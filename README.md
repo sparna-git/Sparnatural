@@ -1,1 +1,2 @@
-# SimSemSearch
+# SimSemSearch - Simple Semantic Search
+
