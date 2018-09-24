@@ -1,0 +1,515 @@
+{
+  "@context":
+  {
+    "label": "http://www.w3.org/2000/01/rdf-schema#label",
+    "Ontology" : "http://www.w3.org/2002/07/owl#Ontology",
+    "Class" : "http://www.w3.org/2002/07/owl#Class",
+    "ObjectProperty" : "http://www.w3.org/2002/07/owl#ObjectProperty",
+    "domain": {
+      "@id": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "@type": "@id"
+    },
+    "range": {
+      "@id": "http://www.w3.org/2000/01/rdf-schema#range",
+      "@type": "@id"
+    },
+    "unionOf": {
+      "@id": "http://www.w3.org/2002/07/owl#unionOf",
+      "@type": "@id"
+    },
+    "widget": {
+      "@id": "http://ontologies.sparna.fr/SimSemSearch#widget",
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@id" : "http://masa.hypotheses.org/onto",
+      "@type" : "Ontology"
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#Mobilier",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Artifact",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Mobilier",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#Type",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Type",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Type",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#Site",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Site",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Site",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#US",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Stratigraphic unit",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Unité stratigraphique",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#Fait",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Feature",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Fait",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#Sepulture",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Burial",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Sepulture",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#Construction",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Built work",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Construction",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#Acteur",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Actor",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Acteur",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#Lieu",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Place",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Lieu",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#Temps",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Time",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Temps",
+          "@language" : "fr"
+        }
+      ]
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#situe_a",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "located in",
+          "@language" : "en"
+        },
+        {
+          "@value" : "situé à",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://masa.hypotheses.org/onto#Site",
+      "range": "http://masa.hypotheses.org/onto#Lieu",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#de_type",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "has type",
+          "@language" : "en"
+        },
+        {
+          "@value" : "de type",
+          "@language" : "fr"
+        }
+      ],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://masa.hypotheses.org/onto#Site"},
+            { "@id" : "http://masa.hypotheses.org/onto#Construction"}
+          ]
+        }
+      },
+      "range": "http://masa.hypotheses.org/onto#Type",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#decouvert_par",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "found by",
+          "@language" : "en"
+        },
+        {
+          "@value" : "découvert par",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://masa.hypotheses.org/onto#Site",
+      "range": "http://masa.hypotheses.org/onto#Acteur",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#a_trouve",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "has found",
+          "@language" : "en"
+        },
+        {
+          "@value" : "a trouvé",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://masa.hypotheses.org/onto#Site",
+      "range":  {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://masa.hypotheses.org/onto#Mobilier"},
+            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"},
+            { "@id" : "http://masa.hypotheses.org/onto#Construction"}, 
+            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
+            { "@id" : "http://masa.hypotheses.org/onto#US"}
+          ]
+        }
+      },
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#date_de",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "dated from",
+          "@language" : "en"
+        },
+        {
+          "@value" : "daté de",
+          "@language" : "fr"
+        }
+      ],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://masa.hypotheses.org/onto#Site"},
+            { "@id" : "http://masa.hypotheses.org/onto#US"},
+            { "@id" : "http://masa.hypotheses.org/onto#Fait"}, 
+            { "@id" : "http://masa.hypotheses.org/onto#Construction"},
+            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"},
+            { "@id" : "http://masa.hypotheses.org/onto#Mobilier"}
+          ]
+        }
+      },
+      "range": "http://masa.hypotheses.org/onto#Temps",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#TimeWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listPeriods"
+      }  
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#trouve_dans",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "found in",
+          "@language" : "en"
+        },
+        {
+          "@value" : "trouvé dans",
+          "@language" : "fr"
+        }
+      ],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://masa.hypotheses.org/onto#Mobilier"},
+            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"},
+            { "@id" : "http://masa.hypotheses.org/onto#Construction"}, 
+            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
+            { "@id" : "http://masa.hypotheses.org/onto#US"}
+          ]
+        }
+      },
+      "range": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://masa.hypotheses.org/onto#Site"},
+            { "@id" : "http://masa.hypotheses.org/onto#US"},
+            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"}
+          ]
+        }
+      },
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#fait_partie_de",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "forms part of",
+          "@language" : "en"
+        },
+        {
+          "@value" : "fait partie de",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://masa.hypotheses.org/onto#US",
+      "range": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
+            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"}
+          ]
+        }
+      },
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#contient",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "contains",
+          "@language" : "en"
+        },
+        {
+          "@value" : "contient",
+          "@language" : "fr"
+        }
+      ],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://masa.hypotheses.org/onto#US"},
+            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
+            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"}
+          ]
+        }
+      },
+      "range": "http://masa.hypotheses.org/onto#Mobilier",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#interprete_comme",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "interpreted by",
+          "@language" : "en"
+        },
+        {
+          "@value" : "interprété comme",
+          "@language" : "fr"
+        }
+      ],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://masa.hypotheses.org/onto#US"},
+            { "@id" : "http://masa.hypotheses.org/onto#Fait"}
+          ]
+        }
+      },
+      "range": "http://masa.hypotheses.org/onto#Type",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#est_compose_de",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "composed of",
+          "@language" : "en"
+        },
+        {
+          "@value" : "est composé de",
+          "@language" : "fr"
+        }
+      ],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
+            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"}
+          ]
+        }
+      },
+      "range": "http://masa.hypotheses.org/onto#US",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#utilise_pour",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "function is",
+          "@language" : "en"
+        },
+        {
+          "@value" : "utilisé pour",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://masa.hypotheses.org/onto#Mobilier",
+      "range": "http://masa.hypotheses.org/onto#Type",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#fait_en",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "consists of",
+          "@language" : "en"
+        },
+        {
+          "@value" : "fait en",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://masa.hypotheses.org/onto#Mobilier",
+      "range": "http://masa.hypotheses.org/onto#Type",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
+      }
+    },
+    {
+      "@id" : "http://masa.hypotheses.org/onto#est_inventeur_de",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "has found",
+          "@language" : "en"
+        },
+        {
+          "@value" : "est inventeur de",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://masa.hypotheses.org/onto#Acteur",
+      "range": "http://masa.hypotheses.org/onto#Site",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+      }
+    }
+  ]
+}
