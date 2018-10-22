@@ -8,15 +8,26 @@
 			language: 'fr'
 		};
 		
+		
 		var settings = $.extend( {}, defaults, options );
 		
 		
 		
 		this.each(function() {
-            var thisForm = $(this) ;
+            var thisForm = {} ;
+            thisForm._this = $(this) ;
+			
+			thisForm.components = [] ;
+			
+			
+			
 			$.when( loadSpecSearch() ).done(function() {
 				
 					initForm(thisForm) ;
+					
+					var UnCritere = new CriteriaGroup(null) ;
+					
+						UnCritere.ChildrensCriteriaGroup.add('hohoh') ; 
 				
 
 				 });
@@ -34,7 +45,13 @@
 			console.log(specSearch) ;
 			
 			var list = getClassListSelectFor(null) ;
-			$(thisForm_).append(list) ;
+			$(thisForm_._this).append(list) ;
+			var contexte = $('<ul></ul>') ;
+			$(thisForm_._this).append(contexte) ;
+			contexte = addComponent(thisForm_, contexte) ;
+			console.log(contexte) ;
+			//contexte.appendTo(thisForm_._this)
+			
 			
 		}
 		/*  Find Class by ID
@@ -178,11 +195,178 @@
 			return items ;
 			
 		}
+		
+		function addComponent(thisForm_, contexte) {
+			console.log(contexte) ;
+			var new_index = thisForm_.components.length ;
+			var gabari = '<li data-index="'+new_index+'"><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""><ul></ul></li>' ;
+			thisForm_.components.push(new_index) ;
+			//contexte.html('span') ;
+			//gabari = '<div></div>' ;
+			return $(contexte).append(gabari) ;
+		}
 
 		
 		return this ;
     }
 	
+	function CriteriaGroup(context) {
+		
+		this.statements = {
+			HasAllComplete : false,
+			IsOnEdit : false
+		}
+		this.html = $('<div class="CriteriaGroup"></div>').appendTo(context) ;
+		
+		this.Context = new Context(context) ;
+		this.ChildrensCriteriaGroup = new ChildrensCriteriaGroup ;
+		
+		this.StartClassGroup = new StartClassGroup(this) ;
+		this.UnionLinkGroup = new UnionLinkGroup(this) ;
+		this.EndClassGroup = new EndClassGroup(this) ;
+		
+		$(this).trigger( {type:"Created" } ) ;
+		
+		
+	}
+	
+	function GroupContenaire(CriteriaGroupe) {
+		this.CriteriaGroupe = CriteriaGroupe ;
+		this.hasSubvalues = false ;
+		this.statements = {
+			HasInputsCompleted : false,
+			IsOnEdit : false
+		}
+		this.InputTypeComponent = null ;
+		
+		function Process(valeur) {
+			
+		}
+		this.Process = Process ;
+		
+		
+		
+	}
+	
+	
+	function StartClassGroup(CriteriaGroupe) {
+		this.CriteriaGroupe = CriteriaGroupe ;
+		console.log(this) ;
+		this.InputTypeComponent = new ClassTypeId(this) ;
+		
+		$(CriteriaGroupe).on('Created', function () {
+			this.StartClassGroup.Edit() ;
+		}) ;
+		
+		function Edit() {
+			this.InputTypeComponent.statements.IsOnEdit = true;
+			this.InputTypeComponent.UpdateClass() ;
+			this.InputTypeComponent.AppendInputHtml() ;
+			console.log('Edit startClassGroup is on ! ') ;
+		} this.Edit = Edit ;
+	} StartClassGroup.prototype = new GroupContenaire;
+	
+	
+	
+	function UnionLinkGroup() {
+		this.InputTypeComponent = new ObjectPropertyTypeId ;
+		
+		
+	} UnionLinkGroup.prototype = new GroupContenaire;
+	
+	
+	
+	function EndClassGroup(CriteriaGroupe) {
+		this.CriteriaGroupe = CriteriaGroupe ;
+		this.hasSubvalues = true ;
+		this.InputTypeComponent = new ClassTypeId(this) ;
+		
+		
+	} EndClassGroup.prototype = new GroupContenaire;
+	
+	
+	function tInputTypeComponent(GroupContenaire) {
+		this.GroupContenaire = GroupContenaire ;
+		
+		console.log(this.GroupContenaire) ;
+		
+		this.statements = {
+			IsCompleted : false,
+			IsOnEdit : false
+		}
+		this.html = '' ;
+		this.possibleValue ;
+		
+		function UpdateClass() {
+			
+			if (this.statements.IsCompleted) {
+				$(this.html).addClass('IsCompleted') ;
+			} else {
+				$(this.html).removeClass('IsCompleted') ;
+			}
+			
+			if (this.statements.IsOnEdit) {
+				$(this.html).addClass('IsOnEdit') ;
+			} else {
+				$(this.html).removeClass('IsOnEdit') ;
+			}
+			
+		} this.UpdateClass = UpdateClass ;
+		
+		function AppendInputHtml() {
+			
+			//this.html = $(this.html).appendTo(this.GroupContenaire.CriteriaGroupe.html) ;
+			
+		} this.AppendInputHtml = AppendInputHtml ;
+		
+	}
+	
+	
+	function ClassTypeId(GroupContenaire) {
+		this.GroupContenaire = GroupContenaire ;
+		console.log(this.GroupContenaire) ;
+		this.html = '<div class="ClassTypeId"></div>' ;
+		
+	}
+	ClassTypeId.prototype = new tInputTypeComponent;
+	
+	
+	function ObjectPropertyTypeId() {
+		this.html = '<div class="ObjectPropertyTypeId"></div>' ;
+		
+	}
+	ObjectPropertyTypeId.prototype = new tInputTypeComponent;
+	
+	function Context(context) {
+		
+		this.contexteReference = context;
+		this.hasContext = false;
+		
+		if (context !== null) {
+			this.hasContext = true;
+		}
+		
+		function get() {
+			return this.contexteReference ;
+		}
+		this.get = get ;
+	}
+	
+	function ChildrensCriteriaGroup() {
+		this.childrensReferences = [];
+		
+		function get() {
+			return this.contexteReferences ;
+		}
+		this.get = get ;
+		function add(children) {
+			this.childrensReferences.push(children) ;
+			console.log(this.childrensReferences ) ;
+		}
+		this.add = add;
+	}
+	
+
 	
  
 }( jQuery ));
