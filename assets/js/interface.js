@@ -111,7 +111,7 @@
 			var items = getAllClassFor(classId) ;
 			$.each( items, function( key, val ) {
 				var label = getClassLabel(val['@id']) ;
-				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'">'+ label + ' => '+val['@id']+'</option>' );
+				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'">'+ label + '</option>' );
 
 			}) ;
 			var html_list = $( "<select/>", {
@@ -127,7 +127,7 @@
 			var items = getAllObjectPropertyFor(domainClassID,rangeClassID) ;
 			$.each( items, function( key, val ) {
 				var label = gatLabel(val) ;
-				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'">'+ label + ' => ' + val['@id']+'</option>' );
+				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'">'+ label + '</option>' );
 
 			}) ;
 			var html_list = $( "<select/>", {
@@ -303,6 +303,7 @@
 		var arg1 = e.data.arg1;
 		var arg2 = e.data.arg2;
 		console.log(arg1) ;
+		//$('.nice-select').removeClass('open') ;
 		arg1[arg2]() ;
 	}
 	
@@ -333,6 +334,8 @@
 			this.InputTypeComponent.statements.IsOnEdit = true;
 			
 			
+			
+			
 			/*this.InputTypeComponent.UpdateStatementsClass() ;
 			this.InputTypeComponent.AppendInputHtml() ;*/
 			
@@ -351,20 +354,28 @@
 		
 		$(CriteriaGroupe).on('Created', function () {
 			console.log('after created') ;
-			//console.log(this.StartClassGroup) ;
+			$(this.StartClassGroup.html).find('.input-val').unbind('change');
 			this.StartClassGroup.init() ;
 			this.StartClassGroup.InputTypeComponent.init() ;
 			this.StartClassGroup.Edit() ;
-			var select = $(this.html).find('.input-val')
+			var select = $(this.StartClassGroup.html).find('.input-val')
 			//console.log(selet) ;
 
-			//$(this.html).find('.input-val').change($.proxy(this.initEnd() , null));  
+			//$(this.html).find('.input-val').change($.proxy(this.initEnd() , null)); 
+			this.StartClassGroup.niceslect = $(select).niceSelect() ;
+			console.log('Reclick') ;
+			$(this.StartClassGroup.niceslect).next().trigger('click') ;
 			
-			$(this.html).find('.input-val').on('change', {arg1: this.StartClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			//$('.StartClassGroup .nice-select').trigger('click') ;
+			console.log(this.StartClassGroup.niceslect) ;
+			
+			
+			$(this.StartClassGroup.html).find('.input-val').on('change', {arg1: this.StartClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
 			console.log('Edit startClassGroup is on ! ') ;
 		}) ;
 		function validSelected() {
+			//this.niceslect.niceSelect('update') ;
 			this.value_selected = $(this.html).find('.input-val').val() ;
 			//$(this.html).find('.input-val').attr('disabled', 'disabled');
 			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
@@ -385,14 +396,17 @@
 		this.InputTypeComponent = new ObjectPropertyTypeId(this) ;
 		
 		$(CriteriaGroupe).on('EndClassGroupSelected', function () {
-			//console.log(this.StartClassGroup) ;
+			$(this.UnionLinkGroup.html).find('.input-val').unbind('change');
 			this.UnionLinkGroup.init() ;
 			this.UnionLinkGroup.InputTypeComponent.init() ;
 			this.UnionLinkGroup.Edit() ;
 			
 			//console.log(this.ParentComponent) ;
+			this.UnionLinkGroup.niceslect = $(this.UnionLinkGroup.html).find('select.input-val').niceSelect()  ;
+			//$('.nice-select').removeClass('open') ;
+			$('.UnionLinkGroup .nice-select').trigger('click') ;
 			
-			$(this.html).find('.input-val').on('change', {arg1: this.UnionLinkGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			$(this.UnionLinkGroup.html).find('.input-val').on('change', {arg1: this.UnionLinkGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
 			
 			//console.log('Edit endClassGroup is on ! ') ;
@@ -400,7 +414,7 @@
 			
 		function validSelected() {
 			this.value_selected = $(this.html).find('.input-val').val() ;
-			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled'); 
+			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
 			console.log(this) ;
 			
@@ -421,11 +435,16 @@
 		
 		$(CriteriaGroupe).on('StartClassGroupSelected', function () {
 			//console.log(this.StartClassGroup) ;
+			$(this.EndClassGroup.html).find('.input-val').unbind('change');
 			this.EndClassGroup.init() ;
 			this.EndClassGroup.InputTypeComponent.init() ;
 			this.EndClassGroup.Edit() ;
 			
-			$(this.html).find('.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			this.EndClassGroup.niceslect = $(this.EndClassGroup.html).find('select.input-val').niceSelect()  ;
+			console.log($('.EndClassGroup .nice-select')) ;
+			$('.EndClassGroup .nice-select').trigger('click') ;
+			
+			$(this.EndClassGroup.html).find('.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
 			
 			console.log('Edit endClassGroup is on ! ') ;
@@ -433,7 +452,7 @@
 		
 		function validSelected() {
 			this.value_selected = $(this.html).find('.input-val').val() ;
-			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled'); 
+			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 			console.log(this) ;
 			
@@ -465,7 +484,7 @@
 			var possible_values = null ;
 			console.log(this.ParentComponent) ;
 			if (this.ParentComponent instanceof StartClassGroup) {
-				possible_values = getClassListSelectFor(null) ;
+				possible_values = getClassListSelectFor(null, 'a') ;
 				
 				console.log(possible_values) ;
 			} 
@@ -473,14 +492,14 @@
 			if (this.ParentComponent instanceof EndClassGroup) {
 				console.log(this.ParentComponent.ParentComponent) ;
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
-				possible_values = getClassListSelectFor(startClassGroup.value_selected) ;
+				possible_values = getClassListSelectFor(startClassGroup.value_selected, 'b') ;
 			}
 			
 			if (this.ParentComponent instanceof UnionLinkGroup) {
 				console.log(this.ParentComponent.ParentComponent) ;
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-				possible_values = getObjectListSelectFor(startClassGroup.value_selected, endClassGroup.value_selected) ;
+				possible_values = getObjectListSelectFor(startClassGroup.value_selected, endClassGroup.value_selected, 'c') ;
 			}
 			
 			
