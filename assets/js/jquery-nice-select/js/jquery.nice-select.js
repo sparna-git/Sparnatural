@@ -92,9 +92,16 @@
     // Open/close
     $(document).on('click.nice_select', '.nice-select', function(event) {
       var $dropdown = $(this);
+	  if ($dropdown.hasClass('open') ) {
+		  $dropdown.toggleClass('open');
+		  $dropdown.prev('select').val($dropdown.find('.selected').data('value')).trigger('change');
+	  } else {
+		  $('.nice-select').not($dropdown).removeClass('open');
+		  $dropdown.toggleClass('open');
+	  }
       
-      //$('.nice-select').not($dropdown).removeClass('open');
-      $dropdown.toggleClass('open');
+      //
+      
       
       if ($dropdown.hasClass('open')) {
         $dropdown.find('.option');  
@@ -123,7 +130,7 @@
       var text = $option.data('display') || $option.text();
       $dropdown.find('.current').text(text);
       
-      $dropdown.prev('select').val($option.data('value')).trigger('change');
+      
     });
 
     // Keyboard events
