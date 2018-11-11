@@ -148,6 +148,7 @@
 			var classIsDomain = false ;
 			$.each( specSearch['@graph'], function( key, val ) {
 				if ( ( val['@type'] == 'ObjectProperty') &&  (val['@id'] == ObjectPropertyId) ){
+					console.log(val) ;
 					if ($.type(val['domain']) === "object") {
 						$.each( val['domain']['unionOf']['@list'], function( domkey, domval ) {
 							if (domval['@id'] == ClassId ) {
@@ -173,6 +174,7 @@
 			if (ClassID === null) {
 				$searchKey = 'domain' ;
 			}
+			console.log(ClassID) ;
 			$.each( specSearch['@graph'], function( key, val ) {
 				if ( val['@type'] == 'ObjectProperty') {
 					if ($.type(val[$searchKey]) === "object") {
@@ -192,7 +194,8 @@
 								var item = getClassById(val[$searchKey]) ;
 								items = pushIfNotInArray(item, items);
 						} else {
-							if (classIsInDomain(val[$searchKey], ClassID)) {
+							console.log(val['@id']) ;
+							if (classIsInDomain(val['@id'], ClassID)) {
 								var item = getClassById(val[$searchKey]) ;
 								items = pushIfNotInArray(item, items);
 							}
