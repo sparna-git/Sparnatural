@@ -93,7 +93,7 @@
     $(document).on('click.nice_select', '.nice-select', function(event) {
       var $dropdown = $(this);
       
-      $('.nice-select').not($dropdown).removeClass('open');
+      //$('.nice-select').not($dropdown).removeClass('open');
       $dropdown.toggleClass('open');
       
       if ($dropdown.hasClass('open')) {
