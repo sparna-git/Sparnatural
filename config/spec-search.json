@@ -24,11 +24,11 @@
   },
   "@graph": [
     {
-      "@id" : "http://masa.hypotheses.org/onto",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto",
       "@type" : "Ontology"
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#Mobilier",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
       "@type" : "Class",
       "label": [
         {
@@ -42,7 +42,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#Type",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Type",
       "@type" : "Class",
       "label": [
         {
@@ -56,7 +56,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#Site",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Site",
       "@type" : "Class",
       "label": [
         {
@@ -70,7 +70,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#US",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#US",
       "@type" : "Class",
       "label": [
         {
@@ -84,7 +84,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#Fait",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait",
       "@type" : "Class",
       "label": [
         {
@@ -98,7 +98,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#Sepulture",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture",
       "@type" : "Class",
       "label": [
         {
@@ -112,7 +112,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#Construction",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Construction",
       "@type" : "Class",
       "label": [
         {
@@ -126,7 +126,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#Acteur",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Acteur",
       "@type" : "Class",
       "label": [
         {
@@ -140,7 +140,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#Lieu",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Lieu",
       "@type" : "Class",
       "label": [
         {
@@ -154,7 +154,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#Temps",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Temps",
       "@type" : "Class",
       "label": [
         {
@@ -168,7 +168,7 @@
       ]
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#situe_a",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#situe_a",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -180,15 +180,15 @@
           "@language" : "fr"
         }
       ],
-      "domain": "http://masa.hypotheses.org/onto#Site",
-      "range": "http://masa.hypotheses.org/onto#Lieu",
+      "domain": "http://www.openarchaeo.fr/explorateur/onto#Site",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Lieu",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#de_type",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#de_type",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -204,39 +204,39 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://masa.hypotheses.org/onto#Site"},
-            { "@id" : "http://masa.hypotheses.org/onto#Construction"}
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Site"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Construction"}
           ]
         }
       },
-      "range": "http://masa.hypotheses.org/onto#Type",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#decouvert_par",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#etudie_par",
       "@type" : "ObjectProperty",
       "label": [
         {
-          "@value" : "found by",
+          "@value" : "studied by",
           "@language" : "en"
         },
         {
-          "@value" : "découvert par",
+          "@value" : "étudié par",
           "@language" : "fr"
         }
       ],
-      "domain": "http://masa.hypotheses.org/onto#Site",
-      "range": "http://masa.hypotheses.org/onto#Acteur",
+      "domain": "http://www.openarchaeo.fr/explorateur/onto#Site",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Acteur",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#a_trouve",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#a_trouve",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -248,16 +248,16 @@
           "@language" : "fr"
         }
       ],
-      "domain": "http://masa.hypotheses.org/onto#Site",
+      "domain": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "range":  {
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://masa.hypotheses.org/onto#Mobilier"},
-            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"},
-            { "@id" : "http://masa.hypotheses.org/onto#Construction"}, 
-            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
-            { "@id" : "http://masa.hypotheses.org/onto#US"}
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Mobilier"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Construction"}, 
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#US"}
           ]
         }
       },
@@ -267,7 +267,7 @@
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#date_de",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#date_de",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -283,23 +283,23 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://masa.hypotheses.org/onto#Site"},
-            { "@id" : "http://masa.hypotheses.org/onto#US"},
-            { "@id" : "http://masa.hypotheses.org/onto#Fait"}, 
-            { "@id" : "http://masa.hypotheses.org/onto#Construction"},
-            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"},
-            { "@id" : "http://masa.hypotheses.org/onto#Mobilier"}
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Site"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#US"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait"}, 
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Construction"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Mobilier"}
           ]
         }
       },
-      "range": "http://masa.hypotheses.org/onto#Temps",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Temps",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#TimeWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listPeriods"
       }  
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#trouve_dans",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#trouve_a",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -307,7 +307,7 @@
           "@language" : "en"
         },
         {
-          "@value" : "trouvé dans",
+          "@value" : "trouvé à",
           "@language" : "fr"
         }
       ],
@@ -315,31 +315,21 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://masa.hypotheses.org/onto#Mobilier"},
-            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"},
-            { "@id" : "http://masa.hypotheses.org/onto#Construction"}, 
-            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
-            { "@id" : "http://masa.hypotheses.org/onto#US"}
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Construction"}, 
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#US"}
           ]
         }
       },
-      "range": {
-        "@type" : "Class",
-        "unionOf" : {
-          "@list" : [ 
-            { "@id" : "http://masa.hypotheses.org/onto#Site"},
-            { "@id" : "http://masa.hypotheses.org/onto#US"},
-            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"}
-          ]
-        }
-      },
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#fait_partie_de",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#fait_partie_de",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -351,13 +341,13 @@
           "@language" : "fr"
         }
       ],
-      "domain": "http://masa.hypotheses.org/onto#US",
+      "domain": "http://www.openarchaeo.fr/explorateur/onto#US",
       "range": {
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
-            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"}
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"}
           ]
         }
       },
@@ -367,7 +357,7 @@
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#contient",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#contient",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -383,20 +373,20 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://masa.hypotheses.org/onto#US"},
-            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
-            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"}
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#US"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"}
           ]
         }
       },
-      "range": "http://masa.hypotheses.org/onto#Mobilier",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#interprete_comme",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#interprete_comme",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -412,19 +402,19 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://masa.hypotheses.org/onto#US"},
-            { "@id" : "http://masa.hypotheses.org/onto#Fait"}
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#US"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait"}
           ]
         }
       },
-      "range": "http://masa.hypotheses.org/onto#Type",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#est_compose_de",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#est_compose_de",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -440,19 +430,48 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://masa.hypotheses.org/onto#Fait"},
-            { "@id" : "http://masa.hypotheses.org/onto#Sepulture"}
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"}
           ]
         }
       },
-      "range": "http://masa.hypotheses.org/onto#US",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#US",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#utilise_pour",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#trouve_dans",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "found in",
+          "@language" : "en"
+        },
+        {
+          "@value" : "trouvé dans",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
+      "range": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Site"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#US"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"}
+          ]
+        }
+      },
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
+        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+      }
+    },
+    {
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#utilise_pour",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -464,15 +483,15 @@
           "@language" : "fr"
         }
       ],
-      "domain": "http://masa.hypotheses.org/onto#Mobilier",
-      "range": "http://masa.hypotheses.org/onto#Type",
+      "domain": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#fait_en",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#fait_en",
       "@type" : "ObjectProperty",
       "label": [
         {
@@ -484,28 +503,28 @@
           "@language" : "fr"
         }
       ],
-      "domain": "http://masa.hypotheses.org/onto#Mobilier",
-      "range": "http://masa.hypotheses.org/onto#Type",
+      "domain": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
       }
     },
     {
-      "@id" : "http://masa.hypotheses.org/onto#est_inventeur_de",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#a_etudie",
       "@type" : "ObjectProperty",
       "label": [
         {
-          "@value" : "has found",
+          "@value" : "studied",
           "@language" : "en"
         },
         {
-          "@value" : "est inventeur de",
+          "@value" : "a étudié",
           "@language" : "fr"
         }
       ],
-      "domain": "http://masa.hypotheses.org/onto#Acteur",
-      "range": "http://masa.hypotheses.org/onto#Site",
+      "domain": "http://www.openarchaeo.fr/explorateur/onto#Acteur",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
         "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
