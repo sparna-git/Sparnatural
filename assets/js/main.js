@@ -21,14 +21,21 @@ $( document ).ready(function($) {
 					
 					json = addVariable(json, endValueName, "http://sparna.fr/database/person/123456") ;
 					
-					var SparqlGenerator = require('sparqljs').Generator;
-					var generator = new SparqlGenerator();
+					
+					console.log(json) ;
+					
+					//var SparqlGenerator = require('sparqljs').Generator;
+					var generator = new Ngenerator();
 					//parsedQuery.variables = ['?mickey'];
 					var generatedQuery = generator.stringify(json);
 					
-					console.log(json) ;
+					
 					console.log(generatedQuery) ;
 					
+					
+					$('#sparql code').html(generatedQuery );
+					var jsons = JSON.stringify(json, null, '\t');
+					$('#json code').html(jsons) ;
 					
 					
 				}) ;
@@ -81,7 +88,8 @@ function addVariable(json, name, valueUrl) {
 					[name]: valueUrl
 				}
 		json.where[1].values.push(newValue) ;		
-				
+	
+	return json ;	
 }
   
     // Parse a SPARQL query to a JSON object
@@ -108,7 +116,7 @@ $('#sparql code').html(generatedQuery) ;
 
 var tmpData = parsedQuery;
  var formattedData = JSON.stringify(tmpData, null, '\t');
-$('#json code').html(formattedData) ;
+$('#json2 code').html(formattedData) ;
 });
 	
 	
