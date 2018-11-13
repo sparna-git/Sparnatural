@@ -1,10 +1,6 @@
 $( document ).ready(function($) {
   // Handler for .ready() called.
   
-
-  
-  $('form').SimSemSearchForm() ;
-  
  $( "form" ).submit(function( event ) {
 	 event.preventDefault();
 				$('.CriteriaGroup').each(function() {
@@ -33,7 +29,7 @@ $( document ).ready(function($) {
 					console.log(generatedQuery) ;
 					
 					
-					$('#sparql code').html(generatedQuery );
+					$('#sparql code').html(generatedQuery.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
 					var jsons = JSON.stringify(json, null, '\t');
 					$('#json code').html(jsons) ;
 					
@@ -72,9 +68,9 @@ function newQueryJson() {
 function addTriple(json, subjet, predicate, object) {
 	
 	var triple = {
-					"subject": '"'+subjet+'"',
-					"predicate": '"'+predicate+'"',
-					"object": '"'+object+'"',
+					"subject": subjet,
+					"predicate": predicate,
+					"object": object,
 				} ;
 				
 			json.where[0].triples.push(triple) ;
