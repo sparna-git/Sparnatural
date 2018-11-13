@@ -6,13 +6,83 @@ $( document ).ready(function($) {
   $('form').SimSemSearchForm() ;
   
  $( "form" ).submit(function( event ) {
-				$('select').each(function() {
+	 event.preventDefault();
+				$('.CriteriaGroup').each(function() {
+					
+					var start = $('.StartClassGroup select').val() ;
+					var obj = $('.ObjectPropertyGroup select').val() ;
+					var end = $('.EndClassGroup select').val() ;
+					var endValueName = '?end1' ;
+					var json = newQueryJson() ;
+					
+					json = addTriple(json, '?this', "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", start) ;
+					json = addTriple(json, '?this', obj, endValueName) ;
+					json = addTriple(json, endValueName, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", end) ;
+					
+					json = addVariable(json, endValueName, "http://sparna.fr/database/person/123456") ;
+					
+					var SparqlGenerator = require('sparqljs').Generator;
+					var generator = new SparqlGenerator();
+					//parsedQuery.variables = ['?mickey'];
+					var generatedQuery = generator.stringify(json);
+					
+					console.log(json) ;
+					console.log(generatedQuery) ;
 					
 					
 					
 				}) ;
-  event.preventDefault();
+				
+				return false ;
+				//
 });
+
+function newQueryJson() {
+	
+	return {
+		"queryType": "SELECT",
+		"variables": [
+			"?this"
+		],
+		"where": [{
+			"type": "bgp",
+			"triples": []
+		},
+		{
+			"type": "values",
+			"values": []
+		}],
+		"type": "query",
+		"prefixes": {
+			"rdfs": "http://www.w3.org/2000/01/rdf-schema#"
+		}
+	}
+	
+	
+	
+}
+
+function addTriple(json, subjet, predicate, object) {
+	
+	var triple = {
+					"subject": '"'+subjet+'"',
+					"predicate": '"'+predicate+'"',
+					"object": '"'+object+'"',
+				} ;
+				
+			json.where[0].triples.push(triple) ;
+	
+	return json ;
+}
+
+function addVariable(json, name, valueUrl) {
+	
+	var newValue = {
+					[name]: valueUrl
+				}
+		json.where[1].values.push(newValue) ;		
+				
+}
   
     // Parse a SPARQL query to a JSON object
 //var SparqlParser = require('sparqljs').Parser;
