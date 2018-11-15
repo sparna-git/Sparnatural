@@ -15,7 +15,7 @@ $( document ).ready(function($) {
 					json = addTriple(json, '?this', obj, endValueName) ;
 					json = addTriple(json, endValueName, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", end) ;
 					
-					json = addVariable(json, endValueName, "http://sparna.fr/database/person/123456") ;
+					json = addVariable(json, endValueName, $('.EndClassWidgetGroup #basics-value').val() ) ;
 					
 					
 					console.log(json) ;

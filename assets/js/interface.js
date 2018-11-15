@@ -104,6 +104,34 @@
 			}
 			return classLabel ;
 		}
+	
+		/*  Find Class by ID
+			@Id of Class
+			return object of @type Class in specSearch 
+		*/
+		function getObjectPropertyById(ObjectPropertyId) {
+			var ObjectPropertyObject = null ;
+			$.each( specSearch['@graph'], function( key, val ) {
+				if ( val['@type'] == 'ObjectProperty') {
+					if ( val['@id'] == ObjectPropertyId) {
+							ObjectPropertyObject = val ;
+					}
+				}
+			}) ;
+			return ObjectPropertyObject ;
+		}
+		function getObjectPropertyLabel(ObjectPropertyId) {
+			var ObjectPropertyLabel = null ;
+			var classObject = getObjectPropertyById(ClassId) ;
+			if (classObject !== null) {
+				$.each( classObject['label'], function( key, val ) {
+					if (val['@language'] == settings.language ) {
+						ObjectPropertyLabel = val['@value'] ;
+					}
+				});
+			}
+			return ObjectPropertyLabel ;
+		}
 		
 		
 		function getClassListSelectFor(classId, inputID) {
@@ -290,6 +318,7 @@
 		this.StartClassGroup = new StartClassGroup(this) ;
 		this.ObjectPropertyGroup = new ObjectPropertyGroup(this) ;
 		this.EndClassGroup = new EndClassGroup(this) ;
+		this.EndClassWidgetGroup = new EndClassWidgetGroup(this) ;
 		//
 		
 		$(this).trigger( {type:"Created" } ) ;
@@ -470,6 +499,55 @@
 	} EndClassGroup.prototype = new GroupContenaire;
 	
 	
+	function EndClassWidgetGroup(CriteriaGroupe) {
+		this.ParentComponent = CriteriaGroupe ;
+		this.GroupType = 'EndClassWidgetGroup' ;
+		this.statements.EndClassWidgetGroup = true ;
+		this.hasSubvalues = true ;
+		
+		function detectWidgetType() {
+			this.objectPropertyDefinition = getObjectPropertyById(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
+			console.log(this.objectPropertyDefinition) ;
+			this.widgetType = this.objectPropertyDefinition.widget['@type'] ;
+			
+		} this.detectWidgetType = detectWidgetType ;
+		
+		this.InputTypeComponent = new ObjectPropertyTypeWidget(this) ;
+		
+		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
+			//console.log(this.StartClassGroup) ;
+			 ;
+			this.EndClassWidgetGroup.detectWidgetType() ;
+			this.EndClassWidgetGroup.InputTypeComponent.init() ;
+			
+			
+			//this.EndClassGroup.init() ;
+			//this.EndClassGroup.InputTypeComponent.init() ;
+			//this.EndClassGroup.Edit() ;
+			
+			//this.EndClassGroup.niceslect = $(this.EndClassGroup.html).find('select.input-val').niceSelect()  ;
+			//console.log($('.EndClassGroup .nice-select')) ;
+			//$('.EndClassGroup .nice-select').trigger('click') ;
+			
+			//$(this.EndClassGroup.html).find('.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			
+			
+			console.log('Edit endClassWidgetGroup is on ! ') ;
+		}) ;
+		
+		function validSelected() {
+			this.value_selected = $(this.html).find('.input-val').val() ;
+			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
+			console.log(this) ;
+			
+		} this.validSelected = validSelected ;
+		
+		this.init() ;
+		
+	} EndClassWidgetGroup.prototype = new GroupContenaire;
+	
+	
 	function InputTypeComponent() {
 		this.ParentComponent = null ;
 		this.statements = {
@@ -547,6 +625,126 @@
 	} ObjectPropertyTypeId.prototype = new InputTypeComponent;
 	
 		
+	function ObjectPropertyTypeWidget(GroupContenaire) {
+		this.ParentComponent = GroupContenaire ;
+		this.html = '<div class="ObjectPropertyTypeWidget"></div>' ;
+		this.widgetHtml = null ;
+		this.widgetType = null ;
+		
+		
+		function init() {
+			
+			if (this.ParentComponent instanceof EndClassWidgetGroup) {
+				console.log(this.ParentComponent.ParentComponent) ;
+				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
+				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+				
+				
+				
+				this.widgetType = this.ParentComponent.widgetType  ;
+				this.getWigetTypeClassName() ;
+				this.widgetHtml = this.widgetComponent.html ;
+				
+			
+				this.statements.IsOnEdit = true ;
+				console.log('load genericTools') ;
+				this.tools = new GenericTools(this) ;
+				console.log('After load genericTools') ;
+				this.tools.InitHtml() ;
+				this.tools.Add() ;
+				this.widgetComponent.init() ;
+			}
+			
+			
+		} this.init = init
+		
+;		function getWigetTypeClassName() {
+			console.log(this.widgetType);
+			switch (this.widgetType) {
+			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
+					
+				break;
+			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
+				this.widgetComponent = new autoCompleteWidget(this) ;
+			    break;
+			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
+				//console.log('Mangoes and papayas are $2.79 a pound.');
+				// expected output: "Mangoes and papayas are $2.79 a pound."
+				break;
+			  default:
+				//console.log('Sorry, we are out of ' + expr + '.');
+			}
+		} this.getWigetTypeClassName = getWigetTypeClassName ;
+		
+	} ObjectPropertyTypeWidget.prototype = new InputTypeComponent;
+	
+	
+	
+	
+	function widgetType() {
+		
+		this.parentComponent = null ;
+		this.html = null ;
+		
+		
+		
+	}
+	
+	function autoCompleteWidget(InputTypeComponent) {
+		this.ParentComponent = InputTypeComponent ;
+		
+		
+		this.html = '<input id="basics" /><input id="basics-value" type="hidden"/>' ;
+		
+		function init() {
+			console.log(this.ParentComponent.ParentComponent) ;
+			var startClassGroup_value = encodeURIComponent(this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected) ;
+			var endClassGroup_value = encodeURIComponent(this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected) ;
+			var ObjectPropertyGroup_value = encodeURIComponent(this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected) ;
+			
+			
+			var options = {
+				ajaxSettings: {crossDomain: true, type: 'GET'} ,
+				url: function(phrase) {
+					return 'proxi-ajax.php?url='+ encodeURIComponent('http://openarchaeo.sparna.fr/federation/api/autocomplete?key='+phrase+'&domain='+startClassGroup_value+'&property='+ObjectPropertyGroup_value+'&range='+endClassGroup_value)
+				},
+				 getValue: function(element) {
+					return element.label;
+				  },
+
+				  ajaxSettings: {
+					dataType: "json",
+					method: "GET",
+					data: {
+					  dataType: "json"
+					}
+				  },
+
+				  preparePostData: function(data) {
+					data.phrase = $("#basics").val();
+					return data;
+				  },
+				  list: {
+
+					onSelectItemEvent: function() {
+							var value = $("#basics").getSelectedItemData().uri;
+
+							$("#basics-value").val(value).trigger("change");
+					}
+				  },
+
+				  requestDelay: 400
+			};
+			//Need to add in html befor
+			
+			$("#basics").easyAutocomplete(options);
+			
+			
+		} this.init = init ;
+		
+		
+		
+	} autoCompleteWidget.prototype = new widgetType;
 	
 	function GenericTools(component) {
 		this.component = component ;
