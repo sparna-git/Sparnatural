@@ -2,4 +2,27 @@ body {
 	section {
 		padding-top: 30px;
 	}
+	.CriteriaGroup {
+		border: 1px solid #ddd;
+		display: flex;
+		
+		.GroupContenaire {
+			
+			min-width: 15%;
+			background: #fff;
+			Border-right: 1px solid #ddd;
+			padding: 2px 5px;
+		}
+		.EndClassWidgetGroup {
+			min-width: 35%;
+			padding: 2px 15px;
+			.easy-autocomplete {
+				width: 100%!important;
+			}
+			input {
+				width: 100%!important;
+				display: block;
+			}
+		}
+	}
 }
