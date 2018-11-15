@@ -23,8 +23,8 @@ $arrow_color: $gray !default;
   box-sizing: border-box;
   clear: both;
   cursor: pointer;
-  display: block;
-  float: left;
+  display: inline-block;
+  /*float: left;*/
   font-family: inherit;
   font-size: $font_size;
   font-weight: normal;
