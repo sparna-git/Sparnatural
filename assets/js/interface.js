@@ -5,7 +5,13 @@
         var specSearch = {} ;
 		var defaults = {
 			pathSpecSearch: 'config/spec-search.json',
-			language: 'fr'
+			language: 'fr',
+			UrlAutocomplete : function(domain, property, range, key) {
+					return 'http://openarchaeo.sparna.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
+			},
+			UrlList : function(domain, property, range) {
+					return 'http://openarchaeo.sparna.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
+			}
 		};
 		
 		
@@ -662,7 +668,7 @@
 			console.log(this.widgetType);
 			switch (this.widgetType) {
 			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
-					
+				this.widgetComponent = new ListWidget(this) ;
 				break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
 				this.widgetComponent = new autoCompleteWidget(this) ;
@@ -692,21 +698,22 @@
 	
 	function autoCompleteWidget(InputTypeComponent) {
 		this.ParentComponent = InputTypeComponent ;
+		this.ParentComponent.statements.AutocompleteWidget  = true ;
 		
 		
 		this.html = '<input id="basics" /><input id="basics-value" type="hidden"/>' ;
 		
 		function init() {
 			console.log(this.ParentComponent.ParentComponent) ;
-			var startClassGroup_value = encodeURIComponent(this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected) ;
-			var endClassGroup_value = encodeURIComponent(this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected) ;
-			var ObjectPropertyGroup_value = encodeURIComponent(this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected) ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
 			
 			
 			var options = {
 				ajaxSettings: {crossDomain: true, type: 'GET'} ,
 				url: function(phrase) {
-					return 'proxi-ajax.php?url='+ encodeURIComponent('http://openarchaeo.sparna.fr/federation/api/autocomplete?key='+phrase+'&domain='+startClassGroup_value+'&property='+ObjectPropertyGroup_value+'&range='+endClassGroup_value)
+					return settings.UrlAutocomplete(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
 				 getValue: function(element) {
 					return element.label;
@@ -745,6 +752,53 @@
 		
 		
 	} autoCompleteWidget.prototype = new widgetType;
+	
+	function ListWidget(InputTypeComponent) {
+		this.ParentComponent = InputTypeComponent ;
+		this.ParentComponent.statements.ListeWidget = true ;
+		
+		this.html = '<select id="listwidget"></select>' ;
+		this.select = $('<select id="listwidget"></select>');
+		
+		function init() {
+			console.log(this.ParentComponent.ParentComponent) ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			
+			
+			var options = {
+
+				url: settings.UrlList(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value),
+				dataType: "json",
+				method: "GET",
+				data: {
+					  dataType: "json"
+				}
+			} ;
+			
+			var request = $.ajax( options );
+			var select = $(this.html).find('select') ;
+			request.done(function( data ) {
+			  
+			  $.each( data, function( key, val ) {
+				$('#listwidget').append( "<option value='" + val.uri + "'>" + val.label + "</option>" );
+			  });
+			  $("#listwidget").niceSelect();
+			  
+			});
+				
+			//Need to add in html befor
+			
+			
+			
+			
+		} this.init = init ;
+		
+		
+		
+	} ListWidget.prototype = new widgetType;
+	
 	
 	function GenericTools(component) {
 		this.component = component ;

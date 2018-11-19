@@ -14,8 +14,11 @@ $( document ).ready(function($) {
 					json = addTriple(json, '?this', "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", start) ;
 					json = addTriple(json, '?this', obj, endValueName) ;
 					json = addTriple(json, endValueName, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", end) ;
-					
-					json = addVariable(json, endValueName, $('.EndClassWidgetGroup #basics-value').val() ) ;
+					if ($('.EndClassWidgetGroup>div').hasClass('ListeWidget')) {
+						json = addVariable(json, endValueName, $('.EndClassWidgetGroup #listwidget').val() ) ;
+					} else {
+						json = addVariable(json, endValueName, $('.EndClassWidgetGroup #basics-value').val() ) ;
+					}
 					
 					
 					console.log(json) ;
