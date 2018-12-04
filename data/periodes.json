@@ -1,0 +1,46 @@
+[
+	{
+		"label" : "Antiquité Romaine",
+		"synonyms" : ["Antiquité", "Toto"],
+		"start" : {
+			"year" : "-0050"
+		},
+		"stop" : {
+			"year" : "0499"
+		},
+		"uri" : "http://toto.fr/p0qhb66xxxxx"
+	},
+	{
+		"label" : "Antiquité Romaine 2",
+		"synonyms" : ["Antiquité", "Toto"],
+		"start" : {
+			"year" : "-0050"
+		},
+		"stop" : {
+			"year" : "0499"
+		},
+		"uri" : "http://toto.fr/p0qhb66xxxxx"
+	},
+	{
+		"label" : "Antiquité Romaine 3",
+		"synonyms" : ["Antiquité", "Toto"],
+		"start" : {
+			"year" : "-0050"
+		},
+		"stop" : {
+			"year" : "0499"
+		},
+		"uri" : "http://toto.fr/p0qhb66xxxxx"
+	},
+	{
+		"label" : "Antiquité Romaine 4",
+		"synonyms" : ["Antiquité", "Toto"],
+		"start" : {
+			"year" : "0500"
+		},
+		"stop" : {
+			"year" : "1499"
+		},
+		"uri" : "http://toto.fr/p0qhb66xxxxx"
+	}
+]

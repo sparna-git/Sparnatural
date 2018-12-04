@@ -82,6 +82,11 @@
 					// ici le code qui se charge de retourner les résultats de la recherche
 					return 'http://openarchaeo.sparna.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
 			
+				  },
+				UrlDates: function(domain, property, range, key) {
+					// ici le code qui se charge de retourner les résultats de la recherche
+					return 'http://localhost/simsemsearch/git/data/periodes.json' ;
+			
 				  }
 				
 			  }) ;

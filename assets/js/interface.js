@@ -11,6 +11,9 @@
 			},
 			UrlList : function(domain, property, range) {
 					return 'http://openarchaeo.sparna.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
+			},
+			UrlDates : function(domain, property, range, key) {
+					return '/data/periodes.jsonld' ;
 			}
 		};
 		
@@ -522,7 +525,7 @@
 		
 		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
 			//console.log(this.StartClassGroup) ;
-			 ;
+			// ;
 			this.EndClassWidgetGroup.detectWidgetType() ;
 			this.EndClassWidgetGroup.InputTypeComponent.init() ;
 			
@@ -675,6 +678,7 @@
 			    break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
 				//console.log('Mangoes and papayas are $2.79 a pound.');
+				this.widgetComponent = new DatesWidget(this) ;
 				// expected output: "Mangoes and papayas are $2.79 a pound."
 				break;
 			  default:
@@ -798,6 +802,75 @@
 		
 		
 	} ListWidget.prototype = new widgetType;
+	
+	function DatesWidget(InputTypeComponent) {
+		this.ParentComponent = InputTypeComponent ;
+		this.ParentComponent.statements.AutocompleteWidget  = true ;
+		
+		
+		this.html = '<input id="basics" /><input id="basics-start" /><input id="basics-stop" /><input id="basics-value" type="hidden"/>' ;
+		
+		function init() {
+			console.log(this.ParentComponent.ParentComponent) ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var phrase ="" ;
+			var data_json = null ;
+			
+			$.ajax({
+				url: settings.UrlDates(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ,
+				async: false,
+				success: function (data){
+					data_json = data;
+					console.log(data_json) ;
+					console.log(data) ;
+					
+					
+				}
+			});
+			
+			
+				var options = {
+					
+						data: data_json ,
+				
+					 getValue: function(element) {
+						return element.synonyms;
+					  },
+
+					 
+					list: {
+
+					onSelectItemEvent: function() {
+							var value = $("#basics").getSelectedItemData().label;
+							var start = $("#basics").getSelectedItemData().start.year;
+							var stop = $("#basics").getSelectedItemData().stop.year;
+
+							$("#basics").val(value).trigger("change");
+							$("#basics-start").val(start).trigger("change");
+							$("#basics-stop").val(stop).trigger("change");
+					}
+				  },
+					 template: {
+						type: "custom",
+						method: function(value, item) {
+							return '<div>' + item.label + "<br/>" + item.start.year + " - " + item.stop.year + '</div>';
+						}
+					},
+
+					  requestDelay: 400
+				};
+				//Need to add in html befor
+				
+				$("#basics").easyAutocomplete(options);
+			
+			
+		} this.init = init ;
+		
+		
+		
+	} DatesWidget.prototype = new widgetType;
 	
 	
 	function GenericTools(component) {
