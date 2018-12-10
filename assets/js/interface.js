@@ -659,6 +659,7 @@
 			
 			$(new_component).find('.nice-select').trigger('click') ;
 			$(new_component).find('.nice-select').trigger('click') ;
+			this.ParentComponent.html.parent('li').addClass('haveOrChild') ;
 			this.ParentComponent.initCompleted() ;
 			//$(new_component).find('.nice-select').trigger('change') ;
 			//new_component.appendTo(this.ParentComponent.Context.HtmlContext) ;

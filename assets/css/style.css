@@ -56,6 +56,9 @@ body .CriteriaGroup {
       width: 46px;
       text-align: center; }
 
+body .haveOrChild .CriteriaGroup .EndClassWidgetGroup {
+  display: none; }
+
 body form ul.componentsListe,
 body form ul.componentsListe ul {
   list-style-type: none;
