@@ -94,7 +94,7 @@ function addVariable(json, name, valueUrl) {
     // Parse a SPARQL query to a JSON object
 //var SparqlParser = require('sparqljs').Parser;
 var parser = new Nparser();
-var parsedQuery = parser.parse(
+/*var parsedQuery = parser.parse(
 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>'+
 'SELECT ?this '+
 'WHERE {'+
@@ -102,6 +102,17 @@ var parsedQuery = parser.parse(
     '?this <http://exemple.fr/ontology/created_by> ?actor .'+
     '?actor a <http://exemple.fr/ontology/Actor>'+
     'VALUES ?actor { <http://sparna.fr/database/person/123456> <http://sparna.fr/database/person/123457776> }'+
+'}');*/
+var parsedQuery = parser.parse(
+'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>'+
+'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>'+
+'SELECT ?this '+
+'WHERE {'+
+    '?this a <http://exemple.fr/ontology/Thing> .'+
+    '?this <http://exemple.fr/ontology/created_by> ?time .'+
+    'FILTER(?time > "1700-01-01"^^xsd:dateTime && ?time <= "1750-12-31"^^xsd:dateTime)'+
+    '?this <http://exemple.fr/ontology/created_by> ?time2 .'+
+    'FILTER(?time2 > "1700-01-01"^^xsd:dateTime && ?time2 <= "1750-12-31"^^xsd:dateTime)'+
 '}');
 
 // Regenerate a SPARQL query from a JSON object

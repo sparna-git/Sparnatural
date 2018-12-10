@@ -75,12 +75,12 @@
 			  $('form').SimSemSearchForm({
 				UrlAutocomplete: function(domain, property, range, key) {
 					// ici le code qui se charge de retourner les résultats de la recherche
-					return 'http://openarchaeo.sparna.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
+					return 'http://openarchaeo.huma-num.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
 			
 				  },
 				UrlList: function(domain, property, range) {
 					// ici le code qui se charge de retourner les résultats de la recherche
-					return 'http://openarchaeo.sparna.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
+					return 'http://openarchaeo.huma-num.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
 			
 				  },
 				UrlDates: function(domain, property, range, key) {

@@ -5,12 +5,27 @@ body .CriteriaGroup {
   border: 1px solid #ddd;
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  position: relative;
+  border-radius: 5px;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  background: #fff; }
   body .CriteriaGroup .GroupContenaire {
-    min-width: 15%;
+    /*min-width: 15%;*/
     background: #fff;
     Border-right: 1px solid #ddd;
     padding: 2px 5px; }
+  body .CriteriaGroup .EndClassGroup {
+    position: relative; }
+    body .CriteriaGroup .EndClassGroup .ActionOr {
+      position: absolute;
+      left: 0;
+      top: 100%;
+      line-height: 46px;
+      width: 46px;
+      text-align: center;
+      z-index: 101; }
   body .CriteriaGroup .EndClassWidgetGroup {
     min-width: 35%;
     padding: 2px 15px; }
@@ -19,3 +34,89 @@ body .CriteriaGroup {
     body .CriteriaGroup .EndClassWidgetGroup input {
       width: 100% !important;
       display: block; }
+  body .CriteriaGroup .ActionsGroup {
+    position: absolute;
+    display: block;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 46px;
+    padding: 0;
+    background: transparent;
+    z-index: 100; }
+    body .CriteriaGroup .ActionsGroup > div {
+      position: absolute; }
+    body .CriteriaGroup .ActionsGroup .ActionRemove {
+      right: 5px;
+      top: -46px;
+      line-height: 46px; }
+    body .CriteriaGroup .ActionsGroup .ActionAnd {
+      left: 0;
+      bottom: 0;
+      line-height: 46px;
+      width: 46px;
+      text-align: center; }
+
+body form ul.componentsListe,
+body form ul.componentsListe ul {
+  list-style-type: none;
+  padding: 0;
+  background: #fff; }
+
+body form ul.componentsListe ul li > div {
+  margin-left: 46px; }
+
+body form ul.componentsListe ul li li > div {
+  margin-left: 92px; }
+
+body form ul.componentsListe li.groupe {
+  margin: 0;
+  display: inline-block;
+  width: 100%; }
+  body form ul.componentsListe li.groupe > div {
+    margin-top: 46px;
+    margin-bottom: 46px; }
+  body form ul.componentsListe li.groupe > div > div > .ShowOnHover {
+    display: none; }
+  body form ul.componentsListe li.groupe:hover > div > div > .ShowOnHover {
+    display: block; }
+  body form ul.componentsListe li.groupe:hover > div.completed > div > .ActionOr.ShowOnHover {
+    display: none; }
+  body form ul.componentsListe li.groupe .nice-select {
+    background: transparent;
+    border-color: transparent; }
+  body form ul.componentsListe li.groupe .nice-select.disabled {
+    color: #fff;
+    border-color: transparent; }
+
+body .completed .triangleR {
+  background: #ff312e;
+  margin-right: 23px; }
+
+body .completed .triangleR:after {
+  content: '';
+  width: 0;
+  height: 0;
+  line-height: 0;
+  padding: 0;
+  display: inline-block;
+  float: right;
+  margin-right: -21px;
+  border-style: solid;
+  border-width: 21px 0 21px 21px;
+  border-color: transparent transparent transparent #ff312e; }
+
+body .completed .triangleR:before {
+  content: '';
+  width: 0;
+  height: 0;
+  line-height: 0;
+  padding: 0;
+  display: inline-block;
+  float: left;
+  border-style: solid;
+  border-width: 21px 0 21px 21px;
+  border-color: transparent transparent transparent #fff; }
+
+body .easy-autocomplete-container {
+  z-index: 999; }

@@ -5,13 +5,30 @@ body {
 	.CriteriaGroup {
 		border: 1px solid #ddd;
 		display: flex;
+		position: relative;
+		border-radius: 5px;
+		margin-top: 40px;
+		margin-bottom: 40px;
+		background: #fff;
 		
 		.GroupContenaire {
 			
-			min-width: 15%;
+			/*min-width: 15%;*/
 			background: #fff;
 			Border-right: 1px solid #ddd;
 			padding: 2px 5px;
+		}
+		.EndClassGroup {
+			position: relative;
+			.ActionOr {
+				position: absolute;
+				left: 0;
+				top: 100%;
+				line-height: 46px;
+				width: 46px;
+				text-align: center;
+				z-index: 101;
+			}
 		}
 		.EndClassWidgetGroup {
 			min-width: 35%;
@@ -24,5 +41,120 @@ body {
 				display: block;
 			}
 		}
+		
+		.ActionsGroup {
+			position: absolute;
+			display: block;
+			top: 100%;
+			left: 0;
+			width: 100%;
+			height: 46px;
+			padding: 0;
+			background: transparent;
+			z-index: 100;
+			
+			&>div {
+				position: absolute;
+			}
+			.ActionRemove {
+				right: 5px;
+				top: -46px;
+				line-height: 46px;
+			}
+			.ActionAnd {
+				left: 0;
+				bottom: 0;
+				line-height: 46px;
+				width: 46px;
+				text-align: center;
+			}
+			
+		}
+		&.completed {
+			
+			
+		}
+	}
+	form {
+		ul.componentsListe {
+			&,
+			ul {
+				list-style-type: none;
+				padding: 0;
+				background: #fff;
+			}
+			
+			ul {
+				
+				li>div {
+					margin-left: 46px;
+				}
+				li li>div {
+					margin-left: 92px;
+				}
+			}
+			li.groupe {
+				margin: 0;
+				display: inline-block;
+				width: 100%;
+				
+				&>div {
+					margin-top: 46px;
+					margin-bottom: 46px;
+				}
+				
+				&>div>div>.ShowOnHover {
+					display: none;
+				}
+				&:hover>div>div>.ShowOnHover {
+					display: block;
+				}
+				&:hover>div.completed>div>.ActionOr.ShowOnHover {
+					display: none;
+				}
+				
+				.nice-select {
+					background: transparent;
+					border-color: transparent;
+				}
+				.nice-select.disabled {
+					color: #fff;
+					border-color: transparent;
+				}
+			}
+		}
+	}
+	.completed {
+		.triangleR {
+			background: #ff312e;
+			margin-right: 23px;
+		}
+		.triangleR:after{
+			content: '';
+			width: 0;
+			height: 0;
+			line-height: 0;
+			padding: 0;
+			display: inline-block;float: right;margin-right: -21px;
+			border-style: solid;
+			border-width: 21px 0 21px 21px;
+			border-color: transparent transparent transparent #ff312e;
+			
+		}
+		.triangleR:before{
+			content: '';
+			width: 0;
+			height: 0;
+			line-height: 0;
+			padding: 0;
+			display: inline-block;float:left;
+			border-style: solid;
+			border-width: 21px 0 21px 21px;
+			border-color: transparent transparent transparent #fff;
+		}
+	}
+	
+	.easy-autocomplete-container {
+		z-index: 999;
 	}
 }

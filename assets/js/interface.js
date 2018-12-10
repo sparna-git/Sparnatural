@@ -41,7 +41,7 @@
 			
 			
 			$.when( loadSpecSearch() ).done(function() {
-				
+				console.log(true) ;
 					initForm(thisForm) ;
 					
 					
@@ -61,29 +61,23 @@
 		function initForm(thisForm_) {
 			//console.log(specSearch) ;
 			
-			var list = getClassListSelectFor(null,'id_1') ;
-			var list_2 = getClassListSelectFor(null,'id_2') ;
-			var list_3 = getObjectListSelectFor(null,null,'id_3') ;
+			//var list = getClassListSelectFor(null,'id_1') ;
+			//var list_2 = getClassListSelectFor(null,'id_2') ;
+			//var list_3 = getObjectListSelectFor(null,null,'id_3') ;
 			//$(thisForm_._this).append(list) ;
 			//$(thisForm_._this).append(list_3) ;
 			//$(thisForm_._this).append(list_2) ;
 			
-			
-			
-			
-			var contexte = $('<ul></ul>') ;
+			var contexte = $('<ul class="componentsListe"></ul>') ;
 			$(thisForm_._this).append(contexte) ;
-			contexte = addComponent(thisForm_, contexte) ;
-			//console.log(contexte) ;
-			
-			
-			var UnCritere = new CriteriaGroup(contexte) ;
-					
-			UnCritere.ChildrensCriteriaGroup.add('hohoh') ; 
+			contexte1 = addComponent(thisForm_, contexte) ;
+			//contexte2 = addComponent(thisForm_, contexte1) ;
+			//contexte3 = addComponent(thisForm_, contexte2) ;
+			//contexte4 = addComponent(thisForm_, contexte1) ;
+			//contexte5 = addComponent(thisForm_, contexte) ;
 			
 			contexte.appendTo(thisForm_._this) ;
-			
-			
+
 		}
 	
 		/*  Find Class by ID
@@ -299,35 +293,80 @@
 		}
 		
 		function addComponent(thisForm_, contexte) {
-			console.log(thisForm_) ;
+			console.log(contexte) ;
 			var new_index = thisForm_.components.length ;
-			var gabari = '<li data-index="'+new_index+'"><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""><ul></ul></li>' ;
-			thisForm_.components.push(new_index) ;
+			var gabari = '<li class="groupe" data-index="'+new_index+'"><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
+			
+			// si il faut desscendre d'un niveau
+			if ($(contexte).is('li')) {
+				console.log('context is li') ;
+				if ($(contexte).find('>ul').length == 0) {
+					var ul = $('<ul></ul>').appendTo($(contexte)) 
+				} else {
+					var ul = $(contexte).find('>ul') ;
+				}
+				
+				gabari = $(gabari).appendTo(ul);
+				//gabarib = $(gabari).appendTo(contexte) ;
+			} else {
+				console.log('context is ul') ;
+				console.log(contexte) ;
+				gabari = $(gabari).appendTo(contexte) ;
+			}
+			
+			
 			//contexte.html('span') ;
 			//gabari = '<div></div>' ;
-			return $(contexte).append(gabari) ;
-		}
-
-		
+			//$(contexte).append(gabari) ;
+			
+			//return $(contexte).find('li[data-index='+new_index+']') ;
+			console.log($(gabari)) ;
+			
+			
+			var UnCritere = new CriteriaGroup({ AncestorHtmlContext: contexte, HtmlContext : gabari, FormContext: thisForm_, ContextComponentIndex: new_index }) ;
+			
+			
+			thisForm_.components.push({index: new_index, CriteriaGroup: UnCritere }) ;
+			
+			var $all_li = thisForm_._this.find('li.groupe') ;
+			var ratio = 80 / $all_li.length / 100 ;
+			$all_li .each(function(index) {
+				var a = (index + 1 ) * ratio ;
+				$(this).css({background : 'rgba(255,49,46,'+a+')'}) ;
+			});
+			
+			return $(gabari) ;
+		}	
 
 	
 	function CriteriaGroup(context) {
 		this._this = this ;
-		this.ParentComponent = context ;
+		this.thisForm_ = context.FormContext ;
+		this.ParentComponent = context.FormContext  ;
+		this.ComponentHtml = context.HtmlContext ;
+		this.AncestorComponentHtml = context.AncestorHtmlContext ;
+		
+		
 		this.statements = {
 			HasAllComplete : false,
 			IsOnEdit : false
 		}
-		this.id = 'CriteriaGroup-'+$(context).find('.CriteriaGroup').length ;
-		this.html = $('<div id="'+this.id+'" class="CriteriaGroup"></div>').appendTo(context.find('ul')) ;
+		this.id =  context.ContextComponentIndex ;
+		console.log('Insert component index : '+ this.id) ;
+		console.log(context) ;
+		this.html = $('<div id="CriteriaGroup-'+this.id+'" class="CriteriaGroup"></div>').appendTo(this.ComponentHtml) ;
 		
 		this.Context = new Context(context) ;
 		this.ChildrensCriteriaGroup = new ChildrensCriteriaGroup ;
 		
 		this.StartClassGroup = new StartClassGroup(this) ;
+		
 		this.ObjectPropertyGroup = new ObjectPropertyGroup(this) ;
+		
+		//EndClassGroup.prototype = new GroupContenaire;
 		this.EndClassGroup = new EndClassGroup(this) ;
 		this.EndClassWidgetGroup = new EndClassWidgetGroup(this) ;
+		this.ActionsGroup = new ActionsGroup(this) ;
 		//
 		
 		$(this).trigger( {type:"Created" } ) ;
@@ -348,11 +387,12 @@
 		arg1[arg2]() ;
 	}
 	
-	function GroupContenaire() {
+	var GroupContenaire = function () {
 		this.ParentComponent = null ;
 		this.GroupType = null ;
 		this.hasSubvalues = false ;
 		this.InputTypeComponent = null ;
+		this.tools = null ;
 		this.widgetHtml = false ;
 		this.html = $() ;
 		this.statements = {
@@ -362,14 +402,26 @@
 		
 		
 		//this.tools = new GenericTools(this) ;
-		function init() {
-			this.statements.IsOnEdit = true ;
-			//this.html.remove() ;
-			this.tools = new GenericTools(this) ;
-			this.tools.InitHtml() ;
-			this.tools.Add() ;
+		this.init = function() {
 			
-		} this.init = init ;
+				console.log(this) ;
+			if (!this.statements.Created) {
+				
+				this.statements.IsOnEdit = true ;
+				this.HtmlContainer = this.ParentComponent ;
+				//this.html.remove() ;
+				this.tools = new GenericTools(this) ;
+				this.tools.InitHtml() ;
+				this.tools.Add() ;
+				this.statements.Created = true ;
+				
+			} else {
+				console.log(this.statements.Created) ;
+				this.tools.Update() ;
+			}
+			
+			
+		} ;
 		
 		function Edit() {
 			this.InputTypeComponent.statements.IsOnEdit = true;
@@ -387,12 +439,18 @@
 	} 
 	
 	
-	function StartClassGroup(CriteriaGroupe) {
+	var StartClassGroup = function (CriteriaGroupe) {
+		this.base = GroupContenaire ;
+		this.base() ;
 		this.ParentComponent = CriteriaGroupe ;
 		this.GroupType = 'StartClassGroup' ;
 		//console.log(this) ;
 		this.statements.StartClassGroup = true ;
+		this.statements.Created = false ;
 		console.log('befor created') ;
+		
+		//ClassTypeId.prototype = new InputTypeComponent();      // child class inherits from Parent
+		//ClassTypeId.prototype.constructor = ClassTypeId; // constructor alignment
 		this.InputTypeComponent = new ClassTypeId(this) ;
 		
 		$(CriteriaGroupe).on('Created', function () {
@@ -413,15 +471,22 @@
 			console.log(this.StartClassGroup.niceslect) ;
 			
 			
-			$(this.StartClassGroup.html).find('.input-val').on('change', {arg1: this.StartClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			$(this.StartClassGroup.html).find('select.input-val').on('change', {arg1: this.StartClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
 			console.log('Edit startClassGroup is on ! ') ;
+			console.log(this) ;
+			if ($(this.Context.get().AncestorHtmlContext).is('li')) {
+				var ancestorID = parseInt( $(this.Context.get().AncestorHtmlContext).attr('data-index') )  ;
+				
+				
+			}
 		}) ;
 		function validSelected() {
 			//this.niceslect.niceSelect('update') ;
-			this.value_selected = $(this.html).find('.input-val').val() ;
+			this.value_selected = $(this.html).find('select.input-val').val() ;
 			//$(this.html).find('.input-val').attr('disabled', 'disabled');
 			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
+			
 			console.log(this) ;
 			
 		} this.validSelected = validSelected ;
@@ -429,18 +494,22 @@
 		this.init() ;
 		
 		
-	} StartClassGroup.prototype = new GroupContenaire;
+	} //StartClassGroup.prototype = new GroupContenaire;
 	
 	
 	
-	function ObjectPropertyGroup(CriteriaGroupe) {
-		this.ParentComponent = CriteriaGroupe ;
+	var ObjectPropertyGroup = function (CriteriaGroupe1) {
+		this.base = GroupContenaire ;
+		this.base() ;
+		this.ParentComponent = CriteriaGroupe1 ;
 		this.GroupType = 'ObjectPropertyGroup' ;
 		this.statements.ObjectPropertyGroup = true ;
+		this.statements.Created = false ;
 		this.hasSubvalues = true ;
 		this.InputTypeComponent = new ObjectPropertyTypeId(this) ;
 		
-		$(CriteriaGroupe).on('EndClassGroupSelected', function () {
+		$(CriteriaGroupe1).on('EndClassGroupSelected', function () {
+			
 			$(this.ObjectPropertyGroup.html).find('.input-val').unbind('change');
 			//this.ObjectPropertyGroup.init() ;
 			this.ObjectPropertyGroup.InputTypeComponent.init() ;
@@ -450,15 +519,16 @@
 			this.ObjectPropertyGroup.niceslect = $(this.ObjectPropertyGroup.html).find('select.input-val').niceSelect()  ;
 			//$('.nice-select').removeClass('open') ;
 			$('.ObjectPropertyGroup .nice-select').trigger('click') ;
-			
-			$(this.ObjectPropertyGroup.html).find('.input-val').on('change', {arg1: this.ObjectPropertyGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			console.log('ObjectProperty init change event--------------------------------------------------------------------------------------------------------------------------------------') ;
+			console.log(this.ObjectPropertyGroup.html) ;
+			$(this.ObjectPropertyGroup.html).find('select.input-val').on('change', {arg1: this.ObjectPropertyGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
 			
 			//console.log('Edit endClassGroup is on ! ') ;
 		}) ;
 			
 		function validSelected() {
-			this.value_selected = $(this.html).find('.input-val').val() ;
+			this.value_selected = $(this.html).find('select.input-val').val() ;
 			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
 			console.log(this) ;
@@ -467,19 +537,24 @@
 			
 		this.init() ;
 		
-	} ObjectPropertyGroup.prototype = new GroupContenaire;
+	} //ObjectPropertyGroup.prototype = new GroupContenaire;
 	
 	
 	
-	function EndClassGroup(CriteriaGroupe) {
+	var EndClassGroup = function EndClassGroup(CriteriaGroupe) {
+		//GroupContenaire.call(this) ;
+		this.base = GroupContenaire ;
+		this.base() ;
 		this.ParentComponent = CriteriaGroupe ;
 		this.GroupType = 'EndClassGroup' ;
 		this.statements.EndClassGroup = true ;
+		this.statements.Created = false ;
 		this.hasSubvalues = true ;
 		this.InputTypeComponent = new ClassTypeId(this) ;
-		
+		console.log('New class typeid ') ;
 		$(CriteriaGroupe).on('StartClassGroupSelected', function () {
-			//console.log(this.StartClassGroup) ;
+			console.log('StartClassGroupSelected--------------------------------------------------------------------------------------------------------------------------------------') ;
+			console.log(this.EndClassGroup.InputTypeComponent) ;
 			$(this.EndClassGroup.html).find('.input-val').unbind('change');
 			//this.EndClassGroup.init() ;
 			this.EndClassGroup.InputTypeComponent.init() ;
@@ -489,14 +564,14 @@
 			console.log($('.EndClassGroup .nice-select')) ;
 			$('.EndClassGroup .nice-select').trigger('click') ;
 			
-			$(this.EndClassGroup.html).find('.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			$(this.EndClassGroup.html).find('select.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
 			
 			console.log('Edit endClassGroup is on ! ') ;
 		}) ;
 		
 		function validSelected() {
-			this.value_selected = $(this.html).find('.input-val').val() ;
+			this.value_selected = $(this.html).find('select.input-val').val() ;
 			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 			console.log(this) ;
@@ -505,13 +580,16 @@
 		
 		this.init() ;
 		
-	} EndClassGroup.prototype = new GroupContenaire;
+	} ;// EndClassGroup.prototype = GroupContenaire.prototype;
 	
 	
-	function EndClassWidgetGroup(CriteriaGroupe) {
+	var EndClassWidgetGroup = function (CriteriaGroupe) {
+		this.base = GroupContenaire ;
+		this.base() ;
 		this.ParentComponent = CriteriaGroupe ;
 		this.GroupType = 'EndClassWidgetGroup' ;
 		this.statements.EndClassWidgetGroup = true ;
+		this.statements.Created = false ;
 		this.hasSubvalues = true ;
 		
 		function detectWidgetType() {
@@ -526,10 +604,11 @@
 		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
 			//console.log(this.StartClassGroup) ;
 			// ;
+			console.log('Init  EndClassWidgetGroup -----------------------------------------------------------------------------------------------') ;
 			this.EndClassWidgetGroup.detectWidgetType() ;
 			this.EndClassWidgetGroup.InputTypeComponent.init() ;
 			
-			
+			console.log(this.EndClassWidgetGroup.InputTypeComponent) ;
 			//this.EndClassGroup.init() ;
 			//this.EndClassGroup.InputTypeComponent.init() ;
 			//this.EndClassGroup.Edit() ;
@@ -538,46 +617,120 @@
 			//console.log($('.EndClassGroup .nice-select')) ;
 			//$('.EndClassGroup .nice-select').trigger('click') ;
 			
-			//$(this.EndClassGroup.html).find('.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			$(this.EndClassWidgetGroup.InputTypeComponent).on('change', {arg1: this.EndClassWidgetGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
 			
 			console.log('Edit endClassWidgetGroup is on ! ') ;
 		}) ;
 		
 		function validSelected() {
-			this.value_selected = $(this.html).find('.input-val').val() ;
-			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
+			this.value_selected = this.InputTypeComponent.GetValue() ;
+			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+			console.log(this) ;
+			$(this.ParentComponent.html).addClass('completed') ;
+			
+		} this.validSelected = validSelected ;
+		
+		this.init() ;
+		
+	} //EndClassWidgetGroup.prototype = new GroupContenaire;
+	
+	
+	function ActionsGroup(CriteriaGroupe) {
+		this.base = GroupContenaire ;
+		this.base() ;
+		this.ParentComponent = CriteriaGroupe ;
+		this.GroupType = 'ActionsGroup' ;
+		this.statements.ActionsGroup = true ;
+		this.statements.Created = false ;
+		this.hasSubvalues = true ;
+		
+		function detectWidgetType() {
+			
+			this.widgetType = 'Actions' ;
+			
+		} this.detectWidgetType = detectWidgetType ;
+		
+		this.InputTypeComponent = { ActionOr: new ActionOr(this), ActionAnd: new ActionAnd(this), ActionRemove: new ActionRemove(this) } ;
+		
+		$(CriteriaGroupe).on('Created', function () {
+			//console.log(this.StartClassGroup) ;
+			// ;
+			this.ActionsGroup.detectWidgetType() ;
+			this.ActionsGroup.InputTypeComponent.ActionRemove.init() ;
+			
+			console.log('Edit ActionRemove is on ! ') ;
+		}) ;
+		
+		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
+			//console.log(this.StartClassGroup) ;
+			// ;
+			this.ActionsGroup.detectWidgetType() ;
+			this.ActionsGroup.InputTypeComponent.ActionOr.init() ;
+			this.ActionsGroup.InputTypeComponent.ActionAnd.init() ;
+			
+			//$(this.ActionsGroup.InputTypeComponent.ActionOr.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddOr'}, eventProxiCriteria);
+			
+			console.log('Edit ActionOR et ActionAnd is on ! ') ;
+		}) ;
+		
+		this.AddOr = function () {
+			console.log('AddOR is launched -----------------------------------------------------------------------------------------------') ;
+			console.log(this) ;
+			//this.value_selected = $(this.html).find('.input-val').val() ;
+			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
+			
+			return false ;
+			
+		}
+		function validSelected() {
+			//this.value_selected = $(this.html).find('.input-val').val() ;
+			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 			console.log(this) ;
 			
 		} this.validSelected = validSelected ;
 		
 		this.init() ;
 		
-	} EndClassWidgetGroup.prototype = new GroupContenaire;
+	} //ActionsGroup.prototype = new GroupContenaire;
 	
 	
-	function InputTypeComponent() {
+	var InputTypeComponent = function () {
+		
+		console.log('InputypeComponent in creation') ;
+		console.log(this) ;
 		this.ParentComponent = null ;
 		this.statements = {
 			IsCompleted : false,
 			IsOnEdit : false
 		}
-
+		
 		this.possibleValue ;
+		this.tools = null ;
+		this.value = null ;
 		
 		
 		
 		
-		console.log('loading class') ;
-		console.log(this.ParentComponent) ;
 		
 		
-		function init() {
+		
+		this.init = function () {
+			console.log('Init class--------------------------------------------------------------------------------------------------------------------------------------') ;
+			console.log(this) ;
+			console.log(this.statements) ;
 			
 			//If Start Class 
+			if (this.statements.Created) {
+				this.tools.Update() ;
+				return true ;
+			}
+			
 			var possible_values = null ;
-			console.log(this.ParentComponent) ;
+			console.log(this.constructor.name) ;
 			if (this.ParentComponent instanceof StartClassGroup) {
 				possible_values = getClassListSelectFor(null, 'a') ;
 				
@@ -597,24 +750,62 @@
 				possible_values = getObjectListSelectFor(startClassGroup.value_selected, endClassGroup.value_selected, 'c') ;
 			}
 			
+			if (this.ParentComponent instanceof ActionsGroup) {
+				
+				if (this instanceof ActionOr) {
+					possible_values = '<a href="#or">OR</a>' ;
+				}
+				if (this instanceof ActionAnd) {
+					possible_values = '<a href="#and">AND</a>' ;
+				}
+				if (this instanceof ActionRemove) {
+					possible_values = '<a href="#remove">Remove</a>' ;
+				}
+				
+			} 
 			
 			
 			this.widgetHtml = possible_values ;
-			
 			this.statements.IsOnEdit = true ;
+			console.log(this.constructor.name) ; 
 			console.log('load genericTools') ;
 			this.tools = new GenericTools(this) ;
 			console.log('After load genericTools') ;
 			this.tools.InitHtml() ;
 			this.tools.Add() ;
+			this.statements.Created = true ;
 			
-		} this.init = init ;
+		}  ;
 		
-	} 
+	} ;
 	
 	
-	function ClassTypeId(GroupContenaire) {
+	function ActionOr(GroupContenaire) {
+		this.base = InputTypeComponent ;
+		this.base() ;
 		this.ParentComponent = GroupContenaire ;
+		this.statements.ActionOr = true ;
+		this.statements.ShowOnHover = true ;
+		this.statements.Created = false ;
+		this.HtmlContainer = this.ParentComponent.ParentComponent.EndClassGroup ;
+		console.log(this) ;
+		
+		
+		
+		//this.widgetHtml = 'hohohoh' ;
+		//this.html = '<div class="ClassTypeId"></div>' ;
+		
+	} //ActionOr.prototype = new InputTypeComponent;
+	
+	
+	function ActionAnd(GroupContenaire) {
+		this.base = InputTypeComponent ;
+		this.base() ;
+		this.ParentComponent = GroupContenaire ;
+		this.statements.ActionAnd = true ;
+		this.statements.ShowOnHover = true ;
+		this.statements.Created = false ;
+		this.HtmlContainer = this.ParentComponent ;
 		
 		console.log(this) ;
 		
@@ -623,27 +814,97 @@
 		//this.widgetHtml = 'hohohoh' ;
 		//this.html = '<div class="ClassTypeId"></div>' ;
 		
-	} ClassTypeId.prototype = new InputTypeComponent;
+	} //ActionAnd.prototype = new InputTypeComponent;
+	
+	
+	function ActionRemove(GroupContenaire) {
+		this.base = InputTypeComponent ;
+		this.base() ;
+		this.ParentComponent = GroupContenaire ;
+		this.statements.ActionRemove = true ;
+		this.statements.Created = false ;
+		this.HtmlContainer = this.ParentComponent ;
+		
+		console.log(this) ;
+		
+		
+		
+		//this.widgetHtml = 'hohohoh' ;
+		//this.html = '<div class="ClassTypeId"></div>' ;
+		
+	} //ActionRemove.prototype = new InputTypeComponent;
+	
+	var ClassTypeId = function (GroupContenaire) {
+		this.base = InputTypeComponent ;
+		this.base() ;
+		console.log('new classTypeId--------------------------------------------------------------------------------------------------------------------------------------') ;
+		console.log(this) ;
+		this.ParentComponent = GroupContenaire ;
+		this.HtmlContainer = this.ParentComponent ;
+		this.statements.triangleR = true ;
+		this.statements.Created = false ;
+		
+		
+		
+		
+		
+		//this.widgetHtml = 'hohohoh' ;
+		//this.html = '<div class="ClassTypeId"></div>' ;
+		
+	} ; //ClassTypeId.prototype = new InputTypeComponent;
+
+
+
+
+	function ClassTypeId2(GroupContenaire) {
+		console.log('new classTypeId2--------------------------------------------------------------------------------------------------------------------------------------') ;
+		
+		this.base = InputTypeComponent ;
+		this.base() ;
+		console.log(this) ;
+		this.ParentComponent = GroupContenaire ;
+		this.HtmlContainer = this.ParentComponent ;
+		this.statements.triangleR = true ;
+		this.statements.Created = false ;
+		
+		
+		
+		
+		//this.widgetHtml = 'hohohoh' ;
+		//this.html = '<div class="ClassTypeId"></div>' ;
+		
+	} //ClassTypeId2.prototype = new InputTypeComponent;
 	
 	
 	function ObjectPropertyTypeId(GroupContenaire) {
+		this.base = InputTypeComponent ;
+		this.base() ;
 		this.ParentComponent = GroupContenaire ;
 		this.html = '<div class="ObjectPropertyTypeId"></div>' ;
 		this.widgetHtml = null ;
+		this.HtmlContainer = this.ParentComponent ;
+		this.statements.Created = false ;
 		
-	} ObjectPropertyTypeId.prototype = new InputTypeComponent;
+	} //ObjectPropertyTypeId.prototype = new InputTypeComponent;
 	
 		
 	function ObjectPropertyTypeWidget(GroupContenaire) {
+		this.base = InputTypeComponent ;
+		this.base() ;
 		this.ParentComponent = GroupContenaire ;
 		this.html = '<div class="ObjectPropertyTypeWidget"></div>' ;
 		this.widgetHtml = null ;
 		this.widgetType = null ;
-		
+		this.HtmlContainer = this.ParentComponent ;
+		this.statements.Created = false ;
 		
 		function init() {
 			
 			if (this.ParentComponent instanceof EndClassWidgetGroup) {
+				if (this.statements.Created) {
+					this.tools.Update() ;
+					return true ;
+				}
 				console.log(this.ParentComponent.ParentComponent) ;
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
@@ -662,6 +923,7 @@
 				this.tools.InitHtml() ;
 				this.tools.Add() ;
 				this.widgetComponent.init() ;
+				this.statements.Created = true ;
 			}
 			
 			
@@ -686,7 +948,33 @@
 			}
 		} this.getWigetTypeClassName = getWigetTypeClassName ;
 		
-	} ObjectPropertyTypeWidget.prototype = new InputTypeComponent;
+		this.GetValue = function () {
+			
+			var value_widget = null ;
+			switch (this.widgetType) {
+			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
+			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
+			  console.log(id_input);
+				value_widget = $(this.widgetComponent.html).find(id_input).val() ;
+				break;
+			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
+				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
+			  console.log(id_input);
+				value_widget = $(id_input).val() ;
+			    break;
+			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
+				//console.log('Mangoes and papayas are $2.79 a pound.');
+				value_widget = $(this.widgetComponent.html).find('input').val() ;
+				// expected output: "Mangoes and papayas are $2.79 a pound."
+				break;
+			  default:
+				//console.log('Sorry, we are out of ' + expr + '.');
+			}
+			console.log(this) ;
+			return value_widget ;
+		}
+		
+	} //ObjectPropertyTypeWidget.prototype = new InputTypeComponent;
 	
 	
 	
@@ -701,18 +989,27 @@
 	}
 	
 	function autoCompleteWidget(InputTypeComponent) {
+		this.base = widgetType ;
+		this.base() ;
 		this.ParentComponent = InputTypeComponent ;
 		this.ParentComponent.statements.AutocompleteWidget  = true ;
 		
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		this.html = '<input id="basics" /><input id="basics-value" type="hidden"/>' ;
+		console.log(this) ;
+		
+		
+		this.html = '<input id="ecgrw-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
 		
 		function init() {
-			console.log(this.ParentComponent.ParentComponent) ;
+			console.log(this) ;
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
 			
+			var id_inputs = this.IdCriteriaGroupe ;
+			
+			var itc_obj = this.ParentComponent;
 			
 			var options = {
 				ajaxSettings: {crossDomain: true, type: 'GET'} ,
@@ -732,15 +1029,15 @@
 				  },
 
 				  preparePostData: function(data) {
-					data.phrase = $("#basics").val();
+					data.phrase = $('#ecgrw-'+id_inputs+'-input').val();
 					return data;
 				  },
 				  list: {
 
-					onSelectItemEvent: function() {
-							var value = $("#basics").getSelectedItemData().uri;
-
-							$("#basics-value").val(value).trigger("change");
+					onChooseEvent: function() {
+							var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData().uri;
+						$(itc_obj).trigger("change");
+							$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");
 					}
 				  },
 
@@ -748,16 +1045,18 @@
 			};
 			//Need to add in html befor
 			
-			$("#basics").easyAutocomplete(options);
+			$('#ecgrw-'+id_inputs+'-input').easyAutocomplete(options);
 			
 			
 		} this.init = init ;
 		
 		
 		
-	} autoCompleteWidget.prototype = new widgetType;
+	} //autoCompleteWidget.prototype = new widgetType;
 	
 	function ListWidget(InputTypeComponent) {
+		this.base = widgetType ;
+		this.base() ;
 		this.ParentComponent = InputTypeComponent ;
 		this.ParentComponent.statements.ListeWidget = true ;
 		
@@ -801,9 +1100,11 @@
 		
 		
 		
-	} ListWidget.prototype = new widgetType;
+	} //ListWidget.prototype = new widgetType;
 	
 	function DatesWidget(InputTypeComponent) {
+		this.base = widgetType ;
+		this.base() ;
 		this.ParentComponent = InputTypeComponent ;
 		this.ParentComponent.statements.AutocompleteWidget  = true ;
 		
@@ -870,21 +1171,26 @@
 		
 		
 		
-	} DatesWidget.prototype = new widgetType;
+	} //DatesWidget.prototype = new widgetType;
 	
 	
 	function GenericTools(component) {
 		this.component = component ;
+		this.component.inserted = false ;
 		
 		function AppendComponentHtml() {
 			console.log(this.component) ;
-			this.component.html = $(this.component.html).appendTo(this.component.ParentComponent.html) ;
+			if (!this.component.inserted ) {
+				this.component.html = $(this.component.html).appendTo(this.component.HtmlContainer.html) ;
+				this.component.inserted = true;
+			}
 			
 		} this.AppendComponentHtml = AppendComponentHtml ;
 		
 		function UpdateStatementsClass() {
 			
 			//var html = this.component.html ;
+			console.log(this.component.statements) ;
 			for (var item in this.component.statements) {
 				
 				if (this.component.statements[item] === true) {
@@ -901,9 +1207,16 @@
 		
 		function Add() {
 			this.UpdateStatementsClass() ;
-			this.AppendComponentHtml() ;
+			console.log(this.component.inserted) ;
+			if (!this.component.inserted) {
+				this.AppendComponentHtml() ;
+			}
 
 		} this.Add = Add ;
+		
+		function Update() {
+			this.UpdateStatementsClass() ;
+		} this.Update = Update ;
 		
 		function InitHtml() {
 			console.log(this.component);
