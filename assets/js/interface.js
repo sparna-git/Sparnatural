@@ -374,9 +374,13 @@
 		$(this).trigger( {type:"Created" } ) ;
 		
 		
-		function initEnd() {
+		this.initEnd = function () {
 			$(this).trigger( {type:"StartClassGroupSelected" } ) ;
-		} this.initEnd = initEnd ;
+		} ;
+		
+		this.initCompleted = function () {
+			$(this.html).parent('li').addClass('completed') ;
+		}
 		
 	}
 	function eventProxiCriteria(e) {
@@ -601,7 +605,7 @@
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 			console.log(this) ;
-			$(this.ParentComponent.html).addClass('completed') ;
+			this.ParentComponent.initCompleted() ;
 			
 		} this.validSelected = validSelected ;
 		
@@ -655,6 +659,7 @@
 			
 			$(new_component).find('.nice-select').trigger('click') ;
 			$(new_component).find('.nice-select').trigger('click') ;
+			this.ParentComponent.initCompleted() ;
 			//$(new_component).find('.nice-select').trigger('change') ;
 			//new_component.appendTo(this.ParentComponent.Context.HtmlContext) ;
 			
@@ -757,7 +762,9 @@
 					} else {
 						default_value = dep_element.element.StartClassGroup.value_selected ;
 					}
-					trigger = {element:$(this.ParentComponent.html).find('select.input-val'), eventName: 'change'} ;
+					this.statements.Highlited = false ;
+				} else {
+					this.statements.Highlited = true ;
 				}
 				
 				possible_values = getClassListSelectFor(null, 'a-'+id, default_value) ;
@@ -859,7 +866,7 @@
 		this.base() ;
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = this.ParentComponent ;
-		this.statements.triangleR = true ;
+		this.statements.Highlited = true ;
 		this.statements.Created = false ;
 		
 		
@@ -882,7 +889,7 @@
 		console.log(this) ;
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = this.ParentComponent ;
-		this.statements.triangleR = true ;
+		this.statements.Highlited = true ;
 		this.statements.Created = false ;
 		
 		

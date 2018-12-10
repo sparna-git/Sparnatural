@@ -11,10 +11,9 @@ body .CriteriaGroup {
   margin-top: 40px;
   margin-bottom: 40px;
   background: #fff; }
-  body .CriteriaGroup .GroupContenaire {
-    /*min-width: 15%;*/
+  body .CriteriaGroup > div {
+    min-width: 100px;
     background: #fff;
-    Border-right: 1px solid #ddd;
     padding: 2px 5px; }
   body .CriteriaGroup .EndClassGroup {
     position: relative; }
@@ -91,41 +90,39 @@ body form ul.componentsListe li.groupe {
   body form ul.componentsListe li.groupe .nice-select.disabled {
     color: #888;
     border-color: transparent; }
-
-body .completed .triangleR {
-  background: #ff312e;
-  margin-right: 23px; }
-  body .completed .triangleR .nice-select {
-    background: transparent;
-    border-color: transparent; }
-  body .completed .triangleR .nice-select.disabled {
-    color: #fff;
-    border-color: transparent; }
-
-body .completed .triangleR:after {
-  content: '';
-  width: 0;
-  height: 0;
-  line-height: 0;
-  padding: 0;
-  display: inline-block;
-  float: right;
-  margin-right: -21px;
-  border-style: solid;
-  border-width: 21px 0 21px 21px;
-  border-color: transparent transparent transparent #ff312e; }
-
-body .completed .triangleR:before {
-  content: '';
-  width: 0;
-  height: 0;
-  line-height: 0;
-  padding: 0;
-  display: inline-block;
-  float: left;
-  border-style: solid;
-  border-width: 21px 0 21px 21px;
-  border-color: transparent transparent transparent #fff; }
+  body form ul.componentsListe li.groupe.completed > div .Highlited {
+    background: #ff312e;
+    margin-right: 23px; }
+    body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select {
+      background: transparent;
+      border-color: transparent;
+      color: #fff; }
+    body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select.disabled {
+      color: #fff;
+      border-color: transparent; }
+  body form ul.componentsListe li.groupe.completed > div .Highlited:after {
+    content: '';
+    width: 0;
+    height: 0;
+    line-height: 0;
+    padding: 0;
+    display: inline-block;
+    float: right;
+    margin-right: -21px;
+    border-style: solid;
+    border-width: 21px 0 21px 21px;
+    border-color: transparent transparent transparent #ff312e; }
+  body form ul.componentsListe li.groupe.completed > div .Highlited:before {
+    content: '';
+    width: 0;
+    height: 0;
+    line-height: 0;
+    padding: 0;
+    display: inline-block;
+    float: left;
+    border-style: solid;
+    border-width: 21px 0 21px 21px;
+    border-color: transparent transparent transparent #fff; }
 
 body .easy-autocomplete-container {
   z-index: 999; }

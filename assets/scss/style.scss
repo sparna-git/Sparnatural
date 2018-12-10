@@ -11,11 +11,10 @@ body {
 		margin-bottom: 40px;
 		background: #fff;
 		
-		.GroupContenaire {
+		&>div {
 			
-			/*min-width: 15%;*/
+			min-width: 100px;
 			background: #fff;
-			Border-right: 1px solid #ddd;
 			padding: 2px 5px;
 		}
 		.EndClassGroup {
@@ -125,46 +124,50 @@ body {
 					color: #888;
 					border-color: transparent;
 				}
+				
+				&.completed {
+					&>div .Highlited {
+						background: #ff312e;
+						margin-right: 23px;
+						
+						.nice-select {
+								background: transparent;
+								border-color: transparent;
+								color: #fff;
+							}
+							.nice-select.disabled {
+								color: #fff;
+								border-color: transparent;
+							}
+					}
+					&>div .Highlited:after{
+						content: '';
+						width: 0;
+						height: 0;
+						line-height: 0;
+						padding: 0;
+						display: inline-block;float: right;margin-right: -21px;
+						border-style: solid;
+						border-width: 21px 0 21px 21px;
+						border-color: transparent transparent transparent #ff312e;
+						
+					}
+					&>div .Highlited:before{
+						content: '';
+						width: 0;
+						height: 0;
+						line-height: 0;
+						padding: 0;
+						display: inline-block;float:left;
+						border-style: solid;
+						border-width: 21px 0 21px 21px;
+						border-color: transparent transparent transparent #fff;
+					}
+				
 			}
 		}
 	}
-	.completed {
-		.triangleR {
-			background: #ff312e;
-			margin-right: 23px;
-			
-			.nice-select {
-					background: transparent;
-					border-color: transparent;
-				}
-				.nice-select.disabled {
-					color: #fff;
-					border-color: transparent;
-				}
-		}
-		.triangleR:after{
-			content: '';
-			width: 0;
-			height: 0;
-			line-height: 0;
-			padding: 0;
-			display: inline-block;float: right;margin-right: -21px;
-			border-style: solid;
-			border-width: 21px 0 21px 21px;
-			border-color: transparent transparent transparent #ff312e;
-			
-		}
-		.triangleR:before{
-			content: '';
-			width: 0;
-			height: 0;
-			line-height: 0;
-			padding: 0;
-			display: inline-block;float:left;
-			border-style: solid;
-			border-width: 21px 0 21px 21px;
-			border-color: transparent transparent transparent #fff;
-		}
+	
 	}
 	
 	.easy-autocomplete-container {
