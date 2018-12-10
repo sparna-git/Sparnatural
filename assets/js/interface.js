@@ -158,6 +158,16 @@
 			return html_list ;
 		}
 		
+		function ClassHaveRange(ClassID) {
+			console.log(getAllClassFor(ClassID)) ;
+			if (getAllClassFor(ClassID).length > 0 ) {
+				return true;
+			} else {
+				return false ;
+			}
+			
+		}
+		
 		function getObjectListSelectFor(domainClassID, rangeClassID, inputID, default_value) {
 			var list = [] ;
 			var items = getAllObjectPropertyFor(domainClassID,rangeClassID) ;
@@ -188,7 +198,7 @@
 			var classIsDomain = false ;
 			$.each( specSearch['@graph'], function( key, val ) {
 				if ( ( val['@type'] == 'ObjectProperty') &&  (val['@id'] == ObjectPropertyId) ){
-					console.log(val) ;
+					//console.log(val) ;
 					if ($.type(val['domain']) === "object") {
 						$.each( val['domain']['unionOf']['@list'], function( domkey, domval ) {
 							if (domval['@id'] == ClassId ) {
@@ -214,7 +224,7 @@
 			if (ClassID === null) {
 				$searchKey = 'domain' ;
 			}
-			console.log(ClassID) ;
+			//console.log(ClassID) ;
 			$.each( specSearch['@graph'], function( key, val ) {
 				if ( val['@type'] == 'ObjectProperty') {
 					if ($.type(val[$searchKey]) === "object") {
@@ -234,7 +244,7 @@
 								var item = getClassById(val[$searchKey]) ;
 								items = pushIfNotInArray(item, items);
 						} else {
-							console.log(val['@id']) ;
+							//console.log(val['@id']) ;
 							if (classIsInDomain(val['@id'], ClassID)) {
 								var item = getClassById(val[$searchKey]) ;
 								items = pushIfNotInArray(item, items);
@@ -560,6 +570,12 @@
 		function validSelected() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			
+			if (ClassHaveRange(this.value_selected)) {
+				$(this.ParentComponent.html).parent('li').removeClass('OrImpossible') ;
+			} else {
+				$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
+			}
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 			
 		} this.validSelected = validSelected ;

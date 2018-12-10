@@ -122,6 +122,7 @@ body {
 				&:hover>div>div>.ShowOnHover {
 					display: block;
 				}
+				&.OrImpossible:hover>div>div>.ActionOr.ShowOnHover,
 				&:hover>div.completed>div>.ActionOr.ShowOnHover {
 					display: none;
 				}
