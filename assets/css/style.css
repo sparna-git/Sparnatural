@@ -86,12 +86,18 @@ body form ul.componentsListe li.groupe {
     background: transparent;
     border-color: transparent; }
   body form ul.componentsListe li.groupe .nice-select.disabled {
-    color: #fff;
+    color: #888;
     border-color: transparent; }
 
 body .completed .triangleR {
   background: #ff312e;
   margin-right: 23px; }
+  body .completed .triangleR .nice-select {
+    background: transparent;
+    border-color: transparent; }
+  body .completed .triangleR .nice-select.disabled {
+    color: #fff;
+    border-color: transparent; }
 
 body .completed .triangleR:after {
   content: '';

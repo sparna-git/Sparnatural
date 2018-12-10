@@ -670,7 +670,8 @@
 			this.ActionsGroup.InputTypeComponent.ActionOr.init() ;
 			this.ActionsGroup.InputTypeComponent.ActionAnd.init() ;
 			
-			//$(this.ActionsGroup.InputTypeComponent.ActionOr.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddOr'}, eventProxiCriteria);
+			$(this.ActionsGroup.InputTypeComponent.ActionOr.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddOr'}, eventProxiCriteria);
+			$(this.ActionsGroup.InputTypeComponent.ActionAnd.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddAnd'}, eventProxiCriteria);
 			
 			console.log('Edit ActionOR et ActionAnd is on ! ') ;
 		}) ;
@@ -678,6 +679,23 @@
 		this.AddOr = function () {
 			console.log('AddOR is launched -----------------------------------------------------------------------------------------------') ;
 			console.log(this) ;
+			
+			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.HtmlContext) ;
+			
+			//new_component.appendTo(this.ParentComponent.Context.HtmlContext) ;
+			
+			//this.value_selected = $(this.html).find('.input-val').val() ;
+			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
+			
+			return false ;
+			
+		}
+		this.AddAnd = function () {
+			console.log('AddAnd is launched -----------------------------------------------------------------------------------------------') ;
+			console.log(this) ;
+			
+			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.AncestorHtmlContext) ;
 			//this.value_selected = $(this.html).find('.input-val').val() ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;

@@ -118,7 +118,7 @@ body {
 					border-color: transparent;
 				}
 				.nice-select.disabled {
-					color: #fff;
+					color: #888;
 					border-color: transparent;
 				}
 			}
@@ -128,6 +128,15 @@ body {
 		.triangleR {
 			background: #ff312e;
 			margin-right: 23px;
+			
+			.nice-select {
+					background: transparent;
+					border-color: transparent;
+				}
+				.nice-select.disabled {
+					color: #fff;
+					border-color: transparent;
+				}
 		}
 		.triangleR:after{
 			content: '';
@@ -158,3 +167,4 @@ body {
 		z-index: 999;
 	}
 }
+
