@@ -343,7 +343,11 @@
 			thisForm_.components.push({index: new_index, CriteriaGroup: UnCritere }) ;
 			
 			var $all_li = thisForm_._this.find('li.groupe') ;
-			var ratio = 80 / $all_li.length / 100 ;
+			var leng = $all_li.length ;
+			if (leng  <= 10 ) {
+				leng = 10 ;
+			}
+			var ratio = 100 / leng / 100 ;
 			$all_li .each(function(index) {
 				var a = (index + 1 ) * ratio ;
 				$(this).css({background : 'rgba(255,49,46,'+a+')'}) ;
