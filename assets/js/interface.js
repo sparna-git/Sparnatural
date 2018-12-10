@@ -697,6 +697,7 @@
 			console.log(new_component) ;
 			$(new_component).find('.nice-select').trigger('click') ;
 			$(new_component).find('.nice-select').trigger('click') ;
+			//$(new_component).find('.nice-select').trigger('change') ;
 			//new_component.appendTo(this.ParentComponent.Context.HtmlContext) ;
 			
 			//this.value_selected = $(this.html).find('.input-val').val() ;
@@ -711,6 +712,9 @@
 			console.log(this) ;
 			
 			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.AncestorHtmlContext) ;
+			
+			$(new_component).find('.nice-select').trigger('click') ;
+			$(new_component).find('.nice-select').trigger('click') ;
 			//this.value_selected = $(this.html).find('.input-val').val() ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
@@ -802,14 +806,15 @@
 			if (this.ParentComponent instanceof StartClassGroup) {
 				
 				var dep_element = GetDependantCriteria(this.ParentComponent.ParentComponent.thisForm_, id) ;
-				console.log(dep_element) ;
+				console.log(this.ParentComponent.html) ;
+				console.log($(this.ParentComponent.html[0]).find('select.input-val')) ;
 				if (dep_element) {
 					if (dep_element.type == 'parent' ) {
 						default_value = dep_element.element.EndClassGroup.value_selected ;
 					} else {
 						default_value = dep_element.element.StartClassGroup.value_selected ;
 					}
-					trigger = {element:$(this.ParentComponent.ParentComponent.StartClassGroup.html).find('select.input-val'), eventName: 'change'} ;
+					trigger = {element:$(this.ParentComponent.html).find('select.input-val'), eventName: 'change'} ;
 				}
 				
 				possible_values = getClassListSelectFor(null, 'a-'+id, default_value) ;
@@ -854,10 +859,10 @@
 			this.tools.InitHtml() ;
 			this.tools.Add() ;
 			this.statements.Created = true ;
-			
+			console.log($(this.widgetHtml)) ;
 			if (trigger) {
-				console.log(trigger) 
-				$(trigger.element).trigger(trigger.eventName) ;
+				//console.log(trigger) 
+				//$(this.widgetHtml).trigger('change') ;
 			}
 			
 		}  ;

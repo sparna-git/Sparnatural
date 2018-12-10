@@ -91,6 +91,10 @@ body {
 				}
 				li li>div {
 					margin-left: 92px;
+					
+				}
+				li li:hover>div>div>.ActionOr.ShowOnHover {
+					display: none;
 				}
 			}
 			li.groupe {
