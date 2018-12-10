@@ -77,6 +77,8 @@
 			//contexte5 = addComponent(thisForm_, contexte) ;
 			
 			contexte.appendTo(thisForm_._this) ;
+			
+			$(thisForm_._this).find('.nice-select').trigger('click') ;
 
 		}
 	
@@ -137,28 +139,37 @@
 		}
 		
 		
-		function getClassListSelectFor(classId, inputID) {
+		function getClassListSelectFor(classId, inputID, default_value) {
 			var list = [] ;
 			var items = getAllClassFor(classId) ;
+			console.log(default_value) ;
 			$.each( items, function( key, val ) {
 				var label = getClassLabel(val['@id']) ;
-				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'">'+ label + '</option>' );
+				var selected ='';
+				if (default_value == val['@id']) {
+					selected = 'selected="selected"' ;
+				}
+				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'"'+selected+'>'+ label + '</option>' );
 
 			}) ;
 			var html_list = $( "<select/>", {
 				"class": "my-new-list input-val",
-				"id": inputID,
+				"id": 'select-'+inputID,
 				html: list.join( "" )
 			  });
 			return html_list ;
 		}
 		
-		function getObjectListSelectFor(domainClassID, rangeClassID, inputID) {
+		function getObjectListSelectFor(domainClassID, rangeClassID, inputID, default_value) {
 			var list = [] ;
 			var items = getAllObjectPropertyFor(domainClassID,rangeClassID) ;
 			$.each( items, function( key, val ) {
 				var label = gatLabel(val) ;
-				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'">'+ label + '</option>' );
+				var selected ='';
+				if (default_value == val['@id']) {
+					selected = 'selected="selected"' ;
+				}
+				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'"'+selected+'>'+ label + '</option>' );
 
 			}) ;
 			var html_list = $( "<select/>", {
@@ -464,8 +475,9 @@
 
 			//$(this.html).find('.input-val').change($.proxy(this.initEnd() , null)); 
 			this.StartClassGroup.niceslect = $(select).niceSelect() ;
-			console.log('Reclick') ;
-			$(this.StartClassGroup.niceslect).next().trigger('click') ;
+			console.log('Reclick ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ') ;
+			console.log($(this.StartClassGroup.niceslect).next() );
+			//$(this.StartClassGroup.niceslect).next().trigger('click') ;
 			
 			//$('.StartClassGroup .nice-select').trigger('click') ;
 			console.log(this.StartClassGroup.niceslect) ;
@@ -682,13 +694,16 @@
 			
 			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.HtmlContext) ;
 			
+			console.log(new_component) ;
+			$(new_component).find('.nice-select').trigger('click') ;
+			$(new_component).find('.nice-select').trigger('click') ;
 			//new_component.appendTo(this.ParentComponent.Context.HtmlContext) ;
 			
 			//this.value_selected = $(this.html).find('.input-val').val() ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 			
-			return false ;
+			//return false ;
 			
 		}
 		this.AddAnd = function () {
@@ -715,6 +730,39 @@
 		
 	} //ActionsGroup.prototype = new GroupContenaire;
 	
+	var GetDependantCriteria = function (thisForm_, id) {
+		var dependant = null ;
+		var dep_id = null ;
+		var element = thisForm_._this.find('li[data-index="'+id+'"]') ;
+		
+		if ($(element).parents('li').length > 0) {
+			
+		dep_id = $($(element).parents('li')[0]).attr('data-index') ;
+			dependant = {type : 'parent'}  ;
+			
+		} else {
+			if ($(element).prev().length > 0) {
+				dep_id = $(element).prev().attr('data-index') ;
+				dependant = {type : 'sibling'}  ;
+				
+			} else {
+				
+			}
+		}
+		$(thisForm_.components).each(function(index) {
+			
+			if (this.index == dep_id) {
+				dependant.element = this.CriteriaGroup ;
+			}
+			
+		}) ;
+		console.log('dependant ______'+id+'_______________'+dep_id+'_____________________________________________________________________') ;
+		console.log(element) ;
+		console.log($(element).parents('li')[0]) ;
+		console.log(dependant) ;
+		return dependant ;
+		
+	}
 	
 	var InputTypeComponent = function () {
 		
@@ -746,11 +794,25 @@
 				this.tools.Update() ;
 				return true ;
 			}
-			
+			var trigger = null ;
 			var possible_values = null ;
+			var default_value = null ;
 			console.log(this.constructor.name) ;
+			var id = this.ParentComponent.ParentComponent.id ;
 			if (this.ParentComponent instanceof StartClassGroup) {
-				possible_values = getClassListSelectFor(null, 'a') ;
+				
+				var dep_element = GetDependantCriteria(this.ParentComponent.ParentComponent.thisForm_, id) ;
+				console.log(dep_element) ;
+				if (dep_element) {
+					if (dep_element.type == 'parent' ) {
+						default_value = dep_element.element.EndClassGroup.value_selected ;
+					} else {
+						default_value = dep_element.element.StartClassGroup.value_selected ;
+					}
+					trigger = {element:$(this.ParentComponent.ParentComponent.StartClassGroup.html).find('select.input-val'), eventName: 'change'} ;
+				}
+				
+				possible_values = getClassListSelectFor(null, 'a-'+id, default_value) ;
 				
 				console.log(possible_values) ;
 			} 
@@ -758,14 +820,14 @@
 			if (this.ParentComponent instanceof EndClassGroup) {
 				console.log(this.ParentComponent.ParentComponent) ;
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
-				possible_values = getClassListSelectFor(startClassGroup.value_selected, 'b') ;
+				possible_values = getClassListSelectFor(startClassGroup.value_selected, 'b-'+id) ;
 			}
 			
 			if (this.ParentComponent instanceof ObjectPropertyGroup) {
 				console.log(this.ParentComponent.ParentComponent) ;
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-				possible_values = getObjectListSelectFor(startClassGroup.value_selected, endClassGroup.value_selected, 'c') ;
+				possible_values = getObjectListSelectFor(startClassGroup.value_selected, endClassGroup.value_selected, 'c-'+id) ;
 			}
 			
 			if (this.ParentComponent instanceof ActionsGroup) {
@@ -792,6 +854,11 @@
 			this.tools.InitHtml() ;
 			this.tools.Add() ;
 			this.statements.Created = true ;
+			
+			if (trigger) {
+				console.log(trigger) 
+				$(trigger.element).trigger(trigger.eventName) ;
+			}
 			
 		}  ;
 		

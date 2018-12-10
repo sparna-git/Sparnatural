@@ -91,7 +91,9 @@
     
     // Open/close
     $(document).on('click.nice_select', '.nice-select', function(event) {
+		//alert("hohoh") ;
       var $dropdown = $(this);
+	  console.log(this) ;
 	  if ($dropdown.hasClass('open') ) {
 		  $dropdown.toggleClass('open');
 		  $dropdown.prev('select').val($dropdown.find('.selected').data('value')).trigger('change');
@@ -113,11 +115,11 @@
     });
     
     // Close when clicking outside
-    $(document).on('click.nice_select', function(event) {
+   /* $(document).on('click.nice_select', function(event) {
       if ($(event.target).closest('.nice-select').length === 0) {
         $('.nice-select').removeClass('open').find('.option');  
       }
-    });
+    });*/
     
     // Option click
     $(document).on('click.nice_select', '.nice-select .option:not(.disabled)', function(event) {
