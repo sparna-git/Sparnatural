@@ -559,6 +559,7 @@
 		this.InputTypeComponent = new ClassTypeId(this) ;
 		$(CriteriaGroupe).on('StartClassGroupSelected', function () {
 			$(this.EndClassGroup.html).find('.input-val').unbind('change');
+			$(this.EndClassGroup.html).append('<div class="EditComponents ShowOnHover"></div>');
 			//this.EndClassGroup.init() ;
 			this.EndClassGroup.InputTypeComponent.init() ;
 			this.EndClassGroup.Edit() ;
@@ -606,13 +607,14 @@
 		
 		this.InputTypeComponent = new ObjectPropertyTypeWidget(this) ;
 		
+		
 		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
 			//console.log(this.StartClassGroup) ;
 			// ;
 			console.log('Init  EndClassWidgetGroup -----------------------------------------------------------------------------------------------') ;
 			this.EndClassWidgetGroup.detectWidgetType() ;
+			this.EndClassWidgetGroup.InputTypeComponent.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
 			this.EndClassWidgetGroup.InputTypeComponent.init() ;
-			
 			
 			$(this.EndClassWidgetGroup.InputTypeComponent).on('change', {arg1: this.EndClassWidgetGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
@@ -664,6 +666,9 @@
 			//console.log(this.StartClassGroup) ;
 			// ;
 			this.ActionsGroup.detectWidgetType() ;
+			
+			console.log($(this.EndClassGroup) ) 
+			this.ActionsGroup.InputTypeComponent.ActionOr.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
 			this.ActionsGroup.InputTypeComponent.ActionOr.init() ;
 			this.ActionsGroup.InputTypeComponent.ActionAnd.init() ;
 			
@@ -841,7 +846,8 @@
 		this.statements.ActionOr = true ;
 		this.statements.ShowOnHover = true ;
 		this.statements.Created = false ;
-		this.HtmlContainer = this.ParentComponent.ParentComponent.EndClassGroup ;
+		this.HtmlContainer = {} ;
+		
 		
 		
 		

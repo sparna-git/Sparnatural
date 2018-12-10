@@ -1,3 +1,6 @@
+$height-components: 48px;
+$height-components-under: 42px;
+
 body {
 	section {
 		padding-top: 30px;
@@ -19,14 +22,19 @@ body {
 		}
 		.EndClassGroup {
 			position: relative;
-			.ActionOr {
+			.EditComponents {
 				position: absolute;
 				left: 0;
-				top: 100%;
+				top: $height-components - 1;
 				line-height: 46px;
 				width: 46px;
 				text-align: center;
 				z-index: 101;
+				height: $height-components;
+				
+			}
+			.ActionOr {
+				/*top: $height-components*2;*/
 			}
 		}
 		.EndClassWidgetGroup {
@@ -102,7 +110,7 @@ body {
 					margin-left: 92px;
 					
 				}
-				li li:hover>div>div>.ActionOr.ShowOnHover {
+				li li:hover>div>div> .ActionOr.ShowOnHover {
 					display: none;
 				}
 			}
@@ -122,8 +130,8 @@ body {
 				&:hover>div>div>.ShowOnHover {
 					display: block;
 				}
-				&.OrImpossible:hover>div>div>.ActionOr.ShowOnHover,
-				&:hover>div.completed>div>.ActionOr.ShowOnHover {
+				&.OrImpossible:hover>div>div .ActionOr.ShowOnHover,
+				&:hover>div.completed>div .ActionOr.ShowOnHover {
 					display: none;
 				}
 				
@@ -180,9 +188,14 @@ body {
 	}
 	
 	}
-	
-	.easy-autocomplete-container {
-		z-index: 999;
+	.easy-autocomplete {
+		input {
+			height: $height-components-under;
+		}
+		.easy-autocomplete-container {
+			z-index: 999;
+		}
 	}
+
 }
 

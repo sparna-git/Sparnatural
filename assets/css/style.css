@@ -17,14 +17,17 @@ body .CriteriaGroup {
     padding: 2px 5px; }
   body .CriteriaGroup .EndClassGroup {
     position: relative; }
-    body .CriteriaGroup .EndClassGroup .ActionOr {
+    body .CriteriaGroup .EndClassGroup .EditComponents {
       position: absolute;
       left: 0;
-      top: 100%;
+      top: 47px;
       line-height: 46px;
       width: 46px;
       text-align: center;
-      z-index: 101; }
+      z-index: 101;
+      height: 48px; }
+    body .CriteriaGroup .EndClassGroup .ActionOr {
+      /*top: $height-components*2;*/ }
   body .CriteriaGroup .EndClassWidgetGroup {
     min-width: 35%;
     padding: 2px 15px; }
@@ -85,8 +88,8 @@ body form ul.componentsListe li.groupe {
     display: none; }
   body form ul.componentsListe li.groupe:hover > div > div > .ShowOnHover {
     display: block; }
-  body form ul.componentsListe li.groupe.OrImpossible:hover > div > div > .ActionOr.ShowOnHover,
-  body form ul.componentsListe li.groupe:hover > div.completed > div > .ActionOr.ShowOnHover {
+  body form ul.componentsListe li.groupe.OrImpossible:hover > div > div .ActionOr.ShowOnHover,
+  body form ul.componentsListe li.groupe:hover > div.completed > div .ActionOr.ShowOnHover {
     display: none; }
   body form ul.componentsListe li.groupe .nice-select {
     background: transparent;
@@ -128,5 +131,8 @@ body form ul.componentsListe li.groupe {
     border-width: 21px 0 21px 21px;
     border-color: transparent transparent transparent #fff; }
 
-body .easy-autocomplete-container {
+body .easy-autocomplete input {
+  height: 42px; }
+
+body .easy-autocomplete .easy-autocomplete-container {
   z-index: 999; }
