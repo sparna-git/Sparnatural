@@ -140,6 +140,7 @@
       ]
     },
     {
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Place",
       "@type" : "Class",
       "label": [
         {
