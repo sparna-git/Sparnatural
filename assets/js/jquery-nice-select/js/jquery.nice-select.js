@@ -66,12 +66,22 @@
       var $dropdown = $select.next();
       var $options = $select.find('option');
       var $selected = $select.find('option:selected');
+	  
+	  var icon ='';
+	  if ($selected.attr('data-icon') !== undefined) {
+			icon = '<img src="assets/icons/noir/'+$selected.attr('data-icon')+'" /><img class="highlited" src="assets/icons/blanc/'+$selected.attr('data-icon')+'" />' ;
+		}
+		
       
-      $dropdown.find('.current').html($selected.data('display') || $selected.text());
+      $dropdown.find('.current').html($selected.data('display') || icon+$selected.html());
       
       $options.each(function(i) {
         var $option = $(this);
         var display = $option.data('display');
+		var icon = '' ;
+		if ($option.attr('data-icon') !== undefined) {
+			icon = '<img src="assets/icons/noir/'+$option.attr('data-icon')+'" /><img class="highlited" src="assets/icons/blanc/'+$option.attr('data-icon')+'" />' ;
+		}
 
         $dropdown.find('ul').append($('<li></li>')
           .attr('data-value', $option.val())
@@ -79,7 +89,7 @@
           .addClass('option' +
             ($option.is(':selected') ? ' selected' : '') +
             ($option.is(':disabled') ? ' disabled' : ''))
-          .html($option.text())
+          .html(icon+$option.text())
         );
       });
     }
@@ -129,8 +139,10 @@
       $dropdown.find('.selected').removeClass('selected');
       $option.addClass('selected');
       
-      var text = $option.data('display') || $option.text();
-      $dropdown.find('.current').text(text);
+	  
+		
+      var text = $option.data('display') || $option.html();
+      $dropdown.find('.current').html(text);
       
       
     });

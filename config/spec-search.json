@@ -39,7 +39,8 @@
           "@value" : "Mobilier",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "mobilier.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Type",
@@ -53,7 +54,8 @@
           "@value" : "Type",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "type.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Site",
@@ -67,7 +69,8 @@
           "@value" : "Site",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "site.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#US",
@@ -81,7 +84,8 @@
           "@value" : "Unité stratigraphique",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "unite_str.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait",
@@ -95,7 +99,8 @@
           "@value" : "Fait",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "fait.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture",
@@ -109,7 +114,8 @@
           "@value" : "Sepulture",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "sepulture.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Construction",
@@ -123,7 +129,8 @@
           "@value" : "Construction",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "construction.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Acteur",
@@ -137,7 +144,8 @@
           "@value" : "Acteur",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "acteur.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Place",
@@ -151,7 +159,8 @@
           "@value" : "Lieu",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "lieu.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Temps",
@@ -165,7 +174,8 @@
           "@value" : "Temps",
           "@language" : "fr"
         }
-      ]
+      ],
+	  "icon":  "temps.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#situe_a",

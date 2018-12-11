@@ -138,6 +138,20 @@ body {
 				.nice-select {
 					background: transparent;
 					border-color: transparent;
+					ul li {
+						
+						img {
+							height : 40px;
+						}
+					}
+					.current {
+						img {
+							height: 40px;
+							&.highlited {
+								display: none;
+							}
+						}
+					}
 				}
 				.nice-select.disabled {
 					color: #888;
@@ -153,6 +167,14 @@ body {
 								background: transparent;
 								border-color: transparent;
 								color: #fff;
+								.current {
+									img {
+										display: none;
+										&.highlited {
+											display: inline;
+										}
+									}
+								}
 							}
 							.nice-select.disabled {
 								color: #fff;

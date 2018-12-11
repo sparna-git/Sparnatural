@@ -94,6 +94,12 @@ body form ul.componentsListe li.groupe {
   body form ul.componentsListe li.groupe .nice-select {
     background: transparent;
     border-color: transparent; }
+    body form ul.componentsListe li.groupe .nice-select ul li img {
+      height: 40px; }
+    body form ul.componentsListe li.groupe .nice-select .current img {
+      height: 40px; }
+      body form ul.componentsListe li.groupe .nice-select .current img.highlited {
+        display: none; }
   body form ul.componentsListe li.groupe .nice-select.disabled {
     color: #888;
     border-color: transparent; }
@@ -104,6 +110,10 @@ body form ul.componentsListe li.groupe {
       background: transparent;
       border-color: transparent;
       color: #fff; }
+      body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img {
+        display: none; }
+        body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img.highlited {
+          display: inline; }
     body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select.disabled {
       color: #fff;
       border-color: transparent; }

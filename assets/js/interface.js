@@ -161,11 +161,12 @@
 			var items = getAllClassFor(classId) ;
 			$.each( items, function( key, val ) {
 				var label = getClassLabel(val['@id']) ;
+				var image = ' data-icon="'+val['icon']+'"' ;
 				var selected ='';
 				if (default_value == val['@id']) {
 					selected = 'selected="selected"' ;
 				}
-				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'"'+selected+'>'+ label + '</option>' );
+				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'"'+image+selected+'>'+ label + '</option>' );
 
 			}) ;
 			var html_list = $( "<select/>", {
