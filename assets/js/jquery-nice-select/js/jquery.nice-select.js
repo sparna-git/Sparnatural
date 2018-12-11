@@ -103,7 +103,6 @@
     $(document).on('click.nice_select', '.nice-select', function(event) {
 		//alert("hohoh") ;
       var $dropdown = $(this);
-	  console.log(this) ;
 	  if ($dropdown.hasClass('open') ) {
 		  $dropdown.toggleClass('open');
 		  $dropdown.prev('select').val($dropdown.find('.selected').data('value')).trigger('change');

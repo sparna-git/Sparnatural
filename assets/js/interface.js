@@ -82,7 +82,237 @@
 			$(thisForm_._this).find('.nice-select').trigger('click') ;
 			
 			intiGeneralEvent(thisForm_) ;
+			
+			$(thisForm_._this).on('submit', { formObject : thisForm_ }, function (event) {
+				
+				event.preventDefault();
+				
+				ExecuteSubmited(event.data.formObject) ;
+				
+			}) ;
 
+		}
+		
+		function newQueryJson() {
+			
+			return {
+				"queryType": "SELECT",
+				"variables": [
+					"?this"
+				],
+				"where": [],
+				"type": "query",
+				"prefixes": {
+					"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+					"xsd": "http://www.w3.org/2001/XMLSchema#"
+				}
+			}
+		}
+		
+		function initTriple() {
+			
+			return {
+					"type": "bgp",
+					"triples": []
+			} ;
+		}
+		function initValues() {
+			
+			return {
+					"type": "values",
+					"values": []
+				} ;
+		}
+
+		function addTriple(jsonTriples, subjet, predicate, object) {
+			
+			var triple = {
+				"subject": subjet,
+				"predicate": predicate,
+				"object": object,
+			} ;
+						
+			jsonTriples.triples.push(triple) ;
+			
+			return jsonTriples ;
+		}
+		
+		function addInWhere(Json, JsonToWhere) {
+			Json.where.push(JsonToWhere) ;		
+			return Json ;
+		}
+
+		function addVariable(jsonValues, name, valueUrl) {
+			
+			var newValue = {
+							[name]: valueUrl
+						}
+				jsonValues.values.push(newValue) ;		
+			
+			return jsonValues ;	
+		}
+		function addVariableDate(json, name, valueUrl) {
+			
+			var newValue = {
+							[name]: valueUrl
+						}
+				json.where[1].values.push(newValue) ;		
+			
+			return json ;	
+		}
+		
+		function ExecuteSubmited(formObject) {
+			
+			console.log(formObject) ;
+			
+			var Json = newQueryJson() ;
+			var levelCriteria = {} ;
+			var levelCursor = 0 ;
+			
+			$(formObject.components).each(function() {
+				
+					
+					var dependantDe = GetDependantCriteria(formObject, this.index ) ;
+					
+					console.log(dependantDe) ;
+					console.log(levelCriteria) ;
+					console.log(levelCursor) ;
+					if (dependantDe != null) {
+						
+						if (dependantDe.type == 'parent') {
+							
+							if (dependantDe.element.id == levelCriteria[levelCursor]) { //si le level precedant etait celui du parent
+								levelCursor = levelCursor + 1 ;
+							} else {
+								
+								if (dependantDe.element.id == levelCriteria[levelCursor-1]) { //si le level precedant etait celui du parent
+									levelCursor = levelCursor - 1 ;
+								}
+							}
+							
+							
+							levelCriteria[levelCursor] = this.index ;
+							
+						} else {
+							levelCursor = 0 ;
+							levelCriteria[levelCursor] = this.index ;
+						}
+					} else {
+						levelCursor = 0 ;
+						levelCriteria[levelCursor] = this.index ;
+					}
+					
+					
+					
+					if (levelCursor == 0) {
+						var varSuffixe = 'this' ;
+						var varSuffixeEnd = 'end'+this.index ;
+					} else {
+						if (levelCursor-1 == -20) {
+							var varSuffixe = '';
+							var varSuffixeEnd = this.index ;
+						} else {
+							var varSuffixe = 'end'+levelCriteria[levelCursor-1] ;
+							var varSuffixeEnd = 'end'+this.index ;
+						}
+						
+					}
+
+					this.CriteriaGroup.StartClassGroup.value_selected
+					
+					var start = this.CriteriaGroup.StartClassGroup.value_selected ;
+					var obj = this.CriteriaGroup.ObjectPropertyGroup.value_selected ;
+					var end = this.CriteriaGroup.EndClassGroup.value_selected ; 
+					console.log(end) ;
+					var endValueName = '?'+varSuffixeEnd ;
+					
+					var new_triple = initTriple() ;
+					
+					new_triple = addTriple(new_triple, '?'+varSuffixe, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", start) ;
+					new_triple = addTriple(new_triple, '?'+varSuffixe, obj, endValueName) ;
+					
+					
+					
+					
+					WidgetType = this.CriteriaGroup.EndClassWidgetGroup.widgetType ;
+					
+					
+					switch (WidgetType) {
+						
+						 case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
+						  var id_input = '#ecgrw-'+ this.index +'-input-value' ;
+							value_widget = $(id_input).val() ;
+							break;
+						  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
+							var id_input = '#ecgrw-'+ this.index +'-input-value' ;
+							value_widget = $(id_input).val() ;
+							console.log(value_widget) ;
+							break;
+						  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
+							//console.log('Mangoes and papayas are $2.79 a pound.');
+							var id_input = '#ecgrw-date-'+ this.index +'-input' ;
+							value_widget = $(id_input).val() ;
+							// expected output: "Mangoes and papayas are $2.79 a pound."
+							break;
+						  default:
+						
+						
+					}
+					
+					
+					if (WidgetType == "http://ontologies.sparna.fr/SimSemSearch#TimeWidget" ) {
+						
+						
+						
+					} else {
+						
+						new_triple = addTriple(new_triple, endValueName, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", end) ;
+					}
+					
+					Json = addInWhere(Json, new_triple) ;
+					
+					
+					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selecte !== null) {
+						
+						var jsonValue = initValues() ;
+						
+						jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
+						
+						Json = addInWhere(Json, jsonValue) ;
+						
+					} else {
+						
+						
+					}
+
+
+
+					console.log(value_widget)
+					/*if ($('.EndClassWidgetGroup>div').hasClass('ListeWidget')) {
+						json = addVariable(json, endValueName, $('.EndClassWidgetGroup #listwidget').val() ) ;
+					} else {
+						json = addVariable(json, endValueName, $('.EndClassWidgetGroup #basics-value').val() ) ;
+					}*/
+					
+					
+					
+					
+					
+				}) ;
+			console.log(Json) ;
+					
+					//var SparqlGenerator = require('sparqljs').Generator;
+			var generator = new Ngenerator();
+			//parsedQuery.variables = ['?mickey'];
+			var generatedQuery = generator.stringify(Json);
+					
+					
+			console.log(generatedQuery) ;
+					
+					
+			$('#sparql code').html(generatedQuery.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+			var jsons = JSON.stringify(Json, null, '\t');
+			$('#json code').html(jsons) ;
 		}
 		
 		function intiGeneralEvent(thisForm_) {
@@ -112,7 +342,7 @@
 			$all_li .each(function(index) {
 				var a = (index + 1 ) * ratio ;
 				var height = $(this).find('>div').height()+92+2+2 ;
-				cssdef += ', rgba(255,49,46,'+a+') '+prev+'px, rgba(255,49,46,'+a+') '+(prev+height)+'px' ;
+				cssdef += ', rgba(250,136,3,'+a+') '+prev+'px, rgba(250,136,3,'+a+') '+(prev+height)+'px' ;
 				prev = prev + height+1 ;
 			});
 			console.log(cssdef) ;
@@ -659,10 +889,14 @@
 			this.LabelValueSelected = this.InputTypeComponent.GetValueLabel() ;
 			console.log(this) ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+			
 			$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue">'+this.LabelValueSelected+'</div>') ;
 			console.log(this) ;
 			$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
+			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+			
+			
 			this.ParentComponent.initCompleted() ;
 			
 		} this.validSelected = validSelected ;

@@ -127,7 +127,7 @@ body form ul.componentsListe {
           body form ul.componentsListe li.groupe .nice-select ul.list li img.highlited {
             display: none; }
         body form ul.componentsListe li.groupe .nice-select ul.list li.selected, body form ul.componentsListe li.groupe .nice-select ul.list li.focus, body form ul.componentsListe li.groupe .nice-select ul.list li:hover {
-          background: #ff312e;
+          background: #fa8803;
           color: #fff; }
           body form ul.componentsListe li.groupe .nice-select ul.list li.selected img, body form ul.componentsListe li.groupe .nice-select ul.list li.focus img, body form ul.componentsListe li.groupe .nice-select ul.list li:hover img {
             display: none; }
