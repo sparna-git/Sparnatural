@@ -67,23 +67,25 @@
 			//$(thisForm_._this).append(list_3) ;
 			//$(thisForm_._this).append(list_2) ;
 			
-			var contexte = $('<ul class="componentsListe"></ul>') ;
+			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
+			//contexte.appendTo(thisForm_._this) ;
 			$(thisForm_._this).append(contexte) ;
-			contexte1 = addComponent(thisForm_, contexte) ;
+			
+			contexte1 = addComponent(thisForm_, contexte.find('ul')) ;
 			//contexte2 = addComponent(thisForm_, contexte1) ;
 			//contexte3 = addComponent(thisForm_, contexte2) ;
 			//contexte4 = addComponent(thisForm_, contexte1) ;
 			//contexte5 = addComponent(thisForm_, contexte) ;
 			
-			contexte.appendTo(thisForm_._this) ;
+			//contexte.appendTo(thisForm_._this) ;
 			
 			$(thisForm_._this).find('.nice-select').trigger('click') ;
 			
-			intiGeneralEvent() ;
+			intiGeneralEvent(thisForm_) ;
 
 		}
 		
-		function intiGeneralEvent() {
+		function intiGeneralEvent(thisForm_) {
 			$('li.groupe').off( "mouseover" ) ;
 			$('li.groupe').off( "mouseleave" ) ;
 			$('li.groupe').on( "mouseover", function(event) {
@@ -97,6 +99,24 @@
 				$('li.groupe').removeClass('Hover') ;
 				
 			} );
+			 /*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
+			 
+			 var $all_li = thisForm_._this.find('li.groupe') ;
+			var leng = $all_li.length ;
+			if (leng  <= 10 ) {
+				leng = 10 ;
+			}
+			var ratio = 100 / leng / 100 ;
+			var prev = 0 ;
+			var cssdef = 'linear-gradient(180deg' ; 
+			$all_li .each(function(index) {
+				var a = (index + 1 ) * ratio ;
+				var height = $(this).find('>div').height()+92+2+2 ;
+				cssdef += ', rgba(255,49,46,'+a+') '+prev+'px, rgba(255,49,46,'+a+') '+(prev+height)+'px' ;
+				prev = prev + height+1 ;
+			});
+			console.log(cssdef) ;
+			thisForm_._this.find('div.bg-wrapper').css({background : cssdef+')' }) ;
 		}
 	
 		/*  Find Class by ID
@@ -361,18 +381,9 @@
 			
 			thisForm_.components.push({index: new_index, CriteriaGroup: UnCritere }) ;
 			
-			var $all_li = thisForm_._this.find('li.groupe') ;
-			var leng = $all_li.length ;
-			if (leng  <= 10 ) {
-				leng = 10 ;
-			}
-			var ratio = 100 / leng / 100 ;
-			$all_li .each(function(index) {
-				var a = (index + 1 ) * ratio ;
-				$(this).css({background : 'rgba(255,49,46,'+a+')'}) ;
-			});
 			
-			intiGeneralEvent();
+			
+			intiGeneralEvent(thisForm_);
 			
 			return $(gabari) ;
 		}	

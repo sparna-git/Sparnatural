@@ -8,9 +8,10 @@ body .CriteriaGroup {
   display: flex;
   position: relative;
   border-radius: 5px;
-  margin-top: 40px;
-  margin-bottom: 40px;
-  background: #fff; }
+  background: #fff;
+  margin-top: 46px;
+  margin-bottom: 46px;
+  clear: both; }
   body .CriteriaGroup > div {
     min-width: 100px;
     background: #fff;
@@ -62,84 +63,110 @@ body .CriteriaGroup {
 body .haveOrChild > .CriteriaGroup .EndClassGroup .ObjectPropertyTypeWidget {
   display: none; }
 
-body form ul.componentsListe,
-body form ul.componentsListe ul {
-  list-style-type: none;
+body form ul.componentsListe {
   padding: 0;
-  background: #fff; }
-
-body form ul.componentsListe ul li > div {
-  margin-left: 46px; }
-
-body form ul.componentsListe ul li li > div {
-  margin-left: 92px; }
-
-body form ul.componentsListe ul li li.Hover > div > div > .ActionOr.ShowOnHover {
-  display: none; }
-
-body form ul.componentsListe li.groupe {
-  margin: 0;
-  display: inline-block;
-  width: 100%; }
-  body form ul.componentsListe li.groupe > div {
-    margin-top: 46px;
-    margin-bottom: 46px; }
-  body form ul.componentsListe li.groupe > div > div > .ShowOnHover {
-    display: none; }
-  body form ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
-    display: block; }
-  body form ul.componentsListe li.groupe.OrImpossible.Hover > div .ActionOr.ShowOnHover,
-  body form ul.componentsListe li.groupe.Hover > div.completed > div .ActionOr.ShowOnHover {
-    display: none; }
-  body form ul.componentsListe li.groupe .nice-select {
+  width: 1200px;
+  max-width: 90%;
+  margin: 0 auto; }
+  body form ul.componentsListe,
+  body form ul.componentsListe ul {
+    list-style-type: none;
+    padding: 0;
     background: transparent;
-    border-color: transparent; }
-    body form ul.componentsListe li.groupe .nice-select ul li img {
-      height: 40px; }
-    body form ul.componentsListe li.groupe .nice-select .current img {
-      height: 40px; }
-      body form ul.componentsListe li.groupe .nice-select .current img.highlited {
-        display: none; }
-  body form ul.componentsListe li.groupe .nice-select.disabled {
-    color: #888;
-    border-color: transparent; }
-  body form ul.componentsListe li.groupe.completed > div .Highlited {
-    background: #ff312e;
-    margin-right: 23px; }
-    body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select {
+    clear: both;
+    border: 0 solid #transparent; }
+  body form ul.componentsListe ul {
+    /*li>div {
+					margin-left: 46px;
+				}
+				li li>div {
+					margin-left: 92px;
+					*
+				}*/ }
+    body form ul.componentsListe ul li li.Hover > div > div > .ActionOr.ShowOnHover {
+      display: none; }
+  body form ul.componentsListe li.groupe {
+    margin: 0;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    display: block;
+    clear: both;
+    /*overflow: hidden;*/ }
+    body form ul.componentsListe li.groupe li.groupe {
+      margin-left: 46px; }
+    body form ul.componentsListe li.groupe > div > div > .ShowOnHover {
+      display: none; }
+    body form ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
+      display: block; }
+    body form ul.componentsListe li.groupe.OrImpossible.Hover > div .ActionOr.ShowOnHover,
+    body form ul.componentsListe li.groupe.Hover > div.completed > div .ActionOr.ShowOnHover {
+      display: none; }
+    body form ul.componentsListe li.groupe .nice-select {
       background: transparent;
-      border-color: transparent;
-      color: #fff; }
-      body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img {
-        display: none; }
-        body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img.highlited {
-          display: inline; }
-    body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select.disabled {
-      color: #fff;
       border-color: transparent; }
-  body form ul.componentsListe li.groupe.completed > div .Highlited:after {
-    content: '';
-    width: 0;
-    height: 0;
-    line-height: 0;
-    padding: 0;
-    display: inline-block;
-    float: right;
-    margin-right: -21px;
-    border-style: solid;
-    border-width: 21px 0 21px 21px;
-    border-color: transparent transparent transparent #ff312e; }
-  body form ul.componentsListe li.groupe.completed > div .Highlited:before {
-    content: '';
-    width: 0;
-    height: 0;
-    line-height: 0;
-    padding: 0;
-    display: inline-block;
-    float: left;
-    border-style: solid;
-    border-width: 21px 0 21px 21px;
-    border-color: transparent transparent transparent #fff; }
+      body form ul.componentsListe li.groupe .nice-select ul.list li {
+        border-bottom: solid 1px #e8e8e8; }
+        body form ul.componentsListe li.groupe .nice-select ul.list li img {
+          height: 40px; }
+          body form ul.componentsListe li.groupe .nice-select ul.list li img.highlited {
+            display: none; }
+        body form ul.componentsListe li.groupe .nice-select ul.list li.selected, body form ul.componentsListe li.groupe .nice-select ul.list li.focus, body form ul.componentsListe li.groupe .nice-select ul.list li:hover {
+          background: #ff312e;
+          color: #fff; }
+          body form ul.componentsListe li.groupe .nice-select ul.list li.selected img, body form ul.componentsListe li.groupe .nice-select ul.list li.focus img, body form ul.componentsListe li.groupe .nice-select ul.list li:hover img {
+            display: none; }
+            body form ul.componentsListe li.groupe .nice-select ul.list li.selected img.highlited, body form ul.componentsListe li.groupe .nice-select ul.list li.focus img.highlited, body form ul.componentsListe li.groupe .nice-select ul.list li:hover img.highlited {
+              display: inline; }
+      body form ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) {
+        color: #000; }
+        body form ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img {
+          display: inline; }
+          body form ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img.highlited {
+            display: none; }
+      body form ul.componentsListe li.groupe .nice-select .current img {
+        height: 40px; }
+        body form ul.componentsListe li.groupe .nice-select .current img.highlited {
+          display: none; }
+    body form ul.componentsListe li.groupe .nice-select.disabled {
+      color: #888;
+      border-color: transparent; }
+    body form ul.componentsListe li.groupe.completed > div .Highlited {
+      background: #ff312e;
+      margin-right: 23px; }
+      body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select {
+        background: transparent;
+        border-color: transparent;
+        color: #fff; }
+        body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img {
+          display: none; }
+          body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img.highlited {
+            display: inline; }
+      body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select.disabled {
+        color: #fff;
+        border-color: transparent; }
+    body form ul.componentsListe li.groupe.completed > div .Highlited:after {
+      content: '';
+      width: 0;
+      height: 0;
+      line-height: 0;
+      padding: 0;
+      display: inline-block;
+      float: right;
+      margin-right: -21px;
+      border-style: solid;
+      border-width: 21px 0 21px 21px;
+      border-color: transparent transparent transparent #ff312e; }
+    body form ul.componentsListe li.groupe.completed > div .Highlited:before {
+      content: '';
+      width: 0;
+      height: 0;
+      line-height: 0;
+      padding: 0;
+      display: inline-block;
+      float: left;
+      border-style: solid;
+      border-width: 21px 0 21px 21px;
+      border-color: transparent transparent transparent #fff; }
 
 body .easy-autocomplete input {
   height: 42px; }

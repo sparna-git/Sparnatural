@@ -1,5 +1,6 @@
 $height-components: 48px;
 $height-components-under: 42px;
+$custom-red: rgb(255,49,46) ;
 
 body {
 	section {
@@ -10,9 +11,10 @@ body {
 		display: flex;
 		position: relative;
 		border-radius: 5px;
-		margin-top: 40px;
-		margin-bottom: 40px;
 		background: #fff;
+		margin-top: 46px;
+		margin-bottom: 46px;
+		clear: both;
 		
 		&>div {
 			
@@ -36,6 +38,7 @@ body {
 			.ActionOr {
 				/*top: $height-components*2;*/
 			}
+			
 		}
 		.EndClassWidgetGroup {
 			min-width: 35%;
@@ -93,35 +96,49 @@ body {
 		
 	}
 	form {
+		.bg-wrapper {
+			
+		}
 		ul.componentsListe {
+			padding: 0;
+			width: 1200px;
+			max-width: 90%;
+			margin: 0 auto;
 			&,
 			ul {
 				list-style-type: none;
 				padding: 0;
-				background: #fff;
+				background: transparent;
+				clear: both;
+				border: 0 solid #transparent
 			}
 			
 			ul {
 				
-				li>div {
+				/*li>div {
 					margin-left: 46px;
 				}
 				li li>div {
 					margin-left: 92px;
-					
-				}
+					*
+				}*/
 				li li.Hover>div>div> .ActionOr.ShowOnHover {
 					display: none;
 				}
 			}
 			li.groupe {
 				margin: 0;
-				display: inline-block;
-				width: 100%;
+				padding-top: 1px;
+				padding-bottom: 1px;
+				display: block;
+				clear: both;
+				/*overflow: hidden;*/
 				
+				& li.groupe {
+					margin-left: 46px;
+				}
 				&>div {
-					margin-top: 46px;
-					margin-bottom: 46px;
+					
 				}
 				
 				&>div>div>.ShowOnHover {
@@ -138,10 +155,35 @@ body {
 				.nice-select {
 					background: transparent;
 					border-color: transparent;
-					ul li {
-						
+					ul.list li {
+						border-bottom: solid 1px #e8e8e8;
 						img {
 							height : 40px;
+							&.highlited {
+								display: none;
+							}
+						}
+						&.selected,
+						&.focus,
+						&:hover {
+							background: $custom-red ;
+							color: #fff;
+							img {
+								display: none;
+								&.highlited {
+									display: inline;
+								}
+							}
+						}
+					}
+					ul.list:hover .option:not(:hover) {
+						color: #000;
+						img {
+							display: inline;
+							
+							&.highlited {
+								display: none;
+							}
 						}
 					}
 					.current {
@@ -205,9 +247,9 @@ body {
 						border-color: transparent transparent transparent #fff;
 					}
 				
+				}
 			}
 		}
-	}
 	
 	}
 	.easy-autocomplete {
