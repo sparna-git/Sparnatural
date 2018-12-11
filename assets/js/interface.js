@@ -78,7 +78,25 @@
 			contexte.appendTo(thisForm_._this) ;
 			
 			$(thisForm_._this).find('.nice-select').trigger('click') ;
+			
+			intiGeneralEvent() ;
 
+		}
+		
+		function intiGeneralEvent() {
+			$('li.groupe').off( "mouseover" ) ;
+			$('li.groupe').off( "mouseleave" ) ;
+			$('li.groupe').on( "mouseover", function(event) {
+				event.stopImmediatePropagation();
+				$('li.groupe').removeClass('Hover') ;
+				$(this).addClass('Hover') ;
+				
+			} );
+			$('li.groupe').on( "mouseleave", function(event) {
+				event.stopImmediatePropagation();
+				$('li.groupe').removeClass('Hover') ;
+				
+			} );
 		}
 	
 		/*  Find Class by ID
@@ -353,6 +371,8 @@
 				$(this).css({background : 'rgba(255,49,46,'+a+')'}) ;
 			});
 			
+			intiGeneralEvent();
+			
 			return $(gabari) ;
 		}	
 
@@ -624,9 +644,13 @@
 		
 		function validSelected() {
 			this.value_selected = this.InputTypeComponent.GetValue() ;
+			this.LabelValueSelected = this.InputTypeComponent.GetValueLabel() ;
+			console.log(this) ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+			$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue">'+this.LabelValueSelected+'</div>') ;
 			console.log(this) ;
+			$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
 			this.ParentComponent.initCompleted() ;
 			
 		} this.validSelected = validSelected ;
@@ -1007,6 +1031,30 @@
 			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				value_widget = $(id_input).val() ;
+				console.log(value_widget) ;
+			    break;
+			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
+				//console.log('Mangoes and papayas are $2.79 a pound.');
+				value_widget = $(this.widgetComponent.html).find('input').val() ;
+				// expected output: "Mangoes and papayas are $2.79 a pound."
+				break;
+			  default:
+				//console.log('Sorry, we are out of ' + expr + '.');
+			}
+			return value_widget ;
+		}
+		this.GetValueLabel = function () {
+			
+			var value_widget = null ;
+			switch (this.widgetType) {
+			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
+			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
+				value_widget = $(this.widgetComponent.html).find(id_input).val() ;
+				break;
+			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
+				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
+				value_widget = $(id_input).val() ;
+				console.log(value_widget) ;
 			    break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
 				//console.log('Mangoes and papayas are $2.79 a pound.');
@@ -1078,9 +1126,10 @@
 				  list: {
 
 					onChooseEvent: function() {
-							var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData().uri;
-						$(itc_obj).trigger("change");
-							$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");
+							var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData();
+							$('#ecgrw-'+id_inputs+'-input').val(value.label)
+							$('#ecgrw-'+id_inputs+'-input-value').val(value.uri).trigger("change");$(itc_obj).trigger("change");
+							
 					}
 				  },
 

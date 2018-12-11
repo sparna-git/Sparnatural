@@ -84,9 +84,9 @@ body {
 	}
 	.haveOrChild {
 		
-		.CriteriaGroup {
+		&>.CriteriaGroup {
 			
-			.EndClassWidgetGroup {
+			.EndClassGroup .ObjectPropertyTypeWidget {
 				display: none;
 			}
 		}
@@ -110,7 +110,7 @@ body {
 					margin-left: 92px;
 					
 				}
-				li li:hover>div>div> .ActionOr.ShowOnHover {
+				li li.Hover>div>div> .ActionOr.ShowOnHover {
 					display: none;
 				}
 			}
@@ -127,11 +127,11 @@ body {
 				&>div>div>.ShowOnHover {
 					display: none;
 				}
-				&:hover>div>div>.ShowOnHover {
+				&.Hover>div>div>.ShowOnHover {
 					display: block;
 				}
-				&.OrImpossible:hover>div>div .ActionOr.ShowOnHover,
-				&:hover>div.completed>div .ActionOr.ShowOnHover {
+				&.OrImpossible.Hover>div .ActionOr.ShowOnHover,
+				&.Hover>div.completed>div .ActionOr.ShowOnHover {
 					display: none;
 				}
 				
