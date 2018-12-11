@@ -1047,7 +1047,8 @@
 			    break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
 				//console.log('Mangoes and papayas are $2.79 a pound.');
-				value_widget = $(this.widgetComponent.html).find('input').val() ;
+				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
+				value_widget = $(id_input).val() ;
 				// expected output: "Mangoes and papayas are $2.79 a pound."
 				break;
 			  default:
@@ -1069,12 +1070,14 @@
 				console.log(value_widget) ;
 			    break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
-				//console.log('Mangoes and papayas are $2.79 a pound.');
-				value_widget = $(this.widgetComponent.html).find('input').val() ;
-				// expected output: "Mangoes and papayas are $2.79 a pound."
+				
+				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
+				console.log(id_input);
+				value_widget = $(id_input).val() ;
 				break;
+				
 			  default:
-				//console.log('Sorry, we are out of ' + expr + '.');
+			  
 			}
 			return value_widget ;
 		}
@@ -1163,6 +1166,7 @@
 		this.base() ;
 		this.ParentComponent = InputTypeComponent ;
 		this.ParentComponent.statements.ListeWidget = true ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
 		this.html = '<select id="listwidget"></select>' ;
 		this.select = $('<select id="listwidget"></select>');
@@ -1209,10 +1213,10 @@
 		this.base = widgetType ;
 		this.base() ;
 		this.ParentComponent = InputTypeComponent ;
-		this.ParentComponent.statements.AutocompleteWidget  = true ;
+		this.ParentComponent.statements.DatesWidget  = true ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		
-		this.html = '<input id="basics" /><input id="basics-start" /><input id="basics-stop" /><input id="basics-value" type="hidden"/>' ;
+		this.html = '<input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
 		
 		function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
@@ -1220,6 +1224,11 @@
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
 			var phrase ="" ;
 			var data_json = null ;
+			
+			var id_inputs = this.IdCriteriaGroupe ;
+			
+			var itc_obj = this.ParentComponent;
+			
 			
 			$.ajax({
 				url: settings.UrlDates(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ,
@@ -1235,20 +1244,26 @@
 						data: data_json ,
 				
 					 getValue: function(element) {
-						return element.synonyms;
+						 //console.log(element) ;
+						return element.synonyms.join(' '); // +'' convert array to string ; https://stackoverflow.com/questions/5289403/jquery-convert-javascript-array-to-string
 					  },
 
 					 
 					list: {
+						match: {
+			enabled: true
+		},
 
-					onSelectItemEvent: function() {
-							var value = $("#basics").getSelectedItemData().label;
-							var start = $("#basics").getSelectedItemData().start.year;
-							var stop = $("#basics").getSelectedItemData().stop.year;
+					onChooseEvent: function() {
+							var value = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData().label;
+							var start = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData().start.year;
+							var stop = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData().stop.year;
 
-							$("#basics").val(value).trigger("change");
-							$("#basics-start").val(start).trigger("change");
-							$("#basics-stop").val(stop).trigger("change");
+							$('#ecgrw-date-'+id_inputs+'-input').val(value).trigger("change");
+							$('#ecgrw-date-'+id_inputs+'-input-start').val(start).trigger("change");
+							$('#ecgrw-date-'+id_inputs+'-input-stop').val(stop).trigger("change");
+							
+							$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");$(itc_obj).trigger("change");
 					}
 				  },
 					 template: {
@@ -1262,7 +1277,7 @@
 				};
 				//Need to add in html befor
 				
-				$("#basics").easyAutocomplete(options);
+				$('#ecgrw-date-'+id_inputs+'-input').easyAutocomplete(options);
 			
 			
 		} this.init = init ;
