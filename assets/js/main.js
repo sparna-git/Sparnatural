@@ -15,6 +15,7 @@ var parser = new Nparser();
     '?actor a <http://exemple.fr/ontology/Actor>'+
     'VALUES ?actor { <http://sparna.fr/database/person/123456> <http://sparna.fr/database/person/123457776> }'+
 '}');*/
+
 var parsedQuery = parser.parse(
 'PREFIX rdf: <http://www.w3.org/2000/01/rdf-schema#>'+
 'SELECT ?this '+
@@ -25,7 +26,7 @@ var parsedQuery = parser.parse(
     '?actor <http://exemple.fr/ontology/from> ?place .'+
     '?place rdf:type <http://exemple.fr/ontology/Place> .'+
     'VALUES ?place {<http://sparna.fr/database/place/abcdef>}'+
-'}');/*
+'}');
 var parsedQuery = parser.parse(
 'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>'+
 'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>'+
@@ -36,7 +37,7 @@ var parsedQuery = parser.parse(
     'FILTER(?time > "1700-01-01"^^xsd:dateTime && ?time <= "1750-12-31"^^xsd:dateTime)'+
     '?this <http://exemple.fr/ontology/created_by> ?time2 .'+
     'FILTER(?time2 > "1700-01-01"^^xsd:dateTime && ?time2 <= "1750-12-31"^^xsd:dateTime)'+
-'}');*/
+'}');/**/
 
 // Regenerate a SPARQL query from a JSON object
 //var SparqlGenerator = require('sparqljs').Generator;

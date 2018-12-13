@@ -123,6 +123,34 @@
 					"values": []
 				} ;
 		}
+		function initFilterTime(StartYear, EndYear, index) {
+			
+			return {
+				"type": "filter",
+				"expression": {
+					"type": "operation",
+					"operator": "&&",
+					"args": [
+						{
+							"type": "operation",
+							"operator": ">",
+							"args": [
+								"?time"+index+"",
+								"\""+StartYear+"-01-01\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+							]
+						},
+						{
+							"type": "operation",
+							"operator": "<=",
+							"args": [
+								"?time"+index+"",
+								"\""+EndYear+"-12-31\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+							]
+						}
+					]
+				}
+			} ;
+		}
 
 		function addTriple(jsonTriples, subjet, predicate, object) {
 			
@@ -285,27 +313,7 @@
 					WidgetType = this.CriteriaGroup.EndClassWidgetGroup.widgetType ;
 					
 					
-					switch (WidgetType) {
-						
-						 case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
-						  var id_input = '#ecgrw-'+ this.index +'-input-value' ;
-							value_widget = $(id_input).val() ;
-							break;
-						  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
-							var id_input = '#ecgrw-'+ this.index +'-input-value' ;
-							value_widget = $(id_input).val() ;
-							console.log(value_widget) ;
-							break;
-						  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
-							//console.log('Mangoes and papayas are $2.79 a pound.');
-							var id_input = '#ecgrw-date-'+ this.index +'-input' ;
-							value_widget = $(id_input).val() ;
-							// expected output: "Mangoes and papayas are $2.79 a pound."
-							break;
-						  default:
-						
-						
-					}
+					
 					
 					
 					if (WidgetType == "http://ontologies.sparna.fr/SimSemSearch#TimeWidget" ) {
@@ -320,13 +328,54 @@
 					Json = addInWhere(Json, new_triple) ;
 					
 					
+					
+					
+					
+					
+					
+					
 					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selecte !== null) {
 						
 						var jsonValue = initValues() ;
 						
-						jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
+						switch (WidgetType) {
 						
-						Json = addInWhere(Json, jsonValue) ;
+						 case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
+						  //var id_input = '#ecgrw-'+ this.index +'-input-value' ;
+							//value_widget = $(id_input).val() ;
+							
+							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
+						
+							Json = addInWhere(Json, jsonValue) ;
+							
+							
+							break;
+						  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
+							//var id_input = '#ecgrw-'+ this.index +'-input-value' ;
+							//value_widget = $(id_input).val() ;
+							
+							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
+						
+							Json = addInWhere(Json, jsonValue) ;
+							
+							break;
+						  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
+							//console.log('Mangoes and papayas are $2.79 a pound.');
+							
+							var StartYear = $('#ecgrw-date-'+ this.index +'-input-start').val() ;
+							var EndYear = $('#ecgrw-date-'+ this.index +'-input-stop').val() ;
+							//value_widget = $(id_input).val() ;
+							
+							jsonFilter = initFilterTime(StartYear, EndYear, endValueName) ;
+							
+							Json = addInWhere(Json, jsonFilter) ;
+							
+							// expected output: "Mangoes and papayas are $2.79 a pound."
+							break;
+						  default:
+						
+						
+						}
 						
 					} else {
 						
@@ -335,7 +384,7 @@
 
 
 
-					console.log(value_widget)
+					//console.log(value_widget)
 					/*if ($('.EndClassWidgetGroup>div').hasClass('ListeWidget')) {
 						json = addVariable(json, endValueName, $('.EndClassWidgetGroup #listwidget').val() ) ;
 					} else {
