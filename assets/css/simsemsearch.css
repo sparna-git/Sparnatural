@@ -1,6 +1,9 @@
 body section {
   padding-top: 30px; }
 
+body li.completed > .CriteriaGroup {
+  margin-bottom: 30px; }
+
 body .CriteriaGroup {
   border: 1px solid #ddd;
   display: -webkit-box;
@@ -9,8 +12,8 @@ body .CriteriaGroup {
   position: relative;
   border-radius: 5px;
   background: #fff;
-  margin-top: 46px;
-  margin-bottom: 46px;
+  margin-top: 30px;
+  margin-bottom: 80px;
   clear: both; }
   body .CriteriaGroup > div {
     min-width: 100px;
@@ -22,9 +25,10 @@ body .CriteriaGroup {
       position: absolute;
       left: 0;
       top: 47px;
-      line-height: 46px;
+      line-height: 35px;
       z-index: 101;
-      height: 48px; }
+      height: 48px;
+      padding: 5px 0; }
       body .CriteriaGroup .EndClassGroup .EditComponents .DatesWidget {
         max-width: 600px;
         white-space: nowrap; }
@@ -83,7 +87,10 @@ body .SimSemSearch ul.componentsListe {
   padding: 0;
   width: 1200px;
   max-width: 90%;
-  margin: 0 auto; }
+  margin: 0 auto;
+  /*ul>li.groupe:last-child .ActionAnd.ShowOnHover {
+					display: block;
+				}*/ }
   body .SimSemSearch ul.componentsListe,
   body .SimSemSearch ul.componentsListe ul {
     list-style-type: none;
@@ -107,16 +114,31 @@ body .SimSemSearch ul.componentsListe {
     padding-bottom: 1px;
     display: block;
     clear: both;
-    /*overflow: hidden;*/ }
+    /*overflow: hidden;*/
+    /*.ActionAnd.ShowOnHover {
+					display: none;
+				}*/ }
     body .SimSemSearch ul.componentsListe li.groupe li.groupe {
       margin-left: 46px; }
     body .SimSemSearch ul.componentsListe li.groupe > div > div > .ShowOnHover {
       display: none; }
     body .SimSemSearch ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
       display: block; }
+    body .SimSemSearch ul.componentsListe li.groupe li.groupe li.groupe .ActionOr.ShowOnHover,
     body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.Hover > div .ActionOr.ShowOnHover,
     body .SimSemSearch ul.componentsListe li.groupe.Hover > div.completed > div .ActionOr.ShowOnHover {
       display: none; }
+    body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete input {
+      height: 35px; }
+    body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container {
+      z-index: 999; }
+      body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container ul {
+        line-height: 20px;
+        background: #fff; }
+        body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container ul li {
+          padding: 5px; }
+          body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container ul li.selected {
+            background: #fa8803; }
     body .SimSemSearch ul.componentsListe li.groupe .nice-select {
       background: transparent;
       border-color: transparent; }
@@ -133,6 +155,10 @@ body .SimSemSearch ul.componentsListe {
             display: none; }
             body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.selected img.highlited, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.focus img.highlited, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li:hover img.highlited {
               display: inline; }
+      body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list {
+        background: #fff;
+        top: 0;
+        margin-top: 0; }
       body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) {
         color: #000; }
         body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img {
@@ -183,9 +209,3 @@ body .SimSemSearch ul.componentsListe {
       border-style: solid;
       border-width: 21px 0 21px 15px;
       border-color: transparent transparent transparent #fff; }
-
-body .easy-autocomplete input {
-  height: 42px; }
-
-body .easy-autocomplete .easy-autocomplete-container {
-  z-index: 999; }

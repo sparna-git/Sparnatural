@@ -1,10 +1,19 @@
 $height-components: 48px;
 $height-components-under: 42px;
+$height-components-hover: 35px;
+$margin-component: 30px;
+$margin-component-onEdit: 80px;
+
 $custom-red: rgb(250,136,3) ;
 
 body {
 	section {
 		padding-top: 30px;
+	}
+	li.completed {
+		&>.CriteriaGroup {
+			margin-bottom: $margin-component;
+		}
 	}
 	.CriteriaGroup {
 		border: 1px solid #ddd;
@@ -12,8 +21,8 @@ body {
 		position: relative;
 		border-radius: 5px;
 		background: #fff;
-		margin-top: 46px;
-		margin-bottom: 46px;
+		margin-top: $margin-component;
+		margin-bottom: $margin-component-onEdit;
 		clear: both;
 		
 		&>div {
@@ -28,9 +37,10 @@ body {
 				position: absolute;
 				left: 0;
 				top: $height-components - 1;
-				line-height: 46px;
+				line-height: $height-components-hover;
 				z-index: 101;
 				height: $height-components;
+				padding: 5px 0;
 				
 				.DatesWidget {
 					max-width: 600px;
@@ -166,9 +176,29 @@ body {
 				&.Hover>div>div>.ShowOnHover {
 					display: block;
 				}
+				li.groupe li.groupe .ActionOr.ShowOnHover,
 				&.OrImpossible.Hover>div .ActionOr.ShowOnHover,
 				&.Hover>div.completed>div .ActionOr.ShowOnHover {
 					display: none;
+				}
+				.easy-autocomplete {
+					input {
+						height: $height-components-hover;
+					}
+				}
+				.easy-autocomplete-container {
+					z-index: 999;
+					ul {
+						line-height: 20px;
+						background: #fff;
+						li {
+							padding: 5px;
+							&.selected {
+								
+								background: $custom-red ;
+							}
+						}
+					}
 				}
 				
 				.nice-select {
@@ -194,6 +224,11 @@ body {
 								}
 							}
 						}
+					}
+					ul.list {
+						background: #fff;
+						top: 0;
+						margin-top: 0;
 					}
 					ul.list:hover .option:not(:hover) {
 						color: #000;
@@ -269,18 +304,17 @@ body {
 					}
 				
 				}
+				/*.ActionAnd.ShowOnHover {
+					display: none;
+				}*/
 			}
+			/*ul>li.groupe:last-child .ActionAnd.ShowOnHover {
+					display: block;
+				}*/
 		}
 	
 	}
-	.easy-autocomplete {
-		input {
-			height: $height-components-under;
-		}
-		.easy-autocomplete-container {
-			z-index: 999;
-		}
-	}
+	
 
 }
 

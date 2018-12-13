@@ -420,7 +420,7 @@
 			var cssdef = 'linear-gradient(180deg' ; 
 			$all_li .each(function(index) {
 				var a = (index + 1 ) * ratio ;
-				var height = $(this).find('>div').height()+92+2+2 ;
+				var height = $(this).find('>div').outerHeight(true)+2+2 ;
 				cssdef += ', rgba(250,136,3,'+a+') '+prev+'px, rgba(250,136,3,'+a+') '+(prev+height)+'px' ;
 				prev = prev + height+1 ;
 			});
@@ -972,11 +972,14 @@
 			$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue">'+this.LabelValueSelected+'</div>') ;
 			console.log(this) ;
 			$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
+			
+			this.ParentComponent.initCompleted() ;
+			
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
 			
-			this.ParentComponent.initCompleted() ;
+			
 			
 		} this.validSelected = validSelected ;
 		
@@ -1029,12 +1032,14 @@
 		
 		this.AddOr = function () {
 			
+			this.ParentComponent.html.parent('li').addClass('haveOrChild') ;
+			this.ParentComponent.initCompleted() ;
+			
 			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.HtmlContext) ;
 			
 			$(new_component).find('.nice-select').trigger('click') ;
 			$(new_component).find('.nice-select').trigger('click') ;
-			this.ParentComponent.html.parent('li').addClass('haveOrChild') ;
-			this.ParentComponent.initCompleted() ;
+			
 			//$(new_component).find('.nice-select').trigger('change') ;
 			//new_component.appendTo(this.ParentComponent.Context.HtmlContext) ;
 			
@@ -1046,6 +1051,9 @@
 			
 		}
 		this.AddAnd = function () {
+			
+			this.ParentComponent.initCompleted() ;
+			
 			
 			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.AncestorHtmlContext) ;
 			
@@ -1160,7 +1168,7 @@
 			if (this.ParentComponent instanceof ActionsGroup) {
 				
 				if (this instanceof ActionOr) {
-					possible_values = '<a href="#or">OR</a>' ;
+					possible_values = '<a href="#or">WHERE</a>' ;
 				}
 				if (this instanceof ActionAnd) {
 					possible_values = '<a href="#and">AND</a>' ;
