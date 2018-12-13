@@ -4,7 +4,7 @@
  
         var specSearch = {} ;
 		var defaults = {
-			pathSpecSearch: 'config/spec-search.json',
+			pathSpecSearch: 'tconfig/spec-search.json',
 			language: 'fr',
 			UrlAutocomplete : function(domain, property, range, key) {
 					return 'http://openarchaeo.sparna.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
@@ -51,7 +51,9 @@
 			
 			return $.getJSON( settings.pathSpecSearch, function( data ) {
 				specSearch = data ;
-			}) ;
+			}).fail(function() {
+				console.log( "error to load the config file : " +settings.pathSpecSearch);
+			})
 		}
 		
 		function initForm(thisForm_) {
