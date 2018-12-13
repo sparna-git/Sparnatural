@@ -166,20 +166,47 @@
 			console.log(formObject) ;
 			
 			var Json = newQueryJson() ;
-			var levelCriteria = {} ;
-			var levelCursor = 0 ;
+			//var levelCriteria = [] ;
+			//var levelCursor = 0 ;
+			//var ComponentsTree = [] ;
+			//var VarsString = [] ;
 			
-			$(formObject.components).each(function() {
+			
+			var ArrayLiIndex = [] ;
+			
+			
+			
+			$(formObject._this).find('ul.componentsListe li.groupe').each(function(i) {
+				
+				var data_id = $(this).attr('data-index') ;
+
+				ArrayLiIndex[data_id] = ArrayLiIndex.length ;
+				
+				
+				
+			}) ;
+			$(formObject.components).each(function(i) {
 				
 					
 					var dependantDe = GetDependantCriteria(formObject, this.index ) ;
 					
 					console.log(dependantDe) ;
-					console.log(levelCriteria) ;
-					console.log(levelCursor) ;
-					if (dependantDe != null) {
+					
+					if ((dependantDe != null) && (dependantDe.type == 'parent')){
 						
-						if (dependantDe.type == 'parent') {
+						StartVar = ArrayLiIndex[dependantDe.element.id] + 1;
+						if (StartVar == 0) {
+							StartVar = 'this' ;
+						} 
+						
+						EndVar = ArrayLiIndex[this.index] + 1;
+						
+						/*VarsString[this.index] = 'var'+ArrayLiIndex[dependantDe.element.id] ;*/
+						
+						
+						/*if  {
+							
+							var ComponentObject = {index: this.index, parent: dependantDe.element.id } ;
 							
 							if (dependantDe.element.id == levelCriteria[levelCursor]) { //si le level precedant etait celui du parent
 								levelCursor = levelCursor + 1 ;
@@ -194,17 +221,40 @@
 							levelCriteria[levelCursor] = this.index ;
 							
 						} else {
+							
+							
 							levelCursor = 0 ;
 							levelCriteria[levelCursor] = this.index ;
-						}
+						} */
 					} else {
-						levelCursor = 0 ;
-						levelCriteria[levelCursor] = this.index ;
+						
+						StartVar = 'this' ;
+						EndVar = ArrayLiIndex[this.index] + 1 ;
+						/*levelCursor = 0 ;
+						levelCriteria[levelCursor] = this.index ;*/
 					}
 					
 					
 					
-					if (levelCursor == 0) {
+					var start = this.CriteriaGroup.StartClassGroup.value_selected ;
+					var obj = this.CriteriaGroup.ObjectPropertyGroup.value_selected ;
+					var end = this.CriteriaGroup.EndClassGroup.value_selected ; 
+					
+					
+					var StartLabel = start.split("#") ;
+					var EndLabel = end.split("#") ;
+					
+					
+					
+					if (StartVar != 'this') {
+						StartVar = StartLabel[1]+''+StartVar ;
+					}
+
+					EndVar = EndLabel[1]+''+EndVar ;
+
+					
+					
+					/*if (levelCursor == 0) {
 						var varSuffixe = 'this' ;
 						var varSuffixeEnd = 'end'+this.index ;
 					} else {
@@ -216,20 +266,18 @@
 							var varSuffixeEnd = 'end'+this.index ;
 						}
 						
-					}
+					}*/
 
-					this.CriteriaGroup.StartClassGroup.value_selected
+					//this.CriteriaGroup.StartClassGroup.value_selected
 					
-					var start = this.CriteriaGroup.StartClassGroup.value_selected ;
-					var obj = this.CriteriaGroup.ObjectPropertyGroup.value_selected ;
-					var end = this.CriteriaGroup.EndClassGroup.value_selected ; 
+					
 					console.log(end) ;
-					var endValueName = '?'+varSuffixeEnd ;
+					var endValueName = '?'+EndVar ;
 					
 					var new_triple = initTriple() ;
 					
-					new_triple = addTriple(new_triple, '?'+varSuffixe, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", start) ;
-					new_triple = addTriple(new_triple, '?'+varSuffixe, obj, endValueName) ;
+					new_triple = addTriple(new_triple, '?'+StartVar, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", start) ;
+					new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
 					
 					
 					
