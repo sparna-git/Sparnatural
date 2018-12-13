@@ -14,6 +14,10 @@
 			},
 			UrlDates : function(domain, property, range, key) {
 					return '/data/periodes.jsonld' ;
+			},
+			UpdateQuery : function (queryString) {
+				console.log('Default handler function on update query ! ' ) ;
+				console.log(queryString) ;
 			}
 		};
 		
@@ -38,16 +42,9 @@
 			
 			thisForm.components = [] ;
 			
-			
-			
 			$.when( loadSpecSearch() ).done(function() {
 					initForm(thisForm) ;
-					
-					
-				
-
 				 });
-				
         });
 		
 		function loadSpecSearch() {
@@ -58,26 +55,12 @@
 		}
 		
 		function initForm(thisForm_) {
-			//console.log(specSearch) ;
-			
-			//var list = getClassListSelectFor(null,'id_1') ;
-			//var list_2 = getClassListSelectFor(null,'id_2') ;
-			//var list_3 = getObjectListSelectFor(null,null,'id_3') ;
-			//$(thisForm_._this).append(list) ;
-			//$(thisForm_._this).append(list_3) ;
-			//$(thisForm_._this).append(list_2) ;
 			
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
 			//contexte.appendTo(thisForm_._this) ;
 			$(thisForm_._this).append(contexte) ;
 			
 			contexte1 = addComponent(thisForm_, contexte.find('ul')) ;
-			//contexte2 = addComponent(thisForm_, contexte1) ;
-			//contexte3 = addComponent(thisForm_, contexte2) ;
-			//contexte4 = addComponent(thisForm_, contexte1) ;
-			//contexte5 = addComponent(thisForm_, contexte) ;
-			
-			//contexte.appendTo(thisForm_._this) ;
 			
 			$(thisForm_._this).find('.nice-select').trigger('click') ;
 			
@@ -328,12 +311,6 @@
 					Json = addInWhere(Json, new_triple) ;
 					
 					
-					
-					
-					
-					
-					
-					
 					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selecte !== null) {
 						
 						var jsonValue = initValues() ;
@@ -404,12 +381,14 @@
 			var generatedQuery = generator.stringify(Json);
 					
 					
-			console.log(generatedQuery) ;
+			//console.log(generatedQuery) ;
 					
 					
-			$('#sparql code').html(generatedQuery.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
-			var jsons = JSON.stringify(Json, null, '\t');
-			$('#json code').html(jsons) ;
+			//$('#sparql code').html(generatedQuery.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+			//var jsons = JSON.stringify(Json, null, '\t');
+			//$('#json code').html(jsons) ;
+			
+			settings.UpdateQuery(generatedQuery) ;
 		}
 		
 		function intiGeneralEvent(thisForm_) {
