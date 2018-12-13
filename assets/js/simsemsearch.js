@@ -4,7 +4,7 @@
  
         var specSearch = {} ;
 		var defaults = {
-			pathSpecSearch: 'tconfig/spec-search.json',
+			pathSpecSearch: 'config/spec-search.json',
 			language: 'fr',
 			UrlAutocomplete : function(domain, property, range, key) {
 					return 'http://openarchaeo.sparna.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
@@ -39,6 +39,7 @@
 		this.each(function() {
             var thisForm = {} ;
             thisForm._this = $(this) ;
+			$(this).addClass('SimSemSearch') ;
 			
 			thisForm.components = [] ;
 			

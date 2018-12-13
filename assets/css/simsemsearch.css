@@ -79,19 +79,19 @@ body .CriteriaGroup {
 body .haveOrChild > .CriteriaGroup .EndClassGroup .ObjectPropertyTypeWidget {
   display: none; }
 
-body form ul.componentsListe {
+body .SimSemSearch ul.componentsListe {
   padding: 0;
   width: 1200px;
   max-width: 90%;
   margin: 0 auto; }
-  body form ul.componentsListe,
-  body form ul.componentsListe ul {
+  body .SimSemSearch ul.componentsListe,
+  body .SimSemSearch ul.componentsListe ul {
     list-style-type: none;
     padding: 0;
     background: transparent;
     clear: both;
     border: 0 solid #transparent; }
-  body form ul.componentsListe ul {
+  body .SimSemSearch ul.componentsListe ul {
     /*li>div {
 					margin-left: 46px;
 				}
@@ -99,68 +99,68 @@ body form ul.componentsListe {
 					margin-left: 92px;
 					*
 				}*/ }
-    body form ul.componentsListe ul li li.Hover > div > div > .ActionOr.ShowOnHover {
+    body .SimSemSearch ul.componentsListe ul li li.Hover > div > div > .ActionOr.ShowOnHover {
       display: none; }
-  body form ul.componentsListe li.groupe {
+  body .SimSemSearch ul.componentsListe li.groupe {
     margin: 0;
     padding-top: 1px;
     padding-bottom: 1px;
     display: block;
     clear: both;
     /*overflow: hidden;*/ }
-    body form ul.componentsListe li.groupe li.groupe {
+    body .SimSemSearch ul.componentsListe li.groupe li.groupe {
       margin-left: 46px; }
-    body form ul.componentsListe li.groupe > div > div > .ShowOnHover {
+    body .SimSemSearch ul.componentsListe li.groupe > div > div > .ShowOnHover {
       display: none; }
-    body form ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
+    body .SimSemSearch ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
       display: block; }
-    body form ul.componentsListe li.groupe.OrImpossible.Hover > div .ActionOr.ShowOnHover,
-    body form ul.componentsListe li.groupe.Hover > div.completed > div .ActionOr.ShowOnHover {
+    body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.Hover > div .ActionOr.ShowOnHover,
+    body .SimSemSearch ul.componentsListe li.groupe.Hover > div.completed > div .ActionOr.ShowOnHover {
       display: none; }
-    body form ul.componentsListe li.groupe .nice-select {
+    body .SimSemSearch ul.componentsListe li.groupe .nice-select {
       background: transparent;
       border-color: transparent; }
-      body form ul.componentsListe li.groupe .nice-select ul.list li {
+      body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li {
         border-bottom: solid 1px #e8e8e8; }
-        body form ul.componentsListe li.groupe .nice-select ul.list li img {
+        body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li img {
           height: 40px; }
-          body form ul.componentsListe li.groupe .nice-select ul.list li img.highlited {
+          body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li img.highlited {
             display: none; }
-        body form ul.componentsListe li.groupe .nice-select ul.list li.selected, body form ul.componentsListe li.groupe .nice-select ul.list li.focus, body form ul.componentsListe li.groupe .nice-select ul.list li:hover {
+        body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.selected, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.focus, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li:hover {
           background: #fa8803;
           color: #fff; }
-          body form ul.componentsListe li.groupe .nice-select ul.list li.selected img, body form ul.componentsListe li.groupe .nice-select ul.list li.focus img, body form ul.componentsListe li.groupe .nice-select ul.list li:hover img {
+          body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.selected img, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.focus img, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li:hover img {
             display: none; }
-            body form ul.componentsListe li.groupe .nice-select ul.list li.selected img.highlited, body form ul.componentsListe li.groupe .nice-select ul.list li.focus img.highlited, body form ul.componentsListe li.groupe .nice-select ul.list li:hover img.highlited {
+            body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.selected img.highlited, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.focus img.highlited, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li:hover img.highlited {
               display: inline; }
-      body form ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) {
+      body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) {
         color: #000; }
-        body form ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img {
+        body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img {
           display: inline; }
-          body form ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img.highlited {
+          body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img.highlited {
             display: none; }
-      body form ul.componentsListe li.groupe .nice-select .current img {
+      body .SimSemSearch ul.componentsListe li.groupe .nice-select .current img {
         height: 40px; }
-        body form ul.componentsListe li.groupe .nice-select .current img.highlited {
+        body .SimSemSearch ul.componentsListe li.groupe .nice-select .current img.highlited {
           display: none; }
-    body form ul.componentsListe li.groupe .nice-select.disabled {
+    body .SimSemSearch ul.componentsListe li.groupe .nice-select.disabled {
       color: #888;
       border-color: transparent; }
-    body form ul.componentsListe li.groupe.completed > div .Highlited {
+    body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited {
       background: #ff312e;
       margin-right: 23px; }
-      body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select {
+      body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited .nice-select {
         background: transparent;
         border-color: transparent;
         color: #fff; }
-        body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img {
+        body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img {
           display: none; }
-          body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img.highlited {
+          body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img.highlited {
             display: inline; }
-      body form ul.componentsListe li.groupe.completed > div .Highlited .nice-select.disabled {
+      body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited .nice-select.disabled {
         color: #fff;
         border-color: transparent; }
-    body form ul.componentsListe li.groupe.completed > div .Highlited:after {
+    body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited:after {
       content: '';
       width: 0;
       height: 0;
@@ -172,7 +172,7 @@ body form ul.componentsListe {
       border-style: solid;
       border-width: 21px 0 21px 15px;
       border-color: transparent transparent transparent #ff312e; }
-    body form ul.componentsListe li.groupe.completed > div .EndClassGroup .Highlited:before {
+    body .SimSemSearch ul.componentsListe li.groupe.completed > div .EndClassGroup .Highlited:before {
       content: '';
       width: 0;
       height: 0;

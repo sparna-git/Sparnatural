@@ -28,7 +28,7 @@
 		<div class="container-fluid">
 			<section>
 				<h2>Formulaire de recherche</h2>
-				<form id="ui-search" class="clearfix"><input type="submit" id="form_submit" /></form>
+				<div id="ui-search" class="clearfix"><input type="submit" id="form_submit" /></div>
 			</section>
 			<section>
 				<ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -72,7 +72,7 @@
 			$( document ).ready(function($) {
 			 //Appel du composant pour la recherche
 			  
-			  $('form').SimSemSearchForm({
+			  $('#ui-search').SimSemSearchForm({
 				UrlAutocomplete: function(domain, property, range, key) {
 					// ici le code qui se charge de retourner les résultats de la recherche
 					return 'http://openarchaeo.huma-num.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
