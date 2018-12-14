@@ -302,6 +302,13 @@ body {
 						border-width: 21px 0 21px 15px;
 						border-color: transparent transparent transparent #fff;
 					}
+					&>div>div .EditComponents {
+						.ActionOr,
+						.ObjectPropertyTypeWidget {
+							display: none;
+						}
+					}
+					
 				
 				}
 				/*.ActionAnd.ShowOnHover {

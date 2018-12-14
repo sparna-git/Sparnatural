@@ -297,13 +297,13 @@
 					
 					
 					
-					WidgetType = this.CriteriaGroup.EndClassWidgetGroup.widgetType ;
+					_WidgetType = this.CriteriaGroup.EndClassWidgetGroup.widgetType ;
 					
 					
 					
 					
 					
-					if (WidgetType == "http://ontologies.sparna.fr/SimSemSearch#TimeWidget" ) {
+					if (_WidgetType == "http://ontologies.sparna.fr/SimSemSearch#TimeWidget" ) {
 						
 						
 						
@@ -319,7 +319,7 @@
 						
 						var jsonValue = initValues() ;
 						
-						switch (WidgetType) {
+						switch (_WidgetType) {
 						
 						 case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
 						  //var id_input = '#ecgrw-'+ this.index +'-input-value' ;
@@ -941,11 +941,14 @@
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
 		
-		function detectWidgetType() {
+		 this.detectWidgetType = function () {
+			
 			this.objectPropertyDefinition = getObjectPropertyById(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
+			
 			this.widgetType = this.objectPropertyDefinition.widget['@type'] ;
 			
-		} this.detectWidgetType = detectWidgetType ;
+			
+		}  ;
 		
 		this.InputTypeComponent = new ObjectPropertyTypeWidget(this) ;
 		
@@ -967,11 +970,9 @@
 		function validSelected() {
 			this.value_selected = this.InputTypeComponent.GetValue() ;
 			this.LabelValueSelected = this.InputTypeComponent.GetValueLabel() ;
-			console.log(this) ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			
 			$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue">'+this.LabelValueSelected+'</div>') ;
-			console.log(this) ;
 			$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
 			
 			this.ParentComponent.initCompleted() ;

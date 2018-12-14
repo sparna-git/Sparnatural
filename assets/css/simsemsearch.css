@@ -209,3 +209,6 @@ body .SimSemSearch ul.componentsListe {
       border-style: solid;
       border-width: 21px 0 21px 15px;
       border-color: transparent transparent transparent #fff; }
+    body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents .ActionOr,
+    body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents .ObjectPropertyTypeWidget {
+      display: none; }
