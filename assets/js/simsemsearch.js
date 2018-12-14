@@ -491,7 +491,7 @@
 			var items = getAllClassFor(classId) ;
 			$.each( items, function( key, val ) {
 				var label = getClassLabel(val['@id']) ;
-				var image = ' data-icon="'+val['iconPath']+'" data-iconh="'+val['highlitedIconPath']+'"' ;
+				var image = ' data-icon="'+val['iconPath']+'" data-iconh="'+val['highlightedIconPath']+'"' ;
 				var selected ='';
 				if (default_value == val['@id']) {
 					selected = 'selected="selected"' ;
