@@ -63,6 +63,24 @@ body {
 						padding: 6px 12px;
 					}
 				}
+				.ListeWidget {
+					
+					
+					.nice-select{
+						background: #fff;
+						height: $height-components-hover;
+						line-height: $height-components-hover;
+						.current {
+								
+						}
+						.list {
+							li.option {
+								min-height: $height-components-hover;
+								line-height: $height-components-hover;
+							}
+						}
+					}
+				}
 			}
 			.ActionOr {
 				/*top: $height-components*2;*/
@@ -102,7 +120,7 @@ body {
 			}
 			.ActionAnd {
 				left: 0;
-				bottom: 0;
+				top: 8px;
 				line-height: 46px;
 				width: 46px;
 				text-align: center;
