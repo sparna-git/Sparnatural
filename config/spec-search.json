@@ -40,7 +40,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "mobilier.png"
+	  "iconPath":  "assets/icons/noir/mobilier.png",
+	  "highlitedIconPath":  "assets/icons/blanc/mobilier.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Type",
@@ -55,7 +56,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "type.png"
+	  "iconPath":  "assets/icons/noir/type.png",
+	  "highlitedIconPath":  "assets/icons/blanc/type.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Site",
@@ -70,7 +72,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "site.png"
+	  "iconPath":  "assets/icons/noir/site.png",
+	  "highlitedIconPath":  "assets/icons/blanc/site.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#US",
@@ -85,7 +88,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "unite_str.png"
+	  "iconPath":  "assets/icons/noir/unite_str.png",
+	  "highlitedIconPath":  "assets/icons/blanc/temps.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait",
@@ -100,7 +104,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "fait.png"
+	  "iconPath":  "assets/icons/noir/fait.png",
+	  "highlitedIconPath":  "assets/icons/blanc/fait.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture",
@@ -115,7 +120,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "sepulture.png"
+	  "iconPath":  "assets/icons/noir/sepulture.png",
+	  "highlitedIconPath":  "assets/icons/blanc/sepulture.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Construction",
@@ -130,7 +136,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "construction.png"
+	  "iconPath":  "assets/icons/noir/construction.png",
+	  "highlitedIconPath":  "assets/icons/blanc/construction.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Acteur",
@@ -145,7 +152,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "acteur.png"
+	  "iconPath":  "assets/icons/noir/acteur.png",
+	  "highlitedIconPath":  "assets/icons/blanc/acteur.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Place",
@@ -160,7 +168,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "lieu.png"
+	  "iconPath":  "assets/icons/noir/lieu.png",
+	  "highlitedIconPath":  "assets/icons/blanc/lieu.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Temps",
@@ -175,7 +184,8 @@
           "@language" : "fr"
         }
       ],
-	  "icon":  "temps.png"
+	  "iconPath":  "assets/icons/noir/temps.png",
+	  "highlitedIconPath":  "assets/icons/blanc/temps.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#situe_a",

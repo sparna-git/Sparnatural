@@ -52,9 +52,10 @@
 			
 			return $.getJSON( settings.pathSpecSearch, function( data ) {
 				specSearch = data ;
-			}).fail(function() {
+			}).fail(function(response) {
 				console.log("SimSemSearch - unable to load config file : " +settings.pathSpecSearch);
-			})
+				console.log(response);
+			}) ;
 		}
 		
 		function initForm(thisForm_) {
@@ -490,7 +491,7 @@
 			var items = getAllClassFor(classId) ;
 			$.each( items, function( key, val ) {
 				var label = getClassLabel(val['@id']) ;
-				var image = ' data-icon="'+val['icon']+'"' ;
+				var image = ' data-icon="'+val['iconPath']+'" data-iconh="'+val['highlitedIconPath']+'"' ;
 				var selected ='';
 				if (default_value == val['@id']) {
 					selected = 'selected="selected"' ;
