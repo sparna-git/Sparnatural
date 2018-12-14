@@ -69,7 +69,7 @@
 	  
 	  var icon ='';
 	  if ($selected.attr('data-icon') !== undefined) {
-			icon = '<img src="assets/icons/noir/'+$selected.attr('data-icon')+'" /><img class="highlited" src="assets/icons/blanc/'+$selected.attr('data-icon')+'" />' ;
+			icon = '<img src="'+$selected.attr('data-icon')+'" /><img class="highlited" src="'+$selected.attr('data-iconh')+'" />' ;
 		}
 		
       
@@ -80,7 +80,7 @@
         var display = $option.data('display');
 		var icon = '' ;
 		if ($option.attr('data-icon') !== undefined) {
-			icon = '<img src="assets/icons/noir/'+$option.attr('data-icon')+'" /><img class="highlited" src="assets/icons/blanc/'+$option.attr('data-icon')+'" />' ;
+			icon = '<img src="'+$option.attr('data-icon')+'" /><img class="highlited" src="'+$option.attr('data-iconh')+'" />' ;
 		}
 
         $dropdown.find('ul').append($('<li></li>')

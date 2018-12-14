@@ -169,6 +169,24 @@ body {
 				&>div {
 					
 				}
+				.ActionAnd {
+					
+				}
+				.ActionOr {
+					display: inline-block;
+				}
+				.ActionAnd a,
+				.ActionOr a {
+					cursor: pointer;
+					display: block;
+					background: #fff;
+					border: 2px solid $custom-red ;
+					border-radius: 15px;
+					height: 30px;
+					line-height: 20px;
+					padding: 2px 4px;
+					width: auto;
+				}
 				
 				&>div>div>.ShowOnHover {
 					display: none;
@@ -258,7 +276,7 @@ body {
 				
 				&.completed {
 					&>div .Highlited {
-						background: #ff312e;
+						background: $custom-red;
 						margin-right: 23px;
 						
 						.nice-select {
@@ -288,7 +306,7 @@ body {
 						display: inline-block;float: right;margin-right: -15px;
 						border-style: solid;
 						border-width: 21px 0 21px 15px;
-						border-color: transparent transparent transparent #ff312e;
+						border-color: transparent transparent transparent $custom-red;
 						
 					}
 					&>div .EndClassGroup .Highlited:before{
@@ -302,6 +320,13 @@ body {
 						border-width: 21px 0 21px 15px;
 						border-color: transparent transparent transparent #fff;
 					}
+					&>div>div .EditComponents {
+						.ActionOr,
+						.ObjectPropertyTypeWidget {
+							display: none;
+						}
+					}
+					
 				
 				}
 				/*.ActionAnd.ShowOnHover {

@@ -6,18 +6,17 @@
 		var defaults = {
 			pathSpecSearch: 'config/spec-search.json',
 			language: 'fr',
-			UrlAutocomplete : function(domain, property, range, key) {
-					return 'http://openarchaeo.sparna.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
+			autocompleteUrl : function(domain, property, range, key) {
+					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
-			UrlList : function(domain, property, range) {
-					return 'http://openarchaeo.sparna.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
+			listUrl : function(domain, property, range) {
+					console.log("Veuillez préciser le nom de la fonction pour l'option listUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range" ) ;
 			},
-			UrlDates : function(domain, property, range, key) {
-					return '/data/periodes.jsonld' ;
+			datesUrl : function(domain, property, range, key) {
+					console.log("Veuillez préciser le nom de la fonction pour l'option datesUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
-			UpdateQuery : function (queryString) {
-				console.log('Default handler function on update query ! ' ) ;
-				console.log(queryString) ;
+			onQueryUpdated : function (queryString) {
+				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de SimSemSearchForm. Le parêtre envoyé à la fonction contiendra la requête convertie en Sparql" ) ;
 			}
 		};
 		
@@ -52,9 +51,10 @@
 			
 			return $.getJSON( settings.pathSpecSearch, function( data ) {
 				specSearch = data ;
-			}).fail(function() {
+			}).fail(function(response) {
 				console.log("SimSemSearch - unable to load config file : " +settings.pathSpecSearch);
-			})
+				console.log(response);
+			}) ;
 		}
 		
 		function initForm(thisForm_) {
@@ -296,13 +296,13 @@
 					
 					
 					
-					WidgetType = this.CriteriaGroup.EndClassWidgetGroup.widgetType ;
+					_WidgetType = this.CriteriaGroup.EndClassWidgetGroup.widgetType ;
 					
 					
 					
 					
 					
-					if (WidgetType == "http://ontologies.sparna.fr/SimSemSearch#TimeWidget" ) {
+					if (_WidgetType == "http://ontologies.sparna.fr/SimSemSearch#TimeWidget" ) {
 						
 						
 						
@@ -318,7 +318,7 @@
 						
 						var jsonValue = initValues() ;
 						
-						switch (WidgetType) {
+						switch (_WidgetType) {
 						
 						 case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
 						  //var id_input = '#ecgrw-'+ this.index +'-input-value' ;
@@ -391,7 +391,7 @@
 			//var jsons = JSON.stringify(Json, null, '\t');
 			//$('#json code').html(jsons) ;
 			
-			settings.UpdateQuery(generatedQuery) ;
+			settings.onQueryUpdated(generatedQuery) ;
 		}
 		
 		function intiGeneralEvent(thisForm_) {
@@ -490,7 +490,7 @@
 			var items = getAllClassFor(classId) ;
 			$.each( items, function( key, val ) {
 				var label = getClassLabel(val['@id']) ;
-				var image = ' data-icon="'+val['icon']+'"' ;
+				var image = ' data-icon="'+val['iconPath']+'" data-iconh="'+val['highlitedIconPath']+'"' ;
 				var selected ='';
 				if (default_value == val['@id']) {
 					selected = 'selected="selected"' ;
@@ -835,6 +835,8 @@
 		function validSelected() {
 			//this.niceslect.niceSelect('update') ;
 			this.value_selected = $(this.html).find('select.input-val').val() ;
+			
+			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			//$(this.html).find('.input-val').attr('disabled', 'disabled');
 			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
 			
@@ -877,8 +879,11 @@
 			
 		function validSelected() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
-			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			
+			$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			 
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
+			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
 		} this.validSelected = validSelected ;
 			
@@ -915,7 +920,9 @@
 		
 		function validSelected() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
-			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			
+			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
+			
 			
 			if (ClassHaveRange(this.value_selected)) {
 				$(this.ParentComponent.html).parent('li').removeClass('OrImpossible') ;
@@ -923,6 +930,7 @@
 				$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
 			}
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
+			
 			
 		} this.validSelected = validSelected ;
 		
@@ -940,11 +948,14 @@
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
 		
-		function detectWidgetType() {
+		 this.detectWidgetType = function () {
+			
 			this.objectPropertyDefinition = getObjectPropertyById(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
+			
 			this.widgetType = this.objectPropertyDefinition.widget['@type'] ;
 			
-		} this.detectWidgetType = detectWidgetType ;
+			
+		}  ;
 		
 		this.InputTypeComponent = new ObjectPropertyTypeWidget(this) ;
 		
@@ -966,11 +977,9 @@
 		function validSelected() {
 			this.value_selected = this.InputTypeComponent.GetValue() ;
 			this.LabelValueSelected = this.InputTypeComponent.GetValueLabel() ;
-			console.log(this) ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			
 			$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue">'+this.LabelValueSelected+'</div>') ;
-			console.log(this) ;
 			$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
 			
 			this.ParentComponent.initCompleted() ;
@@ -1168,13 +1177,13 @@
 			if (this.ParentComponent instanceof ActionsGroup) {
 				
 				if (this instanceof ActionOr) {
-					possible_values = '<a href="#or">WHERE</a>' ;
+					possible_values = '<a>WHERE</a>' ;
 				}
 				if (this instanceof ActionAnd) {
-					possible_values = '<a href="#and">AND</a>' ;
+					possible_values = '<a>AND</a>' ;
 				}
 				if (this instanceof ActionRemove) {
-					possible_values = '<a href="#remove">Remove</a>' ;
+					possible_values = '<a>Remove</a>' ;
 				}
 				
 			} 
@@ -1441,7 +1450,7 @@
 			var options = {
 				ajaxSettings: {crossDomain: true, type: 'GET'} ,
 				url: function(phrase) {
-					return settings.UrlAutocomplete(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
+					return settings.autocompleteUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
 				 getValue: function(element) {
 					return element.label;
@@ -1500,7 +1509,7 @@
 			
 			var options = {
 
-				url: settings.UrlList(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value),
+				url: settings.listUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value),
 				dataType: "json",
 				method: "GET",
 				data: {
@@ -1552,7 +1561,7 @@
 			
 			
 			$.ajax({
-				url: settings.UrlDates(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ,
+				url: settings.datesUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ,
 				async: false,
 				success: function (data){
 					data_json = data;

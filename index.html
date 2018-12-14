@@ -73,22 +73,22 @@
 			 //Appel du composant pour la recherche
 			  
 			  $('#ui-search').SimSemSearchForm({
-				UrlAutocomplete: function(domain, property, range, key) {
+				autocompleteUrl: function(domain, property, range, key) {
 					// ici le code qui se charge de retourner les résultats de la recherche
 					return 'http://openarchaeo.huma-num.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
 			
 				  },
-				UrlList: function(domain, property, range) {
+				listUrl: function(domain, property, range) {
 					// ici le code qui se charge de retourner les résultats de la recherche
 					return 'http://openarchaeo.huma-num.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
 			
 				  },
-				UrlDates: function(domain, property, range, key) {
+				datesUrl: function(domain, property, range, key) {
 					// ici le code qui se charge de retourner les résultats de la recherche
 					return 'data/periodes.json' ;
 			
 				  },
-				UpdateQuery: function(queryString) {
+				onQueryUpdated: function(queryString) {
 					// ici on récupère la requete Sparql grace au premier parametre de la fonction
 					console.log(queryString) ;
 					$('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
