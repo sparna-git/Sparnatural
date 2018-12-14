@@ -836,6 +836,8 @@
 		function validSelected() {
 			//this.niceslect.niceSelect('update') ;
 			this.value_selected = $(this.html).find('select.input-val').val() ;
+			
+			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			//$(this.html).find('.input-val').attr('disabled', 'disabled');
 			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
 			
@@ -878,7 +880,9 @@
 			
 		function validSelected() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
-			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			
+			$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			 
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
 			
 		} this.validSelected = validSelected ;
@@ -916,7 +920,9 @@
 		
 		function validSelected() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
-			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			
+			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
+			
 			
 			if (ClassHaveRange(this.value_selected)) {
 				$(this.ParentComponent.html).parent('li').removeClass('OrImpossible') ;
