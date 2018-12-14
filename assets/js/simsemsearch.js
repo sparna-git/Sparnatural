@@ -1404,13 +1404,13 @@
 			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				value_widget = $(id_input).val() ;
-				console.log(value_widget) ;
+				//console.log(value_widget) ;
 			    break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
 				
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
-				console.log(id_input);
-				value_widget = $(id_input).val() ;
+				//console.log(id_input);
+				value_widget = 'De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() ;
 				break;
 				
 			  default:
@@ -1560,7 +1560,7 @@
 		this.ParentComponent.statements.DatesWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		this.html = '<input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
+		this.html = '<input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">Ajouter</button>' ;
 		
 		function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
@@ -1607,7 +1607,7 @@
 							$('#ecgrw-date-'+id_inputs+'-input-start').val(start).trigger("change");
 							$('#ecgrw-date-'+id_inputs+'-input-stop').val(stop).trigger("change");
 							
-							$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");$(itc_obj).trigger("change");
+							$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");
 					}
 				  },
 					 template: {
@@ -1622,6 +1622,9 @@
 				//Need to add in html befor
 				
 				$('#ecgrw-date-'+id_inputs+'-input').easyAutocomplete(options);
+				$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
+					$(itc_obj).trigger("change");
+				})
 			
 			
 		} this.init = init ;
