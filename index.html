@@ -91,8 +91,7 @@
 				UpdateQuery: function(queryString) {
 					// ici on récupère la requete Sparql grace au premier parametre de la fonction
 					console.log(queryString) ;
-					
-			
+					$('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
 				  }
 				
 			  }) ;
