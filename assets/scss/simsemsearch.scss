@@ -258,7 +258,7 @@ body {
 				
 				&.completed {
 					&>div .Highlited {
-						background: #ff312e;
+						background: $custom-red;
 						margin-right: 23px;
 						
 						.nice-select {
@@ -288,7 +288,7 @@ body {
 						display: inline-block;float: right;margin-right: -15px;
 						border-style: solid;
 						border-width: 21px 0 21px 15px;
-						border-color: transparent transparent transparent #ff312e;
+						border-color: transparent transparent transparent $custom-red;
 						
 					}
 					&>div .EndClassGroup .Highlited:before{

@@ -173,7 +173,7 @@ body .SimSemSearch ul.componentsListe {
       color: #888;
       border-color: transparent; }
     body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited {
-      background: #ff312e;
+      background: #fa8803;
       margin-right: 23px; }
       body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited .nice-select {
         background: transparent;
@@ -197,7 +197,7 @@ body .SimSemSearch ul.componentsListe {
       margin-right: -15px;
       border-style: solid;
       border-width: 21px 0 21px 15px;
-      border-color: transparent transparent transparent #ff312e; }
+      border-color: transparent transparent transparent #fa8803; }
     body .SimSemSearch ul.componentsListe li.groupe.completed > div .EndClassGroup .Highlited:before {
       content: '';
       width: 0;
