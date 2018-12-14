@@ -1176,13 +1176,13 @@
 			if (this.ParentComponent instanceof ActionsGroup) {
 				
 				if (this instanceof ActionOr) {
-					possible_values = '<a href="#or">WHERE</a>' ;
+					possible_values = '<a>WHERE</a>' ;
 				}
 				if (this instanceof ActionAnd) {
-					possible_values = '<a href="#and">AND</a>' ;
+					possible_values = '<a>AND</a>' ;
 				}
 				if (this instanceof ActionRemove) {
-					possible_values = '<a href="#remove">Remove</a>' ;
+					possible_values = '<a>Remove</a>' ;
 				}
 				
 			} 

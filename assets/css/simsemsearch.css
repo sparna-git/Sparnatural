@@ -120,6 +120,19 @@ body .SimSemSearch ul.componentsListe {
 				}*/ }
     body .SimSemSearch ul.componentsListe li.groupe li.groupe {
       margin-left: 46px; }
+    body .SimSemSearch ul.componentsListe li.groupe .ActionOr {
+      display: inline-block; }
+    body .SimSemSearch ul.componentsListe li.groupe .ActionAnd a,
+    body .SimSemSearch ul.componentsListe li.groupe .ActionOr a {
+      cursor: pointer;
+      display: block;
+      background: #fff;
+      border: 2px solid #fa8803;
+      border-radius: 15px;
+      height: 30px;
+      line-height: 20px;
+      padding: 2px 4px;
+      width: auto; }
     body .SimSemSearch ul.componentsListe li.groupe > div > div > .ShowOnHover {
       display: none; }
     body .SimSemSearch ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {

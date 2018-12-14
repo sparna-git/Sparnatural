@@ -169,6 +169,24 @@ body {
 				&>div {
 					
 				}
+				.ActionAnd {
+					
+				}
+				.ActionOr {
+					display: inline-block;
+				}
+				.ActionAnd a,
+				.ActionOr a {
+					cursor: pointer;
+					display: block;
+					background: #fff;
+					border: 2px solid $custom-red ;
+					border-radius: 15px;
+					height: 30px;
+					line-height: 20px;
+					padding: 2px 4px;
+					width: auto;
+				}
 				
 				&>div>div>.ShowOnHover {
 					display: none;
