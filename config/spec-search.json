@@ -193,8 +193,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Place",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
       }
     },
     {
@@ -221,8 +220,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
       }
     },
     {
@@ -241,8 +239,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Acteur",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
       }
     },
     {
@@ -272,8 +269,7 @@
         }
       },
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
       }
     },
     {
@@ -304,8 +300,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Temps",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#TimeWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listPeriods"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#TimeWidget"
       }  
     },
     {
@@ -334,8 +329,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
       }
     },
     {
@@ -362,8 +356,7 @@
         }
       },
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
       }
     },
     {
@@ -391,8 +384,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
       }
     },
     {
@@ -419,8 +411,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
       }
     },
     {
@@ -447,8 +438,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#US",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
       }
     },
     {
@@ -476,8 +466,7 @@
         }
       },
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
       }
     },
     {
@@ -496,8 +485,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
       }
     },
     {
@@ -516,8 +504,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/listTerms"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
       }
     },
     {
@@ -536,8 +523,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Acteur",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget",
-        "http://ontologies.sparna.fr/SimSemSearch#url" : "http://exemple.fr/api/query"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
       }
     }
   ]
