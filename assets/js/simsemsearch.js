@@ -6,18 +6,17 @@
 		var defaults = {
 			pathSpecSearch: 'config/spec-search.json',
 			language: 'fr',
-			UrlAutocomplete : function(domain, property, range, key) {
-					return 'http://openarchaeo.sparna.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
+			autocompleteUrl : function(domain, property, range, key) {
+					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
-			UrlList : function(domain, property, range) {
-					return 'http://openarchaeo.sparna.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
+			listUrl : function(domain, property, range) {
+					console.log("Veuillez préciser le nom de la fonction pour l'option listUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range" ) ;
 			},
-			UrlDates : function(domain, property, range, key) {
-					return '/data/periodes.jsonld' ;
+			datesUrl : function(domain, property, range, key) {
+					console.log("Veuillez préciser le nom de la fonction pour l'option datesUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
-			UpdateQuery : function (queryString) {
-				console.log('Default handler function on update query ! ' ) ;
-				console.log(queryString) ;
+			onQueryUpdated : function (queryString) {
+				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de SimSemSearchForm. Le parêtre envoyé à la fonction contiendra la requête convertie en Sparql" ) ;
 			}
 		};
 		
@@ -392,7 +391,7 @@
 			//var jsons = JSON.stringify(Json, null, '\t');
 			//$('#json code').html(jsons) ;
 			
-			settings.UpdateQuery(generatedQuery) ;
+			settings.onQueryUpdated(generatedQuery) ;
 		}
 		
 		function intiGeneralEvent(thisForm_) {
@@ -1451,7 +1450,7 @@
 			var options = {
 				ajaxSettings: {crossDomain: true, type: 'GET'} ,
 				url: function(phrase) {
-					return settings.UrlAutocomplete(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
+					return settings.autocompleteUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
 				 getValue: function(element) {
 					return element.label;
@@ -1510,7 +1509,7 @@
 			
 			var options = {
 
-				url: settings.UrlList(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value),
+				url: settings.listUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value),
 				dataType: "json",
 				method: "GET",
 				data: {
@@ -1562,7 +1561,7 @@
 			
 			
 			$.ajax({
-				url: settings.UrlDates(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ,
+				url: settings.datesUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ,
 				async: false,
 				success: function (data){
 					data_json = data;
