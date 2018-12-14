@@ -884,6 +884,7 @@
 			$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			 
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
+			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
 		} this.validSelected = validSelected ;
 			
@@ -930,6 +931,7 @@
 				$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
 			}
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
+			
 			
 		} this.validSelected = validSelected ;
 		
