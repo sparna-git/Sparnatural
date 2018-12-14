@@ -53,7 +53,7 @@
 			return $.getJSON( settings.pathSpecSearch, function( data ) {
 				specSearch = data ;
 			}).fail(function() {
-				console.log( "error to load the config file : " +settings.pathSpecSearch);
+				console.log("SimSemSearch - unable to load config file : " +settings.pathSpecSearch);
 			})
 		}
 		
