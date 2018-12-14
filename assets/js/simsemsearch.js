@@ -6,6 +6,7 @@
 		var defaults = {
 			pathSpecSearch: 'config/spec-search.json',
 			language: 'fr',
+			addDistinct: false,
 			autocompleteUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
@@ -80,9 +81,12 @@
 		}
 		
 		function newQueryJson() {
-			
+			var ifDistinct = '' ;
+			if (settings.addDistinct) {
+				ifDistinct = ' DISTINCT' ;
+			}
 			return {
-				"queryType": "SELECT",
+				"queryType": "SELECT"+ifDistinct+"",
 				"variables": [
 					"?this"
 				],
