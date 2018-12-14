@@ -121,7 +121,7 @@
 							"type": "operation",
 							"operator": ">",
 							"args": [
-								"?time"+index+"",
+								""+index+"",
 								"\""+StartYear+"-01-01\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 							]
 						},
@@ -129,7 +129,7 @@
 							"type": "operation",
 							"operator": "<=",
 							"args": [
-								"?time"+index+"",
+								""+index+"",
 								"\""+EndYear+"-12-31\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 							]
 						}
