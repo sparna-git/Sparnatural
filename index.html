@@ -73,6 +73,7 @@
 			 //Appel du composant pour la recherche
 			  
 			  $('#ui-search').SimSemSearchForm({
+				addDistinct: true,
 				autocompleteUrl: function(domain, property, range, key) {
 					// ici le code qui se charge de retourner les résultats de la recherche
 					return 'http://openarchaeo.huma-num.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;

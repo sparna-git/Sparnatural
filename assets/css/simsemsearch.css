@@ -47,6 +47,13 @@ body .CriteriaGroup {
           color: #555;
           float: none;
           padding: 6px 12px; }
+      body .CriteriaGroup .EndClassGroup .EditComponents .ListeWidget .nice-select {
+        background: #fff;
+        height: 35px;
+        line-height: 35px; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .ListeWidget .nice-select .list li.option {
+          min-height: 35px;
+          line-height: 35px; }
     body .CriteriaGroup .EndClassGroup .ActionOr {
       /*top: $height-components*2;*/ }
   body .CriteriaGroup .EndClassWidgetGroup {
@@ -75,7 +82,7 @@ body .CriteriaGroup {
       line-height: 46px; }
     body .CriteriaGroup .ActionsGroup .ActionAnd {
       left: 0;
-      bottom: 0;
+      top: 8px;
       line-height: 46px;
       width: 46px;
       text-align: center; }

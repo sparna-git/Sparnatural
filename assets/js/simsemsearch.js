@@ -6,6 +6,7 @@
 		var defaults = {
 			pathSpecSearch: 'config/spec-search.json',
 			language: 'fr',
+			addDistinct: false,
 			autocompleteUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
@@ -80,9 +81,12 @@
 		}
 		
 		function newQueryJson() {
-			
+			var ifDistinct = '' ;
+			if (settings.addDistinct) {
+				ifDistinct = ' DISTINCT' ;
+			}
 			return {
-				"queryType": "SELECT",
+				"queryType": "SELECT"+ifDistinct+"",
 				"variables": [
 					"?this"
 				],
@@ -177,7 +181,7 @@
 		
 		function ExecuteSubmited(formObject) {
 			
-			console.log(formObject) ;
+			//console.log(formObject) ;
 			
 			var Json = newQueryJson() ;
 			//var levelCriteria = [] ;
@@ -204,7 +208,7 @@
 					
 					var dependantDe = GetDependantCriteria(formObject, this.index ) ;
 					
-					console.log(dependantDe) ;
+					//console.log(dependantDe) ;
 					
 					if ((dependantDe != null) && (dependantDe.type == 'parent')){
 						
@@ -285,7 +289,7 @@
 					//this.CriteriaGroup.StartClassGroup.value_selected
 					
 					
-					console.log(end) ;
+					//console.log(end) ;
 					var endValueName = '?'+EndVar ;
 					
 					var new_triple = initTriple() ;
@@ -376,7 +380,8 @@
 					
 					
 				}) ;
-			console.log(Json) ;
+				
+			//console.log(Json) ;
 					
 					//var SparqlGenerator = require('sparqljs').Generator;
 			var generator = new Ngenerator();
@@ -424,7 +429,7 @@
 				cssdef += ', rgba(250,136,3,'+a+') '+prev+'px, rgba(250,136,3,'+a+') '+(prev+height)+'px' ;
 				prev = prev + height+1 ;
 			});
-			console.log(cssdef) ;
+			//console.log(cssdef) ;
 			thisForm_._this.find('div.bg-wrapper').css({background : cssdef+')' }) ;
 		}
 	
@@ -490,7 +495,7 @@
 			var items = getAllClassFor(classId) ;
 			$.each( items, function( key, val ) {
 				var label = getClassLabel(val['@id']) ;
-				var image = ' data-icon="'+val['iconPath']+'" data-iconh="'+val['highlitedIconPath']+'"' ;
+				var image = ' data-icon="'+val['iconPath']+'" data-iconh="'+val['highlightedIconPath']+'"' ;
 				var selected ='';
 				if (default_value == val['@id']) {
 					selected = 'selected="selected"' ;
@@ -507,7 +512,7 @@
 		}
 		
 		function ClassHaveRange(ClassID) {
-			console.log(getAllClassFor(ClassID)) ;
+			//console.log(getAllClassFor(ClassID)) ;
 			if (getAllClassFor(ClassID).length > 0 ) {
 				return true;
 			} else {
@@ -737,12 +742,87 @@
 			$(this.html).parent('li').addClass('completed') ;
 		}
 		
+		this.RemoveCriteria = function() {
+			console.log(this) ;
+			var index_to_remove = this.id ;
+			
+			
+			$(this.ParentComponent.components).each(function() {
+				
+				
+				var dependantDe = GetDependantCriteria(this.CriteriaGroup.thisForm_, this.index ) ;
+					
+				if ((dependantDe != null) && (dependantDe.type == 'parent')){
+					
+					if (dependantDe.element.id == index_to_remove) {
+						
+						this.CriteriaGroup.RemoveCriteria() ;
+					}
+				}
+				
+			}) ;
+			
+			var dependantDe = GetDependantCriteria(this.thisForm_, this.id ) ;
+			var restart_new = false ;
+			console.log(dependantDe) ;
+			if (dependantDe === null) {
+				restart_new = true ;
+				
+			} else {
+				var dependantComponent = dependantDe.element ;
+			}
+			var formObject = this.thisForm_ ;
+			var formContextHtml = this.Context.contexteReference.AncestorHtmlContext;
+			
+			//remove event listners
+			this.ComponentHtml.outerHTML = this.ComponentHtml.outerHTML;
+			$(this.ComponentHtml).remove() ;
+			
+			
+			var iteration_to_remove = false ;
+			$(this.ParentComponent.components).each(function(i) {
+					
+				if (this.index == index_to_remove){
+					
+					iteration_to_remove = i ;
+				}
+				
+			}) ;
+			this.ParentComponent.components.splice(iteration_to_remove , 1);
+			
+			
+			if (restart_new) {
+				console.log(formObject) ;
+				var new_component = addComponent(formObject, formContextHtml) ;
+			
+				$(new_component).find('.nice-select').trigger('click') ;
+				
+			} else {
+				if ($(dependantComponent.ComponentHtml).find('li.groupe').length > 0) {
+					
+					
+					
+				} else { //Si pas d'enfant, on reaffiche le where action
+					
+					if ($(dependantComponent.ComponentHtml).hasClass('haveOrChild') ) {
+						$(dependantComponent.ComponentHtml).removeClass('haveOrChild') ;
+						$(dependantComponent.ComponentHtml).removeClass('completed') ;
+					}
+				}
+				
+				
+				intiGeneralEvent(formObject) ;
+			}
+			
+			return false ;
+		}
+		
 	}
 	function eventProxiCriteria(e) {
 		
 		var arg1 = e.data.arg1;
 		var arg2 = e.data.arg2;
-		console.log(arg1) ;
+		//console.log(arg1) ;
 		//$('.nice-select').removeClass('open') ;
 		arg1[arg2]() ;
 	}
@@ -805,14 +885,14 @@
 		//console.log(this) ;
 		this.statements.StartClassGroup = true ;
 		this.statements.Created = false ;
-		console.log('befor created') ;
+		//console.log('befor created') ;
 		
 		//ClassTypeId.prototype = new InputTypeComponent();      // child class inherits from Parent
 		//ClassTypeId.prototype.constructor = ClassTypeId; // constructor alignment
 		this.InputTypeComponent = new ClassTypeId(this) ;
 		
 		$(CriteriaGroupe).on('Created', function () {
-			console.log('after created') ;
+			//console.log('after created') ;
 			$(this.StartClassGroup.html).find('.input-val').unbind('change');
 			//this.StartClassGroup.init() ;
 			this.StartClassGroup.InputTypeComponent.init() ;
@@ -963,15 +1043,16 @@
 		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
 			//console.log(this.StartClassGroup) ;
 			// ;
-			console.log('Init  EndClassWidgetGroup -----------------------------------------------------------------------------------------------') ;
+			//console.log('Init  EndClassWidgetGroup -----------------------------------------------------------------------------------------------') ;
 			this.EndClassWidgetGroup.detectWidgetType() ;
 			this.EndClassWidgetGroup.InputTypeComponent.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
 			this.EndClassWidgetGroup.InputTypeComponent.init() ;
 			
+			//console.log(this.EndClassWidgetGroup.InputTypeComponent) ;
 			$(this.EndClassWidgetGroup.InputTypeComponent).on('change', {arg1: this.EndClassWidgetGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
 			
-			console.log('Edit endClassWidgetGroup is on ! ') ;
+			//console.log('Edit endClassWidgetGroup is on ! ') ;
 		}) ;
 		
 		function validSelected() {
@@ -1020,7 +1101,9 @@
 			this.ActionsGroup.detectWidgetType() ;
 			this.ActionsGroup.InputTypeComponent.ActionRemove.init() ;
 			
-			console.log('Edit ActionRemove is on ! ') ;
+			$(this.ActionsGroup.InputTypeComponent.ActionRemove.html).find('a').on('click', {arg1: this, arg2: 'RemoveCriteria'}, eventProxiCriteria);
+			
+			//console.log('Edit ActionRemove is on ! ') ;
 		}) ;
 		
 		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
@@ -1028,7 +1111,7 @@
 			// ;
 			this.ActionsGroup.detectWidgetType() ;
 			
-			console.log($(this.EndClassGroup) ) 
+			//console.log($(this.EndClassGroup) ) 
 			this.ActionsGroup.InputTypeComponent.ActionOr.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
 			this.ActionsGroup.InputTypeComponent.ActionOr.init() ;
 			this.ActionsGroup.InputTypeComponent.ActionAnd.init() ;
@@ -1036,7 +1119,7 @@
 			$(this.ActionsGroup.InputTypeComponent.ActionOr.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddOr'}, eventProxiCriteria);
 			$(this.ActionsGroup.InputTypeComponent.ActionAnd.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddAnd'}, eventProxiCriteria);
 			
-			console.log('Edit ActionOR et ActionAnd is on ! ') ;
+			//console.log('Edit ActionOR et ActionAnd is on ! ') ;
 		}) ;
 		
 		this.AddOr = function () {
@@ -1061,7 +1144,7 @@
 		}
 		this.AddAnd = function () {
 			
-			this.ParentComponent.initCompleted() ;
+			//this.ParentComponent.initCompleted() ;
 			
 			
 			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.AncestorHtmlContext) ;
@@ -1368,7 +1451,8 @@
 			switch (this.widgetType) {
 			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
 			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
-				value_widget = $(this.widgetComponent.html).find(id_input).val() ;
+				value_widget = $(id_input).val() ;
+				console.log(value_widget) ;
 				break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
@@ -1392,18 +1476,18 @@
 			switch (this.widgetType) {
 			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
 			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
-				value_widget = $(this.widgetComponent.html).find(id_input).val() ;
+				value_widget =$(id_input).find('option:selected').text() ;
 				break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				value_widget = $(id_input).val() ;
-				console.log(value_widget) ;
+				//console.log(value_widget) ;
 			    break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
 				
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
-				console.log(id_input);
-				value_widget = $(id_input).val() ;
+				//console.log(id_input);
+				value_widget = 'De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() ;
 				break;
 				
 			  default:
@@ -1498,15 +1582,18 @@
 		this.ParentComponent.statements.ListeWidget = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		this.html = '<select id="listwidget"></select>' ;
-		this.select = $('<select id="listwidget"></select>');
+		var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+		
+		
+		this.html = '<select id="'+id_input+'"></select>' ;
+		this.select = $('<select id="'+id_input+'"></select>');
 		
 		function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
 			
-			
+			var itc_obj = this.ParentComponent;
 			var options = {
 
 				url: settings.listUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value),
@@ -1522,9 +1609,13 @@
 			request.done(function( data ) {
 			  
 			  $.each( data, function( key, val ) {
-				$('#listwidget').append( "<option value='" + val.uri + "'>" + val.label + "</option>" );
+				$('#'+id_input).append( "<option value='" + val.uri + "'>" + val.label + "</option>" );
 			  });
-			  $("#listwidget").niceSelect();
+			  $('#'+id_input).niceSelect();
+			  $('#'+id_input).on("change", function() {
+				  $(itc_obj).trigger('change') ;
+			  });
+			  //$(this.ParentComponent).trigger("change");
 			  
 			});
 				
@@ -1546,7 +1637,7 @@
 		this.ParentComponent.statements.DatesWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		this.html = '<input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
+		this.html = '<input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">Ajouter</button>' ;
 		
 		function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
@@ -1593,7 +1684,7 @@
 							$('#ecgrw-date-'+id_inputs+'-input-start').val(start).trigger("change");
 							$('#ecgrw-date-'+id_inputs+'-input-stop').val(stop).trigger("change");
 							
-							$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");$(itc_obj).trigger("change");
+							$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");
 					}
 				  },
 					 template: {
@@ -1608,6 +1699,9 @@
 				//Need to add in html befor
 				
 				$('#ecgrw-date-'+id_inputs+'-input').easyAutocomplete(options);
+				$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
+					$(itc_obj).trigger("change");
+				})
 			
 			
 		} this.init = init ;

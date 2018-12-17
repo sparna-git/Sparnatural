@@ -45,12 +45,12 @@ var generator = new Ngenerator();
 //parsedQuery.variables = ['?mickey'];
 var generatedQuery = generator.stringify(parsedQuery);
 
-console.log(parsedQuery);
-$('#sparql code').html(generatedQuery) ;
+//console.log(parsedQuery);
+//$('#sparql code').html(generatedQuery) ;
 
 var tmpData = parsedQuery;
  var formattedData = JSON.stringify(tmpData, null, '\t');
-$('#json2 code').html(formattedData) ;
+//$('#json2 code').html(formattedData) ;
 });
 	
 	
