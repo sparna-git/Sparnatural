@@ -3,8 +3,42 @@ $height-components-under: 42px;
 $height-components-hover: 35px;
 $margin-component: 30px;
 $margin-component-onEdit: 80px;
+$margin-children-li: 75px;
 
 $custom-red: rgb(250,136,3) ;
+
+
+@mixin triangle-before() {
+	padding-left: 20px;
+	&:before {
+		content: '';
+		width: 0;
+		height: 0;
+		line-height: 0;
+		padding: 0;
+		display: inline-block;float:left;
+		border-style: solid;
+		border-width: 21px 0 21px 15px;
+		border-color: transparent transparent transparent #fff;
+		margin-left: -20px;
+	}
+	
+}
+@mixin triangle-after() {
+	padding-right: 0;
+	&:after {
+		content: '';
+		width: 0;
+		height: 0;
+		line-height: 0;
+		padding: 0;
+		display: inline-block;float: right;margin-right: -15px;
+		border-style: solid;
+		border-width: 21px 0 21px 15px;
+		border-color: transparent transparent transparent $custom-red;
+	}
+	
+}
 
 body {
 	section {
@@ -27,10 +61,18 @@ body {
 		
 		&>div {
 			
-			min-width: 100px;
-			background: #fff;
+			min-width: 80px;
+			/*background: #fff;*/
 			padding: 2px 5px;
 		}
+		.ObjectPropertyGroup {
+			
+			.current {
+				font-style: italic;
+			}
+		}
+		
+		
 		.EndClassGroup {
 			position: relative;
 			.EditComponents {
@@ -89,13 +131,21 @@ body {
 		}
 		.EndClassWidgetGroup {
 			min-width: 35%;
-			padding: 2px 15px;
+			padding: 2px 15px 2px 0;
+			margin-left: -14px;
 			.easy-autocomplete {
 				width: 100%!important;
 			}
 			input {
 				width: 100%!important;
 				display: block;
+			}
+			.EndClassWidgetValue {
+				line-height: $height-components-under;
+				color: #fff;
+				font-size: 14px;
+				display: inline-block;
+				padding: 0 0 0 15px;
 			}
 		}
 		
@@ -117,10 +167,11 @@ body {
 				right: 5px;
 				top: -46px;
 				line-height: 46px;
+				a {cusor: pointer}
 			}
 			.ActionAnd {
-				left: 0;
-				top: 8px;
+				left: ($margin-children-li - 45) /2;
+				top: $margin-component / 2;
 				line-height: 46px;
 				width: 46px;
 				text-align: center;
@@ -182,7 +233,7 @@ body {
 				/*overflow: hidden;*/
 				
 				& li.groupe {
-					margin-left: 46px;
+					margin-left: $margin-children-li;
 				}
 				&>div {
 					
@@ -236,10 +287,20 @@ body {
 						}
 					}
 				}
+				&.OrImpossible.completed {
+					
+					&>div .EndClassWidgetValue {
+						background: $custom-red ;
+						@include triangle-before();
+						@include triangle-after();
+					}
+					
+				}
 				
 				.nice-select {
 					background: transparent;
 					border-color: transparent;
+					padding-left: 10px;
 					ul.list li {
 						border-bottom: solid 1px #e8e8e8;
 						img {
@@ -344,7 +405,29 @@ body {
 							display: none;
 						}
 					}
-					
+					&.OrImpossible {
+						
+						&>div .EndClassGroup .Highlited {
+							background: transparent;
+							color: #888;
+							margin-right: 0;
+							
+							&:before,
+							&:after {
+								display: none;
+							}
+							.current {
+								color: #888;
+								img {
+									display: inline;
+									&.highlited {
+										display: none;
+									}
+								}
+							}
+						}
+						
+					}
 				
 				}
 				/*.ActionAnd.ShowOnHover {
@@ -360,4 +443,5 @@ body {
 	
 
 }
+
 

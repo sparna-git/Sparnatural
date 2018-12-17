@@ -16,9 +16,11 @@ body .CriteriaGroup {
   margin-bottom: 80px;
   clear: both; }
   body .CriteriaGroup > div {
-    min-width: 100px;
-    background: #fff;
+    min-width: 80px;
+    /*background: #fff;*/
     padding: 2px 5px; }
+  body .CriteriaGroup .ObjectPropertyGroup .current {
+    font-style: italic; }
   body .CriteriaGroup .EndClassGroup {
     position: relative; }
     body .CriteriaGroup .EndClassGroup .EditComponents {
@@ -58,12 +60,19 @@ body .CriteriaGroup {
       /*top: $height-components*2;*/ }
   body .CriteriaGroup .EndClassWidgetGroup {
     min-width: 35%;
-    padding: 2px 15px; }
+    padding: 2px 15px 2px 0;
+    margin-left: -14px; }
     body .CriteriaGroup .EndClassWidgetGroup .easy-autocomplete {
       width: 100% !important; }
     body .CriteriaGroup .EndClassWidgetGroup input {
       width: 100% !important;
       display: block; }
+    body .CriteriaGroup .EndClassWidgetGroup .EndClassWidgetValue {
+      line-height: 42px;
+      color: #fff;
+      font-size: 14px;
+      display: inline-block;
+      padding: 0 0 0 15px; }
   body .CriteriaGroup .ActionsGroup {
     position: absolute;
     display: block;
@@ -80,9 +89,11 @@ body .CriteriaGroup {
       right: 5px;
       top: -46px;
       line-height: 46px; }
+      body .CriteriaGroup .ActionsGroup .ActionRemove a {
+        cusor: pointer; }
     body .CriteriaGroup .ActionsGroup .ActionAnd {
-      left: 0;
-      top: 8px;
+      left: 15px;
+      top: 15px;
       line-height: 46px;
       width: 46px;
       text-align: center; }
@@ -126,7 +137,7 @@ body .SimSemSearch ul.componentsListe {
 					display: none;
 				}*/ }
     body .SimSemSearch ul.componentsListe li.groupe li.groupe {
-      margin-left: 46px; }
+      margin-left: 75px; }
     body .SimSemSearch ul.componentsListe li.groupe .ActionOr {
       display: inline-block; }
     body .SimSemSearch ul.componentsListe li.groupe .ActionAnd a,
@@ -159,9 +170,38 @@ body .SimSemSearch ul.componentsListe {
           padding: 5px; }
           body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container ul li.selected {
             background: #fa8803; }
+    body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.completed > div .EndClassWidgetValue {
+      background: #fa8803;
+      padding-left: 20px;
+      padding-right: 0; }
+      body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.completed > div .EndClassWidgetValue:before {
+        content: '';
+        width: 0;
+        height: 0;
+        line-height: 0;
+        padding: 0;
+        display: inline-block;
+        float: left;
+        border-style: solid;
+        border-width: 21px 0 21px 15px;
+        border-color: transparent transparent transparent #fff;
+        margin-left: -20px; }
+      body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.completed > div .EndClassWidgetValue:after {
+        content: '';
+        width: 0;
+        height: 0;
+        line-height: 0;
+        padding: 0;
+        display: inline-block;
+        float: right;
+        margin-right: -15px;
+        border-style: solid;
+        border-width: 21px 0 21px 15px;
+        border-color: transparent transparent transparent #fa8803; }
     body .SimSemSearch ul.componentsListe li.groupe .nice-select {
       background: transparent;
-      border-color: transparent; }
+      border-color: transparent;
+      padding-left: 10px; }
       body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li {
         border-bottom: solid 1px #e8e8e8; }
         body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li img {
@@ -232,3 +272,15 @@ body .SimSemSearch ul.componentsListe {
     body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents .ActionOr,
     body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents .ObjectPropertyTypeWidget {
       display: none; }
+    body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited {
+      background: transparent;
+      color: #888;
+      margin-right: 0; }
+      body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited:before, body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited:after {
+        display: none; }
+      body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited .current {
+        color: #888; }
+        body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited .current img {
+          display: inline; }
+          body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited .current img.highlited {
+            display: none; }

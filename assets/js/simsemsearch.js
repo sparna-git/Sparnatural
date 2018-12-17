@@ -425,7 +425,7 @@
 			var cssdef = 'linear-gradient(180deg' ; 
 			$all_li .each(function(index) {
 				var a = (index + 1 ) * ratio ;
-				var height = $(this).find('>div').outerHeight(true)+2+2 ;
+				var height = $(this).find('>div').outerHeight(true) ;
 				cssdef += ', rgba(250,136,3,'+a+') '+prev+'px, rgba(250,136,3,'+a+') '+(prev+height)+'px' ;
 				prev = prev + height+1 ;
 			});
@@ -953,6 +953,11 @@
 			//$('.nice-select').removeClass('open') ;
 			$('.ObjectPropertyGroup .nice-select').trigger('click') ;
 			$(this.ObjectPropertyGroup.html).find('select.input-val').on('change', {arg1: this.ObjectPropertyGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			
+			console.log(this.ObjectPropertyGroup.html);
+			if ($(this.ObjectPropertyGroup.html).find('select.input-val').find('option').length == 1) {
+				$(this.ObjectPropertyGroup.html).find('.nice-select').trigger('click') ;
+			}
 			
 			
 			//console.log('Edit endClassGroup is on ! ') ;
