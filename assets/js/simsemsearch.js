@@ -812,6 +812,7 @@
 				
 				
 				intiGeneralEvent(formObject) ;
+				ExecuteSubmited(formObject) ;
 			}
 			
 			return false ;
