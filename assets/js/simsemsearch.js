@@ -954,6 +954,11 @@
 			$('.ObjectPropertyGroup .nice-select').trigger('click') ;
 			$(this.ObjectPropertyGroup.html).find('select.input-val').on('change', {arg1: this.ObjectPropertyGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
+			console.log(this.ObjectPropertyGroup.html);
+			if ($(this.ObjectPropertyGroup.html).find('select.input-val').find('option').length == 1) {
+				$(this.ObjectPropertyGroup.html).find('.nice-select').trigger('click') ;
+			}
+			
 			
 			//console.log('Edit endClassGroup is on ! ') ;
 		}) ;
