@@ -742,6 +742,81 @@
 			$(this.html).parent('li').addClass('completed') ;
 		}
 		
+		this.RemoveCriteria = function() {
+			console.log(this) ;
+			var index_to_remove = this.id ;
+			
+			
+			$(this.ParentComponent.components).each(function() {
+				
+				
+				var dependantDe = GetDependantCriteria(this.CriteriaGroup.thisForm_, this.index ) ;
+					
+				if ((dependantDe != null) && (dependantDe.type == 'parent')){
+					
+					if (dependantDe.element.id == index_to_remove) {
+						
+						this.CriteriaGroup.RemoveCriteria() ;
+					}
+				}
+				
+			}) ;
+			
+			var dependantDe = GetDependantCriteria(this.thisForm_, this.id ) ;
+			var restart_new = false ;
+			console.log(dependantDe) ;
+			if (dependantDe === null) {
+				restart_new = true ;
+				
+			} else {
+				var dependantComponent = dependantDe.element ;
+			}
+			var formObject = this.thisForm_ ;
+			var formContextHtml = this.Context.contexteReference.AncestorHtmlContext;
+			
+			//remove event listners
+			this.ComponentHtml.outerHTML = this.ComponentHtml.outerHTML;
+			$(this.ComponentHtml).remove() ;
+			
+			
+			var iteration_to_remove = false ;
+			$(this.ParentComponent.components).each(function(i) {
+					
+				if (this.index == index_to_remove){
+					
+					iteration_to_remove = i ;
+				}
+				
+			}) ;
+			this.ParentComponent.components.splice(iteration_to_remove , 1);
+			
+			
+			if (restart_new) {
+				console.log(formObject) ;
+				var new_component = addComponent(formObject, formContextHtml) ;
+			
+				$(new_component).find('.nice-select').trigger('click') ;
+				
+			} else {
+				if ($(dependantComponent.ComponentHtml).find('li.groupe').length > 0) {
+					
+					
+					
+				} else { //Si pas d'enfant, on reaffiche le where action
+					
+					if ($(dependantComponent.ComponentHtml).hasClass('haveOrChild') ) {
+						$(dependantComponent.ComponentHtml).removeClass('haveOrChild') ;
+						$(dependantComponent.ComponentHtml).removeClass('completed') ;
+					}
+				}
+				
+				
+				intiGeneralEvent(formObject) ;
+			}
+			
+			return false ;
+		}
+		
 	}
 	function eventProxiCriteria(e) {
 		
@@ -1026,6 +1101,8 @@
 			this.ActionsGroup.detectWidgetType() ;
 			this.ActionsGroup.InputTypeComponent.ActionRemove.init() ;
 			
+			$(this.ActionsGroup.InputTypeComponent.ActionRemove.html).find('a').on('click', {arg1: this, arg2: 'RemoveCriteria'}, eventProxiCriteria);
+			
 			//console.log('Edit ActionRemove is on ! ') ;
 		}) ;
 		
@@ -1067,7 +1144,7 @@
 		}
 		this.AddAnd = function () {
 			
-			this.ParentComponent.initCompleted() ;
+			//this.ParentComponent.initCompleted() ;
 			
 			
 			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.AncestorHtmlContext) ;
