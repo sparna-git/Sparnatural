@@ -89,7 +89,7 @@
         }
       ],
 	  "iconPath":  "assets/icons/noir/unite_str.png",
-	  "highlightedIconPath":  "assets/icons/blanc/temps.png"
+	  "highlightedIconPath":  "assets/icons/blanc/unite_str.png"
     },
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait",
