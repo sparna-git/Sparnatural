@@ -1672,7 +1672,7 @@
 				
 					 getValue: function(element) {
 						 //console.log(element) ;
-						return element.synonyms.join(' '); // +'' convert array to string ; https://stackoverflow.com/questions/5289403/jquery-convert-javascript-array-to-string
+						return element.label+' '+element.synonyms.join(' '); // +'' convert array to string ; https://stackoverflow.com/questions/5289403/jquery-convert-javascript-array-to-string
 					  },
 
 					 
