@@ -1738,7 +1738,7 @@
 				
 					 getValue: function(element) {
 						 //console.log(element) ;
-						return element.synonyms.join(' '); // +'' convert array to string ; https://stackoverflow.com/questions/5289403/jquery-convert-javascript-array-to-string
+						return element.label+' '+element.synonyms.join(' '); // +'' convert array to string ; https://stackoverflow.com/questions/5289403/jquery-convert-javascript-array-to-string
 					  },
 
 					 
@@ -1762,11 +1762,11 @@
 					 template: {
 						type: "custom",
 						method: function(value, item) {
-							return '<div>' + item.label + "<br/>" + item.start.year + " - " + item.stop.year + '</div>';
+							return '<div>' + item.label + " <small>[" + item.start.year + "/" + item.stop.year + ']</small></div>';
 						}
 					},
 
-					  requestDelay: 400
+					requestDelay: 400
 				};
 				//Need to add in html befor
 				
