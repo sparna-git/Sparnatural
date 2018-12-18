@@ -75,6 +75,7 @@ body {
 		
 		.EndClassGroup {
 			position: relative;
+			min-width: auto;
 			.EditComponents {
 				position: absolute;
 				left: 0;
@@ -84,6 +85,7 @@ body {
 				height: $height-components;
 				padding: 5px 0;
 				
+				.SearchWidget,
 				.DatesWidget {
 					max-width: 600px;
 					white-space: nowrap;
@@ -103,6 +105,12 @@ body {
 						color: #555;
 						float: none;
 						padding: 6px 12px;
+					}
+				}
+				
+				.SearchWidget {
+					&>input {
+						width: 200px;
 					}
 				}
 				.ListeWidget {
