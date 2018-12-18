@@ -260,6 +260,8 @@
 					
 					
 					var StartLabel = start.split("#") ;
+					
+					/** A traiter dans les cas ou une recherche est effectuer directement avec un mot clé ou si selecction incomplete **/
 					var EndLabel = end.split("#") ;
 					
 					
@@ -665,7 +667,16 @@
 		}
 		
 		function addComponent(thisForm_, contexte) {
-			var new_index = thisForm_.components.length ;
+			
+			//console.log(thisForm_.components) ;
+			if (thisForm_.components.length > 0 ) {
+				var new_index = thisForm_.components[thisForm_.components.length-1].index + 1 ;
+			} else {
+				var new_index = 0 ;
+			}
+			
+			
+			
 			var gabari = '<li class="groupe" data-index="'+new_index+'"><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
 			
 			// si il faut desscendre d'un niveau
@@ -763,10 +774,8 @@
 			}) ;
 			
 			var dependantDe = GetDependantCriteria(this.thisForm_, this.id ) ;
-			var restart_new = false ;
-			console.log(dependantDe) ;
+			
 			if (dependantDe === null) {
-				restart_new = true ;
 				
 			} else {
 				var dependantComponent = dependantDe.element ;
@@ -791,22 +800,24 @@
 			this.ParentComponent.components.splice(iteration_to_remove , 1);
 			
 			
-			if (restart_new) {
+			if (this.ParentComponent.components.length == 0) {
 				console.log(formObject) ;
 				var new_component = addComponent(formObject, formContextHtml) ;
 			
 				$(new_component).find('.nice-select').trigger('click') ;
 				
 			} else {
-				if ($(dependantComponent.ComponentHtml).find('li.groupe').length > 0) {
-					
-					
-					
-				} else { //Si pas d'enfant, on reaffiche le where action
-					
-					if ($(dependantComponent.ComponentHtml).hasClass('haveOrChild') ) {
-						$(dependantComponent.ComponentHtml).removeClass('haveOrChild') ;
-						$(dependantComponent.ComponentHtml).removeClass('completed') ;
+				if (dependantDe !== null) {
+					if ($(dependantComponent.ComponentHtml).find('li.groupe').length > 0) {
+						
+						
+						
+					} else { //Si pas d'enfant, on reaffiche le where action
+						
+						if ($(dependantComponent.ComponentHtml).hasClass('haveOrChild') ) {
+							$(dependantComponent.ComponentHtml).removeClass('haveOrChild') ;
+							$(dependantComponent.ComponentHtml).removeClass('completed') ;
+						}
 					}
 				}
 				
@@ -951,10 +962,10 @@
 			//console.log(this.ParentComponent) ;
 			this.ObjectPropertyGroup.niceslect = $(this.ObjectPropertyGroup.html).find('select.input-val').niceSelect()  ;
 			//$('.nice-select').removeClass('open') ;
-			$('.ObjectPropertyGroup .nice-select').trigger('click') ;
+			$(this.ObjectPropertyGroup.html).find('.nice-select').trigger('click') ;
 			$(this.ObjectPropertyGroup.html).find('select.input-val').on('change', {arg1: this.ObjectPropertyGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
-			console.log(this.ObjectPropertyGroup.html);
+			//console.log(this.ObjectPropertyGroup.html);
 			if ($(this.ObjectPropertyGroup.html).find('select.input-val').find('option').length == 1) {
 				$(this.ObjectPropertyGroup.html).find('.nice-select').trigger('click') ;
 			}
@@ -997,7 +1008,7 @@
 			this.EndClassGroup.Edit() ;
 			
 			this.EndClassGroup.niceslect = $(this.EndClassGroup.html).find('select.input-val').niceSelect()  ;
-			$('.EndClassGroup .nice-select').trigger('click') ;
+			$(this.EndClassGroup.html).find('.nice-select').trigger('click') ;
 			
 			$(this.EndClassGroup.html).find('select.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
