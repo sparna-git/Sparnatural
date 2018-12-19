@@ -152,11 +152,11 @@
           "@language" : "fr"
         }
       ],
-	  "iconPath":  "assets/icons/noir/acteur.png",
-	  "highlightedIconPath":  "assets/icons/blanc/acteur.png"
+	  "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-user'></i></span>",
+	  "highlightedIconPath":  "<i class='far fa-user highlited'></i>"
     },
     {
-      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Place",
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Lieu",
       "@type" : "Class",
       "label": [
         {
@@ -201,7 +201,7 @@
         }
       ],
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Site",
-      "range": "http://www.openarchaeo.fr/explorateur/onto#Place",
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Lieu",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
       }
