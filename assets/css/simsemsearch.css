@@ -22,7 +22,8 @@ body .CriteriaGroup {
   body .CriteriaGroup .ObjectPropertyGroup .current {
     font-style: italic; }
   body .CriteriaGroup .EndClassGroup {
-    position: relative; }
+    position: relative;
+    min-width: auto; }
     body .CriteriaGroup .EndClassGroup .EditComponents {
       position: absolute;
       left: 0;
@@ -31,12 +32,16 @@ body .CriteriaGroup {
       z-index: 101;
       height: 48px;
       padding: 5px 0; }
+      body .CriteriaGroup .EndClassGroup .EditComponents .SearchWidget,
       body .CriteriaGroup .EndClassGroup .EditComponents .DatesWidget {
         max-width: 600px;
         white-space: nowrap; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .SearchWidget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .SearchWidget > input,
         body .CriteriaGroup .EndClassGroup .EditComponents .DatesWidget > div,
         body .CriteriaGroup .EndClassGroup .EditComponents .DatesWidget > input {
           display: inline-block; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .SearchWidget > input,
         body .CriteriaGroup .EndClassGroup .EditComponents .DatesWidget > input {
           width: 70px;
           height: 42px;
@@ -49,6 +54,8 @@ body .CriteriaGroup {
           color: #555;
           float: none;
           padding: 6px 12px; }
+      body .CriteriaGroup .EndClassGroup .EditComponents .SearchWidget > input {
+        width: 200px; }
       body .CriteriaGroup .EndClassGroup .EditComponents .ListeWidget .nice-select {
         background: #fff;
         height: 35px;

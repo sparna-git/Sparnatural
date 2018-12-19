@@ -15,7 +15,7 @@ var parser = new Nparser();
     '?actor a <http://exemple.fr/ontology/Actor>'+
     'VALUES ?actor { <http://sparna.fr/database/person/123456> <http://sparna.fr/database/person/123457776> }'+
 '}');*/
-
+/*
 var parsedQuery = parser.parse(
 'PREFIX rdf: <http://www.w3.org/2000/01/rdf-schema#>'+
 'SELECT ?this '+
@@ -37,6 +37,16 @@ var parsedQuery = parser.parse(
     'FILTER(?time > "1700-01-01"^^xsd:dateTime && ?time <= "1750-12-31"^^xsd:dateTime)'+
     '?this <http://exemple.fr/ontology/created_by> ?time2 .'+
     'FILTER(?time2 > "1700-01-01"^^xsd:dateTime && ?time2 <= "1750-12-31"^^xsd:dateTime)'+
+'}');*/
+var parsedQuery = parser.parse(
+'PREFIX rdf: <http://www.w3.org/2000/01/rdf-schema#>'+
+'PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>'+
+'PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>'+
+'SELECT ?this '+
+'WHERE {'+
+    '?this rdf:type <http://exemple.fr/ontology/Actor> .'+
+    '?this rdfs:label ?label .'+
+    'FILTER(regex(?label, "William Turner", "i"))'+
 '}');/**/
 
 // Regenerate a SPARQL query from a JSON object
@@ -46,11 +56,11 @@ var generator = new Ngenerator();
 var generatedQuery = generator.stringify(parsedQuery);
 
 //console.log(parsedQuery);
-//$('#sparql code').html(generatedQuery) ;
+$('#sparql code').html(generatedQuery) ;
 
 var tmpData = parsedQuery;
  var formattedData = JSON.stringify(tmpData, null, '\t');
-//$('#json2 code').html(formattedData) ;
+$('#json2 code').html(formattedData) ;
 });
 	
 	

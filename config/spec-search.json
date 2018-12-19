@@ -188,6 +188,22 @@
 	  "highlightedIconPath":  "assets/icons/blanc/temps.png"
     },
     {
+      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Label",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Search",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Rechercher",
+          "@language" : "fr"
+        }
+      ],
+	  "iconPath":  "assets/icons/noir/search.png",
+	  "highlightedIconPath":  "assets/icons/blanc/search.png"
+    },
+    {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#situe_a",
       "@type" : "ObjectProperty",
       "label": [
@@ -534,6 +550,38 @@
       "range": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+      }
+    },
+    {
+      "@id" : "http://www.w3.org/2004/02/skos/core#prefLabel",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "text search",
+          "@language" : "en"
+        },
+        {
+          "@value" : "recheche de texte",
+          "@language" : "fr"
+        }
+      ],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Acteur"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Site"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Mobilier"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Construction"}, 
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Fait"},
+            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#US"}
+          ]
+        }
+      },
+      "range": "http://www.openarchaeo.fr/explorateur/onto#Label",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#SearchWidget"
       }
     }
   ]

@@ -141,6 +141,22 @@
 				}
 			} ;
 		}
+		function initFilterSearch(Texte, index) {
+			
+			return {
+				"type": "filter",
+				"expression": {
+					"type": "operation",
+					"operator": "regex",
+					"args": [
+						
+						""+index+"",
+						"\""+Texte+"\"",
+						"\"i\""
+					]
+				}
+			} ;
+		}
 
 		function addTriple(jsonTriples, subjet, predicate, object) {
 			
@@ -308,7 +324,7 @@
 					
 					
 					
-					if (_WidgetType == "http://ontologies.sparna.fr/SimSemSearch#TimeWidget" ) {
+					if ( (_WidgetType == "http://ontologies.sparna.fr/SimSemSearch#TimeWidget" ) || (_WidgetType == "http://ontologies.sparna.fr/SimSemSearch#SearchWidget" ) ) {
 						
 						
 						
@@ -353,6 +369,18 @@
 							//value_widget = $(id_input).val() ;
 							
 							jsonFilter = initFilterTime(StartYear, EndYear, endValueName) ;
+							
+							
+							jsonFilter = initFilterSearch(Texte, endValueName) ;
+							
+							Json = addInWhere(Json, jsonFilter) ;
+							
+							// expected output: "Mangoes and papayas are $2.79 a pound."
+							break;
+						  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
+							//console.log('Mangoes and papayas are $2.79 a pound.');
+							var Texte = $('#ecgrw-search-'+ this.index +'-input-value').val() ;
+							jsonFilter = initFilterSearch(Texte, endValueName) ;
 							
 							Json = addInWhere(Json, jsonFilter) ;
 							
@@ -980,7 +1008,17 @@
 			$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			 
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
-			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+			
+			
+			var objSpec = getObjectPropertyById(this.value_selected) ;
+			console.log(objSpec) ;
+			if ( (objSpec.widget["@type"] == 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget' )  || (objSpec.widget["@type"] == 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget' ) ) {
+				
+			} else {
+				$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+			}
+			
+			
 			
 		} this.validSelected = validSelected ;
 			
@@ -1457,6 +1495,11 @@
 				this.widgetComponent = new DatesWidget(this) ;
 				// expected output: "Mangoes and papayas are $2.79 a pound."
 				break;
+			  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
+				//console.log('Mangoes and papayas are $2.79 a pound.');
+				this.widgetComponent = new SearchWidget(this) ;
+				// expected output: "Mangoes and papayas are $2.79 a pound."
+				break;
 			  default:
 				//console.log('Sorry, we are out of ' + expr + '.');
 			}
@@ -1479,6 +1522,12 @@
 			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
 				//console.log('Mangoes and papayas are $2.79 a pound.');
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
+				value_widget = $(id_input).val() ;
+				// expected output: "Mangoes and papayas are $2.79 a pound."
+				break;
+			  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
+				//console.log('Mangoes and papayas are $2.79 a pound.');
+				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				value_widget = $(id_input).val() ;
 				// expected output: "Mangoes and papayas are $2.79 a pound."
 				break;
@@ -1505,6 +1554,12 @@
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				//console.log(id_input);
 				value_widget = 'De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() ;
+				break;
+			  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
+				
+				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
+				//console.log(id_input);
+				value_widget = $(id_input).val() ;
 				break;
 				
 			  default:
@@ -1718,6 +1773,43 @@
 				$('#ecgrw-date-'+id_inputs+'-input').easyAutocomplete(options);
 				$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
 					$(itc_obj).trigger("change");
+				})
+			
+			
+		} this.init = init ;
+		
+		
+		
+	} //DatesWidget.prototype = new widgetType;
+	function SearchWidget(InputTypeComponent) {
+		this.base = widgetType ;
+		this.base() ;
+		this.ParentComponent = InputTypeComponent ;
+		this.ParentComponent.statements.SearchWidget  = true ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		
+		this.html = '<input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add">Ajouter</button>' ;
+		
+		function init() {
+			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var phrase ="" ;
+			var data_json = null ;
+			
+			var id_inputs = this.IdCriteriaGroupe ;
+			
+			var itc_obj = this.ParentComponent;
+			
+			var EndClassGroupObject = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup ;
+			
+		
+				//Need to add in html befor
+
+				$('#ecgrw-search-'+this.IdCriteriaGroupe+'-add').on('click', function() {
+					$('#ecgrw-search-'+id_inputs+'-input-value').trigger("change");
+					$(itc_obj).trigger("change");
+					$(EndClassGroupObject.html).find('.ClassTypeId').hide() ;
 				})
 			
 			
