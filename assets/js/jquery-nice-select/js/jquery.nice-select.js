@@ -69,7 +69,11 @@
 	  
 	  var icon ='';
 	  if ($selected.attr('data-icon') !== undefined) {
-			icon = '<img src="'+$selected.attr('data-icon')+'" /><img class="highlited" src="'+$selected.attr('data-iconh')+'" />' ;
+			if($selected.attr('data-icon').indexOf('<') == 0) {
+        icon = $selected.attr('data-icon')+"&nbsp;&nbsp;";
+      } else {
+        icon = '<img src="'+$selected.attr('data-icon')+'" /><img class="highlited" src="'+$selected.attr('data-iconh')+'" />' ;  
+      }
 		}
 		
       
@@ -80,7 +84,13 @@
         var display = $option.data('display');
 		var icon = '' ;
 		if ($option.attr('data-icon') !== undefined) {
-			icon = '<img src="'+$option.attr('data-icon')+'" /><img class="highlited" src="'+$option.attr('data-iconh')+'" />' ;
+      if($option.attr('data-icon').indexOf('<') == 0) {
+        icon = $option.attr('data-icon')+"&nbsp;&nbsp;";
+      } else {
+        icon = '<img src="'+$option.attr('data-icon')+'" /><img class="highlited" src="'+$option.attr('data-iconh')+'" />' ;
+      }
+
+			
 		}
 
         $dropdown.find('ul').append($('<li></li>')
