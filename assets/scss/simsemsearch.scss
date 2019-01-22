@@ -149,11 +149,19 @@ body {
 				display: block;
 			}
 			.EndClassWidgetValue {
-				line-height: $height-components-under;
+				line-height: 0;
 				color: #fff;
 				font-size: 14px;
 				display: inline-block;
 				padding: 0 0 0 15px;
+				span {
+					line-height: $height-components-under;
+					display: inline-block;
+				}
+				span.label-two-line {
+					line-height: $height-components-under / 2;
+					line-height: 21px;
+				}
 			}
 		}
 		

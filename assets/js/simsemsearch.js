@@ -1542,24 +1542,24 @@
 			switch (this.widgetType) {
 			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
 			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
-				value_widget =$(id_input).find('option:selected').text() ;
+				value_widget = '<span>' +$(id_input).find('option:selected').text() + '</span>' ;
 				break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
-				value_widget = $(id_input).val() ;
+				value_widget = '<span>' + $(id_input).val()  + '</span>' ;
 				//console.log(value_widget) ;
 			    break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
 				
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				//console.log(id_input);
-				value_widget = 'De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() ;
+				value_widget = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
 				break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
 				
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				//console.log(id_input);
-				value_widget = $(id_input).val() ;
+				value_widget = '<span>'+ $(id_input).val() +'</span>' ;
 				break;
 				
 			  default:

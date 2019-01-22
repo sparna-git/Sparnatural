@@ -75,11 +75,17 @@ body .CriteriaGroup {
       width: 100% !important;
       display: block; }
     body .CriteriaGroup .EndClassWidgetGroup .EndClassWidgetValue {
-      line-height: 42px;
+      line-height: 0;
       color: #fff;
       font-size: 14px;
       display: inline-block;
       padding: 0 0 0 15px; }
+      body .CriteriaGroup .EndClassWidgetGroup .EndClassWidgetValue span {
+        line-height: 42px;
+        display: inline-block; }
+      body .CriteriaGroup .EndClassWidgetGroup .EndClassWidgetValue span.label-two-line {
+        line-height: 21px;
+        line-height: 21px; }
   body .CriteriaGroup .ActionsGroup {
     position: absolute;
     display: block;
