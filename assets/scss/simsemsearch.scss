@@ -183,7 +183,12 @@ body {
 				right: 5px;
 				top: -46px;
 				line-height: 46px;
-				a {cusor: pointer}
+				a {
+					cursor: pointer;
+					display: inline-block;line-height: 42px;
+					vertical-align: top;
+					padding: 0 15px;
+				}
 			}
 			.ActionAnd {
 				left: ($margin-children-li - 45) /2;
