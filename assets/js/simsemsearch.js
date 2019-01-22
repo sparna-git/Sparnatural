@@ -1321,7 +1321,7 @@
 					possible_values = '<a>AND</a>' ;
 				}
 				if (this instanceof ActionRemove) {
-					possible_values = '<a><img src="assets/icons/noir/remove.png"></a>' ;
+					possible_values = '<a><img src="assets/icons/buttons/remove.png"></a>' ;
 				}
 				
 			} 
