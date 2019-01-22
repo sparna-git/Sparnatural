@@ -1,4 +1,5 @@
 /resources
 /assets/js/sparql
-/assets/icons
+/assets/icons/*
+!/assets/icons/buttons
 prepros-6.config
