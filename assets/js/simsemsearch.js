@@ -207,8 +207,8 @@
 			
 			
 			var ArrayLiIndex = [] ;
-			
-			
+
+			var all_complete = true ;
 			
 			$(formObject._this).find('ul.componentsListe li.groupe').each(function(i) {
 				
@@ -216,9 +216,17 @@
 
 				ArrayLiIndex[data_id] = ArrayLiIndex.length ;
 				
-				
+				if (!$(this).hasClass('completed')) {
+					all_complete = false ;
+				}
 				
 			}) ;
+			
+			
+			if (!all_complete) {
+				return false ;
+			}
+			
 			$(formObject.components).each(function(i) {
 				
 					
@@ -458,6 +466,19 @@
 				var height = $(this).find('>div').outerHeight(true) ;
 				cssdef += ', rgba(250,136,3,'+a+') '+prev+'px, rgba(250,136,3,'+a+') '+(prev+height)+'px' ;
 				prev = prev + height+1 ;
+				console.log($(this).next()) ;
+				if ($(this).next().length > 0 ) {
+					$(this).addClass('hasAnd') ;
+					var this_li = $(this) ;
+					
+					var this_link_and = $(this).find('.link-and-bottom') ;
+					
+					$(this_link_and).height($(this_li).height() ) ;
+					
+					
+				} else {
+					 $(this).removeClass('hasAnd') ;
+				}
 			});
 			//console.log(cssdef) ;
 			thisForm_._this.find('div.bg-wrapper').css({background : cssdef+')' }) ;
@@ -705,7 +726,7 @@
 			
 			
 			
-			var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
+			var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"><span>Et</span></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
 			
 			// si il faut desscendre d'un niveau
 			if ($(contexte).is('li')) {
@@ -1135,7 +1156,7 @@
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
 			
-			
+			intiGeneralEvent(this.ParentComponent.thisForm_);
 			
 		} this.validSelected = validSelected ;
 		
@@ -1185,6 +1206,7 @@
 			$(this.ActionsGroup.InputTypeComponent.ActionOr.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddOr'}, eventProxiCriteria);
 			$(this.ActionsGroup.InputTypeComponent.ActionAnd.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddAnd'}, eventProxiCriteria);
 			
+			intiGeneralEvent(this.thisForm_);
 			//console.log('Edit ActionOR et ActionAnd is on ! ') ;
 		}) ;
 		
@@ -1206,6 +1228,8 @@
 			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 			
 			//return false ;
+			
+			
 			
 		}
 		this.AddAnd = function () {
@@ -1326,10 +1350,10 @@
 			if (this.ParentComponent instanceof ActionsGroup) {
 				
 				if (this instanceof ActionOr) {
-					possible_values = '<a>WHERE</a>' ;
+					possible_values = '<a>Où</a>' ;
 				}
 				if (this instanceof ActionAnd) {
-					possible_values = '<a>AND</a>' ;
+					possible_values = '<a>Et</a>' ;
 				}
 				if (this instanceof ActionRemove) {
 					possible_values = '<a><img src="assets/icons/buttons/remove.png"></a>' ;
