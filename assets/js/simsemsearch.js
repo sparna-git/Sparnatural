@@ -1350,7 +1350,12 @@
 			if (this.ParentComponent instanceof ActionsGroup) {
 				
 				if (this instanceof ActionOr) {
-					possible_values = '<a>Où</a>' ;
+					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+					var endLabel = getClassLabel(endClassGroup.value_selected) ;
+					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>Rechercher '+ endLabel + ' qui...' ;
+					
+					
+					possible_values = widgetLabel+'<a>+</a>' ;
 				}
 				if (this instanceof ActionAnd) {
 					possible_values = '<a>Et</a>' ;
@@ -1489,8 +1494,10 @@
 		this.HtmlContainer = this.ParentComponent ;
 		this.statements.Created = false ;
 		
+		console.log(this) ;
+		
 		function init() {
-			
+			console.log(this) ;
 			if (this.ParentComponent instanceof EndClassWidgetGroup) {
 				if (this.statements.Created) {
 					this.tools.Update() ;
@@ -1498,12 +1505,14 @@
 				}
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+
 				
-				
+				var endLabel = getClassLabel(endClassGroup.value_selected) ;
+				var widgetLabel = '<span class="edit-trait"><span class="edit-num">1</span></span>Trouver '+ endLabel ;
 				
 				this.widgetType = this.ParentComponent.widgetType  ;
 				this.getWigetTypeClassName() ;
-				this.widgetHtml = this.widgetComponent.html ;
+				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
 				
 			
 				this.statements.IsOnEdit = true ;
@@ -1692,7 +1701,7 @@
 		var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 		
 		
-		this.html = '<select id="'+id_input+'"></select>' ;
+		this.html = '<div class="list-widget"><select id="'+id_input+'"></select></div>' ;
 		this.select = $('<select id="'+id_input+'"></select>');
 		
 		function init() {
@@ -1744,7 +1753,7 @@
 		this.ParentComponent.statements.DatesWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		this.html = '<input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">Ajouter</button>' ;
+		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">Ajouter</button></div>' ;
 		
 		function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
@@ -1823,7 +1832,7 @@
 		this.ParentComponent.statements.SearchWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		this.html = '<input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add">Ajouter</button>' ;
+		this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add">Ajouter</button></div>' ;
 		
 		function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;

@@ -14,7 +14,12 @@ body .CriteriaGroup {
   background: #fff;
   margin-top: 30px;
   margin-bottom: 80px;
-  clear: both; }
+  clear: both;
+  -moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
+  -webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;
+  -o-box-shadow: 0px 2px 3px 0px #cfcfcf;
+  box-shadow: 0px 2px 3px 0px #cfcfcf;
+  filter: progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3); }
   body .CriteriaGroup > div {
     min-width: 80px;
     /*background: #fff;*/
@@ -26,12 +31,107 @@ body .CriteriaGroup {
     min-width: auto; }
     body .CriteriaGroup .EndClassGroup .EditComponents {
       position: absolute;
-      left: 0;
+      left: 36px;
       top: 47px;
       line-height: 35px;
       z-index: 101;
       height: 48px;
-      padding: 5px 0; }
+      padding: 0 0;
+      width: auto; }
+      body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr,
+      body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget {
+        position: relative;
+        border-left: 3px solid #fa8803;
+        height: 48px;
+        padding-left: 25px;
+        padding-right: 5px;
+        line-height: 48px;
+        /*overflow: hidden;*/
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: block;
+        width: 100%;
+        min-width: 1px;
+        font-size: 14px;
+        text-decoration: underline; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > a,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > a,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > div {
+          position: absolute;
+          left: 100%;
+          top: 0; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > a,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > a {
+          top: 50%;
+          -webkit-transform: translate(0, -50%);
+          -ms-transform: translate(0, -50%);
+          transform: translate(0, -50%); }
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .listwidget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .listwidget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .listwidget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .listwidget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .search-widget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .search-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > input {
+          display: inline-block; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .listwidget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .listwidget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .search-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > input {
+          height: 35px;
+          width: 50px; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .listwidget > button,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > button,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > button,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .listwidget > button,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .search-widget > button,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > button {
+          height: 35px;
+          line-height: 30px;
+          padding: 0 2px; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .search-widget > input {
+          width: 150px; }
+      body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr {
+        height: 20px;
+        line-height: 20px;
+        position: absolute;
+        top: 48px;
+        width: auto; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr .edit-trait {
+          top: 9px; }
+      body .CriteriaGroup .EndClassGroup .EditComponents .edit-trait {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 20px;
+        border-top: 3px solid #fa8803;
+        display: inline-block; }
+      body .CriteriaGroup .EndClassGroup .EditComponents .edit-num {
+        position: absolute;
+        top: -2px;
+        left: -1px;
+        -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        border: 3px solid #fa8803;
+        border-radius: 10px;
+        width: 20px;
+        height: 20px;
+        text-align: center;
+        line-height: 14px;
+        font-size: 10px;
+        background: #fff;
+        font-style: italic; }
       body .CriteriaGroup .EndClassGroup .EditComponents .SearchWidget,
       body .CriteriaGroup .EndClassGroup .EditComponents .DatesWidget {
         max-width: 600px;
@@ -197,12 +297,15 @@ body .SimSemSearch ul.componentsListe {
       cursor: pointer;
       display: block;
       background: #fff;
-      border: 2px solid #fa8803;
-      border-radius: 15px;
-      height: 30px;
+      border: 3px solid #fa8803;
+      border-radius: 13px;
+      height: 26px;
       line-height: 20px;
-      padding: 2px 4px;
-      width: auto; }
+      min-width: 26px;
+      text-align: center;
+      font-size: 14px;
+      color: #fa8803;
+      font-weight: bold; }
     body .SimSemSearch ul.componentsListe li.groupe > div > div > .ShowOnHover {
       display: none; }
     body .SimSemSearch ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {

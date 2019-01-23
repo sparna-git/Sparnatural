@@ -59,6 +59,12 @@ body {
 		margin-bottom: $margin-component-onEdit;
 		clear: both;
 		
+-moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
+-webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;
+-o-box-shadow: 0px 2px 3px 0px #cfcfcf;
+box-shadow: 0px 2px 3px 0px #cfcfcf;
+filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
+		
 		&>div {
 			
 			min-width: 80px;
@@ -78,12 +84,104 @@ body {
 			min-width: auto;
 			.EditComponents {
 				position: absolute;
-				left: 0;
+				left: 36px;
 				top: $height-components - 1;
 				line-height: $height-components-hover;
 				z-index: 101;
 				height: $height-components;
-				padding: 5px 0;
+				padding: 0 0;
+				width: auto;
+				
+				.ActionOr,
+				.ObjectPropertyTypeWidget {
+					position: relative;
+					border-left: 3px solid $custom-red;
+					height: 48px;
+					padding-left: 25px;
+					padding-right: 5px;
+					line-height: 48px;
+					/*overflow: hidden;*/
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					display:block;
+					width:100%;
+					min-width:1px;
+					font-size: 14px;
+					text-decoration: underline;
+					&>a,
+					&>div {
+						position: absolute;
+						left: 100%;
+						top: 0;
+						
+						
+					}
+					&>a  {
+						top: 50%;
+						transform:translate(0,-50%);
+					}
+					&>.listwidget,
+					&>.search-widget,
+					&>.date-widget {
+						&>div,
+						&>input {
+							display: inline-block;
+						}
+						&>input {
+							height: 35px;
+							width: 50px;
+						}
+						&>button {
+							height: 35px;
+							line-height: 30px;
+							padding: 0 2px;
+						}
+					}
+					&>.search-widget, {
+						
+						&>input {
+							width: 150px;
+						}
+						
+					}
+				}
+				.ActionOr {
+					height: 20px;
+					line-height: 20px;
+					position: absolute;
+					top: 48px;
+					width: auto;
+					
+					.edit-trait {
+						top: 9px;
+					}
+					.edit-num {
+						
+					}
+				}
+				.edit-trait {
+					position: absolute;
+					top: 50%;
+					left: 0;
+					width: 20px;
+					border-top: 3px solid $custom-red;
+					display: inline-block;
+				}
+				.edit-num {
+					position: absolute;
+					top: -2px;
+					left:-1px;
+					transform:translate(-50%,-50%);
+					border: 3px solid $custom-red;
+					border-radius: 10px;
+					width: 20px;
+					height: 20px;
+					text-align: center;
+					line-height: 14px;
+					font-size: 10px;
+					background: #fff;
+					font-style: italic;
+				}
 				
 				.SearchWidget,
 				.DatesWidget {
@@ -307,12 +405,15 @@ body {
 					cursor: pointer;
 					display: block;
 					background: #fff;
-					border: 2px solid $custom-red ;
-					border-radius: 15px;
-					height: 30px;
+					border: 3px solid $custom-red ;
+					border-radius: 13px;
+					height: 26px;
 					line-height: 20px;
-					padding: 2px 4px;
-					width: auto;
+					min-width: 26px;
+					text-align: center;
+					font-size: 14px;
+					color: $custom-red ;
+					font-weight: bold;
 				}
 				
 				&>div>div>.ShowOnHover {
