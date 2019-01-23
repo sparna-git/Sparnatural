@@ -705,12 +705,19 @@
 			
 			
 			
-			var gabari = '<li class="groupe" data-index="'+new_index+'"><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
+			var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
 			
 			// si il faut desscendre d'un niveau
 			if ($(contexte).is('li')) {
 				if ($(contexte).find('>ul').length == 0) {
-					var ul = $('<ul></ul>').appendTo($(contexte)) 
+					var ul = $('<ul><div class="lien-top"><span>Où</span></div></ul>').appendTo($(contexte)) ;
+					var parent_li = $(ul).parent('li') ;
+					var n_width = 0;
+					n_width = n_width + GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
+					var t_width = GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
+					$(ul).attr('data-test', GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) );
+					$(ul).find('>.lien-top').css('width', n_width) ;
+					$(parent_li).find('>.link-where-bottom').css('left', t_width) ;
 				} else {
 					var ul = $(contexte).find('>ul') ;
 				}
@@ -739,7 +746,11 @@
 			intiGeneralEvent(thisForm_);
 			
 			return $(gabari) ;
-		}	
+		}
+
+		function GetOffSet( elem, elemParent ) {
+			return elem.offset().left - $(elemParent).offset().left ;
+		}
 
 	
 	function CriteriaGroup(context) {

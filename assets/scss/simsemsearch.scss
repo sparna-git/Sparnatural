@@ -205,11 +205,47 @@ body {
 		}
 	}
 	.haveOrChild {
+		position: relative;
+		&>.link-where-bottom {
+			position: absolute;
+			left: 200px;
+			top: $height-components + $margin-component ;
+			height: $margin-component + 1;
+			border-left: 3px solid $custom-red;
+			display: block;
+		}
 		
 		&>.CriteriaGroup {
 			
 			.EndClassGroup .ObjectPropertyTypeWidget {
 				display: none;
+			}
+		}
+		&>ul {
+			position: relative;
+			&>.lien-top {
+				position: absolute;
+				top: -2px;
+				left: 111px;
+				border-left: 3px solid $custom-red;
+				border-top: 3px solid $custom-red;
+				width: attr(data-before-width)px ;
+				height: 36px;
+				display: block;
+				&>span {
+					position: absolute;
+					top: -17px;
+					left: -2px;;
+					display: block;
+					background: #fff;
+					border: 2px solid $custom-red ;
+					border-radius: 15px;
+					height: 30px;
+					line-height: 20px;
+					padding: 2px 10px;
+					width: auto;
+					transform: translateX(-50%);
+				}
 			}
 		}
 		
