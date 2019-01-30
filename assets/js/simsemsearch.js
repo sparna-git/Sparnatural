@@ -379,7 +379,7 @@
 							jsonFilter = initFilterTime(StartYear, EndYear, endValueName) ;
 							
 							
-							jsonFilter = initFilterSearch(Texte, endValueName) ;
+							//jsonFilter = initFilterSearch(Texte, endValueName) ;
 							
 							Json = addInWhere(Json, jsonFilter) ;
 							
