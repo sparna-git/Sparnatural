@@ -338,13 +338,19 @@
 						
 					} else {
 						
+						
+					}
+					
+					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
+						
+					} else {
 						new_triple = addTriple(new_triple, endValueName, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", end) ;
 					}
 					
 					Json = addInWhere(Json, new_triple) ;
 					
 					
-					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selecte !== null) {
+					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
 						
 						var jsonValue = initValues() ;
 						
