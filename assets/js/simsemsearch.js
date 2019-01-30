@@ -1753,7 +1753,7 @@
 		this.ParentComponent.statements.DatesWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">Ajouter</button></div>' ;
+		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="nom de la période" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="de"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="à" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">Ajouter</button></div>' ;
 		
 		function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
@@ -1806,7 +1806,7 @@
 					 template: {
 						type: "custom",
 						method: function(value, item) {
-							return '<div>' + item.label + " <small>[" + item.start.year + "/" + item.stop.year + ']</small></div>';
+							return '<div>' + item.label + ' <span class="start">' + item.start.year + '</span><span class="end">' + item.stop.year + '</span></div>';
 						}
 					},
 

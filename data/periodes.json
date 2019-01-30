@@ -22,7 +22,7 @@
 		"uri" : "http://toto.fr/p0qhb66xxxxx"
 	},
 	{
-		"label" : "Antiquité Romaine 3",
+		"label" : "Antiquité Romaine 3 avec un label assez long",
 		"synonyms" : ["Antiquité", "Toto"],
 		"start" : {
 			"year" : "-0050"
