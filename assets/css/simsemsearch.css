@@ -191,6 +191,9 @@ body .CriteriaGroup {
           color: #555;
           float: none;
           padding: 6px 12px; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .SearchWidget .easy-autocomplete > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .DatesWidget .easy-autocomplete > input {
+          width: 100%; }
       body .CriteriaGroup .EndClassGroup .EditComponents .SearchWidget > input {
         width: 200px; }
       body .CriteriaGroup .EndClassGroup .EditComponents .ListeWidget .nice-select {
