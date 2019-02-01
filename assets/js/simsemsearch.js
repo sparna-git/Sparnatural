@@ -7,6 +7,7 @@
 			pathSpecSearch: 'config/spec-search.json',
 			language: 'fr',
 			addDistinct: false,
+			WidgetsNeedValueIds: ['http://ontologies.sparna.fr/SimSemSearch#SearchWidget', 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget'] ,
 			autocompleteUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
@@ -215,10 +216,11 @@
 				var data_id = $(this).attr('data-index') ;
 
 				ArrayLiIndex[data_id] = ArrayLiIndex.length ;
+				//console.log(this);
 				
-				if (!$(this).hasClass('completed')) {
+				/*if (!$(this).hasClass('completed')) {
 					all_complete = false ;
-				}
+				}*/
 				
 			}) ;
 			
@@ -227,12 +229,29 @@
 				return false ;
 			}
 			
+			var have_queriable_criteres = false ;
+			
 			$(formObject.components).each(function(i) {
-				
+					
+					var next_loop = false ;
+					
+					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) == "undefined" || this.CriteriaGroup.EndClassWidgetGroup.value_selected === null) {
+					
+						
+						if ($.inArray(this.CriteriaGroup.EndClassWidgetGroup.widgetType, settings.WidgetsNeedValueIds) > -1) {
+							next_loop = true ;
+						}
+
+					}
+					
+					if (next_loop) {
+						return true;
+					} else {
+						have_queriable_criteres = true ;
+					}
 					
 					var dependantDe = GetDependantCriteria(formObject, this.index ) ;
-					
-					//console.log(dependantDe) ;
+
 					
 					if ((dependantDe != null) && (dependantDe.type == 'parent')){
 						
@@ -427,20 +446,22 @@
 				
 			//console.log(Json) ;
 					
+			if (have_queriable_criteres) {
 					//var SparqlGenerator = require('sparqljs').Generator;
-			var generator = new Ngenerator();
-			//parsedQuery.variables = ['?mickey'];
-			var generatedQuery = generator.stringify(Json);
-					
-					
-			//console.log(generatedQuery) ;
-					
-					
-			//$('#sparql code').html(generatedQuery.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
-			//var jsons = JSON.stringify(Json, null, '\t');
-			//$('#json code').html(jsons) ;
-			
-			settings.onQueryUpdated(generatedQuery) ;
+				var generator = new Ngenerator();
+				//parsedQuery.variables = ['?mickey'];
+				var generatedQuery = generator.stringify(Json);
+						
+						
+				//console.log(generatedQuery) ;
+						
+						
+				//$('#sparql code').html(generatedQuery.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+				//var jsons = JSON.stringify(Json, null, '\t');
+				//$('#json code').html(jsons) ;
+				
+				settings.onQueryUpdated(generatedQuery) ;
+			}
 		}
 		
 		function intiGeneralEvent(thisForm_) {
@@ -1049,13 +1070,15 @@
 			
 			
 			var objSpec = getObjectPropertyById(this.value_selected) ;
-			console.log(objSpec) ;
+			
+			
 			if ( (objSpec.widget["@type"] == 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget' )  || (objSpec.widget["@type"] == 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget' ) ) {
 				
 			} else {
-				$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+				
 			}
 			
+			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
 			
 		} this.validSelected = validSelected ;
