@@ -7,7 +7,6 @@
 			pathSpecSearch: 'config/spec-search.json',
 			language: 'fr',
 			addDistinct: false,
-			WidgetsNeedValueIds: ['http://ontologies.sparna.fr/SimSemSearch#SearchWidget', 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget'] ,
 			autocompleteUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
@@ -237,8 +236,8 @@
 					
 					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) == "undefined" || this.CriteriaGroup.EndClassWidgetGroup.value_selected === null) {
 					
-						
-						if ($.inArray(this.CriteriaGroup.EndClassWidgetGroup.widgetType, settings.WidgetsNeedValueIds) > -1) {
+						var WidgetsNeedValueIds = ['http://ontologies.sparna.fr/SimSemSearch#SearchWidget', 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget'] ;
+						if ($.inArray(this.CriteriaGroup.EndClassWidgetGroup.widgetType, WidgetsNeedValueIds) > -1) {
 							next_loop = true ;
 						}
 
