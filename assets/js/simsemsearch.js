@@ -1386,7 +1386,7 @@
 					possible_values = widgetLabel+'<a>+</a>' ;
 				}
 				if (this instanceof ActionAnd) {
-					possible_values = '<a>Et</a>' ;
+					possible_values = '<span class="trait-and-bottom"></span><a>Et</a>' ;
 				}
 				if (this instanceof ActionRemove) {
 					possible_values = '<a><img src="assets/icons/buttons/remove.png"></a>' ;

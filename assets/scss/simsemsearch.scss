@@ -464,12 +464,37 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				.ActionOr {
 					display: inline-block;
 				}
-				.ActionAnd a,
+				.ActionAnd 
+					.trait-and-bottom {
+						position: absolute;
+						top: -14px;
+						left: 50%;
+						border-left: 3px solid $custom-red ;
+						margin-left: -1px;
+						height: 15px;
+						
+					}
+					a {
+					cursor: pointer;
+					display: block;
+					background: #fff;
+					border: 2px solid $custom-red ;
+					border-radius: 15px;
+					height: 30px;
+					line-height: 20px;
+					padding: 2px 10px;
+					width: auto;
+					text-align: center;
+					
+					&:hover {
+						color: $custom-red ;
+					}
+				}
 				.ActionOr a {
 					cursor: pointer;
 					display: block;
 					background: #fff;
-					border: 3px solid $custom-red ;
+					border: 2px solid $custom-red ;
 					border-radius: 13px;
 					height: 26px;
 					line-height: 20px;
@@ -478,6 +503,11 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 					font-size: 14px;
 					color: $custom-red ;
 					font-weight: bold;
+					padding: 0;
+					
+					&:hover {
+						color: $custom-red ;
+					}
 				}
 				
 				&>div>div>.ShowOnHover {

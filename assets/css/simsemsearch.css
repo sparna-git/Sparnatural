@@ -343,12 +343,32 @@ body .SimSemSearch ul.componentsListe {
       margin-left: 75px; }
     body .SimSemSearch ul.componentsListe li.groupe .ActionOr {
       display: inline-block; }
-    body .SimSemSearch ul.componentsListe li.groupe .ActionAnd a,
+    body .SimSemSearch ul.componentsListe li.groupe .ActionAnd
+.trait-and-bottom {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      border-left: 3px solid #fa8803;
+      margin-left: -1px;
+      height: 15px; }
+    body .SimSemSearch ul.componentsListe li.groupe a {
+      cursor: pointer;
+      display: block;
+      background: #fff;
+      border: 2px solid #fa8803;
+      border-radius: 15px;
+      height: 30px;
+      line-height: 20px;
+      padding: 2px 10px;
+      width: auto;
+      text-align: center; }
+      body .SimSemSearch ul.componentsListe li.groupe a:hover {
+        color: #fa8803; }
     body .SimSemSearch ul.componentsListe li.groupe .ActionOr a {
       cursor: pointer;
       display: block;
       background: #fff;
-      border: 3px solid #fa8803;
+      border: 2px solid #fa8803;
       border-radius: 13px;
       height: 26px;
       line-height: 20px;
@@ -356,7 +376,10 @@ body .SimSemSearch ul.componentsListe {
       text-align: center;
       font-size: 14px;
       color: #fa8803;
-      font-weight: bold; }
+      font-weight: bold;
+      padding: 0; }
+      body .SimSemSearch ul.componentsListe li.groupe .ActionOr a:hover {
+        color: #fa8803; }
     body .SimSemSearch ul.componentsListe li.groupe > div > div > .ShowOnHover {
       display: none; }
     body .SimSemSearch ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
