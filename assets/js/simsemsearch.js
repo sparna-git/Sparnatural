@@ -3,9 +3,11 @@
     $.fn.SimSemSearchForm = function( options ) {
  
         var specSearch = {} ;
+        var langSearch = {} ;
 		var defaults = {
 			pathSpecSearch: 'config/spec-search.json',
-			language: 'fr',
+			pathLanguages: 'config/lang/',
+			language: 'en',
 			addDistinct: false,
 			autocompleteUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
@@ -43,7 +45,7 @@
 			
 			thisForm.components = [] ;
 			
-			$.when( loadSpecSearch() ).done(function() {
+			$.when( loadSpecSearch() && loadLangSearch() ).done(function() {
 					initForm(thisForm) ;
 				 });
         });
@@ -54,6 +56,15 @@
 				specSearch = data ;
 			}).fail(function(response) {
 				console.log("SimSemSearch - unable to load config file : " +settings.pathSpecSearch);
+				console.log(response);
+			}) ;
+		}
+		function loadLangSearch() {
+			var fileName = settings.language+'.json' ;
+			return $.getJSON( settings.pathLanguages+ fileName, function( data ) {
+				langSearch = data ;
+			}).fail(function(response) {
+				console.log("SimSemSearch - unable to load lang file : " +settings.pathLanguages+ fileName);
 				console.log(response);
 			}) ;
 		}
@@ -752,12 +763,12 @@
 			
 			
 			
-			var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"><span>Et</span></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
+			var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"><span>'+langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
 			
 			// si il faut desscendre d'un niveau
 			if ($(contexte).is('li')) {
 				if ($(contexte).find('>ul').length == 0) {
-					var ul = $('<ul class="childsList"><div class="lien-top"><span>Où</span></div></ul>').appendTo($(contexte)) ;
+					var ul = $('<ul class="childsList"><div class="lien-top"><span>'+langSearch.Where+'</span></div></ul>').appendTo($(contexte)) ;
 					var parent_li = $(ul).parent('li') ;
 					var n_width = 0;
 					n_width = n_width + GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
@@ -1381,13 +1392,13 @@
 				if (this instanceof ActionOr) {
 					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 					var endLabel = getClassLabel(endClassGroup.value_selected) ;
-					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>Rechercher '+ endLabel + ' qui...' ;
+					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
 					
 					
 					possible_values = widgetLabel+'<a>+</a>' ;
 				}
 				if (this instanceof ActionAnd) {
-					possible_values = '<span class="trait-and-bottom"></span><a>Et</a>' ;
+					possible_values = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
 				}
 				if (this instanceof ActionRemove) {
 					possible_values = '<a><img src="assets/icons/buttons/remove.png"></a>' ;
@@ -1539,9 +1550,8 @@
 				if (endClassGroup.value_selected == 'http://www.openarchaeo.fr/explorateur/onto#Label') {
 					var endLabel = getClassLabel(endClassGroup.value_selected) ;
 				} else {
-					var endLabel = 'Trouver '+getClassLabel(endClassGroup.value_selected) ;
+					var endLabel = langSearch.Find+' '+getClassLabel(endClassGroup.value_selected) ;
 				}
-				
 				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 				
 				this.widgetType = this.ParentComponent.widgetType  ;
@@ -1787,7 +1797,7 @@
 		this.ParentComponent.statements.DatesWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="nom de la période" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="de"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="à" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">Ajouter</button></div>' ;
+		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
@@ -1866,7 +1876,7 @@
 		this.ParentComponent.statements.SearchWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add">Ajouter</button></div>' ;
+		this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add" class="button-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
