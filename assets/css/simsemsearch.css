@@ -54,7 +54,14 @@ body .CriteriaGroup {
         width: 100%;
         min-width: 1px;
         font-size: 14px;
-        text-decoration: underline; }
+        text-decoration: underline;
+        /*&.DatesWidget {
+						border-left-color: transparent;
+						
+						.edit-trait-top {
+							display: block;
+						}
+					}*/ }
         body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > a,
         body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > div,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > a,
@@ -153,6 +160,13 @@ body .CriteriaGroup {
         width: 20px;
         border-top: 3px solid #fa8803;
         display: inline-block; }
+        body .CriteriaGroup .EndClassGroup .EditComponents .edit-trait .edit-trait-top {
+          position: absolute;
+          bottom: 3px;
+          left: -2px;
+          display: none;
+          border-left: 3px solid #fa8803;
+          height: 24px; }
       body .CriteriaGroup .EndClassGroup .EditComponents .edit-num {
         position: absolute;
         top: -2px;
@@ -210,7 +224,7 @@ body .CriteriaGroup {
         /*color: #212529;*/
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        padding: 0 5px; }
+        padding: 0 10px; }
         body .CriteriaGroup .EndClassGroup .EditComponents .button-add:hover {
           color: #fa8803;
           cursor: pointer; }
@@ -387,6 +401,10 @@ body .SimSemSearch ul.componentsListe {
     body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.Hover > div .ActionOr.ShowOnHover,
     body .SimSemSearch ul.componentsListe li.groupe.Hover > div.completed > div .ActionOr.ShowOnHover {
       display: none; }
+    body .SimSemSearch ul.componentsListe li.groupe.OrImpossible > div .ObjectPropertyTypeWidget {
+      border-left-color: transparent; }
+      body .SimSemSearch ul.componentsListe li.groupe.OrImpossible > div .ObjectPropertyTypeWidget .edit-trait-top {
+        display: block; }
     body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete input {
       height: 35px; }
     body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container {

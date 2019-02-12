@@ -108,6 +108,13 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 					min-width:1px;
 					font-size: 14px;
 					text-decoration: underline;
+					/*&.DatesWidget {
+						border-left-color: transparent;
+						
+						.edit-trait-top {
+							display: block;
+						}
+					}*/
 					&>a,
 					&>div {
 						position: absolute;
@@ -215,6 +222,15 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 					width: 20px;
 					border-top: 3px solid $custom-red;
 					display: inline-block;
+					
+					.edit-trait-top {
+						position: absolute;
+						bottom: 3px;
+						left: -2px;
+						display: none;
+						border-left: 3px solid $custom-red;
+						height: 24px;
+					}
 				}
 				.edit-num {
 					position: absolute;
@@ -287,7 +303,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 					background: #fff;
 					/*color: #212529;*/
 					box-sizing: border-box;
-					padding: 0 5px;
+					padding: 0 10px;
 					&:hover {
 						color: $custom-red;
 						cursor: pointer;
@@ -521,6 +537,13 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				&.OrImpossible.Hover>div .ActionOr.ShowOnHover,
 				&.Hover>div.completed>div .ActionOr.ShowOnHover {
 					display: none;
+				}
+				&.OrImpossible>div .ObjectPropertyTypeWidget {
+					border-left-color: transparent;
+
+					.edit-trait-top {
+						display: block;
+					}
 				}
 				.easy-autocomplete {
 					input {

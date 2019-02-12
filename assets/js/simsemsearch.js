@@ -1537,7 +1537,7 @@
 
 				
 				var endLabel = getClassLabel(endClassGroup.value_selected) ;
-				var widgetLabel = '<span class="edit-trait"><span class="edit-num">1</span></span>Trouver '+ endLabel ;
+				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>Trouver '+ endLabel ;
 				
 				this.widgetType = this.ParentComponent.widgetType  ;
 				this.getWigetTypeClassName() ;
