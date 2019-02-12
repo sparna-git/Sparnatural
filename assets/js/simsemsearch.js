@@ -1535,9 +1535,14 @@
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
+				console.log(endClassGroup) ;
+				if (endClassGroup.value_selected == 'http://www.openarchaeo.fr/explorateur/onto#Label') {
+					var endLabel = getClassLabel(endClassGroup.value_selected) ;
+				} else {
+					var endLabel = 'Trouver '+getClassLabel(endClassGroup.value_selected) ;
+				}
 				
-				var endLabel = getClassLabel(endClassGroup.value_selected) ;
-				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>Trouver '+ endLabel ;
+				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 				
 				this.widgetType = this.ParentComponent.widgetType  ;
 				this.getWigetTypeClassName() ;
