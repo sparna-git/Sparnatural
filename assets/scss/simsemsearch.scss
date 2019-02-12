@@ -356,7 +356,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				left: ($margin-children-li - 45) /2;
 				top: $margin-component / 2;
 				line-height: 46px;
-				width: 46px;
+				/*width: 46px;*/
 				text-align: center;
 			}
 			
@@ -464,7 +464,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				.ActionOr {
 					display: inline-block;
 				}
-				.ActionAnd 
+				.ActionAnd {
 					.trait-and-bottom {
 						position: absolute;
 						top: -14px;
@@ -475,19 +475,20 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 						
 					}
 					a {
-					cursor: pointer;
-					display: block;
-					background: #fff;
-					border: 2px solid $custom-red ;
-					border-radius: 15px;
-					height: 30px;
-					line-height: 20px;
-					padding: 2px 10px;
-					width: auto;
-					text-align: center;
-					
-					&:hover {
-						color: $custom-red ;
+						cursor: pointer;
+						display: block;
+						background: #fff;
+						border: 2px solid $custom-red ;
+						border-radius: 15px;
+						height: 30px;
+						line-height: 20px;
+						padding: 2px 10px;
+						width: auto;
+						text-align: center;
+						
+						&:hover {
+							color: $custom-red ;
+						}
 					}
 				}
 				.ActionOr a {

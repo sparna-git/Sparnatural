@@ -263,7 +263,7 @@ body .CriteriaGroup {
       left: 15px;
       top: 15px;
       line-height: 46px;
-      width: 46px;
+      /*width: 46px;*/
       text-align: center; }
 
 body .haveOrChild {
@@ -343,15 +343,14 @@ body .SimSemSearch ul.componentsListe {
       margin-left: 75px; }
     body .SimSemSearch ul.componentsListe li.groupe .ActionOr {
       display: inline-block; }
-    body .SimSemSearch ul.componentsListe li.groupe .ActionAnd
-.trait-and-bottom {
+    body .SimSemSearch ul.componentsListe li.groupe .ActionAnd .trait-and-bottom {
       position: absolute;
       top: -14px;
       left: 50%;
       border-left: 3px solid #fa8803;
       margin-left: -1px;
       height: 15px; }
-    body .SimSemSearch ul.componentsListe li.groupe a {
+    body .SimSemSearch ul.componentsListe li.groupe .ActionAnd a {
       cursor: pointer;
       display: block;
       background: #fff;
@@ -362,7 +361,7 @@ body .SimSemSearch ul.componentsListe {
       padding: 2px 10px;
       width: auto;
       text-align: center; }
-      body .SimSemSearch ul.componentsListe li.groupe a:hover {
+      body .SimSemSearch ul.componentsListe li.groupe .ActionAnd a:hover {
         color: #fa8803; }
     body .SimSemSearch ul.componentsListe li.groupe .ActionOr a {
       cursor: pointer;
