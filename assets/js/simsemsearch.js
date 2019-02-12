@@ -757,7 +757,7 @@
 			// si il faut desscendre d'un niveau
 			if ($(contexte).is('li')) {
 				if ($(contexte).find('>ul').length == 0) {
-					var ul = $('<ul><div class="lien-top"><span>Où</span></div></ul>').appendTo($(contexte)) ;
+					var ul = $('<ul class="childsList"><div class="lien-top"><span>Où</span></div></ul>').appendTo($(contexte)) ;
 					var parent_li = $(ul).parent('li') ;
 					var n_width = 0;
 					n_width = n_width + GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
@@ -904,6 +904,7 @@
 							$(dependantComponent.ComponentHtml).removeClass('haveOrChild') ;
 							$(dependantComponent.ComponentHtml).removeClass('completed') ;
 						}
+						$(dependantComponent.ComponentHtml).find('>ul.childsList').remove() ;
 					}
 				}
 				
