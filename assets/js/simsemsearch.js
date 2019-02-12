@@ -261,7 +261,7 @@
 					}
 					
 					var dependantDe = GetDependantCriteria(formObject, this.index ) ;
-
+					var addStartClass = true ;
 					
 					if ((dependantDe != null) && (dependantDe.type == 'parent')){
 						
@@ -272,31 +272,8 @@
 						
 						EndVar = ArrayLiIndex[this.index] + 1;
 						
-						/*VarsString[this.index] = 'var'+ArrayLiIndex[dependantDe.element.id] ;*/
+						addStartClass = false ;
 						
-						
-						/*if  {
-							
-							var ComponentObject = {index: this.index, parent: dependantDe.element.id } ;
-							
-							if (dependantDe.element.id == levelCriteria[levelCursor]) { //si le level precedant etait celui du parent
-								levelCursor = levelCursor + 1 ;
-							} else {
-								
-								if (dependantDe.element.id == levelCriteria[levelCursor-1]) { //si le level precedant etait celui du parent
-									levelCursor = levelCursor - 1 ;
-								}
-							}
-							
-							
-							levelCriteria[levelCursor] = this.index ;
-							
-						} else {
-							
-							
-							levelCursor = 0 ;
-							levelCriteria[levelCursor] = this.index ;
-						} */
 					} else {
 						
 						StartVar = 'this' ;
@@ -304,6 +281,10 @@
 						/*levelCursor = 0 ;
 						levelCriteria[levelCursor] = this.index ;*/
 					}
+					if ((dependantDe != null) && (dependantDe.type == 'sibling')){
+						addStartClass = false ;
+					}
+					
 					
 					
 					
@@ -348,8 +329,10 @@
 					var endValueName = '?'+EndVar ;
 					
 					var new_triple = initTriple() ;
+					if (addStartClass) {
+						new_triple = addTriple(new_triple, '?'+StartVar, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", start) ;
+					}
 					
-					new_triple = addTriple(new_triple, '?'+StartVar, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", start) ;
 					new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
 					
 					
