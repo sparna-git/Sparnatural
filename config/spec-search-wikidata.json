@@ -1,0 +1,82 @@
+{
+  "@context":
+  {
+    "label": "http://www.w3.org/2000/01/rdf-schema#label",
+    "Ontology" : "http://www.w3.org/2002/07/owl#Ontology",
+    "Class" : "http://www.w3.org/2002/07/owl#Class",
+    "ObjectProperty" : "http://www.w3.org/2002/07/owl#ObjectProperty",
+    "domain": {
+      "@id": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "@type": "@id"
+    },
+    "range": {
+      "@id": "http://www.w3.org/2000/01/rdf-schema#range",
+      "@type": "@id"
+    },
+    "unionOf": {
+      "@id": "http://www.w3.org/2002/07/owl#unionOf",
+      "@type": "@id"
+    },
+    "widget": {
+      "@id": "http://ontologies.sparna.fr/SimSemSearch#widget",
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/wikidata/onto",
+      "@type" : "Ontology"
+    },
+    {
+      "@id" : "http://www.wikidata.org/entity/Q33506",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Museum",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Muséee",
+          "@language" : "fr"
+        }
+      ],
+	  "iconPath":  "assets/icons/noir/mobilier.png",
+	  "highlightedIconPath":  "assets/icons/blanc/mobilier.png"
+    },
+    {
+      "@id" : "http://www.wikidata.org/entity/Q6256",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Country",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Pays",
+          "@language" : "fr"
+        }
+      ],
+	  "iconPath":  "assets/icons/noir/type.png",
+	  "highlightedIconPath":  "assets/icons/blanc/type.png"
+    },
+    {
+      "@id" : "http://www.wikidata.org/prop/direct/P495",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "country of origin",
+          "@language" : "en"
+        },
+        {
+          "@value" : "pays d'origine",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://www.wikidata.org/entity/Q33506",
+      "range": "http://www.wikidata.org/entity/Q6256",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+      }
+    }
+  ]
+}
