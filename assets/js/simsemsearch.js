@@ -894,8 +894,8 @@
 						
 					} else { //Si pas d'enfant, on reaffiche le where action
 						
-						if ($(dependantComponent.ComponentHtml).hasClass('haveOrChild') ) {
-							$(dependantComponent.ComponentHtml).removeClass('haveOrChild') ;
+						if ($(dependantComponent.ComponentHtml).hasClass('haveWhereChild') ) {
+							$(dependantComponent.ComponentHtml).removeClass('haveWhereChild') ;
 							$(dependantComponent.ComponentHtml).removeClass('completed') ;
 						}
 						$(dependantComponent.ComponentHtml).find('>ul.childsList').remove() ;
@@ -1115,9 +1115,9 @@
 			
 			
 			if (ClassHaveRange(this.value_selected)) {
-				$(this.ParentComponent.html).parent('li').removeClass('OrImpossible') ;
+				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
 			} else {
-				$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
+				$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			}
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 			
@@ -1171,7 +1171,7 @@
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			
 			$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue">'+this.LabelValueSelected+'</div>') ;
-			$(this.ParentComponent.html).parent('li').addClass('OrImpossible') ;
+			$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			
 			this.ParentComponent.initCompleted() ;
 			
@@ -1203,7 +1203,7 @@
 			
 		} this.detectWidgetType = detectWidgetType ;
 		
-		this.InputTypeComponent = { ActionOr: new ActionOr(this), ActionAnd: new ActionAnd(this), ActionRemove: new ActionRemove(this) } ;
+		this.InputTypeComponent = { ActionWhere: new ActionWhere(this), ActionAnd: new ActionAnd(this), ActionRemove: new ActionRemove(this) } ;
 		
 		$(CriteriaGroupe).on('Created', function () {
 			//console.log(this.StartClassGroup) ;
@@ -1222,20 +1222,20 @@
 			this.ActionsGroup.detectWidgetType() ;
 			
 			//console.log($(this.EndClassGroup) ) 
-			this.ActionsGroup.InputTypeComponent.ActionOr.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
-			this.ActionsGroup.InputTypeComponent.ActionOr.init() ;
+			this.ActionsGroup.InputTypeComponent.ActionWhere.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
+			this.ActionsGroup.InputTypeComponent.ActionWhere.init() ;
 			this.ActionsGroup.InputTypeComponent.ActionAnd.init() ;
 			
-			$(this.ActionsGroup.InputTypeComponent.ActionOr.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddOr'}, eventProxiCriteria);
+			$(this.ActionsGroup.InputTypeComponent.ActionWhere.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddWhere'}, eventProxiCriteria);
 			$(this.ActionsGroup.InputTypeComponent.ActionAnd.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddAnd'}, eventProxiCriteria);
 			
 			intiGeneralEvent(this.thisForm_);
-			//console.log('Edit ActionOR et ActionAnd is on ! ') ;
+			//console.log('Edit ActionWhere et ActionAnd is on ! ') ;
 		}) ;
 		
-		this.AddOr = function () {
+		this.AddWhere = function () {
 			
-			this.ParentComponent.html.parent('li').addClass('haveOrChild') ;
+			this.ParentComponent.html.parent('li').addClass('haveWhereChild') ;
 			this.ParentComponent.initCompleted() ;
 			
 			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.HtmlContext) ;
@@ -1372,7 +1372,7 @@
 			
 			if (this.ParentComponent instanceof ActionsGroup) {
 				
-				if (this instanceof ActionOr) {
+				if (this instanceof ActionWhere) {
 					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 					var endLabel = getClassLabel(endClassGroup.value_selected) ;
 					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
@@ -1406,11 +1406,11 @@
 	} ;
 	
 	
-	function ActionOr(GroupContenaire) {
+	function ActionWhere(GroupContenaire) {
 		this.base = InputTypeComponent ;
 		this.base() ;
 		this.ParentComponent = GroupContenaire ;
-		this.statements.ActionOr = true ;
+		this.statements.ActionWhere = true ;
 		this.statements.ShowOnHover = true ;
 		this.statements.Created = false ;
 		this.HtmlContainer = {} ;
@@ -1421,7 +1421,7 @@
 		//this.widgetHtml = 'hohohoh' ;
 		//this.html = '<div class="ClassTypeId"></div>' ;
 		
-	} //ActionOr.prototype = new InputTypeComponent;
+	} //ActionWhere.prototype = new InputTypeComponent;
 	
 	
 	function ActionAnd(GroupContenaire) {
