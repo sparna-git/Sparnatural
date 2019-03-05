@@ -92,7 +92,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				padding: 0 0;
 				width: auto;
 				
-				.ActionOr,
+				.ActionWhere,
 				.ObjectPropertyTypeWidget {
 					position: relative;
 					border-left: 3px solid $custom-red;
@@ -209,7 +209,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 						white-space: normal;
 					}
 				}
-				.ActionOr {
+				.ActionWhere {
 					height: 20px;
 					line-height: 20px;
 					position: absolute;
@@ -318,7 +318,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 					}
 				}
 			}
-			.ActionOr {
+			.ActionWhere {
 				/*top: $height-components*2;*/
 			}
 			
@@ -391,7 +391,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 		}
 	}
 	
-	.haveOrChild {
+	.haveWhereChild {
 		position: relative;
 		&>.link-where-bottom {
 			position: absolute;
@@ -464,7 +464,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 					margin-left: 92px;
 					*
 				}*/
-				li li.Hover>div>div> .ActionOr.ShowOnHover {
+				li li.Hover>div>div> .ActionWhere.ShowOnHover {
 					display: none;
 				}
 			}
@@ -485,7 +485,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				.ActionAnd {
 					
 				}
-				.ActionOr {
+				.ActionWhere {
 					display: inline-block;
 				}
 				.ActionAnd {
@@ -515,7 +515,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 						}
 					}
 				}
-				.ActionOr a {
+				.ActionWhere a {
 					cursor: pointer;
 					display: block;
 					background: #fff;
@@ -541,12 +541,12 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				&.Hover>div>div>.ShowOnHover {
 					display: block;
 				}
-				li.groupe li.groupe .ActionOr.ShowOnHover,
-				&.OrImpossible.Hover>div .ActionOr.ShowOnHover,
-				&.Hover>div.completed>div .ActionOr.ShowOnHover {
+				li.groupe li.groupe .ActionWhere.ShowOnHover,
+				&.WhereImpossible.Hover>div .ActionWhere.ShowOnHover,
+				&.Hover>div.completed>div .ActionWhere.ShowOnHover {
 					display: none;
 				}
-				&.OrImpossible>div .ObjectPropertyTypeWidget {
+				&.WhereImpossible>div .ObjectPropertyTypeWidget {
 					border-left-color: transparent;
 
 					.edit-trait-top {
@@ -573,7 +573,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 						}
 					}
 				}
-				&.OrImpossible.completed {
+				&.WhereImpossible.completed {
 					
 					&>div .EndClassWidgetValue {
 						background: $custom-red ;
@@ -686,12 +686,12 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 						border-color: transparent transparent transparent #fff;
 					}
 					&>div>div .EditComponents {
-						.ActionOr,
+						.ActionWhere,
 						.ObjectPropertyTypeWidget {
 							display: none;
 						}
 					}
-					&.OrImpossible {
+					&.WhereImpossible {
 						
 						&>div .EndClassGroup .Highlited {
 							background: transparent;

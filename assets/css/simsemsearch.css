@@ -38,7 +38,7 @@ body .CriteriaGroup {
       height: 48px;
       padding: 0 0;
       width: auto; }
-      body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr,
+      body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere,
       body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget {
         position: relative;
         border-left: 3px solid #fa8803;
@@ -62,25 +62,25 @@ body .CriteriaGroup {
 							display: block;
 						}
 					}*/ }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > a,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > a,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > div,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > a,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > div {
           position: absolute;
           left: 100%;
           top: 0; }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > a,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > a,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > a {
           top: 50%;
           -webkit-transform: translate(0, -50%);
           -ms-transform: translate(0, -50%);
           transform: translate(0, -50%); }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .listwidget > div,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .listwidget > input,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > div,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > input,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > div,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .listwidget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .listwidget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .search-widget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .search-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .date-widget > div,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .date-widget > input,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .listwidget > div,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .listwidget > input,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .search-widget > div,
@@ -88,32 +88,32 @@ body .CriteriaGroup {
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > div,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > input {
           display: inline-block; }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .listwidget > input,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > input,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .listwidget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .search-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .date-widget > input,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .listwidget > input,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .search-widget > input,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > input {
           height: 35px;
           width: 60px; }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .listwidget > button,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > button,
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > button,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .listwidget > button,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .search-widget > button,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .date-widget > button,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .listwidget > button,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .search-widget > button,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > button {
           height: 35px;
           line-height: 20px;
           margin-left: 5px; }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > .easy-autocomplete,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .date-widget > .easy-autocomplete,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > .easy-autocomplete {
           width: 176px !important; }
-          body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > .easy-autocomplete .easy-autocomplete-container ul li,
+          body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .date-widget > .easy-autocomplete .easy-autocomplete-container ul li,
           body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > .easy-autocomplete .easy-autocomplete-container ul li {
             position: relative;
             width: 296px;
             padding-right: 120px; }
-            body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > .easy-autocomplete .easy-autocomplete-container ul li span,
+            body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .date-widget > .easy-autocomplete .easy-autocomplete-container ul li span,
             body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > .easy-autocomplete .easy-autocomplete-container ul li span {
               display: block;
               position: absolute;
@@ -125,10 +125,10 @@ body .CriteriaGroup {
               text-align: left;
               padding: 5px 12px;
               font-size: 14px; }
-              body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget > .easy-autocomplete .easy-autocomplete-container ul li span.start,
+              body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .date-widget > .easy-autocomplete .easy-autocomplete-container ul li span.start,
               body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget > .easy-autocomplete .easy-autocomplete-container ul li span.start {
                 right: 60px; }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .date-widget input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .date-widget input,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .date-widget input {
           border-color: #ccc;
           border-radius: 4px;
@@ -139,7 +139,7 @@ body .CriteriaGroup {
           color: #555;
           float: none;
           padding: 6px 10px; }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr > .search-widget > input,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere > .search-widget > input,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget > .search-widget > input {
           width: 150px;
           border-color: #ccc;
@@ -151,16 +151,16 @@ body .CriteriaGroup {
           color: #555;
           float: none;
           padding: 6px 12px; }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr .easy-autocomplete-container > ul > li,
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere .easy-autocomplete-container > ul > li,
         body .CriteriaGroup .EndClassGroup .EditComponents .ObjectPropertyTypeWidget .easy-autocomplete-container > ul > li {
           white-space: normal; }
-      body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr {
+      body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere {
         height: 20px;
         line-height: 20px;
         position: absolute;
         top: 48px;
         width: auto; }
-        body .CriteriaGroup .EndClassGroup .EditComponents .ActionOr .edit-trait {
+        body .CriteriaGroup .EndClassGroup .EditComponents .ActionWhere .edit-trait {
           top: 9px; }
       body .CriteriaGroup .EndClassGroup .EditComponents .edit-trait {
         position: absolute;
@@ -237,7 +237,7 @@ body .CriteriaGroup {
         body .CriteriaGroup .EndClassGroup .EditComponents .button-add:hover {
           color: #fa8803;
           cursor: pointer; }
-    body .CriteriaGroup .EndClassGroup .ActionOr {
+    body .CriteriaGroup .EndClassGroup .ActionWhere {
       /*top: $height-components*2;*/ }
   body .CriteriaGroup .EndClassWidgetGroup {
     min-width: 35%;
@@ -289,20 +289,20 @@ body .CriteriaGroup {
       /*width: 46px;*/
       text-align: center; }
 
-body .haveOrChild {
+body .haveWhereChild {
   position: relative; }
-  body .haveOrChild > .link-where-bottom {
+  body .haveWhereChild > .link-where-bottom {
     position: absolute;
     left: 200px;
     top: 78px;
     height: 31px;
     border-left: 3px solid #fa8803;
     display: block; }
-  body .haveOrChild > .CriteriaGroup .EndClassGroup .ObjectPropertyTypeWidget {
+  body .haveWhereChild > .CriteriaGroup .EndClassGroup .ObjectPropertyTypeWidget {
     display: none; }
-  body .haveOrChild > ul {
+  body .haveWhereChild > ul {
     position: relative; }
-    body .haveOrChild > ul > .lien-top {
+    body .haveWhereChild > ul > .lien-top {
       position: absolute;
       top: -2px;
       left: 111px;
@@ -311,7 +311,7 @@ body .haveOrChild {
       width: attr(data-before-width) px;
       height: 36px;
       display: block; }
-      body .haveOrChild > ul > .lien-top > span {
+      body .haveWhereChild > ul > .lien-top > span {
         position: absolute;
         top: -17px;
         left: -2px;
@@ -350,7 +350,7 @@ body .SimSemSearch ul.componentsListe {
 					margin-left: 92px;
 					*
 				}*/ }
-    body .SimSemSearch ul.componentsListe ul li li.Hover > div > div > .ActionOr.ShowOnHover {
+    body .SimSemSearch ul.componentsListe ul li li.Hover > div > div > .ActionWhere.ShowOnHover {
       display: none; }
   body .SimSemSearch ul.componentsListe li.groupe {
     margin: 0;
@@ -364,7 +364,7 @@ body .SimSemSearch ul.componentsListe {
 				}*/ }
     body .SimSemSearch ul.componentsListe li.groupe li.groupe {
       margin-left: 75px; }
-    body .SimSemSearch ul.componentsListe li.groupe .ActionOr {
+    body .SimSemSearch ul.componentsListe li.groupe .ActionWhere {
       display: inline-block; }
     body .SimSemSearch ul.componentsListe li.groupe .ActionAnd .trait-and-bottom {
       position: absolute;
@@ -386,7 +386,7 @@ body .SimSemSearch ul.componentsListe {
       text-align: center; }
       body .SimSemSearch ul.componentsListe li.groupe .ActionAnd a:hover {
         color: #fa8803; }
-    body .SimSemSearch ul.componentsListe li.groupe .ActionOr a {
+    body .SimSemSearch ul.componentsListe li.groupe .ActionWhere a {
       cursor: pointer;
       display: block;
       background: #fff;
@@ -400,19 +400,19 @@ body .SimSemSearch ul.componentsListe {
       color: #fa8803;
       font-weight: bold;
       padding: 0; }
-      body .SimSemSearch ul.componentsListe li.groupe .ActionOr a:hover {
+      body .SimSemSearch ul.componentsListe li.groupe .ActionWhere a:hover {
         color: #fa8803; }
     body .SimSemSearch ul.componentsListe li.groupe > div > div > .ShowOnHover {
       display: none; }
     body .SimSemSearch ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
       display: block; }
-    body .SimSemSearch ul.componentsListe li.groupe li.groupe li.groupe .ActionOr.ShowOnHover,
-    body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.Hover > div .ActionOr.ShowOnHover,
-    body .SimSemSearch ul.componentsListe li.groupe.Hover > div.completed > div .ActionOr.ShowOnHover {
+    body .SimSemSearch ul.componentsListe li.groupe li.groupe li.groupe .ActionWhere.ShowOnHover,
+    body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.Hover > div .ActionWhere.ShowOnHover,
+    body .SimSemSearch ul.componentsListe li.groupe.Hover > div.completed > div .ActionWhere.ShowOnHover {
       display: none; }
-    body .SimSemSearch ul.componentsListe li.groupe.OrImpossible > div .ObjectPropertyTypeWidget {
+    body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible > div .ObjectPropertyTypeWidget {
       border-left-color: transparent; }
-      body .SimSemSearch ul.componentsListe li.groupe.OrImpossible > div .ObjectPropertyTypeWidget .edit-trait-top {
+      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible > div .ObjectPropertyTypeWidget .edit-trait-top {
         display: block; }
     body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete input {
       height: 35px;
@@ -427,11 +427,11 @@ body .SimSemSearch ul.componentsListe {
           padding: 5px; }
           body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container ul li.selected {
             background: #fa8803; }
-    body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.completed > div .EndClassWidgetValue {
+    body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue {
       background: #fa8803;
       padding-left: 20px;
       padding-right: 0; }
-      body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.completed > div .EndClassWidgetValue:before {
+      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue:before {
         content: '';
         width: 0;
         height: 0;
@@ -443,7 +443,7 @@ body .SimSemSearch ul.componentsListe {
         border-width: 21px 0 21px 15px;
         border-color: transparent transparent transparent #fff;
         margin-left: -20px; }
-      body .SimSemSearch ul.componentsListe li.groupe.OrImpossible.completed > div .EndClassWidgetValue:after {
+      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue:after {
         content: '';
         width: 0;
         height: 0;
@@ -526,20 +526,20 @@ body .SimSemSearch ul.componentsListe {
       border-style: solid;
       border-width: 21px 0 21px 15px;
       border-color: transparent transparent transparent #fff; }
-    body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents .ActionOr,
+    body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents .ActionWhere,
     body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents .ObjectPropertyTypeWidget {
       display: none; }
-    body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited {
+    body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited {
       background: transparent;
       color: #888;
       margin-right: 0; }
-      body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited:before, body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited:after {
+      body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited:before, body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited:after {
         display: none; }
-      body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited .current {
+      body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited .current {
         color: #888; }
-        body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited .current img {
+        body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited .current img {
           display: inline; }
-          body .SimSemSearch ul.componentsListe li.groupe.completed.OrImpossible > div .EndClassGroup .Highlited .current img.highlited {
+          body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited .current img.highlited {
             display: none; }
   body .SimSemSearch ul.componentsListe li.groupe > .link-and-bottom {
     display: none; }
