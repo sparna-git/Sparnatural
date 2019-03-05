@@ -59,7 +59,7 @@ Select multiple values in a criteria
 
 SimSemSearch offers currently 4 ways of selecting a value for a criteria : autocomplete field, dropdown list, simple string value, year range.
 
-###Autocomplete field
+### Autocomplete field
 
 ### Dropdown list
 
@@ -71,7 +71,8 @@ SimSemSearch offers currently 4 ways of selecting a value for a criteria : autoc
 
 SimSemSearch is multilingual and supports displaying labels of classes and properties in multiple languages.
 
-## Limitations
+
+## Limitations
 
 ### 3 level depth
 
