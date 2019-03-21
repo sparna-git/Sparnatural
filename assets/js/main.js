@@ -1,6 +1,5 @@
 $( document ).ready(function($) {
-  // Handler for .ready() called.
-  
+
 
   
     // Parse a SPARQL query to a JSON object
@@ -66,6 +65,3 @@ var tmpData = parsedQuery;
  var formattedData = JSON.stringify(tmpData, null, '\t');
 $('#json2 code').html(formattedData) ;
 });
-	
-	
-	
