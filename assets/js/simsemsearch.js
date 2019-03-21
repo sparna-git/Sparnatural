@@ -1212,11 +1212,12 @@
 				
 				
 			}
+			
+			//Plus d'ajjout possible si nombre de valeur suppérieur à l'option maxOr
 			if (this.value_selected.length == settings.maxOr) {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').hide() ;
-				
-				
 			}
+			
 			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').removeClass('newOr') ;
 			
 			
