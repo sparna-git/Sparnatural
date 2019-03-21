@@ -9,6 +9,7 @@
 			pathLanguages: 'config/lang/',
 			language: 'en',
 			addDistinct: false,
+			maxOr: 3,
 			autocompleteUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
@@ -189,10 +190,14 @@
 
 		function addVariable(jsonValues, name, valueUrl) {
 			
-			var newValue = {
-							[name]: valueUrl
+			$.each(valueUrl, function( index, value ) {
+			  //alert( index + ": " + value );
+			  var newValue = {
+							[name]: value
 						}
 				jsonValues.values.push(newValue) ;		
+			  
+			});
 			
 			return jsonValues ;	
 		}
@@ -245,7 +250,8 @@
 					
 					var next_loop = false ;
 					
-					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) == "undefined" || this.CriteriaGroup.EndClassWidgetGroup.value_selected === null) {
+					//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) == "undefined" || this.CriteriaGroup.EndClassWidgetGroup.value_selected === null) {
+					if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length === 0 ) {
 					
 						var WidgetsNeedValueIds = ['http://ontologies.sparna.fr/SimSemSearch#SearchWidget', 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget'] ;
 						if ($.inArray(this.CriteriaGroup.EndClassWidgetGroup.widgetType, WidgetsNeedValueIds) > -1) {
@@ -353,7 +359,8 @@
 						
 					}
 					
-					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
+					//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
+					if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length !== 0 ) {
 						
 					} else {
 						new_triple = addTriple(new_triple, endValueName, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", end) ;
@@ -362,7 +369,8 @@
 					Json = addInWhere(Json, new_triple) ;
 					
 					
-					if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
+					//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
+					if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 0 ) {
 						
 						var jsonValue = initValues() ;
 						
@@ -390,16 +398,29 @@
 						  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
 							//console.log('Mangoes and papayas are $2.79 a pound.');
 							
-							var StartYear = $('#ecgrw-date-'+ this.index +'-input-start').val() ;
-							var EndYear = $('#ecgrw-date-'+ this.index +'-input-stop').val() ;
+							//var StartYear = $('#ecgrw-date-'+ this.index +'-input-start').val() ;
+							//var EndYear = $('#ecgrw-date-'+ this.index +'-input-stop').val() ;
 							//value_widget = $(id_input).val() ;
 							
-							jsonFilter = initFilterTime(StartYear, EndYear, endValueName) ;
+							
+							$.each(this.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
+							  //alert( index + ": " + value );
+							
+
+
+
+								jsonFilter = initFilterTime(value.start, value.stop, endValueName) ;
 							
 							
-							//jsonFilter = initFilterSearch(Texte, endValueName) ;
+								//jsonFilter = initFilterSearch(Texte, endValueName) ;
 							
-							Json = addInWhere(Json, jsonFilter) ;
+								Json = addInWhere(Json, jsonFilter) ;
+							  
+							});
+			
+			
+			
+							
 							
 							// expected output: "Mangoes and papayas are $2.79 a pound."
 							break;
@@ -437,7 +458,7 @@
 					
 				}) ;
 				
-			//console.log(Json) ;
+			console.log(Json) ;
 					
 			if (have_queriable_criteres) {
 					//var SparqlGenerator = require('sparqljs').Generator;
@@ -1137,6 +1158,7 @@
 		this.statements.EndClassWidgetGroup = true ;
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
+		this.value_selected = [] ;
 		
 		 this.detectWidgetType = function () {
 			
@@ -1166,11 +1188,17 @@
 		}) ;
 		
 		function validSelected() {
-			this.value_selected = this.InputTypeComponent.GetValue() ;
+			this.value_selected.push(this.InputTypeComponent.GetValue()) ;
 			this.LabelValueSelected = this.InputTypeComponent.GetValueLabel() ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			
-			$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue">'+this.LabelValueSelected+'</div>') ;
+			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
+				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>') ;
+			} else {
+				$(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>') ;
+			}
+			
+			
 			$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			
 			this.ParentComponent.initCompleted() ;
@@ -1178,10 +1206,28 @@
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
+			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
+				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
+				$(this.ParentComponent.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on('click', {arg1: this, arg2: 'needAddOrValue'}, eventProxiCriteria);
+				
+				
+			}
+			if (this.value_selected.length == settings.maxOr) {
+				$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').hide() ;
+				
+				
+			}
+			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').removeClass('newOr') ;
+			
 			
 			intiGeneralEvent(this.ParentComponent.thisForm_);
 			
 		} this.validSelected = validSelected ;
+		
+		function needAddOrValue() {
+			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
+			
+		} this.needAddOrValue = needAddOrValue ;
 		
 		this.init() ;
 		
@@ -1593,7 +1639,8 @@
 			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
 				//console.log('Mangoes and papayas are $2.79 a pound.');
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
-				value_widget = $(id_input).val() ;
+				
+				value_widget = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
 				// expected output: "Mangoes and papayas are $2.79 a pound."
 				break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':

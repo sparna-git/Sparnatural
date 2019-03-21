@@ -19,8 +19,34 @@ $custom-red: rgb(250,136,3) ;
 		display: inline-block;float:left;
 		border-style: solid;
 		border-width: 21px 0 21px 15px;
-		border-color: transparent transparent transparent #fff;
+		border-color: transparent transparent transparent transparent;
 		margin-left: -20px;
+	}
+	& {
+		position: relative;
+		padding-left: 18px;
+	}
+	&>.triangle-b,
+	&>.triangle-h {
+		position: absolute;
+		left: 3px;
+		background: transparent;
+	}
+	&>.triangle-h {
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 15px 21px 0;
+		border-color: transparent $custom-red transparent transparent;
+		top: 0
+	}
+	&>.triangle-b {
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 0 21px 15px;
+		border-color: transparent transparent $custom-red transparent;
+		bottom: 0;
 	}
 	
 }
@@ -32,7 +58,7 @@ $custom-red: rgb(250,136,3) ;
 		height: 0;
 		line-height: 0;
 		padding: 0;
-		display: inline-block;float: right;margin-right: -15px;
+		display: inline-block;float: right;margin-right: 0;
 		border-style: solid;
 		border-width: 21px 0 21px 15px;
 		border-color: transparent transparent transparent $custom-red;
@@ -327,6 +353,13 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 			min-width: 35%;
 			padding: 2px 15px 2px 0;
 			margin-left: -14px;
+			display: flex;
+			
+			-ms-flex-align: center;
+	-webkit-align-items: center;
+	-webkit-box-align: center;
+	align-items: center;
+	
 			.easy-autocomplete {
 				width: 100%!important;
 			}
@@ -334,21 +367,40 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				width: 100%!important;
 				display: block;
 			}
+			.EndClassWidgetAddOrValue,
 			.EndClassWidgetValue {
-				line-height: 0;
+				/*line-height: 0;*/
 				color: #fff;
 				font-size: 14px;
 				display: inline-block;
 				padding: 0 0 0 15px;
 				span {
-					line-height: $height-components-under;
+					/*line-height: $height-components-under;*/
 					display: inline-block;
+					vertical-align: middle;
+					margin: 0;
 				}
 				span.label-two-line {
 					line-height: $height-components-under / 2;
 					line-height: 21px;
 				}
 			}
+			.EndClassWidgetAddOrValue {
+				color: #fff;
+				/*margin-left: 15px;*/
+				line-height: 42px;
+				height: 42px;
+				font-size: 20px;
+				cursor: pointer;
+				vertical-align: middle;
+				span {
+					line-height: 42px;
+					vertical-align: baseline;
+					display: inline-block;
+					height: 42px;
+				}
+			}
+			
 		}
 		
 		.ActionsGroup {
@@ -575,10 +627,44 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				}
 				&.WhereImpossible.completed {
 					
+					&>div .EndClassWidgetAddOrValue,
 					&>div .EndClassWidgetValue {
-						background: $custom-red ;
+						max-width: 150px;
+						height: 42px;
+						overflow: hidden;
+						padding-right: 15px;
+						margin-right: -15px;
+						display: block;
+						
 						@include triangle-before();
 						@include triangle-after();
+						span {
+							background: $custom-red ;
+							height: 42px;
+							
+						}
+						p {
+							line-height: 42px;
+							height: 42px;
+							width: calc(100% - 15px);
+							background: $custom-red ;
+							margin: 0;
+							padding: 0 0 0 5px;
+							display: inline-block;
+							overflow: hidden;
+							text-overflow: ellipsis;
+							
+							text-align: center;
+							span {
+								line-height: 1;
+								display: inline;
+								vertical-align: baseline;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								white-space: nowrap;
+							
+							}
+						}
 					}
 					
 				}
@@ -689,6 +775,11 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 						.ActionWhere,
 						.ObjectPropertyTypeWidget {
 							display: none;
+						}
+					}
+					&>div>div .EditComponents.newOr {
+						.ObjectPropertyTypeWidget {
+							display: block;
 						}
 					}
 					&.WhereImpossible {
