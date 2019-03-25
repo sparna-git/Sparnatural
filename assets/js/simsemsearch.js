@@ -299,19 +299,27 @@
 					var obj = this.CriteriaGroup.ObjectPropertyGroup.value_selected ;
 					var end = this.CriteriaGroup.EndClassGroup.value_selected ; 
 					
-					
-					var StartLabel = start.split("#") ;
-					
+					if (start.indexOf("#") > -1) {
+						var StartLabel = start.split("#") ;
+						StartLabel = StartLabel[1] ;
+					} else {
+						var StartLabel = start.split("/") ;
+						StartLabel = StartLabel[StartLabel.length - 1] ;
+					}
 					/** A traiter dans les cas ou une recherche est effectuer directement avec un mot clé ou si selecction incomplete **/
-					var EndLabel = end.split("#") ;
-					
-					
+					if (end.indexOf("#") > -1) {
+						var EndLabel = end.split("#") ;
+						EndLabel = EndLabel[1] ;
+					} else {
+						var EndLabel = end.split("/") ;
+						EndLabel = EndLabel[EndLabel.length - 1] ;
+					}
 					
 					if (StartVar != 'this') {
-						StartVar = StartLabel[1]+''+StartVar ;
+						StartVar = StartLabel+''+StartVar ;
 					}
 
-					EndVar = EndLabel[1]+''+EndVar ;
+					EndVar = EndLabel+''+EndVar ;
 
 					
 					
