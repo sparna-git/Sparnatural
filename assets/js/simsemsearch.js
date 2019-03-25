@@ -19,8 +19,8 @@
 			datesUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option datesUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
-			onQueryUpdated : function (queryString) {
-				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de SimSemSearchForm. Le parêtre envoyé à la fonction contiendra la requête convertie en Sparql" ) ;
+			onQueryUpdated : function (queryString, queryJson) {
+				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de SimSemSearchForm. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
 			}
 		};
 		
@@ -474,7 +474,7 @@
 				//var jsons = JSON.stringify(Json, null, '\t');
 				//$('#json code').html(jsons) ;
 				
-				settings.onQueryUpdated(generatedQuery) ;
+				settings.onQueryUpdated(generatedQuery, Json) ;
 			}
 		}
 		

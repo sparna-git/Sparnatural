@@ -92,9 +92,10 @@
 					return 'data/periods-periodo.json' ;
 			
 				  },
-				onQueryUpdated: function(queryString) {
+				onQueryUpdated: function(queryString, queryJson) {
 					// ici on récupère la requete Sparql grace au premier parametre de la fonction
 					console.log(queryString) ;
+					console.log(queryJson) ;
 					$('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
 				  }
 				
