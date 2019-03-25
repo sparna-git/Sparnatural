@@ -1218,13 +1218,15 @@
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
-			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
-				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
-				$(this.ParentComponent.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on('click', {arg1: this, arg2: 'needAddOrValue'}, eventProxiCriteria);
-				
-				
-			}
 			
+			if ( (this.InputTypeComponent.widgetType == 'http://ontologies.sparna.fr/SimSemSearch#ListWidget' )  || (this.InputTypeComponent.widgetType == 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget' ) ) {
+
+			
+				if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
+					$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
+					$(this.ParentComponent.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on('click', {arg1: this, arg2: 'needAddOrValue'}, eventProxiCriteria);
+				}
+			}
 			//Plus d'ajjout possible si nombre de valeur suppérieur à l'option maxOr
 			if (this.value_selected.length == settings.maxOr) {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').hide() ;
