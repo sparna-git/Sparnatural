@@ -1188,6 +1188,11 @@
 		}) ;
 		
 		function validSelected() {
+			var temp_value = this.InputTypeComponent.GetValue() ;
+			if (temp_value == null ) {
+				return false ;
+			}
+			
 			this.value_selected.push(this.InputTypeComponent.GetValue()) ;
 			this.LabelValueSelected = this.InputTypeComponent.GetValueLabel() ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
@@ -1642,6 +1647,15 @@
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				
 				value_widget = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
+				
+				if ((value_widget.start == '') || (value_widget.stop == '')) {
+						value_widget = null ;
+				} else {
+					if (parseInt(value_widget.start) > parseInt(value_widget.stop)) {
+						value_widget = null ;
+					}
+				}
+				
 				// expected output: "Mangoes and papayas are $2.79 a pound."
 				break;
 			  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
