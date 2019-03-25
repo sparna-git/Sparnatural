@@ -604,6 +604,10 @@
 			var items = getAllClassFor(classId) ;
 			$.each( items, function( key, val ) {
 				var label = getClassLabel(val['@id']) ;
+				if (!val['highlightedIconPath'] || 0 === val['highlightedIconPath'].length) {
+					val['highlightedIconPath'] = val['iconPath'] ;
+				}
+				
 				var image = ' data-icon="'+val['iconPath']+'" data-iconh="'+val['highlightedIconPath']+'"' ;
 				var selected ='';
 				if (default_value == val['@id']) {
