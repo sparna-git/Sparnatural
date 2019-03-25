@@ -25,6 +25,14 @@
 			}
 		};
 		
+		const TYPE_WIDGET_LIST_URI = 'http://ontologies.sparna.fr/SimSemSearch#ListWidget';
+		const TYPE_WIDGET_TIME_URI = 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget';
+		const TYPE_WIDGET_AUTOCOMPLETE_URI = 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget';
+		const TYPE_WIDGET_SEARCH_URI = 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget';
+		
+		/*Utiliser pour affichage texte avans champ de recherhce mot clés */
+		const LABEL_URI = 'http://www.openarchaeo.fr/explorateur/onto#Label';
+		
 		
 		var settings = $.extend( {}, defaults, options );
 		
@@ -254,7 +262,7 @@
 					//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) == "undefined" || this.CriteriaGroup.EndClassWidgetGroup.value_selected === null) {
 					if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length === 0 ) {
 					
-						var WidgetsNeedValueIds = ['http://ontologies.sparna.fr/SimSemSearch#SearchWidget', 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget'] ;
+						var WidgetsNeedValueIds = [TYPE_WIDGET_SEARCH_URI, TYPE_WIDGET_TIME_URI] ;
 						if ($.inArray(this.CriteriaGroup.EndClassWidgetGroup.widgetType, WidgetsNeedValueIds) > -1) {
 							next_loop = true ;
 						}
@@ -359,7 +367,7 @@
 					
 					
 					
-					if ( (_WidgetType == "http://ontologies.sparna.fr/SimSemSearch#TimeWidget" ) || (_WidgetType == "http://ontologies.sparna.fr/SimSemSearch#SearchWidget" ) ) {
+					if ( (_WidgetType == TYPE_WIDGET_TIME_URI ) || (_WidgetType == TYPE_WIDGET_SEARCH_URI ) ) {
 						
 						
 						
@@ -385,7 +393,7 @@
 						
 						switch (_WidgetType) {
 						
-						 case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
+						 case TYPE_WIDGET_LIST_URI:
 						  //var id_input = '#ecgrw-'+ this.index +'-input-value' ;
 							//value_widget = $(id_input).val() ;
 							
@@ -395,7 +403,7 @@
 							
 							
 							break;
-						  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
+						  case TYPE_WIDGET_AUTOCOMPLETE_URI:
 							//var id_input = '#ecgrw-'+ this.index +'-input-value' ;
 							//value_widget = $(id_input).val() ;
 							
@@ -404,7 +412,7 @@
 							Json = addInWhere(Json, jsonValue) ;
 							
 							break;
-						  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
+						  case TYPE_WIDGET_TIME_URI:
 							//console.log('Mangoes and papayas are $2.79 a pound.');
 							
 							//var StartYear = $('#ecgrw-date-'+ this.index +'-input-start').val() ;
@@ -433,7 +441,7 @@
 							
 							// expected output: "Mangoes and papayas are $2.79 a pound."
 							break;
-						  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
+						  case TYPE_WIDGET_SEARCH_URI:
 							//console.log('Mangoes and papayas are $2.79 a pound.');
 							var Texte = $('#ecgrw-search-'+ this.index +'-input-value').val() ;
 							jsonFilter = initFilterSearch(Texte, endValueName) ;
@@ -1101,7 +1109,7 @@
 			var objSpec = getObjectPropertyById(this.value_selected) ;
 			
 			
-			if ( (objSpec.widget["@type"] == 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget' )  || (objSpec.widget["@type"] == 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget' ) ) {
+			if ( (objSpec.widget["@type"] == TYPE_WIDGET_SEARCH_URI )  || (objSpec.widget["@type"] == TYPE_WIDGET_TIME_URI ) ) {
 				
 			} else {
 				
@@ -1233,7 +1241,7 @@
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
 			
-			if ( (this.InputTypeComponent.widgetType == 'http://ontologies.sparna.fr/SimSemSearch#ListWidget' )  || (this.InputTypeComponent.widgetType == 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget' ) ) {
+			if ( (this.InputTypeComponent.widgetType == TYPE_WIDGET_LIST_URI )  || (this.InputTypeComponent.widgetType == TYPE_WIDGET_AUTOCOMPLETE_URI ) ) {
 
 			
 				if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
@@ -1605,7 +1613,7 @@
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
 				console.log(endClassGroup) ;
-				if (endClassGroup.value_selected == 'http://www.openarchaeo.fr/explorateur/onto#Label') {
+				if (endClassGroup.value_selected == LABEL_URI) {
 					var endLabel = getClassLabel(endClassGroup.value_selected) ;
 				} else {
 					var endLabel = langSearch.Find+' '+getClassLabel(endClassGroup.value_selected) ;
@@ -1630,18 +1638,18 @@
 		
 ;		function getWigetTypeClassName() {
 			switch (this.widgetType) {
-			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
+			  case TYPE_WIDGET_LIST_URI:
 				this.widgetComponent = new ListWidget(this) ;
 				break;
-			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
+			  case TYPE_WIDGET_AUTOCOMPLETE_URI:
 				this.widgetComponent = new autoCompleteWidget(this) ;
 			    break;
-			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
+			  case TYPE_WIDGET_TIME_URI:
 				//console.log('Mangoes and papayas are $2.79 a pound.');
 				this.widgetComponent = new DatesWidget(this) ;
 				// expected output: "Mangoes and papayas are $2.79 a pound."
 				break;
-			  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
+			  case TYPE_WIDGET_SEARCH_URI:
 				//console.log('Mangoes and papayas are $2.79 a pound.');
 				this.widgetComponent = new SearchWidget(this) ;
 				// expected output: "Mangoes and papayas are $2.79 a pound."
@@ -1655,17 +1663,17 @@
 			
 			var value_widget = null ;
 			switch (this.widgetType) {
-			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
+			  case TYPE_WIDGET_LIST_URI:
 			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				value_widget = $(id_input).val() ;
 				console.log(value_widget) ;
 				break;
-			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
+			  case TYPE_WIDGET_AUTOCOMPLETE_URI:
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				value_widget = $(id_input).val() ;
 				console.log(value_widget) ;
 			    break;
-			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
+			  case TYPE_WIDGET_TIME_URI:
 				//console.log('Mangoes and papayas are $2.79 a pound.');
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				
@@ -1681,7 +1689,7 @@
 				
 				// expected output: "Mangoes and papayas are $2.79 a pound."
 				break;
-			  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
+			  case TYPE_WIDGET_SEARCH_URI:
 				//console.log('Mangoes and papayas are $2.79 a pound.');
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				value_widget = $(id_input).val() ;
@@ -1696,22 +1704,22 @@
 			
 			var value_widget = null ;
 			switch (this.widgetType) {
-			  case 'http://ontologies.sparna.fr/SimSemSearch#ListWidget':
+			  case TYPE_WIDGET_LIST_URI:
 			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				value_widget = '<span>' +$(id_input).find('option:selected').text() + '</span>' ;
 				break;
-			  case 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget':
+			  case TYPE_WIDGET_AUTOCOMPLETE_URI:
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				value_widget = '<span>' + $(id_input).val()  + '</span>' ;
 				//console.log(value_widget) ;
 			    break;
-			  case 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget':
+			  case TYPE_WIDGET_TIME_URI:
 				
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				//console.log(id_input);
 				value_widget = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
 				break;
-			  case 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget':
+			  case TYPE_WIDGET_SEARCH_URI:
 				
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				//console.log(id_input);
