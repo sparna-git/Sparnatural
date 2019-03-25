@@ -77,6 +77,8 @@
 			  $('#ui-search').SimSemSearchForm({
 			  	language: "en",
 				addDistinct: true,
+				maxDepth: 3,
+				maxOr: 3,
 				autocompleteUrl: function(domain, property, range, key) {
 					// ici le code qui se charge de retourner les résultats de la recherche
 					return 'http://openarchaeo.huma-num.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;

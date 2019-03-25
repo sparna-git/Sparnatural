@@ -9,6 +9,7 @@
 			pathLanguages: 'config/lang/',
 			language: 'en',
 			addDistinct: false,
+			maxDepth: 3,
 			maxOr: 3,
 			autocompleteUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
@@ -765,6 +766,10 @@
 				var new_index = 0 ;
 			}
 			
+			var classWherePossible = 'addWereEnable' ;
+			if (($(contexte).parents('li.groupe').length + 1 ) == (settings.maxDepth - 1) ) {
+				classWherePossible = 'addWereDiable' ;
+			}
 			
 			
 			var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"><span>'+langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
@@ -789,6 +794,7 @@
 			} else {
 				gabari = $(gabari).appendTo(contexte) ;
 			}
+			$(gabari).addClass(classWherePossible) ;
 			
 			
 			//contexte.html('span') ;
