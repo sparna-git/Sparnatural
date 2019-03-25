@@ -454,7 +454,7 @@ body .SimSemSearch ul.componentsListe {
             background: #fa8803; }
     body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue,
     body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue {
-      max-width: 150px;
+      max-width: 220px;
       height: 42px;
       overflow: hidden;
       padding-right: 15px;
