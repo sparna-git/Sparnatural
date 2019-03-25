@@ -431,12 +431,14 @@ body .SimSemSearch ul.componentsListe {
       display: none; }
     body .SimSemSearch ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
       display: block; }
-    body .SimSemSearch ul.componentsListe li.groupe li.addWereDiable .ActionWhere.ShowOnHover,
+    body .SimSemSearch ul.componentsListe li.groupe li.addWereDisable .ActionWhere.ShowOnHover,
     body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.Hover > div .ActionWhere.ShowOnHover,
     body .SimSemSearch ul.componentsListe li.groupe.Hover > div.completed > div .ActionWhere.ShowOnHover {
       display: none; }
+    body .SimSemSearch ul.componentsListe li.groupe.addWereDisable > div .ObjectPropertyTypeWidget,
     body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible > div .ObjectPropertyTypeWidget {
       border-left-color: transparent; }
+      body .SimSemSearch ul.componentsListe li.groupe.addWereDisable > div .ObjectPropertyTypeWidget .edit-trait-top,
       body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible > div .ObjectPropertyTypeWidget .edit-trait-top {
         display: block; }
     body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete input {

@@ -593,11 +593,12 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 				&.Hover>div>div>.ShowOnHover {
 					display: block;
 				}
-				li.addWereDiable .ActionWhere.ShowOnHover,
+				li.addWereDisable .ActionWhere.ShowOnHover,
 				&.WhereImpossible.Hover>div .ActionWhere.ShowOnHover,
 				&.Hover>div.completed>div .ActionWhere.ShowOnHover {
 					display: none;
 				}
+				&.addWereDisable>div .ObjectPropertyTypeWidget,
 				&.WhereImpossible>div .ObjectPropertyTypeWidget {
 					border-left-color: transparent;
 

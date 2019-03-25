@@ -776,7 +776,7 @@
 			
 			var classWherePossible = 'addWereEnable' ;
 			if (($(contexte).parents('li.groupe').length + 1 ) == (settings.maxDepth - 1) ) {
-				classWherePossible = 'addWereDiable' ;
+				classWherePossible = 'addWereDisable' ;
 			}
 			
 			
