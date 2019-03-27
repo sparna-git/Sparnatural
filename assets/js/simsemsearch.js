@@ -361,7 +361,6 @@
 						new_triple = addTriple(new_triple, '?'+StartVar, settings.typePredicate, start) ;
 					}
 					
-					new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
 					
 					
 					
@@ -372,12 +371,14 @@
 					
 					
 					
-					if ( (_WidgetType == TYPE_WIDGET_TIME_URI ) || (_WidgetType == TYPE_WIDGET_SEARCH_URI ) ) {
+					if ( (_WidgetType == TYPE_WIDGET_LIST_URI ) || (_WidgetType == TYPE_WIDGET_AUTOCOMPLETE_URI ) ) {
 						
+						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {
 						
+							new_triple = addTriple(new_triple, '?'+StartVar, obj, this.CriteriaGroup.EndClassWidgetGroup.value_selected[0]) ;
+						}
 						
 					} else {
-						
 						
 					}
 					
@@ -401,21 +402,23 @@
 						 case TYPE_WIDGET_LIST_URI:
 						  //var id_input = '#ecgrw-'+ this.index +'-input-value' ;
 							//value_widget = $(id_input).val() ;
-							
-							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
+							if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
+								jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
 						
-							Json = addInWhere(Json, jsonValue) ;
+								Json = addInWhere(Json, jsonValue) ;
+							}
+							
 							
 							
 							break;
 						  case TYPE_WIDGET_AUTOCOMPLETE_URI:
 							//var id_input = '#ecgrw-'+ this.index +'-input-value' ;
 							//value_widget = $(id_input).val() ;
+							if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
+								jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
 							
-							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
-						
-							Json = addInWhere(Json, jsonValue) ;
-							
+								Json = addInWhere(Json, jsonValue) ;
+							}
 							break;
 						  case TYPE_WIDGET_TIME_URI:
 							//console.log('Mangoes and papayas are $2.79 a pound.');
