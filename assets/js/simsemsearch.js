@@ -11,6 +11,7 @@
 			pathLanguages: 'config/lang/',
 			language: 'en',
 			addDistinct: false,
+			typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 			maxDepth: 3,
 			maxOr: 3,
 			autocompleteUrl : function(domain, property, range, key) {
@@ -357,7 +358,7 @@
 					
 					var new_triple = initTriple() ;
 					if (addStartClass) {
-						new_triple = addTriple(new_triple, '?'+StartVar, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", start) ;
+						new_triple = addTriple(new_triple, '?'+StartVar, settings.typePredicate, start) ;
 					}
 					
 					new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
@@ -384,7 +385,7 @@
 					if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length !== 0 ) {
 						
 					} else {
-						new_triple = addTriple(new_triple, endValueName, "http://www.w3.org/1999/02/22-rdf-syntax-ns#type", end) ;
+						new_triple = addTriple(new_triple, endValueName, settings.typePredicate, end) ;
 					}
 					
 					Json = addInWhere(Json, new_triple) ;
