@@ -78,6 +78,7 @@
 				typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 				maxDepth: 3,
 				maxOr: 3,
+				backgroundBaseColor: '250,136,3',
 				autocompleteUrl: function(domain, property, range, key) {
 					// ici le code qui se charge de retourner les résultats de la recherche
 					return 'http://openarchaeo.huma-num.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;

@@ -14,6 +14,7 @@
 			typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 			maxDepth: 3,
 			maxOr: 3,
+			backgroundBaseColor: '250,136,3',
 			autocompleteUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 			},
@@ -530,7 +531,7 @@
 			$all_li .each(function(index) {
 				var a = (index + 1 ) * ratio ;
 				var height = $(this).find('>div').outerHeight(true) ;
-				cssdef += ', rgba(250,136,3,'+a+') '+prev+'px, rgba(250,136,3,'+a+') '+(prev+height)+'px' ;
+				cssdef += ', rgba('+settings.backgroundBaseColor+','+a+') '+prev+'px, rgba('+settings.backgroundBaseColor+','+a+') '+(prev+height)+'px' ;
 				prev = prev + height+1 ;
 				console.log($(this).next()) ;
 				if ($(this).next().length > 0 ) {
