@@ -40,8 +40,7 @@
           "@language" : "fr"
         }
       ],
-	  "iconPath":  "assets/icons/noir/mobilier.png",
-	  "highlightedIconPath":  "assets/icons/blanc/mobilier.png"
+	  "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fal fa-university'></i></span>"
     },
     {
       "@id" : "http://www.wikidata.org/entity/Q6256",
@@ -56,19 +55,48 @@
           "@language" : "fr"
         }
       ],
-	  "iconPath":  "assets/icons/noir/type.png",
-	  "highlightedIconPath":  "assets/icons/blanc/type.png"
+	  "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fal fa-globe-africa'></i></span>"
+    },
+    {
+      "@id" : "http://www.wikidata.org/entity/Q17537576",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Creative Work",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Oeuvre",
+          "@language" : "fr"
+        }
+      ],
+    "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fal fa-pencil-paintbrush'></i></span>"
+    },
+    {
+      "@id" : "http://www.wikidata.org/entity/Q1792379",
+      "@type" : "Class",
+      "label": [
+        {
+          "@value" : "Genre",
+          "@language" : "en"
+        },
+        {
+          "@value" : "Genre",
+          "@language" : "fr"
+        }
+      ],
+    "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fal fa-list-ul'></i></span>"
     },
     {
       "@id" : "http://www.wikidata.org/prop/direct/P495",
       "@type" : "ObjectProperty",
       "label": [
         {
-          "@value" : "country of origin",
+          "@value" : "in (country of origin)",
           "@language" : "en"
         },
         {
-          "@value" : "pays d'origine",
+          "@value" : "dans (country of origin)",
           "@language" : "fr"
         }
       ],
@@ -76,6 +104,44 @@
       "range": "http://www.wikidata.org/entity/Q6256",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+      }
+    },
+    {
+      "@id" : "http://www.wikidata.org/prop/direct/P276",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "in (location)",
+          "@language" : "en"
+        },
+        {
+          "@value" : "dans (loation)",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://www.wikidata.org/entity/Q17537576",
+      "range": "http://www.wikidata.org/entity/Q33506",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+      }
+    },
+    {
+      "@id" : "http://www.wikidata.org/prop/direct/P136",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "genre",
+          "@language" : "en"
+        },
+        {
+          "@value" : "genre",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://www.wikidata.org/entity/Q17537576",
+      "range": "http://www.wikidata.org/entity/Q1792379",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
       }
     }
   ]
