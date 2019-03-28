@@ -377,17 +377,19 @@
 						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {
 						
 							new_triple = addTriple(new_triple, '?'+StartVar, obj, this.CriteriaGroup.EndClassWidgetGroup.value_selected[0]) ;
+						} else {
+							new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
 						}
 						
 					} else {
-						
+						new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
 					}
 					
 					//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
 					if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length !== 0 ) {
 						
 					} else {
-						new_triple = addTriple(new_triple, endValueName, settings.typePredicate, end) ;
+						//new_triple = addTriple(new_triple, endValueName, settings.typePredicate, end) ;
 					}
 					
 					Json = addInWhere(Json, new_triple) ;
