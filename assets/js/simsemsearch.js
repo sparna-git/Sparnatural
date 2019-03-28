@@ -15,15 +15,55 @@
 			maxDepth: 3,
 			maxOr: 3,
 			backgroundBaseColor: '250,136,3',
-			autocompleteUrl : function(domain, property, range, key) {
-					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
+			
+			autocomplete : {
+				url : function(domain, property, range, key) {
+					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key"  ) ;
+				},
+				listLocation: function(data) {
+					console.log("Veuillez préciser comment retrouver les resultats dans le json retourné par le service. retourner data si le service retourne directement un Array des résultats. Le parametre envoyé a votre fonction contenant le Json est le suivant : data ") ;
+				},
+				elementLabel: function(element) {
+					console.log("Veuillez préciser comment retrouver le label dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+				},
+				elementUri: function(element) {
+					console.log("Veuillez préciser comment retrouver l'uri dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+				}
 			},
-			listUrl : function(domain, property, range) {
+			
+			list : {
+				url : function(domain, property, range) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option listUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range" ) ;
+				},
+				listLocation: function(data) {
+					console.log("Veuillez préciser comment retrouver les resultats dans le json retourné par le service. retourner data si le service retourne directement un Array des résultats. Le parametre envoyé a votre fonction contenant le Json est le suivant : data ") ;
+				},
+				elementLabel: function(element) {
+					console.log("Veuillez préciser comment retrouver le label dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+				},
+				elementUri: function(element) {
+					console.log("Veuillez préciser comment retrouver l'uri dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+				}
 			},
-			datesUrl : function(domain, property, range, key) {
+			dates : {
+				url : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option datesUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
+				},
+				listLocation: function(data) {
+					console.log("Veuillez préciser comment retrouver les resultats dans le json retourné par le service. retourner data si le service retourne directement un Array des résultats. Le parametre envoyé a votre fonction contenant le Json est le suivant : data ") ;
+				},
+				elementLabel: function(element) {
+					console.log("Veuillez préciser comment retrouver le label dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+				},
+				elementStart: function(element) {
+					console.log("Veuillez préciser comment retrouver la date de début dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+				},
+				elementEnd: function(element) {
+					console.log("Veuillez préciser comment retrouver la date de fin dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+				}
+				
 			},
+			
 			onQueryUpdated : function (queryString, queryJson) {
 				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de SimSemSearchForm. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
 			}
@@ -1785,11 +1825,12 @@
 			var options = {
 				ajaxSettings: {crossDomain: true, type: 'GET'} ,
 				url: function(phrase) {
-					return settings.autocompleteUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
+					return settings.autocomplete.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
-				 getValue: function(element) {
-					return element.label;
-				  },
+				listLocation: function (data) { return settings.autocomplete.listLocation(data) ; },
+				
+				
+				 getValue: function (element) { return settings.autocomplete.elementLabel(element) ; },
 
 				  ajaxSettings: {
 					dataType: "json",
@@ -1807,8 +1848,11 @@
 
 					onChooseEvent: function() {
 							var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData();
-							$('#ecgrw-'+id_inputs+'-input').val(value.label)
-							$('#ecgrw-'+id_inputs+'-input-value').val(value.uri).trigger("change");$(itc_obj).trigger("change");
+							
+							var label = settings.autocomplete.elementLabel(value) ; 
+							var uri = settings.autocomplete.elementUri(value) ; 
+							$('#ecgrw-'+id_inputs+'-input').val(label)
+							$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");$(itc_obj).trigger("change");
 							
 					}
 				  },
@@ -1847,7 +1891,7 @@
 			var itc_obj = this.ParentComponent;
 			var options = {
 
-				url: settings.listUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value),
+				url: settings.list.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value),
 				dataType: "json",
 				method: "GET",
 				data: {
@@ -1859,8 +1903,12 @@
 			var select = $(this.html).find('select') ;
 			request.done(function( data ) {
 			  
-			  $.each( data, function( key, val ) {
-				$('#'+id_input).append( "<option value='" + val.uri + "'>" + val.label + "</option>" );
+			  var items = settings.list.listLocation(data) ;
+			  $.each( items, function( key, val ) {
+				  
+					var label = settings.list.elementLabel(val) ; 
+					var uri = settings.list.elementUri(val) ; 
+				$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
 			  });
 			  $('#'+id_input).niceSelect();
 			  $('#'+id_input).on("change", function() {
@@ -1903,7 +1951,7 @@
 			
 			
 			$.ajax({
-				url: settings.datesUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ,
+				url: settings.dates.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ,
 				async: false,
 				success: function (data){
 					data_json = data;
@@ -1915,33 +1963,42 @@
 					
 						data: data_json ,
 				
-					 getValue: function(element) {
+					 getValue: function (element) { return settings.dates.elementLabel(element) ; },
+					 /*getValue: function(element) {
 						 //console.log(element) ;
 						return element.label+' '+element.synonyms.join(' '); // +'' convert array to string ; https://stackoverflow.com/questions/5289403/jquery-convert-javascript-array-to-string
-					  },
+					  },*/
 
 					 
 					list: {
 						match: {
-			enabled: true
-		},
+							enabled: true
+						},
 
-					onChooseEvent: function() {
-							var value = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData().label;
-							var start = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData().start.year;
-							var stop = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData().stop.year;
+						onChooseEvent: function() {
+							
+							var values = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData();
+							var value = settings.dates.elementLabel(values) ;
+							var start = settings.dates.elementStart(values) ;
+							var stop = settings.dates.elementEnd(values) ;
 
 							$('#ecgrw-date-'+id_inputs+'-input').val(value).trigger("change");
 							$('#ecgrw-date-'+id_inputs+'-input-start').val(start).trigger("change");
 							$('#ecgrw-date-'+id_inputs+'-input-stop').val(stop).trigger("change");
 							
 							$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");
-					}
-				  },
+						}
+					},
 					 template: {
 						type: "custom",
 						method: function(value, item) {
-							return '<div>' + item.label + ' <span class="start">' + item.start.year + '</span><span class="end">' + item.stop.year + '</span></div>';
+							
+							var label = settings.dates.elementLabel(item) ;
+							var start = settings.dates.elementStart(item) ;
+							var stop = settings.dates.elementEnd(item) ;
+							
+							
+							return '<div>' + label + ' <span class="start">' + start + '</span><span class="end">' + stop + '</span></div>';
 						}
 					},
 
