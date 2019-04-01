@@ -103,7 +103,7 @@
       "domain": "http://dbpedia.org/ontology/Museum",
       "range": "http://dbpedia.org/ontology/Country",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
       }
     },
     {
@@ -217,7 +217,7 @@
       "domain": "http://dbpedia.org/ontology/Person",
       "range": "http://dbpedia.org/ontology/Country",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
       }
     },
     {

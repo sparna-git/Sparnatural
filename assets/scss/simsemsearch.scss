@@ -704,6 +704,8 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 						background: #fff;
 						top: 0;
 						margin-top: 0;
+						max-height: 400px;
+						overflow-y: auto;
 					}
 					ul.list:hover .option:not(:hover) {
 						color: #000;

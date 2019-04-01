@@ -138,7 +138,7 @@
 			}
 
 			orderByPostProcess = function(queryString, queryJson) {
-				queryString = queryString.replace(new RegExp('}$'), "}\nORDER BY ?label");
+				queryString = queryString.replace(new RegExp('}$'), "}\nORDER BY ?label LIMIT 5000");
 				queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT (STR(?label) AS ?nom) ?wikipedia ?this");
 				return queryString;
 			}
@@ -201,7 +201,9 @@
 				//this way, the URLs in the results are prettified using the defined prefixes in the query
 				getUsedPrefixes : yasqe.getPrefixesFromQuery,
 				"drawOutputSelector": false,
-				"drawDownloadIcon": false
+				"drawDownloadIcon": false,
+				// avoid persistency side-effects
+				"persistency": { "prefix": false, "results": { "key": false }}
 			}); 
 
 			// link yasqe and yasr
