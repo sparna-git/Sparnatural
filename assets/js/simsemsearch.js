@@ -20,46 +20,48 @@
 				url : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key"  ) ;
 				},
-				listLocation: function(data) {
-					console.log("Veuillez préciser comment retrouver les resultats dans le json retourné par le service. retourner data si le service retourne directement un Array des résultats. Le parametre envoyé a votre fonction contenant le Json est le suivant : data ") ;
+				listLocation: function(domain, property, range, data) {
+					return data;
 				},
 				elementLabel: function(element) {
-					console.log("Veuillez préciser comment retrouver le label dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+					return element.label;
 				},
 				elementUri: function(element) {
-					console.log("Veuillez préciser comment retrouver l'uri dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
-				}
-			},
-			
+					return element.uri;
+				},
+				enableMatch: function(domain, property, range) {
+					return false;
+				},
+			},			
 			list : {
 				url : function(domain, property, range) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option listUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range" ) ;
 				},
-				listLocation: function(data) {
-					console.log("Veuillez préciser comment retrouver les resultats dans le json retourné par le service. retourner data si le service retourne directement un Array des résultats. Le parametre envoyé a votre fonction contenant le Json est le suivant : data ") ;
+				listLocation: function(domain, property, range, data) {
+					return data;
 				},
 				elementLabel: function(element) {
-					console.log("Veuillez préciser comment retrouver le label dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+					return element.label;
 				},
 				elementUri: function(element) {
-					console.log("Veuillez préciser comment retrouver l'uri dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+					return element.uri;
 				}
 			},
 			dates : {
 				url : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option datesUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 				},
-				listLocation: function(data) {
-					console.log("Veuillez préciser comment retrouver les resultats dans le json retourné par le service. retourner data si le service retourne directement un Array des résultats. Le parametre envoyé a votre fonction contenant le Json est le suivant : data ") ;
+				listLocation: function(domain, property, range, data) {
+					return data;
 				},
 				elementLabel: function(element) {
-					console.log("Veuillez préciser comment retrouver le label dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+					return element.label+' '+element.synonyms.join(' ');
 				},
 				elementStart: function(element) {
-					console.log("Veuillez préciser comment retrouver la date de début dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+					return element.start.year;
 				},
 				elementEnd: function(element) {
-					console.log("Veuillez préciser comment retrouver la date de fin dans un item des résultats retourner par le service. Le parametre envoyé a votre fonction est le suivant : element ") ;
+					return element.stop.year;
 				}
 				
 			},
@@ -74,11 +76,12 @@
 		var TYPE_WIDGET_AUTOCOMPLETE_URI = 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget';
 		var TYPE_WIDGET_SEARCH_URI = 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget';
 		
-		/*Utiliser pour affichage texte avans champ de recherhce mot clés */
+		/*Utiliser pour affichage texte avant champ de recherhce mot clés */
 		var LABEL_URI = 'http://www.openarchaeo.fr/explorateur/onto#Label';
 		
+		var VALUE_SELECTION_WIDGETS = [TYPE_WIDGET_LIST_URI, TYPE_WIDGET_AUTOCOMPLETE_URI];
 		
-		var settings = $.extend( {}, defaults, options );
+		var settings = $.extend( true, {}, defaults, options );
 		
 		function gatLabel(graphItemID) {
 			var label = ''; 
@@ -412,15 +415,12 @@
 					
 					
 					
-					if ( (_WidgetType == TYPE_WIDGET_LIST_URI ) || (_WidgetType == TYPE_WIDGET_AUTOCOMPLETE_URI ) ) {
-						
-						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {
-						
+					if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {						
+						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {						
 							new_triple = addTriple(new_triple, '?'+StartVar, obj, this.CriteriaGroup.EndClassWidgetGroup.value_selected[0]) ;
 						} else {
 							new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
-						}
-						
+						}						
 					} else {
 						new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
 					}
@@ -1296,9 +1296,7 @@
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
 			
-			if ( (this.InputTypeComponent.widgetType == TYPE_WIDGET_LIST_URI )  || (this.InputTypeComponent.widgetType == TYPE_WIDGET_AUTOCOMPLETE_URI ) ) {
-
-			
+			if ( VALUE_SELECTION_WIDGETS.indexOf(this.InputTypeComponent.widgetType) !== -1 ) {
 				if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
 					$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
 					$(this.ParentComponent.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on('click', {arg1: this, arg2: 'needAddOrValue'}, eventProxiCriteria);
@@ -1822,12 +1820,14 @@
 			
 			var itc_obj = this.ParentComponent;
 			
+			var isMatch = settings.autocomplete.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
+			
 			var options = {
 				ajaxSettings: {crossDomain: true, type: 'GET'} ,
 				url: function(phrase) {
 					return settings.autocomplete.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
-				listLocation: function (data) { return settings.autocomplete.listLocation(data) ; },
+				listLocation: function (data) { return settings.autocomplete.listLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ; },
 				
 				
 				 getValue: function (element) { return settings.autocomplete.elementLabel(element) ; },
@@ -1845,7 +1845,9 @@
 					return data;
 				  },
 				  list: {
-
+				  	match: {
+				  		enabled: isMatch
+				  	},
 					onChooseEvent: function() {
 							var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData();
 							
@@ -1903,7 +1905,7 @@
 			var select = $(this.html).find('select') ;
 			request.done(function( data ) {
 			  
-			  var items = settings.list.listLocation(data) ;
+			  var items = settings.list.listLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ;
 			  $.each( items, function( key, val ) {
 				  
 					var label = settings.list.elementLabel(val) ; 

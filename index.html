@@ -74,25 +74,10 @@
 			  
 			  $('#ui-search').SimSemSearchForm({
 			  	language: "en",
-				addDistinct: true,
-				typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-				maxDepth: 3,
-				maxOr: 3,
-				backgroundBaseColor: '250,136,3',
 				autocomplete : {
 					url: function(domain, property, range, key) {
 					// ici le code qui se charge de retourner les résultats de la recherche
 						return 'http://openarchaeo.huma-num.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
-					},
-					listLocation: function(data) {
-						return data.results.bindings;
-					},
-					elementLabel: function(element) {
-						return element.nom.value;
-					},
-					elementUri: function(element) {
-
-						return element.truc.value;
 					}
 				},
 				list : {
@@ -100,45 +85,20 @@
 					// ici le code qui se charge de retourner les résultats de la recherche
 						return 'http://openarchaeo.huma-num.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
 			
-					},
-					listLocation: function(data) {
-						return data;
-					},
-					elementLabel: function(element) {
-						return element.label;
-					},
-					elementUri: function(element) {
-						return element.uri;
 					}
-				
-				},
-				
+				},				
 				dates : {
 					url: function(domain, property, range, key) {
 						// ici le code qui se charge de retourner les résultats de la recherche
 						return 'data/periods-periodo.json' ;
-					},
-					listLocation: function(data) {
-						return data;
-					},
-					elementLabel: function(element) {
-						return element.label+' '+element.synonyms.join(' '); 
-					},
-					elementStart: function(element) {
-						return element.start.year;
-					},
-					elementEnd: function(element) {
-						return element.stop.year;
 					}
-
 				},
 				onQueryUpdated: function(queryString, queryJson) {
 					// ici on récupère la requete Sparql grace au premier parametre de la fonction
 					console.log(queryString) ;
 					console.log(queryJson) ;
 					$('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
-				  }
-				
+				}
 			  }) ;
 			}) ;
 		

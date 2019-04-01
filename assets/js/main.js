@@ -36,7 +36,7 @@ var parsedQuery = parser.parse(
 'SELECT ?this '+
 'WHERE {'+
     '?this a <http://exemple.fr/ontology/Thing> .'+
-    '?this <http://exemple.fr/ontology/created_by> ?time .'+
+    '?this <http://exemple.fr/ontology/created_by>/<http://exemple.fr/ontology/toto>* ?time .'+
     'FILTER(?time > "1700-01-01"^^xsd:dateTime && ?time <= "1750-12-31"^^xsd:dateTime)'+
     '?this <http://exemple.fr/ontology/created_by> ?time2 .'+
     'FILTER(?time2 > "1700-01-01"^^xsd:dateTime && ?time2 <= "1750-12-31"^^xsd:dateTime)'+
@@ -58,7 +58,7 @@ var generator = new Ngenerator();
 //parsedQuery.variables = ['?mickey'];
 var generatedQuery = generator.stringify(parsedQuery);
 
-//console.log(parsedQuery);
+console.log(parsedQuery);
 $('#sparql code').html(generatedQuery) ;
 
 var tmpData = parsedQuery;
