@@ -18,7 +18,7 @@
       "@type": "@id"
     },
     "widget": {
-      "@id": "http://ontologies.sparna.fr/SimSemSearch#widget",
+      "@id": "http://ontologies.sparna.fr/Sparnatural#widget",
       "@type": "@id"
     }
   },
@@ -103,7 +103,7 @@
       "domain": "http://dbpedia.org/ontology/Museum",
       "range": "http://dbpedia.org/ontology/Country",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
       }
     },
     {
@@ -122,7 +122,7 @@
       "domain": "http://dbpedia.org/ontology/Country",
       "range": "http://dbpedia.org/ontology/Museum",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -141,7 +141,7 @@
       "domain": "http://dbpedia.org/ontology/Artwork",
       "range": "http://dbpedia.org/ontology/Museum",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -160,7 +160,7 @@
       "domain": "http://dbpedia.org/ontology/Museum",
       "range": "http://dbpedia.org/ontology/Artwork",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -179,7 +179,7 @@
       "domain": "http://dbpedia.org/ontology/Artwork",
       "range": "http://dbpedia.org/ontology/Person",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -198,7 +198,7 @@
       "domain": "http://dbpedia.org/ontology/Person",
       "range": "http://dbpedia.org/ontology/Artwork",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -217,7 +217,7 @@
       "domain": "http://dbpedia.org/ontology/Person",
       "range": "http://dbpedia.org/ontology/Country",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
       }
     },
     {
@@ -236,7 +236,7 @@
       "domain": "http://dbpedia.org/ontology/Country",
       "range": "http://dbpedia.org/ontology/Person",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     }
   ]

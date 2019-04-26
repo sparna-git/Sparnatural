@@ -324,7 +324,7 @@ body .haveWhereChild {
         padding: 2px 10px;
         width: auto;
         transform: translateX(-50%); }
-body .SimSemSearch ul.componentsListe {
+body .Sparnatural ul.componentsListe {
   padding: 0;
   width: 1200px;
   max-width: 90%;
@@ -332,14 +332,14 @@ body .SimSemSearch ul.componentsListe {
   /*ul>li.groupe:last-child .ActionAnd.ShowOnHover {
   		display: block;
   	}*/ }
-  body .SimSemSearch ul.componentsListe,
-  body .SimSemSearch ul.componentsListe ul {
+  body .Sparnatural ul.componentsListe,
+  body .Sparnatural ul.componentsListe ul {
     list-style-type: none;
     padding: 0;
     background: transparent;
     clear: both;
     border: 0 solid #transparent; }
-  body .SimSemSearch ul.componentsListe ul {
+  body .Sparnatural ul.componentsListe ul {
     /*li>div {
     	margin-left: 46px;
     }
@@ -347,9 +347,9 @@ body .SimSemSearch ul.componentsListe {
     	margin-left: 92px;
     	*
     }*/ }
-    body .SimSemSearch ul.componentsListe ul li li.Hover > div > div > .ActionWhere.ShowOnHover {
+    body .Sparnatural ul.componentsListe ul li li.Hover > div > div > .ActionWhere.ShowOnHover {
       display: none; }
-  body .SimSemSearch ul.componentsListe li.groupe {
+  body .Sparnatural ul.componentsListe li.groupe {
     margin: 0;
     padding-top: 1px;
     padding-bottom: 1px;
@@ -359,18 +359,18 @@ body .SimSemSearch ul.componentsListe {
     /*.ActionAnd.ShowOnHover {
     	display: none;
     }*/ }
-    body .SimSemSearch ul.componentsListe li.groupe li.groupe {
+    body .Sparnatural ul.componentsListe li.groupe li.groupe {
       margin-left: 75px; }
-    body .SimSemSearch ul.componentsListe li.groupe .ActionWhere {
+    body .Sparnatural ul.componentsListe li.groupe .ActionWhere {
       display: inline-block; }
-    body .SimSemSearch ul.componentsListe li.groupe .ActionAnd .trait-and-bottom {
+    body .Sparnatural ul.componentsListe li.groupe .ActionAnd .trait-and-bottom {
       position: absolute;
       top: -14px;
       left: 50%;
       border-left: 3px solid #fa8803;
       margin-left: -1px;
       height: 15px; }
-    body .SimSemSearch ul.componentsListe li.groupe .ActionAnd a {
+    body .Sparnatural ul.componentsListe li.groupe .ActionAnd a {
       cursor: pointer;
       display: block;
       background: #fff;
@@ -381,9 +381,9 @@ body .SimSemSearch ul.componentsListe {
       padding: 2px 10px;
       width: auto;
       text-align: center; }
-      body .SimSemSearch ul.componentsListe li.groupe .ActionAnd a:hover {
+      body .Sparnatural ul.componentsListe li.groupe .ActionAnd a:hover {
         color: #fa8803; }
-    body .SimSemSearch ul.componentsListe li.groupe .ActionWhere a {
+    body .Sparnatural ul.componentsListe li.groupe .ActionWhere a {
       cursor: pointer;
       display: block;
       background: #fff;
@@ -397,31 +397,31 @@ body .SimSemSearch ul.componentsListe {
       color: #fa8803;
       font-weight: bold;
       padding: 0; }
-      body .SimSemSearch ul.componentsListe li.groupe .ActionWhere a:hover {
+      body .Sparnatural ul.componentsListe li.groupe .ActionWhere a:hover {
         color: #fa8803; }
-    body .SimSemSearch ul.componentsListe li.groupe > div > div > .ShowOnHover {
+    body .Sparnatural ul.componentsListe li.groupe > div > div > .ShowOnHover {
       display: none; }
-    body .SimSemSearch ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
+    body .Sparnatural ul.componentsListe li.groupe.Hover > div > div > .ShowOnHover {
       display: block; }
-    body .SimSemSearch ul.componentsListe li.groupe li.addWereDisable .ActionWhere.ShowOnHover, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.Hover > div .ActionWhere.ShowOnHover, body .SimSemSearch ul.componentsListe li.groupe.Hover > div.completed > div .ActionWhere.ShowOnHover {
+    body .Sparnatural ul.componentsListe li.groupe li.addWereDisable .ActionWhere.ShowOnHover, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.Hover > div .ActionWhere.ShowOnHover, body .Sparnatural ul.componentsListe li.groupe.Hover > div.completed > div .ActionWhere.ShowOnHover {
       display: none; }
-    body .SimSemSearch ul.componentsListe li.groupe.addWereDisable > div .ObjectPropertyTypeWidget, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible > div .ObjectPropertyTypeWidget {
+    body .Sparnatural ul.componentsListe li.groupe.addWereDisable > div .ObjectPropertyTypeWidget, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible > div .ObjectPropertyTypeWidget {
       border-left-color: transparent; }
-      body .SimSemSearch ul.componentsListe li.groupe.addWereDisable > div .ObjectPropertyTypeWidget .edit-trait-top, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible > div .ObjectPropertyTypeWidget .edit-trait-top {
+      body .Sparnatural ul.componentsListe li.groupe.addWereDisable > div .ObjectPropertyTypeWidget .edit-trait-top, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible > div .ObjectPropertyTypeWidget .edit-trait-top {
         display: block; }
-    body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete input {
+    body .Sparnatural ul.componentsListe li.groupe .easy-autocomplete input {
       height: 35px;
       box-sizing: border-box; }
-    body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container {
+    body .Sparnatural ul.componentsListe li.groupe .easy-autocomplete-container {
       z-index: 999; }
-      body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container ul {
+      body .Sparnatural ul.componentsListe li.groupe .easy-autocomplete-container ul {
         line-height: 20px;
         background: #fff; }
-        body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container ul li {
+        body .Sparnatural ul.componentsListe li.groupe .easy-autocomplete-container ul li {
           padding: 5px; }
-          body .SimSemSearch ul.componentsListe li.groupe .easy-autocomplete-container ul li.selected {
+          body .Sparnatural ul.componentsListe li.groupe .easy-autocomplete-container ul li.selected {
             background: #fa8803; }
-    body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue {
+    body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue {
       max-width: 220px;
       height: 42px;
       overflow: hidden;
@@ -430,7 +430,7 @@ body .SimSemSearch ul.componentsListe {
       display: block;
       padding-left: 20px;
       padding-right: 0; }
-      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue:before, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue:before {
+      body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue:before, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue:before {
         content: '';
         width: 0;
         height: 0;
@@ -442,28 +442,28 @@ body .SimSemSearch ul.componentsListe {
         border-width: 21px 0 21px 15px;
         border-color: transparent transparent transparent transparent;
         margin-left: -20px; }
-      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue {
+      body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue {
         position: relative;
         padding-left: 18px; }
-      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue > .triangle-b, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue > .triangle-h, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue > .triangle-b, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue > .triangle-h {
+      body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue > .triangle-b, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue > .triangle-h, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue > .triangle-b, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue > .triangle-h {
         position: absolute;
         left: 3px;
         background: transparent; }
-      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue > .triangle-h, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue > .triangle-h {
+      body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue > .triangle-h, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue > .triangle-h {
         width: 0;
         height: 0;
         border-style: solid;
         border-width: 0 15px 21px 0;
         border-color: transparent #fa8803 transparent transparent;
         top: 0; }
-      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue > .triangle-b, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue > .triangle-b {
+      body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue > .triangle-b, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue > .triangle-b {
         width: 0;
         height: 0;
         border-style: solid;
         border-width: 0 0 21px 15px;
         border-color: transparent transparent #fa8803 transparent;
         bottom: 0; }
-      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue:after, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue:after {
+      body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue:after, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue:after {
         content: '';
         width: 0;
         height: 0;
@@ -475,10 +475,10 @@ body .SimSemSearch ul.componentsListe {
         border-style: solid;
         border-width: 21px 0 21px 15px;
         border-color: transparent transparent transparent #fa8803; }
-      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue span, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue span {
+      body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue span, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue span {
         background: #fa8803;
         height: 42px; }
-      body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue p, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue p {
+      body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue p, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue p {
         line-height: 42px;
         height: 42px;
         width: calc(100% - 15px);
@@ -489,64 +489,64 @@ body .SimSemSearch ul.componentsListe {
         overflow: hidden;
         text-overflow: ellipsis;
         text-align: center; }
-        body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue p span, body .SimSemSearch ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue p span {
+        body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetAddOrValue p span, body .Sparnatural ul.componentsListe li.groupe.WhereImpossible.completed > div .EndClassWidgetValue p span {
           line-height: 1;
           display: inline;
           vertical-align: baseline;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap; }
-    body .SimSemSearch ul.componentsListe li.groupe .nice-select {
+    body .Sparnatural ul.componentsListe li.groupe .nice-select {
       background: transparent;
       border-color: transparent;
       padding-left: 10px; }
-      body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li {
+      body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li {
         border-bottom: solid 1px #e8e8e8; }
-        body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li img {
+        body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li img {
           height: 40px; }
-          body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li img.highlited {
+          body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li img.highlited {
             display: none; }
-        body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.selected, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.focus, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li:hover {
+        body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li.selected, body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li.focus, body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li:hover {
           background: #fa8803;
           color: #fff; }
-          body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.selected img, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.focus img, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li:hover img {
+          body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li.selected img, body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li.focus img, body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li:hover img {
             display: none; }
-            body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.selected img.highlited, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li.focus img.highlited, body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list li:hover img.highlited {
+            body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li.selected img.highlited, body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li.focus img.highlited, body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list li:hover img.highlited {
               display: inline; }
-      body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list {
+      body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list {
         background: #fff;
         top: 0;
         margin-top: 0;
-        max-height: 400px;
+        max-height: 450px;
         overflow-y: auto; }
-      body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) {
+      body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) {
         color: #000; }
-        body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img {
+        body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img {
           display: inline; }
-          body .SimSemSearch ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img.highlited {
+          body .Sparnatural ul.componentsListe li.groupe .nice-select ul.list:hover .option:not(:hover) img.highlited {
             display: none; }
-      body .SimSemSearch ul.componentsListe li.groupe .nice-select .current img {
+      body .Sparnatural ul.componentsListe li.groupe .nice-select .current img {
         height: 40px; }
-        body .SimSemSearch ul.componentsListe li.groupe .nice-select .current img.highlited {
+        body .Sparnatural ul.componentsListe li.groupe .nice-select .current img.highlited {
           display: none; }
-    body .SimSemSearch ul.componentsListe li.groupe .nice-select.disabled {
+    body .Sparnatural ul.componentsListe li.groupe .nice-select.disabled {
       color: #888;
       border-color: transparent; }
-    body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited {
+    body .Sparnatural ul.componentsListe li.groupe.completed > div .Highlited {
       background: #fa8803;
       margin-right: 23px; }
-      body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited .nice-select {
+      body .Sparnatural ul.componentsListe li.groupe.completed > div .Highlited .nice-select {
         background: transparent;
         border-color: transparent;
         color: #fff; }
-        body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img {
+        body .Sparnatural ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img {
           display: none; }
-          body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img.highlited {
+          body .Sparnatural ul.componentsListe li.groupe.completed > div .Highlited .nice-select .current img.highlited {
             display: inline; }
-      body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited .nice-select.disabled {
+      body .Sparnatural ul.componentsListe li.groupe.completed > div .Highlited .nice-select.disabled {
         color: #fff;
         border-color: transparent; }
-    body .SimSemSearch ul.componentsListe li.groupe.completed > div .Highlited:after {
+    body .Sparnatural ul.componentsListe li.groupe.completed > div .Highlited:after {
       content: '';
       width: 0;
       height: 0;
@@ -558,7 +558,7 @@ body .SimSemSearch ul.componentsListe {
       border-style: solid;
       border-width: 21px 0 21px 15px;
       border-color: transparent transparent transparent #fa8803; }
-    body .SimSemSearch ul.componentsListe li.groupe.completed > div .EndClassGroup .Highlited:before {
+    body .Sparnatural ul.componentsListe li.groupe.completed > div .EndClassGroup .Highlited:before {
       content: '';
       width: 0;
       height: 0;
@@ -569,34 +569,34 @@ body .SimSemSearch ul.componentsListe {
       border-style: solid;
       border-width: 21px 0 21px 15px;
       border-color: transparent transparent transparent #fff; }
-    body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents .ActionWhere,
-    body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents .ObjectPropertyTypeWidget {
+    body .Sparnatural ul.componentsListe li.groupe.completed > div > div .EditComponents .ActionWhere,
+    body .Sparnatural ul.componentsListe li.groupe.completed > div > div .EditComponents .ObjectPropertyTypeWidget {
       display: none; }
-    body .SimSemSearch ul.componentsListe li.groupe.completed > div > div .EditComponents.newOr .ObjectPropertyTypeWidget {
+    body .Sparnatural ul.componentsListe li.groupe.completed > div > div .EditComponents.newOr .ObjectPropertyTypeWidget {
       display: block; }
-    body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited {
+    body .Sparnatural ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited {
       background: transparent;
       color: #888;
       margin-right: 0; }
-      body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited:before, body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited:after {
+      body .Sparnatural ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited:before, body .Sparnatural ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited:after {
         display: none; }
-      body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited .current {
+      body .Sparnatural ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited .current {
         color: #888; }
-        body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited .current img {
+        body .Sparnatural ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited .current img {
           display: inline; }
-          body .SimSemSearch ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited .current img.highlited {
+          body .Sparnatural ul.componentsListe li.groupe.completed.WhereImpossible > div .EndClassGroup .Highlited .current img.highlited {
             display: none; }
-  body .SimSemSearch ul.componentsListe li.groupe > .link-and-bottom {
+  body .Sparnatural ul.componentsListe li.groupe > .link-and-bottom {
     display: none; }
-  body .SimSemSearch ul.componentsListe li.groupe.hasAnd {
+  body .Sparnatural ul.componentsListe li.groupe.hasAnd {
     position: relative; }
-    body .SimSemSearch ul.componentsListe li.groupe.hasAnd > .link-and-bottom {
+    body .Sparnatural ul.componentsListe li.groupe.hasAnd > .link-and-bottom {
       display: block;
       position: absolute;
       left: 36px;
       top: 54px;
       border-left: 3px solid #fa8803; }
-      body .SimSemSearch ul.componentsListe li.groupe.hasAnd > .link-and-bottom span {
+      body .Sparnatural ul.componentsListe li.groupe.hasAnd > .link-and-bottom span {
         position: absolute;
         top: 50%;
         left: -2px;
@@ -609,7 +609,7 @@ body .SimSemSearch ul.componentsListe {
         padding: 2px 10px;
         width: auto;
         transform: translate(-50%, -50%); }
-    body .SimSemSearch ul.componentsListe li.groupe.hasAnd.Hover > div > div > .ShowOnHover.ActionAnd {
+    body .Sparnatural ul.componentsListe li.groupe.hasAnd.Hover > div > div > .ShowOnHover.ActionAnd {
       display: none; }
 
-/*# sourceMappingURL=simsemsearch.css.map */
+/*# sourceMappingURL=sparnatural.css.map */

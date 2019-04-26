@@ -2,7 +2,7 @@
 //@prepros-append EasyAutocomplete/jquery.easy-autocomplete.js
 (function( $ ) {
  
-    $.fn.SimSemSearchForm = function( options ) {
+    $.fn.Sparnatural = function( options ) {
  
         var specSearch = {} ;
         var langSearch = {} ;
@@ -18,7 +18,7 @@
 			
 			autocomplete : {
 				url : function(domain, property, range, key) {
-					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key"  ) ;
+					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key"  ) ;
 				},
 				listLocation: function(domain, property, range, data) {
 					return data;
@@ -35,7 +35,7 @@
 			},			
 			list : {
 				url : function(domain, property, range) {
-					console.log("Veuillez préciser le nom de la fonction pour l'option listUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range" ) ;
+					console.log("Veuillez préciser le nom de la fonction pour l'option listUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range" ) ;
 				},
 				listLocation: function(domain, property, range, data) {
 					return data;
@@ -49,7 +49,7 @@
 			},
 			dates : {
 				url : function(domain, property, range, key) {
-					console.log("Veuillez préciser le nom de la fonction pour l'option datesUrl dans les parametre d'initalisation de SimSemSearchForm. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
+					console.log("Veuillez préciser le nom de la fonction pour l'option datesUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 				},
 				listLocation: function(domain, property, range, data) {
 					return data;
@@ -67,14 +67,14 @@
 			},
 			
 			onQueryUpdated : function (queryString, queryJson) {
-				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de SimSemSearchForm. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
+				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
 			}
 		};
 		
-		var TYPE_WIDGET_LIST_URI = 'http://ontologies.sparna.fr/SimSemSearch#ListWidget';
-		var TYPE_WIDGET_TIME_URI = 'http://ontologies.sparna.fr/SimSemSearch#TimeWidget';
-		var TYPE_WIDGET_AUTOCOMPLETE_URI = 'http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget';
-		var TYPE_WIDGET_SEARCH_URI = 'http://ontologies.sparna.fr/SimSemSearch#SearchWidget';
+		var TYPE_WIDGET_LIST_URI = 'http://ontologies.sparna.fr/Sparnatural#ListWidget';
+		var TYPE_WIDGET_TIME_URI = 'http://ontologies.sparna.fr/Sparnatural#TimeWidget';
+		var TYPE_WIDGET_AUTOCOMPLETE_URI = 'http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget';
+		var TYPE_WIDGET_SEARCH_URI = 'http://ontologies.sparna.fr/Sparnatural#SearchWidget';
 		
 		/*Utiliser pour affichage texte avant champ de recherhce mot clés */
 		var LABEL_URI = 'http://www.openarchaeo.fr/explorateur/onto#Label';
@@ -98,7 +98,7 @@
 		this.each(function() {
             var thisForm = {} ;
             thisForm._this = $(this) ;
-			$(this).addClass('SimSemSearch') ;
+			$(this).addClass('Sparnatural') ;
 			
 			thisForm.components = [] ;
 			
@@ -112,7 +112,7 @@
 			return $.getJSON( settings.pathSpecSearch, function( data ) {
 				specSearch = data ;
 			}).fail(function(response) {
-				console.log("SimSemSearch - unable to load config file : " +settings.pathSpecSearch);
+				console.log("Sparnatural - unable to load config file : " +settings.pathSpecSearch);
 				console.log(response);
 			}) ;
 		}
@@ -121,7 +121,7 @@
 			return $.getJSON( settings.pathLanguages+ fileName, function( data ) {
 				langSearch = data ;
 			}).fail(function(response) {
-				console.log("SimSemSearch - unable to load lang file : " +settings.pathLanguages+ fileName);
+				console.log("Sparnatural - unable to load lang file : " +settings.pathLanguages+ fileName);
 				console.log(response);
 			}) ;
 		}

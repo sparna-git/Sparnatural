@@ -1,10 +1,10 @@
-# SimSemSearch - Simple Semantic Search
+# Sparnatural - A natural way of building SPARQL queries
 
-SimSemSearch is a **visual SPARQL query builder written in javascript**.
+Sparnatural is a **visual SPARQL query builder written in javascript**.
 
 It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists. It can be configured through a JSON-LD ontology file that defines the classes and properties to be presented in the component.
 
-![](documentation/screencast-simsemsearch.gif)
+![](documentation/screencast-sparnatural.gif)
 
 # Getting Started
 
@@ -12,7 +12,7 @@ To get started :
 
 1. Read the following documentation;
 2. Look at how things work in file `index.html`; 
-   1. **Attention** : make sure you open this open through a web server, e.g. http://localhost/simsemsearch/index.html, and *not* by opening the file directly in your browser (`file://...`), otherwise the loading of component specification fails and your will get a blank page;
+   1. **Attention** : make sure you open this open through a web server, e.g. http://localhost/sparnatural/index.html, and *not* by opening the file directly in your browser (`file://...`), otherwise the loading of component specification fails and your will get a blank page;
 3. Look at how the specification file is written under `config/spec-search.json`;
 
 # Features
@@ -59,7 +59,7 @@ Select multiple values in a criteria
 
 ## Values selection
 
-SimSemSearch offers currently 4 ways of selecting a value for a criteria : autocomplete field, dropdown list, simple string value, year range.
+Sparnatural offers currently 4 ways of selecting a value for a criteria : autocomplete field, dropdown list, simple string value, year range.
 
 ### Autocomplete field
 
@@ -71,18 +71,14 @@ SimSemSearch offers currently 4 ways of selecting a value for a criteria : autoc
 
 ## Multilingual
 
-SimSemSearch is multilingual and supports displaying labels of classes and properties in multiple languages.
+Sparnatural is multilingual and supports displaying labels of classes and properties in multiple languages.
 
 
 ## Limitations
 
-### 3 level depth
-
-SimSemSearch allows for the moment to navigate the graph at 3 levels deep using the "where" operator. The number of criterias that can be combined with "and" is not limited.
-
 ### Only basic graph patterns, no UNION, OPTIONAL, BIND, etc.
 
-SimSemSearch produces only basic graph patterns with VALUES. It does not support the creation of UNION, OPTIONAL, SERVICE, BIND, etc...
+Sparnatural produces only basic graph patterns with VALUES. It does not support the creation of UNION, OPTIONAL, SERVICE, BIND, etc...
 
 # Integration
 
@@ -139,7 +135,7 @@ The component is configurable using a JSON(-LD) ontology file. Look at the speci
         }
       },
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
 ```
@@ -152,7 +148,7 @@ It is possible to directly use font-awesome icons in place of icons embedded in 
 "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-user'></i></span>",
 ```
 
-## How to integrate SimSemSearch in a webpage
+## How to integrate Sparnatural in a webpage
 
 Have a look at `index.html` to see how the component is integrated in a webpage.
 

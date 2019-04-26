@@ -18,7 +18,7 @@
       "@type": "@id"
     },
     "widget": {
-      "@id": "http://ontologies.sparna.fr/SimSemSearch#widget",
+      "@id": "http://ontologies.sparna.fr/Sparnatural#widget",
       "@type": "@id"
     }
   },
@@ -235,7 +235,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Lieu",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -262,7 +262,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
       }
     },
     {
@@ -281,7 +281,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Acteur",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
       }
     },
     {
@@ -311,7 +311,7 @@
         }
       },
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -342,7 +342,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Temps",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#TimeWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#TimeWidget"
       }  
     },
     {
@@ -371,7 +371,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -398,7 +398,7 @@
         }
       },
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -426,7 +426,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -453,7 +453,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
       }
     },
     {
@@ -480,7 +480,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#US",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -508,7 +508,7 @@
         }
       },
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -527,7 +527,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
       }
     },
     {
@@ -546,7 +546,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Type",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#ListWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
       }
     },
     {
@@ -565,7 +565,7 @@
       "domain": "http://www.openarchaeo.fr/explorateur/onto#Acteur",
       "range": "http://www.openarchaeo.fr/explorateur/onto#Site",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -593,7 +593,7 @@
         }
       },
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#AutocompleteWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
     {
@@ -625,7 +625,7 @@
       },
       "range": "http://www.openarchaeo.fr/explorateur/onto#Label",
       "widget": {
-        "@type" : "http://ontologies.sparna.fr/SimSemSearch#SearchWidget"
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#SearchWidget"
       }
     }
   ]
