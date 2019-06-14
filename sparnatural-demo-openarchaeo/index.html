@@ -7,17 +7,15 @@
 
 		<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-		<!--<link rel="stylesheet" href="assets/js/jquery-nice-select/css/nice-select.css" >
-		<link rel="stylesheet" href="assets/js/EasyAutocomplete/easy-autocomplete.min.css"> -->
-		<link rel="stylesheet" href="assets/css/simsemsearch-min.css" >
+		<link rel="stylesheet" href="assets/css/sparnatural-min.css" >
 
-		<title>SimSemSearch</title>
+		<title>Sparnatural</title>
 		
 	</head>
 	<body class="bg-light">
 		<header>
 			<nav class="navbar navbar-expand  navbar-dark bg-dark">
-				<a class="navbar-brand display-1 mr-auto" href="#"><span class="h1">S<sup><small class="text-muted">3</small></sup></span></a>
+				<a class="navbar-brand display-1 mr-auto" href="#"><span class="h1">Sparnatural</sup></span></a>
 				<ul class="navbar-nav">
 					<li class="nav-item"><a class="nav-link" href="en">EN</a></li>
 					<li class="nav-item active"><a class="nav-link" href="fr">FR</a></li>
@@ -27,7 +25,8 @@
 		
 		<div class="container-fluid">
 			<section>
-				<h2>SPARQL Query Generator</h2>
+				<h2>Sparnatural OpenArchaeo demo</h2>
+				<p>(relies on OpenArchaeo API for search and lists. Look at the other dbpedia demo for how to integrate with a SPARQL endpoint)</p>
 				<div id="ui-search" class="clearfix"></div>
 			</section>
 			<section>
@@ -65,15 +64,14 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		
-		<script src="assets/js/sparql-js/sparqljs-browser.js" ></script>
-		<script src="assets/js/simsemsearch-min.js" ></script>
+		<script src="assets/js/sparnatural-min.js" ></script>
 		<script src="assets/js/main.js" ></script>
 		<script>
 			$( document ).ready(function($) {
 			 //Appel du composant pour la recherche
 			  
-			  $('#ui-search').SimSemSearchForm({
-			  	language: "en",
+			  $('#ui-search').Sparnatural({
+			  	language: "fr",
 				autocomplete : {
 					url: function(domain, property, range, key) {
 					// ici le code qui se charge de retourner les résultats de la recherche

@@ -6,14 +6,16 @@ It supports the creation of basic graph patterns with the selection of values wi
 
 ![](documentation/screencast-sparnatural.gif)
 
+You can play with an **online demo at http://labs.sparna.fr/sparnatural-demo-dbpedia/**.
+
 # Getting Started
 
 To get started :
 
 1. Read the following documentation;
-2. Look at how things work in file `index.html`; 
-   1. **Attention** : make sure you open this open through a web server, e.g. http://localhost/sparnatural/index.html, and *not* by opening the file directly in your browser (`file://...`), otherwise the loading of component specification fails and your will get a blank page;
-3. Look at how the specification file is written under `config/spec-search.json`;
+2. Look at how things work in file `sparnatural-demo-dbpedia/index.html`; 
+   1. **Attention** : make sure you open this open through a web server, e.g. http://localhost/sparnatural-demo-dbpedia/index.html, and *not* by opening the file directly in your browser (`file://...`), otherwise the loading of component specification fails and your will get a blank page;
+3. Look at how the specification files are written under `sparnatural-demo-dbpedia/config/spec-search.json` and `sparnatural-demo-openarchaeo/config/spec-search.json`;
 
 # Features
 
@@ -41,21 +43,23 @@ Now you can fetch the generated SPARQL query :
 
 ![](documentation/5-screenshot-sparql.png)
 
-### "where"
+### "WHERE"
 
 This enables to navigate the graph :
 
 ![](documentation/6-where.png)
 
-### "and"
+### "AND"
 
 Combine criterias :
 
 ![](documentation/7-and.png)
 
-### "or"
+### "OR"
 
-Select multiple values in a criteria
+Select multiple values for a criteria :
+
+![](documentation/8-or.png)
 
 ## Values selection
 
@@ -80,11 +84,15 @@ Sparnatural is multilingual and supports displaying labels of classes and proper
 
 Sparnatural produces only basic graph patterns with VALUES. It does not support the creation of UNION, OPTIONAL, SERVICE, BIND, etc...
 
+### SPARQL endpoint needs to be CORS-enabled
+
+To send SPARQL queries to a service that is not hosted on the same domain name as the web page in which Sparnatural is included, the SPARQL endpoint needs to allow [Cross-Origin Resource Sharing (CORS)](https://enable-cors.org/).
+
 # Integration
 
 ## Specification of classes and properties
 
-The component is configurable using a JSON(-LD) ontology file. Look at the specification files under the `config` folder to get you an idea. The file contains :
+The component is configurable using a JSON(-LD) ontology file. Look at the specification files under the `config` folders of the demos to get an idea. The file contains :
 
 ### Class definition
 
@@ -150,11 +158,27 @@ It is possible to directly use font-awesome icons in place of icons embedded in 
 
 ## How to integrate Sparnatural in a webpage
 
-Have a look at `index.html` to see how the component is integrated in a webpage.
+Have a look at `index.html` in the demos folder to see how the component is integrated in a webpage.
 
 
+## Map the query structure to a different graph structure
 
+_to be written_
 
+Do something like this :
 
+```
+      var expand = function(sparql, specs) {
+        $.each( specs['@graph'], function( key, val ) {
+          if ( val['@type'] == 'ObjectProperty' || val['@type'] == 'Class') {
+            if ( val['path'] != null) {
+                var re = new RegExp("<" + val['@id'] + ">","g");
+                sparql = sparql.replace(re, val['path']);
+            }
+          }
+        }) ;
+        return sparql ;
+      }
+```
 
-
+(this should be included in the code of Sparnatural itself.)
