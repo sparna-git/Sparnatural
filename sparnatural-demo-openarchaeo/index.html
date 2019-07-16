@@ -6,38 +6,54 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 		<!-- Bootstrap CSS -->
-		<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/litera/bootstrap.min.css" rel="stylesheet" integrity="sha384-D/7uAka7uwterkSxa2LwZR7RJqH2X6jfmhkJ0vFPGUtPyBMF2WMq9S+f9Ik5jJu1" crossorigin="anonymous">
-		<link rel="stylesheet" href="assets/css/sparnatural-min.css" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+		<link rel="stylesheet" href="assets/css/sparnatural-min.css" >
 
-		<!-- Font Awesome -->
-		<link rel="stylesheet" href="assets/fa/css/all.min.css" />
-
-		<!-- YASGUI stuff -->
-		<link href='http://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.min.css' rel='stylesheet' type='text/css'/>
-		<link href='http://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.min.css' rel='stylesheet' type='text/css'/>
-
-		<title>SPARnatural - requêtes SPARQL naturelles sur DBPedia</title>
-
-		<style>
-		  .yasqe .CodeMirror { font-size: 0.8em; height: 400px; }
-
-		  .yasr_header {
-		  	display: none;
-		  }
-		</style>
-		
+		<title>Sparnatural</title>		
 	</head>
 	<body>
 		<header>
 			<nav class="navbar navbar-expand  navbar-dark bg-dark">
-				<a class="navbar-brand display-1 mr-auto" href="#">SPARnatural - requêtes SPARQL naturelles sur DBPedia</a>
+				<a class="navbar-brand display-1 mr-auto" href="#"><span class="h1">Sparnatural</sup></span></a>
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link" href="en">EN</a></li>
+					<li class="nav-item active"><a class="nav-link" href="fr">FR</a></li>
+				</ul>
 			</nav>
 		</header>
 		
-		<div class="container-fluid" style="margin-top:1em;">
-			<div class="row">
-				<div class="col-md-7">
-					<div id="ui-search"></div>
+		<div class="container-fluid">
+			<section>
+				<h2>Sparnatural OpenArchaeo demo</h2>
+				<p>(relies on OpenArchaeo API for search and lists. Look at the other dbpedia demo for how to integrate with a SPARQL endpoint)</p>
+				<div id="ui-search" class="clearfix"></div>
+			</section>
+			<section>
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active" id="home-tab" data-toggle="tab" href="#sparql" role="tab" aria-controls="sparql" aria-selected="true">SparQL</a>
+					</li>
+					<!--
+					<li class="nav-item">
+						<a class="nav-link" id="profile-tab" data-toggle="tab" href="#json" role="tab" aria-controls="json" aria-selected="false">Json</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" id="profile-tab" data-toggle="tab" href="#json2" role="tab" aria-controls="json" aria-selected="false">Exemple Json</a>
+					</li>
+					-->
+				</ul>
+				<div class="jumbotronn">
+					<div class="tab-content">
+						<div class="tab-pane active" id="sparql" role="tabpanel" aria-labelledby="sparql-tab">
+							<div class=" border border-info m-3"><pre class="pre-scrollable m-3"><code>...</code></pre></div>
+						</div>
+						<div class="tab-pane" id="json" role="tabpanel" aria-labelledby="json-tab">
+							<div class=" border border-info m-3"><pre class="pre-scrollable m-3"><code>...</code></pre></div>
+						</div>
+						<div class="tab-pane" id="json2" role="tabpanel" aria-labelledby="json-tab">
+							<div class=" border border-info m-3"><pre class="pre-scrollable m-3"><code>...</code></pre></div>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-5">
 					<textarea id="yasqe"></textarea>
@@ -72,20 +88,14 @@
 		<script src='https://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.bundled.min.js'></script>
 		<script src='https://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.bundled.min.js'></script>
 		
-		<script src="assets/js/sparnatural.js" ></script>
-		<script src="assets/js/EasyAutocomplete/jquery.easy-autocomplete.js" ></script>
-		<script src="assets/js/jquery-nice-select/js/jquery.nice-select.js" ></script>
-		<script src="assets/js/sparql-js/sparqljs-browser.js" ></script>
+		<script src="assets/js/sparnatural-min.js" ></script>
+		<script src="assets/js/main.js" ></script>
 		<script>
 			$( document ).ready(function($) {
 			 //Appel du composant pour la recherche
 			  
 			  $('#ui-search').Sparnatural({
-			  	pathSpecSearch: 'config/spec-search-dbpedia.json',
 			  	language: "fr",
-			  	maxDepth: 4,
-				addDistinct: true,
-				backgroundBaseColor: '2,184,117',
 				autocomplete : {
 					url: function(domain, property, range, key) {
 						return searchUrlDBPedia(domain, property, range, key);
