@@ -31,6 +31,9 @@
 		<header>
 			<nav class="navbar navbar-expand  navbar-dark bg-dark">
 				<a class="navbar-brand display-1 mr-auto" href="#">SPARnatural - requêtes SPARQL naturelles sur DBPedia</a>
+				<span class="navbar-text" style="margin-right:100px;">
+				<a href="?lang=fr">fr</a>&nbsp;|&nbsp;<a href="?lang=en">en</a>
+    			</span>
 			</nav>
 		</header>
 		
@@ -74,12 +77,21 @@
 		
 		<script src="assets/js/sparnatural-min.js" ></script>
 		<script>
+	      	$.urlParam = function(name){
+	          var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+	          if(results == null) { return null; }
+	          return results[1] || 0;
+	      	}
+
+	      	var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
+
+
 			$( document ).ready(function($) {
 			 //Appel du composant pour la recherche
 			  
 			  $('#ui-search').Sparnatural({
 			  	pathSpecSearch: 'config/spec-search-dbpedia.json',
-			  	language: "fr",
+			  	language: lang,
 			  	maxDepth: 4,
 				addDistinct: true,
 				backgroundBaseColor: '2,184,117',
