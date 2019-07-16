@@ -1,11 +1,156 @@
 //@prepros-append jquery-nice-select/js/jquery.nice-select.js
 //@prepros-append EasyAutocomplete/jquery.easy-autocomplete.js
+
+function SimpleJsonLdSpecificationProvider(specs, lang) {
+
+	this.specSearch = specs;
+	this.lang = lang;
+
+	this.gatLabel = function(graphItemID) {
+		for(i in graphItemID['label']) {
+			aLabel = graphItemID['label'][i];
+			if ( aLabel['@language'] == this.lang) {
+				return aLabel['@value'] ;
+			}
+		}
+		return '';		
+	}
+
+	this.getResourceById = function(id) {
+		for(i in this.specSearch['@graph']) {
+			anEntry = this.specSearch['@graph'][i];
+			if ( anEntry['@id'] == id) {
+				return anEntry;
+			}
+		}
+		return null;
+	}
+
+	this.getClassLabel = function(ClassId) {
+		var classLabel = null ;
+		var classObject = this.getResourceById(ClassId) ;
+		if (classObject !== null) {
+			for(i in classObject['label']) {
+				aLabel = classObject['label'][i];
+				if (aLabel['@language'] == this.lang) {
+					return aLabel['@value'] ;
+				}
+			}
+		}
+		return null ;
+	}
+
+	/* List of possible Class relative to a Class
+	@Id of Class or null if is the first list selection
+	return array of @type Class in specSearch 
+	*/
+	this.getAllClassFor = function(ClassID) {
+		var items = [];
+
+		for(j in this.specSearch['@graph']) {			
+			if (this.specSearch['@graph'][j]['@type'] == 'ObjectProperty') {
+				objectProperty = this.specSearch['@graph'][j];
+				
+				// if ClassIf is null, we are looking for all domain values
+				if (ClassID === null) {
+					values = this.readDomain(objectProperty);
+					for(i in values) {
+						items = this.pushIfNotInArray(this.getResourceById(values[i]), items);
+					}
+				// otherwise we are looking for range values of all properties
+				// for which this class is in the domain
+				} else if (this.inDomainOf(objectProperty, ClassID)) {
+					values = this.readRange(objectProperty);
+					for(i in values) {
+						var item = this.getResourceById(values[i]) ;
+						items = this.pushIfNotInArray(item, items);
+					}
+				}
+			}
+		}
+
+		return items ;
+	}
+
+	this.ClassHaveRange = function(ClassID) {
+		if (this.getAllClassFor(ClassID).length > 0 ) {
+			return true;
+		} else {
+			return false ;
+		}
+	}
+
+	/* List of possible ObjectProperty relative to a Class
+		@Id of Class
+		return array of @type ObjectProperty in specSearch 
+	*/
+	this.getAllObjectPropertyFor = function(domainClassID, rangeClassID) {
+		var items = [];
+
+		for(i in this.specSearch['@graph']) {
+			item = this.specSearch['@graph'][i];
+			if (item['@type'] == 'ObjectProperty') {
+				if(
+					(domainClassID === null || this.inDomainOf(item, domainClassID))
+					&&
+					(rangeClassID === null || this.inRangeOf(item, rangeClassID))
+				) {
+					items = this.pushIfNotInArray(item, items);
+				}
+			}
+		}
+
+		return items ;
+	}
+
+	this._readDomainOrRange = function(objectProperty, domainOrRange) {
+		var result = [];
+		if (typeof objectProperty[domainOrRange] === "object") {
+			for(i in objectProperty[domainOrRange]['unionOf']['@list']) {
+				value = objectProperty[domainOrRange]['unionOf']['@list'][i];
+				result.push(value['@id']);
+			}
+		} else {
+			result.push(objectProperty[domainOrRange]);
+		}
+
+		return result;
+	}
+
+	this.readDomain = function(objectProperty) {
+		return this._readDomainOrRange(objectProperty, 'domain');
+	}
+
+	this.readRange = function(objectProperty) {
+		return this._readDomainOrRange(objectProperty, 'range');
+	}
+
+	this.inDomainOf = function(objectProperty, classId) {
+		return this.readDomain(objectProperty).indexOf(classId) >= 0;
+	}
+
+	this.inRangeOf = function(objectProperty, classId) {
+		return this.readRange(objectProperty).indexOf(classId) >= 0;
+	}
+
+	this.pushIfNotInArray = function(item, items) {
+		if (items.indexOf(item) < 0) {
+			items.push(item) ;
+		}
+
+		return items ;			
+	}
+
+}
+
+
 (function( $ ) {
  
     $.fn.Sparnatural = function( options ) {
  
         var specSearch = {} ;
         var langSearch = {} ;
+        var specProvider;
 		var defaults = {
 			pathSpecSearch: 'config/spec-search.json',
 			pathLanguages: 'config/lang/',
@@ -83,18 +228,6 @@
 		
 		var settings = $.extend( true, {}, defaults, options );
 		
-		function gatLabel(graphItemID) {
-			var label = ''; 
-			$.each( graphItemID['label'], function( key, val ) {
-				if ( val['@language'] == settings.language) {
-					label = val['@value'] ;
-				}
-			}) ;
-			
-			return label ;
-			
-		}
-		
 		this.each(function() {
             var thisForm = {} ;
             thisForm._this = $(this) ;
@@ -111,6 +244,7 @@
 			
 			return $.getJSON( settings.pathSpecSearch, function( data ) {
 				specSearch = data ;
+				specProvider = new SimpleJsonLdSpecificationProvider(data, settings.language);
 			}).fail(function(response) {
 				console.log("Sparnatural - unable to load config file : " +settings.pathSpecSearch);
 				console.log(response);
@@ -126,8 +260,7 @@
 			}) ;
 		}
 		
-		function initForm(thisForm_) {
-			
+		function initForm(thisForm_) {			
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
 			//contexte.appendTo(thisForm_._this) ;
 			$(thisForm_._this).append(contexte) ;
@@ -138,12 +271,9 @@
 			
 			intiGeneralEvent(thisForm_) ;
 			
-			$(thisForm_._this).on('submit', { formObject : thisForm_ }, function (event) {
-				
+			$(thisForm_._this).on('submit', { formObject : thisForm_ }, function (event) {		
 				event.preventDefault();
-				
 				ExecuteSubmited(event.data.formObject) ;
-				
 			}) ;
 
 		}
@@ -167,22 +297,21 @@
 			}
 		}
 		
-		function initTriple() {
-			
+		function initTriple() {			
 			return {
 					"type": "bgp",
 					"triples": []
 			} ;
 		}
-		function initValues() {
-			
+
+		function initValues() {			
 			return {
 					"type": "values",
 					"values": []
 				} ;
 		}
+
 		function initFilterTime(StartYear, EndYear, index) {
-			
 			return {
 				"type": "filter",
 				"expression": {
@@ -194,7 +323,7 @@
 							"operator": ">",
 							"args": [
 								""+index+"",
-								"\""+StartYear+"-01-01\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+								"\""+StartYear+"-01-01\"^^http://www.w3.org/2001/XMLSchema#date"
 							]
 						},
 						{
@@ -202,15 +331,15 @@
 							"operator": "<=",
 							"args": [
 								""+index+"",
-								"\""+EndYear+"-12-31\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+								"\""+EndYear+"-12-31\"^^http://www.w3.org/2001/XMLSchema#date"
 							]
 						}
 					]
 				}
 			} ;
 		}
-		function initFilterSearch(Texte, index) {
-			
+
+		function initFilterSearch(Texte, index) {			
 			return {
 				"type": "filter",
 				"expression": {
@@ -244,22 +373,20 @@
 			return Json ;
 		}
 
-		function addVariable(jsonValues, name, valueUrl) {
-			
+		function addVariable(jsonValues, name, valueUrl) {			
 			$.each(valueUrl, function( index, value ) {
 			  //alert( index + ": " + value );
 			  var newValue = {
 							//[name]: value
 						}
 					newValue[name] = value ;
-				jsonValues.values.push(newValue) ;		
-			  
+				jsonValues.values.push(newValue) ;			  
 			});
 			
 			return jsonValues ;	
 		}
-		function addVariableDate(json, name, valueUrl) {
-			
+
+		function addVariableDate(json, name, valueUrl) {			
 			var newValue = {
 							//[name]: valueUrl
 						}
@@ -529,7 +656,7 @@
 			console.log(Json) ;
 					
 			if (have_queriable_criteres) {
-					//var SparqlGenerator = require('sparqljs').Generator;
+				//var SparqlGenerator = require('sparqljs').Generator;
 				var generator = new Ngenerator();
 				//parsedQuery.variables = ['?mickey'];
 				var generatedQuery = generator.stringify(Json);
@@ -593,68 +720,14 @@
 			thisForm_._this.find('div.bg-wrapper').css({background : cssdef+')' }) ;
 		}
 	
-		/*  Find Class by ID
-			@Id of Class
-			return object of @type Class in specSearch 
-		*/
-		function getClassById(ClassId) {
-			var classObject = null ;
-			$.each( specSearch['@graph'], function( key, val ) {
-				if ( val['@type'] == 'Class') {
-					if ( val['@id'] == ClassId) {
-							classObject = val ;
-					}
-				}
-			}) ;
-			return classObject ;
-		}
-		function getClassLabel(ClassId) {
-			var classLabel = null ;
-			var classObject = getClassById(ClassId) ;
-			if (classObject !== null) {
-				$.each( classObject['label'], function( key, val ) {
-					if (val['@language'] == settings.language ) {
-						classLabel = val['@value'] ;
-					}
-				});
-			}
-			return classLabel ;
-		}
-	
-		/*  Find Class by ID
-			@Id of Class
-			return object of @type Class in specSearch 
-		*/
-		function getObjectPropertyById(ObjectPropertyId) {
-			var ObjectPropertyObject = null ;
-			$.each( specSearch['@graph'], function( key, val ) {
-				if ( val['@type'] == 'ObjectProperty') {
-					if ( val['@id'] == ObjectPropertyId) {
-							ObjectPropertyObject = val ;
-					}
-				}
-			}) ;
-			return ObjectPropertyObject ;
-		}
-		function getObjectPropertyLabel(ObjectPropertyId) {
-			var ObjectPropertyLabel = null ;
-			var classObject = getObjectPropertyById(ClassId) ;
-			if (classObject !== null) {
-				$.each( classObject['label'], function( key, val ) {
-					if (val['@language'] == settings.language ) {
-						ObjectPropertyLabel = val['@value'] ;
-					}
-				});
-			}
-			return ObjectPropertyLabel ;
-		}
+
 		
 		
 		function getClassListSelectFor(classId, inputID, default_value) {
 			var list = [] ;
-			var items = getAllClassFor(classId) ;
+			var items = specProvider.getAllClassFor(classId) ;
 			$.each( items, function( key, val ) {
-				var label = getClassLabel(val['@id']) ;
+				var label = specProvider.getClassLabel(val['@id']) ;
 				if (!val['highlightedIconPath'] || 0 === val['highlightedIconPath'].length) {
 					val['highlightedIconPath'] = val['iconPath'] ;
 				}
@@ -675,21 +748,13 @@
 			return html_list ;
 		}
 		
-		function ClassHaveRange(ClassID) {
-			//console.log(getAllClassFor(ClassID)) ;
-			if (getAllClassFor(ClassID).length > 0 ) {
-				return true;
-			} else {
-				return false ;
-			}
-			
-		}
+
 		
 		function getObjectListSelectFor(domainClassID, rangeClassID, inputID, default_value) {
 			var list = [] ;
-			var items = getAllObjectPropertyFor(domainClassID,rangeClassID) ;
+			var items = specProvider.getAllObjectPropertyFor(domainClassID,rangeClassID) ;
 			$.each( items, function( key, val ) {
-				var label = gatLabel(val) ;
+				var label = specProvider.gatLabel(val) ;
 				var selected ='';
 				if (default_value == val['@id']) {
 					selected = 'selected="selected"' ;
@@ -703,129 +768,6 @@
 				html: list.join( "" )
 			  });
 			return html_list ;
-		}
-		
-		
-		/*  Find if Class is in objectProperty domain list
-			@Id of objectProperty where search
-			@Id of Class we will retrive
-			return true if  we find the class or false
-		*/
-		function classIsInDomain(ObjectPropertyId, ClassId) {
-			var classIsDomain = false ;
-			$.each( specSearch['@graph'], function( key, val ) {
-				if ( ( val['@type'] == 'ObjectProperty') &&  (val['@id'] == ObjectPropertyId) ){
-					//console.log(val) ;
-					if ($.type(val['domain']) === "object") {
-						$.each( val['domain']['unionOf']['@list'], function( domkey, domval ) {
-							if (domval['@id'] == ClassId ) {
-								classIsDomain = true
-							}
-						}) ;
-					} else {
-						if (val['domain'] == ClassId ) {
-							classIsDomain = true ;
-						}
-					}
-				}
-			});
-			return classIsDomain;
-		}
-		/* List of possible Class relative to a Class
-			@Id of Class or null if is the first list selection
-			return array of @type Class in specSearch 
-		*/
-		function getAllClassFor(ClassID) {
-			var items = [];
-			$searchKey = 'range' ;
-			if (ClassID === null) {
-				$searchKey = 'domain' ;
-			}
-			//console.log(ClassID) ;
-			$.each( specSearch['@graph'], function( key, val ) {
-				if ( val['@type'] == 'ObjectProperty') {
-					if ($.type(val[$searchKey]) === "object") {
-						$.each( val[$searchKey]['unionOf']['@list'], function( domkey, domval ) {
-							if (ClassID === null) {
-								var item = getClassById(domval['@id']) ;
-								items = pushIfNotInArray(item, items);
-							} else {
-								if (classIsInDomain(val['@id'], ClassID)) {
-									var item = getClassById(domval['@id']) ;
-									items = pushIfNotInArray(item, items);
-								}
-							}
-						}) ;
-					} else {						
-						if (ClassID === null) {
-								var item = getClassById(val[$searchKey]) ;
-								items = pushIfNotInArray(item, items);
-						} else {
-							//console.log(val['@id']) ;
-							if (classIsInDomain(val['@id'], ClassID)) {
-								var item = getClassById(val[$searchKey]) ;
-								items = pushIfNotInArray(item, items);
-							}
-						}
-					}
-				}
-			});
-			return items ;
-		}
-		/* List of possible ObjectProperty relative to a Class
-			@Id of Class
-			return array of @type ObjectProperty in specSearch 
-		*/
-		function getAllObjectPropertyFor(domainClassID, rangeClassID) {
-			var items = [];
-			$.each( specSearch['@graph'], function( key, val ) {
-				if (domainClassID !== null) {
-					var haveDomain = objectPropertyhaveClassLink(val, 'domain' , domainClassID) ;
-				} else {
-					var haveDomain = true ;
-				}
-				if (rangeClassID !== null) {
-					var haveRange = objectPropertyhaveClassLink(val, 'range', rangeClassID) ;
-				} else {
-					var haveRange = true ;
-				}
-				
-				
-				if ( haveDomain && haveRange) {
-					items = pushIfNotInArray(val, items);
-				}
-			});
-			return items ;
-		}
-		
-		function objectPropertyhaveClassLink(graphItem, type, ClassID) {
-			var ifHave = false ;
-			if ( graphItem['@type'] == 'ObjectProperty') {
-					
-					
-				if ($.type(graphItem[type]) === "object") {
-					$.each( graphItem[type]['unionOf']['@list'], function( domkey, domval ) {
-						if (domval['@id'] == ClassID ) {
-								ifHave = true ;
-						}
-					}) ;
-				} else {
-					if (graphItem[type] == ClassID ) {
-						ifHave = true ;
-					}
-				}
-			}
-			return ifHave ;
-		}
-		
-		function pushIfNotInArray(item, items) {
-
-			if ($.inArray(item, items) < 0) {
-				items.push(item) ;
-				
-			}
-			return items ;
-			
 		}
 		
 		function addComponent(thisForm_, contexte) {
@@ -1155,14 +1097,9 @@
 			
 		function validSelected() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
-			
 			$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-			 
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
-			
-			
-			var objSpec = getObjectPropertyById(this.value_selected) ;
-			
+			var objSpec = specProvider.getResourceById(this.value_selected) ;
 			
 			if ( (objSpec.widget["@type"] == TYPE_WIDGET_SEARCH_URI )  || (objSpec.widget["@type"] == TYPE_WIDGET_TIME_URI ) ) {
 				
@@ -1170,9 +1107,7 @@
 				
 			}
 			
-			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
-			
-			
+			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;			
 		} this.validSelected = validSelected ;
 			
 		this.init() ;
@@ -1201,9 +1136,7 @@
 			this.EndClassGroup.niceslect = $(this.EndClassGroup.html).find('select.input-val').niceSelect()  ;
 			$(this.EndClassGroup.html).find('.nice-select').trigger('click') ;
 			
-			$(this.EndClassGroup.html).find('select.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
-			
-			
+			$(this.EndClassGroup.html).find('select.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);		
 		}) ;
 		
 		function validSelected() {
@@ -1212,7 +1145,7 @@
 			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
 			
 			
-			if (ClassHaveRange(this.value_selected)) {
+			if (specProvider.ClassHaveRange(this.value_selected)) {
 				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
 			} else {
 				$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
@@ -1239,7 +1172,7 @@
 		
 		 this.detectWidgetType = function () {
 			
-			this.objectPropertyDefinition = getObjectPropertyById(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
+			this.objectPropertyDefinition = specProvider.getResourceById(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
 			
 			this.widgetType = this.objectPropertyDefinition.widget['@type'] ;
 			
@@ -1510,7 +1443,7 @@
 				
 				if (this instanceof ActionWhere) {
 					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-					var endLabel = getClassLabel(endClassGroup.value_selected) ;
+					var endLabel = specProvider.getClassLabel(endClassGroup.value_selected) ;
 					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
 					
 					
@@ -1667,9 +1600,9 @@
 
 				console.log(endClassGroup) ;
 				if (endClassGroup.value_selected == LABEL_URI) {
-					var endLabel = getClassLabel(endClassGroup.value_selected) ;
+					var endLabel = specProvider.getClassLabel(endClassGroup.value_selected) ;
 				} else {
-					var endLabel = langSearch.Find+' '+getClassLabel(endClassGroup.value_selected) ;
+					var endLabel = langSearch.Find+' '+specProvider.getClassLabel(endClassGroup.value_selected) ;
 				}
 				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 				
@@ -1687,9 +1620,9 @@
 			}
 			
 			
-		} this.init = init
-		
-;		function getWigetTypeClassName() {
+		} this.init = init;
+
+		function getWigetTypeClassName() {
 			switch (this.widgetType) {
 			  case TYPE_WIDGET_LIST_URI:
 				this.widgetComponent = new ListWidget(this) ;
@@ -1710,7 +1643,8 @@
 			  default:
 				//console.log('Sorry, we are out of ' + expr + '.');
 			}
-		} this.getWigetTypeClassName = getWigetTypeClassName ;
+		} 
+		this.getWigetTypeClassName = getWigetTypeClassName ;
 		
 		this.GetValue = function () {
 			
@@ -1823,7 +1757,7 @@
 			var isMatch = settings.autocomplete.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
 			
 			var options = {
-				ajaxSettings: {crossDomain: true, type: 'GET'} ,
+				// ajaxSettings: {crossDomain: true, type: 'GET'} ,
 				url: function(phrase) {
 					return settings.autocomplete.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
@@ -1833,6 +1767,7 @@
 				 getValue: function (element) { return settings.autocomplete.elementLabel(element) ; },
 
 				  ajaxSettings: {
+				  	crossDomain: true,
 					dataType: "json",
 					method: "GET",
 					data: {
