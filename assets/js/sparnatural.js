@@ -162,32 +162,99 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			backgroundBaseColor: '250,136,3',
 			
 			autocomplete : {
+				/**
+				 * This must return the URL that will be called when the user starts
+				 * typing a few letter in a search field.
+				 *
+				 * @param {string} domain - The domain of the criteria currently being edited, i.e. type of the triple subjects.
+				 * @param {string} property - The predicate of the criteria currently being edited
+				 * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
+				 * @param {string} key - The letters that the user has typed in the search field.
+				 **/
 				url : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key"  ) ;
 				},
+
+				/**
+			   	 * Returns the path in the returned JSON structure where the list of entries should be read.
+			   	 * This is typically the data structure itself, but can correspond to a subentry inside.
+			   	 *
+				 * @param {string} domain - The domain of the criteria currently being edited
+				 * @param {string} property - The predicate of the criteria currently being edited
+				 * @param {string} range - The range of the criteria currently being edited
+				 * @param {object} data - The data structure returned from an autocomplete call
+			   	 **/
 				listLocation: function(domain, property, range, data) {
 					return data;
 				},
+
+				/**
+			   	 * Returns the label to display for a single autocomplete result; defaults to `element.label`.
+			   	 *
+			   	 * @param {object} element - A single autocomplete result
+			   	 **/
 				elementLabel: function(element) {
 					return element.label;
 				},
+
+				/**
+				 * Returns the URI to of a single autocomplete result; ; defaults to `element.uri`.
+				 *
+				 * @param {object} element - A single autocomplete result
+				 **/
 				elementUri: function(element) {
 					return element.uri;
 				},
+
+				/**
+				 * Whether the Easyautocomplete 'enableMatch' flag should be set; this should
+				 * be useful only when loading the autocomplete results from a local file, leave to
+				 * false otherwise.
+				 **/
 				enableMatch: function(domain, property, range) {
 					return false;
 				},
 			},			
 			list : {
+
+				/**
+				 * This must return the URL that will be called to list the values to populate the dropdown.
+				 *
+				 * @param {string} domain - The domain of the criteria currently being edited, i.e. type of the triple subjects.
+				 * @param {string} property - The predicate of the criteria currently being edited
+				 * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
+				 **/
 				url : function(domain, property, range) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option listUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range" ) ;
 				},
+
+				/**
+			   	 * Returns the path in the returned JSON structure where the list of entries should be read.
+			   	 * This is typically the data structure itself, but can correspond to a subentry inside.
+			   	 *
+				 * @param {string} domain - The domain of the criteria currently being edited
+				 * @param {string} property - The predicate of the criteria currently being edited
+				 * @param {string} range - The range of the criteria currently being edited
+				 * @param {object} data - The data structure returned from a list call
+			   	 **/
 				listLocation: function(domain, property, range, data) {
 					return data;
 				},
+
+				/**
+			   	 * Returns the label to display for a single list entry; defaults to `element.label`.
+			   	 *
+			   	 * @param {object} element - A single list entry
+			   	 **/
 				elementLabel: function(element) {
 					return element.label;
 				},
+
+				/**
+			   	 * Returns the URI for a single list entry; defaults to `element.uri`.
+			   	 *
+			   	 * @param {object} element - A single list entry
+			   	 **/
 				elementUri: function(element) {
 					return element.uri;
 				}
@@ -211,6 +278,12 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 				
 			},
 			
+			/**
+			 * Callback notified each time the query is modified.
+			 *
+			 * @param {object} queryString - The SPARQL query string
+			 * @param {object} queryJson - The query as a JSON data structure
+			 **/
 			onQueryUpdated : function (queryString, queryJson) {
 				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
 			}

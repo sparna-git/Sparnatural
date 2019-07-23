@@ -6,7 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 		<!-- Bootstrap CSS -->
-		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" />
+		<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/litera/bootstrap.min.css" rel="stylesheet" integrity="sha384-D/7uAka7uwterkSxa2LwZR7RJqH2X6jfmhkJ0vFPGUtPyBMF2WMq9S+f9Ik5jJu1" crossorigin="anonymous">
 		<link rel="stylesheet" href="assets/css/simsemsearch-min.css" />
 
 		<!-- Font Awesome -->
@@ -64,9 +64,7 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		
-		<script src="assets/js/sparql-js/sparqljs-browser.js" ></script>
 		<script src="assets/js/simsemsearch-min.js" ></script>
-		<script src="assets/js/main.js" ></script>
 		<script>
 			$( document ).ready(function($) {
 			 //Appel du composant pour la recherche
@@ -75,32 +73,65 @@
 			  	pathSpecSearch: 'config/spec-search-wikidata.json',
 			  	language: "en",
 				addDistinct: true,
-				autocompleteUrl: function(domain, property, range, key) {
-					// ici le code qui se charge de retourner les résultats de la recherche
-					return 'http://openarchaeo.huma-num.fr/federation/api/autocomplete?key='+key+'&domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
-			
-				  },
-				listUrl: function(domain, property, range) {
-					// ici le code qui se charge de retourner les résultats de la recherche
-					return 'http://openarchaeo.huma-num.fr/federation/api/list?domain='+encodeURIComponent(domain)+'&property='+encodeURIComponent(property)+'&range='+encodeURIComponent(range) ;
-			
-				  },
-				datesUrl: function(domain, property, range, key) {
-					// ici le code qui se charge de retourner les résultats de la recherche
-					return 'data/periods-periodo.json' ;
-			
-				  },
+				autocomplete : {
+					url: function(domain, property, range, key) {
+						return "data/Q3305213_P136_Q1792379.json";
+					},
+					listLocation: function(domain, property, range, data) {
+						return data.results.bindings;
+					},
+					elementLabel: function(element) {
+						return element.rangeLabel.value;
+					},
+					elementUri: function(element) {
+						return element.range.value;
+					},
+					enableMatch: function(domain, property, range) {
+						return true;
+					},
+				},
+				list : {
+					url: function(domain, property, range) {
+						// return listUrlWikidata(domain, property, range);
+						return "data/Q3305213_P136_Q1792379.json";
+					},
+					listLocation: function(domain, property, range, data) {
+						return data.results.bindings;
+					},
+					elementLabel: function(element) {
+						return element.rangeLabel.value;
+					},
+					elementUri: function(element) {
+						return element.range.value;
+					}
+				},
 				onQueryUpdated: function(queryString, queryJson) {
 					// ici on récupère la requete Sparql grace au premier parametre de la fonction
-					queryString = wdtP31PostProcess(queryString);
+					queryString = wdtP31PostProcess(queryString, queryJson);
+					queryString = wikidataServicePostProcess(queryString, queryJson);
 					$('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
 				  }
 				
 			  }) ;
 			}) ;
 		
-			wdtP31PostProcess = function(queryString) {
-				return queryString.replace(/<http:\/\/www.w3.org\/1999\/02\/22-rdf-syntax-ns#type>/g, "<http://www.wikidata.org/prop/direct/P31>/<http://www.wikidata.org/prop/direct/P279>*");
+			wdtP31PostProcess = function(queryString, queryJson) {
+				// return queryString.replace(/<http:\/\/www.w3.org\/1999\/02\/22-rdf-syntax-ns#type>/g, "<http://www.wikidata.org/prop/direct/P31>/<http://www.wikidata.org/prop/direct/P279>*");
+				return queryString.replace(/<http:\/\/www.w3.org\/1999\/02\/22-rdf-syntax-ns#type>/g, "<http://www.wikidata.org/prop/direct/P31>");
+			}
+
+			wikidataServicePostProcess = function(queryString, queryJson) {
+				queryString = queryString.replace(new RegExp('}$'), "  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". } \n}");
+				queryString = queryString.replace("DISTINCT ?this", "DISTINCT ?this ?thisLabel");
+				return queryString;
+			}
+
+			listUrlWikidata = function(domain, property, range) {
+				var QUERY_SERVICE = "https://query.wikidata.org/sparql"
+				var sparql = "SELECT DISTINCT ?range ?rangeLabel WHERE {\n  ?domain <http://www.wikidata.org/prop/direct/P31> <"+domain+"> . ?domain <"+property+"> ?range . ?range <http://www.wikidata.org/prop/direct/P31> <"+range+"> \n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE],en\". }.}";
+				var url = QUERY_SERVICE+"?query="+encodeURIComponent(sparql)+"&format=json";
+				console.log(url);
+				return url;
 			}
 
 		</script>
