@@ -1,8 +1,11 @@
-require("./assets/js/jquery-nice-select/jquery.nice-select.js");
-require("easy-autocomplete");
-require("sparqljs");
+require("./assets/stylesheets/sparnatural.scss");
 
-require("./assets/scss/sparnatural.scss");
+require("easy-autocomplete");
+var SparqlGenerator = require('sparqljs').Generator;
+
+require("./assets/js/jquery-nice-select/jquery.nice-select.js");
+
+const removeIcon = require("./assets/icons/buttons/remove.png");
 
 function SimpleJsonLdSpecificationProvider(specs, lang) {
 
@@ -732,8 +735,7 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			console.log(Json) ;
 					
 			if (have_queriable_criteres) {
-				//var SparqlGenerator = require('sparqljs').Generator;
-				var generator = new Ngenerator();
+				var generator = new SparqlGenerator();
 				//parsedQuery.variables = ['?mickey'];
 				var generatedQuery = generator.stringify(Json);
 						
@@ -1529,7 +1531,7 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 					possible_values = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
 				}
 				if (this instanceof ActionRemove) {
-					possible_values = '<a><img src="assets/icons/buttons/remove.png"></a>' ;
+					possible_values = '<a><img src="' + removeIcon + '"></a>' ;
 				}
 				
 			} 
