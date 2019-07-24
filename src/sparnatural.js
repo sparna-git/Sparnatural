@@ -1,5 +1,8 @@
-//@prepros-append jquery-nice-select/js/jquery.nice-select.js
-//@prepros-append EasyAutocomplete/jquery.easy-autocomplete.js
+require("./assets/js/jquery-nice-select/jquery.nice-select.js");
+require("easy-autocomplete");
+require("sparqljs");
+
+require("./assets/scss/sparnatural.scss");
 
 function SimpleJsonLdSpecificationProvider(specs, lang) {
 
