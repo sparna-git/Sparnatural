@@ -7,10 +7,9 @@
 
 		<!-- Bootstrap CSS -->
 		<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/litera/bootstrap.min.css" rel="stylesheet" integrity="sha384-D/7uAka7uwterkSxa2LwZR7RJqH2X6jfmhkJ0vFPGUtPyBMF2WMq9S+f9Ik5jJu1" crossorigin="anonymous">
-		<link rel="stylesheet" href="assets/css/sparnatural-min.css" />
 
 		<!-- Font Awesome -->
-		<link rel="stylesheet" href="assets/fa/css/all.min.css" />
+		<link rel="stylesheet" href="fa/css/all.min.css" />
 
 		<!-- YASGUI stuff -->
 		<link href='http://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.min.css' rel='stylesheet' type='text/css'/>
@@ -26,7 +25,7 @@
 		  }
 		</style>
 		
-	</head>
+	<link href="sparnatural.css" rel="stylesheet"></head>
 	<body>
 		<header>
 			<nav class="navbar navbar-expand  navbar-dark bg-dark">
@@ -75,7 +74,6 @@
 		<script src='https://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.bundled.min.js'></script>
 		<script src='https://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.bundled.min.js'></script>
 		
-		<script src="assets/js/sparnatural-min.js" ></script>
 		<script>
 	      	$.urlParam = function(name){
 	          var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
@@ -84,7 +82,6 @@
 	      	}
 
 	      	var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
-
 
 			$( document ).ready(function($) {
 			 //Appel du composant pour la recherche
@@ -127,8 +124,6 @@
 					}
 				},
 				onQueryUpdated: function(queryString, queryJson) {
-					// ici on récupère la requete Sparql grace au premier parametre de la fonction
-					// queryString = wdtP31PostProcess(queryString, queryJson);
 					queryString = semanticPostProcess(queryString, queryJson);
 					queryString = rdfsLabelPostProcess(queryString, queryJson);
 					queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
@@ -141,15 +136,30 @@
 			  }) ;
 			}) ;
 
-			rdfsLabelPostProcess = function(queryString, queryJson) {
-				queryString = queryString.replace(new RegExp('}$'), "  ?this rdfs:label ?label FILTER(lang(?label) = 'fr') \n}");
-				queryString = queryString.replace("SELECT DISTINCT ?this", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT DISTINCT ?this");
+			// load specs
+			var specs;
+			$.getJSON( 'config/spec-search-dbpedia.json', function( data ) {
+				specs = data ;
+			}).fail(function(response) {
+				console.log("Unable to load config file : " +settings.pathSpecSearch);
+				console.log(response);
+			}) ;
+
+			prefixesPostProcess = function(queryString, queryJson) {
+				if(queryString.indexOf("rdf-schema#") == -1) {
+					queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
+				} 				
 				return queryString;
 			}
 
 			isPrimaryTopicOfPostProcess = function(queryString, queryJson) {
 				queryString = queryString.replace(new RegExp('}$'), "  ?this <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> ?wikipedia \n}");
 				queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT ?this");
+				return queryString;
+			}
+
+			rdfsLabelPostProcess = function(queryString, queryJson) {
+				queryString = queryString.replace(new RegExp('}$'), "  ?this rdfs:label ?label FILTER(lang(?label) = 'fr') \n}");
 				return queryString;
 			}
 
@@ -160,33 +170,27 @@
 			}
 
 			semanticPostProcess = function(queryString, queryJson) {
-				queryString = displaysPostProcess(queryString, queryJson);
-				queryString = createdPostProcess(queryString, queryJson);
-				queryString = bornInPostProcess(queryString, queryJson);
-				queryString = birthPlacePostProcess(queryString, queryJson);
-				queryString = countryOfPostProcess(queryString, queryJson);
+				queryString = prefixesPostProcess(queryString, queryJson);
+				queryString = expand(queryString, specs);
 				return queryString;
 			}
 
-			displaysPostProcess = function(queryString, queryJson) {
-				return queryString.replace(/<http:\/\/www.sparna.fr\/simsemsearch\/dbpedia-example\/onto#displays>/g, "^<http://dbpedia.org/ontology/museum>");
-			}
-			createdPostProcess = function(queryString, queryJson) {
-				return queryString.replace(/<http:\/\/www.sparna.fr\/simsemsearch\/dbpedia-example\/onto#created>/g, "^<http://dbpedia.org/ontology/author>");
-			}
-			bornInPostProcess = function(queryString, queryJson) {
-				return queryString.replace(/<http:\/\/www.sparna.fr\/simsemsearch\/dbpedia-example\/onto#bornIn>/g, "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>");
-			}
-			birthPlacePostProcess = function(queryString, queryJson) {
-				return queryString.replace(/<http:\/\/www.sparna.fr\/simsemsearch\/dbpedia-example\/onto#birthPlace>/g, "^<http://dbpedia.org/ontology/country>/^<http://dbpedia.org/ontology/birthPlace>");
-			}
-			countryOfPostProcess = function(queryString, queryJson) {
-				return queryString.replace(/<http:\/\/www.sparna.fr\/simsemsearch\/dbpedia-example\/onto#countryOf>/g, "^<http://dbpedia.org/ontology/country>");
+			var expand = function(sparql, specs) {
+				$.each( specs['@graph'], function( key, val ) {
+					if ( val['@type'] == 'ObjectProperty' || val['@type'] == 'Class') {
+						if ( val['path'] != null) {
+								var re = new RegExp("<" + val['@id'] + ">","g");
+								sparql = sparql.replace(re, val['path']);
+						}
+					}
+				}) ;
+				return sparql ;
 			}
 
 			listUrlDBPedia = function(domain, property, range) {
 				var QUERY_SERVICE = "http://fr.dbpedia.org/sparql"
-				var sparql = "SELECT DISTINCT ?range ?rangeLabel WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . ?range rdfs:label ?rangeLabel FILTER(lang(?rangeLabel) = \"fr\") } ORDER BY ?rangeLabel";
+
+				var sparql = "SELECT ?range ?count (CONCAT(?rangeString, ' (', STR(?count), ')') AS ?rangeLabel) \n WHERE {\n { SELECT DISTINCT ?range (COUNT(?domain) AS ?count) WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . } }\n ?range rdfs:label ?rangeString . FILTER(lang(?rangeString) = \"fr\") }\n ORDER BY DESC(?count)";
 
 				sparql = semanticPostProcess(sparql, null);
 
@@ -226,5 +230,5 @@
 			yasqe.options.sparql.callbacks.complete = yasr.setResponse;
 
 		</script>
-	</body>
+	<script type="text/javascript" src="./sparnatural.js"></script></body>
 </html>
