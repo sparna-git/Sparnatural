@@ -123,7 +123,8 @@
       "range": "http://dbpedia.org/ontology/Museum",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      }
+      },
+      "path": "^<http://dbpedia.org/ontology/country>"
     },
     {
       "@id" : "http://dbpedia.org/ontology/museum",
@@ -161,7 +162,8 @@
       "range": "http://dbpedia.org/ontology/Artwork",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      }
+      },
+      "path": "^<http://dbpedia.org/ontology/museum>"
     },
     {
       "@id" : "http://dbpedia.org/ontology/author",
@@ -199,7 +201,8 @@
       "range": "http://dbpedia.org/ontology/Artwork",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      }
+      },
+      "path": "^<http://dbpedia.org/ontology/author>"
     },
     {
       "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#bornIn",
@@ -218,7 +221,8 @@
       "range": "http://dbpedia.org/ontology/Country",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
-      }
+      },
+      "path": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>"
     },
     {
       "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#birthPlace",
@@ -237,7 +241,48 @@
       "range": "http://dbpedia.org/ontology/Person",
       "widget": {
         "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      }
+      },
+      "path": "^(<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>)"
+    },
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#diedIn",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "died at",
+          "@language" : "en"
+        },
+        {
+          "@value" : "mort à",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://dbpedia.org/ontology/Person",
+      "range": "http://dbpedia.org/ontology/Country",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
+      },
+      "path": "<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>"
+    },
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#deathPlace",
+      "@type" : "ObjectProperty",
+      "label": [
+        {
+          "@value" : "death place",
+          "@language" : "en"
+        },
+        {
+          "@value" : "lieu de décès",
+          "@language" : "fr"
+        }
+      ],
+      "domain": "http://dbpedia.org/ontology/Country",
+      "range": "http://dbpedia.org/ontology/Person",
+      "widget": {
+        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
+      },
+      "path": "^(<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>)"
     }
   ]
 }

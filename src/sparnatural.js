@@ -7,147 +7,17 @@ require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
 const removeIcon = require("./assets/icons/buttons/remove.png");
 
-function SimpleJsonLdSpecificationProvider(specs, lang) {
+// WARNING : if you use ES6 syntax (like import instead of require), 
+// webpack will automatically add "use strict" as all ES6 modules 
+// are expected to be strict mode code.
 
-	this.specSearch = specs;
-	this.lang = lang;
+// This is ugly, should use i18n features instead
+const i18nLabels = { 
+	"en" : require('./assets/lang/en.json'),
+	"fr": require('./assets/lang/fr.json')
+};
 
-	this.gatLabel = function(graphItemID) {
-		for(i in graphItemID['label']) {
-			aLabel = graphItemID['label'][i];
-			if ( aLabel['@language'] == this.lang) {
-				return aLabel['@value'] ;
-			}
-		}
-		return '';		
-	}
-
-	this.getResourceById = function(id) {
-		for(i in this.specSearch['@graph']) {
-			anEntry = this.specSearch['@graph'][i];
-			if ( anEntry['@id'] == id) {
-				return anEntry;
-			}
-		}
-		return null;
-	}
-
-	this.getClassLabel = function(ClassId) {
-		var classLabel = null ;
-		var classObject = this.getResourceById(ClassId) ;
-		if (classObject !== null) {
-			for(i in classObject['label']) {
-				aLabel = classObject['label'][i];
-				if (aLabel['@language'] == this.lang) {
-					return aLabel['@value'] ;
-				}
-			}
-		}
-		return null ;
-	}
-
-	/* List of possible Class relative to a Class
-	@Id of Class or null if is the first list selection
-	return array of @type Class in specSearch 
-	*/
-	this.getAllClassFor = function(ClassID) {
-		var items = [];
-
-		for(j in this.specSearch['@graph']) {			
-			if (this.specSearch['@graph'][j]['@type'] == 'ObjectProperty') {
-				objectProperty = this.specSearch['@graph'][j];
-				
-				// if ClassIf is null, we are looking for all domain values
-				if (ClassID === null) {
-					values = this.readDomain(objectProperty);
-					for(i in values) {
-						items = this.pushIfNotInArray(this.getResourceById(values[i]), items);
-					}
-				// otherwise we are looking for range values of all properties
-				// for which this class is in the domain
-				} else if (this.inDomainOf(objectProperty, ClassID)) {
-					values = this.readRange(objectProperty);
-					for(i in values) {
-						var item = this.getResourceById(values[i]) ;
-						items = this.pushIfNotInArray(item, items);
-					}
-				}
-			}
-		}
-
-		return items ;
-	}
-
-	this.ClassHaveRange = function(ClassID) {
-		if (this.getAllClassFor(ClassID).length > 0 ) {
-			return true;
-		} else {
-			return false ;
-		}
-	}
-
-	/* List of possible ObjectProperty relative to a Class
-		@Id of Class
-		return array of @type ObjectProperty in specSearch 
-	*/
-	this.getAllObjectPropertyFor = function(domainClassID, rangeClassID) {
-		var items = [];
-
-		for(i in this.specSearch['@graph']) {
-			item = this.specSearch['@graph'][i];
-			if (item['@type'] == 'ObjectProperty') {
-				if(
-					(domainClassID === null || this.inDomainOf(item, domainClassID))
-					&&
-					(rangeClassID === null || this.inRangeOf(item, rangeClassID))
-				) {
-					items = this.pushIfNotInArray(item, items);
-				}
-			}
-		}
-
-		return items ;
-	}
-
-	this._readDomainOrRange = function(objectProperty, domainOrRange) {
-		var result = [];
-		if (typeof objectProperty[domainOrRange] === "object") {
-			for(i in objectProperty[domainOrRange]['unionOf']['@list']) {
-				value = objectProperty[domainOrRange]['unionOf']['@list'][i];
-				result.push(value['@id']);
-			}
-		} else {
-			result.push(objectProperty[domainOrRange]);
-		}
-
-		return result;
-	}
-
-	this.readDomain = function(objectProperty) {
-		return this._readDomainOrRange(objectProperty, 'domain');
-	}
-
-	this.readRange = function(objectProperty) {
-		return this._readDomainOrRange(objectProperty, 'range');
-	}
-
-	this.inDomainOf = function(objectProperty, classId) {
-		return this.readDomain(objectProperty).indexOf(classId) >= 0;
-	}
-
-	this.inRangeOf = function(objectProperty, classId) {
-		return this.readRange(objectProperty).indexOf(classId) >= 0;
-	}
-
-	this.pushIfNotInArray = function(item, items) {
-		if (items.indexOf(item) < 0) {
-			items.push(item) ;
-		}
-
-		return items ;			
-	}
-
-}
+SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").SimpleJsonLdSpecificationProvider;
 
 
 (function( $ ) {
@@ -159,7 +29,6 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
         var specProvider;
 		var defaults = {
 			pathSpecSearch: 'config/spec-search.json',
-			pathLanguages: 'config/lang/',
 			language: 'en',
 			addDistinct: false,
 			typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
@@ -303,10 +172,13 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 		/*Utiliser pour affichage texte avant champ de recherhce mot clés */
 		var LABEL_URI = 'http://www.openarchaeo.fr/explorateur/onto#Label';
 		
-		var VALUE_SELECTION_WIDGETS = [TYPE_WIDGET_LIST_URI, TYPE_WIDGET_AUTOCOMPLETE_URI];
+		var VALUE_SELECTION_WIDGETS = [
+			TYPE_WIDGET_LIST_URI,
+			TYPE_WIDGET_AUTOCOMPLETE_URI
+		];
 		
 		var settings = $.extend( true, {}, defaults, options );
-		
+
 		this.each(function() {
             var thisForm = {} ;
             thisForm._this = $(this) ;
@@ -314,13 +186,13 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			
 			thisForm.components = [] ;
 			
-			$.when( loadSpecSearch() && loadLangSearch() ).done(function() {
-					initForm(thisForm) ;
-				 });
+			langSearch = i18nLabels[settings.language];
+			$.when( loadSpecSearch() ).done(function() {
+				initForm(thisForm) ;
+			});
         });
 		
-		function loadSpecSearch() {
-			
+		function loadSpecSearch() {			
 			return $.getJSON( settings.pathSpecSearch, function( data ) {
 				specSearch = data ;
 				specProvider = new SimpleJsonLdSpecificationProvider(data, settings.language);
@@ -328,42 +200,27 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 				console.log("Sparnatural - unable to load config file : " +settings.pathSpecSearch);
 				console.log(response);
 			}) ;
-		}
-		function loadLangSearch() {
-			var fileName = settings.language+'.json' ;
-			return $.getJSON( settings.pathLanguages+ fileName, function( data ) {
-				langSearch = data ;
-			}).fail(function(response) {
-				console.log("Sparnatural - unable to load lang file : " +settings.pathLanguages+ fileName);
-				console.log(response);
-			}) ;
-		}
+		}		
 		
 		function initForm(thisForm_) {			
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
-			//contexte.appendTo(thisForm_._this) ;
 			$(thisForm_._this).append(contexte) ;
 			
-			contexte1 = addComponent(thisForm_, contexte.find('ul')) ;
+			var contexte1 = addComponent(thisForm_, contexte.find('ul')) ;
 			
 			$(thisForm_._this).find('.nice-select').trigger('click') ;
 			
-			intiGeneralEvent(thisForm_) ;
+			initGeneralEvent(thisForm_) ;
 			
 			$(thisForm_._this).on('submit', { formObject : thisForm_ }, function (event) {		
 				event.preventDefault();
 				ExecuteSubmited(event.data.formObject) ;
 			}) ;
-
 		}
 		
 		function newQueryJson() {
-			var ifDistinct = '' ;
-			if (settings.addDistinct) {
-				ifDistinct = ' DISTINCT' ;
-			}
 			return {
-				"queryType": "SELECT"+ifDistinct+"",
+				"queryType": "SELECT"+((settings.addDistinct)?' DISTINCT':'')+"",
 				"variables": [
 					"?this"
 				],
@@ -387,7 +244,7 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			return {
 					"type": "values",
 					"values": []
-				} ;
+			} ;
 		}
 
 		function initFilterTime(StartYear, EndYear, index) {
@@ -454,12 +311,11 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 
 		function addVariable(jsonValues, name, valueUrl) {			
 			$.each(valueUrl, function( index, value ) {
-			  //alert( index + ": " + value );
 			  var newValue = {
-							//[name]: value
-						}
-					newValue[name] = value ;
-				jsonValues.values.push(newValue) ;			  
+				//[name]: value
+			  }
+			  newValue[name] = value ;
+			  jsonValues.values.push(newValue) ;			  
 			});
 			
 			return jsonValues ;	
@@ -467,17 +323,15 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 
 		function addVariableDate(json, name, valueUrl) {			
 			var newValue = {
-							//[name]: valueUrl
-						}
-				newValue[name] = valueUrl ;
-				json.where[1].values.push(newValue) ;		
+				//[name]: valueUrl
+			};
+			newValue[name] = valueUrl ;
+			json.where[1].values.push(newValue) ;		
 			
 			return json ;	
 		}
 		
 		function ExecuteSubmited(formObject) {
-			
-			//console.log(formObject) ;
 			
 			var Json = newQueryJson() ;
 			//var levelCriteria = [] ;
@@ -512,296 +366,192 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			
 			$(formObject.components).each(function(i) {
 					
-					var next_loop = false ;
-					
-					//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) == "undefined" || this.CriteriaGroup.EndClassWidgetGroup.value_selected === null) {
-					if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length === 0 ) {
-					
-						var WidgetsNeedValueIds = [TYPE_WIDGET_SEARCH_URI, TYPE_WIDGET_TIME_URI] ;
-						if ($.inArray(this.CriteriaGroup.EndClassWidgetGroup.widgetType, WidgetsNeedValueIds) > -1) {
-							next_loop = true ;
-						}
-
-					}
-					
-					if (next_loop) {
-						return true;
-					} else {
-						have_queriable_criteres = true ;
-					}
-					
-					var dependantDe = GetDependantCriteria(formObject, this.index ) ;
-					var addStartClass = true ;
-					
-					if ((dependantDe != null) && (dependantDe.type == 'parent')){
-						
-						StartVar = ArrayLiIndex[dependantDe.element.id] + 1;
-						if (StartVar == 0) {
-							StartVar = 'this' ;
-						} 
-						
-						EndVar = ArrayLiIndex[this.index] + 1;
-						
-						addStartClass = false ;
-						
-					} else {
-						
-						StartVar = 'this' ;
-						EndVar = ArrayLiIndex[this.index] + 1 ;
-						/*levelCursor = 0 ;
-						levelCriteria[levelCursor] = this.index ;*/
-					}
-					if ((dependantDe != null) && (dependantDe.type == 'sibling')){
-						addStartClass = false ;
-					}
-					
-					
-					
-					
-					var start = this.CriteriaGroup.StartClassGroup.value_selected ;
-					var obj = this.CriteriaGroup.ObjectPropertyGroup.value_selected ;
-					var end = this.CriteriaGroup.EndClassGroup.value_selected ; 
-					
-					if (start.indexOf("#") > -1) {
-						var StartLabel = start.split("#") ;
-						StartLabel = StartLabel[1] ;
-					} else {
-						var StartLabel = start.split("/") ;
-						StartLabel = StartLabel[StartLabel.length - 1] ;
-					}
-					/** A traiter dans les cas ou une recherche est effectuer directement avec un mot clé ou si selecction incomplete **/
-					if (end.indexOf("#") > -1) {
-						var EndLabel = end.split("#") ;
-						EndLabel = EndLabel[1] ;
-					} else {
-						var EndLabel = end.split("/") ;
-						EndLabel = EndLabel[EndLabel.length - 1] ;
-					}
-					
-					if (StartVar != 'this') {
-						StartVar = StartLabel+''+StartVar ;
-					}
-
-					EndVar = EndLabel+''+EndVar ;
-
-					
-					
-					/*if (levelCursor == 0) {
-						var varSuffixe = 'this' ;
-						var varSuffixeEnd = 'end'+this.index ;
-					} else {
-						if (levelCursor-1 == -20) {
-							var varSuffixe = '';
-							var varSuffixeEnd = this.index ;
-						} else {
-							var varSuffixe = 'end'+levelCriteria[levelCursor-1] ;
-							var varSuffixeEnd = 'end'+this.index ;
-						}
-						
-					}*/
-
-					//this.CriteriaGroup.StartClassGroup.value_selected
-					
-					
-					//console.log(end) ;
-					var endValueName = '?'+EndVar ;
-					
-					var new_triple = initTriple() ;
-					if (addStartClass) {
-						new_triple = addTriple(new_triple, '?'+StartVar, settings.typePredicate, start) ;
-					}
-					
-					
-					
-					
-					
-					_WidgetType = this.CriteriaGroup.EndClassWidgetGroup.widgetType ;
-					
-					
-					
-					
-					
-					if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {						
-						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {						
-							new_triple = addTriple(new_triple, '?'+StartVar, obj, this.CriteriaGroup.EndClassWidgetGroup.value_selected[0]) ;
-						} else {
-							new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
-						}						
-					} else {
-						new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
-					}
-					
-					//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
-					if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length !== 0 ) {
-						
-					} else {
-						//new_triple = addTriple(new_triple, endValueName, settings.typePredicate, end) ;
-					}
-					
-					Json = addInWhere(Json, new_triple) ;
-					
-					
-					//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
-					if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 0 ) {
-						
-						var jsonValue = initValues() ;
-						
-						switch (_WidgetType) {
-						
-						 case TYPE_WIDGET_LIST_URI:
-						  //var id_input = '#ecgrw-'+ this.index +'-input-value' ;
-							//value_widget = $(id_input).val() ;
-							if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
-								jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
-						
-								Json = addInWhere(Json, jsonValue) ;
-							}
-							
-							
-							
-							break;
-						  case TYPE_WIDGET_AUTOCOMPLETE_URI:
-							//var id_input = '#ecgrw-'+ this.index +'-input-value' ;
-							//value_widget = $(id_input).val() ;
-							if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
-								jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
-							
-								Json = addInWhere(Json, jsonValue) ;
-							}
-							break;
-						  case TYPE_WIDGET_TIME_URI:
-							//console.log('Mangoes and papayas are $2.79 a pound.');
-							
-							//var StartYear = $('#ecgrw-date-'+ this.index +'-input-start').val() ;
-							//var EndYear = $('#ecgrw-date-'+ this.index +'-input-stop').val() ;
-							//value_widget = $(id_input).val() ;
-							
-							
-							$.each(this.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
-							  //alert( index + ": " + value );
-							
-
-
-
-								jsonFilter = initFilterTime(value.start, value.stop, endValueName) ;
-							
-							
-								//jsonFilter = initFilterSearch(Texte, endValueName) ;
-							
-								Json = addInWhere(Json, jsonFilter) ;
-							  
-							});
-			
-			
-			
-							
-							
-							// expected output: "Mangoes and papayas are $2.79 a pound."
-							break;
-						  case TYPE_WIDGET_SEARCH_URI:
-							//console.log('Mangoes and papayas are $2.79 a pound.');
-							var Texte = $('#ecgrw-search-'+ this.index +'-input-value').val() ;
-							jsonFilter = initFilterSearch(Texte, endValueName) ;
-							
-							Json = addInWhere(Json, jsonFilter) ;
-							
-							// expected output: "Mangoes and papayas are $2.79 a pound."
-							break;
-						  default:
-						
-						
-						}
-						
-					} else {
-						
-						
-					}
-
-
-
-					//console.log(value_widget)
-					/*if ($('.EndClassWidgetGroup>div').hasClass('ListeWidget')) {
-						json = addVariable(json, endValueName, $('.EndClassWidgetGroup #listwidget').val() ) ;
-					} else {
-						json = addVariable(json, endValueName, $('.EndClassWidgetGroup #basics-value').val() ) ;
-					}*/
-					
-					
-					
-					
-					
-				}) ;
+				var next_loop = false ;
 				
-			console.log(Json) ;
+				//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) == "undefined" || this.CriteriaGroup.EndClassWidgetGroup.value_selected === null) {
+				if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length === 0 ) {
+					var WidgetsNeedValueIds = [TYPE_WIDGET_SEARCH_URI, TYPE_WIDGET_TIME_URI] ;
+					if ($.inArray(this.CriteriaGroup.EndClassWidgetGroup.widgetType, WidgetsNeedValueIds) > -1) {
+						next_loop = true ;
+					}
+				}
+				
+				if (next_loop) {
+					return true;
+				} else {
+					have_queriable_criteres = true ;
+				}
+				
+				var dependantDe = GetDependantCriteria(formObject, this.index ) ;
+				var addStartClass = true ;
+				var StartVar;
+				var EndVar;
+
+				if ((dependantDe != null) && (dependantDe.type == 'parent')){
+					StartVar = ArrayLiIndex[dependantDe.element.id] + 1;
+					if (StartVar == 0) {
+						StartVar = 'this' ;
+					} 
+					
+					EndVar = ArrayLiIndex[this.index] + 1;					
+					addStartClass = false ;					
+				} else {						
+					StartVar = 'this' ;
+					EndVar = ArrayLiIndex[this.index] + 1 ;
+					/*levelCursor = 0 ;
+					levelCriteria[levelCursor] = this.index ;*/
+				}
+				if ((dependantDe != null) && (dependantDe.type == 'sibling')){
+					addStartClass = false ;
+				}
+				
+				
+				var start = this.CriteriaGroup.StartClassGroup.value_selected ;
+				var obj = this.CriteriaGroup.ObjectPropertyGroup.value_selected ;
+				var end = this.CriteriaGroup.EndClassGroup.value_selected ; 
+				
+				if (start.indexOf("#") > -1) {
+					var StartLabel = start.split("#") ;
+					StartLabel = StartLabel[1] ;
+				} else {
+					var StartLabel = start.split("/") ;
+					StartLabel = StartLabel[StartLabel.length - 1] ;
+				}
+
+				/** A traiter dans les cas ou une recherche est effectuer directement avec un mot clé ou si selecction incomplete **/
+				if (end.indexOf("#") > -1) {
+					var EndLabel = end.split("#") ;
+					EndLabel = EndLabel[1] ;
+				} else {
+					var EndLabel = end.split("/") ;
+					EndLabel = EndLabel[EndLabel.length - 1] ;
+				}
+				
+				if (StartVar != 'this') {
+					StartVar = StartLabel+''+StartVar ;
+				}
+
+				EndVar = EndLabel+''+EndVar;
+				var endValueName = '?'+EndVar ;
+				
+				var new_triple = initTriple() ;
+				if (addStartClass) {
+					new_triple = addTriple(new_triple, '?'+StartVar, settings.typePredicate, start) ;
+				}
+				
+				var _WidgetType = this.CriteriaGroup.EndClassWidgetGroup.widgetType ;
+				
+				if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {						
+					if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {
+						// if we are in a value selection widget and we have a single value selected
+						// then insert the value directly as the object of the triple						
+						new_triple = addTriple(new_triple, '?'+StartVar, obj, this.CriteriaGroup.EndClassWidgetGroup.value_selected[0]) ;
+					} else {
+						// otherwise use a variable name as the object of the triple
+						new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
+					}						
+				} else {
+					new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
+				}
+				
+				Json = addInWhere(Json, new_triple) ;
+				
+				
+				//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
+				if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 0 ) {
+					
+					var jsonValue = initValues() ;
+					
+					switch (_WidgetType) {					
+					  case TYPE_WIDGET_LIST_URI:
+						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
+							// add values clause if we have more than 1 values
+							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
+							Json = addInWhere(Json, jsonValue) ;
+						}
+						break;
+					  case TYPE_WIDGET_AUTOCOMPLETE_URI:
+						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
+							// add values clause if we have more than 1 values
+							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
+							Json = addInWhere(Json, jsonValue) ;
+						}
+						break;
+					  case TYPE_WIDGET_TIME_URI:							
+						$.each(this.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
+							jsonFilter = initFilterTime(value.start, value.stop, endValueName) ;
+							Json = addInWhere(Json, jsonFilter) ;
+						});
+						break;
+					  case TYPE_WIDGET_SEARCH_URI:
+						var Texte = $('#ecgrw-search-'+ this.index +'-input-value').val() ;
+						jsonFilter = initFilterSearch(Texte, endValueName) ;
+						Json = addInWhere(Json, jsonFilter) ;
+						break;
+					  default:						
+					}						
+				}			
+				
+			}) ;
 					
 			if (have_queriable_criteres) {
 				var generator = new SparqlGenerator();
-				//parsedQuery.variables = ['?mickey'];
 				var generatedQuery = generator.stringify(Json);
-						
-						
-				//console.log(generatedQuery) ;
-						
-						
-				//$('#sparql code').html(generatedQuery.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
-				//var jsons = JSON.stringify(Json, null, '\t');
-				//$('#json code').html(jsons) ;
-				
+				// send generated query to callback function
 				settings.onQueryUpdated(generatedQuery, Json) ;
 			}
 		}
 		
-		function intiGeneralEvent(thisForm_) {
-			$('li.groupe').off( "mouseover" ) ;
-			$('li.groupe').off( "mouseleave" ) ;
-			$('li.groupe').on( "mouseover", function(event) {
-				event.stopImmediatePropagation();
-				$('li.groupe').removeClass('Hover') ;
-				$(this).addClass('Hover') ;
-				
-			} );
-			$('li.groupe').on( "mouseleave", function(event) {
-				event.stopImmediatePropagation();
-				$('li.groupe').removeClass('Hover') ;
-				
-			} );
-			 /*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
-			 
-			 var $all_li = thisForm_._this.find('li.groupe') ;
-			var leng = $all_li.length ;
-			if (leng  <= 10 ) {
-				leng = 10 ;
-			}
-			var ratio = 100 / leng / 100 ;
-			var prev = 0 ;
-			var cssdef = 'linear-gradient(180deg' ; 
-			$all_li .each(function(index) {
-				var a = (index + 1 ) * ratio ;
-				var height = $(this).find('>div').outerHeight(true) ;
-				cssdef += ', rgba('+settings.backgroundBaseColor+','+a+') '+prev+'px, rgba('+settings.backgroundBaseColor+','+a+') '+(prev+height)+'px' ;
-				prev = prev + height+1 ;
-				console.log($(this).next()) ;
-				if ($(this).next().length > 0 ) {
-					$(this).addClass('hasAnd') ;
-					var this_li = $(this) ;
-					
-					var this_link_and = $(this).find('.link-and-bottom') ;
-					
-					$(this_link_and).height($(this_li).height() ) ;
-					
-					
-				} else {
-					 $(this).removeClass('hasAnd') ;
-				}
-			});
-			//console.log(cssdef) ;
-			thisForm_._this.find('div.bg-wrapper').css({background : cssdef+')' }) ;
+	function initGeneralEvent(thisForm_) {
+		$('li.groupe').off( "mouseover" ) ;
+		$('li.groupe').off( "mouseleave" ) ;
+		$('li.groupe').on( "mouseover", function(event) {
+			event.stopImmediatePropagation();
+			$('li.groupe').removeClass('Hover') ;
+			$(this).addClass('Hover') ;
+			
+		} );
+		$('li.groupe').on( "mouseleave", function(event) {
+			event.stopImmediatePropagation();
+			$('li.groupe').removeClass('Hover') ;
+			
+		} );
+		 /*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
+		 
+		var $all_li = thisForm_._this.find('li.groupe') ;
+		var leng = $all_li.length ;
+		if (leng  <= 10 ) {
+			leng = 10 ;
 		}
-	
+		var ratio = 100 / leng / 100 ;
+		var prev = 0 ;
+		var cssdef = 'linear-gradient(180deg' ; 
+		$all_li .each(function(index) {
+			var a = (index + 1 ) * ratio ;
+			var height = $(this).find('>div').outerHeight(true) ;
+			cssdef += ', rgba('+settings.backgroundBaseColor+','+a+') '+prev+'px, rgba('+settings.backgroundBaseColor+','+a+') '+(prev+height)+'px' ;
+			prev = prev + height+1 ;
+			console.log($(this).next()) ;
+			if ($(this).next().length > 0 ) {
+				$(this).addClass('hasAnd') ;
+				var this_li = $(this) ;
+				
+				var this_link_and = $(this).find('.link-and-bottom') ;
+				
+				$(this_link_and).height($(this_li).height() ) ;
+			} else {
+				 $(this).removeClass('hasAnd') ;
+			}
+		});
 
+		thisForm_._this.find('div.bg-wrapper').css({background : cssdef+')' }) ;
+	}
 		
-		
-		function getClassListSelectFor(classId, inputID, default_value) {
+
+	function ClassSelectBuilder(specProvider) {
+		this.specProvider = specProvider;
+
+		this.buildClassSelect = function(classId, inputID, default_value) {
 			var list = [] ;
 			var items = specProvider.getAllClassFor(classId) ;
 			$.each( items, function( key, val ) {
@@ -825,10 +575,13 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			  });
 			return html_list ;
 		}
-		
+	}
 
-		
-		function getObjectListSelectFor(domainClassID, rangeClassID, inputID, default_value) {
+
+	function PropertySelectBuilder(specProvider) {
+		this.specProvider = specProvider;
+
+		this.buildPropertySelect = function(domainClassID, rangeClassID, inputID, default_value) {
 			var list = [] ;
 			var items = specProvider.getAllObjectPropertyFor(domainClassID,rangeClassID) ;
 			$.each( items, function( key, val ) {
@@ -847,78 +600,75 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			  });
 			return html_list ;
 		}
+	}
 		
-		function addComponent(thisForm_, contexte) {
-			
-			//console.log(thisForm_.components) ;
-			if (thisForm_.components.length > 0 ) {
-				var new_index = thisForm_.components[thisForm_.components.length-1].index + 1 ;
+	function addComponent(thisForm_, contexte) {
+		
+		if (thisForm_.components.length > 0 ) {
+			var new_index = thisForm_.components[thisForm_.components.length-1].index + 1 ;
+		} else {
+			var new_index = 0 ;
+		}
+		
+		var classWherePossible = 'addWereEnable' ;
+		if (($(contexte).parents('li.groupe').length + 1 ) == (settings.maxDepth - 1) ) {
+			classWherePossible = 'addWereDisable' ;
+		}
+		
+		var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"><span>'+langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
+		
+		// si il faut desscendre d'un niveau
+		if ($(contexte).is('li')) {
+			if ($(contexte).find('>ul').length == 0) {
+				var ul = $('<ul class="childsList"><div class="lien-top"><span>'+langSearch.Where+'</span></div></ul>').appendTo($(contexte)) ;
+				var parent_li = $(ul).parent('li') ;
+				var n_width = 0;
+				n_width = n_width + GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
+				var t_width = GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
+				$(ul).attr('data-test', GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) );
+				$(ul).find('>.lien-top').css('width', n_width) ;
+				$(parent_li).find('>.link-where-bottom').css('left', t_width) ;
 			} else {
-				var new_index = 0 ;
+				var ul = $(contexte).find('>ul') ;
 			}
 			
-			var classWherePossible = 'addWereEnable' ;
-			if (($(contexte).parents('li.groupe').length + 1 ) == (settings.maxDepth - 1) ) {
-				classWherePossible = 'addWereDisable' ;
-			}
-			
-			
-			var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"><span>'+langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
-			
-			// si il faut desscendre d'un niveau
-			if ($(contexte).is('li')) {
-				if ($(contexte).find('>ul').length == 0) {
-					var ul = $('<ul class="childsList"><div class="lien-top"><span>'+langSearch.Where+'</span></div></ul>').appendTo($(contexte)) ;
-					var parent_li = $(ul).parent('li') ;
-					var n_width = 0;
-					n_width = n_width + GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
-					var t_width = GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
-					$(ul).attr('data-test', GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) );
-					$(ul).find('>.lien-top').css('width', n_width) ;
-					$(parent_li).find('>.link-where-bottom').css('left', t_width) ;
-				} else {
-					var ul = $(contexte).find('>ul') ;
-				}
-				
-				gabari = $(gabari).appendTo(ul);
-				//gabarib = $(gabari).appendTo(contexte) ;
-			} else {
-				gabari = $(gabari).appendTo(contexte) ;
-			}
-			$(gabari).addClass(classWherePossible) ;
-			
-			
-			//contexte.html('span') ;
-			//gabari = '<div></div>' ;
-			//$(contexte).append(gabari) ;
-			
-			//return $(contexte).find('li[data-index='+new_index+']') ;
-			
-			
-			var UnCritere = new CriteriaGroup({ AncestorHtmlContext: contexte, HtmlContext : gabari, FormContext: thisForm_, ContextComponentIndex: new_index }) ;
-			
-			
-			thisForm_.components.push({index: new_index, CriteriaGroup: UnCritere }) ;
-			
-			
-			
-			intiGeneralEvent(thisForm_);
-			
-			return $(gabari) ;
+			gabari = $(gabari).appendTo(ul);
+			//gabarib = $(gabari).appendTo(contexte) ;
+		} else {
+			gabari = $(gabari).appendTo(contexte) ;
 		}
 
-		function GetOffSet( elem, elemParent ) {
-			return elem.offset().left - $(elemParent).offset().left ;
-		}
+		$(gabari).addClass(classWherePossible) ;		
+		
+		var UnCritere = new CriteriaGroup(
+			{ 
+				AncestorHtmlContext: contexte,
+				HtmlContext : gabari,
+				FormContext: thisForm_,
+				ContextComponentIndex: new_index
+			},
+			settings,
+			specProvider
+		);
+		
+		thisForm_.components.push({index: new_index, CriteriaGroup: UnCritere });			
+		initGeneralEvent(thisForm_);			
+		return $(gabari) ;
+	}
+
+	function GetOffSet( elem, elemParent ) {
+		return elem.offset().left - $(elemParent).offset().left ;
+	}
 
 	
-	function CriteriaGroup(context) {
+	function CriteriaGroup(context, settings, specProvider) {
 		this._this = this ;
 		this.thisForm_ = context.FormContext ;
 		this.ParentComponent = context.FormContext  ;
 		this.ComponentHtml = context.HtmlContext ;
 		this.AncestorComponentHtml = context.AncestorHtmlContext ;
 		
+		this.settings = settings;
 		
 		this.statements = {
 			HasAllComplete : false,
@@ -930,15 +680,12 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 		this.Context = new Context(context) ;
 		this.ChildrensCriteriaGroup = new ChildrensCriteriaGroup ;
 		
-		this.StartClassGroup = new StartClassGroup(this) ;
+		this.StartClassGroup = new StartClassGroup(this, specProvider) ;
 		
-		this.ObjectPropertyGroup = new ObjectPropertyGroup(this) ;
-		
-		//EndClassGroup.prototype = new GroupContenaire;
-		this.EndClassGroup = new EndClassGroup(this) ;
-		this.EndClassWidgetGroup = new EndClassWidgetGroup(this) ;
-		this.ActionsGroup = new ActionsGroup(this) ;
-		//
+		this.ObjectPropertyGroup = new ObjectPropertyGroup(this, specProvider) ;
+		this.EndClassGroup = new EndClassGroup(this, specProvider) ;
+		this.EndClassWidgetGroup = new EndClassWidgetGroup(this, this.settings, specProvider) ;
+		this.ActionsGroup = new ActionsGroup(this, specProvider) ;
 		
 		$(this).trigger( {type:"Created" } ) ;
 		
@@ -957,22 +704,15 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			
 			
 			$(this.ParentComponent.components).each(function() {
-				
-				
 				var dependantDe = GetDependantCriteria(this.CriteriaGroup.thisForm_, this.index ) ;
-					
 				if ((dependantDe != null) && (dependantDe.type == 'parent')){
-					
 					if (dependantDe.element.id == index_to_remove) {
-						
 						this.CriteriaGroup.RemoveCriteria() ;
 					}
 				}
-				
 			}) ;
 			
-			var dependantDe = GetDependantCriteria(this.thisForm_, this.id ) ;
-			
+			var dependantDe = GetDependantCriteria(this.thisForm_, this.id ) ;			
 			if (dependantDe === null) {
 				
 			} else {
@@ -985,33 +725,24 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			this.ComponentHtml.outerHTML = this.ComponentHtml.outerHTML;
 			$(this.ComponentHtml).remove() ;
 			
-			
 			var iteration_to_remove = false ;
-			$(this.ParentComponent.components).each(function(i) {
-					
-				if (this.index == index_to_remove){
-					
+			$(this.ParentComponent.components).each(function(i) {					
+				if (this.index == index_to_remove){					
 					iteration_to_remove = i ;
 				}
-				
 			}) ;
 			this.ParentComponent.components.splice(iteration_to_remove , 1);
 			
 			
 			if (this.ParentComponent.components.length == 0) {
 				console.log(formObject) ;
-				var new_component = addComponent(formObject, formContextHtml) ;
-			
-				$(new_component).find('.nice-select').trigger('click') ;
-				
+				var new_component = addComponent(formObject, formContextHtml) ;			
+				$(new_component).find('.nice-select').trigger('click') ;				
 			} else {
 				if (dependantDe !== null) {
 					if ($(dependantComponent.ComponentHtml).find('li.groupe').length > 0) {
 						
-						
-						
-					} else { //Si pas d'enfant, on reaffiche le where action
-						
+					} else { //Si pas d'enfant, on reaffiche le where action						
 						if ($(dependantComponent.ComponentHtml).hasClass('haveWhereChild') ) {
 							$(dependantComponent.ComponentHtml).removeClass('haveWhereChild') ;
 							$(dependantComponent.ComponentHtml).removeClass('completed') ;
@@ -1019,120 +750,97 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 						$(dependantComponent.ComponentHtml).find('>ul.childsList').remove() ;
 					}
 				}
-				
-				
-				intiGeneralEvent(formObject) ;
+
+				initGeneralEvent(formObject) ;
 				ExecuteSubmited(formObject) ;
 			}
 			
 			return false ;
-		}
-		
+		}		
 	}
+
 	function eventProxiCriteria(e) {
-		
 		var arg1 = e.data.arg1;
 		var arg2 = e.data.arg2;
-		//console.log(arg1) ;
-		//$('.nice-select').removeClass('open') ;
 		arg1[arg2]() ;
 	}
 	
-	var GroupContenaire = function () {
+	function GroupContenaire() {
+	// var GroupContenaire = function () {
 		this.ParentComponent = null ;
 		this.GroupType = null ;
 		this.hasSubvalues = false ;
-		this.InputTypeComponent = null ;
+		this.inputTypeComponent = null ;
 		this.tools = null ;
 		this.widgetHtml = false ;
 		this.html = $() ;
 		this.statements = {
 			HasInputsCompleted : false,
 			IsOnEdit : false
-		}
+		}		
 		
-		
-		//this.tools = new GenericTools(this) ;
-		this.init = function() {
-			
-			if (!this.statements.Created) {
-				
+		this.init = function() {			
+			if (!this.statements.Created) {				
 				this.statements.IsOnEdit = true ;
 				this.HtmlContainer = this.ParentComponent ;
 				//this.html.remove() ;
 				this.tools = new GenericTools(this) ;
 				this.tools.InitHtml() ;
 				this.tools.Add() ;
-				this.statements.Created = true ;
-				
+				this.statements.Created = true ;				
 			} else {
 				this.tools.Update() ;
 			}
-			
-			
 		} ;
 		
-		function Edit() {
-			this.InputTypeComponent.statements.IsOnEdit = true;
-			
-			
-			
-			
-			/*this.InputTypeComponent.UpdateStatementsClass() ;
-			this.InputTypeComponent.AppendInputHtml() ;*/
-			
-		} this.Edit = Edit ;
-		
-		
+		this.Edit = function Edit() {
+			this.inputTypeComponent.statements.IsOnEdit = true;
+		};
 		
 	} 
 	
 	
-	var StartClassGroup = function (CriteriaGroupe) {
+	function StartClassGroup (CriteriaGroupe, specProvider) { 
+	// var StartClassGroup = function (CriteriaGroupe) {
 		this.base = GroupContenaire ;
 		this.base() ;
+
+		this.specProvider = specProvider;
 		this.ParentComponent = CriteriaGroupe ;
 		this.GroupType = 'StartClassGroup' ;
-		//console.log(this) ;
 		this.statements.StartClassGroup = true ;
 		this.statements.Created = false ;
-		//console.log('befor created') ;
 		
-		//ClassTypeId.prototype = new InputTypeComponent();      // child class inherits from Parent
-		//ClassTypeId.prototype.constructor = ClassTypeId; // constructor alignment
-		this.InputTypeComponent = new ClassTypeId(this) ;
-		
+		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
+
 		$(CriteriaGroupe).on('Created', function () {
-			//console.log('after created') ;
 			$(this.StartClassGroup.html).find('.input-val').unbind('change');
-			//this.StartClassGroup.init() ;
-			this.StartClassGroup.InputTypeComponent.init() ;
+			this.StartClassGroup.inputTypeComponent.init() ;
 			this.StartClassGroup.Edit() ;
 			var select = $(this.StartClassGroup.html).find('.input-val')
-			//console.log(selet) ;
 
 			//$(this.html).find('.input-val').change($.proxy(this.initEnd() , null)); 
 			this.StartClassGroup.niceslect = $(select).niceSelect() ;
 			
-			
-			$(this.StartClassGroup.html).find('select.input-val').on('change', {arg1: this.StartClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			$(this.StartClassGroup.html).find('select.input-val').on(
+				'change',
+				{arg1: this.StartClassGroup, arg2: 'validSelected'},
+				eventProxiCriteria
+			);
 			
 			if ($(this.Context.get().AncestorHtmlContext).is('li')) {
 				var ancestorID = parseInt( $(this.Context.get().AncestorHtmlContext).attr('data-index') )  ;
-				
-				
 			}
 		}) ;
-		function validSelected() {
+
+		this.validSelected = function validSelected() {
 			//this.niceslect.niceSelect('update') ;
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 			
 			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			//$(this.html).find('.input-val').attr('disabled', 'disabled');
 			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
-			
-			
-		} this.validSelected = validSelected ;
+		};
 		
 		this.init() ;
 		
@@ -1140,8 +848,8 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 	} //StartClassGroup.prototype = new GroupContenaire;
 	
 	
-	
-	var ObjectPropertyGroup = function (CriteriaGroupe1) {
+	function ObjectPropertyGroup(CriteriaGroupe1, specProvider) {
+	// var ObjectPropertyGroup = function (CriteriaGroupe1) {
 		this.base = GroupContenaire ;
 		this.base() ;
 		this.ParentComponent = CriteriaGroupe1 ;
@@ -1149,66 +857,55 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 		this.statements.ObjectPropertyGroup = true ;
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
-		this.InputTypeComponent = new ObjectPropertyTypeId(this) ;
+		this.inputTypeComponent = new ObjectPropertyTypeId(this, specProvider) ;
 		
 		$(CriteriaGroupe1).on('EndClassGroupSelected', function () {
 			
 			$(this.ObjectPropertyGroup.html).find('.input-val').unbind('change');
 			//this.ObjectPropertyGroup.init() ;
-			this.ObjectPropertyGroup.InputTypeComponent.init() ;
+			this.ObjectPropertyGroup.inputTypeComponent.init() ;
 			this.ObjectPropertyGroup.Edit() ;
 			
-			//console.log(this.ParentComponent) ;
 			this.ObjectPropertyGroup.niceslect = $(this.ObjectPropertyGroup.html).find('select.input-val').niceSelect()  ;
 			//$('.nice-select').removeClass('open') ;
 			$(this.ObjectPropertyGroup.html).find('.nice-select').trigger('click') ;
 			$(this.ObjectPropertyGroup.html).find('select.input-val').on('change', {arg1: this.ObjectPropertyGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
-			//console.log(this.ObjectPropertyGroup.html);
 			if ($(this.ObjectPropertyGroup.html).find('select.input-val').find('option').length == 1) {
 				$(this.ObjectPropertyGroup.html).find('.nice-select').trigger('click') ;
 			}
-			
-			
-			//console.log('Edit endClassGroup is on ! ') ;
 		}) ;
 			
-		function validSelected() {
+		this.validSelected = function validSelected() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 			$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
-			var objSpec = specProvider.getResourceById(this.value_selected) ;
-			
-			if ( (objSpec.widget["@type"] == TYPE_WIDGET_SEARCH_URI )  || (objSpec.widget["@type"] == TYPE_WIDGET_TIME_URI ) ) {
-				
-			} else {
-				
-			}
-			
+			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;			
-		} this.validSelected = validSelected ;
+		};
 			
 		this.init() ;
 		
 	} //ObjectPropertyGroup.prototype = new GroupContenaire;
 	
 	
-	
-	var EndClassGroup = function EndClassGroup(CriteriaGroupe) {
+	function EndClassGroup(CriteriaGroupe, specProvider) {
+	// var EndClassGroup = function EndClassGroup(CriteriaGroupe) {
 		//GroupContenaire.call(this) ;
 		this.base = GroupContenaire ;
 		this.base() ;
+		this.specProvider = specProvider;
 		this.ParentComponent = CriteriaGroupe ;
 		this.GroupType = 'EndClassGroup' ;
 		this.statements.EndClassGroup = true ;
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
-		this.InputTypeComponent = new ClassTypeId(this) ;
+		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
+
 		$(CriteriaGroupe).on('StartClassGroupSelected', function () {
 			$(this.EndClassGroup.html).find('.input-val').unbind('change');
 			$(this.EndClassGroup.html).append('<div class="EditComponents ShowOnHover"></div>');
 			//this.EndClassGroup.init() ;
-			this.EndClassGroup.InputTypeComponent.init() ;
+			this.EndClassGroup.inputTypeComponent.init() ;
 			this.EndClassGroup.Edit() ;
 			
 			this.EndClassGroup.niceslect = $(this.EndClassGroup.html).find('select.input-val').niceSelect()  ;
@@ -1217,11 +914,10 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			$(this.EndClassGroup.html).find('select.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);		
 		}) ;
 		
-		function validSelected() {
+		this.validSelected = function validSelected() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 			
-			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
-			
+			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
 			
 			if (specProvider.ClassHaveRange(this.value_selected)) {
 				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
@@ -1229,18 +925,17 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 				$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			}
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
-			
-			
-		} this.validSelected = validSelected ;
+		};
 		
 		this.init() ;
-		
-	} ;// EndClassGroup.prototype = GroupContenaire.prototype;
+	} ;
 	
-	
-	var EndClassWidgetGroup = function (CriteriaGroupe) {
+	function EndClassWidgetGroup(CriteriaGroupe, settings, specProvider) {
+	// var EndClassWidgetGroup = function (CriteriaGroupe, settings) {
 		this.base = GroupContenaire ;
 		this.base() ;
+		this.settings = settings;
+		this.specProvider = specProvider;
 		this.ParentComponent = CriteriaGroupe ;
 		this.GroupType = 'EndClassWidgetGroup' ;
 		this.statements.EndClassWidgetGroup = true ;
@@ -1248,56 +943,49 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 		this.hasSubvalues = true ;
 		this.value_selected = [] ;
 		
-		 this.detectWidgetType = function () {
-			
-			this.objectPropertyDefinition = specProvider.getResourceById(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
-			
+		this.detectWidgetType = function () {		
+			this.objectPropertyDefinition = this.specProvider.getResourceById(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
 			this.widgetType = this.objectPropertyDefinition.widget['@type'] ;
-			
-			
-		}  ;
+		};
 		
-		this.InputTypeComponent = new ObjectPropertyTypeWidget(this) ;
+		this.inputTypeComponent = new ObjectPropertyTypeWidget(this, this.settings, specProvider) ;
 		
 		
 		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
-			//console.log(this.StartClassGroup) ;
-			// ;
-			//console.log('Init  EndClassWidgetGroup -----------------------------------------------------------------------------------------------') ;
 			this.EndClassWidgetGroup.detectWidgetType() ;
-			this.EndClassWidgetGroup.InputTypeComponent.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
-			this.EndClassWidgetGroup.InputTypeComponent.init() ;
-			
-			//console.log(this.EndClassWidgetGroup.InputTypeComponent) ;
-			$(this.EndClassWidgetGroup.InputTypeComponent).on('change', {arg1: this.EndClassWidgetGroup, arg2: 'validSelected'}, eventProxiCriteria);
-			
-			
-			//console.log('Edit endClassWidgetGroup is on ! ') ;
+			this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
+			this.EndClassWidgetGroup.inputTypeComponent.init() ;
+
+			$(this.EndClassWidgetGroup.inputTypeComponent).on(
+				'change',
+				{
+					arg1: this.EndClassWidgetGroup,
+					arg2: 'validSelected'
+				},
+				eventProxiCriteria
+			);
 		}) ;
 		
-		function validSelected() {
-			var temp_value = this.InputTypeComponent.GetValue() ;
+		this.validSelected = function validSelected() {
+			var temp_value = this.inputTypeComponent.GetValue() ;
 			if (temp_value == null ) {
 				return false ;
 			}
 			if (this.value_selected.length > 0) {
-
-				
 				if (Object.onArray(this.value_selected, temp_value) == true) {
 					return false ;
 				}
 			}
 			
-			this.value_selected.push(this.InputTypeComponent.GetValue()) ;
-			this.LabelValueSelected = this.InputTypeComponent.GetValueLabel() ;
+			this.value_selected.push(this.inputTypeComponent.GetValue()) ;
+			this.LabelValueSelected = this.inputTypeComponent.GetValueLabel() ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			
 			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>') ;
 			} else {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>') ;
-			}
-			
+			}			
 			
 			$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			
@@ -1306,36 +994,33 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
-			
-			if ( VALUE_SELECTION_WIDGETS.indexOf(this.InputTypeComponent.widgetType) !== -1 ) {
+			if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
 				if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
 					$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
 					$(this.ParentComponent.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on('click', {arg1: this, arg2: 'needAddOrValue'}, eventProxiCriteria);
 				}
 			}
-			//Plus d'ajjout possible si nombre de valeur suppérieur à l'option maxOr
+
+			//Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
 			if (this.value_selected.length == settings.maxOr) {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').hide() ;
 			}
 			
 			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').removeClass('newOr') ;
-			
-			
-			intiGeneralEvent(this.ParentComponent.thisForm_);
-			
-		} this.validSelected = validSelected ;
+
+			initGeneralEvent(this.ParentComponent.thisForm_);
+		};
 		
-		function needAddOrValue() {
+		this.needAddOrValue = function needAddOrValue() {
 			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
-			
-		} this.needAddOrValue = needAddOrValue ;
+		};
 		
 		this.init() ;
 		
 	} //EndClassWidgetGroup.prototype = new GroupContenaire;
 	
 	
-	function ActionsGroup(CriteriaGroupe) {
+	function ActionsGroup(CriteriaGroupe, specProvider) {
 		this.base = GroupContenaire ;
 		this.base() ;
 		this.ParentComponent = CriteriaGroupe ;
@@ -1344,40 +1029,46 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
 		
-		function detectWidgetType() {
-			
-			this.widgetType = 'Actions' ;
-			
-		} this.detectWidgetType = detectWidgetType ;
+		this.detectWidgetType = function detectWidgetType() {			
+			this.widgetType = 'Actions' ;			
+		};
 		
-		this.InputTypeComponent = { ActionWhere: new ActionWhere(this), ActionAnd: new ActionAnd(this), ActionRemove: new ActionRemove(this) } ;
+		this.inputTypeComponent = { 
+			ActionWhere: new ActionWhere(this, specProvider),
+			ActionAnd: new ActionAnd(this, specProvider),
+			ActionRemove: new ActionRemove(this, specProvider)
+		} ;
 		
 		$(CriteriaGroupe).on('Created', function () {
-			//console.log(this.StartClassGroup) ;
-			// ;
 			this.ActionsGroup.detectWidgetType() ;
-			this.ActionsGroup.InputTypeComponent.ActionRemove.init() ;
+			this.ActionsGroup.inputTypeComponent.ActionRemove.init() ;
 			
-			$(this.ActionsGroup.InputTypeComponent.ActionRemove.html).find('a').on('click', {arg1: this, arg2: 'RemoveCriteria'}, eventProxiCriteria);
-			
-			//console.log('Edit ActionRemove is on ! ') ;
+			$(this.ActionsGroup.inputTypeComponent.ActionRemove.html).find('a').on(
+				'click',
+				{arg1: this, arg2: 'RemoveCriteria'},
+				eventProxiCriteria
+			);
 		}) ;
 		
 		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
-			//console.log(this.StartClassGroup) ;
-			// ;
 			this.ActionsGroup.detectWidgetType() ;
+
+			this.ActionsGroup.inputTypeComponent.ActionWhere.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
+			this.ActionsGroup.inputTypeComponent.ActionWhere.init() ;
+			this.ActionsGroup.inputTypeComponent.ActionAnd.init() ;
 			
-			//console.log($(this.EndClassGroup) ) 
-			this.ActionsGroup.InputTypeComponent.ActionWhere.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
-			this.ActionsGroup.InputTypeComponent.ActionWhere.init() ;
-			this.ActionsGroup.InputTypeComponent.ActionAnd.init() ;
+			$(this.ActionsGroup.inputTypeComponent.ActionWhere.html).find('a').on(
+				'click', 
+				{arg1: this.ActionsGroup, arg2: 'AddWhere'},
+				eventProxiCriteria
+			);
+			$(this.ActionsGroup.inputTypeComponent.ActionAnd.html).find('a').on(
+				'click',
+				{arg1: this.ActionsGroup, arg2: 'AddAnd'},
+				eventProxiCriteria
+			);
 			
-			$(this.ActionsGroup.InputTypeComponent.ActionWhere.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddWhere'}, eventProxiCriteria);
-			$(this.ActionsGroup.InputTypeComponent.ActionAnd.html).find('a').on('click', {arg1: this.ActionsGroup, arg2: 'AddAnd'}, eventProxiCriteria);
-			
-			intiGeneralEvent(this.thisForm_);
-			//console.log('Edit ActionWhere et ActionAnd is on ! ') ;
+			initGeneralEvent(this.thisForm_);
 		}) ;
 		
 		this.AddWhere = function () {
@@ -1385,82 +1076,64 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			this.ParentComponent.html.parent('li').addClass('haveWhereChild') ;
 			this.ParentComponent.initCompleted() ;
 			
-			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.HtmlContext) ;
+			var new_component = addComponent(
+				this.ParentComponent.thisForm_,
+				this.ParentComponent.Context.contexteReference.HtmlContext
+			) ;
 			
 			$(new_component).find('.nice-select').trigger('click') ;
 			$(new_component).find('.nice-select').trigger('click') ;
-			
-			//$(new_component).find('.nice-select').trigger('change') ;
-			//new_component.appendTo(this.ParentComponent.Context.HtmlContext) ;
-			
-			//this.value_selected = $(this.html).find('.input-val').val() ;
-			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
-			
-			//return false ;
-			
-			
-			
 		}
+
 		this.AddAnd = function () {
-			
-			//this.ParentComponent.initCompleted() ;
-			
-			
-			var new_component = addComponent(this.ParentComponent.thisForm_, this.ParentComponent.Context.contexteReference.AncestorHtmlContext) ;
+			var new_component = addComponent(
+				this.ParentComponent.thisForm_,
+				this.ParentComponent.Context.contexteReference.AncestorHtmlContext
+			) ;
 			
 			$(new_component).find('.nice-select').trigger('click') ;
 			$(new_component).find('.nice-select').trigger('click') ;
-			//this.value_selected = $(this.html).find('.input-val').val() ;
-			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
-			
-			return false ;
-			
+
+			return false ;			
 		}
-		function validSelected() {
-			//this.value_selected = $(this.html).find('.input-val').val() ;
-			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-			//$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
-			
-		} this.validSelected = validSelected ;
+
+		this.validSelected = function validSelected() { };
 		
 		this.init() ;
 		
 	} //ActionsGroup.prototype = new GroupContenaire;
 	
-	var GetDependantCriteria = function (thisForm_, id) {
+
+	function GetDependantCriteria(thisForm_, id) {
+	// var GetDependantCriteria = function (thisForm_, id) {
 		var dependant = null ;
 		var dep_id = null ;
 		var element = thisForm_._this.find('li[data-index="'+id+'"]') ;
 		
-		if ($(element).parents('li').length > 0) {
-			
-		dep_id = $($(element).parents('li')[0]).attr('data-index') ;
-			dependant = {type : 'parent'}  ;
-			
+		if ($(element).parents('li').length > 0) {			
+			dep_id = $($(element).parents('li')[0]).attr('data-index') ;
+			dependant = {type : 'parent'}  ;			
 		} else {
 			if ($(element).prev().length > 0) {
 				dep_id = $(element).prev().attr('data-index') ;
-				dependant = {type : 'sibling'}  ;
-				
-			} else {
-				
+				dependant = {type : 'sibling'}  ;				
 			}
 		}
-		$(thisForm_.components).each(function(index) {
-			
+
+		$(thisForm_.components).each(function(index) {			
 			if (this.index == dep_id) {
 				dependant.element = this.CriteriaGroup ;
 			}
-			
 		}) ;
+
 		return dependant ;
-		
 	}
 	
-	var InputTypeComponent = function () {
+
+	function InputTypeComponent(specProvider) {
+	// var InputTypeComponent = function () {
 		
+		this.specProvider = specProvider;
 		this.ParentComponent = null ;
 		this.statements = {
 			IsCompleted : false,
@@ -1470,13 +1143,7 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 		this.possibleValue ;
 		this.tools = null ;
 		this.value = null ;
-		
-		
-		
-		
-		
-		
-		
+			
 		this.init = function () {
 			
 			//If Start Class 
@@ -1502,29 +1169,29 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 					this.statements.Highlited = true ;
 				}
 				
-				possible_values = getClassListSelectFor(null, 'a-'+id, default_value) ;
-				
+				var selectBuilder = new ClassSelectBuilder(this.specProvider);
+				possible_values = selectBuilder.buildClassSelect(null, 'a-'+id, default_value);
+				// possible_values = getClassListSelectFor(null, 'a-'+id, default_value) ;
 			} 
 			
 			if (this.ParentComponent instanceof EndClassGroup) {
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
-				possible_values = getClassListSelectFor(startClassGroup.value_selected, 'b-'+id) ;
+				var selectBuilder = new ClassSelectBuilder(this.specProvider);
+				possible_values = selectBuilder.buildClassSelect(startClassGroup.value_selected, 'b-'+id);
 			}
 			
 			if (this.ParentComponent instanceof ObjectPropertyGroup) {
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-				possible_values = getObjectListSelectFor(startClassGroup.value_selected, endClassGroup.value_selected, 'c-'+id) ;
+				var selectBuilder = new PropertySelectBuilder(this.specProvider);
+				possible_values = selectBuilder.buildPropertySelect(startClassGroup.value_selected, endClassGroup.value_selected, 'c-'+id) ;
 			}
 			
-			if (this.ParentComponent instanceof ActionsGroup) {
-				
+			if (this.ParentComponent instanceof ActionsGroup) {				
 				if (this instanceof ActionWhere) {
 					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 					var endLabel = specProvider.getClassLabel(endClassGroup.value_selected) ;
 					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
-					
-					
 					possible_values = widgetLabel+'<a>+</a>' ;
 				}
 				if (this instanceof ActionAnd) {
@@ -1533,9 +1200,7 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 				if (this instanceof ActionRemove) {
 					possible_values = '<a><img src="' + removeIcon + '"></a>' ;
 				}
-				
 			} 
-			
 			
 			this.widgetHtml = possible_values ;
 			this.statements.IsOnEdit = true ;
@@ -1543,120 +1208,69 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			this.tools.InitHtml() ;
 			this.tools.Add() ;
 			this.statements.Created = true ;
+
 			if (trigger) {
 				//console.log(trigger) 
 				//$(this.widgetHtml).trigger('change') ;
-			}
-			
-		}  ;
-		
-	} ;
+			}			
+		} ;		
+	};
 	
 	
-	function ActionWhere(GroupContenaire) {
+	function ActionWhere(GroupContenaire, specProvider) {
 		this.base = InputTypeComponent ;
-		this.base() ;
+		this.base(specProvider) ;
 		this.ParentComponent = GroupContenaire ;
 		this.statements.ActionWhere = true ;
 		this.statements.ShowOnHover = true ;
 		this.statements.Created = false ;
 		this.HtmlContainer = {} ;
-		
-		
-		
-		
-		//this.widgetHtml = 'hohohoh' ;
-		//this.html = '<div class="ClassTypeId"></div>' ;
-		
-	} //ActionWhere.prototype = new InputTypeComponent;
+	}	
 	
-	
-	function ActionAnd(GroupContenaire) {
+	function ActionAnd(GroupContenaire, specProvider) {
 		this.base = InputTypeComponent ;
-		this.base() ;
+		this.base(specProvider) ;
 		this.ParentComponent = GroupContenaire ;
 		this.statements.ActionAnd = true ;
 		this.statements.ShowOnHover = true ;
 		this.statements.Created = false ;
 		this.HtmlContainer = this.ParentComponent ;
-		
-		
-		//this.widgetHtml = 'hohohoh' ;
-		//this.html = '<div class="ClassTypeId"></div>' ;
-		
-	} //ActionAnd.prototype = new InputTypeComponent;
+	}	
 	
-	
-	function ActionRemove(GroupContenaire) {
+	function ActionRemove(GroupContenaire, specProvider) {
 		this.base = InputTypeComponent ;
-		this.base() ;
+		this.base(specProvider) ;
 		this.ParentComponent = GroupContenaire ;
 		this.statements.ActionRemove = true ;
 		this.statements.Created = false ;
-		this.HtmlContainer = this.ParentComponent ;
-		
-		
-		
-		//this.widgetHtml = 'hohohoh' ;
-		//this.html = '<div class="ClassTypeId"></div>' ;
-		
-	} //ActionRemove.prototype = new InputTypeComponent;
+		this.HtmlContainer = this.ParentComponent ;		
+	}
 	
-	var ClassTypeId = function (GroupContenaire) {
+	function ClassTypeId(GroupContenaire, specProvider) {
+	// var ClassTypeId = function (GroupContenaire) {
 		this.base = InputTypeComponent ;
-		this.base() ;
+		this.base(specProvider) ;
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = this.ParentComponent ;
 		this.statements.Highlited = true ;
-		this.statements.Created = false ;
-		
-		
-		
-		
-		
-		//this.widgetHtml = 'hohohoh' ;
-		//this.html = '<div class="ClassTypeId"></div>' ;
-		
-	} ; //ClassTypeId.prototype = new InputTypeComponent;
-
-
-
-
-	function ClassTypeId2(GroupContenaire) {
-		console.log('new classTypeId2--------------------------------------------------------------------------------------------------------------------------------------') ;
-		
-		this.base = InputTypeComponent ;
-		this.base() ;
-		console.log(this) ;
-		this.ParentComponent = GroupContenaire ;
-		this.HtmlContainer = this.ParentComponent ;
-		this.statements.Highlited = true ;
-		this.statements.Created = false ;
-		
-		
-		
-		
-		//this.widgetHtml = 'hohohoh' ;
-		//this.html = '<div class="ClassTypeId"></div>' ;
-		
-	} //ClassTypeId2.prototype = new InputTypeComponent;
+		this.statements.Created = false ;		
+	};
 	
 	
-	function ObjectPropertyTypeId(GroupContenaire) {
+	function ObjectPropertyTypeId(GroupContenaire, specProvider) {
 		this.base = InputTypeComponent ;
-		this.base() ;
+		this.base(specProvider) ;
 		this.ParentComponent = GroupContenaire ;
 		this.html = '<div class="ObjectPropertyTypeId"></div>' ;
 		this.widgetHtml = null ;
 		this.HtmlContainer = this.ParentComponent ;
-		this.statements.Created = false ;
+		this.statements.Created = false ;		
+	}
 		
-	} //ObjectPropertyTypeId.prototype = new InputTypeComponent;
-	
-		
-	function ObjectPropertyTypeWidget(GroupContenaire) {
+	function ObjectPropertyTypeWidget(GroupContenaire, settings, specProvider) {
 		this.base = InputTypeComponent ;
-		this.base() ;
+		this.base(specProvider) ;
+		this.settings = settings;
 		this.ParentComponent = GroupContenaire ;
 		this.html = '<div class="ObjectPropertyTypeWidget"></div>' ;
 		this.widgetHtml = null ;
@@ -1664,10 +1278,7 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 		this.HtmlContainer = this.ParentComponent ;
 		this.statements.Created = false ;
 		
-		console.log(this) ;
-		
-		function init() {
-			console.log(this) ;
+		this.init = function init() {
 			if (this.ParentComponent instanceof EndClassWidgetGroup) {
 				if (this.statements.Created) {
 					this.tools.Update() ;
@@ -1676,7 +1287,6 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
-				console.log(endClassGroup) ;
 				if (endClassGroup.value_selected == LABEL_URI) {
 					var endLabel = specProvider.getClassLabel(endClassGroup.value_selected) ;
 				} else {
@@ -1696,217 +1306,193 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 				this.widgetComponent.init() ;
 				this.statements.Created = true ;
 			}
-			
-			
-		} this.init = init;
+		}
 
-		function getWigetTypeClassName() {
+		this.getWigetTypeClassName = function getWigetTypeClassName() {
 			switch (this.widgetType) {
 			  case TYPE_WIDGET_LIST_URI:
-				this.widgetComponent = new ListWidget(this) ;
+				this.widgetComponent = new ListWidget(this, this.settings.list) ;
 				break;
 			  case TYPE_WIDGET_AUTOCOMPLETE_URI:
-				this.widgetComponent = new autoCompleteWidget(this) ;
+				this.widgetComponent = new AutoCompleteWidget(this, this.settings.autocomplete) ;
 			    break;
 			  case TYPE_WIDGET_TIME_URI:
-				//console.log('Mangoes and papayas are $2.79 a pound.');
-				this.widgetComponent = new DatesWidget(this) ;
-				// expected output: "Mangoes and papayas are $2.79 a pound."
+				this.widgetComponent = new DatesWidget(this, this.settings.dates) ;
 				break;
 			  case TYPE_WIDGET_SEARCH_URI:
-				//console.log('Mangoes and papayas are $2.79 a pound.');
 				this.widgetComponent = new SearchWidget(this) ;
-				// expected output: "Mangoes and papayas are $2.79 a pound."
 				break;
 			  default:
-				//console.log('Sorry, we are out of ' + expr + '.');
+			  	// TODO : throw Exception
+				this.widgetComponent = null;
 			}
-		} 
-		this.getWigetTypeClassName = getWigetTypeClassName ;
+		};
 		
 		this.GetValue = function () {
 			
-			var value_widget = null ;
+			var value = null ;
 			switch (this.widgetType) {
 			  case TYPE_WIDGET_LIST_URI:
 			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
-				value_widget = $(id_input).val() ;
-				console.log(value_widget) ;
+				value = $(id_input).val() ;
 				break;
 			  case TYPE_WIDGET_AUTOCOMPLETE_URI:
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
-				value_widget = $(id_input).val() ;
-				console.log(value_widget) ;
+				value = $(id_input).val() ;
 			    break;
 			  case TYPE_WIDGET_TIME_URI:
-				//console.log('Mangoes and papayas are $2.79 a pound.');
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				
-				value_widget = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
+				value = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
 				
-				if ((value_widget.start == '') || (value_widget.stop == '')) {
-						value_widget = null ;
+				if ((value.start == '') || (value.stop == '')) {
+					value = null ;
 				} else {
-					if (parseInt(value_widget.start) > parseInt(value_widget.stop)) {
-						value_widget = null ;
+					if (parseInt(value.start) > parseInt(value.stop)) {
+						value = null ;
 					}
-				}
-				
-				// expected output: "Mangoes and papayas are $2.79 a pound."
+				}				
 				break;
 			  case TYPE_WIDGET_SEARCH_URI:
-				//console.log('Mangoes and papayas are $2.79 a pound.');
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
-				value_widget = $(id_input).val() ;
-				// expected output: "Mangoes and papayas are $2.79 a pound."
+				value = $(id_input).val() ;
 				break;
 			  default:
-				//console.log('Sorry, we are out of ' + expr + '.');
+			  	// TODO : Exception ?
+			  	value = null;
 			}
-			return value_widget ;
+
+			return value ;
 		}
-		this.GetValueLabel = function () {
-			
-			var value_widget = null ;
+
+		this.GetValueLabel = function () {			
+			var valueLabel = null ;
 			switch (this.widgetType) {
 			  case TYPE_WIDGET_LIST_URI:
-			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
-				value_widget = '<span>' +$(id_input).find('option:selected').text() + '</span>' ;
+			  	var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
+				valueLabel = '<span>' +$(id_input).find('option:selected').text() + '</span>' ;
 				break;
 			  case TYPE_WIDGET_AUTOCOMPLETE_URI:
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
-				value_widget = '<span>' + $(id_input).val()  + '</span>' ;
-				//console.log(value_widget) ;
+				valueLabel = '<span>' + $(id_input).val()  + '</span>' ;
 			    break;
-			  case TYPE_WIDGET_TIME_URI:
-				
+			  case TYPE_WIDGET_TIME_URI:				
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
-				//console.log(id_input);
-				value_widget = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
+				valueLabel = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
 				break;
-			  case TYPE_WIDGET_SEARCH_URI:
-				
+			  case TYPE_WIDGET_SEARCH_URI:				
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
-				//console.log(id_input);
-				value_widget = '<span>'+ $(id_input).val() +'</span>' ;
-				break;
-				
+				valueLabel = '<span>'+ $(id_input).val() +'</span>' ;
+				break;				
 			  default:
-			  
+			  	valueLabel = null;
 			}
-			return value_widget ;
+			return valueLabel ;
 		}
-		
-	} //ObjectPropertyTypeWidget.prototype = new InputTypeComponent;
-	
-	
-	
-	
-	function widgetType() {
-		
-		this.parentComponent = null ;
-		this.html = null ;
-		
-		
 		
 	}
 	
-	function autoCompleteWidget(InputTypeComponent) {
-		this.base = widgetType ;
+
+	function Widget() {		
+		this.parentComponent = null ;
+		this.html = null ;		
+	}
+	
+	function AutoCompleteWidget(inputTypeComponent, autocompleteHandler) {
+		this.base = Widget ;
 		this.base() ;
-		this.ParentComponent = InputTypeComponent ;
+		this.autocompleteHandler = autocompleteHandler;
+		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.AutocompleteWidget  = true ;
-		
+
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
-		
-		
-		
 		this.html = '<input id="ecgrw-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
 		
-		function init() {
+		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
 			
-			var id_inputs = this.IdCriteriaGroupe ;
-			
-			var itc_obj = this.ParentComponent;
-			
+			var id_inputs = this.IdCriteriaGroupe ;			
+			var itc_obj = this.ParentComponent;	
 			var isMatch = settings.autocomplete.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
 			
 			var options = {
 				// ajaxSettings: {crossDomain: true, type: 'GET'} ,
 				url: function(phrase) {
-					return settings.autocomplete.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
+					return autocompleteHandler.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
-				listLocation: function (data) { return settings.autocomplete.listLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ; },
-				
-				
-				 getValue: function (element) { return settings.autocomplete.elementLabel(element) ; },
 
-				  ajaxSettings: {
-				  	crossDomain: true,
+				listLocation: function (data) {
+					return autocompleteHandler.listLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ;
+				},
+				
+				
+				getValue: function (element) { 
+					return autocompleteHandler.elementLabel(element) ;
+				},
+
+				ajaxSettings: {
+					crossDomain: true,
 					dataType: "json",
 					method: "GET",
 					data: {
-					  dataType: "json"
+				  		dataType: "json"
 					}
-				  },
+				},
 
-				  preparePostData: function(data) {
+				preparePostData: function(data) {
 					data.phrase = $('#ecgrw-'+id_inputs+'-input').val();
 					return data;
-				  },
-				  list: {
-				  	match: {
-				  		enabled: isMatch
-				  	},
-					onChooseEvent: function() {
-							var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData();
-							
-							var label = settings.autocomplete.elementLabel(value) ; 
-							var uri = settings.autocomplete.elementUri(value) ; 
-							$('#ecgrw-'+id_inputs+'-input').val(label)
-							$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");$(itc_obj).trigger("change");
-							
-					}
-				  },
+				},
 
-				  requestDelay: 400
+				list: {
+					match: {
+						enabled: isMatch
+					},
+
+					onChooseEvent: function() {
+						var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData();
+						
+						var label = autocompleteHandler.elementLabel(value) ; 
+						var uri = autocompleteHandler.elementUri(value) ; 
+						$('#ecgrw-'+id_inputs+'-input').val(label)
+						$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");$(itc_obj).trigger("change");
+					}
+				},
+
+				requestDelay: 400
 			};
 			//Need to add in html befor
 			
 			$('#ecgrw-'+id_inputs+'-input').easyAutocomplete(options);
-			
-			
-		} this.init = init ;
-		
-		
-		
-	} //autoCompleteWidget.prototype = new widgetType;
+		}
+	}
 	
-	function ListWidget(InputTypeComponent) {
-		this.base = widgetType ;
+	function ListWidget(inputTypeComponent, listHandler) {
+		this.base = Widget ;
 		this.base() ;
-		this.ParentComponent = InputTypeComponent ;
+		this.listHandler = listHandler;
+		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.ListeWidget = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-		
-		
+		var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;		
 		this.html = '<div class="list-widget"><select id="'+id_input+'"></select></div>' ;
 		this.select = $('<select id="'+id_input+'"></select>');
 		
-		function init() {
+		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
 			
 			var itc_obj = this.ParentComponent;
 			var options = {
-
-				url: settings.list.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value),
+				url: settings.list.url(
+					startClassGroup_value,
+					ObjectPropertyGroup_value,
+					endClassGroup_value
+				),
 				dataType: "json",
 				method: "GET",
 				data: {
@@ -1916,44 +1502,37 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			
 			var request = $.ajax( options );
 			var select = $(this.html).find('select') ;
-			request.done(function( data ) {
-			  
-			  var items = settings.list.listLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ;
-			  $.each( items, function( key, val ) {
-				  
-					var label = settings.list.elementLabel(val) ; 
-					var uri = settings.list.elementUri(val) ; 
-				$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
-			  });
-			  $('#'+id_input).niceSelect();
-			  $('#'+id_input).on("change", function() {
-				  $(itc_obj).trigger('change') ;
-			  });
-			  //$(this.ParentComponent).trigger("change");
-			  
+			request.done(function( data ) {			  
+			  	var items = listHandler.listLocation(
+			  		startClassGroup_value,
+			  		ObjectPropertyGroup_value,
+			  		endClassGroup_value,
+			  		data
+			  	) ;
+			  	$.each( items, function( key, val ) {				  
+					var label = listHandler.elementLabel(val) ; 
+					var uri = listHandler.elementUri(val) ; 
+					$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
+			  	});
+			  	$('#'+id_input).niceSelect();
+			  	$('#'+id_input).on("change", function() {
+					$(itc_obj).trigger('change') ;
+			  	});  
 			});
-				
-			//Need to add in html befor
-			
-			
-			
-			
-		} this.init = init ;
-		
-		
-		
-	} //ListWidget.prototype = new widgetType;
+		}		
+	}
 	
-	function DatesWidget(InputTypeComponent) {
-		this.base = widgetType ;
+	function DatesWidget(inputTypeComponent, datesHandler) {
+		this.base = Widget ;
 		this.base() ;
-		this.ParentComponent = InputTypeComponent ;
+		this.datesHandler = datesHandler;
+		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.DatesWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
 		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
-		function init() {
+		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
@@ -1962,114 +1541,94 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 			
 			var id_inputs = this.IdCriteriaGroupe ;
 			
-			var itc_obj = this.ParentComponent;
-			
+			var itc_obj = this.ParentComponent;			
 			
 			$.ajax({
-				url: settings.dates.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ,
+				url: settings.dates.url(
+					startClassGroup_value,
+					ObjectPropertyGroup_value,
+					endClassGroup_value,
+					phrase
+				) ,
 				async: false,
 				success: function (data){
 					data_json = data;
 				}
+			});			
+			
+			var options = {
+				
+				data: data_json,
+			
+				getValue: function (element) { 
+					return datesHandler.elementLabel(element) ;
+				},
+				 
+				list: {
+					match: {
+						enabled: true
+					},
+
+					onChooseEvent: function() {
+						
+						var values = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData();
+						var value = datesHandler.elementLabel(values) ;
+						var start = datesHandler.elementStart(values) ;
+						var stop = datesHandler.elementEnd(values) ;
+
+						$('#ecgrw-date-'+id_inputs+'-input').val(value).trigger("change");
+						$('#ecgrw-date-'+id_inputs+'-input-start').val(start).trigger("change");
+						$('#ecgrw-date-'+id_inputs+'-input-stop').val(stop).trigger("change");
+						
+						$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");
+					}
+				},
+
+				template: {
+					type: "custom",
+					method: function(value, item) {							
+						var label = datesHandler.elementLabel(item) ;
+						var start = datesHandler.elementStart(item) ;
+						var stop  = datesHandler.elementEnd(item) ;
+						return '<div>' + label + ' <span class="start">' + start + '</span><span class="end">' + stop + '</span></div>';
+					}
+				},
+
+				requestDelay: 400
+			};
+			
+			$('#ecgrw-date-'+id_inputs+'-input').easyAutocomplete(options);
+			$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
+				$(itc_obj).trigger("change");
 			});
-			
-			
-				var options = {
-					
-						data: data_json ,
-				
-					 getValue: function (element) { return settings.dates.elementLabel(element) ; },
-					 /*getValue: function(element) {
-						 //console.log(element) ;
-						return element.label+' '+element.synonyms.join(' '); // +'' convert array to string ; https://stackoverflow.com/questions/5289403/jquery-convert-javascript-array-to-string
-					  },*/
+		}		
+	}
+	
 
-					 
-					list: {
-						match: {
-							enabled: true
-						},
-
-						onChooseEvent: function() {
-							
-							var values = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData();
-							var value = settings.dates.elementLabel(values) ;
-							var start = settings.dates.elementStart(values) ;
-							var stop = settings.dates.elementEnd(values) ;
-
-							$('#ecgrw-date-'+id_inputs+'-input').val(value).trigger("change");
-							$('#ecgrw-date-'+id_inputs+'-input-start').val(start).trigger("change");
-							$('#ecgrw-date-'+id_inputs+'-input-stop').val(stop).trigger("change");
-							
-							$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");
-						}
-					},
-					 template: {
-						type: "custom",
-						method: function(value, item) {
-							
-							var label = settings.dates.elementLabel(item) ;
-							var start = settings.dates.elementStart(item) ;
-							var stop = settings.dates.elementEnd(item) ;
-							
-							
-							return '<div>' + label + ' <span class="start">' + start + '</span><span class="end">' + stop + '</span></div>';
-						}
-					},
-
-					requestDelay: 400
-				};
-				//Need to add in html befor
-				
-				$('#ecgrw-date-'+id_inputs+'-input').easyAutocomplete(options);
-				$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
-					$(itc_obj).trigger("change");
-				})
-			
-			
-		} this.init = init ;
-		
-		
-		
-	} //DatesWidget.prototype = new widgetType;
-	function SearchWidget(InputTypeComponent) {
-		this.base = widgetType ;
+	function SearchWidget(inputTypeComponent) {
+		this.base = Widget ;
 		this.base() ;
-		this.ParentComponent = InputTypeComponent ;
+		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.SearchWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
 		this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add" class="button-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
-		function init() {
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
-			var phrase ="" ;
-			var data_json = null ;
-			
-			var id_inputs = this.IdCriteriaGroupe ;
-			
-			var itc_obj = this.ParentComponent;
-			
+		this.init = function init() {
+			var id_inputs = this.IdCriteriaGroupe;			
+			var itc_obj = this.ParentComponent;			
 			var EndClassGroupObject = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup ;
 			
-		
-				//Need to add in html befor
-
-				$('#ecgrw-search-'+this.IdCriteriaGroupe+'-add').on('click', function() {
+			$('#ecgrw-search-'+this.IdCriteriaGroupe+'-add').on(
+				'click',
+				function() {
 					$('#ecgrw-search-'+id_inputs+'-input-value').trigger("change");
 					$(itc_obj).trigger("change");
 					$(EndClassGroupObject.html).find('.ClassTypeId').hide() ;
-				})
-			
-			
-		} this.init = init ;
-		
-		
-		
-	} //DatesWidget.prototype = new widgetType;
-	
+				}
+			);
+		}
+	}	
 	
 	function GenericTools(component) {
 		this.component = component ;
@@ -2084,20 +1643,13 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 		} this.AppendComponentHtml = AppendComponentHtml ;
 		
 		function UpdateStatementsClass() {
-			
-			//var html = this.component.html ;
-			for (var item in this.component.statements) {
-				
+			for (var item in this.component.statements) {				
 				if (this.component.statements[item] === true) {
-					
 					$(this.component.html).addClass(item) ;
 				} else {
 					$(this.component.html).removeClass(item) ;
 				}
-				
 			}
-			//console.log(this.component.html) ;
-			//this.component.html = html ;
 		} this.UpdateStatementsClass = UpdateStatementsClass ;
 		
 		function Add() {
@@ -2160,8 +1712,6 @@ function SimpleJsonLdSpecificationProvider(specs, lang) {
 }
 
 Object.onArray = function (arrayTosearch, objectTocompare) {
-	//console.log(arrayTosearch) ;
-	//console.log(objectTocompare) ;
 	var objectTocompare = objectTocompare ;
 	var temp_return = false ;
 	$.each( arrayTosearch, function( key, val ) {
