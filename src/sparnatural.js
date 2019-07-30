@@ -28,7 +28,7 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
         var langSearch = {} ;
         var specProvider;
 		var defaults = {
-			pathSpecSearch: 'config/spec-search.json',
+			config: 'config/spec-search.json',
 			language: 'en',
 			addDistinct: false,
 			typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
@@ -187,19 +187,25 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 			thisForm.components = [] ;
 			
 			langSearch = i18nLabels[settings.language];
-			$.when( loadSpecSearch() ).done(function() {
+			if(typeof(settings.config) == "object") {
+				specSearch = settings.config ;
+				specProvider = new SimpleJsonLdSpecificationProvider(specSearch, settings.language);
 				initForm(thisForm) ;
-			});
+			} else {
+				$.when( loadSpecSearch() ).done(function() {
+					initForm(thisForm) ;
+				});
+			}			
         });
 		
-		function loadSpecSearch() {			
-			return $.getJSON( settings.pathSpecSearch, function( data ) {
+		function loadSpecSearch() {
+			return $.getJSON( settings.config, function( data ) {
 				specSearch = data ;
 				specProvider = new SimpleJsonLdSpecificationProvider(data, settings.language);
 			}).fail(function(response) {
-				console.log("Sparnatural - unable to load config file : " +settings.pathSpecSearch);
+				console.log("Sparnatural - unable to load config file : " +settings.config);
 				console.log(response);
-			}) ;
+			}) ;			
 		}		
 		
 		function initForm(thisForm_) {			
