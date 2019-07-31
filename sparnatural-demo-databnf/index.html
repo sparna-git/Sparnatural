@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="fr">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Bootstrap CSS -->
+		<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/litera/bootstrap.min.css" rel="stylesheet" integrity="sha384-D/7uAka7uwterkSxa2LwZR7RJqH2X6jfmhkJ0vFPGUtPyBMF2WMq9S+f9Ik5jJu1" crossorigin="anonymous">
+		<link rel="stylesheet" href="sparnatural.css" />
+
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.9.0/css/all.min.css" />
+
+		<!-- YASGUI stuff -->
+		<link href='http://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.min.css' rel='stylesheet' type='text/css'/>
+		<link href='http://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.min.css' rel='stylesheet' type='text/css'/>
+
+		<title>SPARnatural - requêtes SPARQL naturelles</title>
+
+		<style>
+		  .yasqe .CodeMirror { font-size: 0.8em; height: 400px; }
+
+		  .yasr_header {
+		  	display: none;
+		  }
+		</style>
+		
+	</head>
+	<body>
+		<header>
+			<nav class="navbar navbar-expand  navbar-dark bg-dark">
+				<a class="navbar-brand display-1 mr-auto" href="#">SPARnatural - requêtes SPARQL naturelles</a>
+			</nav>
+		</header>
+		
+		<div class="container-fluid" style="margin-top:1em;">
+			<div class="row">
+				<div class="col-md-7">
+					<div id="ui-search"></div>
+				</div>
+				<div class="col-md-5">
+					<div class="row" style="margin-bottom:0.5em;">
+		            <div class="col-md-12">
+		             <span style="font-size:90%;"> 
+		             Les requêtes sont envoyées à <a id="endpoint" href="https://data.bnf.fr/sparql">https://data.bnf.fr/sparql</a>
+		             </span>
+		            </div>
+		          </div>
+		          <div class="row">
+		            <div class="col-md-12">
+		  					 <textarea id="yasqe"></textarea>
+		            </div>
+		          </div>
+				</div>
+			</div>
+			<div class="row justify-content-center">
+				<div class="col-md-11">
+					<div id="yasr"></div>
+				</div>
+			</div>
+		</div>
+
+		<footer id="footer" style="margin-top:30px; text-align: center;">
+	      	<a href="http://blog.sparna.fr" target="_blank">Thomas Francart</a>
+	      	&nbsp;|&nbsp;
+	      	<a href="http://sparna.fr" target="_blank"><img src="http://labs.sparna.fr/skos-play/images/sparna.png" /></a>
+	      	&nbsp;|&nbsp;
+	      	<a href="https://github.com/sparna-git/Sparnatural" target="_blank">Voir sur Github</a>
+	      	<br />
+	      	<br />
+      	</footer>
+
+      	<a href="https://github.com/sparna-git/Sparnatural" class="github-corner" aria-label="View on GitHub"><svg width="100" height="100" viewBox="0 0 250 250" style="fill:#FD6C6C; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+		<!-- YASGUI stuff -->
+		<script src='https://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.bundled.min.js'></script>
+		<script src='https://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.bundled.min.js'></script>
+		
+		<script src="sparnatural.js" ></script>
+
+		<script>
+
+			var config =
+{
+  "@context":
+  {
+    "label": "http://www.w3.org/2000/01/rdf-schema#label",
+    "Ontology" : "http://www.w3.org/2002/07/owl#Ontology",
+    "Class" : "http://www.w3.org/2002/07/owl#Class",
+    "ObjectProperty" : "http://www.w3.org/2002/07/owl#ObjectProperty",
+    "domain": {
+      "@id": "http://www.w3.org/2000/01/rdf-schema#domain",
+      "@type": "@id"
+    },
+    "range": {
+      "@id": "http://www.w3.org/2000/01/rdf-schema#range",
+      "@type": "@id"
+    },
+    "unionOf": {
+      "@id": "http://www.w3.org/2002/07/owl#unionOf",
+      "@type": "@id"
+    },
+    "widget": {
+      "@id": "http://ontologies.sparna.fr/Sparnatural#widget",
+      "@type": "@id"
+    }
+  },
+  "@graph": [
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/databnf-example/onto",
+      "@type" : "Ontology"
+    },
+    {
+      "@id" : "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Work",
+      "@type" : "Class",
+      "label": [{
+          "@value" : "Oeuvre",
+          "@language" : "fr"
+      }],
+	  "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='far fa-lightbulb'></i></span>"
+    },
+    {
+      "@id" : "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Manifestation",
+      "@type" : "Class",
+      "label": [{
+          "@value" : "Edition",
+          "@language" : "fr"
+      }],
+    "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-book'></i></span>"
+    },
+    {
+      "@id" : "http://xmlns.com/foaf/0.1/Person",
+      "@type" : "Class",
+      "label": [{
+          "@value" : "Personne",
+          "@language" : "fr"
+      }],
+	    "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-user'></i></span>"
+    },
+    {
+      "@id" : "http://purl.org/dc/dcmitype/Event",
+      "@type" : "Class",
+      "label": [{
+          "@value" : "Spectacle",
+          "@language" : "fr"
+      }],
+      "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-theater-masks'></i></span>"
+    },
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/databnf-example/onto#Langue",
+      "@type" : "Class",
+      "label": [{
+          "@value" : "Langue",
+          "@language" : "fr"
+      }],
+      "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-theater-masks'></i></span>"
+    },
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/databnf-example/onto#auteurDe",
+      "@type" : "ObjectProperty",
+      "label": [{
+          "@value" : "auteur de",
+          "@language" : "fr"
+      }],
+      "domain": "http://xmlns.com/foaf/0.1/Person",
+      "range": "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Work",
+      "widget": { "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget" },
+      "path": "^<http://purl.org/dc/terms/creator>"
+    },
+    {
+      "@id" : "http://purl.org/dc/terms/creator",
+      "@type" : "ObjectProperty",
+      "label": [{
+          "@value" : "auteur",
+          "@language" : "fr"
+      }],
+      "domain": "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Work",
+      "range": "http://xmlns.com/foaf/0.1/Person",
+      "widget": { "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget" }
+    },
+    {
+      "@id" : "http://rdvocab.info/RDARelationshipsWEMI/workManifested",
+      "@type" : "ObjectProperty",
+      "label": [{
+          "@value" : "édition de",
+          "@language" : "fr"
+      }],
+      "domain": "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Manifestation",
+      "range": "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Work",
+      "widget": { "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget" }
+    },
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/databnf-example/onto#aPourEdition",
+      "@type" : "ObjectProperty",
+      "label": [{
+          "@value" : "a pour édition",
+          "@language" : "fr"
+      }],
+      "domain": "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Work",
+      "range": "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Manifestation",
+      "widget": { "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget" },
+      "path": "^<http://rdvocab.info/RDARelationshipsWEMI/workManifested>"
+    },
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/databnf-example/onto#langueEdition",
+      "@type" : "ObjectProperty",
+      "label": [{
+          "@value" : "langue",
+          "@language" : "fr"
+      }],
+      "domain": "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Manifestation",
+      "range": "http://www.sparna.fr/simsemsearch/databnf-example/onto#Langue",
+      "widget": { "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget" },
+      "path": "rdarelationships:expressionManifested/dcterms:language"
+    },
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/databnf-example/onto#adapteDe",
+      "@type" : "ObjectProperty",
+      "label": [{
+          "@value" : "adapté de",
+          "@language" : "fr"
+      }],
+      "domain": "http://purl.org/dc/dcmitype/Event",
+      "range": "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Work",
+      "widget": { "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget" },
+      "path": "<http://rdvocab.info/RDARelationshipsWEMI/workManifested>"
+    },
+    {
+      "@id" : "http://www.sparna.fr/simsemsearch/databnf-example/onto#adapteDans",
+      "@type" : "ObjectProperty",
+      "label": [{
+          "@value" : "adapté dans",
+          "@language" : "fr"
+      }],
+      "domain": "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Work",
+      "range": "http://purl.org/dc/dcmitype/Event",
+      "widget": { "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget" },
+      "path": "^<http://rdvocab.info/RDARelationshipsWEMI/workManifested>"
+    }
+  ]
+};
+
+		</script>
+
+		<script>
+			$( document ).ready(function($) {
+			 //Appel du composant pour la recherche
+			  
+			  $('#ui-search').Sparnatural({
+			  	config: config,
+			  	language: "fr",
+			  	maxDepth: 4,
+				addDistinct: true,
+				backgroundBaseColor: '2,184,117',
+				autocomplete : {
+					url: function(domain, property, range, key) {
+						return searchUrl(domain, property, range, key);
+					},
+					listLocation: function(domain, property, range, data) {
+						return data.results.bindings;
+					},
+					elementLabel: function(element) {
+						return element.rangeLabel.value;
+					},
+					elementUri: function(element) {
+						return element.range.value;
+					},
+					enableMatch: function(domain, property, range) {
+						return true;
+					},
+				},
+				list : {
+					url: function(domain, property, range) {
+						return listUrl(domain, property, range);
+					},
+					listLocation: function(domain, property, range, data) {
+						return data.results.bindings;
+					},
+					elementLabel: function(element) {
+						return element.rangeLabel.value;
+					},
+					elementUri: function(element) {
+						return element.range.value;
+					}
+				},
+				onQueryUpdated: function(queryString, queryJson) {
+					// ici on récupère la requete Sparql grace au premier parametre de la fonction
+					queryString = semanticPostProcess(queryString, queryJson);
+					queryString = labelPostProcess(queryString, queryJson);
+					queryString = orderByLimitPostProcess(queryString, queryJson);
+					$('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+					yasqe.setValue(queryString);
+					yasqe.query();
+				  }
+				
+			  }) ;
+			}) ;
+
+			// load specs
+			var specs;
+			$.getJSON( 'config/spec-search.json', function( data ) {
+				specs = data ;
+			}).fail(function(response) {
+				console.log("Unable to load config file : " +settings.pathSpecSearch);
+				console.log(response);
+			}) ;
+
+			labelPostProcess = function(queryString, queryJson) {
+				queryString = queryString.replace(new RegExp('}$'), "  ?this rdfs:label|skos:prefLabel|foaf:name|dcterms:title ?label \n}");
+				queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT (STR(?label) AS ?nom) ?this");
+				return queryString;
+			}
+
+			prefixesPostProcess = function(queryString, queryJson) {
+				queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nPREFIX rico: <http://www.ica.org/standards/RiC/ontology#> \nPREFIX skos: <http://www.w3.org/2004/02/skos/core#> \nPREFIX foaf: <http://xmlns.com/foaf/0.1/> \nPREFIX dcterms: <http://purl.org/dc/terms/> \nPREFIX rdarelationships: <http://rdvocab.info/RDARelationshipsWEMI/> \nSELECT ");
+				return queryString;
+			}
+
+			orderByLimitPostProcess = function(queryString, queryJson) {
+				queryString = queryString.replace(new RegExp('}$'), "}\nORDER BY ?label LIMIT 500");
+				return queryString;
+			}
+
+			semanticPostProcess = function(queryString, queryJson) {
+				queryString = prefixesPostProcess(queryString, queryJson);
+				queryString = expand(queryString, config);
+				return queryString;
+			}
+
+			var expand = function(sparql, config) {
+				$.each( config['@graph'], function( key, val ) {
+					if ( val['@type'] == 'ObjectProperty' || val['@type'] == 'Class') {
+						if ( val['path'] != null) {
+								var re = new RegExp("<" + val['@id'] + ">","g");
+								sparql = sparql.replace(re, val['path']);
+						}
+					}
+				}) ;
+				return sparql ;
+			}
+		 
+
+			listUrl = function(domain, property, range) {
+				var QUERY_SERVICE = $('#endpoint').text();
+
+				console.log(range);
+
+				var sparql;
+				switch(range) {
+				  case "http://www.sparna.fr/simsemsearch/databnf-example/onto#Langue":
+				    sparql = "SELECT DISTINCT ?range ?rangeLabel WHERE {\n  {SELECT ?domain WHERE { ?domain a <http://rdvocab.info/uri/schema/FRBRentitiesRDA/Manifestation> } LIMIT 10000 } . ?domain rdarelationships:expressionManifested/dcterms:language ?range . BIND(STRAFTER(STR(?range), 'http://id.loc.gov/vocabulary/iso639-2/') AS ?rangeLabel) } ORDER BY ?rangeLabel LIMIT 500";
+				    break;
+				  default:
+				    sparql = "SELECT DISTINCT ?range ?rangeLabel WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . ?range skos:prefLabel|foaf:name|dcterms:title|rdfs:label ?rangeLabel FILTER(lang(?rangeLabel) = \"fr\") } ORDER BY ?rangeLabel LIMIT 500";
+				    break;
+				} 
+
+				sparql = semanticPostProcess(sparql, null);
+
+				console.log(sparql);
+				var url = QUERY_SERVICE+"?query="+encodeURIComponent(sparql)+"&format=json";
+				
+				return url;
+			}
+
+			searchUrl = function(domain, property, range, key) {
+				var QUERY_SERVICE = $('#endpoint').text();
+
+				var labelPredicate;
+				console.log(range);
+				switch(range) {
+				  case "http://xmlns.com/foaf/0.1/Person":
+				    labelPredicate = "foaf:name";
+				    break;
+				  case "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Work":
+				    labelPredicate = "dcterms:title";
+				    break;
+				  case "http://rdvocab.info/uri/schema/FRBRentitiesRDA/Manifestation":
+				    labelPredicate = "dcterms:title";
+				    break;
+				  default:
+				    labelPredicate = "rdfs:label";
+				} 
+
+				var bifContainsSearchString = "'"+key+"'";
+				var sparql = "SELECT DISTINCT ?range ?rangeLabel WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . ?range "+labelPredicate+" ?rangeLabel FILTER(bif:contains(?rangeLabel, \""+bifContainsSearchString+"\")) } ORDER BY ?rangeLabel";
+
+				sparql = semanticPostProcess(sparql, null);
+
+				var url = QUERY_SERVICE+"?query="+encodeURIComponent(sparql)+"&format=json";
+				console.log(url);
+				return url;
+			}
+
+			var yasqe = YASQE.fromTextArea(document.getElementById("yasqe"), {
+				sparql : {
+					showQueryButton : true,
+					endpoint : $('#endpoint').text(),
+					requestMethod : "POST"
+				}
+			});
+
+			var yasr = YASR(document.getElementById("yasr"), {
+				//this way, the URLs in the results are prettified using the defined prefixes in the query
+				getUsedPrefixes : yasqe.getPrefixesFromQuery,
+				"drawOutputSelector": false,
+				"drawDownloadIcon": false,
+				// avoid persistency side-effects
+				"persistency": { "prefix": false, "results": { "key": false }}
+			}); 
+
+			// link yasqe and yasr
+			yasqe.options.sparql.callbacks.complete = yasr.setResponse;
+
+		</script>
+	</body>
+</html>

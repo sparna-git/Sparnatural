@@ -9,9 +9,6 @@
 		<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/litera/bootstrap.min.css" rel="stylesheet" integrity="sha384-D/7uAka7uwterkSxa2LwZR7RJqH2X6jfmhkJ0vFPGUtPyBMF2WMq9S+f9Ik5jJu1" crossorigin="anonymous">
 
 		<!-- Font Awesome -->
-		<!--
-		<link rel="stylesheet" href="fa/css/all.min.css" />
-		-->
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.9.0/css/all.min.css" />
 
 		<!-- YASGUI stuff -->
@@ -21,7 +18,7 @@
 		<title>SPARnatural - requêtes SPARQL naturelles sur DBPedia</title>
 
 		<style>
-		  .yasqe .CodeMirror { font-size: 0.8em; height: 400px; }
+		  .yasqe .CodeMirror { font-size: 0.8em; height: 380px; }
 
 		  .yasr_header {
 		  	display: none;
@@ -45,7 +42,18 @@
 					<div id="ui-search"></div>
 				</div>
 				<div class="col-md-5">
-					<textarea id="yasqe"></textarea>
+          <div class="row" style="margin-bottom:0.5em;">
+            <div class="col-md-12">
+             <span style="font-size:90%;"> 
+             Les requêtes sont envoyées à <a id="endpoint" href="http://fr.dbpedia.org/sparql">http://fr.dbpedia.org/sparql</a>
+             </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+  					 <textarea id="yasqe"></textarea>
+            </div>
+          </div>
 				</div>
 			</div>
 			<div class="row justify-content-center">
@@ -394,7 +402,7 @@
 			}
 
 			listUrlDBPedia = function(domain, property, range) {
-				var QUERY_SERVICE = "http://fr.dbpedia.org/sparql"
+				var QUERY_SERVICE = $('#endpoint').text();
 
 				var sparql = "SELECT ?range ?count (CONCAT(?rangeString, ' (', STR(?count), ')') AS ?rangeLabel) \n WHERE {\n { SELECT DISTINCT ?range (COUNT(?domain) AS ?count) WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . } }\n ?range rdfs:label ?rangeString . FILTER(lang(?rangeString) = \"fr\") }\n ORDER BY DESC(?count)";
 
@@ -406,7 +414,8 @@
 			}
 
 			searchUrlDBPedia = function(domain, property, range, key) {
-				var QUERY_SERVICE = "http://fr.dbpedia.org/sparql"
+				var QUERY_SERVICE = $('#endpoint').text();
+
 				var sparql = "SELECT DISTINCT ?range ?rangeLabel WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . ?range rdfs:label ?rangeLabel FILTER(lang(?rangeLabel) = \"fr\") FILTER(bif:contains(?rangeLabel, \""+key+"\")) } ORDER BY ?rangeLabel";
 
 				sparql = semanticPostProcess(sparql, null);
@@ -419,7 +428,7 @@
 			var yasqe = YASQE.fromTextArea(document.getElementById("yasqe"), {
 				sparql : {
 					showQueryButton : true,
-					endpoint : "http://fr.dbpedia.org/sparql"
+					endpoint : $('#endpoint').text()
 				}
 			});
 
