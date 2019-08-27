@@ -18,7 +18,7 @@ const i18nLabels = {
 };
 
 SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").SimpleJsonLdSpecificationProvider;
-SparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SparqlAutocompleteAndListHandler;
+SparqlBifContainsAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SparqlBifContainsAutocompleteAndListHandler;
 
 (function( $ ) {
  

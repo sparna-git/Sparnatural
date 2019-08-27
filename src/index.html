@@ -309,7 +309,7 @@
 			  	maxDepth: 4,
 				  addDistinct: true,
 				  backgroundBaseColor: '2,184,117',
-				  autocomplete : new SparqlAutocompleteAndListHandler(
+				  autocomplete : new SparqlBifContainsAutocompleteAndListHandler(
               $('#endpoint').text(),
               {
                   semanticPostProcess : function(sparql) {
@@ -317,7 +317,7 @@
                   }
               }
           ),
-				  list : new SparqlAutocompleteAndListHandler(
+				  list : new SparqlBifContainsAutocompleteAndListHandler(
               $('#endpoint').text(),
               {
                   semanticPostProcess : function(sparql) {
