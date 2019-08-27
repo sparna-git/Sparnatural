@@ -24,8 +24,6 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 			  	break;
 			}
 		}
-
-		// return this._getResourceById(objectPropertyId).widget["@type"];
 	}
 
 	this.getIconPath = function(classId) {

@@ -303,28 +303,24 @@
 
 			$( document ).ready(function($) {		
 
+        var sparqlHandler = new SparqlBifContainsAutocompleteAndListHandler(
+          $('#endpoint').text(),
+          {
+              semanticPostProcess : function(sparql) {
+                  return semanticPostProcess(sparql, null);
+              }
+          },
+          "fr"
+        );
+
 			  $('#ui-search').Sparnatural({
 			  	config: config,
 			  	language: lang,
 			  	maxDepth: 4,
 				  addDistinct: true,
 				  backgroundBaseColor: '2,184,117',
-				  autocomplete : new SparqlBifContainsAutocompleteAndListHandler(
-              $('#endpoint').text(),
-              {
-                  semanticPostProcess : function(sparql) {
-                      return semanticPostProcess(sparql, null);
-                  }
-              }
-          ),
-				  list : new SparqlBifContainsAutocompleteAndListHandler(
-              $('#endpoint').text(),
-              {
-                  semanticPostProcess : function(sparql) {
-                      return semanticPostProcess(sparql, null);
-                  }
-              }
-          ),
+				  autocomplete : sparqlHandler,
+				  list : sparqlHandler,
 				  onQueryUpdated: function(queryString, queryJson) {
   					queryString = semanticPostProcess(queryString, queryJson);
   					queryString = rdfsLabelPostProcess(queryString, queryJson);
