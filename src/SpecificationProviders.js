@@ -3,64 +3,65 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 	this.specSearch = specs;
 	this.lang = lang;
 
-	this.gatLabel = function(graphItemID) {
-		for(var i in graphItemID['label']) {
-			var aLabel = graphItemID['label'][i];
-			if ( aLabel['@language'] == this.lang) {
-				return aLabel['@value'] ;
+	this.getWidget = function(objectPropertyId) {
+		var objectProperty = this._getResourceById(objectPropertyId);
+		for(var i in objectProperty['@type']) {
+			var value = objectProperty['@type'][i];
+			switch(value) {
+			  case "AutocompleteProperty":
+			    return "AutocompleteProperty";
+			    break;
+			  case "ListProperty":
+			    return "ListProperty";
+			    break;
+			  case "TimePeriodProperty":
+			    return "TimePeriodProperty";
+			    break;
+			  case "SearchProperty":
+			    return "SearchProperty";
+			    break;
+			  default:
+			  	break;
 			}
 		}
-		return '';		
 	}
 
-	this.getResourceById = function(id) {
-		for(var i in this.specSearch['@graph']) {
-			var anEntry = this.specSearch['@graph'][i];
-			if ( anEntry['@id'] == id) {
-				return anEntry;
-			}
-		}
-		return null;
+	this.getIconPath = function(classId) {
+		return this._getResourceById(classId)["iconPath"];
 	}
 
-	this.getClassLabel = function(ClassId) {
-		var classLabel = null ;
-		var classObject = this.getResourceById(ClassId) ;
-		if (classObject !== null) {
-			for(var i in classObject['label']) {
-				var aLabel = classObject['label'][i];
+	this.getHighlightedIconPath = function(classId) {
+		return this._getResourceById(classId)["highlightedIconPath"];
+	}
+
+	this.getLabel = function(classOrPropertyId) {
+		var item = this._getResourceById(classOrPropertyId) ;
+		if (item !== null) {
+			for(var i in item['label']) {
+				var aLabel = item['label'][i];
 				if (aLabel['@language'] == this.lang) {
 					return aLabel['@value'] ;
 				}
 			}
 		}
+
 		return null ;
 	}
 
-	/* List of possible Class relative to a Class
-	@Id of Class or null if is the first list selection
-	return array of @type Class in specSearch 
+	/* 
+		List of possible Class relative to a Class
+		return array of @type Class in specSearch 
 	*/
-	this.getAllClassFor = function(ClassID) {
+	this.getConnectedClasses = function(classId) {
 		var items = [];
 
-		for(var j in this.specSearch['@graph']) {			
-			if (this.specSearch['@graph'][j]['@type'] == 'ObjectProperty') {
-				var objectProperty = this.specSearch['@graph'][j];
-				
-				// if ClassIf is null, we are looking for all domain values
-				if (ClassID === null) {
-					var values = this.readDomain(objectProperty);
+		for(var j in this.specSearch['@graph']) {
+			var item = this.specSearch['@graph'][j];		
+			if (this._isObjectProperty(item)) {
+				if (this._inDomainOf(item, classId)) {
+					var values = this._readRange(item);
 					for(var i in values) {
-						items = this.pushIfNotInArray(this.getResourceById(values[i]), items);
-					}
-				// otherwise we are looking for range values of all properties
-				// for which this class is in the domain
-				} else if (this.inDomainOf(objectProperty, ClassID)) {
-					var values = this.readRange(objectProperty);
-					for(var i in values) {
-						var item = this.getResourceById(values[i]) ;
-						items = this.pushIfNotInArray(item, items);
+						items = this._pushIfNotExist(values[i], items);
 					}
 				}
 			}
@@ -69,35 +70,69 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		return items ;
 	}
 
-	this.ClassHaveRange = function(ClassID) {
-		if (this.getAllClassFor(ClassID).length > 0 ) {
-			return true;
-		} else {
-			return false ;
-		}
+	this.hasConnectedClasses = function(classId) {
+		return ( this.getConnectedClasses(classId).length > 0 );
 	}
+
+	/*
+		Reads "first-level" classes, i.e. classes that are in the domain
+		of at least one property that connects them to other classes
+	*/
+	this.getClassesInDomainOfAnyProperty = function() {
+		var items = [];
+
+		for(var j in this.specSearch['@graph']) {
+			var item = this.specSearch['@graph'][j];		
+			if (this._isObjectProperty(item)) {				
+				var domains = this._readDomain(item);
+				for(var i in domains) {
+					items = this._pushIfNotExist(domains[i], items);
+				}
+			}
+		}
+
+		return items ;
+	}
+
+
 
 	/* List of possible ObjectProperty relative to a Class
 		@Id of Class
 		return array of @type ObjectProperty in specSearch 
 	*/
-	this.getAllObjectPropertyFor = function(domainClassID, rangeClassID) {
+	this.getConnectingProperties = function(domainClassId, rangeClassId) {
 		var items = [];
 
 		for(var i in this.specSearch['@graph']) {
 			var item = this.specSearch['@graph'][i];
-			if (item['@type'] == 'ObjectProperty') {
+			if (this._isObjectProperty(item)) {
 				if(
-					(domainClassID === null || this.inDomainOf(item, domainClassID))
+					(domainClassId === null || this._inDomainOf(item, domainClassId))
 					&&
-					(rangeClassID === null || this.inRangeOf(item, rangeClassID))
+					(rangeClassId === null || this._inRangeOf(item, rangeClassId))
 				) {
-					items = this.pushIfNotInArray(item, items);
+					items = this._pushIfNotExist(item['@id'], items);
 				}
 			}
 		}
 
 		return items ;
+	}
+
+	this._inDomainOf = function(objectProperty, classId) {
+		return this._readDomain(objectProperty).indexOf(classId) >= 0;
+	}
+
+	this._inRangeOf = function(objectProperty, classId) {
+		return this._readRange(objectProperty).indexOf(classId) >= 0;
+	}
+
+	this._readDomain = function(objectProperty) {
+		return this._readDomainOrRange(objectProperty, 'domain');
+	}
+
+	this._readRange = function(objectProperty) {
+		return this._readDomainOrRange(objectProperty, 'range');
 	}
 
 	this._readDomainOrRange = function(objectProperty, domainOrRange) {
@@ -114,23 +149,32 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		return result;
 	}
 
-	this.readDomain = function(objectProperty) {
-		return this._readDomainOrRange(objectProperty, 'domain');
+	this._isObjectProperty = function(item) {
+		if (typeof item['@type'] === "object") {
+			for(var i in item['@type']) {
+				var value = item['@type'][i];
+				if(value == 'ObjectProperty') {
+					return true;
+				}
+			}
+
+			return false;
+		} else {
+			return (item['@type'] == 'ObjectProperty')
+		}
 	}
 
-	this.readRange = function(objectProperty) {
-		return this._readDomainOrRange(objectProperty, 'range');
+	this._getResourceById = function(id) {
+		for(var i in this.specSearch['@graph']) {
+			var anEntry = this.specSearch['@graph'][i];
+			if ( anEntry['@id'] == id ) {
+				return anEntry;
+			}
+		}
+		return null;
 	}
 
-	this.inDomainOf = function(objectProperty, classId) {
-		return this.readDomain(objectProperty).indexOf(classId) >= 0;
-	}
-
-	this.inRangeOf = function(objectProperty, classId) {
-		return this.readRange(objectProperty).indexOf(classId) >= 0;
-	}
-
-	this.pushIfNotInArray = function(item, items) {
+	this._pushIfNotExist = function(item, items) {
 		if (items.indexOf(item) < 0) {
 			items.push(item) ;
 		}

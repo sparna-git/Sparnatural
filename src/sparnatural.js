@@ -18,7 +18,8 @@ const i18nLabels = {
 };
 
 SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").SimpleJsonLdSpecificationProvider;
-
+SparqlBifContainsAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SparqlBifContainsAutocompleteAndListHandler;
+SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SimpleSparqlAutocompleteAndListHandler;
 
 (function( $ ) {
  
@@ -46,7 +47,7 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 				 * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
 				 * @param {string} key - The letters that the user has typed in the search field.
 				 **/
-				url : function(domain, property, range, key) {
+				autocompleteUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key"  ) ;
 				},
 
@@ -99,7 +100,7 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 				 * @param {string} property - The predicate of the criteria currently being edited
 				 * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
 				 **/
-				url : function(domain, property, range) {
+				listUrl : function(domain, property, range) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option listUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range" ) ;
 				},
 
@@ -164,17 +165,17 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 			}
 		};
 		
-		var TYPE_WIDGET_LIST_URI = 'http://ontologies.sparna.fr/Sparnatural#ListWidget';
-		var TYPE_WIDGET_TIME_URI = 'http://ontologies.sparna.fr/Sparnatural#TimeWidget';
-		var TYPE_WIDGET_AUTOCOMPLETE_URI = 'http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget';
-		var TYPE_WIDGET_SEARCH_URI = 'http://ontologies.sparna.fr/Sparnatural#SearchWidget';
+		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
+		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
+		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
+		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
 		
 		/*Utiliser pour affichage texte avant champ de recherhce mot clés */
 		var LABEL_URI = 'http://www.openarchaeo.fr/explorateur/onto#Label';
 		
 		var VALUE_SELECTION_WIDGETS = [
-			TYPE_WIDGET_LIST_URI,
-			TYPE_WIDGET_AUTOCOMPLETE_URI
+			WIDGET_LIST_PROPERTY,
+			WIDGET_AUTOCOMPLETE_PROPERTY
 		];
 		
 		var settings = $.extend( true, {}, defaults, options );
@@ -376,7 +377,7 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 				
 				//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) == "undefined" || this.CriteriaGroup.EndClassWidgetGroup.value_selected === null) {
 				if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length === 0 ) {
-					var WidgetsNeedValueIds = [TYPE_WIDGET_SEARCH_URI, TYPE_WIDGET_TIME_URI] ;
+					var WidgetsNeedValueIds = [WIDGET_SEARCH_PROPERTY, WIDGET_TIME_PERIOD_PROPERTY] ;
 					if ($.inArray(this.CriteriaGroup.EndClassWidgetGroup.widgetType, WidgetsNeedValueIds) > -1) {
 						next_loop = true ;
 					}
@@ -469,27 +470,27 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 					var jsonValue = initValues() ;
 					
 					switch (_WidgetType) {					
-					  case TYPE_WIDGET_LIST_URI:
+					  case WIDGET_LIST_PROPERTY:
 						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
 							// add values clause if we have more than 1 values
 							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
 							Json = addInWhere(Json, jsonValue) ;
 						}
 						break;
-					  case TYPE_WIDGET_AUTOCOMPLETE_URI:
+					  case WIDGET_AUTOCOMPLETE_PROPERTY:
 						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
 							// add values clause if we have more than 1 values
 							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
 							Json = addInWhere(Json, jsonValue) ;
 						}
 						break;
-					  case TYPE_WIDGET_TIME_URI:							
+					  case WIDGET_TIME_PERIOD_PROPERTY:							
 						$.each(this.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
 							jsonFilter = initFilterTime(value.start, value.stop, endValueName) ;
 							Json = addInWhere(Json, jsonFilter) ;
 						});
 						break;
-					  case TYPE_WIDGET_SEARCH_URI:
+					  case WIDGET_SEARCH_PROPERTY:
 						var Texte = $('#ecgrw-search-'+ this.index +'-input-value').val() ;
 						jsonFilter = initFilterSearch(Texte, endValueName) ;
 						Json = addInWhere(Json, jsonFilter) ;
@@ -559,26 +560,37 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 
 		this.buildClassSelect = function(classId, inputID, default_value) {
 			var list = [] ;
-			var items = specProvider.getAllClassFor(classId) ;
+			var items = [] ;
+
+			if(classId === null) {
+			 	items = specProvider.getClassesInDomainOfAnyProperty() ;
+			} else {
+				items = specProvider.getConnectedClasses(classId) ;
+			}
+
 			$.each( items, function( key, val ) {
-				var label = specProvider.getClassLabel(val['@id']) ;
-				if (!val['highlightedIconPath'] || 0 === val['highlightedIconPath'].length) {
-					val['highlightedIconPath'] = val['iconPath'] ;
+				var label = specProvider.getLabel(val) ;
+				var iconPath = specProvider.getIconPath(val) ;
+				var highlightedIconPath = specProvider.getHighlightedIconPath(val) ;
+
+				if (!highlightedIconPath || 0 === highlightedIconPath.length) {
+					highlightedIconPath = iconPath ;
 				}
 				
-				var image = ' data-icon="'+val['iconPath']+'" data-iconh="'+val['highlightedIconPath']+'"' ;
+				var image = ' data-icon="' + iconPath + '" data-iconh="' + highlightedIconPath + '"' ;
 				var selected ='';
-				if (default_value == val['@id']) {
+				if (default_value == val) {
 					selected = 'selected="selected"' ;
 				}
-				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'"'+image+selected+'>'+ label + '</option>' );
-
+				list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
 			}) ;
+
 			var html_list = $( "<select/>", {
 				"class": "my-new-list input-val",
 				"id": 'select-'+inputID,
 				html: list.join( "" )
 			  });
+
 			return html_list ;
 		}
 	}
@@ -589,14 +601,14 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 
 		this.buildPropertySelect = function(domainClassID, rangeClassID, inputID, default_value) {
 			var list = [] ;
-			var items = specProvider.getAllObjectPropertyFor(domainClassID,rangeClassID) ;
+			var items = specProvider.getConnectingProperties(domainClassID,rangeClassID) ;
 			$.each( items, function( key, val ) {
-				var label = specProvider.gatLabel(val) ;
+				var label = specProvider.getLabel(val) ;
 				var selected ='';
-				if (default_value == val['@id']) {
+				if (default_value == val) {
 					selected = 'selected="selected"' ;
 				}
-				list.push( '<option value="'+val['@id']+'" data-id="'+val['@id']+'"'+selected+'>'+ label + '</option>' );
+				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+'>'+ label + '</option>' );
 
 			}) ;
 			var html_list = $( "<select/>", {
@@ -925,7 +937,7 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 			
 			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
 			
-			if (specProvider.ClassHaveRange(this.value_selected)) {
+			if (specProvider.hasConnectedClasses(this.value_selected)) {
 				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
 			} else {
 				$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
@@ -949,9 +961,8 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 		this.hasSubvalues = true ;
 		this.value_selected = [] ;
 		
-		this.detectWidgetType = function () {		
-			this.objectPropertyDefinition = this.specProvider.getResourceById(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
-			this.widgetType = this.objectPropertyDefinition.widget['@type'] ;
+		this.detectWidgetType = function () {
+			this.widgetType = this.specProvider.getWidget(this.ParentComponent.ObjectPropertyGroup.value_selected);
 		};
 		
 		this.inputTypeComponent = new ObjectPropertyTypeWidget(this, this.settings, specProvider) ;
@@ -1196,7 +1207,7 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 			if (this.ParentComponent instanceof ActionsGroup) {				
 				if (this instanceof ActionWhere) {
 					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-					var endLabel = specProvider.getClassLabel(endClassGroup.value_selected) ;
+					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
 					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
 					possible_values = widgetLabel+'<a>+</a>' ;
 				}
@@ -1294,9 +1305,9 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
 				if (endClassGroup.value_selected == LABEL_URI) {
-					var endLabel = specProvider.getClassLabel(endClassGroup.value_selected) ;
+					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
 				} else {
-					var endLabel = langSearch.Find+' '+specProvider.getClassLabel(endClassGroup.value_selected) ;
+					var endLabel = langSearch.Find+' '+specProvider.getLabel(endClassGroup.value_selected) ;
 				}
 				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 				
@@ -1316,16 +1327,16 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 
 		this.getWigetTypeClassName = function getWigetTypeClassName() {
 			switch (this.widgetType) {
-			  case TYPE_WIDGET_LIST_URI:
+			  case WIDGET_LIST_PROPERTY:
 				this.widgetComponent = new ListWidget(this, this.settings.list) ;
 				break;
-			  case TYPE_WIDGET_AUTOCOMPLETE_URI:
+			  case WIDGET_AUTOCOMPLETE_PROPERTY:
 				this.widgetComponent = new AutoCompleteWidget(this, this.settings.autocomplete) ;
 			    break;
-			  case TYPE_WIDGET_TIME_URI:
+			  case WIDGET_TIME_PERIOD_PROPERTY:
 				this.widgetComponent = new DatesWidget(this, this.settings.dates) ;
 				break;
-			  case TYPE_WIDGET_SEARCH_URI:
+			  case WIDGET_SEARCH_PROPERTY:
 				this.widgetComponent = new SearchWidget(this) ;
 				break;
 			  default:
@@ -1338,15 +1349,15 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 			
 			var value = null ;
 			switch (this.widgetType) {
-			  case TYPE_WIDGET_LIST_URI:
+			  case WIDGET_LIST_PROPERTY:
 			  var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				value = $(id_input).val() ;
 				break;
-			  case TYPE_WIDGET_AUTOCOMPLETE_URI:
+			  case WIDGET_AUTOCOMPLETE_PROPERTY:
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				value = $(id_input).val() ;
 			    break;
-			  case TYPE_WIDGET_TIME_URI:
+			  case WIDGET_TIME_PERIOD_PROPERTY:
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				
 				value = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
@@ -1359,7 +1370,7 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 					}
 				}				
 				break;
-			  case TYPE_WIDGET_SEARCH_URI:
+			  case WIDGET_SEARCH_PROPERTY:
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				value = $(id_input).val() ;
 				break;
@@ -1374,19 +1385,19 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 		this.GetValueLabel = function () {			
 			var valueLabel = null ;
 			switch (this.widgetType) {
-			  case TYPE_WIDGET_LIST_URI:
+			  case WIDGET_LIST_PROPERTY:
 			  	var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				valueLabel = '<span>' +$(id_input).find('option:selected').text() + '</span>' ;
 				break;
-			  case TYPE_WIDGET_AUTOCOMPLETE_URI:
+			  case WIDGET_AUTOCOMPLETE_PROPERTY:
 				var id_input = '#ecgrw-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				valueLabel = '<span>' + $(id_input).val()  + '</span>' ;
 			    break;
-			  case TYPE_WIDGET_TIME_URI:				
+			  case WIDGET_TIME_PERIOD_PROPERTY:				
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				valueLabel = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
 				break;
-			  case TYPE_WIDGET_SEARCH_URI:				
+			  case WIDGET_SEARCH_PROPERTY:				
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
 				valueLabel = '<span>'+ $(id_input).val() +'</span>' ;
 				break;				
@@ -1426,7 +1437,7 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 			var options = {
 				// ajaxSettings: {crossDomain: true, type: 'GET'} ,
 				url: function(phrase) {
-					return autocompleteHandler.url(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
+					return autocompleteHandler.autocompleteUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
 
 				listLocation: function (data) {
@@ -1494,7 +1505,7 @@ SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").Simpl
 			
 			var itc_obj = this.ParentComponent;
 			var options = {
-				url: settings.list.url(
+				url: settings.list.listUrl(
 					startClassGroup_value,
 					ObjectPropertyGroup_value,
 					endClassGroup_value
