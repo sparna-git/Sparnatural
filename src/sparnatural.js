@@ -1,7 +1,6 @@
 require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
-var SparqlGenerator = require('sparqljs').Generator;
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
@@ -20,6 +19,9 @@ const i18nLabels = {
 SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").SimpleJsonLdSpecificationProvider;
 SparqlBifContainsAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SparqlBifContainsAutocompleteAndListHandler;
 SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SimpleSparqlAutocompleteAndListHandler;
+
+DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
+
 
 (function( $ ) {
  
@@ -221,292 +223,9 @@ SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.
 			
 			$(thisForm_._this).on('submit', { formObject : thisForm_ }, function (event) {		
 				event.preventDefault();
-				ExecuteSubmited(event.data.formObject) ;
+				var qGenerator = new DefaultQueryGenerator(settings.addDistinct, settings.typePredicate);
+				qGenerator.generateQuery(event.data.formObject, settings.onQueryUpdated)
 			}) ;
-		}
-		
-		function newQueryJson() {
-			return {
-				"queryType": "SELECT"+((settings.addDistinct)?' DISTINCT':'')+"",
-				"variables": [
-					"?this"
-				],
-				"where": [],
-				"type": "query",
-				"prefixes": {
-					"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-					"xsd": "http://www.w3.org/2001/XMLSchema#"
-				}
-			}
-		}
-		
-		function initTriple() {			
-			return {
-					"type": "bgp",
-					"triples": []
-			} ;
-		}
-
-		function initValues() {			
-			return {
-					"type": "values",
-					"values": []
-			} ;
-		}
-
-		function initFilterTime(StartYear, EndYear, index) {
-			return {
-				"type": "filter",
-				"expression": {
-					"type": "operation",
-					"operator": "&&",
-					"args": [
-						{
-							"type": "operation",
-							"operator": ">",
-							"args": [
-								""+index+"",
-								"\""+StartYear+"-01-01\"^^http://www.w3.org/2001/XMLSchema#date"
-							]
-						},
-						{
-							"type": "operation",
-							"operator": "<=",
-							"args": [
-								""+index+"",
-								"\""+EndYear+"-12-31\"^^http://www.w3.org/2001/XMLSchema#date"
-							]
-						}
-					]
-				}
-			} ;
-		}
-
-		function initFilterSearch(Texte, index) {			
-			return {
-				"type": "filter",
-				"expression": {
-					"type": "operation",
-					"operator": "regex",
-					"args": [
-						
-						""+index+"",
-						"\""+Texte+"\"",
-						"\"i\""
-					]
-				}
-			} ;
-		}
-
-		function addTriple(jsonTriples, subjet, predicate, object) {
-			
-			var triple = {
-				"subject": subjet,
-				"predicate": predicate,
-				"object": object,
-			} ;
-						
-			jsonTriples.triples.push(triple) ;
-			
-			return jsonTriples ;
-		}
-		
-		function addInWhere(Json, JsonToWhere) {
-			Json.where.push(JsonToWhere) ;		
-			return Json ;
-		}
-
-		function addVariable(jsonValues, name, valueUrl) {			
-			$.each(valueUrl, function( index, value ) {
-			  var newValue = {
-				//[name]: value
-			  }
-			  newValue[name] = value ;
-			  jsonValues.values.push(newValue) ;			  
-			});
-			
-			return jsonValues ;	
-		}
-
-		function addVariableDate(json, name, valueUrl) {			
-			var newValue = {
-				//[name]: valueUrl
-			};
-			newValue[name] = valueUrl ;
-			json.where[1].values.push(newValue) ;		
-			
-			return json ;	
-		}
-		
-		function ExecuteSubmited(formObject) {
-			
-			var Json = newQueryJson() ;
-			//var levelCriteria = [] ;
-			//var levelCursor = 0 ;
-			//var ComponentsTree = [] ;
-			//var VarsString = [] ;
-			
-			
-			var ArrayLiIndex = [] ;
-
-			var all_complete = true ;
-			
-			$(formObject._this).find('ul.componentsListe li.groupe').each(function(i) {
-				
-				var data_id = $(this).attr('data-index') ;
-
-				ArrayLiIndex[data_id] = ArrayLiIndex.length ;
-				//console.log(this);
-				
-				/*if (!$(this).hasClass('completed')) {
-					all_complete = false ;
-				}*/
-				
-			}) ;
-			
-			
-			if (!all_complete) {
-				return false ;
-			}
-			
-			var have_queriable_criteres = false ;
-			
-			$(formObject.components).each(function(i) {
-					
-				var next_loop = false ;
-				
-				//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) == "undefined" || this.CriteriaGroup.EndClassWidgetGroup.value_selected === null) {
-				if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length === 0 ) {
-					var WidgetsNeedValueIds = [WIDGET_SEARCH_PROPERTY, WIDGET_TIME_PERIOD_PROPERTY] ;
-					if ($.inArray(this.CriteriaGroup.EndClassWidgetGroup.widgetType, WidgetsNeedValueIds) > -1) {
-						next_loop = true ;
-					}
-				}
-				
-				if (next_loop) {
-					return true;
-				} else {
-					have_queriable_criteres = true ;
-				}
-				
-				var dependantDe = GetDependantCriteria(formObject, this.index ) ;
-				var addStartClass = true ;
-				var StartVar;
-				var EndVar;
-
-				if ((dependantDe != null) && (dependantDe.type == 'parent')){
-					StartVar = ArrayLiIndex[dependantDe.element.id] + 1;
-					if (StartVar == 0) {
-						StartVar = 'this' ;
-					} 
-					
-					EndVar = ArrayLiIndex[this.index] + 1;					
-					addStartClass = false ;					
-				} else {						
-					StartVar = 'this' ;
-					EndVar = ArrayLiIndex[this.index] + 1 ;
-					/*levelCursor = 0 ;
-					levelCriteria[levelCursor] = this.index ;*/
-				}
-				if ((dependantDe != null) && (dependantDe.type == 'sibling')){
-					addStartClass = false ;
-				}
-				
-				
-				var start = this.CriteriaGroup.StartClassGroup.value_selected ;
-				var obj = this.CriteriaGroup.ObjectPropertyGroup.value_selected ;
-				var end = this.CriteriaGroup.EndClassGroup.value_selected ; 
-				
-				if (start.indexOf("#") > -1) {
-					var StartLabel = start.split("#") ;
-					StartLabel = StartLabel[1] ;
-				} else {
-					var StartLabel = start.split("/") ;
-					StartLabel = StartLabel[StartLabel.length - 1] ;
-				}
-
-				/** A traiter dans les cas ou une recherche est effectuer directement avec un mot clé ou si selecction incomplete **/
-				if (end.indexOf("#") > -1) {
-					var EndLabel = end.split("#") ;
-					EndLabel = EndLabel[1] ;
-				} else {
-					var EndLabel = end.split("/") ;
-					EndLabel = EndLabel[EndLabel.length - 1] ;
-				}
-				
-				if (StartVar != 'this') {
-					StartVar = StartLabel+''+StartVar ;
-				}
-
-				EndVar = EndLabel+''+EndVar;
-				var endValueName = '?'+EndVar ;
-				
-				var new_triple = initTriple() ;
-				if (addStartClass) {
-					new_triple = addTriple(new_triple, '?'+StartVar, settings.typePredicate, start) ;
-				}
-				
-				var _WidgetType = this.CriteriaGroup.EndClassWidgetGroup.widgetType ;
-				
-				if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {						
-					if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {
-						// if we are in a value selection widget and we have a single value selected
-						// then insert the value directly as the object of the triple						
-						new_triple = addTriple(new_triple, '?'+StartVar, obj, this.CriteriaGroup.EndClassWidgetGroup.value_selected[0]) ;
-					} else {
-						// otherwise use a variable name as the object of the triple
-						new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
-					}						
-				} else {
-					new_triple = addTriple(new_triple, '?'+StartVar, obj, endValueName) ;
-				}
-				
-				Json = addInWhere(Json, new_triple) ;
-				
-				
-				//if(typeof(this.CriteriaGroup.EndClassWidgetGroup.value_selected) != "undefined" && this.CriteriaGroup.EndClassWidgetGroup.value_selected !== null) {
-				if(this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 0 ) {
-					
-					var jsonValue = initValues() ;
-					
-					switch (_WidgetType) {					
-					  case WIDGET_LIST_PROPERTY:
-						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
-							// add values clause if we have more than 1 values
-							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
-							Json = addInWhere(Json, jsonValue) ;
-						}
-						break;
-					  case WIDGET_AUTOCOMPLETE_PROPERTY:
-						if (this.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
-							// add values clause if we have more than 1 values
-							jsonValue = addVariable(jsonValue, endValueName, this.CriteriaGroup.EndClassWidgetGroup.value_selected)
-							Json = addInWhere(Json, jsonValue) ;
-						}
-						break;
-					  case WIDGET_TIME_PERIOD_PROPERTY:							
-						$.each(this.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
-							jsonFilter = initFilterTime(value.start, value.stop, endValueName) ;
-							Json = addInWhere(Json, jsonFilter) ;
-						});
-						break;
-					  case WIDGET_SEARCH_PROPERTY:
-						var Texte = $('#ecgrw-search-'+ this.index +'-input-value').val() ;
-						jsonFilter = initFilterSearch(Texte, endValueName) ;
-						Json = addInWhere(Json, jsonFilter) ;
-						break;
-					  default:						
-					}						
-				}			
-				
-			}) ;
-					
-			if (have_queriable_criteres) {
-				var generator = new SparqlGenerator();
-				var generatedQuery = generator.stringify(Json);
-				// send generated query to callback function
-				settings.onQueryUpdated(generatedQuery, Json) ;
-			}
 		}
 		
 	function initGeneralEvent(thisForm_) {
@@ -635,7 +354,7 @@ SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.
 		
 		var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"><span>'+langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
 		
-		// si il faut desscendre d'un niveau
+		// si il faut descendre d'un niveau
 		if ($(contexte).is('li')) {
 			if ($(contexte).find('>ul').length == 0) {
 				var ul = $('<ul class="childsList"><div class="lien-top"><span>'+langSearch.Where+'</span></div></ul>').appendTo($(contexte)) ;
@@ -1122,7 +841,6 @@ SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.
 	
 
 	function GetDependantCriteria(thisForm_, id) {
-	// var GetDependantCriteria = function (thisForm_, id) {
 		var dependant = null ;
 		var dep_id = null ;
 		var element = thisForm_._this.find('li[data-index="'+id+'"]') ;

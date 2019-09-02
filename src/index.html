@@ -111,7 +111,7 @@
   },
   "@graph": [
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto",
       "@type" : "Ontology"
     },
     {
@@ -151,6 +151,15 @@
     "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-male'></i>&nbsp;&nbsp;</span>"
     },
     {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
+      "@type" : "Class",
+      "label": [
+        {"@value" : "Search","@language" : "en"},
+        {"@value" : "Rechercher","@language" : "fr"}
+      ],
+    "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-search'></i>&nbsp;&nbsp;</span>"
+    },
+    {
       "@id" : "http://dbpedia.org/ontology/country",
       "@type" : [
         "ObjectProperty",
@@ -164,7 +173,7 @@
       "range": "http://dbpedia.org/ontology/Country"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#countryOf",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#countryOf",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
@@ -191,7 +200,7 @@
       "range": "http://dbpedia.org/ontology/Museum"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#displays",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
@@ -218,7 +227,7 @@
       "range": "http://dbpedia.org/ontology/Person"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#created",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#created",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
@@ -232,7 +241,7 @@
       "path": "^<http://dbpedia.org/ontology/author>"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#bornIn",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
       "@type" : [
         "ObjectProperty",
         "ListProperty"
@@ -246,7 +255,7 @@
       "path": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#birthPlace",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#birthPlace",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
@@ -260,7 +269,7 @@
       "path": "^(<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>)"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#diedIn",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#diedIn",
       "@type" : [
         "ObjectProperty",
         "ListProperty"
@@ -274,7 +283,7 @@
       "path": "<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#deathPlace",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#deathPlace",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
@@ -286,6 +295,29 @@
       "domain": "http://dbpedia.org/ontology/Country",
       "range": "http://dbpedia.org/ontology/Person",
       "path": "^(<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>)"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#search",
+      "@type" : [
+        "ObjectProperty",
+        "SearchProperty"
+      ],
+      "label": [
+        {"@value" : "text search","@language" : "en"},
+        {"@value" : "recherche plein-texte","@language" : "fr"}
+      ],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://dbpedia.org/ontology/Museum"},
+            { "@id" : "http://dbpedia.org/ontology/Person"},
+            { "@id" : "http://dbpedia.org/ontology/Artwork"}
+          ]
+        }
+      },
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
+      "path": "rdfs:label"
     }
   ]
 }
