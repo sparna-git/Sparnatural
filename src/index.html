@@ -342,7 +342,7 @@
                   return semanticPostProcess(sparql, null);
               }
           },
-          "fr"
+          lang
         );
 
 			  $('#ui-search').Sparnatural({
@@ -350,6 +350,7 @@
 			  	language: lang,
 			  	maxDepth: 4,
 				  addDistinct: true,
+          addObjectsTypeCriteria: true,
 				  backgroundBaseColor: '2,184,117',
 				  autocomplete : sparqlHandler,
 				  list : sparqlHandler,

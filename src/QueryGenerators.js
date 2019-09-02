@@ -2,11 +2,12 @@ var SparqlGenerator = require('sparqljs').Generator;
 
 class DefaultQueryGenerator {
 
-	constructor(addDistinct, typePredicate) {
+	constructor(addDistinct, typePredicate, addObjectsTypeCriteria) {
 		this.WIDGETS_REQUIRING_VALUES = ['SearchProperty', 'TimePeriodProperty'] ;
 
 		this.addDistinct = addDistinct;
 		this.typePredicate = typePredicate;
+		this.addObjectsTypeCriteria = addObjectsTypeCriteria;
 	}
 
 	/**
@@ -125,7 +126,16 @@ class DefaultQueryGenerator {
 			} else {
 				// otherwise use a variable name as the object of the triple
 				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
-			}						
+			}
+
+			// if no value is selected add a type criteria for the object
+			if (
+					component.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 0
+					&&
+					this.addObjectsTypeCriteria
+			) {
+				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;
+			}
 		} else {
 			newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
 		}

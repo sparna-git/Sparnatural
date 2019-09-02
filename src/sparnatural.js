@@ -34,6 +34,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			config: 'config/spec-search.json',
 			language: 'en',
 			addDistinct: false,
+			addObjectsTypeCriteria: true,
 			typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 			maxDepth: 3,
 			maxOr: 3,
@@ -138,7 +139,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				}
 			},
 			dates : {
-				url : function(domain, property, range, key) {
+				datesUrl : function(domain, property, range, key) {
 					console.log("Veuillez préciser le nom de la fonction pour l'option datesUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
 				},
 				listLocation: function(domain, property, range, data) {
@@ -152,8 +153,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				},
 				elementEnd: function(element) {
 					return element.stop.year;
-				}
-				
+				}				
 			},
 			
 			/**
@@ -223,7 +223,11 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			
 			$(thisForm_._this).on('submit', { formObject : thisForm_ }, function (event) {		
 				event.preventDefault();
-				var qGenerator = new DefaultQueryGenerator(settings.addDistinct, settings.typePredicate);
+				var qGenerator = new DefaultQueryGenerator(
+					settings.addDistinct,
+					settings.typePredicate,
+					settings.addObjectsTypeCriteria
+				);
 				qGenerator.generateQuery(event.data.formObject, settings.onQueryUpdated)
 			}) ;
 		}
@@ -1279,7 +1283,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var itc_obj = this.ParentComponent;			
 			
 			$.ajax({
-				url: settings.dates.url(
+				url: settings.dates.datesUrl(
 					startClassGroup_value,
 					ObjectPropertyGroup_value,
 					endClassGroup_value,
