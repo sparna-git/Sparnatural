@@ -26,12 +26,16 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		}
 	}
 
-	this.getIconPath = function(classId) {
-		return this._getResourceById(classId)["iconPath"];
+	this.getIcon = function(classId) {
+		if(this._getResourceById(classId)["faIcon"] != null) {
+			return "<span style='font-size: 170%;' >&nbsp;<i class='" + this._getResourceById(classId)["faIcon"] + "'></i></span>";
+		} else {
+			return this._getResourceById(classId)["icon"];
+		}
 	}
 
-	this.getHighlightedIconPath = function(classId) {
-		return this._getResourceById(classId)["highlightedIconPath"];
+	this.getHighlightedIcon = function(classId) {
+		return this._getResourceById(classId)["highlightedIcon"];
 	}
 
 	this.getLabel = function(classOrPropertyId) {

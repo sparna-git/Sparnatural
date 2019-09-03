@@ -60,15 +60,11 @@ class DefaultQueryGenerator {
 		return false;	
 	}
 
-
 	processQueryComponent(jsonQuery, formObject, ArrayLiIndex, component, index) {
 		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
 		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
-		
-		/*Utiliser pour affichage texte avant champ de recherhce mot clés */
-		var LABEL_URI = 'http://www.openarchaeo.fr/explorateur/onto#Label';
 		
 		var VALUE_SELECTION_WIDGETS = [
 			WIDGET_LIST_PROPERTY,

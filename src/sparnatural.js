@@ -290,14 +290,14 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 			$.each( items, function( key, val ) {
 				var label = specProvider.getLabel(val) ;
-				var iconPath = specProvider.getIconPath(val) ;
-				var highlightedIconPath = specProvider.getHighlightedIconPath(val) ;
+				var icon = specProvider.getIcon(val) ;
+				var highlightedIcon = specProvider.getHighlightedIcon(val) ;
 
-				if (!highlightedIconPath || 0 === highlightedIconPath.length) {
-					highlightedIconPath = iconPath ;
+				if (!highlightedIcon || 0 === highlightedIcon.length) {
+					highlightedIcon = icon ;
 				}
 				
-				var image = ' data-icon="' + iconPath + '" data-iconh="' + highlightedIconPath + '"' ;
+				var image = ' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"' ;
 				var selected ='';
 				if (default_value == val) {
 					selected = 'selected="selected"' ;
@@ -418,8 +418,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.Context = new Context(context) ;
 		this.ChildrensCriteriaGroup = new ChildrensCriteriaGroup ;
 		
-		this.StartClassGroup = new StartClassGroup(this, specProvider) ;
-		
+		this.StartClassGroup = new StartClassGroup(this, specProvider) ;		
 		this.ObjectPropertyGroup = new ObjectPropertyGroup(this, specProvider) ;
 		this.EndClassGroup = new EndClassGroup(this, specProvider) ;
 		this.EndClassWidgetGroup = new EndClassWidgetGroup(this, this.settings, specProvider) ;
@@ -1371,15 +1370,14 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.component = component ;
 		this.component.inserted = false ;
 		
-		function AppendComponentHtml() {
+		this.AppendComponentHtml = function () {
 			if (!this.component.inserted ) {
 				this.component.html = $(this.component.html).appendTo(this.component.HtmlContainer.html) ;
 				this.component.inserted = true;
 			}
-			
-		} this.AppendComponentHtml = AppendComponentHtml ;
+		}
 		
-		function UpdateStatementsClass() {
+		this.UpdateStatementsClass = function() {
 			for (var item in this.component.statements) {				
 				if (this.component.statements[item] === true) {
 					$(this.component.html).addClass(item) ;
@@ -1387,30 +1385,28 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 					$(this.component.html).removeClass(item) ;
 				}
 			}
-		} this.UpdateStatementsClass = UpdateStatementsClass ;
+		}
 		
-		function Add() {
+		this.Add = function() {
 			this.UpdateStatementsClass() ;
 			if (!this.component.inserted) {
 				this.AppendComponentHtml() ;
 			}
 
-		} this.Add = Add ;
+		} 
 		
-		function Update() {
+		this.Update = function() {
 			this.UpdateStatementsClass() ;
-		} this.Update = Update ;
+		}
 		
-		function InitHtml() {
+		this.InitHtml = function() {
 			var instance = this.component.constructor.name ;
 			var widget = this.component.widgetHtml ;
 			this.component.html = $('<div class="'+instance+' ddd"></div>') ; 
 			if (widget) {
 				this.component.html.append(widget) ; 
 			}
-			
-			
-		} this.InitHtml = InitHtml ;
+		} 
 	}
 	
 	
@@ -1423,26 +1419,21 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.hasContext = true;
 		}
 		
-		function get() {
+		this.get = function() {
 			return this.contexteReference ;
 		}
-		this.get = get ;
 	}
 	
 	function ChildrensCriteriaGroup() {
 		this.childrensReferences = [];
-		
-		function get() {
+
+		this.get = function() {
 			return this.contexteReferences ;
 		}
-		this.get = get ;
 		
-		
-		function add(children) {
+		this.add = function(children) {
 			this.childrensReferences.push(children) ;
-			//console.log(this.childrensReferences ) ;
 		}
-		this.add = add;
 	}
 
 	return this ;
