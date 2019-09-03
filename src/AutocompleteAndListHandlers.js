@@ -1,9 +1,10 @@
 class AbstractSparqlAutocompleteAndListHandler {
 
-	constructor(sparqlEndpointUrl, sparqlPostprocessor, language) {
+	constructor(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath) {
 		this.sparqlEndpointUrl = sparqlEndpointUrl;
 		this.sparqlPostprocessor = sparqlPostprocessor;
 		this.language = language;
+		this.searchPath = (searchPath != null)?searchPath:"rdfs:label";
 	}
 
 	/**
@@ -60,12 +61,13 @@ class SimpleSparqlAutocompleteAndListHandler extends AbstractSparqlAutocompleteA
 			
 		var sparql = `
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT DISTINCT ?uri ?label
-WHERE {
+ WHERE {
 	?domain a <${domain}> .
 	?domain <${property}> ?uri .
 	?uri a <${range}> .
-	?uri rdfs:label ?label 
+	?uri ${this.searchPath} ?label 
 	FILTER(lang(?label) = "${this.language}")
 	FILTER(STRSTARTS(LCASE(STR(?label)), LCASE("${key}"))) 
 } 
@@ -81,8 +83,10 @@ ORDER BY ?label
 	_buildListSparql(domain, property, range) {
 
 		var sparql = `
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT ?uri ?count (CONCAT(?labelString, ' (', STR(?count), ')') AS ?label)
-WHERE {
+ WHERE {
 	{
 		SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
 		WHERE {
@@ -91,7 +95,7 @@ WHERE {
 			?uri a <${range}> .
 		}
 	}
-	?uri rdfs:label ?labelString .
+	?uri ${this.searchPath} ?labelString .
 	FILTER(lang(?labelString) = "${this.language}")
 }
 ORDER BY DESC(?count)
@@ -115,12 +119,13 @@ class SparqlBifContainsAutocompleteAndListHandler extends SimpleSparqlAutocomple
 			
 		var sparql = `
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT DISTINCT ?uri ?label
-WHERE {
+ WHERE {
 	?domain a <${domain}> .
 	?domain <${property}> ?uri .
 	?uri a <${range}> .
-	?uri rdfs:label ?label 
+	?uri ${this.searchPath} ?label 
 	FILTER(lang(?label) = "${this.language}")
 	FILTER(bif:contains(?label, "${key}")) 
 } 
