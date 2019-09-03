@@ -5,6 +5,7 @@ class AbstractSparqlAutocompleteAndListHandler {
 		this.sparqlPostprocessor = sparqlPostprocessor;
 		this.language = language;
 		this.searchPath = (searchPath != null)?searchPath:"rdfs:label";
+		this.listOrder = "alphabetical";
 	}
 
 	/**
@@ -50,8 +51,8 @@ class AbstractSparqlAutocompleteAndListHandler {
 
 class SimpleSparqlAutocompleteAndListHandler extends AbstractSparqlAutocompleteAndListHandler {
 
-	constructor(sparqlEndpointUrl, sparqlPostprocessor, language) {
-		super(sparqlEndpointUrl, sparqlPostprocessor, language);
+	constructor(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath) {
+		super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
 	}
 
 	/**
@@ -81,8 +82,10 @@ ORDER BY ?label
 	 * Constructs the SPARQL query to use for list widget search.
 	 **/
 	_buildListSparql(domain, property, range) {
+		var sparql;
 
-		var sparql = `
+		if(this.listOrder == "count") {
+			sparql = `
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT ?uri ?count (CONCAT(?labelString, ' (', STR(?count), ')') AS ?label)
@@ -100,6 +103,21 @@ SELECT ?uri ?count (CONCAT(?labelString, ' (', STR(?count), ')') AS ?label)
 }
 ORDER BY DESC(?count)
 	`;
+		} else {
+			sparql = `
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?uri ?label
+WHERE {
+	?domain a <${domain}> .
+	?domain <${property}> ?uri .
+	?uri a <${range}> .
+	?uri ${this.searchPath} ?label .
+	FILTER(lang(?label) = "${this.language}")
+}
+ORDER BY ?label
+	`;
+		}
 
 		return sparql;
 	}
@@ -108,8 +126,8 @@ ORDER BY DESC(?count)
 
 class SparqlBifContainsAutocompleteAndListHandler extends SimpleSparqlAutocompleteAndListHandler {
 
-	constructor(sparqlEndpointUrl, sparqlPostprocessor, language) {
-		super(sparqlEndpointUrl, sparqlPostprocessor, language);
+	constructor(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath) {
+		super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
 	}
 
 	/**
@@ -125,7 +143,7 @@ SELECT DISTINCT ?uri ?label
 	?domain a <${domain}> .
 	?domain <${property}> ?uri .
 	?uri a <${range}> .
-	?uri ${this.searchPath} ?label 
+	?uri ${this.searchPath} ?label .
 	FILTER(lang(?label) = "${this.language}")
 	FILTER(bif:contains(?label, "${key}")) 
 } 
@@ -137,7 +155,52 @@ ORDER BY ?label
 
 }
 
+
+class RangeBasedAutocompleteAndListHandler {
+
+	constructor(defaultHandler, handlerByClassMap) {
+		this.defaultHandler = defaultHandler;
+		this.handlerByClassMap = handlerByClassMap;
+	}
+
+	_findHandler(domain, property, range) {
+		if(this.handlerByClassMap[range] != null) {
+			return this.handlerByClassMap[range];
+		} else {
+			return defaultHandler;
+		}
+	}
+
+	autocompleteUrl(domain, property, range, key) {			
+		return this._findHandler(domain, property, range).autocompleteUrl(domain, property, range, key);
+	}
+
+	listUrl(domain, property, range) {
+		return this._findHandler(domain, property, range).listUrl(domain, property, range);
+	}
+
+	listLocation(domain, property, range, data) {
+		return this._findHandler(domain, property, range).listLocation(domain, property, range, data);
+	}
+
+	elementLabel(element) {
+		// TODO : forces that every handler must have the same result structure than the default one
+		return this.defaultHandler.elementLabel(element);
+	}
+
+	elementUri(element) {
+		// TODO : forces that every handler must have the same result structure than the default one
+		return this.defaultHandler.elementUri(element);
+	}
+
+	enableMatch(domain, property, range) {
+		return this._findHandler(domain, property, range).enableMatch(domain, property, range);
+	}
+
+}
+
 module.exports = {
 	SparqlBifContainsAutocompleteAndListHandler: SparqlBifContainsAutocompleteAndListHandler,
-	SimpleSparqlAutocompleteAndListHandler: SimpleSparqlAutocompleteAndListHandler	
+	SimpleSparqlAutocompleteAndListHandler: SimpleSparqlAutocompleteAndListHandler,
+	RangeBasedAutocompleteAndListHandler: RangeBasedAutocompleteAndListHandler
 }

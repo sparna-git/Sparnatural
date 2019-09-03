@@ -345,6 +345,24 @@
           lang,
           "rdfs:label"
         );
+        sparqlHandler.listOrder = "count";
+
+        var sparqlHandlerAlpha = new SparqlBifContainsAutocompleteAndListHandler(
+          $('#endpoint').text(),
+          {
+              semanticPostProcess : function(sparql) {
+                  return semanticPostProcess(sparql, null);
+              }
+          },
+          lang,
+          "rdfs:label"
+        );
+
+        var rangeBasedHandler = new RangeBasedAutocompleteAndListHandler(sparqlHandlerAlpha,
+        {
+          "http://dbpedia.org/ontology/Country" : sparqlHandler
+        });
+        
 
 			  $('#ui-search').Sparnatural({
 			  	config: config,
@@ -354,7 +372,7 @@
           addObjectsTypeCriteria: true,
 				  backgroundBaseColor: '2,184,117',
 				  autocomplete : sparqlHandler,
-				  list : sparqlHandler,
+				  list : rangeBasedHandler,
 				  onQueryUpdated: function(queryString, queryJson) {
   					queryString = semanticPostProcess(queryString, queryJson);
   					queryString = rdfsLabelPostProcess(queryString, queryJson);
