@@ -26,12 +26,16 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		}
 	}
 
-	this.getIconPath = function(classId) {
-		return this._getResourceById(classId)["iconPath"];
+	this.getIcon = function(classId) {
+		if(this._getResourceById(classId)["faIcon"] != null) {
+			return "<span style='font-size: 170%;' >&nbsp;<i class='" + this._getResourceById(classId)["faIcon"] + "'></i></span>";
+		} else {
+			return this._getResourceById(classId)["icon"];
+		}
 	}
 
-	this.getHighlightedIconPath = function(classId) {
-		return this._getResourceById(classId)["highlightedIconPath"];
+	this.getHighlightedIcon = function(classId) {
+		return this._getResourceById(classId)["highlightedIcon"];
 	}
 
 	this.getLabel = function(classOrPropertyId) {
@@ -67,6 +71,10 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 			}
 		}
 
+		// sort resulting array to garantee classes appear in the order
+		// they are declared in the specs
+		items = this._sortItemsByIndex(items);
+
 		return items ;
 	}
 
@@ -91,10 +99,30 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 			}
 		}
 
+		// sort resulting array to garantee classes appear in the order
+		// they are declared in the specs
+		items = this._sortItemsByIndex(items);
+
 		return items ;
 	}
 
+	this._sortItemsByIndex = function(items) {
+		var me = this;
+		items.sort(function(c1, c2) {
+			const c1Value = me.specSearch['@graph'].indexOf(me._getResourceById(c1));
+			const c2Value = me.specSearch['@graph'].indexOf(me._getResourceById(c2));
 
+			let comparison = 0;
+			if (c1Value > c2Value) {
+				comparison = 1;
+			} else if (c1Value < c2Value) {
+				comparison = -1;
+			}
+			return comparison;
+		});
+
+		return items;	
+	}
 
 	/* List of possible ObjectProperty relative to a Class
 		@Id of Class

@@ -15,7 +15,7 @@
 		<link href='http://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.min.css' rel='stylesheet' type='text/css'/>
 		<link href='http://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.min.css' rel='stylesheet' type='text/css'/>
 
-		<title>SPARnatural - requêtes SPARQL naturelles sur DBPedia</title>
+		<title>SPARnatural - requêtes SPARQL naturelles sur Legilux</title>
 
 		<style>
 		  .yasqe .CodeMirror { font-size: 0.8em; height: 380px; }
@@ -25,11 +25,11 @@
 		  }
 		</style>
 		
-	</head>
+	<link href="sparnatural.css" rel="stylesheet"></head>
 	<body>
 		<header>
 			<nav class="navbar navbar-expand  navbar-dark bg-dark">
-				<a class="navbar-brand display-1 mr-auto" href="#">SPARnatural - requêtes SPARQL naturelles sur DBPedia</a>
+				<a class="navbar-brand display-1 mr-auto" href="#">SPARnatural - requêtes SPARQL naturelles sur Legilux</a>
 				<span class="navbar-text" style="margin-right:100px;">
 				<a href="?lang=fr">fr</a>&nbsp;|&nbsp;<a href="?lang=en">en</a>
     			</span>
@@ -45,7 +45,7 @@
           <div class="row" style="margin-bottom:0.5em;">
             <div class="col-md-12">
              <span style="font-size:90%;"> 
-             Les requêtes sont envoyées à <a id="endpoint" href="http://fr.dbpedia.org/sparql">http://fr.dbpedia.org/sparql</a>
+             Les requêtes sont envoyées à <a id="endpoint" href="http://data.legilux.public.lu/sparql">http://data.legilux.public.lu/sparql</a>
              </span>
             </div>
           </div>
@@ -111,213 +111,173 @@
   },
   "@graph": [
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-legilux/onto",
       "@type" : "Ontology"
     },
     {
-      "@id" : "http://dbpedia.org/ontology/Museum",
+      "@id" : "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
       "@type" : "Class",
       "label": [
-        {"@value" : "Museum", "@language" : "en"},
-        {"@value" : "Musée","@language" : "fr"}
+        {"@value" : "Loi Luxembourgeoise", "@language" : "fr"},
+        {"@value" : "Luxembourg legislation","@language" : "en"}
       ],
-      "faIcon":  "fas fa-university"
+      "faIcon":  "fas fa-file-alt"
     },
     {
-      "@id" : "http://dbpedia.org/ontology/Country",
+      "@id" : "http://data.legilux.public.lu/resource/ontology/jolux#EULegalResource",
       "@type" : "Class",
       "label": [
-        {"@value" : "Country","@language" : "en"},
-        {"@value" : "Pays","@language" : "fr"}
+        {"@value" : "Loi Européenne", "@language" : "fr"},
+        {"@value" : "EU Legislation","@language" : "en"}
       ],
-      "faIcon":  "fas fa-globe-africa"
+      "faIcon":  "fas fa-file-alt"
     },
     {
-      "@id" : "http://dbpedia.org/ontology/Artwork",
+      "@id" : "http://www.w3.org/2004/02/skos/core#Concept",
       "@type" : "Class",
       "label": [
-        {"@value" : "Artwork","@language" : "en"},
-        {"@value" : "Oeuvre","@language" : "fr"}
+        {"@value" : "Concept","@language" : "fr"},
+        {"@value" : "Concept","@language" : "en"}
       ],
-      "faIcon":  "fas fa-paint-brush"
+      "faIcon":  "fas fa-list"
     },
     {
-      "@id" : "http://dbpedia.org/ontology/Person",
-      "@type" : "Class",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-legilux/onto#sujet",
+      "@type" : [
+        "ObjectProperty",
+        "AutocompleteProperty"
+      ],
       "label": [
-        {"@value" : "Person","@language" : "en"},
-        {"@value" : "Personne","@language" : "fr"}
+        {"@value" : "sujet","@language" : "fr"},
+        {"@value" : "subject","@language" : "en"}
       ],
-      "faIcon":  "fas fa-male"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "range": "http://www.w3.org/2004/02/skos/core#Concept",
+      "path": "jolux:subjectLevel1|jolux:subjectLevel2"
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
-      "@type" : "Class",
-      "label": [
-        {"@value" : "Search","@language" : "en"},
-        {"@value" : "Rechercher","@language" : "fr"}
-      ],
-      "faIcon":  "fas fa-search"
-    },
-    {
-      "@id" : "http://dbpedia.org/ontology/country",
+      "@id" : "http://data.legilux.public.lu/resource/ontology/jolux#typeDocument",
       "@type" : [
         "ObjectProperty",
         "ListProperty"
       ],
       "label": [
-        {"@value" : "country","@language" : "en"},
-        {"@value" : "pays","@language" : "fr"}
+        {"@value" : "type","@language" : "fr"},
+        {"@value" : "type","@language" : "en"}
       ],
-      "domain": "http://dbpedia.org/ontology/Museum",
-      "range": "http://dbpedia.org/ontology/Country"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "range": "http://www.w3.org/2004/02/skos/core#Concept"
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#countryOf",
+      "@id" : "http://data.legilux.public.lu/resource/ontology/jolux#transposes",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
       ],
       "label": [
-        {"@value" : "country of","@language" : "en"},
-        {"@value" : "lieu de","@language" : "fr"}
+        {"@value" : "transpose","@language" : "fr"},
+        {"@value" : "transposes","@language" : "en"}
       ],
-      "domain": "http://dbpedia.org/ontology/Country",
-      "range": "http://dbpedia.org/ontology/Museum",
-      "path": "^<http://dbpedia.org/ontology/country>"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "range": "http://data.legilux.public.lu/resource/ontology/jolux#EULegalResource"
     },
     {
-      "@id" : "http://dbpedia.org/ontology/museum",
+      "@id" : "http://data.legilux.public.lu/resource/ontology/jolux#transposedBy",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
       ],
       "label": [
-        {"@value" : "displayed at","@language" : "en"},
-        {"@value" : "exposée à","@language" : "fr"}
+        {"@value" : "transposée par","@language" : "fr"},
+        {"@value" : "transposed by","@language" : "en"}
       ],
-      "domain": "http://dbpedia.org/ontology/Artwork",
-      "range": "http://dbpedia.org/ontology/Museum"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#EULegalResource",
+      "range": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "path": "^jolux:transposes"
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-legilux/onto#modifie",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
       ],
       "label": [
-        {"@value" : "displays","@language" : "en"},
-        {"@value" : "expose","@language" : "fr"}
+        {"@value" : "modifie","@language" : "fr"},
+        {"@value" : "modifies","@language" : "en"}
       ],
-      "domain": "http://dbpedia.org/ontology/Museum",
-      "range": "http://dbpedia.org/ontology/Artwork",
-      "path": "^<http://dbpedia.org/ontology/museum>"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "range": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "path": "jolux:modifies|^jolux:modifiedBy"
     },
     {
-      "@id" : "http://dbpedia.org/ontology/author",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-legilux/onto#modifiePar",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
       ],
       "label": [
-        {"@value" : "author","@language" : "en"},
-        {"@value" : "auteur","@language" : "fr"}
+        {"@value" : "modifié par","@language" : "fr"},
+        {"@value" : "modified by","@language" : "en"}
       ],
-      "domain": "http://dbpedia.org/ontology/Artwork",
-      "range": "http://dbpedia.org/ontology/Person"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "range": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "path": "^jolux:modifies|jolux:modifiedBy"
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#created",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-legilux/onto#baseSur",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
       ],
       "label": [
-        {"@value" : "created","@language" : "en"},
-        {"@value" : "a créé","@language" : "fr"}
+        {"@value" : "basé sur","@language" : "fr"},
+        {"@value" : "based on","@language" : "en"}
       ],
-      "domain": "http://dbpedia.org/ontology/Person",
-      "range": "http://dbpedia.org/ontology/Artwork",
-      "path": "^<http://dbpedia.org/ontology/author>"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "range": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "path": "jolux:basedOn|^jolux:basisFor"
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
-      "@type" : [
-        "ObjectProperty",
-        "ListProperty"
-      ],
-      "label": [
-        {"@value" : "born in","@language" : "en"},
-        {"@value" : "né à","@language" : "fr"}
-      ],
-      "domain": "http://dbpedia.org/ontology/Person",
-      "range": "http://dbpedia.org/ontology/Country",
-      "path": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>"
-    },
-    {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#birthPlace",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-legilux/onto#baseDe",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
       ],
       "label": [
-        {"@value" : "birth place","@language" : "en"},
-        {"@value" : "lieu de naissance","@language" : "fr"}
+        {"@value" : "base de","@language" : "fr"},
+        {"@value" : "basis for","@language" : "en"}
       ],
-      "domain": "http://dbpedia.org/ontology/Country",
-      "range": "http://dbpedia.org/ontology/Person",
-      "path": "^(<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>)"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "range": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "path": "^jolux:basedOn|jolux:basisFor"
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#diedIn",
-      "@type" : [
-        "ObjectProperty",
-        "ListProperty"
-      ],
-      "label": [
-        {"@value" : "died at","@language" : "en"},
-        {"@value" : "mort à","@language" : "fr"}
-      ],
-      "domain": "http://dbpedia.org/ontology/Person",
-      "range": "http://dbpedia.org/ontology/Country",
-      "path": "<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>"
-    },
-    {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#deathPlace",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-legilux/onto#cite",
       "@type" : [
         "ObjectProperty",
         "AutocompleteProperty"
       ],
       "label": [
-        {"@value" : "death place","@language" : "en"},
-        {"@value" : "lieu de décès","@language" : "fr"}
+        {"@value" : "cite","@language" : "fr"},
+        {"@value" : "cites","@language" : "en"}
       ],
-      "domain": "http://dbpedia.org/ontology/Country",
-      "range": "http://dbpedia.org/ontology/Person",
-      "path": "^(<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>)"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "range": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "path": "jolux:cites|^jolux:citedBy"
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#search",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-legilux/onto#citedBy",
       "@type" : [
         "ObjectProperty",
-        "SearchProperty"
+        "AutocompleteProperty"
       ],
       "label": [
-        {"@value" : "text search","@language" : "en"},
-        {"@value" : "recherche plein-texte","@language" : "fr"}
+        {"@value" : "cité par","@language" : "fr"},
+        {"@value" : "cited by","@language" : "en"}
       ],
-      "domain": {
-        "@type" : "Class",
-        "unionOf" : {
-          "@list" : [ 
-            { "@id" : "http://dbpedia.org/ontology/Museum"},
-            { "@id" : "http://dbpedia.org/ontology/Person"},
-            { "@id" : "http://dbpedia.org/ontology/Artwork"}
-          ]
-        }
-      },
-      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
-      "path": "rdfs:label"
+      "domain": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "range": "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource",
+      "path": "^jolux:cites|jolux:citedBy"
     }
   ]
 }
@@ -343,11 +303,10 @@
               }
           },
           lang,
-          "rdfs:label"
+          "skos:prefLabel"
         );
-        sparqlHandler.listOrder = "count";
 
-        var sparqlHandlerAlpha = new SparqlBifContainsAutocompleteAndListHandler(
+        var sparqlCountHandler = new SparqlBifContainsAutocompleteAndListHandler(
           $('#endpoint').text(),
           {
               semanticPostProcess : function(sparql) {
@@ -355,14 +314,26 @@
               }
           },
           lang,
-          "rdfs:label"
+          "skos:prefLabel"
+        );
+        sparqlCountHandler.listOrder = "count";
+
+        var legalResourceSearchHandler = new SparqlBifContainsAutocompleteAndListHandler(
+          $('#endpoint').text(),
+          {
+              semanticPostProcess : function(sparql) {
+                  return semanticPostProcess(sparql, null);
+              }
+          },
+          null,
+          "^<http://data.legilux.public.lu/resource/ontology/jolux#realizes> ?expression . ?expression <http://data.legilux.public.lu/resource/ontology/jolux#title>"
         );
 
-        var rangeBasedHandler = new RangeBasedAutocompleteAndListHandler(sparqlHandlerAlpha,
+        var handlers = new RangeBasedAutocompleteAndListHandler(sparqlHandler,
         {
-          "http://dbpedia.org/ontology/Country" : sparqlHandler
+          "http://www.w3.org/2004/02/skos/core#Concept" : sparqlCountHandler,
+          "http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource" : legalResourceSearchHandler
         });
-        
 
 			  $('#ui-search').Sparnatural({
 			  	config: config,
@@ -371,12 +342,11 @@
 				  addDistinct: true,
           addObjectsTypeCriteria: true,
 				  backgroundBaseColor: '2,184,117',
-				  autocomplete : sparqlHandler,
-				  list : rangeBasedHandler,
+				  autocomplete : handlers,
+				  list : handlers,
 				  onQueryUpdated: function(queryString, queryJson) {
   					queryString = semanticPostProcess(queryString, queryJson);
   					queryString = rdfsLabelPostProcess(queryString, queryJson);
-  					queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
   					queryString = orderByPostProcess(queryString, queryJson);
   					$('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
   					yasqe.setValue(queryString);
@@ -389,23 +359,20 @@
 			prefixesPostProcess = function(queryString, queryJson) {
 				if(queryString.indexOf("rdf-schema#") == -1) {
 					queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
-				} 				
-				return queryString;
-			}
-
-			isPrimaryTopicOfPostProcess = function(queryString, queryJson) {
-				queryString = queryString.replace(new RegExp('}$'), "  ?this <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> ?wikipedia \n}");
+				}
+        queryString = queryString.replace("SELECT ", "PREFIX jolux: <http://data.legilux.public.lu/resource/ontology/jolux#> \nSELECT ");		
 				return queryString;
 			}
 
 			rdfsLabelPostProcess = function(queryString, queryJson) {
-				queryString = queryString.replace(new RegExp('}$'), "  ?this rdfs:label ?label FILTER(lang(?label) = 'fr') \n}");
+				// queryString = queryString.replace(new RegExp('}$'), "  ?this ^jolux:realizes/jolux:title ?label \n}");
 				return queryString;
 			}
 
 			orderByPostProcess = function(queryString, queryJson) {
-				queryString = queryString.replace(new RegExp('}$'), "}\nORDER BY ?label LIMIT 5000");
-				queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT (STR(?label) AS ?nom) ?wikipedia ?this");
+				// queryString = queryString.replace(new RegExp('}$'), "}\nORDER BY ?label LIMIT 1000");
+				// queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT (STR(?label) AS ?nom) ?this");
+        queryString = queryString.replace(new RegExp('}$'), "}\nLIMIT 1000");
 				return queryString;
 			}
 
@@ -445,5 +412,5 @@
 			yasqe.options.sparql.callbacks.complete = yasr.setResponse;
 
 		</script>
-	</body>
+	<script type="text/javascript" src="./sparnatural.js"></script></body>
 </html>
