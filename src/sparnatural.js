@@ -500,7 +500,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 	function eventProxiCriteria(e) {
 		var arg1 = e.data.arg1;
 		var arg2 = e.data.arg2;
-		arg1[arg2]() ;
+		arg1[arg2](e) ;
 	}
 	
 	function GroupContenaire() {
@@ -703,6 +703,31 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			);
 		}) ;
 		
+		this.removeValue = function removeValue(e) {
+			
+			var valueDataAttr = $(e.currentTarget).attr('value-data') ;
+
+			for (var item in this.value_selected) {	
+
+				if (Array.isArray(this.value_selected[item])) {
+					var value_data = this.value_selected[item].toString() ;
+				} else {
+					var value_data = this.value_selected[item] ;
+				}
+
+				if (value_data == valueDataAttr ) {
+					this.value_selected.splice(item, 1); 
+
+				}
+			}
+			$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').show() ;
+
+			$(e.currentTarget).parent('div').remove() ;
+
+			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupUnselected" } ) ;
+			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+
+		} ;
 		this.validSelected = function validSelected() {
 			var temp_value = this.inputTypeComponent.GetValue() ;
 			if (temp_value == null ) {
@@ -717,13 +742,24 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.value_selected.push(this.inputTypeComponent.GetValue()) ;
 			this.LabelValueSelected = this.inputTypeComponent.GetValueLabel() ;
 			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-			
-			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
-				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>') ;
+
+			if (Array.isArray(this.inputTypeComponent.GetValue())) {
+				var value_data = this.inputTypeComponent.GetValue().toString() ;
 			} else {
-				$(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>') ;
-			}			
-			
+				var value_data = this.inputTypeComponent.GetValue() ;
+			}
+
+			this.unselect = $('<span class="unselect" value-data="'+value_data+'">&#10005;</span>') ;
+			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
+				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>').find('div').append(this.unselect) ;
+			} else {
+				var temp_html = $('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>').append(this.unselect)  ;
+				var ellle = $(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
+
+			}
+
+			this.unselect.on('click', {	arg1: this,	arg2: 'removeValue'	}, eventProxiCriteria );
+
 			$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			
 			this.ParentComponent.initCompleted() ;
