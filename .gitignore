@@ -3,3 +3,4 @@
 /assets/icons/*
 !/assets/icons/buttons
 prepros-6.config
+/node_modules
