@@ -69,7 +69,7 @@ SELECT DISTINCT ?uri ?label
 	?domain <${property}> ?uri .
 	?uri a <${range}> .
 	?uri ${this.searchPath} ?label 
-	FILTER(lang(?label) = "${this.language}")
+	${ (this.language != null) ? `FILTER(lang(?label) = "${this.language}")` : "" }
 	FILTER(STRSTARTS(LCASE(STR(?label)), LCASE("${key}"))) 
 } 
 ORDER BY ?label
@@ -84,7 +84,8 @@ ORDER BY ?label
 	_buildListSparql(domain, property, range) {
 		var sparql;
 
-		if(this.listOrder == "count") {
+		switch (this.listOrder) {					
+		  case 'count':
 			sparql = `
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -99,11 +100,33 @@ SELECT ?uri ?count (CONCAT(?labelString, ' (', STR(?count), ')') AS ?label)
 		}
 	}
 	?uri ${this.searchPath} ?labelString .
-	FILTER(lang(?labelString) = "${this.language}")
+	${ (this.language != null) ? `FILTER(lang(?labelString) = "${this.language}")` : "" }
 }
 ORDER BY DESC(?count)
 	`;
-		} else {
+			break;
+		  case 'alphabeticalWithCount':
+			sparql = `
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?uri ?count (CONCAT(?labelString, ' (', STR(?count), ')') AS ?label)
+ WHERE {
+	{
+		SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+		WHERE {
+			?domain a <${domain}> .
+			?domain <${property}> ?uri .
+			?uri a <${range}> .
+		}
+	}
+	?uri ${this.searchPath} ?labelString .
+	${ (this.language != null) ? `FILTER(lang(?labelString) = "${this.language}")` : "" }
+}
+ORDER BY ?label
+	`;
+			break;
+		  case 'alphabetical':
+		  default:	
 			sparql = `
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -113,10 +136,10 @@ WHERE {
 	?domain <${property}> ?uri .
 	?uri a <${range}> .
 	?uri ${this.searchPath} ?label .
-	FILTER(lang(?label) = "${this.language}")
+	${ (this.language != null) ? `FILTER(lang(?label) = "${this.language}")` : "" }
 }
 ORDER BY ?label
-	`;
+	`;					
 		}
 
 		return sparql;
@@ -144,7 +167,7 @@ SELECT DISTINCT ?uri ?label
 	?domain <${property}> ?uri .
 	?uri a <${range}> .
 	?uri ${this.searchPath} ?label .
-	FILTER(lang(?label) = "${this.language}")
+	${ (this.language != null) ? `FILTER(lang(?label) = "${this.language}")` : "" }
 	FILTER(bif:contains(?label, "${key}")) 
 } 
 ORDER BY ?label
@@ -158,16 +181,16 @@ ORDER BY ?label
 
 class RangeBasedAutocompleteAndListHandler {
 
-	constructor(defaultHandler, handlerByClassMap) {
+	constructor(defaultHandler, handlerByKeyMap) {
 		this.defaultHandler = defaultHandler;
-		this.handlerByClassMap = handlerByClassMap;
+		this.handlerByKeyMap = handlerByKeyMap;
 	}
 
 	_findHandler(domain, property, range) {
-		if(this.handlerByClassMap[range] != null) {
-			return this.handlerByClassMap[range];
+		if(this.handlerByKeyMap[range] != null) {
+			return this.handlerByKeyMap[range];
 		} else {
-			return defaultHandler;
+			return this.defaultHandler;
 		}
 	}
 
@@ -199,8 +222,25 @@ class RangeBasedAutocompleteAndListHandler {
 
 }
 
+
+class PropertyBasedAutocompleteAndListHandler extends RangeBasedAutocompleteAndListHandler {
+
+	constructor(defaultHandler, handlerByKeyMap) {
+		super(defaultHandler, handlerByKeyMap);
+	}
+
+	_findHandler(domain, property, range) {
+		if(this.handlerByKeyMap[property] != null) {
+			return this.handlerByKeyMap[property];
+		} else {
+			return this.defaultHandler;
+		}
+	}
+}
+
 module.exports = {
 	SparqlBifContainsAutocompleteAndListHandler: SparqlBifContainsAutocompleteAndListHandler,
 	SimpleSparqlAutocompleteAndListHandler: SimpleSparqlAutocompleteAndListHandler,
-	RangeBasedAutocompleteAndListHandler: RangeBasedAutocompleteAndListHandler
+	RangeBasedAutocompleteAndListHandler: RangeBasedAutocompleteAndListHandler,
+	PropertyBasedAutocompleteAndListHandler: PropertyBasedAutocompleteAndListHandler
 }

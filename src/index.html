@@ -357,7 +357,9 @@
           lang,
           "rdfs:label"
         );
+        sparqlHandlerAlpha.listOrder = "alphabetical";
 
+        // list order is alphabetical by default, and count-based for the countries
         var rangeBasedHandler = new RangeBasedAutocompleteAndListHandler(sparqlHandlerAlpha,
         {
           "http://dbpedia.org/ontology/Country" : sparqlHandler
