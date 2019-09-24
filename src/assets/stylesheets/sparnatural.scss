@@ -127,6 +127,9 @@ body {
 			box-sizing:border-box;
 			font-weight: 700;
 		}
+		.nice-select.disabled:after {
+			display: none;
+		}
 		
 		
 		.EndClassGroup {
