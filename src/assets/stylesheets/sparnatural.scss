@@ -112,11 +112,11 @@ body {
 		span.unselect {
 			display: block;
 			position: absolute;
-			top: -9px;
+			top: -7px;
 			right: 15px;
 			width: 18px;
 			height: 18px!important;
-			text-align: center;
+			padding: 0 2px;
 			cursor: pointer;
 			color: #000;
 			background: #fff!important;
@@ -424,6 +424,9 @@ body {
 					display: inline-block;
 					height: 42px;
 				}
+			}
+			span.unselect {
+				top: -9px;
 			}
 			
 		}
