@@ -490,7 +490,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				}
 
 				initGeneralEvent(formObject) ;
-				ExecuteSubmited(formObject) ;
+				//ExecuteSubmited(formObject) ;
 			}
 			
 			return false ;
@@ -686,7 +686,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 		this.removeSelected = function removeSelected () {
 			
-			$(this.ParentComponent.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').click() ;
+			$(this.ParentComponent.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
+			$(this.ParentComponent.ComponentHtml).find('.childsList .ActionRemove a').trigger('click') ;
 			this.value_selected = null
 			this.init() ;
 			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'validSelected'}, eventProxiCriteria);
