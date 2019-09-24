@@ -601,10 +601,17 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			
 			$(this.ObjectPropertyGroup.html).find('.input-val').unbind('change');
 			//this.ObjectPropertyGroup.init() ;
-			this.ObjectPropertyGroup.inputTypeComponent.init() ;
-			this.ObjectPropertyGroup.Edit() ;
+			if (!this.ObjectPropertyGroup.inputTypeComponent.statements.Created) {
+				this.ObjectPropertyGroup.inputTypeComponent.init() ;
+				this.ObjectPropertyGroup.Edit() ;
+			} else {
+				this.ObjectPropertyGroup.reloadWidget() ;
+				this.ObjectPropertyGroup.Edit() ;
+			}
+			
 			
 			this.ObjectPropertyGroup.niceslect = $(this.ObjectPropertyGroup.html).find('select.input-val').niceSelect()  ;
+			$(this.ObjectPropertyGroup.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 			//$('.nice-select').removeClass('open') ;
 			$(this.ObjectPropertyGroup.html).find('.nice-select').trigger('click') ;
 			$(this.ObjectPropertyGroup.html).find('select.input-val').on('change', {arg1: this.ObjectPropertyGroup, arg2: 'validSelected'}, eventProxiCriteria);
@@ -619,6 +626,11 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;			
+		};
+
+		this.reloadWidget = function reloadWidget() {
+			this.ParentComponent.ObjectPropertyGroup.inputTypeComponent.reload() ;
+
 		};
 			
 		this.init() ;
@@ -638,10 +650,14 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
+		this.unselect = $('<span class="unselect unselectEndClass">&#10005;</span>') ;
+
+
 
 		$(CriteriaGroupe).on('StartClassGroupSelected', function () {
 			$(this.EndClassGroup.html).find('.input-val').unbind('change');
 			$(this.EndClassGroup.html).append('<div class="EditComponents ShowOnHover"></div>');
+			$(this.EndClassGroup.html).append(this.EndClassGroup.unselect);
 			//this.EndClassGroup.init() ;
 			this.EndClassGroup.inputTypeComponent.init() ;
 			this.EndClassGroup.Edit() ;
@@ -649,7 +665,9 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.EndClassGroup.niceslect = $(this.EndClassGroup.html).find('select.input-val').niceSelect()  ;
 			$(this.EndClassGroup.html).find('.nice-select').trigger('click') ;
 			
-			$(this.EndClassGroup.html).find('select.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);		
+			$(this.EndClassGroup.html).find('select.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
+			$(this.EndClassGroup.html).find('span.unselectEndClass').on('click', {arg1: this.EndClassGroup, arg2: 'removeSelected'}, eventProxiCriteria);	
+			$(this.EndClassGroup.unselect).hide() ;	
 		}) ;
 		
 		this.validSelected = function validSelected() {
@@ -662,8 +680,24 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			} else {
 				$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			}
+			$(this.unselect).show() ;	
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 		};
+
+		this.removeSelected = function removeSelected () {
+			
+			$(this.ParentComponent.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').click() ;
+			this.value_selected = null
+			this.init() ;
+			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'validSelected'}, eventProxiCriteria);
+			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
+			$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
+			console.log(this.ParentComponent) ;
+			this.ParentComponent.ActionsGroup.reinsert = true ;
+			$(this.ParentComponent.ComponentHtml).removeClass('completed') ;
+			console.log(this) ;
+			$(this.html).find('.nice-select').trigger('click') ;
+		}
 		
 		this.init() ;
 	} ;
@@ -691,7 +725,18 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
 			this.EndClassWidgetGroup.detectWidgetType() ;
 			this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
-			this.EndClassWidgetGroup.inputTypeComponent.init() ;
+			
+			
+			//this.EndClassWidgetGroup.inputTypeComponent.init() ;
+			console.log(this) ;
+			if (this.ActionsGroup.reinsert == true) {
+				//this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html.find('*').remove() ;
+				this.EndClassWidgetGroup.inputTypeComponent.reload() ;
+			} else {
+				this.EndClassWidgetGroup.inputTypeComponent.init() ;
+			}
+
+
 
 			$(this.EndClassWidgetGroup.inputTypeComponent).on(
 				'change',
@@ -723,6 +768,19 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').show() ;
 
 			$(e.currentTarget).parent('div').remove() ;
+
+			if(this.value_selected.length < 1) {
+				$(this.ParentComponent.ComponentHtml).removeClass('completed') ;
+				$(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').remove() ;
+				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
+				if (this.ParentComponent.EndClassGroup.specProvider.hasConnectedClasses(this.ParentComponent.EndClassGroup.value_selected)) {
+					$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
+				} else {
+					$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
+				}
+
+
+			}
 
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupUnselected" } ) ;
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
@@ -801,6 +859,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.statements.ActionsGroup = true ;
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
+		this.reinsert = false;
 		
 		this.detectWidgetType = function detectWidgetType() {			
 			this.widgetType = 'Actions' ;			
@@ -827,8 +886,16 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.ActionsGroup.detectWidgetType() ;
 
 			this.ActionsGroup.inputTypeComponent.ActionWhere.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
-			this.ActionsGroup.inputTypeComponent.ActionWhere.init() ;
-			this.ActionsGroup.inputTypeComponent.ActionAnd.init() ;
+			console.log(this.ActionsGroup) ;
+			if (this.ActionsGroup.reinsert == true) {
+				//this.ActionsGroup.inputTypeComponent.ActionWhere.HtmlContainer.html.find('*').remove() ;
+				this.ActionsGroup.inputTypeComponent.ActionWhere.reload() ;
+				this.ActionsGroup.inputTypeComponent.ActionAnd.reload() ;
+			} else {
+				this.ActionsGroup.inputTypeComponent.ActionWhere.init() ;
+				this.ActionsGroup.inputTypeComponent.ActionAnd.init() ;
+			}
+			
 			
 			$(this.ActionsGroup.inputTypeComponent.ActionWhere.html).find('a').on(
 				'click', 
@@ -915,6 +982,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.possibleValue ;
 		this.tools = null ;
 		this.value = null ;
+		
 			
 		this.init = function () {
 			
@@ -959,7 +1027,12 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				possible_values = selectBuilder.buildPropertySelect(startClassGroup.value_selected, endClassGroup.value_selected, 'c-'+id) ;
 			}
 			
-			if (this.ParentComponent instanceof ActionsGroup) {				
+			if (this.ParentComponent instanceof ActionsGroup) {	
+				if (this.ParentComponent.reinsert)		 {
+					console.log('Reload du input type component');
+					console.log(this) ;
+					return this.reload() ;
+				}
 				if (this instanceof ActionWhere) {
 					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
@@ -980,12 +1053,50 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.tools.InitHtml() ;
 			this.tools.Add() ;
 			this.statements.Created = true ;
+			console.log(this.tools) ;
 
 			if (trigger) {
 				//console.log(trigger) 
 				//$(this.widgetHtml).trigger('change') ;
 			}			
-		} ;		
+		} ;	
+		
+		this.reload = function() {
+			var possible_values = null ;
+			var default_value = null ;
+			var id = this.ParentComponent.ParentComponent.id ;
+
+			if (this.ParentComponent instanceof ObjectPropertyGroup) {
+				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
+				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+				var selectBuilder = new PropertySelectBuilder(this.specProvider);
+				possible_values = selectBuilder.buildPropertySelect(startClassGroup.value_selected, endClassGroup.value_selected, 'c-'+id) ;
+			}
+
+			if (this.ParentComponent instanceof ActionsGroup) {				
+				if (this instanceof ActionWhere) {
+					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
+					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
+					possible_values = widgetLabel+'<a>+</a>' ;
+				}
+				if (this instanceof ActionAnd) {
+					possible_values = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
+					console.log(possible_values) ;
+				}
+				if (this instanceof ActionRemove) {
+					possible_values = '<a><img src="' + removeIcon + '"></a>' ;
+				}
+			}
+
+			this.widgetHtml = possible_values ;
+			this.statements.IsOnEdit = true ;
+			//this.tools = new GenericTools(this) ;
+			console.log(this.tools) ;
+			this.tools.ReInitHtml() ;
+			this.tools.Replace() ;
+			this.statements.Created = true ;
+		} ;
 	};
 	
 	
@@ -1076,6 +1187,33 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				this.tools = new GenericTools(this) ;
 				this.tools.InitHtml() ;
 				this.tools.Add() ;
+				this.widgetComponent.init() ;
+				this.statements.Created = true ;
+			}
+		}
+
+		this.reload = function reload() {
+			if (this.ParentComponent instanceof EndClassWidgetGroup) {
+				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
+				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+
+				this.widgetType = this.ParentComponent.widgetType  ;
+				if (this.widgetType == WIDGET_SEARCH_PROPERTY) {
+					// label of the "Search" pseudo-class is inserted here in this case
+					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
+				} else {
+					var endLabel = langSearch.Find+' '+specProvider.getLabel(endClassGroup.value_selected) ;
+				}
+				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
+				
+				this.getWigetTypeClassName() ;
+				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+				
+			
+				this.statements.IsOnEdit = true ;
+				//this.tools = new GenericTools(this) ;
+				this.tools.ReInitHtml() ;
+				this.tools.Replace() ;
 				this.widgetComponent.init() ;
 				this.statements.Created = true ;
 			}
@@ -1406,11 +1544,19 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 	function GenericTools(component) {
 		this.component = component ;
 		this.component.inserted = false ;
+		this.component.reinsert = false ;
 		
 		this.AppendComponentHtml = function () {
 			if (!this.component.inserted ) {
 				this.component.html = $(this.component.html).appendTo(this.component.HtmlContainer.html) ;
 				this.component.inserted = true;
+			}
+			if (this.component.reinsert) {
+				var instance = this.component.constructor.name ;
+				console.log(this.component.HtmlContainer.html.find('*')) ;
+				console.log(this.component.html) ;
+				this.component.HtmlContainer.html.find('>.'+instance).remove() ;
+				this.component.html = $(this.component.html).appendTo(this.component.HtmlContainer.html) ;
 			}
 		}
 		
@@ -1431,6 +1577,11 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			}
 
 		} 
+		this.Replace = function() {
+			this.UpdateStatementsClass() ;
+			this.component.reinsert = true ;
+			this.AppendComponentHtml() ;
+		} 
 		
 		this.Update = function() {
 			this.UpdateStatementsClass() ;
@@ -1441,6 +1592,18 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var widget = this.component.widgetHtml ;
 			this.component.html = $('<div class="'+instance+' ddd"></div>') ; 
 			if (widget) {
+				this.component.html.append(widget) ; 
+			}
+		} 
+
+		this.ReInitHtml = function() {
+			var instance = this.component.constructor.name ;
+			var widget = this.component.widgetHtml ;
+			this.component.html = $('<div class="'+instance+' ddd"></div>') ; 
+			if (widget) {
+				console.log(this) ;
+				console.log(widget) ;
+				this.component.html.find('>.'+instance ).remove() ;
 				this.component.html.append(widget) ; 
 			}
 		} 
