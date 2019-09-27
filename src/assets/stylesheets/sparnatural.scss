@@ -90,11 +90,11 @@ body {
 		margin-bottom: $margin-component-onEdit;
 		clear: both;
 		
--moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
--webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;
--o-box-shadow: 0px 2px 3px 0px #cfcfcf;
-box-shadow: 0px 2px 3px 0px #cfcfcf;
-filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
+		-moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
+		-webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;
+		-o-box-shadow: 0px 2px 3px 0px #cfcfcf;
+		box-shadow: 0px 2px 3px 0px #cfcfcf;
+		filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
 		
 		&>div {
 			
@@ -107,6 +107,28 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 			.current {
 				font-style: italic;
 			}
+		}
+
+		span.unselect {
+			display: block;
+			position: absolute;
+			top: -7px;
+			right: 15px;
+			width: 18px;
+			height: 18px!important;
+			padding: 0 2px;
+			cursor: pointer;
+			color: #000;
+			background: #fff!important;
+			border: 2px solid #333;
+			border-radius: 9px;
+			line-height: 13px;
+			font-size: 10px;
+			box-sizing:border-box;
+			font-weight: 700;
+		}
+		.nice-select.disabled:after {
+			display: none;
 		}
 		
 		
@@ -389,24 +411,7 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 					line-height: $height-components-under / 2;
 					line-height: 21px;
 				}
-				span.unselect {
-					display: block;
-					position: absolute;
-					top: -9px;
-					right: 15px;
-					width: 18px;
-					height: 18px!important;
-					text-align: center;
-					cursor: pointer;
-					color: #000;
-					background: #fff!important;
-					border: 2px solid #333;
-					border-radius: 9px;
-					line-height: 13px;
-					font-size: 10px;
-					box-sizing:border-box;
-					font-weight: 700;
-				}
+				
 			}
 			.EndClassWidgetAddOrValue {
 				color: #fff;
@@ -422,6 +427,9 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, St
 					display: inline-block;
 					height: 42px;
 				}
+			}
+			span.unselect {
+				top: -9px;
 			}
 			
 		}
