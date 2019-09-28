@@ -651,7 +651,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
-		this.unselect = $('<span class="unselect unselectEndClass">&#10005;</span>') ;
+		this.unselect = $('<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>') ;
 
 
 
@@ -820,7 +820,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var value_data = this.inputTypeComponent.GetValue() ;
 			}
 
-			this.unselect = $('<span class="unselect" value-data="'+value_data+'">&#10005;</span>') ;
+			this.unselect = $('<span class="unselect" value-data="'+value_data+'"><i class="far fa-times-circle"></i></span>') ;
 			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>').find('div').append(this.unselect) ;
 			} else {
