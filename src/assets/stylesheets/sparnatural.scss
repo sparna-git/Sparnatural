@@ -632,6 +632,7 @@ body {
 				&>div>div>.ShowOnHover {
 					display: none;
 				}
+				&.Hover>div>div.ActionsGroup>.ShowOnHover,
 				&.Hover>div>div.HasInputsCompleted>.ShowOnHover {
 					display: block;
 				}
