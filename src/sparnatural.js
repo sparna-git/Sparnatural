@@ -514,7 +514,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.html = $() ;
 		this.statements = {
 			HasInputsCompleted : false,
-			IsOnEdit : false
+			IsOnEdit : false,
+			Invisible: false
 		}		
 		
 		this.init = function() {			
@@ -667,7 +668,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			
 			$(this.EndClassGroup.html).find('select.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			$(this.EndClassGroup.html).find('span.unselectEndClass').on('click', {arg1: this.EndClassGroup, arg2: 'removeSelected'}, eventProxiCriteria);	
-			$(this.EndClassGroup.unselect).hide() ;	
+			//$(this.EndClassGroup.unselect).hide() ;	
 		}) ;
 		
 		this.validSelected = function validSelected() {
@@ -680,15 +681,26 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			} else {
 				$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			}
-			$(this.unselect).show() ;	
+			//$(this.unselect).show() ;
+			console.log(this) ;
+			this.statements.HasInputsCompleted = true ;
+			this.statements.IsOnEdit = false ;
+			this.init() ;
+			this.ParentComponent.ObjectPropertyGroup.statements.Invisible = false;
+			this.ParentComponent.ObjectPropertyGroup.init() ;
+
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 		};
 
 		this.removeSelected = function removeSelected () {
 			
 			$(this.ParentComponent.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
+			this.ParentComponent.ObjectPropertyGroup.statements.Invisible = true ;
+			this.ParentComponent.ObjectPropertyGroup.init() ;
 			$(this.ParentComponent.ComponentHtml).find('.childsList .ActionRemove a').trigger('click') ;
-			this.value_selected = null
+			this.value_selected = null;
+			this.statements.HasInputsCompleted = false ;
+			this.statements.IsOnEdit = true ;
 			this.init() ;
 			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'validSelected'}, eventProxiCriteria);
 			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
@@ -984,6 +996,9 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.tools = null ;
 		this.value = null ;
 		
+		this.updateClass = function () {
+			this.tools.Update() ;
+		}
 			
 		this.init = function () {
 			

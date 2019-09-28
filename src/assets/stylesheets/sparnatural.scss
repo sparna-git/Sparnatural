@@ -107,6 +107,9 @@ body {
 			.current {
 				font-style: italic;
 			}
+			&.Invisible .ObjectPropertyTypeId {
+				display: none;
+			}
 		}
 
 		span.unselect {
@@ -126,6 +129,9 @@ body {
 			font-size: 10px;
 			box-sizing:border-box;
 			font-weight: 700;
+		}
+		.EndClassGroup.IsOnEdit>span.unselect {
+			display: none;
 		}
 		.nice-select.disabled:after {
 			display: none;
@@ -621,9 +627,10 @@ body {
 				&>div>div>.ShowOnHover {
 					display: none;
 				}
-				&.Hover>div>div>.ShowOnHover {
+				&.Hover>div>div.HasInputsCompleted>.ShowOnHover {
 					display: block;
 				}
+
 				li.addWereDisable .ActionWhere.ShowOnHover,
 				&.WhereImpossible.Hover>div .ActionWhere.ShowOnHover,
 				&.Hover>div.completed>div .ActionWhere.ShowOnHover {
