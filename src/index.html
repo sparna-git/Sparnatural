@@ -160,6 +160,15 @@
       "faIcon":  "fas fa-search"
     },
     {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date",
+      "@type" : "Class",
+      "label": [
+        {"@value" : "Date","@language" : "en"},
+        {"@value" : "Date","@language" : "fr"}
+      ],
+      "faIcon":  "fas fa-calendar-alt"
+    },
+    {
       "@id" : "http://dbpedia.org/ontology/country",
       "@type" : [
         "ObjectProperty",
@@ -295,6 +304,32 @@
       "domain": "http://dbpedia.org/ontology/Country",
       "range": "http://dbpedia.org/ontology/Person",
       "path": "^(<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>)"
+    },
+    {
+      "@id" : "http://dbpedia.org/ontology/deathDate",
+      "@type" : [
+        "ObjectProperty",
+        "TimeDatePickerProperty"
+      ],
+      "label": [
+        {"@value" : "death date","@language" : "en"},
+        {"@value" : "date de décès","@language" : "fr"}
+      ],
+      "domain": "http://dbpedia.org/ontology/Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
+    },
+    {
+      "@id" : "http://dbpedia.org/ontology/birthDate",
+      "@type" : [
+        "ObjectProperty",
+        "TimeDatePickerProperty"
+      ],
+      "label": [
+        {"@value" : "birth date","@language" : "en"},
+        {"@value" : "date de naissance","@language" : "fr"}
+      ],
+      "domain": "http://dbpedia.org/ontology/Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#search",
