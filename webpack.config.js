@@ -69,7 +69,11 @@ module.exports = {
 	new CopyPlugin([
       { from: 'static' }
     ]),
-	new DashboardPlugin()
+	new DashboardPlugin(),
+	new webpack.ProvidePlugin({
+        datepicker: '@chenfengyuan/datepicke',
+	  })
+	  
   ],
 	devServer: {
 	  contentBase: path.resolve(__dirname, "./dist"),

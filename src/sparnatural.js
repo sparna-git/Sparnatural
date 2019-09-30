@@ -2,6 +2,9 @@ require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
 
+const datepicker = require("@chenfengyuan/datepicker") ;
+const $ = require('jquery');
+
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
 const removeIcon = require("./assets/icons/buttons/remove.png");
@@ -23,9 +26,8 @@ RangeBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js
 
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
-
 (function( $ ) {
- 
+	
     $.fn.Sparnatural = function( options ) {
  
         var specSearch = {} ;
