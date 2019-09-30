@@ -2,6 +2,9 @@ require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
 
+const datepicker = require("@chenfengyuan/datepicker") ;
+const $ = require('jquery');
+
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
 const removeIcon = require("./assets/icons/buttons/remove.png");
@@ -24,9 +27,8 @@ PropertyBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers
 
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
-
 (function( $ ) {
- 
+	
     $.fn.Sparnatural = function( options ) {
  
         var specSearch = {} ;
@@ -516,7 +518,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.html = $() ;
 		this.statements = {
 			HasInputsCompleted : false,
-			IsOnEdit : false
+			IsOnEdit : false,
+			Invisible: false
 		}		
 		
 		this.init = function() {			
@@ -652,7 +655,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.statements.Created = false ;
 		this.hasSubvalues = true ;
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
-		this.unselect = $('<span class="unselect unselectEndClass">&#10005;</span>') ;
+		this.unselect = $('<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>') ;
 
 
 
@@ -669,7 +672,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			
 			$(this.EndClassGroup.html).find('select.input-val').on('change', {arg1: this.EndClassGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			$(this.EndClassGroup.html).find('span.unselectEndClass').on('click', {arg1: this.EndClassGroup, arg2: 'removeSelected'}, eventProxiCriteria);	
-			$(this.EndClassGroup.unselect).hide() ;	
+			//$(this.EndClassGroup.unselect).hide() ;	
 		}) ;
 		
 		this.validSelected = function validSelected() {
@@ -682,15 +685,26 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			} else {
 				$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			}
-			$(this.unselect).show() ;	
+			//$(this.unselect).show() ;
+			console.log(this) ;
+			this.statements.HasInputsCompleted = true ;
+			this.statements.IsOnEdit = false ;
+			this.init() ;
+			this.ParentComponent.ObjectPropertyGroup.statements.Invisible = false;
+			this.ParentComponent.ObjectPropertyGroup.init() ;
+
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 		};
 
 		this.removeSelected = function removeSelected () {
 			
 			$(this.ParentComponent.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
+			this.ParentComponent.ObjectPropertyGroup.statements.Invisible = true ;
+			this.ParentComponent.ObjectPropertyGroup.init() ;
 			$(this.ParentComponent.ComponentHtml).find('.childsList .ActionRemove a').trigger('click') ;
-			this.value_selected = null
+			this.value_selected = null;
+			this.statements.HasInputsCompleted = false ;
+			this.statements.IsOnEdit = true ;
 			this.init() ;
 			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'validSelected'}, eventProxiCriteria);
 			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
@@ -810,7 +824,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var value_data = this.inputTypeComponent.GetValue() ;
 			}
 
-			this.unselect = $('<span class="unselect" value-data="'+value_data+'">&#10005;</span>') ;
+			this.unselect = $('<span class="unselect" value-data="'+value_data+'"><i class="far fa-times-circle"></i></span>') ;
 			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>').find('div').append(this.unselect) ;
 			} else {
@@ -986,6 +1000,9 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.tools = null ;
 		this.value = null ;
 		
+		this.updateClass = function () {
+			this.tools.Update() ;
+		}
 			
 		this.init = function () {
 			

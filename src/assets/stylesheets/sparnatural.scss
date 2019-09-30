@@ -1,6 +1,6 @@
 @import "nice-select.css";
 @import "~easy-autocomplete/dist/easy-autocomplete.css";
-
+@import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
 
 
 $height-components: 48px;
@@ -11,7 +11,7 @@ $margin-component-onEdit: 80px;
 $margin-children-li: 75px;
 
 $custom-red: rgb(250,136,3) ;
-
+$custom-red-bold: rgb(182, 97, 0) ;
 
 @mixin triangle-before() {
 	padding-left: 20px;
@@ -107,25 +107,36 @@ body {
 			.current {
 				font-style: italic;
 			}
+			&.Invisible .ObjectPropertyTypeId {
+				display: none;
+			}
 		}
 
 		span.unselect {
 			display: block;
 			position: absolute;
-			top: -7px;
+			top: -9px;
 			right: 15px;
-			width: 18px;
-			height: 18px!important;
-			padding: 0 2px;
+			width: 22px;
+			height: 22px!important;
+			padding: 0 0;
+			text-align: center;
 			cursor: pointer;
-			color: #000;
+			color: $custom-red-bold;
 			background: #fff!important;
-			border: 2px solid #333;
-			border-radius: 9px;
+			line-height: 22px;
+			font-size: 18px;
+			box-sizing:border-box;
+			border-radius: 11px;
+			/*border: 2px solid #333;
+			
 			line-height: 13px;
 			font-size: 10px;
-			box-sizing:border-box;
-			font-weight: 700;
+			
+			font-weight: 700;*/
+		}
+		.EndClassGroup.IsOnEdit>span.unselect {
+			display: none;
 		}
 		.nice-select.disabled:after {
 			display: none;
@@ -429,7 +440,7 @@ body {
 				}
 			}
 			span.unselect {
-				top: -9px;
+				top: -11px;
 			}
 			
 		}
@@ -621,9 +632,11 @@ body {
 				&>div>div>.ShowOnHover {
 					display: none;
 				}
-				&.Hover>div>div>.ShowOnHover {
+				&.Hover>div>div.ActionsGroup>.ShowOnHover,
+				&.Hover>div>div.HasInputsCompleted>.ShowOnHover {
 					display: block;
 				}
+
 				li.addWereDisable .ActionWhere.ShowOnHover,
 				&.WhereImpossible.Hover>div .ActionWhere.ShowOnHover,
 				&.Hover>div.completed>div .ActionWhere.ShowOnHover {

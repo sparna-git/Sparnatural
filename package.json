@@ -31,9 +31,13 @@
     "webpack-dev-server": "^3.7.2"
   },
   "dependencies": {
+    "@chenfengyuan/datepicker": "^1.0.9",
     "easy-autocomplete": "^1.3.5",
     "jquery-nice-select": "^1.1.0",
     "sparqljs": "^2.2.3",
     "webpack-cli": "^3.3.7"
+  },
+  "browser": {
+    "datepicker": "./node_modules/@chenfengyuan/datepicker/dits/datepicker.min.js"
   }
 }
