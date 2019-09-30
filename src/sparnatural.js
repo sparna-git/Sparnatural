@@ -171,6 +171,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		
 		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
 		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
+		var WIDGET_TIME_DATEPICKER_PROPERTY = 'TimeDatePickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
 		
