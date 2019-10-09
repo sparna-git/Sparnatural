@@ -173,7 +173,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		
 		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
 		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
-		var WIDGET_TIME_DATEPICKER_PROPERTY = 'TimeDatePickerProperty';
+		var WIDGET_TIME_DATE_PICKER_PROPERTY = 'TimeDatePickerProperty';
+		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
 		
@@ -520,7 +521,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			HasInputsCompleted : false,
 			IsOnEdit : false,
 			Invisible: false
-		}		
+		};
+		this.value_selected = null ;	
 		
 		this.init = function() {			
 			if (!this.statements.Created) {				
@@ -583,6 +585,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			//$(this.html).find('.input-val').attr('disabled', 'disabled');
 			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
+			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;	
 		};
 		
 		this.init() ;
@@ -733,6 +736,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.value_selected = [] ;
 		
 		this.detectWidgetType = function () {
+			console.log(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
 			this.widgetType = this.specProvider.getWidget(this.ParentComponent.ObjectPropertyGroup.value_selected);
 		};
 		
@@ -1200,6 +1204,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 				
 				this.getWigetTypeClassName() ;
+				console.log(this) ;
 				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
 				
 			
@@ -1253,6 +1258,12 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			  case WIDGET_SEARCH_PROPERTY:
 				this.widgetComponent = new SearchWidget(this) ;
 				break;
+			  case WIDGET_TIME_DATE_PICKER_PROPERTY:
+				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, false) ;
+				break;
+			  case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:
+				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, 'day') ;
+				break;
 			  default:
 			  	// TODO : throw Exception
 				this.widgetComponent = null;
@@ -1276,6 +1287,20 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				
 				value = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
 				
+				if ((value.start == '') || (value.stop == '')) {
+					value = null ;
+				} else {
+					if (parseInt(value.start) > parseInt(value.stop)) {
+						value = null ;
+					}
+				}				
+				break;
+			  case WIDGET_TIME_DATE_PICKER_PROPERTY:
+			  case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY: 
+				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
+					
+				value = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
+					
 				if ((value.start == '') || (value.stop == '')) {
 					value = null ;
 				} else {
@@ -1308,6 +1333,11 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				valueLabel = '<span>' + $(id_input).val()  + '</span>' ;
 			    break;
 			  case WIDGET_TIME_PERIOD_PROPERTY:				
+				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
+				valueLabel = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
+				break;
+			  case WIDGET_TIME_DATE_PICKER_PROPERTY:
+			  case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:			
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				valueLabel = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
 				break;
@@ -1535,6 +1565,87 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		}		
 	}
 	
+	function TimeDatePickerWidget(inputTypeComponent, datesHandler, format) {
+		this.base = Widget ;
+		this.base() ;
+		this.datesHandler = datesHandler;
+		this.ParentComponent = inputTypeComponent ;
+		this.ParentComponent.statements.TimeDatePickerWidget  = true ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		
+		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
+		
+		this.init = function init() {
+			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var phrase ="" ;
+			var data_json = null ;
+			
+			var id_inputs = this.IdCriteriaGroupe ;
+			
+			var itc_obj = this.ParentComponent;			
+			
+			$.ajax({
+				url: settings.dates.datesUrl(
+					startClassGroup_value,
+					ObjectPropertyGroup_value,
+					endClassGroup_value,
+					phrase
+				) ,
+				async: false,
+				success: function (data){
+					data_json = data;
+				}
+			});			
+			
+			var options = {
+				
+				data: data_json,
+			
+				getValue: function (element) { 
+					return datesHandler.elementLabel(element) ;
+				},
+				 
+				list: {
+					match: {
+						enabled: true
+					},
+
+					onChooseEvent: function() {
+						
+						var values = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData();
+						var value = datesHandler.elementLabel(values) ;
+						var start = datesHandler.elementStart(values) ;
+						var stop = datesHandler.elementEnd(values) ;
+
+						$('#ecgrw-date-'+id_inputs+'-input').val(value).trigger("change");
+						$('#ecgrw-date-'+id_inputs+'-input-start').val(start).trigger("change");
+						$('#ecgrw-date-'+id_inputs+'-input-stop').val(stop).trigger("change");
+						
+						$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");
+					}
+				},
+
+				template: {
+					type: "custom",
+					method: function(value, item) {							
+						var label = datesHandler.elementLabel(item) ;
+						var start = datesHandler.elementStart(item) ;
+						var stop  = datesHandler.elementEnd(item) ;
+						return '<div>' + label + ' <span class="start">' + start + '</span><span class="end">' + stop + '</span></div>';
+					}
+				},
+
+				requestDelay: 400
+			};
+			
+			$('#ecgrw-date-'+id_inputs+'-input').easyAutocomplete(options);
+			$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
+				$(itc_obj).trigger("change");
+			});
+		}		
+	}
 
 	function SearchWidget(inputTypeComponent) {
 		this.base = Widget ;

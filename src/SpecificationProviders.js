@@ -19,7 +19,13 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 			    break;
 			  case "SearchProperty":
 			    return "SearchProperty";
-			    break;
+				break;
+			  case "TimeDatePickerProperty":
+				return "TimeDatePickerProperty";
+				break;
+			  case "TimeDateDayPickerProperty":
+				return "TimeDateDayPickerProperty";
+				break;
 			  default:
 			  	break;
 			}

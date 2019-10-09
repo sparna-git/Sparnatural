@@ -3,7 +3,7 @@ var SparqlGenerator = require('sparqljs').Generator;
 class DefaultQueryGenerator {
 
 	constructor(addDistinct, typePredicate, addObjectsTypeCriteria) {
-		this.WIDGETS_REQUIRING_VALUES = ['SearchProperty', 'TimePeriodProperty'] ;
+		this.WIDGETS_REQUIRING_VALUES = ['SearchProperty', 'TimePeriodProperty', 'TimeDatePickerProperty', 'TimeDateDayPickerProperty'] ;
 
 		this.addDistinct = addDistinct;
 		this.typePredicate = typePredicate;
@@ -63,6 +63,8 @@ class DefaultQueryGenerator {
 	processQueryComponent(jsonQuery, formObject, ArrayLiIndex, component, index) {
 		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
 		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
+		var WIDGET_TIME_DATE_PICKER_PROPERTY = 'TimeDatePickerProperty';
+		var WIDGET_TIME_DATE_DAYPICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
 		
@@ -95,6 +97,7 @@ class DefaultQueryGenerator {
 		} else {
 			subjectVariable = '?'+this.localName(start)+''+subjectVariableIndex ;
 		}
+		console.log(end) ;
 		var objectVariable = '?'+this.localName(end)+''+objectVarIndex ;
 
 		// whether to add class criteria for subject or not
@@ -158,12 +161,19 @@ class DefaultQueryGenerator {
 					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
 				}
 				break;
-			  case WIDGET_TIME_PERIOD_PROPERTY:							
-				$.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
-					jsonFilter = this.initFilterTime(value.start, value.stop, objectVariable) ;
-					jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
-				});
-				break;
+				case WIDGET_TIME_PERIOD_PROPERTY:							
+				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
+					  jsonFilter = this.initFilterTime(value.start, value.stop, objectVariable) ;
+					  jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
+				  });
+				  break;
+				case WIDGET_TIME_DATE_PICKER_PROPERTY:
+				case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:						
+				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
+					  jsonFilter = this.initFilterTime(value.start, value.stop, objectVariable) ;
+					  jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
+				  });
+				  break;
 			  case WIDGET_SEARCH_PROPERTY:
 				var Texte = $('#ecgrw-search-'+ i +'-input-value').val() ;
 				jsonFilter = this.initFilterSearch(Texte, objectVariable) ;
