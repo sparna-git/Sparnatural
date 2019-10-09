@@ -2,8 +2,9 @@ require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
 
+
 const datepicker = require("@chenfengyuan/datepicker") ;
-const $ = require('jquery');
+const $$ = require('jquery');
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
@@ -1572,6 +1573,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.TimeDatePickerWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.formatDate = format ;
 		
 		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
@@ -1579,68 +1581,23 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
-			var phrase ="" ;
-			var data_json = null ;
 			
 			var id_inputs = this.IdCriteriaGroupe ;
 			
-			var itc_obj = this.ParentComponent;			
-			
-			$.ajax({
-				url: settings.dates.datesUrl(
-					startClassGroup_value,
-					ObjectPropertyGroup_value,
-					endClassGroup_value,
-					phrase
-				) ,
-				async: false,
-				success: function (data){
-					data_json = data;
-				}
-			});			
-			
+			var itc_obj = this.ParentComponent;	
+			if (this.formatDate == 'day') {
+				format = 'dd/mm/YYYY' ;
+			} else {
+				format = 'YYYY' ;
+			}
 			var options = {
-				
-				data: data_json,
-			
-				getValue: function (element) { 
-					return datesHandler.elementLabel(element) ;
-				},
-				 
-				list: {
-					match: {
-						enabled: true
-					},
-
-					onChooseEvent: function() {
-						
-						var values = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData();
-						var value = datesHandler.elementLabel(values) ;
-						var start = datesHandler.elementStart(values) ;
-						var stop = datesHandler.elementEnd(values) ;
-
-						$('#ecgrw-date-'+id_inputs+'-input').val(value).trigger("change");
-						$('#ecgrw-date-'+id_inputs+'-input-start').val(start).trigger("change");
-						$('#ecgrw-date-'+id_inputs+'-input-stop').val(stop).trigger("change");
-						
-						$('#ecgrw-'+id_inputs+'-input-value').val(value).trigger("change");
-					}
-				},
-
-				template: {
-					type: "custom",
-					method: function(value, item) {							
-						var label = datesHandler.elementLabel(item) ;
-						var start = datesHandler.elementStart(item) ;
-						var stop  = datesHandler.elementEnd(item) ;
-						return '<div>' + label + ' <span class="start">' + start + '</span><span class="end">' + stop + '</span></div>';
-					}
-				},
-
-				requestDelay: 400
+				language: 'fr-FR',
+				autoHide: true,
+				format: format,
+				startView: 2
 			};
 			
-			$('#ecgrw-date-'+id_inputs+'-input').easyAutocomplete(options);
+			$$('#ecgrw-date-'+id_inputs+'-input-start, #ecgrw-date-'+id_inputs+'-input-stop').datepicker(options);
 			$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
 				$(itc_obj).trigger("change");
 			});

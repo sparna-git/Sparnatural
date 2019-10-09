@@ -64,7 +64,7 @@ class DefaultQueryGenerator {
 		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
 		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
 		var WIDGET_TIME_DATE_PICKER_PROPERTY = 'TimeDatePickerProperty';
-		var WIDGET_TIME_DATE_DAYPICKER_PROPERTY = 'TimeDateDayPickerProperty';
+		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
 		
@@ -143,7 +143,7 @@ class DefaultQueryGenerator {
 		
 		
 		if(component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 0 ) {
-			
+			var __this = this ;
 			switch (_WidgetType) {					
 			  case WIDGET_LIST_PROPERTY:
 				if (component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
@@ -161,17 +161,18 @@ class DefaultQueryGenerator {
 					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
 				}
 				break;
-				case WIDGET_TIME_PERIOD_PROPERTY:							
+				case WIDGET_TIME_PERIOD_PROPERTY:	
+
 				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
-					  jsonFilter = this.initFilterTime(value.start, value.stop, objectVariable) ;
-					  jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
+					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
+					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
 				  });
 				  break;
 				case WIDGET_TIME_DATE_PICKER_PROPERTY:
 				case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:						
 				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
-					  jsonFilter = this.initFilterTime(value.start, value.stop, objectVariable) ;
-					  jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
+					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
+					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
 				  });
 				  break;
 			  case WIDGET_SEARCH_PROPERTY:
