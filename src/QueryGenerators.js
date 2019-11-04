@@ -1,4 +1,5 @@
 var SparqlGenerator = require('sparqljs').Generator;
+//var SparqlParser = require('sparqljs').Parser;
 
 class DefaultQueryGenerator {
 
@@ -98,7 +99,12 @@ class DefaultQueryGenerator {
 			subjectVariable = '?'+this.localName(start)+''+subjectVariableIndex ;
 		}
 		console.log(end) ;
-		var objectVariable = '?'+this.localName(end)+''+objectVarIndex ;
+		if (end != null) {
+			var objectVariable = '?'+this.localName(end)+''+objectVarIndex ;
+		} else {
+			var objectVariable = null ;
+		}
+		
 
 		// whether to add class criteria for subject or not
 		var addStartClass = true ;
@@ -117,7 +123,7 @@ class DefaultQueryGenerator {
 		
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.widgetType ;
 		
-		if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {						
+		if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {
 			if (component.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {
 				// if we are in a value selection widget and we have a single value selected
 				// then insert the value directly as the object of the triple						
@@ -136,7 +142,10 @@ class DefaultQueryGenerator {
 				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;
 			}
 		} else {
-			newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
+			if (objectVariable !== null) {
+				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
+			}
+			
 		}
 		
 		jsonQuery = this.addInWhere(jsonQuery, newTriples) ;
@@ -291,6 +300,7 @@ class DefaultQueryGenerator {
 			"predicate": predicate,
 			"object": object,
 		} ;
+		console.log(triple) ;
 					
 		jsonTriples.triples.push(triple) ;
 		
