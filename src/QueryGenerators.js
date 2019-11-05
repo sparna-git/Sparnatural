@@ -250,31 +250,42 @@ class DefaultQueryGenerator {
 	}
 
 	initFilterTime(StartYear, EndYear, index) {
-		return {
+		var filters = new Array ;
+		var filter = {
 			"type": "filter",
 			"expression": {
-				"type": "operation",
+				"type": 'operation',
 				"operator": "&&",
-				"args": [
-					{
-						"type": "operation",
-						"operator": ">",
-						"args": [
-							""+index+"",
-							"\""+StartYear+"-01-01\"^^http://www.w3.org/2001/XMLSchema#date"
-						]
-					},
-					{
-						"type": "operation",
-						"operator": "<=",
-						"args": [
-							""+index+"",
-							"\""+EndYear+"-12-31\"^^http://www.w3.org/2001/XMLSchema#date"
-						]
-					}
-				]
+				"args": []
 			}
 		} ;
+		
+		if (StartYear != null) {
+			filters.push( {
+				"type": "operation",
+				"operator": ">=",
+				"args": [
+					""+index+"",
+					"\""+StartYear+"\"^^http://www.w3.org/2001/XMLSchema#date"
+				]
+			}) ;
+		}
+		if (EndYear != null) {
+			filters.push( {
+				"type": "operation",
+				"operator": "<=",
+				"args": [
+					""+index+"",
+					"\""+EndYear+"\"^^http://www.w3.org/2001/XMLSchema#date"
+				]
+			}) ;
+		}
+		if (filters.length == 2 ) {
+			filter["expression"]["args"] = filters ;
+		} else {
+			filter["expression"] = filters[0] ;
+		}
+		return filter ;
 	}
 
 	initFilterSearch(Texte, index) {			

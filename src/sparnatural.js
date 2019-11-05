@@ -1293,22 +1293,44 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				} else {
 					if (parseInt(value.start) > parseInt(value.stop)) {
 						value = null ;
+					} else {
+						value.start = value.start + '-01-01';
+						value.stop = value.stop + '-12-31';
 					}
 				}				
 				break;
 			  case WIDGET_TIME_DATE_PICKER_PROPERTY:
 			  case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY: 
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
-					
-				value = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
-					
-				if ((value.start == '') || (value.stop == '')) {
-					value = null ;
+				var start = null; var end = null ;
+				if ($(id_input+'-start').val() != '' ) {
+					start = $$(id_input+'-start').datepicker('getDate');
+				}
+				if ($(id_input+'-stop').val() != '' ) {
+					end = $$(id_input+'-stop').datepicker('getDate');
+				}
+
+				if ( (start != null) && (end != null) && (end < start) ) {
+					return null ;
+				}
+
+				if (this.widgetComponent.formatDate == 'day') {
+					dateToYMD(start, 'day') ;
+					value = { start: dateToYMD(start, 'day') , stop: dateToYMD(end, 'day')  } ;
 				} else {
-					if (parseInt(value.start) > parseInt(value.stop)) {
-						value = null ;
+					value = { start: dateToYMD(start, false) , stop: dateToYMD(end, false)  } ;
+					if (value.start != null)  {
+						value.start = value.start + '-01-01';
 					}
-				}				
+					if (value.stop != null)  {
+						value.stop = value.stop + '-12-31';
+					}
+				}
+				// console.log(value) ;
+					
+				if ((value.start == null) && (value.stop == null)) {
+					value = null ;
+				}
 				break;
 			  case WIDGET_SEARCH_PROPERTY:
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
@@ -1340,7 +1362,16 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			  case WIDGET_TIME_DATE_PICKER_PROPERTY:
 			  case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:			
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
-				valueLabel = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '</span>' ;
+				var start = $(id_input+'-start').val() ;
+				var end = $(id_input+'-stop').val() ;
+				if ((start != '') && (end != '')) {
+					valueLabel = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '</span>' ;
+				} else if (start != '') {
+					valueLabel = '<span class="label-two-line">>= '+ $(id_input+'-start').val() + '</span>' ;
+				} else if (end != '') {
+					valueLabel = '<span class="label-two-line"><= '+ $(id_input+'-stop').val() + '</span>' ;
+				}
+				
 				break;
 			  case WIDGET_SEARCH_PROPERTY:				
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
@@ -1594,6 +1625,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				language: 'fr-FR',
 				autoHide: true,
 				format: format,
+				date: null,
 				startView: 2
 			};
 			
@@ -1722,6 +1754,20 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.add = function(children) {
 			this.childrensReferences.push(children) ;
 		}
+	}
+
+	function dateToYMD(date, format) {
+		if (date == null)  {
+			return date ;
+		}
+		var d = date.getDate();
+		var m = date.getMonth() + 1; //Month from 0 to 11
+		var y = date.getFullYear();
+		if (format == 'day') {
+			return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+		}
+		return y ;
+		
 	}
 
 	return this ;
