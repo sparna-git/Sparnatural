@@ -478,14 +478,21 @@ body {
 				position: absolute;
 			}
 			.ActionRemove {
-				right: 5px;
+				right: 0;
 				top: -46px;
 				line-height: 46px;
 				a {
 					cursor: pointer;
-					display: inline-block;line-height: 42px;
+					display: inline-block;line-height: 46px;
 					vertical-align: top;
 					padding: 0 15px;
+					height: 46px;
+
+					.unselect {
+						position: relative;
+						top: 0;
+						line-height: 46px;
+					}
 				}
 			}
 			.ActionAnd {

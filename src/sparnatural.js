@@ -1068,7 +1068,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 					possible_values = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
 				}
 				if (this instanceof ActionRemove) {
-					possible_values = '<a><img src="' + removeIcon + '"></a>' ;
+					possible_values = '<a><span class="unselect"><i class="far fa-times-circle"></i></span></a>' ;
 				}
 			} 
 			
