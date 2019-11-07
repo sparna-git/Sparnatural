@@ -273,6 +273,23 @@ body {
 						white-space: normal;
 					}
 				}
+				.TimeDatePickerWidget {
+					&>.date-widget {
+						&>div,
+						&>input {
+							display: inline-block;
+						}
+						&>input {
+							height: 35px;
+							width: 105px;
+						}
+						&>button {
+							height: 35px;
+							line-height: 20px;
+							margin-left: 5px;
+						}
+					}
+				}
 				.ActionWhere {
 					height: 20px;
 					line-height: 20px;
