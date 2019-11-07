@@ -241,13 +241,13 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		$('li.groupe').off( "mouseleave" ) ;
 		$('li.groupe').on( "mouseover", function(event) {
 			event.stopImmediatePropagation();
-			$('li.groupe').removeClass('Hover') ;
-			$(this).addClass('Hover') ;
+			//$('li.groupe').removeClass('Hover') ;
+			//$(this).addClass('Hover') ;
 			
 		} );
 		$('li.groupe').on( "mouseleave", function(event) {
 			event.stopImmediatePropagation();
-			$('li.groupe').removeClass('Hover') ;
+			//$('li.groupe').removeClass('Hover') ;
 			
 		} );
 		 /*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
@@ -748,17 +748,15 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.EndClassWidgetGroup.detectWidgetType() ;
 			this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
 			
-			
+			//Affichage de la ligne des actions 
+			this.ComponentHtml.addClass('Hover') ;
 			//this.EndClassWidgetGroup.inputTypeComponent.init() ;
-			console.log(this) ;
 			if (this.ActionsGroup.reinsert == true) {
 				//this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html.find('*').remove() ;
 				this.EndClassWidgetGroup.inputTypeComponent.reload() ;
 			} else {
 				this.EndClassWidgetGroup.inputTypeComponent.init() ;
 			}
-
-
 
 			$(this.EndClassWidgetGroup.inputTypeComponent).on(
 				'change',
@@ -1486,7 +1484,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			
 			var itc_obj = this.ParentComponent;
 			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-			
+
 			var options = {
 				url: settings.list.listUrl(
 					startClassGroup_value,
@@ -1613,7 +1611,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		this.formatDate = format ;
 		
-		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFormat+'"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateFormat+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
+		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFormat+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateFormat+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
