@@ -800,7 +800,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				} else {
 					$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 				}
-
+				//On vide les champs de saisie du widget
+				this.inputTypeComponent.reload() ;
 
 			}
 
@@ -866,6 +867,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		
 		this.needAddOrValue = function needAddOrValue() {
 			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
+			//On vide les champs de saisie du widget
+			this.inputTypeComponent.reload() ;
 		};
 		
 		this.init() ;
@@ -1472,7 +1475,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.ParentComponent.statements.ListeWidget = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;		
+		var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 		this.html = '<div class="list-widget"><select id="'+id_input+'"></select></div>' ;
 		this.select = $('<select id="'+id_input+'"></select>');
 		
@@ -1482,6 +1485,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
 			
 			var itc_obj = this.ParentComponent;
+			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+			
 			var options = {
 				url: settings.list.listUrl(
 					startClassGroup_value,
@@ -1514,7 +1519,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 					$(itc_obj).trigger('change') ;
 			  	});  
 			});
-		}		
+		}
 	}
 	
 	function DatesWidget(inputTypeComponent, datesHandler) {
