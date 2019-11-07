@@ -7,5 +7,10 @@
 	"PlaceHolderDatePeriod": "name of the period",
 	"PlaceHolderDateFrom": "from",
 	"PlaceHolderDateTo": "to",
+	"PlaceHolderDateFormat": "mm/dd/YYYY",
+	"LabelDateFrom": "From",
+	"LabelDateTo": "to",
+	"DisplayValueDateFrom" : "From",
+	"DisplayValueDateTo" : "Until",
 	"ButtonAdd": "Add"
 }
