@@ -179,6 +179,92 @@ ORDER BY ?label
 }
 
 
+class WikidataAutocompleteAndListHandler extends SimpleSparqlAutocompleteAndListHandler {
+
+	constructor(sparqlEndpointUrl, sparqlPostprocessor, language) {
+		super(sparqlEndpointUrl, sparqlPostprocessor, language);
+	}
+
+	/**
+	 * Constructs the SPARQL query to use for autocomplete widget search.
+	 **/
+	_buildAutocompleteSparql(domain, property, range, key) {
+
+/*
+
+SELECT ?uri ?uriLabel
+WHERE {
+{
+SELECT ?uri ?uriLabel WHERE {
+  {
+  SELECT DISTINCT ?uri WHERE {  
+    ?domain wdt:P31 wd:Q34770 .
+    ?domain wdt:P17 ?uri .
+  }
+  }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
+}
+}
+  
+  FILTER(STRSTARTS(lcase(?uriLabel), "f"))  
+}
+ORDER BY ?uriLabel
+
+*/
+		var sparql = `
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT DISTINCT ?uri ?uriLabel WHERE {
+  SERVICE wikibase:mwapi {
+      bd:serviceParam wikibase:api "EntitySearch" .
+      bd:serviceParam wikibase:endpoint "www.wikidata.org" .
+      bd:serviceParam mwapi:search "${key}" .
+      ${ (this.language != null) ? `bd:serviceParam mwapi:language "${this.language}" .` : "" }
+      ?this wikibase:apiOutputItem mwapi:item .
+  }
+  ?domain wdt:P31 <${domain}> .
+  ?domain <${property}> ?uri .
+   # ?uri wdt:P31 <${range}> .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${this.language}". }
+}
+ORDER BY ?uriLabel
+		`;
+		return sparql;
+	}
+
+	_buildListSparql(domain, property, range) {
+
+/*
+SELECT ?uri ?uriLabel WHERE {
+  {
+  SELECT DISTINCT ?uri WHERE {  
+    ?domain wdt:P31 wd:Q34770 .
+    ?domain wdt:P17 ?uri .
+  }
+  }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
+}
+ORDER BY ?uriLabel
+*/
+		var sparql = `
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+SELECT DISTINCT ?uri ?uriLabel WHERE {
+  ?domain wdt:P31 <${domain}> .
+  ?domain <${property}> ?uri .
+   # ?uri wdt:P31 <${range}> .
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${this.language}". }
+}
+ORDER BY ?uriLabel
+		`;
+		return sparql;
+	}
+
+
+	elementLabel(element) {
+		return element.uriLabel.value;
+	}
+}
+
+
 class RangeBasedAutocompleteAndListHandler {
 
 	constructor(defaultHandler, handlerByKeyMap) {
@@ -242,5 +328,6 @@ module.exports = {
 	SparqlBifContainsAutocompleteAndListHandler: SparqlBifContainsAutocompleteAndListHandler,
 	SimpleSparqlAutocompleteAndListHandler: SimpleSparqlAutocompleteAndListHandler,
 	RangeBasedAutocompleteAndListHandler: RangeBasedAutocompleteAndListHandler,
-	PropertyBasedAutocompleteAndListHandler: PropertyBasedAutocompleteAndListHandler
+	PropertyBasedAutocompleteAndListHandler: PropertyBasedAutocompleteAndListHandler,
+	WikidataAutocompleteAndListHandler: WikidataAutocompleteAndListHandler
 }
