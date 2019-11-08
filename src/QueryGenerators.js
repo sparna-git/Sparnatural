@@ -1,9 +1,10 @@
 var SparqlGenerator = require('sparqljs').Generator;
+//var SparqlParser = require('sparqljs').Parser;
 
 class DefaultQueryGenerator {
 
 	constructor(addDistinct, typePredicate, addObjectsTypeCriteria) {
-		this.WIDGETS_REQUIRING_VALUES = ['SearchProperty', 'TimePeriodProperty'] ;
+		this.WIDGETS_REQUIRING_VALUES = ['SearchProperty', 'TimePeriodProperty', 'TimeDatePickerProperty', 'TimeDateDayPickerProperty'] ;
 
 		this.addDistinct = addDistinct;
 		this.typePredicate = typePredicate;
@@ -63,6 +64,8 @@ class DefaultQueryGenerator {
 	processQueryComponent(jsonQuery, formObject, ArrayLiIndex, component, index) {
 		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
 		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
+		var WIDGET_TIME_DATE_PICKER_PROPERTY = 'TimeDatePickerProperty';
+		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
 		
@@ -95,7 +98,13 @@ class DefaultQueryGenerator {
 		} else {
 			subjectVariable = '?'+this.localName(start)+''+subjectVariableIndex ;
 		}
-		var objectVariable = '?'+this.localName(end)+''+objectVarIndex ;
+		console.log(end) ;
+		if (end != null) {
+			var objectVariable = '?'+this.localName(end)+''+objectVarIndex ;
+		} else {
+			var objectVariable = null ;
+		}
+		
 
 		// whether to add class criteria for subject or not
 		var addStartClass = true ;
@@ -114,7 +123,7 @@ class DefaultQueryGenerator {
 		
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.widgetType ;
 		
-		if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {						
+		if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {
 			if (component.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {
 				// if we are in a value selection widget and we have a single value selected
 				// then insert the value directly as the object of the triple						
@@ -133,14 +142,17 @@ class DefaultQueryGenerator {
 				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;
 			}
 		} else {
-			newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
+			if (objectVariable !== null) {
+				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
+			}
+			
 		}
 		
 		jsonQuery = this.addInWhere(jsonQuery, newTriples) ;
 		
 		
 		if(component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 0 ) {
-			
+			var __this = this ;
 			switch (_WidgetType) {					
 			  case WIDGET_LIST_PROPERTY:
 				if (component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
@@ -158,12 +170,20 @@ class DefaultQueryGenerator {
 					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
 				}
 				break;
-			  case WIDGET_TIME_PERIOD_PROPERTY:							
-				$.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
-					jsonFilter = this.initFilterTime(value.start, value.stop, objectVariable) ;
-					jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
-				});
-				break;
+				case WIDGET_TIME_PERIOD_PROPERTY:	
+
+				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
+					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
+					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
+				  });
+				  break;
+				case WIDGET_TIME_DATE_PICKER_PROPERTY:
+				case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:						
+				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
+					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
+					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
+				  });
+				  break;
 			  case WIDGET_SEARCH_PROPERTY:
 				var Texte = $('#ecgrw-search-'+ i +'-input-value').val() ;
 				jsonFilter = this.initFilterSearch(Texte, objectVariable) ;
@@ -230,31 +250,42 @@ class DefaultQueryGenerator {
 	}
 
 	initFilterTime(StartYear, EndYear, index) {
-		return {
+		var filters = new Array ;
+		var filter = {
 			"type": "filter",
 			"expression": {
-				"type": "operation",
+				"type": 'operation',
 				"operator": "&&",
-				"args": [
-					{
-						"type": "operation",
-						"operator": ">",
-						"args": [
-							""+index+"",
-							"\""+StartYear+"-01-01\"^^http://www.w3.org/2001/XMLSchema#date"
-						]
-					},
-					{
-						"type": "operation",
-						"operator": "<=",
-						"args": [
-							""+index+"",
-							"\""+EndYear+"-12-31\"^^http://www.w3.org/2001/XMLSchema#date"
-						]
-					}
-				]
+				"args": []
 			}
 		} ;
+		
+		if (StartYear != null) {
+			filters.push( {
+				"type": "operation",
+				"operator": ">=",
+				"args": [
+					""+index+"",
+					"\""+StartYear+"\"^^http://www.w3.org/2001/XMLSchema#date"
+				]
+			}) ;
+		}
+		if (EndYear != null) {
+			filters.push( {
+				"type": "operation",
+				"operator": "<=",
+				"args": [
+					""+index+"",
+					"\""+EndYear+"\"^^http://www.w3.org/2001/XMLSchema#date"
+				]
+			}) ;
+		}
+		if (filters.length == 2 ) {
+			filter["expression"]["args"] = filters ;
+		} else {
+			filter["expression"] = filters[0] ;
+		}
+		return filter ;
 	}
 
 	initFilterSearch(Texte, index) {			
@@ -280,6 +311,7 @@ class DefaultQueryGenerator {
 			"predicate": predicate,
 			"object": object,
 		} ;
+		console.log(triple) ;
 					
 		jsonTriples.triples.push(triple) ;
 		

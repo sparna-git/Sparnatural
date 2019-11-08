@@ -2,8 +2,9 @@ require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
 
+
 const datepicker = require("@chenfengyuan/datepicker") ;
-const $ = require('jquery');
+const $$ = require('jquery');
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
@@ -174,7 +175,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		
 		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
 		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
-		var WIDGET_TIME_DATEPICKER_PROPERTY = 'TimeDatePickerProperty';
+		var WIDGET_TIME_DATE_PICKER_PROPERTY = 'TimeDatePickerProperty';
+		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
 		
@@ -240,13 +242,13 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		$('li.groupe').off( "mouseleave" ) ;
 		$('li.groupe').on( "mouseover", function(event) {
 			event.stopImmediatePropagation();
-			$('li.groupe').removeClass('Hover') ;
-			$(this).addClass('Hover') ;
+			//$('li.groupe').removeClass('Hover') ;
+			//$(this).addClass('Hover') ;
 			
 		} );
 		$('li.groupe').on( "mouseleave", function(event) {
 			event.stopImmediatePropagation();
-			$('li.groupe').removeClass('Hover') ;
+			//$('li.groupe').removeClass('Hover') ;
 			
 		} );
 		 /*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
@@ -521,7 +523,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			HasInputsCompleted : false,
 			IsOnEdit : false,
 			Invisible: false
-		}		
+		};
+		this.value_selected = null ;	
 		
 		this.init = function() {			
 			if (!this.statements.Created) {				
@@ -584,6 +587,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			//$(this.html).find('.input-val').attr('disabled', 'disabled');
 			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
+			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;	
 		};
 		
 		this.init() ;
@@ -734,6 +738,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.value_selected = [] ;
 		
 		this.detectWidgetType = function () {
+			console.log(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
 			this.widgetType = this.specProvider.getWidget(this.ParentComponent.ObjectPropertyGroup.value_selected);
 		};
 		
@@ -744,17 +749,15 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.EndClassWidgetGroup.detectWidgetType() ;
 			this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
 			
-			
+			//Affichage de la ligne des actions 
+			this.ComponentHtml.addClass('Hover') ;
 			//this.EndClassWidgetGroup.inputTypeComponent.init() ;
-			console.log(this) ;
 			if (this.ActionsGroup.reinsert == true) {
 				//this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html.find('*').remove() ;
 				this.EndClassWidgetGroup.inputTypeComponent.reload() ;
 			} else {
 				this.EndClassWidgetGroup.inputTypeComponent.init() ;
 			}
-
-
 
 			$(this.EndClassWidgetGroup.inputTypeComponent).on(
 				'change',
@@ -796,7 +799,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				} else {
 					$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 				}
-
+				//On vide les champs de saisie du widget
+				this.inputTypeComponent.reload() ;
 
 			}
 
@@ -862,6 +866,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		
 		this.needAddOrValue = function needAddOrValue() {
 			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
+			//On vide les champs de saisie du widget
+			this.inputTypeComponent.reload() ;
 		};
 		
 		this.init() ;
@@ -1064,7 +1070,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 					possible_values = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
 				}
 				if (this instanceof ActionRemove) {
-					possible_values = '<a><img src="' + removeIcon + '"></a>' ;
+					possible_values = '<a><span class="unselect"><i class="far fa-times-circle"></i></span></a>' ;
 				}
 			} 
 			
@@ -1201,6 +1207,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 				
 				this.getWigetTypeClassName() ;
+				console.log(this) ;
 				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
 				
 			
@@ -1254,6 +1261,12 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			  case WIDGET_SEARCH_PROPERTY:
 				this.widgetComponent = new SearchWidget(this) ;
 				break;
+			  case WIDGET_TIME_DATE_PICKER_PROPERTY:
+				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, false) ;
+				break;
+			  case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:
+				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, 'day') ;
+				break;
 			  default:
 			  	// TODO : throw Exception
 				this.widgetComponent = null;
@@ -1282,8 +1295,44 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				} else {
 					if (parseInt(value.start) > parseInt(value.stop)) {
 						value = null ;
+					} else {
+						value.start = value.start + '-01-01';
+						value.stop = value.stop + '-12-31';
 					}
 				}				
+				break;
+			  case WIDGET_TIME_DATE_PICKER_PROPERTY:
+			  case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY: 
+				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
+				var start = null; var end = null ;
+				if ($(id_input+'-start').val() != '' ) {
+					start = $$(id_input+'-start').datepicker('getDate');
+				}
+				if ($(id_input+'-stop').val() != '' ) {
+					end = $$(id_input+'-stop').datepicker('getDate');
+				}
+
+				if ( (start != null) && (end != null) && (end < start) ) {
+					return null ;
+				}
+
+				if (this.widgetComponent.formatDate == 'day') {
+					dateToYMD(start, 'day') ;
+					value = { start: dateToYMD(start, 'day') , stop: dateToYMD(end, 'day')  } ;
+				} else {
+					value = { start: dateToYMD(start, false) , stop: dateToYMD(end, false)  } ;
+					if (value.start != null)  {
+						value.start = value.start + '-01-01';
+					}
+					if (value.stop != null)  {
+						value.stop = value.stop + '-12-31';
+					}
+				}
+				// console.log(value) ;
+					
+				if ((value.start == null) && (value.stop == null)) {
+					value = null ;
+				}
 				break;
 			  case WIDGET_SEARCH_PROPERTY:
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
@@ -1311,6 +1360,22 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			  case WIDGET_TIME_PERIOD_PROPERTY:				
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				valueLabel = '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
+				break;
+			  case WIDGET_TIME_DATE_PICKER_PROPERTY:
+			  case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:			
+				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
+				var start = $(id_input+'-start').val() ;
+				var end = $(id_input+'-stop').val() ;
+				console.log(start) ;
+				if ((start != '') && (end != '')) {
+					valueLabel = '<span class="label-two-line">'+langSearch.LabelDateFrom+' '+ $(id_input+'-start').val() +' '+langSearch.LabelDateTo+' '+ $(id_input+'-stop').val() + '</span>' ;
+				} else if (start != '') {
+					console.log(start) ;
+					valueLabel = '<span class="label-two-line">'+langSearch.DisplayValueDateFrom+' '+ $(id_input+'-start').val() + '</span>' ;
+				} else if (end != '') {
+					valueLabel = '<span class="label-two-line">'+langSearch.DisplayValueDateTo+' '+ $(id_input+'-stop').val() + '</span>' ;
+				}
+				console.log(valueLabel);
 				break;
 			  case WIDGET_SEARCH_PROPERTY:				
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
@@ -1409,7 +1474,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.ParentComponent.statements.ListeWidget = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
-		var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;		
+		var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 		this.html = '<div class="list-widget"><select id="'+id_input+'"></select></div>' ;
 		this.select = $('<select id="'+id_input+'"></select>');
 		
@@ -1419,6 +1484,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
 			
 			var itc_obj = this.ParentComponent;
+			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+
 			var options = {
 				url: settings.list.listUrl(
 					startClassGroup_value,
@@ -1451,7 +1518,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 					$(itc_obj).trigger('change') ;
 			  	});  
 			});
-		}		
+		}
 	}
 	
 	function DatesWidget(inputTypeComponent, datesHandler) {
@@ -1536,6 +1603,44 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		}		
 	}
 	
+	function TimeDatePickerWidget(inputTypeComponent, datesHandler, format) {
+		this.base = Widget ;
+		this.base() ;
+		this.datesHandler = datesHandler;
+		this.ParentComponent = inputTypeComponent ;
+		this.ParentComponent.statements.TimeDatePickerWidget  = true ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.formatDate = format ;
+		
+		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFormat+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateFormat+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
+		
+		this.init = function init() {
+			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			
+			var id_inputs = this.IdCriteriaGroupe ;
+			
+			var itc_obj = this.ParentComponent;
+			if (this.formatDate == 'day') {
+				format = 'dd/mm/YYYY' ;
+			} else {
+				format = 'YYYY' ;
+			}
+			var options = {
+				language: 'fr-FR',
+				autoHide: true,
+				format: format,
+				date: null,
+				startView: 2
+			};
+			
+			$$('#ecgrw-date-'+id_inputs+'-input-start, #ecgrw-date-'+id_inputs+'-input-stop').datepicker(options);
+			$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
+				$(itc_obj).trigger("change");
+			});
+		}		
+	}
 
 	function SearchWidget(inputTypeComponent) {
 		this.base = Widget ;
@@ -1655,6 +1760,20 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.add = function(children) {
 			this.childrensReferences.push(children) ;
 		}
+	}
+
+	function dateToYMD(date, format) {
+		if (date == null)  {
+			return date ;
+		}
+		var d = date.getDate();
+		var m = date.getMonth() + 1; //Month from 0 to 11
+		var y = date.getFullYear();
+		if (format == 'day') {
+			return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+		}
+		return y ;
+		
 	}
 
 	return this ;
