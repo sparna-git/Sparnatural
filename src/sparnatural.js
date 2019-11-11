@@ -1610,8 +1610,14 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.ParentComponent.statements.TimeDatePickerWidget  = true ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		this.formatDate = format ;
+
+		if (this.formatDate == 'day') {
+			Placeholder = langSearch.PlaceholderTimeDateDayFormat ;
+		} else {
+			Placeholder = langSearch.PlaceholderTimeDateFormat ;
+		}
 		
-		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFormat+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateFormat+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
+		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+Placeholder+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+Placeholder+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
@@ -1622,12 +1628,12 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			
 			var itc_obj = this.ParentComponent;
 			if (this.formatDate == 'day') {
-				format = 'dd/mm/YYYY' ;
+				format = langSearch.InputTimeDateDayFormat ;
 			} else {
-				format = 'YYYY' ;
+				format = langSearch.InputTimeDateFormat ;
 			}
 			var options = {
-				language: 'fr-FR',
+				language: langSearch.LangCodeTimeDate,
 				autoHide: true,
 				format: format,
 				date: null,
