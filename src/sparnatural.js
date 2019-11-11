@@ -43,6 +43,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 			maxDepth: 3,
 			maxOr: 3,
+			sendQueryOnFirstClassSelected: false,
 			backgroundBaseColor: '250,136,3',
 			
 			autocomplete : {
@@ -587,7 +588,11 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			//$(this.html).find('.input-val').attr('disabled', 'disabled');
 			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
-			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;	
+
+			if(settings.sendQueryOnFirstClassSelected) {
+				$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+			}
+				
 		};
 		
 		this.init() ;
