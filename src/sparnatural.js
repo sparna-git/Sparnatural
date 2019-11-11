@@ -496,7 +496,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				}
 
 				initGeneralEvent(formObject) ;
-				//ExecuteSubmited(formObject) ;
+				$(this.thisForm_._this).trigger( {type:"submit" } ) ;
 			}
 			
 			return false ;
