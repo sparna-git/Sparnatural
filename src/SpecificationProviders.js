@@ -26,6 +26,9 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 			  case "TimeDateDayPickerProperty":
 				return "TimeDateDayPickerProperty";
 				break;
+			  case "NoProperty":
+				return "NoProperty";
+				break;
 			  default:
 			  	break;
 			}

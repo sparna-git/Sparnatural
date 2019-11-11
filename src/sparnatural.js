@@ -178,6 +178,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
+		var WIDGET_NO_PROPERTY 			= 'NoProperty';
 		
 		var VALUE_SELECTION_WIDGETS = [
 			WIDGET_LIST_PROPERTY,
@@ -1061,8 +1062,13 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				}
 				if (this instanceof ActionWhere) {
 					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+					var choise = 2 ;
+					if (endClassGroup.ParentComponent.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
+						choise = 1 ;
+						$(endClassGroup.html).addClass('noPropertyWidget') ;
+					}
 					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
-					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
+					var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choise+'</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
 					possible_values = widgetLabel+'<a>+</a>' ;
 				}
 				if (this instanceof ActionAnd) {
@@ -1102,8 +1108,13 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			if (this.ParentComponent instanceof ActionsGroup) {				
 				if (this instanceof ActionWhere) {
 					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+					var choise = 2 ;
+					if (endClassGroup.ParentComponent.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
+						choise = 1 ;
+						$(endClassGroup.html).addClass('noPropertyWidget') ;
+					}
 					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
-					var widgetLabel = '<span class="edit-trait"><span class="edit-num">2</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
+					var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choise+'</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
 					possible_values = widgetLabel+'<a>+</a>' ;
 				}
 				if (this instanceof ActionAnd) {
@@ -1197,6 +1208,11 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
 				this.widgetType = this.ParentComponent.widgetType  ;
+				console.log(this.widgetType) ;
+				if (this.widgetType == WIDGET_NO_PROPERTY) {
+					return true;
+				}
+
 				if (this.widgetType == WIDGET_SEARCH_PROPERTY) {
 					// label of the "Search" pseudo-class is inserted here in this case
 					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
@@ -1225,6 +1241,11 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
 				this.widgetType = this.ParentComponent.widgetType  ;
+
+				if (this.widgetType == WIDGET_NO_PROPERTY) {
+					return true;
+				}
+
 				if (this.widgetType == WIDGET_SEARCH_PROPERTY) {
 					// label of the "Search" pseudo-class is inserted here in this case
 					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
@@ -1268,7 +1289,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				break;
 			  default:
 			  	// TODO : throw Exception
-				this.widgetComponent = null;
+				this.widgetComponent = new NoWidget(this) ;
 			}
 		};
 		
@@ -1670,7 +1691,22 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				}
 			);
 		}
-	}	
+	}
+	function NoWidget(inputTypeComponent, listHandler) {
+		this.base = Widget ;
+		this.base() ;
+		this.listHandler = listHandler;
+		this.ParentComponent = inputTypeComponent ;
+		this.ParentComponent.statements.ListeWidget = true ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		
+		var id_input = null ;
+		this.html = null ;
+		
+		this.init = function init() {
+			
+		} ;
+	}
 	
 	function GenericTools(component) {
 		this.component = component ;

@@ -68,10 +68,12 @@ class DefaultQueryGenerator {
 		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
+		var WIDGET_NO_PROPERTY 			= 'NoProperty';
 		
 		var VALUE_SELECTION_WIDGETS = [
 			WIDGET_LIST_PROPERTY,
-			WIDGET_AUTOCOMPLETE_PROPERTY
+			WIDGET_AUTOCOMPLETE_PROPERTY,
+			WIDGET_NO_PROPERTY // Pas de vameiur selectionné mais sera forcement utilisé pour une Class
 		];
 
 
@@ -119,6 +121,7 @@ class DefaultQueryGenerator {
 		var newTriples = this.initTriple() ;
 		if (addStartClass) {
 			newTriples = this.addTriple(newTriples, subjectVariable, this.typePredicate, start) ;
+			console.log(1) ;
 		}
 		
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.widgetType ;
@@ -132,6 +135,8 @@ class DefaultQueryGenerator {
 				// otherwise use a variable name as the object of the triple
 				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
 			}
+			
+			console.log(2) ;
 
 			// if no value is selected add a type criteria for the object
 			if (
@@ -140,13 +145,16 @@ class DefaultQueryGenerator {
 					this.addObjectsTypeCriteria
 			) {
 				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;
+				console.log(3) ;
 			}
 		} else {
 			if (objectVariable !== null) {
 				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
+				console.log('2b') ;
 			}
 			
 		}
+		console.log(newTriples) ;
 		
 		jsonQuery = this.addInWhere(jsonQuery, newTriples) ;
 		
