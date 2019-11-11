@@ -68,12 +68,12 @@ class DefaultQueryGenerator {
 		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
-		var WIDGET_NO_PROPERTY 			= 'NoProperty';
+		var WIDGET_NON_SELECTABLE_PROPERTY 			= 'NonSelectableProperty';
 		
 		var VALUE_SELECTION_WIDGETS = [
 			WIDGET_LIST_PROPERTY,
 			WIDGET_AUTOCOMPLETE_PROPERTY,
-			WIDGET_NO_PROPERTY // Pas de vameiur selectionné mais sera forcement utilisé pour une Class
+			WIDGET_NON_SELECTABLE_PROPERTY // Pas de vameiur selectionné mais sera forcement utilisé pour une Class
 		];
 
 

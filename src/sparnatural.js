@@ -178,7 +178,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
-		var WIDGET_NO_PROPERTY 			= 'NoProperty';
+		var WIDGET_NON_SELECTABLE_PROPERTY 			= 'NonSelectableProperty';
 		
 		var VALUE_SELECTION_WIDGETS = [
 			WIDGET_LIST_PROPERTY,
@@ -1209,7 +1209,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 				this.widgetType = this.ParentComponent.widgetType  ;
 				console.log(this.widgetType) ;
-				if (this.widgetType == WIDGET_NO_PROPERTY) {
+				if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
 					return true;
 				}
 
@@ -1242,7 +1242,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 				this.widgetType = this.ParentComponent.widgetType  ;
 
-				if (this.widgetType == WIDGET_NO_PROPERTY) {
+				if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
 					return true;
 				}
 
