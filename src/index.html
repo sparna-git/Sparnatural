@@ -212,7 +212,7 @@
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays",
       "@type" : [
         "ObjectProperty",
-        "AutocompleteProperty"
+        "NonSelectableProperty"
       ],
       "label": [
         {"@value" : "displays","@language" : "en"},
@@ -407,6 +407,7 @@
 			  	maxDepth: 4,
 				  addDistinct: true,
           addObjectsTypeCriteria: true,
+          sendQueryOnFirstClassSelected: true,
 				  backgroundBaseColor: '2,184,117',
 				  autocomplete : sparqlHandler,
 				  list : rangeBasedHandler,

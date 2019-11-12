@@ -142,6 +142,22 @@ body {
 		.nice-select.disabled:after {
 			display: none;
 		}
+		.nice-select .current {
+			display: inline-block;
+			height: $height-components-under - 2;
+			line-height: $height-components-under - 2;
+			span  {
+				display: inline-block;
+
+			}
+			.selectIcon {
+				float: left;
+				width: 26px;
+				text-align: center;
+				margin-left: 5px;
+
+			}
+		}
 		
 		
 		.EndClassGroup {
@@ -377,7 +393,9 @@ body {
 						height: $height-components-hover;
 						line-height: $height-components-hover;
 						.current {
-								
+							display: inline-block;
+							height: $height-components-hover;
+							line-height: $height-components-hover;
 						}
 						.list {
 							li.option {
@@ -397,6 +415,21 @@ body {
 					&:hover {
 						color: $custom-red;
 						cursor: pointer;
+					}
+				}
+			}
+			&.noPropertyWidget {
+				.EditComponents {
+					.ActionWhere {
+						top: 16px;
+						.trait-top {
+							position: absolute;
+							top: -16px;
+							left: -1px;
+							border-left: 3px solid $custom-red ;
+							margin-left: -1px;
+							height: 16px;
+						}
 					}
 				}
 			}
