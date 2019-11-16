@@ -25,6 +25,7 @@ SparqlBifContainsAutocompleteAndListHandler = require("./AutocompleteAndListHand
 SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SimpleSparqlAutocompleteAndListHandler;
 RangeBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").RangeBasedAutocompleteAndListHandler;
 PropertyBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").PropertyBasedAutocompleteAndListHandler
+WikidataAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").WikidataAutocompleteAndListHandler;
 
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
@@ -173,13 +174,13 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			}
 		};
 		
-		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
-		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
-		var WIDGET_TIME_DATE_PICKER_PROPERTY = 'TimeDatePickerProperty';
-		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
-		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
-		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
-		var WIDGET_NON_SELECTABLE_PROPERTY 			= 'NonSelectableProperty';
+		var WIDGET_LIST_PROPERTY 			= 		'ListProperty';
+		var WIDGET_TIME_PERIOD_PROPERTY 	= 		'TimePeriodProperty';
+		var WIDGET_TIME_DATE_PICKER_PROPERTY = 		'TimeDatePickerProperty';
+		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 	'TimeDateDayPickerProperty';
+		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 		'AutocompleteProperty';
+		var WIDGET_SEARCH_PROPERTY 			= 		'SearchProperty';
+		var WIDGET_NON_SELECTABLE_PROPERTY 	= 		'NonSelectableProperty';
 		
 		var VALUE_SELECTION_WIDGETS = [
 			WIDGET_LIST_PROPERTY,

@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin'); // Require  html-webpack-plugin plugin
 const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require('copy-webpack-plugin');
+const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
 module.exports = {
   entry: "./src/sparnatural.js",
@@ -62,6 +63,11 @@ module.exports = {
           template: __dirname + "/src/index.html",
           inject: 'body'
     }),
+    new HtmlWebpackPlugin({
+    	  filename: 'wikidata.html',
+          template: __dirname + "/src/wikidata.html",
+          inject: 'body'
+    }),
 	new MiniCssExtractPlugin({
 	  filename: "sparnatural.css",
 	  chunkFilename: "[id].css"
@@ -72,7 +78,8 @@ module.exports = {
 	new DashboardPlugin(),
 	new webpack.ProvidePlugin({
         datepicker: '@chenfengyuan/datepicke',
-	  })
+	  }),
+	new WebpackBundleSizeAnalyzerPlugin('./webpack-bundle-size-analyzer-report.txt')
 	  
   ],
 	devServer: {

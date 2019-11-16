@@ -10,7 +10,7 @@
 	"PlaceHolderDateFormat": "jj/mm/aaaa",
 	"InputTimeDateFormat" : "yyyy",
 	"InputTimeDateDayFormat" : "dd/mm/yyyy",
-	"PlaceholderTimeDateFormat" : "aaaa",
+	"PlaceholderTimeDateFormat" : "AAAA",
 	"PlaceholderTimeDateDayFormat" : "jj/mm/aaaa",
 	"LangCodeTimeDate": "fr-FR",
 	"LabelDateFrom": "De",

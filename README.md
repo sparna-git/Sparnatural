@@ -4,7 +4,7 @@ Sparnatural is a **visual SPARQL query builder written in javascript**.
 
 It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists. It can be configured through a JSON-LD ontology file that defines the classes and properties to be presented in the component.
 
-![](documentation/screencast-sparnatural.gif)
+![](documentation/screencast-sparnatural-dbpedia-v3-en.gif)
 
 You can play with an **online demo at http://labs.sparna.fr/sparnatural-demo-dbpedia/**.
 
@@ -63,7 +63,7 @@ Select multiple values for a criteria :
 
 ## Values selection
 
-Sparnatural offers currently 4 ways of selecting a value for a criteria : autocomplete field, dropdown list, simple string value, year range.
+Sparnatural offers currently 6 ways of selecting a value for a criteria : autocomplete field, dropdown list, simple string value, date range (year or date precision), date range with a search in a period name (e.g. "bronze age"), or no selection at all.
 
 ### Autocomplete field
 
@@ -71,7 +71,12 @@ Sparnatural offers currently 4 ways of selecting a value for a criteria : autoco
 
 ### String value (text search)
 
-### Year range
+### Date range (year or date precision)
+
+### Date range with search in period name
+
+### No value selection
+
 
 ## Multilingual
 
@@ -120,7 +125,10 @@ The component is configurable using a JSON(-LD) ontology file. Look at the speci
 ```json
     {
       "@id" : "http://www.openarchaeo.fr/explorateur/onto#trouve_dans",
-      "@type" : "ObjectProperty",
+      "@type" : [
+        "ObjectProperty",
+        "AutocompleteProperty"
+      ],
       "label": [
         {
           "@value" : "found in",
@@ -141,9 +149,6 @@ The component is configurable using a JSON(-LD) ontology file. Look at the speci
             { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"}
           ]
         }
-      },
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
       }
     },
 ```
@@ -153,7 +158,7 @@ The component is configurable using a JSON(-LD) ontology file. Look at the speci
 It is possible to directly use font-awesome icons in place of icons embedded in your application :
 
 ```json
-"iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-user'></i></span>",
+"faIcon":  "fas fa-user",
 ```
 
 ## How to integrate Sparnatural in a webpage
