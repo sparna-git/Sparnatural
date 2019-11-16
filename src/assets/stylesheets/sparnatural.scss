@@ -559,6 +559,10 @@ body {
 			.EndClassGroup .ObjectPropertyTypeWidget {
 				display: none;
 			}
+			
+			&>div.EndClassGroup span.unselect {
+				right: 13px;
+			}
 		}
 		&>ul {
 			position: relative;
@@ -729,7 +733,6 @@ body {
 					}
 				}
 				&.WhereImpossible.completed {
-					
 					&>div .EndClassWidgetAddOrValue,
 					&>div .EndClassWidgetValue {
 						max-width: 220px;
