@@ -639,7 +639,9 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			
 		this.validSelected = function validSelected() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
-			$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			if ($(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').find('option').length == 1) {
+				$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			}
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;			
 		};
@@ -805,6 +807,11 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				} else {
 					$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 				}
+				if ($(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').find('option').length > 1 ) {
+					$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
+				} else {
+					$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+				}
 				//On vide les champs de saisie du widget
 				this.inputTypeComponent.reload() ;
 
@@ -864,6 +871,10 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			if (this.value_selected.length == settings.maxOr) {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').hide() ;
 			}
+
+			if (this.value_selected.length > 0 ) {
+				$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			}
 			
 			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').removeClass('newOr') ;
 
@@ -916,7 +927,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.ActionsGroup.detectWidgetType() ;
 
 			this.ActionsGroup.inputTypeComponent.ActionWhere.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
-			console.log(this.ActionsGroup) ;
+			console.log(this) ;
 			if (this.ActionsGroup.reinsert == true) {
 				//this.ActionsGroup.inputTypeComponent.ActionWhere.HtmlContainer.html.find('*').remove() ;
 				this.ActionsGroup.inputTypeComponent.ActionWhere.reload() ;
@@ -924,6 +935,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			} else {
 				this.ActionsGroup.inputTypeComponent.ActionWhere.init() ;
 				this.ActionsGroup.inputTypeComponent.ActionAnd.init() ;
+				this.ActionsGroup.reinsert = true ;
 			}
 			
 			
@@ -1199,6 +1211,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.settings = settings;
 		this.ParentComponent = GroupContenaire ;
 		this.html = '<div class="ObjectPropertyTypeWidget"></div>' ;
+		this.tools = null ;
 		this.widgetHtml = null ;
 		this.widgetType = null ;
 		this.HtmlContainer = this.ParentComponent ;
@@ -1243,6 +1256,10 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 		this.reload = function reload() {
 			if (this.ParentComponent instanceof EndClassWidgetGroup) {
+				if (this.tools === null) {
+					this.init();
+					return true;
+				}
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
