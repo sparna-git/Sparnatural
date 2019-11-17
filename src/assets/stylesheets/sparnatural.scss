@@ -620,7 +620,7 @@ body {
 					margin-left: 92px;
 					*
 				}*/
-				li li.Hover>div>div> .ActionWhere.ShowOnHover {
+				li li.OnEdit>div>div> .ActionWhere.ShowOnEdit {
 					display: none;
 				}
 			}
@@ -694,14 +694,22 @@ body {
 				&>div>div>.ShowOnHover {
 					display: none;
 				}
-				&.Hover>div>div.ActionsGroup>.ShowOnHover,
-				&.Hover>div>div.HasInputsCompleted>.ShowOnHover {
+				&.OnHover>div>div.ActionsGroup>.ShowOnHover,
+				&.OnHover>div>div.HasInputsCompleted>.ShowOnHover {
 					display: block;
 				}
 
-				li.addWereDisable .ActionWhere.ShowOnHover,
-				&.WhereImpossible.Hover>div .ActionWhere.ShowOnHover,
-				&.Hover>div.completed>div .ActionWhere.ShowOnHover {
+				&>div>div>.ShowOnEdit {
+					display: none;
+				}
+				&.OnEdit>div>div.ActionsGroup>.ShowOnEdit,
+				&.OnEdit>div>div.HasInputsCompleted>.ShowOnEdit {
+					display: block;
+				}
+
+				li.addWereDisable .ActionWhere.ShowOnEdit,
+				&.WhereImpossible.OnEdit>div .ActionWhere.ShowOnEdit,
+				&.OnEdit>div.completed>div .ActionWhere.ShowOnEdit {
 					display: none;
 				}
 				&.addWereDisable>div .ObjectPropertyTypeWidget,
@@ -915,7 +923,7 @@ body {
 					}
 				
 				}
-				/*.ActionAnd.ShowOnHover {
+				/*.ActionAnd.ShowOnEdit {
 					display: none;
 				}*/
 			}
@@ -948,11 +956,11 @@ body {
 						transform: translate(-50%, -50%);
 					}
 				}
-				&.Hover > div > div > .ShowOnHover.ActionAnd {
+				&.OnEdit > div > div > .ShowOnHover.ActionAnd {
 					display: none;
 				}
 			}
-			/*ul>li.groupe:last-child .ActionAnd.ShowOnHover {
+			/*ul>li.groupe:last-child .ActionAnd.ShowOnEdit {
 					display: block;
 				}*/
 		}

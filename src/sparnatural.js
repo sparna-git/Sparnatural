@@ -244,13 +244,13 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		$('li.groupe').off( "mouseleave" ) ;
 		$('li.groupe').on( "mouseover", function(event) {
 			event.stopImmediatePropagation();
-			//$('li.groupe').removeClass('Hover') ;
-			//$(this).addClass('Hover') ;
+			$('li.groupe').removeClass('Hover') ;
+			$(this).addClass('OnHover') ;
 			
 		} );
 		$('li.groupe').on( "mouseleave", function(event) {
 			event.stopImmediatePropagation();
-			//$('li.groupe').removeClass('Hover') ;
+			$('li.groupe').removeClass('OnHover') ;
 			
 		} );
 		 /*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
@@ -674,7 +674,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 		$(CriteriaGroupe).on('StartClassGroupSelected', function () {
 			$(this.EndClassGroup.html).find('.input-val').unbind('change');
-			$(this.EndClassGroup.html).append('<div class="EditComponents ShowOnHover"></div>');
+			$(this.EndClassGroup.html).append('<div class="EditComponents ShowOnEdit"></div>');
 			$(this.EndClassGroup.html).append(this.EndClassGroup.unselect);
 			//this.EndClassGroup.init() ;
 			this.EndClassGroup.inputTypeComponent.init() ;
@@ -758,7 +758,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
 			
 			//Affichage de la ligne des actions 
-			this.ComponentHtml.addClass('Hover') ;
+			this.ComponentHtml.addClass('OnEdit') ;
 			//this.EndClassWidgetGroup.inputTypeComponent.init() ;
 			if (this.ActionsGroup.reinsert == true) {
 				//this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html.find('*').remove() ;
@@ -1160,7 +1160,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.base(specProvider) ;
 		this.ParentComponent = GroupContenaire ;
 		this.statements.ActionWhere = true ;
-		this.statements.ShowOnHover = true ;
+		this.statements.ShowOnEdit = true ;
 		this.statements.Created = false ;
 		this.HtmlContainer = {} ;
 	}	
