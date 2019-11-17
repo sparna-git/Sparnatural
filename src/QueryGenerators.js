@@ -193,7 +193,7 @@ class DefaultQueryGenerator {
 				  });
 				  break;
 			  case WIDGET_SEARCH_PROPERTY:
-				var Texte = $('#ecgrw-search-'+ i +'-input-value').val() ;
+				var Texte = component.CriteriaGroup.EndClassWidgetGroup.value_selected[0] ;
 				jsonFilter = this.initFilterSearch(Texte, objectVariable) ;
 				jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
 				break;
