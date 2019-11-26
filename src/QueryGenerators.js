@@ -100,7 +100,6 @@ class DefaultQueryGenerator {
 		} else {
 			subjectVariable = '?'+this.localName(start)+''+subjectVariableIndex ;
 		}
-		console.log(end) ;
 		if (end != null) {
 			var objectVariable = '?'+this.localName(end)+''+objectVarIndex ;
 		} else {
@@ -121,7 +120,6 @@ class DefaultQueryGenerator {
 		var newTriples = this.initTriple() ;
 		if (addStartClass) {
 			newTriples = this.addTriple(newTriples, subjectVariable, this.typePredicate, start) ;
-			console.log(1) ;
 		}
 		
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.widgetType ;
@@ -136,7 +134,6 @@ class DefaultQueryGenerator {
 				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
 			}
 			
-			console.log(2) ;
 
 			// if no value is selected add a type criteria for the object
 			if (
@@ -145,16 +142,13 @@ class DefaultQueryGenerator {
 					this.addObjectsTypeCriteria
 			) {
 				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;
-				console.log(3) ;
 			}
 		} else {
 			if (objectVariable !== null) {
 				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
-				console.log('2b') ;
 			}
 			
 		}
-		console.log(newTriples) ;
 		
 		jsonQuery = this.addInWhere(jsonQuery, newTriples) ;
 		
@@ -319,7 +313,6 @@ class DefaultQueryGenerator {
 			"predicate": predicate,
 			"object": object,
 		} ;
-		console.log(triple) ;
 					
 		jsonTriples.triples.push(triple) ;
 		
@@ -333,9 +326,7 @@ class DefaultQueryGenerator {
 
 	addVariable(jsonValues, name, valueUrl) {			
 		$.each(valueUrl, function( index, value ) {
-		  var newValue = {
-			//[name]: value
-		  }
+		  var newValue = {  } ;
 		  newValue[name] = value ;
 		  jsonValues.values.push(newValue) ;			  
 		});
@@ -344,9 +335,7 @@ class DefaultQueryGenerator {
 	}
 
 	addVariableDate(json, name, valueUrl) {			
-		var newValue = {
-			//[name]: valueUrl
-		};
+		var newValue = { };
 		newValue[name] = valueUrl ;
 		json.where[1].values.push(newValue) ;		
 		

@@ -268,7 +268,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var height = $(this).find('>div').outerHeight(true) ;
 			cssdef += ', rgba('+settings.backgroundBaseColor+','+a+') '+prev+'px, rgba('+settings.backgroundBaseColor+','+a+') '+(prev+height)+'px' ;
 			prev = prev + height+1 ;
-			console.log($(this).next()) ;
 			if ($(this).next().length > 0 ) {
 				$(this).addClass('hasAnd') ;
 				var this_li = $(this) ;
@@ -446,7 +445,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		}
 		
 		this.RemoveCriteria = function() {
-			console.log(this) ;
 			var index_to_remove = this.id ;
 			
 			
@@ -482,7 +480,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			
 			
 			if (this.ParentComponent.components.length == 0) {
-				console.log(formObject) ;
 				var new_component = addComponent(formObject, formContextHtml) ;			
 				$(new_component).find('.nice-select').trigger('click') ;				
 			} else {
@@ -698,8 +695,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			} else {
 				$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			}
-			//$(this.unselect).show() ;
-			console.log(this) ;
 			this.statements.HasInputsCompleted = true ;
 			this.statements.IsOnEdit = false ;
 			this.init() ;
@@ -722,10 +717,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'validSelected'}, eventProxiCriteria);
 			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
 			$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
-			console.log(this.ParentComponent) ;
 			this.ParentComponent.ActionsGroup.reinsert = true ;
 			$(this.ParentComponent.ComponentHtml).removeClass('completed') ;
-			console.log(this) ;
 			$(this.html).find('.nice-select').trigger('click') ;
 		}
 		
@@ -746,7 +739,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.value_selected = [] ;
 		
 		this.detectWidgetType = function () {
-			console.log(this.ParentComponent.ObjectPropertyGroup.value_selected) ;
 			this.widgetType = this.specProvider.getWidget(this.ParentComponent.ObjectPropertyGroup.value_selected);
 		};
 		
@@ -928,7 +920,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.ActionsGroup.detectWidgetType() ;
 
 			this.ActionsGroup.inputTypeComponent.ActionWhere.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
-			console.log(this) ;
 			if (this.ActionsGroup.reinsert == true) {
 				//this.ActionsGroup.inputTypeComponent.ActionWhere.HtmlContainer.html.find('*').remove() ;
 				this.ActionsGroup.inputTypeComponent.ActionWhere.reload() ;
@@ -1075,8 +1066,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			
 			if (this.ParentComponent instanceof ActionsGroup) {	
 				if (this.ParentComponent.reinsert)		 {
-					console.log('Reload du input type component');
-					console.log(this) ;
 					return this.reload() ;
 				}
 				if (this instanceof ActionWhere) {
@@ -1104,10 +1093,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			this.tools.InitHtml() ;
 			this.tools.Add() ;
 			this.statements.Created = true ;
-			console.log(this.tools) ;
 
 			if (trigger) {
-				//console.log(trigger) 
 				//$(this.widgetHtml).trigger('change') ;
 			}			
 		} ;	
@@ -1138,7 +1125,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				}
 				if (this instanceof ActionAnd) {
 					possible_values = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
-					console.log(possible_values) ;
 				}
 				if (this instanceof ActionRemove) {
 					possible_values = '<a><img src="' + removeIcon + '"></a>' ;
@@ -1147,8 +1133,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 			this.widgetHtml = possible_values ;
 			this.statements.IsOnEdit = true ;
-			//this.tools = new GenericTools(this) ;
-			console.log(this.tools) ;
 			this.tools.ReInitHtml() ;
 			this.tools.Replace() ;
 			this.statements.Created = true ;
@@ -1228,7 +1212,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
 				this.widgetType = this.ParentComponent.widgetType  ;
-				console.log(this.widgetType) ;
 				if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
 					return true;
 				}
@@ -1242,7 +1225,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 				
 				this.getWigetTypeClassName() ;
-				console.log(this) ;
 				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
 				
 			
@@ -1372,7 +1354,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 						value.stop = value.stop + '-12-31';
 					}
 				}
-				// console.log(value) ;
 					
 				if ((value.start == null) && (value.stop == null)) {
 					value = null ;
@@ -1410,16 +1391,13 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				var start = $(id_input+'-start').val() ;
 				var end = $(id_input+'-stop').val() ;
-				console.log(start) ;
 				if ((start != '') && (end != '')) {
 					valueLabel = '<span class="label-two-line">'+langSearch.LabelDateFrom+' '+ $(id_input+'-start').val() +' '+langSearch.LabelDateTo+' '+ $(id_input+'-stop').val() + '</span>' ;
 				} else if (start != '') {
-					console.log(start) ;
 					valueLabel = '<span class="label-two-line">'+langSearch.DisplayValueDateFrom+' '+ $(id_input+'-start').val() + '</span>' ;
 				} else if (end != '') {
 					valueLabel = '<span class="label-two-line">'+langSearch.DisplayValueDateTo+' '+ $(id_input+'-stop').val() + '</span>' ;
 				}
-				console.log(valueLabel);
 				break;
 			  case WIDGET_SEARCH_PROPERTY:				
 				var id_input = '#ecgrw-search-'+ this.widgetComponent.IdCriteriaGroupe +'-input-value' ;
@@ -1705,14 +1683,12 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
 			var CriteriaGroup = this.ParentComponent.ParentComponent.ParentComponent ;
-			console.log(this) ;
 			
 			$('#ecgrw-search-'+this.IdCriteriaGroupe+'-add').on(
 				'click',
 				function() {
 					$('#ecgrw-search-'+id_inputs+'-input-value').trigger("change");
 					$(itc_obj).trigger("change");
-					console.log(this) ;
 					$(CriteriaGroup.ComponentHtml[0]).addClass('hideEndClassProperty') ;
 				}
 			);
@@ -1746,8 +1722,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			}
 			if (this.component.reinsert) {
 				var instance = this.component.constructor.name ;
-				console.log(this.component.HtmlContainer.html.find('*')) ;
-				console.log(this.component.html) ;
 				this.component.HtmlContainer.html.find('>.'+instance).remove() ;
 				this.component.html = $(this.component.html).appendTo(this.component.HtmlContainer.html) ;
 			}
@@ -1794,8 +1768,6 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var widget = this.component.widgetHtml ;
 			this.component.html = $('<div class="'+instance+' ddd"></div>') ; 
 			if (widget) {
-				console.log(this) ;
-				console.log(widget) ;
 				this.component.html.find('>.'+instance ).remove() ;
 				this.component.html.append(widget) ; 
 			}
