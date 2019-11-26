@@ -244,7 +244,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		$('li.groupe').off( "mouseleave" ) ;
 		$('li.groupe').on( "mouseover", function(event) {
 			event.stopImmediatePropagation();
-			$('li.groupe').removeClass('Hover') ;
+			$('li.groupe').removeClass('OnHover') ;
 			$(this).addClass('OnHover') ;
 			
 		} );
