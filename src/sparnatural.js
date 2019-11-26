@@ -802,6 +802,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				$(this.ParentComponent.ComponentHtml).removeClass('completed') ;
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').remove() ;
 				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
+				$(this.ParentComponent.html).parent('li').removeClass('hideEndClassProperty') ;
 				if (this.ParentComponent.EndClassGroup.specProvider.hasConnectedClasses(this.ParentComponent.EndClassGroup.value_selected)) {
 					$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
 				} else {
@@ -1703,14 +1704,16 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.init = function init() {
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
-			var EndClassGroupObject = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup ;
+			var CriteriaGroup = this.ParentComponent.ParentComponent.ParentComponent ;
+			console.log(this) ;
 			
 			$('#ecgrw-search-'+this.IdCriteriaGroupe+'-add').on(
 				'click',
 				function() {
 					$('#ecgrw-search-'+id_inputs+'-input-value').trigger("change");
 					$(itc_obj).trigger("change");
-					$(EndClassGroupObject.html).find('.ClassTypeId').hide() ;
+					console.log(this) ;
+					$(CriteriaGroup.ComponentHtml[0]).addClass('hideEndClassProperty') ;
 				}
 			);
 		}

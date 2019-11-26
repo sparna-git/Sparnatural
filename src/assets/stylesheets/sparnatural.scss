@@ -541,6 +541,16 @@ body {
 			
 			
 		}
+		
+	}
+
+	li.hideEndClassProperty {
+		&>div>.EndClassGroup {
+			&>.unselect,
+			&>.ClassTypeId {
+				display: none;
+			}
+		}
 	}
 	
 	.haveWhereChild {
@@ -591,7 +601,6 @@ body {
 				}
 			}
 		}
-		
 	}
 	.Sparnatural {
 		.bg-wrapper {
