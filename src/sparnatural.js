@@ -627,6 +627,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			$(this.ObjectPropertyGroup.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 			//$('.nice-select').removeClass('open') ;
 			$(this.ObjectPropertyGroup.html).find('.nice-select').trigger('click') ;
+			$(this.ObjectPropertyGroup.html).find('select.input-val').unbind('change');
 			$(this.ObjectPropertyGroup.html).find('select.input-val').on('change', {arg1: this.ObjectPropertyGroup, arg2: 'validSelected'}, eventProxiCriteria);
 			
 			if ($(this.ObjectPropertyGroup.html).find('select.input-val').find('option').length == 1) {
@@ -746,14 +747,14 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		
 		
 		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () {
+			//Affichage de la ligne des actions 
+			this.ComponentHtml.addClass('OnEdit') ;
 			this.EndClassWidgetGroup.detectWidgetType() ;
 			this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html = $(this.EndClassGroup.html).find('.EditComponents') ;
 			
-			//Affichage de la ligne des actions 
-			this.ComponentHtml.addClass('OnEdit') ;
+			
 			//this.EndClassWidgetGroup.inputTypeComponent.init() ;
 			if (this.ActionsGroup.reinsert == true) {
-				//this.EndClassWidgetGroup.inputTypeComponent.HtmlContainer.html.find('*').remove() ;
 				this.EndClassWidgetGroup.inputTypeComponent.reload() ;
 			} else {
 				this.EndClassWidgetGroup.inputTypeComponent.init() ;
@@ -1012,6 +1013,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			IsCompleted : false,
 			IsOnEdit : false
 		}
+		this.statementRemove = false; 
 		
 		this.possibleValue ;
 		this.tools = null ;
@@ -1074,6 +1076,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 					if (endClassGroup.ParentComponent.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
 						choise = 1 ;
 						$(endClassGroup.html).addClass('noPropertyWidget') ;
+					} else {
+						$(endClassGroup.html).removeClass('noPropertyWidget') ;
 					}
 					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
 					var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choise+'</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
@@ -1103,6 +1107,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var possible_values = null ;
 			var default_value = null ;
 			var id = this.ParentComponent.ParentComponent.id ;
+			
 
 			if (this.ParentComponent instanceof ObjectPropertyGroup) {
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
@@ -1118,6 +1123,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 					if (endClassGroup.ParentComponent.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
 						choise = 1 ;
 						$(endClassGroup.html).addClass('noPropertyWidget') ;
+					} else {
+						$(endClassGroup.html).removeClass('noPropertyWidget') ;
 					}
 					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
 					var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choise+'</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
@@ -1202,6 +1209,8 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.HtmlContainer = this.ParentComponent ;
 		this.statements.Created = false ;
 		
+		this.statementRemove = false; 
+		
 		this.init = function init() {
 			if (this.ParentComponent instanceof EndClassWidgetGroup) {
 				if (this.statements.Created) {
@@ -1243,14 +1252,16 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 					this.init();
 					return true;
 				}
+				if (this.statementRemove) {
+					this.statements[this.statementRemove] = false ;
+				}
+
 				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
 				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
 				this.widgetType = this.ParentComponent.widgetType  ;
 
-				if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
-					return true;
-				}
+				
 
 				if (this.widgetType == WIDGET_SEARCH_PROPERTY) {
 					// label of the "Search" pseudo-class is inserted here in this case
@@ -1260,9 +1271,15 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				}
 				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 				
+
 				this.getWigetTypeClassName() ;
 				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
-				
+
+				if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
+					widgetLabel ='';
+					endLabel ='';
+					this.widgetHtml = null ;
+				}
 			
 				this.statements.IsOnEdit = true ;
 				//this.tools = new GenericTools(this) ;
@@ -1423,6 +1440,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.autocompleteHandler = autocompleteHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.AutocompleteWidget  = true ;
+		this.ParentComponent.statementRemove = 'AutocompleteWidget' ;
 
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		this.html = '<input id="ecgrw-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
@@ -1450,6 +1468,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				getValue: function (element) { 
 					return autocompleteHandler.elementLabel(element) ;
 				},
+				adjustWidth: false,
 
 				ajaxSettings: {
 					crossDomain: true,
@@ -1494,6 +1513,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.listHandler = listHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.ListeWidget = true ;
+		this.ParentComponent.statementRemove = 'ListeWidget' ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
 		var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
@@ -1549,6 +1569,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.DatesWidget  = true ;
+		this.ParentComponent.statementRemove = 'DatesWidget' ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
 		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
@@ -1631,6 +1652,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.TimeDatePickerWidget  = true ;
+		this.ParentComponent.statementRemove = 'TimeDatePickerWidget' ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		this.formatDate = format ;
 
@@ -1675,6 +1697,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		this.base() ;
 		this.ParentComponent = inputTypeComponent ;
 		this.ParentComponent.statements.SearchWidget  = true ;
+		this.ParentComponent.statementRemove = 'SearchWidget' ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
 		this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add" class="button-add">'+langSearch.ButtonAdd+'</button></div>' ;
@@ -1694,12 +1717,12 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			);
 		}
 	}
-	function NoWidget(inputTypeComponent, listHandler) {
+	function NoWidget(inputTypeComponent) {
 		this.base = Widget ;
 		this.base() ;
-		this.listHandler = listHandler;
 		this.ParentComponent = inputTypeComponent ;
-		this.ParentComponent.statements.ListeWidget = true ;
+		this.ParentComponent.statements.NoWidget = true ;
+		this.ParentComponent.statementRemove = 'NoWidget' ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
 		var id_input = null ;
@@ -1728,6 +1751,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 		}
 		
 		this.UpdateStatementsClass = function() {
+			$(this.component.html).removeClass('*') ;
 			for (var item in this.component.statements) {				
 				if (this.component.statements[item] === true) {
 					$(this.component.html).addClass(item) ;
@@ -1758,18 +1782,22 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			var instance = this.component.constructor.name ;
 			var widget = this.component.widgetHtml ;
 			this.component.html = $('<div class="'+instance+' ddd"></div>') ; 
-			if (widget) {
+			if (widget != null) {
 				this.component.html.append(widget) ; 
+			} else {
+				this.component.html = '';
 			}
 		} 
 
 		this.ReInitHtml = function() {
 			var instance = this.component.constructor.name ;
 			var widget = this.component.widgetHtml ;
-			this.component.html = $('<div class="'+instance+' ddd"></div>') ; 
-			if (widget) {
+			this.component.html = $('<div class="'+instance+' ddd"></div>') ;
+			if (widget != null) {
 				this.component.html.find('>.'+instance ).remove() ;
 				this.component.html.append(widget) ; 
+			} else {
+				this.component.html = '';
 			}
 		} 
 	}
