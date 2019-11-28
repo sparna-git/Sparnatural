@@ -18,6 +18,9 @@
 		<link href='http://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.min.css' rel='stylesheet' type='text/css'/>
 		<link href='http://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.min.css' rel='stylesheet' type='text/css'/>
 
+    <!-- datepicker -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.css">
+
 		<title>SPARnatural - requêtes SPARQL naturelles sur DBPedia</title>
 
 		<style>
@@ -39,21 +42,32 @@
 			</nav>
 		</header>
 		
-		<div class="container-fluid" style="margin-top:1em;">
-			<div class="row">
-				<div class="col-md-7">
-					<div id="ui-search"></div>
-				</div>
-				<div class="col-md-5">
-					<textarea id="yasqe"></textarea>
-				</div>
-			</div>
-			<div class="row justify-content-center">
-				<div class="col-md-11">
-					<div id="yasr"></div>
-				</div>
-			</div>
-		</div>
+    <div class="container-fluid" style="margin-top:1em;">
+      <div class="row">
+        <div class="col-md-7">
+          <div id="ui-search"></div>
+        </div>
+        <div class="col-md-5">
+          <div class="row" style="margin-bottom:0.5em;">
+            <div class="col-md-12">
+             <span style="font-size:90%;"> 
+             Les requêtes sont envoyées à <a id="endpoint" href="http://fr.dbpedia.org/sparql">http://fr.dbpedia.org/sparql</a>
+             </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+             <textarea id="yasqe"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-md-11">
+          <div id="yasr"></div>
+        </div>
+      </div>
+    </div>
 
 		<footer id="footer" style="margin-top:30px; text-align: center;">
 	      	<a href="http://blog.sparna.fr" target="_blank">Thomas Francart</a>
@@ -73,6 +87,9 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
+    <!-- datepicker -->
+    <script src="https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.js"></script>
+
 		<!-- YASGUI stuff -->
 		<script src='https://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.bundled.min.js'></script>
 		<script src='https://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.bundled.min.js'></script>
@@ -83,10 +100,10 @@
 {
   "@context":
   {
-    "label": "http://www.w3.org/2000/01/rdf-schema#label",
     "Ontology" : "http://www.w3.org/2002/07/owl#Ontology",
     "Class" : "http://www.w3.org/2002/07/owl#Class",
     "ObjectProperty" : "http://www.w3.org/2002/07/owl#ObjectProperty",
+    "label": "http://www.w3.org/2000/01/rdf-schema#label",
     "domain": {
       "@id": "http://www.w3.org/2000/01/rdf-schema#domain",
       "@type": "@id"
@@ -99,14 +116,11 @@
       "@id": "http://www.w3.org/2002/07/owl#unionOf",
       "@type": "@id"
     },
-    "widget": {
-      "@id": "http://ontologies.sparna.fr/Sparnatural#widget",
-      "@type": "@id"
-    }
+    "@vocab": "http://ontologies.sparna.fr/Sparnatural#"
   },
   "@graph": [
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto",
       "@type" : "Ontology"
     },
     {
@@ -116,7 +130,7 @@
         {"@value" : "Museum", "@language" : "en"},
         {"@value" : "Musée","@language" : "fr"}
       ],
-	  "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-university'></i></span>"
+      "faIcon":  "fas fa-university"
     },
     {
       "@id" : "http://dbpedia.org/ontology/Country",
@@ -125,7 +139,7 @@
         {"@value" : "Country","@language" : "en"},
         {"@value" : "Pays","@language" : "fr"}
       ],
-	  "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-globe-africa'></i></span>"
+      "faIcon":  "fas fa-globe-africa"
     },
     {
       "@id" : "http://dbpedia.org/ontology/Artwork",
@@ -134,7 +148,7 @@
         {"@value" : "Artwork","@language" : "en"},
         {"@value" : "Oeuvre","@language" : "fr"}
       ],
-    "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-paint-brush'></i></span>"
+      "faIcon":  "fas fa-paint-brush"
     },
     {
       "@id" : "http://dbpedia.org/ontology/Person",
@@ -143,144 +157,196 @@
         {"@value" : "Person","@language" : "en"},
         {"@value" : "Personne","@language" : "fr"}
       ],
-    "iconPath":  "<span style='font-size: 170%;' >&nbsp;<i class='fas fa-male'></i>&nbsp;&nbsp;</span>"
+      "faIcon":  "fas fa-male"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
+      "@type" : "Class",
+      "label": [
+        {"@value" : "Search","@language" : "en"},
+        {"@value" : "Rechercher","@language" : "fr"}
+      ],
+      "faIcon":  "fas fa-search"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date",
+      "@type" : "Class",
+      "label": [
+        {"@value" : "Date","@language" : "en"},
+        {"@value" : "Date","@language" : "fr"}
+      ],
+      "faIcon":  "fas fa-calendar-alt"
     },
     {
       "@id" : "http://dbpedia.org/ontology/country",
-      "@type" : "ObjectProperty",
+      "@type" : [
+        "ObjectProperty",
+        "ListProperty"
+      ],
       "label": [
         {"@value" : "country","@language" : "en"},
         {"@value" : "pays","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Museum",
-      "range": "http://dbpedia.org/ontology/Country",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
-      }
+      "range": "http://dbpedia.org/ontology/Country"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#countryOf",
-      "@type" : "ObjectProperty",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#countryOf",
+      "@type" : [
+        "ObjectProperty",
+        "AutocompleteProperty"
+      ],
       "label": [
         {"@value" : "country of","@language" : "en"},
         {"@value" : "lieu de","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Country",
       "range": "http://dbpedia.org/ontology/Museum",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      },
       "path": "^<http://dbpedia.org/ontology/country>"
     },
     {
       "@id" : "http://dbpedia.org/ontology/museum",
-      "@type" : "ObjectProperty",
+      "@type" : [
+        "ObjectProperty",
+        "AutocompleteProperty"
+      ],
       "label": [
         {"@value" : "displayed at","@language" : "en"},
         {"@value" : "exposée à","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Artwork",
-      "range": "http://dbpedia.org/ontology/Museum",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      }
+      "range": "http://dbpedia.org/ontology/Museum"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#displays",
-      "@type" : "ObjectProperty",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays",
+      "@type" : [
+        "ObjectProperty",
+        "NonSelectableProperty"
+      ],
       "label": [
         {"@value" : "displays","@language" : "en"},
         {"@value" : "expose","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Museum",
       "range": "http://dbpedia.org/ontology/Artwork",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      },
       "path": "^<http://dbpedia.org/ontology/museum>"
     },
     {
       "@id" : "http://dbpedia.org/ontology/author",
-      "@type" : "ObjectProperty",
+      "@type" : [
+        "ObjectProperty",
+        "AutocompleteProperty"
+      ],
       "label": [
         {"@value" : "author","@language" : "en"},
         {"@value" : "auteur","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Artwork",
-      "range": "http://dbpedia.org/ontology/Person",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      }
+      "range": "http://dbpedia.org/ontology/Person"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#created",
-      "@type" : "ObjectProperty",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#created",
+      "@type" : [
+        "ObjectProperty",
+        "AutocompleteProperty"
+      ],
       "label": [
         {"@value" : "created","@language" : "en"},
         {"@value" : "a créé","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Person",
       "range": "http://dbpedia.org/ontology/Artwork",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      },
       "path": "^<http://dbpedia.org/ontology/author>"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#bornIn",
-      "@type" : "ObjectProperty",
-      "label": [
-        {"@value" : "born in","@language" : "en"},
-        {"@value" : "né à","@language" : "fr"}
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
+      "@type" : [
+        "ObjectProperty",
+        "ListProperty"
       ],
-      "domain": "http://dbpedia.org/ontology/Person",
-      "range": "http://dbpedia.org/ontology/Country",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
-      },
-      "path": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>"
-    },
-    {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#birthPlace",
-      "@type" : "ObjectProperty",
       "label": [
         {"@value" : "birth place","@language" : "en"},
         {"@value" : "lieu de naissance","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Country",
-      "range": "http://dbpedia.org/ontology/Person",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
-      },
-      "path": "^(<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>)"
-    },
-    {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#diedIn",
-      "@type" : "ObjectProperty",
-      "label": [
-        {"@value" : "died at","@language" : "en"},
-        {"@value" : "mort à","@language" : "fr"}
-      ],
       "domain": "http://dbpedia.org/ontology/Person",
       "range": "http://dbpedia.org/ontology/Country",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#ListWidget"
-      },
-      "path": "<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>"
+      "path": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>"
     },
     {
-      "@id" : "http://www.sparna.fr/simsemsearch/dbpedia-example/onto#deathPlace",
-      "@type" : "ObjectProperty",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#diedIn",
+      "@type" : [
+        "ObjectProperty",
+        "ListProperty"
+      ],
       "label": [
         {"@value" : "death place","@language" : "en"},
         {"@value" : "lieu de décès","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Country",
-      "range": "http://dbpedia.org/ontology/Person",
-      "widget": {
-        "@type" : "http://ontologies.sparna.fr/Sparnatural#AutocompleteWidget"
+      "domain": "http://dbpedia.org/ontology/Person",
+      "range": "http://dbpedia.org/ontology/Country",
+      "path": "<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>"
+    },
+    {
+      "@id" : "http://dbpedia.org/ontology/deathDate",
+      "@type" : [
+        "ObjectProperty",
+        "TimeDatePickerProperty"
+      ],
+      "label": [
+        {"@value" : "died in","@language" : "en"},
+        {"@value" : "mort en","@language" : "fr"}
+      ],
+      "domain": "http://dbpedia.org/ontology/Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
+    },
+    {
+      "@id" : "http://dbpedia.org/ontology/birthDate",
+      "@type" : [
+        "ObjectProperty",
+        "TimeDatePickerProperty"
+      ],
+      "label": [
+        {"@value" : "born in","@language" : "en"},
+        {"@value" : "né en","@language" : "fr"}
+      ],
+      "domain": "http://dbpedia.org/ontology/Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
+    },
+    {
+      "@id" : "http://dbpedia.org/ontology/creationYear",
+      "@type" : [
+        "ObjectProperty",
+        "TimeDatePickerProperty"
+      ],
+      "label": [
+        {"@value" : "created in","@language" : "en"},
+        {"@value" : "créée en","@language" : "fr"}
+      ],
+      "domain": "http://dbpedia.org/ontology/Artwork",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#search",
+      "@type" : [
+        "ObjectProperty",
+        "SearchProperty"
+      ],
+      "label": [
+        {"@value" : "text search","@language" : "en"},
+        {"@value" : "recherche plein-texte","@language" : "fr"}
+      ],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://dbpedia.org/ontology/Museum"},
+            { "@id" : "http://dbpedia.org/ontology/Person"},
+            { "@id" : "http://dbpedia.org/ontology/Artwork"}
+          ]
+        }
       },
-      "path": "^(<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>)"
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
+      "path": "rdfs:label"
     }
   ]
 }
@@ -288,153 +354,128 @@
 		</script>
 
 
-		<script>
-	      	$.urlParam = function(name){
-	          var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
-	          if(results == null) { return null; }
-	          return results[1] || 0;
-	      	}
+    <script>
+      $.urlParam = function(name){
+        var results = new RegExp('[\\?&amp;]' + name + '=([^&amp;#]*)').exec(window.location.href);
+        if(results == null) { return null; }
+        return results[1] || 0;
+      }
+      var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
-	      	var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
+      $( document ).ready(function($) {   
 
-			$( document ).ready(function($) {
-			 //Appel du composant pour la recherche
-			  
-			  $('#ui-search').Sparnatural({
-			  	// config: 'config/spec-search-dbpedia.json',
-			  	config: config,
-			  	language: lang,
-			  	maxDepth: 4,
-				addDistinct: true,
-				backgroundBaseColor: '2,184,117',
-				autocomplete : {
-					url: function(domain, property, range, key) {
-						return searchUrlDBPedia(domain, property, range, key);
-					},
-					listLocation: function(domain, property, range, data) {
-						return data.results.bindings;
-					},
-					elementLabel: function(element) {
-						return element.rangeLabel.value;
-					},
-					elementUri: function(element) {
-						return element.range.value;
-					},
-					enableMatch: function(domain, property, range) {
-						return false;
-					},
-				},
-				list : {
-					url: function(domain, property, range) {
-						return listUrlDBPedia(domain, property, range);
-					},
-					listLocation: function(domain, property, range, data) {
-						return data.results.bindings;
-					},
-					elementLabel: function(element) {
-						return element.rangeLabel.value;
-					},
-					elementUri: function(element) {
-						return element.range.value;
-					}
-				},
-				onQueryUpdated: function(queryString, queryJson) {
-					queryString = semanticPostProcess(queryString, queryJson);
-					queryString = rdfsLabelPostProcess(queryString, queryJson);
-					queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
-					queryString = orderByPostProcess(queryString, queryJson);
-					$('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
-					yasqe.setValue(queryString);
-					yasqe.query();
-				  }
-				
-			  }) ;
-			}) ;
+        var sparqlHandler = new SparqlBifContainsAutocompleteAndListHandler(
+          $('#endpoint').text(),
+          {
+              semanticPostProcess : function(sparql) {
+                  return semanticPostProcess(sparql, null);
+              }
+          },
+          lang,
+          "rdfs:label"
+        );
+        sparqlHandler.listOrder = "count";
 
-			prefixesPostProcess = function(queryString, queryJson) {
-				if(queryString.indexOf("rdf-schema#") == -1) {
-					queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
-				} 				
-				return queryString;
-			}
+        var sparqlHandlerAlpha = new SparqlBifContainsAutocompleteAndListHandler(
+          $('#endpoint').text(),
+          {
+              semanticPostProcess : function(sparql) {
+                  return semanticPostProcess(sparql, null);
+              }
+          },
+          lang,
+          "rdfs:label"
+        );
+        sparqlHandlerAlpha.listOrder = "alphabetical";
 
-			isPrimaryTopicOfPostProcess = function(queryString, queryJson) {
-				queryString = queryString.replace(new RegExp('}$'), "  ?this <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> ?wikipedia \n}");
-				queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT ?this");
-				return queryString;
-			}
+        // list order is alphabetical by default, and count-based for the countries
+        var rangeBasedHandler = new RangeBasedAutocompleteAndListHandler(sparqlHandlerAlpha,
+        {
+          "http://dbpedia.org/ontology/Country" : sparqlHandler
+        });
+        
 
-			rdfsLabelPostProcess = function(queryString, queryJson) {
-				queryString = queryString.replace(new RegExp('}$'), "  ?this rdfs:label ?label FILTER(lang(?label) = 'fr') \n}");
-				return queryString;
-			}
+        $('#ui-search').Sparnatural({
+          config: config,
+          language: lang,
+          maxDepth: 4,
+          addDistinct: true,
+          addObjectsTypeCriteria: true,
+          sendQueryOnFirstClassSelected: true,
+          backgroundBaseColor: '2,184,117',
+          autocomplete : sparqlHandler,
+          list : rangeBasedHandler,
+          onQueryUpdated: function(queryString, queryJson) {
+            queryString = semanticPostProcess(queryString, queryJson);
+            queryString = rdfsLabelPostProcess(queryString, queryJson);
+            queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
+            queryString = orderByPostProcess(queryString, queryJson);
+            $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
+            yasqe.setValue(queryString);
+            yasqe.query();
+          }
+        });
 
-			orderByPostProcess = function(queryString, queryJson) {
-				queryString = queryString.replace(new RegExp('}$'), "}\nORDER BY ?label LIMIT 5000");
-				queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT (STR(?label) AS ?nom) ?wikipedia ?this");
-				return queryString;
-			}
+      }) ;
 
-			semanticPostProcess = function(queryString, queryJson) {
-				queryString = prefixesPostProcess(queryString, queryJson);
-				queryString = expand(queryString, config);
-				return queryString;
-			}
+      prefixesPostProcess = function(queryString, queryJson) {
+        if(queryString.indexOf("rdf-schema#") == -1) {
+          queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
+        }         
+        return queryString;
+      }
 
-			var expand = function(sparql, config) {
-				$.each( config['@graph'], function( key, val ) {
-					if ( val['@type'] == 'ObjectProperty' || val['@type'] == 'Class') {
-						if ( val['path'] != null) {
-								var re = new RegExp("<" + val['@id'] + ">","g");
-								sparql = sparql.replace(re, val['path']);
-						}
-					}
-				}) ;
-				return sparql ;
-			}
+      isPrimaryTopicOfPostProcess = function(queryString, queryJson) {
+        queryString = queryString.replace(new RegExp('}$'), "  ?this <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> ?wikipedia \n}");
+        return queryString;
+      }
 
-			listUrlDBPedia = function(domain, property, range) {
-				var QUERY_SERVICE = "http://fr.dbpedia.org/sparql"
+      rdfsLabelPostProcess = function(queryString, queryJson) {
+        queryString = queryString.replace(new RegExp('}$'), "  ?this rdfs:label ?label FILTER(lang(?label) = 'fr') \n}");
+        return queryString;
+      }
 
-				var sparql = "SELECT ?range ?count (CONCAT(?rangeString, ' (', STR(?count), ')') AS ?rangeLabel) \n WHERE {\n { SELECT DISTINCT ?range (COUNT(?domain) AS ?count) WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . } }\n ?range rdfs:label ?rangeString . FILTER(lang(?rangeString) = \"fr\") }\n ORDER BY DESC(?count)";
+      orderByPostProcess = function(queryString, queryJson) {
+        queryString = queryString.replace(new RegExp('}$'), "}\nORDER BY ?label LIMIT 5000");
+        queryString = queryString.replace("SELECT DISTINCT ?this", "SELECT DISTINCT (STR(?label) AS ?nom) ?wikipedia ?this");
+        return queryString;
+      }
 
-				sparql = semanticPostProcess(sparql, null);
+      semanticPostProcess = function(queryString, queryJson) {
+        queryString = prefixesPostProcess(queryString, queryJson);
+        queryString = expand(queryString, config);
+        return queryString;
+      }
 
-				var url = QUERY_SERVICE+"?query="+encodeURIComponent(sparql)+"&format=json";
-				console.log(url);
-				return url;
-			}
+      var expand = function(sparql, config) {
+        $.each( config['@graph'], function( key, val ) {
+          if ( val['path'] != null) {
+              var re = new RegExp("<" + val['@id'] + ">","g");
+              sparql = sparql.replace(re, val['path']);
+          }
+        }) ;
+        return sparql ;
+      }
 
-			searchUrlDBPedia = function(domain, property, range, key) {
-				var QUERY_SERVICE = "http://fr.dbpedia.org/sparql"
-				var sparql = "SELECT DISTINCT ?range ?rangeLabel WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . ?range rdfs:label ?rangeLabel FILTER(lang(?rangeLabel) = \"fr\") FILTER(bif:contains(?rangeLabel, \""+key+"\")) } ORDER BY ?rangeLabel";
+      var yasqe = YASQE.fromTextArea(document.getElementById("yasqe"), {
+        sparql : {
+          showQueryButton : true,
+          endpoint : $('#endpoint').text()
+        }
+      });
 
-				sparql = semanticPostProcess(sparql, null);
+      var yasr = YASR(document.getElementById("yasr"), {
+        //this way, the URLs in the results are prettified using the defined prefixes in the query
+        getUsedPrefixes : yasqe.getPrefixesFromQuery,
+        "drawOutputSelector": false,
+        "drawDownloadIcon": false,
+        // avoid persistency side-effects
+        "persistency": { "prefix": false, "results": { "key": false }}
+      }); 
 
-				var url = QUERY_SERVICE+"?query="+encodeURIComponent(sparql)+"&format=json";
-				console.log(url);
-				return url;
-			}
+      // link yasqe and yasr
+      yasqe.options.sparql.callbacks.complete = yasr.setResponse;
 
-			var yasqe = YASQE.fromTextArea(document.getElementById("yasqe"), {
-				sparql : {
-					showQueryButton : true,
-					endpoint : "http://fr.dbpedia.org/sparql"
-				}
-			});
-
-			var yasr = YASR(document.getElementById("yasr"), {
-				//this way, the URLs in the results are prettified using the defined prefixes in the query
-				getUsedPrefixes : yasqe.getPrefixesFromQuery,
-				"drawOutputSelector": false,
-				"drawDownloadIcon": false,
-				// avoid persistency side-effects
-				"persistency": { "prefix": false, "results": { "key": false }}
-			}); 
-
-			// link yasqe and yasr
-			yasqe.options.sparql.callbacks.complete = yasr.setResponse;
-
-		</script>
+    </script>
 	<script type="text/javascript" src="./sparnatural.js"></script></body>
 </html>
