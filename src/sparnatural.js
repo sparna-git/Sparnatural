@@ -3,8 +3,13 @@ require("./assets/stylesheets/sparnatural.scss");
 require("easy-autocomplete");
 
 
-const datepicker = require("@chenfengyuan/datepicker") ;
-const $$ = require('jquery');
+// removed to avoid x2 bundle size
+// the dependency needs to be manually inserted in HTML pages
+// <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.css">
+// <script src="https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.js"></script>
+//
+// const datepicker = require("@chenfengyuan/datepicker") ;
+// const $$ = require('jquery');
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
@@ -1349,13 +1354,26 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var id_input = '#ecgrw-date-'+ this.widgetComponent.IdCriteriaGroupe +'-input' ;
 				var start = null; var end = null ;
 				if ($(id_input+'-start').val() != '' ) {
-					start = $$(id_input+'-start').datepicker('getDate');
+					start = $(id_input+'-start').datepicker('getDate');
+
+					// fix for negative years
+					if($(id_input+'-start').val().startsWith("-") && !start.getFullYear().toString().startsWith("-")) {
+						start.setFullYear($(id_input+'-start').val())
+					}
+
 				}
 				if ($(id_input+'-stop').val() != '' ) {
-					end = $$(id_input+'-stop').datepicker('getDate');
+					end = $(id_input+'-stop').datepicker('getDate');
+
+					// fix for negative years
+					if($(id_input+'-stop').val().startsWith("-") && !end.getFullYear().toString().startsWith("-")) {
+						end.setFullYear($(id_input+'-stop').val())
+					}
 				}
 
-				if ( (start != null) && (end != null) && (end < start) ) {
+				// just compare the years to make sure we have a proper interval
+				// otherwise this uses an alphabetical comparison
+				if ( (start != null) && (end != null) && (end.getFullYear() < start.getFullYear()) ) {
 					return null ;
 				}
 
@@ -1685,7 +1703,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				startView: 2
 			};
 			
-			$$('#ecgrw-date-'+id_inputs+'-input-start, #ecgrw-date-'+id_inputs+'-input-stop').datepicker(options);
+			$('#ecgrw-date-'+id_inputs+'-input-start, #ecgrw-date-'+id_inputs+'-input-stop').datepicker(options);
 			$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
 				$(itc_obj).trigger("change");
 			});
