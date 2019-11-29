@@ -45,7 +45,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 			config: 'config/spec-search.json',
 			language: 'en',
 			addDistinct: false,
-			addObjectsTypeCriteria: true,
+			noTypeCriteriaForObjects: false,
 			typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 			maxDepth: 3,
 			maxOr: 3,
@@ -238,7 +238,7 @@ DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 				var qGenerator = new DefaultQueryGenerator(
 					settings.addDistinct,
 					settings.typePredicate,
-					settings.addObjectsTypeCriteria
+					settings.noTypeCriteriaForObjects
 				);
 				qGenerator.generateQuery(event.data.formObject, settings.onQueryUpdated)
 			}) ;

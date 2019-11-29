@@ -80,7 +80,7 @@
 
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" crossorigin="anonymous"></script>
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 		
     <!-- datepicker -->
     <script src="https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.js"></script>
@@ -413,7 +413,7 @@
 			  	language: lang,
 			  	maxDepth: 4,
 				  addDistinct: true,
-          addObjectsTypeCriteria: true,
+          noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
           sendQueryOnFirstClassSelected: true,
 				  backgroundBaseColor: '2,184,117',
 				  autocomplete : sparqlHandler,

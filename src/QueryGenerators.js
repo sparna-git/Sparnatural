@@ -3,12 +3,12 @@ var SparqlGenerator = require('sparqljs').Generator;
 
 class DefaultQueryGenerator {
 
-	constructor(addDistinct, typePredicate, addObjectsTypeCriteria) {
+	constructor(addDistinct, typePredicate, noTypeCriteriaForObjects) {
 		this.WIDGETS_REQUIRING_VALUES = ['SearchProperty', 'TimePeriodProperty', 'TimeDatePickerProperty', 'TimeDateDayPickerProperty'] ;
 
 		this.addDistinct = addDistinct;
 		this.typePredicate = typePredicate;
-		this.addObjectsTypeCriteria = addObjectsTypeCriteria;
+		this.noTypeCriteriaForObjects = noTypeCriteriaForObjects;
 	}
 
 	/**
@@ -139,7 +139,15 @@ class DefaultQueryGenerator {
 			if (
 					component.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 0
 					&&
-					this.addObjectsTypeCriteria
+					(
+						this.noTypeCriteriaForObjects == false
+						||
+						(
+							Array.isArray(this.noTypeCriteriaForObjects)
+							&&
+							this.noTypeCriteriaForObjects.indexOf(component.CriteriaGroup.EndClassGroup.value_selected) == -1
+						)
+					)
 			) {
 				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;
 			}
