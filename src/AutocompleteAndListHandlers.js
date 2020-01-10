@@ -147,6 +147,39 @@ ORDER BY ?label
 }
 
 
+class UriOnlyListHandler extends SimpleSparqlAutocompleteAndListHandler {
+
+	constructor(sparqlEndpointUrl, sparqlPostprocessor) {
+		super(sparqlEndpointUrl, sparqlPostprocessor, null, null);
+	}
+
+
+	/**
+	 * Constructs the SPARQL query to use for list widget search.
+	 **/
+	_buildListSparql(domain, property, range) {
+		var sparql = `
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?uri ?count (CONCAT(STR(?uri), ' (', STR(?count), ')') AS ?label)
+ WHERE {
+	{
+		SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+		WHERE {
+			?domain a <${domain}> .
+			?domain <${property}> ?uri .
+		}
+	}
+}
+ORDER BY DESC(?count)
+	`;
+
+		return sparql;
+	}
+}
+
+
+
 class SparqlBifContainsAutocompleteAndListHandler extends SimpleSparqlAutocompleteAndListHandler {
 
 	constructor(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath) {
@@ -168,7 +201,8 @@ SELECT DISTINCT ?uri ?label
 	?uri a <${range}> .
 	?uri ${this.searchPath} ?label .
 	${ (this.language != null) ? `FILTER(lang(?label) = "${this.language}")` : "" }
-	FILTER(bif:contains(?label, "${key}")) 
+	# Note the single quote to handle space character
+	?label bif:contains "'${key}'" . 
 } 
 ORDER BY ?label
 			`;
@@ -327,6 +361,7 @@ class PropertyBasedAutocompleteAndListHandler extends RangeBasedAutocompleteAndL
 module.exports = {
 	SparqlBifContainsAutocompleteAndListHandler: SparqlBifContainsAutocompleteAndListHandler,
 	SimpleSparqlAutocompleteAndListHandler: SimpleSparqlAutocompleteAndListHandler,
+	UriOnlyListHandler: UriOnlyListHandler,
 	RangeBasedAutocompleteAndListHandler: RangeBasedAutocompleteAndListHandler,
 	PropertyBasedAutocompleteAndListHandler: PropertyBasedAutocompleteAndListHandler,
 	WikidataAutocompleteAndListHandler: WikidataAutocompleteAndListHandler

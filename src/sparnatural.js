@@ -31,6 +31,7 @@ SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.
 RangeBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").RangeBasedAutocompleteAndListHandler;
 PropertyBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").PropertyBasedAutocompleteAndListHandler
 WikidataAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").WikidataAutocompleteAndListHandler;
+UriOnlyListHandler = require("./AutocompleteAndListHandlers.js").UriOnlyListHandler;
 
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
