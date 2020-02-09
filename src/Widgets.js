@@ -357,7 +357,7 @@
 		}	
 	}
 
-	SearchWidget = function(inputTypeComponent) {
+	SearchWidget = function(inputTypeComponent, langSearch) {
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		

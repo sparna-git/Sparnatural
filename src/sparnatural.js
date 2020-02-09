@@ -195,6 +195,7 @@ require("./Widgets.js");
 			WIDGET_AUTOCOMPLETE_PROPERTY
 		];
 		
+		// merge given options with default values
 		var settings = $.extend( true, {}, defaults, options );
 
 		this.each(function() {
@@ -206,16 +207,19 @@ require("./Widgets.js");
 			
 			langSearch = i18nLabels[settings.language];
 			if(typeof(settings.config) == "object") {
+				// if the config is a JSON object in the page, read it directly
 				specSearch = settings.config ;
 				specProvider = new SimpleJsonLdSpecificationProvider(specSearch, settings.language);
 				initForm(thisForm) ;
 			} else {
+				// otherwise interpret it as a URL, load id and parse the result
 				$.when( loadSpecSearch() ).done(function() {
 					initForm(thisForm) ;
 				});
 			}			
         });
 		
+		// loads the config as a URL and parse the content of the URL
 		function loadSpecSearch() {
 			return $.getJSON( settings.config, function( data ) {
 				specSearch = data ;
@@ -291,19 +295,24 @@ require("./Widgets.js");
 		thisForm_._this.find('div.bg-wrapper').css({background : cssdef+')' }) ;
 	}
 		
-
+	/**
+	 * Builds a selector for a class based on provided domainId, by reading the
+	 * configuration. If the given domainId is null, this means we populate the first
+	 * class selection (starting point) so reads all classes that are domains of any property.
+	 * 
+	 **/
 	function ClassSelectBuilder(specProvider) {
 		this.specProvider = specProvider;
 
-		this.buildClassSelect = function(classId, inputID, default_value) {
+		this.buildClassSelect = function(domainId, inputID, default_value) {
 			var list = [] ;
 			var items = [] ;
 
-			if(classId === null) {
+			if(domainId === null) {
 				// if we are on the first class selection
 			 	items = specProvider.getClassesInDomainOfAnyProperty() ;
 			} else {
-				items = specProvider.getConnectedClasses(classId) ;
+				items = specProvider.getConnectedClasses(domainId) ;
 			}
 
 			$.each( items, function( key, val ) {
@@ -369,6 +378,7 @@ require("./Widgets.js");
 			var new_index = 0 ;
 		}
 		
+		// disable the WHERE if we have reached maximum depth
 		var classWherePossible = 'addWereEnable' ;
 		if (($(contexte).parents('li.groupe').length + 1 ) == (settings.maxDepth - 1) ) {
 			classWherePossible = 'addWereDisable' ;
@@ -581,12 +591,12 @@ require("./Widgets.js");
 			
 			$(this.html).find('select.input-val').on(
 				'change',
-				{arg1: this, arg2: 'validSelected'},
+				{arg1: this, arg2: 'onChange'},
 				eventProxiCriteria
 			);
 		}
 
-		this.validSelected = function validSelected() {
+		this.onChange = function onChange() {
 			//this.niceslect.niceSelect('update') ;
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 			
@@ -634,10 +644,10 @@ require("./Widgets.js");
 			// opens the select automatically
 			$(this.html).find('.nice-select').trigger('click') ;
 			$(this.html).find('select.input-val').unbind('change');
-			// hook the change event to the validSelected function
+			// hook the change event to the onChange function
 			$(this.html).find('select.input-val').on(
 				'change',
-				{arg1: this, arg2: 'validSelected'},
+				{arg1: this, arg2: 'onChange'},
 				eventProxiCriteria
 			);
 			
@@ -647,7 +657,7 @@ require("./Widgets.js");
 			}
 		}
 
-		this.validSelected = function validSelected() {
+		this.onChange = function onChange() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 			// disable if only one possible property option between the 2 classes
 			if ($(this.html).find('.input-val').find('option').length == 1) {
@@ -702,6 +712,83 @@ require("./Widgets.js");
 		} ;
 
 	}
+
+	/**
+	 * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
+	 * The DOMAIN selection happens only for the very first line/criteria.
+	 * Refactored to extract this from InputTypeComponent.
+	 **/
+	function ClassTypeId(GroupContenaire, specProvider) {
+		this.specProvider = specProvider;
+		this.ParentComponent = GroupContenaire ;
+		this.HtmlContainer = this.ParentComponent ;
+		this.cssClasses = {
+			Highlited : true ,
+			Created : false
+		}; 
+		this.widgetHtml = null ;
+
+		this.init = function () {
+			
+			//If Start Class 
+			if (this.cssClasses.Created) {
+				this.tools.Update() ;
+				return true ;
+			}
+
+			var selectHtml = null ;
+			var default_value = null ;
+			var id = this.ParentComponent.ParentComponent.id ;
+			var selectBuilder = new ClassSelectBuilder(this.specProvider);
+
+			if (this.ParentComponent instanceof StartClassGroup) {
+				
+				var parentOrSibling = findParentOrSiblingCriteria(this.ParentComponent.ParentComponent.thisForm_, id) ;
+				if (parentOrSibling) {
+					if (parentOrSibling.type == 'parent' ) {
+						// if we are child in a WHERE relation, the selected class is the selected
+						// class in the RANGE selection of the parent
+						default_value = parentOrSibling.element.EndClassGroup.value_selected ;
+					} else {
+						// if we are sibling in a AND relation, the selected class is the selected
+						// class in the DOMAIN selection of the sibling
+						default_value = parentOrSibling.element.StartClassGroup.value_selected ;
+					}
+					this.cssClasses.Highlited = false ;
+				} else {
+					this.cssClasses.Highlited = true ;
+				}				
+				
+				selectHtml = selectBuilder.buildClassSelect(
+					null,
+					'a-'+id,
+					default_value
+				);
+			} 
+			
+			if (this.ParentComponent instanceof EndClassGroup) {
+				selectHtml = selectBuilder.buildClassSelect(
+					this.ParentComponent.ParentComponent.StartClassGroup.value_selected,
+					'b-'+id
+				);
+			}
+			
+			this.widgetHtml = selectHtml ;
+			this.cssClasses.IsOnEdit = true ;
+			this.tools = new GenericTools(this) ;
+			this.tools.InitHtml() ;
+			this.tools.Add() ;
+			this.cssClasses.Created = true ;			
+		} ;	
+		
+		this.reload = function() {
+			this.widgetHtml = null ;
+			this.cssClasses.IsOnEdit = true ;
+			this.tools.ReInitHtml() ;
+			this.tools.Replace() ;
+			this.cssClasses.Created = true ;
+		} ;		
+	};
 	
 	/**
 	 * The "range" select, encapsulating a ClassTypeId, with a niceselect
@@ -729,11 +816,11 @@ require("./Widgets.js");
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
 			$(this.html).find('.nice-select').trigger('click') ;
 			
-			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'validSelected'}, eventProxiCriteria);
+			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 			$(this.html).find('span.unselectEndClass').on('click', {arg1: this, arg2: 'removeSelected'}, eventProxiCriteria);	
 		}
 		
-		this.validSelected = function validSelected() {
+		this.onChange = function onChange() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 			
 			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
@@ -763,7 +850,7 @@ require("./Widgets.js");
 			this.cssClasses.HasInputsCompleted = false ;
 			this.cssClasses.IsOnEdit = true ;
 			this.init() ;
-			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'validSelected'}, eventProxiCriteria);
+			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
 			$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
 			this.ParentComponent.ActionsGroup.reinsert = true ;
@@ -811,7 +898,7 @@ require("./Widgets.js");
 				'change',
 				{
 					arg1: this,
-					arg2: 'validSelected'
+					arg2: 'onChange'
 				},
 				eventProxiCriteria
 			);			
@@ -831,7 +918,6 @@ require("./Widgets.js");
 
 				if (value_data == valueDataAttr ) {
 					this.value_selected.splice(item, 1); 
-
 				}
 			}
 			$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').show() ;
@@ -855,7 +941,6 @@ require("./Widgets.js");
 				}
 				//On vide les champs de saisie du widget
 				this.inputTypeComponent.reload() ;
-
 			}
 
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupUnselected" } ) ;
@@ -864,7 +949,7 @@ require("./Widgets.js");
 		} ;
 
 		// sélection et affichage d'une valeur sélectionnée par un widget de saisie
-		this.validSelected = function validSelected() {
+		this.onChange = function onChange() {
 			var theValue = this.inputTypeComponent.GetValue() ;
 			var theValueLabel = this.inputTypeComponent.GetValueLabel() ;
 			if (theValue == null ) {
@@ -893,7 +978,12 @@ require("./Widgets.js");
 				var ellle = $(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
 			}
 
-			this.unselect.on('click', {	arg1: this,	arg2: 'removeValue'	}, eventProxiCriteria );
+			// binds a click on the remove cross with the removeValue function
+			this.unselect.on(
+				'click',
+				{	arg1: this,	arg2: 'removeValue'	},
+				eventProxiCriteria
+			);
 
 			// disable the Where
 			$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
@@ -906,7 +996,12 @@ require("./Widgets.js");
 			if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
 				if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
 					$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
-					$(this.ParentComponent.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on('click', {arg1: this, arg2: 'needAddOrValue'}, eventProxiCriteria);
+					// hook a click on the plus to the needAddOrValue function
+					$(this.ParentComponent.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
+						'click',
+						{arg1: this, arg2: 'needAddOrValue'},
+						eventProxiCriteria
+					);
 				}
 			}
 
@@ -943,25 +1038,22 @@ require("./Widgets.js");
 		this.base() ;
 		this.ParentComponent = CriteriaGroupe ;
 		this.GroupType = 'ActionsGroup' ;
-		this.cssClasses.ActionsGroup = true ;
-		this.cssClasses.Created = false ;
+		this.cssClasses = {
+			ActionsGroup : true ,
+			Created : false
+		};
 		this.reinsert = false;
 		
-		this.detectWidgetType = function detectWidgetType() {			
-			this.widgetType = 'Actions' ;			
-		};
-		
-		this.inputTypeComponent = { 
+		this.actions = { 
 			ActionWhere: new ActionWhere(this, specProvider),
 			ActionAnd: new ActionAnd(this, specProvider),
 			ActionRemove: new ActionRemove(this, specProvider)
 		} ;
 
 		this.onCreated = function() {
-			this.detectWidgetType() ;
-			this.inputTypeComponent.ActionRemove.init() ;
+			this.actions.ActionRemove.init() ;
 			
-			$(this.inputTypeComponent.ActionRemove.html).find('a').on(
+			$(this.actions.ActionRemove.html).find('a').on(
 				'click',
 				{
 					arg1: this.ParentComponent,
@@ -972,25 +1064,22 @@ require("./Widgets.js");
 		}
 
 		this.onObjectPropertyGroupSelected = function() {
-			this.detectWidgetType() ;
-
-			this.inputTypeComponent.ActionWhere.HtmlContainer.html = $(this.ParentComponent.EndClassGroup.html).find('.EditComponents') ;
+			this.actions.ActionWhere.HtmlContainer.html = $(this.ParentComponent.EndClassGroup.html).find('.EditComponents') ;
 			if (this.reinsert == true) {
-				//this.ActionsGroup.inputTypeComponent.ActionWhere.HtmlContainer.html.find('*').remove() ;
-				this.inputTypeComponent.ActionWhere.reload() ;
-				this.inputTypeComponent.ActionAnd.reload() ;
+				this.actions.ActionWhere.reload() ;
+				this.actions.ActionAnd.reload() ;
 			} else {
-				this.inputTypeComponent.ActionWhere.init() ;
-				this.inputTypeComponent.ActionAnd.init() ;
+				this.actions.ActionWhere.init() ;
+				this.actions.ActionAnd.init() ;
 				this.reinsert = true ;
 			}			
 			
-			$(this.inputTypeComponent.ActionWhere.html).find('a').on(
+			$(this.actions.ActionWhere.html).find('a').on(
 				'click', 
 				{arg1: this, arg2: 'AddWhere'},
 				eventProxiCriteria
 			);
-			$(this.inputTypeComponent.ActionAnd.html).find('a').on(
+			$(this.actions.ActionAnd.html).find('a').on(
 				'click',
 				{arg1: this, arg2: 'AddAnd'},
 				eventProxiCriteria
@@ -1024,273 +1113,195 @@ require("./Widgets.js");
 			return false ;			
 		}
 
-		this.validSelected = function validSelected() { };
+		this.onChange = function onChange() { };
 		
 		this.init() ;
 		
-	}
+	}	
 	
-	function InputTypeComponent(specProvider) {	
+	function ActionWhere(GroupContenaire, specProvider) {
 		this.specProvider = specProvider;
-		this.ParentComponent = null ;
+		this.ParentComponent = GroupContenaire ;
+		this.HtmlContainer = {} ;
 		this.cssClasses = {
-			IsCompleted : false,
-			IsOnEdit : false
-		}
-		this.statementRemove = false; 
-		
-		this.possibleValue ;
-		this.tools = null ;
-		this.value = null ;
-		
-		this.updateClass = function () {
-			this.tools.Update() ;
-		}
-			
-		this.init = function () {
-			
-			//If Start Class 
-			if (this.cssClasses.Created) {
-				this.tools.Update() ;
-				return true ;
+			ActionWhere : true,
+			ShowOnEdit : true,
+			Created : false
+		};
+
+		this.init = function (reload = false) {
+			if (this.ParentComponent.reinsert && !reload) {
+				return this.reload() ;
 			}
-			var trigger = null ;
-			var possible_values = null ;
-			var default_value = null ;
-			var id = this.ParentComponent.ParentComponent.id ;
-			if (this.ParentComponent instanceof StartClassGroup) {
 				
-				var parentOrSibling = findParentOrSiblingCriteria(this.ParentComponent.ParentComponent.thisForm_, id) ;
-				if (parentOrSibling) {
-					if (parentOrSibling.type == 'parent' ) {
-						default_value = parentOrSibling.element.EndClassGroup.value_selected ;
-					} else {
-						default_value = parentOrSibling.element.StartClassGroup.value_selected ;
-					}
-					this.cssClasses.Highlited = false ;
-				} else {
-					this.cssClasses.Highlited = true ;
-				}
-				
-				var selectBuilder = new ClassSelectBuilder(this.specProvider);
-				possible_values = selectBuilder.buildClassSelect(null, 'a-'+id, default_value);
-				// possible_values = getClassListSelectFor(null, 'a-'+id, default_value) ;
-			} 
-			
-			if (this.ParentComponent instanceof EndClassGroup) {
-				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
-				var selectBuilder = new ClassSelectBuilder(this.specProvider);
-				possible_values = selectBuilder.buildClassSelect(startClassGroup.value_selected, 'b-'+id);
+			var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+			var choiceNumber = 2 ;
+			if (endClassGroup.ParentComponent.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
+				choiceNumber = 1 ;
+				$(endClassGroup.html).addClass('noPropertyWidget') ;
+			} else {
+				$(endClassGroup.html).removeClass('noPropertyWidget') ;
 			}
-			
-			if (this.ParentComponent instanceof ActionsGroup) {	
-				if (this.ParentComponent.reinsert)		 {
-					return this.reload() ;
-				}
-				if (this instanceof ActionWhere) {
-					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-					var choise = 2 ;
-					if (endClassGroup.ParentComponent.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
-						choise = 1 ;
-						$(endClassGroup.html).addClass('noPropertyWidget') ;
-					} else {
-						$(endClassGroup.html).removeClass('noPropertyWidget') ;
-					}
-					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
-					var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choise+'</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
-					possible_values = widgetLabel+'<a>+</a>' ;
-				}
-				if (this instanceof ActionAnd) {
-					possible_values = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
-				}
-				if (this instanceof ActionRemove) {
-					possible_values = '<a><span class="unselect"><i class="far fa-times-circle"></i></span></a>' ;
-				}
-			} 
-			
-			this.widgetHtml = possible_values ;
+			var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
+			var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choiceNumber+'</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
+
+			this.widgetHtml = widgetLabel+'<a>+</a>' ;
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
-			this.tools.InitHtml() ;
-			this.tools.Add() ;
-			this.cssClasses.Created = true ;
-
-			if (trigger) {
-				//$(this.widgetHtml).trigger('change') ;
-			}			
+			if(reload) {
+				this.tools.ReInitHtml() ;
+				this.tools.Replace() ;
+			} else {
+				this.tools.InitHtml() ;
+				this.tools.Add() ;
+			}
+			this.cssClasses.Created = true ;			
 		} ;	
 		
 		this.reload = function() {
-			var possible_values = null ;
-			var default_value = null ;
-			var id = this.ParentComponent.ParentComponent.id ;
-
-			if (this.ParentComponent instanceof ActionsGroup) {				
-				if (this instanceof ActionWhere) {
-					var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-					var choise = 2 ;
-					if (endClassGroup.ParentComponent.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
-						choise = 1 ;
-						$(endClassGroup.html).addClass('noPropertyWidget') ;
-					} else {
-						$(endClassGroup.html).removeClass('noPropertyWidget') ;
-					}
-					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
-					var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choise+'</span></span>'+langSearch.Search+' '+ endLabel + ' '+langSearch.That+'...' ;
-					possible_values = widgetLabel+'<a>+</a>' ;
-				}
-				if (this instanceof ActionAnd) {
-					possible_values = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
-				}
-				if (this instanceof ActionRemove) {
-					possible_values = '<a><img src="' + removeIcon + '"></a>' ;
-				}
-			}
-
-			this.widgetHtml = possible_values ;
-			this.cssClasses.IsOnEdit = true ;
-			this.tools.ReInitHtml() ;
-			this.tools.Replace() ;
-			this.cssClasses.Created = true ;
+			this.init(true);
 		} ;
-	};
-	
-	
-	function ActionWhere(GroupContenaire, specProvider) {
-		this.base = InputTypeComponent ;
-		this.base(specProvider) ;
-		this.ParentComponent = GroupContenaire ;
-		this.cssClasses.ActionWhere = true ;
-		this.cssClasses.ShowOnEdit = true ;
-		this.cssClasses.Created = false ;
-		this.HtmlContainer = {} ;
 	}	
 	
 	function ActionAnd(GroupContenaire, specProvider) {
-		this.base = InputTypeComponent ;
-		this.base(specProvider) ;
+		this.specProvider = specProvider;
 		this.ParentComponent = GroupContenaire ;
-		this.cssClasses.ActionAnd = true ;
-		this.cssClasses.ShowOnHover = true ;
-		this.cssClasses.Created = false ;
 		this.HtmlContainer = this.ParentComponent ;
+		this.cssClasses = {
+			ActionAnd : true ,
+			ShowOnHover : true ,
+			Created : false
+		}; 
+
+		this.init = function (reload = false) {
+			if (this.ParentComponent.reinsert && !reload) {
+				return this.reload() ;
+			}
+
+			this.widgetHtml = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
+			this.cssClasses.IsOnEdit = true ;
+			this.tools = new GenericTools(this) ;
+			if(reload) {
+				this.tools.ReInitHtml() ;
+				this.tools.Replace() ;
+			} else {
+				this.tools.InitHtml() ;
+				this.tools.Add() ;
+			}			
+			this.cssClasses.Created = true ;			
+		} ;	
+		
+		this.reload = function() {
+			this.init(true);
+		} ;
 	}	
 	
 	function ActionRemove(GroupContenaire, specProvider) {
-		this.base = InputTypeComponent ;
-		this.base(specProvider) ;
+		this.specProvider = specProvider;
 		this.ParentComponent = GroupContenaire ;
-		this.cssClasses.ActionRemove = true ;
-		this.cssClasses.Created = false ;
-		this.HtmlContainer = this.ParentComponent ;		
-	}
-	
-	function ClassTypeId(GroupContenaire, specProvider) {
-		this.base = InputTypeComponent ;
-		this.base(specProvider) ;
-		this.ParentComponent = GroupContenaire ;
-		this.HtmlContainer = this.ParentComponent ;
-		this.cssClasses.Highlited = true ;
-		this.cssClasses.Created = false ;		
-	};
-	
-	
+		this.HtmlContainer = this.ParentComponent ;	
+		this.cssClasses = {
+			ActionRemove : true ,
+			Created : false
+		}; 
+
+		this.init = function (reload = false) {
+			if (this.ParentComponent.reinsert && !reload)		 {
+				return this.reload() ;
+			}
+			
+			this.widgetHtml = '<a><span class="unselect"><i class="far fa-times-circle"></i></span></a>' ;
+			this.cssClasses.IsOnEdit = true ;
+			this.tools = new GenericTools(this) ;
+			if(reload) {
+				this.tools.ReInitHtml() ;
+				this.tools.Replace() ;
+			} else {
+				this.tools.InitHtml() ;
+				this.tools.Add() ;
+			}			
+			this.cssClasses.Created = true ;		
+		} ;	
+		
+		this.reload = function() {
+			this.init(true);
+		} ;	
+	}	
 
 	
 	/**
 	 * Selects the value for a range in a criteria/line, using a value selection widget
 	 **/	
 	function ObjectPropertyTypeWidget(GroupContenaire, settings, specProvider) {
-		this.base = InputTypeComponent ;
-		this.base(specProvider) ;
+		this.specProvider = specProvider;
 		this.settings = settings;
 		this.ParentComponent = GroupContenaire ;
+		this.HtmlContainer = this.ParentComponent ;
 		this.html = '<div class="ObjectPropertyTypeWidget"></div>' ;
 		this.tools = null ;
 		this.widgetHtml = null ;
-		this.widgetType = null ;
-		this.HtmlContainer = this.ParentComponent ;
-		this.cssClasses.Created = false ;
+		this.widgetType = null ;		
+		this.cssClasses = {
+			Created : false
+		} ;
 		
 		this.statementRemove = false; 
 		
-		this.init = function init() {
-			if (this.ParentComponent instanceof EndClassWidgetGroup) {
-				if (this.cssClasses.Created) {
-					this.tools.Update() ;
-					return true ;
-				}
-				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
-				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-
-				this.widgetType = this.ParentComponent.widgetType  ;
-				if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
-					return true;
-				}
-
-				if (this.widgetType == WIDGET_SEARCH_PROPERTY) {
-					// label of the "Search" pseudo-class is inserted here in this case
-					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
-				} else {
-					var endLabel = langSearch.Find+' '+specProvider.getLabel(endClassGroup.value_selected) ;
-				}
-				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
-				
-				this.createWidgetComponentFromWidgetType() ;
-				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
-				
+		this.init = function init(reload = false) {
+			if (!reload && this.cssClasses.Created) {
+				this.tools.Update() ;
+				return true ;
+			}
 			
-				this.cssClasses.IsOnEdit = true ;
+			var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
+			var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+
+			this.widgetType = this.ParentComponent.widgetType  ;
+			if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
+				return true;
+			}
+
+			if (this.widgetType == WIDGET_SEARCH_PROPERTY) {
+				// label of the "Search" pseudo-class is inserted here in this case
+				var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
+			} else {
+				var endLabel = langSearch.Find+' '+specProvider.getLabel(endClassGroup.value_selected) ;
+			}
+			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
+			
+			this.createWidgetComponentFromWidgetType() ;
+			this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+
+			if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
+				widgetLabel ='';
+				endLabel ='';
+				this.widgetHtml = null ;
+			}			
+		
+			this.cssClasses.IsOnEdit = true ;
+			if(reload) {
+				this.tools.ReInitHtml() ;
+				this.tools.Replace() ;
+			} else {
 				this.tools = new GenericTools(this) ;
 				this.tools.InitHtml() ;
 				this.tools.Add() ;
-				this.widgetComponent.init() ;
-				this.cssClasses.Created = true ;
 			}
+
+			this.widgetComponent.init() ;
+			this.cssClasses.Created = true ;
 		}
 
 		this.reload = function reload() {
-			if (this.ParentComponent instanceof EndClassWidgetGroup) {
-				if (this.tools === null) {
-					this.init();
-					return true;
-				}
-				if (this.statementRemove) {
-					this.cssClasses[this.statementRemove] = false ;
-				}
-
-				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
-				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-
-				this.widgetType = this.ParentComponent.widgetType  ;
-
-				
-
-				if (this.widgetType == WIDGET_SEARCH_PROPERTY) {
-					// label of the "Search" pseudo-class is inserted here in this case
-					var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
-				} else {
-					var endLabel = langSearch.Find+' '+specProvider.getLabel(endClassGroup.value_selected) ;
-				}
-				var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
-				
-
-				this.createWidgetComponentFromWidgetType() ;
-				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
-
-				if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
-					widgetLabel ='';
-					endLabel ='';
-					this.widgetHtml = null ;
-				}
-			
-				this.cssClasses.IsOnEdit = true ;
-				//this.tools = new GenericTools(this) ;
-				this.tools.ReInitHtml() ;
-				this.tools.Replace() ;
-				this.widgetComponent.init() ;
-				this.cssClasses.Created = true ;
+			if (this.tools === null) {
+				this.init(false);
+				return true;
 			}
+			if (this.statementRemove) {
+				this.cssClasses[this.statementRemove] = false ;
+			}
+
+			this.init(true);
 		}
 
 		this.createWidgetComponentFromWidgetType = function createWidgetComponentFromWidgetType() {
@@ -1311,7 +1322,7 @@ require("./Widgets.js");
 				this.statementRemove = 'DatesWidget' ;
 				break;
 			  case WIDGET_SEARCH_PROPERTY:
-				this.widgetComponent = new SearchWidget(this) ;
+				this.widgetComponent = new SearchWidget(this, langSearch) ;
 				this.cssClasses.SearchWidget  = true ;
 				this.statementRemove = 'SearchWidget' ;
 				break;
