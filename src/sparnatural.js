@@ -333,7 +333,10 @@ require("./Widgets.js");
 		}
 	}
 
-
+	/**
+	 * Builds a selector for property based on provided domain and range, by reading the
+	 * configuration.
+	 **/
 	function PropertySelectBuilder(specProvider) {
 		this.specProvider = specProvider;
 
@@ -437,19 +440,18 @@ require("./Widgets.js");
 		
 		this.Context = new Context(context) ;
 		
-		this.StartClassGroup = new StartClassGroup(this, specProvider) ;		
-		$(this).on('Created', function () { this.StartClassGroup.onCreated(); });
-
+		// create all the elements of the criteria
+		this.StartClassGroup = new StartClassGroup(this, specProvider) ;
 		this.ObjectPropertyGroup = new ObjectPropertyGroup(this, specProvider) ;
-		$(this).on('EndClassGroupSelected', function () { this.ObjectPropertyGroup.onEndClassGroupSelected(); });
-
 		this.EndClassGroup = new EndClassGroup(this, specProvider) ;
-		$(this).on('StartClassGroupSelected', function () { this.EndClassGroup.onStartClassGroupSelected(); });
-
 		this.EndClassWidgetGroup = new EndClassWidgetGroup(this, this.settings, specProvider) ;
-		$(CriteriaGroupe).on('ObjectPropertyGroupSelected', function () { this.EndClassWidgetGroup.onObjectPropertyGroupSelected(); });
-
 		this.ActionsGroup = new ActionsGroup(this, specProvider) ;
+
+		// hook all components together
+		$(this).on('StartClassGroupSelected', function () { this.EndClassGroup.onStartClassGroupSelected(); });
+		$(this).on('Created', function () { this.StartClassGroup.onCreated(); });
+		$(this).on('EndClassGroupSelected', function () { this.ObjectPropertyGroup.onEndClassGroupSelected(); });
+		$(this).on('ObjectPropertyGroupSelected', function () { this.EndClassWidgetGroup.onObjectPropertyGroupSelected(); });
 		$(this).on('Created', function () { this.ActionsGroup.onCreated(); });
 		$(this).on('ObjectPropertyGroupSelected', function () {	this.ActionsGroup.onObjectPropertyGroupSelected();  });	
 
@@ -527,7 +529,6 @@ require("./Widgets.js");
 	function GroupContenaire() {
 		this.ParentComponent = null ;
 		this.GroupType = null ;
-		this.hasSubvalues = false ;
 		this.inputTypeComponent = null ;
 		this.tools = null ;
 		this.widgetHtml = false ;
@@ -552,11 +553,6 @@ require("./Widgets.js");
 				this.tools.Update() ;
 			}
 		} ;
-		
-		this.Edit = function Edit() {
-			this.inputTypeComponent.cssClasses.IsOnEdit = true;
-		};
-		
 	} 
 	
 	/**
@@ -578,7 +574,7 @@ require("./Widgets.js");
 		this.onCreated = function() {
 			$(this.html).find('.input-val').unbind('change');
 			this.inputTypeComponent.init() ;
-			this.Edit() ;
+			this.inputTypeComponent.cssClasses.IsOnEdit = true;
 			var select = $(this.html).find('.input-val')
 
 			this.niceslect = $(select).niceSelect() ;
@@ -614,21 +610,23 @@ require("./Widgets.js");
 		this.base() ;
 		this.ParentComponent = CriteriaGroupe1 ;
 		this.GroupType = 'ObjectPropertyGroup' ;
-		this.cssClasses.ObjectPropertyGroup = true ;
-		this.cssClasses.Created = false ;
-		this.hasSubvalues = true ;
-		this.inputTypeComponent = new ObjectPropertyTypeId(this, specProvider) ;
+		this.cssClasses = {
+			ObjectPropertyGroup : true,
+			Created : false
+		} ;
+
+		this.objectPropertySelector = new ObjectPropertyTypeId(this, specProvider) ;
 		
 		// triggered when a class is selected in the range
 		this.onEndClassGroupSelected = function() {
 			$(this.html).find('.input-val').unbind('change');
 
-			if (!this.inputTypeComponent.cssClasses.Created) {
-				this.inputTypeComponent.init() ;
-				this.Edit() ;
+			if (!this.objectPropertySelector.cssClasses.Created) {
+				this.objectPropertySelector.init() ;
+				this.objectPropertySelector.cssClasses.IsOnEdit = true;
 			} else {
-				this.reloadWidget() ;
-				this.Edit() ;
+				this.objectPropertySelector.reload() ;
+				this.objectPropertySelector.cssClasses.IsOnEdit = true;
 			}
 			
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
@@ -636,7 +634,12 @@ require("./Widgets.js");
 			// opens the select automatically
 			$(this.html).find('.nice-select').trigger('click') ;
 			$(this.html).find('select.input-val').unbind('change');
-			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'validSelected'}, eventProxiCriteria);
+			// hook the change event to the validSelected function
+			$(this.html).find('select.input-val').on(
+				'change',
+				{arg1: this, arg2: 'validSelected'},
+				eventProxiCriteria
+			);
 			
 			// automatically selects the value if there is only one
 			if ($(this.html).find('select.input-val').find('option').length == 1) {
@@ -653,13 +656,51 @@ require("./Widgets.js");
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;			
 		};
-
-		this.reloadWidget = function reloadWidget() {
-			this.inputTypeComponent.reload() ;
-		};
 			
 		this.init() ;
 		
+	}
+
+	/**
+	 * Refactored to extract this from InputTypeComponent
+	 **/
+	function ObjectPropertyTypeId(GroupContenaire, specProvider) {
+		this.specProvider = specProvider;
+		this.cssClasses = {
+			IsCompleted : false,
+			IsOnEdit : false,
+			Created : false
+		} ;
+		this.ParentComponent = GroupContenaire ;
+		this.HtmlContainer = this.ParentComponent ;
+		this.html = '<div class="ObjectPropertyTypeId"></div>' ;
+		this.widgetHtml = null ;
+
+		this.init = function (reload = false) {
+			var selectBuilder = new PropertySelectBuilder(this.specProvider);
+			this.widgetHtml = selectBuilder.buildPropertySelect(
+				this.ParentComponent.ParentComponent.StartClassGroup.value_selected,
+				this.ParentComponent.ParentComponent.EndClassGroup.value_selected,
+				'c-'+this.ParentComponent.ParentComponent.id
+			) ;
+			
+			this.cssClasses.IsOnEdit = true ;
+			this.tools = new GenericTools(this) ;
+			if(reload) {
+				this.tools.ReInitHtml() ;
+				this.tools.Replace() ;
+			} else {
+				this.tools.InitHtml() ;
+				this.tools.Add() ;				
+			}
+
+			this.cssClasses.Created = true ;
+		} ;	
+		
+		this.reload = function() {
+			this.init(true);
+		} ;
+
 	}
 	
 	/**
@@ -673,7 +714,6 @@ require("./Widgets.js");
 		this.GroupType = 'EndClassGroup' ;
 		this.cssClasses.EndClassGroup = true ;
 		this.cssClasses.Created = false ;
-		this.hasSubvalues = true ;
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
 		this.unselect = $('<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>') ;
 
@@ -684,7 +724,7 @@ require("./Widgets.js");
 			$(this.html).append(this.unselect);
 			//this.EndClassGroup.init() ;
 			this.inputTypeComponent.init() ;
-			this.Edit() ;
+			this.inputTypeComponent.cssClasses.IsOnEdit = true;
 			
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
 			$(this.html).find('.nice-select').trigger('click') ;
@@ -746,7 +786,6 @@ require("./Widgets.js");
 		this.GroupType = 'EndClassWidgetGroup' ;
 		this.cssClasses.EndClassWidgetGroup = true ;
 		this.cssClasses.Created = false ;
-		this.hasSubvalues = true ;
 		this.value_selected = [] ;
 		
 		this.detectWidgetType = function () {
@@ -808,7 +847,7 @@ require("./Widgets.js");
 					$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
 				} else {
 					$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
-				}
+					}
 				if ($(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').find('option').length > 1 ) {
 					$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 				} else {
@@ -824,39 +863,39 @@ require("./Widgets.js");
 
 		} ;
 
-		// affichage d'une valeur sélectionnée par un widget de saisie
+		// sélection et affichage d'une valeur sélectionnée par un widget de saisie
 		this.validSelected = function validSelected() {
-			var temp_value = this.inputTypeComponent.GetValue() ;
-			if (temp_value == null ) {
+			var theValue = this.inputTypeComponent.GetValue() ;
+			var theValueLabel = this.inputTypeComponent.GetValueLabel() ;
+			if (theValue == null ) {
 				return false ;
 			}
+			// if the same value is already select, don't do anything
 			if (this.value_selected.length > 0) {
-				if (Object.onArray(this.value_selected, temp_value) == true) {
+				if (Object.onArray(this.value_selected, theValue) == true) {
 					return false ;
 				}
 			}
 			
-			this.value_selected.push(this.inputTypeComponent.GetValue()) ;
-			this.LabelValueSelected = this.inputTypeComponent.GetValueLabel() ;
-			//$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-
-			if (Array.isArray(this.inputTypeComponent.GetValue())) {
-				var value_data = this.inputTypeComponent.GetValue().toString() ;
+			this.value_selected.push(theValue) ;			
+			
+			if (Array.isArray(theValue)) {
+				var value_data = theValue.toString() ;
 			} else {
-				var value_data = this.inputTypeComponent.GetValue() ;
+				var value_data = theValue ;
 			}
 
 			this.unselect = $('<span class="unselect" value-data="'+value_data+'"><i class="far fa-times-circle"></i></span>') ;
 			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
-				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>').find('div').append(this.unselect) ;
+				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+theValueLabel+'</p></div>').find('div').append(this.unselect) ;
 			} else {
-				var temp_html = $('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+this.LabelValueSelected+'</p></div>').append(this.unselect)  ;
+				var temp_html = $('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+theValueLabel+'</p></div>').append(this.unselect)  ;
 				var ellle = $(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
-
 			}
 
 			this.unselect.on('click', {	arg1: this,	arg2: 'removeValue'	}, eventProxiCriteria );
 
+			// disable the Where
 			$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
 			
 			this.ParentComponent.initCompleted() ;
@@ -906,7 +945,6 @@ require("./Widgets.js");
 		this.GroupType = 'ActionsGroup' ;
 		this.cssClasses.ActionsGroup = true ;
 		this.cssClasses.Created = false ;
-		this.hasSubvalues = true ;
 		this.reinsert = false;
 		
 		this.detectWidgetType = function detectWidgetType() {			
@@ -1045,13 +1083,6 @@ require("./Widgets.js");
 				possible_values = selectBuilder.buildClassSelect(startClassGroup.value_selected, 'b-'+id);
 			}
 			
-			if (this.ParentComponent instanceof ObjectPropertyGroup) {
-				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
-				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-				var selectBuilder = new PropertySelectBuilder(this.specProvider);
-				possible_values = selectBuilder.buildPropertySelect(startClassGroup.value_selected, endClassGroup.value_selected, 'c-'+id) ;
-			}
-			
 			if (this.ParentComponent instanceof ActionsGroup) {	
 				if (this.ParentComponent.reinsert)		 {
 					return this.reload() ;
@@ -1093,14 +1124,6 @@ require("./Widgets.js");
 			var possible_values = null ;
 			var default_value = null ;
 			var id = this.ParentComponent.ParentComponent.id ;
-			
-
-			if (this.ParentComponent instanceof ObjectPropertyGroup) {
-				var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
-				var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
-				var selectBuilder = new PropertySelectBuilder(this.specProvider);
-				possible_values = selectBuilder.buildPropertySelect(startClassGroup.value_selected, endClassGroup.value_selected, 'c-'+id) ;
-			}
 
 			if (this.ParentComponent instanceof ActionsGroup) {				
 				if (this instanceof ActionWhere) {
@@ -1172,15 +1195,7 @@ require("./Widgets.js");
 	};
 	
 	
-	function ObjectPropertyTypeId(GroupContenaire, specProvider) {
-		this.base = InputTypeComponent ;
-		this.base(specProvider) ;
-		this.ParentComponent = GroupContenaire ;
-		this.html = '<div class="ObjectPropertyTypeId"></div>' ;
-		this.widgetHtml = null ;
-		this.HtmlContainer = this.ParentComponent ;
-		this.cssClasses.Created = false ;		
-	}
+
 	
 	/**
 	 * Selects the value for a range in a criteria/line, using a value selection widget
@@ -1374,6 +1389,10 @@ require("./Widgets.js");
 				this.component.html = $(this.component.html).appendTo(this.component.HtmlContainer.html) ;
 			}
 		}
+
+		this.Update = function() {
+			this.UpdateStatementsClass() ;
+		}
 		
 		/**
 		 * Updates the CSS classes of an element
@@ -1402,31 +1421,22 @@ require("./Widgets.js");
 			this.AppendComponentHtml() ;
 		} 
 		
-		this.Update = function() {
-			this.UpdateStatementsClass() ;
-		}
-		
-		this.InitHtml = function() {
+
+		this.InitHtml = function(reInit = false) {
 			var instance = this.component.constructor.name ;
-			var widget = this.component.widgetHtml ;
-			this.component.html = $('<div class="'+instance+'"></div>') ; 
-			if (widget != null) {
-				this.component.html.append(widget) ; 
+			this.component.html = $('<div class="'+instance+'"></div>') ;
+			if (this.component.widgetHtml != null) {
+				if(reInit) {
+					this.component.html.find('>.'+instance ).remove() ;
+				}
+				this.component.html.append(this.component.widgetHtml) ; 
 			} else {
 				this.component.html = '';
 			}
 		} 
 
 		this.ReInitHtml = function() {
-			var instance = this.component.constructor.name ;
-			var widget = this.component.widgetHtml ;
-			this.component.html = $('<div class="'+instance+'"></div>') ;
-			if (widget != null) {
-				this.component.html.find('>.'+instance ).remove() ;
-				this.component.html.append(widget) ; 
-			} else {
-				this.component.html = '';
-			}
+			this.InitHtml(true);
 		} 
 	}
 	
