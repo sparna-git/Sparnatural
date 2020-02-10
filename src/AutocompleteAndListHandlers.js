@@ -212,6 +212,51 @@ ORDER BY ?label
 
 }
 
+/**
+ * Simple handler for GraphDB Lucene connectors : http://graphdb.ontotext.com/documentation/standard/lucene-graphdb-connector.html
+ * Takes as input the name of the connector, the field to search on, and the property to read to display
+ * TODO : the property to display should come from the snippet
+ **/
+class GraphDbLuceneConnectorSparqlAutocompleteAndListHandler extends AbstractSparqlAutocompleteAndListHandler {
+
+	/**
+	 * The search path, in this case, is used only to read the label,
+	 * not to search
+	 **/
+	constructor(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath, connectorName, fieldName) {
+		super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
+		this.connectorName = connectorName;
+		this.fieldName = fieldName;
+	}
+
+	/**
+	 * Constructs the SPARQL query to use for autocomplete widget search.
+	 **/
+	_buildAutocompleteSparql(domain, property, range, key) {
+			
+		var sparql = `
+PREFIX : <http://www.ontotext.com/connectors/lucene#>
+PREFIX inst: <http://www.ontotext.com/connectors/lucene/instance#>
+SELECT DISTINCT ?uri ?label
+ WHERE {
+ 	?search a inst:${this.connectorName} ;
+		:query "${this.fieldName}:${key}" ;
+		:entities ?uri .
+	?domain a <${domain}> .
+	?domain <${property}> ?uri .
+	?uri a <${range}> .
+	?uri ${this.searchPath} ?label 
+	${ (this.language != null) ? `FILTER(lang(?label) = "${this.language}")` : "" }
+} 
+ORDER BY ?label
+			`;
+
+		return sparql;
+	}
+
+}
+
+
 
 class WikidataAutocompleteAndListHandler extends SimpleSparqlAutocompleteAndListHandler {
 
@@ -364,5 +409,6 @@ module.exports = {
 	UriOnlyListHandler: UriOnlyListHandler,
 	RangeBasedAutocompleteAndListHandler: RangeBasedAutocompleteAndListHandler,
 	PropertyBasedAutocompleteAndListHandler: PropertyBasedAutocompleteAndListHandler,
-	WikidataAutocompleteAndListHandler: WikidataAutocompleteAndListHandler
+	WikidataAutocompleteAndListHandler: WikidataAutocompleteAndListHandler,
+	GraphDbLuceneConnectorSparqlAutocompleteAndListHandler: GraphDbLuceneConnectorSparqlAutocompleteAndListHandler
 }
