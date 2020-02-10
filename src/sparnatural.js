@@ -32,6 +32,7 @@ RangeBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js
 PropertyBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").PropertyBasedAutocompleteAndListHandler
 WikidataAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").WikidataAutocompleteAndListHandler;
 UriOnlyListHandler = require("./AutocompleteAndListHandlers.js").UriOnlyListHandler;
+GraphDbLuceneConnectorSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").GraphDbLuceneConnectorSparqlAutocompleteAndListHandler;
 
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
@@ -227,7 +228,7 @@ require("./Widgets.js");
 			}).fail(function(response) {
 				console.log("Sparnatural - unable to load config file : " +settings.config);
 				console.log(response);
-			}) ;			
+			}) ;
 		}		
 		
 		function initForm(thisForm_) {			
@@ -240,6 +241,8 @@ require("./Widgets.js");
 			
 			initGeneralEvent(thisForm_) ;
 			
+			// triggered when Sparnatural is submitted : generates output SPARQL
+			// query
 			$(thisForm_._this).on('submit', { formObject : thisForm_ }, function (event) {		
 				event.preventDefault();
 				var qGenerator = new DefaultQueryGenerator(
@@ -799,8 +802,10 @@ require("./Widgets.js");
 		this.specProvider = specProvider;
 		this.ParentComponent = CriteriaGroupe ;
 		this.GroupType = 'EndClassGroup' ;
-		this.cssClasses.EndClassGroup = true ;
-		this.cssClasses.Created = false ;
+		this.cssClasses = {
+			EndClassGroup : true ,
+			Created : false
+		}; 
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
 		this.unselect = $('<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>') ;
 
@@ -809,6 +814,7 @@ require("./Widgets.js");
 			$(this.html).find('.input-val').unbind('change');
 			$(this.html).append('<div class="EditComponents ShowOnEdit"></div>');
 			$(this.html).append(this.unselect);
+
 			//this.EndClassGroup.init() ;
 			this.inputTypeComponent.init() ;
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
@@ -817,7 +823,11 @@ require("./Widgets.js");
 			$(this.html).find('.nice-select').trigger('click') ;
 			
 			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
-			$(this.html).find('span.unselectEndClass').on('click', {arg1: this, arg2: 'removeSelected'}, eventProxiCriteria);	
+			$(this.html).find('span.unselectEndClass').on(
+				'click',
+				{arg1: this, arg2: 'onRemoveSelected'},
+				eventProxiCriteria
+			);	
 		}
 		
 		this.onChange = function onChange() {
@@ -841,7 +851,7 @@ require("./Widgets.js");
 			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
 		};
 
-		this.removeSelected = function removeSelected () {			
+		this.onRemoveSelected = function onRemoveSelected () {			
 			$(this.ParentComponent.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
 			this.ParentComponent.ObjectPropertyGroup.cssClasses.Invisible = true ;
 			this.ParentComponent.ObjectPropertyGroup.init() ;
@@ -904,7 +914,7 @@ require("./Widgets.js");
 			);			
 		}
 		
-		this.removeValue = function removeValue(e) {
+		this.onRemoveValue = function removeValue(e) {
 			
 			var valueDataAttr = $(e.currentTarget).attr('value-data') ;
 
@@ -981,7 +991,7 @@ require("./Widgets.js");
 			// binds a click on the remove cross with the removeValue function
 			this.unselect.on(
 				'click',
-				{	arg1: this,	arg2: 'removeValue'	},
+				{	arg1: this,	arg2: 'onRemoveValue'	},
 				eventProxiCriteria
 			);
 
@@ -999,7 +1009,7 @@ require("./Widgets.js");
 					// hook a click on the plus to the needAddOrValue function
 					$(this.ParentComponent.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
 						'click',
-						{arg1: this, arg2: 'needAddOrValue'},
+						{arg1: this, arg2: 'onAddOrValue'},
 						eventProxiCriteria
 					);
 				}
@@ -1019,7 +1029,7 @@ require("./Widgets.js");
 			initGeneralEvent(this.ParentComponent.thisForm_);
 		};
 		
-		this.needAddOrValue = function needAddOrValue() {
+		this.onAddOrValue = function needAddOrValue() {
 			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
 			// On vide les champs de saisie du widget
 			this.inputTypeComponent.reload() ;
