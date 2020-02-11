@@ -156,6 +156,18 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		return items ;
 	}
 
+	this.getSparqlPropertyTypes = function(objectPropertyId) {
+		var propertyTypes = [];
+		var objectProperty = this._getResourceById(objectPropertyId);
+		for(var i in objectProperty['@type']) {
+			var value = objectProperty['@type'][i];
+			if(value.startsWith("sparql:")) {
+				propertyTypes = this._pushIfNotExist(value, propertyTypes);
+			}
+		}
+		return propertyTypes;
+	}
+
 	this._inDomainOf = function(objectProperty, classId) {
 		return this._readDomain(objectProperty).indexOf(classId) >= 0;
 	}

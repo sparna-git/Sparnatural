@@ -3,12 +3,13 @@ var SparqlGenerator = require('sparqljs').Generator;
 
 class DefaultQueryGenerator {
 
-	constructor(addDistinct, typePredicate, noTypeCriteriaForObjects) {
+	constructor(addDistinct, typePredicate, noTypeCriteriaForObjects, specProvider) {
 		this.WIDGETS_REQUIRING_VALUES = ['SearchProperty', 'TimePeriodProperty', 'TimeDatePickerProperty', 'TimeDateDayPickerProperty'] ;
 
 		this.addDistinct = addDistinct;
 		this.typePredicate = typePredicate;
 		this.noTypeCriteriaForObjects = noTypeCriteriaForObjects;
+		this.specProvider = specProvider;
 	}
 
 	/**
@@ -68,13 +69,15 @@ class DefaultQueryGenerator {
 		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
 		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
 		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
-		var WIDGET_NON_SELECTABLE_PROPERTY 			= 'NonSelectableProperty';
+		var WIDGET_NON_SELECTABLE_PROPERTY 	= 'NonSelectableProperty';
 		
 		var VALUE_SELECTION_WIDGETS = [
 			WIDGET_LIST_PROPERTY,
 			WIDGET_AUTOCOMPLETE_PROPERTY,
-			WIDGET_NON_SELECTABLE_PROPERTY // Pas de vameiur selectionné mais sera forcement utilisé pour une Class
+			WIDGET_NON_SELECTABLE_PROPERTY // Pas de valeur selectionné mais sera forcement utilisé pour une Class
 		];
+
+		var SPARQL_GRAPHDB_SEARCH_PROPERTY = 'sparql:GraphDBSearchProperty';
 
 
 		var start = component.CriteriaGroup.StartClassGroup.value_selected ;
@@ -133,7 +136,6 @@ class DefaultQueryGenerator {
 				// otherwise use a variable name as the object of the triple
 				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
 			}
-			
 
 			// if no value is selected add a type criteria for the object
 			if (
@@ -152,7 +154,13 @@ class DefaultQueryGenerator {
 				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;
 			}
 		} else {
-			if (objectVariable !== null) {
+			if (
+				objectVariable !== null
+				&&
+				// don't add the triple if we are on a fulltext search since this will be part of the
+				// search clause
+				this.specProvider.getSparqlPropertyTypes(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) == -1
+			) {
 				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
 			}
 			
@@ -180,8 +188,7 @@ class DefaultQueryGenerator {
 					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
 				}
 				break;
-				case WIDGET_TIME_PERIOD_PROPERTY:	
-
+				case WIDGET_TIME_PERIOD_PROPERTY:
 				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
 					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
 					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
@@ -195,14 +202,23 @@ class DefaultQueryGenerator {
 				  });
 				  break;
 			  case WIDGET_SEARCH_PROPERTY:
-				var Texte = component.CriteriaGroup.EndClassWidgetGroup.value_selected[0] ;
-				jsonFilter = this.initFilterSearch(Texte, objectVariable) ;
-				jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
+				  var Texte = component.CriteriaGroup.EndClassWidgetGroup.value_selected[0] ;
+				  if(this.specProvider.getSparqlPropertyTypes(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) != -1) {
+				  	jsonQuery = this.updateGraphDbPrefixes(jsonQuery);
+				  	newTriples = this.addTriple(newTriples, "?search", this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#pleinTexte") ;
+				  	newTriples = this.addLiteralTriple(newTriples, "?search", "http://www.ontotext.com/connectors/lucene#query", "text:"+Texte) ;
+				  	newTriples = this.addTriple(newTriples, "?search", "http://www.ontotext.com/connectors/lucene#entities", subjectVariable) ;
+				  } else {				  	
+					jsonFilter = this.initFilterSearch(Texte, objectVariable) ;
+					jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
+				  }
+
 				break;
 			  default:						
 			}						
 		}	
 
+		console.log(jsonQuery);
 		return jsonQuery;		
 	}
 
@@ -239,6 +255,7 @@ class DefaultQueryGenerator {
 			"where": [],
 			"type": "query",
 			"prefixes": {
+				"rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
 				"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
 				"xsd": "http://www.w3.org/2001/XMLSchema#"
 			}
@@ -326,6 +343,20 @@ class DefaultQueryGenerator {
 		
 		return jsonTriples ;
 	}
+
+	addLiteralTriple(jsonTriples, subjet, predicate, object) {
+		
+		var triple = {
+			"subject": subjet,
+			"predicate": predicate,
+			// encapsulates the object in quotes so that it is interpreted as a literal
+			"object": "\""+object+"\""
+		} ;
+					
+		jsonTriples.triples.push(triple) ;
+		
+		return jsonTriples ;
+	}
 	
 	addInWhere(jsonQuery, JsonToWhere) {
 		jsonQuery.where.push(JsonToWhere) ;		
@@ -357,6 +388,12 @@ class DefaultQueryGenerator {
 			var components = uri.split("/") ;
 			return components[components.length - 1] ;
 		}
+	}
+
+	updateGraphDbPrefixes(jsonQuery) {
+		jsonQuery.prefixes.inst = "http://www.ontotext.com/connectors/lucene/instance#";
+		jsonQuery.prefixes.lucene = "http://www.ontotext.com/connectors/lucene#";
+		return jsonQuery ;
 	}
 
 }

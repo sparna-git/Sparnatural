@@ -248,7 +248,8 @@ require("./Widgets.js");
 				var qGenerator = new DefaultQueryGenerator(
 					settings.addDistinct,
 					settings.typePredicate,
-					settings.noTypeCriteriaForObjects
+					settings.noTypeCriteriaForObjects,
+					specProvider
 				);
 				qGenerator.generateQuery(event.data.formObject, settings.onQueryUpdated)
 			}) ;
