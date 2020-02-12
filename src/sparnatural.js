@@ -56,6 +56,7 @@ var Config = require("./SparnaturalConfig.js");
 			maxOr: 3,
 			sendQueryOnFirstClassSelected: false,
 			backgroundBaseColor: '250,136,3',
+			sparqlPrefixes: {},
 			
 			autocomplete : {
 				/**
@@ -244,6 +245,7 @@ var Config = require("./SparnaturalConfig.js");
 					settings.noTypeCriteriaForObjects,
 					specProvider
 				);
+				qGenerator.setPrefixes(settings.sparqlPrefixes);
 				qGenerator.generateQuery(event.data.formObject, settings.onQueryUpdated)
 			}) ;
 		}

@@ -422,6 +422,9 @@
 				  backgroundBaseColor: '2,184,117',
 				  autocomplete : sparqlHandler,
 				  list : rangeBasedHandler,
+          sparqlPrefixes : {
+            "dbpedia" : "http://dbpedia.org/ontology/"
+          },
 				  onQueryUpdated: function(queryString, queryJson) {
   					queryString = semanticPostProcess(queryString, queryJson);
   					queryString = rdfsLabelPostProcess(queryString, queryJson);

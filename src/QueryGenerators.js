@@ -1,5 +1,5 @@
 var SparqlGenerator = require('sparqljs').Generator;
-//var SparqlParser = require('sparqljs').Parser;
+// var SparqlParser = require('sparqljs').Parser;
 
 var Config = require('./SparnaturalConfig.js');
 
@@ -17,6 +17,16 @@ class DefaultQueryGenerator {
 		this.typePredicate = typePredicate;
 		this.noTypeCriteriaForObjects = noTypeCriteriaForObjects;
 		this.specProvider = specProvider;
+		this.additionnalPrefixes = {};
+	}
+
+	// add a new prefix to the generated query
+	addPrefix(prefix, uri) {
+		this.additionnalPrefixes[prefix] = uri;
+	}
+
+	setPrefixes(prefixes) {
+		this.additionnalPrefixes = prefixes;
 	}
 
 	/**
@@ -245,7 +255,7 @@ class DefaultQueryGenerator {
 	}
 
 	newQueryJson() {
-		return {
+		var jsonQuery = {
 			"queryType": "SELECT"+((this.addDistinct)?' DISTINCT':'')+"",
 			"variables": [
 				"?this"
@@ -257,7 +267,14 @@ class DefaultQueryGenerator {
 				"rdfs": "http://www.w3.org/2000/01/rdf-schema#",
 				"xsd": "http://www.w3.org/2001/XMLSchema#"
 			}
-		}
+		};
+
+		// add additionnal prefixes
+		for (key in this.additionnalPrefixes) {
+	        jsonQuery.prefixes[key] = this.additionnalPrefixes[key];
+    	}
+
+		return jsonQuery;
 	}
 	
 	initTriple() {			
