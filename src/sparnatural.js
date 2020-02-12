@@ -37,6 +37,7 @@ GraphDbLuceneConnectorSparqlAutocompleteAndListHandler = require("./Autocomplete
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 require("./Widgets.js");
+var Config = require("./SparnaturalConfig.js");
 
 (function( $ ) {
 	
@@ -182,18 +183,10 @@ require("./Widgets.js");
 				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
 			}
 		};
-		
-		var WIDGET_LIST_PROPERTY 			= 		'ListProperty';
-		var WIDGET_TIME_PERIOD_PROPERTY 	= 		'TimePeriodProperty';
-		var WIDGET_TIME_DATE_PICKER_PROPERTY = 		'TimeDatePickerProperty';
-		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 	'TimeDateDayPickerProperty';
-		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 		'AutocompleteProperty';
-		var WIDGET_SEARCH_PROPERTY 			= 		'SearchProperty';
-		var WIDGET_NON_SELECTABLE_PROPERTY 	= 		'NonSelectableProperty';
-		
+
 		var VALUE_SELECTION_WIDGETS = [
-			WIDGET_LIST_PROPERTY,
-			WIDGET_AUTOCOMPLETE_PROPERTY
+			Config.LIST_PROPERTY,
+			Config.AUTOCOMPLETE_PROPERTY
 		];
 		
 		// merge given options with default values
@@ -887,7 +880,7 @@ require("./Widgets.js");
 		this.value_selected = [] ;
 		
 		this.detectWidgetType = function () {
-			this.widgetType = this.specProvider.getWidget(this.ParentComponent.ObjectPropertyGroup.value_selected);
+			this.widgetType = this.specProvider.getObjectPropertyType(this.ParentComponent.ObjectPropertyGroup.value_selected);
 		};
 		
 		this.inputTypeComponent = new ObjectPropertyTypeWidget(this, this.settings, specProvider) ;
@@ -1268,11 +1261,11 @@ require("./Widgets.js");
 			var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
 			this.widgetType = this.ParentComponent.widgetType  ;
-			if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
+			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
 				return true;
 			}
 
-			if (this.widgetType == WIDGET_SEARCH_PROPERTY) {
+			if (this.widgetType == Config.SEARCH_PROPERTY) {
 				// label of the "Search" pseudo-class is inserted here in this case
 				var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
 			} else {
@@ -1283,7 +1276,7 @@ require("./Widgets.js");
 			this.createWidgetComponentFromWidgetType() ;
 			this.widgetHtml = widgetLabel + this.widgetComponent.html ;
 
-			if (this.widgetType == WIDGET_NON_SELECTABLE_PROPERTY) {
+			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
 				widgetLabel ='';
 				endLabel ='';
 				this.widgetHtml = null ;
@@ -1317,42 +1310,43 @@ require("./Widgets.js");
 
 		this.createWidgetComponentFromWidgetType = function createWidgetComponentFromWidgetType() {
 			switch (this.widgetType) {
-			  case WIDGET_LIST_PROPERTY:
+			  case Config.LIST_PROPERTY:
 				this.widgetComponent = new ListWidget(this, this.settings.list) ;
 				this.cssClasses.ListeWidget = true ;
 				this.statementRemove = 'ListeWidget' ;
 				break;
-			  case WIDGET_AUTOCOMPLETE_PROPERTY:
+			  case Config.AUTOCOMPLETE_PROPERTY:
 				this.widgetComponent = new AutoCompleteWidget(this, this.settings.autocomplete) ;
 				this.cssClasses.AutocompleteWidget = true ;
 				this.statementRemove = 'AutocompleteWidget' ;
 			    break;
-			  case WIDGET_TIME_PERIOD_PROPERTY:
+			  case Config.TIME_PERIOD_PROPERTY:
 				this.widgetComponent = new DatesWidget(this, this.settings.dates, langSearch) ;
 				this.cssClasses.DatesWidget  = true ;
 				this.statementRemove = 'DatesWidget' ;
 				break;
-			  case WIDGET_SEARCH_PROPERTY:
+			  case Config.SEARCH_PROPERTY:
 				this.widgetComponent = new SearchWidget(this, langSearch) ;
 				this.cssClasses.SearchWidget  = true ;
 				this.statementRemove = 'SearchWidget' ;
 				break;
-			  case WIDGET_TIME_DATE_PICKER_PROPERTY:
+			  case Config.TIME_DATE_PICKER_PROPERTY:
 				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, false, langSearch) ;
 				this.cssClasses.TimeDatePickerWidget  = true ;
 				this.statementRemove = 'TimeDatePickerWidget' ;
 				break;
-			  case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:
+			  case Config.TIME_DATE_DAY_PICKER_PROPERTY:
 				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, 'day', langSearch) ;
 				this.cssClasses.TimeDatePickerWidget  = true ;
 				this.statementRemove = 'TimeDatePickerWidget' ;
 				break;
-			  case WIDGET_NON_SELECTABLE_PROPERTY:
+			  case Config.NON_SELECTABLE_PROPERTY:
 			  	this.widgetComponent = new NoWidget(this) ;
 			  	this.cssClasses.NoWidget = true ;
 				this.statementRemove = 'NoWidget' ;
 			  default:
 			  	// TODO : throw Exception
+			  	console.log("Unexpected Widget Type "+this.widgetType)
 			}
 		};
 		

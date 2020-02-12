@@ -1,10 +1,17 @@
 var SparqlGenerator = require('sparqljs').Generator;
 //var SparqlParser = require('sparqljs').Parser;
 
+var Config = require('./SparnaturalConfig.js');
+
 class DefaultQueryGenerator {
 
 	constructor(addDistinct, typePredicate, noTypeCriteriaForObjects, specProvider) {
-		this.WIDGETS_REQUIRING_VALUES = ['SearchProperty', 'TimePeriodProperty', 'TimeDatePickerProperty', 'TimeDateDayPickerProperty'] ;
+		this.WIDGETS_REQUIRING_VALUES = [
+			Config.SEARCH_PROPERTY,
+			Config.TIME_PERIOD_PROPERTY,
+			Config.TIME_DATE_PICKER_PROPERTY,
+			Config.TIME_DATE_PICKER_PROPERTY
+		] ;
 
 		this.addDistinct = addDistinct;
 		this.typePredicate = typePredicate;
@@ -63,18 +70,10 @@ class DefaultQueryGenerator {
 	}
 
 	processQueryComponent(jsonQuery, formObject, ArrayLiIndex, component, index) {
-		var WIDGET_LIST_PROPERTY 			= 'ListProperty';
-		var WIDGET_TIME_PERIOD_PROPERTY 	= 'TimePeriodProperty';
-		var WIDGET_TIME_DATE_PICKER_PROPERTY = 'TimeDatePickerProperty';
-		var WIDGET_TIME_DATE_DAY_PICKER_PROPERTY = 'TimeDateDayPickerProperty';
-		var WIDGET_AUTOCOMPLETE_PROPERTY 	= 'AutocompleteProperty';
-		var WIDGET_SEARCH_PROPERTY 			= 'SearchProperty';
-		var WIDGET_NON_SELECTABLE_PROPERTY 	= 'NonSelectableProperty';
-		
 		var VALUE_SELECTION_WIDGETS = [
-			WIDGET_LIST_PROPERTY,
-			WIDGET_AUTOCOMPLETE_PROPERTY,
-			WIDGET_NON_SELECTABLE_PROPERTY // Pas de valeur selectionné mais sera forcement utilisé pour une Class
+			Config.LIST_PROPERTY,
+			Config.AUTOCOMPLETE_PROPERTY,
+			Config.NON_SELECTABLE_PROPERTY // Pas de valeur selectionné mais sera forcement utilisé pour une Class
 		];
 
 		var SPARQL_GRAPHDB_SEARCH_PROPERTY = 'sparql:GraphDBSearchProperty';
@@ -172,7 +171,7 @@ class DefaultQueryGenerator {
 		if(component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 0 ) {
 			var __this = this ;
 			switch (_WidgetType) {					
-			  case WIDGET_LIST_PROPERTY:
+			  case Config.LIST_PROPERTY:
 				if (component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
 					// add values clause if we have more than 1 values
 					var jsonValue = this.initValues() ;
@@ -180,7 +179,7 @@ class DefaultQueryGenerator {
 					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
 				}
 				break;
-			  case WIDGET_AUTOCOMPLETE_PROPERTY:
+			  case Config.AUTOCOMPLETE_PROPERTY:
 				if (component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
 					// add values clause if we have more than 1 values
 					var jsonValue = this.initValues() ;
@@ -188,20 +187,20 @@ class DefaultQueryGenerator {
 					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
 				}
 				break;
-				case WIDGET_TIME_PERIOD_PROPERTY:
+				case Config.TIME_PERIOD_PROPERTY:
 				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
 					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
 					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
 				  });
 				  break;
-				case WIDGET_TIME_DATE_PICKER_PROPERTY:
-				case WIDGET_TIME_DATE_DAY_PICKER_PROPERTY:						
+				case Config.TIME_DATE_PICKER_PROPERTY:
+				case Config.TIME_DATE_DAY_PICKER_PROPERTY:						
 				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
 					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
 					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
 				  });
 				  break;
-			  case WIDGET_SEARCH_PROPERTY:
+			  	case Config.SEARCH_PROPERTY:
 				  var Texte = component.CriteriaGroup.EndClassWidgetGroup.value_selected[0] ;
 				  if(this.specProvider.getSparqlPropertyTypes(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) != -1) {
 				  	jsonQuery = this.updateGraphDbPrefixes(jsonQuery);
@@ -218,7 +217,6 @@ class DefaultQueryGenerator {
 			}						
 		}	
 
-		console.log(jsonQuery);
 		return jsonQuery;		
 	}
 

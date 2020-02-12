@@ -1,0 +1,12 @@
+var SPARNATURAL_CONFIG_CORE 			=		"http://ontologies.sparna.fr/sparnatural-config-core#";
+
+module.exports = Object.freeze({
+    SPARNATURAL_CONFIG_CORE			: 		SPARNATURAL_CONFIG_CORE,
+	LIST_PROPERTY 					: 		SPARNATURAL_CONFIG_CORE+'ListProperty',
+	TIME_PERIOD_PROPERTY 			: 		SPARNATURAL_CONFIG_CORE+'TimePeriodProperty',
+	TIME_DATE_PICKER_PROPERTY 		: 		SPARNATURAL_CONFIG_CORE+'TimeDatePickerProperty',
+	TIME_DATE_DAY_PICKER_PROPERTY 	: 		SPARNATURAL_CONFIG_CORE+'TimeDateDayPickerProperty',
+	AUTOCOMPLETE_PROPERTY 			: 		SPARNATURAL_CONFIG_CORE+'AutocompleteProperty',
+	SEARCH_PROPERTY 				: 		SPARNATURAL_CONFIG_CORE+'SearchProperty',
+	NON_SELECTABLE_PROPERTY 		: 		SPARNATURAL_CONFIG_CORE+'NonSelectableProperty'
+});

@@ -1,33 +1,35 @@
+
 var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 
-	this.specSearch = specs;
+	this.jsonSpecs = specs;
 	this.lang = lang;
 
-	this.getWidget = function(objectPropertyId) {
+	this.getObjectPropertyType = function(objectPropertyId) {
 		var objectProperty = this._getResourceById(objectPropertyId);
 		for(var i in objectProperty['@type']) {
 			var value = objectProperty['@type'][i];
+			// we expand the value to return full IRIs
 			switch(value) {
 			  case "AutocompleteProperty":
-			    return "AutocompleteProperty";
+			    return this._expand("AutocompleteProperty");
 			    break;
 			  case "ListProperty":
-			    return "ListProperty";
+			    return this._expand("ListProperty");
 			    break;
 			  case "TimePeriodProperty":
-			    return "TimePeriodProperty";
+			    return this._expand("TimePeriodProperty");
 			    break;
 			  case "SearchProperty":
-			    return "SearchProperty";
+			    return this._expand("SearchProperty");
 				break;
 			  case "TimeDatePickerProperty":
-				return "TimeDatePickerProperty";
+				return this._expand("TimeDatePickerProperty");
 				break;
 			  case "TimeDateDayPickerProperty":
-				return "TimeDateDayPickerProperty";
+				return this._expand("TimeDateDayPickerProperty");
 				break;
 			  case "NonSelectableProperty":
-				return "NonSelectableProperty";
+				return this._expand("NonSelectableProperty");
 				break;
 			  default:
 			  	break;
@@ -63,13 +65,13 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 
 	/* 
 		List of possible Class relative to a Class
-		return array of @type Class in specSearch 
+		return array of @type Class in jsonSpecs 
 	*/
 	this.getConnectedClasses = function(classId) {
 		var items = [];
 
-		for(var j in this.specSearch['@graph']) {
-			var item = this.specSearch['@graph'][j];		
+		for(var j in this.jsonSpecs['@graph']) {
+			var item = this.jsonSpecs['@graph'][j];		
 			if (this._isObjectProperty(item)) {
 				if (this._inDomainOf(item, classId)) {
 					var values = this._readRange(item);
@@ -98,8 +100,8 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 	this.getClassesInDomainOfAnyProperty = function() {
 		var items = [];
 
-		for(var j in this.specSearch['@graph']) {
-			var item = this.specSearch['@graph'][j];		
+		for(var j in this.jsonSpecs['@graph']) {
+			var item = this.jsonSpecs['@graph'][j];		
 			if (this._isObjectProperty(item)) {				
 				var domains = this._readDomain(item);
 				for(var i in domains) {
@@ -118,8 +120,8 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 	this._sortItemsByIndex = function(items) {
 		var me = this;
 		items.sort(function(c1, c2) {
-			const c1Value = me.specSearch['@graph'].indexOf(me._getResourceById(c1));
-			const c2Value = me.specSearch['@graph'].indexOf(me._getResourceById(c2));
+			const c1Value = me.jsonSpecs['@graph'].indexOf(me._getResourceById(c1));
+			const c2Value = me.jsonSpecs['@graph'].indexOf(me._getResourceById(c2));
 
 			let comparison = 0;
 			if (c1Value > c2Value) {
@@ -135,13 +137,13 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 
 	/* List of possible ObjectProperty relative to a Class
 		@Id of Class
-		return array of @type ObjectProperty in specSearch 
+		return array of @type ObjectProperty in jsonSpecs 
 	*/
 	this.getConnectingProperties = function(domainClassId, rangeClassId) {
 		var items = [];
 
-		for(var i in this.specSearch['@graph']) {
-			var item = this.specSearch['@graph'][i];
+		for(var i in this.jsonSpecs['@graph']) {
+			var item = this.jsonSpecs['@graph'][i];
 			if (this._isObjectProperty(item)) {
 				if(
 					(domainClassId === null || this._inDomainOf(item, domainClassId))
@@ -162,7 +164,7 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		for(var i in objectProperty['@type']) {
 			var value = objectProperty['@type'][i];
 			if(value.startsWith("sparql:")) {
-				propertyTypes = this._pushIfNotExist(value, propertyTypes);
+				propertyTypes = this._pushIfNotExist(this._expand(value), propertyTypes);
 			}
 		}
 		return propertyTypes;
@@ -214,13 +216,33 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 	}
 
 	this._getResourceById = function(id) {
-		for(var i in this.specSearch['@graph']) {
-			var anEntry = this.specSearch['@graph'][i];
+		for(var i in this.jsonSpecs['@graph']) {
+			var anEntry = this.jsonSpecs['@graph'][i];
 			if ( anEntry['@id'] == id ) {
 				return anEntry;
 			}
 		}
 		return null;
+	}
+
+	this._expand = function(id) {
+		if(id.indexOf(":") >= 0) {
+			prefix = id.split(":")[0];
+			if(this.jsonSpecs['@context'][prefix] == null) {
+				// can't do anything
+				return id;
+			} else {
+				return this.jsonSpecs['@context'][prefix]+id.split(":")[1];
+			}
+		} else {
+			if(this.jsonSpecs['@context']['@vocab'] == null) {
+				// can't do anything
+				return id;
+			} else {
+				return this.jsonSpecs['@context']['@vocab']+id;
+			}
+		}
+		
 	}
 
 	this._pushIfNotExist = function(item, items) {
