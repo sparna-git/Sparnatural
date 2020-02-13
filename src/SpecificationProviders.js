@@ -39,9 +39,13 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 
 	this.getIcon = function(classId) {
 		if(this._getResourceById(classId)["faIcon"] != null) {
-			return "<span style='font-size: 170%;' >&nbsp;<i class='" + this._getResourceById(classId)["faIcon"] + "'></i></span>";
-		} else {
+			// use of fa-fw for fixed-width icons
+			return "<span style='font-size: 170%;' >&nbsp;<i class='" + this._getResourceById(classId)["faIcon"] + " fa-fw'></i></span>";
+		} else if (this._getResourceById(classId)["icon"] != null) {
 			return this._getResourceById(classId)["icon"];
+		} else {
+			// this is ugly, just so it aligns with other entries having an icon
+			return "<span style='font-size: 175%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
 		}
 	}
 

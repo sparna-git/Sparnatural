@@ -319,11 +319,12 @@ var Config = require("./SparnaturalConfig.js");
 				var icon = specProvider.getIcon(val) ;
 				var highlightedIcon = specProvider.getHighlightedIcon(val) ;
 
+				// highlighted icon defaults to icon
 				if (!highlightedIcon || 0 === highlightedIcon.length) {
 					highlightedIcon = icon ;
 				}
 				
-				var image = ' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"' ;
+				var image = (icon != null)?' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"':'' ;
 				var selected ='';
 				if (default_value == val) {
 					selected = 'selected="selected"' ;
