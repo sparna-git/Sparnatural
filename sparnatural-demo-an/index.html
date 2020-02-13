@@ -118,7 +118,7 @@
       "@type" : "Ontology"
     },
     {
-      "@id" : "http://www.ica.org/standards/RiC/ontology#Person",
+      "@id" : "https://www.ica.org/standards/RiC/ontology#Person",
       "@type" : "Class",
       "label": [{
           "@value" : "Personne", "@language" : "fr"
@@ -126,7 +126,7 @@
 	    "faIcon":  "fas fa-male"
     },
     {
-      "@id" : "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "@id" : "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "@type" : "Class",
       "label": [{
           "@value" : "Organisation", "@language" : "fr"
@@ -134,7 +134,7 @@
 	    "faIcon":  "fas fa-building"
     },
     {
-      "@id" : "http://www.ica.org/standards/RiC/ontology#Family",
+      "@id" : "https://www.ica.org/standards/RiC/ontology#Family",
       "@type" : "Class",
       "label": [{
           "@value" : "Famille", "@language" : "fr"
@@ -150,7 +150,7 @@
       "faIcon":  "fas fa-calendar-alt"
     },
     {
-      "@id" : "http://www.ica.org/standards/RiC/ontology#Place",
+      "@id" : "https://www.ica.org/standards/RiC/ontology#Place",
       "@type" : "Class",
       "label": [        {
           "@value" : "Lieu", "@language" : "fr"
@@ -167,12 +167,20 @@
       "path": "skos:Concept ; skos:inScheme <http://data.culture.fr/thesaurus/resource/ark:/67717/74a055e8-1b76-466a-af5d-86d33d41aa92>"
     },
     {
-      "@id" : "http://www.ica.org/standards/RiC/ontology#ActivityType",
+      "@id" : "https://www.ica.org/standards/RiC/ontology#ActivityType",
       "@type" : "Class",
       "label": [{
           "@value" : "Type de Fonction", "@language" : "fr"
       }],
       "faIcon":  "fas fa-clipboard-list"
+    },
+    {
+      "@id" : "https://www.ica.org/standards/RiC/ontology#RecordResource",
+      "@type" : "Class",
+      "label": [{
+          "@value" : "Notice", "@language" : "fr"
+      }],
+      "faIcon":  "fas fa-file"
     },
     {
       "@id" : "http://data.archives-nationales.culture.gouv.fr/sparnatural/OccupationType",
@@ -201,17 +209,17 @@
           "@value" : "est membre de",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Person",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Person",
       "range": {
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#CorporateBody"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Family"}
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#CorporateBody"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Family"}
           ]
         }
       },
-      "path": "rico:personIsSourceOfAgentMembershipRelation/rico:agentMembershipRelationHasTarget"
+      "path": "rico:personIsTargetOfMembershipRelation/rico:membershipRelationHasSource"
     },
     {
       "@id" : "http://data.archives-nationales.culture.gouv.fr/sparnatural/member",
@@ -226,13 +234,13 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#CorporateBody"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Family"}
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#CorporateBody"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Family"}
           ]
         }
       },
-      "range": "http://www.ica.org/standards/RiC/ontology#Person",
-      "path": "rico:groupIsTargetOfAgentMembershipRelation/rico:agentMembershipRelationHasSource"
+      "range": "https://www.ica.org/standards/RiC/ontology#Person",
+      "path": "rico:groupIsSourceOfmembershipRelation/rico:membershipRelationHasTarget"
     },
     {
       "@id" : "http://data.archives-nationales.culture.gouv.fr/sparnatural/hierarchical-parent",
@@ -244,8 +252,8 @@
           "@value" : "est hiérarchiquement inférieur à",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "^rico:agentHierarchicalRelationHasTarget/rico:agentHierarchicalRelationHasSource"
     },
     {
@@ -258,8 +266,8 @@
           "@value" : "est hiérarchiquement supérieur a",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "^rico:agentHierarchicalRelationHasSource/rico:agentHierarchicalRelationHasTarget"
     },
     {
@@ -272,8 +280,8 @@
           "@value" : "est sous le contrôle ou la tutelle de",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "rico:agentIsTargetOfAgentControlRelation/rico:agentControlRelationHasSource"
     },
     {
@@ -286,8 +294,8 @@
           "@value" : "contrôle ou a sous sa tutelle",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "^(rico:agentIsTargetOfAgentControlRelation/rico:agentControlRelationHasSource)"
     },
     {
@@ -300,8 +308,8 @@
           "@value" : "a pour subdivision",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "rico:groupIsSourceOfGroupSubdivisionRelation/rico:groupSubdivisionRelationHasTarget"
     },
     {
@@ -314,8 +322,8 @@
           "@value" : "est une subdivision de",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "^(rico:groupIsSourceOfGroupSubdivisionRelation/rico:groupSubdivisionRelationHasTarget)"
     },
     {
@@ -328,8 +336,8 @@
           "@value" : "est le supérieur hiérarchique de",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Person",
-      "range": "http://www.ica.org/standards/RiC/ontology#Person",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Person",
+      "range": "https://www.ica.org/standards/RiC/ontology#Person",
       "path": "rico:personIsSourceOfAgentSubordinationRelation/rico:agentSubordinationRelationHasTarget"
     },
     {
@@ -342,8 +350,8 @@
           "@value" : "a sous l'autorité hiérarchique de",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Person",
-      "range": "http://www.ica.org/standards/RiC/ontology#Person",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Person",
+      "range": "https://www.ica.org/standards/RiC/ontology#Person",
       "path": "^(rico:personIsSourceOfAgentSubordinationRelation/rico:agentSubordinationRelationHasTarget)"
     },
     {
@@ -356,8 +364,8 @@
           "@value" : "a une relation familiale avec",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Person",
-      "range": "http://www.ica.org/standards/RiC/ontology#Person",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Person",
+      "range": "https://www.ica.org/standards/RiC/ontology#Person",
       "path": "rico:personHasFamilyRelation/rico:familyRelationConnects"
     },
     {
@@ -370,8 +378,8 @@
           "@value" : "a pour fonction",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#ActivityType",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#ActivityType",
       "path": "^rico:activityRealizationRelationHasSource/rico:activityRealizationRelationHasTarget/rico:hasActivityType"
     },
     {
@@ -384,8 +392,8 @@
           "@value" : "fonction de",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#ActivityType",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#ActivityType",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "^(^rico:activityRealizationRelationHasSource/rico:activityRealizationRelationHasTarget/rico:hasActivityType)"
     },
     {
@@ -398,7 +406,7 @@
           "@value" : "a pour activité/profession",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Person",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Person",
       "range": "http://data.archives-nationales.culture.gouv.fr/sparnatural/OccupationType",
       "path": "^rico:relationToOccupationHasSource/rico:relationToOccupationHasTarget/rico:hasOccupationType"
     },
@@ -413,7 +421,7 @@
           "@language" : "fr"
       }],
       "domain": "http://data.archives-nationales.culture.gouv.fr/sparnatural/OccupationType",
-      "range": "http://www.ica.org/standards/RiC/ontology#Person",
+      "range": "https://www.ica.org/standards/RiC/ontology#Person",
       "path": "^(^rico:relationToOccupationHasSource/rico:relationToOccupationHasTarget/rico:hasOccupationType)"
     },
     {
@@ -426,7 +434,7 @@
           "@value" : "a pour statut juridique",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "range": "http://data.archives-nationales.culture.gouv.fr/sparnatural/LegalStatus",
       "path": "(^rico:thingIsSourceOfRelationToType/rico:relationToTypeHasTarget)|rico:hasLegalStatus"
     },
@@ -441,7 +449,7 @@
           "@language" : "fr"
       }],
       "domain": "http://data.archives-nationales.culture.gouv.fr/sparnatural/LegalStatus",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "^((^rico:thingIsSourceOfRelationToType/rico:relationToTypeHasTarget)|rico:hasLegalStatus)"
     },
     {
@@ -454,8 +462,8 @@
           "@value" : "a succédé à",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "^rico:agentTemporalRelationHasTarget/rico:agentTemporalRelationHasSource"
     },
     {
@@ -468,8 +476,8 @@
           "@value" : "a précédé",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Person",
-      "range": "http://www.ica.org/standards/RiC/ontology#Person",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Person",
+      "range": "https://www.ica.org/standards/RiC/ontology#Person",
       "path": "^rico:agentTemporalRelationHasSource/rico:agentTemporalRelationHasTarget"
     },
     {
@@ -482,8 +490,8 @@
           "@value" : "a précédé",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "^rico:agentTemporalRelationHasSource/rico:agentTemporalRelationHasTarget"
     },
     {
@@ -496,8 +504,8 @@
           "@value" : "a précédé",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Family",
-      "range": "http://www.ica.org/standards/RiC/ontology#Family",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Family",
+      "range": "https://www.ica.org/standards/RiC/ontology#Family",
       "path": "^rico:agentTemporalRelationHasSource/rico:agentTemporalRelationHasTarget"
     },
     {
@@ -510,8 +518,8 @@
           "@value" : "a précédé",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Place",
-      "range": "http://www.ica.org/standards/RiC/ontology#Place",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Place",
+      "range": "https://www.ica.org/standards/RiC/ontology#Place",
       "path": "^rico:agentTemporalRelationHasSource/rico:agentTemporalRelationHasTarget"
     },
     {
@@ -524,8 +532,8 @@
           "@value" : "dirige",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Person",
-      "range": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Person",
+      "range": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "path": "^rico:leadershipRelationHasSource/rico:leadershipRelationHasTarget"
     },
     {
@@ -538,12 +546,12 @@
           "@value" : "est dirigée par",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
-      "range": "http://www.ica.org/standards/RiC/ontology#Person",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "range": "https://www.ica.org/standards/RiC/ontology#Person",
       "path": "^rico:leadershipRelationHasTarget/rico:leadershipRelationHasSource"
     },
     {
-      "@id" : "http://www.ica.org/standards/RiC/ontology#beginningDate",
+      "@id" : "https://www.ica.org/standards/RiC/ontology#beginningDate",
       "@type" : [
         "ObjectProperty",
         "TimeDatePickerProperty"
@@ -552,11 +560,11 @@
           "@value" : "date de création",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#CorporateBody",
+      "domain": "https://www.ica.org/standards/RiC/ontology#CorporateBody",
       "range": "http://data.archives-nationales.culture.gouv.fr/sparnatural/Time"
     },
     {
-      "@id" : "http://www.ica.org/standards/RiC/ontology#birthDate",
+      "@id" : "https://www.ica.org/standards/RiC/ontology#birthDate",
       "@type" : [
         "ObjectProperty",
         "TimeDatePickerProperty"
@@ -565,11 +573,11 @@
           "@value" : "date de naissance",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Person",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Person",
       "range": "http://data.archives-nationales.culture.gouv.fr/sparnatural/Time"
     },
     {
-      "@id" : "http://www.ica.org/standards/RiC/ontology#deathDate",
+      "@id" : "https://www.ica.org/standards/RiC/ontology#deathDate",
       "@type" : [
         "ObjectProperty",
         "TimeDatePickerProperty"
@@ -578,7 +586,7 @@
           "@value" : "date de décès",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Person",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Person",
       "range": "http://data.archives-nationales.culture.gouv.fr/sparnatural/Time"
     },
     {
@@ -595,13 +603,13 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Person"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#CorporateBody"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Family"}
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Person"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#CorporateBody"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Family"}
           ]
         }
       },
-      "range": "http://www.ica.org/standards/RiC/ontology#Place",
+      "range": "https://www.ica.org/standards/RiC/ontology#Place",
       "path": "(^rico:thingIsSourceOfRelationToPlace/rico:relationToPlaceHasTarget)|rico:hasLocation"
     },
     {
@@ -614,14 +622,14 @@
           "@value" : "est un lieu associé à",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Place",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Place",
       "range": {
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Person"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#CorporateBody"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Family"}
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Person"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#CorporateBody"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Family"}
           ]
         }
       },
@@ -637,8 +645,8 @@
           "@value" : "est situé dans",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Place",
-      "range": "http://www.ica.org/standards/RiC/ontology#Place",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Place",
+      "range": "https://www.ica.org/standards/RiC/ontology#Place",
       "path": "rico:hasLocatio|rico:isWithin"
     },
     {
@@ -651,8 +659,8 @@
           "@value" : "est la localisation de",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Place",
-      "range": "http://www.ica.org/standards/RiC/ontology#Place",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Place",
+      "range": "https://www.ica.org/standards/RiC/ontology#Place",
       "path": "^(rico:hasLocatio|rico:isWithin)"
     },
     {
@@ -665,8 +673,8 @@
           "@value" : "est une partie de",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Place",
-      "range": "http://www.ica.org/standards/RiC/ontology#Place",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Place",
+      "range": "https://www.ica.org/standards/RiC/ontology#Place",
       "path": "rico:isPartOf"
     },
     {
@@ -679,8 +687,8 @@
           "@value" : "a pour subdivision",
           "@language" : "fr"
       }],
-      "domain": "http://www.ica.org/standards/RiC/ontology#Place",
-      "range": "http://www.ica.org/standards/RiC/ontology#Place",
+      "domain": "https://www.ica.org/standards/RiC/ontology#Place",
+      "range": "https://www.ica.org/standards/RiC/ontology#Place",
       "path": "^rico:isPartOf"
     },
     {
@@ -697,9 +705,9 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Person"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#CorporateBody"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Family"}
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Person"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#CorporateBody"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Family"}
           ]
         }
       },
@@ -707,13 +715,42 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Person"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#CorporateBody"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Family"}
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Person"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#CorporateBody"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Family"}
           ]
         }
       },
       "path": "rico:agentIsConnectedToAgentRelation/rico:agentRelationConnects"
+    },
+    {
+      "@id" : "https://www.ica.org/standards/RiC/ontology#hasProvenance",
+      "@type" : [
+        "ObjectProperty",
+        "AutocompleteProperty"
+      ],
+      "label": [{
+          "@value" : "a pour provenance",
+          "@language" : "fr"
+      }],
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#RecordResource"}
+          ]
+        }
+      },
+      "range": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Person"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#CorporateBody"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Family"}
+          ]
+        }
+      }
     },
     {
       "@id" : "http://www.w3.org/2000/01/rdf-schema#label",
@@ -729,9 +766,9 @@
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Person"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#CorporateBody"},
-            { "@id" : "http://www.ica.org/standards/RiC/ontology#Family"}
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Person"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#CorporateBody"},
+            { "@id" : "https://www.ica.org/standards/RiC/ontology#Family"}
           ]
         }
       },
@@ -813,9 +850,9 @@
 
 			prefixesPostProcess = function(queryString, queryJson) {
 				if(queryString.indexOf("rdf-schema#") == -1) {
-					queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nPREFIX rico: <http://www.ica.org/standards/RiC/ontology#> \nPREFIX skos: <http://www.w3.org/2004/02/skos/core#> \nSELECT ");
+					queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nPREFIX rico: <https://www.ica.org/standards/RiC/ontology#> \nPREFIX skos: <http://www.w3.org/2004/02/skos/core#> \nSELECT ");
 				} else {
-					queryString = queryString.replace("SELECT ", "PREFIX rico: <http://www.ica.org/standards/RiC/ontology#> \nPREFIX skos: <http://www.w3.org/2004/02/skos/core#> \nSELECT ");
+					queryString = queryString.replace("SELECT ", "PREFIX rico: <https://www.ica.org/standards/RiC/ontology#> \nPREFIX skos: <http://www.w3.org/2004/02/skos/core#> \nSELECT ");
 				}
 				
 				return queryString;
@@ -835,9 +872,9 @@
 
 			datesPostProcess = function(queryString, queryJson) {
 				if(
-					queryString.indexOf("?this <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ica.org/standards/RiC/ontology#CorporateBody>") != -1
+					queryString.indexOf("?this <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://www.ica.org/standards/RiC/ontology#CorporateBody>") != -1
 					||
-					queryString.indexOf("?this <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.ica.org/standards/RiC/ontology#Person>") != -1
+					queryString.indexOf("?this <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <https://www.ica.org/standards/RiC/ontology#Person>") != -1
 				) {
 					queryString = queryString.replace("(STR(?label) AS ?nom) ?link ?graphdb", "(STR(?label) AS ?nom) ?link ?graphdb ?start ?end");
 					queryString = queryString.replace(new RegExp('}$'), "\nOPTIONAL { ?this rico:birthDate|rico:beginningDate ?start }\nOPTIONAL { ?this rico:deathDate|rico:endDate ?end }\n}");
@@ -864,7 +901,7 @@
 	 
 
 			listUrl = function(domain, property, range) {
-				var QUERY_SERVICE = "http://graphdb.sparna.fr/repositories/AN"
+				var QUERY_SERVICE = "http://localhost:7200/repositories/AN"
 				var sparql = "SELECT DISTINCT ?range ?rangeLabel WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . ?range skos:prefLabel ?rangeLabel FILTER(langMatches(lang(?rangeLabel), \"fr\")) } ORDER BY ?rangeLabel";
 
 				sparql = semanticPostProcess(sparql, null);
@@ -875,7 +912,7 @@
 			}
 
 			searchUrl = function(domain, property, range, key) {
-				var QUERY_SERVICE = "http://graphdb.sparna.fr/repositories/AN"
+				var QUERY_SERVICE = "http://localhost:7200/repositories/AN"
 				var sparql = "SELECT DISTINCT ?range ?rangeLabel WHERE {\n  ?domain a <"+domain+"> . ?domain <"+property+"> ?range . ?range a <"+range+"> \n . ?range rdfs:label ?rangeLabel FILTER(langMatches(lang(?rangeLabel), \"fr\")) FILTER(contains(lcase(?rangeLabel), lcase(\""+key+"\"))) } ORDER BY STRLEN(?rangeLabel) ?rangeLabel";
 
 				sparql = semanticPostProcess(sparql, null);
@@ -888,7 +925,7 @@
 			var yasqe = YASQE.fromTextArea(document.getElementById("yasqe"), {
 				sparql : {
 					showQueryButton : true,
-					endpoint : "http://graphdb.sparna.fr/repositories/AN",
+					endpoint : "http://localhost:7200/repositories/AN",
 					requestMethod : "GET"
 				}
 			});
