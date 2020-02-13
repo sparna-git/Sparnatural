@@ -26,6 +26,7 @@ const i18nLabels = {
 };
 
 SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").SimpleJsonLdSpecificationProvider;
+RDFSpecificationProvider = require("./RDFSpecificationProvider.js").RDFSpecificationProvider ;
 SparqlBifContainsAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SparqlBifContainsAutocompleteAndListHandler;
 SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SimpleSparqlAutocompleteAndListHandler;
 RangeBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").RangeBasedAutocompleteAndListHandler;
@@ -43,7 +44,6 @@ var Config = require("./SparnaturalConfig.js");
 	
     $.fn.Sparnatural = function( options ) {
  
-        var specSearch = {} ;
         var langSearch = {} ;
         var specProvider;
 		var defaults = {
@@ -203,21 +203,33 @@ var Config = require("./SparnaturalConfig.js");
 			langSearch = i18nLabels[settings.language];
 			if(typeof(settings.config) == "object") {
 				// if the config is a JSON object in the page, read it directly
-				specSearch = settings.config ;
-				specProvider = new SimpleJsonLdSpecificationProvider(specSearch, settings.language);
+				specProvider = new SimpleJsonLdSpecificationProvider(settings.config, settings.language);
 				initForm(thisForm) ;
 			} else {
-				// otherwise interpret it as a URL, load id and parse the result
-				$.when( loadSpecSearch() ).done(function() {
-					initForm(thisForm) ;
-				});
+				if(settings.config.startsWith("http")) {
+					if(settings.config.includes("json")) {
+						// otherwise interpret it as a URL, load id and parse the result
+						$.when( loadJsonSpecSearch() ).done(function() {
+							initForm(thisForm) ;
+						});
+					} else {
+						// TODO : dynamic loading of RDF file
+					}
+				} else {
+					// suppose it is RDF String
+					RDFSpecificationProvider.build(settings.config, settings.language).then(function(provider) {
+					    console.log(provider);
+					    specProvider = provider;
+						initForm(thisForm) ;
+					});
+					
+				}
 			}			
         });
 		
 		// loads the config as a URL and parse the content of the URL
-		function loadSpecSearch() {
+		function loadJsonSpecSearch() {
 			return $.getJSON( settings.config, function( data ) {
-				specSearch = data ;
 				specProvider = new SimpleJsonLdSpecificationProvider(data, settings.language);
 			}).fail(function(response) {
 				console.log("Sparnatural - unable to load config file : " +settings.config);
@@ -309,15 +321,16 @@ var Config = require("./SparnaturalConfig.js");
 
 			if(domainId === null) {
 				// if we are on the first class selection
-			 	items = specProvider.getClassesInDomainOfAnyProperty() ;
+			 	items = this.specProvider.getClassesInDomainOfAnyProperty() ;
 			} else {
-				items = specProvider.getConnectedClasses(domainId) ;
+				items = this.specProvider.getConnectedClasses(domainId) ;
 			}
 
-			$.each( items, function( key, val ) {
-				var label = specProvider.getLabel(val) ;
-				var icon = specProvider.getIcon(val) ;
-				var highlightedIcon = specProvider.getHighlightedIcon(val) ;
+			for (var key in items) {
+				var val = items[key];
+				var label = this.specProvider.getLabel(val) ;
+				var icon = this.specProvider.getIcon(val) ;
+				var highlightedIcon = this.specProvider.getHighlightedIcon(val) ;
 
 				// highlighted icon defaults to icon
 				if (!highlightedIcon || 0 === highlightedIcon.length) {
@@ -330,7 +343,7 @@ var Config = require("./SparnaturalConfig.js");
 					selected = 'selected="selected"' ;
 				}
 				list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
-			}) ;
+			}
 
 			var html_list = $( "<select/>", {
 				"class": "my-new-list input-val",
@@ -351,16 +364,18 @@ var Config = require("./SparnaturalConfig.js");
 
 		this.buildPropertySelect = function(domainClassID, rangeClassID, inputID, default_value) {
 			var list = [] ;
-			var items = specProvider.getConnectingProperties(domainClassID,rangeClassID) ;
-			$.each( items, function( key, val ) {
-				var label = specProvider.getLabel(val) ;
+			var items = this.specProvider.getConnectingProperties(domainClassID,rangeClassID) ;
+			
+			for (var key in items) {
+				var val = items[key];
+				var label = this.specProvider.getLabel(val) ;
 				var selected ='';
 				if (default_value == val) {
 					selected = 'selected="selected"' ;
 				}
 				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+'>'+ label + '</option>' );
+			}
 
-			}) ;
 			var html_list = $( "<select/>", {
 				"class": "select-list input-val",
 				"id": inputID,
