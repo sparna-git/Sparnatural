@@ -97,13 +97,18 @@
 			var config = `
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix sparnatural: <http://ontologies.sparna.fr/sparnatural-config-core#> .
 
 <http://exemple.fr> a owl:Ontology ;
   owl:imports <http://xmlns.com/foaf/0.1/> .
 
 <http://exemple.fr/Personne> a owl:Class .
 
-<http://exemple.fr/knows> rdfs:domain <http://exemple.fr/Personne> .
+<http://exemple.fr/knows>
+	a owl:ObjectProperty, sparnatural:AutocompleteProperty ;
+	rdfs:domain <http://exemple.fr/Personne> ;
+	rdfs:range <http://exemple.fr/Personne> ;
+.
       `;
 		</script>
 

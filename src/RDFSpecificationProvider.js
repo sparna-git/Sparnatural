@@ -10,6 +10,12 @@ const RDFS = {
 	RANGE : factory.namedNode("http://www.w3.org/2000/01/rdf-schema#range")
 };
 
+const RDF = {
+	TYPE : factory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
+};
+
+var Config = require('./SparnaturalConfig.js');
+
 export class RDFSpecificationProvider {
 
 	constructor(n3store, lang) {
@@ -45,14 +51,19 @@ export class RDFSpecificationProvider {
 		console.log("getClassesInDomainOfAnyProperty");
 		const quadsArray = this.store.getQuads(
 			undefined,
-			factory.namedNode("http://www.w3.org/2000/01/rdf-schema#domain"),
+			RDFS.DOMAIN,
 		  	// other arguments are left undefined
 		);
 
 		var items = [];
 		for (const quad of quadsArray) {
-		    // Handle our quad...
-		    this._pushIfNotExist(quad.object.id, items);
+			// we are not looking at domains of _any_ property
+		    // the property we are looking at must be a Sparnatural property, with a known type
+			var objectPropertyId = quad.subject.id;
+		    var classId = quad.object.id;
+		    if(this.getObjectPropertyType(objectPropertyId)) {
+		    	this._pushIfNotExist(classId, items);	
+		    }		    
 		}
 		return items;
 	}
@@ -67,6 +78,93 @@ export class RDFSpecificationProvider {
 
 	getHighlightedIcon(classId) {
 		return null;
+	}
+
+	getConnectedClasses(classId) {
+		var items = [];
+
+		const propertyQuads = this.store.getQuads(
+			undefined,
+			RDFS.DOMAIN,
+		  	factory.namedNode(classId),
+		);
+
+		// now read their ranges
+		for (const quad of propertyQuads) {
+		    const rangeQuads = this.store.getQuads(
+				quad.subject,
+				RDFS.RANGE
+			);
+
+			for (const classQuad of rangeQuads) {
+			    this._pushIfNotExist(classQuad.object.id, items);
+			}
+		}
+
+		return items ;
+	}
+
+	hasConnectedClasses(classId) {
+		return ( this.getConnectedClasses(classId).length > 0 );
+	}
+
+	getConnectingProperties(domainClassId, rangeClassId) {
+		var items = [];
+
+		const propertyDomainQuads = this.store.getQuads(
+			undefined,
+			RDFS.DOMAIN,
+		  	factory.namedNode(domainClassId)
+		);
+
+		for (const quad of propertyDomainQuads) {
+		    const propertyRangeQuads = this.store.getQuads(
+				quad.subject,
+				RDFS.RANGE,
+				factory.namedNode(rangeClassId)
+			);
+
+			for (const classQuad of propertyRangeQuads) {
+			    this._pushIfNotExist(classQuad.subject.id, items);
+			}
+		}
+
+		return items ;
+	}
+
+	getObjectPropertyType(objectPropertyId) {
+		var types = this._readRdfTypes(objectPropertyId);
+		
+		var KNOWN_PROPERTY_TYPES = [
+			Config.LIST_PROPERTY,
+			Config.TIME_PERIOD_PROPERTY,
+			Config.TIME_DATE_PICKER_PROPERTY,
+			Config.TIME_DATE_DAY_PICKER_PROPERTY,
+			Config.AUTOCOMPLETE_PROPERTY,
+			Config.SEARCH_PROPERTY,
+			Config.NON_SELECTABLE_PROPERTY
+		];
+
+		// only return the type if it is a known type
+		for (const aType of types) {
+			if(KNOWN_PROPERTY_TYPES.includes(aType)) {
+				return aType;
+			}
+		}
+		
+		return undefined;
+	}
+
+	_readRdfTypes(uri) {
+		var types = [];
+		for (const classQuad of this.store.getQuads(
+			factory.namedNode(uri),
+			RDF.TYPE
+		)) {
+			console.log(classQuad);
+		    types.push(classQuad.object.id);
+		}
+		return types;
 	}
 
 	_processImports() {
