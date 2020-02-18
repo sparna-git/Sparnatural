@@ -32,7 +32,7 @@ class DefaultQueryGenerator {
 	/**
 	 * Generates the query and notifies the callback
 	 **/
-	generateQuery(formObject, callback) {
+	generateQuery(formObject) {
 		var jsonQuery = this.newQueryJson() ;
 
 		var ArrayLiIndex = [] ;		
@@ -54,8 +54,7 @@ class DefaultQueryGenerator {
 
 			var generator = new SparqlGenerator();
 			var generatedQuery = generator.stringify(jsonQuery);
-			// send generated query to callback function
-			callback(generatedQuery, jsonQuery) ;		
+			return { "generatedQuery" : generatedQuery, "jsonQuery" : jsonQuery } ;		
 		}
 	}
 

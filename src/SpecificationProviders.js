@@ -174,6 +174,18 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		return propertyTypes;
 	}
 
+	this.expandQuery = function(sparqlQuery) {
+		for(var i in this.jsonSpecs['@graph']) {
+			var item = this.jsonSpecs['@graph'][i];
+			if ( item['path'] != null) {
+					var re = new RegExp("<" + item['@id'] + ">","g");
+					sparqlQuery = sparqlQuery.replace(re, item['path']);
+			}
+		}
+		
+		return sparqlQuery ;
+	}
+
 	this._inDomainOf = function(objectProperty, classId) {
 		return this._readDomain(objectProperty).indexOf(classId) >= 0;
 	}

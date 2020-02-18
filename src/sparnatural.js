@@ -246,7 +246,10 @@ var Config = require("./SparnaturalConfig.js");
 					specProvider
 				);
 				qGenerator.setPrefixes(settings.sparqlPrefixes);
-				qGenerator.generateQuery(event.data.formObject, settings.onQueryUpdated)
+				var queries = qGenerator.generateQuery(event.data.formObject);
+				// fire callback
+				settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery, expandedQuery);
+
 			}) ;
 		}
 

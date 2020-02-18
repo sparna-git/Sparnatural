@@ -379,6 +379,7 @@
     	}
     	var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
+      var sparnatural;
 			$( document ).ready(function($) {		
 
         var sparqlHandler = new SparqlBifContainsAutocompleteAndListHandler(
@@ -412,7 +413,7 @@
         });
         
 
-			  $('#ui-search').Sparnatural({
+			  sparnatural = $('#ui-search').Sparnatural({
 			  	config: config,
 			  	language: lang,
 			  	maxDepth: 4,
@@ -435,7 +436,6 @@
   					yasqe.query();
 				  }
 			  });
-
 			}) ;
 
 			prefixesPostProcess = function(queryString, queryJson) {
