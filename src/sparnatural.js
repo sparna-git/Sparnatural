@@ -193,7 +193,7 @@ var Config = require("./SparnaturalConfig.js");
 		// merge given options with default values
 		var settings = $.extend( true, {}, defaults, options );
 
-		this.each(function() {
+		return this.each(function() {
             var thisForm = {} ;
             thisForm._this = $(this) ;
 			$(this).addClass('Sparnatural') ;
@@ -248,6 +248,10 @@ var Config = require("./SparnaturalConfig.js");
 				qGenerator.setPrefixes(settings.sparqlPrefixes);
 				qGenerator.generateQuery(event.data.formObject, settings.onQueryUpdated)
 			}) ;
+		}
+
+		function expandQuery(sparqlQuery) {
+			return specProvider.expandQuery(sparqlQuery);
 		}
 		
 	function initGeneralEvent(thisForm_) {
@@ -1474,7 +1478,6 @@ var Config = require("./SparnaturalConfig.js");
 		}
 	}
 
-	return this ;
 }
 
 Object.onArray = function (arrayTosearch, objectTocompare) {
