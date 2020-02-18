@@ -89,5 +89,7 @@ module.exports = {
 	  open: true,
 	  hot: true
 	},
-	devtool: "eval-source-map"
+  /* terrible, generates huge output files */
+	/* devtool: "eval-source-map" */
+  devtool: "source-map"
 }
