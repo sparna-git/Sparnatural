@@ -236,7 +236,7 @@ var Config = require("./SparnaturalConfig.js");
 				qGenerator.setPrefixes(settings.sparqlPrefixes);
 				var queries = qGenerator.generateQuery(event.data.formObject);
 				// fire callback
-				settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery, expandedQuery);
+				settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery);
 
 			}) ;
 		}
@@ -362,7 +362,7 @@ var Config = require("./SparnaturalConfig.js");
 				"class": "select-list input-val",
 				"id": inputID,
 				html: list.join( "" )
-			  });
+			});
 			return html_list ;
 		}
 	}
@@ -553,11 +553,11 @@ var Config = require("./SparnaturalConfig.js");
 				this.HtmlContainer = this.ParentComponent ;
 				//this.html.remove() ;
 				this.tools = new GenericTools(this) ;
-				this.tools.InitHtml() ;
-				this.tools.Add() ;
+				this.tools.initHtml() ;
+				this.tools.attachHtml() ;
 				this.cssClasses.Created = true ;				
 			} else {
-				this.tools.Update() ;
+				this.tools.updateCssClasses() ;
 			}
 		} ;
 	} 
@@ -693,14 +693,8 @@ var Config = require("./SparnaturalConfig.js");
 			
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
-			if(reload) {
-				this.tools.ReInitHtml() ;
-				this.tools.Replace() ;
-			} else {
-				this.tools.InitHtml() ;
-				this.tools.Add() ;				
-			}
-
+			this.tools.initHtml() ;
+			this.tools.attachHtml() ;
 			this.cssClasses.Created = true ;
 		} ;	
 		
@@ -729,7 +723,7 @@ var Config = require("./SparnaturalConfig.js");
 			
 			//If Start Class 
 			if (this.cssClasses.Created) {
-				this.tools.Update() ;
+				this.tools.updateCssClasses() ;
 				return true ;
 			}
 
@@ -773,16 +767,16 @@ var Config = require("./SparnaturalConfig.js");
 			this.widgetHtml = selectHtml ;
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
-			this.tools.InitHtml() ;
-			this.tools.Add() ;
+			this.tools.initHtml() ;
+			this.tools.attachHtml() ;
 			this.cssClasses.Created = true ;			
 		} ;	
 		
 		this.reload = function() {
 			this.widgetHtml = null ;
 			this.cssClasses.IsOnEdit = true ;
-			this.tools.ReInitHtml() ;
-			this.tools.Replace() ;
+			this.tools.initHtml() ;
+			this.tools.attachHtml() ;
 			this.cssClasses.Created = true ;
 		} ;		
 	};
@@ -997,6 +991,7 @@ var Config = require("./SparnaturalConfig.js");
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
+			console.log("toto "+this.inputTypeComponent.widgetType);
 			if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
 				if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
 					$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
@@ -1050,7 +1045,7 @@ var Config = require("./SparnaturalConfig.js");
 		
 		this.actions = { 
 			ActionWhere: new ActionWhere(this, specProvider),
-			ActionAnd: new ActionAnd(this, specProvider),
+			ActionAnd: new ActionAnd(this),
 			ActionRemove: new ActionRemove(this, specProvider)
 		} ;
 
@@ -1152,13 +1147,9 @@ var Config = require("./SparnaturalConfig.js");
 			this.widgetHtml = widgetLabel+'<a>+</a>' ;
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
-			if(reload) {
-				this.tools.ReInitHtml() ;
-				this.tools.Replace() ;
-			} else {
-				this.tools.InitHtml() ;
-				this.tools.Add() ;
-			}
+			this.tools.initHtml() ;
+			this.tools.attachHtml() ;
+
 			this.cssClasses.Created = true ;			
 		} ;	
 		
@@ -1167,8 +1158,7 @@ var Config = require("./SparnaturalConfig.js");
 		} ;
 	}	
 	
-	function ActionAnd(GroupContenaire, specProvider) {
-		this.specProvider = specProvider;
+	function ActionAnd(GroupContenaire) {
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = this.ParentComponent ;
 		this.cssClasses = {
@@ -1185,13 +1175,8 @@ var Config = require("./SparnaturalConfig.js");
 			this.widgetHtml = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
-			if(reload) {
-				this.tools.ReInitHtml() ;
-				this.tools.Replace() ;
-			} else {
-				this.tools.InitHtml() ;
-				this.tools.Add() ;
-			}			
+			this.tools.initHtml() ;
+			this.tools.attachHtml() ;		
 			this.cssClasses.Created = true ;			
 		} ;	
 		
@@ -1217,13 +1202,8 @@ var Config = require("./SparnaturalConfig.js");
 			this.widgetHtml = '<a><span class="unselect"><i class="far fa-times-circle"></i></span></a>' ;
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
-			if(reload) {
-				this.tools.ReInitHtml() ;
-				this.tools.Replace() ;
-			} else {
-				this.tools.InitHtml() ;
-				this.tools.Add() ;
-			}			
+			this.tools.initHtml() ;
+			this.tools.attachHtml() ;			
 			this.cssClasses.Created = true ;		
 		} ;	
 		
@@ -1253,7 +1233,7 @@ var Config = require("./SparnaturalConfig.js");
 		
 		this.init = function init(reload = false) {
 			if (!reload && this.cssClasses.Created) {
-				this.tools.Update() ;
+				this.tools.updateCssClasses() ;
 				return true ;
 			}
 			
@@ -1283,14 +1263,9 @@ var Config = require("./SparnaturalConfig.js");
 			}			
 		
 			this.cssClasses.IsOnEdit = true ;
-			if(reload) {
-				this.tools.ReInitHtml() ;
-				this.tools.Replace() ;
-			} else {
-				this.tools = new GenericTools(this) ;
-				this.tools.InitHtml() ;
-				this.tools.Add() ;
-			}
+			this.tools = new GenericTools(this) ;
+			this.tools.initHtml() ;
+			this.tools.attachHtml() ;
 
 			this.widgetComponent.init() ;
 			this.cssClasses.Created = true ;
@@ -1391,29 +1366,18 @@ var Config = require("./SparnaturalConfig.js");
 	
 	function GenericTools(component) {
 		this.component = component ;
-		this.component.inserted = false ;
-		this.component.reinsert = false ;
-		
-		this.AppendComponentHtml = function () {
-			if (!this.component.inserted ) {
-				this.component.html = $(this.component.html).appendTo(this.component.HtmlContainer.html) ;
-				this.component.inserted = true;
-			}
-			if (this.component.reinsert) {
-				var instance = this.component.constructor.name ;
-				this.component.HtmlContainer.html.find('>.'+instance).remove() ;
-				this.component.html = $(this.component.html).appendTo(this.component.HtmlContainer.html) ;
-			}
-		}
 
-		this.Update = function() {
-			this.UpdateStatementsClass() ;
+		this.attachComponentHtml = function () {
+			var instance = this.component.constructor.name ;
+			// remove existing component if already existing
+			this.component.HtmlContainer.html.find('>.'+instance).remove() ;
+			$(this.component.html).appendTo(this.component.HtmlContainer.html) ;
 		}
 		
 		/**
 		 * Updates the CSS classes of an element
 		 **/
-		this.UpdateStatementsClass = function() {
+		this.updateCssClasses = function() {
 			$(this.component.html).removeClass('*') ;
 			for (var item in this.component.cssClasses) {				
 				if (this.component.cssClasses[item] === true) {
@@ -1422,38 +1386,25 @@ var Config = require("./SparnaturalConfig.js");
 					$(this.component.html).removeClass(item) ;
 				}
 			}
-		}
-		
-		this.Add = function() {
-			this.UpdateStatementsClass() ;
-			if (!this.component.inserted) {
-				this.AppendComponentHtml() ;
-			}
-		} 
+		}		
 
-		this.Replace = function() {
-			this.UpdateStatementsClass() ;
-			this.component.reinsert = true ;
-			this.AppendComponentHtml() ;
-		} 
-		
-
-		this.InitHtml = function(reInit = false) {
-			var instance = this.component.constructor.name ;
-			this.component.html = $('<div class="'+instance+'"></div>') ;
+		this.initHtml = function() {
+			var instance = this.component.constructor.name ;			
 			if (this.component.widgetHtml != null) {
-				if(reInit) {
-					this.component.html.find('>.'+instance ).remove() ;
-				}
+				this.component.html = $('<div class="'+instance+'"></div>') ;
+				// remove existing component
+				// this.component.html.find('>.'+instance ).remove();
 				this.component.html.append(this.component.widgetHtml) ; 
 			} else {
 				this.component.html = '';
 			}
 		} 
 
-		this.ReInitHtml = function() {
-			this.InitHtml(true);
-		} 
+		this.Add = function() {
+			this.updateCssClasses() ;
+			this.attachComponentHtml() ;
+		}
+		
 	}
 	
 	
