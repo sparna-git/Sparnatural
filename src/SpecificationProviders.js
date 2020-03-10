@@ -174,16 +174,17 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		return propertyTypes;
 	}
 
-	this.expandQuery = function(sparqlQuery) {
+	this.expandSparql = function(sparql) {
 		for(var i in this.jsonSpecs['@graph']) {
 			var item = this.jsonSpecs['@graph'][i];
+
 			if ( item['path'] != null) {
-					var re = new RegExp("<" + item['@id'] + ">","g");
-					sparqlQuery = sparqlQuery.replace(re, item['path']);
+				var re = new RegExp("<" + item['@id'] + ">","g");
+				sparql = sparql.replace(re, item['path']);
 			}
 		}
-		
-		return sparqlQuery ;
+
+		return sparql;
 	}
 
 	this._inDomainOf = function(objectProperty, classId) {
@@ -257,8 +258,7 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 			} else {
 				return this.jsonSpecs['@context']['@vocab']+id;
 			}
-		}
-		
+		}		
 	}
 
 	this._pushIfNotExist = function(item, items) {

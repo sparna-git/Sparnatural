@@ -463,18 +463,8 @@
 
 			semanticPostProcess = function(queryString, queryJson) {
 				queryString = prefixesPostProcess(queryString, queryJson);
-				queryString = expand(queryString, config);
+				queryString = sparnatural.expandSparql(queryString);
 				return queryString;
-			}
-
-			var expand = function(sparql, config) {
-				$.each( config['@graph'], function( key, val ) {
-					if ( val['path'] != null) {
-							var re = new RegExp("<" + val['@id'] + ">","g");
-							sparql = sparql.replace(re, val['path']);
-					}
-				}) ;
-				return sparql ;
 			}
 
 			var yasqe = YASQE.fromTextArea(document.getElementById("yasqe"), {

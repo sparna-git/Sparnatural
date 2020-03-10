@@ -98,6 +98,7 @@ SELECT ?uri ?count (CONCAT(?labelString, ' (', STR(?count), ')') AS ?label)
 			?domain <${property}> ?uri .
 			?uri a <${range}> .
 		}
+		GROUP BY ?uri
 	}
 	?uri ${this.searchPath} ?labelString .
 	${ (this.language != null) ? `FILTER(lang(?labelString) = "${this.language}")` : "" }
@@ -118,6 +119,7 @@ SELECT ?uri ?count (CONCAT(?labelString, ' (', STR(?count), ')') AS ?label)
 			?domain <${property}> ?uri .
 			?uri a <${range}> .
 		}
+		GROUP BY ?uri
 	}
 	?uri ${this.searchPath} ?labelString .
 	${ (this.language != null) ? `FILTER(lang(?labelString) = "${this.language}")` : "" }
@@ -168,7 +170,9 @@ SELECT ?uri ?count (CONCAT(STR(?uri), ' (', STR(?count), ')') AS ?label)
 		WHERE {
 			?domain a <${domain}> .
 			?domain <${property}> ?uri .
+			# Note how the range criteria is not used in this query
 		}
+		GROUP BY ?uri
 	}
 }
 ORDER BY DESC(?count)

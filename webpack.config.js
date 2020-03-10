@@ -7,18 +7,19 @@ const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
+
 module.exports = {
-  entry: "./src/sparnatural.js",
+  entry: [ "babel-polyfill", "./src/sparnatural.js" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
-    filename: "./sparnatural.js"
+    filename: "sparnatural.js"
   },
   module: {
     rules: [
     	{
-			test: /\.(js|jsx)$/,
-			exclude: /node_modules/,
-			use: { loader: "babel-loader" }
+			 test: /\.(js|jsx)$/,
+			 exclude: /node_modules/,
+			 use: { loader: "babel-loader" }
     	},
     	{
 			test: /\.(sass|scss)$/,
@@ -46,11 +47,12 @@ module.exports = {
 			]
 		},
         {
-            test: /\.(png|jp(e*)g|svg|gif)$/,  
+            test: /\.(png|jp(e*)g|svg|gif)$/,
             use: [{
                 loader: 'url-loader',
                 options: { 
-                    limit: 8000, // Convert images < 8kb to base64 strings
+                    limit: 8000,
+                    // Convert images < 8kb to base64 strings
                     // in case larger images are processed by file-loader
                     name: 'images/[hash]-[name].[ext]'
                 } 
@@ -68,6 +70,11 @@ module.exports = {
           template: __dirname + "/src/wikidata.html",
           inject: 'body'
     }),
+    new HtmlWebpackPlugin({
+    	  filename: 'index-nada.html',
+          template: __dirname + "/src/index-nada.html",
+          inject: 'body'
+    }),
 	new MiniCssExtractPlugin({
 	  filename: "sparnatural.css",
 	  chunkFilename: "[id].css"
@@ -76,9 +83,11 @@ module.exports = {
       { from: 'static' }
     ]),
 	new DashboardPlugin(),
+	/*
 	new webpack.ProvidePlugin({
         datepicker: '@chenfengyuan/datepicke',
 	  }),
+	*/
 	new WebpackBundleSizeAnalyzerPlugin('./webpack-bundle-size-analyzer-report.txt')
 	  
   ],

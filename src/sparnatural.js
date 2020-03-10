@@ -26,6 +26,8 @@ const i18nLabels = {
 };
 
 SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").SimpleJsonLdSpecificationProvider;
+SpecificationProviderFactory = require("./SpecificationProviderFactory.js").SpecificationProviderFactory;
+RDFSpecificationProvider = require("./RDFSpecificationProvider.js").RDFSpecificationProvider ;
 SparqlBifContainsAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SparqlBifContainsAutocompleteAndListHandler;
 SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SimpleSparqlAutocompleteAndListHandler;
 RangeBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").RangeBasedAutocompleteAndListHandler;
@@ -43,9 +45,10 @@ var Config = require("./SparnaturalConfig.js");
 	
     $.fn.Sparnatural = function( options ) {
  
-        var specSearch = {} ;
+    	var specProvider;
+
         var langSearch = {} ;
-        var specProvider;
+        
 		var defaults = {
 			config: 'config/spec-search.json',
 			language: 'en',
@@ -193,51 +196,36 @@ var Config = require("./SparnaturalConfig.js");
 		// merge given options with default values
 		var settings = $.extend( true, {}, defaults, options );
 
-		return this.each(function() {
-            var thisForm = {} ;
-            thisForm._this = $(this) ;
+		this.each(function() {
+            var thisForm = {
+            	_this : $(this),
+            	components : []
+            } ;
 			$(this).addClass('Sparnatural') ;
 			
-			thisForm.components = [] ;
-			
 			langSearch = i18nLabels[settings.language];
-			if(typeof(settings.config) == "object") {
-				// if the config is a JSON object in the page, read it directly
-				specSearch = settings.config ;
-				specProvider = new SimpleJsonLdSpecificationProvider(specSearch, settings.language);
-				initForm(thisForm) ;
-			} else {
-				// otherwise interpret it as a URL, load id and parse the result
-				$.when( loadSpecSearch() ).done(function() {
-					initForm(thisForm) ;
-				});
-			}			
-        });
+
+			var specProviderFactory = new SpecificationProviderFactory();
+
+			specProviderFactory.build(settings.config, settings.language, function(sp) {
+				specProvider = sp;
+				initForm(thisForm);
+			});		
+        });	
 		
-		// loads the config as a URL and parse the content of the URL
-		function loadSpecSearch() {
-			return $.getJSON( settings.config, function( data ) {
-				specSearch = data ;
-				specProvider = new SimpleJsonLdSpecificationProvider(data, settings.language);
-			}).fail(function(response) {
-				console.log("Sparnatural - unable to load config file : " +settings.config);
-				console.log(response);
-			}) ;
-		}		
-		
-		function initForm(thisForm_) {			
+		function initForm(form) {	
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
-			$(thisForm_._this).append(contexte) ;
+			$(form._this).append(contexte) ;
 			
-			var contexte1 = addComponent(thisForm_, contexte.find('ul')) ;
+			var contexte1 = addComponent(form, contexte.find('ul')) ;
 			
-			$(thisForm_._this).find('.nice-select').trigger('click') ;
+			$(form._this).find('.nice-select').trigger('click') ;
 			
-			initGeneralEvent(thisForm_) ;
+			initGeneralEvent(form) ;
 			
 			// triggered when Sparnatural is submitted : generates output SPARQL
 			// query
-			$(thisForm_._this).on('submit', { formObject : thisForm_ }, function (event) {		
+			$(form._this).on('submit', { formObject : form }, function (event) {		
 				event.preventDefault();
 				var qGenerator = new DefaultQueryGenerator(
 					settings.addDistinct,
@@ -269,7 +257,6 @@ var Config = require("./SparnaturalConfig.js");
 		$('li.groupe').on( "mouseleave", function(event) {
 			event.stopImmediatePropagation();
 			$('li.groupe').removeClass('OnHover') ;
-			
 		} );
 		 /*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
 		 
@@ -316,15 +303,16 @@ var Config = require("./SparnaturalConfig.js");
 
 			if(domainId === null) {
 				// if we are on the first class selection
-			 	items = specProvider.getClassesInDomainOfAnyProperty() ;
+			 	items = this.specProvider.getClassesInDomainOfAnyProperty() ;
 			} else {
-				items = specProvider.getConnectedClasses(domainId) ;
+				items = this.specProvider.getConnectedClasses(domainId) ;
 			}
 
-			$.each( items, function( key, val ) {
-				var label = specProvider.getLabel(val) ;
-				var icon = specProvider.getIcon(val) ;
-				var highlightedIcon = specProvider.getHighlightedIcon(val) ;
+			for (var key in items) {
+				var val = items[key];
+				var label = this.specProvider.getLabel(val) ;
+				var icon = this.specProvider.getIcon(val) ;
+				var highlightedIcon = this.specProvider.getHighlightedIcon(val) ;
 
 				// highlighted icon defaults to icon
 				if (!highlightedIcon || 0 === highlightedIcon.length) {
@@ -337,7 +325,7 @@ var Config = require("./SparnaturalConfig.js");
 					selected = 'selected="selected"' ;
 				}
 				list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
-			}) ;
+			}
 
 			var html_list = $( "<select/>", {
 				"class": "my-new-list input-val",
@@ -358,16 +346,18 @@ var Config = require("./SparnaturalConfig.js");
 
 		this.buildPropertySelect = function(domainClassID, rangeClassID, inputID, default_value) {
 			var list = [] ;
-			var items = specProvider.getConnectingProperties(domainClassID,rangeClassID) ;
-			$.each( items, function( key, val ) {
-				var label = specProvider.getLabel(val) ;
+			var items = this.specProvider.getConnectingProperties(domainClassID,rangeClassID) ;
+			
+			for (var key in items) {
+				var val = items[key];
+				var label = this.specProvider.getLabel(val) ;
 				var selected ='';
 				if (default_value == val) {
 					selected = 'selected="selected"' ;
 				}
 				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+'>'+ label + '</option>' );
+			}
 
-			}) ;
 			var html_list = $( "<select/>", {
 				"class": "select-list input-val",
 				"id": inputID,
@@ -1481,7 +1471,15 @@ var Config = require("./SparnaturalConfig.js");
 		}
 	}
 
-}
+	/**
+	 * Expands SPARQL query by reading the config
+	 **/
+    this.expandSparql = function(sparql) {
+		return specProvider.expandSparql(sparql);
+	}
+
+	return this ;
+} // end of Sparnatural function
 
 Object.onArray = function (arrayTosearch, objectTocompare) {
 	var objectTocompare = objectTocompare ;
