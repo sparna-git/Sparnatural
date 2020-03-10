@@ -1400,7 +1400,7 @@ var Config = require("./SparnaturalConfig.js");
 			}
 		} 
 
-		this.Add = function() {
+		this.attachHtml = function() {
 			this.updateCssClasses() ;
 			this.attachComponentHtml() ;
 		}
