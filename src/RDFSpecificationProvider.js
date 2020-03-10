@@ -5,13 +5,23 @@ const rdfDereferencer = require("rdf-dereference").default;
 import {storeStream} from "rdf-store-stream";
 const N3 = require('n3');
 
-const RDFS = {
-	DOMAIN : factory.namedNode("http://www.w3.org/2000/01/rdf-schema#domain"),
-	RANGE : factory.namedNode("http://www.w3.org/2000/01/rdf-schema#range")
+const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+const RDF = {
+	TYPE : factory.namedNode(RDF_NAMESPACE+"type")
 };
 
-const RDF = {
-	TYPE : factory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
+const RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
+const RDFS = {
+	LABEL : factory.namedNode(RDFS_NAMESPACE+"label"),
+	DOMAIN : factory.namedNode(RDFS_NAMESPACE+"domain"),
+	RANGE : factory.namedNode(RDFS_NAMESPACE+"range"),
+	SUBPROPERTY_OF : factory.namedNode(RDFS_NAMESPACE+"subPropertyOf")
+};
+
+const OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
+const OWL = {
+	EQUIVALENT_PROPERTY : factory.namedNode(OWL_NAMESPACE+"equivalentProperty"),
+	EQUIVALENT_CLASS : factory.namedNode(OWL_NAMESPACE+"equivalentClass")
 };
 
 var Config = require('./SparnaturalConfig.js');
@@ -69,15 +79,27 @@ export class RDFSpecificationProvider {
 	}
 
 	getLabel(entityId) {
-		return "toto";
+		return this._readAsLiteralWithLang(entityId, RDFS.LABEL, this.lang)
 	}
 
 	getIcon(classId) {
-		return null;
+		var faIcon = this._readAsLiteral(classId, factory.namedNode(Config.FA_ICON));
+		if(faIcon != null) {
+			// use of fa-fw for fixed-width icons
+			return "<span style='font-size: 170%;' >&nbsp;<i class='" + faIcon + " fa-fw'></i></span>";
+		} else {
+			var icon = this._readAsLiteral(classId, factory.namedNode(Config.ICON));
+			if ( icon != null) {
+				return icon;
+			} else {
+				// this is ugly, just so it aligns with other entries having an icon
+				return "<span style='font-size: 175%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
+			}
+		}
 	}
 
 	getHighlightedIcon(classId) {
-		return null;
+		return this._readAsLiteral(classId, factory.namedNode(Config.HIGHLIGHTED_ICON));
 	}
 
 	getConnectedClasses(classId) {
@@ -133,8 +155,8 @@ export class RDFSpecificationProvider {
 	}
 
 	getObjectPropertyType(objectPropertyId) {
-		var types = this._readRdfTypes(objectPropertyId);
-		
+		var superProperties = this._readAsResource(objectPropertyId, RDFS.SUBPROPERTY_OF);
+
 		var KNOWN_PROPERTY_TYPES = [
 			Config.LIST_PROPERTY,
 			Config.TIME_PERIOD_PROPERTY,
@@ -146,45 +168,110 @@ export class RDFSpecificationProvider {
 		];
 
 		// only return the type if it is a known type
-		for (const aType of types) {
-			if(KNOWN_PROPERTY_TYPES.includes(aType)) {
-				return aType;
+		for (const aSuperProperty of superProperties) {
+			if(KNOWN_PROPERTY_TYPES.includes(aSuperProperty)) {
+				return aSuperProperty;
 			}
 		}
 		
 		return undefined;
 	}
 
-	_readRdfTypes(uri) {
-		var types = [];
-		for (const classQuad of this.store.getQuads(
-			factory.namedNode(uri),
-			RDF.TYPE
-		)) {
-			console.log(classQuad);
-		    types.push(classQuad.object.id);
+	expandSparql(sparql) {
+		// for each owl:equivalentProperty ...
+		var equivalentPropertiesPerProperty = {};
+		this.store.getQuads(
+			undefined,
+			OWL.EQUIVALENT_PROPERTY,
+			undefined
+		).forEach( quad => {
+			// store it if multiple equivalences are declared
+			if(!equivalentPropertiesPerProperty[quad.subject.id]) {
+				equivalentPropertiesPerProperty[quad.subject.id] = [];
+			}
+			equivalentPropertiesPerProperty[quad.subject.id].push(quad.object.id);			
+		});
+		// join the equivalences with a |
+		for (let [property, equivalents] of Object.entries(equivalentPropertiesPerProperty)) {
+			var re = new RegExp("<" + property + ">","g");
+			sparql = sparql.replace(re, "<" + equivalents.join(">|<") + ">");
+		}		
+
+		// for each owl:equivalentClass ...
+		var equivalentClassesPerClass = {};
+		this.store.getQuads(
+			undefined,
+			OWL.EQUIVALENT_CLASS,
+			undefined
+		).forEach( quad => {
+			// store it if multiple equivalences are declared
+			if(!equivalentClassesPerClass[quad.subject.id]) {
+				equivalentClassesPerClass[quad.subject.id] = [];
+			}
+			equivalentClassesPerClass[quad.subject.id].push(quad.object.id);			
+		});
+		// use a VALUES if needed
+		var i = 0;
+		for (let [aClass, equivalents] of Object.entries(equivalentClassesPerClass)) {
+			var re = new RegExp("<" + aClass + ">","g");
+			if(equivalents.length == 1) {
+				sparql = sparql.replace(re, "<" + equivalents[0] + ">");
+			} else {
+				sparql = sparql.replace(re, "?class"+i+" . VALUES ?class"+i+" { <"+ equivalents.join("> <") +"> } ");
+			}
+			i++;
 		}
-		return types;
+
+		// for each equivalentPath
+		var equivalentPathsPerEntity = {};
+		this.store.getQuads(
+			undefined,
+			Config.EQUIVALENT_PATH,
+			undefined
+		).forEach( quad => {
+			var re = new RegExp("<" + quad.subject.id + ">","g");
+			sparql = sparql.replace(re, quad.object.value );			
+		});
+
+		return sparql;
 	}
 
-	_processImports() {
-		const quadStream = this.store.match(
-			undefined,
-			factory.namedNode("http://www.w3.org/2002/07/owl#imports"),
-		  	// other arguments are left undefined
-		);
+	/**
+	 * Reads rdf:type(s) of an entity, and return them as an array
+	 **/
+	_readRdfTypes(uri) {
+		return this._readAsResource(uri, RDF.TYPE);
+	}
 
-		quadStream
-		  .on('error', console.error)
-		  .on('data', (quad) => {
-		    // Handle our quad...		    
-		    /*
-		    console.log(quad.object.id);
-		    rdfDereferencer.dereference(quad.object.id).then(function(quads) {
-		    	console.log(quads);
-		    });
-		    */
-		  });
+	/**
+	 * Reads the given property on an entity, and return values as an array
+	 **/
+	_readAsResource(uri, property) {
+		return this.store.getQuads(
+			factory.namedNode(uri),
+			property,
+			undefined
+		)
+		.map(quad => quad.object.id);
+	}
+
+	_readAsLiteral(uri, property) {
+		return this.store.getQuads(
+			factory.namedNode(uri),
+			property,
+			undefined
+		)
+		.map(quad => quad.object.value);
+	}
+
+	_readAsLiteralWithLang(uri, property, lang) {
+		return this.store.getQuads(
+			factory.namedNode(uri),
+			property,
+			undefined
+		)
+		.filter(quad => (quad.object.language == lang))
+		.map(quad => quad.object.value);
 	}
 
 	_pushIfNotExist(item, items) {

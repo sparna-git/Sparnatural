@@ -54,6 +54,7 @@ class DefaultQueryGenerator {
 
 			var generator = new SparqlGenerator();
 			var generatedQuery = generator.stringify(jsonQuery);
+			
 			// send generated query to callback function
 			callback(generatedQuery, jsonQuery) ;		
 		}

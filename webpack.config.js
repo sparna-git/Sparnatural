@@ -71,8 +71,8 @@ module.exports = {
           inject: 'body'
     }),
     new HtmlWebpackPlugin({
-    	  filename: 'index-turtle.html',
-          template: __dirname + "/src/index-turtle.html",
+    	  filename: 'index-nada.html',
+          template: __dirname + "/src/index-nada.html",
           inject: 'body'
     }),
 	new MiniCssExtractPlugin({
