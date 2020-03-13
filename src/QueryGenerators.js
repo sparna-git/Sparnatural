@@ -66,7 +66,7 @@ class DefaultQueryGenerator {
 			if(
 				($.inArray(formObject.components[i].CriteriaGroup.EndClassWidgetGroup.widgetType, this.WIDGETS_REQUIRING_VALUES) > -1)
 				&&
-				(formObject.components[i].CriteriaGroup.EndClassWidgetGroup.value_selected.length === 0)
+				(formObject.components[i].CriteriaGroup.EndClassWidgetGroup.selectedValues.length === 0)
 			) {
 				continue;
 			} else {
@@ -137,10 +137,10 @@ class DefaultQueryGenerator {
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.widgetType ;
 		
 		if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {
-			if (component.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 1) {
+			if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length == 1) {
 				// if we are in a value selection widget and we have a single value selected
 				// then insert the value directly as the object of the triple						
-				newTriples = this.addTriple(newTriples, subjectVariable, obj, component.CriteriaGroup.EndClassWidgetGroup.value_selected[0]) ;
+				newTriples = this.addTriple(newTriples, subjectVariable, obj, component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0]) ;
 			} else {
 				// otherwise use a variable name as the object of the triple
 				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
@@ -148,7 +148,7 @@ class DefaultQueryGenerator {
 
 			// if no value is selected add a type criteria for the object
 			if (
-					component.CriteriaGroup.EndClassWidgetGroup.value_selected.length == 0
+					component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0
 					&&
 					(
 						this.noTypeCriteriaForObjects == false
@@ -178,40 +178,40 @@ class DefaultQueryGenerator {
 		jsonQuery = this.addInWhere(jsonQuery, newTriples) ;
 		
 		
-		if(component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 0 ) {
+		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 0 ) {
 			var __this = this ;
 			switch (_WidgetType) {					
 			  case Config.LIST_PROPERTY:
-				if (component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
+				if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 1) {
 					// add values clause if we have more than 1 values
 					var jsonValue = this.initValues() ;
-					jsonValue = this.addVariable(jsonValue, objectVariable, component.CriteriaGroup.EndClassWidgetGroup.value_selected)
+					jsonValue = this.addVariable(jsonValue, objectVariable, component.CriteriaGroup.EndClassWidgetGroup.selectedValues)
 					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
 				}
 				break;
 			  case Config.AUTOCOMPLETE_PROPERTY:
-				if (component.CriteriaGroup.EndClassWidgetGroup.value_selected.length > 1) {
+				if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 1) {
 					// add values clause if we have more than 1 values
 					var jsonValue = this.initValues() ;
-					jsonValue = this.addVariable(jsonValue, objectVariable, component.CriteriaGroup.EndClassWidgetGroup.value_selected)
+					jsonValue = this.addVariable(jsonValue, objectVariable, component.CriteriaGroup.EndClassWidgetGroup.selectedValues)
 					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
 				}
 				break;
 				case Config.TIME_PERIOD_PROPERTY:
-				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
+				  $.each(component.CriteriaGroup.EndClassWidgetGroup.selectedValues, function( index, value ) {
 					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
 					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
 				  });
 				  break;
 				case Config.TIME_DATE_PICKER_PROPERTY:
 				case Config.TIME_DATE_DAY_PICKER_PROPERTY:						
-				  $.each(component.CriteriaGroup.EndClassWidgetGroup.value_selected, function( index, value ) {
+				  $.each(component.CriteriaGroup.EndClassWidgetGroup.selectedValues, function( index, value ) {
 					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
 					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
 				  });
 				  break;
 			  	case Config.SEARCH_PROPERTY:
-				  var Texte = component.CriteriaGroup.EndClassWidgetGroup.value_selected[0] ;
+				  var Texte = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0] ;
 				  if(this.specProvider.getSparqlPropertyTypes(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) != -1) {
 				  	jsonQuery = this.updateGraphDbPrefixes(jsonQuery);
 				  	newTriples = this.addTriple(newTriples, "?search", this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#pleinTexte") ;

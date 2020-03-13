@@ -389,9 +389,9 @@ var Config = require("./SparnaturalConfig.js");
 				var ul = $('<ul class="childsList"><div class="lien-top"><span>'+langSearch.Where+'</span></div></ul>').appendTo($(contexte)) ;
 				var parent_li = $(ul).parent('li') ;
 				var n_width = 0;
-				n_width = n_width + GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
-				var t_width = GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
-				$(ul).attr('data-test', GetOffSet( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) );
+				n_width = n_width + getOffset( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
+				var t_width = getOffset( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
+				$(ul).attr('data-test', getOffset( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) );
 				$(ul).find('>.lien-top').css('width', n_width) ;
 				$(parent_li).find('>.link-where-bottom').css('left', t_width) ;
 			} else {
@@ -420,10 +420,6 @@ var Config = require("./SparnaturalConfig.js");
 		thisForm_.components.push({index: new_index, CriteriaGroup: UnCritere });			
 		initGeneralEvent(thisForm_);			
 		return $(gabari) ;
-	}
-
-	function GetOffSet( elem, elemParent ) {
-		return elem.offset().left - $(elemParent).offset().left ;
 	}
 
 	/**
@@ -469,14 +465,14 @@ var Config = require("./SparnaturalConfig.js");
 			$(this.html).parent('li').addClass('completed') ;
 		}
 		
-		this.RemoveCriteria = function() {
+		this.onRemoveCriteria = function() {
 			var index_to_remove = this.id ;
 			
 			$(this.ParentComponent.components).each(function() {
 				var parentOrSibling = findParentOrSiblingCriteria(this.CriteriaGroup.thisForm_, this.index ) ;
 				if ((parentOrSibling != null) && (parentOrSibling.type == 'parent')){
 					if (parentOrSibling.element.id == index_to_remove) {
-						this.CriteriaGroup.RemoveCriteria() ;
+						this.CriteriaGroup.onRemoveCriteria() ;
 					}
 				}
 			}) ;
@@ -535,7 +531,6 @@ var Config = require("./SparnaturalConfig.js");
 	
 	function GroupContenaire() {
 		this.ParentComponent = null ;
-		this.GroupType = null ;
 		this.inputTypeComponent = null ;
 		this.tools = null ;
 		this.widgetHtml = false ;
@@ -571,7 +566,6 @@ var Config = require("./SparnaturalConfig.js");
 
 		this.specProvider = specProvider;
 		this.ParentComponent = CriteriaGroupe ;
-		this.GroupType = 'StartClassGroup' ;
 		this.cssClasses.StartClassGroup = true ;
 		this.cssClasses.Created = false ;
 		
@@ -616,7 +610,6 @@ var Config = require("./SparnaturalConfig.js");
 		this.base = GroupContenaire ;
 		this.base() ;
 		this.ParentComponent = CriteriaGroupe1 ;
-		this.GroupType = 'ObjectPropertyGroup' ;
 		this.cssClasses = {
 			ObjectPropertyGroup : true,
 			Created : false
@@ -773,11 +766,8 @@ var Config = require("./SparnaturalConfig.js");
 		} ;	
 		
 		this.reload = function() {
-			this.widgetHtml = null ;
-			this.cssClasses.IsOnEdit = true ;
-			this.tools.initHtml() ;
-			this.tools.attachHtml() ;
-			this.cssClasses.Created = true ;
+			console.log("reload on ClassTypeId should probably never be called");
+			this.init();
 		} ;		
 	};
 	
@@ -789,7 +779,6 @@ var Config = require("./SparnaturalConfig.js");
 		this.base() ;
 		this.specProvider = specProvider;
 		this.ParentComponent = CriteriaGroupe ;
-		this.GroupType = 'EndClassGroup' ;
 		this.cssClasses = {
 			EndClassGroup : true ,
 			Created : false
@@ -860,7 +849,8 @@ var Config = require("./SparnaturalConfig.js");
 	} ;
 	
 	/**
-	 * Shows the selected values at the end of a criteria/line
+	 * Shows the selected values at the end of a criteria/line,
+	 * and encapsulates the ObjectPropertyTypeWidget to select the values
 	 **/
 	function EndClassWidgetGroup(CriteriaGroupe, settings, specProvider) {
 		this.base = GroupContenaire ;
@@ -868,21 +858,20 @@ var Config = require("./SparnaturalConfig.js");
 		this.settings = settings;
 		this.specProvider = specProvider;
 		this.ParentComponent = CriteriaGroupe ;
-		this.GroupType = 'EndClassWidgetGroup' ;
 		this.cssClasses.EndClassWidgetGroup = true ;
 		this.cssClasses.Created = false ;
-		this.value_selected = [] ;
-		
-		this.detectWidgetType = function () {
-			this.widgetType = this.specProvider.getObjectPropertyType(this.ParentComponent.ObjectPropertyGroup.value_selected);
-		};
+		this.selectedValues = [] ;
 		
 		this.inputTypeComponent = new ObjectPropertyTypeWidget(this, this.settings, specProvider) ;
 
+		/**
+		 * Called when the property/link between domain and range is selected, to init this.
+		 **/
 		this.onObjectPropertyGroupSelected = function() {
 			// Affichage de la ligne des actions 
 			this.ParentComponent.ComponentHtml.addClass('OnEdit') ;
-			this.detectWidgetType() ;
+			// determine widget type
+			// this.widgetType = this.specProvider.getObjectPropertyType(this.ParentComponent.ObjectPropertyGroup.selectedValues);
 			this.inputTypeComponent.HtmlContainer.html = $(this.ParentComponent.EndClassGroup.html).find('.EditComponents') ;
 			
 			if (this.ParentComponent.ActionsGroup.reinsert == true) {
@@ -906,23 +895,23 @@ var Config = require("./SparnaturalConfig.js");
 			
 			var valueDataAttr = $(e.currentTarget).attr('value-data') ;
 
-			for (var item in this.value_selected) {	
+			for (var item in this.selectedValues) {	
 
-				if (Array.isArray(this.value_selected[item])) {
-					var value_data = this.value_selected[item].toString() ;
+				if (Array.isArray(this.selectedValues[item])) {
+					var value_data = this.selectedValues[item].toString() ;
 				} else {
-					var value_data = this.value_selected[item] ;
+					var value_data = this.selectedValues[item] ;
 				}
 
 				if (value_data == valueDataAttr ) {
-					this.value_selected.splice(item, 1); 
+					this.selectedValues.splice(item, 1); 
 				}
 			}
 			$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').show() ;
 
 			$(e.currentTarget).parent('div').remove() ;
 
-			if(this.value_selected.length < 1) {
+			if(this.selectedValues.length < 1) {
 				$(this.ParentComponent.ComponentHtml).removeClass('completed') ;
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').remove() ;
 				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
@@ -948,25 +937,23 @@ var Config = require("./SparnaturalConfig.js");
 
 		// sélection et affichage d'une valeur sélectionnée par un widget de saisie
 		this.onChange = function onChange() {
-			var theValue = this.inputTypeComponent.GetValue() ;
-			var theValueLabel = this.inputTypeComponent.GetValueLabel() ;
+			var theValue = this.inputTypeComponent.getValue() ;
+			var theValueLabel = this.inputTypeComponent.getValueLabel() ;
 			if (theValue == null ) {
 				return false ;
 			}
-			// if the same value is already select, don't do anything
-			if (this.value_selected.length > 0) {
-				if (Object.onArray(this.value_selected, theValue) == true) {
-					return false ;
-				}
+			// if the same value is already selected, don't do anything
+			if (
+				this.selectedValues.length > 0
+				&&
+				Object.onArray(this.selectedValues, theValue) == true
+			) {
+				return false ;
 			}
 			
-			this.value_selected.push(theValue) ;			
+			this.selectedValues.push(theValue) ;			
 			
-			if (Array.isArray(theValue)) {
-				var value_data = theValue.toString() ;
-			} else {
-				var value_data = theValue ;
-			}
+			var value_data = (Array.isArray(theValue))?theValue.toString():theValue;
 
 			this.unselect = $('<span class="unselect" value-data="'+value_data+'"><i class="far fa-times-circle"></i></span>') ;
 			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
@@ -991,7 +978,6 @@ var Config = require("./SparnaturalConfig.js");
 			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			
-			console.log("toto "+this.inputTypeComponent.widgetType);
 			if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
 				if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
 					$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
@@ -1005,11 +991,11 @@ var Config = require("./SparnaturalConfig.js");
 			}
 
 			//Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
-			if (this.value_selected.length == settings.maxOr) {
+			if (this.selectedValues.length == settings.maxOr) {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').hide() ;
 			}
 
-			if (this.value_selected.length > 0 ) {
+			if (this.selectedValues.length > 0 ) {
 				$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			}
 			
@@ -1036,7 +1022,6 @@ var Config = require("./SparnaturalConfig.js");
 		this.base = GroupContenaire ;
 		this.base() ;
 		this.ParentComponent = CriteriaGroupe ;
-		this.GroupType = 'ActionsGroup' ;
 		this.cssClasses = {
 			ActionsGroup : true ,
 			Created : false
@@ -1056,7 +1041,7 @@ var Config = require("./SparnaturalConfig.js");
 				'click',
 				{
 					arg1: this.ParentComponent,
-					arg2: 'RemoveCriteria'
+					arg2: 'onRemoveCriteria'
 				},
 				eventProxiCriteria
 			);
@@ -1075,19 +1060,25 @@ var Config = require("./SparnaturalConfig.js");
 			
 			$(this.actions.ActionWhere.html).find('a').on(
 				'click', 
-				{arg1: this, arg2: 'AddWhere'},
+				{
+					arg1: this,
+					arg2: 'onAddWhere'
+				},
 				eventProxiCriteria
 			);
 			$(this.actions.ActionAnd.html).find('a').on(
 				'click',
-				{arg1: this, arg2: 'AddAnd'},
+				{
+					arg1: this,
+					arg2: 'onAddAnd'
+				},
 				eventProxiCriteria
 			);
 			
 			initGeneralEvent(this.ParentComponent.thisForm_);			
 		}
 		
-		this.AddWhere = function () {	
+		this.onAddWhere = function () {	
 			this.ParentComponent.html.parent('li').addClass('haveWhereChild') ;
 			this.ParentComponent.initCompleted() ;
 			
@@ -1096,16 +1087,18 @@ var Config = require("./SparnaturalConfig.js");
 				this.ParentComponent.Context.contexteReference.HtmlContext
 			) ;
 			
+			// trigger 2 clicks to select the same class as the object class (?)
 			$(new_component).find('.nice-select').trigger('click') ;
 			$(new_component).find('.nice-select').trigger('click') ;
 		}
 
-		this.AddAnd = function () {
+		this.onAddAnd = function () {
 			var new_component = addComponent(
 				this.ParentComponent.thisForm_,
 				this.ParentComponent.Context.contexteReference.AncestorHtmlContext
 			) ;
 			
+			// trigger 2 clicks to select the same class as the current criteria (?)
 			$(new_component).find('.nice-select').trigger('click') ;
 			$(new_component).find('.nice-select').trigger('click') ;
 
@@ -1236,31 +1229,27 @@ var Config = require("./SparnaturalConfig.js");
 				this.tools.updateCssClasses() ;
 				return true ;
 			}
-			
-			var startClassGroup = this.ParentComponent.ParentComponent.StartClassGroup ;
-			var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
 
-			this.widgetType = this.ParentComponent.widgetType  ;
+			// determine widget type
+			this.widgetType = this.specProvider.getObjectPropertyType(this.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected);
+			// if non selectable, simply exit
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
 				return true;
 			}
 
+			// determine label and bit of HTML to select value
+			var classLabel = specProvider.getLabel(this.ParentComponent.ParentComponent.EndClassGroup.value_selected) ;
 			if (this.widgetType == Config.SEARCH_PROPERTY) {
-				// label of the "Search" pseudo-class is inserted here in this case
-				var endLabel = specProvider.getLabel(endClassGroup.value_selected) ;
+				// label of the "Search" pseudo-class is inserted alone in this case
+				var endLabel = classLabel;
 			} else {
-				var endLabel = langSearch.Find+' '+specProvider.getLabel(endClassGroup.value_selected) ;
+				var endLabel = langSearch.Find+' '+ classLabel ;
 			}
 			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 			
+			// init HTML by concatenating bit of HTML + widget HTML
 			this.createWidgetComponentFromWidgetType() ;
 			this.widgetHtml = widgetLabel + this.widgetComponent.html ;
-
-			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-				widgetLabel ='';
-				endLabel ='';
-				this.widgetHtml = null ;
-			}			
 		
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
@@ -1325,14 +1314,18 @@ var Config = require("./SparnaturalConfig.js");
 			}
 		};
 		
-		this.GetValue = function () {
+		this.getValue = function () {
 			return this.widgetComponent.getValue() ;
 		}
 
-		this.GetValueLabel = function () {			
+		this.getValueLabel = function () {			
 			return this.widgetComponent.getValueLabel() ;
 		}
 		
+	}
+
+	function getOffset( elem, elemParent ) {
+		return elem.offset().left - $(elemParent).offset().left ;
 	}
 
 	/**
