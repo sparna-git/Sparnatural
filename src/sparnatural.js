@@ -1031,7 +1031,7 @@ var Config = require("./SparnaturalConfig.js");
 		this.actions = { 
 			ActionWhere: new ActionWhere(this, specProvider),
 			ActionAnd: new ActionAnd(this),
-			ActionRemove: new ActionRemove(this, specProvider)
+			ActionRemove: new ActionRemove(this)
 		} ;
 
 		this.onCreated = function() {
@@ -1178,8 +1178,7 @@ var Config = require("./SparnaturalConfig.js");
 		} ;
 	}	
 	
-	function ActionRemove(GroupContenaire, specProvider) {
-		this.specProvider = specProvider;
+	function ActionRemove(GroupContenaire) {
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = this.ParentComponent ;	
 		this.cssClasses = {
@@ -1187,11 +1186,7 @@ var Config = require("./SparnaturalConfig.js");
 			Created : false
 		}; 
 
-		this.init = function (reload = false) {
-			if (this.ParentComponent.reinsert && !reload)		 {
-				return this.reload() ;
-			}
-			
+		this.init = function () {
 			this.widgetHtml = '<a><span class="unselect"><i class="far fa-times-circle"></i></span></a>' ;
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
@@ -1201,7 +1196,7 @@ var Config = require("./SparnaturalConfig.js");
 		} ;	
 		
 		this.reload = function() {
-			this.init(true);
+			this.init();
 		} ;	
 	}	
 
@@ -1221,8 +1216,6 @@ var Config = require("./SparnaturalConfig.js");
 		this.cssClasses = {
 			Created : false
 		} ;
-		
-		this.statementRemove = false; 
 		
 		this.init = function init(reload = false) {
 			if (!reload && this.cssClasses.Created) {
@@ -1265,9 +1258,6 @@ var Config = require("./SparnaturalConfig.js");
 				this.init(false);
 				return true;
 			}
-			if (this.statementRemove) {
-				this.cssClasses[this.statementRemove] = false ;
-			}
 
 			this.init(true);
 		}
@@ -1277,37 +1267,30 @@ var Config = require("./SparnaturalConfig.js");
 			  case Config.LIST_PROPERTY:
 				this.widgetComponent = new ListWidget(this, this.settings.list) ;
 				this.cssClasses.ListeWidget = true ;
-				this.statementRemove = 'ListeWidget' ;
 				break;
 			  case Config.AUTOCOMPLETE_PROPERTY:
 				this.widgetComponent = new AutoCompleteWidget(this, this.settings.autocomplete) ;
 				this.cssClasses.AutocompleteWidget = true ;
-				this.statementRemove = 'AutocompleteWidget' ;
 			    break;
 			  case Config.TIME_PERIOD_PROPERTY:
 				this.widgetComponent = new DatesWidget(this, this.settings.dates, langSearch) ;
 				this.cssClasses.DatesWidget  = true ;
-				this.statementRemove = 'DatesWidget' ;
 				break;
 			  case Config.SEARCH_PROPERTY:
 				this.widgetComponent = new SearchWidget(this, langSearch) ;
 				this.cssClasses.SearchWidget  = true ;
-				this.statementRemove = 'SearchWidget' ;
 				break;
 			  case Config.TIME_DATE_PICKER_PROPERTY:
 				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, false, langSearch) ;
 				this.cssClasses.TimeDatePickerWidget  = true ;
-				this.statementRemove = 'TimeDatePickerWidget' ;
 				break;
 			  case Config.TIME_DATE_DAY_PICKER_PROPERTY:
 				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, 'day', langSearch) ;
 				this.cssClasses.TimeDatePickerWidget  = true ;
-				this.statementRemove = 'TimeDatePickerWidget' ;
 				break;
 			  case Config.NON_SELECTABLE_PROPERTY:
 			  	this.widgetComponent = new NoWidget(this) ;
 			  	this.cssClasses.NoWidget = true ;
-				this.statementRemove = 'NoWidget' ;
 			  default:
 			  	// TODO : throw Exception
 			  	console.log("Unexpected Widget Type "+this.widgetType)
