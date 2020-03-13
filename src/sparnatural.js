@@ -916,17 +916,22 @@ var Config = require("./SparnaturalConfig.js");
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').remove() ;
 				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
 				$(this.ParentComponent.html).parent('li').removeClass('hideEndClassProperty') ;
+				
+				// re-enable Where action if end class can be connected to others
 				if (this.ParentComponent.EndClassGroup.specProvider.hasConnectedClasses(this.ParentComponent.EndClassGroup.value_selected)) {
 					$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
 				} else {
 					$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
-					}
+				}
+
+				// re-enable selection of property/link if there are multiple choices of properties
 				if ($(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').find('option').length > 1 ) {
 					$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 				} else {
 					$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 				}
-				//On vide les champs de saisie du widget
+
+				// re-init the widget to empty input field
 				this.inputTypeComponent.reload() ;
 			}
 
