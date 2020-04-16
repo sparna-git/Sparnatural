@@ -58,7 +58,6 @@ export class RDFSpecificationProvider {
     }
 
 	getClassesInDomainOfAnyProperty() {
-		console.log("getClassesInDomainOfAnyProperty");
 		const quadsArray = this.store.getQuads(
 			undefined,
 			RDFS.DOMAIN,
@@ -75,6 +74,7 @@ export class RDFSpecificationProvider {
 		    	this._pushIfNotExist(classId, items);	
 		    }		    
 		}
+		console.log("Classes in domain of any property "+items);
 		return items;
 	}
 

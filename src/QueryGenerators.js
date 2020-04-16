@@ -64,7 +64,7 @@ class DefaultQueryGenerator {
 			// if there is no value selected and the widget required one
 			// do not process this component			
 			if(
-				($.inArray(formObject.components[i].CriteriaGroup.EndClassWidgetGroup.widgetType, this.WIDGETS_REQUIRING_VALUES) > -1)
+				($.inArray(formObject.components[i].CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType, this.WIDGETS_REQUIRING_VALUES) > -1)
 				&&
 				(formObject.components[i].CriteriaGroup.EndClassWidgetGroup.selectedValues.length === 0)
 			) {
@@ -134,8 +134,7 @@ class DefaultQueryGenerator {
 			newTriples = this.addTriple(newTriples, subjectVariable, this.typePredicate, start) ;
 		}
 		
-		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.widgetType ;
-		
+		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType ;
 		if ( VALUE_SELECTION_WIDGETS.indexOf(_WidgetType) !== -1 ) {
 			if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length == 1) {
 				// if we are in a value selection widget and we have a single value selected
@@ -168,7 +167,7 @@ class DefaultQueryGenerator {
 				&&
 				// don't add the triple if we are on a fulltext search since this will be part of the
 				// search clause
-				this.specProvider.getSparqlPropertyTypes(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) == -1
+				this.specProvider.getObjectPropertyType(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) == -1
 			) {
 				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
 			}
@@ -212,7 +211,7 @@ class DefaultQueryGenerator {
 				  break;
 			  	case Config.SEARCH_PROPERTY:
 				  var Texte = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0] ;
-				  if(this.specProvider.getSparqlPropertyTypes(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) != -1) {
+				  if(this.specProvider.getObjectPropertyType(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) != -1) {
 				  	jsonQuery = this.updateGraphDbPrefixes(jsonQuery);
 				  	newTriples = this.addTriple(newTriples, "?search", this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#pleinTexte") ;
 				  	newTriples = this.addLiteralTriple(newTriples, "?search", "http://www.ontotext.com/connectors/lucene#query", "text:"+Texte) ;
