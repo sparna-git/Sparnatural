@@ -320,10 +320,7 @@ var Config = require("./SparnaturalConfig.js");
 				}
 				
 				var image = (icon != null)?' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"':'' ;
-				var selected ='';
-				if (default_value == val) {
-					selected = 'selected="selected"' ;
-				}
+				var selected = (default_value == val)?'selected="selected"':'';
 				list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
 			}
 
@@ -351,10 +348,7 @@ var Config = require("./SparnaturalConfig.js");
 			for (var key in items) {
 				var val = items[key];
 				var label = this.specProvider.getLabel(val) ;
-				var selected ='';
-				if (default_value == val) {
-					selected = 'selected="selected"' ;
-				}
+				var selected = (default_value == val)?'selected="selected"':'';
 				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+'>'+ label + '</option>' );
 			}
 
@@ -467,27 +461,27 @@ var Config = require("./SparnaturalConfig.js");
 		
 		this.onRemoveCriteria = function() {
 			var index_to_remove = this.id ;
-			
+			// iterate on every "line" in the query
 			$(this.ParentComponent.components).each(function() {
 				var parentOrSibling = findParentOrSiblingCriteria(this.CriteriaGroup.thisForm_, this.index ) ;
 				if ((parentOrSibling != null) && (parentOrSibling.type == 'parent')){
+					// if the line is a child of the one to remove, remove it too
 					if (parentOrSibling.element.id == index_to_remove) {
 						this.CriteriaGroup.onRemoveCriteria() ;
 					}
 				}
 			}) ;
 			
-			var parentOrSibling = findParentOrSiblingCriteria(this.thisForm_, this.id ) ;			
-			if (parentOrSibling === null) {
-				
-			} else {
-				var dependantComponent = parentOrSibling.element ;
-			}
 			var formObject = this.thisForm_ ;
 			var formContextHtml = this.Context.contexteReference.AncestorHtmlContext;
 			
-			//remove event listeners
+			// fetch parentOrSibling _before_ removing HTML and removing
+			// component from list !!
+			var parentOrSibling = findParentOrSiblingCriteria(this.thisForm_, this.id ) ;
+
+			// remove event listeners
 			this.ComponentHtml.outerHTML = this.ComponentHtml.outerHTML;
+			// remove the HTML
 			$(this.ComponentHtml).remove() ;
 			
 			var iteration_to_remove = false ;
@@ -496,17 +490,21 @@ var Config = require("./SparnaturalConfig.js");
 					iteration_to_remove = i ;
 				}
 			}) ;
+			// remove from list of components
 			this.ParentComponent.components.splice(iteration_to_remove , 1);
 			
 			
 			if (this.ParentComponent.components.length == 0) {
+				// top-level criteria : add first criteria and trigger click on class selection
 				var new_component = addComponent(formObject, formContextHtml) ;			
 				$(new_component).find('.nice-select').trigger('click') ;				
 			} else {
 				if (parentOrSibling !== null) {
+					var dependantComponent = parentOrSibling.element ;
 					if ($(dependantComponent.ComponentHtml).find('li.groupe').length > 0) {
 						
-					} else { //Si pas d'enfant, on reaffiche le where action						
+					} else {
+						//Si pas d'enfant, on reaffiche le where action						
 						if ($(dependantComponent.ComponentHtml).hasClass('haveWhereChild') ) {
 							$(dependantComponent.ComponentHtml).removeClass('haveWhereChild') ;
 							$(dependantComponent.ComponentHtml).removeClass('completed') ;
@@ -515,8 +513,9 @@ var Config = require("./SparnaturalConfig.js");
 					}
 				}
 
+				// re-submit form after deletion
 				initGeneralEvent(formObject) ;
-				$(this.thisForm_._this).trigger( {type:"submit" } ) ;
+				$(this.thisForm_._this).trigger( { type:"submit" } ) ;
 			}
 			
 			return false ;
@@ -1328,7 +1327,7 @@ var Config = require("./SparnaturalConfig.js");
 		
 		if ($(element).parents('li').length > 0) {			
 			dep_id = $($(element).parents('li')[0]).attr('data-index') ;
-			dependant = {type : 'parent'}  ;			
+			dependant = {type : 'parent'}  ;
 		} else {
 			if ($(element).prev().length > 0) {
 				dep_id = $(element).prev().attr('data-index') ;
