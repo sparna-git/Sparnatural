@@ -1213,11 +1213,12 @@ var Config = require("./SparnaturalConfig.js");
 		this.settings = settings;
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = this.ParentComponent ;
-		this.html = '<div class="ObjectPropertyTypeWidget"></div>' ;
+		this.html = '<div></div>' ;
 		this.tools = null ;
 		this.widgetHtml = null ;
 		this.widgetType = null ;		
 		this.cssClasses = {
+			ObjectPropertyTypeWidget : true,
 			Created : false
 		} ;
 		
