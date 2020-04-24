@@ -1,4 +1,4 @@
-var SPARNATURAL_CONFIG_CORE 			=		"http://ontologies.sparna.fr/sparnatural-config-core#";
+var SPARNATURAL_CONFIG_CORE 			=		"http://data.sparna.fr/ontologies/sparnatural-config-core#";
 
 module.exports = Object.freeze({
     SPARNATURAL_CONFIG_CORE			: 		SPARNATURAL_CONFIG_CORE,

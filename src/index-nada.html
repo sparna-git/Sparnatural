@@ -94,23 +94,23 @@
 
 		<script>
 					var config = `
-@prefix : <http://ontologies.sparna.fr/sparnatural-demo-nada#> .
+@prefix : <http://data.sparna.fr/ontologies/sparnatural-demo-nada#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix sparnatural: <http://ontologies.sparna.fr/sparnatural-config-core#> .
-@base <http://ontologies.sparna.fr/sparnatural-demo-nada#> .
+@prefix sparnatural: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@base <http://data.sparna.fr/ontologies/sparnatural-demo-nada#> .
 
-<http://ontologies.sparna.fr/sparnatural-demo-nada#> rdf:type owl:Ontology ;
-                                                      owl:imports <http://ontologies.sparna.fr/sparnatural-config-core> .
+<http://data.sparna.fr/ontologies/sparnatural-demo-nada#> rdf:type owl:Ontology ;
+                                                      owl:imports <http://data.sparna.fr/ontologies/sparnatural-config-core> .
 
 #################################################################
 #    Annotation properties
 #################################################################
 
-###  http://ontologies.sparna.fr/sparnatural-config-core#faIcon
+###  http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon
 sparnatural:faIcon rdf:type owl:AnnotationProperty .
 
 
@@ -118,11 +118,11 @@ sparnatural:faIcon rdf:type owl:AnnotationProperty .
 #    Object Properties
 #################################################################
 
-###  http://ontologies.sparna.fr/sparnatural-config-core#AutocompleteProperty
+###  http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty
 sparnatural:AutocompleteProperty rdf:type owl:ObjectProperty .
 
 
-###  http://ontologies.sparna.fr/sparnatural-demo-nada#articleContenuDansCode
+###  http://data.sparna.fr/ontologies/sparnatural-demo-nada#articleContenuDansCode
 :articleContenuDansCode rdf:type owl:ObjectProperty ;
                         rdfs:subPropertyOf sparnatural:ListProperty ;
                         rdfs:domain :ArticleCodifie ;
@@ -131,7 +131,7 @@ sparnatural:AutocompleteProperty rdf:type owl:ObjectProperty .
                         rdfs:label "contenu dans"@fr .
 
 
-###  http://ontologies.sparna.fr/sparnatural-demo-nada#codeContientArticle
+###  http://data.sparna.fr/ontologies/sparnatural-demo-nada#codeContientArticle
 :codeContientArticle rdf:type owl:ObjectProperty ;
                      rdfs:subPropertyOf sparnatural:AutocompleteProperty ;
                      rdfs:domain :Code ;
@@ -144,14 +144,14 @@ sparnatural:AutocompleteProperty rdf:type owl:ObjectProperty .
 #    Classes
 #################################################################
 
-###  http://ontologies.sparna.fr/sparnatural-demo-nada#ArticleCodifie
+###  http://data.sparna.fr/ontologies/sparnatural-demo-nada#ArticleCodifie
 :ArticleCodifie rdf:type owl:Class ;
                 sparnatural:equivalentPath "legi:CodifiedArticle" ;
                 sparnatural:faIcon "fas fa-list-ol" ;
                 rdfs:label "Article codifié"@fr .
 
 
-###  http://ontologies.sparna.fr/sparnatural-demo-nada#Code
+###  http://data.sparna.fr/ontologies/sparnatural-demo-nada#Code
 :Code rdf:type owl:Class ;
       sparnatural:equivalentPath "legi:CodifiedText" ;
       sparnatural:faIcon "fas fa-book" ;
@@ -196,7 +196,7 @@ sparnatural:AutocompleteProperty rdf:type owl:ObjectProperty .
         
 
 			sparnatural = $('#ui-search').Sparnatural({
-			  	config: config,
+			  	config: 'http://labs.sparna.fr/sparnatural-demo-legilocal/config.ttl',
 			  	language: lang,
 			  	maxDepth: 4,
 				addDistinct: true,
