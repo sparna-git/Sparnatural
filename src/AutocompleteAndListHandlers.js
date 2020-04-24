@@ -89,7 +89,7 @@ ORDER BY ?label
 			sparql = `
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?uri ?count (CONCAT(?labelString, ' (', STR(?count), ')') AS ?label)
+SELECT ?uri ?count (CONCAT(STR(?labelString), ' (', STR(?count), ')') AS ?label)
  WHERE {
 	{
 		SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
@@ -110,7 +110,7 @@ ORDER BY DESC(?count)
 			sparql = `
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?uri ?count (CONCAT(?labelString, ' (', STR(?count), ')') AS ?label)
+SELECT ?uri ?count (CONCAT(STR(?labelString), ' (', STR(?count), ')') AS ?label)
  WHERE {
 	{
 		SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
