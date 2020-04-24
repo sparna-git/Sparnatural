@@ -6,8 +6,9 @@
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:sparnatural-config-core="http://ontologies.sparna.fr/sparnatural-config-core#">
-    <owl:Ontology rdf:about="http://ontologies.sparna.fr/sparnatural-config-core"/>
+     xmlns:sparnatural-config-core="http://ontologies.sparna.fr/sparnatural-config-core#"
+     xmlns:sparnatural-config-core1="http://data.sparna.fr/ontologies/sparnatural-config-core#">
+    <owl:Ontology rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core"/>
     
 
 
@@ -22,35 +23,35 @@
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#equivalentPath -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#equivalentPath -->
 
-    <owl:AnnotationProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#equivalentPath">
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#equivalentPath">
         <rdfs:label xml:lang="en">equivalent path</rdfs:label>
     </owl:AnnotationProperty>
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#faIcon -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon -->
 
-    <owl:AnnotationProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#faIcon">
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon">
         <rdfs:label xml:lang="en">fontawesome icon code</rdfs:label>
-        <rdfs:subPropertyOf rdf:resource="http://ontologies.sparna.fr/sparnatural-config-core#icon"/>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#icon"/>
     </owl:AnnotationProperty>
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#highlightedIcon -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#highlightedIcon -->
 
-    <owl:AnnotationProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#highlightedIcon">
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#highlightedIcon">
         <rdfs:label xml:lang="en">highlighted icon</rdfs:label>
-        <rdfs:subPropertyOf rdf:resource="http://ontologies.sparna.fr/sparnatural-config-core#icon"/>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#icon"/>
     </owl:AnnotationProperty>
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#icon -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#icon -->
 
-    <owl:AnnotationProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#icon">
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#icon">
         <rdfs:label xml:lang="en">icon</rdfs:label>
     </owl:AnnotationProperty>
     
@@ -67,45 +68,59 @@
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#AutocompleteProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty -->
 
-    <owl:ObjectProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#AutocompleteProperty"/>
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty">
+        <rdfs:label xml:lang="en">autocomplete property</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#ListProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty -->
 
-    <owl:ObjectProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#ListProperty"/>
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty">
+        <rdfs:label xml:lang="en">list property</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#NonSelectableProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty -->
 
-    <owl:ObjectProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#NonSelectableProperty"/>
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty">
+        <rdfs:label xml:lang="en">non-selectable property</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#SearchProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty -->
 
-    <owl:ObjectProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#SearchProperty"/>
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty">
+        <rdfs:label xml:lang="en">search property</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#TimeDateDayPickerProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeDateDayPickerProperty -->
 
-    <owl:ObjectProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#TimeDateDayPickerProperty"/>
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeDateDayPickerProperty">
+        <rdfs:label xml:lang="en">time date picker day property</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#TimeDatePickerProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeDatePickerProperty -->
 
-    <owl:ObjectProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#TimeDatePickerProperty"/>
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeDatePickerProperty">
+        <rdfs:label xml:lang="en">time date picker property</rdfs:label>
+    </owl:ObjectProperty>
     
 
 
-    <!-- http://ontologies.sparna.fr/sparnatural-config-core#TimePeriodProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimePeriodProperty -->
 
-    <owl:ObjectProperty rdf:about="http://ontologies.sparna.fr/sparnatural-config-core#TimePeriodProperty"/>
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimePeriodProperty">
+        <rdfs:label xml:lang="en">time period property</rdfs:label>
+    </owl:ObjectProperty>
 </rdf:RDF>
 
 
