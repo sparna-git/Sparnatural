@@ -100,26 +100,26 @@
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeDateDayPickerProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date -->
 
-    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeDateDayPickerProperty">
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date">
         <rdfs:label xml:lang="en">time date picker day property</rdfs:label>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeDatePickerProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Period -->
 
-    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeDatePickerProperty">
-        <rdfs:label xml:lang="en">time date picker property</rdfs:label>
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Period">
+        <rdfs:label xml:lang="en">time period property</rdfs:label>
     </owl:ObjectProperty>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimePeriodProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year -->
 
-    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimePeriodProperty">
-        <rdfs:label xml:lang="en">time period property</rdfs:label>
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year">
+        <rdfs:label xml:lang="en">time date picker property</rdfs:label>
     </owl:ObjectProperty>
 </rdf:RDF>
 

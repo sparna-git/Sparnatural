@@ -17,13 +17,13 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 				||
 				value == "sparnatural:ListProperty"
 				||
-				value == "sparnatural:TimePeriodProperty"
-				||
 				value == "sparnatural:SearchProperty"
 				||
-				value == "sparnatural:TimeDatePickerProperty"
+				value == "sparnatural:TimeProperty-Year"
 				||
-				value == "sparnatural:TimeDateDayPickerProperty"
+				value == "sparnatural:TimeProperty-Date"
+				||
+				value == "sparnatural:TimeProperty-Period"
 				||
 				value == "sparnatural:NonSelectableProperty"
 			) {

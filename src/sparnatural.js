@@ -1278,21 +1278,21 @@ var Config = require("./SparnaturalConfig.js");
 				this.widgetComponent = new AutoCompleteWidget(this, this.settings.autocomplete) ;
 				this.cssClasses.AutocompleteWidget = true ;
 			    break;
-			  case Config.TIME_PERIOD_PROPERTY:
-				this.widgetComponent = new DatesWidget(this, this.settings.dates, langSearch) ;
-				this.cssClasses.DatesWidget  = true ;
-				break;
 			  case Config.SEARCH_PROPERTY:
 				this.widgetComponent = new SearchWidget(this, langSearch) ;
 				this.cssClasses.SearchWidget  = true ;
 				break;
-			  case Config.TIME_DATE_PICKER_PROPERTY:
+			  case Config.TIME_PROPERTY_YEAR:
 				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, false, langSearch) ;
 				this.cssClasses.TimeDatePickerWidget  = true ;
 				break;
-			  case Config.TIME_DATE_DAY_PICKER_PROPERTY:
+			  case Config.TIME_PROPERTY_DATE:
 				this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, 'day', langSearch) ;
 				this.cssClasses.TimeDatePickerWidget  = true ;
+				break;
+			  case Config.TIME_PROPERTY_PERIOD:
+				this.widgetComponent = new DatesWidget(this, this.settings.dates, langSearch) ;
+				this.cssClasses.DatesWidget  = true ;
 				break;
 			  case Config.NON_SELECTABLE_PROPERTY:
 			  	this.widgetComponent = new NoWidget(this) ;
