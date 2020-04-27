@@ -6,30 +6,33 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 
 	this.getObjectPropertyType = function(objectPropertyId) {
 		var objectProperty = this._getResourceById(objectPropertyId);
-		for(var i in objectProperty['@type']) {
-			var value = objectProperty['@type'][i];
+
+		var superProperties = (objectProperty['subPropertyOf'] === "object")?objectProperty['subPropertyOf']:new Array(objectProperty['subPropertyOf']);
+
+		for(var i in superProperties) {
+			var value = superProperties[i];
 			// we expand the value to return full IRIs
 			switch(value) {
-			  case "AutocompleteProperty":
-			    return this._expand("AutocompleteProperty");
+			  case "sparnatural:AutocompleteProperty":
+			    return this._expand("sparnatural:AutocompleteProperty");
 			    break;
-			  case "ListProperty":
-			    return this._expand("ListProperty");
+			  case "sparnatural:ListProperty":
+			    return this._expand("sparnatural:ListProperty");
 			    break;
-			  case "TimePeriodProperty":
-			    return this._expand("TimePeriodProperty");
+			  case "sparnatural:TimePeriodProperty":
+			    return this._expand("sparnatural:TimePeriodProperty");
 			    break;
-			  case "SearchProperty":
-			    return this._expand("SearchProperty");
+			  case "sparnatural:SearchProperty":
+			    return this._expand("sparnatural:SearchProperty");
 				break;
-			  case "TimeDatePickerProperty":
-				return this._expand("TimeDatePickerProperty");
+			  case "sparnatural:TimeDatePickerProperty":
+				return this._expand("sparnatural:TimeDatePickerProperty");
 				break;
-			  case "TimeDateDayPickerProperty":
-				return this._expand("TimeDateDayPickerProperty");
+			  case "sparnatural:TimeDateDayPickerProperty":
+				return this._expand("sparnatural:TimeDateDayPickerProperty");
 				break;
-			  case "NonSelectableProperty":
-				return this._expand("NonSelectableProperty");
+			  case "sparnatural:NonSelectableProperty":
+				return this._expand("sparnatural:NonSelectableProperty");
 				break;
 			  default:
 			  	break;
@@ -162,25 +165,13 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		return items ;
 	}
 
-	this.getSparqlPropertyTypes = function(objectPropertyId) {
-		var propertyTypes = [];
-		var objectProperty = this._getResourceById(objectPropertyId);
-		for(var i in objectProperty['@type']) {
-			var value = objectProperty['@type'][i];
-			if(value.startsWith("sparql:")) {
-				propertyTypes = this._pushIfNotExist(this._expand(value), propertyTypes);
-			}
-		}
-		return propertyTypes;
-	}
-
 	this.expandSparql = function(sparql) {
 		for(var i in this.jsonSpecs['@graph']) {
 			var item = this.jsonSpecs['@graph'][i];
 
-			if ( item['path'] != null) {
+			if ( item['equivalentPath'] != null) {
 				var re = new RegExp("<" + item['@id'] + ">","g");
-				sparql = sparql.replace(re, item['path']);
+				sparql = sparql.replace(re, item['equivalentPath']);
 			}
 		}
 

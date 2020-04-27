@@ -1230,6 +1230,7 @@ var Config = require("./SparnaturalConfig.js");
 
 			// determine widget type
 			this.widgetType = this.specProvider.getObjectPropertyType(this.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected);
+
 			// if non selectable, simply exit
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
 				return true;
