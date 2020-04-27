@@ -11,31 +11,23 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 
 		for(var i in superProperties) {
 			var value = superProperties[i];
-			// we expand the value to return full IRIs
-			switch(value) {
-			  case "sparnatural:AutocompleteProperty":
-			    return this._expand("sparnatural:AutocompleteProperty");
-			    break;
-			  case "sparnatural:ListProperty":
-			    return this._expand("sparnatural:ListProperty");
-			    break;
-			  case "sparnatural:TimePeriodProperty":
-			    return this._expand("sparnatural:TimePeriodProperty");
-			    break;
-			  case "sparnatural:SearchProperty":
-			    return this._expand("sparnatural:SearchProperty");
-				break;
-			  case "sparnatural:TimeDatePickerProperty":
-				return this._expand("sparnatural:TimeDatePickerProperty");
-				break;
-			  case "sparnatural:TimeDateDayPickerProperty":
-				return this._expand("sparnatural:TimeDateDayPickerProperty");
-				break;
-			  case "sparnatural:NonSelectableProperty":
-				return this._expand("sparnatural:NonSelectableProperty");
-				break;
-			  default:
-			  	break;
+
+			if(
+				value == "sparnatural:AutocompleteProperty"
+				||
+				value == "sparnatural:ListProperty"
+				||
+				value == "sparnatural:TimePeriodProperty"
+				||
+				value == "sparnatural:SearchProperty"
+				||
+				value == "sparnatural:TimeDatePickerProperty"
+				||
+				value == "sparnatural:TimeDateDayPickerProperty"
+				||
+				value == "sparnatural:NonSelectableProperty"
+			) {
+				return this._expand(value);
 			}
 		}
 	}
