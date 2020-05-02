@@ -120,7 +120,8 @@
     },
     "faIcon": "http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon",
     "equivalentPath": "http://data.sparna.fr/ontologies/sparnatural-config-core#equivalentPath",
-    "sparnatural": "http://data.sparna.fr/ontologies/sparnatural-config-core#"
+    "sparnatural": "http://data.sparna.fr/ontologies/sparnatural-config-core#",
+    "datasources": "http://data.sparna.fr/ontologies/sparnatural-config-datasources#",
   },
   "@graph": [
     {
@@ -182,6 +183,16 @@
       "faIcon":  "fas fa-calendar-alt"
     },
     {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement",
+      "@type" : "Class",
+      "label": [
+        {"@value" : "Movement","@language" : "en"},
+        {"@value" : "Mouvement","@language" : "fr"}
+      ],
+      "faIcon":  "fas fa-palette",
+      "equivalentPath": "<http://www.w3.org/2002/07/owl#Thing>"
+    },
+    {
       "@id" : "http://dbpedia.org/ontology/country",
       "@type" : "ObjectProperty",
       "subPropertyOf" : "sparnatural:ListProperty",
@@ -238,7 +249,8 @@
         {"@value" : "auteur","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Artwork",
-      "range": "http://dbpedia.org/ontology/Person"
+      "range": "http://dbpedia.org/ontology/Person",
+      "datasource" : "datasources:search_rdfslabel_bifcontains"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#created",
@@ -262,7 +274,8 @@
       ],
       "domain": "http://dbpedia.org/ontology/Person",
       "range": "http://dbpedia.org/ontology/Country",
-      "equivalentPath": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>"
+      "equivalentPath": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>",
+      "datasource": "datasources:list_rdfslabel_count"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#birthPlace",
@@ -323,6 +336,19 @@
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
     },
     {
+      "@id" : "http://dbpedia.org/ontology/movement",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:ListProperty",
+      "label": [
+        {"@value" : "movement","@language" : "en"},
+        {"@value" : "mouvement","@language" : "fr"}
+      ],
+      "domain": "http://dbpedia.org/ontology/Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement",
+      "datasource" : "datasources:list_URI_count"
+
+    },
+    {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#search",
       "@type" : "ObjectProperty",
       "subPropertyOf" : "sparnatural:SearchProperty",
@@ -357,38 +383,7 @@
     	var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
       var sparnatural;
-			$( document ).ready(function($) {		
-
-        var sparqlHandler = new SparqlBifContainsAutocompleteAndListHandler(
-          $('#endpoint').text(),
-          {
-              semanticPostProcess : function(sparql) {
-                  return semanticPostProcess(sparql, null);
-              }
-          },
-          lang,
-          "rdfs:label"
-        );
-        sparqlHandler.listOrder = "count";
-
-        var sparqlHandlerAlpha = new SparqlBifContainsAutocompleteAndListHandler(
-          $('#endpoint').text(),
-          {
-              semanticPostProcess : function(sparql) {
-                  return semanticPostProcess(sparql, null);
-              }
-          },
-          lang,
-          "rdfs:label"
-        );
-        sparqlHandlerAlpha.listOrder = "alphabetical";
-
-        // list order is alphabetical by default, and count-based for the countries
-        var rangeBasedHandler = new RangeBasedAutocompleteAndListHandler(sparqlHandlerAlpha,
-        {
-          "http://dbpedia.org/ontology/Country" : sparqlHandler
-        });
-        
+			$( document ).ready(function($) {		       
 
 			  sparnatural = $('#ui-search').Sparnatural({
 			  	config: config,
@@ -398,8 +393,9 @@
           noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
           sendQueryOnFirstClassSelected: true,
 				  backgroundBaseColor: '2,184,117',
-				  autocomplete : sparqlHandler,
-				  list : rangeBasedHandler,
+				  autocomplete : null,
+				  list : null,
+          defaultEndpoint: "http://fr.dbpedia.org/sparql",
           sparqlPrefixes : {
             "dbpedia" : "http://dbpedia.org/ontology/"
           },

@@ -1,4 +1,6 @@
 
+var Datasources = require("./SparnaturalConfigDatasources.js");
+
 var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 
 	this.jsonSpecs = specs;
@@ -30,6 +32,58 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 				return this._expand(value);
 			}
 		}
+	}
+
+	this.getDatasource = function(propertyOrClassId) {
+		var propertyOrClass = this._getResourceById(propertyOrClassId);
+
+		var datasourceValue = propertyOrClass['datasource'];
+
+		if(datasourceValue == null) {
+			return null;
+		}
+
+		var datasource = {};
+		
+		if (typeof datasourceValue === "object") {
+			// if datasource is an object...
+
+			// Alternative 1 : read optional queryString
+			datasource.queryString = datasourceValue['queryString'];
+
+			// Alternative 2 : queryTemplate + labelPath
+			var queryTemplate = datasourceValue['queryTemplate'];
+
+			if(queryTemplate != null) {
+				var expandedQueryTemplate = this._expand(queryTemplate);
+				var knownQueryTemplate = Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(expandedQueryTemplate);
+				if(knownQueryTemplate != null) {
+					// 2.1 It is known in default Sparnatural ontology
+					datasource.queryTemplate = knownQueryTemplate;
+				} else {
+					// 2.2 Unknown, could be defined in the config itself
+				}
+			}
+
+			// labelPath
+			datasource.labelPath = datasourceValue['labelPath'];
+
+			// labelProperty
+			datasource.labelProperty = datasourceValue['labelProperty'];
+
+			// read optional sparqlEndpointUrl
+			datasource.sparqlEndpointUrl = datasourceValue['sparqlEndpointUrl'];
+		} else {
+			// if datasource is a URI...
+			// look it up in known datasources config
+			datasource = Datasources.DATASOURCES_CONFIG.get(this._expand(datasourceValue));
+			if(datasource == null) {
+				// look it up in the config
+				// TODO
+			}			
+		}
+
+		return datasource;
 	}
 
 	this.getIcon = function(classId) {
@@ -116,24 +170,6 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 		return items ;
 	}
 
-	this._sortItemsByIndex = function(items) {
-		var me = this;
-		items.sort(function(c1, c2) {
-			const c1Value = me.jsonSpecs['@graph'].indexOf(me._getResourceById(c1));
-			const c2Value = me.jsonSpecs['@graph'].indexOf(me._getResourceById(c2));
-
-			let comparison = 0;
-			if (c1Value > c2Value) {
-				comparison = 1;
-			} else if (c1Value < c2Value) {
-				comparison = -1;
-			}
-			return comparison;
-		});
-
-		return items;	
-	}
-
 	/* List of possible ObjectProperty relative to a Class
 		@Id of Class
 		return array of @type ObjectProperty in jsonSpecs 
@@ -169,6 +205,25 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 
 		return sparql;
 	}
+
+	this._sortItemsByIndex = function(items) {
+		var me = this;
+		items.sort(function(c1, c2) {
+			const c1Value = me.jsonSpecs['@graph'].indexOf(me._getResourceById(c1));
+			const c2Value = me.jsonSpecs['@graph'].indexOf(me._getResourceById(c2));
+
+			let comparison = 0;
+			if (c1Value > c2Value) {
+				comparison = 1;
+			} else if (c1Value < c2Value) {
+				comparison = -1;
+			}
+			return comparison;
+		});
+
+		return items;	
+	}
+
 
 	this._inDomainOf = function(objectProperty, classId) {
 		return this._readDomain(objectProperty).indexOf(classId) >= 0;
@@ -226,6 +281,10 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 	}
 
 	this._expand = function(id) {
+		if(id.startsWith("http")) {
+			return id;
+		}
+
 		if(id.indexOf(":") >= 0) {
 			prefix = id.split(":")[0];
 			if(this.jsonSpecs['@context'][prefix] == null) {

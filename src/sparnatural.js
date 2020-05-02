@@ -35,11 +35,15 @@ PropertyBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers
 WikidataAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").WikidataAutocompleteAndListHandler;
 UriOnlyListHandler = require("./AutocompleteAndListHandlers.js").UriOnlyListHandler;
 GraphDbLuceneConnectorSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").GraphDbLuceneConnectorSparqlAutocompleteAndListHandler;
+SparqlTemplateListHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateListHandler;
+SparqlTemplateAutocompleteHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateAutocompleteHandler;
 
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 require("./Widgets.js");
+
 var Config = require("./SparnaturalConfig.js");
+var Datasources = require("./SparnaturalConfigDatasources.js");
 
 (function( $ ) {
 	
@@ -60,6 +64,7 @@ var Config = require("./SparnaturalConfig.js");
 			sendQueryOnFirstClassSelected: false,
 			backgroundBaseColor: '250,136,3',
 			sparqlPrefixes: {},
+			defaultEndpoint: null,
 			
 			autocomplete : {
 				/**
@@ -1229,7 +1234,8 @@ var Config = require("./SparnaturalConfig.js");
 			}
 
 			// determine widget type
-			this.widgetType = this.specProvider.getObjectPropertyType(this.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected);
+			var objectPropertyId = this.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected;
+			this.widgetType = this.specProvider.getObjectPropertyType(objectPropertyId);
 
 			// if non selectable, simply exit
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
@@ -1237,7 +1243,8 @@ var Config = require("./SparnaturalConfig.js");
 			}
 
 			// determine label and bit of HTML to select value
-			var classLabel = specProvider.getLabel(this.ParentComponent.ParentComponent.EndClassGroup.value_selected) ;
+			var rangeClassId = this.ParentComponent.ParentComponent.EndClassGroup.value_selected
+			var classLabel = specProvider.getLabel(rangeClassId) ;
 			if (this.widgetType == Config.SEARCH_PROPERTY) {
 				// label of the "Search" pseudo-class is inserted alone in this case
 				var endLabel = classLabel;
@@ -1247,7 +1254,11 @@ var Config = require("./SparnaturalConfig.js");
 			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 			
 			// init HTML by concatenating bit of HTML + widget HTML
-			this.createWidgetComponentFromWidgetType() ;
+			this.createWidgetComponent(
+				this.widgetType,
+				objectPropertyId,
+				rangeClassId
+			) ;
 			this.widgetHtml = widgetLabel + this.widgetComponent.html ;
 		
 			this.cssClasses.IsOnEdit = true ;
@@ -1268,14 +1279,104 @@ var Config = require("./SparnaturalConfig.js");
 			this.init(true);
 		}
 
-		this.createWidgetComponentFromWidgetType = function createWidgetComponentFromWidgetType() {
-			switch (this.widgetType) {
+		this.createWidgetComponent = function createWidgetComponent(widgetType, objectPropertyId, rangeClassId) {
+			switch (widgetType) {
 			  case Config.LIST_PROPERTY:
-				this.widgetComponent = new ListWidget(this, this.settings.list) ;
+			    var handler = this.settings.list;
+			    // to be passed in anonymous functions
+			    var theSpecProvider = this.specProvider;
+
+			    // determine custom datasource
+			    var datasource = this.specProvider.getDatasource(objectPropertyId);
+
+			    if(datasource == null) {
+			    	// try to read it on the class
+			    	datasource = this.specProvider.getDatasource(rangeClassId);
+			    }
+
+			    if(datasource == null) {
+			    	// datasource still null
+			    	// if a default endpoint was provided, provide default datasource
+			    	if(this.settings.defaultEndpoint != null) {
+				    	datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.LIST_URI_COUNT);
+				    }
+			    }
+
+				if(datasource != null) {
+			    	// if we have a datasource, possibly the default one, provide a config based
+			    	// on a SparqlTemplate, otherwise use the handler provided
+				    handler = new SparqlTemplateListHandler(
+			    		// endpoint URL
+			    		this.settings.defaultEndpoint,
+			    		
+			    		// sparqlPostProcessor
+			    		{
+				            semanticPostProcess : function(sparql) {
+				                return theSpecProvider.expandSparql(sparql);
+				            }
+				        },
+
+			    		// language,
+			    		this.settings.language,
+
+			    		// labelPath
+			    		(datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
+
+			    		// sparql query
+			    		(datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+			    	);
+				}
+
+				this.widgetComponent = new ListWidget(this, handler) ;
 				this.cssClasses.ListeWidget = true ;
 				break;
 			  case Config.AUTOCOMPLETE_PROPERTY:
-				this.widgetComponent = new AutoCompleteWidget(this, this.settings.autocomplete) ;
+			    var handler = this.settings.autocomplete;
+			    // to be passed in anonymous functions
+			    var theSpecProvider = this.specProvider;
+
+			    // determine custom datasource
+			    var datasource = this.specProvider.getDatasource(objectPropertyId);
+
+			    if(datasource == null) {
+			    	// try to read it on the class
+			    	datasource = this.specProvider.getDatasource(rangeClassId);
+			    }
+
+			    if(datasource == null) {
+			    	// datasource still null
+			    	// if a default endpoint was provided, provide default datasource
+			    	if(this.settings.defaultEndpoint != null) {
+				    	datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.SEARCH_RDFSLABEL_STRSTARTS);
+				    }
+			    }
+
+			    if(datasource != null) {
+			    	// if we have a datasource, possibly the default one, provide a config based
+			    	// on a SparqlTemplate, otherwise use the handler provided
+				    handler = new SparqlTemplateAutocompleteHandler(
+			    		// endpoint URL
+			    		this.settings.defaultEndpoint,
+			    		
+			    		// sparqlPostProcessor
+			    		{
+				            semanticPostProcess : function(sparql) {
+				                return theSpecProvider.expandSparql(sparql);
+				            }
+				        },
+
+			    		// language,
+			    		this.settings.language,
+
+			    		// labelPath
+			    		(datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
+
+			    		// sparql query
+			    		(datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+			    	);
+				}
+
+				this.widgetComponent = new AutoCompleteWidget(this, handler) ;
 				this.cssClasses.AutocompleteWidget = true ;
 			    break;
 			  case Config.SEARCH_PROPERTY:

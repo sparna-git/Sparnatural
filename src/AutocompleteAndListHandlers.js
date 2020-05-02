@@ -48,6 +48,120 @@ class AbstractSparqlAutocompleteAndListHandler {
 	}
 }
 
+/**
+ * Handles a list widget based on a provided SPARQL template in which
+ * $domain, $property and $range will be replaced by actual values.
+ **/
+class SparqlTemplateListHandler extends AbstractSparqlAutocompleteAndListHandler {
+
+	constructor(
+		sparqlEndpointUrl,
+		sparqlPostprocessor,
+		language,
+		labelPath,
+		sparqlTemplate
+	) {
+		super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
+		this.sparqlTemplate = sparqlTemplate;
+		this.labelPath = labelPath;
+	}
+
+	/**
+	 * Constructs the SPARQL query to use for autocomplete widget search.
+	 **/
+	_buildAutocompleteSparql(domain, property, range, key) {
+		return null;
+	}
+
+	/**
+	 * Constructs the SPARQL query to use for list widget search.
+	 **/
+	_buildListSparql(domain, property, range) {
+		var sparql = this.sparqlTemplate;
+
+		var reDomain = new RegExp("\\$domain","g");
+		var reProperty = new RegExp("\\$property","g");
+		var reRange = new RegExp("\\$range","g");
+		var reLang = new RegExp("\\$lang","g");
+		
+		sparql = this.sparqlTemplate
+			.replace(reDomain, "<"+ domain +">")
+			.replace(reProperty, "<"+ property +">")
+			.replace(reRange, "<"+ range +">")
+			.replace(reLang, "'"+ this.language +"'");
+
+		if(this.labelPath != null) {
+			var reLabelPath = new RegExp("\\$labelPath","g");
+			sparql = sparql.replace(reLabelPath, this.labelPath );
+		}
+
+		console.log(sparql);
+
+		return sparql;
+	}
+}
+
+
+
+/**
+ * Handles a list widget based on a provided SPARQL template in which
+ * $domain, $property and $range will be replaced by actual values.
+ **/
+class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteAndListHandler {
+
+	constructor(
+		sparqlEndpointUrl,
+		sparqlPostprocessor,
+		language,
+		labelPath,
+		sparqlTemplate
+	) {
+		super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
+		this.sparqlTemplate = sparqlTemplate;
+		this.labelPath = labelPath;
+	}
+
+	/**
+	 * Constructs the SPARQL query to use for autocomplete widget search.
+	 **/
+	_buildAutocompleteSparql(domain, property, range, key) {
+		
+		var sparql = this.sparqlTemplate;
+
+		var reDomain = new RegExp("\\$domain","g");
+		var reProperty = new RegExp("\\$property","g");
+		var reRange = new RegExp("\\$range","g");
+		var reLang = new RegExp("\\$lang","g");
+		var reKey = new RegExp("\\$key","g");
+		
+		sparql = this.sparqlTemplate
+			.replace(reDomain, "<"+ domain +">")
+			.replace(reProperty, "<"+ property +">")
+			.replace(reRange, "<"+ range +">")
+			.replace(reLang, "'"+ this.language +"'")
+			.replace(reKey, "" + key + "");
+
+		if(this.labelPath != null) {
+			var reLabelPath = new RegExp("\\$labelPath","g");
+			sparql = sparql.replace(reLabelPath, this.labelPath );
+		}
+
+		console.log(sparql);
+
+		return sparql;
+	}
+
+	/**
+	 * Constructs the SPARQL query to use for list widget search.
+	 **/
+	_buildListSparql(domain, property, range) {
+		return null;
+	}
+}
+
+
+
+
 
 class SimpleSparqlAutocompleteAndListHandler extends AbstractSparqlAutocompleteAndListHandler {
 
@@ -407,6 +521,7 @@ class PropertyBasedAutocompleteAndListHandler extends RangeBasedAutocompleteAndL
 	}
 }
 
+
 module.exports = {
 	SparqlBifContainsAutocompleteAndListHandler: SparqlBifContainsAutocompleteAndListHandler,
 	SimpleSparqlAutocompleteAndListHandler: SimpleSparqlAutocompleteAndListHandler,
@@ -414,5 +529,7 @@ module.exports = {
 	RangeBasedAutocompleteAndListHandler: RangeBasedAutocompleteAndListHandler,
 	PropertyBasedAutocompleteAndListHandler: PropertyBasedAutocompleteAndListHandler,
 	WikidataAutocompleteAndListHandler: WikidataAutocompleteAndListHandler,
-	GraphDbLuceneConnectorSparqlAutocompleteAndListHandler: GraphDbLuceneConnectorSparqlAutocompleteAndListHandler
+	GraphDbLuceneConnectorSparqlAutocompleteAndListHandler: GraphDbLuceneConnectorSparqlAutocompleteAndListHandler,
+	SparqlTemplateListHandler: SparqlTemplateListHandler,
+	SparqlTemplateAutocompleteHandler: SparqlTemplateAutocompleteHandler
 }
