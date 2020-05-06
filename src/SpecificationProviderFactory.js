@@ -20,14 +20,15 @@ export class SpecificationProviderFactory {
 					$.getJSON( config, function( data ) {
 						callback(new JsonLdSpecificationProvider(data, language));
 					}).fail(function(response) {
-						console.log("Sparnatural - unable to load config file : " +config);
+						console.log("Sparnatural - unable to load JSON config file : " +config);
 						console.log(response);
 					})
 				).done(function() {});
 			} else if(config.includes("ttl")) {
 				$.ajax({
 				  method: "GET",
-				  url: config
+				  url: config,
+				  dataType: "text"
 				})
 				.done( function( configData ) {
 					RDFSpecificationProvider.build(configData, language).then(function(provider) {
@@ -36,7 +37,7 @@ export class SpecificationProviderFactory {
 					});
 				})
 				.fail(function(response) {
-						console.log("Sparnatural - unable to load config file : " +config);
+						console.log("Sparnatural - unable to load RDF config file : " +config);
 						console.log(response);
 				});
 			} else {
