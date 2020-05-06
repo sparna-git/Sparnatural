@@ -1,7 +1,7 @@
 
 var Datasources = require("./SparnaturalConfigDatasources.js");
 
-var SimpleJsonLdSpecificationProvider = function(specs, lang) {
+var JsonLdSpecificationProvider = function(specs, lang) {
 
 	this.jsonSpecs = specs;
 	this.lang = lang;
@@ -314,5 +314,5 @@ var SimpleJsonLdSpecificationProvider = function(specs, lang) {
 }
 
 module.exports = {
-	SimpleJsonLdSpecificationProvider: SimpleJsonLdSpecificationProvider	
+	JsonLdSpecificationProvider: JsonLdSpecificationProvider	
 }

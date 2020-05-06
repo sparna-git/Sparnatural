@@ -25,7 +25,7 @@ const i18nLabels = {
 	"fr": require('./assets/lang/fr.json')
 };
 
-SimpleJsonLdSpecificationProvider = require("./SpecificationProviders.js").SimpleJsonLdSpecificationProvider;
+JsonLdSpecificationProvider = require("./JsonLdSpecificationProvider.js").JsonLdSpecificationProvider;
 SpecificationProviderFactory = require("./SpecificationProviderFactory.js").SpecificationProviderFactory;
 RDFSpecificationProvider = require("./RDFSpecificationProvider.js").RDFSpecificationProvider ;
 SparqlBifContainsAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SparqlBifContainsAutocompleteAndListHandler;
@@ -1400,7 +1400,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			  	this.cssClasses.NoWidget = true ;
 			  default:
 			  	// TODO : throw Exception
-			  	console.log("Unexpected Widget Type "+this.widgetType)
+			  	console.log("Unexpected Widget Type "+widgetType)
 			}
 		};
 		

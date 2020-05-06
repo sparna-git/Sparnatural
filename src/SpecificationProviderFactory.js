@@ -6,7 +6,7 @@ export class SpecificationProviderFactory {
 	build(config, language, callback) {
 		if(typeof(config) == "object") {
 			// if the config is a JSON object in the page, read it directly
-			callback(new SimpleJsonLdSpecificationProvider(config, language));
+			callback(new JsonLdSpecificationProvider(config, language));
 		} else if(config.includes("@prefix") || config.includes("<http")) {
 			// inline Turtle
 			RDFSpecificationProvider.build(config, language).then(function(provider) {
@@ -18,7 +18,7 @@ export class SpecificationProviderFactory {
 				// otherwise interpret it as a URL, load id and parse the result
 				$.when(
 					$.getJSON( config, function( data ) {
-						callback(new SimpleJsonLdSpecificationProvider(data, language));
+						callback(new JsonLdSpecificationProvider(data, language));
 					}).fail(function(response) {
 						console.log("Sparnatural - unable to load config file : " +config);
 						console.log(response);

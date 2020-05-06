@@ -9,7 +9,6 @@ SELECT DISTINCT ?uri (STR(?uri) AS ?label)
 WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
-    # Note how the range criteria is not used in this query
 }
 ORDER BY ?label
 `
@@ -25,7 +24,6 @@ WHERE {
   WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
-    # Note how the range criteria is not used in this query
   }
   GROUP BY ?uri
 }
@@ -41,7 +39,6 @@ SELECT DISTINCT ?uri ?label
 WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
-    # Note how the range criteria is not used in this query
     ?uri $labelPath ?label .
     FILTER(lang(?label) = "" || lang(?label) = $lang)
 }
@@ -59,7 +56,6 @@ WHERE {
   WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
-    # Note how the range criteria is not used in this query
   }
   GROUP BY ?uri
 }
@@ -96,7 +92,6 @@ SELECT DISTINCT ?uri ?label
   ?uri a $range .
   ?uri $labelPath ?label .
   FILTER(lang(?label) = '' || lang(?label) = $lang )
-  # Note the single quote to handle space character
   ?label bif:contains "'$key'" . 
 } 
 ORDER BY ?label
