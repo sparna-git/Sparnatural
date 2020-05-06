@@ -89,6 +89,7 @@
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:label xml:lang="en">non-selectable property</rdfs:label>
     </owl:ObjectProperty>
     
@@ -97,6 +98,7 @@
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:label xml:lang="en">search property</rdfs:label>
     </owl:ObjectProperty>
     
@@ -105,7 +107,16 @@
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:label xml:lang="en">select resource property</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty -->
+
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty">
+        <rdfs:label xml:lang="en">sparnatural property</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -113,6 +124,7 @@
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:label xml:lang="en">time property with a date-picker</rdfs:label>
     </owl:ObjectProperty>
     
@@ -121,6 +133,7 @@
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Period -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Period">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:label xml:lang="en">time property with chronocultural period selection</rdfs:label>
     </owl:ObjectProperty>
     
@@ -129,6 +142,7 @@
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:label xml:lang="en">time property with a year-picker</rdfs:label>
     </owl:ObjectProperty>
 </rdf:RDF>
