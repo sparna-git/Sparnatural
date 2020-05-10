@@ -119,7 +119,7 @@
       "@type": "@id"
     },
     "faIcon": "http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon",
-    "equivalentPath": "http://data.sparna.fr/ontologies/sparnatural-config-core#equivalentPath",
+    "sparqlString": "http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString",
     "sparnatural": "http://data.sparna.fr/ontologies/sparnatural-config-core#",
     "datasources": "http://data.sparna.fr/ontologies/sparnatural-config-datasources#",
   },
@@ -190,7 +190,7 @@
         {"@value" : "Mouvement","@language" : "fr"}
       ],
       "faIcon":  "fas fa-palette",
-      "equivalentPath": "<http://www.w3.org/2002/07/owl#Thing>"
+      "sparqlString": "<http://www.w3.org/2002/07/owl#Thing>"
     },
     {
       "@id" : "http://dbpedia.org/ontology/country",
@@ -213,7 +213,7 @@
       ],
       "domain": "http://dbpedia.org/ontology/Country",
       "range": "http://dbpedia.org/ontology/Museum",
-      "equivalentPath": "^<http://dbpedia.org/ontology/country>"
+      "sparqlString": "^<http://dbpedia.org/ontology/country>"
     },
     {
       "@id" : "http://dbpedia.org/ontology/museum",
@@ -238,7 +238,7 @@
       ],
       "domain": "http://dbpedia.org/ontology/Museum",
       "range": "http://dbpedia.org/ontology/Artwork",
-      "equivalentPath": "^<http://dbpedia.org/ontology/museum>"
+      "sparqlString": "^<http://dbpedia.org/ontology/museum>"
     },
     {
       "@id" : "http://dbpedia.org/ontology/author",
@@ -262,7 +262,7 @@
       ],
       "domain": "http://dbpedia.org/ontology/Person",
       "range": "http://dbpedia.org/ontology/Artwork",
-      "equivalentPath": "^<http://dbpedia.org/ontology/author>"
+      "sparqlString": "^<http://dbpedia.org/ontology/author>"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
@@ -274,7 +274,7 @@
       ],
       "domain": "http://dbpedia.org/ontology/Person",
       "range": "http://dbpedia.org/ontology/Country",
-      "equivalentPath": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>",
+      "sparqlString": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>",
       "datasource": "datasources:list_rdfslabel_count"
     },
     {
@@ -287,7 +287,7 @@
       ],
       "domain": "http://dbpedia.org/ontology/Country",
       "range": "http://dbpedia.org/ontology/Person",
-      "equivalentPath": "^(<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>)"
+      "sparqlString": "^(<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>)"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#diedIn",
@@ -299,7 +299,7 @@
       ],
       "domain": "http://dbpedia.org/ontology/Person",
       "range": "http://dbpedia.org/ontology/Country",
-      "equivalentPath": "<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>"
+      "sparqlString": "<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#deathPlace",
@@ -311,7 +311,7 @@
       ],
       "domain": "http://dbpedia.org/ontology/Country",
       "range": "http://dbpedia.org/ontology/Person",
-      "equivalentPath": "^(<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>)"
+      "sparqlString": "^(<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>)"
     },
     {
       "@id" : "http://dbpedia.org/ontology/deathDate",

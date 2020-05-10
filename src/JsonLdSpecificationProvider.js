@@ -197,9 +197,9 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		for(var i in this.jsonSpecs['@graph']) {
 			var item = this.jsonSpecs['@graph'][i];
 
-			if ( item['equivalentPath'] != null) {
+			if ( item['sparqlString'] != null) {
 				var re = new RegExp("<" + item['@id'] + ">","g");
-				sparql = sparql.replace(re, item['equivalentPath']);
+				sparql = sparql.replace(re, item['sparqlString']);
 			}
 		}
 

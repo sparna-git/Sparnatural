@@ -10,7 +10,7 @@ module.exports = Object.freeze({
 	SEARCH_PROPERTY 				: 		SPARNATURAL_CONFIG_CORE+'SearchProperty',
 	NON_SELECTABLE_PROPERTY 		: 		SPARNATURAL_CONFIG_CORE+'NonSelectableProperty',
 
-	EQUIVALENT_PATH			 		: 		SPARNATURAL_CONFIG_CORE+'equivalentPath',
+	SPARQL_STRING			 		: 		SPARNATURAL_CONFIG_CORE+'sparqlString',
 	ICON					 		: 		SPARNATURAL_CONFIG_CORE+'icon',
 	FA_ICON					 		: 		SPARNATURAL_CONFIG_CORE+'faIcon',
 	HIGHLIGHTED_ICON		 		: 		SPARNATURAL_CONFIG_CORE+'highlightedIcon'

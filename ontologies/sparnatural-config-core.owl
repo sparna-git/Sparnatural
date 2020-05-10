@@ -23,14 +23,6 @@
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#equivalentPath -->
-
-    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#equivalentPath">
-        <rdfs:label xml:lang="en">equivalent path</rdfs:label>
-    </owl:AnnotationProperty>
-    
-
-
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon">
@@ -53,6 +45,20 @@
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#icon">
         <rdfs:label xml:lang="en">icon</rdfs:label>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString">
+        <rdfs:comment xml:lang="en">The equivalent SPARQL string that will be inserted in the final query instead of the annotated property or class.
+When used to annotate a property, this annotation must contain a valid SPARQL property path (usually a single property), expanded without using any prefixes (i.e. full URIs in brackets).
+When used to annotate a class, this annotation must contain a class URI, expanded without using any prefixes (i.e. full URIs in brackets), or a piece of SPARQL that can be inserted instead of the class URI, e.g;
+
+&quot;&lt;http://www.w3.org/2004/02/skos/core#Concept&gt; ; &lt;http://www.w3.org/2004/02/skos/core#inScheme&gt; &lt;http://myScheme&gt; .&quot;</rdfs:comment>
+        <rdfs:label xml:lang="en">sparql string</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
     </owl:AnnotationProperty>
     
 
