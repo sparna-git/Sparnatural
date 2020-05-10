@@ -122,6 +122,7 @@ When used to annotate a class, this annotation must contain a class URI, expande
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty">
+        <rdfs:comment xml:lang="en">Any property used to configure Sparnatural</rdfs:comment>
         <rdfs:label xml:lang="en">sparnatural property</rdfs:label>
     </owl:ObjectProperty>
     
@@ -151,6 +152,41 @@ When used to annotate a class, this annotation must contain a class URI, expande
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:label xml:lang="en">time property with a year-picker</rdfs:label>
     </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#LinkedDataClass -->
+
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#LinkedDataClass">
+        <rdfs:subClassOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass"/>
+        <rdfs:comment xml:lang="en">A LinkedDataClass identifies nodes that are references to remote URIs, e.g. references to DBPedia URIs for indexing of LCSH languages, etc.
+These URIs do not hold any information in the graph, but are useful to connect other entites.
+
+  - a LinkedDataClass cannot appear in initial list
+  - a LinkedDataClass must not yield an rdf:type criteria in the SPARQL query
+  - a LinkedDataClass can still be used to connect entites in the graph with a &quot;WHERE&quot; clause</rdfs:comment>
+        <rdfs:label xml:lang="en">Linked Data Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass -->
+
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass">
+        <rdfs:label xml:lang="en">Any class used to configure Sparnatural.</rdfs:label>
+        <rdfs:label xml:lang="en">Sparnatural class</rdfs:label>
+    </owl:Class>
 </rdf:RDF>
 
 
