@@ -14,6 +14,45 @@
 #    Object Properties
 #################################################################
 
+###  http://data.sparna.fr/ontologies/sparnatural-demo-semapps#interestBy
+:interestBy rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+            rdfs:domain :Person ;
+            rdfs:range :Thema ;
+            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
+            rdfs:label "s'intéresse à"@fr .
+
+
+###  http://data.sparna.fr/ontologies/sparnatural-demo-semapps#interestOf
+:interestOf rdf:type owl:ObjectProperty ;
+            rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+            rdfs:domain :Thema ;
+            rdfs:range :Person ;
+            <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#interestOf>" ;
+            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_person ;
+            rdfs:label "qui intéresse"@fr .
+
+
+###  http://data.sparna.fr/ontologies/sparnatural-demo-semapps#offeredBy
+:offeredBy rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+           rdfs:domain :Skill ;
+           rdfs:range :Person ;
+           <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#offeredBy>" ;
+           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_person ;
+           rdfs:label "possédée par"@fr .
+
+
+###  http://data.sparna.fr/ontologies/sparnatural-demo-semapps#offers
+:offers rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+        rdfs:domain :Person ;
+        rdfs:range :Skill ;
+        <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#offers>" ;
+        <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
+        rdfs:label "a pour compétence"@fr .
+
+
 ###  http://ontologies.sparna.fr/sparnatural-demo-semapps#hasMember
 :hasMember rdf:type owl:ObjectProperty ;
            rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
@@ -24,22 +63,12 @@
            rdfs:label "a pour membre"@fr .
 
 
-###  http://ontologies.sparna.fr/sparnatural-demo-semapps#hasParticipant
-:hasParticipant rdf:type owl:ObjectProperty ;
-                rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                rdfs:domain :Event ;
-                rdfs:range :Person ;
-                <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#hasParticipant>" ;
-                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_person ;
-                rdfs:label "a pour participant"@fr .
-
-
 ###  http://ontologies.sparna.fr/sparnatural-demo-semapps#involvedIn
 :involvedIn rdf:type owl:ObjectProperty ;
             rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
             rdfs:domain :Person ;
             rdfs:range :Project ;
-            <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#isInvolvedIn>" ;
+            <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#involvedIn>" ;
             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
             rdfs:label "involved in"@en ,
                        "participe à"@fr .
@@ -56,16 +85,6 @@
                      "participant"@fr .
 
 
-###  http://ontologies.sparna.fr/sparnatural-demo-semapps#isManagedBy
-:isManagedBy rdf:type owl:ObjectProperty ;
-             rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-             rdfs:domain :Project ;
-             rdfs:range :Person ;
-             <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#isManagedBy>" ;
-             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_person ;
-             rdfs:label "géré par"@fr .
-
-
 ###  http://ontologies.sparna.fr/sparnatural-demo-semapps#isMemberOf
 :isMemberOf rdf:type owl:ObjectProperty ;
             rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
@@ -74,75 +93,6 @@
             <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#memberOf>" ;
             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
             rdfs:label "membre de"@fr .
-
-
-###  http://ontologies.sparna.fr/sparnatural-demo-semapps#isParticipatingIn
-:isParticipatingIn rdf:type owl:ObjectProperty ;
-                   rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-                   rdfs:domain :Person ;
-                   rdfs:range :Event ;
-                   <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#isParticipatingIn>" ;
-                   <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
-                   rdfs:label "participe à"@fr .
-
-
-###  http://ontologies.sparna.fr/sparnatural-demo-semapps#isPartnerOf
-:isPartnerOf rdf:type owl:ObjectProperty ;
-             rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-             rdfs:domain :Organization ;
-             rdfs:range :Organization ;
-             <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#isPartnerOf>" ;
-             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
-             rdfs:label "partenaire"@fr .
-
-
-###  http://ontologies.sparna.fr/sparnatural-demo-semapps#knows
-:knows rdf:type owl:ObjectProperty ;
-       owl:equivalentProperty <http://xmlns.com/foaf/0.1/knows> ;
-       rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-       rdfs:domain :Person ;
-       rdfs:range :Person ;
-       <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_person ;
-       rdfs:label "connait"@fr ,
-                  "knows"@en .
-
-
-###  http://ontologies.sparna.fr/sparnatural-demo-semapps#manages
-:manages rdf:type owl:ObjectProperty ;
-         rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-         rdfs:domain :Person ;
-         rdfs:range :Project ;
-         <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#manages>" ;
-         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
-         rdfs:label "gère"@fr .
-
-
-###  http://ontologies.sparna.fr/sparnatural-demo-semapps#organizedBy
-:organizedBy rdf:type owl:ObjectProperty ;
-             rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-             rdfs:domain :Event ;
-             rdfs:range [ rdf:type owl:Class ;
-                          owl:unionOf ( :Organization
-                                        :Person
-                                      )
-                        ] ;
-             <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#isOrganizedBy>" ;
-             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
-             rdfs:label "organisé par"@fr .
-
-
-###  http://ontologies.sparna.fr/sparnatural-demo-semapps#organizes
-:organizes rdf:type owl:ObjectProperty ;
-           rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
-           rdfs:domain [ rdf:type owl:Class ;
-                         owl:unionOf ( :Organization
-                                       :Person
-                                     )
-                       ] ;
-           rdfs:range :Event ;
-           <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#organizes>" ;
-           <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
-           rdfs:label "organise"@fr .
 
 
 ###  http://ontologies.sparna.fr/sparnatural-demo-semapps#searchPerson
@@ -162,6 +112,22 @@
 #################################################################
 #    Classes
 #################################################################
+
+###  http://data.sparna.fr/ontologies/sparnatural-demo-semapps#Skill
+:Skill rdf:type owl:Class ;
+       rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+       <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fas fa-hand-spock"@fr ;
+       <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#Skill>" ;
+       rdfs:label "Compétence"@fr .
+
+
+###  http://data.sparna.fr/ontologies/sparnatural-demo-semapps#Thema
+:Thema rdf:type owl:Class ;
+       rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+       <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fas fa-comments" ;
+       <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#Thema>" ;
+       rdfs:label "Sujet"@fr .
+
 
 ###  http://ontologies.sparna.fr/sparnatural-demo-semapps#Event
 :Event rdf:type owl:Class ;
