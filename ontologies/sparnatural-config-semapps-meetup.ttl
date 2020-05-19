@@ -19,6 +19,7 @@
             rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
             rdfs:domain :Person ;
             rdfs:range :Thema ;
+            <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#interestBy>" ;
             <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :semapps_list_preferredLabel ;
             rdfs:label "s'intéresse à"@fr .
 
