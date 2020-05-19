@@ -274,7 +274,7 @@ WHERE {
   }
   GROUP BY ?uri
 }
-?uri <rdfs:label> ?theLabel .
+?uri <http://www.w3.org/2000/01/rdf-schema#label> ?theLabel .
 FILTER(lang(?theLabel) = \"\" || lang(?theLabel) = $lang)
 }
 ORDER BY DESC(?count)""" .
