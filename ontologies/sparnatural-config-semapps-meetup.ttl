@@ -150,7 +150,7 @@
               rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty> ;
               rdfs:domain :Person ;
               rdfs:range :Search ;
-              <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "dcterms:title" ;
+              <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://www.w3.org/2000/01/rdf-schema#label>" ;
               rdfs:label "full-text search"@en ,
                          "recherche plein-texte"@fr .
 
