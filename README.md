@@ -104,20 +104,13 @@ The component is configurable using a JSON(-LD) ontology file. Look at the speci
 
 ```json
     {
-      "@id" : "http://www.openarchaeo.fr/explorateur/onto#Site",
+      "@id" : "http://dbpedia.org/ontology/Museum",
       "@type" : "Class",
       "label": [
-        {
-          "@value" : "Site",
-          "@language" : "en"
-        },
-        {
-          "@value" : "Site",
-          "@language" : "fr"
-        }
+        {"@value" : "Museum", "@language" : "en"},
+        {"@value" : "Musée","@language" : "fr"}
       ],
-	  "iconPath":  "assets/icons/noir/site.png",
-	  "highlightedIconPath":  "assets/icons/blanc/site.png"
+      "faIcon":  "fas fa-university"
     },
 ```
 
@@ -125,32 +118,16 @@ The component is configurable using a JSON(-LD) ontology file. Look at the speci
 
 ```json
     {
-      "@id" : "http://www.openarchaeo.fr/explorateur/onto#trouve_dans",
-      "@type" : [
-        "ObjectProperty",
-        "AutocompleteProperty"
-      ],
+      "@id" : "http://dbpedia.org/ontology/museum",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:AutocompleteProperty",
       "label": [
-        {
-          "@value" : "found in",
-          "@language" : "en"
-        },
-        {
-          "@value" : "trouvé dans",
-          "@language" : "fr"
-        }
+        {"@value" : "displayed at","@language" : "en"},
+        {"@value" : "exposée à","@language" : "fr"}
       ],
-      "domain": "http://www.openarchaeo.fr/explorateur/onto#Mobilier",
-      "range": {
-        "@type" : "Class",
-        "unionOf" : {
-          "@list" : [ 
-            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Site"},
-            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#US"},
-            { "@id" : "http://www.openarchaeo.fr/explorateur/onto#Sepulture"}
-          ]
-        }
-      }
+      "domain": "http://dbpedia.org/ontology/Artwork",
+      "range": "http://dbpedia.org/ontology/Museum",
+      "datasource" : "datasources:search_rdfslabel_bifcontains"
     },
 ```
 
@@ -169,22 +146,19 @@ Have a look at `index.html` in the demos folder to see how the component is inte
 
 ## Map the query structure to a different graph structure
 
-_to be written_
-
-Do something like this :
+Map classes or properties in the config to a corresponding SPARQL property path or a corresponding class URI, using the `sparqlString` JSON key, e.g. :
 
 ```
-      var expand = function(sparql, specs) {
-        $.each( specs['@graph'], function( key, val ) {
-          if ( val['@type'] == 'ObjectProperty' || val['@type'] == 'Class') {
-            if ( val['path'] != null) {
-                var re = new RegExp("<" + val['@id'] + ">","g");
-                sparql = sparql.replace(re, val['path']);
-            }
-          }
-        }) ;
-        return sparql ;
-      }
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
+      "@type" : "ObjectProperty",
+      ...
+      "sparqlString": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>",
+    },
 ```
 
-(this should be included in the code of Sparnatural itself.)
+Then call `expandSparql` on the `sparnatural` instance by passing the original SPARQL query, to replace all mentions of original classes and properties URI with the corresponding SPARQL string :
+
+```
+queryString = sparnatural.expandSparql(queryString);
+```
