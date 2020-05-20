@@ -1,0 +1,15 @@
+PREFIX pair: <http://virtual-assembly.org/ontologies/pair#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?nomOrganization ?nomProjet
+WHERE {
+  # Toutes les organisations...
+  ?organization a pair:Organization .
+  # Avec leur nom ...
+  ?organization rdfs:label ?nomOrganization .
+  # qui ont un membre ...
+  ?organization pair:hasMember ?personne .
+  # qui est lui-même impliqué dans un projet
+  ?personne pair:involvedIn ?projet .
+  # dont on récupère le nom
+  ?projet rdfs:label ?nomProjet .
+}
