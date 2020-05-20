@@ -16,5 +16,6 @@ module.exports = Object.freeze({
 	HIGHLIGHTED_ICON		 		: 		SPARNATURAL_CONFIG_CORE+'highlightedIcon',
 
 	SPARNATURAL_CLASS				: 		SPARNATURAL_CONFIG_CORE+'SparnaturalClass',
-	LINKED_DATA_CLASS				: 		SPARNATURAL_CONFIG_CORE+'LinkedDataClass'
+	REMOTE_CLASS					: 		SPARNATURAL_CONFIG_CORE+'RemoteClass',
+	RDFS_LITERAL					: 		"http://www.w3.org/2000/01/rdf-schema#Literal"
 });

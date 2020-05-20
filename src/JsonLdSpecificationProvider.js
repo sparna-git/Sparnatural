@@ -160,8 +160,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 				var domains = this._readDomain(item);
 				for(var i in domains) {
 					var aClass = domains[i]
-					// always exclude LinkedDataClasses from first list
-		    		if(!this.isLinkedDataClass(aClass)) {
+					// always exclude RemoteClasses from first list
+		    		if(!this.isRemoteClass(aClass)) {
 		    			items = this._pushIfNotExist(aClass, items);
 		    		}
 				}
@@ -198,14 +198,30 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return items ;
 	}
 
-	this.isLinkedDataClass = function(classUri) {
+	this.isRemoteClass = function(classUri) {
 		var classEntity = this._getResourceById(classUri);
 
 		if(classEntity['subClassOf']) {
 			var superClasses = (classEntity['subClassOf'] === "object")?classEntity['subClassOf']:new Array(classEntity['subClassOf']);
 			for(var i in superClasses) {
 				var value = superClasses[i];
-				if(this._expand(value) == Config.LINKED_DATA_CLASS) {
+				if(this._expand(value) == Config.REMOTE_CLASS) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	this.isLiteralClass = function(classUri) {
+		var classEntity = this._getResourceById(classUri);
+
+		if(classEntity['subClassOf']) {
+			var superClasses = (classEntity['subClassOf'] === "object")?classEntity['subClassOf']:new Array(classEntity['subClassOf']);
+			for(var i in superClasses) {
+				var value = superClasses[i];
+				if(this._expand(value) == Config.RDFS_LITERAL) {
 					return true;
 				}
 			}

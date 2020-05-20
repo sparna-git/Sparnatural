@@ -149,7 +149,9 @@ class DefaultQueryGenerator {
 					component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0
 					&&
 					(
-						!this.specProvider.isLinkedDataClass(component.CriteriaGroup.EndClassGroup.value_selected)
+						!this.specProvider.isRemoteClass(component.CriteriaGroup.EndClassGroup.value_selected)
+						&&
+						!this.specProvider.isLiteralClass(component.CriteriaGroup.EndClassGroup.value_selected)
 					)
 			) {
 				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;

@@ -79,8 +79,8 @@ export class RDFSpecificationProvider {
 
 		    if(this.getObjectPropertyType(objectPropertyId)) {
 
-		    	// always exclude LinkedDataClasses from first list
-		    	if(!this.isLinkedDataClass(classId)) {
+		    	// always exclude RemoteClasses from first list
+		    	if(!this.isRemoteClass(classId)) {
 		    		if(!this._isUnionClass(classId)) {			    
 					    this._pushIfNotExist(classId, items);	
 				    } else {
@@ -184,11 +184,19 @@ export class RDFSpecificationProvider {
 	}
 
 
-	isLinkedDataClass(classUri) {
+	isRemoteClass(classUri) {
 		return this.store.getQuads(
 			factory.namedNode(classUri),
 			RDFS.SUBCLASS_OF,
-			factory.namedNode(Config.LINKED_DATA_CLASS)
+			factory.namedNode(Config.REMOTE_CLASS)
+		).length > 0;
+	}
+
+	isLiteralClass(classUri) {
+		return this.store.getQuads(
+			factory.namedNode(classUri),
+			RDFS.SUBCLASS_OF,
+			factory.namedNode(Config.RDFS_LITERAL)
 		).length > 0;
 	}
 
