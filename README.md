@@ -32,7 +32,7 @@ Select the type of entity to search...
 
 ![](documentation/2-screenshot-object-type-selection.png)
 
-In this case there is only one possible type of relation between the two "_studied by_", so it gets selected automatically. Then select a value for the related entity, in this case in a dropdown list :
+In this case there is only one possible type of relation that can connect the 2 entities, so it gets selected automatically. Then select a value for the related entity, in this case in a dropdown list :
 
 ![](documentation/3-screenshot-value-selection.png)
 
