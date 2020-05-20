@@ -68,15 +68,29 @@ Sparnatural offers currently 6 ways of selecting a value for a criteria : autoco
 
 ### Autocomplete field
 
+![](documentation/9-autocomplete.png)
+
 ### Dropdown list
+
+![](documentation/10-list.png)
 
 ### String value (text search)
 
+![](documentation/11-search.png)
+
 ### Date range (year or date precision)
+
+![](documentation/12-time-date.png)
 
 ### Date range with search in period name
 
 ### No value selection
+
+This is useful when a type a of entity is used only to navigate the graph, but without the ability to select an instance of these entities.
+
+![](documentation/13-no-value.png)
+
+
 
 
 ## Multilingual
