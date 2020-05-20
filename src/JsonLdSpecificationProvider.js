@@ -1,5 +1,6 @@
 
 var Datasources = require("./SparnaturalConfigDatasources.js");
+var Config = require("./SparnaturalConfig.js");
 
 var JsonLdSpecificationProvider = function(specs, lang) {
 
@@ -158,7 +159,11 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 			if (this._isObjectProperty(item)) {				
 				var domains = this._readDomain(item);
 				for(var i in domains) {
-					items = this._pushIfNotExist(domains[i], items);
+					var aClass = domains[i]
+					// always exclude LinkedDataClasses from first list
+		    		if(!this.isLinkedDataClass(aClass)) {
+		    			items = this._pushIfNotExist(aClass, items);
+		    		}
 				}
 			}
 		}
@@ -191,6 +196,22 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		}
 
 		return items ;
+	}
+
+	this.isLinkedDataClass = function(classUri) {
+		var classEntity = this._getResourceById(classUri);
+
+		if(classEntity['subClassOf']) {
+			var superClasses = (classEntity['subClassOf'] === "object")?classEntity['subClassOf']:new Array(classEntity['subClassOf']);
+			for(var i in superClasses) {
+				var value = superClasses[i];
+				if(this._expand(value) == Config.LINKED_DATA_CLASS) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	this.expandSparql = function(sparql) {

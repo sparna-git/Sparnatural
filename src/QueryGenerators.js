@@ -5,7 +5,7 @@ var Config = require('./SparnaturalConfig.js');
 
 class DefaultQueryGenerator {
 
-	constructor(addDistinct, typePredicate, noTypeCriteriaForObjects, specProvider) {
+	constructor(addDistinct, typePredicate, specProvider) {
 		this.WIDGETS_REQUIRING_VALUES = [
 			Config.SEARCH_PROPERTY,
 			Config.TIME_PERIOD_PROPERTY,
@@ -15,7 +15,6 @@ class DefaultQueryGenerator {
 
 		this.addDistinct = addDistinct;
 		this.typePredicate = typePredicate;
-		this.noTypeCriteriaForObjects = noTypeCriteriaForObjects;
 		this.specProvider = specProvider;
 		this.additionnalPrefixes = {};
 	}
@@ -150,13 +149,7 @@ class DefaultQueryGenerator {
 					component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0
 					&&
 					(
-						this.noTypeCriteriaForObjects == false
-						||
-						(
-							Array.isArray(this.noTypeCriteriaForObjects)
-							&&
-							this.noTypeCriteriaForObjects.indexOf(component.CriteriaGroup.EndClassGroup.value_selected) == -1
-						)
+						!this.specProvider.isLinkedDataClass(component.CriteriaGroup.EndClassGroup.value_selected)
 					)
 			) {
 				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;

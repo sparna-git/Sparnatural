@@ -19,7 +19,8 @@ const RDFS = {
 	LABEL : factory.namedNode(RDFS_NAMESPACE+"label"),
 	DOMAIN : factory.namedNode(RDFS_NAMESPACE+"domain"),
 	RANGE : factory.namedNode(RDFS_NAMESPACE+"range"),
-	SUBPROPERTY_OF : factory.namedNode(RDFS_NAMESPACE+"subPropertyOf")
+	SUBPROPERTY_OF : factory.namedNode(RDFS_NAMESPACE+"subPropertyOf"),
+	SUBCLASS_OF : factory.namedNode(RDFS_NAMESPACE+"subClassOf")
 };
 
 const OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
@@ -77,15 +78,20 @@ export class RDFSpecificationProvider {
 		    var classId = quad.object.id;
 
 		    if(this.getObjectPropertyType(objectPropertyId)) {
-			    if(!this._isUnionClass(classId)) {			    
-				    this._pushIfNotExist(classId, items);	
-			    } else {
-			    	// read union content
-			    	var classesInUnion = this._readUnionContent(classId);
-			    	for (const aUnionClass of classesInUnion) {
-					    this._pushIfNotExist(aUnionClass, items);	
-			    	}
-			    }
+
+		    	// always exclude LinkedDataClasses from first list
+		    	if(!this.isLinkedDataClass(classId)) {
+		    		if(!this._isUnionClass(classId)) {			    
+					    this._pushIfNotExist(classId, items);	
+				    } else {
+				    	// read union content
+				    	var classesInUnion = this._readUnionContent(classId);
+				    	for (const aUnionClass of classesInUnion) {
+						    this._pushIfNotExist(aUnionClass, items);	
+				    	}
+				    }
+		    	}
+			    
 			}
 		}
 		console.log("Classes in domain of any property "+items);
@@ -175,6 +181,15 @@ export class RDFSpecificationProvider {
 		}
 		
 		return undefined;
+	}
+
+
+	isLinkedDataClass(classUri) {
+		return this.store.getQuads(
+			factory.namedNode(classUri),
+			RDFS.SUBCLASS_OF,
+			factory.namedNode(Config.LINKED_DATA_CLASS)
+		).length > 0;
 	}
 
 	expandSparql(sparql) {

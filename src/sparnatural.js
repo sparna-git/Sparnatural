@@ -57,7 +57,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			config: 'config/spec-search.json',
 			language: 'en',
 			addDistinct: false,
-			noTypeCriteriaForObjects: false,
 			typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 			maxDepth: 3,
 			maxOr: 3,
@@ -235,7 +234,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				var qGenerator = new DefaultQueryGenerator(
 					settings.addDistinct,
 					settings.typePredicate,
-					settings.noTypeCriteriaForObjects,
 					specProvider
 				);
 				qGenerator.setPrefixes(settings.sparqlPrefixes);

@@ -13,5 +13,8 @@ module.exports = Object.freeze({
 	SPARQL_STRING			 		: 		SPARNATURAL_CONFIG_CORE+'sparqlString',
 	ICON					 		: 		SPARNATURAL_CONFIG_CORE+'icon',
 	FA_ICON					 		: 		SPARNATURAL_CONFIG_CORE+'faIcon',
-	HIGHLIGHTED_ICON		 		: 		SPARNATURAL_CONFIG_CORE+'highlightedIcon'
+	HIGHLIGHTED_ICON		 		: 		SPARNATURAL_CONFIG_CORE+'highlightedIcon',
+
+	SPARNATURAL_CLASS				: 		SPARNATURAL_CONFIG_CORE+'SparnaturalClass',
+	LINKED_DATA_CLASS				: 		SPARNATURAL_CONFIG_CORE+'LinkedDataClass'
 });
