@@ -14,8 +14,7 @@ To get started :
 
 1. Read the following documentation;
 2. Look at how things work in file `sparnatural-demo-dbpedia/index.html`; 
-   1. **Attention** : make sure you open this open through a web server, e.g. http://localhost/sparnatural-demo-dbpedia/index.html, and *not* by opening the file directly in your browser (`file://...`), otherwise the loading of component specification fails and your will get a blank page;
-3. Look at how the specifications are written by looking at the source of `sparnatural-demo-dbpedia/index.html`
+3. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/Sparnatural/blob/master/sparnatural-demo-dbpedia/index.html#L100)
 4. Adapt `sparnatural-demo-dbpedia/index.html` by changing the configuration and adapting the SPARQL endpoint URL;
 
 # Features
