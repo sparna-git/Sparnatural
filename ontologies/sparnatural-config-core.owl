@@ -26,6 +26,8 @@
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon">
+        <rdfs:comment xml:lang="en">The code of an icon in FontAwesome to be associated to an entity, typically a class. Exemples of codes are &quot;fas fa-user&quot; or &quot;fas fa-file&quot;.
+Search in FontAwesome at https://fontawesome.com/icons</rdfs:comment>
         <rdfs:label xml:lang="en">fontawesome icon code</rdfs:label>
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#icon"/>
     </owl:AnnotationProperty>
@@ -35,6 +37,7 @@
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#highlightedIcon -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#highlightedIcon">
+        <rdfs:comment xml:lang="en">An icon to be associated to an entity when it is highlighted. This is typically the same icon as the one indicated in the icon property, but with inversed colors.</rdfs:comment>
         <rdfs:label xml:lang="en">highlighted icon</rdfs:label>
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#icon"/>
     </owl:AnnotationProperty>
@@ -44,6 +47,7 @@
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#icon -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#icon">
+        <rdfs:comment xml:lang="en">An icon to be associated with an entity, typically a class. This can be the URL to an icon file or another mean to specify an icon, like a reference in an icon library.</rdfs:comment>
         <rdfs:label xml:lang="en">icon</rdfs:label>
     </owl:AnnotationProperty>
     
@@ -78,6 +82,9 @@ When used to annotate a class, this annotation must contain a class URI, expande
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which an autocomplete search field should be displayed to select a value.
+
+The autocomplete suggestions can be configured using a datasource annotation, that will typically hold a reference to a SPARQL query to generate the autocomplete suggestions.</rdfs:comment>
         <rdfs:label xml:lang="en">autocomplete property</rdfs:label>
     </owl:ObjectProperty>
     
@@ -87,6 +94,9 @@ When used to annotate a class, this annotation must contain a class URI, expande
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a dropdown list should be displayed to select a value.
+
+The list options can be configured using a datasource annotation, that will typically hold a reference to a SPARQL query to generate the list entries.</rdfs:comment>
         <rdfs:label xml:lang="en">list property</rdfs:label>
     </owl:ObjectProperty>
     
@@ -96,6 +106,9 @@ When used to annotate a class, this annotation must contain a class URI, expande
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which no value selection widget (list, autocomplete field, etc.) should be displayed. Only a &quot;Where&quot; option is available to traverse the entity in the graph.
+
+This is typically used to link entities that serve as connectors between other entities but that don&apos;t have intrinsic selection criterias by themselves, such as blank nodes or Activities in the CIDOC-CRM model.</rdfs:comment>
         <rdfs:label xml:lang="en">non-selectable property</rdfs:label>
     </owl:ObjectProperty>
     
@@ -105,6 +118,7 @@ When used to annotate a class, this annotation must contain a class URI, expande
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a simple text field should be used to enter a string to be searched for.</rdfs:comment>
         <rdfs:label xml:lang="en">search property</rdfs:label>
     </owl:ObjectProperty>
     
@@ -114,6 +128,8 @@ When used to annotate a class, this annotation must contain a class URI, expande
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">The super-property of any property in a Sparnatural configuration for which a resource can be selected, typically through list, or autocomplete field.
+Do not use this super-property directly, use its subproperties.</rdfs:comment>
         <rdfs:label xml:lang="en">select resource property</rdfs:label>
     </owl:ObjectProperty>
     
@@ -132,6 +148,7 @@ When used to annotate a class, this annotation must contain a class URI, expande
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a datepicker with day/month/year precision should be displayed to select the beginning and end of a time span.</rdfs:comment>
         <rdfs:label xml:lang="en">time property with a date-picker</rdfs:label>
     </owl:ObjectProperty>
     
@@ -141,6 +158,7 @@ When used to annotate a class, this annotation must contain a class URI, expande
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Period">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a datepicker with year precision combined with an autocomplete field on period name should be displayed to select the beginning and end of a time span.</rdfs:comment>
         <rdfs:label xml:lang="en">time property with chronocultural period selection</rdfs:label>
     </owl:ObjectProperty>
     
@@ -150,6 +168,7 @@ When used to annotate a class, this annotation must contain a class URI, expande
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a datepicker with year precision should be displayed to select the beginning and end of a time span.</rdfs:comment>
         <rdfs:label xml:lang="en">time property with a year-picker</rdfs:label>
     </owl:ObjectProperty>
     
@@ -196,7 +215,12 @@ These URIs do not hold any information in the graph, but are useful to connect o
         <rdfs:subClassOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass"/>
         <rdfs:comment xml:lang="en">The class rdfs:Literal is the class of literal values such as strings and integers. Property values such as textual strings are examples of RDF literals.
 
-This is rdfs:Literal, provided here for being able to refer to it in Protege.</rdfs:comment>
+This is rdfs:Literal, provided here for being able to refer to it in Protege.
+
+  - a Literal cannot appear in initial list
+  - a Literal must not yield an rdf:type criteria in the SPARQL query
+  - a Literal canot be used to connect entites in the graph with a &quot;WHERE&quot; clause
+  - a Literal can only be used to place FILTER criterias on it</rdfs:comment>
         <rdfs:label xml:lang="en">Literal</rdfs:label>
     </owl:Class>
 </rdf:RDF>

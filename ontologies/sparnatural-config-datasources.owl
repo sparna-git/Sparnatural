@@ -333,6 +333,23 @@ ORDER BY DESC(?count)</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_URI_contains -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_URI_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
+WHERE {
+  ?domain a $domain .
+  ?domain $property ?uri .
+  ?uri a $range .
+  BIND(STR(?uri) AS ?label)
+  FILTER(CONTAINS(LCASE(?label), LCASE(&quot;$key&quot;))) 
+} 
+ORDER BY ?label</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains">
@@ -370,6 +387,35 @@ ORDER BY ?label</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_URI_contains -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_URI_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_URI_contains"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_strstarts">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://purl.org/dc/terms/title"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_strstarts">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_bifcontains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_bifcontains">
@@ -386,6 +432,16 @@ ORDER BY ?label</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_strstarts">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
     </owl:NamedIndividual>
 </rdf:RDF>
 
