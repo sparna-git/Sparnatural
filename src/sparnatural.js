@@ -1345,7 +1345,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    	// datasource still null
 			    	// if a default endpoint was provided, provide default datasource
 			    	if(this.settings.defaultEndpoint != null) {
-				    	datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.SEARCH_RDFSLABEL_STRSTARTS);
+				    	datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.SEARCH_URI_CONTAINS);
 				    }
 			    }
 

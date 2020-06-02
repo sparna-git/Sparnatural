@@ -98,6 +98,21 @@ ORDER BY ?label
 `
 );
 
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+SPARNATURAL_CONFIG_DATASOURCES+"query_search_URI_contains", 
+`
+SELECT DISTINCT ?uri ?label
+WHERE {
+  ?domain a $domain .
+  ?domain $property ?uri .
+  ?uri a $range .
+  BIND(STR(?uri) AS ?label)
+  FILTER(CONTAINS(LCASE(?label), LCASE("$key"))) 
+} 
+ORDER BY ?label
+`
+);
+
 
 var DATASOURCES_CONFIG = new Map();
 
@@ -163,9 +178,28 @@ SPARNATURAL_CONFIG_DATASOURCES+"search_rdfslabel_strstarts", {
 	labelProperty : "http://www.w3.org/2000/01/rdf-schema#label"
 });
 DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_foafname_strstarts", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_strstarts"),
+	labelProperty : "http://xmlns.com/foaf/0.1/name"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_skospreflabel_strstarts", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_strstarts"),
+	labelProperty : "http://www.w3.org/2004/02/skos/core#prefLabel"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_dctermstitle_strstarts", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_strstarts"),
+	labelProperty : "http://purl.org/dc/terms/title"
+});
+DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"search_rdfslabel_bifcontains", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_bifcontains"),
 	labelProperty : "http://www.w3.org/2000/01/rdf-schema#label"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_URI_contains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_URI_contains")
 });
 
 
@@ -186,6 +220,9 @@ module.exports = Object.freeze({
 	QUERY_LIST_URI_COUNT 			: 		SPARNATURAL_CONFIG_DATASOURCES+'query_list_URI_count',
 	QUERY_LIST_LABEL_ALPHA 			: 		SPARNATURAL_CONFIG_DATASOURCES+'query_list_label_alpha',
 	QUERY_LIST_LABEL_COUNT 			: 		SPARNATURAL_CONFIG_DATASOURCES+'query_list_label_count',
+	QUERY_SEARCH_LABEL_STRSTARTS	: 		SPARNATURAL_CONFIG_DATASOURCES+'query_search_label_starstarts',
+	QUERY_SEARCH_LABEL_BITCONTAINS	: 		SPARNATURAL_CONFIG_DATASOURCES+'query_search_label_bitcontains',
+	QUERY_SEARCH_URI_CONTAINS		: 		SPARNATURAL_CONFIG_DATASOURCES+'query_search_URI_contains',
 
 	LIST_URI_ALPHA 		 			: 		SPARNATURAL_CONFIG_DATASOURCES+'list_URI_alpha',
 	LIST_URI_COUNT 		 			: 		SPARNATURAL_CONFIG_DATASOURCES+'list_URI_count',
@@ -199,6 +236,11 @@ module.exports = Object.freeze({
 	LIST_DCTERMSTITLE_COUNT 		: 		SPARNATURAL_CONFIG_DATASOURCES+'list_dctermstitle_count',
 
 	SEARCH_RDFSLABEL_STRSTARTS 		: 		SPARNATURAL_CONFIG_DATASOURCES+'search_rdfslabel_strstarts',
+	SEARCH_FOAFNAME_STRSTARTS 		: 		SPARNATURAL_CONFIG_DATASOURCES+'search_foafname_strstarts',
+	SEARCH_SKOSPREFLABEL_STRSTARTS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_skospreflabel_strstarts',
+	SEARCH_DCTERMSTITLE_STRSTARTS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_dctermstitle_strstarts',
+	SEARCH_URI_CONTAINS			 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_URI_contains',
+	SEARCH_RDFSLABEL_BIFCONTAINS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_rdfslabel_bifcontains',
 
 	QUERY_STRINGS_BY_QUERY_TEMPLATE	: 		QUERY_STRINGS_BY_QUERY_TEMPLATE,
 	DATASOURCES_CONFIG				: 		DATASOURCES_CONFIG
