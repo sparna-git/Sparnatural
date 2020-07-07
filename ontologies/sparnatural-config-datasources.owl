@@ -254,11 +254,33 @@ This is typically the default behavior for a list without a datasource specified
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their schema:name ordered alphabetically based on this property.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their schema:name ordered by the descending number of times the entity is used as a value.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
-        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their skos:prefLabel ordered alphabetically based on this property.</rdfs:comment>
     </owl:NamedIndividual>
