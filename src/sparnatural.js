@@ -1305,7 +1305,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    	// on a SparqlTemplate, otherwise use the handler provided
 				    handler = new SparqlTemplateListHandler(
 			    		// endpoint URL
-			    		(this.datasource.sparqlEndpointUrl != null)?this.datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+			    		(datasource.sparqlEndpointUrl != null)?datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
 			    		
 			    		// sparqlPostProcessor
 			    		{
@@ -1354,7 +1354,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    	// on a SparqlTemplate, otherwise use the handler provided
 				    handler = new SparqlTemplateAutocompleteHandler(
 			    		// endpoint URL
-			    		(this.datasource.sparqlEndpointUrl != null)?this.datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+			    		(datasource.sparqlEndpointUrl != null)?datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
 			    		
 			    		// sparqlPostProcessor
 			    		{

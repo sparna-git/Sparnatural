@@ -296,7 +296,16 @@ export class RDFSpecificationProvider {
 						// 2.1 It is known in default Sparnatural ontology
 						datasource.queryTemplate = knownQueryTemplate;
 					} else {
-						// 2.2 Unknown, could be defined in the config itself
+						// 2.2 Unknown, read the query string
+						var queryStrings = this._readAsResource(theQueryTemplate, Datasources.QUERY_STRING);
+						if(queryStrings.length > 0) {
+							var queryString = queryStrings[0];
+							datasource.queryTemplate = 
+							(queryString.startsWith('"') && queryString.endsWith('"'))
+								?queryString.substring(1,queryString.length-1)
+								:queryString
+							;
+						}
 					}
 
 					// labelPath
@@ -310,13 +319,17 @@ export class RDFSpecificationProvider {
 			    	if(labelProperties.length > 0) {
 			    		datasource.labelProperty = labelProperties[0];	
 			    	}
+		    	}
 
-		    		// read the query string	
+		    	// read optional sparqlEndpointUrl
+		    	var sparqlEndpointUrls = this._readAsLiteral(datasourceQuad.object.id, Datasources.SPARQL_ENDPOINT_URL);
+		    	if(sparqlEndpointUrls.length > 0) {
+		    		datasource.sparqlEndpointUrl = sparqlEndpointUrls[0];	
 		    	}	
 		    }
 		}
 
-		console.log("Returning datasource");
+		console.log("Returning following datasource");
 		console.log(datasource);
 
 		return datasource;

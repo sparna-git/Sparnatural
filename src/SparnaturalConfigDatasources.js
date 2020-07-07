@@ -225,6 +225,7 @@ module.exports = Object.freeze({
     // annotation and data properties
 	DATASOURCE 			 			: 		SPARNATURAL_CONFIG_DATASOURCES+'datasource',
 	LABEL_PATH 			 			: 		SPARNATURAL_CONFIG_DATASOURCES+'labelPath',
+	LABEL_PROPERTY 			 		: 		SPARNATURAL_CONFIG_DATASOURCES+'labelProperty',
 	QUERY_STRING 			 		: 		SPARNATURAL_CONFIG_DATASOURCES+'queryString',
 	SPARQL_ENDPOINT_URL	 			: 		SPARNATURAL_CONFIG_DATASOURCES+'sparqlEndpointUrl',
 
