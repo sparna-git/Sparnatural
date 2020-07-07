@@ -8,9 +8,9 @@ class DefaultQueryGenerator {
 	constructor(addDistinct, typePredicate, specProvider) {
 		this.WIDGETS_REQUIRING_VALUES = [
 			Config.SEARCH_PROPERTY,
-			Config.TIME_PERIOD_PROPERTY,
-			Config.TIME_DATE_PICKER_PROPERTY,
-			Config.TIME_DATE_PICKER_PROPERTY
+			Config.TIME_PROPERTY_PERIOD,
+			Config.TIME_PROPERTY_YEAR,
+			Config.TIME_PROPERTY_DATE
 		] ;
 
 		this.addDistinct = addDistinct;
@@ -109,10 +109,10 @@ class DefaultQueryGenerator {
 		if (subjectVariableIndex == 0) {
 			subjectVariable = "?this";
 		} else {
-			subjectVariable = '?'+this.localName(start)+''+subjectVariableIndex ;
+			subjectVariable = '?'+this.localName(start).replace("-", "_")+''+subjectVariableIndex ;
 		}
 		if (end != null) {
-			var objectVariable = '?'+this.localName(end)+''+objectVarIndex ;
+			var objectVariable = '?'+this.localName(end).replace("-", "_")+''+objectVarIndex ;
 		} else {
 			var objectVariable = null ;
 		}
@@ -191,14 +191,14 @@ class DefaultQueryGenerator {
 					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
 				}
 				break;
-				case Config.TIME_PERIOD_PROPERTY:
+				case Config.TIME_PROPERTY_PERIOD:
 				  $.each(component.CriteriaGroup.EndClassWidgetGroup.selectedValues, function( index, value ) {
 					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
 					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
 				  });
 				  break;
-				case Config.TIME_DATE_PICKER_PROPERTY:
-				case Config.TIME_DATE_DAY_PICKER_PROPERTY:						
+				case Config.TIME_PROPERTY_YEAR:
+				case Config.TIME_PROPERTY_DATE:						
 				  $.each(component.CriteriaGroup.EndClassWidgetGroup.selectedValues, function( index, value ) {
 					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
 					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
