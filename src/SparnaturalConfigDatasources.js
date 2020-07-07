@@ -171,6 +171,17 @@ SPARNATURAL_CONFIG_DATASOURCES+"list_foafname_count", {
 	labelProperty : "http://xmlns.com/foaf/0.1/name"
 });
 
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"list_schemaname_alpha", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_list_label_alpha"),
+	labelProperty : "http://schema.org/name"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"list_schemaname_count", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_list_label_count"),
+	labelProperty : "http://schema.org/name"
+});
+
 
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"search_rdfslabel_strstarts", {
@@ -191,6 +202,11 @@ DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"search_dctermstitle_strstarts", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_strstarts"),
 	labelProperty : "http://purl.org/dc/terms/title"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_schemaname_strstarts", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_strstarts"),
+	labelProperty : "http://schema.org/name"
 });
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"search_rdfslabel_bifcontains", {
