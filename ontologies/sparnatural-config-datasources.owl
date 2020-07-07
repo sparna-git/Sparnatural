@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
-<rdf:RDF xmlns="http://ontologies.sparna.fr/sparnatural-config-core#"
-     xml:base="http://ontologies.sparna.fr/sparnatural-config-core"
+<rdf:RDF xmlns="http://ontologies.sparna.fr/sparnatural-config-datasources#"
+     xml:base="http://ontologies.sparna.fr/sparnatural-config-datasources"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-     xmlns:sparnatural-config-core="http://ontologies.sparna.fr/sparnatural-config-core#"
-     xmlns:sparnatural-config-core1="http://data.sparna.fr/ontologies/sparnatural-config-core#"
+     xmlns:sparnatural-config-core="http://data.sparna.fr/ontologies/sparnatural-config-core#"
      xmlns:sparnatural-config-datasources="http://data.sparna.fr/ontologies/sparnatural-config-datasources#">
+     
     <owl:Ontology rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources">
         <owl:imports rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core"/>
     </owl:Ontology>
