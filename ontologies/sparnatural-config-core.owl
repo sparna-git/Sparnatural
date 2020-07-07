@@ -203,7 +203,7 @@ These URIs do not hold any information in the graph, but are useful to connect o
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass -->
 
     <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass">
-        <rdfs:comment xml:lang="en">Any class used to configure Sparnatural.</rdfs:label>
+        <rdfs:comment xml:lang="en">Any class used to configure Sparnatural.</rdfs:comment>
         <rdfs:label xml:lang="en">Sparnatural class</rdfs:label>
     </owl:Class>
     
