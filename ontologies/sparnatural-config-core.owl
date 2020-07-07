@@ -7,7 +7,6 @@
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:sparnatural-config-core="http://data.sparna.fr/ontologies/sparnatural-config-core#">
-     
     <owl:Ontology rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core"/>
     
 
@@ -185,17 +184,17 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#RemoteEntity -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#NotInstantiatedClass -->
 
-    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#RemoteEntity">
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#NotInstantiatedClass">
         <rdfs:subClassOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass"/>
-        <rdfs:comment xml:lang="en">A Remote Entity identifies nodes that are references to remote URIs, e.g. references to DBPedia URIs for indexing of LCSH languages, etc.
+        <rdfs:comment xml:lang="en">A &quot;Not-Instantiated-Class&quot; regroups all classes that are references to remote URIs, e.g. references to DBPedia URIs for indexing of LCSH languages, etc.
 These URIs do not hold any information in the graph, but are useful to connect other entites.
 
-  - a Remote Entity cannot appear in initial list
-  - a Remote Entity must not yield an rdf:type criteria in the SPARQL query
-  - a Remote Entity can still be used to connect entites in the graph with a &quot;WHERE&quot; clause</rdfs:comment>
-        <rdfs:label xml:lang="en">Remote Entity</rdfs:label>
+  - a Not-Instantiated-Class cannot appear in initial list
+  - a Not-Instantiated-Class must not yield an rdf:type criteria in the SPARQL query
+  - a Not-Instantiated-Class can still be used to connect entites in the graph with a &quot;WHERE&quot; clause</rdfs:comment>
+        <rdfs:label xml:lang="en">Not Instantiated Class</rdfs:label>
     </owl:Class>
     
 
