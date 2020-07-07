@@ -205,7 +205,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 			var superClasses = (classEntity['subClassOf'] === "object")?classEntity['subClassOf']:new Array(classEntity['subClassOf']);
 			for(var i in superClasses) {
 				var value = superClasses[i];
-				if(this._expand(value) == Config.REMOTE_CLASS) {
+				if(this._expand(value) == Config.NOT_INSTANTIATED_CLASS) {
 					return true;
 				}
 			}
