@@ -481,6 +481,17 @@ ORDER BY ?label</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_strstarts">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
+        <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key at the beginning of their schema:name using the STRSTARTS SPARQL function.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_strstarts -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_strstarts">
