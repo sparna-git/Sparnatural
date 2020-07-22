@@ -89,6 +89,16 @@ The autocomplete suggestions can be configured using a datasource annotation, th
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#GraphDBSearchProperty -->
+
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#GraphDBSearchProperty">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for that will act like search properties but will generate GraphDB specific SPARQL criteria to search in a Lucene connector (i.e. using http://www.ontotext.com/connectors/lucene#query, etc.)</rdfs:comment>
+        <rdfs:label xml:lang="en">search property in GraphDB</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty">

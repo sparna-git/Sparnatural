@@ -170,6 +170,7 @@ export class RDFSpecificationProvider {
 			Config.TIME_PROPERTY_DATE,
 			Config.AUTOCOMPLETE_PROPERTY,
 			Config.SEARCH_PROPERTY,
+			Config.GRAPHDB_SEARCH_PROPERTY,
 			Config.NON_SELECTABLE_PROPERTY
 		];
 
@@ -310,7 +311,7 @@ export class RDFSpecificationProvider {
 
 					// labelPath
 					var labelPaths = this._readAsLiteral(datasourceQuad.object.id, Datasources.LABEL_PATH);
-			    	if(queryStrings.length > 0) {
+			    	if(labelPaths.length > 0) {
 			    		datasource.labelPath = labelPaths[0];	
 			    	}	
 

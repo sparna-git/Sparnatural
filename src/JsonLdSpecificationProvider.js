@@ -22,6 +22,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 				||
 				value == "sparnatural:SearchProperty"
 				||
+				value == "sparnatural:GraphDBSearchProperty"
+				||
 				value == "sparnatural:TimeProperty-Year"
 				||
 				value == "sparnatural:TimeProperty-Date"

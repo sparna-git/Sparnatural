@@ -55,6 +55,8 @@ class DefaultQueryGenerator {
 			var generatedQuery = generator.stringify(jsonQuery);
 			
 			return { "generatedQuery" : generatedQuery, "jsonQuery" : jsonQuery } ;		
+		} else {
+			return null;
 		}
 	}
 
@@ -88,9 +90,9 @@ class DefaultQueryGenerator {
 		var SPARQL_GRAPHDB_SEARCH_PROPERTY = 'sparql:GraphDBSearchProperty';
 
 
-		var start = component.CriteriaGroup.StartClassGroup.value_selected ;
-		var obj = component.CriteriaGroup.ObjectPropertyGroup.value_selected ;
-		var end = component.CriteriaGroup.EndClassGroup.value_selected ; 
+		var domainClass = component.CriteriaGroup.StartClassGroup.value_selected ;
+		var property = component.CriteriaGroup.ObjectPropertyGroup.value_selected ;
+		var rangeClass = component.CriteriaGroup.EndClassGroup.value_selected ; 
 		
 		var dependantDe = this.GetDependantCriteria(formObject, index) ;
 		// get index of subject and object variables
@@ -106,13 +108,14 @@ class DefaultQueryGenerator {
 		}
 
 		// name start and end variables
+		// dashes should be replaced
 		if (subjectVariableIndex == 0) {
 			subjectVariable = "?this";
 		} else {
-			subjectVariable = '?'+this.localName(start).replace("-", "_")+''+subjectVariableIndex ;
+			subjectVariable = '?'+this.localName(domainClass).replace("-", "_")+''+subjectVariableIndex ;
 		}
-		if (end != null) {
-			var objectVariable = '?'+this.localName(end).replace("-", "_")+''+objectVarIndex ;
+		if (rangeClass != null) {
+			var objectVariable = '?'+this.localName(rangeClass).replace("-", "_")+''+objectVarIndex ;
 		} else {
 			var objectVariable = null ;
 		}
@@ -128,9 +131,9 @@ class DefaultQueryGenerator {
 		}
 		
 		// list of triples to be inserted in the query
-		var newTriples = this.initTriple() ;
+		var newBasicGraphPattern = this.initBasicGraphPattern() ;
 		if (addStartClass) {
-			newTriples = this.addTriple(newTriples, subjectVariable, this.typePredicate, start) ;
+			newBasicGraphPattern.triples.push(this.buildTriple(subjectVariable, this.typePredicate, domainClass)) ;
 		}
 		
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType ;
@@ -138,10 +141,10 @@ class DefaultQueryGenerator {
 			if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length == 1) {
 				// if we are in a value selection widget and we have a single value selected
 				// then insert the value directly as the object of the triple						
-				newTriples = this.addTriple(newTriples, subjectVariable, obj, component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0]) ;
+				newBasicGraphPattern.triples.push(this.buildTriple(subjectVariable, property, component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0])) ;
 			} else {
 				// otherwise use a variable name as the object of the triple
-				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
+				newBasicGraphPattern.triples.push(this.buildTriple(subjectVariable, property, objectVariable)) ;
 			}
 
 			// if no value is selected add a type criteria for the object
@@ -154,7 +157,7 @@ class DefaultQueryGenerator {
 						!this.specProvider.isLiteralClass(component.CriteriaGroup.EndClassGroup.value_selected)
 					)
 			) {
-				newTriples = this.addTriple(newTriples, objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected) ;
+				newBasicGraphPattern.triples.push(this.buildTriple(objectVariable, this.typePredicate, component.CriteriaGroup.EndClassGroup.value_selected)) ;
 			}
 		} else {
 			if (
@@ -162,14 +165,15 @@ class DefaultQueryGenerator {
 				&&
 				// don't add the triple if we are on a fulltext search since this will be part of the
 				// search clause
-				this.specProvider.getObjectPropertyType(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) == -1
+				// this.specProvider.getObjectPropertyType(property).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) == -1
+				_WidgetType != Config.GRAPHDB_SEARCH_PROPERTY
 			) {
-				newTriples = this.addTriple(newTriples, subjectVariable, obj, objectVariable) ;
+				newBasicGraphPattern.triples.push(this.buildTriple(subjectVariable, property, objectVariable)) ;
 			}
 			
 		}
 		
-		jsonQuery = this.addInWhere(jsonQuery, newTriples) ;
+		jsonQuery.where.push(newBasicGraphPattern) ;
 		
 		
 		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 0 ) {
@@ -178,46 +182,47 @@ class DefaultQueryGenerator {
 			  case Config.LIST_PROPERTY:
 				if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 1) {
 					// add values clause if we have more than 1 values
-					var jsonValue = this.initValues() ;
-					jsonValue = this.addVariable(jsonValue, objectVariable, component.CriteriaGroup.EndClassWidgetGroup.selectedValues)
-					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
+					var jsonValues = this.initValues() ;
+					jsonValues = this.addVariable(jsonValues, objectVariable, component.CriteriaGroup.EndClassWidgetGroup.selectedValues)
+					jsonQuery.where.push(jsonValues) ;
 				}
 				break;
 			  case Config.AUTOCOMPLETE_PROPERTY:
 				if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 1) {
 					// add values clause if we have more than 1 values
-					var jsonValue = this.initValues() ;
-					jsonValue = this.addVariable(jsonValue, objectVariable, component.CriteriaGroup.EndClassWidgetGroup.selectedValues)
-					jsonQuery = this.addInWhere(jsonQuery, jsonValue) ;
+					var jsonValues = this.initValues() ;
+					jsonValues = this.addVariable(jsonValues, objectVariable, component.CriteriaGroup.EndClassWidgetGroup.selectedValues)
+					jsonQuery.where.push(jsonValues) ;
 				}
 				break;
-				case Config.TIME_PROPERTY_PERIOD:
-				  $.each(component.CriteriaGroup.EndClassWidgetGroup.selectedValues, function( index, value ) {
-					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
-					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
-				  });
-				  break;
-				case Config.TIME_PROPERTY_YEAR:
-				case Config.TIME_PROPERTY_DATE:						
-				  $.each(component.CriteriaGroup.EndClassWidgetGroup.selectedValues, function( index, value ) {
-					  jsonFilter = __this.initFilterTime(value.start, value.stop, objectVariable) ;
-					  jsonQuery = __this.addInWhere(jsonQuery, jsonFilter) ;
-				  });
-				  break;
-			  	case Config.SEARCH_PROPERTY:
-				  var Texte = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0] ;
-				  if(this.specProvider.getObjectPropertyType(obj).indexOf(SPARQL_GRAPHDB_SEARCH_PROPERTY) != -1) {
-				  	jsonQuery = this.updateGraphDbPrefixes(jsonQuery);
-				  	newTriples = this.addTriple(newTriples, "?search", this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#pleinTexte") ;
-				  	newTriples = this.addLiteralTriple(newTriples, "?search", "http://www.ontotext.com/connectors/lucene#query", "text:"+Texte) ;
-				  	newTriples = this.addTriple(newTriples, "?search", "http://www.ontotext.com/connectors/lucene#entities", subjectVariable) ;
-				  } else {				  	
-					jsonFilter = this.initFilterSearch(Texte, objectVariable) ;
-					jsonQuery = this.addInWhere(jsonQuery, jsonFilter) ;
+			  case Config.TIME_PROPERTY_PERIOD:
+			  case Config.TIME_PROPERTY_YEAR:
+			  case Config.TIME_PROPERTY_DATE:
+				  for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {
+				  	var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
+				  	jsonQuery.where.push(
+					  	this.initFilterTime(value.start, value.stop, objectVariable)
+					) ;
 				  }
-
-				break;
-			  default:						
+				  break;
+			  case Config.SEARCH_PROPERTY:
+				  var searchKey = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0] ;			  	
+				  jsonFilter = this.initFilterSearch(searchKey, objectVariable) ;
+				  jsonQuery.where.push(jsonFilter) ;
+				  break;
+			  case Config.GRAPHDB_SEARCH_PROPERTY:
+				  var searchKey = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0] ;
+				  jsonQuery = this.updateGraphDbPrefixes(jsonQuery);
+				  var connectorName = this.localName(rangeClass);
+				  var fieldName = this.localName(property);
+				  var searchVariable = subjectVariable+"Search";
+				  newBasicGraphPattern.triples.push(this.buildTriple(searchVariable, this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#"+connectorName)) ;
+				  // add literal triple
+				  newBasicGraphPattern.triples.push(this.buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#query", fieldName+":"+searchKey, true)) ;
+				  newBasicGraphPattern.triples.push(this.buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#entities", subjectVariable)) ;
+				  break;
+			  default:
+			  	console.log('Unknown widget type when generating SPARQL : '+_WidgetType);						
 			}						
 		}	
 
@@ -271,7 +276,7 @@ class DefaultQueryGenerator {
 		return jsonQuery;
 	}
 	
-	initTriple() {			
+	initBasicGraphPattern() {			
 		return {
 				"type": "bgp",
 				"triples": []
@@ -286,16 +291,8 @@ class DefaultQueryGenerator {
 	}
 
 	initFilterTime(StartYear, EndYear, index) {
-		var filters = new Array ;
-		var filter = {
-			"type": "filter",
-			"expression": {
-				"type": 'operation',
-				"operator": "&&",
-				"args": []
-			}
-		} ;
 		
+		var filters = new Array ;
 		if (StartYear != null) {
 			filters.push( {
 				"type": "operation",
@@ -316,60 +313,50 @@ class DefaultQueryGenerator {
 				]
 			}) ;
 		}
+
 		if (filters.length == 2 ) {
-			filter["expression"]["args"] = filters ;
+			return {
+				"type": "filter",
+				"expression": {
+					"type": 'operation',
+					"operator": "&&",
+					"args": filters
+				}
+			} ;
 		} else {
-			filter["expression"] = filters[0] ;
+			return {
+				"type": "filter",
+				"expression": filters[0]
+			} ;
 		}
-		return filter ;
 	}
 
-	initFilterSearch(Texte, index) {			
+	initFilterSearch(texte, variable) {			
 		return {
 			"type": "filter",
 			"expression": {
 				"type": "operation",
 				"operator": "regex",
-				"args": [
-					
-					""+index+"",
-					"\""+Texte+"\"",
+				"args": [					
+					""+variable+"",
+					"\""+texte+"\"",
 					"\"i\""
 				]
 			}
 		} ;
 	}
 
-	addTriple(jsonTriples, subjet, predicate, object) {
+	buildTriple(subjet, predicate, object, literalObject=false) {
 		
+		// encapsulates the object in quotes so that it is interpreted as a literal
+		var objectValue = (literalObject)?"\""+object+"\"":object;
 		var triple = {
 			"subject": subjet,
 			"predicate": predicate,
-			"object": object,
+			"object": objectValue,
 		} ;
 					
-		jsonTriples.triples.push(triple) ;
-		
-		return jsonTriples ;
-	}
-
-	addLiteralTriple(jsonTriples, subjet, predicate, object) {
-		
-		var triple = {
-			"subject": subjet,
-			"predicate": predicate,
-			// encapsulates the object in quotes so that it is interpreted as a literal
-			"object": "\""+object+"\""
-		} ;
-					
-		jsonTriples.triples.push(triple) ;
-		
-		return jsonTriples ;
-	}
-	
-	addInWhere(jsonQuery, JsonToWhere) {
-		jsonQuery.where.push(JsonToWhere) ;		
-		return jsonQuery ;
+		return triple;
 	}
 
 	addVariable(jsonValues, name, valueUrl) {			

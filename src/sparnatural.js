@@ -239,8 +239,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				qGenerator.setPrefixes(settings.sparqlPrefixes);
 				var queries = qGenerator.generateQuery(event.data.formObject);
 				// fire callback
-				settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery);
-
+				if(queries != null) {
+					settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery);
+				}
 			}) ;
 		}
 
@@ -1243,7 +1244,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// determine label and bit of HTML to select value
 			var rangeClassId = this.ParentComponent.ParentComponent.EndClassGroup.value_selected
 			var classLabel = specProvider.getLabel(rangeClassId) ;
-			if (this.widgetType == Config.SEARCH_PROPERTY) {
+			if (this.widgetType == Config.SEARCH_PROPERTY || this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY) {
 				// label of the "Search" pseudo-class is inserted alone in this case
 				var endLabel = classLabel;
 			} else {
@@ -1377,6 +1378,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.widgetComponent = new AutoCompleteWidget(this, handler) ;
 				this.cssClasses.AutocompleteWidget = true ;
 			    break;
+			  case Config.GRAPHDB_SEARCH_PROPERTY:
 			  case Config.SEARCH_PROPERTY:
 				this.widgetComponent = new SearchWidget(this, langSearch) ;
 				this.cssClasses.SearchWidget  = true ;
