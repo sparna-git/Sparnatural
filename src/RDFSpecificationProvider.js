@@ -79,18 +79,21 @@ export class RDFSpecificationProvider {
 
 		    if(this.getObjectPropertyType(objectPropertyId)) {
 
-		    	// always exclude RemoteClasses from first list
-		    	if(!this.isRemoteClass(classId)) {
-		    		if(!this._isUnionClass(classId)) {			    
-					    this._pushIfNotExist(classId, items);	
-				    } else {
-				    	// read union content
-				    	var classesInUnion = this._readUnionContent(classId);
-				    	for (const aUnionClass of classesInUnion) {
-						    this._pushIfNotExist(aUnionClass, items);	
-				    	}
-				    }
-		    	}
+		    	// keep only Sparnatural classes in the list
+		    	if(this.isSparnaturalClass(classId)) {
+			    	// always exclude RemoteClasses from first list
+			    	if(!this.isRemoteClass(classId)) {
+			    		if(!this._isUnionClass(classId)) {			    
+						    this._pushIfNotExist(classId, items);	
+					    } else {
+					    	// read union content
+					    	var classesInUnion = this._readUnionContent(classId);
+					    	for (const aUnionClass of classesInUnion) {
+							    this._pushIfNotExist(aUnionClass, items);	
+					    	}
+					    }
+			    	}
+		   		}
 			    
 			}
 		}
@@ -126,14 +129,26 @@ export class RDFSpecificationProvider {
 		var items = [];
 
 		const properties = this._readPropertiesWithDomain(classId);
-		console.log(properties);
+
 		// now read their ranges
 		for (const aProperty of properties) {
 
 			var classesInRange = this._readClassesInRangeOfProperty(aProperty);
 
 			for (const aClass of classesInRange) {
-				this._pushIfNotExist(aClass, items);
+				// if it is not a Sparnatural Class, read all its subClasses that are Sparnatural classes
+				if(!this.isSparnaturalClass(aClass)) {
+					// TODO : recursivity
+					var subClasses = this._readImmediateSubClasses(aClass);
+					for (const aSubClass of subClasses) {
+						if(this.isSparnaturalClass(aSubClass)) {
+							this._pushIfNotExist(aSubClass, items);
+						}
+					}
+				} else {
+					this._pushIfNotExist(aClass, items);
+				}
+
 			}
 		}
 
@@ -152,8 +167,18 @@ export class RDFSpecificationProvider {
 		for (const aProperty of properties) {
 		    
 			var classesInRange = this._readClassesInRangeOfProperty(aProperty);
+
 			if(classesInRange.indexOf(rangeClassId) > -1) {
 				this._pushIfNotExist(aProperty, items);
+			} else {
+				// potentially the select rangeClassId is a subClass, let's look up
+				for (const aClass of classesInRange) {
+					// TODO : recursivity
+					var subClasses = this._readImmediateSubClasses(aClass);
+					if(subClasses.indexOf(rangeClassId) > -1) {
+						this._pushIfNotExist(aProperty, items);
+					}
+				}
 			}
 		}
 
@@ -200,6 +225,15 @@ export class RDFSpecificationProvider {
 			factory.namedNode(Config.RDFS_LITERAL)
 		).length > 0;
 	}
+
+	isSparnaturalClass(classUri) {
+		return this.store.getQuads(
+			factory.namedNode(classUri),
+			RDFS.SUBCLASS_OF,
+			factory.namedNode(Config.SPARNATURAL_CLASS)
+		).length > 0;
+	}
+
 
 	expandSparql(sparql) {
 		// for each owl:equivalentProperty ...
@@ -346,14 +380,16 @@ export class RDFSpecificationProvider {
 		);
 
 		for (const aQuad of propertyQuads) {
-		    this._pushIfNotExist(aQuad.subject.id, properties);
+			// only select properties with proper Sparnatural configuration
+			if(this.getObjectPropertyType(aQuad.subject.id)) {
+		    	this._pushIfNotExist(aQuad.subject.id, properties);
+			}
 		}
 
 		// read also the properties having as a domain a union containing this class
 		var unionsContainingThisClass = this._readUnionsContaining(classId);
 		
 		for (const aUnionContainingThisClass of unionsContainingThisClass) {
-			console.log(aUnionContainingThisClass);
 		    const propertyQuadsHavingUnionAsDomain = this.store.getQuads(
 				undefined,
 				RDFS.DOMAIN,
@@ -361,9 +397,22 @@ export class RDFSpecificationProvider {
 			);
 
 			for (const aQuad of propertyQuadsHavingUnionAsDomain) {
-			    this._pushIfNotExist(aQuad.subject.id, properties);
+				// only select properties with proper Sparnatural configuration
+				if(this.getObjectPropertyType(aQuad.subject.id)) {
+				    this._pushIfNotExist(aQuad.subject.id, properties);
+				}
 			}
 		}
+
+		// read also the properties having as a domain a super-class of this class
+		var superClassesOfThisClass = this._readImmediateSuperClasses(classId);
+
+		for (const anImmediateSuperClass of superClassesOfThisClass) {
+			var propertiesFromSuperClass = this._readPropertiesWithDomain(anImmediateSuperClass);
+			for (const aProperty of propertiesFromSuperClass) {
+			    this._pushIfNotExist(aProperty, properties);
+			}
+		}		
 
 		return properties;
 	}
@@ -387,6 +436,39 @@ export class RDFSpecificationProvider {
 				    this._pushIfNotExist(aUnionClass, classes);	
 		    	}
 		    }
+		}
+
+		return classes;
+	}
+
+	_readImmediateSuperClasses(classId) {
+		var classes = [];
+
+		const subClassQuads = this.store.getQuads(
+			factory.namedNode(classId),
+			RDFS.SUBCLASS_OF,
+		  	undefined,
+		);
+
+		for (const aQuad of subClassQuads) {
+			this._pushIfNotExist(aQuad.object.id, classes);
+		}
+
+		return classes;
+	}
+
+
+	_readImmediateSubClasses(classId) {
+		var classes = [];
+
+		const subClassQuads = this.store.getQuads(
+			undefined,
+			RDFS.SUBCLASS_OF,
+		  	factory.namedNode(classId),
+		);
+
+		for (const aQuad of subClassQuads) {
+			this._pushIfNotExist(aQuad.subject.id, classes);
 		}
 
 		return classes;

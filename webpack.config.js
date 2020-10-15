@@ -71,8 +71,8 @@ module.exports = {
           inject: 'body'
     }),
     new HtmlWebpackPlugin({
-    	  filename: 'index-nada.html',
-          template: __dirname + "/src/index-nada.html",
+    	  filename: 'index-semapps.html',
+          template: __dirname + "/src/index-semapps.html",
           inject: 'body'
     }),
 	new MiniCssExtractPlugin({

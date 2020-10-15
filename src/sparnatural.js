@@ -1311,6 +1311,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    		// sparqlPostProcessor
 			    		{
 				            semanticPostProcess : function(sparql) {
+				            	// also add prefixes
+				                for (key in settings.sparqlPrefixes) {
+							        sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
+						    	}
 				                return theSpecProvider.expandSparql(sparql);
 				            }
 				        },
@@ -1360,6 +1364,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    		// sparqlPostProcessor
 			    		{
 				            semanticPostProcess : function(sparql) {
+				            	// also add prefixes
+				                for (key in settings.sparqlPrefixes) {
+							        sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
+						    	}
 				                return theSpecProvider.expandSparql(sparql);
 				            }
 				        },

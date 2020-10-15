@@ -20,15 +20,13 @@
 				url: function(phrase) {
 					return autocompleteHandler.autocompleteUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
-
 				listLocation: function (data) {
 					return autocompleteHandler.listLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ;
 				},
-				
-				
 				getValue: function (element) { 
 					return autocompleteHandler.elementLabel(element) ;
 				},
+				
 				adjustWidth: false,
 
 				ajaxSettings: {
