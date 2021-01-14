@@ -70,11 +70,6 @@ module.exports = {
           template: __dirname + "/src/wikidata.html",
           inject: 'body'
     }),
-    new HtmlWebpackPlugin({
-    	  filename: 'index-semapps.html',
-          template: __dirname + "/src/index-semapps.html",
-          inject: 'body'
-    }),
 	new MiniCssExtractPlugin({
 	  filename: "sparnatural.css",
 	  chunkFilename: "[id].css"
