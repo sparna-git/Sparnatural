@@ -132,11 +132,14 @@
 				if(queryString.indexOf("rdf-schema#") == -1) {
 					queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
 				}
+				if(queryString.indexOf("pair:") == -1) {
+					queryString = queryString.replace("SELECT ", "PREFIX pair: <http://virtual-assembly.org/ontologies/pair#> \nSELECT ");
+				}
 				return queryString;
 			}
 
 			displayLabelPostProcess = function(queryString, queryJson) {
-				queryString = queryString.replace(new RegExp('}$'), "  {{ ?this rdfs:label ?label } UNION { ?this <http://virtual-assembly.org/ontologies/pair#lastName> ?lastName . ?this <http://virtual-assembly.org/ontologies/pair#firstName> ?firstName . BIND(CONCAT(?firstName, ' ', ?lastName) AS ?label ) } } . \n}");
+				queryString = queryString.replace(new RegExp('}$'), "  {{ ?this rdfs:label ?label } UNION { ?this pair:label ?label } UNION { ?this <http://virtual-assembly.org/ontologies/pair#lastName> ?lastName . ?this <http://virtual-assembly.org/ontologies/pair#firstName> ?firstName . BIND(CONCAT(?firstName, ' ', ?lastName) AS ?label ) } } . \n}");
 				return queryString;
 			}
 
