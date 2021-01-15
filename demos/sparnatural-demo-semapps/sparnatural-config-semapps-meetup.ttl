@@ -173,7 +173,7 @@
 :Thema rdf:type owl:Class ;
        rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
        <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fas fa-comments" ;
-       <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#Thema>" ;
+       <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://virtual-assembly.org/ontologies/pair#Theme>" ;
        rdfs:label "Sujet"@fr .
 
 
