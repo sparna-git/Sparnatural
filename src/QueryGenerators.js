@@ -298,7 +298,13 @@ class DefaultQueryGenerator {
 				"type": "operation",
 				"operator": ">=",
 				"args": [
-					""+index+"",
+					{
+						"type": "functioncall",
+						"function": "http://www.w3.org/2001/XMLSchema#date",
+						"args" : [
+							""+index+""
+						]
+					},
 					"\""+StartYear+"\"^^http://www.w3.org/2001/XMLSchema#date"
 				]
 			}) ;
@@ -308,7 +314,13 @@ class DefaultQueryGenerator {
 				"type": "operation",
 				"operator": "<=",
 				"args": [
-					""+index+"",
+					{
+						"type": "functioncall",
+						"function": "http://www.w3.org/2001/XMLSchema#date",
+						"args" : [
+							""+index+""
+						]
+					},
 					"\""+EndYear+"\"^^http://www.w3.org/2001/XMLSchema#date"
 				]
 			}) ;
