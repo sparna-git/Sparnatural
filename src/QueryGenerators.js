@@ -298,8 +298,14 @@ class DefaultQueryGenerator {
 				"type": "operation",
 				"operator": ">=",
 				"args": [
-					""+index+"",
-					"\""+StartYear+"\"^^http://www.w3.org/2001/XMLSchema#date"
+					{
+						"type": "functioncall",
+						"function": "http://www.w3.org/2001/XMLSchema#dateTime",
+						"args" : [
+							""+index+""
+						]
+					},
+					"\""+StartYear+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 				]
 			}) ;
 		}
@@ -308,8 +314,14 @@ class DefaultQueryGenerator {
 				"type": "operation",
 				"operator": "<=",
 				"args": [
-					""+index+"",
-					"\""+EndYear+"\"^^http://www.w3.org/2001/XMLSchema#date"
+					{
+						"type": "functioncall",
+						"function": "http://www.w3.org/2001/XMLSchema#dateTime",
+						"args" : [
+							""+index+""
+						]
+					},
+					"\""+EndYear+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 				]
 			}) ;
 		}
