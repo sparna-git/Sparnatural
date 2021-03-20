@@ -35,24 +35,30 @@ var Config = require('./SparnaturalConfig.js');
 export class RDFSpecificationProvider {
 
 	constructor(n3store, lang) {
-		console.log("RDFSpecificationProvider");
-
 		// init memory store
 		this.store = n3store;
 		this.lang = lang;
 	}
 
-	static async build (specs, lang) {
+	static async build (specs, filePath, lang) {
+
+		console.log('Building RDFSpecificationProvider from '+filePath);
 
 		// init memory store
 		var store = new N3.Store();
 
 		// parse input specs
-		console.log(specs);
+		// console.log(specs);
 		const textStream = require('streamify-string')(specs);
+		/*
 		const quadStream = rdfParser.parse(
 			textStream,
 		  	{ contentType: 'text/turtle' }
+		);
+		*/
+		const quadStream = rdfParser.parse(
+			textStream,
+		  	{ path : filePath }
 		);
 		
 		// import into store

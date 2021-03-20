@@ -65,11 +65,6 @@ module.exports = {
           template: __dirname + "/src/index.html",
           inject: 'body'
     }),
-    new HtmlWebpackPlugin({
-    	  filename: 'wikidata.html',
-          template: __dirname + "/src/wikidata.html",
-          inject: 'body'
-    }),
 	new MiniCssExtractPlugin({
 	  filename: "sparnatural.css",
 	  chunkFilename: "[id].css"

@@ -24,14 +24,14 @@ export class SpecificationProviderFactory {
 						console.log(response);
 					})
 				).done(function() {});
-			} else if(config.includes("ttl")) {
+			} else {
 				$.ajax({
 				  method: "GET",
 				  url: config,
 				  dataType: "text"
 				})
 				.done( function( configData ) {
-					RDFSpecificationProvider.build(configData, language).then(function(provider) {
+					RDFSpecificationProvider.build(configData, config, language).then(function(provider) {
 					    console.log(provider);
 					    callback(provider);
 					});
@@ -40,8 +40,6 @@ export class SpecificationProviderFactory {
 						console.log("Sparnatural - unable to load RDF config file : " +config);
 						console.log(response);
 				});
-			} else {
-				console.log("Sparnatural - unable to determine config type : " +config);
 			}
 		}
 	}
