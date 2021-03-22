@@ -8,7 +8,6 @@
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
      xmlns:sparnatural-config-core="http://data.sparna.fr/ontologies/sparnatural-config-core#"
      xmlns:sparnatural-config-datasources="http://data.sparna.fr/ontologies/sparnatural-config-datasources#">
-     
     <owl:Ontology rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources">
         <owl:imports rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core"/>
     </owl:Ontology>
@@ -298,6 +297,15 @@ This is typically the default behavior for a list without a datasource specified
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_alpha -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_alpha">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of literal ordered alphabetically.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_alpha">
@@ -370,6 +378,20 @@ WHERE {
 FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
 }
 ORDER BY DESC(?count)</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value (STR(?value) AS ?label)
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?value .
+}
+ORDER BY ?label</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 

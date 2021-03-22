@@ -20,6 +20,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 				||
 				value == "sparnatural:ListProperty"
 				||
+				value == "sparnatural:LiteralListProperty"
+				||
 				value == "sparnatural:SearchProperty"
 				||
 				value == "sparnatural:GraphDBSearchProperty"

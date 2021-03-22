@@ -82,6 +82,7 @@ class DefaultQueryGenerator {
 
 	processQueryComponent(jsonQuery, formObject, ArrayLiIndex, component, index) {
 		var VALUE_SELECTION_WIDGETS = [
+			Config.LITERAL_LIST_PROPERTY,
 			Config.LIST_PROPERTY,
 			Config.AUTOCOMPLETE_PROPERTY,
 			Config.NON_SELECTABLE_PROPERTY // Pas de valeur selectionné mais sera forcement utilisé pour une Class
@@ -141,7 +142,13 @@ class DefaultQueryGenerator {
 			if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length == 1) {
 				// if we are in a value selection widget and we have a single value selected
 				// then insert the value directly as the object of the triple						
-				newBasicGraphPattern.triples.push(this.buildTriple(subjectVariable, property, component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0])) ;
+				newBasicGraphPattern.triples.push(this.buildTriple(
+					subjectVariable,
+					property,
+					component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0],
+					// insert as a literal if the widget was a literal list
+					(_WidgetType == Config.LITERAL_LIST_PROPERTY)
+				)) ;
 			} else {
 				// otherwise use a variable name as the object of the triple
 				newBasicGraphPattern.triples.push(this.buildTriple(subjectVariable, property, objectVariable)) ;
@@ -180,6 +187,14 @@ class DefaultQueryGenerator {
 			var __this = this ;
 			switch (_WidgetType) {					
 			  case Config.LIST_PROPERTY:
+				if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 1) {
+					// add values clause if we have more than 1 values
+					var jsonValues = this.initValues() ;
+					jsonValues = this.addVariable(jsonValues, objectVariable, component.CriteriaGroup.EndClassWidgetGroup.selectedValues)
+					jsonQuery.where.push(jsonValues) ;
+				}
+				break;
+			  case Config.LITERAL_LIST_PROPERTY:
 				if (component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 1) {
 					// add values clause if we have more than 1 values
 					var jsonValues = this.initValues() ;
@@ -226,6 +241,7 @@ class DefaultQueryGenerator {
 			}						
 		}	
 
+		// console.log(jsonQuery);
 		return jsonQuery;		
 	}
 

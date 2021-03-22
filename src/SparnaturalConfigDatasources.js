@@ -3,6 +3,19 @@ var SPARNATURAL_CONFIG_DATASOURCES	=		"http://data.sparna.fr/ontologies/sparnatu
 var QUERY_STRINGS_BY_QUERY_TEMPLATE = new Map();
 
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+SPARNATURAL_CONFIG_DATASOURCES+"query_literal_list_alpha", 
+`
+SELECT DISTINCT ?value (STR(?value) AS ?label)
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?value .
+}
+ORDER BY ?label
+`
+);
+
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SPARNATURAL_CONFIG_DATASOURCES+"query_list_URI_alpha", 
 `
 SELECT DISTINCT ?uri (STR(?uri) AS ?label)
@@ -115,6 +128,11 @@ ORDER BY ?label
 
 
 var DATASOURCES_CONFIG = new Map();
+
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"literal_list_alpha", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_literal_list_alpha")
+});
 
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_URI_alpha", {
@@ -241,6 +259,8 @@ module.exports = Object.freeze({
 	QUERY_SEARCH_LABEL_BITCONTAINS	: 		SPARNATURAL_CONFIG_DATASOURCES+'query_search_label_bitcontains',
 	QUERY_SEARCH_URI_CONTAINS		: 		SPARNATURAL_CONFIG_DATASOURCES+'query_search_URI_contains',
 
+	LITERAL_LIST_ALPHA 		 		: 		SPARNATURAL_CONFIG_DATASOURCES+'literal_list_alpha',
+	
 	LIST_URI_ALPHA 		 			: 		SPARNATURAL_CONFIG_DATASOURCES+'list_URI_alpha',
 	LIST_URI_COUNT 		 			: 		SPARNATURAL_CONFIG_DATASOURCES+'list_URI_count',
 	LIST_RDFSLABEL_ALPHA 		 	: 		SPARNATURAL_CONFIG_DATASOURCES+'list_rdfslabel_alpha',

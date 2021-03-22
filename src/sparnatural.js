@@ -1280,8 +1280,67 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 		this.createWidgetComponent = function createWidgetComponent(widgetType, objectPropertyId, rangeClassId) {
 			switch (widgetType) {
-			  case Config.LIST_PROPERTY:
+			  case Config.LITERAL_LIST_PROPERTY: {
+				// defaut handler to be used
 			    var handler = this.settings.list;
+			    
+			    // to be passed in anonymous functions
+			    var theSpecProvider = this.specProvider;
+
+			    // determine custom datasource
+			    var datasource = this.specProvider.getDatasource(objectPropertyId);
+
+			    if(datasource == null) {
+			    	// try to read it on the class
+			    	datasource = this.specProvider.getDatasource(rangeClassId);
+			    }
+
+			    if(datasource == null) {
+			    	// datasource still null
+			    	// if a default endpoint was provided, provide default datasource
+			    	if(this.settings.defaultEndpoint != null) {
+				    	datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.LITERAL_LIST_ALPHA);
+				    }
+			    }
+
+				if(datasource != null) {
+			    	// if we have a datasource, possibly the default one, provide a config based
+			    	// on a SparqlTemplate, otherwise use the handler provided
+				    handler = new SparqlTemplateListHandler(
+			    		// endpoint URL
+			    		(datasource.sparqlEndpointUrl != null)?datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+			    		
+			    		// sparqlPostProcessor
+			    		{
+				            semanticPostProcess : function(sparql) {
+				            	// also add prefixes
+				                for (key in settings.sparqlPrefixes) {
+							        sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
+						    	}
+				                return theSpecProvider.expandSparql(sparql);
+				            }
+				        },
+
+			    		// language,
+			    		this.settings.language,
+
+			    		// labelPath
+			    		(datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
+
+			    		// sparql query
+			    		(datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+			    	);
+				}
+
+				this.widgetComponent = new ListWidget(this, handler) ;
+				this.cssClasses.ListeWidget = true ;
+
+			  	break;
+			  }
+			  case Config.LIST_PROPERTY:
+			    // defaut handler to be used
+			    var handler = this.settings.list;
+			    
 			    // to be passed in anonymous functions
 			    var theSpecProvider = this.specProvider;
 

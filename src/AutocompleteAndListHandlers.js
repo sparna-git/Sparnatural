@@ -39,8 +39,13 @@ class AbstractSparqlAutocompleteAndListHandler {
 		return element.label.value;
 	}
 
+	/* TODO : rename to elementValue */
 	elementUri(element) {
-		return element.uri.value;
+		if(element.uri) {
+			return element.uri.value;
+		} else if(element.value) {
+			return element.value.value;
+		}
 	}
 
 	enableMatch(domain, property, range) {
