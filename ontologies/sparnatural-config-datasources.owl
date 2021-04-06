@@ -441,13 +441,29 @@ WHERE {
   ?domain a $domain .
   ?domain $property ?uri .
   ?uri a $range .
-  ?uri $labelPath ?label 
+  ?uri $labelPath ?label .
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY ?label</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
+WHERE {
+  ?domain a $domain .
+  ?domain $property ?uri .
+  ?uri a $range .
+  ?uri $labelPath ?label .
+  FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
+  FILTER(CONTAINS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
+} 
+ORDER BY ?label</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
 
 
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_URI_contains -->
