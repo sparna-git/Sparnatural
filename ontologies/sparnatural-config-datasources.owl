@@ -497,6 +497,26 @@ ORDER BY ?label</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
+        <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://purl.org/dc/terms/title"/>
+        <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their dcterms:title using the CONTAINS SPARQL function.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
+        <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their foaf:name using the CONTAINS SPARQL function.</rdfs:comment>
+    </owl:NamedIndividual>
+
 
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_bifcontains -->
 
@@ -537,6 +557,37 @@ ORDER BY ?label</sparnatural-config-datasources:queryString>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key at the beginning of their skos:prefLabel using the STRSTARTS SPARQL function.</rdfs:comment>
+    </owl:NamedIndividual>
+
+        <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+        <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their rdfs:label using the CONTAINS SPARQL function.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
+        <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their schema:name using the CONTAINS SPARQL function.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
+        <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their skos:prefLabel using the CONTAINS SPARQL function.</rdfs:comment>
     </owl:NamedIndividual>
 </rdf:RDF>
 

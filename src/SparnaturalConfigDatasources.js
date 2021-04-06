@@ -96,6 +96,22 @@ ORDER BY ?label
 );
 
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_contains", 
+`
+SELECT DISTINCT ?uri ?label
+WHERE {
+  ?domain a $domain .
+  ?domain $property ?uri .
+  ?uri a $range .
+  ?uri $labelPath ?label 
+  FILTER(lang(?label) = '' || lang(?label) = $lang)
+  FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key"))) 
+} 
+ORDER BY ?label
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_bifcontains", 
 `
 SELECT DISTINCT ?uri ?label
@@ -224,6 +240,31 @@ SPARNATURAL_CONFIG_DATASOURCES+"search_dctermstitle_strstarts", {
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"search_schemaname_strstarts", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_strstarts"),
+	labelProperty : "http://schema.org/name"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_rdfslabel_contains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_contains"),
+	labelProperty : "http://www.w3.org/2000/01/rdf-schema#label"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_foafname_contains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_contains"),
+	labelProperty : "http://xmlns.com/foaf/0.1/name"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_skospreflabel_contains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_contains"),
+	labelProperty : "http://www.w3.org/2004/02/skos/core#prefLabel"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_dctermstitle_contains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_contains"),
+	labelProperty : "http://purl.org/dc/terms/title"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_schemaname_contains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_contains"),
 	labelProperty : "http://schema.org/name"
 });
 DATASOURCES_CONFIG.set(
