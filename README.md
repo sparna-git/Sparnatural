@@ -6,7 +6,7 @@ It supports the creation of basic graph patterns with the selection of values wi
 
 ![](documentation/screencast-sparnatural-dbpedia-v3-en.gif)
 
-You can play with an **online demo at http://labs.sparna.fr/sparnatural-demo-dbpedia/**.
+You can play with **online demos at http://sparnatural.eu#demos**.
 
 # Getting Started
 
