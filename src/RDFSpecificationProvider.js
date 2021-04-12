@@ -233,11 +233,27 @@ export class RDFSpecificationProvider {
 	}
 
 	isSparnaturalClass(classUri) {
-		return this.store.getQuads(
+		return (
+
+		this.store.getQuads(
 			factory.namedNode(classUri),
 			RDFS.SUBCLASS_OF,
 			factory.namedNode(Config.SPARNATURAL_CLASS)
-		).length > 0;
+		).length > 0
+		||
+		this.store.getQuads(
+			factory.namedNode(classUri),
+			RDFS.SUBCLASS_OF,
+			factory.namedNode(Config.NOT_INSTANTIATED_CLASS)
+		).length > 0
+		||
+		this.store.getQuads(
+			factory.namedNode(classUri),
+			RDFS.SUBCLASS_OF,
+			factory.namedNode(Config.RDFS_LITERAL)
+		).length > 0
+		
+		);
 	}
 
 
