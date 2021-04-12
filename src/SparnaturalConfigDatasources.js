@@ -273,6 +273,26 @@ SPARNATURAL_CONFIG_DATASOURCES+"search_rdfslabel_bifcontains", {
 	labelProperty : "http://www.w3.org/2000/01/rdf-schema#label"
 });
 DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_dctermstitle_bifcontains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_bifcontains"),
+	labelProperty : "http://purl.org/dc/terms/title"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_foafname_bifcontains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_bifcontains"),
+	labelProperty : "http://xmlns.com/foaf/0.1/name"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_skospreflabel_bifcontains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_bifcontains"),
+	labelProperty : "http://www.w3.org/2004/02/skos/core#prefLabel"
+});
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_schemaname_bifcontains", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_bifcontains"),
+	labelProperty : "http://schema.org/name"
+});
+DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"search_URI_contains", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_URI_contains")
 });
@@ -318,7 +338,12 @@ module.exports = Object.freeze({
 	SEARCH_SKOSPREFLABEL_STRSTARTS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_skospreflabel_strstarts',
 	SEARCH_DCTERMSTITLE_STRSTARTS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_dctermstitle_strstarts',
 	SEARCH_URI_CONTAINS			 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_URI_contains',
+	
 	SEARCH_RDFSLABEL_BIFCONTAINS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_rdfslabel_bifcontains',
+	SEARCH_DCTERMSTITLE_BIFCONTAINS : 		SPARNATURAL_CONFIG_DATASOURCES+'search_dctermstitle_bifcontains',
+	SEARCH_FOAFNAME_BIFCONTAINS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_foafname_bifcontains',
+	SEARCH_SCHEMANAME_BIFCONTAINS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_schemaname_bifcontains',
+	SEARCH_SKOSPREFLABEL_BIFCONTAINS : 		SPARNATURAL_CONFIG_DATASOURCES+'search_skospreflabel_bifcontains',
 
 	QUERY_STRINGS_BY_QUERY_TEMPLATE	: 		QUERY_STRINGS_BY_QUERY_TEMPLATE,
 	DATASOURCES_CONFIG				: 		DATASOURCES_CONFIG

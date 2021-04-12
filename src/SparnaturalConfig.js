@@ -2,6 +2,7 @@ var SPARNATURAL_CONFIG_CORE 			=		"http://data.sparna.fr/ontologies/sparnatural-
 
 module.exports = Object.freeze({
     SPARNATURAL_CONFIG_CORE			: 		SPARNATURAL_CONFIG_CORE,
+	LITERAL_LIST_PROPERTY 			: 		SPARNATURAL_CONFIG_CORE+'LiteralListProperty',
 	LIST_PROPERTY 					: 		SPARNATURAL_CONFIG_CORE+'ListProperty',
 	TIME_PROPERTY_PERIOD 			: 		SPARNATURAL_CONFIG_CORE+'TimeProperty-Period',
 	TIME_PROPERTY_YEAR				: 		SPARNATURAL_CONFIG_CORE+'TimeProperty-Year',
