@@ -55,7 +55,8 @@ WHERE {
         ?propertyLabel,
         IF(CONTAINS(str(?p), '#'),
             STRAFTER(str(?p),"#"),
-            STR(?p)
+            # replace everything before last slash by nothing
+            REPLACE(str(?p), "^.*/", '')
         )
     ) AS ?label). 
 }

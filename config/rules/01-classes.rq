@@ -16,7 +16,8 @@ WHERE {
         ?theLabel,
         IF(CONTAINS(str(?class), '#'),
             STRAFTER(str(?class),"#"),
-            STR(?class)
+            # replace everything before last slash by nothing
+            REPLACE(str(?class), "^.*/", '')
         )
     ) AS ?label) . 
     
