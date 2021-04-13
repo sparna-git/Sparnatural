@@ -524,14 +524,26 @@ export class RDFSpecificationProvider {
 		.map(quad => quad.object.value);
 	}
 
-	_readAsLiteralWithLang(uri, property, lang) {
-		return this.store.getQuads(
+	_readAsLiteralWithLang(uri, property, lang, defaultToNoLang = true) {
+		var values = this.store.getQuads(
 			factory.namedNode(uri),
 			property,
 			undefined
 		)
 		.filter(quad => (quad.object.language == lang))
 		.map(quad => quad.object.value);
+
+		if(values.length == 0 && defaultToNoLang) {
+			values = this.store.getQuads(
+				factory.namedNode(uri),
+				property,
+				undefined
+			)
+			.filter(quad => (quad.object.language == ''))
+			.map(quad => quad.object.value);
+		}
+
+		return values;
 	}
 
 	_readAsRdfNode(rdfNode, property) {
