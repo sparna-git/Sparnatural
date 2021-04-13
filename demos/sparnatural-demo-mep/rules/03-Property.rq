@@ -1,0 +1,20 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+#SELECT DISTINCT ?class ?p 
+CONSTRUCT {?class rdf:type owl:ObjectProperty ;
+   				  rdf:type ?p ;
+         		  rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> .}
+WHERE {
+    ?s ?p ?o .
+	?s rdf:type ?class .
+    FILTER(?class != rdf:List &&
+        ?class != rdf:Property &&
+        ?class != owl:SymmetricProperty &&
+        ?class != owl:TransitiveProperty &&
+        ?class != rdfs:Datatype &&
+        ?class != rdfs:Class &&
+        ?class != rdfs:ContainerMembershipProperty)
+}
+ORDER BY ?class ?p
