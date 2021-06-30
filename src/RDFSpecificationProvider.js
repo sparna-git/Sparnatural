@@ -50,21 +50,36 @@ export class RDFSpecificationProvider {
 		// parse input specs
 		// console.log(specs);
 		const textStream = require('streamify-string')(specs);
-		/*
-		const quadStream = rdfParser.parse(
-			textStream,
-		  	{ contentType: 'text/turtle' }
-		);
-		*/
-		const quadStream = rdfParser.parse(
-			textStream,
-		  	{ path : filePath }
-		);
-		
+
+		var quadStream;
+		try {
+			// attempt to parse based on path
+			quadStream = rdfParser.parse(
+				textStream,
+			  	{ path : filePath }
+			);
+		} catch (exception) {
+			try {
+				console.log("Attempt to parse in Turtle...");
+				// attempt to parse in turtle
+				quadStream = rdfParser.parse(
+					textStream,
+				  	{ contentType: 'text/turtle' }
+				);
+			} catch (exception) {
+				console.log("Attempt to parse in RDF/XML...");
+				// attempt to parse in RDF/XML
+				quadStream = rdfParser.parse(
+					textStream,
+				  	{ contentType: 'application/rdf+xml' }
+				);
+			}
+		}
+
 		// import into store
 		// note the await keyword to wait for the asynchronous call to finish
 		var store = await storeStream(quadStream);
-		console.log('Specification store populated with '+store.countQuads()+" triples.");
+		console.log("Specification store populated with "+store.countQuads()+" triples.");
   		var provider = new RDFSpecificationProvider(store, lang);
         return provider;
     }
