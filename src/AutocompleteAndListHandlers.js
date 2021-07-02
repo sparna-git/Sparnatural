@@ -15,7 +15,8 @@ class AbstractSparqlAutocompleteAndListHandler {
 		var sparql = this._buildAutocompleteSparql(domain, property, range, key);
 		sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
 
-		var url = this.sparqlEndpointUrl+"?query="+encodeURIComponent(sparql)+"&format=json";
+		var separator = (this.sparqlEndpointUrl.indexOf("?") > 0)?"&":"?";
+		var url = this.sparqlEndpointUrl+separator+"query="+encodeURIComponent(sparql)+"&format=json";
 		return url;
 	}
 
@@ -27,7 +28,8 @@ class AbstractSparqlAutocompleteAndListHandler {
 
 		sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
 
-		var url = this.sparqlEndpointUrl+"?query="+encodeURIComponent(sparql)+"&format=json";
+		var separator = (this.sparqlEndpointUrl.indexOf("?") > 0)?"&":"?";
+		var url = this.sparqlEndpointUrl+separator+"query="+encodeURIComponent(sparql)+"&format=json";
 		return url;
 	}
 
