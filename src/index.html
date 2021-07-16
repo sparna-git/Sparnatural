@@ -238,10 +238,8 @@
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays",
-      "@type" : [
-        "ObjectProperty",
-        "NonSelectableProperty"
-      ],
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:NonSelectableProperty",
       "label": [
         {"@value" : "displays","@language" : "en"},
         {"@value" : "expose","@language" : "fr"}
@@ -414,7 +412,7 @@
         if(results == null) { return null; }
         return results[1] || 0;
       }
-      var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
+      var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'it';
 
       var sparnatural;
       $( document ).ready(function($) {          
