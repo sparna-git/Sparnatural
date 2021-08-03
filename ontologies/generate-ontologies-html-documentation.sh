@@ -1,0 +1,2 @@
+java -jar widoco-1.4.14-jar-with-dependencies.jar -ontFile sparnatural-config-core.owl -outFolder sparnatural-config-core -rewriteAll -uniteSections -includeAnnotationProperties -excludeIntroduction -confFile widoco-sparnatural-config-core.properties -lang fr-en -htaccess
+java -jar widoco-1.4.14-jar-with-dependencies.jar -ontFile sparnatural-config-datasources.owl -outFolder sparnatural-config-datasources -rewriteAll -uniteSections -includeAnnotationProperties -excludeIntroduction -confFile widoco-sparnatural-config-datasources.properties -lang fr-en -htaccess
