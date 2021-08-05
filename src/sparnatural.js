@@ -208,6 +208,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this).addClass('Sparnatural') ;
 			
 			langSearch = i18nLabels[settings.language];
+			// defaults to English
+			if(langSearch == null) {langSearch = i18nLabels["en"];}
 
 			var specProviderFactory = new SpecificationProviderFactory();
 

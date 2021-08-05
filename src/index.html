@@ -12,13 +12,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.9.0/css/all.min.css" />
 
     <!-- YASGUI stuff -->
-    <link href='http://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.min.css' rel='stylesheet' type='text/css'/>
-    <link href='http://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.min.css' rel='stylesheet' type='text/css'/>
+    <link href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" rel="stylesheet" type="text/css" />
 
     <!-- datepicker -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.css">
 
-    <title>SPARnatural - requêtes SPARQL naturelles sur DBPedia</title>
+    <title>SPARnatural - requêtes SPARQL au naturel !</title>
 
     <style>
       .yasqe .CodeMirror { font-size: 0.8em; height: 380px; }
@@ -32,7 +31,7 @@
   <body>
     <header>
       <nav class="navbar navbar-expand  navbar-dark bg-dark">
-        <a class="navbar-brand display-1 mr-auto" href="#">SPARnatural - requêtes SPARQL naturelles sur DBPedia</a>
+        <a class="navbar-brand display-1 mr-auto" href="#">SPARnatural - requêtes SPARQL au naturel !</a>
         <span class="navbar-text" style="margin-right:100px;">
         <a href="?lang=fr">fr</a>&nbsp;|&nbsp;<a href="?lang=en">en</a>
           </span>
@@ -54,13 +53,13 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-             <textarea id="yasqe"></textarea>
+             <div id="yasqe"></div>
             </div>
           </div>
         </div>
       </div>
       <div class="row justify-content-center">
-        <div class="col-md-11">
+        <div class="col-md-12">
           <div id="yasr"></div>
         </div>
       </div>
@@ -89,8 +88,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
     <!-- YASGUI stuff -->
-    <script src='https://cdn.jsdelivr.net/npm/yasgui-yasr@2.12.19/dist/yasr.bundled.min.js'></script>
-    <script src='https://cdn.jsdelivr.net/npm/yasgui-yasqe@2.11.22/dist/yasqe.bundled.min.js'></script>
+    <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
     
 
     <script>
@@ -473,24 +471,26 @@
         return queryString;
       }
 
-      var yasqe = YASQE.fromTextArea(document.getElementById("yasqe"), {
-        sparql : {
-          showQueryButton : true,
-          endpoint : $('#endpoint').text()
-        }
+
+      const yasqe = new Yasqe(document.getElementById("yasqe"), {
+        requestConfig: { endpoint: $('#endpoint').text() },
+        copyEndpointOnNewTab: false  
       });
 
-      var yasr = YASR(document.getElementById("yasr"), {
+      const yasr = new Yasr(document.getElementById("yasr"), {
         //this way, the URLs in the results are prettified using the defined prefixes in the query
         getUsedPrefixes : yasqe.getPrefixesFromQuery,
         "drawOutputSelector": false,
         "drawDownloadIcon": false,
         // avoid persistency side-effects
         "persistency": { "prefix": false, "results": { "key": false }}
-      }); 
+      });
+
 
       // link yasqe and yasr
-      yasqe.options.sparql.callbacks.complete = yasr.setResponse;
+      yasqe.on("queryResponse", function(_yasqe, response, duration) {
+        yasr.setResponse(response, duration);
+      });
 
     </script>
   </body>
