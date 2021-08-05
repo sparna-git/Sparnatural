@@ -38,6 +38,8 @@ GraphDbLuceneConnectorSparqlAutocompleteAndListHandler = require("./Autocomplete
 SparqlTemplateListHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateListHandler;
 SparqlTemplateAutocompleteHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateAutocompleteHandler;
 
+SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHandler;
+
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 require("./Widgets.js");
@@ -76,7 +78,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				 * @param {string} key - The letters that the user has typed in the search field.
 				 **/
 				autocompleteUrl : function(domain, property, range, key) {
-					console.log("Veuillez préciser le nom de la fonction pour l'option autocompleteUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key"  ) ;
+					console.log("Please specify function for autocompleteUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
 				},
 
 				/**
@@ -129,7 +131,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				 * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
 				 **/
 				listUrl : function(domain, property, range) {
-					console.log("Veuillez préciser le nom de la fonction pour l'option listUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range" ) ;
+					console.log("Please specify function for listUrl option in in init parameters of Sparnatural : function(domain, property, range)" ) ;
 				},
 
 				/**
@@ -165,7 +167,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			},
 			dates : {
 				datesUrl : function(domain, property, range, key) {
-					console.log("Veuillez préciser le nom de la fonction pour l'option datesUrl dans les parametre d'initalisation de Sparnatural. La liste des parametres envoyées a votre fonction est la suivante : domain, property, range, key" ) ;
+					console.log("Please specify function for datesUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
 				},
 				listLocation: function(domain, property, range, data) {
 					return data;
@@ -179,6 +181,17 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				elementEnd: function(element) {
 					return element.stop.year;
 				}				
+			},
+			statistics : {
+				countClassUrl : function(aClass) {
+					console.log("Please specify function to count number of instances of each class : function(aClass)") ;
+				},
+				countPropertyUrl : function(domain, property, range) {
+					console.log("Please specify function to count number of instances of each properties : function(domain, property, range)") ;
+				},
+				elementCount: function(data) {
+					return data.results.bindings[0].count.value;
+				}
 			},
 			
 			/**
@@ -245,6 +258,46 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery);
 				}
 			}) ;
+
+			/*
+			Test for statistics queries
+			var statisticsHandler = new SimpleStatisticsHandler(
+	    		// endpoint URL
+	    		settings.defaultEndpoint,
+	    		
+	    		// sparqlPostProcessor
+	    		{
+		            semanticPostProcess : function(sparql) {
+		            	// also add prefixes
+		                for (key in settings.sparqlPrefixes) {
+					        sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
+				    	}
+		                return specProvider.expandSparql(sparql);
+		            }
+		        }
+	    	);
+
+	    	items = specProvider.getClassesInDomainOfAnyProperty() ;
+			for (var key in items) {
+				var aClass = items[key];
+
+				var options = {
+					url: statisticsHandler.countClassUrl(aClass),
+					dataType: "json",
+					method: "GET",
+					data: {
+						  dataType: "json"
+					}
+				} ;
+
+				var request = $.ajax( options );
+				request.done(function( data ) {			  
+				  	console.log(aClass + " : " + statisticsHandler.elementCount(data)); 
+				});
+
+			}
+			*/
+
 		}
 
 		function expandQuery(sparqlQuery) {
