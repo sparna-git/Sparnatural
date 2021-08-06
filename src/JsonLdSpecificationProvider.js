@@ -121,6 +121,21 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return null ;
 	}
 
+	this.getAllSparnaturalClasses = function() {
+    	var classes = this.getClassesInDomainOfAnyProperty();
+    	// copy initial array
+    	var result = classes.slice();
+    	// now look for all classes we can reach from this class list
+    	for (const aClass of classes) {
+    		var connectedClasses = this.getConnectedClasses(aClass);
+    		for (const aConnectedClass of connectedClasses) {
+    			this._pushIfNotExist(aConnectedClass, result);
+    		}
+    	}
+    	return result;
+    }
+
+
 	/* 
 		List of possible Class relative to a Class
 		return array of @type Class in jsonSpecs 
@@ -204,7 +219,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 
 	this.isRemoteClass = function(classUri) {
 		var classEntity = this._getResourceById(classUri);
-
+		
 		if(classEntity['subClassOf']) {
 			var superClasses = (classEntity['subClassOf'] === "object")?classEntity['subClassOf']:new Array(classEntity['subClassOf']);
 			for(var i in superClasses) {

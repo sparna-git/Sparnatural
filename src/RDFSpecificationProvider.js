@@ -84,6 +84,20 @@ export class RDFSpecificationProvider {
         return provider;
     }
 
+    getAllSparnaturalClasses() {
+    	var classes = this.getClassesInDomainOfAnyProperty();
+    	// copy initial array
+    	var result = classes.slice();
+    	// now look for all classes we can reach from this class list
+    	for (const aClass of classes) {
+    		var connectedClasses = this.getConnectedClasses(aClass);
+    		for (const aConnectedClass of connectedClasses) {
+    			this._pushIfNotExist(aConnectedClass, result);
+    		}
+    	}
+    	return result;
+    }
+
 	getClassesInDomainOfAnyProperty() {
 		const quadsArray = this.store.getQuads(
 			undefined,

@@ -154,17 +154,19 @@
       "faIcon":  "fas fa-paint-brush"
     },
     {
-      "@id" : "http://dbpedia.org/ontology/Person",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "@type" : "Class",
       "label": [
         {"@value" : "Person","@language" : "en"},
         {"@value" : "Personne","@language" : "fr"}
       ],
-      "faIcon":  "fas fa-male"
+      "faIcon":  "fas fa-male",
+      "sparqlString": "<http://dbpedia.org/ontology/Person>"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
       "@type" : "Class",
+      "subClassOf" : "http://www.w3.org/2000/01/rdf-schema#Literal",
       "label": [
         {"@value" : "Search","@language" : "en"},
         {"@value" : "Rechercher","@language" : "fr"}
@@ -174,6 +176,7 @@
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date",
       "@type" : "Class",
+      "subClassOf" : "http://www.w3.org/2000/01/rdf-schema#Literal",
       "label": [
         {"@value" : "Date","@language" : "en"},
         {"@value" : "Date","@language" : "fr"}
@@ -183,7 +186,7 @@
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement",
       "@type" : "Class",
-      "subClassOf" : "sparnatural:RemoteClass",
+      "subClassOf" : "sparnatural:NotInstantiatedClass",
       "label": [
         {"@value" : "Movement","@language" : "en"},
         {"@value" : "Mouvement","@language" : "fr"}
@@ -255,7 +258,7 @@
         {"@value" : "auteur","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Artwork",
-      "range": "http://dbpedia.org/ontology/Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "datasource" : "datasources:search_rdfslabel_bifcontains"
     },
     {
@@ -266,7 +269,7 @@
         {"@value" : "created","@language" : "en"},
         {"@value" : "a créé","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Person",
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://dbpedia.org/ontology/Artwork",
       "sparqlString": "^<http://dbpedia.org/ontology/author>"
     },
@@ -278,7 +281,7 @@
         {"@value" : "nationality","@language" : "en"},
         {"@value" : "nationalité","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Person",
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://dbpedia.org/ontology/Country"
     },
 
@@ -291,7 +294,7 @@
         {"@value" : "born in","@language" : "en"},
         {"@value" : "né à","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Person",
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://dbpedia.org/ontology/Country",
       "sparqlString": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>",
       "datasource": "datasources:list_rdfslabel_count"
@@ -305,7 +308,7 @@
         {"@value" : "lieu de naissance","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Country",
-      "range": "http://dbpedia.org/ontology/Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "sparqlString": "^(<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>)"
     },
     {
@@ -316,7 +319,7 @@
         {"@value" : "died at","@language" : "en"},
         {"@value" : "mort à","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Person",
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://dbpedia.org/ontology/Country",
       "sparqlString": "<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>"
     },
@@ -329,7 +332,7 @@
         {"@value" : "lieu de décès","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Country",
-      "range": "http://dbpedia.org/ontology/Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "sparqlString": "^(<http://dbpedia.org/ontology/deathPlace>/<http://dbpedia.org/ontology/country>)"
     },
     {
@@ -340,7 +343,7 @@
         {"@value" : "death date","@language" : "en"},
         {"@value" : "date de décès","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Person",
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
     },
     {
@@ -351,7 +354,7 @@
         {"@value" : "birth date","@language" : "en"},
         {"@value" : "date de naissance","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Person",
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
     },
     {
@@ -362,30 +365,31 @@
         {"@value" : "movement","@language" : "en"},
         {"@value" : "mouvement","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Person",
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement",
       "datasource" : "datasources:list_URI_count"
 
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#search",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#text",
       "@type" : "ObjectProperty",
       "subPropertyOf" : "sparnatural:SearchProperty",
       "label": [
-        {"@value" : "text search","@language" : "en"},
-        {"@value" : "recherche plein-texte","@language" : "fr"}
+        {"@value" : "label or description","@language" : "en"},
+        {"@value" : "libellé ou description","@language" : "fr"}
       ],
       "domain": {
         "@type" : "Class",
         "unionOf" : {
           "@list" : [ 
             { "@id" : "http://dbpedia.org/ontology/Museum"},
-            { "@id" : "http://dbpedia.org/ontology/Person"},
+            { "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person"},
             { "@id" : "http://dbpedia.org/ontology/Artwork"}
           ]
         }
       },
-      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search"
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
+      "sparqlString": "rdfs:label|rdfs:comment"
     },
     {
       "@id" : "http://www.w3.org/2000/01/rdf-schema#label",
