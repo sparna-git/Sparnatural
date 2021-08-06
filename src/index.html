@@ -164,6 +164,15 @@
       "sparqlString": "<http://dbpedia.org/ontology/Person>"
     },
     {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Unknown",
+      "@type" : "Class",
+      "label": [
+        {"@value" : "Unknown class","@language" : "en"},
+        {"@value" : "Classe inconnue","@language" : "fr"}
+      ],
+      "faIcon":  "fas fa-male"
+    },
+    {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
       "@type" : "Class",
       "subClassOf" : "http://www.w3.org/2000/01/rdf-schema#Literal",
@@ -401,6 +410,39 @@
       ],
       "domain": "http://dbpedia.org/ontology/Artwork",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#unknownProperty",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:ListProperty",
+      "label": [
+        {"@value" : "unknown property","@language" : "en"},
+        {"@value" : "propriété inconnue","@language" : "fr"}
+      ],
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Unknown"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#reverseUnknown",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:ListProperty",
+      "label": [
+        {"@value" : "unknown property reverse","@language" : "en"},
+        {"@value" : "propriété inconnue inversée","@language" : "fr"}
+      ],
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Unknown",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person"      
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#unknownBetweenKnownClasses",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:ListProperty",
+      "label": [
+        {"@value" : "unknown property between known classes","@language" : "en"},
+        {"@value" : "propriété inconnue entre classe connues","@language" : "fr"}
+      ],
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
+      "range": "http://dbpedia.org/ontology/Museum"      
     }
   ]
 }
