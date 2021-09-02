@@ -58,7 +58,7 @@ WHERE {
     FILTER(lang(?label) = "" || lang(?label) = $lang)
     FILTER(isIRI(?uri))
 }
-ORDER BY ?label
+ORDER BY UCASE(?label)
 `
 );
 
@@ -96,7 +96,7 @@ WHERE {
   FILTER(lang(?label) = '' || lang(?label) = $lang)
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
-ORDER BY ?label
+ORDER BY UCASE(?label)
 `
 );
 
@@ -113,7 +113,7 @@ WHERE {
   FILTER(lang(?label) = '' || lang(?label) = $lang)
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
-ORDER BY ?label
+ORDER BY UCASE(?label)
 `
 );
 
@@ -130,7 +130,7 @@ SELECT DISTINCT ?uri ?label
   FILTER(lang(?label) = '' || lang(?label) = $lang )
   ?label bif:contains "'$key'" . 
 } 
-ORDER BY ?label
+ORDER BY UCASE(?label)
 `
 );
 
@@ -146,7 +146,7 @@ WHERE {
   BIND(STR(?uri) AS ?label)
   FILTER(CONTAINS(LCASE(?label), LCASE("$key"))) 
 } 
-ORDER BY ?label
+ORDER BY UCASE(?label)
 `
 );
 
