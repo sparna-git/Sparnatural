@@ -10,7 +10,8 @@ WHERE {
     ?domain a $domain .
     ?domain $property ?value .
 }
-ORDER BY ?label
+ORDER BY UCASE(?label)
+LIMIT 500
 `
 );
 
@@ -24,7 +25,8 @@ WHERE {
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
 }
-ORDER BY ?label
+ORDER BY UCASE(?label)
+LIMIT 500
 `
 );
 
@@ -44,6 +46,7 @@ WHERE {
 }
 }
 ORDER BY DESC(?count)
+LIMIT 500
 `
 );
 
@@ -59,6 +62,7 @@ WHERE {
     FILTER(isIRI(?uri))
 }
 ORDER BY UCASE(?label)
+LIMIT 500
 `
 );
 
@@ -79,7 +83,8 @@ WHERE {
 ?uri $labelPath ?theLabel .
 FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
 }
-ORDER BY DESC(?count)
+ORDER BY DESC(?count) UCASE(?label)
+LIMIT 500
 `
 );
 
@@ -97,6 +102,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
+LIMIT 50
 `
 );
 
@@ -114,6 +120,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
+LIMIT 50
 `
 );
 
@@ -131,6 +138,7 @@ SELECT DISTINCT ?uri ?label
   ?label bif:contains "'$key'" . 
 } 
 ORDER BY UCASE(?label)
+LIMIT 50
 `
 );
 
@@ -147,6 +155,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(?label), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
+LIMIT 50
 `
 );
 
