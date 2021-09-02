@@ -314,6 +314,7 @@ This is typically the default behavior for a list without a datasource specified
 WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
+    FILTER(isIRI(?uri))
     # Note how the range criteria is not used in this query
 }
 ORDER BY ?label</sparnatural-config-datasources:queryString>
@@ -332,6 +333,7 @@ WHERE {
   WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
+    FILTER(isIRI(?uri))
     # Note how the range criteria is not used in this query
   }
   GROUP BY ?uri
@@ -352,6 +354,7 @@ WHERE {
     ?domain $property ?uri .
     # Note how the range criteria is not used in this query
     ?uri $labelPath ?label .
+    FILTER(isIRI(?uri))
     FILTER(lang(?label) = &quot;&quot; || lang(?label) = $lang)
 }
 ORDER BY ?label</sparnatural-config-datasources:queryString>
@@ -370,6 +373,7 @@ WHERE {
   WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
+    FILTER(isIRI(?uri))
     # Note how the range criteria is not used in this query
   }
   GROUP BY ?uri
@@ -405,6 +409,7 @@ WHERE {
   ?domain a $domain .
   ?domain $property ?uri .
   ?uri a $range .
+  FILTER(isIRI(?uri))
   BIND(STR(?uri) AS ?label)
   FILTER(CONTAINS(LCASE(?label), LCASE(&quot;$key&quot;))) 
 } 
@@ -423,6 +428,7 @@ ORDER BY ?label</sparnatural-config-datasources:queryString>
   ?domain $property ?uri .
   ?uri a $range .
   ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang )
   # Note the single quote to handle space character
   ?label bif:contains &quot;&apos;$key&apos;&quot; . 
@@ -442,6 +448,7 @@ WHERE {
   ?domain $property ?uri .
   ?uri a $range .
   ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
 } 
@@ -460,6 +467,7 @@ WHERE {
   ?domain $property ?uri .
   ?uri a $range .
   ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
 } 

@@ -22,6 +22,7 @@ SELECT DISTINCT ?uri (STR(?uri) AS ?label)
 WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
+    FILTER(isIRI(?uri))
 }
 ORDER BY ?label
 `
@@ -37,6 +38,7 @@ WHERE {
   WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
+    FILTER(isIRI(?uri))
   }
   GROUP BY ?uri
 }
@@ -54,6 +56,7 @@ WHERE {
     ?domain $property ?uri .
     ?uri $labelPath ?label .
     FILTER(lang(?label) = "" || lang(?label) = $lang)
+    FILTER(isIRI(?uri))
 }
 ORDER BY ?label
 `
@@ -69,6 +72,7 @@ WHERE {
   WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
+    FILTER(isIRI(?uri))
   }
   GROUP BY ?uri
 }
@@ -87,7 +91,8 @@ WHERE {
   ?domain a $domain .
   ?domain $property ?uri .
   ?uri a $range .
-  ?uri $labelPath ?label 
+  ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
   FILTER(lang(?label) = '' || lang(?label) = $lang)
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
@@ -103,7 +108,8 @@ WHERE {
   ?domain a $domain .
   ?domain $property ?uri .
   ?uri a $range .
-  ?uri $labelPath ?label 
+  ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
   FILTER(lang(?label) = '' || lang(?label) = $lang)
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
@@ -120,6 +126,7 @@ SELECT DISTINCT ?uri ?label
   ?domain $property ?uri .
   ?uri a $range .
   ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
   FILTER(lang(?label) = '' || lang(?label) = $lang )
   ?label bif:contains "'$key'" . 
 } 
@@ -135,6 +142,7 @@ WHERE {
   ?domain a $domain .
   ?domain $property ?uri .
   ?uri a $range .
+  FILTER(isIRI(?uri))
   BIND(STR(?uri) AS ?label)
   FILTER(CONTAINS(LCASE(?label), LCASE("$key"))) 
 } 
@@ -216,7 +224,6 @@ SPARNATURAL_CONFIG_DATASOURCES+"list_schemaname_count", {
 	labelProperty : "http://schema.org/name"
 });
 
-
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"search_rdfslabel_strstarts", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_strstarts"),
@@ -296,6 +303,11 @@ DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"search_URI_contains", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_URI_contains")
 });
+DATASOURCES_CONFIG.set(
+SPARNATURAL_CONFIG_DATASOURCES+"search_defaultproperties_strstarts", {
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_strstarts"),
+	labelPath : "<http://www.w3.org/2000/01/rdf-schema#label>|<http://purl.org/dc/terms/title>|<http://xmlns.com/foaf/0.1/name>|<http://www.w3.org/2004/02/skos/core#prefLabel>|<http://schema.org/name>"
+});
 
 
 module.exports = Object.freeze({
@@ -337,6 +349,7 @@ module.exports = Object.freeze({
 	SEARCH_FOAFNAME_STRSTARTS 		: 		SPARNATURAL_CONFIG_DATASOURCES+'search_foafname_strstarts',
 	SEARCH_SKOSPREFLABEL_STRSTARTS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_skospreflabel_strstarts',
 	SEARCH_DCTERMSTITLE_STRSTARTS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_dctermstitle_strstarts',
+	
 	SEARCH_URI_CONTAINS			 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_URI_contains',
 	
 	SEARCH_RDFSLABEL_BIFCONTAINS 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_rdfslabel_bifcontains',
