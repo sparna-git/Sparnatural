@@ -311,10 +311,10 @@
 			} else {
 				value = { start: dateToYMD(start, false) , stop: dateToYMD(end, false)  } ;
 				if (value.start != null)  {
-					value.start = value.start + '-01-01';
+					value.start = value.start + '-01-01T00:00:00';
 				}
 				if (value.stop != null)  {
-					value.stop = value.stop + '-12-31';
+					value.stop = value.stop + '-12-31T23:59:59';
 				}
 			}
 				
@@ -349,7 +349,7 @@
 			var m = date.getMonth() + 1; //Month from 0 to 11
 			var y = date.getFullYear();
 			if (format == 'day') {
-				return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+				return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d) + "T00:00:00";
 			}
 			return y ;		
 		}	

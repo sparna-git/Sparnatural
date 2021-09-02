@@ -306,10 +306,10 @@ class DefaultQueryGenerator {
 		} ;
 	}
 
-	initFilterTime(StartYear, EndYear, index) {
+	initFilterTime(StartTime, EndTime, variable) {
 		
 		var filters = new Array ;
-		if (StartYear != null) {
+		if (StartTime != null) {
 			filters.push( {
 				"type": "operation",
 				"operator": ">=",
@@ -318,14 +318,14 @@ class DefaultQueryGenerator {
 						"type": "functioncall",
 						"function": "http://www.w3.org/2001/XMLSchema#dateTime",
 						"args" : [
-							""+index+""
+							""+variable+""
 						]
 					},
-					"\""+StartYear+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+					"\""+StartTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 				]
 			}) ;
 		}
-		if (EndYear != null) {
+		if (EndTime != null) {
 			filters.push( {
 				"type": "operation",
 				"operator": "<=",
@@ -334,10 +334,10 @@ class DefaultQueryGenerator {
 						"type": "functioncall",
 						"function": "http://www.w3.org/2001/XMLSchema#dateTime",
 						"args" : [
-							""+index+""
+							""+variable+""
 						]
 					},
-					"\""+EndYear+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+					"\""+EndTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 				]
 			}) ;
 		}
