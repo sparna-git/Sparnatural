@@ -132,6 +132,9 @@ export class RDFSpecificationProvider {
 			    
 			}
 		}
+
+		items = this._sort(items);
+
 		console.log("Classes in domain of any property "+items);
 		return items;
 	}
@@ -187,6 +190,8 @@ export class RDFSpecificationProvider {
 			}
 		}
 
+		items = this._sort(items);
+
 		return items ;
 	}
 
@@ -216,6 +221,8 @@ export class RDFSpecificationProvider {
 				}
 			}
 		}
+
+		items = this._sort(items);
 
 		return items ;
 	}
@@ -421,6 +428,17 @@ export class RDFSpecificationProvider {
 		return datasource;
 	}
 
+	_sort(items) {
+		var me = this;
+		const compareFunction = function(item1, item2) {
+		  return me.getLabel(item1).localeCompare(me.getLabel(item2));
+		};
+
+		// sort according to label
+		items.sort(compareFunction);
+		return items;
+	}
+
 	_readPropertiesWithDomain(classId) {
 		var properties = [];
 
@@ -572,7 +590,7 @@ export class RDFSpecificationProvider {
 			.map(quad => quad.object.value);
 		}
 
-		return values;
+		return values.join(", ");
 	}
 
 	_readAsRdfNode(rdfNode, property) {
