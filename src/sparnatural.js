@@ -232,7 +232,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			specProviderFactory.build(settings.config, settings.language, function(sp) {
 				specProvider = sp;
-				initForm(thisForm);
+
+				initStatistics(specProvider).then((value) => {
+					console.log(value);
+					initForm(thisForm);
+				});
+
+				
 				// uncomment to trigger gathering of statistics
 				// initStatistics(specProvider);
 			});		
@@ -286,21 +292,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		        }
 	    	);
 
+			let apiPromises = [];
+
 	    	items = specProvider.getAllSparnaturalClasses() ;
 			for (var key in items) {
 				var aClass = items[key];
 
 				if(!specProvider.isRemoteClass(aClass) && !specProvider.isLiteralClass(aClass)) {
-					var options = {
-						url: statisticsHandler.countClassUrl(aClass),
-						dataType: "json",
-						method: "GET",
-						data: {
-							  dataType: "json"
-						},
-						// keep reference to current class so that it can be accessed in handler
-						context: { classUri: aClass }
-					} ;
+					var options = true ;
 
 					var handler = function( data ) {
 						var count = statisticsHandler.elementCount(data);
@@ -345,17 +344,66 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 									  	);
 									}
 
-									var requestProperty = $.ajax( options );
-									requestProperty.done(handler);
+									apiPromises.push(
+										new Promise(function(resolve, reject) {
+											var requestProperty = $.ajax( {
+												url: url,
+												dataType: "json",
+												method: "GET",
+												data: {
+													dataType: "json"
+												},
+												success: function (data) {
+													resolve(data)
+												},
+												error: function (error) {
+													reject(error)
+												},
+												// keep reference to current class so that it can be accessed in handler
+												context: { 
+													domain: this.classUri,
+													property: aProperty,
+													range: aRange
+												}
+											} );
+											requestProperty.done(handler);
+										})
+									);
+
+									/*var requestProperty = $.ajax( options );
+									requestProperty.done(handler);*/
 					  			}
 					  		}					  		
 					  	}
 					};
 
-					var request = $.ajax( options );
-					request.done(handler);
+					
+					apiPromises.push(
+						new Promise(function(resolve, reject) {
+							var request = $.ajax( {
+								url: statisticsHandler.countClassUrl(aClass),
+								dataType: "json",
+								method: "GET",
+								data: {
+									  dataType: "json"
+								},
+								success: function (data) {
+									resolve(data)
+								},
+								error: function (error) {
+									reject(error)
+								},
+								// keep reference to current class so that it can be accessed in handler
+								context: { classUri: aClass }
+							} );
+							request.done(handler);
+						})
+					);
+
+					
 				}
 			}
+			return Promise.all(apiPromises);
 
 		}
 
