@@ -43,7 +43,8 @@
     "rdf-store-stream": "^1.0.0",
     "sparqljs": "^2.2.3",
     "streamify-string": "^1.0.1",
-    "webpack-cli": "^3.3.7"
+    "webpack-cli": "^3.3.7",
+    "whatwg-fetch": "^3.6.2"
   },
   "browser": {
     "datepicker": "./node_modules/@chenfengyuan/datepicker/dits/datepicker.min.js"
