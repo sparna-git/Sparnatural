@@ -233,14 +233,21 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			specProviderFactory.build(settings.config, settings.language, function(sp) {
 				specProvider = sp;
 
-				initStatistics(specProvider).then((value) => {
-					console.log(value);
+				initStatistics(specProvider).then((value) => { // Wait all statistics requests before initForm
 					initForm(thisForm);
-				});
+				}) ;
 
 				
-				// uncomment to trigger gathering of statistics
-				// initStatistics(specProvider);
+				/*getStatisticsClass(specProvider).then((value) => {
+					console.log(specProvider);
+
+					getStatisticsProperties(specProvider).then((value) => {
+						console.log(specProvider);
+						initForm(thisForm);
+					});
+				}) ;*/
+
+
 			});		
         });	
 		
@@ -275,7 +282,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		function initStatistics(aSpecProvider) {
 			specProvider = new FilteringSpecificationProvider(aSpecProvider);
 
-			/* Run statistics queries */
 			var statisticsHandler = new SimpleStatisticsHandler(
 	    		// endpoint URL
 	    		settings.defaultEndpoint,
@@ -292,6 +298,20 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		        }
 	    	);
 
+
+			var allPromises = new Promise(function(resolve, reject) {
+				getStatisticsClass(specProvider, statisticsHandler).then((value) => {
+					getStatisticsProperties(specProvider, statisticsHandler).then((value) => {
+						resolve(specProvider) ;
+					});
+				}) ;
+				
+			}) ;
+			return allPromises ;
+		}
+
+		function getStatisticsClass(specProvider, statisticsHandler) {
+
 			let apiPromises = [];
 
 	    	items = specProvider.getAllSparnaturalClasses() ;
@@ -305,76 +325,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 						var count = statisticsHandler.elementCount(data);
 						// "this" refers to the "context" property of the options, see jQuery options
 					  	specProvider.notifyClassCount(this.classUri, count);
-
-					  	if(count > 0) {
-					  		for (const aRange of specProvider.getConnectedClasses(this.classUri)) {
-					  			
-					  			for (const aProperty of specProvider.getConnectingProperties(this.classUri, aRange)) {
-
-					  				var url;
-					  				if(specProvider.isRemoteClass(aRange) || specProvider.isLiteralClass(aRange)) {
-					  					url = statisticsHandler.countPropertyWithoutRangeUrl(this.classUri, aProperty);
-					  				} else {
-					  					url = statisticsHandler.countPropertyUrl(this.classUri, aProperty, aRange);
-					  				}
-
-					  				var options = {
-										url: url,
-										dataType: "json",
-										method: "GET",
-										data: {
-											  dataType: "json"
-										},
-										// keep reference to current class so that it can be accessed in handler
-										context: { 
-											domain: this.classUri,
-											property: aProperty,
-											range: aRange
-										}
-									} ;
-
-									var handler = function( data ) {
-										var count = statisticsHandler.elementCount(data);
-										// "this" refers to the "context" property of the options, see jQuery options
-									  	specProvider.notifyPropertyCount(
-									  		this.domain,
-									  		this.property,
-									  		this.range,
-									  		count
-									  	);
-									}
-
-									apiPromises.push(
-										new Promise(function(resolve, reject) {
-											var requestProperty = $.ajax( {
-												url: url,
-												dataType: "json",
-												method: "GET",
-												data: {
-													dataType: "json"
-												},
-												success: function (data) {
-													resolve(data)
-												},
-												error: function (error) {
-													reject(error)
-												},
-												// keep reference to current class so that it can be accessed in handler
-												context: { 
-													domain: this.classUri,
-													property: aProperty,
-													range: aRange
-												}
-											} );
-											requestProperty.done(handler);
-										})
-									);
-
-									/*var requestProperty = $.ajax( options );
-									requestProperty.done(handler);*/
-					  			}
-					  		}					  		
-					  	}
 					};
 
 					
@@ -388,24 +338,84 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 									  dataType: "json"
 								},
 								success: function (data) {
-									resolve(data)
+									resolve(request)
 								},
 								error: function (error) {
-									reject(error)
+									resolve(request)
 								},
 								// keep reference to current class so that it can be accessed in handler
 								context: { classUri: aClass }
 							} );
 							request.done(handler);
+						}).then(function() {
+							
 						})
 					);
-
-					
 				}
 			}
 			return Promise.all(apiPromises);
-
 		}
+
+		function getStatisticsProperties(specProvider, statisticsHandler) {
+			
+			let apiPromises = [];
+			specProvider.getAllSparnaturalClasses().forEach(function(element, index, array) {
+				if (typeof specProvider.classesCount[element] !== 'undefined') {
+					// Check all properties if Class exist on endpoint
+					if (specProvider.classesCount[element] > 0) {
+						for (const aRange of specProvider.getConnectedClasses(element)) {
+							for (const aProperty of specProvider.getConnectingProperties(element, aRange)) {
+								var url;
+								if(specProvider.isRemoteClass(aRange) || specProvider.isLiteralClass(aRange)) {
+									url = statisticsHandler.countPropertyWithoutRangeUrl(element, aProperty);
+								} else {
+									url = statisticsHandler.countPropertyUrl(element, aProperty, aRange);
+								}
+
+								var handler = function( data ) {
+									var count = statisticsHandler.elementCount(data);
+									// "this" refers to the "context" property of the options, see jQuery options
+									specProvider.notifyPropertyCount(
+										this.domain,
+										this.property,
+										this.range,
+										count
+									);
+								}
+								apiPromises.push(
+									new Promise(function(resolve, reject) {
+										var requestProperty = $.ajax( {
+											url: url,
+											dataType: "json",
+											method: "GET",
+											data: {
+												dataType: "json"
+											},
+											success: function (data) {
+												resolve(data) ;
+											},
+											error: function (error) {
+												resolve(error)
+											},
+											// keep reference to current class so that it can be accessed in handler
+											context: { 
+												domain: element,
+												property: aProperty,
+												range: aRange
+											}
+										} );
+
+										requestProperty.done(handler);
+									})
+								);
+							}
+						}
+					}
+				}			  		
+			}) ;
+			return Promise.all(apiPromises);
+		}
+
 
 		function expandQuery(sparqlQuery) {
 			return specProvider.expandQuery(sparqlQuery);
