@@ -2,6 +2,8 @@ require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
 
+require('whatwg-fetch') ;
+
 
 // removed to avoid x2 bundle size
 // the dependency needs to be manually inserted in HTML pages
@@ -315,40 +317,30 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			let apiPromises = [];
 
 	    	items = specProvider.getAllSparnaturalClasses() ;
+
+			let handler = function( data, classKey ) { 
+				var count = statisticsHandler.elementCount(data);
+				// "this" refers to the "context" property of the options, see jQuery options
+				specProvider.notifyClassCount(classKey, count);
+			};
+
 			for (var key in items) {
-				var aClass = items[key];
-
+				let aClass = items[key];
 				if(!specProvider.isRemoteClass(aClass) && !specProvider.isLiteralClass(aClass)) {
-					var options = true ;
-
-					var handler = function( data ) {
-						var count = statisticsHandler.elementCount(data);
-						// "this" refers to the "context" property of the options, see jQuery options
-					  	specProvider.notifyClassCount(this.classUri, count);
-					};
-
-					
 					apiPromises.push(
 						new Promise(function(resolve, reject) {
-							var request = $.ajax( {
-								url: statisticsHandler.countClassUrl(aClass),
-								dataType: "json",
-								method: "GET",
-								data: {
-									  dataType: "json"
-								},
-								success: function (data) {
-									resolve(request)
-								},
-								error: function (error) {
-									resolve(request)
-								},
-								// keep reference to current class so that it can be accessed in handler
-								context: { classUri: aClass }
-							} );
-							request.done(handler);
-						}).then(function() {
-							
+							let Init = { method: 'GET',
+								headers: new Headers(),
+								mode: 'cors',
+								cache: 'default' };
+							let fetchpromise = fetch(statisticsHandler.countClassUrl(aClass), Init) 
+							fetchpromise.then(response => response.json())
+							.then(data => {
+							 	return handler(data, aClass) ;
+						  	})
+							.then(data => {
+								return resolve(specProvider) ;
+							});
 						})
 					);
 				}
@@ -359,53 +351,45 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		function getStatisticsProperties(specProvider, statisticsHandler) {
 			
 			let apiPromises = [];
+
+
+
 			specProvider.getAllSparnaturalClasses().forEach(function(element, index, array) {
 				if (typeof specProvider.classesCount[element] !== 'undefined') {
 					// Check all properties if Class exist on endpoint
 					if (specProvider.classesCount[element] > 0) {
 						for (const aRange of specProvider.getConnectedClasses(element)) {
 							for (const aProperty of specProvider.getConnectingProperties(element, aRange)) {
-								var url;
+								let url;
 								if(specProvider.isRemoteClass(aRange) || specProvider.isLiteralClass(aRange)) {
 									url = statisticsHandler.countPropertyWithoutRangeUrl(element, aProperty);
 								} else {
 									url = statisticsHandler.countPropertyUrl(element, aProperty, aRange);
 								}
-
-								var handler = function( data ) {
+								let handler = function( data ) {
 									var count = statisticsHandler.elementCount(data);
 									// "this" refers to the "context" property of the options, see jQuery options
 									specProvider.notifyPropertyCount(
-										this.domain,
-										this.property,
-										this.range,
+										element,
+										aProperty,
+										aRange,
 										count
 									);
 								}
 								apiPromises.push(
 									new Promise(function(resolve, reject) {
-										var requestProperty = $.ajax( {
-											url: url,
-											dataType: "json",
-											method: "GET",
-											data: {
-												dataType: "json"
-											},
-											success: function (data) {
-												resolve(data) ;
-											},
-											error: function (error) {
-												resolve(error)
-											},
-											// keep reference to current class so that it can be accessed in handler
-											context: { 
-												domain: element,
-												property: aProperty,
-												range: aRange
-											}
-										} );
-
-										requestProperty.done(handler);
+										let Init = { method: 'GET',
+											headers: new Headers(),
+											mode: 'cors',
+											cache: 'default' };
+										let fetchpromise = fetch(url, Init) 
+										fetchpromise.then(response => response.json())
+										.then(data => {
+										return handler(data) ;
+										})
+										.then(data => {
+											return resolve(specProvider) ;
+										});
 									})
 								);
 							}
