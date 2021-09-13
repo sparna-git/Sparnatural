@@ -69,6 +69,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			backgroundBaseColor: '250,136,3',
 			sparqlPrefixes: {},
 			defaultEndpoint: null,
+			// whether or not to send count queries to determine
+			// how many instances of each classes are properties are present in the graph
+			filterConfigOnEndpoint: false,
 			
 			autocomplete : {
 				/**
@@ -268,7 +271,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				if(queries != null) {
 					settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery);
 				}
-			}) ;
+			});
 		}
 
 		function initStatistics(aSpecProvider) {
@@ -296,8 +299,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					getStatisticsProperties(specProvider, statisticsHandler).then((value) => {
 						resolve(specProvider) ;
 					});
-				}) ;
-				
+				});				
 			}) ;
 			return allPromises ;
 		}
