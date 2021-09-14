@@ -111,7 +111,7 @@ To send SPARQL queries to a service that is not hosted on the same domain name a
 
 ## Specification of classes and properties
 
-The component is configurable using a JSON(-LD) ontology file. Look at the specification files under the `config` folders of the demos to get an idea. The file contains :
+The component is configurable using a [JSON(-LD) ontology file](https://github.com/sparna-git/Sparnatural/wiki/JSON-based-configuration), or an [OWL configuration file](https://github.com/sparna-git/Sparnatural/wiki/OWL-based-configuration) editable in Protégé.. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. A JSON(-LD) configuration file contains :
 
 ### Class definition
 
