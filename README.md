@@ -2,7 +2,7 @@
 
 Sparnatural is a **visual SPARQL query builder written in javascript**.
 
-It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists. It can be configured through a JSON-LD ontology file that defines the classes and properties to be presented in the component.
+It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists. It can be configured through a JSON-LD or OWL configuration file (that can be edited in Protégé) that defines the classes and properties to be presented in the component.
 
 ![](documentation/screencast-sparnatural-dbpedia-v3-en.gif)
 
