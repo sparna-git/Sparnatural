@@ -118,7 +118,7 @@
 			  		endClassGroup_value,
 			  		data
 			  	) ;
-				if (items.length < 0) {
+				if (items.length > 0) {
 					$.each( items, function( key, val ) {				  
 						var label = listHandler.elementLabel(val) ; 
 						var uri = listHandler.elementUri(val) ; 
