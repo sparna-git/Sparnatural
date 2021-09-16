@@ -18,5 +18,5 @@
 	"DisplayValueDateFrom" : "A partir de",
 	"DisplayValueDateTo" : "Jusqu'à",
 	"ButtonAdd": "Ajouter",
-	"ListWidgetNoItem": "Aucune valeur disponible"
+	"ListWidgetNoItem": "... Oups, aucune valeur trouvée !"
 }

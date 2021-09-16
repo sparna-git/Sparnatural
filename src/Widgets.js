@@ -82,7 +82,7 @@
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
 		this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
+		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
 		//this.select = $('<select id="'+this.id_input+'"></select>');
 		
 		this.init = function init() {
