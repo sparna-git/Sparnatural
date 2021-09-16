@@ -71,7 +71,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			defaultEndpoint: null,
 			// whether or not to send count queries to determine
 			// how many instances of each classes are properties are present in the graph
-			filterConfigOnEndpoint: false,
+			filterConfigOnEndpoint: true,
 			
 			autocomplete : {
 				/**
@@ -238,11 +238,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			specProviderFactory.build(settings.config, settings.language, function(sp) {
 				specProvider = sp;
 
-				// Wait all statistics requests before initForm
-				initStatistics(specProvider).then((value) => { 
+				if (settings.filterConfigOnEndpoint) {
+					// Wait all statistics requests before initForm
+					initStatistics(specProvider).then((value) => { 
+						initForm(thisForm);
+					}) ;
+				} else {
 					initForm(thisForm);
-				}) ;
-
+				}
 			});		
         });	
 		
