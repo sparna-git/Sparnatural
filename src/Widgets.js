@@ -93,8 +93,8 @@
 			var itc_obj = this.ParentComponent;
 			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 
-			$('#'+id_input).show() ;
-			$('#'+id_input).parents('.list-widget').find('.no-items').hide() ;
+			document.getElementById(id_input).style.display = 'block' ;
+			document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'none' ;
 
 			var options = {
 				url: listHandler.listUrl(
@@ -110,7 +110,7 @@
 			} ;
 			
 			var request = $.ajax( options );
-			var select = $(this.html).find('select') ;
+			//var select = $(this.html).find('select') ;
 			request.done(function( data ) {			  
 			  	var items = listHandler.listLocation(
 			  		startClassGroup_value,
@@ -129,8 +129,8 @@
 						$(itc_obj).trigger('change') ;
 					});
 				} else {
-					$('#'+id_input).hide() ;
-					$('#'+id_input).parents('.list-widget').find('.no-items').show() ;
+					document.getElementById(id_input).style.display = 'none' ;
+					document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
 					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
 				} 
 			});
