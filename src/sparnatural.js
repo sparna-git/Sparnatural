@@ -1446,7 +1446,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    	);
 				}
 
-				this.widgetComponent = new ListWidget(this, handler) ;
+				this.widgetComponent = new ListWidget(this, handler, langSearch) ;
 				this.cssClasses.ListeWidget = true ;
 
 			  	break;
@@ -1503,7 +1503,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    	);
 				}
 
-				this.widgetComponent = new ListWidget(this, handler) ;
+				this.widgetComponent = new ListWidget(this, handler, langSearch) ;
 				this.cssClasses.ListeWidget = true ;
 				break;
 			  case Config.AUTOCOMPLETE_PROPERTY:

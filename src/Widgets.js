@@ -76,14 +76,14 @@
 		}
 	};
 	
-	ListWidget = function(inputTypeComponent, listHandler) {
+	ListWidget = function(inputTypeComponent, listHandler, langSearch) {
 		this.listHandler = listHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
 		
 		this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select></div>' ;
-		this.select = $('<select id="'+this.id_input+'"></select>');
+		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
+		//this.select = $('<select id="'+this.id_input+'"></select>');
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
@@ -92,6 +92,9 @@
 			
 			var itc_obj = this.ParentComponent;
 			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+
+			$('#'+id_input).show() ;
+			$('#'+id_input).parents('.list-widget').find('.no-items').hide() ;
 
 			var options = {
 				url: listHandler.listUrl(
@@ -115,15 +118,21 @@
 			  		endClassGroup_value,
 			  		data
 			  	) ;
-			  	$.each( items, function( key, val ) {				  
-					var label = listHandler.elementLabel(val) ; 
-					var uri = listHandler.elementUri(val) ; 
-					$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
-			  	});
-			  	$('#'+id_input).niceSelect();
-			  	$('#'+id_input).on("change", function() {
-					$(itc_obj).trigger('change') ;
-			  	});  
+				if (items.length < 0) {
+					$.each( items, function( key, val ) {				  
+						var label = listHandler.elementLabel(val) ; 
+						var uri = listHandler.elementUri(val) ; 
+						$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
+					});
+					$('#'+id_input).niceSelect();
+					$('#'+id_input).on("change", function() {
+						$(itc_obj).trigger('change') ;
+					});
+				} else {
+					$('#'+id_input).hide() ;
+					$('#'+id_input).parents('.list-widget').find('.no-items').show() ;
+					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
+				} 
 			});
 		}
 
