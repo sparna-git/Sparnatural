@@ -1,4 +1,5 @@
 	
+	
 	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
 		this.ParentComponent = inputTypeComponent ;
@@ -108,8 +109,44 @@
 					  dataType: "json"
 				}
 			} ;
+			let url = listHandler.listUrl(
+				startClassGroup_value,
+				ObjectPropertyGroup_value,
+				endClassGroup_value
+			);
+			let Init = { method: 'GET',
+				headers: new Headers(),
+				mode: 'cors',
+				cache: 'default' 
+			};
+			let temp = new LocalCacheData() ;
+			let fetchpromise = temp.fetcha(url, Init, 1000) ;
+			fetchpromise.then(response => response.json())
+			.then(data => {
+				var items = listHandler.listLocation(
+					startClassGroup_value,
+					ObjectPropertyGroup_value,
+					endClassGroup_value,
+					data
+				) ;
+				if (items.length > 0) {
+					$.each( items, function( key, val ) {				  
+						var label = listHandler.elementLabel(val) ; 
+						var uri = listHandler.elementUri(val) ; 
+						$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
+					});
+					$('#'+id_input).niceSelect();
+					$('#'+id_input).on("change", function() {
+						$(itc_obj).trigger('change') ;
+					});
+				} else {
+					document.getElementById(id_input).style.display = 'none' ;
+					document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
+					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
+				}  ;
+			});
 			
-			var request = $.ajax( options );
+			/*var request = $.ajax( options );
 			//var select = $(this.html).find('select') ;
 			request.done(function( data ) {			  
 			  	var items = listHandler.listLocation(
@@ -133,7 +170,7 @@
 					document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
 					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
 				} 
-			});
+			});*/
 		}
 
 		this.getValue = function() {
