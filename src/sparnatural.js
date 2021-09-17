@@ -2,6 +2,8 @@ require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
 
+require('whatwg-fetch') ;
+
 
 // removed to avoid x2 bundle size
 // the dependency needs to be manually inserted in HTML pages
@@ -67,6 +69,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			backgroundBaseColor: '250,136,3',
 			sparqlPrefixes: {},
 			defaultEndpoint: null,
+			// whether or not to send count queries to determine
+			// how many instances of each classes are properties are present in the graph
+			filterConfigOnEndpoint: true,
 			
 			autocomplete : {
 				/**
@@ -232,9 +237,15 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			specProviderFactory.build(settings.config, settings.language, function(sp) {
 				specProvider = sp;
-				initForm(thisForm);
-				// uncomment to trigger gathering of statistics
-				// initStatistics(specProvider);
+
+				if (settings.filterConfigOnEndpoint) {
+					// Wait all statistics requests before initForm
+					initStatistics(specProvider).then((value) => { 
+						initForm(thisForm);
+					}) ;
+				} else {
+					initForm(thisForm);
+				}
 			});		
         });	
 		
@@ -263,13 +274,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				if(queries != null) {
 					settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery);
 				}
-			}) ;
+			});
 		}
 
 		function initStatistics(aSpecProvider) {
 			specProvider = new FilteringSpecificationProvider(aSpecProvider);
 
-			/* Run statistics queries */
 			var statisticsHandler = new SimpleStatisticsHandler(
 	    		// endpoint URL
 	    		settings.defaultEndpoint,
@@ -286,78 +296,105 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		        }
 	    	);
 
+
+			var allPromises = new Promise(function(resolve, reject) {
+				getStatisticsClass(specProvider, statisticsHandler).then((value) => {
+					getStatisticsProperties(specProvider, statisticsHandler).then((value) => {
+						resolve(specProvider) ;
+					});
+				});				
+			}) ;
+			return allPromises ;
+		}
+
+		function getStatisticsClass(specProvider, statisticsHandler) {
+
+			let classesPromises = [];
+
 	    	items = specProvider.getAllSparnaturalClasses() ;
+
+			let handler = function( data, classKey ) { 
+				var count = statisticsHandler.elementCount(data);
+				specProvider.notifyClassCount(classKey, count);
+			};
+
 			for (var key in items) {
-				var aClass = items[key];
-
+				let aClass = items[key];
 				if(!specProvider.isRemoteClass(aClass) && !specProvider.isLiteralClass(aClass)) {
-					var options = {
-						url: statisticsHandler.countClassUrl(aClass),
-						dataType: "json",
-						method: "GET",
-						data: {
-							  dataType: "json"
-						},
-						// keep reference to current class so that it can be accessed in handler
-						context: { classUri: aClass }
-					} ;
-
-					var handler = function( data ) {
-						var count = statisticsHandler.elementCount(data);
-						// "this" refers to the "context" property of the options, see jQuery options
-					  	specProvider.notifyClassCount(this.classUri, count);
-
-					  	if(count > 0) {
-					  		for (const aRange of specProvider.getConnectedClasses(this.classUri)) {
-					  			
-					  			for (const aProperty of specProvider.getConnectingProperties(this.classUri, aRange)) {
-
-					  				var url;
-					  				if(specProvider.isRemoteClass(aRange) || specProvider.isLiteralClass(aRange)) {
-					  					url = statisticsHandler.countPropertyWithoutRangeUrl(this.classUri, aProperty);
-					  				} else {
-					  					url = statisticsHandler.countPropertyUrl(this.classUri, aProperty, aRange);
-					  				}
-
-					  				var options = {
-										url: url,
-										dataType: "json",
-										method: "GET",
-										data: {
-											  dataType: "json"
-										},
-										// keep reference to current class so that it can be accessed in handler
-										context: { 
-											domain: this.classUri,
-											property: aProperty,
-											range: aRange
-										}
-									} ;
-
-									var handler = function( data ) {
-										var count = statisticsHandler.elementCount(data);
-										// "this" refers to the "context" property of the options, see jQuery options
-									  	specProvider.notifyPropertyCount(
-									  		this.domain,
-									  		this.property,
-									  		this.range,
-									  		count
-									  	);
-									}
-
-									var requestProperty = $.ajax( options );
-									requestProperty.done(handler);
-					  			}
-					  		}					  		
-					  	}
-					};
-
-					var request = $.ajax( options );
-					request.done(handler);
+					classesPromises.push(
+						new Promise(function(resolve, reject) {
+							let Init = { method: 'GET',
+								headers: new Headers(),
+								mode: 'cors',
+								cache: 'default' };
+							let fetchpromise = fetch(statisticsHandler.countClassUrl(aClass), Init) 
+							fetchpromise.then(response => response.json())
+							.then(data => {
+							 	return handler(data, aClass) ;
+						  	})
+							.then(data => {
+								return resolve(specProvider) ;
+							});
+						})
+					);
 				}
 			}
-
+			return Promise.all(classesPromises);
 		}
+
+		function getStatisticsProperties(specProvider, statisticsHandler) {
+			
+			let propertiesPromises = [];
+
+			specProvider.getAllSparnaturalClasses().forEach(function(element, index, array) {
+				// Check all properties only if Class exists
+				if (
+					(typeof specProvider.classesCount[element] !== 'undefined')
+					&&
+					(specProvider.classesCount[element] > 0)
+				) {					
+					for (const aRange of specProvider.getConnectedClasses(element)) {
+						for (const aProperty of specProvider.getConnectingProperties(element, aRange)) {
+							let url;
+							if(specProvider.isRemoteClass(aRange) || specProvider.isLiteralClass(aRange)) {
+								url = statisticsHandler.countPropertyWithoutRangeUrl(element, aProperty);
+							} else {
+								url = statisticsHandler.countPropertyUrl(element, aProperty, aRange);
+							}
+
+							let handler = function( data ) {
+								var count = statisticsHandler.elementCount(data);
+								specProvider.notifyPropertyCount(
+									element,
+									aProperty,
+									aRange,
+									count
+								);
+							};
+
+							propertiesPromises.push(
+								new Promise(function(resolve, reject) {
+									let Init = { method: 'GET',
+										headers: new Headers(),
+										mode: 'cors',
+										cache: 'default' };
+									let fetchpromise = fetch(url, Init) 
+									fetchpromise.then(response => response.json())
+									.then(data => {
+										return handler(data) ;
+									})
+									.then(data => {
+										return resolve(specProvider) ;
+									});
+								})
+							);
+						}
+					}
+				}			  		
+			}) ;
+			return Promise.all(propertiesPromises);
+		}
+
 
 		function expandQuery(sparqlQuery) {
 			return specProvider.expandQuery(sparqlQuery);
