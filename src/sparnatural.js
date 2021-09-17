@@ -678,6 +678,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 		// hook all components together
 		$(this).on('StartClassGroupSelected', function () { this.EndClassGroup.onStartClassGroupSelected(); });
+		$(this).on('StartClassGroupSelected', function () { this.ObjectPropertyGroup.onStartClassGroupSelected(); });
 		$(this).on('Created', function () { this.StartClassGroup.onCreated(); });
 		$(this).on('EndClassGroupSelected', function () { this.ObjectPropertyGroup.onEndClassGroupSelected(); });
 		$(this).on('ObjectPropertyGroupSelected', function () { this.EndClassWidgetGroup.onObjectPropertyGroupSelected(); });
@@ -883,9 +884,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		} ;
 
 		this.objectPropertySelector = new ObjectPropertyTypeId(this, specProvider) ;
+
+		this.onStartClassGroupSelected = function() {
+			this.html.append('<span class="current temporary-label">'+langSearch.ObjectPropertyTemporaryLabel+'</span>') ;
+		}
 		
 		// triggered when a class is selected in the range
 		this.onEndClassGroupSelected = function() {
+			$(this.html).find('.temporary-label').remove() ;
 			$(this.html).find('.input-val').unbind('change');
 
 			if (!this.objectPropertySelector.cssClasses.Created) {
@@ -1156,6 +1162,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.parentCriteriaGroup.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
 			this.parentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = true ;
 			this.parentCriteriaGroup.ObjectPropertyGroup.init() ;
+			this.parentCriteriaGroup.ObjectPropertyGroup.onStartClassGroupSelected() ;
 			$(this.parentCriteriaGroup.ComponentHtml).find('.childsList .ActionRemove a').trigger('click') ;
 			this.value_selected = null;
 			this.cssClasses.HasInputsCompleted = false ;
