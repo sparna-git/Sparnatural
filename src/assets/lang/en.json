@@ -18,5 +18,6 @@
 	"DisplayValueDateFrom" : "From",
 	"DisplayValueDateTo" : "Until",
 	"ButtonAdd": "Add",
-	"ListWidgetNoItem": "... Oups, no value found !"
+	"ListWidgetNoItem": "... Oups, no value found !",
+	"ObjectPropertyTemporaryLabel": "... related to"
 }
