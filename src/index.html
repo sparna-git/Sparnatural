@@ -476,6 +476,7 @@
           sparqlPrefixes : {
             "dbpedia" : "http://dbpedia.org/ontology/"
           },
+          filterConfigOnEndpoint : false,
           onQueryUpdated: function(queryString, queryJson) {
             queryString = semanticPostProcess(queryString, queryJson);
             queryString = rdfsLabelPostProcess(queryString, queryJson);
