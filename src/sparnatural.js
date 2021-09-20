@@ -68,6 +68,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			backgroundBaseColor: '250,136,3',
 			sparqlPrefixes: {},
 			defaultEndpoint: null,
+			localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miliseconds
 			
 			autocomplete : {
 				/**
