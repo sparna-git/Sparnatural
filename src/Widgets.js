@@ -120,7 +120,7 @@
 				cache: 'default' 
 			};
 			let temp = new LocalCacheData() ;
-			let fetchpromise = temp.fetcha(url, Init, 1000) ;
+			let fetchpromise = temp.fetcha(url, options, 100000) ;
 			fetchpromise.then(response => response.json())
 			.then(data => {
 				var items = listHandler.listLocation(
