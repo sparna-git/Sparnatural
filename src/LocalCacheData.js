@@ -4,27 +4,30 @@ class LocalCacheData {
 
     }
 
-    fetcha(uri, init, ttl) {
+    fetch(uri, init, ttl) {
         if (this.storageAvailable('localStorage')) {
 
             var lastLoading = localStorage[uri] ;
-            if (lastLoading < Date.now() - ttl) {
-                localStorage.setItem(uri, Date.now()) ;
-                init.cache = 'reload' ;
-            } else {
-                init.cache = 'force-cache' ;
-            }
-
-            console.log(localStorage.getItem(uri));
-            var lastLoading = localStorage[uri] ;
             var now = Date.now();
 
-            console.log(now) ;
-            return fetch(uri, init) ;
+            if(!localStorage.getItem(uri)) {
+                localStorage.setItem(uri, now) ;
+            }
+            lastLoading = localStorage.getItem(uri) ; 
+
+            if (lastLoading < now - ttl) {
+                localStorage.setItem(uri, now) ;
+                init.cache = 'reload' ;
+                return fetch(uri, init) ;
+            } else {
+                init.cache = 'force-cache' ;
+                return fetch(uri, init) ;
+            }
         } else {
             return fetch(uri, init) ;
         }
     }
+
 
     storageAvailable(type) {
         try {

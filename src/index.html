@@ -476,6 +476,7 @@
           sparqlPrefixes : {
             "dbpedia" : "http://dbpedia.org/ontology/"
           },
+          localCacheDataTtl: 1000 * 60, // 1 minute in miiseconds (for checking)
           onQueryUpdated: function(queryString, queryJson) {
             queryString = semanticPostProcess(queryString, queryJson);
             queryString = rdfsLabelPostProcess(queryString, queryJson);

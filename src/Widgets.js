@@ -77,7 +77,7 @@
 		}
 	};
 	
-	ListWidget = function(inputTypeComponent, listHandler, langSearch) {
+	ListWidget = function(inputTypeComponent, listHandler, langSearch, settings) {
 		this.listHandler = listHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
@@ -120,7 +120,7 @@
 				cache: 'default' 
 			};
 			let temp = new LocalCacheData() ;
-			let fetchpromise = temp.fetcha(url, options, 100000) ;
+			let fetchpromise = temp.fetch(url, options, settings.localCacheDataTtl) ;
 			fetchpromise.then(response => response.json())
 			.then(data => {
 				var items = listHandler.listLocation(

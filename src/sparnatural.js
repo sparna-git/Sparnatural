@@ -41,7 +41,7 @@ SparqlTemplateAutocompleteHandler = require("./AutocompleteAndListHandlers.js").
 
 SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHandler;
 
-LocalCacheData = require("./CacheData.js").LocalCacheData;
+LocalCacheData = require("./LocalCacheData.js").LocalCacheData;
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 
 require("./Widgets.js");
@@ -1454,7 +1454,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    	);
 				}
 
-				this.widgetComponent = new ListWidget(this, handler, langSearch) ;
+				this.widgetComponent = new ListWidget(this, handler, langSearch, settings) ;
 				this.cssClasses.ListeWidget = true ;
 
 			  	break;
@@ -1511,7 +1511,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    	);
 				}
 
-				this.widgetComponent = new ListWidget(this, handler, langSearch) ;
+				this.widgetComponent = new ListWidget(this, handler, langSearch, settings) ;
 				this.cssClasses.ListeWidget = true ;
 				break;
 			  case Config.AUTOCOMPLETE_PROPERTY:
