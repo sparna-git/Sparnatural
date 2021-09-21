@@ -110,15 +110,16 @@ export class RDFSpecificationProvider {
 			// we are not looking at domains of _any_ property
 		    // the property we are looking at must be a Sparnatural property, with a known type
 			var objectPropertyId = quad.subject.id;
+			var typeClass = quad.object.termType;
 		    var classId = quad.object.id;
 
-		    if(this.getObjectPropertyType(objectPropertyId)) {
-
+		    if(this.getObjectPropertyType(objectPropertyId) || typeClass == "BlankNode" ) {
+		    	
 		    	// keep only Sparnatural classes in the list
-		    	if(this.isSparnaturalClass(classId)) {
+		    	if(this.isSparnaturalClass(classId) || typeClass == "BlankNode") {
 			    	// always exclude RemoteClasses from first list
 			    	if(!this.isRemoteClass(classId)) {
-			    		if(!this._isUnionClass(classId)) {			    
+			    		if(!this._isUnionClass(classId) & typeClass != "BlankNode") {			    
 						    this._pushIfNotExist(classId, items);	
 					    } else {
 					    	// read union content
@@ -145,7 +146,7 @@ export class RDFSpecificationProvider {
 
 	getIcon(classId) {
 		var faIcon = this._readAsLiteral(classId, factory.namedNode(Config.FA_ICON));
-		if(faIcon != null) {
+		if(faIcon.length > 0) {
 			// use of fa-fw for fixed-width icons
 			return "<span style='font-size: 170%;' >&nbsp;<i class='" + faIcon + " fa-fw'></i></span>";
 		} else {
@@ -616,7 +617,7 @@ export class RDFSpecificationProvider {
 	/*** Handling of UNION classes ***/
 
 	_isUnionClass(classUri) {
-		return this._hasProperty(factory.namedNode(classUri), OWL.UNION_OF);
+		return this._hasProperty(factory.blankNode(classUri), OWL.UNION_OF);
 	}
 
 	_isInUnion(classUri) {
