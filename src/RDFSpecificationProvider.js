@@ -113,13 +113,13 @@ export class RDFSpecificationProvider {
 			var typeClass = quad.object.termType;
 		    var classId = quad.object.id;
 
-		    if(this.getObjectPropertyType(objectPropertyId) || typeClass == "BlankNode" ) {
+		    if(this.getObjectPropertyType(objectPropertyId)) {
 		    	
 		    	// keep only Sparnatural classes in the list
 		    	if(this.isSparnaturalClass(classId) || typeClass == "BlankNode") {
 			    	// always exclude RemoteClasses from first list
 			    	if(!this.isRemoteClass(classId)) {
-			    		if(!this._isUnionClass(classId) & typeClass != "BlankNode") {			    
+			    		if(!this._isUnionClass(classId)) {			    
 						    this._pushIfNotExist(classId, items);	
 					    } else {
 					    	// read union content
@@ -151,7 +151,7 @@ export class RDFSpecificationProvider {
 			return "<span style='font-size: 170%;' >&nbsp;<i class='" + faIcon + " fa-fw'></i></span>";
 		} else {
 			var icon = this._readAsLiteral(classId, factory.namedNode(Config.ICON));
-			if ( icon != null) {
+			if ( icon.length > 0) {
 				return icon;
 			} else {
 				// this is ugly, just so it aligns with other entries having an icon
@@ -617,7 +617,7 @@ export class RDFSpecificationProvider {
 	/*** Handling of UNION classes ***/
 
 	_isUnionClass(classUri) {
-		return this._hasProperty(factory.blankNode(classUri), OWL.UNION_OF);
+		return this._hasProperty(factory.namedNode(classUri), OWL.UNION_OF);
 	}
 
 	_isInUnion(classUri) {
