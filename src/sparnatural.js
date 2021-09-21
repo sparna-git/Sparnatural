@@ -284,7 +284,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				console.log("*** New SPARQL from JSON data structure ***");
 				var writer = new QuerySPARQLWriter(
 					settings.addDistinct,
-					settings.typePredicate);
+					settings.typePredicate,
+					specProvider
+				);
 				writer.setPrefixes(settings.sparqlPrefixes);
 				console.log(writer.toSPARQL(jsonQuery));
 			}) ;

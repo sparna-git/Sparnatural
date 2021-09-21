@@ -38,11 +38,11 @@ export class QueryLine {
 		objectType,
 		objectVariable
 	) {
-		this.subjectVariable = subjectVariable;
-		this.subjectType = subjectType;
-		this.property = property;
-		this.objectType = objectType;
-		this.objectVariable = objectVariable;
+		this.s = subjectVariable;
+		this.p = property;
+		this.o = objectVariable;
+		this.sType = subjectType;
+		this.oType = objectType;
 		this.values = [];
 	}
 }
@@ -97,9 +97,14 @@ export class SearchValue extends AbstractValue {
  **/
 export class QuerySPARQLWriter {
 
-	constructor(distinct=true, typePredicate="http://www.w3.org/1999/02/22-rdf-syntax-ns#type") {
+	constructor(
+		distinct=true,
+		typePredicate="http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+		specProvider
+	) {
 		this.distinct = distinct;
 		this.typePredicate = typePredicate;
+		this.specProvider = specProvider;
 		this.additionnalPrefixes = {};
 	}
 
@@ -131,17 +136,18 @@ export class QuerySPARQLWriter {
     	}
 
 		for (var i = 0; i < query.branches.length; i++) {
-			var basicGraphPatterns = this._QueryBranchToSPARQL(
+			this._QueryBranchToSPARQL(
+				sparqlQuery,
 				query.branches[i],
 				// only the first one will have a type criteria
 				i == 0
 			) ;
-			for (var k = 0; k < basicGraphPatterns.length; k++) {
-				sparqlQuery.where.push(basicGraphPatterns[k]);
-			}
 		}
 
 		console.log(sparqlQuery);
+
+		var stringWriter = new QueryExplainStringWriter(this.specProvider);
+		console.log(stringWriter.toExplainString(query));
 
 		var generator = new SparqlGenerator();
 		var generatedQuery = generator.stringify(sparqlQuery);		
@@ -149,51 +155,82 @@ export class QuerySPARQLWriter {
 		return generatedQuery;
 	}
 
-	_QueryBranchToSPARQL(queryBranch, firstTopLevelBranch) {
-		var basicGraphPatterns = [];
-
-		var newBasicGraphPattern = this._initBasicGraphPattern() ;
+	_QueryBranchToSPARQL(sparqlQuery, queryBranch, firstTopLevelBranch) {		
 		// write the line
-		this._QueryLineToSPARQL(queryBranch.line, newBasicGraphPattern, firstTopLevelBranch);
-		basicGraphPatterns.push(newBasicGraphPattern);
+		this._QueryLineToSPARQL(sparqlQuery, queryBranch.line, firstTopLevelBranch);
 
 		// iterate on children
 		for (var i = 0; i < queryBranch.children.length; i++) {
 			// recursive call on children
-			basicGraphPatterns.concat(this._QueryBranchToSPARQL(
+			this._QueryBranchToSPARQL(
+				sparqlQuery,
 				queryBranch.children[i],
 				false
-			)) ;
+			)
 		}
-
-		return basicGraphPatterns;
 	}
 
-	_QueryLineToSPARQL(queryLine, bgp, includeSubjectType=false) {
+	_QueryLineToSPARQL(sparqlQuery, queryLine, includeSubjectType=false) {
+		var bgp = this._initBasicGraphPattern() ;
+
 		// only for the very first criteria
 		if (includeSubjectType) {
 			bgp.triples.push(this._buildTriple(
-				queryLine.subjectVariable,
+				queryLine.s,
 				this.typePredicate,
-				queryLine.subjectType
+				queryLine.sType
 			)) ;
 		}
 
-		if(queryLine.values.length == 0) {
-			// TODO
-		} else if(queryLine.values.length == 1) {
-			// if we are in a value selection widget and we have a single value selected
-			// then insert the value directly as the object of the triple						
-			bgp.triples.push(this._buildTriple(
-				queryLine.subjectVariable,
-				queryLine.property,
-				queryLine.values[0].uri,
-				// insert as a literal if the value is a literal value
-				queryLine.values[0] instanceof LiteralValue
-			)) ;
-		} else {
-			// TODO
+		if(queryLine.p && queryLine.o) {
+			if(queryLine.values.length == 0) {
+				if(
+					!this.specProvider.isRemoteClass(queryLine.oType)
+					&&
+					!this.specProvider.isLiteralClass(queryLine.oType)
+				) {
+					bgp.triples.push(this._buildTriple(
+						queryLine.s,
+						queryLine.p,
+						queryLine.o
+					)) ;
+					bgp.triples.push(this._buildTriple(
+						queryLine.o,
+						this.typePredicate,
+						queryLine.oType
+					)) ;
+				}
+			} else if(queryLine.values.length == 1) {
+				// if we are in a value selection widget and we have a single value selected
+				// then insert the value directly as the object of the triple						
+				bgp.triples.push(this._buildTriple(
+					queryLine.s,
+					queryLine.p,
+					queryLine.values[0].uri,
+					// insert as a literal if the value is a literal value
+					queryLine.values[0] instanceof LiteralValue
+				)) ;
+			} else {
+				// push in the bgp only s/p/o, values are inserted after
+				bgp.triples.push(this._buildTriple(
+					queryLine.s,
+					queryLine.p,
+					queryLine.o
+				)) ;
+			}
+		}
+		sparqlQuery.where.push(bgp);
+
+		if(queryLine.values.length > 1) {			
+			var jsonValues = this._initValues() ;
+			queryLine.values.forEach(function(v) {
+				var newValue = {  } ;
+		 		newValue[name] = v.uri ;
+		  		jsonValues.values.push(newValue) ;
+			});
+			sparqlQuery.where.push(jsonValues) ;
 		}	
+
 	}
 
 
@@ -217,5 +254,65 @@ export class QuerySPARQLWriter {
 		} ;
 	}
 
+	_initValues() {			
+		return {
+				"type": "values",
+				"values": []
+		} ;
+	}
 
+
+}
+
+export class QueryExplainStringWriter {
+	constructor(
+		specProvider
+	) {
+		this.specProvider = specProvider;
+	}
+
+	toExplainString(query) {
+		var explainString = "";
+		for (var i = 0; i < query.branches.length; i++) {
+			if(i != 0) {
+				explainString += "and" + "\n";
+			}
+			explainString += this._QueryBranchToExplainString(query.branches[i], 0);
+		}
+		return explainString;
+	}
+
+	_QueryBranchToExplainString(queryBranch, indent) {
+		var result = "";
+		// write the line
+		result += this._QueryLineToExplainString(queryBranch.line, indent);
+
+		// iterate on children
+		var newIndent = indent+2;
+		for (var i = 0; i < queryBranch.children.length; i++) {
+			if(i == 0) {
+				result += " ".repeat(newIndent) + "where" + "\n";
+			} else {
+				result += " ".repeat(newIndent) + "and" + "\n";
+			}
+			// recursive call on children
+			result += this._QueryBranchToExplainString(
+				queryBranch.children[i],
+				newIndent
+			)
+		}
+		return result;
+	}
+
+	_QueryLineToExplainString(queryLine, indent) {
+		var result = " ".repeat(indent);
+		result += this.specProvider.getLabel(queryLine.sType);
+		if(queryLine.p && queryLine.o) {
+			result += " "+this.specProvider.getLabel(queryLine.p);
+			result += " "+this.specProvider.getLabel(queryLine.oType);
+			// TODO : values
+		}
+		result += "\n";
+		return result;
+	}
 }
