@@ -71,7 +71,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			defaultEndpoint: null,
 			// whether or not to send count queries to determine
 			// how many instances of each classes are properties are present in the graph
-			filterConfigOnEndpoint: true,
+			filterConfigOnEndpoint: false,
 			
 			autocomplete : {
 				/**

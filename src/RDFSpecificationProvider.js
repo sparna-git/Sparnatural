@@ -110,12 +110,13 @@ export class RDFSpecificationProvider {
 			// we are not looking at domains of _any_ property
 		    // the property we are looking at must be a Sparnatural property, with a known type
 			var objectPropertyId = quad.subject.id;
+			var typeClass = quad.object.termType;
 		    var classId = quad.object.id;
 
 		    if(this.getObjectPropertyType(objectPropertyId)) {
-
+		    	
 		    	// keep only Sparnatural classes in the list
-		    	if(this.isSparnaturalClass(classId)) {
+		    	if(this.isSparnaturalClass(classId) || typeClass == "BlankNode") {
 			    	// always exclude RemoteClasses from first list
 			    	if(!this.isRemoteClass(classId)) {
 			    		if(!this._isUnionClass(classId)) {			    
@@ -145,12 +146,12 @@ export class RDFSpecificationProvider {
 
 	getIcon(classId) {
 		var faIcon = this._readAsLiteral(classId, factory.namedNode(Config.FA_ICON));
-		if(faIcon != null) {
+		if(faIcon.length > 0) {
 			// use of fa-fw for fixed-width icons
 			return "<span style='font-size: 170%;' >&nbsp;<i class='" + faIcon + " fa-fw'></i></span>";
 		} else {
 			var icon = this._readAsLiteral(classId, factory.namedNode(Config.ICON));
-			if ( icon != null) {
+			if ( icon.length > 0) {
 				return icon;
 			} else {
 				// this is ugly, just so it aligns with other entries having an icon
