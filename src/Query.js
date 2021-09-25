@@ -202,7 +202,11 @@ export class QuerySPARQLWriter {
 						queryLine.oType
 					)) ;
 				}
-			} else if(queryLine.values.length == 1) {
+			} else if(
+				queryLine.values.length == 1
+				&&
+				queryLine.values[0].uri
+			) {
 				// if we are in a value selection widget and we have a single value selected
 				// then insert the value directly as the object of the triple						
 				bgp.triples.push(this._buildTriple(
@@ -223,6 +227,7 @@ export class QuerySPARQLWriter {
 		}
 		sparqlQuery.where.push(bgp);
 
+		// this can only be the case for value selection widgets
 		if(queryLine.values.length > 1) {			
 			var jsonValues = this._initValues() ;
 			queryLine.values.forEach(function(v) {
@@ -231,6 +236,13 @@ export class QuerySPARQLWriter {
 		  		jsonValues.values.push(newValue) ;
 			});
 			sparqlQuery.where.push(jsonValues) ;
+		}
+
+		// if we have a date criteria
+		if(queryLine.values.length == 1 && (queryLine.values[0].fromDate || queryLine.values[0].toDate)) {
+			sparqlQuery.where.push(
+				this._initFilterTime(queryLine.values[0].fromDate, queryLine.values[0].toDate, queryLine.o)
+			) ;
 		}	
 
 	}
@@ -263,7 +275,58 @@ export class QuerySPARQLWriter {
 		} ;
 	}
 
+	_initFilterTime(StartTime, EndTime, variable) {
+		
+		var filters = new Array ;
+		if (StartTime != null) {
+			filters.push( {
+				"type": "operation",
+				"operator": ">=",
+				"args": [
+					{
+						"type": "functioncall",
+						"function": "http://www.w3.org/2001/XMLSchema#dateTime",
+						"args" : [
+							""+variable+""
+						]
+					},
+					"\""+StartTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+				]
+			}) ;
+		}
+		if (EndTime != null) {
+			filters.push( {
+				"type": "operation",
+				"operator": "<=",
+				"args": [
+					{
+						"type": "functioncall",
+						"function": "http://www.w3.org/2001/XMLSchema#dateTime",
+						"args" : [
+							""+variable+""
+						]
+					},
+					"\""+EndTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+				]
+			}) ;
+		}
 
+		if (filters.length == 2 ) {
+			return {
+				"type": "filter",
+				"expression": {
+					"type": 'operation',
+					"operator": "&&",
+					"args": filters
+				}
+			} ;
+		} else {
+			return {
+				"type": "filter",
+				"expression": filters[0]
+			} ;
+		}
+	}
 }
 
 export class QueryExplainStringWriter {
