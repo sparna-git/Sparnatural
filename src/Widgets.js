@@ -72,17 +72,10 @@
 
 			return {
 				key: $(id_input).val(),
-				label: '<span>' + $(id_input).val()  + '</span>',
+				label: $(id_input).val(),
 				uri: $(id_input).val()
 			} ;
 		}
-
-		/*
-		this.getValueLabel = function() {
-			var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
-			return '<span>' + $(id_input).val()  + '</span>' ;
-		}
-		*/
 	};
 	
 	ListWidget = function(inputTypeComponent, listHandler, langSearch) {
@@ -151,17 +144,10 @@
 
 			return {
 				key: $(id_input).val(),
-				label: '<span>' + $(id_input).find('option:selected').text() + '</span>',
+				label: $(id_input).find('option:selected').text(),
 				uri: $(id_input).val()
 			} ;
 		}
-
-		/*
-		this.getValueLabel = function() {
-			var id_input = '#'+ this.id_input ;
-			return '<span>' + $(id_input).find('option:selected').text() + '</span>' ;
-		}
-		*/
 	}
 	
 	DatesWidget = function(inputTypeComponent, datesHandler, langSearch) {
@@ -263,19 +249,11 @@
 			return {
 				key: value.start+' '+value.stop,
 				// TODO : this is not translated
-				label: '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>',
+				label: 'De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')',
 				start: value.start,
 				stop: value.stop
 			};
-		}
-
-		/*
-		this.getValueLabel = function() {
-			var id_input = '#ecgrw-date-'+ this.IdCriteriaGroupe +'-input' ;
-			// TODO : this is not translated
-			return '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
-		}
-		*/		
+		}		
 	}
 	
 	TimeDatePickerWidget = function(inputTypeComponent, datesHandler, format, langSearch) {
@@ -374,11 +352,11 @@
 			var end = $(id_input+'-stop').val() ;
 			var valueLabel = null;
 			if ((start != '') && (end != '')) {
-				valueLabel = '<span class="label-two-line">'+langSearch.LabelDateFrom+' '+ $(id_input+'-start').val() +' '+langSearch.LabelDateTo+' '+ $(id_input+'-stop').val() + '</span>' ;
+				valueLabel = langSearch.LabelDateFrom+' '+ $(id_input+'-start').val() +' '+langSearch.LabelDateTo+' '+ $(id_input+'-stop').val() ;
 			} else if (start != '') {
-				valueLabel = '<span class="label-two-line">'+langSearch.DisplayValueDateFrom+' '+ $(id_input+'-start').val() + '</span>' ;
+				valueLabel = langSearch.DisplayValueDateFrom+' '+ $(id_input+'-start').val() ;
 			} else if (end != '') {
-				valueLabel = '<span class="label-two-line">'+langSearch.DisplayValueDateTo+' '+ $(id_input+'-stop').val() + '</span>' ;
+				valueLabel = langSearch.DisplayValueDateTo+' '+ $(id_input+'-stop').val() ;
 			}
 
 			return valueLabel;
@@ -425,17 +403,10 @@
 
 			return {
 				key: $(id_input).val(),
-				label: '<span>'+ $(id_input).val() +'</span>',
+				label: $(id_input).val(),
 				search: $(id_input).val()
 			}
 		}
-
-		/*
-		this.getValueLabel = function() {
-			var id_input = '#ecgrw-search-'+ this.IdCriteriaGroupe +'-input-value' ;
-			return '<span>'+ $(id_input).val() +'</span>' ;
-		}
-		*/
 	}
 
 	NoWidget = function(inputTypeComponent) {
@@ -449,11 +420,4 @@
 			// cannot provide any value
 			return null;
 		}
-
-		/*
-		this.getValueLabel = function() {
-			// cannot provide any value label 
-			return null;
-		}
-		*/
 	}

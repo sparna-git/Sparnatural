@@ -1085,7 +1085,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		// }
 		this.onChange = function onChange() {
 			var theValue = this.inputTypeComponent.getValue() ;
-			var theValueLabel = theValue.label;
+			// put span around with proper class if coming from a date widget
+			var theValueLabel = '<span'+((theValue.start || theValue.stop)?' class="label-two-line"':'')+'>' + theValue.label + '</span>';
 			if (theValue == null ) {
 				return false ;
 			}
