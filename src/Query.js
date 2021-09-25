@@ -52,9 +52,9 @@ export class QueryLine {
  **/
 export class AbstractValue {
 
-	constructor(displayLabel) {
+	constructor(label) {
 		// not used to serialize SPARQL, just for info
-		this.displayLabel = displayLabel;
+		this.label = label;
 	}
 
 }
@@ -73,21 +73,23 @@ export class URIValue extends AbstractValue {
  * A literal value
  **/
 export class LiteralValue extends AbstractValue {
-	constructor(literal) {
-		super();
+	constructor(literal, label=null) {
+		super(label);
 		this.literal=literal;
 	}
 }
 
 export class DateTimeValue extends AbstractValue {
-	constructor(fromDate, toDate) {
+	constructor(fromDate, toDate, label=null) {
+		super(label);
 		this.fromDate = fromDate;
 		this.toDate = toDate;
 	}
 }
 
 export class SearchValue extends AbstractValue {
-	constructor(key) {
+	constructor(key, label=null) {
+		super(label);
 		this.key = key;
 	}
 }
@@ -310,7 +312,12 @@ export class QueryExplainStringWriter {
 		if(queryLine.p && queryLine.o) {
 			result += " "+this.specProvider.getLabel(queryLine.p);
 			result += " "+this.specProvider.getLabel(queryLine.oType);
-			// TODO : values
+			if(queryLine.values.length > 0) {
+				result += " : ";
+			}
+			queryLine.values.forEach(function(v) {
+				result += v.label+", ";
+			});
 		}
 		result += "\n";
 		return result;

@@ -1034,19 +1034,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			);			
 		}
 		
+		// input : the 'key' of the value to be deleted
 		this.onRemoveValue = function removeValue(e) {
 			
-			var valueDataAttr = $(e.currentTarget).attr('value-data') ;
-
-			for (var item in this.selectedValues) {	
-
-				if (Array.isArray(this.selectedValues[item])) {
-					var value_data = this.selectedValues[item].toString() ;
-				} else {
-					var value_data = this.selectedValues[item] ;
-				}
-
-				if (value_data == valueDataAttr ) {
+			var keyToBeDeleted = $(e.currentTarget).attr('value-data') ;
+			for (var item in this.selectedValues) {
+				if(this.selectedValues[item].key == keyToBeDeleted) {
 					this.selectedValues.splice(item, 1); 
 				}
 			}
@@ -1084,26 +1077,30 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		} ;
 
 		// sélection et affichage d'une valeur sélectionnée par un widget de saisie
+		// la structure attendue est
+		// {
+		//   key : ... ,
+		//   label: ... ,
+		//   + soit 'uri', soit 'search', soit 'start' et 'stop' en fonction du widget
+		// }
 		this.onChange = function onChange() {
 			var theValue = this.inputTypeComponent.getValue() ;
-			var theValueLabel = this.inputTypeComponent.getValueLabel() ;
+			var theValueLabel = theValue.label;
 			if (theValue == null ) {
 				return false ;
 			}
 			// if the same value is already selected, don't do anything
-			if (
-				this.selectedValues.length > 0
-				&&
-				Object.onArray(this.selectedValues, theValue) == true
-			) {
-				return false ;
+			for (var item in this.selectedValues) {
+				if(this.selectedValues[item].key == theValue.key) {
+					return false;
+				}
 			}
-			
+
 			this.selectedValues.push(theValue) ;			
 			
-			var value_data = (Array.isArray(theValue))?theValue.toString():theValue;
+			// var value_data = (Array.isArray(theValue))?theValue.toString():theValue;
 
-			this.unselect = $('<span class="unselect" value-data="'+value_data+'"><i class="far fa-times-circle"></i></span>') ;
+			this.unselect = $('<span class="unselect" value-data="'+theValue.key+'"><i class="far fa-times-circle"></i></span>') ;
 			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
 				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+theValueLabel+'</p></div>').find('div').append(this.unselect) ;
 			} else {
@@ -1615,9 +1612,11 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			return this.widgetComponent.getValue() ;
 		}
 
+		/*
 		this.getValueLabel = function () {			
 			return this.widgetComponent.getValueLabel() ;
 		}
+		*/
 		
 	}
 

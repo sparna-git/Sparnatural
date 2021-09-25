@@ -93,28 +93,35 @@ class JSONQueryGenerator {
 			  case Config.LIST_PROPERTY:
 			  case Config.AUTOCOMPLETE_PROPERTY:
 			  	for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {				  	
-				  	var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
-				  	line.values.push(new URIValue(value));
+				  	var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
+				  	line.values.push(new URIValue(
+				  		selectedValue.uri,
+				  		selectedValue.label
+				  	));
 				}
 			  	break;
 			  case Config.LITERAL_LIST_PROPERTY:
 				for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {
-				  	var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
-				  	line.values.push(new LiteralValue(value));
+					// TODO : we use the same key 'uri' but this is a literal
+				  	var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key].uri;
+				  	line.values.push(new LiteralValue(
+				  		selectedValue.uri,
+				  		selectedValue.label
+				  	));
 				}
 				break;
 			  case Config.TIME_PROPERTY_PERIOD:
 			  case Config.TIME_PROPERTY_YEAR:
 			  case Config.TIME_PROPERTY_DATE:
 			  	for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {
-					var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
-					line.values.push(new DateTimeValue(value.start, value.stop));
+					var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
+					line.values.push(new DateTimeValue(selectedValue.start, selectedValue.stop, selectedValue.label));
 				}
 				break;
 			  case Config.SEARCH_PROPERTY:				  
 			  case Config.GRAPHDB_SEARCH_PROPERTY:
-				  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0];
-				  line.values.push(new SearchValue(value));
+				  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
+				  line.values.push(new SearchValue(value, value));
 				  break;
 			  default:
 			  	console.log('Unknown widget type when generating SPARQL : '+_WidgetType);						
@@ -344,7 +351,7 @@ class DefaultQueryGenerator {
 				newBasicGraphPattern.triples.push(this.buildTriple(
 					subjectVariable,
 					property,
-					component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0],
+					component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].uri,
 					// insert as a literal if the widget was a literal list
 					(_WidgetType == Config.LITERAL_LIST_PROPERTY)
 				)) ;
@@ -420,12 +427,12 @@ class DefaultQueryGenerator {
 				  }
 				  break;
 			  case Config.SEARCH_PROPERTY:
-				  var searchKey = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0] ;			  	
+				  var searchKey = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search ;			  	
 				  jsonFilter = this.initFilterSearch(searchKey, objectVariable) ;
 				  jsonQuery.where.push(jsonFilter) ;
 				  break;
 			  case Config.GRAPHDB_SEARCH_PROPERTY:
-				  var searchKey = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0] ;
+				  var searchKey = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search ;
 				  jsonQuery = this.updateGraphDbPrefixes(jsonQuery);
 				  var connectorName = this.localName(rangeClass);
 				  var fieldName = this.localName(property);
@@ -586,10 +593,10 @@ class DefaultQueryGenerator {
 		return triple;
 	}
 
-	addVariable(jsonValues, name, valueUrl) {			
-		$.each(valueUrl, function( index, value ) {
+	addVariable(jsonValues, name, allValues) {			
+		$.each(allValues, function( index, value ) {
 		  var newValue = {  } ;
-		  newValue[name] = value ;
+		  newValue[name] = value.uri ;
 		  jsonValues.values.push(newValue) ;			  
 		});
 		

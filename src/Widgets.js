@@ -54,7 +54,8 @@
 						var label = autocompleteHandler.elementLabel(value) ; 
 						var uri = autocompleteHandler.elementUri(value) ; 
 						$('#ecgrw-'+id_inputs+'-input').val(label)
-						$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");$(itc_obj).trigger("change");
+						$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");
+						$(itc_obj).trigger("change");
 					}
 				},
 
@@ -67,13 +68,21 @@
 
 		this.getValue = function() {
 			var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-			return $(id_input).val() ;
+			var id_input_label = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
+
+			return {
+				key: $(id_input).val(),
+				label: '<span>' + $(id_input).val()  + '</span>',
+				uri: $(id_input).val()
+			} ;
 		}
 
+		/*
 		this.getValueLabel = function() {
 			var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
 			return '<span>' + $(id_input).val()  + '</span>' ;
 		}
+		*/
 	};
 	
 	ListWidget = function(inputTypeComponent, listHandler, langSearch) {
@@ -138,13 +147,21 @@
 
 		this.getValue = function() {
 			var id_input = '#'+ this.id_input ;
-			return $(id_input).val() ;
+			// return $(id_input).val() ;
+
+			return {
+				key: $(id_input).val(),
+				label: '<span>' + $(id_input).find('option:selected').text() + '</span>',
+				uri: $(id_input).val()
+			} ;
 		}
 
+		/*
 		this.getValueLabel = function() {
 			var id_input = '#'+ this.id_input ;
 			return '<span>' + $(id_input).find('option:selected').text() + '</span>' ;
 		}
+		*/
 	}
 	
 	DatesWidget = function(inputTypeComponent, datesHandler, langSearch) {
@@ -227,7 +244,10 @@
 		this.getValue = function() {
 			var id_input = '#ecgrw-date-'+ this.IdCriteriaGroupe +'-input' ;
 			
-			var value = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
+			var value = { 
+				start: $(id_input+'-start').val(),
+				stop: $(id_input+'-stop').val() 
+			} ;
 			
 			if ((value.start == '') || (value.stop == '')) {
 				value = null ;
@@ -240,14 +260,22 @@
 				}
 			}
 
-			return value;
+			return {
+				key: value.start+' '+value.stop,
+				// TODO : this is not translated
+				label: '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>',
+				start: value.start,
+				stop: value.stop
+			};
 		}
 
+		/*
 		this.getValueLabel = function() {
 			var id_input = '#ecgrw-date-'+ this.IdCriteriaGroupe +'-input' ;
 			// TODO : this is not translated
 			return '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
-		}		
+		}
+		*/		
 	}
 	
 	TimeDatePickerWidget = function(inputTypeComponent, datesHandler, format, langSearch) {
@@ -331,7 +359,13 @@
 				value = null ;
 			}
 
-			return value;
+			return {
+				key: value.start+' '+value.stop,
+				// TODO : this is not translated
+				label: this.getValueLabel(),
+				start: value.start,
+				stop: value.stop
+			};
 		}
 
 		this.getValueLabel = function() {
@@ -387,13 +421,21 @@
 
 		this.getValue = function() {
 			var id_input = '#ecgrw-search-'+ this.IdCriteriaGroupe +'-input-value' ;
-			return $(id_input).val() ;
+			// return $(id_input).val() ;
+
+			return {
+				key: $(id_input).val(),
+				label: '<span>'+ $(id_input).val() +'</span>',
+				search: $(id_input).val()
+			}
 		}
 
+		/*
 		this.getValueLabel = function() {
 			var id_input = '#ecgrw-search-'+ this.IdCriteriaGroupe +'-input-value' ;
 			return '<span>'+ $(id_input).val() +'</span>' ;
 		}
+		*/
 	}
 
 	NoWidget = function(inputTypeComponent) {
@@ -408,8 +450,10 @@
 			return null;
 		}
 
+		/*
 		this.getValueLabel = function() {
 			// cannot provide any value label 
 			return null;
 		}
+		*/
 	}
