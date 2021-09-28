@@ -284,7 +284,7 @@ body {
 							padding: 6px 10px;
 						}
 					}
-					&>.search-widget, {
+					&>.search-widget {
 						
 						&>input {
 							width: 150px;
@@ -631,7 +631,7 @@ body {
 				padding: 0;
 				background: transparent;
 				clear: both;
-				border: 0 solid #transparent
+				border: 0 solid transparent;
 			}
 			
 			ul {
