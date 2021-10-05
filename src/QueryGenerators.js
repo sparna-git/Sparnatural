@@ -48,11 +48,11 @@ class JSONQueryGenerator {
 		var rangeClass = component.CriteriaGroup.EndClassGroup.value_selected ; 
 		
 		// not sure what this does
-		var ArrayLiIndex = [] ;		
+		/*var ArrayLiIndex = [] ;		
 		$(formObject._this).find('ul.componentsListe li.groupe').each(function(i) {			
 			var data_id = $(this).attr('data-index') ;
 			ArrayLiIndex[data_id] = ArrayLiIndex.length ;
-		}) ;
+		}) ;*/
 
 		// get index of subject and object variables
 		/*var subjectVariableIndex;
@@ -304,7 +304,7 @@ class DefaultQueryGenerator {
 		
 		var dependantDe = this.GetDependantCriteria(formObject, index) ;
 		// get index of subject and object variables
-		var subjectVariableIndex;
+		/*var subjectVariableIndex;
 		var objectVarIndex;
 		if ((dependantDe != null) && (dependantDe.type == 'parent')){
 			subjectVariableIndex = ArrayLiIndex[dependantDe.element.id] + 1;				
@@ -313,17 +313,27 @@ class DefaultQueryGenerator {
 		} else {						
 			subjectVariableIndex = 0 ;
 			objectVarIndex = ArrayLiIndex[index] + 1 ;
-		}
+		}*/
+
+
 
 		// name start and end variables
 		// dashes should be replaced
-		if (subjectVariableIndex == 0) {
+		/*if (subjectVariableIndex == 0) {
 			subjectVariable = "?this";
 		} else {
 			subjectVariable = '?'+this.localName(domainClass).replace("-", "_")+''+subjectVariableIndex ;
 		}
 		if (rangeClass != null) {
 			var objectVariable = '?'+this.localName(rangeClass).replace("-", "_")+''+objectVarIndex ;
+		} else {
+			var objectVariable = null ;
+		}*/
+
+		var subjectVariable = '?'+formObject._variablesNames.getName(component.CriteriaGroup.StartClassGroup.inputTypeComponent.id).replace("-", "_") ;
+
+		if (rangeClass != null) {
+			var objectVariable = '?'+formObject._variablesNames.getName(component.CriteriaGroup.EndClassGroup.inputTypeComponent.id).replace("-", "_") ;
 		} else {
 			var objectVariable = null ;
 		}

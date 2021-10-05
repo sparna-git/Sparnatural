@@ -224,8 +224,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
             var thisForm = {
             	_this : $(this),
             	components : [],
-				_variablesNames : new ClassVariableName() ,
+				//_variablesNames : new ClassVariableName() ,
             } ;
+			thisForm._variablesNames = new ClassVariableName(thisForm) ;
 			$(this).addClass('Sparnatural') ;
 			
 			langSearch = i18nLabels[settings.language];
@@ -737,7 +738,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 
 			//Set the variable naùe for Sparql
-			this.ParentComponent.thisForm_._variablesNames.setName(this.inputTypeComponent.id, this.value_selected) ;
+			this.ParentComponent.thisForm_._variablesNames.setName(this) ;
 
 			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			// trigger event on the whole line/criteria
@@ -892,6 +893,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				}
 				
 				this.id = 'a-'+id ;
+				this.rowIndex = id;
+				this.check
 				
 				selectHtml = selectBuilder.buildClassSelect(
 					null,
@@ -962,7 +965,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 
 			//Set the variable naùe for Sparql
-			this.ParentComponent.thisForm_._variablesNames.setName(this.inputTypeComponent.id, this.value_selected) ;
+			this.ParentComponent.thisForm_._variablesNames.setName(this) ;
 			
 			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
 			
