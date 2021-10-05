@@ -55,7 +55,7 @@ class JSONQueryGenerator {
 		}) ;
 
 		// get index of subject and object variables
-		var subjectVariableIndex;
+		/*var subjectVariableIndex;
 		var objectVarIndex;
 		if ((dependantDe != null) && (dependantDe.type == 'parent')){
 			subjectVariableIndex = ArrayLiIndex[dependantDe.element.id] + 1;				
@@ -64,17 +64,18 @@ class JSONQueryGenerator {
 		} else {						
 			subjectVariableIndex = 0 ;
 			objectVarIndex = ArrayLiIndex[i] + 1 ;
-		}
-
+		}*/
+		
 		// name start and end variables
 		// dashes should be replaced
-		if (subjectVariableIndex == 0) {
+		var subjectVariable = formObject._variablesNames.getName(component.CriteriaGroup.StartClassGroup.inputTypeComponent.id).replace("-", "_") ;
+		/*if (subjectVariableIndex == 0) {
 			subjectVariable = "?this";
 		} else {
 			subjectVariable = '?'+this.localName(domainClass).replace("-", "_")+''+subjectVariableIndex ;
-		}
+		}*/
 		if (rangeClass != null) {
-			var objectVariable = '?'+this.localName(rangeClass).replace("-", "_")+''+objectVarIndex ;
+			var objectVariable = formObject._variablesNames.getName(component.CriteriaGroup.EndClassGroup.inputTypeComponent.id).replace("-", "_") ;
 		} else {
 			var objectVariable = null ;
 		}

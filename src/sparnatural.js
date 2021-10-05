@@ -44,6 +44,7 @@ SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHan
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 JSONQueryGenerator = require("./QueryGenerators.js").JSONQueryGenerator;
 QuerySPARQLWriter = require("./Query.js").QuerySPARQLWriter ;
+ClassVariableName = require("./ClassVariableName.js").ClassVariableName ;
 
 require("./Widgets.js");
 
@@ -222,7 +223,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.each(function() {
             var thisForm = {
             	_this : $(this),
-            	components : []
+            	components : [],
+				_variablesNames : new ClassVariableName() ,
             } ;
 			$(this).addClass('Sparnatural') ;
 			
@@ -733,14 +735,17 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.onChange = function onChange() {
 			//this.niceslect.niceSelect('update') ;
 			this.value_selected = $(this.html).find('select.input-val').val() ;
-			
+
+			//Set the variable naùe for Sparql
+			this.ParentComponent.thisForm_._variablesNames.setName(this.inputTypeComponent.id, this.value_selected) ;
+
 			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			// trigger event on the whole line/criteria
 			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
 
 			if(settings.sendQueryOnFirstClassSelected) {
 				$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
-			}	
+			}
 		};
 		
 		this.init() ;
@@ -852,7 +857,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.cssClasses = {
 			Highlited : true ,
 			Created : false
-		}; 
+		};
 		this.widgetHtml = null ;
 
 		this.init = function () {
@@ -884,19 +889,22 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					this.cssClasses.Highlited = false ;
 				} else {
 					this.cssClasses.Highlited = true ;
-				}				
+				}
+				
+				this.id = 'a-'+id ;
 				
 				selectHtml = selectBuilder.buildClassSelect(
 					null,
-					'a-'+id,
+					this.id,
 					default_value
 				);
 			} 
 			
 			if (this.ParentComponent instanceof EndClassGroup) {
+				this.id = 'b-'+id ;
 				selectHtml = selectBuilder.buildClassSelect(
 					this.ParentComponent.ParentComponent.StartClassGroup.value_selected,
-					'b-'+id
+					this.id
 				);
 			}
 			
@@ -952,6 +960,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		this.onChange = function onChange() {
 			this.value_selected = $(this.html).find('select.input-val').val() ;
+
+			//Set the variable naùe for Sparql
+			this.ParentComponent.thisForm_._variablesNames.setName(this.inputTypeComponent.id, this.value_selected) ;
 			
 			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
 			
