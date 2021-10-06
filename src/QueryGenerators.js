@@ -17,6 +17,29 @@ class JSONQueryGenerator {
 
 	}
 
+	getLine(json, index) {
+		for (var i = 0; i < json.branches.length; i++) {
+			result =  this.getRecursiveLine(json.branches[i], index) ;
+			if (result !== null){
+				return result ;
+			}
+		}
+		return null ;
+	}
+	getRecursiveLine(json, index) {
+		if(json.line.index == index) {
+			return json ;
+		} else {
+			for (var i = 0; i < json.children.length; i++) {
+				result = getRecursiveLine(json.children[i], index) ;
+				if (result !== null){
+					return result ;
+				}
+			}
+		}
+		return null ;
+	}
+
 	/**
 	 * Generates a JSON query
 	 **/
@@ -85,7 +108,8 @@ class JSONQueryGenerator {
 			domainClass,
 			property,
 			rangeClass,
-			objectVariable
+			objectVariable,
+			i
 		);
 		// Set the values based on widget type
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType ;

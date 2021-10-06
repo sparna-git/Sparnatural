@@ -219,12 +219,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		// merge given options with default values
 		var settings = $.extend( true, {}, defaults, options );
+		var queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
 
 		this.each(function() {
             var thisForm = {
             	_this : $(this),
             	components : [],
-				//_variablesNames : new ClassVariableName() ,
             } ;
 			thisForm._variablesNames = new ClassVariableName(thisForm) ;
 			$(this).addClass('Sparnatural') ;
@@ -235,9 +236,26 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			var specProviderFactory = new SpecificationProviderFactory();
 
+			thisForm.getParameterQuery = $(this).attr('id')+'-query' ;
+
 			specProviderFactory.build(settings.config, settings.language, function(sp) {
 				specProvider = sp;
 				initForm(thisForm);
+				let savedQuery = urlParams.get(thisForm.getParameterQuery) ;
+				if(savedQuery !== null) {
+					var codec = require('json-url')('lzma');
+					codec.decompress(savedQuery).then(json => { 
+						console.log(json) ;
+						thisForm.preLoad = json ;
+						addComponent(thisForm, $(thisForm._this).find('ul')) ;
+					}) ;
+				} else {
+					thisForm.preLoad = false ;
+					addComponent(thisForm, $(thisForm._this).find('ul')) ;
+					$(thisForm._this).find('.nice-select').trigger('click') ;
+				}
+
+				
 				// uncomment to trigger gathering of statistics
 				// initStatistics(specProvider);
 			});		
@@ -247,15 +265,15 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
 			$(form._this).append(contexte) ;
 			
-			var contexte1 = addComponent(form, contexte.find('ul')) ;
 			
-			$(form._this).find('.nice-select').trigger('click') ;
+			
+			//$(form._this).find('.nice-select').trigger('click') ;
 			
 			initGeneralEvent(form) ;
 			
 			// triggered when Sparnatural is submitted : generates output SPARQL
 			// query
-			$(form._this).on('submit', { formObject : form }, function (event) {		
+			$(form._this).on('submit', { formObject : form }, function (event) {
 				event.preventDefault();
 				var qGenerator = new DefaultQueryGenerator(
 					settings.addDistinct,
@@ -272,6 +290,15 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				// prints the JSON query data structure on the console
 				var jsonGenerator = new JSONQueryGenerator();
 				var jsonQuery = jsonGenerator.generateQuery(event.data.formObject);
+
+				var compressCodec = require('json-url')('lzma');
+				compressCodec.compress(jsonQuery).then(result => {
+					
+					var url = '?'+form.getParameterQuery+'='+result ;
+					$('#shareQuery a').text(url);
+					$('#shareQuery a').attr('href', url);
+				});
+
 				console.log("*** New JSON Data structure ***");
 				console.log(JSON.stringify(
 					jsonQuery,
@@ -293,6 +320,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				writer.setPrefixes(settings.sparqlPrefixes);
 				console.log(writer.toSPARQL(jsonQuery));
 			}) ;
+
+			//var contexte1 = addComponent(form, contexte.find('ul')) ;
 		}
 
 		function initStatistics(aSpecProvider) {
@@ -559,7 +588,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		);
 		
 		thisForm_.components.push({index: new_index, CriteriaGroup: UnCritere });			
-		initGeneralEvent(thisForm_);			
+		initGeneralEvent(thisForm_);
+		//le critère est inséré et listé dans les composants, on peut lancer l'event de création
+		$(UnCritere).trigger( {type:"Created" } ) ;
+
 		return $(gabari) ;
 	}
 
@@ -600,7 +632,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		$(this).on('ObjectPropertyGroupSelected', function () {	this.ActionsGroup.onObjectPropertyGroupSelected();  });	
 
 		// trigger the init event
-		$(this).trigger( {type:"Created" } ) ;
+		//$(this).trigger( {type:"Created" } ) ;
 		
 		this.initCompleted = function () {
 			$(this.html).parent('li').addClass('completed') ;
@@ -731,9 +763,17 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				{arg1: this, arg2: 'onChange'},
 				eventProxiCriteria
 			);
+			if(this.inputTypeComponent.needTriggerClick == true) {
+				$(this.html).find('.nice-select').trigger('click') ;
+				$(this.html).find('select.input-val').trigger('change');
+				this.inputTypeComponent.needTriggerClick = false ;
+				//$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+			}
+			
 		}
 
 		this.onChange = function onChange() {
+			
 			//this.niceslect.niceSelect('update') ;
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 
@@ -748,6 +788,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 			}
 		};
+
+		this.setClass = function setClass(value) {
+			$(this.html).find('nice-select ul li[data-value="'+value+'"]').trigger('click');
+		}
 		
 		this.init() ;
 	} 
@@ -860,6 +904,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			Created : false
 		};
 		this.widgetHtml = null ;
+		this.needTriggerClick = false ;
 
 		this.init = function () {
 			
@@ -868,9 +913,22 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.tools.updateCssClasses() ;
 				return true ;
 			}
+			console.log(this.ParentComponent.ParentComponent) ;
+			
+			if(this.ParentComponent.ParentComponent.thisForm_.preLoad !== false) {
+				var _queryGenerator = new JSONQueryGenerator() ;
+				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.ParentComponent.thisForm_.preLoad, this.ParentComponent.ParentComponent.id) ;
+				console.log(preLoadRow) ;
+				default_value_s = preLoadRow.line.sType ;
+				default_value_o = preLoadRow.line.oType ;
+				this.needTriggerClick = true ;
+			} else {
+				var default_value_s = null ;
+				var default_value_o = null ;
+			}
 
 			var selectHtml = null ;
-			var default_value = null ;
+			
 			var id = this.ParentComponent.ParentComponent.id ;
 			var selectBuilder = new ClassSelectBuilder(this.specProvider);
 
@@ -881,11 +939,11 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					if (parentOrSibling.type == 'parent' ) {
 						// if we are child in a WHERE relation, the selected class is the selected
 						// class in the RANGE selection of the parent
-						default_value = parentOrSibling.element.EndClassGroup.value_selected ;
+						default_value_s = parentOrSibling.element.EndClassGroup.value_selected ;
 					} else {
 						// if we are sibling in a AND relation, the selected class is the selected
 						// class in the DOMAIN selection of the sibling
-						default_value = parentOrSibling.element.StartClassGroup.value_selected ;
+						default_value_s = parentOrSibling.element.StartClassGroup.value_selected ;
 					}
 					this.cssClasses.Highlited = false ;
 				} else {
@@ -899,7 +957,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				selectHtml = selectBuilder.buildClassSelect(
 					null,
 					this.id,
-					default_value
+					default_value_s
 				);
 			} 
 			
@@ -907,7 +965,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.id = 'b-'+id ;
 				selectHtml = selectBuilder.buildClassSelect(
 					this.ParentComponent.ParentComponent.StartClassGroup.value_selected,
-					this.id
+					this.id,
+					default_value_o
 				);
 			}
 			
@@ -916,7 +975,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.tools = new GenericTools(this) ;
 			this.tools.initHtml() ;
 			this.tools.attachHtml() ;
-			this.cssClasses.Created = true ;			
+			this.cssClasses.Created = true ;
 		} ;	
 		
 		this.reload = function() {
@@ -958,7 +1017,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				'click',
 				{arg1: this, arg2: 'onRemoveSelected'},
 				eventProxiCriteria
-			);	
+			);
+			if(this.inputTypeComponent.needTriggerClick == true) {
+				$(this.html).find('.nice-select').trigger('click') ;
+				$(this.html).find('select.input-val').trigger('change');
+				this.inputTypeComponent.needTriggerClick = false ;
+				//$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+			}
 		}
 		
 		this.onChange = function onChange() {

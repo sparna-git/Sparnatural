@@ -36,7 +36,8 @@ export class QueryLine {
 		subjectType,
 		property,
 		objectType,
-		objectVariable
+		objectVariable,
+		i
 	) {
 		this.s = subjectVariable;
 		this.p = property;
@@ -44,6 +45,7 @@ export class QueryLine {
 		this.sType = subjectType;
 		this.oType = objectType;
 		this.values = [];
+		this.index = i
 	}
 }
 
