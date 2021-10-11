@@ -3,6 +3,8 @@ require("./assets/stylesheets/sparnatural.scss");
 require("easy-autocomplete");
 
 
+//
+
 // removed to avoid x2 bundle size
 // the dependency needs to be manually inserted in HTML pages
 // <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.css">
@@ -299,26 +301,26 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					$('#shareQuery a').attr('href', url);
 				});
 
-				console.log("*** New JSON Data structure ***");
+				/*console.log("*** New JSON Data structure ***");
 				console.log(JSON.stringify(
 					jsonQuery,
 					null,
 					4
-				));
+				));*/
 
 				// prints original SPARQL
-				console.log("*** Original SPARQL ***");
-				console.log(queries.generatedQuery);
+				/*console.log("*** Original SPARQL ***");
+				console.log(queries.generatedQuery);*/
 
 				// prints the SPARQL generated from the writing of the JSON data structure
-				console.log("*** New SPARQL from JSON data structure ***");
+				/*console.log("*** New SPARQL from JSON data structure ***");
 				var writer = new QuerySPARQLWriter(
 					settings.addDistinct,
 					settings.typePredicate,
 					specProvider
 				);
 				writer.setPrefixes(settings.sparqlPrefixes);
-				console.log(writer.toSPARQL(jsonQuery));
+				console.log(writer.toSPARQL(jsonQuery));*/
 			}) ;
 
 			//var contexte1 = addComponent(form, contexte.find('ul')) ;
@@ -676,7 +678,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			if (this.ParentComponent.components.length == 0) {
 				// top-level criteria : add first criteria and trigger click on class selection
 				var new_component = addComponent(formObject, formContextHtml) ;			
-				$(new_component).find('.nice-select').trigger('click') ;				
+				//$(new_component).find('.nice-select').trigger('click') ;				
 			} else {
 				if (parentOrSibling !== null) {
 					var dependantComponent = parentOrSibling.element ;
@@ -764,7 +766,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				eventProxiCriteria
 			);
 			if(this.inputTypeComponent.needTriggerClick == true) {
-				$(this.html).find('.nice-select').trigger('click') ;
+				//$(this.html).find('.nice-select').trigger('click') ;
 				$(this.html).find('select.input-val').trigger('change');
 				this.inputTypeComponent.needTriggerClick = false ;
 				//$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
@@ -825,7 +827,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
 			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 			// opens the select automatically
-			$(this.html).find('.nice-select').trigger('click') ;
+			if(this.objectPropertySelector.needTriggerClick == false) {
+				$(this.html).find('.nice-select').trigger('click') ;
+			}
 			$(this.html).find('select.input-val').unbind('change');
 			// hook the change event to the onChange function
 			$(this.html).find('select.input-val').on(
@@ -835,8 +839,16 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			);
 			
 			// automatically selects the value if there is only one
-			if ($(this.html).find('select.input-val').find('option').length == 1) {
-				$(this.html).find('.nice-select').trigger('click') ;
+			
+			if(this.objectPropertySelector.needTriggerClick == true) {
+				//$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
+				$(this.html).find('select.input-val:not(.disabled)').trigger('change');
+				this.objectPropertySelector.needTriggerClick = false ;
+				//$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+			} else {
+				if ($(this.html).find('select.input-val').find('option').length == 1) {
+					$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
+				}
 			}
 		}
 
@@ -847,7 +859,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				$(this.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			}
 			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
-			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;			
+			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+			
+			//ici peut être lancer le reload du where si il y a des fils
 		};
 			
 		this.init() ;
@@ -868,13 +882,26 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.HtmlContainer = this.ParentComponent ;
 		this.html = '<div class="ObjectPropertyTypeId"></div>' ;
 		this.widgetHtml = null ;
+		this.needTriggerClick = false ;
 
 		this.init = function (reload = false) {
 			var selectBuilder = new PropertySelectBuilder(this.specProvider);
+			var default_value = null ;
+			if(this.ParentComponent.ParentComponent.thisForm_.preLoad !== false) {
+				var _queryGenerator = new JSONQueryGenerator() ;
+				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.ParentComponent.thisForm_.preLoad, this.ParentComponent.ParentComponent.id) ;
+				if (preLoadRow !== null) {
+					console.log(preLoadRow) ;
+					var default_value = preLoadRow.line.p ;
+					this.needTriggerClick = true ;
+				}
+			}
+
 			this.widgetHtml = selectBuilder.buildPropertySelect(
 				this.ParentComponent.ParentComponent.StartClassGroup.value_selected,
 				this.ParentComponent.ParentComponent.EndClassGroup.value_selected,
-				'c-'+this.ParentComponent.ParentComponent.id
+				'c-'+this.ParentComponent.ParentComponent.id,
+				default_value
 			) ;
 			
 			this.cssClasses.IsOnEdit = true ;
@@ -914,18 +941,19 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				return true ;
 			}
 			console.log(this.ParentComponent.ParentComponent) ;
+			var default_value_s = null ;
+			var default_value_o = null ;
 			
 			if(this.ParentComponent.ParentComponent.thisForm_.preLoad !== false) {
 				var _queryGenerator = new JSONQueryGenerator() ;
 				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.ParentComponent.thisForm_.preLoad, this.ParentComponent.ParentComponent.id) ;
+				if (preLoadRow !== null) {
+					default_value_s = preLoadRow.line.sType ;
+					default_value_o = preLoadRow.line.oType ;
+					this.needTriggerClick = true ;
+				}
 				console.log(preLoadRow) ;
-				default_value_s = preLoadRow.line.sType ;
-				default_value_o = preLoadRow.line.oType ;
-				this.needTriggerClick = true ;
-			} else {
-				var default_value_s = null ;
-				var default_value_o = null ;
-			}
+			} 
 
 			var selectHtml = null ;
 			
@@ -1010,8 +1038,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
 			
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
-			$(this.html).find('.nice-select').trigger('click') ;
-			
+			if(this.inputTypeComponent.needTriggerClick == false) {
+				$(this.html).find('.nice-select').trigger('click') ;
+			}
 			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 			$(this.html).find('span.unselectEndClass').on(
 				'click',
@@ -1019,10 +1048,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				eventProxiCriteria
 			);
 			if(this.inputTypeComponent.needTriggerClick == true) {
-				$(this.html).find('.nice-select').trigger('click') ;
 				$(this.html).find('select.input-val').trigger('change');
 				this.inputTypeComponent.needTriggerClick = false ;
-				//$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
+				//$(this.ParentComponent.thisForm._this).trigger( {type:"submit" } ) ;
 			}
 		}
 		
@@ -1270,6 +1298,21 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				},
 				eventProxiCriteria
 			);
+			/*console.log(this.ParentComponent.thisForm_) ;*/
+			if(this.ParentComponent.thisForm_.preLoad !== false) {
+				var _queryGenerator = new JSONQueryGenerator() ;
+				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.thisForm_.preLoad, this.ParentComponent.id) ;
+				if (preLoadRow !== null) {
+					console.log(preLoadRow ) ;
+					/*console.log(this.ParentComponent.id ) ;*/
+					if(preLoadRow.children.length > 0) {
+						$(this.actions.ActionWhere.html).find('a').trigger('click') ;
+					}
+					if(preLoadRow.line.dNextType == "hasSibling") {
+						$(this.actions.ActionAnd.html).find('a').trigger('click') ;
+					}
+				}
+			}
 		}
 
 		this.onObjectPropertyGroupSelected = function() {
@@ -1300,7 +1343,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				eventProxiCriteria
 			);
 			
-			initGeneralEvent(this.ParentComponent.thisForm_);			
+			initGeneralEvent(this.ParentComponent.thisForm_);
 		}
 		
 		this.onAddWhere = function () {	
@@ -1324,8 +1367,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			) ;
 			
 			// trigger 2 clicks to select the same class as the current criteria (?)
-			$(new_component).find('.nice-select').trigger('click') ;
-			$(new_component).find('.nice-select').trigger('click') ;
+			$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;
+			$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;
 
 			return false ;			
 		}
@@ -1368,7 +1411,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.tools.initHtml() ;
 			this.tools.attachHtml() ;
 
-			this.cssClasses.Created = true ;			
+			this.cssClasses.Created = true ;
 		} ;	
 		
 		this.reload = function() {

@@ -19,7 +19,7 @@
             create_nice_select($select);
             
             if (open) {
-              $select.next().trigger('click');
+              //$select.next().trigger('click');
             }
           }
         });
@@ -111,7 +111,6 @@
     
     // Open/close
     $(document).on('click.nice_select', '.nice-select', function(event) {
-		//alert("hohoh") ;
       var $dropdown = $(this);
 	  if ($dropdown.hasClass('open') ) {
 		  $dropdown.toggleClass('open');

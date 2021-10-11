@@ -31,13 +31,17 @@ class JSONQueryGenerator {
 			return json ;
 		} else {
 			for (var i = 0; i < json.children.length; i++) {
-				result = getRecursiveLine(json.children[i], index) ;
+				result = this.getRecursiveLine(json.children[i], index) ;
 				if (result !== null){
 					return result ;
 				}
 			}
 		}
 		return null ;
+	}
+	getNextSibling(json, index) {
+
+
 	}
 
 	/**
@@ -50,11 +54,13 @@ class JSONQueryGenerator {
 			for (var i = 0; i < formObject.components.length; i++) {
 				var component = formObject.components[i];
 				var dependantDe = this.findDependantCriteria(formObject, i) ;
-				if ((dependantDe == null) || (dependantDe.type == 'sibling')) {
+				if ((dependantDe == null) || (dependantDe.type == 'sibling') || (dependantDe.nextType == 'hasSibling')) {
 					var branch = this.generateBranch(formObject, component, i, dependantDe);
 					query.branches.push(branch);
 				}				
 			} ;	
+
+			console.log(query) ;
 			
 			return query;	
 		} else {
@@ -102,6 +108,12 @@ class JSONQueryGenerator {
 		} else {
 			var objectVariable = null ;
 		}
+console.log(dependantDe) ;
+		if ((dependantDe != null) && (typeof dependantDe.nextType !== 'undefined')) {
+			LinedependantType = dependantDe.nextType ;
+		} else {
+			LinedependantType = null ;
+		}
 
 		var line = new QueryLine(
 			subjectVariable,
@@ -109,8 +121,11 @@ class JSONQueryGenerator {
 			property,
 			rangeClass,
 			objectVariable,
-			i
+			i,
+			LinedependantType
 		);
+		console.log(dependantDe) ;
+		console.log(line) ;
 		// Set the values based on widget type
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType ;
 		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 0 ) {			
@@ -204,6 +219,17 @@ class JSONQueryGenerator {
 				dep_id = $(element).prev().attr('data-index') ;
 				dependant = {type : 'sibling'}  ;				
 			}
+			
+		}
+
+		if ($(element).next().length > 0) {
+			console.log('*******************has next sibling '+ id)
+			//dep_id = $(element).next().attr('data-index') ;
+			if (dependant != null) {
+				dependant.nextType = 'hasSibling'  ;
+			} else {
+				dependant = {nextType : 'hasSibling'}  ;
+			}	
 		}
 
 		$(thisForm_.components).each(function(index) {			
