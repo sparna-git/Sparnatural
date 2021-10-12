@@ -39,10 +39,6 @@ class JSONQueryGenerator {
 		}
 		return null ;
 	}
-	getNextSibling(json, index) {
-
-
-	}
 
 	/**
 	 * Generates a JSON query
@@ -108,7 +104,7 @@ class JSONQueryGenerator {
 		} else {
 			var objectVariable = null ;
 		}
-console.log(dependantDe) ;
+
 		if ((dependantDe != null) && (typeof dependantDe.nextType !== 'undefined')) {
 			LinedependantType = dependantDe.nextType ;
 		} else {
@@ -124,8 +120,6 @@ console.log(dependantDe) ;
 			i,
 			LinedependantType
 		);
-		console.log(dependantDe) ;
-		console.log(line) ;
 
 		var values = component.CriteriaGroup.EndClassWidgetGroup.selectedValues;
 		if(values.length > 0 ) {
@@ -228,8 +222,6 @@ console.log(dependantDe) ;
 		}
 
 		if ($(element).next().length > 0) {
-			console.log('*******************has next sibling '+ id)
-			//dep_id = $(element).next().attr('data-index') ;
 			if (dependant != null) {
 				dependant.nextType = 'hasSibling'  ;
 			} else {

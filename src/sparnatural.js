@@ -250,6 +250,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 						console.log(json) ;
 						thisForm.preLoad = json ;
 						addComponent(thisForm, $(thisForm._this).find('ul')) ;
+						//Preload finished, don't reuse data
+						thisForm.preLoad = false;
+						savedQuery = null;
 					}) ;
 				} else {
 					thisForm.preLoad = false ;
@@ -678,7 +681,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			if (this.ParentComponent.components.length == 0) {
 				// top-level criteria : add first criteria and trigger click on class selection
 				var new_component = addComponent(formObject, formContextHtml) ;			
-				//$(new_component).find('.nice-select').trigger('click') ;				
+				$(new_component).find('.nice-select').trigger('click') ;				
 			} else {
 				if (parentOrSibling !== null) {
 					var dependantComponent = parentOrSibling.element ;
@@ -1140,7 +1143,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				},
 				eventProxiCriteria
 			);
-			this.ParentComponent
+			
 
 			if(this.ParentComponent.thisForm_.preLoad !== false) {
 				var _queryGenerator = new JSONQueryGenerator() ;
@@ -1199,6 +1202,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.loadValue= function loadValue(value) {
 			this.inputTypeComponent.loadedValue = value ;
 			$(this.inputTypeComponent).trigger('change') ;
+			//Value added don't reuse preloaded data.
+			this.inputTypeComponent.loadedValue = null ;
 		}
 
 		// sélection et affichage d'une valeur sélectionnée par un widget de saisie
