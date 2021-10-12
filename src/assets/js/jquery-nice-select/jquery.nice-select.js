@@ -19,7 +19,7 @@
             create_nice_select($select);
             
             if (open) {
-              //$select.next().trigger('click');
+              $select.next().trigger('click');
             }
           }
         });

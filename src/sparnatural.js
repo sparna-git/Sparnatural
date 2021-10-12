@@ -1039,7 +1039,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
 			if(this.inputTypeComponent.needTriggerClick == false) {
-				$(this.html).find('.nice-select').trigger('click') ;
+				$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 			}
 			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 			$(this.html).find('span.unselectEndClass').on(
@@ -1048,6 +1048,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				eventProxiCriteria
 			);
 			if(this.inputTypeComponent.needTriggerClick == true) {
+				//$(this.html).find('.nice-select').trigger('click') ;
 				$(this.html).find('select.input-val').trigger('change');
 				this.inputTypeComponent.needTriggerClick = false ;
 				//$(this.ParentComponent.thisForm._this).trigger( {type:"submit" } ) ;
@@ -1356,8 +1357,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			) ;
 			
 			// trigger 2 clicks to select the same class as the object class (?)
-			$(new_component).find('.nice-select').trigger('click') ;
-			$(new_component).find('.nice-select').trigger('click') ;
+			$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;
+			$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;
 		}
 
 		this.onAddAnd = function () {
