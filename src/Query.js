@@ -70,6 +70,7 @@ export class URIValue extends AbstractValue {
 	constructor(uri, label=null) {
 		super(label);
 		this.uri=uri;
+		this.valueKey=uri;
 	}
 }
 
@@ -80,6 +81,7 @@ export class LiteralValue extends AbstractValue {
 	constructor(literal, label=null) {
 		super(label);
 		this.literal=literal;
+		this.valueKey=literal;
 	}
 }
 
@@ -88,6 +90,7 @@ export class DateTimeValue extends AbstractValue {
 		super(label);
 		this.fromDate = fromDate;
 		this.toDate = toDate;
+		this.valueKey=fromDate+' '+toDate;
 	}
 }
 
@@ -95,6 +98,7 @@ export class SearchValue extends AbstractValue {
 	constructor(key, label=null) {
 		super(label);
 		this.key = key;
+		this.valueKey=key;
 	}
 }
 
