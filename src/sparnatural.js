@@ -284,14 +284,16 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				);
 				qGenerator.setPrefixes(settings.sparqlPrefixes);
 				var queries = qGenerator.generateQuery(event.data.formObject);
-				// fire callback
-				if(queries != null) {
-					settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery);
-				}
 
+				// TODO : use JSON query to generate SPARQL
 				// prints the JSON query data structure on the console
 				var jsonGenerator = new JSONQueryGenerator();
 				var jsonQuery = jsonGenerator.generateQuery(event.data.formObject);
+
+				// fire callback
+				if(queries != null) {
+					settings.onQueryUpdated(queries.generatedQuery, jsonQuery);
+				}
 
 				var compressCodec = require('json-url')('lzma');
 				compressCodec.compress(jsonQuery).then(result => {
