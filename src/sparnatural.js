@@ -45,6 +45,9 @@ SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHan
 
 DefaultQueryGenerator = require("./QueryGenerators.js").DefaultQueryGenerator;
 JSONQueryGenerator = require("./QueryGenerators.js").JSONQueryGenerator;
+
+JSONQueryPreloader = require("./QueryPreloader.js").JSONQueryPreloader;
+
 QuerySPARQLWriter = require("./Query.js").QuerySPARQLWriter ;
 ClassVariableName = require("./ClassVariableName.js").ClassVariableName ;
 
@@ -265,6 +268,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				// initStatistics(specProvider);
 			});		
         });	
+
+		function loadData(json) {
+			console.log(this) ;
+		}
 		
 		function initForm(form) {	
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
@@ -329,6 +336,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}) ;
 
 			//var contexte1 = addComponent(form, contexte.find('ul')) ;
+
+			$(form._this).trigger({type: 'formInitialized'}) ;
 		}
 
 		function initStatistics(aSpecProvider) {
