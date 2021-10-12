@@ -126,8 +126,13 @@ console.log(dependantDe) ;
 		);
 		console.log(dependantDe) ;
 		console.log(line) ;
+
+		var values = component.CriteriaGroup.EndClassWidgetGroup.selectedValues;
+		if(values.length > 0 ) {
+			line.values = values ;
+		}
 		// Set the values based on widget type
-		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType ;
+		/*var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType ;
 		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 0 ) {			
 			switch (_WidgetType) {					
 			  case Config.LIST_PROPERTY:
@@ -166,7 +171,7 @@ console.log(dependantDe) ;
 			  default:
 			  	console.log('Unknown widget type when generating SPARQL : '+_WidgetType);						
 			}						
-		}
+		}*/
 
 		// hook the line to the branch
 		branch.line = line;

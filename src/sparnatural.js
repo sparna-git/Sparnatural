@@ -1139,7 +1139,19 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					arg2: 'onChange'
 				},
 				eventProxiCriteria
-			);			
+			);
+			this.ParentComponent
+
+			if(this.ParentComponent.thisForm_.preLoad !== false) {
+				var _queryGenerator = new JSONQueryGenerator() ;
+				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.thisForm_.preLoad, this.ParentComponent.id) ;
+				if (preLoadRow !== null) {
+					for (var key in preLoadRow.line.values) {
+						this.loadValue(preLoadRow.line.values[key]) ;
+					}
+				}
+			}
+			
 		}
 		
 		// input : the 'key' of the value to be deleted
@@ -1183,6 +1195,11 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.ParentComponent.thisForm_._this).trigger( {type:"submit" } ) ;
 
 		} ;
+
+		this.loadValue= function loadValue(value) {
+			this.inputTypeComponent.loadedValue = value ;
+			$(this.inputTypeComponent).trigger('change') ;
+		}
 
 		// sélection et affichage d'une valeur sélectionnée par un widget de saisie
 		// la structure attendue est
@@ -1486,6 +1503,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			ObjectPropertyTypeWidget : true,
 			Created : false
 		} ;
+		this.loadedValue = null ;
 		
 		this.init = function init(reload = false) {
 			if (!reload && this.cssClasses.Created) {
@@ -1733,7 +1751,11 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		};
 		
 		this.getValue = function () {
-			return this.widgetComponent.getValue() ;
+			if (this.loadedValue !== null) {
+				return this.loadedValue ;
+			} else {
+				return this.widgetComponent.getValue() ;
+			}
 		}
 
 		/*
