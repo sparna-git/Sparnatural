@@ -231,6 +231,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
             var thisForm = {
             	_this : $(this),
             	components : [],
+				submitOpened: true,
+				firstInit: false,
+				preLoad: false 
             } ;
 			thisForm._variablesNames = new ClassVariableName(thisForm) ;
 			$(this).addClass('Sparnatural') ;
@@ -246,32 +249,62 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			specProviderFactory.build(settings.config, settings.language, function(sp) {
 				specProvider = sp;
 				initForm(thisForm);
-				let savedQuery = urlParams.get(thisForm.getParameterQuery) ;
-				if(savedQuery !== null) {
-					var codec = require('json-url')('lzma');
-					codec.decompress(savedQuery).then(json => { 
-						console.log(json) ;
-						thisForm.preLoad = json ;
-						addComponent(thisForm, $(thisForm._this).find('ul')) ;
-						//Preload finished, don't reuse data
-						thisForm.preLoad = false;
-						savedQuery = null;
-					}) ;
-				} else {
-					thisForm.preLoad = false ;
-					addComponent(thisForm, $(thisForm._this).find('ul')) ;
-					$(thisForm._this).find('.nice-select').trigger('click') ;
-				}
-
-				
+				addComponent(thisForm, $(thisForm._this).find('ul')) ;
+				$(thisForm._this).find('.nice-select:not(.disabled)').trigger('click') ;
 				// uncomment to trigger gathering of statistics
 				// initStatistics(specProvider);
-			});		
+			});
+			
+			this.loadQuery = function(json) {
+				//Désactiver le submit du form
+				//en amont reset de ce qui est déjà dans l'interface (fonction à part)
+				if (thisForm.firstInit === true) {
+					console.log('*************** Is initialised ') ;
+					thisForm = loadQuery(thisForm, json) ;
+				} else {
+					//Si un travail est en cours on attend...
+					console.log('*************** Not initialised ') ;
+					$(thisForm._this).on('initialised', function() {
+						
+						thisForm = loadQuery(thisForm, json) ;
+					}) ;
+				}
+
+				console.log(json) ;
+			}
         });	
 
-		function loadData(json) {
-			console.log(this) ;
+		function loadQuery(form, json) {
+			console.log('*************** Loading Query ***************') ;
+			//befor clear add json to form preload data
+			form.preLoad = json ;
+			clearForm(form) ;
+			// On Clear form new component is automaticaly added ;
+			// And now, submit form
+			$(form._this).trigger('submit')
+			/*addComponent(form, $(form._this).find('ul')) ;
+						//Preload finished, don't reuse data
+						form.preLoad = false;
+						savedQuery = null;*/
+			form.preLoad = false ;
+
+			console.log(form) ;
+			return form ;
 		}
+
+		function clearForm(form) {
+			console.log('************* Clear the form, no submit *****************') ;
+			form.submitOpened = false ;
+			for (var i = form.components.length-1; i > -1; i--) {
+				if ($(form.components[i].CriteriaGroup.AncestorComponentHtml).hasClass('componentsListe')) {
+					console.log('*************** is first level '+ i) ;
+					form.components[i].CriteriaGroup.onRemoveCriteria() ;
+				}
+			}
+			form.submitOpened = true ;
+		}
+
+		
 		
 		function initForm(form) {	
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
@@ -286,53 +319,56 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// triggered when Sparnatural is submitted : generates output SPARQL
 			// query
 			$(form._this).on('submit', { formObject : form }, function (event) {
-				event.preventDefault();
-				var qGenerator = new DefaultQueryGenerator(
-					settings.addDistinct,
-					settings.typePredicate,
-					specProvider
-				);
-				qGenerator.setPrefixes(settings.sparqlPrefixes);
-				var queries = qGenerator.generateQuery(event.data.formObject);
+				if (form.submitOpened == true) {
+					console.log('****************** Submit is opened, go!!!') ;
+					event.preventDefault();
+					var qGenerator = new DefaultQueryGenerator(
+						settings.addDistinct,
+						settings.typePredicate,
+						specProvider
+					);
+					qGenerator.setPrefixes(settings.sparqlPrefixes);
+					var queries = qGenerator.generateQuery(event.data.formObject);
+					// fire callback
+					if(queries != null) {
+						settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery);
+					}
 
-				// TODO : use JSON query to generate SPARQL
-				// prints the JSON query data structure on the console
-				var jsonGenerator = new JSONQueryGenerator();
-				var jsonQuery = jsonGenerator.generateQuery(event.data.formObject);
+					// prints the JSON query data structure on the console
+					var jsonGenerator = new JSONQueryGenerator();
+					var jsonQuery = jsonGenerator.generateQuery(event.data.formObject);
 
-				// fire callback
-				if(queries != null) {
-					settings.onQueryUpdated(queries.generatedQuery, jsonQuery);
+					var compressCodec = require('json-url')('lzma');
+					compressCodec.compress(jsonQuery).then(result => {
+						
+						var url = '?'+form.getParameterQuery+'='+result ;
+						$('#shareQuery a').text(url);
+						$('#shareQuery a').attr('href', url);
+					});
+
+					/*console.log("*** New JSON Data structure ***");
+					console.log(JSON.stringify(
+						jsonQuery,
+						null,
+						4
+					));*/
+
+					// prints original SPARQL
+					/*console.log("*** Original SPARQL ***");
+					console.log(queries.generatedQuery);*/
+
+					// prints the SPARQL generated from the writing of the JSON data structure
+					/*console.log("*** New SPARQL from JSON data structure ***");
+					var writer = new QuerySPARQLWriter(
+						settings.addDistinct,
+						settings.typePredicate,
+						specProvider
+					);
+					writer.setPrefixes(settings.sparqlPrefixes);
+					console.log(writer.toSPARQL(jsonQuery));*/
+				} else {
+					console.log('****************** Submit not opened') ;
 				}
-
-				var compressCodec = require('json-url')('lzma');
-				compressCodec.compress(jsonQuery).then(result => {
-					
-					var url = '?'+form.getParameterQuery+'='+result ;
-					$('#shareQuery a').text(url);
-					$('#shareQuery a').attr('href', url);
-				});
-
-				/*console.log("*** New JSON Data structure ***");
-				console.log(JSON.stringify(
-					jsonQuery,
-					null,
-					4
-				));*/
-
-				// prints original SPARQL
-				/*console.log("*** Original SPARQL ***");
-				console.log(queries.generatedQuery);*/
-
-				// prints the SPARQL generated from the writing of the JSON data structure
-				/*console.log("*** New SPARQL from JSON data structure ***");
-				var writer = new QuerySPARQLWriter(
-					settings.addDistinct,
-					settings.typePredicate,
-					specProvider
-				);
-				writer.setPrefixes(settings.sparqlPrefixes);
-				console.log(writer.toSPARQL(jsonQuery));*/
 			}) ;
 
 			//var contexte1 = addComponent(form, contexte.find('ul')) ;
@@ -607,6 +643,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		initGeneralEvent(thisForm_);
 		//le critère est inséré et listé dans les composants, on peut lancer l'event de création
 		$(UnCritere).trigger( {type:"Created" } ) ;
+		console.log('*************** component created ') ;
+		if (thisForm_.firstInit == false) {
+			thisForm_.firstInit = true ;
+			console.log('*************** Initializated ') ;
+			$(thisForm_._this).trigger({type:'initialised'}) ;
+		}
+		
 
 		return $(gabari) ;
 	}
@@ -692,7 +735,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			if (this.ParentComponent.components.length == 0) {
 				// top-level criteria : add first criteria and trigger click on class selection
 				var new_component = addComponent(formObject, formContextHtml) ;			
-				$(new_component).find('.nice-select').trigger('click') ;				
+				$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;				
 			} else {
 				if (parentOrSibling !== null) {
 					var dependantComponent = parentOrSibling.element ;
@@ -842,7 +885,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 			// opens the select automatically
 			if(this.objectPropertySelector.needTriggerClick == false) {
-				$(this.html).find('.nice-select').trigger('click') ;
+				$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 			}
 			$(this.html).find('select.input-val').unbind('change');
 			// hook the change event to the onChange function
