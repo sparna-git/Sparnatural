@@ -339,29 +339,33 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 						$('#shareQuery a').attr('href', url);
 					});
 
-					/*console.log("*** New JSON Data structure ***");
+					console.log("*** New JSON Data structure ***");
 					console.log(JSON.stringify(
 						jsonQuery,
 						null,
 						4
-					));*/
+					));
 
 					// prints original SPARQL
-					/*console.log("*** Original SPARQL ***");
-					console.log(queries.generatedQuery);*/
+					console.log("*** Original SPARQL ***");
+					console.log(queries.generatedQuery);
 
 					// prints the SPARQL generated from the writing of the JSON data structure
-					/*console.log("*** New SPARQL from JSON data structure ***");
+					console.log("*** New SPARQL from JSON data structure ***");
 					var writer = new QuerySPARQLWriter(
 						settings.addDistinct,
 						settings.typePredicate,
 						specProvider
 					);
 					writer.setPrefixes(settings.sparqlPrefixes);
-					console.log(writer.toSPARQL(jsonQuery));*/
-				} else {
+					console.log(writer.toSPARQL(jsonQuery));
 					
+				} else {
+					var url = '?'+form.getParameterQuery+'='+result ;
+					$('#shareQuery a').text(url);
+					$('#shareQuery a').attr('href', url);
 				}
+
 			}) ;
 
 			//var contexte1 = addComponent(form, contexte.find('ul')) ;
