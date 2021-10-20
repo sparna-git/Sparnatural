@@ -259,45 +259,35 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				//Désactiver le submit du form
 				//en amont reset de ce qui est déjà dans l'interface (fonction à part)
 				if (thisForm.firstInit === true) {
-					console.log('*************** Is initialised ') ;
 					thisForm = loadQuery(thisForm, json) ;
 				} else {
 					//Si un travail est en cours on attend...
-					console.log('*************** Not initialised ') ;
 					$(thisForm._this).on('initialised', function() {
-						
 						thisForm = loadQuery(thisForm, json) ;
 					}) ;
 				}
-
-				console.log(json) ;
 			}
         });	
 
 		function loadQuery(form, json) {
-			console.log('*************** Loading Query ***************') ;
+			//Know you need to set variablesName
 			//befor clear add json to form preload data
 			form.preLoad = json ;
 			clearForm(form) ;
-			// On Clear form new component is automaticaly added ;
+			// On Clear form new component is automaticaly added, json is started to be loaded;
 			// And now, submit form
 			$(form._this).trigger('submit')
-			/*addComponent(form, $(form._this).find('ul')) ;
-						//Preload finished, don't reuse data
-						form.preLoad = false;
-						savedQuery = null;*/
 			form.preLoad = false ;
-
-			console.log(form) ;
 			return form ;
 		}
 
 		function clearForm(form) {
-			console.log('************* Clear the form, no submit *****************') ;
+			//Stop submit form on this work.
 			form.submitOpened = false ;
+			//need to clear variablesNames
+			form._variablesNames.clearAll() ;
 			for (var i = form.components.length-1; i > -1; i--) {
 				if ($(form.components[i].CriteriaGroup.AncestorComponentHtml).hasClass('componentsListe')) {
-					console.log('*************** is first level '+ i) ;
 					form.components[i].CriteriaGroup.onRemoveCriteria() ;
 				}
 			}
@@ -320,7 +310,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// query
 			$(form._this).on('submit', { formObject : form }, function (event) {
 				if (form.submitOpened == true) {
-					console.log('****************** Submit is opened, go!!!') ;
 					event.preventDefault();
 					var qGenerator = new DefaultQueryGenerator(
 						settings.addDistinct,
@@ -367,7 +356,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					writer.setPrefixes(settings.sparqlPrefixes);
 					console.log(writer.toSPARQL(jsonQuery));*/
 				} else {
-					console.log('****************** Submit not opened') ;
+					
 				}
 			}) ;
 
@@ -643,10 +632,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		initGeneralEvent(thisForm_);
 		//le critère est inséré et listé dans les composants, on peut lancer l'event de création
 		$(UnCritere).trigger( {type:"Created" } ) ;
-		console.log('*************** component created ') ;
 		if (thisForm_.firstInit == false) {
 			thisForm_.firstInit = true ;
-			console.log('*************** Initializated ') ;
 			$(thisForm_._this).trigger({type:'initialised'}) ;
 		}
 		
@@ -777,7 +764,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			IsOnEdit : false,
 			Invisible: false
 		};
-		this.value_selected = null ;	
+		this.value_selected = null ;
+		this.variableNamePreload = null ;
 		
 		this.init = function() {			
 			if (!this.cssClasses.Created) {				
@@ -948,7 +936,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				var _queryGenerator = new JSONQueryGenerator() ;
 				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.ParentComponent.thisForm_.preLoad, this.ParentComponent.ParentComponent.id) ;
 				if (preLoadRow !== null) {
-					console.log(preLoadRow) ;
 					var default_value = preLoadRow.line.p ;
 					this.needTriggerClick = true ;
 				}
@@ -997,7 +984,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.tools.updateCssClasses() ;
 				return true ;
 			}
-			console.log(this.ParentComponent.ParentComponent) ;
 			var default_value_s = null ;
 			var default_value_o = null ;
 			
@@ -1008,8 +994,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					default_value_s = preLoadRow.line.sType ;
 					default_value_o = preLoadRow.line.oType ;
 					this.needTriggerClick = true ;
+					if (this.ParentComponent instanceof StartClassGroup) {
+						this.ParentComponent.variableNamePreload = preLoadRow.line.s;
+					} else {
+						this.ParentComponent.variableNamePreload = preLoadRow.line.o;
+					}
 				}
-				console.log(preLoadRow) ;
 			} 
 
 			var selectHtml = null ;
@@ -1375,13 +1365,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				},
 				eventProxiCriteria
 			);
-			/*console.log(this.ParentComponent.thisForm_) ;*/
 			if(this.ParentComponent.thisForm_.preLoad !== false) {
 				var _queryGenerator = new JSONQueryGenerator() ;
 				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.thisForm_.preLoad, this.ParentComponent.id) ;
 				if (preLoadRow !== null) {
-					console.log(preLoadRow ) ;
-					/*console.log(this.ParentComponent.id ) ;*/
 					if(preLoadRow.children.length > 0) {
 						$(this.actions.ActionWhere.html).find('a').trigger('click') ;
 					}
