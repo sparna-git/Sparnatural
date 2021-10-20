@@ -361,9 +361,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					console.log(writer.toSPARQL(jsonQuery));
 					
 				} else {
-					var url = '?'+form.getParameterQuery+'='+result ;
-					$('#shareQuery a').text(url);
-					$('#shareQuery a').attr('href', url);
+					
 				}
 
 			}) ;
