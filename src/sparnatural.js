@@ -58,7 +58,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 (function( $ ) {
 	
-    $.fn.Sparnatural = function( options ) {
+    HTMLElement.prototype.Sparnatural = function( options ) {
  
     	var specProvider;
 
@@ -227,7 +227,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		var queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);
 
-		this.each(function() {
+		/*this.each(function() {*/
             var thisForm = {
             	_this : $(this),
             	components : [],
@@ -270,7 +270,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.clear = function() {
 				thisForm = clearForm(thisForm) ;
 			}
-        });	
+        //});	
 
 		function loadQuery(form, json) {
 			//Know you need to set variablesName
