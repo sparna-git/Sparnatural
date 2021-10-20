@@ -63,6 +63,7 @@
                     <button id="requete_1">Requête 1</button>
                     <button id="requete_2">Requête 2</button>
                     <button id="requete_3">Requête 3</button>
+                    <button id="clearAll">Clear</button>
                 </div>
                 Lien direct vers la requête : <a href="" target="_blank">fffff</a></div>
             </div>
@@ -515,6 +516,10 @@
     
     $('#requete_3').on('click', function(e) {
         sparnatural[0].loadQuery(json3) ;
+    });
+    
+    $('#clearAll').on('click', function(e) {
+        sparnatural[0].clear() ;
     });
 
       }) ;

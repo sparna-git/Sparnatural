@@ -267,6 +267,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					}) ;
 				}
 			}
+			this.clear = function() {
+				thisForm = clearForm(thisForm) ;
+			}
         });	
 
 		function loadQuery(form, json) {
@@ -292,6 +295,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				}
 			}
 			form.submitOpened = true ;
+			return form ;
 		}
 
 		
