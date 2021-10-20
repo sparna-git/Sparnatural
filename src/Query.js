@@ -47,6 +47,7 @@ export class QueryLine {
 		this.oType = objectType;
 		this.values = [];
 		this.index = i;
+		// does it has siblings after him ?
 		this.dNextType = dependantType;
 	}
 }
@@ -70,7 +71,14 @@ export class URIValue extends AbstractValue {
 	constructor(uri, label=null) {
 		super(label);
 		this.uri=uri;
-		this.valueKey=uri;
+	}
+
+	toWidgetValue() {
+		return {
+			key: this.uri ,
+			label: this.label,
+			uri: this.uri
+		}
 	}
 }
 
@@ -81,7 +89,13 @@ export class LiteralValue extends AbstractValue {
 	constructor(literal, label=null) {
 		super(label);
 		this.literal=literal;
-		this.valueKey=literal;
+	}
+
+	toWidgetValue() {
+		return {
+			key: this.literal,
+			label: this.label
+		}
 	}
 }
 
@@ -90,7 +104,15 @@ export class DateTimeValue extends AbstractValue {
 		super(label);
 		this.fromDate = fromDate;
 		this.toDate = toDate;
-		this.valueKey=fromDate+' '+toDate;
+	}
+
+	toWidgetValue() {
+		return {
+			key: this.fromDate+' '+this.toDate,
+			label: this.label,
+			start: this.fromDate,
+			stop: this.toDate
+		}
 	}
 }
 
@@ -98,7 +120,18 @@ export class SearchValue extends AbstractValue {
 	constructor(key, label=null) {
 		super(label);
 		this.key = key;
-		this.valueKey=key;
+	}
+
+	valueKey() {
+		return this.key;
+	}
+
+	toWidgetValue() {
+		return {
+			key: this.key,
+			label: this.label,
+			search: this.key
+		}
 	}
 }
 
