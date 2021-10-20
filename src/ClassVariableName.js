@@ -10,8 +10,56 @@ class ClassVariableName {
             return false; 
         }
     }
+    parseName(name) {
+        let ClassNameArray = name.split("_");
+        string = '' ;
+        number = 0 ;
+        if (ClassNameArray.length > 1) {
+            string = '' ;
+            for (var j = 0; j < ClassNameArray.length - 1; j++) {
+                if (j != 0 ) {
+                    string = string+'-'+ClassNameArray[j] ;
+                } else {
+                    string = ClassNameArray[j] ;
+                }
+            }
+            number = ClassNameArray[ClassNameArray.length - 1] ;
+        } else {
+            if (ClassNameArray.length == 1) {
+                string = ClassNameArray[0] ;
+            } else {
+                return false ;
+            }
+        }
+        return {text: string, number:number} ;
+    }
     setName(ClassGroup) {
         ClassName = this.localName(ClassGroup.value_selected) ;
+        //Si une valeur pour le nom est préchargé
+        if (ClassGroup.variableNamePreload !== null ) {
+            ParsedName = this.parseName(ClassGroup.variableNamePreload) ;
+            // Si on peut réutiliser un variableName de type xxxxx_y ou xxxxx
+            if (ParsedName !== false) {
+                if (ParsedName.text in this.variablesNames['counts']) {
+                    if (this.variablesNames['counts'][ParsedName.text] < ParsedName.number) {
+                        this.variablesNames['counts'][ParsedName.text] = ParsedName.number ;
+                    }
+                    
+                } else {
+                    this.variablesNames['counts'][ClassName] = 1 ;
+                }
+                this.variablesNames['ids'][ClassGroup.inputTypeComponent.id] = ClassGroup.variableNamePreload ;
+            } else {
+                if (ClassGroup.variableNamePreload in this.variablesNames['counts']) {
+                    this.variablesNames['counts'][ClassGroup.variableNamePreload]++ ;
+                } else {
+                    this.variablesNames['counts'][ClassGroup.variableNamePreload] = 1 ;
+                }
+                this.variablesNames['ids'][ClassGroup.inputTypeComponent.id] = ClassGroup.variableNamePreload+'-'+this.variablesNames['counts'][ClassGroup.variableNamePreload] ;
+            }
+            //On stop ici, variablesNames est complété dans tous les cas
+            return true ;
+        }
         
         if (ClassGroup.constructor.name == "StartClassGroup") {
             dependantDe = this.findDependantCriteria(ClassGroup.inputTypeComponent.rowIndex) ;
@@ -35,6 +83,9 @@ class ClassVariableName {
             }
             this.variablesNames['ids'][ClassGroup.inputTypeComponent.id] = ClassName+'-'+this.variablesNames['counts'][ClassName] ;
         }
+    }
+    clearAll() {
+        this.variablesNames = { counts : [] ,ids : [] } ;
     }
     localName(uri) {
 		if (uri.indexOf("#") > -1) {

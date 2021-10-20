@@ -58,7 +58,14 @@
           </div>
           <div class="row">
             <div class="col-md-12">
-             <div id="shareQuery">Lien direct vers la requête : <a href="" target="_blank">...</a></div>
+             <div id="shareQuery">
+                 <div >Requêtes près enregistrées <br/>
+                    <button id="requete_1">Requête 1</button>
+                    <button id="requete_2">Requête 2</button>
+                    <button id="requete_3">Requête 3</button>
+                    <button id="clearAll">Clear</button>
+                </div>
+                Lien direct vers la requête : <a href="" target="_blank">fffff</a></div>
             </div>
           </div>
         </div>
@@ -221,7 +228,6 @@
       "@id" : "http://dbpedia.org/ontology/country",
       "@type" : "ObjectProperty",
       "subPropertyOf" : "sparnatural:ListProperty",
-      "datasource" : "datasources:list_rdfslabel_count",
       "label": [
         {"@value" : "country","@language" : "en"},
         {"@value" : "pays","@language" : "fr"}
@@ -496,61 +502,26 @@
 
         console.log(sparnatural) ;
 
-        json = {
-    "distinct": true,
-    "variables": [
-        "?this"
-    ],
-    "branches": [
-        {
-            "line": {
-                "s": "this",
-                "p": "http://dbpedia.org/ontology/country",
-                "o": "Country_1",
-                "sType": "http://dbpedia.org/ontology/Museum",
-                "oType": "http://dbpedia.org/ontology/Country",
-                "values": [],
-                "index": 0,
-                "dNextType": "hasSibling"
-            },
-            "children": [
-                {
-                    "line": {
-                        "s": "Country_1",
-                        "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#birthPlace",
-                        "o": "Person_1",
-                        "sType": "http://dbpedia.org/ontology/Country",
-                        "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
-                        "values": [
-                            {
-                                "key": "http://fr.dbpedia.org/resource/Léonard_de_Vinci",
-                                "label": "http://fr.dbpedia.org/resource/Léonard_de_Vinci",
-                                "uri": "http://fr.dbpedia.org/resource/Léonard_de_Vinci"
-                            }
-                        ],
-                        "index": 1,
-                        "dNextType": null
-                    },
-                    "children": []
-                }
-            ]
-        },
-        {
-            "line": {
-                "s": "this",
-                "p": "http://dbpedia.org/ontology/country",
-                "o": "Country_2",
-                "sType": "http://dbpedia.org/ontology/Museum",
-                "oType": "http://dbpedia.org/ontology/Country",
-                "values": [],
-                "index": 2,
-                "dNextType": null
-            },
-            "children": []
-        }
-    ]
-} ;
-sparnatural[0].loadQuery(json) ;
+        json = { "distinct": true, "variables": [ "?this" ], "branches": [ { "line": { "s": "this", "p": "http://dbpedia.org/ontology/country", "o": "Country_1", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Country", "values": [], "index": 0, "dNextType": "hasSibling" }, "children": [ { "line": { "s": "Country_1", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#birthPlace", "o": "Person_1", "sType": "http://dbpedia.org/ontology/Country", "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "values": [ { "key": "http://fr.dbpedia.org/resource/Léonard_de_Vinci", "label": "http://fr.dbpedia.org/resource/Léonard_de_Vinci", "uri": "http://fr.dbpedia.org/resource/Léonard_de_Vinci" } ], "index": 1, "dNextType": null }, "children": [] } ] }, { "line": { "s": "this", "p": "http://dbpedia.org/ontology/country", "o": "Country_2", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Country", "values": [], "index": 2, "dNextType": null }, "children": [] } ] } ;
+        json2 = { "distinct": true, "variables": [ "?this" ], "branches": [ { "line": { "s": "this", "p": "http://dbpedia.org/ontology/country", "o": "Country_1", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Country", "values": [], "index": 0, "dNextType": "hasSibling" }, "children": [ { "line": { "s": "Country_1", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#birthPlace", "o": "Person_1", "sType": "http://dbpedia.org/ontology/Country", "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "values": [ { "key": "http://fr.dbpedia.org/resource/Léonard_de_Vinci", "label": "http://fr.dbpedia.org/resource/Léonard_de_Vinci", "uri": "http://fr.dbpedia.org/resource/Léonard_de_Vinci" } ], "index": 1, "dNextType": null }, "children": [] } ] }, { "line": { "s": "this", "p": "http://dbpedia.org/ontology/country", "o": "Country_3", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Country", "values": [ { "key": "http://fr.dbpedia.org/resource/Suisse", "label": "http://fr.dbpedia.org/resource/Suisse (146)", "uri": "http://fr.dbpedia.org/resource/Suisse" } ], "index": 2, "dNextType": "hasSibling" }, "children": [] }, { "line": { "s": "this", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays", "o": "Toto", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Artwork", "values": [], "index": 3, "dNextType": null }, "children": [] } ] };
+        json3 = { "distinct": true, "variables": [ "?this" ], "branches": [ { "line": { "s": "this", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn", "o": "Country_7", "sType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "oType": "http://dbpedia.org/ontology/Country", "values": [ { "key": "http://fr.dbpedia.org/resource/États-Unis", "label": "États-Unis (18611)", "uri": "http://fr.dbpedia.org/resource/États-Unis" } ], "index": 0, "dNextType": "hasSibling" }, "children": [] }, { "line": { "s": "this", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#unknownBetweenKnownClasses", "o": "Museum_1", "sType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "oType": "http://dbpedia.org/ontology/Museum", "values": [], "index": 1, "dNextType": "hasSibling" }, "children": [ { "line": { "s": "Museum_1", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays", "o": "Artwork_3", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Artwork", "values": [], "index": 2, "dNextType": null }, "children": [ { "line": { "s": "Artwork_3", "p": "http://dbpedia.org/ontology/author", "o": "Person_4", "sType": "http://dbpedia.org/ontology/Artwork", "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "values": [ { "key": "http://fr.dbpedia.org/resource/Pablo_Picasso", "label": "http://fr.dbpedia.org/resource/Pablo_Picasso", "uri": "http://fr.dbpedia.org/resource/Pablo_Picasso" } ], "index": 3, "dNextType": null }, "children": [] } ] } ] }, { "line": { "s": "this", "p": "http://dbpedia.org/ontology/deathDate", "o": "Date_1", "sType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date", "values": [ { "key": "null 1957-12-31T23:59:59", "label": "Jusqu'à 1957", "start": null, "stop": "1957-12-31T23:59:59" } ], "index": 4, "dNextType": "hasSibling" }, "children": [] }, { "line": { "s": "this", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#created", "o": "Artwork_4", "sType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "oType": "http://dbpedia.org/ontology/Artwork", "values": [], "index": 5, "dNextType": null }, "children": [ { "line": { "s": "Artwork_4", "p": "http://dbpedia.org/ontology/museum", "o": "Museum_2", "sType": "http://dbpedia.org/ontology/Artwork", "oType": "http://dbpedia.org/ontology/Museum", "values": [], "index": 6, "dNextType": null }, "children": [ { "line": { "s": "Museum_2", "p": "http://dbpedia.org/ontology/country", "o": "Country_8", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Country", "values": [ { "key": "http://fr.dbpedia.org/resource/Suisse", "label": "http://fr.dbpedia.org/resource/Suisse (146)", "uri": "http://fr.dbpedia.org/resource/Suisse" }, { "key": "http://fr.dbpedia.org/resource/France", "label": "http://fr.dbpedia.org/resource/France (222)", "uri": "http://fr.dbpedia.org/resource/France" } ], "index": 7, "dNextType": null }, "children": [] } ] } ] } ] };
+
+    $('#requete_1').on('click', function(e) {
+        sparnatural[0].loadQuery(json) ;
+    });
+    
+    $('#requete_2').on('click', function(e) {
+        sparnatural[0].loadQuery(json2) ;
+    });
+    
+    $('#requete_3').on('click', function(e) {
+        sparnatural[0].loadQuery(json3) ;
+    });
+    
+    $('#clearAll').on('click', function(e) {
+        sparnatural[0].clear() ;
+    });
+
       }) ;
 
       prefixesPostProcess = function(queryString, queryJson) {
@@ -602,15 +573,6 @@ sparnatural[0].loadQuery(json) ;
       yasqe.on("queryResponse", function(_yasqe, response, duration) {
         yasr.setResponse(response, duration);
       });
-
-      /*console.log('****************************');
-      var codec = require('json-url')('lzma');
-			codec.decompress(savedQuery).then(json => { 
-          console.log(json) ;
-          sparnatural.loadData(json) ;
-          
-			}) ;*/
- 
       
 
     </script>
