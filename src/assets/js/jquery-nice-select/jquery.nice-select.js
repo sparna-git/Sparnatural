@@ -94,7 +94,8 @@
 		}
 
         $dropdown.find('ul').append($('<li></li>')
-          .attr('data-value', $option.val())
+        .attr('data-value', $option.val())
+        .attr('title', $option.val())
           .attr('data-display', (display || null))
           .addClass('option' +
             ($option.is(':selected') ? ' selected' : '') +
