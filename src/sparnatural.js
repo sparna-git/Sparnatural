@@ -244,8 +244,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			var specProviderFactory = new SpecificationProviderFactory();
 
-			thisForm.getParameterQuery = $(this).attr('id')+'-query' ;
-
 			specProviderFactory.build(settings.config, settings.language, function(sp) {
 				specProvider = sp;
 				initForm(thisForm);
@@ -331,14 +329,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					var jsonGenerator = new JSONQueryGenerator();
 					var jsonQuery = jsonGenerator.generateQuery(event.data.formObject);
 
-					var compressCodec = require('json-url')('lzma');
-					compressCodec.compress(jsonQuery).then(result => {
-						
-						var url = '?'+form.getParameterQuery+'='+result ;
-						$('#shareQuery a').text(url);
-						$('#shareQuery a').attr('href', url);
-					});
-
+					
 					console.log("*** New JSON Data structure ***");
 					console.log(JSON.stringify(
 						jsonQuery,

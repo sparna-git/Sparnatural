@@ -467,7 +467,7 @@
       var sparnatural;
       $( document ).ready(function($) {          
 
-        sparnatural = $('#ui-search').Sparnatural({
+        sparnatural = document.getElementById('ui-search').Sparnatural({
           config: config,
           // config: "sparnatural-config.rdf",
           language: lang,
@@ -493,64 +493,6 @@
             yasqe.query();
           }
         });
-
-        console.log(sparnatural) ;
-
-        json = {
-    "distinct": true,
-    "variables": [
-        "?this"
-    ],
-    "branches": [
-        {
-            "line": {
-                "s": "this",
-                "p": "http://dbpedia.org/ontology/country",
-                "o": "Country_1",
-                "sType": "http://dbpedia.org/ontology/Museum",
-                "oType": "http://dbpedia.org/ontology/Country",
-                "values": [],
-                "index": 0,
-                "dNextType": "hasSibling"
-            },
-            "children": [
-                {
-                    "line": {
-                        "s": "Country_1",
-                        "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#birthPlace",
-                        "o": "Person_1",
-                        "sType": "http://dbpedia.org/ontology/Country",
-                        "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
-                        "values": [
-                            {
-                                "key": "http://fr.dbpedia.org/resource/Léonard_de_Vinci",
-                                "label": "http://fr.dbpedia.org/resource/Léonard_de_Vinci",
-                                "uri": "http://fr.dbpedia.org/resource/Léonard_de_Vinci"
-                            }
-                        ],
-                        "index": 1,
-                        "dNextType": null
-                    },
-                    "children": []
-                }
-            ]
-        },
-        {
-            "line": {
-                "s": "this",
-                "p": "http://dbpedia.org/ontology/country",
-                "o": "Country_2",
-                "sType": "http://dbpedia.org/ontology/Museum",
-                "oType": "http://dbpedia.org/ontology/Country",
-                "values": [],
-                "index": 2,
-                "dNextType": null
-            },
-            "children": []
-        }
-    ]
-} ;
-sparnatural[0].loadQuery(json) ;
       }) ;
 
       prefixesPostProcess = function(queryString, queryJson) {
