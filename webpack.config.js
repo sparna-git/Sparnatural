@@ -12,8 +12,8 @@ let multipleHtmlPlugins = htmlPageNames.map(name => {
   return new HtmlWebpackPlugin({
     template: __dirname +`/src/${name}.html`, // relative path to the HTML files
     filename: `${name}.html`, // output HTML files
-	inject: 'body',
-    chunks: [`${name}`] // respective JS files
+	inject: true,
+    chunks: [name] // respective JS files
   })
 });
 
@@ -75,6 +75,11 @@ module.exports = {
 		template: __dirname + "/src/index.html",
 		inject: 'body'
 	}),
+	new HtmlWebpackPlugin({
+		filename: 'index-saved-query.html',
+		template: __dirname + "/src/index-saved-query.html",
+		inject: 'body'
+	}),
 	new MiniCssExtractPlugin({
 	  filename: "sparnatural.css",
 	  chunkFilename: "[id].css"
@@ -90,7 +95,7 @@ module.exports = {
 	*/
 	new WebpackBundleSizeAnalyzerPlugin('./webpack-bundle-size-analyzer-report.txt')
 	  
-  ].concat(multipleHtmlPlugins),
+  ],
 	devServer: {
 	  contentBase: path.resolve(__dirname, "./dist"),
 	  historyApiFallback: true,
