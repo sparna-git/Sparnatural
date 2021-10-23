@@ -212,7 +212,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			 * @param {object} queryString - The SPARQL query string
 			 * @param {object} queryJson - The query as a JSON data structure
 			 **/
-			onQueryUpdated : function (queryString, queryJson) {
+			onQueryUpdated : function (queryString, queryJson, pivotJson) {
 				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
 			}
 		};
@@ -224,8 +224,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		// merge given options with default values
 		var settings = $.extend( true, {}, defaults, options );
-		var queryString = window.location.search;
-		const urlParams = new URLSearchParams(queryString);
+		
 
 		/*this.each(function() {*/
             var thisForm = {
@@ -320,14 +319,15 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					);
 					qGenerator.setPrefixes(settings.sparqlPrefixes);
 					var queries = qGenerator.generateQuery(event.data.formObject);
-					// fire callback
-					if(queries != null) {
-						settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery);
-					}
 
 					// prints the JSON query data structure on the console
 					var jsonGenerator = new JSONQueryGenerator();
 					var jsonQuery = jsonGenerator.generateQuery(event.data.formObject);
+
+					// fire callback
+					if(queries != null) {
+						settings.onQueryUpdated(queries.generatedQuery, queries.jsonQuery, jsonQuery);
+					}
 
 					
 					console.log("*** New JSON Data structure ***");

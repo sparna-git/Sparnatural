@@ -492,7 +492,7 @@
             "dbpedia" : "http://dbpedia.org/ontology/"
           },
           filterConfigOnEndpoint : false,
-          onQueryUpdated: function(queryString, queryJson) {
+          onQueryUpdated: function(queryString, queryJson, pivotJson) {
             queryString = semanticPostProcess(queryString, queryJson);
             queryString = rdfsLabelPostProcess(queryString, queryJson);
             queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
@@ -501,7 +501,7 @@
             yasqe.setValue(queryString);
             yasqe.query();
             var compressCodec = JsonUrl('lzma');
-					  compressCodec.compress(queryJson).then(result => {
+					  compressCodec.compress(pivotJson).then(result => {
               var url = '?query='+result ;
               $('#shareQuery a').text(url);
               $('#shareQuery a').attr('href', url);
@@ -514,22 +514,33 @@
         json2 = { "distinct": true, "variables": [ "?this" ], "branches": [ { "line": { "s": "this", "p": "http://dbpedia.org/ontology/country", "o": "Country_1", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Country", "values": [], "index": 0, "dNextType": "hasSibling" }, "children": [ { "line": { "s": "Country_1", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#birthPlace", "o": "Person_1", "sType": "http://dbpedia.org/ontology/Country", "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "values": [ { "key": "http://fr.dbpedia.org/resource/Léonard_de_Vinci", "label": "http://fr.dbpedia.org/resource/Léonard_de_Vinci", "uri": "http://fr.dbpedia.org/resource/Léonard_de_Vinci" } ], "index": 1, "dNextType": null }, "children": [] } ] }, { "line": { "s": "this", "p": "http://dbpedia.org/ontology/country", "o": "Country_3", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Country", "values": [ { "key": "http://fr.dbpedia.org/resource/Suisse", "label": "http://fr.dbpedia.org/resource/Suisse (146)", "uri": "http://fr.dbpedia.org/resource/Suisse" } ], "index": 2, "dNextType": "hasSibling" }, "children": [] }, { "line": { "s": "this", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays", "o": "Toto", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Artwork", "values": [], "index": 3, "dNextType": null }, "children": [] } ] };
         json3 = { "distinct": true, "variables": [ "?this" ], "branches": [ { "line": { "s": "this", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn", "o": "Country_7", "sType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "oType": "http://dbpedia.org/ontology/Country", "values": [ { "key": "http://fr.dbpedia.org/resource/États-Unis", "label": "États-Unis (18611)", "uri": "http://fr.dbpedia.org/resource/États-Unis" } ], "index": 0, "dNextType": "hasSibling" }, "children": [] }, { "line": { "s": "this", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#unknownBetweenKnownClasses", "o": "Museum_1", "sType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "oType": "http://dbpedia.org/ontology/Museum", "values": [], "index": 1, "dNextType": "hasSibling" }, "children": [ { "line": { "s": "Museum_1", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays", "o": "Artwork_3", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Artwork", "values": [], "index": 2, "dNextType": null }, "children": [ { "line": { "s": "Artwork_3", "p": "http://dbpedia.org/ontology/author", "o": "Person_4", "sType": "http://dbpedia.org/ontology/Artwork", "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "values": [ { "key": "http://fr.dbpedia.org/resource/Pablo_Picasso", "label": "http://fr.dbpedia.org/resource/Pablo_Picasso", "uri": "http://fr.dbpedia.org/resource/Pablo_Picasso" } ], "index": 3, "dNextType": null }, "children": [] } ] } ] }, { "line": { "s": "this", "p": "http://dbpedia.org/ontology/deathDate", "o": "Date_1", "sType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date", "values": [ { "key": "null 1957-12-31T23:59:59", "label": "Jusqu'à 1957", "start": null, "stop": "1957-12-31T23:59:59" } ], "index": 4, "dNextType": "hasSibling" }, "children": [] }, { "line": { "s": "this", "p": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#created", "o": "Artwork_4", "sType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person", "oType": "http://dbpedia.org/ontology/Artwork", "values": [], "index": 5, "dNextType": null }, "children": [ { "line": { "s": "Artwork_4", "p": "http://dbpedia.org/ontology/museum", "o": "Museum_2", "sType": "http://dbpedia.org/ontology/Artwork", "oType": "http://dbpedia.org/ontology/Museum", "values": [], "index": 6, "dNextType": null }, "children": [ { "line": { "s": "Museum_2", "p": "http://dbpedia.org/ontology/country", "o": "Country_8", "sType": "http://dbpedia.org/ontology/Museum", "oType": "http://dbpedia.org/ontology/Country", "values": [ { "key": "http://fr.dbpedia.org/resource/Suisse", "label": "http://fr.dbpedia.org/resource/Suisse (146)", "uri": "http://fr.dbpedia.org/resource/Suisse" }, { "key": "http://fr.dbpedia.org/resource/France", "label": "http://fr.dbpedia.org/resource/France (222)", "uri": "http://fr.dbpedia.org/resource/France" } ], "index": 7, "dNextType": null }, "children": [] } ] } ] } ] };
 
-    $('#requete_1').on('click', function(e) {
-        document.getElementById('ui-search').loadQuery(json) ;
-    });
-    
-    $('#requete_2').on('click', function(e) {
-        sparnatural.loadQuery(json2) ;
-    });
-    
-    $('#requete_3').on('click', function(e) {
-        sparnatural.loadQuery(json3) ;
-    });
-    
-    $('#clearAll').on('click', function(e) {
-        sparnatural.clear() ;
-    });
+        $('#requete_1').on('click', function(e) {
+            document.getElementById('ui-search').loadQuery(json) ;
+        });
+        
+        $('#requete_2').on('click', function(e) {
+            sparnatural.loadQuery(json2) ;
+        });
+        
+        $('#requete_3').on('click', function(e) {
+            sparnatural.loadQuery(json3) ;
+        });
+        
+        $('#clearAll').on('click', function(e) {
+            sparnatural.clear() ;
+        });
 
+        var UrlString = window.location.search;
+		    var urlParams = new URLSearchParams(UrlString);
+        if (urlParams.has("query") === true) {
+          var compressedJson = urlParams.get("query") ;
+          var compressCodec = JsonUrl('lzma');
+					compressCodec.decompress(compressedJson).then(json => {
+            console.log('*** Load query set on URI ***') ;
+            console.log(json) ;
+            sparnatural.loadQuery(json) ;
+          });
+        }
       }) ;
 
       prefixesPostProcess = function(queryString, queryJson) {
