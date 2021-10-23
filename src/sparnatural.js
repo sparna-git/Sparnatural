@@ -45,8 +45,6 @@ SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHan
 
 JSONQueryGenerator = require("./QueryGenerators.js").JSONQueryGenerator;
 
-JSONQueryPreloader = require("./QueryPreloader.js").JSONQueryPreloader;
-
 QuerySPARQLWriter = require("./Query.js").QuerySPARQLWriter ;
 
 require("./Widgets.js");
