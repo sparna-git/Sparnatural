@@ -3,13 +3,13 @@
 		this.autocompleteHandler = autocompleteHandler;
 		this.ParentComponent = inputTypeComponent ;
 
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		this.html = '<input id="ecgrw-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
 		
 		this.init = function init() {
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			
 			var id_inputs = this.IdCriteriaGroupe ;			
 			var itc_obj = this.ParentComponent;	
@@ -81,16 +81,16 @@
 	ListWidget = function(inputTypeComponent, listHandler, langSearch) {
 		this.listHandler = listHandler;
 		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
 		this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
 		//this.select = $('<select id="'+this.id_input+'"></select>');
 		
 		this.init = function init() {
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			
 			var itc_obj = this.ParentComponent;
 			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
@@ -153,14 +153,14 @@
 	DatesWidget = function(inputTypeComponent, datesHandler, langSearch) {
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
 		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		this.init = function init() {
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			var phrase ="" ;
 			var data_json = null ;
 			
@@ -260,16 +260,16 @@
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
 		
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		this.formatDate = format ;
 
 		placeHolder = (this.formatDate == 'day')?langSearch.PlaceholderTimeDateDayFormat:langSearch.PlaceholderTimeDateFormat ;
 		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+placeHolder+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+placeHolder+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		this.init = function init() {
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			
 			var id_inputs = this.IdCriteriaGroupe ;			
 			var itc_obj = this.ParentComponent;
@@ -378,14 +378,14 @@
 
 	SearchWidget = function(inputTypeComponent, langSearch) {
 		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
 		this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add" class="button-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		this.init = function init() {
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
-			var CriteriaGroup = this.ParentComponent.ParentComponent.ParentComponent ;
+			var CriteriaGroup = this.ParentComponent.ParentComponent.parentCriteriaGroup ;
 			
 			$('#ecgrw-search-'+this.IdCriteriaGroupe+'-add').on(
 				'click',

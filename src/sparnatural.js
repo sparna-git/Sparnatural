@@ -209,8 +209,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			 *
 			 * @param {object} queryString - The SPARQL query string
 			 * @param {object} queryJson - The query as a JSON data structure
+			 * @param {object} pivotJson - The query as a JSON data structure (new version)
 			 **/
-			onQueryUpdated : function (queryString, queryJson) {
+			onQueryUpdated : function (queryString, queryJson, pivotJson) {
 				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
 			}
 		};
@@ -222,53 +223,52 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		// merge given options with default values
 		var settings = $.extend( true, {}, defaults, options );
-		var queryString = window.location.search;
-		const urlParams = new URLSearchParams(queryString);
+		
 
 		// all the components in Sparnatural
 		this.components = [];
 
-		/*this.each(function() {*/
-            var thisForm = {
-            	sparnatural : this,
-				submitOpened: true,
-				firstInit: false,
-				preLoad: false 
-            } ;
-			$(this).addClass('Sparnatural') ;
-			
-			langSearch = i18nLabels[settings.language];
-			// defaults to English
-			if(langSearch == null) {langSearch = i18nLabels["en"];}
+        var thisForm = {
+        	sparnatural : this,
+			submitOpened: true,
+			firstInit: false,
+			// JSON of the query to be loaded
+			preLoad: false 
+        } ;
+		$(this).addClass('Sparnatural') ;
+		
+		langSearch = i18nLabels[settings.language];
+		// defaults to English
+		if(langSearch == null) {langSearch = i18nLabels["en"];}
 
-			var specProviderFactory = new SpecificationProviderFactory();
+		var specProviderFactory = new SpecificationProviderFactory();
 
-			specProviderFactory.build(settings.config, settings.language, function(sp) {
-				specProvider = sp;
-				initForm(thisForm);
-				// add the first CriteriaGroup to the component
-				addComponent(thisForm, $(thisForm.sparnatural).find('ul')) ;
-				$(thisForm.sparnatural).find('.nice-select:not(.disabled)').trigger('click') ;
-				// uncomment to trigger gathering of statistics
-				// initStatistics(specProvider);
-			});
-			
-			this.loadQuery = function(json) {
-				//Désactiver le submit du form
-				//en amont reset de ce qui est déjà dans l'interface (fonction à part)
-				if (thisForm.firstInit === true) {
+		specProviderFactory.build(settings.config, settings.language, function(sp) {
+			specProvider = sp;
+			initForm(thisForm);
+			// add the first CriteriaGroup to the component
+			addComponent(thisForm, $(thisForm.sparnatural).find('ul')) ;
+			$(thisForm.sparnatural).find('.nice-select:not(.disabled)').trigger('click') ;
+			// uncomment to trigger gathering of statistics
+			// initStatistics(specProvider);
+		});
+		
+		this.loadQuery = function(json) {
+			//Désactiver le submit du form
+			//en amont reset de ce qui est déjà dans l'interface (fonction à part)
+			if (thisForm.firstInit === true) {
+				thisForm = loadQuery(thisForm, json) ;
+			} else {
+				//Si un travail est en cours on attend...
+				$(thisForm.sparnatural).on('initialised', function() {
 					thisForm = loadQuery(thisForm, json) ;
-				} else {
-					//Si un travail est en cours on attend...
-					$(thisForm.sparnatural).on('initialised', function() {
-						thisForm = loadQuery(thisForm, json) ;
-					}) ;
-				}
+				}) ;
 			}
-			this.clear = function() {
-				thisForm = clearForm(thisForm) ;
-			}
-        //});	
+		}
+
+		this.clear = function() {
+			thisForm = clearForm(thisForm) ;
+		}	
 
 		function loadQuery(form, json) {
 			//Know you need to set variablesName
@@ -285,8 +285,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		function clearForm(form) {
 			//Stop submit form on this work.
 			form.submitOpened = false ;
-			//need to clear variablesNames
-			form._variablesNames.clearAll() ;
 			for (var i = form.sparnatural.components.length-1; i > -1; i--) {
 				if ($(form.sparnatural.components[i].CriteriaGroup.AncestorComponentHtml).hasClass('componentsListe')) {
 					form.sparnatural.components[i].CriteriaGroup.onRemoveCriteria() ;
@@ -296,8 +294,11 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			return form ;
 		}
 
+		/**
+		 * Returns the maximum index of variables within all the criterias
+		 **/
 		this.getMaxVarIndex = function() {
-			var max = -1;
+			var max = 0;
 			for (var i = 0; i < this.components.length; i++) {
 				var startVarName = this.components[i].CriteriaGroup.StartClassGroup.getVarName();
 				var endVarName = this.components[i].CriteriaGroup.EndClassGroup.getVarName();
@@ -731,7 +732,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.ParentComponent.sparnatural.components.splice(iteration_to_remove , 1);
 			
 			
-			if (this.ParentComponent.components.length == 0) {
+			if (this.ParentComponent.sparnatural.components.length == 0) {
 				// top-level criteria : add first criteria and trigger click on class selection
 				var new_component = addComponent(formObject, formContextHtml) ;			
 				$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;				
@@ -766,7 +767,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	}
 	
 	function GroupContenaire() {
-		this.ParentComponent = null ;
+		this.parentCriteriaGroup = null ;
 		this.inputTypeComponent = null ;
 		this.tools = null ;
 		this.widgetHtml = false ;
@@ -782,7 +783,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.init = function() {			
 			if (!this.cssClasses.Created) {				
 				this.cssClasses.IsOnEdit = true ;
-				this.HtmlContainer = this.ParentComponent ;
+				this.HtmlContainer = this.parentCriteriaGroup ;
 				//this.html.remove() ;
 				this.tools = new GenericTools(this) ;
 				this.tools.initHtml() ;
@@ -802,12 +803,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.base() ;
 
 		this.specProvider = specProvider;
-		this.ParentComponent = CriteriaGroupe ;
+		this.parentCriteriaGroup = CriteriaGroupe ;
 		this.cssClasses.StartClassGroup = true ;
 		this.cssClasses.Created = false ;
 		
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
 
+		// contains the name of the SPARQL variable associated to this component
 		this.varName;
 
 		// triggered when a criteria starts
@@ -825,10 +827,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				eventProxiCriteria
 			);
 			if(this.inputTypeComponent.needTriggerClick == true) {
-				//$(this.html).find('.nice-select').trigger('click') ;
 				$(this.html).find('select.input-val').trigger('change');
 				this.inputTypeComponent.needTriggerClick = false ;
-				//$(this.ParentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			}
 			
 		}
@@ -838,8 +838,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			//this.niceslect.niceSelect('update') ;
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 
-			//Set the variable naùe for Sparql
-			var parentOrSibling = findParentOrSiblingCriteria(this.ParentComponent.thisForm_, this.ParentComponent.id) ;
+			//Set the SPARQL variable name
+			var parentOrSibling = findParentOrSiblingCriteria(this.parentCriteriaGroup.thisForm_, this.parentCriteriaGroup.id) ;
 			if (parentOrSibling && parentOrSibling.type == 'parent' ) {
 				this.varName = parentOrSibling.element.EndClassGroup.getVarName();
 			} else if (parentOrSibling && parentOrSibling.type == 'sibling' ) {
@@ -848,12 +848,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.varName = "?this";
 			}
 
-			$(this.ParentComponent.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+			$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			// trigger event on the whole line/criteria
-			$(this.ParentComponent).trigger( {type:"StartClassGroupSelected" } ) ;
+			$(this.parentCriteriaGroup).trigger( {type:"StartClassGroupSelected" } ) ;
 
 			if(settings.sendQueryOnFirstClassSelected) {
-				$(this.ParentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+				$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			}
 		};
 
@@ -874,7 +874,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	function ObjectPropertyGroup(CriteriaGroupe1, specProvider) {
 		this.base = GroupContenaire ;
 		this.base() ;
-		this.ParentComponent = CriteriaGroupe1 ;
+		this.parentCriteriaGroup = CriteriaGroupe1 ;
 		this.cssClasses = {
 			ObjectPropertyGroup : true,
 			Created : false
@@ -914,7 +914,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				//$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 				$(this.html).find('select.input-val:not(.disabled)').trigger('change');
 				this.objectPropertySelector.needTriggerClick = false ;
-				//$(this.ParentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+				//$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			} else {
 				if ($(this.html).find('select.input-val').find('option').length == 1) {
 					$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
@@ -928,8 +928,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			if ($(this.html).find('.input-val').find('option').length == 1) {
 				$(this.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			}
-			$(this.ParentComponent).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
-			$(this.ParentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+			$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			
 			//ici peut être lancer le reload du where si il y a des fils
 		};
@@ -957,9 +957,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.init = function (reload = false) {
 			var selectBuilder = new PropertySelectBuilder(this.specProvider);
 			var default_value = null ;
-			if(this.ParentComponent.ParentComponent.thisForm_.preLoad !== false) {
-				var _queryGenerator = new JSONQueryGenerator() ;
-				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.ParentComponent.thisForm_.preLoad, this.ParentComponent.ParentComponent.id) ;
+			if(this.ParentComponent.parentCriteriaGroup.thisForm_.preLoad !== false) {
+				var preLoadRow = findCriteriaWithId(this.ParentComponent.parentCriteriaGroup.thisForm_.preLoad, this.ParentComponent.parentCriteriaGroup.id) ;
 				if (preLoadRow !== null) {
 					var default_value = preLoadRow.line.p ;
 					this.needTriggerClick = true ;
@@ -967,9 +966,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}
 
 			this.widgetHtml = selectBuilder.buildPropertySelect(
-				this.ParentComponent.ParentComponent.StartClassGroup.value_selected,
-				this.ParentComponent.ParentComponent.EndClassGroup.value_selected,
-				'c-'+this.ParentComponent.ParentComponent.id,
+				this.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected,
+				this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected,
+				'c-'+this.ParentComponent.parentCriteriaGroup.id,
 				default_value
 			) ;
 			
@@ -1012,9 +1011,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			var default_value_s = null ;
 			var default_value_o = null ;
 			
-			if(this.ParentComponent.ParentComponent.thisForm_.preLoad !== false) {
-				var _queryGenerator = new JSONQueryGenerator() ;
-				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.ParentComponent.thisForm_.preLoad, this.ParentComponent.ParentComponent.id) ;
+			if(this.ParentComponent.parentCriteriaGroup.thisForm_.preLoad !== false) {
+				var preLoadRow = findCriteriaWithId(this.ParentComponent.parentCriteriaGroup.thisForm_.preLoad, this.ParentComponent.parentCriteriaGroup.id) ;
 				if (preLoadRow !== null) {
 					default_value_s = preLoadRow.line.sType ;
 					default_value_o = preLoadRow.line.oType ;
@@ -1029,12 +1027,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			var selectHtml = null ;
 			
-			var id = this.ParentComponent.ParentComponent.id ;
+			var id = this.ParentComponent.parentCriteriaGroup.id ;
 			var selectBuilder = new ClassSelectBuilder(this.specProvider);
 
 			if (this.ParentComponent instanceof StartClassGroup) {
 				
-				var parentOrSibling = findParentOrSiblingCriteria(this.ParentComponent.ParentComponent.thisForm_, id) ;
+				var parentOrSibling = findParentOrSiblingCriteria(this.ParentComponent.parentCriteriaGroup.thisForm_, id) ;
 				if (parentOrSibling) {
 					if (parentOrSibling.type == 'parent' ) {
 						// if we are child in a WHERE relation, the selected class is the selected
@@ -1064,7 +1062,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			if (this.ParentComponent instanceof EndClassGroup) {
 				this.id = 'b-'+id ;
 				selectHtml = selectBuilder.buildClassSelect(
-					this.ParentComponent.ParentComponent.StartClassGroup.value_selected,
+					this.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected,
 					this.id,
 					default_value_o
 				);
@@ -1091,7 +1089,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.base = GroupContenaire ;
 		this.base() ;
 		this.specProvider = specProvider;
-		this.ParentComponent = CriteriaGroupe ;
+		this.parentCriteriaGroup = CriteriaGroupe ;
 		this.cssClasses = {
 			EndClassGroup : true ,
 			Created : false
@@ -1125,7 +1123,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				//$(this.html).find('.nice-select').trigger('click') ;
 				$(this.html).find('select.input-val').trigger('change');
 				this.inputTypeComponent.needTriggerClick = false ;
-				//$(this.ParentComponent.thisForm.sparnatural).trigger( {type:"submit" } ) ;
+				//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
 			}
 		}
 		
@@ -1133,40 +1131,40 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 
 			//Set the variable naùe for Sparql
-			this.varName = "?"+localName(this.value_selected)+"_"+(this.ParentComponent.thisForm_.sparnatural.getMaxVarIndex()+1);
+			this.varName = "?"+localName(this.value_selected)+"_"+(this.parentCriteriaGroup.thisForm_.sparnatural.getMaxVarIndex()+1);
 
-			$(this.ParentComponent.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
+			$(this.parentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
 			
 			if (specProvider.hasConnectedClasses(this.value_selected)) {
-				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
+				$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
 			} else {
-				$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
+				$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
 			}
 			this.cssClasses.HasInputsCompleted = true ;
 			this.cssClasses.IsOnEdit = false ;
 			this.init() ;
 
 			// show and init the property selection
-			this.ParentComponent.ObjectPropertyGroup.cssClasses.Invisible = false;
-			this.ParentComponent.ObjectPropertyGroup.init() ;
+			this.parentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = false;
+			this.parentCriteriaGroup.ObjectPropertyGroup.init() ;
 			// trigger the event that will call the ObjectPropertyGroup
-			$(this.ParentComponent).trigger( {type:"EndClassGroupSelected" } ) ;
+			$(this.parentCriteriaGroup).trigger( {type:"EndClassGroupSelected" } ) ;
 		};
 
 		this.onRemoveSelected = function onRemoveSelected () {			
-			$(this.ParentComponent.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
-			this.ParentComponent.ObjectPropertyGroup.cssClasses.Invisible = true ;
-			this.ParentComponent.ObjectPropertyGroup.init() ;
-			$(this.ParentComponent.ComponentHtml).find('.childsList .ActionRemove a').trigger('click') ;
+			$(this.parentCriteriaGroup.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
+			this.parentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = true ;
+			this.parentCriteriaGroup.ObjectPropertyGroup.init() ;
+			$(this.parentCriteriaGroup.ComponentHtml).find('.childsList .ActionRemove a').trigger('click') ;
 			this.value_selected = null;
 			this.cssClasses.HasInputsCompleted = false ;
 			this.cssClasses.IsOnEdit = true ;
 			this.init() ;
 			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
-			$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
-			this.ParentComponent.ActionsGroup.reinsert = true ;
-			$(this.ParentComponent.ComponentHtml).removeClass('completed') ;
+			$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
+			this.parentCriteriaGroup.ActionsGroup.reinsert = true ;
+			$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
 			$(this.html).find('.nice-select').trigger('click') ;
 		}
 		
@@ -1186,7 +1184,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.base() ;
 		this.settings = settings;
 		this.specProvider = specProvider;
-		this.ParentComponent = CriteriaGroupe ;
+		this.parentCriteriaGroup = CriteriaGroupe ;
 		this.cssClasses.EndClassWidgetGroup = true ;
 		this.cssClasses.Created = false ;
 		this.selectedValues = [] ;
@@ -1198,12 +1196,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		 **/
 		this.onObjectPropertyGroupSelected = function() {
 			// Affichage de la ligne des actions 
-			this.ParentComponent.ComponentHtml.addClass('OnEdit') ;
+			this.parentCriteriaGroup.ComponentHtml.addClass('OnEdit') ;
 			// determine widget type
-			// this.widgetType = this.specProvider.getObjectPropertyType(this.ParentComponent.ObjectPropertyGroup.selectedValues);
-			this.inputTypeComponent.HtmlContainer.html = $(this.ParentComponent.EndClassGroup.html).find('.EditComponents') ;
+			// this.widgetType = this.specProvider.getObjectPropertyType(this.parentCriteriaGroup.ObjectPropertyGroup.selectedValues);
+			this.inputTypeComponent.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
 			
-			if (this.ParentComponent.ActionsGroup.reinsert == true) {
+			if (this.parentCriteriaGroup.ActionsGroup.reinsert == true) {
 				this.inputTypeComponent.reload() ;
 			} else {
 				this.inputTypeComponent.init() ;
@@ -1220,9 +1218,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			);
 			
 
-			if(this.ParentComponent.thisForm_.preLoad !== false) {
-				var _queryGenerator = new JSONQueryGenerator() ;
-				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.thisForm_.preLoad, this.ParentComponent.id) ;
+			if(this.parentCriteriaGroup.thisForm_.preLoad !== false) {
+				var preLoadRow = findCriteriaWithId(this.parentCriteriaGroup.thisForm_.preLoad, this.parentCriteriaGroup.id) ;
 				if (preLoadRow !== null) {
 					for (var key in preLoadRow.line.values) {
 						this.loadValue(preLoadRow.line.values[key]) ;
@@ -1241,36 +1238,36 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					this.selectedValues.splice(item, 1); 
 				}
 			}
-			$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').show() ;
+			$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').show() ;
 
 			$(e.currentTarget).parent('div').remove() ;
 
 			if(this.selectedValues.length < 1) {
-				$(this.ParentComponent.ComponentHtml).removeClass('completed') ;
-				$(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').remove() ;
-				$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
-				$(this.ParentComponent.html).parent('li').removeClass('hideEndClassProperty') ;
+				$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
+				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').remove() ;
+				$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
+				$(this.parentCriteriaGroup.html).parent('li').removeClass('hideEndClassProperty') ;
 				
 				// re-enable Where action if end class can be connected to others
-				if (this.ParentComponent.EndClassGroup.specProvider.hasConnectedClasses(this.ParentComponent.EndClassGroup.value_selected)) {
-					$(this.ParentComponent.html).parent('li').removeClass('WhereImpossible') ;
+				if (this.parentCriteriaGroup.EndClassGroup.specProvider.hasConnectedClasses(this.parentCriteriaGroup.EndClassGroup.value_selected)) {
+					$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
 				} else {
-					$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
+					$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
 				}
 
 				// re-enable selection of property/link if there are multiple choices of properties
-				if ($(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').find('option').length > 1 ) {
-					$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
+				if ($(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.input-val').find('option').length > 1 ) {
+					$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 				} else {
-					$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+					$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 				}
 
 				// re-init the widget to empty input field
 				this.inputTypeComponent.reload() ;
 			}
 
-			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupUnselected" } ) ;
-			$(this.ParentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupUnselected" } ) ;
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 
 		} ;
 
@@ -1307,11 +1304,11 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// var value_data = (Array.isArray(theValue))?theValue.toString():theValue;
 
 			this.unselect = $('<span class="unselect" value-data="'+theValue.key+'"><i class="far fa-times-circle"></i></span>') ;
-			if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 0) {
-				$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+theValueLabel+'</p></div>').find('div').append(this.unselect) ;
+			if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
+				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+theValueLabel+'</p></div>').find('div').append(this.unselect) ;
 			} else {
 				var temp_html = $('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+theValueLabel+'</p></div>').append(this.unselect)  ;
-				var ellle = $(this.ParentComponent.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
+				var ellle = $(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
 			}
 
 			// binds a click on the remove cross with the removeValue function
@@ -1322,18 +1319,18 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			);
 
 			// disable the Where
-			$(this.ParentComponent.html).parent('li').addClass('WhereImpossible') ;
+			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
 			
-			this.ParentComponent.initCompleted() ;
+			this.parentCriteriaGroup.initCompleted() ;
 			
-			$(this.ParentComponent).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
-			$(this.ParentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			
 			if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
-				if ($(this.ParentComponent.html).find('.EndClassWidgetGroup>div').length == 1) {
-					$(this.ParentComponent.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
+				if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 1) {
+					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
 					// hook a click on the plus to the needAddOrValue function
-					$(this.ParentComponent.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
+					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
 						'click',
 						{arg1: this, arg2: 'onAddOrValue'},
 						eventProxiCriteria
@@ -1343,20 +1340,20 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			//Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
 			if (this.selectedValues.length == settings.maxOr) {
-				$(this.ParentComponent.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').hide() ;
+				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').hide() ;
 			}
 
 			if (this.selectedValues.length > 0 ) {
-				$(this.ParentComponent.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 			}
 			
-			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').removeClass('newOr') ;
+			$(this.parentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').removeClass('newOr') ;
 
-			initGeneralEvent(this.ParentComponent.thisForm_);
+			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
 		};
 		
 		this.onAddOrValue = function needAddOrValue() {
-			$(this.ParentComponent.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
+			$(this.parentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
 			// On vide les champs de saisie du widget
 			this.inputTypeComponent.reload() ;
 		};
@@ -1372,7 +1369,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	function ActionsGroup(CriteriaGroupe, specProvider) {
 		this.base = GroupContenaire ;
 		this.base() ;
-		this.ParentComponent = CriteriaGroupe ;
+		this.parentCriteriaGroup = CriteriaGroupe ;
 		this.cssClasses = {
 			ActionsGroup : true ,
 			Created : false
@@ -1391,14 +1388,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.actions.ActionRemove.html).find('a').on(
 				'click',
 				{
-					arg1: this.ParentComponent,
+					arg1: this.parentCriteriaGroup,
 					arg2: 'onRemoveCriteria'
 				},
 				eventProxiCriteria
 			);
-			if(this.ParentComponent.thisForm_.preLoad !== false) {
-				var _queryGenerator = new JSONQueryGenerator() ;
-				var preLoadRow = _queryGenerator.getLine(this.ParentComponent.thisForm_.preLoad, this.ParentComponent.id) ;
+			if(this.parentCriteriaGroup.thisForm_.preLoad !== false) {
+				var preLoadRow = findCriteriaWithId(this.parentCriteriaGroup.thisForm_.preLoad, this.parentCriteriaGroup.id) ;
 				if (preLoadRow !== null) {
 					if(preLoadRow.children.length > 0) {
 						$(this.actions.ActionWhere.html).find('a').trigger('click') ;
@@ -1411,7 +1407,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		}
 
 		this.onObjectPropertyGroupSelected = function() {
-			this.actions.ActionWhere.HtmlContainer.html = $(this.ParentComponent.EndClassGroup.html).find('.EditComponents') ;
+			this.actions.ActionWhere.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
 			if (this.reinsert == true) {
 				this.actions.ActionWhere.reload() ;
 				this.actions.ActionAnd.reload() ;
@@ -1438,16 +1434,16 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				eventProxiCriteria
 			);
 			
-			initGeneralEvent(this.ParentComponent.thisForm_);
+			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
 		}
 		
 		this.onAddWhere = function () {	
-			this.ParentComponent.html.parent('li').addClass('haveWhereChild') ;
-			this.ParentComponent.initCompleted() ;
+			this.parentCriteriaGroup.html.parent('li').addClass('haveWhereChild') ;
+			this.parentCriteriaGroup.initCompleted() ;
 			
 			var new_component = addComponent(
-				this.ParentComponent.thisForm_,
-				this.ParentComponent.Context.contexteReference.HtmlContext
+				this.parentCriteriaGroup.thisForm_,
+				this.parentCriteriaGroup.Context.contexteReference.HtmlContext
 			) ;
 			
 			// trigger 2 clicks to select the same class as the object class (?)
@@ -1457,8 +1453,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 		this.onAddAnd = function () {
 			var new_component = addComponent(
-				this.ParentComponent.thisForm_,
-				this.ParentComponent.Context.contexteReference.AncestorHtmlContext
+				this.parentCriteriaGroup.thisForm_,
+				this.parentCriteriaGroup.Context.contexteReference.AncestorHtmlContext
 			) ;
 			
 			// trigger 2 clicks to select the same class as the current criteria (?)
@@ -1489,9 +1485,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				return this.reload() ;
 			}
 				
-			var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
+			var endClassGroup = this.ParentComponent.parentCriteriaGroup.EndClassGroup ;
 			var choiceNumber = 2 ;
-			if (endClassGroup.ParentComponent.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
+			if (endClassGroup.parentCriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
 				choiceNumber = 1 ;
 				$(endClassGroup.html).addClass('noPropertyWidget') ;
 			} else {
@@ -1589,7 +1585,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}
 
 			// determine widget type
-			var objectPropertyId = this.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected;
+			var objectPropertyId = this.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected;
 			this.widgetType = this.specProvider.getObjectPropertyType(objectPropertyId);
 
 			// if non selectable, simply exit
@@ -1598,7 +1594,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}
 
 			// determine label and bit of HTML to select value
-			var rangeClassId = this.ParentComponent.ParentComponent.EndClassGroup.value_selected
+			var rangeClassId = this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected
 			var classLabel = specProvider.getLabel(rangeClassId) ;
 			if (this.widgetType == Config.SEARCH_PROPERTY || this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY) {
 				// label of the "Search" pseudo-class is inserted alone in this case
@@ -1883,6 +1879,33 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			var components = uri.split("/") ;
 			return components[components.length - 1] ;
 		}
+	}
+
+	/**
+	 * Returns the branch in a JSON query having specified index
+	 **/
+	function findCriteriaWithId(json, index) {
+		for (var i = 0; i < json.branches.length; i++) {
+			result =  findCriteriaWithIdRec(json.branches[i], index) ;
+			if (result !== null){
+				return result ;
+			}
+		}
+		return null ;
+	}
+
+	function findCriteriaWithIdRec(json, index) {
+		if(json.line.index == index) {
+			return json ;
+		} else {
+			for (var i = 0; i < json.children.length; i++) {
+				result = findCriteriaWithIdRec(json.children[i], index) ;
+				if (result !== null){
+					return result ;
+				}
+			}
+		}
+		return null ;
 	}
 	
 	function GenericTools(component) {

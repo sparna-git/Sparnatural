@@ -21,7 +21,7 @@ export class QueryBranch {
 
 	constructor() {
 		this.line = new QueryLine();
-		// array of CriteriaBranch
+		// array of QueryBranch
 		this.children = [];
 	}
 }
@@ -174,7 +174,7 @@ export class QuerySPARQLWriter {
 		};
 
 		// add additionnal prefixes
-		for (key in this.additionnalPrefixes) {
+		for (var key in this.additionnalPrefixes) {
 	        sparqlQuery.prefixes[key] = this.additionnalPrefixes[key];
     	}
 
@@ -367,6 +367,12 @@ export class QuerySPARQLWriter {
 				"expression": filters[0]
 			} ;
 		}
+	}
+
+	_updateGraphDbPrefixes(jsonQuery) {
+		jsonQuery.prefixes.inst = "http://www.ontotext.com/connectors/lucene/instance#";
+		jsonQuery.prefixes.lucene = "http://www.ontotext.com/connectors/lucene#";
+		return jsonQuery ;
 	}
 }
 
