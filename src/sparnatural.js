@@ -15,8 +15,6 @@ require("easy-autocomplete");
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
-const removeIcon = require("./assets/icons/buttons/remove.png");
-
 // WARNING : if you use ES6 syntax (like import instead of require), 
 // webpack will automatically add "use strict" as all ES6 modules 
 // are expected to be strict mode code.
