@@ -73,6 +73,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			backgroundBaseColor: '250,136,3',
 			sparqlPrefixes: {},
 			defaultEndpoint: null,
+			// whether or not to send count queries to determine
+			// how many instances of each classes are properties are present in the graph
+			filterConfigOnEndpoint: false,
 			
 			autocomplete : {
 				/**
