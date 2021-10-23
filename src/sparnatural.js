@@ -613,7 +613,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}
 			
 			gabari = $(gabari).appendTo(ul);
-			//gabarib = $(gabari).appendTo(contexte) ;
 		} else {
 			gabari = $(gabari).appendTo(contexte) ;
 		}
@@ -629,11 +628,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			},
 			settings,
 			specProvider,
+			// pass the JSON query branch as an input parameter
 			jsonQueryBranch
 		);
 		
 		thisForm_.sparnatural.components.push({index: new_index, CriteriaGroup: UnCritere });			
 		initGeneralEvent(thisForm_);
+
 		//le critère est inséré et listé dans les composants, on peut lancer l'event de création
 		$(UnCritere).trigger( {type:"Created" } ) ;
 		if (thisForm_.firstInit == false) {
@@ -651,7 +652,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	function CriteriaGroup(context, settings, specProvider, jsonQueryBranch = null) {
 		this._this = this ;
 		this.thisForm_ = context.FormContext ;
-		this.ParentComponent = context.FormContext  ;
 		this.ComponentHtml = context.HtmlContext ;
 		this.AncestorComponentHtml = context.AncestorHtmlContext ;
 		
@@ -660,14 +660,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		// JSON query line from which this line needs to be initialized
 		this.jsonQueryBranch = jsonQueryBranch;
 		
+		this.children = [];
+
 		this.cssClasses = {
 			HasAllComplete : false,
 			IsOnEdit : false
 		}
 		this.id =  context.ContextComponentIndex ;
 		this.html = $('<div id="CriteriaGroup-'+this.id+'" class="CriteriaGroup"></div>').appendTo(this.ComponentHtml) ;
-		
-		this.Context = new Context(context) ;
 		
 		// create all the elements of the criteria
 		this.StartClassGroup = new StartClassGroup(this, specProvider) ;
@@ -694,7 +694,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.onRemoveCriteria = function() {
 			var index_to_remove = this.id ;
 			// iterate on every "line" in the query
-			$(this.ParentComponent.sparnatural.components).each(function() {
+			$(this.thisForm_.sparnatural.components).each(function() {
 				var parentOrSibling = findParentOrSiblingCriteria(this.CriteriaGroup.thisForm_, this.index ) ;
 				if ((parentOrSibling != null) && (parentOrSibling.type == 'parent')){
 					// if the line is a child of the one to remove, remove it too
@@ -705,7 +705,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}) ;
 			
 			var formObject = this.thisForm_ ;
-			var formContextHtml = this.Context.contexteReference.AncestorHtmlContext;
+			var formContextHtml = this.AncestorComponentHtml;
 			
 			// fetch parentOrSibling _before_ removing HTML and removing
 			// component from list !!
@@ -717,16 +717,16 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.ComponentHtml).remove() ;
 			
 			var iteration_to_remove = false ;
-			$(this.ParentComponent.sparnatural.components).each(function(i) {					
+			$(this.thisForm_.sparnatural.components).each(function(i) {					
 				if (this.index == index_to_remove){					
 					iteration_to_remove = i ;
 				}
 			}) ;
 			// remove from list of components
-			this.ParentComponent.sparnatural.components.splice(iteration_to_remove , 1);
+			this.thisForm_.sparnatural.components.splice(iteration_to_remove , 1);
 			
 			
-			if (this.ParentComponent.sparnatural.components.length == 0) {
+			if (this.thisForm_.sparnatural.components.length == 0) {
 				// top-level criteria : add first criteria and trigger click on class selection
 				var jsonQueryBranch = null;
 				// if this is the very first criteria and there is a query to read, start from
@@ -1949,21 +1949,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.attachComponentHtml() ;
 		}
 		
-	}
-	
-	
-	function Context(context) {
-		
-		this.contexteReference = context;
-		this.hasContext = false;
-		
-		if (context !== null) {
-			this.hasContext = true;
-		}
-		
-		this.get = function() {
-			return this.contexteReference ;
-		}
 	}
 
 	/**
