@@ -54,7 +54,7 @@ class ClassVariableName {
      * An array of names counts is used to find new index
      * The variblesName array is used to save all name assiciated to ClassGroup
      *
-     * @param {object} name - variable name to cut on two parts (text and nuber)
+     * @param {object} ClassGroup - ClassGroup object
      **/
     setName(ClassGroup) {
         ClassName = this.localName(ClassGroup.value_selected) ;
