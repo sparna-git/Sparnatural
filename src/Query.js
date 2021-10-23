@@ -273,7 +273,7 @@ export class QuerySPARQLWriter {
 			var jsonValues = this._initValues() ;
 			queryLine.values.forEach(function(v) {
 				var newValue = {  } ;
-		 		newValue[name] = v.uri ;
+		 		newValue[queryLine.o] = v.uri ;
 		  		jsonValues.values.push(newValue) ;
 			});
 			sparqlQuery.where.push(jsonValues) ;

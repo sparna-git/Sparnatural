@@ -60,20 +60,12 @@ class JSONQueryGenerator {
 			objectVariable = component.CriteriaGroup.EndClassGroup.getVarName() ;
 		} 
 
-		if ((dependantDe != null) && (typeof dependantDe.nextType !== 'undefined')) {
-			LinedependantType = dependantDe.nextType ;
-		} else {
-			LinedependantType = null ;
-		}
-
 		var line = new QueryLine(
 			subjectVariable,
 			domainClass,
 			property,
 			rangeClass,
-			objectVariable,
-			i,
-			LinedependantType
+			objectVariable
 		);
 
 		var values = component.CriteriaGroup.EndClassWidgetGroup.selectedValues;
