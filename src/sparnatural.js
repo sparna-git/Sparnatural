@@ -15,6 +15,8 @@ require("easy-autocomplete");
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
+const removeIcon = require("./assets/icons/buttons/remove.png");
+
 // WARNING : if you use ES6 syntax (like import instead of require), 
 // webpack will automatically add "use strict" as all ES6 modules 
 // are expected to be strict mode code.
@@ -581,7 +583,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	}
 		
 	function addComponent(thisForm_, contexte, jsonQueryBranch = null) {
-		
 		if (thisForm_.sparnatural.components.length > 0 ) {
 			var new_index = thisForm_.sparnatural.components[thisForm_.sparnatural.components.length-1].index + 1 ;
 		} else {
@@ -809,7 +810,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
 
 		// contains the name of the SPARQL variable associated to this component
-		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?"?"+this.parentCriteriaGroup.jsonQueryBranch.line.s:null;
+		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.s:null;
 
 		// triggered when a criteria starts
 		this.onCreated = function() {
@@ -845,7 +846,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				} else if (parentOrSibling && parentOrSibling.type == 'sibling' ) {
 					this.varName = parentOrSibling.element.StartClassGroup.getVarName();
 				} else {
-					this.varName = "?this";
+					this.varName = "this";
 				}
 			}
 
@@ -1095,7 +1096,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.unselect = $('<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>') ;
 
 		// contains the name of the SPARQL variable associated to this component
-		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?"?"+this.parentCriteriaGroup.jsonQueryBranch.line.o:null;
+		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.o:null;
 
 		// triggered when the subject/domain is selected
 		this.onStartClassGroupSelected = function() {
@@ -1439,7 +1440,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			
 			var new_component = addComponent(
 				this.parentCriteriaGroup.thisForm_,
-				this.parentCriteriaGroup.Context.contexteReference.HtmlContext,
+				this.parentCriteriaGroup.ComponentHtml,
 				(this.parentCriteriaGroup.jsonQueryBranch && this.parentCriteriaGroup.jsonQueryBranch.children && this.parentCriteriaGroup.jsonQueryBranch.children.length > 0)?this.parentCriteriaGroup.jsonQueryBranch.children[0]:null
 			) ;
 			
@@ -1451,7 +1452,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.onAddAnd = function () {
 			var new_component = addComponent(
 				this.parentCriteriaGroup.thisForm_,
-				this.parentCriteriaGroup.Context.contexteReference.AncestorHtmlContext,
+				this.parentCriteriaGroup.AncestorComponentHtml,
 				(this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.nextSibling:null
 			) ;
 			
@@ -1602,6 +1603,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}
 			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 			
+
 			// init HTML by concatenating bit of HTML + widget HTML
 			this.createWidgetComponent(
 				this.widgetType,
@@ -1609,7 +1611,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				rangeClassId
 			) ;
 			this.widgetHtml = widgetLabel + this.widgetComponent.html ;
-		
+
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
 			this.tools.initHtml() ;
