@@ -211,6 +211,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			 *
 			 * @param {object} queryString - The SPARQL query string
 			 * @param {object} queryJson - The query as a JSON data structure
+			 * @param {object} pivotJson - The query as a JSON data structure (new version)
 			 **/
 			onQueryUpdated : function (queryString, queryJson, pivotJson) {
 				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
