@@ -4,3 +4,4 @@
 !/assets/icons/buttons
 prepros-6.config
 /node_modules
+package-lock.json

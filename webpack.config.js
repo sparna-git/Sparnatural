@@ -7,6 +7,15 @@ const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
+let htmlPageNames = ['index-saved-query'];
+let multipleHtmlPlugins = htmlPageNames.map(name => {
+  return new HtmlWebpackPlugin({
+    template: __dirname +`/src/${name}.html`, // relative path to the HTML files
+    filename: `${name}.html`, // output HTML files
+	inject: true,
+    chunks: [name] // respective JS files
+  })
+});
 
 module.exports = {
   entry: [ "babel-polyfill", "./src/sparnatural.js" ],
@@ -61,10 +70,16 @@ module.exports = {
     ]
   },
   plugins: [
-  	new HtmlWebpackPlugin({
-          template: __dirname + "/src/index.html",
-          inject: 'body'
-    }),
+	new HtmlWebpackPlugin({
+		filename: 'index.html',
+		template: __dirname + "/src/index.html",
+		inject: 'body'
+	}),
+	new HtmlWebpackPlugin({
+		filename: 'index-saved-query.html',
+		template: __dirname + "/src/index-saved-query.html",
+		inject: 'body'
+	}),
 	new MiniCssExtractPlugin({
 	  filename: "sparnatural.css",
 	  chunkFilename: "[id].css"
