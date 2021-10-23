@@ -7,7 +7,7 @@ class ClassVariableName {
         if (id in this.variablesNames['ids']) {
             return this.variablesNames['ids'][id] ;
         } else {
-            return false; 
+            return ""; 
         }
     }
     parseName(name) {
@@ -98,7 +98,7 @@ class ClassVariableName {
     findDependantCriteria(id) {
 		var dependant = null ;
 		var dep_id = null ;
-		var element = this.form._this.find('li[data-index="'+id+'"]') ;
+		var element = $(this.form.sparnatural).find('li[data-index="'+id+'"]') ;
 		
 		if ($(element).parents('li').length > 0) {			
 			dep_id = $($(element).parents('li')[0]).attr('data-index') ;
