@@ -1167,6 +1167,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.parentCriteriaGroup.ActionsGroup.reinsert = true ;
 			$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
 			$(this.html).find('.nice-select').trigger('click') ;
+
+			// clean the variable name so that it is regenerated when a new value is selected in the onChange
+			this.varName = null;
 		}
 		
 		this.init() ;
