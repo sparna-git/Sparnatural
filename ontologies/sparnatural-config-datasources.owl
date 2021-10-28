@@ -390,6 +390,52 @@ LIMIT 500</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri .
+    # range criteria
+    ?uri a $range .
+    ?uri $labelPath ?label .
+    FILTER(isIRI(?uri))
+    FILTER(lang(?label) = &quot;&quot; || lang(?label) = $lang)
+}
+ORDER BY UCASE(?label)
+LIMIT 500</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT ?uri ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri .
+    FILTER(isIRI(?uri))
+    # range criteria
+    ?uri a $range .
+  }
+  GROUP BY ?uri
+}
+?uri $labelPath ?theLabel .
+FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+}
+ORDER BY DESC(?count) UCASE(?label)
+LIMIT 500</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha">
