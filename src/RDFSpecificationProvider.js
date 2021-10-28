@@ -144,6 +144,10 @@ export class RDFSpecificationProvider {
 		return this._readAsLiteralWithLang(entityId, RDFS.LABEL, this.lang)
 	}
 
+	getTooltip(entityId) {
+		return this._readAsLiteralWithLang(entityId, Config.TOOLTIP, this.lang)
+	}
+
 	getIcon(classId) {
 		var faIcon = this._readAsLiteral(classId, factory.namedNode(Config.FA_ICON));
 		if(faIcon.length > 0) {

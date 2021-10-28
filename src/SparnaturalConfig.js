@@ -17,6 +17,7 @@ module.exports = Object.freeze({
 	FA_ICON					 		: 		SPARNATURAL_CONFIG_CORE+'faIcon',
 	HIGHLIGHTED_ICON		 		: 		SPARNATURAL_CONFIG_CORE+'highlightedIcon',
 	ORDER					 		: 		SPARNATURAL_CONFIG_CORE+'order',
+	TOOLTIP					 		: 		SPARNATURAL_CONFIG_CORE+'tooltip',
 
 	SPARNATURAL_CLASS				: 		SPARNATURAL_CONFIG_CORE+'SparnaturalClass',
 	NOT_INSTANTIATED_CLASS			: 		SPARNATURAL_CONFIG_CORE+'NotInstantiatedClass',
