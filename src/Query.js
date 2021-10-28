@@ -1,4 +1,5 @@
 var SparqlGenerator = require('sparqljs').Generator;
+// var SparqlParser = require('sparqljs').Parser;
 
 /**
  * A complete Sparnatural Query, that can be serialized to SPARQL, and can be reloaded in Sparnatural
@@ -23,6 +24,8 @@ export class QueryBranch {
 		this.line = new QueryLine();
 		// array of QueryBranch
 		this.children = [];
+		this.optional = false;
+		this.notExists = false;
 	}
 }
 
@@ -149,6 +152,10 @@ export class QuerySPARQLWriter {
 		this.typePredicate = typePredicate;
 		this.specProvider = specProvider;
 		this.additionnalPrefixes = {};
+
+		// var parser = new SparqlParser();
+		// var query = parser.parse("SELECT * WHERE { ?x a <http://ex.fr/Museum> FILTER NOT EXISTS { ?x <http://ex.fr/label> ?label . VALUES ?label { 'toto' } FILTER(?label = 'toto') } }");
+		// console.log(query);
 	}
 
 	// add a new prefix to the generated query
@@ -181,6 +188,7 @@ export class QuerySPARQLWriter {
 		for (var i = 0; i < query.branches.length; i++) {
 			this._QueryBranchToSPARQL(
 				sparqlQuery,
+				sparqlQuery.where,
 				query.branches[i],
 				// only the first one will have a type criteria
 				i == 0
@@ -198,22 +206,33 @@ export class QuerySPARQLWriter {
 		return generatedQuery;
 	}
 
-	_QueryBranchToSPARQL(sparqlQuery, queryBranch, firstTopLevelBranch) {		
+	_QueryBranchToSPARQL(sparqlQuery, parent, queryBranch, firstTopLevelBranch) {		
 		// write the line
-		this._QueryLineToSPARQL(sparqlQuery, queryBranch.line, firstTopLevelBranch);
+		var parentInSparqlQuery = parent;
+		if(queryBranch.optional) {
+			var optional = this._initOptional() ;
+			parent.push(optional);
+			parentInSparqlQuery = optional.patterns;
+		} else if(queryBranch.notExists) {
+			var filterNotExists = this._initFilterNotExists() ;
+			parent.push(filterNotExists);
+			parentInSparqlQuery = filterNotExists.expression.args[0].patterns;
+		}
+		this._QueryLineToSPARQL(parentInSparqlQuery, queryBranch.line, firstTopLevelBranch);
 
 		// iterate on children
 		for (var i = 0; i < queryBranch.children.length; i++) {
 			// recursive call on children
 			this._QueryBranchToSPARQL(
 				sparqlQuery,
+				parentInSparqlQuery,
 				queryBranch.children[i],
 				false
 			)
 		}
 	}
 
-	_QueryLineToSPARQL(sparqlQuery, queryLine, includeSubjectType=false) {
+	_QueryLineToSPARQL(parentInSparqlQuery, queryLine, includeSubjectType=false) {
 		var bgp = this._initBasicGraphPattern() ;
 
 		// only for the very first criteria
@@ -266,7 +285,7 @@ export class QuerySPARQLWriter {
 				)) ;
 			}
 		}
-		sparqlQuery.where.push(bgp);
+		parentInSparqlQuery.push(bgp);
 
 		// this can only be the case for value selection widgets
 		if(queryLine.values.length > 1) {			
@@ -276,12 +295,12 @@ export class QuerySPARQLWriter {
 		 		newValue[queryLine.o] = v.uri ;
 		  		jsonValues.values.push(newValue) ;
 			});
-			sparqlQuery.where.push(jsonValues) ;
+			parentInSparqlQuery.push(jsonValues) ;
 		}
 
 		// if we have a date criteria
 		if(queryLine.values.length == 1 && (queryLine.values[0].fromDate || queryLine.values[0].toDate)) {
-			sparqlQuery.where.push(
+			parentInSparqlQuery.push(
 				this._initFilterTime(queryLine.values[0].fromDate, queryLine.values[0].toDate, queryLine.o)
 			) ;
 		}	
@@ -313,6 +332,29 @@ export class QuerySPARQLWriter {
 		return {
 				"type": "values",
 				"values": []
+		} ;
+	}
+
+	_initOptional() {			
+		return {
+				"type": "optional",
+				"patterns": []
+		} ;
+	}
+
+	_initFilterNotExists() {
+		return {
+				"type": "filter",
+				"expression": {
+					"type" : "operation",
+					"operator": "notexists",
+					"args" : [
+						{
+							"type" : "group",
+							"patterns" : []
+						}
+					]
+				}
 		} ;
 	}
 
