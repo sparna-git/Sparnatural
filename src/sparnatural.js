@@ -677,8 +677,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.ActionsGroup = new ActionsGroup(this, specProvider) ;
 
 		// hook all components together
-		$(this).on('StartClassGroupSelected', function () { this.EndClassGroup.onStartClassGroupSelected(); });
 		$(this).on('StartClassGroupSelected', function () { this.ObjectPropertyGroup.onStartClassGroupSelected(); });
+		$(this).on('StartClassGroupSelected', function () { this.EndClassGroup.onStartClassGroupSelected(); });
 		$(this).on('Created', function () { this.StartClassGroup.onCreated(); });
 		$(this).on('EndClassGroupSelected', function () { this.ObjectPropertyGroup.onEndClassGroupSelected(); });
 		$(this).on('ObjectPropertyGroupSelected', function () { this.EndClassWidgetGroup.onObjectPropertyGroupSelected(); });
