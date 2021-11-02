@@ -30,7 +30,14 @@ Search in FontAwesome at https://fontawesome.com/icons</rdfs:comment>
         <rdfs:label xml:lang="en">fontawesome icon code</rdfs:label>
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#icon"/>
     </owl:AnnotationProperty>
-    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip">
+        <rdfs:comment xml:lang="en">The content of the tooltip to be associated with a class or a property in the Sparnatural configuration.</rdfs:comment>
+        <rdfs:label xml:lang="en">tooltip</rdfs:label>
+    </owl:AnnotationProperty>    
 
 
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#highlightedIcon -->

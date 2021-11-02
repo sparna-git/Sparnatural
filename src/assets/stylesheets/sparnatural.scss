@@ -110,6 +110,20 @@ body {
 			&.Invisible .ObjectPropertyTypeId {
 				display: none;
 			}
+			.temporary-label {
+				line-height: $height-components-under - 2;
+				font-size: 14px;
+				font-weight: normal;
+				height: 42px;
+				outline: none;
+				padding-left: 10px;
+				padding-right: 30px;
+				position: relative;
+				text-align: left !important;
+				display: inline-block;
+				border-top: 1px solid transparent;
+				color: #888;
+			}
 		}
 
 		span.unselect {

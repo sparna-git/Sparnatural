@@ -121,6 +121,20 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return null ;
 	}
 
+	this.getTooltip = function(classOrPropertyId) {
+		var item = this._getResourceById(classOrPropertyId) ;
+		if (item !== null) {
+			for(var i in item['tooltip']) {
+				var aLabel = item['tooltip'][i];
+				if (aLabel['@language'] == this.lang) {
+					return aLabel['@value'] ;
+				}
+			}
+		}
+
+		return null ;
+	}
+
 	this.getAllSparnaturalClasses = function() {
     	var classes = this.getClassesInDomainOfAnyProperty();
     	// copy initial array

@@ -3,13 +3,13 @@
 		this.autocompleteHandler = autocompleteHandler;
 		this.ParentComponent = inputTypeComponent ;
 
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		this.html = '<input id="ecgrw-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
 		
 		this.init = function init() {
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			
 			var id_inputs = this.IdCriteriaGroupe ;			
 			var itc_obj = this.ParentComponent;	
@@ -54,7 +54,8 @@
 						var label = autocompleteHandler.elementLabel(value) ; 
 						var uri = autocompleteHandler.elementUri(value) ; 
 						$('#ecgrw-'+id_inputs+'-input').val(label)
-						$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");$(itc_obj).trigger("change");
+						$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");
+						$(itc_obj).trigger("change");
 					}
 				},
 
@@ -67,28 +68,29 @@
 
 		this.getValue = function() {
 			var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-			return $(id_input).val() ;
-		}
+			var id_input_label = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
 
-		this.getValueLabel = function() {
-			var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
-			return '<span>' + $(id_input).val()  + '</span>' ;
+			return {
+				key: $(id_input).val(),
+				label: $(id_input).val(),
+				uri: $(id_input).val()
+			} ;
 		}
 	};
 	
 	ListWidget = function(inputTypeComponent, listHandler, langSearch) {
 		this.listHandler = listHandler;
 		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
 		this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
 		//this.select = $('<select id="'+this.id_input+'"></select>');
 		
 		this.init = function init() {
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			
 			var itc_obj = this.ParentComponent;
 			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
@@ -138,26 +140,27 @@
 
 		this.getValue = function() {
 			var id_input = '#'+ this.id_input ;
-			return $(id_input).val() ;
-		}
+			// return $(id_input).val() ;
 
-		this.getValueLabel = function() {
-			var id_input = '#'+ this.id_input ;
-			return '<span>' + $(id_input).find('option:selected').text() + '</span>' ;
+			return {
+				key: $(id_input).val(),
+				label: $(id_input).find('option:selected').text(),
+				uri: $(id_input).val()
+			} ;
 		}
 	}
 	
 	DatesWidget = function(inputTypeComponent, datesHandler, langSearch) {
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
 		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		this.init = function init() {
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			var phrase ="" ;
 			var data_json = null ;
 			
@@ -227,7 +230,10 @@
 		this.getValue = function() {
 			var id_input = '#ecgrw-date-'+ this.IdCriteriaGroupe +'-input' ;
 			
-			var value = { start: $(id_input+'-start').val() , stop: $(id_input+'-stop').val()  } ;
+			var value = { 
+				start: $(id_input+'-start').val(),
+				stop: $(id_input+'-stop').val() 
+			} ;
 			
 			if ((value.start == '') || (value.stop == '')) {
 				value = null ;
@@ -240,13 +246,13 @@
 				}
 			}
 
-			return value;
-		}
-
-		this.getValueLabel = function() {
-			var id_input = '#ecgrw-date-'+ this.IdCriteriaGroupe +'-input' ;
-			// TODO : this is not translated
-			return '<span class="label-two-line">De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')</span>' ;
+			return {
+				key: value.start+' '+value.stop,
+				// TODO : this is not translated
+				label: 'De '+ $(id_input+'-start').val() +' à '+ $(id_input+'-stop').val() + '<br/>(' + $(id_input).val() + ')',
+				start: value.start,
+				stop: value.stop
+			};
 		}		
 	}
 	
@@ -254,16 +260,16 @@
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
 		
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		this.formatDate = format ;
 
 		placeHolder = (this.formatDate == 'day')?langSearch.PlaceholderTimeDateDayFormat:langSearch.PlaceholderTimeDateFormat ;
 		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+placeHolder+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+placeHolder+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		this.init = function init() {
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentComponent.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentComponent.ObjectPropertyGroup.value_selected ;
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			
 			var id_inputs = this.IdCriteriaGroupe ;			
 			var itc_obj = this.ParentComponent;
@@ -331,7 +337,13 @@
 				value = null ;
 			}
 
-			return value;
+			return {
+				key: value.start+' '+value.stop,
+				// TODO : this is not translated
+				label: this.getValueLabel(),
+				start: value.start,
+				stop: value.stop
+			};
 		}
 
 		this.getValueLabel = function() {
@@ -340,11 +352,11 @@
 			var end = $(id_input+'-stop').val() ;
 			var valueLabel = null;
 			if ((start != '') && (end != '')) {
-				valueLabel = '<span class="label-two-line">'+langSearch.LabelDateFrom+' '+ $(id_input+'-start').val() +' '+langSearch.LabelDateTo+' '+ $(id_input+'-stop').val() + '</span>' ;
+				valueLabel = langSearch.LabelDateFrom+' '+ $(id_input+'-start').val() +' '+langSearch.LabelDateTo+' '+ $(id_input+'-stop').val() ;
 			} else if (start != '') {
-				valueLabel = '<span class="label-two-line">'+langSearch.DisplayValueDateFrom+' '+ $(id_input+'-start').val() + '</span>' ;
+				valueLabel = langSearch.DisplayValueDateFrom+' '+ $(id_input+'-start').val() ;
 			} else if (end != '') {
-				valueLabel = '<span class="label-two-line">'+langSearch.DisplayValueDateTo+' '+ $(id_input+'-stop').val() + '</span>' ;
+				valueLabel = langSearch.DisplayValueDateTo+' '+ $(id_input+'-stop').val() ;
 			}
 
 			return valueLabel;
@@ -366,14 +378,14 @@
 
 	SearchWidget = function(inputTypeComponent, langSearch) {
 		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentComponent.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
 		this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add" class="button-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		this.init = function init() {
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
-			var CriteriaGroup = this.ParentComponent.ParentComponent.ParentComponent ;
+			var CriteriaGroup = this.ParentComponent.ParentComponent.parentCriteriaGroup ;
 			
 			$('#ecgrw-search-'+this.IdCriteriaGroupe+'-add').on(
 				'click',
@@ -387,12 +399,13 @@
 
 		this.getValue = function() {
 			var id_input = '#ecgrw-search-'+ this.IdCriteriaGroupe +'-input-value' ;
-			return $(id_input).val() ;
-		}
+			// return $(id_input).val() ;
 
-		this.getValueLabel = function() {
-			var id_input = '#ecgrw-search-'+ this.IdCriteriaGroupe +'-input-value' ;
-			return '<span>'+ $(id_input).val() +'</span>' ;
+			return {
+				key: $(id_input).val(),
+				label: $(id_input).val(),
+				search: $(id_input).val()
+			}
 		}
 	}
 
@@ -405,11 +418,6 @@
 
 		this.getValue = function() {
 			// cannot provide any value
-			return null;
-		}
-
-		this.getValueLabel = function() {
-			// cannot provide any value label 
 			return null;
 		}
 	}
