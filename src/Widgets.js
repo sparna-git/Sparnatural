@@ -72,7 +72,7 @@
 
 			return {
 				key: $(id_input).val(),
-				label: $(id_input).val(),
+				label: $(id_input_label).val(),
 				uri: $(id_input).val()
 			} ;
 		}
