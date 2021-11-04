@@ -95,7 +95,7 @@
 
         $dropdown.find('ul').append($('<li></li>')
         .attr('data-value', $option.val())
-        .attr('title', $option.val())
+        .attr('title', $option.attr('data-desc'))
           .attr('data-display', (display || null))
           .addClass('option' +
             ($option.is(':selected') ? ' selected' : '') +
@@ -151,6 +151,8 @@
 	  
 		
       var text = $option.data('display') || $option.html();
+      console.log($option) ;
+      text = '<span title="'+$($option).attr('title')+'">'+text+'</span>' ;
       $dropdown.find('.current').html(text);
       
       

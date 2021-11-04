@@ -27,6 +27,8 @@ const i18nLabels = {
 	"fr": require('./assets/lang/fr.json')
 };
 
+const createPopper = require('@popperjs/core');
+
 JsonLdSpecificationProvider = require("./JsonLdSpecificationProvider.js").JsonLdSpecificationProvider;
 SpecificationProviderFactory = require("./SpecificationProviderFactory.js").SpecificationProviderFactory;
 RDFSpecificationProvider = require("./RDFSpecificationProvider.js").RDFSpecificationProvider ;
@@ -569,8 +571,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			for (var key in items) {
 				var val = items[key];
 				var label = this.specProvider.getLabel(val) ;
+				var desc = this.specProvider.getTooltip(val) ;
 				var selected = (default_value == val)?'selected="selected"':'';
-				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+'>'+ label + '</option>' );
+				if(desc != null) {
+					description_attr = ' data-desc="'+desc+'"';
+				} else {
+					description_attr = '' ;
+				}
+				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+' '+description_attr+'  >'+ label + '</option>' );
 			}
 
 			var html_list = $( "<select/>", {
