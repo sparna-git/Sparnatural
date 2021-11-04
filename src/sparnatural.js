@@ -275,14 +275,18 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		}	
 
 		function loadQuery(form, json) {
-			//Know you need to set variablesName
-			//befor clear add json to form preload data
+			// stores the JSON to be preloaded
 			form.preLoad = json ;
+			// clear the form
+			// On Clear form new component is automaticaly added, json gets loaded
 			clearForm(form) ;
-			// On Clear form new component is automaticaly added, json is started to be loaded;
+			
 			// And now, submit form
 			$(form.sparnatural).trigger('submit')
 			form.preLoad = false ;
+			// clear the jsonQueryBranch copied on every component, otherwise they always stay here
+			// and we get the same criterias over and over when removing and re-editing
+			form.sparnatural.components.forEach(function(component) { component.CriteriaGroup.jsonQueryBranch = null; });
 			return form ;
 		}
 
