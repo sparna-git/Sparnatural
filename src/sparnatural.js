@@ -924,7 +924,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// automatically selects the value if there is only one
 			
 			if(this.objectPropertySelector.needTriggerClick == true) {
-				//$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
+				$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 				$(this.html).find('select.input-val:not(.disabled)').trigger('change');
 				this.objectPropertySelector.needTriggerClick = false ;
 				//$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
