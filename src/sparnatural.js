@@ -847,7 +847,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				} else if (parentOrSibling && parentOrSibling.type == 'sibling' ) {
 					this.varName = parentOrSibling.element.StartClassGroup.getVarName();
 				} else {
-					this.varName = "this";
+					this.varName = "?this";
 				}
 			}
 
