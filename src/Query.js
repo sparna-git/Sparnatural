@@ -65,6 +65,34 @@ export class AbstractValue {
 		this.label = label;
 	}
 
+	static valueToWidgetValue(v) {
+	    if(v.uri) {
+	    	return {
+				key: v.uri ,
+				label: v.label,
+				uri: v.uri
+			};
+	    } else if(v.fromDate || v.toDate) {
+			return {
+				key: v.fromDate+' '+v.toDate,
+				label: v.label,
+				start: v.fromDate,
+				stop: v.toDate
+			}
+	    } else if(v.literal) {
+	    	return {
+				key: v.literal,
+				label: v.label
+			}
+	    } else if(v.key) {
+	    	return {
+				key: v.key,
+				label: v.label,
+				search: v.key
+			}
+	    }
+	}
+
 }
 
 /**
@@ -74,14 +102,6 @@ export class URIValue extends AbstractValue {
 	constructor(uri, label=null) {
 		super(label);
 		this.uri=uri;
-	}
-
-	toWidgetValue() {
-		return {
-			key: this.uri ,
-			label: this.label,
-			uri: this.uri
-		}
 	}
 }
 
@@ -93,13 +113,6 @@ export class LiteralValue extends AbstractValue {
 		super(label);
 		this.literal=literal;
 	}
-
-	toWidgetValue() {
-		return {
-			key: this.literal,
-			label: this.label
-		}
-	}
 }
 
 export class DateTimeValue extends AbstractValue {
@@ -108,33 +121,12 @@ export class DateTimeValue extends AbstractValue {
 		this.fromDate = fromDate;
 		this.toDate = toDate;
 	}
-
-	toWidgetValue() {
-		return {
-			key: this.fromDate+' '+this.toDate,
-			label: this.label,
-			start: this.fromDate,
-			stop: this.toDate
-		}
-	}
 }
 
 export class SearchValue extends AbstractValue {
 	constructor(key, label=null) {
 		super(label);
 		this.key = key;
-	}
-
-	valueKey() {
-		return this.key;
-	}
-
-	toWidgetValue() {
-		return {
-			key: this.key,
-			label: this.label,
-			search: this.key
-		}
 	}
 }
 

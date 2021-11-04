@@ -46,6 +46,7 @@ SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHan
 JSONQueryGenerator = require("./QueryGenerators.js").JSONQueryGenerator;
 
 QuerySPARQLWriter = require("./Query.js").QuerySPARQLWriter ;
+AbstractValue = require("./Query.js").AbstractValue ;
 
 require("./Widgets.js");
 
@@ -256,7 +257,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		this.loadQuery = function(json) {
 			var jsonWithLinks = preprocess(json);
-			console.log(jsonWithLinks);
+			// console.log(jsonWithLinks);
 			//Désactiver le submit du form
 			//en amont reset de ce qui est déjà dans l'interface (fonction à part)
 			if (thisForm.firstInit === true) {
@@ -1279,8 +1280,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 		} ;
 
-		this.loadValue= function loadValue(value) {
-			this.inputTypeComponent.loadedValue = value ;
+		this.loadValue = function loadValue(value) {
+			this.inputTypeComponent.loadedValue = AbstractValue.valueToWidgetValue(value) ;
 			$(this.inputTypeComponent).trigger('change') ;
 			//Value added don't reuse preloaded data.
 			this.inputTypeComponent.loadedValue = null ;
