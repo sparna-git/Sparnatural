@@ -305,6 +305,13 @@ export class QuerySPARQLWriter {
 			) ;
 		}	
 
+		// if we have a search criteria
+		if(queryLine.values.length == 1 && queryLine.values[0].key) {
+			parentInSparqlQuery.push(
+				this._initFilterSearch(queryLine.values[0].key, queryLine.o)
+			) ;
+		}
+
 	}
 
 
@@ -409,6 +416,21 @@ export class QuerySPARQLWriter {
 				"expression": filters[0]
 			} ;
 		}
+	}
+
+	_initFilterSearch(texte, variable) {			
+		return {
+			"type": "filter",
+			"expression": {
+				"type": "operation",
+				"operator": "regex",
+				"args": [					
+					""+variable+"",
+					"\""+texte+"\"",
+					"\"i\""
+				]
+			}
+		} ;
 	}
 
 	_updateGraphDbPrefixes(jsonQuery) {
