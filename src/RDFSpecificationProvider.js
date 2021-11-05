@@ -237,6 +237,7 @@ export class RDFSpecificationProvider {
 
 		var KNOWN_PROPERTY_TYPES = [
 			Config.LIST_PROPERTY,
+			Config.LITERAL_LIST_PROPERTY,
 			Config.TIME_PROPERTY_PERIOD,
 			Config.TIME_PROPERTY_YEAR,
 			Config.TIME_PROPERTY_DATE,

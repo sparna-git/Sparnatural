@@ -86,7 +86,7 @@ class JSONQueryGenerator {
 			  case Config.LITERAL_LIST_PROPERTY:
 				for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {
 					// TODO : we use the same key 'uri' but this is a literal
-				  	var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key].uri;
+				  	var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
 				  	line.values.push(new LiteralValue(
 				  		selectedValue.uri,
 				  		selectedValue.label

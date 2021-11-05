@@ -220,6 +220,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 		var VALUE_SELECTION_WIDGETS = [
 			Config.LIST_PROPERTY,
+			Config.LITERAL_LIST_PROPERTY,
 			Config.AUTOCOMPLETE_PROPERTY
 		];
 		
@@ -1663,6 +1664,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			    }
 
 			    if(datasource == null) {
+
 			    	// datasource still null
 			    	// if a default endpoint was provided, provide default datasource
 			    	if(this.settings.defaultEndpoint != null) {

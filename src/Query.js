@@ -257,14 +257,15 @@ export class QuerySPARQLWriter {
 			} else if(
 				queryLine.values.length == 1
 				&&
-				queryLine.values[0].uri
+				( queryLine.values[0].uri || queryLine.values[0].literal )
 			) {
 				// if we are in a value selection widget and we have a single value selected
 				// then insert the value directly as the object of the triple						
 				bgp.triples.push(this._buildTriple(
 					queryLine.s,
 					queryLine.p,
-					queryLine.values[0].uri,
+					// either a URI or a literal in case of LiteralList widget
+					(queryLine.values[0].uri)?queryLine.values[0].uri:queryLine.values[0].literal,
 					// insert as a literal if the value is a literal value
 					queryLine.values[0] instanceof LiteralValue
 				)) ;
@@ -284,7 +285,8 @@ export class QuerySPARQLWriter {
 			var jsonValues = this._initValues() ;
 			queryLine.values.forEach(function(v) {
 				var newValue = {  } ;
-		 		newValue[queryLine.o] = v.uri ;
+				// either a URI or a literal in case of LiteralList widget
+		 		newValue[queryLine.o] = (v.uri)?v.uri:"\""+v.literal+"\"" ;
 		  		jsonValues.values.push(newValue) ;
 			});
 			parentInSparqlQuery.push(jsonValues) ;
