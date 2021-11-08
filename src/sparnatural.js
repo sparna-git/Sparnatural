@@ -979,7 +979,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
-			console.log(desc) ;
 			if(desc != null) {
 				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).attr('data-tippy-content', desc ) ;
 				tippy('.ObjectPropertyGroup[data-tippy-content]', {

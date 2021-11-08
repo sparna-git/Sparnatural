@@ -159,8 +159,6 @@
       
       $dropdown.find('.selected').removeClass('selected');
       $option.addClass('selected');
-      
-      console.log($dropdown) ;
 		
       var text = $option.data('display') || $option.html();
       $dropdown.find('.current').html(text);
