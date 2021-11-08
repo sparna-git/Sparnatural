@@ -882,8 +882,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
 			if(desc != null) {
-				$(this.parentCriteriaGroup.StartClassGroup.html).attr('data-tippy-content', desc ) ;
-				tippy('.StartClassGroup[data-tippy-content]', {
+				$(this.parentCriteriaGroup.StartClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
+				tippy('.StartClassGroup .ClassTypeId[data-tippy-content]', {
 					allowHTML: true,
 					followCursor: true,
 					plugins: [followCursor],
@@ -980,8 +980,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
 			if(desc != null) {
-				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).attr('data-tippy-content', desc ) ;
-				tippy('.ObjectPropertyGroup[data-tippy-content]', {
+				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
+				tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', {
 					allowHTML: true,
 					followCursor: true,
 					plugins: [followCursor],
