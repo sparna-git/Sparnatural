@@ -1214,8 +1214,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
 			if(desc != null) {
-				$(this.parentCriteriaGroup.EndClassGroup.html).attr('data-tippy-content', desc ) ;
-				tippy('.EndClassGroup[data-tippy-content]', {
+				$(this.parentCriteriaGroup.EndClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
+				tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', {
 					allowHTML: true,
 					followCursor: true,
 					plugins: [followCursor],
