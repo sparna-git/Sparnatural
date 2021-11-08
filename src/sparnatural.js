@@ -27,7 +27,10 @@ const i18nLabels = {
 	"fr": require('./assets/lang/fr.json')
 };
 
-const createPopper = require('@popperjs/core');
+const tippy = require('tippy.js').default;
+const followCursor = require('tippy.js').followCursor;
+
+require('tippy.js/dist/tippy.css');
 
 JsonLdSpecificationProvider = require("./JsonLdSpecificationProvider.js").JsonLdSpecificationProvider;
 SpecificationProviderFactory = require("./SpecificationProviderFactory.js").SpecificationProviderFactory;
@@ -509,6 +512,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		});
 
 		$(thisForm_.sparnatural).find('div.bg-wrapper').css({background : cssdef+')' }) ;
+
 	}
 		
 	/**
@@ -543,8 +547,17 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				}
 				
 				var image = (icon != null)?' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"':'' ;
+				//var selected = (default_value == val)?'selected="selected"':'';
+				var desc = this.specProvider.getTooltip(val) ;
 				var selected = (default_value == val)?'selected="selected"':'';
-				list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
+				if(desc != null) {
+					description_attr = ' data-desc="'+desc+'"';
+				} else {
+					description_attr = '' ;
+				}
+				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+' '+description_attr+'  >'+ label + '</option>' );
+
+				//list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
 			}
 
 			var html_list = $( "<select/>", {
@@ -866,6 +879,22 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			if(settings.sendQueryOnFirstClassSelected) {
 				$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			}
+
+			var desc = this.specProvider.getTooltip(this.value_selected) ;
+			if(desc != null) {
+				$(this.parentCriteriaGroup.StartClassGroup.html).attr('data-tippy-content', desc ) ;
+				tippy('.StartClassGroup[data-tippy-content]', {
+					allowHTML: true,
+					followCursor: true,
+					plugins: [followCursor],
+					placement: 'bottom-end',
+					offset: [20, 40],
+					theme: 'sparnatural',
+					arrow: false,
+				  });
+			} else {
+				$(this.parentCriteriaGroup.StartClassGroup.html).removeAttr('data-tippy-content') ;
+			}
 		};
 
 		this.setClass = function setClass(value) {
@@ -890,6 +919,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			ObjectPropertyGroup : true,
 			Created : false
 		} ;
+		this.specProvider = specProvider;
 
 		this.objectPropertySelector = new ObjectPropertyTypeId(this, specProvider) ;
 
@@ -946,6 +976,24 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}
 			$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+
+
+			var desc = this.specProvider.getTooltip(this.value_selected) ;
+			console.log(desc) ;
+			if(desc != null) {
+				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).attr('data-tippy-content', desc ) ;
+				tippy('.ObjectPropertyGroup[data-tippy-content]', {
+					allowHTML: true,
+					followCursor: true,
+					plugins: [followCursor],
+					placement: 'bottom-end',
+					offset: [20, 40],
+					theme: 'sparnatural',
+					arrow: false,
+				  });
+			} else {
+				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
+			}
 			
 			//ici peut être lancer le reload du where si il y a des fils
 		};
@@ -1164,6 +1212,22 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.parentCriteriaGroup.ObjectPropertyGroup.init() ;
 			// trigger the event that will call the ObjectPropertyGroup
 			$(this.parentCriteriaGroup).trigger( {type:"EndClassGroupSelected" } ) ;
+
+			var desc = this.specProvider.getTooltip(this.value_selected) ;
+			if(desc != null) {
+				$(this.parentCriteriaGroup.EndClassGroup.html).attr('data-tippy-content', desc ) ;
+				tippy('.EndClassGroup[data-tippy-content]', {
+					allowHTML: true,
+					followCursor: true,
+					plugins: [followCursor],
+					placement: 'bottom-end',
+					offset: [20, 40],
+					theme: 'sparnatural',
+					arrow: false,
+				  });
+			} else {
+				$(this.parentCriteriaGroup.EndClassGroup.html).removeAttr('data-tippy-content') ;
+			}
 		};
 
 		this.onRemoveSelected = function onRemoveSelected () {			

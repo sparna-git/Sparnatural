@@ -1,6 +1,8 @@
 /*  jQuery Nice Select - v1.1.0
     https://github.com/hernansartorio/jquery-nice-select
     Made by Hernán Sartorio  */
+
+    import tippy, {followCursor} from 'tippy.js';
  
 (function($) {
 
@@ -23,6 +25,7 @@
             }
           }
         });
+        
       } else if (method == 'destroy') {
         this.each(function() {
           var $select = $(this);
@@ -51,6 +54,7 @@
       
       if (!$select.next().hasClass('nice-select')) {
         create_nice_select($select);
+        
       }
     });
     
@@ -67,39 +71,38 @@
       var $options = $select.find('option');
       var $selected = $select.find('option:selected');
 	  
-	  var icon ='';
-	  if ($selected.attr('data-icon') !== undefined) {
-			if($selected.attr('data-icon').indexOf('<') == 0) {
-        icon = $selected.attr('data-icon')+"&nbsp;&nbsp;";
-      } else {
-        icon = '<img src="'+$selected.attr('data-icon')+'" /><img class="highlited" src="'+$selected.attr('data-iconh')+'" />' ;  
+      var icon ='';
+      if ($selected.attr('data-icon') !== undefined) {
+        if($selected.attr('data-icon').indexOf('<') == 0) {
+          icon = $selected.attr('data-icon')+"&nbsp;&nbsp;";
+        } else {
+          icon = '<img src="'+$selected.attr('data-icon')+'" /><img class="highlited" src="'+$selected.attr('data-iconh')+'" />' ;  
+        }
       }
-		}
-		
-      
-      $dropdown.find('.current').html($selected.data('display') || icon+$selected.html());
+    
+      var text = $selected.data('display') || icon+$selected.html();
+        
+      $dropdown.find('.current').html(text);
       
       $options.each(function(i) {
         var $option = $(this);
         var display = $option.data('display');
-		var icon = '' ;
-		if ($option.attr('data-icon') !== undefined) {
-      if($option.attr('data-icon').indexOf('<') == 0) {
-        icon = $option.attr('data-icon')+"&nbsp;&nbsp;";
-      } else {
-        icon = '<img src="'+$option.attr('data-icon')+'" /><img class="highlited" src="'+$option.attr('data-iconh')+'" />' ;
-      }
-
-			
-		}
+        var icon = '' ;
+        if ($option.attr('data-icon') !== undefined) {
+          if($option.attr('data-icon').indexOf('<') == 0) {
+            icon = $option.attr('data-icon')+"&nbsp;&nbsp;";
+          } else {
+            icon = '<img src="'+$option.attr('data-icon')+'" /><img class="highlited" src="'+$option.attr('data-iconh')+'" />' ;
+          }
+        }
 
         $dropdown.find('ul').append($('<li></li>')
         .attr('data-value', $option.val())
-        .attr('title', $option.attr('data-desc'))
-          .attr('data-display', (display || null))
-          .addClass('option' +
-            ($option.is(':selected') ? ' selected' : '') +
-            ($option.is(':disabled') ? ' disabled' : ''))
+        .attr('data-tippy-content', $option.attr('data-desc'))
+        .attr('data-display', (display || null))
+        .addClass('option' +
+          ($option.is(':selected') ? ' selected' : '') +
+          ($option.is(':disabled') ? ' disabled' : ''))
           .html(icon+$option.text())
         );
       });
@@ -119,6 +122,15 @@
 	  } else {
 		  $('.nice-select').not($dropdown).removeClass('open');
 		  $dropdown.toggleClass('open');
+      tippy('.nice-select .option[data-tippy-content]', {
+        allowHTML: true,
+        followCursor: true,
+        plugins: [followCursor],
+        placement: 'bottom-end',
+        offset: [20, 40],
+        theme: 'sparnatural',
+        arrow: false,
+      });
 	  }
       
       //
@@ -148,14 +160,10 @@
       $dropdown.find('.selected').removeClass('selected');
       $option.addClass('selected');
       
-	  
+      console.log($dropdown) ;
 		
       var text = $option.data('display') || $option.html();
-      console.log($option) ;
-      text = '<span title="'+$($option).attr('title')+'">'+text+'</span>' ;
       $dropdown.find('.current').html(text);
-      
-      
     });
 
     // Keyboard events

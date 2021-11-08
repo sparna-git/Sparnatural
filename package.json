@@ -44,6 +44,7 @@
     "rdf-store-stream": "^1.0.0",
     "sparqljs": "^2.2.3",
     "streamify-string": "^1.0.1",
+    "tippy.js": "^6.3.5",
     "webpack-cli": "^3.3.7",
     "whatwg-fetch": "^3.6.2"
   },
