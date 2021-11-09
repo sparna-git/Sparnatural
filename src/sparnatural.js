@@ -79,6 +79,18 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// whether or not to send count queries to determine
 			// how many instances of each classes are properties are present in the graph
 			filterConfigOnEndpoint: false,
+
+			tooltipConfig : {
+				allowHTML: true,
+				followCursor: true,
+				plugins: [followCursor],
+				placement: 'bottom-end',
+				offset: [20, 40],
+				theme: 'sparnatural',
+				arrow: false,
+				delay: [600, 100],
+				duration: [200, 200],
+			},
 			
 			autocomplete : {
 				/**
@@ -549,13 +561,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				var image = (icon != null)?' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"':'' ;
 				//var selected = (default_value == val)?'selected="selected"':'';
 				var desc = this.specProvider.getTooltip(val) ;
-				var selected = (default_value == val)?'selected="selected"':'';
+				var selected = (default_value == val)?' selected="selected"':'';
 				if(desc != null) {
 					description_attr = ' data-desc="'+desc+'"';
 				} else {
 					description_attr = '' ;
 				}
-				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+' '+description_attr+'  >'+ label + '</option>' );
+				list.push( '<option value="'+val+'" data-id="'+val+'"'+image+selected+' '+description_attr+'  >'+ label + '</option>' );
 
 				//list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
 			}
@@ -839,9 +851,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.html).find('.input-val').unbind('change');
 			this.inputTypeComponent.init() ;
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
-			var select = $(this.html).find('.input-val')
-
+			var select = $(this.html).find('.input-val')[0] ;
+			select.sparnaturalSettings = settings ;
 			this.niceslect = $(select).niceSelect() ;
+
 			
 			$(this.html).find('select.input-val').on(
 				'change',
@@ -883,15 +896,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
 			if(desc != null) {
 				$(this.parentCriteriaGroup.StartClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
-				tippy('.StartClassGroup .ClassTypeId[data-tippy-content]', {
-					allowHTML: true,
-					followCursor: true,
-					plugins: [followCursor],
-					placement: 'bottom-end',
-					offset: [20, 40],
-					theme: 'sparnatural',
-					arrow: false,
-				  });
+				tippy('.StartClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
 			} else {
 				$(this.parentCriteriaGroup.StartClassGroup.html).removeAttr('data-tippy-content') ;
 			}
@@ -939,7 +944,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.objectPropertySelector.reload() ;
 				this.objectPropertySelector.cssClasses.IsOnEdit = true;
 			}
-			
+			var select = $(this.html).find('select.input-val') ;
+			select[0].sparnaturalSettings = settings ;
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
 			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 			// opens the select automatically
@@ -981,15 +987,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
 			if(desc != null) {
 				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
-				tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', {
-					allowHTML: true,
-					followCursor: true,
-					plugins: [followCursor],
-					placement: 'bottom-end',
-					offset: [20, 40],
-					theme: 'sparnatural',
-					arrow: false,
-				  });
+				tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
 			} else {
 				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
 			}
@@ -1168,6 +1166,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			//this.EndClassGroup.init() ;
 			this.inputTypeComponent.init() ;
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
+
+			var select =  $(this.html).find('select.input-val') ;
+			select[0].sparnaturalSettings = settings ;
 			
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
 			if(this.inputTypeComponent.needTriggerClick == false) {
@@ -1215,15 +1216,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
 			if(desc != null) {
 				$(this.parentCriteriaGroup.EndClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
-				tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', {
-					allowHTML: true,
-					followCursor: true,
-					plugins: [followCursor],
-					placement: 'bottom-end',
-					offset: [20, 40],
-					theme: 'sparnatural',
-					arrow: false,
-				  });
+				tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
 			} else {
 				$(this.parentCriteriaGroup.EndClassGroup.html).removeAttr('data-tippy-content') ;
 			}

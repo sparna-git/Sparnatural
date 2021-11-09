@@ -6,7 +6,7 @@
  
 (function($) {
 
-  $.fn.niceSelect = function(method) {
+  $.fn.niceSelect = function(method,settings) {
     
     // Methods
     if (typeof method == 'string') {      
@@ -116,21 +116,14 @@
     // Open/close
     $(document).on('click.nice_select', '.nice-select', function(event) {
       var $dropdown = $(this);
+      var settings = $dropdown.prev('select')[0].sparnaturalSettings ;
 	  if ($dropdown.hasClass('open') ) {
 		  $dropdown.toggleClass('open');
 		  $dropdown.prev('select').val($dropdown.find('.selected').data('value')).trigger('change');
 	  } else {
 		  $('.nice-select').not($dropdown).removeClass('open');
 		  $dropdown.toggleClass('open');
-      tippy('.nice-select .option[data-tippy-content]', {
-        allowHTML: true,
-        followCursor: true,
-        plugins: [followCursor],
-        placement: 'bottom-end',
-        offset: [20, 40],
-        theme: 'sparnatural',
-        arrow: false,
-      });
+      tippy('.nice-select .option[data-tippy-content]', settings.tooltipConfig);
 	  }
       
       //
