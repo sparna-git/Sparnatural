@@ -508,7 +508,11 @@
             $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
             yasqe.setValue(queryString);
             yasqe.query();
-          }
+          },
+          tooltipConfig : {
+            delay: [800, 100],
+            duration: [100, 100],
+          },
         });
       }) ;
 

@@ -80,16 +80,16 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// how many instances of each classes are properties are present in the graph
 			filterConfigOnEndpoint: false,
 
-			tooltipConfig : {
+			tooltipConfig : { // see all options on https://atomiks.github.io/tippyjs/v6/all-props/
 				allowHTML: true,
 				followCursor: true,
-				plugins: [followCursor],
+				plugins: [followCursor], // Do not delete here.
 				placement: 'bottom-end',
 				offset: [20, 40],
 				theme: 'sparnatural',
 				arrow: false,
-				delay: [600, 100],
-				duration: [200, 200],
+				delay: [600, 100], //Delay in ms once a trigger event is fired before a tippy shows or hides.
+				duration: [200, 200], //Duration in ms of the transition animation.
 			},
 			
 			autocomplete : {
