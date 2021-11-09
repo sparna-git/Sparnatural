@@ -89,6 +89,49 @@ LIMIT 500
 );
 
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+SPARNATURAL_CONFIG_DATASOURCES+"query_list_label_with_range_alpha", 
+`
+SELECT DISTINCT ?uri ?label
+WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri .
+    # range criteria
+    ?uri a $range .
+    ?uri $labelPath ?label .
+    FILTER(isIRI(?uri))
+    FILTER(lang(?label) = "" || lang(?label) = $lang)
+}
+ORDER BY UCASE(?label)
+LIMIT 500
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+SPARNATURAL_CONFIG_DATASOURCES+"query_list_label_with_range_count", 
+`
+SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri .
+    FILTER(isIRI(?uri))
+    # range criteria
+    ?uri a $range .
+  }
+  GROUP BY ?uri
+}
+?uri $labelPath ?theLabel .
+FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+}
+ORDER BY DESC(?count) UCASE(?label)
+LIMIT 500
+`
+);
+
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SPARNATURAL_CONFIG_DATASOURCES+"query_search_label_strstarts", 
 `
 SELECT DISTINCT ?uri ?label
@@ -332,11 +375,13 @@ module.exports = Object.freeze({
 	// object properties
 	QUERY_TEMPLATE		 			: 		SPARNATURAL_CONFIG_DATASOURCES+'queryTemplate',
 
-    // individuals
+  // individuals
 	QUERY_LIST_URI_ALPHA 			: 		SPARNATURAL_CONFIG_DATASOURCES+'query_list_URI_alpha',
 	QUERY_LIST_URI_COUNT 			: 		SPARNATURAL_CONFIG_DATASOURCES+'query_list_URI_count',
 	QUERY_LIST_LABEL_ALPHA 			: 		SPARNATURAL_CONFIG_DATASOURCES+'query_list_label_alpha',
 	QUERY_LIST_LABEL_COUNT 			: 		SPARNATURAL_CONFIG_DATASOURCES+'query_list_label_count',
+	QUERY_LIST_LABEL_WITH_RANGE_ALPHA 			: 		SPARNATURAL_CONFIG_DATASOURCES+'query_list_label_with_range_alpha',
+	QUERY_LIST_LABEL_WITH_RANGE_COUNT 			: 		SPARNATURAL_CONFIG_DATASOURCES+'query_list_label_with_range_count',
 	QUERY_SEARCH_LABEL_STRSTARTS	: 		SPARNATURAL_CONFIG_DATASOURCES+'query_search_label_starstarts',
 	QUERY_SEARCH_LABEL_BIFCONTAINS	: 		SPARNATURAL_CONFIG_DATASOURCES+'query_search_label_bitcontains',
 	QUERY_SEARCH_URI_CONTAINS		: 		SPARNATURAL_CONFIG_DATASOURCES+'query_search_URI_contains',
