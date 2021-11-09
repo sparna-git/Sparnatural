@@ -27,6 +27,11 @@ const i18nLabels = {
 	"fr": require('./assets/lang/fr.json')
 };
 
+const tippy = require('tippy.js').default;
+const followCursor = require('tippy.js').followCursor;
+
+require('tippy.js/dist/tippy.css');
+
 JsonLdSpecificationProvider = require("./JsonLdSpecificationProvider.js").JsonLdSpecificationProvider;
 SpecificationProviderFactory = require("./SpecificationProviderFactory.js").SpecificationProviderFactory;
 RDFSpecificationProvider = require("./RDFSpecificationProvider.js").RDFSpecificationProvider ;
@@ -75,6 +80,20 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// whether or not to send count queries to determine
 			// how many instances of each classes are properties are present in the graph
 			filterConfigOnEndpoint: false,
+
+			tooltipConfig : { // see all options on https://atomiks.github.io/tippyjs/v6/all-props/
+				allowHTML: true,
+				followCursor: false,
+				plugins: [followCursor], // Do not delete here.
+				// placement: 'bottom-end',
+				placement: 'right-start',
+				// offset: [20, 40],
+				offset: [5, 5],
+				theme: 'sparnatural',
+				arrow: false,
+				delay: [800, 100], //Delay in ms once a trigger event is fired before a tippy shows or hides.
+				duration: [200, 200], //Duration in ms of the transition animation.
+			},
 			
 			autocomplete : {
 				/**
@@ -513,6 +532,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		});
 
 		$(thisForm_.sparnatural).find('div.bg-wrapper').css({background : cssdef+')' }) ;
+
 	}
 		
 	/**
@@ -547,8 +567,17 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				}
 				
 				var image = (icon != null)?' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"':'' ;
-				var selected = (default_value == val)?'selected="selected"':'';
-				list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
+				//var selected = (default_value == val)?'selected="selected"':'';
+				var desc = this.specProvider.getTooltip(val) ;
+				var selected = (default_value == val)?' selected="selected"':'';
+				if(desc != null) {
+					description_attr = ' data-desc="'+desc+'"';
+				} else {
+					description_attr = '' ;
+				}
+				list.push( '<option value="'+val+'" data-id="'+val+'"'+image+selected+' '+description_attr+'  >'+ label + '</option>' );
+
+				//list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
 			}
 
 			var html_list = $( "<select/>", {
@@ -575,8 +604,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			for (var key in items) {
 				var val = items[key];
 				var label = this.specProvider.getLabel(val) ;
+				var desc = this.specProvider.getTooltip(val) ;
 				var selected = (default_value == val)?'selected="selected"':'';
-				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+'>'+ label + '</option>' );
+				if(desc != null) {
+					description_attr = ' data-desc="'+desc+'"';
+				} else {
+					description_attr = '' ;
+				}
+				list.push( '<option value="'+val+'" data-id="'+val+'"'+selected+' '+description_attr+'  >'+ label + '</option>' );
 			}
 
 			var html_list = $( "<select/>", {
@@ -824,9 +859,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.html).find('.input-val').unbind('change');
 			this.inputTypeComponent.init() ;
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
-			var select = $(this.html).find('.input-val')
-
+			var select = $(this.html).find('.input-val')[0] ;
+			select.sparnaturalSettings = settings ;
 			this.niceslect = $(select).niceSelect() ;
+
 			
 			$(this.html).find('select.input-val').on(
 				'change',
@@ -864,6 +900,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			if(settings.sendQueryOnFirstClassSelected) {
 				$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			}
+
+			var desc = this.specProvider.getTooltip(this.value_selected) ;
+			if(desc != null) {
+				$(this.parentCriteriaGroup.StartClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
+				tippy('.StartClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
+			} else {
+				$(this.parentCriteriaGroup.StartClassGroup.html).removeAttr('data-tippy-content') ;
+			}
 		};
 
 		this.setClass = function setClass(value) {
@@ -888,6 +932,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			ObjectPropertyGroup : true,
 			Created : false
 		} ;
+		this.specProvider = specProvider;
 
 		this.objectPropertySelector = new ObjectPropertyTypeId(this, specProvider) ;
 
@@ -907,7 +952,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.objectPropertySelector.reload() ;
 				this.objectPropertySelector.cssClasses.IsOnEdit = true;
 			}
-			
+			var select = $(this.html).find('select.input-val') ;
+			select[0].sparnaturalSettings = settings ;
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
 			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 			// opens the select automatically
@@ -944,6 +990,15 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}
 			$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+
+
+			var desc = this.specProvider.getTooltip(this.value_selected) ;
+			if(desc != null) {
+				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
+				tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
+			} else {
+				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
+			}
 			
 			//ici peut être lancer le reload du where si il y a des fils
 		};
@@ -1119,6 +1174,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			//this.EndClassGroup.init() ;
 			this.inputTypeComponent.init() ;
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
+
+			var select =  $(this.html).find('select.input-val') ;
+			select[0].sparnaturalSettings = settings ;
 			
 			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
 			if(this.inputTypeComponent.needTriggerClick == false) {
@@ -1162,6 +1220,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			this.parentCriteriaGroup.ObjectPropertyGroup.init() ;
 			// trigger the event that will call the ObjectPropertyGroup
 			$(this.parentCriteriaGroup).trigger( {type:"EndClassGroupSelected" } ) ;
+
+			var desc = this.specProvider.getTooltip(this.value_selected) ;
+			if(desc != null) {
+				$(this.parentCriteriaGroup.EndClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
+				tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
+			} else {
+				$(this.parentCriteriaGroup.EndClassGroup.html).removeAttr('data-tippy-content') ;
+			}
 		};
 
 		this.onRemoveSelected = function onRemoveSelected () {			

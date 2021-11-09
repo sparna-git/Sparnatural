@@ -148,6 +148,10 @@
         {"@value" : "Country","@language" : "en"},
         {"@value" : "Pays","@language" : "fr"}
       ],
+      "tooltip": [
+        {"@value" : "This is a country blah blah blah in the tooltip and this should be approximately this size long and maybe a bit longer.","@language" : "en"},
+        {"@value" : "This is a country blah blah blah in the tooltip and this should be approximately this size long and maybe a bit longer.","@language" : "fr"}
+      ],
       "faIcon":  "fas fa-globe-africa"
     },
     {
@@ -504,7 +508,11 @@
             $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
             yasqe.setValue(queryString);
             yasqe.query();
-          }
+          },
+          tooltipConfig : {
+            delay: [800, 100],
+            duration: [100, 100],
+          },
         });
       }) ;
 

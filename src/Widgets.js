@@ -124,7 +124,7 @@
 					$.each( items, function( key, val ) {				  
 						var label = listHandler.elementLabel(val) ; 
 						var uri = listHandler.elementUri(val) ; 
-						$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
+						$('#'+id_input).append( "<option value='" + uri + "' title='" + label + "'>" + label + "</option>" );
 					});
 					$('#'+id_input).niceSelect();
 					$('#'+id_input).on("change", function() {
