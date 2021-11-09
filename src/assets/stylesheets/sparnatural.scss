@@ -997,8 +997,8 @@ body {
 .tippy-box[data-theme~='sparnatural'] {
     background-color: $custom-red-light;
     color: #000;
-	border-radius: 20px;
+	border-radius: 5px;
 	border: 1px dashed $custom-red;
-	padding: 10px;
-	font-weight: 600;
+	padding: 2px;
+	font-size:0.75em;
   }
