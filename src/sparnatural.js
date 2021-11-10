@@ -971,14 +971,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				eventProxiCriteria
 			);
 			
-			// automatically selects the value if there is only one
 			
 			if(this.objectPropertySelector.needTriggerClick == true) {
-				$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
+				// $(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 				$(this.html).find('select.input-val:not(.disabled)').trigger('change');
 				this.objectPropertySelector.needTriggerClick = false ;
 				//$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			} else {
+				// automatically selects the value if there is only one
 				if ($(this.html).find('select.input-val').find('option').length == 1) {
 					$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 				}
@@ -994,7 +994,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 
-
+			// sets tooltip ready
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
 			if(desc) {
 				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
@@ -1697,7 +1697,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// determine label and bit of HTML to select value
 			var rangeClassId = this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected
 			var classLabel = specProvider.getLabel(rangeClassId) ;
-			if (this.widgetType == Config.SEARCH_PROPERTY || this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY) {
+			if (
+				this.widgetType == Config.SEARCH_PROPERTY
+				||
+				this.widgetType == Config.STRING_EQUALS_PROPERTY
+				||
+				this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY
+			) {
 				// label of the "Search" pseudo-class is inserted alone in this case
 				var endLabel = classLabel;
 			} else {
@@ -1901,6 +1907,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.cssClasses.AutocompleteWidget = true ;
 			    break;
 			  case Config.GRAPHDB_SEARCH_PROPERTY:
+			  case Config.STRING_EQUALS_PROPERTY:
 			  case Config.SEARCH_PROPERTY:
 				this.widgetComponent = new SearchWidget(this, langSearch) ;
 				this.cssClasses.SearchWidget  = true ;

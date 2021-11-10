@@ -10,6 +10,7 @@ URIValue = require("./Query.js").URIValue ;
 LiteralValue = require("./Query.js").LiteralValue ;
 DateTimeValue = require("./Query.js").DateTimeValue ;
 SearchValue = require("./Query.js").SearchValue ;
+ExactStringValue = require("./Query.js").ExactStringValue ;
 
 class JSONQueryGenerator {
 
@@ -104,7 +105,11 @@ class JSONQueryGenerator {
 			  case Config.SEARCH_PROPERTY:				  
 			  case Config.GRAPHDB_SEARCH_PROPERTY:
 				  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
-				  line.values.push(new SearchValue(value, value));
+				  line.values.push(new RegexValue(value, value));
+				  break;
+			  case Config.STRING_EQUALS_PROPERTY:
+			  	  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
+				  line.values.push(new ExactStringValue(value, value));
 				  break;
 			  default:
 			  	console.log('Unknown widget type when generating SPARQL : '+_WidgetType);						
