@@ -260,9 +260,10 @@ body {
 			display: inline-block;
 			height: $height-components-under - 2;
 			line-height: $height-components-under - 2;
+			vertical-align: bottom;
 			span  {
 				display: inline-block;
-
+				vertical-align: bottom;
 			}
 			.selectIcon {
 				float: left;
@@ -510,6 +511,10 @@ body {
 							display: inline-block;
 							height: $height-components-hover;
 							line-height: $height-components-hover;
+							vertical-align: bottom;
+							&>span {
+								vertical-align: bottom;
+							}
 						}
 						.list {
 							li.option {

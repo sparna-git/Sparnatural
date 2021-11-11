@@ -604,7 +604,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			var list = [] ;
 			var items = [] ;
 			items['optional'] = 'Optionnal' ;
-			items['notexist'] = 'Not exist' ;
+			items['notExists'] = 'Not exist' ;
 			if(objectId === null) {
 				// if we are on the first class selection
 			 	//items = this.specProvider.getClassesInDomainOfAnyProperty() ;
@@ -636,7 +636,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				} else {
 					description_attr = '' ;
 				}
-				list.push( '<label><input type="checkbox" name="'+inputID+'-'+val+'" data-id="'+val+'"'+image+selected+' '+description_attr+'  />'+ label + '</label>' );
+				list.push( '<label><input type="radio" name="'+inputID+'" data-id="'+key+'"'+image+selected+' '+description_attr+'  />'+ label + '</label>' );
 
 				//list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
 			}
@@ -995,6 +995,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.parentCriteriaGroup = CriteriaGroupe ;
 		this.cssClasses.OptionsGroup = true ;
 		this.cssClasses.Created = false ;
+		this.valuesSelected = [] ;
 		
 		this.inputTypeComponent = new OptionTypeId(this, specProvider) ;
 
@@ -1003,23 +1004,27 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 
 		this.onObjectPropertyGroupSelected = function() {
-			$(this.html).find('.input-val').unbind('change');
+			$(this.html).find('.input-val label').unbind('click');
 			$(this.html).append('<div class="EditComponents ShowOnEdit Enabled"></div>');
 
 			$(this.html).find('.EditComponents').on('click', function(e) {
-				console.log(e) ;
 				$(e.target).parents('.OptionsGroup').first().toggleClass('Opended') ;
 			}) ;
 
 			this.inputTypeComponent.init() ;
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
 
-			
-			$(this.html).find('.input-val input').on('change', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
+			$(this.html).find('.input-val label').on('click', function(e) {
+				$(e.target).addClass('justClicked') ;
+			});
+			$(this.html).find('.input-val input').on('click', function(e) {
+				e.stopPropagation();
+			});
+			$(this.html).find('.input-val label').on('click', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 			
 			if(this.inputTypeComponent.needTriggerClick == true) {
 				//$(this.html).find('.nice-select').trigger('click') ;
-				$(this.html).find('.input-val input').trigger('change');
+				//$(this.html).find('.input-val input').trigger('change');
 				this.inputTypeComponent.needTriggerClick = false ;
 				//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
 			}
@@ -1050,15 +1055,30 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 		this.onChange = function onChange() {
 			console.log('Option modified') ;
-
-			$(this.html).find('.input-val input').each(function() {
-				console.log($(this).attr('name') + ' - ' + $(this).is(":checked") ) ;
-				if ($(this).is(":checked")) {
-					$(this).parents('label').first().addClass('Enabled');
+			var optionsImputs = $(this.html).find('.input-val input').get() ;
+			for (var item in  optionsImputs) {
+				if ($(optionsImputs[item]).parents('label').first().hasClass("justClicked")) {
+					console.log(this.valuesSelected) ;
+					if(this.valuesSelected[$(optionsImputs[item]).attr('data-id')] !== true) {
+						this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = true ;
+						$(optionsImputs[item]).parents('label').first().addClass('Enabled');
+						console.log(this.valuesSelected) ;
+					} else {
+						this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = false ;
+						$(optionsImputs[item]).parents('label').first().removeClass('Enabled');
+						optionsImputs[item].checked = false; 
+						console.log(this.valuesSelected) ;
+					}
+					
 				} else {
-					$(this).parents('label').first().removeClass('Enabled');
+					
+					this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = false ;
+					$(optionsImputs[item]).parents('label').first().removeClass('Enabled');
 				}
-			})
+			}
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+
+			$(this.html).find('.input-val label').removeClass('justClicked') ;
 
 
 			//this.niceslect.niceSelect('update') ;
