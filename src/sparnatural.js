@@ -1004,31 +1004,34 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 
 		this.onObjectPropertyGroupSelected = function() {
-			$(this.html).find('.input-val label').unbind('click');
-			$(this.html).append('<div class="EditComponents ShowOnEdit Enabled"></div>');
+			//$(this.html).find('.input-val label').unbind('click');
 
-			$(this.html).find('.EditComponents').on('click', function(e) {
-				$(e.target).parents('.OptionsGroup').first().toggleClass('Opended') ;
-			}) ;
+			if($(this.html).find('div.EditComponents').length == 0){
+				$(this.html).append('<div class="EditComponents ShowOnEdit Enabled"></div>');
 
-			this.inputTypeComponent.init() ;
-			this.inputTypeComponent.cssClasses.IsOnEdit = true;
+				$(this.html).find('.EditComponents').on('click', function(e) {
+					$(e.target).parents('.OptionsGroup').first().toggleClass('Opended') ;
+					redrawBottomLink($(e.target).parents('li.groupe').first()) ;
+				}) ;
 
-			$(this.html).find('.input-val label').on('click', function(e) {
-				$(e.target).addClass('justClicked') ;
-			});
-			$(this.html).find('.input-val input').on('click', function(e) {
-				e.stopPropagation();
-			});
-			$(this.html).find('.input-val label').on('click', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
-			
-			if(this.inputTypeComponent.needTriggerClick == true) {
-				//$(this.html).find('.nice-select').trigger('click') ;
-				//$(this.html).find('.input-val input').trigger('change');
-				this.inputTypeComponent.needTriggerClick = false ;
-				//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
+				this.inputTypeComponent.init() ;
+				this.inputTypeComponent.cssClasses.IsOnEdit = true;
+
+				$(this.html).find('.input-val label').on('click', function(e) {
+					$(e.target).addClass('justClicked') ;
+				});
+				$(this.html).find('.input-val input').on('click', function(e) {
+					e.stopPropagation();
+				});
+				$(this.html).find('.input-val label').on('click', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
+				
+				if(this.inputTypeComponent.needTriggerClick == true) {
+					//$(this.html).find('.nice-select').trigger('click') ;
+					//$(this.html).find('.input-val input').trigger('change');
+					this.inputTypeComponent.needTriggerClick = false ;
+					//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
+				}
 			}
-
 		}
 
 		// triggered when a criteria starts
@@ -1054,20 +1057,18 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		}
 
 		this.onChange = function onChange() {
-			console.log('Option modified') ;
 			var optionsImputs = $(this.html).find('.input-val input').get() ;
+			var optionSelected = false ;
 			for (var item in  optionsImputs) {
 				if ($(optionsImputs[item]).parents('label').first().hasClass("justClicked")) {
-					console.log(this.valuesSelected) ;
 					if(this.valuesSelected[$(optionsImputs[item]).attr('data-id')] !== true) {
 						this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = true ;
 						$(optionsImputs[item]).parents('label').first().addClass('Enabled');
-						console.log(this.valuesSelected) ;
+						optionSelected = true ;
 					} else {
 						this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = false ;
 						$(optionsImputs[item]).parents('label').first().removeClass('Enabled');
 						optionsImputs[item].checked = false; 
-						console.log(this.valuesSelected) ;
 					}
 					
 				} else {
@@ -1075,6 +1076,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = false ;
 					$(optionsImputs[item]).parents('label').first().removeClass('Enabled');
 				}
+			}
+
+			if (optionSelected == true ) {
+				$(this.parentCriteriaGroup.html).parents('li').first().addClass('optionEnabled') ;
+			} else {
+				$(this.parentCriteriaGroup.html).parents('li').first().removeClass('optionEnabled') ;
 			}
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 
@@ -2305,6 +2312,16 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	 **/
     this.expandSparql = function(sparql) {
 		return specProvider.expandSparql(sparql);
+	}
+
+
+	function redrawBottomLink(parentElementLi) {
+		var n_width = 0;
+		var ul = $(parentElementLi).children('ul').first() ;
+		n_width = n_width + getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
+		var t_width = getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
+		$(ul).find('>.lien-top').css('width', n_width) ;
+		$(parentElementLi).find('>.link-where-bottom').css('left', t_width) ;
 	}
 
 	return this ;
