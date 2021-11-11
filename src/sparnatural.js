@@ -1007,11 +1007,25 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			//$(this.html).find('.input-val label').unbind('click');
 
 			if($(this.html).find('div.EditComponents').length == 0){
-				$(this.html).append('<div class="EditComponents ShowOnEdit Enabled"></div>');
+				$(this.html).append('<div class="EditComponents ShowOnEdit"></div>');
+				var parentOptionEnable = false ;
+				$(this.html).parents('li.groupe').each(function(){
+					if ($(this).hasClass('optionEnabled')) {
+						parentOptionEnable = true ;
+					}
+				});
+
+				if (parentOptionEnable) {
+					$(this.html).find('.EditComponents').addClass('Disabled') ;
+				} else {
+					$(this.html).find('.EditComponents').addClass('Enabled') ;
+				}
 
 				$(this.html).find('.EditComponents').on('click', function(e) {
-					$(e.target).parents('.OptionsGroup').first().toggleClass('Opended') ;
-					redrawBottomLink($(e.target).parents('li.groupe').first()) ;
+					if($(e.target).hasClass('Enabled')) {
+						$(e.target).parents('.OptionsGroup').first().toggleClass('Opended') ;
+						redrawBottomLink($(e.target).parents('li.groupe').first()) ;
+					}
 				}) ;
 
 				this.inputTypeComponent.init() ;
@@ -1065,23 +1079,52 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 						this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = true ;
 						$(optionsImputs[item]).parents('label').first().addClass('Enabled');
 						optionSelected = true ;
+						$(optionsImputs[item]).parents('li.groupe').first().addClass($(optionsImputs[item]).attr('data-id')+'-enabled') ;
 					} else {
 						this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = false ;
 						$(optionsImputs[item]).parents('label').first().removeClass('Enabled');
 						optionsImputs[item].checked = false; 
+						$(optionsImputs[item]).parents('li.groupe').first().removeClass($(optionsImputs[item]).attr('data-id')+'-enabled') ;
 					}
 					
 				} else {
 					
 					this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = false ;
 					$(optionsImputs[item]).parents('label').first().removeClass('Enabled');
+					$(optionsImputs[item]).parents('li.groupe').first().removeClass($(optionsImputs[item]).attr('data-id')+'-enabled') ;
 				}
 			}
 
 			if (optionSelected == true ) {
 				$(this.parentCriteriaGroup.html).parents('li').first().addClass('optionEnabled') ;
+				$(this.parentCriteriaGroup.html).parents('li').first().parents('li.groupe').each(function() {
+					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Disabled') ;
+					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Enabled') ;
+					$(this).find('>div>.OptionsGroup').first().removeClass('Opended') ;
+
+				});
+				$(this.parentCriteriaGroup.html).parents('li').first().find('li.groupe').each(function() {
+					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Disabled') ;
+					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Enabled') ;
+					$(this).find('>div>.OptionsGroup').first().removeClass('Opended') ;
+				});
+				$('li.groupe').each(function() {
+					redrawBottomLink($(this)) ;
+				});
+
+
+
 			} else {
 				$(this.parentCriteriaGroup.html).parents('li').first().removeClass('optionEnabled') ;
+				$(this.parentCriteriaGroup.html).parents('li').first().parents('li.groupe').each(function() {
+					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
+					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
+				});
+				$(this.parentCriteriaGroup.html).parents('li').first().find('li.groupe').each(function() {
+					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
+					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
+				});
+
 			}
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 
@@ -2318,10 +2361,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	function redrawBottomLink(parentElementLi) {
 		var n_width = 0;
 		var ul = $(parentElementLi).children('ul').first() ;
-		n_width = n_width + getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
-		var t_width = getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
-		$(ul).find('>.lien-top').css('width', n_width) ;
-		$(parentElementLi).find('>.link-where-bottom').css('left', t_width) ;
+		if (ul.length == 1) {
+			n_width = n_width + getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
+			var t_width = getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
+			$(ul).find('>.lien-top').css('width', n_width) ;
+			$(parentElementLi).find('>.link-where-bottom').css('left', t_width) ;
+		}
 	}
 
 	return this ;

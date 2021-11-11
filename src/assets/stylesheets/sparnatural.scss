@@ -17,6 +17,8 @@ $custom-green: rgb(107,215,171) ;
 $custom-green-bold: rgb(2,184,117) ;
 $custom-green-light: rgb(151,227,196) ;
 
+$custom-silver: rgb(167,167,167) ;
+
 @mixin triangle-before() {
 	padding-left: 20px;
 	&:before {
@@ -142,18 +144,16 @@ body {
 
 			.EditComponents {
 				position: relative;
-				width: 20px;;
+				width: 20px;
 				background: $custom-green;
 				cursor: pointer;
 				@include arrow-block($custom-green);
 
-				/*&:before {
-					border-color: transparent transparent transparent #fff;
+				&.Disabled {
+					display: inline-block;
+					background: $custom-silver;
+					@include arrow-block($custom-silver);
 				}
-
-				&:after {
-					border-color: #fff #fff #fff $custom-green;
-				}*/
 			}
 			.OptionTypeId {
 				display: none ;
@@ -682,6 +682,12 @@ body {
 			border-left: 3px solid $custom-red;
 			display: block;
 		}
+		&.optional-enabled.completed .link-where-bottom {
+			border-left: 3px dashed $custom-red;
+		}
+		&.notExists-enabled.completed .link-where-bottom {
+			border-left: 3px dotted #000;
+		}
 		
 		&>.CriteriaGroup {
 			
@@ -720,6 +726,34 @@ body {
 				}
 			}
 		}
+		&.optional-enabled {
+			ul.childsList {
+
+				&>.lien-top {
+					border-left: 3px dashed $custom-red;
+					border-top: 3px dashed $custom-red;
+					
+					&>span {
+						border: 2px dashed $custom-red ;
+						border-radius: 15px;
+					}
+				}
+			}
+		}
+		&.notExists-enabled {
+			ul.childsList {
+
+				&>.lien-top {
+					border-left: 3px dotted #000;
+					border-top: 3px dotted #000;
+					
+					&>span {
+						border: 3px dotted #000;
+						border-radius: 15px;
+					}
+				}
+			}
+		}
 	}
 	.Sparnatural {
 		.bg-wrapper {
@@ -752,6 +786,25 @@ body {
 					display: none;
 				}
 			}
+			li.groupe.optional-enabled {
+				.ActionAnd {
+					.trait-and-bottom {
+
+						border-left: 3px dashed $custom-red ;
+						
+					}
+				}
+			}
+			li.groupe.notExists-enabled {
+				.ActionAnd {
+					.trait-and-bottom {
+
+						border-left: 3px dotted #000 ;
+						
+					}
+				}
+			}
+
 			li.groupe {
 				margin: 0;
 				padding-top: 1px;
@@ -830,6 +883,8 @@ body {
 				&>div>div>.ShowOnEdit {
 					display: none;
 				}
+
+				&>div>div>.ShowOnEdit.Disabled,
 				&>div>div>.ShowOnEdit.Enabled {
 					display: inline-block;
 				}
