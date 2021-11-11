@@ -13,6 +13,9 @@ $margin-children-li: 75px;
 $custom-red: rgb(250,136,3) ;
 $custom-red-bold: rgb(182, 97, 0) ;
 $custom-red-light: rgb(255, 231, 203) ;
+$custom-green: rgb(107,215,171) ;
+$custom-green-bold: rgb(2,184,117) ;
+$custom-green-light: rgb(151,227,196) ;
 
 @mixin triangle-before() {
 	padding-left: 20px;
@@ -71,6 +74,32 @@ $custom-red-light: rgb(255, 231, 203) ;
 	}
 	
 }
+@mixin arrow-block($color) {
+	&:before {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		left: 0;
+		border-top: 21px solid transparent;
+		border-left: 15px solid white;
+		border-bottom: 21px solid transparent;
+		/*margin: -10px 0px 0 0px; */
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		right:-15px;
+		border-top: 21px solid transparent;
+		border-left: 15px solid $color;
+		border-bottom: 21px solid transparent;
+		/*border-color: transparent transparent transparent $custom-green-light;
+		margin: -10px 90px 0 10px; */
+	  z-index: 1;
+	}
+}
 
 body {
 	section {
@@ -102,6 +131,76 @@ body {
 			min-width: 80px;
 			/*background: #fff;*/
 			padding: 2px 5px;
+		}
+		.OptionsGroup {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			min-width: auto;
+			padding-right: 15px;
+			margin-left: -30px;
+
+			.EditComponents {
+				position: relative;
+				width: 20px;;
+				background: $custom-green;
+				cursor: pointer;
+				@include arrow-block($custom-green);
+
+				/*&:before {
+					border-color: transparent transparent transparent #fff;
+				}
+
+				&:after {
+					border-color: #fff #fff #fff $custom-green;
+				}*/
+			}
+			.OptionTypeId {
+				display: none ;
+				position: relative;
+				padding-right: 15px;
+				label {
+					position: relative;
+					text-indent: 20px;
+					display: inline-block;
+					zoom: 1;
+					background: $custom-green-light;
+					margin-bottom: 0;
+					line-height: 42px;
+					color: #fff;
+					margin-left: 3px;
+					padding-right: 5px;
+					font-size: 14px;
+					
+				cursor: pointer;
+
+					input {
+						display: none;
+					}
+
+					@include arrow-block($custom-green-light);
+
+					&:hover,
+					&.Enabled {
+						background: $custom-green-bold;
+
+						&:after {
+							border-left: 15px solid $custom-green-bold;
+						}
+					}
+/**
+					&:before {
+						border-color: transparent transparent transparent #fff;
+					}
+
+					&:after {
+						border-color: #fff #fff #fff $custom-green;
+					}*/
+				}
+			}
+			&.Opended .OptionTypeId {
+				display:inline-block ;
+			}
 		}
 		.ObjectPropertyGroup {
 			
@@ -460,9 +559,9 @@ body {
 			display: flex;
 			
 			-ms-flex-align: center;
-	-webkit-align-items: center;
-	-webkit-box-align: center;
-	align-items: center;
+			-webkit-align-items: center;
+			-webkit-box-align: center;
+			align-items: center;
 	
 			.easy-autocomplete {
 				width: 100%!important;
@@ -726,6 +825,9 @@ body {
 				&>div>div>.ShowOnEdit {
 					display: none;
 				}
+				&>div>div>.ShowOnEdit.Enabled {
+					display: inline-block;
+				}
 				&.OnEdit>div>div.ActionsGroup>.ShowOnEdit,
 				&.OnEdit>div>div.HasInputsCompleted>.ShowOnEdit {
 					display: block;
@@ -888,8 +990,15 @@ body {
 								border-color: transparent;
 							}
 					}
+					&>div .Highlited {
+						position: relative;
+						@include arrow-block($custom-red);
+						&:before {
+							display: none;
+						}
+					}
 					&>div .Highlited:after{
-						content: '';
+						/*content: '';
 						width: 0;
 						height: 0;
 						line-height: 0;
@@ -898,10 +1007,12 @@ body {
 						border-style: solid;
 						border-width: 21px 0 21px 15px;
 						border-color: transparent transparent transparent $custom-red;
+
+						*/
 						
 					}
 					&>div .EndClassGroup .Highlited:before{
-						content: '';
+						/*content: '';
 						width: 0;
 						height: 0;
 						line-height: 0;
@@ -909,7 +1020,7 @@ body {
 						display: inline-block;float:left;
 						border-style: solid;
 						border-width: 21px 0 21px 15px;
-						border-color: transparent transparent transparent #fff;
+						border-color: transparent transparent transparent #fff;*/
 					}
 					&>div>div .EditComponents {
 						.ActionWhere,
