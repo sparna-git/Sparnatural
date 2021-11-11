@@ -9,7 +9,7 @@ QueryLine = require("./Query.js").QueryLine ;
 URIValue = require("./Query.js").URIValue ;
 LiteralValue = require("./Query.js").LiteralValue ;
 DateTimeValue = require("./Query.js").DateTimeValue ;
-SearchValue = require("./Query.js").SearchValue ;
+RegexValue = require("./Query.js").RegexValue ;
 ExactStringValue = require("./Query.js").ExactStringValue ;
 
 class JSONQueryGenerator {
