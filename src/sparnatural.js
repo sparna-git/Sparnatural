@@ -599,8 +599,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.buildOptionSelect = function(objectId, inputID, default_value) {
 			var list = [] ;
 			var items = [] ;
-			items['optional'] = 'Optionnal' ;
-			items['notExists'] = 'Not exist' ;
+			
+			items['optional'] = langSearch.labelOptionOptional ;
+			items['notExists'] = langSearch.labelOptionNotExists ;
 			if(objectId === null) {
 				// if we are on the first class selection
 			 	//items = this.specProvider.getClassesInDomainOfAnyProperty() ;

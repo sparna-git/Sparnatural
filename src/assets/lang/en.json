@@ -19,5 +19,7 @@
 	"DisplayValueDateTo" : "Until",
 	"ButtonAdd": "Add",
 	"ListWidgetNoItem": "... Oups, no value found !",
-	"ObjectPropertyTemporaryLabel": "related to"
+	"ObjectPropertyTemporaryLabel": "related to",
+	"labelOptionOptional": "Optional",
+	"labelOptionNotExists": "Not exists"
 }
