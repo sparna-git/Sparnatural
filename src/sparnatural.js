@@ -991,6 +991,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	function OptionsGroup (CriteriaGroupe, specProvider) { 
 		this.base = GroupContenaire ;
 		this.base() ;
+		this.baseCssClass = "OptionsGroup";
 
 		this.specProvider = specProvider;
 		this.parentCriteriaGroup = CriteriaGroupe ;
@@ -1189,6 +1190,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			Highlited : false ,
 			Created : false
 		};
+		this.baseCssClass = "OptionTypeId";
 		this.widgetHtml = null ;
 		this.needTriggerClick = false ;
 
