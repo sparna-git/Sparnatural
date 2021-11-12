@@ -906,6 +906,9 @@ body {
 						display: block;
 					}
 				}
+				&.addWereDisable>.link-where-bottom {
+					display: none;
+				}
 				.easy-autocomplete {
 					input {
 						height: $height-components-hover;
