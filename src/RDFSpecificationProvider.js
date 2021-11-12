@@ -243,6 +243,7 @@ export class RDFSpecificationProvider {
 			Config.TIME_PROPERTY_DATE,
 			Config.AUTOCOMPLETE_PROPERTY,
 			Config.SEARCH_PROPERTY,
+			Config.STRING_EQUALS_PROPERTY,
 			Config.GRAPHDB_SEARCH_PROPERTY,
 			Config.NON_SELECTABLE_PROPERTY
 		];

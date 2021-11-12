@@ -85,9 +85,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				allowHTML: true,
 				followCursor: false,
 				plugins: [followCursor], // Do not delete here.
-				// placement: 'bottom-end',
 				placement: 'right-start',
-				// offset: [20, 40],
 				offset: [5, 5],
 				theme: 'sparnatural',
 				arrow: false,
@@ -570,14 +568,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				//var selected = (default_value == val)?'selected="selected"':'';
 				var desc = this.specProvider.getTooltip(val) ;
 				var selected = (default_value == val)?' selected="selected"':'';
-				if(desc != null) {
+				if(desc) {
 					description_attr = ' data-desc="'+desc+'"';
 				} else {
 					description_attr = '' ;
 				}
 				list.push( '<option value="'+val+'" data-id="'+val+'"'+image+selected+' '+description_attr+'  >'+ label + '</option>' );
-
-				//list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
 			}
 
 			var html_list = $( "<select/>", {
@@ -667,8 +663,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				var val = items[key];
 				var label = this.specProvider.getLabel(val) ;
 				var desc = this.specProvider.getTooltip(val) ;
-				var selected = (default_value == true)?'selected="selected"':'';
-				if(desc != null) {
+				var selected = (default_value == val)?'selected="selected"':'';
+				if(desc) {
 					description_attr = ' data-desc="'+desc+'"';
 				} else {
 					description_attr = '' ;
@@ -873,6 +869,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	}
 	
 	function GroupContenaire() {
+		this.baseCssClass = "GroupContenaire";
 		this.parentCriteriaGroup = null ;
 		this.inputTypeComponent = null ;
 		this.tools = null ;
@@ -908,6 +905,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.base = GroupContenaire ;
 		this.base() ;
 
+		this.baseCssClass = "StartClassGroup";
 		this.specProvider = specProvider;
 		this.parentCriteriaGroup = CriteriaGroupe ;
 		this.cssClasses.StartClassGroup = true ;
@@ -966,9 +964,11 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}
 
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
-			if(desc != null) {
+			if(desc) {
 				$(this.parentCriteriaGroup.StartClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
-				tippy('.StartClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
+				var tippySettings = Object.assign({}, settings.tooltipConfig);
+				tippySettings.placement = "top-start";
+				tippy('.StartClassGroup .ClassTypeId[data-tippy-content]', tippySettings);
 			} else {
 				$(this.parentCriteriaGroup.StartClassGroup.html).removeAttr('data-tippy-content') ;
 			}
@@ -977,7 +977,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.setClass = function setClass(value) {
 			$(this.html).find('nice-select ul li[data-value="'+value+'"]').trigger('click');
 		}
-		
+
+		// do not remove
 		this.init() ;
 
 		this.getVarName = function() {
@@ -1242,6 +1243,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	function ObjectPropertyGroup(CriteriaGroupe1, specProvider) {
 		this.base = GroupContenaire ;
 		this.base() ;
+		
+		this.baseCssClass = "ObjectPropertyGroup";
 		this.parentCriteriaGroup = CriteriaGroupe1 ;
 		this.cssClasses = {
 			ObjectPropertyGroup : true,
@@ -1283,14 +1286,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				eventProxiCriteria
 			);
 			
-			// automatically selects the value if there is only one
 			
 			if(this.objectPropertySelector.needTriggerClick == true) {
-				$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
+				// $(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 				$(this.html).find('select.input-val:not(.disabled)').trigger('change');
 				this.objectPropertySelector.needTriggerClick = false ;
 				//$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			} else {
+				// automatically selects the value if there is only one
 				if ($(this.html).find('select.input-val').find('option').length == 1) {
 					$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 				}
@@ -1306,11 +1309,14 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 
-
+			// sets tooltip ready
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
-			if(desc != null) {
+			if(desc) {
 				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
-				tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
+				// tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
+				var tippySettings = Object.assign({}, settings.tooltipConfig);
+				tippySettings.placement = "top-start";
+				tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', tippySettings);
 			} else {
 				$(this.parentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
 			}
@@ -1326,6 +1332,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	 * Refactored to extract this from InputTypeComponent
 	 **/
 	function ObjectPropertyTypeId(GroupContenaire, specProvider) {
+		this.baseCssClass = "ObjectPropertyTypeId";
 		this.specProvider = specProvider;
 		this.cssClasses = {
 			IsCompleted : false,
@@ -1373,6 +1380,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	 * Refactored to extract this from InputTypeComponent.
 	 **/
 	function ClassTypeId(GroupContenaire, specProvider) {
+		this.baseCssClass = "ClassTypeId";
 		this.specProvider = specProvider;
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = this.ParentComponent ;
@@ -1468,6 +1476,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	function EndClassGroup(CriteriaGroupe, specProvider) {
 		this.base = GroupContenaire ;
 		this.base() ;
+
+		this.baseCssClass = "EndClassGroup";
 		this.specProvider = specProvider;
 		this.parentCriteriaGroup = CriteriaGroupe ;
 		this.cssClasses = {
@@ -1537,9 +1547,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.parentCriteriaGroup).trigger( {type:"EndClassGroupSelected" } ) ;
 
 			var desc = this.specProvider.getTooltip(this.value_selected) ;
-			if(desc != null) {
+			if(desc) {
 				$(this.parentCriteriaGroup.EndClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
-				tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
+				// tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
+				var tippySettings = Object.assign({}, settings.tooltipConfig);
+				tippySettings.placement = "top-start";
+				tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', tippySettings);
+
 			} else {
 				$(this.parentCriteriaGroup.EndClassGroup.html).removeAttr('data-tippy-content') ;
 			}
@@ -1580,6 +1594,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	function EndClassWidgetGroup(CriteriaGroupe, settings, specProvider) {
 		this.base = GroupContenaire ;
 		this.base() ;
+		this.baseCssClass = "EndClassWidgetGroup";
 		this.settings = settings;
 		this.specProvider = specProvider;
 		this.parentCriteriaGroup = CriteriaGroupe ;
@@ -1764,6 +1779,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	function ActionsGroup(CriteriaGroupe, specProvider) {
 		this.base = GroupContenaire ;
 		this.base() ;
+		this.baseCssClass = "ActionsGroup";
 		this.parentCriteriaGroup = CriteriaGroupe ;
 		this.cssClasses = {
 			ActionsGroup : true ,
@@ -1867,6 +1883,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	}	
 	
 	function ActionWhere(GroupContenaire, specProvider) {
+		this.baseCssClass = "ActionWhere";
 		this.specProvider = specProvider;
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = {} ;
@@ -1907,6 +1924,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	}	
 	
 	function ActionAnd(GroupContenaire) {
+		this.baseCssClass = "ActionAnd";
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = this.ParentComponent ;
 		this.cssClasses = {
@@ -1934,6 +1952,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	}	
 	
 	function ActionRemove(GroupContenaire) {
+		this.baseCssClass = "ActionRemove";
 		this.ParentComponent = GroupContenaire ;
 		this.HtmlContainer = this.ParentComponent ;	
 		this.cssClasses = {
@@ -1960,6 +1979,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	 * Selects the value for a range in a criteria/line, using a value selection widget
 	 **/	
 	function ObjectPropertyTypeWidget(GroupContenaire, settings, specProvider) {
+		this.baseCssClass = "ObjectPropertyTypeWidget";
 		this.specProvider = specProvider;
 		this.settings = settings;
 		this.ParentComponent = GroupContenaire ;
@@ -1992,7 +2012,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// determine label and bit of HTML to select value
 			var rangeClassId = this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected
 			var classLabel = specProvider.getLabel(rangeClassId) ;
-			if (this.widgetType == Config.SEARCH_PROPERTY || this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY) {
+			if (
+				this.widgetType == Config.SEARCH_PROPERTY
+				||
+				this.widgetType == Config.STRING_EQUALS_PROPERTY
+				||
+				this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY
+			) {
 				// label of the "Search" pseudo-class is inserted alone in this case
 				var endLabel = classLabel;
 			} else {
@@ -2196,6 +2222,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.cssClasses.AutocompleteWidget = true ;
 			    break;
 			  case Config.GRAPHDB_SEARCH_PROPERTY:
+			  case Config.STRING_EQUALS_PROPERTY:
 			  case Config.SEARCH_PROPERTY:
 				this.widgetComponent = new SearchWidget(this, langSearch) ;
 				this.cssClasses.SearchWidget  = true ;
@@ -2311,7 +2338,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.component = component ;
 
 		this.attachComponentHtml = function () {
-			var instance = this.component.constructor.name ;
+			var instance = this.component.baseCssClass ;
 			// remove existing component if already existing
 			this.component.HtmlContainer.html.find('>.'+instance).remove() ;
 			$(this.component.html).appendTo(this.component.HtmlContainer.html) ;
@@ -2332,7 +2359,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		}		
 
 		this.initHtml = function() {
-			var instance = this.component.constructor.name ;			
+			var instance = this.component.baseCssClass ;				
 			if (this.component.widgetHtml != null) {
 				this.component.html = $('<div class="'+instance+'"></div>') ;
 				// remove existing component

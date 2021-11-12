@@ -149,8 +149,8 @@
         {"@value" : "Pays","@language" : "fr"}
       ],
       "tooltip": [
-        {"@value" : "This is a country blah blah blah in the tooltip and this should be approximately this size long and maybe a bit longer.","@language" : "en"},
-        {"@value" : "This is a country blah blah blah in the tooltip and this should be approximately this size long and maybe a bit longer.","@language" : "fr"}
+        {"@value" : "en","@language" : "en"},
+        {"@value" : "fr","@language" : "fr"}
       ],
       "faIcon":  "fas fa-globe-africa"
     },
@@ -405,7 +405,7 @@
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#text",
       "@type" : "ObjectProperty",
-      "subPropertyOf" : "sparnatural:SearchProperty",
+      "subPropertyOf" : "sparnatural:StringEqualsProperty",
       "label": [
         {"@value" : "label or description","@language" : "en"},
         {"@value" : "libellé ou description","@language" : "fr"}
@@ -486,7 +486,7 @@
 
         sparnatural = document.getElementById('ui-search').Sparnatural({
           config: config,
-          // config: "sparnatural-config.rdf",
+          // config: "sparnatural-config.ttl",
           language: lang,
           maxDepth: 4,
           addDistinct: true,

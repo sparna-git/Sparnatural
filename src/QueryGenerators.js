@@ -9,7 +9,8 @@ QueryLine = require("./Query.js").QueryLine ;
 URIValue = require("./Query.js").URIValue ;
 LiteralValue = require("./Query.js").LiteralValue ;
 DateTimeValue = require("./Query.js").DateTimeValue ;
-SearchValue = require("./Query.js").SearchValue ;
+RegexValue = require("./Query.js").RegexValue ;
+ExactStringValue = require("./Query.js").ExactStringValue ;
 
 class JSONQueryGenerator {
 
@@ -27,10 +28,13 @@ class JSONQueryGenerator {
 			for (var i = 0; i < formObject.sparnatural.components.length; i++) {
 				var component = formObject.sparnatural.components[i];
 				var dependantDe = this.findDependantCriteria(formObject, i) ;
-				if ((dependantDe == null) || (dependantDe.type == 'sibling') || (dependantDe.nextType == 'hasSibling')) {
+				// at first level of the query, we have either no dependant criteria for the first lin
+				// of type = sibling
+				// at other level, the type is always "parent"
+				if ((dependantDe == null) || (dependantDe.type == 'sibling')) {
 					var branch = this.generateBranch(formObject, component, i, dependantDe);
 					query.branches.push(branch);
-				}				
+				}			
 			} ;	
 
 			console.log(query) ;
@@ -108,7 +112,11 @@ class JSONQueryGenerator {
 			  case Config.SEARCH_PROPERTY:				  
 			  case Config.GRAPHDB_SEARCH_PROPERTY:
 				  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
-				  line.values.push(new SearchValue(value, value));
+				  line.values.push(new RegexValue(value, value));
+				  break;
+			  case Config.STRING_EQUALS_PROPERTY:
+			  	  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
+				  line.values.push(new ExactStringValue(value, value));
 				  break;
 			  default:
 			  	console.log('Unknown widget type when generating SPARQL : '+_WidgetType);						
