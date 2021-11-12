@@ -28,10 +28,13 @@ class JSONQueryGenerator {
 			for (var i = 0; i < formObject.sparnatural.components.length; i++) {
 				var component = formObject.sparnatural.components[i];
 				var dependantDe = this.findDependantCriteria(formObject, i) ;
-				if ((dependantDe == null) || (dependantDe.type == 'sibling') || (dependantDe.nextType == 'hasSibling')) {
+				// at first level of the query, we have either no dependant criteria for the first lin
+				// of type = sibling
+				// at other level, the type is always "parent"
+				if ((dependantDe == null) || (dependantDe.type == 'sibling')) {
 					var branch = this.generateBranch(formObject, component, i, dependantDe);
 					query.branches.push(branch);
-				}				
+				}			
 			} ;	
 
 			console.log(query) ;
