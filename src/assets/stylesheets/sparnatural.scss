@@ -938,8 +938,12 @@ body {
 						display: block;
 					}
 				}
+				&.addWereEnable>.link-where-bottom,
 				&.addWereDisable>.link-where-bottom {
 					display: none;
+				}
+				&.addWereEnable.haveWhereChild>.link-where-bottom {
+					display: block;
 				}
 				.easy-autocomplete {
 					input {
