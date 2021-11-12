@@ -599,7 +599,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.buildOptionSelect = function(objectId, inputID, default_value) {
 			var list = [] ;
 			var items = [] ;
-			
+
 			items['optional'] = langSearch.labelOptionOptional ;
 			items['notExists'] = langSearch.labelOptionNotExists ;
 			if(objectId === null) {
@@ -1009,8 +1009,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.onObjectPropertyGroupSelected = function() {
 			//$(this.html).find('.input-val label').unbind('click');
 
-			if($(this.html).find('div.EditComponents').length == 0){
-				$(this.html).append('<div class="EditComponents ShowOnEdit"></div>');
+			if($(this.html).find('div.ShowOnEdit').length == 0){
+				$(this.html).find('div.EditComponents').addClass('ShowOnEdit');
 				var parentOptionEnable = false ;
 				$(this.html).parents('li.groupe').each(function(){
 					if ($(this).hasClass('optionEnabled')) {
@@ -1171,6 +1171,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		}
 		
 		this.init() ;
+		$(this.html).append('<div class="EditComponents"></div>');
 
 		this.getVarName = function() {
 			return this.varName;
