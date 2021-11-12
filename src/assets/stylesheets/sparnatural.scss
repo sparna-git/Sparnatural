@@ -729,6 +729,9 @@ body {
 			}
 		}
 		&.optional-enabled {
+			.CriteriaGroup {
+				border: 2px dashed $custom-red ;
+			}
 			ul.childsList {
 
 				&>.lien-top {
@@ -743,6 +746,9 @@ body {
 			}
 		}
 		&.notExists-enabled {
+			.CriteriaGroup {
+				border: 2px dotted #000;
+			}
 			ul.childsList {
 
 				&>.lien-top {
@@ -1081,22 +1087,11 @@ body {
 						position: relative;
 						@include arrow-block($custom-red);
 						&:before {
-							display: none;
+							
 						}
 					}
-					&>div .Highlited:after{
-						/*content: '';
-						width: 0;
-						height: 0;
-						line-height: 0;
-						padding: 0;
-						display: inline-block;float: right;margin-right: -15px;
-						border-style: solid;
-						border-width: 21px 0 21px 15px;
-						border-color: transparent transparent transparent $custom-red;
-
-						*/
-						
+					&>div>.StartClassGroup .Highlited:before{
+						display: none;
 					}
 					&>div .EndClassGroup .Highlited:before{
 						/*content: '';
