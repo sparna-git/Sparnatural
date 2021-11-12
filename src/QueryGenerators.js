@@ -177,14 +177,6 @@ class JSONQueryGenerator {
 			
 		}
 
-		if ($(element).next().length > 0) {
-			if (dependant != null) {
-				dependant.nextType = 'hasSibling'  ;
-			} else {
-				dependant = {nextType : 'hasSibling'}  ;
-			}	
-		}
-
 		$(thisForm_.sparnatural.components).each(function(index) {			
 			if (this.index == dep_id) {
 				dependant.element = this.CriteriaGroup ;
