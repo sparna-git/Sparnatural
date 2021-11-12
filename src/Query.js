@@ -1,5 +1,5 @@
 var SparqlGenerator = require('sparqljs').Generator;
-// var SparqlParser = require('sparqljs').Parser;
+
 
 /**
  * A complete Sparnatural Query, that can be serialized to SPARQL, and can be reloaded in Sparnatural
@@ -84,11 +84,17 @@ export class AbstractValue {
 				key: v.literal,
 				label: v.label
 			}
-	    } else if(v.key) {
+	    } else if(v.regex) {
 	    	return {
-				key: v.key,
+				key: v.regex,
 				label: v.label,
-				search: v.key
+				search: v.regex
+			}
+	    } else if(v.string) {
+	    	return {
+				key: v.string,
+				label: v.label,
+				search: v.string
 			}
 	    }
 	}
@@ -123,10 +129,17 @@ export class DateTimeValue extends AbstractValue {
 	}
 }
 
-export class SearchValue extends AbstractValue {
-	constructor(key, label=null) {
+export class RegexValue extends AbstractValue {
+	constructor(regex, label=null) {
 		super(label);
-		this.key = key;
+		this.regex = regex;
+	}
+}
+
+export class ExactStringValue extends AbstractValue {
+	constructor(string, label=null) {
+		super(label);
+		this.string = string;
 	}
 }
 
@@ -145,9 +158,10 @@ export class QuerySPARQLWriter {
 		this.specProvider = specProvider;
 		this.additionnalPrefixes = {};
 
-		// var parser = new SparqlParser();
-		// var query = parser.parse("SELECT * WHERE { ?x a <http://ex.fr/Museum> FILTER NOT EXISTS { ?x <http://ex.fr/label> ?label . VALUES ?label { 'toto' } FILTER(?label = 'toto') } }");
-		// console.log(query);
+		var SparqlParser = require('sparqljs').Parser;
+		var parser = new SparqlParser();
+		var query = parser.parse("SELECT * WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) }");
+		console.log(query);
 	}
 
 	// add a new prefix to the generated query
@@ -299,13 +313,19 @@ export class QuerySPARQLWriter {
 			) ;
 		}	
 
-		// if we have a search criteria
-		if(queryLine.values.length == 1 && queryLine.values[0].key) {
+		// if we have a regex criteria
+		if(queryLine.values.length == 1 && queryLine.values[0].regex) {
 			parentInSparqlQuery.push(
-				this._initFilterSearch(queryLine.values[0].key, queryLine.o)
+				this._initFilterRegex(queryLine.values[0].regex, queryLine.o)
 			) ;
 		}
 
+		// if we have a string criteria
+		if(queryLine.values.length == 1 && queryLine.values[0].string) {
+			parentInSparqlQuery.push(
+				this._initFilterStringEquals(queryLine.values[0].string, queryLine.o)
+			) ;
+		}
 	}
 
 
@@ -412,7 +432,7 @@ export class QuerySPARQLWriter {
 		}
 	}
 
-	_initFilterSearch(texte, variable) {			
+	_initFilterRegex(texte, variable) {			
 		return {
 			"type": "filter",
 			"expression": {
@@ -422,6 +442,32 @@ export class QuerySPARQLWriter {
 					""+variable+"",
 					"\""+texte+"\"",
 					"\"i\""
+				]
+			}
+		} ;
+	}
+
+	_initFilterStringEquals(texte, variable) {			
+		return {
+			"type": "filter",
+			"expression": {
+				"type": "operation",
+				"operator": "=",
+				"args": [					
+					{
+						"type": "operation",
+						"operator": "lcase",
+						"args" : [
+							""+variable+""
+						]
+					},
+					{
+						"type": "operation",
+						"operator": "lcase",
+						"args" : [
+							"\""+texte+"\""
+						]
+					}
 				]
 			}
 		} ;
