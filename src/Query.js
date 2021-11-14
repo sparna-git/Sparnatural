@@ -9,6 +9,15 @@ export class Query {
 	constructor(distinct=true) {
 		this.distinct = distinct;
 		this.variables = ["?this"];
+		this.order = null;
+		
+		/*
+		this.order = {
+			expression : "?this",
+			descending : false
+		} ;
+		*/
+		
 		// array of QueryBranch
 		this.branches = [];
 	}
@@ -158,10 +167,10 @@ export class QuerySPARQLWriter {
 		this.specProvider = specProvider;
 		this.additionnalPrefixes = {};
 
-		var SparqlParser = require('sparqljs').Parser;
-		var parser = new SparqlParser();
-		var query = parser.parse("SELECT * WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) }");
-		console.log(query);
+		// var SparqlParser = require('sparqljs').Parser;
+		// var parser = new SparqlParser();
+		// var query = parser.parse("SELECT ?x WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) } ORDER BY DESC(?x)");
+		// console.log(query);
 	}
 
 	// add a new prefix to the generated query
@@ -199,6 +208,11 @@ export class QuerySPARQLWriter {
 				// only the first one will have a type criteria
 				i == 0
 			) ;
+		}
+
+		// add order clause, if any
+		if(query.order) {
+			sparqlQuery.order = this._initOrder(query.order.expression, (query.order.descending)?true:null);
 		}
 
 		console.log(sparqlQuery);
@@ -471,6 +485,17 @@ export class QuerySPARQLWriter {
 				]
 			}
 		} ;
+	}
+
+	_initOrder(variable, desc=false) {
+		var singleOrderClause = {
+			"expression" : variable
+		};
+		if(desc) {
+			singleOrderClause.descending = true;
+		}
+
+		return [singleOrderClause];
 	}
 
 	_updateGraphDbPrefixes(jsonQuery) {
