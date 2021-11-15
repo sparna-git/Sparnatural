@@ -1053,8 +1053,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					e.stopPropagation();
 				});
 				$(this.html).find('.input-val label').on('click', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
-				
+
 				if(this.inputTypeComponent.needTriggerClick == true) {
+					if (this.inputTypeComponent.default_value['optional']) {
+						$(this.html).find('.input-val input[data-id="optional"]').parents('label').first().trigger('click') ;
+					} else if (this.inputTypeComponent.default_value['notExists']) {
+						$(this.html).find('.input-val input[data-id=notExists]').parents('label').first().trigger('click') ;
+					}
 					//$(this.html).find('.nice-select').trigger('click') ;
 					//$(this.html).find('.input-val input').trigger('change');
 					this.inputTypeComponent.needTriggerClick = false ;
@@ -1207,6 +1212,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.baseCssClass = "OptionTypeId";
 		this.widgetHtml = null ;
 		this.needTriggerClick = false ;
+		this.default_value = []
 
 		this.init = function () {
 			
@@ -1215,14 +1221,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.tools.updateCssClasses() ;
 				return true ;
 			}
-			var default_value = [] ;
-			default_value['optionnal'] = false ;
-			default_value['notexist'] = false ;
+			this.default_value['optional'] = false ;
+			this.default_value['notexist'] = false ;
 			
 			if(this.ParentComponent.parentCriteriaGroup.jsonQueryBranch) {
 				var branch = this.ParentComponent.parentCriteriaGroup.jsonQueryBranch
-				default_value['optionnal'] = branch.optional ;
-				default_value['notexist'] = branch.notExists ;
+				this.default_value['optional'] = branch.optional ;
+				this.default_value['notexist'] = branch.notExists ;
 				this.needTriggerClick = true ;
 			}
 
@@ -1235,7 +1240,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			selectHtml = selectBuilder.buildOptionSelect(
 				this.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected,
 				this.id,
-				default_value
+				this.default_value
 			);
 			
 			
