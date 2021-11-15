@@ -792,7 +792,7 @@ body {
 			}
 			li.groupe.optional-enabled {
 				.CriteriaGroup {
-					border: 2px dashed $custom-red ;
+					border: 3px dashed $custom-red ;
 				}
 				ul.childsList {
 					.ActionAnd {
@@ -815,7 +815,7 @@ body {
 			}
 			li.groupe.notExists-enabled {
 				.CriteriaGroup {
-					border: 2px dotted #000 ;
+					border: 3px dotted #000 ;
 				}
 				ul.childsList {
 					.ActionAnd {
