@@ -796,6 +796,18 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		this.onRemoveCriteria = function() {
 			var index_to_remove = this.id ;
+
+			//Remove option selected if enbled
+			if ($(this.html).parents('li').first().hasClass('optionEnabled')) {
+				$(this.html).parents('li').first().parents('li.groupe').each(function() {
+					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
+					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
+				});
+				$(this.html).parents('li').first().find('li.groupe').each(function() {
+					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
+					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
+				});
+			}
 			// iterate on every "line" in the query
 			$(this.thisForm_.sparnatural.components).each(function() {
 				var parentOrSibling = findParentOrSiblingCriteria(this.CriteriaGroup.thisForm_, this.index ) ;
