@@ -438,10 +438,31 @@ export class RDFSpecificationProvider {
 	_sort(items) {
 		var me = this;
 		const compareFunction = function(item1, item2) {
-		  return me.getLabel(item1).localeCompare(me.getLabel(item2));
+		  // return me.getLabel(item1).localeCompare(me.getLabel(item2));
+
+		  var order1 = me._readOrder(item1);
+		  var order2 = me._readOrder(item2);
+		  console.log(order1);
+		  if(order1) {
+		  	if(order2) {
+		  		if(order1 == order2) {
+		  			return me.getLabel(item1).localeCompare(me.getLabel(item2));
+		  		} else {
+		  			return order1 > order2;
+		  		}
+		  	} else {
+		  		return -1;
+		  	}
+		  } else {
+		  	if(order2) {
+		  		return 1;
+		  	} else {
+		  		return me.getLabel(item1).localeCompare(me.getLabel(item2));
+		  	}
+		  }
 		};
 
-		// sort according to label
+		// sort according to order or label
 		items.sort(compareFunction);
 		return items;
 	}
@@ -558,6 +579,13 @@ export class RDFSpecificationProvider {
 	}
 
 	/**
+	 * Reads config:order of an entity and returns it, or null if not set
+	 **/
+	_readOrder(uri) {
+		return this._readAsSingleLiteral(uri, Config.ORDER);
+	}
+
+	/**
 	 * Reads the given property on an entity, and return values as an array
 	 **/
 	_readAsResource(uri, property) {
@@ -576,6 +604,15 @@ export class RDFSpecificationProvider {
 			undefined
 		)
 		.map(quad => quad.object.value);
+	}
+
+	_readAsSingleLiteral(uri, property) {
+		var values = this._readAsLiteral(uri, property);
+		if(values.length == 0) {
+			return undefined;
+		} else {
+			return values[0];
+		}
 	}
 
 	_readAsLiteralWithLang(uri, property, lang, defaultToNoLang = true) {
