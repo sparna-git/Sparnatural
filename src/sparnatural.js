@@ -271,7 +271,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			initForm(thisForm);
 			// add the first CriteriaGroup to the component
 			addComponent(thisForm, $(thisForm.sparnatural).find('ul')) ;
-			$(thisForm.sparnatural).find('.nice-select:not(.disabled)').trigger('click') ;
+			$(thisForm.sparnatural).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
 			// uncomment to trigger gathering of statistics
 			// initStatistics(specProvider);
 		});
@@ -777,7 +777,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					jsonQueryBranch = this.thisForm_.preLoad.branches[0];
 				}
 				var new_component = addComponent(formObject, formContextHtml, jsonQueryBranch) ;			
-				$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;				
+				$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;				
 			} else {
 				if (parentOrSibling !== null) {
 					var dependantComponent = parentOrSibling.element ;
@@ -1548,8 +1548,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			) ;
 			
 			// trigger 2 clicks to select the same class as the object class (?)
-			$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;
-			$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;
+			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
+			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
 		}
 
 		this.onAddAnd = function () {
@@ -1560,8 +1560,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			) ;
 			
 			// trigger 2 clicks to select the same class as the current criteria (?)
-			$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;
-			$(new_component).find('.nice-select:not(.disabled)').trigger('click') ;
+			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
+			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
 
 			return false ;			
 		}
