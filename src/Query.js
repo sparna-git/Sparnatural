@@ -238,7 +238,7 @@ export class QuerySPARQLWriter {
 			parent.push(filterNotExists);
 			parentInSparqlQuery = filterNotExists.expression.args[0].patterns;
 		}
-		this._QueryLineToSPARQL(parentInSparqlQuery, queryBranch.line, firstTopLevelBranch);
+		this._QueryLineToSPARQL(parentInSparqlQuery, sparqlQuery, queryBranch.line, firstTopLevelBranch);
 
 		// iterate on children
 		for (var i = 0; i < queryBranch.children.length; i++) {
@@ -252,16 +252,20 @@ export class QuerySPARQLWriter {
 		}
 	}
 
-	_QueryLineToSPARQL(parentInSparqlQuery, queryLine, includeSubjectType=false) {
+	_QueryLineToSPARQL(parentInSparqlQuery, completeSparqlQuery, queryLine, includeSubjectType=false) {
 		var bgp = this._initBasicGraphPattern() ;
 
 		// only for the very first criteria
 		if (includeSubjectType) {
-			bgp.triples.push(this._buildTriple(
+			var typeBgp = this._initBasicGraphPattern() ;
+			typeBgp.triples.push(this._buildTriple(
 				queryLine.s,
 				this.typePredicate,
 				queryLine.sType
 			)) ;
+			// this criteria is _always_ inserted in the global where,
+			// ant not in the parent OPTIONAL or FILTER NOT EXISTS
+			completeSparqlQuery.where.push(typeBgp);
 		}
 
 		if(queryLine.p && queryLine.o) {
