@@ -12,6 +12,7 @@ $margin-children-li: 75px;
 
 $custom-red: rgb(250,136,3) ;
 $custom-red-bold: rgb(182, 97, 0) ;
+$custom-red-light: rgb(255, 231, 203) ;
 
 @mixin triangle-before() {
 	padding-left: 20px;
@@ -992,3 +993,12 @@ body {
 	
 
 }
+
+.tippy-box[data-theme~='sparnatural'] {
+    background-color: $custom-red-light;
+    color: #000;
+	border-radius: 5px;
+	border: 1px dashed $custom-red;
+	padding: 2px;
+	font-size:0.75em;
+  }

@@ -52,6 +52,15 @@ Search in FontAwesome at https://fontawesome.com/icons</rdfs:comment>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#order -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#order">
+        <sparnatural-config-core:order xml:lang="en">An ordering information associated with this entity. This can be the display order of this entity within a list, or the display order of instances of the annotated class in list of instances, or predicates of the annotated property in a list of predicates, etc.</sparnatural-config-core:order>
+        <rdfs:label xml:lang="en">order</rdfs:label>
+    </owl:AnnotationProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString">
@@ -62,6 +71,15 @@ When used to annotate a class, this annotation must contain a class URI, expande
 &quot;&lt;http://www.w3.org/2004/02/skos/core#Concept&gt; ; &lt;http://www.w3.org/2004/02/skos/core#inScheme&gt; &lt;http://myScheme&gt; .&quot;</rdfs:comment>
         <rdfs:label xml:lang="en">sparql string</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip">
+        <rdfs:comment xml:lang="en">The content of the tooltip to be associated with a class or a property in the Sparnatural configuration.</rdfs:comment>
+        <rdfs:label xml:lang="en">tooltip</rdfs:label>
     </owl:AnnotationProperty>
     
 
@@ -161,6 +179,16 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty">
         <rdfs:comment xml:lang="en">Any property used to configure Sparnatural</rdfs:comment>
         <rdfs:label xml:lang="en">sparnatural property</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#StringEqualsProperty -->
+
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#StringEqualsProperty">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a simple text field should be used to enter a string to be searched for, in an exact way, case-insensitive.</rdfs:comment>
+        <rdfs:label xml:lang="en">string equals property</rdfs:label>
     </owl:ObjectProperty>
     
 

@@ -24,6 +24,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 				||
 				value == "sparnatural:SearchProperty"
 				||
+				value == "sparnatural:StringEqualsProperty"
+				||
 				value == "sparnatural:GraphDBSearchProperty"
 				||
 				value == "sparnatural:TimeProperty-Year"
@@ -112,6 +114,20 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		if (item !== null) {
 			for(var i in item['label']) {
 				var aLabel = item['label'][i];
+				if (aLabel['@language'] == this.lang) {
+					return aLabel['@value'] ;
+				}
+			}
+		}
+
+		return null ;
+	}
+
+	this.getTooltip = function(classOrPropertyId) {
+		var item = this._getResourceById(classOrPropertyId) ;
+		if (item !== null) {
+			for(var i in item['tooltip']) {
+				var aLabel = item['tooltip'][i];
 				if (aLabel['@language'] == this.lang) {
 					return aLabel['@value'] ;
 				}

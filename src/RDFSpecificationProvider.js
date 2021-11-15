@@ -110,12 +110,13 @@ export class RDFSpecificationProvider {
 			// we are not looking at domains of _any_ property
 		    // the property we are looking at must be a Sparnatural property, with a known type
 			var objectPropertyId = quad.subject.id;
+			var typeClass = quad.object.termType;
 		    var classId = quad.object.id;
 
 		    if(this.getObjectPropertyType(objectPropertyId)) {
-
+		    	
 		    	// keep only Sparnatural classes in the list
-		    	if(this.isSparnaturalClass(classId)) {
+		    	if(this.isSparnaturalClass(classId) || typeClass == "BlankNode") {
 			    	// always exclude RemoteClasses from first list
 			    	if(!this.isRemoteClass(classId)) {
 			    		if(!this._isUnionClass(classId)) {			    
@@ -143,14 +144,18 @@ export class RDFSpecificationProvider {
 		return this._readAsLiteralWithLang(entityId, RDFS.LABEL, this.lang)
 	}
 
+	getTooltip(entityId) {
+		return this._readAsLiteralWithLang(entityId, Config.TOOLTIP, this.lang)
+	}
+
 	getIcon(classId) {
 		var faIcon = this._readAsLiteral(classId, factory.namedNode(Config.FA_ICON));
-		if(faIcon != null) {
+		if(faIcon.length > 0) {
 			// use of fa-fw for fixed-width icons
 			return "<span style='font-size: 170%;' >&nbsp;<i class='" + faIcon + " fa-fw'></i></span>";
 		} else {
 			var icon = this._readAsLiteral(classId, factory.namedNode(Config.ICON));
-			if ( icon != null) {
+			if ( icon.length > 0) {
 				return icon;
 			} else {
 				// this is ugly, just so it aligns with other entries having an icon
@@ -232,11 +237,13 @@ export class RDFSpecificationProvider {
 
 		var KNOWN_PROPERTY_TYPES = [
 			Config.LIST_PROPERTY,
+			Config.LITERAL_LIST_PROPERTY,
 			Config.TIME_PROPERTY_PERIOD,
 			Config.TIME_PROPERTY_YEAR,
 			Config.TIME_PROPERTY_DATE,
 			Config.AUTOCOMPLETE_PROPERTY,
 			Config.SEARCH_PROPERTY,
+			Config.STRING_EQUALS_PROPERTY,
 			Config.GRAPHDB_SEARCH_PROPERTY,
 			Config.NON_SELECTABLE_PROPERTY
 		];
@@ -431,10 +438,31 @@ export class RDFSpecificationProvider {
 	_sort(items) {
 		var me = this;
 		const compareFunction = function(item1, item2) {
-		  return me.getLabel(item1).localeCompare(me.getLabel(item2));
+		  // return me.getLabel(item1).localeCompare(me.getLabel(item2));
+
+		  var order1 = me._readOrder(item1);
+		  var order2 = me._readOrder(item2);
+		  console.log(order1);
+		  if(order1) {
+		  	if(order2) {
+		  		if(order1 == order2) {
+		  			return me.getLabel(item1).localeCompare(me.getLabel(item2));
+		  		} else {
+		  			return order1 > order2;
+		  		}
+		  	} else {
+		  		return -1;
+		  	}
+		  } else {
+		  	if(order2) {
+		  		return 1;
+		  	} else {
+		  		return me.getLabel(item1).localeCompare(me.getLabel(item2));
+		  	}
+		  }
 		};
 
-		// sort according to label
+		// sort according to order or label
 		items.sort(compareFunction);
 		return items;
 	}
@@ -551,6 +579,13 @@ export class RDFSpecificationProvider {
 	}
 
 	/**
+	 * Reads config:order of an entity and returns it, or null if not set
+	 **/
+	_readOrder(uri) {
+		return this._readAsSingleLiteral(uri, Config.ORDER);
+	}
+
+	/**
 	 * Reads the given property on an entity, and return values as an array
 	 **/
 	_readAsResource(uri, property) {
@@ -569,6 +604,15 @@ export class RDFSpecificationProvider {
 			undefined
 		)
 		.map(quad => quad.object.value);
+	}
+
+	_readAsSingleLiteral(uri, property) {
+		var values = this._readAsLiteral(uri, property);
+		if(values.length == 0) {
+			return undefined;
+		} else {
+			return values[0];
+		}
 	}
 
 	_readAsLiteralWithLang(uri, property, lang, defaultToNoLang = true) {

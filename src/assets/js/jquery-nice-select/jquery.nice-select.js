@@ -1,10 +1,12 @@
 /*  jQuery Nice Select - v1.1.0
     https://github.com/hernansartorio/jquery-nice-select
     Made by Hernán Sartorio  */
+
+    import tippy, {followCursor} from 'tippy.js';
  
 (function($) {
 
-  $.fn.niceSelect = function(method) {
+  $.fn.niceSelect = function(method,settings) {
     
     // Methods
     if (typeof method == 'string') {      
@@ -23,6 +25,7 @@
             }
           }
         });
+        
       } else if (method == 'destroy') {
         this.each(function() {
           var $select = $(this);
@@ -51,6 +54,7 @@
       
       if (!$select.next().hasClass('nice-select')) {
         create_nice_select($select);
+        
       }
     });
     
@@ -67,38 +71,38 @@
       var $options = $select.find('option');
       var $selected = $select.find('option:selected');
 	  
-	  var icon ='';
-	  if ($selected.attr('data-icon') !== undefined) {
-			if($selected.attr('data-icon').indexOf('<') == 0) {
-        icon = $selected.attr('data-icon')+"&nbsp;&nbsp;";
-      } else {
-        icon = '<img src="'+$selected.attr('data-icon')+'" /><img class="highlited" src="'+$selected.attr('data-iconh')+'" />' ;  
+      var icon ='';
+      if ($selected.attr('data-icon') !== undefined) {
+        if($selected.attr('data-icon').indexOf('<') == 0) {
+          icon = $selected.attr('data-icon')+"&nbsp;&nbsp;";
+        } else {
+          icon = '<img src="'+$selected.attr('data-icon')+'" /><img class="highlited" src="'+$selected.attr('data-iconh')+'" />' ;  
+        }
       }
-		}
-		
-      
-      $dropdown.find('.current').html($selected.data('display') || icon+$selected.html());
+    
+      var text = $selected.data('display') || icon+$selected.html();
+        
+      $dropdown.find('.current').html(text);
       
       $options.each(function(i) {
         var $option = $(this);
         var display = $option.data('display');
-		var icon = '' ;
-		if ($option.attr('data-icon') !== undefined) {
-      if($option.attr('data-icon').indexOf('<') == 0) {
-        icon = $option.attr('data-icon')+"&nbsp;&nbsp;";
-      } else {
-        icon = '<img src="'+$option.attr('data-icon')+'" /><img class="highlited" src="'+$option.attr('data-iconh')+'" />' ;
-      }
-
-			
-		}
+        var icon = '' ;
+        if ($option.attr('data-icon') !== undefined) {
+          if($option.attr('data-icon').indexOf('<') == 0) {
+            icon = $option.attr('data-icon')+"&nbsp;&nbsp;";
+          } else {
+            icon = '<img src="'+$option.attr('data-icon')+'" /><img class="highlited" src="'+$option.attr('data-iconh')+'" />' ;
+          }
+        }
 
         $dropdown.find('ul').append($('<li></li>')
-          .attr('data-value', $option.val())
-          .attr('data-display', (display || null))
-          .addClass('option' +
-            ($option.is(':selected') ? ' selected' : '') +
-            ($option.is(':disabled') ? ' disabled' : ''))
+        .attr('data-value', $option.val())
+        .attr('data-tippy-content', $option.attr('data-desc'))
+        .attr('data-display', (display || null))
+        .addClass('option' +
+          ($option.is(':selected') ? ' selected' : '') +
+          ($option.is(':disabled') ? ' disabled' : ''))
           .html(icon+$option.text())
         );
       });
@@ -111,14 +115,15 @@
     
     // Open/close
     $(document).on('click.nice_select', '.nice-select', function(event) {
-		//alert("hohoh") ;
       var $dropdown = $(this);
+      var settings = $dropdown.prev('select')[0].sparnaturalSettings ;
 	  if ($dropdown.hasClass('open') ) {
 		  $dropdown.toggleClass('open');
 		  $dropdown.prev('select').val($dropdown.find('.selected').data('value')).trigger('change');
 	  } else {
 		  $('.nice-select').not($dropdown).removeClass('open');
 		  $dropdown.toggleClass('open');
+      tippy('.nice-select .option[data-tippy-content]', settings.tooltipConfig);
 	  }
       
       //
@@ -147,13 +152,9 @@
       
       $dropdown.find('.selected').removeClass('selected');
       $option.addClass('selected');
-      
-	  
 		
       var text = $option.data('display') || $option.html();
       $dropdown.find('.current').html(text);
-      
-      
     });
 
     // Keyboard events

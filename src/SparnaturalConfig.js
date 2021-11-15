@@ -9,6 +9,7 @@ module.exports = Object.freeze({
 	TIME_PROPERTY_DATE			 	: 		SPARNATURAL_CONFIG_CORE+'TimeProperty-Date',
 	AUTOCOMPLETE_PROPERTY 			: 		SPARNATURAL_CONFIG_CORE+'AutocompleteProperty',
 	SEARCH_PROPERTY 				: 		SPARNATURAL_CONFIG_CORE+'SearchProperty',
+	STRING_EQUALS_PROPERTY 			: 		SPARNATURAL_CONFIG_CORE+'StringEqualsProperty',
 	GRAPHDB_SEARCH_PROPERTY 		: 		SPARNATURAL_CONFIG_CORE+'GraphDBSearchProperty',
 	NON_SELECTABLE_PROPERTY 		: 		SPARNATURAL_CONFIG_CORE+'NonSelectableProperty',
 
@@ -16,6 +17,8 @@ module.exports = Object.freeze({
 	ICON					 		: 		SPARNATURAL_CONFIG_CORE+'icon',
 	FA_ICON					 		: 		SPARNATURAL_CONFIG_CORE+'faIcon',
 	HIGHLIGHTED_ICON		 		: 		SPARNATURAL_CONFIG_CORE+'highlightedIcon',
+	ORDER					 		: 		SPARNATURAL_CONFIG_CORE+'order',
+	TOOLTIP					 		: 		SPARNATURAL_CONFIG_CORE+'tooltip',
 
 	SPARNATURAL_CLASS				: 		SPARNATURAL_CONFIG_CORE+'SparnaturalClass',
 	NOT_INSTANTIATED_CLASS			: 		SPARNATURAL_CONFIG_CORE+'NotInstantiatedClass',
