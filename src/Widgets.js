@@ -1,4 +1,4 @@
-	
+
 	
 	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
@@ -99,30 +99,22 @@
 			document.getElementById(id_input).style.display = 'block' ;
 			document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'none' ;
 
-			var options = {
-				url: listHandler.listUrl(
-					startClassGroup_value,
-					ObjectPropertyGroup_value,
-					endClassGroup_value
-				),
-				dataType: "json",
-				method: "GET",
-				data: {
-					  dataType: "json"
-				}
-			} ;
 			let url = listHandler.listUrl(
 				startClassGroup_value,
 				ObjectPropertyGroup_value,
 				endClassGroup_value
 			);
-			let Init = { method: 'GET',
-				headers: new Headers(),
+
+			var headers = new Headers();
+			headers.append("Accept", "application/sparql-results+json, application/json, */*;q=0.01");
+			let init = {
+				method: 'GET',
+				headers: headers,
 				mode: 'cors',
 				cache: 'default' 
 			};
 			let temp = new LocalCacheData() ;
-			let fetchpromise = temp.fetch(url, options, settings.localCacheDataTtl) ;
+			let fetchpromise = temp.fetch(url, init, settings.localCacheDataTtl) ;
 			fetchpromise.then(response => response.json())
 			.then(data => {
 				var items = listHandler.listLocation(
@@ -148,7 +140,21 @@
 				}  ;
 			});
 			
-			/*var request = $.ajax( options );
+			/*
+			var options = {
+				url: listHandler.listUrl(
+					startClassGroup_value,
+					ObjectPropertyGroup_value,
+					endClassGroup_value
+				),
+				dataType: "json",
+				method: "GET",
+				data: {
+					  dataType: "json"
+				}
+			} ;
+	
+			var request = $.ajax( options );
 			//var select = $(this.html).find('select') ;
 			request.done(function( data ) {			  
 			  	var items = listHandler.listLocation(
@@ -172,7 +178,8 @@
 					document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
 					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
 				} 
-			});*/
+			});
+			*/
 		}
 
 		this.getValue = function() {

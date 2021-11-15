@@ -442,7 +442,7 @@ export class RDFSpecificationProvider {
 
 		  var order1 = me._readOrder(item1);
 		  var order2 = me._readOrder(item2);
-		  console.log(order1);
+
 		  if(order1) {
 		  	if(order2) {
 		  		if(order1 == order2) {
