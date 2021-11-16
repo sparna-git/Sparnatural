@@ -15,10 +15,12 @@ class LocalCacheData {
         var lastLoading = datastorage.get(uri) ; 
 
         if (lastLoading < now - ttl) {
+            // ttl exceeded, reload
             datastorage.set(uri, now) ;
             init.cache = 'reload' ;
             return fetch(uri, init) ;
         } else {
+            console.log("force-cache");
             init.cache = 'force-cache' ;
             return fetch(uri, init) ;
         }
