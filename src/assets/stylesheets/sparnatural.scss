@@ -621,6 +621,26 @@ body {
 		.bg-wrapper {
 			
 		}
+		.variablesSelection {
+			.line1, .line2 {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+
+				&>div.variablesOtherSelect {
+					display: flex;
+					flex-direction: row;
+					flex-wrap: wrap;
+				}
+			}
+			.line1 {
+				.variableSelected {
+					padding: 3px 7px;
+					border: 1px solid $custom-red ;
+					font-size: 12px;
+				}
+			}
+		}
 		ul.componentsListe {
 			padding: 0;
 			width: 1200px;

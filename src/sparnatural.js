@@ -350,8 +350,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		
 		function initForm(form) {	
-			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
+			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div><div class="variablesSelection"></div>');
 			$(form.sparnatural).append(contexte) ;
+
+			initVariablesSelector(form) ;
 			
 			initGeneralEvent(form) ;
 			
@@ -389,6 +391,91 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}) ;
 
 			$(form.sparnatural).trigger({type: 'formInitialized'}) ;
+		}
+
+		function initVariablesSelector(form) {
+			form.sparnatural.variablesSemector = {} ;
+			this.html = $(form.sparnatural).find('.variablesSelection').first() ; 
+			this.selectedList = [] ;
+
+			
+			this.line1 = $('<div class="line1"></div>') ;
+			this.line2 = $('<div class="line2"></div>') ;
+			$(this.html).append(this.line1) ;
+			$(this.html).append(this.line2) ;
+
+			this.firstSelectHtml = $('<div class="variablesFirstSelect"></div>') ;
+			this.otherSelectHtml = $('<div class="variablesOtherSelect"></div>') ;
+			this.ordersSelectHtml = $('<div class="variablesOrdersSelect"></div>') ;
+			this.optionsSelectHtml = $('<div class="variablesOptionsSelect"></div>') ;
+
+			$(this.line1).append(this.firstSelectHtml) ;
+			$(this.line1).append(this.otherSelectHtml) ;
+
+			$(this.line2).append(this.ordersSelectHtml) ;
+			$(this.line2).append(this.optionsSelectHtml) ;
+
+			form.sparnatural.variablesSemector = this ;
+
+			form.sparnatural.variablesSemector.switchLabel = 'name' ; // or name
+
+			console.log(form) ;
+		}
+
+		function VariableSelector(GroupContenaire) {
+			this.baseCssClass = "VariableSelector";
+			this.GroupContenaire = GroupContenaire ;
+			this.globalVariablesSelctor = this.GroupContenaire.parentCriteriaGroup.thisForm_.sparnatural.variablesSemector ;
+			var icon = this.GroupContenaire.specProvider.getIcon(GroupContenaire.value_selected) ;
+			var highlightedIcon = this.GroupContenaire.specProvider.getHighlightedIcon(GroupContenaire.value_selected) ;
+
+				// highlighted icon defaults to icon
+				if (!highlightedIcon || 0 === highlightedIcon.length) {
+					highlightedIcon = icon ;
+				}
+			
+			if (icon !== undefined) {
+				if(icon.indexOf('<') == 0) {
+					var image = icon+"&nbsp;&nbsp;";
+				} else {
+					var image = '<img src="'+icon+'" /><img class="highlited" src="'+highlightedIcon+'" />' ;   
+				}
+			  }	else {
+				  var image = "";
+			  }
+
+			this.varLabel = localName(GroupContenaire.value_selected) ;
+			this.varName = GroupContenaire.varName ;
+			this.labelDisplayed = '' ;
+
+			if (this.globalVariablesSelctor.switchLabel == 'label') {
+				this.labelDisplayed = image + this.varLabel ;
+			} else {
+				this.labelDisplayed = image + this.varName ;
+			}
+
+			this.element = '<div class="variableSelected" data=variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'">'+this.labelDisplayed+'</div>' ;
+
+			if (this.globalVariablesSelctor.selectedList.length == 0 ) {
+				$(this.globalVariablesSelctor.firstSelectHtml).append($(this.element)) ;
+
+			} else {
+				$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
+			}
+
+			this.globalVariablesSelctor.selectedList.push(this) ;
+
+			if (this.GroupContenaire instanceof StartClassGroup) {
+
+			}
+			if (this.GroupContenaire instanceof EndClassGroup) {
+
+			}
+
+			this.remove = function() {
+
+			}
+
 		}
 
 		function initStatistics(aSpecProvider) {
@@ -879,9 +966,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			//this.niceslect.niceSelect('update') ;
 			this.value_selected = $(this.html).find('select.input-val').val() ;
 
+			//Sets the SPARQL variable name if not initialized from loaded query
+			var parentOrSibling = findParentOrSiblingCriteria(this.parentCriteriaGroup.thisForm_, this.parentCriteriaGroup.id) ;
 			if(this.varName == null) {
-				//Sets the SPARQL variable name if not initialized from loaded query
-				var parentOrSibling = findParentOrSiblingCriteria(this.parentCriteriaGroup.thisForm_, this.parentCriteriaGroup.id) ;
 				if (parentOrSibling && parentOrSibling.type == 'parent' ) {
 					this.varName = parentOrSibling.element.EndClassGroup.getVarName();
 				} else if (parentOrSibling && parentOrSibling.type == 'sibling' ) {
@@ -889,6 +976,11 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				} else {
 					this.varName = "?this";
 				}
+			}
+			if ((this.varName == '?this') && (parentOrSibling === null)) {
+				console.log(this) ;
+				//Add varableSelector on variableSelector list ;
+				this.variableSelector = new VariableSelector(this) ;
 			}
 
 			$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
@@ -1213,6 +1305,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			if(this.varName == null) {
 				this.varName = "?"+localName(this.value_selected)+"_"+(this.parentCriteriaGroup.thisForm_.sparnatural.getMaxVarIndex()+1);
 			}
+
+			//Add varableSelector on variableSelector list ;
+			this.variableSelector = new VariableSelector(this) ;
 
 			$(this.parentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
 			
