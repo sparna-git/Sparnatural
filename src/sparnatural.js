@@ -589,60 +589,33 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	
 		
 	/**
-	 * Builds a selector for options on provided property, by reading the
-	 * configuration. If the given objectId is null, this means we populate all default options aviable.
 	 * 
 	 **/
 	 function OptionSelectBuilder(specProvider) {
 		this.specProvider = specProvider;
 
-		this.buildOptionSelect = function(objectId, inputID, default_value) {
-			var list = [] ;
+		this.buildOptionSelect = function(objectId, inputID, default_value) {			
 			var items = [] ;
-
-			items['optional'] = langSearch.labelOptionOptional ;
-			items['notExists'] = langSearch.labelOptionNotExists ;
-			if(objectId === null) {
-				// if we are on the first class selection
-			 	//items = this.specProvider.getClassesInDomainOfAnyProperty() ;
-			} else {
-				//items = this.specProvider.getConnectedClasses(domainId) ;
+			if(specProvider.isEnablingOptional(objectId)) {
+				items['optional'] = langSearch.labelOptionOptional ;
+			}
+			
+			if(specProvider.isEnablingNegation(objectId)) {
+				items['notExists'] = langSearch.labelOptionNotExists ;
 			}
 
+			var list = [] ;
 			for (var key in items) {
-				var val = items[key];
-				//var label = this.specProvider.getLabel(val) ;
-				var label = val ;
-				//var icon = this.specProvider.getIcon(val) ;
-				var icon = null ;
-				//var highlightedIcon = this.specProvider.getHighlightedIcon(val) ;
-				var highlightedIcon = '' ;
-
-				// highlighted icon defaults to icon
-				if (!highlightedIcon || 0 === highlightedIcon.length) {
-					highlightedIcon = icon ;
-				}
-				
-				var image = (icon != null)?' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"':'' ;
-				//var selected = (default_value == val)?'selected="selected"':'';
-				var desc = this.specProvider.getTooltip(val) ;
-				var desc = null ;
-				var selected = (default_value[key] == val)?' checked="checked"':'';
-				if(desc != null) {
-					description_attr = ' data-desc="'+desc+'"';
-				} else {
-					description_attr = '' ;
-				}
-				list.push( '<label><input type="radio" name="'+inputID+'" data-id="'+key+'"'+image+selected+' '+description_attr+'  />'+ label + '</label>' );
-
-				//list.push( '<option value="'+ val +'" data-id="' + val + '"'+image+selected+'>'+ label + '</option>' );
+				var label = items[key] ;
+				var selected = (default_value[key] == label)?' checked="checked"':'';
+				list.push( '<label><input type="radio" name="'+inputID+'" data-id="'+key+'"'+selected+' '+'  />'+ label + '</label>' );
 			}
 
 			var html_list = $( "<div/>", {
 				"class": "optionsGroupe-list input-val",
 				"id": 'select-'+inputID,
 				html: list.join( "" )
-			  });
+			});
 
 			return html_list ;
 		}
@@ -998,6 +971,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			return this.varName;
 		}
 	} 
+
 	/**
 	 * Selection of the start class in a criteria/line
 	 **/
@@ -1014,13 +988,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		this.inputTypeComponent = new OptionTypeId(this, specProvider) ;
 
-		// contains the name of the SPARQL variable associated to this component
-		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.s:null;
-
-
 		this.onObjectPropertyGroupSelected = function() {
-			//$(this.html).find('.input-val label').unbind('click');
-
 			if($(this.html).find('div.ShowOnEdit').length == 0){
 				$(this.html).find('div.EditComponents').addClass('ShowOnEdit');
 				var parentOptionEnable = false ;
@@ -1030,7 +998,15 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					}
 				});
 
-				if (parentOptionEnable) {
+				if (
+					parentOptionEnable
+					||
+					(
+						!this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+						&&
+						!this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+					)
+				) {
 					$(this.html).find('.EditComponents').addClass('Disabled') ;
 				} else {
 					$(this.html).find('.EditComponents').addClass('Enabled') ;
@@ -1060,58 +1036,36 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					} else if (this.inputTypeComponent.default_value['notExists']) {
 						$(this.html).find('.input-val input[data-id=notExists]').parents('label').first().trigger('click') ;
 					}
-					//$(this.html).find('.nice-select').trigger('click') ;
-					//$(this.html).find('.input-val input').trigger('change');
 					this.inputTypeComponent.needTriggerClick = false ;
-					//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
 				}
 			}
 		}
 
 		// triggered when a criteria starts
 		this.onCreated = function() {
-			/*$(this.html).find('.input-val').unbind('change');
-			this.inputTypeComponent.init() ;
-			this.inputTypeComponent.cssClasses.IsOnEdit = true;
-			var select = $(this.html).find('.input-val')[0] ;
-			select.sparnaturalSettings = settings ;
-			this.niceslect = $(select).niceSelect() ;
 
-			
-			$(this.html).find('select.input-val').on(
-				'change',
-				{arg1: this, arg2: 'onChange'},
-				eventProxiCriteria
-			);
-			if(this.inputTypeComponent.needTriggerClick == true) {
-				$(this.html).find('select.input-val').trigger('change');
-				this.inputTypeComponent.needTriggerClick = false ;
-			}*/
-			
 		}
 
 		this.onChange = function onChange() {
-			var optionsImputs = $(this.html).find('.input-val input').get() ;
+			var optionsInputs = $(this.html).find('.input-val input').get() ;
 			var optionSelected = false ;
-			for (var item in  optionsImputs) {
-				if ($(optionsImputs[item]).parents('label').first().hasClass("justClicked")) {
-					if(this.valuesSelected[$(optionsImputs[item]).attr('data-id')] !== true) {
-						this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = true ;
-						$(optionsImputs[item]).parents('label').first().addClass('Enabled');
+			for (var item in  optionsInputs) {
+				if ($(optionsInputs[item]).parents('label').first().hasClass("justClicked")) {
+					if(this.valuesSelected[$(optionsInputs[item]).attr('data-id')] !== true) {
+						this.valuesSelected[$(optionsInputs[item]).attr('data-id')]  = true ;
+						$(optionsInputs[item]).parents('label').first().addClass('Enabled');
 						optionSelected = true ;
-						$(optionsImputs[item]).parents('li.groupe').first().addClass($(optionsImputs[item]).attr('data-id')+'-enabled') ;
+						$(optionsInputs[item]).parents('li.groupe').first().addClass($(optionsInputs[item]).attr('data-id')+'-enabled') ;
 					} else {
-						this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = false ;
-						$(optionsImputs[item]).parents('label').first().removeClass('Enabled');
-						optionsImputs[item].checked = false; 
-						$(optionsImputs[item]).parents('li.groupe').first().removeClass($(optionsImputs[item]).attr('data-id')+'-enabled') ;
-					}
-					
-				} else {
-					
-					this.valuesSelected[$(optionsImputs[item]).attr('data-id')]  = false ;
-					$(optionsImputs[item]).parents('label').first().removeClass('Enabled');
-					$(optionsImputs[item]).parents('li.groupe').first().removeClass($(optionsImputs[item]).attr('data-id')+'-enabled') ;
+						this.valuesSelected[$(optionsInputs[item]).attr('data-id')]  = false ;
+						$(optionsInputs[item]).parents('label').first().removeClass('Enabled');
+						optionsInputs[item].checked = false; 
+						$(optionsInputs[item]).parents('li.groupe').first().removeClass($(optionsInputs[item]).attr('data-id')+'-enabled') ;
+					}					
+				} else {					
+					this.valuesSelected[$(optionsInputs[item]).attr('data-id')]  = false ;
+					$(optionsInputs[item]).parents('label').first().removeClass('Enabled');
+					$(optionsInputs[item]).parents('li.groupe').first().removeClass($(optionsInputs[item]).attr('data-id')+'-enabled') ;
 				}
 			}
 
@@ -1132,8 +1086,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					redrawBottomLink($(this)) ;
 				});
 
-
-
 			} else {
 				$(this.parentCriteriaGroup.html).parents('li').first().removeClass('optionEnabled') ;
 				$(this.parentCriteriaGroup.html).parents('li').first().parents('li.groupe').each(function() {
@@ -1144,43 +1096,12 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
 					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
 				});
-
 			}
+
+			// update the query
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 
 			$(this.html).find('.input-val label').removeClass('justClicked') ;
-
-
-			//this.niceslect.niceSelect('update') ;
-			/*this.value_selected = $(this.html).find('select.input-val').val() ;
-
-			if(this.varName == null) {
-				//Sets the SPARQL variable name if not initialized from loaded query
-				var parentOrSibling = findParentOrSiblingCriteria(this.parentCriteriaGroup.thisForm_, this.parentCriteriaGroup.id) ;
-				if (parentOrSibling && parentOrSibling.type == 'parent' ) {
-					this.varName = parentOrSibling.element.EndClassGroup.getVarName();
-				} else if (parentOrSibling && parentOrSibling.type == 'sibling' ) {
-					this.varName = parentOrSibling.element.StartClassGroup.getVarName();
-				} else {
-					this.varName = "?this";
-				}
-			}
-
-			$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
-			// trigger event on the whole line/criteria
-			$(this.parentCriteriaGroup).trigger( {type:"StartClassGroupSelected" } ) ;
-
-			if(settings.sendQueryOnFirstClassSelected) {
-				$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
-			}
-
-			var desc = this.specProvider.getTooltip(this.value_selected) ;
-			if(desc != null) {
-				$(this.parentCriteriaGroup.StartClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
-				tippy('.StartClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
-			} else {
-				$(this.parentCriteriaGroup.StartClassGroup.html).removeAttr('data-tippy-content') ;
-			}*/
 		};
 
 		this.setClass = function setClass(value) {
@@ -1189,17 +1110,11 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		this.init() ;
 		$(this.html).append('<div class="EditComponents"></div>');
-
-		this.getVarName = function() {
-			return this.varName;
-		}
 	} 
 
 	
 	/**
-	 * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
-	 * The DOMAIN selection happens only for the very first line/criteria.
-	 * Refactored to extract this from InputTypeComponent.
+	 * 
 	 **/
 	 function OptionTypeId(GroupContenaire, specProvider) {
 		this.specProvider = specProvider;
@@ -1214,8 +1129,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.needTriggerClick = false ;
 		this.default_value = []
 
-		this.init = function () {
-			
+		this.init = function () {	
 			//If Start Class 
 			if (this.cssClasses.Created) {
 				this.tools.updateCssClasses() ;
