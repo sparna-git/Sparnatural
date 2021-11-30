@@ -79,8 +79,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			backgroundBaseColor: '250,136,3',
 			sparqlPrefixes: {},
 			defaultEndpoint: null,
-			// localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miliseconds
-			localCacheDataTtl: 1000 * 60, // 1 hour
+			localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miliseconds
+			// localCacheDataTtl: 1000 * 60 * 4, // 4 hour
 			// whether or not to send count queries to determine
 			// how many instances of each classes are properties are present in the graph
 			filterConfigOnEndpoint: false,
@@ -720,7 +720,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		// hook all components together
 		$(this).on('StartClassGroupSelected', function () { this.ObjectPropertyGroup.onStartClassGroupSelected(); });
 		$(this).on('StartClassGroupSelected', function () { this.EndClassGroup.onStartClassGroupSelected(); });
-		$(this).on('StartClassGroupSelected', function () { this.ObjectPropertyGroup.onStartClassGroupSelected(); });
 		$(this).on('Created', function () { this.StartClassGroup.onCreated(); });
 		$(this).on('EndClassGroupSelected', function () { this.ObjectPropertyGroup.onEndClassGroupSelected(); });
 		$(this).on('ObjectPropertyGroupSelected', function () { this.EndClassWidgetGroup.onObjectPropertyGroupSelected(); });
