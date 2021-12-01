@@ -22,6 +22,26 @@
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#enableNegation -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#enableNegation">
+        <rdfs:comment xml:lang="en">Set this annotation to &quot;true&quot; on a property to indicate that this property can be applied a negation pattern (FILTER NOT EXISTS { ... })</rdfs:comment>
+        <rdfs:label xml:lang="en">enable negation</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#enableOptional -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#enableOptional">
+        <rdfs:comment xml:lang="en">Set this annotation to &quot;true&quot; on a property to indicate that this property can be applied an optional pattern (OPTIONAL { ... })</rdfs:comment>
+        <rdfs:label xml:lang="en">enable optional</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    </owl:AnnotationProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon">
