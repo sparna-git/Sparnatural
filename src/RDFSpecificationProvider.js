@@ -435,6 +435,15 @@ export class RDFSpecificationProvider {
 		return datasource;
 	}
 
+	isEnablingOptional(propertyId) {
+		return (this._readAsSingleLiteral(propertyId, Config.ENABLE_OPTIONAL) == "true");		
+	}
+
+	isEnablingNegation(propertyId) {
+		return (this._readAsSingleLiteral(propertyId, Config.ENABLE_NEGATION) == "true");	
+	}
+
+
 	_sort(items) {
 		var me = this;
 		const compareFunction = function(item1, item2) {
@@ -442,7 +451,7 @@ export class RDFSpecificationProvider {
 
 		  var order1 = me._readOrder(item1);
 		  var order2 = me._readOrder(item2);
-		  console.log(order1);
+		  
 		  if(order1) {
 		  	if(order2) {
 		  		if(order1 == order2) {
