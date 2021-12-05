@@ -626,7 +626,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.StartClassGroup = new StartClassGroup(this, specProvider) ;
 		this.OptionsGroup = new SparnaturalComponents.OptionsGroup(this, specProvider) ;
 		this.ObjectPropertyGroup = new ObjectPropertyGroup(this, specProvider) ;
-		this.EndClassGroup = new EndClassGroup(this, specProvider) ;
+		this.EndClassGroup = new SparnaturalComponents.EndClassGroup(this, specProvider, settings) ;
 		this.EndClassWidgetGroup = new EndClassWidgetGroup(this, this.settings, specProvider) ;
 		this.ActionsGroup = new ActionsGroup(this, specProvider) ;
 
@@ -1800,6 +1800,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.initHtml = function() {
 			var instance = this.component.baseCssClass ;				
 			if (this.component.widgetHtml != null) {
+				console.log("*** init with widgetHtml on "+instance);
 				this.component.html = $('<div class="'+instance+'"></div>') ;
 				// remove existing component
 				// this.component.html.find('>.'+instance ).remove();

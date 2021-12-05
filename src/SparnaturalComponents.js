@@ -6,13 +6,14 @@
 			this.baseCssClass = baseCssClass;
 			this.cssClasses = cssClasses;
 			this.parentComponent = parentComponent;
+			// TODO : see if this is really needed
 			this.widgetHtml = widgetHtml;
 			this.html = $();
 		}
 
 		attachComponentHtml() {
 			// remove existing component if already existing
-			this.parentComponent.html.find('>.'+this.baseCssClass).remove() ;
+			this.parentComponent.html.find('>.'+this.baseCssClass).remove() ;	
 			$(this.html).appendTo(this.parentComponent.html) ;
 		}
 
@@ -30,7 +31,7 @@
 			}
 		}
 
-		initHtml() {				
+		initHtml() {
 			if (this.widgetHtml != null) {
 				this.html = $('<div class="'+this.baseCssClass+'"></div>') ;
 				// remove existing component
@@ -69,7 +70,7 @@
 		}		
 
 		
-		init() {			
+		init() {		
 			if (!this.cssClasses.Created) {				
 				this.cssClasses.IsOnEdit = true ;
 				this.initHtml() ;
@@ -80,6 +81,130 @@
 			}
 		} ;
 	} 
+
+
+	/**
+	 * The "range" select, encapsulating a ClassTypeId, with a niceselect
+	 **/
+	export class EndClassGroup extends GroupContenaire {
+
+		constructor(parentCriteriaGroup, specProvider, settings) {
+			super(
+				"EndClassGroup",
+				parentCriteriaGroup
+			);
+
+			this.specProvider = specProvider;
+			this.settings = settings;
+			// TODO : this is removing classes from GroupContainer
+			this.cssClasses = {
+				EndClassGroup : true ,
+				Created : false
+			}; 
+			this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
+
+			// contains the name of the SPARQL variable associated to this component
+			this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.o:null;
+
+			this.init();
+		}
+
+		// triggered when the subject/domain is selected
+		onStartClassGroupSelected() {
+			$(this.html).find('.input-val').unbind('change');
+			$(this.html).append('<div class="EditComponents ShowOnEdit"></div>');
+
+			var unselect = $('<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>') ;
+			$(this.html).append(unselect);
+
+			//this.EndClassGroup.init() ;
+			this.inputTypeComponent.init() ;
+			this.inputTypeComponent.cssClasses.IsOnEdit = true;
+
+			var select = $(this.html).find('select.input-val') ;
+			select[0].sparnaturalSettings = this.settings ;
+			
+			this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
+			if(this.inputTypeComponent.needTriggerClick == false) {
+				$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
+			}
+			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, SparnaturalComponents.eventProxiCriteria);
+			$(this.html).find('span.unselectEndClass').on(
+				'click',
+				{arg1: this, arg2: 'onRemoveSelected'},
+				SparnaturalComponents.eventProxiCriteria
+			);
+			if(this.inputTypeComponent.needTriggerClick == true) {
+				//$(this.html).find('.nice-select').trigger('click') ;
+				$(this.html).find('select.input-val').trigger('change');
+				this.inputTypeComponent.needTriggerClick = false ;
+				//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
+			}
+		}
+		
+		onChange() {
+			this.value_selected = $(this.html).find('select.input-val').val() ;
+
+			//Set the variable name for Sparql
+			if(this.varName == null) {
+				this.varName = "?"+localName(this.value_selected)+"_"+(this.parentCriteriaGroup.thisForm_.sparnatural.getMaxVarIndex()+1);
+			}
+
+			$(this.parentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
+			
+			if (specProvider.hasConnectedClasses(this.value_selected)) {
+				$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
+			} else {
+				$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
+			}
+			this.cssClasses.HasInputsCompleted = true ;
+			this.cssClasses.IsOnEdit = false ;
+			this.init() ;
+
+			// show and init the property selection
+			this.parentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = false;
+			this.parentCriteriaGroup.ObjectPropertyGroup.init() ;
+			// trigger the event that will call the ObjectPropertyGroup
+			$(this.parentCriteriaGroup).trigger( {type:"EndClassGroupSelected" } ) ;
+
+			var desc = this.specProvider.getTooltip(this.value_selected) ;
+			if(desc) {
+				$(this.parentCriteriaGroup.EndClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
+				// tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
+				var tippySettings = Object.assign({}, settings.tooltipConfig);
+				tippySettings.placement = "top-start";
+				tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', tippySettings);
+
+			} else {
+				$(this.parentCriteriaGroup.EndClassGroup.html).removeAttr('data-tippy-content') ;
+			}
+		};
+
+		onRemoveSelected() {			
+			$(this.parentCriteriaGroup.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
+			this.parentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = true ;
+			this.parentCriteriaGroup.ObjectPropertyGroup.init() ;
+			this.parentCriteriaGroup.ObjectPropertyGroup.onStartClassGroupSelected() ;
+			$(this.parentCriteriaGroup.ComponentHtml).find('.childsList .ActionRemove a').trigger('click') ;
+			this.value_selected = null;
+			this.cssClasses.HasInputsCompleted = false ;
+			this.cssClasses.IsOnEdit = true ;
+			this.init() ;
+			$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, SparnaturalComponents.eventProxiCriteria);
+			$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
+			$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
+			this.parentCriteriaGroup.ActionsGroup.reinsert = true ;
+			$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
+			$(this.html).find('.nice-select').trigger('click') ;
+
+			// clean the variable name so that it is regenerated when a new value is selected in the onChange
+			this.varName = null;
+		}
+
+		getVarName() {
+			return this.varName;
+		}
+	} ;
 
 
 
@@ -106,6 +231,7 @@
 		}
 
 		onObjectPropertyGroupSelected() {
+			console.log("onObjectPropertyGroupSelected called");
 			if($(this.html).find('div.ShowOnEdit').length == 0){
 				$(this.html).find('div.EditComponents').addClass('ShowOnEdit');
 				var parentOptionEnable = false ;
@@ -245,7 +371,7 @@
 					Created : false
 				},
 				parentComponent,
-				null
+				false
 	 		);
 
 			this.specProvider = specProvider;
@@ -345,7 +471,7 @@
 					Created : false
 				},
 				parentComponent,
-				null
+				false
 	 		);
 
 			this.specProvider = specProvider;
@@ -395,7 +521,7 @@
 					Created : false
 				},
 				parentComponent,
-				null
+				false
 	 		);
 
 			this.specProvider = specProvider;
