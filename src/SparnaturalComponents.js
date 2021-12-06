@@ -105,6 +105,8 @@ export class GroupContenaire extends HTMLComponent {
 
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.s:null;
+		this.variableSelector = null ;
+		
 
 		this.init();
 	}
@@ -131,6 +133,20 @@ export class GroupContenaire extends HTMLComponent {
 		
 	}
 
+	onchangeViewVariable() {
+		if (this.variableSelector === null) {
+			//Add varableSelector on variableSelector list ;
+			this.variableSelector = new VariableSelector(this) ;
+			$(this.selectViewVariable).html(this.settings.svgIcons.seletedVaraible) ;
+		} else {
+			if (this.variableSelector.canRemove()) {
+				this.variableSelector.remove() ;
+				this.variableSelector = null ;
+				$(this.selectViewVariable).html(this.settings.svgIcons.notSeletedVaraible) ;
+			}
+		}
+	}
+
 	onChange() {
 		
 		//this.niceslect.niceSelect('update') ;
@@ -149,6 +165,13 @@ export class GroupContenaire extends HTMLComponent {
 
 		if ((this.varName == '?this') && (parentOrSibling === null)) {
 			console.log(this) ;
+			this.selectViewVariable = $('<span class="selectViewVariable">'+this.settings.svgIcons.seletedVaraible+'</span>') ;
+			$(this.html).append(this.selectViewVariable) ;
+			$(this.html).find('span.selectViewVariable').on(
+				'click',
+				{arg1: this, arg2: 'onchangeViewVariable'},
+				SparnaturalComponents.eventProxiCriteria
+			);
 			//Add varableSelector on variableSelector list ;
 			this.variableSelector = new VariableSelector(this) ;
 		}
@@ -358,16 +381,14 @@ export class EndClassGroup extends GroupContenaire {
 		if (this.variableSelector === null) {
 			//Add varableSelector on variableSelector list ;
 			this.variableSelector = new VariableSelector(this) ;
-
 			$(this.selectViewVariable).html(this.settings.svgIcons.seletedVaraible) ;
-
 		} else {
-			
-			this.variableSelector.remove() ;
-			this.variableSelector = null ;
-			$(this.selectViewVariable).html(this.settings.svgIcons.notSeletedVaraible) ;
+			if (this.variableSelector.canRemove()) {
+				this.variableSelector.remove() ;
+				this.variableSelector = null ;
+				$(this.selectViewVariable).html(this.settings.svgIcons.notSeletedVaraible) ;
+			}
 		}
-		
 	}
 	
 	onChange() {
@@ -843,6 +864,11 @@ export class VariableSelector extends HTMLComponent {
 		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
 
 		this.globalVariablesSelctor.selectedList.push(this) ;
+		if (this.globalVariablesSelctor.selectedList.length == 1) {
+			var width = $('.sortableItem').first().width() ;
+			$('.variablesOrdersSelect').width(width) ;
+		}
+		
 
 		if (this.GroupContenaire instanceof StartClassGroup) {
 
@@ -859,6 +885,17 @@ export class VariableSelector extends HTMLComponent {
 			return value.varName !== checkVarName;
 		});
 		$('[data-variableName="'+this.varName+'"]').parents('div.sortableItem').remove() ;
+		//Any one can be the first in line, compute the width for first place
+		var width = $('.sortableItem').first().width() ;
+		$('.variablesOrdersSelect').width(width) ;
+		
+	}
+
+	canRemove() {
+		if (this.globalVariablesSelctor.selectedList.length > 1) {
+			return true ;
+		}
+		return false ;
 	}
 
 }
