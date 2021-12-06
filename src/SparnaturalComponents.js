@@ -135,10 +135,9 @@ export class GroupContenaire extends HTMLComponent {
 		
 		//this.niceslect.niceSelect('update') ;
 		this.value_selected = $(this.html).find('select.input-val').val() ;
-
+		//Sets the SPARQL variable name if not initialized from loaded query
+		var parentOrSibling = SparnaturalComponents.findParentOrSiblingCriteria(this.parentCriteriaGroup.thisForm_, this.parentCriteriaGroup.id) ;
 		if(this.varName == null) {
-			//Sets the SPARQL variable name if not initialized from loaded query
-			var parentOrSibling = SparnaturalComponents.findParentOrSiblingCriteria(this.parentCriteriaGroup.thisForm_, this.parentCriteriaGroup.id) ;
 			if (parentOrSibling && parentOrSibling.type == 'parent' ) {
 				this.varName = parentOrSibling.element.EndClassGroup.getVarName();
 			} else if (parentOrSibling && parentOrSibling.type == 'sibling' ) {
@@ -146,6 +145,12 @@ export class GroupContenaire extends HTMLComponent {
 			} else {
 				this.varName = "?this";
 			}
+		}
+
+		if ((this.varName == '?this') && (parentOrSibling === null)) {
+			console.log(this) ;
+			//Add varableSelector on variableSelector list ;
+			this.variableSelector = new VariableSelector(this) ;
 		}
 
 		$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
@@ -303,6 +308,7 @@ export class EndClassGroup extends GroupContenaire {
 
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.o:null;
+		this.variableSelector = null ;
 
 		this.init();
 	}
@@ -313,7 +319,10 @@ export class EndClassGroup extends GroupContenaire {
 		$(this.html).append('<div class="EditComponents ShowOnEdit"></div>');
 
 		var unselect = $('<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>') ;
+		this.selectViewVariable = $('<span class="selectViewVariable">'+this.settings.svgIcons.notSeletedVaraible+'</span>') ;
 		$(this.html).append(unselect);
+		$(this.html).append(this.selectViewVariable);
+
 
 		//this.EndClassGroup.init() ;
 		this.inputTypeComponent.init() ;
@@ -332,12 +341,33 @@ export class EndClassGroup extends GroupContenaire {
 			{arg1: this, arg2: 'onRemoveSelected'},
 			SparnaturalComponents.eventProxiCriteria
 		);
+		$(this.html).find('span.selectViewVariable').on(
+			'click',
+			{arg1: this, arg2: 'onchangeViewVariable'},
+			SparnaturalComponents.eventProxiCriteria
+		);
 		if(this.inputTypeComponent.needTriggerClick == true) {
 			//$(this.html).find('.nice-select').trigger('click') ;
 			$(this.html).find('select.input-val').trigger('change');
 			this.inputTypeComponent.needTriggerClick = false ;
 			//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
 		}
+	}
+
+	onchangeViewVariable() {
+		if (this.variableSelector === null) {
+			//Add varableSelector on variableSelector list ;
+			this.variableSelector = new VariableSelector(this) ;
+
+			$(this.selectViewVariable).html(this.settings.svgIcons.seletedVaraible) ;
+
+		} else {
+			
+			this.variableSelector.remove() ;
+			this.variableSelector = null ;
+			$(this.selectViewVariable).html(this.settings.svgIcons.notSeletedVaraible) ;
+		}
+		
 	}
 	
 	onChange() {
@@ -763,6 +793,74 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 		console.log("reload on OptionTypeId should probably never be called");
 		this.init();
 	} ;		
+}
+
+export class VariableSelector extends HTMLComponent {
+	constructor(GroupContenaire) {
+		super(
+			"VariableSelector",
+			GroupContenaire
+		);
+		this.GroupContenaire = GroupContenaire;
+		this.specProvider = GroupContenaire.specProvider;
+		console.log(this.GroupContenaire) ;
+		this.globalVariablesSelctor = this.GroupContenaire.parentComponent.thisForm_.sparnatural.variablesSelector ;
+		this.icon = this.GroupContenaire.specProvider.getIcon(GroupContenaire.value_selected) ;
+		this.highlightedIcon = this.GroupContenaire.specProvider.getHighlightedIcon(GroupContenaire.value_selected) ;
+
+		this.init();
+	}
+
+	//On init add varible to selected list
+	init() {
+		// highlighted icon defaults to icon
+		if (!this.highlightedIcon || 0 === this.highlightedIcon.length) {
+			this.highlightedIcon = this.icon ;
+		}
+
+		if (this.icon !== undefined) {
+		if(this.icon.indexOf('<') == 0) {
+			this.image = this.icon+"&nbsp;&nbsp;";
+		} else {
+			this.image = '<img src="'+this.icon+'" /><img class="highlited" src="'+this.highlightedIcon+'" />' ;   
+		}
+		}	else {
+		this.image = "";
+		}
+
+		this.varLabel = localName(this.GroupContenaire.value_selected) ;
+		this.varName = this.GroupContenaire.varName ;
+		this.labelDisplayed = '' ;
+
+		if (this.globalVariablesSelctor.switchLabel == 'label') {
+		this.labelDisplayed = this.image + this.varLabel ;
+		} else {
+		this.labelDisplayed = this.image + this.varName ;
+		}
+
+		this.element = '<div class="sortableItem"><div class="variableSelected" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">||</span>'+this.labelDisplayed+'</div></div>' ;
+
+		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
+
+		this.globalVariablesSelctor.selectedList.push(this) ;
+
+		if (this.GroupContenaire instanceof StartClassGroup) {
+
+		}
+		if (this.GroupContenaire instanceof EndClassGroup) {
+
+		}
+
+	}
+
+	remove () {
+		var checkVarName = this.varName
+		this.globalVariablesSelctor.selectedList = this.globalVariablesSelctor.selectedList.filter(function(value, index, arr){
+			return value.varName !== checkVarName;
+		});
+		$('[data-variableName="'+this.varName+'"]').parents('div.sortableItem').remove() ;
+	}
+
 }
 
 
