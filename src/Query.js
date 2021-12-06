@@ -9,6 +9,15 @@ export class Query {
 	constructor(distinct=true) {
 		this.distinct = distinct;
 		this.variables = ["?this"];
+		this.order = null;
+		
+		/*
+		this.order = {
+			expression : "?this",
+			descending : false
+		} ;
+		*/
+		
 		// array of QueryBranch
 		this.branches = [];
 	}
@@ -158,10 +167,10 @@ export class QuerySPARQLWriter {
 		this.specProvider = specProvider;
 		this.additionnalPrefixes = {};
 
-		var SparqlParser = require('sparqljs').Parser;
-		var parser = new SparqlParser();
-		var query = parser.parse("SELECT * WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) }");
-		console.log(query);
+		// var SparqlParser = require('sparqljs').Parser;
+		// var parser = new SparqlParser();
+		// var query = parser.parse("SELECT ?x WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) } ORDER BY DESC(?x)");
+		// console.log(query);
 	}
 
 	// add a new prefix to the generated query
@@ -201,6 +210,11 @@ export class QuerySPARQLWriter {
 			) ;
 		}
 
+		// add order clause, if any
+		if(query.order) {
+			sparqlQuery.order = this._initOrder(query.order.expression, (query.order.descending)?true:null);
+		}
+
 		console.log(sparqlQuery);
 
 		var stringWriter = new QueryExplainStringWriter(this.specProvider);
@@ -224,7 +238,7 @@ export class QuerySPARQLWriter {
 			parent.push(filterNotExists);
 			parentInSparqlQuery = filterNotExists.expression.args[0].patterns;
 		}
-		this._QueryLineToSPARQL(parentInSparqlQuery, queryBranch.line, firstTopLevelBranch);
+		this._QueryLineToSPARQL(parentInSparqlQuery, sparqlQuery, queryBranch.line, firstTopLevelBranch);
 
 		// iterate on children
 		for (var i = 0; i < queryBranch.children.length; i++) {
@@ -238,16 +252,20 @@ export class QuerySPARQLWriter {
 		}
 	}
 
-	_QueryLineToSPARQL(parentInSparqlQuery, queryLine, includeSubjectType=false) {
+	_QueryLineToSPARQL(parentInSparqlQuery, completeSparqlQuery, queryLine, includeSubjectType=false) {
 		var bgp = this._initBasicGraphPattern() ;
 
 		// only for the very first criteria
 		if (includeSubjectType) {
-			bgp.triples.push(this._buildTriple(
+			var typeBgp = this._initBasicGraphPattern() ;
+			typeBgp.triples.push(this._buildTriple(
 				queryLine.s,
 				this.typePredicate,
 				queryLine.sType
 			)) ;
+			// this criteria is _always_ inserted in the global where,
+			// ant not in the parent OPTIONAL or FILTER NOT EXISTS
+			completeSparqlQuery.where.push(typeBgp);
 		}
 
 		if(queryLine.p && queryLine.o) {
@@ -471,6 +489,17 @@ export class QuerySPARQLWriter {
 				]
 			}
 		} ;
+	}
+
+	_initOrder(variable, desc=false) {
+		var singleOrderClause = {
+			"expression" : variable
+		};
+		if(desc) {
+			singleOrderClause.descending = true;
+		}
+
+		return [singleOrderClause];
 	}
 
 	_updateGraphDbPrefixes(jsonQuery) {

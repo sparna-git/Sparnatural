@@ -51,6 +51,10 @@ class JSONQueryGenerator {
 		var domainClass = component.CriteriaGroup.StartClassGroup.value_selected ;
 		var property = component.CriteriaGroup.ObjectPropertyGroup.value_selected ;
 		var rangeClass = component.CriteriaGroup.EndClassGroup.value_selected ; 
+
+
+		branch.optional = component.CriteriaGroup.OptionsGroup.valuesSelected['optional'];
+		branch.notExists = component.CriteriaGroup.OptionsGroup.valuesSelected['notExists'];
 		
 		// name start and end variables
 		// dashes should be replaced
