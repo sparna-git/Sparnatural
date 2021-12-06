@@ -622,22 +622,79 @@ body {
 			
 		}
 		.variablesSelection {
+			background: $custom-red-light;
+			padding: 30px 0;
 			.line1, .line2 {
 				display: flex;
 				flex-direction: row;
 				flex-wrap: wrap;
+				width: 1200px				;
+				max-width: 90%;
+				margin: 0 auto;
+
+				border: 1px solid #ddd;
+				background: #fff;
+				
 
 				&>div.variablesOtherSelect {
-					display: flex;
-					flex-direction: row;
-					flex-wrap: wrap;
+					display: block;
 				}
 			}
 			.line1 {
+				border-radius: 5px 5px 0 0 ;
+				border-bottom: 0px solid transparent;
+				.sortableItem {
+					padding: 10px;
+					display: inline-block;
+				}
+				.variablesOtherSelect>div:first-child {
+					background: lightgray;
+					height: 100%;
+					display: block;
+					float: left;
+				}
 				.variableSelected {
 					padding: 3px 7px;
-					border: 1px solid $custom-red ;
+					border: 1px solid gray ;
 					font-size: 12px;
+					color: gray;
+					border-radius: 5px;
+
+					.variable-handle {
+						display: inline-block;
+						padding: 5px 3px;
+						color: transparent;
+						border-left: 2px dashed lightgray;
+						border-right: 2px dashed lightgray;
+						cursor: grab;
+					}
+				}
+			}
+			.line2 {
+				border-radius: 0 0 5px 5px;
+				justify-content: space-between;
+				border-top: 1px solid darkgray;
+				line-height: 20px;
+				-moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
+				-webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;
+				-o-box-shadow: 0px 2px 3px 0px #cfcfcf;
+				box-shadow: 0px 2px 3px 0px #cfcfcf;
+
+				.variablesOrdersSelect {
+					background: lightgray;
+					padding: 0 10px;
+				}
+				
+
+				.variablesOptionsSelect {
+					text-align: right;
+				}
+				color: gray;
+
+				a {
+					display: inline-block;
+					padding: 5px;
+					color: gray;
 				}
 			}
 		}

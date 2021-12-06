@@ -32,6 +32,8 @@ const followCursor = require('tippy.js').followCursor;
 
 require('tippy.js/dist/tippy.css');
 
+const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
+
 JsonLdSpecificationProvider = require("./JsonLdSpecificationProvider.js").JsonLdSpecificationProvider;
 SpecificationProviderFactory = require("./SpecificationProviderFactory.js").SpecificationProviderFactory;
 RDFSpecificationProvider = require("./RDFSpecificationProvider.js").RDFSpecificationProvider ;
@@ -406,8 +408,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			this.firstSelectHtml = $('<div class="variablesFirstSelect"></div>') ;
 			this.otherSelectHtml = $('<div class="variablesOtherSelect"></div>') ;
-			this.ordersSelectHtml = $('<div class="variablesOrdersSelect"></div>') ;
-			this.optionsSelectHtml = $('<div class="variablesOptionsSelect"></div>') ;
+			this.ordersSelectHtml = $('<div class="variablesOrdersSelect">Trier <a class="desc">a</a><a class="asc">z</a><a class="none">x</a></div>') ;
+			this.optionsSelectHtml = $('<div class="variablesOptionsSelect"><a class="switch label">Switch name</a></div>') ;
 
 			$(this.line1).append(this.firstSelectHtml) ;
 			$(this.line1).append(this.otherSelectHtml) ;
@@ -418,6 +420,55 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			form.sparnatural.variablesSemector = this ;
 
 			form.sparnatural.variablesSemector.switchLabel = 'name' ; // or name
+
+			console.log(this.line1) ;
+
+			var sortable = new Sortable(this.otherSelectHtml[0], {
+				group: "name",  // or { name: "...", pull: [true, false, 'clone', array], put: [true, false, array] }
+				sort: true,  // sorting inside list
+				delay: 0, // time in milliseconds to define when the sorting should start
+				delayOnTouchOnly: false, // only delay if user is using touch
+				touchStartThreshold: 0, // px, how many pixels the point should move before cancelling a delayed drag event
+				disabled: false, // Disables the sortable if set to true.
+				store: null,  // @see Store
+				animation: 150,  // ms, animation speed moving items when sorting, `0` — without animation
+				easing: "cubic-bezier(1, 0, 0, 1)", // Easing for animation. Defaults to null. See https://easings.net/ for examples.
+				handle: "div>.variable-handle",  // Drag handle selector within list items
+				filter: ".ignore-elements",  // Selectors that do not lead to dragging (String or Function)
+				preventOnFilter: true, // Call `event.preventDefault()` when triggered `filter`
+				draggable: ".sortableItem",  // Specifies which items inside the element should be draggable
+			
+				dataIdAttr: 'data-variableName', // HTML attribute that is used by the `toArray()` method
+			
+				ghostClass: "sortable-ghost",  // Class name for the drop placeholder
+				chosenClass: "sortable-chosen",  // Class name for the chosen item
+				dragClass: "sortable-drag",  // Class name for the dragging item
+
+			
+				// Element is dropped into the list from another list
+				onAdd: function (/**Event*/evt) {
+					// same properties as onEnd
+				},
+			
+				// Changed sorting within list
+				onUpdate: function (/**Event*/evt) {
+					// same properties as onEnd
+				},
+			
+				// Called by any change to the list (add / update / remove)
+				onSort: function (/**Event*/evt) {
+					// same properties as onEnd
+				},
+			
+				// Called when dragging element changes position
+				onEnd: function(/**Event*/evt) {
+					evt.newIndex // most likely why this event is used is to get the dragging element's current index
+					// same properties as onEnd
+					var width = $('.sortableItem').first().width() ;
+					$('.variablesOrdersSelect').width(width) ;
+
+				}
+			});
 
 			console.log(form) ;
 		}
@@ -454,10 +505,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				this.labelDisplayed = image + this.varName ;
 			}
 
-			this.element = '<div class="variableSelected" data=variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'">'+this.labelDisplayed+'</div>' ;
+			this.element = '<div class="sortableItem"><div class="variableSelected" data=variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">||</span>'+this.labelDisplayed+'</div></div>' ;
 
 			if (this.globalVariablesSelctor.selectedList.length == 0 ) {
-				$(this.globalVariablesSelctor.firstSelectHtml).append($(this.element)) ;
+				$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
 
 			} else {
 				$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
