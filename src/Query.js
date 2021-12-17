@@ -6,17 +6,19 @@ var SparqlGenerator = require('sparqljs').Generator;
  **/
 export class Query {
 
-	constructor(distinct=true) {
-		this.distinct = distinct;
-		this.variables = ["?this"];
-		this.order = null;
+	constructor(options) {
+		console.log(options) ;
+		this.distinct = options.distinct;
+		this.variables = options.displayVariableList;
+		this.order = null ;
 		
-		/*
-		this.order = {
-			expression : "?this",
-			descending : false
-		} ;
-		*/
+		if (options.orderSort !== null) {
+			this.order = {
+				expression : "?this",
+				sort : options.orderSort
+			} ;
+		}
+		
 		
 		// array of QueryBranch
 		this.branches = [];
@@ -212,7 +214,7 @@ export class QuerySPARQLWriter {
 
 		// add order clause, if any
 		if(query.order) {
-			sparqlQuery.order = this._initOrder(query.order.expression, (query.order.descending)?true:null);
+			sparqlQuery.order = this._initOrder(query.order.expression, (query.order.sort)?query.order.sort:null);
 		}
 
 		console.log(sparqlQuery);
@@ -491,12 +493,16 @@ export class QuerySPARQLWriter {
 		} ;
 	}
 
-	_initOrder(variable, desc=false) {
+	_initOrder(variable, order) {
+		console.log(order) ;
 		var singleOrderClause = {
 			"expression" : variable
 		};
-		if(desc) {
+		if(order == 'desc') {
 			singleOrderClause.descending = true;
+		}
+		if(order == 'asc') {
+			singleOrderClause.ascending = true;
 		}
 
 		return [singleOrderClause];

@@ -356,6 +356,12 @@ UiuxConfig = require("./UiuxConfig.js");
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div><div class="variablesSelection"></div>');
 			$(form.sparnatural).append(contexte) ;
 
+			form.queryOptions = {
+				distinct : true,
+				displayVariableList: ['?this'],
+				orderSort: null
+			}
+
 			initVariablesSelector(form) ;
 			
 			initGeneralEvent(form) ;
@@ -398,6 +404,7 @@ UiuxConfig = require("./UiuxConfig.js");
 
 		function initVariablesSelector(form) {
 			form.sparnatural.variablesSelector = {} ;
+			this.form = form ;
 			this.html = $(form.sparnatural).find('.variablesSelection').first() ; 
 			this.selectedList = [] ;
 
@@ -492,7 +499,7 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			this.changeOrderSort = function() {
 				var selected = $(this.ordersSelectHtml).find('a.selected').first() ;
-				var sort = 'none'
+				var sort = null ;
 				if ($(selected).hasClass('desc')) {
 					sort = 'desc' ;
 				}
@@ -500,6 +507,8 @@ UiuxConfig = require("./UiuxConfig.js");
 					sort = 'asc' ;
 				}
 				console.log(sort) ;
+				this.form.queryOptions.orderSort = sort ;
+				$(this.form.sparnatural).trigger( {type:"submit" } ) ;
 			}
 		}
 
