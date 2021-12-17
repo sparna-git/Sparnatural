@@ -137,12 +137,12 @@ export class GroupContenaire extends HTMLComponent {
 		if (this.variableSelector === null) {
 			//Add varableSelector on variableSelector list ;
 			this.variableSelector = new VariableSelector(this) ;
-			$(this.selectViewVariable).html(this.settings.svgIcons.seletedVaraible) ;
+			$(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE) ;
 		} else {
 			if (this.variableSelector.canRemove()) {
 				this.variableSelector.remove() ;
 				this.variableSelector = null ;
-				$(this.selectViewVariable).html(this.settings.svgIcons.notSeletedVaraible) ;
+				$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
 			}
 		}
 	}
@@ -165,7 +165,7 @@ export class GroupContenaire extends HTMLComponent {
 
 		if ((this.varName == '?this') && (parentOrSibling === null)) {
 			console.log(this) ;
-			this.selectViewVariable = $('<span class="selectViewVariable">'+this.settings.svgIcons.seletedVaraible+'</span>') ;
+			this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_SELECTED_VARIABLE+'</span>') ;
 			$(this.html).append(this.selectViewVariable) ;
 			$(this.html).find('span.selectViewVariable').on(
 				'click',
@@ -342,7 +342,7 @@ export class EndClassGroup extends GroupContenaire {
 		$(this.html).append('<div class="EditComponents ShowOnEdit"></div>');
 
 		var unselect = $('<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>') ;
-		this.selectViewVariable = $('<span class="selectViewVariable">'+this.settings.svgIcons.notSeletedVaraible+'</span>') ;
+		this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_NOT_SELECTED_VARIABLE+'</span>') ;
 		$(this.html).append(unselect);
 		$(this.html).append(this.selectViewVariable);
 
@@ -381,12 +381,12 @@ export class EndClassGroup extends GroupContenaire {
 		if (this.variableSelector === null) {
 			//Add varableSelector on variableSelector list ;
 			this.variableSelector = new VariableSelector(this) ;
-			$(this.selectViewVariable).html(this.settings.svgIcons.seletedVaraible) ;
+			$(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE) ;
 		} else {
 			if (this.variableSelector.canRemove()) {
 				this.variableSelector.remove() ;
 				this.variableSelector = null ;
-				$(this.selectViewVariable).html(this.settings.svgIcons.notSeletedVaraible) ;
+				$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
 			}
 		}
 	}
