@@ -288,7 +288,7 @@ body {
 				display: block;
 				position: absolute;
 				top: 50%;
-				right: 2px; //+9 pour retrait dans fleche
+				right: 23px; //+9 pour retrait dans fleche
 				margin-top: -10px;
 				width: 20px;
 				height: 20px;
@@ -1160,8 +1160,12 @@ body {
 					color: #888;
 					border-color: transparent;
 				}
-				
-				
+				&>div>.EndClassGroup>.ClassTypeId:after,
+				&>div>.StartClassGroup>.ClassTypeId:after {
+					content: '';
+					display: inline-block;
+					width: 15px;
+				}
 				
 				&.completed {
 					&>div .Highlited {
