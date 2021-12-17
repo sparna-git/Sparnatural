@@ -409,7 +409,7 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			this.firstSelectHtml = $('<div class="variablesFirstSelect"></div>') ;
 			this.otherSelectHtml = $('<div class="variablesOtherSelect"></div>') ;
-			this.ordersSelectHtml = $('<div class="variablesOrdersSelect">Trier <a class="desc">a</a><a class="asc">z</a><a class="none">x</a></div>') ;
+			this.ordersSelectHtml = $('<div class="variablesOrdersSelect"><strong>'+langSearch.labelOrderSort+'</strong> <a class="desc">'+UiuxConfig.ICON_AZ+'</a><a class="asc">'+UiuxConfig.ICON_ZA+'</a><a class="none selected">'+UiuxConfig.ICON_NO_ORDER+'</a></div>') ;
 			this.optionsSelectHtml = $('<div class="variablesOptionsSelect"><a class="switch label">Switch name</a></div>') ;
 
 			$(this.line1).append(this.firstSelectHtml) ;
@@ -423,6 +423,23 @@ UiuxConfig = require("./UiuxConfig.js");
 			form.sparnatural.variablesSelector.switchLabel = 'name' ; // or name
 
 			console.log(this.line1) ;
+			$(this.ordersSelectHtml).find('a').on('change',
+			{arg1: this, arg2: 'changeOrderSort'},
+			SparnaturalComponents.eventProxiCriteria
+			);
+
+			$(this.ordersSelectHtml).find('a').on('click', function() {
+				if ($(this).hasClass('selected')) {
+					//No change, make nothing
+				} else {
+					$(this).parent('div').find('a').removeClass('selected') ;
+					$(this).addClass('selected') ;
+					$(this).trigger('change') ;
+				}
+				
+
+
+			});
 
 			var sortable = new Sortable(this.otherSelectHtml[0], {
 				group: "name",  // or { name: "...", pull: [true, false, 'clone', array], put: [true, false, array] }
@@ -472,6 +489,18 @@ UiuxConfig = require("./UiuxConfig.js");
 			});
 
 			console.log(form) ;
+
+			this.changeOrderSort = function() {
+				var selected = $(this.ordersSelectHtml).find('a.selected').first() ;
+				var sort = 'none'
+				if ($(selected).hasClass('desc')) {
+					sort = 'desc' ;
+				}
+				if ($(selected).hasClass('asc')) {
+					sort = 'asc' ;
+				}
+				console.log(sort) ;
+			}
 		}
 
 		

@@ -21,5 +21,6 @@
 	"ListWidgetNoItem": "... Oups, no value found !",
 	"ObjectPropertyTemporaryLabel": "related to",
 	"labelOptionOptional": "Optional",
-	"labelOptionNotExists": "Not exists"
+	"labelOptionNotExists": "Not exists",
+	"labelOrderSort": "Sort"
 }

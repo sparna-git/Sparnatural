@@ -808,6 +808,9 @@ body {
 				.sortableItem {
 					padding: 10px;
 					display: inline-block;
+					&:first-child {
+						min-width: 150px;
+					}
 				}
 				.variablesOtherSelect>div:first-child {
 					background: lightgray;
@@ -845,6 +848,25 @@ body {
 				.variablesOrdersSelect {
 					background: lightgray;
 					padding: 0 10px;
+					min-width: 150px;
+					strong {
+						font-size: 12px;
+					}
+					a {
+						cursor: pointer;
+						svg {
+							width: 20px;
+							height: 20px;
+						}
+					}
+					a.selected {
+						cursor: none;
+						svg {
+							path {
+								fill: $custom-red;
+							}
+						}
+					}
 				}
 				
 
