@@ -853,12 +853,13 @@ export class VariableSelector extends HTMLComponent {
 
 		this.varLabel = localName(this.GroupContenaire.value_selected) ;
 		this.varName = this.GroupContenaire.varName ;
+		this.varNameForDisplay = this.varName.replace('?', '') ;
 		this.labelDisplayed = '' ;
 
 		if (this.globalVariablesSelctor.switchLabel == 'label') {
 		this.labelDisplayed = this.image + this.varLabel ;
 		} else {
-		this.labelDisplayed = this.image + this.varName ;
+		this.labelDisplayed = this.image + this.varNameForDisplay ;
 		}
 
 		this.element = '<div class="sortableItem"><div class="variableSelected" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">||</span>'+this.labelDisplayed+'</div></div>' ;
