@@ -426,10 +426,9 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(this.line2).append(this.optionsSelectHtml) ;
 
 			form.sparnatural.variablesSelector = this ;
-
 			form.sparnatural.variablesSelector.switchLabel = 'name' ; // or name
 
-			console.log(this.line1) ;
+			// Listening when change sort order (AZ, ZA, None)
 			$(this.ordersSelectHtml).find('a').on('change',
 			{arg1: this, arg2: 'changeOrderSort'},
 			SparnaturalComponents.eventProxiCriteria
@@ -443,10 +442,8 @@ UiuxConfig = require("./UiuxConfig.js");
 					$(this).addClass('selected') ;
 					$(this).trigger('change') ;
 				}
-				
-
-
 			});
+
 
 			var sortable = new Sortable(this.otherSelectHtml[0], {
 				group: "name",  // or { name: "...", pull: [true, false, 'clone', array], put: [true, false, array] }
@@ -478,6 +475,7 @@ UiuxConfig = require("./UiuxConfig.js");
 				// Changed sorting within list
 				onUpdate: function (/**Event*/evt) {
 					// same properties as onEnd
+					$(this).trigger( {type:"onUpdate" } ) ;
 				},
 			
 				// Called by any change to the list (add / update / remove)
@@ -495,7 +493,10 @@ UiuxConfig = require("./UiuxConfig.js");
 				}
 			});
 
-			console.log(form) ;
+			$(sortable).on('onUpdate',
+			{arg1: this, arg2: 'updateVariableList'},
+			SparnaturalComponents.eventProxiCriteria
+			);
 
 			this.changeOrderSort = function() {
 				var selected = $(this.ordersSelectHtml).find('a.selected').first() ;
@@ -506,8 +507,18 @@ UiuxConfig = require("./UiuxConfig.js");
 				if ($(selected).hasClass('asc')) {
 					sort = 'asc' ;
 				}
-				console.log(sort) ;
 				this.form.queryOptions.orderSort = sort ;
+				$(this.form.sparnatural).trigger( {type:"submit" } ) ;
+			}
+
+			
+			this.updateVariableList = function() {
+				var listedItems = $(this.otherSelectHtml).find('.sortableItem>div') ;
+				this.form.queryOptions.displayVariableList = [] ;
+				for (var i = 0; i < listedItems.length; i++) {
+					var variableName = $(listedItems[i]).attr('data-variablename'); 
+					this.form.queryOptions.displayVariableList.push(variableName) ;
+				}
 				$(this.form.sparnatural).trigger( {type:"submit" } ) ;
 			}
 		}

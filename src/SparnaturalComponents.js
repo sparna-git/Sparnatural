@@ -145,6 +145,7 @@ export class GroupContenaire extends HTMLComponent {
 				$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
 			}
 		}
+		this.parentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
 	}
 
 	onChange() {
@@ -389,6 +390,7 @@ export class EndClassGroup extends GroupContenaire {
 				$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
 			}
 		}
+		this.parentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
 	}
 	
 	onChange() {

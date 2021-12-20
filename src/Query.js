@@ -7,19 +7,15 @@ var SparqlGenerator = require('sparqljs').Generator;
 export class Query {
 
 	constructor(options) {
-		console.log(options) ;
 		this.distinct = options.distinct;
 		this.variables = options.displayVariableList;
 		this.order = null ;
-		
 		if (options.orderSort !== null) {
 			this.order = {
 				expression : "?this",
 				sort : options.orderSort
 			} ;
 		}
-		
-		
 		// array of QueryBranch
 		this.branches = [];
 	}
@@ -216,8 +212,6 @@ export class QuerySPARQLWriter {
 		if(query.order) {
 			sparqlQuery.order = this._initOrder(query.order.expression, (query.order.sort)?query.order.sort:null);
 		}
-
-		console.log(sparqlQuery);
 
 		var stringWriter = new QueryExplainStringWriter(this.specProvider);
 		console.log(stringWriter.toExplainString(query));
@@ -494,7 +488,6 @@ export class QuerySPARQLWriter {
 	}
 
 	_initOrder(variable, order) {
-		console.log(order) ;
 		var singleOrderClause = {
 			"expression" : variable
 		};
