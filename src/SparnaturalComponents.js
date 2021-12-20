@@ -836,6 +836,8 @@ export class VariableSelector extends HTMLComponent {
 		this.icon = this.GroupContenaire.specProvider.getIcon(GroupContenaire.value_selected) ;
 		this.highlightedIcon = this.GroupContenaire.specProvider.getHighlightedIcon(GroupContenaire.value_selected) ;
 
+		this.displayVariableList = this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList ;
+
 		this.init();
 	}
 
@@ -871,8 +873,8 @@ export class VariableSelector extends HTMLComponent {
 
 		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
 
-		this.globalVariablesSelctor.selectedList.push(this) ;
-		if (this.globalVariablesSelctor.selectedList.length == 1) {
+		//this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.push(this.varName) ;
+		if (this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.length == 1) {
 			var width = $('.sortableItem').first().width() ;
 			$('.variablesOrdersSelect').width(width) ;
 		}
@@ -884,13 +886,13 @@ export class VariableSelector extends HTMLComponent {
 		if (this.GroupContenaire instanceof EndClassGroup) {
 
 		}
-
+		//$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 	}
 
 	remove () {
 		var checkVarName = this.varName
-		this.globalVariablesSelctor.selectedList = this.globalVariablesSelctor.selectedList.filter(function(value, index, arr){
-			return value.varName !== checkVarName;
+		this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList = this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.filter(function(value, index, arr){
+			return value !== checkVarName;
 		});
 		$('[data-variableName="'+this.varName+'"]').parents('div.sortableItem').remove() ;
 		//Any one can be the first in line, compute the width for first place
@@ -898,14 +900,16 @@ export class VariableSelector extends HTMLComponent {
 		$('.variablesOrdersSelect').width(width) ;
 
 		//Si plus de valeur selectionnée on rajoute this
-		if (this.globalVariablesSelctor.selectedList.length == 0) {
+		if (this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.length == 0) {
 			$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).find('.selectViewVariable').first().trigger('click') ;
 		}
+
+		$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 		
 	}
 
 	canRemove() {
-		if (this.globalVariablesSelctor.selectedList.length > 1) {
+		if (this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.length > 1) {
 			return true ;
 		}
 		return false ;
