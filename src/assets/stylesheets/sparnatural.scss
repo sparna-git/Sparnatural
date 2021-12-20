@@ -285,7 +285,7 @@ body {
 		.EndClassGroup {
 			position: relative;
 			.selectViewVariable {
-				display: block;
+				display: none;
 				position: absolute;
 				top: 50%;
 				right: 23px; //+9 pour retrait dans fleche
@@ -1227,6 +1227,7 @@ body {
 					&>div .StartClassGroup,
 					&>div .EndClassGroup {
 						&>.selectViewVariable {
+							display: block;
 							right: 23px; //+10 pour retrait dans fleche
 							svg {
 								stroke: #fff;
