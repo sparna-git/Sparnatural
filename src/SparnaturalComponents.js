@@ -165,7 +165,6 @@ export class GroupContenaire extends HTMLComponent {
 		}
 
 		if ((this.varName == '?this') && (parentOrSibling === null)) {
-			console.log(this) ;
 			this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_SELECTED_VARIABLE+'</span>') ;
 			$(this.html).append(this.selectViewVariable) ;
 			$(this.html).find('span.selectViewVariable').on(
@@ -443,10 +442,18 @@ export class EndClassGroup extends GroupContenaire {
 		this.init() ;
 		$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, SparnaturalComponents.eventProxiCriteria);
 		$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
+
 		$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
 		this.parentCriteriaGroup.ActionsGroup.reinsert = true ;
 		$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
+		var select = $(this.html).find('select.input-val') ;
+		select[0].sparnaturalSettings = this.settings ;
 		$(this.html).find('.nice-select').trigger('click') ;
+
+		//Removote to Variable list
+		this.variableSelector.remove() ;
+		this.variableSelector = null ;
+		$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
 
 		// clean the variable name so that it is regenerated when a new value is selected in the onChange
 		this.varName = null;
@@ -482,7 +489,6 @@ export class OptionsGroup extends GroupContenaire {
 	}
 
 	onObjectPropertyGroupSelected() {
-		console.log("onObjectPropertyGroupSelected called");
 		if($(this.html).find('div.ShowOnEdit').length == 0){
 			$(this.html).find('div.EditComponents').addClass('ShowOnEdit');
 			var parentOptionEnable = false ;
@@ -826,7 +832,6 @@ export class VariableSelector extends HTMLComponent {
 		);
 		this.GroupContenaire = GroupContenaire;
 		this.specProvider = GroupContenaire.specProvider;
-		console.log(this.GroupContenaire) ;
 		this.globalVariablesSelctor = this.GroupContenaire.parentComponent.thisForm_.sparnatural.variablesSelector ;
 		this.icon = this.GroupContenaire.specProvider.getIcon(GroupContenaire.value_selected) ;
 		this.highlightedIcon = this.GroupContenaire.specProvider.getHighlightedIcon(GroupContenaire.value_selected) ;
@@ -891,6 +896,11 @@ export class VariableSelector extends HTMLComponent {
 		//Any one can be the first in line, compute the width for first place
 		var width = $('.sortableItem').first().width() ;
 		$('.variablesOrdersSelect').width(width) ;
+
+		//Si plus de valeur selectionnée on rajoute this
+		if (this.globalVariablesSelctor.selectedList.length == 0) {
+			$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).find('.selectViewVariable').first().trigger('click') ;
+		}
 		
 	}
 

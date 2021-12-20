@@ -498,6 +498,10 @@ UiuxConfig = require("./UiuxConfig.js");
 			SparnaturalComponents.eventProxiCriteria
 			);
 
+			this.removeVariableName = function(name) {
+
+			}
+
 			this.changeOrderSort = function() {
 				var selected = $(this.ordersSelectHtml).find('a.selected').first() ;
 				var sort = null ;
@@ -782,6 +786,13 @@ UiuxConfig = require("./UiuxConfig.js");
 		this.onRemoveCriteria = function() {
 			var index_to_remove = this.id ;
 
+			//RemoveSelectedVariable names 
+			if (this.EndClassGroup.variableSelector != null) {
+				this.EndClassGroup.variableSelector.remove() ;
+				this.EndClassGroup.variableSelector = null;
+			}
+			
+
 			//Remove option selected if enbled
 			if ($(this.html).parents('li').first().hasClass('optionEnabled')) {
 				$(this.html).parents('li').first().parents('li.groupe').each(function() {
@@ -834,6 +845,9 @@ UiuxConfig = require("./UiuxConfig.js");
 				if(this.thisForm_.preLoad !== false) {
 					jsonQueryBranch = this.thisForm_.preLoad.branches[0];
 				}
+
+				$('.variablesOtherSelect .sortableItem').remove() ;
+
 				var new_component = addComponent(formObject, formContextHtml, jsonQueryBranch) ;			
 				$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;				
 			} else {

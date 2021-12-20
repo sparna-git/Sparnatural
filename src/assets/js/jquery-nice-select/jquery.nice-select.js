@@ -124,7 +124,10 @@
   	  } else {
   		  $('.nice-select').not($dropdown).removeClass('open');
   		  $dropdown.toggleClass('open');
-        tippy('.nice-select .option[data-tippy-content]', settings.tooltipConfig);
+        if (typeof settings.tooltipConfig !== 'undefined') {
+          tippy('.nice-select .option[data-tippy-content]', settings.tooltipConfig);
+        }
+        
   	  }
       
       //
