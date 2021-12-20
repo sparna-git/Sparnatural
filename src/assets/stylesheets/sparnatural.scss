@@ -824,6 +824,7 @@ body {
 					font-size: 12px;
 					color: gray;
 					border-radius: 5px;
+					background: #fff;
 
 					.variable-handle {
 						display: inline-block;
@@ -860,7 +861,7 @@ body {
 						}
 					}
 					a.selected {
-						cursor: none;
+						cursor: default;
 						svg {
 							path {
 								fill: $custom-red;
