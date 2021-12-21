@@ -1346,14 +1346,19 @@ UiuxConfig = require("./UiuxConfig.js");
 			}
 			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
 			
-
 			// init HTML by concatenating bit of HTML + widget HTML
-			this.createWidgetComponent(
-				this.widgetType,
-				objectPropertyId,
-				rangeClassId
-			) ;
-			this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+
+			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
+				this.widgetHtml = "" ;
+			} else {
+				this.createWidgetComponent(
+					this.widgetType,
+					objectPropertyId,
+					rangeClassId
+				) ;
+				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+			}
+			
 
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
@@ -1369,7 +1374,9 @@ UiuxConfig = require("./UiuxConfig.js");
 				this.init(false);
 				return true;
 			}
-
+			//this.html = "" ;
+			this.tools.remove() ;
+			this.widgetHtml = null;
 			this.init(true);
 		}
 
@@ -1656,6 +1663,10 @@ UiuxConfig = require("./UiuxConfig.js");
 		this.attachHtml = function() {
 			this.updateCssClasses() ;
 			this.attachComponentHtml() ;
+		}
+
+		this.remove = function() {
+			$(this.component.html).remove() ;
 		}
 		
 	}
