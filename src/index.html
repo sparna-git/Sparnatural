@@ -431,6 +431,18 @@
         {"@value" : "name","@language" : "en"},
         {"@value" : "nom","@language" : "fr"}
       ],
+      "domain": "http://dbpedia.org/ontology/Museum",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#artwork-label",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:SearchProperty",
+      "label": [
+        {"@value" : "name","@language" : "en"},
+        {"@value" : "nom","@language" : "fr"}
+      ],
+      "sparqlString": "rdfs:label",
       "domain": "http://dbpedia.org/ontology/Artwork",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
     },
