@@ -90,6 +90,12 @@ export class AbstractValue {
 				label: v.label,
 				search: v.regex
 			}
+	    } else if(v.luceneQueryValue) {
+	    	return {
+				key: v.luceneQueryValue,
+				label: v.label,
+				search: v.luceneQueryValue
+			}
 	    } else if(v.string) {
 	    	return {
 				key: v.string,
@@ -133,6 +139,13 @@ export class RegexValue extends AbstractValue {
 	constructor(regex, label=null) {
 		super(label);
 		this.regex = regex;
+	}
+}
+
+export class LuceneQueryValue extends AbstractValue {
+	constructor(luceneQueryValue, label=null) {
+		super(label);
+		this.luceneQueryValue = luceneQueryValue;
 	}
 }
 
@@ -320,7 +333,25 @@ export class QuerySPARQLWriter {
 			) ;
 		}
 
-		// if we have a string criteria
+		// if we have a lucene query criteria
+		if(queryLine.values.length == 1 && queryLine.values[0].luceneQueryValue) {
+
+			/*
+			case Config.GRAPHDB_SEARCH_PROPERTY:
+			  var searchKey = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0] ;
+			  jsonQuery = this.updateGraphDbPrefixes(jsonQuery);
+			  var connectorName = this.localName(rangeClass);
+			  var fieldName = this.localName(property);
+			  var searchVariable = subjectVariable+"Search";
+			  newBasicGraphPattern.triples.push(this.buildTriple(searchVariable, this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#"+connectorName)) ;
+			  // add literal triple
+			  newBasicGraphPattern.triples.push(this.buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#query", fieldName+":"+searchKey, true)) ;
+			  newBasicGraphPattern.triples.push(this.buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#entities", subjectVariable)) ;
+			*/
+
+		}
+
+		// if we have an exact string criteria
 		if(queryLine.values.length == 1 && queryLine.values[0].string) {
 			parentInSparqlQuery.push(
 				this._initFilterStringEquals(queryLine.values[0].string, queryLine.o)
