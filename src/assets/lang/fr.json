@@ -22,5 +22,7 @@
 	"ObjectPropertyTemporaryLabel": "relié(e) à",
 	"labelOptionOptional": "Optionnel",
 	"labelOptionNotExists": "Négatif",
-	"labelOrderSort": "Trier"
+	"labelOrderSort": "Trier",
+	"SelectAllValues": "Tous·tes",
+	"Or": "ou"
 }
