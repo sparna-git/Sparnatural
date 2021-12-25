@@ -446,14 +446,16 @@ export class EndClassGroup extends GroupContenaire {
 		$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
 		this.parentCriteriaGroup.ActionsGroup.reinsert = true ;
 		$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
-		var select = $(this.html).find('select.input-val') ;
+		var select = $(this.html).find('.ClassTypeId select.input-val') ;
 		select[0].sparnaturalSettings = this.settings ;
-		$(this.html).find('.nice-select').trigger('click') ;
+		$(this.html).find('.ClassTypeId .nice-select').trigger('click') ;
 
 		//Removote to Variable list
-		this.variableSelector.remove() ;
-		this.variableSelector = null ;
-		$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
+		if (this.variableSelector !== null) {
+			this.variableSelector.remove() ;
+			this.variableSelector = null ;
+			$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
+		}
 
 		// clean the variable name so that it is regenerated when a new value is selected in the onChange
 		this.varName = null;
