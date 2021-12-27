@@ -530,12 +530,16 @@ export class OptionsGroup extends GroupContenaire {
 		} else {
 			$(this.parentCriteriaGroup.html).parents('li').first().removeClass('optionEnabled') ;
 			$(this.parentCriteriaGroup.html).parents('li').first().parents('li.groupe').each(function() {
-				$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
-				$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
+				if ($(this).find('>div>.OptionsGroup label').length > 0) {
+					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
+					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
+				}
 			});
 			$(this.parentCriteriaGroup.html).parents('li').first().find('li.groupe').each(function() {
-				$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
-				$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
+				if ($(this).find('>div>.OptionsGroup label').length > 0) {
+					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
+					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
+				}
 			});
 		}
 
@@ -742,7 +746,7 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 		}
 
 		var id = this.parentComponent.parentCriteriaGroup.id ;
-		var selectBuilder = new OptionSelectBuilder(this.specProvider);
+		var selectBuilder = new OptionSelectBuilder(this.specProvider, this);
 
 		this.id = 'option-'+id ;
 		var selectHtml = selectBuilder.buildOptionSelect(
@@ -827,18 +831,19 @@ class ClassSelectBuilder {
  **/
  class OptionSelectBuilder {
 	
- 	constructor(specProvider) {
+ 	constructor(specProvider, OptionTypeId) {
  		this.specProvider = specProvider;
+		this.OptionTypeId = OptionTypeId ;
  	}		
 
 	buildOptionSelect(objectId, inputID, default_value) {			
 		var items = [] ;
 		if(this.specProvider.isEnablingOptional(objectId)) {
-			items['optional'] = langSearch.labelOptionOptional ;
+			items['optional'] = this.OptionTypeId.parentComponent.parentCriteriaGroup.thisForm_.langSearch.labelOptionOptional ;
 		}
 		
 		if(this.specProvider.isEnablingNegation(objectId)) {
-			items['notExists'] = langSearch.labelOptionNotExists ;
+			items['notExists'] = this.OptionTypeId.parentComponent.parentCriteriaGroup.thisForm_.langSearch.labelOptionNotExists ;
 		}
 
 		var list = [] ;
@@ -939,4 +944,17 @@ export function localName(uri) {
 		var components = uri.split("/") ;
 		return components[components.length - 1] ;
 	}
+}
+export function redrawBottomLink(parentElementLi) {
+	var n_width = 0;
+	var ul = $(parentElementLi).children('ul').first() ;
+	if (ul.length == 1) {
+		n_width = n_width + getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
+		var t_width = getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
+		$(ul).find('>.lien-top').css('width', n_width) ;
+		$(parentElementLi).find('>.link-where-bottom').css('left', t_width) ;
+	}
+}
+export function getOffset( elem, elemParent ) {
+	return elem.offset().left - $(elemParent).offset().left ;
 }

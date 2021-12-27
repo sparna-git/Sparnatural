@@ -240,7 +240,9 @@
         {"@value" : "Un musée peut se trouver dans un pays","@language" : "fr"}
       ],
       "domain": "http://dbpedia.org/ontology/Museum",
-      "range": "http://dbpedia.org/ontology/Country"
+      "range": "http://dbpedia.org/ontology/Country",
+      "enableOptional": true,
+      "enableNegation": true
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#countryOf",
@@ -275,7 +277,8 @@
       ],
       "domain": "http://dbpedia.org/ontology/Museum",
       "range": "http://dbpedia.org/ontology/Artwork",
-      "sparqlString": "^<http://dbpedia.org/ontology/museum>"
+      "sparqlString": "^<http://dbpedia.org/ontology/museum>",
+      "enableNegation": true
     },
     {
       "@id" : "http://dbpedia.org/ontology/author",

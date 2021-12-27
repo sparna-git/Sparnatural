@@ -261,6 +261,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		// defaults to English
 		if(langSearch == null) {langSearch = i18nLabels["en"];}
 
+		thisForm.langSearch = langSearch ;
+
 		var specProviderFactory = new SpecificationProviderFactory();
 
 		specProviderFactory.build(settings.config, settings.language, function(sp) {
@@ -1518,18 +1520,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 	 **/
     this.expandSparql = function(sparql) {
 		return specProvider.expandSparql(sparql);
-	}
-
-
-	function redrawBottomLink(parentElementLi) {
-		var n_width = 0;
-		var ul = $(parentElementLi).children('ul').first() ;
-		if (ul.length == 1) {
-			n_width = n_width + getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
-			var t_width = getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
-			$(ul).find('>.lien-top').css('width', n_width) ;
-			$(parentElementLi).find('>.link-where-bottom').css('left', t_width) ;
-		}
 	}
 
 	return this ;
