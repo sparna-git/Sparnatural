@@ -147,18 +147,17 @@ body {
 				position: relative;
 				width: 20px;
 				background: $custom-silver-light;
-				cursor: pointer;
 				@include arrow-block($custom-silver-light);
 
 				&.Enabled {
 					display: inline-block;
 					background: $custom-green;
+					cursor: pointer;
 					@include arrow-block($custom-green);
 				}
 				&.Disabled {
 					display: inline-block;
 					background: $custom-silver;
-					cursor: default;
 					@include arrow-block($custom-silver);
 				}
 			}
