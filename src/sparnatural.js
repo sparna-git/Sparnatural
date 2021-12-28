@@ -946,6 +946,15 @@ UiuxConfig = require("./UiuxConfig.js");
 				},
 				SparnaturalComponents.eventProxiCriteria
 			);
+			// binds a selection in an input widget with the display of the value in the line
+			$(this.inputTypeComponent).on(
+				'selectAll',
+				{
+					arg1: this,
+					arg2: 'onSelectAll'
+				},
+				SparnaturalComponents.eventProxiCriteria
+			);
 			
 			if(this.parentCriteriaGroup.jsonQueryBranch != null) {
 				var branch = this.parentCriteriaGroup.jsonQueryBranch;
@@ -958,6 +967,9 @@ UiuxConfig = require("./UiuxConfig.js");
 		
 		// input : the 'key' of the value to be deleted
 		this.onRemoveValue = function removeValue(e) {
+
+			//On all case, selectAllValue will be set to false
+			this.selectAllValue = false;
 			
 			var keyToBeDeleted = $(e.currentTarget).attr('value-data') ;
 			for (var item in this.selectedValues) {
@@ -996,6 +1008,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupUnselected" } ) ;
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 
+			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
+
 		} ;
 
 		this.loadValue = function loadValue(value) {
@@ -1003,6 +1017,31 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(this.inputTypeComponent).trigger('change') ;
 			//Value added don't reuse preloaded data.
 			this.inputTypeComponent.loadedValue = null ;
+		}
+
+
+		this.onSelectAll = function onSelectAll() {
+			var theValueLabel = '<span>'+langSearch.SelectAllValues+'</span>';
+			this.selectAllValue = true;
+			this.unselect = $('<span class="unselect" value-data="allValues"><i class="far fa-times-circle"></i></span>') ;
+			if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
+				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+theValueLabel+'</p></div>').find('div').append(this.unselect) ;
+			}
+
+			this.unselect.on(
+				'click',
+				{	arg1: this,	arg2: 'onRemoveValue'	},
+				SparnaturalComponents.eventProxiCriteria
+			);
+
+			// disable the Where
+			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
+			
+			this.parentCriteriaGroup.initCompleted() ;
+			
+			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
 		}
 
 		// sélection et affichage d'une valeur sélectionnée par un widget de saisie
@@ -1344,16 +1383,27 @@ UiuxConfig = require("./UiuxConfig.js");
 			} else {
 				var endLabel = langSearch.Find+' '+ classLabel ;
 			}
-			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
-			
 
+			//Ajout de l'option all
+			var selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span> ('+ classLabel + ') </span><span class="or">'+langSearch.Or+'</span> ' ;
+
+			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll + '<span class="underline">'+ endLabel+'</span>' ;
+			
 			// init HTML by concatenating bit of HTML + widget HTML
-			this.createWidgetComponent(
-				this.widgetType,
-				objectPropertyId,
-				rangeClassId
-			) ;
-			this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+
+			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
+				this.widgetHtml = "" ;
+			} else {
+				this.createWidgetComponent(
+					this.widgetType,
+					objectPropertyId,
+					rangeClassId
+				) ;
+				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+			}
+			var this_component = this;
+			
+			
 
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
@@ -1362,6 +1412,10 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			this.widgetComponent.init() ;
 			this.cssClasses.Created = true ;
+			$(this.html).find('.selectAll').first().on("click", function() {
+				$(this_component).trigger('selectAll') ;
+			});
+
 		}
 
 		this.reload = function reload() {
@@ -1369,7 +1423,9 @@ UiuxConfig = require("./UiuxConfig.js");
 				this.init(false);
 				return true;
 			}
-
+			//this.html = "" ;
+			this.tools.remove() ;
+			this.widgetHtml = null;
 			this.init(true);
 		}
 
@@ -1656,6 +1712,10 @@ UiuxConfig = require("./UiuxConfig.js");
 		this.attachHtml = function() {
 			this.updateCssClasses() ;
 			this.attachComponentHtml() ;
+		}
+
+		this.remove = function() {
+			$(this.component.html).remove() ;
 		}
 		
 	}

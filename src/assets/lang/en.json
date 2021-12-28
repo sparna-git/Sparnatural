@@ -22,5 +22,6 @@
 	"ObjectPropertyTemporaryLabel": "related to",
 	"labelOptionOptional": "Optional",
 	"labelOptionNotExists": "Not exists",
-	"labelOrderSort": "Sort"
+	"labelOrderSort": "Sort",
+	"SelectAllValues": "All"
 }
