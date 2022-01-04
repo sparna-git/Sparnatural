@@ -172,10 +172,10 @@ $custom-silver-light: rgb(230, 230, 230) ;
 
 	/*Completed criteria*/
 .componentsListe li.completed>.CriteriaGroup {
-	&>.StartClassGroup>.ClassTypeId {
+	&>.StartClassGroup>.Highlited {
 		@include arrow-front-colors($custom-red, #fff);
 	}
-	&>.StartClassGroup.VariableSelected>.ClassTypeId {
+	&>.StartClassGroup.VariableSelected>.Highlited {
 		@include arrow-front-colors($custom-red, $custom-green-bold);
 	}
 
@@ -184,11 +184,11 @@ $custom-silver-light: rgb(230, 230, 230) ;
 		@include arrow-back-colors(transparent, #fff);
 		@include arrow-front-colors(transparent, #fff);
 	}
-	&>.EndClassGroup>.ClassTypeId {
+	&>.EndClassGroup>.Highlited {
 		@include arrow-back-colors($custom-red, #fff);
 		@include arrow-front-colors($custom-red, #fff);
 	}
-	&>.EndClassGroup.VariableSelected>.ClassTypeId {
+	&>.EndClassGroup.VariableSelected>.Highlited {
 		@include arrow-back-colors($custom-red, $custom-green-bold);
 		@include arrow-front-colors($custom-red, $custom-green-bold);
 	}
