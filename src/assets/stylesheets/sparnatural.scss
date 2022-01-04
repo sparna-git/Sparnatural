@@ -22,6 +22,7 @@ $custom-green-light: rgb(151,227,196) ;
 
 $custom-silver: rgb(167,167,167) ;
 $custom-silver-light: rgb(230, 230, 230) ;
+$default-text-color: #666 ;
 
 @mixin triangle-before() {
 	padding-left: 20px;
@@ -334,7 +335,7 @@ body {
 				text-align: left !important;
 				display: inline-block;
 				border-top: 1px solid transparent;
-				color: #888;
+				color: $default-text-color;
 			}
 		}
 
@@ -948,7 +949,7 @@ body {
 					padding: 3px 7px;
 					border: 1px solid gray ;
 					font-size: 12px;
-					color: gray;
+					color: $default-text-color;
 					border-radius: 5px;
 					background: #fff;
 
@@ -1000,12 +1001,12 @@ body {
 				.variablesOptionsSelect {
 					text-align: right;
 				}
-				color: gray;
+				color: $default-text-color;
 
 				a {
 					display: inline-block;
 					padding: 5px;
-					color: gray;
+					color: $default-text-color;
 				}
 			}
 		}
@@ -1252,6 +1253,7 @@ body {
 								overflow: hidden;
 								text-overflow: ellipsis;
 								white-space: nowrap;
+								color: $default-text-color;
 							
 							}
 						}
@@ -1312,7 +1314,7 @@ body {
 					}
 				}
 				.nice-select.disabled {
-					color: #888;
+					color: $default-text-color;
 					border-color: transparent;
 					border-radius: 0;
 				}
