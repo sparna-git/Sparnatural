@@ -435,6 +435,15 @@ export class RDFSpecificationProvider {
 		return datasource;
 	}
 
+	isEnablingOptional(propertyId) {
+		return (this._readAsSingleLiteral(propertyId, Config.ENABLE_OPTIONAL) == "true");		
+	}
+
+	isEnablingNegation(propertyId) {
+		return (this._readAsSingleLiteral(propertyId, Config.ENABLE_NEGATION) == "true");	
+	}
+
+
 	_sort(items) {
 		var me = this;
 		const compareFunction = function(item1, item2) {

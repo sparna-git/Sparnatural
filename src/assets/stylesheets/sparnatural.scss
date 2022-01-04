@@ -13,6 +13,12 @@ $margin-children-li: 75px;
 $custom-red: rgb(250,136,3) ;
 $custom-red-bold: rgb(182, 97, 0) ;
 $custom-red-light: rgb(255, 231, 203) ;
+$custom-green: rgb(107,215,171) ;
+$custom-green-bold: rgb(2,184,117) ;
+$custom-green-light: rgb(151,227,196) ;
+
+$custom-silver: rgb(167,167,167) ;
+$custom-silver-light: rgb(230, 230, 230) ;
 
 @mixin triangle-before() {
 	padding-left: 20px;
@@ -71,6 +77,32 @@ $custom-red-light: rgb(255, 231, 203) ;
 	}
 	
 }
+@mixin arrow-block($color) {
+	&:before {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		left: 0;
+		border-top: 21px solid transparent;
+		border-left: 15px solid white;
+		border-bottom: 21px solid transparent;
+		/*margin: -10px 0px 0 0px; */
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		right:-15px;
+		border-top: 21px solid transparent;
+		border-left: 15px solid $color;
+		border-bottom: 21px solid transparent;
+		/*border-color: transparent transparent transparent $custom-green-light;
+		margin: -10px 90px 0 10px; */
+	  z-index: 1;
+	}
+}
 
 body {
 	section {
@@ -102,6 +134,79 @@ body {
 			min-width: 80px;
 			/*background: #fff;*/
 			padding: 2px 5px;
+		}
+		.OptionsGroup {
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			min-width: auto;
+			padding-right: 15px;
+			margin-left: -30px;
+
+			.EditComponents {
+				position: relative;
+				width: 20px;
+				background: $custom-silver-light;
+				@include arrow-block($custom-silver-light);
+
+				&.Enabled {
+					display: inline-block;
+					background: $custom-green;
+					cursor: pointer;
+					@include arrow-block($custom-green);
+				}
+				&.Disabled {
+					display: inline-block;
+					background: $custom-silver;
+					@include arrow-block($custom-silver);
+				}
+			}
+			.OptionTypeId {
+				display: none ;
+				position: relative;
+				padding-right: 15px;
+				label {
+					position: relative;
+					text-indent: 20px;
+					display: inline-block;
+					zoom: 1;
+					background: $custom-green-light;
+					margin-bottom: 0;
+					line-height: 42px;
+					color: #fff;
+					margin-left: 3px;
+					padding-right: 5px;
+					font-size: 14px;
+					
+				cursor: pointer;
+
+					input {
+						display: none;
+					}
+
+					@include arrow-block($custom-green-light);
+
+					&:hover,
+					&.Enabled {
+						background: $custom-green-bold;
+
+						&:after {
+							border-left: 15px solid $custom-green-bold;
+						}
+					}
+/**
+					&:before {
+						border-color: transparent transparent transparent #fff;
+					}
+
+					&:after {
+						border-color: #fff #fff #fff $custom-green;
+					}*/
+				}
+			}
+			&.Opended .OptionTypeId {
+				display:inline-block ;
+			}
 		}
 		.ObjectPropertyGroup {
 			
@@ -143,7 +248,7 @@ body {
 			font-size: 18px;
 			box-sizing:border-box;
 			border-radius: 11px;
-			z-index: 1;
+			z-index: 2;
 			/*border: 2px solid #333;
 			
 			line-height: 13px;
@@ -161,9 +266,10 @@ body {
 			display: inline-block;
 			height: $height-components-under - 2;
 			line-height: $height-components-under - 2;
+			vertical-align: bottom;
 			span  {
 				display: inline-block;
-
+				vertical-align: bottom;
 			}
 			.selectIcon {
 				float: left;
@@ -411,6 +517,10 @@ body {
 							display: inline-block;
 							height: $height-components-hover;
 							line-height: $height-components-hover;
+							vertical-align: bottom;
+							&>span {
+								vertical-align: bottom;
+							}
 						}
 						.list {
 							li.option {
@@ -454,15 +564,15 @@ body {
 			
 		}
 		.EndClassWidgetGroup {
-			min-width: 35%;
+			width: auto;
 			padding: 2px 15px 2px 0;
 			margin-left: -14px;
 			display: flex;
 			
 			-ms-flex-align: center;
-	-webkit-align-items: center;
-	-webkit-box-align: center;
-	align-items: center;
+			-webkit-align-items: center;
+			-webkit-box-align: center;
+			align-items: center;
 	
 			.easy-autocomplete {
 				width: 100%!important;
@@ -578,6 +688,14 @@ body {
 			border-left: 3px solid $custom-red;
 			display: block;
 		}
+		&.optional-enabled.completed ul.childsList>li.haveWhereChild>.link-where-bottom,
+		&.optional-enabled.completed>.link-where-bottom {
+			border-left: 3px dashed $custom-red;
+		}
+		&.notExists-enabled.completed ul.childsList>li.haveWhereChild>.link-where-bottom,
+		&.notExists-enabled.completed>.link-where-bottom {
+			border-left: 3px dotted #000;
+		}
 		
 		&>.CriteriaGroup {
 			
@@ -616,6 +734,30 @@ body {
 				}
 			}
 		}
+		&.optional-enabled {
+			ul.childsList {
+				&>.lien-top {
+					border-left: 3px dashed $custom-red;
+					border-top: 3px dashed $custom-red;
+					&>span {
+						border: 2px dashed $custom-red ;
+						border-radius: 15px;
+					}
+				}
+			}
+		}
+		&.notExists-enabled {
+			ul.childsList {
+				&>.lien-top {
+					border-left: 3px dotted #000;
+					border-top: 3px dotted #000;
+					&>span {
+						border: 2px dotted #000;
+						border-radius: 15px;
+					}
+				}
+			}
+		}
 	}
 	.Sparnatural {
 		.bg-wrapper {
@@ -648,6 +790,53 @@ body {
 					display: none;
 				}
 			}
+			li.groupe.optional-enabled {
+				.CriteriaGroup {
+					border: 3px dashed $custom-red ;
+				}
+				ul.childsList {
+					.ActionAnd {
+						&>.trait-and-bottom {
+							border-left: 3px dashed $custom-red ;
+						}
+						&>a {
+							border: 2px dashed $custom-red ;
+						}
+					}
+					&>li.hasAnd {
+						&>span {
+							border-left: 3px dashed $custom-red ;
+						}
+						&>span>span  {
+							border: 2px dashed $custom-red ;
+						}
+					}
+				} 
+			}
+			li.groupe.notExists-enabled {
+				.CriteriaGroup {
+					border: 3px dotted #000 ;
+				}
+				ul.childsList {
+					.ActionAnd {
+						&>.trait-and-bottom {
+							border-left: 3px dotted #000 ;
+						}
+						&>a {
+							border: 2px dotted #000 ;
+						}
+					}
+					&>li.hasAnd {
+						&>span {
+							border-left: 3px dotted #000 ;
+						}
+						&>span>span  {
+							border: 2px dotted #000 ;
+						}
+					}
+				} 
+			}
+
 			li.groupe {
 				margin: 0;
 				padding-top: 1px;
@@ -726,6 +915,11 @@ body {
 				&>div>div>.ShowOnEdit {
 					display: none;
 				}
+
+				&>div>div>.ShowOnEdit.Disabled,
+				&>div>div>.ShowOnEdit.Enabled {
+					display: inline-block;
+				}
 				&.OnEdit>div>div.ActionsGroup>.ShowOnEdit,
 				&.OnEdit>div>div.HasInputsCompleted>.ShowOnEdit {
 					display: block;
@@ -743,6 +937,13 @@ body {
 					.edit-trait-top {
 						display: block;
 					}
+				}
+				&.addWereEnable>.link-where-bottom,
+				&.addWereDisable>.link-where-bottom {
+					display: none;
+				}
+				&.addWereEnable.haveWhereChild>.link-where-bottom {
+					display: block;
 				}
 				.easy-autocomplete {
 					input {
@@ -888,20 +1089,18 @@ body {
 								border-color: transparent;
 							}
 					}
-					&>div .Highlited:after{
-						content: '';
-						width: 0;
-						height: 0;
-						line-height: 0;
-						padding: 0;
-						display: inline-block;float: right;margin-right: -15px;
-						border-style: solid;
-						border-width: 21px 0 21px 15px;
-						border-color: transparent transparent transparent $custom-red;
-						
+					&>div .Highlited {
+						position: relative;
+						@include arrow-block($custom-red);
+						&:before {
+							
+						}
+					}
+					&>div>.StartClassGroup .Highlited:before{
+						display: none;
 					}
 					&>div .EndClassGroup .Highlited:before{
-						content: '';
+						/*content: '';
 						width: 0;
 						height: 0;
 						line-height: 0;
@@ -909,7 +1108,7 @@ body {
 						display: inline-block;float:left;
 						border-style: solid;
 						border-width: 21px 0 21px 15px;
-						border-color: transparent transparent transparent #fff;
+						border-color: transparent transparent transparent #fff;*/
 					}
 					&>div>div .EditComponents {
 						.ActionWhere,

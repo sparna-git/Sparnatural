@@ -2,7 +2,7 @@
     https://github.com/hernansartorio/jquery-nice-select
     Made by Hernán Sartorio  */
 
-    import tippy, {followCursor} from 'tippy.js';
+    import tippy from 'tippy.js';
  
 (function($) {
 
@@ -115,16 +115,17 @@
     
     // Open/close
     $(document).on('click.nice_select', '.nice-select', function(event) {
+      console.log("click on niceselect");
       var $dropdown = $(this);
       var settings = $dropdown.prev('select')[0].sparnaturalSettings ;
-	  if ($dropdown.hasClass('open') ) {
-		  $dropdown.toggleClass('open');
-		  $dropdown.prev('select').val($dropdown.find('.selected').data('value')).trigger('change');
-	  } else {
-		  $('.nice-select').not($dropdown).removeClass('open');
-		  $dropdown.toggleClass('open');
-      tippy('.nice-select .option[data-tippy-content]', settings.tooltipConfig);
-	  }
+  	  if ($dropdown.hasClass('open') ) {
+  		  $dropdown.toggleClass('open');
+  		  $dropdown.prev('select').val($dropdown.find('.selected').data('value')).trigger('change');
+  	  } else {
+  		  $('.nice-select').not($dropdown).removeClass('open');
+  		  $dropdown.toggleClass('open');
+        tippy('.nice-select .option[data-tippy-content]', settings.tooltipConfig);
+  	  }
       
       //
       

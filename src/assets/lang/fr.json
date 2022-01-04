@@ -19,5 +19,7 @@
 	"DisplayValueDateTo" : "Jusqu'à",
 	"ButtonAdd": "Ajouter",
 	"ListWidgetNoItem": "... Oups, aucune valeur trouvée !",
-	"ObjectPropertyTemporaryLabel": "relié(e) à"
+	"ObjectPropertyTemporaryLabel": "relié(e) à",
+	"labelOptionOptional": "Optionnel",
+	"labelOptionNotExists": "Négatif"
 }

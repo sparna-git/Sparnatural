@@ -137,6 +137,24 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return null ;
 	}
 
+	this.isEnablingOptional = function(propertyId) {
+		var item = this._getResourceById(propertyId) ;
+		if (item !== null) {
+			return (item['enableOptional'] == true);
+		}	
+
+		return false;
+	}
+
+	this.isEnablingNegation = function(propertyId) {
+		var item = this._getResourceById(propertyId) ;
+		if (item !== null) {
+			return (item['enableNegation'] == true);
+		}	
+
+		return false;
+	}
+
 	this.getAllSparnaturalClasses = function() {
     	var classes = this.getClassesInDomainOfAnyProperty();
     	// copy initial array
@@ -277,6 +295,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 
 		return sparql;
 	}
+
 
 	this._sortItemsByIndex = function(items) {
 		var me = this;
