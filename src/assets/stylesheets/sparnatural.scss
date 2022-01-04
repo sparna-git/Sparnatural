@@ -3,15 +3,18 @@
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
 
 
-$height-components: 48px;
-$height-components-under: 42px;
+$height-components: 52px;
+$height-components-under: 48px;
 $height-components-hover: 35px;
 $margin-component: 30px;
 $margin-component-onEdit: 80px;
 $margin-children-li: 75px;
 
+$center-arrow-bd-width : 3px;
+
 $custom-red: rgb(250,136,3) ;
 $custom-red-bold: rgb(182, 97, 0) ;
+$custom-red-medium: rgb(255, 210, 157) ;
 $custom-red-light: rgb(255, 231, 203) ;
 $custom-green: rgb(107,215,171) ;
 $custom-green-bold: rgb(2,184,117) ;
@@ -104,6 +107,110 @@ $custom-silver-light: rgb(230, 230, 230) ;
 	}
 }
 
+@mixin arrow-back-colors($bgColor, $borderColor) {
+	.componentBackArrow svg {
+		height: 48px;
+		path {
+			fill: $bgColor;
+			stroke: $borderColor;
+		}
+	}
+}
+@mixin arrow-front-colors($bgColor, $borderColor) {
+	.componentFrontArrow svg {
+		height: 48px;
+		path {
+			fill: $bgColor;
+			stroke: $borderColor;
+		}
+	}
+}
+
+/*New component Arrow */
+.CriteriaGroup {
+	.componentBackArrow svg {
+		height: 48px;
+		path {
+			fill:transparent;
+			stroke:transparent;
+			stroke-width: 8px;
+		}
+	}
+	.componentFrontArrow svg{
+		height: 48px;
+		path {
+			fill:transparent;
+			stroke: $custom-silver-light;
+			stroke-width: 8px;
+		}
+	}
+
+	/*Arrow on options */
+	.OptionsGroup {
+		.EditComponents {
+			@include arrow-front-colors(#fff, #fff);
+			&.Enabled {
+				@include arrow-back-colors($custom-green, #fff);
+				@include arrow-front-colors($custom-green, #fff);
+			}
+			&.Disabled {
+				@include arrow-back-colors($custom-silver, #fff);
+				@include arrow-front-colors($custom-silver, #fff);
+			}
+		}
+		.OptionTypeId {
+			label {
+				&:hover,
+				&.Enabled {
+					@include arrow-back-colors($custom-green, #fff);
+					@include arrow-front-colors($custom-green, #fff);
+				}
+			}
+		}
+	}
+}
+
+	/*Completed criteria*/
+.componentsListe li.completed>.CriteriaGroup {
+	&>.StartClassGroup>.ClassTypeId {
+		@include arrow-front-colors($custom-red, #fff);
+	}
+	&>.StartClassGroup.VariableSelected>.ClassTypeId {
+		@include arrow-front-colors($custom-red, $custom-green-bold);
+	}
+
+	
+	&>.ObjectPropertyGroup>.ObjectPropertyTypeId {
+		@include arrow-back-colors(transparent, #fff);
+		@include arrow-front-colors(transparent, #fff);
+	}
+	&>.EndClassGroup>.ClassTypeId {
+		@include arrow-back-colors($custom-red, #fff);
+		@include arrow-front-colors($custom-red, #fff);
+	}
+	&>.EndClassGroup.VariableSelected>.ClassTypeId {
+		@include arrow-back-colors($custom-red, $custom-green-bold);
+		@include arrow-front-colors($custom-red, $custom-green-bold);
+	}
+
+	&>.EndClassWidgetGroup {
+		.EndClassWidgetAddOrValue,
+		.EndClassWidgetValue {
+			@include arrow-back-colors($custom-red-medium, #fff);
+			@include arrow-front-colors($custom-red-medium, #fff);
+		}
+	}
+}
+
+/* Structure flex */
+.CriteriaGroup {
+	.flexWarap {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+}
+
 body {
 	section {
 		padding-top: 30px;
@@ -140,25 +247,24 @@ body {
 			flex-direction: row;
 			flex-wrap: nowrap;
 			min-width: auto;
-			padding-right: 15px;
-			margin-left: -30px;
+			/*padding-right: 15px;*/
+			margin-left: -20px;
 
 			.EditComponents {
 				position: relative;
 				width: 20px;
-				background: $custom-silver-light;
+				/*background: $custom-silver-light;*/
 				cursor: pointer;
-				@include arrow-block($custom-silver-light);
-
+				/*@include arrow-block($custom-silver-light);*/
+				display: flex!important;
 				&.Enabled {
-					display: inline-block;
-					background: $custom-green;
-					@include arrow-block($custom-green);
+					/*background: $custom-green;*/
+					/*@include arrow-block($custom-green);*/
 				}
 				&.Disabled {
-					display: inline-block;
-					background: $custom-silver;
-					@include arrow-block($custom-silver);
+					/*display: inline-block;*/
+					/*background: $custom-silver;*/
+					/*@include arrow-block($custom-silver);*/
 				}
 			}
 			.OptionTypeId {
@@ -168,9 +274,9 @@ body {
 				label {
 					position: relative;
 					text-indent: 20px;
-					display: inline-block;
+					/*display: inline-block;*/
 					zoom: 1;
-					background: $custom-green-light;
+					/*background: $custom-green-light;*/
 					margin-bottom: 0;
 					line-height: 42px;
 					color: #fff;
@@ -184,14 +290,14 @@ body {
 						display: none;
 					}
 
-					@include arrow-block($custom-green-light);
+					/*@include arrow-block($custom-green-light);*/
 
 					&:hover,
 					&.Enabled {
-						background: $custom-green-bold;
+						/*background: $custom-green-bold;*/
 
 						&:after {
-							border-left: 15px solid $custom-green-bold;
+							/*border-left: 15px solid $custom-green-bold;*/
 						}
 					}
 /**
@@ -205,11 +311,11 @@ body {
 				}
 			}
 			&.Opended .OptionTypeId {
-				display:inline-block ;
+				display:flex ;
 			}
 		}
 		.ObjectPropertyGroup {
-			
+			margin-right: -15px;
 			.current {
 				font-style: italic;
 			}
@@ -236,7 +342,7 @@ body {
 			display: block;
 			position: absolute;
 			top: -9px;
-			right: 0;
+			right: 10px;
 			width: 22px;
 			height: 22px!important;
 			padding: 0 0;
@@ -259,13 +365,19 @@ body {
 		.EndClassGroup.IsOnEdit>span.unselect {
 			display: none;
 		}
+		/*Hide select widget list arrow*/
 		.nice-select.disabled:after {
 			display: none;
 		}
+		.nice-select {
+			border: $center-arrow-bd-width solid #fff;
+			border-left: 0;
+			border-right: 0;
+		}
 		.nice-select .current {
 			display: inline-block;
-			height: $height-components-under - 2;
-			line-height: $height-components-under - 2;
+			height: $height-components-under - ($center-arrow-bd-width*2);
+			line-height: $height-components-under - ($center-arrow-bd-width*2);
 			vertical-align: bottom;
 			span  {
 				display: inline-block;
@@ -284,15 +396,16 @@ body {
 		.StartClassGroup,
 		.EndClassGroup {
 			position: relative;
+			margin-right: -3px;
 			.selectViewVariable {
 				display: none;
 				position: absolute;
 				top: 50%;
-				right: 23px; //+9 pour retrait dans fleche
-				margin-top: -10px;
-				width: 20px;
-				height: 20px;
-				line-height: 20px;
+				right: 18px; //+9 pour retrait dans fleche
+				margin-top: -8px;
+				width: 16px;
+				height: 16px;
+				line-height: 16px;
 				z-index: 2;
 				cursor: pointer;
 				svg{
@@ -306,10 +419,11 @@ body {
 		.EndClassGroup {
 			position: relative;
 			min-width: auto;
+			margin-left: -20px;
 			.EditComponents {
 				position: absolute;
 				left: 36px;
-				top: $height-components - 1;
+				top: $height-components ;
 				line-height: $height-components-hover;
 				z-index: 101;
 				height: $height-components;
@@ -595,7 +709,7 @@ body {
 		}
 		.EndClassWidgetGroup {
 			width: auto;
-			padding: 2px 15px 2px 0;
+			padding: 1px 15px 1px 0;
 			margin-left: -14px;
 			display: flex;
 			
@@ -613,11 +727,12 @@ body {
 			}
 			.EndClassWidgetAddOrValue,
 			.EndClassWidgetValue {
+				position: relative;
 				/*line-height: 0;*/
 				color: #fff;
 				font-size: 14px;
-				display: inline-block;
-				padding: 0 0 0 15px;
+				/*display: inline-block;*/
+				padding: 0;
 				span {
 					/*line-height: $height-components-under;*/
 					display: inline-block;
@@ -633,16 +748,16 @@ body {
 			.EndClassWidgetAddOrValue {
 				color: #fff;
 				/*margin-left: 15px;*/
-				line-height: 42px;
-				height: 42px;
+				/*line-height: 48px;
+				height: 48px;*/
 				font-size: 20px;
 				cursor: pointer;
 				vertical-align: middle;
 				span {
-					line-height: 42px;
+					/*line-height: 48px;
 					vertical-align: baseline;
 					display: inline-block;
-					height: 42px;
+					height: 48px;*/
 				}
 			}
 			span.unselect {
@@ -905,7 +1020,7 @@ body {
 				padding: 0;
 				background: transparent;
 				clear: both;
-				border: 0 solid #transparent
+				border: 0 solid transparent;
 			}
 			
 			ul {
@@ -1100,34 +1215,39 @@ body {
 					&>div .EndClassWidgetAddOrValue,
 					&>div .EndClassWidgetValue {
 						max-width: 220px;
-						height: 42px;
+						height: 48px;
 						/*overflow: hidden;*/
-						padding-right: 15px;
+						/*padding-right: 15px;*/
 						margin-right: -15px;
-						display: block;
+						/*display: block;*/
 						
-						@include triangle-before();
-						@include triangle-after();
-						span {
-							background: $custom-red ;
-							height: 42px;
+						/*@include triangle-before();
+						@include triangle-after();*/
+						/*span {
+							background: $custom-red-light ;
+							height: 48px;
+							background-clip: padding-box;
 							
-						}
+						}*/
 						p {
-							line-height: 42px;
-							height: 42px;
+							line-height: 48px;
+							height: 48px;
 							width: calc(100% - 15px);
-							background: $custom-red ;
+							background: $custom-red-medium;
+							background-clip: padding-box;
 							margin: 0;
 							padding: 0 0 0 5px;
 							display: inline-block;
 							overflow: hidden;
 							text-overflow: ellipsis;
+							border: $center-arrow-bd-width solid #fff;
+							border-left: 0;
+							border-right: 0;
 							
 							text-align: center;
 							span {
-								line-height: 1;
-								display: inline;
+								line-height: 42px;
+								display: inline-block;
 								vertical-align: baseline;
 								overflow: hidden;
 								text-overflow: ellipsis;
@@ -1143,6 +1263,7 @@ body {
 					background: transparent;
 					border-color: transparent;
 					padding-left: 10px;
+					padding-right: 15px;
 					ul.list li {
 						border-bottom: solid 1px #e8e8e8;
 						img {
@@ -1193,23 +1314,30 @@ body {
 				.nice-select.disabled {
 					color: #888;
 					border-color: transparent;
+					border-radius: 0;
 				}
-				&>div>.EndClassGroup>.ClassTypeId:after,
+				.StartClassGroup>.ClassTypeId .nice-select.disabled {
+					border-radius: 5px 0 0 5px;
+				}
+				/*&>div>.EndClassGroup>.ClassTypeId:after,
 				&>div>.StartClassGroup>.ClassTypeId:after {
 					content: '';
 					display: inline-block;
 					width: 15px;
-				}
+				}*/
 				
 				&.completed {
 					&>div .Highlited {
-						background: $custom-red;
-						margin-right: 23px;
+						/*background: $custom-red;*/
+						/*margin-right: 23px;*/
 						
 						.nice-select {
-								background: transparent;
+								background: $custom-red;
+								background-clip: padding-box;
 								border-color: transparent;
 								color: #fff;
+								height: $height-components-under;
+								line-height: $height-components-under - ($center-arrow-bd-width*2);
 								.current {
 									img {
 										display: none;
@@ -1224,21 +1352,33 @@ body {
 								border-color: transparent;
 							}
 					}
+					&>div>.StartClassGroup.VariableSelected .Highlited {
+						.nice-select.disabled {
+							border-left: 3px solid $custom-green-bold;
+						}
+					}
+					&>div>.StartClassGroup.VariableSelected .Highlited,
+					&>div>.EndClassGroup.VariableSelected .Highlited {
+						.nice-select.disabled {
+							border-color: $custom-green-bold;
+						}
+					}
+
 					&>div .Highlited {
 						position: relative;
-						@include arrow-block($custom-red);
+						/*@include arrow-block($custom-red);*/
 						&:before {
 							
 						}
 					}
-					&>div>.StartClassGroup .Highlited:before{
+					/*&>div>.StartClassGroup .Highlited:before{
 						display: none;
-					}
+					}*/
 					&>div .StartClassGroup,
 					&>div .EndClassGroup {
 						&>.selectViewVariable {
 							display: block;
-							right: 23px; //+10 pour retrait dans fleche
+							right: 18px; //+10 pour retrait dans fleche
 							svg {
 								stroke: #fff;
 							}
@@ -1269,16 +1409,16 @@ body {
 					&.WhereImpossible {
 						
 						&>div .EndClassGroup .Highlited {
-							background: transparent;
+							/*background: transparent;
 							color: #888;
-							margin-right: 0;
+							margin-right: 0;*/
 							
-							&:before,
+							/*&:before,
 							&:after {
 								display: none;
-							}
+							}*/
 							.current {
-								color: #888;
+								/*color: #888;*/
 								img {
 									display: inline;
 									&.highlited {
@@ -1337,6 +1477,8 @@ body {
 	
 
 }
+
+
 
 .tippy-box[data-theme~='sparnatural'] {
     background-color: $custom-red-light;

@@ -1,5 +1,6 @@
 
 const tippy = require('tippy.js').default;
+var UiuxConfig = require("./UiuxConfig.js");
 
 export class HTMLComponent {
 
@@ -11,6 +12,8 @@ export class HTMLComponent {
 		// must be false if not set for the moment
 		this.widgetHtml = widgetHtml;
 		this.html = $();
+		this.needBackArrow = false;
+		this.needFrontArrow = false;
 	}
 
 	attachComponentHtml() {
@@ -39,6 +42,13 @@ export class HTMLComponent {
 			// remove existing component
 			// this.component.html.find('>.'+instance ).remove();
 			this.html.append(this.widgetHtml) ; 
+			console.log(this) ;
+			if(this.needBackArrow) {
+				this.addBackArrow() ;
+			}
+			if(this.needFrontArrow) {
+				this.addFrontArrow() ;
+			}
 		} else {
 			this.html = $();
 		}
@@ -48,6 +58,16 @@ export class HTMLComponent {
 		this.updateCssClasses() ;
 		this.attachComponentHtml() ;
 	}	
+
+	addBackArrow() {
+		this.backArrow = $('<div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div>') ;
+		this.html.prepend(this.backArrow) ;
+	}
+
+	addFrontArrow() {
+		this.frontArrow = $('<div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div>') ;
+		this.html.append(this.frontArrow) ;
+	}
 }
 
 export class GroupContenaire extends HTMLComponent {
@@ -102,10 +122,14 @@ export class GroupContenaire extends HTMLComponent {
 		this.cssClasses.Created = false ;
 		
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
+		this.inputTypeComponent.needFrontArrow= true ;
 
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.s:null;
 		this.variableSelector = null ;
+
+		//this.needFrontArrow= true ;
+		//this.needBackArrow= true ;
 		
 
 		this.init();
@@ -138,11 +162,13 @@ export class GroupContenaire extends HTMLComponent {
 			//Add varableSelector on variableSelector list ;
 			this.variableSelector = new VariableSelector(this) ;
 			$(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE) ;
+			$(this.html).addClass('VariableSelected') ;
 		} else {
 			if (this.variableSelector.canRemove()) {
 				this.variableSelector.remove() ;
 				this.variableSelector = null ;
 				$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
+				$(this.html).removeClass('VariableSelected') ;
 			}
 		}
 		this.parentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
@@ -174,6 +200,7 @@ export class GroupContenaire extends HTMLComponent {
 			);
 			//Add varableSelector on variableSelector list ;
 			this.variableSelector = new VariableSelector(this) ;
+			$(this.html).addClass('VariableSelected') ;
 		}
 
 		$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
@@ -328,6 +355,8 @@ export class EndClassGroup extends GroupContenaire {
 			Created : false
 		}; 
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
+		this.inputTypeComponent.needBackArrow= true ;
+		this.inputTypeComponent.needFrontArrow= true ;
 
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.o:null;
@@ -382,11 +411,13 @@ export class EndClassGroup extends GroupContenaire {
 			//Add varableSelector on variableSelector list ;
 			this.variableSelector = new VariableSelector(this) ;
 			$(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE) ;
+			$(this.html).addClass('VariableSelected') ;
 		} else {
 			if (this.variableSelector.canRemove()) {
 				this.variableSelector.remove() ;
 				this.variableSelector = null ;
 				$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
+				$(this.html).removeClass('VariableSelected') ;
 			}
 		}
 		this.parentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
@@ -487,7 +518,7 @@ export class OptionsGroup extends GroupContenaire {
 		this.inputTypeComponent = new OptionTypeId(this, specProvider) ;
 
 		this.init() ;
-		$(this.html).append('<div class="EditComponents"></div>');
+		$(this.html).append('<div class="EditComponents flexWarap">'+ '<div class="componentBackArrow">'+ UiuxConfig.COMPONENT_ARROW_BACK + '</div><div class="componentFrontArrow">' + UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>');
 	}
 
 	onObjectPropertyGroupSelected() {
@@ -624,7 +655,8 @@ export class ClassTypeId extends HTMLComponent {
  			"ClassTypeId",
  			{
 				Highlited : true ,
-				Created : false
+				Created : false,
+
 			},
 			parentComponent,
 			false
@@ -632,6 +664,7 @@ export class ClassTypeId extends HTMLComponent {
 
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;
+		this.cssClasses.flexWarap = true;
 	}
 
 	init() {
@@ -731,7 +764,10 @@ export class ObjectPropertyTypeId extends HTMLComponent {
  		);
 
 		this.specProvider = specProvider;
-		this.needTriggerClick = false ;			
+		this.needTriggerClick = false ;	
+		this.cssClasses.flexWarap = true;
+		this.needBackArrow= true ;
+		this.needFrontArrow= true ;
 	}
 
 	init(reload = false) {
@@ -783,6 +819,7 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;
 		this.default_value = [];
+		this.cssClasses.flexWarap = true;
  	}
 
 
@@ -999,7 +1036,7 @@ class ClassSelectBuilder {
 		for (var key in items) {
 			var label = items[key] ;
 			var selected = (default_value[key] == label)?' checked="checked"':'';
-			list.push( '<label><input type="radio" name="'+inputID+'" data-id="'+key+'"'+selected+' '+'  />'+ label + '</label>' );
+			list.push( '<label class="flexWarap"><input type="radio" name="'+inputID+'" data-id="'+key+'"'+selected+' '+'  />' + '<div class="componentBackArrow">' + UiuxConfig.COMPONENT_ARROW_BACK + '</div><span>'+ label + '</span><div class="componentFrontArrow">' + UiuxConfig.COMPONENT_ARROW_FRONT + '</div></label>' );
 		}
 
 		var html_list = $( "<div/>", {
