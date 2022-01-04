@@ -266,22 +266,28 @@ export class QuerySPARQLWriter {
 
 		if(queryLine.p && queryLine.o) {
 			if(queryLine.values.length == 0) {
+
 				if(
 					!this.specProvider.isRemoteClass(queryLine.oType)
-					&&
-					!this.specProvider.isLiteralClass(queryLine.oType)
 				) {
 					bgp.triples.push(this._buildTriple(
 						queryLine.s,
 						queryLine.p,
 						queryLine.o
 					)) ;
-					bgp.triples.push(this._buildTriple(
-						queryLine.o,
-						this.typePredicate,
-						queryLine.oType
-					)) ;
+
+					if(
+						!this.specProvider.isLiteralClass(queryLine.oType)
+					) {
+						bgp.triples.push(this._buildTriple(
+							queryLine.o,
+							this.typePredicate,
+							queryLine.oType
+						)) ;
+					}
 				}
+
+				
 			} else if(
 				queryLine.values.length == 1
 				&&
