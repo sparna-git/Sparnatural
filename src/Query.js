@@ -353,20 +353,19 @@ export class QuerySPARQLWriter {
 
 		// if we have a lucene query criteria
 		if(queryLine.values.length == 1 && queryLine.values[0].luceneQueryValue) {
+			this._updateGraphDbPrefixes(completeSparqlQuery);
+			// name of index must correspond to the local name of the range class
+			var connectorName = this._localName(queryLine.oType);
+			// field name in index corresponds to the local name of the property
+			var fieldName = this._localName(queryLine.p);
+			var searchVariable = queryLine.s+"Search";
 
-			/*
-			case Config.GRAPHDB_SEARCH_PROPERTY:
-			  var searchKey = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0] ;
-			  jsonQuery = this.updateGraphDbPrefixes(jsonQuery);
-			  var connectorName = this.localName(rangeClass);
-			  var fieldName = this.localName(property);
-			  var searchVariable = subjectVariable+"Search";
-			  newBasicGraphPattern.triples.push(this.buildTriple(searchVariable, this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#"+connectorName)) ;
-			  // add literal triple
-			  newBasicGraphPattern.triples.push(this.buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#query", fieldName+":"+searchKey, true)) ;
-			  newBasicGraphPattern.triples.push(this.buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#entities", subjectVariable)) ;
-			*/
-
+			var newBasicGraphPattern = this._initBasicGraphPattern() ;
+			newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#"+connectorName)) ;
+			// add literal triple
+			newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#query", fieldName+":"+queryLine.values[0].luceneQueryValue, true)) ;
+			newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#entities", queryLine.s)) ;
+			parentInSparqlQuery.push(newBasicGraphPattern);  
 		}
 
 		// if we have an exact string criteria
@@ -537,6 +536,15 @@ export class QuerySPARQLWriter {
 		jsonQuery.prefixes.inst = "http://www.ontotext.com/connectors/lucene/instance#";
 		jsonQuery.prefixes.lucene = "http://www.ontotext.com/connectors/lucene#";
 		return jsonQuery ;
+	}
+
+	_localName(uri) {
+		if (uri.indexOf("#") > -1) {
+			return uri.split("#")[1] ;
+		} else {
+			var components = uri.split("/") ;
+			return components[components.length - 1] ;
+		}
 	}
 }
 
