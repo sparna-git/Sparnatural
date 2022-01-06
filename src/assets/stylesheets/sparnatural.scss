@@ -124,6 +124,9 @@ $default-text-color: #666 ;
 			fill: $bgColor;
 			stroke: $borderColor;
 		}
+		rect {
+			fill:transparent;
+		}
 	}
 }
 
@@ -134,7 +137,7 @@ $default-text-color: #666 ;
 		path {
 			fill:transparent;
 			stroke:transparent;
-			stroke-width: 8px;
+			stroke-width: 3px;
 		}
 	}
 	.componentFrontArrow svg{
@@ -142,7 +145,10 @@ $default-text-color: #666 ;
 		path {
 			fill:transparent;
 			stroke: $custom-silver-light;
-			stroke-width: 8px;
+			stroke-width: 3px;
+		}
+		rect {
+			fill:#fff;
 		}
 	}
 
@@ -150,13 +156,24 @@ $default-text-color: #666 ;
 	.OptionsGroup {
 		.EditComponents {
 			@include arrow-front-colors(#fff, #fff);
+			position relative
 			&.Enabled {
 				@include arrow-back-colors($custom-green, #fff);
-				@include arrow-front-colors($custom-green, #fff);
+				/*@include arrow-front-colors($custom-green, #fff);*/
 			}
 			&.Disabled {
 				@include arrow-back-colors($custom-silver, #fff);
-				@include arrow-front-colors($custom-silver, #fff);
+				/*@include arrow-front-colors($custom-silver, #fff);*/
+			}
+			.componentBackArrow {
+				width: 41px;
+				height: 48px;
+				position: relative;
+				svg {
+					position: absolute;
+					z-index: 1;
+					left: -5px;
+				}
 			}
 		}
 		.OptionTypeId {
@@ -204,8 +221,9 @@ $default-text-color: #666 ;
 }
 
 /* Structure flex */
-.CriteriaGroup {
-	.flexWarap {
+.CriteriaGroup,
+.variablesSelection {
+	.flexWrap {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
@@ -249,7 +267,7 @@ body {
 			flex-wrap: nowrap;
 			min-width: auto;
 			/*padding-right: 15px;*/
-			margin-left: -20px;
+			margin-left: -22px;
 
 			.EditComponents {
 				position: relative;
@@ -397,7 +415,7 @@ body {
 		.StartClassGroup,
 		.EndClassGroup {
 			position: relative;
-			margin-right: -3px;
+			margin-right: 0px;
 			.selectViewVariable {
 				display: none;
 				position: absolute;
@@ -420,7 +438,7 @@ body {
 		.EndClassGroup {
 			position: relative;
 			min-width: auto;
-			margin-left: -20px;
+			margin-left: -15px;
 			.EditComponents {
 				position: absolute;
 				left: 36px;
@@ -658,6 +676,7 @@ body {
 						background: #fff;
 						height: $height-components-hover;
 						line-height: $height-components-hover;
+						padding-right: 20px;
 						.current {
 							display: inline-block;
 							height: $height-components-hover;
@@ -711,7 +730,7 @@ body {
 		.EndClassWidgetGroup {
 			width: auto;
 			padding: 1px 15px 1px 0;
-			margin-left: -14px;
+			margin-left: -17px;
 			display: flex;
 			
 			-ms-flex-align: center;
@@ -814,15 +833,15 @@ body {
 		}
 		
 	}
-
-	li.hideEndClassProperty {
+	// N'est plus à cacher, lutilisateur peut choisi d'afficher les valeurs
+	/*li.hideEndClassProperty {
 		&>div>.EndClassGroup {
 			&>.unselect,
 			&>.ClassTypeId {
 				display: none;
 			}
 		}
-	}
+	}*/
 	
 	.haveWhereChild {
 		position: relative;
@@ -952,14 +971,19 @@ body {
 					color: $default-text-color;
 					border-radius: 5px;
 					background: #fff;
+					align-items: center;
 
 					.variable-handle {
 						display: inline-block;
 						padding: 5px 3px;
+						height: 24px;
 						color: transparent;
 						border-left: 2px dashed lightgray;
 						border-right: 2px dashed lightgray;
 						cursor: grab;
+					}
+					div {
+						line-height: 30px;
 					}
 				}
 			}
@@ -1219,7 +1243,7 @@ body {
 						height: 48px;
 						/*overflow: hidden;*/
 						/*padding-right: 15px;*/
-						margin-right: -15px;
+						margin-right: -13px;
 						/*display: block;*/
 						
 						/*@include triangle-before();
@@ -1233,14 +1257,14 @@ body {
 						p {
 							line-height: 48px;
 							height: 48px;
-							width: calc(100% - 15px);
+							/*width: calc(100% - 15px);*/
 							background: $custom-red-medium;
 							background-clip: padding-box;
 							margin: 0;
 							padding: 0 0 0 5px;
 							display: inline-block;
 							overflow: hidden;
-							text-overflow: ellipsis;
+							/*text-overflow: ellipsis;*/
 							border: $center-arrow-bd-width solid #fff;
 							border-left: 0;
 							border-right: 0;
@@ -1254,7 +1278,7 @@ body {
 								text-overflow: ellipsis;
 								white-space: nowrap;
 								color: $default-text-color;
-							
+								width: 100%;
 							}
 						}
 					}

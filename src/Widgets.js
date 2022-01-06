@@ -392,7 +392,8 @@
 				function() {
 					$('#ecgrw-search-'+id_inputs+'-input-value').trigger("change");
 					$(itc_obj).trigger("change");
-					$(CriteriaGroup.ComponentHtml[0]).addClass('hideEndClassProperty') ;
+					// N'est plus à cacher, lutilisateur peut choisi d'afficher les valeurs
+					//$(CriteriaGroup.ComponentHtml[0]).addClass('hideEndClassProperty') ;
 				}
 			);
 		}

@@ -23,5 +23,6 @@
 	"labelOptionOptional": "Optional",
 	"labelOptionNotExists": "Not exists",
 	"labelOrderSort": "Sort",
-	"SelectAllValues": "All"
+	"SelectAllValues": "All",
+	"Or": "or"
 }

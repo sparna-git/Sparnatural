@@ -518,7 +518,7 @@ export class OptionsGroup extends GroupContenaire {
 		this.inputTypeComponent = new OptionTypeId(this, specProvider) ;
 
 		this.init() ;
-		$(this.html).append('<div class="EditComponents flexWarap">'+ '<div class="componentBackArrow">'+ UiuxConfig.COMPONENT_ARROW_BACK + '</div><div class="componentFrontArrow">' + UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>');
+		$(this.html).append('<div class="EditComponents flexWrap">'+ '<div class="componentBackArrow">'+ UiuxConfig.COMPONENT_OPTION_ARROW_FRONT + '</div></div>');
 	}
 
 	onObjectPropertyGroupSelected() {
@@ -664,7 +664,7 @@ export class ClassTypeId extends HTMLComponent {
 
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;
-		this.cssClasses.flexWarap = true;
+		this.cssClasses.flexWrap = true;
 	}
 
 	init() {
@@ -765,7 +765,7 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;	
-		this.cssClasses.flexWarap = true;
+		this.cssClasses.flexWrap = true;
 		this.needBackArrow= true ;
 		this.needFrontArrow= true ;
 	}
@@ -819,7 +819,7 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;
 		this.default_value = [];
-		this.cssClasses.flexWarap = true;
+		this.cssClasses.flexWrap = true;
  	}
 
 
@@ -903,12 +903,12 @@ export class VariableSelector extends HTMLComponent {
 		this.labelDisplayed = '' ;
 
 		if (this.globalVariablesSelctor.switchLabel == 'label') {
-		this.labelDisplayed = this.image + this.varLabel ;
+		this.labelDisplayed = this.image + '<div>'+this.varLabel+'</div>' ;
 		} else {
-		this.labelDisplayed = this.image + this.varNameForDisplay ;
+		this.labelDisplayed = this.image + '<div>'+this.varNameForDisplay+'</div>' ;
 		}
 
-		this.element = '<div class="sortableItem"><div class="variableSelected" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">||</span>'+this.labelDisplayed+'</div></div>' ;
+		this.element = '<div class="sortableItem"><div class="variableSelected flexWrap" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle"></span>'+this.labelDisplayed+'</div></div>' ;
 
 		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
 
@@ -1036,7 +1036,7 @@ class ClassSelectBuilder {
 		for (var key in items) {
 			var label = items[key] ;
 			var selected = (default_value[key] == label)?' checked="checked"':'';
-			list.push( '<label class="flexWarap"><input type="radio" name="'+inputID+'" data-id="'+key+'"'+selected+' '+'  />' + '<div class="componentBackArrow">' + UiuxConfig.COMPONENT_ARROW_BACK + '</div><span>'+ label + '</span><div class="componentFrontArrow">' + UiuxConfig.COMPONENT_ARROW_FRONT + '</div></label>' );
+			list.push( '<label class="flexWrap"><input type="radio" name="'+inputID+'" data-id="'+key+'"'+selected+' '+'  />' + '<div class="componentBackArrow">' + UiuxConfig.COMPONENT_ARROW_BACK + '</div><span>'+ label + '</span><div class="componentFrontArrow">' + UiuxConfig.COMPONENT_ARROW_FRONT + '</div></label>' );
 		}
 
 		var html_list = $( "<div/>", {
