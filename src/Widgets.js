@@ -285,8 +285,15 @@
 				if (parseInt(value.start) > parseInt(value.stop)) {
 					value = null ;
 				} else {
-					value.start = value.start + '-01-01';
-					value.stop = value.stop + '-12-31';
+					var absoluteStartYear = (value.start.startsWith("-")?value.start.substring(1):value.start);
+					var paddedAbsoluteStartYear = absoluteStartYear.padStart(4,0);
+					var paddedStartYear = (value.start.startsWith("-")?"-"+paddedAbsoluteStartYear:paddedAbsoluteStartYear);
+					value.start = paddedStartYear + '-01-01T00:00:00';
+
+					var absoluteStopYear = (value.stop.startsWith("-")?value.stop.substring(1):value.stop);
+					var paddedAbsoluteStopYear = absoluteStopYear.padStart(4,0);
+					var paddedStopYear = (value.stop.startsWith("-")?"-"+paddedAbsoluteStopYear:paddedAbsoluteStopYear);
+					value.stop = paddedStopYear + '-12-31T23:59:59';
 				}
 			}
 
