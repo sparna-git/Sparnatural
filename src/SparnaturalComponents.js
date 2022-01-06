@@ -429,7 +429,6 @@ export class OptionsGroup extends GroupContenaire {
 	}
 
 	onObjectPropertyGroupSelected() {
-		console.log("onObjectPropertyGroupSelected called");
 		if($(this.html).find('div.ShowOnEdit').length == 0){
 			$(this.html).find('div.EditComponents').addClass('ShowOnEdit');
 			var parentOptionEnable = false ;
@@ -441,16 +440,18 @@ export class OptionsGroup extends GroupContenaire {
 
 			if (
 				parentOptionEnable
-				||
-				(
-					!this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
-					&&
-					!this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
-				)
 			) {
 				$(this.html).find('.EditComponents').addClass('Disabled') ;
-			} else {
+			} else if (
+				this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+				||
+				this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+			) {
 				$(this.html).find('.EditComponents').addClass('Enabled') ;
+			} else {
+				// TODO : keep original light-silver color
+				// $(this.html).find('.EditComponents').addClass('Unavailable') ;
+				$(this.html).find('.EditComponents').addClass('Disabled') ;
 			}
 
 			$(this.html).find('.EditComponents').on('click', function(e) {
