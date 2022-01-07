@@ -1081,7 +1081,6 @@ console.log('removeValue') ;
 			}
 
 			// binds a click on the remove cross with the removeValue function
-			$(this.unselect).addClass('xxxxxxxxxxxxxxxxxxxxx');
 			this.unselect.on(
 				'click',
 				{	arg1: this,	arg2: 'onRemoveValue'	},
@@ -1369,6 +1368,11 @@ console.log('removeValue') ;
 
 			// if non selectable, simply exit
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
+				this.ParentComponent.parentCriteriaGroup.initCompleted() ;
+			
+				//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+				$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+				initGeneralEvent(this.ParentComponent.parentCriteriaGroup.thisForm_);
 				return true;
 			}
 
