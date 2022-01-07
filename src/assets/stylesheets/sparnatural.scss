@@ -155,7 +155,7 @@ $default-text-color: #666 ;
 	/*Arrow on options */
 	.OptionsGroup {
 		.EditComponents {
-			@include arrow-front-colors(#fff, #fff);
+			@include arrow-back-colors($custom-silver-light, #fff);
 			position: relative;
 			&.Enabled {
 				@include arrow-back-colors($custom-green, #fff);
