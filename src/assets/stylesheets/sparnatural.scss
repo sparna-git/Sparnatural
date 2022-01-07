@@ -975,12 +975,22 @@ body {
 
 					.variable-handle {
 						display: inline-block;
-						padding: 5px 3px;
+						padding: 0 3px;
 						height: 24px;
 						color: transparent;
-						border-left: 2px dashed lightgray;
-						border-right: 2px dashed lightgray;
+						/*border-left: 2px dashed lightgray;
+						border-right: 2px dashed lightgray;*/
 						cursor: grab;
+
+						svg {
+							width: 15px;
+    						height: 24px;
+
+							path {
+								stroke: $custom-silver;
+								stroke-width: 0.264583;
+							}
+						}
 					}
 					div {
 						line-height: 30px;

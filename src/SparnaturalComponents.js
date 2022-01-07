@@ -908,7 +908,7 @@ export class VariableSelector extends HTMLComponent {
 		this.labelDisplayed = this.image + '<div>'+this.varNameForDisplay+'</div>' ;
 		}
 
-		this.element = '<div class="sortableItem"><div class="variableSelected flexWrap" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle"></span>'+this.labelDisplayed+'</div></div>' ;
+		this.element = '<div class="sortableItem"><div class="variableSelected flexWrap" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">'+ UiuxConfig.COMPONENT_DRAG_HANDLE + '</span>'+this.labelDisplayed+'</div></div>' ;
 
 		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
 
