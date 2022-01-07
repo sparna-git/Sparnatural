@@ -1390,14 +1390,18 @@ console.log('removeValue') ;
 				var endLabel = classLabel;
 			} else if(
 				this.widgetType == Config.LIST_PROPERTY
+				||
+				this.widgetType == Config.TIME_PROPERTY_DATE
+				||
+				this.widgetType == Config.TIME_PROPERTY_YEAR
 			){
-				var endLabel = langSearch.Select+' '+ classLabel ;
+				var endLabel = langSearch.Select+" :" ;
 			} else {
-				var endLabel = langSearch.Find+' '+ classLabel+" :" ;
+				var endLabel = langSearch.Find+" :" ;
 			}
 
 			//Ajout de l'option all
-			var selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span> ('+ classLabel + ') </span><span class="or">'+langSearch.Or+'</span> ' ;
+			var selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span> ('+classLabel+') </span><span class="or">'+langSearch.Or+'</span> ' ;
 
 			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll + '<span>'+ endLabel+'</span>' ;
 			
