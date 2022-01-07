@@ -1393,7 +1393,7 @@ console.log('removeValue') ;
 			//Ajout de l'option all
 			var selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span> ('+ classLabel + ') </span><span class="or">'+langSearch.Or+'</span> ' ;
 
-			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll + '<span class="underline">'+ endLabel+'</span>' ;
+			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll + '<span>'+ endLabel+'</span>' ;
 			
 			// init HTML by concatenating bit of HTML + widget HTML
 
