@@ -12,7 +12,7 @@ export class Query {
 		this.order = null ;
 		if (options.orderSort !== null) {
 			this.order = {
-				expression : "?this",
+				expression : this.variables[0],
 				sort : options.orderSort
 			} ;
 		}

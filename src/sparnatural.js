@@ -418,7 +418,7 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			this.firstSelectHtml = $('<div class="variablesFirstSelect"></div>') ;
 			this.otherSelectHtml = $('<div class="variablesOtherSelect"></div>') ;
-			this.ordersSelectHtml = $('<div class="variablesOrdersSelect"><strong>'+langSearch.labelOrderSort+'</strong> <a class="desc">'+UiuxConfig.ICON_AZ+'</a><a class="asc">'+UiuxConfig.ICON_ZA+'</a><a class="none selected">'+UiuxConfig.ICON_NO_ORDER+'</a></div>') ;
+			this.ordersSelectHtml = $('<div class="variablesOrdersSelect"><strong>'+langSearch.labelOrderSort+'</strong> <a class="asc">'+UiuxConfig.ICON_AZ+'</a><a class="desc">'+UiuxConfig.ICON_ZA+'</a><a class="none selected">'+UiuxConfig.ICON_NO_ORDER+'</a></div>') ;
 			this.optionsSelectHtml = $('<div class="variablesOptionsSelect"><a class="switch label">Switch name</a></div>') ;
 
 			$(this.line1).append(this.firstSelectHtml) ;
