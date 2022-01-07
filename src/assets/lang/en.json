@@ -1,6 +1,7 @@
 {
 	"Where": "Where",
 	"Find": "Find",
+	"Select": "Select",
 	"And": "And",
 	"That": "where",
 	"Search": "Search",
@@ -23,6 +24,6 @@
 	"labelOptionOptional": "Optional",
 	"labelOptionNotExists": "Not exists",
 	"labelOrderSort": "Sort",
-	"SelectAllValues": "All",
+	"SelectAllValues": "Any",
 	"Or": "or"
 }

@@ -1382,8 +1382,12 @@ console.log('removeValue') ;
 			) {
 				// label of the "Search" pseudo-class is inserted alone in this case
 				var endLabel = classLabel;
+			} else if(
+				this.widgetType == Config.LIST_PROPERTY
+			){
+				var endLabel = langSearch.Select+' '+ classLabel ;
 			} else {
-				var endLabel = langSearch.Find+' '+ classLabel ;
+				var endLabel = langSearch.Find+' '+ classLabel+" :" ;
 			}
 
 			//Ajout de l'option all

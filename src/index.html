@@ -443,7 +443,15 @@
         {"@value" : "nom","@language" : "fr"}
       ],
       "sparqlString": "rdfs:label",
-      "domain": "http://dbpedia.org/ontology/Artwork",
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person"},
+            { "@id" : "http://dbpedia.org/ontology/Artwork"}
+          ]
+        }
+      },
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
     },
     {
