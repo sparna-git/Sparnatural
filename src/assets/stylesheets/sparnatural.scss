@@ -137,7 +137,7 @@ $default-text-color: #666 ;
 		path {
 			fill:transparent;
 			stroke:transparent;
-			stroke-width: 3px;
+			stroke-width: 2.5px;
 		}
 	}
 	.componentFrontArrow svg{
@@ -164,6 +164,9 @@ $default-text-color: #666 ;
 			&.Disabled {
 				@include arrow-back-colors($custom-silver, #fff);
 				/*@include arrow-front-colors($custom-silver, #fff);*/
+			}
+			&.NoOptionEnabled {
+				@include arrow-back-colors($custom-silver-light, #fff);
 			}
 			.componentBackArrow {
 				width: 41px;
@@ -219,6 +222,11 @@ $default-text-color: #666 ;
 	&>.EndClassGroup.VariableSelected>.Highlited {
 		@include arrow-back-colors($custom-red, $custom-green-bold);
 		@include arrow-front-colors($custom-red, $custom-green-bold);
+		.componentBackArrow svg {
+			path {
+				stroke-width: 3px;
+			}
+		}
 	}
 
 	&>.EndClassWidgetGroup {
@@ -302,7 +310,8 @@ body {
 			.OptionTypeId {
 				display: none ;
 				position: relative;
-				padding-right: 15px;
+				padding-right: 13px;
+				
 				label {
 					position: relative;
 					/*display: inline-block;*/
@@ -312,12 +321,12 @@ body {
 					line-height: 42px;
 					color: #fff;
 					margin-left: 3px;
-					padding-right: 5px;
+					padding-right: 0;
 					font-size: 14px;
-					
+					margin-right: -20px;
 					cursor: pointer;
 					span {
-						text-indent: 20px;
+						text-indent: 13px;
 					}
 
 					input {

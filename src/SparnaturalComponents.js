@@ -541,12 +541,20 @@ export class OptionsGroup extends GroupContenaire {
 				)
 			) {
 				$(this.html).find('.EditComponents').addClass('Disabled') ;
+				$(this.html).find('.EditComponents').removeClass('NoOptionEnabled') ;
+				if (
+					!this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+					&&
+					!this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+				) {
+					$(this.html).find('.EditComponents').addClass('NoOptionEnabled') ;
+				}
 			} else {
 				$(this.html).find('.EditComponents').addClass('Enabled') ;
 			}
 
-			$(this.html).find('.EditComponents').on('click', function(e) {
-				if($(e.target).hasClass('Enabled')) {
+			$(this.html).find('.EditComponents>div').first().on('click', function(e) {
+				if($(e.target).parents('.EditComponents').first().hasClass('Enabled')) {
 					$(e.target).parents('.OptionsGroup').first().toggleClass('Opended') ;
 					redrawBottomLink($(e.target).parents('li.groupe').first()) ;
 				}
@@ -556,7 +564,7 @@ export class OptionsGroup extends GroupContenaire {
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
 
 			$(this.html).find('.input-val label').on('click', function(e) {
-				$(e.target).addClass('justClicked') ;
+				$(e.target).parents('label').first().addClass('justClicked') ;
 			});
 			$(this.html).find('.input-val input').on('click', function(e) {
 				e.stopPropagation();
@@ -770,7 +778,7 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;	
 		this.cssClasses.flexWrap = true;
-		this.needBackArrow= true ;
+		this.needBackArrow= false ;
 		this.needFrontArrow= true ;
 	}
 
@@ -1045,7 +1053,7 @@ class ClassSelectBuilder {
 		}
 
 		var html_list = $( "<div/>", {
-			"class": "optionsGroupe-list input-val",
+			"class": "optionsGroupe-list input-val flexWrap",
 			"id": 'select-'+inputID,
 			html: list.join( "" )
 		});
