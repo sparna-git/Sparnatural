@@ -1039,6 +1039,9 @@ console.log('removeValue') ;
 
 			// disable the Where
 			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
+
+			//Add variable on results view
+			this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
 			
 			this.parentCriteriaGroup.initCompleted() ;
 			
