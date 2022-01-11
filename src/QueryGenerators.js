@@ -23,7 +23,6 @@ class JSONQueryGenerator {
 	 **/
 	generateQuery(formObject) {
 		if(this.hasEnoughCriteria(formObject)) {
-console.log(formObject) ;
 			var query = new Query(formObject.queryOptions);
 
 			for (var i = 0; i < formObject.sparnatural.components.length; i++) {
@@ -38,7 +37,7 @@ console.log(formObject) ;
 				}			
 			} ;	
 
-			console.log(query) ;
+			// console.log(query) ;
 			
 			return query;	
 		} else {

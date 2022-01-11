@@ -359,9 +359,10 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(form.sparnatural).append(contexte) ;
 
 			form.queryOptions = {
-				distinct : true,
+				distinct : settings.addDistinct,
 				displayVariableList: ['?this'],
-				orderSort: null
+				orderSort: null,
+				defaultLang: settings.language
 			}
 
 			initVariablesSelector(form) ;
@@ -388,7 +389,6 @@ UiuxConfig = require("./UiuxConfig.js");
 						// prints the SPARQL generated from the writing of the JSON data structure
 						console.log("*** New SPARQL from JSON data structure ***");
 						var writer = new QuerySPARQLWriter(
-							settings.addDistinct,
 							settings.typePredicate,
 							specProvider
 						);
@@ -1715,7 +1715,6 @@ console.log('removeValue') ;
 		this.initHtml = function() {
 			var instance = this.component.baseCssClass ;				
 			if (this.component.widgetHtml != null) {
-				console.log("*** init with widgetHtml on "+instance);
 				this.component.html = $('<div class="'+instance+'"></div>') ;
 				// remove existing component
 				// this.component.html.find('>.'+instance ).remove();

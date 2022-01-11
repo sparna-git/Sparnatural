@@ -8,7 +8,9 @@ export class Query {
 
 	constructor(options) {
 		this.distinct = options.distinct;
-		this.variables = options.displayVariableList;
+		this.variables = options.displayVariableList;		
+		this.defaultLang = options.defaultLang;
+
 		this.order = null ;
 		if (options.orderSort !== null) {
 			this.order = {
@@ -156,11 +158,9 @@ export class ExactStringValue extends AbstractValue {
 export class QuerySPARQLWriter {
 
 	constructor(
-		distinct=true,
 		typePredicate="http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 		specProvider
 	) {
-		this.distinct = distinct;
 		this.typePredicate = typePredicate;
 		this.specProvider = specProvider;
 		this.additionnalPrefixes = {};
@@ -183,7 +183,7 @@ export class QuerySPARQLWriter {
 	toSPARQL(query) {
 		var sparqlQuery = {
 			"type": "query",
-			"queryType": "SELECT"+((this.distinct)?' DISTINCT':'')+"",
+			"queryType": "SELECT"+((query.distinct)?' DISTINCT':'')+"",
 			"variables": query.variables,
 			"where": [],			
 			"prefixes": {
@@ -204,7 +204,8 @@ export class QuerySPARQLWriter {
 				sparqlQuery.where,
 				query.branches[i],
 				// only the first one will have a type criteria
-				i == 0
+				i == 0,
+				query.defaultLang
 			) ;
 		}
 
@@ -222,7 +223,7 @@ export class QuerySPARQLWriter {
 		return generatedQuery;
 	}
 
-	_QueryBranchToSPARQL(sparqlQuery, parent, queryBranch, firstTopLevelBranch) {		
+	_QueryBranchToSPARQL(sparqlQuery, parent, queryBranch, firstTopLevelBranch, defaultLang) {		
 		// write the line
 		var parentInSparqlQuery = parent;
 		if(queryBranch.optional) {
@@ -234,7 +235,7 @@ export class QuerySPARQLWriter {
 			parent.push(filterNotExists);
 			parentInSparqlQuery = filterNotExists.expression.args[0].patterns;
 		}
-		this._QueryLineToSPARQL(parentInSparqlQuery, sparqlQuery, queryBranch.line, firstTopLevelBranch);
+		this._QueryLineToSPARQL(parentInSparqlQuery, sparqlQuery, queryBranch.line, firstTopLevelBranch, defaultLang);
 
 		// iterate on children
 		for (var i = 0; i < queryBranch.children.length; i++) {
@@ -243,13 +244,15 @@ export class QuerySPARQLWriter {
 				sparqlQuery,
 				parentInSparqlQuery,
 				queryBranch.children[i],
-				false
+				false,
+				defaultLang
 			)
 		}
 	}
 
-	_QueryLineToSPARQL(parentInSparqlQuery, completeSparqlQuery, queryLine, includeSubjectType=false) {
+	_QueryLineToSPARQL(parentInSparqlQuery, completeSparqlQuery, queryLine, includeSubjectType=false, defaultLang) {
 		var bgp = this._initBasicGraphPattern() ;
+
 
 		// only for the very first criteria
 		if (includeSubjectType) {
@@ -264,9 +267,12 @@ export class QuerySPARQLWriter {
 			completeSparqlQuery.where.push(typeBgp);
 		}
 
+		// insert BGP righ now so that lang filter comes after in generated SPARQL
+		parentInSparqlQuery.push(bgp);
+
 		if(queryLine.p && queryLine.o) {
 			if(queryLine.values.length == 0) {
-
+				// no value, insert ?s ?p ?o line
 				if(
 					!this.specProvider.isRemoteClass(queryLine.oType)
 				) {
@@ -276,6 +282,17 @@ export class QuerySPARQLWriter {
 						queryLine.o
 					)) ;
 
+					// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
+					if(
+						this.specProvider.isMultilingual(queryLine.p)
+					) {
+						parentInSparqlQuery.push(
+							this._initFilterLang(defaultLang,queryLine.o)
+						) ;
+					}
+
+					// if the class of the value does no correspond to a literal, insert a criteria
+					// on its rdf:type
 					if(
 						!this.specProvider.isLiteralClass(queryLine.oType)
 					) {
@@ -304,15 +321,26 @@ export class QuerySPARQLWriter {
 					queryLine.values[0] instanceof LiteralValue
 				)) ;
 			} else {
+
+				// more than one value for an URI, or a search criteria
 				// push in the bgp only s/p/o, values are inserted after
 				bgp.triples.push(this._buildTriple(
 					queryLine.s,
 					queryLine.p,
 					queryLine.o
 				)) ;
+
+				// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
+				if(
+					this.specProvider.isMultilingual(queryLine.p)
+				) {
+					parentInSparqlQuery.push(
+						this._initFilterLang(defaultLang,queryLine.o)
+					) ;
+				}
 			}
 		}
-		parentInSparqlQuery.push(bgp);
+		
 
 		// this can only be the case for value selection widgets
 		if(queryLine.values.length > 1) {			
@@ -338,6 +366,8 @@ export class QuerySPARQLWriter {
 			parentInSparqlQuery.push(
 				this._initFilterRegex(queryLine.values[0].regex, queryLine.o)
 			) ;
+
+			// TODO : language filter
 		}
 
 		// if we have a string criteria
@@ -345,6 +375,8 @@ export class QuerySPARQLWriter {
 			parentInSparqlQuery.push(
 				this._initFilterStringEquals(queryLine.values[0].string, queryLine.o)
 			) ;
+
+			// TODO : language filter
 		}
 	}
 
@@ -462,6 +494,26 @@ export class QuerySPARQLWriter {
 					""+variable+"",
 					"\""+texte+"\"",
 					"\"i\""
+				]
+			}
+		} ;
+	}
+
+	_initFilterLang(lang, variable) {			
+		return {
+			"type": "filter",
+			"expression": {
+				"type": "operation",
+				"operator": "langMatches",
+				"args": [					
+					{
+						"type": "operation",
+						"operator": "lang",
+						"args" : [
+							""+variable+""
+						]
+					},
+					"\""+lang+"\""
 				]
 			}
 		} ;

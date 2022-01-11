@@ -21,6 +21,7 @@ module.exports = Object.freeze({
 	TOOLTIP					 		: 		SPARNATURAL_CONFIG_CORE+'tooltip',
 	ENABLE_OPTIONAL			 		: 		SPARNATURAL_CONFIG_CORE+'enableOptional',
 	ENABLE_NEGATION			 		: 		SPARNATURAL_CONFIG_CORE+'enableNegation',
+	IS_MULTILINGUAL			 		: 		SPARNATURAL_CONFIG_CORE+'isMultilingual',
 
 	SPARNATURAL_CLASS				: 		SPARNATURAL_CONFIG_CORE+'SparnaturalClass',
 	NOT_INSTANTIATED_CLASS			: 		SPARNATURAL_CONFIG_CORE+'NotInstantiatedClass',

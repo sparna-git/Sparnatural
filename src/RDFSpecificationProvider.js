@@ -443,6 +443,9 @@ export class RDFSpecificationProvider {
 		return (this._readAsSingleLiteral(propertyId, Config.ENABLE_NEGATION) == "true");	
 	}
 
+	isMultilingual(propertyId) {
+		return (this._readAsSingleLiteral(propertyId, Config.IS_MULTILINGUAL) == "true");	
+	}
 
 	_sort(items) {
 		var me = this;
