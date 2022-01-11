@@ -797,11 +797,20 @@ body {
 				font-size: 20px;
 				cursor: pointer;
 				vertical-align: middle;
-				span {
-					/*line-height: 48px;
-					vertical-align: baseline;
-					display: inline-block;
-					height: 48px;*/
+				p {
+					width: 0;
+					padding: 0;
+					position: relative;
+					height: 42px;
+					line-height: 42px;
+					overflow: visible;
+					span {
+						line-height: 32px;
+						width: auto;
+						/*vertical-align: baseline;
+						display: inline-block;
+						height: 48px;*/
+					}
 				}
 			}
 			span.unselect {
@@ -1313,6 +1322,24 @@ body {
 								white-space: nowrap;
 								color: $default-text-color;
 								width: 100%;
+							}
+						}
+					}
+					&>div .EndClassWidgetAddOrValue {
+						p {
+							width: 0;
+							padding: 0;
+							position: relative;
+							height: 48px;
+							line-height: 48px;
+							overflow: visible;
+							span {
+								line-height: 42px;
+								width: auto;
+								text-indent: 1px;
+								/*vertical-align: baseline;
+								display: inline-block;
+								height: 48px;*/
 							}
 						}
 					}
