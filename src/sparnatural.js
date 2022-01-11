@@ -970,6 +970,10 @@ UiuxConfig = require("./UiuxConfig.js");
 		// input : the 'key' of the value to be deleted
 		this.onRemoveValue = function removeValue(e) {
 console.log('removeValue') ;
+			if(this.selectAllValue) {
+				//unselect the endClass for view
+				this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+			}
 			//On all case, selectAllValue will be set to false
 			this.selectAllValue = false;
 			
