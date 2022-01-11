@@ -473,6 +473,7 @@ export class EndClassGroup extends GroupContenaire {
 		this.value_selected = null;
 		this.cssClasses.HasInputsCompleted = false ;
 		this.cssClasses.IsOnEdit = true ;
+		$(this.html).removeClass('VariableSelected') ;
 		this.init() ;
 		$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, SparnaturalComponents.eventProxiCriteria);
 		$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
