@@ -402,8 +402,7 @@
       ],
       "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement",
-      "datasource" : "datasources:list_URI_count"
-
+      "datasource" : "datasources:list_rdfslabel_count"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#text",
@@ -441,6 +440,7 @@
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#artwork-label",
       "@type" : "ObjectProperty",
       "subPropertyOf" : "sparnatural:SearchProperty",
+      "isMultilingual" : true,
       "label": [
         {"@value" : "name","@language" : "en"},
         {"@value" : "nom","@language" : "fr"}
@@ -525,9 +525,9 @@
           filterConfigOnEndpoint : false,
           onQueryUpdated: function(queryString, queryJson, pivotJson) {
             queryString = semanticPostProcess(queryString, queryJson);
-            queryString = rdfsLabelPostProcess(queryString, queryJson);
-            queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
-            queryString = orderByPostProcess(queryString, queryJson);
+            // queryString = rdfsLabelPostProcess(queryString, queryJson);
+            // queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
+            // queryString = orderByPostProcess(queryString, queryJson);
             $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
             yasqe.setValue(queryString);
             yasqe.query();

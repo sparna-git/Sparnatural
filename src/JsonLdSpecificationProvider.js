@@ -155,6 +155,15 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return false;
 	}
 
+	this.isMultilingual = function(propertyId) {
+		var item = this._getResourceById(propertyId) ;
+		if (item !== null) {
+			return (item['isMultilingual'] == true);
+		}	
+
+		return false;
+	}
+
 	this.getAllSparnaturalClasses = function() {
     	var classes = this.getClassesInDomainOfAnyProperty();
     	// copy initial array

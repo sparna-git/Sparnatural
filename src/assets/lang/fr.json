@@ -14,7 +14,7 @@
 	"PlaceholderTimeDateFormat" : "AAAA",
 	"PlaceholderTimeDateDayFormat" : "jj/mm/aaaa",
 	"LangCodeTimeDate": "fr-FR",
-	"LabelDateFrom": "De",
+	"LabelDateFrom": "de",
 	"LabelDateTo": "à", 
 	"DisplayValueDateFrom" : "A partir de",
 	"DisplayValueDateTo" : "Jusqu'à",
@@ -23,7 +23,7 @@
 	"ObjectPropertyTemporaryLabel": "relié(e) à",
 	"labelOptionOptional": "Optionnel",
 	"labelOptionNotExists": "Négatif",
-	"labelOrderSort": "Trier",
+	"labelOrderSort": "Tri :",
 	"SelectAllValues": "Tous·tes",
 	"Or": "ou"
 }

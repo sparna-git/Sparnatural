@@ -42,7 +42,6 @@ export class HTMLComponent {
 			// remove existing component
 			// this.component.html.find('>.'+instance ).remove();
 			this.html.append(this.widgetHtml) ; 
-			console.log(this) ;
 			if(this.needBackArrow) {
 				this.addBackArrow() ;
 			}
