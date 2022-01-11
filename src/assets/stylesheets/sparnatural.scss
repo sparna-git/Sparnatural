@@ -3,7 +3,7 @@
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
 
 
-$height-components: 52px;
+$height-components: 54px;
 $height-components-under: 48px;
 $height-components-hover: 35px;
 $margin-component: 30px;
@@ -699,12 +699,12 @@ body {
 					.nice-select{
 						background: #fff;
 						height: $height-components-hover;
-						line-height: $height-components-hover;
-						padding-right: 20px;
+						line-height: $height-components-hover - 6;
+						padding-right: 26px;
 						.current {
 							display: inline-block;
-							height: $height-components-hover;
-							line-height: $height-components-hover;
+							height: $height-components-hover - 6;
+							line-height: $height-components-hover - 6;
 							vertical-align: bottom;
 							&>span {
 								vertical-align: bottom;
@@ -989,7 +989,7 @@ body {
 					float: left;
 				}
 				.variableSelected {
-					padding: 3px 7px;
+					padding: 3px 7px 3px 2px;
 					border: 1px solid gray ;
 					font-size: 12px;
 					color: $default-text-color;
@@ -1199,7 +1199,7 @@ body {
 					line-height: 20px;
 					min-width: 26px;
 					text-align: center;
-					font-size: 14px;
+					font-size: 18px;
 					color: $custom-red ;
 					font-weight: bold;
 					padding: 0;
