@@ -266,6 +266,7 @@ export class ObjectPropertyGroup extends GroupContenaire {
 	onEndClassGroupSelected() {
 		$(this.html).find('.temporary-label').remove() ;
 		$(this.html).find('.input-val').unbind('change');
+		this.value_selected = null;
 
 		if (!this.objectPropertySelector.cssClasses.Created) {
 			this.objectPropertySelector.init() ;
@@ -305,6 +306,9 @@ export class ObjectPropertyGroup extends GroupContenaire {
 	}
 
 	onChange() {
+		if (this.value_selected) {
+			this.parentCriteriaGroup.OptionsGroup.reload() ;
+		}
 		this.value_selected = $(this.html).find('select.input-val').val() ;
 		// disable if only one possible property option between the 2 classes
 		if ($(this.html).find('.input-val').find('option').length == 1) {
@@ -487,6 +491,9 @@ export class EndClassGroup extends GroupContenaire {
 			$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
 		}
 
+		//Reload options menu to wait objectProperty selection
+		this.parentCriteriaGroup.OptionsGroup.reload() ;
+
 		// clean the variable name so that it is regenerated when a new value is selected in the onChange
 		this.varName = null;
 	}
@@ -518,6 +525,26 @@ export class OptionsGroup extends GroupContenaire {
 
 		this.init() ;
 		$(this.html).append('<div class="EditComponents flexWrap">'+ '<div class="componentBackArrow">'+ UiuxConfig.COMPONENT_OPTION_ARROW_FRONT + '</div></div>');
+	}
+
+	reload() {
+		if($(this.html).find('.EditComponents').first().hasClass('Enabled')) {
+			$(this.html).removeClass('Opended') ;
+			redrawBottomLink($(this.html).parents('li.groupe').first()) ;
+		}
+		$(this.html).find('.EditComponents').removeClass('Disabled') ;
+		$(this.html).find('.EditComponents').removeClass('NoOptionEnabled') ;
+		$(this.html).find('.EditComponents').removeClass('Enabled') ;
+		$(this.html).find('.EditComponents').removeClass('ShowOnEdit') ;
+		$(this.html).find('.EditComponents>div').first().unbind('click') ;
+		$(this.html).find('.input-val input').unbind('click') ;
+		$(this.html).find('.input-val label').unbind('click') ;
+		// for re init all options menu and criteria conditional css if option is enbled
+		this.onChange() ;
+		$(this.html).find('.OptionTypeId').remove() ;
+		this.inputTypeComponent = new OptionTypeId(this, this.specProvider) ;
+
+		this.valuesSelected = [] ;
 	}
 
 	onObjectPropertyGroupSelected() {
