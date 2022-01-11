@@ -1369,6 +1369,9 @@ console.log('removeValue') ;
 			// if non selectable, simply exit
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
 				this.ParentComponent.parentCriteriaGroup.initCompleted() ;
+
+				//Add variable on results view
+				this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
 			
 				//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 				$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
