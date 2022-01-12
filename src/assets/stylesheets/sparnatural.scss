@@ -160,6 +160,11 @@ $default-text-color: #666 ;
 			&.Enabled {
 				@include arrow-back-colors($custom-green, #fff);
 				/*@include arrow-front-colors($custom-green, #fff);*/
+				.componentBackArrow {
+					svg path {
+						filter:url(#filter19278);
+					}
+				}
 			}
 			&.Disabled {
 				@include arrow-back-colors($custom-silver, #fff);
