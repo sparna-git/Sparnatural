@@ -1031,6 +1031,7 @@ body {
 					background: #fff;
 					align-items: center;
 					width: fit-content;
+					min-width: 110px;
 
 					.variable-handle {
 						display: inline-block;
@@ -1144,7 +1145,7 @@ body {
 			  }
 			  
 			  input:checked + .slider {
-				background-color: #ccc;
+				background-color: #819AAE;
 			  }
 			  
 			  input:focus + .slider {
@@ -1155,6 +1156,7 @@ body {
 				-webkit-transform: translateX(22px);
 				-ms-transform: translateX(22px);
 				transform: translateX(22px);
+				background-color: #04355E;
 			  }
 			  
 			  /* Rounded sliders */
