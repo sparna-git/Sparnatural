@@ -314,8 +314,12 @@ export class ObjectPropertyGroup extends GroupContenaire {
 		if ($(this.html).find('.input-val').find('option').length == 1) {
 			$(this.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 		}
-		$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
-		$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+		$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
+		console.log(this.parentCriteriaGroup.html) ;
+		if($(this.parentCriteriaGroup.html).parent('li').first().hasClass('completed'))	{
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+		}
+		
 
 		// sets tooltip ready
 		var desc = this.specProvider.getTooltip(this.value_selected) ;
