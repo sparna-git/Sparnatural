@@ -444,12 +444,15 @@ body {
 			}
 		}
 		&.displayVarName {
-			.nice-select .current {
-				.label {
-					display: none;
-				}
-				.variableName {
-					display: inline;
+			&>.StartClassGroup,
+			&>.EndClassGroup {
+				.nice-select .current {
+					.label {
+						display: none;
+					}
+					.variableName {
+						display: inline;
+					}
 				}
 			}
 		}
