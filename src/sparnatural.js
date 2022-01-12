@@ -373,9 +373,9 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(form.sparnatural).on('submit', { formObject : form }, function (event) {
 				if (form.submitOpened == true) {
 					event.preventDefault();
-					if ($(event.data.formObject.sparnatural).find('li.groupe').not('.completed').length > 0) {
+					/*if ($(event.data.formObject.sparnatural).find('li.groupe').not('.completed').length > 0) {
 						return false ;
-					}
+					}*/
 
 					// prints the JSON query data structure on the console
 					var jsonGenerator = new JSONQueryGenerator();
