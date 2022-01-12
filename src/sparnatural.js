@@ -999,6 +999,7 @@ console.log('removeValue') ;
 				}
 			}
 			$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').show() ;
+			$(this.parentCriteriaGroup.html).removeClass('onAddOrValue') ;
 
 			$(e.currentTarget).parent('div').remove() ;
 
@@ -1111,6 +1112,7 @@ console.log('removeValue') ;
 
 			// disable the Where
 			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
+			$(this.parentCriteriaGroup.html).removeClass('onAddOrValue') ;
 			
 			this.parentCriteriaGroup.initCompleted() ;
 			
@@ -1145,8 +1147,10 @@ console.log('removeValue') ;
 		
 		this.onAddOrValue = function needAddOrValue() {
 			$(this.parentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
+			$(this.parentCriteriaGroup.html).addClass('onAddOrValue') ;
 			// On vide les champs de saisie du widget
 			this.inputTypeComponent.reload() ;
+			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
 		};
 		
 		this.init() ;

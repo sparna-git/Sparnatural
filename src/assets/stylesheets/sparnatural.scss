@@ -260,6 +260,9 @@ body {
 	li.completed {
 		&>.CriteriaGroup {
 			margin-bottom: $margin-component;
+			&.onAddOrValue {
+				margin-bottom: $margin-component-onEdit/2 + 10;
+			}
 		}
 	}
 	.CriteriaGroup {
@@ -277,6 +280,10 @@ body {
 		-o-box-shadow: 0px 2px 3px 0px #cfcfcf;
 		box-shadow: 0px 2px 3px 0px #cfcfcf;
 		filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
+
+		&.onAddOrValue {
+			margin-bottom: $margin-component-onEdit/2;
+		}
 		
 		&>div {
 			
