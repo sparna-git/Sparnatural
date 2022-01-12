@@ -1145,7 +1145,7 @@ body {
 			  }
 			  
 			  input:checked + .slider {
-				background-color: #819AAE;
+				background-color: $custom-red-medium;
 			  }
 			  
 			  input:focus + .slider {
@@ -1156,7 +1156,7 @@ body {
 				-webkit-transform: translateX(22px);
 				-ms-transform: translateX(22px);
 				transform: translateX(22px);
-				background-color: #04355E;
+				background-color: $custom-red;
 			  }
 			  
 			  /* Rounded sliders */
