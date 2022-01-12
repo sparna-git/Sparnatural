@@ -80,7 +80,7 @@
         }
       }
     
-      var text = $selected.data('display') || icon+$selected.html();
+      var text = $selected.data('display') || icon+'<span class="label">'+$selected.html()+'</span>';
         
       $dropdown.find('.current').html(text);
       
@@ -103,7 +103,7 @@
         .addClass('option' +
           ($option.is(':selected') ? ' selected' : '') +
           ($option.is(':disabled') ? ' disabled' : ''))
-          .html(icon+$option.text())
+          .html(icon+'<span class="label">'+$option.text()+'</span>')
         );
       });
     }

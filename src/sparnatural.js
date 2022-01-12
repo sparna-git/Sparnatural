@@ -419,7 +419,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			this.firstSelectHtml = $('<div class="variablesFirstSelect"></div>') ;
 			this.otherSelectHtml = $('<div class="variablesOtherSelect"></div>') ;
 			this.ordersSelectHtml = $('<div class="variablesOrdersSelect"><strong>'+langSearch.labelOrderSort+'</strong> <a class="asc">'+UiuxConfig.ICON_AZ+'</a><a class="desc">'+UiuxConfig.ICON_ZA+'</a><a class="none selected">'+UiuxConfig.ICON_NO_ORDER+'</a></div>') ;
-			this.optionsSelectHtml = $('<div class="variablesOptionsSelect"><a class="switch label">Switch name</a></div>') ;
+			this.optionsSelectHtml = $('<div class="variablesOptionsSelect">'+langSearch.SwitchVariablesNames+' <label class="switch"><input type="checkbox"><span class="slider round"></span></label></div>') ;
 
 			$(this.line1).append(this.firstSelectHtml) ;
 			$(this.line1).append(this.otherSelectHtml) ;
@@ -433,6 +433,12 @@ UiuxConfig = require("./UiuxConfig.js");
 			// Listening when change sort order (AZ, ZA, None)
 			$(this.ordersSelectHtml).find('a').on('change',
 			{arg1: this, arg2: 'changeOrderSort'},
+			SparnaturalComponents.eventProxiCriteria
+			);
+
+			// Listening when switch display variable
+			$(this.optionsSelectHtml).find('label, span').on('click',
+			{arg1: this, arg2: 'switchVariableName'},
 			SparnaturalComponents.eventProxiCriteria
 			);
 
@@ -526,6 +532,12 @@ UiuxConfig = require("./UiuxConfig.js");
 					this.form.queryOptions.displayVariableList.push(variableName) ;
 				}
 				$(this.form.sparnatural).trigger( {type:"submit" } ) ;
+			}
+
+			this.switchVariableName = function() {
+				$(this.form.sparnatural).find('.CriteriaGroup').each(function() {
+					$(this).toggleClass('displayVarName') ;
+				})
 			}
 		}
 

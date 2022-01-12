@@ -25,5 +25,6 @@
 	"labelOptionNotExists": "Not exists",
 	"labelOrderSort": "Sort",
 	"SelectAllValues": "Any",
-	"Or": "or"
+	"Or": "or",
+	"SwitchVariablesNames": "Show column names"
 }

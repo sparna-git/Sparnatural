@@ -101,6 +101,13 @@ export class GroupContenaire extends HTMLComponent {
 			this.updateCssClasses() ;
 		}
 	} ;
+
+	onSelctValue() {
+		var current = $(this.html).find('.nice-select .current').first() ;
+		var varNameForDisplay = '<span class="variableName">'+this.varName.replace('?', '')+'</span>' ;
+		$(varNameForDisplay).insertAfter($(current).find('.label').first()) ;
+
+	}
 } 
 
 
@@ -203,6 +210,8 @@ export class GroupContenaire extends HTMLComponent {
 		}
 
 		$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+		//add varName on curent selection display
+		this.onSelctValue() ;
 		// trigger event on the whole line/criteria
 		$(this.parentCriteriaGroup).trigger( {type:"StartClassGroupSelected" } ) ;
 
@@ -438,7 +447,10 @@ export class EndClassGroup extends GroupContenaire {
 			this.varName = "?"+localName(this.value_selected)+"_"+(this.parentCriteriaGroup.thisForm_.sparnatural.getMaxVarIndex()+1);
 		}
 
-		$(this.parentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
+		$(this.parentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
+		
+		//add varName on curent selection display
+		this.onSelctValue() ;	
 		
 		if (this.specProvider.hasConnectedClasses(this.value_selected)) {
 			$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;

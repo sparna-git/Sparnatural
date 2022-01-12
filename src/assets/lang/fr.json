@@ -25,5 +25,6 @@
 	"labelOptionNotExists": "Négatif",
 	"labelOrderSort": "Tri :",
 	"SelectAllValues": "Tous·tes",
-	"Or": "ou"
+	"Or": "ou",
+	"SwitchVariablesNames": "Montrer le nom des colonnes"
 }
