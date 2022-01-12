@@ -444,8 +444,8 @@ body {
 			}
 		}
 		&.displayVarName {
-			&>.StartClassGroup,
-			&>.EndClassGroup {
+			&>.StartClassGroup>.ClassTypeId,
+			&>.EndClassGroup>.ClassTypeId {
 				.nice-select .current {
 					.label {
 						display: none;
