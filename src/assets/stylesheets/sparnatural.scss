@@ -997,7 +997,7 @@ body {
 					padding: 10px;
 					display: inline-block;
 					&:first-child {
-						min-width: 150px;
+						min-width: 140px;
 					}
 				}
 				.variablesOtherSelect>div:first-child {
@@ -1014,6 +1014,7 @@ body {
 					border-radius: 5px;
 					background: #fff;
 					align-items: center;
+					width: fit-content;
 
 					.variable-handle {
 						display: inline-block;
@@ -1052,7 +1053,7 @@ body {
 				.variablesOrdersSelect {
 					background: lightgray;
 					padding: 0 10px;
-					min-width: 150px;
+					min-width: 140px;
 					strong {
 						font-size: 12px;
 					}
