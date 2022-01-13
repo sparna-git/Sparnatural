@@ -450,19 +450,7 @@ body {
 				display: none;
 			}
 		}
-		&.displayVarName {
-			&>.StartClassGroup>.ClassTypeId,
-			&>.EndClassGroup>.ClassTypeId {
-				.nice-select .current {
-					.label {
-						display: none;
-					}
-					.variableName {
-						display: inline;
-					}
-				}
-			}
-		}
+		
 
 
 		.StartClassGroup,
@@ -897,6 +885,20 @@ body {
 			
 		}
 		
+	}
+
+	.componentsListe.displayVarName .CriteriaGroup {
+		&>.StartClassGroup>.ClassTypeId,
+		&>.EndClassGroup>.ClassTypeId {
+			.nice-select .current {
+				.label {
+					display: none;
+				}
+				.variableName {
+					display: inline;
+				}
+			}
+		}
 	}
 	// N'est plus à cacher, lutilisateur peut choisi d'afficher les valeurs
 	/*li.hideEndClassProperty {

@@ -538,9 +538,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			}
 
 			this.switchVariableName = function() {
-				$(this.form.sparnatural).find('.CriteriaGroup').each(function() {
-					$(this).toggleClass('displayVarName') ;
-				})
+				$(this.form.sparnatural).find('.componentsListe').first().toggleClass('displayVarName') ;
 			}
 		}
 
