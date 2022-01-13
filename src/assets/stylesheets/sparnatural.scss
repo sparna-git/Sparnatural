@@ -155,9 +155,11 @@ $default-text-color: #666 ;
 	/*Arrow on options */
 	.OptionsGroup {
 		.EditComponents {
+			display: none;
 			@include arrow-back-colors($custom-silver-light, #fff);
 			position: relative;
 			&.Enabled {
+				display: flex;
 				@include arrow-back-colors($custom-green, #fff);
 				/*@include arrow-front-colors($custom-green, #fff);*/
 				.componentBackArrow {
@@ -167,10 +169,12 @@ $default-text-color: #666 ;
 				}
 			}
 			&.Disabled {
+				display: flex;
 				@include arrow-back-colors($custom-silver, #fff);
 				/*@include arrow-front-colors($custom-silver, #fff);*/
 			}
 			&.NoOptionEnabled {
+				display: none!important;
 				@include arrow-back-colors($custom-silver-light, #fff);
 			}
 			.componentBackArrow {
@@ -303,7 +307,7 @@ body {
 				position: relative;
 				width: 20px;
 				/*@include arrow-block($custom-silver-light);*/
-				display: flex!important;
+				/*display: flex!important;*/
 				/*background: $custom-silver-light;
 				@include arrow-block($custom-silver-light);*/
 
