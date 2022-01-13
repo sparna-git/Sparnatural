@@ -585,15 +585,18 @@ export class OptionsGroup extends GroupContenaire {
 			) {
 				$(this.html).find('.EditComponents').addClass('Disabled') ;
 				$(this.html).find('.EditComponents').removeClass('NoOptionEnabled') ;
+				$(this.parentCriteriaGroup.html).addClass('OptionMenuShowed') ;
 				if (
 					!this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
 					&&
 					!this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
 				) {
 					$(this.html).find('.EditComponents').addClass('NoOptionEnabled') ;
+					$(this.parentCriteriaGroup.html).removeClass('OptionMenuShowed') ;
 				}
 			} else {
 				$(this.html).find('.EditComponents').addClass('Enabled') ;
+				$(this.parentCriteriaGroup.html).addClass('OptionMenuShowed') ;
 			}
 
 			$(this.html).find('.EditComponents>div').first().on('click', function(e) {

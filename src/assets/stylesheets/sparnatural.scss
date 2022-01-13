@@ -211,6 +211,18 @@ $default-text-color: #666 ;
 }
 
 	/*Completed criteria*/
+.componentsListe li>.CriteriaGroup.OptionMenuShowed {
+	&>.StartClassGroup .componentFrontArrow {
+		display: none;
+	}
+
+}
+.componentsListe li.completed>.CriteriaGroup.OptionMenuShowed {
+	&>.StartClassGroup .Highlited .componentFrontArrow {
+		display: block;
+	}
+
+}
 .componentsListe li.completed>.CriteriaGroup {
 	&>.StartClassGroup>.Highlited {
 		@include arrow-front-colors($custom-red, #fff);
