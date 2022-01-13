@@ -1057,6 +1057,7 @@ console.log('removeValue') ;
 
 			// disable the Where
 			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
+			$(this.parentCriteriaGroup.html).find('.EndClassGroup>div').first().removeClass('newOr') ;
 
 			//Add variable on results view
 			this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
@@ -1427,9 +1428,12 @@ console.log('removeValue') ;
 				var endLabel = langSearch.Find+" :" ;
 			}
 
-			//Ajout de l'option all
-			var selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span> ('+classLabel+') </span><span class="or">'+langSearch.Or+'</span> ' ;
-
+			//Ajout de l'option all si pas de valeur déjà selectionées
+			var selcetAll = "";
+			if (this.ParentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0) {
+				selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span> ('+classLabel+') </span><span class="or">'+langSearch.Or+'</span> ' ;
+			}
+			
 			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll + '<span>'+ endLabel+'</span>' ;
 			
 			// init HTML by concatenating bit of HTML + widget HTML
