@@ -234,6 +234,9 @@ $default-text-color: #666 ;
 	
 	&>.ObjectPropertyGroup>.ObjectPropertyTypeId {
 		@include arrow-back-colors(transparent, #fff);
+		.componentFrontArrow {
+			display: none;
+		}
 		@include arrow-front-colors(transparent, #fff);
 	}
 	&>.EndClassGroup>.Highlited {
@@ -388,6 +391,7 @@ body {
 		}
 		.ObjectPropertyGroup {
 			margin-right: -15px;
+			padding-left: 10px;
 			.current {
 				font-style: italic;
 			}
@@ -1527,6 +1531,10 @@ body {
 				.StartClassGroup>.ClassTypeId .nice-select.disabled {
 					border-radius: 5px 0 0 5px;
 				}
+				
+				&>.CriteriaGroup>.ObjectPropertyGroup>.ObjectPropertyTypeId .nice-select.disabled {
+					/*padding-right: 0;*/
+				}
 				/*&>div>.EndClassGroup>.ClassTypeId:after,
 				&>div>.StartClassGroup>.ClassTypeId:after {
 					content: '';
@@ -1571,6 +1579,9 @@ body {
 							border-color: $custom-green-bold;
 						}
 					}
+					&>.CriteriaGroup>.ObjectPropertyGroup>.ObjectPropertyTypeId .nice-select.disabled {
+						padding-right: 26px;
+					}
 
 					&>div .Highlited {
 						position: relative;
@@ -1584,6 +1595,7 @@ body {
 					}*/
 					&>div .StartClassGroup,
 					&>div .EndClassGroup {
+						margin-left: -8px;
 						&>.selectViewVariable {
 							display: block;
 							right: 18px; //+10 pour retrait dans fleche
