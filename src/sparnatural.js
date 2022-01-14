@@ -1396,15 +1396,20 @@ console.log('removeValue') ;
 			this.widgetType = this.specProvider.getObjectPropertyType(objectPropertyId);
 
 			// if non selectable, simply exit
-			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-				this.ParentComponent.parentCriteriaGroup.initCompleted() ;
+			if (
+				this.widgetType == Config.NON_SELECTABLE_PROPERTY
+			) {
+				if(this.specProvider.isLiteralClass(this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected)) {
+					this.ParentComponent.parentCriteriaGroup.initCompleted() ;
 
-				//Add variable on results view
-				this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
-			
-				//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
-				$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
-				initGeneralEvent(this.ParentComponent.parentCriteriaGroup.thisForm_);
+					//Add variable on results view
+					this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+				
+					//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+					$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+					initGeneralEvent(this.ParentComponent.parentCriteriaGroup.thisForm_);					
+				}
+
 				return true;
 			}
 
