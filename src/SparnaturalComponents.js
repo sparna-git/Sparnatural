@@ -888,12 +888,12 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 			return true ;
 		}
 		this.default_value['optional'] = false ;
-		this.default_value['notexist'] = false ;
+		this.default_value['notExists'] = false ;
 		
 		if(this.parentComponent.parentCriteriaGroup.jsonQueryBranch) {
 			var branch = this.parentComponent.parentCriteriaGroup.jsonQueryBranch
 			this.default_value['optional'] = branch.optional ;
-			this.default_value['notexist'] = branch.notExists ;
+			this.default_value['notExists'] = branch.notExists ;
 			this.needTriggerClick = true ;
 		}
 
