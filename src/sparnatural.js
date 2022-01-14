@@ -1705,14 +1705,21 @@ console.log('removeValue') ;
 			if(jsonQuery.branches.length > i+1) {
 				next = jsonQuery.branches[i+1];
 			}
-			preprocessRec(branch, null, next);
+			preprocessRec(branch, null, next, jsonQuery);
 		}
 		return jsonQuery;
 	}
 
-	function preprocessRec(branch, parent, nextSibling) {
+	function preprocessRec(branch, parent, nextSibling, jsonQuery) {
 		branch.parent = parent;
 		branch.nextSibling = nextSibling;
+		// set flags ot indicate if the eye is open by testing the selected variables
+		if(jsonQuery.variables.includes(branch.line.s)) {
+			branch.line.sSelected = true;
+		}
+		if(jsonQuery.variables.includes(branch.line.o)) {
+			branch.line.oSelected = true;
+		}
 		for(var i = 0;i < branch.children.length;i++) {
 			var child = branch.children[i];
 			var next = null;
