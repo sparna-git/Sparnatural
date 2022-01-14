@@ -621,7 +621,7 @@ export class OptionsGroup extends GroupContenaire {
 				if (this.inputTypeComponent.default_value['optional']) {
 					$(this.html).find('.input-val input[data-id="optional"]').parents('label').first().trigger('click') ;
 				} else if (this.inputTypeComponent.default_value['notExists']) {
-					$(this.html).find('.input-val input[data-id=notExists]').parents('label').first().trigger('click') ;
+					$(this.html).find('.input-val input[data-id="notExists"]').parents('label').first().trigger('click') ;
 				}
 				this.inputTypeComponent.needTriggerClick = false ;
 			}
@@ -1094,7 +1094,7 @@ class ClassSelectBuilder {
 		var list = [] ;
 		for (var key in items) {
 			var label = items[key] ;
-			var selected = (default_value[key] == label)?' checked="checked"':'';
+			var selected = (default_value[key])?' checked="checked"':'';
 			list.push( '<label class="flexWrap"><input type="radio" name="'+inputID+'" data-id="'+key+'"'+selected+' '+'  />' + '<div class="componentBackArrow">' + UiuxConfig.COMPONENT_ARROW_BACK + '</div><span>'+ label + '</span><div class="componentFrontArrow">' + UiuxConfig.COMPONENT_ARROW_FRONT + '</div></label>' );
 		}
 
