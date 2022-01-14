@@ -132,6 +132,7 @@
       "@type": "@id"
     },
     "faIcon": "http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon",
+    "tooltip": "http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip",
     "sparqlString": "http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString",
     "sparnatural": "http://data.sparna.fr/ontologies/sparnatural-config-core#",
     "datasources": "http://data.sparna.fr/ontologies/sparnatural-config-datasources#",
@@ -157,6 +158,10 @@
         {"@value" : "Country","@language" : "en"},
         {"@value" : "Pays","@language" : "fr"}
       ],
+      "tooltip": [
+        {"@value" : "en","@language" : "en"},
+        {"@value" : "fr","@language" : "fr"}
+      ],
       "faIcon":  "fas fa-globe-africa"
     },
     {
@@ -174,6 +179,10 @@
       "label": [
         {"@value" : "Person","@language" : "en"},
         {"@value" : "Personne","@language" : "fr"}
+      ],
+      "tooltip": [
+        {"@value" : "This is a person blah blah blah in the tooltip and this should be approximately this size long and maybe a bit longer.","@language" : "en"},
+        {"@value" : "This is a person blah blah blah in the tooltip and this should be approximately this size long and maybe a bit longer.","@language" : "fr"}
       ],
       "faIcon":  "fas fa-male",
       "sparqlString": "<http://dbpedia.org/ontology/Person>"
@@ -231,12 +240,19 @@
       "@id" : "http://dbpedia.org/ontology/country",
       "@type" : "ObjectProperty",
       "subPropertyOf" : "sparnatural:ListProperty",
+      "datasource" : "datasources:list_rdfslabel_count",
       "label": [
         {"@value" : "country","@language" : "en"},
         {"@value" : "pays","@language" : "fr"}
       ],
+      "tooltip": [
+        {"@value" : "A museum can be located in a country","@language" : "en"},
+        {"@value" : "Un musée peut se trouver dans un pays","@language" : "fr"}
+      ],
       "domain": "http://dbpedia.org/ontology/Museum",
-      "range": "http://dbpedia.org/ontology/Country"
+      "range": "http://dbpedia.org/ontology/Country",
+      "enableOptional": true,
+      "enableNegation": true
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#countryOf",
@@ -271,7 +287,8 @@
       ],
       "domain": "http://dbpedia.org/ontology/Museum",
       "range": "http://dbpedia.org/ontology/Artwork",
-      "sparqlString": "^<http://dbpedia.org/ontology/museum>"
+      "sparqlString": "^<http://dbpedia.org/ontology/museum>",
+      "enableNegation": true
     },
     {
       "@id" : "http://dbpedia.org/ontology/author",
@@ -317,6 +334,10 @@
       "label": [
         {"@value" : "born in","@language" : "en"},
         {"@value" : "né à","@language" : "fr"}
+      ],
+      "tooltip": [
+        {"@value" : "the country in which the person was born, which is actually the <em>country of the city in which the person was born <b>!!!</b></em>","@language" : "en"},
+        {"@value" : "the country in which the person was born, which is actually the <em>country of the city in which the person was born <b>!!!</b></em>","@language" : "fr"}
       ],
       "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://dbpedia.org/ontology/Country",
@@ -391,13 +412,12 @@
       ],
       "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement",
-      "datasource" : "datasources:list_URI_count"
-
+      "datasource" : "datasources:list_rdfslabel_count"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#text",
       "@type" : "ObjectProperty",
-      "subPropertyOf" : "sparnatural:SearchProperty",
+      "subPropertyOf" : "sparnatural:StringEqualsProperty",
       "label": [
         {"@value" : "label or description","@language" : "en"},
         {"@value" : "libellé ou description","@language" : "fr"}
@@ -423,7 +443,28 @@
         {"@value" : "name","@language" : "en"},
         {"@value" : "nom","@language" : "fr"}
       ],
-      "domain": "http://dbpedia.org/ontology/Artwork",
+      "domain": "http://dbpedia.org/ontology/Museum",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#artwork-label",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:SearchProperty",
+      "isMultilingual" : true,
+      "label": [
+        {"@value" : "name","@language" : "en"},
+        {"@value" : "nom","@language" : "fr"}
+      ],
+      "sparqlString": "rdfs:label",
+      "domain": {
+        "@type" : "Class",
+        "unionOf" : {
+          "@list" : [ 
+            { "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person"},
+            { "@id" : "http://dbpedia.org/ontology/Artwork"}
+          ]
+        }
+      },
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
     },
     {
