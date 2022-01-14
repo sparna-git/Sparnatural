@@ -618,6 +618,8 @@ export class OptionsGroup extends GroupContenaire {
 			$(this.html).find('.input-val label').on('click', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 
 			if(this.inputTypeComponent.needTriggerClick == true) {
+				// pour ouvrir la flèche : 
+				// $(this.html).find('.componentBackArrow').trigger('click');
 				if (this.inputTypeComponent.default_value['optional']) {
 					$(this.html).find('.input-val input[data-id="optional"]').parents('label').first().trigger('click') ;
 				} else if (this.inputTypeComponent.default_value['notExists']) {
