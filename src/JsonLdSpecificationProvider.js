@@ -35,6 +35,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 				value == "sparnatural:TimeProperty-Period"
 				||
 				value == "sparnatural:NonSelectableProperty"
+				||
+				value == "sparnatural:BooleanProperty"
 			) {
 				return this._expand(value);
 			}

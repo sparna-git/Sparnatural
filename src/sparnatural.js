@@ -1674,6 +1674,9 @@ console.log('removeValue') ;
 			  case Config.NON_SELECTABLE_PROPERTY:
 			  	this.widgetComponent = new NoWidget(this) ;
 			  	this.cssClasses.NoWidget = true ;
+			  case Config.BOOLEAN_PROPERTY:
+			  	this.widgetComponent = new BooleanWidget(this) ;
+			  	this.cssClasses.BooleanWidget = true ;
 			  default:
 			  	// TODO : throw Exception
 			  	console.log("Unexpected Widget Type "+widgetType)

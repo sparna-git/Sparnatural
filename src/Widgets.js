@@ -150,6 +150,104 @@
 		}
 	}
 	
+
+	ListWidgetNew = function(inputTypeComponent, listDatasource, langSearch) {
+		this.listDatasource = listDatasource;
+		this.ParentComponent = inputTypeComponent ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+		
+		this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
+		
+		this.init = function init() {
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
+			
+			var itc_obj = this.ParentComponent;
+			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+
+			document.getElementById(id_input).style.display = 'block' ;
+			document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'none' ;
+
+			var items = listDatasource.getItems(
+				startClassGroup_value,
+				ObjectPropertyGroup_value,
+				endClassGroup_value,
+				function( items ) {
+					if (items.length > 0) {
+						$.each( items, function( key, val ) {				  
+							var label = listHandler.elementLabel(val) ; 
+							var uri = listHandler.elementUri(val) ; 
+							$('#'+id_input).append( "<option value='" + uri + "' title='" + label + "'>" + label + "</option>" );
+						});
+						$('#'+id_input).niceSelect();
+						$('#'+id_input).on("change", function() {
+							$(itc_obj).trigger('change') ;
+						});
+					} else {
+						document.getElementById(id_input).style.display = 'none' ;
+						document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
+						console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
+					} 
+				}
+			);
+		}
+
+		this.getValue = function() {
+			var id_input = '#'+ this.id_input ;
+			// return $(id_input).val() ;
+
+			return {
+				key: $(id_input).val(),
+				label: $(id_input).find('option:selected').text(),
+				uri: $(id_input).val()
+			} ;
+		}
+	}
+
+	URLListDatasource = function(listHandler) {
+		
+		this.getItems = function(
+			startClassGroup_value,
+			ObjectPropertyGroup_value,
+			endClassGroup_value,
+			callback
+		) {
+			var options = {
+				url: listHandler.listUrl(
+					startClassGroup_value,
+					ObjectPropertyGroup_value,
+					endClassGroup_value
+				),
+				dataType: "json",
+				method: "GET",
+				data: {
+					  dataType: "json"
+				}
+			} ;
+			
+			var request = $.ajax( options );
+			request.done(function( data ) {			  
+			  	var items = listHandler.listLocation(
+			  		startClassGroup_value,
+			  		ObjectPropertyGroup_value,
+			  		endClassGroup_value,
+			  		data
+			  	) ;
+
+			  	var result = [];
+			  	$.each( items, function( key, val ) {				  
+					var label = listHandler.elementLabel(val) ; 
+					var uri = listHandler.elementUri(val) ; 
+					result[uri] = label;
+				});
+
+			  	callback(result);
+			});
+		}
+	}
+
 	DatesWidget = function(inputTypeComponent, datesHandler, langSearch) {
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
@@ -409,6 +507,48 @@
 			}
 		}
 	}
+
+
+	BooleanWidget = function(inputTypeComponent, langSearch) {
+		this.ParentComponent = inputTypeComponent ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+		
+		this.html = '<div class="boolean-widget" id="boolean-widget-'+this.IdCriteriaGroupe+'"><a class="boolean-link" id="boolean-widget-'+this.IdCriteriaGroupe+'-true" href="#">true</a> or <a class="boolean-link" id="boolean-widget-'+this.IdCriteriaGroupe+'-false" href="#">false</a><input type="hidden" id="boolean-widget-'+this.IdCriteriaGroupe+'-value" /></div>' ;
+		
+		this.init = function init() {
+			var id_inputs = this.IdCriteriaGroupe;			
+			var itc_obj = this.ParentComponent;			
+			var CriteriaGroup = this.ParentComponent.ParentComponent.parentCriteriaGroup ;
+			var id_input = '#boolean-widget-'+ this.IdCriteriaGroupe +'-value' ;
+
+			$('#boolean-widget-'+this.IdCriteriaGroupe+'-true').on(
+				'click',
+				function() {
+					$(id_input).val("true");
+					$(itc_obj).trigger("change");
+				}
+			);
+
+			$('#boolean-widget-'+this.IdCriteriaGroupe+'-false').on(
+				'click',
+				function() {
+					$(id_input).val("false");
+					$(itc_obj).trigger("change");
+				}
+			);
+		}
+
+		this.getValue = function() {
+			var id_input = '#boolean-widget-'+ this.IdCriteriaGroupe +'-value' ;
+
+			return {
+				key: $(id_input).val(),
+				label: $(id_input).val(),
+				boolean: $(id_input).val()
+			}
+		}
+	}
+
 
 	NoWidget = function(inputTypeComponent) {
 		this.html = null ;
