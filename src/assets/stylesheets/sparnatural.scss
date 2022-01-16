@@ -536,6 +536,10 @@ body {
 					.underline {
 						text-decoration: underline;
 					}
+					.boolean-value {
+						text-decoration: underline;
+						cursor: pointer;
+					}
 					.or {
 						color: $custom-red;
 						font-weight: 600;

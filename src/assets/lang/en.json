@@ -26,5 +26,7 @@
 	"labelOrderSort": "Sort",
 	"SelectAllValues": "Any",
 	"Or": "or",
-	"SwitchVariablesNames": "Show column names"
+	"SwitchVariablesNames": "Show column names",
+	"true": "True",
+	"false": "False"
 }

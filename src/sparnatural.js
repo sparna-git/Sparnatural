@@ -1433,14 +1433,21 @@ console.log('removeValue') ;
 				this.widgetType == Config.TIME_PROPERTY_YEAR
 			){
 				var endLabel = langSearch.Select+" :" ;
+			} else if(this.widgetType == Config.BOOLEAN_PROPERTY) {
+				var endLabel = "" ;
 			} else {
 				var endLabel = langSearch.Find+" :" ;
+			}
+
+			var parenthesisLabel = ' ('+classLabel+') ';
+			if(this.widgetType == Config.BOOLEAN_PROPERTY) {
+				parenthesisLabel = " " ;
 			}
 
 			//Ajout de l'option all si pas de valeur déjà selectionées
 			var selcetAll = "";
 			if (this.ParentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0) {
-				selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span> ('+classLabel+') </span><span class="or">'+langSearch.Or+'</span> ' ;
+				selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span><span class="or">'+langSearch.Or+'</span> ' ;
 			}
 			
 			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll + '<span>'+ endLabel+'</span>' ;
@@ -1675,7 +1682,7 @@ console.log('removeValue') ;
 			  	this.widgetComponent = new NoWidget(this) ;
 			  	this.cssClasses.NoWidget = true ;
 			  case Config.BOOLEAN_PROPERTY:
-			  	this.widgetComponent = new BooleanWidget(this) ;
+			  	this.widgetComponent = new BooleanWidget(this, langSearch) ;
 			  	this.cssClasses.BooleanWidget = true ;
 			  default:
 			  	// TODO : throw Exception

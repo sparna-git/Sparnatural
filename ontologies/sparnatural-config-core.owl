@@ -137,6 +137,16 @@ The autocomplete suggestions can be configured using a datasource annotation, th
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#BooleanProperty -->
+
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#BooleanProperty">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a choice between &quot;true&quot; and &quot;false&quot; should be proposed.</rdfs:comment>
+        <rdfs:label xml:lang="en">boolean property</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#GraphDBSearchProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#GraphDBSearchProperty">
@@ -166,7 +176,7 @@ The list options can be configured using a datasource annotation, that will typi
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a dropdown list should be displayed to select a _literal_ value. Use this when the list of distinct literal values is small (e.g. foaf:gender).
 
 The list options can be configured using a datasource annotation, that will typically hold a reference to a SPARQL query to generate the list entries.</rdfs:comment>
-        <rdfs:label xml:lang="en">literel list property</rdfs:label>
+        <rdfs:label xml:lang="en">literal list property</rdfs:label>
     </owl:ObjectProperty>
     
 

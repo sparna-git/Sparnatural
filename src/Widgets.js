@@ -513,7 +513,7 @@
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
-		this.html = '<div class="boolean-widget" id="boolean-widget-'+this.IdCriteriaGroupe+'"><a class="boolean-link" id="boolean-widget-'+this.IdCriteriaGroupe+'-true" href="#">true</a> or <a class="boolean-link" id="boolean-widget-'+this.IdCriteriaGroupe+'-false" href="#">false</a><input type="hidden" id="boolean-widget-'+this.IdCriteriaGroupe+'-value" /></div>' ;
+		this.html = '<div class="boolean-widget" id="boolean-widget-'+this.IdCriteriaGroupe+'"><span class="boolean-value" id="boolean-widget-'+this.IdCriteriaGroupe+'-true">'+langSearch.true+'</span> <span class="or">'+langSearch.Or+'</span> <span class="boolean-value" id="boolean-widget-'+this.IdCriteriaGroupe+'-false">'+langSearch.false+'</span><input type="hidden" id="boolean-widget-'+this.IdCriteriaGroupe+'-value" /></div>' ;
 		
 		this.init = function init() {
 			var id_inputs = this.IdCriteriaGroupe;			
@@ -540,10 +540,10 @@
 
 		this.getValue = function() {
 			var id_input = '#boolean-widget-'+ this.IdCriteriaGroupe +'-value' ;
-
+			
 			return {
 				key: $(id_input).val(),
-				label: $(id_input).val(),
+				label: ($(id_input).val() == "true")?langSearch.true:langSearch.false,
 				boolean: $(id_input).val()
 			}
 		}
