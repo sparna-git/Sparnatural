@@ -81,7 +81,15 @@ Sparnatural offers currently 6 ways of selecting a value for a criteria : autoco
 
 ![](documentation/12-time-date.png)
 
-### Date range with search in period name
+### Date range with search in period name (chronocultural periods)
+
+![](documentation/14-chronocultural-period.png)
+
+(this requires data from [Perio.do](https://perio.do), a gazeeter of periods for linking and visualizing data)
+
+### Boolean selection
+
+TODO
 
 ### No value selection
 
