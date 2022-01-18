@@ -346,13 +346,13 @@ export class RDFSpecificationProvider {
 			i++;
 		}
 
-		// for each equivalentPath
-		var equivalentPathsPerEntity = {};
+		// for each sparqlString
 		this.store.getQuads(
 			undefined,
 			Config.SPARQL_STRING,
 			undefined
 		).forEach( quad => {
+			// find it with the full URI
 			var re = new RegExp("<" + quad.subject.id + ">","g");
 			sparql = sparql.replace(re, quad.object.value );			
 		});
@@ -455,7 +455,7 @@ export class RDFSpecificationProvider {
 
 		  var order1 = me._readOrder(item1);
 		  var order2 = me._readOrder(item2);
-		  
+
 		  if(order1) {
 		  	if(order2) {
 		  		if(order1 == order2) {

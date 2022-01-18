@@ -99,6 +99,12 @@ export class AbstractValue {
 				label: v.label,
 				search: v.regex
 			}
+	    } else if(v.luceneQueryValue) {
+	    	return {
+				key: v.luceneQueryValue,
+				label: v.label,
+				search: v.luceneQueryValue
+			}
 	    } else if(v.string) {
 	    	return {
 				key: v.string,
@@ -148,6 +154,13 @@ export class RegexValue extends AbstractValue {
 	constructor(regex, label=null) {
 		super(label);
 		this.regex = regex;
+	}
+}
+
+export class LuceneQueryValue extends AbstractValue {
+	constructor(luceneQueryValue, label=null) {
+		super(label);
+		this.luceneQueryValue = luceneQueryValue;
 	}
 }
 
@@ -396,7 +409,24 @@ export class QuerySPARQLWriter {
 			// TODO : language filter
 		}
 
-		// if we have a string criteria
+		// if we have a lucene query criteria
+		if(queryLine.values.length == 1 && queryLine.values[0].luceneQueryValue) {
+			this._updateGraphDbPrefixes(completeSparqlQuery);
+			// name of index must correspond to the local name of the range class
+			var connectorName = this._localName(queryLine.oType);
+			// field name in index corresponds to the local name of the property
+			var fieldName = this._localName(queryLine.p);
+			var searchVariable = queryLine.s+"Search";
+
+			var newBasicGraphPattern = this._initBasicGraphPattern() ;
+			newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#"+connectorName)) ;
+			// add literal triple
+			newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#query", fieldName+":"+queryLine.values[0].luceneQueryValue, true)) ;
+			newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#entities", queryLine.s)) ;
+			parentInSparqlQuery.push(newBasicGraphPattern);  
+		}
+
+		// if we have an exact string criteria
 		if(queryLine.values.length == 1 && queryLine.values[0].string) {
 			parentInSparqlQuery.push(
 				this._initFilterStringEquals(queryLine.values[0].string, queryLine.o)
@@ -589,6 +619,15 @@ export class QuerySPARQLWriter {
 		jsonQuery.prefixes.inst = "http://www.ontotext.com/connectors/lucene/instance#";
 		jsonQuery.prefixes.lucene = "http://www.ontotext.com/connectors/lucene#";
 		return jsonQuery ;
+	}
+
+	_localName(uri) {
+		if (uri.indexOf("#") > -1) {
+			return uri.split("#")[1] ;
+		} else {
+			var components = uri.split("/") ;
+			return components[components.length - 1] ;
+		}
 	}
 }
 

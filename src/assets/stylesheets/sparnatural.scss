@@ -337,6 +337,11 @@ body {
 					/*background: $custom-silver;*/
 					/*@include arrow-block($custom-silver);*/
 				}
+				&.Unavailable {
+					display: inline-block;
+					background: $custom-silver-light;
+					@include arrow-block($custom-silver-light);
+				}
 			}
 			.OptionTypeId {
 				display: none ;

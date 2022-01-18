@@ -10,6 +10,7 @@ URIValue = require("./Query.js").URIValue ;
 LiteralValue = require("./Query.js").LiteralValue ;
 DateTimeValue = require("./Query.js").DateTimeValue ;
 RegexValue = require("./Query.js").RegexValue ;
+LuceneQueryValue = require("./Query.js").LuceneQueryValue ;
 ExactStringValue = require("./Query.js").ExactStringValue ;
 BooleanValue = require("./Query.js").BooleanValue ;
 
@@ -111,9 +112,12 @@ class JSONQueryGenerator {
 				}
 				break;
 			  case Config.SEARCH_PROPERTY:				  
-			  case Config.GRAPHDB_SEARCH_PROPERTY:
 				  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
 				  line.values.push(new RegexValue(value, value));
+				  break;
+		 	  case Config.GRAPHDB_SEARCH_PROPERTY:
+		 	  	  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
+				  line.values.push(new LuceneQueryValue(value, value));
 				  break;
 			  case Config.STRING_EQUALS_PROPERTY:
 			  	  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;

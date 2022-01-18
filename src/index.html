@@ -409,7 +409,7 @@
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#text",
       "@type" : "ObjectProperty",
-      "subPropertyOf" : "sparnatural:StringEqualsProperty",
+      "subPropertyOf" : "sparnatural:GraphDBSearchProperty",
       "label": [
         {"@value" : "label or description","@language" : "en"},
         {"@value" : "libellé ou description","@language" : "fr"}
@@ -535,6 +535,7 @@
           sparqlPrefixes : {
             "dbpedia" : "http://dbpedia.org/ontology/"
           },
+          localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
           filterConfigOnEndpoint : false,
           onQueryUpdated: function(queryString, queryJson, pivotJson) {
             queryString = semanticPostProcess(queryString, queryJson);

@@ -198,6 +198,16 @@ This is typically the default behavior for a list without a datasource specified
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their dcterms:title and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_count">
@@ -216,6 +226,17 @@ This is typically the default behavior for a list without a datasource specified
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their foaf:name ordered alphabetically based on this property.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_foafname_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_foafname_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their foaf:name and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
     </owl:NamedIndividual>
     
 
@@ -242,6 +263,17 @@ This is typically the default behavior for a list without a datasource specified
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their rdfs:label and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_count">
@@ -260,6 +292,16 @@ This is typically the default behavior for a list without a datasource specified
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their schema:name ordered alphabetically based on this property.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their schema:name and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
     </owl:NamedIndividual>
     
 
@@ -286,6 +328,17 @@ This is typically the default behavior for a list without a datasource specified
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
+        <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their skos:prefLabel and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_count">
@@ -301,7 +354,26 @@ This is typically the default behavior for a list without a datasource specified
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_alpha">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of literal ordered alphabetically.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_alpha_with_count">
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of literal with count in parenthesis, ordered alphabetically.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_count">
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of literal ordered by descending number of occurrences.</rdfs:comment>
     </owl:NamedIndividual>
     
 
@@ -365,6 +437,31 @@ LIMIT 500</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT ?uri ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri .
+    FILTER(isIRI(?uri))
+    # Note how the range criteria is not used in this query
+  }
+  GROUP BY ?uri
+}
+?uri $labelPath ?theLabel .
+FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+}
+ORDER BY UCASE(?label)
+LIMIT 500</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count">
@@ -410,6 +507,32 @@ LIMIT 500</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT ?uri ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri .
+    FILTER(isIRI(?uri))
+    # range criteria
+    ?uri a $range .
+  }
+  GROUP BY ?uri
+}
+?uri $labelPath ?theLabel .
+FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+}
+ORDER BY UCASE(?label)
+LIMIT 500</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_with_range_count">
@@ -446,6 +569,50 @@ WHERE {
     ?domain $property ?value .
 }
 ORDER BY UCASE(?label)
+LIMIT 500</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count">
+        <sparnatural-config-datasources:queryString>SELECT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+  WHERE {
+    ?domain a $domain .
+    ?domain $property ?theLabel .
+  }
+  GROUP BY ?theLabel
+}
+?uri $labelPath ?theLabel .
+FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+}
+ORDER BY UCASE(?label)
+LIMIT 500</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count">
+        <sparnatural-config-datasources:queryString>SELECT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+  WHERE {
+    ?domain a $domain .
+    ?domain $property ?theLabel .
+  }
+  GROUP BY ?theLabel
+}
+?uri $labelPath ?theLabel .
+FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+}
+ORDER BY DESC(?count) UCASE(?label)
 LIMIT 500</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
