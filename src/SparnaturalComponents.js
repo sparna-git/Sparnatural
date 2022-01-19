@@ -576,6 +576,12 @@ export class OptionsGroup extends GroupContenaire {
 
 			if (
 				parentOptionEnable
+				||
+				(
+					!this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+					&&
+					!this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+				)
 			) {
 				$(this.html).find('.EditComponents').addClass('Disabled') ;
 				$(this.html).find('.EditComponents').removeClass('NoOptionEnabled') ;
