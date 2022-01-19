@@ -105,6 +105,12 @@ export class AbstractValue {
 				label: v.label,
 				search: v.string
 			}
+	    } else if(v.boolean) {
+	    	return {
+				key: v.boolean,
+				label: v.label,
+				boolean: v.boolean
+			}
 	    }
 	}
 
@@ -152,6 +158,13 @@ export class ExactStringValue extends AbstractValue {
 	}
 }
 
+export class BooleanValue extends AbstractValue {
+	constructor(boolean, label=null) {
+		super(label);
+		this.boolean = boolean;
+	}
+}
+
 /**
  * Writes a Query data structure in SPARQL
  **/
@@ -165,10 +178,11 @@ export class QuerySPARQLWriter {
 		this.specProvider = specProvider;
 		this.additionnalPrefixes = {};
 
-		// var SparqlParser = require('sparqljs').Parser;
-		// var parser = new SparqlParser();
+		var SparqlParser = require('sparqljs').Parser;
+		var parser = new SparqlParser();
 		// var query = parser.parse("SELECT ?x WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) } ORDER BY DESC(?x)");
-		// console.log(query);
+		var query = parser.parse("SELECT ?x WHERE { ?x <http://ex.fr/test> true }");
+		console.log(query);
 	}
 
 	// add a new prefix to the generated query
@@ -319,6 +333,18 @@ export class QuerySPARQLWriter {
 					(queryLine.values[0].uri)?queryLine.values[0].uri:queryLine.values[0].literal,
 					// insert as a literal if the value is a literal value
 					queryLine.values[0] instanceof LiteralValue
+				)) ;
+			} else if(
+				queryLine.values.length == 1
+				&&
+				queryLine.values[0].boolean
+			) {		
+				// build direct boolean value				
+				bgp.triples.push(this._buildTriple(
+					queryLine.s,
+					queryLine.p,
+					"\""+queryLine.values[0].boolean+"\"^^http://www.w3.org/2001/XMLSchema#boolean",
+					false
 				)) ;
 			} else {
 

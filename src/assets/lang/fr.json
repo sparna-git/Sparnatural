@@ -26,5 +26,7 @@
 	"labelOrderSort": "Tri :",
 	"SelectAllValues": "Tous·tes",
 	"Or": "ou",
-	"SwitchVariablesNames": "Montrer le nom des colonnes"
+	"SwitchVariablesNames": "Montrer le nom des colonnes",
+	"true": "Vrai",
+	"false": "Faux"
 }

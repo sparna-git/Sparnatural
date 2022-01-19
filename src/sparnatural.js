@@ -1396,15 +1396,20 @@ console.log('removeValue') ;
 			this.widgetType = this.specProvider.getObjectPropertyType(objectPropertyId);
 
 			// if non selectable, simply exit
-			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-				this.ParentComponent.parentCriteriaGroup.initCompleted() ;
+			if (
+				this.widgetType == Config.NON_SELECTABLE_PROPERTY
+			) {
+				if(this.specProvider.isLiteralClass(this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected)) {
+					this.ParentComponent.parentCriteriaGroup.initCompleted() ;
 
-				//Add variable on results view
-				this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
-			
-				//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
-				$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
-				initGeneralEvent(this.ParentComponent.parentCriteriaGroup.thisForm_);
+					//Add variable on results view
+					this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+				
+					//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+					$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+					initGeneralEvent(this.ParentComponent.parentCriteriaGroup.thisForm_);					
+				}
+
 				return true;
 			}
 
@@ -1428,14 +1433,21 @@ console.log('removeValue') ;
 				this.widgetType == Config.TIME_PROPERTY_YEAR
 			){
 				var endLabel = langSearch.Select+" :" ;
+			} else if(this.widgetType == Config.BOOLEAN_PROPERTY) {
+				var endLabel = "" ;
 			} else {
 				var endLabel = langSearch.Find+" :" ;
+			}
+
+			var parenthesisLabel = ' ('+classLabel+') ';
+			if(this.widgetType == Config.BOOLEAN_PROPERTY) {
+				parenthesisLabel = " " ;
 			}
 
 			//Ajout de l'option all si pas de valeur déjà selectionées
 			var selcetAll = "";
 			if (this.ParentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0) {
-				selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span> ('+classLabel+') </span><span class="or">'+langSearch.Or+'</span> ' ;
+				selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span><span class="or">'+langSearch.Or+'</span> ' ;
 			}
 			
 			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll + '<span>'+ endLabel+'</span>' ;
@@ -1669,6 +1681,9 @@ console.log('removeValue') ;
 			  case Config.NON_SELECTABLE_PROPERTY:
 			  	this.widgetComponent = new NoWidget(this) ;
 			  	this.cssClasses.NoWidget = true ;
+			  case Config.BOOLEAN_PROPERTY:
+			  	this.widgetComponent = new BooleanWidget(this, langSearch) ;
+			  	this.cssClasses.BooleanWidget = true ;
 			  default:
 			  	// TODO : throw Exception
 			  	console.log("Unexpected Widget Type "+widgetType)
@@ -1705,14 +1720,21 @@ console.log('removeValue') ;
 			if(jsonQuery.branches.length > i+1) {
 				next = jsonQuery.branches[i+1];
 			}
-			preprocessRec(branch, null, next);
+			preprocessRec(branch, null, next, jsonQuery);
 		}
 		return jsonQuery;
 	}
 
-	function preprocessRec(branch, parent, nextSibling) {
+	function preprocessRec(branch, parent, nextSibling, jsonQuery) {
 		branch.parent = parent;
 		branch.nextSibling = nextSibling;
+		// set flags ot indicate if the eye is open by testing the selected variables
+		if(jsonQuery.variables.includes(branch.line.s)) {
+			branch.line.sSelected = true;
+		}
+		if(jsonQuery.variables.includes(branch.line.o)) {
+			branch.line.oSelected = true;
+		}
 		for(var i = 0;i < branch.children.length;i++) {
 			var child = branch.children[i];
 			var next = null;

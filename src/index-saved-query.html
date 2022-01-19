@@ -499,6 +499,17 @@
       ],
       "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://dbpedia.org/ontology/Museum"      
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#isAlive",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:BooleanProperty",
+      "label": [
+        {"@value" : "is alive","@language" : "en"},
+        {"@value" : "est vivant","@language" : "fr"}
+      ],
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
     }
   ]
 }
