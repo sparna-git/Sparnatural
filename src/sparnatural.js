@@ -307,6 +307,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			// clear the form
 			// On Clear form new component is automaticaly added, json gets loaded
 			clearForm(form) ;
+
+			form.sparnatural.variablesSelector.loadQuery() ;
 			
 			// And now, submit form
 			$(form.sparnatural).trigger('submit')
@@ -363,7 +365,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(form.sparnatural).append(contexte) ;
 
 			//Ajout du filtre pour ombrage menu options
-			$(form.sparnatural).append($('<svg data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0"><defs><filter style="color-interpolation-filters:sRGB;" inkscape:label="Drop Shadow" id="filter19278" x="-0.15483875" y="-0.11428573" width="1.3096775" height="1.2714286"><feFlood flood-opacity="0.811765" flood-color="rgb(120,120,120)" result="flood" id="feFlood19268" /><feComposite in="flood" in2="SourceGraphic" operator="out" result="composite1" id="feComposite19270" /><feGaussianBlur in="composite1" stdDeviation="2" result="blur" id="feGaussianBlur19272" /><feOffset dx="3.60822e-16" dy="1.8" result="offset" id="feOffset19274" /><feComposite in="offset" in2="SourceGraphic" operator="atop" result="composite2" id="feComposite19276" /></filter></defs></svg>') );
+			$(form.sparnatural).append($('<svg data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" style="width:0;height:0;"><defs><filter style="color-interpolation-filters:sRGB;" inkscape:label="Drop Shadow" id="filter19278" x="-0.15483875" y="-0.11428573" width="1.3096775" height="1.2714286"><feFlood flood-opacity="0.811765" flood-color="rgb(120,120,120)" result="flood" id="feFlood19268" /><feComposite in="flood" in2="SourceGraphic" operator="out" result="composite1" id="feComposite19270" /><feGaussianBlur in="composite1" stdDeviation="2" result="blur" id="feGaussianBlur19272" /><feOffset dx="3.60822e-16" dy="1.8" result="offset" id="feOffset19274" /><feComposite in="offset" in2="SourceGraphic" operator="atop" result="composite2" id="feComposite19276" /></filter></defs></svg>') );
 
 
 			form.queryOptions = {
@@ -548,6 +550,28 @@ UiuxConfig = require("./UiuxConfig.js");
 			this.switchVariableName = function() {
 				$(this.form.sparnatural).find('.componentsListe').first().toggleClass('displayVarName') ;
 			}
+			this.loadQuery = function() {
+				this.form.submitOpened = false ;
+				for (var i = 0; i < this.form.preLoad.variables.length; i++) {
+					var variableName = this.form.preLoad.variables[i] ;
+					for (var x = 0; x < this.form.sparnatural.components.length; x++) {
+						var critere = this.form.sparnatural.components[x].CriteriaGroup ;
+						if (critere.StartClassGroup.variableNamePreload == variableName ) {
+							critere.StartClassGroup.onchangeViewVariable() ;
+							break ; // une variable ne doit être trouvé q'une seule fois et seulement la première
+						}
+						if (critere.EndClassGroup.variableNamePreload == variableName ) {
+							critere.EndClassGroup.onchangeViewVariable() ;
+							break ; // une variable ne doit être trouvé q'une seule fois et seulement la première
+						}
+						
+					}
+					x= 0 ;
+				}
+				this.form.submitOpened = true ;
+			}
+
+			///form.sparnatural.variablesSelector = this ;
 		}
 
 		
@@ -1068,8 +1092,12 @@ console.log('removeValue') ;
 			$(this.parentCriteriaGroup.html).find('.EndClassGroup>div').first().removeClass('newOr') ;
 
 			//Add variable on results view
-			this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
-			
+			if(!this.parentCriteriaGroup.EndClassGroup.notSelectForview) {
+				if (this.parentCriteriaGroup.EndClassGroup.variableSelector == null) {
+					this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+				}
+				
+			}
 			this.parentCriteriaGroup.initCompleted() ;
 			
 			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
@@ -1407,7 +1435,10 @@ console.log('removeValue') ;
 					this.ParentComponent.parentCriteriaGroup.initCompleted() ;
 
 					//Add variable on results view
-					this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+					if(!this.ParentComponent.parentCriteriaGroup.EndClassGroup.notSelectForview) {
+						this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+					}
+					
 				
 					//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 					$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
@@ -1745,7 +1776,7 @@ console.log('removeValue') ;
 			if(branch.children.length > i+1) {
 				next = branch.children[i+1];
 			}
-			preprocessRec(child, branch, next);
+			preprocessRec(child, branch, next, jsonQuery);
 		}
 	}
 	

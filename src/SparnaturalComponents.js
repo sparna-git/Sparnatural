@@ -157,8 +157,11 @@ export class GroupContenaire extends HTMLComponent {
 			SparnaturalComponents.eventProxiCriteria
 		);
 		if(this.inputTypeComponent.needTriggerClick == true) {
+			// Ne pas selectionner pour les résultats si chargement en cours
+			this.notSelectForview = true ;
 			$(this.html).find('select.input-val').trigger('change');
 			this.inputTypeComponent.needTriggerClick = false ;
+			this.notSelectForview = false ;
 		}
 		
 	}
@@ -197,16 +200,19 @@ export class GroupContenaire extends HTMLComponent {
 		}
 
 		if ((this.varName == '?this') && (parentOrSibling === null)) {
-			this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_SELECTED_VARIABLE+'</span>') ;
-			$(this.html).append(this.selectViewVariable) ;
-			$(this.html).find('span.selectViewVariable').on(
-				'click',
-				{arg1: this, arg2: 'onchangeViewVariable'},
-				SparnaturalComponents.eventProxiCriteria
-			);
-			//Add varableSelector on variableSelector list ;
-			this.variableSelector = new VariableSelector(this) ;
-			$(this.html).addClass('VariableSelected') ;
+			//Si une requete est en chargement pas d'obligation d'aficher la première variable
+			if (!this.notSelectForview) {
+				this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_SELECTED_VARIABLE+'</span>') ;
+				$(this.html).append(this.selectViewVariable) ;
+				$(this.html).find('span.selectViewVariable').on(
+					'click',
+					{arg1: this, arg2: 'onchangeViewVariable'},
+					SparnaturalComponents.eventProxiCriteria
+				);
+				//Add varableSelector on variableSelector list ;
+				this.variableSelector = new VariableSelector(this) ;
+				$(this.html).addClass('VariableSelected') ;
+			}
 		}
 
 		$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
@@ -415,9 +421,12 @@ export class EndClassGroup extends GroupContenaire {
 			SparnaturalComponents.eventProxiCriteria
 		);
 		if(this.inputTypeComponent.needTriggerClick == true) {
+			// Ne pas selectionner pour les résultats si chargement en cours
+			this.notSelectForview = true ;
 			//$(this.html).find('.nice-select').trigger('click') ;
 			$(this.html).find('select.input-val').trigger('change');
 			this.inputTypeComponent.needTriggerClick = false ;
+			this.notSelectForview = false ;
 			//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
 		}
 	}
@@ -610,7 +619,7 @@ export class OptionsGroup extends GroupContenaire {
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
 
 			$(this.html).find('.input-val label').on('click', function(e) {
-				$(e.target).parents('label').first().addClass('justClicked') ;
+				$(this).addClass('justClicked') ;
 			});
 			$(this.html).find('.input-val input').on('click', function(e) {
 				e.stopPropagation();
@@ -618,11 +627,16 @@ export class OptionsGroup extends GroupContenaire {
 			$(this.html).find('.input-val label').on('click', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 
 			if(this.inputTypeComponent.needTriggerClick == true) {
-				// pour ouvrir la flèche : 
-				// $(this.html).find('.componentBackArrow').trigger('click');
+				
 				if (this.inputTypeComponent.default_value['optional']) {
+					// pour ouvrir le menu : 
+					$(this.html).find('.componentBackArrow').first().trigger('click');
+					// pour selectionner l'option
 					$(this.html).find('.input-val input[data-id="optional"]').parents('label').first().trigger('click') ;
 				} else if (this.inputTypeComponent.default_value['notExists']) {
+					// pour ouvrir le menu : 
+					$(this.html).find('.componentBackArrow').first().trigger('click');
+					// pour selectionner l'option
 					$(this.html).find('.input-val input[data-id="notExists"]').parents('label').first().trigger('click') ;
 				}
 				this.inputTypeComponent.needTriggerClick = false ;
@@ -636,6 +650,7 @@ export class OptionsGroup extends GroupContenaire {
 	}
 
 	onChange() {
+		
 		var optionsInputs = $(this.html).find('.input-val input').get() ;
 		var optionSelected = false ;
 		for (var item in  optionsInputs) {
@@ -744,8 +759,11 @@ export class ClassTypeId extends HTMLComponent {
 			this.needTriggerClick = true ;
 			if (this.parentComponent.baseCssClass == "StartClassGroup") {
 				this.parentComponent.variableNamePreload = branch.line.s;
+				this.parentComponent.variableViewPreload = branch.line.sSelected ;
+
 			} else {
 				this.parentComponent.variableNamePreload = branch.line.o;
+				this.parentComponent.variableViewPreload = branch.line.oSelected ;
 			}
 		}
 
