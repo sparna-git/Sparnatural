@@ -157,8 +157,11 @@ export class GroupContenaire extends HTMLComponent {
 			SparnaturalComponents.eventProxiCriteria
 		);
 		if(this.inputTypeComponent.needTriggerClick == true) {
+			// Ne pas selectionner pour les résultats si chargement en cours
+			this.notSelectForview = true ;
 			$(this.html).find('select.input-val').trigger('change');
 			this.inputTypeComponent.needTriggerClick = false ;
+			this.notSelectForview = false ;
 		}
 		
 	}
@@ -197,16 +200,19 @@ export class GroupContenaire extends HTMLComponent {
 		}
 
 		if ((this.varName == '?this') && (parentOrSibling === null)) {
-			this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_SELECTED_VARIABLE+'</span>') ;
-			$(this.html).append(this.selectViewVariable) ;
-			$(this.html).find('span.selectViewVariable').on(
-				'click',
-				{arg1: this, arg2: 'onchangeViewVariable'},
-				SparnaturalComponents.eventProxiCriteria
-			);
-			//Add varableSelector on variableSelector list ;
-			this.variableSelector = new VariableSelector(this) ;
-			$(this.html).addClass('VariableSelected') ;
+			//Si une requete est en chargement pas d'obligation d'aficher la première variable
+			if (!this.notSelectForview) {
+				this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_SELECTED_VARIABLE+'</span>') ;
+				$(this.html).append(this.selectViewVariable) ;
+				$(this.html).find('span.selectViewVariable').on(
+					'click',
+					{arg1: this, arg2: 'onchangeViewVariable'},
+					SparnaturalComponents.eventProxiCriteria
+				);
+				//Add varableSelector on variableSelector list ;
+				this.variableSelector = new VariableSelector(this) ;
+				$(this.html).addClass('VariableSelected') ;
+			}
 		}
 
 		$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
@@ -415,9 +421,12 @@ export class EndClassGroup extends GroupContenaire {
 			SparnaturalComponents.eventProxiCriteria
 		);
 		if(this.inputTypeComponent.needTriggerClick == true) {
+			// Ne pas selectionner pour les résultats si chargement en cours
+			this.notSelectForview = true ;
 			//$(this.html).find('.nice-select').trigger('click') ;
 			$(this.html).find('select.input-val').trigger('change');
 			this.inputTypeComponent.needTriggerClick = false ;
+			this.notSelectForview = false ;
 			//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
 		}
 	}
@@ -750,8 +759,11 @@ export class ClassTypeId extends HTMLComponent {
 			this.needTriggerClick = true ;
 			if (this.parentComponent.baseCssClass == "StartClassGroup") {
 				this.parentComponent.variableNamePreload = branch.line.s;
+				this.parentComponent.variableViewPreload = branch.line.sSelected ;
+
 			} else {
 				this.parentComponent.variableNamePreload = branch.line.o;
+				this.parentComponent.variableViewPreload = branch.line.oSelected ;
 			}
 		}
 

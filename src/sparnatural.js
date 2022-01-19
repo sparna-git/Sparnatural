@@ -303,6 +303,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			// clear the form
 			// On Clear form new component is automaticaly added, json gets loaded
 			clearForm(form) ;
+
+			form.sparnatural.variablesSelector.loadQuery() ;
 			
 			// And now, submit form
 			$(form.sparnatural).trigger('submit')
@@ -544,6 +546,28 @@ UiuxConfig = require("./UiuxConfig.js");
 			this.switchVariableName = function() {
 				$(this.form.sparnatural).find('.componentsListe').first().toggleClass('displayVarName') ;
 			}
+			this.loadQuery = function() {
+				this.form.submitOpened = false ;
+				for (var i = 0; i < this.form.preLoad.variables.length; i++) {
+					var variableName = this.form.preLoad.variables[i] ;
+					for (var x = 0; x < this.form.sparnatural.components.length; x++) {
+						var critere = this.form.sparnatural.components[x].CriteriaGroup ;
+						if (critere.StartClassGroup.variableNamePreload == variableName ) {
+							critere.StartClassGroup.onchangeViewVariable() ;
+							break ; // une variable ne doit être trouvé q'une seule fois et seulement la première
+						}
+						if (critere.EndClassGroup.variableNamePreload == variableName ) {
+							critere.EndClassGroup.onchangeViewVariable() ;
+							break ; // une variable ne doit être trouvé q'une seule fois et seulement la première
+						}
+						
+					}
+					x= 0 ;
+				}
+				this.form.submitOpened = true ;
+			}
+
+			///form.sparnatural.variablesSelector = this ;
 		}
 
 		
@@ -1064,8 +1088,12 @@ console.log('removeValue') ;
 			$(this.parentCriteriaGroup.html).find('.EndClassGroup>div').first().removeClass('newOr') ;
 
 			//Add variable on results view
-			this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
-			
+			if(!this.parentCriteriaGroup.EndClassGroup.notSelectForview) {
+				if (this.parentCriteriaGroup.EndClassGroup.variableSelector == null) {
+					this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+				}
+				
+			}
 			this.parentCriteriaGroup.initCompleted() ;
 			
 			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
@@ -1403,7 +1431,10 @@ console.log('removeValue') ;
 					this.ParentComponent.parentCriteriaGroup.initCompleted() ;
 
 					//Add variable on results view
-					this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+					if(!this.ParentComponent.parentCriteriaGroup.EndClassGroup.notSelectForview) {
+						this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+					}
+					
 				
 					//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 					$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
