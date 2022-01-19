@@ -1741,7 +1741,7 @@ console.log('removeValue') ;
 			if(branch.children.length > i+1) {
 				next = branch.children[i+1];
 			}
-			preprocessRec(child, branch, next);
+			preprocessRec(child, branch, next, jsonQuery);
 		}
 	}
 	
