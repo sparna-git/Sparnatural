@@ -1005,8 +1005,6 @@ UiuxConfig = require("./UiuxConfig.js");
 			
 			if(this.parentCriteriaGroup.jsonQueryBranch != null) {
 				var branch = this.parentCriteriaGroup.jsonQueryBranch;
-				console.log(branch) ;
-				console.log(branch.line.values.lenght) ;
 				if (branch.line.values.length == 0) {
 					if (branch.children.length == 0) {
 						this.onSelectAll() ;
@@ -1435,6 +1433,15 @@ console.log('removeValue') ;
 			var objectPropertyId = this.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected;
 			this.widgetType = this.specProvider.getObjectPropertyType(objectPropertyId);
 
+			
+			var add_all = true;
+			var add_where = true;
+			var add_or = true;
+
+			// determine label and bit of HTML to select value
+			var rangeClassId = this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected
+			var classLabel = specProvider.getLabel(rangeClassId) ;
+
 			// if non selectable, simply exit
 			if (
 				this.widgetType == Config.NON_SELECTABLE_PROPERTY
@@ -1446,40 +1453,43 @@ console.log('removeValue') ;
 					if(!this.ParentComponent.parentCriteriaGroup.EndClassGroup.notSelectForview) {
 						this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
 					}
+
+					add_all = false;
+					add_where = false;
+					
 					
 				
 					//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 					$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 					initGeneralEvent(this.ParentComponent.parentCriteriaGroup.thisForm_);					
 				}
+				var endLabel = false ;
+				add_or = false;
 
-				return true;
-			}
-
-			// determine label and bit of HTML to select value
-			var rangeClassId = this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected
-			var classLabel = specProvider.getLabel(rangeClassId) ;
-			if (
-				this.widgetType == Config.SEARCH_PROPERTY
-				||
-				this.widgetType == Config.STRING_EQUALS_PROPERTY
-				||
-				this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY
-			) {
-				// label of the "Search" pseudo-class is inserted alone in this case
-				var endLabel = classLabel;
-			} else if(
-				this.widgetType == Config.LIST_PROPERTY
-				||
-				this.widgetType == Config.TIME_PROPERTY_DATE
-				||
-				this.widgetType == Config.TIME_PROPERTY_YEAR
-			){
-				var endLabel = langSearch.Select+" :" ;
-			} else if(this.widgetType == Config.BOOLEAN_PROPERTY) {
-				var endLabel = "" ;
-			} else {
-				var endLabel = langSearch.Find+" :" ;
+				//return true;
+			} else { // pour les autres type de widgets
+				if (
+					this.widgetType == Config.SEARCH_PROPERTY
+					||
+					this.widgetType == Config.STRING_EQUALS_PROPERTY
+					||
+					this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY
+				) {
+					// label of the "Search" pseudo-class is inserted alone in this case
+					var endLabel = classLabel;
+				} else if(
+					this.widgetType == Config.LIST_PROPERTY
+					||
+					this.widgetType == Config.TIME_PROPERTY_DATE
+					||
+					this.widgetType == Config.TIME_PROPERTY_YEAR
+				){
+					var endLabel = langSearch.Select+" :" ;
+				} else if(this.widgetType == Config.BOOLEAN_PROPERTY) {
+					var endLabel = "" ;
+				} else {
+					var endLabel = langSearch.Find+" :" ;
+				}
 			}
 
 			var parenthesisLabel = ' ('+classLabel+') ';
@@ -1490,23 +1500,33 @@ console.log('removeValue') ;
 			//Ajout de l'option all si pas de valeur déjà selectionées
 			var selcetAll = "";
 			if (this.ParentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0) {
-				selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span><span class="or">'+langSearch.Or+'</span> ' ;
+				if (add_all) {
+					selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span>' ;
+				}
+				if (add_all && add_or) {
+					selcetAll += '<span class="or">'+langSearch.Or+'</span> ';
+				}
 			}
 			
-			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll + '<span>'+ endLabel+'</span>' ;
+			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll  ;
+
+			if (endLabel) {
+				widgetLabel += '<span>'+ endLabel+'</span>' ;
+			}
 			
 			// init HTML by concatenating bit of HTML + widget HTML
+			this.createWidgetComponent(
+				this.widgetType,
+				objectPropertyId,
+				rangeClassId
+			) ;
 
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-				this.widgetHtml = "" ;
+				this.widgetHtml = widgetLabel ;
 			} else {
-				this.createWidgetComponent(
-					this.widgetType,
-					objectPropertyId,
-					rangeClassId
-				) ;
 				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
 			}
+
 			var this_component = this;
 			
 			
