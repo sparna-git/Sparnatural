@@ -1437,7 +1437,6 @@ console.log('removeValue') ;
 
 			
 			var add_all = true;
-			var add_where = true;
 			var add_or = true;
 
 			// determine label and bit of HTML to select value
@@ -1457,7 +1456,6 @@ console.log('removeValue') ;
 					}
 
 					add_all = false;
-					add_where = false;
 					
 					
 				
