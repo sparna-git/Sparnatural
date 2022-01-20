@@ -134,6 +134,8 @@ export class GroupContenaire extends HTMLComponent {
 		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.s:null;
 		this.variableSelector = null ;
 
+		this.notSelectForview = false ;
+
 		//this.needFrontArrow= true ;
 		//this.needBackArrow= true ;
 		
@@ -201,7 +203,7 @@ export class GroupContenaire extends HTMLComponent {
 
 		if ((this.varName == '?this') && (parentOrSibling === null)) {
 			//Si une requete est en chargement pas d'obligation d'aficher la première variable
-			if (!this.notSelectForview) {
+			if (!this.notSelectForview) { // Pas de requete à charger, oeil actif
 				this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_SELECTED_VARIABLE+'</span>') ;
 				$(this.html).append(this.selectViewVariable) ;
 				$(this.html).find('span.selectViewVariable').on(
@@ -212,6 +214,14 @@ export class GroupContenaire extends HTMLComponent {
 				//Add varableSelector on variableSelector list ;
 				this.variableSelector = new VariableSelector(this) ;
 				$(this.html).addClass('VariableSelected') ;
+			} else { //Pour le chargement d'une requête, par défaul l'oeil est barré.
+				this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_NOT_SELECTED_VARIABLE+'</span>') ;
+				$(this.html).append(this.selectViewVariable) ;
+				$(this.html).find('span.selectViewVariable').on(
+					'click',
+					{arg1: this, arg2: 'onchangeViewVariable'},
+					SparnaturalComponents.eventProxiCriteria
+				);
 			}
 		}
 
