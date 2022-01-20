@@ -1,3 +1,4 @@
+
 	
 	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
@@ -78,7 +79,7 @@
 		}
 	};
 	
-	ListWidget = function(inputTypeComponent, listHandler, langSearch) {
+	ListWidget = function(inputTypeComponent, listHandler, langSearch, settings) {
 		this.listHandler = listHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
@@ -98,6 +99,48 @@
 			document.getElementById(id_input).style.display = 'block' ;
 			document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'none' ;
 
+			let url = listHandler.listUrl(
+				startClassGroup_value,
+				ObjectPropertyGroup_value,
+				endClassGroup_value
+			);
+
+			var headers = new Headers();
+			headers.append("Accept", "application/sparql-results+json, application/json, */*;q=0.01");
+			let init = {
+				method: 'GET',
+				headers: headers,
+				mode: 'cors',
+				cache: 'default' 
+			};
+			let temp = new LocalCacheData() ;
+			let fetchpromise = temp.fetch(url, init, settings.localCacheDataTtl) ;
+			fetchpromise.then(response => response.json())
+			.then(data => {
+				var items = listHandler.listLocation(
+					startClassGroup_value,
+					ObjectPropertyGroup_value,
+					endClassGroup_value,
+					data
+				) ;
+				if (items.length > 0) {
+					$.each( items, function( key, val ) {				  
+						var label = listHandler.elementLabel(val) ; 
+						var uri = listHandler.elementUri(val) ; 
+						$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
+					});
+					$('#'+id_input).niceSelect();
+					$('#'+id_input).on("change", function() {
+						$(itc_obj).trigger('change') ;
+					});
+				} else {
+					document.getElementById(id_input).style.display = 'none' ;
+					document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
+					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
+				}  ;
+			});
+			
+			/*
 			var options = {
 				url: listHandler.listUrl(
 					startClassGroup_value,
@@ -110,7 +153,7 @@
 					  dataType: "json"
 				}
 			} ;
-			
+	
 			var request = $.ajax( options );
 			//var select = $(this.html).find('select') ;
 			request.done(function( data ) {			  
@@ -136,6 +179,7 @@
 					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
 				} 
 			});
+			*/
 		}
 
 		this.getValue = function() {
@@ -339,8 +383,15 @@
 				if (parseInt(value.start) > parseInt(value.stop)) {
 					value = null ;
 				} else {
-					value.start = value.start + '-01-01';
-					value.stop = value.stop + '-12-31';
+					var absoluteStartYear = (value.start.startsWith("-")?value.start.substring(1):value.start);
+					var paddedAbsoluteStartYear = absoluteStartYear.padStart(4,0);
+					var paddedStartYear = (value.start.startsWith("-")?"-"+paddedAbsoluteStartYear:paddedAbsoluteStartYear);
+					value.start = paddedStartYear + '-01-01T00:00:00';
+
+					var absoluteStopYear = (value.stop.startsWith("-")?value.stop.substring(1):value.stop);
+					var paddedAbsoluteStopYear = absoluteStopYear.padStart(4,0);
+					var paddedStopYear = (value.stop.startsWith("-")?"-"+paddedAbsoluteStopYear:paddedAbsoluteStopYear);
+					value.stop = paddedStopYear + '-12-31T23:59:59';
 				}
 			}
 

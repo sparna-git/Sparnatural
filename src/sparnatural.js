@@ -49,6 +49,8 @@ SparqlTemplateAutocompleteHandler = require("./AutocompleteAndListHandlers.js").
 
 SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHandler;
 
+LocalDataStorage = require("./LocalDataStorage.js").LocalDataStorage;
+LocalCacheData = require("./LocalCacheData.js").LocalCacheData;
 JSONQueryGenerator = require("./QueryGenerators.js").JSONQueryGenerator;
 
 QuerySPARQLWriter = require("./Query.js").QuerySPARQLWriter ;
@@ -81,6 +83,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			backgroundBaseColor: '250,136,3',
 			sparqlPrefixes: {},
 			defaultEndpoint: null,
+			localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miliseconds
+			// localCacheDataTtl: 1000 * 60 * 4, // 4 hour
 			// whether or not to send count queries to determine
 			// how many instances of each classes are properties are present in the graph
 			filterConfigOnEndpoint: false,
@@ -1586,7 +1590,7 @@ console.log('removeValue') ;
 			    	);
 				}
 
-				this.widgetComponent = new ListWidget(this, handler, langSearch) ;
+				this.widgetComponent = new ListWidget(this, handler, langSearch, settings) ;
 				this.cssClasses.ListeWidget = true ;
 
 			  	break;
@@ -1643,7 +1647,7 @@ console.log('removeValue') ;
 			    	);
 				}
 
-				this.widgetComponent = new ListWidget(this, handler, langSearch) ;
+				this.widgetComponent = new ListWidget(this, handler, langSearch, settings) ;
 				this.cssClasses.ListeWidget = true ;
 				break;
 			  case Config.AUTOCOMPLETE_PROPERTY:
