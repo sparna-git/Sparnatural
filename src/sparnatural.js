@@ -1007,7 +1007,9 @@ UiuxConfig = require("./UiuxConfig.js");
 				var branch = this.parentCriteriaGroup.jsonQueryBranch;
 				if (branch.line.values.length == 0) {
 					if (branch.children.length == 0) {
-						this.onSelectAll() ;
+						if (this.inputTypeComponent.canHaveSelectAll()) {
+							this.onSelectAll() ;
+						}
 					}
 				} else {
 					for (var key in branch.line.values) {
@@ -1543,6 +1545,14 @@ console.log('removeValue') ;
 			});
 
 		}
+
+		this.canHaveSelectAll = function canHaveSelectAll() {
+			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
+				this.specProvider.isLiteralClass(this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected)) {
+					return false;
+			} 
+			return true ;
+		} 
 
 		this.reload = function reload() {
 			if (this.tools === null) {
