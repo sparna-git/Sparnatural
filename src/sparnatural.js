@@ -1001,8 +1001,16 @@ UiuxConfig = require("./UiuxConfig.js");
 			
 			if(this.parentCriteriaGroup.jsonQueryBranch != null) {
 				var branch = this.parentCriteriaGroup.jsonQueryBranch;
-				for (var key in branch.line.values) {
-					this.loadValue(branch.line.values[key]) ;
+				console.log(branch) ;
+				console.log(branch.line.values.lenght) ;
+				if (branch.line.values.length == 0) {
+					if (branch.children.length == 0) {
+						this.onSelectAll() ;
+					}
+				} else {
+					for (var key in branch.line.values) {
+						this.loadValue(branch.line.values[key]) ;
+					}
 				}
 			}
 			
