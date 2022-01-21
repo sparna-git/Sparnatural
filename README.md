@@ -104,12 +104,19 @@ This is useful when a type a of entity is used only to navigate the graph, but w
 
 Sparnatural is multilingual and supports displaying labels of classes and properties in multiple languages.
 
+## Support for OPTIONAL and FILTER NOT EXISTS
+
+Sparnatural supports the `OPTIONAL` and `FILTER NOT EXISTS {}` keywords applied to a whole "branch" of the query.
+See here how to search for French Museums and the name of Italian painters they display, _if any_ :
+
+![](documentation/16-optional.gif)
+
 
 ## Limitations
 
-### Only basic graph patterns, no UNION, OPTIONAL, BIND, etc.
+### No UNION or BIND, etc.
 
-Sparnatural produces only basic graph patterns with VALUES. It does not support the creation of UNION, OPTIONAL, SERVICE, BIND, etc...
+Sparnatural does not support the creation of UNION, SERVICE, BIND, etc...
 
 ### SPARQL endpoint needs to be CORS-enabled
 
