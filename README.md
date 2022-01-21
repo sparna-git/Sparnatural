@@ -89,15 +89,13 @@ Sparnatural offers currently 6 ways of selecting a value for a criteria : autoco
 
 ### Boolean selection
 
-TODO
+![](documentation/15-boolean.png)
 
 ### No value selection
 
 This is useful when a type a of entity is used only to navigate the graph, but without the ability to select an instance of these entities.
 
 ![](documentation/13-no-value.png)
-
-
 
 
 ## Multilingual
@@ -120,13 +118,15 @@ Sparnatural does not support the creation of UNION, SERVICE, BIND, etc...
 
 ### SPARQL endpoint needs to be CORS-enabled
 
-To send SPARQL queries to a service that is not hosted on the same domain name as the web page in which Sparnatural is included, the SPARQL endpoint needs to allow [Cross-Origin Resource Sharing (CORS)](https://enable-cors.org/).
+To send SPARQL queries to a service that is not hosted on the same domain name as the web page in which Sparnatural is included, the SPARQL endpoint needs to allow [Cross-Origin Resource Sharing (CORS)](https://enable-cors.org/). But we have SPARQL proxies for those who are not, don't worry ;-)
 
 # Integration
 
 ## Specification of classes and properties
 
-The component is configurable using a [JSON(-LD) ontology file](https://github.com/sparna-git/Sparnatural/wiki/JSON-based-configuration), or an [OWL configuration file](https://github.com/sparna-git/Sparnatural/wiki/OWL-based-configuration) editable in Protégé.. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. A JSON(-LD) configuration file contains :
+The component is configurable using a an [OWL configuration file](https://github.com/sparna-git/Sparnatural/wiki/OWL-based-configuration) editable in Protégé.. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. 
+
+Alternatively one can also use a [JSON(-LD) ontology file](https://github.com/sparna-git/Sparnatural/wiki/JSON-based-configuration). A JSON(-LD) configuration file contains :
 
 ### Class definition
 
@@ -169,7 +169,7 @@ It is possible to directly use font-awesome icons in place of icons embedded in 
 
 ## How to integrate Sparnatural in a webpage
 
-Have a look at `index.html` in the demos folder to see how the component is integrated in a webpage.
+Look at [this page in the wiki documentation](https://github.com/sparna-git/Sparnatural/wiki/Javascript-integration).
 
 
 ## Map the query structure to a different graph structure
