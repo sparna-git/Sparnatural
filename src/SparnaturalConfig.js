@@ -24,6 +24,8 @@ module.exports = Object.freeze({
 	ENABLE_NEGATION			 		: 		SPARNATURAL_CONFIG_CORE+'enableNegation',
 	IS_MULTILINGUAL			 		: 		SPARNATURAL_CONFIG_CORE+'isMultilingual',
 
+	LABEL_PROPERTY			 		: 		SPARNATURAL_CONFIG_CORE+'labelProperty',
+
 	SPARNATURAL_CLASS				: 		SPARNATURAL_CONFIG_CORE+'SparnaturalClass',
 	NOT_INSTANTIATED_CLASS			: 		SPARNATURAL_CONFIG_CORE+'NotInstantiatedClass',
 	RDFS_LITERAL					: 		"http://www.w3.org/2000/01/rdf-schema#Literal"

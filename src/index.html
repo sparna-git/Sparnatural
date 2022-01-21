@@ -141,7 +141,8 @@
         {"@value" : "Museum", "@language" : "en"},
         {"@value" : "Musée","@language" : "fr"}
       ],
-      "faIcon":  "fas fa-university"
+      "faIcon":  "fas fa-university",
+      "labelProperty": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#auto_label"
     },
     {
       "@id" : "http://dbpedia.org/ontology/Country",
@@ -439,7 +440,7 @@
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#artwork-label",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#a_label",
       "@type" : "ObjectProperty",
       "subPropertyOf" : "sparnatural:SearchProperty",
       "isMultilingual" : true,
@@ -457,6 +458,17 @@
           ]
         }
       },
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#auto_label",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:NonSelectableProperty",
+      "label": [
+        {"@value" : "name","@language" : "en"},
+        {"@value" : "nom","@language" : "fr"}
+      ],
+      "sparqlString": "rdfs:label",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
     },
     {
@@ -521,8 +533,8 @@
       $( document ).ready(function($) {          
 
         sparnatural = document.getElementById('ui-search').Sparnatural({
-          config: config,
-          // config: "sparnatural-config.ttl",
+          // config: config,
+          config: "sparnatural-config.ttl",
           language: lang,
           maxDepth: 4,
           addDistinct: true,

@@ -139,6 +139,16 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return null ;
 	}
 
+	this.getLabelProperty = function(classId) {
+		var theClass = this._getResourceById(classId);
+
+		if(theClass['labelProperty']) {
+			return theClass['labelProperty'];
+		}
+
+		return null;
+	}
+
 	this.isEnablingOptional = function(propertyId) {
 		var item = this._getResourceById(propertyId) ;
 		if (item !== null) {
@@ -307,6 +317,14 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return sparql;
 	}
 
+	this.readRange = function(objectProperty) {
+		var propertyEntity = this._getResourceById(objectProperty);
+		if(propertyEntity != null) {
+			return this._readRange(propertyEntity);
+		}
+		return null;
+	}
+
 
 	this._sortItemsByIndex = function(items) {
 		var me = this;
@@ -350,7 +368,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 				var value = objectProperty[domainOrRange]['unionOf']['@list'][i];
 				result.push(value['@id']);
 			}
-		} else {
+		} else if (objectProperty[domainOrRange]) {
 			result.push(objectProperty[domainOrRange]);
 		}
 

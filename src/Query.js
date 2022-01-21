@@ -58,9 +58,6 @@ export class QueryLine {
 		this.sType = subjectType;
 		this.oType = objectType;
 		this.values = [];
-		this.index = i;
-		// does it has siblings after him ?
-		this.dNextType = dependantType;
 	}
 }
 
@@ -208,6 +205,9 @@ export class QuerySPARQLWriter {
 	}
 
 	toSPARQL(query) {
+
+		this._preProcessQueryForLabelProperty(query);
+
 		var sparqlQuery = {
 			"type": "query",
 			"queryType": "SELECT"+((query.distinct)?' DISTINCT':'')+"",
@@ -248,6 +248,66 @@ export class QuerySPARQLWriter {
 		var generatedQuery = generator.stringify(sparqlQuery);		
 
 		return generatedQuery;
+	}
+
+	_preProcessQueryForLabelProperty(jsonQuery) {
+		for(var i = 0;i < jsonQuery.branches.length;i++) {
+			var branch = jsonQuery.branches[i];
+			this._preprocessBranchForLabelProperty_rec(branch, i == 0, jsonQuery);
+		}
+		return jsonQuery;
+	}
+
+	_preprocessBranchForLabelProperty_rec(branch, firstTopLevelBranch, jsonQuery) {
+		if(
+			jsonQuery.variables.includes(branch.line.s)
+			&&
+			this.specProvider.getLabelProperty(branch.line.sType) != null
+		) {
+			var originalVarName = branch.line.s;
+			branch.line.s = branch.line.s + "_resource";
+
+			if(branch.parent == null) {
+				// add criteria to fetch the label
+				var newBranch = new QueryBranch();
+				newBranch.line = new QueryLine(
+					branch.line.s,
+					branch.line.sType,
+					this.specProvider.getLabelProperty(branch.line.sType),
+					this.specProvider.readRange(this.specProvider.getLabelProperty(branch.line.sType))[0],
+					originalVarName
+				);
+				jsonQuery.branches.push(newBranch);
+			}
+		}
+
+
+		if(
+			jsonQuery.variables.includes(branch.line.o)
+			&&
+			this.specProvider.getLabelProperty(branch.line.oType) != null
+		) {
+			var originalVarName = branch.line.o;
+			branch.line.o = branch.line.o + "_resource";
+
+			// add criteria to fetch the label
+			var newBranch = new QueryBranch();
+			newBranch.line = new QueryLine(
+				branch.line.o,
+				branch.line.oType,
+				this.specProvider.getLabelProperty(branch.line.oType),
+				this.specProvider.readRange(this.specProvider.getLabelProperty(branch.line.oType))[0],
+				originalVarName
+			);
+			branch.children.push(newBranch);
+		}
+
+		for(var i = 0;i < branch.children.length;i++) {
+			var child = branch.children[i];
+			this._preprocessBranchForLabelProperty_rec(child, false, jsonQuery);
+		}
+
+		return branch;
 	}
 
 	_QueryBranchToSPARQL(sparqlQuery, parent, queryBranch, firstTopLevelBranch, defaultLang) {		

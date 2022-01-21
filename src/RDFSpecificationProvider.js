@@ -260,6 +260,7 @@ export class RDFSpecificationProvider {
 	}
 
 
+
 	isRemoteClass(classUri) {
 		return this.store.getQuads(
 			factory.namedNode(classUri),
@@ -360,6 +361,16 @@ export class RDFSpecificationProvider {
 		return sparql;
 	}
 
+	getLabelProperty(classId) {
+		var labelProperties = this._readAsResource(classId, Config.LABEL_PROPERTY);
+
+		if(labelProperties.length > 0) {
+			return labelProperties[0];
+		}
+
+		return null;
+	}
+
 	getDatasource(propertyOrClassId) {
 		var datasource = {};
 
@@ -446,6 +457,10 @@ export class RDFSpecificationProvider {
 
 	isMultilingual(propertyId) {
 		return (this._readAsSingleLiteral(propertyId, Config.IS_MULTILINGUAL) == "true");	
+	}
+
+	readRange(propertyId) {
+		return this._readClassesInRangeOfProperty(propertyId);
 	}
 
 	_sort(items) {
