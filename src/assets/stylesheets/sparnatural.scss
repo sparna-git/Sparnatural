@@ -12,13 +12,21 @@ $margin-children-li: 75px;
 
 $center-arrow-bd-width : 3px;
 
+/* Color of the criteria arrows (orange) */
 $custom-red: rgb(250,136,3) ;
+/* Color of the "unselect" buttons in criterias */
 $custom-red-bold: rgb(182, 97, 0) ;
+/* Color of a selected value in a criteria */
 $custom-red-medium: rgb(255, 210, 157) ;
 $custom-red-light: rgb(255, 231, 203) ;
+
+/* Color of the options arrow (optional / negation) */
 $custom-green: rgb(107,215,171) ;
-$custom-green-bold: rgb(2,184,117) ;
+/* Color of the options arrow when not selected */
 $custom-green-light: rgb(151,227,196) ;
+
+/* Color of the highlight of arrows */
+$custom-green-bold: rgb(2,184,117) ;
 
 $custom-silver: rgb(167,167,167) ;
 $custom-silver-light: rgb(230, 230, 230) ;
