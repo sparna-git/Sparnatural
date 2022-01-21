@@ -35,6 +35,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 				value == "sparnatural:TimeProperty-Period"
 				||
 				value == "sparnatural:NonSelectableProperty"
+				||
+				value == "sparnatural:BooleanProperty"
 			) {
 				return this._expand(value);
 			}
@@ -150,6 +152,15 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		var item = this._getResourceById(propertyId) ;
 		if (item !== null) {
 			return (item['enableNegation'] == true);
+		}	
+
+		return false;
+	}
+
+	this.isMultilingual = function(propertyId) {
+		var item = this._getResourceById(propertyId) ;
+		if (item !== null) {
+			return (item['isMultilingual'] == true);
 		}	
 
 		return false;

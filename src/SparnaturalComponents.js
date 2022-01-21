@@ -1,5 +1,6 @@
 
 const tippy = require('tippy.js').default;
+var UiuxConfig = require("./UiuxConfig.js");
 
 export class HTMLComponent {
 
@@ -11,6 +12,8 @@ export class HTMLComponent {
 		// must be false if not set for the moment
 		this.widgetHtml = widgetHtml;
 		this.html = $();
+		this.needBackArrow = false;
+		this.needFrontArrow = false;
 	}
 
 	attachComponentHtml() {
@@ -39,6 +42,12 @@ export class HTMLComponent {
 			// remove existing component
 			// this.component.html.find('>.'+instance ).remove();
 			this.html.append(this.widgetHtml) ; 
+			if(this.needBackArrow) {
+				this.addBackArrow() ;
+			}
+			if(this.needFrontArrow) {
+				this.addFrontArrow() ;
+			}
 		} else {
 			this.html = $();
 		}
@@ -48,6 +57,16 @@ export class HTMLComponent {
 		this.updateCssClasses() ;
 		this.attachComponentHtml() ;
 	}	
+
+	addBackArrow() {
+		this.backArrow = $('<div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div>') ;
+		this.html.prepend(this.backArrow) ;
+	}
+
+	addFrontArrow() {
+		this.frontArrow = $('<div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div>') ;
+		this.html.append(this.frontArrow) ;
+	}
 }
 
 export class GroupContenaire extends HTMLComponent {
@@ -82,6 +101,13 @@ export class GroupContenaire extends HTMLComponent {
 			this.updateCssClasses() ;
 		}
 	} ;
+
+	onSelctValue() {
+		var current = $(this.html).find('.nice-select .current').first() ;
+		var varNameForDisplay = '<span class="variableName">'+this.varName.replace('?', '')+'</span>' ;
+		$(varNameForDisplay).insertAfter($(current).find('.label').first()) ;
+
+	}
 } 
 
 
@@ -102,9 +128,17 @@ export class GroupContenaire extends HTMLComponent {
 		this.cssClasses.Created = false ;
 		
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
+		this.inputTypeComponent.needFrontArrow= true ;
 
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.s:null;
+		this.variableSelector = null ;
+
+		this.notSelectForview = false ;
+
+		//this.needFrontArrow= true ;
+		//this.needBackArrow= true ;
+		
 
 		this.init();
 	}
@@ -125,20 +159,39 @@ export class GroupContenaire extends HTMLComponent {
 			SparnaturalComponents.eventProxiCriteria
 		);
 		if(this.inputTypeComponent.needTriggerClick == true) {
+			// Ne pas selectionner pour les résultats si chargement en cours
+			this.notSelectForview = true ;
 			$(this.html).find('select.input-val').trigger('change');
 			this.inputTypeComponent.needTriggerClick = false ;
+			this.notSelectForview = false ;
 		}
 		
+	}
+
+	onchangeViewVariable() {
+		if (this.variableSelector === null) {
+			//Add varableSelector on variableSelector list ;
+			this.variableSelector = new VariableSelector(this) ;
+			$(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE) ;
+			$(this.html).addClass('VariableSelected') ;
+		} else {
+			if (this.variableSelector.canRemove()) {
+				this.variableSelector.remove() ;
+				this.variableSelector = null ;
+				$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
+				$(this.html).removeClass('VariableSelected') ;
+			}
+		}
+		this.parentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
 	}
 
 	onChange() {
 		
 		//this.niceslect.niceSelect('update') ;
 		this.value_selected = $(this.html).find('select.input-val').val() ;
-
+		//Sets the SPARQL variable name if not initialized from loaded query
+		var parentOrSibling = SparnaturalComponents.findParentOrSiblingCriteria(this.parentCriteriaGroup.thisForm_, this.parentCriteriaGroup.id) ;
 		if(this.varName == null) {
-			//Sets the SPARQL variable name if not initialized from loaded query
-			var parentOrSibling = SparnaturalComponents.findParentOrSiblingCriteria(this.parentCriteriaGroup.thisForm_, this.parentCriteriaGroup.id) ;
 			if (parentOrSibling && parentOrSibling.type == 'parent' ) {
 				this.varName = parentOrSibling.element.EndClassGroup.getVarName();
 			} else if (parentOrSibling && parentOrSibling.type == 'sibling' ) {
@@ -148,7 +201,33 @@ export class GroupContenaire extends HTMLComponent {
 			}
 		}
 
+		if ((this.varName == '?this') && (parentOrSibling === null)) {
+			//Si une requete est en chargement pas d'obligation d'aficher la première variable
+			if (!this.notSelectForview) { // Pas de requete à charger, oeil actif
+				this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_SELECTED_VARIABLE+'</span>') ;
+				$(this.html).append(this.selectViewVariable) ;
+				$(this.html).find('span.selectViewVariable').on(
+					'click',
+					{arg1: this, arg2: 'onchangeViewVariable'},
+					SparnaturalComponents.eventProxiCriteria
+				);
+				//Add varableSelector on variableSelector list ;
+				this.variableSelector = new VariableSelector(this) ;
+				$(this.html).addClass('VariableSelected') ;
+			} else { //Pour le chargement d'une requête, par défaul l'oeil est barré.
+				this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_NOT_SELECTED_VARIABLE+'</span>') ;
+				$(this.html).append(this.selectViewVariable) ;
+				$(this.html).find('span.selectViewVariable').on(
+					'click',
+					{arg1: this, arg2: 'onchangeViewVariable'},
+					SparnaturalComponents.eventProxiCriteria
+				);
+			}
+		}
+
 		$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+		//add varName on curent selection display
+		this.onSelctValue() ;
 		// trigger event on the whole line/criteria
 		$(this.parentCriteriaGroup).trigger( {type:"StartClassGroupSelected" } ) ;
 
@@ -212,6 +291,7 @@ export class ObjectPropertyGroup extends GroupContenaire {
 	onEndClassGroupSelected() {
 		$(this.html).find('.temporary-label').remove() ;
 		$(this.html).find('.input-val').unbind('change');
+		this.value_selected = null;
 
 		if (!this.objectPropertySelector.cssClasses.Created) {
 			this.objectPropertySelector.init() ;
@@ -251,13 +331,20 @@ export class ObjectPropertyGroup extends GroupContenaire {
 	}
 
 	onChange() {
+		if (this.value_selected) {
+			this.parentCriteriaGroup.OptionsGroup.reload() ;
+		}
 		this.value_selected = $(this.html).find('select.input-val').val() ;
 		// disable if only one possible property option between the 2 classes
 		if ($(this.html).find('.input-val').find('option').length == 1) {
 			$(this.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 		}
-		$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;			
-		$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+		$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
+		console.log(this.parentCriteriaGroup.html) ;
+		if($(this.parentCriteriaGroup.html).parent('li').first().hasClass('completed'))	{
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+		}
+		
 
 		// sets tooltip ready
 		var desc = this.specProvider.getTooltip(this.value_selected) ;
@@ -300,9 +387,12 @@ export class EndClassGroup extends GroupContenaire {
 			Created : false
 		}; 
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
+		this.inputTypeComponent.needBackArrow= true ;
+		this.inputTypeComponent.needFrontArrow= true ;
 
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.o:null;
+		this.variableSelector = null ;
 
 		this.init();
 	}
@@ -313,7 +403,10 @@ export class EndClassGroup extends GroupContenaire {
 		$(this.html).append('<div class="EditComponents ShowOnEdit"></div>');
 
 		var unselect = $('<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>') ;
+		this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_NOT_SELECTED_VARIABLE+'</span>') ;
 		$(this.html).append(unselect);
+		$(this.html).append(this.selectViewVariable);
+
 
 		//this.EndClassGroup.init() ;
 		this.inputTypeComponent.init() ;
@@ -332,12 +425,37 @@ export class EndClassGroup extends GroupContenaire {
 			{arg1: this, arg2: 'onRemoveSelected'},
 			SparnaturalComponents.eventProxiCriteria
 		);
+		$(this.html).find('span.selectViewVariable').on(
+			'click',
+			{arg1: this, arg2: 'onchangeViewVariable'},
+			SparnaturalComponents.eventProxiCriteria
+		);
 		if(this.inputTypeComponent.needTriggerClick == true) {
+			// Ne pas selectionner pour les résultats si chargement en cours
+			this.notSelectForview = true ;
 			//$(this.html).find('.nice-select').trigger('click') ;
 			$(this.html).find('select.input-val').trigger('change');
 			this.inputTypeComponent.needTriggerClick = false ;
+			this.notSelectForview = false ;
 			//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
 		}
+	}
+
+	onchangeViewVariable() {
+		if (this.variableSelector === null) {
+			//Add varableSelector on variableSelector list ;
+			this.variableSelector = new VariableSelector(this) ;
+			$(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE) ;
+			$(this.html).addClass('VariableSelected') ;
+		} else {
+			if (this.variableSelector.canRemove()) {
+				this.variableSelector.remove() ;
+				this.variableSelector = null ;
+				$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
+				$(this.html).removeClass('VariableSelected') ;
+			}
+		}
+		this.parentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
 	}
 	
 	onChange() {
@@ -348,7 +466,10 @@ export class EndClassGroup extends GroupContenaire {
 			this.varName = "?"+localName(this.value_selected)+"_"+(this.parentCriteriaGroup.thisForm_.sparnatural.getMaxVarIndex()+1);
 		}
 
-		$(this.parentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');	
+		$(this.parentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
+		
+		//add varName on curent selection display
+		this.onSelctValue() ;	
 		
 		if (this.specProvider.hasConnectedClasses(this.value_selected)) {
 			$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
@@ -387,13 +508,27 @@ export class EndClassGroup extends GroupContenaire {
 		this.value_selected = null;
 		this.cssClasses.HasInputsCompleted = false ;
 		this.cssClasses.IsOnEdit = true ;
+		$(this.html).removeClass('VariableSelected') ;
 		this.init() ;
 		$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, SparnaturalComponents.eventProxiCriteria);
 		$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
+
 		$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
 		this.parentCriteriaGroup.ActionsGroup.reinsert = true ;
 		$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
-		$(this.html).find('.nice-select').trigger('click') ;
+		var select = $(this.html).find('.ClassTypeId select.input-val') ;
+		select[0].sparnaturalSettings = this.settings ;
+		$(this.html).find('.ClassTypeId .nice-select').trigger('click') ;
+
+		//Removote to Variable list
+		if (this.variableSelector !== null) {
+			this.variableSelector.remove() ;
+			this.variableSelector = null ;
+			$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
+		}
+
+		//Reload options menu to wait objectProperty selection
+		this.parentCriteriaGroup.OptionsGroup.reload() ;
 
 		// clean the variable name so that it is regenerated when a new value is selected in the onChange
 		this.varName = null;
@@ -425,7 +560,27 @@ export class OptionsGroup extends GroupContenaire {
 		this.inputTypeComponent = new OptionTypeId(this, specProvider) ;
 
 		this.init() ;
-		$(this.html).append('<div class="EditComponents"></div>');
+		$(this.html).append('<div class="EditComponents flexWrap">'+ '<div class="componentBackArrow">'+ UiuxConfig.COMPONENT_OPTION_ARROW_FRONT + '</div></div>');
+	}
+
+	reload() {
+		if($(this.html).find('.EditComponents').first().hasClass('Enabled')) {
+			$(this.html).removeClass('Opended') ;
+			redrawBottomLink($(this.html).parents('li.groupe').first()) ;
+		}
+		$(this.html).find('.EditComponents').removeClass('Disabled') ;
+		$(this.html).find('.EditComponents').removeClass('NoOptionEnabled') ;
+		$(this.html).find('.EditComponents').removeClass('Enabled') ;
+		$(this.html).find('.EditComponents').removeClass('ShowOnEdit') ;
+		$(this.html).find('.EditComponents>div').first().unbind('click') ;
+		$(this.html).find('.input-val input').unbind('click') ;
+		$(this.html).find('.input-val label').unbind('click') ;
+		// for re init all options menu and criteria conditional css if option is enbled
+		this.onChange() ;
+		$(this.html).find('.OptionTypeId').remove() ;
+		this.inputTypeComponent = new OptionTypeId(this, this.specProvider) ;
+
+		this.valuesSelected = [] ;
 	}
 
 	onObjectPropertyGroupSelected() {
@@ -440,22 +595,31 @@ export class OptionsGroup extends GroupContenaire {
 
 			if (
 				parentOptionEnable
-			) {
-				$(this.html).find('.EditComponents').addClass('Disabled') ;
-			} else if (
-				this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
 				||
-				this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+				(
+					!this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+					&&
+					!this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+				)
 			) {
-				$(this.html).find('.EditComponents').addClass('Enabled') ;
-			} else {
-				// TODO : keep original light-silver color
-				// $(this.html).find('.EditComponents').addClass('Unavailable') ;
 				$(this.html).find('.EditComponents').addClass('Disabled') ;
+				$(this.html).find('.EditComponents').removeClass('NoOptionEnabled') ;
+				$(this.parentCriteriaGroup.html).addClass('OptionMenuShowed') ;
+				if (
+					!this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+					&&
+					!this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+				) {
+					$(this.html).find('.EditComponents').addClass('NoOptionEnabled') ;
+					$(this.parentCriteriaGroup.html).removeClass('OptionMenuShowed') ;
+				}
+			} else {
+				$(this.html).find('.EditComponents').addClass('Enabled') ;
+				$(this.parentCriteriaGroup.html).addClass('OptionMenuShowed') ;
 			}
 
-			$(this.html).find('.EditComponents').on('click', function(e) {
-				if($(e.target).hasClass('Enabled')) {
+			$(this.html).find('.EditComponents>div').first().on('click', function(e) {
+				if($(e.target).parents('.EditComponents').first().hasClass('Enabled')) {
 					$(e.target).parents('.OptionsGroup').first().toggleClass('Opended') ;
 					redrawBottomLink($(e.target).parents('li.groupe').first()) ;
 				}
@@ -465,7 +629,7 @@ export class OptionsGroup extends GroupContenaire {
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
 
 			$(this.html).find('.input-val label').on('click', function(e) {
-				$(e.target).addClass('justClicked') ;
+				$(this).addClass('justClicked') ;
 			});
 			$(this.html).find('.input-val input').on('click', function(e) {
 				e.stopPropagation();
@@ -473,10 +637,17 @@ export class OptionsGroup extends GroupContenaire {
 			$(this.html).find('.input-val label').on('click', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 
 			if(this.inputTypeComponent.needTriggerClick == true) {
+				
 				if (this.inputTypeComponent.default_value['optional']) {
+					// pour ouvrir le menu : 
+					$(this.html).find('.componentBackArrow').first().trigger('click');
+					// pour selectionner l'option
 					$(this.html).find('.input-val input[data-id="optional"]').parents('label').first().trigger('click') ;
 				} else if (this.inputTypeComponent.default_value['notExists']) {
-					$(this.html).find('.input-val input[data-id=notExists]').parents('label').first().trigger('click') ;
+					// pour ouvrir le menu : 
+					$(this.html).find('.componentBackArrow').first().trigger('click');
+					// pour selectionner l'option
+					$(this.html).find('.input-val input[data-id="notExists"]').parents('label').first().trigger('click') ;
 				}
 				this.inputTypeComponent.needTriggerClick = false ;
 			}
@@ -489,6 +660,7 @@ export class OptionsGroup extends GroupContenaire {
 	}
 
 	onChange() {
+		
 		var optionsInputs = $(this.html).find('.input-val input').get() ;
 		var optionSelected = false ;
 		for (var item in  optionsInputs) {
@@ -568,7 +740,8 @@ export class ClassTypeId extends HTMLComponent {
  			"ClassTypeId",
  			{
 				Highlited : true ,
-				Created : false
+				Created : false,
+
 			},
 			parentComponent,
 			false
@@ -576,6 +749,7 @@ export class ClassTypeId extends HTMLComponent {
 
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;
+		this.cssClasses.flexWrap = true;
 	}
 
 	init() {
@@ -595,8 +769,11 @@ export class ClassTypeId extends HTMLComponent {
 			this.needTriggerClick = true ;
 			if (this.parentComponent.baseCssClass == "StartClassGroup") {
 				this.parentComponent.variableNamePreload = branch.line.s;
+				this.parentComponent.variableViewPreload = branch.line.sSelected ;
+
 			} else {
 				this.parentComponent.variableNamePreload = branch.line.o;
+				this.parentComponent.variableViewPreload = branch.line.oSelected ;
 			}
 		}
 
@@ -675,7 +852,10 @@ export class ObjectPropertyTypeId extends HTMLComponent {
  		);
 
 		this.specProvider = specProvider;
-		this.needTriggerClick = false ;			
+		this.needTriggerClick = false ;	
+		this.cssClasses.flexWrap = true;
+		this.needBackArrow= false ;
+		this.needFrontArrow= true ;
 	}
 
 	init(reload = false) {
@@ -727,6 +907,7 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;
 		this.default_value = [];
+		this.cssClasses.flexWrap = true;
  	}
 
 
@@ -737,12 +918,12 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 			return true ;
 		}
 		this.default_value['optional'] = false ;
-		this.default_value['notexist'] = false ;
+		this.default_value['notExists'] = false ;
 		
 		if(this.parentComponent.parentCriteriaGroup.jsonQueryBranch) {
 			var branch = this.parentComponent.parentCriteriaGroup.jsonQueryBranch
 			this.default_value['optional'] = branch.optional ;
-			this.default_value['notexist'] = branch.notExists ;
+			this.default_value['notExists'] = branch.notExists ;
 			this.needTriggerClick = true ;
 		}
 
@@ -768,6 +949,99 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 		console.log("reload on OptionTypeId should probably never be called");
 		this.init();
 	} ;		
+}
+
+export class VariableSelector extends HTMLComponent {
+	constructor(GroupContenaire) {
+		super(
+			"VariableSelector",
+			GroupContenaire
+		);
+		this.GroupContenaire = GroupContenaire;
+		this.specProvider = GroupContenaire.specProvider;
+		this.globalVariablesSelctor = this.GroupContenaire.parentComponent.thisForm_.sparnatural.variablesSelector ;
+		this.icon = this.GroupContenaire.specProvider.getIcon(GroupContenaire.value_selected) ;
+		this.highlightedIcon = this.GroupContenaire.specProvider.getHighlightedIcon(GroupContenaire.value_selected) ;
+
+		this.displayVariableList = this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList ;
+
+		this.init();
+	}
+
+	//On init add varible to selected list
+	init() {
+		// highlighted icon defaults to icon
+		if (!this.highlightedIcon || 0 === this.highlightedIcon.length) {
+			this.highlightedIcon = this.icon ;
+		}
+
+		if (this.icon !== undefined) {
+		if(this.icon.indexOf('<') == 0) {
+			this.image = this.icon+"&nbsp;&nbsp;";
+		} else {
+			this.image = '<img src="'+this.icon+'" /><img class="highlited" src="'+this.highlightedIcon+'" />' ;   
+		}
+		}	else {
+		this.image = "";
+		}
+
+		this.varLabel = localName(this.GroupContenaire.value_selected) ;
+		this.varName = this.GroupContenaire.varName ;
+		this.varNameForDisplay = this.varName.replace('?', '') ;
+		this.labelDisplayed = '' ;
+
+		if (this.globalVariablesSelctor.switchLabel == 'label') {
+		this.labelDisplayed = this.image + '<div>'+this.varLabel+'</div>' ;
+		} else {
+		this.labelDisplayed = this.image + '<div>'+this.varNameForDisplay+'</div>' ;
+		}
+
+		this.element = '<div class="sortableItem"><div class="variableSelected flexWrap" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">'+ UiuxConfig.COMPONENT_DRAG_HANDLE + '</span>'+this.labelDisplayed+'</div></div>' ;
+
+		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
+
+		//this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.push(this.varName) ;
+		if (this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.length == 1) {
+			var width = $('.sortableItem').first().width() ;
+			$('.variablesOrdersSelect').width(width) ;
+		}
+		
+
+		if (this.GroupContenaire instanceof StartClassGroup) {
+
+		}
+		if (this.GroupContenaire instanceof EndClassGroup) {
+
+		}
+		//$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+	}
+
+	remove () {
+		var checkVarName = this.varName
+		this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList = this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.filter(function(value, index, arr){
+			return value !== checkVarName;
+		});
+		$('[data-variableName="'+this.varName+'"]').parents('div.sortableItem').remove() ;
+		//Any one can be the first in line, compute the width for first place
+		var width = $('.sortableItem').first().width() ;
+		$('.variablesOrdersSelect').width(width) ;
+
+		//Si plus de valeur selectionnée on rajoute this
+		if (this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.length == 0) {
+			$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).find('.selectViewVariable').first().trigger('click') ;
+		}
+
+		$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+		
+	}
+
+	canRemove() {
+		if (this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.length > 1) {
+			return true ;
+		}
+		return false ;
+	}
+
 }
 
 
@@ -850,12 +1124,12 @@ class ClassSelectBuilder {
 		var list = [] ;
 		for (var key in items) {
 			var label = items[key] ;
-			var selected = (default_value[key] == label)?' checked="checked"':'';
-			list.push( '<label><input type="radio" name="'+inputID+'" data-id="'+key+'"'+selected+' '+'  />'+ label + '</label>' );
+			var selected = (default_value[key])?' checked="checked"':'';
+			list.push( '<label class="flexWrap"><input type="radio" name="'+inputID+'" data-id="'+key+'"'+selected+' '+'  />' + '<div class="componentBackArrow">' + UiuxConfig.COMPONENT_ARROW_BACK + '</div><span>'+ label + '</span><div class="componentFrontArrow">' + UiuxConfig.COMPONENT_ARROW_FRONT + '</div></label>' );
 		}
 
 		var html_list = $( "<div/>", {
-			"class": "optionsGroupe-list input-val",
+			"class": "optionsGroupe-list input-val flexWrap",
 			"id": 'select-'+inputID,
 			html: list.join( "" )
 		});

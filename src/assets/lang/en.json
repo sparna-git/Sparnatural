@@ -1,6 +1,7 @@
 {
 	"Where": "Where",
 	"Find": "Find",
+	"Select": "Select",
 	"And": "And",
 	"That": "where",
 	"Search": "Search",
@@ -21,5 +22,11 @@
 	"ListWidgetNoItem": "... Oups, no value found !",
 	"ObjectPropertyTemporaryLabel": "related to",
 	"labelOptionOptional": "Optional",
-	"labelOptionNotExists": "Not exists"
+	"labelOptionNotExists": "Not exists",
+	"labelOrderSort": "Sort",
+	"SelectAllValues": "Any",
+	"Or": "or",
+	"SwitchVariablesNames": "Show column names",
+	"true": "True",
+	"false": "False"
 }

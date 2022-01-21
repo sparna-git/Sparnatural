@@ -3,22 +3,34 @@
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
 
 
-$height-components: 48px;
-$height-components-under: 42px;
+$height-components: 54px;
+$height-components-under: 48px;
 $height-components-hover: 35px;
 $margin-component: 30px;
 $margin-component-onEdit: 80px;
 $margin-children-li: 75px;
 
+$center-arrow-bd-width : 3px;
+
+/* Color of the criteria arrows (orange) */
 $custom-red: rgb(250,136,3) ;
+/* Color of the "unselect" buttons in criterias */
 $custom-red-bold: rgb(182, 97, 0) ;
+/* Color of a selected value in a criteria */
+$custom-red-medium: rgb(255, 210, 157) ;
 $custom-red-light: rgb(255, 231, 203) ;
+
+/* Color of the options arrow (optional / negation) */
 $custom-green: rgb(107,215,171) ;
-$custom-green-bold: rgb(2,184,117) ;
+/* Color of the options arrow when not selected */
 $custom-green-light: rgb(151,227,196) ;
+
+/* Color of the highlight of arrows */
+$custom-green-bold: rgb(2,184,117) ;
 
 $custom-silver: rgb(167,167,167) ;
 $custom-silver-light: rgb(230, 230, 230) ;
+$default-text-color: #666 ;
 
 @mixin triangle-before() {
 	padding-left: 20px;
@@ -104,6 +116,170 @@ $custom-silver-light: rgb(230, 230, 230) ;
 	}
 }
 
+@mixin arrow-back-colors($bgColor, $borderColor) {
+	.componentBackArrow svg {
+		height: 48px;
+		path {
+			fill: $bgColor;
+			stroke: $borderColor;
+		}
+	}
+}
+@mixin arrow-front-colors($bgColor, $borderColor) {
+	.componentFrontArrow svg {
+		height: 48px;
+		path {
+			fill: $bgColor;
+			stroke: $borderColor;
+		}
+		rect {
+			fill:transparent;
+		}
+	}
+}
+
+/*New component Arrow */
+.CriteriaGroup {
+	.componentBackArrow svg {
+		height: 48px;
+		path {
+			fill:transparent;
+			stroke:transparent;
+			stroke-width: 2.5px;
+		}
+	}
+	.componentFrontArrow svg{
+		height: 48px;
+		path {
+			fill:transparent;
+			stroke: $custom-silver-light;
+			stroke-width: 3px;
+		}
+		rect {
+			fill:#fff;
+		}
+	}
+
+	/*Arrow on options */
+	.OptionsGroup {
+		.EditComponents {
+			display: none;
+			@include arrow-back-colors($custom-silver-light, #fff);
+			position: relative;
+			&.Enabled {
+				display: flex;
+				@include arrow-back-colors($custom-green, #fff);
+				/*@include arrow-front-colors($custom-green, #fff);*/
+				.componentBackArrow {
+					svg path {
+						filter:url(#filter19278);
+					}
+				}
+			}
+			&.Disabled {
+				display: flex;
+				@include arrow-back-colors($custom-silver, #fff);
+				/*@include arrow-front-colors($custom-silver, #fff);*/
+			}
+			&.NoOptionEnabled {
+				display: none!important;
+				@include arrow-back-colors($custom-silver-light, #fff);
+			}
+			.componentBackArrow {
+				width: 41px;
+				height: 48px;
+				position: relative;
+				svg {
+					position: absolute;
+					z-index: 1;
+					left: -5px;
+				}
+			}
+		}
+		.OptionTypeId {
+			label {
+				@include arrow-back-colors($custom-green-light, #fff);
+				@include arrow-front-colors($custom-green-light, #fff);
+				span {
+					background: $custom-green-light;
+					border-top: 3px solid #fff;
+					border-bottom: 3px solid #fff;
+				}
+				&:hover,
+				&.Enabled {
+					@include arrow-back-colors($custom-green-bold, #fff);
+					@include arrow-front-colors($custom-green-bold, #fff);
+					span {
+						background: $custom-green-bold;
+					}
+				}
+			}
+		}
+	}
+}
+
+	/*Completed criteria*/
+.componentsListe li>.CriteriaGroup.OptionMenuShowed {
+	&>.StartClassGroup .componentFrontArrow {
+		display: none;
+	}
+
+}
+.componentsListe li.completed>.CriteriaGroup.OptionMenuShowed {
+	&>.StartClassGroup .Highlited .componentFrontArrow {
+		display: block;
+	}
+
+}
+.componentsListe li.completed>.CriteriaGroup {
+	&>.StartClassGroup>.Highlited {
+		@include arrow-front-colors($custom-red, #fff);
+	}
+	&>.StartClassGroup.VariableSelected>.Highlited {
+		@include arrow-front-colors($custom-red, $custom-green-bold);
+	}
+
+	
+	&>.ObjectPropertyGroup>.ObjectPropertyTypeId {
+		@include arrow-back-colors(transparent, #fff);
+		.componentFrontArrow {
+			display: none;
+		}
+		@include arrow-front-colors(transparent, #fff);
+	}
+	&>.EndClassGroup>.Highlited {
+		@include arrow-back-colors($custom-red, #fff);
+		@include arrow-front-colors($custom-red, #fff);
+	}
+	&>.EndClassGroup.VariableSelected>.Highlited {
+		@include arrow-back-colors($custom-red, $custom-green-bold);
+		@include arrow-front-colors($custom-red, $custom-green-bold);
+		.componentBackArrow svg {
+			path {
+				stroke-width: 3px;
+			}
+		}
+	}
+
+	&>.EndClassWidgetGroup {
+		.EndClassWidgetAddOrValue,
+		.EndClassWidgetValue {
+			@include arrow-back-colors($custom-red-medium, #fff);
+			@include arrow-front-colors($custom-red-medium, #fff);
+		}
+	}
+}
+
+/* Structure flex */
+.CriteriaGroup,
+.variablesSelection {
+	.flexWrap {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+}
+
 body {
 	section {
 		padding-top: 30px;
@@ -111,6 +287,9 @@ body {
 	li.completed {
 		&>.CriteriaGroup {
 			margin-bottom: $margin-component;
+			&.onAddOrValue {
+				margin-bottom: $margin-component-onEdit/2 + 10;
+			}
 		}
 	}
 	.CriteriaGroup {
@@ -128,6 +307,10 @@ body {
 		-o-box-shadow: 0px 2px 3px 0px #cfcfcf;
 		box-shadow: 0px 2px 3px 0px #cfcfcf;
 		filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
+
+		&.onAddOrValue {
+			margin-bottom: $margin-component-onEdit/2;
+		}
 		
 		&>div {
 			
@@ -140,25 +323,27 @@ body {
 			flex-direction: row;
 			flex-wrap: nowrap;
 			min-width: auto;
-			padding-right: 15px;
-			margin-left: -30px;
+			/*padding-right: 15px;*/
+			margin-left: -22px;
 
 			.EditComponents {
 				position: relative;
 				width: 20px;
-				background: $custom-silver-light;
-				@include arrow-block($custom-silver-light);
+				/*@include arrow-block($custom-silver-light);*/
+				/*display: flex!important;*/
+				/*background: $custom-silver-light;
+				@include arrow-block($custom-silver-light);*/
 
 				&.Enabled {
 					display: inline-block;
-					background: $custom-green;
+					/*background: $custom-green;*/
 					cursor: pointer;
-					@include arrow-block($custom-green);
+					/*@include arrow-block($custom-green);*/
 				}
 				&.Disabled {
-					display: inline-block;
-					background: $custom-silver;
-					@include arrow-block($custom-silver);
+					/*display: inline-block;*/
+					/*background: $custom-silver;*/
+					/*@include arrow-block($custom-silver);*/
 				}
 				&.Unavailable {
 					display: inline-block;
@@ -169,34 +354,38 @@ body {
 			.OptionTypeId {
 				display: none ;
 				position: relative;
-				padding-right: 15px;
+				padding-right: 13px;
+				margin-left: -7px;
+				
 				label {
 					position: relative;
-					text-indent: 20px;
-					display: inline-block;
+					/*display: inline-block;*/
 					zoom: 1;
-					background: $custom-green-light;
+					/*background: $custom-green-light;*/
 					margin-bottom: 0;
 					line-height: 42px;
 					color: #fff;
 					margin-left: 3px;
-					padding-right: 5px;
+					padding-right: 0;
 					font-size: 14px;
-					
-				cursor: pointer;
+					margin-right: -20px;
+					cursor: pointer;
+					span {
+						text-indent: 13px;
+					}
 
 					input {
 						display: none;
 					}
 
-					@include arrow-block($custom-green-light);
+					/*@include arrow-block($custom-green-light);*/
 
 					&:hover,
 					&.Enabled {
-						background: $custom-green-bold;
+						/*background: $custom-green-bold;*/
 
 						&:after {
-							border-left: 15px solid $custom-green-bold;
+							/*border-left: 15px solid $custom-green-bold;*/
 						}
 					}
 /**
@@ -210,11 +399,12 @@ body {
 				}
 			}
 			&.Opended .OptionTypeId {
-				display:inline-block ;
+				display:flex ;
 			}
 		}
 		.ObjectPropertyGroup {
-			
+			margin-right: -15px;
+			padding-left: 10px;
 			.current {
 				font-style: italic;
 			}
@@ -233,7 +423,7 @@ body {
 				text-align: left !important;
 				display: inline-block;
 				border-top: 1px solid transparent;
-				color: #888;
+				color: $default-text-color;
 			}
 		}
 
@@ -241,7 +431,7 @@ body {
 			display: block;
 			position: absolute;
 			top: -9px;
-			right: 0;
+			right: 10px;
 			width: 22px;
 			height: 22px!important;
 			padding: 0 0;
@@ -264,13 +454,19 @@ body {
 		.EndClassGroup.IsOnEdit>span.unselect {
 			display: none;
 		}
+		/*Hide select widget list arrow*/
 		.nice-select.disabled:after {
 			display: none;
 		}
+		.nice-select {
+			border: $center-arrow-bd-width solid #fff;
+			border-left: 0;
+			border-right: 0;
+		}
 		.nice-select .current {
 			display: inline-block;
-			height: $height-components-under - 2;
-			line-height: $height-components-under - 2;
+			height: $height-components-under - ($center-arrow-bd-width*2);
+			line-height: $height-components-under - ($center-arrow-bd-width*2);
 			vertical-align: bottom;
 			span  {
 				display: inline-block;
@@ -283,16 +479,44 @@ body {
 				margin-left: 5px;
 
 			}
+			.variableName {
+				display: none;
+			}
 		}
 		
+
+
+		.StartClassGroup,
+		.EndClassGroup {
+			position: relative;
+			margin-right: 0px;
+			.selectViewVariable {
+				display: none;
+				position: absolute;
+				top: 50%;
+				right: 18px; //+9 pour retrait dans fleche
+				margin-top: -8px;
+				width: 16px;
+				height: 16px;
+				line-height: 16px;
+				z-index: 2;
+				cursor: pointer;
+				svg{
+					width: 100%;
+					height: 100%;
+					vertical-align: top;
+				}
+			}
+		}
 		
 		.EndClassGroup {
 			position: relative;
 			min-width: auto;
+			margin-left: -15px;
 			.EditComponents {
 				position: absolute;
 				left: 36px;
-				top: $height-components - 1;
+				top: $height-components ;
 				line-height: $height-components-hover;
 				z-index: 101;
 				height: $height-components;
@@ -314,7 +538,7 @@ body {
 					width:100%;
 					min-width:1px;
 					font-size: 14px;
-					text-decoration: underline;
+					/*text-decoration: underline;*/
 					/*&.DatesWidget {
 						border-left-color: transparent;
 						
@@ -322,6 +546,20 @@ body {
 							display: block;
 						}
 					}*/
+					.underline {
+						text-decoration: underline;
+					}
+					.boolean-value {
+						text-decoration: underline;
+						cursor: pointer;
+					}
+					.or {
+						color: $custom-red;
+						font-weight: 600;
+					}
+					.selectAll .underline {
+						cursor: pointer;
+					}
 					&>a,
 					&>div {
 						position: absolute;
@@ -512,16 +750,15 @@ body {
 					}
 				}
 				.ListeWidget {
-					
-					
 					.nice-select{
 						background: #fff;
 						height: $height-components-hover;
-						line-height: $height-components-hover;
+						line-height: $height-components-hover - 6;
+						padding-right: 26px;
 						.current {
 							display: inline-block;
-							height: $height-components-hover;
-							line-height: $height-components-hover;
+							height: $height-components-hover - 6;
+							line-height: $height-components-hover - 6;
 							vertical-align: bottom;
 							&>span {
 								vertical-align: bottom;
@@ -532,6 +769,9 @@ body {
 								min-height: $height-components-hover;
 								line-height: $height-components-hover;
 							}
+						}
+						&:after {
+							margin-top: -2px;
 						}
 					}
 				}
@@ -570,8 +810,8 @@ body {
 		}
 		.EndClassWidgetGroup {
 			width: auto;
-			padding: 2px 15px 2px 0;
-			margin-left: -14px;
+			padding: 1px 15px 1px 0;
+			margin-left: -17px;
 			display: flex;
 			
 			-ms-flex-align: center;
@@ -588,11 +828,12 @@ body {
 			}
 			.EndClassWidgetAddOrValue,
 			.EndClassWidgetValue {
+				position: relative;
 				/*line-height: 0;*/
 				color: #fff;
 				font-size: 14px;
-				display: inline-block;
-				padding: 0 0 0 15px;
+				/*display: inline-block;*/
+				padding: 0;
 				span {
 					/*line-height: $height-components-under;*/
 					display: inline-block;
@@ -608,16 +849,25 @@ body {
 			.EndClassWidgetAddOrValue {
 				color: #fff;
 				/*margin-left: 15px;*/
-				line-height: 42px;
-				height: 42px;
+				/*line-height: 48px;
+				height: 48px;*/
 				font-size: 20px;
 				cursor: pointer;
 				vertical-align: middle;
-				span {
-					line-height: 42px;
-					vertical-align: baseline;
-					display: inline-block;
+				p {
+					width: 0;
+					padding: 0;
+					position: relative;
 					height: 42px;
+					line-height: 42px;
+					overflow: visible;
+					span {
+						line-height: 32px;
+						width: auto;
+						/*vertical-align: baseline;
+						display: inline-block;
+						height: 48px;*/
+					}
 				}
 			}
 			span.unselect {
@@ -674,14 +924,28 @@ body {
 		
 	}
 
-	li.hideEndClassProperty {
+	.componentsListe.displayVarName .CriteriaGroup {
+		&>.StartClassGroup>.ClassTypeId,
+		&>.EndClassGroup>.ClassTypeId {
+			.nice-select .current {
+				.label {
+					display: none;
+				}
+				.variableName {
+					display: inline;
+				}
+			}
+		}
+	}
+	// N'est plus à cacher, lutilisateur peut choisi d'afficher les valeurs
+	/*li.hideEndClassProperty {
 		&>div>.EndClassGroup {
 			&>.unselect,
 			&>.ClassTypeId {
 				display: none;
 			}
 		}
-	}
+	}*/
 	
 	.haveWhereChild {
 		position: relative;
@@ -767,6 +1031,190 @@ body {
 	.Sparnatural {
 		.bg-wrapper {
 			
+		}
+		.variablesSelection {
+			background: $custom-red-light;
+			padding: 30px 0;
+			.line1, .line2 {
+				display: flex;
+				flex-direction: row;
+				flex-wrap: wrap;
+				width: 1200px				;
+				max-width: 90%;
+				margin: 0 auto;
+
+				border: 1px solid #ddd;
+				background: #fff;
+				
+
+				&>div.variablesOtherSelect {
+					display: block;
+				}
+			}
+			.line1 {
+				border-radius: 5px 5px 0 0 ;
+				border-bottom: 0px solid transparent;
+				min-height: 61px;
+				.sortableItem {
+					padding: 10px;
+					display: inline-block;
+					&:first-child {
+						min-width: 140px;
+					}
+				}
+				.variablesOtherSelect>div:first-child {
+					background: lightgray;
+					height: 100%;
+					display: block;
+					float: left;
+				}
+				.variableSelected {
+					padding: 3px 7px 3px 2px;
+					border: 1px solid gray ;
+					font-size: 12px;
+					color: $default-text-color;
+					border-radius: 5px;
+					background: #fff;
+					align-items: center;
+					width: fit-content;
+					min-width: 110px;
+
+					.variable-handle {
+						display: inline-block;
+						padding: 0 3px;
+						height: 24px;
+						color: transparent;
+						/*border-left: 2px dashed lightgray;
+						border-right: 2px dashed lightgray;*/
+						cursor: grab;
+
+						svg {
+							width: 15px;
+    						height: 24px;
+
+							path {
+								stroke: $custom-silver;
+								stroke-width: 0.264583;
+							}
+						}
+					}
+					div {
+						line-height: 30px;
+					}
+				}
+			}
+			.line2 {
+				border-radius: 0 0 5px 5px;
+				justify-content: space-between;
+				border-top: 1px solid darkgray;
+				line-height: 20px;
+				-moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
+				-webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;
+				-o-box-shadow: 0px 2px 3px 0px #cfcfcf;
+				box-shadow: 0px 2px 3px 0px #cfcfcf;
+
+				.variablesOrdersSelect {
+					background: lightgray;
+					padding: 0 10px;
+					min-width: 140px;
+					strong {
+						font-size: 12px;
+					}
+					a {
+						cursor: pointer;
+						svg {
+							width: 20px;
+							height: 20px;
+						}
+					}
+					a.selected {
+						cursor: default;
+						svg {
+							path {
+								fill: $custom-red;
+							}
+						}
+					}
+				}
+				
+
+				.variablesOptionsSelect {
+					text-align: right;
+					padding: 5px 5px 5px 5px;
+					font-size: 14px;
+					font-weight: bolder;
+				}
+				color: $default-text-color;
+
+				a {
+					display: inline-block;
+					padding: 5px;
+					color: $default-text-color;
+				}
+			}
+			.switch {
+				position: relative;
+				display: inline-block;
+				width: 50px;
+				height: 26px;
+				margin-bottom: 0;
+			  }
+			  
+			  .switch input { 
+				opacity: 0;
+				width: 0;
+				height: 0;
+			  }
+			  
+			  .slider {
+				position: absolute;
+				cursor: pointer;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-color: #ccc;
+				-webkit-transition: .4s;
+				transition: .4s;
+			  }
+			  
+			  .slider:before {
+				position: absolute;
+				content: "";
+				height: 20px;
+				width: 20px;
+				left: 3px;
+				bottom: 2px;
+				background-color: white;
+				-webkit-transition: .4s;
+				transition: .4s;
+			  }
+			  
+			  input:checked + .slider {
+				background-color: $custom-red-medium;
+			  }
+			  
+			  input:focus + .slider {
+				box-shadow: 0 0 1px #ccc;
+			  }
+			  
+			  input:checked + .slider:before {
+				-webkit-transform: translateX(22px);
+				-ms-transform: translateX(22px);
+				transform: translateX(22px);
+				background-color: $custom-red;
+			  }
+			  
+			  /* Rounded sliders */
+			  .slider.round {
+				border-radius: 26px;
+				border: 1px solid #555;
+			  }
+			  
+			  .slider.round:before {
+				border-radius: 50%;
+				border: 1px solid #555;
+			  }
 		}
 		ul.componentsListe {
 			padding: 0;
@@ -899,7 +1347,7 @@ body {
 					line-height: 20px;
 					min-width: 26px;
 					text-align: center;
-					font-size: 14px;
+					font-size: 18px;
 					color: $custom-red ;
 					font-weight: bold;
 					padding: 0;
@@ -974,39 +1422,63 @@ body {
 					&>div .EndClassWidgetAddOrValue,
 					&>div .EndClassWidgetValue {
 						max-width: 220px;
-						height: 42px;
+						height: 48px;
 						/*overflow: hidden;*/
-						padding-right: 15px;
-						margin-right: -15px;
-						display: block;
+						/*padding-right: 15px;*/
+						margin-right: -13px;
+						/*display: block;*/
 						
-						@include triangle-before();
-						@include triangle-after();
-						span {
-							background: $custom-red ;
-							height: 42px;
+						/*@include triangle-before();
+						@include triangle-after();*/
+						/*span {
+							background: $custom-red-light ;
+							height: 48px;
+							background-clip: padding-box;
 							
-						}
+						}*/
 						p {
-							line-height: 42px;
-							height: 42px;
-							width: calc(100% - 15px);
-							background: $custom-red ;
+							line-height: 48px;
+							height: 48px;
+							/*width: calc(100% - 15px);*/
+							background: $custom-red-medium;
+							background-clip: padding-box;
 							margin: 0;
 							padding: 0 0 0 5px;
 							display: inline-block;
 							overflow: hidden;
-							text-overflow: ellipsis;
+							/*text-overflow: ellipsis;*/
+							border: $center-arrow-bd-width solid #fff;
+							border-left: 0;
+							border-right: 0;
 							
 							text-align: center;
 							span {
-								line-height: 1;
-								display: inline;
+								line-height: 42px;
+								display: inline-block;
 								vertical-align: baseline;
 								overflow: hidden;
 								text-overflow: ellipsis;
 								white-space: nowrap;
-							
+								color: $default-text-color;
+								width: 100%;
+							}
+						}
+					}
+					&>div .EndClassWidgetAddOrValue {
+						p {
+							width: 0;
+							padding: 0;
+							position: relative;
+							height: 48px;
+							line-height: 48px;
+							overflow: visible;
+							span {
+								line-height: 42px;
+								width: auto;
+								text-indent: 1px;
+								/*vertical-align: baseline;
+								display: inline-block;
+								height: 48px;*/
 							}
 						}
 					}
@@ -1017,6 +1489,7 @@ body {
 					background: transparent;
 					border-color: transparent;
 					padding-left: 10px;
+					padding-right: 26px;
 					ul.list li {
 						border-bottom: solid 1px #e8e8e8;
 						img {
@@ -1063,23 +1536,41 @@ body {
 							}
 						}
 					}
+					&:after {
+						margin-top: 0;
+					}
 				}
 				.nice-select.disabled {
-					color: #888;
+					color: $default-text-color;
 					border-color: transparent;
+					border-radius: 0;
+				}
+				.StartClassGroup>.ClassTypeId .nice-select.disabled {
+					border-radius: 5px 0 0 5px;
 				}
 				
-				
+				&>.CriteriaGroup>.ObjectPropertyGroup>.ObjectPropertyTypeId .nice-select.disabled {
+					/*padding-right: 0;*/
+				}
+				/*&>div>.EndClassGroup>.ClassTypeId:after,
+				&>div>.StartClassGroup>.ClassTypeId:after {
+					content: '';
+					display: inline-block;
+					width: 15px;
+				}*/
 				
 				&.completed {
 					&>div .Highlited {
-						background: $custom-red;
-						margin-right: 23px;
+						/*background: $custom-red;*/
+						/*margin-right: 23px;*/
 						
 						.nice-select {
-								background: transparent;
+								background: $custom-red;
+								background-clip: padding-box;
 								border-color: transparent;
 								color: #fff;
+								height: $height-components-under;
+								line-height: $height-components-under - ($center-arrow-bd-width*2);
 								.current {
 									img {
 										display: none;
@@ -1094,15 +1585,41 @@ body {
 								border-color: transparent;
 							}
 					}
+					&>div>.StartClassGroup.VariableSelected .Highlited {
+						.nice-select.disabled {
+							border-left: 3px solid $custom-green-bold;
+						}
+					}
+					&>div>.StartClassGroup.VariableSelected .Highlited,
+					&>div>.EndClassGroup.VariableSelected .Highlited {
+						.nice-select.disabled {
+							border-color: $custom-green-bold;
+						}
+					}
+					&>.CriteriaGroup>.ObjectPropertyGroup>.ObjectPropertyTypeId .nice-select.disabled {
+						padding-right: 26px;
+					}
+
 					&>div .Highlited {
 						position: relative;
-						@include arrow-block($custom-red);
+						/*@include arrow-block($custom-red);*/
 						&:before {
 							
 						}
 					}
-					&>div>.StartClassGroup .Highlited:before{
+					/*&>div>.StartClassGroup .Highlited:before{
 						display: none;
+					}*/
+					&>div .StartClassGroup,
+					&>div .EndClassGroup {
+						margin-left: -8px;
+						&>.selectViewVariable {
+							display: block;
+							right: 18px; //+10 pour retrait dans fleche
+							svg {
+								stroke: #fff;
+							}
+						}
 					}
 					&>div .EndClassGroup .Highlited:before{
 						/*content: '';
@@ -1129,16 +1646,16 @@ body {
 					&.WhereImpossible {
 						
 						&>div .EndClassGroup .Highlited {
-							background: transparent;
+							/*background: transparent;
 							color: #888;
-							margin-right: 0;
+							margin-right: 0;*/
 							
-							&:before,
+							/*&:before,
 							&:after {
 								display: none;
-							}
+							}*/
 							.current {
-								color: #888;
+								/*color: #888;*/
 								img {
 									display: inline;
 									&.highlited {
@@ -1197,6 +1714,8 @@ body {
 	
 
 }
+
+
 
 .tippy-box[data-theme~='sparnatural'] {
     background-color: $custom-red-light;

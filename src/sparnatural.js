@@ -31,6 +31,8 @@ const tippy = require('tippy.js').default;
 
 require('tippy.js/dist/tippy.css');
 
+const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
+
 JsonLdSpecificationProvider = require("./JsonLdSpecificationProvider.js").JsonLdSpecificationProvider;
 SpecificationProviderFactory = require("./SpecificationProviderFactory.js").SpecificationProviderFactory;
 RDFSpecificationProvider = require("./RDFSpecificationProvider.js").RDFSpecificationProvider ;
@@ -60,6 +62,7 @@ require("./Widgets.js");
 
 var Config = require("./SparnaturalConfig.js");
 var Datasources = require("./SparnaturalConfigDatasources.js");
+UiuxConfig = require("./UiuxConfig.js");
 
 (function( $ ) {
 	
@@ -304,6 +307,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			// clear the form
 			// On Clear form new component is automaticaly added, json gets loaded
 			clearForm(form) ;
+
+			form.sparnatural.variablesSelector.loadQuery() ;
 			
 			// And now, submit form
 			$(form.sparnatural).trigger('submit')
@@ -356,8 +361,21 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		
 		function initForm(form) {	
-			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>');
+			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div><div class="variablesSelection"></div>');
 			$(form.sparnatural).append(contexte) ;
+
+			//Ajout du filtre pour ombrage menu options
+			$(form.sparnatural).append($('<svg data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" style="width:0;height:0;display:block"><defs><filter style="color-interpolation-filters:sRGB;" inkscape:label="Drop Shadow" id="filter19278" x="-0.15483875" y="-0.11428573" width="1.3096775" height="1.2714286"><feFlood flood-opacity="0.811765" flood-color="rgb(120,120,120)" result="flood" id="feFlood19268" /><feComposite in="flood" in2="SourceGraphic" operator="out" result="composite1" id="feComposite19270" /><feGaussianBlur in="composite1" stdDeviation="2" result="blur" id="feGaussianBlur19272" /><feOffset dx="3.60822e-16" dy="1.8" result="offset" id="feOffset19274" /><feComposite in="offset" in2="SourceGraphic" operator="atop" result="composite2" id="feComposite19276" /></filter></defs></svg>') );
+
+
+			form.queryOptions = {
+				distinct : settings.addDistinct,
+				displayVariableList: ['?this'],
+				orderSort: null,
+				defaultLang: settings.language
+			}
+
+			initVariablesSelector(form) ;
 			
 			initGeneralEvent(form) ;
 			
@@ -365,6 +383,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(form.sparnatural).on('submit', { formObject : form }, function (event) {
 				if (form.submitOpened == true) {
 					event.preventDefault();
+					/*if ($(event.data.formObject.sparnatural).find('li.groupe').not('.completed').length > 0) {
+						return false ;
+					}*/
 
 					// prints the JSON query data structure on the console
 					var jsonGenerator = new JSONQueryGenerator();
@@ -381,7 +402,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 						// prints the SPARQL generated from the writing of the JSON data structure
 						console.log("*** New SPARQL from JSON data structure ***");
 						var writer = new QuerySPARQLWriter(
-							settings.addDistinct,
 							settings.typePredicate,
 							specProvider
 						);
@@ -396,6 +416,165 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			$(form.sparnatural).trigger({type: 'formInitialized'}) ;
 		}
+
+		function initVariablesSelector(form) {
+			form.sparnatural.variablesSelector = {} ;
+			this.form = form ;
+			this.html = $(form.sparnatural).find('.variablesSelection').first() ; 
+			this.selectedList = [] ;
+
+			
+			this.line1 = $('<div class="line1"></div>') ;
+			this.line2 = $('<div class="line2"></div>') ;
+			$(this.html).append(this.line1) ;
+			$(this.html).append(this.line2) ;
+
+			this.firstSelectHtml = $('<div class="variablesFirstSelect"></div>') ;
+			this.otherSelectHtml = $('<div class="variablesOtherSelect"></div>') ;
+			this.ordersSelectHtml = $('<div class="variablesOrdersSelect"><strong>'+langSearch.labelOrderSort+'</strong> <a class="asc">'+UiuxConfig.ICON_AZ+'</a><a class="desc">'+UiuxConfig.ICON_ZA+'</a><a class="none selected">'+UiuxConfig.ICON_NO_ORDER+'</a></div>') ;
+			this.optionsSelectHtml = $('<div class="variablesOptionsSelect">'+langSearch.SwitchVariablesNames+' <label class="switch"><input type="checkbox"><span class="slider round"></span></label></div>') ;
+
+			$(this.line1).append(this.firstSelectHtml) ;
+			$(this.line1).append(this.otherSelectHtml) ;
+
+			$(this.line2).append(this.ordersSelectHtml) ;
+			$(this.line2).append(this.optionsSelectHtml) ;
+
+			form.sparnatural.variablesSelector = this ;
+			form.sparnatural.variablesSelector.switchLabel = 'name' ; // or name
+
+			// Listening when change sort order (AZ, ZA, None)
+			$(this.ordersSelectHtml).find('a').on('change',
+			{arg1: this, arg2: 'changeOrderSort'},
+			SparnaturalComponents.eventProxiCriteria
+			);
+
+			// Listening when switch display variable
+			$(this.optionsSelectHtml).find('label, span').on('click',
+			{arg1: this, arg2: 'switchVariableName'},
+			SparnaturalComponents.eventProxiCriteria
+			);
+
+			$(this.ordersSelectHtml).find('a').on('click', function() {
+				if ($(this).hasClass('selected')) {
+					//No change, make nothing
+				} else {
+					$(this).parent('div').find('a').removeClass('selected') ;
+					$(this).addClass('selected') ;
+					$(this).trigger('change') ;
+				}
+			});
+
+
+			var sortable = new Sortable(this.otherSelectHtml[0], {
+				group: "name",  // or { name: "...", pull: [true, false, 'clone', array], put: [true, false, array] }
+				sort: true,  // sorting inside list
+				delay: 0, // time in milliseconds to define when the sorting should start
+				delayOnTouchOnly: false, // only delay if user is using touch
+				touchStartThreshold: 0, // px, how many pixels the point should move before cancelling a delayed drag event
+				disabled: false, // Disables the sortable if set to true.
+				store: null,  // @see Store
+				animation: 150,  // ms, animation speed moving items when sorting, `0` — without animation
+				easing: "cubic-bezier(1, 0, 0, 1)", // Easing for animation. Defaults to null. See https://easings.net/ for examples.
+				handle: "div>.variable-handle",  // Drag handle selector within list items
+				filter: ".ignore-elements",  // Selectors that do not lead to dragging (String or Function)
+				preventOnFilter: true, // Call `event.preventDefault()` when triggered `filter`
+				draggable: ".sortableItem",  // Specifies which items inside the element should be draggable
+			
+				dataIdAttr: 'data-variableName', // HTML attribute that is used by the `toArray()` method
+			
+				ghostClass: "sortable-ghost",  // Class name for the drop placeholder
+				chosenClass: "sortable-chosen",  // Class name for the chosen item
+				dragClass: "sortable-drag",  // Class name for the dragging item
+
+			
+				// Element is dropped into the list from another list
+				onAdd: function (/**Event*/evt) {
+					// same properties as onEnd
+				},
+			
+				// Changed sorting within list
+				onUpdate: function (/**Event*/evt) {
+					// same properties as onEnd
+					$(this).trigger( {type:"onUpdate" } ) ;
+				},
+			
+				// Called by any change to the list (add / update / remove)
+				onSort: function (/**Event*/evt) {
+					// same properties as onEnd
+				},
+			
+				// Called when dragging element changes position
+				onEnd: function(/**Event*/evt) {
+					evt.newIndex // most likely why this event is used is to get the dragging element's current index
+					// same properties as onEnd
+					var width = $('.sortableItem').first().width() ;
+					$('.variablesOrdersSelect').width(width) ;
+
+				}
+			});
+
+			$(sortable).on('onUpdate',
+			{arg1: this, arg2: 'updateVariableList'},
+			SparnaturalComponents.eventProxiCriteria
+			);
+
+			this.removeVariableName = function(name) {
+
+			}
+
+			this.changeOrderSort = function() {
+				var selected = $(this.ordersSelectHtml).find('a.selected').first() ;
+				var sort = null ;
+				if ($(selected).hasClass('desc')) {
+					sort = 'desc' ;
+				}
+				if ($(selected).hasClass('asc')) {
+					sort = 'asc' ;
+				}
+				this.form.queryOptions.orderSort = sort ;
+				$(this.form.sparnatural).trigger( {type:"submit" } ) ;
+			}
+
+			
+			this.updateVariableList = function() {
+				var listedItems = $(this.otherSelectHtml).find('.sortableItem>div') ;
+				this.form.queryOptions.displayVariableList = [] ;
+				for (var i = 0; i < listedItems.length; i++) {
+					var variableName = $(listedItems[i]).attr('data-variablename'); 
+					this.form.queryOptions.displayVariableList.push(variableName) ;
+				}
+				$(this.form.sparnatural).trigger( {type:"submit" } ) ;
+			}
+
+			this.switchVariableName = function() {
+				$(this.form.sparnatural).find('.componentsListe').first().toggleClass('displayVarName') ;
+			}
+			this.loadQuery = function() {
+				this.form.submitOpened = false ;
+				for (var i = 0; i < this.form.preLoad.variables.length; i++) {
+					var variableName = this.form.preLoad.variables[i] ;
+					for (var x = 0; x < this.form.sparnatural.components.length; x++) {
+						var critere = this.form.sparnatural.components[x].CriteriaGroup ;
+						if (critere.StartClassGroup.variableNamePreload == variableName ) {
+							critere.StartClassGroup.onchangeViewVariable() ;
+							break ; // une variable ne doit être trouvé q'une seule fois et seulement la première
+						}
+						if (critere.EndClassGroup.variableNamePreload == variableName ) {
+							critere.EndClassGroup.onchangeViewVariable() ;
+							break ; // une variable ne doit être trouvé q'une seule fois et seulement la première
+						}
+						
+					}
+					x= 0 ;
+				}
+				this.form.submitOpened = true ;
+			}
+
+			///form.sparnatural.variablesSelector = this ;
+		}
+
+		
 
 		function initStatistics(aSpecProvider) {
 			specProvider = new FilteringSpecificationProvider(aSpecProvider);
@@ -654,6 +833,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.onRemoveCriteria = function() {
 			var index_to_remove = this.id ;
 
+			//RemoveSelectedVariable names 
+			if (this.EndClassGroup.variableSelector != null) {
+				this.EndClassGroup.variableSelector.remove() ;
+				this.EndClassGroup.variableSelector = null;
+			}
+			
+
 			//Remove option selected if enbled
 			if ($(this.html).parents('li').first().hasClass('optionEnabled')) {
 				$(this.html).parents('li').first().parents('li.groupe').each(function() {
@@ -706,6 +892,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				if(this.thisForm_.preLoad !== false) {
 					jsonQueryBranch = this.thisForm_.preLoad.branches[0];
 				}
+
+				$('.variablesOtherSelect .sortableItem').remove() ;
+
 				var new_component = addComponent(formObject, formContextHtml, jsonQueryBranch) ;			
 				$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;				
 			} else {
@@ -761,7 +950,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			}
 		} ;
 	} 
-
 	
 	/**
 	 * Shows the selected values at the end of a criteria/line,
@@ -805,11 +993,28 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				},
 				SparnaturalComponents.eventProxiCriteria
 			);
+			// binds a selection in an input widget with the display of the value in the line
+			$(this.inputTypeComponent).on(
+				'selectAll',
+				{
+					arg1: this,
+					arg2: 'onSelectAll'
+				},
+				SparnaturalComponents.eventProxiCriteria
+			);
 			
 			if(this.parentCriteriaGroup.jsonQueryBranch != null) {
 				var branch = this.parentCriteriaGroup.jsonQueryBranch;
-				for (var key in branch.line.values) {
-					this.loadValue(branch.line.values[key]) ;
+				if (branch.line.values.length == 0) {
+					if (branch.children.length == 0) {
+						if (this.inputTypeComponent.canHaveSelectAll()) {
+							this.onSelectAll() ;
+						}
+					}
+				} else {
+					for (var key in branch.line.values) {
+						this.loadValue(branch.line.values[key]) ;
+					}
 				}
 			}
 			
@@ -817,6 +1022,13 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		// input : the 'key' of the value to be deleted
 		this.onRemoveValue = function removeValue(e) {
+console.log('removeValue') ;
+			if(this.selectAllValue) {
+				//unselect the endClass for view
+				this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+			}
+			//On all case, selectAllValue will be set to false
+			this.selectAllValue = false;
 			
 			var keyToBeDeleted = $(e.currentTarget).attr('value-data') ;
 			for (var item in this.selectedValues) {
@@ -825,6 +1037,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				}
 			}
 			$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup .EndClassWidgetAddOrValue').show() ;
+			$(this.parentCriteriaGroup.html).removeClass('onAddOrValue') ;
 
 			$(e.currentTarget).parent('div').remove() ;
 
@@ -832,7 +1045,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 				$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
 				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').remove() ;
 				$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
-				$(this.parentCriteriaGroup.html).parent('li').removeClass('hideEndClassProperty') ;
+				// N'est plus à cacher, lutilisateur peut choisi d'afficher les valeurs
+				//$(this.parentCriteriaGroup.html).parent('li').removeClass('hideEndClassProperty') ;
 				
 				// re-enable Where action if end class can be connected to others
 				if (this.parentCriteriaGroup.EndClassGroup.specProvider.hasConnectedClasses(this.parentCriteriaGroup.EndClassGroup.value_selected)) {
@@ -855,6 +1069,8 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupUnselected" } ) ;
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 
+			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
+
 		} ;
 
 		this.loadValue = function loadValue(value) {
@@ -862,6 +1078,39 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			$(this.inputTypeComponent).trigger('change') ;
 			//Value added don't reuse preloaded data.
 			this.inputTypeComponent.loadedValue = null ;
+		}
+
+
+		this.onSelectAll = function onSelectAll() {
+			var theValueLabel = '<span>'+langSearch.SelectAllValues+'</span>';
+			this.selectAllValue = true;
+			this.unselect = $('<span class="unselect" value-data="allValues"><i class="far fa-times-circle"></i></span>') ;
+			if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
+				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
+			}
+
+			this.unselect.on(
+				'click',
+				{	arg1: this,	arg2: 'onRemoveValue'	},
+				SparnaturalComponents.eventProxiCriteria
+			);
+
+			// disable the Where
+			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
+			$(this.parentCriteriaGroup.html).find('.EndClassGroup>div').first().removeClass('newOr') ;
+
+			//Add variable on results view
+			if(!this.parentCriteriaGroup.EndClassGroup.notSelectForview) {
+				if (this.parentCriteriaGroup.EndClassGroup.variableSelector == null) {
+					this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+				}
+				
+			}
+			this.parentCriteriaGroup.initCompleted() ;
+			
+			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
 		}
 
 		// sélection et affichage d'une valeur sélectionnée par un widget de saisie
@@ -891,9 +1140,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			this.unselect = $('<span class="unselect" value-data="'+theValue.key+'"><i class="far fa-times-circle"></i></span>') ;
 			if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
-				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+theValueLabel+'</p></div>').find('div').append(this.unselect) ;
+				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
 			} else {
-				var temp_html = $('<div class="EndClassWidgetValue"><span class="triangle-h"></span><span class="triangle-b"></span><p>'+theValueLabel+'</p></div>').append(this.unselect)  ;
+				var temp_html = $('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>').append(this.unselect)  ;
 				var ellle = $(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
 			}
 
@@ -906,6 +1155,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			// disable the Where
 			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
+			$(this.parentCriteriaGroup.html).removeClass('onAddOrValue') ;
 			
 			this.parentCriteriaGroup.initCompleted() ;
 			
@@ -914,7 +1164,7 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			
 			if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
 				if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 1) {
-					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue"><span class="triangle-h"></span><span class="triangle-b"></span><p><span>+</span></p></div>') ;
+					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p><span>+</span></p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>') ;
 					// hook a click on the plus to the needAddOrValue function
 					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
 						'click',
@@ -940,8 +1190,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		
 		this.onAddOrValue = function needAddOrValue() {
 			$(this.parentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
+			$(this.parentCriteriaGroup.html).addClass('onAddOrValue') ;
 			// On vide les champs de saisie du widget
 			this.inputTypeComponent.reload() ;
+			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
 		};
 		
 		this.init() ;
@@ -1183,36 +1435,101 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			var objectPropertyId = this.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected;
 			this.widgetType = this.specProvider.getObjectPropertyType(objectPropertyId);
 
-			// if non selectable, simply exit
-			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-				return true;
-			}
+			
+			var add_all = true;
+			var add_or = true;
 
 			// determine label and bit of HTML to select value
 			var rangeClassId = this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected
 			var classLabel = specProvider.getLabel(rangeClassId) ;
-			if (
-				this.widgetType == Config.SEARCH_PROPERTY
-				||
-				this.widgetType == Config.STRING_EQUALS_PROPERTY
-				||
-				this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY
-			) {
-				// label of the "Search" pseudo-class is inserted alone in this case
-				var endLabel = classLabel;
-			} else {
-				var endLabel = langSearch.Find+' '+ classLabel ;
-			}
-			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ endLabel ;
-			
 
+			// if non selectable, simply exit
+			if (
+				this.widgetType == Config.NON_SELECTABLE_PROPERTY
+			) {
+				if(this.specProvider.isLiteralClass(this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected)) {
+					this.ParentComponent.parentCriteriaGroup.initCompleted() ;
+
+					//Add variable on results view
+					if(!this.ParentComponent.parentCriteriaGroup.EndClassGroup.notSelectForview) {
+						this.ParentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+					}
+
+					add_all = false;
+					
+					
+				
+					//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+					$(this.ParentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+					initGeneralEvent(this.ParentComponent.parentCriteriaGroup.thisForm_);					
+				}
+				var endLabel = false ;
+				add_or = false;
+
+				//return true;
+			} else { // pour les autres type de widgets
+				if (
+					this.widgetType == Config.SEARCH_PROPERTY
+					||
+					this.widgetType == Config.STRING_EQUALS_PROPERTY
+					||
+					this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY
+				) {
+					// label of the "Search" pseudo-class is inserted alone in this case
+					var endLabel = classLabel;
+				} else if(
+					this.widgetType == Config.LIST_PROPERTY
+					||
+					this.widgetType == Config.TIME_PROPERTY_DATE
+					||
+					this.widgetType == Config.TIME_PROPERTY_YEAR
+				){
+					var endLabel = langSearch.Select+" :" ;
+				} else if(this.widgetType == Config.BOOLEAN_PROPERTY) {
+					var endLabel = "" ;
+				} else {
+					var endLabel = langSearch.Find+" :" ;
+				}
+			}
+
+			var parenthesisLabel = ' ('+classLabel+') ';
+			if(this.widgetType == Config.BOOLEAN_PROPERTY) {
+				parenthesisLabel = " " ;
+			}
+
+			//Ajout de l'option all si pas de valeur déjà selectionées
+			var selcetAll = "";
+			if (this.ParentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0) {
+				if (add_all) {
+					selcetAll = '<span class="selectAll"><span class="underline">'+langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span>' ;
+				}
+				if (add_all && add_or) {
+					selcetAll += '<span class="or">'+langSearch.Or+'</span> ';
+				}
+			}
+			
+			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll  ;
+
+			if (endLabel) {
+				widgetLabel += '<span>'+ endLabel+'</span>' ;
+			}
+			
 			// init HTML by concatenating bit of HTML + widget HTML
 			this.createWidgetComponent(
 				this.widgetType,
 				objectPropertyId,
 				rangeClassId
 			) ;
-			this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+
+			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
+				this.widgetHtml = widgetLabel ;
+			} else {
+				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+			}
+
+			var this_component = this;
+			
+			
 
 			this.cssClasses.IsOnEdit = true ;
 			this.tools = new GenericTools(this) ;
@@ -1221,14 +1538,28 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 
 			this.widgetComponent.init() ;
 			this.cssClasses.Created = true ;
+			$(this.html).find('.selectAll').first().on("click", function() {
+				$(this_component).trigger('selectAll') ;
+			});
+
 		}
+
+		this.canHaveSelectAll = function canHaveSelectAll() {
+			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
+				this.specProvider.isLiteralClass(this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected)) {
+					return false;
+			} 
+			return true ;
+		} 
 
 		this.reload = function reload() {
 			if (this.tools === null) {
 				this.init(false);
 				return true;
 			}
-
+			//this.html = "" ;
+			this.tools.remove() ;
+			this.widgetHtml = null;
 			this.init(true);
 		}
 
@@ -1421,6 +1752,9 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			  case Config.NON_SELECTABLE_PROPERTY:
 			  	this.widgetComponent = new NoWidget(this) ;
 			  	this.cssClasses.NoWidget = true ;
+			  case Config.BOOLEAN_PROPERTY:
+			  	this.widgetComponent = new BooleanWidget(this, langSearch) ;
+			  	this.cssClasses.BooleanWidget = true ;
 			  default:
 			  	// TODO : throw Exception
 			  	console.log("Unexpected Widget Type "+widgetType)
@@ -1457,21 +1791,28 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 			if(jsonQuery.branches.length > i+1) {
 				next = jsonQuery.branches[i+1];
 			}
-			preprocessRec(branch, null, next);
+			preprocessRec(branch, null, next, jsonQuery);
 		}
 		return jsonQuery;
 	}
 
-	function preprocessRec(branch, parent, nextSibling) {
+	function preprocessRec(branch, parent, nextSibling, jsonQuery) {
 		branch.parent = parent;
 		branch.nextSibling = nextSibling;
+		// set flags ot indicate if the eye is open by testing the selected variables
+		if(jsonQuery.variables.includes(branch.line.s)) {
+			branch.line.sSelected = true;
+		}
+		if(jsonQuery.variables.includes(branch.line.o)) {
+			branch.line.oSelected = true;
+		}
 		for(var i = 0;i < branch.children.length;i++) {
 			var child = branch.children[i];
 			var next = null;
 			if(branch.children.length > i+1) {
 				next = branch.children[i+1];
 			}
-			preprocessRec(child, branch, next);
+			preprocessRec(child, branch, next, jsonQuery);
 		}
 	}
 	
@@ -1502,7 +1843,6 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.initHtml = function() {
 			var instance = this.component.baseCssClass ;				
 			if (this.component.widgetHtml != null) {
-				console.log("*** init with widgetHtml on "+instance);
 				this.component.html = $('<div class="'+instance+'"></div>') ;
 				// remove existing component
 				// this.component.html.find('>.'+instance ).remove();
@@ -1515,6 +1855,10 @@ var Datasources = require("./SparnaturalConfigDatasources.js");
 		this.attachHtml = function() {
 			this.updateCssClasses() ;
 			this.attachComponentHtml() ;
+		}
+
+		this.remove = function() {
+			$(this.component.html).remove() ;
 		}
 		
 	}

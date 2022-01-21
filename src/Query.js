@@ -6,18 +6,18 @@ var SparqlGenerator = require('sparqljs').Generator;
  **/
 export class Query {
 
-	constructor(distinct=true) {
-		this.distinct = distinct;
-		this.variables = ["?this"];
-		this.order = null;
-		
-		/*
-		this.order = {
-			expression : "?this",
-			descending : false
-		} ;
-		*/
-		
+	constructor(options) {
+		this.distinct = options.distinct;
+		this.variables = options.displayVariableList;		
+		this.defaultLang = options.defaultLang;
+
+		this.order = null ;
+		if (options.orderSort !== null) {
+			this.order = {
+				expression : this.variables[0],
+				sort : options.orderSort
+			} ;
+		}
 		// array of QueryBranch
 		this.branches = [];
 	}
@@ -111,6 +111,12 @@ export class AbstractValue {
 				label: v.label,
 				search: v.string
 			}
+	    } else if(v.boolean) {
+	    	return {
+				key: v.boolean,
+				label: v.label,
+				boolean: v.boolean
+			}
 	    }
 	}
 
@@ -165,25 +171,31 @@ export class ExactStringValue extends AbstractValue {
 	}
 }
 
+export class BooleanValue extends AbstractValue {
+	constructor(boolean, label=null) {
+		super(label);
+		this.boolean = boolean;
+	}
+}
+
 /**
  * Writes a Query data structure in SPARQL
  **/
 export class QuerySPARQLWriter {
 
 	constructor(
-		distinct=true,
 		typePredicate="http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
 		specProvider
 	) {
-		this.distinct = distinct;
 		this.typePredicate = typePredicate;
 		this.specProvider = specProvider;
 		this.additionnalPrefixes = {};
 
-		// var SparqlParser = require('sparqljs').Parser;
-		// var parser = new SparqlParser();
+		var SparqlParser = require('sparqljs').Parser;
+		var parser = new SparqlParser();
 		// var query = parser.parse("SELECT ?x WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) } ORDER BY DESC(?x)");
-		// console.log(query);
+		var query = parser.parse("SELECT ?x WHERE { ?x <http://ex.fr/test> true }");
+		console.log(query);
 	}
 
 	// add a new prefix to the generated query
@@ -198,7 +210,7 @@ export class QuerySPARQLWriter {
 	toSPARQL(query) {
 		var sparqlQuery = {
 			"type": "query",
-			"queryType": "SELECT"+((this.distinct)?' DISTINCT':'')+"",
+			"queryType": "SELECT"+((query.distinct)?' DISTINCT':'')+"",
 			"variables": query.variables,
 			"where": [],			
 			"prefixes": {
@@ -219,16 +231,15 @@ export class QuerySPARQLWriter {
 				sparqlQuery.where,
 				query.branches[i],
 				// only the first one will have a type criteria
-				i == 0
+				i == 0,
+				query.defaultLang
 			) ;
 		}
 
 		// add order clause, if any
 		if(query.order) {
-			sparqlQuery.order = this._initOrder(query.order.expression, (query.order.descending)?true:null);
+			sparqlQuery.order = this._initOrder(query.order.expression, (query.order.sort)?query.order.sort:null);
 		}
-
-		console.log(sparqlQuery);
 
 		var stringWriter = new QueryExplainStringWriter(this.specProvider);
 		console.log(stringWriter.toExplainString(query));
@@ -239,7 +250,7 @@ export class QuerySPARQLWriter {
 		return generatedQuery;
 	}
 
-	_QueryBranchToSPARQL(sparqlQuery, parent, queryBranch, firstTopLevelBranch) {		
+	_QueryBranchToSPARQL(sparqlQuery, parent, queryBranch, firstTopLevelBranch, defaultLang) {		
 		// write the line
 		var parentInSparqlQuery = parent;
 		if(queryBranch.optional) {
@@ -251,7 +262,7 @@ export class QuerySPARQLWriter {
 			parent.push(filterNotExists);
 			parentInSparqlQuery = filterNotExists.expression.args[0].patterns;
 		}
-		this._QueryLineToSPARQL(parentInSparqlQuery, sparqlQuery, queryBranch.line, firstTopLevelBranch);
+		this._QueryLineToSPARQL(parentInSparqlQuery, sparqlQuery, queryBranch.line, firstTopLevelBranch, defaultLang);
 
 		// iterate on children
 		for (var i = 0; i < queryBranch.children.length; i++) {
@@ -260,13 +271,15 @@ export class QuerySPARQLWriter {
 				sparqlQuery,
 				parentInSparqlQuery,
 				queryBranch.children[i],
-				false
+				false,
+				defaultLang
 			)
 		}
 	}
 
-	_QueryLineToSPARQL(parentInSparqlQuery, completeSparqlQuery, queryLine, includeSubjectType=false) {
+	_QueryLineToSPARQL(parentInSparqlQuery, completeSparqlQuery, queryLine, includeSubjectType=false, defaultLang) {
 		var bgp = this._initBasicGraphPattern() ;
+
 
 		// only for the very first criteria
 		if (includeSubjectType) {
@@ -281,24 +294,44 @@ export class QuerySPARQLWriter {
 			completeSparqlQuery.where.push(typeBgp);
 		}
 
+		// insert BGP righ now so that lang filter comes after in generated SPARQL
+		parentInSparqlQuery.push(bgp);
+
 		if(queryLine.p && queryLine.o) {
 			if(queryLine.values.length == 0) {
+				// no value, insert ?s ?p ?o line
 				if(
 					!this.specProvider.isRemoteClass(queryLine.oType)
-					&&
-					!this.specProvider.isLiteralClass(queryLine.oType)
 				) {
 					bgp.triples.push(this._buildTriple(
 						queryLine.s,
 						queryLine.p,
 						queryLine.o
 					)) ;
-					bgp.triples.push(this._buildTriple(
-						queryLine.o,
-						this.typePredicate,
-						queryLine.oType
-					)) ;
+
+					// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
+					if(
+						this.specProvider.isMultilingual(queryLine.p)
+					) {
+						parentInSparqlQuery.push(
+							this._initFilterLang(defaultLang,queryLine.o)
+						) ;
+					}
+
+					// if the class of the value does no correspond to a literal, insert a criteria
+					// on its rdf:type
+					if(
+						!this.specProvider.isLiteralClass(queryLine.oType)
+					) {
+						bgp.triples.push(this._buildTriple(
+							queryLine.o,
+							this.typePredicate,
+							queryLine.oType
+						)) ;
+					}
 				}
+
+				
 			} else if(
 				queryLine.values.length == 1
 				&&
@@ -314,16 +347,39 @@ export class QuerySPARQLWriter {
 					// insert as a literal if the value is a literal value
 					queryLine.values[0] instanceof LiteralValue
 				)) ;
+			} else if(
+				queryLine.values.length == 1
+				&&
+				queryLine.values[0].boolean
+			) {		
+				// build direct boolean value				
+				bgp.triples.push(this._buildTriple(
+					queryLine.s,
+					queryLine.p,
+					"\""+queryLine.values[0].boolean+"\"^^http://www.w3.org/2001/XMLSchema#boolean",
+					false
+				)) ;
 			} else {
+
+				// more than one value for an URI, or a search criteria
 				// push in the bgp only s/p/o, values are inserted after
 				bgp.triples.push(this._buildTriple(
 					queryLine.s,
 					queryLine.p,
 					queryLine.o
 				)) ;
+
+				// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
+				if(
+					this.specProvider.isMultilingual(queryLine.p)
+				) {
+					parentInSparqlQuery.push(
+						this._initFilterLang(defaultLang,queryLine.o)
+					) ;
+				}
 			}
 		}
-		parentInSparqlQuery.push(bgp);
+		
 
 		// this can only be the case for value selection widgets
 		if(queryLine.values.length > 1) {			
@@ -349,6 +405,8 @@ export class QuerySPARQLWriter {
 			parentInSparqlQuery.push(
 				this._initFilterRegex(queryLine.values[0].regex, queryLine.o)
 			) ;
+
+			// TODO : language filter
 		}
 
 		// if we have a lucene query criteria
@@ -373,6 +431,8 @@ export class QuerySPARQLWriter {
 			parentInSparqlQuery.push(
 				this._initFilterStringEquals(queryLine.values[0].string, queryLine.o)
 			) ;
+
+			// TODO : language filter
 		}
 	}
 
@@ -495,6 +555,26 @@ export class QuerySPARQLWriter {
 		} ;
 	}
 
+	_initFilterLang(lang, variable) {			
+		return {
+			"type": "filter",
+			"expression": {
+				"type": "operation",
+				"operator": "langMatches",
+				"args": [					
+					{
+						"type": "operation",
+						"operator": "lang",
+						"args" : [
+							""+variable+""
+						]
+					},
+					"\""+lang+"\""
+				]
+			}
+		} ;
+	}
+
 	_initFilterStringEquals(texte, variable) {			
 		return {
 			"type": "filter",
@@ -521,12 +601,15 @@ export class QuerySPARQLWriter {
 		} ;
 	}
 
-	_initOrder(variable, desc=false) {
+	_initOrder(variable, order) {
 		var singleOrderClause = {
 			"expression" : variable
 		};
-		if(desc) {
+		if(order == 'desc') {
 			singleOrderClause.descending = true;
+		}
+		if(order == 'asc') {
+			singleOrderClause.ascending = true;
 		}
 
 		return [singleOrderClause];

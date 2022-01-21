@@ -245,7 +245,8 @@ export class RDFSpecificationProvider {
 			Config.SEARCH_PROPERTY,
 			Config.STRING_EQUALS_PROPERTY,
 			Config.GRAPHDB_SEARCH_PROPERTY,
-			Config.NON_SELECTABLE_PROPERTY
+			Config.NON_SELECTABLE_PROPERTY,
+			Config.BOOLEAN_PROPERTY
 		];
 
 		// only return the type if it is a known type
@@ -443,6 +444,9 @@ export class RDFSpecificationProvider {
 		return (this._readAsSingleLiteral(propertyId, Config.ENABLE_NEGATION) == "true");	
 	}
 
+	isMultilingual(propertyId) {
+		return (this._readAsSingleLiteral(propertyId, Config.IS_MULTILINGUAL) == "true");	
+	}
 
 	_sort(items) {
 		var me = this;

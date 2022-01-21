@@ -12,6 +12,7 @@ DateTimeValue = require("./Query.js").DateTimeValue ;
 RegexValue = require("./Query.js").RegexValue ;
 LuceneQueryValue = require("./Query.js").LuceneQueryValue ;
 ExactStringValue = require("./Query.js").ExactStringValue ;
+BooleanValue = require("./Query.js").BooleanValue ;
 
 class JSONQueryGenerator {
 
@@ -24,7 +25,7 @@ class JSONQueryGenerator {
 	 **/
 	generateQuery(formObject) {
 		if(this.hasEnoughCriteria(formObject)) {
-			var query = new Query();
+			var query = new Query(formObject.queryOptions);
 
 			for (var i = 0; i < formObject.sparnatural.components.length; i++) {
 				var component = formObject.sparnatural.components[i];
@@ -38,7 +39,7 @@ class JSONQueryGenerator {
 				}			
 			} ;	
 
-			console.log(query) ;
+			// console.log(query) ;
 			
 			return query;	
 		} else {
@@ -122,6 +123,10 @@ class JSONQueryGenerator {
 			  	  var value = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0].search;
 				  line.values.push(new ExactStringValue(value, value));
 				  break;
+			  case Config.BOOLEAN_PROPERTY:
+			  	  var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[0];
+			  	  line.values.push(new BooleanValue(selectedValue.boolean, selectedValue.label));
+			  	  break;
 			  default:
 			  	console.log('Unknown widget type when generating SPARQL : '+_WidgetType);						
 			}						

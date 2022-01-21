@@ -1,6 +1,7 @@
 {
-	"Where": "Et",
+	"Where": "Où",
 	"Find": "Trouver",
+	"Select": "Sélectionner",
 	"And": "Et",
 	"That": "qui",
 	"Search": "Rechercher",
@@ -13,7 +14,7 @@
 	"PlaceholderTimeDateFormat" : "AAAA",
 	"PlaceholderTimeDateDayFormat" : "jj/mm/aaaa",
 	"LangCodeTimeDate": "fr-FR",
-	"LabelDateFrom": "De",
+	"LabelDateFrom": "de",
 	"LabelDateTo": "à", 
 	"DisplayValueDateFrom" : "A partir de",
 	"DisplayValueDateTo" : "Jusqu'à",
@@ -21,5 +22,11 @@
 	"ListWidgetNoItem": "... Oups, aucune valeur trouvée !",
 	"ObjectPropertyTemporaryLabel": "relié(e) à",
 	"labelOptionOptional": "Optionnel",
-	"labelOptionNotExists": "Négatif"
+	"labelOptionNotExists": "Négatif",
+	"labelOrderSort": "Tri :",
+	"SelectAllValues": "Tous·tes",
+	"Or": "ou",
+	"SwitchVariablesNames": "Montrer le nom des colonnes",
+	"true": "Vrai",
+	"false": "Faux"
 }

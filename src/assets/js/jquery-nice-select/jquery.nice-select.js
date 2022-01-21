@@ -80,7 +80,7 @@
         }
       }
     
-      var text = $selected.data('display') || icon+$selected.html();
+      var text = $selected.data('display') || icon+'<span class="label">'+$selected.html()+'</span>';
         
       $dropdown.find('.current').html(text);
       
@@ -103,7 +103,7 @@
         .addClass('option' +
           ($option.is(':selected') ? ' selected' : '') +
           ($option.is(':disabled') ? ' disabled' : ''))
-          .html(icon+$option.text())
+          .html(icon+'<span class="label">'+$option.text()+'</span>')
         );
       });
     }
@@ -115,7 +115,6 @@
     
     // Open/close
     $(document).on('click.nice_select', '.nice-select', function(event) {
-      console.log("click on niceselect");
       var $dropdown = $(this);
       var settings = $dropdown.prev('select')[0].sparnaturalSettings ;
   	  if ($dropdown.hasClass('open') ) {
@@ -124,7 +123,10 @@
   	  } else {
   		  $('.nice-select').not($dropdown).removeClass('open');
   		  $dropdown.toggleClass('open');
-        tippy('.nice-select .option[data-tippy-content]', settings.tooltipConfig);
+        if (typeof settings.tooltipConfig !== 'undefined') {
+          tippy('.nice-select .option[data-tippy-content]', settings.tooltipConfig);
+        }
+        
   	  }
       
       //

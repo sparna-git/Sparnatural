@@ -12,6 +12,7 @@ module.exports = Object.freeze({
 	STRING_EQUALS_PROPERTY 			: 		SPARNATURAL_CONFIG_CORE+'StringEqualsProperty',
 	GRAPHDB_SEARCH_PROPERTY 		: 		SPARNATURAL_CONFIG_CORE+'GraphDBSearchProperty',
 	NON_SELECTABLE_PROPERTY 		: 		SPARNATURAL_CONFIG_CORE+'NonSelectableProperty',
+	BOOLEAN_PROPERTY 				: 		SPARNATURAL_CONFIG_CORE+'BooleanProperty',
 
 	SPARQL_STRING			 		: 		SPARNATURAL_CONFIG_CORE+'sparqlString',
 	ICON					 		: 		SPARNATURAL_CONFIG_CORE+'icon',
@@ -21,6 +22,7 @@ module.exports = Object.freeze({
 	TOOLTIP					 		: 		SPARNATURAL_CONFIG_CORE+'tooltip',
 	ENABLE_OPTIONAL			 		: 		SPARNATURAL_CONFIG_CORE+'enableOptional',
 	ENABLE_NEGATION			 		: 		SPARNATURAL_CONFIG_CORE+'enableNegation',
+	IS_MULTILINGUAL			 		: 		SPARNATURAL_CONFIG_CORE+'isMultilingual',
 
 	SPARNATURAL_CLASS				: 		SPARNATURAL_CONFIG_CORE+'SparnaturalClass',
 	NOT_INSTANTIATED_CLASS			: 		SPARNATURAL_CONFIG_CORE+'NotInstantiatedClass',
