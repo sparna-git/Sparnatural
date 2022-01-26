@@ -82,6 +82,17 @@ Search in FontAwesome at https://fontawesome.com/icons</rdfs:comment>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#labelProperty -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#labelProperty">
+        <rdfs:comment xml:lang="en">Use this annotation to relate a class in a Sparnatural configuration to a property that will be used as the default to fetch the labels of instances of this class. When a user selects this class as a column in the result set, if the class has this annotation set, everything behaves as if the user had selected also the corresponding property to be included.
+The label property may have no domain specified if you don&apos;t want it to be proposed to the user.
+The property must have a range specified to a single class.</rdfs:comment>
+        <rdfs:label xml:lang="en">label property</rdfs:label>
+    </owl:AnnotationProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#order -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#order">
