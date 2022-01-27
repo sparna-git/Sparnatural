@@ -236,7 +236,7 @@ export class QuerySPARQLWriter {
 				query.branches[i],
 				// only the first one will have a type criteria
 				i == 0,
-				query.defaultLang
+				query
 			) ;
 		}
 
@@ -324,7 +324,7 @@ export class QuerySPARQLWriter {
 		return branch;
 	}
 
-	_QueryBranchToSPARQL(sparqlQuery, parent, queryBranch, firstTopLevelBranch, defaultLang) {		
+	_QueryBranchToSPARQL(sparqlQuery, parent, queryBranch, firstTopLevelBranch, query) {		
 		// write the line
 		var parentInSparqlQuery = parent;
 		if(queryBranch.optional) {
@@ -336,7 +336,7 @@ export class QuerySPARQLWriter {
 			parent.push(filterNotExists);
 			parentInSparqlQuery = filterNotExists.expression.args[0].patterns;
 		}
-		this._QueryLineToSPARQL(parentInSparqlQuery, sparqlQuery, queryBranch.line, firstTopLevelBranch, defaultLang);
+		this._QueryLineToSPARQL(parentInSparqlQuery, sparqlQuery, queryBranch.line, firstTopLevelBranch, query);
 
 		// iterate on children
 		for (var i = 0; i < queryBranch.children.length; i++) {
@@ -346,12 +346,12 @@ export class QuerySPARQLWriter {
 				parentInSparqlQuery,
 				queryBranch.children[i],
 				false,
-				defaultLang
+				query
 			)
 		}
 	}
 
-	_QueryLineToSPARQL(parentInSparqlQuery, completeSparqlQuery, queryLine, includeSubjectType=false, defaultLang) {
+	_QueryLineToSPARQL(parentInSparqlQuery, completeSparqlQuery, queryLine, includeSubjectType=false, query) {
 		var bgp = this._initBasicGraphPattern() ;
 
 
@@ -388,7 +388,7 @@ export class QuerySPARQLWriter {
 						this.specProvider.isMultilingual(queryLine.p)
 					) {
 						parentInSparqlQuery.push(
-							this._initFilterLang(defaultLang,queryLine.o)
+							this._initFilterLang(query.defaultLang,queryLine.o)
 						) ;
 					}
 
@@ -407,9 +407,14 @@ export class QuerySPARQLWriter {
 
 				
 			} else if(
+				// there is a single value
 				queryLine.values.length == 1
 				&&
+				// and it is a URI or a Literal
 				( queryLine.values[0].uri || queryLine.values[0].literal )
+				&&
+				// and we don't need the value to be selected
+				(!query.variables.includes(queryLine.o))
 			) {
 				// if we are in a value selection widget and we have a single value selected
 				// then insert the value directly as the object of the triple						
@@ -425,6 +430,8 @@ export class QuerySPARQLWriter {
 				queryLine.values.length == 1
 				&&
 				queryLine.values[0].boolean
+				&&
+				(!query.variables.includes(queryLine.o))
 			) {		
 				// build direct boolean value				
 				bgp.triples.push(this._buildTriple(
@@ -448,7 +455,7 @@ export class QuerySPARQLWriter {
 					this.specProvider.isMultilingual(queryLine.p)
 				) {
 					parentInSparqlQuery.push(
-						this._initFilterLang(defaultLang,queryLine.o)
+						this._initFilterLang(query.defaultLang,queryLine.o)
 					) ;
 				}
 			}
@@ -456,7 +463,17 @@ export class QuerySPARQLWriter {
 		
 
 		// this can only be the case for value selection widgets
-		if(queryLine.values.length > 1) {			
+		if(
+			// we use a VALUES if there is more than one value
+			queryLine.values.length > 1
+			||
+			// or if there is only one, but we need the variable to be selected
+			(
+				queryLine.values.length == 1
+				&&
+				query.variables.includes(queryLine.o)
+			)			
+		) {			
 			var jsonValues = this._initValues() ;
 			queryLine.values.forEach(function(v) {
 				var newValue = {  } ;
