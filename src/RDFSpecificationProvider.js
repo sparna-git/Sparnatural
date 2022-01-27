@@ -361,8 +361,8 @@ export class RDFSpecificationProvider {
 		return sparql;
 	}
 
-	getLabelProperty(classId) {
-		var labelProperties = this._readAsResource(classId, Config.LABEL_PROPERTY);
+	getDefaultLabelProperty(classId) {
+		var labelProperties = this._readAsResource(classId, Config.DEFAULT_LABEL_PROPERTY);
 
 		if(labelProperties.length > 0) {
 			return labelProperties[0];

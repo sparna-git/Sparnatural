@@ -271,11 +271,11 @@ export class QuerySPARQLWriter {
 		if(
 			jsonQuery.variables.includes(branch.line.s)
 			&&
-			this.specProvider.getLabelProperty(branch.line.sType) != null
+			this.specProvider.getDefaultLabelProperty(branch.line.sType) != null
 			&&
 			firstTopLevelBranch
 		) {
-			var labelProperty = this.specProvider.getLabelProperty(branch.line.sType);
+			var labelProperty = this.specProvider.getDefaultLabelProperty(branch.line.sType);
 
 			if(branch.parent == null) {
 				// add criteria to fetch the label
@@ -299,9 +299,9 @@ export class QuerySPARQLWriter {
 		if(
 			jsonQuery.variables.includes(branch.line.o)
 			&&
-			this.specProvider.getLabelProperty(branch.line.oType) != null
+			this.specProvider.getDefaultLabelProperty(branch.line.oType) != null
 		) {
-			var labelProperty = this.specProvider.getLabelProperty(branch.line.oType);
+			var labelProperty = this.specProvider.getDefaultLabelProperty(branch.line.oType);
 
 			// add criteria to fetch the label
 			var newBranch = new QueryBranch();

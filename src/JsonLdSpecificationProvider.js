@@ -139,11 +139,11 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return null ;
 	}
 
-	this.getLabelProperty = function(classId) {
+	this.getDefaultLabelProperty = function(classId) {
 		var theClass = this._getResourceById(classId);
 
-		if(theClass['labelProperty']) {
-			return theClass['labelProperty'];
+		if(theClass['defaultLabelProperty']) {
+			return theClass['defaultLabelProperty'];
 		}
 
 		return null;

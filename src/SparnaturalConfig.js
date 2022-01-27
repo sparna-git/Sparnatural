@@ -24,7 +24,7 @@ module.exports = Object.freeze({
 	ENABLE_NEGATION			 		: 		SPARNATURAL_CONFIG_CORE+'enableNegation',
 	IS_MULTILINGUAL			 		: 		SPARNATURAL_CONFIG_CORE+'isMultilingual',
 
-	LABEL_PROPERTY			 		: 		SPARNATURAL_CONFIG_CORE+'labelProperty',
+	DEFAULT_LABEL_PROPERTY	 		: 		SPARNATURAL_CONFIG_CORE+'defaultLabelProperty',
 
 	SPARNATURAL_CLASS				: 		SPARNATURAL_CONFIG_CORE+'SparnaturalClass',
 	NOT_INSTANTIATED_CLASS			: 		SPARNATURAL_CONFIG_CORE+'NotInstantiatedClass',
