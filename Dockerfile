@@ -8,12 +8,14 @@ COPY package.json /usr/src/app/
 COPY package-lock.json /usr/src/app/
 RUN npm install
 COPY . /usr/src/app/
-# build sparnatural into dist/ folder
+# build sparnatural.js and sparnatural.css from src into dist/ folder
 RUN npm run build
+# prepare the home page (demo-dbpedia-v2) with the latest sparnatural.js|css build 
+RUN git clone https://github.com/sparna-git/sparnatural.eu.git /tmp/sparnatural.eu/
+RUN cp -f /usr/src/app/dist/sparnatural.* /tmp/sparnatural.eu/demos/demo-dbpedia-v2/
 
-
-### start a nginx web server to serve the dist/ folder
+### start a nginx web server to serve the demo-dbpedia-v2/ folder
 FROM nginx:1.21.6
-COPY --from=sparnatural-builder /usr/src/app/dist/ /usr/share/nginx/html/
+COPY --from=sparnatural-builder /tmp/sparnatural.eu/demos/demo-dbpedia-v2/ /usr/share/nginx/html/
 RUN chown nginx.nginx /usr/share/nginx/html/ -R
 EXPOSE 80
