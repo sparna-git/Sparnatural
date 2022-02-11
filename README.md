@@ -17,6 +17,13 @@ To get started :
 3. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/Sparnatural/blob/master/sparnatural-demo-dbpedia/index.html#L100)
 4. Adapt `sparnatural-demo-dbpedia/index.html` by changing the configuration and adapting the SPARQL endpoint URL;
 
+To get started with docker :
+
+1. Clone the git repository
+2. Run ``docker-compose build``
+3. Run ``docker-compose up``
+4. Open your browser: http://127.0.0.1:8080
+
 # Features
 
 ## Query Structure
