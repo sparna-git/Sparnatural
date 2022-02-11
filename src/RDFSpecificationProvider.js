@@ -246,7 +246,8 @@ export class RDFSpecificationProvider {
 			Config.STRING_EQUALS_PROPERTY,
 			Config.GRAPHDB_SEARCH_PROPERTY,
 			Config.NON_SELECTABLE_PROPERTY,
-			Config.BOOLEAN_PROPERTY
+			Config.BOOLEAN_PROPERTY,
+			Config.TREE_PROPERTY
 		];
 
 		// only return the type if it is a known type

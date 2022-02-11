@@ -245,7 +245,8 @@ UiuxConfig = require("./UiuxConfig.js");
 		var VALUE_SELECTION_WIDGETS = [
 			Config.LIST_PROPERTY,
 			Config.LITERAL_LIST_PROPERTY,
-			Config.AUTOCOMPLETE_PROPERTY
+			Config.AUTOCOMPLETE_PROPERTY,
+			Config.TREE_PROPERTY
 		];
 		
 		// merge given options with default values
@@ -1139,6 +1140,7 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			this.unselect = $('<span class="unselect" value-data="'+theValue.key+'"><i class="far fa-times-circle"></i></span>') ;
 			if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
+				// set a tooltip if the label is a bit long
 				var tooltip = (theValue.label.length > 25)?'title="'+theValue.label+'"':"";
 				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p '+tooltip+'>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
 			} else {
@@ -1755,6 +1757,9 @@ UiuxConfig = require("./UiuxConfig.js");
 			  case Config.BOOLEAN_PROPERTY:
 			  	this.widgetComponent = new BooleanWidget(this, langSearch) ;
 			  	this.cssClasses.BooleanWidget = true ;
+			  case Config.TREE_PROPERTY:
+			  	console.log("Insert here tree widget !!!");
+			  	this.cssClasses.TreeWidget = true ;
 			  default:
 			  	// TODO : throw Exception
 			  	console.log("Unexpected Widget Type "+widgetType)

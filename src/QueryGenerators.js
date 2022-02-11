@@ -83,6 +83,7 @@ class JSONQueryGenerator {
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType ;
 		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 0 ) {			
 			switch (_WidgetType) {					
+			  case Config.TREE_PROPERTY:
 			  case Config.LIST_PROPERTY:
 			  case Config.AUTOCOMPLETE_PROPERTY:
 			  	for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {				  	

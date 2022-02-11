@@ -37,6 +37,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 				value == "sparnatural:NonSelectableProperty"
 				||
 				value == "sparnatural:BooleanProperty"
+				||
+				value == "sparnatural:TreeProperty"
 			) {
 				return this._expand(value);
 			}

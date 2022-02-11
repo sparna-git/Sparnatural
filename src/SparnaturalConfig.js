@@ -13,6 +13,7 @@ module.exports = Object.freeze({
 	GRAPHDB_SEARCH_PROPERTY 		: 		SPARNATURAL_CONFIG_CORE+'GraphDBSearchProperty',
 	NON_SELECTABLE_PROPERTY 		: 		SPARNATURAL_CONFIG_CORE+'NonSelectableProperty',
 	BOOLEAN_PROPERTY 				: 		SPARNATURAL_CONFIG_CORE+'BooleanProperty',
+	TREE_PROPERTY 					: 		SPARNATURAL_CONFIG_CORE+'TreeProperty',
 
 	SPARQL_STRING			 		: 		SPARNATURAL_CONFIG_CORE+'sparqlString',
 	ICON					 		: 		SPARNATURAL_CONFIG_CORE+'icon',
