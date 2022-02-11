@@ -274,6 +274,16 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty -->
+
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a tree selection widget should be displayed.</rdfs:comment>
+        <rdfs:label xml:lang="en">tree property</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
