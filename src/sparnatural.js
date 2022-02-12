@@ -362,11 +362,22 @@ UiuxConfig = require("./UiuxConfig.js");
 		
 		function initForm(form) {	
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div><div class="variablesSelection"></div>');
+
 			$(form.sparnatural).append(contexte) ;
+
+
 
 			//Ajout du filtre pour ombrage menu options
 			$(form.sparnatural).append($('<svg data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" style="width:0;height:0;display:block"><defs><filter style="color-interpolation-filters:sRGB;" inkscape:label="Drop Shadow" id="filter19278" x="-0.15483875" y="-0.11428573" width="1.3096775" height="1.2714286"><feFlood flood-opacity="0.811765" flood-color="rgb(120,120,120)" result="flood" id="feFlood19268" /><feComposite in="flood" in2="SourceGraphic" operator="out" result="composite1" id="feComposite19270" /><feGaussianBlur in="composite1" stdDeviation="2" result="blur" id="feGaussianBlur19272" /><feOffset dx="3.60822e-16" dy="1.8" result="offset" id="feOffset19274" /><feComposite in="offset" in2="SourceGraphic" operator="atop" result="composite2" id="feComposite19276" /></filter></defs></svg>') );
 
+			//Bouton de reset
+			var reset = $('<div class="reset-wrapper"><p class="reset-form"><a href="">'+UiuxConfig.ICON_RESET+'</a></p></div>') ;
+			$(form.sparnatural).find('.bg-wrapper').prepend(reset) ;
+	
+			$(reset).find('a').on('clik', function() {
+					clearForm(form) ;
+			})
+			
 
 			form.queryOptions = {
 				distinct : settings.addDistinct,
@@ -1139,8 +1150,7 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			this.unselect = $('<span class="unselect" value-data="'+theValue.key+'"><i class="far fa-times-circle"></i></span>') ;
 			if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
-				var tooltip = (theValue.label.length > 25)?'title="'+theValue.label+'"':"";
-				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p '+tooltip+'>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
+				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
 			} else {
 				var temp_html = $('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>').append(this.unselect)  ;
 				var ellle = $(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
