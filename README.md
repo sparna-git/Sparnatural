@@ -13,9 +13,10 @@ You can play with **online demos at http://sparnatural.eu#demos**.
 To get started :
 
 1. Read the following documentation;
-2. Look at how things work in file `sparnatural-demo-dbpedia/index.html`; 
-3. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/Sparnatural/blob/master/sparnatural-demo-dbpedia/index.html#L100)
-4. Adapt `sparnatural-demo-dbpedia/index.html` by changing the configuration and adapting the SPARQL endpoint URL;
+2. Read [the Wiki](https://github.com/sparna-git/Sparnatural/wiki)
+3. Look at how things work in file `sparnatural-demo-dbpedia/index.html`; 
+4. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/Sparnatural/blob/master/sparnatural-demo-dbpedia/index.html#L100)
+5. Adapt `sparnatural-demo-dbpedia/index.html` by changing the configuration and adapting the SPARQL endpoint URL;
 
 To get started with docker :
 
