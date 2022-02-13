@@ -28,6 +28,7 @@ $custom-green-light: rgb(151,227,196) ;
 /* Color of the highlight of arrows */
 $custom-green-bold: rgb(2,184,117) ;
 
+$custom-silver-line: #8D8D8D;
 $custom-silver: rgb(167,167,167) ;
 $custom-silver-light: rgb(230, 230, 230) ;
 $default-text-color: #666 ;
@@ -1035,7 +1036,7 @@ body {
 		.variablesSelection {
 			background: $custom-red-light;
 			margin-bottom: 22px;
-			border-top: 2px solid $default-text-color;
+			border-top: 2px solid $custom-silver-line;
 			.linesWrapper {
 				/*display: none;*/
 				
@@ -1049,6 +1050,7 @@ body {
 				.VariableSelectorDisplay {
 					a {
 						margin-top: -22px;
+						transition: margin-top 0.700s ease;
 					}
 				}
 			}
@@ -1070,6 +1072,8 @@ body {
 						background: $custom-red-medium;
 						line-height: 1;
 						padding: 10px;
+						transition: margin-top 0.700s ease;
+						cursor: pointer;
 
 					.icon-arrow-top {
 						display: none;
