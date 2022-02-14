@@ -1007,14 +1007,7 @@ export class VariableSelector extends HTMLComponent {
 		
 		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
 
-		$('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().on('keypress', function(event) {
-			var regex = new RegExp("^[a-zA-Z0-9_]+$");
-			var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-			if (!regex.test(key)) {
-			   event.preventDefault();
-			   return false;
-			}
-	 	});
+		$('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().on('keypress',{arg1: this, arg2: 'onEditKeyPress'}, eventProxiCriteria);
 
 		 $('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().on('keyup', function(event) {
 			var width = $('.sortableItem').first().width() ;
@@ -1039,6 +1032,8 @@ export class VariableSelector extends HTMLComponent {
 
 	onFocusEdit() {
 		this.beforEdit = $(this.contentEditableElement).html() ;
+		var width = $('.sortableItem').first().width() ;
+		$('.variablesOrdersSelect').width(width) ;
 	}
 	onFocusOutEdit() {
 		this.contentEditableElement = $('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first() ;
@@ -1050,14 +1045,26 @@ export class VariableSelector extends HTMLComponent {
 
 			this.GroupContenaire.varName = '?'+this.beforEdit ;
 			this.GroupContenaire.parentComponent.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
-
-			var width = $('.sortableItem').first().width() ;
-			$('.variablesOrdersSelect').width(width) ;
 			
 			redrawBottomLink($(this.GroupContenaire.parentComponent.html).parents('li').first());
 			$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 		}
+		var width = $('.sortableItem').first().width() ;
+		$('.variablesOrdersSelect').width(width) ;
 	}
+
+	onEditKeyPress(event) {
+		if (event.keyCode === 13) { // If press Enter
+			$('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().blur() ;
+			return true;
+		}
+		var regex = new RegExp("^[a-zA-Z0-9_]+$");
+		var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+		if (!regex.test(key)) {
+		   event.preventDefault();
+		   return false;
+		}
+	 }
 
 	remove () {
 		var checkVarName = this.varName
