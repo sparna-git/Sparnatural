@@ -1037,6 +1037,10 @@ export class VariableSelector extends HTMLComponent {
 	}
 	onFocusOutEdit() {
 		this.contentEditableElement = $('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first() ;
+
+		if ($(this.contentEditableElement).html() =='') {
+			$(this.contentEditableElement).html(this.beforEdit) ;
+		}
 		if (this.beforEdit !== $(this.contentEditableElement).html()) {
 			this.beforEdit = $(this.contentEditableElement).html();
 			$(this.contentEditableElement).trigger('change');
