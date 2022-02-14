@@ -62,7 +62,9 @@ class JSONQueryGenerator {
 		// dashes should be replaced
 		var subjectVariable = component.CriteriaGroup.StartClassGroup.getVarName() ;
 		if(i == 0) {
-			subjectVariable = "?this";
+			if (subjectVariable == null) {
+				subjectVariable = "?this";
+			}
 		}
 
 		var objectVariable = null ;
