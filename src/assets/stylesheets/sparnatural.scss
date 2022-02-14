@@ -30,6 +30,7 @@ $custom-green-light: rgb(151,227,196) ;
 /* Color of the highlight of arrows */
 $custom-green-bold: rgb(2,184,117) ;
 
+$custom-silver-line: #8D8D8D;
 $custom-silver: rgb(167,167,167) ;
 $custom-silver-light: rgb(230, 230, 230) ;
 $default-text-color: #666 ;
@@ -1063,7 +1064,63 @@ body {
 		}
 		.variablesSelection {
 			background: $custom-red-light;
-			padding: 30px 0;
+			margin-bottom: 22px;
+			border-top: 2px solid $custom-silver-line;
+			.linesWrapper {
+				/*display: none;*/
+				
+				height: 0;
+				overflow: hidden;
+			}
+			&.displayed {
+				.linesWrapper {
+					height: auto;
+				}
+				.VariableSelectorDisplay {
+					a {
+						margin-top: -22px;
+						transition: margin-top 0.700s ease;
+					}
+				}
+			}
+			.VariableSelectorDisplay {
+				background: $custom-red-medium;
+				height: $margin-component;
+				position: relative;
+				
+					a  {
+						position: absolute;
+						left: 50%;
+						display: block;
+						height: 44px;
+						width: 44px;
+						margin: 0 auto;
+						margin-top: 8px;
+						margin-left: -22px;
+						border-radius: 22px;
+						background: $custom-red-medium;
+						line-height: 1;
+						padding: 10px;
+						transition: margin-top 0.700s ease;
+						cursor: pointer;
+
+					.icon-arrow-top {
+						display: none;
+					}
+					.icon-arrow-bottom {
+						display: inline;
+					}
+				}
+			}
+
+			&.displayed .VariableSelectorDisplay a  {
+				.icon-arrow-top {
+					display: inline;
+				}
+				.icon-arrow-bottom {
+					display: none;
+				}
+			}
 			.line1, .line2 {
 				display: flex;
 				flex-direction: row;
@@ -1084,6 +1141,7 @@ body {
 				border-radius: 5px 5px 0 0 ;
 				border-bottom: 0px solid transparent;
 				min-height: 61px;
+				margin-top: 30px;
 				.sortableItem {
 					padding: 10px;
 					display: inline-block;
@@ -1133,6 +1191,7 @@ body {
 				}
 			}
 			.line2 {
+				margin-bottom: 30px;
 				border-radius: 0 0 5px 5px;
 				justify-content: space-between;
 				border-top: 1px solid darkgray;

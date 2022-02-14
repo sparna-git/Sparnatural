@@ -434,12 +434,13 @@ UiuxConfig = require("./UiuxConfig.js");
 			this.form = form ;
 			this.html = $(form.sparnatural).find('.variablesSelection').first() ; 
 			this.selectedList = [] ;
-
+			this.linesWrapper = $('<div class="linesWrapper"></div>') ;
+			$(this.html).append(this.linesWrapper) ;
 			
 			this.line1 = $('<div class="line1"></div>') ;
 			this.line2 = $('<div class="line2"></div>') ;
-			$(this.html).append(this.line1) ;
-			$(this.html).append(this.line2) ;
+			$(this.linesWrapper).append(this.line1) ;
+			$(this.linesWrapper).append(this.line2) ;
 
 			this.firstSelectHtml = $('<div class="variablesFirstSelect"></div>') ;
 			this.otherSelectHtml = $('<div class="variablesOtherSelect"></div>') ;
@@ -451,6 +452,17 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			$(this.line2).append(this.ordersSelectHtml) ;
 			$(this.line2).append(this.optionsSelectHtml) ;
+
+			//Show and hide button
+			this.displayButton = $('<div class="VariableSelectorDisplay"><a class="displayButton">'+UiuxConfig.ICON_ARROW_TOP+UiuxConfig.ICON_ARROW_BOTTOM+'</a></div>') ;
+			
+			$(this.html).append(this.displayButton) ;
+
+			// Listening when display to hide or show
+			$(this.displayButton).find('a').on('click',
+			{arg1: this, arg2: 'display'},
+			SparnaturalComponents.eventProxiCriteria
+			);
 
 			form.sparnatural.variablesSelector = this ;
 			form.sparnatural.variablesSelector.switchLabel = 'name' ; // or name
@@ -532,6 +544,25 @@ UiuxConfig = require("./UiuxConfig.js");
 			);
 
 			this.removeVariableName = function(name) {
+
+			}
+
+			this.display = function() {
+				if( $(this.html).hasClass('displayed') ) {
+					$(this.linesWrapper).animate({
+						height: 0
+					}, 500, function(){
+	
+					});
+				} else {
+					$(this.linesWrapper).animate({
+						height: $(this.linesWrapper).get(0).scrollHeight
+					}, 500, function(){
+						$(this.linesWrapper).height('auto');
+					});
+				}
+				
+				$(this.html).toggleClass('displayed') ;
 
 			}
 
