@@ -1062,6 +1062,69 @@ body {
 		.bg-wrapper {
 			
 		}
+		.submitSectionWrapper {
+			height: 30px;
+			background: $custom-green ;
+			.submitSection {
+				position: relative;
+				
+				width: 1200px;
+				max-width: 90%;
+				margin: 0 auto;
+				a {
+					position: absolute;
+					top: 10px;
+					right: 0;
+					width: 40px;
+					height: 40px;
+					padding: 9px;
+					border: 1px solid $custom-silver;
+					border-radius: 5px;
+					background: $custom-green-bold;
+					box-shadow: 0px 2px 3px 0px #cfcfcf;
+					cursor: pointer;
+					z-index: 2;
+					svg {
+						display: block;
+						max-width:  20px;
+						height: 20px;
+						path {
+							fill:#FFFFFF;
+							width: auto;
+							height: auto;
+						}
+					}
+					svg.playLoader {
+						display: none;
+						max-width:  30px;
+						height: 30px;
+					}
+
+					&.submitDisable {
+						background: $custom-silver-light;
+						cursor: default;
+						svg {
+							path {
+								fill:$custom-silver;
+							}
+						}
+						&.loadingEnabled {
+							padding: 4px;
+							svg.playIcon {
+								display: none;
+							}
+							svg.playLoader {
+								display: block;
+								path {
+									fill:$custom-green-bold;
+								}
+								
+							}
+						}
+					}
+				}
+			}
+		}
 		.variablesSelection {
 			background: $custom-red-light;
 			margin-bottom: 22px;
