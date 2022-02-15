@@ -1063,7 +1063,7 @@ body {
 			
 		}
 		.submitSectionWrapper {
-			height: 30px;
+			height: 41px;
 			background: $custom-green ;
 			.submitSection {
 				position: relative;
@@ -1073,10 +1073,10 @@ body {
 				margin: 0 auto;
 				a {
 					position: absolute;
-					top: 10px;
+					top: 14px;
 					right: 0;
-					width: 40px;
-					height: 40px;
+					width: 54px;
+					height: 54px;
 					padding: 9px;
 					border: 1px solid $custom-silver;
 					border-radius: 5px;
@@ -1086,8 +1086,8 @@ body {
 					z-index: 2;
 					svg {
 						display: block;
-						max-width:  20px;
-						height: 20px;
+						max-width:  34px;
+						height: 34px;
 						path {
 							fill:#FFFFFF;
 							width: auto;
@@ -1096,8 +1096,8 @@ body {
 					}
 					svg.playLoader {
 						display: none;
-						max-width:  30px;
-						height: 30px;
+						max-width:  44px;
+						height: 44px;
 					}
 
 					&.submitDisable {
@@ -1148,7 +1148,7 @@ body {
 			}
 			.VariableSelectorDisplay {
 				background: $custom-red-medium;
-				height: $margin-component;
+				height: 41px;
 				position: relative;
 				
 					a  {
@@ -1158,7 +1158,7 @@ body {
 						height: 44px;
 						width: 44px;
 						margin: 0 auto;
-						margin-top: 8px;
+						margin-top: 18px;
 						margin-left: -22px;
 						border-radius: 22px;
 						background: $custom-red-medium;
@@ -1171,6 +1171,7 @@ body {
 						display: none;
 					}
 					.icon-arrow-bottom {
+						margin-top: 4px;
 						display: inline;
 					}
 				}
@@ -1204,7 +1205,7 @@ body {
 				border-radius: 5px 5px 0 0 ;
 				border-bottom: 0px solid transparent;
 				min-height: 61px;
-				margin-top: 30px;
+				margin-top: 41px;
 				.sortableItem {
 					padding: 10px;
 					display: inline-block;
@@ -1254,7 +1255,7 @@ body {
 				}
 			}
 			.line2 {
-				margin-bottom: 30px;
+				margin-bottom: 41px;
 				border-radius: 0 0 5px 5px;
 				justify-content: space-between;
 				border-top: 1px solid darkgray;
