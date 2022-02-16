@@ -1185,7 +1185,7 @@ UiuxConfig = require("./UiuxConfig.js");
 						}
 					}
 					if (selected == false) {
-							var new_value = {key: theValue[node].id, label: theValue[node].original.text}
+							var new_value = {key: theValue[node].id, label: theValue[node].original.text, uri: theValue[node].id} ;
 							new_items.push(new_value) ;
 							this.selectedValues.push(new_value) ;
 					}
@@ -1197,7 +1197,7 @@ UiuxConfig = require("./UiuxConfig.js");
 						return false;
 					}
 				}
-				new_items.push(new_value) ;
+				new_items.push(theValue) ;
 				this.selectedValues.push(theValue) ;	
 			}
 			
@@ -1238,6 +1238,7 @@ UiuxConfig = require("./UiuxConfig.js");
 					SparnaturalComponents.eventProxiCriteria
 				);
 			}
+
 			// disable the Where
 			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
 			$(this.parentCriteriaGroup.html).removeClass('onAddOrValue') ;
