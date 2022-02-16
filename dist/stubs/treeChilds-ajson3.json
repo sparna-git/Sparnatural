@@ -1,8 +1,8 @@
 [
-    { "id" : "3ajson1", "parent" : "ajson3", "text" : "Child of 3 node 1" },
-    { "id" : "3ajson2", "parent" : "ajson3", "text" : "Child of 3 node 2" },
-    { "id" : "3ajson3", "parent" : "ajson3", "text" : "Child of 3 node 3" },
-    { "id" : "3ajson4", "parent" : "ajson3", "text" : "Child of 3 node 4" },
-    { "id" : "3ajson5", "parent" : "ajson3", "text" : "Child of 3 node 5" },
-    { "id" : "3ajson6", "parent" : "ajson3", "text" : "Child of 3 node 6" }
+    { "id" : "http://fr.dbpedia.org/resource/Réalisme_(peinture)", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Réalisme (peinture)" },
+    { "id" : "http://fr.dbpedia.org/resource/Néoclassicisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Néoclassicisme" },
+    { "id" : "http://fr.dbpedia.org/resource/Expressionnisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Expressionnisme" },
+    { "id" : "http://fr.dbpedia.org/resource/Classicisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Classicisme" },
+    { "id" : "http://fr.dbpedia.org/resource/Orientalisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Orientalisme" },
+    { "id" : "http://fr.dbpedia.org/resource/Cubisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Cubisme" }
 ]

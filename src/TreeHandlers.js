@@ -32,7 +32,7 @@ class SparqlTreeHandler {
 		var url = this.sparqlEndpointUrl+separator+"query="+encodeURIComponent(sparql)+"&format=json";
 		return url;*/
 
-		return '/stubs/treeChilds-'+key+'.json' ;
+		return '/stubs/treeChilds-ajson3.json' ;
 	}
 
 	/**

@@ -1,8 +1,8 @@
 [
-       { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
-       { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
-       { "id" : "ajson3", "parent" : "#", "text" : "Root node 3", "count":6 },
-       { "id" : "ajson4", "parent" : "#", "text" : "Root node 4" },
-       { "id" : "ajson5", "parent" : "#", "text" : "Root node 5", "disabled" : true },
-       { "id" : "ajson6", "parent" : "#", "text" : "Root node 6" }
+       { "id" : "http://fr.dbpedia.org/resource/Baroque", "parent" : "#", "text" : "Baroque" },
+       { "id" : "http://fr.dbpedia.org/resource/Romantisme", "parent" : "#", "text" : "Romantisme" },
+       { "id" : "http://fr.dbpedia.org/resource/Impressionnisme", "parent" : "#", "text" : "Impressionnisme"},
+       { "id" : "http://fr.dbpedia.org/resource/Surréalisme", "parent" : "#", "text" : "Surréalisme", "count":6  },
+       { "id" : "http://fr.dbpedia.org/resource/Postimpressionnisme", "parent" : "#", "text" : "Postimpressionnisme", "disabled" : true },
+       { "id" : "http://fr.dbpedia.org/resource/Naturalisme", "parent" : "#", "text" : "Naturalisme" }
 ]
