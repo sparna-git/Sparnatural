@@ -1268,7 +1268,10 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(this.parentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
 			$(this.parentCriteriaGroup.html).addClass('onAddOrValue') ;
 			// On vide les champs de saisie du widget
-			this.inputTypeComponent.reload() ;
+			if (!this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
+				this.inputTypeComponent.reload() ;
+			}
+			
 			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
 		};
 		
