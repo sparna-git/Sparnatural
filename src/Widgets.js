@@ -723,7 +723,9 @@
 					}
 				},*/
 				"checkbox" : {
-					"keep_selected_style" : false
+					"keep_selected_style" : false,
+					"three_state" : false,
+					"cascade_to_disabled" : false
 				},
 				"plugins" : [ "changed", "wholerow", "checkbox"/*, "massload", "state" */ ]
 			} ;
