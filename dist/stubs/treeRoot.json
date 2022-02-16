@@ -3,6 +3,6 @@
        { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
        { "id" : "ajson3", "parent" : "#", "text" : "Root node 3", "count":6 },
        { "id" : "ajson4", "parent" : "#", "text" : "Root node 4" },
-       { "id" : "ajson5", "parent" : "#", "text" : "Root node 5" },
+       { "id" : "ajson5", "parent" : "#", "text" : "Root node 5", "exist" : "disabled" },
        { "id" : "ajson6", "parent" : "#", "text" : "Root node 6" }
 ]

@@ -701,6 +701,13 @@
 									data[i].children = true ;
 									data[i].text += ' ('+data[i].count+')' ;
 								} 
+								
+								if(data[i].exist == "disabled") {
+									data[i].state = {
+										disabled  : true  // is the node disabled
+									}
+									data[i].text += ' (not found on store)' ;
+								} 
 							}
 							return data ;
 						}
