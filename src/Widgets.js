@@ -724,7 +724,7 @@
 				},*/
 				"checkbox" : {
 					"keep_selected_style" : false,
-					"three_state" : false,
+					"three_state" : true,
 					"cascade_to_disabled" : false
 				},
 				"plugins" : [ "changed", "wholerow", "checkbox"/*, "massload", "state" */ ]
@@ -796,7 +796,7 @@
 			//var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 			//var id_input_label = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
 
-			var checked = this.jsTree.jstree().get_checked (true) ;
+			var checked = this.jsTree.jstree().get_top_checked  (true) ;
 
 			return checked ;
 		}
