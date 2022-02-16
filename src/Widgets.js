@@ -627,7 +627,7 @@
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			
 			var id_inputs = this.IdCriteriaGroupe ;			
-			var itc_obj = this.ParentComponent;	
+			this.itc_obj = this.ParentComponent;	
 			var isMatch = LoaderHandler.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
 			
 			/*var options = {
@@ -787,16 +787,15 @@
 		this.onClickSelect = function(e) {
 			this_ = e.data.arg1;
 			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
+			$(this_.itc_obj).trigger("change");
 		}
 
 		this.getValue = function() {
-			var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-			var id_input_label = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
+			//var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+			//var id_input_label = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
 
-			return {
-				key: $(id_input).val(),
-				label: $(id_input_label).val(),
-				uri: $(id_input).val()
-			} ;
+			var checked = this.jsTree.jstree().get_checked (true) ;
+
+			return checked ;
 		}
 	};

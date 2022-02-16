@@ -1170,38 +1170,74 @@ UiuxConfig = require("./UiuxConfig.js");
 		this.onChange = function onChange() {
 			var theValue = this.inputTypeComponent.getValue() ;
 			// put span around with proper class if coming from a date widget
-			var theValueLabel = '<span'+((theValue.start || theValue.stop)?' class="label-two-line"':'')+'>' + theValue.label + '</span>';
+			
 			if (theValue == null ) {
 				return false ;
 			}
-			// if the same value is already selected, don't do anything
-			for (var item in this.selectedValues) {
-				if(this.selectedValues[item].key == theValue.key) {
-					return false;
+			var new_items = [] ;
+			if (this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
+				for (var node in theValue) {
+					var selected = false ;
+					// if the same value is already selected, don't do anything
+					for (var item in this.selectedValues) {
+						if(this.selectedValues[item].key == theValue[node].id) {
+							selected = true ;
+						}
+					}
+					if (selected == false) {
+							var new_value = {key: theValue[node].id, label: theValue[node].original.text}
+							new_items.push(new_value) ;
+							this.selectedValues.push(new_value) ;
+					}
 				}
+			} else {
+				// if the same value is already selected, don't do anything
+				for (var item in this.selectedValues) {
+					if(this.selectedValues[item].key == theValue.key) {
+						return false;
+					}
+				}
+				new_items.push(new_value) ;
+				this.selectedValues.push(theValue) ;	
 			}
-
-			this.selectedValues.push(theValue) ;			
 			
 			// var value_data = (Array.isArray(theValue))?theValue.toString():theValue;
 
-			this.unselect = $('<span class="unselect" value-data="'+theValue.key+'"><i class="far fa-times-circle"></i></span>') ;
-			if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
-				// set a tooltip if the label is a bit long
-				var tooltip = (theValue.label.length > 25)?'title="'+theValue.label+'"':"";
-				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p '+tooltip+'>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
-			} else {
-				var temp_html = $('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>').append(this.unselect)  ;
-				var ellle = $(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
+			for (var new_item in new_items) {
+				theValue = new_items[new_item] ;
+
+				var theValueLabel = '<span'+((theValue.start || theValue.stop)?' class="label-two-line"':'')+'>' + theValue.label + '</span>';
+
+				this.unselect = $('<span class="unselect" value-data="'+theValue.key+'"><i class="far fa-times-circle"></i></span>') ;
+				if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
+					// set a tooltip if the label is a bit long
+					var tooltip = (theValue.label.length > 25)?'title="'+theValue.label+'"':"";
+					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p '+tooltip+'>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
+
+					if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
+						//if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 1) { Now is sures, we have one
+							$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p><span>+</span></p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>') ;
+							// hook a click on the plus to the needAddOrValue function
+							$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
+								'click',
+								{arg1: this, arg2: 'onAddOrValue'},
+								SparnaturalComponents.eventProxiCriteria
+							);
+						//}
+					}
+
+				} else {
+					var temp_html = $('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>').append(this.unselect)  ;
+					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
+				}
+
+				// binds a click on the remove cross with the removeValue function
+				this.unselect.on(
+					'click',
+					{	arg1: this,	arg2: 'onRemoveValue'	},
+					SparnaturalComponents.eventProxiCriteria
+				);
 			}
-
-			// binds a click on the remove cross with the removeValue function
-			this.unselect.on(
-				'click',
-				{	arg1: this,	arg2: 'onRemoveValue'	},
-				SparnaturalComponents.eventProxiCriteria
-			);
-
 			// disable the Where
 			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
 			$(this.parentCriteriaGroup.html).removeClass('onAddOrValue') ;
@@ -1211,17 +1247,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			
-			if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
-				if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 1) {
-					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p><span>+</span></p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>') ;
-					// hook a click on the plus to the needAddOrValue function
-					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
-						'click',
-						{arg1: this, arg2: 'onAddOrValue'},
-						SparnaturalComponents.eventProxiCriteria
-					);
-				}
-			}
+			
 
 			//Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
 			if (this.selectedValues.length == settings.maxOr) {
