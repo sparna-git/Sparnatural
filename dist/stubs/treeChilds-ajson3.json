@@ -1,0 +1,8 @@
+[
+    { "id" : "3ajson1", "parent" : "ajson3", "text" : "Child of 3 node 1" },
+    { "id" : "3ajson2", "parent" : "ajson3", "text" : "Child of 3 node 2" },
+    { "id" : "3ajson3", "parent" : "ajson3", "text" : "Child of 3 node 3" },
+    { "id" : "3ajson4", "parent" : "ajson3", "text" : "Child of 3 node 4" },
+    { "id" : "3ajson5", "parent" : "ajson3", "text" : "Child of 3 node 5" },
+    { "id" : "3ajson6", "parent" : "ajson3", "text" : "Child of 3 node 6" }
+]

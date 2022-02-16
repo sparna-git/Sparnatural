@@ -1,7 +1,8 @@
+require("./assets/stylesheets/jstree/style.min.css");
+
 require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
-
 
 //
 
@@ -14,6 +15,8 @@ require("easy-autocomplete");
 // const $$ = require('jquery');
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
+
+require('tippy.js/dist/tippy.css');
 
 const removeIcon = require("./assets/icons/buttons/remove.png");
 
@@ -46,6 +49,8 @@ UriOnlyListHandler = require("./AutocompleteAndListHandlers.js").UriOnlyListHand
 GraphDbLuceneConnectorSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").GraphDbLuceneConnectorSparqlAutocompleteAndListHandler;
 SparqlTemplateListHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateListHandler;
 SparqlTemplateAutocompleteHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateAutocompleteHandler;
+
+SparqlTreeHandler = require("./TreeHandlers.js").SparqlTreeHandler;
 
 SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHandler;
 
@@ -1518,6 +1523,8 @@ UiuxConfig = require("./UiuxConfig.js");
 					this.widgetType == Config.STRING_EQUALS_PROPERTY
 					||
 					this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY
+					||
+					this.widgetType == Config.TREE_PROPERTY
 				) {
 					// label of the "Search" pseudo-class is inserted alone in this case
 					var endLabel = classLabel;
@@ -1801,6 +1808,53 @@ UiuxConfig = require("./UiuxConfig.js");
 			  	this.cssClasses.BooleanWidget = true ;
 			  case Config.TREE_PROPERTY:
 			  	console.log("Insert here tree widget !!!");
+				  var theSpecProvider = this.specProvider;
+
+				  // determine custom datasource
+				  var datasource = this.specProvider.getDatasource(objectPropertyId);
+  
+				  if(datasource == null) {
+					  // try to read it on the class
+					  datasource = this.specProvider.getDatasource(rangeClassId);
+				  }
+  
+				  /*if(datasource == null) {
+					  // datasource still null
+					  // if a default endpoint was provided, provide default datasource
+					  if(this.settings.defaultEndpoint != null) {
+						  datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.SEARCH_URI_CONTAINS);
+					  }
+				  }*/
+  
+				  if(datasource != null) {
+					  // if we have a datasource, possibly the default one, provide a config based
+					  // on a SparqlTemplate, otherwise use the handler provided
+					  handler = new SparqlTreeHandler(
+						  // endpoint URL
+						  (datasource.sparqlEndpointUrl != null)?datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+						  
+						  // sparqlPostProcessor
+						  {
+							  semanticPostProcess : function(sparql) {
+								  // also add prefixes
+								  for (key in settings.sparqlPrefixes) {
+									  sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
+								  }
+								  return theSpecProvider.expandSparql(sparql);
+							  }
+						  },
+  
+						  // language,
+						  this.settings.language,
+  
+						  // labelPath
+						  (datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
+  
+						  // sparql query
+						  (datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+					  );
+				  }
+				  this.widgetComponent = new TreeWidget(this, handler) ;
 			  	this.cssClasses.TreeWidget = true ;
 			  default:
 			  	// TODO : throw Exception

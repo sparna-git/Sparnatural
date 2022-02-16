@@ -613,3 +613,160 @@
 			return null;
 		}
 	}
+
+	TreeWidget = function(inputTypeComponent, LoaderHandler) {
+		this.LoaderHandler = LoaderHandler;
+		this.ParentComponent = inputTypeComponent ;
+
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+		this.html = '<div id="ecgrw-'+this.IdCriteriaGroupe+'-input" /></div><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
+		
+		this.init = function init() {
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
+			
+			var id_inputs = this.IdCriteriaGroupe ;			
+			var itc_obj = this.ParentComponent;	
+			var isMatch = LoaderHandler.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
+			
+			/*var options = {
+				// ajaxSettings: {crossDomain: true, type: 'GET'} ,
+				url: function(phrase) {
+					return rootLoaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
+				},
+				listLocation: function (data) {
+					return rootLoaderHandler.treeLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ;
+				},
+				getValue: function (element) { 
+					return rootLoaderHandler.elementLabel(element) ;
+				},
+				
+				adjustWidth: false,
+
+				ajaxSettings: {
+					crossDomain: true,
+					dataType: "json",
+					method: "GET",
+					data: {
+				  		dataType: "json"
+					}
+				},
+
+				preparePostData: function(data) {
+					data.phrase = $('#ecgrw-'+id_inputs+'-input').val();
+					return data;
+				},
+
+				list: {
+					match: {
+						enabled: isMatch
+					},
+
+					onChooseEvent: function() {
+						var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData();
+						
+						var label = rootLoaderHandler.elementLabel(value) ; 
+						var uri = rootLoaderHandler.elementUri(value) ; 
+						$('#ecgrw-'+id_inputs+'-input').val(label)
+						$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");
+						$(itc_obj).trigger("change");
+					}
+				},
+
+				requestDelay: 400
+			};*/
+			console.log(this.LoaderHandler) ;
+			var options = {
+				'core' : {
+					"multiple" : true,
+				  	'data' : {
+						'url' : function (node) {
+						return node.id === '#' ?
+						LoaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id) :
+						LoaderHandler.treeChildsUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id) ;
+						},
+						'data' : function (node) {
+							console.log(node) ;
+							var childs = true ;
+							if(node.count > 0) {
+								childs = true ;
+							} 
+						return { 'id' : node.id, "children" : childs };
+						},
+						'success' : function(data) {
+							for (var i = 0; i < data.length; i++) {
+								var childs = true ;
+								if(data[i].count > 0) {
+									data[i].children = true ;
+									data[i].text += ' ('+data[i].count+')' ;
+								} 
+							}
+							return data ;
+						}
+					},
+				},
+				/*"massload" : {
+					"url" : LoaderHandler.treeChildsUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
+					"data" : function (nodes) {
+					  return { "ids" : nodes.join(",") };
+					}
+				},*/
+				"checkbox" : {
+					"keep_selected_style" : false
+				},
+				"plugins" : [ "changed", "wholerow", "checkbox"/*, "massload", "state" */ ]
+			} ;
+			//Need to add in html befor
+			
+			$('#ecgrw-'+id_inputs+'-input').jstree(options);
+
+			/*$('#ecgrw-'+id_inputs+'-input').on('changed.jstree', function (e, data) {
+				if(data && data.selected && data.selected.length) {
+					$.get(LoaderHandler.treeChildsUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data.selected.join(':')) , function (d) {
+						if(d && typeof d.type !== 'undefined') {
+							$('#data .content').hide();
+							switch(d.type) {
+								case 'text':
+								case 'txt':
+								case 'md':
+								case 'htaccess':
+								case 'log':
+								case 'sql':
+								case 'php':
+								case 'js':
+								case 'json':
+								case 'css':
+								case 'html':
+									$('#data .code').show();
+									$('#code').val(d.content);
+									break;
+								case 'png':
+								case 'jpg':
+								case 'jpeg':
+								case 'bmp':
+								case 'gif':
+									$('#data .image img').one('load', function () { $(this).css({'marginTop':'-' + $(this).height()/2 + 'px','marginLeft':'-' + $(this).width()/2 + 'px'}); }).attr('src',d.content);
+									$('#data .image').show();
+									break;
+								default:
+									$('#data .default').html(d.content).show();
+									break;
+							}
+						}
+					});
+				}
+			});*/
+		}
+
+		this.getValue = function() {
+			var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+			var id_input_label = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
+
+			return {
+				key: $(id_input).val(),
+				label: $(id_input_label).val(),
+				uri: $(id_input).val()
+			} ;
+		}
+	};
