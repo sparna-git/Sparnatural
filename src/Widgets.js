@@ -619,7 +619,7 @@
 		this.ParentComponent = inputTypeComponent ;
 
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
-		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeSubmit">Sélectionner</a><a class="treeCancel">Annuler</a></div></div>' ;
+		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">Effacer</a><a class="treeSubmit">Sélectionner</a></div></div>' ;
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
@@ -729,7 +729,7 @@
 			} ;
 			//Need to add in html befor
 			
-			$('#ecgrw-'+id_inputs+'-display').jstree(options);
+			this.jsTree = $('#ecgrw-'+id_inputs+'-display').jstree(options);
 
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-input').on("click",  { arg1 : this },  this.onClickDisplay);
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeSubmit').on("click",  { arg1 : this },  this.onClickSelect);
@@ -781,7 +781,8 @@
 		}
 		this.onClickCancel = function(e) {
 			this_ = e.data.arg1;
-			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
+			this_.jsTree.jstree().deselect_all() 
+			//$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
 		}
 		this.onClickSelect = function(e) {
 			this_ = e.data.arg1;
