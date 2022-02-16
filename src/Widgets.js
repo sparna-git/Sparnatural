@@ -702,7 +702,7 @@
 									data[i].text += ' ('+data[i].count+')' ;
 								} 
 								
-								if(data[i].exist == "disabled") {
+								if(data[i].disabled === true) {
 									data[i].state = {
 										disabled  : true  // is the node disabled
 									}
