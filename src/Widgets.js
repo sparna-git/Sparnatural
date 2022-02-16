@@ -619,7 +619,7 @@
 		this.ParentComponent = inputTypeComponent ;
 
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
-		this.html = '<div id="ecgrw-'+this.IdCriteriaGroupe+'-input" /></div><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
+		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeSubmit">Sélectionner</a><a class="treeCancel">Annuler</a></div></div>' ;
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
@@ -712,6 +712,9 @@
 							return data ;
 						}
 					},
+					"themes" : {
+						"icons" : false
+					}
 				},
 				/*"massload" : {
 					"url" : LoaderHandler.treeChildsUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
@@ -726,7 +729,13 @@
 			} ;
 			//Need to add in html befor
 			
-			$('#ecgrw-'+id_inputs+'-input').jstree(options);
+			$('#ecgrw-'+id_inputs+'-display').jstree(options);
+
+			$('#ecgrw-'+this.IdCriteriaGroupe+'-input').on("click",  { arg1 : this },  this.onClickDisplay);
+			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeSubmit').on("click",  { arg1 : this },  this.onClickSelect);
+			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeCancel').on("click",  { arg1 : this },  this.onClickCancel);
+
+			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').hide() ;
 
 			/*$('#ecgrw-'+id_inputs+'-input').on('changed.jstree', function (e, data) {
 				if(data && data.selected && data.selected.length) {
@@ -764,6 +773,19 @@
 					});
 				}
 			});*/
+		}
+
+		this.onClickDisplay = function(e) {
+			this_ = e.data.arg1;
+			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').show() ;
+		}
+		this.onClickCancel = function(e) {
+			this_ = e.data.arg1;
+			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
+		}
+		this.onClickSelect = function(e) {
+			this_ = e.data.arg1;
+			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
 		}
 
 		this.getValue = function() {

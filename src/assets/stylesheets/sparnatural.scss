@@ -805,6 +805,57 @@ body {
 						}
 					}
 				}
+				.TreeWidget {
+					.treeBtnDisplay {
+						border: 1px solid #ddd;
+						border-radius: 5px;
+						background: #fff;
+						box-shadow: 0px 2px 3px 0px #cfcfcf;
+						padding: 5px;
+						line-height: 1;
+						z-index: 2;
+						cursor: pointer;
+						img {
+							height: 26px;
+						}
+					}
+					.treeLayer {
+						position: absolute;
+						top: 50%;
+						margin-top: -19px;
+						left: calc(100% + 30px);
+						border: 1px solid #ddd;
+						border-radius: 5px;
+						background: #fff;
+						box-shadow: 0px 2px 3px 0px #cfcfcf;
+						z-index: 1;
+						.treeDisplay {
+							overflow: auto;
+							max-height: 200px;
+							padding: 10px 10px 5px;
+						}
+						.treeActions {
+							border-top: 2px solid #ddd;
+							padding: 5px 10px;
+							text-align: right;
+							a {
+								border-radius: 5px;
+								color: #fff;
+								display: inline-block;
+								margin-left: 10px;
+								padding: 15px 5px;
+								line-height: 1;
+								cursor: pointer;
+							}
+							a.treeCancel {
+								background: #EE8D67;
+							}
+							a.treeSubmit {
+								background: #84C99E;
+							}
+						}
+					}
+				}
 				.button-add {
 					border: 3px solid $custom-red;
 					border-radius: 15px;
