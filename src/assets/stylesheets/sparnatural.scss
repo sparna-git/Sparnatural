@@ -831,8 +831,13 @@ body {
 						z-index: 1;
 						.treeDisplay {
 							overflow: auto;
-							max-height: 200px;
+							max-height: 500px;
+							min-width: 275px;
 							padding: 10px 10px 5px;
+
+							&.jstree-default .jstree-disabled {
+								opacity: 0.5;
+							}
 						}
 						.treeActions {
 							border-top: 2px solid #ddd;

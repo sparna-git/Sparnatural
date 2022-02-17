@@ -706,7 +706,7 @@
 									data[i].state = {
 										disabled  : true  // is the node disabled
 									}
-									data[i].text += ' (not found on store)' ;
+									//data[i].text += ' (not found on store)' ;
 								} 
 							}
 							return data ;
