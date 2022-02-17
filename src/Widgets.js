@@ -628,7 +628,7 @@
 			
 			var id_inputs = this.IdCriteriaGroupe ;			
 			this.itc_obj = this.ParentComponent;	
-			var isMatch = LoaderHandler.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
+			//var isMatch = LoaderHandler.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
 			
 			/*var options = {
 				// ajaxSettings: {crossDomain: true, type: 'GET'} ,
