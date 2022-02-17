@@ -1038,7 +1038,7 @@ export class VariableSelector extends HTMLComponent {
 	onFocusOutEdit() {
 		this.contentEditableElement = $('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first() ;
 
-		if ($(this.contentEditableElement).html() =='') {
+		if ($(this.contentEditableElement).text() =='') {
 			$(this.contentEditableElement).html(this.beforEdit) ;
 		}
 		if (this.beforEdit !== $(this.contentEditableElement).html()) {
@@ -1058,9 +1058,11 @@ export class VariableSelector extends HTMLComponent {
 	}
 
 	onEditKeyPress(event) {
-		if (event.keyCode === 13) { // If press Enter
+		var code = event.keyCode ? event.keyCode : event.which;
+		if (code === 13) { // If press Enter
 			$('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().blur() ;
-			return true;
+			
+			return false;
 		}
 		var regex = new RegExp("^[a-zA-Z0-9_]+$");
 		var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
