@@ -626,6 +626,10 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			this.switchVariableName = function() {
 				$(this.form.sparnatural).find('.componentsListe').first().toggleClass('displayVarName') ;
+
+				$('li.groupe').each(function() {
+					SparnaturalComponents.redrawBottomLink($(this)) ;
+				});
 			}
 			this.loadQuery = function() {
 				this.form.submitOpened = false ;

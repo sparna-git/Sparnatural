@@ -991,14 +991,28 @@ export class VariableSelector extends HTMLComponent {
 		this.labelDisplayed = '' ;
 
 		if (this.globalVariablesSelctor.switchLabel == 'label') {
-		this.labelDisplayed = this.image + '<div>'+this.varLabel+'</div>' ;
+		this.labelDisplayed = this.image + '<div id="editable-'+this.varName+'"><div contenteditable="true">'+this.varLabel+'</div></div>' ;
 		} else {
-		this.labelDisplayed = this.image + '<div>'+this.varNameForDisplay+'</div>' ;
+		this.labelDisplayed = this.image + '<div id="editable-'+this.varName+'"><div contenteditable="true">'+this.varNameForDisplay+'</div></div>' ;
 		}
 
 		this.element = '<div class="sortableItem"><div class="variableSelected flexWrap" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">'+ UiuxConfig.COMPONENT_DRAG_HANDLE + '</span>'+this.labelDisplayed+'</div></div>' ;
 
+		
+
+		//trigger change editable variable
+		this.contentEditableElement = $(this.element).find('div[contenteditable="true"]').first() ;
+		
+		$('body').on('focus', 'div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]', {arg1: this, arg2: 'onFocusEdit'}, eventProxiCriteria).on('focusout', 'div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]', {arg1: this, arg2: 'onFocusOutEdit'}, eventProxiCriteria);
+		
 		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
+
+		$('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().on('keypress',{arg1: this, arg2: 'onEditKeyPress'}, eventProxiCriteria);
+
+		 $('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().on('keyup', function(event) {
+			var width = $('.sortableItem').first().width() ;
+			$('.variablesOrdersSelect').width(width) ;
+	 	});
 
 		//this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.push(this.varName) ;
 		if (this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.length == 1) {
@@ -1016,6 +1030,48 @@ export class VariableSelector extends HTMLComponent {
 		//$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 	}
 
+	onFocusEdit() {
+		this.beforEdit = $(this.contentEditableElement).text() ;
+		var width = $('.sortableItem').first().width() ;
+		$('.variablesOrdersSelect').width(width) ;
+	}
+	onFocusOutEdit() {
+		this.contentEditableElement = $('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first() ;
+
+		if ($(this.contentEditableElement).text() =='') {
+			$(this.contentEditableElement).text(this.beforEdit) ;
+		}
+		if (this.beforEdit !== $(this.contentEditableElement).text()) {
+			this.beforEdit = $(this.contentEditableElement).text();
+			$(this.contentEditableElement).trigger('change');
+			$(this.contentEditableElement).parents('.variableSelected').attr('data-variableName', '?'+this.beforEdit);
+			$(this.GroupContenaire.html).find('.variableName').first().text(this.beforEdit) ;
+
+			this.GroupContenaire.varName = '?'+this.beforEdit ;
+			this.GroupContenaire.parentComponent.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
+			
+			redrawBottomLink($(this.GroupContenaire.parentComponent.html).parents('li').first());
+			$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+		}
+		var width = $('.sortableItem').first().width() ;
+		$('.variablesOrdersSelect').width(width) ;
+	}
+
+	onEditKeyPress(event) {
+		var code = event.keyCode ? event.keyCode : event.which;
+		if (code === 13) { // If press Enter
+			$('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().blur() ;
+			
+			return false;
+		}
+		var regex = new RegExp("^[a-zA-Z0-9_]+$");
+		var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+		if (!regex.test(key)) {
+		   event.preventDefault();
+		   return false;
+		}
+	 }
+
 	remove () {
 		var checkVarName = this.varName
 		this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList = this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.filter(function(value, index, arr){
@@ -1030,7 +1086,7 @@ export class VariableSelector extends HTMLComponent {
 		if (this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.length == 0) {
 			$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).find('.selectViewVariable').first().trigger('click') ;
 		}
-
+		
 		$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 		
 	}
