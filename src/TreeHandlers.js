@@ -12,7 +12,7 @@ class SparqlTreeHandler {
 	/**
 	 * Post-processes the SPARQL query and builds the full URL for root of tree
 	 **/
-	 treeRootUrl(domain, property, range, key) {			
+	 treeRootUrl(domain, property, range) {			
 		/*var sparql = this._buildTreeRootSparql(domain, property, range, key);
 		sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
 

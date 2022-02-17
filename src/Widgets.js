@@ -683,7 +683,7 @@
 				  	'data' : {
 						'url' : function (node) {
 						return node.id === '#' ?
-						LoaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id) :
+						LoaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value) :
 						LoaderHandler.treeChildsUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id) ;
 						},
 						'data' : function (node) {
