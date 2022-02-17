@@ -1031,7 +1031,7 @@ export class VariableSelector extends HTMLComponent {
 	}
 
 	onFocusEdit() {
-		this.beforEdit = $(this.contentEditableElement).html() ;
+		this.beforEdit = $(this.contentEditableElement).text() ;
 		var width = $('.sortableItem').first().width() ;
 		$('.variablesOrdersSelect').width(width) ;
 	}
@@ -1039,10 +1039,10 @@ export class VariableSelector extends HTMLComponent {
 		this.contentEditableElement = $('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first() ;
 
 		if ($(this.contentEditableElement).text() =='') {
-			$(this.contentEditableElement).html(this.beforEdit) ;
+			$(this.contentEditableElement).text(this.beforEdit) ;
 		}
-		if (this.beforEdit !== $(this.contentEditableElement).html()) {
-			this.beforEdit = $(this.contentEditableElement).html();
+		if (this.beforEdit !== $(this.contentEditableElement).text()) {
+			this.beforEdit = $(this.contentEditableElement).text();
 			$(this.contentEditableElement).trigger('change');
 			$(this.contentEditableElement).parents('.variableSelected').attr('data-variableName', '?'+this.beforEdit);
 			$(this.GroupContenaire.html).find('.variableName').first().text(this.beforEdit) ;
