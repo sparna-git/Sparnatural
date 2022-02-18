@@ -464,15 +464,20 @@ export class QuerySPARQLWriter {
 
 		// this can only be the case for value selection widgets
 		if(
-			// we use a VALUES if there is more than one value
-			queryLine.values.length > 1
-			||
-			// or if there is only one, but we need the variable to be selected
+			(queryLine.values[0].uri || queryLine.values[0].literal)
+			&&
 			(
-				queryLine.values.length == 1
-				&&
-				query.variables.includes(queryLine.o)
-			)			
+				// we use a VALUES if there is more than one value
+				queryLine.values.length > 1
+				||
+				// or if there is only one, but we need the variable to be selected
+				// only
+				(
+					queryLine.values.length == 1
+					&&
+					query.variables.includes(queryLine.o)
+				)	
+			)		
 		) {			
 			var jsonValues = this._initValues() ;
 			queryLine.values.forEach(function(v) {
