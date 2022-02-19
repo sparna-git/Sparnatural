@@ -136,7 +136,10 @@ The placeholder $labelPath will be replaced by the value indicated in the Sparql
 
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#Datasource -->
 
-    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#Datasource"/>
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#Datasource">
+        <rdfs:comment xml:lang="en">A source of data to populate Sparnatural widgets (list, search fields, trees, etc.)</rdfs:comment>
+        <rdfs:label xml:lang="en">Datasource</rdfs:label>
+    </owl:Class>
     
 
 
@@ -150,6 +153,91 @@ The placeholder $labelPath will be replaced by the value indicated in the Sparql
 
     <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource">
         <rdfs:subClassOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#Datasource"/>
+        <rdfs:comment xml:lang="en">A source of data for a Sparnatural widget implemented as a SPARQL query.</rdfs:comment>
+        <rdfs:label xml:lang="en">SPARQL datasource</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource -->
+
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource">
+        <rdfs:subClassOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdfs:comment xml:lang="en">A datasource to populate a list widget, implemented as a SPARQL query.
+
+The SPARQL query MUST return 2 variables : ?uri and ?label
+
+The following variables, if present in the SPARQL query, are automatically bound in the query :
+  - $domain: bound to the URI of the subject class of the criteria
+  - $property: bound to the URI or property path of the property of the criteria
+  - $range: bound to the URI of the object class of the criteria
+  - $lang: bound to the default language of Sparnatural</rdfs:comment>
+        <rdfs:label xml:lang="en">SPARQL list datasource</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlLiteralListDatasource -->
+
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlLiteralListDatasource">
+        <rdfs:subClassOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdfs:label xml:lang="en">A datasource to populate a literal list widget, implemented as a SPARQL query.
+
+The SPARQL query MUST return 2 variables : ?uri and ?label
+
+The following variables, if present in the SPARQL query, are automatically bound in the query :
+  - $domain: bound to the URI of the subject class of the criteria
+  - $property: bound to the URI or property path of the property of the criteria
+  - $range: bound to the URI of the object class of the criteria
+  - $lang: bound to the default language of Sparnatural</rdfs:label>
+        <rdfs:label xml:lang="en">SPARQL literal list datasource</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource -->
+
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource">
+        <rdfs:subClassOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdfs:comment xml:lang="en">A datasource to populate an autocomplete search widget, implemented as a SPARQL query.
+
+The SPARQL query MUST return 2 variables : ?uri and ?label
+
+The following variables, if present in the SPARQL query, are automatically bound in the query :
+  - $domain: bound to the URI of the subject class of the criteria
+  - $property: bound to the URI or property path of the property of the criteria
+  - $range: bound to the URI of the object class of the criteria
+  - $lang: bound to the default language of Sparnatural
+  - $key: the characters entered by the user in the search field</rdfs:comment>
+        <rdfs:label xml:lang="en">SPARQL search datasource</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeChildrenDatasource -->
+
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeChildrenDatasource">
+        <rdfs:subClassOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdfs:comment xml:lang="en">A datasource to populate the children of a node of a tree widget, when unfolded, implemented as a SPARQL query.
+
+The query MUST return the following variables:
+  - ?uri
+  - ?label
+  - ?hasChildren: a boolean indicating if the node has some children
+
+In addition the query CAN return the following variables:
+  - ?count: the number of times this entity is used as the value of the criteria</rdfs:comment>
+        <rdfs:label xml:lang="en">SPARQL tree datasource for children of a node</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource -->
+
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource">
+        <rdfs:subClassOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdfs:comment xml:lang="en">A datasource to populate the root of a tree widget, implemented as a SPARQL query.</rdfs:comment>
+        <rdfs:label xml:lang="en">SPARQL tree datasource for the roots of the tree</rdfs:label>
     </owl:Class>
     
 
@@ -168,7 +256,7 @@ The placeholder $labelPath will be replaced by the value indicated in the Sparql
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_alpha">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_alpha"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their URI as a label ordered alphabetically based on the URI string.</rdfs:comment>
     </owl:NamedIndividual>
@@ -178,7 +266,7 @@ The placeholder $labelPath will be replaced by the value indicated in the Sparql
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_count"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their URI as a label ordered by the descending number of times the entity is used as a value.
 
@@ -190,7 +278,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://purl.org/dc/terms/title"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their dcterms:title ordered alphabetically based on this property.</rdfs:comment>
@@ -201,7 +289,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha_with_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha_with_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their dcterms:title and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
     </owl:NamedIndividual>
@@ -211,7 +299,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://purl.org/dc/terms/title"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their dcterms:title ordered by the descending number of times the entity is used as a value.</rdfs:comment>
@@ -222,7 +310,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_foafname_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_foafname_alpha">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their foaf:name ordered alphabetically based on this property.</rdfs:comment>
@@ -233,7 +321,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_foafname_alpha_with_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_foafname_alpha_with_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their foaf:name and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
@@ -244,7 +332,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_foafname_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_foafname_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their foaf:name ordered by the descending number of times the entity is used as a value.</rdfs:comment>
@@ -255,7 +343,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_alpha">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their rdfs:label ordered alphabetically based on this property.</rdfs:comment>
@@ -266,7 +354,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_alpha_with_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_alpha_with_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their rdfs:label and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
@@ -277,7 +365,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their rdfs:label ordered by the descending number of times the entity is used as a value.</rdfs:comment>
@@ -288,7 +376,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their schema:name ordered alphabetically based on this property.</rdfs:comment>
@@ -299,7 +387,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha_with_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha_with_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their schema:name and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
     </owl:NamedIndividual>
@@ -309,7 +397,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their schema:name ordered by the descending number of times the entity is used as a value.</rdfs:comment>
@@ -320,7 +408,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their skos:prefLabel ordered alphabetically based on this property.</rdfs:comment>
@@ -331,7 +419,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha_with_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha_with_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_alpha_with_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their skos:prefLabel and the number of occurrences of the entity in parenthesis, ordered alphabetically based on this property.</rdfs:comment>
@@ -342,7 +430,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their skos:prefLabel ordered by the descending number of times the entity is used as a value.</rdfs:comment>
@@ -698,10 +786,64 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString># Selects the root of a range, using a $rootPath connected to the range
+SELECT ?uri ?label ?hasChildren
+WHERE {
+  $range $rootPath ?uri .
+  ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
+  FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
+  OPTIONAL {
+  	?uri $childrenPath ?children .
+  }
+  BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}
+ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+WHERE {
+  {
+    SELECT ?uri ?theLabel ?hasChildren
+    WHERE {
+      $range $rootPath ?uri .
+      ?uri $labelPath ?theLabel .
+      FILTER(isIRI(?uri))
+      FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
+      OPTIONAL {
+        ?uri $childrenPath ?children .
+      }
+      BIND(IF(bound(?children),true,false) AS ?hasChildren)
+    }
+  }
+
+  OPTIONAL {
+    ?x a $domain .
+    ?x $property ?uri .
+    # no range criteria
+    # ?uri a $range .
+  }
+}
+GROUP BY ?uri ?label ?hasChildren
+ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_URI_contains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_URI_contains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_URI_contains"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key in their URI string using the CONTAINS SPARQL function.</rdfs:comment>
     </owl:NamedIndividual>
@@ -711,7 +853,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_bifcontains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_bifcontains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://purl.org/dc/terms/title"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their dcterms:title using the bif:contains Virtuoso function.</rdfs:comment>
@@ -722,7 +864,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_contains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_contains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://purl.org/dc/terms/title"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their dcterms:title using the CONTAINS SPARQL function.</rdfs:comment>
@@ -733,7 +875,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_strstarts -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_dctermstitle_strstarts">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://purl.org/dc/terms/title"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key at the beginning of their dcterms;title using the STRSTARTS SPARQL function.</rdfs:comment>
@@ -744,7 +886,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_bifcontains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_bifcontains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their foaf:name using the bif:contains Virtuoso function.</rdfs:comment>
@@ -755,7 +897,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_contains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_contains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their foaf:name using the CONTAINS SPARQL function.</rdfs:comment>
@@ -766,7 +908,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_strstarts -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_foafname_strstarts">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key at the beginning of their foaf:name using the STRSTARTS SPARQL function.</rdfs:comment>
@@ -777,7 +919,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_bifcontains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_bifcontains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their rdfs:label using the bif:contains Virtuoso function.</rdfs:comment>
@@ -788,7 +930,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_contains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_contains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their rdfs:label using the CONTAINS SPARQL function.</rdfs:comment>
@@ -799,7 +941,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_strstarts -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_strstarts">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key at the beginning of their rdfs:label using the STRSTARTS SPARQL function.</rdfs:comment>
@@ -810,7 +952,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_bifcontains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_bifcontains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains"/>
         <sparnatural-config-datasources:labelPath rdf:resource="http://schema.org/name"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their schema:name using the bif:contains Virtuoso function.</rdfs:comment>
@@ -821,7 +963,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_contains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_contains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their schema:name using the CONTAINS SPARQL function.</rdfs:comment>
@@ -832,7 +974,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_strstarts -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_strstarts">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key at the beginning of their schema:name using the STRSTARTS SPARQL function.</rdfs:comment>
@@ -843,7 +985,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_bifcontains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_bifcontains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains"/>
         <sparnatural-config-datasources:labelPath rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their skos:prefLabel using the bif:contains Virtuoso function.</rdfs:comment>
@@ -854,7 +996,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_contains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_contains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key inside their skos:prefLabel using the CONTAINS SPARQL function.</rdfs:comment>
@@ -865,7 +1007,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_strstarts -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_strstarts">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key at the beginning of their skos:prefLabel using the STRSTARTS SPARQL function.</rdfs:comment>
