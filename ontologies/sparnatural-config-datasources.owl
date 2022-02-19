@@ -786,6 +786,60 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString># Selects the children of a node
+SELECT ?uri ?label ?hasChildren
+WHERE {
+  $node $childrenPath ?uri .
+  ?uri $labelPath ?label .
+  FILTER(isIRI(?uri))
+  FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
+  OPTIONAL {
+  	?uri $childrenPath ?children .
+  }
+  BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}
+ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+WHERE {
+  {
+    SELECT ?uri ?theLabel ?hasChildren
+    WHERE {
+      $node $childrenPath ?uri .
+      ?uri $labelPath ?theLabel .
+      FILTER(isIRI(?uri))
+      FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
+      OPTIONAL {
+        ?uri $childrenPath ?children .
+      }
+      BIND(IF(bound(?children),true,false) AS ?hasChildren)
+    }
+  }
+
+  OPTIONAL {
+    ?x a $domain .
+    ?x $property ?uri .
+    # no range criteria
+    # ?uri a $range .
+  }
+}
+GROUP BY ?uri ?label ?hasChildren
+ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root">
