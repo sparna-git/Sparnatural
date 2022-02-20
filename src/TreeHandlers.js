@@ -133,7 +133,7 @@ class SparqlTreeHandler {
 		if(!item.hasChildren) {
 			return true;
 		} else {
-			return item.hasChildren.value;	
+			return item.hasChildren.value != "false" && item.hasChildren.value != "0";	
 		}
 	}
 

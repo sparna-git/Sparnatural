@@ -418,7 +418,7 @@
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement"
     },
     {
-      "@id" : "http://dbpedia.org/ontology/category",
+      "@id" : "http://purl.org/dc/terms/subject",
       "@type" : "ObjectProperty",
       "subPropertyOf" : "sparnatural:TreeProperty",
       "label": [
@@ -432,7 +432,7 @@
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT ?uri ?label ?hasChildren
 WHERE {
-  VALUES ?uri {<http://fr.dbpedia.org/resource/Catégorie:Peinture_par_courant>}
+  VALUES ?uri {<http://fr.dbpedia.org/resource/Catégorie:Peintre_français_par_courant>}
   ?uri skos:prefLabel ?label .
   FILTER(lang(?label) = '' || lang(?label) = $lang)
   BIND(true AS ?hasChildren)

@@ -633,19 +633,22 @@
 			var options = {
 				'core' : {
 					"multiple" : true,
-				  	'data' : {
-						'url' : function (node) {
-						return node.id === '#' ?
-						 loaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value) :
-						 loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id) ;
-						},
-						'data' : function (node) {
-							console.log("node") ;
-							console.log(node) ;
-							return node;
-							// return { 'id' : node.id, "children" : loaderHandler.nodeHasChildren(node) };
-						},
-						'success' : function(data) {
+					'data' : function (node, callback) {
+
+						var options = {
+							url: node.id === '#' ?
+						 		loaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value) :
+						 		loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
+							dataType: "json",
+							method: "GET",
+							data: {
+								  dataType: "json"
+							}
+						} ;
+	
+						var request = $.ajax( options );
+
+						request.done(function( data ) {			  
 							console.log("data") ;
 							var result = [];
 							var items = loaderHandler.nodeListLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data);
@@ -663,13 +666,13 @@
 										disabled  : true  // node disabled
 									}
 								} 
-								aNode.parent="#";
+								aNode.parent=node.id;
 								result.push(aNode);
 							}
 							console.log(result) ;
-							return result ;
-						}
-					},
+							callback.call(this, result);
+						});
+			        },
 					"themes" : {
 						"icons" : false
 					}

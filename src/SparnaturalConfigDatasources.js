@@ -300,7 +300,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SPARNATURAL_CONFIG_DATASOURCES+"query_tree_children", 
 `
 # Selects the children of a node
-SELECT ?uri ?label ?hasChildren
+SELECT DISTINCT ?uri ?label ?hasChildren
 WHERE {
   $node $childrenPath ?uri .
   ?uri $labelPath ?label .
@@ -318,7 +318,7 @@ ORDER BY UCASE(?label)
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SPARNATURAL_CONFIG_DATASOURCES+"query_tree_children_with_count", 
 `
-SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+SELECT DISTINCT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
 WHERE {
   {
     SELECT ?uri ?theLabel ?hasChildren
@@ -689,13 +689,15 @@ ORDER BY UCASE(?label)
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"tree_children_skos", {
   queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_tree_children"),
-  childrenPath: "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>"
+  childrenPath: "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>",
+  labelPath: "<http://www.w3.org/2004/02/skos/core#prefLabel>"
 });
 
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"tree_children_skos_with_count", {
   queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_tree_children_with_count"),
-  childrenPath: "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>"
+  childrenPath: "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>",
+  labelPath: "<http://www.w3.org/2004/02/skos/core#prefLabel>"
 });
 
 
