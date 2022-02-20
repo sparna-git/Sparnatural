@@ -25,11 +25,22 @@
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#childrenDatasource -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#childrenDatasource">
+        <rdfs:comment xml:lang="en">A reference to the datasource with which a tree widget will populate the children of a node in the tree.</rdfs:comment>
+        <rdfs:label xml:lang="en">children datasource</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource"/>
+    </owl:AnnotationProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource">
         <rdfs:comment xml:lang="en">The datasource from which a property with value selection should fetch its data.</rdfs:comment>
         <rdfs:label xml:lang="en">datasource</rdfs:label>
+        <rdfs:range rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#Datasource"/>
     </owl:AnnotationProperty>
     
 
@@ -51,6 +62,16 @@
         <rdfs:comment xml:lang="en">The URI of a property where the label of resources can be read. This should point to a URI.</rdfs:comment>
         <rdfs:label xml:lang="en">label property</rdfs:label>
         <rdfs:domain rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#rootsDatasource -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#rootsDatasource">
+        <rdfs:comment xml:lang="en">A reference to the datasource with which a tree widget will populate its root (first-level) nodes.</rdfs:comment>
+        <rdfs:label xml:lang="en">roots datasource</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource"/>
     </owl:AnnotationProperty>
     
 
@@ -441,7 +462,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_alpha">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlLiteralListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of literal ordered alphabetically.</rdfs:comment>
     </owl:NamedIndividual>
@@ -451,6 +472,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_alpha_with_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlLiteralListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of literal with count in parenthesis, ordered alphabetically.</rdfs:comment>
     </owl:NamedIndividual>
@@ -460,6 +482,7 @@ This is typically the default behavior for a list without a datasource specified
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlLiteralListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count"/>
         <rdfs:comment xml:lang="en">A datasource that returns a list of literal ordered by descending number of occurrences.</rdfs:comment>
     </owl:NamedIndividual>
@@ -665,6 +688,7 @@ LIMIT 500</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
 {
@@ -687,6 +711,7 @@ LIMIT 500</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
 {
@@ -840,19 +865,21 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root_noparent -->
 
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root">
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root_noparent">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString># Selects the root of a range, using a $rootPath connected to the range
-SELECT ?uri ?label ?hasChildren
+        <sparnatural-config-datasources:queryString>SELECT ?uri ?label ?hasChildren
 WHERE {
-  $range $rootPath ?uri .
+  ?uri a $range .
+  FILTER NOT EXISTS {
+    ?parent $childrenPath ?uri .
+  }
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
   OPTIONAL {
-  	?uri $childrenPath ?children .
+    ?uri $childrenPath ?children .
   }
   BIND(IF(bound(?children),true,false) AS ?hasChildren)
 }
@@ -861,16 +888,19 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root_with_count -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root_noparent_with_count -->
 
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root_with_count">
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root_noparent_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
 WHERE {
   {
     SELECT ?uri ?theLabel ?hasChildren
     WHERE {
-      $range $rootPath ?uri .
+      ?uri a $range .
+      FILTER NOT EXISTS {
+        ?parent $childrenPath ?uri .
+      }
       ?uri $labelPath ?theLabel .
       FILTER(isIRI(?uri))
       FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
@@ -884,8 +914,6 @@ WHERE {
   OPTIONAL {
     ?x a $domain .
     ?x $property ?uri .
-    # no range criteria
-    # ?uri a $range .
   }
 }
 GROUP BY ?uri ?label ?hasChildren
@@ -1065,6 +1093,81 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_strstarts"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
         <rdfs:comment xml:lang="en">Searches for entities by looking up the provided $key at the beginning of their skos:prefLabel using the STRSTARTS SPARQL function.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children"/>
+        <sparnatural-config-datasources:labelProperty>&lt;http://www.w3.org/2004/02/skos/core#narrower&gt;|^&lt;http://www.w3.org/2004/02/skos/core#broader&gt;</sparnatural-config-datasources:labelProperty>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children_with_count"/>
+        <sparnatural-config-datasources:labelProperty>&lt;http://www.w3.org/2004/02/skos/core#narrower&gt;|^&lt;http://www.w3.org/2004/02/skos/core#broader&gt;</sparnatural-config-datasources:labelProperty>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skos -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skos">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
+        <sparnatural-config-datasources:queryString>PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;
+SELECT ?uri ?label ?hasChildren
+WHERE {
+  $range skos:hasTopConcept|^skos:topConceptOf ?uri .
+  ?uri skos:prefLabel ?label .
+  FILTER(isIRI(?uri))
+  FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
+  OPTIONAL {
+    ?uri skos:narrower|^skos:broader ?children .
+  }
+  BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}
+ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skos_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skos_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
+        <sparnatural-config-datasources:queryString>PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;
+SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+WHERE {
+  {
+    SELECT ?uri ?theLabel ?hasChildren
+    WHERE {
+      $range skos:hasTopConcept|^skos:topConceptOf ?uri .
+      ?uri skos:prefLabel ?theLabel .
+      FILTER(isIRI(?uri))
+      FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
+      OPTIONAL {
+        ?uri skos:narrower|^skos:broader ?children .
+      }
+      BIND(IF(bound(?children),true,false) AS ?hasChildren)
+    }
+  }
+
+  OPTIONAL {
+    ?x a $domain .
+    ?x $property ?uri .
+    # no range criteria
+    # ?uri a $range .
+  }
+}
+GROUP BY ?uri ?label ?hasChildren
+ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
 </rdf:RDF>
 
