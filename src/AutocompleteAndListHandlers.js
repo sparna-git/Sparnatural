@@ -115,7 +115,6 @@ class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteAndLis
 	) {
 		super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
 		this.queryString = queryString;
-		this.labelPath = labelPath;
 	}
 
 	/**

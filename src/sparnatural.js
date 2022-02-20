@@ -1693,7 +1693,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		this.settings.language,
 
 			    		// sparql query (with labelPath interpreted)
-			    		this.getFinalQueryString(datasource)
+			    		getFinalQueryString(datasource)
 			    	);
 				}
 
@@ -1747,7 +1747,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		this.settings.language,
 
 			    		// sparql query (with labelPath interpreted)
-			    		this.getFinalQueryString(datasource)
+			    		getFinalQueryString(datasource)
 			    	);
 				}
 
@@ -1797,7 +1797,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		this.settings.language,
 
 			    		// sparql query (with labelPath interpreted)
-			    		this.getFinalQueryString(datasource)
+			    		getFinalQueryString(datasource)
 			    	);
 				}
 
