@@ -1,126 +1,148 @@
+class StubTreeHandler {
+
+	constructor() {}
+
+	treeRootUrl(domain, property, range) {			
+		return '/stubs/treeRoot.json' ;
+	}
+
+	treeChildrenUrl(domain, property, range, key) {			
+		return '/stubs/treeChilds-ajson3.json' ;
+	}
+
+	nodeListLocation(domain, property, range, data) {
+		return data;
+	}
+
+	nodeLabel(item) {
+		return item.text;
+	}
+
+	nodeUri(item) {
+		return item.id;
+	}
+
+	nodeHasChildren(item) {
+		return item.hasChildren;
+	}
+
+	nodeDisabled(item) {
+		return item.disabled;
+	}
+}
+
+
 class SparqlTreeHandler {
 
-	constructor(sparqlEndpointUrl, sparqlPostprocessor, language, labelPath, sparqlTemplate) {
+	constructor(
+		sparqlEndpointUrl,
+		sparqlPostprocessor,
+		language,
+		rootsSparqlQuery,
+		childrenSparqlQuery
+	) {
 		this.sparqlEndpointUrl = sparqlEndpointUrl;
 		this.sparqlPostprocessor = sparqlPostprocessor;
 		this.language = language;
-		this.labelPath = (labelPath != null)?labelPath:"rdfs:label";
-		this.sparqlTemplate = sparqlTemplate;
-		this.listOrder = "alphabetical";
+		this.rootsSparqlQuery = rootsSparqlQuery;
+		this.childrenSparqlQuery = childrenSparqlQuery;
 	}
 
 	/**
 	 * Post-processes the SPARQL query and builds the full URL for root of tree
 	 **/
 	 treeRootUrl(domain, property, range) {			
-		/*var sparql = this._buildTreeRootSparql(domain, property, range, key);
+		var sparql = this._buildTreeRootSparql(domain, property, range);
 		sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
 
 		var separator = (this.sparqlEndpointUrl.indexOf("?") > 0)?"&":"?";
 		var url = this.sparqlEndpointUrl+separator+"query="+encodeURIComponent(sparql)+"&format=json";
-		return url;*/
-		return '/stubs/treeRoot.json' ;
+		return url;
 	}
 	/**
 	 * Post-processes the SPARQL query and builds the full URL for root of tree
 	 **/
-	treeChildsUrl(domain, property, range, key) {			
-		/*var sparql = this._buildTreeChildsSparql(domain, property, range, key);
+	treeChildrenUrl(domain, property, range, node) {			
+		var sparql = this._buildTreeChildrenSparql(domain, property, range, node);
 		sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
 
 		var separator = (this.sparqlEndpointUrl.indexOf("?") > 0)?"&":"?";
 		var url = this.sparqlEndpointUrl+separator+"query="+encodeURIComponent(sparql)+"&format=json";
-		return url;*/
-
-		return '/stubs/treeChilds-ajson3.json' ;
+		return url;
 	}
 
 	/**
 	 * Constructs the SPARQL query to use for autocomplete widget search.
 	 **/
-	 _buildTreeRootSparql(domain, property, range, key) {
-		
-		var sparql = this.sparqlTemplate;
-
-		var reDomain = new RegExp("\\$domain","g");
-		var reProperty = new RegExp("\\$property","g");
-		var reRange = new RegExp("\\$range","g");
-		var reLang = new RegExp("\\$lang","g");
-		var reKey = new RegExp("\\$key","g");
-		
-		sparql = this.sparqlTemplate
-			.replace(reDomain, "<"+ domain +">")
-			.replace(reProperty, "<"+ property +">")
-			.replace(reRange, "<"+ range +">")
-			.replace(reLang, "'"+ this.language +"'")
-			.replace(reKey, "" + key + "");
-
-		if(this.labelPath != null) {
-			var reLabelPath = new RegExp("\\$labelPath","g");
-			sparql = sparql.replace(reLabelPath, this.labelPath );
-		}
-
-		console.log(sparql);
-
-		return sparql;
+	_buildTreeRootSparql(domain, property, range) {		
+		return this._buildSparql(
+			this.rootsSparqlQuery,
+			domain,
+			property,
+			range,
+			null
+		);
 	}
 
 	/**
 	 * Constructs the SPARQL query to use for autocomplete widget search.
 	 **/
-	 _buildTreeChildsSparql(domain, property, range, key) {
-		
-		var sparql = this.sparqlTemplate;
+	_buildTreeChildrenSparql(domain, property, range, node) {
+		return this._buildSparql(
+			this.childrenSparqlQuery,
+			domain,
+			property,
+			range,
+			node
+		);
+	}
 
+	_buildSparql(theSparqlQuery, domain, property, range, node) {
 		var reDomain = new RegExp("\\$domain","g");
 		var reProperty = new RegExp("\\$property","g");
 		var reRange = new RegExp("\\$range","g");
 		var reLang = new RegExp("\\$lang","g");
-		var reKey = new RegExp("\\$key","g");
 		
-		sparql = this.sparqlTemplate
+		var sparql = theSparqlQuery
 			.replace(reDomain, "<"+ domain +">")
 			.replace(reProperty, "<"+ property +">")
 			.replace(reRange, "<"+ range +">")
-			.replace(reLang, "'"+ this.language +"'")
-			.replace(reKey, "" + key + "");
+			.replace(reLang, "'"+ this.language +"'");
 
-		if(this.labelPath != null) {
-			var reLabelPath = new RegExp("\\$labelPath","g");
-			sparql = sparql.replace(reLabelPath, this.labelPath );
+		if(node != null) {
+			var reNode = new RegExp("\\$node","g");
+			sparql = sparql.replace(reNode, "<"+ node +">");
 		}
-
-		console.log(sparql);
 
 		return sparql;
 	}
 
-	treeLocation(domain, property, range, data) {
+	nodeListLocation(domain, property, range, data) {
 		return data.results.bindings;
 	}
 
-	elementLabel(element) {
-		return element.label.value;
+	nodeLabel(item) {
+		return item.label.value;
 	}
 
-	/* TODO : rename to elementValue */
-	elementUri(element) {
-		if(element.uri) {
-			return element.uri.value;
-		} else if(element.value) {
-			return element.value.value;
+	nodeUri(item) {
+		return item.uri.value;
+	}
+
+	nodeHasChildren(item) {
+		if(!item.hasChildren) {
+			return true;
+		} else {
+			return item.hasChildren.value;	
 		}
 	}
 
-	enableMatch(domain, property, range) {
-		return false;
+	nodeDisabled(item) {
+		return item.count && (item.count.value == 0);
 	}
 }
 
-
-
-
-
 module.exports = {
-	SparqlTreeHandler: SparqlTreeHandler
+	SparqlTreeHandler: SparqlTreeHandler,
+	StubTreeHandler: StubTreeHandler
 }

@@ -56,7 +56,7 @@ class AbstractSparqlAutocompleteAndListHandler {
 }
 
 /**
- * Handles a list widget based on a provided SPARQL template in which
+ * Handles a list widget based on a provided SPARQL query in which
  * $domain, $property and $range will be replaced by actual values.
  **/
 class SparqlTemplateListHandler extends AbstractSparqlAutocompleteAndListHandler {
@@ -65,12 +65,10 @@ class SparqlTemplateListHandler extends AbstractSparqlAutocompleteAndListHandler
 		sparqlEndpointUrl,
 		sparqlPostprocessor,
 		language,
-		labelPath,
-		sparqlTemplate
+		queryString
 	) {
 		super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
-		this.sparqlTemplate = sparqlTemplate;
-		this.labelPath = labelPath;
+		this.queryString = queryString;
 	}
 
 	/**
@@ -84,23 +82,16 @@ class SparqlTemplateListHandler extends AbstractSparqlAutocompleteAndListHandler
 	 * Constructs the SPARQL query to use for list widget search.
 	 **/
 	_buildListSparql(domain, property, range) {
-		var sparql = this.sparqlTemplate;
-
 		var reDomain = new RegExp("\\$domain","g");
 		var reProperty = new RegExp("\\$property","g");
 		var reRange = new RegExp("\\$range","g");
 		var reLang = new RegExp("\\$lang","g");
 		
-		sparql = this.sparqlTemplate
+		var sparql = this.queryString
 			.replace(reDomain, "<"+ domain +">")
 			.replace(reProperty, "<"+ property +">")
 			.replace(reRange, "<"+ range +">")
 			.replace(reLang, "'"+ this.language +"'");
-
-		if(this.labelPath != null) {
-			var reLabelPath = new RegExp("\\$labelPath","g");
-			sparql = sparql.replace(reLabelPath, this.labelPath );
-		}
 
 		console.log(sparql);
 
@@ -111,7 +102,7 @@ class SparqlTemplateListHandler extends AbstractSparqlAutocompleteAndListHandler
 
 
 /**
- * Handles a list widget based on a provided SPARQL template in which
+ * Handles a list widget based on a provided SPARQL query in which
  * $domain, $property and $range will be replaced by actual values.
  **/
 class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteAndListHandler {
@@ -120,11 +111,10 @@ class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteAndLis
 		sparqlEndpointUrl,
 		sparqlPostprocessor,
 		language,
-		labelPath,
-		sparqlTemplate
+		queryString
 	) {
 		super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
-		this.sparqlTemplate = sparqlTemplate;
+		this.queryString = queryString;
 		this.labelPath = labelPath;
 	}
 
@@ -132,26 +122,18 @@ class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteAndLis
 	 * Constructs the SPARQL query to use for autocomplete widget search.
 	 **/
 	_buildAutocompleteSparql(domain, property, range, key) {
-		
-		var sparql = this.sparqlTemplate;
-
 		var reDomain = new RegExp("\\$domain","g");
 		var reProperty = new RegExp("\\$property","g");
 		var reRange = new RegExp("\\$range","g");
 		var reLang = new RegExp("\\$lang","g");
 		var reKey = new RegExp("\\$key","g");
 		
-		sparql = this.sparqlTemplate
+		var sparql = this.queryString
 			.replace(reDomain, "<"+ domain +">")
 			.replace(reProperty, "<"+ property +">")
 			.replace(reRange, "<"+ range +">")
 			.replace(reLang, "'"+ this.language +"'")
 			.replace(reKey, "" + key + "");
-
-		if(this.labelPath != null) {
-			var reLabelPath = new RegExp("\\$labelPath","g");
-			sparql = sparql.replace(reLabelPath, this.labelPath );
-		}
 
 		console.log(sparql);
 

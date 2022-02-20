@@ -614,8 +614,8 @@
 		}
 	}
 
-	TreeWidget = function(inputTypeComponent, LoaderHandler) {
-		this.LoaderHandler = LoaderHandler;
+	TreeWidget = function(inputTypeComponent, loaderHandler) {
+		this.loaderHandler = loaderHandler;
 		this.ParentComponent = inputTypeComponent ;
 
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
@@ -628,88 +628,46 @@
 			
 			var id_inputs = this.IdCriteriaGroupe ;			
 			this.itc_obj = this.ParentComponent;	
-			//var isMatch = LoaderHandler.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
-			
-			/*var options = {
-				// ajaxSettings: {crossDomain: true, type: 'GET'} ,
-				url: function(phrase) {
-					return rootLoaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
-				},
-				listLocation: function (data) {
-					return rootLoaderHandler.treeLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ;
-				},
-				getValue: function (element) { 
-					return rootLoaderHandler.elementLabel(element) ;
-				},
-				
-				adjustWidth: false,
 
-				ajaxSettings: {
-					crossDomain: true,
-					dataType: "json",
-					method: "GET",
-					data: {
-				  		dataType: "json"
-					}
-				},
-
-				preparePostData: function(data) {
-					data.phrase = $('#ecgrw-'+id_inputs+'-input').val();
-					return data;
-				},
-
-				list: {
-					match: {
-						enabled: isMatch
-					},
-
-					onChooseEvent: function() {
-						var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData();
-						
-						var label = rootLoaderHandler.elementLabel(value) ; 
-						var uri = rootLoaderHandler.elementUri(value) ; 
-						$('#ecgrw-'+id_inputs+'-input').val(label)
-						$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");
-						$(itc_obj).trigger("change");
-					}
-				},
-
-				requestDelay: 400
-			};*/
-			console.log(this.LoaderHandler) ;
+			console.log(this.loaderHandler) ;
 			var options = {
 				'core' : {
 					"multiple" : true,
 				  	'data' : {
 						'url' : function (node) {
 						return node.id === '#' ?
-						LoaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value) :
-						LoaderHandler.treeChildsUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id) ;
+						 loaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value) :
+						 loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id) ;
 						},
 						'data' : function (node) {
+							console.log("node") ;
 							console.log(node) ;
-							var childs = true ;
-							if(node.count > 0) {
-								childs = true ;
-							} 
-						return { 'id' : node.id, "children" : childs };
+							return node;
+							// return { 'id' : node.id, "children" : loaderHandler.nodeHasChildren(node) };
 						},
 						'success' : function(data) {
-							for (var i = 0; i < data.length; i++) {
-								var childs = true ;
-								if(data[i].count > 0) {
-									data[i].children = true ;
-									data[i].text += ' ('+data[i].count+')' ;
+							console.log("data") ;
+							var result = [];
+							var items = loaderHandler.nodeListLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data);
+							for (var i = 0; i < items.length; i++) {
+								var aNode = {
+									id: loaderHandler.nodeUri(items[i]),
+									text: loaderHandler.nodeLabel(items[i])
+								};
+								if(loaderHandler.nodeHasChildren(items[i])) {
+									aNode.children = true ;
 								} 
 								
-								if(data[i].disabled === true) {
-									data[i].state = {
-										disabled  : true  // is the node disabled
+								if(loaderHandler.nodeDisabled(items[i])) {
+									aNode.state = {
+										disabled  : true  // node disabled
 									}
-									//data[i].text += ' (not found on store)' ;
 								} 
+								aNode.parent="#";
+								result.push(aNode);
 							}
-							return data ;
+							console.log(result) ;
+							return result ;
 						}
 					},
 					"themes" : {
@@ -717,7 +675,7 @@
 					}
 				},
 				/*"massload" : {
-					"url" : LoaderHandler.treeChildsUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
+					"url" : loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
 					"data" : function (nodes) {
 					  return { "ids" : nodes.join(",") };
 					}
@@ -741,7 +699,7 @@
 
 			/*$('#ecgrw-'+id_inputs+'-input').on('changed.jstree', function (e, data) {
 				if(data && data.selected && data.selected.length) {
-					$.get(LoaderHandler.treeChildsUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data.selected.join(':')) , function (d) {
+					$.get(loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data.selected.join(':')) , function (d) {
 						if(d && typeof d.type !== 'undefined') {
 							$('#data .content').hide();
 							switch(d.type) {
