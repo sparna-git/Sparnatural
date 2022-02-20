@@ -25,12 +25,20 @@
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#childrenDatasource -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#childrenPath -->
 
-    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#childrenDatasource">
-        <rdfs:comment xml:lang="en">A reference to the datasource with which a tree widget will populate the children of a node in the tree.</rdfs:comment>
-        <rdfs:label xml:lang="en">children datasource</rdfs:label>
-        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource"/>
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#childrenPath">
+        <rdfs:comment xml:lang="en">The SPARQL property path where the children of resources can be read. This must be a valid SPARQL property path without any prefix, e.g. &lt;http://schema.org&gt; (including brackets).</rdfs:comment>
+        <rdfs:label xml:lang="en">children path</rdfs:label>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#childrenProperty -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#childrenProperty">
+        <rdfs:comment xml:lang="en">The URI of a property where the children of resources can be read. This should point to a URI.</rdfs:comment>
+        <rdfs:label xml:lang="en">children property</rdfs:label>
     </owl:AnnotationProperty>
     
 
@@ -66,11 +74,21 @@
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#rootsDatasource -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource -->
 
-    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#rootsDatasource">
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource">
+        <rdfs:comment xml:lang="en">A reference to the datasource with which a tree widget will populate the children of a node in the tree.</rdfs:comment>
+        <rdfs:label xml:lang="en">tree children datasource</rdfs:label>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource"/>
+    </owl:AnnotationProperty>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource">
         <rdfs:comment xml:lang="en">A reference to the datasource with which a tree widget will populate its root (first-level) nodes.</rdfs:comment>
-        <rdfs:label xml:lang="en">roots datasource</rdfs:label>
+        <rdfs:label xml:lang="en">tree roots datasource</rdfs:label>
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource"/>
     </owl:AnnotationProperty>
     
@@ -1100,9 +1118,9 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeChildrenDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children"/>
-        <sparnatural-config-datasources:labelProperty>&lt;http://www.w3.org/2004/02/skos/core#narrower&gt;|^&lt;http://www.w3.org/2004/02/skos/core#broader&gt;</sparnatural-config-datasources:labelProperty>
+        <sparnatural-config-datasources:childrenPath>&lt;http://www.w3.org/2004/02/skos/core#narrower&gt;|^&lt;http://www.w3.org/2004/02/skos/core#broader&gt;</sparnatural-config-datasources:childrenPath>
     </owl:NamedIndividual>
     
 
@@ -1110,9 +1128,9 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos_with_count -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos_with_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeChildrenDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children_with_count"/>
-        <sparnatural-config-datasources:labelProperty>&lt;http://www.w3.org/2004/02/skos/core#narrower&gt;|^&lt;http://www.w3.org/2004/02/skos/core#broader&gt;</sparnatural-config-datasources:labelProperty>
+        <sparnatural-config-datasources:childrenPath>&lt;http://www.w3.org/2004/02/skos/core#narrower&gt;|^&lt;http://www.w3.org/2004/02/skos/core#broader&gt;</sparnatural-config-datasources:childrenPath>
     </owl:NamedIndividual>
     
 
