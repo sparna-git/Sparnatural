@@ -1,6 +1,6 @@
 
 	const jstree = require('jstree').default;
-
+	const datepicker = require('@chenfengyuan/datepicker').default;
 	
 	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
