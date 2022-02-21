@@ -218,7 +218,7 @@ This is typically used to link entities that serve as connectors between other e
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
-        <rdfs:comment xml:lang="en">The super-property of any property in a Sparnatural configuration for which a resource can be selected, typically through list, or autocomplete field.
+        <rdfs:comment xml:lang="en">The super-property of any property in a Sparnatural configuration for which a resource can be selected, through a list, an autocomplete field, or a tree.
 Do not use this super-property directly, use its subproperties.</rdfs:comment>
         <rdfs:label xml:lang="en">select resource property</rdfs:label>
     </owl:ObjectProperty>
@@ -277,7 +277,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty">
-        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a tree selection widget should be displayed.</rdfs:comment>
         <rdfs:label xml:lang="en">tree property</rdfs:label>
     </owl:ObjectProperty>
