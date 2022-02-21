@@ -1843,7 +1843,7 @@ UiuxConfig = require("./UiuxConfig.js");
 					  // datasource still null
 					  // if a default endpoint was provided, provide default datasource
 					  if(this.settings.defaultEndpoint != null) {
-						  treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_ROOT_SKOS);
+						  treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_ROOT_SKOSINSCHEME);
 					  }
 				  }
 
@@ -1857,7 +1857,7 @@ UiuxConfig = require("./UiuxConfig.js");
 					  // datasource still null
 					  // if a default endpoint was provided, provide default datasource
 					  if(this.settings.defaultEndpoint != null) {
-						  treeChildrenDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_CHILDREN_SKOS);
+						  treeChildrenDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_CHILDREN_SKOSNARROWER);
 					  }
 				  }
   

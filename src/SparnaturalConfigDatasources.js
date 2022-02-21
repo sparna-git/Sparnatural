@@ -632,7 +632,7 @@ SPARNATURAL_CONFIG_DATASOURCES+"search_URI_contains", {
 // ## Tree roots datasources
 
 DATASOURCES_CONFIG.set(
-SPARNATURAL_CONFIG_DATASOURCES+"tree_root_skos", {
+SPARNATURAL_CONFIG_DATASOURCES+"tree_root_skosinScheme", {
   queryString : 
 `
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -652,7 +652,7 @@ ORDER BY UCASE(?label)
 });
 
 DATASOURCES_CONFIG.set(
-SPARNATURAL_CONFIG_DATASOURCES+"tree_root_skos_with_count", {
+SPARNATURAL_CONFIG_DATASOURCES+"tree_root_skosinScheme_with_count", {
   queryString : 
 `
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -687,14 +687,14 @@ ORDER BY UCASE(?label)
 // ## Tree children datasources
 
 DATASOURCES_CONFIG.set(
-SPARNATURAL_CONFIG_DATASOURCES+"tree_children_skos", {
+SPARNATURAL_CONFIG_DATASOURCES+"tree_children_skosnarrower", {
   queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_tree_children"),
   childrenPath: "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>",
   labelPath: "<http://www.w3.org/2004/02/skos/core#prefLabel>"
 });
 
 DATASOURCES_CONFIG.set(
-SPARNATURAL_CONFIG_DATASOURCES+"tree_children_skos_with_count", {
+SPARNATURAL_CONFIG_DATASOURCES+"tree_children_skosnarrower_with_count", {
   queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_tree_children_with_count"),
   childrenPath: "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>",
   labelPath: "<http://www.w3.org/2004/02/skos/core#prefLabel>"
@@ -773,11 +773,11 @@ module.exports = Object.freeze({
 
 	SEARCH_URI_CONTAINS			 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_URI_contains',
 
-  TREE_ROOT_SKOS            :     SPARNATURAL_CONFIG_DATASOURCES+'tree_root_skos',
-  TREE_ROOT_SKOS_WITH_COUNT :     SPARNATURAL_CONFIG_DATASOURCES+'tree_root_skos_with_count',
+  TREE_ROOT_SKOSINSCHEME        :     SPARNATURAL_CONFIG_DATASOURCES+'tree_root_skosinScheme',
+  TREE_ROOT_SKOSINSCHEME_WITH_COUNT :     SPARNATURAL_CONFIG_DATASOURCES+'tree_root_skosinScheme_with_count',
 
-  TREE_CHILDREN_SKOS            :     SPARNATURAL_CONFIG_DATASOURCES+'tree_children_skos',
-  TREE_CHILDREN_SKOS_WITH_COUNT :     SPARNATURAL_CONFIG_DATASOURCES+'tree_children_skos_with_count',
+  TREE_CHILDREN_SKOSNARROWER            :     SPARNATURAL_CONFIG_DATASOURCES+'tree_children_skosnarrower',
+  TREE_CHILDREN_SKOSNARROWER_WITH_COUNT :     SPARNATURAL_CONFIG_DATASOURCES+'tree_children_skosnarrower_with_count',
 
 	QUERY_STRINGS_BY_QUERY_TEMPLATE	: 		QUERY_STRINGS_BY_QUERY_TEMPLATE,
 	DATASOURCES_CONFIG				: 		DATASOURCES_CONFIG

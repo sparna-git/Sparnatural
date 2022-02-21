@@ -834,7 +834,7 @@ LIMIT 50</sparnatural-config-datasources:queryString>
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString># Selects the children of a node
-SELECT ?uri ?label ?hasChildren
+SELECT DISTINCT ?uri ?label ?hasChildren
 WHERE {
   $node $childrenPath ?uri .
   ?uri $labelPath ?label .
@@ -854,7 +854,7 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
 WHERE {
   {
     SELECT ?uri ?theLabel ?hasChildren
@@ -1115,29 +1115,31 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower -->
 
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos">
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeChildrenDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children"/>
         <sparnatural-config-datasources:childrenPath>&lt;http://www.w3.org/2004/02/skos/core#narrower&gt;|^&lt;http://www.w3.org/2004/02/skos/core#broader&gt;</sparnatural-config-datasources:childrenPath>
+        <sparnatural-config-datasources:labelPath>&lt;http://www.w3.org/2004/02/skos/core#prefLabel&gt;</sparnatural-config-datasources:labelPath>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos_with_count -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower_with_count -->
 
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skos_with_count">
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeChildrenDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children_with_count"/>
         <sparnatural-config-datasources:childrenPath>&lt;http://www.w3.org/2004/02/skos/core#narrower&gt;|^&lt;http://www.w3.org/2004/02/skos/core#broader&gt;</sparnatural-config-datasources:childrenPath>
+        <sparnatural-config-datasources:labelPath>&lt;http://www.w3.org/2004/02/skos/core#prefLabel&gt;</sparnatural-config-datasources:labelPath>
     </owl:NamedIndividual>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skos -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skosinScheme -->
 
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skos">
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skosinScheme">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
         <sparnatural-config-datasources:queryString>PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;
 SELECT ?uri ?label ?hasChildren
@@ -1156,9 +1158,9 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skos_with_count -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skosinScheme_with_count -->
 
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skos_with_count">
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skosinScheme_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
         <sparnatural-config-datasources:queryString>PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;
 SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
