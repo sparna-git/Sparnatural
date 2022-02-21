@@ -1,4 +1,4 @@
-require("./assets/stylesheets/jstree/style.min.css");
+require("jstree/dist/themes/default/style.min.css");
 
 require("./assets/stylesheets/sparnatural.scss");
 
