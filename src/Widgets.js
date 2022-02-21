@@ -1,4 +1,6 @@
 
+	const jstree = require('jstree').default;
+
 	
 	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
@@ -613,3 +615,152 @@
 			return null;
 		}
 	}
+
+	TreeWidget = function(inputTypeComponent, loaderHandler) {
+		this.loaderHandler = loaderHandler;
+		this.ParentComponent = inputTypeComponent ;
+
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">Effacer</a><a class="treeSubmit">Sélectionner</a></div></div>' ;
+		
+		this.init = function init() {
+			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
+			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
+			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
+			
+			var id_inputs = this.IdCriteriaGroupe ;			
+			this.itc_obj = this.ParentComponent;	
+
+			console.log(this.loaderHandler) ;
+			var options = {
+				'core' : {
+					"multiple" : true,
+					'data' : function (node, callback) {
+
+						var options = {
+							url: node.id === '#' ?
+						 		loaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value) :
+						 		loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
+							dataType: "json",
+							method: "GET",
+							data: {
+								  dataType: "json"
+							}
+						} ;
+	
+						var request = $.ajax( options );
+
+						request.done(function( data ) {			  
+							console.log("data") ;
+							var result = [];
+							var items = loaderHandler.nodeListLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data);
+							for (var i = 0; i < items.length; i++) {
+								var aNode = {
+									id: loaderHandler.nodeUri(items[i]),
+									text: loaderHandler.nodeLabel(items[i])
+								};
+								if(loaderHandler.nodeHasChildren(items[i])) {
+									aNode.children = true ;
+								} 
+								
+								if(loaderHandler.nodeDisabled(items[i])) {
+									aNode.state = {
+										disabled  : true  // node disabled
+									}
+								} 
+								aNode.parent=node.id;
+								result.push(aNode);
+							}
+							console.log(result) ;
+							callback.call(this, result);
+						});
+			        },
+					"themes" : {
+						"icons" : false
+					}
+				},
+				/*"massload" : {
+					"url" : loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
+					"data" : function (nodes) {
+					  return { "ids" : nodes.join(",") };
+					}
+				},*/
+				"checkbox" : {
+					"keep_selected_style" : false,
+					"three_state" : true,
+					"cascade_to_disabled" : false
+				},
+				"plugins" : [ "changed", "wholerow", "checkbox"/*, "massload", "state" */ ]
+			} ;
+			//Need to add in html befor
+			
+			this.jsTree = $('#ecgrw-'+id_inputs+'-display').jstree(options);
+
+			$('#ecgrw-'+this.IdCriteriaGroupe+'-input').on("click",  { arg1 : this },  this.onClickDisplay);
+			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeSubmit').on("click",  { arg1 : this },  this.onClickSelect);
+			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeCancel').on("click",  { arg1 : this },  this.onClickCancel);
+
+			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').hide() ;
+
+			/*$('#ecgrw-'+id_inputs+'-input').on('changed.jstree', function (e, data) {
+				if(data && data.selected && data.selected.length) {
+					$.get(loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data.selected.join(':')) , function (d) {
+						if(d && typeof d.type !== 'undefined') {
+							$('#data .content').hide();
+							switch(d.type) {
+								case 'text':
+								case 'txt':
+								case 'md':
+								case 'htaccess':
+								case 'log':
+								case 'sql':
+								case 'php':
+								case 'js':
+								case 'json':
+								case 'css':
+								case 'html':
+									$('#data .code').show();
+									$('#code').val(d.content);
+									break;
+								case 'png':
+								case 'jpg':
+								case 'jpeg':
+								case 'bmp':
+								case 'gif':
+									$('#data .image img').one('load', function () { $(this).css({'marginTop':'-' + $(this).height()/2 + 'px','marginLeft':'-' + $(this).width()/2 + 'px'}); }).attr('src',d.content);
+									$('#data .image').show();
+									break;
+								default:
+									$('#data .default').html(d.content).show();
+									break;
+							}
+						}
+					});
+				}
+			});*/
+		}
+
+		this.onClickDisplay = function(e) {
+			this_ = e.data.arg1;
+			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').show() ;
+		}
+		this.onClickCancel = function(e) {
+			this_ = e.data.arg1;
+			this_.jsTree.jstree().deselect_all() 
+			//$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
+		}
+		this.onClickSelect = function(e) {
+			this_ = e.data.arg1;
+			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
+			$(this_.itc_obj).trigger("change");
+		}
+
+		this.getValue = function() {
+			//var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+			//var id_input_label = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
+
+			var checked = this.jsTree.jstree().get_top_checked  (true) ;
+
+			return checked ;
+		}
+	};

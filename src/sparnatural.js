@@ -1,7 +1,8 @@
+require("./assets/stylesheets/jstree/style.min.css");
+
 require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
-
 
 //
 
@@ -14,6 +15,8 @@ require("easy-autocomplete");
 // const $$ = require('jquery');
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
+
+require('tippy.js/dist/tippy.css');
 
 const removeIcon = require("./assets/icons/buttons/remove.png");
 
@@ -46,6 +49,9 @@ UriOnlyListHandler = require("./AutocompleteAndListHandlers.js").UriOnlyListHand
 GraphDbLuceneConnectorSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").GraphDbLuceneConnectorSparqlAutocompleteAndListHandler;
 SparqlTemplateListHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateListHandler;
 SparqlTemplateAutocompleteHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateAutocompleteHandler;
+
+SparqlTreeHandler = require("./TreeHandlers.js").SparqlTreeHandler;
+StubTreeHandler = require("./TreeHandlers.js").StubTreeHandler;
 
 SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHandler;
 
@@ -1203,37 +1209,74 @@ UiuxConfig = require("./UiuxConfig.js");
 		this.onChange = function onChange() {
 			var theValue = this.inputTypeComponent.getValue() ;
 			// put span around with proper class if coming from a date widget
-			var theValueLabel = '<span'+((theValue.start || theValue.stop)?' class="label-two-line"':'')+'>' + theValue.label + '</span>';
+			
 			if (theValue == null ) {
 				return false ;
 			}
-			// if the same value is already selected, don't do anything
-			for (var item in this.selectedValues) {
-				if(this.selectedValues[item].key == theValue.key) {
-					return false;
+			var new_items = [] ;
+			if (this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
+				for (var node in theValue) {
+					var selected = false ;
+					// if the same value is already selected, don't do anything
+					for (var item in this.selectedValues) {
+						if(this.selectedValues[item].key == theValue[node].id) {
+							selected = true ;
+						}
+					}
+					if (selected == false) {
+							var new_value = {key: theValue[node].id, label: theValue[node].original.text, uri: theValue[node].id} ;
+							new_items.push(new_value) ;
+							this.selectedValues.push(new_value) ;
+					}
 				}
+			} else {
+				// if the same value is already selected, don't do anything
+				for (var item in this.selectedValues) {
+					if(this.selectedValues[item].key == theValue.key) {
+						return false;
+					}
+				}
+				new_items.push(theValue) ;
+				this.selectedValues.push(theValue) ;	
 			}
-
-			this.selectedValues.push(theValue) ;			
 			
 			// var value_data = (Array.isArray(theValue))?theValue.toString():theValue;
 
-			this.unselect = $('<span class="unselect" value-data="'+theValue.key+'"><i class="far fa-times-circle"></i></span>') ;
-			if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
-				// set a tooltip if the label is a bit long
-				var tooltip = (theValue.label.length > 25)?'title="'+theValue.label+'"':"";
-				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p '+tooltip+'>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
-			} else {
-				var temp_html = $('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>').append(this.unselect)  ;
-				var ellle = $(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
-			}
+			for (var new_item in new_items) {
+				theValue = new_items[new_item] ;
 
-			// binds a click on the remove cross with the removeValue function
-			this.unselect.on(
-				'click',
-				{	arg1: this,	arg2: 'onRemoveValue'	},
-				SparnaturalComponents.eventProxiCriteria
-			);
+				var theValueLabel = '<span'+((theValue.start || theValue.stop)?' class="label-two-line"':'')+'>' + theValue.label + '</span>';
+
+				this.unselect = $('<span class="unselect" value-data="'+theValue.key+'"><i class="far fa-times-circle"></i></span>') ;
+				if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
+					// set a tooltip if the label is a bit long
+					var tooltip = (theValue.label.length > 25)?'title="'+theValue.label+'"':"";
+					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p '+tooltip+'>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
+
+					if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
+						//if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 1) { Now is sures, we have one
+							$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p><span>+</span></p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>') ;
+							// hook a click on the plus to the needAddOrValue function
+							$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
+								'click',
+								{arg1: this, arg2: 'onAddOrValue'},
+								SparnaturalComponents.eventProxiCriteria
+							);
+						//}
+					}
+
+				} else {
+					var temp_html = $('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>').append(this.unselect)  ;
+					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').before(temp_html) ;
+				}
+
+				// binds a click on the remove cross with the removeValue function
+				this.unselect.on(
+					'click',
+					{	arg1: this,	arg2: 'onRemoveValue'	},
+					SparnaturalComponents.eventProxiCriteria
+				);
+			}
 
 			// disable the Where
 			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
@@ -1244,17 +1287,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(this.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 			
-			if ( VALUE_SELECTION_WIDGETS.indexOf(this.inputTypeComponent.widgetType) !== -1 ) {
-				if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 1) {
-					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append('<div class="EndClassWidgetAddOrValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p><span>+</span></p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>') ;
-					// hook a click on the plus to the needAddOrValue function
-					$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
-						'click',
-						{arg1: this, arg2: 'onAddOrValue'},
-						SparnaturalComponents.eventProxiCriteria
-					);
-				}
-			}
+			
 
 			//Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
 			if (this.selectedValues.length == settings.maxOr) {
@@ -1274,7 +1307,10 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(this.parentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
 			$(this.parentCriteriaGroup.html).addClass('onAddOrValue') ;
 			// On vide les champs de saisie du widget
-			this.inputTypeComponent.reload() ;
+			if (!this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
+				this.inputTypeComponent.reload() ;
+			}
+			
 			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
 		};
 		
@@ -1556,6 +1592,8 @@ UiuxConfig = require("./UiuxConfig.js");
 					this.widgetType == Config.STRING_EQUALS_PROPERTY
 					||
 					this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY
+					||
+					this.widgetType == Config.TREE_PROPERTY
 				) {
 					// label of the "Search" pseudo-class is inserted alone in this case
 					var endLabel = classLabel;
@@ -1692,11 +1730,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		// language,
 			    		this.settings.language,
 
-			    		// labelPath
-			    		(datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
-
-			    		// sparql query
-			    		(datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+			    		// sparql query (with labelPath interpreted)
+			    		getFinalQueryString(datasource)
 			    	);
 				}
 
@@ -1749,11 +1784,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		// language,
 			    		this.settings.language,
 
-			    		// labelPath
-			    		(datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
-
-			    		// sparql query
-			    		(datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+			    		// sparql query (with labelPath interpreted)
+			    		getFinalQueryString(datasource)
 			    	);
 				}
 
@@ -1802,11 +1834,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		// language,
 			    		this.settings.language,
 
-			    		// labelPath
-			    		(datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
-
-			    		// sparql query
-			    		(datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+			    		// sparql query (with labelPath interpreted)
+			    		getFinalQueryString(datasource)
 			    	);
 				}
 
@@ -1834,12 +1863,78 @@ UiuxConfig = require("./UiuxConfig.js");
 			  case Config.NON_SELECTABLE_PROPERTY:
 			  	this.widgetComponent = new NoWidget(this) ;
 			  	this.cssClasses.NoWidget = true ;
+			  	break;
 			  case Config.BOOLEAN_PROPERTY:
 			  	this.widgetComponent = new BooleanWidget(this, langSearch) ;
 			  	this.cssClasses.BooleanWidget = true ;
+			  	break;
 			  case Config.TREE_PROPERTY:
-			  	console.log("Insert here tree widget !!!");
-			  	this.cssClasses.TreeWidget = true ;
+				  var theSpecProvider = this.specProvider;
+
+				  // determine custom roots datasource
+				  var treeRootsDatasource = this.specProvider.getTreeRootsDatasource(objectPropertyId);  
+				  if(treeRootsDatasource == null) {
+					  // try to read it on the class
+					  treeRootsDatasource = this.specProvider.getTreeRootsDatasource(rangeClassId);
+				  }
+				  if(treeRootsDatasource == null) {
+					  // datasource still null
+					  // if a default endpoint was provided, provide default datasource
+					  if(this.settings.defaultEndpoint != null) {
+						  treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_ROOT_SKOSINSCHEME);
+					  }
+				  }
+
+				  // determine custom children datasource
+				  var treeChildrenDatasource = this.specProvider.getTreeChildrenDatasource(objectPropertyId);  
+				  if(treeChildrenDatasource == null) {
+					  // try to read it on the class
+					  treeChildrenDatasource = this.specProvider.getTreeChildrenDatasource(rangeClassId);
+				  }
+				  if(treeChildrenDatasource == null) {
+					  // datasource still null
+					  // if a default endpoint was provided, provide default datasource
+					  if(this.settings.defaultEndpoint != null) {
+						  treeChildrenDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_CHILDREN_SKOSNARROWER);
+					  }
+				  }
+  
+				  
+  
+				  if(treeRootsDatasource != null && treeChildrenDatasource != null) {
+					  // if we have a datasource, possibly the default one, provide a config based
+					  // on a SparqlTemplate, otherwise use the handler provided
+					  // handler = new StubTreeHandler();
+					  
+					  handler = new SparqlTreeHandler(
+						  // endpoint URL
+						  // we read it on the roots datasource
+						  (treeRootsDatasource.sparqlEndpointUrl != null)?treeRootsDatasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+						  
+						  // sparqlPostProcessor
+						  {
+							  semanticPostProcess : function(sparql) {
+								  // also add prefixes
+								  for (key in settings.sparqlPrefixes) {
+									  sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
+								  }
+								  return theSpecProvider.expandSparql(sparql);
+							  }
+						  },
+  
+						  // language,
+						  this.settings.language,
+
+						  // sparql strings
+						  getFinalQueryString(treeRootsDatasource),
+						  getFinalQueryString(treeChildrenDatasource)
+					  );
+					  
+				  }
+
+				  this.widgetComponent = new TreeWidget(this, handler) ;
+			  	  this.cssClasses.TreeWidget = true ;
+			  	  break;
 			  default:
 			  	// TODO : throw Exception
 			  	console.log("Unexpected Widget Type "+widgetType)
@@ -1864,6 +1959,32 @@ UiuxConfig = require("./UiuxConfig.js");
 
 	function getOffset( elem, elemParent ) {
 		return elem.offset().left - $(elemParent).offset().left ;
+	}
+
+	/**
+	 * Builds the final query string from a query source, by injecting
+	 * labelPath/property and childrenPath/property
+	 **/
+	function getFinalQueryString(datasource) {
+		if(datasource.queryString != null) {
+			return datasource.queryString;
+		} else {
+			var sparql = datasource.queryTemplate;
+
+			if(datasource.labelPath != null || datasource.labelProperty) {
+				var theLabelPath = (datasource.labelPath)?datasource.labelPath:"<"+datasource.labelProperty+">";
+				var reLabelPath = new RegExp("\\$labelPath","g");
+				sparql = sparql.replace(reLabelPath, theLabelPath);
+			}
+
+			if(datasource.childrenPath != null || datasource.childrenProperty) {
+				var theChildrenPath = (datasource.childrenPath)?datasource.childrenPath:"<"+datasource.childrenProperty+">";
+				var reChildrenPath = new RegExp("\\$childrenPath","g");
+				sparql = sparql.replace(reChildrenPath, theChildrenPath);
+			}
+
+			return sparql;
+		}
 	}
 
 	/**

@@ -87,7 +87,7 @@
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
-    
+
     <!-- datepicker -->
     <script src="https://cdn.jsdelivr.net/npm/@chenfengyuan/datepicker@1.0.9/dist/datepicker.min.js"></script>
 
@@ -216,6 +216,16 @@
       "label": [
         {"@value" : "Movement","@language" : "en"},
         {"@value" : "Mouvement","@language" : "fr"}
+      ],
+      "faIcon":  "fas fa-palette"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Category",
+      "@type" : "Class",
+      "subClassOf" : "sparnatural:NotInstantiatedClass",
+      "label": [
+        {"@value" : "Category","@language" : "en"},
+        {"@value" : "Catégorie","@language" : "fr"}
       ],
       "faIcon":  "fas fa-palette"
     },
@@ -398,14 +408,37 @@
     {
       "@id" : "http://dbpedia.org/ontology/movement",
       "@type" : "ObjectProperty",
-      "subPropertyOf" : "sparnatural:ListProperty",
+      "subPropertyOf" : "sparnatural:TreeProperty",
       "label": [
         {"@value" : "movement","@language" : "en"},
         {"@value" : "mouvement","@language" : "fr"}
       ],
       "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
-      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement",
-      "datasource" : "datasources:list_rdfslabel_count"
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement"
+    },
+    {
+      "@id" : "http://purl.org/dc/terms/subject",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:TreeProperty",
+      "label": [
+        {"@value" : "category","@language" : "en"},
+        {"@value" : "catégorie","@language" : "fr"}
+      ],
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Category",
+      "treeRootsDatasource" : {
+        "queryString" : `
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?uri ?label ?hasChildren
+WHERE {
+  VALUES ?uri {<http://fr.dbpedia.org/resource/Catégorie:Peintre_français>}
+  ?uri skos:prefLabel ?label .
+  FILTER(lang(?label) = '' || lang(?label) = $lang)
+  BIND(true AS ?hasChildren)
+}
+        `
+      },
+      "treeChildrenDatasource": "datasources:tree_children_skos"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#text",

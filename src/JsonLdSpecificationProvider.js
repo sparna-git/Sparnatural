@@ -47,23 +47,44 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 
 	this.getDatasource = function(propertyOrClassId) {
 		var propertyOrClass = this._getResourceById(propertyOrClassId);
+		return this._buildDatasource(propertyOrClass['datasource']);
+	}
 
-		var datasourceValue = propertyOrClass['datasource'];
+	this.getTreeRootsDatasource = function(propertyOrClassId) {
+		var propertyOrClass = this._getResourceById(propertyOrClassId);
+		return this._buildDatasource(propertyOrClass['treeRootsDatasource']);
+	}
 
-		if(datasourceValue == null) {
+	this.getTreeChildrenDatasource = function(propertyOrClassId) {
+		var propertyOrClass = this._getResourceById(propertyOrClassId);
+		return this._buildDatasource(propertyOrClass['treeChildrenDatasource']);
+	}
+
+	/**
+	 * {
+	 *   queryString: "...",
+	 *   queryTemplate: "...",
+	 *   labelPath: "...",
+	 *   labelProperty: "...",
+	 *   childrenPath: "...",
+	 *   childrenProperty: "..."
+	 * }
+	 **/
+	this._buildDatasource = function(datasourceObject) {
+		if(datasourceObject == null) {
 			return null;
 		}
 
 		var datasource = {};
 		
-		if (typeof datasourceValue === "object") {
+		if (typeof datasourceObject === "object") {
 			// if datasource is an object...
 
 			// Alternative 1 : read optional queryString
-			datasource.queryString = datasourceValue['queryString'];
+			datasource.queryString = datasourceObject['queryString'];
 
 			// Alternative 2 : queryTemplate + labelPath
-			var queryTemplate = datasourceValue['queryTemplate'];
+			var queryTemplate = datasourceObject['queryTemplate'];
 
 			if(queryTemplate != null) {
 				var expandedQueryTemplate = this._expand(queryTemplate);
@@ -73,24 +94,32 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 					datasource.queryTemplate = knownQueryTemplate;
 				} else {
 					// 2.2 Unknown, could be defined in the config itself
+					// TODO
+					console.log("Reference to custom query template currently unsupported in JSON config");
 				}
 			}
 
 			// labelPath
-			datasource.labelPath = datasourceValue['labelPath'];
+			datasource.labelPath = datasourceObject['labelPath'];
 
 			// labelProperty
-			datasource.labelProperty = datasourceValue['labelProperty'];
+			datasource.labelProperty = datasourceObject['labelProperty'];
+
+			// childrenPath
+			datasource.childrenPath = datasourceObject['childrenPath'];
+
+			// childrenProperty
+			datasource.childrenProperty = datasourceObject['childrenProperty'];
 
 			// read optional sparqlEndpointUrl
-			datasource.sparqlEndpointUrl = datasourceValue['sparqlEndpointUrl'];
+			datasource.sparqlEndpointUrl = datasourceObject['sparqlEndpointUrl'];
 		} else {
 			// if datasource is a URI...
 			// look it up in known datasources config
-			datasource = Datasources.DATASOURCES_CONFIG.get(this._expand(datasourceValue));
+			datasource = Datasources.DATASOURCES_CONFIG.get(this._expand(datasourceObject));
 			if(datasource == null) {
 				// look it up in the config
-				// TODO
+				console.log("Reference to custom datasource URI currently unsupported in JSON config");
 			}			
 		}
 

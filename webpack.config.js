@@ -88,13 +88,20 @@ module.exports = {
       { from: 'static' }
     ]),
 	new DashboardPlugin(),
+	// so that JQuery is automatically inserted
+	new webpack.ProvidePlugin({
+	  $: 'jquery',
+	  jQuery: 'jquery',
+	})
 	/*
 	new webpack.ProvidePlugin({
         datepicker: '@chenfengyuan/datepicke',
 	  }),
 	*/
+	/*
 	new WebpackBundleSizeAnalyzerPlugin('./webpack-bundle-size-analyzer-report.txt')
-	  
+	*/
+
   ],
 	devServer: {
 	  contentBase: path.resolve(__dirname, "./dist"),
