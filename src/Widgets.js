@@ -1,4 +1,6 @@
 
+	const jstree = require('jstree').default;
+
 	
 	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
