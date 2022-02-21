@@ -51,6 +51,7 @@ SparqlTemplateListHandler = require("./AutocompleteAndListHandlers.js").SparqlTe
 SparqlTemplateAutocompleteHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateAutocompleteHandler;
 
 SparqlTreeHandler = require("./TreeHandlers.js").SparqlTreeHandler;
+StubTreeHandler = require("./TreeHandlers.js").StubTreeHandler;
 
 SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHandler;
 
@@ -1691,11 +1692,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		// language,
 			    		this.settings.language,
 
-			    		// labelPath
-			    		(datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
-
-			    		// sparql query
-			    		(datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+			    		// sparql query (with labelPath interpreted)
+			    		getFinalQueryString(datasource)
 			    	);
 				}
 
@@ -1748,11 +1746,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		// language,
 			    		this.settings.language,
 
-			    		// labelPath
-			    		(datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
-
-			    		// sparql query
-			    		(datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+			    		// sparql query (with labelPath interpreted)
+			    		getFinalQueryString(datasource)
 			    	);
 				}
 
@@ -1801,11 +1796,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			    		// language,
 			    		this.settings.language,
 
-			    		// labelPath
-			    		(datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
-
-			    		// sparql query
-			    		(datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+			    		// sparql query (with labelPath interpreted)
+			    		getFinalQueryString(datasource)
 			    	);
 				}
 
@@ -1833,35 +1825,53 @@ UiuxConfig = require("./UiuxConfig.js");
 			  case Config.NON_SELECTABLE_PROPERTY:
 			  	this.widgetComponent = new NoWidget(this) ;
 			  	this.cssClasses.NoWidget = true ;
+			  	break;
 			  case Config.BOOLEAN_PROPERTY:
 			  	this.widgetComponent = new BooleanWidget(this, langSearch) ;
 			  	this.cssClasses.BooleanWidget = true ;
+			  	break;
 			  case Config.TREE_PROPERTY:
-			  	console.log("Insert here tree widget !!!");
 				  var theSpecProvider = this.specProvider;
 
-				  // determine custom datasource
-				  var datasource = this.specProvider.getDatasource(objectPropertyId);
-  
-				  if(datasource == null) {
+				  // determine custom roots datasource
+				  var treeRootsDatasource = this.specProvider.getTreeRootsDatasource(objectPropertyId);  
+				  if(treeRootsDatasource == null) {
 					  // try to read it on the class
-					  datasource = this.specProvider.getDatasource(rangeClassId);
+					  treeRootsDatasource = this.specProvider.getTreeRootsDatasource(rangeClassId);
 				  }
-  
-				  /*if(datasource == null) {
+				  if(treeRootsDatasource == null) {
 					  // datasource still null
 					  // if a default endpoint was provided, provide default datasource
 					  if(this.settings.defaultEndpoint != null) {
-						  datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.SEARCH_URI_CONTAINS);
+						  treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_ROOT_SKOSINSCHEME);
 					  }
-				  }*/
+				  }
+
+				  // determine custom children datasource
+				  var treeChildrenDatasource = this.specProvider.getTreeChildrenDatasource(objectPropertyId);  
+				  if(treeChildrenDatasource == null) {
+					  // try to read it on the class
+					  treeChildrenDatasource = this.specProvider.getTreeChildrenDatasource(rangeClassId);
+				  }
+				  if(treeChildrenDatasource == null) {
+					  // datasource still null
+					  // if a default endpoint was provided, provide default datasource
+					  if(this.settings.defaultEndpoint != null) {
+						  treeChildrenDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_CHILDREN_SKOSNARROWER);
+					  }
+				  }
   
-				  if(datasource != null) {
+				  
+  
+				  if(treeRootsDatasource != null && treeChildrenDatasource != null) {
 					  // if we have a datasource, possibly the default one, provide a config based
 					  // on a SparqlTemplate, otherwise use the handler provided
+					  // handler = new StubTreeHandler();
+					  
 					  handler = new SparqlTreeHandler(
 						  // endpoint URL
-						  (datasource.sparqlEndpointUrl != null)?datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+						  // we read it on the roots datasource
+						  (treeRootsDatasource.sparqlEndpointUrl != null)?treeRootsDatasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
 						  
 						  // sparqlPostProcessor
 						  {
@@ -1876,16 +1886,17 @@ UiuxConfig = require("./UiuxConfig.js");
   
 						  // language,
 						  this.settings.language,
-  
-						  // labelPath
-						  (datasource.labelPath != null)?datasource.labelPath:((datasource.labelProperty != null)?"<"+datasource.labelProperty+">":null),
-  
-						  // sparql query
-						  (datasource.queryString != null)?datasource.queryString:datasource.queryTemplate
+
+						  // sparql strings
+						  getFinalQueryString(treeRootsDatasource),
+						  getFinalQueryString(treeChildrenDatasource)
 					  );
+					  
 				  }
+
 				  this.widgetComponent = new TreeWidget(this, handler) ;
-			  	this.cssClasses.TreeWidget = true ;
+			  	  this.cssClasses.TreeWidget = true ;
+			  	  break;
 			  default:
 			  	// TODO : throw Exception
 			  	console.log("Unexpected Widget Type "+widgetType)
@@ -1910,6 +1921,32 @@ UiuxConfig = require("./UiuxConfig.js");
 
 	function getOffset( elem, elemParent ) {
 		return elem.offset().left - $(elemParent).offset().left ;
+	}
+
+	/**
+	 * Builds the final query string from a query source, by injecting
+	 * labelPath/property and childrenPath/property
+	 **/
+	function getFinalQueryString(datasource) {
+		if(datasource.queryString != null) {
+			return datasource.queryString;
+		} else {
+			var sparql = datasource.queryTemplate;
+
+			if(datasource.labelPath != null || datasource.labelProperty) {
+				var theLabelPath = (datasource.labelPath)?datasource.labelPath:"<"+datasource.labelProperty+">";
+				var reLabelPath = new RegExp("\\$labelPath","g");
+				sparql = sparql.replace(reLabelPath, theLabelPath);
+			}
+
+			if(datasource.childrenPath != null || datasource.childrenProperty) {
+				var theChildrenPath = (datasource.childrenPath)?datasource.childrenPath:"<"+datasource.childrenProperty+">";
+				var reChildrenPath = new RegExp("\\$childrenPath","g");
+				sparql = sparql.replace(reChildrenPath, theChildrenPath);
+			}
+
+			return sparql;
+		}
 	}
 
 	/**

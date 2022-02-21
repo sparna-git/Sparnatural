@@ -373,79 +373,15 @@ export class RDFSpecificationProvider {
 	}
 
 	getDatasource(propertyOrClassId) {
-		var datasource = {};
+		return this._readDatasourceAnnotationProperty(propertyOrClassId, Datasources.DATASOURCE);
+	}
 
-		// read predicate datasource
-		const datasourceQuads = this.store.getQuads(
-			factory.namedNode(propertyOrClassId),
-			Datasources.DATASOURCE,
-		  	undefined
-		);
+	getTreeRootsDatasource(propertyOrClassId) {
+		return this._readDatasourceAnnotationProperty(propertyOrClassId, Datasources.TREE_ROOTS_DATASOURCE);
+	}
 
-		if(datasourceQuads.length == 0) {
-			return null;
-		}
-
-		for (const datasourceQuad of datasourceQuads) {
-			const datasourceUri = datasourceQuad.object.id;
-		    var knownDatasource = Datasources.DATASOURCES_CONFIG.get(datasourceUri);
-		    if(knownDatasource != null) {
-		    	return knownDatasource;
-		    } else {
-		    	// read datasource characteristics
-
-		    	// Alternative 1 : read optional queryString
-		    	var queryStrings = this._readAsLiteral(datasourceQuad.object.id, Datasources.QUERY_STRING);
-		    	if(queryStrings.length > 0) {
-		    		datasource.queryString = queryStrings[0];	
-		    	}		    	
-
-		    	// Alternative 2 : query template + label path
-		    	var queryTemplates = this._readAsResource(datasourceQuad.object.id, Datasources.QUERY_TEMPLATE);
-		    	if(queryTemplates.length > 0) {
-		    		var theQueryTemplate = queryTemplates[0];
-		    		var knownQueryTemplate = Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(theQueryTemplate);
-		    		if(knownQueryTemplate != null) {
-						// 2.1 It is known in default Sparnatural ontology
-						datasource.queryTemplate = knownQueryTemplate;
-					} else {
-						// 2.2 Unknown, read the query string
-						var queryStrings = this._readAsResource(theQueryTemplate, Datasources.QUERY_STRING);
-						if(queryStrings.length > 0) {
-							var queryString = queryStrings[0];
-							datasource.queryTemplate = 
-							(queryString.startsWith('"') && queryString.endsWith('"'))
-								?queryString.substring(1,queryString.length-1)
-								:queryString
-							;
-						}
-					}
-
-					// labelPath
-					var labelPaths = this._readAsLiteral(datasourceQuad.object.id, Datasources.LABEL_PATH);
-			    	if(labelPaths.length > 0) {
-			    		datasource.labelPath = labelPaths[0];	
-			    	}	
-
-					// labelProperty
-					var labelProperties = this._readAsResource(datasourceQuad.object.id, Datasources.LABEL_PROPERTY);
-			    	if(labelProperties.length > 0) {
-			    		datasource.labelProperty = labelProperties[0];	
-			    	}
-		    	}
-
-		    	// read optional sparqlEndpointUrl
-		    	var sparqlEndpointUrls = this._readAsLiteral(datasourceQuad.object.id, Datasources.SPARQL_ENDPOINT_URL);
-		    	if(sparqlEndpointUrls.length > 0) {
-		    		datasource.sparqlEndpointUrl = sparqlEndpointUrls[0];	
-		    	}	
-		    }
-		}
-
-		console.log("Returning following datasource");
-		console.log(datasource);
-
-		return datasource;
+	getTreeChildrenDatasource(propertyOrClassId) {
+		return this._readDatasourceAnnotationProperty(propertyOrClassId, Datasources.TREE_CHILDREN_DATASOURCE);
 	}
 
 	isEnablingOptional(propertyId) {
@@ -463,6 +399,108 @@ export class RDFSpecificationProvider {
 	readRange(propertyId) {
 		return this._readClassesInRangeOfProperty(propertyId);
 	}
+
+
+	_readDatasourceAnnotationProperty(propertyOrClassId, datasourceAnnotationProperty) {
+		// read predicate datasource
+		const datasourceQuads = this.store.getQuads(
+			factory.namedNode(propertyOrClassId),
+			datasourceAnnotationProperty,
+		  	undefined
+		);
+
+		if(datasourceQuads.length == 0) {
+			return null;
+		}
+
+		for (const datasourceQuad of datasourceQuads) {
+			const datasourceUri = datasourceQuad.object.id;
+		    var knownDatasource = Datasources.DATASOURCES_CONFIG.get(datasourceUri);
+		    if(knownDatasource != null) {
+		    	return knownDatasource;
+		    } else {
+		    	return this._buildDatasource(datasourceUri);	
+		    }
+		}
+
+		return datasource;
+	}
+
+	/**
+	 * {
+	 *   queryString: "...",
+	 *   queryTemplate: "...",
+	 *   labelPath: "...",
+	 *   labelProperty: "...",
+	 *   childrenPath: "...",
+	 *   childrenProperty: "..."
+	 * }
+	 **/
+	_buildDatasource(datasourceUri) {
+		var datasource = {};
+		// read datasource characteristics
+
+    	// Alternative 1 : read optional queryString
+    	var queryStrings = this._readAsLiteral(datasourceUri, Datasources.QUERY_STRING);
+    	if(queryStrings.length > 0) {
+    		datasource.queryString = queryStrings[0];	
+    	}		    	
+
+    	// Alternative 2 : query template + label path
+    	var queryTemplates = this._readAsResource(datasourceUri, Datasources.QUERY_TEMPLATE);
+    	if(queryTemplates.length > 0) {
+    		var theQueryTemplate = queryTemplates[0];
+    		var knownQueryTemplate = Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(theQueryTemplate);
+    		if(knownQueryTemplate != null) {
+				// 2.1 It is known in default Sparnatural ontology
+				datasource.queryTemplate = knownQueryTemplate;
+			} else {
+				// 2.2 Unknown, read the query string on the query template
+				var queryStrings = this._readAsResource(theQueryTemplate, Datasources.QUERY_STRING);
+				if(queryStrings.length > 0) {
+					var queryString = queryStrings[0];
+					datasource.queryTemplate = 
+					(queryString.startsWith('"') && queryString.endsWith('"'))
+						?queryString.substring(1,queryString.length-1)
+						:queryString
+					;
+				}
+			}
+
+			// labelPath
+			var labelPaths = this._readAsLiteral(datasourceUri, Datasources.LABEL_PATH);
+	    	if(labelPaths.length > 0) {
+	    		datasource.labelPath = labelPaths[0];	
+	    	}	
+
+			// labelProperty
+			var labelProperties = this._readAsResource(datasourceUri, Datasources.LABEL_PROPERTY);
+	    	if(labelProperties.length > 0) {
+	    		datasource.labelProperty = labelProperties[0];	
+	    	}
+
+	    	// childrenPath
+			var childrenPaths = this._readAsLiteral(datasourceUri, Datasources.CHILDREN_PATH);
+	    	if(childrenPaths.length > 0) {
+	    		datasource.childrenPath = childrenPaths[0];	
+	    	}	
+
+			// childrenProperty
+			var childrenProperties = this._readAsResource(datasourceUri, Datasources.CHILDREN_PROPERTY);
+	    	if(childrenProperties.length > 0) {
+	    		datasource.childrenProperty = childrenProperties[0];	
+	    	}
+    	}
+
+    	// read optional sparqlEndpointUrl
+    	var sparqlEndpointUrls = this._readAsLiteral(datasourceUri, Datasources.SPARQL_ENDPOINT_URL);
+    	if(sparqlEndpointUrls.length > 0) {
+    		datasource.sparqlEndpointUrl = sparqlEndpointUrls[0];	
+    	}
+
+    	return datasource;
+	}
+
 
 	_sort(items) {
 		var me = this;
