@@ -373,38 +373,36 @@ export class QuerySPARQLWriter {
 
 		if(queryLine.p && queryLine.o) {
 			if(queryLine.values.length == 0) {
+
 				// no value, insert ?s ?p ?o line
+				bgp.triples.push(this._buildTriple(
+					queryLine.s,
+					queryLine.p,
+					queryLine.o
+				)) ;				
+
+				// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
 				if(
+					this.specProvider.isMultilingual(queryLine.p)
+				) {
+					parentInSparqlQuery.push(
+						this._initFilterLang(query.defaultLang,queryLine.o)
+					) ;
+				}
+
+				// if the class of the value does no correspond to a literal, insert a criteria
+				// on its rdf:type, if it is not remote
+				if(
+					!this.specProvider.isLiteralClass(queryLine.oType)
+					&&
 					!this.specProvider.isRemoteClass(queryLine.oType)
 				) {
 					bgp.triples.push(this._buildTriple(
-						queryLine.s,
-						queryLine.p,
-						queryLine.o
+						queryLine.o,
+						this.typePredicate,
+						queryLine.oType
 					)) ;
-
-					// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
-					if(
-						this.specProvider.isMultilingual(queryLine.p)
-					) {
-						parentInSparqlQuery.push(
-							this._initFilterLang(query.defaultLang,queryLine.o)
-						) ;
-					}
-
-					// if the class of the value does no correspond to a literal, insert a criteria
-					// on its rdf:type
-					if(
-						!this.specProvider.isLiteralClass(queryLine.oType)
-					) {
-						bgp.triples.push(this._buildTriple(
-							queryLine.o,
-							this.typePredicate,
-							queryLine.oType
-						)) ;
-					}
 				}
-
 				
 			} else if(
 				// there is a single value
