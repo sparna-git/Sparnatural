@@ -111,7 +111,7 @@ export class GroupContenaire extends HTMLComponent {
 } 
 
 
-/**
+ /**
  * Selection of the start class in a criteria/line
  **/
  export class StartClassGroup extends GroupContenaire { 

@@ -391,7 +391,7 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			var SubmitSection = "" ;
 			if (settings.onSubmit instanceof Function) {
-				var SubmitSection = '<div class="submitSectionWrapper"><div class="submitSection"><a class="submitDisable">'+UiuxConfig.ICON_PLAY+'</a></div></div>' ; 
+				var SubmitSection = '<div class="submitSectionWrapper" style="background: rgba('+settings.backgroundBaseColor+');"><div class="submitSection"><a class="submitDisable">'+UiuxConfig.ICON_PLAY+'</a></div></div>' ; 
 			}
 			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>'+SubmitSection+'<div class="variablesSelection"></div>');
 
@@ -1214,7 +1214,11 @@ UiuxConfig = require("./UiuxConfig.js");
 				return false ;
 			}
 			var new_items = [] ;
-			if (this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
+			if (
+				this.inputTypeComponent.widgetType == Config.TREE_PROPERTY
+				&&
+				Array.isArray(theValue)
+			) {
 				for (var node in theValue) {
 					var selected = false ;
 					// if the same value is already selected, don't do anything
@@ -1224,9 +1228,8 @@ UiuxConfig = require("./UiuxConfig.js");
 						}
 					}
 					if (selected == false) {
-							var new_value = {key: theValue[node].id, label: theValue[node].original.text, uri: theValue[node].id} ;
-							new_items.push(new_value) ;
-							this.selectedValues.push(new_value) ;
+						new_items.push(theValue[node]) ;
+						this.selectedValues.push(theValue[node]) ;
 					}
 				}
 			} else {

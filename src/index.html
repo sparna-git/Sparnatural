@@ -583,12 +583,19 @@ WHERE {
             // queryString = orderByPostProcess(queryString, queryJson);
             $('#sparql code').html(queryString.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"));
             yasqe.setValue(queryString);
-            yasqe.query();
+            // yasqe.query();
           },
           tooltipConfig : {
             delay: [800, 100],
             duration: [100, 100],
           },
+          // triggered when "play" button is clicked
+          onSubmit: function(form) {
+            // enable loader on button
+            form.sparnatural.enableLoading() ; 
+            // trigger the query from YasQE
+            yasqe.query();
+          }
         });
       }) ;
 
@@ -640,6 +647,7 @@ WHERE {
       // link yasqe and yasr
       yasqe.on("queryResponse", function(_yasqe, response, duration) {
         yasr.setResponse(response, duration);
+        sparnatural.disableLoading() ;
       });
 
       /*console.log('****************************');
