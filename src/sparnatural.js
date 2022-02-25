@@ -1217,6 +1217,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			if (
 				this.inputTypeComponent.widgetType == Config.TREE_PROPERTY
 				&&
+				// when loading the value from a saved query, the value is not an array, it is
+				// a simple value.
 				Array.isArray(theValue)
 			) {
 				for (var node in theValue) {
