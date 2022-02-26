@@ -578,9 +578,10 @@ UiuxConfig = require("./UiuxConfig.js");
 				}
 			});
 
-			$(sortable).on('onUpdate',
-			{arg1: this, arg2: 'updateVariableList'},
-			SparnaturalComponents.eventProxiCriteria
+			$(sortable).on(
+				'onUpdate',
+				{arg1: this, arg2: 'updateVariableList'},
+				SparnaturalComponents.eventProxiCriteria
 			);
 
 			this.removeVariableName = function(name) {
@@ -619,7 +620,9 @@ UiuxConfig = require("./UiuxConfig.js");
 				$(this.form.sparnatural).trigger( {type:"submit" } ) ;
 			}
 
-			
+			/**
+			 * Updates the variables in the generated query based on HTML variable line
+			 **/
 			this.updateVariableList = function() {
 				var listedItems = $(this.otherSelectHtml).find('.sortableItem>div') ;
 				this.form.queryOptions.displayVariableList = [] ;
@@ -637,6 +640,7 @@ UiuxConfig = require("./UiuxConfig.js");
 					SparnaturalComponents.redrawBottomLink($(this)) ;
 				});
 			}
+
 			this.loadQuery = function() {
 				this.form.submitOpened = false ;
 				for (var i = 0; i < this.form.preLoad.variables.length; i++) {
