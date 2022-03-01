@@ -2,61 +2,8 @@
 @import "~easy-autocomplete/dist/easy-autocomplete.css";
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
 
+@import "themes.scss";
 
-/**
- * Color of the criteria arrows (orange)
- **/
-$custom-red: rgb(250,136,3) ;
-
-/**
- * Color of the "unselect" buttons in criterias
- **/
-$custom-red-bold: rgb(182, 97, 0) ;
-
-/**
- * Color of a selected value in a criteria
- **/
-$custom-red-medium: rgb(255, 210, 157) ;
-
-/**
- * variable selector background & tooltip background
- **/
-$custom-red-light: rgb(255, 231, 203) ;
-
-/** 
- * Color of the options arrow (optional / negation)
- **/
-$custom-green: rgb(107,215,171) ;
-
-/**
- * Color of the options arrow when not selected
- **/
-$custom-green-light: rgb(151,227,196) ;
-
-/** 
- * Color of the highlight of arrows
- **/
-$custom-green-bold: rgb(2,184,117) ;
-
-/**
- * Color of line between query and variable selection
- **/
-$custom-silver-line: #8D8D8D;
-
-/**
- * Color of variable d&d grip, disabled query button, disabled options
- **/
-$custom-silver: rgb(167,167,167) ;
-
-/**
- *
- **/
-$custom-silver-light: rgb(230, 230, 230) ;
-
-/**
- * Default text color
- **/
-$default-text-color: #666 ;
 
 
 
@@ -68,12 +15,11 @@ $height-components-hover: 35px;
 $margin-component: 30px;
 $margin-component-onEdit: 80px;
 $margin-children-li: 75px;
-
 $center-arrow-bd-width : 3px;
-
-
-
 $margin-left-reset: 20px;
+
+
+
 
 @mixin triangle-before() {
 	padding-left: 20px;
