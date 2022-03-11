@@ -661,8 +661,7 @@
 								};
 								if(loaderHandler.nodeHasChildren(items[i])) {
 									aNode.children = true ;
-								} 
-								
+								}			
 								if(loaderHandler.nodeDisabled(items[i])) {
 									aNode.state = {
 										disabled  : true  // node disabled
@@ -688,7 +687,7 @@
 				"checkbox" : {
 					"keep_selected_style" : false,
 					"three_state" : true,
-					"cascade_to_disabled" : false
+					"cascade_to_disabled" : true
 				},
 				"plugins" : [ "changed", "wholerow", "checkbox"/*, "massload", "state" */ ]
 			} ;
@@ -747,32 +746,64 @@
 		//limit to 3 selction
 		this.onChangedJstree = function (e, data) {
 			this_ = e.data.arg1;
-			//console.log(data);
-			if (this_.jsTree.jstree().get_top_checked().length >= settings.maxOr) {
-				var items = $(this_.jsTree).find('li.jstree-node') ;
-				for (var i = 0; i < items.length; i++) {
-					var id = $(items[i]).attr('id') ;
-					if(!this_.jsTree.jstree('is_checked', id)) {
-						var node = this_.jsTree.jstree(true).get_node(id) ;
+			var items = $(this_.jsTree).find('li.jstree-node') ;
+
+			var selecteds = this_.jsTree.jstree().get_top_checked() ;
+			for (var i = 0; i < items.length; i++) {
+				var id = $(items[i]).attr('id') ;
+				if(selecteds.indexOf(id) > -1) {
+					$(items[i]).addClass('tree-item-selected') ;
+				} else {
+					$(items[i]).removeClass('tree-item-selected') ;
+				}
+				if($(items[i]).parents('.tree-item-selected').length  > 0) {
+					var node = this_.jsTree.jstree(true).get_node(id) ;
+					if(!this_.jsTree.jstree(true).is_disabled(node)) {
 						$(items[i]).addClass('is-reactivable') ;
 						this_.jsTree.jstree(true).disable_checkbox(node);
 						this_.jsTree.jstree(true).disable_node(node);
 					}
+				} else {
+					if($(items[i]).hasClass('is-reactivable') ) {
+						$(items[i]).addClass('red') ;
+						this_.jsTree.jstree('enable_checkbox', id);
+						this_.jsTree.jstree(true).enable_node(id);
+					}
 				}
-				this_.jsTree.addClass('max-slected') ;
+			}
+			
+			//console.log(data);
+			if (this_.jsTree.jstree().get_top_checked().length >= settings.maxOr) {
+				
+				for (var i = 0; i < items.length; i++) {
+					var id = $(items[i]).attr('id') ;
+					if(selecteds.indexOf(id) == -1) {
+						var node = this_.jsTree.jstree(true).get_node(id) ;
+						if(!this_.jsTree.jstree(true).is_disabled(node)) {
+							$(items[i]).addClass('is-reactivable') ;
+							this_.jsTree.jstree(true).disable_checkbox(node);
+							this_.jsTree.jstree(true).disable_node(node);
+						}
+						
+					}
+				}
+				this_.jsTree.addClass('max-selected') ;
 			} else {
-				if (this_.jsTree.hasClass('max-slected')) {
+				if (this_.jsTree.hasClass('max-selected')) {
 					var items = $(this_.jsTree).find('li.jstree-node') ;
 					for (var i = 0; i < items.length; i++) {
 						var id = $(items[i]).attr('id') ;
-						if(!this_.jsTree.jstree().is_checked(id)) {
+						if(selecteds.indexOf(id) == -1) {
 							if($(items[i]).hasClass('is-reactivable') ) {
-								this_.jsTree.jstree('enable_checkbox', id);
-								this_.jsTree.jstree(true).enable_node(id);
+								$(items[i]).addClass('red') ;
+								if($(items[i]).parents('.tree-item-selected').length  == 0) {
+									this_.jsTree.jstree('enable_checkbox', id);
+									this_.jsTree.jstree(true).enable_node(id);
+								}
 							}
 						}
 					}
-					this_.jsTree.removeClass('max-slected')
+					this_.jsTree.removeClass('max-selected')
 				}
 			}
 		}
