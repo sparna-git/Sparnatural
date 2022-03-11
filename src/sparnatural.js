@@ -1089,6 +1089,12 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			$(e.currentTarget).parent('div').remove() ;
 
+			//if jstree remove unselecteds term
+			if (this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
+				this.inputTypeComponent.widgetComponent.jsTree.jstree('uncheck_node',  $(e.currentTarget).attr('value-data'));
+			}
+			//uncheck_node() 
+
 			if(this.selectedValues.length < 1) {
 				$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
 				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup >.EndClassWidgetAddOrValue').remove() ;
@@ -1177,6 +1183,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			}
 			var new_items = [] ;
 			if (this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
+				//Check for new values
 				for (var node in theValue) {
 					var selected = false ;
 					// if the same value is already selected, don't do anything
@@ -1191,6 +1198,19 @@ UiuxConfig = require("./UiuxConfig.js");
 							this.selectedValues.push(new_value) ;
 					}
 				}
+				//Check if values removed
+				for (var item in this.selectedValues) {
+					var selected = false ;
+					for (var node in theValue) {
+						if(this.selectedValues[item].key == theValue[node].id) {
+							selected = true ;
+						}
+					}
+					if (selected == false){
+						$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup span[value-data="'+this.selectedValues[item].key+'"]').first().trigger('click') ;
+					}
+				}
+
 			} else {
 				// if the same value is already selected, don't do anything
 				for (var item in this.selectedValues) {
