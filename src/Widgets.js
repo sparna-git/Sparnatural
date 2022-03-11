@@ -1,6 +1,8 @@
 
 	const jstree = require('jstree').default;
 	const datepicker = require('@chenfengyuan/datepicker').default;
+	const select2 = require('select2');
+	require('select2/dist/css/select2.css');
 	
 	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
@@ -131,7 +133,8 @@
 						var uri = listHandler.elementUri(val) ; 
 						$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
 					});
-					$('#'+id_input).niceSelect();
+					// $('#'+id_input).niceSelect();
+					$('#'+id_input).select2();
 					$('#'+id_input).on("change", function() {
 						$(itc_obj).trigger('change') ;
 					});
