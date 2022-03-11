@@ -834,8 +834,11 @@ body {
 							max-height: 500px;
 							min-width: 275px;
 							padding: 10px 10px 5px;
-
+							
 							&.jstree-default .jstree-disabled {
+								opacity: 0.5;
+							}
+							&.jstree-default .jstree-checkbox-disabled {
 								opacity: 0.5;
 							}
 						}

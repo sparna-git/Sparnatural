@@ -616,7 +616,7 @@
 		}
 	}
 
-	TreeWidget = function(inputTypeComponent, loaderHandler) {
+	TreeWidget = function(inputTypeComponent, loaderHandler, settings) {
 		this.loaderHandler = loaderHandler;
 		this.ParentComponent = inputTypeComponent ;
 
@@ -697,6 +697,10 @@
 			this.jsTree = $('#ecgrw-'+id_inputs+'-display').jstree(options);
 
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-input').on("click",  { arg1 : this },  this.onClickDisplay);
+			//disable/enable on max selction 
+			this.jsTree.on("changed.jstree",  { arg1 : this },  this.onChangedJstree);
+			this.jsTree.on("after_open.jstree",  { arg1 : this },  this.onChangedJstree);
+
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeSubmit').on("click",  { arg1 : this },  this.onClickSelect);
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeCancel').on("click",  { arg1 : this },  this.onClickCancel);
 
@@ -738,6 +742,39 @@
 					});
 				}
 			});*/
+		}
+		
+		//limit to 3 selction
+		this.onChangedJstree = function (e, data) {
+			this_ = e.data.arg1;
+			//console.log(data);
+			if (this_.jsTree.jstree().get_top_checked().length >= settings.maxOr) {
+				var items = $(this_.jsTree).find('li.jstree-node') ;
+				for (var i = 0; i < items.length; i++) {
+					var id = $(items[i]).attr('id') ;
+					if(!this_.jsTree.jstree('is_checked', id)) {
+						var node = this_.jsTree.jstree(true).get_node(id) ;
+						$(items[i]).addClass('is-reactivable') ;
+						this_.jsTree.jstree(true).disable_checkbox(node);
+						this_.jsTree.jstree(true).disable_node(node);
+					}
+				}
+				this_.jsTree.addClass('max-slected') ;
+			} else {
+				if (this_.jsTree.hasClass('max-slected')) {
+					var items = $(this_.jsTree).find('li.jstree-node') ;
+					for (var i = 0; i < items.length; i++) {
+						var id = $(items[i]).attr('id') ;
+						if(!this_.jsTree.jstree().is_checked(id)) {
+							if($(items[i]).hasClass('is-reactivable') ) {
+								this_.jsTree.jstree('enable_checkbox', id);
+								this_.jsTree.jstree(true).enable_node(id);
+							}
+						}
+					}
+					this_.jsTree.removeClass('max-slected')
+				}
+			}
 		}
 
 		this.onClickDisplay = function(e) {
