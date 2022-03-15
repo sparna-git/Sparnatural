@@ -48,6 +48,7 @@
     "streamify-string": "^1.0.1",
     "tippy.js": "^6.3.5",
     "webpack-cli": "^3.3.7",
-    "whatwg-fetch": "^3.6.2"
+    "whatwg-fetch": "^3.6.2",
+    "select2": "^4.0.13"
   }
 }
