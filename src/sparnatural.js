@@ -1291,6 +1291,9 @@ UiuxConfig = require("./UiuxConfig.js");
 			// On vide les champs de saisie du widget
 			if (!this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
 				this.inputTypeComponent.reload() ;
+			} else {
+				//On avffiche de suite l'arbre. Car pas d'autre action possible
+				$(this.inputTypeComponent.HtmlContainer.html).find('a.treeBtnDisplay').first().trigger('click') ;
 			}
 			
 			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
