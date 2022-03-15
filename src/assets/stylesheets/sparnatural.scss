@@ -1931,8 +1931,8 @@ body {
 body .select2-container--default {
 	font-size: 14px;
 	line-height: 1.2;
-	.select2-results__option--highlighted.select2-results__option--selectable {
-		background-color: $custom-red-medium;
+	.select2-results__option--highlighted.select2-results__option--highlighted {
+		background-color: $custom-red;
 	}
 }
 //tippy overides
