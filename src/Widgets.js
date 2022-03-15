@@ -622,7 +622,7 @@
 		this.langSearch = langSearch;
 
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
-		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">Effacer</a><a class="treeSubmit">Sélectionner</a></div></div>' ;
+		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">'+this.langSearch.TreeWidgetDelete+'</a><a class="treeSubmit">'+this.langSearch.TreeWidgetSelect+'</a></div></div>' ;
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;

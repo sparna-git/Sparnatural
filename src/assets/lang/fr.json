@@ -29,5 +29,7 @@
 	"SwitchVariablesNames": "Montrer le nom des colonnes",
 	"true": "Vrai",
 	"false": "Faux",
-	"TreeWidgetNoData": "Aucune donnée trouvée pour cet arbre..."
+	"TreeWidgetNoData": "Aucune donnée trouvée pour cet arbre...",
+	"TreeWidgetDelete": "Effacer",
+	"TreeWidgetSelect": "Sélectionner"
 }
