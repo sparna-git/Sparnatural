@@ -1914,7 +1914,7 @@ UiuxConfig = require("./UiuxConfig.js");
 					  
 				  }
 
-				  this.widgetComponent = new TreeWidget(this, handler, settings) ;
+				  this.widgetComponent = new TreeWidget(this, handler, settings, langSearch) ;
 			  	  this.cssClasses.TreeWidget = true ;
 			  	  break;
 			  default:

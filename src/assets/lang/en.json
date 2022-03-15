@@ -28,5 +28,6 @@
 	"Or": "or",
 	"SwitchVariablesNames": "Show column names",
 	"true": "True",
-	"false": "False"
+	"false": "False",
+	"TreeWidgetNoData": "No data could be found for this tree..."
 }

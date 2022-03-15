@@ -616,12 +616,13 @@
 		}
 	}
 
-	TreeWidget = function(inputTypeComponent, loaderHandler, settings) {
+	TreeWidget = function(inputTypeComponent, loaderHandler, settings, langSearch) {
 		this.loaderHandler = loaderHandler;
 		this.ParentComponent = inputTypeComponent ;
+		this.langSearch = langSearch;
 
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
-		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">Effacer</a><a class="treeSubmit">Sélectionner</a></div></div>' ;
+		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">Effacer</a><a class="treeSubmit">Sélectionner</a></div></div>' ;
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
@@ -632,6 +633,7 @@
 			this.itc_obj = this.ParentComponent;	
 
 			console.log(this.loaderHandler) ;
+			var self = this ;
 			var options = {
 				'core' : {
 					"multiple" : true,
@@ -672,6 +674,10 @@
 							}
 							console.log(result) ;
 							callback.call(this, result);
+							if( node.id === '#') {
+								self.onTreeDataLoaded(result);
+							}
+							
 						});
 			        },
 					"themes" : {
@@ -741,6 +747,19 @@
 					});
 				}
 			});*/
+		}
+
+		this.onTreeDataLoaded = function onTreeDataLoaded(result) {
+			console.log('loaded !') ;
+			console.log(result.length) ;
+			console.log(this.langSearch) ;
+			if(result.length == 0) {
+				$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer .treeNotice').text(this.langSearch.TreeWidgetNoData).show() ;
+				
+			} else {
+				$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer .treeNotice').hide() ;
+			}
+			
 		}
 		
 		//limit to 3 selction

@@ -28,5 +28,6 @@
 	"Or": "ou",
 	"SwitchVariablesNames": "Montrer le nom des colonnes",
 	"true": "Vrai",
-	"false": "Faux"
+	"false": "Faux",
+	"TreeWidgetNoData": "Aucune donnée trouvée pour cet arbre..."
 }
