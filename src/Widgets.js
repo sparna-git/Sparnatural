@@ -632,7 +632,7 @@
 			var id_inputs = this.IdCriteriaGroupe ;			
 			this.itc_obj = this.ParentComponent;	
 
-			console.log(this.loaderHandler) ;
+			//console.log(this.loaderHandler) ;
 			var self = this ;
 			var options = {
 				'core' : {
@@ -652,8 +652,7 @@
 	
 						var request = $.ajax( options );
 
-						request.done(function( data ) {			  
-							console.log("data") ;
+						request.done(function( data ) {
 							var result = [];
 							var items = loaderHandler.nodeListLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data);
 							for (var i = 0; i < items.length; i++) {
@@ -672,7 +671,6 @@
 								aNode.parent=node.id;
 								result.push(aNode);
 							}
-							console.log(result) ;
 							callback.call(this, result);
 							if( node.id === '#') {
 								self.onTreeDataLoaded(result);
@@ -750,16 +748,12 @@
 		}
 
 		this.onTreeDataLoaded = function onTreeDataLoaded(result) {
-			console.log('loaded !') ;
-			console.log(result.length) ;
-			console.log(this.langSearch) ;
 			if(result.length == 0) {
 				$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer .treeNotice').text(this.langSearch.TreeWidgetNoData).show() ;
 				
 			} else {
 				$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer .treeNotice').hide() ;
 			}
-			
 		}
 		
 		//limit to 3 selction
