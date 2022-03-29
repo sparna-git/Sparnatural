@@ -480,8 +480,11 @@ export class QuerySPARQLWriter {
 			queryLine.values.length > 1
 			||
 			// or if there is only one, but we need the variable to be selected
+			// only
 			(
 				queryLine.values.length == 1
+				&&
+				(queryLine.values[0].uri || queryLine.values[0].literal)
 				&&
 				query.variables.includes(queryLine.o)
 			)			

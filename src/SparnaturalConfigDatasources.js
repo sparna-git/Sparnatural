@@ -341,7 +341,7 @@ WHERE {
     # ?uri a $range .
   }
 }
-GROUP BY ?uri ?label ?hasChildren
+GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)
 `
 );
@@ -394,7 +394,7 @@ WHERE {
     ?x $property ?uri .
   }
 }
-GROUP BY ?uri ?label ?hasChildren
+GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)
 `
 );
@@ -679,7 +679,7 @@ WHERE {
     # ?uri a $range .
   }
 }
-GROUP BY ?uri ?label ?hasChildren
+GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)
 `
 });

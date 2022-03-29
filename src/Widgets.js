@@ -1,6 +1,6 @@
 
 	const jstree = require('jstree').default;
-
+	const datepicker = require('@chenfengyuan/datepicker').default;
 	
 	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
@@ -837,11 +837,19 @@
 		}
 
 		this.getValue = function() {
-			//var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-			//var id_input_label = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
+			var checked = this.jsTree.jstree().get_top_checked(true);
 
-			var checked = this.jsTree.jstree().get_top_checked  (true) ;
+			// rebuild a clean data structure
+			var values = [] ;
+			for (var node in checked) {
+				var v = {
+					key: checked[node].id,
+					label: checked[node].original.text,
+					uri: checked[node].id
+				} ;
+				values.push(v) ;
+			}
 
-			return checked ;
+			return values ;
 		}
 	};

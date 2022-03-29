@@ -1,4 +1,4 @@
-require("./assets/stylesheets/jstree/style.min.css");
+require("jstree/dist/themes/default/style.min.css");
 
 require("./assets/stylesheets/sparnatural.scss");
 
@@ -245,7 +245,15 @@ UiuxConfig = require("./UiuxConfig.js");
 			 **/
 			onQueryUpdated : function (queryString, queryJson, pivotJson) {
 				console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
-			}
+			},
+			/**
+			 * Callback notified when click submit button of Sparnatural.
+			 * If function is difine on settings, the button appear in the bottom of the component before variables selector section
+			 *
+			 * @param {object} form - The form object of Sparnatural
+			 * ! Need to not to be a function if disable
+			 **/
+			onSubmit : null ,
 		};
 
 		var VALUE_SELECTION_WIDGETS = [
@@ -306,6 +314,18 @@ UiuxConfig = require("./UiuxConfig.js");
 
 		this.clear = function() {
 			thisForm = clearForm(thisForm) ;
+		}
+		this.enableSubmit = function() {
+			$(thisForm.sparnatural).find('.submitSection a').removeClass('submitDisable') ;
+		}	
+		this.disableSubmit = function() {
+			$(thisForm.sparnatural).find('.submitSection a').addClass('submitDisable') ;
+		}	
+		this.enableLoading = function() {
+			$(thisForm.sparnatural).find('.submitSection a').addClass('submitDisable, loadingEnabled') ; /// Need to be disabled with loading
+		}	
+		this.disableLoading = function() {
+			$(thisForm.sparnatural).find('.submitSection a').removeClass('loadingEnabled') ;
 		}	
 
 		function loadQuery(form, json) {
@@ -368,11 +388,23 @@ UiuxConfig = require("./UiuxConfig.js");
 		
 		
 		function initForm(form) {	
-			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div><div class="variablesSelection"></div>');
+
+			var SubmitSection = "" ;
+			if (settings.onSubmit instanceof Function) {
+				var SubmitSection = '<div class="submitSectionWrapper" style="background: rgba('+settings.backgroundBaseColor+');"><div class="submitSection"><a class="submitDisable">'+UiuxConfig.ICON_PLAY+'</a></div></div>' ; 
+			}
+			var contexte = $('<div class="bg-wrapper"><ul class="componentsListe"></ul></div>'+SubmitSection+'<div class="variablesSelection"></div>');
 
 			$(form.sparnatural).append(contexte) ;
-
-
+			
+			if (settings.onSubmit instanceof Function) {
+				$(form.sparnatural).find('.submitSection a').on('click', function(event) {
+					if (!$(this).hasClass('submitDisable')) {
+						form.sparnatural.disableSubmit() ;
+						settings.onSubmit(form) ;
+					}
+				}) ;
+			}
 
 			//Ajout du filtre pour ombrage menu options
 			$(form.sparnatural).append($('<svg data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" style="width:0;height:0;display:block"><defs><filter style="color-interpolation-filters:sRGB;" inkscape:label="Drop Shadow" id="filter19278" x="-0.15483875" y="-0.11428573" width="1.3096775" height="1.2714286"><feFlood flood-opacity="0.811765" flood-color="rgb(120,120,120)" result="flood" id="feFlood19268" /><feComposite in="flood" in2="SourceGraphic" operator="out" result="composite1" id="feComposite19270" /><feGaussianBlur in="composite1" stdDeviation="2" result="blur" id="feGaussianBlur19272" /><feOffset dx="3.60822e-16" dy="1.8" result="offset" id="feOffset19274" /><feComposite in="offset" in2="SourceGraphic" operator="atop" result="composite2" id="feComposite19276" /></filter></defs></svg>') );
@@ -383,7 +415,7 @@ UiuxConfig = require("./UiuxConfig.js");
 	
 			$(reset).find('a').first().on('click', function(event) {
 					clearForm(form) ;
-			})
+			});
 			
 
 			form.queryOptions = {
@@ -428,8 +460,10 @@ UiuxConfig = require("./UiuxConfig.js");
 
 						// fire callback
 						settings.onQueryUpdated(writer.toSPARQL(jsonQuery), jsonQuery);
+						//Can enable for submit
+						form.sparnatural.enableSubmit() ;
 					}
-				} 
+				}
 			}) ;
 
 			$(form.sparnatural).trigger({type: 'formInitialized'}) ;
@@ -544,9 +578,10 @@ UiuxConfig = require("./UiuxConfig.js");
 				}
 			});
 
-			$(sortable).on('onUpdate',
-			{arg1: this, arg2: 'updateVariableList'},
-			SparnaturalComponents.eventProxiCriteria
+			$(sortable).on(
+				'onUpdate',
+				{arg1: this, arg2: 'updateVariableList'},
+				SparnaturalComponents.eventProxiCriteria
 			);
 
 			this.removeVariableName = function(name) {
@@ -585,7 +620,9 @@ UiuxConfig = require("./UiuxConfig.js");
 				$(this.form.sparnatural).trigger( {type:"submit" } ) ;
 			}
 
-			
+			/**
+			 * Updates the variables in the generated query based on HTML variable line
+			 **/
 			this.updateVariableList = function() {
 				var listedItems = $(this.otherSelectHtml).find('.sortableItem>div') ;
 				this.form.queryOptions.displayVariableList = [] ;
@@ -598,7 +635,12 @@ UiuxConfig = require("./UiuxConfig.js");
 
 			this.switchVariableName = function() {
 				$(this.form.sparnatural).find('.componentsListe').first().toggleClass('displayVarName') ;
+
+				$('li.groupe').each(function() {
+					SparnaturalComponents.redrawBottomLink($(this)) ;
+				});
 			}
+
 			this.loadQuery = function() {
 				this.form.submitOpened = false ;
 				for (var i = 0; i < this.form.preLoad.variables.length; i++) {
@@ -1182,8 +1224,13 @@ UiuxConfig = require("./UiuxConfig.js");
 				return false ;
 			}
 			var new_items = [] ;
-			if (this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
-				//Check for new values
+			if (
+				this.inputTypeComponent.widgetType == Config.TREE_PROPERTY
+				&&
+				// when loading the value from a saved query, the value is not an array, it is
+				// a simple value.
+				Array.isArray(theValue)
+			) {
 				for (var node in theValue) {
 					var selected = false ;
 					// if the same value is already selected, don't do anything
@@ -1193,9 +1240,8 @@ UiuxConfig = require("./UiuxConfig.js");
 						}
 					}
 					if (selected == false) {
-							var new_value = {key: theValue[node].id, label: theValue[node].original.text, uri: theValue[node].id} ;
-							new_items.push(new_value) ;
-							this.selectedValues.push(new_value) ;
+						new_items.push(theValue[node]) ;
+						this.selectedValues.push(theValue[node]) ;
 					}
 				}
 				//Check if values removed

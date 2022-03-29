@@ -149,7 +149,8 @@
         {"@value" : "Museum", "@language" : "en"},
         {"@value" : "Musée","@language" : "fr"}
       ],
-      "faIcon":  "fas fa-university"
+      "faIcon":  "fas fa-university",
+      "defaultLabelProperty": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#auto_label"
     },
     {
       "@id" : "http://dbpedia.org/ontology/Country",
@@ -223,6 +224,16 @@
       "label": [
         {"@value" : "Movement","@language" : "en"},
         {"@value" : "Mouvement","@language" : "fr"}
+      ],
+      "faIcon":  "fas fa-palette"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Category",
+      "@type" : "Class",
+      "subClassOf" : "sparnatural:NotInstantiatedClass",
+      "label": [
+        {"@value" : "Category","@language" : "en"},
+        {"@value" : "Catégorie","@language" : "fr"}
       ],
       "faIcon":  "fas fa-palette"
     },
@@ -405,19 +416,42 @@
     {
       "@id" : "http://dbpedia.org/ontology/movement",
       "@type" : "ObjectProperty",
-      "subPropertyOf" : "sparnatural:ListProperty",
+      "subPropertyOf" : "sparnatural:TreeProperty",
       "label": [
         {"@value" : "movement","@language" : "en"},
         {"@value" : "mouvement","@language" : "fr"}
       ],
       "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
-      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement",
-      "datasource" : "datasources:list_rdfslabel_count"
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Movement"
+    },
+    {
+      "@id" : "http://purl.org/dc/terms/subject",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:TreeProperty",
+      "label": [
+        {"@value" : "category","@language" : "en"},
+        {"@value" : "catégorie","@language" : "fr"}
+      ],
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Category",
+      "treeRootsDatasource" : {
+        "queryString" : `
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?uri ?label ?hasChildren
+WHERE {
+  VALUES ?uri {<http://fr.dbpedia.org/resource/Catégorie:Peintre_français>}
+  ?uri skos:prefLabel ?label .
+  FILTER(lang(?label) = '' || lang(?label) = $lang)
+  BIND(true AS ?hasChildren)
+}
+        `
+      },
+      "treeChildrenDatasource": "datasources:tree_children_skos"
     },
     {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#text",
       "@type" : "ObjectProperty",
-      "subPropertyOf" : "sparnatural:StringEqualsProperty",
+      "subPropertyOf" : "sparnatural:GraphDBSearchProperty",
       "label": [
         {"@value" : "label or description","@language" : "en"},
         {"@value" : "libellé ou description","@language" : "fr"}
@@ -447,7 +481,7 @@
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
     },
     {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#artwork-label",
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#a_label",
       "@type" : "ObjectProperty",
       "subPropertyOf" : "sparnatural:SearchProperty",
       "isMultilingual" : true,
@@ -465,6 +499,17 @@
           ]
         }
       },
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#auto_label",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:NonSelectableProperty",
+      "label": [
+        {"@value" : "name","@language" : "en"},
+        {"@value" : "nom","@language" : "fr"}
+      ],
+      "sparqlString": "rdfs:label",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
     },
     {
@@ -510,10 +555,11 @@
       ],
       "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
-    }
+    },
   ]
 }
 ;
+
     </script>
 
 

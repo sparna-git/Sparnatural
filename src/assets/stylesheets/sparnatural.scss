@@ -2,6 +2,10 @@
 @import "~easy-autocomplete/dist/easy-autocomplete.css";
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
 
+@import "themes.scss";
+
+
+
 
 $component-width: 1200px;
 $component-max-width: 90%;
@@ -11,31 +15,11 @@ $height-components-hover: 35px;
 $margin-component: 30px;
 $margin-component-onEdit: 80px;
 $margin-children-li: 75px;
-
 $center-arrow-bd-width : 3px;
-
-/* Color of the criteria arrows (orange) */
-$custom-red: rgb(250,136,3) ;
-/* Color of the "unselect" buttons in criterias */
-$custom-red-bold: rgb(182, 97, 0) ;
-/* Color of a selected value in a criteria */
-$custom-red-medium: rgb(255, 210, 157) ;
-$custom-red-light: rgb(255, 231, 203) ;
-
-/* Color of the options arrow (optional / negation) */
-$custom-green: rgb(107,215,171) ;
-/* Color of the options arrow when not selected */
-$custom-green-light: rgb(151,227,196) ;
-
-/* Color of the highlight of arrows */
-$custom-green-bold: rgb(2,184,117) ;
-
-$custom-silver-line: #8D8D8D;
-$custom-silver: rgb(167,167,167) ;
-$custom-silver-light: rgb(230, 230, 230) ;
-$default-text-color: #666 ;
-
 $margin-left-reset: 20px;
+
+
+
 
 @mixin triangle-before() {
 	padding-left: 20px;
@@ -1127,6 +1111,69 @@ body {
 		.bg-wrapper {
 			
 		}
+		.submitSectionWrapper {
+			height: 41px;
+			background: $custom-green ;
+			.submitSection {
+				position: relative;
+				
+				width: 1200px;
+				max-width: 90%;
+				margin: 0 auto;
+				a {
+					position: absolute;
+					top: 14px;
+					right: 0;
+					width: 54px;
+					height: 54px;
+					padding: 10px;
+					padding-left: 12px;
+					border-radius: 5px;
+					background: $custom-green-bold;
+					box-shadow: 0px 2px 3px 0px #cfcfcf;
+					cursor: pointer;
+					z-index: 2;
+					svg {
+						display: block;
+						max-width:  34px;
+						height: 34px;
+						path {
+							fill:#FFFFFF;
+							width: auto;
+							height: auto;
+						}
+					}
+					svg.playLoader {
+						display: none;
+						max-width:  44px;
+						height: 44px;
+					}
+
+					&.submitDisable {
+						background: $custom-silver-light;
+						cursor: default;
+						svg {
+							path {
+								fill:$custom-silver;
+							}
+						}
+						&.loadingEnabled {
+							padding: 4px;
+							svg.playIcon {
+								display: none;
+							}
+							svg.playLoader {
+								display: block;
+								path {
+									fill:$custom-green-bold;
+								}
+								
+							}
+						}
+					}
+				}
+			}
+		}
 		.variablesSelection {
 			background: $custom-red-light;
 			margin-bottom: 22px;
@@ -1150,7 +1197,7 @@ body {
 			}
 			.VariableSelectorDisplay {
 				background: $custom-red-medium;
-				height: $margin-component;
+				height: 41px;
 				position: relative;
 				
 					a  {
@@ -1160,7 +1207,7 @@ body {
 						height: 44px;
 						width: 44px;
 						margin: 0 auto;
-						margin-top: 8px;
+						margin-top: 18px;
 						margin-left: -22px;
 						border-radius: 22px;
 						background: $custom-red-medium;
@@ -1173,6 +1220,7 @@ body {
 						display: none;
 					}
 					.icon-arrow-bottom {
+						margin-top: 4px;
 						display: inline;
 					}
 				}
@@ -1206,7 +1254,7 @@ body {
 				border-radius: 5px 5px 0 0 ;
 				border-bottom: 0px solid transparent;
 				min-height: 61px;
-				margin-top: 30px;
+				margin-top: 41px;
 				.sortableItem {
 					padding: 10px;
 					display: inline-block;
@@ -1253,10 +1301,20 @@ body {
 					div {
 						line-height: 30px;
 					}
+
+					[contenteditable="true"]:active,
+					[contenteditable="true"]:focus{
+						border-color: #ccc;
+						border-radius: 4px;
+						border-style: solid;
+						border-width: 1px;
+						padding: 0 5px;
+						outline:none;
+					}
 				}
 			}
 			.line2 {
-				margin-bottom: 30px;
+				margin-bottom: 41px;
 				border-radius: 0 0 5px 5px;
 				justify-content: space-between;
 				border-top: 1px solid darkgray;
