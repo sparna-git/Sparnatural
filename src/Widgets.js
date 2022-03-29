@@ -133,8 +133,11 @@
 						var uri = listHandler.elementUri(val) ; 
 						$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
 					});
-					// $('#'+id_input).niceSelect();
-					$('#'+id_input).select2();
+					if(items.length < 30) {
+						$('#'+id_input).niceSelect();
+					} else {
+						$('#'+id_input).select2();	
+					}					
 					$('#'+id_input).on("change", function() {
 						$(itc_obj).trigger('change') ;
 					});
