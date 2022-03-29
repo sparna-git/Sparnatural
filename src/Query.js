@@ -191,7 +191,9 @@ export class QuerySPARQLWriter {
 		var SparqlParser = require('sparqljs').Parser;
 		var parser = new SparqlParser();
 		// var query = parser.parse("SELECT ?x WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) } ORDER BY DESC(?x)");
-		var query = parser.parse("SELECT ?x WHERE { ?x <http://ex.fr/test> true }");
+		// var query = parser.parse("SELECT ?x WHERE { ?x <http://ex.fr/test> true }");
+		var query = parser.parse("PREFIX ex: <http://exemple.fr/> SELECT ?this WHERE { { ?this ex: date ?date . FILTER('1575-01-01'^^xsd:date < ?date && ?date < '1580-12-31'^^xsd:date) } UNION { ?this ex:beginDate ?beginDate .  FILTER(?beginDate < '1580-12-31'^^xsd:date) ?this ex:endDate ?endDate . FILTER(?endDate > '1575-01-01'^^xsd:date) } }");
+
 		console.log(query);
 	}
 
@@ -372,7 +374,19 @@ export class QuerySPARQLWriter {
 		parentInSparqlQuery.push(bgp);
 
 		if(queryLine.p && queryLine.o) {
-			if(queryLine.values.length == 0) {
+
+			var beginDateProp = this.specProvider.getBeginDateProperty(queryLine.p);
+			var endDateProp = this.specProvider.getEndDateProperty(queryLine.p);
+			if(
+				beginDateProp != null
+				&&
+				endDateProp != null
+			) {
+				// if we are on a date criteria
+				if(queryLine.values.length == 1 && (queryLine.values[0].fromDate || queryLine.values[0].toDate)) {
+					console.log("Date range query");
+				}
+			} else if(queryLine.values.length == 0) {
 
 				// no value, insert ?s ?p ?o line
 				bgp.triples.push(this._buildTriple(
@@ -576,10 +590,10 @@ export class QuerySPARQLWriter {
 		} ;
 	}
 
-	_initFilterTime(StartTime, EndTime, variable) {
+	_initFilterTime(startTime, endTime, variable) {
 		
 		var filters = new Array ;
-		if (StartTime != null) {
+		if (startTime != null) {
 			filters.push( {
 				"type": "operation",
 				"operator": ">=",
@@ -591,11 +605,11 @@ export class QuerySPARQLWriter {
 							""+variable+""
 						]
 					},
-					"\""+StartTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+					"\""+startTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 				]
 			}) ;
 		}
-		if (EndTime != null) {
+		if (endTime != null) {
 			filters.push( {
 				"type": "operation",
 				"operator": "<=",
@@ -607,7 +621,7 @@ export class QuerySPARQLWriter {
 							""+variable+""
 						]
 					},
-					"\""+EndTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+					"\""+endTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 				]
 			}) ;
 		}
@@ -689,6 +703,30 @@ export class QuerySPARQLWriter {
 			}
 		} ;
 	}
+
+	_initDateRange(
+		beginDateProp,
+		endDateProp,
+		exactDateProp,
+		subjectVariable,
+		objectVariable,
+		startDate,
+		endDate
+	) {			
+		if(exactDateProp !== null) {
+			// we need a UNION pattern
+		} else {
+			// we have provided both begin and end date criteria
+			if(startDate != null && endDate != null) {
+				var bgp = this._initBasicGraphPattern();
+				var beginDateVarName = objectVariable+"Begin";
+				bgp.push(this._buildTriple(subjectVariable, beginDateProp, beginDateVarName));
+				// begin date is before given end date
+				bgp.push(this._initFilterTime(null, endDate, beginDateVarName));
+			}
+		}
+	}
+
 
 	_initOrder(variable, order) {
 		var singleOrderClause = {
