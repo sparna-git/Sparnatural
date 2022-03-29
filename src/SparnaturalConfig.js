@@ -26,6 +26,9 @@ module.exports = Object.freeze({
 	IS_MULTILINGUAL			 		: 		SPARNATURAL_CONFIG_CORE+'isMultilingual',
 
 	DEFAULT_LABEL_PROPERTY	 		: 		SPARNATURAL_CONFIG_CORE+'defaultLabelProperty',
+	EXACT_DATE_PROPERTY	 			: 		SPARNATURAL_CONFIG_CORE+'exactDateProperty',
+	BEGIN_DATE_PROPERTY	 			: 		SPARNATURAL_CONFIG_CORE+'beginDateProperty',
+	END_DATE_PROPERTY	 			: 		SPARNATURAL_CONFIG_CORE+'endDateProperty',
 
 	SPARNATURAL_CLASS				: 		SPARNATURAL_CONFIG_CORE+'SparnaturalClass',
 	NOT_INSTANTIATED_CLASS			: 		SPARNATURAL_CONFIG_CORE+'NotInstantiatedClass',
