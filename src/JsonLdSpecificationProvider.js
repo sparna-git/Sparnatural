@@ -171,13 +171,19 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 	}
 
 	this.getDefaultLabelProperty = function(classId) {
-		var theClass = this._getResourceById(classId);
+		return this._readValue(classId, 'defaultLabelProperty');
+	}
 
-		if(theClass['defaultLabelProperty']) {
-			return theClass['defaultLabelProperty'];
-		}
+	this.getBeginDateProperty = function(propertyId) {
+		return this._readValue(propertyId, 'beginDateProperty');
+	}
 
-		return null;
+	this.getEndDateProperty = function(propertyId) {
+		return this._readValue(propertyId, 'endDateProperty');
+	}
+
+	this.getExactDateProperty = function(propertyId) {
+		return this._readValue(propertyId, 'exactDateProperty');
 	}
 
 	this.isEnablingOptional = function(propertyId) {
@@ -404,6 +410,16 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		}
 
 		return result;
+	}
+
+	this._readValue = function(id, key) {
+		var theObject = this._getResourceById(id);
+
+		if(theObject !== null && theObject[key]) {
+			return theObject[key];
+		}
+
+		return null;
 	}
 
 	this._isObjectProperty = function(item) {

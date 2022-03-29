@@ -363,14 +363,21 @@ export class RDFSpecificationProvider {
 	}
 
 	getDefaultLabelProperty(classId) {
-		var labelProperties = this._readAsResource(classId, Config.DEFAULT_LABEL_PROPERTY);
-
-		if(labelProperties.length > 0) {
-			return labelProperties[0];
-		}
-
-		return null;
+		return this._readAsSingleResource(classId, Config.DEFAULT_LABEL_PROPERTY);
 	}
+
+	getBeginDateProperty(propertyId) {
+		return this._readAsSingleResource(propertyId, Config.BEGIN_DATE_PROPERTY);
+	}
+
+	getEndDateProperty(propertyId) {
+		return this._readAsSingleResource(propertyId, Config.END_DATE_PROPERTY);
+	}
+
+	getExactDateProperty(propertyId) {
+		return this._readAsSingleResource(propertyId, Config.EXACT_DATE_PROPERTY);
+	}
+
 
 	getDatasource(propertyOrClassId) {
 		return this._readDatasourceAnnotationProperty(propertyOrClassId, Datasources.DATASOURCE);
@@ -662,6 +669,19 @@ export class RDFSpecificationProvider {
 			undefined
 		)
 		.map(quad => quad.object.id);
+	}
+
+	/**
+	 * Reads the given property on an entity, and returns the first value found, or null if not found
+	 **/
+	_readAsSingleResource(uri, property) {
+		var values = this._readAsResource(uri, property);
+
+		if(values.length > 0) {
+			return values[0];
+		}
+
+		return null;
 	}
 
 	_readAsLiteral(uri, property) {
