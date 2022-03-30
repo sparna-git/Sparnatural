@@ -801,22 +801,59 @@ export class QuerySPARQLWriter {
 		startDate,
 		endDate
 	) {
-		var result = [];
+		var result = this._initUnion();
 
 		// we have provided both begin and end date criteria
-		if(startDate != null && endDate != null) {				
+		if(startDate != null && endDate != null) {
+
+			// 1. case where the resource has both start date and end date
+			var firstAlternative = this._initGroup();
 			var bgp = this._initBasicGraphPattern();
 			var beginDateVarName = objectVariable+"_begin";
 			var endDateVarName = objectVariable+"_end";
 
 			bgp.triples.push(this._buildTriple(subjectVariable, beginDateProp, beginDateVarName));
 			bgp.triples.push(this._buildTriple(subjectVariable, endDateProp, endDateVarName));
-			result.push(bgp);
+			firstAlternative.patterns.push(bgp);
 
 			// begin date is before given end date
-			result.push(this._initFilterTime(null, endDate, beginDateVarName));
+			firstAlternative.patterns.push(this._initFilterTime(null, endDate, beginDateVarName));
 			// end date is after given start date
-			result.push(this._initFilterTime(startDate, null, endDateVarName));
+			firstAlternative.patterns.push(this._initFilterTime(startDate, null, endDateVarName));
+
+			
+			// 2. case where the resource has only a start date
+			var secondAlternative = this._initGroup();
+			var secondBgp = this._initBasicGraphPattern();
+			secondBgp.triples.push(this._buildTriple(subjectVariable, beginDateProp, beginDateVarName));
+			secondAlternative.patterns.push(secondBgp);
+			var notExistsEndDate = this._initFilterNotExists();
+			notExistsEndDate.expression.args[0].patterns.push(
+				this._buildTriple(subjectVariable, endDateProp, endDateVarName)
+			);
+			secondAlternative.patterns.push(notExistsEndDate);
+			// begin date is before given end date
+			secondAlternative.patterns.push(this._initFilterTime(null, endDate, beginDateVarName));
+
+
+			// 3. case where the resource has only a end date
+			var thirdAlternative = this._initGroup();
+			var thirdBgp = this._initBasicGraphPattern();
+			thirdBgp.triples.push(this._buildTriple(subjectVariable, endDateProp, endDateVarName));
+			thirdAlternative.patterns.push(thirdBgp);
+			var notExistsBeginDate = this._initFilterNotExists();
+			notExistsBeginDate.expression.args[0].patterns.push(
+				this._buildTriple(subjectVariable, beginDateProp, beginDateVarName)
+			);
+			thirdAlternative.patterns.push(notExistsBeginDate);
+			// end date is after given start date
+			thirdAlternative.patterns.push(this._initFilterTime(startDate, null, endDateVarName));
+
+
+			result.patterns.push(firstAlternative);
+			result.patterns.push(secondAlternative);
+			result.patterns.push(thirdAlternative);
+
 		// we have provided only a start date
 		} else if(startDate != null && endDate === null) {
 			var bgp = this._initBasicGraphPattern();
@@ -825,6 +862,10 @@ export class QuerySPARQLWriter {
 			result.push(bgp);
 			// end date is after given start date
 			result.push(this._initFilterTime(startDate, null, endDateVarName));
+
+			// if the resource has no end date, and has only a start date
+			// then it necessarily overlaps with the provided open-ended range
+			// so let's avoid this case for the moment
 		// we have provided only a end date
 		} else if(startDate === null && endDate != null) {
 			var bgp = this._initBasicGraphPattern();

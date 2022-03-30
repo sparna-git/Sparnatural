@@ -480,6 +480,12 @@
 			if (this.formatDate == 'day') {
 				dateToYMD(start, 'day') ;
 				value = { start: dateToYMD(start, 'day') , stop: dateToYMD(end, 'day')  } ;
+				if (value.start != null)  {
+					value.start = value.start + 'T00:00:00';
+				}
+				if (value.stop != null)  {
+					value.stop = value.stop + 'T23:59:59';
+				}
 			} else {
 				value = { start: dateToYMD(start, false) , stop: dateToYMD(end, false)  } ;
 				if (value.start != null)  {
@@ -527,7 +533,7 @@
 			var m = date.getMonth() + 1; //Month from 0 to 11
 			var y = date.getFullYear();
 			if (format == 'day') {
-				return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d) + "T00:00:00";
+				return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
 			}
 			return y ;		
 		}	
