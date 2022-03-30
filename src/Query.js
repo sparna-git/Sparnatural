@@ -191,7 +191,9 @@ export class QuerySPARQLWriter {
 		var SparqlParser = require('sparqljs').Parser;
 		var parser = new SparqlParser();
 		// var query = parser.parse("SELECT ?x WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) } ORDER BY DESC(?x)");
-		var query = parser.parse("SELECT ?x WHERE { ?x <http://ex.fr/test> true }");
+		// var query = parser.parse("SELECT ?x WHERE { ?x <http://ex.fr/test> true }");
+		var query = parser.parse("PREFIX ex: <http://exemple.fr/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  SELECT ?this WHERE { { ?this ex:date ?date . FILTER('1575-01-01'^^xsd:date < ?date && ?date < '1580-12-31'^^xsd:date) } UNION { ?this ex:beginDate ?beginDate .  FILTER(?beginDate < '1580-12-31'^^xsd:date) ?this ex:endDate ?endDate . FILTER(?endDate > '1575-01-01'^^xsd:date) } }");
+
 		console.log(query);
 	}
 
@@ -372,160 +374,190 @@ export class QuerySPARQLWriter {
 		parentInSparqlQuery.push(bgp);
 
 		if(queryLine.p && queryLine.o) {
-			if(queryLine.values.length == 0) {
 
-				// no value, insert ?s ?p ?o line
-				bgp.triples.push(this._buildTriple(
-					queryLine.s,
-					queryLine.p,
-					queryLine.o
-				)) ;				
-
-				// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
-				if(
-					this.specProvider.isMultilingual(queryLine.p)
-				) {
-					parentInSparqlQuery.push(
-						this._initFilterLang(query.defaultLang,queryLine.o)
-					) ;
-				}
-
-				// if the class of the value does no correspond to a literal, insert a criteria
-				// on its rdf:type, if it is not remote
-				if(
-					!this.specProvider.isLiteralClass(queryLine.oType)
-					&&
-					!this.specProvider.isRemoteClass(queryLine.oType)
-				) {
-					bgp.triples.push(this._buildTriple(
-						queryLine.o,
-						this.typePredicate,
-						queryLine.oType
-					)) ;
-				}
-				
-			} else if(
-				// there is a single value
-				queryLine.values.length == 1
+			var beginDateProp = this.specProvider.getBeginDateProperty(queryLine.p);
+			var endDateProp = this.specProvider.getEndDateProperty(queryLine.p);
+			if(
+				beginDateProp !== null
 				&&
-				// and it is a URI or a Literal
-				( queryLine.values[0].uri || queryLine.values[0].literal )
-				&&
-				// and we don't need the value to be selected
-				(!query.variables.includes(queryLine.o))
+				endDateProp !== null
 			) {
-				// if we are in a value selection widget and we have a single value selected
-				// then insert the value directly as the object of the triple						
-				bgp.triples.push(this._buildTriple(
-					queryLine.s,
-					queryLine.p,
-					// either a URI or a literal in case of LiteralList widget
-					(queryLine.values[0].uri)?queryLine.values[0].uri:queryLine.values[0].literal,
-					// insert as a literal if the value is a literal value
-					queryLine.values[0] instanceof LiteralValue
-				)) ;
-			} else if(
-				queryLine.values.length == 1
-				&&
-				queryLine.values[0].boolean
-				&&
-				(!query.variables.includes(queryLine.o))
-			) {		
-				// build direct boolean value				
-				bgp.triples.push(this._buildTriple(
-					queryLine.s,
-					queryLine.p,
-					"\""+queryLine.values[0].boolean+"\"^^http://www.w3.org/2001/XMLSchema#boolean",
-					false
-				)) ;
-			} else {
-
-				// more than one value for an URI, or a search criteria
-				// push in the bgp only s/p/o, values are inserted after
-				bgp.triples.push(this._buildTriple(
-					queryLine.s,
-					queryLine.p,
-					queryLine.o
-				)) ;
-
-				// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
-				if(
-					this.specProvider.isMultilingual(queryLine.p)
-				) {
-					parentInSparqlQuery.push(
-						this._initFilterLang(query.defaultLang,queryLine.o)
-					) ;
+				// if we are on a date criteria
+				if(queryLine.values.length == 1 && (queryLine.values[0].fromDate || queryLine.values[0].toDate)) {
+					var exactDateProp = this.specProvider.getExactDateProperty(queryLine.p);
+					var bitsOfQuery = this._initDateRangeOrExactDateCriteria(
+						// beginDateProp,
+						beginDateProp,
+						// endDateProp,
+						endDateProp,
+						// exactDateProp,
+						exactDateProp,
+						// subjectVariable,
+						queryLine.s,
+						// objectVariable,
+						queryLine.o,
+						// startDate,
+						queryLine.values[0].fromDate,
+						// endDate
+						queryLine.values[0].toDate
+					);
+					bitsOfQuery.forEach(element => parentInSparqlQuery.push(element));
 				}
-			}
-		}
-		
+			} else {
+				if(queryLine.values.length == 0) {
 
-		// this can only be the case for value selection widgets
-		if(
-			// we use a VALUES if there is more than one value
-			queryLine.values.length > 1
-			||
-			// or if there is only one, but we need the variable to be selected
-			// only
-			(
-				queryLine.values.length == 1
-				&&
-				(queryLine.values[0].uri || queryLine.values[0].literal)
-				&&
-				query.variables.includes(queryLine.o)
-			)			
-		) {			
-			var jsonValues = this._initValues() ;
-			queryLine.values.forEach(function(v) {
-				var newValue = {  } ;
-				// either a URI or a literal in case of LiteralList widget
-		 		newValue[queryLine.o] = (v.uri)?v.uri:"\""+v.literal+"\"" ;
-		  		jsonValues.values.push(newValue) ;
-			});
-			parentInSparqlQuery.push(jsonValues) ;
-		}
+					// no value, insert ?s ?p ?o line
+					bgp.triples.push(this._buildTriple(
+						queryLine.s,
+						queryLine.p,
+						queryLine.o
+					)) ;				
 
-		// if we have a date criteria
-		if(queryLine.values.length == 1 && (queryLine.values[0].fromDate || queryLine.values[0].toDate)) {
-			parentInSparqlQuery.push(
-				this._initFilterTime(queryLine.values[0].fromDate, queryLine.values[0].toDate, queryLine.o)
-			) ;
-		}	
+					// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
+					if(
+						this.specProvider.isMultilingual(queryLine.p)
+					) {
+						parentInSparqlQuery.push(
+							this._initFilterLang(query.defaultLang,queryLine.o)
+						) ;
+					}
 
-		// if we have a regex criteria
-		if(queryLine.values.length == 1 && queryLine.values[0].regex) {
-			parentInSparqlQuery.push(
-				this._initFilterRegex(queryLine.values[0].regex, queryLine.o)
-			) ;
+					// if the class of the value does no correspond to a literal, insert a criteria
+					// on its rdf:type, if it is not remote
+					if(
+						!this.specProvider.isLiteralClass(queryLine.oType)
+						&&
+						!this.specProvider.isRemoteClass(queryLine.oType)
+					) {
+						bgp.triples.push(this._buildTriple(
+							queryLine.o,
+							this.typePredicate,
+							queryLine.oType
+						)) ;
+					}
+				
+				} else if(
+					// there is a single value
+					queryLine.values.length == 1
+					&&
+					// and it is a URI or a Literal
+					( queryLine.values[0].uri || queryLine.values[0].literal )
+					&&
+					// and we don't need the value to be selected
+					(!query.variables.includes(queryLine.o))
+				) {
+					// if we are in a value selection widget and we have a single value selected
+					// then insert the value directly as the object of the triple						
+					bgp.triples.push(this._buildTriple(
+						queryLine.s,
+						queryLine.p,
+						// either a URI or a literal in case of LiteralList widget
+						(queryLine.values[0].uri)?queryLine.values[0].uri:queryLine.values[0].literal,
+						// insert as a literal if the value is a literal value
+						queryLine.values[0] instanceof LiteralValue
+					)) ;
+				} else if(
+					queryLine.values.length == 1
+					&&
+					queryLine.values[0].boolean
+					&&
+					(!query.variables.includes(queryLine.o))
+				) {		
+					// build direct boolean value				
+					bgp.triples.push(this._buildTriple(
+						queryLine.s,
+						queryLine.p,
+						"\""+queryLine.values[0].boolean+"\"^^http://www.w3.org/2001/XMLSchema#boolean",
+						false
+					)) ;
+				} else {
 
-			// TODO : language filter
-		}
+					// more than one value for an URI, or a search criteria
+					// push in the bgp only s/p/o, values are inserted after
+					bgp.triples.push(this._buildTriple(
+						queryLine.s,
+						queryLine.p,
+						queryLine.o
+					)) ;
 
-		// if we have a lucene query criteria
-		if(queryLine.values.length == 1 && queryLine.values[0].luceneQueryValue) {
-			this._updateGraphDbPrefixes(completeSparqlQuery);
-			// name of index must correspond to the local name of the range class
-			var connectorName = this._localName(queryLine.oType);
-			// field name in index corresponds to the local name of the property
-			var fieldName = this._localName(queryLine.p);
-			var searchVariable = queryLine.s+"Search";
+					// if the property can be multilingual, insert a FILTER(langMatches(lang(?x), "fr"))
+					if(
+						this.specProvider.isMultilingual(queryLine.p)
+					) {
+						parentInSparqlQuery.push(
+							this._initFilterLang(query.defaultLang,queryLine.o)
+						) ;
+					}
+				}		
 
-			var newBasicGraphPattern = this._initBasicGraphPattern() ;
-			newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#"+connectorName)) ;
-			// add literal triple
-			newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#query", fieldName+":"+queryLine.values[0].luceneQueryValue, true)) ;
-			newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#entities", queryLine.s)) ;
-			parentInSparqlQuery.push(newBasicGraphPattern);  
-		}
+				// this can only be the case for value selection widgets
+				if(
+					// we use a VALUES if there is more than one value
+					queryLine.values.length > 1
+					||
+					// or if there is only one, but we need the variable to be selected
+					// only
+					(
+						queryLine.values.length == 1
+						&&
+						(queryLine.values[0].uri || queryLine.values[0].literal)
+						&&
+						query.variables.includes(queryLine.o)
+					)			
+				) {			
+					var jsonValues = this._initValues() ;
+					queryLine.values.forEach(function(v) {
+						var newValue = {  } ;
+						// either a URI or a literal in case of LiteralList widget
+				 		newValue[queryLine.o] = (v.uri)?v.uri:"\""+v.literal+"\"" ;
+				  		jsonValues.values.push(newValue) ;
+					});
+					parentInSparqlQuery.push(jsonValues) ;
+				}
 
-		// if we have an exact string criteria
-		if(queryLine.values.length == 1 && queryLine.values[0].string) {
-			parentInSparqlQuery.push(
-				this._initFilterStringEquals(queryLine.values[0].string, queryLine.o)
-			) ;
+				// if we have a date criteria
+				if(queryLine.values.length == 1 && (queryLine.values[0].fromDate || queryLine.values[0].toDate)) {
+					parentInSparqlQuery.push(
+						this._initFilterTime(queryLine.values[0].fromDate, queryLine.values[0].toDate, queryLine.o)
+					) ;
+				}	
 
-			// TODO : language filter
-		}
+				// if we have a regex criteria
+				if(queryLine.values.length == 1 && queryLine.values[0].regex) {
+					parentInSparqlQuery.push(
+						this._initFilterRegex(queryLine.values[0].regex, queryLine.o)
+					) ;
+
+					// TODO : language filter
+				}
+
+				// if we have a lucene query criteria
+				if(queryLine.values.length == 1 && queryLine.values[0].luceneQueryValue) {
+					this._updateGraphDbPrefixes(completeSparqlQuery);
+					// name of index must correspond to the local name of the range class
+					var connectorName = this._localName(queryLine.oType);
+					// field name in index corresponds to the local name of the property
+					var fieldName = this._localName(queryLine.p);
+					var searchVariable = queryLine.s+"Search";
+
+					var newBasicGraphPattern = this._initBasicGraphPattern() ;
+					newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, this.typePredicate, "http://www.ontotext.com/connectors/lucene/instance#"+connectorName)) ;
+					// add literal triple
+					newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#query", fieldName+":"+queryLine.values[0].luceneQueryValue, true)) ;
+					newBasicGraphPattern.triples.push(this._buildTriple(searchVariable, "http://www.ontotext.com/connectors/lucene#entities", queryLine.s)) ;
+					parentInSparqlQuery.push(newBasicGraphPattern);  
+				}
+
+				// if we have an exact string criteria
+				if(queryLine.values.length == 1 && queryLine.values[0].string) {
+					parentInSparqlQuery.push(
+						this._initFilterStringEquals(queryLine.values[0].string, queryLine.o)
+					) ;
+
+					// TODO : language filter
+				}
+			} // end case of begin date / start date
+		} // end if p & o
 	}
 
 
@@ -546,6 +578,20 @@ export class QuerySPARQLWriter {
 		return {
 				"type": "bgp",
 				"triples": []
+		} ;
+	}
+
+	_initGroup() {			
+		return {
+				"type": "group",
+				"patterns": []
+		} ;
+	}
+
+	_initUnion() {			
+		return {
+				"type": "union",
+				"patterns": []
 		} ;
 	}
 
@@ -579,10 +625,10 @@ export class QuerySPARQLWriter {
 		} ;
 	}
 
-	_initFilterTime(StartTime, EndTime, variable) {
+	_initFilterTime(startTime, endTime, variable) {
 		
 		var filters = new Array ;
-		if (StartTime != null) {
+		if (startTime != null) {
 			filters.push( {
 				"type": "operation",
 				"operator": ">=",
@@ -594,11 +640,11 @@ export class QuerySPARQLWriter {
 							""+variable+""
 						]
 					},
-					"\""+StartTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+					"\""+startTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 				]
 			}) ;
 		}
-		if (EndTime != null) {
+		if (endTime != null) {
 			filters.push( {
 				"type": "operation",
 				"operator": "<=",
@@ -610,7 +656,7 @@ export class QuerySPARQLWriter {
 							""+variable+""
 						]
 					},
-					"\""+EndTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
+					"\""+endTime+"\"^^http://www.w3.org/2001/XMLSchema#dateTime"
 				]
 			}) ;
 		}
@@ -692,6 +738,147 @@ export class QuerySPARQLWriter {
 			}
 		} ;
 	}
+
+
+	_initDateRangeOrExactDateCriteria(
+		beginDateProp,
+		endDateProp,
+		exactDateProp,
+		subjectVariable,
+		objectVariable,
+		startDate,
+		endDate
+	) {
+		if(exactDateProp != null) {
+			var result = this._initUnion();
+
+			// first alternative of the union to test exact date
+			var firstAlternative = this._initGroup();
+			var bgp = this._initBasicGraphPattern();
+			var exactDateVarName = objectVariable+"_exact";
+			bgp.triples.push(this._buildTriple(subjectVariable, exactDateProp, exactDateVarName));
+			firstAlternative.patterns.push(bgp);
+			// exact date is within provided date range
+			firstAlternative.patterns.push(this._initFilterTime(startDate, endDate, exactDateVarName));
+
+			// second alternative to test date range
+			var secondAlternative = this._initGroup();
+			secondAlternative.patterns.push(
+				this._initDateRangeCriteria(
+					beginDateProp,
+					endDateProp,
+					subjectVariable,
+					objectVariable,
+					startDate,
+					endDate
+				)
+			);
+
+			result.patterns.push(firstAlternative);
+			result.patterns.push(secondAlternative);
+			// return as an array
+			return [result];
+		} else {
+			return this._initDateRangeCriteria(
+				beginDateProp,
+				endDateProp,
+				subjectVariable,
+				objectVariable,
+				startDate,
+				endDate
+			);
+		}
+	}
+
+	// builds a date range criteria to test the overlap between a date range of the resource
+	// and the provided date range.
+	// The provided date range may have only start date or end date provided
+	_initDateRangeCriteria(
+		beginDateProp,
+		endDateProp,
+		subjectVariable,
+		objectVariable,
+		startDate,
+		endDate
+	) {
+		var result = this._initUnion();
+
+		// we have provided both begin and end date criteria
+		if(startDate != null && endDate != null) {
+
+			// 1. case where the resource has both start date and end date
+			var firstAlternative = this._initGroup();
+			var bgp = this._initBasicGraphPattern();
+			var beginDateVarName = objectVariable+"_begin";
+			var endDateVarName = objectVariable+"_end";
+
+			bgp.triples.push(this._buildTriple(subjectVariable, beginDateProp, beginDateVarName));
+			bgp.triples.push(this._buildTriple(subjectVariable, endDateProp, endDateVarName));
+			firstAlternative.patterns.push(bgp);
+
+			// begin date is before given end date
+			firstAlternative.patterns.push(this._initFilterTime(null, endDate, beginDateVarName));
+			// end date is after given start date
+			firstAlternative.patterns.push(this._initFilterTime(startDate, null, endDateVarName));
+
+			
+			// 2. case where the resource has only a start date
+			var secondAlternative = this._initGroup();
+			var secondBgp = this._initBasicGraphPattern();
+			secondBgp.triples.push(this._buildTriple(subjectVariable, beginDateProp, beginDateVarName));
+			secondAlternative.patterns.push(secondBgp);
+			var notExistsEndDate = this._initFilterNotExists();
+			notExistsEndDate.expression.args[0].patterns.push(
+				this._buildTriple(subjectVariable, endDateProp, endDateVarName)
+			);
+			secondAlternative.patterns.push(notExistsEndDate);
+			// begin date is before given end date
+			secondAlternative.patterns.push(this._initFilterTime(null, endDate, beginDateVarName));
+
+
+			// 3. case where the resource has only a end date
+			var thirdAlternative = this._initGroup();
+			var thirdBgp = this._initBasicGraphPattern();
+			thirdBgp.triples.push(this._buildTriple(subjectVariable, endDateProp, endDateVarName));
+			thirdAlternative.patterns.push(thirdBgp);
+			var notExistsBeginDate = this._initFilterNotExists();
+			notExistsBeginDate.expression.args[0].patterns.push(
+				this._buildTriple(subjectVariable, beginDateProp, beginDateVarName)
+			);
+			thirdAlternative.patterns.push(notExistsBeginDate);
+			// end date is after given start date
+			thirdAlternative.patterns.push(this._initFilterTime(startDate, null, endDateVarName));
+
+
+			result.patterns.push(firstAlternative);
+			result.patterns.push(secondAlternative);
+			result.patterns.push(thirdAlternative);
+
+		// we have provided only a start date
+		} else if(startDate != null && endDate === null) {
+			var bgp = this._initBasicGraphPattern();
+			var endDateVarName = objectVariable+"_end";
+			bgp.triples.push(this._buildTriple(subjectVariable, endDateProp, endDateVarName));
+			result.push(bgp);
+			// end date is after given start date
+			result.push(this._initFilterTime(startDate, null, endDateVarName));
+
+			// if the resource has no end date, and has only a start date
+			// then it necessarily overlaps with the provided open-ended range
+			// so let's avoid this case for the moment
+		// we have provided only a end date
+		} else if(startDate === null && endDate != null) {
+			var bgp = this._initBasicGraphPattern();
+			var beginDateVarName = objectVariable+"_begin";
+			bgp.triples.push(this._buildTriple(subjectVariable, beginDateProp, beginDateVarName));
+			result.push(bgp);
+			// begin date is before given end date
+			result.push(this._initFilterTime(null, endDate, beginDateVarName));
+		}
+
+		return result;
+	}
+
 
 	_initOrder(variable, order) {
 		var singleOrderClause = {

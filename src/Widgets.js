@@ -3,6 +3,7 @@
 	const datepicker = require('@chenfengyuan/datepicker').default;
 	const select2 = require('select2');
 	require('select2/dist/css/select2.css');
+	const tippy = require('tippy.js').default;
 	
 	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
@@ -305,7 +306,7 @@
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
-		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.PlaceHolderDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.PlaceHolderDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
+		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.TimeWidgetDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.TimeWidgetDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
@@ -421,8 +422,9 @@
 		this.formatDate = format ;
 
 		placeHolder = (this.formatDate == 'day')?langSearch.PlaceholderTimeDateDayFormat:langSearch.PlaceholderTimeDateFormat ;
-		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+placeHolder+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+placeHolder+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
-		
+		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+placeHolder+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+placeHolder+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>';
+		this.html += '&nbsp;<span id="circle-info-'+this.IdCriteriaGroupe+'" data-tippy-content="'+((this.formatDate == 'day')?langSearch.TimeWidgetDateHelp:langSearch.TimeWidgetYearHelp)+'">'+UiuxConfig.ICON_CIRCLE_INFO+'</span><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
+
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
@@ -431,7 +433,7 @@
 			var id_inputs = this.IdCriteriaGroupe ;			
 			var itc_obj = this.ParentComponent;
 
-			format = (this.formatDate == 'day')?langSearch.InputTimeDateDayFormat:langSearch.InputTimeDateFormat;
+			format = (this.formatDate == 'day')?langSearch.TimeWidgetDateFormat:langSearch.TimeWidgetYearFormat;
 			
 			var options = {
 				language: langSearch.LangCodeTimeDate,
@@ -445,6 +447,14 @@
 			$('#ecgrw-date-'+this.IdCriteriaGroupe+'-add').on('click', function() {
 				$(itc_obj).trigger("change");
 			});
+
+			// set a tooltip on the info circle
+			var tippySettings = Object.assign({}, this.ParentComponent.settings.tooltipConfig);
+			tippySettings.placement = "left";
+			tippySettings.trigger = "click";
+			tippySettings.offset = [(this.formatDate == 'day')?75:50,-20];
+			tippySettings.delay = [0,0];
+			tippy('#circle-info-'+this.IdCriteriaGroupe, tippySettings);
 		}
 
 		this.getValue = function() {
@@ -480,6 +490,12 @@
 			if (this.formatDate == 'day') {
 				dateToYMD(start, 'day') ;
 				value = { start: dateToYMD(start, 'day') , stop: dateToYMD(end, 'day')  } ;
+				if (value.start != null)  {
+					value.start = value.start + 'T00:00:00';
+				}
+				if (value.stop != null)  {
+					value.stop = value.stop + 'T23:59:59';
+				}
 			} else {
 				value = { start: dateToYMD(start, false) , stop: dateToYMD(end, false)  } ;
 				if (value.start != null)  {
@@ -527,7 +543,7 @@
 			var m = date.getMonth() + 1; //Month from 0 to 11
 			var y = date.getFullYear();
 			if (format == 'day') {
-				return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d) + "T00:00:00";
+				return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
 			}
 			return y ;		
 		}	
@@ -622,12 +638,13 @@
 		}
 	}
 
-	TreeWidget = function(inputTypeComponent, loaderHandler) {
+	TreeWidget = function(inputTypeComponent, loaderHandler, settings, langSearch) {
 		this.loaderHandler = loaderHandler;
 		this.ParentComponent = inputTypeComponent ;
+		this.langSearch = langSearch;
 
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
-		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">Effacer</a><a class="treeSubmit">Sélectionner</a></div></div>' ;
+		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">'+this.langSearch.TreeWidgetDelete+'</a><a class="treeSubmit">'+this.langSearch.TreeWidgetSelect+'</a></div></div>' ;
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
@@ -637,7 +654,8 @@
 			var id_inputs = this.IdCriteriaGroupe ;			
 			this.itc_obj = this.ParentComponent;	
 
-			console.log(this.loaderHandler) ;
+			//console.log(this.loaderHandler) ;
+			var self = this ;
 			var options = {
 				'core' : {
 					"multiple" : true,
@@ -656,8 +674,7 @@
 	
 						var request = $.ajax( options );
 
-						request.done(function( data ) {			  
-							console.log("data") ;
+						request.done(function( data ) {
 							var result = [];
 							var items = loaderHandler.nodeListLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data);
 							for (var i = 0; i < items.length; i++) {
@@ -667,8 +684,7 @@
 								};
 								if(loaderHandler.nodeHasChildren(items[i])) {
 									aNode.children = true ;
-								} 
-								
+								}			
 								if(loaderHandler.nodeDisabled(items[i])) {
 									aNode.state = {
 										disabled  : true  // node disabled
@@ -677,8 +693,11 @@
 								aNode.parent=node.id;
 								result.push(aNode);
 							}
-							console.log(result) ;
 							callback.call(this, result);
+							if( node.id === '#') {
+								self.onTreeDataLoaded(result);
+							}
+							
 						});
 			        },
 					"themes" : {
@@ -694,7 +713,7 @@
 				"checkbox" : {
 					"keep_selected_style" : false,
 					"three_state" : true,
-					"cascade_to_disabled" : false
+					"cascade_to_disabled" : true
 				},
 				"plugins" : [ "changed", "wholerow", "checkbox"/*, "massload", "state" */ ]
 			} ;
@@ -703,6 +722,10 @@
 			this.jsTree = $('#ecgrw-'+id_inputs+'-display').jstree(options);
 
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-input').on("click",  { arg1 : this },  this.onClickDisplay);
+			//disable/enable on max selction 
+			this.jsTree.on("changed.jstree",  { arg1 : this },  this.onChangedJstree);
+			this.jsTree.on("after_open.jstree",  { arg1 : this },  this.onChangedJstree);
+
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeSubmit').on("click",  { arg1 : this },  this.onClickSelect);
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeCancel').on("click",  { arg1 : this },  this.onClickCancel);
 
@@ -744,6 +767,80 @@
 					});
 				}
 			});*/
+		}
+
+		this.onTreeDataLoaded = function onTreeDataLoaded(result) {
+			if(result.length == 0) {
+				$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer .treeNotice').text(this.langSearch.TreeWidgetNoData).show() ;
+				
+			} else {
+				$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer .treeNotice').hide() ;
+			}
+		}
+		
+		//limit to 3 selction
+		this.onChangedJstree = function (e, data) {
+			this_ = e.data.arg1;
+			var items = $(this_.jsTree).find('li.jstree-node') ;
+
+			var selecteds = this_.jsTree.jstree().get_top_checked() ;
+			for (var i = 0; i < items.length; i++) {
+				var id = $(items[i]).attr('id') ;
+				if(selecteds.indexOf(id) > -1) {
+					$(items[i]).addClass('tree-item-selected') ;
+				} else {
+					$(items[i]).removeClass('tree-item-selected') ;
+				}
+				if($(items[i]).parents('.tree-item-selected').length  > 0) {
+					var node = this_.jsTree.jstree(true).get_node(id) ;
+					if(!this_.jsTree.jstree(true).is_disabled(node)) {
+						$(items[i]).addClass('is-reactivable') ;
+						this_.jsTree.jstree(true).disable_checkbox(node);
+						this_.jsTree.jstree(true).disable_node(node);
+					}
+				} else {
+					if($(items[i]).hasClass('is-reactivable') ) {
+						$(items[i]).addClass('red') ;
+						this_.jsTree.jstree('enable_checkbox', id);
+						this_.jsTree.jstree(true).enable_node(id);
+					}
+				}
+			}
+			
+			//console.log(data);
+			if (this_.jsTree.jstree().get_top_checked().length >= settings.maxOr) {
+				
+				for (var i = 0; i < items.length; i++) {
+					var id = $(items[i]).attr('id') ;
+					if(selecteds.indexOf(id) == -1) {
+						var node = this_.jsTree.jstree(true).get_node(id) ;
+						if(!this_.jsTree.jstree(true).is_disabled(node)) {
+							$(items[i]).addClass('is-reactivable') ;
+							this_.jsTree.jstree(true).disable_checkbox(node);
+							this_.jsTree.jstree(true).disable_node(node);
+						}
+						
+					}
+				}
+				this_.jsTree.addClass('max-selected') ;
+			} else {
+				if (this_.jsTree.hasClass('max-selected')) {
+					var items = $(this_.jsTree).find('li.jstree-node') ;
+					for (var i = 0; i < items.length; i++) {
+						var id = $(items[i]).attr('id') ;
+						if(selecteds.indexOf(id) == -1) {
+							if($(items[i]).hasClass('is-reactivable') ) {
+								$(items[i]).addClass('red') ;
+								if($(items[i]).parents('.tree-item-selected').length  == 0) {
+									this_.jsTree.jstree('enable_checkbox', id);
+									this_.jsTree.jstree(true).enable_node(id);
+								}
+							}
+						}
+					}
+					this_.jsTree.removeClass('max-selected')
+				}
+			}
 		}
 
 		this.onClickDisplay = function(e) {
