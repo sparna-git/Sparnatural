@@ -43,11 +43,13 @@
     "rdf-dereference": "^1.4.0",
     "rdf-parse": "^1.2.1",
     "rdf-store-stream": "^1.0.0",
+    "select2": "*",
     "sortablejs": "^1.14.0",
     "sparqljs": "^2.2.3",
     "streamify-string": "^1.0.1",
     "tippy.js": "^6.3.5",
     "webpack-cli": "^3.3.7",
-    "whatwg-fetch": "^3.6.2"
+    "whatwg-fetch": "^3.6.2",
+    "select2": "^4.0.13"
   }
 }

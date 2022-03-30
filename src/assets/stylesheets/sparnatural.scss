@@ -1928,14 +1928,23 @@ body {
 					display: block;
 				}*/
 		}
+
+		
 	
 	}
 	
 
 }
 
-
-
+//Select2 overides
+body .select2-container--default {
+	font-size: 14px;
+	line-height: 1.2;
+	.select2-results__option--highlighted.select2-results__option--highlighted {
+		background-color: $custom-red;
+	}
+}
+//tippy overides
 .tippy-box[data-theme~='sparnatural'] {
     background-color: $custom-red-light;
     color: #000;
