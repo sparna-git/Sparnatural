@@ -16,8 +16,6 @@ require("easy-autocomplete");
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
-require('tippy.js/dist/tippy.css');
-
 const removeIcon = require("./assets/icons/buttons/remove.png");
 
 // WARNING : if you use ES6 syntax (like import instead of require), 
@@ -31,7 +29,6 @@ const i18nLabels = {
 };
 
 const tippy = require('tippy.js').default;
-
 require('tippy.js/dist/tippy.css');
 
 const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
