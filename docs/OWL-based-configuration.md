@@ -1,3 +1,5 @@
+# OWL-based configuration
+
 Sparnatural can be configured using an OWL file edited in [Protégé](http://protege.stanford.edu) and saved in Turtle.
 
 Sparnatural can also be configured with an [[JSON-based configuration]], but OWL-based configuration brings:
@@ -8,13 +10,13 @@ Sparnatural can also be configured with an [[JSON-based configuration]], but OWL
 
 This documentation assumes you are familiar with Protégé.
 
-# Sparnatural configuration ontologies
+## Sparnatural configuration ontologies
 
 Sparnatural comes with 2 ontologies that need to be imported (through `owl:imports`) in your own configuration ontology:
 1. A core configuration ontology at http://data.sparna.fr/ontologies/sparnatural-config-core
 2. A datasource configuration ontology at http://data.sparna.fr/ontologies/sparnatural-config-datasources
 
-# How to define and test your own configuration ?
+## How to define and test your own configuration ?
 
 1. Create a new ontology in Protégé;
 2. Import the 2 Sparnatural configuration in your ontology;
@@ -35,22 +37,22 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
         2. Open a command-line or a terminal
         3. Run chrome with the flag "**--allow-file-access-from-files**", e.g. on Ubuntu Linux "chromium --allow-file-access-from-files"
 
-# How to publish your configuration
+## How to publish your configuration
 
 1. If your configuration is hosted on the same server as the Sparnatural component, there is nothing special to do, just put the configuration ontology in a file typically in the same folder as the HTML page in which Sparnatural is used.
 2. If the configuration is not on the same server as the page in which Sparnatural is inserted, it must be [CORS-enabled](https://enable-cors.org/); an easy way to do this is to host it in a Github repository or Gist;
 3. Provide the URL to your configuration ontology in Sparnatural configuration. For a file hosted on Github, this must be the "raw" link to the file, that is the link returning the turtle file, e.g. https://raw.githubusercontent.com/sparna-git/Sparnatural/master/demos/sparnatural-demo-semapps/sparnatural-config-semapps-meetup.ttl
 
-# Reference for classes and properties of a Sparnatural configuration
+## Reference for classes and properties of a Sparnatural configuration
 
-## Namespaces
+### Namespaces
 
 | Prefix | Namespaces |
 | ------ | ---------- |
 | core   | http://data.sparna.fr/ontologies/sparnatural-config-core# |
 | ds     | http://data.sparna.fr/ontologies/sparnatural-config-datasources# |
 
-## Classes configuration reference
+### Classes configuration reference
 
 | Annotation / Axiom | Label | Card. | Description |
 | ------------------ | ----- | ----- | ----------- |
@@ -65,7 +67,7 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 | [`core:order`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#order) | order | 0..1 | Order of this class in classes lists. If not set, alphabetical order is used. |
 | [`core:tooltip`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tooltip) | tooltip | 0..n | Text that appears as tooltip when hovering this class, in lists and when selected. Multiple values are allowed in different languages. HTML markup is supported. |
 
-## Properties configuration reference
+### Properties configuration reference
 
 | Annotation / Axiom | Label | Card. | Description |
 | ------------------ | ----- | ----- | ----------- |
