@@ -1,37 +1,20 @@
-## Welcome to GitHub Pages
+# Sparnatural
 
-You can use the [editor on GitHub](https://github.com/sparna-git/Sparnatural/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
+_For examples of how Sparnatural works and can be configured, have a look at the [**demos folder**](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) of [sparnatural.eu](http://sparnatural.eu) website._
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+- Configuration :
+  - [[OWL-based configuration]] - Reference page and how-to for the OWL-based configuration
+  - [[OWL-based configuration : datasources]] - Reference page and how-to to configure the datasources on properties or classes
+  - [[JSON-based configuration]] - Reference page for the JSON-based configuration
+  - [[Integration with GraphDB Lucene Connector]] - Special configuration to interact with a GraphDB Lucene index 
 
-### Markdown
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+- Integration in webpages :
+  - [[Javascript integration]] - Reference page for Javascript integration and parameters
+  - [[Querying a password protected SPARQL endpoint]]
+  - [[SPARQL service integration]] - **/!\ deprecated** How to fetch autocomplete results and list contents from a SPARQL endpoint
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/sparna-git/Sparnatural/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+  
+- Developers :
+  - [[Developing and Compiling]] - How to make modifications to the source code in a development environment and recompile Sparnatural
+  - [[Internal]] - **/!\ deprecated** Internal code structure documentation
