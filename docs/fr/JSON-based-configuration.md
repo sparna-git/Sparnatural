@@ -1,6 +1,6 @@
-_[Home](index.html) > JSON-based configuration_
+_[Accueil](/fr) > Configuration JSON_
 
-# Sparnatural JSON configuration
+# Configuration JSON
 
 Sparnatural can be configured using a JSON(-LD) data structure. The data structure looks very much like [JSON-LD](https://www.w3.org/TR/json-ld/), but is really interpreted and parsed like a JSON, so stick with the JSON keys given below.
 
@@ -85,7 +85,7 @@ var config =
 
 Copy-paste the `@context` key given in the minimal example and do not modify it. Keep it like this for your own configuration.
 
-# Configuration URI
+## Configuration URI
 
 This part specifies a URI for your configuration, this is not used for reading/parsing the configuration, and is here only for compatibility with an OWL-base configuration. Just specify any URI here, and don't bother too much. You can use whatever URL Sparnatural will be inserted in, and append `/config` at the end :
 
@@ -428,7 +428,7 @@ e.g. to populate a list with `rdfs:label`s fetched from DBPedia:
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
       ...
       "datasource": {
-        "queryTemplate" : "datasources:query_search_label_strstarts",
+        "queryTemplate" : "datasources:query_list_rdfslabel_count",
         "labelProperty" : "http://www.w3.org/2000/01/rdf-schema#label",
         "sparqlEndpointUrl" : "http://dbpedia.org/sparql"
       } 
