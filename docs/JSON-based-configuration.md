@@ -1,3 +1,4 @@
+_[Home](index.html) > JSON-based configuration_
 
 # Sparnatural JSON configuration
 
@@ -5,7 +6,7 @@ Sparnatural can be configured using a JSON(-LD) data structure. The data structu
 
 Sparnatural can also be configured with an [[OWL-based configuration]] editable in [Protégé](https://protege.stanford.edu/). JSON configuration will look more familiar for programmers.
 
-# Structure of the JSON configuration
+## Structure of the JSON configuration
 
 The JSON configuration consists of :
 1. A fixed `@context` declaration
@@ -13,7 +14,7 @@ The JSON configuration consists of :
 1. A list of classes declaration
 1. A list of properties declaration
 
-# Minimal JSON configuration
+## Minimal JSON configuration
 
 A minimal JSON configuration for Sparnatural looks like the following example. It declares 1 class `foaf:Person` and a single property `foaf:knows` that has `foaf:Person` as its domain and range (a Person can know another Person). The config is stored in a `config` javascript variable that will be passed as a parameter to init Sparnatural.
 
@@ -80,7 +81,7 @@ var config =
     </script>
 ```
 
-# JSON @context
+## JSON @context
 
 Copy-paste the `@context` key given in the minimal example and do not modify it. Keep it like this for your own configuration.
 
@@ -96,7 +97,7 @@ This part specifies a URI for your configuration, this is not used for reading/p
 ```
 
 
-# Classes configuration
+## Classes configuration
 
 The configuration lists the types of entities that are searchable in Sparnatural. These types either map to real RDF resources, or are used to express search criterias on literal values.
 
@@ -185,7 +186,7 @@ The replacement is done at the string level, there is no syntax checking of the 
 1. Mapping to a class with an extra criteria separated by a `;`: `"sparqlString" : "<http://www.w3.org/2004/02/skos/core#Concept>; <http://www.w3.org/2004/02/skos/core#inScheme> <http://mysite.com/vocabulary/TypesOfArtwork>"`
 
 
-# Properties configuration
+## Properties configuration
 
 Each property represents a possible connection between one or more classes declared in the configuration as its domain, and one or more classes of the configuration as its range.
 

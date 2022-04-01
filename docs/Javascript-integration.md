@@ -1,6 +1,9 @@
-## Javascript integration and parameters reference
+_[Home](index.html) > Javascript integration_
 
-### Constructor
+
+# Javascript integration and parameters reference
+
+## Constructor
 
 ```html
   <div id="sparnatural-container"></div>
@@ -43,7 +46,7 @@ A typical integration in a web page looks like this :
 ```
 
 
-### Parameters reference
+## Parameters reference
 
 
 | Setting / Description | Default value if not set |
@@ -85,7 +88,7 @@ A typical integration in a web page looks like this :
 | **filterConfigOnEndpoint** **/!\ beta feature** | false |
 | If set to `true`, Sparnatural will issue on initialisation a serie of queries to the SPARQL endpoint to determine if each class and properties in the provided configuration is actually implemented in the graph. Classes or properties with no instances will be hidden from the lists displayed to the user. | 
 
-### autocomplete reference
+## autocomplete reference
 
 The `autocomplete` object must provide the functions documented below.
 The autocomplete feature relies on [Easyautocomplete](http://easyautocomplete.com/guide) so interested readers are invited to refer to Easyautocomplete documentation for more information.
@@ -147,7 +150,7 @@ autocomplete : {
 }
 ```
 
-### list reference
+## list reference
 
 The `list` object must provide the functions documented below to populate select dropdowns.
 
@@ -197,7 +200,7 @@ list : {
 	}
 ```
 
-### dates reference
+## dates reference
 
 ```javascript
 dates : {
@@ -219,7 +222,7 @@ dates : {
 }
 ```
 
-### onQueryUpdated reference
+## onQueryUpdated reference
 
 The `onQueryUpdated` function is called everytime the query is modified :
 
@@ -235,7 +238,7 @@ onQueryUpdated : function (queryString, queryJson) {
 }
 ```
 
-### onSubmit reference
+## onSubmit reference
 
 The `onSubmit` function is called when the submit button is clicked. Sparnatural listens for other events to update the state of the button (loading/not loading state and active/disabled state). The functions are:
   - `enableLoading()`

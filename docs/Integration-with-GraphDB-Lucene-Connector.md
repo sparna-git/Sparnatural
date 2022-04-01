@@ -1,3 +1,7 @@
+_[Home](index.html) > Integration with GraphDB Lucene connector_
+
+# Integration with GraphDB Lucene Connector
+
 ## Introduction
 
 GraphDB provides an integration with Lucene using the [GraphDB Lucene Connector](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html). This connector allows to create powerful full-text indexes of text properties in the graph, and write queries that combine both full-text and graph criteria, such as _"Give me the list of museums that display an artwork whose title contains word 'peace'"_

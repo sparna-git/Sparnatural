@@ -1,6 +1,8 @@
-## SPARQL service integration
+_[Home](index.html) > SPARQL service integration_
 
-**This page is deprecated**
+# SPARQL service integration
+
+**/!\ This page is deprecated**
 
 As Sparnatural generates SPARQL queries to be executed against a SPARQL service, it seems natural to be able to use this same SPARQL service as a data source for autocomplete and list components. 
 
@@ -9,7 +11,7 @@ Have a look at the [DBPedia integration demo](blob/master/sparnatural-demo-dbped
 Here are more detailled explanations
 
 
-### Provide the necessary callbacks for autocomplete and list
+## Provide the necessary callbacks for autocomplete and list
 
 As described in the [Configuration reference](Configuration), you must provide the necessary objects to implement the `autocomplete` and `list` widgets. The idea is of course to generate SPARQL calls for this, and parse the results as JSON.
 
@@ -62,7 +64,7 @@ list : {
 ```
 
 
-### Build the SPARQL queries
+## Build the SPARQL queries
 
 Now you need to write the functions `sparqlListUrl` and `sparqlAutocompleteUrl` to generate a SPARQL URL call :
 

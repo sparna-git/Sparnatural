@@ -1,6 +1,8 @@
+_[Home](index.html) > Internal components_
+
 # Internal Components
 
-**!!! This is outdated !!!**
+**/!\ This is outdated !!!**
 
 What are the comcepts in this code ? We have defined components to construct the GUI.
 Here is how the components relate together.
