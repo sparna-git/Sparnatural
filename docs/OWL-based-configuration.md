@@ -1,3 +1,5 @@
+[home](index.html) > OWL-based configuration
+
 # OWL-based configuration
 
 Sparnatural can be configured using an OWL file edited in [Protégé](http://protege.stanford.edu) and saved in Turtle.
