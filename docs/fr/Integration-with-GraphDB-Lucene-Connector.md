@@ -33,7 +33,7 @@ Refer to the [GraphDB Lucene Connector documentation](http://graphdb.ontotext.co
     - Property chain = http://www.w3.org/2004/02/skos/core#prefLabel
     - Uncheck the "facet" checkbox
 
-![](https://github.com/sparna-git/Sparnatural/raw/master/documentation/graphdb-lucene-01.png)
+![](/assets/images/graphdb-lucene-01.png)
 
 5. Add a new "Field" entry by clicking on the "+" on the right, this time for `skos:altLabel`s :
     - Field name = altLabel
@@ -58,7 +58,7 @@ Then we need to create a new field `text` that will aggregate the content of eve
 
 Here is how this part looks like:
 
-![](https://github.com/sparna-git/Sparnatural/raw/master/documentation/graphdb-lucene-02.png)
+![](/assets/images/graphdb-lucene-02.png)
 
 ### Set language and Analyzer
 
@@ -205,4 +205,4 @@ Here is an example configuration with 2 properties configured to query fields `c
 
 Which will give the following end-user behavior:
 
-![](https://github.com/sparna-git/Sparnatural/raw/master/documentation/graphdb-lucene-03.png)
+![](/assets/images/graphdb-lucene-03.png)
