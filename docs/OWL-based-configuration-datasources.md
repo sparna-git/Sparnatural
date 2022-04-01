@@ -34,7 +34,7 @@ The preconfigured datasource identifiers for a ListProperty are :
 
 You can find these identifiers in Protégé when you create the `ds:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) annotation under the tabs "Entity IRI", then "Individuals" :
 
-[[/images/protege-screenshot-datasources-1.png|Screenshot Protégé datasources]]
+[[/assets/images/protege-screenshot-datasources-1.png|Screenshot Protégé datasources]]
 
 ### Preconfigured datasources for an AutocompleteProperty
 
@@ -60,7 +60,7 @@ The preconfigured datasource identifiers for an AutocompleteProperty are :
 
 Similarly to list datasources, you find these under the "Entity IRI" > "Individuals" tab of Protégé when you edit the `ds:datasource` annotation :
 
-[[/images/protege-screenshot-datasources-2.png|Screenshot Protégé datasources]]
+[[/assets//images/protege-screenshot-datasources-2.png|Screenshot Protégé datasources]]
 
 
 ## Preconfigured SPARQL query with another property
@@ -85,7 +85,7 @@ If the preconfigured datasources do not fit the data model to be queried, you ha
 
 For example to create a new custom datasource that will use `dc:title` as the label, and use an alphabetical ordering, do the following:
 
-[[/images/screencast-protege-custom-datasource-1.gif|Screenshot Protégé custom datasource]]
+[[/assets//images/screencast-protege-custom-datasource-1.gif|Screencast Protégé custom datasource]]
 
 ### Queries without range / queries with range
 

@@ -80,7 +80,7 @@ A typical integration in a web page looks like this :
 | **onQueryUpdated** |  |
 | A Javascript `function(queryString, queryJson) { ... }` taking as a parameter the SPARQL query String and the SPARQL query JSON data structure. See the [onQueryUpdated reference](#onQueryUpdated-reference) below| 
 | **onSubmit** |  |
-| A Javascript `function(form) { ... }` that is triggered when the submit button inside Sparnatural is clicked. This function is optional, if not provided, no submit button is displayed. See the See the [onSubmit reference](#onSubmit-reference) below| 
+| A Javascript `function(form) { ... }` that is triggered when the submit button inside Sparnatural is clicked. This function is optional, if not provided, no submit button is displayed. See the See the [onSubmit reference](#onsubmit-reference) below| 
 | **tooltipConfig** |  |
 | The tooltip configuration object. Possible configuration options are described in [Tippy documentation here](https://atomiks.github.io/tippyjs/v6/all-props/). Defaults to : <pre>{ <br />  allowHTML: true,<br />  plugins: [], <br />  placement: 'right-start',<br />  offset: [5, 5],<br />  theme: 'sparnatural',<br />  arrow: false,<br />  delay: [800, 100],<br />  duration: [200, 200]<br />}</pre> | 
 | **localCacheDataTtl** **/!\ beta feature** | 1000 * 60 * 60 * 24 |
