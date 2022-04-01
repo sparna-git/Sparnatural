@@ -87,7 +87,7 @@ SELECT DISTINCT ?uri ?label ?snippetField ?snippet WHERE  {
 ## Feeding an autocomplete field in Sparnatural with SPARQL using GraphDB Lucene Connector
 
 The principle is the following:
-1. As stated in the [Sparnatural configuration documentation for your own queries](https://github.com/sparna-git/Sparnatural/wiki/JSON-based-configuration#your-own-sparql-query), the SPARQL query MUST return 2 variables : `?uri` and `?label`;
+1. As stated in the [Sparnatural configuration documentation for your own queries](JSON-based-configuration#your-own-sparql-query), the SPARQL query MUST return 2 variables : `?uri` and `?label`;
 2. Set a custom SPARQL query string to the autocomplete field definition, using special `:query` operators to query the index;
 3. Add a "*" after the search key to search for the beginning of words;
 4. Query the catch-all field, so `text` in our case;
@@ -114,7 +114,7 @@ SELECT DISTINCT ?uri ?label WHERE  {
 }
 ```
 
-And here is a query integrated in a [JSON-LD configuration of Sparnatural](JSON-based configuration). Note how it uses the placeholders `$domain`, `$range`, `$property`, `$key` and `$lang` that gets replaced at query time with actual values:
+And here is a query integrated in a [JSON-LD configuration of Sparnatural](JSON-based-configuration). Note how it uses the placeholders `$domain`, `$range`, `$property`, `$key` and `$lang` that gets replaced at query time with actual values:
 
 ```json
     {
