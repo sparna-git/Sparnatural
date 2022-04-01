@@ -42,6 +42,13 @@
         overflow: visible;
       }
 
+      .anchorjs-link {
+        transition: all .25s linear;
+      }
+      *:hover > .anchorjs-link {
+        margin-left: -1.125em !important;
+      }
+
     </style>
 
 
@@ -89,6 +96,12 @@
     </main>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+    <script>
+      anchors.options.placement = 'left';
+      anchors.add();
+    </script>
 
     <script>
       $( document ).ready(function($) {          
