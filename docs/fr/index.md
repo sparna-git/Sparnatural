@@ -17,7 +17,7 @@ _Des exemples de fonctionnement et de configuration de Sparnatural sont visibles
 
   - [Intégration Javacript](Javascript-integration) - Référence pour l'intégration Javascript du composant dans une page web
   - [Requêter un endpoint SPARQL protégé par mot de passe](Querying-a-password-protected-SPARQL-endpoint)
-  - [[SPARQL service integration]] - **/!\ deprécié** Comment récupérer des contenus de liste et de résultats d'autocompletion en SPARQL
+  - [SPARQL service integration](SPARQL-service-integration) - **/!\ deprécié** Comment récupérer des contenus de liste et de résultats d'autocompletion en SPARQL
 
 
 ## Développeurs / Contributeurs
