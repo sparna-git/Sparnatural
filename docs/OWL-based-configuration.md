@@ -1,4 +1,4 @@
-[home](index.html) > OWL-based configuration
+_[Home](index.html) > OWL-based configuration_
 
 # OWL-based configuration
 
