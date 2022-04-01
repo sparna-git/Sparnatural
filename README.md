@@ -12,8 +12,8 @@ You can play with **online demos at http://sparnatural.eu#demos**.
 
 To get started :
 
-1. Read the following documentation;
-2. Read [the Wiki](https://github.com/sparna-git/Sparnatural/wiki)
+1. Read the following README;
+2. Read [the documentation](https://docs.sparnatural.eu)
 3. Look at how things work in file `sparnatural-demo-dbpedia/index.html`; 
 4. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/Sparnatural/blob/master/sparnatural-demo-dbpedia/index.html#L100)
 5. Adapt `sparnatural-demo-dbpedia/index.html` by changing the configuration and adapting the SPARQL endpoint URL;
@@ -132,9 +132,9 @@ To send SPARQL queries to a service that is not hosted on the same domain name a
 
 ## Specification of classes and properties
 
-The component is configurable using a an [OWL configuration file](https://github.com/sparna-git/Sparnatural/wiki/OWL-based-configuration) editable in Protégé.. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. 
+The component is configurable using a an [OWL configuration file](https://docs.sparnatural.eu/OWL-based-configuration) editable in Protégé.. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. 
 
-Alternatively one can also use a [JSON(-LD) ontology file](https://github.com/sparna-git/Sparnatural/wiki/JSON-based-configuration). A JSON(-LD) configuration file contains :
+Alternatively one can also use a [JSON(-LD) ontology file](https://docs.sparnatural.eu/JSON-based-configuration). A JSON(-LD) configuration file contains :
 
 ### Class definition
 
@@ -177,7 +177,7 @@ It is possible to directly use font-awesome icons in place of icons embedded in 
 
 ## How to integrate Sparnatural in a webpage
 
-Look at [this page in the wiki documentation](https://github.com/sparna-git/Sparnatural/wiki/Javascript-integration).
+Look at [this page in the documentation](https://docs.sparnatural.eu/Javascript-integration).
 
 
 ## Map the query structure to a different graph structure
