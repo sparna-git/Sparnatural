@@ -689,7 +689,8 @@
 				},*/
 				"checkbox" : {
 					"keep_selected_style" : false,
-					"three_state" : true,
+					"three_state" : false,
+					"cascade" : 'down+undetermined',
 					"cascade_to_disabled" : true
 				},
 				"plugins" : [ "changed", "wholerow", "checkbox"/*, "massload", "state" */ ]
