@@ -714,6 +714,7 @@ module.exports = Object.freeze({
   CHILDREN_PROPERTY          :     SPARNATURAL_CONFIG_DATASOURCES+'childrenProperty',
 	QUERY_STRING 			 		: 		SPARNATURAL_CONFIG_DATASOURCES+'queryString',
 	SPARQL_ENDPOINT_URL	 			: 		SPARNATURAL_CONFIG_DATASOURCES+'sparqlEndpointUrl',
+  FORCE_SORT            :     SPARNATURAL_CONFIG_DATASOURCES+'forceSort',
 
 	// object properties
 	QUERY_TEMPLATE		 			: 		SPARNATURAL_CONFIG_DATASOURCES+'queryTemplate',

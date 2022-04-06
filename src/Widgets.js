@@ -129,6 +129,13 @@
 					data
 				) ;
 				if (items.length > 0) {
+
+					// here, if we have forced sorting, then sort according to lang
+					var collator = new Intl.Collator(settings.language);					
+					items.sort(function(a, b) {
+						return collator.compare(listHandler.elementLabel(a),listHandler.elementLabel(b));
+					});
+
 					$.each( items, function( key, val ) {				  
 						var label = listHandler.elementLabel(val) ; 
 						var uri = listHandler.elementUri(val) ; 
