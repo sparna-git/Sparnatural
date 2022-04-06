@@ -642,9 +642,8 @@
 		this.loaderHandler = loaderHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.langSearch = langSearch;
-
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
-		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">'+this.langSearch.TreeWidgetDelete+'</a><a class="treeSubmit">'+this.langSearch.TreeWidgetSelect+'</a></div></div>' ;
+		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeClose"><i class="far fa-times-circle"></i></div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">'+this.langSearch.TreeWidgetDelete+'</a><a class="treeSubmit">'+this.langSearch.TreeWidgetSelect+'</a></div></div>' ;
 		
 		this.init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
@@ -712,7 +711,8 @@
 				},*/
 				"checkbox" : {
 					"keep_selected_style" : false,
-					"three_state" : true,
+					"three_state" : false,
+					"cascade" : 'down+undetermined',
 					"cascade_to_disabled" : true
 				},
 				"plugins" : [ "changed", "wholerow", "checkbox"/*, "massload", "state" */ ]
@@ -728,7 +728,9 @@
 
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeSubmit').on("click",  { arg1 : this },  this.onClickSelect);
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeCancel').on("click",  { arg1 : this },  this.onClickCancel);
+			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeClose').on("click",  { arg1 : this },  this.onClickClose);
 
+			
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').hide() ;
 
 			/*$('#ecgrw-'+id_inputs+'-input').on('changed.jstree', function (e, data) {
@@ -856,6 +858,10 @@
 			this_ = e.data.arg1;
 			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
 			$(this_.itc_obj).trigger("change");
+		}
+		this.onClickClose = function(e) {
+			this_ = e.data.arg1;
+			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
 		}
 
 		this.getValue = function() {

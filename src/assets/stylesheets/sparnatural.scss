@@ -814,6 +814,23 @@ body {
 						box-shadow: 0px 2px 3px 0px #cfcfcf;
 						z-index: 1;
 
+						.treeClose {
+							position: absolute;
+							top: 5px;
+							right: 5px;
+							width: 22px;
+							height: 22px;
+							vertical-align: top;
+							line-height: 22px;
+							cursor: pointer;
+							i {
+								text-align: center;
+								color: $custom-red-bold;
+								background: #fff !important;
+								font-size: 18px;
+							}
+						}
+
 						.treeNotice {
 							padding: 5px;
 							display: none;
@@ -823,7 +840,7 @@ body {
 							overflow: auto;
 							max-height: 500px;
 							min-width: 275px;
-							padding: 10px 10px 5px;
+							padding: 25px 10px 5px;
 							
 							&.jstree-default .jstree-disabled {
 								opacity: 0.5;
