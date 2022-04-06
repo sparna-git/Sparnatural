@@ -1003,13 +1003,13 @@ export class VariableSelector extends HTMLComponent {
 		//trigger change editable variable
 		this.contentEditableElement = $(this.element).find('div[contenteditable="true"]').first() ;
 		
-		$('body').on('focus', 'div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]', {arg1: this, arg2: 'onFocusEdit'}, eventProxiCriteria).on('focusout', 'div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]', {arg1: this, arg2: 'onFocusOutEdit'}, eventProxiCriteria);
+		$('body').on('focus', 'div[data-variableName="'+this.varName+'"] div[contenteditable="true"]', {arg1: this, arg2: 'onFocusEdit'}, eventProxiCriteria).on('focusout', 'div[data-variableName="'+this.varName+'"] div[contenteditable="true"]', {arg1: this, arg2: 'onFocusOutEdit'}, eventProxiCriteria);
 		
 		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
 
-		$('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().on('keypress',{arg1: this, arg2: 'onEditKeyPress'}, eventProxiCriteria);
+		$('.variablesSelection').find('div[data-variableName="'+this.varName+'"] div[contenteditable="true"]').first().on('keypress',{arg1: this, arg2: 'onEditKeyPress'}, eventProxiCriteria);
 
-		 $('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().on('keyup', function(event) {
+		 $('.variablesSelection').find('div[data-variableName="'+this.varName+'"] div[contenteditable="true"]').first().on('keyup', function(event) {
 			var width = $('.sortableItem').first().width() ;
 			$('.variablesOrdersSelect').width(width) ;
 	 	});
@@ -1037,7 +1037,7 @@ export class VariableSelector extends HTMLComponent {
 	}
 
 	onFocusOutEdit() {
-		this.contentEditableElement = $('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first() ;
+		this.contentEditableElement = $('.variablesSelection').find('div[data-variableName="'+this.varName+'"] div[contenteditable="true"]').first() ;
 
 		var newValue = $(this.contentEditableElement).text();
 		if (newValue == '') {
@@ -1050,10 +1050,27 @@ export class VariableSelector extends HTMLComponent {
 			$(this.contentEditableElement).parents('.variableSelected').attr('data-variableName', '?'+this.currentValue);
 			$(this.GroupContenaire.html).find('.variableName').first().text(this.currentValue) ;
 
-			// TODO : ici il faut que le nom de variable soit aussi répercuté sur d'autres StartClassGroup
+			//Set variable name for childs criteria
+			var curent_value = this.currentValue ;
+			var childs_index= [] ;
+			//Set variable neme displayed for childs
+			$(this.GroupContenaire.html).parents('.haveWhereChild').first().find('.childsList>li>.CriteriaGroup>.StartClassGroup').each(function(index) {
+				childs_index[index] = $(this).parents('li').first().attr('data-index') ;
+				$(this).find('.variableName').first().text(curent_value) ;
+			});
+			//Set varialbeles names on components list for StartClassGroup childs
+			for (var key in childs_index) {
+				for (var componentKey in this.GroupContenaire.parentComponent.thisForm_.sparnatural.components) {
+					if(this.GroupContenaire.parentComponent.thisForm_.sparnatural.components[componentKey].index == childs_index[key]) {
+						this.GroupContenaire.parentComponent.thisForm_.sparnatural.components[componentKey].CriteriaGroup.StartClassGroup.varName = '?'+this.currentValue ;
+					}
+				}
+			}
+			//Set variable name used on query for criteria
 			this.GroupContenaire.varName = '?'+this.currentValue ;
+			//Updates the variables in the generated query based on HTML variable line
 			this.GroupContenaire.parentComponent.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
-			
+			//Variable name blocks whidth can be change, redraw lines links
 			redrawBottomLink($(this.GroupContenaire.parentComponent.html).parents('li').first());
 			$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 		}
@@ -1064,7 +1081,7 @@ export class VariableSelector extends HTMLComponent {
 	onEditKeyPress(event) {
 		var code = event.keyCode ? event.keyCode : event.which;
 		if (code === 13) { // If press Enter
-			$('.variablesSelection').find('div[data-variableLabel="'+this.varLabel+'"] div[contenteditable="true"]').first().blur() ;		
+			$('.variablesSelection').find('div[data-variableName="'+this.varName+'"] div[contenteditable="true"]').first().blur() ;		
 			return false;
 		}
 
