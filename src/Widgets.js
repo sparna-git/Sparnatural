@@ -136,12 +136,15 @@
 					});
 					if(items.length < 30) {
 						$('#'+id_input).niceSelect();
+						$('#'+id_input).on("change", function() {
+							$(itc_obj).trigger('change') ;
+						});
 					} else {
-						$('#'+id_input).select2();	
-					}					
-					$('#'+id_input).on("change", function() {
-						$(itc_obj).trigger('change') ;
-					});
+						$('#'+id_input).select2();
+						$('#'+id_input).on("select2:close", function() {
+							$(itc_obj).trigger('change') ;
+						});
+					}
 				} else {
 					document.getElementById(id_input).style.display = 'none' ;
 					document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
