@@ -1039,7 +1039,6 @@ export class VariableSelector extends HTMLComponent {
 	}
 
 	onFocusOutEdit() {
-		///this.contentEditableElement = $('.variablesSelection').find('div[data-variableName="'+this.varName+'"] div[contenteditable="true"]').first() ;
 
 		var newValue = $(this.contentEditableElement).text();
 		if (newValue == '') {
@@ -1060,7 +1059,7 @@ export class VariableSelector extends HTMLComponent {
 				childs_index[index] = $(this).parents('li').first().attr('data-index') ;
 				$(this).find('.variableName').first().text(curent_value) ;
 			});
-
+			// If is startClassGroup, update siblings. (normaly is root)
 			if (this.GroupContenaire instanceof StartClassGroup) {
 				$(this.GroupContenaire.html).parents('ul').first().find('>li>.CriteriaGroup>.StartClassGroup').each(function(index) {
 					if (index != 0) {
@@ -1069,7 +1068,6 @@ export class VariableSelector extends HTMLComponent {
 					}
 				});
 			}
-
 
 			//Set varialbeles names on components list for StartClassGroup childs
 			for (var key in childs_index) {
