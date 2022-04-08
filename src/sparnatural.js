@@ -1909,7 +1909,7 @@ UiuxConfig = require("./UiuxConfig.js");
 					  // datasource still null
 					  // if a default endpoint was provided, provide default datasource
 					  if(this.settings.defaultEndpoint != null) {
-						  treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_ROOT_SKOSINSCHEME);
+						  treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_ROOT_SKOSTOPCONCEPT);
 					  }
 				  }
 

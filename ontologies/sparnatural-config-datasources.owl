@@ -1166,9 +1166,9 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skosinScheme -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept -->
 
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skosinScheme">
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
         <sparnatural-config-datasources:queryString>PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;
 SELECT ?uri ?label ?hasChildren
@@ -1187,9 +1187,9 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skosinScheme_with_count -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept_with_count -->
 
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skosinScheme_with_count">
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
         <sparnatural-config-datasources:queryString>PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;
 SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)

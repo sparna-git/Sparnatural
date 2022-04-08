@@ -639,7 +639,7 @@ SPARNATURAL_CONFIG_DATASOURCES+"search_URI_contains", {
 // ## Tree roots datasources
 
 DATASOURCES_CONFIG.set(
-SPARNATURAL_CONFIG_DATASOURCES+"tree_root_skosinScheme", {
+SPARNATURAL_CONFIG_DATASOURCES+"tree_root_skostopconcept", {
   queryString : 
 `
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -659,7 +659,7 @@ ORDER BY UCASE(?label)
 });
 
 DATASOURCES_CONFIG.set(
-SPARNATURAL_CONFIG_DATASOURCES+"tree_root_skosinScheme_with_count", {
+SPARNATURAL_CONFIG_DATASOURCES+"tree_root_skostopconcept_with_count", {
   queryString : 
 `
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
@@ -781,8 +781,8 @@ module.exports = Object.freeze({
 
 	SEARCH_URI_CONTAINS			 	: 		SPARNATURAL_CONFIG_DATASOURCES+'search_URI_contains',
 
-  TREE_ROOT_SKOSINSCHEME        :     SPARNATURAL_CONFIG_DATASOURCES+'tree_root_skosinScheme',
-  TREE_ROOT_SKOSINSCHEME_WITH_COUNT :     SPARNATURAL_CONFIG_DATASOURCES+'tree_root_skosinScheme_with_count',
+  TREE_ROOT_SKOSTOPCONCEPT       :     SPARNATURAL_CONFIG_DATASOURCES+'tree_root_skostopconcept',
+  TREE_ROOT_SKOSTOPCONCEPT_WITH_COUNT :     SPARNATURAL_CONFIG_DATASOURCES+'tree_root_skostopconcept_with_count',
 
   TREE_CHILDREN_SKOSNARROWER            :     SPARNATURAL_CONFIG_DATASOURCES+'tree_children_skosnarrower',
   TREE_CHILDREN_SKOSNARROWER_WITH_COUNT :     SPARNATURAL_CONFIG_DATASOURCES+'tree_children_skosnarrower_with_count',
