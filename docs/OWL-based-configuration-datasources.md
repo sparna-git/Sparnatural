@@ -62,6 +62,27 @@ Similarly to list datasources, you find these under the "Entity IRI" > "Individu
 
 ![Screenshot Protégé datasources](/assets//images/protege-screenshot-datasources-2.png)
 
+### Preconfigured datasources for a TreeProperty
+
+Sparnatural comes preconfigured with datasources that can populate a tree selector with the roots and the children of each node.
+
+#### Preconfigured datasources for the roots of a TreeProperty
+
+These datasources are to be used with a [`treeRootsDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource) on a [`TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty).
+
+The preconfigured datasource identifiers for roots datasource on a TreeProperty are :
+
+1. [`datasources:tree_root_skostopconcept`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept) : reads the roots of a SKOS ConceptScheme using `skos:hasTopConcept` or `^skos:topConceptOf`, assuming the URI of the Sparnatural class is equal to the URI of the ConceptScheme
+1. [`datasources:tree_root_skostopconcept_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept_with_count) : same as previous, but returns the number of occurences of each node in parenthesis
+
+#### Preconfigured datasources for the children of a TreeProperty
+
+These datasources are to be used with a [`treeChildrenDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource) on a [`TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty).
+
+The preconfigured datasource identifiers for children datasource on a TreeProperty are :
+
+1. [`datasources:tree_children_skosnarrower`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower) : reads the children of a node using `skos:narrower` or `^skos:broader`
+1. [`datasources:tree_children_skosnarrower_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower_with_count) : same as previous, but returns the number of occurences of each node in parenthesis
 
 ## Preconfigured SPARQL query with another property
 
