@@ -81,6 +81,10 @@ Sparnatural offers currently 6 ways of selecting a value for a criteria : autoco
 
 ![](documentation/10-list.png)
 
+### Tree selector
+
+![](documentation/17-tree.png)
+
 ### String value (text search)
 
 ![](documentation/11-search.png)
