@@ -74,6 +74,17 @@
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#noSort -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#noSort">
+        <rdfs:comment xml:lang="en">Set this to true to disable client-side javascript sorting for a datasource. If set to true, the order of elements will be the one returned by the SPARQL query.</rdfs:comment>
+        <rdfs:label xml:lang="en">no sort</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:domain rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+    </owl:AnnotationProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource">
@@ -130,6 +141,17 @@ The placeholder $labelPath will be replaced by the value indicated in the Sparql
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#forceSort -->
+
+    <owl:DatatypeProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#forceSort">
+        <rdfs:domain rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+        <rdfs:comment xml:lang="en">Set to true to force a sort on a datasource</rdfs:comment>
+        <rdfs:label xml:lang="en">force sort</rdfs:label>
+    </owl:DatatypeProperty>
     
 
 
@@ -307,6 +329,7 @@ In addition the query CAN return the following variables:
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_count"/>
+        <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their URI as a label ordered by the descending number of times the entity is used as a value.
 
 This is typically the default behavior for a list without a datasource specified.</rdfs:comment>
@@ -341,6 +364,7 @@ This is typically the default behavior for a list without a datasource specified
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://purl.org/dc/terms/title"/>
+        <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their dcterms:title ordered by the descending number of times the entity is used as a value.</rdfs:comment>
     </owl:NamedIndividual>
     
@@ -374,6 +398,7 @@ This is typically the default behavior for a list without a datasource specified
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://xmlns.com/foaf/0.1/name"/>
+        <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their foaf:name ordered by the descending number of times the entity is used as a value.</rdfs:comment>
     </owl:NamedIndividual>
     
@@ -407,6 +432,7 @@ This is typically the default behavior for a list without a datasource specified
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2000/01/rdf-schema#label"/>
+        <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their rdfs:label ordered by the descending number of times the entity is used as a value.</rdfs:comment>
     </owl:NamedIndividual>
     
@@ -439,6 +465,7 @@ This is typically the default behavior for a list without a datasource specified
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://schema.org/name"/>
+        <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their schema:name ordered by the descending number of times the entity is used as a value.</rdfs:comment>
     </owl:NamedIndividual>
     
@@ -472,6 +499,7 @@ This is typically the default behavior for a list without a datasource specified
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_label_count"/>
         <sparnatural-config-datasources:labelProperty rdf:resource="http://www.w3.org/2004/02/skos/core#prefLabel"/>
+        <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
         <rdfs:comment xml:lang="en">A datasource that returns a list of entities with their skos:prefLabel ordered by the descending number of times the entity is used as a value.</rdfs:comment>
     </owl:NamedIndividual>
     
@@ -502,6 +530,7 @@ This is typically the default behavior for a list without a datasource specified
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#literal_list_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlLiteralListDatasource"/>
         <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count"/>
+        <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
         <rdfs:comment xml:lang="en">A datasource that returns a list of literal ordered by descending number of occurrences.</rdfs:comment>
     </owl:NamedIndividual>
     
@@ -877,7 +906,7 @@ WHERE {
     # ?uri a $range .
   }
 }
-GROUP BY ?uri ?label ?hasChildren
+GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -934,7 +963,7 @@ WHERE {
     ?x $property ?uri .
   }
 }
-GROUP BY ?uri ?label ?hasChildren
+GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -1186,7 +1215,7 @@ WHERE {
     # ?uri a $range .
   }
 }
-GROUP BY ?uri ?label ?hasChildren
+GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
 </rdf:RDF>
