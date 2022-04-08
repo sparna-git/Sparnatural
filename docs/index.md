@@ -11,7 +11,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
   - [OWL-based configuration : datasources](OWL-based-configuration-datasources)  - Reference page and how-to to configure the datasources on properties or classes
   - [JSON-based configuration](JSON-based-configuration) - Reference page for the JSON-based configuration
   - [Integration with GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector) - Special configuration to interact with a GraphDB Lucene index 
-
+  - [Querying date ranges](Querying-date-ranges) - How to generate SPARQL queries that can match on resources with a begin date and a end date 
 
 ### Integration in webpages
 
