@@ -130,3 +130,13 @@ WHERE {
 ORDER BY UCASE(?label)
 LIMIT 500
 ```
+
+## Datasource configuration reference
+
+| Annotation / Axiom | Label | Card. | Description |
+| ------------------ | ----- | ----- | ----------- |
+| `queryString` | query string | 0..1 | The SPARQL query string of the datasource. At least one of `queryTemplate` or `queryString` must be provided. |
+| `queryTemplate` | query template | 0..1 | The SPARQL query template to be used in a SPARQL datasource. At least one of `queryTemplate` or `queryString` must be provided. |
+| `labelProperty` | label property | 0..1 | Used in combination with `queryTemplate`, indicates the URI of the property that will replace the variable `$labelPath` in the SPARQL query. |
+| `labelPath` | label path | 0..1 | Used in combination with `queryTemplate` indicate a SPARQL property path that will replace the variable `$labelPath` in the SPARQL query. |
+| `noSort` | no sort | 0..1 | By default Sparnatural sorts the list using the locale of the client. Set this to `true` if you don't want that sorting to happen and want to rely on the sort order returned by the SPARQL query. |
