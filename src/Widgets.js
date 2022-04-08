@@ -84,10 +84,11 @@
 		}
 	};
 	
-	ListWidget = function(inputTypeComponent, listHandler, langSearch, settings) {
+	ListWidget = function(inputTypeComponent, listHandler, langSearch, settings, sort) {
 		this.listHandler = listHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+		this.sort = sort;
 		
 		this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
@@ -130,11 +131,13 @@
 				) ;
 				if (items.length > 0) {
 
-					// here, if we have forced sorting, then sort according to lang
-					var collator = new Intl.Collator(settings.language);					
-					items.sort(function(a, b) {
-						return collator.compare(listHandler.elementLabel(a),listHandler.elementLabel(b));
-					});
+					if(sort) {
+						// here, if we need to sort, then sort according to lang
+						var collator = new Intl.Collator(settings.language);					
+						items.sort(function(a, b) {
+							return collator.compare(listHandler.elementLabel(a),listHandler.elementLabel(b));
+						});
+					}
 
 					$.each( items, function( key, val ) {				  
 						var label = listHandler.elementLabel(val) ; 

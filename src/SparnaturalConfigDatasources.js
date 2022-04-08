@@ -411,7 +411,8 @@ SPARNATURAL_CONFIG_DATASOURCES+"literal_list_alpha", {
 
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"literal_list_count", {
-	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_literal_list_count")
+	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_literal_list_count"),
+  noSort: true
 });
 
 DATASOURCES_CONFIG.set(
@@ -429,7 +430,8 @@ SPARNATURAL_CONFIG_DATASOURCES+"list_URI_alpha", {
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_URI_count", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_list_URI_count"),
-	labelProperty : null
+	labelProperty : null,
+  noSort: true
 });
 
 
@@ -445,7 +447,8 @@ SPARNATURAL_CONFIG_DATASOURCES+"list_rdfslabel_alpha", {
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_rdfslabel_count", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_list_label_count"),
-	labelProperty : "http://www.w3.org/2000/01/rdf-schema#label"
+	labelProperty : "http://www.w3.org/2000/01/rdf-schema#label",
+  noSort: true
 });
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_rdfslabel_alpha_with_count", {
@@ -463,7 +466,8 @@ SPARNATURAL_CONFIG_DATASOURCES+"list_skospreflabel_alpha", {
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_skospreflabel_count", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_list_label_count"),
-	labelProperty : "http://www.w3.org/2004/02/skos/core#prefLabel"
+	labelProperty : "http://www.w3.org/2004/02/skos/core#prefLabel",
+  noSort: true
 });
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_skospreflabel_alpha_with_count", {
@@ -481,7 +485,8 @@ SPARNATURAL_CONFIG_DATASOURCES+"list_dctermstitle_alpha", {
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_dctermstitle_count", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_list_label_count"),
-	labelProperty : "http://purl.org/dc/terms/title"
+	labelProperty : "http://purl.org/dc/terms/title",
+  noSort: true
 });
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_dctermstitle_alpha_with_count", {
@@ -499,7 +504,8 @@ SPARNATURAL_CONFIG_DATASOURCES+"list_foafname_alpha", {
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_foafname_count", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_list_label_count"),
-	labelProperty : "http://xmlns.com/foaf/0.1/name"
+	labelProperty : "http://xmlns.com/foaf/0.1/name",
+  noSort: true
 });
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_foafname_alpha_with_count", {
@@ -517,7 +523,8 @@ SPARNATURAL_CONFIG_DATASOURCES+"list_schemaname_alpha", {
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_schemaname_count", {
 	queryTemplate : QUERY_STRINGS_BY_QUERY_TEMPLATE.get(SPARNATURAL_CONFIG_DATASOURCES+"query_list_label_count"),
-	labelProperty : "http://schema.org/name"
+	labelProperty : "http://schema.org/name",
+  noSort: true
 });
 DATASOURCES_CONFIG.set(
 SPARNATURAL_CONFIG_DATASOURCES+"list_schemaname_alpha_with_count", {
@@ -714,7 +721,7 @@ module.exports = Object.freeze({
   CHILDREN_PROPERTY          :     SPARNATURAL_CONFIG_DATASOURCES+'childrenProperty',
 	QUERY_STRING 			 		: 		SPARNATURAL_CONFIG_DATASOURCES+'queryString',
 	SPARQL_ENDPOINT_URL	 			: 		SPARNATURAL_CONFIG_DATASOURCES+'sparqlEndpointUrl',
-  FORCE_SORT            :     SPARNATURAL_CONFIG_DATASOURCES+'forceSort',
+  NO_SORT            :     SPARNATURAL_CONFIG_DATASOURCES+'noSort',
 
 	// object properties
 	QUERY_TEMPLATE		 			: 		SPARNATURAL_CONFIG_DATASOURCES+'queryTemplate',
