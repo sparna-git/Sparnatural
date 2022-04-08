@@ -996,20 +996,22 @@ export class VariableSelector extends HTMLComponent {
 			this.labelDisplayed = this.image + '<div id="editable-'+this.varName+'"><div contenteditable="true">'+this.varNameForDisplay+'</div></div>' ;
 		}
 
-		this.element = '<div class="sortableItem"><div class="variableSelected flexWrap" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">'+ UiuxConfig.COMPONENT_DRAG_HANDLE + '</span>'+this.labelDisplayed+'</div></div>' ;
+		this.element = $('<div class="sortableItem"><div class="variableSelected flexWrap" data-variableName="'+this.varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">'+ UiuxConfig.COMPONENT_DRAG_HANDLE + '</span>'+this.labelDisplayed+'</div></div>') ;
 
 		
 
 		//trigger change editable variable
 		this.contentEditableElement = $(this.element).find('div[contenteditable="true"]').first() ;
-		
-		$('body').on('focus', 'div[data-variableName="'+this.varName+'"] div[contenteditable="true"]', {arg1: this, arg2: 'onFocusEdit'}, eventProxiCriteria).on('focusout', 'div[data-variableName="'+this.varName+'"] div[contenteditable="true"]', {arg1: this, arg2: 'onFocusOutEdit'}, eventProxiCriteria);
-		
-		$(this.globalVariablesSelctor.otherSelectHtml).append($(this.element)) ;
 
-		$('.variablesSelection').find('div[data-variableName="'+this.varName+'"] div[contenteditable="true"]').first().on('keypress',{arg1: this, arg2: 'onEditKeyPress'}, eventProxiCriteria);
+		this.contentEditableElement.on('focus',{arg1: this, arg2: 'onFocusEdit'}, eventProxiCriteria);
+		this.contentEditableElement.on('focusout',{arg1: this, arg2: 'onFocusOutEdit'}, eventProxiCriteria);
 
-		 $('.variablesSelection').find('div[data-variableName="'+this.varName+'"] div[contenteditable="true"]').first().on('keyup', function(event) {
+		
+		$(this.globalVariablesSelctor.otherSelectHtml).append(this.element) ;
+
+		this.contentEditableElement.on('keypress',{arg1: this, arg2: 'onEditKeyPress'}, eventProxiCriteria);
+
+		this.contentEditableElement.on('keyup', function(event) {
 			var width = $('.sortableItem').first().width() ;
 			$('.variablesOrdersSelect').width(width) ;
 	 	});
@@ -1037,7 +1039,6 @@ export class VariableSelector extends HTMLComponent {
 	}
 
 	onFocusOutEdit() {
-		this.contentEditableElement = $('.variablesSelection').find('div[data-variableName="'+this.varName+'"] div[contenteditable="true"]').first() ;
 
 		var newValue = $(this.contentEditableElement).text();
 		if (newValue == '') {
@@ -1058,6 +1059,16 @@ export class VariableSelector extends HTMLComponent {
 				childs_index[index] = $(this).parents('li').first().attr('data-index') ;
 				$(this).find('.variableName').first().text(curent_value) ;
 			});
+			// If is startClassGroup, update siblings. (normaly is root)
+			if (this.GroupContenaire instanceof StartClassGroup) {
+				$(this.GroupContenaire.html).parents('ul').first().find('>li>.CriteriaGroup>.StartClassGroup').each(function(index) {
+					if (index != 0) {
+						childs_index[index] = $(this).parents('li').first().attr('data-index') ;
+						$(this).find('.variableName').first().text(curent_value) ;
+					}
+				});
+			}
+
 			//Set varialbeles names on components list for StartClassGroup childs
 			for (var key in childs_index) {
 				for (var componentKey in this.GroupContenaire.parentComponent.thisForm_.sparnatural.components) {
@@ -1066,6 +1077,7 @@ export class VariableSelector extends HTMLComponent {
 					}
 				}
 			}
+
 			//Set variable name used on query for criteria
 			this.GroupContenaire.varName = '?'+this.currentValue ;
 			//Updates the variables in the generated query based on HTML variable line
@@ -1081,7 +1093,7 @@ export class VariableSelector extends HTMLComponent {
 	onEditKeyPress(event) {
 		var code = event.keyCode ? event.keyCode : event.which;
 		if (code === 13) { // If press Enter
-			$('.variablesSelection').find('div[data-variableName="'+this.varName+'"] div[contenteditable="true"]').first().blur() ;		
+			this.contentEditableElement.blur() ;		
 			return false;
 		}
 
@@ -1099,7 +1111,7 @@ export class VariableSelector extends HTMLComponent {
 		this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList = this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.filter(function(value, index, arr){
 			return value !== checkVarName;
 		});
-		$('[data-variableName="'+this.varName+'"]').parents('div.sortableItem').remove() ;
+		this.element.remove() ;
 		//Any one can be the first in line, compute the width for first place
 		var width = $('.sortableItem').first().width() ;
 		$('.variablesOrdersSelect').width(width) ;
