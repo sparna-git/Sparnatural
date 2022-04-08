@@ -440,7 +440,8 @@ export class RDFSpecificationProvider {
 	 *   labelPath: "...",
 	 *   labelProperty: "...",
 	 *   childrenPath: "...",
-	 *   childrenProperty: "..."
+	 *   childrenProperty: "...",
+	 *   noSort: true
 	 * }
 	 **/
 	_buildDatasource(datasourceUri) {
@@ -503,6 +504,12 @@ export class RDFSpecificationProvider {
     	var sparqlEndpointUrls = this._readAsLiteral(datasourceUri, Datasources.SPARQL_ENDPOINT_URL);
     	if(sparqlEndpointUrls.length > 0) {
     		datasource.sparqlEndpointUrl = sparqlEndpointUrls[0];	
+    	}
+
+    	// read optional noSort
+    	var noSorts = this._readAsLiteral(datasourceUri, Datasources.NO_SORT);
+    	if(noSorts.length > 0) {
+    		datasource.noSort = (noSorts[0] === "true");	
     	}
 
     	return datasource;

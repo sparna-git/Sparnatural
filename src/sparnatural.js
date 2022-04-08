@@ -1763,7 +1763,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			    	);
 				}
 
-				this.widgetComponent = new ListWidget(this, handler, langSearch, settings) ;
+				this.widgetComponent = new ListWidget(this, handler, langSearch, settings, !(datasource.noSort == true)) ;
 				this.cssClasses.ListeWidget = true ;
 
 			  	break;
@@ -1817,7 +1817,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			    	);
 				}
 
-				this.widgetComponent = new ListWidget(this, handler, langSearch, settings) ;
+				this.widgetComponent = new ListWidget(this, handler, langSearch, settings, !(datasource.noSort == true)) ;
 				this.cssClasses.ListeWidget = true ;
 				break;
 			  case Config.AUTOCOMPLETE_PROPERTY:

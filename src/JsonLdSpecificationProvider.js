@@ -113,6 +113,9 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 
 			// read optional sparqlEndpointUrl
 			datasource.sparqlEndpointUrl = datasourceObject['sparqlEndpointUrl'];
+
+			// read optional noSort
+			datasource.noSort = datasourceObject['noSort'];
 		} else {
 			// if datasource is a URI...
 			// look it up in known datasources config
