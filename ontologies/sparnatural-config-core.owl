@@ -276,10 +276,22 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty -->
+
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">The super-property of any property in a Sparnatural configuration for which a date range can be selected, using year or date picker.
+
+Do not use this super-property directly, use its subproperties.</rdfs:comment>
+        <rdfs:label xml:lang="en">time property</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date">
-        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a datepicker with day/month/year precision should be displayed to select the beginning and end of a time span.</rdfs:comment>
         <rdfs:label xml:lang="en">time property with a date-picker</rdfs:label>
     </owl:ObjectProperty>
@@ -289,7 +301,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Period -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Period">
-        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a datepicker with year precision combined with an autocomplete field on period name should be displayed to select the beginning and end of a time span.</rdfs:comment>
         <rdfs:label xml:lang="en">time property with chronocultural period selection</rdfs:label>
     </owl:ObjectProperty>
@@ -299,7 +311,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year">
-        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a datepicker with year precision should be displayed to select the beginning and end of a time span.</rdfs:comment>
         <rdfs:label xml:lang="en">time property with a year-picker</rdfs:label>
     </owl:ObjectProperty>
