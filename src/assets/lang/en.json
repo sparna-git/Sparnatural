@@ -31,7 +31,7 @@
 	"SwitchVariablesNames": "Show column names",
 	"true": "True",
 	"false": "False",
-	"TreeWidgetNoData": "No data could be found for this tree...",
-	"TreeWidgetDelete": "Delete",
+	"TreeWidgetNoData": "No data could be found...",
+	"TreeWidgetDelete": "Clear selection",
 	"TreeWidgetSelect": "Select"
 }
