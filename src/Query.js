@@ -776,7 +776,8 @@ export class QuerySPARQLWriter {
 
 			result.patterns.push(firstAlternative);
 			result.patterns.push(secondAlternative);
-			// return as an array
+			// return as an array so that caller can have generic forEach loop to all
+			// every element to outer query
 			return [result];
 		} else {
 			return this._initDateRangeCriteria(
@@ -876,7 +877,9 @@ export class QuerySPARQLWriter {
 			result.push(this._initFilterTime(null, endDate, beginDateVarName));
 		}
 
-		return result;
+		// return as an array so that caller can have generic forEach loop to all
+		// every element to outer query
+		return [result];
 	}
 
 
