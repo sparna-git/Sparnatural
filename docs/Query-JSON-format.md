@@ -5,7 +5,7 @@ _[Home](index.html) > Query JSON format_
 
 ## How it works : onQueryUpdated / loadQuery
 
-Sparnatural emits the `onQueryUpdated()` event each time the query is modified. This event takes 2 parameters : the generated SPARQL query, and a JSON data structure that encodes the query. This JSON data structure is custom to Sparnatural, and enables it to **load previously generated query**, using the method **`loadQuery(jsonQuery)`**.
+Sparnatural emits the `onQueryUpdated(sparqlQuery, jsonQuery)` event each time the query is modified. This event takes 2 parameters : the generated SPARQL query, and a JSON data structure that encodes the query. This JSON data structure is custom to Sparnatural, and enables it to **load previously generated query**, using the method **`sparnatural.loadQuery(jsonQuery)`**.
 
 This allows to implement 2 important features to showcase your knowledge graph :
 
@@ -61,7 +61,7 @@ document.getElementById('select-examples').onchange = function() {
 
 The following query in Sparnatural (_All Artworks displayed in French or Italian museums, and created in the 19th century, with their creation date_) :
 
-![Sparnatural query example](/assets//images/screenshot-JSON-data-structure.png)
+![Sparnatural query example](/assets/images/screenshot-JSON-data-structure.png)
 
 Is modelled in the following JSON data structure :
 
@@ -169,12 +169,16 @@ The data structure is composed of a top "Query" structure, that contains "branch
       },
       "children": [
         ...
-      ]
+      ],
+      "optional": true,
+      "notExists": false,
     },
 ```
 
 - `line` : one single query line / criteria
 - `children` : the children of that line / criteria, the ones that are below it in the Sparnatural query builder
+- `optional` : whether the line and all its children are optional (use a SPARQL "OPTIONAL")
+- `notExists` : whether the line and all its children and negative (use a SPARQL "FILTER NOT EXISTS")
 
 ### Query line structure
 

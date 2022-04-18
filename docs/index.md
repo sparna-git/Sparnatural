@@ -16,7 +16,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 ### Integration in webpages
 
   - [Javascript integration](Javascript-integration) - Reference page for Javascript integration and parameters
-  - [Qury JSON format](Query-JSON-format) - Documentation on the JSON structure used by Sparnatural to output and reload queries
+  - [Query JSON format](Query-JSON-format) - Documentation on the JSON structure used by Sparnatural to output and reload queries
   - [Querying a password protected SPARQL endpoint](Querying-a-password-protected-SPARQL-endpoint)
   - [SPARQL service integration](SPARQL-service-integration) - **/!\ deprecated** How to fetch autocomplete results and list contents from a SPARQL endpoint
 
