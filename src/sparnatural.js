@@ -300,11 +300,11 @@ UiuxConfig = require("./UiuxConfig.js");
 			//Désactiver le submit du form
 			//en amont reset de ce qui est déjà dans l'interface (fonction à part)
 			if (thisForm.firstInit === true) {
-				thisForm = loadQuery(thisForm, jsonWithLinks) ;
+				thisForm = doLoadQuery(thisForm, jsonWithLinks) ;
 			} else {
 				//Si un travail est en cours on attend...
 				$(thisForm.sparnatural).on('initialised', function() {
-					thisForm = loadQuery(thisForm, jsonWithLinks) ;
+					thisForm = doLoadQuery(thisForm, jsonWithLinks) ;
 				}) ;
 			}
 		}
@@ -325,7 +325,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(thisForm.sparnatural).find('.submitSection a').removeClass('loadingEnabled') ;
 		}	
 
-		function loadQuery(form, json) {
+		function doLoadQuery(form, json) {
 			// stores the JSON to be preloaded
 			form.preLoad = json ;
 			// clear the form
