@@ -115,7 +115,7 @@ This is usually sufficient and more performant but this can be a problem if the 
 To use the range as a criteria in the query and filter the list based on the type of the value, create a datasource based on a query including "..._with_range_..." in its identifier. This will garantee that only values of the selected type will appear in the list.
 
 
-## Your own SPARQL query
+## Your own SPARQL query (lists / autocomplete)
 
 You can provide your own SPARQL queries to populate lists or autocomplete suggestions. To do so, attach a `queryString` data property assertion on your datasource object, holding the SPARQL query that should be used to populate the list/autocomplete.
 
@@ -151,6 +151,55 @@ WHERE {
 ORDER BY UCASE(?label)
 LIMIT 500
 ```
+
+## Your own SPARQL query (tree)
+
+You can provide your own SPARQL queries to populate a tree widget. To do so, you need 2 datasources : one that will populate the roots of the tree (entries at first level), and one that will be used to populate the children of a tree, when clicked (see the [annotations for a SelectResourceProperty](https://docs.sparnatural.eu/OWL-based-configuration#annotations-for-a-selectresourceproperty) for more information).
+
+**The SPARQL query MUST return 2 variables : `?uri` and `?label`, populated anyway you like.**
+The SPARQL query CAN return 2 other variables :
+
+  - **`?hasChildren`**, a boolean to indicate if the node has children. If not present, all tree items can be unfolded, even when have no children; if present and set to false, an item cannot be unfolded. 
+  - **`?count`** to indicate the number of times a node is used as a value; nodes with a count = 0 will be disabled and cannot be selected as a value.
+
+In these SPARQL query, the same replacement of the **`$domain`**, **`$range`**, **`$property`** and **`$lang`** than in the queries for list/autocomplete will happen (see above). The following additional replacements will happen:
+- **`$node`**, if present, will be replaced by the URI of the node being clicked;
+
+A typical query that populates the `?hasChildren` and `?count` variable looks like the following :
+
+```
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT DISTINCT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+WHERE {
+
+  {
+    SELECT ?uri ?theLabel ?hasChildren
+    WHERE {
+      # Note the $node variable that can is replaced by the URI of the node being clicked
+      $node skos:narrower|^skos:broader ?uri .
+      ?uri skos:prefLabel ?theLabel .
+      FILTER(isIRI(?uri))
+      FILTER(lang(?theLabel) = '' || lang(?theLabel) = $lang)
+      # tests if the URI itself has some children to populate ?hasChildren
+      OPTIONAL {
+        ?uri skos:narrower|^skos:broader ?children .
+      }
+      BIND(IF(bound(?children),true,false) AS ?hasChildren)
+    }
+  }
+
+  # Counts how many time the URI is used as value in the criteria build in Sparnatural
+  OPTIONAL {
+    ?x a $domain .
+    ?x $property ?uri .
+    # here we choose not to use the $range criteria, but it can also be used
+    # ?uri a $range .
+  }
+}
+GROUP BY ?uri ?theLabel ?hasChildren
+ORDER BY UCASE(?label)
+```
+
 
 ## Datasource configuration reference
 
