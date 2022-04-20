@@ -15,8 +15,7 @@ require("easy-autocomplete");
 // const $$ = require('jquery');
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
-
-const removeIcon = require("./assets/icons/buttons/remove.png");
+import removeIcon from "./assets/icons/buttons/remove.png"
 
 // WARNING : if you use ES6 syntax (like import instead of require), 
 // webpack will automatically add "use strict" as all ES6 modules 
@@ -33,44 +32,30 @@ require('tippy.js/dist/tippy.css');
 
 const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
 
-JsonLdSpecificationProvider = require("./JsonLdSpecificationProvider.js").JsonLdSpecificationProvider;
-SpecificationProviderFactory = require("./SpecificationProviderFactory.js").SpecificationProviderFactory;
-RDFSpecificationProvider = require("./RDFSpecificationProvider.js").RDFSpecificationProvider ;
-FilteringSpecificationProvider = require("./FilteringSpecificationProvider.js").FilteringSpecificationProvider ;
-SparqlBifContainsAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SparqlBifContainsAutocompleteAndListHandler;
-SimpleSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").SimpleSparqlAutocompleteAndListHandler;
-RangeBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").RangeBasedAutocompleteAndListHandler;
-PropertyBasedAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").PropertyBasedAutocompleteAndListHandler
-WikidataAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").WikidataAutocompleteAndListHandler;
-UriOnlyListHandler = require("./AutocompleteAndListHandlers.js").UriOnlyListHandler;
-GraphDbLuceneConnectorSparqlAutocompleteAndListHandler = require("./AutocompleteAndListHandlers.js").GraphDbLuceneConnectorSparqlAutocompleteAndListHandler;
-SparqlTemplateListHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateListHandler;
-SparqlTemplateAutocompleteHandler = require("./AutocompleteAndListHandlers.js").SparqlTemplateAutocompleteHandler;
+import { SparqlTemplateListHandler, SparqlTemplateAutocompleteHandler } from "./AutocompleteAndListHandlers";
 
-SparqlTreeHandler = require("./TreeHandlers.js").SparqlTreeHandler;
-StubTreeHandler = require("./TreeHandlers.js").StubTreeHandler;
+import { FilteringSpecificationProvider } from "./FilteringSpecificationProvider";
+import { QuerySPARQLWriter, AbstractValue } from "./Query";
+import { JSONQueryGenerator } from "./QueryGenerators";
 
-SimpleStatisticsHandler = require("./StatisticsHandlers.js").SimpleStatisticsHandler;
+import * as SparnaturalComponents from "./SparnaturalComponents";
+import { SpecificationProviderFactory } from "./SpecificationProviderFactory";
+import { SimpleStatisticsHandler } from "./StatisticsHandlers";
+import { SparqlTreeHandler } from "./TreeHandlers";
+import UiuxConfig from "./UiuxConfig";
+import Datasources from "./SparnaturalConfigDatasources";
+import { AutoCompleteWidget, SearchWidget,NoWidget,BooleanWidget,TimeDatePickerWidget,DatesWidget,ListWidget } from "./Widgets";
 
-LocalDataStorage = require("./LocalDataStorage.js").LocalDataStorage;
-LocalCacheData = require("./LocalCacheData.js").LocalCacheData;
-JSONQueryGenerator = require("./QueryGenerators.js").JSONQueryGenerator;
 
-QuerySPARQLWriter = require("./Query.js").QuerySPARQLWriter ;
-AbstractValue = require("./Query.js").AbstractValue ;
+import Config from "./SparnaturalConfig"
 
-SparnaturalComponents = require("./SparnaturalComponents.js");
-
-require("./Widgets.js");
-
-var Config = require("./SparnaturalConfig.js");
-var Datasources = require("./SparnaturalConfigDatasources.js");
-UiuxConfig = require("./UiuxConfig.js");
+import ActionRemove from "./ts-components/ActionRemove";
 
 (function( $ ) {
 	
     HTMLElement.prototype.Sparnatural = function( options ) {
- 
+		console.log("this1")
+		console.log(this)
     	var specProvider;
 
         var langSearch = {} ;
@@ -284,9 +269,9 @@ UiuxConfig = require("./UiuxConfig.js");
 
 		var specProviderFactory = new SpecificationProviderFactory();
 
-		specProviderFactory.build(settings.config, settings.language, function(sp) {
+		specProviderFactory.build(settings.config, settings.language, (sp)=> {
 			specProvider = sp;
-			initForm(thisForm);
+			initForm.call(this,thisForm);
 			// add the first CriteriaGroup to the component
 			addComponent(thisForm, $(thisForm.sparnatural).find('ul')) ;
 			$(thisForm.sparnatural).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
@@ -385,7 +370,8 @@ UiuxConfig = require("./UiuxConfig.js");
 		
 		
 		function initForm(form) {	
-
+			console.log("this1.2")
+			console.log(this)
 			var SubmitSection = "" ;
 			if (settings.onSubmit instanceof Function) {
 				var SubmitSection = '<div class="submitSectionWrapper" style="background: rgba('+settings.backgroundBaseColor+');"><div class="submitSection"><a class="submitDisable">'+UiuxConfig.ICON_PLAY+'</a></div></div>' ; 
@@ -422,9 +408,9 @@ UiuxConfig = require("./UiuxConfig.js");
 				defaultLang: settings.language
 			}
 
-			initVariablesSelector(form) ;
+			initVariablesSelector.call(this,form) ;
 			
-			initGeneralEvent(form) ;
+			initGeneralEvent.call(this,form) ;
 			
 			// triggered when Sparnatural is submitted : generates output SPARQL query
 			$(form.sparnatural).on('submit', { formObject : form }, function (event) {
@@ -440,6 +426,7 @@ UiuxConfig = require("./UiuxConfig.js");
 
 					if(jsonQuery != null) {					
 						console.log("*** New JSON Data structure ***");
+						console.log("yes that's right")
 						console.log(JSON.stringify(
 							jsonQuery,
 							null,
@@ -467,6 +454,8 @@ UiuxConfig = require("./UiuxConfig.js");
 		}
 
 		function initVariablesSelector(form) {
+			console.log("this2")
+			console.log(this)
 			form.sparnatural.variablesSelector = {} ;
 			this.form = form ;
 			this.html = $(form.sparnatural).find('.variablesSelection').first() ; 
@@ -1525,32 +1514,6 @@ UiuxConfig = require("./UiuxConfig.js");
 			this.init(true);
 		} ;
 	}	
-	
-	function ActionRemove(GroupContenaire) {
-		this.baseCssClass = "ActionRemove";
-		this.ParentComponent = GroupContenaire ;
-		this.HtmlContainer = this.ParentComponent ;	
-		this.cssClasses = {
-			ActionRemove : true ,
-			Created : false
-		}; 
-
-		this.init = function () {
-			this.widgetHtml = '<a><span class="unselect"><i class="far fa-times-circle"></i></span></a>' ;
-			this.cssClasses.IsOnEdit = true ;
-			this.tools = new GenericTools(this) ;
-			this.tools.initHtml() ;
-			this.tools.attachHtml() ;			
-			this.cssClasses.Created = true ;		
-		} ;	
-		
-		this.reload = function() {
-			this.init();
-		} ;	
-	}	
-
-
-
 	
 	/**
 	 * Selects the value for a range in a criteria/line, using a value selection widget

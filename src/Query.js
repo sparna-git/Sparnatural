@@ -1,5 +1,4 @@
-var SparqlGenerator = require('sparqljs').Generator;
-
+import { Generator } from 'sparqljs';
 
 /**
  * A complete Sparnatural Query, that can be serialized to SPARQL, and can be reloaded in Sparnatural
@@ -250,7 +249,7 @@ export class QuerySPARQLWriter {
 		var stringWriter = new QueryExplainStringWriter(this.specProvider);
 		console.log(stringWriter.toExplainString(query));
 
-		var generator = new SparqlGenerator();
+		var generator = new Generator();
 		var generatedQuery = generator.stringify(sparqlQuery);		
 
 		return generatedQuery;

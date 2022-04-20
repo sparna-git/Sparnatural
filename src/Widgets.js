@@ -1,11 +1,12 @@
 
-	const jstree = require('jstree').default;
-	const datepicker = require('@chenfengyuan/datepicker').default;
-	const select2 = require('select2');
-	require('select2/dist/css/select2.css');
-	const tippy = require('tippy.js').default;
+	import jstree from 'jstree';
+	import datepicker from '@chenfengyuan/datepicker';
+	import select2 from 'select2';
+	import UiuxConfig from "./UiuxConfig";
+	import 'select2/dist/css/select2.css';
+	import tippy from 'tippy.js';
 	
-	AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
+	export const AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
 		this.autocompleteHandler = autocompleteHandler;
 		this.ParentComponent = inputTypeComponent ;
 
@@ -84,7 +85,7 @@
 		}
 	};
 	
-	ListWidget = function(inputTypeComponent, listHandler, langSearch, settings, sort) {
+	export const ListWidget = function(inputTypeComponent, listHandler, langSearch, settings, sort) {
 		this.listHandler = listHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
@@ -217,7 +218,7 @@
 	}
 	
 
-	ListWidgetNew = function(inputTypeComponent, listDatasource, langSearch) {
+	export const ListWidgetNew = function(inputTypeComponent, listDatasource, langSearch) {
 		this.listDatasource = listDatasource;
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
@@ -272,7 +273,7 @@
 		}
 	}
 
-	URLListDatasource = function(listHandler) {
+	export const URLListDatasource = function(listHandler) {
 		
 		this.getItems = function(
 			startClassGroup_value,
@@ -314,7 +315,7 @@
 		}
 	}
 
-	DatesWidget = function(inputTypeComponent, datesHandler, langSearch) {
+	export const DatesWidget = function(inputTypeComponent, datesHandler, langSearch) {
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
@@ -427,7 +428,7 @@
 		}		
 	}
 	
-	TimeDatePickerWidget = function(inputTypeComponent, datesHandler, format, langSearch) {
+	export const TimeDatePickerWidget = function(inputTypeComponent, datesHandler, format, langSearch) {
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
 		
@@ -562,7 +563,7 @@
 		}	
 	}
 
-	SearchWidget = function(inputTypeComponent, langSearch) {
+	export const SearchWidget = function(inputTypeComponent, langSearch) {
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
@@ -597,7 +598,7 @@
 	}
 
 
-	BooleanWidget = function(inputTypeComponent, langSearch) {
+	export const BooleanWidget = function(inputTypeComponent, langSearch) {
 		this.ParentComponent = inputTypeComponent ;
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
@@ -638,7 +639,7 @@
 	}
 
 
-	NoWidget = function(inputTypeComponent) {
+	export const NoWidget = function(inputTypeComponent) {
 		this.html = null ;
 		
 		this.init = function init() {
@@ -651,7 +652,7 @@
 		}
 	}
 
-	TreeWidget = function(inputTypeComponent, loaderHandler, settings, langSearch) {
+	export const TreeWidget = function(inputTypeComponent, loaderHandler, settings, langSearch) {
 		this.loaderHandler = loaderHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.langSearch = langSearch;

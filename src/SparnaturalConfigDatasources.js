@@ -708,7 +708,7 @@ SPARNATURAL_CONFIG_DATASOURCES+"tree_children_skosnarrower_with_count", {
 });
 
 
-module.exports = Object.freeze({
+const Datasources = Object.freeze({
     SPARNATURAL_CONFIG_DATASOURCES	: 		SPARNATURAL_CONFIG_DATASOURCES,
 
   // annotation and data properties
@@ -790,3 +790,5 @@ module.exports = Object.freeze({
 	QUERY_STRINGS_BY_QUERY_TEMPLATE	: 		QUERY_STRINGS_BY_QUERY_TEMPLATE,
 	DATASOURCES_CONFIG				: 		DATASOURCES_CONFIG
 });
+
+export default Datasources

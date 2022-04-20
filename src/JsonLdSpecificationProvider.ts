@@ -1,13 +1,26 @@
+import Datasources from "./SparnaturalConfigDatasources"
+import Config from "./SparnaturalConfig"
 
-var Datasources = require("./SparnaturalConfigDatasources.js");
-var Config = require("./SparnaturalConfig.js");
+interface IDataSources {
+	queryString: string,
+	queryTemplate: any,
+	labelPath: any,
+	labelProperty: any,
+	childrenPath: any,
+	childrenProperty: any,
+	sparqlEndpointUrl: any,
+	noSort: any
+}
 
-var JsonLdSpecificationProvider = function(specs, lang) {
+export default class JsonLdSpecificationProvider {
+	jsonSpecs:any;
+	lang:any;
+	constructor(specs:any, lang:any){
+		this.jsonSpecs = specs;
+		this.lang = lang;
+	}
 
-	this.jsonSpecs = specs;
-	this.lang = lang;
-
-	this.getObjectPropertyType = function(objectPropertyId) {
+	getObjectPropertyType = function(objectPropertyId: any) {
 		var objectProperty = this._getResourceById(objectPropertyId);
 
 		var superProperties = (objectProperty['subPropertyOf'] === "object")?objectProperty['subPropertyOf']:new Array(objectProperty['subPropertyOf']);
@@ -45,17 +58,17 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		}
 	}
 
-	this.getDatasource = function(propertyOrClassId) {
+	getDatasource = function(propertyOrClassId: any) {
 		var propertyOrClass = this._getResourceById(propertyOrClassId);
 		return this._buildDatasource(propertyOrClass['datasource']);
 	}
 
-	this.getTreeRootsDatasource = function(propertyOrClassId) {
+	getTreeRootsDatasource = function(propertyOrClassId: any) {
 		var propertyOrClass = this._getResourceById(propertyOrClassId);
 		return this._buildDatasource(propertyOrClass['treeRootsDatasource']);
 	}
 
-	this.getTreeChildrenDatasource = function(propertyOrClassId) {
+	getTreeChildrenDatasource = function(propertyOrClassId: any) {
 		var propertyOrClass = this._getResourceById(propertyOrClassId);
 		return this._buildDatasource(propertyOrClass['treeChildrenDatasource']);
 	}
@@ -70,12 +83,12 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 	 *   childrenProperty: "..."
 	 * }
 	 **/
-	this._buildDatasource = function(datasourceObject) {
+	_buildDatasource = function(datasourceObject: { [x: string]: any; }) {
 		if(datasourceObject == null) {
 			return null;
 		}
 
-		var datasource = {};
+		var datasource:IDataSources;
 		
 		if (typeof datasourceObject === "object") {
 			// if datasource is an object...
@@ -129,7 +142,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return datasource;
 	}
 
-	this.getIcon = function(classId) {
+	getIcon = function(classId: any) {
 		if(this._getResourceById(classId)["faIcon"] != null) {
 			// use of fa-fw for fixed-width icons
 			return "<span style='font-size: 170%;' >&nbsp;<i class='" + this._getResourceById(classId)["faIcon"] + " fa-fw'></i></span>";
@@ -141,11 +154,11 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		}
 	}
 
-	this.getHighlightedIcon = function(classId) {
+	getHighlightedIcon = function(classId: any) {
 		return this._getResourceById(classId)["highlightedIcon"];
 	}
 
-	this.getLabel = function(classOrPropertyId) {
+	getLabel = function(classOrPropertyId: any) {
 		var item = this._getResourceById(classOrPropertyId) ;
 		if (item !== null) {
 			for(var i in item['label']) {
@@ -159,7 +172,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return null ;
 	}
 
-	this.getTooltip = function(classOrPropertyId) {
+	getTooltip = function(classOrPropertyId: any) {
 		var item = this._getResourceById(classOrPropertyId) ;
 		if (item !== null) {
 			for(var i in item['tooltip']) {
@@ -173,23 +186,23 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return null ;
 	}
 
-	this.getDefaultLabelProperty = function(classId) {
+	getDefaultLabelProperty = function(classId: any) {
 		return this._readValue(classId, 'defaultLabelProperty');
 	}
 
-	this.getBeginDateProperty = function(propertyId) {
+	getBeginDateProperty = function(propertyId: any) {
 		return this._readValue(propertyId, 'beginDateProperty');
 	}
 
-	this.getEndDateProperty = function(propertyId) {
+	getEndDateProperty = function(propertyId: any) {
 		return this._readValue(propertyId, 'endDateProperty');
 	}
 
-	this.getExactDateProperty = function(propertyId) {
+	getExactDateProperty = function(propertyId: any) {
 		return this._readValue(propertyId, 'exactDateProperty');
 	}
 
-	this.isEnablingOptional = function(propertyId) {
+	isEnablingOptional = function(propertyId: any) {
 		var item = this._getResourceById(propertyId) ;
 		if (item !== null) {
 			return (item['enableOptional'] == true);
@@ -198,7 +211,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return false;
 	}
 
-	this.isEnablingNegation = function(propertyId) {
+	isEnablingNegation = function(propertyId: any) {
 		var item = this._getResourceById(propertyId) ;
 		if (item !== null) {
 			return (item['enableNegation'] == true);
@@ -207,7 +220,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return false;
 	}
 
-	this.isMultilingual = function(propertyId) {
+	isMultilingual = function(propertyId: any) {
 		var item = this._getResourceById(propertyId) ;
 		if (item !== null) {
 			return (item['isMultilingual'] == true);
@@ -216,7 +229,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return false;
 	}
 
-	this.getAllSparnaturalClasses = function() {
+	getAllSparnaturalClasses = function() {
     	var classes = this.getClassesInDomainOfAnyProperty();
     	// copy initial array
     	var result = classes.slice();
@@ -235,8 +248,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		List of possible Class relative to a Class
 		return array of @type Class in jsonSpecs 
 	*/
-	this.getConnectedClasses = function(classId) {
-		var items = [];
+	getConnectedClasses = function(classId: any) {
+		var items: any[] = [];
 
 		for(var j in this.jsonSpecs['@graph']) {
 			var item = this.jsonSpecs['@graph'][j];		
@@ -257,7 +270,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return items ;
 	}
 
-	this.hasConnectedClasses = function(classId) {
+	hasConnectedClasses = function(classId: any) {
 		return ( this.getConnectedClasses(classId).length > 0 );
 	}
 
@@ -265,8 +278,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		Reads "first-level" classes, i.e. classes that are in the domain
 		of at least one property that connects them to other classes
 	*/
-	this.getClassesInDomainOfAnyProperty = function() {
-		var items = [];
+	getClassesInDomainOfAnyProperty = function() {
+		var items: any[] = [];
 
 		for(var j in this.jsonSpecs['@graph']) {
 			var item = this.jsonSpecs['@graph'][j];		
@@ -293,8 +306,8 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		@Id of Class
 		return array of @type ObjectProperty in jsonSpecs 
 	*/
-	this.getConnectingProperties = function(domainClassId, rangeClassId) {
-		var items = [];
+	getConnectingProperties = function(domainClassId: any, rangeClassId: any) {
+		var items: any[] = [];
 
 		for(var i in this.jsonSpecs['@graph']) {
 			var item = this.jsonSpecs['@graph'][i];
@@ -312,7 +325,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return items ;
 	}
 
-	this.isRemoteClass = function(classUri) {
+	isRemoteClass = function(classUri: any) {
 		var classEntity = this._getResourceById(classUri);
 		
 		if(classEntity['subClassOf']) {
@@ -328,7 +341,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return false;
 	}
 
-	this.isLiteralClass = function(classUri) {
+	isLiteralClass = function(classUri: any) {
 		var classEntity = this._getResourceById(classUri);
 
 		if(classEntity['subClassOf']) {
@@ -344,7 +357,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return false;
 	}
 
-	this.expandSparql = function(sparql) {
+	expandSparql = function(sparql: string) {
 		for(var i in this.jsonSpecs['@graph']) {
 			var item = this.jsonSpecs['@graph'][i];
 
@@ -357,7 +370,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return sparql;
 	}
 
-	this.readRange = function(objectProperty) {
+	readRange = function(objectProperty: any) {
 		var propertyEntity = this._getResourceById(objectProperty);
 		if(propertyEntity != null) {
 			return this._readRange(propertyEntity);
@@ -366,9 +379,9 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 	}
 
 
-	this._sortItemsByIndex = function(items) {
+	_sortItemsByIndex = function(items: any[]) {
 		var me = this;
-		items.sort(function(c1, c2) {
+		items.sort(function(c1: any, c2: any) {
 			const c1Value = me.jsonSpecs['@graph'].indexOf(me._getResourceById(c1));
 			const c2Value = me.jsonSpecs['@graph'].indexOf(me._getResourceById(c2));
 
@@ -385,23 +398,23 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 	}
 
 
-	this._inDomainOf = function(objectProperty, classId) {
+	_inDomainOf = function(objectProperty: any, classId: any) {
 		return this._readDomain(objectProperty).indexOf(classId) >= 0;
 	}
 
-	this._inRangeOf = function(objectProperty, classId) {
+	_inRangeOf = function(objectProperty: any, classId: any) {
 		return this._readRange(objectProperty).indexOf(classId) >= 0;
 	}
 
-	this._readDomain = function(objectProperty) {
+	_readDomain = function(objectProperty: any) {
 		return this._readDomainOrRange(objectProperty, 'domain');
 	}
 
-	this._readRange = function(objectProperty) {
+	_readRange = function(objectProperty: any) {
 		return this._readDomainOrRange(objectProperty, 'range');
 	}
 
-	this._readDomainOrRange = function(objectProperty, domainOrRange) {
+	_readDomainOrRange = function(objectProperty: { [x: string]: any; }, domainOrRange: string | number) {
 		var result = [];
 		if (typeof objectProperty[domainOrRange] === "object") {
 			for(var i in objectProperty[domainOrRange]['unionOf']['@list']) {
@@ -415,7 +428,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return result;
 	}
 
-	this._readValue = function(id, key) {
+	_readValue = function(id: any, key: string | number) {
 		var theObject = this._getResourceById(id);
 
 		if(theObject !== null && theObject[key]) {
@@ -425,7 +438,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return null;
 	}
 
-	this._isObjectProperty = function(item) {
+	_isObjectProperty = function(item: { [x: string]: any; }) {
 		if (typeof item['@type'] === "object") {
 			for(var i in item['@type']) {
 				var value = item['@type'][i];
@@ -440,7 +453,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		}
 	}
 
-	this._getResourceById = function(id) {
+	_getResourceById = function(id: any) {
 		for(var i in this.jsonSpecs['@graph']) {
 			var anEntry = this.jsonSpecs['@graph'][i];
 			if ( anEntry['@id'] == id ) {
@@ -450,13 +463,13 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		return null;
 	}
 
-	this._expand = function(id) {
+	_expand = function(id: string) {
 		if(id.startsWith("http")) {
 			return id;
 		}
 
 		if(id.indexOf(":") >= 0) {
-			prefix = id.split(":")[0];
+			let prefix = id.split(":")[0];
 			if(this.jsonSpecs['@context'][prefix] == null) {
 				// can't do anything
 				return id;
@@ -473,7 +486,7 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 		}		
 	}
 
-	this._pushIfNotExist = function(item, items) {
+	_pushIfNotExist = function(item: any, items: any[]) {
 		if (items.indexOf(item) < 0) {
 			items.push(item) ;
 		}
@@ -482,7 +495,4 @@ var JsonLdSpecificationProvider = function(specs, lang) {
 	}
 
 }
-
-module.exports = {
-	JsonLdSpecificationProvider: JsonLdSpecificationProvider	
-}
+	

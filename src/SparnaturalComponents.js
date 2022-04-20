@@ -1,6 +1,6 @@
-
-const tippy = require('tippy.js').default;
-var UiuxConfig = require("./UiuxConfig.js");
+import tippy from 'tippy.js';
+import UiuxConfig from "./UiuxConfig";
+import * as SparnaturalComponents from "./SparnaturalComponents";
 
 export class HTMLComponent {
 

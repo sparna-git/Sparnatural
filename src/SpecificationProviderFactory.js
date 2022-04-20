@@ -1,6 +1,6 @@
 
 
-
+import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider"
 export class SpecificationProviderFactory {
 
 	build(config, language, callback) {

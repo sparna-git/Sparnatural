@@ -1,6 +1,6 @@
 var SPARNATURAL_CONFIG_CORE 			=		"http://data.sparna.fr/ontologies/sparnatural-config-core#";
 
-module.exports = Object.freeze({
+const Config = Object.freeze({
     SPARNATURAL_CONFIG_CORE			: 		SPARNATURAL_CONFIG_CORE,
 	LITERAL_LIST_PROPERTY 			: 		SPARNATURAL_CONFIG_CORE+'LiteralListProperty',
 	LIST_PROPERTY 					: 		SPARNATURAL_CONFIG_CORE+'ListProperty',
@@ -34,3 +34,4 @@ module.exports = Object.freeze({
 	NOT_INSTANTIATED_CLASS			: 		SPARNATURAL_CONFIG_CORE+'NotInstantiatedClass',
 	RDFS_LITERAL					: 		"http://www.w3.org/2000/01/rdf-schema#Literal"
 });
+export default Config
