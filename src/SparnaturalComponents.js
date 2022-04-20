@@ -56,6 +56,7 @@ export class HTMLComponent {
 	attachHtml() {
 		this.updateCssClasses() ;
 		this.attachComponentHtml() ;
+		this.cssClasses.Created = true;
 	}	
 
 	addBackArrow() {

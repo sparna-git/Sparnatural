@@ -15,6 +15,7 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
+    "@types/jquery": "^3.5.14",
     "babel-loader": "^8.0.6",
     "babel-polyfill": "^6.26.0",
     "copy-webpack-plugin": "^5.0.3",
@@ -25,8 +26,8 @@
     "sass": "^1.49.8",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.1",
-    "url-loader": "^2.1.0",
     "ts-loader": "8.3.0",
+    "url-loader": "^2.1.0",
     "webpack": "^4.39.3",
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-bundle-size-analyzer": "^3.1.0",
@@ -44,12 +45,12 @@
     "rdf-dereference": "^1.4.0",
     "rdf-parse": "^1.2.1",
     "rdf-store-stream": "^1.0.0",
+    "select2": "^4.0.13",
     "sortablejs": "^1.14.0",
     "sparqljs": "^2.2.3",
     "streamify-string": "^1.0.1",
     "tippy.js": "^6.3.5",
     "webpack-cli": "^3.3.7",
-    "whatwg-fetch": "^3.6.2",
-    "select2": "^4.0.13"
+    "whatwg-fetch": "^3.6.2"
   }
 }
