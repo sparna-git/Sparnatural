@@ -30,6 +30,11 @@ module.exports = {
 			 exclude: /node_modules/,
 			 use: { loader: "babel-loader" }
     	},
+		{
+			test: /\.tsx?$/,
+			use: 'ts-loader',
+			exclude: /node_modules/,
+		},
     	{
 			test: /\.(sass|scss)$/,
 			use: [
@@ -68,6 +73,9 @@ module.exports = {
             }]
         }
     ]
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
 	new HtmlWebpackPlugin({
