@@ -865,6 +865,7 @@ import ActionWhere from "./ts-components/ActionWhere";
 	 * A single line/criteria
 	 **/
 	function CriteriaGroup(context, settings, specProvider, jsonQueryBranch = null) {
+		console.warn("Criteria Group gets called")
 		this._this = this ;
 		this.thisForm_ = context.FormContext ;
 		this.ComponentHtml = context.HtmlContext ;
@@ -933,6 +934,7 @@ import ActionWhere from "./ts-components/ActionWhere";
 			// iterate on every "line" in the query
 			$(this.thisForm_.sparnatural.components).each(function() {
 				var parentOrSibling = SparnaturalComponents.findParentOrSiblingCriteria(this.CriteriaGroup.thisForm_, this.index ) ;
+				console.log("back in sparql.js")
 				if ((parentOrSibling != null) && (parentOrSibling.type == 'parent')){
 					// if the line is a child of the one to remove, remove it too
 					if (parentOrSibling.element.id == index_to_remove) {
@@ -946,6 +948,7 @@ import ActionWhere from "./ts-components/ActionWhere";
 			
 			// fetch parentOrSibling _before_ removing HTML and removing
 			// component from list !!
+			console.warn("Outside the if")
 			var parentOrSibling = SparnaturalComponents.findParentOrSiblingCriteria(this.thisForm_, this.id ) ;
 
 			// remove event listeners
@@ -1029,6 +1032,112 @@ import ActionWhere from "./ts-components/ActionWhere";
 			}
 		} ;
 	} 
+
+	function ActionsGroup(CriteriaGroupe, specProvider) {
+		this.base = GroupContenaire ;
+		this.base() ;
+		this.baseCssClass = "ActionsGroup";
+		this.parentCriteriaGroup = CriteriaGroupe ;
+		this.cssClasses = {
+			ActionsGroup : true ,
+			Created : false
+		};
+		this.reinsert = false;
+		
+		this.actions = { 
+			ActionWhere: new ActionWhere(this, specProvider,settings),
+			ActionAnd: new ActionAnd(this,settings),
+			ActionRemove: new ActionRemove(this)
+		} ;
+
+		this.onCreated = function() {
+			this.actions.ActionRemove.init() ;
+			
+			$(this.actions.ActionRemove.html).find('a').on(
+				'click',
+				{
+					arg1: this.parentCriteriaGroup,
+					arg2: 'onRemoveCriteria'
+				},
+				SparnaturalComponents.eventProxiCriteria
+			);
+
+			if(this.parentCriteriaGroup.jsonQueryBranch != null) {
+				var branch = this.parentCriteriaGroup.jsonQueryBranch;
+				if(branch.children.length > 0) {
+					$(this.actions.ActionWhere.html).find('a').trigger('click') ;
+				}
+				if(branch.nextSibling != null) {
+					$(this.actions.ActionAnd.html).find('a').trigger('click') ;
+				}
+			}
+		}
+
+		this.onObjectPropertyGroupSelected = function() {
+			this.actions.ActionWhere.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
+			if (this.reinsert == true) {
+				this.actions.ActionWhere.reload() ;
+				this.actions.ActionAnd.reload() ;
+			} else {
+				this.actions.ActionWhere.init() ;
+				this.actions.ActionAnd.init() ;
+				this.reinsert = true ;
+			}			
+			
+			$(this.actions.ActionWhere.html).find('a').on(
+				'click', 
+				{
+					arg1: this,
+					arg2: 'onAddWhere'
+				},
+				SparnaturalComponents.eventProxiCriteria
+			);
+			$(this.actions.ActionAnd.html).find('a').on(
+				'click',
+				{
+					arg1: this,
+					arg2: 'onAddAnd'
+				},
+				SparnaturalComponents.eventProxiCriteria
+			);
+			
+			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
+		}
+		
+		this.onAddWhere = function () {	
+			this.parentCriteriaGroup.html.parent('li').addClass('haveWhereChild') ;
+			this.parentCriteriaGroup.initCompleted() ;
+			
+			var new_component = addComponent(
+				this.parentCriteriaGroup.thisForm_,
+				this.parentCriteriaGroup.ComponentHtml,
+				(this.parentCriteriaGroup.jsonQueryBranch && this.parentCriteriaGroup.jsonQueryBranch.children && this.parentCriteriaGroup.jsonQueryBranch.children.length > 0)?this.parentCriteriaGroup.jsonQueryBranch.children[0]:null
+			) ;
+			
+			// trigger 2 clicks to select the same class as the object class (?)
+			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
+			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
+		}
+
+		this.onAddAnd = function () {
+			var new_component = addComponent(
+				this.parentCriteriaGroup.thisForm_,
+				this.parentCriteriaGroup.AncestorComponentHtml,
+				(this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.nextSibling:null
+			) ;
+			
+			// trigger 2 clicks to select the same class as the current criteria (?)
+			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
+			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
+
+			return false ;			
+		}
+
+		this.onChange = function onChange() { };
+		
+		this.init() ;
+		
+	}	
 	
 	/**
 	 * Shows the selected values at the end of a criteria/line,
@@ -1336,117 +1445,6 @@ import ActionWhere from "./ts-components/ActionWhere";
 		this.init() ;
 		
 	}
-
-
-	/**
-	 * Groups all the actions on a line/criteria (AND / REMOVE / WHERE)
-	 * even if they are visually not connected
-	 **/
-	function ActionsGroup(CriteriaGroupe, specProvider) {
-		this.base = GroupContenaire ;
-		this.base() ;
-		this.baseCssClass = "ActionsGroup";
-		this.parentCriteriaGroup = CriteriaGroupe ;
-		this.cssClasses = {
-			ActionsGroup : true ,
-			Created : false
-		};
-		this.reinsert = false;
-		
-		this.actions = { 
-			ActionWhere: new ActionWhere(this, specProvider,settings),
-			ActionAnd: new ActionAnd(this,settings),
-			ActionRemove: new ActionRemove(this)
-		} ;
-
-		this.onCreated = function() {
-			this.actions.ActionRemove.init() ;
-			
-			$(this.actions.ActionRemove.html).find('a').on(
-				'click',
-				{
-					arg1: this.parentCriteriaGroup,
-					arg2: 'onRemoveCriteria'
-				},
-				SparnaturalComponents.eventProxiCriteria
-			);
-
-			if(this.parentCriteriaGroup.jsonQueryBranch != null) {
-				var branch = this.parentCriteriaGroup.jsonQueryBranch;
-				if(branch.children.length > 0) {
-					$(this.actions.ActionWhere.html).find('a').trigger('click') ;
-				}
-				if(branch.nextSibling != null) {
-					$(this.actions.ActionAnd.html).find('a').trigger('click') ;
-				}
-			}
-		}
-
-		this.onObjectPropertyGroupSelected = function() {
-			this.actions.ActionWhere.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
-			if (this.reinsert == true) {
-				this.actions.ActionWhere.reload() ;
-				this.actions.ActionAnd.reload() ;
-			} else {
-				this.actions.ActionWhere.init() ;
-				this.actions.ActionAnd.init() ;
-				this.reinsert = true ;
-			}			
-			
-			$(this.actions.ActionWhere.html).find('a').on(
-				'click', 
-				{
-					arg1: this,
-					arg2: 'onAddWhere'
-				},
-				SparnaturalComponents.eventProxiCriteria
-			);
-			$(this.actions.ActionAnd.html).find('a').on(
-				'click',
-				{
-					arg1: this,
-					arg2: 'onAddAnd'
-				},
-				SparnaturalComponents.eventProxiCriteria
-			);
-			
-			initGeneralEvent(this.parentCriteriaGroup.thisForm_);
-		}
-		
-		this.onAddWhere = function () {	
-			this.parentCriteriaGroup.html.parent('li').addClass('haveWhereChild') ;
-			this.parentCriteriaGroup.initCompleted() ;
-			
-			var new_component = addComponent(
-				this.parentCriteriaGroup.thisForm_,
-				this.parentCriteriaGroup.ComponentHtml,
-				(this.parentCriteriaGroup.jsonQueryBranch && this.parentCriteriaGroup.jsonQueryBranch.children && this.parentCriteriaGroup.jsonQueryBranch.children.length > 0)?this.parentCriteriaGroup.jsonQueryBranch.children[0]:null
-			) ;
-			
-			// trigger 2 clicks to select the same class as the object class (?)
-			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
-			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
-		}
-
-		this.onAddAnd = function () {
-			var new_component = addComponent(
-				this.parentCriteriaGroup.thisForm_,
-				this.parentCriteriaGroup.AncestorComponentHtml,
-				(this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.nextSibling:null
-			) ;
-			
-			// trigger 2 clicks to select the same class as the current criteria (?)
-			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
-			$(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
-
-			return false ;			
-		}
-
-		this.onChange = function onChange() { };
-		
-		this.init() ;
-		
-	}	
 	
 	/**
 	 * Selects the value for a range in a criteria/line, using a value selection widget
@@ -2000,6 +1998,7 @@ import ActionWhere from "./ts-components/ActionWhere";
 		return specProvider.expandSparql(sparql);
 	}
 
+
 	return this ;
 } // end of Sparnatural function
 
@@ -2043,6 +2042,6 @@ Object.compare = function (obj1, obj2) {
 	return true;
 };
 
-	
  
 }( jQuery ));
+

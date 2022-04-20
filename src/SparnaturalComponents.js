@@ -788,7 +788,7 @@ export class ClassTypeId extends HTMLComponent {
 		if (this.parentComponent.baseCssClass == "StartClassGroup") {
 			
 			var parentOrSibling = findParentOrSiblingCriteria(this.parentComponent.parentCriteriaGroup.thisForm_, id) ;
-			if (parentOrSibling) {
+			if (parentOrSibling.type) {
 				if (parentOrSibling.type == 'parent' ) {
 					// if we are child in a WHERE relation, the selected class is the selected
 					// class in the RANGE selection of the parent
@@ -796,6 +796,8 @@ export class ClassTypeId extends HTMLComponent {
 				} else {
 					// if we are sibling in a AND relation, the selected class is the selected
 					// class in the DOMAIN selection of the sibling
+					console.log("before error!")
+					console.dir(parentOrSibling)
 					default_value_s = parentOrSibling.element.StartClassGroup.value_selected ;
 				}
 				this.cssClasses.Highlited = false ;
@@ -1273,25 +1275,35 @@ class PropertySelectBuilder {
  * in an AND criteria
  **/
 export function findParentOrSiblingCriteria(thisForm_, id) {
-	var dependant = null ;
+	console.warn("searching for it...")
+	var dependant = {
+		type: null,
+		element: null
+	}
 	var dep_id = null ;
 	var element = $(thisForm_.sparnatural).find('li[data-index="'+id+'"]') ;
 	
 	if ($(element).parents('li').length > 0) {			
 		dep_id = $($(element).parents('li')[0]).attr('data-index') ;
-		dependant = {type : 'parent'}  ;
+		dependant = {type : 'parent', element: null}  ;
 	} else {
 		if ($(element).prev().length > 0) {
 			dep_id = $(element).prev().attr('data-index') ;
-			dependant = {type : 'sibling'}  ;				
+			dependant = {type : 'sibling', element: null}  ;				
 		}
-	}
+	} 
 
 	$(thisForm_.sparnatural.components).each(function(index) {			
 		if (this.index == dep_id) {
-			dependant.element = this.CriteriaGroup ;
-		}
+			console.log("forEach")
+			dependant = {
+				type: dependant.type,
+				element: this.CriteriaGroup
+			}
+			console.log(dependant)
+		} 
 	}) ;
+	console.log("end searchings")
 
 	return dependant ;
 }
