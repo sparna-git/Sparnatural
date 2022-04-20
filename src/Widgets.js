@@ -435,7 +435,7 @@
 		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		this.formatDate = format ;
 
-		placeHolder = (this.formatDate == 'day')?langSearch.PlaceholderTimeDateDayFormat:langSearch.PlaceholderTimeDateFormat ;
+		let placeHolder = (this.formatDate == 'day')?langSearch.PlaceholderTimeDateDayFormat:langSearch.PlaceholderTimeDateFormat ;
 		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+placeHolder+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+placeHolder+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>';
 		this.html += '&nbsp;<span id="circle-info-'+this.IdCriteriaGroupe+'" data-tippy-content="'+((this.formatDate == 'day')?langSearch.TimeWidgetDateHelp:langSearch.TimeWidgetYearHelp)+'">'+UiuxConfig.ICON_CIRCLE_INFO+'</span><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 

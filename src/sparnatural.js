@@ -46,10 +46,11 @@ import UiuxConfig from "./UiuxConfig";
 import Datasources from "./SparnaturalConfigDatasources";
 import { AutoCompleteWidget, SearchWidget,NoWidget,BooleanWidget,TimeDatePickerWidget,DatesWidget,ListWidget } from "./Widgets";
 
-
 import Config from "./SparnaturalConfig"
 
+// Import ts ported components
 import ActionRemove from "./ts-components/ActionRemove";
+import { ActionAnd } from "./ts-components/ActionAnd";
 
 (function( $ ) {
 	
@@ -264,7 +265,7 @@ import ActionRemove from "./ts-components/ActionRemove";
 		langSearch = i18nLabels[settings.language];
 		// defaults to English
 		if(langSearch == null) {langSearch = i18nLabels["en"];}
-
+		settings.langSearch = langSearch
 		thisForm.langSearch = langSearch ;
 
 		var specProviderFactory = new SpecificationProviderFactory();
@@ -1353,7 +1354,7 @@ import ActionRemove from "./ts-components/ActionRemove";
 		
 		this.actions = { 
 			ActionWhere: new ActionWhere(this, specProvider),
-			ActionAnd: new ActionAnd(this),
+			ActionAnd: new ActionAnd(this,settings),
 			ActionRemove: new ActionRemove(this)
 		} ;
 
@@ -1480,34 +1481,6 @@ import ActionRemove from "./ts-components/ActionRemove";
 			this.tools.attachHtml() ;
 
 			this.cssClasses.Created = true ;
-		} ;	
-		
-		this.reload = function() {
-			this.init(true);
-		} ;
-	}	
-	
-	function ActionAnd(GroupContenaire) {
-		this.baseCssClass = "ActionAnd";
-		this.ParentComponent = GroupContenaire ;
-		this.HtmlContainer = this.ParentComponent ;
-		this.cssClasses = {
-			ActionAnd : true ,
-			ShowOnHover : true ,
-			Created : false
-		}; 
-
-		this.init = function (reload = false) {
-			if (this.ParentComponent.reinsert && !reload) {
-				return this.reload() ;
-			}
-
-			this.widgetHtml = '<span class="trait-and-bottom"></span><a>'+langSearch.And+'</a>' ;
-			this.cssClasses.IsOnEdit = true ;
-			this.tools = new GenericTools(this) ;
-			this.tools.initHtml() ;
-			this.tools.attachHtml() ;		
-			this.cssClasses.Created = true ;			
 		} ;	
 		
 		this.reload = function() {

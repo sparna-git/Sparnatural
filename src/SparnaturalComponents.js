@@ -92,6 +92,8 @@ export class GroupContenaire extends HTMLComponent {
 
 	
 	init() {
+		console.log("init called with:")
+		console.log(this.baseCssClass)
 		if (!this.cssClasses.Created) {			
 			this.cssClasses.IsOnEdit = true ;
 			this.initHtml() ;

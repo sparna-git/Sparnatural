@@ -11,5 +11,10 @@ class ActionRemove extends GroupContenaire {
         this.widgetHtml = '<a><span class="unselect"><i class="far fa-times-circle"></i></span></a>' ;
         this.init()
     }
+    reload = () =>{
+        console.log("reeeeload  called")
+        this.init();
+    } ;
+
 }
 export default ActionRemove

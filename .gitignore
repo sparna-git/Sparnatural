@@ -6,3 +6,4 @@ prepros-6.config
 /node_modules
 package-lock.json
 /dist/
+/.vscode/
