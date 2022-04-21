@@ -2,12 +2,17 @@ import { FilteringSpecificationProvider } from "../FilteringSpecificationProvide
 import { GroupContenaire, HTMLComponent } from "../SparnaturalComponents";
 import ISettings from "./ISettings";
 import Config from "../SparnaturalConfig";
+import Datasources from "../SparnaturalConfigDatasources";
+import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../AutocompleteAndListHandlers";
+import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "../Widgets";
+import JsonLdSpecificationProvider from "../JsonLdSpecificationProvider";
+import { SparqlTreeHandler } from "../TreeHandlers";
 
 /**
  *  Selects the value for a range in a criteria/line, using a value selection widget
  **/
  class ObjectPropertyTypeWidget extends GroupContenaire {
-    specProvider:FilteringSpecificationProvider;
+    specProvider:JsonLdSpecificationProvider;
     settings: ISettings;
     htmlContainer: any;
     widgetType: string | null = null;
@@ -15,8 +20,7 @@ import Config from "../SparnaturalConfig";
     objectPropertyId: any;
     rangeClassId: any;
     classLabel: string;
-    add_all = true
-    add_or = true
+    widgetComponent:any;
     loadedValue:{
         key?: any;
         label?: any;
@@ -27,7 +31,7 @@ import Config from "../SparnaturalConfig";
         boolean?: any;
     } | null = null ;
 
-    constructor(ParentComponent: GroupContenaire, settings: ISettings, specProvider:FilteringSpecificationProvider){
+    constructor(ParentComponent: GroupContenaire, settings: ISettings, specProvider:JsonLdSpecificationProvider){
         super("ObjectPropertyTypeWidget",GroupContenaire)
         this.specProvider = specProvider;
         this.settings = settings;
@@ -39,8 +43,10 @@ import Config from "../SparnaturalConfig";
     }
 
     init(){
-        super.init() // IMPORTANT : check if this actually does the same thing like in the original code
+      
         let endLabel:string
+        let add_all = true
+        let add_or = true
         // if non selectable, simply exit
 			if (
 				this.widgetType == Config.NON_SELECTABLE_PROPERTY
@@ -53,7 +59,7 @@ import Config from "../SparnaturalConfig";
 						this.parentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
 					}
 
-					this.add_all = false;
+					add_all = false;
 					
 					
 				
@@ -62,7 +68,7 @@ import Config from "../SparnaturalConfig";
 					this.initGeneralEvent(this.parentComponent.parentCriteriaGroup.thisForm_);					
 				}
 				//var endLabel = null ; //Imporant is this still necessary?
-				this.add_or = false;
+				add_or = false;
 
 				//return true;
 			} else { // pour les autres type de widgets
@@ -91,10 +97,348 @@ import Config from "../SparnaturalConfig";
 					endLabel = this.settings.langSearch.Find+" :" ;
 				}
 			}
+            var parenthesisLabel = ' ('+this.classLabel+') ';
+			if(this.widgetType == Config.BOOLEAN_PROPERTY) {
+				parenthesisLabel = " " ;
+			}
 
+			//Ajout de l'option all si pas de valeur déjà selectionées
+			var selcetAll = "";
+			if (this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0) {
+				if (add_all) {
+					selcetAll = '<span class="selectAll"><span class="underline">'+this.settings.langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span>' ;
+				}
+				if (add_all && add_or) {
+					selcetAll += '<span class="or">'+this.settings.langSearch.Or+'</span> ';
+				}
+			}
+			
+			var widgetLabel = '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>'+ selcetAll  ;
+
+			if (endLabel) {
+				widgetLabel += '<span>'+ endLabel+'</span>' ;
+			}
+			
+			// init HTML by concatenating bit of HTML + widget HTML
+			this.widgetComponent = this.createWidgetComponent(
+				this.widgetType,
+				this.objectPropertyId,
+				this.rangeClassId
+			) ;
+
+			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
+				this.widgetHtml = widgetLabel ;
+			} else {
+				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+			}
+
+			var this_component = this;
+
+			this.widgetComponent.init() ;
+			this.cssClasses.Created = true ;
+			$(this.html).find('.selectAll').first().on("click", function() {
+				$(this_component).trigger('selectAll') ;
+			});
+            super.init() // IMPORTANT : check if this actually does the same thing like in the original code
     }
 
+    canHaveSelectAll() {
+        if (this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
+            this.specProvider.isLiteralClass(this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected)) {
+                return false;
+        } 
+        return true ;
+    }
 
+    reload() {
+        //this.html = "" ;
+        this.widgetHtml = null;
+        this.init();
+    }
+
+    createWidgetComponent = (widgetType:string, objectPropertyId:any, rangeClassId:any) => {
+        switch (widgetType) {
+          case Config.LITERAL_LIST_PROPERTY: {
+            // defaut handler to be used
+            var handler = this.settings.list; //IMPORTANT: what is this list?
+            
+            // to be passed in anonymous functions
+            var theSpecProvider = this.specProvider;
+
+            // determine custom datasource
+            var datasource = this.specProvider.getDatasource(objectPropertyId);
+
+            if(datasource == null) {
+                // try to read it on the class
+                datasource = this.specProvider.getDatasource(rangeClassId);
+            }
+
+            if(datasource == null) {
+
+                // datasource still null
+                // if a default endpoint was provided, provide default datasource
+                if(this.settings.defaultEndpoint != null) {
+                    datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.LITERAL_LIST_ALPHA);
+                }
+            }
+
+            if(datasource != null) {
+                // if we have a datasource, possibly the default one, provide a config based
+                // on a SparqlTemplate, otherwise use the handler provided
+                handler = new SparqlTemplateListHandler(
+                    // endpoint URL
+                    (datasource.sparqlEndpointUrl != null)?datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+                    
+                    // sparqlPostProcessor
+                    {
+                        semanticPostProcess: (sparql:any) => {
+                            // also add prefixes
+                            for (let key in this.settings.sparqlPrefixes) {
+                                sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+this.settings.sparqlPrefixes[key]+"> \nSELECT ");
+                            }
+                            return theSpecProvider.expandSparql(sparql);
+                        }
+                    },
+
+                    // language,
+                    this.settings.language,
+
+                    // sparql query (with labelPath interpreted)
+                    this.getFinalQueryString(datasource)
+                );
+            }
+
+            this.widgetComponent = new ListWidget(this, handler, this.settings.langSearch, this.settings, !(datasource.noSort == true)) ;
+            this.cssClasses.ListeWidget = true ;
+
+              break;
+          }
+          case Config.LIST_PROPERTY:
+            // defaut handler to be used
+            var handler = this.settings.list;
+            
+            // to be passed in anonymous functions
+            var theSpecProvider = this.specProvider;
+
+            // determine custom datasource
+            var datasource = this.specProvider.getDatasource(objectPropertyId);
+
+            if(datasource == null) {
+                // try to read it on the class
+                datasource = this.specProvider.getDatasource(rangeClassId);
+            }
+
+            if(datasource == null) {
+                // datasource still null
+                // if a default endpoint was provided, provide default datasource
+                if(this.settings.defaultEndpoint != null) {
+                    datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.LIST_URI_COUNT);
+                }
+            }
+
+            if(datasource != null) {
+                // if we have a datasource, possibly the default one, provide a config based
+                // on a SparqlTemplate, otherwise use the handler provided
+                handler = new SparqlTemplateListHandler(
+                    // endpoint URL
+                    (datasource.sparqlEndpointUrl != null)?datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+                    
+                    // sparqlPostProcessor
+                    {
+                        semanticPostProcess : function(sparql:any) {
+                            // also add prefixes
+                            for (let key in this.settings.sparqlPrefixes) {
+                                sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+this.settings.sparqlPrefixes[key]+"> \nSELECT ");
+                            }
+                            return theSpecProvider.expandSparql(sparql);
+                        }
+                    },
+
+                    // language,
+                    this.settings.language,
+
+                    // sparql query (with labelPath interpreted)
+                    this.getFinalQueryString(datasource)
+                );
+            }
+
+            this.widgetComponent = new ListWidget(this, handler, this.settings.langSearch, this.settings, !(datasource.noSort == true)) ;
+            this.cssClasses.ListeWidget = true ;
+            break;
+          case Config.AUTOCOMPLETE_PROPERTY:
+            var handler = this.settings.autocomplete;
+            // to be passed in anonymous functions
+            var theSpecProvider = this.specProvider;
+
+            // determine custom datasource
+            var datasource = this.specProvider.getDatasource(objectPropertyId);
+
+            if(datasource == null) {
+                // try to read it on the class
+                datasource = this.specProvider.getDatasource(rangeClassId);
+            }
+
+            if(datasource == null) {
+                // datasource still null
+                // if a default endpoint was provided, provide default datasource
+                if(this.settings.defaultEndpoint != null) {
+                    datasource = Datasources.DATASOURCES_CONFIG.get(Datasources.SEARCH_URI_CONTAINS);
+                }
+            }
+
+            if(datasource != null) {
+                // if we have a datasource, possibly the default one, provide a config based
+                // on a SparqlTemplate, otherwise use the handler provided
+                handler = new SparqlTemplateAutocompleteHandler(
+                    // endpoint URL
+                    (datasource.sparqlEndpointUrl != null)?datasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+                    
+                    // sparqlPostProcessor
+                    {
+                        semanticPostProcess : function(sparql:any) {
+                            // also add prefixes
+                            for (let key in this.settings.sparqlPrefixes) {
+                                sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+this.settings.sparqlPrefixes[key]+"> \nSELECT ");
+                            }
+                            return theSpecProvider.expandSparql(sparql);
+                        }
+                    },
+
+                    // language,
+                    this.settings.language,
+
+                    // sparql query (with labelPath interpreted)
+                    this.getFinalQueryString(datasource)
+                );
+            }
+
+            this.widgetComponent = new AutoCompleteWidget(this, handler) ;
+            this.cssClasses.AutocompleteWidget = true ;
+            break;
+          case Config.GRAPHDB_SEARCH_PROPERTY:
+          case Config.STRING_EQUALS_PROPERTY:
+          case Config.SEARCH_PROPERTY:
+            this.widgetComponent = new SearchWidget(this, this.settings.langSearch) ;
+            this.cssClasses.SearchWidget  = true ;
+            break;
+          case Config.TIME_PROPERTY_YEAR:
+            this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, false, this.settings.langSearch) ;
+            this.cssClasses.TimeDatePickerWidget  = true ;
+            break;
+          case Config.TIME_PROPERTY_DATE:
+            this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, 'day', this.settings.langSearch) ;
+            this.cssClasses.TimeDatePickerWidget  = true ;
+            break;
+          case Config.TIME_PROPERTY_PERIOD:
+            this.widgetComponent = new DatesWidget(this, this.settings.dates, this.settings.langSearch) ;
+            this.cssClasses.DatesWidget  = true ;
+            break;
+          case Config.NON_SELECTABLE_PROPERTY:
+              this.widgetComponent = new NoWidget(this) ;
+              this.cssClasses.NoWidget = true ;
+              break;
+          case Config.BOOLEAN_PROPERTY:
+              this.widgetComponent = new BooleanWidget(this, this.settings.langSearch) ;
+              this.cssClasses.BooleanWidget = true ;
+              break;
+          case Config.TREE_PROPERTY:
+              var theSpecProvider = this.specProvider;
+
+              // determine custom roots datasource
+              var treeRootsDatasource = this.specProvider.getTreeRootsDatasource(objectPropertyId);  
+              if(treeRootsDatasource == null) {
+                  // try to read it on the class
+                  treeRootsDatasource = this.specProvider.getTreeRootsDatasource(rangeClassId);
+              }
+              if(treeRootsDatasource == null) {
+                  // datasource still null
+                  // if a default endpoint was provided, provide default datasource
+                  if(this.settings.defaultEndpoint != null) {
+                      treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_ROOT_SKOSTOPCONCEPT);
+                  }
+              }
+
+              // determine custom children datasource
+              var treeChildrenDatasource = this.specProvider.getTreeChildrenDatasource(objectPropertyId);  
+              if(treeChildrenDatasource == null) {
+                  // try to read it on the class
+                  treeChildrenDatasource = this.specProvider.getTreeChildrenDatasource(rangeClassId);
+              }
+              if(treeChildrenDatasource == null) {
+                  // datasource still null
+                  // if a default endpoint was provided, provide default datasource
+                  if(this.settings.defaultEndpoint != null) {
+                      treeChildrenDatasource = Datasources.DATASOURCES_CONFIG.get(Datasources.TREE_CHILDREN_SKOSNARROWER);
+                  }
+              }
+
+              
+
+              if(treeRootsDatasource != null && treeChildrenDatasource != null) {
+                  // if we have a datasource, possibly the default one, provide a config based
+                  // on a SparqlTemplate, otherwise use the handler provided
+                  // handler = new StubTreeHandler();
+                  
+                  handler = new SparqlTreeHandler(
+                      // endpoint URL
+                      // we read it on the roots datasource
+                      (treeRootsDatasource.sparqlEndpointUrl != null)?treeRootsDatasource.sparqlEndpointUrl:this.settings.defaultEndpoint,
+                      
+                      // sparqlPostProcessor
+                      {
+                          semanticPostProcess : function(sparql:any) {
+                              // also add prefixes
+                              for (let key in this.settings.sparqlPrefixes) {
+                                  sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+this.settings.sparqlPrefixes[key]+"> \nSELECT ");
+                              }
+                              return theSpecProvider.expandSparql(sparql);
+                          }
+                      },
+
+                      // language,
+                      this.settings.language,
+
+                      // sparql strings
+                      this.getFinalQueryString(treeRootsDatasource),
+                      this.getFinalQueryString(treeChildrenDatasource)
+                  );
+                  
+              }
+
+              this.widgetComponent = new TreeWidget(this, handler, this.settings, this.settings.langSearch) ;
+                this.cssClasses.TreeWidget = true ;
+                break;
+          default:
+              // TODO : throw Exception
+              console.log("Unexpected Widget Type "+widgetType)
+        }
+    };
+
+    	/**
+	 * Builds the final query string from a query source, by injecting
+	 * labelPath/property and childrenPath/property
+	 **/
+	getFinalQueryString(datasource:any) {
+		if(datasource.queryString != null) {
+			return datasource.queryString;
+		} else {
+			var sparql = datasource.queryTemplate;
+
+			if(datasource.labelPath != null || datasource.labelProperty) {
+				var theLabelPath = (datasource.labelPath)?datasource.labelPath:"<"+datasource.labelProperty+">";
+				var reLabelPath = new RegExp("\\$labelPath","g");
+				sparql = sparql.replace(reLabelPath, theLabelPath);
+			}
+
+			if(datasource.childrenPath != null || datasource.childrenProperty) {
+				var theChildrenPath = (datasource.childrenPath)?datasource.childrenPath:"<"+datasource.childrenProperty+">";
+				var reChildrenPath = new RegExp("\\$childrenPath","g");
+				sparql = sparql.replace(reChildrenPath, theChildrenPath);
+			}
+
+			return sparql;
+		}
+	}
 
     initGeneralEvent(thisForm_: { sparnatural: any; }) {
 		$('li.groupe').off( "mouseover" ) ;
@@ -149,6 +493,7 @@ import Config from "../SparnaturalConfig";
 		$(thisForm_.sparnatural).find('div.bg-wrapper').css({background : cssdef+')' }) ;
 	
 	}
+
 
  }
 

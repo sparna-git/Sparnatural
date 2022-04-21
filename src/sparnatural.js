@@ -52,6 +52,7 @@ import Config from "./SparnaturalConfig"
 import ActionRemove from "./ts-components/ActionRemove";
 import ActionAnd  from "./ts-components/ActionAnd";
 import ActionWhere from "./ts-components/ActionWhere";
+import ObjectPropertyTypeWidget from "./ts-components/ObjectPropertyTypeWidget";
 
 (function( $ ) {
 	
@@ -1451,31 +1452,7 @@ import ActionWhere from "./ts-components/ActionWhere";
 		return elem.offset().left - $(elemParent).offset().left ;
 	}
 
-	/**
-	 * Builds the final query string from a query source, by injecting
-	 * labelPath/property and childrenPath/property
-	 **/
-	function getFinalQueryString(datasource) {
-		if(datasource.queryString != null) {
-			return datasource.queryString;
-		} else {
-			var sparql = datasource.queryTemplate;
 
-			if(datasource.labelPath != null || datasource.labelProperty) {
-				var theLabelPath = (datasource.labelPath)?datasource.labelPath:"<"+datasource.labelProperty+">";
-				var reLabelPath = new RegExp("\\$labelPath","g");
-				sparql = sparql.replace(reLabelPath, theLabelPath);
-			}
-
-			if(datasource.childrenPath != null || datasource.childrenProperty) {
-				var theChildrenPath = (datasource.childrenPath)?datasource.childrenPath:"<"+datasource.childrenProperty+">";
-				var reChildrenPath = new RegExp("\\$childrenPath","g");
-				sparql = sparql.replace(reChildrenPath, theChildrenPath);
-			}
-
-			return sparql;
-		}
-	}
 
 	/**
 	 * Preprocess JSON query to add parent and nextSibling links

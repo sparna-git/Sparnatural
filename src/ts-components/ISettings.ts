@@ -12,4 +12,7 @@ export default interface Settings  {
     localCacheDataTtl?: number, 
     filterConfigOnEndpoint?: boolean,
     langSearch:any
+    autocomplete:any //Handler function
+    list:any //Handler function
+    dates:any //Handler function?
 }
