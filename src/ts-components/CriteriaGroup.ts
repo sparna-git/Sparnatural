@@ -24,8 +24,8 @@ class CriteriaGroup extends HTMLComponent {
     EndClassWidgetGroup:any;
     ActionsGroup:any;
     specProvider:any;
-    constructor(context: { AncestorHtmlContext: any; HtmlContext: any; FormContext: any; ContextComponentIndex: any; }, settings: ISettings, specProvider: any, jsonQueryBranch:any,langSearch:any){
-        super(settings,langSearch,specProvider)
+    constructor(context: { AncestorHtmlContext: any; HtmlContext: any; FormContext: any; ContextComponentIndex: any; }, settings: ISettings, specProvider: any, jsonQueryBranch:any){
+        super() // IMPORTANT Check what has to come into the constructor
         this.context = context
         this.thisForm_ = context.FormContext ;
         this.ComponentHtml = context.HtmlContext ;
@@ -35,9 +35,9 @@ class CriteriaGroup extends HTMLComponent {
         this.id = context.ContextComponentIndex ;
         this.html = $('<div id="CriteriaGroup-'+this.id+'" class="CriteriaGroup"></div>').appendTo(this.ComponentHtml)
         // create all the elements of the criteria
-        this.StartClassGroup = new StartClassGroup(this, this.specProvider, this.settings) ;
+        this.StartClassGroup = new StartClassGroup(this, specProvider, settings) ;
         this.OptionsGroup = new OptionsGroup(this, specProvider) ;
-        this.ObjectPropertyGroup = new ObjectPropertyGroup(this, specProvider, settings, langSearch.ObjectPropertyTemporaryLabel) ;
+        this.ObjectPropertyGroup = new ObjectPropertyGroup(this, specProvider, settings, settings.langSearch.ObjectPropertyTemporaryLabel) ;
         this.EndClassGroup = new EndClassGroup(this, specProvider, settings) ;
         this.EndClassWidgetGroup = {}//new EndClassWidgetGroup(this, this.settings, specProvider) ;
         this.ActionsGroup = new ActionsGroup(this, specProvider,settings) ;
@@ -208,8 +208,7 @@ class CriteriaGroup extends HTMLComponent {
 			this.settings,
 			this.specProvider,
 			// pass the JSON query branch as an input parameter
-			jsonQueryBranch,
-            this.settings.langSearch
+			jsonQueryBranch
 		);
 		
 		thisForm_.sparnatural.components.push({index: new_index, CriteriaGroup: UnCritere });			

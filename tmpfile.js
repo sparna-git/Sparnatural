@@ -10,7 +10,8 @@
 		this.html = '<div></div>' ;
 		this.tools = null ;
 		this.widgetHtml = null ;
-		this.widgetType = null ;		
+		this.widgetType = null ;
+        		
 		this.cssClasses = {
 			ObjectPropertyTypeWidget : true,
 			Created : false

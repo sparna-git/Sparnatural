@@ -1,18 +1,11 @@
+import { BooleanValue, DateTimeValue, ExactStringValue, LiteralValue, LuceneQueryValue, Query, QueryBranch, QueryLine, RegexValue, URIValue } from "./Query";
+
 var SparqlGenerator = require('sparqljs').Generator;
 // var SparqlParser = require('sparqljs').Parser;
 
 var Config = require('./SparnaturalConfig.js');
 
-Query = require("./Query.js").Query ;
-QueryBranch = require("./Query.js").QueryBranch ;
-QueryLine = require("./Query.js").QueryLine ;
-URIValue = require("./Query.js").URIValue ;
-LiteralValue = require("./Query.js").LiteralValue ;
-DateTimeValue = require("./Query.js").DateTimeValue ;
-RegexValue = require("./Query.js").RegexValue ;
-LuceneQueryValue = require("./Query.js").LuceneQueryValue ;
-ExactStringValue = require("./Query.js").ExactStringValue ;
-BooleanValue = require("./Query.js").BooleanValue ;
+// TODO: Change name of file to classname
 
 class JSONQueryGenerator {
 
@@ -23,7 +16,7 @@ class JSONQueryGenerator {
 	/**
 	 * Generates a JSON query
 	 **/
-	generateQuery(formObject) {
+	generateQuery(formObject: { queryOptions: any; sparnatural: { components: string | any[]; }; }) {
 		if(this.hasEnoughCriteria(formObject)) {
 			var query = new Query(formObject.queryOptions);
 
@@ -47,7 +40,7 @@ class JSONQueryGenerator {
 		}		
 	}
 
-	generateBranch(formObject, component, i, dependantDe) {
+	generateBranch(formObject: { queryOptions?: any; sparnatural: any; }, component: { CriteriaGroup: { StartClassGroup: { value_selected: any; getVarName: () => any; }; ObjectPropertyGroup: { value_selected: any; }; EndClassGroup: { value_selected: any; getVarName: () => any; }; OptionsGroup: { valuesSelected: { [x: string]: boolean; }; }; EndClassWidgetGroup: { selectedValues: string | any[]; inputTypeComponent: { widgetType: any; }; }; }; }, i: number, dependantDe: { type: string; }) {
 		var branch = new QueryBranch();
 					
 		var domainClass = component.CriteriaGroup.StartClassGroup.value_selected ;
@@ -83,12 +76,14 @@ class JSONQueryGenerator {
 		var values = component.CriteriaGroup.EndClassWidgetGroup.selectedValues;
 		// Set the values based on widget type
 		var _WidgetType = component.CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType ;
-		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues.length > 0 ) {			
+		console.warn("before log")
+		console.dir(component.CriteriaGroup.EndClassWidgetGroup)
+		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues?.length > 0 ) {	// IMPORTANT see if the introduced null check still has the same effect		
 			switch (_WidgetType) {					
 			  case Config.TREE_PROPERTY:
 			  case Config.LIST_PROPERTY:
 			  case Config.AUTOCOMPLETE_PROPERTY:
-			  	for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {				  	
+			  	for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues as Array<any>) {				  	
 				  	var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
 				  	line.values.push(new URIValue(
 				  		selectedValue.uri,
@@ -97,7 +92,7 @@ class JSONQueryGenerator {
 				}
 			  	break;
 			  case Config.LITERAL_LIST_PROPERTY:
-				for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {
+				for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues as Array<any>) {
 					// TODO : we use the same key 'uri' but this is a literal
 				  	var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
 				  	line.values.push(new LiteralValue(
@@ -109,7 +104,7 @@ class JSONQueryGenerator {
 			  case Config.TIME_PROPERTY_PERIOD:
 			  case Config.TIME_PROPERTY_YEAR:
 			  case Config.TIME_PROPERTY_DATE:
-			  	for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues) {
+			  	for (var key in component.CriteriaGroup.EndClassWidgetGroup.selectedValues as Array<any>) {
 					var selectedValue = component.CriteriaGroup.EndClassWidgetGroup.selectedValues[key];
 					line.values.push(new DateTimeValue(selectedValue.start, selectedValue.stop, selectedValue.label));
 				}
@@ -153,14 +148,16 @@ class JSONQueryGenerator {
 		return branch;
 	}
 
-	hasEnoughCriteria(formObject) {
+	hasEnoughCriteria(formObject: { queryOptions?: any; sparnatural: any; }) {
 		for (var i = 0; i < formObject.sparnatural.components.length; i++) {			
 			// if there is no value selected and the widget required one
-			// do not process this component			
+			// do not process this component		
 			if(
-				($.inArray(formObject.sparnatural.components[i].CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType, this.WIDGETS_REQUIRING_VALUES) > -1)
+				//($.inArray(formObject.sparnatural.components[i].CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType, WIDGETS_REQUIRING_VALUES) > -1)
+				
+				($.inArray(formObject.sparnatural.components[i].CriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetType,[]) > -1)
 				&&
-				(formObject.sparnatural.components[i].CriteriaGroup.EndClassWidgetGroup.selectedValues.length === 0)
+				(formObject.sparnatural.components[i].CriteriaGroup.EndClassWidgetGroup.selectedValues?.length === 0) // IMPORTANT see if the introduced null check still has the same effect	
 			) {
 				continue;
 			} else {
@@ -173,9 +170,9 @@ class JSONQueryGenerator {
 		return false;	
 	}
 
-	findDependantCriteria(thisForm_, id) {
-		var dependant = null ;
-		var dep_id = null ;
+	findDependantCriteria(thisForm_: { queryOptions?: any; sparnatural: any; }, id: string | number) {
+		var dependant: { element?: any; type: string; } = null ;
+		var dep_id: string = null ;
 		var element = $(thisForm_.sparnatural).find('li[data-index="'+id+'"]') ;
 		
 		if ($(element).parents('li').length > 0) {			
@@ -198,7 +195,7 @@ class JSONQueryGenerator {
 		return dependant ;
 	}
 
-	localName(uri) {
+	localName(uri: string) {
 		if (uri.indexOf("#") > -1) {
 			return uri.split("#")[1] ;
 		} else {
@@ -209,6 +206,4 @@ class JSONQueryGenerator {
 }
 
 
-module.exports = {
-	JSONQueryGenerator: JSONQueryGenerator
-}
+export default JSONQueryGenerator

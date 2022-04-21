@@ -5,7 +5,7 @@ import ActionRemove from "./ActionRemove";
 import ActionWhere from "./ActionWhere";
 import CriteriaGroup from "./CriteriaGroup";
 import ISettings from "./ISettings";
-const SparnaturalComponents = require("./SparnaturalComponents.js"); //IMPORTANT : double import?
+import * as SparnaturalComponents from "../SparnaturalComponents.js"; //IMPORTANT : double import?
 
 
 /**
@@ -164,8 +164,7 @@ class ActionsGroup extends GroupContenaire {
 			this.settings,
 			this.specProvider,
 			// pass the JSON query branch as an input parameter
-			jsonQueryBranch,
-            this.settings.langSearch
+			jsonQueryBranch
 		);
 		
 		thisForm_.sparnatural.components.push({index: new_index, CriteriaGroup: UnCritere });			

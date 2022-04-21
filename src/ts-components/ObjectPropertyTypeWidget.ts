@@ -14,7 +14,7 @@ import { SparqlTreeHandler } from "../TreeHandlers";
  class ObjectPropertyTypeWidget extends GroupContenaire {
     specProvider:JsonLdSpecificationProvider;
     settings: ISettings;
-    htmlContainer: any;
+    HtmlContainer: any;
     widgetType: string | null = null;
     widgetHtml: null | string = null;
     objectPropertyId: any;
@@ -33,16 +33,23 @@ import { SparqlTreeHandler } from "../TreeHandlers";
 
     constructor(ParentComponent: GroupContenaire, settings: ISettings, specProvider:JsonLdSpecificationProvider){
         super("ObjectPropertyTypeWidget",GroupContenaire)
+        console.log("constr of objectpropertytypewidget")
+        console.dir(ParentComponent)
+        this.parentComponent = ParentComponent
         this.specProvider = specProvider;
         this.settings = settings;
-        this.htmlContainer = ParentComponent
-        this.objectPropertyId = ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected
-        this.widgetType = specProvider.getObjectPropertyType(this.objectPropertyId);
-        this.rangeClassId = ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected
-        this.classLabel = specProvider.getLabel(this.rangeClassId) ;
+        this.HtmlContainer = ParentComponent
     }
 
     init(){
+        console.dir(this.parentComponent)
+
+        this.objectPropertyId = this.parentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected
+        console.log(this.objectPropertyId)
+        this.widgetType = this.specProvider.getObjectPropertyType(this.objectPropertyId);
+        console.warn("after error")
+        this.rangeClassId = this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected
+        this.classLabel = this.specProvider.getLabel(this.rangeClassId) ;
       
         let endLabel:string
         let add_all = true
@@ -104,7 +111,9 @@ import { SparqlTreeHandler } from "../TreeHandlers";
 
 			//Ajout de l'option all si pas de valeur déjà selectionées
 			var selcetAll = "";
-			if (this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues.length == 0) {
+            console.warn("log objectproptypwidget")
+            console.dir(this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup)
+			if (this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues?.length == 0) {
 				if (add_all) {
 					selcetAll = '<span class="selectAll"><span class="underline">'+this.settings.langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span>' ;
 				}
@@ -133,7 +142,7 @@ import { SparqlTreeHandler } from "../TreeHandlers";
 			}
 
 			var this_component = this;
-
+            console.log("iniiiiiit")
 			this.widgetComponent.init() ;
 			this.cssClasses.Created = true ;
 			$(this.html).find('.selectAll').first().on("click", function() {
@@ -152,6 +161,7 @@ import { SparqlTreeHandler } from "../TreeHandlers";
 
     reload() {
         //this.html = "" ;
+        console.log("Reload!")
         this.widgetHtml = null;
         this.init();
     }
@@ -439,6 +449,13 @@ import { SparqlTreeHandler } from "../TreeHandlers";
 			return sparql;
 		}
 	}
+    getValue() {
+        if (this.loadedValue !== null) {
+            return this.loadedValue ;
+        } else {
+            return this.widgetComponent.getValue() ;
+        }
+    }
 
     initGeneralEvent(thisForm_: { sparnatural: any; }) {
 		$('li.groupe').off( "mouseover" ) ;

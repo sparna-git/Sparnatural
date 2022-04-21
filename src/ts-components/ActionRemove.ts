@@ -12,7 +12,6 @@ class ActionRemove extends GroupContenaire {
         this.init()
     }
     reload = () =>{
-        console.log("reeeeload  called")
         this.init();
     } ;
 

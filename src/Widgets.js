@@ -432,7 +432,7 @@
 		this.datesHandler = datesHandler;
 		this.ParentComponent = inputTypeComponent ;
 		
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent?.parentCriteriaGroup.id ;
 		this.formatDate = format ;
 
 		let placeHolder = (this.formatDate == 'day')?langSearch.PlaceholderTimeDateDayFormat:langSearch.PlaceholderTimeDateFormat ;

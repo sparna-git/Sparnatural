@@ -15,7 +15,6 @@ class ActionAnd extends GroupContenaire {
     }; 
     }
     reload = () =>{
-        console.log("reeeeload  called")
         this.init();
     } ;
 }

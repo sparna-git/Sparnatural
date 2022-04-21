@@ -22,7 +22,7 @@ export default class JsonLdSpecificationProvider {
 
 	getObjectPropertyType = function(objectPropertyId: any) {
 		var objectProperty = this._getResourceById(objectPropertyId);
-
+		
 		var superProperties = (objectProperty['subPropertyOf'] === "object")?objectProperty['subPropertyOf']:new Array(objectProperty['subPropertyOf']);
 
 		for(var i in superProperties) {

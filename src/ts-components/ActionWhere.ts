@@ -15,10 +15,8 @@ class ActionWhere extends HTMLComponent {
         let widgetHtml = "initialize"
 
         super("ActionWhere",cssClasses,parentComponent,widgetHtml)
-        console.warn("constructin ActionWhere")
         
         this.settings = settings
-        console.dir(this)
         this.specProvider = specProvider  
     }
     init = () => {
@@ -31,7 +29,6 @@ class ActionWhere extends HTMLComponent {
             $(endClassGroup.html).removeClass('noPropertyWidget') ;
         }
         var endLabel = this.specProvider.getLabel(endClassGroup.value_selected) ;
-        console.dir(this)
         var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choiceNumber+'</span></span>'+this.settings.langSearch.Search+' '+ endLabel + ' '+this.settings.langSearch.That+'...' ;
 
         this.widgetHtml = widgetLabel+'<a>+</a>' ;
