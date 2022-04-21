@@ -1,5 +1,5 @@
-import { GroupContenaire } from "../SparnaturalComponents";
-import ISettings from "./ISettings"
+import GroupContenaire from "./GroupContenaire"
+import ISettings from "../ISettings"
 
 
 class ActionAnd extends GroupContenaire {
@@ -7,7 +7,7 @@ class ActionAnd extends GroupContenaire {
     constructor(parentComponent:GroupContenaire,settings:ISettings){
         super("ActionAnd",parentComponent)
         this.HtmlContainer = parentComponent
-        this.widgetHtml = '<span class="trait-and-bottom"></span><a>'+settings.langSearch.And+'</a>' ;
+        this.widgetHtml = $('<span class="trait-and-bottom"></span><a>'+settings.langSearch.And+'</a>') ;
         this.cssClasses = {
         ActionAnd : true ,
         ShowOnHover : true ,

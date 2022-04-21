@@ -1,21 +1,19 @@
-import { GroupContenaire } from "../SparnaturalComponents";
-import ISettings from "./ISettings";
-import Config from "../SparnaturalConfig";
-import Datasources from "../SparnaturalConfigDatasources";
-import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../AutocompleteAndListHandlers";
-import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "../Widgets";
-import JsonLdSpecificationProvider from "../JsonLdSpecificationProvider";
-import { SparqlTreeHandler } from "../TreeHandlers";
+import GroupContenaire from "./GroupContenaire";
+import ISettings from "../ISettings";
+import Config from "../../SparnaturalConfig";
+import Datasources from "../../SparnaturalConfigDatasources";
+import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../../AutocompleteAndListHandlers";
+import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "../../Widgets";
+import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
+import { SparqlTreeHandler } from "../../TreeHandlers";
 
 /**
  *  Selects the value for a range in a criteria/line, using a value selection widget
  **/
  class ObjectPropertyTypeWidget extends GroupContenaire {
-    specProvider:JsonLdSpecificationProvider;
     settings: ISettings;
     HtmlContainer: any;
     widgetType: string | null = null;
-    widgetHtml: null | string = null;
     objectPropertyId: any;
     rangeClassId: any;
     classLabel: string;
@@ -32,9 +30,8 @@ import { SparqlTreeHandler } from "../TreeHandlers";
     } | null = null ;
 
     constructor(ParentComponent: GroupContenaire, settings: ISettings, specProvider:JsonLdSpecificationProvider){
-        super("ObjectPropertyTypeWidget",GroupContenaire)
+        super("ObjectPropertyTypeWidget",GroupContenaire,specProvider)
         this.parentComponent = ParentComponent
-        this.specProvider = specProvider;
         this.settings = settings;
         this.HtmlContainer = ParentComponent
     }
@@ -132,13 +129,12 @@ import { SparqlTreeHandler } from "../TreeHandlers";
 			) ;
 
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-				this.widgetHtml = widgetLabel ;
+				this.widgetHtml = $(widgetLabel) ;
 			} else {
-				this.widgetHtml = widgetLabel + this.widgetComponent.html ;
+				this.widgetHtml = $(widgetLabel) + this.widgetComponent.html ;
 			}
 
 			var this_component = this;
-            console.log("iniiiiiit")
 			this.widgetComponent.init() ;
 			this.cssClasses.Created = true ;
 			$(this.html).find('.selectAll').first().on("click", function() {

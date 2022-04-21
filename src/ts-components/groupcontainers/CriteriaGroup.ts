@@ -1,12 +1,16 @@
-import { isReturnStatement } from "typescript";
-import { StartClassGroup, OptionsGroup, ObjectPropertyGroup, EndClassGroup, findParentOrSiblingCriteria, HTMLComponent, GroupContenaire } from "../SparnaturalComponents";
 import ActionsGroup from "./ActionsGroup";
-import ISettings from "./ISettings";
+import ISettings from "../ISettings";
+import GroupContenaire from "./GroupContenaire";
+import StartClassGroup from "./StartClassGroup";
+import { OptionsGroup } from "./OptionsGroup";
+import ObjectPropertyGroup from "./ObjectPropertyGroup";
+import EndClassGroup from "./EndClassGroup";
+import { findParentOrSiblingCriteria } from "../../SparnaturalComponents";
 /**
 * A single line/criteria
 **/
 
-class CriteriaGroup extends GroupContenaire {
+class CriteriaGroup {
     thisForm_ :any;
     ComponentHtml:any;
     AncestorComponentHtml:any;
@@ -25,7 +29,7 @@ class CriteriaGroup extends GroupContenaire {
     ActionsGroup:any;
     specProvider:any;
     constructor(context: { AncestorHtmlContext: any; HtmlContext: any; FormContext: any; ContextComponentIndex: any; }, settings: ISettings, specProvider: any, jsonQueryBranch:any){
-        super() // IMPORTANT Check what has to come into the constructor
+        //super() // IMPORTANT Check what has to come into the constructor
         this.context = context
         this.thisForm_ = context.FormContext ;
         this.ComponentHtml = context.HtmlContext ;

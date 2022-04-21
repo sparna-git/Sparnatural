@@ -1,17 +1,17 @@
-import { FilteringSpecificationProvider } from "../FilteringSpecificationProvider";
-import JsonLdSpecificationProvider from "../JsonLdSpecificationProvider";
-import { GroupContenaire } from "../SparnaturalComponents";
-import ISettings from "./ISettings";
+import { FilteringSpecificationProvider } from "../../FilteringSpecificationProvider";
+import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
+import GroupContenaire from "./GroupContenaire";
+import ISettings from "../ISettings";
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
-import * as SparnaturalComponents from "../SparnaturalComponents";
-import { AbstractValue } from "../Query";
-import Config from "../SparnaturalConfig";
-import * as UiuxConfig from "../UiuxConfig";
+import * as SparnaturalComponents from "../../SparnaturalComponents";
+import { AbstractValue } from "../../Query";
+import Config from "../../SparnaturalConfig";
+import * as UiuxConfig from "../../UiuxConfig";
+import CriteriaGroup from "./CriteriaGroup";
 
 
 class EndClassWidgetGroup extends GroupContenaire {
     settings:ISettings
-    specProvider:JsonLdSpecificationProvider
     inputTypeComponent:ObjectPropertyTypeWidget
     selectedValues: Array<any>
     selectAllValue:boolean = true
@@ -21,10 +21,9 @@ class EndClassWidgetGroup extends GroupContenaire {
         Config.AUTOCOMPLETE_PROPERTY,
         Config.TREE_PROPERTY
     ];
-    constructor(CriteriaGroupe:GroupContenaire, settings:ISettings, specProvider:JsonLdSpecificationProvider){
-        super("EndClassWidgetGroup",CriteriaGroupe)
+    constructor(CriteriaGroupe:CriteriaGroup, settings:ISettings, specProvider:JsonLdSpecificationProvider){
+        super("EndClassWidgetGroup",CriteriaGroupe,specProvider)
         this.settings = settings
-        this.specProvider = specProvider
         this.cssClasses={
             EndClassWidgetGroup: true,
             Created: false

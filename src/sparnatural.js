@@ -39,7 +39,7 @@ import { SpecificationProviderFactory } from "./SpecificationProviderFactory";
 import { SimpleStatisticsHandler } from "./StatisticsHandlers";
 
 import UiuxConfig from "./UiuxConfig";
-import CriteriaGroup from "./ts-components/CriteriaGroup";
+import CriteriaGroup from "./ts-components/groupcontainers/CriteriaGroup";
 
 (function( $ ) {
 	
@@ -352,8 +352,6 @@ import CriteriaGroup from "./ts-components/CriteriaGroup";
 
 		
 		function initForm(form) {	
-			console.log("this1.2")
-			console.log(this)
 			var SubmitSection = "" ;
 			if (settings.onSubmit instanceof Function) {
 				var SubmitSection = '<div class="submitSectionWrapper" style="background: rgba('+settings.backgroundBaseColor+');"><div class="submitSection"><a class="submitDisable">'+UiuxConfig.ICON_PLAY+'</a></div></div>' ; 
@@ -436,8 +434,6 @@ import CriteriaGroup from "./ts-components/CriteriaGroup";
 		}
 
 		function initVariablesSelector(form) {
-			console.log("this2")
-			console.log(this)
 			form.sparnatural.variablesSelector = {} ;
 			this.form = form ;
 			this.html = $(form.sparnatural).find('.variablesSelection').first() ; 

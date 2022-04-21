@@ -1,11 +1,15 @@
-import { FilteringSpecificationProvider } from "../FilteringSpecificationProvider";
-import { GroupContenaire, HTMLComponent } from "../SparnaturalComponents";
+import { FilteringSpecificationProvider } from "../../FilteringSpecificationProvider";
+
 import ActionAnd from "./ActionAnd";
 import ActionRemove from "./ActionRemove";
-import ActionWhere from "./ActionWhere";
+import ActionWhere from "../htmlcomponents/ActionWhere";
 import CriteriaGroup from "./CriteriaGroup";
-import ISettings from "./ISettings";
-import * as SparnaturalComponents from "../SparnaturalComponents.js"; //IMPORTANT : double import?
+import ISettings from "../ISettings";
+import * as SparnaturalComponents from "../../SparnaturalComponents.js"; //IMPORTANT : double import?
+import GroupContenaire from "./GroupContenaire";
+import HTMLComponent from "../htmlcomponents/HtmlComponent";
+import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
 
 
 /**
@@ -18,18 +22,16 @@ class ActionsGroup extends GroupContenaire {
         ActionRemove:ActionRemove};
     reinsert = false;
     settings:ISettings
-    specProvider: FilteringSpecificationProvider
-    constructor(parentGroup:HTMLComponent, specProvider:FilteringSpecificationProvider, settings:ISettings){
-        super("ActionsGroup",parentGroup)
+    constructor(parentGroup:HTMLComponent, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider, settings:ISettings){
+        super("ActionsGroup",parentGroup, specProvider)
         this.cssClasses = {
             ActionsGroup: true,
             Created : false
         }
-        this.specProvider = specProvider
         this.actions =  { 
             ActionWhere: new ActionWhere(this, specProvider,settings),
-            ActionAnd: new ActionAnd(this,settings),
-            ActionRemove: new ActionRemove(this)
+            ActionAnd: new ActionAnd(this,settings,specProvider),
+            ActionRemove: new ActionRemove(this,specProvider)
         } ;
 
         this.settings = settings
