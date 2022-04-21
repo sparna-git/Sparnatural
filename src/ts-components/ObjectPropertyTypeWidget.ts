@@ -1,5 +1,4 @@
-import { FilteringSpecificationProvider } from "../FilteringSpecificationProvider";
-import { GroupContenaire, HTMLComponent } from "../SparnaturalComponents";
+import { GroupContenaire } from "../SparnaturalComponents";
 import ISettings from "./ISettings";
 import Config from "../SparnaturalConfig";
 import Datasources from "../SparnaturalConfigDatasources";
@@ -21,6 +20,7 @@ import { SparqlTreeHandler } from "../TreeHandlers";
     rangeClassId: any;
     classLabel: string;
     widgetComponent:any;
+    parentComponent:GroupContenaire
     loadedValue:{
         key?: any;
         label?: any;
@@ -33,8 +33,6 @@ import { SparqlTreeHandler } from "../TreeHandlers";
 
     constructor(ParentComponent: GroupContenaire, settings: ISettings, specProvider:JsonLdSpecificationProvider){
         super("ObjectPropertyTypeWidget",GroupContenaire)
-        console.log("constr of objectpropertytypewidget")
-        console.dir(ParentComponent)
         this.parentComponent = ParentComponent
         this.specProvider = specProvider;
         this.settings = settings;
@@ -42,8 +40,6 @@ import { SparqlTreeHandler } from "../TreeHandlers";
     }
 
     init(){
-        console.dir(this.parentComponent)
-
         this.objectPropertyId = this.parentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected
         console.log(this.objectPropertyId)
         this.widgetType = this.specProvider.getObjectPropertyType(this.objectPropertyId);

@@ -15,8 +15,6 @@ require("easy-autocomplete");
 // const $$ = require('jquery');
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
-import removeIcon from "./assets/icons/buttons/remove.png"
-
 // WARNING : if you use ES6 syntax (like import instead of require), 
 // webpack will automatically add "use strict" as all ES6 modules 
 // are expected to be strict mode code.
@@ -27,32 +25,20 @@ const i18nLabels = {
 	"fr": require('./assets/lang/fr.json')
 };
 
-const tippy = require('tippy.js').default;
 require('tippy.js/dist/tippy.css');
 
 const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
 
-import { SparqlTemplateListHandler, SparqlTemplateAutocompleteHandler } from "./AutocompleteAndListHandlers";
 
 import { FilteringSpecificationProvider } from "./FilteringSpecificationProvider";
-import { QuerySPARQLWriter, AbstractValue } from "./Query";
+import { QuerySPARQLWriter } from "./Query";
 import JSONQueryGenerator from "./QueryGenerators";
 
 import * as SparnaturalComponents from "./SparnaturalComponents";
 import { SpecificationProviderFactory } from "./SpecificationProviderFactory";
 import { SimpleStatisticsHandler } from "./StatisticsHandlers";
-import { SparqlTreeHandler } from "./TreeHandlers";
+
 import UiuxConfig from "./UiuxConfig";
-import Datasources from "./SparnaturalConfigDatasources";
-import { AutoCompleteWidget, SearchWidget,NoWidget,BooleanWidget,TimeDatePickerWidget,DatesWidget,ListWidget } from "./Widgets";
-
-import Config from "./SparnaturalConfig"
-
-// Import ts ported components
-import ActionRemove from "./ts-components/ActionRemove";
-import ActionAnd  from "./ts-components/ActionAnd";
-import ActionWhere from "./ts-components/ActionWhere";
-import EndClassWidgetGroup from "./ts-components/EndClassWidgetGroup";
 import CriteriaGroup from "./ts-components/CriteriaGroup";
 
 (function( $ ) {
@@ -888,53 +874,6 @@ import CriteriaGroup from "./ts-components/CriteriaGroup";
 			}
 			preprocessRec(child, branch, next, jsonQuery);
 		}
-	}
-	
-	function GenericTools(component) {
-		this.component = component ;
-
-		this.attachComponentHtml = function () {
-			var instance = this.component.baseCssClass ;
-			// remove existing component if already existing
-			this.component.HtmlContainer.html.find('>.'+instance).remove() ;
-			$(this.component.html).appendTo(this.component.HtmlContainer.html) ;
-		}
-		
-		/**
-		 * Updates the CSS classes of an element
-		 **/
-		this.updateCssClasses = function() {
-			$(this.component.html).removeClass('*') ;
-			for (var item in this.component.cssClasses) {				
-				if (this.component.cssClasses[item] === true) {
-					$(this.component.html).addClass(item) ;
-				} else {
-					$(this.component.html).removeClass(item) ;
-				}
-			}
-		}		
-
-		this.initHtml = function() {
-			var instance = this.component.baseCssClass ;				
-			if (this.component.widgetHtml != null) {
-				this.component.html = $('<div class="'+instance+'"></div>') ;
-				// remove existing component
-				// this.component.html.find('>.'+instance ).remove();
-				this.component.html.append(this.component.widgetHtml) ; 
-			} else {
-				this.component.html = '';
-			}
-		} 
-
-		this.attachHtml = function() {
-			this.updateCssClasses() ;
-			this.attachComponentHtml() ;
-		}
-
-		this.remove = function() {
-			$(this.component.html).remove() ;
-		}
-		
 	}
 
 	/**

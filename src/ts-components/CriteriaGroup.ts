@@ -1,12 +1,12 @@
 import { isReturnStatement } from "typescript";
-import { StartClassGroup, OptionsGroup, ObjectPropertyGroup, EndClassGroup, findParentOrSiblingCriteria, HTMLComponent } from "../SparnaturalComponents";
+import { StartClassGroup, OptionsGroup, ObjectPropertyGroup, EndClassGroup, findParentOrSiblingCriteria, HTMLComponent, GroupContenaire } from "../SparnaturalComponents";
 import ActionsGroup from "./ActionsGroup";
 import ISettings from "./ISettings";
 /**
 * A single line/criteria
 **/
 
-class CriteriaGroup extends HTMLComponent {
+class CriteriaGroup extends GroupContenaire {
     thisForm_ :any;
     ComponentHtml:any;
     AncestorComponentHtml:any;

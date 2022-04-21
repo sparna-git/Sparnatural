@@ -1,10 +1,17 @@
 import tippy from 'tippy.js';
-import UiuxConfig from "./UiuxConfig";
+import {UiuxConfig} from "./UiuxConfig";
 import * as SparnaturalComponents from "./SparnaturalComponents";
+import ISettings from './ts-components/ISettings';
 
 export class HTMLComponent {
-
-	constructor(baseCssClass, cssClasses, parentComponent, widgetHtml) {
+	baseCssClass: {}
+	cssClasses:any
+	parentComponent: HTMLComponent
+	widgetHtml: JQuery<HTMLElement>
+	html:JQuery<HTMLElement>
+	needBackArrow: boolean
+	needFrontArrow: boolean
+	constructor(baseCssClass: any, cssClasses: any, parentComponent: any, widgetHtml: any) {
 		this.baseCssClass = baseCssClass;
 		this.cssClasses = cssClasses;
 		this.parentComponent = parentComponent;
@@ -60,19 +67,22 @@ export class HTMLComponent {
 	}	
 
 	addBackArrow() {
-		this.backArrow = $('<div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div>') ;
-		this.html.prepend(this.backArrow) ;
+		let backArrow = $('<div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div>') ;
+		this.html.prepend(backArrow) ;
 	}
 
 	addFrontArrow() {
-		this.frontArrow = $('<div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div>') ;
-		this.html.append(this.frontArrow) ;
+		let frontArrow = $('<div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div>') ;
+		this.html.append(frontArrow) ;
 	}
 }
 
 export class GroupContenaire extends HTMLComponent {
-
-	constructor(baseCssClass, parentComponent) {
+	parentCriteriaGroup: GroupContenaire
+	inputTypeComponent: ObjectPropertyTypeWidget | ClassTypeId
+	value_selected:any
+	variableNamePreload:any
+	constructor(baseCssClass: any, parentComponent: any) {
 		super(
  			baseCssClass,
  			{
@@ -83,7 +93,7 @@ export class GroupContenaire extends HTMLComponent {
 			parentComponent,
 			false
  		);
-		this.parentCriteriaGroup = parentComponent;
+		this.parentCriteriaGroup = parentComponent; // IMPORTANT ParentComponent the same as parentCritiriaGroup?
 		this.inputTypeComponent = null ;
 
 		// TODO : to be removed from here
@@ -105,9 +115,9 @@ export class GroupContenaire extends HTMLComponent {
 		}
 	} ;
 
-	onSelctValue() {
+	onSelectValue(varName:any) {
 		var current = $(this.html).find('.nice-select .current').first() ;
-		var varNameForDisplay = '<span class="variableName">'+this.varName.replace('?', '')+'</span>' ;
+		var varNameForDisplay = '<span class="variableName">'+varName.replace('?', '')+'</span>' ;
 		$(varNameForDisplay).insertAfter($(current).find('.label').first()) ;
 
 	}
@@ -118,8 +128,13 @@ export class GroupContenaire extends HTMLComponent {
  * Selection of the start class in a criteria/line
  **/
  export class StartClassGroup extends GroupContenaire { 
-
- 	constructor(parentCriteriaGroup, specProvider, settings) {
+	varName:any
+	specProvider:any
+	settings:ISettings
+	inputTypeComponent: ObjectPropertyTypeWidget;
+	variableSelector:any
+	notSelectForview: boolean
+ 	constructor(parentCriteriaGroup:GroupContenaire, specProvider: any, settings: ISettings) {
  		super(
 			"StartClassGroup",
 			parentCriteriaGroup
@@ -131,7 +146,7 @@ export class GroupContenaire extends HTMLComponent {
 		this.cssClasses.Created = false ;
 		
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
-		this.inputTypeComponent.needFrontArrow= true ;
+		this.inputTypeComponent.needFrontArrow= true ; // IMPORTANT FOUND IN HTMLCOMPONENT CLASS
 
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.s:null;
@@ -150,7 +165,6 @@ export class GroupContenaire extends HTMLComponent {
 	onCreated() {
 		$(this.html).find('.input-val').unbind('change');
 		this.inputTypeComponent.init() ;
-		this.inputTypeComponent.cssClasses.IsOnEdit = true;
 		var select = $(this.html).find('.input-val')[0] ;
 		select.sparnaturalSettings = this.settings ;
 		this.niceslect = $(select).niceSelect() ;
@@ -230,12 +244,12 @@ export class GroupContenaire extends HTMLComponent {
 
 		$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 		//add varName on curent selection display
-		this.onSelctValue() ;
+		this.onSelectValue(this.varName) ;
 		// trigger event on the whole line/criteria
-		$(this.parentCriteriaGroup).trigger( {type:"StartClassGroupSelected" } ) ;
+		$(this.parentCriteriaGroup).trigger( "StartClassGroupSelected" ) ;
 
 		if(this.settings.sendQueryOnFirstClassSelected) {
-			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
 		}
 
 		var desc = this.specProvider.getTooltip(this.value_selected) ;
@@ -248,10 +262,10 @@ export class GroupContenaire extends HTMLComponent {
 			$(this.parentCriteriaGroup.StartClassGroup.html).removeAttr('data-tippy-content') ;
 		}
 	};
-
+	/*
 	setClass(value) {
 		$(this.html).find('nice-select ul li[data-value="'+value+'"]').trigger('click');
-	}
+	}*/ // IMPORTANT unecessary method?
 
 	getVarName() {
 		return this.varName;
@@ -264,8 +278,11 @@ export class GroupContenaire extends HTMLComponent {
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
  **/
 export class ObjectPropertyGroup extends GroupContenaire {
-
-	constructor(parentCriteriaGroup, specProvider, settings, temporaryLabel) {
+	temporaryLabel:string;
+	specProvider:any;
+	settings:ISettings;
+	objectPropertySelector:ObjectPropertyTypeId
+	constructor(parentCriteriaGroup:GroupContenaire, specProvider:any, settings:ISettings, temporaryLabel:string) {
 		super(
 			"ObjectPropertyGroup",
 			parentCriteriaGroup
@@ -342,10 +359,10 @@ export class ObjectPropertyGroup extends GroupContenaire {
 		if ($(this.html).find('.input-val').find('option').length == 1) {
 			$(this.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 		}
-		$(this.parentCriteriaGroup).trigger( {type:"ObjectPropertyGroupSelected" } ) ;
+		$(this.parentCriteriaGroup).trigger( "ObjectPropertyGroupSelected" ) ;
 		console.log(this.parentCriteriaGroup.html) ;
 		if($(this.parentCriteriaGroup.html).parent('li').first().hasClass('completed'))	{
-			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
 		}
 		
 
@@ -375,8 +392,12 @@ export class ObjectPropertyGroup extends GroupContenaire {
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
  **/
 export class EndClassGroup extends GroupContenaire {
-
-	constructor(parentCriteriaGroup, specProvider, settings) {
+	varName:any //IMPORTANT varName is only present at EndClassGroup and StartClassGroup. Refactor on selectedValue method from upper class
+	specProvider:any
+	settings:ISettings
+	variableSelector:any
+	inputTypeComponent:ClassTypeId
+	constructor(parentCriteriaGroup:GroupContenaire, specProvider: any, settings: ISettings) {
 		super(
 			"EndClassGroup",
 			parentCriteriaGroup
@@ -413,7 +434,7 @@ export class EndClassGroup extends GroupContenaire {
 
 		//this.EndClassGroup.init() ;
 		this.inputTypeComponent.init() ;
-		this.inputTypeComponent.cssClasses.IsOnEdit = true;
+		//this.inputTypeComponent.cssClasses.IsOnEdit = true;
 
 		var select = $(this.html).find('select.input-val') ;
 		select[0].sparnaturalSettings = this.settings ;
@@ -472,7 +493,7 @@ export class EndClassGroup extends GroupContenaire {
 		$(this.parentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
 		
 		//add varName on curent selection display
-		this.onSelctValue() ;	
+		this.onSelectValue(this.varName) ;	
 		
 		if (this.specProvider.hasConnectedClasses(this.value_selected)) {
 			$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
@@ -725,9 +746,10 @@ export class OptionsGroup extends GroupContenaire {
 		$(this.html).find('.input-val label').removeClass('justClicked') ;
 	};
 
+	/*
 	setClass(value) {
 		$(this.html).find('nice-select ul li[data-value="'+value+'"]').trigger('click');
-	}
+	}*/ //IMPORTANT unecessary method? nowhere called
 } 
 
 
@@ -737,13 +759,15 @@ export class OptionsGroup extends GroupContenaire {
  * Refactored to extract this from InputTypeComponent.
  **/
 export class ClassTypeId extends HTMLComponent {
-
-	constructor(parentComponent, specProvider) {
+	specProvider:any
+	needTriggerClick:any
+	constructor(parentComponent:GroupContenaire, specProvider:any) {
 		super(
  			"ClassTypeId",
  			{
 				Highlited : true ,
 				Created : false,
+				flexWrap: true
 
 			},
 			parentComponent,
@@ -752,7 +776,6 @@ export class ClassTypeId extends HTMLComponent {
 
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;
-		this.cssClasses.flexWrap = true;
 	}
 
 	init() {
@@ -805,22 +828,20 @@ export class ClassTypeId extends HTMLComponent {
 				this.cssClasses.Highlited = true ;
 			}
 			
-			this.id = 'a-'+id ;
-			this.rowIndex = id;
-			this.check
+			id = 'a-'+id ;
 			
 			selectHtml = selectBuilder.buildClassSelect(
 				null,
-				this.id,
+				id,
 				default_value_s
 			);
 		} 
 		
 		if (this.parentComponent.baseCssClass == "EndClassGroup") {
-			this.id = 'b-'+id ;
+			id = 'b-'+id ;
 			selectHtml = selectBuilder.buildClassSelect(
 				this.parentComponent.parentCriteriaGroup.StartClassGroup.value_selected,
-				this.id,
+				id,
 				default_value_o
 			);
 		}
@@ -843,14 +864,16 @@ export class ClassTypeId extends HTMLComponent {
  * Refactored to extract this from InputTypeComponent
  **/
 export class ObjectPropertyTypeId extends HTMLComponent {
-
-	constructor(parentComponent, specProvider) {
+	specProvider:any
+	needTriggerClick:boolean
+	constructor(parentComponent:GroupContenaire, specProvider:any) {
 		super(
  			"ObjectPropertyTypeId",
  			{
 				IsCompleted : false,
 				IsOnEdit : false,
-				Created : false
+				Created : false,
+				flexWrap : true
 			},
 			parentComponent,
 			false
@@ -858,12 +881,11 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 
 		this.specProvider = specProvider;
 		this.needTriggerClick = false ;	
-		this.cssClasses.flexWrap = true;
 		this.needBackArrow= false ;
 		this.needFrontArrow= true ;
 	}
 
-	init(reload = false) {
+	init() {
 		var selectBuilder = new PropertySelectBuilder(this.specProvider);
 		var default_value = null ;
 
@@ -886,7 +908,7 @@ export class ObjectPropertyTypeId extends HTMLComponent {
 	} ;	
 	
 	reload() {
-		this.init(true);
+		this.init();
 	} ;
 
 }
