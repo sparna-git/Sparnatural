@@ -24,6 +24,7 @@ class OptionTypeId extends HTMLComponent {
             specProvider,
             null,
  		);
+		 this.GrandParent = parentComponent.ParentComponent as CriteriaGroup
 
 		this.needTriggerClick = false ;
 		this.default_value = {optional: false, notExists: false};

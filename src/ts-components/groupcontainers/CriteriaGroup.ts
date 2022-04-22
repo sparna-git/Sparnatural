@@ -1,11 +1,12 @@
 import ActionsGroup from "../actions/ActionsGroup";
 import ISettings from "../ISettings";
-import GroupContenaire from "./GroupContenaire";
 import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import { OptionsGroup } from "./OptionsGroup";
 import ObjectPropertyGroup from "./ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
 import { findParentOrSiblingCriteria } from "../../SparnaturalComponents";
+import EndClassWidgetGroup from "./endclasswidgetgroup/EndClassWidgetGroup";
+
 /**
 * A single line/criteria
 **/
@@ -45,7 +46,7 @@ class CriteriaGroup {
         this.OptionsGroup = new OptionsGroup(this, specProvider) ;
         this.ObjectPropertyGroup = new ObjectPropertyGroup(this, specProvider, settings, settings.langSearch.ObjectPropertyTemporaryLabel) ;
         this.EndClassGroup = new EndClassGroup(this, specProvider, settings) ;
-        this.EndClassWidgetGroup = {}//new EndClassWidgetGroup(this, this.settings, specProvider) ;
+        this.EndClassWidgetGroup = new EndClassWidgetGroup(this, settings, specProvider) ;
         this.ActionsGroup = new ActionsGroup(this, specProvider,settings) ;
         this.assembleComponents()
     }

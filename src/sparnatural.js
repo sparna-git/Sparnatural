@@ -3,7 +3,6 @@ require("jstree/dist/themes/default/style.min.css");
 require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
-
 //
 
 // removed to avoid x2 bundle size
@@ -34,7 +33,7 @@ import { FilteringSpecificationProvider } from "./FilteringSpecificationProvider
 import { QuerySPARQLWriter } from "./Query";
 import JSONQueryGenerator from "./QueryGenerators";
 
-import * as SparnaturalComponents from "./SparnaturalComponents";
+import { eventProxiCriteria } from "./SparnaturalComponents";
 import { SpecificationProviderFactory } from "./SpecificationProviderFactory";
 import { SimpleStatisticsHandler } from "./StatisticsHandlers";
 
@@ -465,7 +464,7 @@ import CriteriaGroup from "./ts-components/groupcontainers/CriteriaGroup";
 			// Listening when display to hide or show
 			$(this.displayButton).find('a').on('click',
 			{arg1: this, arg2: 'display'},
-			SparnaturalComponents.eventProxiCriteria
+			eventProxiCriteria
 			);
 
 			form.sparnatural.variablesSelector = this ;
@@ -474,13 +473,13 @@ import CriteriaGroup from "./ts-components/groupcontainers/CriteriaGroup";
 			// Listening when change sort order (AZ, ZA, None)
 			$(this.ordersSelectHtml).find('a').on('change',
 			{arg1: this, arg2: 'changeOrderSort'},
-			SparnaturalComponents.eventProxiCriteria
+			eventProxiCriteria
 			);
 
 			// Listening when switch display variable
 			$(this.optionsSelectHtml).find('label, span').on('click',
 			{arg1: this, arg2: 'switchVariableName'},
-			SparnaturalComponents.eventProxiCriteria
+			eventProxiCriteria
 			);
 
 			$(this.ordersSelectHtml).find('a').on('click', function() {
@@ -545,7 +544,7 @@ import CriteriaGroup from "./ts-components/groupcontainers/CriteriaGroup";
 			$(sortable).on(
 				'onUpdate',
 				{arg1: this, arg2: 'updateVariableList'},
-				SparnaturalComponents.eventProxiCriteria
+				eventProxiCriteria
 			);
 
 			this.removeVariableName = function(name) {
@@ -601,7 +600,7 @@ import CriteriaGroup from "./ts-components/groupcontainers/CriteriaGroup";
 				$(this.form.sparnatural).find('.componentsListe').first().toggleClass('displayVarName') ;
 
 				$('li.groupe').each(function() {
-					SparnaturalComponents.redrawBottomLink($(this)) ;
+					redrawBottomLink($(this)) ;
 				});
 			}
 

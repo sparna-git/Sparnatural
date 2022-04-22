@@ -1,37 +1,49 @@
 
-	import jstree from 'jstree';
-	import datepicker from '@chenfengyuan/datepicker';
-	import select2 from 'select2';
-	import UiuxConfig from "./UiuxConfig";
-	import 'select2/dist/css/select2.css';
-	import tippy from 'tippy.js';
+import UiuxConfig from "../../../UiuxConfig";
+import '@chenfengyuan/datepicker'
+import 'select2';
+import 'select2/dist/css/select2.css';
+import tippy from 'tippy.js';
+import ISettings from "../../ISettings";
+import LocalCacheData from "../../../LocalCacheData";
+import IWidget from "./IWidget";
+let jsTree = require('jstree').default;
 	
-	export const AutoCompleteWidget = function(inputTypeComponent, autocompleteHandler) {
-		this.autocompleteHandler = autocompleteHandler;
-		this.ParentComponent = inputTypeComponent ;
+	export class AutoCompleteWidget implements IWidget{
+		autocompleteHandler: any;
+		ParentComponent: any;
+		IdCriteriaGroupe: any;
+		html: string;
+		constructor(inputTypeComponent:any, autocompleteHandler:any){
+			this.autocompleteHandler = autocompleteHandler;
+			this.ParentComponent = inputTypeComponent ;
+			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+			this.html = '<input id="ecgrw-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
+		}
 
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
-		this.html = '<input id="ecgrw-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
+
 		
-		this.init = function init() {
+		
+		
+		init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			
 			var id_inputs = this.IdCriteriaGroupe ;			
 			var itc_obj = this.ParentComponent;	
-			var isMatch = autocompleteHandler.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
+			var isMatch = this.autocompleteHandler.enableMatch(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value);
 			
-			var options = {
+			let options = {
 				// ajaxSettings: {crossDomain: true, type: 'GET'} ,
-				url: function(phrase) {
-					return autocompleteHandler.autocompleteUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
+				url: function(phrase: any) {
+					return this.autocompleteHandler.autocompleteUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, phrase) ;
 				},
-				listLocation: function (data) {
-					return autocompleteHandler.listLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ;
+				listLocation: function (data: any) {
+					return this.autocompleteHandler.listLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data) ;
 				},
-				getValue: function (element) { 
-					return autocompleteHandler.elementLabel(element) ;
+				getValue: function (element: any) { 
+					return this.autocompleteHandler.elementLabel(element) ;
 				},
 				
 				adjustWidth: false,
@@ -45,7 +57,7 @@
 					}
 				},
 
-				preparePostData: function(data) {
+				preparePostData: function(data: { phrase: string | number | string[]; }) {
 					data.phrase = $('#ecgrw-'+id_inputs+'-input').val();
 					return data;
 				},
@@ -58,8 +70,8 @@
 					onChooseEvent: function() {
 						var value = $('#ecgrw-'+id_inputs+'-input').getSelectedItemData();
 						
-						var label = autocompleteHandler.elementLabel(value) ; 
-						var uri = autocompleteHandler.elementUri(value) ; 
+						var label = this.autocompleteHandler.elementLabel(value) ; 
+						var uri = this.autocompleteHandler.elementUri(value) ; 
 						$('#ecgrw-'+id_inputs+'-input').val(label)
 						$('#ecgrw-'+id_inputs+'-input-value').val(uri).trigger("change");
 						$(itc_obj).trigger("change");
@@ -73,7 +85,7 @@
 			$('#ecgrw-'+id_inputs+'-input').easyAutocomplete(options);
 		}
 
-		this.getValue = function() {
+		getValue = function() {
 			var id_input = '#ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 			var id_input_label = '#ecgrw-'+ this.IdCriteriaGroupe +'-input' ;
 
@@ -85,17 +97,24 @@
 		}
 	};
 	
-	export const ListWidget = function(inputTypeComponent, listHandler, langSearch, settings, sort) {
-		this.listHandler = listHandler;
-		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
-		this.sort = sort;
+	export class ListWidget implements IWidget {
+		listHandler: any;
+		ParentComponent: any;
+		IdCriteriaGroupe: any;
+		sort: boolean;
+		id_input: string;
+		html: string;
+		constructor(inputTypeComponent:any, listHandler:any, langSearch:any, settings: ISettings, sort: boolean){
+			this.listHandler = listHandler;
+			this.ParentComponent = inputTypeComponent ;
+			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+			this.sort = sort;
+			this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+			this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
+		}
+
 		
-		this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
-		//this.select = $('<select id="'+this.id_input+'"></select>');
-		
-		this.init = function init() {
+		init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -104,9 +123,9 @@
 			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 
 			document.getElementById(id_input).style.display = 'block' ;
-			document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'none' ;
+			(document.getElementById(id_input).closest('.list-widget').querySelector('.no-items')as HTMLElement).style.display = 'none' ;
 
-			let url = listHandler.listUrl(
+			let url = this.listHandler.listUrl(
 				startClassGroup_value,
 				ObjectPropertyGroup_value,
 				endClassGroup_value
@@ -121,10 +140,10 @@
 				cache: 'default' 
 			};
 			let temp = new LocalCacheData() ;
-			let fetchpromise = temp.fetch(url, init, settings.localCacheDataTtl) ;
-			fetchpromise.then(response => response.json())
-			.then(data => {
-				var items = listHandler.listLocation(
+			let fetchpromise = temp.fetch(url, init, this.settings.localCacheDataTtl) ;
+			fetchpromise.then((response: { json: () => any; }) => response.json())
+			.then((data: any) => {
+				var items = this.listHandler.listLocation(
 					startClassGroup_value,
 					ObjectPropertyGroup_value,
 					endClassGroup_value,
@@ -132,17 +151,17 @@
 				) ;
 				if (items.length > 0) {
 
-					if(sort) {
+					if(this.sort) {
 						// here, if we need to sort, then sort according to lang
-						var collator = new Intl.Collator(settings.language);					
-						items.sort(function(a, b) {
-							return collator.compare(listHandler.elementLabel(a),listHandler.elementLabel(b));
+						var collator = new Intl.Collator(this.settings.language);					
+						items.sort(function(a: any, b: any) {
+							return collator.compare(this.listHandler.elementLabel(a),this.listHandler.elementLabel(b));
 						});
 					}
 
 					$.each( items, function( key, val ) {				  
-						var label = listHandler.elementLabel(val) ; 
-						var uri = listHandler.elementUri(val) ; 
+						var label = this.listHandler.elementLabel(val) ; 
+						var uri = this.listHandler.elementUri(val) ; 
 						$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
 					});
 					if(items.length < 30) {
@@ -158,54 +177,13 @@
 					}
 				} else {
 					document.getElementById(id_input).style.display = 'none' ;
-					document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
-					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
+					(document.getElementById(id_input).closest('.list-widget').querySelector('.no-items')as HTMLElement).style.display = 'block' ;
+					//console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
 				}  ;
 			});
-			
-			/*
-			var options = {
-				url: listHandler.listUrl(
-					startClassGroup_value,
-					ObjectPropertyGroup_value,
-					endClassGroup_value
-				),
-				dataType: "json",
-				method: "GET",
-				data: {
-					  dataType: "json"
-				}
-			} ;
-	
-			var request = $.ajax( options );
-			//var select = $(this.html).find('select') ;
-			request.done(function( data ) {			  
-			  	var items = listHandler.listLocation(
-			  		startClassGroup_value,
-			  		ObjectPropertyGroup_value,
-			  		endClassGroup_value,
-			  		data
-			  	) ;
-				if (items.length > 0) {
-					$.each( items, function( key, val ) {				  
-						var label = listHandler.elementLabel(val) ; 
-						var uri = listHandler.elementUri(val) ; 
-						$('#'+id_input).append( "<option value='" + uri + "' title='" + label + "'>" + label + "</option>" );
-					});
-					$('#'+id_input).niceSelect();
-					$('#'+id_input).on("change", function() {
-						$(itc_obj).trigger('change') ;
-					});
-				} else {
-					document.getElementById(id_input).style.display = 'none' ;
-					document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
-					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
-				} 
-			});
-			*/
 		}
 
-		this.getValue = function() {
+		getValue = function() {
 			var id_input = '#'+ this.id_input ;
 			// return $(id_input).val() ;
 
@@ -218,15 +196,23 @@
 	}
 	
 
-	export const ListWidgetNew = function(inputTypeComponent, listDatasource, langSearch) {
-		this.listDatasource = listDatasource;
-		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+	export class ListWidgetNew implements IWidget {
+		listDatasource: any;
+		ParentComponent: any;
+		IdCriteriaGroupe: any;
+		id_input: string;
+		html: string;
+		constructor(inputTypeComponent:any, listDatasource:any, langSearch:any){
+			this.listDatasource = listDatasource;
+			this.ParentComponent = inputTypeComponent ;
+			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
-		this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-		this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
+			this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
+			this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
 		
-		this.init = function init() {
+		}
+		
+		init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -235,17 +221,17 @@
 			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 
 			document.getElementById(id_input).style.display = 'block' ;
-			document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'none' ;
+			(document.getElementById(id_input).closest('.list-widget').querySelector('.no-items')as HTMLElement).style.display = 'none' ;
 
-			var items = listDatasource.getItems(
+			var items = this.listDatasource.getItems(
 				startClassGroup_value,
 				ObjectPropertyGroup_value,
 				endClassGroup_value,
-				function( items ) {
+				function( items: string | any[] ) {
 					if (items.length > 0) {
 						$.each( items, function( key, val ) {				  
-							var label = listHandler.elementLabel(val) ; 
-							var uri = listHandler.elementUri(val) ; 
+							var label = this.listHandler.elementLabel(val) ; 
+							var uri = this.listHandler.elementUri(val) ; 
 							$('#'+id_input).append( "<option value='" + uri + "' title='" + label + "'>" + label + "</option>" );
 						});
 						$('#'+id_input).niceSelect();
@@ -254,14 +240,14 @@
 						});
 					} else {
 						document.getElementById(id_input).style.display = 'none' ;
-						document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
-						console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
+						(document.getElementById(id_input).closest('.list-widget').querySelector('.no-items')as HTMLElement).style.display = 'block' ;
+						//console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
 					} 
 				}
 			);
 		}
 
-		this.getValue = function() {
+		getValue = function() {
 			var id_input = '#'+ this.id_input ;
 			// return $(id_input).val() ;
 
@@ -273,16 +259,19 @@
 		}
 	}
 
-	export const URLListDatasource = function(listHandler) {
-		
-		this.getItems = function(
-			startClassGroup_value,
-			ObjectPropertyGroup_value,
-			endClassGroup_value,
-			callback
+	export class URLListDatasource{
+		listHandler: any;
+		constructor(listHandler:any) {
+			this.listHandler = listHandler
+		}
+		getItems = function(
+			startClassGroup_value: any,
+			ObjectPropertyGroup_value: any,
+			endClassGroup_value: any,
+			callback: (arg0: any[]) => void
 		) {
 			var options = {
-				url: listHandler.listUrl(
+				url: this.listHandler.listUrl(
 					startClassGroup_value,
 					ObjectPropertyGroup_value,
 					endClassGroup_value
@@ -296,17 +285,17 @@
 			
 			var request = $.ajax( options );
 			request.done(function( data ) {			  
-			  	var items = listHandler.listLocation(
+			  	var items = this.listHandler.listLocation(
 			  		startClassGroup_value,
 			  		ObjectPropertyGroup_value,
 			  		endClassGroup_value,
 			  		data
 			  	) ;
 
-			  	var result = [];
+			  	var result: any[] = [];
 			  	$.each( items, function( key, val ) {				  
-					var label = listHandler.elementLabel(val) ; 
-					var uri = listHandler.elementUri(val) ; 
+					var label = this.listHandler.elementLabel(val) ; 
+					var uri = this.listHandler.elementUri(val) ; 
 					result[uri] = label;
 				});
 
@@ -315,14 +304,21 @@
 		}
 	}
 
-	export const DatesWidget = function(inputTypeComponent, datesHandler, langSearch) {
-		this.datesHandler = datesHandler;
-		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+	export class DatesWidget implements IWidget {
+		datesHandler: any;
+		ParentComponent: any;
+		IdCriteriaGroupe: any;
+		html: string;
+		constructor(inputTypeComponent:any, datesHandler:any, langSearch:any){
+			this.datesHandler = datesHandler;
+			this.ParentComponent = inputTypeComponent ;
+			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+			
+			this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.TimeWidgetDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.TimeWidgetDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
+			
+		}
 		
-		this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.TimeWidgetDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.TimeWidgetDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
-		
-		this.init = function init() {
+		init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -333,7 +329,7 @@
 			var itc_obj = this.ParentComponent;			
 			
 			$.ajax({
-				url: datesHandler.datesUrl(
+				url: this.datesHandler.datesUrl(
 					startClassGroup_value,
 					ObjectPropertyGroup_value,
 					endClassGroup_value,
@@ -347,10 +343,10 @@
 			
 			var options = {
 				
-				data: data_json,
+				data: {},
 			
-				getValue: function (element) { 
-					return datesHandler.elementLabel(element) ;
+				getValue: function (element: any) { 
+					return this.datesHandler.elementLabel(element) ;
 				},
 				 
 				list: {
@@ -361,9 +357,9 @@
 					onChooseEvent: function() {
 						
 						var values = $('#ecgrw-date-'+id_inputs+'-input').getSelectedItemData();
-						var value = datesHandler.elementLabel(values) ;
-						var start = datesHandler.elementStart(values) ;
-						var stop = datesHandler.elementEnd(values) ;
+						var value = this.datesHandler.elementLabel(values) ;
+						var start = this.datesHandler.elementStart(values) ;
+						var stop = this.datesHandler.elementEnd(values) ;
 
 						$('#ecgrw-date-'+id_inputs+'-input').val(value).trigger("change");
 						$('#ecgrw-date-'+id_inputs+'-input-start').val(start).trigger("change");
@@ -375,10 +371,10 @@
 
 				template: {
 					type: "custom",
-					method: function(value, item) {							
-						var label = datesHandler.elementLabel(item) ;
-						var start = datesHandler.elementStart(item) ;
-						var stop  = datesHandler.elementEnd(item) ;
+					method: function(value: any, item: any) {							
+						var label = this.datesHandler.elementLabel(item) ;
+						var start = this.datesHandler.elementStart(item) ;
+						var stop  = this.datesHandler.elementEnd(item) ;
 						return '<div>' + label + ' <span class="start">' + start + '</span><span class="end">' + stop + '</span></div>';
 					}
 				},
@@ -392,12 +388,12 @@
 			});
 		}
 
-		this.getValue = function() {
+		getValue = function() {
 			var id_input = '#ecgrw-date-'+ this.IdCriteriaGroupe +'-input' ;
 			
 			var value = { 
-				start: $(id_input+'-start').val(),
-				stop: $(id_input+'-stop').val() 
+				start: $(id_input+'-start').val().toString(),
+				stop: $(id_input+'-stop').val().toString()
 			} ;
 			
 			if ((value.start == '') || (value.stop == '')) {
@@ -407,12 +403,12 @@
 					value = null ;
 				} else {
 					var absoluteStartYear = (value.start.startsWith("-")?value.start.substring(1):value.start);
-					var paddedAbsoluteStartYear = absoluteStartYear.padStart(4,0);
+					var paddedAbsoluteStartYear = absoluteStartYear.padStart(4,'0');
 					var paddedStartYear = (value.start.startsWith("-")?"-"+paddedAbsoluteStartYear:paddedAbsoluteStartYear);
 					value.start = paddedStartYear + '-01-01T00:00:00';
 
 					var absoluteStopYear = (value.stop.startsWith("-")?value.stop.substring(1):value.stop);
-					var paddedAbsoluteStopYear = absoluteStopYear.padStart(4,0);
+					var paddedAbsoluteStopYear = absoluteStopYear.padStart(4,'0');
 					var paddedStopYear = (value.stop.startsWith("-")?"-"+paddedAbsoluteStopYear:paddedAbsoluteStopYear);
 					value.stop = paddedStopYear + '-12-31T23:59:59';
 				}
@@ -428,18 +424,27 @@
 		}		
 	}
 	
-	export const TimeDatePickerWidget = function(inputTypeComponent, datesHandler, format, langSearch) {
-		this.datesHandler = datesHandler;
-		this.ParentComponent = inputTypeComponent ;
+	export class TimeDatePickerWidget implements IWidget {
+		datesHandler: any;
+		ParentComponent: any;
+		IdCriteriaGroupe: any;
+		formatDate: any;
+		html: string;
+		langSearch: any;
+		constructor(inputTypeComponent:any, datesHandler:any, format:any, langSearch:any){
+			this.datesHandler = datesHandler;
+			this.ParentComponent = inputTypeComponent ;
+			
+			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent?.parentCriteriaGroup.id ;
+			this.formatDate = format ;
+
+			let placeHolder = (this.formatDate == 'day')?langSearch.PlaceholderTimeDateDayFormat:langSearch.PlaceholderTimeDateFormat ;
+			this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+placeHolder+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+placeHolder+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>';
+			this.html += '&nbsp;<span id="circle-info-'+this.IdCriteriaGroupe+'" data-tippy-content="'+((this.formatDate == 'day')?langSearch.TimeWidgetDateHelp:langSearch.TimeWidgetYearHelp)+'">'+UiuxConfig.ICON_CIRCLE_INFO+'</span><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
+			this.langSearch = langSearch
+		}
 		
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent?.parentCriteriaGroup.id ;
-		this.formatDate = format ;
-
-		let placeHolder = (this.formatDate == 'day')?langSearch.PlaceholderTimeDateDayFormat:langSearch.PlaceholderTimeDateFormat ;
-		this.html = '<div class="date-widget">'+langSearch.LabelDateFrom+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+placeHolder+'" autocomplete="off"/> '+langSearch.LabelDateTo+' <input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+placeHolder+'" autocomplete="off" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>';
-		this.html += '&nbsp;<span id="circle-info-'+this.IdCriteriaGroupe+'" data-tippy-content="'+((this.formatDate == 'day')?langSearch.TimeWidgetDateHelp:langSearch.TimeWidgetYearHelp)+'">'+UiuxConfig.ICON_CIRCLE_INFO+'</span><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
-
-		this.init = function init() {
+		init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -447,12 +452,12 @@
 			var id_inputs = this.IdCriteriaGroupe ;			
 			var itc_obj = this.ParentComponent;
 
-			format = (this.formatDate == 'day')?langSearch.TimeWidgetDateFormat:langSearch.TimeWidgetYearFormat;
+			this.format = (this.formatDate == 'day')?this.langSearch.InputTimeDateDayFormat:this.langSearch.InputTimeDateFormat;;
 			
-			var options = {
-				language: langSearch.LangCodeTimeDate,
+			var options:{language:any,autoHide:boolean,format:any,date:any,startView:number} = {
+				language: this.langSearch.LangCodeTimeDate,
 				autoHide: true,
-				format: format,
+				format: this.format,
 				date: null,
 				startView: 2
 			};
@@ -471,7 +476,7 @@
 			tippy('#circle-info-'+this.IdCriteriaGroupe, tippySettings);
 		}
 
-		this.getValue = function() {
+		getValue = function() {
 			var id_input = '#ecgrw-date-'+ this.IdCriteriaGroupe +'-input' ;
 			var start = null;
 			var end = null ;
@@ -481,8 +486,8 @@
 				start = $(id_input+'-start').datepicker('getDate');
 
 				// fix for negative years
-				if($(id_input+'-start').val().startsWith("-") && !start.getFullYear().toString().startsWith("-")) {
-					start.setFullYear($(id_input+'-start').val())
+				if($(id_input+'-start').val().toString().startsWith("-") && !start.getFullYear().toString().startsWith("-")) {
+					start.setFullYear($(id_input+'-start').val() as number)
 				}
 
 			}
@@ -490,8 +495,8 @@
 				end = $(id_input+'-stop').datepicker('getDate');
 
 				// fix for negative years
-				if($(id_input+'-stop').val().startsWith("-") && !end.getFullYear().toString().startsWith("-")) {
-					end.setFullYear($(id_input+'-stop').val())
+				if($(id_input+'-stop').val().toString().startsWith("-") && !end.getFullYear().toString().startsWith("-")) {
+					end.setFullYear($(id_input+'-stop').val() as number)
 				}
 			}
 
@@ -502,8 +507,8 @@
 			}
 
 			if (this.formatDate == 'day') {
-				dateToYMD(start, 'day') ;
-				value = { start: dateToYMD(start, 'day') , stop: dateToYMD(end, 'day')  } ;
+				this.dateToYMD(start, 'day') ;
+				value = { start: this.dateToYMD(start, 'day') , stop: this.dateToYMD(end, 'day')  } ;
 				if (value.start != null)  {
 					value.start = value.start + 'T00:00:00';
 				}
@@ -511,7 +516,7 @@
 					value.stop = value.stop + 'T23:59:59';
 				}
 			} else {
-				value = { start: dateToYMD(start, false) , stop: dateToYMD(end, false)  } ;
+				value = { start: this.dateToYMD(start, false) , stop: this.dateToYMD(end, false)  } ;
 				if (value.start != null)  {
 					value.start = value.start + '-01-01T00:00:00';
 				}
@@ -533,23 +538,23 @@
 			};
 		}
 
-		this.getValueLabel = function() {
+		getValueLabel = function() {
 			var id_input = '#ecgrw-date-'+ this.IdCriteriaGroupe +'-input' ;
 			var start = $(id_input+'-start').val() ;
 			var end = $(id_input+'-stop').val() ;
 			var valueLabel = null;
 			if ((start != '') && (end != '')) {
-				valueLabel = langSearch.LabelDateFrom+' '+ $(id_input+'-start').val() +' '+langSearch.LabelDateTo+' '+ $(id_input+'-stop').val() ;
+				valueLabel = this.langSearch.LabelDateFrom+' '+ $(id_input+'-start').val() +' '+this.langSearch.LabelDateTo+' '+ $(id_input+'-stop').val() ;
 			} else if (start != '') {
-				valueLabel = langSearch.DisplayValueDateFrom+' '+ $(id_input+'-start').val() ;
+				valueLabel = this.langSearch.DisplayValueDateFrom+' '+ $(id_input+'-start').val() ;
 			} else if (end != '') {
-				valueLabel = langSearch.DisplayValueDateTo+' '+ $(id_input+'-stop').val() ;
+				valueLabel = this.langSearch.DisplayValueDateTo+' '+ $(id_input+'-stop').val() ;
 			}
 
 			return valueLabel;
 		}
 
-		function dateToYMD(date, format) {
+		dateToYMD(date: { getDate: () => any; getMonth: () => number; getFullYear: () => any; }, format: string | boolean) {
 			if (date == null)  {
 				return date ;
 			}
@@ -563,13 +568,19 @@
 		}	
 	}
 
-	export const SearchWidget = function(inputTypeComponent, langSearch) {
-		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+	export class SearchWidget implements IWidget {
+		ParentComponent: any;
+		IdCriteriaGroupe: any;
+		html: string;
+		constructor(inputTypeComponent:any, langSearch:any){
+			this.ParentComponent = inputTypeComponent ;
+			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+			
+			this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add" class="button-add">'+langSearch.ButtonAdd+'</button></div>' ;
+			
+		}
 		
-		this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add" class="button-add">'+langSearch.ButtonAdd+'</button></div>' ;
-		
-		this.init = function init() {
+		init = function init() {
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
 			var CriteriaGroup = this.ParentComponent.ParentComponent.parentCriteriaGroup ;
@@ -585,7 +596,7 @@
 			);
 		}
 
-		this.getValue = function() {
+		getValue = function() {
 			var id_input = '#ecgrw-search-'+ this.IdCriteriaGroupe +'-input-value' ;
 			// return $(id_input).val() ;
 
@@ -598,13 +609,18 @@
 	}
 
 
-	export const BooleanWidget = function(inputTypeComponent, langSearch) {
-		this.ParentComponent = inputTypeComponent ;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+	export class BooleanWidget implements IWidget {
+		ParentComponent: any;
+		IdCriteriaGroupe: any;
+		html: string;
+		constructor(inputTypeComponent:any, langSearch:any){
+			this.ParentComponent = inputTypeComponent ;
+			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 		
-		this.html = '<div class="boolean-widget" id="boolean-widget-'+this.IdCriteriaGroupe+'"><span class="boolean-value" id="boolean-widget-'+this.IdCriteriaGroupe+'-true">'+langSearch.true+'</span> <span class="or">'+langSearch.Or+'</span> <span class="boolean-value" id="boolean-widget-'+this.IdCriteriaGroupe+'-false">'+langSearch.false+'</span><input type="hidden" id="boolean-widget-'+this.IdCriteriaGroupe+'-value" /></div>' ;
+			this.html = '<div class="boolean-widget" id="boolean-widget-'+this.IdCriteriaGroupe+'"><span class="boolean-value" id="boolean-widget-'+this.IdCriteriaGroupe+'-true">'+langSearch.true+'</span> <span class="or">'+langSearch.Or+'</span> <span class="boolean-value" id="boolean-widget-'+this.IdCriteriaGroupe+'-false">'+langSearch.false+'</span><input type="hidden" id="boolean-widget-'+this.IdCriteriaGroupe+'-value" /></div>' ;
+		}
 		
-		this.init = function init() {
+		init = function init() {
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
 			var CriteriaGroup = this.ParentComponent.ParentComponent.parentCriteriaGroup ;
@@ -627,39 +643,52 @@
 			);
 		}
 
-		this.getValue = function() {
+		getValue = function() {
 			var id_input = '#boolean-widget-'+ this.IdCriteriaGroupe +'-value' ;
 			
 			return {
 				key: $(id_input).val(),
-				label: ($(id_input).val() == "true")?langSearch.true:langSearch.false,
+				label: ($(id_input).val() == "true")?this.langSearch.true:this.langSearch.false,
 				boolean: $(id_input).val()
 			}
 		}
 	}
 
-
-	export const NoWidget = function(inputTypeComponent) {
-		this.html = null ;
+	// IMPORTANT Do we need a NoWidget
+	export class NoWidget implements IWidget {
+		inputTypeComponent: any;
+		html: any;
+		constructor(inputTypeComponent:any){
+			this.inputTypeComponent
+			this.html = null ;
+		}
+	
 		
-		this.init = function init() {
+		init = function init() {
 			// nothing
 		} ;
 
-		this.getValue = function() {
+		getValue = function():any {
 			// cannot provide any value
 			return null;
 		}
 	}
 
-	export const TreeWidget = function(inputTypeComponent, loaderHandler, settings, langSearch) {
-		this.loaderHandler = loaderHandler;
-		this.ParentComponent = inputTypeComponent ;
-		this.langSearch = langSearch;
-		this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
-		this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeClose"><i class="far fa-times-circle"></i></div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">'+this.langSearch.TreeWidgetDelete+'</a><a class="treeSubmit">'+this.langSearch.TreeWidgetSelect+'</a></div></div>' ;
+	export class TreeWidget implements IWidget{
+		loaderHandler: any;
+		ParentComponent: any;
+		langSearch: any;
+		IdCriteriaGroupe: any;
+		html: string;
+		constructor(inputTypeComponent:any, loaderHandler:any, settings:any, langSearch:any){
+			this.loaderHandler = loaderHandler;
+			this.ParentComponent = inputTypeComponent ;
+			this.langSearch = langSearch;
+			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
+			this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeClose"><i class="far fa-times-circle"></i></div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">'+this.langSearch.TreeWidgetDelete+'</a><a class="treeSubmit">'+this.langSearch.TreeWidgetSelect+'</a></div></div>' ;
+		}
 		
-		this.init = function init() {
+		init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -672,12 +701,12 @@
 			var options = {
 				'core' : {
 					"multiple" : true,
-					'data' : function (node, callback) {
+					'data' : function (node: { id: string; }, callback: { call: (arg0: any, arg1: { id: any; text: any; }[]) => void; }) {
 
 						var options = {
 							url: node.id === '#' ?
-						 		loaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value) :
-						 		loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
+						 		this.loaderHandler.treeRootUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value) :
+						 		this.loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
 							dataType: "json",
 							method: "GET",
 							data: {
@@ -689,16 +718,17 @@
 
 						request.done(function( data ) {
 							var result = [];
-							var items = loaderHandler.nodeListLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data);
+							var items = this.loaderHandler.nodeListLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data);
 							for (var i = 0; i < items.length; i++) {
-								var aNode = {
-									id: loaderHandler.nodeUri(items[i]),
-									text: loaderHandler.nodeLabel(items[i])
+								var aNode:{id:string,text:string,children?:boolean,state?:{disabled:boolean},parent?:any} = {
+									id: this.loaderHandler.nodeUri(items[i]),
+									text: this.loaderHandler.nodeLabel(items[i]),
+									
 								};
-								if(loaderHandler.nodeHasChildren(items[i])) {
+								if(this.loaderHandler.nodeHasChildren(items[i])) {
 									aNode.children = true ;
 								}			
-								if(loaderHandler.nodeDisabled(items[i])) {
+								if(this.loaderHandler.nodeDisabled(items[i])) {
 									aNode.state = {
 										disabled  : true  // node disabled
 									}
@@ -733,12 +763,12 @@
 			} ;
 			//Need to add in html befor
 			
-			this.jsTree = $('#ecgrw-'+id_inputs+'-display').jstree(options);
+			jsTree = $('#ecgrw-'+id_inputs+'-display').jstree(options);
 
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-input').on("click",  { arg1 : this },  this.onClickDisplay);
 			//disable/enable on max selction 
-			this.jsTree.on("changed.jstree",  { arg1 : this },  this.onChangedJstree);
-			this.jsTree.on("after_open.jstree",  { arg1 : this },  this.onChangedJstree);
+			jsTree.on("changed.jstree",  { arg1 : this },  this.onChangedJstree);
+			jsTree.on("after_open.jstree",  { arg1 : this },  this.onChangedJstree);
 
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeSubmit').on("click",  { arg1 : this },  this.onClickSelect);
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeCancel').on("click",  { arg1 : this },  this.onClickCancel);
@@ -746,46 +776,9 @@
 
 			
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').hide() ;
-
-			/*$('#ecgrw-'+id_inputs+'-input').on('changed.jstree', function (e, data) {
-				if(data && data.selected && data.selected.length) {
-					$.get(loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data.selected.join(':')) , function (d) {
-						if(d && typeof d.type !== 'undefined') {
-							$('#data .content').hide();
-							switch(d.type) {
-								case 'text':
-								case 'txt':
-								case 'md':
-								case 'htaccess':
-								case 'log':
-								case 'sql':
-								case 'php':
-								case 'js':
-								case 'json':
-								case 'css':
-								case 'html':
-									$('#data .code').show();
-									$('#code').val(d.content);
-									break;
-								case 'png':
-								case 'jpg':
-								case 'jpeg':
-								case 'bmp':
-								case 'gif':
-									$('#data .image img').one('load', function () { $(this).css({'marginTop':'-' + $(this).height()/2 + 'px','marginLeft':'-' + $(this).width()/2 + 'px'}); }).attr('src',d.content);
-									$('#data .image').show();
-									break;
-								default:
-									$('#data .default').html(d.content).show();
-									break;
-							}
-						}
-					});
-				}
-			});*/
 		}
 
-		this.onTreeDataLoaded = function onTreeDataLoaded(result) {
+		onTreeDataLoaded = function onTreeDataLoaded(result: string | any[]) {
 			if(result.length == 0) {
 				$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer .treeNotice').text(this.langSearch.TreeWidgetNoData).show() ;
 				
@@ -795,8 +788,8 @@
 		}
 		
 		//limit to 3 selction
-		this.onChangedJstree = function (e, data) {
-			this_ = e.data.arg1;
+		onChangedJstree = function (e: { data: { arg1: any; }; }, data: any) {
+			let this_ = e.data.arg1;
 			var items = $(this_.jsTree).find('li.jstree-node') ;
 
 			var selecteds = this_.jsTree.jstree().get_top_checked() ;
@@ -824,7 +817,7 @@
 			}
 			
 			//console.log(data);
-			if (this_.jsTree.jstree().get_top_checked().length >= settings.maxOr) {
+			if (this_.jsTree.jstree().get_top_checked().length >= this.settings.maxOr) {
 				
 				for (var i = 0; i < items.length; i++) {
 					var id = $(items[i]).attr('id') ;
@@ -859,26 +852,26 @@
 			}
 		}
 
-		this.onClickDisplay = function(e) {
-			this_ = e.data.arg1;
+		onClickDisplay = function(e: any) {
+			let this_ = e.data.arg1;
 			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').show() ;
 		}
-		this.onClickCancel = function(e) {
-			this_ = e.data.arg1;
+		onClickCancel = function(e:any) {
+			let this_ = e.data.arg1;
 			this_.jsTree.jstree().deselect_all() 
 			//$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
 		}
-		this.onClickSelect = function(e) {
-			this_ = e.data.arg1;
+		onClickSelect = function(e:any) {
+			let this_ = e.data.arg1;
 			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
 			$(this_.itc_obj).trigger("change");
 		}
-		this.onClickClose = function(e) {
-			this_ = e.data.arg1;
+		onClickClose = function(e:any) {
+			let this_ = e.data.arg1;
 			$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
 		}
 
-		this.getValue = function() {
+		getValue = function() {
 			var checked = this.jsTree.jstree().get_top_checked(true);
 
 			// rebuild a clean data structure

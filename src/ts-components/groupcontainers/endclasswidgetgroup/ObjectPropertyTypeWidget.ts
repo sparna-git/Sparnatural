@@ -1,12 +1,14 @@
-import GroupContenaire from "./GroupContenaire";
-import ISettings from "../ISettings";
-import Config from "../../SparnaturalConfig";
-import Datasources from "../../SparnaturalConfigDatasources";
-import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../../AutocompleteAndListHandlers";
-import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "../../Widgets";
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { SparqlTreeHandler } from "../../TreeHandlers";
-import HTMLComponent from "../htmlcomponents/HtmlComponent";
+import GroupContenaire from "../GroupContenaire";
+import ISettings from "../../ISettings";
+import Config from "../../../SparnaturalConfig";
+import Datasources from "../../../SparnaturalConfigDatasources";
+import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../../../AutocompleteAndListHandlers";
+import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "./Widgets"
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { SparqlTreeHandler } from "../../../TreeHandlers";
+import HTMLComponent from "../../htmlcomponents/HtmlComponent";
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
+import IWidget from "./IWidget";
 
 /**
  *  Selects the value for a range in a criteria/line, using a value selection widget
@@ -31,7 +33,7 @@ import HTMLComponent from "../htmlcomponents/HtmlComponent";
         boolean?: any;
     } | null = null ;
 
-    constructor(ParentComponent: GroupContenaire, settings: ISettings, specProvider:JsonLdSpecificationProvider){
+    constructor(ParentComponent: GroupContenaire, settings: ISettings, specProvider:JsonLdSpecificationProvider|RDFSpecificationProvider){
         let cssClasses = {
 			ObjectPropertyTypeWidget : true,
 			Created : false
@@ -44,9 +46,7 @@ import HTMLComponent from "../htmlcomponents/HtmlComponent";
 
     init(){
         this.objectPropertyId = this.parentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected
-        console.log(this.objectPropertyId)
         this.widgetType = this.specProvider.getObjectPropertyType(this.objectPropertyId);
-        console.warn("after error")
         this.rangeClassId = this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected
         this.classLabel = this.specProvider.getLabel(this.rangeClassId) ;
       
@@ -110,8 +110,6 @@ import HTMLComponent from "../htmlcomponents/HtmlComponent";
 
 			//Ajout de l'option all si pas de valeur déjà selectionées
 			var selcetAll = "";
-            console.warn("log objectproptypwidget")
-            console.dir(this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup)
 			if (this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues?.length == 0) {
 				if (add_all) {
 					selcetAll = '<span class="selectAll"><span class="underline">'+this.settings.langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span>' ;
@@ -133,6 +131,8 @@ import HTMLComponent from "../htmlcomponents/HtmlComponent";
 				this.objectPropertyId,
 				this.rangeClassId
 			) ;
+            console.log("widgetComponent")
+            console.dir(this.widgetComponent)
 
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
 				this.widgetHtml = $(widgetLabel) ;
@@ -164,7 +164,9 @@ import HTMLComponent from "../htmlcomponents/HtmlComponent";
         this.init();
     }
 
-    createWidgetComponent = (widgetType:string, objectPropertyId:any, rangeClassId:any) => {
+    createWidgetComponent(widgetType:string, objectPropertyId:any, rangeClassId:any):IWidget {
+        console.log("calling create Widget")
+        console.log(widgetType,objectPropertyId,rangeClassId)
         switch (widgetType) {
           case Config.LITERAL_LIST_PROPERTY: {
             // defaut handler to be used
@@ -215,9 +217,9 @@ import HTMLComponent from "../htmlcomponents/HtmlComponent";
                     this.getFinalQueryString(datasource)
                 );
             }
-
-            this.widgetComponent = new ListWidget(this, handler, this.settings.langSearch, this.settings, !(datasource.noSort == true)) ;
             this.cssClasses.ListeWidget = true ;
+            return new ListWidget(this, handler, this.settings.langSearch, this.settings, !(datasource.noSort == true)) ;
+            
 
               break;
           }
@@ -269,9 +271,8 @@ import HTMLComponent from "../htmlcomponents/HtmlComponent";
                     this.getFinalQueryString(datasource)
                 );
             }
-
-            this.widgetComponent = new ListWidget(this, handler, this.settings.langSearch, this.settings, !(datasource.noSort == true)) ;
             this.cssClasses.ListeWidget = true ;
+            return new ListWidget(this, handler, this.settings.langSearch, this.settings, !(datasource.noSort == true)) ;
             break;
           case Config.AUTOCOMPLETE_PROPERTY:
             var handler = this.settings.autocomplete;
@@ -319,36 +320,36 @@ import HTMLComponent from "../htmlcomponents/HtmlComponent";
                     this.getFinalQueryString(datasource)
                 );
             }
-
-            this.widgetComponent = new AutoCompleteWidget(this, handler) ;
             this.cssClasses.AutocompleteWidget = true ;
+            return new AutoCompleteWidget(this, handler) ;
+            
             break;
           case Config.GRAPHDB_SEARCH_PROPERTY:
           case Config.STRING_EQUALS_PROPERTY:
           case Config.SEARCH_PROPERTY:
-            this.widgetComponent = new SearchWidget(this, this.settings.langSearch) ;
             this.cssClasses.SearchWidget  = true ;
+            return new SearchWidget(this, this.settings.langSearch) ;
             break;
           case Config.TIME_PROPERTY_YEAR:
-            this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, false, this.settings.langSearch) ;
             this.cssClasses.TimeDatePickerWidget  = true ;
+            return new TimeDatePickerWidget(this, this.settings.dates, false, this.settings.langSearch) ;
             break;
           case Config.TIME_PROPERTY_DATE:
-            this.widgetComponent = new TimeDatePickerWidget(this, this.settings.dates, 'day', this.settings.langSearch) ;
             this.cssClasses.TimeDatePickerWidget  = true ;
+            return new TimeDatePickerWidget(this, this.settings.dates, 'day', this.settings.langSearch) ;
             break;
           case Config.TIME_PROPERTY_PERIOD:
-            this.widgetComponent = new DatesWidget(this, this.settings.dates, this.settings.langSearch) ;
             this.cssClasses.DatesWidget  = true ;
+            return new DatesWidget(this, this.settings.dates, this.settings.langSearch) ;
             break;
           case Config.NON_SELECTABLE_PROPERTY:
-              this.widgetComponent = new NoWidget(this) ;
-              this.cssClasses.NoWidget = true ;
-              break;
+            this.cssClasses.NoWidget = true ;
+            return new NoWidget(this) ;
+            break;
           case Config.BOOLEAN_PROPERTY:
-              this.widgetComponent = new BooleanWidget(this, this.settings.langSearch) ;
-              this.cssClasses.BooleanWidget = true ;
-              break;
+            this.cssClasses.BooleanWidget = true ;
+            return new BooleanWidget(this, this.settings.langSearch) ;
+            break;
           case Config.TREE_PROPERTY:
               var theSpecProvider = this.specProvider;
 
@@ -412,13 +413,13 @@ import HTMLComponent from "../htmlcomponents/HtmlComponent";
                   );
                   
               }
-
-              this.widgetComponent = new TreeWidget(this, handler, this.settings, this.settings.langSearch) ;
-                this.cssClasses.TreeWidget = true ;
-                break;
+              this.cssClasses.TreeWidget = true ;
+              return new TreeWidget(this, handler, this.settings, this.settings.langSearch) ;
+                
+               break;
           default:
               // TODO : throw Exception
-              console.log("Unexpected Widget Type "+widgetType)
+              console.error("Unexpected Widget Type "+widgetType)
         }
     };
 

@@ -63,7 +63,7 @@ class HTMLComponent {
 				this.addFrontArrow() ;
 			}
 		} else {
-			this.html = $();
+			this.html =  $('<div class="'+this.baseCssClass+'"></div>') ;
 		}
 	} 
 

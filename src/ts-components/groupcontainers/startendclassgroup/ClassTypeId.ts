@@ -67,7 +67,7 @@ class ClassTypeId extends HTMLComponent {
 		var selectBuilder = new ClassSelectBuilder(this.specProvider);
 
 		if (isStartClassGroup(this.ParentComponent)) {
-			
+			console.log("should be StartClassGroup")
 			var parentOrSibling = findParentOrSiblingCriteria(this.GrandParent.thisForm_, id) ;
 			if (parentOrSibling.type) {
 				if (parentOrSibling.type == 'parent' ) {
@@ -87,7 +87,7 @@ class ClassTypeId extends HTMLComponent {
 			}
 			
 			id = 'a-'+id ;
-			
+			console.log(id,default_value_s)
 			selectHtml = selectBuilder.buildClassSelect(
 				null,
 				id,
@@ -103,7 +103,8 @@ class ClassTypeId extends HTMLComponent {
 				default_value_o
 			);
 		}
-		
+		console.warn("should have selectHtml used as widgethtml")
+		console.log(selectHtml)
 		this.widgetHtml = selectHtml ;
 		this.cssClasses.IsOnEdit = true ;
 		this.initHtml() ;

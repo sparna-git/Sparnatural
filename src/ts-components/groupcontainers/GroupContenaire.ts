@@ -1,12 +1,7 @@
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
-import ClassTypeId from "./startendclassgroup/ClassTypeId";
 import HTMLComponent from "../htmlcomponents/HtmlComponent";
-import ObjectPropertyTypeId from "../htmlcomponents/ObjectPropertyTypeId";
-import OptionTypeId from "../htmlcomponents/OptionTypeId";
 import CriteriaGroup from "./CriteriaGroup";
-import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
-
 class GroupContenaire extends HTMLComponent {
 	parentCriteriaGroup: CriteriaGroup
 	constructor(baseCssClass: any, parentComponent: CriteriaGroup, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {

@@ -3,10 +3,10 @@ import ActionRemove from "./ActionRemove";
 import ActionWhere from "./ActionWhere";
 import CriteriaGroup from "../groupcontainers/CriteriaGroup";
 import ISettings from "../ISettings";
-import * as SparnaturalComponents from "../../SparnaturalComponents.js"; //IMPORTANT : double import?
 import GroupContenaire from "../groupcontainers/GroupContenaire";
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
+import { eventProxiCriteria } from "../../SparnaturalComponents";
 
 
 /**
@@ -43,7 +43,7 @@ class ActionsGroup extends GroupContenaire {
                 arg1: this.parentCriteriaGroup,
                 arg2: 'onRemoveCriteria'
             },
-            SparnaturalComponents.eventProxiCriteria
+            eventProxiCriteria
         );
 
         if(this.parentCriteriaGroup.jsonQueryBranch != null) {
@@ -74,7 +74,7 @@ class ActionsGroup extends GroupContenaire {
                 arg1: this,
                 arg2: 'onAddWhere'
             },
-            SparnaturalComponents.eventProxiCriteria
+            eventProxiCriteria
         );
         $(this.actions.ActionAnd.html).find('a').on(
             'click',
@@ -82,7 +82,7 @@ class ActionsGroup extends GroupContenaire {
                 arg1: this,
                 arg2: 'onAddAnd'
             },
-            SparnaturalComponents.eventProxiCriteria
+            eventProxiCriteria
         );
         
         this.initGeneralEvent(this.parentCriteriaGroup.thisForm_);

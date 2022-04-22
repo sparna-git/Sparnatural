@@ -27,6 +27,4 @@ class LocalCacheData {
     }
 }
 
-module.exports = {
-	LocalCacheData: LocalCacheData
-}
+export default LocalCacheData

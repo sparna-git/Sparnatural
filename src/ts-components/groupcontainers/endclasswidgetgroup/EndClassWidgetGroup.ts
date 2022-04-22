@@ -1,13 +1,13 @@
-import { FilteringSpecificationProvider } from "../../FilteringSpecificationProvider";
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import GroupContenaire from "./GroupContenaire";
-import ISettings from "../ISettings";
+import { FilteringSpecificationProvider } from "../../../FilteringSpecificationProvider";
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import GroupContenaire from "../GroupContenaire";
+import ISettings from "../../ISettings";
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
-import * as SparnaturalComponents from "../../SparnaturalComponents";
-import { AbstractValue } from "../../Query";
-import Config from "../../SparnaturalConfig";
-import UiuxConfig from "../../UiuxConfig";
-import CriteriaGroup from "./CriteriaGroup";
+import * as SparnaturalComponents from "../../../SparnaturalComponents";
+import { AbstractValue } from "../../../Query";
+import Config from "../../../SparnaturalConfig";
+import UiuxConfig from "../../../UiuxConfig";
+import CriteriaGroup from "../CriteriaGroup";
 
 
 class EndClassWidgetGroup extends GroupContenaire {
@@ -30,7 +30,7 @@ class EndClassWidgetGroup extends GroupContenaire {
         }
         console.warn("creating objectpropertytypewidget")
         console.dir(this)
-        this.inputTypeComponent = new ObjectPropertyTypeWidget(this, this.settings, specProvider) ;
+        this.inputTypeComponent = new ObjectPropertyTypeWidget(this, settings, specProvider) ;
     }
 
 	

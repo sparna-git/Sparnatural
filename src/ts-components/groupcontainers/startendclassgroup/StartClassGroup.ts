@@ -53,7 +53,9 @@ class StartClassGroup extends GroupContenaire implements IStartEndClassGroup {
 	// triggered when a criteria starts
 	onCreated() {
 		$(this.html).find('.input-val').unbind('change');
-		this.inputTypeComponent.init() ;
+		this.inputTypeComponent.init() ; //ClassTypeId contains class html input val so init first then we can find it
+		console.log("try to find it")
+		console.dir($(this.html).find('.input-val'))
 		var select = $(this.html).find('.input-val')[0] ;
 		select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
 		$(select).niceSelect() ;
