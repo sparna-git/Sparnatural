@@ -6,13 +6,12 @@ import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
 import * as SparnaturalComponents from "../../SparnaturalComponents";
 import { AbstractValue } from "../../Query";
 import Config from "../../SparnaturalConfig";
-import * as UiuxConfig from "../../UiuxConfig";
+import UiuxConfig from "../../UiuxConfig";
 import CriteriaGroup from "./CriteriaGroup";
 
 
 class EndClassWidgetGroup extends GroupContenaire {
     settings:ISettings
-    inputTypeComponent:ObjectPropertyTypeWidget
     selectedValues: Array<any>
     selectAllValue:boolean = true
     VALUE_SELECTION_WIDGETS = [
@@ -21,6 +20,7 @@ class EndClassWidgetGroup extends GroupContenaire {
         Config.AUTOCOMPLETE_PROPERTY,
         Config.TREE_PROPERTY
     ];
+	inputTypeComponent: ObjectPropertyTypeWidget;
     constructor(CriteriaGroupe:CriteriaGroup, settings:ISettings, specProvider:JsonLdSpecificationProvider){
         super("EndClassWidgetGroup",CriteriaGroupe,specProvider)
         this.settings = settings

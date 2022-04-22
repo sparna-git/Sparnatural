@@ -1,15 +1,15 @@
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
-import ClassTypeId from "../htmlcomponents/ClassTypeId";
+import ClassTypeId from "./startendclassgroup/ClassTypeId";
 import HTMLComponent from "../htmlcomponents/HtmlComponent";
+import ObjectPropertyTypeId from "../htmlcomponents/ObjectPropertyTypeId";
 import OptionTypeId from "../htmlcomponents/OptionTypeId";
+import CriteriaGroup from "./CriteriaGroup";
+import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
 
 class GroupContenaire extends HTMLComponent {
-	parentCriteriaGroup: GroupContenaire
-	inputTypeComponent: ObjectPropertyTypeWidget | ClassTypeId | OptionTypeId
-	value_selected:any
-	variableNamePreload:any
-	constructor(baseCssClass: any, parentComponent: any, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
+	parentCriteriaGroup: CriteriaGroup
+	constructor(baseCssClass: any, parentComponent: CriteriaGroup, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
 		super(
  			baseCssClass,
  			{
@@ -18,15 +18,10 @@ class GroupContenaire extends HTMLComponent {
 				Invisible: false
 			},
 			parentComponent,
-			null,
-			specProvider
+			specProvider,
+			null
  		);
-		this.parentCriteriaGroup = parentComponent; // IMPORTANT ParentComponent the same as parentCritiriaGroup?
-		this.inputTypeComponent = null ;
-
-		// TODO : to be removed from here
-		this.value_selected = null ;
-		this.variableNamePreload = null ;
+		this.parentCriteriaGroup = parentComponent;
 	}		
 
 	

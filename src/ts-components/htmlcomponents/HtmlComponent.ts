@@ -1,17 +1,19 @@
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider"
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider"
-import { UiuxConfig } from "../../UiuxConfig"
+import UiuxConfig from "../../UiuxConfig"
+import CriteriaGroup from "../groupcontainers/CriteriaGroup"
+import GroupContenaire from "../groupcontainers/GroupContenaire"
 
 class HTMLComponent {
-	baseCssClass: {}
+	baseCssClass: string
 	cssClasses:any
-	ParentComponent: HTMLComponent
+	ParentComponent: GroupContenaire |CriteriaGroup 
 	widgetHtml: JQuery<HTMLElement>
 	html:JQuery<HTMLElement>
 	needBackArrow: boolean
 	needFrontArrow: boolean
 	specProvider: JsonLdSpecificationProvider | RDFSpecificationProvider
-	constructor(baseCssClass: any, cssClasses: any, ParentComponent: any, widgetHtml: JQuery<HTMLElement>,specProvider: JsonLdSpecificationProvider | RDFSpecificationProvider) {
+	constructor(baseCssClass: any, cssClasses: any, ParentComponent: GroupContenaire | CriteriaGroup, specProvider: JsonLdSpecificationProvider | RDFSpecificationProvider,widgetHtml: JQuery<HTMLElement>) {
 		this.specProvider = specProvider
 		this.baseCssClass = baseCssClass;
 		this.cssClasses = cssClasses;
@@ -42,6 +44,10 @@ class HTMLComponent {
 				$(this.html).removeClass(item) ;
 			}
 		}
+	}
+
+	remove(){
+		$(this.html).remove()
 	}
 
 	initHtml() {

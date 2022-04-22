@@ -1,10 +1,10 @@
-import ActionsGroup from "./ActionsGroup";
+import ActionsGroup from "../actions/ActionsGroup";
 import ISettings from "../ISettings";
 import GroupContenaire from "./GroupContenaire";
-import StartClassGroup from "./StartClassGroup";
+import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import { OptionsGroup } from "./OptionsGroup";
 import ObjectPropertyGroup from "./ObjectPropertyGroup";
-import EndClassGroup from "./EndClassGroup";
+import EndClassGroup from "./startendclassgroup/EndClassGroup";
 import { findParentOrSiblingCriteria } from "../../SparnaturalComponents";
 /**
 * A single line/criteria
@@ -28,8 +28,10 @@ class CriteriaGroup {
     EndClassWidgetGroup:any;
     ActionsGroup:any;
     specProvider:any;
-    constructor(context: { AncestorHtmlContext: any; HtmlContext: any; FormContext: any; ContextComponentIndex: any; }, settings: ISettings, specProvider: any, jsonQueryBranch:any){
-        //super() // IMPORTANT Check what has to come into the constructor
+    ParentComponent:any
+    constructor(ParentComponent:any,context: { AncestorHtmlContext: any; HtmlContext: any; FormContext: any; ContextComponentIndex: any; }, settings: ISettings, specProvider: any, jsonQueryBranch:any){
+       // IMPORTANT Check what has to come into the constructor
+        this.ParentComponent = ParentComponent
         this.context = context
         this.thisForm_ = context.FormContext ;
         this.ComponentHtml = context.HtmlContext ;
@@ -203,7 +205,8 @@ class CriteriaGroup {
 		$(gabariEl).addClass(classWherePossible) ;		
 		
 		var UnCritere = new CriteriaGroup(
-			{ 
+			this,
+            { 
 				AncestorHtmlContext: contexte,
 				HtmlContext : gabari,
 				FormContext: thisForm_,

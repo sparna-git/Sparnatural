@@ -1,11 +1,12 @@
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
-import { eventProxiCriteria, localName, redrawBottomLink } from "../../SparnaturalComponents";
-import { UiuxConfig } from "../../UiuxConfig";
-import EndClassGroup from "../groupcontainers/EndClassGroup";
-import GroupContenaire from "../groupcontainers/GroupContenaire";
-import StartClassGroup from "../groupcontainers/StartClassGroup";
-import HTMLComponent from "./HtmlComponent";
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
+import { eventProxiCriteria, localName, redrawBottomLink } from "../../../SparnaturalComponents";
+import  UiuxConfig  from "../../../UiuxConfig";
+import CriteriaGroup from "../CriteriaGroup";
+import EndClassGroup from "./EndClassGroup";
+import StartClassGroup from "./StartClassGroup";
+import HTMLComponent from "../../htmlcomponents/HtmlComponent";
+import IStartEndClassGroup from "./IStartEndClassGroup";
 
 class VariableSelector extends HTMLComponent {
     displayVariableList: any;
@@ -15,20 +16,25 @@ class VariableSelector extends HTMLComponent {
     element: JQuery<HTMLElement>;
     contentEditableElement: JQuery<HTMLElement>;
     currentValue: string;
-	constructor(ParentComponent:GroupContenaire,specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
+    parentVarName:any
+    GrandParent:CriteriaGroup
+	varLabel:string
+	constructor(ParentComponent:IStartEndClassGroup,specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
 		super(
 			"VariableSelector",
 			{VariableSelector: true, Created: false},
 			ParentComponent,
-			null,
-            specProvider
+			specProvider,
+            null            
 		);
+        this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup // IMPORTANT : Dangerous cast?
+        this.parentVarName = ParentComponent.varName
 		this.ParentComponent = ParentComponent;
-		this.globalVariablesSelctor = this.ParentComponent.ParentComponent.thisForm_.sparnatural.variablesSelector ;
+		this.globalVariablesSelctor = this.GrandParent.thisForm_.sparnatural.variablesSelector ;
 		this.icon = specProvider.getIcon(ParentComponent.value_selected) ;
 		this.highlightedIcon = specProvider.getHighlightedIcon(ParentComponent.value_selected) ;
-
-		this.displayVariableList = this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList ;
+		this.varLabel = localName(ParentComponent.value_selected) ;
+		this.displayVariableList = this.GrandParent.thisForm_.queryOptions.displayVariableList ;
 
 		this.init();
 	}
@@ -48,18 +54,18 @@ class VariableSelector extends HTMLComponent {
 			}
 		}
 
-		let varLabel = localName(this.ParentComponent.value_selected) ;
-		let varName = this.ParentComponent.varName ;
+		
+		let varName = this.parentVarName ;
 		let varNameForDisplay = varName.replace('?', '') ;
 		let labelDisplayed = '' ;
 
 		if (this.globalVariablesSelctor.switchLabel == 'label') {
-			labelDisplayed = image + '<div id="editable-'+varName+'"><div contenteditable="true">'+varLabel+'</div></div>' ;
+			labelDisplayed = image + '<div id="editable-'+varName+'"><div contenteditable="true">'+this.varLabel+'</div></div>' ;
 		} else {
 			labelDisplayed = image + '<div id="editable-'+varName+'"><div contenteditable="true">'+varNameForDisplay+'</div></div>' ;
 		}
 
-		this.element = $('<div class="sortableItem"><div class="variableSelected flexWrap" data-variableName="'+varName+'" data-variableLabel="'+varLabel+'"><span class="variable-handle">'+ UiuxConfig.COMPONENT_DRAG_HANDLE + '</span>'+labelDisplayed+'</div></div>') ;
+		this.element = $('<div class="sortableItem"><div class="variableSelected flexWrap" data-variableName="'+varName+'" data-variableLabel="'+this.varLabel+'"><span class="variable-handle">'+ UiuxConfig.COMPONENT_DRAG_HANDLE + '</span>'+labelDisplayed+'</div></div>') ;
 
 		
 
@@ -142,7 +148,7 @@ class VariableSelector extends HTMLComponent {
             });
 
 			//Set variable name used on query for criteria
-			this.ParentComponent.varName = '?'+this.currentValue ;
+			this.parentVarName = '?'+this.currentValue ;
 			//Updates the variables in the generated query based on HTML variable line
 			this.ParentComponent.ParentComponent.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
 			//Variable name blocks whidth can be change, redraw lines links
@@ -170,8 +176,8 @@ class VariableSelector extends HTMLComponent {
 	 }
 
 	remove () {
-		var checkVarName = this.ParentComponent.varName;
-		this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList = this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList.filter(function(value, index, arr){
+		var checkVarName = this.parentVarName;
+		this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList = this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList.filter(function(value: any, index: any, arr: any){
 			return value !== checkVarName;
 		});
 		this.element.remove() ;

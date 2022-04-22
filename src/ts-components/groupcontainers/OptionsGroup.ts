@@ -1,6 +1,7 @@
+import { data } from "jquery";
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { eventProxiCriteria, redrawBottomLink } from "../../SparnaturalComponents";
-import { UiuxConfig } from "../../UiuxConfig";
+import UiuxConfig from "../../UiuxConfig";
 import OptionTypeId from "../htmlcomponents/OptionTypeId";
 import CriteriaGroup from "./CriteriaGroup";
 import GroupContenaire from "./GroupContenaire";
@@ -9,7 +10,8 @@ import GroupContenaire from "./GroupContenaire";
  * Selection of the start class in a criteria/line
  **/
  export class OptionsGroup extends GroupContenaire {
-	valuesSelected: Array<any>
+	valuesSelected: {[key:string]:boolean}
+	 inputTypeComponent: OptionTypeId;
 	constructor(parentCriteriaGroup:CriteriaGroup, specProvider:JsonLdSpecificationProvider) { 
 		super(
 			"OptionsGroup",
@@ -17,7 +19,7 @@ import GroupContenaire from "./GroupContenaire";
             specProvider
 		);
 		this.cssClasses.OptionsGroup = true ;
-		this.valuesSelected = [] ;
+		this.valuesSelected = {} ;
 		
 		this.inputTypeComponent = new OptionTypeId(this, specProvider) ;
 
@@ -42,7 +44,7 @@ import GroupContenaire from "./GroupContenaire";
 		$(this.html).find('.OptionTypeId').remove() ;
 		this.inputTypeComponent = new OptionTypeId(this, this.specProvider) ;
 
-		this.valuesSelected = [] ;
+		this.valuesSelected = {} ;
 	}
 
 	onObjectPropertyGroupSelected() {
@@ -122,15 +124,16 @@ import GroupContenaire from "./GroupContenaire";
 		var optionSelected = false ;
 		for (var item in  optionsInputs) {
 			if ($(optionsInputs[item]).parents('label').first().hasClass("justClicked")) {
-				if(this.valuesSelected[$(optionsInputs[item]).attr('data-id')] !== true) {
-					this.valuesSelected[$(optionsInputs[item]).attr('data-id')]  = true ;
+				let dataid = $(optionsInputs[item]).attr('data-id')
+				if(this.valuesSelected[dataid] !== true) {
+					this.valuesSelected[dataid]  = true ;
 					$(optionsInputs[item]).parents('label').first().addClass('Enabled');
 					optionSelected = true ;
 					$(optionsInputs[item]).parents('li.groupe').first().addClass($(optionsInputs[item]).attr('data-id')+'-enabled') ;
 				} else {
-					this.valuesSelected[$(optionsInputs[item]).attr('data-id')]  = false ;
+					this.valuesSelected[dataid] = false ;
 					$(optionsInputs[item]).parents('label').first().removeClass('Enabled');
-					optionsInputs[item].checked = false; 
+					optionsInputs[item].setAttribute("check","false")  //IMPORTANT Check if this does the same thing as the original code?
 					$(optionsInputs[item]).parents('li.groupe').first().removeClass($(optionsInputs[item]).attr('data-id')+'-enabled') ;
 				}					
 			} else {					

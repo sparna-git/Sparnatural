@@ -1,6 +1,7 @@
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
-import { UiuxConfig } from "../../UiuxConfig";
+import UiuxConfig from "../../UiuxConfig";
+import CriteriaGroup from "../groupcontainers/CriteriaGroup";
 import GroupContenaire from "../groupcontainers/GroupContenaire";
 import HTMLComponent from "./HtmlComponent";
 
@@ -10,6 +11,7 @@ import HTMLComponent from "./HtmlComponent";
 class OptionTypeId extends HTMLComponent {
 	needTriggerClick:boolean
 	default_value: {optional?: boolean, notExists?:boolean}
+	GrandParent: CriteriaGroup
  	constructor(parentComponent:GroupContenaire, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
  		super(
  			"OptionTypeId",
@@ -19,8 +21,8 @@ class OptionTypeId extends HTMLComponent {
                 flexWrap: true
 			},
 			parentComponent,
-			null,
-            specProvider
+            specProvider,
+            null,
  		);
 
 		this.needTriggerClick = false ;
@@ -37,19 +39,19 @@ class OptionTypeId extends HTMLComponent {
 		this.default_value['optional'] = false ;
 		this.default_value['notExists'] = false ;
 		
-		if(this.ParentComponent.parentCriteriaGroup.jsonQueryBranch) {
-			var branch = this.ParentComponent.parentCriteriaGroup.jsonQueryBranch
+		if(this.GrandParent.jsonQueryBranch) {
+			var branch = this.GrandParent.jsonQueryBranch
 			this.default_value['optional'] = branch.optional ;
 			this.default_value['notExists'] = branch.notExists ;
 			this.needTriggerClick = true ;
 		}
 
-		var id = this.ParentComponent.parentCriteriaGroup.id ;
+		var id = this.GrandParent.id ;
 		var selectBuilder = new OptionSelectBuilder(this.specProvider, this);
 
 		id = 'option-'+id ;
 		var selectHtml = selectBuilder.buildOptionSelect(
-			this.ParentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected,
+			this.GrandParent.ObjectPropertyGroup.value_selected,
 			id,
 			this.default_value
 		);

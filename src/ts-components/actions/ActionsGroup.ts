@@ -1,13 +1,10 @@
-import { FilteringSpecificationProvider } from "../../FilteringSpecificationProvider";
-
 import ActionAnd from "./ActionAnd";
 import ActionRemove from "./ActionRemove";
-import ActionWhere from "../htmlcomponents/ActionWhere";
-import CriteriaGroup from "./CriteriaGroup";
+import ActionWhere from "./ActionWhere";
+import CriteriaGroup from "../groupcontainers/CriteriaGroup";
 import ISettings from "../ISettings";
 import * as SparnaturalComponents from "../../SparnaturalComponents.js"; //IMPORTANT : double import?
-import GroupContenaire from "./GroupContenaire";
-import HTMLComponent from "../htmlcomponents/HtmlComponent";
+import GroupContenaire from "../groupcontainers/GroupContenaire";
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
 
@@ -22,8 +19,8 @@ class ActionsGroup extends GroupContenaire {
         ActionRemove:ActionRemove};
     reinsert = false;
     settings:ISettings
-    constructor(parentGroup:HTMLComponent, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider, settings:ISettings){
-        super("ActionsGroup",parentGroup, specProvider)
+    constructor(parentCriteriaGroup:CriteriaGroup, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider, settings:ISettings){
+        super("ActionsGroup",parentCriteriaGroup, specProvider)
         this.cssClasses = {
             ActionsGroup: true,
             Created : false
@@ -38,7 +35,7 @@ class ActionsGroup extends GroupContenaire {
         this.init()
     }
     onCreated = ()=> {
-        this.actions.ActionRemove.init() ;
+        this.actions.ActionRemove.initHtml() ;
         
         $(this.actions.ActionRemove.html).find('a').on(
             'click',
@@ -67,7 +64,7 @@ class ActionsGroup extends GroupContenaire {
             this.actions.ActionAnd.reload() ;
         } else {
             this.actions.ActionWhere.init() ;
-            this.actions.ActionAnd.init() ;
+            this.actions.ActionAnd.initHtml() ;
             this.reinsert = true ;
         }			
         
@@ -157,6 +154,7 @@ class ActionsGroup extends GroupContenaire {
 		$(gabariEl).addClass(classWherePossible) ;		
 		
 		var UnCritere = new CriteriaGroup(
+			this,
 			{ 
 				AncestorHtmlContext: contexte,
 				HtmlContext : gabari,

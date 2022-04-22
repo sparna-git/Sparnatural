@@ -27,7 +27,7 @@ class JSONQueryGenerator {
 				// of type = sibling
 				// at other level, the type is always "parent"
 				if ((dependantDe == null) || (dependantDe.type == 'sibling')) {
-					var branch = this.generateBranch(formObject, component, i, dependantDe);
+					var branch = this.generateBranch(formObject, component, i);
 					query.branches.push(branch);
 				}			
 			} ;	
@@ -40,7 +40,7 @@ class JSONQueryGenerator {
 		}		
 	}
 
-	generateBranch(formObject: { queryOptions?: any; sparnatural: any; }, component: { CriteriaGroup: { StartClassGroup: { value_selected: any; getVarName: () => any; }; ObjectPropertyGroup: { value_selected: any; }; EndClassGroup: { value_selected: any; getVarName: () => any; }; OptionsGroup: { valuesSelected: { [x: string]: boolean; }; }; EndClassWidgetGroup: { selectedValues: string | any[]; inputTypeComponent: { widgetType: any; }; }; }; }, i: number, dependantDe: { type: string; }) {
+	generateBranch(formObject: { queryOptions?: any; sparnatural: any; }, component: { CriteriaGroup: { StartClassGroup: { value_selected: any; getVarName: () => any; }; ObjectPropertyGroup: { value_selected: any; }; EndClassGroup: { value_selected: any; getVarName: () => any; }; OptionsGroup: { valuesSelected: { [x: string]: boolean; }; }; EndClassWidgetGroup: { selectedValues: string | any[]; inputTypeComponent: { widgetType: any; }; }; }; }, i: number) {
 		var branch = new QueryBranch();
 					
 		var domainClass = component.CriteriaGroup.StartClassGroup.value_selected ;
@@ -137,10 +137,10 @@ class JSONQueryGenerator {
 		for (var j = 0; j < formObject.sparnatural.components.length; j++) {
 			var parentOfJ = this.findDependantCriteria(formObject, j) ;
 			// not sure I should compare on id - is it equal to the index of the component ?
-			if ((parentOfJ != null) && (parentOfJ.type == 'parent') && (parentOfJ.element.id == i)) {
+			if ((parentOfJ != null) && (parentOfJ.type == 'parent') && (parentOfJ.element.id == i)) { //IMPORTANT parentOfJ unused?
 				branch.children.push(
 					// recursive call
-					this.generateBranch(formObject, formObject.sparnatural.components[j], j, parentOfJ)
+					this.generateBranch(formObject, formObject.sparnatural.components[j], j)
 				);
 			}
 		}

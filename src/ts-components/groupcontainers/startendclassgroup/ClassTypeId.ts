@@ -1,8 +1,12 @@
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
-import { findParentOrSiblingCriteria } from "../../SparnaturalComponents";
-import GroupContenaire from "../groupcontainers/GroupContenaire";
-import HTMLComponent from "./HtmlComponent";
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
+import { findParentOrSiblingCriteria } from "../../../SparnaturalComponents";
+import CriteriaGroup from "../CriteriaGroup";
+import IStartEndClassGroup from "./IStartEndClassGroup";
+import HTMLComponent from "../../htmlcomponents/HtmlComponent";
+import GroupContenaire from "../GroupContenaire";
+import StartClassGroup from "./StartClassGroup";
+import EndClassGroup from "./EndClassGroup";
 
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
@@ -11,7 +15,8 @@ import HTMLComponent from "./HtmlComponent";
  **/
 class ClassTypeId extends HTMLComponent {
 	needTriggerClick:any
-	constructor(parentComponent:GroupContenaire, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
+	GrandParent:CriteriaGroup
+	constructor(ParentComponent:IStartEndClassGroup, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
 		super(
  			"ClassTypeId",
  			{
@@ -20,11 +25,13 @@ class ClassTypeId extends HTMLComponent {
 				flexWrap: true
 
 			},
-			parentComponent,
-			null,
-            specProvider
+			ParentComponent,
+			specProvider,
+			null
  		);
 		this.needTriggerClick = false ;
+		this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup
+		this.ParentComponent = ParentComponent
 	}
 
 	init() {
@@ -38,16 +45,17 @@ class ClassTypeId extends HTMLComponent {
 		var default_value_s = null ;
 		var default_value_o = null ;
 		
-		if(this.ParentComponent.parentCriteriaGroup.jsonQueryBranch) {
-			var branch = this.ParentComponent.parentCriteriaGroup.jsonQueryBranch
+		if(this.GrandParent.jsonQueryBranch) {
+			var branch = this.GrandParent.jsonQueryBranch
 			default_value_s = branch.line.sType ;
 			default_value_o = branch.line.oType ;
 			this.needTriggerClick = true ;
-			if (this.ParentComponent.baseCssClass == "StartClassGroup") {
+			if (isStartClassGroup(this.ParentComponent)) {
 				this.ParentComponent.variableNamePreload = branch.line.s;
 				this.ParentComponent.variableViewPreload = branch.line.sSelected ;
 
-			} else {
+			} 
+			if(isEndClassGroup(this.ParentComponent)) {
 				this.ParentComponent.variableNamePreload = branch.line.o;
 				this.ParentComponent.variableViewPreload = branch.line.oSelected ;
 			}
@@ -55,12 +63,12 @@ class ClassTypeId extends HTMLComponent {
 
 		var selectHtml = null ;
 		
-		var id = this.ParentComponent.parentCriteriaGroup.id ;
+		var id = this.GrandParent.id ;
 		var selectBuilder = new ClassSelectBuilder(this.specProvider);
 
-		if (this.ParentComponent.baseCssClass == "StartClassGroup") {
+		if (isStartClassGroup(this.ParentComponent)) {
 			
-			var parentOrSibling = findParentOrSiblingCriteria(this.ParentComponent.parentCriteriaGroup.thisForm_, id) ;
+			var parentOrSibling = findParentOrSiblingCriteria(this.GrandParent.thisForm_, id) ;
 			if (parentOrSibling.type) {
 				if (parentOrSibling.type == 'parent' ) {
 					// if we are child in a WHERE relation, the selected class is the selected
@@ -87,10 +95,10 @@ class ClassTypeId extends HTMLComponent {
 			);
 		} 
 		
-		if (this.ParentComponent.baseCssClass == "EndClassGroup") {
+		if (isEndClassGroup(this.ParentComponent)) {
 			id = 'b-'+id ;
 			selectHtml = selectBuilder.buildClassSelect(
-				this.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected,
+				this.GrandParent.StartClassGroup.value_selected,
 				id,
 				default_value_o
 			);
@@ -163,3 +171,9 @@ export default ClassTypeId
 		return html_list ;
 	}
 }
+function isStartClassGroup(ParentComponent: CriteriaGroup | GroupContenaire): ParentComponent is StartClassGroup {
+	return (ParentComponent as StartClassGroup).baseCssClass === "StartClassGroup";
+} // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards
+function isEndClassGroup(ParentComponent: CriteriaGroup | GroupContenaire): ParentComponent is EndClassGroup {
+	return (ParentComponent as EndClassGroup).baseCssClass === "EndClassGroup";
+} // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards

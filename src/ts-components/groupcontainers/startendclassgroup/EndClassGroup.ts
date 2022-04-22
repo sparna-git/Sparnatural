@@ -1,22 +1,28 @@
-import ClassTypeId from "../htmlcomponents/ClassTypeId"
-import { UiuxConfig } from "../../UiuxConfig"
-import ISettings from "../ISettings"
-import GroupContenaire from "./GroupContenaire"
-import { eventProxiCriteria } from "../../SparnaturalComponents"
-import VariableSelector from "../htmlcomponents/VariableSelector"
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider"
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider"
-import CriteriaGroup from "./CriteriaGroup"
+import ClassTypeId from "./ClassTypeId"
+import UiuxConfig from "../../../UiuxConfig"
+import ISettings from "../../ISettings"
+import GroupContenaire from "../GroupContenaire"
+import { eventProxiCriteria, localName } from "../../../SparnaturalComponents"
+import VariableSelector from "./VariableSelector"
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider"
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider"
+import CriteriaGroup from "../CriteriaGroup"
+import tippy from "tippy.js"
+import IStartEndClassGroup from "./IStartEndClassGroup"
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
  **/
- class EndClassGroup extends GroupContenaire {
+ class EndClassGroup extends GroupContenaire implements IStartEndClassGroup  {
 	varName:any //IMPORTANT varName is only present at EndClassGroup and StartClassGroup. Refactor on selectedValue method from upper class
 	settings:ISettings
 	variableSelector:any
-	inputTypeComponent:ClassTypeId
     selectViewVariable:JQuery<HTMLElement>
+	value_selected: any
+	notSelectForview: boolean
+	inputTypeComponent: ClassTypeId
+	variableNamePreload: string
+	variableViewPreload: string
 	constructor(parentCriteriaGroup:CriteriaGroup, specProvider: JsonLdSpecificationProvider | RDFSpecificationProvider, settings: ISettings) {
 		super(
 			"EndClassGroup",
@@ -40,6 +46,7 @@ import CriteriaGroup from "./CriteriaGroup"
 		this.init();
 	}
 
+
 	// triggered when the subject/domain is selected
 	onStartClassGroupSelected() {
 		$(this.html).find('.input-val').unbind('change');
@@ -55,10 +62,10 @@ import CriteriaGroup from "./CriteriaGroup"
 		this.inputTypeComponent.init() ;
 		//this.inputTypeComponent.cssClasses.IsOnEdit = true;
 
-		var select = $(this.html).find('select.input-val') ;
-		select[0].sparnaturalSettings = this.settings ;
+		var select = $(this.html).find('select.input-val')[0] ;
+		select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
 		
-		this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
+		$(this.html).find('select.input-val').niceSelect()  ;
 		if(this.inputTypeComponent.needTriggerClick == false) {
 			$(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 		}
@@ -87,7 +94,7 @@ import CriteriaGroup from "./CriteriaGroup"
 	onchangeViewVariable() {
 		if (this.variableSelector === null) {
 			//Add varableSelector on variableSelector list ;
-			this.variableSelector = new VariableSelector(this) ;
+			this.variableSelector = new VariableSelector(this,this.specProvider) ;
 			$(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE) ;
 			$(this.html).addClass('VariableSelected') ;
 		} else {
@@ -133,7 +140,7 @@ import CriteriaGroup from "./CriteriaGroup"
 		if(desc) {
 			$(this.parentCriteriaGroup.EndClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
 			// tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
-			var tippySettings = Object.assign({}, this.settings.tooltipConfig);
+			var tippySettings = Object.assign({}, this.settings?.tooltipConfig);
 			tippySettings.placement = "top-start";
 			tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', tippySettings);
 
@@ -159,8 +166,8 @@ import CriteriaGroup from "./CriteriaGroup"
 		$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
 		this.parentCriteriaGroup.ActionsGroup.reinsert = true ;
 		$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
-		var select = $(this.html).find('.ClassTypeId select.input-val') ;
-		select[0].sparnaturalSettings = this.settings ;
+		var select = $(this.html).find('.ClassTypeId select.input-val')[0] ;
+		select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
 		$(this.html).find('.ClassTypeId .nice-select').trigger('click') ;
 
 		//Removote to Variable list

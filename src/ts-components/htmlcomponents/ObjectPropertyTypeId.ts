@@ -1,5 +1,6 @@
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
+import CriteriaGroup from "../groupcontainers/CriteriaGroup";
 import GroupContenaire from "../groupcontainers/GroupContenaire";
 import HTMLComponent from "./HtmlComponent";
 
@@ -9,7 +10,8 @@ import HTMLComponent from "./HtmlComponent";
  **/
 class ObjectPropertyTypeId extends HTMLComponent {
 	needTriggerClick:boolean
-	constructor(parentComponent:GroupContenaire, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
+	GrandParent:CriteriaGroup
+	constructor(ParentComponent:GroupContenaire, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
 		super(
  			"ObjectPropertyTypeId",
  			{
@@ -18,29 +20,30 @@ class ObjectPropertyTypeId extends HTMLComponent {
 				Created : false,
 				flexWrap : true
 			},
-			parentComponent,
-			null,
-            specProvider
+			ParentComponent,
+            specProvider,
+			null
  		);
 
 		this.needTriggerClick = false ;	
 		this.needBackArrow= false ;
 		this.needFrontArrow= true ;
+		this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup
 	}
 
 	init() {
 		var selectBuilder = new PropertySelectBuilder(this.specProvider);
 		var default_value = null ;
 
-		if(this.ParentComponent.parentCriteriaGroup.jsonQueryBranch != null) {
-			var default_value = this.ParentComponent.parentCriteriaGroup.jsonQueryBranch.line.p ;
+		if(this.GrandParent.jsonQueryBranch != null) {
+			var default_value = this.GrandParent.jsonQueryBranch.line.p ;
 			this.needTriggerClick = true ;
 		}
 
 		this.widgetHtml = selectBuilder.buildPropertySelect(
-			this.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected,
-			this.ParentComponent.parentCriteriaGroup.EndClassGroup.value_selected,
-			'c-'+this.ParentComponent.parentCriteriaGroup.id,
+			this.GrandParent.StartClassGroup.value_selected,
+			this.GrandParent.EndClassGroup.value_selected,
+			'c-'+this.GrandParent.id,
 			default_value
 		) ;
 		

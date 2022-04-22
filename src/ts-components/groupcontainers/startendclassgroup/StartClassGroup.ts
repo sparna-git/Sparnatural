@@ -1,22 +1,28 @@
 import tippy from "tippy.js"
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider"
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider"
-import { eventProxiCriteria, findParentOrSiblingCriteria } from "../../SparnaturalComponents"
-import { UiuxConfig } from "../../UiuxConfig"
-import ClassTypeId from "../htmlcomponents/ClassTypeId"
-import VariableSelector from "../htmlcomponents/VariableSelector"
-import ISettings from "../ISettings"
-import CriteriaGroup from "./CriteriaGroup"
-import GroupContenaire from "./GroupContenaire"
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider"
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider"
+import { eventProxiCriteria, findParentOrSiblingCriteria } from "../../../SparnaturalComponents"
+import UiuxConfig from "../../../UiuxConfig"
+import ClassTypeId from "./ClassTypeId"
+import VariableSelector from "./VariableSelector"
+import ISettings from "../../ISettings"
+import CriteriaGroup from "../CriteriaGroup"
+import GroupContenaire from "../GroupContenaire"
+import IStartEndClassGroup from "./IStartEndClassGroup"
 
  /**
  * Selection of the start class in a criteria/line
  **/
-class StartClassGroup extends GroupContenaire { 
+class StartClassGroup extends GroupContenaire implements IStartEndClassGroup { 
 	varName:any
 	settings:ISettings
 	variableSelector:any
+	selectViewVariable:JQuery<HTMLElement>
 	notSelectForview: boolean
+	value_selected:any
+	inputTypeComponent: ClassTypeId
+	variableViewPreload: string = ''
+	variableNamePreload: string
  	constructor(parentCriteriaGroup:CriteriaGroup, specProvider: JsonLdSpecificationProvider | RDFSpecificationProvider, settings: ISettings) {
  		super(
 			"StartClassGroup",
@@ -43,13 +49,14 @@ class StartClassGroup extends GroupContenaire {
 		this.init();
 	}
 
+
 	// triggered when a criteria starts
 	onCreated() {
 		$(this.html).find('.input-val').unbind('change');
 		this.inputTypeComponent.init() ;
 		var select = $(this.html).find('.input-val')[0] ;
-		select.sparnaturalSettings = this.settings ;
-		this.niceslect = $(select).niceSelect() ;
+		select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
+		$(select).niceSelect() ;
 
 		
 		$(this.html).find('select.input-val').on(
@@ -70,7 +77,7 @@ class StartClassGroup extends GroupContenaire {
 	onchangeViewVariable() {
 		if (this.variableSelector === null) {
 			//Add varableSelector on variableSelector list ;
-			this.variableSelector = new VariableSelector(this) ;
+			this.variableSelector = new VariableSelector(this,this.specProvider) ;
 			$(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE) ;
 			$(this.html).addClass('VariableSelected') ;
 		} else {
@@ -111,7 +118,7 @@ class StartClassGroup extends GroupContenaire {
 					eventProxiCriteria
 				);
 				//Add varableSelector on variableSelector list ;
-				this.variableSelector = new VariableSelector(this) ;
+				this.variableSelector = new VariableSelector(this,this.specProvider) ;
 				$(this.html).addClass('VariableSelected') ;
 			} else { //Pour le chargement d'une requête, par défaul l'oeil est barré.
 				this.selectViewVariable = $('<span class="selectViewVariable">'+UiuxConfig.ICON_NOT_SELECTED_VARIABLE+'</span>') ;
@@ -137,6 +144,7 @@ class StartClassGroup extends GroupContenaire {
 		var desc = this.specProvider.getTooltip(this.value_selected) ;
 		if(desc) {
 			$(this.parentCriteriaGroup.StartClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
+			// tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
 			var tippySettings = Object.assign({}, this.settings.tooltipConfig);
 			tippySettings.placement = "top-start";
 			tippy('.StartClassGroup .ClassTypeId[data-tippy-content]', tippySettings);

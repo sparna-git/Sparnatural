@@ -1,25 +1,27 @@
 import ISettings from "../ISettings";
 import * as $ from "jquery"
-import HTMLComponent from "./HtmlComponent";
+import HTMLComponent from "../htmlcomponents/HtmlComponent";
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
+import ActionsGroup from "./ActionsGroup";
 
 class ActionWhere extends HTMLComponent {
     HtmlContainer:{html?:any} = {};
     settings: ISettings
-    constructor(parentComponent:any, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider, settings:ISettings){
+
+    constructor(ParentComponent:ActionsGroup, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider, settings:ISettings){
         let cssClasses = {
             ActionWhere : true,
             ShowOnEdit : true,
             Created : false
         };
 
-        super("ActionWhere",cssClasses,parentComponent,null,specProvider)
+        super("ActionWhere",cssClasses,ParentComponent,specProvider,null)
         
         this.settings = settings 
     }
     init = () => {
-        var endClassGroup = this.ParentComponent.parentCriteriaGroup.EndClassGroup ;
+        var endClassGroup = this.ParentComponent.ParentComponent.EndClassGroup ;
         var choiceNumber = 2 ;
         if (endClassGroup.parentCriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
             choiceNumber = 1 ;

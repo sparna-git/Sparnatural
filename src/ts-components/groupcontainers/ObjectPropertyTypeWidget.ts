@@ -6,11 +6,12 @@ import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "..
 import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "../../Widgets";
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { SparqlTreeHandler } from "../../TreeHandlers";
+import HTMLComponent from "../htmlcomponents/HtmlComponent";
 
 /**
  *  Selects the value for a range in a criteria/line, using a value selection widget
  **/
- class ObjectPropertyTypeWidget extends GroupContenaire {
+ class ObjectPropertyTypeWidget extends HTMLComponent {
     settings: ISettings;
     HtmlContainer: any;
     widgetType: string | null = null;
@@ -18,6 +19,7 @@ import { SparqlTreeHandler } from "../../TreeHandlers";
     rangeClassId: any;
     classLabel: string;
     widgetComponent:any;
+    needTriggerClick:boolean = false // IMPORTANT Cheating here a little bit. useless class var but neeted to fit inputTypeComponent
     parentComponent:GroupContenaire
     loadedValue:{
         key?: any;
@@ -30,7 +32,11 @@ import { SparqlTreeHandler } from "../../TreeHandlers";
     } | null = null ;
 
     constructor(ParentComponent: GroupContenaire, settings: ISettings, specProvider:JsonLdSpecificationProvider){
-        super("ObjectPropertyTypeWidget",GroupContenaire,specProvider)
+        let cssClasses = {
+			ObjectPropertyTypeWidget : true,
+			Created : false
+		} ;
+        super("ObjectPropertyTypeWidget",cssClasses,ParentComponent,specProvider,null)
         this.parentComponent = ParentComponent
         this.settings = settings;
         this.HtmlContainer = ParentComponent
@@ -140,7 +146,7 @@ import { SparqlTreeHandler } from "../../TreeHandlers";
 			$(this.html).find('.selectAll').first().on("click", function() {
 				$(this_component).trigger('selectAll') ;
 			});
-            super.init() // IMPORTANT : check if this actually does the same thing like in the original code
+            super.initHtml() // IMPORTANT : check if this actually does the same thing like in the original code
     }
 
     canHaveSelectAll() {

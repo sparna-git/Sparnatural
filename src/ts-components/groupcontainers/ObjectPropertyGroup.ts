@@ -13,6 +13,7 @@ import GroupContenaire from "./GroupContenaire";
 	temporaryLabel:string;
 	settings:ISettings;
 	objectPropertySelector:ObjectPropertyTypeId
+	value_selected:any = null;
 	constructor(parentCriteriaGroup:CriteriaGroup, specProvider:JsonLdSpecificationProvider, settings:ISettings, temporaryLabel:string) {
 		super(
 			"ObjectPropertyGroup",
@@ -41,8 +42,7 @@ import GroupContenaire from "./GroupContenaire";
 	onEndClassGroupSelected() {
 		$(this.html).find('.temporary-label').remove() ;
 		$(this.html).find('.input-val').unbind('change');
-		this.value_selected = null;
-
+		
 		if (!this.objectPropertySelector.cssClasses.Created) {
 			this.objectPropertySelector.init() ;
 			this.objectPropertySelector.cssClasses.IsOnEdit = true;
@@ -50,9 +50,9 @@ import GroupContenaire from "./GroupContenaire";
 			this.objectPropertySelector.reload() ;
 			this.objectPropertySelector.cssClasses.IsOnEdit = true;
 		}
-		var select = $(this.html).find('select.input-val') ;
-		select[0].sparnaturalSettings = this.settings ;
-		this.niceslect = $(this.html).find('select.input-val').niceSelect()  ;
+		var select = $(this.html).find('select.input-val')[0] ;
+		select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
+		$(this.html).find('select.input-val').niceSelect()  ;
 		$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 		// opens the select automatically
 		if(this.objectPropertySelector.needTriggerClick == false) {
@@ -101,7 +101,7 @@ import GroupContenaire from "./GroupContenaire";
 		if(desc) {
 			$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
 			// tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
-			var tippySettings = Object.assign({}, this.settings.tooltipConfig);
+			var tippySettings = Object.assign({}, this.settings?.tooltipConfig);
 			tippySettings.placement = "top-start";
 			tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', tippySettings);
 		} else {

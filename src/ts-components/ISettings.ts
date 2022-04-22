@@ -15,4 +15,5 @@ export default interface Settings  {
     autocomplete:any //Handler function
     list:any //Handler function
     dates:any //Handler function?
+    tooltipConfig?:any
 }

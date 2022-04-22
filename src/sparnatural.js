@@ -807,6 +807,7 @@ import CriteriaGroup from "./ts-components/groupcontainers/CriteriaGroup";
 		$(gabari).addClass(classWherePossible) ;		
 		
 		var UnCritere = new CriteriaGroup(
+			this,
 			{ 
 				AncestorHtmlContext: contexte,
 				HtmlContext : gabari,
