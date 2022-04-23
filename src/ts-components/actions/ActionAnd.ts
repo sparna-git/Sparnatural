@@ -20,7 +20,7 @@ class ActionAnd extends HTMLComponent {
         this.HtmlContainer = parentComponent
        
     }
-    reload = () =>{
+    render = () =>{
         this.initHtml();
         this.attachHtml();
     } ;

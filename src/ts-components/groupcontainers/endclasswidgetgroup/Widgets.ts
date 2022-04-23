@@ -696,7 +696,6 @@ let jsTree = require('jstree').default;
 			var id_inputs = this.IdCriteriaGroupe ;			
 			this.itc_obj = this.ParentComponent;	
 
-			//console.log(this.loaderHandler) ;
 			var self = this ;
 			var options = {
 				'core' : {
@@ -816,7 +815,6 @@ let jsTree = require('jstree').default;
 				}
 			}
 			
-			//console.log(data);
 			if (this_.jsTree.jstree().get_top_checked().length >= this.settings.maxOr) {
 				
 				for (var i = 0; i < items.length; i++) {

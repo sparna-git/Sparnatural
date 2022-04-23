@@ -49,7 +49,6 @@ import IWidget from "./IWidget";
         this.widgetType = this.specProvider.getObjectPropertyType(this.objectPropertyId);
         this.rangeClassId = this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected
         this.classLabel = this.specProvider.getLabel(this.rangeClassId) ;
-        console.log("init ObjectPropertyTypeWIDGET is called")
         let endLabel:string
         let add_all = true
         let add_or = true
@@ -64,9 +63,6 @@ import IWidget from "./IWidget";
 					if(!this.parentComponent.parentCriteriaGroup.EndClassGroup.notSelectForview) {
 						this.parentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
 					}
-
-                    console.log("add all is getting set false")
-                    console.log(this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected)
 					add_all = false;
 					
 					
@@ -137,8 +133,6 @@ import IWidget from "./IWidget";
 				this.objectPropertyId,
 				this.rangeClassId
 			) ;
-            console.log("widgetComponent")
-            console.dir(this.widgetComponent)
 
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
 				this.widgetHtml = $(widgetLabel) ;
@@ -149,9 +143,7 @@ import IWidget from "./IWidget";
             this.cssClasses.IsOnEdit = true;
             this.initHtml() 
             this.attachHtml()
-            console.log("ObjectPropertyTypeWidget calling widgetComponent.init()")
 			this.widgetComponent.init() ;
-            console.log("after widgetComponent.init()")
 			this.cssClasses.Created = true ;
 			$(this.html).find('.selectAll').first().on("click", ()=> {
                 console.warn('selectAll has been clicked')

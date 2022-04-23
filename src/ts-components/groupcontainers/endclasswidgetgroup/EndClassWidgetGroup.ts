@@ -40,13 +40,10 @@ class EndClassWidgetGroup extends GroupContenaire {
 		console.warn("onObjectPropertyGroupSelected()")
         // Affichage de la ligne des actions 
         this.parentCriteriaGroup.ComponentHtml.addClass('OnEdit') ;
-        // determine widget type
-        // this.widgetType = this.specProvider.getObjectPropertyType(this.parentCriteriaGroup.ObjectPropertyGroup.selectedValues);
+
+		// IMPORTANT TODO refactor HtmlContainer. This will never be rendered
         this.inputTypeComponent.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
         
-
-		console.log("bind onchange")
-		console.log(this.inputTypeComponent)
         // binds a selection in an input widget with the display of the value in the line
         $(this.inputTypeComponent).on(
             'change',
@@ -91,7 +88,6 @@ class EndClassWidgetGroup extends GroupContenaire {
 
     // input : the 'key' of the value to be deleted
 		onremoveValue(e:any) {
-			console.log("endclasswidgetgroup on removevalue called")
 			if(this.selectAllValue) {
 				//unselect the endClass for view
 				this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
@@ -100,9 +96,6 @@ class EndClassWidgetGroup extends GroupContenaire {
 			this.selectAllValue = false;
 			
 			var keyToBeDeleted = $(e.currentTarget).attr('value-data') ;
-			console.warn("Observe filter function!")
-			console.dir(this.selectedValues)
-			console.log(keyToBeDeleted)
             this.selectedValues.filter((item)=>{
                 return item.key != keyToBeDeleted
             }) //IMPORTANT check if this function works the same as the original one
@@ -239,8 +232,6 @@ class EndClassWidgetGroup extends GroupContenaire {
 					}
 				}
 				new_items.push(theValue) ;
-				console.log("endclasswidgetgroup, selectedValues.push()")
-				console.log(theValue)
 				this.selectedValues.push(theValue) ;	
 			}
 			

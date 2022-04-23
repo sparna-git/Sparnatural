@@ -10,9 +10,9 @@ import { eventProxiCriteria } from "../../SparnaturalComponents";
 
 
 /**
-	 * Groups all the actions on a line/criteria (AND / REMOVE / WHERE)
-	 * even if they are visually not connected
-	 **/
+ 	Groups all the actions on a line/criteria (AND / REMOVE / WHERE)
+	even if they are visually not connected. ActionWhere for example is rendered under EndClassGroup -> EditComponent -> ActionWhere
+ **/
 class ActionsGroup extends GroupContenaire {
     actions: {ActionWhere:ActionWhere,
         ActionAnd:ActionAnd,
@@ -51,9 +51,9 @@ class ActionsGroup extends GroupContenaire {
 	/*
 		Create the ActionRemove button which deletes a row when clicked. 
 		Add this Button to the CriteriaGroup e.g row 
+		TODO: Refactor to ActionRemove class. ActionRemove class should get render() method
 	*/
 	#attachActionRemoveButtonToCriteriaGroup(){
-		console.log("call ActionRemove.initHtml")
         this.actions.ActionRemove.initHtml()
 		//this.actions.ActionRemove.attachComponentHtml()
 		this.actions.ActionRemove.attachHtml()
@@ -69,16 +69,18 @@ class ActionsGroup extends GroupContenaire {
 	}
 
     onObjectPropertyGroupSelected() {
-		console.log("ActionsGroup onObjectPropertyGroupSelected()")
 		this.#renderActionAnd()
 		this.#renderActionWhere()
         
         this.initGeneralEvent(this.parentCriteriaGroup.thisForm_);
     }
-
+	/*
+		Create the ActionAnd button which adds another row. 
+		TODO: Refactor to ActionAnd class. ActionRemove class should get render() method
+	*/
 	#renderActionAnd(){
-		this.actions.ActionWhere.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
-		this.actions.ActionWhere.render()
+		
+		this.actions.ActionAnd.render()
         $(this.actions.ActionAnd.html).find('a').on(
             'click',
             {
@@ -89,9 +91,11 @@ class ActionsGroup extends GroupContenaire {
         );
 		
 	}
-
+	/*
+		Create the ActionWhere button which opens another where row
+		TODO: Refactor to ActionAnd class. ActionRemove class should get render() method
+	*/
 	#renderActionWhere(){
-		this.actions.ActionWhere.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
 		this.actions.ActionWhere.render()
 		$(this.actions.ActionWhere.html).find('a').on(
 			'click', 
@@ -103,7 +107,9 @@ class ActionsGroup extends GroupContenaire {
 		);
 	}
 
-    onAddWhere() {	
+	// This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
+    onAddWhere() {
+		console.warn("ActionsGroup.onAddWhere()")	
         this.parentCriteriaGroup.html.parent('li').addClass('haveWhereChild') ;
         this.parentCriteriaGroup.initCompleted() ;
         
@@ -118,6 +124,7 @@ class ActionsGroup extends GroupContenaire {
         $(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
     }
     onAddAnd(){
+		console.warn("ActionsGroup.onAddWhere()")
         var new_component = this.addComponent(
             this.parentCriteriaGroup.thisForm_,
             this.parentCriteriaGroup.AncestorComponentHtml,
@@ -132,9 +139,11 @@ class ActionsGroup extends GroupContenaire {
     }
 
     addComponent(thisForm_: { sparnatural: any; submitOpened?: boolean; firstInit: any; preLoad?: boolean; }, contexte: any, jsonQueryBranch:any = null) {
+		console.log(`Args: thisForm_:${thisForm_},contexts: ${contexte}, jsonQueryBranch: ${jsonQueryBranch}`)
 		var new_index; //TODO : Refactor this index if else to a better solution...
 		if (thisForm_.sparnatural.components.length > 0 ) {
 			new_index = thisForm_.sparnatural.components[thisForm_.sparnatural.components.length-1].index + 1 ;
+			console.log(`new index: ${new_index} VS nr of comp: ${thisForm_.sparnatural.components.length}`)
 		} else {
 			new_index = 0 ;
 		}

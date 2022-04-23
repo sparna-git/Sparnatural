@@ -90,7 +90,6 @@ import GroupContenaire from "./GroupContenaire";
 			$(this.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 		}
 		$(this.parentCriteriaGroup).trigger( "ObjectPropertyGroupSelected" ) ;
-		console.log(this.parentCriteriaGroup.html) ;
 		if($(this.parentCriteriaGroup.html).parent('li').first().hasClass('completed'))	{
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
 		}
