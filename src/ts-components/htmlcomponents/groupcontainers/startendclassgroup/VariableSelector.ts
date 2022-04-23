@@ -1,11 +1,11 @@
-import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
-import { eventProxiCriteria, localName, redrawBottomLink } from "../../../SparnaturalComponents";
-import  UiuxConfig  from "../../../UiuxConfig";
+import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider";
+import { eventProxiCriteria, localName, redrawBottomLink } from "../../../../SparnaturalComponents";
+import  UiuxConfig  from "../../../../UiuxConfig";
 import CriteriaGroup from "../CriteriaGroup";
 import EndClassGroup from "./EndClassGroup";
 import StartClassGroup from "./StartClassGroup";
-import HTMLComponent from "../../htmlcomponents/HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 import IStartEndClassGroup from "./IStartEndClassGroup";
 
 class VariableSelector extends HTMLComponent {

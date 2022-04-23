@@ -1,8 +1,8 @@
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
 import UiuxConfig from "../../UiuxConfig";
-import CriteriaGroup from "../groupcontainers/CriteriaGroup";
-import GroupContenaire from "../groupcontainers/GroupContenaire";
+import CriteriaGroup from "./groupcontainers/CriteriaGroup";
+import GroupContenaire from "./groupcontainers/GroupContenaire";
 import HTMLComponent from "./HtmlComponent";
 
 /**

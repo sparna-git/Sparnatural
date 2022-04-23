@@ -1,8 +1,8 @@
 import { data } from "jquery";
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { eventProxiCriteria, redrawBottomLink } from "../../SparnaturalComponents";
-import UiuxConfig from "../../UiuxConfig";
-import OptionTypeId from "../htmlcomponents/OptionTypeId";
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { eventProxiCriteria, redrawBottomLink } from "../../../SparnaturalComponents";
+import UiuxConfig from "../../../UiuxConfig";
+import OptionTypeId from "../OptionTypeId";
 import CriteriaGroup from "./CriteriaGroup";
 import GroupContenaire from "./GroupContenaire";
 

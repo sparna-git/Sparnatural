@@ -1,9 +1,9 @@
-import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
-import { findParentOrSiblingCriteria } from "../../../SparnaturalComponents";
+import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider";
+import { findParentOrSiblingCriteria } from "../../../../SparnaturalComponents";
 import CriteriaGroup from "../CriteriaGroup";
 import IStartEndClassGroup from "./IStartEndClassGroup";
-import HTMLComponent from "../../htmlcomponents/HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 import GroupContenaire from "../GroupContenaire";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";

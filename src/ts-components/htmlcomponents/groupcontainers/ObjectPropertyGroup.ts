@@ -1,8 +1,8 @@
 import tippy from "tippy.js";
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { eventProxiCriteria } from "../../SparnaturalComponents";
-import ObjectPropertyTypeId from "../htmlcomponents/ObjectPropertyTypeId";
-import ISettings from "../ISettings";
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { eventProxiCriteria } from "../../../SparnaturalComponents";
+import ObjectPropertyTypeId from "../ObjectPropertyTypeId";
+import ISettings from "../../ISettings";
 import CriteriaGroup from "./CriteriaGroup";
 import GroupContenaire from "./GroupContenaire";
 

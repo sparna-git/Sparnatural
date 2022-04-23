@@ -1,6 +1,6 @@
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
-import HTMLComponent from "../htmlcomponents/HtmlComponent";
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
+import HTMLComponent from "../HtmlComponent";
 import CriteriaGroup from "./CriteriaGroup";
 class GroupContenaire extends HTMLComponent {
 	parentCriteriaGroup: CriteriaGroup

@@ -2,11 +2,11 @@ import ActionAnd from "./ActionAnd";
 import ActionRemove from "./ActionRemove";
 import ActionWhere from "./ActionWhere";
 import CriteriaGroup from "../groupcontainers/CriteriaGroup";
-import ISettings from "../ISettings";
+import ISettings from "../../ISettings";
 import GroupContenaire from "../groupcontainers/GroupContenaire";
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
-import { eventProxiCriteria } from "../../SparnaturalComponents";
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
+import { eventProxiCriteria } from "../../../SparnaturalComponents";
 
 
 /**
@@ -140,13 +140,7 @@ class ActionsGroup extends GroupContenaire {
 
     addComponent(thisForm_: { sparnatural: any; submitOpened?: boolean; firstInit: any; preLoad?: boolean; }, contexte: any, jsonQueryBranch:any = null) {
 		console.log(`Args: thisForm_:${thisForm_},contexts: ${contexte}, jsonQueryBranch: ${jsonQueryBranch}`)
-		var new_index; //TODO : Refactor this index if else to a better solution...
-		if (thisForm_.sparnatural.components.length > 0 ) {
-			new_index = thisForm_.sparnatural.components[thisForm_.sparnatural.components.length-1].index + 1 ;
-			console.log(`new index: ${new_index} VS nr of comp: ${thisForm_.sparnatural.components.length}`)
-		} else {
-			new_index = 0 ;
-		}
+		let index = thisForm_.sparnatural.components.length; // IMPORTANT check if this does the same as legacy code...
 		
 		// disable the WHERE if we have reached maximum depth
 		var classWherePossible = 'addWereEnable' ;
@@ -154,7 +148,7 @@ class ActionsGroup extends GroupContenaire {
 			classWherePossible = 'addWereDisable' ;
 		}
 		
-		var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"><span>'+this.settings.langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
+		var gabari = '<li class="groupe" data-index="'+index+'"><span class="link-and-bottom"><span>'+this.settings.langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+index+'" type="hidden" value=""><input name="b-'+index+'" type="hidden" value=""><input name="c-'+index+'" type="hidden" value=""></li>' ;
 		
 		// si il faut descendre d'un niveau
 		if ($(contexte).is('li')) {
@@ -184,7 +178,7 @@ class ActionsGroup extends GroupContenaire {
 				AncestorHtmlContext: contexte,
 				HtmlContext : gabari,
 				FormContext: thisForm_,
-				ContextComponentIndex: new_index
+				ContextComponentIndex: index
 			},
 			this.settings,
 			this.specProvider,
@@ -192,7 +186,7 @@ class ActionsGroup extends GroupContenaire {
 			jsonQueryBranch
 		);
 		
-		thisForm_.sparnatural.components.push({index: new_index, CriteriaGroup: UnCritere });			
+		thisForm_.sparnatural.components.push({index: index, CriteriaGroup: UnCritere });			
 		this.initGeneralEvent(thisForm_);
 	
 		//le critère est inséré et listé dans les composants, on peut lancer l'event de création

@@ -1,10 +1,9 @@
-import ISettings from "../ISettings";
+import ISettings from "../../ISettings";
 import * as $ from "jquery"
-import HTMLComponent from "../htmlcomponents/HtmlComponent";
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
+import HTMLComponent from "../HtmlComponent";
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
 import ActionsGroup from "./ActionsGroup";
-import EndClassGroup from "../groupcontainers/startendclassgroup/EndClassGroup";
 import CriteriaGroup from "../groupcontainers/CriteriaGroup";
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 

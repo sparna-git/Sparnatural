@@ -1,7 +1,7 @@
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
-import CriteriaGroup from "../groupcontainers/CriteriaGroup";
-import GroupContenaire from "../groupcontainers/GroupContenaire";
+import CriteriaGroup from "./groupcontainers/CriteriaGroup";
+import GroupContenaire from "./groupcontainers/GroupContenaire";
 import HTMLComponent from "./HtmlComponent";
 
 
