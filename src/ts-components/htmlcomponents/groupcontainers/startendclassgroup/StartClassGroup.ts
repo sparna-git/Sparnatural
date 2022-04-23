@@ -5,7 +5,7 @@ import { eventProxiCriteria, findParentOrSiblingCriteria } from "../../../../Spa
 import UiuxConfig from "../../../../UiuxConfig"
 import ClassTypeId from "./ClassTypeId"
 import VariableSelector from "./VariableSelector"
-import ISettings from "../../../ISettings"
+import ISettings from "../../../globals/ISettings"
 import CriteriaGroup from "../CriteriaGroup"
 import GroupContenaire from "../GroupContenaire"
 import IStartEndClassGroup from "./IStartEndClassGroup"

@@ -1,13 +1,13 @@
 import GroupContenaire from "../GroupContenaire";
-import ISettings from "../../ISettings";
-import Config from "../../../SparnaturalConfig";
-import Datasources from "../../../SparnaturalConfigDatasources";
-import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../../../AutocompleteAndListHandlers";
+import ISettings from "../../../globals/ISettings";
+import Config from "../../../../SparnaturalConfig";
+import Datasources from "../../../../SparnaturalConfigDatasources";
+import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../../../../AutocompleteAndListHandlers";
 import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "./Widgets"
-import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
-import { SparqlTreeHandler } from "../../../TreeHandlers";
-import HTMLComponent from "../../htmlcomponents/HtmlComponent";
-import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
+import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
+import { SparqlTreeHandler } from "../../../../TreeHandlers";
+import HTMLComponent from "../../HtmlComponent";
+import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider";
 import IWidget from "./IWidget";
 
 /**
@@ -212,7 +212,7 @@ import IWidget from "./IWidget";
                         }
                     },
 
-                    // language,
+                    // IMPORTANT is this deletable?
                     this.settings.language,
 
                     // sparql query (with labelPath interpreted)
@@ -406,7 +406,7 @@ import IWidget from "./IWidget";
                           }
                       },
 
-                      // language,
+                      // IMPORTANT is this deletable?
                       this.settings.language,
 
                       // sparql strings

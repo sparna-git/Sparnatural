@@ -1,10 +1,9 @@
 import GroupContenaire from "../groupcontainers/GroupContenaire"
-import ISettings from "../ISettings"
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider"
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider"
-import CriteriaGroup from "../groupcontainers/CriteriaGroup"
+import ISettings from "../../globals/ISettings"
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider"
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider"
 import ActionsGroup from "./ActionsGroup"
-import HTMLComponent from "../htmlcomponents/HtmlComponent"
+import HTMLComponent from "../HtmlComponent"
 
 
 class ActionAnd extends HTMLComponent {

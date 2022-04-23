@@ -16,4 +16,12 @@ export default interface Settings  {
     list:any //Handler function
     dates:any //Handler function?
     tooltipConfig?:any
+    statistics:{
+        countClassUrl: (aClass:any) =>void,
+        countPropertyUrl : (domain, property, range) => void,
+        countPropertyWithoutRangeUrl : (domain, property) => void,
+        elementCount: (data) => void
+    }
+    onQueryUpdated: (queryString, queryJson,pivotJson?) => void
+    onSubmit:(form:any)=>void
 }

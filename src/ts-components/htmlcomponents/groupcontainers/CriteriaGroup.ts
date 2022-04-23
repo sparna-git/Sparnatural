@@ -1,11 +1,12 @@
 import ActionsGroup from "../actions/ActionsGroup";
-import ISettings from "../ISettings";
+import ISettings from "../../globals/ISettings";
 import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import { OptionsGroup } from "./OptionsGroup";
 import ObjectPropertyGroup from "./ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
-import { findParentOrSiblingCriteria } from "../../SparnaturalComponents";
+import { findParentOrSiblingCriteria } from "../../../SparnaturalComponents";
 import EndClassWidgetGroup from "./endclasswidgetgroup/EndClassWidgetGroup";
+import { addComponent } from "../../globals/globalfunctions";
 
 /**
 * A single line/criteria
@@ -135,7 +136,7 @@ class CriteriaGroup {
 
             $('.variablesOtherSelect .sortableItem').remove() ;
 
-            var new_component = this.addComponent(formObject, formContextHtml, jsonQueryBranch) ;			
+            var new_component = addComponent(formObject, formContextHtml, jsonQueryBranch) ;			
             $(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;				
         } else {
             if (parentOrSibling.element !== null) {
@@ -166,72 +167,6 @@ class CriteriaGroup {
     initCompleted =  () => {
         $(this.html).parent('li').addClass('completed') ;
     }
-
-    addComponent(thisForm_: { sparnatural: any; submitOpened?: boolean; firstInit: any; preLoad?: boolean; }, contexte: any, jsonQueryBranch:any = null) {
-		var new_index; //TODO : Refactor this index if else to a better solution...
-		if (thisForm_.sparnatural.components.length > 0 ) {
-			new_index = thisForm_.sparnatural.components[thisForm_.sparnatural.components.length-1].index + 1 ;
-		} else {
-			new_index = 0 ;
-		}
-		
-		// disable the WHERE if we have reached maximum depth
-		var classWherePossible = 'addWereEnable' ;
-		if (($(contexte).parents('li.groupe').length + 1 ) == (this.settings.maxDepth - 1) ) {
-			classWherePossible = 'addWereDisable' ;
-		}
-		
-		var gabari = '<li class="groupe" data-index="'+new_index+'"><span class="link-and-bottom"><span>'+this.settings.langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+new_index+'" type="hidden" value=""><input name="b-'+new_index+'" type="hidden" value=""><input name="c-'+new_index+'" type="hidden" value=""></li>' ;
-		
-		// si il faut descendre d'un niveau
-		if ($(contexte).is('li')) {
-			if ($(contexte).find('>ul').length == 0) {
-				var ul = $('<ul class="childsList"><div class="lien-top"><span>'+this.settings.langSearch.Where+'</span></div></ul>').appendTo($(contexte)) ;
-				var parent_li = $(ul).parent('li') ;
-				var n_width = 0;
-				n_width = n_width + this.getOffset( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
-				var t_width = this.getOffset( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
-				$(ul).attr('data-test', this.getOffset( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) );
-				$(ul).find('>.lien-top').css('width', n_width) ;
-				$(parent_li).find('>.link-where-bottom').css('left', t_width) ;
-			} else {
-				var ul = $(contexte).find('>ul') ;
-			}
-			
-			var gabariEl = $(gabari).appendTo(ul); //IMPORTANT :Introduced new var gabariEl
-		} else {
-			var gabariEl = $(gabari).appendTo(contexte) ; // IMPORTANT : Introduced new var gabariEl
-		}
-	
-		$(gabariEl).addClass(classWherePossible) ;		
-		
-		var UnCritere = new CriteriaGroup(
-			this,
-            { 
-				AncestorHtmlContext: contexte,
-				HtmlContext : gabari,
-				FormContext: thisForm_,
-				ContextComponentIndex: new_index
-			},
-			this.settings,
-			this.specProvider,
-			// pass the JSON query branch as an input parameter
-			jsonQueryBranch
-		);
-		
-		thisForm_.sparnatural.components.push({index: new_index, CriteriaGroup: UnCritere });			
-		this.initGeneralEvent(thisForm_);
-	
-		//le critère est inséré et listé dans les composants, on peut lancer l'event de création
-		$(UnCritere).trigger( "Created" ) ;
-		if (thisForm_.firstInit == false) {
-			thisForm_.firstInit = true ;
-			$(thisForm_.sparnatural).trigger('initialised') ;
-		}
-		
-	
-		return $(gabari) ;
-	}
 
     getOffset( elem: JQuery<HTMLElement>, elemParent: JQuery<HTMLElement> ) {
 		return elem.offset()!.left - elemParent.offset()!.left ;

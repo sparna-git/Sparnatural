@@ -1,13 +1,13 @@
-import { FilteringSpecificationProvider } from "../../../FilteringSpecificationProvider";
-import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { FilteringSpecificationProvider } from "../../../../FilteringSpecificationProvider";
+import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
 import GroupContenaire from "../GroupContenaire";
-import ISettings from "../../ISettings";
+import ISettings from "../../../globals/ISettings";
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
-import { AbstractValue } from "../../../Query";
-import Config from "../../../SparnaturalConfig";
-import UiuxConfig from "../../../UiuxConfig";
+import { AbstractValue } from "../../../../Query";
+import Config from "../../../../SparnaturalConfig";
+import UiuxConfig from "../../../../UiuxConfig";
 import CriteriaGroup from "../CriteriaGroup";
-import { eventProxiCriteria } from "../../../SparnaturalComponents";
+import { eventProxiCriteria } from "../../../../SparnaturalComponents";
 
 
 class EndClassWidgetGroup extends GroupContenaire {

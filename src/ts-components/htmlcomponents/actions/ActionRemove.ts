@@ -1,8 +1,7 @@
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
-import CriteriaGroup from "../groupcontainers/CriteriaGroup";
-import GroupContenaire from "../groupcontainers/GroupContenaire";
-import HTMLComponent from "../htmlcomponents/HtmlComponent";
+import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
+
+import HTMLComponent from "../HtmlComponent";
 import ActionsGroup from "./ActionsGroup";
 
 class ActionRemove extends HTMLComponent {
