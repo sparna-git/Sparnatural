@@ -15,7 +15,7 @@ class ActionRemove extends HTMLComponent {
         super("ActionRemove",cssClasses,parentComponent,specProvider,widgetHtml)
 
     }
-    reload = () =>{
+    render = () =>{
         this.initHtml();
         this.attachHtml();;
     } ;

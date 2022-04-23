@@ -4,7 +4,6 @@
  * in an AND criteria
  **/
 export function findParentOrSiblingCriteria(thisForm_: { sparnatural: { components: any; }; }, id: string) {
-	console.warn("searching for it...")
 	let dependant:{type:any,element:any} = {
 		type: null,
 		element: null
@@ -24,15 +23,12 @@ export function findParentOrSiblingCriteria(thisForm_: { sparnatural: { componen
 
 	$(thisForm_.sparnatural.components).each(function(index) {			
 		if (this.index == dep_id) {
-			console.log("forEach")
 			dependant = {
 				type: dependant.type,
 				element: this.CriteriaGroup
 			}
-			console.log(dependant)
 		} 
 	}) ;
-	console.log("end searchings")
 
 	return dependant ;
 }

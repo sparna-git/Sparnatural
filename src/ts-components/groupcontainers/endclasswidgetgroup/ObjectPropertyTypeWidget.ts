@@ -49,7 +49,7 @@ import IWidget from "./IWidget";
         this.widgetType = this.specProvider.getObjectPropertyType(this.objectPropertyId);
         this.rangeClassId = this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected
         this.classLabel = this.specProvider.getLabel(this.rangeClassId) ;
-      
+        console.log("init ObjectPropertyTypeWIDGET is called")
         let endLabel:string
         let add_all = true
         let add_or = true
@@ -65,6 +65,8 @@ import IWidget from "./IWidget";
 						this.parentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
 					}
 
+                    console.log("add all is getting set false")
+                    console.log(this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected)
 					add_all = false;
 					
 					
@@ -110,6 +112,10 @@ import IWidget from "./IWidget";
 
 			//Ajout de l'option all si pas de valeur déjà selectionées
 			var selcetAll = "";
+            console.log("checking on add all:")
+            console.group(add_all)
+            console.dir(this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup)
+            // explain this if
 			if (this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues?.length == 0) {
 				if (add_all) {
 					selcetAll = '<span class="selectAll"><span class="underline">'+this.settings.langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span>' ;
@@ -137,16 +143,22 @@ import IWidget from "./IWidget";
 			if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
 				this.widgetHtml = $(widgetLabel) ;
 			} else {
-				this.widgetHtml = $(widgetLabel) + this.widgetComponent.html ;
+				this.widgetHtml = $(widgetLabel + this.widgetComponent.html)  ;
 			}
-
-			var this_component = this;
+            // First init this component as parent component and then init the widgetComponent because it will be attached to this component
+            this.cssClasses.IsOnEdit = true;
+            this.initHtml() 
+            this.attachHtml()
+            console.log("ObjectPropertyTypeWidget calling widgetComponent.init()")
 			this.widgetComponent.init() ;
+            console.log("after widgetComponent.init()")
 			this.cssClasses.Created = true ;
-			$(this.html).find('.selectAll').first().on("click", function() {
-				$(this_component).trigger('selectAll') ;
+			$(this.html).find('.selectAll').first().on("click", ()=> {
+                console.warn('selectAll has been clicked')
+				$(this).trigger('selectAll') ;
 			});
-            super.initHtml() // IMPORTANT : check if this actually does the same thing like in the original code
+
+            
     }
 
     canHaveSelectAll() {
@@ -165,8 +177,6 @@ import IWidget from "./IWidget";
     }
 
     createWidgetComponent(widgetType:string, objectPropertyId:any, rangeClassId:any):IWidget {
-        console.log("calling create Widget")
-        console.log(widgetType,objectPropertyId,rangeClassId)
         switch (widgetType) {
           case Config.LITERAL_LIST_PROPERTY: {
             // defaut handler to be used

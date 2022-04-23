@@ -405,7 +405,6 @@ import CriteriaGroup from "./ts-components/groupcontainers/CriteriaGroup";
 
 					if(jsonQuery != null) {					
 						console.log("*** New JSON Data structure ***");
-						console.log("yes that's right")
 						console.log(JSON.stringify(
 							jsonQuery,
 							null,

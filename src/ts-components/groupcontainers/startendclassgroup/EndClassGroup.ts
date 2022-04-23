@@ -149,7 +149,8 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 		}
 	};
 
-	onRemoveSelected() {			
+	onRemoveSelected() {
+		console.warn('endClassGroup.onRemoveSelected()')			
 		$(this.parentCriteriaGroup.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
 		this.parentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = true ;
 		this.parentCriteriaGroup.ObjectPropertyGroup.init() ;

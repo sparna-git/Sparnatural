@@ -247,7 +247,6 @@ export class QuerySPARQLWriter {
 		}
 
 		var stringWriter = new QueryExplainStringWriter(this.specProvider);
-		console.log(stringWriter.toExplainString(query));
 
 		var generator = new Generator();
 		var generatedQuery = generator.stringify(sparqlQuery);		

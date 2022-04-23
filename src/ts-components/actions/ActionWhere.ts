@@ -33,11 +33,11 @@ class ActionWhere extends HTMLComponent {
         var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choiceNumber+'</span></span>'+this.settings.langSearch.Search+' '+ endLabel + ' '+this.settings.langSearch.That+'...' ;
 
         this.widgetHtml = $(widgetLabel+'<a>+</a>') ;
-        super.initHtml()
-        super.attachHtml
+        this.initHtml()
+        this.attachHtml()
 
     }
-    reload = ()=> {
+    render = ()=> {
         this.init();
     } ;
 }

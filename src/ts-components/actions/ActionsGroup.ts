@@ -17,7 +17,6 @@ class ActionsGroup extends GroupContenaire {
     actions: {ActionWhere:ActionWhere,
         ActionAnd:ActionAnd,
         ActionRemove:ActionRemove};
-    reinsert = false;
     settings:ISettings
     constructor(parentCriteriaGroup:CriteriaGroup, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider, settings:ISettings){
         super("ActionsGroup",parentCriteriaGroup, specProvider)
@@ -34,17 +33,9 @@ class ActionsGroup extends GroupContenaire {
         this.settings = settings
         this.init()
     }
-    onCreated = ()=> {
-        this.actions.ActionRemove.initHtml() ;
-        
-        $(this.actions.ActionRemove.html).find('a').on(
-            'click',
-            {
-                arg1: this.parentCriteriaGroup,
-                arg2: 'onRemoveCriteria'
-            },
-            eventProxiCriteria
-        );
+    onCreated() {
+		
+		this.#attachActionRemoveButtonToCriteriaGroup()
 
         if(this.parentCriteriaGroup.jsonQueryBranch != null) {
             var branch = this.parentCriteriaGroup.jsonQueryBranch;
@@ -57,25 +48,37 @@ class ActionsGroup extends GroupContenaire {
         }
     }
 
-    onObjectPropertyGroupSelected = () => {
-        this.actions.ActionWhere.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
-        if (this.reinsert == true) {
-            this.actions.ActionWhere.reload() ;
-            this.actions.ActionAnd.reload() ;
-        } else {
-            this.actions.ActionWhere.init() ;
-            this.actions.ActionAnd.initHtml() ;
-            this.reinsert = true ;
-        }			
-        
-        $(this.actions.ActionWhere.html).find('a').on(
-            'click', 
+	/*
+		Create the ActionRemove button which deletes a row when clicked. 
+		Add this Button to the CriteriaGroup e.g row 
+	*/
+	#attachActionRemoveButtonToCriteriaGroup(){
+		console.log("call ActionRemove.initHtml")
+        this.actions.ActionRemove.initHtml()
+		//this.actions.ActionRemove.attachComponentHtml()
+		this.actions.ActionRemove.attachHtml()
+		// when click then remove row
+        $(this.actions.ActionRemove.html).find('a').on(
+            'click',
             {
-                arg1: this,
-                arg2: 'onAddWhere'
+                arg1: this.parentCriteriaGroup,
+                arg2: 'onRemoveCriteria'
             },
             eventProxiCriteria
         );
+	}
+
+    onObjectPropertyGroupSelected() {
+		console.log("ActionsGroup onObjectPropertyGroupSelected()")
+		this.#renderActionAnd()
+		this.#renderActionWhere()
+        
+        this.initGeneralEvent(this.parentCriteriaGroup.thisForm_);
+    }
+
+	#renderActionAnd(){
+		this.actions.ActionWhere.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
+		this.actions.ActionWhere.render()
         $(this.actions.ActionAnd.html).find('a').on(
             'click',
             {
@@ -84,10 +87,23 @@ class ActionsGroup extends GroupContenaire {
             },
             eventProxiCriteria
         );
-        
-        this.initGeneralEvent(this.parentCriteriaGroup.thisForm_);
-    }
-    onAddWhere = ()=> {	
+		
+	}
+
+	#renderActionWhere(){
+		this.actions.ActionWhere.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
+		this.actions.ActionWhere.render()
+		$(this.actions.ActionWhere.html).find('a').on(
+			'click', 
+			{
+				arg1: this,
+				arg2: 'onAddWhere'
+			},
+			eventProxiCriteria
+		);
+	}
+
+    onAddWhere() {	
         this.parentCriteriaGroup.html.parent('li').addClass('haveWhereChild') ;
         this.parentCriteriaGroup.initCompleted() ;
         
@@ -101,7 +117,7 @@ class ActionsGroup extends GroupContenaire {
         $(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
         $(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
     }
-    onAddAnd = () =>{
+    onAddAnd(){
         var new_component = this.addComponent(
             this.parentCriteriaGroup.thisForm_,
             this.parentCriteriaGroup.AncestorComponentHtml,

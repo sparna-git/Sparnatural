@@ -116,7 +116,6 @@
     // Open/close
     $(document).on('click.nice_select', '.nice-select', function(event) {
       var $dropdown = $(this);
-      console.dir($dropdown.prev('select')[0])
       var settings = $dropdown.prev('select')[0].sparnaturalSettings ;
   	  if ($dropdown.hasClass('open') ) {
   		  $dropdown.toggleClass('open');

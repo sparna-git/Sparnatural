@@ -3,11 +3,11 @@ import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
 import GroupContenaire from "../GroupContenaire";
 import ISettings from "../../ISettings";
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
-import * as SparnaturalComponents from "../../../SparnaturalComponents";
 import { AbstractValue } from "../../../Query";
 import Config from "../../../SparnaturalConfig";
 import UiuxConfig from "../../../UiuxConfig";
 import CriteriaGroup from "../CriteriaGroup";
+import { eventProxiCriteria } from "../../../SparnaturalComponents";
 
 
 class EndClassWidgetGroup extends GroupContenaire {
@@ -28,8 +28,6 @@ class EndClassWidgetGroup extends GroupContenaire {
             EndClassWidgetGroup: true,
             Created: false
         }
-        console.warn("creating objectpropertytypewidget")
-        console.dir(this)
         this.inputTypeComponent = new ObjectPropertyTypeWidget(this, settings, specProvider) ;
     }
 
@@ -39,18 +37,16 @@ class EndClassWidgetGroup extends GroupContenaire {
      * Called when the property/link between domain and range is selected, to init this.
      **/
     onObjectPropertyGroupSelected() {
+		console.warn("onObjectPropertyGroupSelected()")
         // Affichage de la ligne des actions 
         this.parentCriteriaGroup.ComponentHtml.addClass('OnEdit') ;
         // determine widget type
         // this.widgetType = this.specProvider.getObjectPropertyType(this.parentCriteriaGroup.ObjectPropertyGroup.selectedValues);
         this.inputTypeComponent.HtmlContainer.html = $(this.parentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
         
-        if (this.parentCriteriaGroup.ActionsGroup.reinsert == true) {
-            this.inputTypeComponent.reload() ;
-        } else {
-            this.inputTypeComponent.init() ;
-        }
 
+		console.log("bind onchange")
+		console.log(this.inputTypeComponent)
         // binds a selection in an input widget with the display of the value in the line
         $(this.inputTypeComponent).on(
             'change',
@@ -58,7 +54,7 @@ class EndClassWidgetGroup extends GroupContenaire {
                 arg1: this,
                 arg2: 'onChange'
             },
-            SparnaturalComponents.eventProxiCriteria
+            eventProxiCriteria
         );
         // binds a selection in an input widget with the display of the value in the line
         $(this.inputTypeComponent).on(
@@ -67,8 +63,15 @@ class EndClassWidgetGroup extends GroupContenaire {
                 arg1: this,
                 arg2: 'onSelectAll'
             },
-            SparnaturalComponents.eventProxiCriteria
+            eventProxiCriteria
         );
+		// IMPORTANT changed the reinsert and init after the function bining onchange. otherwise selectedValues are empty cause only in onChange they are getting filled
+		if (this.parentCriteriaGroup.ActionsGroup.reinsert == true) {
+			console.dir(this.parentCriteriaGroup)
+            this.inputTypeComponent.reload() ;
+        } else {
+            this.inputTypeComponent.init() ;
+        }
         
         if(this.parentCriteriaGroup.jsonQueryBranch != null) {
             var branch = this.parentCriteriaGroup.jsonQueryBranch;
@@ -88,6 +91,7 @@ class EndClassWidgetGroup extends GroupContenaire {
 
     // input : the 'key' of the value to be deleted
 		onremoveValue(e:any) {
+			console.log("endclasswidgetgroup on removevalue called")
 			if(this.selectAllValue) {
 				//unselect the endClass for view
 				this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
@@ -96,6 +100,9 @@ class EndClassWidgetGroup extends GroupContenaire {
 			this.selectAllValue = false;
 			
 			var keyToBeDeleted = $(e.currentTarget).attr('value-data') ;
+			console.warn("Observe filter function!")
+			console.dir(this.selectedValues)
+			console.log(keyToBeDeleted)
             this.selectedValues.filter((item)=>{
                 return item.key != keyToBeDeleted
             }) //IMPORTANT check if this function works the same as the original one
@@ -150,6 +157,7 @@ class EndClassWidgetGroup extends GroupContenaire {
 		}
 
         onSelectAll() {
+			console.log('onSelectAll()')
 			var theValueLabel = '<span>'+this.settings.langSearch.SelectAllValues+'</span>';
 			this.selectAllValue = true;
 			let unselect = $('<span class="unselect" value-data="allValues"><i class="far fa-times-circle"></i></span>') ;
@@ -159,8 +167,8 @@ class EndClassWidgetGroup extends GroupContenaire {
 
 			unselect.on(
 				'click',
-				{	arg1: this,	arg2: 'onRemoveValue'	},
-				SparnaturalComponents.eventProxiCriteria
+				{	arg1: this,	arg2: 'onRemoveValue'},
+				eventProxiCriteria
 			);
 
 			// disable the Where
@@ -182,6 +190,7 @@ class EndClassWidgetGroup extends GroupContenaire {
 		}
 
         onChange() {
+			console.warn("EndclasswidgetGroup on change called")
 			var theValue = this.inputTypeComponent.getValue() ;
 			// put span around with proper class if coming from a date widget
 			
@@ -230,6 +239,8 @@ class EndClassWidgetGroup extends GroupContenaire {
 					}
 				}
 				new_items.push(theValue) ;
+				console.log("endclasswidgetgroup, selectedValues.push()")
+				console.log(theValue)
 				this.selectedValues.push(theValue) ;	
 			}
 			
@@ -253,7 +264,7 @@ class EndClassWidgetGroup extends GroupContenaire {
 							$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>.EndClassWidgetAddOrValue').on(
 								'click',
 								{arg1: this, arg2: 'onAddOrValue'},
-								SparnaturalComponents.eventProxiCriteria
+								eventProxiCriteria
 							);
 						//}
 					}
@@ -267,7 +278,7 @@ class EndClassWidgetGroup extends GroupContenaire {
 				unselect.on(
 					'click',
 					{	arg1: this,	arg2: 'onRemoveValue'	},
-					SparnaturalComponents.eventProxiCriteria
+					eventProxiCriteria
 				);
 			}
 

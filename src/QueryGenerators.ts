@@ -17,8 +17,6 @@ class JSONQueryGenerator {
 	 * Generates a JSON query
 	 **/
 	generateQuery(formObject: { queryOptions: any; sparnatural: { components: string | any[]; }; }) {
-		console.log("generateQuery()")
-		console.dir(formObject)
 		if(this.hasEnoughCriteria(formObject)) {
 			var query = new Query(formObject.queryOptions);
 
@@ -78,8 +76,6 @@ class JSONQueryGenerator {
 		var values = component.CriteriaGroup.EndClassWidgetGroup.selectedValues;
 		// Set the values based on widget type
 		var _WidgetType = component.CriteriaGroup?.EndClassWidgetGroup?.inputTypeComponent?.widgetType ;
-		console.warn("before log")
-		console.dir(component.CriteriaGroup.EndClassWidgetGroup)
 		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues?.length > 0 ) {	// IMPORTANT see if the introduced null check still has the same effect		
 			switch (_WidgetType) {					
 			  case Config.TREE_PROPERTY:
@@ -151,8 +147,7 @@ class JSONQueryGenerator {
 	}
 
 	hasEnoughCriteria(formObject: { queryOptions?: any; sparnatural: any; }) {
-		for (var i = 0; i < formObject.sparnatural.components.length; i++) {	
-			console.dir(formObject.sparnatural.components[i])		
+		for (var i = 0; i < formObject.sparnatural.components.length; i++) {		
 			// if there is no value selected and the widget required one
 			// do not process this component		
 			if(
