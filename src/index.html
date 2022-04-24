@@ -63,7 +63,8 @@
         </div>
       <div class="row justify-content-center">
         <div class="col-md-12">
-          <yas-gui></yas-gui>
+          <div id="yasgui"></div>
+            <yas-gui></yas-gui>
         </div>
       </div>
     </div>
@@ -175,17 +176,21 @@
       /*
         Init Yasgui component
       */
-      let yasgui = document.querySelector("yas-gui");
-      yasgui.setEndpoint(defaultEndpoint)
-      let tab = yasgui.getTab()
+      let yasg = document.querySelector("yas-gui");
+
+      yasg.setEndpoint(defaultEndpoint)
+      //yasg.setEndpoint(defaultEndpoint)
+      let tab = yasg.getTab()
 
       /*
         Init Sparnatural component
       */
       let sparnatural = document.querySelector("spar-natural");
-      let set = sparnatural.getSettings()
+      console.dir(sparnatural)
+      let settings = sparnatural.getSettings()
+
       // link sparnatural with yasgui
-      set.currentTab = tab
+      settings.currentTab = tab
       // If you would like to set settings
       sparnatural.setSettings(settings);
       sparnatural.initSparnatural();

@@ -1,15 +1,15 @@
 import Yasgui from "@triply/yasgui";
-
-require("./assets/stylesheets/sparnatural.scss");
-
+import "@triply/yasgui/build/yasgui.min.css";
 
 
-class YasguiHtml extends HTMLElement {
+export class YasguiComponent extends HTMLElement {
     Yasgui:Yasgui
     endpoint: string = null
     
     constructor(){
       super()
+      console.warn('YAGSUi constructor called')
+      $(this).attr('id', 'yasg-container');
       this.Yasgui = new Yasgui(document.getElementById("yasgui"), {
           requestConfig:{
             endpoint: ()=>{
@@ -38,9 +38,6 @@ class YasguiHtml extends HTMLElement {
     getTab(tabName?:string){
       return this.Yasgui.getTab(tabName)
     }
-
-
 }
 
-customElements.get('yas-gui') || window.customElements.define('yas-gui', YasguiHtml);
-export default YasguiHtml
+customElements.get('yas-gui') || window.customElements.define('yas-gui', YasguiComponent);

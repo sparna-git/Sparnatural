@@ -51,6 +51,7 @@ export class SparNatural extends HTMLElement {
         } ;
 
 		constructor() {
+			console.warn("sparnatural constructor called")
 			super();
 			// overwride the default settings with the settings provided by the index.html
 			$(this).attr('id', 'sparnatural-container');
