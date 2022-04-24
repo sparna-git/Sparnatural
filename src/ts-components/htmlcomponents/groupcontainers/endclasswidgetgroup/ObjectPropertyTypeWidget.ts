@@ -108,9 +108,6 @@ import IWidget from "./IWidget";
 
 			//Ajout de l'option all si pas de valeur déjà selectionées
 			var selcetAll = "";
-            console.log("checking on add all:")
-            console.group(add_all)
-            console.dir(this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup)
             // explain this if
 			if (this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues?.length == 0) {
 				if (add_all) {

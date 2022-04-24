@@ -32,12 +32,12 @@ class HTMLComponent {
 	attachComponentHtml() {
 		// sometimes components don't need to be rendered under their parentcomponent but under htmlParent... like ActionWhere
 		if(this.htmlParent){
-			console.log(`Component: ${this.baseCssClass} gets attached to htmlParent: ${this.htmlParent}`)
+			//console.log(`Component: ${this.baseCssClass} gets attached to htmlParent: ${this.htmlParent}`)
 			// remove existing component if already existing
 			this.htmlParent.find('>.'+this.baseCssClass).remove()
 			$(this.html).appendTo(this.htmlParent)
 		}else{
-			console.log(`Component: ${this.baseCssClass} gets attached to ParentComponent: ${this.ParentComponent}`)
+			//console.log(`Component: ${this.baseCssClass} gets attached to ParentComponent: ${this.ParentComponent}`)
 			// remove existing component if already existing
 			this.ParentComponent.html.find('>.'+this.baseCssClass).remove()
 			$(this.html).appendTo(this.ParentComponent.html) ;

@@ -3,7 +3,7 @@ import ISettings from "./ISettings";
 import { getSettings } from "./settings";
 
 export function addComponent (thisForm_: { sparnatural: any; submitOpened?: boolean; firstInit: any; preLoad?: boolean; }, contexte: any, jsonQueryBranch:any = null) {
-    console.log(`Args: thisForm_:${thisForm_},contexts: ${contexte}, jsonQueryBranch: ${jsonQueryBranch}`)
+    console.log("addComponent")
     let index = thisForm_.sparnatural.components.length; // IMPORTANT check if this does the same as legacy code...
     
     // disable the WHERE if we have reached maximum depth
@@ -34,9 +34,7 @@ export function addComponent (thisForm_: { sparnatural: any; submitOpened?: bool
         var gabariEl = $(gabari).appendTo(contexte) ; // IMPORTANT : Introduced new var gabariEl
     }
 
-    $(gabariEl).addClass(classWherePossible) ;		
-    console.log("checking this here")
-    console.dir(this)
+    $(gabariEl).addClass(classWherePossible) ;
     var UnCritere = new CriteriaGroup(
         this,
         { 
@@ -50,7 +48,6 @@ export function addComponent (thisForm_: { sparnatural: any; submitOpened?: bool
         // pass the JSON query branch as an input parameter
         jsonQueryBranch
     );
-    console.log("right after it")
     
     thisForm_.sparnatural.components.push({index: index, CriteriaGroup: UnCritere });			
     initGeneralEvent.call(this,thisForm_,getSettings());

@@ -43,12 +43,7 @@ class CriteriaGroup {
         this.id = context.ContextComponentIndex ;
         
         this.html = $('<div id="CriteriaGroup-'+this.id+'" class="CriteriaGroup"></div>').appendTo($(this.ComponentHtml))
-        console.log(`show criteria group html }`)
-        console.dir(this.html[0])
-        console.log('context object')
-        console.dir(context)
-        console.log('componenthtml')
-        console.dir(this.ComponentHtml)
+
         // create all the elements of the criteria
         this.StartClassGroup = new StartClassGroup(this, specProvider, settings) ;
         this.OptionsGroup = new OptionsGroup(this, specProvider) ;

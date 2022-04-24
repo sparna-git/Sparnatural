@@ -57,10 +57,10 @@ export class SparNatural extends HTMLElement {
 
 		constructor() {
 			super();
-			console.log("constructor called!!!")
 			// overwride the default settings with the settings provided by the index.html
-			$(this).addClass('Sparnatural') ;
 			$(this).attr('id', 'sparnatural-container');
+			$(this).addClass('Sparnatural') ;
+			
 			
 		}
 
@@ -278,7 +278,6 @@ export class SparNatural extends HTMLElement {
 			*/
 			let html = $(form.sparnatural).find('.variablesSelection').first() ; 
 			let linesWrapper = $('<div class="linesWrapper"></div>')
-			console.dir(getSettings())
 			let ordersSelectHtml = $('<div class="variablesOrdersSelect"><strong>'+getSettings().langSearch.labelOrderSort+'</strong> <a class="asc">'+UiuxConfig.ICON_AZ+'</a><a class="desc">'+UiuxConfig.ICON_ZA+'</a><a class="none selected">'+UiuxConfig.ICON_NO_ORDER+'</a></div>')
 			let variablesOptionsSelect = $('<div class="variablesOptionsSelect">'+getSettings().langSearch.SwitchVariablesNames+' <label class="switch"><input type="checkbox"><span class="slider round"></span></label></div>')
 			variablesOptionsSelect.find('label, span')

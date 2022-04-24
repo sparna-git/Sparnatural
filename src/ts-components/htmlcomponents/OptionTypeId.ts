@@ -66,7 +66,6 @@ class OptionTypeId extends HTMLComponent {
 	} ;	
 	
 	reload() {
-		console.log("reload on OptionTypeId should probably never be called");
 		this.init();
 	} ;		
 }
@@ -94,7 +93,6 @@ export default OptionTypeId
 		}
 
 		var list = [] ;
-		console.dir(items)
 		for (const [key, value] of Object.entries(items)) {
 			let label = value;
 			let selected = (default_value[key]?' checked="checked"':'')

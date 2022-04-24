@@ -48,7 +48,6 @@ import GroupContenaire from "./GroupContenaire";
 	}
 
 	onObjectPropertyGroupSelected() {
-		console.log("OptionsGroup onObjectPropertyGroupSelected")
 		if($(this.html).find('div.ShowOnEdit').length == 0){
 			$(this.html).find('div.EditComponents').addClass('ShowOnEdit');
 			var parentOptionEnable = false ;

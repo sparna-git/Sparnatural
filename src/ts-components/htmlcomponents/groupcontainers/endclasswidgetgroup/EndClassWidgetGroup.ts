@@ -64,7 +64,6 @@ class EndClassWidgetGroup extends GroupContenaire {
         );
 		// IMPORTANT changed the reinsert and init after the function bining onchange. otherwise selectedValues are empty cause only in onChange they are getting filled
 		if (this.parentCriteriaGroup.ActionsGroup.reinsert == true) {
-			console.dir(this.parentCriteriaGroup)
             this.inputTypeComponent.reload() ;
         } else {
             this.inputTypeComponent.init() ;
