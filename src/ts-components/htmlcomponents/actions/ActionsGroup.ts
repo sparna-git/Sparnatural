@@ -114,7 +114,7 @@ class ActionsGroup extends GroupContenaire {
         this.parentCriteriaGroup.html.parent('li').addClass('haveWhereChild') ;
         this.parentCriteriaGroup.initCompleted() ;
         
-        var new_component = addComponent(
+        var new_component = addComponent.call(this,
             this.parentCriteriaGroup.thisForm_,
             this.parentCriteriaGroup.ComponentHtml,
             (this.parentCriteriaGroup.jsonQueryBranch && this.parentCriteriaGroup.jsonQueryBranch.children && this.parentCriteriaGroup.jsonQueryBranch.children.length > 0)?this.parentCriteriaGroup.jsonQueryBranch.children[0]:null
@@ -126,7 +126,7 @@ class ActionsGroup extends GroupContenaire {
     }
     onAddAnd(){
 		console.warn("ActionsGroup.onAddWhere()")
-        var new_component = addComponent(
+        var new_component = addComponent.call(this,
             this.parentCriteriaGroup.thisForm_,
             this.parentCriteriaGroup.AncestorComponentHtml,
             (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.nextSibling:null

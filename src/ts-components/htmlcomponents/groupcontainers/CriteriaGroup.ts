@@ -41,7 +41,14 @@ class CriteriaGroup {
         this.jsonQueryBranch = jsonQueryBranch;
         //TODO: Refactor to have only context variable and not for example this.thisForm_ = context.FormContext
         this.id = context.ContextComponentIndex ;
-        this.html = $('<div id="CriteriaGroup-'+this.id+'" class="CriteriaGroup"></div>').appendTo(this.ComponentHtml)
+        
+        this.html = $('<div id="CriteriaGroup-'+this.id+'" class="CriteriaGroup"></div>').appendTo($(this.ComponentHtml))
+        console.log(`show criteria group html }`)
+        console.dir(this.html[0])
+        console.log('context object')
+        console.dir(context)
+        console.log('componenthtml')
+        console.dir(this.ComponentHtml)
         // create all the elements of the criteria
         this.StartClassGroup = new StartClassGroup(this, specProvider, settings) ;
         this.OptionsGroup = new OptionsGroup(this, specProvider) ;
@@ -136,7 +143,7 @@ class CriteriaGroup {
 
             $('.variablesOtherSelect .sortableItem').remove() ;
 
-            var new_component = addComponent(formObject, formContextHtml, jsonQueryBranch) ;			
+            var new_component = addComponent.call(this,formObject, formContextHtml, jsonQueryBranch) ;			
             $(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;				
         } else {
             if (parentOrSibling.element !== null) {

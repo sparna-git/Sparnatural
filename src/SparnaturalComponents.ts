@@ -34,8 +34,11 @@ export function findParentOrSiblingCriteria(thisForm_: { sparnatural: { componen
 }
 
 export function eventProxiCriteria(e: { data: { arg1: any; arg2: any; }; }) {
+	console.log("eventproxycriteria")
+
 	var arg1 = e.data.arg1;
 	var arg2 = e.data.arg2;
+	console.log(`arg1: ${arg1}, args2: ${arg2}`)
 	arg1[arg2](e) ;
 }
 

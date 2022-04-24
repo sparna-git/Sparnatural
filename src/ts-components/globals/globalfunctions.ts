@@ -2,7 +2,7 @@ import CriteriaGroup from "../htmlcomponents/groupcontainers/CriteriaGroup";
 import ISettings from "./ISettings";
 import { getSettings } from "./settings";
 
-export function addComponent(thisForm_: { sparnatural: any; submitOpened?: boolean; firstInit: any; preLoad?: boolean; }, contexte: any, jsonQueryBranch:any = null) {
+export function addComponent (thisForm_: { sparnatural: any; submitOpened?: boolean; firstInit: any; preLoad?: boolean; }, contexte: any, jsonQueryBranch:any = null) {
     console.log(`Args: thisForm_:${thisForm_},contexts: ${contexte}, jsonQueryBranch: ${jsonQueryBranch}`)
     let index = thisForm_.sparnatural.components.length; // IMPORTANT check if this does the same as legacy code...
     
@@ -35,12 +35,13 @@ export function addComponent(thisForm_: { sparnatural: any; submitOpened?: boole
     }
 
     $(gabariEl).addClass(classWherePossible) ;		
-    
+    console.log("checking this here")
+    console.dir(this)
     var UnCritere = new CriteriaGroup(
         this,
         { 
             AncestorHtmlContext: contexte,
-            HtmlContext : gabari,
+            HtmlContext : gabariEl,
             FormContext: thisForm_,
             ContextComponentIndex: index
         },
@@ -49,9 +50,10 @@ export function addComponent(thisForm_: { sparnatural: any; submitOpened?: boole
         // pass the JSON query branch as an input parameter
         jsonQueryBranch
     );
+    console.log("right after it")
     
     thisForm_.sparnatural.components.push({index: index, CriteriaGroup: UnCritere });			
-    this.initGeneralEvent(thisForm_);
+    initGeneralEvent.call(this,thisForm_,getSettings());
 
     //le critère est inséré et listé dans les composants, on peut lancer l'event de création
     $(UnCritere).trigger( "Created" ) ;

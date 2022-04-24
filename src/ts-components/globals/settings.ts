@@ -177,7 +177,8 @@ let settings:ISettings = {
      * ! Need to not to be a function if disable
      **/
     //TODO: refactor to functions?
-    onSubmit:null
+    onSubmit:null,
+    
 };
 
 export function getSettings(){

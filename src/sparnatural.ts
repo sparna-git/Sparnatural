@@ -46,32 +46,42 @@ export class SparNatural extends HTMLElement {
     	specProvider:any;	
 		// all the components in Sparnatural
 		components:any = [];
-		
-		Form = {
+		Form:{sparnatural:SparNatural, submitOpened:boolean,firstInit:boolean,preLoad:boolean,langSearch:any} = {
         	sparnatural : this,
 			submitOpened: true,
 			firstInit: false,
 			// JSON of the query to be loaded
-			preLoad: false 
+			preLoad: false,
+			langSearch:null
         } ;
 
 		constructor() {
 			super();
+			console.log("constructor called!!!")
 			// overwride the default settings with the settings provided by the index.html
 			$(this).addClass('Sparnatural') ;
-			let settings = getSettings()
+			$(this).attr('id', 'sparnatural-container');
+			
+		}
+
+		initSparnatural(){
+			getSettings().langSearch = i18nLabels["en"]
+			this.Form.langSearch = i18nLabels["en"]
+			let settings = this.getSettings()
 			let specProviderFactory = new SpecificationProviderFactory();
 
 
 			specProviderFactory.build(settings.config, settings.language, (sp:any)=> {
 				this.specProvider = sp;
-				this.initForm.call(this,this.Form);
+				this.initForm(this.Form);
 				// add the first CriteriaGroup to the component
-				addComponent(this.Form, $(this.Form.sparnatural).find('ul')) ;
+				addComponent.call(this,this.Form, $(this.Form.sparnatural).find('ul')) ;
 				$(this.Form.sparnatural).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
 				// uncomment to trigger gathering of statistics
 				// initStatistics(specProvider);
 			});
+			console.log("after init")
+
 		}
 		
 		getSettings(){
@@ -268,8 +278,14 @@ export class SparNatural extends HTMLElement {
 			*/
 			let html = $(form.sparnatural).find('.variablesSelection').first() ; 
 			let linesWrapper = $('<div class="linesWrapper"></div>')
-		
+			console.dir(getSettings())
 			let ordersSelectHtml = $('<div class="variablesOrdersSelect"><strong>'+getSettings().langSearch.labelOrderSort+'</strong> <a class="asc">'+UiuxConfig.ICON_AZ+'</a><a class="desc">'+UiuxConfig.ICON_ZA+'</a><a class="none selected">'+UiuxConfig.ICON_NO_ORDER+'</a></div>')
+			let variablesOptionsSelect = $('<div class="variablesOptionsSelect">'+getSettings().langSearch.SwitchVariablesNames+' <label class="switch"><input type="checkbox"><span class="slider round"></span></label></div>')
+			variablesOptionsSelect.find('label, span')
+			.on('click', // Listening when switch display variable
+				{arg1: this, arg2: 'switchVariableName'},
+				eventProxiCriteria
+			)
 			// Listening when change sort order (AZ, ZA, None)
 			ordersSelectHtml
 			.find('a')
@@ -293,34 +309,36 @@ export class SparNatural extends HTMLElement {
 			End prepare html
 			*/
 
-			$(html)
-			.append(linesWrapper)			
-			.append($('<div class="line1"></div>'))
-			.append($('<div class="variablesFirstSelect"></div>') )
-			.append(otherSelectHtml);
-
-
+			
 			linesWrapper
-			.append( $('<div class="line2"></div>'))
-			.append(ordersSelectHtml)
-			.append(
-				$('<div class="variablesOptionsSelect">'+getSettings().langSearch.SwitchVariablesNames+' <label class="switch"><input type="checkbox"><span class="slider round"></span></label></div>')
-				.find('label, span')
-				.on('click', // Listening when switch display variable
-					{arg1: this, arg2: 'switchVariableName'},
-					eventProxiCriteria
-				)
-			);
+			.append( $('<div class="line2"></div>')
+				.append(ordersSelectHtml)
+				.append(variablesOptionsSelect)
+			)
 
-			//Show and hide button			
-			$(html).append(
-				$('<div class="VariableSelectorDisplay"><a class="displayButton">'+UiuxConfig.ICON_ARROW_TOP+UiuxConfig.ICON_ARROW_BOTTOM+'</a></div>')
-				.find('a')
-				.on('click',
-				{arg1: this, arg2: 'display'},
-				eventProxiCriteria
-				)
-			);
+			$(html)
+			.append(
+				linesWrapper
+					.append($('<div class="line1"></div>')
+						.append($('<div class="variablesFirstSelect"></div>')
+						).append(otherSelectHtml)
+					)
+				)	
+			
+
+
+
+			
+		
+
+			//Show and hide button
+			let selectorDisplay = $('<div class="VariableSelectorDisplay"><a class="displayButton">'+UiuxConfig.ICON_ARROW_TOP+UiuxConfig.ICON_ARROW_BOTTOM+'</a></div>')
+			selectorDisplay.find('a')
+			.on('click',
+			{arg1: this, arg2: 'display'},
+			eventProxiCriteria
+			)
+			$(html).append(selectorDisplay);
 
 			form.sparnatural.variablesSelector = this ;
 			form.sparnatural.variablesSelector.switchLabel = 'name' ; // or name
@@ -600,3 +618,5 @@ export class SparNatural extends HTMLElement {
 	}
 
 } // end of Sparnatural class
+
+customElements.get('spar-natural') || window.customElements.define('spar-natural', SparNatural);
