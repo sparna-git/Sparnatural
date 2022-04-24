@@ -39,6 +39,7 @@
     "@chenfengyuan/datepicker": "^1.0.10",
     "@popperjs/core": "^2.10.2",
     "@rdfjs/data-model": "^1.1.2",
+    "@triply/yasgui": "^4.2.24",
     "easy-autocomplete": "^1.3.5",
     "jquery-nice-select": "^1.1.0",
     "jstree": "^3.3.12",

@@ -1,4 +1,6 @@
+import Tab from "@triply/yasgui"
 export default interface Settings  {
+    currentTab?: Tab,
     config: string,
     language: string,
     addDistinct?: boolean,

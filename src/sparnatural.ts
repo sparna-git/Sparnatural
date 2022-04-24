@@ -27,20 +27,15 @@ const i18nLabels = {
 require('tippy.js/dist/tippy.css');
 
 const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
-
-
-import { FilteringSpecificationProvider } from "./FilteringSpecificationProvider";
 import { QuerySPARQLWriter } from "./Query";
 import JSONQueryGenerator from "./QueryGenerators";
 
 import { eventProxiCriteria, redrawBottomLink } from "./SparnaturalComponents";
 import { SpecificationProviderFactory } from "./SpecificationProviderFactory";
-import { SimpleStatisticsHandler } from "./StatisticsHandlers";
 
 import UiuxConfig from "./UiuxConfig";
 import {addComponent, initGeneralEvent} from "./ts-components/globals/globalfunctions"
 import {getSettings, mergeSettings} from "./ts-components/globals/settings"
-
 	
 export class SparNatural extends HTMLElement {
     	specProvider:any;	
@@ -60,7 +55,6 @@ export class SparNatural extends HTMLElement {
 			// overwride the default settings with the settings provided by the index.html
 			$(this).attr('id', 'sparnatural-container');
 			$(this).addClass('Sparnatural') ;
-			
 			
 		}
 
@@ -270,8 +264,6 @@ export class SparNatural extends HTMLElement {
 
 		initVariablesSelector(form:any) {
 			form.sparnatural.variablesSelector = {} ;
-			let selectedList = [] ;
-
 			/*
 				Prepare Html
 				TODO refactor to own method
@@ -323,13 +315,6 @@ export class SparNatural extends HTMLElement {
 						).append(otherSelectHtml)
 					)
 				)	
-			
-
-
-
-			
-		
-
 			//Show and hide button
 			let selectorDisplay = $('<div class="VariableSelectorDisplay"><a class="displayButton">'+UiuxConfig.ICON_ARROW_TOP+UiuxConfig.ICON_ARROW_BOTTOM+'</a></div>')
 			selectorDisplay.find('a')
@@ -478,102 +463,6 @@ export class SparNatural extends HTMLElement {
 			///form.sparnatural.variablesSelector = this ;
 		}
 
-		
-
-		initStatistics(aSpecProvider:any) {
-			let specProvider = new FilteringSpecificationProvider(aSpecProvider);
-			let settings = getSettings()
-			/* Run statistics queries */
-			var statisticsHandler = new SimpleStatisticsHandler(
-	    		// endpoint URL
-	    		settings.defaultEndpoint,
-	    		
-	    		// sparqlPostProcessor
-	    		{
-		            semanticPostProcess : function(sparql:any) {
-		            	// also add prefixes
-		                for (key in settings.sparqlPrefixes) {
-					        sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
-				    	}
-		                return specProvider.expandSparql(sparql);
-		            }
-		        }
-	    	);
-
-	    	const items = specProvider.getAllSparnaturalClasses() ;
-			for (var key in items) {
-				var aClass = items[key];
-
-				if(!specProvider.isRemoteClass(aClass) && !specProvider.isLiteralClass(aClass)) {
-					var options = {
-						url: statisticsHandler.countClassUrl(aClass),
-						dataType: "json",
-						method: "GET",
-						data: {
-							  dataType: "json"
-						},
-						// keep reference to current class so that it can be accessed in handler
-						context: { classUri: aClass }
-					} ;
-
-					var handler = function( data:any ) {
-						var count = statisticsHandler.elementCount(data);
-						// "this" refers to the "context" property of the options, see jQuery options
-					  	specProvider.notifyClassCount(this.classUri, count);
-
-					  	if(count > 0) {
-					  		for (const aRange of specProvider.getConnectedClasses(this.classUri)) {
-					  			
-					  			for (const aProperty of specProvider.getConnectingProperties(this.classUri, aRange)) {
-
-					  				var url;
-					  				if(specProvider.isRemoteClass(aRange) || specProvider.isLiteralClass(aRange)) {
-					  					url = statisticsHandler.countPropertyWithoutRangeUrl(this.classUri, aProperty);
-					  				} else {
-					  					url = statisticsHandler.countPropertyUrl(this.classUri, aProperty, aRange);
-					  				}
-
-					  				var options = {
-										url: url,
-										dataType: "json",
-										method: "GET",
-										data: {
-											  dataType: "json"
-										},
-										// keep reference to current class so that it can be accessed in handler
-										context: { 
-											domain: this.classUri,
-											property: aProperty,
-											range: aRange
-										}
-									} ;
-
-									var handler = function( data:any ) {
-										var count = statisticsHandler.elementCount(data);
-										// "this" refers to the "context" property of the options, see jQuery options
-									  	specProvider.notifyPropertyCount(
-									  		this.domain,
-									  		this.property,
-									  		this.range,
-									  		count
-									  	);
-									}
-
-									var requestProperty = $.ajax( options );
-									requestProperty.done(handler);
-					  			}
-					  		}					  		
-					  	}
-					};
-
-					var request = $.ajax( options );
-					request.done(handler);
-				}
-			}
-
-		}
-	
-
 	/**
 	 * Preprocess JSON query to add parent and nextSibling links
 	 **/
@@ -607,13 +496,6 @@ export class SparNatural extends HTMLElement {
 			}
 			this.preprocessRec(child, branch, next, jsonQuery);
 		}
-	}
-
-	/**
-	 * Expands SPARQL query by reading the config
-	 **/
-    expandSparql = function(sparql:any) {
-		return this.specProvider.expandSparql(sparql);
 	}
 
 } // end of Sparnatural class
