@@ -39,7 +39,7 @@ let settings:ISettings = {
          * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
          * @param {string} key - The letters that the user has typed in the search field.
          **/
-        autocompleteUrl : function(domain, property, range, key) {
+        autocompleteUrl : function(domain:any, property:any, range:any, key:any) {
             console.log("Please specify function for autocompleteUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
         },
 
@@ -52,7 +52,7 @@ let settings:ISettings = {
          * @param {string} range - The range of the criteria currently being edited
          * @param {object} data - The data structure returned from an autocomplete call
             **/
-        listLocation: function(domain, property, range, data) {
+        listLocation: function(domain:any, property:any, range:any, data:any) {
             return data;
         },
 
@@ -61,7 +61,7 @@ let settings:ISettings = {
             *
             * @param {object} element - A single autocomplete result
             **/
-        elementLabel: function(element) {
+        elementLabel: function(element:any) {
             return element.label;
         },
 
@@ -70,7 +70,7 @@ let settings:ISettings = {
          *
          * @param {object} element - A single autocomplete result
          **/
-        elementUri: function(element) {
+        elementUri: function(element:any) {
             return element.uri;
         },
 
@@ -79,7 +79,7 @@ let settings:ISettings = {
          * be useful only when loading the autocomplete results from a local file, leave to
          * false otherwise.
          **/
-        enableMatch: function(domain, property, range) {
+        enableMatch: function(domain:any, property:any, range:any) {
             return false;
         },
     },			
@@ -92,7 +92,7 @@ let settings:ISettings = {
          * @param {string} property - The predicate of the criteria currently being edited
          * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
          **/
-        listUrl : function(domain, property, range) {
+        listUrl : function(domain:any, property:any, range:any) {
             console.log("Please specify function for listUrl option in in init parameters of Sparnatural : function(domain, property, range)" ) ;
         },
 
@@ -105,7 +105,7 @@ let settings:ISettings = {
          * @param {string} range - The range of the criteria currently being edited
          * @param {object} data - The data structure returned from a list call
             **/
-        listLocation: function(domain, property, range, data) {
+        listLocation: function(domain:any, property:any, range:any, data:any) {
             return data;
         },
 
@@ -114,7 +114,7 @@ let settings:ISettings = {
             *
             * @param {object} element - A single list entry
             **/
-        elementLabel: function(element) {
+        elementLabel: function(element:any) {
             return element.label;
         },
 
@@ -123,38 +123,38 @@ let settings:ISettings = {
             *
             * @param {object} element - A single list entry
             **/
-        elementUri: function(element) {
+        elementUri: function(element:any) {
             return element.uri;
         }
     },
     dates : {
-        datesUrl : function(domain, property, range, key) {
+        datesUrl : function(domain:any, property:any, range:any, key:any) {
             console.log("Please specify function for datesUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
         },
-        listLocation: function(domain, property, range, data) {
+        listLocation: function(domain:any, property:any, range:any, data:any) {
             return data;
         },
-        elementLabel: function(element) {
+        elementLabel: function(element:any) {
             return element.label+' '+element.synonyms.join(' ');
         },
-        elementStart: function(element) {
+        elementStart: function(element:any) {
             return element.start.year;
         },
-        elementEnd: function(element) {
+        elementEnd: function(element:any) {
             return element.stop.year;
         }				
     },
     statistics : {
-        countClassUrl : function(aClass) {
+        countClassUrl : function(aClass:any) {
             console.log("Please specify function to count number of instances of each class : function(aClass)") ;
         },
-        countPropertyUrl : function(domain, property, range) {
+        countPropertyUrl : function(domain:any, property:any, range:any) {
             console.log("Please specify function to count number of instances of each property : function(domain, property, range)") ;
         },
-        countPropertyWithoutRangeUrl : function(domain, property) {
+        countPropertyWithoutRangeUrl : function(domain:any, property:any) {
             console.log("Please specify function to count number of instances of each property without a range : function(domain, property)") ;
         },
-        elementCount: function(data) {
+        elementCount: function(data:any) {
             return data.results.bindings[0].count.value;
         }
     },
@@ -166,7 +166,7 @@ let settings:ISettings = {
      * @param {object} queryJson - The query as a JSON data structure
      * @param {object} pivotJson - The query as a JSON data structure (new version)
      **/
-    onQueryUpdated : function (queryString, queryJson, pivotJson) {
+    onQueryUpdated : function (queryString:string, queryJson:any, pivotJson:any) {
         console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
     },
     /**

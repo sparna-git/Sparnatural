@@ -18,7 +18,7 @@ let multipleHtmlPlugins = htmlPageNames.map(name => {
 });
 
 module.exports = {
-  entry: [ "babel-polyfill", "./src/sparnatural.js" ],
+  entry: [ "babel-polyfill", "./src/sparnatural.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "sparnatural.js"

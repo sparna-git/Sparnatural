@@ -42,10 +42,10 @@ import {addComponent, initGeneralEvent} from "./ts-components/globals/globalfunc
 import {getSettings, mergeSettings} from "./ts-components/globals/settings"
 
 	
-class SparNatural extends HTMLElement {
-    	specProvider;	
+export class SparNatural extends HTMLElement {
+    	specProvider:any;	
 		// all the components in Sparnatural
-		components = [];
+		components:any = [];
 		
 		Form = {
         	sparnatural : this,
@@ -58,13 +58,12 @@ class SparNatural extends HTMLElement {
 		constructor() {
 			super();
 			// overwride the default settings with the settings provided by the index.html
-			
 			$(this).addClass('Sparnatural') ;
 			let settings = getSettings()
 			let specProviderFactory = new SpecificationProviderFactory();
 
 
-			specProviderFactory.build(settings.config, settings.language, (sp)=> {
+			specProviderFactory.build(settings.config, settings.language, (sp:any)=> {
 				this.specProvider = sp;
 				this.initForm.call(this,this.Form);
 				// add the first CriteriaGroup to the component
@@ -83,11 +82,7 @@ class SparNatural extends HTMLElement {
 			mergeSettings(options)
 		}
 		
-		
-
-		
-		
-		loadQuery(json) {
+		loadQuery(json:any) {
 			var jsonWithLinks = this.preprocess(json);
 			// console.log(jsonWithLinks);
 			//Désactiver le submit du form
@@ -120,7 +115,7 @@ class SparNatural extends HTMLElement {
 			$(this.Form.sparnatural).find('.submitSection a').removeClass('loadingEnabled') ;
 		}	
 
-		doLoadQuery(form, json) {
+		doLoadQuery(form:any, json:any) {
 			// stores the JSON to be preloaded
 			form.preLoad = json ;
 			// clear the form
@@ -134,11 +129,11 @@ class SparNatural extends HTMLElement {
 			form.preLoad = false ;
 			// clear the jsonQueryBranch copied on every component, otherwise they always stay here
 			// and we get the same criterias over and over when removing and re-editing
-			form.sparnatural.components.forEach(function(component) { component.CriteriaGroup.jsonQueryBranch = null; });
+			form.sparnatural.components.forEach(function(component:any) { component.CriteriaGroup.jsonQueryBranch = null; });
 			return form ;
 		}
 
-		clearForm(form) {
+		clearForm(form:any) {
 			//Stop submit form on this work.
 			form.submitOpened = false ;
 			for (var i = form.sparnatural.components.length-1; i > -1; i--) {
@@ -178,7 +173,7 @@ class SparNatural extends HTMLElement {
 		}
 
 		
-		initForm(form) {	
+		initForm(form:any) {	
 			var SubmitSection = "" ;
 			let settings = getSettings()
 			if (settings.onSubmit) {
@@ -263,7 +258,7 @@ class SparNatural extends HTMLElement {
 			$(form.sparnatural).trigger('formInitialized') ;
 		}
 
-		initVariablesSelector(form) {
+		initVariablesSelector(form:any) {
 			form.sparnatural.variablesSelector = {} ;
 			let selectedList = [] ;
 
@@ -354,23 +349,23 @@ class SparNatural extends HTMLElement {
 
 			
 				// Element is dropped into the list from another list
-				onAdd: function (/**Event*/evt) {
+				onAdd: function (/**Event*/evt:any) {
 					// same properties as onEnd
 				},
 			
 				// Changed sorting within list
-				onUpdate: function (/**Event*/evt) {
+				onUpdate: function (/**Event*/evt:any) {
 					// same properties as onEnd
 					$(this).trigger( "onUpdate" ) ;
 				},
 			
 				// Called by any change to the list (add / update / remove)
-				onSort: function (/**Event*/evt) {
+				onSort: function (/**Event*/evt:any) {
 					// same properties as onEnd
 				},
 			
 				// Called when dragging element changes position
-				onEnd: function(/**Event*/evt) {
+				onEnd: function(/**Event*/evt:any) {
 					evt.newIndex // most likely why this event is used is to get the dragging element's current index
 					// same properties as onEnd
 					var width = $('.sortableItem').first().width() ;
@@ -385,7 +380,7 @@ class SparNatural extends HTMLElement {
 				eventProxiCriteria
 			);
 
-			let removeVariableName = function(name) {
+			let removeVariableName = function(name:any) {
 				// IMPORTANT unused method?
 			}
 
@@ -468,7 +463,7 @@ class SparNatural extends HTMLElement {
 
 		
 
-		initStatistics(aSpecProvider) {
+		initStatistics(aSpecProvider:any) {
 			let specProvider = new FilteringSpecificationProvider(aSpecProvider);
 			let settings = getSettings()
 			/* Run statistics queries */
@@ -478,7 +473,7 @@ class SparNatural extends HTMLElement {
 	    		
 	    		// sparqlPostProcessor
 	    		{
-		            semanticPostProcess : function(sparql) {
+		            semanticPostProcess : function(sparql:any) {
 		            	// also add prefixes
 		                for (key in settings.sparqlPrefixes) {
 					        sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+settings.sparqlPrefixes[key]+"> \nSELECT ");
@@ -504,7 +499,7 @@ class SparNatural extends HTMLElement {
 						context: { classUri: aClass }
 					} ;
 
-					var handler = function( data ) {
+					var handler = function( data:any ) {
 						var count = statisticsHandler.elementCount(data);
 						// "this" refers to the "context" property of the options, see jQuery options
 					  	specProvider.notifyClassCount(this.classUri, count);
@@ -536,7 +531,7 @@ class SparNatural extends HTMLElement {
 										}
 									} ;
 
-									var handler = function( data ) {
+									var handler = function( data:any ) {
 										var count = statisticsHandler.elementCount(data);
 										// "this" refers to the "context" property of the options, see jQuery options
 									  	specProvider.notifyPropertyCount(
@@ -565,7 +560,7 @@ class SparNatural extends HTMLElement {
 	/**
 	 * Preprocess JSON query to add parent and nextSibling links
 	 **/
-	preprocess(jsonQuery) {
+	preprocess(jsonQuery:any) {
 		for(var i = 0;i < jsonQuery.branches.length;i++) {
 			var branch = jsonQuery.branches[i];
 			var next = null;
@@ -577,7 +572,7 @@ class SparNatural extends HTMLElement {
 		return jsonQuery;
 	}
 
-	preprocessRec(branch, parent, nextSibling, jsonQuery) {
+	preprocessRec(branch:any, parent:any, nextSibling:any, jsonQuery:any) {
 		branch.parent = parent;
 		branch.nextSibling = nextSibling;
 		// set flags ot indicate if the eye is open by testing the selected variables
@@ -600,7 +595,7 @@ class SparNatural extends HTMLElement {
 	/**
 	 * Expands SPARQL query by reading the config
 	 **/
-    expandSparql = function(sparql) {
+    expandSparql = function(sparql:any) {
 		return this.specProvider.expandSparql(sparql);
 	}
 

@@ -44,7 +44,7 @@ export function addComponent(thisForm_: { sparnatural: any; submitOpened?: boole
             FormContext: thisForm_,
             ContextComponentIndex: index
         },
-        this.settings,
+        getSettings(),
         this.specProvider,
         // pass the JSON query branch as an input parameter
         jsonQueryBranch
@@ -64,7 +64,7 @@ export function addComponent(thisForm_: { sparnatural: any; submitOpened?: boole
     return $(gabari) ;
 }
 
-export function initGeneralEvent(thisForm_,settings:ISettings) {
+export function initGeneralEvent(thisForm_:any,settings:ISettings) {
     $('li.groupe').off( "mouseover" ) ;
     $('li.groupe').off( "mouseleave" ) ;
     $('li.groupe').on( "mouseover", function(event) {

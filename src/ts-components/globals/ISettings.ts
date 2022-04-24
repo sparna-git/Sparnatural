@@ -18,10 +18,10 @@ export default interface Settings  {
     tooltipConfig?:any
     statistics:{
         countClassUrl: (aClass:any) =>void,
-        countPropertyUrl : (domain, property, range) => void,
-        countPropertyWithoutRangeUrl : (domain, property) => void,
-        elementCount: (data) => void
+        countPropertyUrl : (domain:any, property:any, range:any) => void,
+        countPropertyWithoutRangeUrl : (domain:any, property:any) => void,
+        elementCount: (data:any) => void
     }
-    onQueryUpdated: (queryString, queryJson,pivotJson?) => void
+    onQueryUpdated: (queryString:any, queryJson:any,pivotJson?:any) => void
     onSubmit:(form:any)=>void
 }
