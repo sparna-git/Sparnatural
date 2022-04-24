@@ -727,8 +727,6 @@ WHERE {
       };
       //var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
-      var sparnatural;
-
       let settings = {
         config: config,
         // config: "sparnatural-config.ttl",
@@ -773,6 +771,12 @@ WHERE {
         },
       };
 
+      
+      console.log("trying to init sparnatural");
+      let sparnatural = document.querySelector("spar-natural");
+      sparnatural.setSettings(settings);
+      sparnatural.initSparnatural();
+
       $(document).ready(function ($) {
         console.log("doc ready");
       });
@@ -814,16 +818,10 @@ WHERE {
 
       semanticPostProcess = function (queryString, queryJson) {
         queryString = prefixesPostProcess(queryString, queryJson);
-        queryString = sparnatural.expandSparql(queryString);
+        queryString = sparnatural.expandSparql(queryString); // needs the sparnatural declared above
         return queryString;
       };
 
-      console.log("trying to init sparnatural");
-      let spar = document.querySelector("spar-natural");
-      console.dir(spar);
-      console.log(settings);
-      spar.setSettings(settings);
-      spar.initSparnatural();
 
       const yasqe = new Yasqe(document.getElementById("yasqe"), {
         requestConfig: { endpoint: $("#endpoint").text() },
