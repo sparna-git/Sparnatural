@@ -39,6 +39,7 @@
       <div class="row">
         <div class="col-md-7">
           <div id="ui-search"></div>
+          <sparnatural></sparnatural>
         </div>
         <div class="col-md-5">
           <div class="row" style="margin-bottom:0.5em;">
@@ -558,15 +559,13 @@ WHERE {
         return results[1] || 0;
       }
       //var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
-      var lang = 'en';
 
       var sparnatural;
-      $( document ).ready(function($) {          
-        console.log(document.getElementById('ui-search'))
-        sparnatural = document.getElementById('ui-search').Sparnatural({
+
+      let settings = {
           config: config,
           // config: "sparnatural-config.ttl",
-          language: lang,
+          language: 'en',
           maxDepth: 4,
           addDistinct: true,
           noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
@@ -600,7 +599,13 @@ WHERE {
             // trigger the query from YasQE
             yasqe.query();
           }
-        });
+        }
+        
+      $( document ).ready(function($) {          
+        window.customElements.define('sparnatural', SparNatural);
+        let spar = document.querySelector('sparnatural');
+        spar.setSettings(settings);
+        sparnatural = document.getElementById('ui-search')
       }) ;
 
       prefixesPostProcess = function(queryString, queryJson) {
@@ -662,8 +667,6 @@ WHERE {
           
 			}) ;*/
  
-      
-
     </script>
   </body>
 </html>

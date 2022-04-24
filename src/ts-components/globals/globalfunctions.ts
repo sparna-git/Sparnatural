@@ -1,5 +1,6 @@
 import CriteriaGroup from "../htmlcomponents/groupcontainers/CriteriaGroup";
 import ISettings from "./ISettings";
+import { getSettings } from "./settings";
 
 export function addComponent(thisForm_: { sparnatural: any; submitOpened?: boolean; firstInit: any; preLoad?: boolean; }, contexte: any, jsonQueryBranch:any = null) {
     console.log(`Args: thisForm_:${thisForm_},contexts: ${contexte}, jsonQueryBranch: ${jsonQueryBranch}`)
@@ -7,16 +8,16 @@ export function addComponent(thisForm_: { sparnatural: any; submitOpened?: boole
     
     // disable the WHERE if we have reached maximum depth
     var classWherePossible = 'addWereEnable' ;
-    if (($(contexte).parents('li.groupe').length + 1 ) == (this.settings.maxDepth - 1) ) {
+    if (($(contexte).parents('li.groupe').length + 1 ) == (getSettings().maxDepth - 1) ) {
         classWherePossible = 'addWereDisable' ;
     }
     
-    var gabari = '<li class="groupe" data-index="'+index+'"><span class="link-and-bottom"><span>'+this.settings.langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+index+'" type="hidden" value=""><input name="b-'+index+'" type="hidden" value=""><input name="c-'+index+'" type="hidden" value=""></li>' ;
+    var gabari = '<li class="groupe" data-index="'+index+'"><span class="link-and-bottom"><span>'+getSettings().langSearch.And+'</span></span><span class="link-where-bottom"></span><input name="a-'+index+'" type="hidden" value=""><input name="b-'+index+'" type="hidden" value=""><input name="c-'+index+'" type="hidden" value=""></li>' ;
     
     // si il faut descendre d'un niveau
     if ($(contexte).is('li')) {
         if ($(contexte).find('>ul').length == 0) {
-            var ul = $('<ul class="childsList"><div class="lien-top"><span>'+this.settings.langSearch.Where+'</span></div></ul>').appendTo($(contexte)) ;
+            var ul = $('<ul class="childsList"><div class="lien-top"><span>'+getSettings().langSearch.Where+'</span></div></ul>').appendTo($(contexte)) ;
             var parent_li = $(ul).parent('li') ;
             var n_width = 0;
             n_width = n_width + this.getOffset( $(parent_li).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;

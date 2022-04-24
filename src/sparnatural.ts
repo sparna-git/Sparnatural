@@ -46,7 +46,7 @@ class SparNatural extends HTMLElement {
     	specProvider;	
 		// all the components in Sparnatural
 		components = [];
-
+		
 		Form = {
         	sparnatural : this,
 			submitOpened: true,
@@ -55,10 +55,10 @@ class SparNatural extends HTMLElement {
 			preLoad: false 
         } ;
 
-		constructor(options:any) {
+		constructor() {
 			super();
 			// overwride the default settings with the settings provided by the index.html
-			mergeSettings(options)
+			
 			$(this).addClass('Sparnatural') ;
 			let settings = getSettings()
 			let specProviderFactory = new SpecificationProviderFactory();
@@ -73,6 +73,14 @@ class SparNatural extends HTMLElement {
 				// uncomment to trigger gathering of statistics
 				// initStatistics(specProvider);
 			});
+		}
+		
+		getSettings(){
+			return getSettings()
+		}
+
+		setSettings(options:any){
+			mergeSettings(options)
 		}
 		
 		
