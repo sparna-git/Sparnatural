@@ -1,27 +1,18 @@
-import GroupContenaire from "../groupcontainers/GroupContenaire"
 import ISettings from "../../../configs/client-configs/ISettings"
-import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider"
-import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider"
-import ActionsGroup from "./ActionsGroup"
 import HTMLComponent from "../HtmlComponent"
+import ISpecProvider from "../../../spec-providers/ISpecProviders"
 
 
 class ActionAnd extends HTMLComponent {
-    HtmlContainer:GroupContenaire //IMPORTANT unecessary?
-    constructor(parentComponent:ActionsGroup,settings:ISettings,specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider){
+    HtmlContainer:HTMLComponent
+    constructor(parentComponent:HTMLComponent,settings:ISettings,specProvider:ISpecProvider){
         let widgetHtml = $('<span class="trait-and-bottom"></span><a>'+settings.langSearch.And+'</a>') ;
-        let cssClasses = {
-            ActionAnd : true ,
-            ShowOnHover : true ,
-            Created : false
-        }
-        super("ActionAnd",cssClasses,parentComponent,specProvider,widgetHtml)
-        this.HtmlContainer = parentComponent
-       
+        super("ActionAnd",parentComponent,specProvider,widgetHtml)
+        this.cssClasses.ShowOnHover = true
+        this.HtmlContainer = parentComponent 
     }
     render = () =>{
-        this.initHtml();
-        this.attachHtml();
+        this.init()
     } ;
 }
 export default ActionAnd

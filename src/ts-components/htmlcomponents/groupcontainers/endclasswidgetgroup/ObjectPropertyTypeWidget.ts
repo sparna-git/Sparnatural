@@ -1,21 +1,20 @@
-import GroupContenaire from "../GroupContenaire";
-
 import ISettings from "../../../../configs/client-configs/ISettings";
 import {Config} from "../../../../configs/fixed-configs/SparnaturalConfig";
 import Datasources from "../../../../SparnaturalConfigDatasources";
 import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../../../../AutocompleteAndListHandlers";
 import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "./Widgets"
-import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
 import { SparqlTreeHandler } from "../../../../TreeHandlers";
 import HTMLComponent from "../../HtmlComponent";
-import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider";
 import IWidget from "./IWidget";
 import { initGeneralEvent } from "../../../globals/globalfunctions";
+import ISpecProvider from "../../../../spec-providers/ISpecProviders";
+import CriteriaGroup from "../CriteriaGroup";
 
 /**
  *  Selects the value for a range in a criteria/line, using a value selection widget
  **/
  class ObjectPropertyTypeWidget extends HTMLComponent {
+    GrandParent:CriteriaGroup
     settings: ISettings;
     HtmlContainer: any;
     widgetType: string | null = null;
@@ -24,7 +23,6 @@ import { initGeneralEvent } from "../../../globals/globalfunctions";
     classLabel: string;
     widgetComponent:any;
     needTriggerClick:boolean = false // IMPORTANT Cheating here a little bit. useless class var but neeted to fit inputTypeComponent
-    parentComponent:GroupContenaire
     loadedValue:{
         key?: any;
         label?: any;
@@ -35,21 +33,17 @@ import { initGeneralEvent } from "../../../globals/globalfunctions";
         boolean?: any;
     } | null = null ;
 
-    constructor(ParentComponent: GroupContenaire, settings: ISettings, specProvider:JsonLdSpecificationProvider|RDFSpecificationProvider){
-        let cssClasses = {
-			ObjectPropertyTypeWidget : true,
-			Created : false
-		} ;
-        super("ObjectPropertyTypeWidget",cssClasses,ParentComponent,specProvider,null)
-        this.parentComponent = ParentComponent
+    constructor(ParentComponent: HTMLComponent, settings: ISettings, specProvider:ISpecProvider){
+        super("ObjectPropertyTypeWidget",ParentComponent,specProvider,null)
         this.settings = settings;
         this.HtmlContainer = ParentComponent
+        this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup
     }
 
     init(){
-        this.objectPropertyId = this.parentComponent.parentCriteriaGroup.ObjectPropertyGroup.value_selected
+        this.objectPropertyId = this.GrandParent.ObjectPropertyGroup.value_selected
         this.widgetType = this.specProvider.getObjectPropertyType(this.objectPropertyId);
-        this.rangeClassId = this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected
+        this.rangeClassId = this.GrandParent.EndClassGroup.value_selected
         this.classLabel = this.specProvider.getLabel(this.rangeClassId) ;
         let endLabel:string
         let add_all = true
@@ -58,20 +52,20 @@ import { initGeneralEvent } from "../../../globals/globalfunctions";
 			if (
 				this.widgetType == Config.NON_SELECTABLE_PROPERTY
 			) {
-				if(this.specProvider.isLiteralClass(this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected)) {
-					this.parentComponent.parentCriteriaGroup.initCompleted() ;
+				if(this.specProvider.isLiteralClass(this.GrandParent.EndClassGroup.value_selected)) {
+					this.GrandParent.initCompleted() ;
 
 					//Add variable on results view
-					if(!this.parentComponent.parentCriteriaGroup.EndClassGroup.notSelectForview) {
-						this.parentComponent.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+					if(!this.GrandParent.EndClassGroup.notSelectForview) {
+						this.GrandParent.EndClassGroup.onchangeViewVariable() ;
 					}
 					add_all = false;
 					
 					
 				
-					//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
-					$(this.parentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
-					initGeneralEvent(this,this.parentComponent.parentCriteriaGroup.thisForm_);					
+					//$(this.ParentComponent.ParentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
+					$(this.GrandParent.thisForm_.sparnatural).trigger( "submit" ) ;
+					initGeneralEvent(this,this.GrandParent.thisForm_);					
 				}
 				//var endLabel = null ; //Imporant is this still necessary?
 				add_or = false;
@@ -111,7 +105,7 @@ import { initGeneralEvent } from "../../../globals/globalfunctions";
 			//Ajout de l'option all si pas de valeur déjà selectionées
 			var selcetAll = "";
             // explain this if
-			if (this.parentComponent.parentCriteriaGroup.EndClassWidgetGroup.selectedValues?.length == 0) {
+			if (this.GrandParent.EndClassWidgetGroup.selectedValues?.length == 0) {
 				if (add_all) {
 					selcetAll = '<span class="selectAll"><span class="underline">'+this.settings.langSearch.SelectAllValues+'</span>'+parenthesisLabel+'</span>' ;
 				}
@@ -139,11 +133,8 @@ import { initGeneralEvent } from "../../../globals/globalfunctions";
 				this.widgetHtml = $(widgetLabel + this.widgetComponent.html)  ;
 			}
             // First init this component as parent component and then init the widgetComponent because it will be attached to this component
-            this.cssClasses.IsOnEdit = true;
-            this.initHtml() 
-            this.attachHtml()
+            this.init()
 			this.widgetComponent.init() ;
-			this.cssClasses.Created = true ;
 			$(this.html).find('.selectAll').first().on("click", ()=> {
                 console.warn('selectAll has been clicked')
 				$(this).trigger('selectAll') ;
@@ -154,7 +145,7 @@ import { initGeneralEvent } from "../../../globals/globalfunctions";
 
     canHaveSelectAll() {
         if (this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
-            this.specProvider.isLiteralClass(this.parentComponent.parentCriteriaGroup.EndClassGroup.value_selected)) {
+            this.specProvider.isLiteralClass(this.GrandParent.EndClassGroup.value_selected)) {
                 return false;
         } 
         return true ;

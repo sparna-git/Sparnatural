@@ -1,19 +1,17 @@
 import tippy from "tippy.js"
-import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider"
-import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider"
 import { eventProxiCriteria, findParentOrSiblingCriteria } from "../../../globals/globalfunctions"
 import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig"
 import ClassTypeId from "./ClassTypeId"
 import VariableSelector from "./VariableSelector"
 import ISettings from "../../../../configs/client-configs/ISettings"
 import CriteriaGroup from "../CriteriaGroup"
-import GroupContenaire from "../GroupContenaire"
-import IStartEndClassGroup from "./IStartEndClassGroup"
+import ISpecProvider from "../../../../spec-providers/ISpecProviders"
+import HTMLComponent from "../../HtmlComponent"
 
  /**
  * Selection of the start class in a criteria/line
  **/
-class StartClassGroup extends GroupContenaire implements IStartEndClassGroup { 
+class StartClassGroup extends HTMLComponent { 
 	varName:any
 	settings:ISettings
 	variableSelector:any
@@ -23,28 +21,29 @@ class StartClassGroup extends GroupContenaire implements IStartEndClassGroup {
 	inputTypeComponent: ClassTypeId
 	variableViewPreload: string = ''
 	variableNamePreload: string
- 	constructor(parentCriteriaGroup:CriteriaGroup, specProvider: JsonLdSpecificationProvider | RDFSpecificationProvider, settings: ISettings) {
+	ParentCriteriaGroup: CriteriaGroup
+ 	constructor(ParentCriteriaGroup:CriteriaGroup, specProvider: ISpecProvider, settings: ISettings) {
  		super(
 			"StartClassGroup",
-			parentCriteriaGroup,
-			specProvider
+			ParentCriteriaGroup,
+			specProvider,
+			null
 		);
 		this.settings = settings;
-		this.cssClasses.StartClassGroup = true ;
 		this.cssClasses.Created = false ;
 		
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
 		this.inputTypeComponent.needFrontArrow= true ; // IMPORTANT FOUND IN HTMLCOMPONENT CLASS
 
 		// contains the name of the SPARQL variable associated to this component
-		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.s:null;
+		this.varName = (this.ParentCriteriaGroup.jsonQueryBranch)?this.ParentCriteriaGroup.jsonQueryBranch.line.s:null;
 		this.variableSelector = null ;
 
 		this.notSelectForview = false ;
 
 		//this.needFrontArrow= true ;
 		//this.needBackArrow= true ;
-		
+		this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup
 
 		this.init();
 	}
@@ -87,7 +86,7 @@ class StartClassGroup extends GroupContenaire implements IStartEndClassGroup {
 				$(this.html).removeClass('VariableSelected') ;
 			}
 		}
-		this.parentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
+		this.ParentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
 	}
 
 	onChange() {
@@ -95,7 +94,7 @@ class StartClassGroup extends GroupContenaire implements IStartEndClassGroup {
 		//this.niceslect.niceSelect('update') ;
 		this.value_selected = $(this.html).find('select.input-val').val() ;
 		//Sets the SPARQL variable name if not initialized from loaded query
-		var parentOrSibling = findParentOrSiblingCriteria(this.parentCriteriaGroup.thisForm_, this.parentCriteriaGroup.id) ;
+		var parentOrSibling = findParentOrSiblingCriteria(this.ParentCriteriaGroup.thisForm_, this.ParentCriteriaGroup.id) ;
 		if(this.varName == null) {
 			if (parentOrSibling && parentOrSibling.type == 'parent' ) {
 				this.varName = parentOrSibling.element.EndClassGroup.getVarName();
@@ -130,29 +129,36 @@ class StartClassGroup extends GroupContenaire implements IStartEndClassGroup {
 			}
 		}
 
-		$(this.parentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
+		$(this.ParentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 		//add varName on curent selection display
 		this.onSelectValue(this.varName) ;
 		// trigger event on the whole line/criteria
-		$(this.parentCriteriaGroup).trigger( "StartClassGroupSelected" ) ;
+		$(this.ParentCriteriaGroup).trigger( "StartClassGroupSelected" ) ;
 
 		if(this.settings.sendQueryOnFirstClassSelected) {
-			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
+			$(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
 		}
 
 		var desc = this.specProvider.getTooltip(this.value_selected) ;
 		if(desc) {
-			$(this.parentCriteriaGroup.StartClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
+			$(this.ParentCriteriaGroup.StartClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
 			// tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
 			var tippySettings = Object.assign({}, this.settings.tooltipConfig);
 			tippySettings.placement = "top-start";
 			tippy('.StartClassGroup .ClassTypeId[data-tippy-content]', tippySettings);
 		} else {
-			$(this.parentCriteriaGroup.StartClassGroup.html).removeAttr('data-tippy-content') ;
+			$(this.ParentCriteriaGroup.StartClassGroup.html).removeAttr('data-tippy-content') ;
 		}
 	};
 	getVarName() {
 		return this.varName;
+	}
+	// TODO refactor away. only endclassgroup and startclassgroup are using this
+	onSelectValue(varName:any) {
+		var current = $(this.html).find('.nice-select .current').first() ;
+		var varNameForDisplay = '<span class="variableName">'+varName.replace('?', '')+'</span>' ;
+		$(varNameForDisplay).insertAfter($(current).find('.label').first()) ;
+
 	}
 } 
 export default StartClassGroup

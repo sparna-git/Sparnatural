@@ -1,25 +1,48 @@
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider"
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider"
 import UiuxConfig from "../../configs/fixed-configs/UiuxConfig"
-import CriteriaGroup from "./groupcontainers/CriteriaGroup"
-import GroupContenaire from "./groupcontainers/GroupContenaire"
+import ISpecProvider from "../../spec-providers/ISpecProviders"
+
+interface IcssClasses {
+    TreeWidget?: boolean
+    BooleanWidget?: boolean
+    NoWidget?: boolean
+    DatesWidget?: boolean //typo? plural?
+    TimeDatePickerWidget?: boolean
+	HasInputsCompleted: boolean,
+	IsOnEdit?: boolean,
+	Invisible?: boolean,
+	Created?:boolean,
+	ShowOnHover?:boolean,
+	ShowOnEdit?:boolean,
+	HasAllComplete?:boolean,
+	ListeWidget?:boolean, // TODO ListWidget or ListEWidget? typo?
+	AutocompleteWidget?:boolean, //typo?
+	SearchWidget?:boolean,
+	Highlited?: boolean ,
+	flexWrap?: boolean,
+
+}
 
 class HTMLComponent {
 	baseCssClass: string
-	cssClasses:any
-	ParentComponent: GroupContenaire |CriteriaGroup 
+	cssClasses:IcssClasses = {
+		HasInputsCompleted: false,
+		IsOnEdit: false,
+		Invisible: false,
+		Created:false // each component starts uncreated. init() will change it
+	}
+
+	ParentComponent: HTMLComponent 
 	// TODO refactor widgetHtml and html to one? seems very confusing
 	widgetHtml: JQuery<HTMLElement>
 	html:JQuery<HTMLElement>
 	needBackArrow: boolean
 	needFrontArrow: boolean
-	specProvider: JsonLdSpecificationProvider | RDFSpecificationProvider
+	specProvider: ISpecProvider
 	// TODO this is only temporarly. Some components (ActionWhere) don't need to be attached on there parentcomponent but somewhere else
-	htmlParent:JQuery<HTMLElement> = null 
-	constructor(baseCssClass: any, cssClasses: any, ParentComponent: GroupContenaire | CriteriaGroup, specProvider: JsonLdSpecificationProvider | RDFSpecificationProvider,widgetHtml: JQuery<HTMLElement>) {
+	htmlParent:JQuery<HTMLElement> = null
+	constructor(baseCssClass: any, ParentComponent: HTMLComponent, specProvider:ISpecProvider,widgetHtml: JQuery<HTMLElement>) {
 		this.specProvider = specProvider
 		this.baseCssClass = baseCssClass;
-		this.cssClasses = cssClasses;
 		this.ParentComponent = ParentComponent;
 		// TODO : see if this is really needed
 		// must be false if not set for the moment
@@ -48,14 +71,16 @@ class HTMLComponent {
 	/**
 	 * Updates the CSS classes of an element
 	 **/
-	updateCssClasses() {
+	#updateCssClasses() {
 		$(this.html).removeClass('*') ;
-		for (var item in this.cssClasses) {				
-			if (this.cssClasses[item] === true) {
-				$(this.html).addClass(item) ;
-			} else {
-				$(this.html).removeClass(item) ;
+		// adding base class to each htmlcomponent
+		this.html.addClass(this.baseCssClass)
+		for (const [k, v] of Object.entries(this.cssClasses)) {
+			if(v == true){
+				$(this.html).addClass(k) ;
+				return
 			}
+			$(this.html).removeClass(k) ;
 		}
 	}
 
@@ -63,7 +88,7 @@ class HTMLComponent {
 		$(this.html).remove()
 	}
 
-	initHtml() {
+	#initHtml() {
 		if (this.widgetHtml != null) {
 			this.html = $('<div class="'+this.baseCssClass+'"></div>') ;
 			// remove existing component
@@ -80,10 +105,23 @@ class HTMLComponent {
 		}
 	} 
 
-	attachHtml() {
-		this.updateCssClasses() ;
+	#attachHtml() {
+		this.#updateCssClasses() ;
 		this.attachComponentHtml() ;
-	}	
+	}
+	
+		
+	init() {
+		if (!this.cssClasses.Created) {			
+			this.cssClasses.IsOnEdit = true ;
+			this.#initHtml() ;
+			this.#attachHtml() ;
+			this.cssClasses.Created = true ;				
+		} else {
+			this.#updateCssClasses() ;
+		}
+	};
+
 
 	addBackArrow() {
 		let backArrow = $('<div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div>') ;

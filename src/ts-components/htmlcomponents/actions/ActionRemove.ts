@@ -1,22 +1,15 @@
-import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
+import ISpecProvider from "../../../spec-providers/ISpecProviders";
 
 import HTMLComponent from "../HtmlComponent";
 import ActionsGroup from "./ActionsGroup";
 
 class ActionRemove extends HTMLComponent {
-    constructor(parentComponent:ActionsGroup,specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider){
+    constructor(parentComponent:ActionsGroup,specProvider:ISpecProvider){
         let widgetHtml = $('<a><span class="unselect"><i class="far fa-times-circle"></i></span></a>');
-        let cssClasses={
-            ActionRemove: true,
-            Created: false
-        }
-        super("ActionRemove",cssClasses,parentComponent,specProvider,widgetHtml)
-
+        super("ActionRemove",parentComponent,specProvider,widgetHtml)
     }
     render = () =>{
-        this.initHtml();
-        this.attachHtml();;
+        this.init()
     } ;
 
 }

@@ -3,43 +3,42 @@ import ActionRemove from "./ActionRemove";
 import ActionWhere from "./ActionWhere";
 import CriteriaGroup from "../groupcontainers/CriteriaGroup";
 import ISettings from "../../../configs/client-configs/ISettings";
-import GroupContenaire from "../groupcontainers/GroupContenaire";
-import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
 import { addComponent, initGeneralEvent } from "../../globals/globalfunctions";
+import HTMLComponent from "../HtmlComponent";
+import ISpecProvider from "../../../spec-providers/ISpecProviders";
+import IHasCriteriaGroupParent from "../IHasCriteriaGroupParent";
 
 
 /**
  	Groups all the actions on a line/criteria (AND / REMOVE / WHERE)
 	even if they are visually not connected. ActionWhere for example is rendered under EndClassGroup -> EditComponent -> ActionWhere
  **/
-class ActionsGroup extends GroupContenaire {
+class ActionsGroup extends HTMLComponent implements IHasCriteriaGroupParent {
     actions: {ActionWhere:ActionWhere,
         ActionAnd:ActionAnd,
         ActionRemove:ActionRemove};
     settings:ISettings
-    constructor(parentCriteriaGroup:CriteriaGroup, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider, settings:ISettings){
-        super("ActionsGroup",parentCriteriaGroup, specProvider)
-        this.cssClasses = {
-            ActionsGroup: true,
-            Created : false
-        }
+    ParentCriteriaGroup: CriteriaGroup;
+    constructor(ParentCriteriaGroup:CriteriaGroup, specProvider:ISpecProvider, settings:ISettings){
+        super("ActionsGroup",ParentCriteriaGroup, specProvider,$())
         this.actions =  { 
             ActionWhere: new ActionWhere(this, specProvider,settings),
             ActionAnd: new ActionAnd(this,settings,specProvider),
             ActionRemove: new ActionRemove(this,specProvider)
         } ;
-
+        //TODO refactor is this even necessary
+        this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup
         this.settings = settings
         this.init()
     }
+
     onCreated() {
 		
 		this.#attachActionRemoveButtonToCriteriaGroup()
 
-        if(this.parentCriteriaGroup.jsonQueryBranch != null) {
-            var branch = this.parentCriteriaGroup.jsonQueryBranch;
+        if(this.ParentCriteriaGroup.jsonQueryBranch != null) {
+            var branch = this.ParentCriteriaGroup.jsonQueryBranch;
             if(branch.children.length > 0) {
                 $(this.actions.ActionWhere.html).find('a').trigger('click') ;
             }
@@ -55,14 +54,12 @@ class ActionsGroup extends GroupContenaire {
 		TODO: Refactor to ActionRemove class. ActionRemove class should get render() method
 	*/
 	#attachActionRemoveButtonToCriteriaGroup(){
-        this.actions.ActionRemove.initHtml()
-		//this.actions.ActionRemove.attachComponentHtml()
-		this.actions.ActionRemove.attachHtml()
+        this.actions.ActionRemove.init()
 		// when click then remove row
         $(this.actions.ActionRemove.html).find('a').on(
             'click',
             {
-                arg1: this.parentCriteriaGroup,
+                arg1: this.ParentCriteriaGroup,
                 arg2: 'onRemoveCriteria'
             },
             eventProxiCriteria
@@ -73,7 +70,7 @@ class ActionsGroup extends GroupContenaire {
 		this.#renderActionAnd()
 		this.#renderActionWhere()
         
-        initGeneralEvent(this,this.parentCriteriaGroup.thisForm_);
+        initGeneralEvent(this,this.ParentCriteriaGroup.thisForm_);
     }
 	/*
 		Create the ActionAnd button which adds another row. 
@@ -111,13 +108,13 @@ class ActionsGroup extends GroupContenaire {
 	// This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
     onAddWhere() {
 		console.warn("ActionsGroup.onAddWhere()")	
-        this.parentCriteriaGroup.html.parent('li').addClass('haveWhereChild') ;
-        this.parentCriteriaGroup.initCompleted() ;
+        this.ParentCriteriaGroup.html.parent('li').addClass('haveWhereChild') ;
+        this.ParentCriteriaGroup.initCompleted() ;
         
         var new_component = addComponent.call(this,
-            this.parentCriteriaGroup.thisForm_,
-            this.parentCriteriaGroup.ComponentHtml,
-            (this.parentCriteriaGroup.jsonQueryBranch && this.parentCriteriaGroup.jsonQueryBranch.children && this.parentCriteriaGroup.jsonQueryBranch.children.length > 0)?this.parentCriteriaGroup.jsonQueryBranch.children[0]:null
+            this.ParentCriteriaGroup.thisForm_,
+            this.ParentCriteriaGroup.ComponentHtml,
+            (this.ParentCriteriaGroup.jsonQueryBranch && this.ParentCriteriaGroup.jsonQueryBranch.children && this.ParentCriteriaGroup.jsonQueryBranch.children.length > 0)?this.ParentCriteriaGroup.jsonQueryBranch.children[0]:null
         ) ;
         
         // trigger 2 clicks to select the same class as the object class (?)
@@ -127,9 +124,9 @@ class ActionsGroup extends GroupContenaire {
     onAddAnd(){
 		console.warn("ActionsGroup.onAddWhere()")
         var new_component = addComponent.call(this,
-            this.parentCriteriaGroup.thisForm_,
-            this.parentCriteriaGroup.AncestorComponentHtml,
-            (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.nextSibling:null
+            this.ParentCriteriaGroup.thisForm_,
+            this.ParentCriteriaGroup.AncestorComponentHtml,
+            (this.ParentCriteriaGroup.jsonQueryBranch)?this.ParentCriteriaGroup.jsonQueryBranch.nextSibling:null
         ) ;
         
         // trigger 2 clicks to select the same class as the current criteria (?)

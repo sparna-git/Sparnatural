@@ -1,8 +1,6 @@
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
 import UiuxConfig from "../../configs/fixed-configs/UiuxConfig";
+import ISpecProvider from "../../spec-providers/ISpecProviders";
 import CriteriaGroup from "./groupcontainers/CriteriaGroup";
-import GroupContenaire from "./groupcontainers/GroupContenaire";
 import HTMLComponent from "./HtmlComponent";
 
 /**
@@ -12,19 +10,14 @@ class OptionTypeId extends HTMLComponent {
 	needTriggerClick:boolean
 	default_value: {optional?: boolean, notExists?:boolean}
 	GrandParent: CriteriaGroup
- 	constructor(parentComponent:GroupContenaire, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
+ 	constructor(ParentComponent:HTMLComponent, specProvider:ISpecProvider) {
  		super(
  			"OptionTypeId",
- 			{
-				Highlited : false ,
-				Created : false,
-                flexWrap: true
-			},
-			parentComponent,
+			ParentComponent,
             specProvider,
             null,
  		);
-		 this.GrandParent = parentComponent.ParentComponent as CriteriaGroup
+		 this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup
 
 		this.needTriggerClick = false ;
 		this.default_value = {optional: false, notExists: false};
@@ -32,11 +25,16 @@ class OptionTypeId extends HTMLComponent {
 
 
 	init() {	
-		//If Start Class 
+		//Test if this ever happens
+		if(this.cssClasses.Created){
+			console.warn("this should not have happened")
+		}
+		/* Original Code
 		if (this.cssClasses.Created) {
 			this.updateCssClasses() ;
 			return true ;
 		}
+		*/
 		this.default_value['optional'] = false ;
 		this.default_value['notExists'] = false ;
 		
@@ -59,10 +57,7 @@ class OptionTypeId extends HTMLComponent {
 		
 		
 		this.widgetHtml = selectHtml ;
-		this.cssClasses.IsOnEdit = true ;
-		this.initHtml() ;
-		this.attachHtml() ;
-		this.cssClasses.Created = true ;
+		this.init()
 	} ;	
 	
 	reload() {
@@ -75,9 +70,9 @@ export default OptionTypeId
  * 
  **/
  class OptionSelectBuilder {
-	specProvider: RDFSpecificationProvider | JsonLdSpecificationProvider
+	specProvider: ISpecProvider
 	OptionTypeId: any
- 	constructor(specProvider: RDFSpecificationProvider | JsonLdSpecificationProvider, OptionTypeId: any) {
+ 	constructor(specProvider:ISpecProvider, OptionTypeId: any) {
  		this.specProvider = specProvider;
 		this.OptionTypeId = OptionTypeId ;
  	}		

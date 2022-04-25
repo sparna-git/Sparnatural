@@ -1,19 +1,17 @@
 import ClassTypeId from "./ClassTypeId"
 import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig"
 import ISettings from "../../../../configs/client-configs/ISettings"
-import GroupContenaire from "../GroupContenaire"
 import { eventProxiCriteria, localName, } from "../../../globals/globalfunctions" 
 import VariableSelector from "./VariableSelector"
-import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider"
-import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider"
+import ISpecProvider from "../../../../spec-providers/ISpecProviders"
 import CriteriaGroup from "../CriteriaGroup"
 import tippy from "tippy.js"
-import IStartEndClassGroup from "./IStartEndClassGroup"
+import HTMLComponent from "../../HtmlComponent"
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
  **/
- class EndClassGroup extends GroupContenaire implements IStartEndClassGroup  {
+ class EndClassGroup extends HTMLComponent {
 	varName:any //IMPORTANT varName is only present at EndClassGroup and StartClassGroup. Refactor on selectedValue method from upper class
 	settings:ISettings
 	variableSelector:any
@@ -23,26 +21,23 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 	inputTypeComponent: ClassTypeId
 	variableNamePreload: string
 	variableViewPreload: string
-	constructor(parentCriteriaGroup:CriteriaGroup, specProvider: JsonLdSpecificationProvider | RDFSpecificationProvider, settings: ISettings) {
+	ParentCriteriaGroup: CriteriaGroup
+	constructor(ParentCriteriaGroup:CriteriaGroup, specProvider: ISpecProvider, settings: ISettings) {
 		super(
 			"EndClassGroup",
-			parentCriteriaGroup,
-            specProvider
+			ParentCriteriaGroup,
+            specProvider,
+			null
 		);
 		this.settings = settings;
-		// TODO : this is removing classes from GroupContainer
-		this.cssClasses = {
-			EndClassGroup : true ,
-			Created : false
-		}; 
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
 		this.inputTypeComponent.needBackArrow= true ;
 		this.inputTypeComponent.needFrontArrow= true ;
 
 		// contains the name of the SPARQL variable associated to this component
-		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.o:null;
+		this.varName = (this.ParentCriteriaGroup.jsonQueryBranch)?this.ParentCriteriaGroup.jsonQueryBranch.line.o:null;
 		this.variableSelector = null ;
-
+		this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup
 		this.init();
 	}
 
@@ -85,7 +80,7 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 			$(this.html).find('select.input-val').trigger('change');
 			this.inputTypeComponent.needTriggerClick = false ;
 			this.notSelectForview = false ;
-			//$(this.parentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
+			//$(this.ParentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
 		}
 	}
 
@@ -103,7 +98,7 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 				$(this.html).removeClass('VariableSelected') ;
 			}
 		}
-		this.parentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
+		this.ParentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
 	}
 	
 	onChange() {
@@ -111,49 +106,49 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 
 		//Set the variable name for Sparql
 		if(this.varName == null) {
-			this.varName = "?"+localName(this.value_selected)+"_"+(this.parentCriteriaGroup.thisForm_.sparnatural.getMaxVarIndex()+1);
+			this.varName = "?"+localName(this.value_selected)+"_"+(this.ParentCriteriaGroup.thisForm_.sparnatural.getMaxVarIndex()+1);
 		}
 
-		$(this.parentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
+		$(this.ParentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
 		
 		//add varName on curent selection display
 		this.onSelectValue(this.varName) ;	
 		
 		if (this.specProvider.hasConnectedClasses(this.value_selected)) {
-			$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
+			$(this.ParentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
 		} else {
-			$(this.parentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
+			$(this.ParentCriteriaGroup.html).parent('li').addClass('WhereImpossible') ;
 		}
 		this.cssClasses.HasInputsCompleted = true ;
 		this.cssClasses.IsOnEdit = false ;
 		this.init() ;
 
 		// show and init the property selection
-		this.parentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = false;
-		this.parentCriteriaGroup.ObjectPropertyGroup.init() ;
+		this.ParentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = false;
+		this.ParentCriteriaGroup.ObjectPropertyGroup.init() ;
 		// trigger the event that will call the ObjectPropertyGroup
-		$(this.parentCriteriaGroup).trigger( "EndClassGroupSelected" ) ;
+		$(this.ParentCriteriaGroup).trigger( "EndClassGroupSelected" ) ;
 
 		var desc = this.specProvider.getTooltip(this.value_selected) ;
 		if(desc) {
-			$(this.parentCriteriaGroup.EndClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
+			$(this.ParentCriteriaGroup.EndClassGroup.html).find('.ClassTypeId').attr('data-tippy-content', desc ) ;
 			// tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
 			var tippySettings = Object.assign({}, this.settings?.tooltipConfig);
 			tippySettings.placement = "top-start";
 			tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', tippySettings);
 
 		} else {
-			$(this.parentCriteriaGroup.EndClassGroup.html).removeAttr('data-tippy-content') ;
+			$(this.ParentCriteriaGroup.EndClassGroup.html).removeAttr('data-tippy-content') ;
 		}
 	};
 
 	onRemoveSelected() {
 		console.warn('endClassGroup.onRemoveSelected()')			
-		$(this.parentCriteriaGroup.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
-		this.parentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = true ;
-		this.parentCriteriaGroup.ObjectPropertyGroup.init() ;
-		this.parentCriteriaGroup.ObjectPropertyGroup.onStartClassGroupSelected() ;
-		$(this.parentCriteriaGroup.ComponentHtml).find('.childsList .ActionRemove a').trigger('click') ;
+		$(this.ParentCriteriaGroup.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
+		this.ParentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = true ;
+		this.ParentCriteriaGroup.ObjectPropertyGroup.init() ;
+		this.ParentCriteriaGroup.ObjectPropertyGroup.onStartClassGroupSelected() ;
+		$(this.ParentCriteriaGroup.ComponentHtml).find('.childsList .ActionRemove a').trigger('click') ;
 		this.value_selected = null;
 		this.cssClasses.HasInputsCompleted = false ;
 		this.cssClasses.IsOnEdit = true ;
@@ -162,9 +157,9 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 		$(this.html).find('select.input-val').on('change', {arg1: this, arg2: 'onChange'}, eventProxiCriteria);
 		$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update');
 
-		$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
-		this.parentCriteriaGroup.ActionsGroup.reinsert = true ;
-		$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
+		$(this.ParentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
+		this.ParentCriteriaGroup.ActionsGroup.reinsert = true ;
+		$(this.ParentCriteriaGroup.ComponentHtml).removeClass('completed') ;
 		$(this.html).find('.ClassTypeId .nice-select').trigger('click') ;
 
 		//Removote to Variable list
@@ -175,7 +170,7 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 		}
 
 		//Reload options menu to wait objectProperty selection
-		this.parentCriteriaGroup.OptionsGroup.reload() ;
+		this.ParentCriteriaGroup.OptionsGroup.reload() ;
 
 		// clean the variable name so that it is regenerated when a new value is selected in the onChange
 		this.varName = null;
@@ -183,6 +178,13 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 
 	getVarName() {
 		return this.varName;
+	}
+	// TODO refactor away. only endclassgroup and startclassgroup are using this
+	onSelectValue(varName:any) {
+		var current = $(this.html).find('.nice-select .current').first() ;
+		var varNameForDisplay = '<span class="variableName">'+varName.replace('?', '')+'</span>' ;
+		$(varNameForDisplay).insertAfter($(current).find('.label').first()) ;
+
 	}
 } ;
 export default EndClassGroup

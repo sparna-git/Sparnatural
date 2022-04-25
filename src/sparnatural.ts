@@ -31,7 +31,7 @@ import { QuerySPARQLWriter } from "./Query";
 import JSONQueryGenerator from "./QueryGenerators";
 
 import { eventProxiCriteria, redrawBottomLink } from "./ts-components/globals/globalfunctions";
-import { SpecificationProviderFactory } from "./SpecificationProviderFactory";
+import {SpecificationProviderFactory} from "./spec-providers/SpecificationProviderFactory"
 
 import UiuxConfig from "./configs/fixed-configs/UiuxConfig";
 import {addComponent, initGeneralEvent} from "./ts-components/globals/globalfunctions"

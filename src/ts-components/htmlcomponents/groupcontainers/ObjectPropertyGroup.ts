@@ -1,33 +1,31 @@
 import tippy from "tippy.js";
-import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
 import ObjectPropertyTypeId from "../ObjectPropertyTypeId";
 import ISettings from "../../../configs/client-configs/ISettings";
 import CriteriaGroup from "./CriteriaGroup";
-import GroupContenaire from "./GroupContenaire";
+import HTMLComponent from "../HtmlComponent";
+import ISpecProvider from "../../../spec-providers/ISpecProviders";
 
 /**
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
  **/
- class ObjectPropertyGroup extends GroupContenaire {
+ class ObjectPropertyGroup extends HTMLComponent {
 	temporaryLabel:string;
 	settings:ISettings;
 	objectPropertySelector:ObjectPropertyTypeId
 	value_selected:any = null;
-	constructor(parentCriteriaGroup:CriteriaGroup, specProvider:JsonLdSpecificationProvider, settings:ISettings, temporaryLabel:string) {
+	ParentCriteriaGroup:CriteriaGroup
+	constructor(ParentComponent:CriteriaGroup, specProvider:ISpecProvider, settings:ISettings, temporaryLabel:string) {
 		super(
 			"ObjectPropertyGroup",
-			parentCriteriaGroup,
-            specProvider
+			ParentComponent,
+            specProvider,
+			null
 		);
+		this.ParentCriteriaGroup as CriteriaGroup
 		this.settings = settings;
 		this.temporaryLabel = temporaryLabel;
 		// TODO : this is removing CSS classes
-		this.cssClasses = {
-			ObjectPropertyGroup : true,
-			Created : false
-		} ;		
-
 		this.objectPropertySelector = new ObjectPropertyTypeId(this, specProvider) ;
 
 		this.init() ;
@@ -69,7 +67,7 @@ import GroupContenaire from "./GroupContenaire";
 			// $(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
 			$(this.html).find('select.input-val:not(.disabled)').trigger('change');
 			this.objectPropertySelector.needTriggerClick = false ;
-			//$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+			//$(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
 		} else {
 			// automatically selects the value if there is only one
 			if ($(this.html).find('select.input-val').find('option').length == 1) {
@@ -80,29 +78,29 @@ import GroupContenaire from "./GroupContenaire";
 
 	onChange() {
 		if (this.value_selected) {
-			this.parentCriteriaGroup.OptionsGroup.reload() ;
+			this.ParentCriteriaGroup.OptionsGroup.reload() ;
 		}
 		this.value_selected = $(this.html).find('select.input-val').val() ;
 		// disable if only one possible property option between the 2 classes
 		if ($(this.html).find('.input-val').find('option').length == 1) {
 			$(this.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 		}
-		$(this.parentCriteriaGroup).trigger( "ObjectPropertyGroupSelected" ) ;
-		if($(this.parentCriteriaGroup.html).parent('li').first().hasClass('completed'))	{
-			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
+		$(this.ParentCriteriaGroup).trigger( "ObjectPropertyGroupSelected" ) ;
+		if($(this.ParentCriteriaGroup.html).parent('li').first().hasClass('completed'))	{
+			$(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
 		}
 		
 
 		// sets tooltip ready
 		var desc = this.specProvider.getTooltip(this.value_selected) ;
 		if(desc) {
-			$(this.parentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
+			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
 			// tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
 			var tippySettings = Object.assign({}, this.settings?.tooltipConfig);
 			tippySettings.placement = "top-start";
 			tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', tippySettings);
 		} else {
-			$(this.parentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
+			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
 		}
 		
 		//ici peut être lancer le reload du where si il y a des fils

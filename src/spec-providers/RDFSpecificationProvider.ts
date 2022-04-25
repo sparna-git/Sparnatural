@@ -1,10 +1,11 @@
 
 const factory = require('@rdfjs/data-model');
 const rdfParser = require("rdf-parse").default;
+import { Quad, Store } from "n3";
 import {storeStream} from "rdf-store-stream";
-import { Config } from "./configs/fixed-configs/SparnaturalConfig";
-const N3 = require('n3');
-const Datasources = require("./SparnaturalConfigDatasources.js");
+import { Config } from "../configs/fixed-configs/SparnaturalConfig";
+import ISpecProvider from "./ISpecProviders";
+import Datasources from "../SparnaturalConfigDatasources";
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 const RDF = {
@@ -30,20 +31,21 @@ const OWL = {
 	UNION_OF : factory.namedNode(OWL_NAMESPACE+"unionOf")
 };
 
-export class RDFSpecificationProvider {
-
-	constructor(n3store, lang) {
+export class RDFSpecificationProvider implements ISpecProvider {
+	lang:string
+	static store: Store<Quad, Quad, Quad, Quad>;
+	constructor(n3store:Store<Quad, Quad, Quad, Quad> , lang: string) {
 		// init memory store
-		this.store = n3store;
+		RDFSpecificationProvider.store = n3store;
 		this.lang = lang;
 	}
 
-	static async build (specs, filePath, lang) {
+	static async build (specs: any, filePath: string, lang: any) {
 
 		console.log('Building RDFSpecificationProvider from '+filePath);
 
 		// init memory store
-		var store = new N3.Store();
+		this.store = new Store();
 
 		// parse input specs
 		// console.log(specs);
@@ -77,8 +79,8 @@ export class RDFSpecificationProvider {
 		// import into store
 		// note the await keyword to wait for the asynchronous call to finish
 		var store = await storeStream(quadStream);
-		console.log("Specification store populated with "+store.countQuads()+" triples.");
-  		var provider = new RDFSpecificationProvider(store, lang);
+		console.log("Specification store populated with "+RDFSpecificationProvider.store.countQuads(undefined,undefined,undefined,undefined)+" triples.");
+  		var provider = new RDFSpecificationProvider(RDFSpecificationProvider.store, lang);
         return provider;
     }
 
@@ -97,13 +99,14 @@ export class RDFSpecificationProvider {
     }
 
 	getClassesInDomainOfAnyProperty() {
-		const quadsArray = this.store.getQuads(
+		const quadsArray = RDFSpecificationProvider.store.getQuads(
 			undefined,
 			RDFS.DOMAIN,
-		  	// other arguments are left undefined
+		  	undefined,
+			undefined
 		);
 
-		var items = [];
+		var items: string | any[] = [];
 		for (const quad of quadsArray) {
 			// we are not looking at domains of _any_ property
 		    // the property we are looking at must be a Sparnatural property, with a known type
@@ -138,15 +141,15 @@ export class RDFSpecificationProvider {
 		return items;
 	}
 
-	getLabel(entityId) {
+	getLabel(entityId: any) {
 		return this._readAsLiteralWithLang(entityId, RDFS.LABEL, this.lang)
 	}
 
-	getTooltip(entityId) {
+	getTooltip(entityId: any) {
 		return this._readAsLiteralWithLang(entityId, Config.TOOLTIP, this.lang)
 	}
 
-	getIcon(classId) {
+	getIcon(classId: any) {
 		var faIcon = this._readAsLiteral(classId, factory.namedNode(Config.FA_ICON));
 		if(faIcon.length > 0) {
 			// use of fa-fw for fixed-width icons
@@ -162,12 +165,12 @@ export class RDFSpecificationProvider {
 		}
 	}
 
-	getHighlightedIcon(classId) {
+	getHighlightedIcon(classId: any) {
 		return this._readAsLiteral(classId, factory.namedNode(Config.HIGHLIGHTED_ICON));
 	}
 
-	getConnectedClasses(classId) {
-		var items = [];
+	getConnectedClasses(classId: any) {
+		var items: any[] = [];
 
 		const properties = this._readPropertiesWithDomain(classId);
 
@@ -198,12 +201,12 @@ export class RDFSpecificationProvider {
 		return items ;
 	}
 
-	hasConnectedClasses(classId) {
+	hasConnectedClasses(classId: any) {
 		return ( this.getConnectedClasses(classId).length > 0 );
 	}
 
-	getConnectingProperties(domainClassId, rangeClassId) {
-		var items = [];
+	getConnectingProperties(domainClassId: any, rangeClassId: any) {
+		var items: any[] = [];
 
 		const properties = this._readPropertiesWithDomain(domainClassId);
 
@@ -230,7 +233,7 @@ export class RDFSpecificationProvider {
 		return items ;
 	}
 
-	getObjectPropertyType(objectPropertyId) {
+	getObjectPropertyType(objectPropertyId: any) {
 		var superProperties = this._readAsResource(objectPropertyId, RDFS.SUBPROPERTY_OF);
 
 		var KNOWN_PROPERTY_TYPES = [
@@ -260,55 +263,61 @@ export class RDFSpecificationProvider {
 
 
 
-	isRemoteClass(classUri) {
-		return this.store.getQuads(
+	isRemoteClass(classUri: any) {
+		return RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(classUri),
 			RDFS.SUBCLASS_OF,
-			factory.namedNode(Config.NOT_INSTANTIATED_CLASS)
+			factory.namedNode(Config.NOT_INSTANTIATED_CLASS),
+			undefined
 		).length > 0;
 	}
 
-	isLiteralClass(classUri) {
-		return this.store.getQuads(
+	isLiteralClass(classUri: any) {
+		return RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(classUri),
 			RDFS.SUBCLASS_OF,
-			factory.namedNode(Config.RDFS_LITERAL)
+			factory.namedNode(Config.RDFS_LITERAL),
+			undefined
 		).length > 0;
 	}
 
-	isSparnaturalClass(classUri) {
+	isSparnaturalClass(classUri: any) {
 		return (
 
-		this.store.getQuads(
+			RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(classUri),
 			RDFS.SUBCLASS_OF,
-			factory.namedNode(Config.SPARNATURAL_CLASS)
+			factory.namedNode(Config.SPARNATURAL_CLASS),
+			undefined
 		).length > 0
 		||
-		this.store.getQuads(
+		RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(classUri),
 			RDFS.SUBCLASS_OF,
-			factory.namedNode(Config.NOT_INSTANTIATED_CLASS)
+			factory.namedNode(Config.NOT_INSTANTIATED_CLASS),
+			undefined
 		).length > 0
 		||
-		this.store.getQuads(
+		RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(classUri),
 			RDFS.SUBCLASS_OF,
-			factory.namedNode(Config.RDFS_LITERAL)
+			factory.namedNode(Config.RDFS_LITERAL),
+			undefined
 		).length > 0
 		
 		);
 	}
 
 
-	expandSparql(sparql) {
+	expandSparql(sparql: string) {
 		// for each owl:equivalentProperty ...
-		var equivalentPropertiesPerProperty = {};
-		this.store.getQuads(
+		var equivalentPropertiesPerProperty:any = {};
+		RDFSpecificationProvider.store.getQuads(
 			undefined,
 			OWL.EQUIVALENT_PROPERTY,
+			undefined,
 			undefined
-		).forEach( quad => {
+		).forEach( (quad: { subject: { id: string | number; }; object: { id: any; }; }) => {
 			// store it if multiple equivalences are declared
 			if(!equivalentPropertiesPerProperty[quad.subject.id]) {
 				equivalentPropertiesPerProperty[quad.subject.id] = [];
@@ -318,16 +327,17 @@ export class RDFSpecificationProvider {
 		// join the equivalences with a |
 		for (let [property, equivalents] of Object.entries(equivalentPropertiesPerProperty)) {
 			var re = new RegExp("<" + property + ">","g");
-			sparql = sparql.replace(re, "<" + equivalents.join(">|<") + ">");
+			sparql = sparql.replace(re, "<" +(equivalents as Array<any>).join(">|<") + ">");
 		}		
 
 		// for each owl:equivalentClass ...
-		var equivalentClassesPerClass = {};
-		this.store.getQuads(
+		var equivalentClassesPerClass:any = {};
+		RDFSpecificationProvider.store.getQuads(
 			undefined,
 			OWL.EQUIVALENT_CLASS,
+			undefined,
 			undefined
-		).forEach( quad => {
+		).forEach( (quad: { subject: { id: string | number; }; object: { id: any; }; }) => {
 			// store it if multiple equivalences are declared
 			if(!equivalentClassesPerClass[quad.subject.id]) {
 				equivalentClassesPerClass[quad.subject.id] = [];
@@ -338,20 +348,21 @@ export class RDFSpecificationProvider {
 		var i = 0;
 		for (let [aClass, equivalents] of Object.entries(equivalentClassesPerClass)) {
 			var re = new RegExp("<" + aClass + ">","g");
-			if(equivalents.length == 1) {
-				sparql = sparql.replace(re, "<" + equivalents[0] + ">");
+			if((equivalents as Array<any>).length == 1) {
+				sparql = sparql.replace(re, "<" + (equivalents as Array<any>)[0] + ">");
 			} else {
-				sparql = sparql.replace(re, "?class"+i+" . VALUES ?class"+i+" { <"+ equivalents.join("> <") +"> } ");
+				sparql = sparql.replace(re, "?class"+i+" . VALUES ?class"+i+" { <"+ (equivalents as Array<any>).join("> <") +"> } ");
 			}
 			i++;
 		}
 
 		// for each sparqlString
-		this.store.getQuads(
+		RDFSpecificationProvider.store.getQuads(
 			undefined,
 			Config.SPARQL_STRING,
+			undefined,
 			undefined
-		).forEach( quad => {
+		).forEach( (quad: { subject: { id: string; }; object: { value: any; }; }) => {
 			// find it with the full URI
 			var re = new RegExp("<" + quad.subject.id + ">","g");
 			sparql = sparql.replace(re, quad.object.value );			
@@ -360,58 +371,59 @@ export class RDFSpecificationProvider {
 		return sparql;
 	}
 
-	getDefaultLabelProperty(classId) {
+	getDefaultLabelProperty(classId: any) {
 		return this._readAsSingleResource(classId, Config.DEFAULT_LABEL_PROPERTY);
 	}
 
-	getBeginDateProperty(propertyId) {
+	getBeginDateProperty(propertyId: any) {
 		return this._readAsSingleResource(propertyId, Config.BEGIN_DATE_PROPERTY);
 	}
 
-	getEndDateProperty(propertyId) {
+	getEndDateProperty(propertyId: any) {
 		return this._readAsSingleResource(propertyId, Config.END_DATE_PROPERTY);
 	}
 
-	getExactDateProperty(propertyId) {
+	getExactDateProperty(propertyId: any) {
 		return this._readAsSingleResource(propertyId, Config.EXACT_DATE_PROPERTY);
 	}
 
 
-	getDatasource(propertyOrClassId) {
+	getDatasource(propertyOrClassId: any) {
 		return this._readDatasourceAnnotationProperty(propertyOrClassId, Datasources.DATASOURCE);
 	}
 
-	getTreeRootsDatasource(propertyOrClassId) {
+	getTreeRootsDatasource(propertyOrClassId: any) {
 		return this._readDatasourceAnnotationProperty(propertyOrClassId, Datasources.TREE_ROOTS_DATASOURCE);
 	}
 
-	getTreeChildrenDatasource(propertyOrClassId) {
+	getTreeChildrenDatasource(propertyOrClassId: any) {
 		return this._readDatasourceAnnotationProperty(propertyOrClassId, Datasources.TREE_CHILDREN_DATASOURCE);
 	}
 
-	isEnablingOptional(propertyId) {
+	isEnablingOptional(propertyId: any) {
 		return (this._readAsSingleLiteral(propertyId, Config.ENABLE_OPTIONAL) == "true");		
 	}
 
-	isEnablingNegation(propertyId) {
+	isEnablingNegation(propertyId: any) {
 		return (this._readAsSingleLiteral(propertyId, Config.ENABLE_NEGATION) == "true");	
 	}
 
-	isMultilingual(propertyId) {
+	isMultilingual(propertyId: any) {
 		return (this._readAsSingleLiteral(propertyId, Config.IS_MULTILINGUAL) == "true");	
 	}
 
-	readRange(propertyId) {
+	readRange(propertyId: any) {
 		return this._readClassesInRangeOfProperty(propertyId);
 	}
 
 
-	_readDatasourceAnnotationProperty(propertyOrClassId, datasourceAnnotationProperty) {
+	_readDatasourceAnnotationProperty(propertyOrClassId: any, datasourceAnnotationProperty: any) {
 		// read predicate datasource
-		const datasourceQuads = this.store.getQuads(
+		const datasourceQuads = RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(propertyOrClassId),
 			datasourceAnnotationProperty,
-		  	undefined
+		  	undefined,
+			undefined
 		);
 
 		if(datasourceQuads.length == 0) {
@@ -428,7 +440,8 @@ export class RDFSpecificationProvider {
 		    }
 		}
 
-		return datasource;
+		// IMPORTANT should here be propper error handling?
+		return {};
 	}
 
 	/**
@@ -442,8 +455,18 @@ export class RDFSpecificationProvider {
 	 *   noSort: true
 	 * }
 	 **/
-	_buildDatasource(datasourceUri) {
-		var datasource = {};
+
+	_buildDatasource(datasourceUri: any) {
+		var datasource:{
+			queryString?:string,
+			queryTemplate?:any,
+			labelPath?:any,
+			labelProperty?:any
+			childrenPath?:any
+			childrenProperty?:any
+			sparqlEndpointUrl?:any
+			noSort?:any
+		} = {};
 		// read datasource characteristics
 
     	// Alternative 1 : read optional queryString
@@ -514,9 +537,9 @@ export class RDFSpecificationProvider {
 	}
 
 
-	_sort(items) {
+	_sort(items: any[]) {
 		var me = this;
-		const compareFunction = function(item1, item2) {
+		const compareFunction = function(item1: any, item2: any) {
 		  // return me.getLabel(item1).localeCompare(me.getLabel(item2));
 
 		  var order1 = me._readOrder(item1);
@@ -527,7 +550,7 @@ export class RDFSpecificationProvider {
 		  		if(order1 == order2) {
 		  			return me.getLabel(item1).localeCompare(me.getLabel(item2));
 		  		} else {
-		  			return order1 > order2;
+		  			return (order1 - order2);
 		  		}
 		  	} else {
 		  		return -1;
@@ -546,13 +569,14 @@ export class RDFSpecificationProvider {
 		return items;
 	}
 
-	_readPropertiesWithDomain(classId) {
-		var properties = [];
+	_readPropertiesWithDomain(classId: any) {
+		var properties: any[] = [];
 
-		const propertyQuads = this.store.getQuads(
+		const propertyQuads = RDFSpecificationProvider.store.getQuads(
 			undefined,
 			RDFS.DOMAIN,
 		  	factory.namedNode(classId),
+			undefined
 		);
 
 		for (const aQuad of propertyQuads) {
@@ -566,10 +590,11 @@ export class RDFSpecificationProvider {
 		var unionsContainingThisClass = this._readUnionsContaining(classId);
 		
 		for (const aUnionContainingThisClass of unionsContainingThisClass) {
-		    const propertyQuadsHavingUnionAsDomain = this.store.getQuads(
+		    const propertyQuadsHavingUnionAsDomain = RDFSpecificationProvider.store.getQuads(
 				undefined,
 				RDFS.DOMAIN,
 			  	aUnionContainingThisClass,
+				undefined
 			);
 
 			for (const aQuad of propertyQuadsHavingUnionAsDomain) {
@@ -593,13 +618,14 @@ export class RDFSpecificationProvider {
 		return properties;
 	}
 
-	_readClassesInRangeOfProperty(propertyId) {
-		var classes = [];
+	_readClassesInRangeOfProperty(propertyId: any) {
+		var classes: any[] = [];
 
-		const propertyQuads = this.store.getQuads(
+		const propertyQuads = RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(propertyId),
 			RDFS.RANGE,
 		  	undefined,
+			undefined
 		);
 
 		for (const aQuad of propertyQuads) {
@@ -617,13 +643,14 @@ export class RDFSpecificationProvider {
 		return classes;
 	}
 
-	_readImmediateSuperClasses(classId) {
-		var classes = [];
+	_readImmediateSuperClasses(classId: any) {
+		var classes: any[] = [];
 
-		const subClassQuads = this.store.getQuads(
+		const subClassQuads = RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(classId),
 			RDFS.SUBCLASS_OF,
 		  	undefined,
+			undefined
 		);
 
 		for (const aQuad of subClassQuads) {
@@ -634,13 +661,14 @@ export class RDFSpecificationProvider {
 	}
 
 
-	_readImmediateSubClasses(classId) {
-		var classes = [];
+	_readImmediateSubClasses(classId: any) {
+		var classes: any[] = [];
 
-		const subClassQuads = this.store.getQuads(
+		const subClassQuads = RDFSpecificationProvider.store.getQuads(
 			undefined,
 			RDFS.SUBCLASS_OF,
 		  	factory.namedNode(classId),
+			undefined
 		);
 
 		for (const aQuad of subClassQuads) {
@@ -653,33 +681,34 @@ export class RDFSpecificationProvider {
 	/**
 	 * Reads rdf:type(s) of an entity, and return them as an array
 	 **/
-	_readRdfTypes(uri) {
+	_readRdfTypes(uri: any) {
 		return this._readAsResource(uri, RDF.TYPE);
 	}
 
 	/**
 	 * Reads config:order of an entity and returns it, or null if not set
 	 **/
-	_readOrder(uri) {
+	_readOrder(uri: any) {
 		return this._readAsSingleLiteral(uri, Config.ORDER);
 	}
 
 	/**
 	 * Reads the given property on an entity, and return values as an array
 	 **/
-	_readAsResource(uri, property) {
-		return this.store.getQuads(
+	_readAsResource(uri: any, property: any) {
+		return RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(uri),
 			property,
+			undefined,
 			undefined
 		)
-		.map(quad => quad.object.id);
+		.map((quad: { object: { id: any; }; }) => quad.object.id);
 	}
 
 	/**
 	 * Reads the given property on an entity, and returns the first value found, or null if not found
 	 **/
-	_readAsSingleResource(uri, property) {
+	_readAsSingleResource(uri: any, property: any) {
 		var values = this._readAsResource(uri, property);
 
 		if(values.length > 0) {
@@ -689,16 +718,17 @@ export class RDFSpecificationProvider {
 		return null;
 	}
 
-	_readAsLiteral(uri, property) {
-		return this.store.getQuads(
+	_readAsLiteral(uri: any, property: any) {
+		return RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(uri),
 			property,
+			undefined,
 			undefined
 		)
-		.map(quad => quad.object.value);
+		.map((quad: { object: { value: any; }; }) => quad.object.value);
 	}
 
-	_readAsSingleLiteral(uri, property) {
+	_readAsSingleLiteral(uri: any, property: any) {
 		var values = this._readAsLiteral(uri, property);
 		if(values.length == 0) {
 			return undefined;
@@ -707,41 +737,45 @@ export class RDFSpecificationProvider {
 		}
 	}
 
-	_readAsLiteralWithLang(uri, property, lang, defaultToNoLang = true) {
-		var values = this.store.getQuads(
+	_readAsLiteralWithLang(uri: any, property: any, lang: any, defaultToNoLang = true) {
+		var values = RDFSpecificationProvider.store.getQuads(
 			factory.namedNode(uri),
 			property,
+			undefined,
 			undefined
 		)
-		.filter(quad => (quad.object.language == lang))
-		.map(quad => quad.object.value);
+		.filter((quad: any) => (quad.object.language == lang))
+		.map((quad: { object: { value: any; }; }) => quad.object.value);
 
 		if(values.length == 0 && defaultToNoLang) {
-			values = this.store.getQuads(
+			values = RDFSpecificationProvider.store.getQuads(
 				factory.namedNode(uri),
 				property,
+				undefined,
 				undefined
 			)
-			.filter(quad => (quad.object.language == ''))
-			.map(quad => quad.object.value);
+			.filter((quad: any) => (quad.object.language == ''))
+			.map((quad: { object: { value: any; }; }) => quad.object.value);
 		}
 
 		return values.join(", ");
 	}
 
-	_readAsRdfNode(rdfNode, property) {
-		return this.store.getQuads(
+	_readAsRdfNode(rdfNode: any, property: any) {
+		return RDFSpecificationProvider.store.getQuads(
 			rdfNode,
 			property,
+			undefined,
 			undefined
 		)
-		.map(quad => quad.object);
+		.map((quad: { object: any; }) => quad.object);
 	}
 
-	_hasProperty(rdfNode, property) {
-		return this.store.getQuads(
+	_hasProperty(rdfNode: any, property: any) {
+		return RDFSpecificationProvider.store.getQuads(
 			rdfNode,
 			property,
+			undefined,
 			undefined
 		).length > 0;
 	}
@@ -751,31 +785,34 @@ export class RDFSpecificationProvider {
 
 	/*** Handling of UNION classes ***/
 
-	_isUnionClass(classUri) {
+	_isUnionClass(classUri: any) {
 		return this._hasProperty(factory.namedNode(classUri), OWL.UNION_OF);
 	}
 
-	_isInUnion(classUri) {
-		return this.store.getQuads(
+	_isInUnion(classUri: any) {
+		return RDFSpecificationProvider.store.getQuads(
 			undefined,
 			RDF.FIRST,
-			classUri
+			classUri,
+			undefined
 		).length > 0;;
 	}
 
-	_readUnionContent(classUri) {
+	_readUnionContent(classUri: any) {
 		var lists = this._readAsRdfNode(factory.namedNode(classUri), OWL.UNION_OF);
 		if(lists.length > 0) {
 			return this._readList_rec(lists[0]);
 		}
 	}
 
-	_readList_rec(list) {
-		var result = this.store.getQuads(
+	_readList_rec(list: any) {
+		var result = RDFSpecificationProvider.store.getQuads(
 			list,
-			RDF.FIRST
+			RDF.FIRST,
+			undefined,
+			undefined
 		)
-		.map(quad => quad.object.id);
+		.map((quad: { object: { id: any; }; }) => quad.object.id);
 
 		var subLists = this._readAsRdfNode(list, RDF.REST);
 		if(subLists.length > 0) {
@@ -785,7 +822,7 @@ export class RDFSpecificationProvider {
 		return result;
 	}
 
-	_readRootList(listId) {
+	_readRootList(listId: any):any {
 		var root = this._readSuperList(listId);
 		if(root == null) {
 			return listId;
@@ -794,11 +831,12 @@ export class RDFSpecificationProvider {
 		}
 	}
 
-	_readSuperList(listId) {
-		const propertyQuads = this.store.getQuads(
+	_readSuperList(listId: any) {
+		const propertyQuads = RDFSpecificationProvider.store.getQuads(
 			undefined,
 			RDF.REST,
-		  	listId
+		  	listId,
+			undefined
 		);
 
 		if(propertyQuads.length > 0) {
@@ -808,24 +846,26 @@ export class RDFSpecificationProvider {
 		}
 	}
 
-	_readUnionsContaining(classId) {
+	_readUnionsContaining(classId: any) {
 		var unions = [];
 
-		var listsContainingThisClass = this.store.getQuads(
+		var listsContainingThisClass = RDFSpecificationProvider.store.getQuads(
 			undefined,
 			RDF.FIRST,
-			factory.namedNode(classId)
-		).map(quad => quad.subject);
+			factory.namedNode(classId),
+			undefined
+		).map((quad: { subject: any; }) => quad.subject);
 
 		for (const aListContainingThisClass of listsContainingThisClass) {
 			var rootList = this._readRootList(aListContainingThisClass);
 
 			// now read the union pointing to this list
-			var unionPointingToThisList = this.store.getQuads(
+			var unionPointingToThisList = RDFSpecificationProvider.store.getQuads(
 				undefined,
 				OWL.UNION_OF,
-				rootList
-			).map(quad => quad.subject);
+				rootList,
+				undefined
+			).map((quad: { subject: any; }) => quad.subject);
 
 			if(unionPointingToThisList.length > 0) {
 				unions.push(unionPointingToThisList[0]);
@@ -837,7 +877,7 @@ export class RDFSpecificationProvider {
 
 	/*** / Handling of UNION classes ***/
 
-	_pushIfNotExist(item, items) {
+	_pushIfNotExist(item: any, items: any[]) {
 		if (items.indexOf(item) < 0) {
 			items.push(item) ;
 		}

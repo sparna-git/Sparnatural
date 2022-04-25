@@ -1,7 +1,5 @@
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
+import ISpecProvider from "../../spec-providers/ISpecProviders";
 import CriteriaGroup from "./groupcontainers/CriteriaGroup";
-import GroupContenaire from "./groupcontainers/GroupContenaire";
 import HTMLComponent from "./HtmlComponent";
 
 
@@ -11,27 +9,21 @@ import HTMLComponent from "./HtmlComponent";
 class ObjectPropertyTypeId extends HTMLComponent {
 	needTriggerClick:boolean
 	GrandParent:CriteriaGroup
-	constructor(ParentComponent:GroupContenaire, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
+	constructor(ParentComponent:HTMLComponent, specProvider:ISpecProvider) {
 		super(
  			"ObjectPropertyTypeId",
- 			{
-				IsCompleted : false,
-				IsOnEdit : false,
-				Created : false,
-				flexWrap : true
-			},
 			ParentComponent,
             specProvider,
 			null
  		);
-
+		this.cssClasses.flexWrap = true;
 		this.needTriggerClick = false ;	
 		this.needBackArrow= false ;
 		this.needFrontArrow= true ;
 		this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup
 	}
 
-	init() {
+	render() {
 		var selectBuilder = new PropertySelectBuilder(this.specProvider);
 		var default_value = null ;
 
@@ -47,14 +39,11 @@ class ObjectPropertyTypeId extends HTMLComponent {
 			default_value
 		) ;
 		
-		this.cssClasses.IsOnEdit = true ;
-		this.initHtml() ;
-		this.attachHtml() ;
-		this.cssClasses.Created = true ;
+		this.init()
 	} ;	
 	
 	reload() {
-		this.init();
+		this.render(); // IMPORTANT  is this right? or should it be this.init()? to only update css classes
 	} ;
 
 }

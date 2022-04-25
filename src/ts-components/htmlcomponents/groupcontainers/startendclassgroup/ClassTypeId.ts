@@ -1,10 +1,7 @@
-import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider";
 import { findParentOrSiblingCriteria } from "../../../globals/globalfunctions";
 import CriteriaGroup from "../CriteriaGroup";
-import IStartEndClassGroup from "./IStartEndClassGroup";
 import HTMLComponent from "../../HtmlComponent";
-import GroupContenaire from "../GroupContenaire";
+import ISpecProvider from "../../../../spec-providers/ISpecProviders";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
 
@@ -16,32 +13,32 @@ import EndClassGroup from "./EndClassGroup";
 class ClassTypeId extends HTMLComponent {
 	needTriggerClick:any
 	GrandParent:CriteriaGroup
-	constructor(ParentComponent:IStartEndClassGroup, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
+	constructor(ParentComponent:HTMLComponent, specProvider:ISpecProvider) {
 		super(
  			"ClassTypeId",
- 			{
-				Highlited : true ,
-				Created : false,
-				flexWrap: true
-
-			},
 			ParentComponent,
 			specProvider,
 			null
  		);
+		this.cssClasses.Highlited = true,
+		this.cssClasses.flexWrap = true,
 		this.needTriggerClick = false ;
 		this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup
-		this.ParentComponent = ParentComponent
 	}
 
 	init() {
+
+		if(this.cssClasses.Created){
+			console.log("CHECK here. Didn't think that would happen")
+		}
 		
-		//If Start Class 
+		/* Original code
 		if (this.cssClasses.Created) {
-			console.warn("This actually happened!")
 			this.updateCssClasses() ;
 			return true ;
 		}
+		*/
+
 		var default_value_s = null ;
 		var default_value_o = null ;
 		
@@ -100,9 +97,7 @@ class ClassTypeId extends HTMLComponent {
 			);
 		}
 		this.widgetHtml = selectHtml ;
-		this.cssClasses.IsOnEdit = true ;
-		this.initHtml() ;
-		this.attachHtml() ;
+		this.init()
 	} ;	
 	
 	reload() {
@@ -166,9 +161,11 @@ export default ClassTypeId
 		return html_list ;
 	}
 }
-function isStartClassGroup(ParentComponent: CriteriaGroup | GroupContenaire): ParentComponent is StartClassGroup {
-	return (ParentComponent as StartClassGroup).baseCssClass === "StartClassGroup";
+
+
+function isStartClassGroup(ParentComponent: HTMLComponent ): ParentComponent is StartClassGroup {
+	return (ParentComponent as unknown as StartClassGroup).baseCssClass === "StartClassGroup";
 } // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards
-function isEndClassGroup(ParentComponent: CriteriaGroup | GroupContenaire): ParentComponent is EndClassGroup {
-	return (ParentComponent as EndClassGroup).baseCssClass === "EndClassGroup";
+function isEndClassGroup(ParentComponent: HTMLComponent ): ParentComponent is EndClassGroup {
+	return (ParentComponent as unknown as EndClassGroup).baseCssClass === "EndClassGroup";
 } // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards

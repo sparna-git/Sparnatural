@@ -7,12 +7,13 @@ import EndClassGroup from "./startendclassgroup/EndClassGroup";
 import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
 import EndClassWidgetGroup from "./endclasswidgetgroup/EndClassWidgetGroup";
 import { addComponent, initGeneralEvent } from "../../globals/globalfunctions";
+import HTMLComponent from "../HtmlComponent";
 
 /**
 * A single line/criteria
 **/
 
-class CriteriaGroup {
+class CriteriaGroup extends HTMLComponent {
     thisForm_ :any;
     ComponentHtml:any;
     AncestorComponentHtml:any;
@@ -21,7 +22,6 @@ class CriteriaGroup {
     jsonQueryBranch:any;
     context:{ AncestorHtmlContext: any; HtmlContext: any; FormContext: any; ContextComponentIndex: any;  }
     id:any;
-    html:any;
     // create all the elements of the criteria
     StartClassGroup:any;
     OptionsGroup:any;
@@ -30,9 +30,10 @@ class CriteriaGroup {
     EndClassWidgetGroup:any;
     ActionsGroup:any;
     specProvider:any;
-    ParentComponent:any
-    constructor(ParentComponent:any,context: { AncestorHtmlContext: any; HtmlContext: any; FormContext: any; ContextComponentIndex: any; }, settings: ISettings, specProvider: any, jsonQueryBranch:any){
-       // IMPORTANT Check what has to come into the constructor
+    constructor(ParentComponent:HTMLComponent,context: { AncestorHtmlContext: any; HtmlContext: any; FormContext: any; ContextComponentIndex: any; }, settings: ISettings, specProvider: any, jsonQueryBranch:any){
+       super("CriteriaGroup",ParentComponent,specProvider,null)
+       this.cssClasses.HasAllComplete = true
+        // IMPORTANT Check what has to come into the constructor
         this.ParentComponent = ParentComponent
         this.context = context
         this.thisForm_ = context.FormContext ;
@@ -42,6 +43,7 @@ class CriteriaGroup {
         //TODO: Refactor to have only context variable and not for example this.thisForm_ = context.FormContext
         this.id = context.ContextComponentIndex ;
         
+        // Is this equals to widget html?
         this.html = $('<div id="CriteriaGroup-'+this.id+'" class="CriteriaGroup"></div>').appendTo($(this.ComponentHtml))
 
         // create all the elements of the criteria
@@ -55,11 +57,6 @@ class CriteriaGroup {
     }
     //this._this = this ; IMPORTANT : unused var?
     children:Array<any> = [];
-
-    cssClasses = {
-        HasAllComplete : false,
-        IsOnEdit : false
-    } 
     
     assembleComponents = () => {
         // hook all components together

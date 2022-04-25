@@ -1,5 +1,6 @@
-import Datasources from "./SparnaturalConfigDatasources"
-import {Config} from "./configs/fixed-configs/SparnaturalConfig"
+import Datasources from "../SparnaturalConfigDatasources";
+import { Config } from "../configs/fixed-configs/SparnaturalConfig";
+import ISpecProvider from "./ISpecProviders";
 
 interface IDataSources {
 	queryString: string,
@@ -12,7 +13,7 @@ interface IDataSources {
 	noSort: any
 }
 
-export default class JsonLdSpecificationProvider {
+export default class JsonLdSpecificationProvider implements ISpecProvider {
 	jsonSpecs:any;
 	lang:any;
 	constructor(specs:any, lang:any){

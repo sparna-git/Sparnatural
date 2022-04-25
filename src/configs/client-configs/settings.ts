@@ -1,5 +1,4 @@
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
+import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ISettings from "./ISettings";
 const settings:ISettings = {
     langSearch: null,
@@ -19,7 +18,7 @@ const settings:ISettings = {
     },
     localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
     filterConfigOnEndpoint: false,
-    onQueryUpdated: function (queryString:string, queryJson:any, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
+    onQueryUpdated: function (queryString:string, queryJson:any, specProvider:ISpecProvider) {
       queryString = semanticPostProcess(queryString, queryJson);
       queryString = specProvider.expandSparql(queryString);
       // set the query of the tab

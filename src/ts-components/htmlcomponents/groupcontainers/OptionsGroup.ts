@@ -1,25 +1,26 @@
-import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
 import { eventProxiCriteria, redrawBottomLink } from "../../globals/globalfunctions";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import OptionTypeId from "../OptionTypeId";
 import CriteriaGroup from "./CriteriaGroup";
-import GroupContenaire from "./GroupContenaire";
+import HTMLComponent from "../HtmlComponent";
+import ISpecProvider from "../../../spec-providers/ISpecProviders";
 
 /**
  * Selection of the start class in a criteria/line
  **/
- export class OptionsGroup extends GroupContenaire {
+ export class OptionsGroup extends HTMLComponent {
+	 ParentCriteriaGroup:CriteriaGroup
 	valuesSelected: {[key:string]:boolean}
 	 inputTypeComponent: OptionTypeId;
-	constructor(parentCriteriaGroup:CriteriaGroup, specProvider:JsonLdSpecificationProvider) { 
+	constructor(ParentCriteriaGroup:CriteriaGroup, specProvider:ISpecProvider) { 
 		super(
 			"OptionsGroup",
-			parentCriteriaGroup,
-            specProvider
+			ParentCriteriaGroup,
+            specProvider,
+			null
 		);
-		this.cssClasses.OptionsGroup = true ;
 		this.valuesSelected = {} ;
-		
+		this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup
 		this.inputTypeComponent = new OptionTypeId(this, specProvider) ;
 
 		this.init() ;
@@ -60,25 +61,25 @@ import GroupContenaire from "./GroupContenaire";
 				parentOptionEnable
 				||
 				(
-					!this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+					!this.specProvider.isEnablingOptional(this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected)
 					&&
-					!this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+					!this.specProvider.isEnablingNegation(this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected)
 				)
 			) {
 				$(this.html).find('.EditComponents').addClass('Disabled') ;
 				$(this.html).find('.EditComponents').removeClass('NoOptionEnabled') ;
-				$(this.parentCriteriaGroup.html).addClass('OptionMenuShowed') ;
+				$(this.ParentCriteriaGroup.html).addClass('OptionMenuShowed') ;
 				if (
-					!this.specProvider.isEnablingOptional(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+					!this.specProvider.isEnablingOptional(this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected)
 					&&
-					!this.specProvider.isEnablingNegation(this.parentCriteriaGroup.ObjectPropertyGroup.value_selected)
+					!this.specProvider.isEnablingNegation(this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected)
 				) {
 					$(this.html).find('.EditComponents').addClass('NoOptionEnabled') ;
-					$(this.parentCriteriaGroup.html).removeClass('OptionMenuShowed') ;
+					$(this.ParentCriteriaGroup.html).removeClass('OptionMenuShowed') ;
 				}
 			} else {
 				$(this.html).find('.EditComponents').addClass('Enabled') ;
-				$(this.parentCriteriaGroup.html).addClass('OptionMenuShowed') ;
+				$(this.ParentCriteriaGroup.html).addClass('OptionMenuShowed') ;
 			}
 
 			$(this.html).find('.EditComponents>div').first().on('click', function(e) {
@@ -143,14 +144,14 @@ import GroupContenaire from "./GroupContenaire";
 		}
 
 		if (optionSelected == true ) {
-			$(this.parentCriteriaGroup.html).parents('li').first().addClass('optionEnabled') ;
-			$(this.parentCriteriaGroup.html).parents('li').first().parents('li.groupe').each(function() {
+			$(this.ParentCriteriaGroup.html).parents('li').first().addClass('optionEnabled') ;
+			$(this.ParentCriteriaGroup.html).parents('li').first().parents('li.groupe').each(function() {
 				$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Disabled') ;
 				$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Enabled') ;
 				$(this).find('>div>.OptionsGroup').first().removeClass('Opended') ;
 
 			});
-			$(this.parentCriteriaGroup.html).parents('li').first().find('li.groupe').each(function() {
+			$(this.ParentCriteriaGroup.html).parents('li').first().find('li.groupe').each(function() {
 				$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Disabled') ;
 				$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Enabled') ;
 				$(this).find('>div>.OptionsGroup').first().removeClass('Opended') ;
@@ -160,14 +161,14 @@ import GroupContenaire from "./GroupContenaire";
 			});
 
 		} else {
-			$(this.parentCriteriaGroup.html).parents('li').first().removeClass('optionEnabled') ;
-			$(this.parentCriteriaGroup.html).parents('li').first().parents('li.groupe').each(function() {
+			$(this.ParentCriteriaGroup.html).parents('li').first().removeClass('optionEnabled') ;
+			$(this.ParentCriteriaGroup.html).parents('li').first().parents('li.groupe').each(function() {
 				if ($(this).find('>div>.OptionsGroup label').length > 0) {
 					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
 					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
 				}
 			});
-			$(this.parentCriteriaGroup.html).parents('li').first().find('li.groupe').each(function() {
+			$(this.ParentCriteriaGroup.html).parents('li').first().find('li.groupe').each(function() {
 				if ($(this).find('>div>.OptionsGroup label').length > 0) {
 					$(this).find('>div>.OptionsGroup .EditComponents').first().addClass('Enabled') ;
 					$(this).find('>div>.OptionsGroup .EditComponents').first().removeClass('Disabled') ;
@@ -176,7 +177,7 @@ import GroupContenaire from "./GroupContenaire";
 		}
 
 		// update the query
-		$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
+		$(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
 
 		$(this.html).find('.input-val label').removeClass('justClicked') ;
 	};

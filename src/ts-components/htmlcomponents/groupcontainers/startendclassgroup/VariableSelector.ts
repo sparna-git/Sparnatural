@@ -1,12 +1,10 @@
-import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider";
 import { eventProxiCriteria, localName, redrawBottomLink } from "../../../globals/globalfunctions";
 import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
 import CriteriaGroup from "../CriteriaGroup";
 import EndClassGroup from "./EndClassGroup";
 import StartClassGroup from "./StartClassGroup";
 import HTMLComponent from "../../HtmlComponent";
-import IStartEndClassGroup from "./IStartEndClassGroup";
+import ISpecProvider from "../../../../spec-providers/ISpecProviders";
 
 class VariableSelector extends HTMLComponent {
     displayVariableList: any;
@@ -19,10 +17,9 @@ class VariableSelector extends HTMLComponent {
     parentVarName:any
     GrandParent:CriteriaGroup
 	varLabel:string
-	constructor(ParentComponent:IStartEndClassGroup,specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
+	constructor(ParentComponent:StartClassGroup | EndClassGroup,specProvider:ISpecProvider) {
 		super(
 			"VariableSelector",
-			{VariableSelector: true, Created: false},
 			ParentComponent,
 			specProvider,
             null            
@@ -86,7 +83,7 @@ class VariableSelector extends HTMLComponent {
 	 	});
 
 		//this.GroupContenaire.parentComponent.thisForm_.queryOptions.displayVariableList.push(this.varName) ;
-		if (this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList.length == 1) {
+		if (this.GrandParent.thisForm_.queryOptions.displayVariableList.length == 1) {
 			var width = $('.sortableItem').first().width() ;
 			$('.variablesOrdersSelect').width(width) ;
 		}
@@ -140,9 +137,9 @@ class VariableSelector extends HTMLComponent {
 
 			//Set varialbeles names on components list for StartClassGroup childs
             childs_index.forEach(child =>{
-                for (var componentKey in this.ParentComponent.ParentComponent.thisForm_.sparnatural.components) {
-					if(this.ParentComponent.ParentComponent.thisForm_.sparnatural.components[componentKey].index == child) {
-						this.ParentComponent.ParentComponent.thisForm_.sparnatural.components[componentKey].CriteriaGroup.StartClassGroup.varName = '?'+this.currentValue ;
+                for (var componentKey in this.GrandParent.thisForm_.sparnatural.components) {
+					if(this.GrandParent.thisForm_.sparnatural.components[componentKey].index == child) {
+						this.GrandParent.thisForm_.sparnatural.components[componentKey].CriteriaGroup.StartClassGroup.varName = '?'+this.currentValue ;
 					}
 				}
             });
@@ -150,10 +147,10 @@ class VariableSelector extends HTMLComponent {
 			//Set variable name used on query for criteria
 			this.parentVarName = '?'+this.currentValue ;
 			//Updates the variables in the generated query based on HTML variable line
-			this.ParentComponent.ParentComponent.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
+			this.GrandParent.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
 			//Variable name blocks whidth can be change, redraw lines links
-			redrawBottomLink($(this.ParentComponent.ParentComponent.html).parents('li').first());
-			$(this.ParentComponent.ParentComponent.thisForm_.sparnatural).trigger( "submit" ) ;
+			redrawBottomLink($(this.GrandParent.html).parents('li').first());
+			$(this.GrandParent.thisForm_.sparnatural).trigger( "submit" ) ;
 		}
 		var width = $('.sortableItem').first().width() ;
 		$('.variablesOrdersSelect').width(width) ;
@@ -177,7 +174,7 @@ class VariableSelector extends HTMLComponent {
 
 	remove () {
 		var checkVarName = this.parentVarName;
-		this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList = this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList.filter(function(value: any, index: any, arr: any){
+		this.GrandParent.thisForm_.queryOptions.displayVariableList = this.GrandParent.thisForm_.queryOptions.displayVariableList.filter(function(value: any, index: any, arr: any){
 			return value !== checkVarName;
 		});
 		this.element.remove() ;
@@ -186,16 +183,16 @@ class VariableSelector extends HTMLComponent {
 		$('.variablesOrdersSelect').width(width) ;
 
 		// If no value selected, then select "this"
-		if (this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList.length == 0) {
-			$(this.ParentComponent.ParentComponent.thisForm_.sparnatural).find('.selectViewVariable').first().trigger('click') ;
+		if (this.GrandParent.thisForm_.queryOptions.displayVariableList.length == 0) {
+			$(this.GrandParent.thisForm_.sparnatural).find('.selectViewVariable').first().trigger('click') ;
 		}
 		
-		$(this.ParentComponent.ParentComponent.thisForm_.sparnatural).trigger( "submit" ) ;	
+		$(this.GrandParent.thisForm_.sparnatural).trigger( "submit" ) ;	
 	}
 
 	canRemove() {
 		// returns true if more than one
-		return (this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList.length > 1);
+		return (this.GrandParent.thisForm_.queryOptions.displayVariableList.length > 1);
 	}
 }
 
