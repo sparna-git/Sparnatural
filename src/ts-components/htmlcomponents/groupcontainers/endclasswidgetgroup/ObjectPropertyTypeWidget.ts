@@ -1,6 +1,7 @@
 import GroupContenaire from "../GroupContenaire";
-import ISettings from "../../../globals/ISettings";
-import {Config} from "../../../../SparnaturalConfig";
+
+import ISettings from "../../../../configs/client-configs/ISettings";
+import {Config} from "../../../../configs/fixed-configs/SparnaturalConfig";
 import Datasources from "../../../../SparnaturalConfigDatasources";
 import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../../../../AutocompleteAndListHandlers";
 import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "./Widgets"
@@ -9,6 +10,7 @@ import { SparqlTreeHandler } from "../../../../TreeHandlers";
 import HTMLComponent from "../../HtmlComponent";
 import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider";
 import IWidget from "./IWidget";
+import { initGeneralEvent } from "../../../globals/globalfunctions";
 
 /**
  *  Selects the value for a range in a criteria/line, using a value selection widget
@@ -69,7 +71,7 @@ import IWidget from "./IWidget";
 				
 					//$(this.ParentComponent.parentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
 					$(this.parentComponent.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
-					this.initGeneralEvent(this.parentComponent.parentCriteriaGroup.thisForm_);					
+					initGeneralEvent(this,this.parentComponent.parentCriteriaGroup.thisForm_);					
 				}
 				//var endLabel = null ; //Imporant is this still necessary?
 				add_or = false;
@@ -454,61 +456,6 @@ import IWidget from "./IWidget";
             return this.widgetComponent.getValue() ;
         }
     }
-
-    initGeneralEvent(thisForm_: { sparnatural: any; }) {
-		$('li.groupe').off( "mouseover" ) ;
-		$('li.groupe').off( "mouseleave" ) ;
-		$('li.groupe').on( "mouseover", function(event: { stopImmediatePropagation: () => void; }) {
-			event.stopImmediatePropagation();
-			$('li.groupe').removeClass('OnHover') ;
-			$(this).addClass('OnHover') ;
-			
-		} );
-		$('li.groupe').on( "mouseleave", function(event: { stopImmediatePropagation: () => void; }) {
-			event.stopImmediatePropagation();
-			$('li.groupe').removeClass('OnHover') ;
-		} );
-			/*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
-			
-		// var $all_li = $(thisForm_.sparnatural).find('li.groupe') ;
-		var $all_li = $(thisForm_.sparnatural).find('li.groupe') ;
-		var leng = $all_li.length ;
-		if (leng  <= 10 ) {
-			leng = 10 ;
-		}
-		var ratio = 100 / leng / 100 ;
-		var prev = 0 ;
-		var cssdef = 'linear-gradient(180deg' ; 
-		let that = this //IMPORTANT : make this available in foreach function -> this.settings
-		$all_li.each(function(index: number) {
-			var a = (index + 1 ) * ratio ;
-			var height = $(this).find('>div').outerHeight(true) ;
-			if(height){
-				cssdef += ', rgba('+that.settings.backgroundBaseColor+','+a+') '+prev+'px, rgba('+that.settings.backgroundBaseColor+','+a+') '+(prev+height)+'px' ;
-				prev = prev + height+1 ;
-				if ($(this).next().length > 0 ) {
-					$(this).addClass('hasAnd') ;
-					var this_li = $(this) ;
-					
-					var this_link_and = $(this).find('.link-and-bottom') ;
-					var height = this_li.height()
-					if(height){
-						$(this_link_and).height(height) ;
-					} else {
-						console.warn("this_li.height() not found in $(this)")
-					}
-				} else {
-						$(this).removeClass('hasAnd') ;
-				}
-			} else {
-				console.warn("Height not found in parent element.")
-			}
-		});
-	
-		$(thisForm_.sparnatural).find('div.bg-wrapper').css({background : cssdef+')' }) ;
-	
-	}
-
 
  }
 

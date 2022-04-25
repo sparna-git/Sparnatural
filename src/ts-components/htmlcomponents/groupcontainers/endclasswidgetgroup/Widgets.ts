@@ -1,10 +1,10 @@
 
-import UiuxConfig from "../../../../UiuxConfig";
+import UiuxConfig from '../../../../configs/fixed-configs/UiuxConfig';
 import '@chenfengyuan/datepicker'
 import 'select2';
 import 'select2/dist/css/select2.css';
 import tippy from 'tippy.js';
-import ISettings from "../../../globals/ISettings";
+import ISettings from "../../../../configs/client-configs/ISettings"
 import LocalCacheData from "../../../../LocalCacheData";
 import IWidget from "./IWidget";
 let jsTree = require('jstree').default;

@@ -30,13 +30,13 @@ const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
 import { QuerySPARQLWriter } from "./Query";
 import JSONQueryGenerator from "./QueryGenerators";
 
-import { eventProxiCriteria, redrawBottomLink } from "./SparnaturalComponents";
+import { eventProxiCriteria, redrawBottomLink } from "./ts-components/globals/globalfunctions";
 import { SpecificationProviderFactory } from "./SpecificationProviderFactory";
 
-import UiuxConfig from "./UiuxConfig";
+import UiuxConfig from "./configs/fixed-configs/UiuxConfig";
 import {addComponent, initGeneralEvent} from "./ts-components/globals/globalfunctions"
-import { getSettings, mergeSettings } from "./ts-components/globals/settings";
-import ISettings from "./ts-components/globals/ISettings";
+import { getSettings, mergeSettings } from "./configs/client-configs/settings";
+import ISettings from "./configs/client-configs/ISettings"
 	
 export class SparNatural extends HTMLElement {
     	specProvider:any;	

@@ -1,7 +1,6 @@
-import { data } from "jquery";
 import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";
-import { eventProxiCriteria, redrawBottomLink } from "../../../SparnaturalComponents";
-import UiuxConfig from "../../../UiuxConfig";
+import { eventProxiCriteria, redrawBottomLink } from "../../globals/globalfunctions";
+import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import OptionTypeId from "../OptionTypeId";
 import CriteriaGroup from "./CriteriaGroup";
 import GroupContenaire from "./GroupContenaire";
@@ -181,9 +180,4 @@ import GroupContenaire from "./GroupContenaire";
 
 		$(this.html).find('.input-val label').removeClass('justClicked') ;
 	};
-
-	/*
-	setClass(value) {
-		$(this.html).find('nice-select ul li[data-value="'+value+'"]').trigger('click');
-	}*/ //IMPORTANT unecessary method? nowhere called
 } 

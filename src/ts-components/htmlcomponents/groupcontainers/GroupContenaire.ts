@@ -29,7 +29,7 @@ class GroupContenaire extends HTMLComponent {
 		} else {
 			this.updateCssClasses() ;
 		}
-	} ;
+	};
 
 	onSelectValue(varName:any) {
 		var current = $(this.html).find('.nice-select .current').first() ;

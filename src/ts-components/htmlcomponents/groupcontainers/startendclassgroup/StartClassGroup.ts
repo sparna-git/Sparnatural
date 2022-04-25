@@ -1,11 +1,11 @@
 import tippy from "tippy.js"
 import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider"
 import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider"
-import { eventProxiCriteria, findParentOrSiblingCriteria } from "../../../../SparnaturalComponents"
-import UiuxConfig from "../../../../UiuxConfig"
+import { eventProxiCriteria, findParentOrSiblingCriteria } from "../../../globals/globalfunctions"
+import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig"
 import ClassTypeId from "./ClassTypeId"
 import VariableSelector from "./VariableSelector"
-import ISettings from "../../../globals/ISettings"
+import ISettings from "../../../../configs/client-configs/ISettings"
 import CriteriaGroup from "../CriteriaGroup"
 import GroupContenaire from "../GroupContenaire"
 import IStartEndClassGroup from "./IStartEndClassGroup"
@@ -151,11 +151,6 @@ class StartClassGroup extends GroupContenaire implements IStartEndClassGroup {
 			$(this.parentCriteriaGroup.StartClassGroup.html).removeAttr('data-tippy-content') ;
 		}
 	};
-	/*
-	setClass(value) {
-		$(this.html).find('nice-select ul li[data-value="'+value+'"]').trigger('click');
-	}*/ // IMPORTANT unecessary method?
-
 	getVarName() {
 		return this.varName;
 	}

@@ -1,5 +1,5 @@
 import GroupContenaire from "../groupcontainers/GroupContenaire"
-import ISettings from "../../globals/ISettings"
+import ISettings from "../../../configs/client-configs/ISettings"
 import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider"
 import { RDFSpecificationProvider } from "../../../RDFSpecificationProvider"
 import ActionsGroup from "./ActionsGroup"

@@ -3,7 +3,7 @@
     Made by Hernán Sartorio  */
 
     import tippy from 'tippy.js';
-    import {getSettings} from "../../../ts-components/globals/settings"
+    import {getSettings} from "../../../configs/client-configs/settings"
  
 (function($) {
 

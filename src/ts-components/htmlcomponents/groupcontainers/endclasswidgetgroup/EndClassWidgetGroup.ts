@@ -1,13 +1,12 @@
-import { FilteringSpecificationProvider } from "../../../../FilteringSpecificationProvider";
 import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
 import GroupContenaire from "../GroupContenaire";
-import ISettings from "../../../globals/ISettings";
+import ISettings from "../../../../configs/client-configs/ISettings";
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
 import { AbstractValue } from "../../../../Query";
-import {Config} from "../../../../SparnaturalConfig";
-import UiuxConfig from "../../../../UiuxConfig";
+import {Config} from "../../../../configs/fixed-configs/SparnaturalConfig";
+import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
 import CriteriaGroup from "../CriteriaGroup";
-import { eventProxiCriteria } from "../../../../SparnaturalComponents";
+import { eventProxiCriteria } from "../../../globals/globalfunctions";
 import { initGeneralEvent } from "../../../globals/globalfunctions";
 
 
@@ -300,7 +299,7 @@ class EndClassWidgetGroup extends GroupContenaire {
 			$(this.parentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').removeClass('newOr') ;
 			console.log('before init general even')
 			console.dir(this)
-			initGeneralEvent.call(this,this.parentCriteriaGroup.thisForm_);
+			initGeneralEvent.call(this,this.parentCriteriaGroup.thisForm_,this.settings);
 		};
 
 }

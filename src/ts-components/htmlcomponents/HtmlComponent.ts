@@ -1,6 +1,6 @@
 import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider"
 import { RDFSpecificationProvider } from "../../RDFSpecificationProvider"
-import UiuxConfig from "../../UiuxConfig"
+import UiuxConfig from "../../configs/fixed-configs/UiuxConfig"
 import CriteriaGroup from "./groupcontainers/CriteriaGroup"
 import GroupContenaire from "./groupcontainers/GroupContenaire"
 

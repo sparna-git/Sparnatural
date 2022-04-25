@@ -1,8 +1,8 @@
 
 const factory = require('@rdfjs/data-model');
 const rdfParser = require("rdf-parse").default;
-const rdfDereferencer = require("rdf-dereference").default;
 import {storeStream} from "rdf-store-stream";
+import { Config } from "./configs/fixed-configs/SparnaturalConfig";
 const N3 = require('n3');
 const Datasources = require("./SparnaturalConfigDatasources.js");
 
@@ -29,8 +29,6 @@ const OWL = {
 	EQUIVALENT_CLASS : factory.namedNode(OWL_NAMESPACE+"equivalentClass"),
 	UNION_OF : factory.namedNode(OWL_NAMESPACE+"unionOf")
 };
-
-var Config = require('./SparnaturalConfig.js');
 
 export class RDFSpecificationProvider {
 

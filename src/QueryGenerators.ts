@@ -3,15 +3,13 @@ import { BooleanValue, DateTimeValue, ExactStringValue, LiteralValue, LuceneQuer
 var SparqlGenerator = require('sparqljs').Generator;
 // var SparqlParser = require('sparqljs').Parser;
 
-var Config = require('./SparnaturalConfig.js');
+import { Config } from "./configs/fixed-configs/SparnaturalConfig";
 
 // TODO: Change name of file to classname
 
 class JSONQueryGenerator {
 
-	constructor() {
-
-	}
+	constructor() {}
 
 	/**
 	 * Generates a JSON query
@@ -73,7 +71,6 @@ class JSONQueryGenerator {
 			objectVariable
 		);
 
-		var values = component.CriteriaGroup.EndClassWidgetGroup.selectedValues;
 		// Set the values based on widget type
 		var _WidgetType = component.CriteriaGroup?.EndClassWidgetGroup?.inputTypeComponent?.widgetType ;
 		if(component.CriteriaGroup.EndClassWidgetGroup.selectedValues?.length > 0 ) {	// IMPORTANT see if the introduced null check still has the same effect		

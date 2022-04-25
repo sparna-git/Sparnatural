@@ -1,7 +1,5 @@
 import Tab from "@triply/yasgui"
-import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider"
-import { RDFSpecificationProvider } from "../../RDFSpecificationProvider"
-export default interface Settings  {
+interface ISettings  {
     currentTab?: Tab,
     noTypeCriteriaForObjects:any,
     config: any,
@@ -30,3 +28,4 @@ export default interface Settings  {
     onQueryUpdated: (queryString:any, queryJson:any,pivotJson?:any) => void
     onSubmit:(form:any)=>void
 }
+export default ISettings

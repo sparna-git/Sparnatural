@@ -1,4 +1,4 @@
-import ISettings from "../../globals/ISettings";
+import ISettings from "../../../configs/client-configs/ISettings";
 import * as $ from "jquery"
 import HTMLComponent from "../HtmlComponent";
 import JsonLdSpecificationProvider from "../../../JsonLdSpecificationProvider";

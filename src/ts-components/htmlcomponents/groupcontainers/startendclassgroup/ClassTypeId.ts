@@ -1,6 +1,6 @@
 import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider";
-import { findParentOrSiblingCriteria } from "../../../../SparnaturalComponents";
+import { findParentOrSiblingCriteria } from "../../../globals/globalfunctions";
 import CriteriaGroup from "../CriteriaGroup";
 import IStartEndClassGroup from "./IStartEndClassGroup";
 import HTMLComponent from "../../HtmlComponent";

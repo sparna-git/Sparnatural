@@ -1,7 +1,7 @@
 import JsonLdSpecificationProvider from "../../../../JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "../../../../RDFSpecificationProvider";
-import { eventProxiCriteria, localName, redrawBottomLink } from "../../../../SparnaturalComponents";
-import  UiuxConfig  from "../../../../UiuxConfig";
+import { eventProxiCriteria, localName, redrawBottomLink } from "../../../globals/globalfunctions";
+import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
 import CriteriaGroup from "../CriteriaGroup";
 import EndClassGroup from "./EndClassGroup";
 import StartClassGroup from "./StartClassGroup";
@@ -197,7 +197,6 @@ class VariableSelector extends HTMLComponent {
 		// returns true if more than one
 		return (this.ParentComponent.ParentComponent.thisForm_.queryOptions.displayVariableList.length > 1);
 	}
-
 }
 
 export default VariableSelector

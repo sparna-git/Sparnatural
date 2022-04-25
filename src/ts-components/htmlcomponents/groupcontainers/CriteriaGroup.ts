@@ -1,12 +1,12 @@
 import ActionsGroup from "../actions/ActionsGroup";
-import ISettings from "../../globals/ISettings";
+import ISettings from "../../../configs/client-configs/ISettings";
 import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import { OptionsGroup } from "./OptionsGroup";
 import ObjectPropertyGroup from "./ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
-import { findParentOrSiblingCriteria } from "../../../SparnaturalComponents";
+import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
 import EndClassWidgetGroup from "./endclasswidgetgroup/EndClassWidgetGroup";
-import { addComponent } from "../../globals/globalfunctions";
+import { addComponent, initGeneralEvent } from "../../globals/globalfunctions";
 
 /**
 * A single line/criteria
@@ -159,7 +159,7 @@ class CriteriaGroup {
             }
 
             // re-submit form after deletion
-            this.initGeneralEvent(formObject) ;
+            initGeneralEvent(this,formObject) ;
             $(this.thisForm_.sparnatural).trigger( "submit" ) ;
         }
         
@@ -169,69 +169,8 @@ class CriteriaGroup {
     initCompleted =  () => {
         $(this.html).parent('li').addClass('completed') ;
     }
-
-    getOffset( elem: JQuery<HTMLElement>, elemParent: JQuery<HTMLElement> ) {
-		return elem.offset()!.left - elemParent.offset()!.left ;
-	} //TODO This function also exists as export in SparnaturalComponents
-
-    initGeneralEvent(thisForm_: { sparnatural: any; }) {
-		$('li.groupe').off( "mouseover" ) ;
-		$('li.groupe').off( "mouseleave" ) ;
-		$('li.groupe').on( "mouseover", function(event: { stopImmediatePropagation: () => void; }) {
-			event.stopImmediatePropagation();
-			$('li.groupe').removeClass('OnHover') ;
-			$(this).addClass('OnHover') ;
-			
-		} );
-		$('li.groupe').on( "mouseleave", function(event: { stopImmediatePropagation: () => void; }) {
-			event.stopImmediatePropagation();
-			$('li.groupe').removeClass('OnHover') ;
-		} );
-			/*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
-			
-		// var $all_li = $(thisForm_.sparnatural).find('li.groupe') ;
-		var $all_li = $(thisForm_.sparnatural).find('li.groupe') ;
-		var leng = $all_li.length ;
-		if (leng  <= 10 ) {
-			leng = 10 ;
-		}
-		var ratio = 100 / leng / 100 ;
-		var prev = 0 ;
-		var cssdef = 'linear-gradient(180deg' ; 
-		let that = this //IMPORTANT : make this available in foreach function -> this.settings
-		$all_li.each(function(index: number) {
-			var a = (index + 1 ) * ratio ;
-			var height = $(this).find('>div').outerHeight(true) ;
-			if(height){
-				cssdef += ', rgba('+that.settings.backgroundBaseColor+','+a+') '+prev+'px, rgba('+that.settings.backgroundBaseColor+','+a+') '+(prev+height)+'px' ;
-				prev = prev + height+1 ;
-				if ($(this).next().length > 0 ) {
-					$(this).addClass('hasAnd') ;
-					var this_li = $(this) ;
-					
-					var this_link_and = $(this).find('.link-and-bottom') ;
-					var height = this_li.height()
-					if(height){
-						$(this_link_and).height(height) ;
-					} else {
-						console.warn("this_li.height() not found in $(this)")
-					}
-				} else {
-						$(this).removeClass('hasAnd') ;
-				}
-			} else {
-				console.warn("Height not found in parent element.")
-			}
-		});
-	
-		$(thisForm_.sparnatural).find('div.bg-wrapper').css({background : cssdef+')' }) ;
-	
-	}
-
   
     // trigger the init event
     //$(this).trigger( {type:"Created" } ) ; // TODO : delete unused code
-    
-    
 }
 export default CriteriaGroup
