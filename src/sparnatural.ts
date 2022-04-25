@@ -258,9 +258,6 @@ export class SparNatural extends HTMLElement {
 							this.specProvider
 						);
 						writer.setPrefixes(settings.sparqlPrefixes);
-
-
-
 						console.log(writer.toSPARQL(jsonQuery));
 
 						// fire callback

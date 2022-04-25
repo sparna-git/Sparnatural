@@ -85,11 +85,11 @@ export default OptionTypeId
 	buildOptionSelect(objectId: any, inputID: string, default_value: { [x: string]: any; optional?: boolean; notExists?: boolean; }) {			
 		let items:{optional?:string, notExists?:string} = {} ;
 		if(this.specProvider.isEnablingOptional(objectId)) {
-			items.optional = this.OptionTypeId.parentComponent.parentCriteriaGroup.thisForm_.langSearch.labelOptionOptional ;
+			items.optional = this.OptionTypeId.GrandParent.thisForm_.langSearch.labelOptionOptional ;
 		}
 		
 		if(this.specProvider.isEnablingNegation(objectId)) {
-			items.notExists = this.OptionTypeId.parentComponent.parentCriteriaGroup.thisForm_.langSearch.labelOptionNotExists ;
+			items.notExists = this.OptionTypeId.GrandParent.thisForm_.langSearch.labelOptionNotExists ;
 		}
 
 		var list = [] ;

@@ -135,7 +135,7 @@ export function initGeneralEvent(thisForm_: any, settings: ISettings) {
   var ratio = 100 / leng / 100;
   var prev = 0;
   var cssdef = "linear-gradient(180deg";
-  $all_li.each(function (index) {
+  $all_li.each((index) =>{
     var a = (index + 1) * ratio;
     var height = $(this).find(">div").outerHeight(true);
     cssdef +=
@@ -180,7 +180,7 @@ export function initStatistics(aSpecProvider: any) {
 
     // sparqlPostProcessor
     {
-      semanticPostProcess: function (sparql: any) {
+      semanticPostProcess: (sparql: any) => {
         // also add prefixes
         for (key in settings.sparqlPrefixes) {
           sparql = sparql.replace(
@@ -216,7 +216,7 @@ export function initStatistics(aSpecProvider: any) {
         context: { classUri: aClass },
       };
 
-      var handler = function (data: any) {
+      var handler = (data: any) =>{
         var count = statisticsHandler.elementCount(data);
         // "this" refers to the "context" property of the options, see jQuery options
         specProvider.notifyClassCount(this.classUri, count);
@@ -261,7 +261,7 @@ export function initStatistics(aSpecProvider: any) {
                 },
               };
 
-              var handler = function (data: any) {
+              var handler = (data: any) => {
                 var count = statisticsHandler.elementCount(data);
                 // "this" refers to the "context" property of the options, see jQuery options
                 specProvider.notifyPropertyCount(

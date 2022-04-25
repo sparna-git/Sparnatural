@@ -20,10 +20,6 @@ let jsTree = require('jstree').default;
 			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 			this.html = '<input id="ecgrw-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
 		}
-
-
-		
-		
 		
 		init = function init() {
 			var startClassGroup_value = this.ParentComponent.ParentComponent.parentCriteriaGroup.StartClassGroup.value_selected ;
@@ -104,11 +100,13 @@ let jsTree = require('jstree').default;
 		sort: boolean;
 		id_input: string;
 		html: string;
+		settings:ISettings
 		constructor(inputTypeComponent:any, listHandler:any, langSearch:any, settings: ISettings, sort: boolean){
 			this.listHandler = listHandler;
 			this.ParentComponent = inputTypeComponent ;
 			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.parentCriteriaGroup.id ;
 			this.sort = sort;
+			this.settings = settings ;
 			this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 			this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
 		}
@@ -154,12 +152,12 @@ let jsTree = require('jstree').default;
 					if(this.sort) {
 						// here, if we need to sort, then sort according to lang
 						var collator = new Intl.Collator(this.settings.language);					
-						items.sort(function(a: any, b: any) {
+						items.sort((a: any, b: any) =>{
 							return collator.compare(this.listHandler.elementLabel(a),this.listHandler.elementLabel(b));
 						});
 					}
 
-					$.each( items, function( key, val ) {				  
+					$.each( items, ( key, val ) =>{				  
 						var label = this.listHandler.elementLabel(val) ; 
 						var uri = this.listHandler.elementUri(val) ; 
 						$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );

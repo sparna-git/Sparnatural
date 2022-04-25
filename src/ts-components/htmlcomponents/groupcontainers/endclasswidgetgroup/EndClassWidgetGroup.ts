@@ -8,11 +8,12 @@ import {Config} from "../../../../SparnaturalConfig";
 import UiuxConfig from "../../../../UiuxConfig";
 import CriteriaGroup from "../CriteriaGroup";
 import { eventProxiCriteria } from "../../../../SparnaturalComponents";
+import { initGeneralEvent } from "../../../globals/globalfunctions";
 
 
 class EndClassWidgetGroup extends GroupContenaire {
     settings:ISettings
-    selectedValues: Array<any>
+    selectedValues: Array<any> =[]
     selectAllValue:boolean = true
     VALUE_SELECTION_WIDGETS = [
         Config.LIST_PROPERTY,
@@ -138,7 +139,7 @@ class EndClassWidgetGroup extends GroupContenaire {
 			$(this.parentCriteriaGroup).trigger( "EndClassWidgetGroupUnselected"  ) ;
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
 
-			this.initGeneralEvent(this.parentCriteriaGroup.thisForm_);
+			initGeneralEvent.call(this,this.parentCriteriaGroup.thisForm_);
 		} ;
 
         loadValue = function loadValue(value:any) {
@@ -178,18 +179,18 @@ class EndClassWidgetGroup extends GroupContenaire {
 			
 			$(this.parentCriteriaGroup).trigger( "EndClassWidgetGroupSelected" ) ;
 			$(this.parentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
-			this.initGeneralEvent(this.parentCriteriaGroup.thisForm_);
+			initGeneralEvent.call(this,this.parentCriteriaGroup.thisForm_);
 		}
 
         onChange() {
-			console.warn("EndclasswidgetGroup on change called")
+			console.warn('what?')
 			var theValue = this.inputTypeComponent.getValue() ;
 			// put span around with proper class if coming from a date widget
 			
 			if (theValue == null ) {
 				return false ;
 			}
-			var new_items = [] ;
+			var new_items: any[] = [] ;
 			if (
 				this.inputTypeComponent.widgetType == Config.TREE_PROPERTY
 				&&
@@ -206,6 +207,7 @@ class EndClassWidgetGroup extends GroupContenaire {
 						}
 					}
 					if (selected == false) {
+						console.log('OH')
 						new_items.push(theValue[node]) ;
 						this.selectedValues.push(theValue[node]) ;
 					}
@@ -230,6 +232,9 @@ class EndClassWidgetGroup extends GroupContenaire {
 						return false;
 					}
 				}
+				console.log('end of it')
+				console.dir(new_items)
+				console.dir(this)
 				new_items.push(theValue) ;
 				this.selectedValues.push(theValue) ;	
 			}
@@ -293,64 +298,10 @@ class EndClassWidgetGroup extends GroupContenaire {
 			}
 			
 			$(this.parentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').removeClass('newOr') ;
-
-			this.initGeneralEvent(this.parentCriteriaGroup.thisForm_);
+			console.log('before init general even')
+			console.dir(this)
+			initGeneralEvent.call(this,this.parentCriteriaGroup.thisForm_);
 		};
-
-
-        initGeneralEvent(thisForm_: { sparnatural: any; }) {
-            $('li.groupe').off( "mouseover" ) ;
-            $('li.groupe').off( "mouseleave" ) ;
-            $('li.groupe').on( "mouseover", function(event: { stopImmediatePropagation: () => void; }) {
-                event.stopImmediatePropagation();
-                $('li.groupe').removeClass('OnHover') ;
-                $(this).addClass('OnHover') ;
-                
-            } );
-            $('li.groupe').on( "mouseleave", function(event: { stopImmediatePropagation: () => void; }) {
-                event.stopImmediatePropagation();
-                $('li.groupe').removeClass('OnHover') ;
-            } );
-                /*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
-                
-            // var $all_li = $(thisForm_.sparnatural).find('li.groupe') ;
-            var $all_li = $(thisForm_.sparnatural).find('li.groupe') ;
-            var leng = $all_li.length ;
-            if (leng  <= 10 ) {
-                leng = 10 ;
-            }
-            var ratio = 100 / leng / 100 ;
-            var prev = 0 ;
-            var cssdef = 'linear-gradient(180deg' ; 
-            let that = this //IMPORTANT : make this available in foreach function -> this.settings
-            $all_li.each(function(index: number) {
-                var a = (index + 1 ) * ratio ;
-                var height = $(this).find('>div').outerHeight(true) ;
-                if(height){
-                    cssdef += ', rgba('+that.settings.backgroundBaseColor+','+a+') '+prev+'px, rgba('+that.settings.backgroundBaseColor+','+a+') '+(prev+height)+'px' ;
-                    prev = prev + height+1 ;
-                    if ($(this).next().length > 0 ) {
-                        $(this).addClass('hasAnd') ;
-                        var this_li = $(this) ;
-                        
-                        var this_link_and = $(this).find('.link-and-bottom') ;
-                        var height = this_li.height()
-                        if(height){
-                            $(this_link_and).height(height) ;
-                        } else {
-                            console.warn("this_li.height() not found in $(this)")
-                        }
-                    } else {
-                            $(this).removeClass('hasAnd') ;
-                    }
-                } else {
-                    console.warn("Height not found in parent element.")
-                }
-            });
-        
-            $(thisForm_.sparnatural).find('div.bg-wrapper').css({background : cssdef+')' }) ;
-        
-        }
 
 }
 export default EndClassWidgetGroup
