@@ -1,10 +1,13 @@
 import Yasgui from "@triply/yasgui";
 import "@triply/yasgui/build/yasgui.min.css";
+import Tab from "@triply/yasgui"
+import PersistedJson from "@triply/yasgui"
 
 
 export class YasguiComponent extends HTMLElement {
     Yasgui:Yasgui
     endpoint: string = null
+    maxTabSize: number = 1 //default tabsize. multiple tabs currently not supported with sparnatural
     
     constructor(){
       super()
@@ -19,11 +22,10 @@ export class YasguiComponent extends HTMLElement {
           },
           copyEndpointOnNewTab: false,
         });
-            // Add a new Tab. Returns the new Tab object.
-      this.Yasgui.addTab(
-        true, // set as active tab
-        { ...Yasgui.Tab.getDefaults(), name: "my new tab" }
-      );
+        this.Yasgui.on("tabAdd", (instance: Yasgui, newTabId: string) => {
+          console.log("addTabsevent")
+          // TODO delete or prevent tab from getting created
+        })
         /* IMPORTANT do i have to set Yasr.setResponse here?
       this.Yasgui.on("queryResponse",(instance: Yasgui, tab: Tab) => {
         console.log("do i have to do that?")

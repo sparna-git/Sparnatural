@@ -55,7 +55,8 @@ class StartClassGroup extends GroupContenaire implements IStartEndClassGroup {
 		$(this.html).find('.input-val').unbind('change');
 		this.inputTypeComponent.init() ; //ClassTypeId contains class html input val so init first then we can find it
 		var select = $(this.html).find('.input-val')[0] ;
-		select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
+		// was replaced by setting settings as import into jquery-niceselect
+		//select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
 		$(select).niceSelect() ;
 
 		

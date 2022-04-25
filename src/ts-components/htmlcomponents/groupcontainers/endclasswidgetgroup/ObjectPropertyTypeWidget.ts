@@ -1,6 +1,6 @@
 import GroupContenaire from "../GroupContenaire";
 import ISettings from "../../../globals/ISettings";
-import Config from "../../../../SparnaturalConfig";
+import {Config} from "../../../../SparnaturalConfig";
 import Datasources from "../../../../SparnaturalConfigDatasources";
 import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "../../../../AutocompleteAndListHandlers";
 import { AutoCompleteWidget, BooleanWidget, DatesWidget, ListWidget, NoWidget, SearchWidget, TimeDatePickerWidget, TreeWidget } from "./Widgets"

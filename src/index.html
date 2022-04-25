@@ -159,8 +159,11 @@
     ></script>
 
     <!-- Start Sparnatural stuff-->
-    <script src="./sparnatural.js"></script>
-    <script>
+    <script type="module" src="./sparnatural.js"></script>
+    <script  type="module" src="./config.js"></script>
+    <script type="module">
+      import config from './config.js';
+
       $.urlParam = function (name) {
         var results = new RegExp("[\\?&amp;]" + name + "=([^&amp;#]*)").exec(
           window.location.href
@@ -176,23 +179,21 @@
       /*
         Init Yasgui component
       */
-      let yasg = document.querySelector("yas-gui");
-
-      yasg.setEndpoint(defaultEndpoint)
-      //yasg.setEndpoint(defaultEndpoint)
-      let tab = yasg.getTab()
+      let yasgui = document.querySelector("yas-gui");
+      yasgui.setEndpoint(defaultEndpoint)
+      let tab = yasgui.getTab()
 
       /*
         Init Sparnatural component
       */
       let sparnatural = document.querySelector("spar-natural");
-      console.dir(sparnatural)
-      let settings = sparnatural.getSettings()
-
-      // link sparnatural with yasgui
-      settings.currentTab = tab
-      // If you would like to set settings
-      sparnatural.setSettings(settings);
+     
+      // If you would like to overwride default settings
+      let settings = {
+        config: config,
+        currentTab: tab // link sparnatural with yasgui
+      }
+      sparnatural.setSettings(settings); 
       sparnatural.initSparnatural();
 
       $(document).ready(function ($) {

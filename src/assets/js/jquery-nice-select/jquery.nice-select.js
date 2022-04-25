@@ -3,6 +3,7 @@
     Made by Hernán Sartorio  */
 
     import tippy from 'tippy.js';
+    import {getSettings} from "../../../ts-components/globals/settings"
  
 (function($) {
 
@@ -116,7 +117,9 @@
     // Open/close
     $(document).on('click.nice_select', '.nice-select', function(event) {
       var $dropdown = $(this);
-      var settings = $dropdown.prev('select')[0].sparnaturalSettings ;
+
+      var settings = getSettings()
+      //var settings = $dropdown.prev('select')[0].sparnaturalSettings ;
   	  if ($dropdown.hasClass('open') ) {
   		  $dropdown.toggleClass('open');
   		  $dropdown.prev('select').val($dropdown.find('.selected').data('value')).trigger('change');

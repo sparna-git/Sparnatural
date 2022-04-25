@@ -1,7 +1,8 @@
 import Tab from "@triply/yasgui"
 export default interface Settings  {
     currentTab?: Tab,
-    config: string,
+    noTypeCriteriaForObjects:any,
+    config: any,
     language: string,
     addDistinct?: boolean,
     typePredicate?: string,

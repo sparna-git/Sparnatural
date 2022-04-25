@@ -1,5 +1,5 @@
 import Datasources from "./SparnaturalConfigDatasources"
-import Config from "./SparnaturalConfig"
+import {Config} from "./SparnaturalConfig"
 
 interface IDataSources {
 	queryString: string,

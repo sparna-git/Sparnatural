@@ -35,7 +35,7 @@ import { SpecificationProviderFactory } from "./SpecificationProviderFactory";
 
 import UiuxConfig from "./UiuxConfig";
 import {addComponent, initGeneralEvent} from "./ts-components/globals/globalfunctions"
-import {getSettings, mergeSettings} from "./ts-components/globals/settings"
+import { getSettings, mergeSettings } from "./ts-components/globals/settings";
 	
 export class SparNatural extends HTMLElement {
     	specProvider:any;	
@@ -57,12 +57,15 @@ export class SparNatural extends HTMLElement {
 			$(this).attr('id', 'sparnatural-container');
 			$(this).addClass('Sparnatural') ;
 			
+			
 		}
 
 		initSparnatural(){
 			getSettings().langSearch = i18nLabels["en"]
 			this.Form.langSearch = i18nLabels["en"]
 			let settings = this.getSettings()
+			console.log("log settings")
+			console.dir(settings)
 			let specProviderFactory = new SpecificationProviderFactory();
 
 

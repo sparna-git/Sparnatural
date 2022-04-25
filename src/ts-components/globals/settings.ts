@@ -1,191 +1,140 @@
+import { expandSparql } from "./globalfunctions";
 import ISettings from "./ISettings";
-
-let settings:ISettings = {
-    config: 'config/spec-search.json',
-    language: 'en',
-    langSearch: null,
-    addDistinct: false,
-    typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-    maxDepth: 3,
-    maxOr: 3,
-    sendQueryOnFirstClassSelected: false,
-    backgroundBaseColor: '250,136,3',
-    sparqlPrefixes: {},
-    defaultEndpoint: null,
-    localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miliseconds
-    // localCacheDataTtl: 1000 * 60 * 4, // 4 hour
-    // whether or not to send count queries to determine
-    // how many instances of each classes are properties are present in the graph
-    filterConfigOnEndpoint: false,
-
-    tooltipConfig : { // see all options on https://atomiks.github.io/tippyjs/v6/all-props/
-        allowHTML: true,
-        plugins: [], 
-        placement: 'right-start',
-        offset: [5, 5],
-        theme: 'sparnatural',
-        arrow: false,
-        delay: [800, 100], //Delay in ms once a trigger event is fired before a tippy shows or hides.
-        duration: [200, 200], //Duration in ms of the transition animation.
+const settings:ISettings = {
+    langSearch:null,
+    currentTab: null, // needs to be set with a ref to the tab from Yasgui
+    config: null,
+    language: "en",
+    maxDepth: 4,
+    addDistinct: true,
+    noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
+    sendQueryOnFirstClassSelected: true,
+    backgroundBaseColor: "2,184,117",
+    autocomplete: null,
+    list: null,
+    defaultEndpoint: "http://fr.dbpedia.org/sparql",
+    sparqlPrefixes: {
+      dbpedia: "http://dbpedia.org/ontology/",
     },
-    
-    autocomplete : {
-        /**
-         * This must return the URL that will be called when the user starts
-         * typing a few letter in a search field.
-         *
-         * @param {string} domain - The domain of the criteria currently being edited, i.e. type of the triple subjects.
-         * @param {string} property - The predicate of the criteria currently being edited
-         * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
-         * @param {string} key - The letters that the user has typed in the search field.
-         **/
-        autocompleteUrl : function(domain:any, property:any, range:any, key:any) {
-            console.log("Please specify function for autocompleteUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
-        },
-
-        /**
-            * Returns the path in the returned JSON structure where the list of entries should be read.
-            * This is typically the data structure itself, but can correspond to a subentry inside.
-            *
-         * @param {string} domain - The domain of the criteria currently being edited
-         * @param {string} property - The predicate of the criteria currently being edited
-         * @param {string} range - The range of the criteria currently being edited
-         * @param {object} data - The data structure returned from an autocomplete call
-            **/
-        listLocation: function(domain:any, property:any, range:any, data:any) {
-            return data;
-        },
-
-        /**
-            * Returns the label to display for a single autocomplete result; defaults to `element.label`.
-            *
-            * @param {object} element - A single autocomplete result
-            **/
-        elementLabel: function(element:any) {
-            return element.label;
-        },
-
-        /**
-         * Returns the URI to of a single autocomplete result; ; defaults to `element.uri`.
-         *
-         * @param {object} element - A single autocomplete result
-         **/
-        elementUri: function(element:any) {
-            return element.uri;
-        },
-
-        /**
-         * Whether the Easyautocomplete 'enableMatch' flag should be set; this should
-         * be useful only when loading the autocomplete results from a local file, leave to
-         * false otherwise.
-         **/
-        enableMatch: function(domain:any, property:any, range:any) {
-            return false;
-        },
-    },			
-    list : {
-
-        /**
-         * This must return the URL that will be called to list the values to populate the dropdown.
-         *
-         * @param {string} domain - The domain of the criteria currently being edited, i.e. type of the triple subjects.
-         * @param {string} property - The predicate of the criteria currently being edited
-         * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
-         **/
-        listUrl : function(domain:any, property:any, range:any) {
-            console.log("Please specify function for listUrl option in in init parameters of Sparnatural : function(domain, property, range)" ) ;
-        },
-
-        /**
-            * Returns the path in the returned JSON structure where the list of entries should be read.
-            * This is typically the data structure itself, but can correspond to a subentry inside.
-            *
-         * @param {string} domain - The domain of the criteria currently being edited
-         * @param {string} property - The predicate of the criteria currently being edited
-         * @param {string} range - The range of the criteria currently being edited
-         * @param {object} data - The data structure returned from a list call
-            **/
-        listLocation: function(domain:any, property:any, range:any, data:any) {
-            return data;
-        },
-
-        /**
-            * Returns the label to display for a single list entry; defaults to `element.label`.
-            *
-            * @param {object} element - A single list entry
-            **/
-        elementLabel: function(element:any) {
-            return element.label;
-        },
-
-        /**
-            * Returns the URI for a single list entry; defaults to `element.uri`.
-            *
-            * @param {object} element - A single list entry
-            **/
-        elementUri: function(element:any) {
-            return element.uri;
-        }
+    localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
+    filterConfigOnEndpoint: false,
+    onQueryUpdated: function (queryString:string, queryJson:any, pivotJson:any) {
+      queryString = semanticPostProcess(queryString, queryJson);
+      // queryString = rdfsLabelPostProcess(queryString, queryJson);
+      // queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
+      // queryString = orderByPostProcess(queryString, queryJson);
+      $("#sparql code").html(
+        queryString
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+      );
+      // set the query of the tab
+      if(this.currentTab){
+        this.currentTab.setQuery(queryString);
+      }
     },
     dates : {
-        datesUrl : function(domain:any, property:any, range:any, key:any) {
-            console.log("Please specify function for datesUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
-        },
-        listLocation: function(domain:any, property:any, range:any, data:any) {
-            return data;
-        },
-        elementLabel: function(element:any) {
-            return element.label+' '+element.synonyms.join(' ');
-        },
-        elementStart: function(element:any) {
-            return element.start.year;
-        },
-        elementEnd: function(element:any) {
-            return element.stop.year;
-        }				
+      datesUrl : function(domain:any, property:any, range:any, key:any) {
+        console.log("Please specify function for datesUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
+      },
+      listLocation: function(domain:any, property:any, range:any, data:any) {
+        return data;
+      },
+      elementLabel: function(element:any) {
+        return element.label+' '+element.synonyms.join(' ');
+      },
+      elementStart: function(element:any) {
+        return element.start.year;
+      },
+      elementEnd: function(element:any) {
+        return element.stop.year;
+      }				
     },
     statistics : {
-        countClassUrl : function(aClass:any) {
-            console.log("Please specify function to count number of instances of each class : function(aClass)") ;
-        },
-        countPropertyUrl : function(domain:any, property:any, range:any) {
-            console.log("Please specify function to count number of instances of each property : function(domain, property, range)") ;
-        },
-        countPropertyWithoutRangeUrl : function(domain:any, property:any) {
-            console.log("Please specify function to count number of instances of each property without a range : function(domain, property)") ;
-        },
-        elementCount: function(data:any) {
-            return data.results.bindings[0].count.value;
-        }
+      countClassUrl : function(aClass:any) {
+        console.log("Please specify function to count number of instances of each class : function(aClass)") ;
+      },
+      countPropertyUrl : function(domain:any, property:any, range:any) {
+        console.log("Please specify function to count number of instances of each property : function(domain, property, range)") ;
+      },
+      countPropertyWithoutRangeUrl : function(domain:any, property:any) {
+        console.log("Please specify function to count number of instances of each property without a range : function(domain, property)") ;
+      },
+      elementCount: function(data) {
+        return data.results.bindings[0].count.value;
+      }
     },
-    
-    /**
-     * Callback notified each time the query is modified.
-     *
-     * @param {object} queryString - The SPARQL query string
-     * @param {object} queryJson - The query as a JSON data structure
-     * @param {object} pivotJson - The query as a JSON data structure (new version)
-     **/
-    onQueryUpdated : function (queryString:string, queryJson:any, pivotJson:any) {
-        console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
+    tooltipConfig: {
+      delay: [800, 100],
+      duration: [100, 100],
     },
-    /**
-     * Callback notified when click submit button of Sparnatural.
-     * If function is difine on settings, the button appear in the bottom of the component before variables selector section
-     *
-     * @param {object} form - The form object of Sparnatural
-     * ! Need to not to be a function if disable
-     **/
-    //TODO: refactor to functions?
-    onSubmit:null,
-    
-};
+    // triggered when "play" button is clicked
+    onSubmit: function (form:any) {
+      // enable loader on button
+      form.sparnatural.enableLoading();
+      // trigger the query from YasQE
+      if(this.currentTab){
+        this.currentTab.getYasqe.query({
+            url:this.defaultEnpoint,
+            reqMethod: "POST", // or "GET"
+            //headers: { Accept: "..." /*...*/ },
+            //args: { arg1: "val1" /*...*/ },
+            withCredentials: false,
+          });
+      }
+    },
+  }
 
+  let prefixesPostProcess = function (queryString:any, queryJson:any) {
+    if (queryString.indexOf("rdf-schema#") == -1) {
+      queryString = queryString.replace(
+        "SELECT ",
+        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT "
+      );
+    }
+    return queryString;
+  };
+
+  let isPrimaryTopicOfPostProcess = function (queryString:any, queryJson:any) {
+    queryString = queryString.replace(
+      new RegExp("\n\}"),
+      "  ?this <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> ?wikipedia \n}"
+    );
+    return queryString;
+  };
+
+  let rdfsLabelPostProcess = function (queryString:any, queryJson:any) {
+    queryString = queryString.replace(
+      new RegExp("\n\}"),
+      "  ?this rdfs:label ?label FILTER(lang(?label) = 'fr') \n}"
+    );
+    return queryString;
+  };
+
+ let orderByPostProcess = function (queryString:any, queryJson:any) {
+    queryString = queryString + "\nLIMIT 5000";
+    queryString = queryString.replace(
+      "SELECT DISTINCT ?this",
+      "SELECT DISTINCT (STR(?label) AS ?nom) ?wikipedia ?this"
+    );
+    return queryString;
+  };
+
+  let semanticPostProcess = function (queryString:any, queryJson:any) {
+    queryString = prefixesPostProcess(queryString, queryJson);
+    queryString = expandSparql(queryString);
+    return queryString;
+  };
+
+  
 export function getSettings(){
     return settings
 }
 
 // merge given options with default setting values
 export function mergeSettings(options:any){
-    settings = $.extend( true, {}, settings, options );
+    console.log("merging into settings")
+    console.dir(options)
+    $.extend(true, settings, settings, options);
 }

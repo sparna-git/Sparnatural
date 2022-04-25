@@ -4,7 +4,7 @@ import GroupContenaire from "../GroupContenaire";
 import ISettings from "../../../globals/ISettings";
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
 import { AbstractValue } from "../../../../Query";
-import Config from "../../../../SparnaturalConfig";
+import {Config} from "../../../../SparnaturalConfig";
 import UiuxConfig from "../../../../UiuxConfig";
 import CriteriaGroup from "../CriteriaGroup";
 import { eventProxiCriteria } from "../../../../SparnaturalComponents";
