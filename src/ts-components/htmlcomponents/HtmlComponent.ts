@@ -47,7 +47,7 @@ class HTMLComponent {
 		// TODO : see if this is really needed
 		// must be false if not set for the moment
 		this.widgetHtml = widgetHtml;
-		this.html = $();
+		this.html = null;
 		this.needBackArrow = false;
 		this.needFrontArrow = false;
 	}
@@ -73,14 +73,12 @@ class HTMLComponent {
 	 **/
 	#updateCssClasses() {
 		$(this.html).removeClass('*') ;
-		// adding base class to each htmlcomponent
-		this.html.addClass(this.baseCssClass)
 		for (const [k, v] of Object.entries(this.cssClasses)) {
-			if(v == true){
-				$(this.html).addClass(k) ;
-				return
+			if(v != true){
+				$(this.html).removeClass(k) ;
 			}
-			$(this.html).removeClass(k) ;
+			$(this.html).addClass(k) ;
+			
 		}
 	}
 
@@ -116,7 +114,8 @@ class HTMLComponent {
 			this.cssClasses.IsOnEdit = true ;
 			this.#initHtml() ;
 			this.#attachHtml() ;
-			this.cssClasses.Created = true ;				
+			this.cssClasses.Created = true 
+			//this.#updateCssClasses()				
 		} else {
 			this.#updateCssClasses() ;
 		}

@@ -1,7 +1,5 @@
 import Yasgui from "@triply/yasgui";
 import "@triply/yasgui/build/yasgui.min.css";
-import Tab from "@triply/yasgui"
-import PersistedJson from "@triply/yasgui"
 
 
 export class YasguiComponent extends HTMLElement {
@@ -12,7 +10,6 @@ export class YasguiComponent extends HTMLElement {
     constructor(){
       super()
       console.warn('YAGSUi constructor called')
-      $(this).attr('id', 'yasg-container');
       this.Yasgui = new Yasgui(document.getElementById("yasgui"), {
           requestConfig:{
             endpoint: ()=>{

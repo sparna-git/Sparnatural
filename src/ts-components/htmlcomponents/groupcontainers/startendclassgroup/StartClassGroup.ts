@@ -34,7 +34,7 @@ class StartClassGroup extends HTMLComponent {
 		
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
 		this.inputTypeComponent.needFrontArrow= true ; // IMPORTANT FOUND IN HTMLCOMPONENT CLASS
-
+		this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup // must be before varName declaration
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.ParentCriteriaGroup.jsonQueryBranch)?this.ParentCriteriaGroup.jsonQueryBranch.line.s:null;
 		this.variableSelector = null ;
@@ -43,8 +43,6 @@ class StartClassGroup extends HTMLComponent {
 
 		//this.needFrontArrow= true ;
 		//this.needBackArrow= true ;
-		this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup
-
 		this.init();
 	}
 
@@ -52,7 +50,7 @@ class StartClassGroup extends HTMLComponent {
 	// triggered when a criteria starts
 	onCreated() {
 		$(this.html).find('.input-val').unbind('change');
-		this.inputTypeComponent.init() ; //ClassTypeId contains class html input val so init first then we can find it
+		this.inputTypeComponent.render() ; //ClassTypeId contains class html input val so init first then we can find it
 		var select = $(this.html).find('.input-val')[0] ;
 		$(select).niceSelect() ;
 
@@ -94,7 +92,7 @@ class StartClassGroup extends HTMLComponent {
 		//this.niceslect.niceSelect('update') ;
 		this.value_selected = $(this.html).find('select.input-val').val() ;
 		//Sets the SPARQL variable name if not initialized from loaded query
-		var parentOrSibling = findParentOrSiblingCriteria(this.ParentCriteriaGroup.thisForm_, this.ParentCriteriaGroup.id) ;
+		var parentOrSibling = findParentOrSiblingCriteria.call(this,this.ParentCriteriaGroup.thisForm_, this.ParentCriteriaGroup.id) ;
 		if(this.varName == null) {
 			if (parentOrSibling && parentOrSibling.type == 'parent' ) {
 				this.varName = parentOrSibling.element.EndClassGroup.getVarName();

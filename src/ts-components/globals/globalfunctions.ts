@@ -1,4 +1,4 @@
-import { FilteringSpecificationProvider } from "../../FilteringSpecificationProvider";
+import { FilteringSpecificationProvider } from "../../spec-providers/FilteringSpecificationProvider";
 
 import { SimpleStatisticsHandler } from "../../StatisticsHandlers";
 import CriteriaGroup from "../htmlcomponents/groupcontainers/CriteriaGroup";
@@ -308,7 +308,7 @@ export function initStatistics(aSpecProvider: any) {
 		}
 	} 
 
-	$(thisForm_.sparnatural.components).each(function(index) {			
+	$(thisForm_.sparnatural.components).each((index) => {			
 		if (this.index == dep_id) {
 			dependant = {
 				type: dependant.type,
@@ -325,7 +325,6 @@ export function eventProxiCriteria(e: { data: { arg1: any; arg2: any; }; }) {
 
 	var arg1 = e.data.arg1;
 	var arg2 = e.data.arg2;
-	console.log(`arg1: ${arg1}, args2: ${arg2}`)
 	arg1[arg2](e) ;
 }
 

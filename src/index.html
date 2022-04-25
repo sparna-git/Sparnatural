@@ -6,8 +6,7 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-
+    /> 
     <!-- Bootstrap CSS -->
     <link
       href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/litera/bootstrap.min.css"
@@ -68,7 +67,6 @@
         </div>
       </div>
     </div>
-
     <footer id="footer" style="margin-top: 30px; text-align: center">
       <a href="http://blog.sparna.fr" target="_blank">Thomas Francart</a>
       &nbsp;|&nbsp;
@@ -143,10 +141,15 @@
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    
+    
     <script
       src="https://code.jquery.com/jquery-3.4.1.min.js"
-      crossorigin="anonymous"
-    ></script>
+      crossorigin="anonymous" >
+    </script>
+    
+
+
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
       integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
@@ -159,11 +162,8 @@
     ></script>
 
     <!-- Start Sparnatural stuff-->
-    <script type="module" src="./sparnatural.js"></script>
-
     <script type="module">
       import config from './config.js';
-
       $.urlParam = function (name) {
         var results = new RegExp("[\\?&amp;]" + name + "=([^&amp;#]*)").exec(
           window.location.href
@@ -193,12 +193,9 @@
         config: config,
         currentTab: tab // link sparnatural with yasgui
       }
-      sparnatural.setSettings(settings); 
+      sparnatural.setSettings(settings);
+      console.warn("befor initting") 
       sparnatural.initSparnatural();
-
-      $(document).ready(function ($) {
-        console.log("doc ready");
-      });
     </script>
   </body>
 </html>

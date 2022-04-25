@@ -1,5 +1,4 @@
 import ISettings from "../../../configs/client-configs/ISettings";
-import * as $ from "jquery"
 import HTMLComponent from "../HtmlComponent";
 import ActionsGroup from "./ActionsGroup";
 import CriteriaGroup from "../groupcontainers/CriteriaGroup";

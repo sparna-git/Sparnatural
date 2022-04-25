@@ -26,8 +26,8 @@ class ClassTypeId extends HTMLComponent {
 		this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup
 	}
 
-	init() {
-
+	render() {
+		console.log("classtypeid render()")
 		if(this.cssClasses.Created){
 			console.log("CHECK here. Didn't think that would happen")
 		}
@@ -64,7 +64,7 @@ class ClassTypeId extends HTMLComponent {
 		var selectBuilder = new ClassSelectBuilder(this.specProvider);
 
 		if (isStartClassGroup(this.ParentComponent)) {
-			var parentOrSibling = findParentOrSiblingCriteria(this.GrandParent.thisForm_, id) ;
+			var parentOrSibling = findParentOrSiblingCriteria.call(this,this.GrandParent.thisForm_, id) ;
 			if (parentOrSibling.type) {
 				if (parentOrSibling.type == 'parent' ) {
 					// if we are child in a WHERE relation, the selected class is the selected
@@ -102,7 +102,7 @@ class ClassTypeId extends HTMLComponent {
 	
 	reload() {
 		console.log("reload on ClassTypeId should probably never be called");
-		this.init();
+		this.reload();
 	} ;		
 };
 export default ClassTypeId

@@ -31,7 +31,7 @@ class CriteriaGroup extends HTMLComponent {
     ActionsGroup:any;
     specProvider:any;
     constructor(ParentComponent:HTMLComponent,context: { AncestorHtmlContext: any; HtmlContext: any; FormContext: any; ContextComponentIndex: any; }, settings: ISettings, specProvider: any, jsonQueryBranch:any){
-       super("CriteriaGroup",ParentComponent,specProvider,null)
+        super("CriteriaGroup",ParentComponent,specProvider,null)
        this.cssClasses.HasAllComplete = true
         // IMPORTANT Check what has to come into the constructor
         this.ParentComponent = ParentComponent
@@ -92,7 +92,7 @@ class CriteriaGroup extends HTMLComponent {
         }
         // iterate on every "line" in the query
         $(this.thisForm_.sparnatural.components).each(function() {
-            var parentOrSibling = findParentOrSiblingCriteria(this.CriteriaGroup.thisForm_, this.index ) ;
+            var parentOrSibling = findParentOrSiblingCriteria.call(this,this.CriteriaGroup.thisForm_, this.index ) ;
             if ((parentOrSibling.type != null) && (parentOrSibling.type == 'parent' && parentOrSibling.element != null)){
                 // if the line is a child of the one to remove, remove it too
                 var el = parentOrSibling.element as CriteriaGroup
@@ -107,7 +107,7 @@ class CriteriaGroup extends HTMLComponent {
         
         // fetch parentOrSibling _before_ removing HTML and removing
         // component from list !!
-        var parentOrSibling = findParentOrSiblingCriteria(this.thisForm_, this.id ) ;
+        var parentOrSibling = findParentOrSiblingCriteria.call(this,this.thisForm_, this.id ) ;
 
         // remove event listeners
         this.ComponentHtml.outerHTML = this.ComponentHtml.outerHTML; // IMPORTANT : does that actually do something?

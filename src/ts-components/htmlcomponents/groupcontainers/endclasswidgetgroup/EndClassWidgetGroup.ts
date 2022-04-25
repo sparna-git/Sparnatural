@@ -144,7 +144,6 @@ class EndClassWidgetGroup extends HTMLComponent {
 		}
 
         onSelectAll() {
-			console.log('onSelectAll()')
 			var theValueLabel = '<span>'+this.settings.langSearch.SelectAllValues+'</span>';
 			this.selectAllValue = true;
 			let unselect = $('<span class="unselect" value-data="allValues"><i class="far fa-times-circle"></i></span>') ;
@@ -201,7 +200,6 @@ class EndClassWidgetGroup extends HTMLComponent {
 						}
 					}
 					if (selected == false) {
-						console.log('OH')
 						new_items.push(theValue[node]) ;
 						this.selectedValues.push(theValue[node]) ;
 					}
@@ -226,9 +224,6 @@ class EndClassWidgetGroup extends HTMLComponent {
 						return false;
 					}
 				}
-				console.log('end of it')
-				console.dir(new_items)
-				console.dir(this)
 				new_items.push(theValue) ;
 				this.selectedValues.push(theValue) ;	
 			}
@@ -292,8 +287,6 @@ class EndClassWidgetGroup extends HTMLComponent {
 			}
 			
 			$(this.ParentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').removeClass('newOr') ;
-			console.log('before init general even')
-			console.dir(this)
 			initGeneralEvent.call(this,this.ParentCriteriaGroup.thisForm_,this.settings);
 		};
 

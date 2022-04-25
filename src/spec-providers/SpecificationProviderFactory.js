@@ -5,7 +5,6 @@ import { RDFSpecificationProvider } from "./RDFSpecificationProvider";
 export class SpecificationProviderFactory {
 
 	build(config, language, callback) {
-		console.log(`typeof: ${typeof config}`)
 		if(typeof(config) == "object") {
 			// if the config is a JSON object in the page, read it directly
 			callback(new JsonLdSpecificationProvider(config, language));

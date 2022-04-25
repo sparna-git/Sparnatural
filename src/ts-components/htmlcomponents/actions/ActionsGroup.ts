@@ -21,7 +21,7 @@ class ActionsGroup extends HTMLComponent implements IHasCriteriaGroupParent {
     settings:ISettings
     ParentCriteriaGroup: CriteriaGroup;
     constructor(ParentCriteriaGroup:CriteriaGroup, specProvider:ISpecProvider, settings:ISettings){
-        super("ActionsGroup",ParentCriteriaGroup, specProvider,$())
+        super("ActionsGroup",ParentCriteriaGroup, specProvider,null)
         this.actions =  { 
             ActionWhere: new ActionWhere(this, specProvider,settings),
             ActionAnd: new ActionAnd(this,settings,specProvider),

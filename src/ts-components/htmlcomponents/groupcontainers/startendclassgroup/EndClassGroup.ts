@@ -33,11 +33,12 @@ import HTMLComponent from "../../HtmlComponent"
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
 		this.inputTypeComponent.needBackArrow= true ;
 		this.inputTypeComponent.needFrontArrow= true ;
-
+		
+		this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup // must be above varName declaration
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.ParentCriteriaGroup.jsonQueryBranch)?this.ParentCriteriaGroup.jsonQueryBranch.line.o:null;
 		this.variableSelector = null ;
-		this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup
+
 		this.init();
 	}
 
@@ -54,7 +55,7 @@ import HTMLComponent from "../../HtmlComponent"
 
 
 		//this.EndClassGroup.init() ;
-		this.inputTypeComponent.init() ;
+		this.inputTypeComponent.render() ;
 
 		//this.inputTypeComponent.cssClasses.IsOnEdit = true;
 		
