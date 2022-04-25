@@ -62,11 +62,6 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 		this.inputTypeComponent.init() ;
 
 		//this.inputTypeComponent.cssClasses.IsOnEdit = true;
-
-
-		// was replaced by setting settings as import into jquery-niceselect
-		//var select = $(this.html).find('select.input-val')[0] ;
-		//select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
 		
 		$(this.html).find('select.input-val').niceSelect()  ;
 		if(this.inputTypeComponent.needTriggerClick == false) {
@@ -170,9 +165,6 @@ import IStartEndClassGroup from "./IStartEndClassGroup"
 		$(this.parentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
 		this.parentCriteriaGroup.ActionsGroup.reinsert = true ;
 		$(this.parentCriteriaGroup.ComponentHtml).removeClass('completed') ;
-		// was replaced by setting settings as import into jquery-niceselect
-		//var select = $(this.html).find('.ClassTypeId select.input-val')[0] ;
-		//select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
 		$(this.html).find('.ClassTypeId .nice-select').trigger('click') ;
 
 		//Removote to Variable list

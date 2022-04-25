@@ -50,9 +50,6 @@ import GroupContenaire from "./GroupContenaire";
 			this.objectPropertySelector.reload() ;
 			this.objectPropertySelector.cssClasses.IsOnEdit = true;
 		}
-		// was replaced by setting settings as import into jquery-niceselect
-		//var select = $(this.html).find('select.input-val')[0] ;
-		//select.setAttribute("sparnaturalSettings",JSON.stringify(this.settings)) ;
 		$(this.html).find('select.input-val').niceSelect()  ;
 		$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 		// opens the select automatically
