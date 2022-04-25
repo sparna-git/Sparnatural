@@ -1,4 +1,6 @@
 import { FilteringSpecificationProvider } from "../../FilteringSpecificationProvider";
+import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
 import { SimpleStatisticsHandler } from "../../StatisticsHandlers";
 import CriteriaGroup from "../htmlcomponents/groupcontainers/CriteriaGroup";
 import ISettings from "./ISettings";
@@ -166,13 +168,6 @@ export function initGeneralEvent(thisForm_: any, settings: ISettings) {
   $(thisForm_.sparnatural)
     .find("div.bg-wrapper")
     .css({ background: cssdef + ")" });
-}
-
-/**
- * Expands SPARQL query by reading the config
- **/
-export function expandSparql(sparql: any) {
-  return this.specProvider.expandSparql(sparql);
 }
 
 export function initStatistics(aSpecProvider: any) {

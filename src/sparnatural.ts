@@ -36,6 +36,7 @@ import { SpecificationProviderFactory } from "./SpecificationProviderFactory";
 import UiuxConfig from "./UiuxConfig";
 import {addComponent, initGeneralEvent} from "./ts-components/globals/globalfunctions"
 import { getSettings, mergeSettings } from "./ts-components/globals/settings";
+import ISettings from "./ts-components/globals/ISettings";
 	
 export class SparNatural extends HTMLElement {
     	specProvider:any;	
@@ -56,8 +57,6 @@ export class SparNatural extends HTMLElement {
 			// overwride the default settings with the settings provided by the index.html
 			$(this).attr('id', 'sparnatural-container');
 			$(this).addClass('Sparnatural') ;
-			
-			
 		}
 
 		initSparnatural(){
@@ -226,6 +225,12 @@ export class SparNatural extends HTMLElement {
 			
 			initGeneralEvent.call(this,form) ;
 			
+			this.addOnSubmitHook(form,settings)
+
+			$(form.sparnatural).trigger('formInitialized') ;
+		}
+
+		addOnSubmitHook(form:any,settings:ISettings){
 			// triggered when Sparnatural is submitted : generates output SPARQL query
 			$(form.sparnatural).on('submit', { formObject : form }, function (event) {
 				if (form.submitOpened == true) {
@@ -253,17 +258,19 @@ export class SparNatural extends HTMLElement {
 							this.specProvider
 						);
 						writer.setPrefixes(settings.sparqlPrefixes);
+
+
+
 						console.log(writer.toSPARQL(jsonQuery));
 
 						// fire callback
-						settings.onQueryUpdated(writer.toSPARQL(jsonQuery), jsonQuery);
+						settings.onQueryUpdated(writer.toSPARQL(jsonQuery), jsonQuery,this.specProvider);
+						
 						//Can enable for submit
 						form.sparnatural.enableSubmit() ;
 					}
 				}
 			}) ;
-
-			$(form.sparnatural).trigger('formInitialized') ;
 		}
 
 		initVariablesSelector(form:any) {

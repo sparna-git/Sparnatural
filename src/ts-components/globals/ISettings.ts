@@ -1,4 +1,6 @@
 import Tab from "@triply/yasgui"
+import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider"
+import { RDFSpecificationProvider } from "../../RDFSpecificationProvider"
 export default interface Settings  {
     currentTab?: Tab,
     noTypeCriteriaForObjects:any,

@@ -1,7 +1,8 @@
-import { expandSparql } from "./globalfunctions";
+import JsonLdSpecificationProvider from "../../JsonLdSpecificationProvider";
+import { RDFSpecificationProvider } from "../../RDFSpecificationProvider";
 import ISettings from "./ISettings";
 const settings:ISettings = {
-    langSearch:null,
+    langSearch: null,
     currentTab: null, // needs to be set with a ref to the tab from Yasgui
     config: null,
     language: "en",
@@ -18,17 +19,9 @@ const settings:ISettings = {
     },
     localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
     filterConfigOnEndpoint: false,
-    onQueryUpdated: function (queryString:string, queryJson:any, pivotJson:any) {
+    onQueryUpdated: function (queryString:string, queryJson:any, specProvider:JsonLdSpecificationProvider | RDFSpecificationProvider) {
       queryString = semanticPostProcess(queryString, queryJson);
-      // queryString = rdfsLabelPostProcess(queryString, queryJson);
-      // queryString = isPrimaryTopicOfPostProcess(queryString, queryJson);
-      // queryString = orderByPostProcess(queryString, queryJson);
-      $("#sparql code").html(
-        queryString
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-      );
+      queryString = specProvider.expandSparql(queryString);
       // set the query of the tab
       if(this.currentTab){
         this.currentTab.setQuery(queryString);
@@ -86,46 +79,16 @@ const settings:ISettings = {
     },
   }
 
-  let prefixesPostProcess = function (queryString:any, queryJson:any) {
-    if (queryString.indexOf("rdf-schema#") == -1) {
-      queryString = queryString.replace(
-        "SELECT ",
-        "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT "
-      );
-    }
-    return queryString;
-  };
-
-  let isPrimaryTopicOfPostProcess = function (queryString:any, queryJson:any) {
-    queryString = queryString.replace(
-      new RegExp("\n\}"),
-      "  ?this <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> ?wikipedia \n}"
+  let semanticPostProcess = (queryString:any,queryJson?:any) =>{
+    $("#sparql code").html(
+      queryString
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
     );
     return queryString;
   };
 
-  let rdfsLabelPostProcess = function (queryString:any, queryJson:any) {
-    queryString = queryString.replace(
-      new RegExp("\n\}"),
-      "  ?this rdfs:label ?label FILTER(lang(?label) = 'fr') \n}"
-    );
-    return queryString;
-  };
-
- let orderByPostProcess = function (queryString:any, queryJson:any) {
-    queryString = queryString + "\nLIMIT 5000";
-    queryString = queryString.replace(
-      "SELECT DISTINCT ?this",
-      "SELECT DISTINCT (STR(?label) AS ?nom) ?wikipedia ?this"
-    );
-    return queryString;
-  };
-
-  let semanticPostProcess = function (queryString:any, queryJson:any) {
-    queryString = prefixesPostProcess(queryString, queryJson);
-    queryString = expandSparql(queryString);
-    return queryString;
-  };
 
   
 export function getSettings(){

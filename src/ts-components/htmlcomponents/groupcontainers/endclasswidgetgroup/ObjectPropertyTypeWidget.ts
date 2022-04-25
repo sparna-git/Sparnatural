@@ -254,7 +254,7 @@ import IWidget from "./IWidget";
                     
                     // sparqlPostProcessor
                     {
-                        semanticPostProcess : function(sparql:any) {
+                        semanticPostProcess : (sparql:any) =>{
                             // also add prefixes
                             for (let key in this.settings.sparqlPrefixes) {
                                 sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+this.settings.sparqlPrefixes[key]+"> \nSELECT ");
@@ -303,7 +303,7 @@ import IWidget from "./IWidget";
                     
                     // sparqlPostProcessor
                     {
-                        semanticPostProcess : function(sparql:any) {
+                        semanticPostProcess : (sparql:any) =>{
                             // also add prefixes
                             for (let key in this.settings.sparqlPrefixes) {
                                 sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+this.settings.sparqlPrefixes[key]+"> \nSELECT ");
@@ -394,7 +394,7 @@ import IWidget from "./IWidget";
                       
                       // sparqlPostProcessor
                       {
-                          semanticPostProcess : function(sparql:any) {
+                          semanticPostProcess : (sparql:any) => {
                               // also add prefixes
                               for (let key in this.settings.sparqlPrefixes) {
                                   sparql = sparql.replace("SELECT ", "PREFIX "+key+": <"+this.settings.sparqlPrefixes[key]+"> \nSELECT ");
