@@ -89,7 +89,7 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 				}
 			}) ;
 
-			this.inputTypeComponent.init() ;
+			this.inputTypeComponent.render() ;
 			this.inputTypeComponent.cssClasses.IsOnEdit = true;
 
 			$(this.html).find('.input-val label').on('click', function(e) {

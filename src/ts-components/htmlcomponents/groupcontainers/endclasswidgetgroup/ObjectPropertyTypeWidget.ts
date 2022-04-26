@@ -16,12 +16,11 @@ import CriteriaGroup from "../CriteriaGroup";
  class ObjectPropertyTypeWidget extends HTMLComponent {
     GrandParent:CriteriaGroup
     settings: ISettings;
-    HtmlContainer: any;
     widgetType: string | null = null;
     objectPropertyId: any;
     rangeClassId: any;
     classLabel: string;
-    widgetComponent:any;
+    widgetComponent:IWidget;
     needTriggerClick:boolean = false // IMPORTANT Cheating here a little bit. useless class var but neeted to fit inputTypeComponent
     loadedValue:{
         key?: any;
@@ -36,12 +35,11 @@ import CriteriaGroup from "../CriteriaGroup";
     constructor(ParentComponent: HTMLComponent, settings: ISettings, specProvider:ISpecProvider){
         super("ObjectPropertyTypeWidget",ParentComponent,specProvider,null)
         this.settings = settings;
-        this.HtmlContainer = ParentComponent
         this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup
     }
 
-    init(){
-        this.objectPropertyId = this.GrandParent.ObjectPropertyGroup.value_selected
+    render(){
+        this.objectPropertyId = this.GrandParent.ObjectPropertyGroup.value_selected // shows which objectproperty got chosen for which subject object combination
         this.widgetType = this.specProvider.getObjectPropertyType(this.objectPropertyId);
         this.rangeClassId = this.GrandParent.EndClassGroup.value_selected
         this.classLabel = this.specProvider.getLabel(this.rangeClassId) ;
@@ -133,10 +131,12 @@ import CriteriaGroup from "../CriteriaGroup";
 				this.widgetHtml = $(widgetLabel + this.widgetComponent.html)  ;
 			}
             // First init this component as parent component and then init the widgetComponent because it will be attached to this component
+            // this component gets inserted under the EndclassGroup
+            this.htmlParent = this.GrandParent.EndClassGroup.html.find('.EditComponents')
             this.init()
-			this.widgetComponent.init() ;
+
+			this.widgetComponent.render() ;
 			$(this.html).find('.selectAll').first().on("click", ()=> {
-                console.warn('selectAll has been clicked')
 				$(this).trigger('selectAll') ;
 			});
 

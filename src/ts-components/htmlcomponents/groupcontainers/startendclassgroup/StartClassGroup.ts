@@ -129,7 +129,7 @@ class StartClassGroup extends HTMLComponent {
 
 		$(this.ParentCriteriaGroup.StartClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update'); 
 		//add varName on curent selection display
-		this.onSelectValue(this.varName) ;
+		//this.onSelectValue(this.varName) ;
 		// trigger event on the whole line/criteria
 		$(this.ParentCriteriaGroup).trigger( "StartClassGroupSelected" ) ;
 
@@ -152,11 +152,12 @@ class StartClassGroup extends HTMLComponent {
 		return this.varName;
 	}
 	// TODO refactor away. only endclassgroup and startclassgroup are using this
+	/*
 	onSelectValue(varName:any) {
 		var current = $(this.html).find('.nice-select .current').first() ;
 		var varNameForDisplay = '<span class="variableName">'+varName.replace('?', '')+'</span>' ;
 		$(varNameForDisplay).insertAfter($(current).find('.label').first()) ;
 
-	}
+	}*/
 } 
 export default StartClassGroup

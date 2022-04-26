@@ -34,7 +34,7 @@ class HTMLComponent {
 	ParentComponent: HTMLComponent 
 	// TODO refactor widgetHtml and html to one? seems very confusing
 	widgetHtml: JQuery<HTMLElement>
-	html:JQuery<HTMLElement>
+	html:JQuery<HTMLElement> 
 	needBackArrow: boolean
 	needFrontArrow: boolean
 	specProvider: ISpecProvider
@@ -47,38 +47,35 @@ class HTMLComponent {
 		// TODO : see if this is really needed
 		// must be false if not set for the moment
 		this.widgetHtml = widgetHtml;
-		this.html = null;
+		this.html = $(`<div class=${this.baseCssClass}></div>`);
 		this.needBackArrow = false;
 		this.needFrontArrow = false;
 	}
 
-	attachComponentHtml() {
+	#attachComponentHtml() {
 		// sometimes components don't need to be rendered under their parentcomponent but under htmlParent... like ActionWhere
 		if(this.htmlParent){
-			//console.log(`Component: ${this.baseCssClass} gets attached to htmlParent: ${this.htmlParent}`)
 			// remove existing component if already existing
 			this.htmlParent.find('>.'+this.baseCssClass).remove()
 			$(this.html).appendTo(this.htmlParent)
 		}else{
-			//console.log(`Component: ${this.baseCssClass} gets attached to ParentComponent: ${this.ParentComponent}`)
 			// remove existing component if already existing
 			this.ParentComponent.html.find('>.'+this.baseCssClass).remove()
 			$(this.html).appendTo(this.ParentComponent.html) ;
 		}
-
 	}
 
 	/**
-	 * Updates the CSS classes of an element
+	 * Updates the CSS classes of an element. All elements with true are added
 	 **/
 	#updateCssClasses() {
 		$(this.html).removeClass('*') ;
 		for (const [k, v] of Object.entries(this.cssClasses)) {
 			if(v != true){
 				$(this.html).removeClass(k) ;
+			}else{
+				$(this.html).addClass(k) ;
 			}
-			$(this.html).addClass(k) ;
-			
 		}
 	}
 
@@ -88,9 +85,9 @@ class HTMLComponent {
 
 	#initHtml() {
 		if (this.widgetHtml != null) {
-			this.html = $('<div class="'+this.baseCssClass+'"></div>') ;
 			// remove existing component
-			// this.component.html.find('>.'+instance ).remove();
+			this.html.remove();
+			this.html = $('<div class="'+this.baseCssClass+'"></div>') ;
 			this.html.append(this.widgetHtml) ; 
 			if(this.needBackArrow) {
 				this.addBackArrow() ;
@@ -105,19 +102,23 @@ class HTMLComponent {
 
 	#attachHtml() {
 		this.#updateCssClasses() ;
-		this.attachComponentHtml() ;
+		this.#attachComponentHtml() ;
 	}
 	
-		
+	update(){
+		this.#initHtml()
+		this.#attachHtml()
+
+	}	
+
 	init() {
 		if (!this.cssClasses.Created) {			
 			this.cssClasses.IsOnEdit = true ;
 			this.#initHtml() ;
 			this.#attachHtml() ;
-			this.cssClasses.Created = true 
-			//this.#updateCssClasses()				
+			this.cssClasses.Created = true 			
 		} else {
-			this.#updateCssClasses() ;
+			this.#updateCssClasses()
 		}
 	};
 

@@ -52,7 +52,6 @@ export class SparNatural extends HTMLElement {
         } ;
 
 		constructor() {
-			console.warn("sparnatural constructor called")
 			super();
 			// overwride the default settings with the settings provided by the index.html
 			$(this).attr('id', 'sparnatural-container');
@@ -63,8 +62,6 @@ export class SparNatural extends HTMLElement {
 			getSettings().langSearch = i18nLabels["en"]
 			this.Form.langSearch = i18nLabels["en"]
 			let settings = this.getSettings()
-			console.log("log settings")
-			console.dir(settings)
 			let specProviderFactory = new SpecificationProviderFactory();
 
 
@@ -77,7 +74,6 @@ export class SparNatural extends HTMLElement {
 				// uncomment to trigger gathering of statistics
 				// initStatistics(specProvider);
 			});
-			console.log("after init")
 
 		}
 		
@@ -233,6 +229,7 @@ export class SparNatural extends HTMLElement {
 		addOnSubmitHook(form:any,settings:ISettings){
 			// triggered when Sparnatural is submitted : generates output SPARQL query
 			$(form.sparnatural).on('submit', { formObject : form }, function (event) {
+				console.log("submit called")
 				if (form.submitOpened == true) {
 					event.preventDefault();
 					/*if ($(event.data.formObject.sparnatural).find('li.groupe').not('.completed').length > 0) {

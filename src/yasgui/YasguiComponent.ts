@@ -9,7 +9,6 @@ export class YasguiComponent extends HTMLElement {
     
     constructor(){
       super()
-      console.warn('YAGSUi constructor called')
       this.Yasgui = new Yasgui(document.getElementById("yasgui"), {
           requestConfig:{
             endpoint: ()=>{

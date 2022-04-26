@@ -16,7 +16,7 @@ import HTMLComponent from "../../HtmlComponent"
 	settings:ISettings
 	variableSelector:any
     selectViewVariable:JQuery<HTMLElement>
-	value_selected: any
+	value_selected: any = null
 	notSelectForview: boolean
 	inputTypeComponent: ClassTypeId
 	variableNamePreload: string
@@ -102,18 +102,19 @@ import HTMLComponent from "../../HtmlComponent"
 		this.ParentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList() ;
 	}
 	
+	/*
+		onChange gets called when a Endclassgroup was selected. For example choosing Musuem relatedTo Countr
+		When Country got selected this events fires
+	*/
 	onChange() {
-		this.value_selected = $(this.html).find('select.input-val').val() ;
-
+		this.#getSelectedValue()
 		//Set the variable name for Sparql
 		if(this.varName == null) {
 			this.varName = "?"+localName(this.value_selected)+"_"+(this.ParentCriteriaGroup.thisForm_.sparnatural.getMaxVarIndex()+1);
 		}
-
-		$(this.ParentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
-		
+		this.#disableSelectionPossibility()
 		//add varName on curent selection display
-		this.onSelectValue(this.varName) ;	
+		//this.onSelectValue(this.varName) ;	
 		
 		if (this.specProvider.hasConnectedClasses(this.value_selected)) {
 			$(this.ParentCriteriaGroup.html).parent('li').removeClass('WhereImpossible') ;
@@ -126,7 +127,8 @@ import HTMLComponent from "../../HtmlComponent"
 
 		// show and init the property selection
 		this.ParentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = false;
-		this.ParentCriteriaGroup.ObjectPropertyGroup.init() ;
+		this.ParentCriteriaGroup.ObjectPropertyGroup.init() ; //IMPORTANT this shouldn't work
+
 		// trigger the event that will call the ObjectPropertyGroup
 		$(this.ParentCriteriaGroup).trigger( "EndClassGroupSelected" ) ;
 
@@ -142,9 +144,16 @@ import HTMLComponent from "../../HtmlComponent"
 			$(this.ParentCriteriaGroup.EndClassGroup.html).removeAttr('data-tippy-content') ;
 		}
 	};
+	// after an Object is chosen, disable the inputs
+	#disableSelectionPossibility(){
+		$(this.ParentCriteriaGroup.EndClassGroup.html).find('.input-val').attr('disabled', 'disabled').niceSelect('update');
+	}
+	// gathers the selected Object chosen
+	#getSelectedValue(){
+		this.value_selected = $(this.html).find('select.input-val').val() ;
+	}
 
-	onRemoveSelected() {
-		console.warn('endClassGroup.onRemoveSelected()')			
+	onRemoveSelected() {		
 		$(this.ParentCriteriaGroup.html).find('>.EndClassWidgetGroup .EndClassWidgetValue span.unselect').trigger('click') ;
 		this.ParentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = true ;
 		this.ParentCriteriaGroup.ObjectPropertyGroup.init() ;
@@ -181,11 +190,13 @@ import HTMLComponent from "../../HtmlComponent"
 		return this.varName;
 	}
 	// TODO refactor away. only endclassgroup and startclassgroup are using this
+	// IMPORTANT idon't think this does something
+	/*
 	onSelectValue(varName:any) {
 		var current = $(this.html).find('.nice-select .current').first() ;
 		var varNameForDisplay = '<span class="variableName">'+varName.replace('?', '')+'</span>' ;
 		$(varNameForDisplay).insertAfter($(current).find('.label').first()) ;
 
-	}
+	}*/
 } ;
 export default EndClassGroup

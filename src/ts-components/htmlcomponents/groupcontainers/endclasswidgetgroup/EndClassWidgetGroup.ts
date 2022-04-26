@@ -8,6 +8,7 @@ import { eventProxiCriteria } from "../../../globals/globalfunctions";
 import { initGeneralEvent } from "../../../globals/globalfunctions";
 import HTMLComponent from "../../HtmlComponent";
 import ISpecProvider from "../../../../spec-providers/ISpecProviders";
+import { TreeWidget } from "./Widgets";
 
 
 class EndClassWidgetGroup extends HTMLComponent {
@@ -36,9 +37,7 @@ class EndClassWidgetGroup extends HTMLComponent {
         // Affichage de la ligne des actions 
         this.ParentCriteriaGroup.ComponentHtml.addClass('OnEdit') ;
 
-		// IMPORTANT TODO refactor HtmlContainer. This will never be rendered
-        this.inputTypeComponent.HtmlContainer.html = $(this.ParentCriteriaGroup.EndClassGroup.html).find('.EditComponents') ;
-        
+		
         // binds a selection in an input widget with the display of the value in the line
         $(this.inputTypeComponent).on(
             'change',
@@ -61,9 +60,8 @@ class EndClassWidgetGroup extends HTMLComponent {
 		if (this.ParentCriteriaGroup.ActionsGroup.reinsert == true) {
             this.inputTypeComponent.reload() ;
         } else {
-            this.inputTypeComponent.init() ;
+            this.inputTypeComponent.render() ;
         }
-        
         if(this.ParentCriteriaGroup.jsonQueryBranch != null) {
             var branch = this.ParentCriteriaGroup.jsonQueryBranch;
             if (branch.line.values.length == 0) {
@@ -101,7 +99,7 @@ class EndClassWidgetGroup extends HTMLComponent {
 
 			//if jstree remove unselecteds term
 			if (this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
-				this.inputTypeComponent.widgetComponent.jsTree.jstree('uncheck_node',  $(e.currentTarget).attr('value-data'));
+				(this.inputTypeComponent.widgetComponent as TreeWidget).jsTree.jstree('uncheck_node',  $(e.currentTarget).attr('value-data'));
 			}
 			//uncheck_node() 
 

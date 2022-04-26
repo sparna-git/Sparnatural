@@ -24,7 +24,7 @@ class OptionTypeId extends HTMLComponent {
  	}
 
 
-	init() {	
+	render() {	
 		//Test if this ever happens
 		if(this.cssClasses.Created){
 			console.warn("this should not have happened")
@@ -61,7 +61,8 @@ class OptionTypeId extends HTMLComponent {
 	} ;	
 	
 	reload() {
-		this.init();
+		console.warn("optiontypeid reload called")
+		this.render();
 	} ;		
 }
 export default OptionTypeId

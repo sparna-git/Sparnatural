@@ -5,7 +5,7 @@ const settings:ISettings = {
     currentTab: null, // needs to be set with a ref to the tab from Yasgui
     config: null,
     language: "en",
-    maxDepth: 4,
+    maxDepth: 4, // max amount of where clauses
     addDistinct: true,
     noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
     sendQueryOnFirstClassSelected: true,
@@ -96,7 +96,5 @@ export function getSettings(){
 
 // merge given options with default setting values
 export function mergeSettings(options:any){
-    console.log("merging into settings")
-    console.dir(options)
     $.extend(true, settings, settings, options);
 }

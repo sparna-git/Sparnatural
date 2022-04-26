@@ -10,10 +10,9 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
  **/
  class ObjectPropertyGroup extends HTMLComponent {
-	temporaryLabel:string;
 	settings:ISettings;
 	objectPropertySelector:ObjectPropertyTypeId
-	value_selected:any = null;
+	value_selected:any = null; // value which shows which object property got chosen by the config for subject and object
 	ParentCriteriaGroup:CriteriaGroup
 	constructor(ParentComponent:CriteriaGroup, specProvider:ISpecProvider, settings:ISettings, temporaryLabel:string) {
 		super(
@@ -22,32 +21,30 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
             specProvider,
 			null
 		);
-		this.ParentCriteriaGroup as CriteriaGroup
+		this.ParentCriteriaGroup = ParentComponent
 		this.settings = settings;
-		this.temporaryLabel = temporaryLabel;
-		// TODO : this is removing CSS classes
-		this.objectPropertySelector = new ObjectPropertyTypeId(this, specProvider) ;
+		this.objectPropertySelector = new ObjectPropertyTypeId(this, specProvider,temporaryLabel) ;
 
 		this.init() ;
 
 	}
-
+	/*
+		renders the temporarly object property
+	*/
 	onStartClassGroupSelected() {
-		this.html.append('<span class="current temporary-label">'+this.temporaryLabel+'</span>') ;
+		//this will set the temporary label since there hasn't been a Value chosen for EndClassGroup
+		this.objectPropertySelector.render()
 	}
 	
-	// triggered when a class is selected in the range
+	/*
+		This method is triggered when an Object is selected.
+		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
+	*/
 	onEndClassGroupSelected() {
-		$(this.html).find('.temporary-label').remove() ;
-		$(this.html).find('.input-val').unbind('change');
-		
-		if (!this.objectPropertySelector.cssClasses.Created) {
-			this.objectPropertySelector.init() ;
-			this.objectPropertySelector.cssClasses.IsOnEdit = true;
-		} else {
-			this.objectPropertySelector.reload() ;
-			this.objectPropertySelector.cssClasses.IsOnEdit = true;
-		}
+		// this will update the temporarly label
+		this.objectPropertySelector.render()
+
+
 		$(this.html).find('select.input-val').niceSelect()  ;
 		$(this.html).find('.input-val').removeAttr('disabled').niceSelect('update'); 
 		// opens the select automatically
@@ -89,7 +86,7 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 		if($(this.ParentCriteriaGroup.html).parent('li').first().hasClass('completed'))	{
 			$(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger( "submit" ) ;
 		}
-		
+
 
 		// sets tooltip ready
 		var desc = this.specProvider.getTooltip(this.value_selected) ;
@@ -102,7 +99,7 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 		} else {
 			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
 		}
-		
+		console.log("after it")
 		//ici peut être lancer le reload du where si il y a des fils
 	};	
 }

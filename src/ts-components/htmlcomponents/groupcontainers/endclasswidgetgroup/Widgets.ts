@@ -7,21 +7,32 @@ import tippy from 'tippy.js';
 import ISettings from "../../../../configs/client-configs/ISettings"
 import LocalCacheData from "../../../../LocalCacheData";
 import IWidget from "./IWidget";
+import EndClassWidgetGroup from './EndClassWidgetGroup';
+import CriteriaGroup from '../CriteriaGroup';
 let jsTree = require('jstree').default;
+// IMPORTANT TODO refactor HtmlContainer. 
+
 	
 	export class AutoCompleteWidget implements IWidget{
 		autocompleteHandler: any;
 		ParentComponent: any;
 		IdCriteriaGroupe: any;
 		html: string;
+		EndClassWidgetParent: EndClassWidgetGroup;
 		constructor(inputTypeComponent:any, autocompleteHandler:any){
 			this.autocompleteHandler = autocompleteHandler;
 			this.ParentComponent = inputTypeComponent ;
+			this.EndClassWidgetParent = this.ParentComponent.ParentComponent
 			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentCriteriaGroup.id ;
 			this.html = '<input id="ecgrw-'+this.IdCriteriaGroupe+'-input" /><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/>' ;
 		}
 		
-		init = function init() {
+		
+		render() {
+			//render this element
+			$(this.ParentComponent.widgetHtml).append($(this.html))
+
+
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -101,6 +112,7 @@ let jsTree = require('jstree').default;
 		id_input: string;
 		html: string;
 		settings:ISettings
+		ParentCriteriaGroup: CriteriaGroup;
 		constructor(inputTypeComponent:any, listHandler:any, langSearch:any, settings: ISettings, sort: boolean){
 			this.listHandler = listHandler;
 			this.ParentComponent = inputTypeComponent ;
@@ -109,19 +121,17 @@ let jsTree = require('jstree').default;
 			this.settings = settings ;
 			this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 			this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
+			this.ParentCriteriaGroup = this.ParentComponent.ParentComponent.ParentCriteriaGroup
 		}
-
 		
-		init = function init() {
+		render() {
+			//render this element
+
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
 			
-			var itc_obj = this.ParentComponent;
-			var id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
-
-			document.getElementById(id_input).style.display = 'block' ;
-			(document.getElementById(id_input).closest('.list-widget').querySelector('.no-items')as HTMLElement).style.display = 'none' ;
+			var itc_obj = this.ParentComponent;;
 
 			let url = this.listHandler.listUrl(
 				startClassGroup_value,
@@ -160,22 +170,22 @@ let jsTree = require('jstree').default;
 					$.each( items, ( key, val ) =>{				  
 						var label = this.listHandler.elementLabel(val) ; 
 						var uri = this.listHandler.elementUri(val) ; 
-						$('#'+id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
+						$('#'+this.id_input).append( "<option value='" + uri + "'>" + label + "</option>" );
 					});
 					if(items.length < 30) {
-						$('#'+id_input).niceSelect();
-						$('#'+id_input).on("change", function() {
+						$('#'+this.id_input).niceSelect();
+						$('#'+this.id_input).on("change", function() {
 							$(itc_obj).trigger('change') ;
 						});
 					} else {
-						$('#'+id_input).select2();
-						$('#'+id_input).on("select2:close", function() {
+						$('#'+this.id_input).select2();
+						$('#'+this.id_input).on("select2:close", function() {
 							$(itc_obj).trigger('change') ;
 						});
 					}
 				} else {
-					document.getElementById(id_input).style.display = 'none' ;
-					(document.getElementById(id_input).closest('.list-widget').querySelector('.no-items')as HTMLElement).style.display = 'block' ;
+					document.getElementById(this.id_input).style.display = 'none' ;
+					(document.getElementById(this.id_input).closest('.list-widget').querySelector('.no-items')as HTMLElement).style.display = 'block' ;
 					//console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
 				}  ;
 			});
@@ -200,17 +210,21 @@ let jsTree = require('jstree').default;
 		IdCriteriaGroupe: any;
 		id_input: string;
 		html: string;
+		EndClassWidgetParent: EndClassWidgetGroup;
 		constructor(inputTypeComponent:any, listDatasource:any, langSearch:any){
 			this.listDatasource = listDatasource;
-			this.ParentComponent = inputTypeComponent ;
+			this.ParentComponent = inputTypeComponent ; // is of type ObjectPropertyTypeWidgets
 			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentCriteriaGroup.id ;
-		
+			this.EndClassWidgetParent = this.ParentComponent.ParentComponent
 			this.id_input = 'ecgrw-'+ this.IdCriteriaGroupe +'-input-value' ;
 			this.html = '<div class="list-widget"><select id="'+this.id_input+'"></select><div class="no-items" style="display: none; font-style:italic;">'+langSearch.ListWidgetNoItem+'</div></div>' ;
 		
 		}
+
 		
-		init = function init() {
+		render() {
+			//render this element
+			$(this.ParentComponent.widgetHtml).append($(this.html))
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -307,16 +321,20 @@ let jsTree = require('jstree').default;
 		ParentComponent: any;
 		IdCriteriaGroupe: any;
 		html: string;
+		EndClassWidgetParent: EndClassWidgetGroup;
 		constructor(inputTypeComponent:any, datesHandler:any, langSearch:any){
 			this.datesHandler = datesHandler;
 			this.ParentComponent = inputTypeComponent ;
 			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentCriteriaGroup.id ;
-			
+			this.EndClassWidgetParent = this.ParentComponent.ParentComponent
 			this.html = '<div class="date-widget"><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input" placeholder="'+langSearch.PlaceHolderDatePeriod+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-start" placeholder="'+langSearch.TimeWidgetDateFrom+'"/><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-stop" placeholder="'+langSearch.TimeWidgetDateTo+'" /><input id="ecgrw-date-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 			
 		}
+
 		
-		init = function init() {
+		render() {
+			//render this element
+			$(this.ParentComponent.widgetHtml).append($(this.html))
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -429,10 +447,12 @@ let jsTree = require('jstree').default;
 		formatDate: any;
 		html: string;
 		langSearch: any;
+		format: any;
+		EndClassWidgetParent: EndClassWidgetGroup;
 		constructor(inputTypeComponent:any, datesHandler:any, format:any, langSearch:any){
 			this.datesHandler = datesHandler;
 			this.ParentComponent = inputTypeComponent ;
-			
+			this.EndClassWidgetParent = this.ParentComponent.ParentComponent
 			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent?.ParentCriteriaGroup.id ;
 			this.formatDate = format ;
 
@@ -441,8 +461,12 @@ let jsTree = require('jstree').default;
 			this.html += '&nbsp;<span id="circle-info-'+this.IdCriteriaGroupe+'" data-tippy-content="'+((this.formatDate == 'day')?langSearch.TimeWidgetDateHelp:langSearch.TimeWidgetYearHelp)+'">'+UiuxConfig.ICON_CIRCLE_INFO+'</span><button class="button-add" id="ecgrw-date-'+this.IdCriteriaGroupe+'-add">'+langSearch.ButtonAdd+'</button></div>' ;
 			this.langSearch = langSearch
 		}
+
 		
-		init = function init() {
+		render() {
+			//render this element
+			$(this.ParentComponent.widgetHtml).append($(this.html))
+
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -570,15 +594,20 @@ let jsTree = require('jstree').default;
 		ParentComponent: any;
 		IdCriteriaGroupe: any;
 		html: string;
+		EndClassWidgetParent: EndClassWidgetGroup;
 		constructor(inputTypeComponent:any, langSearch:any){
 			this.ParentComponent = inputTypeComponent ;
 			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentCriteriaGroup.id ;
-			
+			this.EndClassWidgetParent = this.ParentComponent.ParentComponent
 			this.html = '<div class="search-widget"><input id="ecgrw-search-'+this.IdCriteriaGroupe+'-input-value" /><button id="ecgrw-search-'+this.IdCriteriaGroupe+'-add" class="button-add">'+langSearch.ButtonAdd+'</button></div>' ;
 			
 		}
+
 		
-		init = function init() {
+		render() {
+			//render this element
+			$(this.ParentComponent.widgetHtml).append($(this.html))
+
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
 			var CriteriaGroup = this.ParentComponent.ParentComponent.ParentCriteriaGroup ;
@@ -611,14 +640,19 @@ let jsTree = require('jstree').default;
 		ParentComponent: any;
 		IdCriteriaGroupe: any;
 		html: string;
+		EndClassWidgetParent: EndClassWidgetGroup;
 		constructor(inputTypeComponent:any, langSearch:any){
 			this.ParentComponent = inputTypeComponent ;
 			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentCriteriaGroup.id ;
-		
+			this.EndClassWidgetParent = this.ParentComponent.ParentComponent
 			this.html = '<div class="boolean-widget" id="boolean-widget-'+this.IdCriteriaGroupe+'"><span class="boolean-value" id="boolean-widget-'+this.IdCriteriaGroupe+'-true">'+langSearch.true+'</span> <span class="or">'+langSearch.Or+'</span> <span class="boolean-value" id="boolean-widget-'+this.IdCriteriaGroupe+'-false">'+langSearch.false+'</span><input type="hidden" id="boolean-widget-'+this.IdCriteriaGroupe+'-value" /></div>' ;
 		}
+
 		
-		init = function init() {
+		render() {
+			//render this element
+			$(this.ParentComponent.widgetHtml).append($(this.html))
+
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
 			var CriteriaGroup = this.ParentComponent.ParentComponent.ParentCriteriaGroup ;
@@ -655,14 +689,17 @@ let jsTree = require('jstree').default;
 	// IMPORTANT Do we need a NoWidget
 	export class NoWidget implements IWidget {
 		inputTypeComponent: any;
-		html: any;
+		html: string;
 		constructor(inputTypeComponent:any){
 			this.inputTypeComponent
 			this.html = null ;
+			this.EndClassWidgetParent = null
+
 		}
+		EndClassWidgetParent: EndClassWidgetGroup;
 	
 		
-		init = function init() {
+		render() {
 			// nothing
 		} ;
 
@@ -678,15 +715,25 @@ let jsTree = require('jstree').default;
 		langSearch: any;
 		IdCriteriaGroupe: any;
 		html: string;
+		itc_obj: any;
+		jsTree:any
+		EndClassWidgetParent: EndClassWidgetGroup;
 		constructor(inputTypeComponent:any, loaderHandler:any, settings:any, langSearch:any){
 			this.loaderHandler = loaderHandler;
 			this.ParentComponent = inputTypeComponent ;
 			this.langSearch = langSearch;
 			this.IdCriteriaGroupe = this.ParentComponent.ParentComponent.ParentCriteriaGroup.id ;
 			this.html = '<a id="ecgrw-'+this.IdCriteriaGroupe+'-input" class="treeBtnDisplay">'+UiuxConfig.ICON_TREE+'</a><input id="ecgrw-'+this.IdCriteriaGroupe+'-input-value" type="hidden"/><div  id="ecgrw-'+this.IdCriteriaGroupe+'-displayLayer" class="treeLayer"><div class="treeClose"><i class="far fa-times-circle"></i></div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-'+this.IdCriteriaGroupe+'-display"></div><div class="treeActions"><a class="treeCancel">'+this.langSearch.TreeWidgetDelete+'</a><a class="treeSubmit">'+this.langSearch.TreeWidgetSelect+'</a></div></div>' ;
+			this.EndClassWidgetParent = this.ParentComponent.ParentComponent
+
 		}
+
 		
-		init = function init() {
+		render() {
+			//render this element
+			$(this.ParentComponent.widgetHtml).append($(this.html))
+
+
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -760,12 +807,12 @@ let jsTree = require('jstree').default;
 			} ;
 			//Need to add in html befor
 			
-			jsTree = $('#ecgrw-'+id_inputs+'-display').jstree(options);
+			this.jsTree = $('#ecgrw-'+id_inputs+'-display').jstree(options);
 
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-input').on("click",  { arg1 : this },  this.onClickDisplay);
 			//disable/enable on max selction 
-			jsTree.on("changed.jstree",  { arg1 : this },  this.onChangedJstree);
-			jsTree.on("after_open.jstree",  { arg1 : this },  this.onChangedJstree);
+			this.jsTree.on("changed.jstree",  { arg1 : this },  this.onChangedJstree);
+			this.jsTree.on("after_open.jstree",  { arg1 : this },  this.onChangedJstree);
 
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeSubmit').on("click",  { arg1 : this },  this.onClickSelect);
 			$('#ecgrw-'+this.IdCriteriaGroupe+'-displayLayer').find('.treeCancel').on("click",  { arg1 : this },  this.onClickCancel);
