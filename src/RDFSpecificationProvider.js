@@ -420,6 +420,9 @@ export class RDFSpecificationProvider {
 			return null;
 		}
 
+		// hypothesis : there is only one datasource annotation, we return the first one
+		// either it is known and we take it from the list of known datasources
+		// either it is custom and we build it
 		for (const datasourceQuad of datasourceQuads) {
 			const datasourceUri = datasourceQuad.object.id;
 		    var knownDatasource = Datasources.DATASOURCES_CONFIG.get(datasourceUri);
@@ -429,8 +432,6 @@ export class RDFSpecificationProvider {
 		    	return this._buildDatasource(datasourceUri);	
 		    }
 		}
-
-		return datasource;
 	}
 
 	/**
