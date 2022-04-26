@@ -17,7 +17,12 @@ BooleanValue = require("./Query.js").BooleanValue ;
 class JSONQueryGenerator {
 
 	constructor() {
-
+		this.WIDGETS_REQUIRING_VALUES = [
+			Config.SEARCH_PROPERTY,
+			Config.TIME_PROPERTY_PERIOD,
+			Config.TIME_PROPERTY_YEAR,
+			Config.TIME_PROPERTY_DATE
+		] ;
 	}
 
 	/**
