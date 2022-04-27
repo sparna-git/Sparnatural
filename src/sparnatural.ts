@@ -34,9 +34,10 @@ import { eventProxiCriteria, redrawBottomLink } from "./ts-components/globals/gl
 import {SpecificationProviderFactory} from "./spec-providers/SpecificationProviderFactory"
 
 import UiuxConfig from "./configs/fixed-configs/UiuxConfig";
-import {addComponent, initGeneralEvent} from "./ts-components/globals/globalfunctions"
+import { initGeneralEvent} from "./ts-components/globals/globalfunctions"
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
 import ISettings from "./configs/client-configs/ISettings"
+import { addComponent } from "./ts-components/globals/addComponent";
 	
 export class SparNatural extends HTMLElement {
     	specProvider:any;	

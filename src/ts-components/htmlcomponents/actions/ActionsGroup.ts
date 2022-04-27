@@ -4,10 +4,11 @@ import ActionWhere from "./ActionWhere";
 import CriteriaGroup from "../groupcontainers/CriteriaGroup";
 import ISettings from "../../../configs/client-configs/ISettings";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
-import { addComponent, initGeneralEvent } from "../../globals/globalfunctions";
+import {initGeneralEvent } from "../../globals/globalfunctions";
 import HTMLComponent from "../HtmlComponent";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import IHasCriteriaGroupParent from "../IHasCriteriaGroupParent";
+import { addComponent } from "../../globals/addComponent";
 
 
 /**
@@ -122,7 +123,7 @@ class ActionsGroup extends HTMLComponent implements IHasCriteriaGroupParent {
         $(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
     }
     onAddAnd(){
-		console.warn("ActionsGroup.onAddWhere()")
+		console.warn("ActionsGroup.onAddAnd()")
         var new_component = addComponent.call(this,
             this.ParentCriteriaGroup.thisForm_,
             this.ParentCriteriaGroup.AncestorComponentHtml,

@@ -6,8 +6,9 @@ import ObjectPropertyGroup from "./ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
 import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
 import EndClassWidgetGroup from "./endclasswidgetgroup/EndClassWidgetGroup";
-import { addComponent, initGeneralEvent } from "../../globals/globalfunctions";
+import { initGeneralEvent } from "../../globals/globalfunctions";
 import HTMLComponent from "../HtmlComponent";
+import { addComponent } from "../../globals/addComponent";
 
 /**
 * A single line/criteria

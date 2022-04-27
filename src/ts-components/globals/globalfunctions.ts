@@ -5,109 +5,8 @@ import CriteriaGroup from "../htmlcomponents/groupcontainers/CriteriaGroup";
 import ISettings from "../../configs/client-configs/ISettings"
 import { getSettings } from "../../configs/client-configs//settings";
 
-export function addComponent(
-  thisForm_: {
-    sparnatural: any;
-    submitOpened?: boolean;
-    firstInit: any;
-    preLoad?: boolean;
-  },
-  contexte: any,
-  jsonQueryBranch: any = null
-) {
-  console.log("addComponent with");
-  console.dir(thisForm_)
-  console.dir(contexte)
-  console.dir(jsonQueryBranch)
-  console.log('fini args')
-  let index = thisForm_.sparnatural.components.length; // IMPORTANT check if this does the same as legacy code...
-  console.log(index)
-  // disable the WHERE if we have reached maximum depth
-  var classWherePossible = "addWereEnable";
-  if (
-    $(contexte).parents("li.groupe").length + 1 ==
-    getSettings().maxDepth - 1
-  ) {
-    classWherePossible = "addWereDisable";
-  }
 
-  // the connection line between CriteriaGroups
-  var gabari =
-    '<li class="groupe" data-index="' +
-    index +
-    '"><span class="link-and-bottom"><span>' +
-    getSettings().langSearch.And +
-    '</span></span><span class="link-where-bottom"></span><input name="a-' +
-    index +
-    '" type="hidden" value=""><input name="b-' +
-    index +
-    '" type="hidden" value=""><input name="c-' +
-    index +
-    '" type="hidden" value=""></li>';
-
-  // si il faut descendre d'un niveau
-  if ($(contexte).is("li")) {
-    if ($(contexte).find(">ul").length == 0) {
-      var ul = $(
-        '<ul class="childsList"><div class="lien-top"><span>' +
-          getSettings().langSearch.Where +
-          "</span></div></ul>"
-      ).appendTo($(contexte));
-      var parent_li = $(ul).parent("li");
-      var n_width = 0;
-      n_width =
-        n_width +
-        this.getOffset($(parent_li).find(">div>.EndClassGroup"), $(ul)) - (111 + 15 + 11 + 20 + 5 + 3);
-      var t_width =
-        this.getOffset($(parent_li).find(">div>.EndClassGroup"), $(ul)) + (15 + 11 + 20 + 5);
-      $(ul).attr(
-        "data-test",
-        this.getOffset($(parent_li).find(">div>.EndClassGroup"), $(ul))
-      );
-      $(ul).find(">.lien-top").css("width", n_width);
-      $(parent_li).find(">.link-where-bottom").css("left", t_width);
-    } else {
-      var ul = $(contexte).find(">ul");
-    }
-
-    var gabariEl = $(gabari).appendTo(ul); //IMPORTANT :Introduced new var gabariEl
-  } else {
-    var gabariEl = $(gabari).appendTo(contexte); // IMPORTANT : Introduced new var gabariEl
-  }
-  console.log('gabari')
-  console.dir(gabariEl)
-  $(gabariEl).addClass(classWherePossible);
-  var UnCritere = new CriteriaGroup(
-    this,
-    {
-      AncestorHtmlContext: contexte,
-      HtmlContext: gabariEl,
-      FormContext: thisForm_,
-      ContextComponentIndex: index,
-    },
-    getSettings(),
-    this.specProvider,
-    // pass the JSON query branch as an input parameter
-    jsonQueryBranch
-  );
-
-  thisForm_.sparnatural.components.push({
-    index: index,
-    CriteriaGroup: UnCritere,
-  });
-  initGeneralEvent.call(this, thisForm_, getSettings());
-
-  //le critère est inséré et listé dans les composants, on peut lancer l'event de création
-  $(UnCritere).trigger("Created");
-  if (thisForm_.firstInit == false) {
-    thisForm_.firstInit = true;
-    $(thisForm_.sparnatural).trigger("initialised");
-  }
-
-  return $(gabari);
-}
-
-//Responsible if a where or and got clicked?
+//Responsible if a WHERE or AND got clicked?
 export function initGeneralEvent(thisForm_: any, settings: ISettings) {
   $("li.groupe").off("mouseover");
   $("li.groupe").off("mouseleave");
@@ -127,17 +26,13 @@ export function initGeneralEvent(thisForm_: any, settings: ISettings) {
   if (leng <= 10) {
     leng = 10;
   }
-  console.log("all_li")
-  console.dir($all_li)
   var ratio = 100 / leng / 100;
   var prev = 0;
   var cssdef = "linear-gradient(180deg";
   $all_li.each((index,elem) =>{
-    // elemements are group addwhereEnable
+    // elemements are of class="group addwhereEnable"
     var a = (index + 1) * ratio;
-    console.log('what was found')
-    console.dir(elem)
-    // outer height of group addWhereEnable
+    // outer height of html elements classgroup addWhereEnable
     var height = $(elem).find(">div").outerHeight(true);
     cssdef +=
       ", rgba(" +
@@ -304,11 +199,10 @@ export function initStatistics(aSpecProvider: any) {
 	var dep_id: number = null ;
 	if ($(dependant.element).parents('li').length > 0) {			
 		dep_id = parseInt($($(dependant.element).parents('li')[0]).attr('data-index')) ;
-		dependant = {type : 'parent', element: null} // TODO refactor element:null; if that happens and for each will not change element the the calling function will crash
-	} else {
+		dependant = {type : 'parent', element: null}
 		if ($(dependant.element).prev().length > 0) {
 			dep_id = parseInt($(dependant.element).prev().attr('data-index')) ;
-			dependant = {type : 'sibling', element: null} // TODO refactor element:null; if that happens and for each will not change element the the calling function will crash
+			dependant = {type : 'sibling', element: null} 
 		}
 	} 
 
@@ -347,8 +241,8 @@ export function redrawBottomLink(parentElementLi: JQuery<HTMLElement>) {
 	var n_width = 0;
 	var ul = $(parentElementLi).children('ul').first() ;
 	if (ul.length == 1) {
-		n_width = n_width + getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) - 111 + 15 + 11 + 20 + 5 + 3 ;
-		var t_width = getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) ) + 15 + 11 + 20 + 5  ;
+		n_width = n_width + getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) as JQuery<HTMLUListElement> ) - 111 + 15 + 11 + 20 + 5 + 3 ;
+		var t_width = getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) as JQuery<HTMLUListElement> ) + 15 + 11 + 20 + 5  ;
 		$(ul).find('>.lien-top').css('width', n_width) ;
 		$(parentElementLi).find('>.link-where-bottom').css('left', t_width) ;
 	}
@@ -356,3 +250,5 @@ export function redrawBottomLink(parentElementLi: JQuery<HTMLElement>) {
 export function getOffset( elem: JQuery<HTMLElement>, elemParent: JQuery<HTMLUListElement> ) {
 	return elem.offset().left - $(elemParent).offset().left ;
 }
+
+
