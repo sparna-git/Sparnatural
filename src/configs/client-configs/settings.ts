@@ -1,4 +1,4 @@
-import ISpecProvider from "../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../sparnatural/spec-providers/ISpecProviders";
 import ISettings from "./ISettings";
 const settings:ISettings = {
     langSearch: null,

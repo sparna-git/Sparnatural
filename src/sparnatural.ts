@@ -27,17 +27,17 @@ const i18nLabels = {
 require('tippy.js/dist/tippy.css');
 
 const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
-import { QuerySPARQLWriter } from "./Query";
-import JSONQueryGenerator from "./QueryGenerators";
+import { QuerySPARQLWriter } from "./sparnatural/sparql/Query";
+import JSONQueryGenerator from "./sparnatural/sparql/QueryGenerators";
 
-import { eventProxiCriteria, redrawBottomLink } from "./ts-components/globals/globalfunctions";
-import {SpecificationProviderFactory} from "./spec-providers/SpecificationProviderFactory"
+import { eventProxiCriteria, redrawBottomLink } from "./sparnatural/ts-components/globals/globalfunctions";
+import {SpecificationProviderFactory} from "./sparnatural/spec-providers/SpecificationProviderFactory"
 
 import UiuxConfig from "./configs/fixed-configs/UiuxConfig";
-import { initGeneralEvent} from "./ts-components/globals/globalfunctions"
+import { initGeneralEvent} from "./sparnatural/ts-components/globals/globalfunctions"
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
 import ISettings from "./configs/client-configs/ISettings"
-import { addComponent } from "./ts-components/globals/addComponent";
+import { addComponent } from "./sparnatural/ts-components/globals/addComponent";
 	
 export class SparNatural extends HTMLElement {
     	specProvider:any;	
