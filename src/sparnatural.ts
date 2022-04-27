@@ -26,7 +26,7 @@ const i18nLabels = {
 
 require('tippy.js/dist/tippy.css');
 
-const Sortable = require('sortablejs/modular/sortable.core.esm.js').Sortable;
+
 import { QuerySPARQLWriter } from "./sparnatural/sparql/Query";
 import JSONQueryGenerator from "./sparnatural/sparql/QueryGenerators";
 
@@ -38,6 +38,7 @@ import { initGeneralEvent} from "./sparnatural/ts-components/globals/globalfunct
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
 import ISettings from "./configs/client-configs/ISettings"
 import { addComponent } from "./sparnatural/ts-components/globals/addComponent";
+import VariableSelectionBuilder from "./VariableSelectionBuilder";
 	
 export class SparNatural extends HTMLElement {
     	specProvider:any;	
@@ -270,181 +271,11 @@ export class SparNatural extends HTMLElement {
 
 		initVariablesSelector(form:any) {
 			form.sparnatural.variablesSelector = {} ;
-			/*
-				Prepare Html
-				TODO refactor to own method
-			*/
-			let html = $(form.sparnatural).find('.variablesSelection').first() ; 
-			let linesWrapper = $('<div class="linesWrapper"></div>')
-			let ordersSelectHtml = $('<div class="variablesOrdersSelect"><strong>'+getSettings().langSearch.labelOrderSort+'</strong> <a class="asc">'+UiuxConfig.ICON_AZ+'</a><a class="desc">'+UiuxConfig.ICON_ZA+'</a><a class="none selected">'+UiuxConfig.ICON_NO_ORDER+'</a></div>')
-			let variablesOptionsSelect = $('<div class="variablesOptionsSelect">'+getSettings().langSearch.SwitchVariablesNames+' <label class="switch"><input type="checkbox"><span class="slider round"></span></label></div>')
-			variablesOptionsSelect.find('label, span')
-			.on('click', // Listening when switch display variable
-				{arg1: this, arg2: 'switchVariableName'},
-				eventProxiCriteria
-			)
-			// Listening when change sort order (AZ, ZA, None)
-			ordersSelectHtml
-			.find('a')
-			.on('change',
-				{arg1: this, arg2: 'changeOrderSort'},
-				eventProxiCriteria
-			)
+			// TODO maybe refactor this to hold VariableSelector objects?
+			let varSelectBuilder = new VariableSelectionBuilder(form)
+			varSelectBuilder.render()
 
-			ordersSelectHtml.find('a').on('click', function() {
-				if ($(this).hasClass('selected')) {
-					//No change, make nothing
-				} else {
-					$(this).parent('div').find('a').removeClass('selected') ;
-					$(this).addClass('selected') ;
-					$(this).trigger('change') ;
-				}
-			});
-			let otherSelectHtml = $('<div class="variablesOtherSelect"></div>')
-
-			/*
-			End prepare html
-			*/
-
-			
-			linesWrapper
-			.append( $('<div class="line2"></div>')
-				.append(ordersSelectHtml)
-				.append(variablesOptionsSelect)
-			)
-
-			$(html)
-			.append(
-				linesWrapper
-					.append($('<div class="line1"></div>')
-						.append($('<div class="variablesFirstSelect"></div>')
-						).append(otherSelectHtml)
-					)
-				)	
-			//Show and hide button
-			let selectorDisplay = $('<div class="VariableSelectorDisplay"><a class="displayButton">'+UiuxConfig.ICON_ARROW_TOP+UiuxConfig.ICON_ARROW_BOTTOM+'</a></div>')
-			selectorDisplay.find('a')
-			.on('click',
-			{arg1: this, arg2: 'display'},
-			eventProxiCriteria
-			)
-			$(html).append(selectorDisplay);
-
-			form.sparnatural.variablesSelector = this ;
-			form.sparnatural.variablesSelector.switchLabel = 'name' ; // or name
-
-
-			var sortable = new Sortable(otherSelectHtml[0], {
-				group: "name",  // or { name: "...", pull: [true, false, 'clone', array], put: [true, false, array] }
-				sort: true,  // sorting inside list
-				delay: 0, // time in milliseconds to define when the sorting should start
-				delayOnTouchOnly: false, // only delay if user is using touch
-				touchStartThreshold: 0, // px, how many pixels the point should move before cancelling a delayed drag event
-				disabled: false, // Disables the sortable if set to true.
-				store: null,  // @see Store
-				animation: 150,  // ms, animation speed moving items when sorting, `0` — without animation
-				easing: "cubic-bezier(1, 0, 0, 1)", // Easing for animation. Defaults to null. See https://easings.net/ for examples.
-				handle: "div>.variable-handle",  // Drag handle selector within list items
-				filter: ".ignore-elements",  // Selectors that do not lead to dragging (String or Function)
-				preventOnFilter: true, // Call `event.preventDefault()` when triggered `filter`
-				draggable: ".sortableItem",  // Specifies which items inside the element should be draggable
-			
-				dataIdAttr: 'data-variableName', // HTML attribute that is used by the `toArray()` method
-			
-				ghostClass: "sortable-ghost",  // Class name for the drop placeholder
-				chosenClass: "sortable-chosen",  // Class name for the chosen item
-				dragClass: "sortable-drag",  // Class name for the dragging item
-
-			
-				// Element is dropped into the list from another list
-				onAdd: function (/**Event*/evt:any) {
-					// same properties as onEnd
-				},
-			
-				// Changed sorting within list
-				onUpdate: function (/**Event*/evt:any) {
-					// same properties as onEnd
-					$(this).trigger( "onUpdate" ) ;
-				},
-			
-				// Called by any change to the list (add / update / remove)
-				onSort: function (/**Event*/evt:any) {
-					// same properties as onEnd
-				},
-			
-				// Called when dragging element changes position
-				onEnd: function(/**Event*/evt:any) {
-					evt.newIndex // most likely why this event is used is to get the dragging element's current index
-					// same properties as onEnd
-					var width = $('.sortableItem').first().width() ;
-					$('.variablesOrdersSelect').width(width) ;
-
-				}
-			});
-
-			$(sortable).on(
-				'onUpdate',
-				{arg1: this, arg2: 'updateVariableList'},
-				eventProxiCriteria
-			);
-
-			let removeVariableName = function(name:any) {
-				// IMPORTANT unused method?
-			}
-
-			let display =  ()=> {
-				if( $(html).hasClass('displayed') ) {
-					$(linesWrapper).animate({
-						height: 0
-					}, 500, function(){
-	
-					});
-				} else {
-					$(linesWrapper).animate({
-						height: $(linesWrapper).get(0).scrollHeight
-					}, 500, function(){
-						$(linesWrapper).height('auto');
-					});
-				}
-				
-				$(html).toggleClass('displayed') ;
-
-			}
-
-			let changeOrderSort = () => {
-				var selected = $(ordersSelectHtml).find('a.selected').first() ;
-				var sort = null ;
-				if ($(selected).hasClass('desc')) {
-					sort = 'desc' ;
-				}
-				if ($(selected).hasClass('asc')) {
-					sort = 'asc' ;
-				}
-				form.queryOptions.orderSort = sort ;
-				$(form.sparnatural).trigger( "submit"  ) ;
-			}
-
-			/**
-			 * Updates the variables in the generated query based on HTML variable line
-			 **/
-			let updateVariableList = function() {
-				var listedItems = $(this.otherSelectHtml).find('.sortableItem>div') ;
-				this.form.queryOptions.displayVariableList = [] ;
-				for (var i = 0; i < listedItems.length; i++) {
-					var variableName = $(listedItems[i]).attr('data-variablename'); 
-					this.form.queryOptions.displayVariableList.push(variableName) ;
-				}
-				$(form.sparnatural).trigger( "submit" ) ;
-			}
-
-			let switchVariableName = function() {
-				$(this.form.sparnatural).find('.componentsListe').first().toggleClass('displayVarName') ;
-
-				$('li.groupe').each(function() {
-					redrawBottomLink($(this)) ;
-				});
-			}
-
+			// not sur what to do with this
 			this.loadQuery = function() {
 				this.form.submitOpened = false ;
 				for (var i = 0; i < this.form.preLoad.variables.length; i++) {
@@ -465,8 +296,6 @@ export class SparNatural extends HTMLElement {
 				}
 				this.form.submitOpened = true ;
 			}
-
-			///form.sparnatural.variablesSelector = this ;
 		}
 
 	/**
