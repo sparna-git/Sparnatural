@@ -7,7 +7,6 @@ import { eventProxiCriteria } from "../../globals/globalfunctions";
 import {initGeneralEvent } from "../../globals/globalfunctions";
 import HTMLComponent from "../HtmlComponent";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
-import IHasCriteriaGroupParent from "../IHasCriteriaGroupParent";
 import { addComponent } from "../../globals/addComponent";
 
 
@@ -15,7 +14,7 @@ import { addComponent } from "../../globals/addComponent";
  	Groups all the actions on a line/criteria (AND / REMOVE / WHERE)
 	even if they are visually not connected. ActionWhere for example is rendered under EndClassGroup -> EditComponent -> ActionWhere
  **/
-class ActionsGroup extends HTMLComponent implements IHasCriteriaGroupParent {
+class ActionsGroup extends HTMLComponent {
     actions: {ActionWhere:ActionWhere,
         ActionAnd:ActionAnd,
         ActionRemove:ActionRemove};
