@@ -99,7 +99,6 @@ import ISpecProvider from "../../spec-providers/ISpecProviders";
 		} else {
 			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
 		}
-		console.log("after it")
 		//ici peut être lancer le reload du where si il y a des fils
 	};	
 }

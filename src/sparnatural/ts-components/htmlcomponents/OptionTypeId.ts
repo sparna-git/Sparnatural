@@ -61,7 +61,6 @@ class OptionTypeId extends HTMLComponent {
 	} ;	
 	
 	reload() {
-		console.warn("optiontypeid reload called")
 		this.render();
 	} ;		
 }

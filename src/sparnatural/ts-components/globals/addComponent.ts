@@ -14,7 +14,6 @@ export function addComponent(
     jsonQueryBranch: any = null
   ) {
     let index = thisForm_.sparnatural.components.length; // IMPORTANT check if this does the same as legacy code...
-    console.log(index)
     // disable the WHERE if we have reached maximum depth
     var classWherePossible = "addWereEnable";
     if (
@@ -81,7 +80,6 @@ export function addComponent(
   }
   
   function addWhere(contexte:any){
-      console.warn('addComponent WHERE called')
       var ul = $(
         '<ul class="childsList"><div class="lien-top"><span>' +
           getSettings().langSearch.Where +
@@ -90,7 +88,6 @@ export function addComponent(
       var parent_li = $(ul).parent("li");
       let width = calculateHorizontalWidth(parent_li,ul)
       let leftshift = calculateLeftShift(parent_li,ul)
-      console.log(`n_width: ${width}, t_width:${leftshift}`)
       $(ul).find(">.lien-top").css("width", width);
       $(parent_li).find(">.link-where-bottom").css("left", leftshift);
       return ul

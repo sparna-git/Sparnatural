@@ -30,9 +30,6 @@ let jsTree = require('jstree').default;
 		
 		render() {
 			//render this element
-			$(this.ParentComponent.widgetHtml).append($(this.html))
-
-
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -125,8 +122,6 @@ let jsTree = require('jstree').default;
 		}
 		
 		render() {
-			//render this element
-
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -224,7 +219,6 @@ let jsTree = require('jstree').default;
 		
 		render() {
 			//render this element
-			$(this.ParentComponent.widgetHtml).append($(this.html))
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -334,7 +328,6 @@ let jsTree = require('jstree').default;
 		
 		render() {
 			//render this element
-			$(this.ParentComponent.widgetHtml).append($(this.html))
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
@@ -464,13 +457,7 @@ let jsTree = require('jstree').default;
 
 		
 		render() {
-			//render this element
-			$(this.ParentComponent.widgetHtml).append($(this.html))
-
-			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
-			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
-			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;
-			
+			//render this element			
 			var id_inputs = this.IdCriteriaGroupe ;			
 			var itc_obj = this.ParentComponent;
 
@@ -606,8 +593,6 @@ let jsTree = require('jstree').default;
 		
 		render() {
 			//render this element
-			$(this.ParentComponent.widgetHtml).append($(this.html))
-
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
 			var CriteriaGroup = this.ParentComponent.ParentComponent.ParentCriteriaGroup ;
@@ -650,9 +635,6 @@ let jsTree = require('jstree').default;
 
 		
 		render() {
-			//render this element
-			$(this.ParentComponent.widgetHtml).append($(this.html))
-
 			var id_inputs = this.IdCriteriaGroupe;			
 			var itc_obj = this.ParentComponent;			
 			var CriteriaGroup = this.ParentComponent.ParentComponent.ParentCriteriaGroup ;
@@ -731,9 +713,6 @@ let jsTree = require('jstree').default;
 		
 		render() {
 			//render this element
-			$(this.ParentComponent.widgetHtml).append($(this.html))
-
-
 			var startClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup.value_selected ;
 			var endClassGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup.value_selected ;
 			var ObjectPropertyGroup_value = this.ParentComponent.ParentComponent.ParentCriteriaGroup.ObjectPropertyGroup.value_selected ;

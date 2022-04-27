@@ -1,9 +1,5 @@
-import { FilteringSpecificationProvider } from "../../spec-providers/FilteringSpecificationProvider";
-
-import { SimpleStatisticsHandler } from "./statistics/StatisticsHandlers";
 import CriteriaGroup from "../htmlcomponents/CriteriaGroup";
 import ISettings from "../../../configs/client-configs/ISettings"
-import { getSettings } from "../../../configs/client-configs/settings";
 
 
 //Responsible if a WHERE or AND got clicked?
@@ -68,9 +64,6 @@ export function initGeneralEvent(thisForm_: any, settings: ISettings) {
     .css({ background: cssdef + ")" });
 }
 
-
-
-
 /**
  * Utility function to find the criteria "above" a given criteria ID, being
  * either the "parent" in a WHERE criteria, or the "sibling"
@@ -110,9 +103,14 @@ export function initGeneralEvent(thisForm_: any, settings: ISettings) {
 
 export function eventProxiCriteria(e: { data: { arg1: any; arg2: any; }; }) {
 	console.log("eventproxycriteria")
-
+  console.log("event")
+  console.dir(e)
 	var arg1 = e.data.arg1;
 	var arg2 = e.data.arg2;
+  console.log("arg1")
+  console.dir(arg1)
+  console.log("arg2")
+  console.log(arg2)
 	arg1[arg2](e) ;
 }
 

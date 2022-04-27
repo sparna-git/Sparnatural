@@ -130,8 +130,6 @@ import CriteriaGroup from "../CriteriaGroup";
 			} else {
 				this.widgetHtml = $(widgetLabel + this.widgetComponent.html)  ;
 			}
-            // First init this component as parent component and then init the widgetComponent because it will be attached to this component
-            // this component gets inserted under the EndclassGroup
             this.htmlParent = this.GrandParent.EndClassGroup.html.find('.EditComponents')
             this.init()
 

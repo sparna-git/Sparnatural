@@ -174,7 +174,6 @@ class EndClassWidgetGroup extends HTMLComponent {
 		}
 
         onChange() {
-			console.warn('what?')
 			var theValue = this.inputTypeComponent.getValue() ;
 			// put span around with proper class if coming from a date widget
 			

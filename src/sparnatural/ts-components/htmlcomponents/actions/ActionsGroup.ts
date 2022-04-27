@@ -106,8 +106,7 @@ class ActionsGroup extends HTMLComponent {
 	}
 
 	// This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
-    onAddWhere() {
-		console.warn("ActionsGroup.onAddWhere()")	
+    onAddWhere() {	
         this.ParentCriteriaGroup.html.parent('li').addClass('haveWhereChild') ;
         this.ParentCriteriaGroup.initCompleted() ;
         
@@ -122,7 +121,6 @@ class ActionsGroup extends HTMLComponent {
         $(new_component).find('.StartClassGroup .nice-select:not(.disabled)').trigger('click') ;
     }
     onAddAnd(){
-		console.warn("ActionsGroup.onAddAnd()")
         var new_component = addComponent.call(this,
             this.ParentCriteriaGroup.thisForm_,
             this.ParentCriteriaGroup.AncestorComponentHtml,

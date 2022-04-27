@@ -27,7 +27,6 @@ class ClassTypeId extends HTMLComponent {
 	}
 
 	render() {
-		console.log("classtypeid render()")
 		if(this.cssClasses.Created){
 			console.log("CHECK here. Didn't think that would happen")
 		}
