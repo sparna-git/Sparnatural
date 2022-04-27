@@ -1,3 +1,1 @@
-const BaseCssClass = {
-    
-}
+const BaseCssClass = {};

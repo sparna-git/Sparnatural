@@ -1,6 +1,5 @@
 import CriteriaGroup from "../htmlcomponents/CriteriaGroup";
-import ISettings from "../../../configs/client-configs/ISettings"
-
+import ISettings from "../../../configs/client-configs/ISettings";
 
 //Responsible if a WHERE or AND got clicked?
 export function initGeneralEvent(thisForm_: any, settings: ISettings) {
@@ -25,7 +24,7 @@ export function initGeneralEvent(thisForm_: any, settings: ISettings) {
   var ratio = 100 / leng / 100;
   var prev = 0;
   var cssdef = "linear-gradient(180deg";
-  $all_li.each((index,elem) =>{
+  $all_li.each((index, elem) => {
     // elemements are of class="group addwhereEnable"
     var a = (index + 1) * ratio;
     // outer height of html elements classgroup addWhereEnable
@@ -47,7 +46,7 @@ export function initGeneralEvent(thisForm_: any, settings: ISettings) {
     prev = prev + height + 1;
     if ($(elem).next().length > 0) {
       //hasAnd is responsible that the connection gets drawn
-      console.log('hasAND does get called')
+      console.log("hasAND does get called");
       $(elem).addClass("hasAnd");
       var this_li = $(elem);
 
@@ -69,71 +68,101 @@ export function initGeneralEvent(thisForm_: any, settings: ISettings) {
  * either the "parent" in a WHERE criteria, or the "sibling"
  * in an AND criteria
  **/
- export function findParentOrSiblingCriteria(thisForm_: { sparnatural: { components: any; }; }, id: string) {
-   // TODO refactor type (sibling | parent) to enums and not strings
-	let dependant:{type:any,element:any} = {
-		type: null,
-		element: $(thisForm_.sparnatural).find('li[data-index="'+id+'"]')
-	}
+export function findParentOrSiblingCriteria(
+  thisForm_: { sparnatural: { components: any } },
+  id: string
+) {
+  // TODO refactor type (sibling | parent) to enums and not strings
+  let dependant: { type: any; element: any } = {
+    type: null,
+    element: $(thisForm_.sparnatural).find('li[data-index="' + id + '"]'),
+  };
   //
-	var dep_id: number = null ;
-	if ($(dependant.element).parents('li').length > 0) {			
-		dep_id = parseInt($($(dependant.element).parents('li')[0]).attr('data-index')) ;
-		dependant = {type : 'parent', element: null}
-		if ($(dependant.element).prev().length > 0) {
-			dep_id = parseInt($(dependant.element).prev().attr('data-index')) ;
-			dependant = {type : 'sibling', element: null} 
-		}
-	} 
+  var dep_id: number = null;
+  if ($(dependant.element).parents("li").length > 0) {
+    dep_id = parseInt(
+      $($(dependant.element).parents("li")[0]).attr("data-index")
+    );
+    dependant = { type: "parent", element: null };
+    if ($(dependant.element).prev().length > 0) {
+      dep_id = parseInt($(dependant.element).prev().attr("data-index"));
+      dependant = { type: "sibling", element: null };
+    }
+  }
 
-	thisForm_.sparnatural.components.forEach((component:{index:number,CriteriaGroup:CriteriaGroup}) => {	
-		if (component.index == dep_id) {
-			dependant = {
-				type: dependant.type,
-				element: component.CriteriaGroup
-			}
-		} 
-	}) ;
+  thisForm_.sparnatural.components.forEach(
+    (component: { index: number; CriteriaGroup: CriteriaGroup }) => {
+      if (component.index == dep_id) {
+        dependant = {
+          type: dependant.type,
+          element: component.CriteriaGroup,
+        };
+      }
+    }
+  );
 
   // catch this error otherwise calling function will crash
-  if(!dependant.element) throw Error("Didn't find the dependant element. dependant.element should not be null.")
+  if (!dependant.element)
+    throw Error(
+      "Didn't find the dependant element. dependant.element should not be null."
+    );
 
-	return dependant ;
+  return dependant;
 }
 
-export function eventProxiCriteria(e: { data: { arg1: any; arg2: any; }; }) {
-	console.log("eventproxycriteria")
-  console.log("event")
-  console.dir(e)
-	var arg1 = e.data.arg1;
-	var arg2 = e.data.arg2;
-  console.log("arg1")
-  console.dir(arg1)
-  console.log("arg2")
-  console.log(arg2)
-	arg1[arg2](e) ;
+export function eventProxiCriteria(e: { data: { arg1: any; arg2: any } }) {
+  console.log("eventproxycriteria");
+  console.log("event");
+  console.dir(e);
+  var arg1 = e.data.arg1;
+  var arg2 = e.data.arg2;
+  console.log("arg1");
+  console.dir(arg1);
+  console.log("arg2");
+  console.log(arg2);
+  arg1[arg2](e);
 }
 
 export function localName(uri: string) {
-	if (uri.indexOf("#") > -1) {
-		return uri.split("#")[1] ;
-	} else {
-		var components = uri.split("/") ;
-		return components[components.length - 1] ;
-	}
+  if (uri.indexOf("#") > -1) {
+    return uri.split("#")[1];
+  } else {
+    var components = uri.split("/");
+    return components[components.length - 1];
+  }
 }
 export function redrawBottomLink(parentElementLi: JQuery<HTMLElement>) {
-	var n_width = 0;
-	var ul = $(parentElementLi).children('ul').first() ;
-	if (ul.length == 1) {
-		n_width = n_width + getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) as JQuery<HTMLUListElement> ) - 111 + 15 + 11 + 20 + 5 + 3 ;
-		var t_width = getOffset( $(parentElementLi).find('>div>.EndClassGroup'), $(ul) as JQuery<HTMLUListElement> ) + 15 + 11 + 20 + 5  ;
-		$(ul).find('>.lien-top').css('width', n_width) ;
-		$(parentElementLi).find('>.link-where-bottom').css('left', t_width) ;
-	}
+  var n_width = 0;
+  var ul = $(parentElementLi).children("ul").first();
+  if (ul.length == 1) {
+    n_width =
+      n_width +
+      getOffset(
+        $(parentElementLi).find(">div>.EndClassGroup"),
+        $(ul) as JQuery<HTMLUListElement>
+      ) -
+      111 +
+      15 +
+      11 +
+      20 +
+      5 +
+      3;
+    var t_width =
+      getOffset(
+        $(parentElementLi).find(">div>.EndClassGroup"),
+        $(ul) as JQuery<HTMLUListElement>
+      ) +
+      15 +
+      11 +
+      20 +
+      5;
+    $(ul).find(">.lien-top").css("width", n_width);
+    $(parentElementLi).find(">.link-where-bottom").css("left", t_width);
+  }
 }
-export function getOffset( elem: JQuery<HTMLElement>, elemParent: JQuery<HTMLUListElement> ) {
-	return elem.offset().left - $(elemParent).offset().left ;
+export function getOffset(
+  elem: JQuery<HTMLElement>,
+  elemParent: JQuery<HTMLUListElement>
+) {
+  return elem.offset().left - $(elemParent).offset().left;
 }
-
-

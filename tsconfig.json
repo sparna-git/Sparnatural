@@ -7,7 +7,8 @@
       "target": "es6",
       "jsx": "react",
       "allowJs": true,
-      "moduleResolution": "node"
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports":true
     },
     "include": [
       "src/**/*.ts",

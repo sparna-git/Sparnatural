@@ -9,31 +9,49 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
     There the Endclassgroup is foun
 */
 class ActionWhere extends HTMLComponent {
+  settings: ISettings;
+  GrandParentComponent: CriteriaGroup;
+  constructor(
+    ParentComponent: ActionsGroup,
+    specProvider: ISpecProvider,
     settings: ISettings
-    GrandParentComponent:CriteriaGroup
-    constructor(ParentComponent:ActionsGroup, specProvider:ISpecProvider, settings:ISettings){
-        //TODO refactor the null init in html widget
-        super("ActionWhere",ParentComponent,specProvider,null)
-        this.GrandParentComponent = ParentComponent.ParentComponent as CriteriaGroup
-        this.cssClasses.ShowOnEdit = true
-        this.settings = settings 
+  ) {
+    //TODO refactor the null init in html widget
+    super("ActionWhere", ParentComponent, specProvider, null);
+    this.GrandParentComponent =
+      ParentComponent.ParentComponent as CriteriaGroup;
+    this.cssClasses.ShowOnEdit = true;
+    this.settings = settings;
+  }
+  render = () => {
+    // Endclassgroup -> EditComponents -> ActionWhere
+    var endClassGroup = this.GrandParentComponent.EndClassGroup;
+    this.htmlParent = $(endClassGroup.html).find(".EditComponents");
+    var choiceNumber = 2;
+    if (
+      endClassGroup.ParentCriteriaGroup.EndClassWidgetGroup.inputTypeComponent
+        .widgetHtml == null
+    ) {
+      choiceNumber = 1;
+      $(endClassGroup.html).addClass("noPropertyWidget");
+    } else {
+      $(endClassGroup.html).removeClass("noPropertyWidget");
     }
-    render = () => {
-       		// Endclassgroup -> EditComponents -> ActionWhere
-        var endClassGroup = this.GrandParentComponent.EndClassGroup ;
-        this.htmlParent = $(endClassGroup.html).find('.EditComponents')    
-        var choiceNumber = 2 ;
-        if (endClassGroup.ParentCriteriaGroup.EndClassWidgetGroup.inputTypeComponent.widgetHtml == null) {
-            choiceNumber = 1 ;
-            $(endClassGroup.html).addClass('noPropertyWidget') ;
-        } else {
-            $(endClassGroup.html).removeClass('noPropertyWidget') ;
-        }
-        var endLabel = this.specProvider.getLabel(endClassGroup.value_selected) ;
-        var widgetLabel = '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">'+choiceNumber+'</span></span>'+this.settings.langSearch.Search+' '+ 'endlbl:'+endLabel + ' '+this.settings.langSearch.That+'...' ;
+    var endLabel = this.specProvider.getLabel(endClassGroup.value_selected);
+    var widgetLabel =
+      '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">' +
+      choiceNumber +
+      "</span></span>" +
+      this.settings.langSearch.Search +
+      " " +
+      "endlbl:" +
+      endLabel +
+      " " +
+      this.settings.langSearch.That +
+      "...";
 
-        this.widgetHtml = $(widgetLabel+'<a>+</a>') ;
-        this.init()
-    }
+    this.widgetHtml = $(widgetLabel + "<a>+</a>");
+    this.init();
+  };
 }
-export default ActionWhere
+export default ActionWhere;

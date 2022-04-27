@@ -1,5 +1,5 @@
-export default interface IWidget{
-    html:string
-    render: ()=>void
-    getValue:()=>any
+export default interface IWidget {
+  html: string;
+  render: () => void;
+  getValue: () => any;
 }
