@@ -48,17 +48,6 @@ class EndClassGroup extends HTMLComponent {
     $(this.html).find(".input-val").unbind("change");
     $(this.html).append('<div class="EditComponents ShowOnEdit"></div>');
 
-    var unselect = $(
-      '<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>'
-    );
-    this.selectViewVariable = $(
-      '<span class="selectViewVariable">' +
-        UiuxConfig.ICON_NOT_SELECTED_VARIABLE +
-        "</span>"
-    );
-    $(this.html).append(unselect);
-    $(this.html).append(this.selectViewVariable);
-
     //this.EndClassGroup.init() ;
     this.inputTypeComponent.render();
 
@@ -118,6 +107,9 @@ class EndClassGroup extends HTMLComponent {
 		When Country got selected this events fires
 	*/
   onChange() {
+    this.#renderUnselectBtn()
+    this.#renderSelectViewVariableBtn()
+    console.warn('endclassgroup.onchange')
     this.#getSelectedValue();
     //Set the variable name for Sparql
     if (this.varName == null) {
@@ -176,7 +168,25 @@ class EndClassGroup extends HTMLComponent {
     this.value_selected = $(this.html).find("select.input-val").val();
   }
 
+  // is this little crossed eye button at the end of EndclassGroup component
+  #renderSelectViewVariableBtn(){
+    this.selectViewVariable = $(
+      '<span class="selectViewVariable">' +
+        UiuxConfig.ICON_NOT_SELECTED_VARIABLE +
+        "</span>"
+    );
+    $(this.html).append(this.selectViewVariable);
+  }
+
+  #renderUnselectBtn(){
+    var unselect = $(
+      '<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>'
+    );
+    $(this.html).append(unselect);
+  }
+
   onRemoveSelected() {
+    console.warn("Endclassgroup . onRemoveSelected")
     $(this.ParentCriteriaGroup.html)
       .find(">.EndClassWidgetGroup .EndClassWidgetValue span.unselect")
       .trigger("click");

@@ -46,7 +46,6 @@ export function initGeneralEvent(thisForm_: any, settings: ISettings) {
     prev = prev + height + 1;
     if ($(elem).next().length > 0) {
       //hasAnd is responsible that the connection gets drawn
-      console.log("hasAND does get called");
       $(elem).addClass("hasAnd");
       var this_li = $(elem);
 
@@ -111,15 +110,8 @@ export function findParentOrSiblingCriteria(
 }
 
 export function eventProxiCriteria(e: { data: { arg1: any; arg2: any } }) {
-  console.log("eventproxycriteria");
-  console.log("event");
-  console.dir(e);
   var arg1 = e.data.arg1;
   var arg2 = e.data.arg2;
-  console.log("arg1");
-  console.dir(arg1);
-  console.log("arg2");
-  console.log(arg2);
   arg1[arg2](e);
 }
 

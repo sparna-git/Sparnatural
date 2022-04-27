@@ -115,6 +115,7 @@ class CriteriaGroup extends HTMLComponent {
   };
 
   onRemoveCriteria = () => {
+    console.warn('onremovecriteria')
     var index_to_remove = this.id;
 
     //RemoveSelectedVariable names

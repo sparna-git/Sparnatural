@@ -70,6 +70,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   }
 
   reload() {
+    console.warn("reload objectpropertytypeID")
     this.render(); // IMPORTANT  is this right? or should it be this.init()? to only update css classes
   }
 }

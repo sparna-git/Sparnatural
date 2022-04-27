@@ -44,6 +44,7 @@ class ObjectPropertyGroup extends HTMLComponent {
 		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
 	*/
   onEndClassGroupSelected() {
+    console.log('objectpropertygroup.onendclassgroupselected')
     // this will update the temporarly label
     this.objectPropertySelector.render();
 
