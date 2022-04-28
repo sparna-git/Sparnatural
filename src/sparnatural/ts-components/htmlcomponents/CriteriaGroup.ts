@@ -66,21 +66,21 @@ class CriteriaGroup extends HTMLComponent {
     ).appendTo($(this.ComponentHtml));
 
     // create all the elements of the criteria
-    this.StartClassGroup = new StartClassGroup(this, specProvider, settings);
-    this.OptionsGroup = new OptionsGroup(this, specProvider);
+    this.StartClassGroup = new StartClassGroup(this, specProvider, settings).render();
+    this.OptionsGroup = new OptionsGroup(this, specProvider).render();
     this.ObjectPropertyGroup = new ObjectPropertyGroup(
       this,
       specProvider,
       settings,
       settings.langSearch.ObjectPropertyTemporaryLabel
-    );
-    this.EndClassGroup = new EndClassGroup(this, specProvider, settings);
+    ).render();
+    this.EndClassGroup = new EndClassGroup(this, specProvider, settings).render();
     this.EndClassWidgetGroup = new EndClassWidgetGroup(
       this,
       settings,
       specProvider
-    );
-    this.ActionsGroup = new ActionsGroup(this, specProvider, settings);
+    ).render();
+    this.ActionsGroup = new ActionsGroup(this, specProvider, settings).render();
     this.assembleComponents();
   }
   //this._this = this ; IMPORTANT : unused var?
@@ -131,11 +131,11 @@ class CriteriaGroup extends HTMLComponent {
         .parents("li.groupe")
         .each(function () {
           $(this)
-            .find(">div>.OptionsGroup .EditComponents")
+            .find(">div>.OptionsGroup")
             .first()
             .addClass("Enabled");
           $(this)
-            .find(">div>.OptionsGroup .EditComponents")
+            .find(">div>.OptionsGroup")
             .first()
             .removeClass("Disabled");
         });
@@ -145,11 +145,11 @@ class CriteriaGroup extends HTMLComponent {
         .find("li.groupe")
         .each(function () {
           $(this)
-            .find(">div>.OptionsGroup .EditComponents")
+            .find(">div>.OptionsGroup")
             .first()
             .addClass("Enabled");
           $(this)
-            .find(">div>.OptionsGroup .EditComponents")
+            .find(">div>.OptionsGroup")
             .first()
             .removeClass("Disabled");
         });
@@ -251,7 +251,5 @@ class CriteriaGroup extends HTMLComponent {
     $(this.html).parent("li").addClass("completed");
   };
 
-  // trigger the init event
-  //$(this).trigger( {type:"Created" } ) ; // TODO : delete unused code
 }
 export default CriteriaGroup;

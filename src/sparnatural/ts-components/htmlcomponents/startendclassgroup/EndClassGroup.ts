@@ -16,7 +16,7 @@ class EndClassGroup extends HTMLComponent {
   settings: ISettings;
   variableSelector: any;
   selectViewVariable: JQuery<HTMLElement>;
-  value_selected: any = null;
+  value_selected: any;
   notSelectForview: boolean;
   inputTypeComponent: ClassTypeId;
   variableNamePreload: string;
@@ -30,28 +30,33 @@ class EndClassGroup extends HTMLComponent {
     super("EndClassGroup", ParentCriteriaGroup, specProvider, null);
     this.settings = settings;
     this.inputTypeComponent = new ClassTypeId(this, specProvider);
-    this.inputTypeComponent.needBackArrow = true;
-    this.inputTypeComponent.needFrontArrow = true;
 
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be above varName declaration
+    
+
+  }
+
+  render(){
+    super.render()
     // contains the name of the SPARQL variable associated to this component
     this.varName = this.ParentCriteriaGroup.jsonQueryBranch
-      ? this.ParentCriteriaGroup.jsonQueryBranch.line.o
-      : null;
+    ? this.ParentCriteriaGroup.jsonQueryBranch.line.o
+    : null;
+    console.log(`VARNAME: ${this.varName}`)
     this.variableSelector = null;
-
-    this.init();
+    this.value_selected = null
+    return this
   }
 
   // triggered when the subject/domain is selected
   onStartClassGroupSelected() {
+    console.log('endlclassgrp startgrp selected')
+    // render the inputComponent for a user to select an Object
+    this.inputTypeComponent.render()
+    console.log($(this.html).children())
+    console.log($(this.inputTypeComponent.html).children())
     $(this.html).find(".input-val").unbind("change");
-    $(this.html).append('<div class="EditComponents ShowOnEdit"></div>');
-
-    //this.EndClassGroup.init() ;
-    this.inputTypeComponent.render();
-
-    //this.inputTypeComponent.cssClasses.IsOnEdit = true;
+    $(this.html).append('<div class="EditComponents"></div>');
 
     $(this.html).find("select.input-val").niceSelect();
     if (this.inputTypeComponent.needTriggerClick == false) {
@@ -60,20 +65,7 @@ class EndClassGroup extends HTMLComponent {
     $(this.html)
       .find("select.input-val")
       .on("change", { arg1: this, arg2: "onChange" }, eventProxiCriteria);
-    $(this.html)
-      .find("span.unselectEndClass")
-      .on(
-        "click",
-        { arg1: this, arg2: "onRemoveSelected" },
-        eventProxiCriteria
-      );
-    $(this.html)
-      .find("span.selectViewVariable")
-      .on(
-        "click",
-        { arg1: this, arg2: "onchangeViewVariable" },
-        eventProxiCriteria
-      );
+   
     if (this.inputTypeComponent.needTriggerClick == true) {
       // Ne pas selectionner pour les résultats si chargement en cours
       this.notSelectForview = true;
@@ -85,7 +77,38 @@ class EndClassGroup extends HTMLComponent {
     }
   }
 
+    //All components in this CriteriaGroup have to be recreated except the the StartClassGroup
+    onRemoveSelected() {
+      console.warn('endclassgroup onRemoveSelected')
+      let optionsGrp = $(this.ParentCriteriaGroup.html).find('.OptionsGroup')
+      this.#removeComponent(optionsGrp)
+  
+      let objectPropertyGrp = $(this.ParentCriteriaGroup.html).find('.ObjectPropertyGroup')
+      this.#removeComponent(objectPropertyGrp)
+  
+      let endClassGrp = $(this.ParentCriteriaGroup.html).find('.EndClassGroup')
+      this.#removeComponent(endClassGrp)
+  
+      let endClassWgtGrp = $(this.ParentCriteriaGroup.html).find('.EndClassWidgetGroup')
+      this.#removeComponent(endClassWgtGrp)
+  
+      let actionsGrp = $(this.ParentCriteriaGroup.html).find('.ActionsGroup')
+      this.#removeComponent(actionsGrp)
+  
+      //Now rerender all of them
+      this.ParentCriteriaGroup.OptionsGroup.render()
+      this.ParentCriteriaGroup.ObjectPropertyGroup.render()
+      this.ParentCriteriaGroup.EndClassGroup.render()
+      this.ParentCriteriaGroup.EndClassWidgetGroup.render()
+      this.ParentCriteriaGroup.ActionsGroup.render()
+  
+      // set the state back
+      $(this.ParentCriteriaGroup).trigger("StartClassGroupSelected")
+  
+    }
+
   onchangeViewVariable() {
+    console.warn("endclassgrp onChangeViewVar")
     if (this.variableSelector === null) {
       //Add varableSelector on variableSelector list ;
       this.variableSelector = new VariableSelector(this, this.specProvider);
@@ -107,10 +130,11 @@ class EndClassGroup extends HTMLComponent {
 		When Country got selected this events fires
 	*/
   onChange() {
+    console.warn("endclassgrp onChange")
     this.#renderUnselectBtn()
     this.#renderSelectViewVariableBtn()
     console.warn('endclassgroup.onchange')
-    this.#getSelectedValue();
+    this.value_selected = this.#getSelectedValue();
     //Set the variable name for Sparql
     if (this.varName == null) {
       this.varName =
@@ -130,13 +154,13 @@ class EndClassGroup extends HTMLComponent {
     } else {
       $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
     }
+    // since this component was already created only the css classes are updated
     this.cssClasses.HasInputsCompleted = true;
     this.cssClasses.IsOnEdit = false;
-    this.init();
-
+    this.update()
     // show and init the property selection
     this.ParentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = false;
-    this.ParentCriteriaGroup.ObjectPropertyGroup.init(); //IMPORTANT this shouldn't work
+
 
     // trigger the event that will call the ObjectPropertyGroup
     $(this.ParentCriteriaGroup).trigger("EndClassGroupSelected");
@@ -156,6 +180,7 @@ class EndClassGroup extends HTMLComponent {
       );
     }
   }
+
   // after an Object is chosen, disable the inputs
   #disableSelectionPossibility() {
     $(this.ParentCriteriaGroup.EndClassGroup.html)
@@ -163,9 +188,10 @@ class EndClassGroup extends HTMLComponent {
       .attr("disabled", "disabled")
       .niceSelect("update");
   }
+
   // gathers the selected Object chosen
   #getSelectedValue() {
-    this.value_selected = $(this.html).find("select.input-val").val();
+    return $(this.html).find("select.input-val").val();
   }
 
   // is this little crossed eye button at the end of EndclassGroup component
@@ -176,68 +202,46 @@ class EndClassGroup extends HTMLComponent {
         "</span>"
     );
     $(this.html).append(this.selectViewVariable);
+  
+    this.selectViewVariable.on(
+        "click",
+        { arg1: this, arg2: "onchangeViewVariable" },
+        eventProxiCriteria
+      );
   }
 
   #renderUnselectBtn(){
     var unselect = $(
       '<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>'
     );
+    console.log('renderunselectbtn')
+    console.log(this.html)
     $(this.html).append(unselect);
+
+    unselect.on(
+      "click",
+      { arg1: this, arg2: "onRemoveSelected" },
+      eventProxiCriteria
+    );
   }
 
-  onRemoveSelected() {
-    console.warn("Endclassgroup . onRemoveSelected")
-    $(this.ParentCriteriaGroup.html)
-      .find(">.EndClassWidgetGroup .EndClassWidgetValue span.unselect")
-      .trigger("click");
-    this.ParentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = true;
-    this.ParentCriteriaGroup.ObjectPropertyGroup.init();
-    this.ParentCriteriaGroup.ObjectPropertyGroup.onStartClassGroupSelected();
-    $(this.ParentCriteriaGroup.ComponentHtml)
-      .find(".childsList .ActionRemove a")
-      .trigger("click");
-    this.value_selected = null;
-    this.cssClasses.HasInputsCompleted = false;
-    this.cssClasses.IsOnEdit = true;
-    $(this.html).removeClass("VariableSelected");
-    this.init();
-    $(this.html)
-      .find("select.input-val")
-      .on("change", { arg1: this, arg2: "onChange" }, eventProxiCriteria);
-    $(this.html).find(".input-val").removeAttr("disabled").niceSelect("update");
 
-    $(this.ParentCriteriaGroup.html)
-      .parent("li")
-      .removeClass("WhereImpossible");
-    this.ParentCriteriaGroup.ActionsGroup.reinsert = true;
-    $(this.ParentCriteriaGroup.ComponentHtml).removeClass("completed");
-    $(this.html).find(".ClassTypeId .nice-select").trigger("click");
 
-    //Removote to Variable list
-    if (this.variableSelector !== null) {
-      this.variableSelector.remove();
-      this.variableSelector = null;
-      $(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE);
-    }
+  #removeComponent(component:JQuery<HTMLElement>){
+    this.#isExactlyOne(component)
+    component.empty()
+    component.remove()
+  }
 
-    //Reload options menu to wait objectProperty selection
-    this.ParentCriteriaGroup.OptionsGroup.reload();
-
-    // clean the variable name so that it is regenerated when a new value is selected in the onChange
-    this.varName = null;
+  // check if the Jquery find method found exactly one child element
+  #isExactlyOne(el:JQuery<HTMLElement>){
+    if(el.length > 1) throw Error(`More than one ${el[0]} found. Criteriagroup ${this.ParentCriteriaGroup.html} has more than one ${el[0]} as child`)
+    // if no el found then length is zero
+    if(!el.length) throw Error(`No HTMLElement found. Criteriagroup id: ${this.ParentCriteriaGroup.id} doesn't contain the HTMLElement`)
   }
 
   getVarName() {
     return this.varName;
   }
-  // TODO refactor away. only endclassgroup and startclassgroup are using this
-  // IMPORTANT idon't think this does something
-  /*
-	onSelectValue(varName:any) {
-		var current = $(this.html).find('.nice-select .current').first() ;
-		var varNameForDisplay = '<span class="variableName">'+varName.replace('?', '')+'</span>' ;
-		$(varNameForDisplay).insertAfter($(current).find('.label').first()) ;
-
-	}*/
 }
 export default EndClassGroup;

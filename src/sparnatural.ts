@@ -58,7 +58,6 @@ export class SparNatural extends HTMLElement {
 
   constructor() {
     super();
-    // overwride the default settings with the settings provided by the index.html
     $(this).addClass("Sparnatural");
   }
 

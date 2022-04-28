@@ -160,6 +160,7 @@ export class ListWidget implements IWidget {
   }
 
   render() {
+    console.warn('render list widget')
     var startClassGroup_value =
       this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup
         .value_selected;
@@ -278,6 +279,7 @@ export class ListWidgetNew implements IWidget {
   }
 
   render() {
+    console.warn("RENDERWidg")
     //render this element
     var startClassGroup_value =
       this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup

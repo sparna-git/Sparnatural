@@ -7,6 +7,7 @@ import OptionTypeId from "./OptionTypeId";
 import CriteriaGroup from "./CriteriaGroup";
 import HTMLComponent from "./HtmlComponent";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
+import ArrowComponent from "./arrows/ArrowComponent";
 
 /**
  * Selection of the start class in a criteria/line
@@ -15,44 +16,44 @@ export class OptionsGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   valuesSelected: { [key: string]: boolean };
   inputTypeComponent: OptionTypeId;
+  frontArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
+  backArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_BACK)
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
     super("OptionsGroup", ParentCriteriaGroup, specProvider, null);
     this.valuesSelected = {};
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
     this.inputTypeComponent = new OptionTypeId(this, specProvider);
+    this.backArrow.cssClasses.Invisible = true
+    this.frontArrow.cssClasses.Invisible = true
 
-    this.init();
-    $(this.html).append(
-      '<div class="EditComponents flexWrap">' +
-        '<div class="componentBackArrow">' +
-        UiuxConfig.COMPONENT_OPTION_ARROW_FRONT +
-        "</div></div>"
-    );
   }
+  //TODO refactor to render()
+  // still necessary after refactoring the EndClassGroup on remove selected?
+  render() {
+    super.render()
+    this.backArrow.render()
 
-  reload() {
     if ($(this.html).find(".EditComponents").first().hasClass("Enabled")) {
       $(this.html).removeClass("Opended");
       redrawBottomLink($(this.html).parents("li.groupe").first());
     }
-    $(this.html).find(".EditComponents").removeClass("Disabled");
-    $(this.html).find(".EditComponents").removeClass("NoOptionEnabled");
-    $(this.html).find(".EditComponents").removeClass("Enabled");
-    $(this.html).find(".EditComponents").removeClass("ShowOnEdit");
-    $(this.html).find(".EditComponents>div").first().unbind("click");
+    $(this.html).removeClass("Disabled");
+    $(this.html).removeClass("NoOptionEnabled");
+    $(this.html).removeClass("Enabled");
+    $(this.html).removeClass("ShowOnEdit");
+    $(this.html).first().unbind("click");
     $(this.html).find(".input-val input").unbind("click");
     $(this.html).find(".input-val label").unbind("click");
-    // for re init all options menu and criteria conditional css if option is enbled
-    this.onChange();
-    $(this.html).find(".OptionTypeId").remove();
-    this.inputTypeComponent = new OptionTypeId(this, this.specProvider);
-
+    // if there were values selected delete it
     this.valuesSelected = {};
+    this.frontArrow.render() // init the Front arrow needs to be rendered after the ParentComponent e.g this
+    return this
   }
 
   onObjectPropertyGroupSelected() {
-    if ($(this.html).find("div.ShowOnEdit").length == 0) {
-      $(this.html).find("div.EditComponents").addClass("ShowOnEdit");
+    if ($(this.html).hasClass("ShowOnEdit")) {
+      console.log('OptionsGroup first if')
+      $(this.html).addClass("ShowOnEdit");
       var parentOptionEnable = false;
       $(this.html)
         .parents("li.groupe")
@@ -71,9 +72,11 @@ export class OptionsGroup extends HTMLComponent {
             this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
           ))
       ) {
-        $(this.html).find(".EditComponents").addClass("Disabled");
-        $(this.html).find(".EditComponents").removeClass("NoOptionEnabled");
+        console.log('optionsgroup second if')
+        $(this.html).addClass("Disabled");
+        $(this.html).removeClass("NoOptionEnabled");
         $(this.ParentCriteriaGroup.html).addClass("OptionMenuShowed");
+        // check if it is possible to enable optional and negatif values
         if (
           !this.specProvider.isEnablingOptional(
             this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
@@ -82,22 +85,21 @@ export class OptionsGroup extends HTMLComponent {
             this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
           )
         ) {
-          $(this.html).find(".EditComponents").addClass("NoOptionEnabled");
+          $(this.html).addClass("NoOptionEnabled");
           $(this.ParentCriteriaGroup.html).removeClass("OptionMenuShowed");
         }
       } else {
-        $(this.html).find(".EditComponents").addClass("Enabled");
+        console.log(console.log('optionsgroup second else'))
+        $(this.html).addClass("Enabled");
         $(this.ParentCriteriaGroup.html).addClass("OptionMenuShowed");
       }
 
       $(this.html)
-        .find(".EditComponents>div")
-        .first()
         .on("click", function (e) {
           if (
-            $(e.target).parents(".EditComponents").first().hasClass("Enabled")
+            $(e.target).hasClass("Enabled")
           ) {
-            $(e.target).parents(".OptionsGroup").first().toggleClass("Opended");
+            $(e.target).toggleClass("Opended");
             redrawBottomLink($(e.target).parents("li.groupe").first());
           }
         });
@@ -144,7 +146,15 @@ export class OptionsGroup extends HTMLComponent {
     }
   }
 
+    //This method only gets called on StartClassGroup.InputTypeComponent
+  // When the EndClassGroup is selected, then change the Front arrow to the back arrow
+  renderOptionalBackArrow(){
+    this.backArrow = new ArrowComponent(this,UiuxConfig.COMPONENT_OPTION_ARROW_FRONT)
+    this.render()
+  }
+
   onChange() {
+    console.warn("OptionsGroup onChange called")
     var optionsInputs = $(this.html).find(".input-val input").get();
     var optionSelected = false;
     for (var item in optionsInputs) {
@@ -193,11 +203,11 @@ export class OptionsGroup extends HTMLComponent {
         .parents("li.groupe")
         .each(function () {
           $(this)
-            .find(">div>.OptionsGroup .EditComponents")
+            .find(">div>.OptionsGroup")
             .first()
             .addClass("Disabled");
           $(this)
-            .find(">div>.OptionsGroup .EditComponents")
+            .find(">div>.OptionsGroup")
             .first()
             .removeClass("Enabled");
           $(this).find(">div>.OptionsGroup").first().removeClass("Opended");
@@ -208,11 +218,11 @@ export class OptionsGroup extends HTMLComponent {
         .find("li.groupe")
         .each(function () {
           $(this)
-            .find(">div>.OptionsGroup .EditComponents")
+            .find(">div>.OptionsGroup")
             .first()
             .addClass("Disabled");
           $(this)
-            .find(">div>.OptionsGroup .EditComponents")
+            .find(">div>.OptionsGroup")
             .first()
             .removeClass("Enabled");
           $(this).find(">div>.OptionsGroup").first().removeClass("Opended");
@@ -232,11 +242,11 @@ export class OptionsGroup extends HTMLComponent {
         .each(function () {
           if ($(this).find(">div>.OptionsGroup label").length > 0) {
             $(this)
-              .find(">div>.OptionsGroup .EditComponents")
+              .find(">div>.OptionsGroup")
               .first()
               .addClass("Enabled");
             $(this)
-              .find(">div>.OptionsGroup .EditComponents")
+              .find(">div>.OptionsGroup")
               .first()
               .removeClass("Disabled");
           }
@@ -248,11 +258,11 @@ export class OptionsGroup extends HTMLComponent {
         .each(function () {
           if ($(this).find(">div>.OptionsGroup label").length > 0) {
             $(this)
-              .find(">div>.OptionsGroup .EditComponents")
+              .find(">div>.OptionsGroup")
               .first()
               .addClass("Enabled");
             $(this)
-              .find(">div>.OptionsGroup .EditComponents")
+              .find(">div>.OptionsGroup")
               .first()
               .removeClass("Disabled");
           }

@@ -55,6 +55,8 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
   }
 
   render() {
+    this.widgetHtml = null;
+    console.warn('render objectpropertytypewidget')
     this.objectPropertyId = this.GrandParent.ObjectPropertyGroup.value_selected; // shows which objectproperty got chosen for which subject object combination
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropertyId
@@ -154,7 +156,9 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     }
     this.htmlParent =
       this.GrandParent.EndClassGroup.html.find(".EditComponents");
-    this.init();
+    console.log('objectpropertytypewidget htmlparent')
+    console.dir(this.htmlParent)
+    super.render()
 
     this.widgetComponent.render();
     $(this.html)
@@ -163,6 +167,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
       .on("click", () => {
         $(this).trigger("selectAll");
       });
+      return this
   }
 
   canHaveSelectAll() {
@@ -175,13 +180,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
       return false;
     }
     return true;
-  }
-
-  reload() {
-    //this.html = "" ;
-    console.log("Reload!");
-    this.widgetHtml = null;
-    this.init();
   }
 
   createWidgetComponent(

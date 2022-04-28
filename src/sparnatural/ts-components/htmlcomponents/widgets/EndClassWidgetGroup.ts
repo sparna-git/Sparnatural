@@ -9,6 +9,7 @@ import { initGeneralEvent } from "../../globals/globalfunctions";
 import HTMLComponent from "../HtmlComponent";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import { TreeWidget } from "./Widgets";
+import { getSettings } from "../../../../configs/client-configs/settings";
 
 class EndClassWidgetGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
@@ -36,13 +37,17 @@ class EndClassWidgetGroup extends HTMLComponent {
     );
     this.ParentCriteriaGroup = CriteriaGroup;
   }
+
+  render(){
+    super.render()
+    return this
+  }
   /**
    * Called when the property/link between domain and range is selected, to init this.
    **/
   onObjectPropertyGroupSelected() {
-    console.warn("onObjectPropertyGroupSelected()");
-    // Affichage de la ligne des actions
-    this.ParentCriteriaGroup.ComponentHtml.addClass("OnEdit");
+    this.inputTypeComponent.render()
+    console.warn("Endclasswidgetgroup. onObjectPropertyGroupSelected()");
 
     // binds a selection in an input widget with the display of the value in the line
     $(this.inputTypeComponent).on(
@@ -64,8 +69,10 @@ class EndClassWidgetGroup extends HTMLComponent {
     );
     // IMPORTANT changed the reinsert and init after the function bining onchange. otherwise selectedValues are empty cause only in onChange they are getting filled
     if (this.ParentCriteriaGroup.ActionsGroup.reinsert == true) {
-      this.inputTypeComponent.reload();
+      console.warn('Actionsgroup reinsert true')
+      this.inputTypeComponent.render();
     } else {
+      console.warn('Actiongroupreinsert false')
       this.inputTypeComponent.render();
     }
     if (this.ParentCriteriaGroup.jsonQueryBranch != null) {
@@ -86,6 +93,7 @@ class EndClassWidgetGroup extends HTMLComponent {
 
   // input : the 'key' of the value to be deleted
   onremoveValue(e: any) {
+    console.warn('endclasswidget on remove value was called')
     if (this.selectAllValue) {
       //unselect the endClass for view
       this.ParentCriteriaGroup.EndClassGroup.onchangeViewVariable();
@@ -158,13 +166,13 @@ class EndClassWidgetGroup extends HTMLComponent {
       }
 
       // re-init the widget to empty input field
-      this.inputTypeComponent.reload();
+      this.inputTypeComponent.render();
     }
 
     $(this.ParentCriteriaGroup).trigger("EndClassWidgetGroupUnselected");
     $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
 
-    initGeneralEvent.call(this, this.ParentCriteriaGroup.thisForm_);
+    initGeneralEvent.call(this, this.ParentCriteriaGroup.thisForm_,getSettings());
   }
 
   loadValue = function loadValue(value: any) {
@@ -229,9 +237,18 @@ class EndClassWidgetGroup extends HTMLComponent {
     $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
     initGeneralEvent.call(this, this.ParentCriteriaGroup.thisForm_);
   }
+  // this method renders Arrow Components on the ClassTypeId's
+  #renderArrowComponentents(){
+    this.ParentCriteriaGroup.EndClassGroup.inputTypeComponent.highlight()
+    this.ParentCriteriaGroup.StartClassGroup.inputTypeComponent.highlight()
+  }
 
   onChange() {
-    var theValue = this.inputTypeComponent.getValue();
+    //TODO render here the back and front arrow for both InputClasstypes
+    this.#renderArrowComponentents()
+
+    console.warn("endclasswidgetGroup onChange called")
+    var theValue = this.inputTypeComponent.getValue(); // could be array or single value
     // put span around with proper class if coming from a date widget
 
     if (theValue == null) {
@@ -288,7 +305,45 @@ class EndClassWidgetGroup extends HTMLComponent {
     }
 
     // var value_data = (Array.isArray(theValue))?theValue.toString():theValue;
+    console.log('what are these values?')
+    console.dir(new_items)
+    this.#renderAllItemsSelected(new_items,theValue)
 
+    // disable the Where
+    $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
+    $(this.ParentCriteriaGroup.html).removeClass("onAddOrValue");
+
+    this.ParentCriteriaGroup.initCompleted();
+
+    $(this.ParentCriteriaGroup).trigger("EndClassWidgetGroupSelected");
+    $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
+
+    //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
+    if (this.selectedValues.length == this.settings.maxOr) {
+      $(this.ParentCriteriaGroup.html)
+        .find(".EndClassWidgetGroup .EndClassWidgetAddOrValue")
+        .hide();
+    }
+
+    if (this.selectedValues.length > 0) {
+      $(this.ParentCriteriaGroup.ObjectPropertyGroup.html)
+        .find(".input-val")
+        .attr("disabled", "disabled")
+        .niceSelect("update");
+    }
+
+    $(this.ParentCriteriaGroup.html)
+      .find(".EndClassGroup>.EditComponents")
+      .removeClass("newOr");
+    initGeneralEvent.call(
+      this,
+      this.ParentCriteriaGroup.thisForm_,
+      this.settings
+    );
+  }
+
+  // All items which got selected in the widget will be added add the back of the EndClassGroup.
+  #renderAllItemsSelected(new_items:Array<any>,theValue:any){
     for (var new_item in new_items) {
       theValue = new_items[new_item];
 
@@ -308,6 +363,7 @@ class EndClassWidgetGroup extends HTMLComponent {
         $(this.ParentCriteriaGroup.html).find(".EndClassWidgetGroup>div")
           .length == 0
       ) {
+          console.warn("should get here!endclasswidgetgroup has more than one div")
         // set a tooltip if the label is a bit long
         var tooltip =
           theValue.label.length > 25 ? 'title="' + theValue.label + '"' : "";
@@ -378,37 +434,22 @@ class EndClassWidgetGroup extends HTMLComponent {
       );
     }
 
-    // disable the Where
-    $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
-    $(this.ParentCriteriaGroup.html).removeClass("onAddOrValue");
-
-    this.ParentCriteriaGroup.initCompleted();
-
-    $(this.ParentCriteriaGroup).trigger("EndClassWidgetGroupSelected");
-    $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
-
-    //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
-    if (this.selectedValues.length == this.settings.maxOr) {
-      $(this.ParentCriteriaGroup.html)
-        .find(".EndClassWidgetGroup .EndClassWidgetAddOrValue")
-        .hide();
-    }
-
-    if (this.selectedValues.length > 0) {
-      $(this.ParentCriteriaGroup.ObjectPropertyGroup.html)
-        .find(".input-val")
-        .attr("disabled", "disabled")
-        .niceSelect("update");
-    }
-
-    $(this.ParentCriteriaGroup.html)
-      .find(".EndClassGroup>.EditComponents")
-      .removeClass("newOr");
-    initGeneralEvent.call(
-      this,
-      this.ParentCriteriaGroup.thisForm_,
-      this.settings
-    );
   }
+
+  //This is called when a value is selected from a list and you would like to add more values
+  onAddOrValue() {
+    
+    $(this.ParentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
+    $(this.ParentCriteriaGroup.html).addClass('onAddOrValue') ;
+    // On vide les champs de saisie du widget
+    if (!(this.inputTypeComponent.widgetType == Config.TREE_PROPERTY)) {
+      this.inputTypeComponent.render() ;
+    } else {
+      //On avffiche de suite l'arbre. Car pas d'autre action possible
+      $(this.ParentCriteriaGroup.EndClassGroup).find('a.treeBtnDisplay').first().trigger('click') ;
+    }
+    
+    initGeneralEvent(this.ParentCriteriaGroup.thisForm_,getSettings());
+  };
 }
 export default EndClassWidgetGroup;

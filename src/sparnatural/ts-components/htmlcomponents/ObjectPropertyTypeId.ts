@@ -1,4 +1,6 @@
+import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
+import ArrowComponent from "./arrows/ArrowComponent";
 import CriteriaGroup from "./CriteriaGroup";
 import HTMLComponent from "./HtmlComponent";
 
@@ -9,6 +11,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   needTriggerClick: boolean;
   GrandParent: CriteriaGroup;
   temporaryLabel: string;
+  arrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
@@ -18,8 +21,6 @@ class ObjectPropertyTypeId extends HTMLComponent {
     this.temporaryLabel = temporaryLabel;
     this.cssClasses.flexWrap = true;
     this.needTriggerClick = false;
-    this.needBackArrow = false;
-    this.needFrontArrow = true;
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
   }
 
@@ -31,9 +32,10 @@ class ObjectPropertyTypeId extends HTMLComponent {
   render() {
     // if there is an Object selected
     if (this.GrandParent.EndClassGroup.value_selected) {
+      console.log("ObjectPropertyTypeid: Endclassgroup value selected")
       this.#removeTempLbl();
-      this.#setObjectProperty();
-      this.update();
+      this.widgetHtml = this.#setObjectProperty();
+      //this.update();
     } else {
       // there hasn't been an Object in Endclassgroup chosen. render a temporary label
       this.widgetHtml = $(
@@ -41,8 +43,10 @@ class ObjectPropertyTypeId extends HTMLComponent {
           this.temporaryLabel +
           "</span>"
       );
-      this.init();
     }
+    super.render()
+    this.arrow.render()
+    return this
   }
 
   // removes the temporary label e.g 'relatedTo'
@@ -61,7 +65,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
       this.needTriggerClick = true;
     }
 
-    this.widgetHtml = selectBuilder.buildPropertySelect(
+    return selectBuilder.buildPropertySelect(
       this.GrandParent.StartClassGroup.value_selected,
       this.GrandParent.EndClassGroup.value_selected,
       "c-" + this.GrandParent.id,

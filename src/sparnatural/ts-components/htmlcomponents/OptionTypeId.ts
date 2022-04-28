@@ -19,16 +19,8 @@ class OptionTypeId extends HTMLComponent {
   }
 
   render() {
-    //Test if this ever happens
-    if (this.cssClasses.Created) {
-      console.warn("this should not have happened");
-    }
-    /* Original Code
-		if (this.cssClasses.Created) {
-			this.updateCssClasses() ;
-			return true ;
-		}
-		*/
+    console.warn('optionTypeId render')
+    
     this.default_value["optional"] = false;
     this.default_value["notExists"] = false;
 
@@ -50,7 +42,8 @@ class OptionTypeId extends HTMLComponent {
     );
 
     this.widgetHtml = selectHtml;
-    this.init();
+    super.render()
+    return this
   }
 
   reload() {
@@ -75,6 +68,7 @@ class OptionSelectBuilder {
     inputID: string,
     default_value: { [x: string]: any; optional?: boolean; notExists?: boolean }
   ) {
+
     let items: { optional?: string; notExists?: string } = {};
     if (this.specProvider.isEnablingOptional(objectId)) {
       items.optional =
@@ -87,6 +81,7 @@ class OptionSelectBuilder {
     }
 
     var list = [];
+    // what is this?
     for (const [key, value] of Object.entries(items)) {
       let label = value;
       let selected = default_value[key] ? ' checked="checked"' : "";

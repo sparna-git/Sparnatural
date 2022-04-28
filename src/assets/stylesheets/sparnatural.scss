@@ -150,18 +150,12 @@ $margin-left-reset: 20px;
 
 	/*Arrow on options */
 	.OptionsGroup {
-		.EditComponents {
-			display: none;
-			@include arrow-back-colors($custom-silver-light, #fff);
-			position: relative;
-			&.Enabled {
-				display: flex;
-				@include arrow-back-colors($custom-green, #fff);
-				/*@include arrow-front-colors($custom-green, #fff);*/
-				.componentBackArrow {
-					svg path {
-						filter:url(#filter19278);
-					}
+			display: flex;
+			@include arrow-back-colors($custom-green, #fff);
+			/*@include arrow-front-colors($custom-green, #fff);*/
+			.componentBackArrow {
+				svg path {
+					filter:url(#filter19278);
 				}
 			}
 			&.Disabled {
@@ -183,7 +177,6 @@ $margin-left-reset: 20px;
 					left: -5px;
 				}
 			}
-		}
 		.OptionTypeId {
 			label {
 				@include arrow-back-colors($custom-green-light, #fff);
@@ -421,9 +414,6 @@ body {
 			.current {
 				font-style: italic;
 			}
-			&.Invisible .ObjectPropertyTypeId {
-				display: none;
-			}
 			.temporary-label {
 				line-height: $height-components-under - 2;
 				font-size: 14px;
@@ -525,7 +515,7 @@ body {
 		.EndClassGroup {
 			position: relative;
 			min-width: auto;
-			margin-left: -15px;
+			display:flex;
 			.EditComponents {
 				position: absolute;
 				left: 36px;
@@ -1951,6 +1941,10 @@ body {
 	}
 	
 
+}
+
+.Invisible {
+	display: none;
 }
 
 //Select2 overides

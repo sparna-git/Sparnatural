@@ -18,8 +18,9 @@ class ActionAnd extends HTMLComponent {
     this.cssClasses.ShowOnHover = true;
     this.HtmlContainer = parentComponent;
   }
-  render = () => {
-    this.init();
-  };
+  render(){
+    super.render()
+    return this
+  }
 }
 export default ActionAnd;

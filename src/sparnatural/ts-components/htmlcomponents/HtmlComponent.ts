@@ -1,6 +1,11 @@
-import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
+import ISettings from "../../../configs/client-configs/ISettings";
+import { getSettings } from "../../../configs/client-configs/settings";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 
+
+interface IRenderable{
+  render: () => this
+}
 interface IcssClasses {
   TreeWidget?: boolean;
   BooleanWidget?: boolean;
@@ -19,23 +24,23 @@ interface IcssClasses {
   SearchWidget?: boolean;
   Highlited?: boolean;
   flexWrap?: boolean;
+  disable?: boolean
 }
 
-class HTMLComponent {
+class HTMLComponent implements IRenderable {
   baseCssClass: string;
   cssClasses: IcssClasses = {
     HasInputsCompleted: false,
     IsOnEdit: false,
     Invisible: false,
-    Created: false, // each component starts uncreated. init() will change it
+    //Created: false, // each component starts uncreated. init() will change it
   };
+  settings:ISettings = getSettings()
 
   ParentComponent: HTMLComponent;
   // TODO refactor widgetHtml and html to one? seems very confusing
   widgetHtml: JQuery<HTMLElement>;
   html: JQuery<HTMLElement>;
-  needBackArrow: boolean;
-  needFrontArrow: boolean;
   specProvider: ISpecProvider;
   // TODO this is only temporarly. Some components (ActionWhere) don't need to be attached on there parentcomponent but somewhere else
   htmlParent: JQuery<HTMLElement> = null;
@@ -48,12 +53,8 @@ class HTMLComponent {
     this.specProvider = specProvider;
     this.baseCssClass = baseCssClass;
     this.ParentComponent = ParentComponent;
-    // TODO : see if this is really needed
-    // must be false if not set for the moment
     this.widgetHtml = widgetHtml;
     this.html = $(`<div class=${this.baseCssClass}></div>`);
-    this.needBackArrow = false;
-    this.needFrontArrow = false;
   }
 
   #attachComponentHtml() {
@@ -90,15 +91,8 @@ class HTMLComponent {
   #initHtml() {
     if (this.widgetHtml != null) {
       // remove existing component
-      this.html.remove();
       this.html = $('<div class="' + this.baseCssClass + '"></div>');
       this.html.append(this.widgetHtml);
-      if (this.needBackArrow) {
-        this.addBackArrow();
-      }
-      if (this.needFrontArrow) {
-        this.addFrontArrow();
-      }
     } else {
       this.html = $('<div class="' + this.baseCssClass + '"></div>');
     }
@@ -109,38 +103,21 @@ class HTMLComponent {
     this.#attachComponentHtml();
   }
 
+  // refactor unecessary
   update() {
-    this.#initHtml();
-    this.#attachHtml();
+    this.#updateCssClasses()
   }
 
-  init() {
-    if (!this.cssClasses.Created) {
+  appendWidgetHtml(){
+    this.html.append(this.widgetHtml)
+  }
+
+  render() {
       this.cssClasses.IsOnEdit = true;
       this.#initHtml();
       this.#attachHtml();
       this.cssClasses.Created = true;
-    } else {
-      this.#updateCssClasses();
-    }
-  }
-
-  addBackArrow() {
-    let backArrow = $(
-      '<div class="componentBackArrow">' +
-        UiuxConfig.COMPONENT_ARROW_BACK +
-        "</div>"
-    );
-    this.html.prepend(backArrow);
-  }
-
-  addFrontArrow() {
-    let frontArrow = $(
-      '<div class="componentFrontArrow">' +
-        UiuxConfig.COMPONENT_ARROW_FRONT +
-        "</div>"
-    );
-    this.html.append(frontArrow);
+      return this
   }
 }
 export default HTMLComponent;

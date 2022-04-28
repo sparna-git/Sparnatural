@@ -5,7 +5,7 @@ import CriteriaGroup from "../CriteriaGroup";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 
-    check if there are any things going on eith ActionWhere.ParenComponent except the rendering in init()
+    check if there are any things going on eith ActionWhere.ParenComponent except the rendering in render()
     There the Endclassgroup is foun
 */
 class ActionWhere extends HTMLComponent {
@@ -51,7 +51,8 @@ class ActionWhere extends HTMLComponent {
       "...";
 
     this.widgetHtml = $(widgetLabel + "<a>+</a>");
-    this.init();
+    super.render();
+    return this
   };
 }
 export default ActionWhere;

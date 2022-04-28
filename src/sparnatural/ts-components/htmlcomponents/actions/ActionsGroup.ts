@@ -35,7 +35,12 @@ class ActionsGroup extends HTMLComponent {
     //TODO refactor is this even necessary
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
     this.settings = settings;
-    this.init();
+
+  }
+
+  render(){
+    super.render()
+    return this
   }
 
   onCreated() {
@@ -58,7 +63,7 @@ class ActionsGroup extends HTMLComponent {
 		TODO: Refactor to ActionRemove class. ActionRemove class should get render() method
 	*/
   #attachActionRemoveButtonToCriteriaGroup() {
-    this.actions.ActionRemove.init();
+    this.actions.ActionRemove.render();
     // when click then remove row
     $(this.actions.ActionRemove.html).find("a").on(
       "click",
@@ -96,6 +101,8 @@ class ActionsGroup extends HTMLComponent {
 		TODO: Refactor to ActionAnd class. ActionRemove class should get render() method
 	*/
   #renderActionWhere() {
+
+
     this.actions.ActionWhere.render();
     $(this.actions.ActionWhere.html).find("a").on(
       "click",
@@ -132,6 +139,7 @@ class ActionsGroup extends HTMLComponent {
       .trigger("click");
   }
   onAddAnd() {
+    this.#deactivateOnHover()
     var new_component = addComponent.call(
       this,
       this.ParentCriteriaGroup.thisForm_,
@@ -150,6 +158,13 @@ class ActionsGroup extends HTMLComponent {
       .trigger("click");
 
     return false;
+  }
+
+  // deactivate onHover function and remove it. Could also make it invisible?
+  #deactivateOnHover(){
+    let remCss = $(this.actions.ActionAnd.html).remove()
+    console.dir(remCss)
+    if(remCss.length == 0) throw Error(`Didn't find ActionAnd Component. ActionAnd.html:${this.actions.ActionAnd.html}`)
   }
 }
 export default ActionsGroup;

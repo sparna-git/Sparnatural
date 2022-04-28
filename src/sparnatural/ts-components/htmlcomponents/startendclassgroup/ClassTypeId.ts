@@ -4,7 +4,8 @@ import HTMLComponent from "../HtmlComponent";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
-
+import ArrowComponent from "../arrows/ArrowComponent";
+import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.
@@ -13,25 +14,39 @@ import EndClassGroup from "./EndClassGroup";
 class ClassTypeId extends HTMLComponent {
   needTriggerClick: any;
   GrandParent: CriteriaGroup;
+  id:string
+  frontArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
+  backArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_BACK)
   constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
+
     super("ClassTypeId", ParentComponent, specProvider, null);
     (this.cssClasses.Highlited = true),
       (this.cssClasses.flexWrap = true),
       (this.needTriggerClick = false);
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
+    this.frontArrow.cssClasses.Invisible = false
+    this.backArrow.cssClasses.Invisible = true
+    //create Id depending on ParentComponent
+    if(isStartClassGroup(ParentComponent)){
+      this.id = 'a-' + this.GrandParent.id;
+    }else{
+      this.id = 'a-' + this.GrandParent.id;
+    }    
   }
 
+  /*
+    This component hasChild components: backArrow -> widgetHtml ->frontArrow
+    Rendering must be done in this ordering
+  */
   render() {
-    if (this.cssClasses.Created) {
-      console.log("CHECK here. Didn't think that would happen");
-    }
+    //init ParentComponent
+    console.log("classtypeid render START")
+    console.dir($(this.html).children())
+    //delete this html
+    this.widgetHtml = null
+    super.render()
 
-    /* Original code
-		if (this.cssClasses.Created) {
-			this.updateCssClasses() ;
-			return true ;
-		}
-		*/
+    this.backArrow.render()
 
     var default_value_s = null;
     var default_value_o = null;
@@ -41,6 +56,8 @@ class ClassTypeId extends HTMLComponent {
       default_value_s = branch.line.sType;
       default_value_o = branch.line.oType;
       this.needTriggerClick = true;
+      //TODO refactor this to parentcomponent. why should child component render stuff in the ParentComponent?
+      // maybe with a function but not with class variables
       if (isStartClassGroup(this.ParentComponent)) {
         this.ParentComponent.variableNamePreload = branch.line.s;
         this.ParentComponent.variableViewPreload = branch.line.sSelected;
@@ -51,54 +68,67 @@ class ClassTypeId extends HTMLComponent {
       }
     }
 
-    var selectHtml = null;
-
-    var id = this.GrandParent.id;
-    var selectBuilder = new ClassSelectBuilder(this.specProvider);
-
+    let selectBuilder = new ClassSelectBuilder(this.specProvider);
     if (isStartClassGroup(this.ParentComponent)) {
-      var parentOrSibling = findParentOrSiblingCriteria.call(
-        this,
-        this.GrandParent.thisForm_,
-        id
-      );
-      if (parentOrSibling.type) {
-        if (parentOrSibling.type == "parent") {
-          // if we are child in a WHERE relation, the selected class is the selected
-          // class in the RANGE selection of the parent
-          default_value_s =
-            parentOrSibling.element.EndClassGroup.value_selected;
-        } else {
-          // if we are sibling in a AND relation, the selected class is the selected
-          // class in the DOMAIN selection of the sibling
-          default_value_s =
-            parentOrSibling.element.StartClassGroup.value_selected;
-        }
-        this.cssClasses.Highlited = false;
-      } else {
-        this.cssClasses.Highlited = true;
-      }
-
-      id = "a-" + id;
-      selectHtml = selectBuilder.buildClassSelect(null, id, default_value_s);
+      this.widgetHtml = this.#getStartValues(selectBuilder,default_value_s)
+    } else{
+      this.widgetHtml = this.#getRangeOfEndValues(selectBuilder,default_value_o)
     }
-
-    if (isEndClassGroup(this.ParentComponent)) {
-      id = "b-" + id;
-      selectHtml = selectBuilder.buildClassSelect(
-        this.GrandParent.StartClassGroup.value_selected,
-        id,
-        default_value_o
-      );
-    }
-    this.widgetHtml = selectHtml;
-    this.init();
+    this.appendWidgetHtml()
+  
+    this.frontArrow.render()
+    console.log("classtupeid endrender")
+    console.dir($(this.html).children())
+    return this
   }
+
+  // If this Component is a child of the EndClassGroup component, we want the range of possible end values
+  #getRangeOfEndValues(selectBuilder:ClassSelectBuilder,default_value_o:any){
+    return selectBuilder.buildClassSelect(
+      this.GrandParent.StartClassGroup.value_selected,
+      this.id,
+      default_value_o
+    );
+  }
+
+  // If this Component is a child of the StartClassGroup component, we want the possible StartValues
+  #getStartValues(selectBuilder:ClassSelectBuilder,default_value_s:any){
+    var parentOrSibling = findParentOrSiblingCriteria.call(
+      this,
+      this.GrandParent.thisForm_,
+      this.GrandParent.id
+    );
+
+    if(parentOrSibling.type){
+      if (parentOrSibling.type == "parent") {
+        // if we are child in a WHERE relation, the selected class is the selected
+        // class in the RANGE selection of the parent
+        default_value_s =
+          parentOrSibling.element.EndClassGroup.value_selected;
+      } else {
+        // if we are sibling in a AND relation, the selected class is the selected
+        // class in the DOMAIN selection of the sibling
+        default_value_s =
+          parentOrSibling.element.StartClassGroup.value_selected;
+      }
+    }
+  
+    return selectBuilder.buildClassSelect(null, this.id, default_value_s);
+  }
+
+  //This function is called by EnclassWidgetGroup when a value got selected. It renders the classTypeIds as shape forms and highlights them
+  highlight(){
+    this.cssClasses.Highlited = true
+    this.frontArrow.cssClasses.disable = false
+    this.backArrow.cssClasses.disable = false
+  }
+
 
   reload() {
     console.log("reload on ClassTypeId should probably never be called");
     this.reload();
   }
+
 }
 export default ClassTypeId;
 
@@ -115,6 +145,7 @@ class ClassSelectBuilder {
   }
 
   buildClassSelect(domainId: any, inputID: string, default_value: any) {
+    console.warn("classselectBUILDER buildclass")
     var list = [];
     var items = [];
 
@@ -162,12 +193,13 @@ class ClassSelectBuilder {
           "</option>"
       );
     }
-
+    
     var html_list = $("<select/>", {
       class: "my-new-list input-val",
       id: "select-" + inputID,
       html: list.join(""),
     });
+    console.dir(html_list)
 
     return html_list;
   }

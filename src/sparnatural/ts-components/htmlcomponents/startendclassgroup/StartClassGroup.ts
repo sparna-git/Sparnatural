@@ -35,7 +35,6 @@ class StartClassGroup extends HTMLComponent {
     this.cssClasses.Created = false;
 
     this.inputTypeComponent = new ClassTypeId(this, specProvider);
-    this.inputTypeComponent.needFrontArrow = true; // IMPORTANT FOUND IN HTMLCOMPONENT CLASS
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration
     // contains the name of the SPARQL variable associated to this component
     this.varName = this.ParentCriteriaGroup.jsonQueryBranch
@@ -44,10 +43,11 @@ class StartClassGroup extends HTMLComponent {
     this.variableSelector = null;
 
     this.notSelectForview = false;
+  }
 
-    //this.needFrontArrow= true ;
-    //this.needBackArrow= true ;
-    this.init();
+  render(){
+    super.render()
+    return this
   }
 
   // triggered when a criteria starts

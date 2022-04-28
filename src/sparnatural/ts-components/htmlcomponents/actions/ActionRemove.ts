@@ -10,8 +10,10 @@ class ActionRemove extends HTMLComponent {
     );
     super("ActionRemove", parentComponent, specProvider, widgetHtml);
   }
-  render = () => {
-    this.init();
-  };
+  render(){
+    super.render()
+    return this
+  }
+  
 }
 export default ActionRemove;

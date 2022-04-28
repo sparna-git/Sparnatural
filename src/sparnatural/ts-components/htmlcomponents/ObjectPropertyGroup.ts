@@ -28,8 +28,11 @@ class ObjectPropertyGroup extends HTMLComponent {
       specProvider,
       temporaryLabel
     );
+  }
 
-    this.init();
+  render(){
+    super.render()
+    return this
   }
   /*
 		renders the temporarly object property
@@ -74,8 +77,10 @@ class ObjectPropertyGroup extends HTMLComponent {
   }
 
   onChange() {
+    console.log('objectpropertygroup on change called')
     if (this.value_selected) {
-      this.ParentCriteriaGroup.OptionsGroup.reload();
+      console.warn("ObjectPropertyGroup call OptionsGroup.reload!!!")
+      this.ParentCriteriaGroup.OptionsGroup.render();
     }
     this.value_selected = $(this.html).find("select.input-val").val();
     // disable if only one possible property option between the 2 classes
