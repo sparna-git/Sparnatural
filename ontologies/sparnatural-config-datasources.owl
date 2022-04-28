@@ -883,10 +883,10 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+        <sparnatural-config-datasources:queryString>SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
 WHERE {
   {
-    SELECT ?uri ?theLabel ?hasChildren
+    SELECT DISTINCT ?uri ?theLabel ?hasChildren
     WHERE {
       $node $childrenPath ?uri .
       ?uri $labelPath ?theLabel .
@@ -1171,7 +1171,7 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
         <sparnatural-config-datasources:queryString>PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;
-SELECT ?uri ?label ?hasChildren
+SELECT DISTINCT ?uri ?label ?hasChildren
 WHERE {
   $range skos:hasTopConcept|^skos:topConceptOf ?uri .
   ?uri skos:prefLabel ?label .
@@ -1195,7 +1195,7 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
 SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
 WHERE {
   {
-    SELECT ?uri ?theLabel ?hasChildren
+    SELECT DISTINCT ?uri ?theLabel ?hasChildren
     WHERE {
       $range skos:hasTopConcept|^skos:topConceptOf ?uri .
       ?uri skos:prefLabel ?theLabel .

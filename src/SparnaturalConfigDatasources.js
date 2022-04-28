@@ -318,10 +318,10 @@ ORDER BY UCASE(?label)
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 SPARNATURAL_CONFIG_DATASOURCES+"query_tree_children_with_count", 
 `
-SELECT DISTINCT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
 WHERE {
   {
-    SELECT ?uri ?theLabel ?hasChildren
+    SELECT DISTINCT ?uri ?theLabel ?hasChildren
     WHERE {
       $node $childrenPath ?uri .
       ?uri $labelPath ?theLabel .
@@ -643,7 +643,7 @@ SPARNATURAL_CONFIG_DATASOURCES+"tree_root_skostopconcept", {
   queryString : 
 `
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?uri ?label ?hasChildren
+SELECT DISTINCT ?uri ?label ?hasChildren
 WHERE {
   $range skos:hasTopConcept|^skos:topConceptOf ?uri .
   ?uri skos:prefLabel ?label .
@@ -666,7 +666,7 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
 WHERE {
   {
-    SELECT ?uri ?theLabel ?hasChildren
+    SELECT DISTINCT ?uri ?theLabel ?hasChildren
     WHERE {
       $range skos:hasTopConcept|^skos:topConceptOf ?uri .
       ?uri skos:prefLabel ?theLabel .
