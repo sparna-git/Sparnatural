@@ -1960,7 +1960,8 @@ UiuxConfig = require("./UiuxConfig.js");
 					  
 				  }
 
-				  this.widgetComponent = new TreeWidget(this, handler, settings, langSearch) ;
+				  // note : the "noSort" flag is read only on the children datasource, even though it is global to the whole tree
+				  this.widgetComponent = new TreeWidget(this, handler, settings, langSearch, !(treeChildrenDatasource.noSort == true)) ;
 			  	  this.cssClasses.TreeWidget = true ;
 			  	  break;
 			  default:

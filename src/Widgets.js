@@ -651,7 +651,7 @@
 		}
 	}
 
-	TreeWidget = function(inputTypeComponent, loaderHandler, settings, langSearch) {
+	TreeWidget = function(inputTypeComponent, loaderHandler, settings, langSearch, sort) {
 		this.loaderHandler = loaderHandler;
 		this.ParentComponent = inputTypeComponent ;
 		this.langSearch = langSearch;
@@ -689,10 +689,25 @@
 						request.done(function( data ) {
 							var result = [];
 							var items = loaderHandler.nodeListLocation(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, data);
+							
+							if(sort) {
+								// here, if we need to sort, then sort according to lang
+								var collator = new Intl.Collator(settings.language);					
+								items.sort(function(a, b) {
+									return collator.compare(loaderHandler.nodeLabel(a),loaderHandler.nodeLabel(b));
+								});
+							}
+
+
 							for (var i = 0; i < items.length; i++) {
+								var text = loaderHandler.nodeLabel(items[i]);
+								// shorten the label if too long to avoid tree goind far right
+								if(text.length > 90) {
+									text = text.substring(0,90)+" (...)";
+								}
 								var aNode = {
 									id: loaderHandler.nodeUri(items[i]),
-									text: loaderHandler.nodeLabel(items[i])
+									text: text
 								};
 								if(loaderHandler.nodeHasChildren(items[i])) {
 									aNode.children = true ;
