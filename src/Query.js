@@ -802,10 +802,11 @@ export class QuerySPARQLWriter {
 		startDate,
 		endDate
 	) {
-		var result = this._initUnion();
 
 		// we have provided both begin and end date criteria
 		if(startDate != null && endDate != null) {
+
+			var result = this._initUnion();
 
 			// 1. case where the resource has both start date and end date
 			var firstAlternative = this._initGroup();
@@ -855,31 +856,32 @@ export class QuerySPARQLWriter {
 			result.patterns.push(secondAlternative);
 			result.patterns.push(thirdAlternative);
 
+			// return as an array so that caller can have generic forEach loop to all
+			// every element to outer query
+			return [result];
 		// we have provided only a start date
 		} else if(startDate != null && endDate === null) {
 			var bgp = this._initBasicGraphPattern();
 			var endDateVarName = objectVariable+"_end";
 			bgp.triples.push(this._buildTriple(subjectVariable, endDateProp, endDateVarName));
-			result.push(bgp);
 			// end date is after given start date
-			result.push(this._initFilterTime(startDate, null, endDateVarName));
+			var filter = this._initFilterTime(startDate, null, endDateVarName);
 
 			// if the resource has no end date, and has only a start date
 			// then it necessarily overlaps with the provided open-ended range
 			// so let's avoid this case for the moment
+			return [bgp,filter];
 		// we have provided only a end date
 		} else if(startDate === null && endDate != null) {
+
 			var bgp = this._initBasicGraphPattern();
 			var beginDateVarName = objectVariable+"_begin";
 			bgp.triples.push(this._buildTriple(subjectVariable, beginDateProp, beginDateVarName));
-			result.push(bgp);
 			// begin date is before given end date
-			result.push(this._initFilterTime(null, endDate, beginDateVarName));
-		}
+			var filter = this._initFilterTime(null, endDate, beginDateVarName);
 
-		// return as an array so that caller can have generic forEach loop to all
-		// every element to outer query
-		return [result];
+			return [bgp,filter];
+		}
 	}
 
 
