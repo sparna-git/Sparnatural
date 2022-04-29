@@ -4,7 +4,7 @@ _[Home](index.html) > OWL-based configuration_
 
 Sparnatural can be configured using an OWL file edited in [Protégé](http://protege.stanford.edu) and saved in Turtle.
 
-Sparnatural can also be configured with an [[JSON-based configuration]], but OWL-based configuration brings:
+Sparnatural can also be configured with an [JSON-based configuration](JSON-based-configuration), but OWL-based configuration brings:
 - an editing environement (Protégé);
 - formal machine-readable links from Sparnatural configuration to business ontology;
 - sharing, publishing and reusing configurations;
@@ -100,6 +100,6 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 
 #### Annotations for a TimeProperty
 
-| [`core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty) | begin date property | 0..1 | Applicable to properties under `TimeProperty`. Indicates the property that is used in the graph to express the beginning of a validity range on resources, for example [`rico:beginningDate`](https://www.ica.org/standards/RiC/ontology#beginningDate). Specifying `core:beginDateProperty` and `core:endDateProperty` will trigger a specific date range query behavior. |
-| [`core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) | end date property | 0..1 | Applicable to properties under `TimeProperty`. Indicates the property that is used in the graph to express the end of a validity range on resources, for example [`rico:endDate`](https://www.ica.org/standards/RiC/ontology#endDate). Specifying `core:beginDateProperty` and `core:endDateProperty` will trigger a specific date range query behavior. |
-| [`core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) | exact date property | 0..1 | Applicable to properties under `TimeProperty`. Used in combination with `core:beginDateProperty` and `core:endDateProperty`, to indicate the the property that is used in the graph to express the exact date of a resource, for example [`rico:endDate`](https://www.ica.org/standards/RiC/ontology#date). This is used for a specific date range query behavior. |
+| [`core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty) | begin date property | 0..1 | Applicable to properties under `TimeProperty`. Indicates the property that is used in the graph to express the beginning of a validity range on resources, for example [`rico:beginningDate`](https://www.ica.org/standards/RiC/ontology#beginningDate). Specifying `core:beginDateProperty` and `core:endDateProperty` will trigger the [specific date range query behavior](Querying-date-ranges). |
+| [`core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) | end date property | 0..1 | Applicable to properties under `TimeProperty`. Indicates the property that is used in the graph to express the end of a validity range on resources, for example [`rico:endDate`](https://www.ica.org/standards/RiC/ontology#endDate). Specifying `core:beginDateProperty` and `core:endDateProperty` will trigger the [specific date range query behavior](Querying-date-ranges). |
+| [`core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) | exact date property | 0..1 | Applicable to properties under `TimeProperty`. Used in combination with `core:beginDateProperty` and `core:endDateProperty`, to indicate the the property that is used in the graph to express the exact date of a resource, for example [`rico:endDate`](https://www.ica.org/standards/RiC/ontology#date). This is used for the [specific date range query behavior](Querying-date-ranges). |
