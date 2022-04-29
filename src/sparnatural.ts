@@ -31,10 +31,10 @@ import JSONQueryGenerator from "./sparnatural/sparql/QueryGenerators";
 import { SpecificationProviderFactory } from "./sparnatural/spec-providers/SpecificationProviderFactory";
 
 import UiuxConfig from "./configs/fixed-configs/UiuxConfig";
-import { initGeneralEvent } from "./sparnatural/ts-components/globals/globalfunctions";
+import { initGeneralEvent } from "./sparnatural/globals/globalfunctions";
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
 import ISettings from "./configs/client-configs/ISettings";
-import { addComponent } from "./sparnatural/ts-components/globals/addComponent";
+import { addComponent } from "./sparnatural/globals/addComponent";
 import VariableSelectionBuilder from "./VariableSelectionBuilder";
 
 export class SparNatural extends HTMLElement {

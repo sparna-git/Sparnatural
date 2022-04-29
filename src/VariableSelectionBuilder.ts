@@ -3,7 +3,7 @@ import UiuxConfig from "./configs/fixed-configs/UiuxConfig";
 import {
   eventProxiCriteria,
   redrawBottomLink,
-} from "./sparnatural/ts-components/globals/globalfunctions";
+} from "./sparnatural/globals/globalfunctions";
 import Sortable from "sortablejs"; // has to add allowSyntheticDefaultImports in tsconfig cause of this import
 
 /*
