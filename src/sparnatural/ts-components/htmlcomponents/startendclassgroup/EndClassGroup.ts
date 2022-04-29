@@ -53,8 +53,6 @@ class EndClassGroup extends HTMLComponent {
     console.log('endlclassgrp startgrp selected')
     // render the inputComponent for a user to select an Object
     this.inputTypeComponent.render()
-    console.log($(this.html).children())
-    console.log($(this.inputTypeComponent.html).children())
     $(this.html).find(".input-val").unbind("change");
     $(this.html).append('<div class="EditComponents"></div>');
 
@@ -214,8 +212,6 @@ class EndClassGroup extends HTMLComponent {
     var unselect = $(
       '<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>'
     );
-    console.log('renderunselectbtn')
-    console.log(this.html)
     $(this.html).append(unselect);
 
     unselect.on(

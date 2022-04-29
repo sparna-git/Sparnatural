@@ -74,6 +74,8 @@ class ObjectPropertyGroup extends HTMLComponent {
         $(this.html).find(".nice-select:not(.disabled)").trigger("click");
       }
     }
+
+    $(this.ParentCriteriaGroup).trigger("ObjectPropertyGroupSelected");
   }
 
   onChange() {

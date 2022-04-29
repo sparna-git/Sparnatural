@@ -1,7 +1,7 @@
 import ActionsGroup from "./actions/ActionsGroup";
 import ISettings from "../../../configs/client-configs/ISettings";
 import StartClassGroup from "./startendclassgroup/StartClassGroup";
-import { OptionsGroup } from "./OptionsGroup";
+import { OptionsGroup } from "./optionsgroup/OptionsGroup";
 import ObjectPropertyGroup from "./ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
 import { findParentOrSiblingCriteria } from "../globals/globalfunctions";
@@ -19,6 +19,7 @@ class CriteriaGroup extends HTMLComponent {
   ComponentHtml: any;
   AncestorComponentHtml: any;
   settings: any;
+  liRef:JQuery<HTMLElement> // this holds a reference to the outer <li class="groupe..."> HTMLElement
   // JSON query line from which this line needs to be initialized
   jsonQueryBranch: any;
   context: {
@@ -46,10 +47,15 @@ class CriteriaGroup extends HTMLComponent {
     },
     settings: ISettings,
     specProvider: any,
-    jsonQueryBranch: any
+    jsonQueryBranch: any,
+    liRef:JQuery<HTMLElement>
   ) {
     super("CriteriaGroup", ParentComponent, specProvider, null);
+
+    if(liRef.length === 0) throw Error("NO Reference to the outside <li> tag found.")
+    this.liRef = liRef
     this.cssClasses.HasAllComplete = true;
+
     // IMPORTANT Check what has to come into the constructor
     this.ParentComponent = ParentComponent;
     this.context = context;
@@ -115,7 +121,6 @@ class CriteriaGroup extends HTMLComponent {
   };
 
   onRemoveCriteria = () => {
-    console.warn('onremovecriteria')
     var index_to_remove = this.id;
 
     //RemoveSelectedVariable names

@@ -104,7 +104,8 @@ class EndClassWidgetGroup extends HTMLComponent {
     var keyToBeDeleted = $(e.currentTarget).attr("value-data");
     this.selectedValues.filter((item) => {
       return item.key != keyToBeDeleted;
-    }); //IMPORTANT check if this function works the same as the original one
+    }); 
+
 
     $(this.ParentCriteriaGroup.html)
       .find(".EndClassWidgetGroup .EndClassWidgetAddOrValue")
@@ -173,6 +174,10 @@ class EndClassWidgetGroup extends HTMLComponent {
     $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
 
     initGeneralEvent.call(this, this.ParentCriteriaGroup.thisForm_,getSettings());
+  }
+
+  #removeONAddOrValue(){
+
   }
 
   loadValue = function loadValue(value: any) {
@@ -363,7 +368,6 @@ class EndClassWidgetGroup extends HTMLComponent {
         $(this.ParentCriteriaGroup.html).find(".EndClassWidgetGroup>div")
           .length == 0
       ) {
-          console.warn("should get here!endclasswidgetgroup has more than one div")
         // set a tooltip if the label is a bit long
         var tooltip =
           theValue.label.length > 25 ? 'title="' + theValue.label + '"' : "";

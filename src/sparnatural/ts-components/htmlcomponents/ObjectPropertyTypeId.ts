@@ -32,7 +32,6 @@ class ObjectPropertyTypeId extends HTMLComponent {
   render() {
     // if there is an Object selected
     if (this.GrandParent.EndClassGroup.value_selected) {
-      console.log("ObjectPropertyTypeid: Endclassgroup value selected")
       this.#removeTempLbl();
       this.widgetHtml = this.#setObjectProperty();
       //this.update();

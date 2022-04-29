@@ -40,8 +40,6 @@ class ClassTypeId extends HTMLComponent {
   */
   render() {
     //init ParentComponent
-    console.log("classtypeid render START")
-    console.dir($(this.html).children())
     //delete this html
     this.widgetHtml = null
     super.render()
@@ -77,8 +75,6 @@ class ClassTypeId extends HTMLComponent {
     this.appendWidgetHtml()
   
     this.frontArrow.render()
-    console.log("classtupeid endrender")
-    console.dir($(this.html).children())
     return this
   }
 
@@ -145,7 +141,6 @@ class ClassSelectBuilder {
   }
 
   buildClassSelect(domainId: any, inputID: string, default_value: any) {
-    console.warn("classselectBUILDER buildclass")
     var list = [];
     var items = [];
 
@@ -199,8 +194,6 @@ class ClassSelectBuilder {
       id: "select-" + inputID,
       html: list.join(""),
     });
-    console.dir(html_list)
-
     return html_list;
   }
 }

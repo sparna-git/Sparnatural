@@ -56,7 +56,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
 
   render() {
     this.widgetHtml = null;
-    console.warn('render objectpropertytypewidget')
     this.objectPropertyId = this.GrandParent.ObjectPropertyGroup.value_selected; // shows which objectproperty got chosen for which subject object combination
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropertyId
@@ -156,8 +155,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     }
     this.htmlParent =
       this.GrandParent.EndClassGroup.html.find(".EditComponents");
-    console.log('objectpropertytypewidget htmlparent')
-    console.dir(this.htmlParent)
     super.render()
 
     this.widgetComponent.render();

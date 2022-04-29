@@ -37,6 +37,7 @@ export function addComponent(
     index +
     '" type="hidden" value=""></li>';
 
+  //componentslist
   let ul: JQuery<HTMLElement>;
 
   if ($(contexte).is("li")) {
@@ -57,13 +58,14 @@ export function addComponent(
       HtmlContext: gabariEl,
       FormContext: thisForm_,
       ContextComponentIndex: index,
+
     },
     getSettings(),
     this.specProvider,
     // pass the JSON query branch as an input parameter
-    jsonQueryBranch
+    jsonQueryBranch,
+    $(contexte).find(`[data-index='${index}']`),
   );
-
   thisForm_.sparnatural.components.push({
     index: index,
     CriteriaGroup: UnCritere,
