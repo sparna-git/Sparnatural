@@ -16,7 +16,6 @@ class OptionComponent extends HTMLComponent {
     default_value:string = ''
     ParentOptionsGroup: OptionsGroup;
     label:string
-    labelElement = $(`<label class="flexWrap"></label>`)
     inputElement:JQuery<HTMLElement>
     name:string
     id:string
@@ -26,12 +25,11 @@ class OptionComponent extends HTMLComponent {
         this.name = name
         this.id = `option-${crtGroupId}`
         this.ParentOptionsGroup = ParentComponent as OptionsGroup
-        this.objectId = this.ParentOptionsGroup.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
         this.cssClasses.IsOnEdit = true;
+        this.cssClasses.flexWrap = true;
     }
 
     render(): this {
-
         if(this.ParentOptionsGroup.ParentCriteriaGroup.jsonQueryBranch){
             let branch =  this.ParentOptionsGroup.ParentCriteriaGroup.jsonQueryBranch;
             this.default_value =  branch[this.name]  ? ' checked="checked"' : ""
@@ -40,8 +38,7 @@ class OptionComponent extends HTMLComponent {
 
         this.inputElement = $(`<input type="radio" name="${this.name}" data-id="${this.id}" ${this.default_value} />`)
         
-        // htmlStructure rendering: 
-        this.widgetHtml = this.labelElement
+        // htmlStructure rendering:
         super.render()
         this.widgetHtml = this.inputElement
         super.appendWidgetHtml()
@@ -58,14 +55,14 @@ class OptionComponent extends HTMLComponent {
         // pour ouvrir le menu :
         $(this.backArrow.html).trigger("click");
         // pour selectionner l'option
-        this.labelElement.trigger("click");
+        this.html.trigger("click");
     }
 
     #addEventListeners(){
-        this.labelElement.on("click", (e) => {
+        this.html.on("click", (e) => {
             e.stopPropagation();
           });
-        this.labelElement.on("click", { arg1: this, arg2: "onChange" }, eventProxiCriteria);
+        this.html.on("click", { arg1: this, arg2: "onChange" }, eventProxiCriteria);
     }
 
     onChange(cls:string){

@@ -14,7 +14,10 @@ class OptionalComponent extends OptionComponent{
     }
 
     render(): this {
+        this.objectId = this.ParentOptionsGroup.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
+        console.log(`thisobjectid: ${this.objectId}`)
         if(this.specProvider.isEnablingOptional(this.objectId)){
+            console.log(`optionalcomponent inside if`)
             this.label = getSettings().langSearch.labelOptionOptional
         }
         super.render()

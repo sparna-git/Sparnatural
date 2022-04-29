@@ -116,6 +116,6 @@ export class OptionsGroup extends HTMLComponent {
   }
 
   #renderOptionsGroupBackArrow() {
-    this.backArrow.html.removeClass("Invisible")
+    this.backArrow = new ArrowComponent(this,UiuxConfig.COMPONENT_OPTION_ARROW_FRONT).render()
   }
 }
