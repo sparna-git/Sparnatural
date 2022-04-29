@@ -7,6 +7,7 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../CriteriaGroup";
 import tippy from "tippy.js";
 import HTMLComponent from "../HtmlComponent";
+import UnselectButton from "../buttons/UnselectBtn";
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
@@ -23,6 +24,7 @@ class EndClassGroup extends HTMLComponent {
   variableViewPreload: string;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
+  UnselectButton:UnselectButton = new UnselectButton(this,this.onchangeViewVariable)
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
@@ -33,8 +35,6 @@ class EndClassGroup extends HTMLComponent {
     this.specProvider = specProvider
     this.inputTypeComponent = new ClassTypeId(this, specProvider);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be above varName declaration
-    
-
   }
 
   render(){
@@ -210,19 +210,8 @@ class EndClassGroup extends HTMLComponent {
   }
 
   #renderUnselectBtn(){
-    var unselect = $(
-      '<span class="unselect unselectEndClass"><i class="far fa-times-circle"></i></span>'
-    );
-    $(this.html).append(unselect);
-
-    unselect.on(
-      "click",
-      { arg1: this, arg2: "onRemoveSelected" },
-      eventProxiCriteria
-    );
+    this.UnselectButton.render() 
   }
-
-
 
   #removeComponent(component:JQuery<HTMLElement>){
     this.#isExactlyOne(component)

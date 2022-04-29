@@ -1,10 +1,20 @@
 import HTMLComponent from "../HtmlComponent";
 
 class UnselectButton extends HTMLComponent{
-    eventListener:(event:JQuery.ClickEvent)=>void
-    constructor(ParentComponent:HTMLComponent, eventListner:(event:JQuery.ClickEvent)=>void){
-        super("unselect",ParentComponent,null)
-        this.eventListener = eventListner
+    constructor(ParentComponent:HTMLComponent, callBack:()=>void){
+        let widgetHtml = $('<span class="unselect"><i class="far fa-times-circle"></i></span>');
+        super("unselect",ParentComponent,widgetHtml)
+        // add clicklistener
+        this.html.on('click',(e:JQuery.ClickEvent)=>{
+            callBack()
+        })
     }
+
+    render(): this {
+        super.render()
+        return this
+    }
+  
+      
 }
 export default UnselectButton
