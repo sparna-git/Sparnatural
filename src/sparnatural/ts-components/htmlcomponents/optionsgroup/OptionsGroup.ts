@@ -12,7 +12,8 @@ import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 
 /**
  * Contains the components for Optional and not exists arrow.
- * Can be triggered when there was a EndClassGroup selected.
+ * Components can be triggered when:
+ * 1. None of the parents rows (list elements) has it already chosen
  **/
 export class OptionsGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
@@ -33,67 +34,56 @@ export class OptionsGroup extends HTMLComponent {
     this.NotExistsComponent = new NotExistsComponent(this,specProvider,this.crtGroupId)
     this.backArrow.cssClasses.Invisible = true;
   }
-  //TODO refactor to render()
-  // still necessary after refactoring the EndClassGroup on remove selected?
+
+
   render() {
     super.render();
     this.backArrow.render();
-
-    if ($(this.html).find(".EditComponents").first().hasClass("Enabled")) {
-      $(this.html).removeClass("Opended");
-      redrawBottomLink($(this.html).parents("li.groupe").first());
-    }
-    $(this.html).removeClass("Disabled");
-    $(this.html).removeClass("NoOptionEnabled");
-    $(this.html).removeClass("Enabled");
-    $(this.html).removeClass("ShowOnEdit");
-    $(this.html).first().unbind("click");
-    $(this.html).find(".input-val input").unbind("click");
-    $(this.html).find(".input-val label").unbind("click");
     // if there were values selected delete it
     this.valuesSelected = {};
     return this;
   }
 
- 
-
   onObjectPropertyGroupSelected() {
-    console.log("optionsgroup onObjectPropertyGroupSelected");
     $(this.html).addClass("ShowOnEdit");
+    this.#checkIfBackArrowisRendered()  
+  }
 
+  #checkIfBackArrowisRendered(){
     var parentOptionEnable = false;
     let listElements = this.ParentCriteriaGroup.liRef.find('li.groupe')
 
+    // check if there is an optional component activated of the parent rows
     listElements.each((i)=>{
-      // a parent li has the options enabled
+      //optionEnabled gets set in OptionalComponent.onChange()
       if($(listElements[i]).hasClass('optionEnabled')){
         parentOptionEnable = true
         this.ParentCriteriaGroup.html.addClass("OptionMenuShowed")
       }
     });
 
+    
     if(this.#checkIfOptionPossible && !(parentOptionEnable)){
+      //Options like NOTEXISTS are possible and none of the parent has it already activated
       this.#addOptionPossible()
+      this.#addEventListener()
     }else{
       this.#addNoOptionPossible()
       if(parentOptionEnable){
         $(this.ParentCriteriaGroup.html).addClass("OptionMenuShowed");
       }
     }
+  }
 
-    // opens the Optional and negatif options
+  #addEventListener(){
     $(this.backArrow.html).on("click", (e) =>{
-      // check if OptionsGroup has the Class Enabled
-      //TODO refactor get away from this html class checks
       if ($(this.html).hasClass("Enabled")) {
+        // Clicked! now render the optional components
         this.#renderOptionalComponents()
         $(e.target).toggleClass("Opended");
-
         redrawBottomLink(this.ParentCriteriaGroup.liRef);
       }
     });
-
-
   }
 
   #renderOptionalComponents(){
@@ -108,7 +98,7 @@ export class OptionsGroup extends HTMLComponent {
   }
 
   #addOptionPossible(){
-    this.renderOptionsGroupBackArrow();
+    this.#renderOptionsGroupBackArrow();
     $(this.html).addClass("Enabled");
     $(this.ParentCriteriaGroup.html).addClass("OptionMenuShowed");
   }
@@ -125,10 +115,7 @@ export class OptionsGroup extends HTMLComponent {
     ) 
   }
 
-  //This method only gets called on StartClassGroup.InputTypeComponent
-  // When the StartClassGroup is selected, then change the Front arrow to the back arrow
-  renderOptionsGroupBackArrow() {
-    console.log("renderOptionalBackArrow");
+  #renderOptionsGroupBackArrow() {
     this.backArrow.html.removeClass("Invisible")
   }
 }

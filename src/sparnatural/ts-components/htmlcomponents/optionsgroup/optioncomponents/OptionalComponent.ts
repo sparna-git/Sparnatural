@@ -22,7 +22,7 @@ class OptionalComponent extends OptionComponent{
     }
         
     onChange(): void {
-        super.onChange('notExistsEnabled')
+        super.onChange('optionalEnabled')
     }
   
 }
