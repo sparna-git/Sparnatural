@@ -41,16 +41,13 @@ class HTMLComponent implements IRenderable {
   // TODO refactor widgetHtml and html to one? seems very confusing
   widgetHtml: JQuery<HTMLElement>;
   html: JQuery<HTMLElement>;
-  specProvider: ISpecProvider;
   // TODO this is only temporarly. Some components (ActionWhere) don't need to be attached on there parentcomponent but somewhere else
   htmlParent: JQuery<HTMLElement> = null;
   constructor(
     baseCssClass: any,
     ParentComponent: HTMLComponent,
-    specProvider: ISpecProvider,
     widgetHtml: JQuery<HTMLElement>
   ) {
-    this.specProvider = specProvider;
     this.baseCssClass = baseCssClass;
     this.ParentComponent = ParentComponent;
     this.widgetHtml = widgetHtml;

@@ -11,17 +11,19 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 class ActionWhere extends HTMLComponent {
   settings: ISettings;
   GrandParentComponent: CriteriaGroup;
+  specProvider: ISpecProvider;
   constructor(
     ParentComponent: ActionsGroup,
     specProvider: ISpecProvider,
     settings: ISettings
   ) {
     //TODO refactor the null init in html widget
-    super("ActionWhere", ParentComponent, specProvider, null);
+    super("ActionWhere", ParentComponent, null);
     this.GrandParentComponent =
       ParentComponent.ParentComponent as CriteriaGroup;
     this.cssClasses.ShowOnEdit = true;
     this.settings = settings;
+    this.specProvider = specProvider
   }
   render = () => {
     // Endclassgroup -> EditComponents -> ActionWhere

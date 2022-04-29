@@ -28,7 +28,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     settings: ISettings,
     specProvider: ISpecProvider
   ) {
-    super("EndClassWidgetGroup", CriteriaGroup, specProvider, null);
+    super("EndClassWidgetGroup", CriteriaGroup,null);
     this.settings = settings;
     this.inputTypeComponent = new ObjectPropertyTypeWidget(
       this,

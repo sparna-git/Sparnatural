@@ -25,7 +25,7 @@ class VariableSelector extends HTMLComponent {
     ParentComponent: StartClassGroup | EndClassGroup,
     specProvider: ISpecProvider
   ) {
-    super("VariableSelector", ParentComponent, specProvider, null);
+    super("VariableSelector", ParentComponent, null);
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup; // IMPORTANT : Dangerous cast?
     this.parentVarName = ParentComponent.varName;
     this.ParentComponent = ParentComponent;

@@ -50,7 +50,7 @@ class CriteriaGroup extends HTMLComponent {
     jsonQueryBranch: any,
     liRef:JQuery<HTMLElement>
   ) {
-    super("CriteriaGroup", ParentComponent, specProvider, null);
+    super("CriteriaGroup", ParentComponent, null);
 
     if(liRef.length === 0) throw Error("NO Reference to the outside <li> tag found.")
     this.liRef = liRef
@@ -129,7 +129,7 @@ class CriteriaGroup extends HTMLComponent {
       this.EndClassGroup.variableSelector = null;
     }
     //Remove option selected if enbled
-    if ($(this.html).parents("li").first().hasClass("optionEnabled")) {
+    if ($(this.html).parents("li").first().hasClass("optionalEnabled")) {
       $(this.html)
         .parents("li")
         .first()
@@ -252,8 +252,8 @@ class CriteriaGroup extends HTMLComponent {
     return false;
   };
 
-  initCompleted = () => {
-    $(this.html).parent("li").addClass("completed");
+  initCompleted(){
+    this.liRef.addClass("completed")
   };
 
 }

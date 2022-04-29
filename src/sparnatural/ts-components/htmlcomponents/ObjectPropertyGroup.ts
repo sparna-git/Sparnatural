@@ -14,13 +14,14 @@ class ObjectPropertyGroup extends HTMLComponent {
   objectPropertySelector: ObjectPropertyTypeId;
   value_selected: any = null; // value which shows which object property got chosen by the config for subject and object
   ParentCriteriaGroup: CriteriaGroup;
+  specProvider: ISpecProvider;
   constructor(
     ParentComponent: CriteriaGroup,
     specProvider: ISpecProvider,
     settings: ISettings,
     temporaryLabel: string
   ) {
-    super("ObjectPropertyGroup", ParentComponent, specProvider, null);
+    super("ObjectPropertyGroup", ParentComponent, null);
     this.ParentCriteriaGroup = ParentComponent;
     this.settings = settings;
     this.objectPropertySelector = new ObjectPropertyTypeId(
@@ -28,6 +29,7 @@ class ObjectPropertyGroup extends HTMLComponent {
       specProvider,
       temporaryLabel
     );
+    this.specProvider = specProvider
   }
 
   render(){

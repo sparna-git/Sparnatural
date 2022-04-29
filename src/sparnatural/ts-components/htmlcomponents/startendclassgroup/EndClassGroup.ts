@@ -22,15 +22,16 @@ class EndClassGroup extends HTMLComponent {
   variableNamePreload: string;
   variableViewPreload: string;
   ParentCriteriaGroup: CriteriaGroup;
+  specProvider: ISpecProvider;
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
     settings: ISettings
   ) {
-    super("EndClassGroup", ParentCriteriaGroup, specProvider, null);
+    super("EndClassGroup", ParentCriteriaGroup, null);
     this.settings = settings;
+    this.specProvider = specProvider
     this.inputTypeComponent = new ClassTypeId(this, specProvider);
-
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be above varName declaration
     
 

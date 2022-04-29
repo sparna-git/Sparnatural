@@ -8,7 +8,7 @@ class ArrowComponent extends HTMLComponent{
         if(arrowStyle == UiuxConfig.COMPONENT_OPTION_ARROW_FRONT || arrowStyle == UiuxConfig.COMPONENT_ARROW_BACK){
             baseCssClass = "componentBackArrow"
         }
-        super(baseCssClass,ParenComponent,null,null)
+        super(baseCssClass,ParenComponent,null)
         this.arrowStyle = arrowStyle
         this.widgetHtml = $(arrowStyle)  
     }

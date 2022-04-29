@@ -23,14 +23,14 @@ class ActionsGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
-    specProvider: ISpecProvider,
+    specProvider:ISpecProvider,
     settings: ISettings
   ) {
-    super("ActionsGroup", ParentCriteriaGroup, specProvider, null);
+    super("ActionsGroup", ParentCriteriaGroup,  null);
     this.actions = {
-      ActionWhere: new ActionWhere(this, specProvider, settings),
-      ActionAnd: new ActionAnd(this, settings, specProvider),
-      ActionRemove: new ActionRemove(this, specProvider),
+      ActionWhere: new ActionWhere(this, specProvider,settings),
+      ActionAnd: new ActionAnd(this, settings),
+      ActionRemove: new ActionRemove(this),
     };
     //TODO refactor is this even necessary
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;

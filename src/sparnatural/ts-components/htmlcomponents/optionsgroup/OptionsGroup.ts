@@ -21,20 +21,23 @@ export class OptionsGroup extends HTMLComponent {
   OptionalComponent: OptionalComponent 
   NotExistsComponent: NotExistsComponent
   crtGroupId:number
+  specProvider: ISpecProvider;
   backArrow: ArrowComponent = new ArrowComponent(
     this,
     UiuxConfig.COMPONENT_ARROW_BACK
   );
+
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
-    super("OptionsGroup", ParentCriteriaGroup, specProvider, null);
+    super("OptionsGroup", ParentCriteriaGroup, null);
+    this.specProvider = specProvider
     this.valuesSelected = {};
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
     this.crtGroupId = ParentCriteriaGroup.id
     this.OptionalComponent = new OptionalComponent(this,specProvider,this.crtGroupId)
     this.NotExistsComponent = new NotExistsComponent(this,specProvider,this.crtGroupId)
     this.backArrow.cssClasses.Invisible = true;
-  }
 
+  }
 
   render() {
     super.render();
@@ -56,7 +59,7 @@ export class OptionsGroup extends HTMLComponent {
     // check if there is an optional component activated of the parent rows
     listElements.each((i)=>{
       //optionEnabled gets set in OptionalComponent.onChange()
-      if($(listElements[i]).hasClass('optionEnabled')){
+      if($(listElements[i]).hasClass('optionalEnabled')){
         parentOptionEnable = true
         this.ParentCriteriaGroup.html.addClass("OptionMenuShowed")
       }

@@ -43,15 +43,17 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     search?: any;
     boolean?: any;
   } | null = null;
+  specProvider: ISpecProvider;
 
   constructor(
     ParentComponent: HTMLComponent,
     settings: ISettings,
     specProvider: ISpecProvider
   ) {
-    super("ObjectPropertyTypeWidget", ParentComponent, specProvider, null);
+    super("ObjectPropertyTypeWidget", ParentComponent, null);
     this.settings = settings;
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
+    this.specProvider = specProvider
   }
 
   render() {

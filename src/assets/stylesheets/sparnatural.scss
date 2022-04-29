@@ -1009,8 +1009,8 @@ body {
 			border-left: 3px solid $custom-red;
 			display: block;
 		}
-		&.optional-enabled.completed ul.childsList>li.haveWhereChild>.link-where-bottom,
-		&.optional-enabled.completed>.link-where-bottom {
+		&.optionalEnabledcompleted ul.childsList>li.haveWhereChild>.link-where-bottom,
+		&.optionalEnabled.completed>.link-where-bottom {
 			border-left: 3px dashed $custom-red;
 		}
 		&.notExists-enabled.completed ul.childsList>li.haveWhereChild>.link-where-bottom,
@@ -1055,7 +1055,7 @@ body {
 				}
 			}
 		}
-		&.optional-enabled {
+		&.optionalEnabled {
 			ul.childsList {
 				&>.lien-top {
 					border-left: 3px dashed $custom-red;
@@ -1428,7 +1428,7 @@ body {
 					display: none;
 				}
 			}
-			li.groupe.optional-enabled {
+			li.groupe.optionalEnabled {
 				.CriteriaGroup {
 					border: 3px dashed $custom-red ;
 				}
@@ -1451,7 +1451,7 @@ body {
 					}
 				} 
 			}
-			li.groupe.notExists-enabled {
+			li.groupe.notExistsEnabled {
 				.CriteriaGroup {
 					border: 3px dotted #000 ;
 				}

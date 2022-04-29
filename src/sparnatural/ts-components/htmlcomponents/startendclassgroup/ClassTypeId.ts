@@ -17,13 +17,16 @@ class ClassTypeId extends HTMLComponent {
   id:string
   frontArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
   backArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_BACK)
+  selectBuilder: ClassSelectBuilder;
+  
   constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
 
-    super("ClassTypeId", ParentComponent, specProvider, null);
+    super("ClassTypeId", ParentComponent, null);
     (this.cssClasses.Highlited = true),
-      (this.cssClasses.flexWrap = true),
-      (this.needTriggerClick = false);
+    (this.cssClasses.flexWrap = true),
+    (this.needTriggerClick = false);
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
+    this.selectBuilder = new ClassSelectBuilder(specProvider);
     this.frontArrow.cssClasses.Invisible = false
     this.backArrow.cssClasses.Invisible = true
     //create Id depending on ParentComponent
@@ -66,11 +69,11 @@ class ClassTypeId extends HTMLComponent {
       }
     }
 
-    let selectBuilder = new ClassSelectBuilder(this.specProvider);
+
     if (isStartClassGroup(this.ParentComponent)) {
-      this.widgetHtml = this.#getStartValues(selectBuilder,default_value_s)
+      this.widgetHtml = this.#getStartValues(this.selectBuilder,default_value_s)
     } else{
-      this.widgetHtml = this.#getRangeOfEndValues(selectBuilder,default_value_o)
+      this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder,default_value_o)
     }
     this.appendWidgetHtml()
   

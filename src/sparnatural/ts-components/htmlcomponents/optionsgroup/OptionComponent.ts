@@ -20,13 +20,15 @@ class OptionComponent extends HTMLComponent {
     name:string
     id:string
     objectId:any
+    specProvider: ISpecProvider;
     constructor(baseCssClass:string,ParentComponent:OptionsGroup,specProvider:ISpecProvider, name:string, crtGroupId:number){
-        super(baseCssClass,ParentComponent,specProvider,null)
+        super(baseCssClass,ParentComponent,null)
         this.name = name
         this.id = `option-${crtGroupId}`
         this.ParentOptionsGroup = ParentComponent as OptionsGroup
         this.cssClasses.IsOnEdit = true;
         this.cssClasses.flexWrap = true;
+        this.specProvider = specProvider
     }
 
     render(): this {

@@ -8,6 +8,7 @@ import { OptionsGroup } from "../OptionsGroup";
     When Clicked changes the SPARQL of the query to a NOTEXISTS form
 */
 class NotExistsComponent extends OptionComponent{
+    specProvider: ISpecProvider;
     // If you would like to change the shape of the Arrow. Do it here
     constructor(ParentComponent:OptionsGroup,specProvider:ISpecProvider,crtGroupId:number){
         super('NotExists',ParentComponent,specProvider,'notExists',crtGroupId)

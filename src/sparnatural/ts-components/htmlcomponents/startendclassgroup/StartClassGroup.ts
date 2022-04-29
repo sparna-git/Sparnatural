@@ -25,15 +25,15 @@ class StartClassGroup extends HTMLComponent {
   variableViewPreload: string = "";
   variableNamePreload: string;
   ParentCriteriaGroup: CriteriaGroup;
+  specProvider: ISpecProvider;
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
     settings: ISettings
   ) {
-    super("StartClassGroup", ParentCriteriaGroup, specProvider, null);
+    super("StartClassGroup", ParentCriteriaGroup, null);
     this.settings = settings;
-    this.cssClasses.Created = false;
-
+    this.specProvider = specProvider
     this.inputTypeComponent = new ClassTypeId(this, specProvider);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration
     // contains the name of the SPARQL variable associated to this component
@@ -41,8 +41,8 @@ class StartClassGroup extends HTMLComponent {
       ? this.ParentCriteriaGroup.jsonQueryBranch.line.s
       : null;
     this.variableSelector = null;
-
     this.notSelectForview = false;
+   
   }
 
   render(){

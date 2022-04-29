@@ -12,16 +12,18 @@ class ObjectPropertyTypeId extends HTMLComponent {
   GrandParent: CriteriaGroup;
   temporaryLabel: string;
   arrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
+  specProvider: ISpecProvider;
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
     temporaryLabel: string
   ) {
-    super("ObjectPropertyTypeId", ParentComponent, specProvider, null);
+    super("ObjectPropertyTypeId", ParentComponent, null);
     this.temporaryLabel = temporaryLabel;
     this.cssClasses.flexWrap = true;
     this.needTriggerClick = false;
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
+    this.specProvider = specProvider
   }
 
   /*
