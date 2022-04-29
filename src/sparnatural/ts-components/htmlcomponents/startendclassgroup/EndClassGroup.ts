@@ -7,7 +7,7 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../CriteriaGroup";
 import tippy from "tippy.js";
 import HTMLComponent from "../HtmlComponent";
-import UnselectButton from "../buttons/UnselectBtn";
+import UnselectButton from "../buttons/UnselectButton";
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
