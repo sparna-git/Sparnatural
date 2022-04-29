@@ -1,10 +1,9 @@
-import { getSettings } from "./configs/client-configs/settings";
-import UiuxConfig from "./configs/fixed-configs/UiuxConfig";
-import {
-  eventProxiCriteria,
-  redrawBottomLink,
-} from "./sparnatural/globals/globalfunctions";
+
+
 import Sortable from "sortablejs"; // has to add allowSyntheticDefaultImports in tsconfig cause of this import
+import { getSettings } from "../configs/client-configs/settings";
+import UiuxConfig from "../configs/fixed-configs/UiuxConfig";
+import { eventProxiCriteria, redrawBottomLink } from "./globals/globalfunctions";
 
 /*
     This Class builds the class Variable Selector and adds the Eventhooks for it.

@@ -1,6 +1,6 @@
 require("jstree/dist/themes/default/style.min.css");
 
-require("./assets/stylesheets/sparnatural.scss");
+require("../assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
 //
@@ -13,29 +13,31 @@ require("easy-autocomplete");
 // const datepicker = require("@chenfengyuan/datepicker") ;
 // const $$ = require('jquery');
 
-require("./assets/js/jquery-nice-select/jquery.nice-select.js");
+require("../assets/js/jquery-nice-select/jquery.nice-select.js");
 // WARNING : if you use ES6 syntax (like import instead of require),
 // webpack will automatically add "use strict" as all ES6 modules
 // are expected to be strict mode code.
 
 // This is ugly, should use i18n features instead
 const i18nLabels = {
-  en: require("./assets/lang/en.json"),
-  fr: require("./assets/lang/fr.json"),
+  en: require("../assets/lang/en.json"),
+  fr: require("../assets/lang/fr.json"),
 };
 
 require("tippy.js/dist/tippy.css");
 
-import { QuerySPARQLWriter } from "./sparnatural/sparql/Query";
-import JSONQueryGenerator from "./sparnatural/sparql/QueryGenerators";
-import { SpecificationProviderFactory } from "./sparnatural/spec-providers/SpecificationProviderFactory";
 
-import UiuxConfig from "./configs/fixed-configs/UiuxConfig";
-import { initGeneralEvent } from "./sparnatural/globals/globalfunctions";
-import { getSettings, mergeSettings } from "./configs/client-configs/settings";
-import ISettings from "./configs/client-configs/ISettings";
-import { addComponent } from "./sparnatural/globals/addComponent";
+import { QuerySPARQLWriter } from "./sparql/Query";
+import JSONQueryGenerator from "./sparql/QueryGenerators";
+import { SpecificationProviderFactory } from "./spec-providers/SpecificationProviderFactory";
+
+import UiuxConfig from "../configs/fixed-configs/UiuxConfig";
+import { initGeneralEvent } from "./globals/globalfunctions";
+import { getSettings, mergeSettings } from "../configs/client-configs/settings";
+import ISettings from "../configs/client-configs/ISettings";
+import { addComponent } from "./globals/addComponent";
 import VariableSelectionBuilder from "./VariableSelectionBuilder";
+
 
 export class SparNatural extends HTMLElement {
   specProvider: any;
