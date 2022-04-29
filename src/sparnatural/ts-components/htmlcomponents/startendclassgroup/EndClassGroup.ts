@@ -7,7 +7,9 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../CriteriaGroup";
 import tippy from "tippy.js";
 import HTMLComponent from "../HtmlComponent";
-import UnselectButton from "../buttons/UnselectButton";
+import UnselectButton from "../buttons/UnselectBtn";
+import UnselectBtn from "../buttons/UnselectBtn";
+import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
@@ -24,7 +26,9 @@ class EndClassGroup extends HTMLComponent {
   variableViewPreload: string;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
-  UnselectButton:UnselectButton = new UnselectButton(this,this.onchangeViewVariable)
+  UnselectButton = new UnselectBtn(this,this.onRemoveSelected)
+  SelectViewVariableBtn = new SelectViewVariableBtn(this,this.onchangeViewVariable)
+  
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
@@ -195,18 +199,7 @@ class EndClassGroup extends HTMLComponent {
 
   // is this little crossed eye button at the end of EndclassGroup component
   #renderSelectViewVariableBtn(){
-    this.selectViewVariable = $(
-      '<span class="selectViewVariable">' +
-        UiuxConfig.ICON_NOT_SELECTED_VARIABLE +
-        "</span>"
-    );
-    $(this.html).append(this.selectViewVariable);
-  
-    this.selectViewVariable.on(
-        "click",
-        { arg1: this, arg2: "onchangeViewVariable" },
-        eventProxiCriteria
-      );
+
   }
 
   #renderUnselectBtn(){

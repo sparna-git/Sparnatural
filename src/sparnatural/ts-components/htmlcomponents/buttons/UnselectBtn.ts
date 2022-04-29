@@ -1,6 +1,6 @@
 import HTMLComponent from "../HtmlComponent";
 
-class UnselectButton extends HTMLComponent{
+class UnselectBtn extends HTMLComponent{
     constructor(ParentComponent:HTMLComponent, callBack:()=>void){
         let widgetHtml = $('<span class="unselect"><i class="far fa-times-circle"></i></span>');
         super("unselect",ParentComponent,widgetHtml)
@@ -13,8 +13,6 @@ class UnselectButton extends HTMLComponent{
     render(): this {
         super.render()
         return this
-    }
-  
-      
+    }    
 }
-export default UnselectButton
+export default UnselectBtn
