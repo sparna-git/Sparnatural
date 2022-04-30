@@ -5,7 +5,7 @@ import { SparqlTreeHandler } from "./handlers/TreeHandlers";
 import IWidget from "./IWidget";
 import { initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import CriteriaGroup from "../CriteriaGroup";
+import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
 import HTMLComponent from "../HtmlComponent";
 import {
   SparqlTemplateAutocompleteHandler,

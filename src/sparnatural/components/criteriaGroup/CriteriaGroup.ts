@@ -1,15 +1,15 @@
-import ActionsGroup from "./actions/ActionsGroup";
-import ISettings from "../../configs/client-configs/ISettings";
-import StartClassGroup from "./startendclassgroup/StartClassGroup";
-import { OptionsGroup } from "./optionsgroup/OptionsGroup";
+import ActionsGroup from "../actions/ActionsGroup";
+import ISettings from "../../../configs/client-configs/ISettings";
+import StartClassGroup from "../startendclassgroup/StartClassGroup";
+import { OptionsGroup } from "../optionsgroup/OptionsGroup";
 
-import EndClassGroup from "./startendclassgroup/EndClassGroup";
-import { findParentOrSiblingCriteria } from "../globals/globalfunctions";
-import EndClassWidgetGroup from "./widgets/EndClassWidgetGroup";
-import { initGeneralEvent } from "../globals/globalfunctions";
-import HTMLComponent from "./HtmlComponent";
-import { addComponent } from "../globals/addComponent";
-import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
+import EndClassGroup from "../startendclassgroup/EndClassGroup";
+import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
+import EndClassWidgetGroup from "../widgets/EndClassWidgetGroup";
+import { initGeneralEvent } from "../../globals/globalfunctions";
+import HTMLComponent from "../HtmlComponent";
+import { addComponent } from "../../globals/addComponent";
+import ObjectPropertyGroup from "../objectpropertygroup/ObjectPropertyGroup";
 
 /**
  * A single line/criteria

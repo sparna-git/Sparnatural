@@ -1,4 +1,4 @@
-import CriteriaGroup from "../components/CriteriaGroup";
+import CriteriaGroup from "../components/criteriaGroup/CriteriaGroup";
 import ISettings from "../../configs/client-configs/ISettings";
 
 //Responsible if a WHERE or AND got clicked?

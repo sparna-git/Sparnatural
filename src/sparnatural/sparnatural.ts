@@ -30,7 +30,6 @@ require("tippy.js/dist/tippy.css");
 import { QuerySPARQLWriter } from "./sparql/Query";
 import JSONQueryGenerator from "./sparql/QueryGenerators";
 import { SpecificationProviderFactory } from "./spec-providers/SpecificationProviderFactory";
-
 import UiuxConfig from "../configs/fixed-configs/UiuxConfig";
 import { initGeneralEvent } from "./globals/globalfunctions";
 import { getSettings, mergeSettings } from "../configs/client-configs/settings";

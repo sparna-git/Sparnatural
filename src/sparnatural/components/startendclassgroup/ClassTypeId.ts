@@ -1,5 +1,5 @@
 import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
-import CriteriaGroup from "../CriteriaGroup";
+import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
@@ -26,7 +26,7 @@ class ClassTypeId extends HTMLComponent {
     (this.cssClasses.flexWrap = true),
     (this.needTriggerClick = false);
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
-    this.selectBuilder = new ClassSelectBuilder(specProvider);
+    this.selectBuilder = new ClassSelectBuilder(this,specProvider);
     this.frontArrow.cssClasses.Invisible = false
     this.backArrow.cssClasses.Invisible = true
     //create Id depending on ParentComponent
@@ -42,6 +42,7 @@ class ClassTypeId extends HTMLComponent {
     Rendering must be done in this ordering
   */
   render() {
+    console.log('classtyperender')
     //init ParentComponent
     //delete this html
     this.widgetHtml = null
@@ -57,8 +58,7 @@ class ClassTypeId extends HTMLComponent {
       default_value_s = branch.line.sType;
       default_value_o = branch.line.oType;
       this.needTriggerClick = true;
-      //TODO refactor this to parentcomponent. why should child component render stuff in the ParentComponent?
-      // maybe with a function but not with class variables
+
       if (isStartClassGroup(this.ParentComponent)) {
         this.ParentComponent.variableNamePreload = branch.line.s;
         this.ParentComponent.variableViewPreload = branch.line.sSelected;
@@ -69,12 +69,13 @@ class ClassTypeId extends HTMLComponent {
       }
     }
 
-
+    
     if (isStartClassGroup(this.ParentComponent)) {
       this.widgetHtml = this.#getStartValues(this.selectBuilder,default_value_s)
     } else{
       this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder,default_value_o)
     }
+
     this.appendWidgetHtml()
   
     this.frontArrow.render()
@@ -137,15 +138,21 @@ export default ClassTypeId;
  * class selection (starting point) so reads all classes that are domains of any property.
  *
  **/
-class ClassSelectBuilder {
+class ClassSelectBuilder extends HTMLComponent {
   specProvider: any;
-  constructor(specProvider: any) {
+  constructor(ParentComponent:HTMLComponent, specProvider: any) {
+    super('ClassTypeId',ParentComponent,null)
     this.specProvider = specProvider;
   }
 
+  render(): this {
+    super.render()
+    return this
+  }
+
   buildClassSelect(domainId: any, inputID: string, default_value: any) {
-    var list = [];
-    var items = [];
+    let list:Array<string> = [];
+    let items = [];
 
     if (domainId === null) {
       // if we are on the first class selection
@@ -153,8 +160,10 @@ class ClassSelectBuilder {
     } else {
       items = this.specProvider.getConnectedClasses(domainId);
     }
-
+    console.log('log the items')
+    console.dir(items)
     for (var key in items) {
+      console.log(`key:${key} item:${items[key]}`)
       var val = items[key];
       var label = this.specProvider.getLabel(val);
       var icon = this.specProvider.getIcon(val);

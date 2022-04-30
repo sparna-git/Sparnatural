@@ -1,5 +1,5 @@
 import { getSettings } from "../../configs/client-configs/settings";
-import CriteriaGroup from "../components/CriteriaGroup";
+import CriteriaGroup from "../components/criteriaGroup/CriteriaGroup";
 import { getOffset, initGeneralEvent } from "./globalfunctions";
 
 // TODO refactor in addAndCompnentpart and addWhereComponentpart
@@ -29,13 +29,7 @@ export function addComponent(
     index +
     '"><span class="link-and-bottom"><span>' +
     getSettings().langSearch.And +
-    '</span></span><span class="link-where-bottom"></span><input name="a-' +
-    index +
-    '" type="hidden" value=""><input name="b-' +
-    index +
-    '" type="hidden" value=""><input name="c-' +
-    index +
-    '" type="hidden" value=""></li>';
+    '</span></span><span class="link-where-bottom">'
 
   //componentslist
   let ul: JQuery<HTMLElement>;
@@ -51,6 +45,7 @@ export function addComponent(
     var gabariEl = $(gabari).appendTo(contexte);
   }
   $(gabariEl).addClass(classWherePossible);
+  console.log('creating new criterias')
   var UnCritere = new CriteriaGroup(
     this,
     {

@@ -4,7 +4,7 @@ import ISettings from "../../../configs/client-configs/ISettings";
 import { eventProxiCriteria, localName } from "../../globals/globalfunctions";
 import VariableSelector from "./VariableSelector";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import CriteriaGroup from "../CriteriaGroup";
+import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
 import tippy from "tippy.js";
 import UnselectBtn from "../buttons/UnselectBtn";
 import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";

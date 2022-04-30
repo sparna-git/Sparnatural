@@ -7,7 +7,7 @@ import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import ClassTypeId from "./ClassTypeId";
 import VariableSelector from "./VariableSelector";
 import ISettings from "../../../configs/client-configs/ISettings";
-import CriteriaGroup from "../CriteriaGroup";
+import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../HtmlComponent";
 
@@ -34,6 +34,8 @@ class StartClassGroup extends HTMLComponent {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.settings = settings;
     this.specProvider = specProvider
+    console.log('specprovider in startclass')
+    console.dir(specProvider)
     this.inputTypeComponent = new ClassTypeId(this, specProvider);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration
     // contains the name of the SPARQL variable associated to this component
