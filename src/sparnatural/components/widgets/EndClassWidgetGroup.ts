@@ -3,7 +3,7 @@ import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
 import { AbstractValue } from "../../sparql/Query";
 import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
+import CriteriaGroup from "../criteriaList/CriteriaGroup";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
 import { initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";

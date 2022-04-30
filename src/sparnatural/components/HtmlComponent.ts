@@ -1,5 +1,6 @@
 import ISettings from "../../configs/client-configs/ISettings";
 import { getSettings } from "../../configs/client-configs/settings";
+import BaseClassFactory from "./baseClassFactory/BaseClassFactory";
 
 
 interface IRenderable{
@@ -42,6 +43,7 @@ class HTMLComponent implements IRenderable {
   html: JQuery<HTMLElement>;
   // TODO this is only temporarly. Some components (ActionWhere) don't need to be attached on there parentcomponent but somewhere else
   htmlParent: JQuery<HTMLElement> = null;
+  BaseClassFactory = new BaseClassFactory()
   constructor(
     baseCssClass: any,
     ParentComponent: HTMLComponent,
@@ -87,10 +89,10 @@ class HTMLComponent implements IRenderable {
   #initHtml() {
     if (this.widgetHtml != null) {
       // remove existing component
-      this.html = $('<div class="' + this.baseCssClass + '"></div>');
+      this.html = this.BaseClassFactory.getBaseClass(this.baseCssClass)
       this.html.append(this.widgetHtml);
     } else {
-      this.html = $('<div class="' + this.baseCssClass + '"></div>');
+      this.html = this.BaseClassFactory.getBaseClass(this.baseCssClass)
     }
   }
 

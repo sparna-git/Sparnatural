@@ -1,5 +1,5 @@
 
-import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
+import CriteriaGroup from "../criteriaList/CriteriaGroup";
 import ISettings from "../../../configs/client-configs/ISettings";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
 import { initGeneralEvent } from "../../globals/globalfunctions";

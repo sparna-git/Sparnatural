@@ -3,7 +3,7 @@ import {
   redrawBottomLink,
 } from "../../globals/globalfunctions";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
+import CriteriaGroup from "../criteriaList/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ArrowComponent from "../arrows/ArrowComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";

@@ -8,8 +8,8 @@ import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
 import EndClassWidgetGroup from "../widgets/EndClassWidgetGroup";
 import { initGeneralEvent } from "../../globals/globalfunctions";
 import HTMLComponent from "../HtmlComponent";
-import { addComponent } from "../../globals/addComponent";
 import ObjectPropertyGroup from "../objectpropertygroup/ObjectPropertyGroup";
+import CriteriaList from "./CriteriaList";
 
 /**
  * A single line/criteria
@@ -38,6 +38,7 @@ class CriteriaGroup extends HTMLComponent {
   EndClassWidgetGroup: any;
   ActionsGroup: any;
   specProvider: any;
+  ParentCriteriaList: CriteriaList;
   constructor(
     ParentComponent: HTMLComponent,
     context: {
@@ -58,7 +59,7 @@ class CriteriaGroup extends HTMLComponent {
     this.cssClasses.HasAllComplete = true;
 
     // IMPORTANT Check what has to come into the constructor
-    this.ParentComponent = ParentComponent;
+    this.ParentCriteriaList = ParentComponent as CriteriaList;
     this.context = context;
     this.thisForm_ = context.FormContext;
     this.ComponentHtml = context.HtmlContext;
@@ -216,7 +217,7 @@ class CriteriaGroup extends HTMLComponent {
 
       $(".variablesOtherSelect .sortableItem").remove();
 
-      var new_component = addComponent.call(
+      this.ParentCriteriaList.addComponent.call(
         this,
         formObject,
         formContextHtml,

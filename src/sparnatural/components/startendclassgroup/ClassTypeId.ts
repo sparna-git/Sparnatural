@@ -1,5 +1,5 @@
 import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
-import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
+import CriteriaGroup from "../criteriaList/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";

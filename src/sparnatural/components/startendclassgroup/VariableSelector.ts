@@ -4,7 +4,7 @@ import {
   redrawBottomLink,
 } from "../../globals/globalfunctions";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
+import CriteriaGroup from "../criteriaList/CriteriaGroup";
 import EndClassGroup from "./EndClassGroup";
 import StartClassGroup from "./StartClassGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";

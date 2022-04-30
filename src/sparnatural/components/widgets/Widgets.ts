@@ -6,7 +6,7 @@ import tippy from "tippy.js";
 import ISettings from "../../../configs/client-configs/ISettings";
 import IWidget from "./IWidget";
 import EndClassWidgetGroup from "./EndClassWidgetGroup";
-import CriteriaGroup from "../criteriaGroup/CriteriaGroup";
+import CriteriaGroup from "../criteriaList/CriteriaGroup";
 import LocalCacheData from "../../datastorage/LocalCacheData";
 let jsTree = require("jstree").default;
 // IMPORTANT TODO refactor HtmlContainer.

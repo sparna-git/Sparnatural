@@ -1,4 +1,4 @@
-import CriteriaGroup from "../components/criteriaGroup/CriteriaGroup";
+import CriteriaGroup from "../components/criteriaList/CriteriaGroup";
 import ISettings from "../../configs/client-configs/ISettings";
 
 //Responsible if a WHERE or AND got clicked?
@@ -122,39 +122,4 @@ export function localName(uri: string) {
     var components = uri.split("/");
     return components[components.length - 1];
   }
-}
-export function redrawBottomLink(parentElementLi: JQuery<HTMLElement>) {
-  var n_width = 0;
-  var ul = $(parentElementLi).children("ul").first();
-  if (ul.length == 1) {
-    n_width =
-      n_width +
-      getOffset(
-        $(parentElementLi).find(">div>.EndClassGroup"),
-        $(ul) as JQuery<HTMLUListElement>
-      ) -
-      111 +
-      15 +
-      11 +
-      20 +
-      5 +
-      3;
-    var t_width =
-      getOffset(
-        $(parentElementLi).find(">div>.EndClassGroup"),
-        $(ul) as JQuery<HTMLUListElement>
-      ) +
-      15 +
-      11 +
-      20 +
-      5;
-    $(ul).find(">.lien-top").css("width", n_width);
-    $(parentElementLi).find(">.link-where-bottom").css("left", t_width);
-  }
-}
-export function getOffset(
-  elem: JQuery<HTMLElement>,
-  elemParent: JQuery<HTMLUListElement>
-) {
-  return elem.offset().left - $(elemParent).offset().left;
 }
