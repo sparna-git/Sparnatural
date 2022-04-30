@@ -49,10 +49,11 @@ export class OptionsGroup extends HTMLComponent {
 
   onObjectPropertyGroupSelected() {
     $(this.html).addClass("ShowOnEdit");
-    this.#checkIfBackArrowisRendered()  
+    this.#checkIfBackArrowisRenderable()  
   }
 
-  #checkIfBackArrowisRendered(){
+  // validates if the Options Arrow can be rendered or not
+  #checkIfBackArrowisRenderable(){
     var parentOptionEnable = false;
     let listElements = this.ParentCriteriaGroup.liRef.find('li.groupe')
 

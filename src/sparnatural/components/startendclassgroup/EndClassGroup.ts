@@ -25,8 +25,8 @@ class EndClassGroup extends HTMLComponent {
   variableViewPreload: string;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
-  UnselectButton = new UnselectBtn(this,this.onRemoveSelected)
-  SelectViewVariableBtn = new SelectViewVariableBtn(this,this.onchangeViewVariable)
+  UnselectButton:UnselectBtn
+  SelectViewVariableBtn:SelectViewVariableBtn
   
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
@@ -57,13 +57,14 @@ class EndClassGroup extends HTMLComponent {
     console.log('endlclassgrp startgrp selected')
     // render the inputComponent for a user to select an Object
     this.inputTypeComponent.render()
-    $(this.html).find(".input-val").unbind("change");
     $(this.html).append('<div class="EditComponents"></div>');
 
     $(this.html).find("select.input-val").niceSelect();
     if (this.inputTypeComponent.needTriggerClick == false) {
       $(this.html).find(".nice-select:not(.disabled)").trigger("click");
     }
+    console.log("binding on change to ")
+    console.dir($(this.html).find("select.input-val"))
     $(this.html)
       .find("select.input-val")
       .on("change", { arg1: this, arg2: "onChange" }, eventProxiCriteria);
@@ -79,9 +80,12 @@ class EndClassGroup extends HTMLComponent {
     }
   }
 
-    //All components in this CriteriaGroup have to be recreated except the the StartClassGroup
-    onRemoveSelected() {
+    // Make arrow function to bind the this lexically
+    // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
+    onRemoveSelected = () =>{
       console.warn('endclassgroup onRemoveSelected')
+      console.dir(this)
+      console.dir(this.html)
       let optionsGrp = $(this.ParentCriteriaGroup.html).find('.OptionsGroup')
       this.#removeComponent(optionsGrp)
   
@@ -108,8 +112,9 @@ class EndClassGroup extends HTMLComponent {
       $(this.ParentCriteriaGroup).trigger("StartClassGroupSelected")
   
     }
-
-  onchangeViewVariable() {
+  // Make arrow function to bind the this lexically
+  // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
+  onchangeViewVariable = ()=> {
     console.warn("endclassgrp onChangeViewVar")
     if (this.variableSelector === null) {
       //Add varableSelector on variableSelector list ;
@@ -198,11 +203,11 @@ class EndClassGroup extends HTMLComponent {
 
   // is this little crossed eye button at the end of EndclassGroup component
   #renderSelectViewVariableBtn(){
-
+    this.SelectViewVariableBtn = new SelectViewVariableBtn(this,this.onchangeViewVariable)
   }
 
   #renderUnselectBtn(){
-    this.UnselectButton.render() 
+    this.UnselectButton = new UnselectBtn(this,this.onRemoveSelected).render() 
   }
 
   #removeComponent(component:JQuery<HTMLElement>){

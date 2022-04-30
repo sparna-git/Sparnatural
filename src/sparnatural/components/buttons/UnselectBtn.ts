@@ -6,13 +6,14 @@ class UnselectBtn extends HTMLComponent{
         let widgetHtml = $('<span class="unselect"><i class="far fa-times-circle"></i></span>');
         super("unselect",ParentComponent,widgetHtml)
         // add clicklistener
-        this.html.on('click',(e:JQuery.ClickEvent)=>{
+        this.widgetHtml.on('click',function(e:JQuery.ClickEvent){
             callBack()
         })
     }
 
     render(): this {
         super.render()
+        
         return this
     }    
 }
