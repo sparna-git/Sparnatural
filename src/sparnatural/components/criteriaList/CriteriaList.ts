@@ -23,10 +23,29 @@ class CriteriaList extends HTMLComponent{
     hasWhereChild:boolean
     specProvider:ISpecProvider
     CriteriaGroup:CriteriaGroup
+  Form: { sparnatural: any; submitOpened?: boolean; firstInit: any; preLoad?: boolean; };
+  context: any;
+  jsonQueryBranch: any;
     
-    constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider){
+    constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider,thisForm_: {
+      sparnatural: any;
+      submitOpened?: boolean;
+      firstInit: any;
+      preLoad?: boolean;
+      }, 
+      contexte: any,
+      jsonQueryBranch?: any)
+      {
         super('groupe',ParentComponent,null)
         this.specProvider = specProvider
+        this.Form = thisForm_
+        this.context = contexte
+        this.jsonQueryBranch = jsonQueryBranch
+      }
+
+    render(): this {
+      this.addComponent(this.Form,this.context,this.jsonQueryBranch)
+      return this
     }
 // TODO refactor in addAndCompnentpart and addWhereComponentpart
 addComponent(

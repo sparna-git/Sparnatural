@@ -110,7 +110,7 @@ class ActionsGroup extends HTMLComponent {
     this.ParentCriteriaGroup.html.parent("li").addClass("hasWhereChild");
     this.ParentCriteriaGroup.initCompleted();
 
-    var new_component = addComponent.call(
+    var new_component = this.ParentCriteriaGroup.ParentCriteriaList.addComponent.call(
       this,
       this.ParentCriteriaGroup.thisForm_,
       this.ParentCriteriaGroup.ComponentHtml,
