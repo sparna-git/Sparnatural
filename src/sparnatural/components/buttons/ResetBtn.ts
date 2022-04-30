@@ -12,3 +12,4 @@ class ResetBtn extends HTMLComponent {
         })
     }
 }
+export default ResetBtn
