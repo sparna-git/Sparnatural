@@ -4,6 +4,12 @@ import BgWrapper from "./BgWrapper";
 import SubmitSection from "./SubmitSection";
 import VariableSection from "./VariableSelection";
 
+// This is ugly, should use i18n features instead
+const i18nLabels = {
+    en: require("../assets/lang/en.json"),
+    fr: require("../assets/lang/fr.json"),
+  };
+
 class Sparnatural extends HTMLComponent {
     Form: {
         sparnatural: Sparnatural;

@@ -18,7 +18,7 @@ let multipleHtmlPlugins = htmlPageNames.map(name => {
 });
 
 module.exports = {
-  entry: [ "./src/yasgui/YasguiComponent.ts","./src/sparnatural/sparnatural.ts" ],
+  entry: [ "./src/yasgui/YasguiComponent.ts","./src/sparnatural.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "sparnatural.js"
