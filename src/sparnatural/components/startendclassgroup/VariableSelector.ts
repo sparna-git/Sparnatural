@@ -168,7 +168,7 @@ class VariableSelector extends HTMLComponent {
       let childs_index: Array<string> = [];
       //Set variable neme displayed for childs
       $(this.ParentComponent.html)
-        .parents(".haveWhereChild")
+        .parents(".hasWhereChild")
         .first()
         .find(".childsList>li>.CriteriaGroup>.StartClassGroup")
         .each(function (index) {

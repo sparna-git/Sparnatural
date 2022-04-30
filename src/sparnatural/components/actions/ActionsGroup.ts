@@ -117,7 +117,7 @@ class ActionsGroup extends HTMLComponent {
 
   // This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
   onAddWhere() {
-    this.ParentCriteriaGroup.html.parent("li").addClass("haveWhereChild");
+    this.ParentCriteriaGroup.html.parent("li").addClass("hasWhereChild");
     this.ParentCriteriaGroup.initCompleted();
 
     var new_component = addComponent.call(

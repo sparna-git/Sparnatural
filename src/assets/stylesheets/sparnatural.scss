@@ -999,7 +999,7 @@ body {
 		}
 	}*/
 	
-	.haveWhereChild {
+	.hasWhereChild {
 		position: relative;
 		&>.link-where-bottom {
 			position: absolute;
@@ -1009,11 +1009,11 @@ body {
 			border-left: 3px solid $custom-red;
 			display: block;
 		}
-		&.optionalEnabledcompleted ul.childsList>li.haveWhereChild>.link-where-bottom,
+		&.optionalEnabledcompleted ul.childsList>li.hasWhereChild>.link-where-bottom,
 		&.optionalEnabled.completed>.link-where-bottom {
 			border-left: 3px dashed $custom-red;
 		}
-		&.notExists-enabled.completed ul.childsList>li.haveWhereChild>.link-where-bottom,
+		&.notExists-enabled.completed ul.childsList>li.hasWhereChild>.link-where-bottom,
 		&.notExists-enabled.completed>.link-where-bottom {
 			border-left: 3px dotted #000;
 		}
@@ -1588,7 +1588,7 @@ body {
 				&.addWereDisable>.link-where-bottom {
 					display: none;
 				}
-				&.addWereEnable.haveWhereChild>.link-where-bottom {
+				&.addWereEnable.hasWhereChild>.link-where-bottom {
 					display: block;
 				}
 				.easy-autocomplete {

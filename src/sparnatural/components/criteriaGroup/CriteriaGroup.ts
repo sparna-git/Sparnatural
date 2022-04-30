@@ -235,9 +235,9 @@ class CriteriaGroup extends HTMLComponent {
           } else {
             //Si pas d'enfant, on reaffiche le where action
             if (
-              $(dependantComponent.ComponentHtml).hasClass("haveWhereChild")
+              $(dependantComponent.ComponentHtml).hasClass("hasWhereChild")
             ) {
-              $(dependantComponent.ComponentHtml).removeClass("haveWhereChild");
+              $(dependantComponent.ComponentHtml).removeClass("hasWhereChild");
               $(dependantComponent.ComponentHtml).removeClass("completed");
             }
             $(dependantComponent.ComponentHtml).find(">ul.childsList").remove();
