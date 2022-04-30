@@ -1571,12 +1571,12 @@ body {
 					display: block;
 				}
 
-				li.addWereDisable .ActionWhere.ShowOnEdit,
+				li.addWhereDisable .ActionWhere.ShowOnEdit,
 				&.WhereImpossible.OnEdit>div .ActionWhere.ShowOnEdit,
 				&.OnEdit>div.completed>div .ActionWhere.ShowOnEdit {
 					display: none;
 				}
-				&.addWereDisable>div .ObjectPropertyTypeWidget,
+				&.addWhereDisable>div .ObjectPropertyTypeWidget,
 				&.WhereImpossible>div .ObjectPropertyTypeWidget {
 					border-left-color: transparent;
 
@@ -1584,11 +1584,11 @@ body {
 						display: block;
 					}
 				}
-				&.addWereEnable>.link-where-bottom,
-				&.addWereDisable>.link-where-bottom {
+				&.addWhereEnable>.link-where-bottom,
+				&.addWhereDisable>.link-where-bottom {
 					display: none;
 				}
-				&.addWereEnable.hasWhereChild>.link-where-bottom {
+				&.addWhereEnable.hasWhereChild>.link-where-bottom {
 					display: block;
 				}
 				.easy-autocomplete {

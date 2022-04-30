@@ -15,12 +15,12 @@ export function addComponent(
 ) {
   let index = thisForm_.sparnatural.components.length; // IMPORTANT check if this does the same as legacy code...
   // disable the WHERE if we have reached maximum depth
-  var classWherePossible = "addWereEnable";
+  var classWherePossible = "addWhereEnable";
   if (
     $(contexte).parents("li.groupe").length + 1 ==
     getSettings().maxDepth - 1
   ) {
-    classWherePossible = "addWereDisable";
+    classWherePossible = "addWhereDisable";
   }
 
   // the connection line between CriteriaGroups
