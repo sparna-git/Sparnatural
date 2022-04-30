@@ -9,6 +9,7 @@ require("../assets/js/jquery-nice-select/jquery.nice-select.js");
 require("tippy.js/dist/tippy.css");
 
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
+import Sparnatural from "./sparnatural/components/MainComponents/Sparnatural";
 
 /*
   This is the SparNatural HTMLElement. 
@@ -16,7 +17,7 @@ import { getSettings, mergeSettings } from "./configs/client-configs/settings";
   Used to configure the Settings
 */
 export class SparNatural extends HTMLElement {
-  Sparnatural = new SparNatural()
+  Sparnatural = new Sparnatural()
   specProvider: any;
   // all the components in Sparnatural
   components: any = [];
