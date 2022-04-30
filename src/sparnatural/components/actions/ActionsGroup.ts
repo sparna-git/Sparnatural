@@ -4,11 +4,10 @@ import ISettings from "../../../configs/client-configs/ISettings";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
 import { initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import { addComponent } from "../../globals/addComponent";
 import ActionWhere from "./actioncomponents/ActionWhere";
 import ActionAnd from "./actioncomponents/ActionAnd";
-import ActionRemove from "./actioncomponents/ActionRemove";
 import HTMLComponent from "../HtmlComponent";
+import UnselectBtn from "../buttons/UnselectBtn";
 
 /**
  	Groups all the actions on a line/criteria (AND / REMOVE / WHERE)
@@ -18,8 +17,8 @@ class ActionsGroup extends HTMLComponent {
   actions: {
     ActionWhere: ActionWhere;
     ActionAnd: ActionAnd;
-    ActionRemove: ActionRemove;
   };
+  RemoveCrtGroup:UnselectBtn
   settings: ISettings;
   ParentCriteriaGroup: CriteriaGroup;
   constructor(
@@ -31,7 +30,6 @@ class ActionsGroup extends HTMLComponent {
     this.actions = {
       ActionWhere: new ActionWhere(this, specProvider,settings),
       ActionAnd: new ActionAnd(this, settings),
-      ActionRemove: new ActionRemove(this),
     };
     //TODO refactor is this even necessary
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
@@ -45,6 +43,7 @@ class ActionsGroup extends HTMLComponent {
   }
 
   onCreated() {
+    
     this.#attachActionRemoveButtonToCriteriaGroup();
 
     if (this.ParentCriteriaGroup.jsonQueryBranch != null) {
@@ -64,16 +63,7 @@ class ActionsGroup extends HTMLComponent {
 		TODO: Refactor to ActionRemove class. ActionRemove class should get render() method
 	*/
   #attachActionRemoveButtonToCriteriaGroup() {
-    this.actions.ActionRemove.render();
-    // when click then remove row
-    $(this.actions.ActionRemove.html).find("a").on(
-      "click",
-      {
-        arg1: this.ParentCriteriaGroup,
-        arg2: "onRemoveCriteria",
-      },
-      eventProxiCriteria
-    );
+    this.RemoveCrtGroup = new UnselectBtn(this,this.ParentCriteriaGroup.ParentCriteriaList.onRemoveCriteriaGroup).render()
   }
 
   onObjectPropertyGroupSelected() {
@@ -141,7 +131,7 @@ class ActionsGroup extends HTMLComponent {
   }
   onAddAnd() {
     this.#deactivateOnHover()
-    var new_component = addComponent.call(
+    var new_component = this.ParentCriteriaGroup.ParentCriteriaList.addComponent.call(
       this,
       this.ParentCriteriaGroup.thisForm_,
       this.ParentCriteriaGroup.AncestorComponentHtml,

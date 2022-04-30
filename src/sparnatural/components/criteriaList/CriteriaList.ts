@@ -22,6 +22,7 @@ class CriteriaList extends HTMLComponent{
     hasAnd:boolean
     hasWhereChild:boolean
     specProvider:ISpecProvider
+    CriteriaGroup:CriteriaGroup
     
     constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider){
         super('groupe',ParentComponent,null)
@@ -102,17 +103,17 @@ addComponent(
 }
 
 //If the CriteriaGroup should be deleted
-onRemoveCriteriaGroup(CrtGroup:CriteriaGroup){
-  var index_to_remove = CrtGroup.id;
+onRemoveCriteriaGroup(){
+  var index_to_remove = this.CriteriaGroup.id;
 
   //RemoveSelectedVariable names
-  if (CrtGroup.EndClassGroup.variableSelector != null) {
-    CrtGroup.EndClassGroup.variableSelector.remove();
-    CrtGroup.EndClassGroup.variableSelector = null;
+  if (this.CriteriaGroup.EndClassGroup.variableSelector != null) {
+    this.CriteriaGroup.EndClassGroup.variableSelector.remove();
+    this.CriteriaGroup.EndClassGroup.variableSelector = null;
   }
   //Remove option selected if enbled
-  if ($(CrtGroup.html).parents("li").first().hasClass("optionalEnabled")) {
-    $(CrtGroup.html)
+  if ($(this.CriteriaGroup.html).parents("li").first().hasClass("optionalEnabled")) {
+    $(this.CriteriaGroup.html)
       .parents("li")
       .first()
       .parents("li.groupe")
@@ -126,7 +127,7 @@ onRemoveCriteriaGroup(CrtGroup:CriteriaGroup){
           .first()
           .removeClass("Disabled");
       });
-    $(CrtGroup.html)
+    $(this.CriteriaGroup.html)
       .parents("li")
       .first()
       .find("li.groupe")
@@ -142,7 +143,7 @@ onRemoveCriteriaGroup(CrtGroup:CriteriaGroup){
       });
   }
   // iterate on every "line" in the query
-  $(CrtGroup.thisForm_.sparnatural.components).each(function () {
+  $(this.CriteriaGroup.thisForm_.sparnatural.components).each(function () {
     var parentOrSibling = findParentOrSiblingCriteria.call(
       this,
       this.CriteriaGroup.thisForm_,
@@ -161,35 +162,35 @@ onRemoveCriteriaGroup(CrtGroup:CriteriaGroup){
     }
   });
 
-  var formObject = CrtGroup.thisForm_;
-  var formContextHtml = CrtGroup.AncestorComponentHtml;
+  var formObject = this.CriteriaGroup.thisForm_;
+  var formContextHtml = this.CriteriaGroup.AncestorComponentHtml;
 
   // remove event listeners
-  CrtGroup.ComponentHtml.outerHTML = CrtGroup.ComponentHtml.outerHTML; // IMPORTANT : does that actually do something?
+  this.CriteriaGroup.ComponentHtml.outerHTML = this.CriteriaGroup.ComponentHtml.outerHTML; // IMPORTANT : does that actually do something?
   // remove the HTML
-  $(CrtGroup.ComponentHtml).remove();
+  $(this.CriteriaGroup.ComponentHtml).remove();
 
   var iteration_to_remove = 0;
-  $(CrtGroup.thisForm_.sparnatural.components).each(function (i: number) {
+  $(this.CriteriaGroup.thisForm_.sparnatural.components).each(function (i: number) {
     if (this.index === index_to_remove) {
       iteration_to_remove = i;
     }
   });
   // remove from list of components
-  CrtGroup.thisForm_.sparnatural.components.splice(iteration_to_remove, 1);
+  this.CriteriaGroup.thisForm_.sparnatural.components.splice(iteration_to_remove, 1);
 
-  if (CrtGroup.thisForm_.sparnatural.components.length == 0) {
+  if (this.CriteriaGroup.thisForm_.sparnatural.components.length == 0) {
     // top-level criteria : add first criteria and trigger click on class selection
     var jsonQueryBranch = null;
     // if this is the very first criteria and there is a query to read, start from
     // the first branch
-    if (CrtGroup.thisForm_.preLoad !== false) {
-      jsonQueryBranch = CrtGroup.thisForm_.preLoad.branches[0];
+    if (this.CriteriaGroup.thisForm_.preLoad !== false) {
+      jsonQueryBranch = this.CriteriaGroup.thisForm_.preLoad.branches[0];
     }
 
     $(".variablesOtherSelect .sortableItem").remove();
 
-    CrtGroup.ParentCriteriaList.addComponent.call(
+    this.CriteriaGroup.ParentCriteriaList.addComponent.call(
       this,
       formObject,
       formContextHtml,
@@ -199,10 +200,8 @@ onRemoveCriteriaGroup(CrtGroup:CriteriaGroup){
 
     // re-submit form after deletion
     initGeneralEvent(this, formObject);
-    $(CrtGroup.thisForm_.sparnatural).trigger("submit");
+    $(this.CriteriaGroup.thisForm_.sparnatural).trigger("submit");
   }
-
-  return false;
  
 }
 
