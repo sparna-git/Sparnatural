@@ -9,7 +9,8 @@ import VariableSelector from "./VariableSelector";
 import ISettings from "../../../configs/client-configs/ISettings";
 import CriteriaGroup from "../criteriaList/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import HTMLComponent from "../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
+import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
 
 /**
  * Selection of the start class in a criteria/line
@@ -17,7 +18,7 @@ import HTMLComponent from "../HtmlComponent";
 class StartClassGroup extends HTMLComponent {
   varName: any;
   settings: ISettings;
-  variableSelector: any;
+  variableSelector: VariableSelector;
   selectViewVariable: JQuery<HTMLElement>;
   notSelectForview: boolean;
   value_selected: any;
@@ -26,6 +27,7 @@ class StartClassGroup extends HTMLComponent {
   variableNamePreload: string;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
+  selectViewVariableBtn: SelectViewVariableBtn
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
@@ -71,24 +73,23 @@ class StartClassGroup extends HTMLComponent {
     }
   }
 
-  onchangeViewVariable() {
+  onchangeViewVariable = ()=> {
     if (this.variableSelector === null) {
       //Add varableSelector on variableSelector list ;
       this.variableSelector = new VariableSelector(this, this.specProvider);
-      $(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE);
-      $(this.html).addClass("VariableSelected");
     } else {
       if (this.variableSelector.canRemove()) {
         this.variableSelector.remove();
         this.variableSelector = null;
-        $(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE);
-        $(this.html).removeClass("VariableSelected");
       }
     }
-    this.ParentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList();
+    // emit custom event. getting cought in SparnaturalComponent
+    let ev = new Event('updateVariableList',{bubbles:true})
+    this.html[0].dispatchEvent(ev)
   }
 
   onChange() {
+    this.#renderSelectViewVariableBtn()
     //this.niceslect.niceSelect('update') ;
     this.value_selected = $(this.html).find("select.input-val").val();
     //Sets the SPARQL variable name if not initialized from loaded query
@@ -172,6 +173,10 @@ class StartClassGroup extends HTMLComponent {
         "data-tippy-content"
       );
     }
+  }
+
+  #renderSelectViewVariableBtn(){
+    this.selectViewVariableBtn = new SelectViewVariableBtn(this,this.onchangeViewVariable)
   }
   getVarName() {
     return this.varName;

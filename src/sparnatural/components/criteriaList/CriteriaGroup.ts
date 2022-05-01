@@ -4,12 +4,11 @@ import StartClassGroup from "../startendclassgroup/StartClassGroup";
 import { OptionsGroup } from "../optionsgroup/OptionsGroup";
 
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
 import EndClassWidgetGroup from "../widgets/EndClassWidgetGroup";
-import { initGeneralEvent } from "../../globals/globalfunctions";
-import HTMLComponent from "../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 import ObjectPropertyGroup from "../objectpropertygroup/ObjectPropertyGroup";
-import CriteriaList from "./CriteriaList";
+import CriteriaList from "./GroupWrapper";
+import GroupWrapper from "./GroupWrapper";
 
 /**
  * A single line/criteria
@@ -40,7 +39,7 @@ class CriteriaGroup extends HTMLComponent {
   specProvider: any;
   ParentCriteriaList: CriteriaList;
   constructor(
-    ParentComponent: HTMLComponent,
+    ParentComponent: GroupWrapper,
     context: {
       AncestorHtmlContext: any;
       HtmlContext: any;

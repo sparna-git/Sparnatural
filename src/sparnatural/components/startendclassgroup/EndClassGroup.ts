@@ -8,7 +8,7 @@ import CriteriaGroup from "../criteriaList/CriteriaGroup";
 import tippy from "tippy.js";
 import UnselectBtn from "../buttons/UnselectBtn";
 import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
-import HTMLComponent from "../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
@@ -129,7 +129,8 @@ class EndClassGroup extends HTMLComponent {
         $(this.html).removeClass("VariableSelected");
       }
     }
-    this.ParentCriteriaGroup.thisForm_.sparnatural.variablesSelector.updateVariableList();
+    const ev = new Event('updateVariableList',{bubbles:true})
+    this.html[0].dispatchEvent(ev)
   }
 
   /*
@@ -162,9 +163,8 @@ class EndClassGroup extends HTMLComponent {
       $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
     }
     // since this component was already created only the css classes are updated
-    this.cssClasses.HasInputsCompleted = true;
-    this.cssClasses.IsOnEdit = false;
-    this.update()
+    this.html.addClass('HasInputsCompleted')
+    this.html.addClass('IsOnEdit')
     // show and init the property selection
     this.ParentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = false;
 
