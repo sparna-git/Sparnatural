@@ -3,10 +3,11 @@ import HTMLComponent from "../HtmlComponent"
 
 class PlayBtn extends HTMLComponent {
     constructor(ParentComponent:HTMLComponent,callBack:()=>void){
-        let widgetHtml = $(`<a class="submitDisable">
+        //TODO submit enable disable as binary state
+        let widgetHtml = $(`<a class="">
         ${UiuxConfig.ICON_PLAY}
         </a>`)
-        super("reset-wrapper",ParentComponent,widgetHtml)
+        super("submitSection",ParentComponent,widgetHtml)
         this.html.on('click',(e:JQuery.ClickEvent)=>{
             callBack()
         })
