@@ -1,6 +1,6 @@
 import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "./RDFSpecificationProvider";
-export class SpecificationProviderFactory {
+class SpecificationProviderFactory {
   build(config, language, callback) {
     if (typeof config == "object") {
       // if the config is a JSON object in the page, read it directly
@@ -52,3 +52,4 @@ export class SpecificationProviderFactory {
     }
   }
 }
+export default SpecificationProviderFactory
