@@ -7,7 +7,7 @@ import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import ClassTypeId from "./ClassTypeId";
 import VariableSelector from "./VariableSelector";
 import ISettings from "../../../configs/client-configs/ISettings";
-import CriteriaGroup from "../criteriaList/CriteriaGroup";
+import CriteriaGroup from "../criterialist/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
 import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";

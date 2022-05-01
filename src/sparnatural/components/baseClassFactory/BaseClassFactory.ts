@@ -6,7 +6,9 @@
 */
 class BaseClassFactory {
     liTags:Array<string> = ['groupe']
-    ulTags:Array<string> = ['componentsListe']
+    ulTags:Array<string> = ['componentsListe','childsList']
+    spanTags:Array<string> = ['link-and-bottom','link-where-bottom','selectViewVariable']
+    aTags:Array<string> = ['asc','dsc', 'none selected']
     constructor(){}
 
     getBaseClass(baseCssClass:string){
@@ -14,12 +16,14 @@ class BaseClassFactory {
         let html:JQuery<HTMLElement>
         switch(baseCssClass){
             case this.liTags.find(findCallBack):
-                html = $('<li class="' + baseCssClass + '"></li>')
+                html = $(`<li class="${baseCssClass}"></li>`)
                 break;
             case this.ulTags.find(findCallBack):
-                html = $('<ul class="' + baseCssClass + '"></ul>')
+                html = $(`<ul class="${baseCssClass}"></ul>`)
+            case this.spanTags.find(findCallBack):
+                html = $(`<span class="${baseCssClass}"><span>`)
             default:
-                html = $('<div class="' + baseCssClass + '"></div>');
+                html = $(`<div class="${baseCssClass}"></div>`);
         }
         return html
     }

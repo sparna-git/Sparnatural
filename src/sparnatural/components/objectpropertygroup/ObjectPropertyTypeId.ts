@@ -1,8 +1,8 @@
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ArrowComponent from "../arrows/ArrowComponent";
-import CriteriaGroup from "../criteriaList/CriteriaGroup";
-import HTMLComponent from "../HtmlComponent";
+import CriteriaGroup from "../criterialist/CriteriaGroup";
+import HTMLComponent from "../../HtmlComponent";
 
 /**
  * Refactored to extract this from InputTypeComponent
@@ -36,7 +36,6 @@ class ObjectPropertyTypeId extends HTMLComponent {
     if (this.GrandParent.EndClassGroup.value_selected) {
       this.#removeTempLbl();
       this.widgetHtml = this.#setObjectProperty();
-      //this.update();
     } else {
       // there hasn't been an Object in Endclassgroup chosen. render a temporary label
       this.widgetHtml = $(

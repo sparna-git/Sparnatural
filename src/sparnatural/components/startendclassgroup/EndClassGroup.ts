@@ -4,7 +4,7 @@ import ISettings from "../../../configs/client-configs/ISettings";
 import { eventProxiCriteria, localName } from "../../globals/globalfunctions";
 import VariableSelector from "./VariableSelector";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import CriteriaGroup from "../criteriaList/CriteriaGroup";
+import CriteriaGroup from "../criterialist/CriteriaGroup";
 import tippy from "tippy.js";
 import UnselectBtn from "../buttons/UnselectBtn";
 import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
@@ -119,14 +119,10 @@ class EndClassGroup extends HTMLComponent {
     if (this.variableSelector === null) {
       //Add varableSelector on variableSelector list ;
       this.variableSelector = new VariableSelector(this, this.specProvider);
-      $(this.selectViewVariable).html(UiuxConfig.ICON_SELECTED_VARIABLE);
-      $(this.html).addClass("VariableSelected");
     } else {
       if (this.variableSelector.canRemove()) {
         this.variableSelector.remove();
         this.variableSelector = null;
-        $(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE);
-        $(this.html).removeClass("VariableSelected");
       }
     }
     const ev = new Event('updateVariableList',{bubbles:true})
