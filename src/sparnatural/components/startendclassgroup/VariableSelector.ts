@@ -4,11 +4,11 @@ import {
   redrawBottomLink,
 } from "../../globals/globalfunctions";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import CriteriaGroup from "../criteriaList/CriteriaGroup";
+import CriteriaGroup from "../criterialist/CriteriaGroup";
 import EndClassGroup from "./EndClassGroup";
 import StartClassGroup from "./StartClassGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import HTMLComponent from "../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 
 class VariableSelector extends HTMLComponent {
   displayVariableList: any;

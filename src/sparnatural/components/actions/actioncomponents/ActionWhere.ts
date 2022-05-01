@@ -1,7 +1,7 @@
 import ISettings from "../../../../configs/client-configs/ISettings";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
-import CriteriaGroup from "../../criteriaList/CriteriaGroup";
-import HTMLComponent from "../../HtmlComponent";
+import CriteriaGroup from "../../criterialist/CriteriaGroup";
+import HTMLComponent from "../../../HtmlComponent";
 
 import ActionsGroup from "../ActionsGroup";
 

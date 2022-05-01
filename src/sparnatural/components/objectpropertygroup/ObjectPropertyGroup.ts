@@ -3,8 +3,8 @@ import { eventProxiCriteria } from "../../globals/globalfunctions";
 import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
 import ISettings from "../../../configs/client-configs/ISettings";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import HTMLComponent from "../HtmlComponent";
-import CriteriaGroup from "../criteriaList/CriteriaGroup";
+import HTMLComponent from "../../HtmlComponent";
+import CriteriaGroup from "../criterialist/CriteriaGroup";
 
 /**
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId

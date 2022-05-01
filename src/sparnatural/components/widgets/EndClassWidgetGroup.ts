@@ -3,13 +3,13 @@ import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
 import { AbstractValue } from "../../sparql/Query";
 import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import CriteriaGroup from "../criteriaList/CriteriaGroup";
+import CriteriaGroup from "../criterialist/CriteriaGroup";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
 import { initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import { TreeWidget } from "./Widgets";
 import { getSettings } from "../../../configs/client-configs/settings";
-import HTMLComponent from "../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 
 class EndClassWidgetGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;

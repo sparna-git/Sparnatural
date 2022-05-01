@@ -1,12 +1,12 @@
 
-import CriteriaGroup from "../criteriaList/CriteriaGroup";
+import CriteriaGroup from "../criterialist/CriteriaGroup";
 import ISettings from "../../../configs/client-configs/ISettings";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
 import { initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ActionWhere from "./actioncomponents/ActionWhere";
 import ActionAnd from "./actioncomponents/ActionAnd";
-import HTMLComponent from "../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 import UnselectBtn from "../buttons/UnselectBtn";
 
 /**
