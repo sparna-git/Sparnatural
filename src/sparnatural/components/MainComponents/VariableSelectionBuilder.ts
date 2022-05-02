@@ -4,7 +4,7 @@ import Sortable from "sortablejs"; // has to add allowSyntheticDefaultImports in
 import { getSettings } from "../../../configs/client-configs/settings";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import HTMLComponent from "../../HtmlComponent";
-import { eventProxiCriteria } from "../../globals/globalfunctions";
+import { eventProxiCriteria, redrawBottomLink } from "../../globals/globalfunctions";
 
 /*
     This Class builds the class Variable Selector and adds the Eventhooks for it.

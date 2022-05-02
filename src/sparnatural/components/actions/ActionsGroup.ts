@@ -19,21 +19,18 @@ class ActionsGroup extends HTMLComponent {
     ActionAnd: ActionAnd;
   };
   RemoveCrtGroup:UnselectBtn
-  settings: ISettings;
   ParentCriteriaGroup: CriteriaGroup;
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider:ISpecProvider,
-    settings: ISettings
   ) {
     super("ActionsGroup", ParentCriteriaGroup,  null);
     this.actions = {
-      ActionWhere: new ActionWhere(this, specProvider,settings),
-      ActionAnd: new ActionAnd(this, settings),
+      ActionWhere: new ActionWhere(this, specProvider),
+      ActionAnd: new ActionAnd(this),
     };
     //TODO refactor is this even necessary
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
-    this.settings = settings;
 
   }
 

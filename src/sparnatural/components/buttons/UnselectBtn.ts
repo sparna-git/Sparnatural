@@ -1,4 +1,4 @@
-import HTMLComponent from "../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 
 
 class UnselectBtn extends HTMLComponent{

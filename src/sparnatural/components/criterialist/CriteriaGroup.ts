@@ -78,13 +78,11 @@ class CriteriaGroup extends HTMLComponent {
     this.ObjectPropertyGroup = new ObjectPropertyGroup(
       this,
       specProvider,
-      settings,
       settings.langSearch.ObjectPropertyTemporaryLabel
     ).render();
-    this.EndClassGroup = new EndClassGroup(this, specProvider, settings).render();
+    this.EndClassGroup = new EndClassGroup(this, specProvider).render();
     this.EndClassWidgetGroup = new EndClassWidgetGroup(
       this,
-      settings,
       specProvider
     ).render();
     this.ActionsGroup = new ActionsGroup(this, specProvider, settings).render();
