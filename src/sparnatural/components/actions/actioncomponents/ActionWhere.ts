@@ -1,9 +1,9 @@
-import ISettings from "../../../../configs/client-configs/ISettings";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../../criterialist/CriteriaGroup";
 import HTMLComponent from "../../../HtmlComponent";
 
 import ActionsGroup from "../ActionsGroup";
+import { getSettings } from "../../../../configs/client-configs/settings";
 
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 
@@ -11,20 +11,17 @@ import ActionsGroup from "../ActionsGroup";
     There the Endclassgroup is foun
 */
 class ActionWhere extends HTMLComponent {
-  settings: ISettings;
   GrandParentComponent: CriteriaGroup;
   specProvider: ISpecProvider;
   constructor(
     ParentComponent: ActionsGroup,
     specProvider: ISpecProvider,
-    settings: ISettings
   ) {
     //TODO refactor the null init in html widget
     super("ActionWhere", ParentComponent, null);
     this.GrandParentComponent =
       ParentComponent.ParentComponent as CriteriaGroup;
     this.cssClasses.ShowOnEdit = true;
-    this.settings = settings;
     this.specProvider = specProvider
   }
   render = () => {
@@ -46,12 +43,12 @@ class ActionWhere extends HTMLComponent {
       '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">' +
       choiceNumber +
       "</span></span>" +
-      this.settings.langSearch.Search +
+      getSettings().langSearch.Search +
       " " +
       "endlbl:" +
       endLabel +
       " " +
-      this.settings.langSearch.That +
+      getSettings().langSearch.That +
       "...";
 
     this.widgetHtml = $(widgetLabel + "<a>+</a>");

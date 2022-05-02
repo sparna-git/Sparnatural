@@ -1,16 +1,15 @@
-import ISettings from "../../../../configs/client-configs/ISettings";
-import HTMLComponent from "../../HtmlComponent";
+import { getSettings } from "../../../../configs/client-configs/settings";
+import HTMLComponent from "../../../HtmlComponent";
 
 
 class ActionAnd extends HTMLComponent {
   HtmlContainer: HTMLComponent;
   constructor(
     parentComponent: HTMLComponent,
-    settings: ISettings,
   ) {
     let widgetHtml = $(
       '<span class="trait-and-bottom"></span><a>' +
-        settings.langSearch.And +
+        getSettings().langSearch.And +
         "</a>"
     );
     super("ActionAnd", parentComponent, widgetHtml);

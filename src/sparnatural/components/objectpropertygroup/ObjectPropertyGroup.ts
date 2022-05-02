@@ -1,16 +1,15 @@
 import tippy from "tippy.js";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
 import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
-import ISettings from "../../../configs/client-configs/ISettings";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
+import { getSettings } from "../../../configs/client-configs/settings";
 
 /**
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
  **/
 class ObjectPropertyGroup extends HTMLComponent {
-  settings: ISettings;
   objectPropertySelector: ObjectPropertyTypeId;
   value_selected: any = null; // value which shows which object property got chosen by the config for subject and object
   ParentCriteriaGroup: CriteriaGroup;
@@ -18,12 +17,10 @@ class ObjectPropertyGroup extends HTMLComponent {
   constructor(
     ParentComponent: CriteriaGroup,
     specProvider: ISpecProvider,
-    settings: ISettings,
     temporaryLabel: string
   ) {
     super("ObjectPropertyGroup", ParentComponent, null);
     this.ParentCriteriaGroup = ParentComponent;
-    this.settings = settings;
     this.objectPropertySelector = new ObjectPropertyTypeId(
       this,
       specProvider,
@@ -111,7 +108,7 @@ class ObjectPropertyGroup extends HTMLComponent {
         .find(".ObjectPropertyTypeId")
         .attr("data-tippy-content", desc);
       // tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
-      var tippySettings = Object.assign({}, this.settings?.tooltipConfig);
+      var tippySettings = Object.assign({}, getSettings()?.tooltipConfig);
       tippySettings.placement = "top-start";
       tippy(
         ".ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]",

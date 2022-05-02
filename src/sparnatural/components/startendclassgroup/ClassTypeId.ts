@@ -1,11 +1,11 @@
 import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
-import CriteriaGroup from "../criteriaList/CriteriaGroup";
+import CriteriaGroup from "../criterialist/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
 import ArrowComponent from "../arrows/ArrowComponent";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import HTMLComponent from "../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.
@@ -27,8 +27,8 @@ class ClassTypeId extends HTMLComponent {
     (this.needTriggerClick = false);
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.selectBuilder = new ClassSelectBuilder(this,specProvider);
-    this.frontArrow.cssClasses.Invisible = false
-    this.backArrow.cssClasses.Invisible = true
+    this.frontArrow.html.addClass('Invisible')
+    this.backArrow.html.addClass('Invisible')
     //create Id depending on ParentComponent
     if(isStartClassGroup(ParentComponent)){
       this.id = 'a-' + this.GrandParent.id;
@@ -76,7 +76,7 @@ class ClassTypeId extends HTMLComponent {
       this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder,default_value_o)
     }
 
-    this.appendWidgetHtml()
+    this.html.append(this.widgetHtml)
   
     this.frontArrow.render()
     return this
@@ -118,9 +118,9 @@ class ClassTypeId extends HTMLComponent {
 
   //This function is called by EnclassWidgetGroup when a value got selected. It renders the classTypeIds as shape forms and highlights them
   highlight(){
-    this.cssClasses.Highlited = true
-    this.frontArrow.cssClasses.disable = false
-    this.backArrow.cssClasses.disable = false
+    this.html.addClass('Highlited')
+    this.frontArrow.html.removeClass('disable')
+    this.backArrow.html.removeClass('disable')
   }
 
 

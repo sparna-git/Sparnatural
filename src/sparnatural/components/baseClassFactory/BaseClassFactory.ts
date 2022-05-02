@@ -8,7 +8,7 @@ class BaseClassFactory {
     liTags:Array<string> = ['groupe']
     ulTags:Array<string> = ['componentsListe','childsList']
     spanTags:Array<string> = ['link-and-bottom','link-where-bottom','selectViewVariable']
-    aTags:Array<string> = ['asc','dsc', 'none selected']
+    aTags:Array<string> = ['asc','dsc', 'none',]
     constructor(){}
 
     getBaseClass(baseCssClass:string){

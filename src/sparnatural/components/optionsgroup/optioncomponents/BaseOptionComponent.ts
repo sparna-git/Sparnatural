@@ -3,7 +3,7 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import { eventProxiCriteria } from "../../../globals/globalfunctions";
 import ArrowComponent from "../../arrows/ArrowComponent";
 import { OptionsGroup } from "../OptionsGroup";
-import HTMLComponent from "../../HtmlComponent";
+import HTMLComponent from "../../../HtmlComponent";
 
 
 /*
@@ -42,11 +42,9 @@ class BaseOptionComponent extends HTMLComponent {
         
         // htmlStructure rendering:
         super.render()
-        this.widgetHtml = this.inputElement
-        super.appendWidgetHtml()
+        this.html.append(this.inputElement)
         this.backArrow.render()
-        this.widgetHtml = $(`<span>${this.label}</span>`)
-        super.appendWidgetHtml()
+        this.html.append($(`<span>${this.label}</span>`)) 
         this.frontArrow.render()
 
         this.#addEventListeners()

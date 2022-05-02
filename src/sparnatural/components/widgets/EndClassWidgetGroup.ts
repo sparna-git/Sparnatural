@@ -1,4 +1,3 @@
-import ISettings from "../../../configs/client-configs/ISettings";
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
 import { AbstractValue } from "../../sparql/Query";
 import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
@@ -13,7 +12,6 @@ import HTMLComponent from "../../HtmlComponent";
 
 class EndClassWidgetGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
-  settings: ISettings;
   selectedValues: Array<any> = [];
   selectAllValue: boolean = true;
   VALUE_SELECTION_WIDGETS = [
@@ -25,14 +23,12 @@ class EndClassWidgetGroup extends HTMLComponent {
   inputTypeComponent: ObjectPropertyTypeWidget;
   constructor(
     CriteriaGroup: CriteriaGroup,
-    settings: ISettings,
     specProvider: ISpecProvider
   ) {
     super("EndClassWidgetGroup", CriteriaGroup,null);
-    this.settings = settings;
     this.inputTypeComponent = new ObjectPropertyTypeWidget(
       this,
-      settings,
+      getSettings(),
       specProvider
     );
     this.ParentCriteriaGroup = CriteriaGroup;
@@ -190,7 +186,7 @@ class EndClassWidgetGroup extends HTMLComponent {
 
   onSelectAll() {
     var theValueLabel =
-      "<span>" + this.settings.langSearch.SelectAllValues + "</span>";
+      "<span>" + getSettings().langSearch.SelectAllValues + "</span>";
     this.selectAllValue = true;
     let unselect = $(
       '<span class="unselect" value-data="allValues"><i class="far fa-times-circle"></i></span>'
@@ -324,7 +320,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
 
     //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
-    if (this.selectedValues.length == this.settings.maxOr) {
+    if (this.selectedValues.length == getSettings().maxOr) {
       $(this.ParentCriteriaGroup.html)
         .find(".EndClassWidgetGroup .EndClassWidgetAddOrValue")
         .hide();
@@ -343,7 +339,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     initGeneralEvent.call(
       this,
       this.ParentCriteriaGroup.thisForm_,
-      this.settings
+      getSettings()
     );
   }
 

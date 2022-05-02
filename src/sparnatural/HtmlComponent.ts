@@ -52,7 +52,8 @@ class HTMLComponent implements IRenderable {
     this.baseCssClass = baseCssClass;
     this.ParentComponent = ParentComponent;
     this.widgetHtml = widgetHtml;
-    this.html = $(`<div class=${this.baseCssClass}></div>`);
+    this.html = this.BaseClassFactory.getBaseClass(this.baseCssClass)
+    this.html.append(this.widgetHtml);
   }
 
   #attachComponentHtml() {
@@ -80,11 +81,6 @@ class HTMLComponent implements IRenderable {
     } else {
       this.html = this.BaseClassFactory.getBaseClass(this.baseCssClass)
     }
-  }
-
-  appendWidgetHtml(){
- // should throw error if none found
-    this.html.append(this.widgetHtml)
   }
 
   updateWidgetHtml(newWidgetHtml:JQuery<HTMLElement>){

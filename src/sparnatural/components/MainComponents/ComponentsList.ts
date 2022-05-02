@@ -1,6 +1,6 @@
-import GroupWrapper from "../criteriaList/GroupWrapper";
-import LienTop from "../criteriaList/LienTop";
 import HTMLComponent from "../../HtmlComponent";
+import GroupWrapper from "../criterialist/GroupWrapper";
+import LienTop from "../criterialist/LienTop";
 import BgWrapper from "./BgWrapper";
 
 /*
