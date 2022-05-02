@@ -21,21 +21,19 @@ class SubmitSection extends HTMLComponent {
     // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
     sumbitAction = ()=>{
         if (getSettings().onSubmit) {
-            getSettings().onSubmit(form);
+            let e = new CustomEvent('onSubmit',{bubbles:true})
+            this.html[0].dispatchEvent(e)
         }
     }
 
 
-    /* DONT Forget
-          enableSubmit() {
-        $(this.Form.sparnatural)
-          .find(".submitSection a")
-          .removeClass("submitDisable");
+    enableSubmit() {
+        this.html.removeClass("submitDisable");
       }
     
-      disableSubmit() {
-        $(this.Form.sparnatural).find(".submitSection a").addClass("submitDisable");
-      }
+    disableSubmit() {
+       this.html.addClass("submitDisable");
+    }
 
     */
 } export default SubmitSection

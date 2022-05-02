@@ -84,7 +84,7 @@ class StartClassGroup extends HTMLComponent {
       }
     }
     // emit custom event. getting cought in SparnaturalComponent
-    let ev = new Event('updateVariableList',{bubbles:true})
+    let ev = new CustomEvent('updateVariableList',{bubbles:true})
     this.html[0].dispatchEvent(ev)
   }
 

@@ -1,8 +1,15 @@
+import ISettings from "../../../configs/client-configs/ISettings";
 import { getSettings } from "../../../configs/client-configs/settings";
-import HTMLComponent from "../HtmlComponent";
+import { initGeneralEvent, redrawBottomLink } from "../../globals/globalfunctions";
+import { QuerySPARQLWriter } from "../../sparql/Query";
+import JSONQueryGenerator from "../../sparql/QueryGenerators";
+import ISpecProvider from "../../spec-providers/ISpecProviders";
+import VariableSelectionBuilder from "./VariableSelectionBuilder";
+import HTMLComponent from "../../HtmlComponent";
 import BgWrapper from "./BgWrapper";
 import SubmitSection from "./SubmitSection";
 import VariableSection from "./VariableSelection";
+import SpecificationProviderFactory from "../../spec-providers/SpecificationProviderFactory"
 
 // This is ugly, should use i18n features instead
 const i18nLabels = {
@@ -11,15 +18,15 @@ const i18nLabels = {
   };
 
 class Sparnatural extends HTMLComponent {
+    specProvider:ISpecProvider
+    submitOpened = true
     Form: {
         sparnatural: Sparnatural;
-        submitOpened: boolean;
         firstInit: boolean;
         preLoad: boolean;
         langSearch: any;
       } = {
         sparnatural: this,
-        submitOpened: true,
         firstInit: false,
         // JSON of the query to be loaded
         preLoad: false,
@@ -41,27 +48,63 @@ class Sparnatural extends HTMLComponent {
         this.SubmitSection.render()
         this.VariableSelection.render()
         this.html.append(this.filter)
+        this.#addCustomEventListners()
         return this
+    }
+
+    // register the event listeners to listen for event from the components
+    #addCustomEventListners(){
+
+        // executed by VariableSelection, Start-EndclassGroup & VariableSelector
+        this.html[0].addEventListener('updateVariableList',(e)=>{
+            console.log('updateVariableList event caught')
+            e.stopImmediatePropagation()
+        })
+        this.html[0].addEventListener('onSubmit',(e)=>{
+          console.log('onSubmit even caught')
+          e.stopImmediatePropagation()
+        })
+
+        // when the 
+        this.html[0].addEventListener('switchVariableName',()=>{
+          this.BgWrapper.componentsList.html
+          .toggleClass("displayVarName");
+    
+        $("li.groupe").each(function () {
+          redrawBottomLink($(this));
+        });
+        })
+        // maxvarindex shows the index for the sparql variables. e.g Country_1
+        let maxVarIndex = 0
+        this.html[0].addEventListener('getMaxVarIndex',(e:CustomEvent)=>{
+          e.stopImmediatePropagation()
+          maxVarIndex++
+          // return the index in callback
+          e.detail(maxVarIndex)
+        })
+
+        this.addOnSubmitHook()
+        
     }
 
 
     initSparnatural() {
         getSettings().langSearch = i18nLabels["en"];
         this.Form.langSearch = i18nLabels["en"];
-        let settings = this.getSettings();
-        let specProviderFactory = new SpecificationProviderFactory();
-    
+        let settings = getSettings();
+        let specProviderFactory = new SpecificationProviderFactory()
+
         specProviderFactory.build(settings.config, settings.language, (sp: any) => {
           this.specProvider = sp;
-          this.initForm(this.Form);
-          // add the first CriteriaGroup to the component
-          addComponent.call(this, this.Form, $(this.Form.sparnatural).find("ul"));
-          $(this.Form.sparnatural)
-            .find(".StartClassGroup .nice-select:not(.disabled)")
-            .trigger("click");
-          // uncomment to trigger gathering of statistics
-          // initStatistics(specProvider);
         });
+        this.initForm(this.Form);
+        // add the first CriteriaGroup to the component
+        addComponent.call(this, this.Form, $(this.Form.sparnatural).find("ul"));
+        $(this.Form.sparnatural)
+          .find(".StartClassGroup .nice-select:not(.disabled)")
+          .trigger("click");
+        // uncomment to trigger gathering of statistics
+        // initStatistics(specProvider);
       }
 
     initForm(form: any) {
@@ -78,7 +121,7 @@ class Sparnatural extends HTMLComponent {
     
         initGeneralEvent.call(this, form);
     
-        this.addOnSubmitHook(form, settings);
+        this.addOnSubmitHook();
     
         $(form.sparnatural).trigger("formInitialized");
       }
@@ -104,20 +147,8 @@ class Sparnatural extends HTMLComponent {
     return form;
   }
 
-    clearForm(form: any) {
-        //Stop submit form on this work.
-        form.submitOpened = false;
-        for (var i = form.sparnatural.components.length - 1; i > -1; i--) {
-          if (
-            $(
-              form.sparnatural.components[i].CriteriaGroup.AncestorComponentHtml
-            ).hasClass("componentsListe")
-          ) {
-            form.sparnatural.components[i].CriteriaGroup.onRemoveCriteria();
-          }
-        }
-        form.submitOpened = true;
-        return form;
+    clearForm() {
+
     }
 
     loadQuery(json: any) {
@@ -140,15 +171,7 @@ class Sparnatural extends HTMLComponent {
         this.Form = this.clearForm(this.Form);
       }
     
-      enableSubmit() {
-        $(this.Form.sparnatural)
-          .find(".submitSection a")
-          .removeClass("submitDisable");
-      }
-    
-      disableSubmit() {
-        $(this.Form.sparnatural).find(".submitSection a").addClass("submitDisable");
-      }
+
       enableLoading() {
         $(this.Form.sparnatural)
           .find(".submitSection a")
@@ -158,36 +181,7 @@ class Sparnatural extends HTMLComponent {
         $(this.Form.sparnatural)
           .find(".submitSection a")
           .removeClass("loadingEnabled");
-      }
-
-        /**
-   * Returns the maximum index of variables within all the criterias
-   **/
-  getMaxVarIndex() {
-    var max = 0;
-    for (var i = 0; i < this.components.length; i++) {
-      var startVarName =
-        this.components[i].CriteriaGroup.StartClassGroup.getVarName();
-      var endVarName =
-        this.components[i].CriteriaGroup.EndClassGroup.getVarName();
-
-      if (startVarName && startVarName.split("_").length > 1) {
-        var index = parseInt(startVarName.split("_")[1]);
-        if (index > max) {
-          max = index;
-        }
-      }
-
-      if (endVarName && endVarName.split("_").length > 1) {
-        var index = parseInt(endVarName.split("_")[1]);
-        if (index > max) {
-          max = index;
-        }
-      }
-    }
-
-    return max;
-  }
+      }  
 
     /**
    * Preprocess JSON query to add parent and nextSibling links
@@ -233,7 +227,7 @@ class Sparnatural extends HTMLComponent {
 
     // not sur what to do with this
     this.loadQuery = function () {
-      this.form.submitOpened = false;
+      this.submitOpened = false;
       for (var i = 0; i < this.form.preLoad.variables.length; i++) {
         var variableName = this.form.preLoad.variables[i];
         for (var x = 0; x < this.form.sparnatural.components.length; x++) {
@@ -249,20 +243,18 @@ class Sparnatural extends HTMLComponent {
         }
         x = 0;
       }
-      this.form.submitOpened = true;
+      this.submitOpened = true;
     };
   }
 
   
-  addOnSubmitHook(form: any, settings: ISettings) {
+  addOnSubmitHook() {
     // triggered when Sparnatural is submitted : generates output SPARQL query
-    $(form.sparnatural).on("submit", { formObject: form }, function (event) {
+    this.html[0].addEventListener("submit", (event) => {
+      let settings = getSettings()
       console.log("submit called");
-      if (form.submitOpened == true) {
+      if (this.submitOpened == true) {
         event.preventDefault();
-        /*if ($(event.data.formObject.sparnatural).find('li.groupe').not('.completed').length > 0) {
-						return false ;
-					}*/
 
         // prints the JSON query data structure on the console
         var jsonGenerator = new JSONQueryGenerator();
@@ -289,7 +281,7 @@ class Sparnatural extends HTMLComponent {
           );
 
           //Can enable for submit
-          form.sparnatural.enableSubmit();
+          this.SubmitSection.enableSubmit();
         }
       }
     });

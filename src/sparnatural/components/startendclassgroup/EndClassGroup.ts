@@ -1,6 +1,4 @@
 import ClassTypeId from "./ClassTypeId";
-import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import ISettings from "../../../configs/client-configs/ISettings";
 import { eventProxiCriteria, localName } from "../../globals/globalfunctions";
 import VariableSelector from "./VariableSelector";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
@@ -9,13 +7,17 @@ import tippy from "tippy.js";
 import UnselectBtn from "../buttons/UnselectBtn";
 import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
 import HTMLComponent from "../../HtmlComponent";
+import { OptionsGroup } from "../optionsgroup/OptionsGroup";
+import ObjectPropertyGroup from "../objectpropertygroup/ObjectPropertyGroup";
+import { getSettings } from "../../../configs/client-configs/settings";
+import EndClassWidgetGroup from "../widgets/EndClassWidgetGroup";
+import ActionsGroup from "../actions/ActionsGroup";
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
  **/
 class EndClassGroup extends HTMLComponent {
   varName: any; //IMPORTANT varName is only present at EndClassGroup and StartClassGroup. Refactor on selectedValue method from upper class
-  settings: ISettings;
   variableSelector: any;
   selectViewVariable: JQuery<HTMLElement>;
   value_selected: any;
@@ -31,10 +33,8 @@ class EndClassGroup extends HTMLComponent {
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
-    settings: ISettings
   ) {
     super("EndClassGroup", ParentCriteriaGroup, null);
-    this.settings = settings;
     this.specProvider = specProvider
     this.inputTypeComponent = new ClassTypeId(this, specProvider);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be above varName declaration
@@ -83,30 +83,27 @@ class EndClassGroup extends HTMLComponent {
     // Make arrow function to bind the this lexically
     // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
     onRemoveSelected = () =>{
-      console.warn('endclassgroup onRemoveSelected')
-      console.dir(this)
-      console.dir(this.html)
-      let optionsGrp = $(this.ParentCriteriaGroup.html).find('.OptionsGroup')
+      let optionsGrp = this.ParentCriteriaGroup.OptionsGroup.html
       this.#removeComponent(optionsGrp)
   
-      let objectPropertyGrp = $(this.ParentCriteriaGroup.html).find('.ObjectPropertyGroup')
+      let objectPropertyGrp = this.ParentCriteriaGroup.html
       this.#removeComponent(objectPropertyGrp)
   
-      let endClassGrp = $(this.ParentCriteriaGroup.html).find('.EndClassGroup')
+      let endClassGrp = this.ParentCriteriaGroup.html
       this.#removeComponent(endClassGrp)
   
-      let endClassWgtGrp = $(this.ParentCriteriaGroup.html).find('.EndClassWidgetGroup')
+      let endClassWgtGrp = this.ParentCriteriaGroup.html
       this.#removeComponent(endClassWgtGrp)
   
-      let actionsGrp = $(this.ParentCriteriaGroup.html).find('.ActionsGroup')
+      let actionsGrp = this.ParentCriteriaGroup.html
       this.#removeComponent(actionsGrp)
   
       //Now rerender all of them
-      this.ParentCriteriaGroup.OptionsGroup.render()
-      this.ParentCriteriaGroup.ObjectPropertyGroup.render()
-      this.ParentCriteriaGroup.EndClassGroup.render()
-      this.ParentCriteriaGroup.EndClassWidgetGroup.render()
-      this.ParentCriteriaGroup.ActionsGroup.render()
+      this.ParentCriteriaGroup.OptionsGroup = new OptionsGroup(this.ParentCriteriaGroup,this.specProvider).render()
+      this.ParentCriteriaGroup.ObjectPropertyGroup = new ObjectPropertyGroup(this.ParentCriteriaGroup,this.specProvider,getSettings().langSearch.ObjectPropertyTemporaryLabel).render()
+      this.ParentCriteriaGroup.EndClassGroup = new EndClassGroup(this.ParentCriteriaGroup,this.specProvider).render()
+      this.ParentCriteriaGroup.EndClassWidgetGroup = new EndClassWidgetGroup(this.ParentCriteriaGroup,this.specProvider).render()
+      this.ParentCriteriaGroup.ActionsGroup = new ActionsGroup(this.ParentCriteriaGroup,this.specProvider).render()
   
       // set the state back
       $(this.ParentCriteriaGroup).trigger("StartClassGroupSelected")
@@ -125,7 +122,7 @@ class EndClassGroup extends HTMLComponent {
         this.variableSelector = null;
       }
     }
-    const ev = new Event('updateVariableList',{bubbles:true})
+    const ev = new CustomEvent('updateVariableList',{bubbles:true,detail:"test"})
     this.html[0].dispatchEvent(ev)
   }
 
@@ -137,15 +134,19 @@ class EndClassGroup extends HTMLComponent {
     console.warn("endclassgrp onChange")
     this.#renderUnselectBtn()
     this.#renderSelectViewVariableBtn()
-    console.warn('endclassgroup.onchange')
+
     this.value_selected = this.#getSelectedValue();
     //Set the variable name for Sparql
     if (this.varName == null) {
-      this.varName =
+      // dispatch event and get maxVarIndex via callback
+      this.html[0].dispatchEvent(new CustomEvent('getMaxVarIndex',{bubbles:true,detail:(index:number)=>{
+        //getting the value Sparnatural
+        this.varName =
         "?" +
         localName(this.value_selected) +
         "_" +
-        (this.ParentCriteriaGroup.thisForm_.sparnatural.getMaxVarIndex() + 1);
+        (index);
+      }}))
     }
     this.#disableSelectionPossibility();
     //add varName on curent selection display
@@ -174,7 +175,7 @@ class EndClassGroup extends HTMLComponent {
         .find(".ClassTypeId")
         .attr("data-tippy-content", desc);
       // tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
-      var tippySettings = Object.assign({}, this.settings?.tooltipConfig);
+      var tippySettings = Object.assign({}, getSettings()?.tooltipConfig);
       tippySettings.placement = "top-start";
       tippy(".EndClassGroup .ClassTypeId[data-tippy-content]", tippySettings);
     } else {
@@ -207,16 +208,8 @@ class EndClassGroup extends HTMLComponent {
   }
 
   #removeComponent(component:JQuery<HTMLElement>){
-    this.#isExactlyOne(component)
     component.empty()
     component.remove()
-  }
-
-  // check if the Jquery find method found exactly one child element
-  #isExactlyOne(el:JQuery<HTMLElement>){
-    if(el.length > 1) throw Error(`More than one ${el[0]} found. Criteriagroup ${this.ParentCriteriaGroup.html} has more than one ${el[0]} as child`)
-    // if no el found then length is zero
-    if(!el.length) throw Error(`No HTMLElement found. Criteriagroup id: ${this.ParentCriteriaGroup.id} doesn't contain the HTMLElement`)
   }
 
   getVarName() {

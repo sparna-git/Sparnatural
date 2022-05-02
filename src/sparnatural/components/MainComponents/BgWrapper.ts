@@ -1,6 +1,6 @@
 import ResetBtn from "../buttons/ResetBtn";
-import ComponentsList from "../ComponentsList";
-import HTMLComponent from "./HtmlComponent";
+import ComponentsList from "./ComponentsList";
+import HTMLComponent from "../../HtmlComponent";
 import Sparnatural from "./Sparnatural";
 
 class BgWrapper extends HTMLComponent {
@@ -9,7 +9,7 @@ class BgWrapper extends HTMLComponent {
     componentsList = new ComponentsList(this)
     constructor(ParentComponent:Sparnatural){
         super("bg-wrapper",ParentComponent,null)
-        this.ParentSparnatural = ParentComponent as Sparnatural
+        this
     }
     render(): this {
         super.render()
@@ -18,6 +18,10 @@ class BgWrapper extends HTMLComponent {
     }
 
     resetCallback = ()=>{
-        this.ParentSparnatural.clearForm(this.ParentSparnatural.form);
+        // delete all Components. necessary when i just create a new componentslist?
+      this.componentsList.GroupWrappers.forEach(wrapper=>{
+        wrapper.html.empty()
+      })
+      this.componentsList = new ComponentsList(this)
     }
 } export default BgWrapper
