@@ -35,5 +35,4 @@ class SubmitSection extends HTMLComponent {
        this.html.addClass("submitDisable");
     }
 
-    */
 } export default SubmitSection

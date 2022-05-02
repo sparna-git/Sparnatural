@@ -13,7 +13,9 @@ class BgWrapper extends HTMLComponent {
     }
     render(): this {
         super.render()
+        this.componentsList.render()
         this.resetBtn = new ResetBtn(this,this.resetCallback).render()
+
         return this
     }
 

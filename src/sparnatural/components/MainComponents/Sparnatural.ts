@@ -1,15 +1,13 @@
-import ISettings from "../../../configs/client-configs/ISettings";
 import { getSettings } from "../../../configs/client-configs/settings";
-import { initGeneralEvent, redrawBottomLink } from "../../globals/globalfunctions";
-import { QuerySPARQLWriter } from "../../sparql/Query";
-import JSONQueryGenerator from "../../sparql/QueryGenerators";
+import { initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import VariableSelectionBuilder from "./VariableSelectionBuilder";
 import HTMLComponent from "../../HtmlComponent";
 import BgWrapper from "./BgWrapper";
 import SubmitSection from "./SubmitSection";
 import VariableSection from "./VariableSelection";
 import SpecificationProviderFactory from "../../spec-providers/SpecificationProviderFactory"
+import ActionStore from "../actionstore/actionstore";
+import GroupWrapper from "../criterialist/GroupWrapper";
 
 // This is ugly, should use i18n features instead
 const i18nLabels = {
@@ -19,19 +17,8 @@ const i18nLabels = {
 
 class Sparnatural extends HTMLComponent {
     specProvider:ISpecProvider
-    submitOpened = true
-    Form: {
-        sparnatural: Sparnatural;
-        firstInit: boolean;
-        preLoad: boolean;
-        langSearch: any;
-      } = {
-        sparnatural: this,
-        firstInit: false,
-        // JSON of the query to be loaded
-        preLoad: false,
-        langSearch: null,
-      };
+    submitOpened = true // is responsible if the submit button works or not
+    actionStore:ActionStore
     BgWrapper = new BgWrapper(this)
     SubmitSection = new SubmitSection(this)
     VariableSelection = new VariableSection(this)
@@ -48,137 +35,71 @@ class Sparnatural extends HTMLComponent {
         this.SubmitSection.render()
         this.VariableSelection.render()
         this.html.append(this.filter)
-        this.#addCustomEventListners()
         return this
     }
 
-    // register the event listeners to listen for event from the components
-    #addCustomEventListners(){
-
-        // executed by VariableSelection, Start-EndclassGroup & VariableSelector
-        this.html[0].addEventListener('updateVariableList',(e)=>{
-            console.log('updateVariableList event caught')
-            e.stopImmediatePropagation()
-        })
-        this.html[0].addEventListener('onSubmit',(e)=>{
-          console.log('onSubmit even caught')
-          e.stopImmediatePropagation()
-        })
-
-        // when the 
-        this.html[0].addEventListener('switchVariableName',()=>{
-          this.BgWrapper.componentsList.html
-          .toggleClass("displayVarName");
-    
-        $("li.groupe").each(function () {
-          redrawBottomLink($(this));
-        });
-        })
-        // maxvarindex shows the index for the sparql variables. e.g Country_1
-        let maxVarIndex = 0
-        this.html[0].addEventListener('getMaxVarIndex',(e:CustomEvent)=>{
-          e.stopImmediatePropagation()
-          maxVarIndex++
-          // return the index in callback
-          e.detail(maxVarIndex)
-        })
-
-        this.addOnSubmitHook()
-        
-    }
-
-
     initSparnatural() {
         getSettings().langSearch = i18nLabels["en"];
-        this.Form.langSearch = i18nLabels["en"];
         let settings = getSettings();
         let specProviderFactory = new SpecificationProviderFactory()
 
         specProviderFactory.build(settings.config, settings.language, (sp: any) => {
           this.specProvider = sp;
         });
-        this.initForm(this.Form);
+        this.actionStore = new ActionStore(this,this.specProvider)
+        this.initForm();
         // add the first CriteriaGroup to the component
-        addComponent.call(this, this.Form, $(this.Form.sparnatural).find("ul"));
-        $(this.Form.sparnatural)
-          .find(".StartClassGroup .nice-select:not(.disabled)")
+        // todo 
+        this.BgWrapper.componentsList.addAndComponent()
+        
+        this.BgWrapper.componentsList.GroupWrappers[0].html.find(".StartClassGroup .nice-select:not(.disabled)")
           .trigger("click");
         // uncomment to trigger gathering of statistics
         // initStatistics(specProvider);
       }
 
-    initForm(form: any) {
-        let settings = getSettings()
-    
-        form.queryOptions = {
-          distinct: settings.addDistinct,
-          displayVariableList: ["?this"],
-          orderSort: null,
-          defaultLang: settings.language,
-        };
-    
-        this.initVariablesSelector.call(this, form);
-    
-        initGeneralEvent.call(this, form);
-    
-        this.addOnSubmitHook();
-    
-        $(form.sparnatural).trigger("formInitialized");
+    initForm() {
+        this.initVariablesSelector()
+        initGeneralEvent.call(this);
       }
 
-    
-  doLoadQuery(form: any, json: any) {
-    // stores the JSON to be preloaded
-    form.preLoad = json;
-    // clear the form
-    // On Clear form new component is automaticaly added, json gets loaded
-    this.clearForm(form);
+    loadQueryInterface(json: any) {
+      var jsonWithLinks = this.preprocess(json);
+  
+      this.doLoadQuery( jsonWithLinks);
+    }
 
-    form.sparnatural.variablesSelector.loadQuery();
+   // global function 
+  doLoadQuery(json: any) {
+    // stores the JSON to be preloaded
+    this.actionStore.Form.preLoad = json
+
+    this.loadQuery();
 
     // And now, submit form
-    $(form.sparnatural).trigger("submit");
-    form.preLoad = false;
+    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
     // clear the jsonQueryBranch copied on every component, otherwise they always stay here
     // and we get the same criterias over and over when removing and re-editing
-    form.sparnatural.components.forEach(function (component: any) {
+    this.BgWrapper.componentsList.GroupWrappers.forEach((component: GroupWrapper) => {
+      // IMPORTANT do i need to set the jsonquerybranch of sub criteria groups as well to null?
       component.CriteriaGroup.jsonQueryBranch = null;
     });
-    return form;
   }
 
-    clearForm() {
 
-    }
-
-    loadQuery(json: any) {
-        var jsonWithLinks = this.preprocess(json);
-        // console.log(jsonWithLinks);
-        //Désactiver le submit du form
-        //en amont reset de ce qui est déjà dans l'interface (fonction à part)
-        if (this.Form.firstInit === true) {
-          this.Form = this.doLoadQuery(this.Form, jsonWithLinks);
-        } else {
-          //Si un travail est en cours on attend...
-          $(this.Form.sparnatural).on("initialised", () => {
-            this.Form = this.doLoadQuery(this.Form, jsonWithLinks);
-          });
-        }
-    }
 
 
     clear() {
-        this.Form = this.clearForm(this.Form);
+        this.actionStore = new ActionStore(this,this.specProvider)
       }
     
-
       enableLoading() {
-        $(this.Form.sparnatural)
+        this.html
           .find(".submitSection a")
           .addClass("submitDisable, loadingEnabled"); /// Need to be disabled with loading
       }
       disableLoading() {
-        $(this.Form.sparnatural)
+        this.html
           .find(".submitSection a")
           .removeClass("loadingEnabled");
       }  
@@ -217,16 +138,8 @@ class Sparnatural extends HTMLComponent {
           this.preprocessRec(child, branch, next, jsonQuery);
         }
       }
-
-    
-  initVariablesSelector(form: any) {
-    form.sparnatural.variablesSelector = {};
-    // TODO maybe refactor this to hold VariableSelector objects?
-    let varSelectBuilder = new VariableSelectionBuilder(form);
-    varSelectBuilder.render();
-
-    // not sur what to do with this
-    this.loadQuery = function () {
+      //used to be form.spar
+    loadQuery = function () {
       this.submitOpened = false;
       for (var i = 0; i < this.form.preLoad.variables.length; i++) {
         var variableName = this.form.preLoad.variables[i];
@@ -245,46 +158,14 @@ class Sparnatural extends HTMLComponent {
       }
       this.submitOpened = true;
     };
+
+    
+  initVariablesSelector() {
+    // TODO maybe refactor this to hold VariableSelector objects?
+    this.VariableSelection = new VariableSection(this)
   }
 
   
-  addOnSubmitHook() {
-    // triggered when Sparnatural is submitted : generates output SPARQL query
-    this.html[0].addEventListener("submit", (event) => {
-      let settings = getSettings()
-      console.log("submit called");
-      if (this.submitOpened == true) {
-        event.preventDefault();
 
-        // prints the JSON query data structure on the console
-        var jsonGenerator = new JSONQueryGenerator();
-        var jsonQuery = jsonGenerator.generateQuery(event.data.formObject);
-
-        if (jsonQuery != null) {
-          console.log("*** New JSON Data structure ***");
-          console.log(JSON.stringify(jsonQuery, null, 4));
-
-          // prints the SPARQL generated from the writing of the JSON data structure
-          console.log("*** New SPARQL from JSON data structure ***");
-          var writer = new QuerySPARQLWriter(
-            settings.typePredicate,
-            this.specProvider
-          );
-          writer.setPrefixes(settings.sparqlPrefixes);
-          console.log(writer.toSPARQL(jsonQuery));
-
-          // fire callback
-          settings.onQueryUpdated(
-            writer.toSPARQL(jsonQuery),
-            jsonQuery,
-            this.specProvider
-          );
-
-          //Can enable for submit
-          this.SubmitSection.enableSubmit();
-        }
-      }
-    });
-  }
 }
 export default Sparnatural
