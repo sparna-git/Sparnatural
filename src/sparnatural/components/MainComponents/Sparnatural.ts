@@ -1,5 +1,5 @@
 import { getSettings } from "../../../configs/client-configs/settings";
-import { initGeneralEvent } from "../../globals/globalfunctions";
+
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
 import BgWrapper from "./BgWrapper";
@@ -7,19 +7,18 @@ import SubmitSection from "./SubmitSection";
 import VariableSection from "./VariableSelection";
 import SpecificationProviderFactory from "../../spec-providers/SpecificationProviderFactory"
 import ActionStore from "../actionstore/actionstore";
-import GroupWrapper from "../criterialist/GroupWrapper";
 
 // This is ugly, should use i18n features instead
 const i18nLabels = {
-    en: require("../assets/lang/en.json"),
-    fr: require("../assets/lang/fr.json"),
+    en: require("../../../assets/lang/en.json"),
+    fr: require("../../../assets/lang/fr.json"),
   };
 
 class Sparnatural extends HTMLComponent {
     specProvider:ISpecProvider
     submitOpened = true // is responsible if the submit button works or not
     actionStore:ActionStore
-    BgWrapper = new BgWrapper(this)
+    BgWrapper:BgWrapper
     SubmitSection = new SubmitSection(this)
     VariableSelection = new VariableSection(this)
     filter =  $(
@@ -28,10 +27,14 @@ class Sparnatural extends HTMLComponent {
     constructor(){
         //Sparnatural: Does not have a ParentComponent!
         super("Sparnatural",null,null)
+        getSettings().langSearch = i18nLabels["en"];
+
     }
 
     render(): this {
-        this.BgWrapper.render()
+        //super.render()
+        console.log('sparnatural render')
+        this.BgWrapper = new BgWrapper(this,this.specProvider).render()
         this.SubmitSection.render()
         this.VariableSelection.render()
         this.html.append(this.filter)
@@ -39,28 +42,21 @@ class Sparnatural extends HTMLComponent {
     }
 
     initSparnatural() {
-        getSettings().langSearch = i18nLabels["en"];
         let settings = getSettings();
         let specProviderFactory = new SpecificationProviderFactory()
 
         specProviderFactory.build(settings.config, settings.language, (sp: any) => {
           this.specProvider = sp;
         });
+
         this.actionStore = new ActionStore(this,this.specProvider)
-        this.initForm();
+        this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
         // add the first CriteriaGroup to the component
         // todo 
-        this.BgWrapper.componentsList.addAndComponent()
         
-        this.BgWrapper.componentsList.GroupWrappers[0].html.find(".StartClassGroup .nice-select:not(.disabled)")
-          .trigger("click");
+
         // uncomment to trigger gathering of statistics
         // initStatistics(specProvider);
-      }
-
-    initForm() {
-        this.initVariablesSelector()
-        initGeneralEvent.call(this);
       }
 
     loadQueryInterface(json: any) {
@@ -80,10 +76,6 @@ class Sparnatural extends HTMLComponent {
     this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
     // clear the jsonQueryBranch copied on every component, otherwise they always stay here
     // and we get the same criterias over and over when removing and re-editing
-    this.BgWrapper.componentsList.GroupWrappers.forEach((component: GroupWrapper) => {
-      // IMPORTANT do i need to set the jsonquerybranch of sub criteria groups as well to null?
-      component.CriteriaGroup.jsonQueryBranch = null;
-    });
   }
 
 
@@ -157,15 +149,7 @@ class Sparnatural extends HTMLComponent {
         x = 0;
       }
       this.submitOpened = true;
-    };
-
-    
-  initVariablesSelector() {
-    // TODO maybe refactor this to hold VariableSelector objects?
-    this.VariableSelection = new VariableSection(this)
-  }
-
-  
+    }; 
 
 }
 export default Sparnatural

@@ -1,12 +1,8 @@
 import tippy from "tippy.js";
 import {
   eventProxiCriteria,
-  findParentOrSiblingCriteria,
 } from "../../globals/globalfunctions";
-import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import ClassTypeId from "./ClassTypeId";
-import VariableSelector from "./VariableSelector";
-import ISettings from "../../../configs/client-configs/ISettings";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
@@ -16,35 +12,29 @@ import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
  * Selection of the start class in a criteria/line
  **/
 class StartClassGroup extends HTMLComponent {
+  startClassValue:any
   varName: any;
-  settings: ISettings;
-  variableSelector: VariableSelector;
   selectViewVariable: JQuery<HTMLElement>;
   notSelectForview: boolean;
   value_selected: any;
   inputTypeComponent: ClassTypeId;
-  variableViewPreload: string = "";
-  variableNamePreload: string;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   selectViewVariableBtn: SelectViewVariableBtn
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
-    settings: ISettings
+    startClassValue:any
   ) {
     super("StartClassGroup", ParentCriteriaGroup, null);
-    this.settings = settings;
+    this.startClassValue = startClassValue
     this.specProvider = specProvider
-    console.log('specprovider in startclass')
-    console.dir(specProvider)
-    this.inputTypeComponent = new ClassTypeId(this, specProvider);
+    this.inputTypeComponent = new ClassTypeId(this, specProvider,startClassValue);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration
     // contains the name of the SPARQL variable associated to this component
     this.varName = this.ParentCriteriaGroup.jsonQueryBranch
       ? this.ParentCriteriaGroup.jsonQueryBranch.line.s
       : null;
-    this.variableSelector = null;
     this.notSelectForview = false;
    
   }
@@ -74,30 +64,20 @@ class StartClassGroup extends HTMLComponent {
   }
 
   onchangeViewVariable = ()=> {
-    if (this.variableSelector === null) {
-      //Add varableSelector on variableSelector list ;
-      this.variableSelector = new VariableSelector(this, this.specProvider);
-    } else {
-      if (this.variableSelector.canRemove()) {
-        this.variableSelector.remove();
-        this.variableSelector = null;
-      }
-    }
     // emit custom event. getting cought in SparnaturalComponent
     let ev = new CustomEvent('updateVariableList',{bubbles:true})
     this.html[0].dispatchEvent(ev)
   }
 
   onChange() {
+    $(this.html).addClass("VariableSelected");
     this.#renderSelectViewVariableBtn()
     //this.niceslect.niceSelect('update') ;
     this.value_selected = $(this.html).find("select.input-val").val();
     //Sets the SPARQL variable name if not initialized from loaded query
-    var parentOrSibling = findParentOrSiblingCriteria.call(
-      this,
-      this.ParentCriteriaGroup.thisForm_,
-      this.ParentCriteriaGroup.id
-    );
+
+    //pass down the varname instead of getting it from the parent or sibling
+      /*
     if (this.varName == null) {
       if (parentOrSibling && parentOrSibling.type == "parent") {
         this.varName = parentOrSibling.element.EndClassGroup.getVarName();
@@ -106,47 +86,9 @@ class StartClassGroup extends HTMLComponent {
       } else {
         this.varName = "?this";
       }
-    }
+    }*/
 
-    if (this.varName == "?this" && parentOrSibling === null) {
-      //Si une requete est en chargement pas d'obligation d'aficher la première variable
-      if (!this.notSelectForview) {
-        // Pas de requete à charger, oeil actif
-        this.selectViewVariable = $(
-          '<span class="selectViewVariable">' +
-            UiuxConfig.ICON_SELECTED_VARIABLE +
-            "</span>"
-        );
-        $(this.html).append(this.selectViewVariable);
-        $(this.html)
-          .find("span.selectViewVariable")
-          .on(
-            "click",
-            { arg1: this, arg2: "onchangeViewVariable" },
-            eventProxiCriteria
-          );
-        //Add varableSelector on variableSelector list ;
-        this.variableSelector = new VariableSelector(this, this.specProvider);
-        $(this.html).addClass("VariableSelected");
-      } else {
-        //Pour le chargement d'une requête, par défaul l'oeil est barré.
-        this.selectViewVariable = $(
-          '<span class="selectViewVariable">' +
-            UiuxConfig.ICON_NOT_SELECTED_VARIABLE +
-            "</span>"
-        );
-        $(this.html).append(this.selectViewVariable);
-        $(this.html)
-          .find("span.selectViewVariable")
-          .on(
-            "click",
-            { arg1: this, arg2: "onchangeViewVariable" },
-            eventProxiCriteria
-          );
-      }
-    }
-
-    $(this.ParentCriteriaGroup.StartClassGroup.html)
+    this.html
       .find(".input-val")
       .attr("disabled", "disabled")
       .niceSelect("update");
@@ -155,9 +97,7 @@ class StartClassGroup extends HTMLComponent {
     // trigger event on the whole line/criteria
     $(this.ParentCriteriaGroup).trigger("StartClassGroupSelected");
 
-    if (this.settings.sendQueryOnFirstClassSelected) {
-      $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
-    }
+    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
 
     var desc = this.specProvider.getTooltip(this.value_selected);
     if (desc) {
@@ -173,6 +113,7 @@ class StartClassGroup extends HTMLComponent {
         "data-tippy-content"
       );
     }
+
   }
 
   #renderSelectViewVariableBtn(){

@@ -1,10 +1,10 @@
 require("jstree/dist/themes/default/style.min.css");
 
-require("../assets/stylesheets/sparnatural.scss");
+require("./assets/stylesheets/sparnatural.scss");
 
 require("easy-autocomplete");
 
-require("../assets/js/jquery-nice-select/jquery.nice-select.js");
+require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
 require("tippy.js/dist/tippy.css");
 
@@ -33,6 +33,12 @@ export class SparNatural extends HTMLElement {
 
   setSettings(options: any) {
     mergeSettings(options);
+  }
+
+  initSparnatural(){
+    $(this).append(this.Sparnatural.html)
+    this.Sparnatural.render()
+    this.Sparnatural.initSparnatural()
   }
 }
 

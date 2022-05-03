@@ -1,11 +1,10 @@
 import { getSettings } from "../../../configs/client-configs/settings";
-import { findParentOrSiblingCriteria, initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import ComponentsList from "../MainComponents/ComponentsList";
 import HTMLComponent from "../../HtmlComponent";
 import CriteriaGroup from "./CriteriaGroup";
 import LinkAndBottom from "./LinkAndBottom";
 import LinkWhereBottom from "./LinkWhereBottom";
+import LienTop from "./LienTop";
 /*
     This Components represents the <li class="groupe"..> tag
     Possible states are:
@@ -17,231 +16,128 @@ import LinkWhereBottom from "./LinkWhereBottom";
     - hasAnd: The CriteriaList has an ADD connection to a sibling CriteriaList
 */
 class GroupWrapper extends HTMLComponent{
-    childsList = new ComponentsList(this)// The childsList contains all the sub CriteriaList added with the Where button
+    whereChild:GroupWrapper = null
+    andSibling:GroupWrapper = null
     linkAndBottom = new LinkAndBottom(this) // connection line drawn from this CriteriaList with hasAnd CriteriaList
-    linkWhereBottom = new LinkWhereBottom(this) // connection line drawn from this CriteriaList hasWhereChild CriteriaList
+    linkWhereBottom = new LinkWhereBottom(this)
+    LienTop = new LienTop(this) // connection line drawn from this CriteriaList hasWhereChild CriteriaList
+    CriteriaGroup:CriteriaGroup 
     completed:boolean 
     hasAllCompleted:boolean 
     hasAnd:boolean
-    hasWhereChild:boolean
     specProvider:ISpecProvider
-    CriteriaGroup:CriteriaGroup
-    Form: { sparnatural: any; submitOpened?: boolean; firstInit: any; preLoad?: boolean; };
-    context: any;
-    jsonQueryBranch: any;
-    index: any;
-    
-    constructor(ParentComponent:ComponentsList,specProvider:ISpecProvider,thisForm_: {
-      sparnatural: any;
-      submitOpened?: boolean;
-      firstInit: any;
-      preLoad?: boolean;
-      }, 
-      contexte: any,
-      index:number,
-      jsonQueryBranch?: any
-      )
+    jsonQueryBranch:any = null
+    startClassValue:any // if this is a sibling or child. It needs a startingValue for the StartClass
+    // ParentComponent: ComponentsList | GroupWrapper
+    constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider,jsonQueryBranch:any,startClassValue?:any)
       {
         super('groupe',ParentComponent,null)
-
         this.specProvider = specProvider
-        this.Form = thisForm_
-        this.context = contexte
         this.jsonQueryBranch = jsonQueryBranch
-        this.index = index
+        this.startClassValue = startClassValue
+
       }
 
     render(): this {
       super.render()
-      // Refactor: This is only important for the css. make css independent of one data-index
-      this.html.addClass(`data-index="${this.index}"`)
-      this.linkAndBottom.render()
-      this.linkWhereBottom.render()
+      //if the parent is a GroupWrapper then this Group Wrapper is a where child
+      if(isGroupWrapper(this.ParentComponent)) this.LienTop.render()
 
-       // disable the WHERE if we have reached maximum dept
-      let classWherePossible = this.checkIfMaxDepthIsReached ? "addWhereDisable" : "addWhereEnable"
-      this.html.addClass(classWherePossible);
+       // disable further links when max depth is reached
+      if(!this.checkIfMaxDepthIsReached()){
+        //
+        //
+        this.html.addClass('addWereEnable')
+      }
+      this.#registerAddComponentHooks()
+      this.CriteriaGroup = new CriteriaGroup(this,this.specProvider,this.jsonQueryBranch).render()
       return this
     }
-// TODO refactor in addAndCompnentpart and addWhereComponentpart
-addComponent(
-  thisForm_: {
-    sparnatural: any;
-    submitOpened?: boolean;
-    firstInit: any;
-    preLoad?: boolean;
-  },
-  contexte: any,
-  jsonQueryBranch: any = null
-) {
-  let index = thisForm_.sparnatural.components.length; 
-  
-  let ul: JQuery<HTMLElement>;
 
-  if ($(contexte).is("li")) {
-    if ($(contexte).find(">ul").length == 0) {
-      ul = this.#addWhere(contexte);
-    } else {
-      ul = this.#addAndComponentOnWhere(contexte);
+    #registerAddComponentHooks(){
+      this.html[0].addEventListener('addAndComponent',()=>{
+        this.#addAndComponent()
+      })
+
+      this.html[0].addEventListener('addWhereComponent',()=>{
+        this.#addWhereComponent()
+      })
     }
-    var gabariEl = $(gabari).appendTo(ul);
-  } else {
-    var gabariEl = $(gabari).appendTo(contexte);
+
+    //add GroupWrapper as a Sibling
+    #addAndComponent(){
+      let startClassValue = this.CriteriaGroup.StartClassGroup.value_selected
+      this.andSibling = new GroupWrapper(this.ParentComponent,this.specProvider,this.jsonQueryBranch,startClassValue)
+      this.linkAndBottom.render()
+      // trigger 2 clicks to select the same class as the current criteria (?)
+      this.CriteriaGroup.StartClassGroup
+      .find(".nice-select:not(.disabled)")
+      .trigger("click");
+      this.CriteriaGroup.StartClassGroup
+      .find(".nice-select:not(.disabled)")
+      .trigger("click");
+
+      this.html[0].dispatchEvent(new CustomEvent('initGeneralevent',{bubbles:true}))
+    }
+
+  
+    // Create a SubComponentsList and add the GroupWrapper there
+    // activate lien top
+    //give it additional class childsList
+    #addWhereComponent(){
+      this.whereChild = new GroupWrapper(this,this.specProvider,this.jsonQueryBranch)
+      this.linkWhereBottom.render()
+      //add two clicks?
+      this.CriteriaGroup.StartClassGroup
+      .find(".nice-select:not(.disabled)")
+      .trigger("click");
+      this.CriteriaGroup.StartClassGroup
+      .find(".nice-select:not(.disabled)")
+      .trigger("click");
+    }
+
+  checkIfMaxDepthIsReached(){
+    let maxreached = false
+    this.html[0].dispatchEvent(new CustomEvent('getMaxVarIndex',{bubbles:true,detail:(index:number)=>{
+      //getting the value Sparnatural
+      if(index >= getSettings().maxDepth) maxreached=true
+    }}))
+    return maxreached
   }
-  $(gabariEl).addClass(classWherePossible);
-  console.log('creating new criterias')
-  var UnCritere = new CriteriaGroup(
-    this,
-    {
-      AncestorHtmlContext: contexte,
-      HtmlContext: gabariEl,
-      FormContext: thisForm_,
-      ContextComponentIndex: index,
-
-    },
-    getSettings(),
-    this.specProvider,
-    // pass the JSON query branch as an input parameter
-    jsonQueryBranch,
-    $(contexte).find(`[data-index='${index}']`),
-  );
-  thisForm_.sparnatural.components.push({
-    index: index,
-    CriteriaGroup: UnCritere,
-  });
-  initGeneralEvent.call(this, thisForm_, getSettings());
-
-  //le critère est inséré et listé dans les composants, on peut lancer l'event de création
-  $(UnCritere).trigger("Created");
-  if (thisForm_.firstInit == false) {
-    thisForm_.firstInit = true;
-    $(thisForm_.sparnatural).trigger("initialised");
-  }
-  return $(gabari);
-}
-
-checkIfMaxDepthIsReached(contexte:any){
-  return (
-    this.childsList.GroupWrappers.length ==
-    getSettings().maxDepth - 1
-  )
-}
-
-addWhereComponent(){
-
-}
-
-addAndComponent(){
-
-}
 
 //If the CriteriaGroup should be deleted
 onRemoveCriteriaGroup(){
-  var index_to_remove = this.CriteriaGroup.id;
+  //delete everything under it
+  this.html.empty()
 
-  //RemoveSelectedVariable names
-  if (this.CriteriaGroup.EndClassGroup.variableSelector != null) {
-    this.CriteriaGroup.EndClassGroup.variableSelector.remove();
-    this.CriteriaGroup.EndClassGroup.variableSelector = null;
-  }
-  //Remove option selected if enbled
-  if ($(this.CriteriaGroup.html).parents("li").first().hasClass("optionalEnabled")) {
-    $(this.CriteriaGroup.html)
-      .parents("li")
-      .first()
-      .parents("li.groupe")
-      .each(function () {
-        $(this)
-          .find(">div>.OptionsGroup")
-          .first()
-          .addClass("Enabled");
-        $(this)
-          .find(">div>.OptionsGroup")
-          .first()
-          .removeClass("Disabled");
-      });
-    $(this.CriteriaGroup.html)
-      .parents("li")
-      .first()
-      .find("li.groupe")
-      .each(function () {
-        $(this)
-          .find(">div>.OptionsGroup")
-          .first()
-          .addClass("Enabled");
-        $(this)
-          .find(">div>.OptionsGroup")
-          .first()
-          .removeClass("Disabled");
-      });
-  }
-  // iterate on every "line" in the query
-  $(this.CriteriaGroup.thisForm_.sparnatural.components).each(function () {
-    var parentOrSibling = findParentOrSiblingCriteria.call(
-      this,
-      this.CriteriaGroup.thisForm_,
-      this.index
-    );
-    if (
-      parentOrSibling.type != null &&
-      parentOrSibling.type == "parent" &&
-      parentOrSibling.element != null
-    ) {
-      // if the line is a child of the one to remove, remove it too
-      var el = parentOrSibling.element as CriteriaGroup;
-      if (el.id === index_to_remove) {
-        this.CriteriaGroup.onRemoveCriteria();
-      }
-    }
-  });
+  //rerender the criteria group
+  this.CriteriaGroup = new CriteriaGroup(this,this.specProvider,this.jsonQueryBranch)
+  // revaluate the which criteria groups got deleted. Maybe run through Componentslist and see which CriteriaGroups are now null??
 
-  var formObject = this.CriteriaGroup.thisForm_;
-  var formContextHtml = this.CriteriaGroup.AncestorComponentHtml;
-
-  // remove event listeners
-  this.CriteriaGroup.ComponentHtml.outerHTML = this.CriteriaGroup.ComponentHtml.outerHTML; // IMPORTANT : does that actually do something?
-  // remove the HTML
-  $(this.CriteriaGroup.ComponentHtml).remove();
-
-  var iteration_to_remove = 0;
-  $(this.CriteriaGroup.thisForm_.sparnatural.components).each(function (i: number) {
-    if (this.index === index_to_remove) {
-      iteration_to_remove = i;
-    }
-  });
-  // remove from list of components
-  this.CriteriaGroup.thisForm_.sparnatural.components.splice(iteration_to_remove, 1);
-
-  if (this.CriteriaGroup.thisForm_.sparnatural.components.length == 0) {
-    // top-level criteria : add first criteria and trigger click on class selection
-    var jsonQueryBranch = null;
-    // if this is the very first criteria and there is a query to read, start from
-    // the first branch
-    if (this.CriteriaGroup.thisForm_.preLoad !== false) {
-      jsonQueryBranch = this.CriteriaGroup.thisForm_.preLoad.branches[0];
-    }
-
-    $(".variablesOtherSelect .sortableItem").remove();
-
-    this.CriteriaGroup.ParentCriteriaList.addComponent.call(
-      this,
-      formObject,
-      formContextHtml,
-      jsonQueryBranch
-    );
-
+  // TODO check if any variables are highlighted in variable selection. then delete them
+  // TODO reavulate the query branches to create new query
 
     // re-submit form after deletion
-    initGeneralEvent(this, formObject);
-    $(this.CriteriaGroup.thisForm_.sparnatural).trigger("submit");
-  }
- 
-}  
-
-#addAndComponentOnWhere(contexte: any) {
-  return $(contexte).find(">ul");
+    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
+    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
 }
 
+// this method traverses recurively through all the GroupWrappers and calls the callback
+traverse(callBack:(grpWarpper:GroupWrapper)=>void){
+  callBack(this)
+  if(this.whereChild) this.whereChild.traverse(callBack)
+  if(this.andSibling) this.andSibling.traverse(callBack)
+  return
+}
 
 }
 export default GroupWrapper
+
+function isGroupWrapper(
+  ParentComponent: HTMLComponent
+): ParentComponent is GroupWrapper {
+  return (
+    (ParentComponent as GroupWrapper).baseCssClass ===
+    "groupe"
+  );
+} // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards

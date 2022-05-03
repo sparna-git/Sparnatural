@@ -1,6 +1,5 @@
 import ClassTypeId from "./ClassTypeId";
 import { eventProxiCriteria, localName } from "../../globals/globalfunctions";
-import VariableSelector from "./VariableSelector";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import tippy from "tippy.js";
@@ -23,8 +22,6 @@ class EndClassGroup extends HTMLComponent {
   value_selected: any;
   notSelectForview: boolean;
   inputTypeComponent: ClassTypeId;
-  variableNamePreload: string;
-  variableViewPreload: string;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   UnselectButton:UnselectBtn
@@ -113,17 +110,7 @@ class EndClassGroup extends HTMLComponent {
   // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
   onchangeViewVariable = ()=> {
     console.warn("endclassgrp onChangeViewVar")
-    if (this.variableSelector === null) {
-      //Add varableSelector on variableSelector list ;
-      this.variableSelector = new VariableSelector(this, this.specProvider);
-    } else {
-      if (this.variableSelector.canRemove()) {
-        this.variableSelector.remove();
-        this.variableSelector = null;
-      }
-    }
-    const ev = new CustomEvent('updateVariableList',{bubbles:true,detail:"test"})
-    this.html[0].dispatchEvent(ev)
+    this.html[0].dispatchEvent(new CustomEvent('updateVariableList',{bubbles:true,detail:"test"}))
   }
 
   /*

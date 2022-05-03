@@ -1,8 +1,6 @@
 
 import CriteriaGroup from "../criterialist/CriteriaGroup";
-import ISettings from "../../../configs/client-configs/ISettings";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
-import { initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ActionWhere from "./actioncomponents/ActionWhere";
 import ActionAnd from "./actioncomponents/ActionAnd";
@@ -60,14 +58,15 @@ class ActionsGroup extends HTMLComponent {
 		TODO: Refactor to ActionRemove class. ActionRemove class should get render() method
 	*/
   #attachActionRemoveButtonToCriteriaGroup() {
-    this.RemoveCrtGroup = new UnselectBtn(this,this.ParentCriteriaGroup.ParentCriteriaList.onRemoveCriteriaGroup).render()
+
+    this.RemoveCrtGroup = new UnselectBtn(this,this.ParentCriteriaGroup.ParentGroupWrapper.onRemoveCriteriaGroup).render()
   }
 
   onObjectPropertyGroupSelected() {
     this.#renderActionAnd();
     this.#renderActionWhere();
 
-    initGeneralEvent(this, this.ParentCriteriaGroup.thisForm_);
+    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   }
   /*
 		Create the ActionAnd button which adds another row. 
@@ -106,45 +105,14 @@ class ActionsGroup extends HTMLComponent {
   onAddWhere() {
     this.ParentCriteriaGroup.html.parent("li").addClass("hasWhereChild");
     this.ParentCriteriaGroup.initCompleted();
+    this.html[0].dispatchEvent(new CustomEvent('addWhere',{bubbles:true}))
 
-    var new_component = this.ParentCriteriaGroup.ParentCriteriaList.addComponent.call(
-      this,
-      this.ParentCriteriaGroup.thisForm_,
-      this.ParentCriteriaGroup.ComponentHtml,
-      this.ParentCriteriaGroup.jsonQueryBranch &&
-        this.ParentCriteriaGroup.jsonQueryBranch.children &&
-        this.ParentCriteriaGroup.jsonQueryBranch.children.length > 0
-        ? this.ParentCriteriaGroup.jsonQueryBranch.children[0]
-        : null
-    );
 
     // trigger 2 clicks to select the same class as the object class (?)
-    $(new_component)
-      .find(".StartClassGroup .nice-select:not(.disabled)")
-      .trigger("click");
-    $(new_component)
-      .find(".StartClassGroup .nice-select:not(.disabled)")
-      .trigger("click");
+  
   }
   onAddAnd() {
     this.#deactivateOnHover()
-    var new_component = this.ParentCriteriaGroup.ParentCriteriaList.addComponent.call(
-      this,
-      this.ParentCriteriaGroup.thisForm_,
-      this.ParentCriteriaGroup.AncestorComponentHtml,
-      this.ParentCriteriaGroup.jsonQueryBranch
-        ? this.ParentCriteriaGroup.jsonQueryBranch.nextSibling
-        : null
-    );
-
-    // trigger 2 clicks to select the same class as the current criteria (?)
-    $(new_component)
-      .find(".StartClassGroup .nice-select:not(.disabled)")
-      .trigger("click");
-    $(new_component)
-      .find(".StartClassGroup .nice-select:not(.disabled)")
-      .trigger("click");
-
     return false;
   }
 

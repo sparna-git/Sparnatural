@@ -4,6 +4,7 @@ import { eventProxiCriteria } from "../../../globals/globalfunctions";
 import ArrowComponent from "../../arrows/ArrowComponent";
 import { OptionsGroup } from "../OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
+import GroupWrapper from "../../criterialist/GroupWrapper";
 
 
 /*
@@ -67,23 +68,21 @@ class BaseOptionComponent extends HTMLComponent {
 
     onChange(cls:string){
         // get the ref to the list element
-        let listRef = this.ParentOptionsGroup.ParentCriteriaGroup.liRef
-        listRef.hasClass(cls) ? listRef.removeClass(cls) : listRef.addClass(cls)
-        let listElements = listRef.find('li.groupe')
-        listElements.each(index=>{
-            // convert the htmlelement again in a Jquery<HTMLElement> so hasClass method is available
-            this.#changeDisabledEnabled($(listElements[index]))
-        })
+        let wrapperRef = this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper
+        wrapperRef.html.hasClass(cls) ? wrapperRef.html.removeClass(cls) : wrapperRef.html.addClass(cls)
+
+        wrapperRef.traverse(this.#changeDisabledEnabled)
         
     }
 
-    #changeDisabledEnabled(listEl:JQuery<HTMLElement>){
-        if(listEl.hasClass("Enabled")){
-            listEl.addClass("Disabled")
-            listEl.removeClass(["Enabled","Opended"])
+    #changeDisabledEnabled(grpWrapper:GroupWrapper){
+        let grpWrapperHtml = grpWrapper.html
+        if(grpWrapperHtml.hasClass("Enabled")){
+            grpWrapperHtml.addClass("Disabled")
+            grpWrapperHtml.removeClass(["Enabled","Opended"])
         } else{
-            listEl.addClass(["Enabled","Opended"])
-            listEl.removeClass("Disabled")
+            grpWrapperHtml.addClass(["Enabled","Opended"])
+            grpWrapperHtml.removeClass("Disabled")
         }
     }
 

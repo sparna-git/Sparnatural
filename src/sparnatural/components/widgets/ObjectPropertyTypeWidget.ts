@@ -3,7 +3,6 @@ import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
 import Datasources from "../../../configs/fixed-configs/SparnaturalConfigDatasources";
 import { SparqlTreeHandler } from "./handlers/TreeHandlers";
 import IWidget from "./IWidget";
-import { initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import HTMLComponent from "../../HtmlComponent";
@@ -83,8 +82,8 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
         add_all = false;
 
         //$(this.ParentComponent.ParentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
-        $(this.GrandParent.thisForm_.sparnatural).trigger("submit");
-        initGeneralEvent(this, this.GrandParent.thisForm_);
+        this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
+        this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
       }
       //var endLabel = null ; //Imporant is this still necessary?
       add_or = false;

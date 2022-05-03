@@ -11,5 +11,9 @@ class ResetBtn extends HTMLComponent {
             callBack()
         })
     }
+    render(): this {
+        super.render()
+        return this
+    }
 }
 export default ResetBtn

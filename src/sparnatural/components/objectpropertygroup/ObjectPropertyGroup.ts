@@ -98,7 +98,7 @@ class ObjectPropertyGroup extends HTMLComponent {
         .first()
         .hasClass("completed")
     ) {
-      $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
+      this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
     }
 
     // sets tooltip ready

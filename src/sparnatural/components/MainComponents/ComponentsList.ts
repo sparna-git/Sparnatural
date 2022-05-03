@@ -1,45 +1,35 @@
 import HTMLComponent from "../../HtmlComponent";
+import ISpecProvider from "../../spec-providers/ISpecProviders";
 import GroupWrapper from "../criterialist/GroupWrapper";
-import LienTop from "../criterialist/LienTop";
-import BgWrapper from "./BgWrapper";
 
 /*
     Componentslist does correspond to the <ul class="componentsListe"> OR <ul class="childsList">
-    Depending on the ParentComponent. If BGWrapper parent then it is the root Componentslist
-    Componentslist holds a list of GroupWrapper siblings add with 'addAndComponent'.
+    Depending on the ParentComponent. If BGWrapper is parent, then it is the root Componentslist
+    Componentslist holds a list of GroupWrapper siblings added with 'addAndComponent'.
 */
 class ComponentsList extends HTMLComponent {
-    LienTop = new LienTop(this)
-    GroupWrappers:Array<GroupWrapper> = []
-    constructor(ParentComponent:HTMLComponent){
-        let baseCssClass = isRootComponentsList(ParentComponent)? 'componentsListe' : 'childsList'
-        super(baseCssClass,ParentComponent,null)
+  specProvider: ISpecProvider;
+  rootGroupWrapper:GroupWrapper
+    constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider){
+        super('componentsListe',ParentComponent,null)
+        this.specProvider = specProvider
     }
 
     render(): this {
+      console.log('componentslist render')
         super.render()
-        if(isRootComponentsList(this.ParentComponent)) this.LienTop.render()
+        this.initFirstGroupWrapper()
+        this.rootGroupWrapper.CriteriaGroup.html.find(".StartClassGroup .nice-select:not(.disabled)")
+        .trigger("click");
         return this
     }
 
-    //add GroupWrapper as a Sibling
-    addAndComponent(){
-
+    initFirstGroupWrapper(){
+      this.rootGroupWrapper = new GroupWrapper(this,this.specProvider,null).render()
     }
 
-    // Create a SubComponentsList and add the GroupWrapper there
-    // activate lien top
-    //give it additional class childsList
-    addWhereComponent(){
-
-    }
 }
-function isRootComponentsList(
-    ParentComponent: HTMLComponent
-  ): ParentComponent is BgWrapper {
-    return (
-      (ParentComponent as BgWrapper).baseCssClass ===
-      "bg-wrapper"
-    );
-} // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards
+
+
+
 export default ComponentsList

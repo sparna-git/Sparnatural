@@ -8,7 +8,6 @@ const settings: ISettings = {
   maxDepth: 4, // max amount of where clauses
   addDistinct: true,
   noTypeCriteriaForObjects: ["http://dbpedia.org/ontology/Artwork"],
-  sendQueryOnFirstClassSelected: true,
   backgroundBaseColor: "2,184,117",
   autocomplete: null,
   list: null,

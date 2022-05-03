@@ -13,26 +13,26 @@ class LienTop extends HTMLComponent {
         this.ParentGroupWrapper = this.ParentComponentsList.ParentComponent as GroupWrapper
     }
     render(): this {
-        let width = this.#calculateHorizontalWidth(this.ParentComponentsList,this.ParentGroupWrapper)
+        let width = this.#calculateHorizontalWidth(this.ParentGroupWrapper.ParentComponent,this.ParentGroupWrapper)
         this.html.css("width", width)
         return this
     }
 
       // Calculate the Horizontal line connecting the parent Criteria Group with the WHERE inserted child CriteriaGroup
     #calculateHorizontalWidth(
-        componentsList: ComponentsList,
+        groupWrapperParent: HTMLComponent,
         groupWrapper: GroupWrapper
     ) {
         return (
         this.#getOffset(
-            componentsList,
+            groupWrapperParent,
             groupWrapper
         ) - 57
     );
     }
 
     #getOffset(
-        elem: ComponentsList,
+        elem: HTMLComponent,
         elemParent: GroupWrapper
       ) {
         return $(elem.html).offset().left - $(elemParent.html).offset().left;

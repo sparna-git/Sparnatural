@@ -6,6 +6,7 @@ import DescendBtn from "../buttons/DescendBtn";
 import NoOrderBtn from "../buttons/NoOrderBtn";
 import ShowHideBtn from "../buttons/ShowHideBtn";
 import VariableOptionsSelectBtn from "../buttons/VariableOptionsSelectBtn";
+//import VariableSelector from "./VariableSelector";
 
 class VariableSection extends HTMLComponent {
     ascendBtn:AscendBtn
@@ -16,6 +17,7 @@ class VariableSection extends HTMLComponent {
     linesWrapper:JQuery<HTMLElement>
     otherSelectHtml: JQuery<HTMLElement>;
     displayVariableList:Array<string>
+    //variableSelector:VariableSelector
 
     constructor(ParentComponent:HTMLComponent){
         super('variablesSelection',ParentComponent,null)

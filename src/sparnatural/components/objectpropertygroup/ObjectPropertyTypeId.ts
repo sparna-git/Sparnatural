@@ -68,7 +68,6 @@ class ObjectPropertyTypeId extends HTMLComponent {
     return selectBuilder.buildPropertySelect(
       this.GrandParent.StartClassGroup.value_selected,
       this.GrandParent.EndClassGroup.value_selected,
-      "c-" + this.GrandParent.id,
       default_value
     );
   }
@@ -94,7 +93,6 @@ class PropertySelectBuilder {
   buildPropertySelect(
     domainClassID: any,
     rangeClassID: any,
-    inputID: string,
     default_value: any
   ) {
     var list = [];
@@ -129,7 +127,6 @@ class PropertySelectBuilder {
 
     var html_list = $("<select/>", {
       class: "select-list input-val",
-      id: inputID,
       html: list.join(""),
     });
     return html_list;

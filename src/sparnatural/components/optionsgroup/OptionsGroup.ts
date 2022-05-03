@@ -32,7 +32,6 @@ export class OptionsGroup extends HTMLComponent {
     this.specProvider = specProvider
     this.valuesSelected = {};
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
-    this.crtGroupId = ParentCriteriaGroup.id
     this.OptionalComponent = new OptionalComponent(this,specProvider,this.crtGroupId)
     this.NotExistsComponent = new NotExistsComponent(this,specProvider,this.crtGroupId)
     this.backArrow.cssClasses.Invisible = true;
@@ -54,26 +53,15 @@ export class OptionsGroup extends HTMLComponent {
 
   // validates if the Options Arrow can be rendered or not
   #checkIfBackArrowisRenderable(){
-    var parentOptionEnable = false;
-    let listElements = this.ParentCriteriaGroup.liRef.find('li.groupe')
-
-    // check if there is an optional component activated of the parent rows
-    listElements.each((i)=>{
-      //optionEnabled gets set in OptionalComponent.onChange()
-      if($(listElements[i]).hasClass('optionalEnabled')){
-        parentOptionEnable = true
-        this.ParentCriteriaGroup.html.addClass("OptionMenuShowed")
-      }
-    });
-
-    
-    if(this.#checkIfOptionPossible && !(parentOptionEnable)){
+    let parentAlreadyOptionEnabled = false
+    if(this.ParentCriteriaGroup.ParentGroupWrapper.html.hasClass('Enabled')) parentAlreadyOptionEnabled = true
+    if(this.#checkIfOptionPossible && !(parentAlreadyOptionEnabled)){
       //Options like NOTEXISTS are possible and none of the parent has it already activated
       this.#addOptionPossible()
       this.#addEventListener()
     }else{
       this.#addNoOptionPossible()
-      if(parentOptionEnable){
+      if(parentAlreadyOptionEnabled){
         $(this.ParentCriteriaGroup.html).addClass("OptionMenuShowed");
       }
     }
@@ -85,7 +73,7 @@ export class OptionsGroup extends HTMLComponent {
         // Clicked! now render the optional components
         this.#renderOptionalComponents()
         $(e.target).toggleClass("Opended");
-        redrawBottomLink(this.ParentCriteriaGroup.liRef);
+        redrawBottomLink(this.ParentCriteriaGroup.ParentGroupWrapper.html);
       }
     });
   }

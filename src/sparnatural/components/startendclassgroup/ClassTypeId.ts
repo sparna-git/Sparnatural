@@ -1,4 +1,3 @@
-import { findParentOrSiblingCriteria } from "../../globals/globalfunctions";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import StartClassGroup from "./StartClassGroup";
@@ -18,23 +17,17 @@ class ClassTypeId extends HTMLComponent {
   frontArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
   backArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_BACK)
   selectBuilder: ClassSelectBuilder;
-  
-  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
+  startClassValue:any = null
+  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider,startClassValue?:any) {
+    super("ClassTypeId", ParentComponent, null)
 
-    super("ClassTypeId", ParentComponent, null);
-    (this.cssClasses.Highlited = true),
-    (this.cssClasses.flexWrap = true),
-    (this.needTriggerClick = false);
+    this.html.addClass('Highlited')
+    this.html.addClass('flexwrap')
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.selectBuilder = new ClassSelectBuilder(this,specProvider);
     this.frontArrow.html.addClass('Invisible')
-    this.backArrow.html.addClass('Invisible')
-    //create Id depending on ParentComponent
-    if(isStartClassGroup(ParentComponent)){
-      this.id = 'a-' + this.GrandParent.id;
-    }else{
-      this.id = 'a-' + this.GrandParent.id;
-    }    
+    this.backArrow.html.addClass('Invisible') 
+    this.startClassValue = startClassValue
   }
 
   /*
@@ -58,15 +51,6 @@ class ClassTypeId extends HTMLComponent {
       default_value_s = branch.line.sType;
       default_value_o = branch.line.oType;
       this.needTriggerClick = true;
-
-      if (isStartClassGroup(this.ParentComponent)) {
-        this.ParentComponent.variableNamePreload = branch.line.s;
-        this.ParentComponent.variableViewPreload = branch.line.sSelected;
-      }
-      if (isEndClassGroup(this.ParentComponent)) {
-        this.ParentComponent.variableNamePreload = branch.line.o;
-        this.ParentComponent.variableViewPreload = branch.line.oSelected;
-      }
     }
 
     
@@ -86,34 +70,15 @@ class ClassTypeId extends HTMLComponent {
   #getRangeOfEndValues(selectBuilder:ClassSelectBuilder,default_value_o:any){
     return selectBuilder.buildClassSelect(
       this.GrandParent.StartClassGroup.value_selected,
-      this.id,
       default_value_o
     );
   }
 
   // If this Component is a child of the StartClassGroup component, we want the possible StartValues
   #getStartValues(selectBuilder:ClassSelectBuilder,default_value_s:any){
-    var parentOrSibling = findParentOrSiblingCriteria.call(
-      this,
-      this.GrandParent.thisForm_,
-      this.GrandParent.id
-    );
-
-    if(parentOrSibling.type){
-      if (parentOrSibling.type == "parent") {
-        // if we are child in a WHERE relation, the selected class is the selected
-        // class in the RANGE selection of the parent
-        default_value_s =
-          parentOrSibling.element.EndClassGroup.value_selected;
-      } else {
-        // if we are sibling in a AND relation, the selected class is the selected
-        // class in the DOMAIN selection of the sibling
-        default_value_s =
-          parentOrSibling.element.StartClassGroup.value_selected;
-      }
-    }
+    if(this.startClassValue) default_value_s = this.startClassValue
   
-    return selectBuilder.buildClassSelect(null, this.id, default_value_s);
+    return selectBuilder.buildClassSelect(null, default_value_s);
   }
 
   //This function is called by EnclassWidgetGroup when a value got selected. It renders the classTypeIds as shape forms and highlights them
@@ -150,7 +115,7 @@ class ClassSelectBuilder extends HTMLComponent {
     return this
   }
 
-  buildClassSelect(domainId: any, inputID: string, default_value: any) {
+  buildClassSelect(domainId: any, default_value: any) {
     let list:Array<string> = [];
     let items = [];
 
@@ -203,7 +168,6 @@ class ClassSelectBuilder extends HTMLComponent {
     
     var html_list = $("<select/>", {
       class: "my-new-list input-val",
-      id: "select-" + inputID,
       html: list.join(""),
     });
     return html_list;

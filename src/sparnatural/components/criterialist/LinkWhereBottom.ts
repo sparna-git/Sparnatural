@@ -1,6 +1,5 @@
-import HTMLComponent from "../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import ChildsList from "./Childslist";
 import GroupWrapper from "./GroupWrapper";
 
 class LinkWhereBottom extends HTMLComponent{
@@ -14,7 +13,7 @@ class LinkWhereBottom extends HTMLComponent{
     render(): this {
         let leftshift = this.#calculateLeftShift(
             this.ParentGroupWrapper.CriteriaGroup.EndClassGroup,
-            this.ParentGroupWrapper.childsList
+            this.ParentGroupWrapper.whereChild
         )
         this.html.css("left", leftshift);
         return this
@@ -24,19 +23,19 @@ class LinkWhereBottom extends HTMLComponent{
         // Calculate the Horizontal shift connecting the parent Criteria Group with the WHERE inserted child CriteriaGroup
     #calculateLeftShift(
         EndClassGroup:EndClassGroup,
-        ChildsList: ChildsList
+        whereChild:GroupWrapper 
     ): number {
         return (
             this.#getOffset(
                 EndClassGroup,
-                ChildsList
+                whereChild
             ) + 51
         );
     }
     
     #getOffset(
         elem: EndClassGroup,
-        elemParent: ChildsList
+        elemParent: GroupWrapper
       ) {
         return $(elem.html).offset().left - $(elemParent).offset().left;
       }

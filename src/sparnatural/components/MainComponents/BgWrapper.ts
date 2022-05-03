@@ -2,28 +2,26 @@ import ResetBtn from "../buttons/ResetBtn";
 import ComponentsList from "./ComponentsList";
 import HTMLComponent from "../../HtmlComponent";
 import Sparnatural from "./Sparnatural";
+import ISpecProvider from "../../spec-providers/ISpecProviders";
 
 class BgWrapper extends HTMLComponent {
     ParentSparnatural: Sparnatural;
     resetBtn:ResetBtn
-    componentsList = new ComponentsList(this)
-    constructor(ParentComponent:Sparnatural){
+    componentsList:ComponentsList
+    specProvider: ISpecProvider;
+    constructor(ParentComponent:Sparnatural,specProvider:ISpecProvider){
         super("bg-wrapper",ParentComponent,null)
-        this
+        this.specProvider = specProvider
     }
     render(): this {
         super.render()
-        this.componentsList.render()
+        this.componentsList == new ComponentsList(this,this.specProvider).render()
         this.resetBtn = new ResetBtn(this,this.resetCallback).render()
 
         return this
     }
 
     resetCallback = ()=>{
-        // delete all Components. necessary when i just create a new componentslist?
-      this.componentsList.GroupWrappers.forEach(wrapper=>{
-        wrapper.html.empty()
-      })
-      this.componentsList = new ComponentsList(this)
+      this.componentsList = new ComponentsList(this,this.specProvider).render()
     }
 } export default BgWrapper

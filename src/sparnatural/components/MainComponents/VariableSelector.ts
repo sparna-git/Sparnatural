@@ -5,11 +5,11 @@ import {
 } from "../../globals/globalfunctions";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
-import EndClassGroup from "./EndClassGroup";
-import StartClassGroup from "./StartClassGroup";
+import EndClassGroup from "../startendclassgroup/EndClassGroup";
+import StartClassGroup from "../startendclassgroup/StartClassGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
-
+/*
 class VariableSelector extends HTMLComponent {
   displayVariableList: any;
   globalVariablesSelctor: any;
@@ -281,3 +281,4 @@ class VariableSelector extends HTMLComponent {
 }
 
 export default VariableSelector;
+*/

@@ -4,7 +4,6 @@ import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import { eventProxiCriteria } from "../../globals/globalfunctions";
-import { initGeneralEvent } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import { TreeWidget } from "./Widgets";
 import { getSettings } from "../../../configs/client-configs/settings";
@@ -120,7 +119,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     //uncheck_node()
 
     if (this.selectedValues.length < 1) {
-      $(this.ParentCriteriaGroup.ComponentHtml).removeClass("completed");
+      //$(this.ParentCriteriaGroup.ComponentHtml).removeClass("completed");
       $(this.ParentCriteriaGroup.html)
         .find(".EndClassWidgetGroup >.EndClassWidgetAddOrValue")
         .remove();
@@ -167,13 +166,9 @@ class EndClassWidgetGroup extends HTMLComponent {
     }
 
     $(this.ParentCriteriaGroup).trigger("EndClassWidgetGroupUnselected");
-    $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
-
-    initGeneralEvent.call(this, this.ParentCriteriaGroup.thisForm_,getSettings());
-  }
-
-  #removeONAddOrValue(){
-
+    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
+    this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
+    
   }
 
   loadValue = function loadValue(value: any) {
@@ -235,8 +230,8 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.ParentCriteriaGroup.initCompleted();
 
     $(this.ParentCriteriaGroup).trigger("EndClassWidgetGroupSelected");
-    $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
-    initGeneralEvent.call(this, this.ParentCriteriaGroup.thisForm_);
+    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
+    this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
   }
   // this method renders Arrow Components on the ClassTypeId's
   #renderArrowComponentents(){
@@ -317,7 +312,8 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.ParentCriteriaGroup.initCompleted();
 
     $(this.ParentCriteriaGroup).trigger("EndClassWidgetGroupSelected");
-    $(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger("submit");
+    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
+
 
     //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
     if (this.selectedValues.length == getSettings().maxOr) {
@@ -336,11 +332,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     $(this.ParentCriteriaGroup.html)
       .find(".EndClassGroup>.EditComponents")
       .removeClass("newOr");
-    initGeneralEvent.call(
-      this,
-      this.ParentCriteriaGroup.thisForm_,
-      getSettings()
-    );
+      this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
   }
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
@@ -449,7 +441,7 @@ class EndClassWidgetGroup extends HTMLComponent {
       $(this.ParentCriteriaGroup.EndClassGroup).find('a.treeBtnDisplay').first().trigger('click') ;
     }
     
-    initGeneralEvent(this.ParentCriteriaGroup.thisForm_,getSettings());
+    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   };
 }
 export default EndClassWidgetGroup;

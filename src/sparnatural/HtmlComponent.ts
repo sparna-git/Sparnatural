@@ -63,6 +63,9 @@ class HTMLComponent implements IRenderable {
       this.htmlParent.find(">." + this.baseCssClass).remove();
       $(this.html).appendTo(this.htmlParent);
     } else {
+      console.dir(`attaching:${this.html} to ${this.ParentComponent}`)
+      console.dir(this.html)
+      console.dir(this.ParentComponent)
       // remove existing component if already existing
       this.ParentComponent.html.find(">." + this.baseCssClass).remove();
       $(this.html).appendTo(this.ParentComponent.html);
@@ -90,10 +93,10 @@ class HTMLComponent implements IRenderable {
   }
 
   render() {
-      this.cssClasses.IsOnEdit = true;
+      this.html.addClass('isOnEdit')
       this.#initHtml();
       this.#attachComponentHtml();
-      this.cssClasses.Created = true;
+      this.html.addClass('Created')
       return this
   }
 }
