@@ -46,7 +46,6 @@ class ObjectPropertyGroup extends HTMLComponent {
 		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
 	*/
   onEndClassGroupSelected() {
-    console.log('objectpropertygroup.onendclassgroupselected')
     // this will update the temporarly label
     this.objectPropertySelector.render();
 
@@ -78,7 +77,6 @@ class ObjectPropertyGroup extends HTMLComponent {
   }
 
   onChange() {
-    console.log('objectpropertygroup on change called')
     if (this.value_selected) {
       console.warn("ObjectPropertyGroup call OptionsGroup.reload!!!")
       this.ParentCriteriaGroup.OptionsGroup.render();

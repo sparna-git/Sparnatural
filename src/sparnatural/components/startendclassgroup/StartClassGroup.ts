@@ -48,6 +48,7 @@ class StartClassGroup extends HTMLComponent {
 
   #addEventListener(){
     this.html[0].addEventListener('classTypeValueSelected',(e:CustomEvent)=>{
+      if((e.detail === '') || (!e.detail)) throw Error('No value received on "classTypeValueSelected"')
       e.stopImmediatePropagation()
       this.value_selected = e.detail
       this.#valueWasSelected()

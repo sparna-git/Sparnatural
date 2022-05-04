@@ -33,7 +33,6 @@ class Sparnatural extends HTMLComponent {
 
     render(): this {
         //super.render()
-        console.log('sparnatural render')
         this.initSparnatural()
         this.BgWrapper = new BgWrapper(this,this.specProvider).render()
         this.SubmitSection.render()
@@ -47,7 +46,6 @@ class Sparnatural extends HTMLComponent {
     initSparnatural() {
         let settings = getSettings();
         let specProviderFactory = new SpecificationProviderFactory()
-        console.log('iiiiiiinit')
         specProviderFactory.build(settings.config, settings.language, (sp: any) => {
           this.specProvider = sp;
         });
