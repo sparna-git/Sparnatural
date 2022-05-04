@@ -1,5 +1,5 @@
 import ClassTypeId from "./ClassTypeId";
-import { eventProxiCriteria, localName } from "../../globals/globalfunctions";
+import { localName } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import tippy from "tippy.js";
@@ -46,8 +46,19 @@ class EndClassGroup extends HTMLComponent {
     console.log(`VARNAME: ${this.varName}`)
     this.variableSelector = null;
     this.value_selected = null
+    this.#addEventListener()
     return this
   }
+
+  #addEventListener(){
+    this.html[0].addEventListener('classTypeValueSelected',(e:CustomEvent)=>{
+      if((e.detail === '') || (!e.detail)) throw Error('No value received on "classTypeValueSelected"')
+      e.stopImmediatePropagation()
+      this.value_selected = e.detail
+      this.#valueWasSelected()
+    })
+  }
+
 
   // triggered when the subject/domain is selected
   onStartClassGroupSelected() {
@@ -55,26 +66,6 @@ class EndClassGroup extends HTMLComponent {
     // render the inputComponent for a user to select an Object
     this.inputTypeComponent.render()
     $(this.html).append('<div class="EditComponents"></div>');
-
-    $(this.html).find("select.input-val").niceSelect();
-    if (this.inputTypeComponent.needTriggerClick == false) {
-      $(this.html).find(".nice-select:not(.disabled)").trigger("click");
-    }
-    console.log("binding on change to ")
-    console.dir($(this.html).find("select.input-val"))
-    $(this.html)
-      .find("select.input-val")
-      .on("change", { arg1: this, arg2: "onChange" }, eventProxiCriteria);
-   
-    if (this.inputTypeComponent.needTriggerClick == true) {
-      // Ne pas selectionner pour les résultats si chargement en cours
-      this.notSelectForview = true;
-      //$(this.html).find('.nice-select').trigger('click') ;
-      $(this.html).find("select.input-val").trigger("change");
-      this.inputTypeComponent.needTriggerClick = false;
-      this.notSelectForview = false;
-      //$(this.ParentCriteriaGroup.thisForm.sparnatural).trigger( {type:"submit" } ) ;
-    }
   }
 
     // Make arrow function to bind the this lexically
@@ -117,7 +108,7 @@ class EndClassGroup extends HTMLComponent {
 		onChange gets called when a Endclassgroup was selected. For example choosing Musuem relatedTo Countr
 		When Country got selected this events fires
 	*/
-  onChange() {
+  #valueWasSelected() {
     console.warn("endclassgrp onChange")
     this.#renderUnselectBtn()
     this.#renderSelectViewVariableBtn()

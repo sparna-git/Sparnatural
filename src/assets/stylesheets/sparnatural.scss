@@ -212,51 +212,7 @@ spar-natural {
 			
 		}
 		
-		.ActionsGroup {
-			position: absolute;
-			display: block;
-			top: 100%;
-			left: 0;
-			width: 100%;
-			height: 46px;
-			padding: 0;
-			background: transparent;
-			z-index: 100;
-			
-			&>div {
-				position: absolute;
-			}
-			.ActionRemove {
-				right: 0;
-				top: -46px;
-				line-height: 46px;
-				a {
-					cursor: pointer;
-					display: inline-block;line-height: 46px;
-					vertical-align: top;
-					padding: 0 15px;
-					height: 46px;
 
-					.unselect {
-						position: relative;
-						top: 0;
-						line-height: 46px;
-					}
-				}
-			}
-			.ActionAnd {
-				left: (base.$margin-children-li - 45) /2;
-				top: base.$margin-component / 2;
-				line-height: 46px;
-				/*width: 46px;*/
-				text-align: center;
-			}
-			
-		}
-		&.completed {
-			
-			
-		}
 		
 
 	.componentsListe.displayVarName .CriteriaGroup {
@@ -421,33 +377,7 @@ spar-natural {
 		.ActionWhere {
 			display: inline-block;
 		}
-		.ActionAnd {
-			.trait-and-bottom {
-				position: absolute;
-				top: -14px;
-				left: 50%;
-				border-left: 3px solid $custom-red ;
-				margin-left: -1px;
-				height: 15px;
-				
-			}
-			a {
-				cursor: pointer;
-				display: block;
-				background: #fff;
-				border: 2px solid $custom-red ;
-				border-radius: 15px;
-				height: 30px;
-				line-height: 20px;
-				padding: 2px 10px;
-				width: auto;
-				text-align: center;
-				
-				&:hover {
-					color: $custom-red ;
-				}
-			}
-		}
+
 		.ActionWhere a {
 			cursor: pointer;
 			display: block;
@@ -467,11 +397,7 @@ spar-natural {
 				color: $custom-red ;
 			}
 		}
-		
-		&>div>div>.ShowOnHover {
-			display: none;
-		}
-		&.OnHover>div>div.ActionsGroup>.ShowOnHover,
+
 		&.OnHover>div>div.HasInputsCompleted>.ShowOnHover {
 			display: block;
 		}
@@ -793,9 +719,6 @@ spar-natural {
 				width: auto;
 				transform: translate(-50%, -50%);
 			}
-		}
-		&.OnEdit > div > div > .ShowOnHover.ActionAnd {
-			display: none;
 		}
 	}
 	}
