@@ -23,7 +23,6 @@ export class SparNatural extends HTMLElement {
   components: any = [];
   constructor() {
     super();
-    $(this).addClass("Sparnatural");
   }
   // Used by calling Calling component to set or get the settings.
   // e.g index.html can overwride default settings
@@ -38,7 +37,6 @@ export class SparNatural extends HTMLElement {
   initSparnatural(){
     $(this).append(this.Sparnatural.html)
     this.Sparnatural.render()
-    this.Sparnatural.initSparnatural()
   }
 }
 

@@ -27,9 +27,11 @@ class StartClassGroup extends HTMLComponent {
     startClassValue:any
   ) {
     super("StartClassGroup", ParentCriteriaGroup, null);
+    console.log('specprovider')
+    console.dir(specProvider)
     this.startClassValue = startClassValue
     this.specProvider = specProvider
-    this.inputTypeComponent = new ClassTypeId(this, specProvider,startClassValue);
+    this.inputTypeComponent = new ClassTypeId(this, this.specProvider,startClassValue);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration
     // contains the name of the SPARQL variable associated to this component
     this.varName = this.ParentCriteriaGroup.jsonQueryBranch
@@ -41,6 +43,7 @@ class StartClassGroup extends HTMLComponent {
 
   render(){
     super.render()
+    this.inputTypeComponent.render()
     return this
   }
 

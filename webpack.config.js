@@ -1,5 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
+const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin'); // Require  html-webpack-plugin plugin
@@ -78,16 +79,18 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
+	new WriteFilePlugin(),
 	new HtmlWebpackPlugin({
 		filename: 'index.html',
 		template: __dirname + "/src/index.html",
 		inject: 'body'
 	}),
+	/*
 	new HtmlWebpackPlugin({
 		filename: 'index-saved-query.html',
 		template: __dirname + "/src/index-saved-query.html",
 		inject: 'body'
-	}),
+	}),*/
 	new MiniCssExtractPlugin({
 	  filename: "sparnatural.css",
 	  chunkFilename: "[id].css"

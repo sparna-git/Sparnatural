@@ -1,0 +1,17 @@
+@use "../themes";
+@use '../base';
+li.groupe {
+    width: 95%;
+    margin: 0;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    display: block;
+    clear: both;
+    /*overflow: hidden;*/
+
+    /*first line*/
+    &>li.groupe {
+        margin-left: base.$margin-children-li;
+        width: 90%;
+     }
+}

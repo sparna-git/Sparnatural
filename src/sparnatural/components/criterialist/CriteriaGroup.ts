@@ -36,6 +36,7 @@ class CriteriaGroup extends HTMLComponent {
     startClassValue?:any
   ) {
     super("CriteriaGroup", ParentComponent, null);
+    this.specProvider = specProvider
     this.startClassValue = startClassValue
     this.jsonQueryBranch = jsonQueryBranch;
     this.ParentGroupWrapper = ParentComponent

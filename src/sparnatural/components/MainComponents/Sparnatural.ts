@@ -34,25 +34,25 @@ class Sparnatural extends HTMLComponent {
     render(): this {
         //super.render()
         console.log('sparnatural render')
+        this.initSparnatural()
         this.BgWrapper = new BgWrapper(this,this.specProvider).render()
         this.SubmitSection.render()
         this.VariableSelection.render()
         this.html.append(this.filter)
+        //BGWrapper must be rendered first
+        this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
         return this
     }
 
     initSparnatural() {
         let settings = getSettings();
         let specProviderFactory = new SpecificationProviderFactory()
-
+        console.log('iiiiiiinit')
         specProviderFactory.build(settings.config, settings.language, (sp: any) => {
           this.specProvider = sp;
         });
 
         this.actionStore = new ActionStore(this,this.specProvider)
-        this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
-        // add the first CriteriaGroup to the component
-        // todo 
         
 
         // uncomment to trigger gathering of statistics

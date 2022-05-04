@@ -76,7 +76,8 @@ class GroupWrapper extends HTMLComponent{
       this.CriteriaGroup.StartClassGroup
       .find(".nice-select:not(.disabled)")
       .trigger("click");
-
+      // set hasAnd Class. set relative position in css. necessary?
+      this.html.addClass("hasAnd")
       this.html[0].dispatchEvent(new CustomEvent('initGeneralevent',{bubbles:true}))
     }
 

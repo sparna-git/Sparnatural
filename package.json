@@ -36,7 +36,8 @@
     "webpack-bundle-analyzer": "^3.6.0",
     "webpack-bundle-size-analyzer": "^3.1.0",
     "webpack-dashboard": "^3.0.7",
-    "webpack-dev-server": "^3.7.2"
+    "webpack-dev-server": "^3.7.2",
+    "write-file-webpack-plugin": "^4.5.1"
   },
   "dependencies": {
     "@chenfengyuan/datepicker": "^1.0.10",

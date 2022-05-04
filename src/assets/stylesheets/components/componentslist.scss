@@ -1,0 +1,17 @@
+@use "../themes";
+@use '../base';
+
+ul.componentsListe {
+    padding: 0;
+    width: base.$component-width;
+    max-width: base.$component-max-width;
+    margin: 0 auto;
+    &,
+    ul {
+        list-style-type: none;
+        padding: 0;
+        background: transparent;
+        clear: both;
+        border: 0 solid transparent;
+    }
+} 

@@ -1,0 +1,106 @@
+
+@mixin triangle-before() {
+	padding-left: 20px;
+	&:before {
+		content: '';
+		width: 0;
+		height: 0;
+		line-height: 0;
+		padding: 0;
+		display: inline-block;float:left;
+		border-style: solid;
+		border-width: 21px 0 21px 15px;
+		border-color: transparent transparent transparent transparent;
+		margin-left: -20px;
+	}
+	& {
+		position: relative;
+		padding-left: 18px;
+	}
+	&>.triangle-b,
+	&>.triangle-h {
+		position: absolute;
+		left: 3px;
+		background: transparent;
+	}
+	&>.triangle-h {
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 15px 21px 0;
+		border-color: transparent $custom-red transparent transparent;
+		top: 0
+	}
+	&>.triangle-b {
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 0 0 21px 15px;
+		border-color: transparent transparent $custom-red transparent;
+		bottom: 0;
+	}
+	
+}
+@mixin triangle-after() {
+	padding-right: 0;
+	&:after {
+		content: '';
+		width: 0;
+		height: 0;
+		line-height: 0;
+		padding: 0;
+		display: inline-block;float: right;margin-right: 0;
+		border-style: solid;
+		border-width: 21px 0 21px 15px;
+		border-color: transparent transparent transparent $custom-red;
+	}
+	
+}
+@mixin arrow-block($color) {
+	&:before {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		left: 0;
+		border-top: 21px solid transparent;
+		border-left: 15px solid white;
+		border-bottom: 21px solid transparent;
+		/*margin: -10px 0px 0 0px; */
+	}
+	&:after {
+		content: "";
+		position: absolute;
+		width: 0;
+		height: 0;
+		right:-15px;
+		border-top: 21px solid transparent;
+		border-left: 15px solid $color;
+		border-bottom: 21px solid transparent;
+		/*border-color: transparent transparent transparent $custom-green-light;
+		margin: -10px 90px 0 10px; */
+	  z-index: 1;
+	}
+}
+
+@mixin arrow-back-colors($bgColor, $borderColor) {
+	.componentBackArrow svg {
+		height: 48px;
+		path {
+			fill: $bgColor;
+			stroke: $borderColor;
+		}
+	}
+}
+@mixin arrow-front-colors($bgColor, $borderColor) {
+	.componentFrontArrow svg {
+		height: 48px;
+		path {
+			fill: $bgColor;
+			stroke: $borderColor;
+		}
+		rect {
+			fill:transparent;
+		}
+	}
+}

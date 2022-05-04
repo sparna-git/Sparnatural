@@ -1,3 +1,7 @@
+@use './mixins';
+@use './base';
+@use './layout/all-layout.scss';
+@use './components/all-components.scss';
 @import "nice-select.css";
 @import "~easy-autocomplete/dist/easy-autocomplete.css";
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
@@ -7,124 +11,7 @@
 
 
 
-$component-width: 1200px;
-$component-max-width: 90%;
-$height-components: 54px;
-$height-components-under: 48px;
-$height-components-hover: 35px;
-$margin-component: 30px;
-$margin-component-onEdit: 80px;
-$margin-children-li: 75px;
-$center-arrow-bd-width : 3px;
-$margin-left-reset: 20px;
 
-
-
-@mixin triangle-before() {
-	padding-left: 20px;
-	&:before {
-		content: '';
-		width: 0;
-		height: 0;
-		line-height: 0;
-		padding: 0;
-		display: inline-block;float:left;
-		border-style: solid;
-		border-width: 21px 0 21px 15px;
-		border-color: transparent transparent transparent transparent;
-		margin-left: -20px;
-	}
-	& {
-		position: relative;
-		padding-left: 18px;
-	}
-	&>.triangle-b,
-	&>.triangle-h {
-		position: absolute;
-		left: 3px;
-		background: transparent;
-	}
-	&>.triangle-h {
-		width: 0;
-		height: 0;
-		border-style: solid;
-		border-width: 0 15px 21px 0;
-		border-color: transparent $custom-red transparent transparent;
-		top: 0
-	}
-	&>.triangle-b {
-		width: 0;
-		height: 0;
-		border-style: solid;
-		border-width: 0 0 21px 15px;
-		border-color: transparent transparent $custom-red transparent;
-		bottom: 0;
-	}
-	
-}
-@mixin triangle-after() {
-	padding-right: 0;
-	&:after {
-		content: '';
-		width: 0;
-		height: 0;
-		line-height: 0;
-		padding: 0;
-		display: inline-block;float: right;margin-right: 0;
-		border-style: solid;
-		border-width: 21px 0 21px 15px;
-		border-color: transparent transparent transparent $custom-red;
-	}
-	
-}
-@mixin arrow-block($color) {
-	&:before {
-		content: "";
-		position: absolute;
-		width: 0;
-		height: 0;
-		left: 0;
-		border-top: 21px solid transparent;
-		border-left: 15px solid white;
-		border-bottom: 21px solid transparent;
-		/*margin: -10px 0px 0 0px; */
-	}
-	&:after {
-		content: "";
-		position: absolute;
-		width: 0;
-		height: 0;
-		right:-15px;
-		border-top: 21px solid transparent;
-		border-left: 15px solid $color;
-		border-bottom: 21px solid transparent;
-		/*border-color: transparent transparent transparent $custom-green-light;
-		margin: -10px 90px 0 10px; */
-	  z-index: 1;
-	}
-}
-
-@mixin arrow-back-colors($bgColor, $borderColor) {
-	.componentBackArrow svg {
-		height: 48px;
-		path {
-			fill: $bgColor;
-			stroke: $borderColor;
-		}
-	}
-}
-@mixin arrow-front-colors($bgColor, $borderColor) {
-	.componentFrontArrow svg {
-		height: 48px;
-		path {
-			fill: $bgColor;
-			stroke: $borderColor;
-		}
-		rect {
-			fill:transparent;
-		}
-	}
-}
 
 /*New component Arrow */
 .CriteriaGroup {
@@ -147,55 +34,6 @@ $margin-left-reset: 20px;
 			fill:#fff;
 		}
 	}
-
-	.OptionsGroup > .componentBackArrow {
-		width: 13px;
-		height: 48px;
-		position: relative;
-		svg {
-			path{
-				filter:url(#filter19278);
-			}
-			position: absolute;
-			z-index: 1;
-			left: -5px;
-		}
-	}
-
-	/*Arrow on options */
-	.OptionsGroup {
-			display: flex;
-			@include arrow-back-colors($custom-green, #fff);
-			/*@include arrow-front-colors($custom-green, #fff);*/
-
-			&.Disabled {
-				display: flex;
-				@include arrow-back-colors($custom-silver, #fff);
-				/*@include arrow-front-colors($custom-silver, #fff);*/
-			}
-			&.NoOptionEnabled {
-				display: none!important;
-				@include arrow-back-colors($custom-silver-light, #fff);
-			}
-		.Optional, .NotExists{
-				@include arrow-back-colors($custom-green-light, #fff);
-				@include arrow-front-colors($custom-green-light, #fff);
-				margin-left:10px;
-				span {
-					background: $custom-green-light;
-					border-top: 3px solid #fff;
-					border-bottom: 3px solid #fff;
-				}
-				&:hover,
-				&.Enabled {
-					@include arrow-back-colors($custom-green-bold, #fff);
-					@include arrow-front-colors($custom-green-bold, #fff);
-					span {
-						background: $custom-green-bold;
-					}
-				}
-		}
-	}
 }
 
 	/*Completed criteria*/
@@ -213,27 +51,27 @@ $margin-left-reset: 20px;
 }
 .componentsListe li.completed>.CriteriaGroup {
 	&>.StartClassGroup>.Highlited {
-		@include arrow-front-colors($custom-red, #fff);
+		@include mixins.arrow-front-colors($custom-red, #fff);
 	}
 	&>.StartClassGroup.VariableSelected>.Highlited {
-		@include arrow-front-colors($custom-red, $custom-green-bold);
+		@include mixins.arrow-front-colors($custom-red, $custom-green-bold);
 	}
 
 	
 	&>.ObjectPropertyGroup>.ObjectPropertyTypeId {
-		@include arrow-back-colors(transparent, #fff);
+		@include mixins.arrow-back-colors(transparent, #fff);
 		.componentFrontArrow {
 			display: none;
 		}
-		@include arrow-front-colors(transparent, #fff);
+		@include mixins.arrow-front-colors(transparent, #fff);
 	}
 	&>.EndClassGroup>.Highlited {
-		@include arrow-back-colors($custom-red, #fff);
-		@include arrow-front-colors($custom-red, #fff);
+		@include mixins.arrow-back-colors($custom-red, #fff);
+		@include mixins.arrow-front-colors($custom-red, #fff);
 	}
 	&>.EndClassGroup.VariableSelected>.Highlited {
-		@include arrow-back-colors($custom-red, $custom-green-bold);
-		@include arrow-front-colors($custom-red, $custom-green-bold);
+		@include mixins.arrow-back-colors($custom-red, $custom-green-bold);
+		@include mixins.arrow-front-colors($custom-red, $custom-green-bold);
 		.componentBackArrow svg {
 			path {
 				stroke-width: 3px;
@@ -244,56 +82,24 @@ $margin-left-reset: 20px;
 	&>.EndClassWidgetGroup {
 		.EndClassWidgetAddOrValue,
 		.EndClassWidgetValue {
-			@include arrow-back-colors($custom-red-medium, #fff);
-			@include arrow-front-colors($custom-red-medium, #fff);
+			@include mixins.arrow-back-colors($custom-red-medium, #fff);
+			@include mixins.arrow-front-colors($custom-red-medium, #fff);
 		}
 	}
 }
 
-/* Structure flex */
-.CriteriaGroup,
-.variablesSelection {
-	.flexWrap {
-		display: flex;
-		flex-direction: row;
-		flex-wrap: nowrap;
-	}
-}
 
-body {
+
+spar-natural {
 	section {
 		padding-top: 30px;
 	}
-	.reset-wrapper {
-		position: relative;
-		height: 0;
-		width: $component-width;
-		max-width: $component-max-width;
-		margin: 0 auto;
-		&>.reset-form {
-			position: absolute;
-			right: 0;
-			top: 0;
-			width: 54px;
-			height: 54px;
-			margin-top: 31px;
-			margin-bottom: 80px;
-			border: 1px solid #ddd;
-			border-radius: 5px;
-			background: #fff;
-			box-shadow: 0px 2px 3px 0px #cfcfcf;
-			a {
-				display: block;
-				margin: 5px;
-				cursor: pointer;
-			}
-		}
-	}
+
 	li.completed {
 		&>.CriteriaGroup {
-			margin-bottom: $margin-component;
+			margin-bottom: base.$margin-component;
 			&.onAddOrValue {
-				margin-bottom: $margin-component-onEdit/2 + 10;
+				margin-bottom: base.$margin-component-onEdit/2 + 10;
 			}
 		}
 	}
@@ -303,8 +109,8 @@ body {
 		position: relative;
 		border-radius: 5px;
 		background: #fff;
-		margin-top: $margin-component;
-		margin-bottom: $margin-component-onEdit;
+		margin-top: base.$margin-component;
+		margin-bottom: base.$margin-component-onEdit;
 		clear: both;
 		
 		-moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
@@ -314,7 +120,7 @@ body {
 		filter:progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
 
 		&.onAddOrValue {
-			margin-bottom: $margin-component-onEdit/2;
+			margin-bottom: base.$margin-component-onEdit/2;
 		}
 		
 		&>div {
@@ -323,58 +129,7 @@ body {
 			/*background: #fff;*/
 			padding: 2px 5px;
 		}
-		.OptionsGroup {
-			display: flex;
-			flex-direction: row;
-			flex-wrap: nowrap;
-			min-width: auto;
-			/*padding-right: 15px;*/
-			margin-left: -22px;
-			.Optional, .NotExists {
-				padding-right: 13px;
-				margin-left: -7px;
-				
-					position: relative;
-					/*display: inline-block;*/
-					zoom: 1;
-					/*background: $custom-green-light;*/
-					margin-bottom: 0;
-					line-height: 42px;
-					color: #fff;
-					margin-left: 3px;
-					padding-right: 0;
-					font-size: 14px;
-					margin-right: -20px;
-					cursor: pointer;
-					span {
-						text-indent: 13px;
-					}
 
-					input {
-						display: none;
-					}
-
-					/*@include arrow-block($custom-green-light);*/
-
-					&:hover,
-					&.Enabled {
-						/*background: $custom-green-bold;*/
-
-						&:after {
-							/*border-left: 15px solid $custom-green-bold;*/
-						}
-					}
-/**
-					&:before {
-						border-color: transparent transparent transparent #fff;
-					}
-
-					&:after {
-						border-color: #fff #fff #fff $custom-green;
-					}*/
-
-			}
-		}
 		.ObjectPropertyGroup {
 			margin-right: -15px;
 			padding-left: 10px;
@@ -382,7 +137,7 @@ body {
 				font-style: italic;
 			}
 			.temporary-label {
-				line-height: $height-components-under - 2;
+				line-height: base.$height-components-under - 2;
 				font-size: 14px;
 				font-weight: normal;
 				height: 42px;
@@ -429,14 +184,14 @@ body {
 			display: none;
 		}
 		.nice-select {
-			border: $center-arrow-bd-width solid #fff;
+			border: base.$center-arrow-bd-width solid #fff;
 			border-left: 0;
 			border-right: 0;
 		}
 		.nice-select .current {
 			display: inline-block;
-			height: $height-components-under - ($center-arrow-bd-width*2);
-			line-height: $height-components-under - ($center-arrow-bd-width*2);
+			height: base.$height-components-under - (base.$center-arrow-bd-width*2);
+			line-height: base.$height-components-under - (base.$center-arrow-bd-width*2);
 			vertical-align: bottom;
 			span  {
 				display: inline-block;
@@ -486,10 +241,10 @@ body {
 			.EditComponents {
 				position: absolute;
 				left: 36px;
-				top: $height-components ;
-				line-height: $height-components-hover;
+				top: base.$height-components ;
+				line-height: base.$height-components-hover;
 				z-index: 101;
-				height: $height-components;
+				height: base.$height-components;
 				padding: 0 0;
 				width: auto;
 				
@@ -699,7 +454,7 @@ body {
 					}
 					&>input {
 						width: 70px;
-						height: $height-components-under;
+						height: base.$height-components-under;
 						border-color: #ccc;
 						border-radius: 4px;
 						border-style: solid;
@@ -722,13 +477,13 @@ body {
 				.ListeWidget {
 					.nice-select{
 						background: #fff;
-						height: $height-components-hover;
-						line-height: $height-components-hover - 6;
+						height: base.$height-components-hover;
+						line-height: base.$height-components-hover - 6;
 						padding-right: 26px;
 						.current {
 							display: inline-block;
-							height: $height-components-hover - 6;
-							line-height: $height-components-hover - 6;
+							height: base.$height-components-hover - 6;
+							line-height: base.$height-components-hover - 6;
 							vertical-align: bottom;
 							&>span {
 								vertical-align: bottom;
@@ -736,8 +491,8 @@ body {
 						}
 						.list {
 							li.option {
-								min-height: $height-components-hover;
-								line-height: $height-components-hover;
+								min-height: base.$height-components-hover;
+								line-height: base.$height-components-hover;
 							}
 						}
 						&:after {
@@ -856,7 +611,7 @@ body {
 				}
 			}
 			.ActionWhere {
-				/*top: $height-components*2;*/
+				/*top: base.$height-components*2;*/
 			}
 			
 		}
@@ -887,13 +642,13 @@ body {
 				/*display: inline-block;*/
 				padding: 0;
 				span {
-					/*line-height: $height-components-under;*/
+					/*line-height: base.$height-components-under;*/
 					display: inline-block;
 					vertical-align: middle;
 					margin: 0;
 				}
 				span.label-two-line {
-					line-height: $height-components-under / 2;
+					line-height: base.$height-components-under / 2;
 					line-height: 21px;
 				}
 				
@@ -961,8 +716,8 @@ body {
 				}
 			}
 			.ActionAnd {
-				left: ($margin-children-li - 45) /2;
-				top: $margin-component / 2;
+				left: (base.$margin-children-li - 45) /2;
+				top: base.$margin-component / 2;
 				line-height: 46px;
 				/*width: 46px;*/
 				text-align: center;
@@ -1004,8 +759,8 @@ body {
 		&>.link-where-bottom {
 			position: absolute;
 			left: 200px;
-			top: $height-components + $margin-component ;
-			height: $margin-component + 1;
+			top: base.$height-components + base.$margin-component ;
+			height: base.$margin-component + 1;
 			border-left: 3px solid $custom-red;
 			display: block;
 		}
@@ -1081,621 +836,325 @@ body {
 		}
 	}
 	.Sparnatural {
+		width:100%;
 
-		.bg-wrapper {
-			
+	li li.OnEdit>div>div> .ActionWhere.ShowOnEdit {
+		display: none;
+	}
+	li.groupe.optionalEnabled {
+		.CriteriaGroup {
+			border: 3px dashed $custom-red ;
 		}
-		.submitSectionWrapper {
-			height: 41px;
-			background: $custom-green ;
-			.submitSection {
-				position: relative;
-				
-				width: 1200px;
-				max-width: 90%;
-				margin: 0 auto;
-				a {
-					position: absolute;
-					top: 14px;
-					right: 0;
-					width: 54px;
-					height: 54px;
-					padding: 10px;
-					padding-left: 12px;
-					border-radius: 5px;
-					background: $custom-green-bold;
-					box-shadow: 0px 2px 3px 0px #cfcfcf;
-					cursor: pointer;
-					z-index: 2;
-					svg {
-						display: block;
-						max-width:  34px;
-						height: 34px;
-						path {
-							fill:#FFFFFF;
-							width: auto;
-							height: auto;
-						}
-					}
-					svg.playLoader {
-						display: none;
-						max-width:  44px;
-						height: 44px;
-					}
-
-					&.submitDisable {
-						background: $custom-silver-light;
-						cursor: default;
-						svg {
-							path {
-								fill:$custom-silver;
-							}
-						}
-						&.loadingEnabled {
-							padding: 4px;
-							svg.playIcon {
-								display: none;
-							}
-							svg.playLoader {
-								display: block;
-								path {
-									fill:$custom-green-bold;
-								}
-								
-							}
-						}
-					}
+		ul.childsList {
+			.ActionAnd {
+				&>.trait-and-bottom {
+					border-left: 3px dashed $custom-red ;
+				}
+				&>a {
+					border: 2px dashed $custom-red ;
 				}
 			}
+			&>li.hasAnd {
+				&>span {
+					border-left: 3px dashed $custom-red ;
+				}
+				&>span>span  {
+					border: 2px dashed $custom-red ;
+				}
+			}
+		} 
+	}
+	li.groupe.notExistsEnabled {
+		.CriteriaGroup {
+			border: 3px dotted #000 ;
 		}
-		.variablesSelection {
-			background: $custom-red-light;
-			margin-bottom: 22px;
-			border-top: 2px solid $custom-silver-line;
-			.linesWrapper {
-				/*display: none;*/
-				
-				height: 0;
-				overflow: hidden;
-			}
-			&.displayed {
-				.linesWrapper {
-					height: auto;
+		ul.childsList {
+			.ActionAnd {
+				&>.trait-and-bottom {
+					border-left: 3px dotted #000 ;
 				}
-				.VariableSelectorDisplay {
-					a {
-						margin-top: -22px;
-						transition: margin-top 0.700s ease;
-					}
+				&>a {
+					border: 2px dotted #000 ;
 				}
 			}
-			.VariableSelectorDisplay {
-				background: $custom-red-medium;
-				height: 41px;
-				position: relative;
-				
-					a  {
-						position: absolute;
-						left: 50%;
-						display: block;
-						height: 44px;
-						width: 44px;
-						margin: 0 auto;
-						margin-top: 18px;
-						margin-left: -22px;
-						border-radius: 22px;
-						background: $custom-red-medium;
-						line-height: 1;
-						padding: 10px;
-						transition: margin-top 0.700s ease;
-						cursor: pointer;
-
-					.icon-arrow-top {
-						display: none;
-					}
-					.icon-arrow-bottom {
-						margin-top: 4px;
-						display: inline;
-					}
+			&>li.hasAnd {
+				&>span {
+					border-left: 3px dotted #000 ;
+				}
+				&>span>span  {
+					border: 2px dotted #000 ;
 				}
 			}
+		} 
+	}
 
-			&.displayed .VariableSelectorDisplay a  {
-				.icon-arrow-top {
-					display: inline;
-				}
-				.icon-arrow-bottom {
-					display: none;
-				}
-			}
-			.line1, .line2 {
-				display: flex;
-				flex-direction: row;
-				flex-wrap: wrap;
-				width: $component-width;
-				max-width: $component-max-width;
-				margin: 0 auto;
 
-				border: 1px solid #ddd;
-				background: #fff;
-				
-
-				&>div.variablesOtherSelect {
-					display: block;
-				}
-			}
-			.line1 {
-				border-radius: 5px 5px 0 0 ;
-				border-bottom: 0px solid transparent;
-				min-height: 61px;
-				margin-top: 41px;
-				.sortableItem {
-					padding: 10px;
-					display: inline-block;
-					&:first-child {
-						min-width: 140px;
-					}
-				}
-				.variablesOtherSelect>div:first-child {
-					background: lightgray;
-					height: 100%;
-					display: block;
-					float: left;
-				}
-				.variableSelected {
-					padding: 3px 7px 3px 2px;
-					border: 1px solid gray ;
-					font-size: 12px;
-					color: $default-text-color;
-					border-radius: 5px;
-					background: #fff;
-					align-items: center;
-					width: fit-content;
-					min-width: 110px;
-
-					.variable-handle {
-						display: inline-block;
-						padding: 0 3px;
-						height: 24px;
-						color: transparent;
-						/*border-left: 2px dashed lightgray;
-						border-right: 2px dashed lightgray;*/
-						cursor: grab;
-
-						svg {
-							width: 15px;
-    						height: 24px;
-
-							path {
-								stroke: $custom-silver;
-								stroke-width: 0.264583;
-							}
-						}
-					}
-					div {
-						line-height: 30px;
-					}
-
-					[contenteditable="true"]:active,
-					[contenteditable="true"]:focus{
-						border-color: #ccc;
-						border-radius: 4px;
-						border-style: solid;
-						border-width: 1px;
-						padding: 0 5px;
-						outline:none;
-					}
-				}
-			}
-			.line2 {
-				margin-bottom: 41px;
-				border-radius: 0 0 5px 5px;
-				justify-content: space-between;
-				border-top: 1px solid darkgray;
-				line-height: 20px;
-				-moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
-				-webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;
-				-o-box-shadow: 0px 2px 3px 0px #cfcfcf;
-				box-shadow: 0px 2px 3px 0px #cfcfcf;
-
-				.variablesOrdersSelect {
-					background: lightgray;
-					padding: 0 10px;
-					min-width: 140px;
-					strong {
-						font-size: 12px;
-					}
-					a {
-						cursor: pointer;
-						svg {
-							width: 20px;
-							height: 20px;
-						}
-					}
-					a.selected {
-						cursor: default;
-						svg {
-							path {
-								fill: $custom-red;
-							}
-						}
-					}
-				}
-				
-
-				.variablesOptionsSelect {
-					text-align: right;
-					padding: 5px 5px 5px 5px;
-					font-size: 14px;
-					font-weight: bolder;
-				}
-				color: $default-text-color;
-
-				a {
-					display: inline-block;
-					padding: 5px;
-					color: $default-text-color;
-				}
-			}
-			.switch {
-				position: relative;
-				display: inline-block;
-				width: 50px;
-				height: 26px;
-				margin-bottom: 0;
-			  }
-			  
-			  .switch input { 
-				opacity: 0;
-				width: 0;
-				height: 0;
-			  }
-			  
-			  .slider {
+	
+		.ActionWhere {
+			display: inline-block;
+		}
+		.ActionAnd {
+			.trait-and-bottom {
 				position: absolute;
+				top: -14px;
+				left: 50%;
+				border-left: 3px solid $custom-red ;
+				margin-left: -1px;
+				height: 15px;
+				
+			}
+			a {
 				cursor: pointer;
-				top: 0;
-				left: 0;
-				right: 0;
-				bottom: 0;
-				background-color: #ccc;
-				-webkit-transition: .4s;
-				transition: .4s;
-			  }
-			  
-			  .slider:before {
-				position: absolute;
-				content: "";
-				height: 20px;
-				width: 20px;
-				left: 3px;
-				bottom: 2px;
-				background-color: white;
-				-webkit-transition: .4s;
-				transition: .4s;
-			  }
-			  
-			  input:checked + .slider {
-				background-color: $custom-red-medium;
-			  }
-			  
-			  input:focus + .slider {
-				box-shadow: 0 0 1px #ccc;
-			  }
-			  
-			  input:checked + .slider:before {
-				-webkit-transform: translateX(22px);
-				-ms-transform: translateX(22px);
-				transform: translateX(22px);
-				background-color: $custom-red;
-			  }
-			  
-			  /* Rounded sliders */
-			  .slider.round {
-				border-radius: 26px;
-				border: 1px solid #555;
-			  }
-			  
-			  .slider.round:before {
-				border-radius: 50%;
-				border: 1px solid #555;
-			  }
+				display: block;
+				background: #fff;
+				border: 2px solid $custom-red ;
+				border-radius: 15px;
+				height: 30px;
+				line-height: 20px;
+				padding: 2px 10px;
+				width: auto;
+				text-align: center;
+				
+				&:hover {
+					color: $custom-red ;
+				}
+			}
 		}
-		ul.componentsListe {
+		.ActionWhere a {
+			cursor: pointer;
+			display: block;
+			background: #fff;
+			border: 2px solid $custom-red ;
+			border-radius: 13px;
+			height: 26px;
+			line-height: 20px;
+			min-width: 26px;
+			text-align: center;
+			font-size: 18px;
+			color: $custom-red ;
+			font-weight: bold;
 			padding: 0;
-			width: $component-width;
-			max-width: $component-max-width;
-			margin: 0 auto;
-			&,
+			
+			&:hover {
+				color: $custom-red ;
+			}
+		}
+		
+		&>div>div>.ShowOnHover {
+			display: none;
+		}
+		&.OnHover>div>div.ActionsGroup>.ShowOnHover,
+		&.OnHover>div>div.HasInputsCompleted>.ShowOnHover {
+			display: block;
+		}
+
+		&>div>div>.ShowOnEdit {
+			display: none;
+		}
+
+		&>div>div>.ShowOnEdit.Disabled,
+		&>div>div>.ShowOnEdit.Enabled {
+			display: inline-block;
+		}
+		&.OnEdit>div>div.ActionsGroup>.ShowOnEdit,
+		&.OnEdit>div>div.HasInputsCompleted>.ShowOnEdit {
+			display: block;
+		}
+
+		li.addWhereDisable .ActionWhere.ShowOnEdit,
+		&.WhereImpossible.OnEdit>div .ActionWhere.ShowOnEdit,
+		&.OnEdit>div.completed>div .ActionWhere.ShowOnEdit {
+			display: none;
+		}
+		&.addWhereDisable>div .ObjectPropertyTypeWidget,
+		&.WhereImpossible>div .ObjectPropertyTypeWidget {
+			border-left-color: transparent;
+
+			.edit-trait-top {
+				display: block;
+			}
+		}
+		&.addWhereEnable>.link-where-bottom,
+		&.addWhereDisable>.link-where-bottom {
+			display: none;
+		}
+		&.addWhereEnable.hasWhereChild>.link-where-bottom {
+			display: block;
+		}
+		.easy-autocomplete {
+			input {
+				height: base.$height-components-hover;
+				box-sizing: border-box;
+			}
+		}
+		.easy-autocomplete-container {
+			z-index: 999;
 			ul {
-				list-style-type: none;
-				padding: 0;
-				background: transparent;
-				clear: both;
-				border: 0 solid transparent;
+				line-height: 20px;
+				background: #fff;
+				li {
+					padding: 5px;
+					&.selected {
+						
+						background: $custom-red ;
+					}
+				}
+			}
+		}
+		&.WhereImpossible.completed {
+			&>div .EndClassWidgetAddOrValue,
+			&>div .EndClassWidgetValue {
+				max-width: 220px;
+				height: 48px;
+				/*overflow: hidden;*/
+				/*padding-right: 15px;*/
+				margin-right: -13px;
+				/*display: block;*/
+				
+				/*@include triangle-before();
+				@include triangle-after();*/
+				/*span {
+					background: $custom-red-light ;
+					height: 48px;
+					background-clip: padding-box;
+					
+				}*/
+				p {
+					line-height: 48px;
+					height: 48px;
+					/*width: calc(100% - 15px);*/
+					background: $custom-red-medium;
+					background-clip: padding-box;
+					margin: 0;
+					padding: 0 0 0 5px;
+					display: inline-block;
+					overflow: hidden;
+					/*text-overflow: ellipsis;*/
+					border: base.$center-arrow-bd-width solid #fff;
+					border-left: 0;
+					border-right: 0;
+					
+					text-align: center;
+					span {
+						line-height: 42px;
+						display: inline-block;
+						vertical-align: baseline;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
+						color: $default-text-color;
+						width: 100%;
+					}
+				}
+			}
+			&>div .EndClassWidgetAddOrValue {
+				p {
+					width: 0;
+					padding: 0;
+					position: relative;
+					height: 48px;
+					line-height: 48px;
+					overflow: visible;
+					span {
+						line-height: 42px;
+						width: auto;
+						text-indent: 1px;
+						/*vertical-align: baseline;
+						display: inline-block;
+						height: 48px;*/
+					}
+				}
 			}
 			
-			ul {
-				
-				/*li>div {
-					margin-left: 46px;
+		}
+		
+		.nice-select {
+			background: transparent;
+			border-color: transparent;
+			padding-left: 10px;
+			padding-right: 26px;
+			ul.list li {
+				border-bottom: solid 1px #e8e8e8;
+				img {
+					height : 40px;
+					&.highlited {
+						display: none;
+					}
 				}
-				li li>div {
-					margin-left: 92px;
-					*
-				}*/
-				li li.OnEdit>div>div> .ActionWhere.ShowOnEdit {
-					display: none;
+				&.selected,
+				&.focus,
+				&:hover {
+					background: $custom-red ;
+					color: #fff;
+					img {
+						display: none;
+						&.highlited {
+							display: inline;
+						}
+					}
 				}
 			}
-			li.groupe.optionalEnabled {
-				.CriteriaGroup {
-					border: 3px dashed $custom-red ;
-				}
-				ul.childsList {
-					.ActionAnd {
-						&>.trait-and-bottom {
-							border-left: 3px dashed $custom-red ;
-						}
-						&>a {
-							border: 2px dashed $custom-red ;
-						}
-					}
-					&>li.hasAnd {
-						&>span {
-							border-left: 3px dashed $custom-red ;
-						}
-						&>span>span  {
-							border: 2px dashed $custom-red ;
-						}
-					}
-				} 
+			ul.list {
+				background: #fff;
+				top: 0;
+				margin-top: 0;
+				max-height: 450px;
+				overflow-y: auto;
 			}
-			li.groupe.notExistsEnabled {
-				.CriteriaGroup {
-					border: 3px dotted #000 ;
+			ul.list:hover .option:not(:hover) {
+				color: #000;
+				img {
+					display: inline;
+					
+					&.highlited {
+						display: none;
+					}
 				}
-				ul.childsList {
-					.ActionAnd {
-						&>.trait-and-bottom {
-							border-left: 3px dotted #000 ;
-						}
-						&>a {
-							border: 2px dotted #000 ;
-						}
-					}
-					&>li.hasAnd {
-						&>span {
-							border-left: 3px dotted #000 ;
-						}
-						&>span>span  {
-							border: 2px dotted #000 ;
-						}
-					}
-				} 
 			}
-
-			li.groupe {
-				margin: 0;
-				padding-top: 1px;
-				padding-bottom: 1px;
-				display: block;
-				clear: both;
-				/*overflow: hidden;*/
-
-				/*first line*/
-				&[data-index="0"] {
-					width: calc(100% - #{$height-components} - #{$margin-left-reset});
-					&>ul {
-						width: calc(100% + #{$height-components} + #{$margin-left-reset});
+			.current {
+				img {
+					height: 40px;
+					&.highlited {
+						display: none;
 					}
 				}
-				
-				& li.groupe {
-					margin-left: $margin-children-li;
-				}
-				&>div {
-					
-				}
-				.ActionAnd {
-					
-				}
-				.ActionWhere {
-					display: inline-block;
-				}
-				.ActionAnd {
-					.trait-and-bottom {
-						position: absolute;
-						top: -14px;
-						left: 50%;
-						border-left: 3px solid $custom-red ;
-						margin-left: -1px;
-						height: 15px;
-						
-					}
-					a {
-						cursor: pointer;
-						display: block;
-						background: #fff;
-						border: 2px solid $custom-red ;
-						border-radius: 15px;
-						height: 30px;
-						line-height: 20px;
-						padding: 2px 10px;
-						width: auto;
-						text-align: center;
-						
-						&:hover {
-							color: $custom-red ;
-						}
-					}
-				}
-				.ActionWhere a {
-					cursor: pointer;
-					display: block;
-					background: #fff;
-					border: 2px solid $custom-red ;
-					border-radius: 13px;
-					height: 26px;
-					line-height: 20px;
-					min-width: 26px;
-					text-align: center;
-					font-size: 18px;
-					color: $custom-red ;
-					font-weight: bold;
-					padding: 0;
-					
-					&:hover {
-						color: $custom-red ;
-					}
-				}
-				
-				&>div>div>.ShowOnHover {
-					display: none;
-				}
-				&.OnHover>div>div.ActionsGroup>.ShowOnHover,
-				&.OnHover>div>div.HasInputsCompleted>.ShowOnHover {
-					display: block;
-				}
-
-				&>div>div>.ShowOnEdit {
-					display: none;
-				}
-
-				&>div>div>.ShowOnEdit.Disabled,
-				&>div>div>.ShowOnEdit.Enabled {
-					display: inline-block;
-				}
-				&.OnEdit>div>div.ActionsGroup>.ShowOnEdit,
-				&.OnEdit>div>div.HasInputsCompleted>.ShowOnEdit {
-					display: block;
-				}
-
-				li.addWhereDisable .ActionWhere.ShowOnEdit,
-				&.WhereImpossible.OnEdit>div .ActionWhere.ShowOnEdit,
-				&.OnEdit>div.completed>div .ActionWhere.ShowOnEdit {
-					display: none;
-				}
-				&.addWhereDisable>div .ObjectPropertyTypeWidget,
-				&.WhereImpossible>div .ObjectPropertyTypeWidget {
-					border-left-color: transparent;
-
-					.edit-trait-top {
-						display: block;
-					}
-				}
-				&.addWhereEnable>.link-where-bottom,
-				&.addWhereDisable>.link-where-bottom {
-					display: none;
-				}
-				&.addWhereEnable.hasWhereChild>.link-where-bottom {
-					display: block;
-				}
-				.easy-autocomplete {
-					input {
-						height: $height-components-hover;
-						box-sizing: border-box;
-					}
-				}
-				.easy-autocomplete-container {
-					z-index: 999;
-					ul {
-						line-height: 20px;
-						background: #fff;
-						li {
-							padding: 5px;
-							&.selected {
-								
-								background: $custom-red ;
-							}
-						}
-					}
-				}
-				&.WhereImpossible.completed {
-					&>div .EndClassWidgetAddOrValue,
-					&>div .EndClassWidgetValue {
-						max-width: 220px;
-						height: 48px;
-						/*overflow: hidden;*/
-						/*padding-right: 15px;*/
-						margin-right: -13px;
-						/*display: block;*/
-						
-						/*@include triangle-before();
-						@include triangle-after();*/
-						/*span {
-							background: $custom-red-light ;
-							height: 48px;
-							background-clip: padding-box;
-							
-						}*/
-						p {
-							line-height: 48px;
-							height: 48px;
-							/*width: calc(100% - 15px);*/
-							background: $custom-red-medium;
-							background-clip: padding-box;
-							margin: 0;
-							padding: 0 0 0 5px;
-							display: inline-block;
-							overflow: hidden;
-							/*text-overflow: ellipsis;*/
-							border: $center-arrow-bd-width solid #fff;
-							border-left: 0;
-							border-right: 0;
-							
-							text-align: center;
-							span {
-								line-height: 42px;
-								display: inline-block;
-								vertical-align: baseline;
-								overflow: hidden;
-								text-overflow: ellipsis;
-								white-space: nowrap;
-								color: $default-text-color;
-								width: 100%;
-							}
-						}
-					}
-					&>div .EndClassWidgetAddOrValue {
-						p {
-							width: 0;
-							padding: 0;
-							position: relative;
-							height: 48px;
-							line-height: 48px;
-							overflow: visible;
-							span {
-								line-height: 42px;
-								width: auto;
-								text-indent: 1px;
-								/*vertical-align: baseline;
-								display: inline-block;
-								height: 48px;*/
-							}
-						}
-					}
-					
-				}
+			}
+			&:after {
+				margin-top: 0;
+			}
+		}
+		.nice-select.disabled {
+			color: $default-text-color;
+			border-color: transparent;
+			border-radius: 0;
+		}
+		.StartClassGroup>.ClassTypeId .nice-select.disabled {
+			border-radius: 5px 0 0 5px;
+		}
+		
+		&>.CriteriaGroup>.ObjectPropertyGroup>.ObjectPropertyTypeId .nice-select.disabled {
+			/*padding-right: 0;*/
+		}
+		/*&>div>.EndClassGroup>.ClassTypeId:after,
+		&>div>.StartClassGroup>.ClassTypeId:after {
+			content: '';
+			display: inline-block;
+			width: 15px;
+		}*/
+		
+		&.completed {
+			&>div .Highlited {
+				/*background: $custom-red;*/
+				/*margin-right: 23px;*/
 				
 				.nice-select {
-					background: transparent;
-					border-color: transparent;
-					padding-left: 10px;
-					padding-right: 26px;
-					ul.list li {
-						border-bottom: solid 1px #e8e8e8;
-						img {
-							height : 40px;
-							&.highlited {
-								display: none;
-							}
-						}
-						&.selected,
-						&.focus,
-						&:hover {
-							background: $custom-red ;
-							color: #fff;
+						background: $custom-red;
+						background-clip: padding-box;
+						border-color: transparent;
+						color: #fff;
+						height: base.$height-components-under;
+						line-height: base.$height-components-under - (base.$center-arrow-bd-width*2);
+						.current {
 							img {
 								display: none;
 								&.highlited {
@@ -1704,209 +1163,124 @@ body {
 							}
 						}
 					}
-					ul.list {
-						background: #fff;
-						top: 0;
-						margin-top: 0;
-						max-height: 450px;
-						overflow-y: auto;
+					.nice-select.disabled {
+						color: #fff;
+						border-color: transparent;
 					}
-					ul.list:hover .option:not(:hover) {
-						color: #000;
-						img {
-							display: inline;
-							
-							&.highlited {
-								display: none;
-							}
-						}
-					}
-					.current {
-						img {
-							height: 40px;
-							&.highlited {
-								display: none;
-							}
-						}
-					}
-					&:after {
-						margin-top: 0;
-					}
-				}
+			}
+			&>div>.StartClassGroup.VariableSelected .Highlited {
 				.nice-select.disabled {
-					color: $default-text-color;
-					border-color: transparent;
-					border-radius: 0;
+					border-left: 3px solid $custom-green-bold;
 				}
-				.StartClassGroup>.ClassTypeId .nice-select.disabled {
-					border-radius: 5px 0 0 5px;
+			}
+			&>div>.StartClassGroup.VariableSelected .Highlited,
+			&>div>.EndClassGroup.VariableSelected .Highlited {
+				.nice-select.disabled {
+					border-color: $custom-green-bold;
 				}
-				
-				&>.CriteriaGroup>.ObjectPropertyGroup>.ObjectPropertyTypeId .nice-select.disabled {
-					/*padding-right: 0;*/
-				}
-				/*&>div>.EndClassGroup>.ClassTypeId:after,
-				&>div>.StartClassGroup>.ClassTypeId:after {
-					content: '';
-					display: inline-block;
-					width: 15px;
-				}*/
-				
-				&.completed {
-					&>div .Highlited {
-						/*background: $custom-red;*/
-						/*margin-right: 23px;*/
-						
-						.nice-select {
-								background: $custom-red;
-								background-clip: padding-box;
-								border-color: transparent;
-								color: #fff;
-								height: $height-components-under;
-								line-height: $height-components-under - ($center-arrow-bd-width*2);
-								.current {
-									img {
-										display: none;
-										&.highlited {
-											display: inline;
-										}
-									}
-								}
-							}
-							.nice-select.disabled {
-								color: #fff;
-								border-color: transparent;
-							}
-					}
-					&>div>.StartClassGroup.VariableSelected .Highlited {
-						.nice-select.disabled {
-							border-left: 3px solid $custom-green-bold;
-						}
-					}
-					&>div>.StartClassGroup.VariableSelected .Highlited,
-					&>div>.EndClassGroup.VariableSelected .Highlited {
-						.nice-select.disabled {
-							border-color: $custom-green-bold;
-						}
-					}
-					&>.CriteriaGroup>.ObjectPropertyGroup>.ObjectPropertyTypeId .nice-select.disabled {
-						padding-right: 26px;
-					}
+			}
+			&>.CriteriaGroup>.ObjectPropertyGroup>.ObjectPropertyTypeId .nice-select.disabled {
+				padding-right: 26px;
+			}
 
-					&>div .Highlited {
-						position: relative;
-						/*@include arrow-block($custom-red);*/
-						&:before {
-							
-						}
+			&>div .Highlited {
+				position: relative;
+				/*@include mixins.arrow-block($custom-red);*/
+				&:before {
+					
+				}
+			}
+			/*&>div>.StartClassGroup .Highlited:before{
+				display: none;
+			}*/
+			&>div .StartClassGroup,
+			&>div .EndClassGroup {
+				margin-left: -8px;
+				&>.selectViewVariable {
+					display: block;
+					right: 18px; //+10 pour retrait dans fleche
+					svg {
+						stroke: #fff;
 					}
-					/*&>div>.StartClassGroup .Highlited:before{
+				}
+			}
+			&>div .EndClassGroup .Highlited:before{
+				/*content: '';
+				width: 0;
+				height: 0;
+				line-height: 0;
+				padding: 0;
+				display: inline-block;float:left;
+				border-style: solid;
+				border-width: 21px 0 21px 15px;
+				border-color: transparent transparent transparent #fff;*/
+			}
+			&>div>div .EditComponents {
+				.ActionWhere,
+				.ObjectPropertyTypeWidget {
+					display: none;
+				}
+			}
+			&>div>div .EditComponents.newOr {
+				.ObjectPropertyTypeWidget {
+					display: block;
+				}
+			}
+			&.WhereImpossible {
+				
+				&>div .EndClassGroup .Highlited {
+					/*background: transparent;
+					color: #888;
+					margin-right: 0;*/
+					
+					/*&:before,
+					&:after {
 						display: none;
 					}*/
-					&>div .StartClassGroup,
-					&>div .EndClassGroup {
-						margin-left: -8px;
-						&>.selectViewVariable {
-							display: block;
-							right: 18px; //+10 pour retrait dans fleche
-							svg {
-								stroke: #fff;
-							}
-						}
-					}
-					&>div .EndClassGroup .Highlited:before{
-						/*content: '';
-						width: 0;
-						height: 0;
-						line-height: 0;
-						padding: 0;
-						display: inline-block;float:left;
-						border-style: solid;
-						border-width: 21px 0 21px 15px;
-						border-color: transparent transparent transparent #fff;*/
-					}
-					&>div>div .EditComponents {
-						.ActionWhere,
-						.ObjectPropertyTypeWidget {
-							display: none;
-						}
-					}
-					&>div>div .EditComponents.newOr {
-						.ObjectPropertyTypeWidget {
-							display: block;
-						}
-					}
-					&.WhereImpossible {
-						
-						&>div .EndClassGroup .Highlited {
-							/*background: transparent;
-							color: #888;
-							margin-right: 0;*/
-							
-							/*&:before,
-							&:after {
+					.current {
+						/*color: #888;*/
+						img {
+							display: inline;
+							&.highlited {
 								display: none;
-							}*/
-							.current {
-								/*color: #888;*/
-								img {
-									display: inline;
-									&.highlited {
-										display: none;
-									}
-								}
 							}
 						}
-						
 					}
+				}
 				
-				}
-				/*.ActionAnd.ShowOnEdit {
-					display: none;
-				}*/
 			}
-			li.groupe {
-				&>.link-and-bottom {
-					display: none;
-				}
-			}
-			li.groupe.hasAnd {
-				position: relative;
-				&>.link-and-bottom {
-					display: block;
-					position: absolute;
-					left: 36px;
-					top: $height-components / 2 + $margin-component;
-					border-left: 3px solid $custom-red;
-					
-					span {
-						position: absolute;
-						top: 50%;
-						left: -2px;
-						display: block;
-						background: #fff;
-						border: 2px solid $custom-red ;
-						border-radius: 15px;
-						height: 30px;
-						line-height: 20px;
-						padding: 2px 10px;
-						width: auto;
-						transform: translate(-50%, -50%);
-					}
-				}
-				&.OnEdit > div > div > .ShowOnHover.ActionAnd {
-					display: none;
-				}
-			}
-			/*ul>li.groupe:last-child .ActionAnd.ShowOnEdit {
-					display: block;
-				}*/
+		
 		}
 
-		
-	
+	li.groupe.hasAnd {
+		position: relative;
+		&>.link-and-bottom {
+			display: block;
+			position: absolute;
+			left: 36px;
+			top: base.$height-components / 2 + base.$margin-component;
+			border-left: 3px solid $custom-red;
+			
+			span {
+				position: absolute;
+				top: 50%;
+				left: -2px;
+				display: block;
+				background: #fff;
+				border: 2px solid $custom-red ;
+				border-radius: 15px;
+				height: 30px;
+				line-height: 20px;
+				padding: 2px 10px;
+				width: auto;
+				transform: translate(-50%, -50%);
+			}
+		}
+		&.OnEdit > div > div > .ShowOnHover.ActionAnd {
+			display: none;
+		}
 	}
-	
+	}
 
 }
 

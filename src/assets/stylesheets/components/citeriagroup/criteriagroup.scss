@@ -1,0 +1,29 @@
+@use "../../themes";
+@use '../../base';
+/* Structure flex */
+.CriteriaGroup {
+	.flexWrap {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+	.componentBackArrow svg {
+		height: 48px;
+		path {
+			fill:transparent;
+			stroke:transparent;
+			stroke-width: 2.5px;
+		}
+	}
+	.componentFrontArrow svg{
+		height: 48px;
+		path {
+			fill:transparent;
+			stroke: themes.$custom-silver-light;
+			stroke-width: 3px;
+		}
+		rect {
+			fill:#fff;
+		}
+	}
+}

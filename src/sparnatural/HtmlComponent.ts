@@ -1,7 +1,6 @@
 import ISettings from "../configs/client-configs/ISettings";
 import { getSettings } from "../configs/client-configs/settings";
 import BaseClassFactory from "./components/baseClassFactory/BaseClassFactory";
-import Sparnatural from "./components/MainComponents/Sparnatural";
 
 
 interface IRenderable{
@@ -63,9 +62,9 @@ class HTMLComponent implements IRenderable {
       this.htmlParent.find(">." + this.baseCssClass).remove();
       $(this.html).appendTo(this.htmlParent);
     } else {
-      console.dir(`attaching:${this.html} to ${this.ParentComponent}`)
-      console.dir(this.html)
-      console.dir(this.ParentComponent)
+      //console.dir(`attaching:${this.html} to ${this.ParentComponent}`)
+      //console.dir(this.html)
+      //console.dir(this.ParentComponent)
       // remove existing component if already existing
       this.ParentComponent.html.find(">." + this.baseCssClass).remove();
       $(this.html).appendTo(this.ParentComponent.html);

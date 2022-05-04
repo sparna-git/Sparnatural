@@ -15,4 +15,5 @@ class LinkAndBottom extends HTMLComponent{
 
     // Set method from init general event here to compute the height?
 }
+
 export default LinkAndBottom
