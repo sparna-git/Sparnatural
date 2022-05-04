@@ -35,7 +35,6 @@ class GroupWrapper extends HTMLComponent{
         this.specProvider = specProvider
         this.jsonQueryBranch = jsonQueryBranch
         this.startClassValue = startClassValue
-
       }
 
     render(): this {
@@ -55,6 +54,10 @@ class GroupWrapper extends HTMLComponent{
     }
 
     #registerAddComponentHooks(){
+      this.html[0].addEventListener('onRemevoeCriteria',()=>{
+        this.onRemoveCriteriaGroup()
+      })
+
       this.html[0].addEventListener('addAndComponent',()=>{
         this.#addAndComponent()
       })

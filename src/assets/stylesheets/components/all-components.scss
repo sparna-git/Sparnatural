@@ -1,7 +1,14 @@
 @use './componentslist.scss'; 
 @use './groupwrapper.scss';
+//CriteriaGroup
 @use './citeriagroup/criteriagroup.scss';
-@use './citeriagroup/endclass.scss';
-@use './citeriagroup/objectpropertygroup.scss';
+//OptionsGroup
 @use './citeriagroup/optionsgroup.scss';
-@use './citeriagroup/startclass.scss';
+//ObjectPropertyGroup
+@use './citeriagroup/objectpropertygroup/objectpropertygroup.scss';
+@use './citeriagroup/objectpropertygroup/objectpropertytypeid.scss';
+//StartEndClassGroup
+@use './citeriagroup/startendclassgroup/startendclassgroup.scss';
+@use './citeriagroup/startendclassgroup/classtypeid.scss';
+//Buttons
+@use './buttons/unselectbtn.scss'

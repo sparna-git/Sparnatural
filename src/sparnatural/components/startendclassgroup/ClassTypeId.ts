@@ -60,8 +60,12 @@ class ClassTypeId extends HTMLComponent {
       this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder,default_value_o)
     }
 
+
     this.html.append(this.widgetHtml)
-  
+    // convert to niceSelect: https://jqueryniceselect.hernansartorio.com/
+    // needs to happen after html.append(). it uses rendered stuff on page to create a new select... should move away from that
+    this.widgetHtml.niceSelect()
+    this.#addOnChangeListener(this.widgetHtml)
     this.frontArrow.render()
     return this
   }
@@ -79,6 +83,19 @@ class ClassTypeId extends HTMLComponent {
     if(this.startClassValue) default_value_s = this.startClassValue
   
     return selectBuilder.buildClassSelect(null, default_value_s);
+  }
+
+  // when a value gets selected from the dropdown menu (niceselect), then change is called
+  #addOnChangeListener(selectWidget:JQuery<HTMLElement>){
+     
+    selectWidget.on('change',()=>{
+      //get value from <select..> tag and dispatch -> StartClass and EndClass can listen on it
+      let selectedValue = this.widgetHtml.val()
+      this.widgetHtml[0].dispatchEvent(new CustomEvent('classTypeValueSelected',{bubbles:true,detail:selectedValue}))
+      //disable further choice
+      this.widgetHtml.prop('disabled',true)
+      this.widgetHtml.niceSelect('update')
+    })
   }
 
   //This function is called by EnclassWidgetGroup when a value got selected. It renders the classTypeIds as shape forms and highlights them
@@ -167,10 +184,10 @@ class ClassSelectBuilder extends HTMLComponent {
     }
     
     var html_list = $("<select/>", {
-      class: "my-new-list input-val",
+      class: "my-new-list input-val open",
       html: list.join(""),
     });
-    return html_list;
+    return html_list
   }
 }
 

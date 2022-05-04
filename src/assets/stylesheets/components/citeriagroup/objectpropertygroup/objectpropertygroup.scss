@@ -1,0 +1,19 @@
+@use "../../../themes";
+@use "../../../base";
+
+.ObjectPropertyGroup {
+    margin-right: -15px;
+    padding-left: 10px;
+    .current {
+        font-style: italic;
+    }
+    .temporary-label {
+        line-height: base.$height-components-under - 2;
+        font-size: 14px;
+        height: 42px;
+        padding-left: 10px;
+        padding-right: 30px;
+        display: inline-block;
+        color: themes.$default-text-color;
+    }
+}

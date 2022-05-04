@@ -19,8 +19,8 @@ class ComponentsList extends HTMLComponent {
       console.log('componentslist render')
         super.render()
         this.initFirstGroupWrapper()
-        this.rootGroupWrapper.CriteriaGroup.html.find(".StartClassGroup .nice-select:not(.disabled)")
-        .trigger("click");
+        //this.rootGroupWrapper.CriteriaGroup.html.find(".StartClassGroup .nice-select:not(.disabled)")
+        //.trigger("click");
         return this
     }
 

@@ -8,6 +8,7 @@ import HTMLComponent from "../../HtmlComponent";
 import ObjectPropertyGroup from "../objectpropertygroup/ObjectPropertyGroup";
 import GroupWrapper from "./GroupWrapper";
 import { getSettings } from "../../../configs/client-configs/settings";
+import UnselectBtn from "../buttons/UnselectBtn";
 
 /**
  * A single line/criteria
@@ -28,6 +29,7 @@ class CriteriaGroup extends HTMLComponent {
   specProvider: any;
   ParentGroupWrapper: GroupWrapper;
   startClassValue: any;
+  unselectBtn: UnselectBtn
 
   constructor(
     ParentComponent: GroupWrapper,
@@ -46,6 +48,10 @@ class CriteriaGroup extends HTMLComponent {
   render(): this {
     super.render()
     this.#renderChildComponents()
+    this.unselectBtn = new UnselectBtn(this,()=>{
+      // caught in Parentcomponent
+      this.html[0].dispatchEvent(new CustomEvent('onRemoveCriteria',{bubbles:true}))
+    }).render()
     return this
   }
 
