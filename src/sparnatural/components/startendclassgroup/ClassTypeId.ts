@@ -20,24 +20,13 @@ class ClassTypeId extends HTMLComponent {
   startClassValue:any = null
   constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider,startClassValue?:any) {
     super("ClassTypeId", ParentComponent, null)
-
-    this.html.addClass('Highlited')
-    this.html.addClass('flexwrap')
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.selectBuilder = new ClassSelectBuilder(this,specProvider);
-    this.frontArrow.html.addClass('Invisible')
-    this.backArrow.html.addClass('Invisible') 
     this.startClassValue = startClassValue
   }
 
-  /*
-    This component hasChild components: backArrow -> widgetHtml ->frontArrow
-    Rendering must be done in this ordering
-  */
+
   render() {
-    console.log('classtyperender')
-    //init ParentComponent
-    //delete this html
     this.widgetHtml = null
     super.render()
 
@@ -64,8 +53,10 @@ class ClassTypeId extends HTMLComponent {
     this.html.append(this.widgetHtml)
     // convert to niceSelect: https://jqueryniceselect.hernansartorio.com/
     // needs to happen after html.append(). it uses rendered stuff on page to create a new select... should move away from that
-    this.widgetHtml.niceSelect()
-    this.#addOnChangeListener(this.widgetHtml)
+    let oldWidget = this.widgetHtml
+    this.widgetHtml = this.widgetHtml.niceSelect()
+    // nice-select is not a proper select tag and that's why can't listen for change events... move away from nice-select!
+    this.#addOnChangeListener(oldWidget)
     this.frontArrow.render()
     return this
   }
@@ -87,14 +78,12 @@ class ClassTypeId extends HTMLComponent {
 
   // when a value gets selected from the dropdown menu (niceselect), then change is called
   #addOnChangeListener(selectWidget:JQuery<HTMLElement>){
-     
     selectWidget.on('change',()=>{
       //get value from <select..> tag and dispatch -> StartClass and EndClass can listen on it
-      let selectedValue = this.widgetHtml.val()
+      let selectedValue = selectWidget.val()
       this.widgetHtml[0].dispatchEvent(new CustomEvent('classTypeValueSelected',{bubbles:true,detail:selectedValue}))
       //disable further choice
       this.widgetHtml.prop('disabled',true)
-      this.widgetHtml.niceSelect('update')
     })
   }
 
@@ -184,6 +173,7 @@ class ClassSelectBuilder extends HTMLComponent {
     }
     
     var html_list = $("<select/>", {
+      // open triggers the niceselect to be open
       class: "my-new-list input-val open",
       html: list.join(""),
     });
