@@ -13,9 +13,11 @@ import { getSettings } from "../../../../configs/client-configs/settings";
 class ActionWhere extends HTMLComponent {
   GrandParentComponent: CriteriaGroup;
   specProvider: ISpecProvider;
+  callBack: ()=>void;
   constructor(
     ParentComponent: ActionsGroup,
     specProvider: ISpecProvider,
+    callBack: ()=>void
   ) {
     //TODO refactor the null init in html widget
     super("ActionWhere", ParentComponent, null);
@@ -23,6 +25,7 @@ class ActionWhere extends HTMLComponent {
       ParentComponent.ParentComponent as CriteriaGroup;
     this.cssClasses.ShowOnEdit = true;
     this.specProvider = specProvider
+    this.callBack = callBack
   }
   render = () => {
     // Endclassgroup -> EditComponents -> ActionWhere
@@ -50,8 +53,11 @@ class ActionWhere extends HTMLComponent {
       " " +
       getSettings().langSearch.That +
       "...";
-
-    this.widgetHtml = $(widgetLabel + "<a>+</a>");
+    let link = $(`<a>+</a>`)
+    this.widgetHtml = $(widgetLabel + link);
+    link[0].addEventListener('click',()=>{
+      this.callBack()
+    })
     super.render();
     return this
   };

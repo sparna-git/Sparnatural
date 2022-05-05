@@ -3,18 +3,18 @@ import HTMLComponent from "../../../HtmlComponent";
 
 
 class ActionAnd extends HTMLComponent {
-  HtmlContainer: HTMLComponent;
   constructor(
     parentComponent: HTMLComponent,
+    callBack:()=>void
   ) {
+    let link = $(`<a>${getSettings().langSearch.And}</a>`)
     let widgetHtml = $(
-      '<span class="trait-and-bottom"></span><a>' +
-        getSettings().langSearch.And +
-        "</a>"
+      `<span class="trait-and-bottom"></span> ${link}`
     );
     super("ActionAnd", parentComponent, widgetHtml);
-    this.cssClasses.ShowOnHover = true;
-    this.HtmlContainer = parentComponent;
+    link[0].addEventListener('click',()=>{
+      callBack()
+    })
   }
   render(){
     super.render()
