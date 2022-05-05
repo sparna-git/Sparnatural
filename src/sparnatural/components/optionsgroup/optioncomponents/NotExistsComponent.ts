@@ -16,6 +16,7 @@ class NotExistsComponent extends BaseOptionComponent{
 
     render(): this {
         this.objectId = this.ParentOptionsGroup.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
+        // TODO already checked in OptionsGroup?
         if(this.specProvider.isEnablingNegation(this.objectId)){
             this.label = getSettings().langSearch.labelOptionNotExists
         }

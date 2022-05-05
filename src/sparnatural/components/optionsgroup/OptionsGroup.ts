@@ -34,7 +34,6 @@ export class OptionsGroup extends HTMLComponent {
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
     this.OptionalComponent = new OptionalComponent(this,specProvider,this.crtGroupId)
     this.NotExistsComponent = new NotExistsComponent(this,specProvider,this.crtGroupId)
-    this.backArrow.cssClasses.Invisible = true;
 
   }
 
@@ -46,6 +45,7 @@ export class OptionsGroup extends HTMLComponent {
     return this;
   }
 
+  // called by ParentCriteriaGroup
   onObjectPropertyGroupSelected() {
     $(this.html).addClass("ShowOnEdit");
     this.#checkIfBackArrowisRenderable()  
@@ -53,28 +53,18 @@ export class OptionsGroup extends HTMLComponent {
 
   // validates if the Options Arrow can be rendered or not
   #checkIfBackArrowisRenderable(){
-    let parentAlreadyOptionEnabled = false
-    if(this.ParentCriteriaGroup.ParentGroupWrapper.html.hasClass('Enabled')) parentAlreadyOptionEnabled = true
-    if(this.#checkIfOptionPossible && !(parentAlreadyOptionEnabled)){
+    if(this.#checkIfOptionsPossible){
       //Options like NOTEXISTS are possible and none of the parent has it already activated
-      this.#addOptionPossible()
+      this.#addOptionsPossible()
       this.#addEventListener()
-    }else{
-      this.#addNoOptionPossible()
-      if(parentAlreadyOptionEnabled){
-        $(this.ParentCriteriaGroup.html).addClass("OptionMenuShowed");
-      }
     }
   }
 
   #addEventListener(){
     $(this.backArrow.html).on("click", (e) =>{
-      if ($(this.html).hasClass("Enabled")) {
         // Clicked! now render the optional components
         this.#renderOptionalComponents()
-        $(e.target).toggleClass("Opended");
         redrawBottomLink(this.ParentCriteriaGroup.ParentGroupWrapper.html);
-      }
     });
   }
 
@@ -84,18 +74,11 @@ export class OptionsGroup extends HTMLComponent {
     this.NotExistsComponent.render()
   }
 
-  #addNoOptionPossible(){
-    this.html.removeClass("NoOptionEnabled")
-    this.html.addClass("Disabled")
-  }
-
-  #addOptionPossible(){
+  #addOptionsPossible(){
     this.#renderOptionsGroupBackArrow();
-    $(this.html).addClass("Enabled");
-    $(this.ParentCriteriaGroup.html).addClass("OptionMenuShowed");
   }
 
-  #checkIfOptionPossible():boolean{
+  #checkIfOptionsPossible():boolean{
     return  (
       (this.specProvider.isEnablingOptional(
         this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected

@@ -63,13 +63,11 @@ class EndClassWidgetGroup extends HTMLComponent {
       eventProxiCriteria
     );
     // IMPORTANT changed the reinsert and init after the function bining onchange. otherwise selectedValues are empty cause only in onChange they are getting filled
-    if (this.ParentCriteriaGroup.ActionsGroup.reinsert == true) {
-      console.warn('Actionsgroup reinsert true')
-      this.inputTypeComponent.render();
-    } else {
-      console.warn('Actiongroupreinsert false')
-      this.inputTypeComponent.render();
-    }
+    console.warn('Actionsgroup reinsert true')
+    this.inputTypeComponent.render();
+    console.warn('Actiongroupreinsert false')
+    this.inputTypeComponent.render();
+    
     if (this.ParentCriteriaGroup.jsonQueryBranch != null) {
       var branch = this.ParentCriteriaGroup.jsonQueryBranch;
       if (branch.line.values.length == 0) {

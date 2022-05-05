@@ -73,10 +73,10 @@ class GroupWrapper extends HTMLComponent{
       this.andSibling = new GroupWrapper(this.ParentComponent,this.specProvider,this.jsonQueryBranch,startClassValue)
       this.linkAndBottom.render()
       // trigger 2 clicks to select the same class as the current criteria (?)
-      this.CriteriaGroup.StartClassGroup
+      this.CriteriaGroup.StartClassGroup.html
       .find(".nice-select:not(.disabled)")
       .trigger("click");
-      this.CriteriaGroup.StartClassGroup
+      this.CriteriaGroup.StartClassGroup.html
       .find(".nice-select:not(.disabled)")
       .trigger("click");
       // set hasAnd Class. set relative position in css. necessary?
@@ -92,10 +92,10 @@ class GroupWrapper extends HTMLComponent{
       this.whereChild = new GroupWrapper(this,this.specProvider,this.jsonQueryBranch)
       this.linkWhereBottom.render()
       //add two clicks?
-      this.CriteriaGroup.StartClassGroup
+      this.CriteriaGroup.StartClassGroup.html
       .find(".nice-select:not(.disabled)")
       .trigger("click");
-      this.CriteriaGroup.StartClassGroup
+      this.CriteriaGroup.StartClassGroup.html
       .find(".nice-select:not(.disabled)")
       .trigger("click");
     }

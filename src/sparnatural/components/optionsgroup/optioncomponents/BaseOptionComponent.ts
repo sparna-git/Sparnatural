@@ -36,7 +36,6 @@ class BaseOptionComponent extends HTMLComponent {
         if(this.ParentOptionsGroup.ParentCriteriaGroup.jsonQueryBranch){
             let branch =  this.ParentOptionsGroup.ParentCriteriaGroup.jsonQueryBranch;
             this.default_value =  branch[this.name]  ? ' checked="checked"' : ""
-            this.#needsTriggerClick()
     }
 
         this.inputElement = $(`<input type="radio" name="${this.name}" data-id="${this.id}" ${this.default_value} />`)
@@ -52,12 +51,6 @@ class BaseOptionComponent extends HTMLComponent {
 
         return this
     }
-    #needsTriggerClick(){
-        // pour ouvrir le menu :
-        $(this.backArrow.html).trigger("click");
-        // pour selectionner l'option
-        this.html.trigger("click");
-    }
 
     #addEventListeners(){
         this.html.on("click", (e) => {
@@ -70,20 +63,13 @@ class BaseOptionComponent extends HTMLComponent {
         // get the ref to the list element
         let wrapperRef = this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper
         wrapperRef.html.hasClass(cls) ? wrapperRef.html.removeClass(cls) : wrapperRef.html.addClass(cls)
-
-        wrapperRef.traverse(this.#changeDisabledEnabled)
-        
-    }
-
-    #changeDisabledEnabled(grpWrapper:GroupWrapper){
-        let grpWrapperHtml = grpWrapper.html
-        if(grpWrapperHtml.hasClass("Enabled")){
-            grpWrapperHtml.addClass("Disabled")
-            grpWrapperHtml.removeClass(["Enabled","Opended"])
-        } else{
-            grpWrapperHtml.addClass(["Enabled","Opended"])
-            grpWrapperHtml.removeClass("Disabled")
-        }
+        let css
+        wrapperRef.traverse((grpWarpper:GroupWrapper)=>{
+            // refactor to an internal state variable and changing it via a method... like OptionsGroup.hideHtml
+            grpWarpper.html.hasClass(cls) ? grpWarpper.html.removeClass(cls) : grpWarpper.html.addClass(cls)
+            // add here code to hide the OptionsGroup in child classes
+            grpWarpper.CriteriaGroup.OptionsGroup.backArrow.html.toggle()
+        })   
     }
 
 }

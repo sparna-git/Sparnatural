@@ -9,6 +9,7 @@ import ObjectPropertyGroup from "../objectpropertygroup/ObjectPropertyGroup";
 import GroupWrapper from "./GroupWrapper";
 import { getSettings } from "../../../configs/client-configs/settings";
 import UnselectBtn from "../buttons/UnselectBtn";
+import ISpecProvider from "../../spec-providers/ISpecProviders";
 
 /**
  * A single line/criteria
@@ -20,13 +21,13 @@ class CriteriaGroup extends HTMLComponent {
   // JSON query line from which this line needs to be initialized
   jsonQueryBranch: any;
   // create all the elements of the criteria
-  StartClassGroup: any;
-  OptionsGroup: any;
-  ObjectPropertyGroup: any;
-  EndClassGroup: any;
-  EndClassWidgetGroup: any;
-  ActionsGroup: any;
-  specProvider: any;
+  StartClassGroup: StartClassGroup;
+  OptionsGroup: OptionsGroup;
+  ObjectPropertyGroup: ObjectPropertyGroup;
+  EndClassGroup: EndClassGroup;
+  EndClassWidgetGroup: EndClassWidgetGroup;
+  ActionsGroup: ActionsGroup;
+  specProvider: ISpecProvider;
   ParentGroupWrapper: GroupWrapper;
   startClassValue: any;
   unselectBtn: UnselectBtn
@@ -70,7 +71,7 @@ class CriteriaGroup extends HTMLComponent {
       this.specProvider
     ).render();
     this.ActionsGroup = new ActionsGroup(this, this.specProvider).render();
-    
+
     this.#assembleComponents();
   }
 
