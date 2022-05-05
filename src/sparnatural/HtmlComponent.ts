@@ -60,7 +60,7 @@ class HTMLComponent implements IRenderable {
     if (this.htmlParent) {
       // remove existing component if already existing
       this.htmlParent.find(">." + this.baseCssClass).remove();
-      $(this.html).appendTo(this.htmlParent);
+      this.htmlParent.append(this.html)
     } else {
       //console.dir(`attaching:${this.html} to ${this.ParentComponent}`)
       //console.dir(this.html)

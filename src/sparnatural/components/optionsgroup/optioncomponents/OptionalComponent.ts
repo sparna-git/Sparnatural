@@ -15,6 +15,7 @@ class OptionalComponent extends BaseOptionComponent{
 
     render(): this {
         this.objectId = this.ParentOptionsGroup.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
+        // TODO already checked in OptionsGroup?
         if(this.specProvider.isEnablingOptional(this.objectId)){
             this.label = getSettings().langSearch.labelOptionOptional
         }

@@ -1,6 +1,5 @@
 
 import CriteriaGroup from "../criterialist/CriteriaGroup";
-import { eventProxiCriteria } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ActionWhere from "./actioncomponents/ActionWhere";
 import ActionAnd from "./actioncomponents/ActionAnd";
@@ -49,8 +48,10 @@ class ActionsGroup extends HTMLComponent {
   }
 
   onObjectPropertyGroupSelected() {
-    this.actions.ActionAnd = new ActionAnd(this,this.#onAddAnd).render()
-    this.actions.ActionWhere = new ActionWhere(this, this.specProvider,this.#onAddWhere).render()
+    this.actions = {
+      ActionAnd: new ActionAnd(this,this.#onAddAnd).render(),
+      ActionWhere: new ActionWhere(this, this.specProvider,this.#onAddWhere).render()
+    }
 
     this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   }

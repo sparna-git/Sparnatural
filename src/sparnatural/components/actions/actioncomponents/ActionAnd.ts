@@ -9,8 +9,8 @@ class ActionAnd extends HTMLComponent {
   ) {
     let link = $(`<a>${getSettings().langSearch.And}</a>`)
     let widgetHtml = $(
-      `<span class="trait-and-bottom"></span> ${link}`
-    );
+      `<span class="trait-and-bottom"></span>`
+    ).append(link);
     super("ActionAnd", parentComponent, widgetHtml);
     link[0].addEventListener('click',()=>{
       callBack()

@@ -23,7 +23,6 @@ class ActionWhere extends HTMLComponent {
     super("ActionWhere", ParentComponent, null);
     this.GrandParentComponent =
       ParentComponent.ParentComponent as CriteriaGroup;
-    this.cssClasses.ShowOnEdit = true;
     this.specProvider = specProvider
     this.callBack = callBack
   }
@@ -42,19 +41,24 @@ class ActionWhere extends HTMLComponent {
       $(endClassGroup.html).removeClass("noPropertyWidget");
     }
     var endLabel = this.specProvider.getLabel(endClassGroup.value_selected);
-    var widgetLabel =
-      '<span class="trait-top"></span><span class="edit-trait"><span class="edit-num">' +
-      choiceNumber +
-      "</span></span>" +
-      getSettings().langSearch.Search +
-      " " +
-      "endlbl:" +
-      endLabel +
-      " " +
-      getSettings().langSearch.That +
-      "...";
+    
+    let newhtml= $(`
+      <span class="edit-trait">
+        <span class="edit-num"> ${choiceNumber}</span>
+      </span>
+      <span> ${getSettings().langSearch.Search} ${endLabel} ${getSettings().langSearch.That} </span>
+      
+      `)
     let link = $(`<a>+</a>`)
-    this.widgetHtml = $(widgetLabel + link);
+    newhtml = newhtml.add(link)
+
+   // let editTrait = $(`<span class="edit-trait"></span>`)
+    //let editNum = $(`<span class="edit-num"> ${choiceNumber}</span>`)
+    //let searchThat = $(`<div> ${getSettings().langSearch.Search} ${endLabel} ${getSettings().langSearch.That} <div>`) 
+    //var widgetLabel = editTrait.append(editNum).insertAfter(searchThat).insertAfter(link)
+    
+
+    this.widgetHtml = newhtml 
     link[0].addEventListener('click',()=>{
       this.callBack()
     })
