@@ -72,8 +72,10 @@ class ObjectPropertyGroup extends HTMLComponent {
         $(this.html).find(".nice-select:not(.disabled)").trigger("click");
       }
     }
+      
+      
+    this.html[0].dispatchEvent(new CustomEvent('ObjectPropertyGroupSelected',{bubbles:true}))
 
-    $(this.ParentCriteriaGroup).trigger("ObjectPropertyGroupSelected");
   }
 
   onChange() {
@@ -89,7 +91,7 @@ class ObjectPropertyGroup extends HTMLComponent {
         .attr("disabled", "disabled")
         .niceSelect("update");
     }
-    $(this.ParentCriteriaGroup).trigger("ObjectPropertyGroupSelected");
+    this.html[0].dispatchEvent(new CustomEvent('ObjectPropertyGroupSelected',{bubbles:true}))
     if (
       $(this.ParentCriteriaGroup.html)
         .parent("li")

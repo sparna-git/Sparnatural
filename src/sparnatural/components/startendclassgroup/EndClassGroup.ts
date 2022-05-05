@@ -62,7 +62,6 @@ class EndClassGroup extends HTMLComponent {
 
   // triggered when the subject/domain is selected
   onStartClassGroupSelected() {
-    console.log('endlclassgrp startgrp selected')
     // render the inputComponent for a user to select an Object
     this.inputTypeComponent.render()
     $(this.html).append('<div class="EditComponents"></div>');
@@ -117,6 +116,7 @@ class EndClassGroup extends HTMLComponent {
     //Set the variable name for Sparql
     if (this.varName == null) {
       // dispatch event and get maxVarIndex via callback
+      // can i refactor this so that traversing the components will set the varindex?
       this.html[0].dispatchEvent(new CustomEvent('getMaxVarIndex',{bubbles:true,detail:(index:number)=>{
         //getting the value Sparnatural
         this.varName =
@@ -131,21 +131,15 @@ class EndClassGroup extends HTMLComponent {
     //this.onSelectValue(this.varName) ;
 
     if (this.specProvider.hasConnectedClasses(this.value_selected)) {
+      console.warn('EndClassgroup. specprovider hasConnectedClasses')
       $(this.ParentCriteriaGroup.html)
         .parent("li")
         .removeClass("WhereImpossible");
     } else {
       $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
     }
-    // since this component was already created only the css classes are updated
-    this.html.addClass('HasInputsCompleted')
-    this.html.addClass('IsOnEdit')
-    // show and init the property selection
-    this.ParentCriteriaGroup.ObjectPropertyGroup.cssClasses.Invisible = false;
-
-
     // trigger the event that will call the ObjectPropertyGroup
-    $(this.ParentCriteriaGroup).trigger("EndClassGroupSelected");
+    this.html[0].dispatchEvent(new CustomEvent('EndClassGroupSelected',{bubbles:true}))
 
     var desc = this.specProvider.getTooltip(this.value_selected);
     if (desc) {

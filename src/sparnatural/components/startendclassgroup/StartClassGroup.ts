@@ -65,7 +65,7 @@ class StartClassGroup extends HTMLComponent {
     $(this.html).addClass("VariableSelected");
     this.#renderSelectViewVariableBtn()
 
-    $(this.ParentCriteriaGroup).trigger("StartClassGroupSelected");
+   this.html[0].dispatchEvent(new CustomEvent('StartClassGroupSelected',{bubbles:true}))
 
     this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
 

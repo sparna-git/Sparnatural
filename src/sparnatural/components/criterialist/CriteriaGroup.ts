@@ -70,35 +70,32 @@ class CriteriaGroup extends HTMLComponent {
       this.specProvider
     ).render();
     this.ActionsGroup = new ActionsGroup(this, this.specProvider).render();
+    
     this.#assembleComponents();
   }
 
   #assembleComponents = () => {
-    // hook all components together
-    $(this).on("StartClassGroupSelected", function () {
-      this.ObjectPropertyGroup.onStartClassGroupSelected();
-    });
-    $(this).on("StartClassGroupSelected", function () {
-      this.EndClassGroup.onStartClassGroupSelected();
-    });
-    $(this).on("Created", function () {
-      this.StartClassGroup.onCreated();
-    });
-    $(this).on("EndClassGroupSelected", function () {
+    this.html[0].addEventListener("EndClassGroupSelected",(e)=>{
+      e.stopImmediatePropagation()
       this.ObjectPropertyGroup.onEndClassGroupSelected();
-    });
-    $(this).on("ObjectPropertyGroupSelected", function () {
+    })
+    this.html[0].addEventListener("StartClassGroupSelected",(e)=>{
+      e.stopImmediatePropagation()
+      this.EndClassGroup.onStartClassGroupSelected();
+      this.ObjectPropertyGroup.onStartClassGroupSelected()
+    })
+
+    this.html[0].addEventListener("ObjectPropertyGroupSelected",(e)=>{
+      e.stopImmediatePropagation()
       this.EndClassWidgetGroup.onObjectPropertyGroupSelected();
-    });
-    $(this).on("ObjectPropertyGroupSelected", function () {
       this.OptionsGroup.onObjectPropertyGroupSelected();
-    });
+      this.ActionsGroup.onObjectPropertyGroupSelected();
+    })
+
     $(this).on("Created", function () {
       this.ActionsGroup.onCreated();
     });
-    $(this).on("ObjectPropertyGroupSelected", function () {
-      this.ActionsGroup.onObjectPropertyGroupSelected();
-    });
+
   };
 
   //set css completed class on GroupWrapper
