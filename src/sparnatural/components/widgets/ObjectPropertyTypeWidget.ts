@@ -43,21 +43,25 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     boolean?: any;
   } | null = null;
   specProvider: ISpecProvider;
+  objectProperty_selected: string;
 
   constructor(
     ParentComponent: HTMLComponent,
     settings: ISettings,
-    specProvider: ISpecProvider
+    specProvider: ISpecProvider,
+    objectProperty_selected:string
   ) {
     super("ObjectPropertyTypeWidget", ParentComponent, null);
     this.settings = settings;
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.specProvider = specProvider
+    this.objectProperty_selected = objectProperty_selected
   }
 
   render() {
     this.widgetHtml = null;
-    this.objectPropertyId = this.GrandParent.ObjectPropertyGroup.value_selected; // shows which objectproperty got chosen for which subject object combination
+    this.objectPropertyId = this.objectProperty_selected; // shows which objectproperty got chosen for which subject object combination
+    
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropertyId
     );

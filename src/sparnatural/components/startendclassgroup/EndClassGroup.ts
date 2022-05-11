@@ -108,11 +108,8 @@ class EndClassGroup extends HTMLComponent {
 		When Country got selected this events fires
 	*/
   #valueWasSelected() {
-    console.warn("endclassgrp onChange")
     this.#renderUnselectBtn()
     this.#renderSelectViewVariableBtn()
-
-    this.value_selected = this.#getSelectedValue();
     //Set the variable name for Sparql
     if (this.varName == null) {
       // dispatch event and get maxVarIndex via callback
@@ -126,7 +123,6 @@ class EndClassGroup extends HTMLComponent {
         (index);
       }}))
     }
-    this.#disableSelectionPossibility();
 
     if (this.specProvider.hasConnectedClasses(this.value_selected)) {
       console.warn('EndClassgroup. specprovider hasConnectedClasses')
@@ -153,19 +149,6 @@ class EndClassGroup extends HTMLComponent {
         "data-tippy-content"
       );
     }
-  }
-
-  // after an Object is chosen, disable the inputs
-  #disableSelectionPossibility() {
-    $(this.ParentCriteriaGroup.EndClassGroup.html)
-      .find(".input-val")
-      .attr("disabled", "disabled")
-      .niceSelect("update");
-  }
-
-  // gathers the selected Object chosen
-  #getSelectedValue() {
-    return $(this.html).find("select.input-val").val();
   }
 
   // is this little crossed eye button at the end of EndclassGroup component

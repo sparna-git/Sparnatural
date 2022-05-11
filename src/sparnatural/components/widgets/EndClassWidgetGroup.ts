@@ -8,11 +8,14 @@ import ISpecProvider from "../../spec-providers/ISpecProviders";
 import { TreeWidget } from "./Widgets";
 import { getSettings } from "../../../configs/client-configs/settings";
 import HTMLComponent from "../../HtmlComponent";
+import ArrowComponent from "../arrows/ArrowComponent";
+import UnselectBtn from "../buttons/UnselectBtn";
 
 class EndClassWidgetGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   selectedValues: Array<any> = [];
   selectAllValue: boolean = true;
+  specProvider:ISpecProvider;
   VALUE_SELECTION_WIDGETS = [
     Config.LIST_PROPERTY,
     Config.LITERAL_LIST_PROPERTY,
@@ -25,11 +28,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     specProvider: ISpecProvider
   ) {
     super("EndClassWidgetGroup", CriteriaGroup,null);
-    this.inputTypeComponent = new ObjectPropertyTypeWidget(
-      this,
-      getSettings(),
-      specProvider
-    );
+    this.specProvider = specProvider
     this.ParentCriteriaGroup = CriteriaGroup;
   }
 
@@ -40,9 +39,13 @@ class EndClassWidgetGroup extends HTMLComponent {
   /**
    * Called when the property/link between domain and range is selected, to init this.
    **/
-  onObjectPropertyGroupSelected() {
-    console.warn('onObjectPropertyGroupSelected!!!!')
-    this.inputTypeComponent.render()
+  onObjectPropertyGroupSelected(objectProperty_selected:string) {
+    this.inputTypeComponent = new ObjectPropertyTypeWidget(
+      this,
+      getSettings(),
+      this.specProvider,
+      objectProperty_selected
+    ).render()
     // binds a selection in an input widget with the display of the value in the line
     this.inputTypeComponent.html.on("change",()=>{
       this.#onChange()
@@ -67,7 +70,7 @@ class EndClassWidgetGroup extends HTMLComponent {
         }
       }
     }*/
-    
+
   }
 
   // input : the 'key' of the value to be deleted
@@ -230,7 +233,6 @@ class EndClassWidgetGroup extends HTMLComponent {
     console.warn("endclasswidgetGroup onChange called")
     var theValue = this.inputTypeComponent.getValue(); // could be array or single value
     // put span around with proper class if coming from a date widget
-
     if (theValue == null) {
       return false;
     }
@@ -287,7 +289,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     // var value_data = (Array.isArray(theValue))?theValue.toString():theValue;
     console.log('what are these values?')
     console.dir(new_items)
-    this.#renderAllItemsSelected(new_items,theValue)
+    this.#renderAllItemsSelected(new_items)
 
     // disable the Where
     $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
@@ -320,95 +322,36 @@ class EndClassWidgetGroup extends HTMLComponent {
   }
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
-  #renderAllItemsSelected(new_items:Array<any>,theValue:any){
-    for (var new_item in new_items) {
-      theValue = new_items[new_item];
-
-      var theValueLabel =
-        "<span" +
-        (theValue.start || theValue.stop ? ' class="label-two-line"' : "") +
-        ">" +
-        theValue.label +
-        "</span>";
-
-      let unselect = $(
-        '<span class="unselect" value-data="' +
-          theValue.key +
-          '"><i class="far fa-times-circle"></i></span>'
-      );
+  #renderAllItemsSelected(new_items:Array<any>){
+    new_items.forEach((item)=>{
+      let valuelbl = `<span ${item.start || item.stop ? ' class="label-two-line"' : ""}> ${item.label} </span>`
+      new EndClassWidgetValue(this,valuelbl).render()
       if (
-        $(this.ParentCriteriaGroup.html).find(".EndClassWidgetGroup>div")
-          .length == 0
+        this.VALUE_SELECTION_WIDGETS.indexOf(
+          this.inputTypeComponent.widgetType
+        ) !== -1
       ) {
-        // set a tooltip if the label is a bit long
-        var tooltip =
-          theValue.label.length > 25 ? 'title="' + theValue.label + '"' : "";
+        //if ($(this.ParentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 1) { Now is sures, we have one
         $(this.ParentCriteriaGroup.html)
           .find(".EndClassWidgetGroup")
           .append(
-            $(
-              '<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">' +
-                UiuxConfig.COMPONENT_ARROW_BACK +
-                "</div><p " +
-                tooltip +
-                ">" +
-                theValueLabel +
-                '</p><div class="componentFrontArrow">' +
-                UiuxConfig.COMPONENT_ARROW_FRONT +
-                "</div></div>"
-            )
-          )
-          .find("div")
-          .first()
-          .append(unselect);
-
-        if (
-          this.VALUE_SELECTION_WIDGETS.indexOf(
-            this.inputTypeComponent.widgetType
-          ) !== -1
-        ) {
-          //if ($(this.ParentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 1) { Now is sures, we have one
-          $(this.ParentCriteriaGroup.html)
-            .find(".EndClassWidgetGroup")
-            .append(
-              '<div class="EndClassWidgetAddOrValue flexWrap"><div class="componentBackArrow">' +
-                UiuxConfig.COMPONENT_ARROW_BACK +
-                '</div><p><span>+</span></p><div class="componentFrontArrow">' +
-                UiuxConfig.COMPONENT_ARROW_FRONT +
-                "</div></div>"
-            );
-          // hook a click on the plus to the needAddOrValue function
-          $(this.ParentCriteriaGroup.html)
-            .find(".EndClassWidgetGroup>.EndClassWidgetAddOrValue")
-            .on(
-              "click",
-              { arg1: this, arg2: "onAddOrValue" },
-              eventProxiCriteria
-            );
-          //}
-        }
-      } else {
-        var temp_html = $(
-          '<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">' +
-            UiuxConfig.COMPONENT_ARROW_BACK +
-            "</div><p>" +
-            theValueLabel +
-            '</p><div class="componentFrontArrow">' +
-            UiuxConfig.COMPONENT_ARROW_FRONT +
-            "</div></div>"
-        ).append(unselect);
+            '<div class="EndClassWidgetAddOrValue flexWrap"><div class="componentBackArrow">' +
+              UiuxConfig.COMPONENT_ARROW_BACK +
+              '</div><p><span>+</span></p><div class="componentFrontArrow">' +
+              UiuxConfig.COMPONENT_ARROW_FRONT +
+              "</div></div>"
+          );
+        // hook a click on the plus to the needAddOrValue function
         $(this.ParentCriteriaGroup.html)
-          .find(".EndClassWidgetGroup >.EndClassWidgetAddOrValue")
-          .before(temp_html);
+          .find(".EndClassWidgetGroup>.EndClassWidgetAddOrValue")
+          .on(
+            "click",
+            { arg1: this, arg2: "onAddOrValue" },
+            eventProxiCriteria
+          );
+        //}
       }
-
-      // binds a click on the remove cross with the removeValue function
-      unselect.on(
-        "click",
-        { arg1: this, arg2: "onRemoveValue" },
-        eventProxiCriteria
-      );
-    }
+    });
 
   }
 
@@ -428,4 +371,30 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   };
 }
+
+
+class EndClassWidgetValue extends HTMLComponent {
+  backArrow = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_BACK)
+  frontArrow = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
+  unselectBtn: UnselectBtn
+  value_lbl:string
+  constructor(ParentComponent:EndClassWidgetGroup,value_lbl:string){
+    super('EndClassWidgetValue',ParentComponent,null)
+    // set a tooltip if the label is a bit long
+    value_lbl = value_lbl.length > 25 ? 'title="' + value_lbl + '"' : "";
+    this.value_lbl = value_lbl
+  }
+
+  render(): this {
+    super.render()
+    this.backArrow.render()
+    this.html.append($(`<p>${this.value_lbl}</p>`)) 
+    this.frontArrow.render()
+    this.unselectBtn = new UnselectBtn(this,()=>{
+      this.html[0].dispatchEvent(new CustomEvent('onRemoveEndClassWidgetValue',{bubbles:true}))
+    })
+    return this
+  }
+}
+
 export default EndClassWidgetGroup;

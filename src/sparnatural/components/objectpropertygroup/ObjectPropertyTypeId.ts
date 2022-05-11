@@ -13,6 +13,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   temporaryLabel: string;
   arrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
   specProvider: ISpecProvider;
+  object_property_selected:any
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
@@ -35,8 +36,10 @@ class ObjectPropertyTypeId extends HTMLComponent {
     // if there is an Object selected
     if (this.GrandParent.EndClassGroup.value_selected) {
       this.#removeTempLbl();
+      let op = this.#setObjectProperty()
       // set the correct objectProperty matching to Start and End value
-      this.widgetHtml = this.#setObjectProperty().niceSelect()
+      this.widgetHtml = op.niceSelect()
+      this.object_property_selected = op.val()
     } else {
       // there hasn't been an Object in Endclassgroup chosen. render a temporary label
       this.widgetHtml = $(
@@ -53,7 +56,6 @@ class ObjectPropertyTypeId extends HTMLComponent {
   // removes the temporary label e.g 'relatedTo'
   #removeTempLbl() {
     $(this.html).find(".temporary-label").remove();
-    $(this.html).find(".input-val").unbind("change");
   }
 
   // sets the ObjectProperty according to the Subject and Object e.g Country isCountryOf Musuem

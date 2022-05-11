@@ -47,9 +47,9 @@ class ObjectPropertyGroup extends HTMLComponent {
 	*/
   onEndClassGroupSelected() {
     // this will update the temporarly label
-    this.objectPropertySelector.render();      
-      
-    this.html[0].dispatchEvent(new CustomEvent('ObjectPropertyGroupSelected',{bubbles:true}))
+    this.objectPropertySelector.render();       
+    this.value_selected = this.objectPropertySelector.object_property_selected
+    this.html[0].dispatchEvent(new CustomEvent('ObjectPropertyGroupSelected',{bubbles:true,detail:this.value_selected}))
 
   }
 
