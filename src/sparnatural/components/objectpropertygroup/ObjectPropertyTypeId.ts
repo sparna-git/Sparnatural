@@ -35,7 +35,8 @@ class ObjectPropertyTypeId extends HTMLComponent {
     // if there is an Object selected
     if (this.GrandParent.EndClassGroup.value_selected) {
       this.#removeTempLbl();
-      this.widgetHtml = this.#setObjectProperty();
+      // set the correct objectProperty matching to Start and End value
+      this.widgetHtml = this.#setObjectProperty().niceSelect()
     } else {
       // there hasn't been an Object in Endclassgroup chosen. render a temporary label
       this.widgetHtml = $(
@@ -72,6 +73,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
     );
   }
 
+
   reload() {
     console.warn("reload objectpropertytypeID")
     this.render(); // IMPORTANT  is this right? or should it be this.init()? to only update css classes
@@ -95,40 +97,31 @@ class PropertySelectBuilder {
     rangeClassID: any,
     default_value: any
   ) {
-    var list = [];
     var items = this.specProvider.getConnectingProperties(
       domainClassID,
       rangeClassID
     );
 
-    for (var key in items) {
-      var val = items[key];
+    if(items.length > 1){
+      throw Error("ObjectPropertyType should never have more than one connecting properties.")
+    }
+
+      let val = items[0]
       var label = this.specProvider.getLabel(val);
       var desc = this.specProvider.getTooltip(val);
-      var selected = default_value == val ? 'selected="selected"' : "";
       var description_attr = "";
       if (desc) {
         description_attr = ' data-desc="' + desc + '"';
       }
-      list.push(
-        '<option value="' +
-          val +
-          '" data-id="' +
-          val +
-          '"' +
-          selected +
-          " " +
-          description_attr +
-          "  >" +
-          label +
-          "</option>"
-      );
-    }
+      // disable by default since the user don't need to select anything
+      let htmlnew = $(
+      `<select select-list input-val disabled> 
+        <option selected="selected"  value="${val}" data-id="${val}" ${description_attr}>
+        ${label}
+        </option>
+      </select>`
+      )
 
-    var html_list = $("<select/>", {
-      class: "select-list input-val",
-      html: list.join(""),
-    });
-    return html_list;
+    return htmlnew;
   }
 }

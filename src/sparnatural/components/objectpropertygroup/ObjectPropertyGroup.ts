@@ -47,32 +47,7 @@ class ObjectPropertyGroup extends HTMLComponent {
 	*/
   onEndClassGroupSelected() {
     // this will update the temporarly label
-    this.objectPropertySelector.render();
-
-    $(this.html).find("select.input-val").niceSelect();
-    $(this.html).find(".input-val").removeAttr("disabled").niceSelect("update");
-    // opens the select automatically
-    if (this.objectPropertySelector.needTriggerClick == false) {
-      $(this.html).find(".nice-select:not(.disabled)").trigger("click");
-    }
-    $(this.html).find("select.input-val").unbind("change");
-    // hook the change event to the onChange function
-    $(this.html)
-      .find("select.input-val")
-      .on("change", { arg1: this, arg2: "onChange" }, eventProxiCriteria);
-
-    if (this.objectPropertySelector.needTriggerClick == true) {
-      // $(this.html).find('.nice-select:not(.disabled)').trigger('click') ;
-      $(this.html).find("select.input-val:not(.disabled)").trigger("change");
-      this.objectPropertySelector.needTriggerClick = false;
-      //$(this.ParentCriteriaGroup.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
-    } else {
-      // automatically selects the value if there is only one
-      if ($(this.html).find("select.input-val").find("option").length == 1) {
-        $(this.html).find(".nice-select:not(.disabled)").trigger("click");
-      }
-    }
-      
+    this.objectPropertySelector.render();      
       
     this.html[0].dispatchEvent(new CustomEvent('ObjectPropertyGroupSelected',{bubbles:true}))
 

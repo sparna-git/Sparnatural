@@ -64,7 +64,7 @@ class EndClassGroup extends HTMLComponent {
   onStartClassGroupSelected() {
     // render the inputComponent for a user to select an Object
     this.inputTypeComponent.render()
-    $(this.html).append('<div class="EditComponents"></div>');
+    $(this.html).append('<div class="EditComponents"></div>'); // this is important!
   }
 
     // Make arrow function to bind the this lexically
@@ -127,8 +127,6 @@ class EndClassGroup extends HTMLComponent {
       }}))
     }
     this.#disableSelectionPossibility();
-    //add varName on curent selection display
-    //this.onSelectValue(this.varName) ;
 
     if (this.specProvider.hasConnectedClasses(this.value_selected)) {
       console.warn('EndClassgroup. specprovider hasConnectedClasses')

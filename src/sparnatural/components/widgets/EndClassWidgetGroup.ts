@@ -41,39 +41,24 @@ class EndClassWidgetGroup extends HTMLComponent {
    * Called when the property/link between domain and range is selected, to init this.
    **/
   onObjectPropertyGroupSelected() {
+    console.warn('onObjectPropertyGroupSelected!!!!')
     this.inputTypeComponent.render()
-    console.warn("Endclasswidgetgroup. onObjectPropertyGroupSelected()");
-
     // binds a selection in an input widget with the display of the value in the line
-    $(this.inputTypeComponent).on(
-      "change",
-      {
-        arg1: this,
-        arg2: "onChange",
-      },
-      eventProxiCriteria
-    );
+    this.inputTypeComponent.html.on("change",()=>{
+      this.#onChange()
+      });
     // binds a selection in an input widget with the display of the value in the line
-    $(this.inputTypeComponent).on(
-      "selectAll",
-      {
-        arg1: this,
-        arg2: "onSelectAll",
-      },
-      eventProxiCriteria
-    );
-    // IMPORTANT changed the reinsert and init after the function bining onchange. otherwise selectedValues are empty cause only in onChange they are getting filled
-    console.warn('Actionsgroup reinsert true')
-    this.inputTypeComponent.render();
-    console.warn('Actiongroupreinsert false')
-    this.inputTypeComponent.render();
+    this.inputTypeComponent.html.on('selectAll',()=>{
+      this.#onSelectAll()
+    });
     
+    /*
     if (this.ParentCriteriaGroup.jsonQueryBranch != null) {
       var branch = this.ParentCriteriaGroup.jsonQueryBranch;
       if (branch.line.values.length == 0) {
         if (branch.children.length == 0) {
           if (this.inputTypeComponent.canHaveSelectAll()) {
-            this.onSelectAll();
+            this.#onSelectAll();
           }
         }
       } else {
@@ -81,7 +66,8 @@ class EndClassWidgetGroup extends HTMLComponent {
           this.loadValue(branch.line.values[key]);
         }
       }
-    }
+    }*/
+    
   }
 
   // input : the 'key' of the value to be deleted
@@ -177,7 +163,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.inputTypeComponent.loadedValue = null;
   };
 
-  onSelectAll() {
+  #onSelectAll() {
     var theValueLabel =
       "<span>" + getSettings().langSearch.SelectAllValues + "</span>";
     this.selectAllValue = true;
@@ -232,14 +218,14 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
   }
   // this method renders Arrow Components on the ClassTypeId's
-  #renderArrowComponentents(){
+  #highlightArrowComponentents(){
     this.ParentCriteriaGroup.EndClassGroup.inputTypeComponent.highlight()
     this.ParentCriteriaGroup.StartClassGroup.inputTypeComponent.highlight()
   }
 
-  onChange() {
+  #onChange() {
     //TODO render here the back and front arrow for both InputClasstypes
-    this.#renderArrowComponentents()
+    this.#highlightArrowComponentents()
 
     console.warn("endclasswidgetGroup onChange called")
     var theValue = this.inputTypeComponent.getValue(); // could be array or single value
