@@ -9,6 +9,7 @@ import ArrowComponent from "../arrows/ArrowComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";
 import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 import HTMLComponent from "../../HtmlComponent";
+import OptionalArrow from "../buttons/OptionalArrow";
 
 /**
  * Contains the components for Optional and not exists arrow.
@@ -22,10 +23,8 @@ export class OptionsGroup extends HTMLComponent {
   NotExistsComponent: NotExistsComponent
   crtGroupId:number
   specProvider: ISpecProvider;
-  backArrow: ArrowComponent = new ArrowComponent(
-    this,
-    UiuxConfig.COMPONENT_ARROW_BACK
-  );
+  backArrow: OptionalArrow;
+  
 
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
     super("OptionsGroup", ParentCriteriaGroup, null);
@@ -39,7 +38,6 @@ export class OptionsGroup extends HTMLComponent {
 
   render() {
     super.render();
-    this.backArrow.render();
     // if there were values selected delete it
     this.valuesSelected = {};
     return this;
@@ -56,16 +54,7 @@ export class OptionsGroup extends HTMLComponent {
     if(this.#checkIfOptionsPossible){
       //Options like NOTEXISTS are possible and none of the parent has it already activated
       this.#addOptionsPossible()
-      this.#addEventListener()
     }
-  }
-
-  #addEventListener(){
-    $(this.backArrow.html).on("click", (e) =>{
-        // Clicked! now render the optional components
-        this.#renderOptionalComponents()
-        redrawBottomLink(this.ParentCriteriaGroup.ParentGroupWrapper.html);
-    });
   }
 
   #renderOptionalComponents(){
@@ -90,7 +79,15 @@ export class OptionsGroup extends HTMLComponent {
     ) 
   }
 
+  #removeOptionalComponents(){
+    this.OptionalComponent.html.remove()
+    this.NotExistsComponent.html.remove()
+  }
+
   #renderOptionsGroupBackArrow() {
-    this.backArrow = new ArrowComponent(this,UiuxConfig.COMPONENT_OPTION_ARROW_FRONT).render()
+    this.backArrow = new OptionalArrow(this,(selected:boolean)=>{
+      selected ? this.#renderOptionalComponents() : this.#removeOptionalComponents()
+      redrawBottomLink(this.ParentCriteriaGroup.ParentGroupWrapper.html);
+    }).render()
   }
 }

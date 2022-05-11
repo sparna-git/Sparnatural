@@ -1,18 +1,6 @@
 @use "../../themes";
 @use '../../mixins';
-.OptionsGroup > .componentBackArrow {
-    width: 13px;
-    height: 48px;
-    position: relative;
-    svg {
-        path{
-            filter:url(#filter19278);
-        }
-        position: absolute;
-        z-index: 1;
-        left: -5px;
-    }
-}
+
 .OptionsGroup {
     display: flex;
     flex-direction: row;
@@ -36,7 +24,7 @@
         @include mixins.arrow-back-colors(themes.$custom-green-light, #fff);
         @include mixins.arrow-front-colors(themes.$custom-green-light, #fff);
             position: relative;
-            /*display: inline-block;*/
+            display: flex;
             zoom: 1;
             /*background: $custom-green-light;*/
             margin-bottom: 0;

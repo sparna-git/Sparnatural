@@ -6,9 +6,8 @@ class ArrowComponent extends HTMLComponent{
     arrowStyle:UiuxConfig
     constructor(ParenComponent:HTMLComponent,arrowStyle:UiuxConfig){
         let baseCssClass:string = "componentFrontArrow" //default
-        if(arrowStyle == UiuxConfig.COMPONENT_OPTION_ARROW_FRONT || arrowStyle == UiuxConfig.COMPONENT_ARROW_BACK){
-            baseCssClass = "componentBackArrow"
-        }
+        if(arrowStyle == UiuxConfig.COMPONENT_ARROW_BACK) baseCssClass = "componentBackArrow"
+        
         super(baseCssClass,ParenComponent,null)
         this.arrowStyle = arrowStyle
         this.widgetHtml = $(arrowStyle)  

@@ -10,32 +10,6 @@
 
 
 
-
-
-
-/*New component Arrow */
-.CriteriaGroup {
-	.componentBackArrow svg {
-		height: 48px;
-		path {
-			fill:transparent;
-			stroke:transparent;
-			stroke-width: 2.5px;
-		}
-	}
-	.componentFrontArrow svg{
-		height: 48px;
-		path {
-			fill:transparent;
-			stroke: $custom-silver-light;
-			stroke-width: 3px;
-		}
-		rect {
-			fill:#fff;
-		}
-	}
-}
-
 	/*Completed criteria*/
 .componentsListe li>.CriteriaGroup.OptionMenuShowed {
 	&>.StartClassGroup .componentFrontArrow {

@@ -62,8 +62,7 @@ class BaseOptionComponent extends HTMLComponent {
     onChange(cls:string){
         // get the ref to the list element
         let wrapperRef = this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper
-        wrapperRef.html.hasClass(cls) ? wrapperRef.html.removeClass(cls) : wrapperRef.html.addClass(cls)
-        let css
+        //wrapperRef.html.hasClass(cls) ? wrapperRef.html.removeClass(cls) : wrapperRef.html.addClass(cls)
         wrapperRef.traverse((grpWarpper:GroupWrapper)=>{
             // refactor to an internal state variable and changing it via a method... like OptionsGroup.hideHtml
             grpWarpper.html.hasClass(cls) ? grpWarpper.html.removeClass(cls) : grpWarpper.html.addClass(cls)
