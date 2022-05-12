@@ -85,7 +85,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
         }
         add_all = false;
 
-        //$(this.ParentComponent.ParentCriteriaGroup).trigger( {type:"EndClassWidgetGroupSelected" } ) ;
         this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
         this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
       }
@@ -249,7 +248,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
             this.getFinalQueryString(datasource)
           );
         }
-        this.cssClasses.ListeWidget = true;
         return new ListWidget(
           this,
           handler,
@@ -319,7 +317,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
             this.getFinalQueryString(datasource)
           );
         }
-        this.cssClasses.ListeWidget = true;
         return new ListWidget(
           this,
           handler,
@@ -385,18 +382,15 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
             this.getFinalQueryString(datasource)
           );
         }
-        this.cssClasses.AutocompleteWidget = true;
         return new AutoCompleteWidget(this, handler);
 
         break;
       case Config.GRAPHDB_SEARCH_PROPERTY:
       case Config.STRING_EQUALS_PROPERTY:
       case Config.SEARCH_PROPERTY:
-        this.cssClasses.SearchWidget = true;
         return new SearchWidget(this, this.settings.langSearch);
         break;
       case Config.TIME_PROPERTY_YEAR:
-        this.cssClasses.TimeDatePickerWidget = true;
         return new TimeDatePickerWidget(
           this,
           this.settings.dates,
@@ -405,7 +399,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
         );
         break;
       case Config.TIME_PROPERTY_DATE:
-        this.cssClasses.TimeDatePickerWidget = true;
         return new TimeDatePickerWidget(
           this,
           this.settings.dates,
@@ -414,7 +407,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
         );
         break;
       case Config.TIME_PROPERTY_PERIOD:
-        this.cssClasses.DatesWidget = true;
         return new DatesWidget(
           this,
           this.settings.dates,
@@ -422,11 +414,9 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
         );
         break;
       case Config.NON_SELECTABLE_PROPERTY:
-        this.cssClasses.NoWidget = true;
         return new NoWidget(this);
         break;
       case Config.BOOLEAN_PROPERTY:
-        this.cssClasses.BooleanWidget = true;
         return new BooleanWidget(this, this.settings.langSearch);
         break;
       case Config.TREE_PROPERTY:
@@ -505,7 +495,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
             this.getFinalQueryString(treeChildrenDatasource)
           );
         }
-        this.cssClasses.TreeWidget = true;
         return new TreeWidget(
           this,
           handler,

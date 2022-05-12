@@ -21,7 +21,6 @@ class ObjectPropertyTypeId extends HTMLComponent {
   ) {
     super("ObjectPropertyTypeId", ParentComponent, null);
     this.temporaryLabel = temporaryLabel;
-    this.cssClasses.flexWrap = true;
     this.needTriggerClick = false;
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.specProvider = specProvider

@@ -10,12 +10,14 @@ import { getSettings } from "../../../configs/client-configs/settings";
 import HTMLComponent from "../../HtmlComponent";
 import ArrowComponent from "../arrows/ArrowComponent";
 import UnselectBtn from "../buttons/UnselectBtn";
+import AddMoreValuesBtn from "../buttons/AddMoreValuesBtn";
 
 class EndClassWidgetGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
-  selectedValues: Array<any> = [];
+  selectedValues: Array<EndClassWidgetValue> = [];
   selectAllValue: boolean = true;
   specProvider:ISpecProvider;
+  addMoreValuesBtn: AddMoreValuesBtn
   VALUE_SELECTION_WIDGETS = [
     Config.LIST_PROPERTY,
     Config.LITERAL_LIST_PROPERTY,
@@ -46,6 +48,7 @@ class EndClassWidgetGroup extends HTMLComponent {
       this.specProvider,
       objectProperty_selected
     ).render()
+    
     // binds a selection in an input widget with the display of the value in the line
     this.inputTypeComponent.html.on("change",()=>{
       this.#onChange()
@@ -71,31 +74,26 @@ class EndClassWidgetGroup extends HTMLComponent {
       }
     }*/
 
+    this.html
+
   }
 
   // input : the 'key' of the value to be deleted
-  onremoveValue(e: any) {
-    console.warn('endclasswidget on remove value was called')
-    if (this.selectAllValue) {
-      //unselect the endClass for view
-      this.ParentCriteriaGroup.EndClassGroup.onchangeViewVariable();
-    }
+  onremoveValue(e: CustomEvent) {
+    let valueToDel:EndClassWidgetValue = e.detail
     //On all case, selectAllValue will be set to false
     this.selectAllValue = false;
 
-    var keyToBeDeleted = $(e.currentTarget).attr("value-data");
-    this.selectedValues.filter((item) => {
-      return item.key != keyToBeDeleted;
-    }); 
-
-
-    $(this.ParentCriteriaGroup.html)
-      .find(".EndClassWidgetGroup .EndClassWidgetAddOrValue")
-      .show();
-    $(this.ParentCriteriaGroup.html).removeClass("onAddOrValue");
-
-    $(e.currentTarget).parent("div").remove();
-
+    let unselectedValue:EndClassWidgetValue
+    this.selectedValues = this.selectedValues.filter((val:EndClassWidgetValue) =>{
+      if(val === valueToDel){
+        unselectedValue = val
+        return false
+      }
+      return true
+    })
+    if(!unselectedValue) throw Error('Unselected val not found in the selectedValues list!')
+    unselectedValue.html.remove()
     //if jstree remove unselecteds term
     if (this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
       (this.inputTypeComponent.widgetComponent as TreeWidget).jsTree.jstree(
@@ -107,52 +105,10 @@ class EndClassWidgetGroup extends HTMLComponent {
 
     if (this.selectedValues.length < 1) {
       //$(this.ParentCriteriaGroup.ComponentHtml).removeClass("completed");
-      $(this.ParentCriteriaGroup.html)
-        .find(".EndClassWidgetGroup >.EndClassWidgetAddOrValue")
-        .remove();
-      $(this.ParentCriteriaGroup.html)
-        .parent("li")
-        .removeClass("WhereImpossible");
-      // N'est plus à cacher, lutilisateur peut choisi d'afficher les valeurs
-      //$(this.ParentCriteriaGroup.html).parent('li').removeClass('hideEndClassProperty') ;
-
-      // re-enable Where action if end class can be connected to others
-      if (
-        this.ParentCriteriaGroup.EndClassGroup.specProvider.hasConnectedClasses(
-          this.ParentCriteriaGroup.EndClassGroup.value_selected
-        )
-      ) {
-        $(this.ParentCriteriaGroup.html)
-          .parent("li")
-          .removeClass("WhereImpossible");
-      } else {
-        $(this.ParentCriteriaGroup.html)
-          .parent("li")
-          .addClass("WhereImpossible");
-      }
-
-      // re-enable selection of property/link if there are multiple choices of properties
-      if (
-        $(this.ParentCriteriaGroup.ObjectPropertyGroup.html)
-          .find(".input-val")
-          .find("option").length > 1
-      ) {
-        $(this.ParentCriteriaGroup.ObjectPropertyGroup.html)
-          .find(".input-val")
-          .removeAttr("disabled")
-          .niceSelect("update");
-      } else {
-        $(this.ParentCriteriaGroup.ObjectPropertyGroup.html)
-          .find(".input-val")
-          .attr("disabled", "disabled")
-          .niceSelect("update");
-      }
 
       // re-init the widget to empty input field
       this.inputTypeComponent.render();
     }
-
-    $(this.ParentCriteriaGroup).trigger("EndClassWidgetGroupUnselected");
     this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
     this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
     
@@ -226,140 +182,47 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.ParentCriteriaGroup.StartClassGroup.inputTypeComponent.highlight()
   }
 
+  
   #onChange() {
-    //TODO render here the back and front arrow for both InputClasstypes
-    this.#highlightArrowComponentents()
+    //this.#highlightArrowComponentents()
 
-    console.warn("endclasswidgetGroup onChange called")
-    var theValue = this.inputTypeComponent.getValue(); // could be array or single value
+    var selectedVal:{key:string,label:string,uri:string} = this.inputTypeComponent.getValue(); // could be array or single value
     // put span around with proper class if coming from a date widget
-    if (theValue == null) {
+    if (selectedVal == null) {
       return false;
-    }
-    var new_items: any[] = [];
-    if (
-      this.inputTypeComponent.widgetType == Config.TREE_PROPERTY &&
-      // when loading the value from a saved query, the value is not an array, it is
-      // a simple value.
-      Array.isArray(theValue)
-    ) {
-      for (var node in theValue) {
-        var selected = false;
-        // if the same value is already selected, don't do anything
-        for (var item in this.selectedValues) {
-          if (this.selectedValues[item].key == theValue[node].id) {
-            selected = true;
-          }
-        }
-        if (selected == false) {
-          new_items.push(theValue[node]);
-          this.selectedValues.push(theValue[node]);
-        }
-      }
-      //Check if values removed
-      for (var item in this.selectedValues) {
-        var selected = false;
-        for (var node in theValue) {
-          if (this.selectedValues[item].key == theValue[node].id) {
-            selected = true;
-          }
-        }
-        if (selected == false) {
-          $(this.ParentCriteriaGroup.html)
-            .find(
-              '.EndClassWidgetGroup span[value-data="' +
-                this.selectedValues[item].key +
-                '"]'
-            )
-            .first()
-            .trigger("click");
-        }
-      }
-    } else {
-      // if the same value is already selected, don't do anything
-      for (var item in this.selectedValues) {
-        if (this.selectedValues[item].key == theValue.key) {
-          return false;
-        }
-      }
-      new_items.push(theValue);
-      this.selectedValues.push(theValue);
-    }
+    }   
 
-    // var value_data = (Array.isArray(theValue))?theValue.toString():theValue;
-    console.log('what are these values?')
-    console.dir(new_items)
-    this.#renderAllItemsSelected(new_items)
+    // check if value already got selected before
+    if(this.selectedValues.some(val => val.value_lbl === selectedVal.label)) return
+    // if not, then create the EndclassWidgetValue and add it to the list
+    let endClassWidgetVal = new EndClassWidgetValue(this,selectedVal.label)
+    this.selectedValues.push(endClassWidgetVal)
 
-    // disable the Where
-    $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
-    $(this.ParentCriteriaGroup.html).removeClass("onAddOrValue");
-
-    this.ParentCriteriaGroup.initCompleted();
-
-    $(this.ParentCriteriaGroup).trigger("EndClassWidgetGroupSelected");
+    this.#renderNewSelectedValue(endClassWidgetVal)
+    //this.ParentCriteriaGroup.initCompleted();
+    this.html[0].dispatchEvent(new CustomEvent('EndClassWidgetGroupSelected',{bubbles:true}))
     this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
 
 
     //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
     if (this.selectedValues.length == getSettings().maxOr) {
-      $(this.ParentCriteriaGroup.html)
-        .find(".EndClassWidgetGroup .EndClassWidgetAddOrValue")
-        .hide();
+      this.addMoreValuesBtn.html.hide
     }
 
-    if (this.selectedValues.length > 0) {
-      $(this.ParentCriteriaGroup.ObjectPropertyGroup.html)
-        .find(".input-val")
-        .attr("disabled", "disabled")
-        .niceSelect("update");
-    }
-
-    $(this.ParentCriteriaGroup.html)
-      .find(".EndClassGroup>.EditComponents")
-      .removeClass("newOr");
       this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
   }
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
-  #renderAllItemsSelected(new_items:Array<any>){
-    new_items.forEach((item)=>{
-      let valuelbl = `<span ${item.start || item.stop ? ' class="label-two-line"' : ""}> ${item.label} </span>`
-      new EndClassWidgetValue(this,valuelbl).render()
-      if (
-        this.VALUE_SELECTION_WIDGETS.indexOf(
-          this.inputTypeComponent.widgetType
-        ) !== -1
-      ) {
-        //if ($(this.ParentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 1) { Now is sures, we have one
-        $(this.ParentCriteriaGroup.html)
-          .find(".EndClassWidgetGroup")
-          .append(
-            '<div class="EndClassWidgetAddOrValue flexWrap"><div class="componentBackArrow">' +
-              UiuxConfig.COMPONENT_ARROW_BACK +
-              '</div><p><span>+</span></p><div class="componentFrontArrow">' +
-              UiuxConfig.COMPONENT_ARROW_FRONT +
-              "</div></div>"
-          );
-        // hook a click on the plus to the needAddOrValue function
-        $(this.ParentCriteriaGroup.html)
-          .find(".EndClassWidgetGroup>.EndClassWidgetAddOrValue")
-          .on(
-            "click",
-            { arg1: this, arg2: "onAddOrValue" },
-            eventProxiCriteria
-          );
-        //}
-      }
-    });
-
+  #renderNewSelectedValue(endClassWidgetVal:EndClassWidgetValue){
+    endClassWidgetVal.render()
+    // now render the addMoreValuesButton
+    this.addMoreValuesBtn = new AddMoreValuesBtn(this,this.onAddOrValue).render()
   }
 
+
   //This is called when a value is selected from a list and you would like to add more values
-  onAddOrValue() {
+  onAddOrValue = ()=> {
     
-    $(this.ParentCriteriaGroup.html).find('.EndClassGroup>.EditComponents').addClass('newOr') ;
-    $(this.ParentCriteriaGroup.html).addClass('onAddOrValue') ;
     // On vide les champs de saisie du widget
     if (!(this.inputTypeComponent.widgetType == Config.TREE_PROPERTY)) {
       this.inputTypeComponent.render() ;
@@ -378,21 +241,23 @@ class EndClassWidgetValue extends HTMLComponent {
   frontArrow = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
   unselectBtn: UnselectBtn
   value_lbl:string
+ 
   constructor(ParentComponent:EndClassWidgetGroup,value_lbl:string){
-    super('EndClassWidgetValue',ParentComponent,null)
+    super(value_lbl,ParentComponent,null)
     // set a tooltip if the label is a bit long
-    value_lbl = value_lbl.length > 25 ? 'title="' + value_lbl + '"' : "";
     this.value_lbl = value_lbl
   }
 
   render(): this {
     super.render()
+    this.html.addClass('EndClassWidgetValue')
     this.backArrow.render()
-    this.html.append($(`<p>${this.value_lbl}</p>`)) 
+    let valuelbl =`<p><span> ${this.value_lbl} </span></p>`
+    this.html.append($(valuelbl)) 
     this.frontArrow.render()
     this.unselectBtn = new UnselectBtn(this,()=>{
       this.html[0].dispatchEvent(new CustomEvent('onRemoveEndClassWidgetValue',{bubbles:true}))
-    })
+    }).render()
     return this
   }
 }

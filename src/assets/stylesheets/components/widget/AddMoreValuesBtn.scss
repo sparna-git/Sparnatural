@@ -1,0 +1,35 @@
+@use '../../themes';
+@use '../../base';
+@use '../../mixins';
+
+.AddMoreValuesBtn {
+    @include mixins.arrow-back-colors(themes.$custom-red-medium, #fff);
+    @include mixins.arrow-front-colors(themes.$custom-red-medium, #fff);
+    display: flex;
+    color: black;
+    font-size: 20px;
+    cursor: pointer;
+    vertical-align: middle;
+    max-width: 220px;
+    height: 48px;
+    margin-right: -13px;
+    position: relative;
+    padding: 0;
+    p {
+        height: inherit;
+        background: themes.$custom-red-medium;
+        padding: 0 0 0 5px;
+        border: base.$center-arrow-bd-width solid #fff;
+        border-left: 0;
+        border-right: 0;
+        span {
+            line-height: 42px;
+            color: themes.$default-text-color;
+        }
+    }
+    /* Not sure what this does */
+    span.label-two-line {
+        line-height: base.$height-components-under / 2;
+        line-height: 21px;
+    }
+}

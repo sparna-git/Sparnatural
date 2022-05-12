@@ -40,6 +40,7 @@ class Sparnatural extends HTMLComponent {
         this.html.append(this.filter)
         //BGWrapper must be rendered first
         this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
+        this.actionStore = new ActionStore(this,this.specProvider)
         return this
     }
 
@@ -49,8 +50,6 @@ class Sparnatural extends HTMLComponent {
         specProviderFactory.build(settings.config, settings.language, (sp: any) => {
           this.specProvider = sp;
         });
-
-        this.actionStore = new ActionStore(this,this.specProvider)
         
 
         // uncomment to trigger gathering of statistics

@@ -13,6 +13,7 @@ class BaseClassFactory {
     constructor(){}
 
     getBaseClass(baseCssClass:string){
+        if(!baseCssClass) return
         let findCallBack = (el:string)=>{if(el == baseCssClass) return true}
         let html:JQuery<HTMLElement>
         switch(baseCssClass){

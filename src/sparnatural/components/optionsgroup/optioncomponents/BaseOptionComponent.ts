@@ -27,8 +27,6 @@ class BaseOptionComponent extends HTMLComponent {
         this.name = name
         this.id = `option-${crtGroupId}`
         this.ParentOptionsGroup = ParentComponent as OptionsGroup
-        this.cssClasses.IsOnEdit = true;
-        this.cssClasses.flexWrap = true;
         this.specProvider = specProvider
     }
 

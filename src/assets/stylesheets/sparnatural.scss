@@ -53,13 +53,6 @@
 		}
 	}
 
-	&>.EndClassWidgetGroup {
-		.EndClassWidgetAddOrValue,
-		.EndClassWidgetValue {
-			@include mixins.arrow-back-colors($custom-red-medium, #fff);
-			@include mixins.arrow-front-colors($custom-red-medium, #fff);
-		}
-	}
 }
 
 
@@ -136,50 +129,7 @@ spar-natural {
 				width: 100%!important;
 				display: block;
 			}
-			.EndClassWidgetAddOrValue,
-			.EndClassWidgetValue {
-				position: relative;
-				/*line-height: 0;*/
-				color: #fff;
-				font-size: 14px;
-				/*display: inline-block;*/
-				padding: 0;
-				span {
-					/*line-height: base.$height-components-under;*/
-					display: inline-block;
-					vertical-align: middle;
-					margin: 0;
-				}
-				span.label-two-line {
-					line-height: base.$height-components-under / 2;
-					line-height: 21px;
-				}
-				
-			}
-			.EndClassWidgetAddOrValue {
-				color: #fff;
-				/*margin-left: 15px;*/
-				/*line-height: 48px;
-				height: 48px;*/
-				font-size: 20px;
-				cursor: pointer;
-				vertical-align: middle;
-				p {
-					width: 0;
-					padding: 0;
-					position: relative;
-					height: 42px;
-					line-height: 42px;
-					overflow: visible;
-					span {
-						line-height: 32px;
-						width: auto;
-						/*vertical-align: baseline;
-						display: inline-block;
-						height: 48px;*/
-					}
-				}
-			}
+
 			span.unselect {
 				top: -11px;
 			}
@@ -428,74 +378,7 @@ spar-natural {
 					}
 				}
 			}
-		}
-		&.WhereImpossible.completed {
-			&>div .EndClassWidgetAddOrValue,
-			&>div .EndClassWidgetValue {
-				max-width: 220px;
-				height: 48px;
-				/*overflow: hidden;*/
-				/*padding-right: 15px;*/
-				margin-right: -13px;
-				/*display: block;*/
-				
-				/*@include triangle-before();
-				@include triangle-after();*/
-				/*span {
-					background: $custom-red-light ;
-					height: 48px;
-					background-clip: padding-box;
-					
-				}*/
-				p {
-					line-height: 48px;
-					height: 48px;
-					/*width: calc(100% - 15px);*/
-					background: $custom-red-medium;
-					background-clip: padding-box;
-					margin: 0;
-					padding: 0 0 0 5px;
-					display: inline-block;
-					overflow: hidden;
-					/*text-overflow: ellipsis;*/
-					border: base.$center-arrow-bd-width solid #fff;
-					border-left: 0;
-					border-right: 0;
-					
-					text-align: center;
-					span {
-						line-height: 42px;
-						display: inline-block;
-						vertical-align: baseline;
-						overflow: hidden;
-						text-overflow: ellipsis;
-						white-space: nowrap;
-						color: $default-text-color;
-						width: 100%;
-					}
-				}
-			}
-			&>div .EndClassWidgetAddOrValue {
-				p {
-					width: 0;
-					padding: 0;
-					position: relative;
-					height: 48px;
-					line-height: 48px;
-					overflow: visible;
-					span {
-						line-height: 42px;
-						width: auto;
-						text-indent: 1px;
-						/*vertical-align: baseline;
-						display: inline-block;
-						height: 48px;*/
-					}
-				}
-			}
-			
-		}
-		
+		}		
 		.nice-select {
 			background: transparent;
 			border-color: transparent;
