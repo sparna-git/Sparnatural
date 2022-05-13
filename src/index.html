@@ -385,9 +385,19 @@
         {"@value" : "death date","@language" : "en"},
         {"@value" : "date de décès","@language" : "fr"}
       ],
-      "beginDateProperty": "http://exemple.fr/beginDate",
-      "endDateProperty": "http://exemple.fr/endDate",
-      "exactDateProperty": "http://exemple.fr/exactDate",
+      "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
+      "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
+    },
+    {
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#periodOfLife",
+      "@type" : "ObjectProperty",
+      "subPropertyOf" : "sparnatural:TimeProperty-Year",
+      "label": [
+        {"@value" : "period of life","@language" : "en"},
+        {"@value" : "période d'existence","@language" : "fr"}
+      ],
+      "beginDateProperty": "http://dbpedia.org/ontology/birthDate",
+      "endDateProperty": "http://dbpedia.org/ontology/deathDate",
       "domain": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date"
     },

@@ -212,6 +212,7 @@ export class QuerySPARQLWriter {
 		var query = JSON.parse(JSON.stringify(q))
 		// preprocess the query, in particular add extra criterias for labels
 		this._preProcessQueryForLabelProperty(query);
+		this._preProcessQueryForDateRangeProperty(query);
 
 		var sparqlQuery = {
 			"type": "query",
@@ -256,6 +257,10 @@ export class QuerySPARQLWriter {
 		return generatedQuery;
 	}
 
+	/**
+	 * Pre-processes the JSON query data structure in order to add an extra criteria line
+	 * whenever the "eye" is selected and the class has a default label property
+	 **/
 	_preProcessQueryForLabelProperty(jsonQuery) {
 		for(var i = 0;i < jsonQuery.branches.length;i++) {
 			var branch = jsonQuery.branches[i];
@@ -325,6 +330,55 @@ export class QuerySPARQLWriter {
 
 		return branch;
 	}
+
+	/**
+	 * Pre-processes the JSON query in order to add extra variables in the SELECT
+	 * whenever the "eye" is selected for a property that is a DateRangeProperty
+	 **/
+	_preProcessQueryForDateRangeProperty(jsonQuery) {
+		for(var i = 0;i < jsonQuery.branches.length;i++) {
+			var branch = jsonQuery.branches[i];
+			jsonQuery = this._preProcessQueryForDateRangeProperty_rec(branch, jsonQuery);
+		}
+		return jsonQuery;
+	}
+
+
+	_preProcessQueryForDateRangeProperty_rec(branch, jsonQuery) {
+		for(var i = 0;i < branch.children.length;i++) {
+			var child = branch.children[i];
+			// recurse
+			jsonQuery = this._preProcessQueryForDateRangeProperty_rec(child, jsonQuery);
+		}
+
+		if(
+			// if the object is select in the query variables...
+			jsonQuery.variables.includes(branch.line.o)
+			&&
+			// ... and the property is associated to begin/end date ...
+			this.specProvider.getBeginDateProperty(branch.line.p) != null
+			&&
+			this.specProvider.getEndDateProperty(branch.line.p) != null
+		) {
+			// then change the selected variable
+			for( var i = 0; i < jsonQuery.variables.length; i++){ 	                                   
+		        if ( jsonQuery.variables[i] === branch.line.o) { 
+		            // remove it from the array and add new values
+		            if(this.specProvider.getExactDateProperty(branch.line.p) != null) {
+		            	jsonQuery.variables.splice(i, 1, branch.line.o+"_begin", branch.line.o+"_end", branch.line.o+"_exact"); 
+		            } else {
+		            	jsonQuery.variables.splice(i, 1, branch.line.o+"_begin", branch.line.o+"_end"); 
+		            }
+		            
+		            break;
+		        }
+	    	}
+
+		}
+
+		return jsonQuery;
+	}
+
 
 	_QueryBranchToSPARQL(sparqlQuery, parent, queryBranch, firstTopLevelBranch, query) {		
 		// write the line
