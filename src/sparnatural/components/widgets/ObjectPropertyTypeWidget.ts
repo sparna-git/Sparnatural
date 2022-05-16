@@ -20,19 +20,21 @@ import {
   TimeDatePickerWidget,
   TreeWidget,
 } from "./Widgets";
+import EndClassWidgetGroup from "./EndClassWidgetGroup";
+import EndClassGroup from "../startendclassgroup/EndClassGroup";
 
 /**
  *  Selects the value for a range in a criteria/line, using a value selection widget
  **/
 class ObjectPropertyTypeWidget extends HTMLComponent {
-  GrandParent: CriteriaGroup;
+  ParentComponent: EndClassWidgetGroup;
+  GrandParent: EndClassGroup;
   settings: ISettings;
   widgetType: string | null = null;
   objectPropertyId: any;
   rangeClassId: any;
   classLabel: string;
   widgetComponent: IWidget;
-  needTriggerClick: boolean = false; // IMPORTANT Cheating here a little bit. useless class var but neeted to fit inputTypeComponent
   loadedValue: {
     key?: any;
     label?: any;
@@ -53,7 +55,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
   ) {
     super("ObjectPropertyTypeWidget", ParentComponent, null);
     this.settings = settings;
-    this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
+    this.GrandParent = ParentComponent.ParentComponent as EndClassGroup
     this.specProvider = specProvider
     this.objectProperty_selected = objectProperty_selected
   }
@@ -65,7 +67,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropertyId
     );
-    this.rangeClassId = this.GrandParent.EndClassGroup.value_selected;
+    this.rangeClassId = this.GrandParent.value_selected;
     this.classLabel = this.specProvider.getLabel(this.rangeClassId);
     let endLabel: string;
     let add_all = true;
@@ -74,14 +76,14 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
       if (
         this.specProvider.isLiteralClass(
-          this.GrandParent.EndClassGroup.value_selected
+          this.GrandParent.value_selected
         )
       ) {
-        this.GrandParent.initCompleted();
+        //this.GrandParent.initCompleted();
 
         //Add variable on results view
-        if (!this.GrandParent.EndClassGroup.notSelectForview) {
-          this.GrandParent.EndClassGroup.onchangeViewVariable();
+        if (!this.GrandParent.notSelectForview) {
+          this.GrandParent.onchangeViewVariable();
         }
         add_all = false;
 
@@ -122,7 +124,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     //Ajout de l'option all si pas de valeur déjà selectionées
     var selcetAll = "";
     // explain this if
-    if (this.GrandParent.EndClassWidgetGroup.selectedValues?.length == 0) {
+    if (this.ParentComponent.selectedValues?.length == 0) {
       if (add_all) {
         selcetAll =
           '<span class="selectAll"><span class="underline">' +
@@ -158,7 +160,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
       this.widgetHtml = $(widgetLabel + this.widgetComponent.html);
     }
     this.htmlParent =
-      this.GrandParent.EndClassGroup.html.find(".EditComponents");
+      this.GrandParent.html.find(".EditComponents");
     super.render()
 
     this.widgetComponent.render();
@@ -175,7 +177,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     if (
       this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
       this.specProvider.isLiteralClass(
-        this.GrandParent.EndClassGroup.value_selected
+        this.GrandParent.value_selected
       )
     ) {
       return false;

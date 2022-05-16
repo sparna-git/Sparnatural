@@ -1,9 +1,7 @@
 import ActionsGroup from "../actions/ActionsGroup";
 import StartClassGroup from "../startendclassgroup/StartClassGroup";
 import { OptionsGroup } from "../optionsgroup/OptionsGroup";
-
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import EndClassWidgetGroup from "../widgets/EndClassWidgetGroup";
 import HTMLComponent from "../../HtmlComponent";
 import ObjectPropertyGroup from "../objectpropertygroup/ObjectPropertyGroup";
 import GroupWrapper from "./GroupWrapper";
@@ -25,7 +23,6 @@ class CriteriaGroup extends HTMLComponent {
   OptionsGroup: OptionsGroup;
   ObjectPropertyGroup: ObjectPropertyGroup;
   EndClassGroup: EndClassGroup;
-  EndClassWidgetGroup: EndClassWidgetGroup;
   ActionsGroup: ActionsGroup;
   specProvider: ISpecProvider;
   ParentGroupWrapper: GroupWrapper;
@@ -66,10 +63,6 @@ class CriteriaGroup extends HTMLComponent {
       getSettings().langSearch.ObjectPropertyTemporaryLabel
     ).render();
     this.EndClassGroup = new EndClassGroup(this, this.specProvider).render();
-    this.EndClassWidgetGroup = new EndClassWidgetGroup(
-      this,
-      this.specProvider
-    ).render();
     this.ActionsGroup = new ActionsGroup(this, this.specProvider).render();
 
     this.#assembleComponents();
@@ -88,15 +81,10 @@ class CriteriaGroup extends HTMLComponent {
 
     this.html[0].addEventListener("ObjectPropertyGroupSelected",(e:CustomEvent)=>{
       e.stopImmediatePropagation()
-      this.EndClassWidgetGroup.onObjectPropertyGroupSelected(e.detail);
+      this.EndClassGroup.onObjectPropertyGroupSelected(e.detail)
       this.OptionsGroup.onObjectPropertyGroupSelected();
       this.ActionsGroup.onObjectPropertyGroupSelected();
     })
-
-    $(this).on("Created", function () {
-      this.ActionsGroup.onCreated();
-    });
-
   };
 
   //set css completed class on GroupWrapper

@@ -4,6 +4,7 @@ import HTMLComponent from "../../../HtmlComponent";
 
 import ActionsGroup from "../ActionsGroup";
 import { getSettings } from "../../../../configs/client-configs/settings";
+import EndClassGroup from "../../startendclassgroup/EndClassGroup";
 
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 
@@ -11,36 +12,30 @@ import { getSettings } from "../../../../configs/client-configs/settings";
     There the Endclassgroup is foun
 */
 class ActionWhere extends HTMLComponent {
-  GrandParentComponent: CriteriaGroup;
+  ParentComponent: EndClassGroup;
   specProvider: ISpecProvider;
   callBack: ()=>void;
   constructor(
-    ParentComponent: ActionsGroup,
+    ParentComponent: EndClassGroup,
     specProvider: ISpecProvider,
     callBack: ()=>void
   ) {
     //TODO refactor the null init in html widget
     super("ActionWhere", ParentComponent, null);
-    this.GrandParentComponent =
-      ParentComponent.ParentComponent as CriteriaGroup;
     this.specProvider = specProvider
     this.callBack = callBack
   }
   render = () => {
     // Endclassgroup -> EditComponents -> ActionWhere
-    var endClassGroup = this.GrandParentComponent.EndClassGroup;
-    this.htmlParent = $(endClassGroup.html).find(".EditComponents");
+    this.htmlParent = $(this.ParentComponent.html).find(".EditComponents");
     var choiceNumber = 2;
     if (
-      endClassGroup.ParentCriteriaGroup.EndClassWidgetGroup.inputTypeComponent
+      this.ParentComponent.endClassWidgetGroup.inputTypeComponent
         .widgetHtml == null
     ) {
       choiceNumber = 1;
-      $(endClassGroup.html).addClass("noPropertyWidget");
-    } else {
-      $(endClassGroup.html).removeClass("noPropertyWidget");
     }
-    var endLabel = this.specProvider.getLabel(endClassGroup.value_selected);
+    var endLabel = this.specProvider.getLabel((this.ParentComponent as EndClassGroup).value_selected);
     
     let newhtml= $(`
       <span class="edit-trait">

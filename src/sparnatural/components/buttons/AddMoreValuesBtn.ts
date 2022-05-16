@@ -10,7 +10,6 @@ class AddMoreValuesBtn extends HTMLComponent{
     constructor(ParentComponent:HTMLComponent,callBack:()=>void){
         super('AddMoreValuesBtn',ParentComponent,null)
         this.callBack = callBack
-        
     }
 
     render(): this {

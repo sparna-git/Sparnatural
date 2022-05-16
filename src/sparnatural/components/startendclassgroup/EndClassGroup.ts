@@ -11,6 +11,7 @@ import ObjectPropertyGroup from "../objectpropertygroup/ObjectPropertyGroup";
 import { getSettings } from "../../../configs/client-configs/settings";
 import EndClassWidgetGroup from "../widgets/EndClassWidgetGroup";
 import ActionsGroup from "../actions/ActionsGroup";
+import ActionWhere from "../actions/actioncomponents/ActionWhere";
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
@@ -26,6 +27,8 @@ class EndClassGroup extends HTMLComponent {
   specProvider: ISpecProvider;
   UnselectButton:UnselectBtn
   SelectViewVariableBtn:SelectViewVariableBtn
+  endClassWidgetGroup:EndClassWidgetGroup
+  actionWhere:ActionWhere
   
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
@@ -34,11 +37,14 @@ class EndClassGroup extends HTMLComponent {
     super("EndClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider
     this.inputTypeComponent = new ClassTypeId(this, specProvider);
-    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be above varName declaration
+    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
+    this.endClassWidgetGroup = new EndClassWidgetGroup(this,this.specProvider)
+    this.actionWhere = new ActionWhere(this,this.specProvider,this.#onAddWhere)
   }
 
   render(){
     super.render()
+
     // contains the name of the SPARQL variable associated to this component
     this.varName = this.ParentCriteriaGroup.jsonQueryBranch
     ? this.ParentCriteriaGroup.jsonQueryBranch.line.o
@@ -50,12 +56,28 @@ class EndClassGroup extends HTMLComponent {
     return this
   }
 
+  #onAddWhere() {
+    this.html[0].dispatchEvent(new CustomEvent('addWhereComponent',{bubbles:true}))  
+  }
+
   #addEventListener(){
     this.html[0].addEventListener('classTypeValueSelected',(e:CustomEvent)=>{
       if((e.detail === '') || (!e.detail)) throw Error('No value received on "classTypeValueSelected"')
       e.stopImmediatePropagation()
       this.value_selected = e.detail
       this.#valueWasSelected()
+    })
+
+    // when inputgot selected then we remove the where btn
+    this.html[0].addEventListener('removeWhereBtn',(e:CustomEvent)=>{
+      e.stopImmediatePropagation()
+      this.actionWhere.html.remove()
+    })
+
+    // rerenderWhereBtn
+    this.html[0].addEventListener('renderWhereBtn',(e:CustomEvent)=>{
+      e.stopImmediatePropagation()
+      this.actionWhere.render()
     })
   }
 
@@ -70,6 +92,8 @@ class EndClassGroup extends HTMLComponent {
     // Make arrow function to bind the this lexically
     // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
     onRemoveSelected = () =>{
+
+      //TODO: this has to be done in the CriteriaGroup (ParentComponent)
       let optionsGrp = this.ParentCriteriaGroup.OptionsGroup.html
       this.#removeComponent(optionsGrp)
   
@@ -89,7 +113,7 @@ class EndClassGroup extends HTMLComponent {
       this.ParentCriteriaGroup.OptionsGroup = new OptionsGroup(this.ParentCriteriaGroup,this.specProvider).render()
       this.ParentCriteriaGroup.ObjectPropertyGroup = new ObjectPropertyGroup(this.ParentCriteriaGroup,this.specProvider,getSettings().langSearch.ObjectPropertyTemporaryLabel).render()
       this.ParentCriteriaGroup.EndClassGroup = new EndClassGroup(this.ParentCriteriaGroup,this.specProvider).render()
-      this.ParentCriteriaGroup.EndClassWidgetGroup = new EndClassWidgetGroup(this.ParentCriteriaGroup,this.specProvider).render()
+      this.endClassWidgetGroup = new EndClassWidgetGroup(this.ParentCriteriaGroup,this.specProvider).render()
       this.ParentCriteriaGroup.ActionsGroup = new ActionsGroup(this.ParentCriteriaGroup,this.specProvider).render()
   
       // set the state back
@@ -103,13 +127,19 @@ class EndClassGroup extends HTMLComponent {
     this.html[0].dispatchEvent(new CustomEvent('updateVariableList',{bubbles:true,detail:"test"}))
   }
 
+  onObjectPropertyGroupSelected(input: string){
+    this.endClassWidgetGroup.onObjectPropertyGroupSelected(input)
+    this.actionWhere.render() // first render endClassWidgetGroup then actionWhere
+  }
+
   /*
-		onChange gets called when a Endclassgroup was selected. For example choosing Musuem relatedTo Countr
+		onChange gets called when a Endclassgroup was selected. For example choosing Musuem relatedTo Country
 		When Country got selected this events fires
 	*/
   #valueWasSelected() {
     this.#renderUnselectBtn()
     this.#renderSelectViewVariableBtn()
+    this.endClassWidgetGroup.render()
     //Set the variable name for Sparql
     if (this.varName == null) {
       // dispatch event and get maxVarIndex via callback

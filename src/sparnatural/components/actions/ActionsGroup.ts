@@ -12,7 +12,6 @@ import UnselectBtn from "../buttons/UnselectBtn";
  **/
 class ActionsGroup extends HTMLComponent {
   actions: {
-    ActionWhere: ActionWhere;
     ActionAnd: ActionAnd;
   };
   RemoveCrtGroup:UnselectBtn
@@ -34,36 +33,15 @@ class ActionsGroup extends HTMLComponent {
     return this
   }
 
-  onCreated() {
-
-    if (this.ParentCriteriaGroup.jsonQueryBranch != null) {
-      var branch = this.ParentCriteriaGroup.jsonQueryBranch;
-      if (branch.children.length > 0) {
-        $(this.actions.ActionWhere.html).find("a").trigger("click");
-      }
-      if (branch.nextSibling != null) {
-        $(this.actions.ActionAnd.html).find("a").trigger("click");
-      }
-    }
-  }
-
   onObjectPropertyGroupSelected() {
     this.actions = {
-      ActionAnd: new ActionAnd(this,this.#onAddAnd).render(),
-      ActionWhere: new ActionWhere(this, this.specProvider,this.#onAddWhere).render()
+      ActionAnd: new ActionAnd(this,this.#onAddAnd).render()
     }
 
     this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   }
 
   // This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
-  #onAddWhere() {
-    this.ParentCriteriaGroup.html.parent("li").addClass("hasWhereChild");
-    this.ParentCriteriaGroup.initCompleted();
-    this.html[0].dispatchEvent(new CustomEvent('addWhereComponent',{bubbles:true}))
-    // trigger 2 clicks to select the same class as the object class (?)
-  
-  }
   #onAddAnd() {
     this.#deactivateOnHover()
     this.actions.ActionAnd.html[0].dispatchEvent(new CustomEvent('addAndComponent',{bubbles:true}))

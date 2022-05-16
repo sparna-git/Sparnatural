@@ -22,7 +22,7 @@ export class AutoCompleteWidget implements IWidget {
     this.ParentComponent = inputTypeComponent;
     this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
     this.IdCriteriaGroupe =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.id;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.html =
       '<input id="ecgrw-' +
       this.IdCriteriaGroupe +
@@ -34,13 +34,13 @@ export class AutoCompleteWidget implements IWidget {
   render() {
     //render this element
     var startClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
         .value_selected;
     var endClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .value_selected;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup
         .ObjectPropertyGroup.value_selected;
 
     var id_inputs = this.IdCriteriaGroupe;
@@ -145,7 +145,7 @@ export class ListWidget implements IWidget {
     this.listHandler = listHandler;
     this.ParentComponent = inputTypeComponent;
     this.IdCriteriaGroupe =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.id;
+    this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.sort = sort;
     this.settings = settings;
     this.id_input = "ecgrw-" + this.IdCriteriaGroupe + "-input-value";
@@ -156,19 +156,19 @@ export class ListWidget implements IWidget {
       langSearch.ListWidgetNoItem +
       "</div></div>";
     this.ParentCriteriaGroup =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup;
   }
 
   render() {
     console.warn('render list widget')
     var startClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
         .value_selected;
     var endClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .value_selected;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup
         .ObjectPropertyGroup.value_selected;
 
     var itc_obj = this.ParentComponent;
@@ -267,7 +267,7 @@ export class ListWidgetNew implements IWidget {
     this.listDatasource = listDatasource;
     this.ParentComponent = inputTypeComponent; // is of type ObjectPropertyTypeWidgets
     this.IdCriteriaGroupe =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.id;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
     this.id_input = "ecgrw-" + this.IdCriteriaGroupe + "-input-value";
     this.html =
@@ -282,13 +282,13 @@ export class ListWidgetNew implements IWidget {
     console.warn("RENDERWidg")
     //render this element
     var startClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
         .value_selected;
     var endClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .value_selected;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup
         .ObjectPropertyGroup.value_selected;
 
     var itc_obj = this.ParentComponent;
@@ -406,7 +406,7 @@ export class DatesWidget implements IWidget {
     this.datesHandler = datesHandler;
     this.ParentComponent = inputTypeComponent;
     this.IdCriteriaGroupe =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.id;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
     this.html =
       '<div class="date-widget"><input id="ecgrw-date-' +
@@ -433,13 +433,13 @@ export class DatesWidget implements IWidget {
   render() {
     //render this element
     var startClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
         .value_selected;
     var endClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .value_selected;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup
         .ObjectPropertyGroup.value_selected;
     var phrase = "";
     var data_json = null;
@@ -825,7 +825,7 @@ export class SearchWidget implements IWidget {
   constructor(inputTypeComponent: any, langSearch: any) {
     this.ParentComponent = inputTypeComponent;
     this.IdCriteriaGroupe =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.id;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
     this.html =
       '<div class="search-widget"><input id="ecgrw-search-' +
@@ -842,7 +842,7 @@ export class SearchWidget implements IWidget {
     var id_inputs = this.IdCriteriaGroupe;
     var itc_obj = this.ParentComponent;
     var CriteriaGroup =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup;
 
     $("#ecgrw-search-" + this.IdCriteriaGroupe + "-add").on(
       "click",
@@ -875,7 +875,7 @@ export class BooleanWidget implements IWidget {
   constructor(inputTypeComponent: any, langSearch: any) {
     this.ParentComponent = inputTypeComponent;
     this.IdCriteriaGroupe =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.id;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
     this.html =
       '<div class="boolean-widget" id="boolean-widget-' +
@@ -899,7 +899,7 @@ export class BooleanWidget implements IWidget {
     var id_inputs = this.IdCriteriaGroupe;
     var itc_obj = this.ParentComponent;
     var CriteriaGroup =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup;
     var id_input = "#boolean-widget-" + this.IdCriteriaGroupe + "-value";
 
     $("#boolean-widget-" + this.IdCriteriaGroupe + "-true").on(
@@ -973,7 +973,7 @@ export class TreeWidget implements IWidget {
     this.ParentComponent = inputTypeComponent;
     this.langSearch = langSearch;
     this.IdCriteriaGroupe =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.id;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.html =
       '<a id="ecgrw-' +
       this.IdCriteriaGroupe +
@@ -996,13 +996,13 @@ export class TreeWidget implements IWidget {
   render() {
     //render this element
     var startClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.StartClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
         .value_selected;
     var endClassGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup.EndClassGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .value_selected;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.ParentComponent.ParentCriteriaGroup
+      this.ParentComponent.GrandParent.ParentCriteriaGroup
         .ObjectPropertyGroup.value_selected;
 
     var id_inputs = this.IdCriteriaGroupe;

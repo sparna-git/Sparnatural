@@ -2,10 +2,7 @@ import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
 import { AbstractValue } from "../../sparql/Query";
 import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import CriteriaGroup from "../criterialist/CriteriaGroup";
-import { eventProxiCriteria } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import { TreeWidget } from "./Widgets";
 import { getSettings } from "../../../configs/client-configs/settings";
 import HTMLComponent from "../../HtmlComponent";
 import ArrowComponent from "../arrows/ArrowComponent";
@@ -13,7 +10,7 @@ import UnselectBtn from "../buttons/UnselectBtn";
 import AddMoreValuesBtn from "../buttons/AddMoreValuesBtn";
 
 class EndClassWidgetGroup extends HTMLComponent {
-  ParentCriteriaGroup: CriteriaGroup;
+  ParentComponent: HTMLComponent;
   selectedValues: Array<EndClassWidgetValue> = [];
   selectAllValue: boolean = true;
   specProvider:ISpecProvider;
@@ -26,15 +23,15 @@ class EndClassWidgetGroup extends HTMLComponent {
   ];
   inputTypeComponent: ObjectPropertyTypeWidget;
   constructor(
-    CriteriaGroup: CriteriaGroup,
+    parentComponent: HTMLComponent,
     specProvider: ISpecProvider
   ) {
-    super("EndClassWidgetGroup", CriteriaGroup,null);
+    super("EndClassWidgetGroup", parentComponent,null);
     this.specProvider = specProvider
-    this.ParentCriteriaGroup = CriteriaGroup;
   }
 
   render(){
+    console.warn("rendering endclasswidgetgroup")
     super.render()
     return this
   }
@@ -48,16 +45,8 @@ class EndClassWidgetGroup extends HTMLComponent {
       this.specProvider,
       objectProperty_selected
     ).render()
-    
-    // binds a selection in an input widget with the display of the value in the line
-    this.inputTypeComponent.html.on("change",()=>{
-      this.#onChange()
-      });
-    // binds a selection in an input widget with the display of the value in the line
-    this.inputTypeComponent.html.on('selectAll',()=>{
-      this.#onSelectAll()
-    });
-    
+    console.dir(this.inputTypeComponent) 
+    this.#addEventListener()   
     /*
     if (this.ParentCriteriaGroup.jsonQueryBranch != null) {
       var branch = this.ParentCriteriaGroup.jsonQueryBranch;
@@ -78,13 +67,30 @@ class EndClassWidgetGroup extends HTMLComponent {
 
   }
 
+  #addEventListener(){
+    this.html[0].addEventListener('onRemoveEndClassWidgetValue',(e:CustomEvent)=>{
+      this.#onRemoveValue(e)
+    })
+
+    // binds a selection in an input widget with the display of the value in the line
+    this.inputTypeComponent.html.on("change",()=>{
+      this.#onChange()
+      });
+    // binds a selection in an input widget with the display of the value in the line
+    this.inputTypeComponent.html.on('selectAll',()=>{
+      this.#onSelectAll()
+    });
+  }
+
   // input : the 'key' of the value to be deleted
-  onremoveValue(e: CustomEvent) {
+  #onRemoveValue(e: CustomEvent) {
     let valueToDel:EndClassWidgetValue = e.detail
     //On all case, selectAllValue will be set to false
     this.selectAllValue = false;
 
     let unselectedValue:EndClassWidgetValue
+    console.dir(this)
+    console.dir(e)
     this.selectedValues = this.selectedValues.filter((val:EndClassWidgetValue) =>{
       if(val === valueToDel){
         unselectedValue = val
@@ -95,6 +101,9 @@ class EndClassWidgetGroup extends HTMLComponent {
     if(!unselectedValue) throw Error('Unselected val not found in the selectedValues list!')
     unselectedValue.html.remove()
     //if jstree remove unselecteds term
+    //TODO for the tree widget when there is a deletion then rerender the tree widget without the value
+    // OR call method remove on widget
+    /*
     if (this.inputTypeComponent.widgetType == Config.TREE_PROPERTY) {
       (this.inputTypeComponent.widgetComponent as TreeWidget).jsTree.jstree(
         "uncheck_node",
@@ -102,12 +111,15 @@ class EndClassWidgetGroup extends HTMLComponent {
       );
     }
     //uncheck_node()
+    */
 
     if (this.selectedValues.length < 1) {
       //$(this.ParentCriteriaGroup.ComponentHtml).removeClass("completed");
 
       // re-init the widget to empty input field
       this.inputTypeComponent.render();
+      this.addMoreValuesBtn.html.remove()
+      this.html[0].dispatchEvent(new CustomEvent('renderWhereBtn',{bubbles:true}))
     }
     this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
     this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
@@ -123,63 +135,24 @@ class EndClassWidgetGroup extends HTMLComponent {
   };
 
   #onSelectAll() {
-    var theValueLabel =
-      "<span>" + getSettings().langSearch.SelectAllValues + "</span>";
-    this.selectAllValue = true;
-    let unselect = $(
-      '<span class="unselect" value-data="allValues"><i class="far fa-times-circle"></i></span>'
-    );
-    if (
-      $(this.ParentCriteriaGroup.html).find(".EndClassWidgetGroup>div")
-        .length == 0
-    ) {
-      $(this.ParentCriteriaGroup.html)
-        .find(".EndClassWidgetGroup")
-        .append(
-          $(
-            '<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">' +
-              UiuxConfig.COMPONENT_ARROW_BACK +
-              "</div><p>" +
-              theValueLabel +
-              '</p><div class="componentFrontArrow">' +
-              UiuxConfig.COMPONENT_ARROW_FRONT +
-              "</div></div>"
-          )
-        )
-        .find("div")
-        .first()
-        .append(unselect);
-    }
+    const endClassWidgetVal = new EndClassWidgetValue(this,getSettings().langSearch.SelectAllValues) 
 
-    unselect.on(
-      "click",
-      { arg1: this, arg2: "onRemoveValue" },
-      eventProxiCriteria
-    );
+    this.selectAllValue = true;
 
     // disable the Where
-    $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
-    $(this.ParentCriteriaGroup.html)
-      .find(".EndClassGroup>div")
-      .first()
-      .removeClass("newOr");
+
 
     //Add variable on results view
-    if (!this.ParentCriteriaGroup.EndClassGroup.notSelectForview) {
-      if (this.ParentCriteriaGroup.EndClassGroup.variableSelector == null) {
-        this.ParentCriteriaGroup.EndClassGroup.onchangeViewVariable();
-      }
-    }
-    this.ParentCriteriaGroup.initCompleted();
 
-    $(this.ParentCriteriaGroup).trigger("EndClassWidgetGroupSelected");
+    this.#renderNewSelectedValue(endClassWidgetVal)
+
+    this.html[0].dispatchEvent(new CustomEvent('EndClassWidgetGroupSelected',{bubbles:true}))
     this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
     this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
   }
   // this method renders Arrow Components on the ClassTypeId's
   #highlightArrowComponentents(){
-    this.ParentCriteriaGroup.EndClassGroup.inputTypeComponent.highlight()
-    this.ParentCriteriaGroup.StartClassGroup.inputTypeComponent.highlight()
+
   }
 
   
@@ -199,40 +172,37 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.selectedValues.push(endClassWidgetVal)
 
     this.#renderNewSelectedValue(endClassWidgetVal)
-    //this.ParentCriteriaGroup.initCompleted();
-    this.html[0].dispatchEvent(new CustomEvent('EndClassWidgetGroupSelected',{bubbles:true}))
-    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
-
-
+    this.#removeWhereAndWidget()
     //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
     if (this.selectedValues.length == getSettings().maxOr) {
       this.addMoreValuesBtn.html.hide
     }
 
+      this.html[0].dispatchEvent(new CustomEvent('EndClassWidgetGroupSelected',{bubbles:true}))
+      this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
       this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
+  }
+  // removes the where and objectpropertytypewidget after a value got chosen
+  #removeWhereAndWidget(){
+    this.inputTypeComponent.html.remove()
+    this.html[0].dispatchEvent(new CustomEvent('removeWhereBtn',{bubbles:true}))
   }
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
   #renderNewSelectedValue(endClassWidgetVal:EndClassWidgetValue){
     endClassWidgetVal.render()
-    // now render the addMoreValuesButton
-    this.addMoreValuesBtn = new AddMoreValuesBtn(this,this.onAddOrValue).render()
+    // now (re)render the addMoreValuesButton
+    this.addMoreValuesBtn?.html ? this.addMoreValuesBtn.render() 
+    :
+    this.addMoreValuesBtn = new AddMoreValuesBtn(this,this.#addMoreValues).render()
   }
 
+  // when more values should be added then render the inputypecomponent again
+  #addMoreValues = () =>{
+    this.inputTypeComponent.render()
+    this.#addEventListener()
+  }
 
-  //This is called when a value is selected from a list and you would like to add more values
-  onAddOrValue = ()=> {
-    
-    // On vide les champs de saisie du widget
-    if (!(this.inputTypeComponent.widgetType == Config.TREE_PROPERTY)) {
-      this.inputTypeComponent.render() ;
-    } else {
-      //On avffiche de suite l'arbre. Car pas d'autre action possible
-      $(this.ParentCriteriaGroup.EndClassGroup).find('a.treeBtnDisplay').first().trigger('click') ;
-    }
-    
-    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
-  };
 }
 
 
@@ -256,7 +226,7 @@ class EndClassWidgetValue extends HTMLComponent {
     this.html.append($(valuelbl)) 
     this.frontArrow.render()
     this.unselectBtn = new UnselectBtn(this,()=>{
-      this.html[0].dispatchEvent(new CustomEvent('onRemoveEndClassWidgetValue',{bubbles:true}))
+      this.html[0].dispatchEvent(new CustomEvent('onRemoveEndClassWidgetValue',{bubbles:true,detail:this}))
     }).render()
     return this
   }
