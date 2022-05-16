@@ -47,24 +47,6 @@ class EndClassWidgetGroup extends HTMLComponent {
     ).render()
     console.dir(this.inputTypeComponent) 
     this.#addEventListener()   
-    /*
-    if (this.ParentCriteriaGroup.jsonQueryBranch != null) {
-      var branch = this.ParentCriteriaGroup.jsonQueryBranch;
-      if (branch.line.values.length == 0) {
-        if (branch.children.length == 0) {
-          if (this.inputTypeComponent.canHaveSelectAll()) {
-            this.#onSelectAll();
-          }
-        }
-      } else {
-        for (var key in branch.line.values) {
-          this.loadValue(branch.line.values[key]);
-        }
-      }
-    }*/
-
-    this.html
-
   }
 
   #addEventListener(){
@@ -76,6 +58,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.inputTypeComponent.html.on("change",()=>{
       this.#onChange()
       });
+
     // binds a selection in an input widget with the display of the value in the line
     this.inputTypeComponent.html.on('selectAll',()=>{
       this.#onSelectAll()
@@ -123,16 +106,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     }
     this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
     this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
-    
   }
-
-  loadValue = function loadValue(value: any) {
-    this.inputTypeComponent.loadedValue =
-      AbstractValue.valueToWidgetValue(value);
-    $(this.inputTypeComponent).trigger("change");
-    //Value added don't reuse preloaded data.
-    this.inputTypeComponent.loadedValue = null;
-  };
 
   #onSelectAll() {
     const endClassWidgetVal = new EndClassWidgetValue(this,getSettings().langSearch.SelectAllValues) 
