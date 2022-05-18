@@ -1,0 +1,20 @@
+@use '../base';
+@use '../themes';
+.link-where-bottom {
+    .upper-vertical{
+        position: absolute;
+        border-left: 3px solid themes.$custom-red;
+        display: block;
+    }
+    .horizontal{
+        position: absolute;
+        border-left: 3px solid themes.$custom-red;
+        display: block;
+    }
+    .lower-vertical{
+        position: absolute;
+        border-left: 3px solid themes.$custom-red;
+        display: block;
+    }
+
+}

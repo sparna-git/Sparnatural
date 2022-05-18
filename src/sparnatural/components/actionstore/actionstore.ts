@@ -92,7 +92,6 @@ class ActionStore {
     }
 
     #initGeneralevent(){
-      let settings = getSettings()
       $("li.groupe").off("mouseover");
       $("li.groupe").off("mouseleave");
       $("li.groupe").on("mouseover", function (event) {
@@ -104,7 +103,6 @@ class ActionStore {
         event.stopImmediatePropagation();
         $("li.groupe").removeClass("OnHover");
       });
-      /*background: linear-gradient(180deg, rgba(255,0,0,1) 0%, rgba(255,0,0,1) 27%, rgba(5,193,255,1) 28%, rgba(5,193,255,1) 51%, rgba(255,0,0,1) 52%, rgba(255,0,0,1) 77%, rgba(0,0,0,1) 78%, rgba(0,0,0,1) 100%); /* w3c */
       //#all_li will contain the elements with class groupe addWhereEnable
 
       let cssdef =''
@@ -112,17 +110,34 @@ class ActionStore {
       let index = 0
       let currentHeight = 0
       let previousHeight=0
-      // traverse through components and calculate background for them
+      // traverse through components and calculate background / linkAndBottoms /  for them
       this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traverse((grpWrapper:GroupWrapper)=>{
         previousHeight = currentHeight
         currentHeight = grpWrapper.html.outerHeight(true) + 1
-        cssdef += this.#drawBackgroungOfGroupWrapper(grpWrapper,index,previousHeight,currentHeight)
+        cssdef += this.#drawBackgroungOfGroupWrapper(index,previousHeight,currentHeight)
         index++
+        if(grpWrapper.andSibling) this.#drawLinkAndBottom(grpWrapper,previousHeight,currentHeight)
       })
       this.sparnatural.BgWrapper.html.css('background', cssdef );
     }
-    #drawBackgroungOfGroupWrapper(grpWrapper:GroupWrapper,index:number,prev:number,currHeight:number) {
-      var ratio = 100 / 10 / 100; //old code: 100 / leng / 100; leng based on groupwrappers length
+    // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect/element-box-diagram.png
+    #drawLinkAndBottom(grpWarpper:GroupWrapper,prevHeight:number,currHeight:number){
+      let posUpperStart = grpWarpper.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect()
+      let posLowerStart = grpWarpper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect()
+
+      let line = {
+        xStart: posUpperStart.left + ((posUpperStart.right - posUpperStart.left)/2),
+        xEnd: posLowerStart.left + ((posLowerStart.right - posLowerStart.left)/2),
+        yStart: posUpperStart.bottom,
+        yEnd: posLowerStart.top,
+        length: currHeight+prevHeight
+      }
+
+      grpWarpper.linkAndBottom.setLineObj(line)
+    }
+
+    #drawBackgroungOfGroupWrapper(index:number,prev:number,currHeight:number) {
+      var ratio = 100 / 10 / 100; 
       let a = (index + 1) * ratio;
       let rgba = `rgba(${getSettings().backgroundBaseColor},${a})`
       return `linear-gradient(180deg,${rgba} ${prev}px, ${rgba} ${currHeight}px)`

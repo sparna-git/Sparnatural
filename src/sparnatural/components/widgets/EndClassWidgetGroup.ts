@@ -1,5 +1,4 @@
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
-import { AbstractValue } from "../../sparql/Query";
 import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
@@ -45,12 +44,12 @@ class EndClassWidgetGroup extends HTMLComponent {
       this.specProvider,
       objectProperty_selected
     ).render()
-    console.dir(this.inputTypeComponent) 
     this.#addEventListener()   
   }
 
   #addEventListener(){
     this.html[0].addEventListener('onRemoveEndClassWidgetValue',(e:CustomEvent)=>{
+      e.stopImmediatePropagation()
       this.#onRemoveValue(e)
     })
 
@@ -75,13 +74,13 @@ class EndClassWidgetGroup extends HTMLComponent {
     console.dir(this)
     console.dir(e)
     this.selectedValues = this.selectedValues.filter((val:EndClassWidgetValue) =>{
-      if(val === valueToDel){
+      if(val.value_lbl === valueToDel.value_lbl){
         unselectedValue = val
         return false
       }
       return true
     })
-    if(!unselectedValue) throw Error('Unselected val not found in the selectedValues list!')
+    if(unselectedValue === undefined) throw Error('Unselected val not found in the selectedValues list!')
     unselectedValue.html.remove()
     //if jstree remove unselecteds term
     //TODO for the tree widget when there is a deletion then rerender the tree widget without the value
@@ -105,7 +104,7 @@ class EndClassWidgetGroup extends HTMLComponent {
       this.html[0].dispatchEvent(new CustomEvent('renderWhereBtn',{bubbles:true}))
     }
     this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
-    this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
+    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   }
 
   #onSelectAll() {
@@ -115,14 +114,13 @@ class EndClassWidgetGroup extends HTMLComponent {
 
     // disable the Where
 
-
     //Add variable on results view
 
     this.#renderNewSelectedValue(endClassWidgetVal)
 
     this.html[0].dispatchEvent(new CustomEvent('EndClassWidgetGroupSelected',{bubbles:true}))
     this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
-    this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
+    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   }
   // this method renders Arrow Components on the ClassTypeId's
   #highlightArrowComponentents(){
@@ -131,7 +129,6 @@ class EndClassWidgetGroup extends HTMLComponent {
 
   
   #onChange() {
-    //this.#highlightArrowComponentents()
 
     var selectedVal:{key:string,label:string,uri:string} = this.inputTypeComponent.getValue(); // could be array or single value
     // put span around with proper class if coming from a date widget
@@ -154,7 +151,7 @@ class EndClassWidgetGroup extends HTMLComponent {
 
       this.html[0].dispatchEvent(new CustomEvent('EndClassWidgetGroupSelected',{bubbles:true}))
       this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
-      this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
+      this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   }
   // removes the where and objectpropertytypewidget after a value got chosen
   #removeWhereAndWidget(){

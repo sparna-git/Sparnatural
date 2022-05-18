@@ -88,7 +88,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
         add_all = false;
 
         this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
-        this.html[0].dispatchEvent(new CustomEvent('initGenerEvent',{bubbles:true}))
+        this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
       }
       //var endLabel = null ; //Imporant is this still necessary?
       add_or = false;

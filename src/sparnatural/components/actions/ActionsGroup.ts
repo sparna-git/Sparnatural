@@ -42,14 +42,14 @@ class ActionsGroup extends HTMLComponent {
   }
 
   // This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
-  #onAddAnd() {
-    this.#deactivateOnHover()
+  #onAddAnd = ()=> {
     this.actions.ActionAnd.html[0].dispatchEvent(new CustomEvent('addAndComponent',{bubbles:true}))
+    this.#removeActionAnd()
     return false;
   }
 
   // deactivate onHover function and remove it. Could also make it invisible?
-  #deactivateOnHover(){
+  #removeActionAnd(){
     let remCss = $(this.actions.ActionAnd.html).remove()
     if(remCss.length == 0) throw Error(`Didn't find ActionAnd Component. ActionAnd.html:${this.actions.ActionAnd.html}`)
   }

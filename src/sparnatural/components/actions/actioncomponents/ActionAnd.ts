@@ -1,5 +1,6 @@
 import { getSettings } from "../../../../configs/client-configs/settings";
 import HTMLComponent from "../../../HtmlComponent";
+import { ListWidgetNew } from "../../widgets/Widgets";
 
 
 class ActionAnd extends HTMLComponent {
@@ -10,7 +11,7 @@ class ActionAnd extends HTMLComponent {
     let link = $(`<a>${getSettings().langSearch.And}</a>`)
     let widgetHtml = $(
       `<span class="trait-and-bottom"></span>`
-    ).append(link);
+    ).add(link)
     super("ActionAnd", parentComponent, widgetHtml);
     link[0].addEventListener('click',()=>{
       callBack()

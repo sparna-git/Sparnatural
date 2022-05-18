@@ -54,7 +54,7 @@ class GroupWrapper extends HTMLComponent{
     }
 
     #registerAddComponentHooks(){
-      this.html[0].addEventListener('onRemevoeCriteria',()=>{
+      this.html[0].addEventListener('onRemoveCriteria',()=>{
         this.onRemoveCriteriaGroup()
       })
 
@@ -69,19 +69,12 @@ class GroupWrapper extends HTMLComponent{
 
     //add GroupWrapper as a Sibling
     #addAndComponent(){
+      console.log('addAndComponent')
       let startClassValue = this.CriteriaGroup.StartClassGroup.value_selected
-      this.andSibling = new GroupWrapper(this.ParentComponent,this.specProvider,this.jsonQueryBranch,startClassValue)
+      this.andSibling = new GroupWrapper(this.ParentComponent,this.specProvider,this.jsonQueryBranch,startClassValue).render()
       this.linkAndBottom.render()
-      // trigger 2 clicks to select the same class as the current criteria (?)
-      this.CriteriaGroup.StartClassGroup.html
-      .find(".nice-select:not(.disabled)")
-      .trigger("click");
-      this.CriteriaGroup.StartClassGroup.html
-      .find(".nice-select:not(.disabled)")
-      .trigger("click");
-      // set hasAnd Class. set relative position in css. necessary?
-      this.html.addClass("hasAnd")
-      this.html[0].dispatchEvent(new CustomEvent('initGeneralevent',{bubbles:true}))
+      console.warn('dispatchEvent')
+      this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
     }
 
   
@@ -89,15 +82,8 @@ class GroupWrapper extends HTMLComponent{
     // activate lien top
     //give it additional class childsList
     #addWhereComponent(){
-      this.whereChild = new GroupWrapper(this,this.specProvider,this.jsonQueryBranch)
+      this.whereChild = new GroupWrapper(this,this.specProvider,this.jsonQueryBranch).render()
       this.linkWhereBottom.render()
-      //add two clicks?
-      this.CriteriaGroup.StartClassGroup.html
-      .find(".nice-select:not(.disabled)")
-      .trigger("click");
-      this.CriteriaGroup.StartClassGroup.html
-      .find(".nice-select:not(.disabled)")
-      .trigger("click");
     }
 
   checkIfMaxDepthIsReached(){

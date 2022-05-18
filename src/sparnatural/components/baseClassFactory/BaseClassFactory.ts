@@ -7,7 +7,7 @@
 class BaseClassFactory {
     liTags:Array<string> = ['groupe']
     ulTags:Array<string> = ['componentsListe','childsList']
-    spanTags:Array<string> = ['link-and-bottom','link-where-bottom','selectViewVariable']
+    spanTags:Array<string> = ['link-where-bottom','selectViewVariable']
     aTags:Array<string> = ['asc','dsc', 'none',]
     labelTags:Array<string>=['switch']
     constructor(){}

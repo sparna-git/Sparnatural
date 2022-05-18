@@ -1,0 +1,18 @@
+@use '../base';
+@use '../themes';
+.link-and-bottom {
+    position:absolute;
+    background-color: themes.$custom-red;
+    height: 3px;
+    span {
+        transform: rotate(-90deg); //line will get transformed 90deg. transform the span back to horizontal
+        display: block;
+        background: #fff;
+        border: 2px solid themes.$custom-red ;
+        border-radius: 15px;
+        height: 30px;
+        line-height: 20px;
+        padding: 2px 10px;
+        width: fit-content;
+    }
+}
