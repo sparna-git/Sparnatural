@@ -35,7 +35,7 @@ class ActionWhere extends HTMLComponent {
     ) {
       choiceNumber = 1;
     }
-    var endLabel = this.specProvider.getLabel((this.ParentComponent as EndClassGroup).value_selected);
+    var endLabel = this.specProvider.getLabel((this.ParentComponent as EndClassGroup).endClassVal);
     
     let newhtml= $(`
       <span class="edit-trait">

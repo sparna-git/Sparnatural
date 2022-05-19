@@ -11,80 +11,66 @@ import HTMLComponent from "../../HtmlComponent";
  * Refactored to extract this from InputTypeComponent.
  **/
 class ClassTypeId extends HTMLComponent {
-  needTriggerClick: any;
   GrandParent: CriteriaGroup;
   id:string
   frontArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
   backArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_BACK)
   selectBuilder: ClassSelectBuilder;
-  startClassValue:any = null
-  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider,startClassValue?:any) {
+  startClassVal:any = null
+  oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
+  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider,startClassVal?:any) {
     super("ClassTypeId", ParentComponent, null)
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.selectBuilder = new ClassSelectBuilder(this,specProvider);
-    this.startClassValue = startClassValue
+    this.startClassVal = startClassVal
   }
-
 
   render() {
     this.widgetHtml = null
     super.render()
 
     this.backArrow.render()
-
-    var default_value_s = null;
-    var default_value_o = null;
-
-    if (this.GrandParent.jsonQueryBranch) {
-      var branch = this.GrandParent.jsonQueryBranch;
-      default_value_s = branch.line.sType;
-      default_value_o = branch.line.oType;
-      this.needTriggerClick = true;
-    }
-
     
     if (isStartClassGroup(this.ParentComponent)) {
-      this.widgetHtml = this.#getStartValues(this.selectBuilder,default_value_s)
+      this.widgetHtml = this.#getStartValues(this.selectBuilder,this.startClassVal)
     } else{
-      this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder,default_value_o)
+      this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder)
     }
 
 
     this.html.append(this.widgetHtml)
     // convert to niceSelect: https://jqueryniceselect.hernansartorio.com/
     // needs to happen after html.append(). it uses rendered stuff on page to create a new select... should move away from that
-    let oldWidget = this.widgetHtml
+    this.oldWidget = this.widgetHtml
     this.widgetHtml = this.widgetHtml.niceSelect()
     // nice-select is not a proper select tag and that's why can't listen for change events... move away from nice-select!
-    this.#addOnChangeListener(oldWidget)
+    this.#addOnChangeListener(this.oldWidget)
     this.frontArrow.render()
     return this
   }
 
   // If this Component is a child of the EndClassGroup component, we want the range of possible end values
-  #getRangeOfEndValues(selectBuilder:ClassSelectBuilder,default_value_o:any){
+  #getRangeOfEndValues(selectBuilder:ClassSelectBuilder){
+    // if you would like to have a default value selected, then change the null
     return selectBuilder.buildClassSelect(
-      this.GrandParent.StartClassGroup.value_selected,
-      default_value_o
+      this.startClassVal,
+      null
     );
   }
 
   // If this Component is a child of the StartClassGroup component, we want the possible StartValues
-  #getStartValues(selectBuilder:ClassSelectBuilder,default_value_s:any){
-    if(this.startClassValue) default_value_s = this.startClassValue
-  
-    return selectBuilder.buildClassSelect(null, default_value_s);
+  #getStartValues(selectBuilder:ClassSelectBuilder,default_value:any){  
+    return selectBuilder.buildClassSelect(null, default_value);
   }
 
   // when a value gets selected from the dropdown menu (niceselect), then change is called
   #addOnChangeListener(selectWidget:JQuery<HTMLElement>){
     selectWidget.on('change',()=>{
-      //get value from <select..> tag and dispatch -> StartClass and EndClass can listen on it
       let selectedValue = selectWidget.val()
-      this.widgetHtml[0].dispatchEvent(new CustomEvent('classTypeValueSelected',{bubbles:true,detail:selectedValue}))
       //disable further choice
-      this.widgetHtml.prop('disabled',true)
-      this.widgetHtml.prop('open',false)
+      this.widgetHtml.addClass('disabled')
+      this.widgetHtml.removeClass('open')
+      this.widgetHtml[0].dispatchEvent(new CustomEvent('classTypeValueSelected',{bubbles:true,detail:selectedValue}))
     })
   }
 

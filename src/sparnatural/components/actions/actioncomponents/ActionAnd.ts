@@ -1,6 +1,5 @@
 import { getSettings } from "../../../../configs/client-configs/settings";
 import HTMLComponent from "../../../HtmlComponent";
-import { ListWidgetNew } from "../../widgets/Widgets";
 
 
 class ActionAnd extends HTMLComponent {

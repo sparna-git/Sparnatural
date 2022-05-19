@@ -67,7 +67,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropertyId
     );
-    this.rangeClassId = this.GrandParent.value_selected;
+    this.rangeClassId = this.GrandParent.endClassVal;
     this.classLabel = this.specProvider.getLabel(this.rangeClassId);
     let endLabel: string;
     let add_all = true;
@@ -76,7 +76,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
       if (
         this.specProvider.isLiteralClass(
-          this.GrandParent.value_selected
+          this.GrandParent.endClassVal
         )
       ) {
         //this.GrandParent.initCompleted();
@@ -177,7 +177,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     if (
       this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
       this.specProvider.isLiteralClass(
-        this.GrandParent.value_selected
+        this.GrandParent.endClassVal
       )
     ) {
       return false;

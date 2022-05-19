@@ -1,20 +1,25 @@
 @use '../base';
 @use '../themes';
 .link-where-bottom {
-    .upper-vertical{
+    .upper-vertical, .horizontal, .lower-vertical{
+        height: 3px;
         position: absolute;
-        border-left: 3px solid themes.$custom-red;
+        background-color: themes.$custom-red;
         display: block;
     }
     .horizontal{
-        position: absolute;
-        border-left: 3px solid themes.$custom-red;
-        display: block;
+        z-index: 1; // span or should be overlayd over .lower-vertical
+        span {
+            position: relative;
+            top: -10px;
+            left: -10px;
+            background: #fff;
+            border: 2px solid themes.$custom-red ;
+            border-radius: 15px;
+            height: 30px;
+            line-height: 20px;
+            padding: 2px 10px;
+            width: fit-content;
+        }
     }
-    .lower-vertical{
-        position: absolute;
-        border-left: 3px solid themes.$custom-red;
-        display: block;
-    }
-
 }

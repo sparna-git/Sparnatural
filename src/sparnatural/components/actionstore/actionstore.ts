@@ -126,8 +126,9 @@ class ActionStore {
       let posLowerStart = grpWarpper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect()
 
       let line = {
-        xStart: posUpperStart.left + ((posUpperStart.right - posUpperStart.left)/2),
-        xEnd: posLowerStart.left + ((posLowerStart.right - posLowerStart.left)/2),
+        // line is located in the first quarter of StartClassGroup
+        xStart: posUpperStart.left + ((posUpperStart.right - posUpperStart.left)/4),
+        xEnd: posLowerStart.left + ((posLowerStart.right - posLowerStart.left)/4),
         yStart: posUpperStart.bottom,
         yEnd: posLowerStart.top,
         length: currHeight+prevHeight

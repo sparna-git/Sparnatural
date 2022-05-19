@@ -1,5 +1,4 @@
 import tippy from "tippy.js";
-import { eventProxiCriteria } from "../../globals/globalfunctions";
 import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
@@ -36,7 +35,7 @@ class ObjectPropertyGroup extends HTMLComponent {
   /*
 		renders the temporarly object property
 	*/
-  onStartClassGroupSelected() {
+  onStartClassGroupSelected(startClassVal:string) {
     //this will set the temporary label since there hasn't been a Value chosen for EndClassGroup
     this.objectPropertySelector.render();
   }
@@ -45,7 +44,7 @@ class ObjectPropertyGroup extends HTMLComponent {
 		This method is triggered when an Object is selected.
 		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
 	*/
-  onEndClassGroupSelected() {
+  onEndClassGroupSelected(endClassVal:string) {
     // this will update the temporarly label
     this.objectPropertySelector.render();       
     this.value_selected = this.objectPropertySelector.object_property_selected

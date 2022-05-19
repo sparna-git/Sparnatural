@@ -8,7 +8,6 @@ import IWidget from "./IWidget";
 import EndClassWidgetGroup from "./EndClassWidgetGroup";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import LocalCacheData from "../../datastorage/LocalCacheData";
-let jsTree = require("jstree").default;
 // IMPORTANT TODO refactor HtmlContainer.
 
 export class AutoCompleteWidget implements IWidget {
@@ -163,14 +162,15 @@ export class ListWidget implements IWidget {
     console.warn('render list widget')
     var startClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .value_selected;
+        .startClassVal;
     var endClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .value_selected;
+        .endClassVal;
     var ObjectPropertyGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup
         .ObjectPropertyGroup.value_selected;
-
+    console.dir(this)
+    console.log(`start: ${startClassGroup_value}, obj: ${ObjectPropertyGroup_value}, end: ${endClassGroup_value}`)
     var itc_obj = this.ParentComponent;
 
     let url = this.listHandler.listUrl(
@@ -279,18 +279,16 @@ export class ListWidgetNew implements IWidget {
   }
 
   render() {
-    console.warn("RENDERWidg")
     //render this element
     var startClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .value_selected;
+        .startClassVal;
     var endClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .value_selected;
+        .endClassVal;
     var ObjectPropertyGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup
         .ObjectPropertyGroup.value_selected;
-
     var itc_obj = this.ParentComponent;
     var id_input = "ecgrw-" + this.IdCriteriaGroupe + "-input-value";
 

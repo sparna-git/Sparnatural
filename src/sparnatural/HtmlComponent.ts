@@ -32,13 +32,8 @@ class HTMLComponent implements IRenderable {
   #attachComponentHtml() {
     // sometimes components don't need to be rendered under their parentcomponent but under htmlParent... like ActionWhere
     if (this.htmlParent) {
-      // remove existing component if already existing
-      //if(this.ParentComponent.html) this.htmlParent.find(">." + this.baseCssClass).remove();
       this.htmlParent.append(this.html)
-    } else {
-      // remove existing component if already existing
-      //if(this.ParentComponent.html) this.ParentComponent.html.find(">." + this.baseCssClass).remove();
-      
+    } else {      
       $(this.html).appendTo(this.ParentComponent.html);
     }
   }
@@ -49,7 +44,7 @@ class HTMLComponent implements IRenderable {
 
   #initHtml() {
     if (this.widgetHtml != null) {
-      // remove existing component
+      // remove existing html
       this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass)
       this.html.append(this.widgetHtml);
     } else {
@@ -67,8 +62,6 @@ class HTMLComponent implements IRenderable {
       if(this.html != null) this.html.remove()
       this.#initHtml();
       this.#attachComponentHtml();
-      this.html.addClass('isOnEdit')
-      this.html.addClass('Created')
       return this
   }
 }

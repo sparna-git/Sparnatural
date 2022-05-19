@@ -26,18 +26,15 @@ class CriteriaGroup extends HTMLComponent {
   ActionsGroup: ActionsGroup;
   specProvider: ISpecProvider;
   ParentGroupWrapper: GroupWrapper;
-  startClassValue: any;
   unselectBtn: UnselectBtn
 
   constructor(
     ParentComponent: GroupWrapper,
     specProvider: any,
     jsonQueryBranch: any,
-    startClassValue?:any
   ) {
     super("CriteriaGroup", ParentComponent, null);
     this.specProvider = specProvider
-    this.startClassValue = startClassValue
     this.jsonQueryBranch = jsonQueryBranch;
     this.ParentGroupWrapper = ParentComponent
 
@@ -55,7 +52,7 @@ class CriteriaGroup extends HTMLComponent {
 
   #renderChildComponents(){
     // create all the elements of the criteria
-    this.StartClassGroup = new StartClassGroup(this, this.specProvider,this.startClassValue).render();
+    this.StartClassGroup = new StartClassGroup(this, this.specProvider).render(); // is startClassVal here actually needed?
     this.OptionsGroup = new OptionsGroup(this, this.specProvider).render();
     this.ObjectPropertyGroup = new ObjectPropertyGroup(
       this,
@@ -69,14 +66,16 @@ class CriteriaGroup extends HTMLComponent {
   }
 
   #assembleComponents = () => {
-    this.html[0].addEventListener("EndClassGroupSelected",(e)=>{
+    this.html[0].addEventListener("EndClassGroupSelected",(e:CustomEvent)=>{
       e.stopImmediatePropagation()
-      this.ObjectPropertyGroup.onEndClassGroupSelected();
+      if((e.detail === '') || (!e.detail)) throw Error('The Event StartClassGroupSelected expects the startClassVal')
+      this.ObjectPropertyGroup.onEndClassGroupSelected(e.detail);
     })
-    this.html[0].addEventListener("StartClassGroupSelected",(e)=>{
+    this.html[0].addEventListener("StartClassGroupSelected",(e:CustomEvent)=>{
       e.stopImmediatePropagation()
-      this.EndClassGroup.onStartClassGroupSelected();
-      this.ObjectPropertyGroup.onStartClassGroupSelected()
+      if((e.detail === '') || (!e.detail)) throw Error('The Event StartClassGroupSelected expects the startClassVal')
+      this.ObjectPropertyGroup.onStartClassGroupSelected(e.detail)
+      this.EndClassGroup.onStartClassGroupSelected(e.detail);
     })
 
     this.html[0].addEventListener("ObjectPropertyGroupSelected",(e:CustomEvent)=>{

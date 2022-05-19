@@ -4,7 +4,6 @@ import HTMLComponent from "../../HtmlComponent";
 import CriteriaGroup from "./CriteriaGroup";
 import LinkAndBottom from "./LinkAndBottom";
 import LinkWhereBottom from "./LinkWhereBottom";
-import LienTop from "./LienTop";
 /*
     This Components represents the <li class="groupe"..> tag
     Possible states are:
@@ -20,28 +19,22 @@ class GroupWrapper extends HTMLComponent{
     andSibling:GroupWrapper = null
     linkAndBottom = new LinkAndBottom(this) // connection line drawn from this CriteriaList with hasAnd CriteriaList
     linkWhereBottom = new LinkWhereBottom(this)
-    LienTop = new LienTop(this) // connection line drawn from this CriteriaList hasWhereChild CriteriaList
     CriteriaGroup:CriteriaGroup 
     completed:boolean 
     hasAllCompleted:boolean 
     hasAnd:boolean
     specProvider:ISpecProvider
     jsonQueryBranch:any = null
-    startClassValue:any // if this is a sibling or child. It needs a startingValue for the StartClass
     // ParentComponent: ComponentsList | GroupWrapper
-    constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider,jsonQueryBranch:any,startClassValue?:any)
+    constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider,jsonQueryBranch:any)
       {
         super('groupe',ParentComponent,null)
         this.specProvider = specProvider
         this.jsonQueryBranch = jsonQueryBranch
-        this.startClassValue = startClassValue
       }
 
     render(): this {
       super.render()
-      //if the parent is a GroupWrapper then this Group Wrapper is a where child
-      if(isGroupWrapper(this.ParentComponent)) this.LienTop.render()
-
        // disable further links when max depth is reached
       if(!this.checkIfMaxDepthIsReached()){
         //
@@ -54,26 +47,29 @@ class GroupWrapper extends HTMLComponent{
     }
 
     #registerAddComponentHooks(){
-      this.html[0].addEventListener('onRemoveCriteria',()=>{
+      this.html[0].addEventListener('onRemoveCriteria',(e:CustomEvent)=>{
+        e.stopImmediatePropagation()
         this.onRemoveCriteriaGroup()
       })
 
-      this.html[0].addEventListener('addAndComponent',()=>{
-        this.#addAndComponent()
+      this.html[0].addEventListener('addAndComponent',(e:CustomEvent)=>{
+        e.stopImmediatePropagation()
+        this.#addAndComponent(e.detail)
       })
 
-      this.html[0].addEventListener('addWhereComponent',()=>{
-        this.#addWhereComponent()
+      this.html[0].addEventListener('addWhereComponent',(e:CustomEvent)=>{
+        e.stopImmediatePropagation()
+        this.#addWhereComponent(e.detail)
       })
     }
 
     //add GroupWrapper as a Sibling
-    #addAndComponent(){
+    #addAndComponent(startClassVal:string){
       console.log('addAndComponent')
-      let startClassValue = this.CriteriaGroup.StartClassGroup.value_selected
-      this.andSibling = new GroupWrapper(this.ParentComponent,this.specProvider,this.jsonQueryBranch,startClassValue).render()
+      this.andSibling = new GroupWrapper(this.ParentComponent,this.specProvider,this.jsonQueryBranch).render()
+      //set state to startClassValSelected
+      this.andSibling.CriteriaGroup.html[0].dispatchEvent(new CustomEvent('StartClassGroupSelected',{detail:startClassVal}))
       this.linkAndBottom.render()
-      console.warn('dispatchEvent')
       this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
     }
 
@@ -81,11 +77,19 @@ class GroupWrapper extends HTMLComponent{
     // Create a SubComponentsList and add the GroupWrapper there
     // activate lien top
     //give it additional class childsList
-    #addWhereComponent(){
+    #addWhereComponent(endClassVal:string){
+      this.#removeEditComponents()
       this.whereChild = new GroupWrapper(this,this.specProvider,this.jsonQueryBranch).render()
+
+      //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
+      this.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget.val(endClassVal).niceSelect('update')
       this.linkWhereBottom.render()
     }
-
+  
+  #removeEditComponents(){
+    this.CriteriaGroup.EndClassGroup.actionWhere.html.remove()
+    this.CriteriaGroup.EndClassGroup.endClassWidgetGroup.inputTypeComponent.html.remove()
+  }
   checkIfMaxDepthIsReached(){
     let maxreached = false
     this.html[0].dispatchEvent(new CustomEvent('getMaxVarIndex',{bubbles:true,detail:(index:number)=>{

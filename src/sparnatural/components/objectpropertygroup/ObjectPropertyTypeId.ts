@@ -33,7 +33,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
 	*/
   render() {
     // if there is an Object selected
-    if (this.GrandParent.EndClassGroup.value_selected) {
+    if (this.GrandParent.EndClassGroup.endClassVal) {
       this.#removeTempLbl();
       let op = this.#setObjectProperty()
       // set the correct objectProperty matching to Start and End value
@@ -68,8 +68,8 @@ class ObjectPropertyTypeId extends HTMLComponent {
     }
 
     return selectBuilder.buildPropertySelect(
-      this.GrandParent.StartClassGroup.value_selected,
-      this.GrandParent.EndClassGroup.value_selected,
+      this.GrandParent.StartClassGroup.startClassVal,
+      this.GrandParent.EndClassGroup.endClassVal,
       default_value
     );
   }

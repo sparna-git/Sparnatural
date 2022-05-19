@@ -20,7 +20,7 @@ class EndClassGroup extends HTMLComponent {
   varName: any; //IMPORTANT varName is only present at EndClassGroup and StartClassGroup. Refactor on selectedValue method from upper class
   variableSelector: any;
   selectViewVariable: JQuery<HTMLElement>;
-  value_selected: any;
+  endClassVal: any;
   notSelectForview: boolean;
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
@@ -29,6 +29,7 @@ class EndClassGroup extends HTMLComponent {
   SelectViewVariableBtn:SelectViewVariableBtn
   endClassWidgetGroup:EndClassWidgetGroup
   actionWhere:ActionWhere
+  startClassVal: string
   
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
@@ -36,7 +37,6 @@ class EndClassGroup extends HTMLComponent {
   ) {
     super("EndClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider
-    this.inputTypeComponent = new ClassTypeId(this, specProvider);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
     this.endClassWidgetGroup = new EndClassWidgetGroup(this,this.specProvider)
     this.actionWhere = new ActionWhere(this,this.specProvider,this.#onAddWhere)
@@ -44,27 +44,22 @@ class EndClassGroup extends HTMLComponent {
 
   render(){
     super.render()
-
-    // contains the name of the SPARQL variable associated to this component
-    this.varName = this.ParentCriteriaGroup.jsonQueryBranch
-    ? this.ParentCriteriaGroup.jsonQueryBranch.line.o
-    : null;
-    console.log(`VARNAME: ${this.varName}`)
     this.variableSelector = null;
-    this.value_selected = null
+    this.endClassVal = null
     this.#addEventListener()
     return this
   }
 
-  #onAddWhere() {
-    this.html[0].dispatchEvent(new CustomEvent('addWhereComponent',{bubbles:true}))  
+  //MUST be arrowfunction
+  #onAddWhere = () =>{
+    this.html[0].dispatchEvent(new CustomEvent('addWhereComponent',{bubbles:true,detail:this.endClassVal}))  
   }
 
   #addEventListener(){
     this.html[0].addEventListener('classTypeValueSelected',(e:CustomEvent)=>{
       if((e.detail === '') || (!e.detail)) throw Error('No value received on "classTypeValueSelected"')
       e.stopImmediatePropagation()
-      this.value_selected = e.detail
+      this.endClassVal = e.detail
       this.#valueWasSelected()
     })
 
@@ -83,8 +78,10 @@ class EndClassGroup extends HTMLComponent {
 
 
   // triggered when the subject/domain is selected
-  onStartClassGroupSelected() {
+  onStartClassGroupSelected(startClassVal: string) {
+    this.startClassVal = startClassVal
     // render the inputComponent for a user to select an Object
+    this.inputTypeComponent = new ClassTypeId(this, this.specProvider,startClassVal);
     this.inputTypeComponent.render()
     $(this.html).append('<div class="EditComponents"></div>'); // this is important!
   }
@@ -117,7 +114,7 @@ class EndClassGroup extends HTMLComponent {
       this.ParentCriteriaGroup.ActionsGroup = new ActionsGroup(this.ParentCriteriaGroup,this.specProvider).render()
   
       // set the state back
-      $(this.ParentCriteriaGroup).trigger("StartClassGroupSelected")
+      this.html[0].dispatchEvent(new CustomEvent('StartClassGroupSelected',{detail:this.startClassVal}))
   
     }
   // Make arrow function to bind the this lexically
@@ -136,6 +133,7 @@ class EndClassGroup extends HTMLComponent {
 		onChange gets called when a Endclassgroup was selected. For example choosing Musuem relatedTo Country
 		When Country got selected this events fires
 	*/
+
   #valueWasSelected() {
     this.#renderUnselectBtn()
     this.#renderSelectViewVariableBtn()
@@ -148,13 +146,13 @@ class EndClassGroup extends HTMLComponent {
         //getting the value Sparnatural
         this.varName =
         "?" +
-        localName(this.value_selected) +
+        localName(this.endClassVal) +
         "_" +
         (index);
       }}))
     }
 
-    if (this.specProvider.hasConnectedClasses(this.value_selected)) {
+    if (this.specProvider.hasConnectedClasses(this.endClassVal)) {
       console.warn('EndClassgroup. specprovider hasConnectedClasses')
       $(this.ParentCriteriaGroup.html)
         .parent("li")
@@ -163,9 +161,9 @@ class EndClassGroup extends HTMLComponent {
       $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
     }
     // trigger the event that will call the ObjectPropertyGroup
-    this.html[0].dispatchEvent(new CustomEvent('EndClassGroupSelected',{bubbles:true}))
+    this.html[0].dispatchEvent(new CustomEvent('EndClassGroupSelected',{bubbles:true,detail:this.endClassVal}))
 
-    var desc = this.specProvider.getTooltip(this.value_selected);
+    var desc = this.specProvider.getTooltip(this.endClassVal);
     if (desc) {
       $(this.ParentCriteriaGroup.EndClassGroup.html)
         .find(".ClassTypeId")
