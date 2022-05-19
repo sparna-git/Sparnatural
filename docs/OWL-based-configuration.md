@@ -15,8 +15,8 @@ This documentation assumes you are familiar with Protégé.
 ## Sparnatural configuration ontologies
 
 Sparnatural comes with 2 ontologies that need to be imported (through `owl:imports`) in your own configuration ontology:
-1. A core configuration ontology at http://data.sparna.fr/ontologies/sparnatural-config-core
-2. A datasource configuration ontology at http://data.sparna.fr/ontologies/sparnatural-config-datasources
+1. A core configuration ontology at [http://data.sparna.fr/ontologies/sparnatural-config-core](http://data.sparna.fr/ontologies/sparnatural-config-core)
+2. A datasource configuration ontology at [http://data.sparna.fr/ontologies/sparnatural-config-datasources](http://data.sparna.fr/ontologies/sparnatural-config-datasources)
 
 ## How to define and test your own configuration ?
 
