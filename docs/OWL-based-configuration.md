@@ -18,6 +18,8 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 1. A core configuration ontology at [http://data.sparna.fr/ontologies/sparnatural-config-core](http://data.sparna.fr/ontologies/sparnatural-config-core)
 2. A datasource configuration ontology at [http://data.sparna.fr/ontologies/sparnatural-config-datasources](http://data.sparna.fr/ontologies/sparnatural-config-datasources)
 
+To import these ontologies in Protégé use section under "Imported Ontologies > Direct imports" and then in the dialog select "Import an ontology contained in a document located on the web", and then enter the URI of an ontology above. Repeat the process for the other one. You will get a warning from Protégé stating that "_The following ontologies are already loaded in this workspace_", you can safely ignore the warning.
+
 ## How to define and test your own configuration ?
 
 1. Create a new ontology in Protégé;
