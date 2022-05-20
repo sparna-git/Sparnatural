@@ -1,5 +1,4 @@
 import ClassTypeId from "./ClassTypeId";
-import { localName } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import tippy from "tippy.js";
@@ -117,29 +116,7 @@ class EndClassGroup extends HTMLComponent {
     this.#renderUnselectBtn();
     this.#renderSelectViewVariableBtn();
     this.endClassWidgetGroup.render();
-    //Set the variable name for Sparql
-    if (this.varName == null) {
-      // dispatch event and get maxVarIndex via callback
-      // can i refactor this so that traversing the components will set the varindex?
-      this.html[0].dispatchEvent(
-        new CustomEvent("getMaxVarIndex", {
-          bubbles: true,
-          detail: (index: number) => {
-            //getting the value Sparnatural
-            this.varName = "?" + localName(this.endClassVal) + "_" + index;
-          },
-        })
-      );
-    }
 
-    if (this.specProvider.hasConnectedClasses(this.endClassVal)) {
-      console.warn("EndClassgroup. specprovider hasConnectedClasses");
-      $(this.ParentCriteriaGroup.html)
-        .parent("li")
-        .removeClass("WhereImpossible");
-    } else {
-      $(this.ParentCriteriaGroup.html).parent("li").addClass("WhereImpossible");
-    }
     // trigger the event that will call the ObjectPropertyGroup
     this.html[0].dispatchEvent(
       new CustomEvent("EndClassGroupSelected", {

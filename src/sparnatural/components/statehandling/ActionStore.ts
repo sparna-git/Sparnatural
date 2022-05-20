@@ -1,9 +1,9 @@
 import { getSettings } from "../../../configs/client-configs/settings";
-import { redrawBottomLink } from "../../globals/globalfunctions";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import GroupWrapper from "../criterialist/GroupWrapper";
 import Sparnatural from "../MainComponents/Sparnatural";
 import initGeneralevent from "./actions/initGeneralEvent";
+import toggleVarNames from "./actions/toggleVarNames";
 import submit from "./actions/submitAction";
 // This is ugly, should use i18n features instead
 const i18nLabels = {
@@ -55,18 +55,7 @@ class ActionStore {
       "displayVarName",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        e.detail
-          ? this.sparnatural.BgWrapper.componentsList.html.addClass(
-              "displayVarName"
-            )
-          : this.sparnatural.BgWrapper.componentsList.html.removeClass(
-              "displayVarName"
-            );
-        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traverse(
-          (grp) => {
-            redrawBottomLink(grp.html);
-          }
-        );
+
       }
     );
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
@@ -81,16 +70,10 @@ class ActionStore {
     });
 
     // Switch which toggles if the Start and Endvalues are shown as their Var name. e.g Country_1
-    this.sparnatural.html[0].addEventListener("switchVariableName", () => {
-      this.sparnatural.BgWrapper.componentsList.html.toggleClass(
-        "displayVarName"
-      );
-      // when the varnames are shown, the size of the components can change.
-      this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traverse(
-        (grp: GroupWrapper) => {
-          redrawBottomLink(grp.html);
-        }
-      );
+    this.sparnatural.html[0].addEventListener("toggleVarNames", () => {
+      e.stopImmediatePropagation();
+      toggleVarNames(this)
+
     });
     // maxvarindex shows the index for the sparql variables. e.g Country_1
     let maxVarIndex = 0;

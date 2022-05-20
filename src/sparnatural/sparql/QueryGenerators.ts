@@ -256,15 +256,6 @@ class JSONQueryGenerator {
 
     return dependant;
   }
-
-  localName(uri: string) {
-    if (uri.indexOf("#") > -1) {
-      return uri.split("#")[1];
-    } else {
-      var components = uri.split("/");
-      return components[components.length - 1];
-    }
-  }
 }
 
 export default JSONQueryGenerator;

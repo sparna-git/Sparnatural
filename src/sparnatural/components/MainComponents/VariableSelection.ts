@@ -30,7 +30,7 @@ class VariableSection extends HTMLComponent {
     this.noOrderBtn = new NoOrderBtn(this, this.noOrderCallback);
     this.variableOptionSelectBtn = new VariableOptionsSelectBtn(
       this,
-      this.switchVariableName
+      this.toggleVarNames
     );
 
     this.linesWrapper = $('<div class="linesWrapper"></div>');
@@ -90,9 +90,9 @@ class VariableSection extends HTMLComponent {
     );
   };
 
-  switchVariableName = (selected: boolean) => {
+  toggleVarNames = (selected: boolean) => {
     this.html[0].dispatchEvent(
-      new CustomEvent("displayVarName", { bubbles: true, detail: selected })
+      new CustomEvent("toggleVarName", { bubbles: true, detail: selected })
     );
   };
 
