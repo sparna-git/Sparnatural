@@ -70,7 +70,7 @@ class ActionStore {
     });
 
     // Switch which toggles if the Start and Endvalues are shown as their Var name. e.g Country_1
-    this.sparnatural.html[0].addEventListener("toggleVarNames", () => {
+    this.sparnatural.html[0].addEventListener("toggleVarNames", (e) => {
       e.stopImmediatePropagation();
       toggleVarNames(this)
 

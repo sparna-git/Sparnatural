@@ -1,8 +1,3 @@
-import {
-  eventProxiCriteria,
-  localName,
-  redrawBottomLink,
-} from "../../globals/globalfunctions";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";

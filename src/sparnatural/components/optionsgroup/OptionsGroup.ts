@@ -1,4 +1,3 @@
-import { redrawBottomLink } from "../../globals/globalfunctions";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import OptionalComponent from "./optioncomponents/OptionalComponent";
@@ -89,7 +88,6 @@ export class OptionsGroup extends HTMLComponent {
       selected
         ? this.#renderOptionalComponents()
         : this.#removeOptionalComponents();
-      redrawBottomLink(this.ParentCriteriaGroup.ParentGroupWrapper.html);
     }).render();
   }
 }

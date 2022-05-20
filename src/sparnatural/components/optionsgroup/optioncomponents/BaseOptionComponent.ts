@@ -1,6 +1,5 @@
 import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
-import { eventProxiCriteria } from "../../../globals/globalfunctions";
 import ArrowComponent from "../../arrows/ArrowComponent";
 import { OptionsGroup } from "../OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
