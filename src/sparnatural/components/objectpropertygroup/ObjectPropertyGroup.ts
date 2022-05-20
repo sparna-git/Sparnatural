@@ -23,38 +23,41 @@ class ObjectPropertyGroup extends HTMLComponent {
       specProvider,
       temporaryLabel
     );
-    this.specProvider = specProvider
+    this.specProvider = specProvider;
   }
 
-  render(){
-    super.render()
-    this.#addEventListener()
-    return this
+  render() {
+    super.render();
+    this.#addEventListener();
+    return this;
   }
   /*
 		renders the temporarly object property
 	*/
-  onStartClassGroupSelected(startClassVal:string) {
+  onStartClassGroupSelected(startClassVal: string) {
     //this will set the temporary label since there hasn't been a Value chosen for EndClassGroup
     this.objectPropertySelector.render();
   }
 
-  #addEventListener(){
-    this.html[0].addEventListener('onObjectPropertyGroupSelected',(e:CustomEvent)=>{
-      if((e.detail === '') || (!e.detail)) throw Error('No value received on "classTypeValueSelected"')
-      this.objectPropVal = e.detail
-      this.#valueWasSelected()
-    })
+  #addEventListener() {
+    this.html[0].addEventListener(
+      "onObjectPropertyGroupSelected",
+      (e: CustomEvent) => {
+        if (e.detail === "" || !e.detail)
+          throw Error('No value received on "classTypeValueSelected"');
+        this.objectPropVal = e.detail;
+        this.#valueWasSelected();
+      }
+    );
   }
 
   #valueWasSelected() {
-
-    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
+    this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
 
     var desc = this.specProvider.getTooltip(this.objectPropVal);
 
     if (desc) {
-      console.warn('StartClassGroup.valueSelected desc hapene!')
+      console.warn("StartClassGroup.valueSelected desc hapene!");
       $(this.ParentCriteriaGroup.StartClassGroup.html)
         .find(".ClassTypeId")
         .attr("data-tippy-content", desc);
@@ -73,11 +76,11 @@ class ObjectPropertyGroup extends HTMLComponent {
 		This method is triggered when an Object is selected.
 		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
 	*/
-  onEndClassGroupSelected(endClassVal:string) {
+  onEndClassGroupSelected(endClassVal: string) {
     // this will update the temporarly label
-    this.objectPropertySelector.render();       
+    this.objectPropertySelector.render();
   }
-/*
+  /*
   onChange() {
     if (this.objectPropVal) {
       console.warn("ObjectPropertyGroup call OptionsGroup.reload!!!")

@@ -1,6 +1,5 @@
 import LocalDataStorage from "./LocalDataStorage";
 
-
 class LocalCacheData {
   constructor() {}
 

@@ -39,8 +39,8 @@ export class AutoCompleteWidget implements IWidget {
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .value_selected;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup
-        .ObjectPropertyGroup.value_selected;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
+        .value_selected;
 
     var id_inputs = this.IdCriteriaGroupe;
     var itc_obj = this.ParentComponent;
@@ -144,7 +144,7 @@ export class ListWidget implements IWidget {
     this.listHandler = listHandler;
     this.ParentComponent = inputTypeComponent;
     this.IdCriteriaGroupe =
-    this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.sort = sort;
     this.settings = settings;
     this.id_input = "ecgrw-" + this.IdCriteriaGroupe + "-input-value";
@@ -159,7 +159,7 @@ export class ListWidget implements IWidget {
   }
 
   render() {
-    console.warn('render list widget')
+    console.warn("render list widget");
     var startClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
         .startClassVal;
@@ -167,10 +167,12 @@ export class ListWidget implements IWidget {
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .endClassVal;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup
-        .ObjectPropertyGroup.value_selected;
-    console.dir(this)
-    console.log(`start: ${startClassGroup_value}, obj: ${ObjectPropertyGroup_value}, end: ${endClassGroup_value}`)
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
+        .value_selected;
+    console.dir(this);
+    console.log(
+      `start: ${startClassGroup_value}, obj: ${ObjectPropertyGroup_value}, end: ${endClassGroup_value}`
+    );
     var itc_obj = this.ParentComponent;
 
     let url = this.listHandler.listUrl(
@@ -287,8 +289,8 @@ export class ListWidgetNew implements IWidget {
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .endClassVal;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup
-        .ObjectPropertyGroup.value_selected;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
+        .value_selected;
     var itc_obj = this.ParentComponent;
     var id_input = "ecgrw-" + this.IdCriteriaGroupe + "-input-value";
 
@@ -437,8 +439,8 @@ export class DatesWidget implements IWidget {
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .value_selected;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup
-        .ObjectPropertyGroup.value_selected;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
+        .value_selected;
     var phrase = "";
     var data_json = null;
 
@@ -839,8 +841,7 @@ export class SearchWidget implements IWidget {
     //render this element
     var id_inputs = this.IdCriteriaGroupe;
     var itc_obj = this.ParentComponent;
-    var CriteriaGroup =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup;
+    var CriteriaGroup = this.ParentComponent.GrandParent.ParentCriteriaGroup;
 
     $("#ecgrw-search-" + this.IdCriteriaGroupe + "-add").on(
       "click",
@@ -896,8 +897,7 @@ export class BooleanWidget implements IWidget {
   render() {
     var id_inputs = this.IdCriteriaGroupe;
     var itc_obj = this.ParentComponent;
-    var CriteriaGroup =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup;
+    var CriteriaGroup = this.ParentComponent.GrandParent.ParentCriteriaGroup;
     var id_input = "#boolean-widget-" + this.IdCriteriaGroupe + "-value";
 
     $("#boolean-widget-" + this.IdCriteriaGroupe + "-true").on(
@@ -1000,8 +1000,8 @@ export class TreeWidget implements IWidget {
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .value_selected;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup
-        .ObjectPropertyGroup.value_selected;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
+        .value_selected;
 
     var id_inputs = this.IdCriteriaGroupe;
     this.itc_obj = this.ParentComponent;

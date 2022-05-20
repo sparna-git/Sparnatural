@@ -52,4 +52,4 @@ class SpecificationProviderFactory {
     }
   }
 }
-export default SpecificationProviderFactory
+export default SpecificationProviderFactory;

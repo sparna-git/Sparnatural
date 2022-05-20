@@ -9,24 +9,21 @@ import GroupWrapper from "../criterialist/GroupWrapper";
 */
 class ComponentsList extends HTMLComponent {
   specProvider: ISpecProvider;
-  rootGroupWrapper:GroupWrapper
-    constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider){
-        super('componentsListe',ParentComponent,null)
-        this.specProvider = specProvider
-    }
+  rootGroupWrapper: GroupWrapper;
+  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
+    super("componentsListe", ParentComponent, null);
+    this.specProvider = specProvider;
+  }
 
-    render(): this {
-        super.render()
-        this.initFirstGroupWrapper()
-        return this
-    }
+  render(): this {
+    super.render();
+    this.initFirstGroupWrapper();
+    return this;
+  }
 
-    initFirstGroupWrapper(){
-      this.rootGroupWrapper = new GroupWrapper(this,this.specProvider).render()
-    }
-
+  initFirstGroupWrapper() {
+    this.rootGroupWrapper = new GroupWrapper(this, this.specProvider).render();
+  }
 }
 
-
-
-export default ComponentsList
+export default ComponentsList;

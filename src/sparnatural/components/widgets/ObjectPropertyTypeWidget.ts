@@ -51,19 +51,19 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     ParentComponent: HTMLComponent,
     settings: ISettings,
     specProvider: ISpecProvider,
-    objectProperty_selected:string
+    objectProperty_selected: string
   ) {
     super("ObjectPropertyTypeWidget", ParentComponent, null);
     this.settings = settings;
-    this.GrandParent = ParentComponent.ParentComponent as EndClassGroup
-    this.specProvider = specProvider
-    this.objectProperty_selected = objectProperty_selected
+    this.GrandParent = ParentComponent.ParentComponent as EndClassGroup;
+    this.specProvider = specProvider;
+    this.objectProperty_selected = objectProperty_selected;
   }
 
   render() {
     this.widgetHtml = null;
     this.objectPropertyId = this.objectProperty_selected; // shows which objectproperty got chosen for which subject object combination
-    
+
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropertyId
     );
@@ -74,11 +74,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     let add_or = true;
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-      if (
-        this.specProvider.isLiteralClass(
-          this.GrandParent.endClassVal
-        )
-      ) {
+      if (this.specProvider.isLiteralClass(this.GrandParent.endClassVal)) {
         //this.GrandParent.initCompleted();
 
         //Add variable on results view
@@ -87,8 +83,12 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
         }
         add_all = false;
 
-        this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
-        this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
+        this.html[0].dispatchEvent(
+          new CustomEvent("submit", { bubbles: true })
+        );
+        this.html[0].dispatchEvent(
+          new CustomEvent("initGeneralEvent", { bubbles: true })
+        );
       }
       //var endLabel = null ; //Imporant is this still necessary?
       add_or = false;
@@ -159,9 +159,8 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     } else {
       this.widgetHtml = $(widgetLabel + this.widgetComponent.html);
     }
-    this.htmlParent =
-      this.GrandParent.html.find(".EditComponents");
-    super.render()
+    this.htmlParent = this.GrandParent.html.find(".EditComponents");
+    super.render();
 
     this.widgetComponent.render();
     $(this.html)
@@ -170,15 +169,13 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
       .on("click", () => {
         $(this).trigger("selectAll");
       });
-      return this
+    return this;
   }
 
   canHaveSelectAll() {
     if (
       this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
-      this.specProvider.isLiteralClass(
-        this.GrandParent.endClassVal
-      )
+      this.specProvider.isLiteralClass(this.GrandParent.endClassVal)
     ) {
       return false;
     }

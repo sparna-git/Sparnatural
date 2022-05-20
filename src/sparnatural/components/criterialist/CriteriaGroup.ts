@@ -23,30 +23,32 @@ class CriteriaGroup extends HTMLComponent {
   ActionsGroup: ActionsGroup;
   specProvider: ISpecProvider;
   ParentGroupWrapper: GroupWrapper;
-  unselectBtn: UnselectBtn
+  unselectBtn: UnselectBtn;
 
-  constructor(
-    ParentComponent: GroupWrapper,
-    specProvider: any,
-  ) {
+  constructor(ParentComponent: GroupWrapper, specProvider: any) {
     super("CriteriaGroup", ParentComponent, null);
-    this.specProvider = specProvider
-    this.ParentGroupWrapper = ParentComponent
+    this.specProvider = specProvider;
+    this.ParentGroupWrapper = ParentComponent;
   }
 
   render(): this {
-    super.render()
-    this.#renderChildComponents()
-    this.unselectBtn = new UnselectBtn(this,()=>{
+    super.render();
+    this.#renderChildComponents();
+    this.unselectBtn = new UnselectBtn(this, () => {
       // caught in Parentcomponent
-      this.html[0].dispatchEvent(new CustomEvent('onRemoveCriteria',{bubbles:true}))
-    }).render()
-    return this
+      this.html[0].dispatchEvent(
+        new CustomEvent("onRemoveCriteria", { bubbles: true })
+      );
+    }).render();
+    return this;
   }
 
-  #renderChildComponents(){
+  #renderChildComponents() {
     // create all the elements of the criteria
-    this.StartClassGroup = new StartClassGroup(this, this.specProvider).render(); // is startClassVal here actually needed?
+    this.StartClassGroup = new StartClassGroup(
+      this,
+      this.specProvider
+    ).render(); // is startClassVal here actually needed?
     this.OptionsGroup = new OptionsGroup(this, this.specProvider).render();
     this.ObjectPropertyGroup = new ObjectPropertyGroup(
       this,
@@ -60,30 +62,42 @@ class CriteriaGroup extends HTMLComponent {
   }
 
   #assembleComponents = () => {
-    this.html[0].addEventListener("EndClassGroupSelected",(e:CustomEvent)=>{
-      e.stopImmediatePropagation()
-      if((e.detail === '') || (!e.detail)) throw Error('The Event StartClassGroupSelected expects the startClassVal')
+    this.html[0].addEventListener("EndClassGroupSelected", (e: CustomEvent) => {
+      e.stopImmediatePropagation();
+      if (e.detail === "" || !e.detail)
+        throw Error(
+          "The Event StartClassGroupSelected expects the startClassVal"
+        );
       this.ObjectPropertyGroup.onEndClassGroupSelected(e.detail);
-    })
-    this.html[0].addEventListener("StartClassGroupSelected",(e:CustomEvent)=>{
-      e.stopImmediatePropagation()
-      if((e.detail === '') || (!e.detail)) throw Error('The Event StartClassGroupSelected expects the startClassVal')
-      this.ObjectPropertyGroup.onStartClassGroupSelected(e.detail)
-      this.EndClassGroup.onStartClassGroupSelected(e.detail);
-    })
+    });
+    this.html[0].addEventListener(
+      "StartClassGroupSelected",
+      (e: CustomEvent) => {
+        e.stopImmediatePropagation();
+        if (e.detail === "" || !e.detail)
+          throw Error(
+            "The Event StartClassGroupSelected expects the startClassVal"
+          );
+        this.ObjectPropertyGroup.onStartClassGroupSelected(e.detail);
+        this.EndClassGroup.onStartClassGroupSelected(e.detail);
+      }
+    );
 
-    this.html[0].addEventListener("onObjectPropertyGroupSelected",(e:CustomEvent)=>{
-      e.stopImmediatePropagation()
-      this.EndClassGroup.onObjectPropertyGroupSelected(e.detail)
-      this.OptionsGroup.onObjectPropertyGroupSelected();
-      this.ActionsGroup.onObjectPropertyGroupSelected();
-    })
+    this.html[0].addEventListener(
+      "onObjectPropertyGroupSelected",
+      (e: CustomEvent) => {
+        e.stopImmediatePropagation();
+        this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
+        this.OptionsGroup.onObjectPropertyGroupSelected();
+        this.ActionsGroup.onObjectPropertyGroupSelected();
+      }
+    );
   };
 
   //set css completed class on GroupWrapper
-  
-  initCompleted(){
-    this.ParentGroupWrapper.html.addClass("completed")
-  };
+
+  initCompleted() {
+    this.ParentGroupWrapper.html.addClass("completed");
+  }
 }
 export default CriteriaGroup;

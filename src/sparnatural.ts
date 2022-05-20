@@ -17,7 +17,7 @@ import Sparnatural from "./sparnatural/components/MainComponents/Sparnatural";
   Used to configure the Settings
 */
 export class SparNatural extends HTMLElement {
-  Sparnatural = new Sparnatural()
+  Sparnatural = new Sparnatural();
   specProvider: any;
   // all the components in Sparnatural
   components: any = [];
@@ -34,9 +34,9 @@ export class SparNatural extends HTMLElement {
     mergeSettings(options);
   }
 
-  initSparnatural(){
-    $(this).append(this.Sparnatural.html)
-    this.Sparnatural.render()
+  initSparnatural() {
+    $(this).append(this.Sparnatural.html);
+    this.Sparnatural.render();
   }
 }
 

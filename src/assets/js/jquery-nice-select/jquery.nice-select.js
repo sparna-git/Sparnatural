@@ -7,7 +7,7 @@ import { getSettings } from "../../../configs/client-configs/settings";
 
 (function ($) {
   $.fn.niceSelect = function (method, settings) {
-    let newSelect
+    let newSelect;
     // Methods
     if (typeof method == "string") {
       if (method == "update") {
@@ -54,17 +54,16 @@ import { getSettings } from "../../../configs/client-configs/settings";
       if (!$select.next().hasClass("nice-select")) {
         create_nice_select($select);
       }
-
     });
 
     function create_nice_select($select) {
       $select.after(
-        newSelect = $("<div></div>")
+        (newSelect = $("<div></div>")
           .addClass("nice-select")
           .addClass($select.attr("class") || "")
           .addClass($select.attr("disabled") ? "disabled" : "")
           .attr("tabindex", $select.attr("disabled") ? null : "0")
-          .html('<span class="current"></span><ul class="list"></ul>')
+          .html('<span class="current"></span><ul class="list"></ul>'))
       );
 
       var $dropdown = $select.next();

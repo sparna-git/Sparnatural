@@ -16,54 +16,60 @@ class StartClassGroup extends HTMLComponent {
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
-  selectViewVariableBtn: SelectViewVariableBtn
-  constructor(
-    ParentCriteriaGroup: CriteriaGroup,
-    specProvider: ISpecProvider,
-  ) {
+  selectViewVariableBtn: SelectViewVariableBtn;
+  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
     super("StartClassGroup", ParentCriteriaGroup, null);
-    this.specProvider = specProvider
+    this.specProvider = specProvider;
     this.inputTypeComponent = new ClassTypeId(this, this.specProvider);
-    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration   
+    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration
   }
 
-  render(){
-    super.render()
-    this.inputTypeComponent.render()
-    this.#addEventListener()
-    return this
+  render() {
+    super.render();
+    this.inputTypeComponent.render();
+    this.#addEventListener();
+    return this;
   }
 
-  #addEventListener(){
-    this.html[0].addEventListener('classTypeValueSelected',(e:CustomEvent)=>{
-      if((e.detail === '') || (!e.detail)) throw Error('No value received on "classTypeValueSelected"')
-      e.stopImmediatePropagation()
-      this.startClassVal = e.detail
-      this.#valueWasSelected()
-    })
+  #addEventListener() {
+    this.html[0].addEventListener(
+      "classTypeValueSelected",
+      (e: CustomEvent) => {
+        if (e.detail === "" || !e.detail)
+          throw Error('No value received on "classTypeValueSelected"');
+        e.stopImmediatePropagation();
+        this.startClassVal = e.detail;
+        this.#valueWasSelected();
+      }
+    );
   }
 
-  onchangeViewVariable = ()=> {
+  onchangeViewVariable = () => {
     // emit custom event. getting cought in SparnaturalComponent
-    let ev = new CustomEvent('updateVariableList',{bubbles:true})
-    this.html[0].dispatchEvent(ev)
-  }
+    let ev = new CustomEvent("updateVariableList", { bubbles: true });
+    this.html[0].dispatchEvent(ev);
+  };
 
   #valueWasSelected() {
-    this.#renderSelectViewVariableBtn()
+    this.#renderSelectViewVariableBtn();
 
-   this.html[0].dispatchEvent(new CustomEvent('StartClassGroupSelected',{bubbles:true,detail:this.startClassVal}))
+    this.html[0].dispatchEvent(
+      new CustomEvent("StartClassGroupSelected", {
+        bubbles: true,
+        detail: this.startClassVal,
+      })
+    );
 
-    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
+    this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
 
     var desc = this.specProvider.getTooltip(this.startClassVal);
-    
+
     /*
       Not sure what the following code does
     */
 
     if (desc) {
-      console.warn('StartClassGroup.valueSelected desc hapene!')
+      console.warn("StartClassGroup.valueSelected desc hapene!");
       $(this.ParentCriteriaGroup.StartClassGroup.html)
         .find(".ClassTypeId")
         .attr("data-tippy-content", desc);
@@ -76,11 +82,13 @@ class StartClassGroup extends HTMLComponent {
         "data-tippy-content"
       );
     }
-
   }
 
-  #renderSelectViewVariableBtn(){
-    this.selectViewVariableBtn = new SelectViewVariableBtn(this,this.onchangeViewVariable)
+  #renderSelectViewVariableBtn() {
+    this.selectViewVariableBtn = new SelectViewVariableBtn(
+      this,
+      this.onchangeViewVariable
+    );
   }
   getVarName() {
     return this.varName;

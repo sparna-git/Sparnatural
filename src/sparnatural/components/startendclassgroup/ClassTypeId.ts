@@ -12,81 +12,93 @@ import HTMLComponent from "../../HtmlComponent";
  **/
 class ClassTypeId extends HTMLComponent {
   GrandParent: CriteriaGroup;
-  id:string
-  frontArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_FRONT)
-  backArrow:ArrowComponent = new ArrowComponent(this,UiuxConfig.COMPONENT_ARROW_BACK)
+  id: string;
+  frontArrow: ArrowComponent = new ArrowComponent(
+    this,
+    UiuxConfig.COMPONENT_ARROW_FRONT
+  );
+  backArrow: ArrowComponent = new ArrowComponent(
+    this,
+    UiuxConfig.COMPONENT_ARROW_BACK
+  );
   selectBuilder: ClassSelectBuilder;
-  startClassVal:any = null
+  startClassVal: any = null;
   oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
-  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider,startClassVal?:any) {
-    super("ClassTypeId", ParentComponent, null)
+  constructor(
+    ParentComponent: HTMLComponent,
+    specProvider: ISpecProvider,
+    startClassVal?: any
+  ) {
+    super("ClassTypeId", ParentComponent, null);
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
-    this.selectBuilder = new ClassSelectBuilder(this,specProvider);
-    this.startClassVal = startClassVal
+    this.selectBuilder = new ClassSelectBuilder(this, specProvider);
+    this.startClassVal = startClassVal;
   }
 
   render() {
-    this.widgetHtml = null
-    super.render()
+    this.widgetHtml = null;
+    super.render();
 
-    this.backArrow.render()
-    
+    this.backArrow.render();
+
     if (isStartClassGroup(this.ParentComponent)) {
-      this.widgetHtml = this.#getStartValues(this.selectBuilder,this.startClassVal)
-    } else{
-      this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder)
+      this.widgetHtml = this.#getStartValues(
+        this.selectBuilder,
+        this.startClassVal
+      );
+    } else {
+      this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder);
     }
 
-
-    this.html.append(this.widgetHtml)
+    this.html.append(this.widgetHtml);
     // convert to niceSelect: https://jqueryniceselect.hernansartorio.com/
     // needs to happen after html.append(). it uses rendered stuff on page to create a new select... should move away from that
-    this.oldWidget = this.widgetHtml
-    this.widgetHtml = this.widgetHtml.niceSelect()
+    this.oldWidget = this.widgetHtml;
+    this.widgetHtml = this.widgetHtml.niceSelect();
     // nice-select is not a proper select tag and that's why can't listen for change events... move away from nice-select!
-    this.#addOnChangeListener(this.oldWidget)
-    this.frontArrow.render()
-    return this
+    this.#addOnChangeListener(this.oldWidget);
+    this.frontArrow.render();
+    return this;
   }
 
   // If this Component is a child of the EndClassGroup component, we want the range of possible end values
-  #getRangeOfEndValues(selectBuilder:ClassSelectBuilder){
+  #getRangeOfEndValues(selectBuilder: ClassSelectBuilder) {
     // if you would like to have a default value selected, then change the null
-    return selectBuilder.buildClassSelect(
-      this.startClassVal,
-      null
-    );
+    return selectBuilder.buildClassSelect(this.startClassVal, null);
   }
 
   // If this Component is a child of the StartClassGroup component, we want the possible StartValues
-  #getStartValues(selectBuilder:ClassSelectBuilder,default_value:any){  
+  #getStartValues(selectBuilder: ClassSelectBuilder, default_value: any) {
     return selectBuilder.buildClassSelect(null, default_value);
   }
 
   // when a value gets selected from the dropdown menu (niceselect), then change is called
-  #addOnChangeListener(selectWidget:JQuery<HTMLElement>){
-    selectWidget.on('change',()=>{
-      let selectedValue = selectWidget.val()
+  #addOnChangeListener(selectWidget: JQuery<HTMLElement>) {
+    selectWidget.on("change", () => {
+      let selectedValue = selectWidget.val();
       //disable further choice
-      this.widgetHtml.addClass('disabled')
-      this.widgetHtml.removeClass('open')
-      this.html[0].dispatchEvent(new CustomEvent('classTypeValueSelected',{bubbles:true,detail:selectedValue}))
-    })
+      this.widgetHtml.addClass("disabled");
+      this.widgetHtml.removeClass("open");
+      this.html[0].dispatchEvent(
+        new CustomEvent("classTypeValueSelected", {
+          bubbles: true,
+          detail: selectedValue,
+        })
+      );
+    });
   }
 
   //This function is called by EnclassWidgetGroup when a value got selected. It renders the classTypeIds as shape forms and highlights them
-  highlight(){
-    this.html.addClass('Highlited')
-    this.frontArrow.html.removeClass('disable')
-    this.backArrow.html.removeClass('disable')
+  highlight() {
+    this.html.addClass("Highlited");
+    this.frontArrow.html.removeClass("disable");
+    this.backArrow.html.removeClass("disable");
   }
-
 
   reload() {
     console.log("reload on ClassTypeId should probably never be called");
     this.reload();
   }
-
 }
 export default ClassTypeId;
 
@@ -98,18 +110,18 @@ export default ClassTypeId;
  **/
 class ClassSelectBuilder extends HTMLComponent {
   specProvider: any;
-  constructor(ParentComponent:HTMLComponent, specProvider: any) {
-    super('ClassTypeId',ParentComponent,null)
+  constructor(ParentComponent: HTMLComponent, specProvider: any) {
+    super("ClassTypeId", ParentComponent, null);
     this.specProvider = specProvider;
   }
 
   render(): this {
-    super.render()
-    return this
+    super.render();
+    return this;
   }
 
   buildClassSelect(domainId: any, default_value: any) {
-    let list:Array<string> = [];
+    let list: Array<string> = [];
     let items = [];
 
     if (domainId === null) {
@@ -118,10 +130,10 @@ class ClassSelectBuilder extends HTMLComponent {
     } else {
       items = this.specProvider.getConnectedClasses(domainId);
     }
-    console.log('log the items')
-    console.dir(items)
+    console.log("log the items");
+    console.dir(items);
     for (var key in items) {
-      console.log(`key:${key} item:${items[key]}`)
+      console.log(`key:${key} item:${items[key]}`);
       var val = items[key];
       var label = this.specProvider.getLabel(val);
       var icon = this.specProvider.getIcon(val);
@@ -158,13 +170,13 @@ class ClassSelectBuilder extends HTMLComponent {
           "</option>"
       );
     }
-    
+
     var html_list = $("<select/>", {
       // open triggers the niceselect to be open
       class: "my-new-list input-val open",
       html: list.join(""),
     });
-    return html_list
+    return html_list;
   }
 }
 

@@ -16,16 +16,17 @@ export function localName(uri: string) {
 export function redrawBottomLink(parentElementLi: JQuery<HTMLElement>) {
   var ul = $(parentElementLi).children("ul").first();
   if (ul.length == 1) {
-      let n_width:any = getOffset(
-          $(parentElementLi).find(">div>.EndClassGroup"),
-          $(ul) as JQuery<HTMLUListElement>
-        )-
-        111 +
-        15 +
-        11 +
-        20 +
-        5 +
-        3;
+    let n_width: any =
+      getOffset(
+        $(parentElementLi).find(">div>.EndClassGroup"),
+        $(ul) as JQuery<HTMLUListElement>
+      ) -
+      111 +
+      15 +
+      11 +
+      20 +
+      5 +
+      3;
 
     var t_width =
       getOffset(
@@ -41,9 +42,6 @@ export function redrawBottomLink(parentElementLi: JQuery<HTMLElement>) {
   }
 }
 
-function getOffset(
-  elem: JQuery<HTMLElement>,
-  elemParent: JQuery<HTMLElement>
-) {
+function getOffset(elem: JQuery<HTMLElement>, elemParent: JQuery<HTMLElement>) {
   return $(elem.html).offset().left - $(elemParent.html).offset().left;
 }

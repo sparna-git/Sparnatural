@@ -2,14 +2,13 @@ import ISettings from "../configs/client-configs/ISettings";
 import { getSettings } from "../configs/client-configs/settings";
 import BaseClassFactory from "./components/baseClassFactory/BaseClassFactory";
 
-
-interface IRenderable{
-  render: () => this
+interface IRenderable {
+  render: () => this;
 }
 class HTMLComponent implements IRenderable {
   baseCssClass: string;
-  static BaseClassFactory = new BaseClassFactory()
-  settings:ISettings = getSettings()
+  static BaseClassFactory = new BaseClassFactory();
+  settings: ISettings = getSettings();
 
   ParentComponent: HTMLComponent;
   widgetHtml: JQuery<HTMLElement>;
@@ -22,9 +21,9 @@ class HTMLComponent implements IRenderable {
     ParentComponent: HTMLComponent,
     widgetHtml: JQuery<HTMLElement>
   ) {
-    this.baseCssClass = baseCssClass
-    this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass)
-    this.baseCssClass =baseCssClass;
+    this.baseCssClass = baseCssClass;
+    this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass);
+    this.baseCssClass = baseCssClass;
     this.ParentComponent = ParentComponent;
     this.widgetHtml = widgetHtml;
   }
@@ -32,8 +31,8 @@ class HTMLComponent implements IRenderable {
   #attachComponentHtml() {
     // sometimes components don't need to be rendered under their parentcomponent but under htmlParent... like ActionWhere
     if (this.htmlParent) {
-      this.htmlParent.append(this.html)
-    } else {      
+      this.htmlParent.append(this.html);
+    } else {
       $(this.html).appendTo(this.ParentComponent.html);
     }
   }
@@ -45,24 +44,28 @@ class HTMLComponent implements IRenderable {
   #initHtml() {
     if (this.widgetHtml != null) {
       // remove existing html
-      this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass)
+      this.html = HTMLComponent.BaseClassFactory.getBaseClass(
+        this.baseCssClass
+      );
       this.html.append(this.widgetHtml);
     } else {
-      this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass)
+      this.html = HTMLComponent.BaseClassFactory.getBaseClass(
+        this.baseCssClass
+      );
     }
   }
 
-  updateWidgetHtml(newWidgetHtml:JQuery<HTMLElement>){
-    this.html.remove(this.widgetHtml.toString())
-    this.widgetHtml = newWidgetHtml
-    this.html.append(this.widgetHtml)
+  updateWidgetHtml(newWidgetHtml: JQuery<HTMLElement>) {
+    this.html.remove(this.widgetHtml.toString());
+    this.widgetHtml = newWidgetHtml;
+    this.html.append(this.widgetHtml);
   }
 
   render() {
-      if(this.html != null) this.html.remove()
-      this.#initHtml();
-      this.#attachComponentHtml();
-      return this
+    if (this.html != null) this.html.remove();
+    this.#initHtml();
+    this.#attachComponentHtml();
+    return this;
   }
 }
 export default HTMLComponent;
