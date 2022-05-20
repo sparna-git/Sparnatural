@@ -12,6 +12,7 @@ class OptionalArrow extends HTMLComponent{
         let widgetHtml = $(UiuxConfig.COMPONENT_OPTION_ARROW_FRONT)
         super('optionalArrow',ParentComponent,widgetHtml)
         this.widgetHtml.on('click',(e:JQuery.ClickEvent)=>{
+            e.stopImmediatePropagation()
             this.selected = this.selected ? false:true
             callBack(this.selected)
         })

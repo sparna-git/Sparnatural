@@ -70,7 +70,7 @@ class ClassTypeId extends HTMLComponent {
       //disable further choice
       this.widgetHtml.addClass('disabled')
       this.widgetHtml.removeClass('open')
-      this.widgetHtml[0].dispatchEvent(new CustomEvent('classTypeValueSelected',{bubbles:true,detail:selectedValue}))
+      this.html[0].dispatchEvent(new CustomEvent('classTypeValueSelected',{bubbles:true,detail:selectedValue}))
     })
   }
 

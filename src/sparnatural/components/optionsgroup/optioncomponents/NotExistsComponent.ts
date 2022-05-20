@@ -14,6 +14,7 @@ class NotExistsComponent extends BaseOptionComponent{
         super('NotExists',ParentComponent,specProvider,'notExists',crtGroupId)
     }
 
+    
     render(): this {
         this.objectId = this.ParentOptionsGroup.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
         // TODO already checked in OptionsGroup?
@@ -21,13 +22,16 @@ class NotExistsComponent extends BaseOptionComponent{
             this.label = getSettings().langSearch.labelOptionNotExists
         }
         super.render()
+        
+        this.#addEventListeners()
         return this
     }
-
-    onChange(): void {
-        super.onChange('notExistsEnabled')
+    #addEventListeners(){
+        this.html.on("click", (e) => {
+            e.stopPropagation();
+            this.onChange('optionalEnabled')
+          });
     }
-
 
 }
 

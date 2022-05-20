@@ -1,11 +1,8 @@
 import {
-  eventProxiCriteria,
   redrawBottomLink,
 } from "../../globals/globalfunctions";
-import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import ArrowComponent from "../arrows/ArrowComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";
 import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 import HTMLComponent from "../../HtmlComponent";

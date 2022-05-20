@@ -20,12 +20,17 @@ class OptionalComponent extends BaseOptionComponent{
             this.label = getSettings().langSearch.labelOptionOptional
         }
         super.render()
+        
+        this.#addEventListeners()
         return this
     }
-        
-    onChange(): void {
-        super.onChange('optionalEnabled')
+
+    #addEventListeners(){
+        this.html.on("click", (e) => {
+            e.stopPropagation();
+            this.onChange('optionalEnabled')
+          });
     }
-  
+
 }
 export default OptionalComponent

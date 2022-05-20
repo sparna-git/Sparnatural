@@ -24,13 +24,7 @@ class StartClassGroup extends HTMLComponent {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider
     this.inputTypeComponent = new ClassTypeId(this, this.specProvider);
-    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration
-    // contains the name of the SPARQL variable associated to this component
-    this.varName = this.ParentCriteriaGroup.jsonQueryBranch
-      ? this.ParentCriteriaGroup.jsonQueryBranch.line.s
-      : null;
-    this.notSelectForview = false;
-   
+    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration   
   }
 
   render(){
@@ -56,7 +50,6 @@ class StartClassGroup extends HTMLComponent {
   }
 
   #valueWasSelected() {
-    $(this.html).addClass("VariableSelected");
     this.#renderSelectViewVariableBtn()
 
    this.html[0].dispatchEvent(new CustomEvent('StartClassGroupSelected',{bubbles:true,detail:this.startClassVal}))

@@ -24,32 +24,33 @@ class GroupWrapper extends HTMLComponent{
     hasAllCompleted:boolean 
     hasAnd:boolean
     specProvider:ISpecProvider
-    jsonQueryBranch:any = null
     // ParentComponent: ComponentsList | GroupWrapper
-    constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider,jsonQueryBranch:any)
+    constructor(ParentComponent:HTMLComponent,specProvider:ISpecProvider)
       {
         super('groupe',ParentComponent,null)
         this.specProvider = specProvider
-        this.jsonQueryBranch = jsonQueryBranch
       }
 
     render(): this {
       super.render()
        // disable further links when max depth is reached
       if(!this.checkIfMaxDepthIsReached()){
-        //
-        //
         this.html.addClass('addWereEnable')
       }
-      this.#registerAddComponentHooks()
-      this.CriteriaGroup = new CriteriaGroup(this,this.specProvider,this.jsonQueryBranch).render()
+      this.#registerCriteriaEvents()
+      this.CriteriaGroup = new CriteriaGroup(this,this.specProvider).render()
       return this
     }
 
-    #registerAddComponentHooks(){
+    #registerCriteriaEvents(){
+
+      this.html[0].addEventListener('onRemoveEndClass',(e:CustomEvent)=>{
+        e.stopImmediatePropagation()
+        this.#onRemoveEndClass()
+      })
       this.html[0].addEventListener('onRemoveCriteria',(e:CustomEvent)=>{
         e.stopImmediatePropagation()
-        this.onRemoveCriteriaGroup()
+        this.#onRemoveCriteriaGroup()
       })
 
       this.html[0].addEventListener('addAndComponent',(e:CustomEvent)=>{
@@ -66,20 +67,19 @@ class GroupWrapper extends HTMLComponent{
     //add GroupWrapper as a Sibling
     #addAndComponent(startClassVal:string){
       console.log('addAndComponent')
-      this.andSibling = new GroupWrapper(this.ParentComponent,this.specProvider,this.jsonQueryBranch).render()
+      this.andSibling = new GroupWrapper(this.ParentComponent,this.specProvider).render()
       //set state to startClassValSelected
       this.andSibling.CriteriaGroup.html[0].dispatchEvent(new CustomEvent('StartClassGroupSelected',{detail:startClassVal}))
       this.linkAndBottom.render()
       this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
     }
-
   
     // Create a SubComponentsList and add the GroupWrapper there
     // activate lien top
     //give it additional class childsList
     #addWhereComponent(endClassVal:string){
       this.#removeEditComponents()
-      this.whereChild = new GroupWrapper(this,this.specProvider,this.jsonQueryBranch).render()
+      this.whereChild = new GroupWrapper(this,this.specProvider).render()
 
       //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
       this.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget.val(endClassVal).niceSelect('update')
@@ -100,20 +100,22 @@ class GroupWrapper extends HTMLComponent{
   }
 
 //If the CriteriaGroup should be deleted
-onRemoveCriteriaGroup(){
+#onRemoveCriteriaGroup(){
   //delete everything under it
   this.html.empty()
 
-  //rerender the criteria group
-  this.CriteriaGroup = new CriteriaGroup(this,this.specProvider,this.jsonQueryBranch)
-  // revaluate the which criteria groups got deleted. Maybe run through Componentslist and see which CriteriaGroups are now null??
+  // re-submit form after deletion
+  this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
+  this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
+}
 
-  // TODO check if any variables are highlighted in variable selection. then delete them
-  // TODO reavulate the query branches to create new query
-
-    // re-submit form after deletion
-    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
-    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
+// Remove the EndClass and rerender from the point where the startClassVal got selected
+#onRemoveEndClass(){
+  let startVal = this.CriteriaGroup.StartClassGroup.startClassVal
+  this.CriteriaGroup.html.empty()
+  this.CriteriaGroup.html.remove()
+  this.CriteriaGroup = new CriteriaGroup(this,this.specProvider).render()
+  this.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget.val(startVal).niceSelect('update')
 }
 
 // this method traverses recurively through all the GroupWrappers and calls the callback

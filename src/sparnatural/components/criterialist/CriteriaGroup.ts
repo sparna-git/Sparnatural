@@ -14,10 +14,7 @@ import ISpecProvider from "../../spec-providers/ISpecProviders";
  **/
 
 class CriteriaGroup extends HTMLComponent {
-
   settings: any;
-  // JSON query line from which this line needs to be initialized
-  jsonQueryBranch: any;
   // create all the elements of the criteria
   StartClassGroup: StartClassGroup;
   OptionsGroup: OptionsGroup;
@@ -31,13 +28,10 @@ class CriteriaGroup extends HTMLComponent {
   constructor(
     ParentComponent: GroupWrapper,
     specProvider: any,
-    jsonQueryBranch: any,
   ) {
     super("CriteriaGroup", ParentComponent, null);
     this.specProvider = specProvider
-    this.jsonQueryBranch = jsonQueryBranch;
     this.ParentGroupWrapper = ParentComponent
-
   }
 
   render(): this {

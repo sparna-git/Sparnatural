@@ -22,7 +22,7 @@ class ComponentsList extends HTMLComponent {
     }
 
     initFirstGroupWrapper(){
-      this.rootGroupWrapper = new GroupWrapper(this,this.specProvider,null).render()
+      this.rootGroupWrapper = new GroupWrapper(this,this.specProvider).render()
     }
 
 }

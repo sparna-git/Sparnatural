@@ -6,11 +6,8 @@ import tippy from "tippy.js";
 import UnselectBtn from "../buttons/UnselectBtn";
 import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
 import HTMLComponent from "../../HtmlComponent";
-import { OptionsGroup } from "../optionsgroup/OptionsGroup";
-import ObjectPropertyGroup from "../objectpropertygroup/ObjectPropertyGroup";
 import { getSettings } from "../../../configs/client-configs/settings";
 import EndClassWidgetGroup from "../widgets/EndClassWidgetGroup";
-import ActionsGroup from "../actions/ActionsGroup";
 import ActionWhere from "../actions/actioncomponents/ActionWhere";
 
 /**
@@ -76,7 +73,6 @@ class EndClassGroup extends HTMLComponent {
     })
   }
 
-
   // triggered when the subject/domain is selected
   onStartClassGroupSelected(startClassVal: string) {
     this.startClassVal = startClassVal
@@ -86,39 +82,6 @@ class EndClassGroup extends HTMLComponent {
     $(this.html).append('<div class="EditComponents"></div>'); // this is important!
   }
 
-    // Make arrow function to bind the this lexically
-    // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
-    onRemoveSelected = () =>{
-
-      //TODO: this has to be done in the CriteriaGroup (ParentComponent)
-      let optionsGrp = this.ParentCriteriaGroup.OptionsGroup.html
-      this.#removeComponent(optionsGrp)
-  
-      let objectPropertyGrp = this.ParentCriteriaGroup.html
-      this.#removeComponent(objectPropertyGrp)
-  
-      let endClassGrp = this.ParentCriteriaGroup.html
-      this.#removeComponent(endClassGrp)
-  
-      let endClassWgtGrp = this.ParentCriteriaGroup.html
-      this.#removeComponent(endClassWgtGrp)
-  
-      let actionsGrp = this.ParentCriteriaGroup.html
-      this.#removeComponent(actionsGrp)
-  
-      //Now rerender all of them
-      this.ParentCriteriaGroup.OptionsGroup = new OptionsGroup(this.ParentCriteriaGroup,this.specProvider).render()
-      this.ParentCriteriaGroup.ObjectPropertyGroup = new ObjectPropertyGroup(this.ParentCriteriaGroup,this.specProvider,getSettings().langSearch.ObjectPropertyTemporaryLabel).render()
-      this.ParentCriteriaGroup.EndClassGroup = new EndClassGroup(this.ParentCriteriaGroup,this.specProvider).render()
-      this.endClassWidgetGroup = new EndClassWidgetGroup(this.ParentCriteriaGroup,this.specProvider).render()
-      this.ParentCriteriaGroup.ActionsGroup = new ActionsGroup(this.ParentCriteriaGroup,this.specProvider).render()
-  
-      // set the state back
-      this.html[0].dispatchEvent(new CustomEvent('StartClassGroupSelected',{detail:this.startClassVal}))
-  
-    }
-  // Make arrow function to bind the this lexically
-  // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
   onchangeViewVariable = ()=> {
     console.warn("endclassgrp onChangeViewVar")
     this.html[0].dispatchEvent(new CustomEvent('updateVariableList',{bubbles:true,detail:"test"}))
@@ -185,12 +148,8 @@ class EndClassGroup extends HTMLComponent {
   }
 
   #renderUnselectBtn(){
-    this.UnselectButton = new UnselectBtn(this,this.onRemoveSelected).render() 
-  }
-
-  #removeComponent(component:JQuery<HTMLElement>){
-    component.empty()
-    component.remove()
+    let removeEndClassEvent = ()=>{this.html[0].dispatchEvent(new CustomEvent('onRemoveEndClass',{bubbles:true}))}
+    this.UnselectButton = new UnselectBtn(this,removeEndClassEvent).render() 
   }
 
   getVarName() {

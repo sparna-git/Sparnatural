@@ -23,9 +23,6 @@ class LinkAndBottom extends HTMLComponent{
 
     render(): this {
         super.render()
-
-        //this.html[0].style.height = `${this.height}`
-        //this.html.css({"height":`${this.height}`})
         return this
     }
 

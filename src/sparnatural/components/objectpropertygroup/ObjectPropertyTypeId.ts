@@ -62,11 +62,6 @@ class ObjectPropertyTypeId extends HTMLComponent {
     var selectBuilder = new PropertySelectBuilder(this.specProvider);
     var default_value = null;
 
-    if (this.GrandParent.jsonQueryBranch != null) {
-      var default_value = this.GrandParent.jsonQueryBranch.line.p;
-      this.needTriggerClick = true;
-    }
-
     return selectBuilder.buildPropertySelect(
       this.GrandParent.StartClassGroup.startClassVal,
       this.GrandParent.EndClassGroup.endClassVal,

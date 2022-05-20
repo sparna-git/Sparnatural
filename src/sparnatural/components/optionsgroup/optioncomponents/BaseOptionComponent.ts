@@ -31,11 +31,6 @@ class BaseOptionComponent extends HTMLComponent {
     }
 
     render(): this {
-        if(this.ParentOptionsGroup.ParentCriteriaGroup.jsonQueryBranch){
-            let branch =  this.ParentOptionsGroup.ParentCriteriaGroup.jsonQueryBranch;
-            this.default_value =  branch[this.name]  ? ' checked="checked"' : ""
-    }
-
         this.inputElement = $(`<input type="radio" name="${this.name}" data-id="${this.id}" ${this.default_value} />`)
         
         // htmlStructure rendering:
@@ -45,24 +40,13 @@ class BaseOptionComponent extends HTMLComponent {
         this.html.append($(`<span>${this.label}</span>`)) 
         this.frontArrow.render()
 
-        this.#addEventListeners()
-
         return this
-    }
-
-    #addEventListeners(){
-        this.html.on("click", (e) => {
-            e.stopPropagation();
-          });
-        this.html.on("click", { arg1: this, arg2: "onChange" }, eventProxiCriteria);
     }
 
     onChange(cls:string){
         // get the ref to the list element
         let wrapperRef = this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper
-        //wrapperRef.html.hasClass(cls) ? wrapperRef.html.removeClass(cls) : wrapperRef.html.addClass(cls)
         wrapperRef.traverse((grpWarpper:GroupWrapper)=>{
-            // refactor to an internal state variable and changing it via a method... like OptionsGroup.hideHtml
             grpWarpper.html.hasClass(cls) ? grpWarpper.html.removeClass(cls) : grpWarpper.html.addClass(cls)
             // add here code to hide the OptionsGroup in child classes
             grpWarpper.CriteriaGroup.OptionsGroup.backArrow.html.toggle()
