@@ -159,7 +159,6 @@ export class ListWidget implements IWidget {
   }
 
   render() {
-    console.warn("render list widget");
     var startClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
         .startClassVal;
@@ -169,10 +168,6 @@ export class ListWidget implements IWidget {
     var ObjectPropertyGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
         .value_selected;
-    console.dir(this);
-    console.log(
-      `start: ${startClassGroup_value}, obj: ${ObjectPropertyGroup_value}, end: ${endClassGroup_value}`
-    );
     var itc_obj = this.ParentComponent;
 
     let url = this.listHandler.listUrl(

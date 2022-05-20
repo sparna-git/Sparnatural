@@ -94,11 +94,6 @@ class ClassTypeId extends HTMLComponent {
     this.frontArrow.html.removeClass("disable");
     this.backArrow.html.removeClass("disable");
   }
-
-  reload() {
-    console.log("reload on ClassTypeId should probably never be called");
-    this.reload();
-  }
 }
 export default ClassTypeId;
 
@@ -130,10 +125,8 @@ class ClassSelectBuilder extends HTMLComponent {
     } else {
       items = this.specProvider.getConnectedClasses(domainId);
     }
-    console.log("log the items");
     console.dir(items);
     for (var key in items) {
-      console.log(`key:${key} item:${items[key]}`);
       var val = items[key];
       var label = this.specProvider.getLabel(val);
       var icon = this.specProvider.getIcon(val);

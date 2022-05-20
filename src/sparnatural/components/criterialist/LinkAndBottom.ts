@@ -27,7 +27,6 @@ class LinkAndBottom extends HTMLComponent {
   }
 
   setLineObj(lineObj: LineObject) {
-    console.warn("should draw");
     this.lineObj = lineObj;
     this.xStart = lineObj.xStart;
     this.xEnd = lineObj.xEnd;

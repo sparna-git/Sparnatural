@@ -60,12 +60,10 @@ class ActionStore {
     );
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
     this.sparnatural.html[0].addEventListener("updateVariableList", (e) => {
-      console.log("updateVariableList event caught");
       e.stopImmediatePropagation();
     });
 
     this.sparnatural.html[0].addEventListener("onSubmit", (e) => {
-      console.log("onSubmit even caught");
       e.stopImmediatePropagation();
     });
 
