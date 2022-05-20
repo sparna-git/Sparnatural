@@ -72,7 +72,7 @@ class CriteriaGroup extends HTMLComponent {
       this.EndClassGroup.onStartClassGroupSelected(e.detail);
     })
 
-    this.html[0].addEventListener("ObjectPropertyGroupSelected",(e:CustomEvent)=>{
+    this.html[0].addEventListener("onObjectPropertyGroupSelected",(e:CustomEvent)=>{
       e.stopImmediatePropagation()
       this.EndClassGroup.onObjectPropertyGroupSelected(e.detail)
       this.OptionsGroup.onObjectPropertyGroupSelected();

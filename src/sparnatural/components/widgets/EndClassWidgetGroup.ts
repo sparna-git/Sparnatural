@@ -112,10 +112,6 @@ class EndClassWidgetGroup extends HTMLComponent {
 
     this.selectAllValue = true;
 
-    // disable the Where
-
-    //Add variable on results view
-
     this.#renderNewSelectedValue(endClassWidgetVal)
 
     this.html[0].dispatchEvent(new CustomEvent('EndClassWidgetGroupSelected',{bubbles:true}))

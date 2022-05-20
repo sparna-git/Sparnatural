@@ -67,10 +67,10 @@ export class OptionsGroup extends HTMLComponent {
   #checkIfOptionsPossible():boolean{
     return  (
       (this.specProvider.isEnablingOptional(
-        this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
+        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal
       ) &&
         this.specProvider.isEnablingNegation(
-          this.ParentCriteriaGroup.ObjectPropertyGroup.value_selected
+          this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal
         )
       )
     ) 

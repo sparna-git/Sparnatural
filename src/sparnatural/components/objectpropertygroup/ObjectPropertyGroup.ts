@@ -3,14 +3,12 @@ import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
 import CriteriaGroup from "../criterialist/CriteriaGroup";
-import { getSettings } from "../../../configs/client-configs/settings";
-
 /**
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
  **/
 class ObjectPropertyGroup extends HTMLComponent {
   objectPropertySelector: ObjectPropertyTypeId;
-  value_selected: any = null; // value which shows which object property got chosen by the config for subject and object
+  objectPropVal: any = null; // value which shows which object property got chosen by the config for subject and object
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   constructor(
@@ -30,6 +28,7 @@ class ObjectPropertyGroup extends HTMLComponent {
 
   render(){
     super.render()
+    this.#addEventListener()
     return this
   }
   /*
@@ -40,6 +39,36 @@ class ObjectPropertyGroup extends HTMLComponent {
     this.objectPropertySelector.render();
   }
 
+  #addEventListener(){
+    this.html[0].addEventListener('onObjectPropertyGroupSelected',(e:CustomEvent)=>{
+      if((e.detail === '') || (!e.detail)) throw Error('No value received on "classTypeValueSelected"')
+      this.objectPropVal = e.detail
+      this.#valueWasSelected()
+    })
+  }
+
+  #valueWasSelected() {
+
+    this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
+
+    var desc = this.specProvider.getTooltip(this.objectPropVal);
+
+    if (desc) {
+      console.warn('StartClassGroup.valueSelected desc hapene!')
+      $(this.ParentCriteriaGroup.StartClassGroup.html)
+        .find(".ClassTypeId")
+        .attr("data-tippy-content", desc);
+      // tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
+      var tippySettings = Object.assign({}, this.settings.tooltipConfig);
+      tippySettings.placement = "top-start";
+      tippy(".StartClassGroup .ClassTypeId[data-tippy-content]", tippySettings);
+    } else {
+      $(this.ParentCriteriaGroup.StartClassGroup.html).removeAttr(
+        "data-tippy-content"
+      );
+    }
+  }
+
   /*
 		This method is triggered when an Object is selected.
 		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
@@ -47,17 +76,14 @@ class ObjectPropertyGroup extends HTMLComponent {
   onEndClassGroupSelected(endClassVal:string) {
     // this will update the temporarly label
     this.objectPropertySelector.render();       
-    this.value_selected = this.objectPropertySelector.object_property_selected
-    this.html[0].dispatchEvent(new CustomEvent('ObjectPropertyGroupSelected',{bubbles:true,detail:this.value_selected}))
-
   }
-
+/*
   onChange() {
-    if (this.value_selected) {
+    if (this.objectPropVal) {
       console.warn("ObjectPropertyGroup call OptionsGroup.reload!!!")
       this.ParentCriteriaGroup.OptionsGroup.render();
     }
-    this.value_selected = $(this.html).find("select.input-val").val();
+    this.objectPropVal = $(this.html).find("select.input-val").val();
     // disable if only one possible property option between the 2 classes
     if ($(this.html).find(".input-val").find("option").length == 1) {
       $(this.html)
@@ -76,7 +102,7 @@ class ObjectPropertyGroup extends HTMLComponent {
     }
 
     // sets tooltip ready
-    var desc = this.specProvider.getTooltip(this.value_selected);
+    var desc = this.specProvider.getTooltip(this.objectPropVal);
     if (desc) {
       $(this.ParentCriteriaGroup.ObjectPropertyGroup.html)
         .find(".ObjectPropertyTypeId")
@@ -94,6 +120,6 @@ class ObjectPropertyGroup extends HTMLComponent {
       );
     }
     //ici peut être lancer le reload du where si il y a des fils
-  }
+  }*/
 }
 export default ObjectPropertyGroup;
