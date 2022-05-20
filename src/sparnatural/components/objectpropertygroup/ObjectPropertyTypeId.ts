@@ -30,11 +30,13 @@ class ObjectPropertyTypeId extends HTMLComponent {
 		created by PropertySelectBuilder
 	*/
   render() {
+    super.render()
     // if there is an Object selected
     if (this.GrandParent.EndClassGroup.endClassVal) {
       this.#removeTempLbl(); 
       // set the correct objectProperty matching to Start and End value
       let oldWidget = this.#getObjectProperty()
+      this.html.append(oldWidget)
       this.widgetHtml = oldWidget.niceSelect()
       this.#addOnChangeListener(oldWidget)
 
@@ -51,7 +53,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
           "</span>"
       );
     }
-    super.render()
+    this.html.append(this.widgetHtml)
     this.arrow.render()
     return this
   }

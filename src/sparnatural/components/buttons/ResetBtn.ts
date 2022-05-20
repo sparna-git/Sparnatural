@@ -7,7 +7,7 @@ class ResetBtn extends HTMLComponent {
         UiuxConfig.ICON_RESET +
         "</a></p>")
         super("reset-wrapper",ParentComponent,widgetHtml)
-        this.html.on('click',(e:JQuery.ClickEvent)=>{
+        this.widgetHtml.on('click',(e:JQuery.ClickEvent)=>{
             callBack()
         })
     }

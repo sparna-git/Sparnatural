@@ -15,12 +15,20 @@ class BgWrapper extends HTMLComponent {
     }
     render(): this {
         super.render()
-        this.componentsList = new ComponentsList(this,this.specProvider).render()
-        this.resetBtn = new ResetBtn(this,this.resetCallback).render()
+        this.#renderComponents()
         return this
     }
 
+    #renderComponents(){
+        this.componentsList = new ComponentsList(this,this.specProvider).render()
+        this.resetBtn = new ResetBtn(this,this.resetCallback).render()
+    }
+
     resetCallback = ()=>{
-      this.componentsList = new ComponentsList(this,this.specProvider).render()
+        this.componentsList.html.empty()
+        this.componentsList.html.remove()
+        this.resetBtn.html.empty()
+        this.resetBtn.html.remove()
+        this.#renderComponents()
     }
 } export default BgWrapper
