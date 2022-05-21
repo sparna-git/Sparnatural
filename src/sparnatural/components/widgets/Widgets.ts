@@ -166,7 +166,8 @@ export class ListWidget implements IWidget {
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
         .endClassVal;
     var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
+        .objectPropVal;
     var itc_obj = this.ParentComponent;
 
     let url = this.listHandler.listUrl(

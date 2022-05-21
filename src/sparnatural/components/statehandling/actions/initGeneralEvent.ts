@@ -1,7 +1,9 @@
 import { getSettings } from "../../../../configs/client-configs/settings";
 import GroupWrapper from "../../criterialist/GroupWrapper";
 import ActionStore from "../ActionStore";
-
+/*
+  A general Event is either an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper
+*/
 export default function initGeneralevent(actionStore: ActionStore) {
   let cssdef = ``;
   //index used in callback
@@ -11,8 +13,7 @@ export default function initGeneralevent(actionStore: ActionStore) {
   // traverse through components and calculate background / linkAndBottoms /  for them
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traverse(
     (grpWrapper: GroupWrapper) => {
-
-      renderLinks(grpWrapper)
+      renderLinks(grpWrapper);
       //render background
       previousHeight = currentHeight;
       currentHeight = grpWrapper.html.outerHeight(true) + 1;
@@ -24,21 +25,21 @@ export default function initGeneralevent(actionStore: ActionStore) {
       index++;
     }
   );
-  let linGradCss= `linear-gradient(${cssdef})`
-  actionStore.sparnatural.BgWrapper.html.css({background:linGradCss});
+  let linGradCss = `linear-gradient(${cssdef})`;
+  actionStore.sparnatural.BgWrapper.html.css({ background: linGradCss });
 }
 
-
-function renderLinks(grpWrapper:GroupWrapper){
-  if(grpWrapper.whereChild){
-    grpWrapper.linkWhereBottom.html.empty()
-    grpWrapper.linkWhereBottom.html.remove()
-    grpWrapper.linkWhereBottom.render()
+// if the grpWrapper doesn't have prop .html, then it got deleted and the links don't need to be rerendered
+function renderLinks(grpWrapper: GroupWrapper) {
+  if (grpWrapper.whereChild) {
+    grpWrapper.linkWhereBottom.html.empty();
+    grpWrapper.linkWhereBottom.html.remove();
+    if (grpWrapper.html) grpWrapper.linkWhereBottom.render();
   }
-  if(grpWrapper.andSibling){
-    grpWrapper.linkAndBottom.html.empty()
-    grpWrapper.linkAndBottom.html.remove()
-    grpWrapper.linkAndBottom.render()
+  if (grpWrapper.andSibling) {
+    grpWrapper.linkAndBottom.html.empty();
+    grpWrapper.linkAndBottom.html.remove();
+    if (grpWrapper.html) grpWrapper.linkAndBottom.render();
   }
 }
 
@@ -50,9 +51,9 @@ function drawBackgroungOfGroupWrapper(
   var ratio = 100 / 10 / 100;
   let a = (index + 1) * ratio;
   let rgba = `rgba(${getSettings().backgroundBaseColor},${a})`;
-  if(index !== 0){
+  if (index !== 0) {
     // comma in the string beginning
     return ` ,${rgba} ${prev}px, ${rgba} ${currHeight}px`;
-  } 
+  }
   return `${rgba} ${prev}px, ${rgba} ${currHeight}px`;
 }

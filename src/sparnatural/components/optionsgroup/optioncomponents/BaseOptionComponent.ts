@@ -60,17 +60,20 @@ class BaseOptionComponent extends HTMLComponent {
     let wrapperRef =
       this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper;
     wrapperRef.traverse((grpWrapper: GroupWrapper) => {
-      if(grpWrapper.html.hasClass(cls)){
-        grpWrapper.html.removeClass(cls)
-        grpWrapper.linkWhereBottom.html.removeClass(cls)
+      if (grpWrapper.html.hasClass(cls)) {
+        grpWrapper.html.removeClass(cls);
+        grpWrapper.linkWhereBottom.html.removeClass(cls);
       } else {
         grpWrapper.html.addClass(cls);
-        grpWrapper.linkWhereBottom.html.addClass(cls)
+        grpWrapper.linkWhereBottom.html.addClass(cls);
       }
 
       //skip the toggling for this ParentGroupWrapper and if there is no option possible
-      if((grpWrapper != wrapperRef) && (grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html)){
-        grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html.toggle()
+      if (
+        grpWrapper != wrapperRef &&
+        grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html
+      ) {
+        grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html.toggle();
       }
     });
   }

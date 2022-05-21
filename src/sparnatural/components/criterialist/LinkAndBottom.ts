@@ -25,31 +25,30 @@ class LinkAndBottom extends HTMLComponent {
 
   render(): this {
     super.render();
-    this.#drawLinkAndBottom(this.ParentGroupWrapper)
+    this.#drawLinkAndBottom(this.ParentGroupWrapper);
     return this;
   }
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect/element-box-diagram.png
-#drawLinkAndBottom(
-  grpWrapper: GroupWrapper
-) {
-  let posUpperStart =
-    grpWrapper.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
-  let posLowerStart =
-    grpWrapper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
+  #drawLinkAndBottom(grpWrapper: GroupWrapper) {
+    let posUpperStart =
+      grpWrapper.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
+    let posLowerStart =
+      grpWrapper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
 
-  let line = {
-    // line is located in the first quarter of StartClassGroup
-    xStart: posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4,
-    xEnd: posLowerStart.left + (posLowerStart.right - posLowerStart.left) / 4,
-    yStart: posUpperStart.bottom,
-    yEnd: posLowerStart.top
-  };
+    let line = {
+      // line is located in the first quarter of StartClassGroup
+      xStart:
+        posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4,
+      xEnd: posLowerStart.left + (posLowerStart.right - posLowerStart.left) / 4,
+      yStart: posUpperStart.bottom,
+      yEnd: posLowerStart.top,
+    };
 
-  grpWrapper.linkAndBottom.setLineObj(line);
-}
+    this.#setLineObj(line);
+  }
 
-  setLineObj(lineObj: LineObject) {
+  #setLineObj(lineObj: LineObject) {
     this.lineObj = lineObj;
     this.xStart = lineObj.xStart;
     this.xEnd = lineObj.xEnd;

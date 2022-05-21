@@ -32,11 +32,6 @@ class EndClassGroup extends HTMLComponent {
     this.specProvider = specProvider;
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
     this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
-    this.actionWhere = new ActionWhere(
-      this,
-      this.specProvider,
-      this.#onAddWhere
-    );
   }
 
   render() {
@@ -46,16 +41,6 @@ class EndClassGroup extends HTMLComponent {
     this.#addEventListener();
     return this;
   }
-
-  //MUST be arrowfunction
-  #onAddWhere = () => {
-    this.html[0].dispatchEvent(
-      new CustomEvent("addWhereComponent", {
-        bubbles: true,
-        detail: this.endClassVal,
-      })
-    );
-  };
 
   #addEventListener() {
     this.html[0].addEventListener(
@@ -92,7 +77,8 @@ class EndClassGroup extends HTMLComponent {
       startClassVal
     );
     this.inputTypeComponent.render();
-    $(this.html).append('<div class="EditComponents"></div>'); // this is important!
+    let editCompCls = $('<div class="EditComponents"></div>');
+    this.html.append(editCompCls);
   }
 
   onchangeViewVariable = () => {
@@ -103,14 +89,24 @@ class EndClassGroup extends HTMLComponent {
   };
 
   onObjectPropertyGroupSelected(input: string) {
+    if (this.endClassWidgetGroup.inputTypeComponent || this.actionWhere) return;
     this.endClassWidgetGroup.onObjectPropertyGroupSelected(input);
-    this.actionWhere.render(); // first render endClassWidgetGroup then actionWhere
+    this.actionWhere = new ActionWhere(
+      this,
+      this.specProvider,
+      this.#onAddWhere
+    ).render();
   }
 
-  /*
-		onChange gets called when a Endclassgroup was selected. For example choosing Musuem relatedTo Country
-		When Country got selected this events fires
-	*/
+  //MUST be arrowfunction
+  #onAddWhere = () => {
+    this.html[0].dispatchEvent(
+      new CustomEvent("addWhereComponent", {
+        bubbles: true,
+        detail: this.endClassVal,
+      })
+    );
+  };
 
   #valueWasSelected() {
     this.#renderUnselectBtn();
@@ -156,10 +152,6 @@ class EndClassGroup extends HTMLComponent {
       );
     };
     this.UnselectButton = new UnselectBtn(this, removeEndClassEvent).render();
-  }
-
-  getVarName() {
-    return this.varName;
   }
 }
 export default EndClassGroup;

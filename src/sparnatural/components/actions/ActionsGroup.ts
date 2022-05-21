@@ -36,7 +36,10 @@ class ActionsGroup extends HTMLComponent {
   // This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
   #onAddAnd = () => {
     this.actions.ActionAnd.html[0].dispatchEvent(
-      new CustomEvent("addAndComponent", { bubbles: true,detail:this.ParentCriteriaGroup.StartClassGroup.startClassVal })
+      new CustomEvent("addAndComponent", {
+        bubbles: true,
+        detail: this.ParentCriteriaGroup.StartClassGroup.startClassVal,
+      })
     );
     this.#removeActionAnd();
     return false;

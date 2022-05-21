@@ -33,22 +33,13 @@ class LinkWhereBottom extends HTMLComponent {
     return this;
   }
 
-  #drawWhereConnection(
-    EndClassGroup: EndClassGroup,
-    whereChild: GroupWrapper
-  ) {
-    let xyUpper = this.#drawUpperVertical(
-      EndClassGroup,
-      whereChild
-    );
+  #drawWhereConnection(EndClassGroup: EndClassGroup, whereChild: GroupWrapper) {
+    let xyUpper = this.#drawUpperVertical(EndClassGroup, whereChild);
     let xyLower = this.#drawLowerVertical(whereChild);
     this.#drawHorizontal(xyLower, xyUpper);
   }
   // line from the middle of the endclassgroup till the end of GroupWrapper
-  #drawUpperVertical(
-    endClassGroup: EndClassGroup,
-    whereChild: GroupWrapper
-  ) {
+  #drawUpperVertical(endClassGroup: EndClassGroup, whereChild: GroupWrapper) {
     let endClassClientRect = endClassGroup.html[0].getBoundingClientRect();
     let whereChildRect = whereChild.html[0].getBoundingClientRect();
     let middleOfEndClass =

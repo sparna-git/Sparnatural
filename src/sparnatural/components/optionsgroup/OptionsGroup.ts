@@ -50,7 +50,7 @@ export class OptionsGroup extends HTMLComponent {
 
   // validates if the Options Arrow can be rendered or not
   #checkIfBackArrowisRenderable() {
-    if (this.#checkIfOptionsPossible) {
+    if (this.#checkIfOptionsPossible && !this.backArrow) {
       //Options like NOTEXISTS are possible and none of the parent has it already activated
       this.#addOptionsPossible();
     }

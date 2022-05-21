@@ -17,8 +17,8 @@ import LinkWhereBottom from "./LinkWhereBottom";
 class GroupWrapper extends HTMLComponent {
   whereChild: GroupWrapper = null;
   andSibling: GroupWrapper = null;
-  linkAndBottom = new LinkAndBottom(this); // connection line drawn from this CriteriaList with hasAnd CriteriaList
-  linkWhereBottom = new LinkWhereBottom(this);
+  linkAndBottom: LinkAndBottom; // connection line drawn from this CriteriaList with hasAnd CriteriaList
+  linkWhereBottom: LinkWhereBottom;
   CriteriaGroup: CriteriaGroup;
   completed: boolean;
   hasAllCompleted: boolean;
@@ -48,7 +48,7 @@ class GroupWrapper extends HTMLComponent {
     });
     this.html[0].addEventListener("onRemoveCriteria", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      this.#onRemoveCriteriaGroup();
+      this.#onRemoveGrpWrapper();
     });
 
     this.html[0].addEventListener("addAndComponent", (e: CustomEvent) => {
@@ -70,9 +70,9 @@ class GroupWrapper extends HTMLComponent {
     ).render();
     //set state to startClassValSelected and trigger change
     this.andSibling.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget
-    .val(startClassVal)
-    .niceSelect("update");
-    this.linkAndBottom.render();
+      .val(startClassVal)
+      .niceSelect("update");
+    this.linkAndBottom = new LinkAndBottom(this).render();
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
@@ -89,7 +89,7 @@ class GroupWrapper extends HTMLComponent {
     this.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget
       .val(endClassVal)
       .niceSelect("update");
-    this.linkWhereBottom.render();
+    this.linkWhereBottom = new LinkWhereBottom(this).render();
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
@@ -97,7 +97,10 @@ class GroupWrapper extends HTMLComponent {
 
   #removeEditComponents() {
     this.CriteriaGroup.EndClassGroup.actionWhere.html.remove();
+    this.CriteriaGroup.EndClassGroup.actionWhere = null;
     this.CriteriaGroup.EndClassGroup.endClassWidgetGroup.inputTypeComponent.html.remove();
+    this.CriteriaGroup.EndClassGroup.endClassWidgetGroup.inputTypeComponent =
+      null;
   }
   checkIfMaxDepthIsReached() {
     let maxreached = false;
@@ -114,13 +117,9 @@ class GroupWrapper extends HTMLComponent {
   }
 
   //If the CriteriaGroup should be deleted
-  #onRemoveCriteriaGroup() {
-    //delete everything under it
-    this.html.empty();
-
-    // re-submit form after deletion
+  #onRemoveGrpWrapper() {
     this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
+      new CustomEvent("deleteGrpWrapper", { bubbles: true, detail: this })
     );
     this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
   }
@@ -136,6 +135,14 @@ class GroupWrapper extends HTMLComponent {
       .niceSelect("update");
   }
 
+  // set back state
+  setObjectPropertySelectedState() {
+    let opVal = this.CriteriaGroup.ObjectPropertyGroup.objectPropVal;
+    this.CriteriaGroup.html[0].dispatchEvent(
+      new CustomEvent("onObjectPropertyGroupSelected", { detail: opVal })
+    );
+  }
+
   // this method traverses recurively through all the GroupWrappers and calls the callback
   traverse(callBack: (grpWarpper: GroupWrapper) => void) {
     callBack(this);
@@ -145,9 +152,3 @@ class GroupWrapper extends HTMLComponent {
   }
 }
 export default GroupWrapper;
-
-function isGroupWrapper(
-  ParentComponent: HTMLComponent
-): ParentComponent is GroupWrapper {
-  return (ParentComponent as GroupWrapper).baseCssClass === "groupe";
-} // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards

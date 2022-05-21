@@ -62,14 +62,7 @@ class CriteriaGroup extends HTMLComponent {
   }
 
   #assembleComponents = () => {
-    this.html[0].addEventListener("EndClassGroupSelected", (e: CustomEvent) => {
-      e.stopImmediatePropagation();
-      if (e.detail === "" || !e.detail)
-        throw Error(
-          "The Event StartClassGroupSelected expects the startClassVal"
-        );
-      this.ObjectPropertyGroup.onEndClassGroupSelected(e.detail);
-    });
+    // 1. User selects StartClassVal
     this.html[0].addEventListener(
       "StartClassGroupSelected",
       (e: CustomEvent) => {
@@ -83,6 +76,17 @@ class CriteriaGroup extends HTMLComponent {
       }
     );
 
+    // 2. User Selects EndClassVal
+    this.html[0].addEventListener("EndClassGroupSelected", (e: CustomEvent) => {
+      e.stopImmediatePropagation();
+      if (e.detail === "" || !e.detail)
+        throw Error(
+          "The Event StartClassGroupSelected expects the startClassVal"
+        );
+      this.ObjectPropertyGroup.onEndClassGroupSelected(e.detail);
+    });
+
+    // 3. Automatically selected or User selects ObjectPropertyGrpVal
     this.html[0].addEventListener(
       "onObjectPropertyGroupSelected",
       (e: CustomEvent) => {

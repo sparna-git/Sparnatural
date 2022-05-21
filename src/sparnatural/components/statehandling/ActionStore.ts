@@ -5,6 +5,7 @@ import Sparnatural from "../MainComponents/Sparnatural";
 import initGeneralevent from "./actions/initGeneralEvent";
 import toggleVarNames from "./actions/toggleVarNames";
 import submit from "./actions/submitAction";
+import deleteGrpWrapper from "./actions/deleteGrpWrapper";
 // This is ugly, should use i18n features instead
 const i18nLabels = {
   en: require("../../../assets/lang/en.json"),
@@ -19,7 +20,7 @@ class ActionStore {
   sparnatural: Sparnatural;
   specProvider: any;
   orderSort: string;
-  cssdef:string
+  cssdef: string;
   //submitOpened = false still implement
   constructor(sparnatural: Sparnatural, specProvider: ISpecProvider) {
     this.specProvider = specProvider;
@@ -56,7 +57,6 @@ class ActionStore {
       "displayVarName",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-
       }
     );
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
@@ -71,8 +71,7 @@ class ActionStore {
     // Switch which toggles if the Start and Endvalues are shown as their Var name. e.g Country_1
     this.sparnatural.html[0].addEventListener("toggleVarNames", (e) => {
       e.stopImmediatePropagation();
-      toggleVarNames(this)
-
+      toggleVarNames(this);
     });
     // maxvarindex shows the index for the sparql variables. e.g Country_1
     let maxVarIndex = 0;
@@ -92,10 +91,16 @@ class ActionStore {
         this.orderSort = e.detail;
       }
     );
-    // refactor this away
+
     this.sparnatural.html[0].addEventListener("initGeneralEvent", () => {
       initGeneralevent(this);
     });
+    this.sparnatural.html[0].addEventListener(
+      "deleteGrpWrapper",
+      (e: CustomEvent) => {
+        deleteGrpWrapper(this, e);
+      }
+    );
   }
 }
 

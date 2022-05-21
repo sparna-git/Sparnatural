@@ -27,7 +27,6 @@ class EndClassWidgetGroup extends HTMLComponent {
   }
 
   render() {
-    console.warn("rendering endclasswidgetgroup");
     super.render();
     return this;
   }
@@ -35,6 +34,7 @@ class EndClassWidgetGroup extends HTMLComponent {
    * Called when the property/link between domain and range is selected, to init this.
    **/
   onObjectPropertyGroupSelected(objectProperty_selected: string) {
+    //if(this.inputTypeComponent) return // if already initialized don't do it again
     this.inputTypeComponent = new ObjectPropertyTypeWidget(
       this,
       getSettings(),

@@ -1,6 +1,6 @@
 import ActionStore from "../ActionStore";
 
-export default function toggleVarNames(actionsStore:ActionStore){
+export default function toggleVarNames(actionsStore: ActionStore) {
   actionsStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traverse(
     (grp) => {
       //TODO: add logic to display the varnames as labels
