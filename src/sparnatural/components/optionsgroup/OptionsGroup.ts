@@ -45,7 +45,6 @@ export class OptionsGroup extends HTMLComponent {
 
   // called by ParentCriteriaGroup
   onObjectPropertyGroupSelected() {
-    $(this.html).addClass("ShowOnEdit");
     this.#checkIfBackArrowisRenderable();
   }
 

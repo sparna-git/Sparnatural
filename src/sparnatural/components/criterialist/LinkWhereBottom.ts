@@ -1,7 +1,6 @@
 import { getSettings } from "../../../configs/client-configs/settings";
 import HTMLComponent from "../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import CriteriaGroup from "./CriteriaGroup";
 import GroupWrapper from "./GroupWrapper";
 
 /*
@@ -29,20 +28,17 @@ class LinkWhereBottom extends HTMLComponent {
     this.html.append(this.lowerVertical);
     this.#drawWhereConnection(
       this.ParentGroupWrapper.CriteriaGroup.EndClassGroup,
-      this.ParentGroupWrapper.whereChild,
-      this.ParentGroupWrapper.CriteriaGroup
+      this.ParentGroupWrapper.whereChild
     );
     return this;
   }
 
   #drawWhereConnection(
     EndClassGroup: EndClassGroup,
-    whereChild: GroupWrapper,
-    criteriaGroup: CriteriaGroup
+    whereChild: GroupWrapper
   ) {
     let xyUpper = this.#drawUpperVertical(
       EndClassGroup,
-      criteriaGroup,
       whereChild
     );
     let xyLower = this.#drawLowerVertical(whereChild);
@@ -51,7 +47,6 @@ class LinkWhereBottom extends HTMLComponent {
   // line from the middle of the endclassgroup till the end of GroupWrapper
   #drawUpperVertical(
     endClassGroup: EndClassGroup,
-    criteriaGroup: CriteriaGroup,
     whereChild: GroupWrapper
   ) {
     let endClassClientRect = endClassGroup.html[0].getBoundingClientRect();

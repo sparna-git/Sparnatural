@@ -19,6 +19,7 @@ class ActionStore {
   sparnatural: Sparnatural;
   specProvider: any;
   orderSort: string;
+  cssdef:string
   //submitOpened = false still implement
   constructor(sparnatural: Sparnatural, specProvider: ISpecProvider) {
     this.specProvider = specProvider;

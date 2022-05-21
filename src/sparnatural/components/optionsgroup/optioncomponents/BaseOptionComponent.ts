@@ -59,12 +59,19 @@ class BaseOptionComponent extends HTMLComponent {
     // get the ref to the list element
     let wrapperRef =
       this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper;
-    wrapperRef.traverse((grpWarpper: GroupWrapper) => {
-      grpWarpper.html.hasClass(cls)
-        ? grpWarpper.html.removeClass(cls)
-        : grpWarpper.html.addClass(cls);
-      // add here code to hide the OptionsGroup in child classes
-      grpWarpper.CriteriaGroup.OptionsGroup.backArrow.html.toggle();
+    wrapperRef.traverse((grpWrapper: GroupWrapper) => {
+      if(grpWrapper.html.hasClass(cls)){
+        grpWrapper.html.removeClass(cls)
+        grpWrapper.linkWhereBottom.html.removeClass(cls)
+      } else {
+        grpWrapper.html.addClass(cls);
+        grpWrapper.linkWhereBottom.html.addClass(cls)
+      }
+
+      //skip the toggling for this ParentGroupWrapper and if there is no option possible
+      if((grpWrapper != wrapperRef) && (grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html)){
+        grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html.toggle()
+      }
     });
   }
 }

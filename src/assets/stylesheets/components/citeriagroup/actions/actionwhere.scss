@@ -1,0 +1,30 @@
+@use '../../../base';
+@use '../../../themes';
+.ActionWhere {
+    line-height: 20px;
+    position: absolute;
+    display: flex;
+    margin-top: -1px;
+    div{
+        margin-left: 25px;
+    }
+    a{
+        position: absolute;
+        left: 100%;
+        cursor: pointer;
+        display: block;
+        background: #fff;
+        border: 2px solid themes.$custom-red ;
+        border-radius: 13px;
+        height: 26px;
+        min-width: 26px !important;
+        text-align: center;
+        font-size: 18px;
+        color: themes.$custom-red !important ;
+        font-weight: bold;  
+        margin-left: 10px;  
+        &:hover {
+            color: themes.$custom-red ;
+        }
+    }
+}

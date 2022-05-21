@@ -1,12 +1,12 @@
 import { getSettings } from "../../../configs/client-configs/settings";
 import HTMLComponent from "../../HtmlComponent";
+import GroupWrapper from "./GroupWrapper";
 
 interface LineObject {
   xStart: number;
   xEnd: number;
   yStart: number;
   yEnd: number;
-  length: number;
 }
 
 class LinkAndBottom extends HTMLComponent {
@@ -16,15 +16,38 @@ class LinkAndBottom extends HTMLComponent {
   yStart: number;
   yEnd: number;
   length: number;
+  ParentGroupWrapper: GroupWrapper;
   constructor(ParentComponent: HTMLComponent) {
     let widgetHTML = $(`<span>${getSettings().langSearch.And}</span>`);
     super("link-and-bottom", ParentComponent, widgetHTML);
+    this.ParentGroupWrapper = ParentComponent as GroupWrapper;
   }
 
   render(): this {
     super.render();
+    this.#drawLinkAndBottom(this.ParentGroupWrapper)
     return this;
   }
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect/element-box-diagram.png
+#drawLinkAndBottom(
+  grpWrapper: GroupWrapper
+) {
+  let posUpperStart =
+    grpWrapper.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
+  let posLowerStart =
+    grpWrapper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
+
+  let line = {
+    // line is located in the first quarter of StartClassGroup
+    xStart: posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4,
+    xEnd: posLowerStart.left + (posLowerStart.right - posLowerStart.left) / 4,
+    yStart: posUpperStart.bottom,
+    yEnd: posLowerStart.top
+  };
+
+  grpWrapper.linkAndBottom.setLineObj(line);
+}
 
   setLineObj(lineObj: LineObject) {
     this.lineObj = lineObj;

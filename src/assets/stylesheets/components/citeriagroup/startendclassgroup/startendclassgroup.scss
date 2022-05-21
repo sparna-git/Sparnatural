@@ -37,8 +37,8 @@
         height: base.$height-components;
         padding: 0 0;
         width: auto;
+        font-size: 14px;
         
-        .ActionWhere,
         .ObjectPropertyTypeWidget {
             position: relative;
             border-left: 3px solid themes.$custom-red;
@@ -52,7 +52,6 @@
             display:block;
             width:100%;
             min-width:1px;
-            font-size: 14px;
             /*text-decoration: underline;*/
             /*&.DatesWidget {
                 border-left-color: transparent;
@@ -79,13 +78,7 @@
             &>div {
                 position: absolute;
                 left: 100%;
-                top: 0;
-                
-                
-            }
-            &>a  {
-                top: 50%;
-                transform:translate(0,-50%);
+                top: 0; 
             }
             &>.listwidget,
             &>.search-widget,
@@ -186,20 +179,7 @@
                 }
             }
         }
-        .ActionWhere {
-            height: 20px;
-            line-height: 20px;
-            position: absolute;
-            top: 48px;
-            width: auto;
-            
-            .edit-trait {
-                top: 9px;
-            }
-            .edit-num {
-                
-            }
-        }
+
         .edit-trait {
             position: absolute;
             top: 50%;

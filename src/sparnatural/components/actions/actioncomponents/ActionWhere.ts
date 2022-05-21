@@ -43,9 +43,9 @@ class ActionWhere extends HTMLComponent {
       <span class="edit-trait">
         <span class="edit-num"> ${choiceNumber}</span>
       </span>
-      <span> ${getSettings().langSearch.Search} ${endLabel} ${
+      <div> ${getSettings().langSearch.Search} ${endLabel} ${
       getSettings().langSearch.That
-    } </span>
+    } </div>
       
       `);
     let link = $(`<a>+</a>`);

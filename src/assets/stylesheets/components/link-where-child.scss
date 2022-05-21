@@ -22,4 +22,15 @@
             width: fit-content;
         }
     }
+    &.optionalEnabled{
+        .upper-vertical, .horizontal, .lower-vertical{
+            height: 3px;
+            position: absolute;
+            background: repeating-linear-gradient( 90deg, #fff, #fff 5px, themes.$custom-red 5px, themes.$custom-red 10px);
+            display: block;
+        }
+        span{
+            border: 2px dashed themes.$custom-red
+        }
+    }
 }

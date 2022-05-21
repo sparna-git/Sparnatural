@@ -64,15 +64,14 @@ class GroupWrapper extends HTMLComponent {
 
   //add GroupWrapper as a Sibling
   #addAndComponent(startClassVal: string) {
-    console.log("addAndComponent");
     this.andSibling = new GroupWrapper(
       this.ParentComponent,
       this.specProvider
     ).render();
-    //set state to startClassValSelected
-    this.andSibling.CriteriaGroup.html[0].dispatchEvent(
-      new CustomEvent("StartClassGroupSelected", { detail: startClassVal })
-    );
+    //set state to startClassValSelected and trigger change
+    this.andSibling.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget
+    .val(startClassVal)
+    .niceSelect("update");
     this.linkAndBottom.render();
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
@@ -91,6 +90,9 @@ class GroupWrapper extends HTMLComponent {
       .val(endClassVal)
       .niceSelect("update");
     this.linkWhereBottom.render();
+    this.html[0].dispatchEvent(
+      new CustomEvent("initGeneralEvent", { bubbles: true })
+    );
   }
 
   #removeEditComponents() {

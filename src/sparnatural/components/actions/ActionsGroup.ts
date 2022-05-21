@@ -1,6 +1,5 @@
 import CriteriaGroup from "../criterialist/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import ActionWhere from "./actioncomponents/ActionWhere";
 import ActionAnd from "./actioncomponents/ActionAnd";
 import HTMLComponent from "../../HtmlComponent";
 import UnselectBtn from "../buttons/UnselectBtn";
@@ -32,16 +31,12 @@ class ActionsGroup extends HTMLComponent {
     this.actions = {
       ActionAnd: new ActionAnd(this, this.#onAddAnd).render(),
     };
-
-    this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
-    );
   }
 
   // This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
   #onAddAnd = () => {
     this.actions.ActionAnd.html[0].dispatchEvent(
-      new CustomEvent("addAndComponent", { bubbles: true })
+      new CustomEvent("addAndComponent", { bubbles: true,detail:this.ParentCriteriaGroup.StartClassGroup.startClassVal })
     );
     this.#removeActionAnd();
     return false;

@@ -287,70 +287,6 @@ spar-natural {
 			}
 		} 
 	}
-
-
-	
-		.ActionWhere {
-			display: inline-block;
-		}
-
-		.ActionWhere a {
-			cursor: pointer;
-			display: block;
-			background: #fff;
-			border: 2px solid $custom-red ;
-			border-radius: 13px;
-			height: 26px;
-			line-height: 20px;
-			min-width: 26px;
-			text-align: center;
-			font-size: 18px;
-			color: $custom-red ;
-			font-weight: bold;
-			padding: 0;
-			
-			&:hover {
-				color: $custom-red ;
-			}
-		}
-
-		&.OnHover>div>div.HasInputsCompleted>.ShowOnHover {
-			display: block;
-		}
-
-		&>div>div>.ShowOnEdit {
-			display: none;
-		}
-
-		&>div>div>.ShowOnEdit.Disabled,
-		&>div>div>.ShowOnEdit.Enabled {
-			display: inline-block;
-		}
-		&.OnEdit>div>div.ActionsGroup>.ShowOnEdit,
-		&.OnEdit>div>div.HasInputsCompleted>.ShowOnEdit {
-			display: block;
-		}
-
-		li.addWhereDisable .ActionWhere.ShowOnEdit,
-		&.WhereImpossible.OnEdit>div .ActionWhere.ShowOnEdit,
-		&.OnEdit>div.completed>div .ActionWhere.ShowOnEdit {
-			display: none;
-		}
-		&.addWhereDisable>div .ObjectPropertyTypeWidget,
-		&.WhereImpossible>div .ObjectPropertyTypeWidget {
-			border-left-color: transparent;
-
-			.edit-trait-top {
-				display: block;
-			}
-		}
-		&.addWhereEnable>.link-where-bottom,
-		&.addWhereDisable>.link-where-bottom {
-			display: none;
-		}
-		&.addWhereEnable.hasWhereChild>.link-where-bottom {
-			display: block;
-		}
 		.easy-autocomplete {
 			input {
 				height: base.$height-components-hover;
@@ -545,10 +481,6 @@ spar-natural {
 		
 		}
 	}
-}
-
-.Invisible {
-	display: none;
 }
 
 //Select2 overides
