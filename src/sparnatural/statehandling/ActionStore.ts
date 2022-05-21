@@ -1,15 +1,14 @@
-import { getSettings } from "../../../configs/client-configs/settings";
-import ISpecProvider from "../../spec-providers/ISpecProviders";
-import GroupWrapper from "../criterialist/GroupWrapper";
-import Sparnatural from "../MainComponents/Sparnatural";
+import { getSettings } from "../../configs/client-configs/settings";
+import ISpecProvider from "../spec-providers/ISpecProviders";
+import Sparnatural from "../components/MainComponents/Sparnatural";
 import initGeneralevent from "./actions/initGeneralEvent";
 import toggleVarNames from "./actions/toggleVarNames";
 import submit from "./actions/submitAction";
 import deleteGrpWrapper from "./actions/deleteGrpWrapper";
 // This is ugly, should use i18n features instead
 const i18nLabels = {
-  en: require("../../../assets/lang/en.json"),
-  fr: require("../../../assets/lang/fr.json"),
+  en: require("../../assets/lang/en.json"),
+  fr: require("../../assets/lang/fr.json"),
 };
 /*
     The ActionStore is responsible of the statehandling.

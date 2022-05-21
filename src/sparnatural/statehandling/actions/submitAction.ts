@@ -1,6 +1,7 @@
-import { getSettings } from "../../../../configs/client-configs/settings";
-import { QuerySPARQLWriter } from "../../../sparql/Query";
-import JSONQueryGenerator from "../../../sparql/QueryGenerators";
+
+import { getSettings } from "../../../configs/client-configs/settings";
+import { QuerySPARQLWriter } from "../../sparql/Query";
+import JSONQueryGenerator from "../../sparql/QueryGenerators";
 import ActionStore from "../ActionStore";
 
 export default function submit(actionStore: ActionStore) {
