@@ -1,5 +1,5 @@
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
-import CriteriaGroup from "../../criterialist/CriteriaGroup";
+import CriteriaGroup from "../../groupwrapper/CriteriaGroup";
 import HTMLComponent from "../../../HtmlComponent";
 
 import ActionsGroup from "../ActionsGroup";

@@ -1,5 +1,5 @@
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import CriteriaGroup from "../criterialist/CriteriaGroup";
+import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import StartClassGroup from "../startendclassgroup/StartClassGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";

@@ -1,5 +1,5 @@
 import { getSettings } from "../../../configs/client-configs/settings";
-import GroupWrapper from "../../components/criterialist/GroupWrapper";
+import GroupWrapper from "../../components/groupwrapper/GroupWrapper";
 import ActionStore from "../ActionStore";
 /*
   A general Event is either an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper

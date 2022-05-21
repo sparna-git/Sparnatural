@@ -1,4 +1,4 @@
-import GroupWrapper from "../../components/criterialist/GroupWrapper";
+import GroupWrapper from "../../components/groupwrapper/GroupWrapper";
 import ActionStore from "../ActionStore";
 
 export default function toggleVarNames(actionsStore: ActionStore) {

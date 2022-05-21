@@ -1,6 +1,6 @@
 import tippy from "tippy.js";
 import ClassTypeId from "./ClassTypeId";
-import CriteriaGroup from "../criterialist/CriteriaGroup";
+import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
 import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";

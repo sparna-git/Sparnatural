@@ -1,6 +1,6 @@
 import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import CriteriaGroup from "../criterialist/CriteriaGroup";
+import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import tippy from "tippy.js";
 import UnselectBtn from "../buttons/UnselectBtn";
 import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";

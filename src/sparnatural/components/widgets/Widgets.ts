@@ -6,7 +6,7 @@ import tippy from "tippy.js";
 import ISettings from "../../../configs/client-configs/ISettings";
 import IWidget from "./IWidget";
 import EndClassWidgetGroup from "./EndClassWidgetGroup";
-import CriteriaGroup from "../criterialist/CriteriaGroup";
+import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import LocalCacheData from "../../datastorage/LocalCacheData";
 // IMPORTANT TODO refactor HtmlContainer.
 

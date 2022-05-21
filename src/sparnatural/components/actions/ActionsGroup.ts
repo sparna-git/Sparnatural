@@ -1,4 +1,4 @@
-import CriteriaGroup from "../criterialist/CriteriaGroup";
+import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ActionAnd from "./actioncomponents/ActionAnd";
 import HTMLComponent from "../../HtmlComponent";

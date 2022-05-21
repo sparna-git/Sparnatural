@@ -1,6 +1,6 @@
 import HTMLComponent from "../../HtmlComponent";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import GroupWrapper from "../criterialist/GroupWrapper";
+import GroupWrapper from "../groupwrapper/GroupWrapper";
 
 /*
     Componentslist does correspond to the <ul class="componentsListe"> OR <ul class="childsList">

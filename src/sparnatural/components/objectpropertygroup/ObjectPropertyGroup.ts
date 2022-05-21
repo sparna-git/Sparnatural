@@ -2,7 +2,7 @@ import tippy from "tippy.js";
 import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
-import CriteriaGroup from "../criterialist/CriteriaGroup";
+import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 /**
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
  **/

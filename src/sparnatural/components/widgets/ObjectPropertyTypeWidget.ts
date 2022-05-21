@@ -4,7 +4,7 @@ import Datasources from "../../../configs/fixed-configs/SparnaturalConfigDatasou
 import { SparqlTreeHandler } from "./handlers/TreeHandlers";
 import IWidget from "./IWidget";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
-import CriteriaGroup from "../criterialist/CriteriaGroup";
+import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import HTMLComponent from "../../HtmlComponent";
 import {
   SparqlTemplateAutocompleteHandler,

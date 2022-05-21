@@ -3,7 +3,7 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import ArrowComponent from "../../arrows/ArrowComponent";
 import { OptionsGroup } from "../OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
-import GroupWrapper from "../../criterialist/GroupWrapper";
+import GroupWrapper from "../../groupwrapper/GroupWrapper";
 
 /*
     This is the base class for the optioncomponents such as NotExistComponent or OptionalComponent
