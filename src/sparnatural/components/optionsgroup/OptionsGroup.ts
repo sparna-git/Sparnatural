@@ -60,6 +60,7 @@ export class OptionsGroup extends HTMLComponent {
     // MUST BE WRAPPED INTO LIST DIV
     this.OptionalComponent.render();
     this.NotExistsComponent.render();
+    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   }
 
   #addOptionsPossible() {
@@ -80,6 +81,7 @@ export class OptionsGroup extends HTMLComponent {
   #removeOptionalComponents() {
     this.OptionalComponent.html.remove();
     this.NotExistsComponent.html.remove();
+    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   }
 
   #renderOptionsGroupBackArrow() {

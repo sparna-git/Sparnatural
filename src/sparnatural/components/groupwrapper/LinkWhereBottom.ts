@@ -77,6 +77,7 @@ class LinkWhereBottom extends HTMLComponent {
     let whereChildRect = whereChild.html[0].getBoundingClientRect();
     let topWhereChild = whereChildRect.top;
 
+    // middleOfStartClass can be used twice since line is horizontal
     let css = this.#getLine(
       middleOfStartClass,
       middleOfStartClass,

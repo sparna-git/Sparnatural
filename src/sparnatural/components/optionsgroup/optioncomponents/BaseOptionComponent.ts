@@ -62,18 +62,20 @@ class BaseOptionComponent extends HTMLComponent {
     wrapperRef.traverse((grpWrapper: GroupWrapper) => {
       if (grpWrapper.html.hasClass(cls)) {
         grpWrapper.html.removeClass(cls);
-        grpWrapper.linkWhereBottom.html.removeClass(cls);
+        if(grpWrapper.whereChild) grpWrapper.linkWhereBottom.html.removeClass(cls);
       } else {
         grpWrapper.html.addClass(cls);
-        grpWrapper.linkWhereBottom.html.addClass(cls);
+        if(grpWrapper.whereChild) grpWrapper.linkWhereBottom.html.addClass(cls);
       }
 
       //skip the toggling for this ParentGroupWrapper and if there is no option possible
       if (
         grpWrapper != wrapperRef &&
-        grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html
+        grpWrapper.CriteriaGroup.OptionsGroup?.backArrow?.html
       ) {
+        //remove the optional possibilities for child groups
         grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html.toggle();
+        grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html[0].dispatchEvent(new Event('click'))
       }
     });
   }

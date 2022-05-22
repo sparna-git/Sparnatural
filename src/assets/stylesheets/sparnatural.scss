@@ -210,30 +210,6 @@ spar-natural {
 				}
 			}
 		}
-		&.optionalEnabled {
-			ul.childsList {
-				&>.lien-top {
-					border-left: 3px dashed $custom-red;
-					border-top: 3px dashed $custom-red;
-					&>span {
-						border: 2px dashed $custom-red ;
-						border-radius: 15px;
-					}
-				}
-			}
-		}
-		&.notExists-enabled {
-			ul.childsList {
-				&>.lien-top {
-					border-left: 3px dotted #000;
-					border-top: 3px dotted #000;
-					&>span {
-						border: 2px dotted #000;
-						border-radius: 15px;
-					}
-				}
-			}
-		}
 	}
 	.Sparnatural {
 		width:100%;

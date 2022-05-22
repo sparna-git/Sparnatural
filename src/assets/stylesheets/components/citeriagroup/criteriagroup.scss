@@ -40,4 +40,22 @@
 			fill:#fff;
 		}
 	}
+	&.optionalEnabled {
+		border-left: 3px dashed themes.$custom-red;
+		border-top: 3px dashed themes.$custom-red;
+		&>span {
+			border: 2px dashed themes.$custom-red ;
+			border-radius: 15px;
+		}
+			
+		
+	}
+	&.notExistsEnabled {
+		border-left: 3px dotted #000;
+		border-top: 3px dotted #000;
+		&>span {
+			border: 2px dotted #000;
+			border-radius: 15px;
+		}
+	}
 }

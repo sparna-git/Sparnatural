@@ -30,7 +30,7 @@ class NotExistsComponent extends BaseOptionComponent {
   #addEventListeners() {
     this.html.on("click", (e) => {
       e.stopPropagation();
-      this.onChange("optionalEnabled");
+      this.onChange("notExistsEnabled");
     });
   }
 }

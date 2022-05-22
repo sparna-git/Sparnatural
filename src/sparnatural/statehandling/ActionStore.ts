@@ -74,7 +74,8 @@ class ActionStore {
       }
     );
 
-    this.sparnatural.html[0].addEventListener("initGeneralEvent", () => {
+    this.sparnatural.html[0].addEventListener("initGeneralEvent", (e) => {
+      e.stopImmediatePropagation()
       initGeneralevent(this);
     });
     this.sparnatural.html[0].addEventListener(
