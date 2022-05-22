@@ -46,7 +46,7 @@ class GroupWrapper extends HTMLComponent {
       e.stopImmediatePropagation();
       this.#onRemoveEndClass();
     });
-    this.html[0].addEventListener("onRemoveCriteria", (e: CustomEvent) => {
+    this.html[0].addEventListener("onRemoveGrp", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.#onRemoveGrpWrapper();
     });
@@ -126,6 +126,9 @@ class GroupWrapper extends HTMLComponent {
 
   // Remove the EndClass and rerender from the point where the startClassVal got selected
   #onRemoveEndClass() {
+    // first delete the whereChild classes
+    if(this.whereChild) this.whereChild.html[0].dispatchEvent(new CustomEvent('onRemoveGrp'))
+
     let startVal = this.CriteriaGroup.StartClassGroup.startClassVal;
     this.CriteriaGroup.html.empty();
     this.CriteriaGroup.html.remove();

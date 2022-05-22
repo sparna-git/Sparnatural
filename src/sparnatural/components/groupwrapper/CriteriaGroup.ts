@@ -37,7 +37,7 @@ class CriteriaGroup extends HTMLComponent {
     this.unselectBtn = new UnselectBtn(this, () => {
       // caught in Parentcomponent
       this.html[0].dispatchEvent(
-        new CustomEvent("onRemoveCriteria", { bubbles: true })
+        new CustomEvent("onRemoveGrp", { bubbles: true })
       );
     }).render();
     return this;
