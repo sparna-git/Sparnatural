@@ -33,4 +33,14 @@
             border: 2px dashed themes.$custom-red
         }
     }
+
+    &.notExistsEnabled {
+        .upper-vertical, .horizontal, .lower-vertical{
+		    background: repeating-linear-gradient( 90deg, #fff, #fff 5px, #000 5px, #000 10px);
+        }
+		span {
+			border: 3px dashed #000;
+			border-radius: 15px;
+		}
+	}
 }

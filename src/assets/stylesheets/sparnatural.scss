@@ -168,10 +168,7 @@ spar-natural {
 		&.optionalEnabled.completed>.link-where-bottom {
 			border-left: 3px dashed $custom-red;
 		}
-		&.notExists-enabled.completed ul.childsList>li.hasWhereChild>.link-where-bottom,
-		&.notExists-enabled.completed>.link-where-bottom {
-			border-left: 3px dotted #000;
-		}
+
 		
 		&>.CriteriaGroup {
 			
@@ -236,29 +233,6 @@ spar-natural {
 				}
 				&>span>span  {
 					border: 2px dashed $custom-red ;
-				}
-			}
-		} 
-	}
-	li.groupe.notExistsEnabled {
-		.CriteriaGroup {
-			border: 3px dotted #000 ;
-		}
-		ul.childsList {
-			.ActionAnd {
-				&>.trait-and-bottom {
-					border-left: 3px dotted #000 ;
-				}
-				&>a {
-					border: 2px dotted #000 ;
-				}
-			}
-			&>li.hasAnd {
-				&>span {
-					border-left: 3px dotted #000 ;
-				}
-				&>span>span  {
-					border: 2px dotted #000 ;
 				}
 			}
 		} 
