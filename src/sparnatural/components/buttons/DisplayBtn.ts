@@ -15,9 +15,6 @@ class DisplayBtn extends HTMLComponent {
     // add clicklistener
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       this.selected = this.selected ? false : true;
-      this.selected
-        ? this.html.addClass("displayed")
-        : this.html.removeClass("displayed");
       callBack(this.selected);
     });
   }

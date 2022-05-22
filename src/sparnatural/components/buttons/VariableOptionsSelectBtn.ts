@@ -1,4 +1,4 @@
-import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
+import { getSettings } from "../../../configs/client-configs/settings";
 import HTMLComponent from "../../HtmlComponent";
 
 class VariableOptionsSelectBtn extends HTMLComponent {
@@ -7,8 +7,15 @@ class VariableOptionsSelectBtn extends HTMLComponent {
     ParentComponent: HTMLComponent,
     callBack: (selected: boolean) => void
   ) {
-    let widgetHtml = $(UiuxConfig.ICON_AZ);
-    super("switch", ParentComponent, widgetHtml);
+    let widgetHtml = 
+    $(`<p>${getSettings().langSearch.SwitchVariablesNames}</p><label class="switch">
+        <input type="checkbox">
+          <span class="slider round">
+          </span>
+        </input>
+      </label>
+     `)
+    super("variablesOptionsSelect", ParentComponent, widgetHtml);
     // add clicklistener
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       this.selected = this.selected ? false : true;
@@ -20,6 +27,7 @@ class VariableOptionsSelectBtn extends HTMLComponent {
   }
 
   render(): this {
+    this.htmlParent = this.ParentComponent.htmlParent
     super.render();
     return this;
   }

@@ -4,9 +4,9 @@ import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
 import BgWrapper from "./BgWrapper";
 import SubmitSection from "./SubmitSection";
-import VariableSection from "./VariableSelection";
 import SpecificationProviderFactory from "../../spec-providers/SpecificationProviderFactory";
 import ActionStore from "../../statehandling/ActionStore";
+import VariableSection from "../variablesmenu/VariableSelection";
 
 // This is ugly, should use i18n features instead
 const i18nLabels = {

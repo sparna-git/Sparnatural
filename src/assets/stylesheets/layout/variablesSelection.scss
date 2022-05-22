@@ -206,10 +206,14 @@
 
 
         .variablesOptionsSelect {
+            display: flex;
             text-align: right;
             padding: 5px 5px 5px 5px;
             font-size: 14px;
             font-weight: bolder;
+            p{
+                margin-right: 5px;
+            }
         }
 
         color: themes.$default-text-color;

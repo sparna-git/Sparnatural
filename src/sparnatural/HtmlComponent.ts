@@ -37,10 +37,6 @@ class HTMLComponent implements IRenderable {
     }
   }
 
-  remove() {
-    $(this.html).remove();
-  }
-
   #initHtml() {
     if (this.widgetHtml != null) {
       // remove existing html
@@ -62,7 +58,10 @@ class HTMLComponent implements IRenderable {
   }
 
   render() {
-    if (this.html != null) this.html.remove();
+    if (this.html != null){
+      this.html.remove();
+      this.html.empty()
+    }
     this.#initHtml();
     this.#attachComponentHtml();
     return this;
