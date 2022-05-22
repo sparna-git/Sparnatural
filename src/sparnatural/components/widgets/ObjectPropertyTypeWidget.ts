@@ -84,7 +84,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
         add_all = false;
 
         this.html[0].dispatchEvent(
-          new CustomEvent("submit", { bubbles: true })
+          new CustomEvent("generateQuery", { bubbles: true })
         );
         this.html[0].dispatchEvent(
           new CustomEvent("initGeneralEvent", { bubbles: true })

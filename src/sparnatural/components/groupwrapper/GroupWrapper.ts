@@ -121,7 +121,7 @@ class GroupWrapper extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("deleteGrpWrapper", { bubbles: true, detail: this })
     );
-    this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
+    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
   }
 
   // Remove the EndClass and rerender from the point where the startClassVal got selected

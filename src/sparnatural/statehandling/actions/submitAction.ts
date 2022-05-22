@@ -4,7 +4,7 @@ import { QuerySPARQLWriter } from "../../sparql/Query";
 import JSONQueryGenerator from "../../sparql/QueryGenerators";
 import ActionStore from "../ActionStore";
 
-export default function submit(actionStore: ActionStore) {
+export default function generateQuery(actionStore: ActionStore) {
   // triggered when Sparnatural is submitted : generates output SPARQL query
   let settings = getSettings();
   // prints the JSON query data structure on the console

@@ -60,7 +60,7 @@ class StartClassGroup extends HTMLComponent {
       })
     );
 
-    this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
+    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
 
     var desc = this.specProvider.getTooltip(this.startClassVal);
 

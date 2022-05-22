@@ -1,9 +1,9 @@
-import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import CriteriaGroup from "../groupwrapper/CriteriaGroup";
-import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import StartClassGroup from "../startendclassgroup/StartClassGroup";
-import ISpecProvider from "../../spec-providers/ISpecProviders";
-import HTMLComponent from "../../HtmlComponent";
+import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
+import CriteriaGroup from "../../groupwrapper/CriteriaGroup";
+import EndClassGroup from "../../startendclassgroup/EndClassGroup";
+import StartClassGroup from "../../startendclassgroup/StartClassGroup";
+import ISpecProvider from "../../../spec-providers/ISpecProviders";
+import HTMLComponent from "../../../HtmlComponent";
 /*
 class VariableSelector extends HTMLComponent {
   displayVariableList: any;
@@ -132,7 +132,7 @@ class VariableSelector extends HTMLComponent {
     }
     if (this.ParentComponent instanceof EndClassGroup) {
     }
-    //$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"submit" } ) ;
+    //$(this.GroupContenaire.parentComponent.thisForm_.sparnatural).trigger( {type:"generateQuery" } ) ;
   }
 
   onFocusEdit() {
@@ -211,7 +211,7 @@ class VariableSelector extends HTMLComponent {
       this.GrandParent.thisForm_.sparnatural.variablesSelector.updateVariableList();
       //Variable name blocks whidth can be change, redraw lines links
       redrawBottomLink($(this.GrandParent.html).parents("li").first());
-      $(this.GrandParent.thisForm_.sparnatural).trigger("submit");
+      $(this.GrandParent.thisForm_.sparnatural).trigger("generateQuery");
     }
     var width = $(".sortableItem").first().width();
     $(".variablesOrdersSelect").width(width);
@@ -264,7 +264,7 @@ class VariableSelector extends HTMLComponent {
         .trigger("click");
     }
 
-    $(this.GrandParent.thisForm_.sparnatural).trigger("submit");
+    $(this.GrandParent.thisForm_.sparnatural).trigger("generateQuery");
   }
 
   canRemove() {

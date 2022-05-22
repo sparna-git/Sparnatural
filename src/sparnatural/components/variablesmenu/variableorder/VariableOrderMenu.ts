@@ -1,20 +1,26 @@
-import Sortable from "sortablejs";
+import Sortable, { SortableEvent } from "sortablejs";
 import HTMLComponent from "../../../HtmlComponent";
+import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import VariableSelection from "../VariableSelection";
+import DraggableComponent from "./DraggableComponent";
 
 class VariableOrderMenu extends HTMLComponent {
-    displayVariableList: Array<string>;
-    constructor(parentComponent: VariableSelection){
+    displayVariableList: Array<string> = [];
+    draggables: Array<DraggableComponent> = [];
+    specProvider: ISpecProvider;
+    constructor(parentComponent: VariableSelection,specProvider:ISpecProvider){
         super('VariableOrderMenu',parentComponent,null)
+        this.specProvider = specProvider
     }
 
     render(): this {
         this.htmlParent = $(this.ParentComponent.html).find(".line1");
         super.render()
         let otherSelectHtml = $('<div class="variablesOtherSelect"></div>');
-        this.html.append($('<div class="variablesFirstSelect"></div>'))
-        .append(otherSelectHtml)
+        this.html.append(otherSelectHtml)
+        this.addDraggableComponent('http://dbpedia.org/ontology/Museum','testvarname')
         this.#addSortable(otherSelectHtml);
+
         return this
     }
 
@@ -42,24 +48,25 @@ class VariableOrderMenu extends HTMLComponent {
           dragClass: "sortable-drag", // Class name for the dragging item
     
           // Element is dropped into the list from another list
-          onAdd: function (/**Event*/ evt: any) {
+          onAdd: function (/**Event*/ evt: SortableEvent) {
             // same properties as onEnd
           },
     
           // Changed sorting within list
-          onUpdate: function (/**Event*/ evt: any) {
+          onUpdate: function (/**Event*/ evt: SortableEvent) {
             // same properties as onEnd
-            that.#updateVariableList(htmlParent);
+
           },
     
           // Called by any change to the list (add / update / remove)
-          onSort: function (/**Event*/ evt: any) {
+          onSort: function (/**Event*/ evt: SortableEvent) {
             // same properties as onEnd
           },
     
           // Called when dragging element changes position
-          onEnd: function (/**Event*/ evt: any) {
-            evt.newIndex; // most likely why this event is used is to get the dragging element's current index
+          onEnd: function (/**Event*/ evt:SortableEvent) {
+              this.displayVariableList = this.toArray()
+            that.#updateVariableList();
             // same properties as onEnd
             var width = $(".sortableItem").first().width();
             $(".variablesOrdersSelect").width(width);
@@ -68,16 +75,15 @@ class VariableOrderMenu extends HTMLComponent {
       }
 
       
+      addDraggableComponent(selected_val:string,varName:string){
+          let dragbl = new DraggableComponent(this,this.specProvider,selected_val,varName)
+          dragbl.render()
+          this.draggables.push(dragbl)
+      }
 
-  #updateVariableList(htmlParent:JQuery<HTMLElement>) {
-    //refactor move away from jquery find
-    var listedItems = $(htmlParent).find(".sortableItem>div");
-    this.displayVariableList = [];
-    for (var i = 0; i < listedItems.length; i++) {
-      var variableName = $(listedItems[i]).attr("data-variablename");
-      this.displayVariableList.push(variableName);
-    }
-    this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
+
+  #updateVariableList() {
+    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
   }
 }
 

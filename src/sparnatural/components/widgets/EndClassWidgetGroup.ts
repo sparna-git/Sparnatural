@@ -108,7 +108,7 @@ class EndClassWidgetGroup extends HTMLComponent {
         new CustomEvent("renderWhereBtn", { bubbles: true })
       );
     }
-    this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
+    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
@@ -127,7 +127,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("EndClassWidgetGroupSelected", { bubbles: true })
     );
-    this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
+    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
@@ -160,7 +160,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("EndClassWidgetGroupSelected", { bubbles: true })
     );
-    this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
+    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );

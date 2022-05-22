@@ -1,4 +1,5 @@
 import HTMLComponent from "../../HtmlComponent";
+import ISpecProvider from "../../spec-providers/ISpecProviders";
 import DisplayBtn from "../buttons/DisplayBtn";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";
 import VariableSortOption from "./variablesort/VariableSortOptions";
@@ -9,9 +10,11 @@ class VariableSection extends HTMLComponent {
   variableSortOption: VariableSortOption
   variableOrderMenu: VariableOrderMenu
   linesWrapper: JQuery<HTMLElement>;
+  specProvider: ISpecProvider;
 
-  constructor(ParentComponent: HTMLComponent) {
+  constructor(ParentComponent: HTMLComponent,specProvider:ISpecProvider) {
     super("variablesSelection", ParentComponent, null);
+    this.specProvider = specProvider
   }
 
   render(): this {
@@ -21,7 +24,7 @@ class VariableSection extends HTMLComponent {
     let line2 = $('<div class="line2"></div>')
     this.linesWrapper.append(line1).append(line2)
     this.html.append(this.linesWrapper)
-    this.variableOrderMenu = new VariableOrderMenu(this).render()
+    this.variableOrderMenu = new VariableOrderMenu(this,this.specProvider).render()
     this.variableSortOption = new VariableSortOption(this).render()
 
     this.#renderShowHideBtn();

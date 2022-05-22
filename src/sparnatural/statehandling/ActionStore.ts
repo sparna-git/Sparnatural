@@ -1,9 +1,8 @@
-import { getSettings } from "../../configs/client-configs/settings";
 import ISpecProvider from "../spec-providers/ISpecProviders";
 import Sparnatural from "../components/MainComponents/Sparnatural";
 import initGeneralevent from "./actions/initGeneralEvent";
 import toggleVarNames from "./actions/toggleVarNames";
-import submit from "./actions/submitAction";
+import generateQuery from "./actions/submitAction";
 import deleteGrpWrapper from "./actions/deleteGrpWrapper";
 // This is ugly, should use i18n features instead
 const i18nLabels = {
@@ -19,36 +18,20 @@ class ActionStore {
   sparnatural: Sparnatural;
   specProvider: any;
   orderSort: string;
-  cssdef: string;
   //submitOpened = false still implement
   constructor(sparnatural: Sparnatural, specProvider: ISpecProvider) {
     this.specProvider = specProvider;
     this.sparnatural = sparnatural;
     this.#addCustomEventListners();
   }
-  Form: {
-    distinct: any;
-    displayVariableList: Array<string>;
-    firstInit: boolean;
-    preLoad: any;
-    langSearch: any;
-  } = {
-    distinct: getSettings().addDistinct,
-    displayVariableList: ["?this"],
-    firstInit: false,
-    // JSON of the query to be loaded
-    preLoad: null,
-    langSearch: i18nLabels["en"],
-  };
-
   // register the event listeners to listen for event from the components
   #addCustomEventListners() {
     this.sparnatural.html[0].addEventListener(
-      "submit",
+      "generateQuery",
       (event: CustomEvent) => {
         event.stopImmediatePropagation();
         event.preventDefault();
-        submit(this);
+        generateQuery(this);
       }
     );
 

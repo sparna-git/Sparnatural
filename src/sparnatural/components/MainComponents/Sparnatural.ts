@@ -16,11 +16,11 @@ const i18nLabels = {
 
 class Sparnatural extends HTMLComponent {
   specProvider: ISpecProvider;
-  submitOpened = true; // is responsible if the submit button works or not
+  submitOpened = true; // is responsible if the generateQuery button works or not
   actionStore: ActionStore;
   BgWrapper: BgWrapper;
-  SubmitSection = new SubmitSection(this);
-  VariableSelection = new VariableSection(this);
+  SubmitSection:SubmitSection
+  VariableSelection:VariableSection
   filter = $(
     '<svg data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" style="width:0;height:0;display:block"><defs><filter style="color-interpolation-filters:sRGB;" inkscape:label="Drop Shadow" id="filter19278" x="-0.15483875" y="-0.11428573" width="1.3096775" height="1.2714286"><feFlood flood-opacity="0.811765" flood-color="rgb(120,120,120)" result="flood" id="feFlood19268" /><feComposite in="flood" in2="SourceGraphic" operator="out" result="composite1" id="feComposite19270" /><feGaussianBlur in="composite1" stdDeviation="2" result="blur" id="feGaussianBlur19272" /><feOffset dx="3.60822e-16" dy="1.8" result="offset" id="feOffset19274" /><feComposite in="offset" in2="SourceGraphic" operator="atop" result="composite2" id="feComposite19276" /></filter></defs></svg>'
   );
@@ -34,8 +34,8 @@ class Sparnatural extends HTMLComponent {
     //super.render()
     this.initSparnatural();
     this.BgWrapper = new BgWrapper(this, this.specProvider).render();
-    this.SubmitSection.render();
-    this.VariableSelection.render();
+    this.SubmitSection = new SubmitSection(this).render();
+    this.VariableSelection = new VariableSection(this,this.specProvider).render()
     this.html.append(this.filter);
     //BGWrapper must be rendered first
     this.html[0].dispatchEvent(
@@ -65,12 +65,12 @@ class Sparnatural extends HTMLComponent {
   // global function
   doLoadQuery(json: any) {
     // stores the JSON to be preloaded
-    this.actionStore.Form.preLoad = json;
+    this.actionStore //.Form.preLoad = json;
 
     this.loadQuery();
 
-    // And now, submit form
-    this.html[0].dispatchEvent(new CustomEvent("submit", { bubbles: true }));
+    // And now, generateQuery form
+    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
     // clear the jsonQueryBranch copied on every component, otherwise they always stay here
     // and we get the same criterias over and over when removing and re-editing
   }
