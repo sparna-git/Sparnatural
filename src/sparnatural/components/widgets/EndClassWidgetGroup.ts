@@ -59,7 +59,8 @@ class EndClassWidgetGroup extends HTMLComponent {
     });
 
     // binds a selection in an input widget with the display of the value in the line
-    this.inputTypeComponent.html.on("selectAll", () => {
+    this.inputTypeComponent.html[0].addEventListener("selectAll", (e:CustomEvent) => {
+      e.stopImmediatePropagation()
       this.#onSelectAll();
     });
   }
@@ -115,25 +116,9 @@ class EndClassWidgetGroup extends HTMLComponent {
   }
 
   #onSelectAll() {
-    const endClassWidgetVal = new EndClassWidgetValue(
-      this,
-      getSettings().langSearch.SelectAllValues
-    );
-
     this.selectAllValue = true;
-
-    this.#renderNewSelectedValue(endClassWidgetVal);
-
-    this.html[0].dispatchEvent(
-      new CustomEvent("EndClassWidgetGroupSelected", { bubbles: true })
-    );
-    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
-    this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
-    );
+    this.#renderEndClassWidgetVal(getSettings().langSearch.SelectAllValues)
   }
-  // this method renders Arrow Components on the ClassTypeId's
-  #highlightArrowComponentents() {}
 
   #onChange() {
     var selectedVal: { key: string; label: string; uri: string } =
@@ -147,7 +132,11 @@ class EndClassWidgetGroup extends HTMLComponent {
     if (this.selectedValues.some((val) => val.value_lbl === selectedVal.label))
       return;
     // if not, then create the EndclassWidgetValue and add it to the list
-    let endClassWidgetVal = new EndClassWidgetValue(this, selectedVal.label);
+    this.#renderEndClassWidgetVal(selectedVal.label)
+  }
+
+  #renderEndClassWidgetVal(lbl:string){
+    let endClassWidgetVal = new EndClassWidgetValue(this, lbl);
     this.selectedValues.push(endClassWidgetVal);
 
     this.#renderNewSelectedValue(endClassWidgetVal);
@@ -164,6 +153,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
+
   }
   // removes the where and objectpropertytypewidget after a value got chosen
   #removeWhereAndWidget() {
@@ -176,13 +166,15 @@ class EndClassWidgetGroup extends HTMLComponent {
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
   #renderNewSelectedValue(endClassWidgetVal: EndClassWidgetValue) {
     endClassWidgetVal.render();
+    if(!this.selectAllValue){
     // now (re)render the addMoreValuesButton
     this.addMoreValuesBtn?.html
-      ? this.addMoreValuesBtn.render()
-      : (this.addMoreValuesBtn = new AddMoreValuesBtn(
-          this,
-          this.#addMoreValues
-        ).render());
+    ? this.addMoreValuesBtn.render()
+    : (this.addMoreValuesBtn = new AddMoreValuesBtn(
+        this,
+        this.#addMoreValues
+      ).render());
+    }
   }
 
   // when more values should be added then render the inputypecomponent again

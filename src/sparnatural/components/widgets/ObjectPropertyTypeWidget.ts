@@ -132,6 +132,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
           "</span>" +
           parenthesisLabel +
           "</span>";
+
       }
       if (add_all && add_or) {
         selcetAll +=
@@ -167,7 +168,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
       .find(".selectAll")
       .first()
       .on("click", () => {
-        $(this).trigger("selectAll");
+        this.html[0].dispatchEvent(new CustomEvent('selectAll',{bubbles:true}))
       });
     return this;
   }
