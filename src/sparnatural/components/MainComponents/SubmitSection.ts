@@ -7,13 +7,12 @@ class SubmitSection extends HTMLComponent {
   playBtn: PlayBtn;
   ParentSparnatural: Sparnatural;
   constructor(ParentComponent: HTMLComponent) {
-    let widgetHTML = $(`<div class="submitSection"></div>`);
-    super("bg-submitSectionWrapper", ParentComponent, widgetHTML);
+    super("submitSection", ParentComponent, null);
     this.ParentSparnatural = ParentComponent as Sparnatural;
   }
   render(): this {
     super.render();
-    this.playBtn = new PlayBtn(this.ParentComponent, this.sumbitAction);
+    this.playBtn = new PlayBtn(this, this.sumbitAction).render()
     return this;
   }
 

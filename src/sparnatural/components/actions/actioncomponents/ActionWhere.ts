@@ -1,8 +1,5 @@
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
-import CriteriaGroup from "../../groupwrapper/CriteriaGroup";
 import HTMLComponent from "../../../HtmlComponent";
-
-import ActionsGroup from "../ActionsGroup";
 import { getSettings } from "../../../../configs/client-configs/settings";
 import EndClassGroup from "../../startendclassgroup/EndClassGroup";
 
@@ -50,11 +47,6 @@ class ActionWhere extends HTMLComponent {
       `);
     let link = $(`<a>+</a>`);
     newhtml = newhtml.add(link);
-
-    // let editTrait = $(`<span class="edit-trait"></span>`)
-    //let editNum = $(`<span class="edit-num"> ${choiceNumber}</span>`)
-    //let searchThat = $(`<div> ${getSettings().langSearch.Search} ${endLabel} ${getSettings().langSearch.That} <div>`)
-    //var widgetLabel = editTrait.append(editNum).insertAfter(searchThat).insertAfter(link)
 
     this.widgetHtml = newhtml;
     link[0].addEventListener("click", () => {

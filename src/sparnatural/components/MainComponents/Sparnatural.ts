@@ -79,15 +79,6 @@ class Sparnatural extends HTMLComponent {
     this.actionStore = new ActionStore(this, this.specProvider);
   }
 
-  enableLoading() {
-    this.html
-      .find(".submitSection a")
-      .addClass("submitDisable, loadingEnabled"); /// Need to be disabled with loading
-  }
-  disableLoading() {
-    this.html.find(".submitSection a").removeClass("loadingEnabled");
-  }
-
   /**
    * Preprocess JSON query to add parent and nextSibling links
    **/

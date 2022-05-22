@@ -1,7 +1,7 @@
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import HTMLComponent from "../../HtmlComponent";
 
-class ShowHideBtn extends HTMLComponent {
+class DisplayBtn extends HTMLComponent {
   selected = false;
   constructor(
     ParentComponent: HTMLComponent,
@@ -27,4 +27,4 @@ class ShowHideBtn extends HTMLComponent {
     return this;
   }
 }
-export default ShowHideBtn;
+export default DisplayBtn;

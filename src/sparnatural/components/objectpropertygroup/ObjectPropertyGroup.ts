@@ -80,49 +80,5 @@ class ObjectPropertyGroup extends HTMLComponent {
     // this will update the temporarly label
     this.objectPropertySelector.render();
   }
-  /*
-  onChange() {
-    if (this.objectPropVal) {
-      console.warn("ObjectPropertyGroup call OptionsGroup.reload!!!")
-      this.ParentCriteriaGroup.OptionsGroup.render();
-    }
-    this.objectPropVal = $(this.html).find("select.input-val").val();
-    // disable if only one possible property option between the 2 classes
-    if ($(this.html).find(".input-val").find("option").length == 1) {
-      $(this.html)
-        .find(".input-val")
-        .attr("disabled", "disabled")
-        .niceSelect("update");
-    }
-    this.html[0].dispatchEvent(new CustomEvent('ObjectPropertyGroupSelected',{bubbles:true}))
-    if (
-      $(this.ParentCriteriaGroup.html)
-        .parent("li")
-        .first()
-        .hasClass("completed")
-    ) {
-      this.html[0].dispatchEvent(new CustomEvent('submit',{bubbles:true}))
-    }
-
-    // sets tooltip ready
-    var desc = this.specProvider.getTooltip(this.objectPropVal);
-    if (desc) {
-      $(this.ParentCriteriaGroup.ObjectPropertyGroup.html)
-        .find(".ObjectPropertyTypeId")
-        .attr("data-tippy-content", desc);
-      // tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
-      var tippySettings = Object.assign({}, getSettings()?.tooltipConfig);
-      tippySettings.placement = "top-start";
-      tippy(
-        ".ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]",
-        tippySettings
-      );
-    } else {
-      $(this.ParentCriteriaGroup.ObjectPropertyGroup.html).removeAttr(
-        "data-tippy-content"
-      );
-    }
-    //ici peut être lancer le reload du where si il y a des fils
-  }*/
 }
 export default ObjectPropertyGroup;

@@ -8,7 +8,7 @@ class BaseClassFactory {
   liTags: Array<string> = ["groupe"];
   ulTags: Array<string> = ["componentsListe", "childsList"];
   spanTags: Array<string> = ["link-where-bottom", "selectViewVariable"];
-  aTags: Array<string> = ["asc", "dsc", "none"];
+  aTags: Array<string> = ["asc", "dsc", "none","playBtn"];
   labelTags: Array<string> = ["switch"];
   constructor() {}
 
@@ -28,8 +28,11 @@ class BaseClassFactory {
       case this.spanTags.find(findCallBack):
         html = $(`<span class="${baseCssClass}"></span>`);
         break;
-      case this.spanTags.find(findCallBack):
+      case this.labelTags.find(findCallBack):
         html = $(`<label class="${baseCssClass}"></label>`);
+        break;
+      case this.aTags.find(findCallBack):
+        html = $(`<a class="${baseCssClass}"></a>`);
         break;
       default:
         html = $(`<div class="${baseCssClass}"></div>`);

@@ -3,8 +3,8 @@ import { getSettings } from "../../../configs/client-configs/settings";
 import HTMLComponent from "../../HtmlComponent";
 import AscendBtn from "../buttons/AscendBtn";
 import DescendBtn from "../buttons/DescendBtn";
+import DisplayBtn from "../buttons/DisplayBtn";
 import NoOrderBtn from "../buttons/NoOrderBtn";
-import ShowHideBtn from "../buttons/ShowHideBtn";
 import VariableOptionsSelectBtn from "../buttons/VariableOptionsSelectBtn";
 //import VariableSelector from "./VariableSelector";
 
@@ -12,7 +12,7 @@ class VariableSection extends HTMLComponent {
   ascendBtn: AscendBtn;
   descendBtn: DescendBtn;
   noOrderBtn: NoOrderBtn;
-  showHideBtn: ShowHideBtn;
+  displayBtn: DisplayBtn
   variableOptionSelectBtn: VariableOptionsSelectBtn;
   linesWrapper: JQuery<HTMLElement>;
   otherSelectHtml: JQuery<HTMLElement>;
@@ -118,7 +118,7 @@ class VariableSection extends HTMLComponent {
       }
     };
 
-    this.showHideBtn = new ShowHideBtn(this, displayaction);
+    this.displayBtn = new DisplayBtn(this, displayaction).render();
   }
 
   #addSortable() {
