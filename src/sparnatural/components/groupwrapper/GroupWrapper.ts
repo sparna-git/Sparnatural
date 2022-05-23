@@ -36,12 +36,16 @@ class GroupWrapper extends HTMLComponent {
     if (!this.checkIfMaxDepthIsReached()) {
       this.html.addClass("addWereEnable");
     }
-    this.#registerCriteriaEvents();
+    this.#registerGrpWrapperEvents();
     this.CriteriaGroup = new CriteriaGroup(this, this.specProvider).render();
     return this;
   }
 
-  #registerCriteriaEvents() {
+  #registerGrpWrapperEvents() {
+    this.html[0].addEventListener("onGrpInputCompleted", (e: CustomEvent) => {
+      e.stopImmediatePropagation();
+      this.#onGrpInputCompleted();
+    });
     this.html[0].addEventListener("onRemoveEndClass", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.#onRemoveEndClass();
@@ -58,8 +62,16 @@ class GroupWrapper extends HTMLComponent {
 
     this.html[0].addEventListener("addWhereComponent", (e: CustomEvent) => {
       e.stopImmediatePropagation();
+      this.#onGrpInputCompleted()
       this.#addWhereComponent(e.detail);
     });
+  }
+
+  //Input is completed by either choosing widgetvalue or adding a whereChild
+  #onGrpInputCompleted(){
+    this.CriteriaGroup.EndClassGroup.renderSelectViewVar()
+    this.CriteriaGroup.StartClassGroup.inputTypeComponent.html[0].classList.add("Highlited")
+    this.CriteriaGroup.EndClassGroup.inputTypeComponent.html[0].classList.add('Highlited')
   }
 
   //add GroupWrapper as a Sibling

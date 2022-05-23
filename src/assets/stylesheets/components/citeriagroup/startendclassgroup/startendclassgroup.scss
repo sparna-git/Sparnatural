@@ -4,30 +4,15 @@
 .StartClassGroup,
 .EndClassGroup {
     position: relative;
-    margin-right: 0px;
-    .selectViewVariable {
-        display: none;
-        position: absolute;
-        top: 50%;
-        right: 18px; //+9 pour retrait dans fleche
-        margin-top: -8px;
-        width: 16px;
-        height: 16px;
-        line-height: 16px;
-        z-index: 2;
-        cursor: pointer;
-        svg{
-            width: 100%;
-            height: 100%;
-            vertical-align: top;
-        }
-    }
+    margin-right: 9px;
+
 }
 
 .EndClassGroup {
     position: relative;
     min-width: auto;
     display:flex;
+
     .EditComponents {
         position: absolute;
         left: 36px;
@@ -379,5 +364,5 @@
                 }
             }
         }
-    }    
+    }   
 }

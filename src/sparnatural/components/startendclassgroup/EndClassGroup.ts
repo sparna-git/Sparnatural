@@ -15,17 +15,15 @@ import ActionWhere from "../actions/actioncomponents/ActionWhere";
 class EndClassGroup extends HTMLComponent {
   varName: any; //IMPORTANT varName is only present at EndClassGroup and StartClassGroup. Refactor on selectedValue method from upper class
   variableSelector: any;
-  selectViewVariable: JQuery<HTMLElement>;
   endClassVal: any;
   notSelectForview: boolean;
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
-  UnselectButton: UnselectBtn;
-  SelectViewVariableBtn: SelectViewVariableBtn;
   endClassWidgetGroup: EndClassWidgetGroup;
   actionWhere: ActionWhere;
   startClassVal: string;
+  selectViewVariableBtn: SelectViewVariableBtn;
 
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
     super("EndClassGroup", ParentCriteriaGroup, null);
@@ -43,6 +41,8 @@ class EndClassGroup extends HTMLComponent {
   }
 
   #addEventListener() {
+    
+
     this.html[0].addEventListener(
       "classTypeValueSelected",
       (e: CustomEvent) => {
@@ -81,13 +81,6 @@ class EndClassGroup extends HTMLComponent {
     this.html.append(editCompCls);
   }
 
-  onchangeViewVariable = () => {
-    console.warn("endclassgrp onChangeViewVar");
-    this.html[0].dispatchEvent(
-      new CustomEvent("updateVariableList", { bubbles: true, detail: "test" })
-    );
-  };
-
   onObjectPropertyGroupSelected(input: string) {
     if (this.endClassWidgetGroup.inputTypeComponent || this.actionWhere) return;
     this.endClassWidgetGroup.onObjectPropertyGroupSelected(input);
@@ -100,6 +93,7 @@ class EndClassGroup extends HTMLComponent {
 
   //MUST be arrowfunction
   #onAddWhere = () => {
+    // render the ViewVarBtn
     this.html[0].dispatchEvent(
       new CustomEvent("addWhereComponent", {
         bubbles: true,
@@ -108,9 +102,20 @@ class EndClassGroup extends HTMLComponent {
     );
   };
 
+  renderSelectViewVar(){
+    this.selectViewVariableBtn = new SelectViewVariableBtn(
+      this,
+      this.onchangeViewVariable
+    ).render()
+  }
+
+  
+  onchangeViewVariable = () => {
+    this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true }));
+  };
+
   #valueWasSelected() {
     this.#renderUnselectBtn();
-    this.#renderSelectViewVariableBtn();
     this.endClassWidgetGroup.render();
 
     // trigger the event that will call the ObjectPropertyGroup
@@ -137,21 +142,8 @@ class EndClassGroup extends HTMLComponent {
     }
   }
 
-  // is this little crossed eye button at the end of EndclassGroup component
-  #renderSelectViewVariableBtn() {
-    this.SelectViewVariableBtn = new SelectViewVariableBtn(
-      this,
-      this.onchangeViewVariable
-    );
-  }
-
   #renderUnselectBtn() {
-    let removeEndClassEvent = () => {
-      this.html[0].dispatchEvent(
-        new CustomEvent("onRemoveEndClass", { bubbles: true })
-      );
-    };
-    this.UnselectButton = new UnselectBtn(this, removeEndClassEvent).render();
+    this.inputTypeComponent.renderUnselectBtn()
   }
 }
 export default EndClassGroup;

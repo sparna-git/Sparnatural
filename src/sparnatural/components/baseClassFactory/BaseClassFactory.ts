@@ -7,9 +7,10 @@
 class BaseClassFactory {
   liTags: Array<string> = ["groupe"];
   ulTags: Array<string> = ["componentsListe", "childsList"];
-  spanTags: Array<string> = ["link-where-bottom", "selectViewVariable"];
+  spanTags: Array<string> = ["link-where-bottom", "selectViewVariable","unselect"];
   aTags: Array<string> = ["asc", "dsc", "none","playBtn"];
   labelTags: Array<string> = ["switch"];
+  
   constructor() {}
 
   getBaseClass(baseCssClass: string) {

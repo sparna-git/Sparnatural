@@ -34,7 +34,7 @@ class ObjectPropertyGroup extends HTMLComponent {
   /*
 		renders the temporarly object property
 	*/
-  onStartClassGroupSelected(startClassVal: string) {
+  onStartClassGroupSelected() {
     //this will set the temporary label since there hasn't been a Value chosen for EndClassGroup
     this.objectPropertySelector.render();
   }
@@ -76,7 +76,7 @@ class ObjectPropertyGroup extends HTMLComponent {
 		This method is triggered when an Object is selected.
 		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
 	*/
-  onEndClassGroupSelected(endClassVal: string) {
+  onEndClassGroupSelected() {
     // this will update the temporarly label
     this.objectPropertySelector.render();
   }

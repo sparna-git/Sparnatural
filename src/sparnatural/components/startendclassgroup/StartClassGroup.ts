@@ -10,13 +10,12 @@ import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
  **/
 class StartClassGroup extends HTMLComponent {
   varName: any;
-  selectViewVariable: JQuery<HTMLElement>;
   notSelectForview: boolean;
   startClassVal: any;
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
-  selectViewVariableBtn: SelectViewVariableBtn;
+
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
@@ -44,15 +43,7 @@ class StartClassGroup extends HTMLComponent {
     );
   }
 
-  onchangeViewVariable = () => {
-    // emit custom event. getting cought in SparnaturalComponent
-    let ev = new CustomEvent("updateVariableList", { bubbles: true });
-    this.html[0].dispatchEvent(ev);
-  };
-
   #valueWasSelected() {
-    this.#renderSelectViewVariableBtn();
-
     this.html[0].dispatchEvent(
       new CustomEvent("StartClassGroupSelected", {
         bubbles: true,
@@ -82,13 +73,6 @@ class StartClassGroup extends HTMLComponent {
         "data-tippy-content"
       );
     }
-  }
-
-  #renderSelectViewVariableBtn() {
-    this.selectViewVariableBtn = new SelectViewVariableBtn(
-      this,
-      this.onchangeViewVariable
-    );
   }
   getVarName() {
     return this.varName;

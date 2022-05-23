@@ -17,10 +17,14 @@
 @use './buttons/unselectbtn.scss';
 @use './buttons/optionalarrow.scss';
 @use './buttons/resetbtn.scss';
+@use './buttons/selectviewvariablebtn.scss';
 //Widget
 @use './widget/EndClassWidgetValue.scss';
 @use './widget/AddMoreValuesBtn.scss';
 
 // link components
 @use './link-and-component.scss';
-@use './link-where-child.scss'
+@use './link-where-child.scss';
+
+// jquery nice-select
+@use './citeriagroup/nice-select/nice-select.scss'

@@ -1,0 +1,64 @@
+@use "../../../themes";
+@use '../../../base';
+@use '../../../mixins';
+.nice-select {
+    background: transparent;
+    border-color: transparent;
+    padding-left: 10px;
+    padding-right: 26px;
+    margin-top: 3px;
+    ul.list li {
+        border-bottom: solid 1px #e8e8e8;
+        img {
+            height : 40px;
+            &.highlited {
+                display: none;
+            }
+        }
+        &.selected,
+        &.focus,
+        &:hover {
+            background: themes.$custom-red ;
+            color: #fff;
+            img {
+                display: none;
+                &.highlited {
+                    display: inline;
+                }
+            }
+        }
+    }
+    ul.list {
+        background: #fff;
+        top: 0;
+        margin-top: 0;
+        max-height: 450px;
+        overflow-y: auto;
+    }
+    ul.list:hover .option:not(:hover) {
+        color: #000;
+        img {
+            display: inline;
+            
+            &.highlited {
+                display: none;
+            }
+        }
+    }
+    .current {
+        img {
+            height: 40px;
+            &.highlited {
+                display: none;
+            }
+        }
+    }
+    &:after {
+        margin-top: 0;
+    }
+}
+.nice-select.disabled {
+    color: themes.$default-text-color;
+    border-color: transparent;
+    border-radius: 0;
+}

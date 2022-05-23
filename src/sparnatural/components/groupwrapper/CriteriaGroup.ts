@@ -71,7 +71,7 @@ class CriteriaGroup extends HTMLComponent {
           throw Error(
             "The Event StartClassGroupSelected expects the startClassVal"
           );
-        this.ObjectPropertyGroup.onStartClassGroupSelected(e.detail);
+        this.ObjectPropertyGroup.onStartClassGroupSelected();
         this.EndClassGroup.onStartClassGroupSelected(e.detail);
       }
     );
@@ -83,7 +83,7 @@ class CriteriaGroup extends HTMLComponent {
         throw Error(
           "The Event StartClassGroupSelected expects the startClassVal"
         );
-      this.ObjectPropertyGroup.onEndClassGroupSelected(e.detail);
+      this.ObjectPropertyGroup.onEndClassGroupSelected();
     });
 
     // 3. Automatically selected or User selects ObjectPropertyGrpVal

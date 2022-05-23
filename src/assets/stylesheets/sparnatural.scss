@@ -84,11 +84,6 @@ spar-natural {
 		.nice-select.disabled:after {
 			display: none;
 		}
-		.nice-select {
-			border: base.$center-arrow-bd-width solid #fff;
-			border-left: 0;
-			border-right: 0;
-		}
 		.nice-select .current {
 			display: inline-block;
 			height: base.$height-components-under - (base.$center-arrow-bd-width*2);
@@ -257,70 +252,6 @@ spar-natural {
 				}
 			}
 		}		
-		.nice-select {
-			background: transparent;
-			border-color: transparent;
-			padding-left: 10px;
-			padding-right: 26px;
-			ul.list li {
-				border-bottom: solid 1px #e8e8e8;
-				img {
-					height : 40px;
-					&.highlited {
-						display: none;
-					}
-				}
-				&.selected,
-				&.focus,
-				&:hover {
-					background: $custom-red ;
-					color: #fff;
-					img {
-						display: none;
-						&.highlited {
-							display: inline;
-						}
-					}
-				}
-			}
-			ul.list {
-				background: #fff;
-				top: 0;
-				margin-top: 0;
-				max-height: 450px;
-				overflow-y: auto;
-			}
-			ul.list:hover .option:not(:hover) {
-				color: #000;
-				img {
-					display: inline;
-					
-					&.highlited {
-						display: none;
-					}
-				}
-			}
-			.current {
-				img {
-					height: 40px;
-					&.highlited {
-						display: none;
-					}
-				}
-			}
-			&:after {
-				margin-top: 0;
-			}
-		}
-		.nice-select.disabled {
-			color: $default-text-color;
-			border-color: transparent;
-			border-radius: 0;
-		}
-		.StartClassGroup>.ClassTypeId .nice-select.disabled {
-			border-radius: 5px 0 0 5px;
-		}
-		
 		&.completed {
 			&>div .Highlited {
 				/*background: $custom-red;*/

@@ -1,3 +1,28 @@
+@use "../../../themes";
+@use '../../../base';
+@use '../../../mixins';
 .ClassTypeId{
     display: flex;
+    span.unselect{
+        top:-10px;
+        right:29px
+    }
+
+    &.Highlited {
+        @include mixins.arrow-back-colors(themes.$custom-red, #fff);
+		@include mixins.arrow-front-colors(themes.$custom-red, #fff);
+        .nice-select{
+            color: #fff;
+            background-color: themes.$custom-red;
+        }
+        &.VariableSelected{
+            @include mixins.arrow-front-colors(themes.$custom-red, themes.$custom-green-bold);
+            @include mixins.arrow-back-colors(themes.$custom-red, themes.$custom-green-bold);
+            .nice-select{
+                border: themes.$custom-green-bold;
+            }
+        }
+	}
+
+
 }

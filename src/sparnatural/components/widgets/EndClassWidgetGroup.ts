@@ -120,6 +120,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     this.#renderEndClassWidgetVal(getSettings().langSearch.SelectAllValues)
   }
 
+  // user selects a value
   #onChange() {
     var selectedVal: { key: string; label: string; uri: string } =
       this.inputTypeComponent.getValue(); // could be array or single value
@@ -147,7 +148,7 @@ class EndClassWidgetGroup extends HTMLComponent {
     }
 
     this.html[0].dispatchEvent(
-      new CustomEvent("EndClassWidgetGroupSelected", { bubbles: true })
+      new CustomEvent("onGrpInputCompleted", { bubbles: true })
     );
     this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
     this.html[0].dispatchEvent(

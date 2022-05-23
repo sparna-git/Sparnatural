@@ -2,7 +2,6 @@ import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ActionAnd from "./actioncomponents/ActionAnd";
 import HTMLComponent from "../../HtmlComponent";
-import UnselectBtn from "../buttons/UnselectBtn";
 
 /**
  	Groups all the actions on a line/criteria (AND / REMOVE / WHERE)
@@ -12,7 +11,6 @@ class ActionsGroup extends HTMLComponent {
   actions: {
     ActionAnd: ActionAnd;
   };
-  RemoveCrtGroup: UnselectBtn;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {

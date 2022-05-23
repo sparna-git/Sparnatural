@@ -9,7 +9,7 @@ class SelectViewVariableBtn extends HTMLComponent {
   selected = false;
   constructor(ParentComponent: HTMLComponent, callBack: () => void) {
     let widgetHtml = $(UiuxConfig.ICON_NOT_SELECTED_VARIABLE); //default
-    super("selectViewVariable", ParentComponent, widgetHtml);
+    super("selectViewVariableBtn", ParentComponent, widgetHtml);
     this.html.on("click", (e: JQuery.ClickEvent) => {
       this.selected = this.selected ? false : true;
       this.selected

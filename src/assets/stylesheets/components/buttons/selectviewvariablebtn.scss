@@ -1,0 +1,14 @@
+.selectViewVariableBtn {
+    color: #fff;
+    position: relative;
+    top: 30%;
+    right: 25px;
+    height: 16px;
+    z-index: 2;
+    cursor: pointer;
+    svg{
+        width: 100%;
+        height: 100%;
+        vertical-align: top;
+    }
+}

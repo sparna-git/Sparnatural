@@ -42,7 +42,7 @@ class ActionStore {
       }
     );
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
-    this.sparnatural.html[0].addEventListener("updateVariableList", (e) => {
+    this.sparnatural.html[0].addEventListener("onSelectViewVar", (e) => {
       e.stopImmediatePropagation();
     });
 

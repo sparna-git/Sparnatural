@@ -5,6 +5,8 @@ import EndClassGroup from "./EndClassGroup";
 import ArrowComponent from "../arrows/ArrowComponent";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import HTMLComponent from "../../HtmlComponent";
+import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
+import UnselectBtn from "../buttons/UnselectBtn";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.
@@ -21,9 +23,11 @@ class ClassTypeId extends HTMLComponent {
     this,
     UiuxConfig.COMPONENT_ARROW_BACK
   );
+
   selectBuilder: ClassSelectBuilder;
-  startClassVal: any = null;
+  startClassVal: any = null; // if it is a whereChild, the startclassVal is already set
   oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
+  UnselectButton: any;
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
@@ -58,8 +62,19 @@ class ClassTypeId extends HTMLComponent {
     // nice-select is not a proper select tag and that's why can't listen for change events... move away from nice-select!
     this.#addOnChangeListener(this.oldWidget);
     this.frontArrow.render();
+
     return this;
   }
+
+  renderUnselectBtn(){
+    let removeEndClassEvent = () => {
+      this.html[0].dispatchEvent(
+        new CustomEvent("onRemoveEndClass", { bubbles: true })
+      );
+    };
+    this.UnselectButton = new UnselectBtn(this, removeEndClassEvent).render();
+  }
+
 
   // If this Component is a child of the EndClassGroup component, we want the range of possible end values
   #getRangeOfEndValues(selectBuilder: ClassSelectBuilder) {
