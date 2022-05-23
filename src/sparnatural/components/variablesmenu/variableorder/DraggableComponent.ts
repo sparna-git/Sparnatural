@@ -11,7 +11,6 @@ class DraggableComponent extends HTMLComponent {
     icon:any
     varName:string
     constructor(parentComponent:VariableOrderMenu,specProvider:ISpecProvider, selected_val:string,varName:string){
-        var label = specProvider.getLabel(selected_val);
         var icon = specProvider.getIcon(selected_val);
         let widgetHtml = 
         $(`<div class="variableSelected flexWrap" data-variableName="${varName}">

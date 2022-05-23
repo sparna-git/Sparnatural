@@ -51,12 +51,6 @@ class HTMLComponent implements IRenderable {
     }
   }
 
-  updateWidgetHtml(newWidgetHtml: JQuery<HTMLElement>) {
-    this.html.remove(this.widgetHtml.toString());
-    this.widgetHtml = newWidgetHtml;
-    this.html.append(this.widgetHtml);
-  }
-
   render() {
     if (this.html != null){
       this.html.remove();

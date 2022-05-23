@@ -111,6 +111,7 @@ class EndClassGroup extends HTMLComponent {
 
   
   onchangeViewVariable = () => {
+    console.warn('selctviewvar clicked')
     this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true }));
   };
 

@@ -7,28 +7,32 @@ import HTMLComponent from "../../HtmlComponent";
 */
 class SelectViewVariableBtn extends HTMLComponent {
   selected = false;
+  callBack
   constructor(ParentComponent: HTMLComponent, callBack: () => void) {
     let widgetHtml = $(UiuxConfig.ICON_NOT_SELECTED_VARIABLE); //default
     super("selectViewVariableBtn", ParentComponent, widgetHtml);
-    this.html.on("click", (e: JQuery.ClickEvent) => {
+    this.callBack = callBack
+  }
+
+  render() {
+    if (this.selected) {
+      this.widgetHtml = $(UiuxConfig.ICON_SELECTED_VARIABLE);
+    } else {
+      this.widgetHtml = $(UiuxConfig.ICON_NOT_SELECTED_VARIABLE);
+    }
+    super.render();
+    this.#addClickListener()
+    return this;
+  }
+  #addClickListener(){
+    this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       this.selected = this.selected ? false : true;
       this.selected
         ? this.html.addClass("VariableSelected")
         : this.html.removeClass("VariableSelected");
-      let newWidgetHml: JQuery<HTMLElement>;
-      if (this.selected) {
-        newWidgetHml = $(UiuxConfig.ICON_SELECTED_VARIABLE);
-      } else {
-        newWidgetHml = $(UiuxConfig.ICON_NOT_SELECTED_VARIABLE);
-      }
-      this.updateWidgetHtml(newWidgetHml);
-      callBack();
+      this.render()
+      this.callBack();
     });
-  }
-
-  render() {
-    super.render();
-    return this;
   }
 }
 export default SelectViewVariableBtn;
