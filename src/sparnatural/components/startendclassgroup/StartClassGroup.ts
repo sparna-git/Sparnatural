@@ -3,15 +3,13 @@ import ClassTypeId from "./ClassTypeId";
 import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
-import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
+import { SelectedVal } from "../../sparql/ISparJson";
 
 /**
  * Selection of the start class in a criteria/line
  **/
 class StartClassGroup extends HTMLComponent {
-  varName: any;
-  notSelectForview: boolean;
-  startClassVal: any;
+  startClassVal: SelectedVal;
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
@@ -37,10 +35,20 @@ class StartClassGroup extends HTMLComponent {
         if (e.detail === "" || !e.detail)
           throw Error('No value received on "classTypeValueSelected"');
         e.stopImmediatePropagation();
-        this.startClassVal = e.detail;
+        this.#createSparqlVar(e.detail)
         this.#valueWasSelected();
       }
     );
+  }
+
+  #createSparqlVar(type:string){
+    this.startClassVal.type = type
+    this.html[0].dispatchEvent(new CustomEvent('getSparqlVarId',{
+      bubbles:true,
+      detail:(id: number) => { //callback
+        this.startClassVal.variable = `?${this.specProvider.getLabel(type)}_${id}`
+      }
+    }))
   }
 
   #valueWasSelected() {
@@ -75,7 +83,10 @@ class StartClassGroup extends HTMLComponent {
     }
   }
   getVarName() {
-    return this.varName;
+    return this.startClassVal.variable;
+  }
+  getTypeSelected(){
+    return this.startClassVal.type
   }
 }
 export default StartClassGroup;

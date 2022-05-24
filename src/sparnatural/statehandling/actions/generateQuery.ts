@@ -1,14 +1,15 @@
 
 import { getSettings } from "../../../configs/client-configs/settings";
+import NewJSONQueryGenerator from "../../sparql/NewQueryGenerator";
 import { QuerySPARQLWriter } from "../../sparql/Query";
-import JSONQueryGenerator from "../../sparql/QueryGenerators";
 import ActionStore from "../ActionStore";
 
 export default function generateQuery(actionStore: ActionStore) {
   // triggered when Sparnatural is submitted : generates output SPARQL query
   let settings = getSettings();
   // prints the JSON query data structure on the console
-  var jsonGenerator = new JSONQueryGenerator();
+  let qryGen = new NewJSONQueryGenerator(actionStore.sparnatural)
+
   //var jsonQuery = jsonGenerator.generateQuery(event.data.formObject);
   var jsonQuery = null;
   if (jsonQuery != null) {

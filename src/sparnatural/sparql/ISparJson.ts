@@ -1,0 +1,39 @@
+import { EndClassWidgetValue } from "../components/widgets/EndClassWidgetGroup"
+
+export interface SelectedVal {
+    variable: string
+    type:string
+}
+
+export interface CriteriaLine {
+    s:string,
+    p: string,
+    o:string,
+    sType:string,
+    oType:string,
+    values:Array<EndClassWidgetValue>
+}
+
+export interface Branch {
+    line: CriteriaLine
+    children:Array<Branch>
+}
+
+export interface ISparJson {
+    distinct: boolean,
+    variables: Array<SelectedVal>,
+    lang: Language,
+    order: Order
+    branches:Array<Branch>
+}
+
+export enum Language {
+    FR = 'fr',
+    EN = 'en'
+}
+
+export enum Order {
+    ASC = 'asc',
+    DESC = 'desc',
+    NOORDER = 'noord'
+}

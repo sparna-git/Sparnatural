@@ -16,8 +16,6 @@ var SparqlGenerator = require("sparqljs").Generator;
 
 import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
 
-// TODO: Change name of file to classname
-
 class JSONQueryGenerator {
   constructor() {}
 

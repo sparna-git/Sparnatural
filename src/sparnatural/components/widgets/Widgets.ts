@@ -5,9 +5,9 @@ import "select2/dist/css/select2.css";
 import tippy from "tippy.js";
 import ISettings from "../../../configs/client-configs/ISettings";
 import IWidget from "./IWidget";
-import EndClassWidgetGroup from "./EndClassWidgetGroup";
 import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import LocalCacheData from "../../datastorage/LocalCacheData";
+import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
 // IMPORTANT TODO refactor HtmlContainer.
 
 export class AutoCompleteWidget implements IWidget {

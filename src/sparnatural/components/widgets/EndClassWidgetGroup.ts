@@ -8,7 +8,7 @@ import ArrowComponent from "../arrows/ArrowComponent";
 import UnselectBtn from "../buttons/UnselectBtn";
 import AddMoreValuesBtn from "../buttons/AddMoreValuesBtn";
 
-class EndClassWidgetGroup extends HTMLComponent {
+export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
   selectedValues: Array<EndClassWidgetValue> = [];
   selectAllValue: boolean = true;
@@ -185,7 +185,7 @@ class EndClassWidgetGroup extends HTMLComponent {
   };
 }
 
-class EndClassWidgetValue extends HTMLComponent {
+export class EndClassWidgetValue extends HTMLComponent {
   backArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_BACK);
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   unselectBtn: UnselectBtn;
@@ -215,5 +215,3 @@ class EndClassWidgetValue extends HTMLComponent {
     return this;
   }
 }
-
-export default EndClassWidgetGroup;

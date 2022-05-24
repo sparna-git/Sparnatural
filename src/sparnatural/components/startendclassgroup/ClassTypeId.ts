@@ -5,7 +5,6 @@ import EndClassGroup from "./EndClassGroup";
 import ArrowComponent from "../arrows/ArrowComponent";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import HTMLComponent from "../../HtmlComponent";
-import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
 import UnselectBtn from "../buttons/UnselectBtn";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.

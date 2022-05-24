@@ -2,27 +2,25 @@ import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import tippy from "tippy.js";
-import UnselectBtn from "../buttons/UnselectBtn";
 import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
 import HTMLComponent from "../../HtmlComponent";
 import { getSettings } from "../../../configs/client-configs/settings";
-import EndClassWidgetGroup from "../widgets/EndClassWidgetGroup";
 import ActionWhere from "../actions/actioncomponents/ActionWhere";
+import { SelectedVal } from "../../sparql/ISparJson";
+import { EndClassWidgetGroup } from "../widgets/EndClassWidgetGroup";
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
  **/
 class EndClassGroup extends HTMLComponent {
-  varName: any; //IMPORTANT varName is only present at EndClassGroup and StartClassGroup. Refactor on selectedValue method from upper class
   variableSelector: any;
-  endClassVal: any;
-  notSelectForview: boolean;
+  endClassVal: SelectedVal;
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   endClassWidgetGroup: EndClassWidgetGroup;
   actionWhere: ActionWhere;
-  startClassVal: string;
+  startClassVal: SelectedVal;
   selectViewVariableBtn: SelectViewVariableBtn;
 
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
@@ -41,19 +39,16 @@ class EndClassGroup extends HTMLComponent {
   }
 
   #addEventListener() {
-    
-
     this.html[0].addEventListener(
       "classTypeValueSelected",
       (e: CustomEvent) => {
         if (e.detail === "" || !e.detail)
           throw Error('No value received on "classTypeValueSelected"');
         e.stopImmediatePropagation();
-        this.endClassVal = e.detail;
+        this.#createSparqlVar(e.detail)
         this.#valueWasSelected();
       }
     );
-
     // when inputgot selected then we remove the where btn
     this.html[0].addEventListener("removeWhereBtn", (e: CustomEvent) => {
       e.stopImmediatePropagation();
@@ -67,9 +62,20 @@ class EndClassGroup extends HTMLComponent {
     });
   }
 
+  #createSparqlVar(type:string){
+    this.endClassVal.type = type
+    this.html[0].dispatchEvent(new CustomEvent('getSparqlVarId',{
+      bubbles:true,
+      detail:(id: number) => { //callback
+        this.endClassVal.variable = `?${this.specProvider.getLabel(type)}_${id}`
+      }
+    }))
+  }
+
   // triggered when the subject/domain is selected
-  onStartClassGroupSelected(startClassVal: string) {
-    this.startClassVal = startClassVal;
+  onStartClassGroupSelected(startClassVal: SelectedVal) {
+    this.startClassVal = startClassVal
+
     // render the inputComponent for a user to select an Object
     this.inputTypeComponent = new ClassTypeId(
       this,
@@ -111,7 +117,6 @@ class EndClassGroup extends HTMLComponent {
 
   
   onchangeViewVariable = () => {
-    console.warn('selctviewvar clicked')
     this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true }));
   };
 
@@ -145,6 +150,13 @@ class EndClassGroup extends HTMLComponent {
 
   #renderUnselectBtn() {
     this.inputTypeComponent.renderUnselectBtn()
+  }
+
+  getVarName() {
+    return this.startClassVal.variable;
+  }
+  getTypeSelected(){
+    return this.startClassVal.type
   }
 }
 export default EndClassGroup;

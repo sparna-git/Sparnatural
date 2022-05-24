@@ -19,8 +19,8 @@ import {
   TimeDatePickerWidget,
   TreeWidget,
 } from "./Widgets";
-import EndClassWidgetGroup from "./EndClassWidgetGroup";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
+import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
 
 /**
  *  Selects the value for a range in a criteria/line, using a value selection widget
@@ -77,9 +77,10 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
         //this.GrandParent.initCompleted();
 
         //Add variable on results view
+        /* STILL NECESSARY?
         if (!this.GrandParent.notSelectForview) {
           this.GrandParent.onchangeViewVariable();
-        }
+        }*/
         add_all = false;
 
         this.html[0].dispatchEvent(

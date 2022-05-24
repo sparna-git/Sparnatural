@@ -2,8 +2,8 @@ import ISpecProvider from "../spec-providers/ISpecProviders";
 import Sparnatural from "../components/MainComponents/Sparnatural";
 import initGeneralevent from "./actions/initGeneralEvent";
 import toggleVarNames from "./actions/toggleVarNames";
-import generateQuery from "./actions/submitAction";
 import deleteGrpWrapper from "./actions/deleteGrpWrapper";
+import { Order, SelectedVal } from "../sparql/ISparJson";
 // This is ugly, should use i18n features instead
 const i18nLabels = {
   en: require("../../assets/lang/en.json"),
@@ -17,7 +17,13 @@ const i18nLabels = {
 class ActionStore {
   sparnatural: Sparnatural;
   specProvider: any;
-  orderSort: string;
+  order: Order;
+  variables: Array<SelectedVal>
+  
+  sparqlVarID = 0  // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
+
+  maxVarIndex = 0; //maxVarIndex indicates how many AND and WHERE siblings are allowed to be added
+  
   //submitOpened = false still implement
   constructor(sparnatural: Sparnatural, specProvider: ISpecProvider) {
     this.specProvider = specProvider;
@@ -31,7 +37,7 @@ class ActionStore {
       (event: CustomEvent) => {
         event.stopImmediatePropagation();
         event.preventDefault();
-        generateQuery(this);
+        //generateQuery(this);
       }
     );
 
@@ -55,22 +61,42 @@ class ActionStore {
       e.stopImmediatePropagation();
       toggleVarNames(this);
     });
-    // maxvarindex shows the index for the sparql variables. e.g Country_1
-    let maxVarIndex = 0;
+   
     this.sparnatural.html[0].addEventListener(
       "getMaxVarIndex",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        maxVarIndex++;
+        this.maxVarIndex++;
         // return the index in callback
-        e.detail(maxVarIndex);
+        e.detail(this.maxVarIndex);
+      }
+    );
+
+    this.sparnatural.html[0].addEventListener(
+      "getSparqlVarId",
+      (e: CustomEvent) => {
+        e.stopImmediatePropagation();
+        this.sparqlVarID++;
+        // return the index in callback
+        e.detail(this.sparqlVarID);
       }
     );
 
     this.sparnatural.html[0].addEventListener(
       "changeOrderSort",
       (e: CustomEvent) => {
-        this.orderSort = e.detail;
+        switch(e.detail){
+          case 'asc':
+            this.order = Order.ASC
+            break;
+          case 'desc':
+            this.order = Order.DESC
+            break;
+          case 'noorder':
+            this.order = Order.NOORDER
+            break;
+        }
+        this.order = e.detail;
       }
     );
 

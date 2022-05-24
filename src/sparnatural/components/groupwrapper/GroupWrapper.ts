@@ -33,6 +33,7 @@ class GroupWrapper extends HTMLComponent {
   render(): this {
     super.render();
     // disable further links when max depth is reached
+    //TODO: does this still work????
     if (!this.checkIfMaxDepthIsReached()) {
       this.html.addClass("addWereEnable");
     }
@@ -146,7 +147,7 @@ class GroupWrapper extends HTMLComponent {
     this.CriteriaGroup.html.remove();
     this.CriteriaGroup = new CriteriaGroup(this, this.specProvider).render();
     this.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget
-      .val(startVal)
+      .val(startVal.type)
       .niceSelect("update");
   }
 
