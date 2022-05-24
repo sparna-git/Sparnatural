@@ -6,6 +6,8 @@ import ArrowComponent from "../arrows/ArrowComponent";
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import HTMLComponent from "../../HtmlComponent";
 import UnselectBtn from "../buttons/UnselectBtn";
+import { SelectedVal } from "../../sparql/ISparJson";
+import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.
@@ -24,9 +26,13 @@ class ClassTypeId extends HTMLComponent {
   );
 
   selectBuilder: ClassSelectBuilder;
-  startClassVal: any = null; // if it is a whereChild, the startclassVal is already set
+  startClassVal: SelectedVal = {
+    variable: null,
+    type: null
+  }; // if it is a whereChild, the startclassVal is already set
   oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
   UnselectButton: any;
+  selectViewVariableBtn: SelectViewVariableBtn;
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
@@ -40,6 +46,10 @@ class ClassTypeId extends HTMLComponent {
 
   render() {
     this.widgetHtml = null;
+    this.selectViewVariableBtn = new SelectViewVariableBtn(
+      this,
+      this.#onchangeViewVariable
+    )
     super.render();
 
     this.backArrow.render();
@@ -47,7 +57,7 @@ class ClassTypeId extends HTMLComponent {
     if (isStartClassGroup(this.ParentComponent)) {
       this.widgetHtml = this.#getStartValues(
         this.selectBuilder,
-        this.startClassVal
+        this.startClassVal?.type
       );
     } else {
       this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder);
@@ -78,7 +88,7 @@ class ClassTypeId extends HTMLComponent {
   // If this Component is a child of the EndClassGroup component, we want the range of possible end values
   #getRangeOfEndValues(selectBuilder: ClassSelectBuilder) {
     // if you would like to have a default value selected, then change the null
-    return selectBuilder.buildClassSelect(this.startClassVal, null);
+    return selectBuilder.buildClassSelect(this.startClassVal.type, null);
   }
 
   // If this Component is a child of the StartClassGroup component, we want the possible StartValues
@@ -101,6 +111,11 @@ class ClassTypeId extends HTMLComponent {
       );
     });
   }
+
+    
+  #onchangeViewVariable = () => {
+    this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true }));
+  };
 
   //This function is called by EnclassWidgetGroup when a value got selected. It renders the classTypeIds as shape forms and highlights them
   highlight() {
@@ -129,7 +144,7 @@ class ClassSelectBuilder extends HTMLComponent {
     return this;
   }
 
-  buildClassSelect(domainId: any, default_value: any) {
+  buildClassSelect(domainId: string, default_value: string) {
     let list: Array<string> = [];
     let items = [];
 

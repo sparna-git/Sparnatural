@@ -35,7 +35,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   render() {
     super.render();
     // if there is an Object selected
-    if (this.GrandParent.EndClassGroup.endClassVal) {
+    if (this.GrandParent.EndClassGroup.endClassVal.type) {
       this.#removeTempLbl();
       // set the correct objectProperty matching to Start and End value
       let oldWidget = this.#getObjectProperty();

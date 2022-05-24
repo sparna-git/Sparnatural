@@ -91,7 +91,8 @@ class CriteriaGroup extends HTMLComponent {
       "onObjectPropertyGroupSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
+        // if there is already a where connection, don't change anything  
+        if(!this.ParentGroupWrapper.whereChild) this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
         this.OptionsGroup.onObjectPropertyGroupSelected();
         this.ActionsGroup.onObjectPropertyGroupSelected();
       }

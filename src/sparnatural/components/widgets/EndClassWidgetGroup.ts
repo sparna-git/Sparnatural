@@ -1,5 +1,5 @@
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
-import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
+
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import { getSettings } from "../../../configs/client-configs/settings";
@@ -11,15 +11,9 @@ import AddMoreValuesBtn from "../buttons/AddMoreValuesBtn";
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
   selectedValues: Array<EndClassWidgetValue> = [];
-  selectAllValue: boolean = true;
+  selectAllValue: boolean = false;
   specProvider: ISpecProvider;
   addMoreValuesBtn: AddMoreValuesBtn;
-  VALUE_SELECTION_WIDGETS = [
-    Config.LIST_PROPERTY,
-    Config.LITERAL_LIST_PROPERTY,
-    Config.AUTOCOMPLETE_PROPERTY,
-    Config.TREE_PROPERTY,
-  ];
   inputTypeComponent: ObjectPropertyTypeWidget;
   constructor(parentComponent: HTMLComponent, specProvider: ISpecProvider) {
     super("EndClassWidgetGroup", parentComponent, null);
@@ -104,6 +98,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
       // re-init the widget to empty input field
       this.inputTypeComponent.render();
+      // reattach eventlistener. it got removed
+      this.#addEventListener()
       this.addMoreValuesBtn.html.remove();
       this.html[0].dispatchEvent(
         new CustomEvent("renderWhereBtn", { bubbles: true })
@@ -120,7 +116,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.#renderEndClassWidgetVal(getSettings().langSearch.SelectAllValues)
   }
 
-  // user selects a value
+  // user selects a value for example a country from the listwidget
   #onChange() {
     var selectedVal: { key: string; label: string; uri: string } =
       this.inputTypeComponent.getValue(); // could be array or single value

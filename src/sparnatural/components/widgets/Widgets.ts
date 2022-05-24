@@ -33,14 +33,13 @@ export class AutoCompleteWidget implements IWidget {
   render() {
     //render this element
     var startClassGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .value_selected;
+      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup.startClassVal.type;
     var endClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .value_selected;
+        .endClassVal.type;
     var ObjectPropertyGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
-        .value_selected;
+        .objectPropVal;
 
     var id_inputs = this.IdCriteriaGroupe;
     var itc_obj = this.ParentComponent;
@@ -161,10 +160,10 @@ export class ListWidget implements IWidget {
   render() {
     var startClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .startClassVal;
+        .startClassVal.type;
     var endClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .endClassVal;
+        .endClassVal.type;
     var ObjectPropertyGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
         .objectPropVal;
@@ -279,10 +278,10 @@ export class ListWidgetNew implements IWidget {
     //render this element
     var startClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .startClassVal;
+        .startClassVal.type;
     var endClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .endClassVal;
+        .endClassVal.type;
     var ObjectPropertyGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
         .value_selected;
@@ -352,9 +351,9 @@ export class URLListDatasource {
     this.listHandler = listHandler;
   }
   getItems = function (
-    startClassGroup_value: any,
-    ObjectPropertyGroup_value: any,
-    endClassGroup_value: any,
+    startClassGroup_value: string,
+    ObjectPropertyGroup_value: string,
+    endClassGroup_value: string,
     callback: (arg0: any[]) => void
   ) {
     var options = {
@@ -429,13 +428,13 @@ export class DatesWidget implements IWidget {
     //render this element
     var startClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .value_selected;
+        .startClassVal.type;
     var endClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .value_selected;
+        .endClassVal.type;
     var ObjectPropertyGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
-        .value_selected;
+        .objectPropVal;
     var phrase = "";
     var data_json = null;
 
@@ -990,13 +989,13 @@ export class TreeWidget implements IWidget {
     //render this element
     var startClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .value_selected;
+        .startClassVal.type;
     var endClassGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .value_selected;
+        .endClassVal.type;
     var ObjectPropertyGroup_value =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
-        .value_selected;
+        .objectPropVal;
 
     var id_inputs = this.IdCriteriaGroupe;
     this.itc_obj = this.ParentComponent;

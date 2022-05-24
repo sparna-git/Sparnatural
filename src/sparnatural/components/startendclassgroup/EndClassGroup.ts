@@ -2,12 +2,20 @@ import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../groupwrapper/CriteriaGroup";
 import tippy from "tippy.js";
-import SelectViewVariableBtn from "../buttons/SelectViewVariableBtn";
 import HTMLComponent from "../../HtmlComponent";
 import { getSettings } from "../../../configs/client-configs/settings";
 import ActionWhere from "../actions/actioncomponents/ActionWhere";
 import { SelectedVal } from "../../sparql/ISparJson";
 import { EndClassWidgetGroup } from "../widgets/EndClassWidgetGroup";
+import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
+
+enum RENDER_WHERE_ENUM {
+  LIST_PROPERTY = Config.LIST_PROPERTY,
+  LITERAL_LIST_PROPERTY= Config.LITERAL_LIST_PROPERTY,
+  AUTOCOMPLETE_PROPERTY=Config.AUTOCOMPLETE_PROPERTY,
+  TREE_PROPERTY=Config.TREE_PROPERTY,
+}
+
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
@@ -24,7 +32,7 @@ class EndClassGroup extends HTMLComponent {
   endClassWidgetGroup: EndClassWidgetGroup;
   actionWhere: ActionWhere;
   startClassVal: SelectedVal;
-  selectViewVariableBtn: SelectViewVariableBtn;
+  RENDER_WHERE  = RENDER_WHERE_ENUM
 
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
     super("EndClassGroup", ParentCriteriaGroup, null);
@@ -36,6 +44,7 @@ class EndClassGroup extends HTMLComponent {
   render() {
     super.render();
     this.variableSelector = null;
+
     this.#addEventListener();
     return this;
   }
@@ -92,11 +101,16 @@ class EndClassGroup extends HTMLComponent {
   onObjectPropertyGroupSelected(input: string) {
     if (this.endClassWidgetGroup.inputTypeComponent || this.actionWhere) return;
     this.endClassWidgetGroup.onObjectPropertyGroupSelected(input);
-    this.actionWhere = new ActionWhere(
-      this,
-      this.specProvider,
-      this.#onAddWhere
-    ).render();
+    //whereaction only needs to be rendered on certain widgets
+    let widgetType = this.endClassWidgetGroup.inputTypeComponent.getWidgetType() 
+    if(Object.values(this.RENDER_WHERE).includes(widgetType)){
+      this.actionWhere = new ActionWhere(
+        this,
+        this.specProvider,
+        this.#onAddWhere
+      ).render();
+    }
+
   }
 
   //MUST be arrowfunction
@@ -111,16 +125,8 @@ class EndClassGroup extends HTMLComponent {
   };
 
   renderSelectViewVar(){
-    this.selectViewVariableBtn = new SelectViewVariableBtn(
-      this,
-      this.onchangeViewVariable
-    ).render()
+    this.inputTypeComponent.selectViewVariableBtn.render()
   }
-
-  
-  onchangeViewVariable = () => {
-    this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true }));
-  };
 
   #valueWasSelected() {
     this.#renderUnselectBtn();

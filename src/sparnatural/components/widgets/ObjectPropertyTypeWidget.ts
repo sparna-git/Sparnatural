@@ -29,7 +29,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
   ParentComponent: EndClassWidgetGroup;
   GrandParent: EndClassGroup;
   settings: ISettings;
-  widgetType: string | null = null;
+  widgetType: Config
   objectPropertyId: any;
   rangeClassId: any;
   classLabel: string;
@@ -66,7 +66,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropertyId
     );
-    this.rangeClassId = this.GrandParent.endClassVal;
+    this.rangeClassId = this.GrandParent.endClassVal.type;
     this.classLabel = this.specProvider.getLabel(this.rangeClassId);
     let endLabel: string;
     let add_all = true;
@@ -537,6 +537,10 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
 
       return sparql;
     }
+  }
+
+  getWidgetType(){
+    return this.widgetType
   }
   getValue() {
     if (this.loadedValue !== null) {

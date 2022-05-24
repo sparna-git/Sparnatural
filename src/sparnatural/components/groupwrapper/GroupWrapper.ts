@@ -58,13 +58,13 @@ class GroupWrapper extends HTMLComponent {
 
     this.html[0].addEventListener("addAndComponent", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      this.#addAndComponent(e.detail);
+      this.#addAndComponent(e.detail.type);
     });
 
     this.html[0].addEventListener("addWhereComponent", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.#onGrpInputCompleted()
-      this.#addWhereComponent(e.detail);
+      this.#addWhereComponent(e.detail.type);
     });
   }
 

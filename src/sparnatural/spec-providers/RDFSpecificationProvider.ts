@@ -152,7 +152,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
     return this._readAsLiteralWithLang(entityId, Config.TOOLTIP, this.lang);
   }
 
-  getIcon(classId: any) {
+  getIcon(classId: string) {
     var faIcon = this._readAsLiteral(
       classId,
       factory.namedNode(Config.FA_ICON)
@@ -175,14 +175,14 @@ export class RDFSpecificationProvider implements ISpecProvider {
     }
   }
 
-  getHighlightedIcon(classId: any) {
+  getHighlightedIcon(classId: string) {
     return this._readAsLiteral(
       classId,
       factory.namedNode(Config.HIGHLIGHTED_ICON)
     );
   }
 
-  getConnectedClasses(classId: any) {
+  getConnectedClasses(classId: string) {
     var items: any[] = [];
 
     const properties = this._readPropertiesWithDomain(classId);

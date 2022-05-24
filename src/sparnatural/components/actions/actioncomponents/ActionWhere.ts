@@ -33,7 +33,7 @@ class ActionWhere extends HTMLComponent {
       choiceNumber = 1;
     }
     var endLabel = this.specProvider.getLabel(
-      (this.ParentComponent as EndClassGroup).endClassVal
+      (this.ParentComponent as EndClassGroup).endClassVal.type
     );
 
     let newhtml = $(`

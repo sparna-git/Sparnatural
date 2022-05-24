@@ -8,7 +8,7 @@ import CriteriaGroup from "../groupwrapper/CriteriaGroup";
  **/
 class ObjectPropertyGroup extends HTMLComponent {
   objectPropertySelector: ObjectPropertyTypeId;
-  objectPropVal: any = null; // value which shows which object property got chosen by the config for subject and object
+  objectPropVal: string = null; // value which shows which object property got chosen by the config for subject and object
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   constructor(

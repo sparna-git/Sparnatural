@@ -121,11 +121,11 @@ class Sparnatural extends HTMLComponent {
       for (var x = 0; x < this.form.sparnatural.components.length; x++) {
         var critere = this.form.sparnatural.components[x].CriteriaGroup;
         if (critere.StartClassGroup.variableNamePreload == variableName) {
-          critere.StartClassGroup.onchangeViewVariable();
+          //critere.StartClassGroup.onchangeViewVariable();
           break; // une variable ne doit être trouvé q'une seule fois et seulement la première
         }
         if (critere.EndClassGroup.variableNamePreload == variableName) {
-          critere.EndClassGroup.onchangeViewVariable();
+          //critere.EndClassGroup.onchangeViewVariable();
           break; // une variable ne doit être trouvé q'une seule fois et seulement la première
         }
       }
