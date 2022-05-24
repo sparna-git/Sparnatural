@@ -14,7 +14,10 @@ import { EndClassWidgetGroup } from "../widgets/EndClassWidgetGroup";
  **/
 class EndClassGroup extends HTMLComponent {
   variableSelector: any;
-  endClassVal: SelectedVal;
+  endClassVal: SelectedVal = {
+    type:null,
+    variable:null
+  };
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
@@ -33,7 +36,6 @@ class EndClassGroup extends HTMLComponent {
   render() {
     super.render();
     this.variableSelector = null;
-    this.endClassVal = null;
     this.#addEventListener();
     return this;
   }
@@ -132,7 +134,7 @@ class EndClassGroup extends HTMLComponent {
       })
     );
 
-    var desc = this.specProvider.getTooltip(this.endClassVal);
+    var desc = this.specProvider.getTooltip(this.endClassVal.type);
     if (desc) {
       $(this.ParentCriteriaGroup.EndClassGroup.html)
         .find(".ClassTypeId")

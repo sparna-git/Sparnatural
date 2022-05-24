@@ -73,7 +73,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     let add_or = true;
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-      if (this.specProvider.isLiteralClass(this.GrandParent.endClassVal)) {
+      if (this.specProvider.isLiteralClass(this.GrandParent.endClassVal.type)) {
         //this.GrandParent.initCompleted();
 
         //Add variable on results view
@@ -176,7 +176,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
   canHaveSelectAll() {
     if (
       this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
-      this.specProvider.isLiteralClass(this.GrandParent.endClassVal)
+      this.specProvider.isLiteralClass(this.GrandParent.endClassVal.type)
     ) {
       return false;
     }

@@ -2,18 +2,19 @@
     All SpecificationProvider provided by the SpecificationProviderFactory MUST implement this interface
 */
 interface ISpecProvider {
-  isEnablingNegation(value_selected: any): any;
-  isEnablingOptional(value_selected: any): any;
-  getHighlightedIcon(value_selected: any): any;
-  getIcon(value_selected: any): any;
-  getTreeChildrenDatasource(objectPropertyId: any): any;
-  getTreeRootsDatasource(objectPropertyId: any): any;
-  expandSparql(sparql: any): any;
-  getDatasource(objectPropertyId: any): any;
-  isLiteralClass(value_selected: any): any;
-  getObjectPropertyType(objectPropertyId: any): string;
-  getLabel(value_selected: any): any;
-  getTooltip(value_selected: any): any;
-  hasConnectedClasses(value_selected: any): any;
+  isEnablingNegation(value_selected: string): boolean;
+  isEnablingOptional(value_selected: string): boolean;
+  getHighlightedIcon(value_selected: string): string;
+  getIcon(value_selected: string): string;
+  getTreeChildrenDatasource(objectPropertyId: string): string;
+  getTreeRootsDatasource(objectPropertyId: string): any;
+  expandSparql(sparql: string): string;
+  getDatasource(objectPropertyId: string): any ;
+  isLiteralClass(value_selected: string): any;
+  getObjectPropertyType(objectPropertyId: string): string;
+  getLabel(value_selected: string): string;
+  getTooltip(value_selected: string): string;
+  hasConnectedClasses(value_selected: string): any;
+  getConnectingProperties(domain:string,range:string): Array<string>;
 }
 export default ISpecProvider;

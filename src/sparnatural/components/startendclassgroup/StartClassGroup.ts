@@ -9,7 +9,10 @@ import { SelectedVal } from "../../sparql/ISparJson";
  * Selection of the start class in a criteria/line
  **/
 class StartClassGroup extends HTMLComponent {
-  startClassVal: SelectedVal;
+  startClassVal: SelectedVal = {
+    type:null,
+    variable:null
+  };
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
@@ -61,7 +64,7 @@ class StartClassGroup extends HTMLComponent {
 
     this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
 
-    var desc = this.specProvider.getTooltip(this.startClassVal);
+    var desc = this.specProvider.getTooltip(this.startClassVal.type);
 
     /*
       Not sure what the following code does

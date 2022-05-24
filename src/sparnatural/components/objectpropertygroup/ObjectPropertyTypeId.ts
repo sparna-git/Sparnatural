@@ -87,8 +87,8 @@ class ObjectPropertyTypeId extends HTMLComponent {
     var default_value = null;
 
     return this.selectBuilder.buildPropertySelect(
-      this.GrandParent.StartClassGroup.startClassVal,
-      this.GrandParent.EndClassGroup.endClassVal,
+      this.GrandParent.StartClassGroup.startClassVal.type,
+      this.GrandParent.EndClassGroup.endClassVal.type,
       default_value
     );
   }
@@ -108,14 +108,14 @@ export default ObjectPropertyTypeId;
  **/
 class PropertySelectBuilder {
   items: Array<string>;
-  specProvider: any;
+  specProvider: ISpecProvider;
   constructor(specProvider: any) {
     this.specProvider = specProvider;
   }
 
   buildPropertySelect(
-    domainClassID: any,
-    rangeClassID: any,
+    domainClassID: string,
+    rangeClassID: string,
     default_value: any
   ) {
     this.items = this.specProvider.getConnectingProperties(
