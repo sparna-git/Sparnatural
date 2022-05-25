@@ -15,10 +15,9 @@ import {
   // var SparqlParser = require('sparqljs').Parser;
   
 import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
-import Sparnatural from "../components/MainComponents/Sparnatural";
-import GroupWrapper from "../components/groupwrapper/GroupWrapper";
+import Sparnatural from "../components/Sparnatural";
+import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { Branch, ISparJson, Language, Order,SelectedVal } from "./ISparJson";
-import StartClassGroup from "../components/startendclassgroup/StartClassGroup";
   
   class NewJSONQueryGenerator {
     sparnatural: Sparnatural;

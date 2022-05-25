@@ -1,5 +1,5 @@
 import ISpecProvider from "../spec-providers/ISpecProviders";
-import Sparnatural from "../components/MainComponents/Sparnatural";
+import Sparnatural from "../components/Sparnatural";
 import initGeneralevent from "./actions/initGeneralEvent";
 import toggleVarNames from "./actions/toggleVarNames";
 import deleteGrpWrapper from "./actions/deleteGrpWrapper";

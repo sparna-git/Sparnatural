@@ -1,7 +1,7 @@
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../../HtmlComponent";
 import { getSettings } from "../../../../configs/client-configs/settings";
-import EndClassGroup from "../../startendclassgroup/EndClassGroup";
+import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 

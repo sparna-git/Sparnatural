@@ -9,7 +9,7 @@ require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 require("tippy.js/dist/tippy.css");
 
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
-import Sparnatural from "./sparnatural/components/MainComponents/Sparnatural";
+import Sparnatural from "./sparnatural/components/Sparnatural";
 
 /*
   This is the SparNatural HTMLElement. 

@@ -1,4 +1,4 @@
-import { EndClassWidgetValue } from "../components/widgets/EndClassWidgetGroup"
+import { EndClassWidgetValue } from "../components/builder-section/groupwrapper/criteriagroup/widgets/EndClassWidgetGroup"
 
 export interface SelectedVal {
     variable: string
