@@ -6,6 +6,12 @@ import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";
 
 
+export enum OptionTypes {
+  OPTIONAL = 'optionalEnabled',
+  NOTEXISTS = 'notExistsEnabled',
+  NONE = 'noOption',
+}
+
 /**
  * Contains the components for Optional and not exists arrow.
  * Components can be triggered when:

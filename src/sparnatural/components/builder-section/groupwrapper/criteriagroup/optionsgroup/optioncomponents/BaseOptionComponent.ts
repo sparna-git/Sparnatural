@@ -3,7 +3,7 @@ import ISpecProvider from "../../../../../../spec-providers/ISpecProviders";
 import ArrowComponent from "../../../../../arrows/ArrowComponent";
 import HTMLComponent from "../../../../../HtmlComponent";
 import GroupWrapper from "../../../GroupWrapper";
-import { OptionsGroup } from "../OptionsGroup";
+import { OptionsGroup, OptionTypes } from "../OptionsGroup";
 
 /*
     This is the base class for the optioncomponents such as NotExistComponent or OptionalComponent
@@ -27,8 +27,10 @@ class BaseOptionComponent extends HTMLComponent {
   id: string;
   objectId: any;
   specProvider: ISpecProvider;
+  type: OptionTypes;
   constructor(
     baseCssClass: string,
+    type:OptionTypes,
     ParentComponent: OptionsGroup,
     specProvider: ISpecProvider,
     name: string,
@@ -40,6 +42,7 @@ class BaseOptionComponent extends HTMLComponent {
     this.ParentOptionsGroup = ParentComponent as OptionsGroup;
     this.specProvider = specProvider;
     this.parentWrapper = this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper;
+    this.type = type
   }
 
   render(): this {
@@ -58,42 +61,8 @@ class BaseOptionComponent extends HTMLComponent {
   }
 
   // Optional or notExists button got clicked. handle the css and state
-  onChange(cls: string) {      
-    this.parentWrapper.traverse((grpWrapper: GroupWrapper) => {
-      switch(cls){
-        case 'notExistsEnabled':
-          grpWrapper.notexists ? false : true
-          //remove optional enabled class if activated
-          if(grpWrapper.optional) this.#handleCSS(grpWrapper,'optionalEnabled')
-          grpWrapper.optional = false
-          //toggle notExistsEnabled class
-          this.#handleCSS(grpWrapper,cls)
-          break;
-        case 'optionalEnabled':
-          grpWrapper.optional ? false : true
-          // remove notExistsEnabled class if activated
-          if(grpWrapper.notexists) this.#handleCSS(grpWrapper,'notExistsEnabled')
-          grpWrapper.notexists = false
-          // toggle optionalEnabled
-          this.#handleCSS(grpWrapper,cls)
-          break;
-        default:
-          throw Error(`OptionComponent clicked doesn't recognize type: ${this.baseCssClass}`)
-      }
-    });
-  }
-
-  #handleCSS(grpWrapper:GroupWrapper,cls: string){
-    grpWrapper.CriteriaGroup.html[0].classList.toggle(cls)
-    if(grpWrapper.whereChild) grpWrapper.linkWhereBottom.html[0].classList.toggle(cls)
-
-
-    //skip the toggling for this parentWrapper
-    if (grpWrapper != this.parentWrapper) {
-      if(grpWrapper.andSibling) grpWrapper.linkAndBottom.html[0].classList.toggle(cls)
-      //remove the optional possibilities for child groups
-      grpWrapper.CriteriaGroup.OptionsGroup.backArrow.html.toggle();
-    }
+  onChange() { 
+    this.html[0].dispatchEvent(new CustomEvent('optionTriggered',{bubbles:true,detail:this.type}))
   }
 }
 

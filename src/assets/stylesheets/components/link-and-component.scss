@@ -15,4 +15,20 @@
         padding: 2px 10px;
         width: fit-content;
     }
+    &.optionalEnabled{
+        height: 3px;
+        position: absolute;
+        background: repeating-linear-gradient( 90deg, #fff, #fff 5px, themes.$custom-red 5px, themes.$custom-red 10px);
+        display: block;
+        span{
+            border: 2px dashed themes.$custom-red
+        }
+    }
+    &.notExistsEnabled {
+		background: repeating-linear-gradient( 90deg, #fff, #fff 5px, #000 5px, #000 10px);
+		span {
+			border: 3px dashed #000;
+			border-radius: 15px;
+		}
+	}
 }

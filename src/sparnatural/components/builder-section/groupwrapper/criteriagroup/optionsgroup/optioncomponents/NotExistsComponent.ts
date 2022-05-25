@@ -1,7 +1,8 @@
 import BaseOptionComponent from "./BaseOptionComponent";
 import { getSettings } from "../../../../../../../configs/client-configs/settings";
 import ISpecProvider from "../../../../../../spec-providers/ISpecProviders";
-import { OptionsGroup } from "../OptionsGroup";
+import { OptionsGroup, OptionTypes } from "../OptionsGroup";
+
 
 /*
     Not Exists Component. Get's rendered by OptionsGroup if this is enabled.
@@ -9,15 +10,16 @@ import { OptionsGroup } from "../OptionsGroup";
 */
 class NotExistsComponent extends BaseOptionComponent {
   specProvider: ISpecProvider;
+
   // If you would like to change the shape of the Arrow. Do it here
   constructor(
     ParentComponent: OptionsGroup,
     specProvider: ISpecProvider,
     crtGroupId: number
   ) {
-    super("NotExists", ParentComponent, specProvider, "notExists", crtGroupId);
+    super("NotExists",OptionTypes.NOTEXISTS,ParentComponent, specProvider, "notExists", crtGroupId);
   }
-  
+
 
   render(): this {
     this.objectId =
@@ -31,7 +33,7 @@ class NotExistsComponent extends BaseOptionComponent {
   #addEventListeners() {
     this.html.on("click", (e) => {
       e.stopPropagation();
-      this.onChange("notExistsEnabled");
+      this.onChange();
     });
   }
 }

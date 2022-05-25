@@ -33,7 +33,7 @@ import { Branch, ISparJson, Language, Order,SelectedVal } from "./ISparJson";
         this.json.variables = variables
         this.json.order = order
         this.json.lang = lang
-        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traverse(
+        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
             (grpWrapper: GroupWrapper) => {
                 let CrtGrp = grpWrapper.CriteriaGroup
                 let branch:Branch = {

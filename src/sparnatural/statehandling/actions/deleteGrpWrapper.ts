@@ -9,33 +9,35 @@ export default function deleteGrpWrapper(
 ) {
   let elToDel = e.detail as GroupWrapper;
   let deleteIt = (el: GroupWrapper) => {
+    el?.linkWhereBottom?.html?.empty()?.remove()
+    el?.linkAndBottom?.html?.empty()?.remove()
     el.html.empty();
     el.html.remove();
   };
-  // traverse through components and calculate background / linkAndBottoms /  for them
-  actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traverse(
+  // traversePreOrder through components and calculate background / linkAndBottoms /  for them
+  actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
-      if (grpWrapper === elToDel) {
-        //grpWrapper is the root groupwrapper
-        grpWrapper.html.empty();
-        grpWrapper.html.remove();
-        deleteIt(grpWrapper);
+      if(grpWrapper === elToDel){
+        //grpWrapper is root node. call resetCallBack like resetBtn would have been clicked
+        actionStore.sparnatural.BgWrapper.resetCallback()
       }
-      if (grpWrapper.andSibling === elToDel) {
-        grpWrapper.linkAndBottom.html.empty().remove();
-        grpWrapper.linkAndBottom = null;
-        deleteIt(grpWrapper.andSibling);
-        grpWrapper.andSibling = null;
-        grpWrapper.setObjectPropertySelectedState();
-        //grpWrapper.CriteriaGroup.ActionsGroup.onObjectPropertyGroupSelected()
+      if(grpWrapper.andSibling === elToDel){
+        grpWrapper.andSibling.traversePostOrder((grpWrapper:GroupWrapper)=>{
+          deleteIt(grpWrapper)
+        })
+        grpWrapper.andSibling = null
+        grpWrapper.linkAndBottom.html.empty().remove()
+        grpWrapper.setObjectPropertySelectedState()
       }
       if (grpWrapper.whereChild === elToDel) {
-        grpWrapper.linkWhereBottom.html.empty().remove();
-        grpWrapper.linkWhereBottom = null;
-        deleteIt(grpWrapper.whereChild);
-        grpWrapper.whereChild = null;
-        grpWrapper.setObjectPropertySelectedState();
+        grpWrapper.whereChild.traversePostOrder((grpWrapper:GroupWrapper)=>{
+          deleteIt(grpWrapper)
+        })
+        grpWrapper.whereChild = null
+        grpWrapper.linkWhereBottom.html.empty().remove()
+        grpWrapper.setObjectPropertySelectedState()
       }
+
     }
   );
   actionStore.sparnatural.html[0].dispatchEvent(

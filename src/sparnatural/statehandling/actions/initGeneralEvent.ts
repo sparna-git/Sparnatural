@@ -10,8 +10,8 @@ export default function initGeneralevent(actionStore: ActionStore) {
   let index = 0;
   let currentHeight = 0;
   let previousHeight = 0;
-  // traverse through components and calculate background / linkAndBottoms /  for them
-  actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traverse(
+  // traversePreOrder through components and calculate background / linkAndBottoms /  for them
+  actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       renderLinks(grpWrapper);
       //render background
