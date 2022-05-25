@@ -36,7 +36,7 @@ export default class GroupWrapperEventStore{
         this.grpWrapper.html[0].addEventListener("addWhereComponent", (e: CustomEvent) => {
           e.stopImmediatePropagation();
           completeGrpInput(this.grpWrapper)
-          addWhereComponent(this.grpWrapper,e.detail.type);
+          addWhereComponent(this.grpWrapper,e.detail);
         });
     
         this.grpWrapper.html[0].addEventListener('optionTriggered',(e:CustomEvent)=>{

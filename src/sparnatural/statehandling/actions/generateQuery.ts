@@ -10,10 +10,10 @@ export default function generateQuery(actionStore: ActionStore) {
   // prints the JSON query data structure on the console
   let qryGen = new NewJSONQueryGenerator(actionStore.sparnatural)
 
-  //var jsonQuery = jsonGenerator.generateQuery(event.data.formObject);
-  var jsonQuery = null;
+  var jsonQuery = qryGen.generateQuery(actionStore.variables,actionStore.distinct,actionStore.order,actionStore.language);
   if (jsonQuery != null) {
     console.log("*** New JSON Data structure ***");
+    console.dir(jsonQuery)
     console.log(JSON.stringify(jsonQuery, null, 4));
 
     // prints the SPARQL generated from the writing of the JSON data structure

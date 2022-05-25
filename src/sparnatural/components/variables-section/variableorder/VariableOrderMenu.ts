@@ -84,7 +84,7 @@ class VariableOrderMenu extends HTMLComponent {
 
 
   #updateVariableList() {
-    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
+    this.html[0].dispatchEvent(new CustomEvent("updateVariables", { bubbles: true }));
   }
 }
 

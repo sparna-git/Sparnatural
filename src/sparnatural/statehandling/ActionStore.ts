@@ -3,7 +3,8 @@ import Sparnatural from "../components/Sparnatural";
 import initGeneralevent from "./actions/initGeneralEvent";
 import toggleVarNames from "./actions/toggleVarNames";
 import deleteGrpWrapper from "./actions/deleteGrpWrapper";
-import { Order, SelectedVal } from "../sparql/ISparJson";
+import { Language, Order, SelectedVal } from "../sparql/ISparJson";
+import generateQuery from "./actions/generateQuery";
 // This is ugly, should use i18n features instead
 const i18nLabels = {
   en: require("../../assets/lang/en.json"),
@@ -19,6 +20,8 @@ class ActionStore {
   specProvider: any;
   order: Order;
   variables: Array<SelectedVal>
+  distinct = true // default
+  language = Language.EN //default
   
   sparqlVarID = 0  // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
 
@@ -37,7 +40,7 @@ class ActionStore {
       (event: CustomEvent) => {
         event.stopImmediatePropagation();
         event.preventDefault();
-        //generateQuery(this);
+        generateQuery(this);
       }
     );
 
@@ -99,6 +102,11 @@ class ActionStore {
         this.order = e.detail;
       }
     );
+
+    
+    this.sparnatural.html[0].addEventListener('updateVariables',()=>{
+
+    })
 
     this.sparnatural.html[0].addEventListener("initGeneralEvent", (e) => {
       e.stopImmediatePropagation()

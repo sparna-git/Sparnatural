@@ -104,7 +104,6 @@ export class EndClassWidgetGroup extends HTMLComponent {
         new CustomEvent("renderWhereBtn", { bubbles: true })
       );
     }
-    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
@@ -112,7 +111,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   #onSelectAll() {
     this.selectAllValue = true;
-    this.#renderEndClassWidgetVal(getSettings().langSearch.SelectAllValues)
+    //allvalues doesn't have an uri
+    this.#renderEndClassWidgetVal(getSettings().langSearch.SelectAllValues,'')
   }
 
   // user selects a value for example a country from the listwidget
@@ -128,11 +128,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
     if (this.selectedValues.some((val) => val.value_lbl === selectedVal.label))
       return;
     // if not, then create the EndclassWidgetValue and add it to the list
-    this.#renderEndClassWidgetVal(selectedVal.label)
+    this.#renderEndClassWidgetVal(selectedVal.label,selectedVal.uri)
   }
 
-  #renderEndClassWidgetVal(lbl:string){
-    let endClassWidgetVal = new EndClassWidgetValue(this, lbl);
+  #renderEndClassWidgetVal(lbl:string, uri:string){
+    let endClassWidgetVal = new EndClassWidgetValue(this, lbl,uri);
     this.selectedValues.push(endClassWidgetVal);
 
     this.#renderNewSelectedValue(endClassWidgetVal);
@@ -145,7 +145,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("onGrpInputCompleted", { bubbles: true })
     );
-    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
+
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
@@ -185,11 +185,13 @@ export class EndClassWidgetValue extends HTMLComponent {
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   unselectBtn: UnselectBtn;
   value_lbl: string;
+  uri: string;
 
-  constructor(ParentComponent: EndClassWidgetGroup, value_lbl: string) {
+  constructor(ParentComponent: EndClassWidgetGroup, value_lbl: string, uri: string) {
     super(value_lbl, ParentComponent, null);
     // set a tooltip if the label is a bit long
     this.value_lbl = value_lbl;
+    this.uri = uri
   }
 
   render(): this {

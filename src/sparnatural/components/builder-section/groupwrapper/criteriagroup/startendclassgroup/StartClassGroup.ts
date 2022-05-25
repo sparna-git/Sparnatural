@@ -9,19 +9,20 @@ import HTMLComponent from "../../../../HtmlComponent";
  * Selection of the start class in a criteria/line
  **/
 class StartClassGroup extends HTMLComponent {
-  startClassVal: SelectedVal = {
-    type:null,
-    variable:null
-  };
+  startClassVal: SelectedVal;
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
 
-  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
+  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider,startClassVal?:SelectedVal) {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.inputTypeComponent = new ClassTypeId(this, this.specProvider);
-    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup; // must be before varName declaration
+    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
+    this.startClassVal = startClassVal ? startClassVal : {
+      type:null,
+      variable:null
+    };
   }
 
   render() {
@@ -38,7 +39,8 @@ class StartClassGroup extends HTMLComponent {
         if (e.detail === "" || !e.detail)
           throw Error('No value received on "classTypeValueSelected"');
         e.stopImmediatePropagation();
-        this.#createSparqlVar(e.detail)
+        //only create new SPARQL variable if the startClassVal is not set by the parent component
+        if(!this.startClassVal.variable)this.#createSparqlVar(e.detail)
         this.#valueWasSelected();
       }
     );
@@ -61,8 +63,6 @@ class StartClassGroup extends HTMLComponent {
         detail: this.startClassVal,
       })
     );
-
-    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
 
     var desc = this.specProvider.getTooltip(this.startClassVal.type);
 

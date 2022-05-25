@@ -53,8 +53,6 @@ class ObjectPropertyGroup extends HTMLComponent {
   }
 
   #valueWasSelected() {
-    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
-
     var desc = this.specProvider.getTooltip(this.objectPropVal);
 
     if (desc) {

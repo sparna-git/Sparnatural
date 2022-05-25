@@ -1,7 +1,7 @@
 import { getSettings } from "../../configs/client-configs/settings";
 import ISpecProvider from "../spec-providers/ISpecProviders";
 import BgWrapper from "./builder-section/BgWrapper";
-import SubmitSection from "./MainComponents/SubmitSection";
+import SubmitSection from "./submit-section/SubmitSection";
 import SpecificationProviderFactory from "../spec-providers/SpecificationProviderFactory";
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
@@ -69,7 +69,7 @@ class Sparnatural extends HTMLComponent {
     this.loadQuery();
 
     // And now, generateQuery form
-    this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
+    //this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
     // clear the jsonQueryBranch copied on every component, otherwise they always stay here
     // and we get the same criterias over and over when removing and re-editing
   }

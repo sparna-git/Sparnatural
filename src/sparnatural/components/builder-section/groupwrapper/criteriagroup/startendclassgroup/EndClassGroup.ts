@@ -163,10 +163,10 @@ class EndClassGroup extends HTMLComponent {
   }
 
   getVarName() {
-    return this.startClassVal.variable;
+    return this.endClassVal.variable;
   }
   getTypeSelected(){
-    return this.startClassVal.type
+    return this.endClassVal.type
   }
 }
 export default EndClassGroup;

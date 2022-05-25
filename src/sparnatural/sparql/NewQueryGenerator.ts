@@ -18,41 +18,57 @@ import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
 import Sparnatural from "../components/Sparnatural";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { Branch, ISparJson, Language, Order,SelectedVal } from "./ISparJson";
+import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
   
   class NewJSONQueryGenerator {
     sparnatural: Sparnatural;
-    json: ISparJson
+    json: ISparJson = {
+      distinct: null,
+      variables: null,
+      lang: null,
+      order: null,
+      branches: null
+    }
     constructor(sparnatural:Sparnatural) {
         this.sparnatural = sparnatural
     }
 
 
-    generateQueryi(variables:Array<SelectedVal>,distinct:boolean,order:Order,lang:Language){
+    generateQuery(variables:Array<SelectedVal>,distinct:boolean,order:Order,lang:Language){
         let index = 0
         this.json.distinct = distinct
         this.json.variables = variables
         this.json.order = order
         this.json.lang = lang
-        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
-            (grpWrapper: GroupWrapper) => {
-                let CrtGrp = grpWrapper.CriteriaGroup
-                let branch:Branch = {
-                    line: {
-                       s:CrtGrp.StartClassGroup.getVarName(),
-                       p:CrtGrp.ObjectPropertyGroup.objectPropVal,
-                       o:CrtGrp.EndClassGroup.getVarName(),
-                       sType:CrtGrp.StartClassGroup.getTypeSelected(),
-                       oType:CrtGrp.EndClassGroup.getTypeSelected(),
-                       values:CrtGrp.EndClassGroup.endClassWidgetGroup.selectedValues 
-                    },
-                    children: []
-                }
-            }
-        );
+        this.json.branches = this.#getBranch(this.sparnatural.BgWrapper.componentsList.rootGroupWrapper)
+        return this.json
+    }
+
+
+    #getBranch(grpWrapper: GroupWrapper):Array<any>{
+      let branches = []
+      let CrtGrp = grpWrapper.CriteriaGroup
+      let branch:Branch = {
+          line: {
+             s:CrtGrp.StartClassGroup.getVarName(),
+             p:CrtGrp.ObjectPropertyGroup.objectPropVal,
+             o:CrtGrp.EndClassGroup.getVarName(),
+             sType:CrtGrp.StartClassGroup.getTypeSelected(),
+             oType:CrtGrp.EndClassGroup.getTypeSelected(),
+             values:CrtGrp.EndClassGroup.endClassWidgetGroup.selectedValues.map((v)=>{return {label:v.value_lbl,uri:v.uri}})
+          },
+          children: grpWrapper.whereChild ? this.#getBranch(grpWrapper.whereChild) : [],
+          optional: grpWrapper.optionState == OptionTypes.OPTIONAL,
+          notExists: grpWrapper.optionState == OptionTypes.NOTEXISTS
+      }
+      branches.push(branch)
+      if(grpWrapper.andSibling) branches.push(this.#getBranch(grpWrapper.andSibling))
+      return branches
     }
     /**
      * Generates a JSON query
      **/
+    /*
     generateQuery(formObject: {
       queryOptions: any;
       sparnatural: { components: string | any[] };
@@ -284,7 +300,7 @@ import { Branch, ISparJson, Language, Order,SelectedVal } from "./ISparJson";
       });
   
       return dependant;
-    }
+    }*/
   }
   
   export default NewJSONQueryGenerator;

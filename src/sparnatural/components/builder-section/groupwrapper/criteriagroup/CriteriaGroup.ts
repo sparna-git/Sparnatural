@@ -13,6 +13,7 @@ import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup } from "./optionsgroup/OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
+import { SelectedVal } from "../../../../sparql/ISparJson";
 
 class CriteriaGroup extends HTMLComponent {
   settings: any;
@@ -26,10 +27,15 @@ class CriteriaGroup extends HTMLComponent {
   ParentGroupWrapper: GroupWrapper;
   unselectBtn: UnselectBtn;
 
-  constructor(ParentComponent: GroupWrapper, specProvider: any) {
+  constructor(ParentComponent: GroupWrapper, specProvider: any,startClassVal?:SelectedVal) {
     super("CriteriaGroup", ParentComponent, null);
     this.specProvider = specProvider;
     this.ParentGroupWrapper = ParentComponent;
+    this.StartClassGroup = new StartClassGroup(
+      this,
+      this.specProvider,
+      startClassVal
+    )
   }
 
   render(): this {
@@ -46,10 +52,7 @@ class CriteriaGroup extends HTMLComponent {
 
   #renderChildComponents() {
     // create all the elements of the criteria
-    this.StartClassGroup = new StartClassGroup(
-      this,
-      this.specProvider
-    ).render(); // is startClassVal here actually needed?
+    this.StartClassGroup.render();
     this.OptionsGroup = new OptionsGroup(this, this.specProvider).render();
     this.ObjectPropertyGroup = new ObjectPropertyGroup(
       this,

@@ -82,10 +82,6 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
           this.GrandParent.onchangeViewVariable();
         }*/
         add_all = false;
-
-        this.html[0].dispatchEvent(
-          new CustomEvent("generateQuery", { bubbles: true })
-        );
         this.html[0].dispatchEvent(
           new CustomEvent("initGeneralEvent", { bubbles: true })
         );

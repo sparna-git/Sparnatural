@@ -11,12 +11,14 @@ export interface CriteriaLine {
     o:string,
     sType:string,
     oType:string,
-    values:Array<EndClassWidgetValue>
+    values:Array<{label:string,uri:string}>
 }
 
 export interface Branch {
     line: CriteriaLine
-    children:Array<Branch>
+    children:Array<Branch> | []
+    optional:boolean
+    notExists:boolean
 }
 
 export interface ISparJson {

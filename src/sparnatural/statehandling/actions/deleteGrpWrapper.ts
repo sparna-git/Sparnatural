@@ -1,7 +1,8 @@
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import ActionStore from "../ActionStore";
 /*
-  A general Event is either an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper
+  This method traverses first preorder through the tree and looks for the child component to delete.
+  It then traverses postorder through the descendants of the element to delete and deletes them all
 */
 export default function deleteGrpWrapper(
   actionStore: ActionStore,
@@ -37,7 +38,6 @@ export default function deleteGrpWrapper(
         grpWrapper.linkWhereBottom.html.empty().remove()
         grpWrapper.setObjectPropertySelectedState()
       }
-
     }
   );
   actionStore.sparnatural.html[0].dispatchEvent(

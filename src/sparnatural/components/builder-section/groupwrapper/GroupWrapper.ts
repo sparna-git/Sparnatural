@@ -6,12 +6,12 @@ import CriteriaGroup from "./criteriagroup/CriteriaGroup";
 import HTMLComponent from "../../HtmlComponent";
 import { OptionTypes } from "./criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapperEventStore from "./groupwrapperevents/GroupWrapperEventStore";
+import { SelectedVal } from "../../../sparql/ISparJson";
 
 /*
   GroupWrapper class represents a row in Sparnatural. It is the WrapperClass for the CriteriaGroup
 */
 class GroupWrapper extends HTMLComponent {
-
   whereChild: GroupWrapper = null;
   andSibling: GroupWrapper = null;
   optionState: OptionTypes
@@ -21,9 +21,10 @@ class GroupWrapper extends HTMLComponent {
   specProvider: ISpecProvider;
   groupWrapperEventStore: GroupWrapperEventStore
   // ParentComponent: ComponentsList | GroupWrapper
-  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
+  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider,startClassVal?:SelectedVal) {
     super("groupe", ParentComponent, null);
     this.specProvider = specProvider;
+    this.CriteriaGroup = new CriteriaGroup(this, this.specProvider,startClassVal)
   }
 
   render(): this {
@@ -34,7 +35,7 @@ class GroupWrapper extends HTMLComponent {
       this.html.addClass("addWereEnable");
     }
     this.groupWrapperEventStore = new GroupWrapperEventStore(this)
-    this.CriteriaGroup = new CriteriaGroup(this, this.specProvider).render();
+    this.CriteriaGroup = this.CriteriaGroup.render();
     return this;
   }
   checkIfMaxDepthIsReached() {

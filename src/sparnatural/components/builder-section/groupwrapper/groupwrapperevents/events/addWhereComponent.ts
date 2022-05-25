@@ -1,3 +1,4 @@
+import { SelectedVal } from "../../../../../sparql/ISparJson";
 import GroupWrapper from "../../GroupWrapper";
 import LinkWhereBottom from "../../LinkWhereBottom";
 
@@ -11,13 +12,13 @@ let removeEditComponents = (grpWrapper:GroupWrapper) =>{
 }
 
 //give it additional class childsList
-export function addWhereComponent(grpWrapper:GroupWrapper,endClassVal: string) {
+export function addWhereComponent(grpWrapper:GroupWrapper,endClassVal: SelectedVal) {
   removeEditComponents(grpWrapper);
-  grpWrapper.whereChild = new GroupWrapper(grpWrapper, grpWrapper.specProvider).render();
+  grpWrapper.whereChild = new GroupWrapper(grpWrapper, grpWrapper.specProvider,endClassVal).render();
 
   //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
   grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget
-    .val(endClassVal)
+    .val(endClassVal.type)
     .niceSelect("update");
   grpWrapper.linkWhereBottom = new LinkWhereBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(
