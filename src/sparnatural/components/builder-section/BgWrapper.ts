@@ -1,8 +1,8 @@
 import ResetBtn from "../buttons/ResetBtn";
 import ComponentsList from "./ComponentsList";
-import HTMLComponent from "../../HtmlComponent";
 import Sparnatural from "../Sparnatural";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
+import HTMLComponent from "../HtmlComponent";
 
 class BgWrapper extends HTMLComponent {
   ParentSparnatural: Sparnatural;

@@ -1,7 +1,7 @@
 import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import ArrowComponent from "../../../../arrows/ArrowComponent";
-import HTMLComponent from "../../../../../HtmlComponent";
+import HTMLComponent from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
 
 /**

@@ -1,6 +1,6 @@
-import HTMLComponent from "../../HtmlComponent";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import DisplayBtn from "../buttons/DisplayBtn";
+import HTMLComponent from "../HtmlComponent";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";
 import VariableSortOption from "./variablesort/VariableSortOptions";
 

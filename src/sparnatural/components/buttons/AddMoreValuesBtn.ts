@@ -1,6 +1,6 @@
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import HTMLComponent from "../../HtmlComponent";
 import ArrowComponent from "../arrows/ArrowComponent";
+import HTMLComponent from "../HtmlComponent";
 
 class AddMoreValuesBtn extends HTMLComponent {
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);

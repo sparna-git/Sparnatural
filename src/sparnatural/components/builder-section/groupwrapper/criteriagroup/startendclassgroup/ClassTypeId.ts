@@ -4,11 +4,11 @@ import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
 import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
-import HTMLComponent from "../../../../../HtmlComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import SelectViewVariableBtn from "../../../../buttons/SelectViewVariableBtn";
 import CriteriaGroup from "../CriteriaGroup";
+import HTMLComponent from "../../../../HtmlComponent";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.

@@ -1,12 +1,11 @@
 import { getSettings } from "../../configs/client-configs/settings";
-
 import ISpecProvider from "../spec-providers/ISpecProviders";
-import HTMLComponent from "../HtmlComponent";
 import BgWrapper from "./builder-section/BgWrapper";
-import SubmitSection from "./submit-section/SubmitSection";
+import SubmitSection from "./MainComponents/SubmitSection";
 import SpecificationProviderFactory from "../spec-providers/SpecificationProviderFactory";
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
+import HTMLComponent from "./HtmlComponent";
 
 // This is ugly, should use i18n features instead
 const i18nLabels = {

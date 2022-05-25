@@ -1,6 +1,7 @@
 import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
-import HTMLComponent from "../../../HtmlComponent";
+
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
+import HTMLComponent from "../../HtmlComponent";
 import VariableOrderMenu from "./VariableOrderMenu";
 /*
     Single Draggable Component

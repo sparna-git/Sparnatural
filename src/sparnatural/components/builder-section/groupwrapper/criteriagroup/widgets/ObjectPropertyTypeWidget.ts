@@ -4,7 +4,6 @@ import Datasources from "../../../../../../configs/fixed-configs/SparnaturalConf
 import { SparqlTreeHandler } from "./handlers/TreeHandlers";
 import IWidget from "./IWidget";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
-import HTMLComponent from "../../../../../HtmlComponent";
 import {
   SparqlTemplateAutocompleteHandler,
   SparqlTemplateListHandler,
@@ -21,6 +20,7 @@ import {
 } from "./Widgets";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
+import HTMLComponent from "../../../../HtmlComponent";
 
 /**
  *  Selects the value for a range in a criteria/line, using a value selection widget

@@ -1,6 +1,7 @@
-import ISettings from "../configs/client-configs/ISettings";
-import { getSettings } from "../configs/client-configs/settings";
-import BaseClassFactory from "./components/baseClassFactory/BaseClassFactory";
+import ISettings from "../../configs/client-configs/ISettings";
+import { getSettings } from "../../configs/client-configs/settings";
+import BaseClassFactory from "./baseClassFactory/BaseClassFactory";
+
 
 interface IRenderable {
   render: () => this;

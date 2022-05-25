@@ -1,6 +1,7 @@
 import Sortable, { SortableEvent } from "sortablejs";
-import HTMLComponent from "../../../HtmlComponent";
+
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
+import HTMLComponent from "../../HtmlComponent";
 import VariableSelection from "../VariableSelection";
 import DraggableComponent from "./DraggableComponent";
 

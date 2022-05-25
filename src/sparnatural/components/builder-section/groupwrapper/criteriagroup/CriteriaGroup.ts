@@ -4,7 +4,6 @@
  **/
 
 import { getSettings } from "../../../../../configs/client-configs/settings";
-import HTMLComponent from "../../../../HtmlComponent";
 import ISpecProvider from "../../../../spec-providers/ISpecProviders";
 import ActionsGroup from "../../../actions/ActionsGroup";
 import UnselectBtn from "../../../buttons/UnselectBtn";
@@ -13,6 +12,7 @@ import EndClassGroup from "./startendclassgroup/EndClassGroup";
 import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup } from "./optionsgroup/OptionsGroup";
+import HTMLComponent from "../../../HtmlComponent";
 
 class CriteriaGroup extends HTMLComponent {
   settings: any;

@@ -2,7 +2,6 @@ import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import StartClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
-import HTMLComponent from "../../../HtmlComponent";
 /*
 class VariableSelector extends HTMLComponent {
   displayVariableList: any;

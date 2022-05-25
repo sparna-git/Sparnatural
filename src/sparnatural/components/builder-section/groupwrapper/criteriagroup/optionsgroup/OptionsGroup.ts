@@ -1,6 +1,6 @@
-import HTMLComponent from "../../../../../HtmlComponent";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import OptionalArrow from "../../../../buttons/OptionalArrow";
+import HTMLComponent from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
 import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";

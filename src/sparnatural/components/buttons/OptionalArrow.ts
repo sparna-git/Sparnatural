@@ -3,8 +3,8 @@
 */
 
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import HTMLComponent from "../../HtmlComponent";
 import { OptionsGroup } from "../builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
+import HTMLComponent from "../HtmlComponent";
 
 class OptionalArrow extends HTMLComponent {
   selected = false;

@@ -1,7 +1,8 @@
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ActionAnd from "./actioncomponents/ActionAnd";
-import HTMLComponent from "../../HtmlComponent";
+
 import CriteriaGroup from "../builder-section/groupwrapper/criteriagroup/CriteriaGroup";
+import HTMLComponent from "../HtmlComponent";
 
 /**
  	Groups all the actions on a line/criteria (AND / REMOVE / WHERE)

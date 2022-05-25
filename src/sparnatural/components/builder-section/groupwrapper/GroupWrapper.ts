@@ -1,9 +1,10 @@
 import { getSettings } from "../../../../configs/client-configs/settings";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
-import HTMLComponent from "../../../HtmlComponent";
+
 import LinkAndBottom from "./LinkAndBottom";
 import LinkWhereBottom from "./LinkWhereBottom";
 import CriteriaGroup from "./criteriagroup/CriteriaGroup";
+import HTMLComponent from "../../HtmlComponent";
 /*
   GroupWrapper class represents a row in Sparnatural. It is the WrapperClass for the CriteriaGroup
 */

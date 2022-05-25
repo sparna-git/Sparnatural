@@ -1,5 +1,5 @@
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import HTMLComponent from "../../HtmlComponent";
+import HTMLComponent from "../HtmlComponent";
 
 class NoOrderBtn extends HTMLComponent {
   selected: boolean = false;

@@ -1,5 +1,5 @@
 import { getSettings } from "../../../configs/client-configs/settings";
-import HTMLComponent from "../../HtmlComponent";
+import HTMLComponent from "../HtmlComponent";
 
 class VariableOptionsSelectBtn extends HTMLComponent {
   selected = false;

@@ -1,9 +1,9 @@
 import tippy from "tippy.js";
 import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
-import HTMLComponent from "../../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import CriteriaGroup from "../CriteriaGroup";
+import HTMLComponent from "../../../../HtmlComponent";
 
 /**
  * Selection of the start class in a criteria/line

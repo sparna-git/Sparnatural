@@ -1,5 +1,5 @@
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import HTMLComponent from "../../HtmlComponent";
+import HTMLComponent from "../HtmlComponent";
 
 class DescendBtn extends HTMLComponent {
   selected: boolean = false;

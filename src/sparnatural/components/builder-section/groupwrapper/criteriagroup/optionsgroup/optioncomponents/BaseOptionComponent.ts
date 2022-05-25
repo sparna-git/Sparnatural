@@ -1,7 +1,7 @@
 import UiuxConfig from "../../../../../../../configs/fixed-configs/UiuxConfig";
-import HTMLComponent from "../../../../../../HtmlComponent";
 import ISpecProvider from "../../../../../../spec-providers/ISpecProviders";
 import ArrowComponent from "../../../../../arrows/ArrowComponent";
+import HTMLComponent from "../../../../../HtmlComponent";
 import GroupWrapper from "../../../GroupWrapper";
 import { OptionsGroup } from "../OptionsGroup";
 

@@ -1,12 +1,11 @@
 import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
-
 import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
-import HTMLComponent from "../../../../../HtmlComponent";
 import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import AddMoreValuesBtn from "../../../../buttons/AddMoreValuesBtn";
+import HTMLComponent from "../../../../HtmlComponent";
 
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;

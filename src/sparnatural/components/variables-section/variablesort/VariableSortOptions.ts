@@ -1,9 +1,9 @@
 import { getSettings } from "../../../../configs/client-configs/settings";
-import HTMLComponent from "../../../HtmlComponent";
 import AscendBtn from "../../buttons/AscendBtn";
 import DescendBtn from "../../buttons/DescendBtn";
 import NoOrderBtn from "../../buttons/NoOrderBtn";
 import VariableOptionsSelectBtn from "../../buttons/VariableOptionsSelectBtn";
+import HTMLComponent from "../../HtmlComponent";
 import VariableSection from "../VariableSelection";
 
 class VariableSortOption extends HTMLComponent{

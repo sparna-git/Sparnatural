@@ -1,5 +1,6 @@
 import { getSettings } from "../../../../configs/client-configs/settings";
-import HTMLComponent from "../../../HtmlComponent";
+import HTMLComponent from "../../HtmlComponent";
+
 
 class ActionAnd extends HTMLComponent {
   constructor(parentComponent: HTMLComponent, callBack: () => void) {

@@ -1,5 +1,5 @@
-import HTMLComponent from "../../HtmlComponent";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
+import HTMLComponent from "../HtmlComponent";
 import GroupWrapper from "./groupwrapper/GroupWrapper";
 
 /*

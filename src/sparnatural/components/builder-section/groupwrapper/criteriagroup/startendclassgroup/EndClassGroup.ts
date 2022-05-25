@@ -1,13 +1,13 @@
 import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import tippy from "tippy.js";
-import HTMLComponent from "../../../../../HtmlComponent";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
 import ActionWhere from "../../../../actions/actioncomponents/ActionWhere";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import { EndClassWidgetGroup } from "../widgets/EndClassWidgetGroup";
 import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
 import CriteriaGroup from "../CriteriaGroup";
+import HTMLComponent from "../../../../HtmlComponent";
 
 
 enum RENDER_WHERE_ENUM {
