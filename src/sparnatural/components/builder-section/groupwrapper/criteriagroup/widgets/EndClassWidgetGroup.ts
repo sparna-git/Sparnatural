@@ -1,4 +1,3 @@
-import WidgetWrapper from "./WidgetWrapper";
 import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
@@ -6,6 +5,9 @@ import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import HTMLComponent from "../../../../HtmlComponent";
 import AddListValueBtn from "../../../../buttons/AddMoreValuesBtn";
+import WidgetWrapper from "./WidgetWrapper";
+import { SelectedVal } from "../../../../../sparql/ISparJson";
+import { start } from "@popperjs/core";
 
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
@@ -26,13 +28,14 @@ export class EndClassWidgetGroup extends HTMLComponent {
   /**
    * Called when the property/link between domain and range is selected, to init this.
    **/
-  onObjectPropertyGroupSelected(objectProperty_selected: string) {
+  onObjectPropertyGroupSelected(startClassVal:SelectedVal,objectPropVal: SelectedVal, endClassVal:SelectedVal) {
     //if(this.inputTypeComponent) return // if already initialized don't do it again
     this.inputTypeComponent = new WidgetWrapper(
       this,
-      getSettings(),
       this.specProvider,
-      objectProperty_selected
+      startClassVal,
+      objectPropVal,
+      endClassVal
     ).render();
     this.#addEventListener();
   }

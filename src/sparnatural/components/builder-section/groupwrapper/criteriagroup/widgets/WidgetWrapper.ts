@@ -2,7 +2,6 @@ import ISettings from "../../../../../../configs/client-configs/ISettings";
 import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
 import Datasources from "../../../../../../configs/fixed-configs/SparnaturalConfigDatasources";
 import { SparqlTreeHandler } from "./handlers/TreeHandlers";
-import IWidget from "./IWidget";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import {
   SparqlTemplateAutocompleteHandler,
@@ -21,6 +20,8 @@ import {
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
 import HTMLComponent from "../../../../HtmlComponent";
+import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./IWidget";
+import { SelectedVal } from "../../../../../sparql/ISparJson";
 
 /**
  *  creates the corresponding widget
@@ -30,41 +31,37 @@ class WidgetWrapper extends HTMLComponent {
   GrandParent: EndClassGroup;
   settings: ISettings;
   widgetType: Config
-  objectPropertyId: any;
+  objectPropertype: string;
   rangeClassId: any;
   classLabel: string;
   widgetComponent: IWidget;
-  loadedValue: {
-    key?: any;
-    label?: any;
-    uri?: any;
-    start?: any;
-    stop?: any;
-    search?: any;
-    boolean?: any;
-  } | null = null;
+  widgetVal: ListWidgetValue | DateValue | AutocompleteValue
   specProvider: ISpecProvider;
-  objectProperty_selected: string;
+  objectPropVal: SelectedVal;
+  startClassVal: SelectedVal;
+  endClassVal: SelectedVal;
 
   constructor(
     ParentComponent: HTMLComponent,
-    settings: ISettings,
     specProvider: ISpecProvider,
-    objectProperty_selected: string
+    startClassVal:SelectedVal,
+    objectPropVal: SelectedVal,
+    endClassVal: SelectedVal
   ) {
     super("WidgetWrapper", ParentComponent, null);
-    this.settings = settings;
     this.GrandParent = ParentComponent.ParentComponent as EndClassGroup;
     this.specProvider = specProvider;
-    this.objectProperty_selected = objectProperty_selected;
+    this.startClassVal = startClassVal;
+    this.objectPropVal = objectPropVal;
+    this.endClassVal = endClassVal;
   }
 
   render() {
     this.widgetHtml = null;
-    this.objectPropertyId = this.objectProperty_selected; // shows which objectproperty got chosen for which subject object combination
+    this.objectPropertype = this.objectPropVal.type; // shows which objectproperty got chosen for which subject object combination
 
     this.widgetType = this.specProvider.getObjectPropertyType(
-      this.objectPropertyId
+      this.objectPropertype
     );
     this.rangeClassId = this.GrandParent.endClassVal.type;
     this.classLabel = this.specProvider.getLabel(this.rangeClassId);
@@ -147,7 +144,7 @@ class WidgetWrapper extends HTMLComponent {
     // init HTML by concatenating bit of HTML + widget HTML
     this.widgetComponent = this.createWidgetComponent(
       this.widgetType,
-      this.objectPropertyId,
+      this.objectPropertype,
       this.rangeClassId
     );
 
@@ -247,9 +244,10 @@ class WidgetWrapper extends HTMLComponent {
         return new ListWidget(
           this,
           handler,
-          this.settings.langSearch,
-          this.settings,
-          !(datasource.noSort == true)
+          !(datasource.noSort == true),
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
         );
 
         break;
@@ -533,6 +531,13 @@ class WidgetWrapper extends HTMLComponent {
 
       return sparql;
     }
+  }
+
+  #addValueSelectedListener(){
+    this.html[0].addEventListener('widgetValueSelected',(e:CustomEvent)=>{
+      if(e.detail == '' || !(e.detail)) throw Error('WidgetValueEvent got called but no widgetValue as payload received')
+      this.widgetVal = e.detail 
+    })
   }
 
   getWidgetType(){

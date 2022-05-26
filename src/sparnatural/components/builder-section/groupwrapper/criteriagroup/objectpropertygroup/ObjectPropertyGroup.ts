@@ -3,13 +3,17 @@ import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
+import { SelectedVal } from "../../../../../sparql/ISparJson";
 
 /**
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
  **/
 class ObjectPropertyGroup extends HTMLComponent {
   objectPropertySelector: ObjectPropertyTypeId;
-  objectPropVal: string = null; // value which shows which object property got chosen by the config for subject and object
+  objectPropVal: SelectedVal ={
+    variable: null,
+    type: null
+  } // value which shows which object property got chosen by the config for subject and object
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   constructor(
@@ -46,14 +50,23 @@ class ObjectPropertyGroup extends HTMLComponent {
       (e: CustomEvent) => {
         if (e.detail === "" || !e.detail)
           throw Error('No value received on "classTypeValueSelected"');
-        this.objectPropVal = e.detail;
+        this.#createSparqlVar(e.detail)
         this.#valueWasSelected();
       }
     );
   }
 
+  #createSparqlVar(type:string){
+    this.objectPropVal.type = type
+    this.html[0].dispatchEvent(new CustomEvent('getSparqlVarId',{
+      bubbles:true,
+      detail:(id: number) => { //callback
+        this.objectPropVal.variable = `?${this.specProvider.getLabel(type)}_${id}`
+      }
+    }))
+  }
   #valueWasSelected() {
-    var desc = this.specProvider.getTooltip(this.objectPropVal);
+    var desc = this.specProvider.getTooltip(this.objectPropVal.type);
 
     if (desc) {
       console.warn("StartClassGroup.valueSelected desc hapene!");

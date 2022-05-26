@@ -274,33 +274,7 @@ import { OptionTypes } from "../components/builder-section/groupwrapper/criteria
       // not enough criteria found.
       return false;
     }
-  
-    findDependantCriteria(
-      thisForm_: { queryOptions?: any; sparnatural: any },
-      id: string | number
-    ) {
-      var dependant: { element?: any; type: string } = null;
-      var dep_id: string = null;
-      var element = $(thisForm_.sparnatural).find('li[data-index="' + id + '"]');
-  
-      if ($(element).parents("li").length > 0) {
-        dep_id = $($(element).parents("li")[0]).attr("data-index");
-        dependant = { type: "parent" };
-      } else {
-        if ($(element).prev().length > 0) {
-          dep_id = $(element).prev().attr("data-index");
-          dependant = { type: "sibling" };
-        }
-      }
-  
-      $(thisForm_.sparnatural.components).each(function (index) {
-        if (this.index == dep_id) {
-          dependant.element = this.CriteriaGroup;
-        }
-      });
-  
-      return dependant;
-    }*/
+  */
   }
   
   export default NewJSONQueryGenerator;

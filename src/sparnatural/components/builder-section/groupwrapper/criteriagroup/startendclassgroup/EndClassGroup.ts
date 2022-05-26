@@ -100,9 +100,10 @@ class EndClassGroup extends HTMLComponent {
     this.html.append(editCompCls);
   }
 
-  onObjectPropertyGroupSelected(input: string) {
+
+  onObjectPropertyGroupSelected(objectPropVal: SelectedVal) {
     if (this.endClassWidgetGroup.inputTypeComponent || this.actionWhere) return;
-    this.endClassWidgetGroup.onObjectPropertyGroupSelected(input);
+    this.endClassWidgetGroup.onObjectPropertyGroupSelected(this.startClassVal,objectPropVal,this.endClassVal);
     //whereaction only needs to be rendered on certain widgets
     let widgetType = this.endClassWidgetGroup.inputTypeComponent.getWidgetType() 
     if(Object.values(this.RENDER_WHERE).includes(widgetType)){

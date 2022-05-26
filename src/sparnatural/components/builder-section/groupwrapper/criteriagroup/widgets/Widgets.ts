@@ -4,66 +4,57 @@ import "select2";
 import "select2/dist/css/select2.css";
 import tippy from "tippy.js";
 import ISettings from "../../../../../../configs/client-configs/ISettings";
-import IWidget from "./IWidget";
 import LocalCacheData from "../../../../../datastorage/LocalCacheData";
 import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
-import CriteriaGroup from "../CriteriaGroup";
-// IMPORTANT TODO refactor HtmlContainer.
+import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./IWidget";
+import HTMLComponent from "../../../../HtmlComponent";
+import WidgetWrapper from "./WidgetWrapper";
+import { SelectedVal } from "../../../../../sparql/ISparJson";
+import { getSettings } from "../../../../../../configs/client-configs/settings";
 
-export class AutoCompleteWidget implements IWidget {
+export class AutoCompleteWidget extends HTMLComponent implements IWidget {
   autocompleteHandler: any;
-  ParentComponent: any;
-  IdCriteriaGroupe: any;
-  html: string;
-  EndClassWidgetParent: EndClassWidgetGroup;
-  constructor(inputTypeComponent: any, autocompleteHandler: any) {
+  startClassVal: SelectedVal;
+  objectPropVal: SelectedVal;
+  endClassVal: SelectedVal;
+  value: AutocompleteValue
+
+  constructor(parentComponent: WidgetWrapper, autocompleteHandler: any,startClassValue:SelectedVal,objectPropVal:SelectedVal,endClassValue:SelectedVal) {
+    super('autocomplete-widget',parentComponent,null)
     this.autocompleteHandler = autocompleteHandler;
-    this.ParentComponent = inputTypeComponent;
-    this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
-    this.IdCriteriaGroupe =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
-    this.html =
-      '<input id="ecgrw-' +
-      this.IdCriteriaGroupe +
-      '-input" /><input id="ecgrw-' +
-      this.IdCriteriaGroupe +
-      '-input-value" type="hidden"/>';
+    this.startClassVal = startClassValue
+    this.objectPropVal = objectPropVal
+    this.endClassVal = endClassValue
   }
 
   render() {
-    //render this element
-    var startClassGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup.startClassVal.type;
-    var endClassGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .endClassVal.type;
-    var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
-        .objectPropVal;
+    super.render()
+    let inputHtml = $(`<input class="autocompleteinput"/>`)
+    let listHtml = $(`<input class="inputvalue"/>`)
+    this.html.append(inputHtml)
+    this.html.append(listHtml)
 
-    var id_inputs = this.IdCriteriaGroupe;
-    var itc_obj = this.ParentComponent;
     var isMatch = this.autocompleteHandler.enableMatch(
-      startClassGroup_value,
-      ObjectPropertyGroup_value,
-      endClassGroup_value
+      this.startClassVal,
+      this.objectPropVal,
+      this.endClassVal
     );
 
     let options = {
       // ajaxSettings: {crossDomain: true, type: 'GET'} ,
       url: function (phrase: any) {
         return this.autocompleteHandler.autocompleteUrl(
-          startClassGroup_value,
-          ObjectPropertyGroup_value,
-          endClassGroup_value,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal,
           phrase
         );
       },
       listLocation: function (data: any) {
         return this.autocompleteHandler.listLocation(
-          startClassGroup_value,
-          ObjectPropertyGroup_value,
-          endClassGroup_value,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal,
           data
         );
       },
@@ -83,7 +74,7 @@ export class AutoCompleteWidget implements IWidget {
       },
 
       preparePostData: function (data: { phrase: string | number | string[] }) {
-        data.phrase = $("#ecgrw-" + id_inputs + "-input").val();
+        data.phrase = inputHtml.val()
         return data;
       },
 
@@ -93,86 +84,68 @@ export class AutoCompleteWidget implements IWidget {
         },
 
         onChooseEvent: function () {
-          var value = $("#ecgrw-" + id_inputs + "-input").getSelectedItemData();
-
-          var label = this.autocompleteHandler.elementLabel(value);
-          var uri = this.autocompleteHandler.elementUri(value);
-          $("#ecgrw-" + id_inputs + "-input").val(label);
-          $("#ecgrw-" + id_inputs + "-input-value")
-            .val(uri)
+          let val = inputHtml.getSelectedItemData();
+          let autocompleteValue = {
+            key:this.autocompleteHandler.elementUri(val),
+            label:this.autocompleteHandler.elementLabel(val),
+            uri: this.autocompleteHandler.elementUri(val)
+          }
+          inputHtml.val(autocompleteValue.label);
+          listHtml
+            .val(autocompleteValue.uri)
             .trigger("change");
-          $(itc_obj).trigger("change");
+            this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:autocompleteValue}))
         },
       },
-
       requestDelay: 400,
     };
     //Need to add in html befor
 
-    $("#ecgrw-" + id_inputs + "-input").easyAutocomplete(options);
+    inputHtml.easyAutocomplete(options);
+    return this
   }
-
-  getValue = function () {
-    var id_input = "#ecgrw-" + this.IdCriteriaGroupe + "-input-value";
-    var id_input_label = "#ecgrw-" + this.IdCriteriaGroupe + "-input";
-
-    return {
-      key: $(id_input).val(),
-      label: $(id_input_label).val(),
-      uri: $(id_input).val(),
-    };
-  };
 }
 
-export class ListWidget implements IWidget {
+export class ListWidget extends HTMLComponent implements IWidget {
   listHandler: any;
-  ParentComponent: any;
-  IdCriteriaGroupe: any;
+  value: ListWidgetValue
   sort: boolean;
-  id_input: string;
-  html: string;
   settings: ISettings;
-  ParentCriteriaGroup: CriteriaGroup;
+  startClassVal: SelectedVal;
+  objectPropVal: SelectedVal;
+  endClassVal: SelectedVal;
+  selectHtml: JQuery<HTMLElement>;
   constructor(
-    inputTypeComponent: any,
+    parentComponent: WidgetWrapper,
     listHandler: any,
-    langSearch: any,
-    settings: ISettings,
-    sort: boolean
+    sort: boolean,
+    startClassVal:SelectedVal,
+    objectPropVal:SelectedVal,
+    endClassVal:SelectedVal
   ) {
+    super('list-widget',parentComponent,null)
     this.listHandler = listHandler;
-    this.ParentComponent = inputTypeComponent;
-    this.IdCriteriaGroupe =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.sort = sort;
-    this.settings = settings;
-    this.id_input = "ecgrw-" + this.IdCriteriaGroupe + "-input-value";
-    this.html =
-      '<div class="list-widget"><select id="' +
-      this.id_input +
-      '"></select><div class="no-items" style="display: none; font-style:italic;">' +
-      langSearch.ListWidgetNoItem +
-      "</div></div>";
-    this.ParentCriteriaGroup =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup;
+    this.startClassVal = startClassVal;
+    this.objectPropVal = objectPropVal;
+    this.endClassVal = endClassVal
   }
 
   render() {
-    var startClassGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .startClassVal.type;
-    var endClassGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .endClassVal.type;
-    var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
-        .objectPropVal;
-    var itc_obj = this.ParentComponent;
+    super.render()
+    this.selectHtml = $(`<select></select>`)
+    let noItemsHtml = $(`<div class="no-items" style="display: none; font-style:italic;">
+    ${getSettings().langSearch.ListWidgetNoItem}
+  </div>`)
+    this.html.append(this.selectHtml)
+
+
+    var itc_obj = this.ParentComponent.html;
 
     let url = this.listHandler.listUrl(
-      startClassGroup_value,
-      ObjectPropertyGroup_value,
-      endClassGroup_value
+      this.startClassVal,
+      this.objectPropVal,
+      this.endClassVal
     );
 
     var headers = new Headers();
@@ -192,9 +165,9 @@ export class ListWidget implements IWidget {
       .then((response: { json: () => any }) => response.json())
       .then((data: any) => {
         var items = this.listHandler.listLocation(
-          startClassGroup_value,
-          ObjectPropertyGroup_value,
-          endClassGroup_value,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal,
           data
         );
         if (items.length > 0) {
@@ -212,46 +185,43 @@ export class ListWidget implements IWidget {
           $.each(items, (key, val) => {
             var label = this.listHandler.elementLabel(val);
             var uri = this.listHandler.elementUri(val);
-            $("#" + this.id_input).append(
-              "<option value='" + uri + "'>" + label + "</option>"
-            );
+            this.selectHtml.append($("<option value='" + uri + "'>" + label + "</option>"))
           });
-          if (items.length < 30) {
-            $("#" + this.id_input).niceSelect();
-            $("#" + this.id_input).on("change", function () {
-              $(itc_obj).trigger("change");
-            });
+          if(items.length < 20){
+              items.niceSelect();
+              items.on('change',function(){
+                let val = items.val()
+                let listWidgetValue = {
+                  key: val,
+                  label: this.listHandler.elementLabel(val),
+                  uri: val
+                }
+                this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:listWidgetValue}))
+              })
+
           } else {
-            $("#" + this.id_input).select2();
-            $("#" + this.id_input).on("select2:close", function () {
-              $(itc_obj).trigger("change");
-            });
+            items.map((i:any)=>{
+              i.select2()
+              i.on("select2:close", function (e:any) {
+                let val = $(e.currentTarget).val();
+                let listWidgetValue = {
+                  key: val,
+                  label: this.listHandler.elementLabel(val),
+                  uri: val
+                }
+                this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:listWidgetValue}))
+              });
+            })
           }
         } else {
-          document.getElementById(this.id_input).style.display = "none";
-          (
-            document
-              .getElementById(this.id_input)
-              .closest(".list-widget")
-              .querySelector(".no-items") as HTMLElement
-          ).style.display = "block";
-          //console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
+          this.html.append(noItemsHtml)
         }
       });
+      return this
   }
-
-  getValue = function () {
-    var id_input = "#" + this.id_input;
-    // return $(id_input).val() ;
-
-    return {
-      key: $(id_input).val(),
-      label: $(id_input).find("option:selected").text(),
-      uri: $(id_input).val(),
-    };
-  };
 }
 
+/*
 export class ListWidgetNew implements IWidget {
   listDatasource: any;
   ParentComponent: any;
@@ -332,6 +302,7 @@ export class ListWidgetNew implements IWidget {
       }
     );
   }
+  
 
   getValue = function () {
     var id_input = "#" + this.id_input;
@@ -343,8 +314,8 @@ export class ListWidgetNew implements IWidget {
       uri: $(id_input).val(),
     };
   };
-}
-
+}*/
+/*
 export class URLListDatasource {
   listHandler: any;
   constructor(listHandler: any) {
@@ -388,22 +359,16 @@ export class URLListDatasource {
       callback(result);
     });
   };
-}
+}*/
 
-export class DatesWidget implements IWidget {
+export class DatesWidget extends HTMLComponent implements IWidget {
   datesHandler: any;
-  ParentComponent: any;
-  IdCriteriaGroupe: any;
-  html: string;
-  EndClassWidgetParent: EndClassWidgetGroup;
-  constructor(inputTypeComponent: any, datesHandler: any, langSearch: any) {
+  value:DateValue
+  constructor(parentComponent: WidgetWrapper, datesHandler: any,startClassVal:SelectedVal,objectPropVal:SelectedVal,endClassVal:SelectedVal) {
+    super('date-widget',parentComponent,null)
     this.datesHandler = datesHandler;
-    this.ParentComponent = inputTypeComponent;
-    this.IdCriteriaGroupe =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
-    this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
     this.html =
-      '<div class="date-widget"><input id="ecgrw-date-' +
+      '<input id="ecgrw-date-' +
       this.IdCriteriaGroupe +
       '-input" placeholder="' +
       langSearch.PlaceHolderDatePeriod +
@@ -421,20 +386,10 @@ export class DatesWidget implements IWidget {
       this.IdCriteriaGroupe +
       '-add">' +
       langSearch.ButtonAdd +
-      "</button></div>";
+      "</button>";
   }
 
   render() {
-    //render this element
-    var startClassGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .startClassVal.type;
-    var endClassGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .endClassVal.type;
-    var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
-        .objectPropVal;
     var phrase = "";
     var data_json = null;
 
