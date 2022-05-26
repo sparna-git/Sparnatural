@@ -4,7 +4,7 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
 import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
-import AddMoreValuesBtn from "../../../../buttons/AddMoreValuesBtn";
+import AddListValueBtn from "../../../../buttons/AddListValueBtn";
 import HTMLComponent from "../../../../HtmlComponent";
 
 export class EndClassWidgetGroup extends HTMLComponent {
@@ -12,7 +12,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
   selectedValues: Array<EndClassWidgetValue> = [];
   selectAllValue: boolean = false;
   specProvider: ISpecProvider;
-  addMoreValuesBtn: AddMoreValuesBtn;
+  addListValueBtn: AddListValueBtn;
   inputTypeComponent: ObjectPropertyTypeWidget;
   constructor(parentComponent: HTMLComponent, specProvider: ISpecProvider) {
     super("EndClassWidgetGroup", parentComponent, null);
@@ -99,7 +99,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.inputTypeComponent.render();
       // reattach eventlistener. it got removed
       this.#addEventListener()
-      this.addMoreValuesBtn.html.remove();
+      this.addListValueBtn.html.remove();
       this.html[0].dispatchEvent(
         new CustomEvent("renderWhereBtn", { bubbles: true })
       );
@@ -139,7 +139,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.#removeWhereAndWidget();
     //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
     if (this.selectedValues.length == getSettings().maxOr) {
-      this.addMoreValuesBtn.html.hide;
+      this.addListValueBtn.html.hide;
     }
 
     this.html[0].dispatchEvent(
@@ -164,9 +164,9 @@ export class EndClassWidgetGroup extends HTMLComponent {
     endClassWidgetVal.render();
     if(!this.selectAllValue){
     // now (re)render the addMoreValuesButton
-    this.addMoreValuesBtn?.html
-    ? this.addMoreValuesBtn.render()
-    : (this.addMoreValuesBtn = new AddMoreValuesBtn(
+    this.addListValueBtn?.html
+    ? this.addListValueBtn.render()
+    : (this.addListValueBtn = new AddListValueBtn(
         this,
         this.#addMoreValues
       ).render());
