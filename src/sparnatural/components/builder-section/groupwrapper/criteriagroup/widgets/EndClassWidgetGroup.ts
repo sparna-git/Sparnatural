@@ -1,11 +1,11 @@
-import ObjectPropertyTypeWidget from "./ObjectPropertyTypeWidget";
+import WidgetWrapper from "./WidgetWrapper";
 import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
 import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
-import AddListValueBtn from "../../../../buttons/AddListValueBtn";
 import HTMLComponent from "../../../../HtmlComponent";
+import AddListValueBtn from "../../../../buttons/AddMoreValuesBtn";
 
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
@@ -13,7 +13,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
   selectAllValue: boolean = false;
   specProvider: ISpecProvider;
   addListValueBtn: AddListValueBtn;
-  inputTypeComponent: ObjectPropertyTypeWidget;
+  inputTypeComponent: WidgetWrapper;
   constructor(parentComponent: HTMLComponent, specProvider: ISpecProvider) {
     super("EndClassWidgetGroup", parentComponent, null);
     this.specProvider = specProvider;
@@ -28,7 +28,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
    **/
   onObjectPropertyGroupSelected(objectProperty_selected: string) {
     //if(this.inputTypeComponent) return // if already initialized don't do it again
-    this.inputTypeComponent = new ObjectPropertyTypeWidget(
+    this.inputTypeComponent = new WidgetWrapper(
       this,
       getSettings(),
       this.specProvider,
@@ -151,7 +151,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     );
 
   }
-  // removes the where and objectpropertytypewidget after a value got chosen
+  // removes the where and WidgetWrapper after a value got chosen
   #removeWhereAndWidget() {
     this.inputTypeComponent.html.remove();
     this.html[0].dispatchEvent(

@@ -167,7 +167,7 @@ spar-natural {
 		
 		&>.CriteriaGroup {
 			
-			.EndClassGroup .ObjectPropertyTypeWidget {
+			.EndClassGroup .WidgetWrapper {
 				display: none;
 			}
 			
@@ -327,12 +327,12 @@ spar-natural {
 			}
 			&>div>div .EditComponents {
 				.ActionWhere,
-				.ObjectPropertyTypeWidget {
+				.WidgetWrapper {
 					display: none;
 				}
 			}
 			&>div>div .EditComponents.newOr {
-				.ObjectPropertyTypeWidget {
+				.WidgetWrapper {
 					display: block;
 				}
 			}

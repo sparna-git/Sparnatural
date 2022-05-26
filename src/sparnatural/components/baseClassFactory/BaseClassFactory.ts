@@ -7,14 +7,14 @@
 class BaseClassFactory {
   liTags: Array<string> = ["groupe"];
   ulTags: Array<string> = ["componentsListe", "childsList"];
-  spanTags: Array<string> = ["link-where-bottom", "selectViewVariable","unselect"];
+  spanTags: Array<string> = ["link-where-bottom", "selectViewVariable","unselect","circle-info"];
   aTags: Array<string> = ["asc", "dsc", "none","playBtn"];
   labelTags: Array<string> = ["switch"];
   
   constructor() {}
 
   getBaseClass(baseCssClass: string) {
-    if (!baseCssClass) return;
+    if (!baseCssClass) throw Error('No baseCssClass found when rendering element!');
     let findCallBack = (el: string) => {
       if (el == baseCssClass) return true;
     };

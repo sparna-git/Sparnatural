@@ -261,7 +261,7 @@ export class ListWidgetNew implements IWidget {
   EndClassWidgetParent: EndClassWidgetGroup;
   constructor(inputTypeComponent: any, listDatasource: any, langSearch: any) {
     this.listDatasource = listDatasource;
-    this.ParentComponent = inputTypeComponent; // is of type ObjectPropertyTypeWidgets
+    this.ParentComponent = inputTypeComponent; // is of type WidgetWrappers
     this.IdCriteriaGroupe =
       this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
     this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
@@ -598,6 +598,17 @@ export class TimeDatePickerWidget implements IWidget {
       this.formatDate == "day"
         ? langSearch.PlaceholderTimeDateDayFormat
         : langSearch.PlaceholderTimeDateFormat;
+    this.html = 
+    `<div class="date-widget">
+    ${langSearch.LabelDateFrom}
+      <input placeholder="${placeHolder}" autocomplete="off"/>
+      ${langSearch.LabelDateTo}
+      <input placeholder="${placeHolder}" autocomplete="off"/>
+      '&nbsp;<span data-tippy-content="
+      ${(this.formatDate == "day"
+        ? langSearch.TimeWidgetDateHelp
+        : langSearch.TimeWidgetYearHelp)}">'
+      `
     this.html =
       '<div class="date-widget">' +
       langSearch.LabelDateFrom +
@@ -615,19 +626,7 @@ export class TimeDatePickerWidget implements IWidget {
       this.IdCriteriaGroupe +
       '-input-value" type="hidden"/>';
     this.html +=
-      '&nbsp;<span id="circle-info-' +
-      this.IdCriteriaGroupe +
-      '" data-tippy-content="' +
-      (this.formatDate == "day"
-        ? langSearch.TimeWidgetDateHelp
-        : langSearch.TimeWidgetYearHelp) +
-      '">' +
-      UiuxConfig.ICON_CIRCLE_INFO +
-      '</span><button class="button-add" id="ecgrw-date-' +
-      this.IdCriteriaGroupe +
-      '-add">' +
-      langSearch.ButtonAdd +
-      "</button></div>";
+      '&nbsp;"
     this.langSearch = langSearch;
   }
 

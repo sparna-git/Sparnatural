@@ -23,9 +23,9 @@ import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 
 /**
- *  Selects the value for a range in a criteria/line, using a value selection widget
+ *  creates the corresponding widget
  **/
-class ObjectPropertyTypeWidget extends HTMLComponent {
+class WidgetWrapper extends HTMLComponent {
   ParentComponent: EndClassWidgetGroup;
   GrandParent: EndClassGroup;
   settings: ISettings;
@@ -52,7 +52,7 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
     specProvider: ISpecProvider,
     objectProperty_selected: string
   ) {
-    super("ObjectPropertyTypeWidget", ParentComponent, null);
+    super("WidgetWrapper", ParentComponent, null);
     this.settings = settings;
     this.GrandParent = ParentComponent.ParentComponent as EndClassGroup;
     this.specProvider = specProvider;
@@ -547,4 +547,4 @@ class ObjectPropertyTypeWidget extends HTMLComponent {
   }
 }
 
-export default ObjectPropertyTypeWidget;
+export default WidgetWrapper;
