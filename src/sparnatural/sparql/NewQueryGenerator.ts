@@ -62,7 +62,7 @@ import { OptionTypes } from "../components/builder-section/groupwrapper/criteria
           notExists: grpWrapper.optionState == OptionTypes.NOTEXISTS
       }
       branches.push(branch)
-      if(grpWrapper.andSibling) branches.push(this.#getBranch(grpWrapper.andSibling))
+      if(grpWrapper.andSibling) branches.push(this.#getBranch(grpWrapper.andSibling)[0])
       return branches
     }
     /**

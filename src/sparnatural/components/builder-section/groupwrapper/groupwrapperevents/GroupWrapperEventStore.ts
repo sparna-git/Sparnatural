@@ -30,7 +30,7 @@ export default class GroupWrapperEventStore{
     
         this.grpWrapper.html[0].addEventListener("addAndComponent", (e: CustomEvent) => {
           e.stopImmediatePropagation();
-          addAndComponent(this.grpWrapper,e.detail.type);
+          addAndComponent(this.grpWrapper,e.detail);
         });
     
         this.grpWrapper.html[0].addEventListener("addWhereComponent", (e: CustomEvent) => {

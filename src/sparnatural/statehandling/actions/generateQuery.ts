@@ -15,7 +15,7 @@ export default function generateQuery(actionStore: ActionStore) {
     console.log("*** New JSON Data structure ***");
     console.dir(jsonQuery)
     console.log(JSON.stringify(jsonQuery, null, 4));
-
+    /*
     // prints the SPARQL generated from the writing of the JSON data structure
     console.log("*** New SPARQL from JSON data structure ***");
     var writer = new QuerySPARQLWriter(
@@ -34,5 +34,6 @@ export default function generateQuery(actionStore: ActionStore) {
 
     //TODO enable disable geying out the submitbtn
     //this.SubmitSection.enableSubmit();
+    */
   }
 }
