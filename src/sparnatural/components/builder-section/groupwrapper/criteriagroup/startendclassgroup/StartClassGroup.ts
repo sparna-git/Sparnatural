@@ -5,6 +5,7 @@ import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import TippyInfo from "../../../../buttons/TippyInfo";
 
+
 /**
  * Selection of the start class in a criteria/line
  **/

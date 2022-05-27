@@ -18,9 +18,12 @@
 @use './buttons/optionalarrow.scss';
 @use './buttons/resetbtn.scss';
 @use './buttons/selectviewvariablebtn.scss';
+@use './buttons/AddUserInputBtn.scss';
+@use './buttons/InfoBtn.scss';
 //Widget
 @use './widget/EndClassWidgetValue.scss';
 @use './widget/AddMoreValuesBtn.scss';
+@use './widget/WidgetWrapper.scss';
 
 // link components
 @use './link-and-component.scss';

@@ -10,7 +10,7 @@ import WidgetWrapper from "./WidgetWrapper";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
 import AddUserInputBtn from "../../../../buttons/addUserInputBtn";
-import InfoBtn from "../../../../buttons/infoBtn";
+import InfoBtn from "../../../../buttons/InfoBtn";
 
 export class AutoCompleteWidget extends HTMLComponent implements IWidget {
   autocompleteHandler: any;
@@ -460,7 +460,7 @@ export class DatesWidget extends HTMLComponent implements IWidget {
     return this
   }
   
-  #addValueBtnClicked(){
+  #addValueBtnClicked = ()=>{
     let val = {
       start: this.inputStart.val().toString(),
       stop: this.inputEnd.val().toString()
@@ -519,24 +519,22 @@ export class TimeDatePickerWidget extends HTMLComponent implements IWidget {
     this.datesHandler = datesHandler;
     this.formatDate = format;
 
-    let placeHolder =
-      this.formatDate == "day"
-        ? getSettings().langSearch.PlaceholderTimeDateDayFormat
-        : getSettings().langSearch.PlaceholderTimeDateFormat;
+    this.formatDate == "day"
+      ? getSettings().langSearch.PlaceholderTimeDateDayFormat
+      : getSettings().langSearch.PlaceholderTimeDateFormat;
 
   }
 
   render() {
     super.render()
-    let placeHolder =
     this.formatDate == "day"
       ? getSettings().langSearch.PlaceholderTimeDateDayFormat
       : getSettings().langSearch.PlaceholderTimeDateFormat;
     this.html.append($(`<span>${getSettings().langSearch.LabelDateFrom}</span>`))
-    this.inputStart = $(`<input placeholder="${placeHolder}" autocomplete="off"/>`)
-    this.inputEnd = $(`<input id="input-start" placeholder="${getSettings().langSearch.TimeWidgetDateFrom}"/>`)
+    this.inputStart = $(`<input id="input-start" placeholder="${getSettings().langSearch.TimeWidgetDateFrom}" autocomplete="off"/>`)
+    this.inputEnd = $(`<input id="input-end" placeholder="${getSettings().langSearch.TimeWidgetDateTo}"/>`)
     this.inputValue= $(`<input id="input-value" type="hidden"/>`)
-    let span = $(`${getSettings().langSearch.LabelDateTo}`)
+    let span = $(`<span>${getSettings().langSearch.LabelDateTo}</span>`)
     this.html.append(this.inputStart).append(span).append(this.inputEnd).append(this.inputValue)
     let datatippy = (this.formatDate == 'day')?getSettings().langSearch.TimeWidgetDateHelp:getSettings().langSearch.TimeWidgetYearHelp
     this.infoBtn = new InfoBtn(this,datatippy).render()
@@ -577,7 +575,7 @@ export class TimeDatePickerWidget extends HTMLComponent implements IWidget {
     return this
   }
 
-  #addValueBtnClicked(){
+  #addValueBtnClicked = ()=>{
     let val = {
       start: this.inputStart.datepicker('getDate'),
       stop: this.inputEnd.datepicker('getDate')
@@ -680,7 +678,7 @@ export class SearchWidget extends HTMLComponent implements IWidget {
     this.addValueBtn = new AddUserInputBtn(this,this.#addValueBtnClicked)
     return this
   }
-  #addValueBtnClicked(){
+  #addValueBtnClicked = () =>{
     this.searchInput.trigger('change')
     let searchWidgetValue:SearchWidgetValue = {
       key:this.searchInput.val().toString(),
