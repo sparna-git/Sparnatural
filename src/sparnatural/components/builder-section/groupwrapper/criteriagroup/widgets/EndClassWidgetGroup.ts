@@ -7,7 +7,7 @@ import HTMLComponent from "../../../../HtmlComponent";
 import AddListValueBtn from "../../../../buttons/AddMoreValuesBtn";
 import WidgetWrapper from "./WidgetWrapper";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
-import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./IWidget";
+import { IWidget} from "./IWidget";
 
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
@@ -48,10 +48,10 @@ export class EndClassWidgetGroup extends HTMLComponent {
         this.#onRemoveValue(e);
       }
     );
-    this.html[0].addEventListener('widgetValueSelected',(e:CustomEvent)=>{
+    this.html[0].addEventListener('onChange',(e:CustomEvent)=>{
       e.stopImmediatePropagation()
       if(e.detail == '' || !(e.detail)) throw Error('WidgetValueEvent got called but no widgetValue as payload received')
-      this.#onChange()
+      this.#onChange(e.detail)
     })
     // binds a selection in an input widget with the display of the value in the line
     this.widgetWrapper.html[0].addEventListener("selectAll", (e:CustomEvent) => {
@@ -118,8 +118,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
   }
 
   // user selects a value for example a country from the listwidget
-  #onChange() {
-    var selectedVal = this.widgetWrapper.widgetVal// could be array or single value
+  #onChange(selectedVal:IWidget['value']) {
     // put span around with proper class if coming from a date widget
     if (selectedVal == null) {
       return false;
@@ -195,7 +194,7 @@ export class EndClassWidgetValue extends HTMLComponent {
   value_lbl: string;
   selectedVal: IWidget['value']
   constructor(ParentComponent: EndClassWidgetGroup,selectedVal:IWidget['value']) {
-    super(selectedVal.label, ParentComponent, null);
+    super('EndClassWidgetValue', ParentComponent, null);
     // set a tooltip if the label is a bit long
     this.selectedVal = selectedVal
     this.value_lbl = selectedVal.label;

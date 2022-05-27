@@ -578,7 +578,7 @@ export class TimeDatePickerWidget extends HTMLComponent implements IWidget {
   #addValueBtnClicked = ()=>{
     let val = {
       start: this.inputStart.datepicker('getDate'),
-      stop: this.inputEnd.datepicker('getDate')
+      stop: this.inputEnd.datepicker('getDate'),
     }
     this.value = this.#validateInput(val)
     this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:this.value}))
@@ -633,9 +633,13 @@ export class TimeDatePickerWidget extends HTMLComponent implements IWidget {
 
   getValueLabel = function (start:any,stop:any) {
     let lbl = ''
-    if(start != '') lbl.concat(`${getSettings().langSearch.LabelDateFrom} ${start} ${getSettings().langSearch.LabelDateTo} ${stop}`)
-    if(stop != '') lbl.concat(`${getSettings().langSearch.LabelDateTo} ${stop}`)
-
+    
+    if(start != ''){
+      lbl = lbl.concat(` ${start.toISOString().slice(0,10)}`)
+    } 
+    if(stop){
+      lbl = lbl.concat(` - ${stop.toISOString().slice(0,10)}`)
+    } 
     return lbl;
   };
 

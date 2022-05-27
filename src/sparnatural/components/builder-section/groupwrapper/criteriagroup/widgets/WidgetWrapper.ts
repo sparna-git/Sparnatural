@@ -42,7 +42,7 @@ class WidgetWrapper extends HTMLComponent {
   endClassVal: SelectedVal;
 
   constructor(
-    ParentComponent: HTMLComponent,
+    ParentComponent: EndClassWidgetGroup,
     specProvider: ISpecProvider,
     startClassVal:SelectedVal,
     objectPropVal: SelectedVal,
@@ -57,8 +57,10 @@ class WidgetWrapper extends HTMLComponent {
   }
 
   render() {
-    super.render()
+    this.htmlParent = this.GrandParent.html.find(".EditComponents");
+    super.render();
     this.#addValueSelectedListener()
+
     this.widgetHtml = null;
     this.objectPropertype = this.objectPropVal.type; // shows which objectproperty got chosen for which subject object combination
 
@@ -155,8 +157,8 @@ class WidgetWrapper extends HTMLComponent {
     } else {
       this.widgetHtml = $(widgetLabel + this.widgetComponent.html);
     }
-    this.htmlParent = this.GrandParent.html.find(".EditComponents");
-    super.render();
+    this.html.append(this.widgetHtml)
+
 
     this.widgetComponent.render();
     $(this.html)
@@ -541,6 +543,7 @@ class WidgetWrapper extends HTMLComponent {
     this.html[0].addEventListener('widgetValueSelected',(e:CustomEvent)=>{
       if(e.detail == '' || !(e.detail)) throw Error('WidgetValueEvent got called but no widgetValue as payload received')
       this.widgetVal = e.detail 
+      this.ParentComponent.html[0].dispatchEvent(new CustomEvent('onChange',{bubbles:true,detail:this.widgetVal}))
     })
   }
 
