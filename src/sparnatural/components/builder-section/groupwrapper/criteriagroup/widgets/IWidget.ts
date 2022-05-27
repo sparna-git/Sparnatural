@@ -1,8 +1,6 @@
-import { DateTimeValue } from "../../../../../sparql/Query"
-
 export interface ListWidgetValue{
   key:string
-  label:string,
+  label:string
   uri:string
 }
 
@@ -19,7 +17,7 @@ export interface SearchWidgetValue{
 }
 
 export interface AutocompleteValue{
-  label:string,
+  label:string
   uri:string
 }
 
@@ -38,6 +36,6 @@ export interface DateTimePickerValue{
 
 export interface IWidget {
   html:JQuery<HTMLElement>
-  render: ()=>IWidget
+  render: ()=> any
   value: ListWidgetValue | DateValue | AutocompleteValue | DateTimePickerValue | SearchWidgetValue | BooleanWidgetValue
 }

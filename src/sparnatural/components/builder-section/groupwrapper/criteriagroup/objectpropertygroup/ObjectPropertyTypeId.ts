@@ -68,7 +68,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
       this.widgetHtml.addClass("disabled");
       this.widgetHtml.removeClass("open");
       this.html[0].dispatchEvent(
-        new CustomEvent("onObjectPropertyGroupSelected", {
+        new CustomEvent("onObjectPropertyTypeIdSelected", {
           bubbles: true,
           detail: selectedValue,
         })

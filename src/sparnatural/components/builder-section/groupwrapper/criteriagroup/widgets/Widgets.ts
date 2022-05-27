@@ -1,11 +1,9 @@
-import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
 import "@chenfengyuan/datepicker";
 import "select2";
 import "select2/dist/css/select2.css";
 import tippy from "tippy.js";
 import ISettings from "../../../../../../configs/client-configs/ISettings";
 import LocalCacheData from "../../../../../datastorage/LocalCacheData";
-import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
 import { AutocompleteValue, BooleanWidgetValue, DateTimePickerValue, DateValue, IWidget, ListWidgetValue, SearchWidgetValue } from "./IWidget";
 import HTMLComponent from "../../../../HtmlComponent";
 import WidgetWrapper from "./WidgetWrapper";
@@ -140,9 +138,6 @@ export class ListWidget extends HTMLComponent implements IWidget {
     ${getSettings().langSearch.ListWidgetNoItem}
   </div>`)
     this.html.append(this.selectHtml)
-
-
-    var itc_obj = this.ParentComponent.html;
 
     let url = this.listHandler.listUrl(
       this.startClassVal,

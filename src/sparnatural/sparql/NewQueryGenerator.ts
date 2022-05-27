@@ -51,11 +51,11 @@ import { OptionTypes } from "../components/builder-section/groupwrapper/criteria
       let branch:Branch = {
           line: {
              s:CrtGrp.StartClassGroup.getVarName(),
-             p:CrtGrp.ObjectPropertyGroup.objectPropVal,
+             p:CrtGrp.ObjectPropertyGroup.getTypeSelected(),
              o:CrtGrp.EndClassGroup.getVarName(),
              sType:CrtGrp.StartClassGroup.getTypeSelected(),
              oType:CrtGrp.EndClassGroup.getTypeSelected(),
-             values:CrtGrp.EndClassGroup.endClassWidgetGroup.selectedValues.map((v)=>{return {label:v.value_lbl,uri:v.uri}})
+             values:CrtGrp.EndClassGroup.endClassWidgetGroup.getWidgetValue()
           },
           children: grpWrapper.whereChild ? this.#getBranch(grpWrapper.whereChild) : [],
           optional: grpWrapper.optionState == OptionTypes.OPTIONAL,

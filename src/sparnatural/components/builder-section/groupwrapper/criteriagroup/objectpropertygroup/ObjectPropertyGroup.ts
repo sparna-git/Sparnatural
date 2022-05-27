@@ -45,11 +45,13 @@ class ObjectPropertyGroup extends HTMLComponent {
   }
 
   #addEventListener() {
+    // event is caught here and then bubbles up to the CriteriaGroup
     this.html[0].addEventListener(
-      "onObjectPropertyGroupSelected",
+      "onObjectPropertyTypeIdSelected",
       (e: CustomEvent) => {
+        e.stopImmediatePropagation()
         if (e.detail === "" || !e.detail)
-          throw Error('No value received on "classTypeValueSelected"');
+          throw Error('No value received on "onObjectPropertyGroupSelected"');
         this.#createSparqlVar(e.detail)
         this.#valueWasSelected();
       }
@@ -66,6 +68,12 @@ class ObjectPropertyGroup extends HTMLComponent {
     }))
   }
   #valueWasSelected() {
+    this.html[0].dispatchEvent(
+      new CustomEvent("onObjectPropertyGroupSelected", {
+        bubbles: true,
+        detail: this.objectPropVal,
+      })
+    );
     var desc = this.specProvider.getTooltip(this.objectPropVal.type);
 
     if (desc) {
@@ -82,6 +90,10 @@ class ObjectPropertyGroup extends HTMLComponent {
         "data-tippy-content"
       );
     }
+  }
+
+  getTypeSelected(){
+    return this.objectPropVal.type
   }
 
   /*

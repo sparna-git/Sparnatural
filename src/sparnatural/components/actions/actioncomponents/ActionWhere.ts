@@ -28,7 +28,7 @@ class ActionWhere extends HTMLComponent {
     this.htmlParent = $(this.ParentComponent.html).find(".EditComponents");
     var choiceNumber = 2;
     if (
-      this.ParentComponent.endClassWidgetGroup.inputTypeComponent.widgetHtml ==
+      this.ParentComponent.endClassWidgetGroup.widgetWrapper.widgetHtml ==
       null
     ) {
       choiceNumber = 1;

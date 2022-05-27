@@ -1,3 +1,5 @@
+import { Select2Plugin } from "select2";
+
 export {};
 declare global {
   // Custom type definitions for the jquery.nice-select plugin
@@ -6,7 +8,6 @@ declare global {
     niceSelect: (method?: any, settings?: any) => JQuery<HTMLElement>;
     getSelectedItemData: () => void;
     easyAutocomplete: (options: any) => void;
-    select2: () => void;
     datepicker: (method: any) => Date;
     jstree: (options: any) => void;
   }

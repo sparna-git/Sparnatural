@@ -1,9 +1,9 @@
-import tippy from "tippy.js";
 import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
+import TippyInfo from "../../../../buttons/TippyInfo";
 
 /**
  * Selection of the start class in a criteria/line
@@ -72,17 +72,10 @@ class StartClassGroup extends HTMLComponent {
 
     if (desc) {
       console.warn("StartClassGroup.valueSelected desc hapene!");
-      $(this.ParentCriteriaGroup.StartClassGroup.html)
-        .find(".ClassTypeId")
-        .attr("data-tippy-content", desc);
       // tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
       var tippySettings = Object.assign({}, this.settings.tooltipConfig);
       tippySettings.placement = "top-start";
-      tippy(".StartClassGroup .ClassTypeId[data-tippy-content]", tippySettings);
-    } else {
-      $(this.ParentCriteriaGroup.StartClassGroup.html).removeAttr(
-        "data-tippy-content"
-      );
+      new TippyInfo(this,desc,tippySettings)
     }
   }
   getVarName() {

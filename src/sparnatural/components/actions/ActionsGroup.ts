@@ -25,6 +25,7 @@ class ActionsGroup extends HTMLComponent {
     super.render();
     return this;
   }
+  
 
   onObjectPropertyGroupSelected() {
     this.actions = {

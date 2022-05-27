@@ -22,7 +22,6 @@ import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./IWidget";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
-import { readyException } from "jquery";
 
 /**
  *  creates the corresponding widget
@@ -58,6 +57,8 @@ class WidgetWrapper extends HTMLComponent {
   }
 
   render() {
+    super.render()
+    this.#addValueSelectedListener()
     this.widgetHtml = null;
     this.objectPropertype = this.objectPropVal.type; // shows which objectproperty got chosen for which subject object combination
 

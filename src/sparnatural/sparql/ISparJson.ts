@@ -1,3 +1,4 @@
+import { IWidget } from "../components/builder-section/groupwrapper/criteriagroup/widgets/IWidget"
 
 export interface SelectedVal {
     variable: string
@@ -10,7 +11,7 @@ export interface CriteriaLine {
     o:string,
     sType:string,
     oType:string,
-    values:Array<{label:string,uri:string}>
+    values:IWidget['value'][]
 }
 
 export interface Branch {
