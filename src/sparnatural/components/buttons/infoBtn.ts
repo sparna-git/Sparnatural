@@ -11,3 +11,4 @@ class InfoBtn extends HTMLComponent{
         return this
     }
 }
+export default InfoBtn

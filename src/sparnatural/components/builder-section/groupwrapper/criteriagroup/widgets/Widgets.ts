@@ -6,11 +6,13 @@ import tippy from "tippy.js";
 import ISettings from "../../../../../../configs/client-configs/ISettings";
 import LocalCacheData from "../../../../../datastorage/LocalCacheData";
 import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
-import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./IWidget";
+import { AutocompleteValue, BooleanWidgetValue, DateTimePickerValue, DateValue, IWidget, ListWidgetValue, SearchWidgetValue } from "./IWidget";
 import HTMLComponent from "../../../../HtmlComponent";
 import WidgetWrapper from "./WidgetWrapper";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
+import AddUserInputBtn from "../../../../buttons/addUserInputBtn";
+import InfoBtn from "../../../../buttons/infoBtn";
 
 export class AutoCompleteWidget extends HTMLComponent implements IWidget {
   autocompleteHandler: any;
@@ -364,43 +366,39 @@ export class URLListDatasource {
 export class DatesWidget extends HTMLComponent implements IWidget {
   datesHandler: any;
   value:DateValue
+  startClassVal: SelectedVal;
+  objectPropVal: SelectedVal;
+  endClassVal: SelectedVal;
+  addWidgetValue: AddUserInputBtn
+  input: JQuery<HTMLElement>;
+  inputStart: JQuery<HTMLElement>;
+  inputEnd: JQuery<HTMLElement>;
+  inputValue: JQuery<HTMLElement>;
   constructor(parentComponent: WidgetWrapper, datesHandler: any,startClassVal:SelectedVal,objectPropVal:SelectedVal,endClassVal:SelectedVal) {
     super('date-widget',parentComponent,null)
     this.datesHandler = datesHandler;
-    this.html =
-      '<input id="ecgrw-date-' +
-      this.IdCriteriaGroupe +
-      '-input" placeholder="' +
-      langSearch.PlaceHolderDatePeriod +
-      '" /><input id="ecgrw-date-' +
-      this.IdCriteriaGroupe +
-      '-input-start" placeholder="' +
-      langSearch.TimeWidgetDateFrom +
-      '"/><input id="ecgrw-date-' +
-      this.IdCriteriaGroupe +
-      '-input-stop" placeholder="' +
-      langSearch.TimeWidgetDateTo +
-      '" /><input id="ecgrw-date-' +
-      this.IdCriteriaGroupe +
-      '-input-value" type="hidden"/><button class="button-add" id="ecgrw-date-' +
-      this.IdCriteriaGroupe +
-      '-add">' +
-      langSearch.ButtonAdd +
-      "</button>";
+    this.startClassVal = startClassVal
+    this.objectPropVal = objectPropVal
+    this.endClassVal = endClassVal
   }
 
   render() {
+    super.render()
+    this.input = $(`<input id="input" placeholder="${getSettings().langSearch.PlaceHolderDatePeriod}"/>`)
+    this.inputStart = $(`<input id="input-start" placeholder="${getSettings().langSearch.TimeWidgetDateFrom}"/>`)
+    this.inputEnd = $(`<input id="input-start" placeholder="${getSettings().langSearch.TimeWidgetDateFrom}"/>`)
+    this.inputValue= $(`<input id="input-value" type="hidden"/>`)
+    this.html.append(this.input).append(this.inputStart).append(this.inputEnd).append(this.inputValue)
+    this.addWidgetValue = new AddUserInputBtn(this,this.#addValueBtnClicked).render()
     var phrase = "";
     var data_json = null;
-
-    var id_inputs = this.IdCriteriaGroupe;
     var itc_obj = this.ParentComponent;
 
     $.ajax({
       url: this.datesHandler.datesUrl(
-        startClassGroup_value,
-        ObjectPropertyGroup_value,
-        endClassGroup_value,
+        this.startClassVal,
+        this.objectPropVal,
+        this.endClassVal,
         phrase
       ),
       async: false,
@@ -422,24 +420,21 @@ export class DatesWidget extends HTMLComponent implements IWidget {
         },
 
         onChooseEvent: function () {
-          var values = $(
-            "#ecgrw-date-" + id_inputs + "-input"
-          ).getSelectedItemData();
+          var values = this.input.getSelectedItemData();
           var value = this.datesHandler.elementLabel(values);
           var start = this.datesHandler.elementStart(values);
           var stop = this.datesHandler.elementEnd(values);
 
-          $("#ecgrw-date-" + id_inputs + "-input")
-            .val(value)
-            .trigger("change");
-          $("#ecgrw-date-" + id_inputs + "-input-start")
+         this.input.val(value).trigger("change");
+
+         this.inputStart
             .val(start)
             .trigger("change");
-          $("#ecgrw-date-" + id_inputs + "-input-stop")
+          this.inputEnd
             .val(stop)
             .trigger("change");
 
-          $("#ecgrw-" + id_inputs + "-input-value")
+          this.inputValue
             .val(value)
             .trigger("change");
         },
@@ -466,24 +461,20 @@ export class DatesWidget extends HTMLComponent implements IWidget {
       requestDelay: 400,
     };
 
-    $("#ecgrw-date-" + id_inputs + "-input").easyAutocomplete(options);
-    $("#ecgrw-date-" + this.IdCriteriaGroupe + "-add").on("click", function () {
-      $(itc_obj).trigger("change");
-    });
+    this.input.easyAutocomplete(options);
+    return this
   }
-
-  getValue = function () {
-    var id_input = "#ecgrw-date-" + this.IdCriteriaGroupe + "-input";
-
-    var value = {
-      start: $(id_input + "-start")
-        .val()
-        .toString(),
-      stop: $(id_input + "-stop")
-        .val()
-        .toString(),
-    };
-
+  
+  #addValueBtnClicked(){
+    let val = {
+      start: this.inputStart.val().toString(),
+      stop: this.inputEnd.val().toString()
+    }
+    val = this.#validateDateInput(val)
+    this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:val}))
+  }
+  //TODO: add dialog response to user if dateinput doesn't make sense
+  #validateDateInput(value:{start:string,stop:string}){
     if (value.start == "" || value.stop == "") {
       value = null;
     } else {
@@ -509,91 +500,57 @@ export class DatesWidget extends HTMLComponent implements IWidget {
         value.stop = paddedStopYear + "-12-31T23:59:59";
       }
     }
+    return value
+  }
 
-    return {
-      key: value.start + " " + value.stop,
-      // TODO : this is not translated
-      label:
-        "De " +
-        $(id_input + "-start").val() +
-        " à " +
-        $(id_input + "-stop").val() +
-        "<br/>(" +
-        $(id_input).val() +
-        ")",
-      start: value.start,
-      stop: value.stop,
-    };
-  };
 }
 
-export class TimeDatePickerWidget implements IWidget {
+export class TimeDatePickerWidget extends HTMLComponent implements IWidget {
   datesHandler: any;
   ParentComponent: any;
-  IdCriteriaGroupe: any;
   formatDate: any;
-  html: string;
-  langSearch: any;
-  format: any;
-  EndClassWidgetParent: EndClassWidgetGroup;
+  format: any;inputStart: JQuery<HTMLElement>;
+  inputEnd: JQuery<HTMLElement>;
+  inputValue: JQuery<HTMLElement>;
+  infoBtn: InfoBtn;
+  addValueBtn: AddUserInputBtn;
+  value: DateTimePickerValue;
   constructor(
-    inputTypeComponent: any,
+    parentComponent: WidgetWrapper,
     datesHandler: any,
     format: any,
-    langSearch: any
   ) {
+    super('date-widget',parentComponent,null)
     this.datesHandler = datesHandler;
-    this.ParentComponent = inputTypeComponent;
-    this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
-    this.IdCriteriaGroupe =
-      this.ParentComponent.ParentComponent?.ParentCriteriaGroup.id;
     this.formatDate = format;
 
     let placeHolder =
       this.formatDate == "day"
-        ? langSearch.PlaceholderTimeDateDayFormat
-        : langSearch.PlaceholderTimeDateFormat;
-    this.html = 
-    `<div class="date-widget">
-    ${langSearch.LabelDateFrom}
-      <input placeholder="${placeHolder}" autocomplete="off"/>
-      ${langSearch.LabelDateTo}
-      <input placeholder="${placeHolder}" autocomplete="off"/>
-      '&nbsp;<span data-tippy-content="
-      ${(this.formatDate == "day"
-        ? langSearch.TimeWidgetDateHelp
-        : langSearch.TimeWidgetYearHelp)}">'
-      `
-    this.html =
-      '<div class="date-widget">' +
-      langSearch.LabelDateFrom +
-      ' <input id="ecgrw-date-' +
-      this.IdCriteriaGroupe +
-      '-input-start" placeholder="' +
-      placeHolder +
-      '" autocomplete="off"/> ' +
-      langSearch.LabelDateTo +
-      ' <input id="ecgrw-date-' +
-      this.IdCriteriaGroupe +
-      '-input-stop" placeholder="' +
-      placeHolder +
-      '" autocomplete="off" /><input id="ecgrw-date-' +
-      this.IdCriteriaGroupe +
-      '-input-value" type="hidden"/>';
-    this.html +=
-      '&nbsp;"
-    this.langSearch = langSearch;
+        ? getSettings().langSearch.PlaceholderTimeDateDayFormat
+        : getSettings().langSearch.PlaceholderTimeDateFormat;
+
   }
 
   render() {
-    //render this element
-    var id_inputs = this.IdCriteriaGroupe;
-    var itc_obj = this.ParentComponent;
+    super.render()
+    let placeHolder =
+    this.formatDate == "day"
+      ? getSettings().langSearch.PlaceholderTimeDateDayFormat
+      : getSettings().langSearch.PlaceholderTimeDateFormat;
+    this.html.append($(`<span>${getSettings().langSearch.LabelDateFrom}</span>`))
+    this.inputStart = $(`<input placeholder="${placeHolder}" autocomplete="off"/>`)
+    this.inputEnd = $(`<input id="input-start" placeholder="${getSettings().langSearch.TimeWidgetDateFrom}"/>`)
+    this.inputValue= $(`<input id="input-value" type="hidden"/>`)
+    let span = $(`${getSettings().langSearch.LabelDateTo}`)
+    this.html.append(this.inputStart).append(span).append(this.inputEnd).append(this.inputValue)
+    let datatippy = (this.formatDate == 'day')?getSettings().langSearch.TimeWidgetDateHelp:getSettings().langSearch.TimeWidgetYearHelp
+    this.infoBtn = new InfoBtn(this,datatippy).render()
+    this.addValueBtn = new AddUserInputBtn(this,this.#addValueBtnClicked).render()
 
     this.format =
       this.formatDate == "day"
-        ? this.langSearch.InputTimeDateDayFormat
-        : this.langSearch.InputTimeDateFormat;
+        ? getSettings().langSearch.InputTimeDateDayFormat
+        : getSettings().langSearch.InputTimeDateFormat;
 
     var options: {
       language: any;
@@ -602,144 +559,91 @@ export class TimeDatePickerWidget implements IWidget {
       date: any;
       startView: number;
     } = {
-      language: this.langSearch.LangCodeTimeDate,
+      language: getSettings().langSearch.LangCodeTimeDate,
       autoHide: true,
       format: this.format,
       date: null,
       startView: 2,
     };
 
-    $(
-      "#ecgrw-date-" +
-        id_inputs +
-        "-input-start, #ecgrw-date-" +
-        id_inputs +
-        "-input-stop"
-    ).datepicker(options);
-    $("#ecgrw-date-" + this.IdCriteriaGroupe + "-add").on("click", function () {
-      $(itc_obj).trigger("change");
-    });
+    this.inputStart.datepicker(options);
+    this.inputEnd.datepicker(options)
 
     // set a tooltip on the info circle
     var tippySettings = Object.assign(
       {},
-      this.ParentComponent.settings.tooltipConfig
+      getSettings().tooltipConfig
     );
     tippySettings.placement = "left";
     tippySettings.trigger = "click";
     tippySettings.offset = [this.formatDate == "day" ? 75 : 50, -20];
     tippySettings.delay = [0, 0];
-    tippy("#circle-info-" + this.IdCriteriaGroupe, tippySettings);
+    tippy(this.infoBtn.widgetHtml[0], tippySettings);
+    return this
   }
 
-  getValue = function () {
-    var id_input = "#ecgrw-date-" + this.IdCriteriaGroupe + "-input";
-    var start = null;
-    var end = null;
-    var value = null;
-
-    if ($(id_input + "-start").val() != "") {
-      start = $(id_input + "-start").datepicker("getDate");
-
-      // fix for negative years
-      if (
-        $(id_input + "-start")
-          .val()
-          .toString()
-          .startsWith("-") &&
-        !start.getFullYear().toString().startsWith("-")
-      ) {
-        start.setFullYear($(id_input + "-start").val() as number);
-      }
+  #addValueBtnClicked(){
+    let val = {
+      start: this.inputStart.datepicker('getDate'),
+      stop: this.inputEnd.datepicker('getDate')
     }
-    if ($(id_input + "-stop").val() != "") {
-      end = $(id_input + "-stop").datepicker("getDate");
-
-      // fix for negative years
-      if (
-        $(id_input + "-stop")
-          .val()
-          .toString()
-          .startsWith("-") &&
-        !end.getFullYear().toString().startsWith("-")
-      ) {
-        end.setFullYear($(id_input + "-stop").val() as number);
-      }
+    this.value = this.#validateInput(val)
+    this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:this.value}))
+  }
+  //TODO add dialog for user if input is unreasonable
+  #validateInput(val:{start:Date,stop:Date}){
+    if(val.start.toString() == '' || val.stop.toString() == ''){
+      console.warn(`no input received on DateTimePicker`)
+      return null
     }
-
-    // just compare the years to make sure we have a proper interval
-    // otherwise this uses an alphabetical comparison
-    if (
-      start != null &&
-      end != null &&
-      end.getFullYear() < start.getFullYear()
-    ) {
-      return null;
+    if(val.start > val.stop){
+      console.warn(`startVal is bigger then endVal`)
+      return null
     }
 
     if (this.formatDate == "day") {
-      this.dateToYMD(start, "day");
-      value = {
-        start: this.dateToYMD(start, "day"),
-        stop: this.dateToYMD(end, "day"),
+      this.dateToYMD(val.start, "day");
+       val = {
+        start: this.dateToYMD(val.start, "day"),
+        stop: this.dateToYMD(val.stop, "day"),
       };
-      if (value.start != null) {
-        value.start = value.start + "T00:00:00";
+      if (val.start != null) {
+        val.start = new Date(val.start + "T00:00:00");
       }
-      if (value.stop != null) {
-        value.stop = value.stop + "T23:59:59";
+      if (val.stop != null) {
+        val.stop = new Date(val.stop + "T23:59:59");
       }
     } else {
-      value = {
-        start: this.dateToYMD(start, false),
-        stop: this.dateToYMD(end, false),
+      val = {
+        start: this.dateToYMD(val.start, false),
+        stop: this.dateToYMD(val.stop, false),
       };
-      if (value.start != null) {
-        value.start = value.start + "-01-01T00:00:00";
+      if (val.start != null) {
+        val.start = new Date(val.start + "-01-01T00:00:00");
       }
-      if (value.stop != null) {
-        value.stop = value.stop + "-12-31T23:59:59";
+      if (val.stop != null) {
+        val.stop = new Date(val.stop + "-12-31T23:59:59");
       }
     }
-
-    if (value.start == null && value.stop == null) {
-      value = null;
+    if (val.start == null && val.stop == null) {
+      val = null;
     }
-
-    return {
-      key: value.start + " " + value.stop,
+    let dateTimePickerVal:DateTimePickerValue = {
+      key: val.start + " " + val.stop,
       // TODO : this is not translated
-      label: this.getValueLabel(),
-      start: value.start,
-      stop: value.stop,
-    };
-  };
-
-  getValueLabel = function () {
-    var id_input = "#ecgrw-date-" + this.IdCriteriaGroupe + "-input";
-    var start = $(id_input + "-start").val();
-    var end = $(id_input + "-stop").val();
-    var valueLabel = null;
-    if (start != "" && end != "") {
-      valueLabel =
-        this.langSearch.LabelDateFrom +
-        " " +
-        $(id_input + "-start").val() +
-        " " +
-        this.langSearch.LabelDateTo +
-        " " +
-        $(id_input + "-stop").val();
-    } else if (start != "") {
-      valueLabel =
-        this.langSearch.DisplayValueDateFrom +
-        " " +
-        $(id_input + "-start").val();
-    } else if (end != "") {
-      valueLabel =
-        this.langSearch.DisplayValueDateTo + " " + $(id_input + "-stop").val();
+      label: this.getValueLabel(val.start,val.stop),
+      start: val.start,
+      stop: val.stop,
     }
+    return dateTimePickerVal
+  }
 
-    return valueLabel;
+  getValueLabel = function (start:any,stop:any) {
+    let lbl = ''
+    if(start != '') lbl.concat(`${getSettings().langSearch.LabelDateFrom} ${start} ${getSettings().langSearch.LabelDateTo} ${stop}`)
+    if(stop != '') lbl.concat(`${getSettings().langSearch.LabelDateTo} ${stop}`)
+
+    return lbl;
   };
 
   dateToYMD(
@@ -765,141 +669,91 @@ export class TimeDatePickerWidget implements IWidget {
   }
 }
 
-export class SearchWidget implements IWidget {
-  ParentComponent: any;
-  IdCriteriaGroupe: any;
-  html: string;
-  EndClassWidgetParent: EndClassWidgetGroup;
-  constructor(inputTypeComponent: any, langSearch: any) {
-    this.ParentComponent = inputTypeComponent;
-    this.IdCriteriaGroupe =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
-    this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
-    this.html =
-      '<div class="search-widget"><input id="ecgrw-search-' +
-      this.IdCriteriaGroupe +
-      '-input-value" /><button id="ecgrw-search-' +
-      this.IdCriteriaGroupe +
-      '-add" class="button-add">' +
-      langSearch.ButtonAdd +
-      "</button></div>";
+export class SearchWidget extends HTMLComponent implements IWidget {
+  addValueBtn: AddUserInputBtn;
+  value: SearchWidgetValue
+  searchInput: JQuery<HTMLElement>;
+
+  constructor(parentComponent: HTMLComponent) {
+    super('search-widget',parentComponent,null)
   }
 
   render() {
-    //render this element
-    var id_inputs = this.IdCriteriaGroupe;
-    var itc_obj = this.ParentComponent;
-    var CriteriaGroup = this.ParentComponent.GrandParent.ParentCriteriaGroup;
-
-    $("#ecgrw-search-" + this.IdCriteriaGroupe + "-add").on(
-      "click",
-      function () {
-        $("#ecgrw-search-" + id_inputs + "-input-value").trigger("change");
-        $(itc_obj).trigger("change");
-        // N'est plus à cacher, lutilisateur peut choisi d'afficher les valeurs
-        //$(CriteriaGroup.ComponentHtml[0]).addClass('hideEndClassProperty') ;
-      }
-    );
+    super.render()
+    this.searchInput = $(`<input />`)
+    this.html.append(this.searchInput)
+    this.addValueBtn = new AddUserInputBtn(this,this.#addValueBtnClicked)
+    return this
+  }
+  #addValueBtnClicked(){
+    this.searchInput.trigger('change')
+    let searchWidgetValue:SearchWidgetValue = {
+      key:this.searchInput.val().toString(),
+      label:this.searchInput.val().toString(),
+      search:this.searchInput.val().toString()
+    }
+    this.value = this.#validateInput(searchWidgetValue)
+    this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:this.value}))
   }
 
-  getValue = function () {
-    var id_input = "#ecgrw-search-" + this.IdCriteriaGroupe + "-input-value";
-    // return $(id_input).val() ;
-
-    return {
-      key: $(id_input).val(),
-      label: $(id_input).val(),
-      search: $(id_input).val(),
-    };
-  };
+  //TODO add dialog for input sanitation
+  #validateInput(val:SearchWidgetValue){
+    if(this.searchInput.val().toString() == ''){
+      console.warn('empty string provided in searchWidget')
+      val = null
+    }
+    return val
+  }
 }
 
-export class BooleanWidget implements IWidget {
-  ParentComponent: any;
-  IdCriteriaGroupe: any;
-  html: string;
-  EndClassWidgetParent: EndClassWidgetGroup;
-  constructor(inputTypeComponent: any, langSearch: any) {
-    this.ParentComponent = inputTypeComponent;
-    this.IdCriteriaGroupe =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
-    this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
-    this.html =
-      '<div class="boolean-widget" id="boolean-widget-' +
-      this.IdCriteriaGroupe +
-      '"><span class="boolean-value" id="boolean-widget-' +
-      this.IdCriteriaGroupe +
-      '-true">' +
-      langSearch.true +
-      '</span> <span class="or">' +
-      langSearch.Or +
-      '</span> <span class="boolean-value" id="boolean-widget-' +
-      this.IdCriteriaGroupe +
-      '-false">' +
-      langSearch.false +
-      '</span><input type="hidden" id="boolean-widget-' +
-      this.IdCriteriaGroupe +
-      '-value" /></div>';
+export class BooleanWidget extends HTMLComponent implements IWidget {
+  value:BooleanWidgetValue
+  constructor(parentComponent: WidgetWrapper) {
+    super('boolean-widget',parentComponent,null)
   }
 
   render() {
-    var id_inputs = this.IdCriteriaGroupe;
-    var itc_obj = this.ParentComponent;
-    var CriteriaGroup = this.ParentComponent.GrandParent.ParentCriteriaGroup;
-    var id_input = "#boolean-widget-" + this.IdCriteriaGroupe + "-value";
+    super.render()
+    let trueSpan = $(`<span class="boolean-value">${getSettings().langSearch.true}</span>'`)
+    let orSpan = $(`<span class="or">${getSettings().langSearch.Or}</span>`)
+    let falseSpan = $(`<span class="boolean-value"">'${getSettings().langSearch.false}</span>`)
+    this.html.append(trueSpan).append(orSpan).append(falseSpan)
 
-    $("#boolean-widget-" + this.IdCriteriaGroupe + "-true").on(
-      "click",
-      function () {
-        $(id_input).val("true");
-        $(itc_obj).trigger("change");
+    trueSpan[0].addEventListener('click',(e)=>{
+      this.value = {
+        key:true,
+        label:getSettings().langSearch.true,
+        boolean: true
       }
-    );
+      this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:this.value}))
+    })
 
-    $("#boolean-widget-" + this.IdCriteriaGroupe + "-false").on(
-      "click",
-      function () {
-        $(id_input).val("false");
-        $(itc_obj).trigger("change");
+    falseSpan[0].addEventListener('click',(e)=>{
+      this.value = {
+        key:false,
+        label:getSettings().langSearch.false,
+        boolean: false
       }
-    );
+      this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:this.value}))
+    })
+    return this
   }
-
-  getValue = function () {
-    var id_input = "#boolean-widget-" + this.IdCriteriaGroupe + "-value";
-
-    return {
-      key: $(id_input).val(),
-      label:
-        $(id_input).val() == "true"
-          ? this.langSearch.true
-          : this.langSearch.false,
-      boolean: $(id_input).val(),
-    };
-  };
 }
 
 // IMPORTANT Do we need a NoWidget
-export class NoWidget implements IWidget {
-  inputTypeComponent: any;
-  html: string;
-  constructor(inputTypeComponent: any) {
-    this.inputTypeComponent;
-    this.html = null;
-    this.EndClassWidgetParent = null;
+export class NoWidget extends HTMLComponent implements IWidget {
+
+  value:any = null
+  constructor(parentComponent: WidgetWrapper) {
+    super('no-widget',parentComponent,null)
   }
-  EndClassWidgetParent: EndClassWidgetGroup;
 
   render() {
-    // nothing
+    return this
   }
-
-  getValue = function (): any {
-    // cannot provide any value
-    return null;
-  };
 }
 
+/*
 export class TreeWidget implements IWidget {
   loaderHandler: any;
   ParentComponent: any;
@@ -1027,21 +881,20 @@ export class TreeWidget implements IWidget {
           icons: false,
         },
       },
-      /*"massload" : {
+      "massload" : {
 					"url" : loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
 					"data" : function (nodes) {
 					  return { "ids" : nodes.join(",") };
 					}
-				},*/
+				},
       checkbox: {
         keep_selected_style: false,
         three_state: false,
         cascade: "down+undetermined",
         cascade_to_disabled: true,
       },
-      plugins: ["changed", "wholerow", "checkbox" /*, "massload", "state" */],
+      plugins: ["changed", "wholerow", "checkbox" ],
     };
-    //Need to add in html befor
 
     this.jsTree = $("#ecgrw-" + id_inputs + "-display").jstree(options);
 
@@ -1174,4 +1027,4 @@ export class TreeWidget implements IWidget {
 
     return values;
   };
-}
+}*/

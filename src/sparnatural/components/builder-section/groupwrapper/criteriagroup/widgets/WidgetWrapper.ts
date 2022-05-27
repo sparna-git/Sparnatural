@@ -15,13 +15,14 @@ import {
   NoWidget,
   SearchWidget,
   TimeDatePickerWidget,
-  TreeWidget,
+  //TreeWidget,
 } from "./Widgets";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./IWidget";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
+import { readyException } from "jquery";
 
 /**
  *  creates the corresponding widget
@@ -314,9 +315,10 @@ class WidgetWrapper extends HTMLComponent {
         return new ListWidget(
           this,
           handler,
-          this.settings.langSearch,
-          this.settings,
-          !(datasource.noSort == true)
+          !(datasource.noSort == true),
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
         );
         break;
       case Config.AUTOCOMPLETE_PROPERTY:
@@ -376,42 +378,42 @@ class WidgetWrapper extends HTMLComponent {
             this.getFinalQueryString(datasource)
           );
         }
-        return new AutoCompleteWidget(this, handler);
+        return new AutoCompleteWidget(this, handler, this.startClassVal,this.objectPropVal,this.endClassVal);
 
         break;
       case Config.GRAPHDB_SEARCH_PROPERTY:
       case Config.STRING_EQUALS_PROPERTY:
       case Config.SEARCH_PROPERTY:
-        return new SearchWidget(this, this.settings.langSearch);
+        return new SearchWidget(this);
         break;
       case Config.TIME_PROPERTY_YEAR:
         return new TimeDatePickerWidget(
           this,
           this.settings.dates,
-          false,
-          this.settings.langSearch
+          false
         );
         break;
       case Config.TIME_PROPERTY_DATE:
         return new TimeDatePickerWidget(
           this,
           this.settings.dates,
-          "day",
-          this.settings.langSearch
+          "day"
         );
         break;
       case Config.TIME_PROPERTY_PERIOD:
         return new DatesWidget(
           this,
           this.settings.dates,
-          this.settings.langSearch
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
         );
         break;
       case Config.NON_SELECTABLE_PROPERTY:
         return new NoWidget(this);
         break;
       case Config.BOOLEAN_PROPERTY:
-        return new BooleanWidget(this, this.settings.langSearch);
+        return new BooleanWidget(this);
         break;
       case Config.TREE_PROPERTY:
         var theSpecProvider = this.specProvider;
@@ -489,17 +491,18 @@ class WidgetWrapper extends HTMLComponent {
             this.getFinalQueryString(treeChildrenDatasource)
           );
         }
+        /*
         return new TreeWidget(
           this,
           handler,
           this.settings,
           this.settings.langSearch
-        );
+        );*/
+        return new NoWidget(this)
 
         break;
       default:
-        // TODO : throw Exception
-        console.error("Unexpected Widget Type " + widgetType);
+        throw new Error(`WidgetType for ${widgetType} not recognized`)
     }
   }
 
@@ -544,11 +547,7 @@ class WidgetWrapper extends HTMLComponent {
     return this.widgetType
   }
   getValue() {
-    if (this.loadedValue !== null) {
-      return this.loadedValue;
-    } else {
-      return this.widgetComponent.getValue();
-    }
+    return this.widgetVal
   }
 }
 
