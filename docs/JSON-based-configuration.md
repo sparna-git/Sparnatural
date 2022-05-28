@@ -85,7 +85,7 @@ var config =
 
 Copy-paste the `@context` key given in the minimal example and do not modify it. Keep it like this for your own configuration.
 
-# Configuration URI
+# Configuration URI
 
 This part specifies a URI for your configuration, this is not used for reading/parsing the configuration, and is here only for compatibility with an OWL-base configuration. Just specify any URI here, and don't bother too much. You can use whatever URL Sparnatural will be inserted in, and append `/config` at the end :
 
