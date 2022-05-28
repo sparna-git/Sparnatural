@@ -4,7 +4,7 @@ import tippy from "tippy.js";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
 import ActionWhere from "../../../../actions/actioncomponents/ActionWhere";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
-import { EndClassWidgetGroup } from "../widgets/EndClassWidgetGroup";
+import { EndClassWidgetGroup } from "../edit-components/EndClassWidgetGroup";
 import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";

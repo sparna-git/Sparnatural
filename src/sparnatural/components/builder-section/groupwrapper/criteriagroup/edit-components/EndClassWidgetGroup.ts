@@ -154,6 +154,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
   // removes the where and WidgetWrapper after a value got chosen
   #removeWhereAndWidget() {
     this.widgetWrapper.html.remove();
+    this.widgetWrapper.html = null
     this.html[0].dispatchEvent(
       new CustomEvent("removeWhereBtn", { bubbles: true })
     );
@@ -202,7 +203,6 @@ export class EndClassWidgetValue extends HTMLComponent {
 
   render(): this {
     super.render();
-    this.html.addClass("EndClassWidgetValue");
     this.backArrow.render();
     let valuelbl = `<p><span> ${this.value_lbl} </span></p>`;
     this.html.append($(valuelbl));

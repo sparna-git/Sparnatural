@@ -1,4 +1,4 @@
-import { IWidget } from "../components/builder-section/groupwrapper/criteriagroup/widgets/IWidget"
+import { IWidget } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/IWidget"
 
 export interface SelectedVal {
     variable: string
