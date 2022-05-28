@@ -49,6 +49,7 @@ class EditComponents extends HTMLComponent {
         return this
     }
     renderWidgetsWrapper(){
+      super.render()
       this.widgetWrapper = new WidgetWrapper(
         this,
         this.specProvider,

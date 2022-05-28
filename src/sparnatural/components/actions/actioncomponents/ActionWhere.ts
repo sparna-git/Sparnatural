@@ -2,6 +2,8 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import { getSettings } from "../../../../configs/client-configs/settings";
 import HTMLComponent from "../../HtmlComponent";
 import EditComponents from "../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
+import { NoWidget } from "../../builder-section/groupwrapper/criteriagroup/edit-components/Widgets";
+import { Config } from "../../../../configs/fixed-configs/SparnaturalConfig";
 
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 
@@ -21,12 +23,13 @@ class ActionWhere extends HTMLComponent {
     super("ActionWhere", parentComponent, null);
     this.specProvider = specProvider;
     this.callBack = callBack;
+    this.parentComponent = parentComponent
   }
   render = () => {
     var choiceNumber = 2;
     if (
-      this.parentComponent.widgetWrapper.widgetHtml ==
-      null
+      this.parentComponent.widgetWrapper.getWidgetType() ==
+      Config.NON_SELECTABLE_PROPERTY
     ) {
       choiceNumber = 1;
     }

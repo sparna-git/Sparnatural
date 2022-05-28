@@ -30,7 +30,7 @@ export class AutoCompleteWidget extends HTMLComponent implements IWidget {
   render() {
     super.render()
     let inputHtml = $(`<input class="autocompleteinput"/>`)
-    let listHtml = $(`<input class="inputvalue"/>`)
+    let listHtml = $(`<input class="inputvalue" type="hidden"/>`)
     this.html.append(inputHtml)
     this.html.append(listHtml)
 

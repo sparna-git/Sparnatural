@@ -155,7 +155,6 @@ class ClassSelectBuilder extends HTMLComponent {
     } else {
       items = this.specProvider.getConnectedClasses(domainId);
     }
-    console.dir(items);
     for (var key in items) {
       var val = items[key];
       var label = this.specProvider.getLabel(val);

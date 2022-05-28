@@ -24,6 +24,7 @@ class EndClassGroup extends HTMLComponent {
   editComponents:EditComponents
   endClassWidgetGroup: EndClassWidgetGroup;
   startClassVal: SelectedVal;
+  objectPropVal: SelectedVal;
 
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
     super("EndClassGroup", ParentCriteriaGroup, null);
@@ -62,6 +63,7 @@ class EndClassGroup extends HTMLComponent {
     this.html[0].addEventListener("renderWidgetWrapper", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       //we only need widgetswrapper
+      this.editComponents = new EditComponents(this,this.startClassVal,this.objectPropVal,this.endClassVal,this.specProvider)
       this.editComponents.renderWidgetsWrapper()
     });
 
@@ -98,6 +100,7 @@ class EndClassGroup extends HTMLComponent {
 
 
   onObjectPropertyGroupSelected(objectPropVal: SelectedVal) {
+    this.objectPropVal = objectPropVal
     if (this.editComponents) return;
     this.endClassWidgetGroup.render()
     //whereaction only needs to be rendered on certain widgets
