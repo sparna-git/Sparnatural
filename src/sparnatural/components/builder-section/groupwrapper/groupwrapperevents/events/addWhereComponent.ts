@@ -4,11 +4,7 @@ import LinkWhereBottom from "../../LinkWhereBottom";
 
 
 let removeEditComponents = (grpWrapper:GroupWrapper) =>{
-    grpWrapper.CriteriaGroup.EndClassGroup.actionWhere.html.remove();
-    grpWrapper.CriteriaGroup.EndClassGroup.actionWhere = null;
-    grpWrapper.CriteriaGroup.EndClassGroup.endClassWidgetGroup.widgetWrapper.html.remove();
-    grpWrapper.CriteriaGroup.EndClassGroup.endClassWidgetGroup.widgetWrapper =
-      null;
+    grpWrapper.CriteriaGroup.EndClassGroup.html[0].dispatchEvent(new CustomEvent('removeEditComponents'))
 }
 
 //give it additional class childsList

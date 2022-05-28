@@ -18,10 +18,11 @@ import {
   //TreeWidget,
 } from "./Widgets";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
+import { EndClassWidgetGroup } from "../startendclassgroup/EndClassWidgetGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./IWidget";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
+import EditComponents from "./EditComponents";
 
 /**
  *  creates the corresponding widget
@@ -42,7 +43,7 @@ class WidgetWrapper extends HTMLComponent {
   endClassVal: SelectedVal;
 
   constructor(
-    ParentComponent: EndClassWidgetGroup,
+    ParentComponent: EditComponents,
     specProvider: ISpecProvider,
     startClassVal:SelectedVal,
     objectPropVal: SelectedVal,
@@ -57,7 +58,6 @@ class WidgetWrapper extends HTMLComponent {
   }
 
   render() {
-    this.htmlParent = this.GrandParent.html.find(".EditComponents");
     super.render();
     this.#addValueSelectedListener()
 

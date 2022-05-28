@@ -2,7 +2,7 @@
 @use '../../base';
 @use '../../mixins';
 
-.AddListValueBtn {
+.AddWidgetValueBtn {
     @include mixins.arrow-back-colors(themes.$custom-red-medium, #fff);
     @include mixins.arrow-front-colors(themes.$custom-red-medium, #fff);
     display: flex;

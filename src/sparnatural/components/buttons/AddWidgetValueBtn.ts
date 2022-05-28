@@ -2,13 +2,13 @@ import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import ArrowComponent from "../arrows/ArrowComponent";
 import HTMLComponent from "../HtmlComponent";
 
-class AddListValueBtn extends HTMLComponent {
+class AddWidgetValueBtn extends HTMLComponent {
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   backArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_BACK);
   callBack: () => void;
 
   constructor(ParentComponent: HTMLComponent, callBack: () => void) {
-    super("AddListValueBtn", ParentComponent, null);
+    super("AddWidgetValueBtn", ParentComponent, null);
     this.callBack = callBack;
   }
 
@@ -28,4 +28,4 @@ class AddListValueBtn extends HTMLComponent {
     });
   }
 }
-export default AddListValueBtn;
+export default AddWidgetValueBtn;

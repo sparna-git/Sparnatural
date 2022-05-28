@@ -4,6 +4,10 @@ export interface ListWidgetValue{
   uri:string
 }
 
+export interface SelectAllValue{
+  label:string
+}
+
 export interface BooleanWidgetValue {
   key:boolean
   label:string
@@ -37,5 +41,5 @@ export interface DateTimePickerValue{
 export interface IWidget {
   html:JQuery<HTMLElement>
   render: ()=> any
-  value: ListWidgetValue | DateValue | AutocompleteValue | DateTimePickerValue | SearchWidgetValue | BooleanWidgetValue
+  value: ListWidgetValue | DateValue | AutocompleteValue | DateTimePickerValue | SearchWidgetValue | BooleanWidgetValue | SelectAllValue
 }

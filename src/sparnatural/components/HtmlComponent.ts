@@ -30,12 +30,7 @@ class HTMLComponent implements IRenderable {
   }
 
   #attachComponentHtml() {
-    // sometimes components don't need to be rendered under their parentcomponent but under htmlParent... like ActionWhere
-    if (this.htmlParent) {
-      this.htmlParent.append(this.html);
-    } else {
-      $(this.html).appendTo(this.ParentComponent.html);
-    }
+    $(this.html).appendTo(this.ParentComponent.html);
   }
 
   #initHtml() {

@@ -4,40 +4,24 @@ import { getSettings } from "../../../../../../configs/client-configs/settings";
 import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import HTMLComponent from "../../../../HtmlComponent";
-import AddListValueBtn from "../../../../buttons/AddMoreValuesBtn";
-import WidgetWrapper from "./WidgetWrapper";
-import { SelectedVal } from "../../../../../sparql/ISparJson";
-import { IWidget} from "./IWidget";
+import AddWidgetValueBtn from "../../../../buttons/AddWidgetValueBtn";
+import { IWidget, SelectAllValue} from "../edit-components/IWidget";
 
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
   selectedValues: Array<EndClassWidgetValue> = [];
   selectAllValue: boolean = false;
   specProvider: ISpecProvider;
-  addListValueBtn: AddListValueBtn;
-  widgetWrapper: WidgetWrapper;
+  addWidgetValueBtn: AddWidgetValueBtn;
   constructor(parentComponent: HTMLComponent, specProvider: ISpecProvider) {
     super("EndClassWidgetGroup", parentComponent, null);
     this.specProvider = specProvider;
   }
 
   render() {
-    super.render();
-    return this;
-  }
-  /**
-   * Called when the property/link between domain and range is selected, to init this.
-   **/
-  onObjectPropertyGroupSelected(startClassVal:SelectedVal,objectPropVal: SelectedVal, endClassVal:SelectedVal) {
-    //if(this.widgetWrapper) return // if already initialized don't do it again
-    this.widgetWrapper = new WidgetWrapper(
-      this,
-      this.specProvider,
-      startClassVal,
-      objectPropVal,
-      endClassVal
-    ).render();
+    super.render()
     this.#addEventListener();
+    return this;
   }
 
   #addEventListener() {
@@ -48,16 +32,6 @@ export class EndClassWidgetGroup extends HTMLComponent {
         this.#onRemoveValue(e);
       }
     );
-    this.html[0].addEventListener('onChange',(e:CustomEvent)=>{
-      e.stopImmediatePropagation()
-      if(e.detail == '' || !(e.detail)) throw Error('WidgetValueEvent got called but no widgetValue as payload received')
-      this.#onChange(e.detail)
-    })
-    // binds a selection in an input widget with the display of the value in the line
-    this.widgetWrapper.html[0].addEventListener("selectAll", (e:CustomEvent) => {
-      e.stopImmediatePropagation()
-      this.#onSelectAll();
-    });
 
   }
 
@@ -68,8 +42,6 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.selectAllValue = false;
 
     let unselectedValue: EndClassWidgetValue;
-    console.dir(this);
-    console.dir(e);
     this.selectedValues = this.selectedValues.filter(
       (val: EndClassWidgetValue) => {
         if (val.value_lbl === valueToDel.value_lbl) {
@@ -82,29 +54,19 @@ export class EndClassWidgetGroup extends HTMLComponent {
     if (unselectedValue === undefined)
       throw Error("Unselected val not found in the selectedValues list!");
     unselectedValue.html.remove();
-    //if jstree remove unselecteds term
-    //TODO for the tree widget when there is a deletion then rerender the tree widget without the value
-    // OR call method remove on widget
-    /*
-    if (this.widgetWrapper.widgetType == Config.TREE_PROPERTY) {
-      (this.widgetWrapper.widgetComponent as TreeWidget).jsTree.jstree(
-        "uncheck_node",
-        $(e.currentTarget).attr("value-data")
-      );
+
+    if(this.selectedValues.length < getSettings().maxOr){
+      this.addWidgetValueBtn.html.show;
     }
-    //uncheck_node()
-    */
 
     if (this.selectedValues.length < 1) {
       //$(this.ParentCriteriaGroup.ComponentHtml).removeClass("completed");
 
-      // re-init the widget to empty input field
-      this.widgetWrapper.render();
       // reattach eventlistener. it got removed
       this.#addEventListener()
-      this.addListValueBtn.html.remove();
+      this.addWidgetValueBtn.html.remove();
       this.html[0].dispatchEvent(
-        new CustomEvent("renderWhereBtn", { bubbles: true })
+        new CustomEvent("renderWidgetWrapper", { bubbles: true })
       );
     }
     this.html[0].dispatchEvent(
@@ -112,18 +74,10 @@ export class EndClassWidgetGroup extends HTMLComponent {
     );
   }
 
-  #onSelectAll() {
-    this.selectAllValue = true;
-    this.#renderEndClassWidgetVal(getSettings().langSearch.SelectAllValues)
-  }
-
   // user selects a value for example a country from the listwidget
-  #onChange(selectedVal:IWidget['value']) {
-    // put span around with proper class if coming from a date widget
-    if (selectedVal == null) {
-      return false;
-    }
-
+  renderWidgetVal(selectedVal:IWidget['value']) {
+    
+    
     // check if value already got selected before
     if (this.selectedValues.some((val) => val.value_lbl === selectedVal.label))
       return;
@@ -136,11 +90,26 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.selectedValues.push(endClassWidgetVal);
 
     this.#renderNewSelectedValue(endClassWidgetVal);
-    this.#removeWhereAndWidget();
+
+    // if selectAllvalues then we don't need a AddWidgetValueBtn
+    if(!this.#instanceOfAllValues(selectedVal)){
+      // now (re)render the addMoreValuesButton
+      this.addWidgetValueBtn?.html
+      ? this.addWidgetValueBtn.render()
+      : (this.addWidgetValueBtn = new AddWidgetValueBtn(
+          this,
+          this.#addMoreValues
+        ).render());
+    }
+
     //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
     if (this.selectedValues.length == getSettings().maxOr) {
-      this.addListValueBtn.html.hide;
+      this.addWidgetValueBtn.html.hide;
     }
+
+    this.html[0].dispatchEvent(
+      new CustomEvent("removeEditComponents", { bubbles: true })
+    );
 
     this.html[0].dispatchEvent(
       new CustomEvent("onGrpInputCompleted", { bubbles: true })
@@ -151,32 +120,17 @@ export class EndClassWidgetGroup extends HTMLComponent {
     );
 
   }
-  // removes the where and WidgetWrapper after a value got chosen
-  #removeWhereAndWidget() {
-    this.widgetWrapper.html.remove();
-    this.widgetWrapper.html = null
-    this.html[0].dispatchEvent(
-      new CustomEvent("removeWhereBtn", { bubbles: true })
-    );
-  }
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
   #renderNewSelectedValue(endClassWidgetVal: EndClassWidgetValue) {
     endClassWidgetVal.render();
-    if(!this.selectAllValue){
-    // now (re)render the addMoreValuesButton
-    this.addListValueBtn?.html
-    ? this.addListValueBtn.render()
-    : (this.addListValueBtn = new AddListValueBtn(
-        this,
-        this.#addMoreValues
-      ).render());
-    }
   }
 
   // when more values should be added then render the inputypecomponent again
   #addMoreValues = () => {
-    this.widgetWrapper.render();
+    this.html[0].dispatchEvent(
+      new CustomEvent("renderWidgetWrapper", { bubbles: true })
+    );
     this.#addEventListener();
   };
 
@@ -185,6 +139,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
       return val.selectedVal
     })
     return vals
+  }
+  //TS typeguard
+  //https://www.typescriptlang.org/docs/handbook/advanced-types.html
+  #instanceOfAllValues(selectedVal: IWidget['value']): selectedVal is SelectAllValue {
+    return selectedVal.label == getSettings().langSearch.SelectAllValues;
   }
 }
 

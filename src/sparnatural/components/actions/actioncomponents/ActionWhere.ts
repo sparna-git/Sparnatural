@@ -1,8 +1,7 @@
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
-
 import { getSettings } from "../../../../configs/client-configs/settings";
-import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import HTMLComponent from "../../HtmlComponent";
+import EditComponents from "../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 
@@ -10,32 +9,30 @@ import HTMLComponent from "../../HtmlComponent";
     There the Endclassgroup is foun
 */
 class ActionWhere extends HTMLComponent {
-  ParentComponent: EndClassGroup;
+  parentComponent: EditComponents;
   specProvider: ISpecProvider;
   callBack: () => void;
   constructor(
-    ParentComponent: EndClassGroup,
+    parentComponent: EditComponents,
     specProvider: ISpecProvider,
     callBack: () => void
   ) {
     //TODO refactor the null init in html widget
-    super("ActionWhere", ParentComponent, null);
+    super("ActionWhere", parentComponent, null);
     this.specProvider = specProvider;
     this.callBack = callBack;
   }
   render = () => {
-    // Endclassgroup -> EditComponents -> ActionWhere
-    this.htmlParent = $(this.ParentComponent.html).find(".EditComponents");
     var choiceNumber = 2;
     if (
-      this.ParentComponent.endClassWidgetGroup.widgetWrapper.widgetHtml ==
+      this.parentComponent.widgetWrapper.widgetHtml ==
       null
     ) {
       choiceNumber = 1;
     }
     var endLabel = this.specProvider.getLabel(
-      (this.ParentComponent as EndClassGroup).endClassVal.type
-    );
+      this.parentComponent.endClassVal.type
+    )
 
     let newhtml = $(`
       <span class="edit-trait">
