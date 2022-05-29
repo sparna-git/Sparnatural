@@ -15,7 +15,7 @@ import HTMLComponent from "../../../../HtmlComponent";
  * Refactored to extract this from InputTypeComponent.
  **/
 class ClassTypeId extends HTMLComponent {
-  GrandParent: CriteriaGroup;
+  ParentComponent: EndClassGroup | StartClassGroup
   id: string;
   frontArrow: ArrowComponent = new ArrowComponent(
     this,
@@ -40,7 +40,6 @@ class ClassTypeId extends HTMLComponent {
     startClassVal?: any
   ) {
     super("ClassTypeId", ParentComponent, null);
-    this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.selectBuilder = new ClassSelectBuilder(this, specProvider);
     this.startClassVal = startClassVal;
   }
@@ -115,7 +114,9 @@ class ClassTypeId extends HTMLComponent {
 
     
   #onchangeViewVariable = () => {
-    this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true }));
+    if(isEndClassGroup(this.ParentComponent)){
+      this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true,detail:this.ParentComponent.endClassVal }));
+    }
   };
 
   //This function is called by EnclassWidgetGroup when a value got selected. It renders the classTypeIds as shape forms and highlights them

@@ -1,4 +1,5 @@
 import Sortable, { SortableEvent } from "sortablejs";
+import { SelectedVal } from "../../../sparql/ISparJson";
 
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
@@ -6,7 +7,6 @@ import VariableSelection from "../VariableSelection";
 import DraggableComponent from "./DraggableComponent";
 
 class VariableOrderMenu extends HTMLComponent {
-    displayVariableList: Array<string> = [];
     draggables: Array<DraggableComponent> = [];
     specProvider: ISpecProvider;
     constructor(parentComponent: VariableSelection,specProvider:ISpecProvider){
@@ -19,9 +19,7 @@ class VariableOrderMenu extends HTMLComponent {
         super.render()
         let otherSelectHtml = $('<div class="variablesOtherSelect"></div>');
         this.html.append(otherSelectHtml)
-        this.addDraggableComponent('http://dbpedia.org/ontology/Museum','testvarname')
         this.#addSortable(otherSelectHtml);
-
         return this
     }
 
@@ -76,15 +74,18 @@ class VariableOrderMenu extends HTMLComponent {
       }
 
       
-      addDraggableComponent(selected_val:string,varName:string){
-          let dragbl = new DraggableComponent(this,this.specProvider,selected_val,varName)
-          dragbl.render()
-          this.draggables.push(dragbl)
-      }
+  addDraggableComponent(selected_val:SelectedVal){
+      let dragbl = new DraggableComponent(this,this.specProvider,selected_val,this.variableNameEdited)
+      dragbl.render()
+      this.draggables.push(dragbl)
+  }
+  variableNameEdited = (oldName:string,newName:string)=>{
+    this.html[0].dispatchEvent(new CustomEvent("updateVarName", { bubbles: true, detail: {oldName:oldName,newName:newName} }));
+  }
 
 
   #updateVariableList() {
-    this.html[0].dispatchEvent(new CustomEvent("updateVariables", { bubbles: true }));
+   
   }
 }
 

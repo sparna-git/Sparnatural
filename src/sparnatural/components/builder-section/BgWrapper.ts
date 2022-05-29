@@ -29,7 +29,9 @@ class BgWrapper extends HTMLComponent {
     this.componentsList.html.remove();
     this.resetBtn.html.empty();
     this.resetBtn.html.remove();
+    this.html[0].dispatchEvent(new CustomEvent("resetVarIds", { bubbles: true }));
     this.#renderComponents();
+    
   };
 }
 export default BgWrapper;

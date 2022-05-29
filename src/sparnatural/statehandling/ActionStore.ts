@@ -5,6 +5,7 @@ import toggleVarNames from "./actions/toggleVarNames";
 import deleteGrpWrapper from "./actions/deleteGrpWrapper";
 import { Language, Order, SelectedVal } from "../sparql/ISparJson";
 import generateQuery from "./actions/generateQuery";
+import updateVarName from "./actions/UpdateVarName";
 // This is ugly, should use i18n features instead
 const i18nLabels = {
   en: require("../../assets/lang/en.json"),
@@ -51,8 +52,10 @@ class ActionStore {
       }
     );
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
-    this.sparnatural.html[0].addEventListener("onSelectViewVar", (e) => {
+    this.sparnatural.html[0].addEventListener("onSelectViewVar", (e:CustomEvent) => {
+      if(!('type' in e.detail && 'variable' in e.detail)) throw Error('onSelectViewVar expects value of type SelectedVal')
       e.stopImmediatePropagation();
+      this.sparnatural.VariableSelection.variableOrderMenu.addDraggableComponent(e.detail)
     });
 
     this.sparnatural.html[0].addEventListener("onSubmit", (e) => {
@@ -86,6 +89,14 @@ class ActionStore {
     );
 
     this.sparnatural.html[0].addEventListener(
+      "resetVarIds",
+      (e: CustomEvent) => {
+        e.stopImmediatePropagation();
+        this.sparqlVarID = 0
+      }
+    );
+
+    this.sparnatural.html[0].addEventListener(
       "changeOrderSort",
       (e: CustomEvent) => {
         switch(e.detail){
@@ -104,8 +115,10 @@ class ActionStore {
     );
 
     
-    this.sparnatural.html[0].addEventListener('updateVariables',()=>{
-
+    this.sparnatural.html[0].addEventListener('updateVarName',(e:CustomEvent)=>{
+      let payload = e.detail
+      if(!('oldName' in payload && 'newName' in payload)) throw Error('updateVarName event requires an object of {oldName:string,newName:string}')
+      updateVarName(this,payload.oldName,payload.newName)
     })
 
     this.sparnatural.html[0].addEventListener("initGeneralEvent", (e) => {

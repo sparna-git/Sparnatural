@@ -70,6 +70,7 @@ class EndClassGroup extends HTMLComponent {
       if(e.detail.NrOfSelValues === 0) {
         // Render WidgetsWrapper and ActionWhere
         this.editComponents.render()
+        this.html[0].dispatchEvent(new CustomEvent('onGrpInputNotCompleted',{bubbles:true}))
       } else {
         //we only need widgetswrapper
         this.editComponents.renderWidgetsWrapper(false)
@@ -152,6 +153,9 @@ class EndClassGroup extends HTMLComponent {
 
   getVarName() {
     return this.endClassVal.variable;
+  }
+  setVarName(name:string){
+    this.endClassVal.variable = name
   }
   getTypeSelected(){
     return this.endClassVal.type

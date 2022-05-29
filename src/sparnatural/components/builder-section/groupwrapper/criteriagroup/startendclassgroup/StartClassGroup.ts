@@ -53,6 +53,9 @@ class StartClassGroup extends HTMLComponent {
       bubbles:true,
       detail:(id: number) => { //callback
         this.startClassVal.variable = `?${this.specProvider.getLabel(type)}_${id}`
+        // id==1 -> first StartClassGroup of first GroupWrapper
+        if(id === 1) this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true,detail:this.startClassVal }));
+
       }
     }))
   }
@@ -81,6 +84,9 @@ class StartClassGroup extends HTMLComponent {
   }
   getVarName() {
     return this.startClassVal.variable;
+  }
+  setVarName(name:string){
+    this.startClassVal.variable = name
   }
   getTypeSelected(){
     return this.startClassVal.type

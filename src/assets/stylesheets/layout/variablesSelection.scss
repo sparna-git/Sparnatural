@@ -149,9 +149,15 @@
                 }
             }
 
-            div {
+            input {
                 line-height: 30px;
+                padding:1px;
+                min-width: 4ch;
+
             }
+            input:invalid {
+                border: 2px dashed red;
+              }
 
             [contenteditable="true"]:active,
             [contenteditable="true"]:focus {
