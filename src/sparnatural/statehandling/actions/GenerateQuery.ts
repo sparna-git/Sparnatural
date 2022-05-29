@@ -1,7 +1,6 @@
 
 import { getSettings } from "../../../configs/client-configs/settings";
 import NewJSONQueryGenerator from "../../sparql/NewQueryGenerator";
-import { QuerySPARQLWriter } from "../../sparql/Query";
 import ActionStore from "../ActionStore";
 
 export default function generateQuery(actionStore: ActionStore) {

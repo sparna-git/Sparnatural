@@ -7,7 +7,6 @@ import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import SelectViewVariableBtn from "../../../../buttons/SelectViewVariableBtn";
-import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
@@ -34,6 +33,7 @@ class ClassTypeId extends HTMLComponent {
   oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
   UnselectButton: any;
   selectViewVariableBtn: SelectViewVariableBtn;
+  specProvider:ISpecProvider
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
@@ -42,6 +42,7 @@ class ClassTypeId extends HTMLComponent {
     super("ClassTypeId", ParentComponent, null);
     this.selectBuilder = new ClassSelectBuilder(this, specProvider);
     this.startClassVal = startClassVal;
+    this.specProvider = specProvider
   }
 
   render() {
@@ -124,6 +125,16 @@ class ClassTypeId extends HTMLComponent {
     this.html.addClass("Highlited");
     this.frontArrow.html.removeClass("disable");
     this.backArrow.html.removeClass("disable");
+  }
+
+  // show the sparql variable name instead of the type
+  toggleVarName(){
+    let val = (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent.trimStart()
+    if(this.ParentComponent.getVarName() === val){
+      (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent = this.specProvider.getLabel(this.ParentComponent.getTypeSelected());
+    }else{
+      (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent = this.ParentComponent.getVarName()
+   }
   }
 }
 export default ClassTypeId;

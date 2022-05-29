@@ -48,7 +48,7 @@ class VariableSortOption extends HTMLComponent{
     
     toggleVarNames = (selected: boolean) => {
         this.html[0].dispatchEvent(
-            new CustomEvent("toggleVarName", { bubbles: true, detail: selected })
+            new CustomEvent("toggleVarNames", { bubbles: true})
         );
     };
 

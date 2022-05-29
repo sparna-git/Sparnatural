@@ -7,17 +7,19 @@ class VariableOptionsSelectBtn extends HTMLComponent {
     ParentComponent: HTMLComponent,
     callBack: (selected: boolean) => void
   ) {
+    let input = $(`
+    <input type="checkbox">
+      <span class="slider round">
+      </span>
+    </input>
+    `)
     let widgetHtml = 
-    $(`<p>${getSettings().langSearch.SwitchVariablesNames}</p><label class="switch">
-        <input type="checkbox">
-          <span class="slider round">
-          </span>
-        </input>
+    $(`<label class="switch">
       </label>
-     `)
+     `).append(input).prepend($(`<p>${getSettings().langSearch.SwitchVariablesNames}</p>`))
     super("variablesOptionsSelect", ParentComponent, widgetHtml);
     // add clicklistener
-    this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
+    input[0].addEventListener("change", (e) => {
       this.selected = this.selected ? false : true;
       this.selected
         ? this.html.addClass("selected")
