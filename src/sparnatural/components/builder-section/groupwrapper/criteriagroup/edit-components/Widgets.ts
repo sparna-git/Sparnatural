@@ -140,9 +140,9 @@ export class ListWidget extends HTMLComponent implements IWidget {
     this.html.append(this.selectHtml)
 
     let url = this.listHandler.listUrl(
-      this.startClassVal,
-      this.objectPropVal,
-      this.endClassVal
+      this.startClassVal.type,
+      this.objectPropVal.type,
+      this.endClassVal.type
     );
 
     var headers = new Headers();
@@ -162,9 +162,9 @@ export class ListWidget extends HTMLComponent implements IWidget {
       .then((response: { json: () => any }) => response.json())
       .then((data: any) => {
         var items = this.listHandler.listLocation(
-          this.startClassVal,
-          this.objectPropVal,
-          this.endClassVal,
+          this.startClassVal.type,
+          this.objectPropVal.type,
+          this.endClassVal.type,
           data
         );
         if (items.length > 0) {

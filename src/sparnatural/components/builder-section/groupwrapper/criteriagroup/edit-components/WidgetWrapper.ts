@@ -4,10 +4,6 @@ import Datasources from "../../../../../../configs/fixed-configs/SparnaturalConf
 import { SparqlTreeHandler } from "./handlers/TreeHandlers";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import {
-  SparqlTemplateAutocompleteHandler,
-  SparqlTemplateListHandler,
-} from "./handlers/AutocompleteAndListHandlers";
-import {
   AutoCompleteWidget,
   BooleanWidget,
   DatesWidget,
