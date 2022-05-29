@@ -1,10 +1,10 @@
 import ISpecProvider from "../spec-providers/ISpecProviders";
 import Sparnatural from "../components/Sparnatural";
-import initGeneralevent from "./actions/initGeneralEvent";
-import toggleVarNames from "./actions/toggleVarNames";
-import deleteGrpWrapper from "./actions/deleteGrpWrapper";
+import initGeneralevent from "./actions/InitGeneralEvent";
+import toggleVarNames from "./actions/ToggleVarNames";
+import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import { Language, Order, SelectedVal } from "../sparql/ISparJson";
-import generateQuery from "./actions/generateQuery";
+import generateQuery from "./actions/GenerateQuery";
 import updateVarName from "./actions/UpdateVarName";
 // This is ugly, should use i18n features instead
 const i18nLabels = {
