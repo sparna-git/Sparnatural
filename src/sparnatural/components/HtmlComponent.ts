@@ -53,9 +53,9 @@ class HTMLComponent implements IRenderable {
   }
 
   render() {
-    if (this.html != null){
-      this.html.remove();
+    if (this.html != null){ // TODO: Probably useless? it's always going to be null if super.render() called in the begining of render()
       this.html.empty()
+      this.html.remove();
     }
     this.#initHtml();
     this.#attachComponentHtml();

@@ -35,26 +35,26 @@ export class AutoCompleteWidget extends HTMLComponent implements IWidget {
     this.html.append(listHtml)
 
     var isMatch = this.autocompleteHandler.enableMatch(
-      this.startClassVal,
-      this.objectPropVal,
-      this.endClassVal
+      this.startClassVal.type,
+      this.objectPropVal.type,
+      this.endClassVal.type
     );
 
     let options = {
       // ajaxSettings: {crossDomain: true, type: 'GET'} ,
       url: function (phrase: any) {
         return this.autocompleteHandler.autocompleteUrl(
-          this.startClassVal,
-          this.objectPropVal,
-          this.endClassVal,
+          this.startClassVal.type,
+          this.objectPropVal.type,
+          this.endClassVal.type,
           phrase
         );
       },
       listLocation: function (data: any) {
         return this.autocompleteHandler.listLocation(
-          this.startClassVal,
-          this.objectPropVal,
-          this.endClassVal,
+          this.startClassVal.type,
+          this.objectPropVal.type,
+          this.endClassVal.type,
           data
         );
       },
@@ -94,7 +94,7 @@ export class AutoCompleteWidget extends HTMLComponent implements IWidget {
           listHtml
             .val(autocompleteValue.uri)
             .trigger("change");
-            this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:autocompleteValue}))
+            this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:autocompleteValue}))
         },
       },
       requestDelay: 400,
@@ -185,30 +185,31 @@ export class ListWidget extends HTMLComponent implements IWidget {
             this.selectHtml.append($("<option value='" + uri + "'>" + label + "</option>"))
           });
           if(items.length < 20){
-              items.niceSelect();
-              items.on('change',function(){
-                let val = items.val()
+              this.selectHtml.niceSelect();
+              this.selectHtml.on('change',(e:Event)=>{
+                let option = (e.currentTarget as HTMLSelectElement).selectedOptions
+                if(option.length > 1) throw Error('List widget should allow only for one el to be selected!')
                 let listWidgetValue = {
-                  key: val,
-                  label: this.listHandler.elementLabel(val),
-                  uri: val
+                  key: option[0].value,
+                  label: option[0].label,
+                  uri: option[0].value
                 }
-                this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:listWidgetValue}))
+                this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:listWidgetValue}))
               })
 
           } else {
-            items.map((i:any)=>{
-              i.select2()
-              i.on("select2:close", function (e:any) {
-                let val = $(e.currentTarget).val();
-                let listWidgetValue = {
-                  key: val,
-                  label: this.listHandler.elementLabel(val),
-                  uri: val
-                }
-                this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:listWidgetValue}))
+            this.selectHtml = this.selectHtml.select2()
+            this.selectHtml.on("select2:close",  (e:any) =>{
+              let option = (e.currentTarget as HTMLSelectElement).selectedOptions
+              if(option.length > 1) throw Error('List widget should allow only for one el to be selected!')
+              let listWidgetValue = {
+                key: option[0].value,
+                label: option[0].label,
+                uri: option[0].value
+              }
+                this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:listWidgetValue}))
               });
-            })
+
           }
         } else {
           this.html.append(noItemsHtml)
@@ -391,9 +392,9 @@ export class DatesWidget extends HTMLComponent implements IWidget {
 
     $.ajax({
       url: this.datesHandler.datesUrl(
-        this.startClassVal,
-        this.objectPropVal,
-        this.endClassVal,
+        this.startClassVal.type,
+        this.objectPropVal.type,
+        this.endClassVal.type,
         phrase
       ),
       async: false,
@@ -466,7 +467,7 @@ export class DatesWidget extends HTMLComponent implements IWidget {
       stop: this.inputEnd.val().toString()
     }
     val = this.#validateDateInput(val)
-    this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:val}))
+    this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:val}))
   }
   //TODO: add dialog response to user if dateinput doesn't make sense
   #validateDateInput(value:{start:string,stop:string}){
@@ -581,7 +582,7 @@ export class TimeDatePickerWidget extends HTMLComponent implements IWidget {
       stop: this.inputEnd.datepicker('getDate'),
     }
     this.value = this.#validateInput(val)
-    this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:this.value}))
+    this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:this.value}))
   }
   //TODO add dialog for user if input is unreasonable
   #validateInput(val:{start:Date,stop:Date}){
@@ -690,7 +691,7 @@ export class SearchWidget extends HTMLComponent implements IWidget {
       search:this.searchInput.val().toString()
     }
     this.value = this.#validateInput(searchWidgetValue)
-    this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:this.value}))
+    this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:this.value}))
   }
 
   //TODO add dialog for input sanitation
@@ -722,7 +723,7 @@ export class BooleanWidget extends HTMLComponent implements IWidget {
         label:getSettings().langSearch.true,
         boolean: true
       }
-      this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:this.value}))
+      this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:this.value}))
     })
 
     falseSpan[0].addEventListener('click',(e)=>{
@@ -731,7 +732,7 @@ export class BooleanWidget extends HTMLComponent implements IWidget {
         label:getSettings().langSearch.false,
         boolean: false
       }
-      this.html[0].dispatchEvent(new CustomEvent('widgetValueSelected',{bubbles:true,detail:this.value}))
+      this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:this.value}))
     })
     return this
   }

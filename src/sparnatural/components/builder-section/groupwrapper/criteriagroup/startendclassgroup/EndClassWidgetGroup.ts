@@ -66,7 +66,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.#addEventListener()
       this.addWidgetValueBtn.html.remove();
       this.html[0].dispatchEvent(
-        new CustomEvent("renderWidgetWrapper", { bubbles: true })
+        new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{NrOfSelValues:this.selectedValues.length} })
       );
     }
     this.html[0].dispatchEvent(
@@ -129,7 +129,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
   // when more values should be added then render the inputypecomponent again
   #addMoreValues = () => {
     this.html[0].dispatchEvent(
-      new CustomEvent("renderWidgetWrapper", { bubbles: true })
+      new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{NrOfSelValues:this.selectedValues.length} })
     );
     this.#addEventListener();
   };

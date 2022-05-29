@@ -35,7 +35,7 @@ class EditComponents extends HTMLComponent {
     render(): this {
       super.render()
 
-      this.renderWidgetsWrapper()
+      this.renderWidgetsWrapper(true)
 
       let widgetType = this.widgetWrapper.getWidgetType()
       if(Object.values(this.RENDER_WHERE).includes(widgetType)){
@@ -48,14 +48,15 @@ class EditComponents extends HTMLComponent {
       this.#addEventListeners()
         return this
     }
-    renderWidgetsWrapper(){
+    renderWidgetsWrapper(add_all:boolean){
       super.render()
       this.widgetWrapper = new WidgetWrapper(
         this,
         this.specProvider,
         this.startClassVal,
         this.objectPropVal,
-        this.endClassVal
+        this.endClassVal,
+        add_all
       ).render();
     }
     
@@ -65,13 +66,6 @@ class EditComponents extends HTMLComponent {
             e.stopImmediatePropagation()
             this.#onSelectAll();
         });
-        this.html[0].addEventListener('onChange',(e:CustomEvent)=>{
-            e.stopImmediatePropagation()
-            if(e.detail == '' || !(e.detail)) throw Error('WidgetValueEvent got called but no widgetValue as payload received')
-            this.html[0].dispatchEvent(
-                new CustomEvent("renderWidgetVal", { bubbles: true, detail:e.detail })
-            );
-        })
     }
 
     #onSelectAll() {

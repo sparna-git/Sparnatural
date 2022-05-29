@@ -55,16 +55,25 @@ class EndClassGroup extends HTMLComponent {
     // when inputgot selected then we remove the where btn
     this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      this.editComponents.html.remove()
+      this.editComponents?.html?.empty()?.remove()
       this.editComponents = null
     });
 
     // when the addmorevaluesbtn is clicked then render the widgets again to select further values
     this.html[0].addEventListener("renderWidgetWrapper", (e: CustomEvent) => {
+      if(!('NrOfSelValues' in e.detail)) throw Error('renderWidgetWrapper expects boolean if add_all should be rendered')
       e.stopImmediatePropagation();
-      //we only need widgetswrapper
+      // remove: if add btn got clicked mutiple times or the old widgetwrapper is still rendered while the last selectedvalue got deleted 
+      this.html[0].dispatchEvent(new CustomEvent('removeEditComponents'))
+
       this.editComponents = new EditComponents(this,this.startClassVal,this.objectPropVal,this.endClassVal,this.specProvider)
-      this.editComponents.renderWidgetsWrapper()
+      if(e.detail.NrOfSelValues === 0) {
+        // Render WidgetsWrapper and ActionWhere
+        this.editComponents.render()
+      } else {
+        //we only need widgetswrapper
+        this.editComponents.renderWidgetsWrapper(false)
+      }
     });
 
     // when the addmorevaluesbtn is clicked then render the widgets again to select further values

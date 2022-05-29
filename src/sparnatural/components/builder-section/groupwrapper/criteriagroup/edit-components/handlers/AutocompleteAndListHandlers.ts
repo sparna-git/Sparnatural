@@ -76,7 +76,7 @@ abstract class AbstractSparqlAutocompleteHandler extends Handler {
  * Handles a list widget based on a provided SPARQL query in which
  * $domain, $property and $range will be replaced by actual values.
  **/
-class SparqlTemplateListHandler extends AbstractSparqlListHandler {
+export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
   queryString: any;
   constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, queryString: any) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
@@ -105,7 +105,7 @@ class SparqlTemplateListHandler extends AbstractSparqlListHandler {
  * Handles a list widget based on a provided SPARQL query in which
  * $domain, $property and $range will be replaced by actual values.
  **/
-class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteHandler {
+export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteHandler {
 
 
   queryString: any;
@@ -133,7 +133,7 @@ class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteHandle
   }
 }
 
-class SimpleSparqlAutocompleteAndListHandler extends Handler {
+export class SimpleSparqlAutocompleteAndListHandler extends Handler {
   constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, searchPath: any) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
   }
@@ -238,7 +238,7 @@ ORDER BY ?label
   }
 }
 
-class UriOnlyListHandler extends Handler {
+export class UriOnlyListHandler extends Handler {
   constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any) {
     super(sparqlEndpointUrl, sparqlPostprocessor, null, null);
   }
@@ -269,7 +269,7 @@ ORDER BY DESC(?count)
   }
 }
 
-class SparqlBifContainsAutocompleteAndListHandler extends Handler {
+export class SparqlBifContainsAutocompleteAndListHandler extends Handler {
   constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, searchPath: any) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
   }
@@ -303,7 +303,7 @@ ORDER BY ?label
  * Takes as input the name of the connector, the field to search on, and the property to read to display
  * TODO : the property to display should come from the snippet
  **/
-class GraphDbLuceneConnectorSparqlAutocompleteAndListHandler extends Handler {
+export class GraphDbLuceneConnectorSparqlAutocompleteAndListHandler extends Handler {
   connectorName: any;
   fieldName: any;
   /**
@@ -348,7 +348,7 @@ ORDER BY ?label
   }
 }
 
-class WikidataAutocompleteAndListHandler extends Handler {
+export class WikidataAutocompleteAndListHandler extends Handler {
   constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language,null);
   }
@@ -432,7 +432,7 @@ ORDER BY ?uriLabel
 
 }
 
-class RangeBasedAutocompleteAndListHandler {
+export class RangeBasedAutocompleteAndListHandler {
   defaultHandler: any;
   handlerByKeyMap: any;
   constructor(defaultHandler: any, handlerByKeyMap: any) {
@@ -493,7 +493,7 @@ class RangeBasedAutocompleteAndListHandler {
   }
 }
 
-class PropertyBasedAutocompleteAndListHandler extends RangeBasedAutocompleteAndListHandler {
+export class PropertyBasedAutocompleteAndListHandler extends RangeBasedAutocompleteAndListHandler {
   constructor(defaultHandler: any, handlerByKeyMap: any) {
     super(defaultHandler, handlerByKeyMap);
   }
@@ -507,18 +507,3 @@ class PropertyBasedAutocompleteAndListHandler extends RangeBasedAutocompleteAndL
   }
 }
 
-module.exports = {
-  SparqlBifContainsAutocompleteAndListHandler:
-    SparqlBifContainsAutocompleteAndListHandler,
-  SimpleSparqlAutocompleteAndListHandler:
-    SimpleSparqlAutocompleteAndListHandler,
-  UriOnlyListHandler: UriOnlyListHandler,
-  RangeBasedAutocompleteAndListHandler: RangeBasedAutocompleteAndListHandler,
-  PropertyBasedAutocompleteAndListHandler:
-    PropertyBasedAutocompleteAndListHandler,
-  WikidataAutocompleteAndListHandler: WikidataAutocompleteAndListHandler,
-  GraphDbLuceneConnectorSparqlAutocompleteAndListHandler:
-    GraphDbLuceneConnectorSparqlAutocompleteAndListHandler,
-  SparqlTemplateListHandler: SparqlTemplateListHandler,
-  SparqlTemplateAutocompleteHandler: SparqlTemplateAutocompleteHandler,
-};

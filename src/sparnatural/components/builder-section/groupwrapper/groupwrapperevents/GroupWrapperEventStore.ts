@@ -1,8 +1,10 @@
 import { OptionTypes } from "../criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../GroupWrapper";
-import { addAndComponent } from "./events/addAndComponent";
-import { addWhereComponent } from "./events/addWhereComponent";
+import { addAndComponent } from "./events/AddAndComponent";
+import { addWhereComponent } from "./events/AddWhereComponent";
+
 import { completeGrpInput } from "./events/CompleteGrpInput";
+import { inCompleteGrpInput } from "./events/InCompleteGrpInput";
 import { removeEndClass } from "./events/RemoveEndClass";
 import { removeGrpWrapper } from "./events/RemoveGrpWrapper";
 import { triggerOption } from "./events/TriggerOption";
@@ -18,6 +20,10 @@ export default class GroupWrapperEventStore{
         this.grpWrapper.html[0].addEventListener("onGrpInputCompleted", (e: CustomEvent) => {
           e.stopImmediatePropagation();
           completeGrpInput(this.grpWrapper)
+        });
+        this.grpWrapper.html[0].addEventListener("onGrpInputNotCompleted", (e: CustomEvent) => {
+          e.stopImmediatePropagation();
+          inCompleteGrpInput(this.grpWrapper)
         });
         this.grpWrapper.html[0].addEventListener("onRemoveEndClass", (e: CustomEvent) => {
           e.stopImmediatePropagation();

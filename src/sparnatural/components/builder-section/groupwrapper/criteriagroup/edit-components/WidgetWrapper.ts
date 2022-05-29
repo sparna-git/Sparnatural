@@ -13,23 +13,20 @@ import {
   TimeDatePickerWidget,
   //TreeWidget,
 } from "./Widgets";
-import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import { EndClassWidgetGroup } from "../startendclassgroup/EndClassWidgetGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./IWidget";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import EditComponents from "./EditComponents";
+import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "./handlers/AutocompleteAndListHandlers";
 
 /**
  *  creates the corresponding widget
  **/
 class WidgetWrapper extends HTMLComponent {
-  ParentComponent: EndClassWidgetGroup;
-  GrandParent: EndClassGroup;
   settings: ISettings;
   widgetType: Config
   objectPropertype: string;
-  rangeClassId: any;
+  rangeClassId: string;
   classLabel: string;
   widgetComponent: IWidget;
   widgetVal: ListWidgetValue | DateValue | AutocompleteValue
@@ -37,40 +34,39 @@ class WidgetWrapper extends HTMLComponent {
   objectPropVal: SelectedVal;
   startClassVal: SelectedVal;
   endClassVal: SelectedVal;
+  add_or:boolean
+  add_all = true; // render only when widgets allows it AND no widgetvalue is already selected
 
   constructor(
     ParentComponent: EditComponents,
     specProvider: ISpecProvider,
     startClassVal:SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    endClassVal: SelectedVal,
+    add_all:boolean //if the add_all option should be rendered
   ) {
     super("WidgetWrapper", ParentComponent, null);
-    this.GrandParent = ParentComponent.ParentComponent as EndClassGroup;
     this.specProvider = specProvider;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
+    this.add_all=add_all
   }
 
   render() {
     super.render();
-    this.#addValueSelectedListener()
-
     this.widgetHtml = null;
     this.objectPropertype = this.objectPropVal.type; // shows which objectproperty got chosen for which subject object combination
 
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropertype
     );
-    this.rangeClassId = this.GrandParent.endClassVal.type;
+    this.rangeClassId = this.endClassVal.type;
     this.classLabel = this.specProvider.getLabel(this.rangeClassId);
     let endLabel: string;
-    let add_all = true;
-    let add_or = true;
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-      if (this.specProvider.isLiteralClass(this.GrandParent.endClassVal.type)) {
+      if (this.specProvider.isLiteralClass(this.endClassVal.type)) {
         //this.GrandParent.initCompleted();
 
         //Add variable on results view
@@ -78,13 +74,13 @@ class WidgetWrapper extends HTMLComponent {
         if (!this.GrandParent.notSelectForview) {
           this.GrandParent.onchangeViewVariable();
         }*/
-        add_all = false;
+        this.add_all = false;
         this.html[0].dispatchEvent(
           new CustomEvent("initGeneralEvent", { bubbles: true })
         );
       }
       //var endLabel = null ; //Imporant is this still necessary?
-      add_or = false;
+      this.add_or = false;
 
       //return true;
     } else {
@@ -115,11 +111,10 @@ class WidgetWrapper extends HTMLComponent {
     }
 
     //Ajout de l'option all si pas de valeur déjà selectionées
-    var selcetAll = "";
-    // explain this if
-    if (this.ParentComponent.selectedValues?.length == 0) {
-      if (add_all) {
-        selcetAll =
+    var selectAll = "";
+
+      if (this.add_all) {
+        selectAll =
           '<span class="selectAll"><span class="underline">' +
           this.settings.langSearch.SelectAllValues +
           "</span>" +
@@ -127,15 +122,15 @@ class WidgetWrapper extends HTMLComponent {
           "</span>";
 
       }
-      if (add_all && add_or) {
-        selcetAll +=
+      if (this.add_all && this.add_or) {
+        selectAll +=
           '<span class="or">' + this.settings.langSearch.Or + "</span> ";
       }
-    }
+
 
     var widgetLabel =
       '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>' +
-      selcetAll;
+      selectAll;
 
     if (endLabel) {
       widgetLabel += "<span>" + endLabel + "</span>";
@@ -169,7 +164,7 @@ class WidgetWrapper extends HTMLComponent {
   canHaveSelectAll() {
     if (
       this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
-      this.specProvider.isLiteralClass(this.GrandParent.endClassVal.type)
+      this.specProvider.isLiteralClass(this.endClassVal.type)
     ) {
       return false;
     }
@@ -535,19 +530,8 @@ class WidgetWrapper extends HTMLComponent {
     }
   }
 
-  #addValueSelectedListener(){
-    this.html[0].addEventListener('widgetValueSelected',(e:CustomEvent)=>{
-      if(e.detail == '' || !(e.detail)) throw Error('WidgetValueEvent got called but no widgetValue as payload received')
-      this.widgetVal = e.detail 
-      this.ParentComponent.html[0].dispatchEvent(new CustomEvent('onChange',{bubbles:true,detail:this.widgetVal}))
-    })
-  }
-
   getWidgetType(){
     return this.widgetType
-  }
-  getValue() {
-    return this.widgetVal
   }
 }
 
