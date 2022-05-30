@@ -1,4 +1,5 @@
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
+import DraggableComponent from "../../components/variables-section/variableorder/DraggableComponent";
 import ActionStore from "../ActionStore";
 
 /*
@@ -20,7 +21,12 @@ export default function updateVarName(
         if(endGrp.getVarName() === sparqlVar) endGrp.setVarName(newSparqlVar)
       }
     );
+    //add variables list in actionstor
+    actionStore.variables = this.sparnatural.VariableSelection.variableOrderMenu.draggables.map((d: DraggableComponent)=>{
+      return d.varName
+    })
     actionStore.sparnatural.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent")
     );
+
   }

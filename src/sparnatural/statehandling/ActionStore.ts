@@ -7,6 +7,7 @@ import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
 import initGeneralevent from "./actions/InitGeneralEvent";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
+import DraggableComponent from "../components/variables-section/variableorder/DraggableComponent";
 
 // This is ugly, should use i18n features instead
 const i18nLabels = {
@@ -22,7 +23,7 @@ class ActionStore {
   sparnatural: Sparnatural;
   specProvider: any;
   order: Order;
-  variables: Array<SelectedVal>
+  variables: Array<string>
   distinct = true // default
   language = Language.EN //default
   
@@ -58,6 +59,9 @@ class ActionStore {
       if(!('type' in e.detail && 'variable' in e.detail)) throw Error('onSelectViewVar expects value of type SelectedVal')
       e.stopImmediatePropagation();
       this.sparnatural.VariableSelection.variableOrderMenu.addDraggableComponent(e.detail)
+      this.variables = this.sparnatural.VariableSelection.variableOrderMenu.draggables.map((d:DraggableComponent)=>{
+        return d.varName
+      })
     });
 
     this.sparnatural.html[0].addEventListener("onSubmit", (e) => {

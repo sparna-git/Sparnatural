@@ -23,7 +23,7 @@ export interface Branch {
 
 export interface ISparJson {
     distinct: boolean,
-    variables: Array<SelectedVal>,
+    variables: Array<string>,
     lang: Language,
     order: Order
     branches:Array<Branch>
