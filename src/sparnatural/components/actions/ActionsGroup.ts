@@ -1,6 +1,5 @@
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import ActionAnd from "./actioncomponents/ActionAnd";
-
 import CriteriaGroup from "../builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import HTMLComponent from "../HtmlComponent";
 import { getSettings } from "../../../configs/client-configs/settings";
@@ -29,7 +28,7 @@ class ActionsGroup extends HTMLComponent {
   
 
   onObjectPropertyGroupSelected() {
-    if(this.checkIfMaxDepthIsReached()){
+    if(!(this.maxDepthIsReached())){
       this.actions = {
         ActionAnd: new ActionAnd(this, this.#onAddAnd).render(),
       };
@@ -57,7 +56,7 @@ class ActionsGroup extends HTMLComponent {
       );
   }
 
-  checkIfMaxDepthIsReached() {
+  maxDepthIsReached() {
     let maxreached = false;
     this.html[0].dispatchEvent(
       new CustomEvent("getMaxVarIndex", {

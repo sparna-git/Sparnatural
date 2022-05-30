@@ -680,7 +680,7 @@ export class SearchWidget extends HTMLComponent implements IWidget {
     super.render()
     this.searchInput = $(`<input />`)
     this.html.append(this.searchInput)
-    this.addValueBtn = new AddUserInputBtn(this,this.#addValueBtnClicked)
+    this.addValueBtn = new AddUserInputBtn(this,this.#addValueBtnClicked).render()
     return this
   }
   #addValueBtnClicked = () =>{
