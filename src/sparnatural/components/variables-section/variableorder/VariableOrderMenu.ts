@@ -65,7 +65,9 @@ class VariableOrderMenu extends HTMLComponent {
           // Called when dragging element changes position
           onEnd: function (/**Event*/ evt:SortableEvent) {
               this.displayVariableList = this.toArray()
-            that.#updateVariableList();
+              let fromIndex = evt.oldDraggableIndex
+              let toIndex = evt.newDraggableIndex
+            that.#updateVariableList(fromIndex,toIndex);
             // same properties as onEnd
             var width = $(".sortableItem").first().width();
             $(".variablesOrdersSelect").width(width);
@@ -84,8 +86,10 @@ class VariableOrderMenu extends HTMLComponent {
   }
 
 
-  #updateVariableList() {
-   
+  #updateVariableList(oldIndex:number,newIndex:number) {
+    let tmp = this.draggables[oldIndex]
+    this.draggables.splice(oldIndex,1)
+    this.draggables.splice(newIndex,0,tmp)
   }
 }
 
