@@ -29,28 +29,11 @@ class GroupWrapper extends HTMLComponent {
 
   render(): this {
     super.render();
-    // disable further links when max depth is reached
-    //TODO: does this still work????
-    if (!this.checkIfMaxDepthIsReached()) {
-      this.html.addClass("addWereEnable");
-    }
     this.groupWrapperEventStore = new GroupWrapperEventStore(this)
     this.CriteriaGroup = this.CriteriaGroup.render();
     return this;
   }
-  checkIfMaxDepthIsReached() {
-    let maxreached = false;
-    this.html[0].dispatchEvent(
-      new CustomEvent("getMaxVarIndex", {
-        bubbles: true,
-        detail: (index: number) => {
-          //getting the value Sparnatural
-          if (index >= getSettings().maxDepth) maxreached = true;
-        },
-      })
-    );
-    return maxreached;
-  }
+
   // set back state
   setObjectPropertySelectedState() {
     let opVal = this.CriteriaGroup.ObjectPropertyGroup.objectPropVal;

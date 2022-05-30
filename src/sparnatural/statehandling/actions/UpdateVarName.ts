@@ -12,10 +12,12 @@ export default function updateVarName(
     // traversePreOrder through components and calculate background / linkAndBottoms /  for them
     actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
       (grpWrapper: GroupWrapper) => {
+        let sparqlVar = `?${oldName}`
+        let newSparqlVar = `?${newName}`
         let startGrp = grpWrapper.CriteriaGroup.StartClassGroup
-        let endGrp = grpWrapper.CriteriaGroup.EndClassGroup
-        if(startGrp.getVarName() === oldName) startGrp.setVarName(newName)
-        if(endGrp.getVarName() === oldName) endGrp.setVarName(newName)
+        let endGrp = grpWrapper.CriteriaGroup.EndClassGroup 
+        if(startGrp.getVarName() === sparqlVar) startGrp.setVarName(newSparqlVar)
+        if(endGrp.getVarName() === sparqlVar) endGrp.setVarName(newSparqlVar)
       }
     );
     actionStore.sparnatural.html[0].dispatchEvent(

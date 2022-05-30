@@ -3,6 +3,7 @@ import ActionAnd from "./actioncomponents/ActionAnd";
 
 import CriteriaGroup from "../builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import HTMLComponent from "../HtmlComponent";
+import { getSettings } from "../../../configs/client-configs/settings";
 
 /**
  	Groups all the actions on a line/criteria (AND / REMOVE / WHERE)
@@ -28,9 +29,11 @@ class ActionsGroup extends HTMLComponent {
   
 
   onObjectPropertyGroupSelected() {
-    this.actions = {
-      ActionAnd: new ActionAnd(this, this.#onAddAnd).render(),
-    };
+    if(this.checkIfMaxDepthIsReached()){
+      this.actions = {
+        ActionAnd: new ActionAnd(this, this.#onAddAnd).render(),
+      };
+    }
   }
 
   // This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
@@ -52,6 +55,20 @@ class ActionsGroup extends HTMLComponent {
       throw Error(
         `Didn't find ActionAnd Component. ActionAnd.html:${this.actions.ActionAnd.html}`
       );
+  }
+
+  checkIfMaxDepthIsReached() {
+    let maxreached = false;
+    this.html[0].dispatchEvent(
+      new CustomEvent("getMaxVarIndex", {
+        bubbles: true,
+        detail: (index: number) => {
+          //getting the value Sparnatural
+          if (index >= getSettings().maxDepth) maxreached = true;
+        },
+      })
+    );
+    return maxreached;
   }
 }
 export default ActionsGroup;
