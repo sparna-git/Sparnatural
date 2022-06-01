@@ -1,7 +1,9 @@
 
+@use 'sass:math';
 @use '../../mixins';
 @use '../../base';
 @use '../../themes';
+
 
 .EndClassWidgetValue {
     @include mixins.arrow-back-colors(themes.$custom-red-medium, #fff);
@@ -20,7 +22,7 @@
         margin: 0;
     }
     span.label-two-line {
-        line-height: base.$height-components-under / 2;
+        line-height: math.div(base.$height-components-under, 2);
         line-height: 21px;
     }
     max-width: 220px;
@@ -29,7 +31,6 @@
     p {
         line-height: 48px;
         height: 48px;
-        /*width: calc(100% - 15px);*/
         background: themes.$custom-red-medium;
         background-clip: padding-box;
         margin: 0;

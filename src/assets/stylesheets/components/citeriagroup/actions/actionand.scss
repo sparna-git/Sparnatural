@@ -1,5 +1,6 @@
 @use '../../../base';
 @use '../../../themes';
+@use 'sass:math';
 .ActionsGroup { // acts als hover div
     position: absolute;
     display: block;
@@ -13,8 +14,8 @@
     }
     .ActionAnd {
         display:none;
-        left: (base.$margin-children-li - 45) /2;
-        top: base.$margin-component / 2;
+        left: math.div(base.$margin-children-li - 45, 2);
+        top: math.div(base.$margin-component, 2);
         line-height: 46px;
         /*width: 46px;*/
         text-align: center;

@@ -1,6 +1,7 @@
 @use '../../themes';
 @use '../../base';
 @use '../../mixins';
+@use 'sass:math';
 
 .AddWidgetValueBtn {
     @include mixins.arrow-back-colors(themes.$custom-red-medium, #fff);
@@ -29,7 +30,7 @@
     }
     /* Not sure what this does */
     span.label-two-line {
-        line-height: base.$height-components-under / 2;
+        line-height: math.div(base.$height-components-under, 2);
         line-height: 21px;
     }
 }
