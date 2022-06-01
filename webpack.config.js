@@ -19,6 +19,7 @@ let multipleHtmlPlugins = htmlPageNames.map(name => {
 });
 
 module.exports = {
+  mode:'development',
   entry: [ "./src/yasgui/YasguiComponent.ts","./src/sparnatural.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
@@ -76,6 +77,13 @@ module.exports = {
     ]
   },
   resolve: {
+	fallback:{
+		"util": require.resolve('util/'),
+		"buffer": require.resolve('buffer/'),
+		"stream": require.resolve("stream-browserify"),
+		"querystring": require.resolve("querystring-es3"),
+		"url": require.resolve("url/")
+	},
     extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
@@ -95,9 +103,11 @@ module.exports = {
 	  filename: "sparnatural.css",
 	  chunkFilename: "[id].css"
 	}),
-	new CopyPlugin([
-      { from: 'static' }
-    ]),
+	new CopyPlugin({
+	  patterns: [
+		{from:'static', to: './dist'}
+	  ]
+	}),
 	new DashboardPlugin(),
 	// so that JQuery is automatically inserted
 	new webpack.ProvidePlugin({
@@ -115,13 +125,14 @@ module.exports = {
 
   ],
 	devServer: {
-	  contentBase: path.resolve(__dirname, "./dist"),
-	  historyApiFallback: true,
-	  inline: true,
-	  open: true,
-	  hot: true
+	static:{
+		directory: path.resolve(__dirname, "./dist"),
+	},
+	historyApiFallback: true,
+	open: true,
+	hot: true
 	},
   /* terrible, generates huge output files */
 	/* devtool: "eval-source-map" */
-  devtool: "source-map"
+  devtool: "eval-cheap-source-map"
 }
