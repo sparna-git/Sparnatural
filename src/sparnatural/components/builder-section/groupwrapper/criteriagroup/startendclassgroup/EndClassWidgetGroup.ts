@@ -5,7 +5,7 @@ import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import HTMLComponent from "../../../../HtmlComponent";
 import AddWidgetValueBtn from "../../../../buttons/AddWidgetValueBtn";
-import { IWidget, SelectAllValue} from "../edit-components/IWidget";
+import { IWidget, SelectAllValue} from "../edit-components/widgets/IWidget";
 
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;

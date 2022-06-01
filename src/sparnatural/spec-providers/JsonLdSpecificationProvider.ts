@@ -1,6 +1,7 @@
 import Datasources from "../../configs/fixed-configs/SparnaturalConfigDatasources";
 import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
 import ISpecProvider from "./ISpecProviders";
+import WidgetWrapper from "../components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 
 interface IDataSources {
   queryString: string;
@@ -11,6 +12,22 @@ interface IDataSources {
   childrenProperty: any;
   sparqlEndpointUrl: any;
   noSort: any;
+}
+
+enum WIDGETSTYPES {
+  "sparnatural:AutocompleteProperty",
+  "sparnatural:ListProperty",
+  "sparnatural:LiteralListProperty",
+  "sparnatural:SearchProperty",
+  "sparnatural:StringEqualsProperty",
+  "sparnatural:GraphDBSearchProperty",
+  "sparnatural:TimeProperty-Year",
+  "sparnatural:TimeProperty-Date",
+  "sparnatural:TimeProperty-Period",
+  "sparnatural:NonSelectableProperty",
+  "sparnatural:BooleanProperty",
+  "sparnatural:TreeProperty",
+  "sparnatural:MapProperty"
 }
 
 export default class JsonLdSpecificationProvider implements ISpecProvider {
@@ -32,22 +49,10 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
     for (var i in superProperties) {
       var value = superProperties[i];
 
-      if (
-        value == "sparnatural:AutocompleteProperty" ||
-        value == "sparnatural:ListProperty" ||
-        value == "sparnatural:LiteralListProperty" ||
-        value == "sparnatural:SearchProperty" ||
-        value == "sparnatural:StringEqualsProperty" ||
-        value == "sparnatural:GraphDBSearchProperty" ||
-        value == "sparnatural:TimeProperty-Year" ||
-        value == "sparnatural:TimeProperty-Date" ||
-        value == "sparnatural:TimeProperty-Period" ||
-        value == "sparnatural:NonSelectableProperty" ||
-        value == "sparnatural:BooleanProperty" ||
-        value == "sparnatural:TreeProperty"
-      ) {
+      if (value in WIDGETSTYPES) {
         return this._expand(value);
       }
+      throw Error(`Couldn't find object property type for ${value}. Make sure there is a Widget for this object property type!`)
     }
   };
 
@@ -471,6 +476,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
         return anEntry;
       }
     }
+    console.warn(`Couldn't find an entry with id: ${id}`)
     return null;
   };
 

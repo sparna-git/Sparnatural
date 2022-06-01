@@ -75,7 +75,6 @@ class StartClassGroup extends HTMLComponent {
     */
 
     if (desc) {
-      console.warn("StartClassGroup.valueSelected desc hapene!");
       // tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
       var tippySettings = Object.assign({}, this.settings.tooltipConfig);
       tippySettings.placement = "top-start";

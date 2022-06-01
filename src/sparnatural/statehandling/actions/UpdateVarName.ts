@@ -22,7 +22,7 @@ export default function updateVarName(
       }
     );
     //add variables list in actionstor
-    actionStore.variables = this.sparnatural.VariableSelection.variableOrderMenu.draggables.map((d: DraggableComponent)=>{
+    actionStore.variables = actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.map((d: DraggableComponent)=>{
       return d.varName
     })
     actionStore.sparnatural.html[0].dispatchEvent(

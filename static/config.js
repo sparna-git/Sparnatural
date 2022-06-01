@@ -62,6 +62,19 @@ const config = {
       faIcon: "fas fa-globe-africa",
     },
     {
+      "@id": "http://dbpedia.org/ontology/Tree",
+      "@type": "Class",
+      label: [
+        { "@value": "Tree", "@language": "en" },
+        { "@value": "Arbre", "@language": "fr" },
+      ],
+      tooltip: [
+        { "@value": "en", "@language": "en" },
+        { "@value": "fr", "@language": "fr" },
+      ],
+      faIcon: "fab fa-pagelines",
+    },
+    {
       "@id": "http://dbpedia.org/ontology/Artwork",
       "@type": "Class",
       label: [
@@ -145,6 +158,17 @@ const config = {
       faIcon: "fas fa-palette",
     },
     {
+      "@id":"http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
+      "@type": "Class",
+      subClassOf: "http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing",
+      label: [
+        { "@value": "Area", "@language": "en" },
+        { "@value": "Région", "@language": "fr" },
+      ],
+      faIcon: "fas fa-map-marked-alt",
+      
+    },
+    {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text",
       "@type": "Class",
       subClassOf: "http://www.w3.org/2000/01/rdf-schema#Literal",
@@ -190,6 +214,32 @@ const config = {
       domain: "http://dbpedia.org/ontology/Country",
       range: "http://dbpedia.org/ontology/Museum",
       sparqlString: "^<http://dbpedia.org/ontology/country>",
+    },
+    {
+      "@id":
+        "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#withinArea",
+      "@type": "ObjectProperty",
+      subPropertyOf: "sparnatural:MapProperty",
+      label: [
+        { "@value": "withinArea", "@language": "en" },
+        { "@value": "dans la zone", "@language": "fr" },
+      ],
+      domain: "http://dbpedia.org/ontology/Tree",
+      range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
+      sparqlString: "<http://dbpedia.org/ontology/withinArea>",
+    },
+    {
+      "@id":
+        "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#outsideArea",
+      "@type": "ObjectProperty",
+      subPropertyOf: "sparnatural:MapProperty",
+      label: [
+        { "@value": "outsideArea", "@language": "en" },
+        { "@value": "dehors de la zone", "@language": "fr" },
+      ],
+      domain: "http://dbpedia.org/ontology/Tree",
+      range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
+      sparqlString: "<http://dbpedia.org/ontology/outsideArea>",
     },
     {
       "@id": "http://dbpedia.org/ontology/museum",

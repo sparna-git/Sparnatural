@@ -12,12 +12,13 @@ import {
   SearchWidget,
   TimeDatePickerWidget,
   //TreeWidget,
-} from "./Widgets";
+} from "./widgets/Widgets";
 import HTMLComponent from "../../../../HtmlComponent";
-import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./IWidget";
+import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./widgets/IWidget";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import EditComponents from "./EditComponents";
 import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "./handlers/AutocompleteAndListHandlers";
+import MapWidget from "./widgets/MapWidget";
 
 /**
  *  creates the corresponding widget
@@ -494,7 +495,8 @@ class WidgetWrapper extends HTMLComponent {
         );*/
         return new NoWidget(this)
 
-        break;
+      case Config.Map_PROPERTY:
+        return new MapWidget(this).render()
       default:
         throw new Error(`WidgetType for ${widgetType} not recognized`)
     }

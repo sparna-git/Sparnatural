@@ -72,12 +72,12 @@ export class AbstractValue {
         label: v.label,
         uri: v.uri,
       };
-    } else if (v.fromDate || v.toDate) {
+    } else if (v.start || v.end) {
       return {
-        key: v.fromDate + " " + v.toDate,
+        key: v.start + " " + v.end,
         label: v.label,
-        start: v.fromDate,
-        stop: v.toDate,
+        start: v.start,
+        stop: v.end,
       };
     } else if (v.literal) {
       return {
@@ -133,10 +133,10 @@ export class LiteralValue extends AbstractValue {
 }
 
 export class DateTimeValue extends AbstractValue {
-  constructor(fromDate, toDate, label = null) {
+  constructor(start, end, label = null) {
     super(label);
-    this.fromDate = fromDate;
-    this.toDate = toDate;
+    this.start = start;
+    this.end = end;
   }
 }
 
@@ -409,7 +409,7 @@ export class QuerySPARQLWriter {
         // if we are on a date criteria
         if (
           queryLine.values.length == 1 &&
-          (queryLine.values[0].fromDate || queryLine.values[0].toDate)
+          (queryLine.values[0].start || queryLine.values[0].stop)
         ) {
           var exactDateProp = this.specProvider.getExactDateProperty(
             queryLine.p
@@ -426,9 +426,9 @@ export class QuerySPARQLWriter {
             // objectVariable,
             queryLine.o,
             // startDate,
-            queryLine.values[0].fromDate,
+            queryLine.values[0].start,
             // endDate
-            queryLine.values[0].toDate
+            queryLine.values[0].end
           );
           bitsOfQuery.forEach((element) => parentInSparqlQuery.push(element));
         }
@@ -536,12 +536,12 @@ export class QuerySPARQLWriter {
         // if we have a date criteria
         if (
           queryLine.values.length == 1 &&
-          (queryLine.values[0].fromDate || queryLine.values[0].toDate)
+          (queryLine.values[0].start || queryLine.values[0].end)
         ) {
           parentInSparqlQuery.push(
             this._initFilterTime(
-              queryLine.values[0].fromDate,
-              queryLine.values[0].toDate,
+              queryLine.values[0].start,
+              queryLine.values[0].end,
               queryLine.o
             )
           );

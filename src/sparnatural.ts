@@ -11,11 +11,13 @@ require("tippy.js/dist/tippy.css");
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
 import Sparnatural from "./sparnatural/components/Sparnatural";
 
+
 /*
   This is the SparNatural HTMLElement. 
   e.g. Interface to the outside world
   Used to configure the Settings
 */
+import config from '../static/config'
 export class SparNatural extends HTMLElement {
   Sparnatural = new Sparnatural();
   specProvider: any;
@@ -23,6 +25,11 @@ export class SparNatural extends HTMLElement {
   components: any = [];
   constructor() {
     super();
+    this.setSettings({config:config})
+  }
+  //gets called when the component was rendered
+  connectedCallback(){
+    this.initSparnatural()
   }
   // Used by calling Calling component to set or get the settings.
   // e.g index.html can overwride default settings

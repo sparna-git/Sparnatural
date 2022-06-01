@@ -13,6 +13,7 @@ export enum Config {
   NON_SELECTABLE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" + "NonSelectableProperty",
   BOOLEAN_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" + "BooleanProperty",
   TREE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" + "TreeProperty",
+  Map_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" + "MapProperty",
 
   SPARQL_STRING = "http://data.sparna.fr/ontologies/sparnatural-config-core#" + "sparqlString",
   ICON = "http://data.sparna.fr/ontologies/sparnatural-config-core#" + "icon",
@@ -33,3 +34,4 @@ export enum Config {
   NOT_INSTANTIATED_CLASS = "http://data.sparna.fr/ontologies/sparnatural-config-core#" + "NotInstantiatedClass",
   RDFS_LITERAL = "http://www.w3.org/2000/01/rdf-schema#Literal",
 }
+

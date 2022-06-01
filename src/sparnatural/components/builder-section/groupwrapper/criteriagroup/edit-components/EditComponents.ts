@@ -5,7 +5,7 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import ActionWhere from "../../../../actions/actioncomponents/ActionWhere";
 import HTMLComponent from "../../../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import { SelectAllValue } from "./IWidget";
+import { SelectAllValue } from "./widgets/IWidget";
 import WidgetWrapper from "./WidgetWrapper";
 
 

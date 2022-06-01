@@ -3,9 +3,9 @@ import HTMLComponent from "../HtmlComponent";
 
 class AddUserInputBtn extends HTMLComponent {
     callBack: () => void;
-    constructor(parentComponent:HTMLComponent, callBack: () => void){
+    constructor(parentComponent:HTMLComponent,btnText:string, callBack: () => void){
         let widgetHtml = $(`<button class="button-add">
-        ${getSettings().langSearch.ButtonAdd}
+        ${btnText}
         </button>`)
         super('AddUserInputBtn',parentComponent,widgetHtml)
         this.callBack = callBack

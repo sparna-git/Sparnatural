@@ -31,6 +31,11 @@ export interface DateValue {
   toDate: Date
 }
 
+export interface MapValue{
+  label:string
+  coordinates:Array<any>
+}
+
 export interface DateTimePickerValue{
   key:string
   label:string
@@ -41,5 +46,5 @@ export interface DateTimePickerValue{
 export interface IWidget {
   html:JQuery<HTMLElement>
   render: ()=> any
-  value: ListWidgetValue | DateValue | AutocompleteValue | DateTimePickerValue | SearchWidgetValue | BooleanWidgetValue | SelectAllValue
+  value: ListWidgetValue | DateValue | AutocompleteValue | DateTimePickerValue | SearchWidgetValue | BooleanWidgetValue | SelectAllValue | MapValue
 }

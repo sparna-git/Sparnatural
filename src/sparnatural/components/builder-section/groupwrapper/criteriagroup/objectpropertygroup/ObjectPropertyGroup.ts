@@ -77,7 +77,6 @@ class ObjectPropertyGroup extends HTMLComponent {
     var desc = this.specProvider.getTooltip(this.objectPropVal.type);
 
     if (desc) {
-      console.warn("StartClassGroup.valueSelected desc hapene!");
       $(this.ParentCriteriaGroup.StartClassGroup.html)
         .find(".ClassTypeId")
         .attr("data-tippy-content", desc);

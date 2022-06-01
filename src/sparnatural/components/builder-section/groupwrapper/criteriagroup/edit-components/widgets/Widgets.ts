@@ -2,15 +2,15 @@ import "@chenfengyuan/datepicker";
 import "select2";
 import "select2/dist/css/select2.css";
 import tippy from "tippy.js";
-import ISettings from "../../../../../../configs/client-configs/ISettings";
-import LocalCacheData from "../../../../../datastorage/LocalCacheData";
+import ISettings from "../../../../../../../configs/client-configs/ISettings";
+import LocalCacheData from "../../../../../../datastorage/LocalCacheData";
 import { AutocompleteValue, BooleanWidgetValue, DateTimePickerValue, DateValue, IWidget, ListWidgetValue, SearchWidgetValue } from "./IWidget";
-import HTMLComponent from "../../../../HtmlComponent";
-import WidgetWrapper from "./WidgetWrapper";
-import { SelectedVal } from "../../../../../sparql/ISparJson";
-import { getSettings } from "../../../../../../configs/client-configs/settings";
-import AddUserInputBtn from "../../../../buttons/addUserInputBtn";
-import InfoBtn from "../../../../buttons/InfoBtn";
+import HTMLComponent from "../../../../../HtmlComponent";
+import WidgetWrapper from "../WidgetWrapper";
+import { SelectedVal } from "../../../../../../sparql/ISparJson";
+import { getSettings } from "../../../../../../../configs/client-configs/settings";
+import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
+import InfoBtn from "../../../../../buttons/InfoBtn";
 
 export class AutoCompleteWidget extends HTMLComponent implements IWidget {
   autocompleteHandler: any;
@@ -385,7 +385,7 @@ export class DatesWidget extends HTMLComponent implements IWidget {
     this.inputEnd = $(`<input id="input-start" placeholder="${getSettings().langSearch.TimeWidgetDateFrom}"/>`)
     this.inputValue= $(`<input id="input-value" type="hidden"/>`)
     this.html.append(this.input).append(this.inputStart).append(this.inputEnd).append(this.inputValue)
-    this.addWidgetValue = new AddUserInputBtn(this,this.#addValueBtnClicked).render()
+    this.addWidgetValue = new AddUserInputBtn(this,getSettings().langSearch.ButtonAdd,this.#addValueBtnClicked).render()
     var phrase = "";
     var data_json = null;
     var itc_obj = this.ParentComponent;
@@ -539,7 +539,7 @@ export class TimeDatePickerWidget extends HTMLComponent implements IWidget {
     this.html.append(this.inputStart).append(span).append(this.inputEnd).append(this.inputValue)
     let datatippy = (this.formatDate == 'day')?getSettings().langSearch.TimeWidgetDateHelp:getSettings().langSearch.TimeWidgetYearHelp
     this.infoBtn = new InfoBtn(this,datatippy).render()
-    this.addValueBtn = new AddUserInputBtn(this,this.#addValueBtnClicked).render()
+    this.addValueBtn = new AddUserInputBtn(this,getSettings().langSearch.ButtonAdd,this.#addValueBtnClicked).render()
 
     this.format =
       this.formatDate == "day"
@@ -680,7 +680,7 @@ export class SearchWidget extends HTMLComponent implements IWidget {
     super.render()
     this.searchInput = $(`<input />`)
     this.html.append(this.searchInput)
-    this.addValueBtn = new AddUserInputBtn(this,this.#addValueBtnClicked).render()
+    this.addValueBtn = new AddUserInputBtn(this,getSettings().langSearch.ButtonAdd,this.#addValueBtnClicked).render()
     return this
   }
   #addValueBtnClicked = () =>{

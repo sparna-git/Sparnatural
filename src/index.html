@@ -161,7 +161,7 @@
 
     <!-- Start Sparnatural stuff-->
     <script type="module">
-      import config from './config.js';
+      
       $.urlParam = function (name) {
         var results = new RegExp("[\\?&amp;]" + name + "=([^&amp;#]*)").exec(
           window.location.href
@@ -187,12 +187,13 @@
       let sparnatural = document.querySelector("spar-natural");
      
       // If you would like to overwride default settings
+      
+      import config from './config.js';
       let settings = {
-        config: config,
+        //config: config,
         currentTab: tab // link sparnatural with yasgui
       }
       sparnatural.setSettings(settings);
-      sparnatural.initSparnatural();
     </script>
   </body>
 </html>
