@@ -21,5 +21,5 @@ export function addWhereComponent(grpWrapper:GroupWrapper,endClassVal: SelectedV
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("initGeneralEvent", { bubbles: true })
   );
-  this.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{bubbles:true,detail:MaxVarAction.INCREASE}))
+  grpWrapper.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{bubbles:true,detail:MaxVarAction.INCREASE}))
 }
