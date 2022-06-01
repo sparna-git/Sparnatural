@@ -1,6 +1,5 @@
 import Sortable, { SortableEvent } from "sortablejs";
 import { SelectedVal } from "../../../sparql/ISparJson";
-
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
 import VariableSelection from "../VariableSelection";
@@ -81,11 +80,13 @@ class VariableOrderMenu extends HTMLComponent {
       dragbl.render()
       this.draggables.push(dragbl)
   }
+
+  // A variable name has been edited. Update it in the correct ClassTypeId
   variableNameEdited = (oldName:string,newName:string)=>{
     this.html[0].dispatchEvent(new CustomEvent("updateVarName", { bubbles: true, detail: {oldName:oldName,newName:newName} }));
   }
 
-
+  // The ordering of the variables got changed.
   #updateVariableList(oldIndex:number,newIndex:number) {
     let tmp = this.draggables[oldIndex]
     this.draggables.splice(oldIndex,1)

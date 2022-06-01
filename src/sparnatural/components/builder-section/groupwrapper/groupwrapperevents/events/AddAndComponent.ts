@@ -1,6 +1,7 @@
 
 
 import { SelectedVal } from "../../../../../sparql/ISparJson";
+import { MaxVarAction } from "../../../../../statehandling/ActionStore";
 import GroupWrapper from "../../GroupWrapper";
 import LinkAndBottom from "../../LinkAndBottom";
 
@@ -19,5 +20,6 @@ grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();
 grpWrapper.html[0].dispatchEvent(
     new CustomEvent("initGeneralEvent", { bubbles: true })
 );
+this.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{bubbles:true,detail:MaxVarAction.INCREASE}))
 }
 

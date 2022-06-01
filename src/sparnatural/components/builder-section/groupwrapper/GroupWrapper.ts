@@ -34,7 +34,7 @@ class GroupWrapper extends HTMLComponent {
     return this;
   }
 
-  // set back state
+  // set back state to when objectproperty was selected
   setObjectPropertySelectedState() {
     let opVal = this.CriteriaGroup.ObjectPropertyGroup.objectPropVal;
     //if opVal is null, then temporary lbl is shown an no endclassgroup has been selected

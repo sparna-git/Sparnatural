@@ -2,7 +2,6 @@ import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import { getSettings } from "../../../../configs/client-configs/settings";
 import HTMLComponent from "../../HtmlComponent";
 import EditComponents from "../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
-import { NoWidget } from "../../builder-section/groupwrapper/criteriagroup/edit-components/widgets/Widgets";
 import { Config } from "../../../../configs/fixed-configs/SparnaturalConfig";
 
 /*

@@ -1,13 +1,18 @@
 import ISpecProvider from "../spec-providers/ISpecProviders";
 import Sparnatural from "../components/Sparnatural";
 
-import { Language, Order, SelectedVal } from "../sparql/ISparJson";
+import { Language, Order } from "../sparql/ISparJson";
 import generateQuery from "./actions/GenerateQuery";
 import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
 import initGeneralevent from "./actions/InitGeneralEvent";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import DraggableComponent from "../components/variables-section/variableorder/DraggableComponent";
+
+export enum MaxVarAction{
+  INCREASE,
+  DECREASE,
+}
 
 // This is ugly, should use i18n features instead
 const i18nLabels = {
@@ -78,11 +83,19 @@ class ActionStore {
       "getMaxVarIndex",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        this.maxVarIndex++;
         // return the index in callback
         e.detail(this.maxVarIndex);
       }
     );
+
+    this.sparnatural.html[0].addEventListener(
+      "changeMaxVarIndex",
+      (e: CustomEvent) => {
+        e.stopImmediatePropagation();
+        if(e.detail == MaxVarAction.DECREASE) this.maxVarIndex--
+        if(e.detail == MaxVarAction.INCREASE) this.maxVarIndex++
+      }
+    )
 
     this.sparnatural.html[0].addEventListener(
       "getSparqlVarId",

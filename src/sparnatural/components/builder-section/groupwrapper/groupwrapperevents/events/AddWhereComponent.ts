@@ -1,4 +1,5 @@
 import { SelectedVal } from "../../../../../sparql/ISparJson";
+import { MaxVarAction } from "../../../../../statehandling/ActionStore";
 import GroupWrapper from "../../GroupWrapper";
 import LinkWhereBottom from "../../LinkWhereBottom";
 
@@ -20,4 +21,5 @@ export function addWhereComponent(grpWrapper:GroupWrapper,endClassVal: SelectedV
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("initGeneralEvent", { bubbles: true })
   );
+  this.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{bubbles:true,detail:MaxVarAction.INCREASE}))
 }

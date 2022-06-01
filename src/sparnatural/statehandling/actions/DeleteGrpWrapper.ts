@@ -1,5 +1,5 @@
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
-import ActionStore from "../ActionStore";
+import ActionStore, { MaxVarAction } from "../ActionStore";
 /*
   This method traverses first preorder through the tree and looks for the child component to delete.
   It then traverses postorder through the descendants of the element to delete and deletes them all
@@ -21,10 +21,12 @@ export default function deleteGrpWrapper(
       if(grpWrapper === elToDel){
         //grpWrapper is root node. call resetCallBack like resetBtn would have been clicked
         actionStore.sparnatural.BgWrapper.resetCallback()
+        actionStore.sparnatural.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{detail:MaxVarAction.DECREASE}))
       }
       if(grpWrapper.andSibling === elToDel){
         grpWrapper.andSibling.traversePostOrder((grpWrapper:GroupWrapper)=>{
           deleteIt(grpWrapper)
+          actionStore.sparnatural.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{detail:MaxVarAction.DECREASE}))
         })
         grpWrapper.andSibling = null
         grpWrapper.linkAndBottom.html.empty().remove()
@@ -33,6 +35,7 @@ export default function deleteGrpWrapper(
       if (grpWrapper.whereChild === elToDel) {
         grpWrapper.whereChild.traversePostOrder((grpWrapper:GroupWrapper)=>{
           deleteIt(grpWrapper)
+          actionStore.sparnatural.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{detail:MaxVarAction.DECREASE}))
         })
         grpWrapper.whereChild = null
         grpWrapper.linkWhereBottom.html.empty().remove()
