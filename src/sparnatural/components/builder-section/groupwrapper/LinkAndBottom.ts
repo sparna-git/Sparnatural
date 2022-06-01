@@ -39,15 +39,11 @@ class LinkAndBottom extends HTMLComponent {
       bx = ax + bx;
       ax = bx - ax;
       bx = bx - ax;
-
-      by = ay + by;
-      ay = by - ay;
-      by = by - ay;
     }
     let distance = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
-    let calc = Math.atan((by - ay) / (bx - ax));
-    let degree = (calc * 180) / Math.PI;
-
+    // we always need a vertical line. So 90degree is fixed
+    let degree = 90
+    
     return {
       transformOrigin: "top left",
       width: distance,
