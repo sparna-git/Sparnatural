@@ -30,7 +30,6 @@ class Sparnatural extends HTMLComponent {
   }
 
   render(): this {
-    //super.render()
     this.initSparnatural();
     this.BgWrapper = new BgWrapper(this, this.specProvider).render();
     this.SubmitSection = new SubmitSection(this).render();
