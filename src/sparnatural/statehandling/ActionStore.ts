@@ -88,7 +88,7 @@ class ActionStore {
         e.detail(this.maxVarIndex);
       }
     );
-
+    
     this.sparnatural.html[0].addEventListener('updateVarList',(e)=>{
       e.stopImmediatePropagation()
       updateVarList(this)

@@ -15,8 +15,9 @@ export function updateVarList(actionStore:ActionStore){
         (grpWrapper:GroupWrapper) => {
           let startGrp = grpWrapper.CriteriaGroup.StartClassGroup
           let endGrp = grpWrapper.CriteriaGroup.EndClassGroup
-          varNames.add(startGrp.getVarName()) 
-          varNames.add(endGrp.getVarName())
+          //always remove the '?' as the first char
+          varNames.add(startGrp.getVarName().slice(1)) 
+          varNames.add(endGrp.getVarName().slice(1))
         }
     );
     updateDraggables(actionStore,varNames)
@@ -27,6 +28,12 @@ function updateDraggables(actionStore:ActionStore,varNames:Set<string>){
     let draggables = actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables
     // filter out the variables which don't exist anymore
     draggables = draggables.filter((d:DraggableComponent)=>{
-        if(varNames.has(d.varName)) return d
+        if(varNames.has(d.varName)){
+            //keep draggable
+            return d
+        } else{
+            //delete it
+            d.html.remove()
+        }
     })
 }
