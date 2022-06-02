@@ -4,7 +4,7 @@ import L from "leaflet";
 import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
 import { MapValue } from "./IWidget";
 import 'leaflet-draw';
-const leafletDraw = require('leaflet-draw');
+import "leaflet-draw/dist/leaflet.draw-src.css";
 import "leaflet/dist/leaflet.css";
 
 export default class MapWidget extends HTMLComponent {
@@ -31,10 +31,25 @@ export default class MapWidget extends HTMLComponent {
         var drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
         var drawControl = new L.Control.Draw({
+            draw:{
+                polyline:false,
+                circle:false,
+                polygon:false,
+                marker:false,
+                circlemarker:false,
+
+            },
             edit: {
                 featureGroup: drawnItems
             }
         });
         map.addControl(drawControl);
+        map.on('draw:created', function (e) {
+            var layer = e.layer
+            map.addLayer(layer);;
+            layer.eachLayer(function (layer:any) {
+                //do whatever you want; most likely save back to db
+            });
+        });
     }
 }
