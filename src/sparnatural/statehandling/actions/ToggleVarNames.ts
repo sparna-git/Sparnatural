@@ -10,4 +10,7 @@ export default function toggleVarNames(actionsStore: ActionStore) {
       endGrp.inputTypeComponent.toggleVarName()
     }
   );
+  actionsStore.sparnatural.html[0].dispatchEvent(
+    new CustomEvent("initGeneralEvent")
+  );
 }
