@@ -1,14 +1,14 @@
 require("jstree/dist/themes/default/style.min.css");
 
-require("./assets/stylesheets/sparnatural.scss");
-
 require("easy-autocomplete");
 
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
 require("tippy.js/dist/tippy.css");
 
+require("./assets/stylesheets/sparnatural.scss");
 
+import $ from 'jquery'
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
 import Sparnatural from "./sparnatural/components/Sparnatural";
 
