@@ -1,3 +1,5 @@
+import { LatLng } from "leaflet"
+
 export interface ListWidgetValue{
   key:string
   label:string
@@ -33,7 +35,7 @@ export interface DateValue {
 
 export interface MapValue{
   label:string
-  coordinates:Array<any>
+  coordinates:LatLng[][]
 }
 
 export interface DateTimePickerValue{
