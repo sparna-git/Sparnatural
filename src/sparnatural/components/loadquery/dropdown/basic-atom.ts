@@ -1,4 +1,4 @@
-import * as COLORS from './colors.js';
+import * as COLORS from './colors';
 
 export default `
   .basic-atom {

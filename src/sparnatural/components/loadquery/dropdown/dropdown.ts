@@ -1,8 +1,8 @@
-import globalStyle from './global-style.js';
-import basicAtom from './basic-atom.js';
-import * as COLORS from './colors.js';
+import globalStyle from './global-style'
+import basicAtom from './basic-atom';
+import * as COLORS from './colors';
 
-import './button.js';
+import './button';
 
 const template = document.createElement('template');
 
@@ -11,7 +11,6 @@ const template = document.createElement('template');
   - https://www.robinwieruch.de/web-components-tutorial/
   - https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM
 */
-
 template.innerHTML = `
   <style>
     ${globalStyle}
@@ -19,6 +18,7 @@ template.innerHTML = `
     ${basicAtom}
 
     .dropdown {
+      width:fit-content;
       box-sizing: border-box;
       padding: 3px 8px 8px;
       cursor: pointer;
@@ -120,8 +120,7 @@ template.innerHTML = `
   </div>
 `;
 
-class Dropdown extends HTMLElement {
-  #sR: ShadowRoot;
+export class Dropdown extends HTMLElement {
   open: boolean;
   $label: any;
   $button: any;
@@ -129,16 +128,15 @@ class Dropdown extends HTMLElement {
   $dropdownList: any;
   constructor() {
     super();
-
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     this.open = false;
 
-    this.$label = this.#sR.querySelector('.label');
-    this.$button = this.#sR.querySelector('road-button');
-    this.$dropdown = this.#sR.querySelector('.dropdown');
-    this.$dropdownList = this.#sR.querySelector('.dropdown-list');
+    this.$label = this.shadowRoot.querySelector('.label');
+    this.$button = this.shadowRoot.querySelector('road-button');
+    this.$dropdown = this.shadowRoot.querySelector('.dropdown');
+    this.$dropdownList = this.shadowRoot.querySelector('.dropdown-list');
 
     this.$button.addEventListener(
       'onClick',
@@ -226,4 +224,4 @@ class Dropdown extends HTMLElement {
   }
 }
 
-window.customElements.define('road-dropdown', Dropdown);
+window.customElements.define('custom-dropdown', Dropdown);

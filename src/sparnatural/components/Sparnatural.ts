@@ -6,6 +6,7 @@ import SpecificationProviderFactory from "../spec-providers/SpecificationProvide
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
 import HTMLComponent from "./HtmlComponent";
+import LoadQuery from "./loadquery/LoadQuery";
 
 // This is ugly, should use i18n features instead
 const i18nLabels = {
@@ -17,6 +18,7 @@ class Sparnatural extends HTMLComponent {
   specProvider: ISpecProvider;
   submitOpened = true; // is responsible if the generateQuery button works or not
   actionStore: ActionStore;
+  loadQueries: LoadQuery
   BgWrapper: BgWrapper;
   SubmitSection:SubmitSection
   VariableSelection:VariableSection
@@ -31,6 +33,7 @@ class Sparnatural extends HTMLComponent {
 
   render(): this {
     this.initSparnatural();
+    this.loadQueries = new LoadQuery(this,null).render()
     this.BgWrapper = new BgWrapper(this, this.specProvider).render();
     this.SubmitSection = new SubmitSection(this).render();
     this.VariableSelection = new VariableSection(this,this.specProvider).render()

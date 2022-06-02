@@ -1,5 +1,5 @@
-import globalStyle from './global-style.js';
-import basicAtom from './basic-atom.js';
+import globalStyle from './global-style';
+import basicAtom from './basic-atom';
 
 const template = document.createElement('template');
 
