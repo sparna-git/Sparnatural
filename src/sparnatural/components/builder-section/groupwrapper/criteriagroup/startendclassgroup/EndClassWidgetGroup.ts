@@ -142,6 +142,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
     })
     return vals
   }
+
+  //set's
+  setWidgetValue(){
+
+  }
   //TS typeguard
   //https://www.typescriptlang.org/docs/handbook/advanced-types.html
   #instanceOfAllValues(selectedVal: IWidget['value']): selectedVal is SelectAllValue {

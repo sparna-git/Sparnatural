@@ -28,7 +28,7 @@ import { OptionTypes } from "../components/builder-section/groupwrapper/criteria
         this.json.branches = this.#getBranch(this.sparnatural.BgWrapper.componentsList.rootGroupWrapper)
         return this.json
     }
-
+    // goes recursivly through the grpWrappers and collects all the data
     #getBranch(grpWrapper: GroupWrapper):Array<any>{
       let branches = []
       let CrtGrp = grpWrapper.CriteriaGroup

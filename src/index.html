@@ -137,12 +137,7 @@
           animation: octocat-wave 560ms ease-in-out;
         }
       }
-    </style>
-
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    
-    
+    </style>    
 
     <!-- Start Sparnatural stuff-->
     <script type="module">
@@ -156,7 +151,7 @@
         }
         return results[1] || 0;
       };
-      //var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
+      var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
 
       let defaultEndpoint = "http://fr.dbpedia.org/sparql"
       /*
@@ -176,7 +171,8 @@
       import config from './config.js';
       let settings = {
         //config: config,
-        currentTab: tab // link sparnatural with yasgui
+        currentTab: tab, // link sparnatural with yasgui
+        language:lang
       }
       sparnatural.setSettings(settings);
     </script>
