@@ -33,7 +33,9 @@ class Sparnatural extends HTMLComponent {
 
   render(): this {
     this.initSparnatural();
-    this.loadQueries = new LoadQuery(this,null).render()
+    if(getSettings().preLoadedQueries){
+      this.loadQueries = new LoadQuery(this,getSettings().preLoadedQueries).render()
+    }
     this.BgWrapper = new BgWrapper(this, this.specProvider).render();
     this.SubmitSection = new SubmitSection(this).render();
     this.VariableSelection = new VariableSection(this,this.specProvider).render()

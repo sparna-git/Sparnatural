@@ -18,6 +18,7 @@ template.innerHTML = `
     ${basicAtom}
 
     .dropdown {
+      margin-left: 50px;
       width:fit-content;
       box-sizing: border-box;
       padding: 3px 8px 8px;

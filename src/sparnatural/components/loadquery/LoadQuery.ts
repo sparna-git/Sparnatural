@@ -1,3 +1,4 @@
+import { PreLoadQueries } from "../../../configs/client-configs/ISettings"
 import { ISparJson } from "../../sparql/ISparJson"
 import HTMLComponent from "../HtmlComponent"
 import Sparnatural from "../Sparnatural"
@@ -12,7 +13,7 @@ import { Dropdown } from "./dropdown/dropdown"
 export default class LoadQuery extends HTMLComponent {
     dropDown: Dropdown
 
-    constructor(parentComponent:Sparnatural,queries:Array<{queryName:string,query:ISparJson}>){
+    constructor(parentComponent:Sparnatural,queries:PreLoadQueries){
         super('preloaded-queries',parentComponent,null)
     }
 
