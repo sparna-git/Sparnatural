@@ -15,7 +15,7 @@ interface ISettings {
   maxOr?: number;
   backgroundBaseColor?: string; //TODO '250,136,3'
   sparqlPrefixes?: any;
-  defaultEndpoint?: any;
+  defaultEndpoint?: ()=>string;
   localCacheDataTtl?: number;
   filterConfigOnEndpoint?: boolean;
   langSearch?: any;

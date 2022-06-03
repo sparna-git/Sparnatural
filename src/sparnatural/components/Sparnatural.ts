@@ -8,7 +8,7 @@ import VariableSection from "./variables-section/VariableSelection";
 import HTMLComponent from "./HtmlComponent";
 import LoadQuery from "./loadquery/LoadQuery";
 
-// This is ugly, should use i18n features instead
+
 const i18nLabels = {
   en: require("../../assets/lang/en.json"),
   fr: require("../../assets/lang/fr.json"),
@@ -28,7 +28,12 @@ class Sparnatural extends HTMLComponent {
   constructor() {
     //Sparnatural: Does not have a ParentComponent!
     super("Sparnatural", null, null);
-    getSettings().langSearch = i18nLabels["en"];
+    if(getSettings().langSearch == 'fr'){
+      getSettings().langSearch = i18nLabels['fr'];
+    } else{
+      getSettings().langSearch = i18nLabels['en']
+    }
+    
   }
 
   render(): this {

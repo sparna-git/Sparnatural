@@ -11,7 +11,7 @@ const settings: ISettings = {
   backgroundBaseColor: "2,184,117",
   autocomplete: null,
   list: null,
-  defaultEndpoint: "http://fr.dbpedia.org/sparql",
+  defaultEndpoint (){ if(this.language == 'fr'){return `http://fr.dbpedia.org/sparql`} else {return`http://dbpedia.org/sparql`} },
   sparqlPrefixes: {
     dbpedia: "http://dbpedia.org/ontology/",
   },
