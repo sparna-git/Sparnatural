@@ -18,6 +18,8 @@ import Sparnatural from "./sparnatural/components/Sparnatural";
 */
 import config from '../static/config'
 import ISettings from './configs/client-configs/ISettings';
+
+import { queries } from './sparnatural/preloadedqueries';
 export class SparNatural extends HTMLElement {
   Sparnatural = new Sparnatural();
   specProvider: any;
@@ -25,7 +27,7 @@ export class SparNatural extends HTMLElement {
   components: any = [];
   constructor() {
     super();
-    this.setSettings({config:config,language:'en'})
+    this.setSettings({config:config,language:'en',preLoadedQueries:queries})
   }
   //gets called when the component was rendered
   connectedCallback(){

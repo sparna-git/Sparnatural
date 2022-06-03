@@ -1,7 +1,7 @@
 import Tab from "@triply/yasgui";
-import { ISparJson } from "../../sparnatural/sparql/ISparJson";
 export interface PreLoadQueries {
-  queries:Array<{queryName:string,query:ISparJson}>
+  queries:Array<{  queryName:string,
+    query:string}>
 }
 interface ISettings {
   preLoadedQueries?: PreLoadQueries;
