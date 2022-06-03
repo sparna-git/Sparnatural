@@ -60,7 +60,7 @@ A typical integration in a web page looks like this :
 | **addDistinct** | `false` |
 | Whether the `DISTINCT` keyword should be inserted to the generated SPARQL query. | 
 | **typePredicate** | `rdf:type` |
-| The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to `wdt:p31` for Wikidata integration. | 
+| The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to `http://www.wikidata.org/prop/direct/P31` for Wikidata integration. | 
 | **sendQueryOnFirstClassSelected** | `false` |
 | Whether to emit the query when the very first class is selected, before the complete first criteria is complete, to select all the instances of this class. | 
 | **maxDepth** | `3` |
