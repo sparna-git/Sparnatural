@@ -69,8 +69,6 @@ A typical integration in a web page looks like this :
 | Maximum number of different values that can be selected for a given property criteria. | 
 | **backgroundBaseColor** | `250,136,3` |
 | The base color to use as the background. This color should be given in the format 'R,G,B'. Transparency is applied to the base color to generate the color gradient. | 
-| **sparqlPrefixes** | `{}` |
-| A set of prefixes in the form `"foaf" : "http://xmlns.com/foaf/0.1/"` to be added to the output SPARQL query. | 
 | **autocomplete** |  |
 | A Javascript object providing the necessary functions for the autocomplete widget. If using SPARQL datasources to populate the widgets, this is optional. This provides a low-level hook to populate autocomplete fields. See the [autocomplete reference](#autocomplete-reference) below | 
 | **list** |  |
@@ -83,6 +81,8 @@ A typical integration in a web page looks like this :
 | A Javascript `function(form) { ... }` that is triggered when the submit button inside Sparnatural is clicked. This function is optional, if not provided, no submit button is displayed. See the See the [onSubmit reference](#onsubmit-reference) below| 
 | **tooltipConfig** |  |
 | The tooltip configuration object. Possible configuration options are described in [Tippy documentation here](https://atomiks.github.io/tippyjs/v6/all-props/). Defaults to : <pre>{ <br />  allowHTML: true,<br />  plugins: [], <br />  placement: 'right-start',<br />  offset: [5, 5],<br />  theme: 'sparnatural',<br />  arrow: false,<br />  delay: [800, 100],<br />  duration: [200, 200]<br />}</pre> | 
+| **sparqlPrefixes** **/!\ unstable** | `{}` |
+| A set of prefixes in the form `"foaf" : "http://xmlns.com/foaf/0.1/"` to be added to the output SPARQL query. This is an unstable param, current use is discouraged. | 
 | **localCacheDataTtl** **/!\ beta feature** | 1000 * 60 * 60 * 24 |
 | The time that the dropdown lists will be stored in cache on the client, if the server has allowed it in its response headers, that is if `Cache-Control: no-cache` header is returned in the response, no cache will happen, whatever the value of this field. The server can return `Cache-Control: public` for lists to be properly cached. | 
 | **filterConfigOnEndpoint** **/!\ beta feature** | false |
