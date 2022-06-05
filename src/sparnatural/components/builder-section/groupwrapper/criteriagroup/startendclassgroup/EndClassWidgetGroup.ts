@@ -5,7 +5,7 @@ import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import HTMLComponent from "../../../../HtmlComponent";
 import AddWidgetValueBtn from "../../../../buttons/AddWidgetValueBtn";
-import { IWidget, SelectAllValue} from "../edit-components/widgets/IWidget";
+import { IWidget, MapValue, SelectAllValue} from "../edit-components/widgets/IWidget";
 
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
@@ -54,6 +54,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     if (unselectedValue === undefined)
       throw Error("Unselected val not found in the selectedValues list!");
     unselectedValue.html.remove();
+    
 
     if(this.selectedValues.length < getSettings().maxOr){
       this.addWidgetValueBtn.html.show;
@@ -64,7 +65,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
       // reattach eventlistener. it got removed
       this.#addEventListener()
-      this.addWidgetValueBtn.html.remove();
+      //if there is an addWidgetValueBtn then remove it as well
+      this.addWidgetValueBtn?.html?.remove();
       this.html[0].dispatchEvent(
         new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{NrOfSelValues:this.selectedValues.length} })
       );
@@ -92,7 +94,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.#renderNewSelectedValue(endClassWidgetVal);
 
     // if selectAllvalues then we don't need a AddWidgetValueBtn
-    if(!this.#instanceOfAllValues(selectedVal)){
+    if((!this.#instanceOfAllValues(selectedVal)) && (!this.#instanceOfMapValue(selectedVal))){
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
       ? this.addWidgetValueBtn.render()
@@ -140,10 +142,18 @@ export class EndClassWidgetGroup extends HTMLComponent {
     })
     return vals
   }
+
+  //set's
+  setWidgetValue(){
+
+  }
   //TS typeguard
   //https://www.typescriptlang.org/docs/handbook/advanced-types.html
   #instanceOfAllValues(selectedVal: IWidget['value']): selectedVal is SelectAllValue {
     return selectedVal.label == getSettings().langSearch.SelectAllValues;
+  }
+  #instanceOfMapValue(selectedVal: IWidget['value']):selectedVal is MapValue{
+    return selectedVal.label == 'Area selected'
   }
 }
 

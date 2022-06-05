@@ -19,8 +19,12 @@ abstract class Handler {
     buildURL(sparql:string):string {
 
       sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
-  
+      //remove linebreaks
+      sparql = sparql.replace(/(\r\n|\n|\r)/gm, "");
+      //remove all backslashes
+      sparql = sparql.replace(/\\/g, '');
       var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
+      
       var url =
         this.sparqlEndpointUrl +
         separator +
@@ -78,7 +82,7 @@ abstract class AbstractSparqlAutocompleteHandler extends Handler {
  **/
 export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
   queryString: any;
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, queryString: any) {
+  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, queryString: string) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
     this.queryString = queryString;
   }
@@ -90,13 +94,12 @@ export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
     var reProperty = new RegExp("\\$property", "g");
     var reRange = new RegExp("\\$range", "g");
     var reLang = new RegExp("\\$lang", "g");
-
     var sparql = this.queryString
       .replace(reDomain, "<" + domain + ">")
       .replace(reProperty, "<" + property + ">")
       .replace(reRange, "<" + range + ">")
       .replace(reLang, "'" + this.language + "'");
-
+    sparql = sparql.replace("\\", "")
   return this.buildURL(sparql)
   }
 }

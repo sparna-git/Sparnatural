@@ -141,7 +141,6 @@ WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
-    # Note how the range criteria is not used in this query
   }
   GROUP BY ?uri
 }
@@ -160,7 +159,6 @@ SELECT DISTINCT ?uri ?label
 WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
-    # range criteria
     ?uri a $range .
     ?uri $labelPath ?label .
     FILTER(isIRI(?uri))
@@ -182,7 +180,6 @@ WHERE {
     ?domain a $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
-    # range criteria
     ?uri a $range .
   }
   GROUP BY ?uri

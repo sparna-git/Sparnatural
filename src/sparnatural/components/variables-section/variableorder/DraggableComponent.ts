@@ -21,6 +21,7 @@ class DraggableComponent extends HTMLComponent {
         </input>
         `).val(varName)
         editVar[0].addEventListener("change", (event)=>{
+            //variableName got edited by user
             let val = this.#validateInput((event.currentTarget as HTMLInputElement))
             let oldName = this.varName
             this.varName = val

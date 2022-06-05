@@ -8,6 +8,7 @@ import updateVarName from "./actions/UpdateVarName";
 import initGeneralevent from "./actions/InitGeneralEvent";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import DraggableComponent from "../components/variables-section/variableorder/DraggableComponent";
+import { updateVarList } from "./actions/UpdateVarList";
 
 export enum MaxVarAction{
   INCREASE,
@@ -87,6 +88,11 @@ class ActionStore {
         e.detail(this.maxVarIndex);
       }
     );
+    
+    this.sparnatural.html[0].addEventListener('updateVarList',(e)=>{
+      e.stopImmediatePropagation()
+      updateVarList(this)
+    })
 
     this.sparnatural.html[0].addEventListener(
       "changeMaxVarIndex",

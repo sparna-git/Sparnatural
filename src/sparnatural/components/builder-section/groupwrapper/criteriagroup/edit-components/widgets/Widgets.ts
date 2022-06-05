@@ -11,6 +11,7 @@ import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import { getSettings } from "../../../../../../../configs/client-configs/settings";
 import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
 import InfoBtn from "../../../../../buttons/InfoBtn";
+import { SparqlTemplateListHandler } from "../handlers/AutocompleteAndListHandlers";
 
 export class AutoCompleteWidget extends HTMLComponent implements IWidget {
   autocompleteHandler: any;
@@ -107,7 +108,7 @@ export class AutoCompleteWidget extends HTMLComponent implements IWidget {
 }
 
 export class ListWidget extends HTMLComponent implements IWidget {
-  listHandler: any;
+  listHandler: SparqlTemplateListHandler;
   value: ListWidgetValue
   sort: boolean;
   settings: ISettings;
@@ -117,7 +118,7 @@ export class ListWidget extends HTMLComponent implements IWidget {
   selectHtml: JQuery<HTMLElement>;
   constructor(
     parentComponent: WidgetWrapper,
-    listHandler: any,
+    listHandler: SparqlTemplateListHandler,
     sort: boolean,
     startClassVal:SelectedVal,
     objectPropVal:SelectedVal,

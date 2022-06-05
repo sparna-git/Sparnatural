@@ -113,7 +113,7 @@ const config = {
         { "@value": "Unknown class", "@language": "en" },
         { "@value": "Classe inconnue", "@language": "fr" },
       ],
-      faIcon: "fas fa-male",
+      faIcon: "fas fa-question",
     },
     {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",

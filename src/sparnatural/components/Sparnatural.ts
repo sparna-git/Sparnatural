@@ -6,8 +6,9 @@ import SpecificationProviderFactory from "../spec-providers/SpecificationProvide
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
 import HTMLComponent from "./HtmlComponent";
+import LoadQuery from "./loadquery/LoadQuery";
 
-// This is ugly, should use i18n features instead
+
 const i18nLabels = {
   en: require("../../assets/lang/en.json"),
   fr: require("../../assets/lang/fr.json"),
@@ -17,6 +18,7 @@ class Sparnatural extends HTMLComponent {
   specProvider: ISpecProvider;
   submitOpened = true; // is responsible if the generateQuery button works or not
   actionStore: ActionStore;
+  loadQueries: LoadQuery
   BgWrapper: BgWrapper;
   SubmitSection:SubmitSection
   VariableSelection:VariableSection
@@ -26,12 +28,19 @@ class Sparnatural extends HTMLComponent {
   constructor() {
     //Sparnatural: Does not have a ParentComponent!
     super("Sparnatural", null, null);
-    getSettings().langSearch = i18nLabels["en"];
+    if(getSettings().langSearch == 'fr'){
+      getSettings().langSearch = i18nLabels['fr'];
+    } else{
+      getSettings().langSearch = i18nLabels['en']
+    }
+    
   }
 
   render(): this {
-    //super.render()
     this.initSparnatural();
+    if(getSettings().preLoadedQueries){
+      this.loadQueries = new LoadQuery(this,getSettings().preLoadedQueries).render()
+    }
     this.BgWrapper = new BgWrapper(this, this.specProvider).render();
     this.SubmitSection = new SubmitSection(this).render();
     this.VariableSelection = new VariableSection(this,this.specProvider).render()
@@ -50,87 +59,9 @@ class Sparnatural extends HTMLComponent {
     specProviderFactory.build(settings.config, settings.language, (sp: any) => {
       this.specProvider = sp;
     });
-
     // uncomment to trigger gathering of statistics
     // initStatistics(specProvider);
   }
 
-  loadQueryInterface(json: any) {
-    var jsonWithLinks = this.preprocess(json);
-
-    this.doLoadQuery(jsonWithLinks);
-  }
-
-  // global function
-  doLoadQuery(json: any) {
-    // stores the JSON to be preloaded
-    this.actionStore //.Form.preLoad = json;
-
-    this.loadQuery();
-
-    // And now, generateQuery form
-    //this.html[0].dispatchEvent(new CustomEvent("generateQuery", { bubbles: true }));
-    // clear the jsonQueryBranch copied on every component, otherwise they always stay here
-    // and we get the same criterias over and over when removing and re-editing
-  }
-
-  clear() {
-    this.actionStore = new ActionStore(this, this.specProvider);
-  }
-
-  /**
-   * Preprocess JSON query to add parent and nextSibling links
-   **/
-  preprocess(jsonQuery: any) {
-    for (var i = 0; i < jsonQuery.branches.length; i++) {
-      var branch = jsonQuery.branches[i];
-      var next = null;
-      if (jsonQuery.branches.length > i + 1) {
-        next = jsonQuery.branches[i + 1];
-      }
-      this.preprocessRec(branch, null, next, jsonQuery);
-    }
-    return jsonQuery;
-  }
-
-  preprocessRec(branch: any, parent: any, nextSibling: any, jsonQuery: any) {
-    branch.parent = parent;
-    branch.nextSibling = nextSibling;
-    // set flags ot indicate if the eye is open by testing the selected variables
-    if (jsonQuery.variables.includes(branch.line.s)) {
-      branch.line.sSelected = true;
-    }
-    if (jsonQuery.variables.includes(branch.line.o)) {
-      branch.line.oSelected = true;
-    }
-    for (var i = 0; i < branch.children.length; i++) {
-      var child = branch.children[i];
-      var next = null;
-      if (branch.children.length > i + 1) {
-        next = branch.children[i + 1];
-      }
-      this.preprocessRec(child, branch, next, jsonQuery);
-    }
-  }
-  //used to be form.spar
-  loadQuery = function () {
-    this.submitOpened = false;
-    for (var i = 0; i < this.form.preLoad.variables.length; i++) {
-      var variableName = this.form.preLoad.variables[i];
-      for (var x = 0; x < this.form.sparnatural.components.length; x++) {
-        var critere = this.form.sparnatural.components[x].CriteriaGroup;
-        if (critere.StartClassGroup.variableNamePreload == variableName) {
-          //critere.StartClassGroup.onchangeViewVariable();
-          break; // une variable ne doit être trouvé q'une seule fois et seulement la première
-        }
-        if (critere.EndClassGroup.variableNamePreload == variableName) {
-          //critere.EndClassGroup.onchangeViewVariable();
-          break; // une variable ne doit être trouvé q'une seule fois et seulement la première
-        }
-      }
-      x = 0;
-    }
-    this.submitOpened = true;
-  };
 }
 export default Sparnatural;

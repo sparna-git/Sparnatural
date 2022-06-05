@@ -134,5 +134,5 @@ module.exports = {
 	},
   /* terrible, generates huge output files */
 	/* devtool: "eval-source-map" */
-  devtool: "eval-cheap-source-map"
+  devtool: "eval-source-map"
 }
