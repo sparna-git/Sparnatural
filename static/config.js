@@ -438,7 +438,7 @@ BIND(true AS ?hasChildren)
 }
   `,
       },
-      treeChildrenDatasource: "datasources:tree_children_skos",
+      treeChildrenDatasource: "datasources:tree_children_skosnarrower",
     },
     {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#text",
