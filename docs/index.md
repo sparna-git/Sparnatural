@@ -12,6 +12,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
   - [JSON-based configuration](JSON-based-configuration) - Reference page for the JSON-based configuration
   - [Integration with GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector) - Special configuration to interact with a GraphDB Lucene index 
   - [Querying date ranges](Querying-date-ranges) - How to generate SPARQL queries that can match on resources with a begin date and a end date 
+  - [FAQ](FAQ) - Frequently Asked Questions, mostly about configuration 
 
 ### Integration in webpages
 
