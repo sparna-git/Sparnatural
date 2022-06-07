@@ -63,3 +63,9 @@ LIMIT 50
 
 - Dropdown lists currently don't work properly due to Wikidata query service being too slow
 
+
+#### How do I automatically get a label to display when the user clicks on the "eye" ?
+
+...
+
+See [issue 3 in Sparnatural Wikidata Prototype](https://github.com/lubianat/sparnatural_wikidata_prototype/issues/3).
