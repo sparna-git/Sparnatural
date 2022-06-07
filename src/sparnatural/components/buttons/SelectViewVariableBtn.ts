@@ -8,7 +8,7 @@ import HTMLComponent from "../HtmlComponent";
 class SelectViewVariableBtn extends HTMLComponent {
   selected = false;
   callBack
-  constructor(ParentComponent: HTMLComponent, callBack: () => void) {
+  constructor(ParentComponent: HTMLComponent, callBack: (selected:boolean) => void) {
     let widgetHtml = $(UiuxConfig.ICON_NOT_SELECTED_VARIABLE); //default
     super("selectViewVariableBtn", ParentComponent, widgetHtml);
     this.callBack = callBack
@@ -31,7 +31,7 @@ class SelectViewVariableBtn extends HTMLComponent {
         ? this.html.addClass("VariableSelected")
         : this.html.removeClass("VariableSelected");
       this.render()
-      this.callBack();
+      this.callBack(this.selected);
     });
   }
 }

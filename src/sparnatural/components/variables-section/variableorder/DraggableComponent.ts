@@ -11,7 +11,7 @@ import VariableOrderMenu from "./VariableOrderMenu";
 */
 class DraggableComponent extends HTMLComponent {
     icon:any
-    varName:string
+    varName:string // withut the ?
     constructor(parentComponent:VariableOrderMenu,specProvider:ISpecProvider, selected_val:SelectedVal,varEdited:(oldName:string,newName:string)=>void){
         let varName = selected_val.variable.substring(1,selected_val.variable.length)
         var icon = specProvider.getIcon(selected_val.type);

@@ -114,9 +114,13 @@ class ClassTypeId extends HTMLComponent {
   }
 
     
-  #onchangeViewVariable = () => {
+  #onchangeViewVariable = (selected:boolean) => {
     if(isEndClassGroup(this.ParentComponent)){
-      this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true,detail:this.ParentComponent.endClassVal }));
+      let payload = {
+        val:this.ParentComponent.endClassVal,
+        selected:selected
+      }
+      this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true,detail:payload }));
     }
   };
 

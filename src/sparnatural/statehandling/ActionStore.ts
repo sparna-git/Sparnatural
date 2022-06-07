@@ -9,6 +9,7 @@ import initGeneralevent from "./actions/InitGeneralEvent";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import DraggableComponent from "../components/variables-section/variableorder/DraggableComponent";
 import { updateVarList } from "./actions/UpdateVarList";
+import { selectViewVar } from "./actions/SelectViewVar";
 
 export enum MaxVarAction{
   INCREASE,
@@ -29,7 +30,7 @@ class ActionStore {
   sparnatural: Sparnatural;
   specProvider: any;
   order: Order;
-  variables: Array<string>
+  variables: Array<string> = []
   distinct = true // default
   language = Language.EN //default
   
@@ -62,12 +63,9 @@ class ActionStore {
     );
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
     this.sparnatural.html[0].addEventListener("onSelectViewVar", (e:CustomEvent) => {
-      if(!('type' in e.detail && 'variable' in e.detail)) throw Error('onSelectViewVar expects value of type SelectedVal')
       e.stopImmediatePropagation();
-      this.sparnatural.VariableSelection.variableOrderMenu.addDraggableComponent(e.detail)
-      this.variables = this.sparnatural.VariableSelection.variableOrderMenu.draggables.map((d:DraggableComponent)=>{
-        return d.varName
-      })
+      if(!('val' in e.detail && 'selected' in e.detail)) throw Error('onSelectViewVar expects object of type {val:SelectedVal,selected:boolean}')
+      selectViewVar(this,e.detail)
     });
 
     this.sparnatural.html[0].addEventListener("onSubmit", (e) => {
