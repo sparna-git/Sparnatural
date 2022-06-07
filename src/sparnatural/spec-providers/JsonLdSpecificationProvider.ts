@@ -4,14 +4,19 @@ import ISpecProvider from "./ISpecProviders";
 import WidgetWrapper from "../components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 
 interface IDataSources {
-  queryString: string;
-  queryTemplate: any;
-  labelPath: any;
-  labelProperty: any;
-  childrenPath: any;
-  childrenProperty: any;
-  sparqlEndpointUrl: any;
-  noSort: any;
+  // one of queryString or queryTemplate must be set
+  queryString?: string;
+  queryTemplate?: any;
+  // one of labelPath or labelProperty must be present if queryTemplate is set
+  labelPath?: any;
+  labelProperty?: any;
+  // one of childrenPath or childrenProperty must be present if queryTemplate is set, only for Trees datasource
+  childrenPath?: any;
+  childrenProperty?: any;
+  // optional
+  sparqlEndpointUrl?: any;
+  // optional
+  noSort?: any;
 }
 
 enum WIDGETSTYPES {
@@ -86,7 +91,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
       return null;
     }
 
-    var datasource: IDataSources;
+    var datasource: IDataSources = {};
 
     if (typeof datasourceObject === "object") {
       // if datasource is an object...
