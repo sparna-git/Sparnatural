@@ -10,7 +10,6 @@ export function removeEndClass(grpWrapper:GroupWrapper) {
   grpWrapper.CriteriaGroup.html.empty();
   grpWrapper.CriteriaGroup.html.remove();
   grpWrapper.CriteriaGroup = new CriteriaGroup(grpWrapper, grpWrapper.specProvider).render();
-  grpWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget
-    .val(startVal.type)
-    .niceSelect("update");
+  grpWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent.widgetHtml.val(startVal.type)
+  grpWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget.trigger('change')
 }

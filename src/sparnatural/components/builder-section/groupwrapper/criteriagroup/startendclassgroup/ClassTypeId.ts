@@ -76,6 +76,7 @@ class ClassTypeId extends HTMLComponent {
     return this;
   }
 
+  // is called by EndClassGroup
   renderUnselectBtn(){
     let removeEndClassEvent = () => {
       this.html[0].dispatchEvent(
