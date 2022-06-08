@@ -14,7 +14,6 @@ function addVariable(actionStore:ActionStore,val:SelectedVal){
      actionStore.variables = actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.map((d:DraggableComponent)=>{
        return d.varName
      })
-
 }
 
 function deleteVariable(actionStore:ActionStore,val:SelectedVal){

@@ -7,7 +7,6 @@ import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
 import initGeneralevent from "./actions/InitGeneralEvent";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
-import DraggableComponent from "../components/variables-section/variableorder/DraggableComponent";
 import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
 
@@ -29,7 +28,7 @@ const i18nLabels = {
 class ActionStore {
   sparnatural: Sparnatural;
   specProvider: any;
-  order: Order;
+  order: Order = Order.DESC; //default descending order
   variables: Array<string> = []
   distinct = true // default
   language = Language.EN //default

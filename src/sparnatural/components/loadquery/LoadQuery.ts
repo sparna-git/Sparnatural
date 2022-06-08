@@ -1,5 +1,4 @@
 import { PreLoadQueries } from "../../../configs/client-configs/ISettings"
-import { queries } from "../../preloadedqueries"
 import { Branch, CriteriaLine, ISparJson, Order } from "../../sparql/ISparJson"
 import { IWidget } from "../builder-section/groupwrapper/criteriagroup/edit-components/widgets/IWidget"
 import HTMLComponent from "../HtmlComponent"
@@ -14,30 +13,46 @@ import { Dropdown } from "./dropdown/dropdown"
 
 export default class LoadQuery extends HTMLComponent {
     dropDown: Dropdown
+    parsedQueries: { queryName: string; query: string }[]
+    queries: PreLoadQueries
 
     constructor(parentComponent:Sparnatural,queries:PreLoadQueries){
         super('preloaded-queries',parentComponent,null)
+        this.queries = queries
     }
 
     render(): this {
         super.render()
-        let parsedQueries = this.#parseQueries()
+        if(!this.queries) return
+        this.parsedQueries = this.#parseQueries(this.queries)
+        if(this.parsedQueries?.length == 0) return  
         this.#renderDropDown()
+
 
         return this
     }
 
-    #parseQueries(){
+    #parseQueries(queries:PreLoadQueries){
         try{
+            /*
+            let sanitized = queries.queries.map(q=>{
+                //remove newlines
+                q.query = q.query.replace(/(\r\n|\n|\r)/gm, "");
+                //remove whitespaces and tabs
+                q.query = q.query.replace(/\s/g, '');
+                return q
+            })*/
             let queryJson:Array<{queryName:string,
-                query:string}> = JSON.parse(queries.toString())
+                query:string}> = queries.queries.map(q=>{
+                    q.query = JSON.parse(q.query)
+                    return q
+                })
             let validatedQueries = this.#validateQueries(queryJson)
-            return queryJson
+
+            return validatedQueries
         }
         catch(error){
-            let message = ''
-            if(error instanceof Error) message = error.message
-            else message = String(error)
+            console.error(error)
         }
     }
     #renderDropDown(){
@@ -68,10 +83,10 @@ export default class LoadQuery extends HTMLComponent {
 
         let hasKeys = 'distinct' in queryObj && 'variables' in queryObj && 'lang' in queryObj && 'order' in queryObj
 
-        let branches = queryObj.branches as Array<Branch>
+        let branches = queryObj.query.branches as Array<Branch>
         // iterate through top level andSiblings
         let every = branches.every(b=>{
-           return this.#instanceOfBranch(queryObj['branches'])
+           return this.#instanceOfBranch(b)
         })
         
        
@@ -79,16 +94,14 @@ export default class LoadQuery extends HTMLComponent {
     }
     #instanceOfBranch(branch:Branch):branch is Branch{
         let hasKeys = 'line' in branch && 'optional' in branch && 'notExists' in branch
-        let isInstanceOf = true
-        isInstanceOf = this.#instanceOfLine(branch.line)
+        let isInstanceOf = this.#instanceOfLine(branch.line)
         let every = branch.children.every(b=>{
             return this.#instanceOfBranch(b)
         })
-        return hasKeys && every
+        return hasKeys && every && isInstanceOf
     }
     #instanceOfLine(line:CriteriaLine): line is CriteriaLine{
         let hasKeys = 's' in line && 'p' in line && 'o' in line && 'sType' in line && 'oType' in line
-        let isInstanceOf = true
         let every = line.values.every(v=>{
             return this.#isWidgetValue(v)
         })
@@ -98,8 +111,6 @@ export default class LoadQuery extends HTMLComponent {
     #isWidgetValue(val: IWidget['value']): val is IWidget['value']{
         //every WidgetVal needs to have at least a label
         let hasKeys = 'label' in val
-
         return hasKeys
-
     }
 }

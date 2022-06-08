@@ -38,6 +38,7 @@ class Sparnatural extends HTMLComponent {
 
   render(): this {
     this.initSparnatural();
+    
     if(getSettings().preLoadedQueries){
       this.loadQueries = new LoadQuery(this,getSettings().preLoadedQueries).render()
     }
