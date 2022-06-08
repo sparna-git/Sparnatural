@@ -48,6 +48,7 @@ class EditComponents extends HTMLComponent {
       this.#addEventListeners()
         return this
     }
+    // boolean decides wether the 'any' clickable span should be added
     renderWidgetsWrapper(add_all:boolean){
       super.render()
       this.widgetWrapper = new WidgetWrapper(

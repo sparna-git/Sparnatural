@@ -35,7 +35,7 @@ class WidgetWrapper extends HTMLComponent {
   objectPropVal: SelectedVal;
   startClassVal: SelectedVal;
   endClassVal: SelectedVal;
-  add_or:boolean
+  add_or:boolean = true;
   add_all = true; // render only when widgets allows it AND no widgetvalue is already selected
 
   constructor(
