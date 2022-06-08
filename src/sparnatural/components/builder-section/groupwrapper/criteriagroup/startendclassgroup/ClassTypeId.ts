@@ -93,7 +93,7 @@ class ClassTypeId extends HTMLComponent {
   }
 
   // If this Component is a child of the StartClassGroup component, we want the possible StartValues
-  #getStartValues(selectBuilder: ClassSelectBuilder, default_value: any) {
+  #getStartValues(selectBuilder: ClassSelectBuilder, default_value: string) {
     return selectBuilder.buildClassSelect(null, default_value);
   }
 
@@ -101,9 +101,9 @@ class ClassTypeId extends HTMLComponent {
   #addOnChangeListener(selectWidget: JQuery<HTMLElement>) {
     selectWidget.on("change", () => {
       let selectedValue = selectWidget.val();
-      //disable further choice
-      this.widgetHtml.addClass("disabled");
-      this.widgetHtml.removeClass("open");
+      //disable further choice on nice-select
+      this.widgetHtml[0].classList.add('disabled')
+      this.widgetHtml[0].classList.remove('open')
       this.html[0].dispatchEvent(
         new CustomEvent("classTypeValueSelected", {
           bubbles: true,

@@ -13,9 +13,8 @@ grpWrapper.andSibling = new GroupWrapper(
     startClassVal
 ).render();
 //set state to startClassValSelected and trigger change
-grpWrapper.andSibling.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget
-    .val(startClassVal.type)
-    .niceSelect("update");
+grpWrapper.andSibling.CriteriaGroup.StartClassGroup.inputTypeComponent.widgetHtml.val(startClassVal.type)
+grpWrapper.andSibling.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget.trigger('change')
 grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();
 grpWrapper.html[0].dispatchEvent(
     new CustomEvent("initGeneralEvent", { bubbles: true })
