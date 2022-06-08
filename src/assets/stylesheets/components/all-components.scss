@@ -3,7 +3,7 @@
 //CriteriaGroup
 @use './citeriagroup/criteriagroup.scss';
 //OptionsGroup
-@use './citeriagroup/optionsgroup.scss';
+@use './citeriagroup/optionsgroup/optionsgroup.scss';
 //ObjectPropertyGroup
 @use './citeriagroup/objectpropertygroup/objectpropertygroup.scss';
 @use './citeriagroup/objectpropertygroup/objectpropertytypeid.scss';
@@ -20,15 +20,14 @@
 @use './buttons/selectviewvariablebtn.scss';
 @use './buttons/AddUserInputBtn.scss';
 @use './buttons/InfoBtn.scss';
+@use './buttons/AddMoreValuesBtn.scss';
 //Widget
+@use './widget/EndClassWidgetGroup.scss';
 @use './widget/EndClassWidgetValue.scss';
-@use './widget/AddMoreValuesBtn.scss';
 @use './widget/WidgetWrapper.scss';
 @use './widget/MapWidget.scss';
-
 // link components
 @use './link-and-component.scss';
 @use './link-where-child.scss';
-
 // jquery nice-select
 @use './citeriagroup/nice-select/nice-select.scss'

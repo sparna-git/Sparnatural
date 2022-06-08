@@ -1,6 +1,31 @@
 @use "../../../themes";
 @use '../../../base';
 @use '../../../mixins';
+/*Hide select widget list arrow*/
+.nice-select.disabled:after {
+    display: none;
+}
+.nice-select .current {
+    display: inline-block;
+    height: base.$height-components-under - (base.$center-arrow-bd-width*2);
+    line-height: base.$height-components-under - (base.$center-arrow-bd-width*2);
+    vertical-align: bottom;
+    span  {
+        display: inline-block;
+        vertical-align: bottom;
+    }
+    .selectIcon {
+        float: left;
+        width: 26px;
+        text-align: center;
+        margin-left: 5px;
+
+    }
+    .variableName {
+        display: none;
+    }
+}
+
 .nice-select {
     background: transparent;
     border-color: transparent;

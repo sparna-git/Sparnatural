@@ -3,7 +3,7 @@ import HTMLComponent from "../HtmlComponent";
 class UnselectBtn extends HTMLComponent {
   constructor(ParentComponent: HTMLComponent, callBack: () => void) {
     let widgetHtml = $(
-      '<i class="far fa-times-circle"></i>'
+      '<i class="fa-solid fa-circle-xmark"></i>'
     );
     super("unselect", ParentComponent, widgetHtml);
     // add clicklistener
