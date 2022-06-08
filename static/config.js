@@ -123,7 +123,7 @@ export const rdfconfig = {
         { "@value": "Search", "@language": "en" },
         { "@value": "Rechercher", "@language": "fr" },
       ],
-      faIcon: 'fa-solid fa-flag',
+      faIcon: 'fa-solid fa-magnifying-glass',
     },
     {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date",
@@ -144,7 +144,7 @@ export const rdfconfig = {
         { "@value": "Movement", "@language": "en" },
         { "@value": "Mouvement", "@language": "fr" },
       ],
-      faIcon: "fas fa-palette",
+      faIcon: "fa-solid fa-people-group",
     },
     {
       "@id":
@@ -176,7 +176,7 @@ export const rdfconfig = {
         { "@value": "Text", "@language": "en" },
         { "@value": "Texte", "@language": "fr" },
       ],
-      faIcon: "fas fa-signature",
+      faIcon: "fa-solid fa-pen",
     },
     {
       "@id": "http://dbpedia.org/ontology/country",
