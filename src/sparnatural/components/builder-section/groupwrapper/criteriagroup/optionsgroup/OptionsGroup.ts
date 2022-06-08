@@ -22,7 +22,6 @@ export class OptionsGroup extends HTMLComponent {
   valuesSelected: { [key: string]: boolean };
   OptionalComponent: OptionalComponent;
   NotExistsComponent: NotExistsComponent;
-  crtGroupId: number;
   specProvider: ISpecProvider;
   backArrow: OptionalArrow;
 
@@ -33,13 +32,11 @@ export class OptionsGroup extends HTMLComponent {
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
     this.OptionalComponent = new OptionalComponent(
       this,
-      specProvider,
-      this.crtGroupId
+      specProvider
     );
     this.NotExistsComponent = new NotExistsComponent(
       this,
-      specProvider,
-      this.crtGroupId
+      specProvider
     );
   }
 
