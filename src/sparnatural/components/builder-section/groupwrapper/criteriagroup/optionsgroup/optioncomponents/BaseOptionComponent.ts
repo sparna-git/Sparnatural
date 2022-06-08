@@ -33,12 +33,10 @@ class BaseOptionComponent extends HTMLComponent {
     type:OptionTypes,
     ParentComponent: OptionsGroup,
     specProvider: ISpecProvider,
-    name: string,
-    crtGroupId: number
+    name: string
   ) {
     super(baseCssClass, ParentComponent, null);
     this.name = name;
-    this.id = `option-${crtGroupId}`;
     this.ParentOptionsGroup = ParentComponent as OptionsGroup;
     this.specProvider = specProvider;
     this.parentWrapper = this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper;
@@ -47,7 +45,7 @@ class BaseOptionComponent extends HTMLComponent {
 
   render(): this {
     this.inputElement = $(
-      `<input type="radio" name="${this.name}" data-id="${this.id}" ${this.default_value} />`
+      `<input type="radio" name="${this.name}" ${this.default_value} />`
     );
 
     // htmlStructure rendering:

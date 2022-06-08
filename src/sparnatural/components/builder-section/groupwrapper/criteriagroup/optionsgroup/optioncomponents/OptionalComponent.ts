@@ -12,10 +12,9 @@ class OptionalComponent extends BaseOptionComponent {
   // If you would like to change the shape of the Arrow. Do it here
   constructor(
     ParentComponent: OptionsGroup,
-    specProvider: ISpecProvider,
-    crtGroupId: number
+    specProvider: ISpecProvider
   ) {
-    super("Optional",OptionTypes.OPTIONAL,ParentComponent, specProvider, "optional", crtGroupId);
+    super("Optional",OptionTypes.OPTIONAL,ParentComponent, specProvider, "optional");
   }
 
   render(): this {

@@ -14,10 +14,9 @@ class NotExistsComponent extends BaseOptionComponent {
   // If you would like to change the shape of the Arrow. Do it here
   constructor(
     ParentComponent: OptionsGroup,
-    specProvider: ISpecProvider,
-    crtGroupId: number
+    specProvider: ISpecProvider
   ) {
-    super("NotExists",OptionTypes.NOTEXISTS,ParentComponent, specProvider, "notExists", crtGroupId);
+    super("NotExists",OptionTypes.NOTEXISTS,ParentComponent, specProvider, "notExists");
   }
 
 
