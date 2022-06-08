@@ -1,5 +1,5 @@
 
-const config = {
+export const rdfconfig = {
   "@context": {
     Ontology: "http://www.w3.org/2002/07/owl#Ontology",
     Class: "http://www.w3.org/2002/07/owl#Class",
@@ -44,7 +44,7 @@ const config = {
         { "@value": "Museum", "@language": "en" },
         { "@value": "Musée", "@language": "fr" },
       ],
-      faIcon: "fas fa-university",
+      faIcon: "fa-solid fa-building-columns",
       defaultLabelProperty:
         "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#auto_label",
     },
@@ -59,7 +59,7 @@ const config = {
         { "@value": "en", "@language": "en" },
         { "@value": "fr", "@language": "fr" },
       ],
-      faIcon: "fas fa-globe-africa",
+      faIcon: "fa-solid fa-earth-africa",
     },
     {
       "@id": "http://dbpedia.org/ontology/Tree",
@@ -72,7 +72,7 @@ const config = {
         { "@value": "en", "@language": "en" },
         { "@value": "fr", "@language": "fr" },
       ],
-      faIcon: "fab fa-pagelines",
+      faIcon: "fa-solid fa-leaf",
     },
     {
       "@id": "http://dbpedia.org/ontology/Artwork",
@@ -81,7 +81,7 @@ const config = {
         { "@value": "Artwork", "@language": "en" },
         { "@value": "Oeuvre", "@language": "fr" },
       ],
-      faIcon: "fas fa-paint-brush",
+      faIcon: "fa-solid fa-paintbrush",
     },
     {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
@@ -102,7 +102,7 @@ const config = {
           "@language": "fr",
         },
       ],
-      faIcon: "fas fa-male",
+      faIcon: "fa-solid fa-user",
       sparqlString: "<http://dbpedia.org/ontology/Person>",
     },
     {
@@ -113,7 +113,7 @@ const config = {
         { "@value": "Unknown class", "@language": "en" },
         { "@value": "Classe inconnue", "@language": "fr" },
       ],
-      faIcon: "fas fa-question",
+      faIcon: "fa-solid fa-question",
     },
     {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Search",
@@ -123,7 +123,7 @@ const config = {
         { "@value": "Search", "@language": "en" },
         { "@value": "Rechercher", "@language": "fr" },
       ],
-      faIcon: "fas fa-search",
+      faIcon: 'fa-solid fa-flag',
     },
     {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date",
@@ -573,4 +573,3 @@ BIND(true AS ?hasChildren)
     },
   ],
 };
-export default config
