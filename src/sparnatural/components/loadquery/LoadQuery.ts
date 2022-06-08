@@ -34,14 +34,6 @@ export default class LoadQuery extends HTMLComponent {
 
     #parseQueries(queries:PreLoadQueries){
         try{
-            /*
-            let sanitized = queries.queries.map(q=>{
-                //remove newlines
-                q.query = q.query.replace(/(\r\n|\n|\r)/gm, "");
-                //remove whitespaces and tabs
-                q.query = q.query.replace(/\s/g, '');
-                return q
-            })*/
             let queryJson:Array<{queryName:string,
                 query:string}> = queries.queries.map(q=>{
                     q.query = JSON.parse(q.query)
@@ -56,22 +48,33 @@ export default class LoadQuery extends HTMLComponent {
         }
     }
     #renderDropDown(){
-        this.dropDown = new Dropdown()
-        this.html.append($(`<custom-dropdown label="Preloaded queries" option="option2"></custom-dropdown`));
-        (document.querySelector('custom-dropdown') as Dropdown).options = {
-            option1: { label: 'Option 1' },
-            option2: { label: 'Option 2' },
-          };
+
+        this.dropDown = new Dropdown();
+        this.dropDown.label = 'Preloaded SPARQL queries';
+        // Set the queries as aptions
+        let options: {[k: string]: any} = {}
+        let i = 0
+        this.parsedQueries.forEach(q=>{
+            options[`option${i}`] = {label:q.queryName}
+            i++;
+        });
+        this.dropDown.options = options
+        // set the first query as default query
+        this.dropDown.option = Object.keys(options)[0]
+
+        this.html.append(this.dropDown);
           
         document.querySelector('custom-dropdown')
-        .addEventListener('onChange', value => console.log(value));
+        .addEventListener('onChange', value => {
+            console.log(value)
+        });
     }
 
     #validateQueries(queries:Array<{ queryName:string,query:string}>) {
         
         // filter out the queries which are not in the correct format
         queries = queries.filter(q=>{
-            if(!('queryName' in q && this.#instanceOfISparJson(q))){
+            if(!('queryName' in q && this.#instanceOfISparJson(q.query))){
                 console.warn(`The provided query "${q}" doesn't hold the Sparnatural JSON structure`)
                 return false
             }
@@ -83,7 +86,7 @@ export default class LoadQuery extends HTMLComponent {
 
         let hasKeys = 'distinct' in queryObj && 'variables' in queryObj && 'lang' in queryObj && 'order' in queryObj
 
-        let branches = queryObj.query.branches as Array<Branch>
+        let branches = queryObj.branches as Array<Branch>
         // iterate through top level andSiblings
         let every = branches.every(b=>{
            return this.#instanceOfBranch(b)

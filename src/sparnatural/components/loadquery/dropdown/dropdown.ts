@@ -28,6 +28,7 @@ template.innerHTML = `
     .dropdown.open .dropdown-list {
       display: flex;
       flex-direction: column;
+      width: max-content;
     }
 
     .label {
@@ -55,6 +56,7 @@ template.innerHTML = `
     }
 
     .dropdown-list {
+      z-index: 100;
       position: absolute;
       width: 100%;
       display: none;
@@ -187,8 +189,7 @@ export class Dropdown extends HTMLElement {
 
   render() {
     this.$label.innerHTML = this.label;
-
-    if (this.options) {
+    if (this.options && this.option) {
       this.$button.setAttribute(
         'label',
         this.options[this.option].label
