@@ -29,12 +29,10 @@ export class OptionsGroup extends HTMLComponent {
     this.specProvider = specProvider;
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
     this.OptionalComponent = new OptionalComponent(
-      this,
-      specProvider
+      this
     );
     this.NotExistsComponent = new NotExistsComponent(
-      this,
-      specProvider
+      this
     );
   }
 

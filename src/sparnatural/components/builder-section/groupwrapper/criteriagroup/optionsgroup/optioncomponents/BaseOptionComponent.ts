@@ -1,5 +1,4 @@
 import UiuxConfig from "../../../../../../../configs/fixed-configs/UiuxConfig";
-import ISpecProvider from "../../../../../../spec-providers/ISpecProviders";
 import ArrowComponent from "../../../../../arrows/ArrowComponent";
 import HTMLComponent from "../../../../../HtmlComponent";
 import GroupWrapper from "../../../GroupWrapper";
@@ -22,34 +21,25 @@ class BaseOptionComponent extends HTMLComponent {
   ParentOptionsGroup: OptionsGroup;
   parentWrapper:GroupWrapper
   label: string;
-  inputElement: JQuery<HTMLElement>;
   name: string;
-  objectId: any;
-  specProvider: ISpecProvider;
   type: OptionTypes;
+  selected = false
   constructor(
     baseCssClass: string,
     type:OptionTypes,
     ParentComponent: OptionsGroup,
-    specProvider: ISpecProvider,
     name: string
   ) {
     super(baseCssClass, ParentComponent, null);
     this.name = name;
     this.ParentOptionsGroup = ParentComponent as OptionsGroup;
-    this.specProvider = specProvider;
     this.parentWrapper = this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper;
     this.type = type
   }
 
   render(): this {
-    this.inputElement = $(
-      `<input type="radio" name="${this.name}" ${this.default_value} />`
-    );
-
     // htmlStructure rendering:
     super.render();
-    this.html.append(this.inputElement);
     this.backArrow.render();
     this.html.append($(`<span>${this.label}</span>`));
     this.frontArrow.render();
