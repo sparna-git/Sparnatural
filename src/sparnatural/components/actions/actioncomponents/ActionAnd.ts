@@ -3,11 +3,13 @@ import HTMLComponent from "../../HtmlComponent";
 
 
 class ActionAnd extends HTMLComponent {
+  btn: JQuery<HTMLElement>;
   constructor(parentComponent: HTMLComponent, callBack: () => void) {
-    let link = $(`<a>${getSettings().langSearch.And}</a>`);
-    let widgetHtml = $(`<span class="trait-and-bottom"></span>`).add(link);
+    let widgetHtml = $(`<span class="trait-and-bottom"></span>`)
     super("ActionAnd", parentComponent, widgetHtml);
-    link[0].addEventListener("click", () => {
+    this.btn = $(`<a>${getSettings().langSearch.And}</a>`);
+    this.widgetHtml = this.widgetHtml.add(this.btn);
+    this.btn[0].addEventListener("click", () => {
       callBack();
     });
   }

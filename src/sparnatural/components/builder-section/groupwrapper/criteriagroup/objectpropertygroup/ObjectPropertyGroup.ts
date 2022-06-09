@@ -9,13 +9,16 @@ import { SelectedVal } from "../../../../../sparql/ISparJson";
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
  **/
 class ObjectPropertyGroup extends HTMLComponent {
-  objectPropertySelector: ObjectPropertyTypeId;
+  inputTypeComponent: ObjectPropertyTypeId;
   objectPropVal: SelectedVal ={
     variable: null,
     type: null
   } // value which shows which object property got chosen by the config for subject and object
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
+  startClassVal:SelectedVal
+  endClassVal:SelectedVal
+  temporaryLabel: string;
   constructor(
     ParentComponent: CriteriaGroup,
     specProvider: ISpecProvider,
@@ -23,11 +26,7 @@ class ObjectPropertyGroup extends HTMLComponent {
   ) {
     super("ObjectPropertyGroup", ParentComponent, null);
     this.ParentCriteriaGroup = ParentComponent;
-    this.objectPropertySelector = new ObjectPropertyTypeId(
-      this,
-      specProvider,
-      temporaryLabel
-    );
+    this.temporaryLabel = temporaryLabel
     this.specProvider = specProvider;
   }
 
@@ -39,9 +38,16 @@ class ObjectPropertyGroup extends HTMLComponent {
   /*
 		renders the temporarly object property
 	*/
-  onStartClassGroupSelected() {
-    //this will set the temporary label since there hasn't been a Value chosen for EndClassGroup
-    this.objectPropertySelector.render();
+  onStartClassGroupSelected(startClassVal:SelectedVal) {
+    this.startClassVal = startClassVal
+        //this will set the temporary label since there hasn't been a Value chosen for EndClassGroup
+    this.inputTypeComponent = new ObjectPropertyTypeId(
+      this,
+      this.specProvider,
+      this.temporaryLabel,
+      this.startClassVal
+    ).render()
+
   }
 
   #addEventListener() {
@@ -63,7 +69,7 @@ class ObjectPropertyGroup extends HTMLComponent {
     this.html[0].dispatchEvent(new CustomEvent('getSparqlVarId',{
       bubbles:true,
       detail:(id: number) => { //callback
-        this.objectPropVal.variable = `?${this.specProvider.getLabel(type)}_${id}`
+        this.objectPropVal.variable = `?${this.specProvider.getLabel(type).replace(/\s+/g, '')}_${id}`
       }
     }))
   }
@@ -95,13 +101,18 @@ class ObjectPropertyGroup extends HTMLComponent {
     return this.objectPropVal.type
   }
 
+  getVarName() {
+    return this.objectPropVal.variable;
+  }
+
   /*
 		This method is triggered when an Object is selected.
 		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
 	*/
-  onEndClassGroupSelected() {
+  onEndClassGroupSelected(endClassVal:SelectedVal) {
     // this will update the temporarly label
-    this.objectPropertySelector.render();
+    this.inputTypeComponent.setEndClassVal(endClassVal)
+    this.inputTypeComponent.render()
   }
 }
 export default ObjectPropertyGroup;

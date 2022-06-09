@@ -16,8 +16,10 @@ export function addWhereComponent(grpWrapper:GroupWrapper,endClassVal: SelectedV
   grpWrapper.whereChild = new GroupWrapper(grpWrapper, grpWrapper.specProvider,endClassVal).render();
 
   //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
-  grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent.widgetHtml.val(endClassVal.type)
-  grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent.oldWidget.trigger('change')
+  let inputTypeComponent =  grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent
+  inputTypeComponent.oldWidget.val(endClassVal.type).niceSelect("update");
+  // nice-select is 2nd place in childrenslist. move away from nice-select...
+  inputTypeComponent.html[0].children[2].classList.add('disabled')
   // render the link where
   grpWrapper.linkWhereBottom = new LinkWhereBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(

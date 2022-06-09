@@ -35,7 +35,8 @@ import { OptionTypes } from "../components/builder-section/groupwrapper/criteria
       let branch:Branch = {
           line: {
              s:CrtGrp.StartClassGroup.getVarName(),
-             p:CrtGrp.ObjectPropertyGroup.getTypeSelected(),
+             p:CrtGrp.ObjectPropertyGroup.getVarName(),
+             pType:CrtGrp.ObjectPropertyGroup.getTypeSelected(),
              o:CrtGrp.EndClassGroup.getVarName(),
              sType:CrtGrp.StartClassGroup.getTypeSelected(),
              oType:CrtGrp.EndClassGroup.getTypeSelected(),
@@ -46,7 +47,7 @@ import { OptionTypes } from "../components/builder-section/groupwrapper/criteria
           notExists: grpWrapper.optionState == OptionTypes.NOTEXISTS
       }
       branches.push(branch)
-      if(grpWrapper.andSibling) branches.push(...this.#getBranch(grpWrapper.andSibling))
+      if(grpWrapper.andSibling) branches.push(...this.#getBranch(grpWrapper.andSibling)) // spread operatore since getBranch() returns an array
       return branches
     }
   }

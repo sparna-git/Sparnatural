@@ -1,4 +1,5 @@
 import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
+import { SelectedVal } from "../../../../../sparql/ISparJson";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import ArrowComponent from "../../../../arrows/ArrowComponent";
 import HTMLComponent from "../../../../HtmlComponent";
@@ -10,6 +11,9 @@ import CriteriaGroup from "../CriteriaGroup";
 class ObjectPropertyTypeId extends HTMLComponent {
   GrandParent: CriteriaGroup;
   temporaryLabel: string;
+  startClassVal:SelectedVal;
+  endClassVal:SelectedVal;
+  oldWidget:JQuery<HTMLElement>
   arrow: ArrowComponent = new ArrowComponent(
     this,
     UiuxConfig.COMPONENT_ARROW_FRONT
@@ -19,12 +23,14 @@ class ObjectPropertyTypeId extends HTMLComponent {
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
-    temporaryLabel: string
+    temporaryLabel: string,
+    startClassVal:SelectedVal
   ) {
     super("ObjectPropertyTypeId", ParentComponent, null);
     this.temporaryLabel = temporaryLabel;
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.specProvider = specProvider;
+    this.startClassVal = startClassVal
   }
 
   /*
@@ -35,17 +41,17 @@ class ObjectPropertyTypeId extends HTMLComponent {
   render() {
     super.render();
     // if there is an Object selected
-    if (this.GrandParent.EndClassGroup.endClassVal.type) {
+    if (this.endClassVal) {
       this.#removeTempLbl();
       // set the correct objectProperty matching to Start and End value
-      let oldWidget = this.#getObjectProperty();
-      this.html.append(oldWidget);
-      this.widgetHtml = oldWidget.niceSelect();
-      this.#addOnChangeListener(oldWidget);
+      this.oldWidget = this.#getObjectProperty();
+      this.html.append(this.oldWidget);
+      this.widgetHtml = this.oldWidget.niceSelect();
+      this.#addOnChangeListener(this.oldWidget);
 
       // if there is no options for the user to choose, then trigger the change event
       if (this.selectBuilder.items.length <= 1) {
-        oldWidget.trigger("change");
+        this.oldWidget.trigger("change");
       }
     } else {
       // there hasn't been an Object in Endclassgroup chosen. render a temporary label
@@ -87,15 +93,13 @@ class ObjectPropertyTypeId extends HTMLComponent {
     var default_value = null;
 
     return this.selectBuilder.buildPropertySelect(
-      this.GrandParent.StartClassGroup.startClassVal.type,
-      this.GrandParent.EndClassGroup.endClassVal.type,
+      this.startClassVal.type,
+      this.endClassVal.type,
       default_value
     );
   }
-
-  reload() {
-    console.warn("reload objectpropertytypeID");
-    this.render(); // IMPORTANT  is this right? or should it be this.init()? to only update css classes
+  setEndClassVal(endClassVal:SelectedVal){
+    this.endClassVal = endClassVal
   }
 }
 export default ObjectPropertyTypeId;

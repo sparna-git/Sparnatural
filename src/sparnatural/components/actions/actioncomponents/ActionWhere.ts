@@ -13,6 +13,7 @@ class ActionWhere extends HTMLComponent {
   parentComponent: EditComponents;
   specProvider: ISpecProvider;
   callBack: () => void;
+  btn: JQuery<HTMLElement>;
   constructor(
     parentComponent: EditComponents,
     specProvider: ISpecProvider,
@@ -25,6 +26,7 @@ class ActionWhere extends HTMLComponent {
     this.parentComponent = parentComponent
   }
   render = () => {
+    super.render();
     var choiceNumber = 2;
     if (
       this.parentComponent.widgetWrapper.getWidgetType() ==
@@ -35,24 +37,23 @@ class ActionWhere extends HTMLComponent {
     var endLabel = this.specProvider.getLabel(
       this.parentComponent.endClassVal.type
     )
-
-    let newhtml = $(`
-      <span class="edit-trait">
-        <span class="edit-num"> ${choiceNumber}</span>
-      </span>
+    
+    let editTrait = $(`
+    <span class="edit-trait">
+      <span class="edit-num"> ${choiceNumber}</span>
+    </span>`)
+    let where = $(`
       <div> ${getSettings().langSearch.Search} ${endLabel} ${
       getSettings().langSearch.That
     } </div>
-      
-      `);
-    let link = $(`<a>+</a>`);
-    newhtml = newhtml.add(link);
-
-    this.widgetHtml = newhtml;
-    link[0].addEventListener("click", () => {
+    `);
+    this.btn = $(`<a>+</a>`);
+    where = where.add(this.btn[0])
+    editTrait = editTrait.add(where);
+    this.btn[0].addEventListener("click", () => {
       this.callBack();
     });
-    super.render();
+    this.html.append(editTrait)
     return this;
   };
 }

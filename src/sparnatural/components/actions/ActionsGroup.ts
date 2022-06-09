@@ -43,18 +43,7 @@ class ActionsGroup extends HTMLComponent {
         detail: this.ParentCriteriaGroup.StartClassGroup.startClassVal,
       })
     );
-    this.#removeActionAnd();
-    return false;
   };
-
-  // deactivate onHover function and remove it. Could also make it invisible?
-  #removeActionAnd() {
-    let remCss = $(this.actions.ActionAnd.html).remove();
-    if (remCss.length == 0)
-      throw Error(
-        `Didn't find ActionAnd Component. ActionAnd.html:${this.actions.ActionAnd.html}`
-      );
-  }
 
   maxDepthIsReached() {
     let maxreached = false;

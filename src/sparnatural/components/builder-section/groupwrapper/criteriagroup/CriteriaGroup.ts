@@ -71,11 +71,8 @@ class CriteriaGroup extends HTMLComponent {
       "StartClassGroupSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        if (e.detail === "" || !e.detail)
-          throw Error(
-            "The Event StartClassGroupSelected expects the startClassVal"
-          );
-        this.ObjectPropertyGroup.onStartClassGroupSelected();
+        if (!this.#isSelectedVal(e.detail))  throw Error('StartClassGroupSelected expects object of type SelectedVal')
+        this.ObjectPropertyGroup.onStartClassGroupSelected(e.detail);
         this.EndClassGroup.onStartClassGroupSelected(e.detail);
       }
     );
@@ -83,11 +80,8 @@ class CriteriaGroup extends HTMLComponent {
     // 2. User Selects EndClassVal
     this.html[0].addEventListener("EndClassGroupSelected", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      if (e.detail === "" || !e.detail)
-        throw Error(
-          "The Event StartClassGroupSelected expects the startClassVal"
-        );
-      this.ObjectPropertyGroup.onEndClassGroupSelected();
+      if (!this.#isSelectedVal(e.detail)) throw Error('EndClassGroupSelected expects object of type SelectedVal')
+      this.ObjectPropertyGroup.onEndClassGroupSelected(e.detail);
     });
 
     // 3. Automatically selected or User selects ObjectPropertyGrpVal
@@ -95,6 +89,7 @@ class CriteriaGroup extends HTMLComponent {
       "onObjectPropertyGroupSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
+        if (!this.#isSelectedVal(e.detail)) throw Error('onObjectPropertyGroupSelected expects object of type SelectedVal')
         // if there is already a where connection, don't change anything  
         if(!this.ParentGroupWrapper.whereChild) this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
         this.OptionsGroup.onObjectPropertyGroupSelected();
@@ -104,9 +99,11 @@ class CriteriaGroup extends HTMLComponent {
   };
 
   //set css completed class on GroupWrapper
-
   initCompleted() {
     this.ParentGroupWrapper.html.addClass("completed");
+  }
+  #isSelectedVal(payload:any): payload is SelectedVal{
+    return ('type' in payload) && ('variable' in payload)
   }
 }
 export default CriteriaGroup;

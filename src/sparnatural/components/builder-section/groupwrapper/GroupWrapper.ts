@@ -1,4 +1,3 @@
-import { getSettings } from "../../../../configs/client-configs/settings";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import LinkAndBottom from "./LinkAndBottom";
 import LinkWhereBottom from "./LinkWhereBottom";
@@ -14,7 +13,7 @@ import { SelectedVal } from "../../../sparql/ISparJson";
 class GroupWrapper extends HTMLComponent {
   whereChild: GroupWrapper = null;
   andSibling: GroupWrapper = null;
-  optionState: OptionTypes
+  optionState = OptionTypes.NONE
   linkAndBottom: LinkAndBottom; // connection line drawn from this CriteriaList with hasAnd CriteriaList
   linkWhereBottom: LinkWhereBottom;
   CriteriaGroup: CriteriaGroup;

@@ -215,7 +215,7 @@ export class Dropdown extends HTMLElement {
         this.toggleOpen();
 
         this.dispatchEvent(
-          new CustomEvent('onChange', { detail: key })
+          new CustomEvent('onChange', { detail: this.options[this.option] })
         );
 
         this.render();

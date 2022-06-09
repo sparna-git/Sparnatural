@@ -63,10 +63,15 @@ export default class LoadQuery extends HTMLComponent {
         this.dropDown.option = Object.keys(options)[0]
 
         this.html.append(this.dropDown);
-          
-        document.querySelector('custom-dropdown')
-        .addEventListener('onChange', value => {
-            console.log(value)
+        
+        // gets called when the user selects a query from the dropdown
+        this.dropDown.addEventListener('onChange', (value:CustomEvent) => {
+            if(!('detail' in value) || !('label' in value.detail)) throw Error('onChange dropdown event expects object of type{detail: {label:string}}')
+            let payload = this.parsedQueries.find(q=>{
+                if(q.queryName == value.detail.label) return q
+                return false
+            })
+            this.html[0].dispatchEvent(new CustomEvent('setPreloadedQuery',{bubbles:true,detail:payload}))
         });
     }
 

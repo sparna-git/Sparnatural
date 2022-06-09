@@ -8,6 +8,7 @@ export interface SelectedVal {
 export interface CriteriaLine {
     s:string,
     p: string,
+    pType:string,
     o:string,
     sType:string,
     oType:string,
