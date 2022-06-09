@@ -7,11 +7,11 @@
     position: relative;
     margin: 0 auto;
     a {
-        position: absolute;
+        position: relative;
+        display: flex;
         top: 14px;
-        right: 0;
-        width: 54px;
-        height: 54px;
+        width: fit-content;
+        left:93%;
         padding: 10px;
         padding-left: 12px;
         border-radius: 5px;
