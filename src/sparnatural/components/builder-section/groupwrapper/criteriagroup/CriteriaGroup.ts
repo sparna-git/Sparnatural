@@ -92,7 +92,7 @@ class CriteriaGroup extends HTMLComponent {
         if (!this.#isSelectedVal(e.detail)) throw Error('onObjectPropertyGroupSelected expects object of type SelectedVal')
         // if there is already a where connection, don't change anything  
         if(!this.ParentGroupWrapper.whereChild) this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
-        this.OptionsGroup.onObjectPropertyGroupSelected();
+        this.OptionsGroup.onObjectPropertyGroupSelected(this.ParentGroupWrapper.optionState);
         this.ActionsGroup.onObjectPropertyGroupSelected();
       }
     );

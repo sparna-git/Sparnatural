@@ -19,7 +19,6 @@ export enum OptionTypes {
  **/
 export class OptionsGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
-  valuesSelected: { [key: string]: boolean };
   OptionalComponent: OptionalComponent;
   NotExistsComponent: NotExistsComponent;
   specProvider: ISpecProvider;
@@ -28,7 +27,6 @@ export class OptionsGroup extends HTMLComponent {
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
     super("OptionsGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
-    this.valuesSelected = {};
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
     this.OptionalComponent = new OptionalComponent(
       this,
@@ -42,19 +40,17 @@ export class OptionsGroup extends HTMLComponent {
 
   render() {
     super.render();
-    // if there were values selected delete it
-    this.valuesSelected = {};
     return this;
   }
 
   // called by ParentCriteriaGroup
-  onObjectPropertyGroupSelected() {
-    this.#checkIfoptionalArrowisRenderable();
+  onObjectPropertyGroupSelected(optionState:OptionTypes) {
+    this.#checkIfoptionalArrowisRenderable(optionState);
   }
 
   // validates if the Options Arrow can be rendered or not
-  #checkIfoptionalArrowisRenderable() {
-    if (this.#checkIfOptionsPossible && !this.optionalArrow) {
+  #checkIfoptionalArrowisRenderable(optionState:OptionTypes) {
+    if (this.#checkIfOptionsPossible && !this.optionalArrow && (optionState == OptionTypes.NONE)) {
       //Options like NOTEXISTS are possible and none of the parent has it already activated
       this.#addOptionsPossible();
     }
