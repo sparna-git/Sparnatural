@@ -46,10 +46,13 @@ export default class GroupWrapperEventStore{
         });
     
         this.grpWrapper.html[0].addEventListener('optionTriggered',(e:CustomEvent)=>{
-          if(!Object.values(OptionTypes).includes(e.detail)) throw Error("No OptionalType payload received! optionTriggered must send payload of type OptionTypes!")
+          if(!('detail' in e) || (e.detail == '') || (!e.detail)) throw Error("No OptionalType payload received! optionTriggered must send payload of type OptionTypes!")
           e.stopImmediatePropagation();
           let newOptionState = e.detail
-            triggerOption(this.grpWrapper,newOptionState)
+          triggerOption(this.grpWrapper,newOptionState)
+          this.grpWrapper.html[0].dispatchEvent(
+            new CustomEvent("generateQuery", { bubbles: true })
+          );
         })
       }
 }

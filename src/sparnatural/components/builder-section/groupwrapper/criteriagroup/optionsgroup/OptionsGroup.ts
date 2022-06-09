@@ -23,7 +23,7 @@ export class OptionsGroup extends HTMLComponent {
   OptionalComponent: OptionalComponent;
   NotExistsComponent: NotExistsComponent;
   specProvider: ISpecProvider;
-  backArrow: OptionalArrow;
+  optionalArrow: OptionalArrow;
 
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
     super("OptionsGroup", ParentCriteriaGroup, null);
@@ -49,12 +49,12 @@ export class OptionsGroup extends HTMLComponent {
 
   // called by ParentCriteriaGroup
   onObjectPropertyGroupSelected() {
-    this.#checkIfBackArrowisRenderable();
+    this.#checkIfoptionalArrowisRenderable();
   }
 
   // validates if the Options Arrow can be rendered or not
-  #checkIfBackArrowisRenderable() {
-    if (this.#checkIfOptionsPossible && !this.backArrow) {
+  #checkIfoptionalArrowisRenderable() {
+    if (this.#checkIfOptionsPossible && !this.optionalArrow) {
       //Options like NOTEXISTS are possible and none of the parent has it already activated
       this.#addOptionsPossible();
     }
@@ -68,7 +68,7 @@ export class OptionsGroup extends HTMLComponent {
   }
 
   #addOptionsPossible() {
-    this.#renderOptionsGroupBackArrow();
+    this.#renderOptionsGroupoptionalArrow();
   }
 
   #checkIfOptionsPossible(): boolean {
@@ -88,8 +88,8 @@ export class OptionsGroup extends HTMLComponent {
     this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
   }
 
-  #renderOptionsGroupBackArrow() {
-    this.backArrow = new OptionalArrow(this, (selected: boolean) => {
+  #renderOptionsGroupoptionalArrow() {
+    this.optionalArrow = new OptionalArrow(this, (selected: boolean) => {
       selected
         ? this.#renderOptionalComponents()
         : this.#removeOptionalComponents();

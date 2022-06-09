@@ -27,7 +27,7 @@ let setOptnTypeToDescendants = (grpWrapper:GroupWrapper,newOptionState: OptionTy
       setOptionCss(grpWrapper,grpWrapper.optionState,newOptionState)
       grpWrapper.optionState = newOptionState
       //remove the optional possibilities for child groups
-      grpWrapper.CriteriaGroup.OptionsGroup.backArrow?.html?.toggle();
+      grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow?.html?.toggle();
       grpWrapper.CriteriaGroup.OptionsGroup?.OptionalComponent?.html?.toggle()
       grpWrapper.CriteriaGroup.OptionsGroup?.NotExistsComponent?.html?.toggle()
       if(grpWrapper.andSibling) switchState(grpWrapper.linkAndBottom.html[0],grpWrapper.optionState,newOptionState)

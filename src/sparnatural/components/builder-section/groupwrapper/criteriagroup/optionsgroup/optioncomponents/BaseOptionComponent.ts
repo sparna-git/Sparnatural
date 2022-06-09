@@ -24,7 +24,6 @@ class BaseOptionComponent extends HTMLComponent {
   label: string;
   inputElement: JQuery<HTMLElement>;
   name: string;
-  id: string;
   objectId: any;
   specProvider: ISpecProvider;
   type: OptionTypes;

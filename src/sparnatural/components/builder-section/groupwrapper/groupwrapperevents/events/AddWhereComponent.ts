@@ -1,5 +1,6 @@
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import { MaxVarAction } from "../../../../../statehandling/ActionStore";
+import { OptionTypes } from "../../criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../GroupWrapper";
 import LinkWhereBottom from "../../LinkWhereBottom";
 
@@ -23,4 +24,8 @@ export function addWhereComponent(grpWrapper:GroupWrapper,endClassVal: SelectedV
     new CustomEvent("initGeneralEvent", { bubbles: true })
   );
   grpWrapper.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{bubbles:true,detail:MaxVarAction.INCREASE}))
+  // If there is an option on this grpWrapper, set it to the where child as well
+  let tmpOptionState = grpWrapper.optionState
+  grpWrapper.optionState = OptionTypes.NONE
+  grpWrapper.html[0].dispatchEvent(new CustomEvent('optionTriggered',{detail:tmpOptionState}))
 }
