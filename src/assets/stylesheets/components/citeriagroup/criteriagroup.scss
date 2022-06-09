@@ -45,10 +45,6 @@
 	}
 	&.notExistsEnabled {
 		border: 3px dashed #000;
-		&>span {
-			border: 2px dashed #000;
-			border-radius: 15px;
-		}
 	}
 	span.unselect{
 		position: absolute;
