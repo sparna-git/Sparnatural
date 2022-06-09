@@ -1,4 +1,5 @@
 import { getSettings } from "../../../configs/client-configs/settings";
+import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import ActionStore from "../ActionStore";
 /*
@@ -14,6 +15,7 @@ export default function initGeneralevent(actionStore: ActionStore) {
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       renderLinks(grpWrapper);
+      rerenderOptionState(grpWrapper)
       //render background
       previousHeight = currentHeight;
       currentHeight = grpWrapper.html.outerHeight(true) + 1;
@@ -40,6 +42,15 @@ function renderLinks(grpWrapper: GroupWrapper) {
     grpWrapper.linkAndBottom.html.empty();
     grpWrapper.linkAndBottom.html.remove();
     if (grpWrapper.html) grpWrapper.linkAndBottom.render();
+  }
+}
+
+//sets the correct OptionState on newly added group wrappers
+function rerenderOptionState(grpWrapper:GroupWrapper){
+  if(grpWrapper.optionState != OptionTypes.NONE){
+    let tmpOptionState = grpWrapper.optionState
+    grpWrapper.optionState = OptionTypes.NONE
+    grpWrapper.html[0].dispatchEvent(new CustomEvent('optionTriggered',{detail:tmpOptionState}))
   }
 }
 

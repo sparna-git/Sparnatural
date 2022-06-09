@@ -71,7 +71,8 @@ export default class LoadQuery extends HTMLComponent {
                 if(q.queryName == value.detail.label) return q
                 return false
             })
-            this.html[0].dispatchEvent(new CustomEvent('setPreloadedQuery',{bubbles:true,detail:payload}))
+            // send a deep copy of that object
+            this.html[0].dispatchEvent(new CustomEvent('setPreloadedQuery',{bubbles:true,detail:JSON.parse(JSON.stringify(payload))}))
         });
     }
 

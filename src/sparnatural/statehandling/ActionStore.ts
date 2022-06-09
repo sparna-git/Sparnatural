@@ -55,12 +55,6 @@ class ActionStore {
       }
     );
 
-    this.sparnatural.html[0].addEventListener(
-      "displayVarName",
-      (e: CustomEvent) => {
-        e.stopImmediatePropagation();
-      }
-    );
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
     this.sparnatural.html[0].addEventListener("onSelectViewVar", (e:CustomEvent) => {
       e.stopImmediatePropagation();
@@ -117,10 +111,13 @@ class ActionStore {
     );
 
     this.sparnatural.html[0].addEventListener(
-      "resetVarIds",
+      "resetVars",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
         this.sparqlVarID = 0
+        this.variables = []
+        this.sparnatural.VariableSelection.html.remove()
+        this.sparnatural.VariableSelection.render()
       }
     );
 

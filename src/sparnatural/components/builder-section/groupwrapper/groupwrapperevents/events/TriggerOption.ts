@@ -1,4 +1,3 @@
-import toggleVarNames from "../../../../../statehandling/actions/ToggleVarNames";
 import { OptionTypes } from "../../criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../GroupWrapper";
 
@@ -10,11 +9,9 @@ import GroupWrapper from "../../GroupWrapper";
 */
 export function triggerOption(grpWrapper:GroupWrapper,newOptionState:OptionTypes){
     if(grpWrapper.optionState == newOptionState) newOptionState = OptionTypes.NONE  //btn with already active state got clicked again. switch back to normal 
-
-
-    //set css on linkWhereBottom
+    //set css on linkWhereBottom and linkAnBottom
     if(grpWrapper.whereChild) switchState(grpWrapper.linkWhereBottom.html[0],grpWrapper.optionState,newOptionState)
-    //switch to new state
+    //set css on grpwrapper itself
     switchState(grpWrapper.CriteriaGroup.html[0],grpWrapper.optionState,newOptionState)
     // set new optionstate as classvariable
     grpWrapper.optionState = newOptionState
@@ -26,18 +23,26 @@ let setOptnTypeToDescendants = (grpWrapper:GroupWrapper,newOptionState: OptionTy
     if(grpWrapper.whereChild) grpWrapper.whereChild.traversePreOrder((grpWrapper: GroupWrapper) => {
       setOptionCss(grpWrapper,grpWrapper.optionState,newOptionState)
       grpWrapper.optionState = newOptionState
-      //remove the optional possibilities for child groups
-      grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow?.html?.toggle();
-      grpWrapper.CriteriaGroup.OptionsGroup?.OptionalComponent?.html?.toggle()
-      grpWrapper.CriteriaGroup.OptionsGroup?.NotExistsComponent?.html?.toggle()
-      if(grpWrapper.andSibling) switchState(grpWrapper.linkAndBottom.html[0],grpWrapper.optionState,newOptionState)
     });
   }
   
 let setOptionCss = (grpWrapper:GroupWrapper,oldState:OptionTypes, newState:OptionTypes)=>{
-switchState(grpWrapper.CriteriaGroup.html[0],oldState,newState)
-if(grpWrapper.whereChild) switchState(grpWrapper.linkWhereBottom.html[0],oldState,newState)
-if(grpWrapper.andSibling) switchState(grpWrapper.linkAndBottom.html[0],oldState,newState)
+  switchState(grpWrapper.CriteriaGroup.html[0],oldState,newState)
+  if(grpWrapper.whereChild) switchState(grpWrapper.linkWhereBottom.html[0],oldState,newState)
+  if(grpWrapper.andSibling) switchState(grpWrapper.linkAndBottom.html[0],oldState,newState)
+
+  //remove the optional possibilities for child groups if they have an optional arrow
+  if(grpWrapper.CriteriaGroup.OptionsGroup?.optionalArrow?.html){
+    if(newState == OptionTypes.NONE ){
+      grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.render()
+    }
+    if((newState == OptionTypes.NOTEXISTS) || (newState == OptionTypes.OPTIONAL)){
+
+      grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.html.remove()
+      grpWrapper.CriteriaGroup.OptionsGroup.OptionalComponent.html.remove()
+      grpWrapper.CriteriaGroup.OptionsGroup.NotExistsComponent.html.remove()
+    }
+  }
 }
 
 let switchState = (el:HTMLElement,oldState:OptionTypes, newState:OptionTypes) =>{

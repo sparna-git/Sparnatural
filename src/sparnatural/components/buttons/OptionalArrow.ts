@@ -8,20 +8,23 @@ import HTMLComponent from "../HtmlComponent";
 
 class OptionalArrow extends HTMLComponent {
   selected = false;
+  callBack: (selected: boolean) => void;
   constructor(
     ParentComponent: OptionsGroup,
     callBack: (selected: boolean) => void
   ) {
     let widgetHtml = $(UiuxConfig.COMPONENT_OPTION_ARROW_FRONT);
     super("optionalArrow", ParentComponent, widgetHtml);
-    this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
-      e.stopImmediatePropagation();
-      this.selected = this.selected ? false : true;
-      callBack(this.selected);
-    });
+    this.callBack = callBack
+
   }
   render(): this {
     super.render();
+    this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
+      e.stopImmediatePropagation();
+      this.selected = this.selected ? false : true;
+      this.callBack(this.selected);
+    });
     return this;
   }
 }
