@@ -122,19 +122,9 @@ class ActionStore {
     );
 
     this.sparnatural.html[0].addEventListener(
-      "changeOrderSort",
+      "changeSortOrder",
       (e: CustomEvent) => {
-        switch(e.detail){
-          case 'asc':
-            this.order = Order.ASC
-            break;
-          case 'desc':
-            this.order = Order.DESC
-            break;
-          case 'noorder':
-            this.order = Order.NOORDER
-            break;
-        }
+        if(!(Object.values(Order).includes(e.detail))) throw Error('changeSortOrder expects a payload of Order enum')
         this.order = e.detail;
       }
     );

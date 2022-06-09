@@ -1,4 +1,5 @@
 import { getSettings } from "../../../../configs/client-configs/settings";
+import { Order } from "../../../sparql/ISparJson";
 import AscendBtn from "../../buttons/AscendBtn";
 import DescendBtn from "../../buttons/DescendBtn";
 import NoOrderBtn from "../../buttons/NoOrderBtn";
@@ -32,17 +33,17 @@ class VariableSortOption extends HTMLComponent{
 
     ascendCallBack = () => {
         this.html[0].dispatchEvent(
-          new CustomEvent("changeOrderSort", { bubbles: true, detail: "asc" })
+          new CustomEvent("changeSortOrder", { bubbles: true, detail: Order.ASC })
         );
       };
     descendCallBack = () => {
     this.html[0].dispatchEvent(
-        new CustomEvent("changeOrderSort", { bubbles: true, detail: "desc" })
+        new CustomEvent("changeSortOrder", { bubbles: true, detail: Order.DESC })
     );
     };
     noOrderCallback = () => {
     this.html[0].dispatchEvent(
-        new CustomEvent("changeOrderSort", { bubbles: true, detail: "nosort" })
+        new CustomEvent("changeSortOrder", { bubbles: true, detail: Order.NOORDER })
     );
     };
     
