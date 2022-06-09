@@ -57,24 +57,10 @@
             transition: margin-top 0.700s ease;
             cursor: pointer;
 
-            .icon-arrow-top {
-                display: none;
-            }
-
-            .icon-arrow-bottom {
+            .arrow-icon {
                 margin-top: 4px;
                 display: inline;
             }
-        }
-    }
-
-    &.displayed .VariableSelectorDisplay a {
-        .icon-arrow-top {
-            display: inline;
-        }
-
-        .icon-arrow-bottom {
-            display: none;
         }
     }
 
