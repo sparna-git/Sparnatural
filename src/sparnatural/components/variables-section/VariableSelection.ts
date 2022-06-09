@@ -33,15 +33,8 @@ class VariableSection extends HTMLComponent {
   }
 
   #renderShowHideBtn() {
-    let displayaction = (displayed: boolean) => {
-      if (displayed) {
-        $(this.linesWrapper).animate(
-          {
-            height: 0,
-          },
-          500
-        );
-      } else {
+    let displayaction = (display: boolean) => {
+      if (display) {
         $(this.linesWrapper).animate(
           {
             height: $(this.linesWrapper).get(0).scrollHeight,
@@ -50,6 +43,13 @@ class VariableSection extends HTMLComponent {
           () => {
             $(this.linesWrapper).height("auto");
           }
+        );
+      } else {
+        $(this.linesWrapper).animate(
+          {
+            height: 0,
+          },
+          500
         );
       }
     };
