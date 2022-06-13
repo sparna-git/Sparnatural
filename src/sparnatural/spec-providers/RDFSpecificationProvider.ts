@@ -1,6 +1,6 @@
 const factory = require("@rdfjs/data-model");
 const rdfParser = require("rdf-parse").default;
-import { Quad, Store } from "n3";
+import { NamedNode, Quad, Store } from "n3";
 import { storeStream } from "rdf-store-stream";
 import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
 import ISpecProvider from "./ISpecProviders";
@@ -8,26 +8,26 @@ import Datasources from "../../configs/fixed-configs/SparnaturalConfigDatasource
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 export const RDF = {
-  TYPE: factory.namedNode(RDF_NAMESPACE + "type"),
-  FIRST: factory.namedNode(RDF_NAMESPACE + "first"),
-  REST: factory.namedNode(RDF_NAMESPACE + "rest"),
-  NIL: factory.namedNode(RDF_NAMESPACE + "nil"),
+  TYPE: factory.namedNode(RDF_NAMESPACE + "type") as NamedNode,
+  FIRST: factory.namedNode(RDF_NAMESPACE + "first") as NamedNode,
+  REST: factory.namedNode(RDF_NAMESPACE + "rest") as NamedNode,
+  NIL: factory.namedNode(RDF_NAMESPACE + "nil") as NamedNode,
 };
 
 const RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
 export const RDFS = {
-  LABEL: factory.namedNode(RDFS_NAMESPACE + "label"),
-  DOMAIN: factory.namedNode(RDFS_NAMESPACE + "domain"),
-  RANGE: factory.namedNode(RDFS_NAMESPACE + "range"),
-  SUBPROPERTY_OF: factory.namedNode(RDFS_NAMESPACE + "subPropertyOf"),
-  SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf"),
+  LABEL: factory.namedNode(RDFS_NAMESPACE + "label") as NamedNode,
+  DOMAIN: factory.namedNode(RDFS_NAMESPACE + "domain") as NamedNode,
+  RANGE: factory.namedNode(RDFS_NAMESPACE + "range") as NamedNode,
+  SUBPROPERTY_OF: factory.namedNode(RDFS_NAMESPACE + "subPropertyOf") as NamedNode,
+  SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf") as NamedNode,
 };
 
 const OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
 export const OWL = {
-  EQUIVALENT_PROPERTY: factory.namedNode(OWL_NAMESPACE + "equivalentProperty"),
-  EQUIVALENT_CLASS: factory.namedNode(OWL_NAMESPACE + "equivalentClass"),
-  UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf"),
+  EQUIVALENT_PROPERTY: factory.namedNode(OWL_NAMESPACE + "equivalentProperty") as NamedNode,
+  EQUIVALENT_CLASS: factory.namedNode(OWL_NAMESPACE + "equivalentClass") as NamedNode,
+  UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode,
 };
 
 export class RDFSpecificationProvider implements ISpecProvider {

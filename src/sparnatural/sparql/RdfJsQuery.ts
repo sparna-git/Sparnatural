@@ -2,12 +2,11 @@ import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrappe
 import {  Language, Order } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import ISpecProvider from "../spec-providers/ISpecProviders";
-import { BgpPattern, FilterPattern, Generator, OptionalPattern, Ordering, Pattern, SelectQuery, Triple, Variable, VariableTerm } from "sparqljs";
+import { BgpPattern, FilterPattern, Generator, OptionalPattern, Ordering, Pattern, SelectQuery, Triple, Variable, VariableExpression, VariableTerm } from "sparqljs";
 import Sparnatural from "../components/Sparnatural";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import { DataFactory } from "n3";
 import { RDF } from "../spec-providers/RDFSpecificationProvider";
-  
 /*
   Reads out the UI and creates the internal JSON structure described here:
   https://docs.sparnatural.eu/Query-JSON-format
@@ -49,7 +48,7 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
               rdfs: "http://www.w3.org/2000/01/rdf-schema#",
               xsd: "http://www.w3.org/2001/XMLSchema#"
             },
-            order:this.#orderToRDFJS(order,this.#varsToRDFJS(variables)[0])
+            order:this.#orderToRDFJS(order,this.#varsToRDFJS(variables)[0] as VariableTerm)
           }
           for (var key in this.additionnalPrefixes) {
             RdfJsQuery.prefixes[key] = this.additionnalPrefixes[key]
@@ -63,7 +62,7 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
     }
 
     #processGrpWrapper(grpWrapper:GroupWrapper,isInOption:boolean){
-        let ptrns:Pattern[] 
+        let ptrns:Pattern[] = []
 
         let triples = this.#buildTripples(grpWrapper.CriteriaGroup)
         let widgetVals = grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.getRdfJsPattern()
@@ -115,8 +114,8 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
 
     #buildTripples(crtGrp: CriteriaGroup): Triple[]{
     let triples:Triple[] = []
-    let startClass = this.#buildTripple(crtGrp.StartClassGroup.getVarName(),RDF.TYPE,crtGrp.StartClassGroup.getTypeSelected())
-    let endClass = this.#buildTripple(crtGrp.EndClassGroup.getVarName(),RDF.TYPE,crtGrp.EndClassGroup.getTypeSelected())
+    let startClass = this.#buildTripple(crtGrp.StartClassGroup.getVarName(),RDF.TYPE.value,crtGrp.StartClassGroup.getTypeSelected())
+    let endClass = this.#buildTripple(crtGrp.EndClassGroup.getVarName(),RDF.TYPE.value,crtGrp.EndClassGroup.getTypeSelected())
     let connectingTripple = this.#buildTripple(startClass.subject.value,crtGrp.ObjectPropertyGroup.getTypeSelected(),endClass.subject.value)
     triples.push(startClass,endClass,connectingTripple)
     return triples
@@ -131,7 +130,7 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
 
     #buildTripple(subj:string,pred:string,obj:string):Triple{
     return {
-        subject: DataFactory.variable(subj),
+        subject: DataFactory.variable(subj.replace('?','')),
         predicate: DataFactory.namedNode(pred),
         object: DataFactory.namedNode(obj)
     }
@@ -158,7 +157,7 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
     }
     }
 
-    #varsToRDFJS(variables:Array<string>): VariableTerm[]{
+    #varsToRDFJS(variables:Array<string>): Variable[]{
     return variables.map(v=>{
         return DataFactory.variable(v.replace('?',''))
     })

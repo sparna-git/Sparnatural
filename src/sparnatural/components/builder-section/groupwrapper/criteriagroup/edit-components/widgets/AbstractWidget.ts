@@ -16,7 +16,7 @@ export interface WidgetValue {
 }
 
 export abstract class AbstractWidget extends HTMLComponent{
-  protected widgetValues:Array<WidgetValue>
+  protected widgetValues:Array<WidgetValue> = []
   startClassVal: SelectedVal
   objectPropVal: SelectedVal
   endClassVal: SelectedVal

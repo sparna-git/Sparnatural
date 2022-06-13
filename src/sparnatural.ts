@@ -31,7 +31,6 @@ import Sparnatural from "./sparnatural/components/Sparnatural";
   Used to configure the Settings
 */
 import {rdfconfig} from '../static/config'
-import ISettings from './configs/client-configs/ISettings';
 
 import { queries } from './sparnatural/preloadedqueries';
 export class SparNatural extends HTMLElement {
@@ -39,21 +38,25 @@ export class SparNatural extends HTMLElement {
   specProvider: any;
   // all the components in Sparnatural
   components: any = [];
+  static get observedAttributes() {
+    return ['settings'];
+  }
   constructor() {
     super();
-    this.setSettings({config:rdfconfig,language:'en',preLoadedQueries:queries})
+    mergeSettings({config:rdfconfig,language:'en',preLoadedQueries:queries})
   }
   //gets called when the component was rendered
   connectedCallback(){
+    this.dispatchEvent(new CustomEvent('componentLoaded',{bubbles:true}))
     this.initSparnatural()
   }
   // Used by calling Calling component to set or get the settings.
   // e.g index.html can overwride default settings
-  getSettings() {
+  get settings() {
     return getSettings();
   }
 
-  setSettings(options: ISettings) {
+  set settings(options: any) {
     mergeSettings(options);
   }
 

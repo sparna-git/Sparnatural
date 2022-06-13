@@ -130,7 +130,7 @@ export class Dropdown extends HTMLElement {
   $dropdown: any;
   $dropdownList: any;
   constructor() {
-    super();
+    super()
     this.attachShadow({ mode: 'open' });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 

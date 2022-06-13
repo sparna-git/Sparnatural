@@ -49,8 +49,7 @@
         </div>
       <div class="row justify-content-center">
         <div class="col-md-12">
-          <div id="yasgui"></div>
-            <yas-gui></yas-gui>
+            <yas-gui><div id="yasgui"></div></yas-gui>
         </div>
       </div>
     </div>
@@ -128,40 +127,39 @@
 
     <!-- Start Sparnatural stuff-->
     <script type="module">
-      
-      $.urlParam = function (name) {
-        var results = new RegExp("[\\?&amp;]" + name + "=([^&amp;#]*)").exec(
-          window.location.href
-        );
-        if (results == null) {
-          return null;
-        }
-        return results[1] || 0;
-      };
-      var lang = ($.urlParam('lang') != null)?$.urlParam('lang'):'fr';
-
-      let defaultEndpoint = "http://fr.dbpedia.org/sparql"
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      const lang = urlParams.get('lang')
+      //const yas = new YasguiComponent()
       /*
         Init Yasgui component
       */
+      let defaultEndpoint = "http://fr.dbpedia.org/sparql"
       let yasgui = document.querySelector("yas-gui");
-      yasgui.setEndpoint(defaultEndpoint)
-      let tab = yasgui.getTab()
+      //yasgui.setAttribute('endpoint',defaultEndpoint)
+      let tab = null
+      yasgui.addEventListener('componentLoaded',(e)=>{
+        e.stopImmediatePropagation()
+        tab = e.detail;     
+        // If you would like to overwride default settings
+      })
 
       /*
         Init Sparnatural component
       */
       let sparnatural = document.querySelector("spar-natural");
-     
-      // If you would like to overwride default settings
-      
-      //import config from '../static/config';
-      let settings = {
+      sparnatural.addEventListener('componentLoaded',(e)=>{
+        //import config from '../static/config';
+        let settings = {
         //config: config,
         currentTab: tab, // link sparnatural with yasgui
-        language:lang
+        //language:lang
       }
-      sparnatural.setSettings(settings);
+      sparnatural.settings = settings
+      })
+
+
+     
     </script>
   </body>
 </html>

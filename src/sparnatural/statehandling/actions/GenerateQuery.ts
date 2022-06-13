@@ -25,8 +25,6 @@ export default function generateQuery(actionStore: ActionStore) {
     );
     writer.setPrefixes(settings.sparqlPrefixes);
     let selectQuery = writer.generateQuery(actionStore.variables,actionStore.distinct,actionStore.order,actionStore.language);
-    console.log(selectQuery)
-
     // fire callback
     settings.onQueryUpdated(
      selectQuery,

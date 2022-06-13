@@ -56,7 +56,7 @@ class EndClassGroup extends HTMLComponent {
     this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.editComponents?.html?.empty()?.remove()
-      this.editComponents = null
+      //this.editComponents = null
     });
 
     // when the addmorevaluesbtn is clicked then render the widgets again to select further values
