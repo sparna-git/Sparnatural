@@ -141,7 +141,7 @@
       yasgui.addEventListener('componentLoaded',(e)=>{
         e.stopImmediatePropagation()
         tab = e.detail;     
-        // If you would like to overwride default settings
+
       })
 
       /*
@@ -149,6 +149,7 @@
       */
       let sparnatural = document.querySelector("spar-natural");
       sparnatural.addEventListener('componentLoaded',(e)=>{
+        // If you would like to overwride default settings
         //import config from '../static/config';
         let settings = {
         //config: config,
