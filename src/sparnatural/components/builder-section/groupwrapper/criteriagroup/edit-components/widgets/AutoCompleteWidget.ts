@@ -1,4 +1,5 @@
-import { BaseExpression, Expression, Pattern } from "sparqljs";
+import { DataFactory } from "n3";
+import {  BgpPattern, Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import WidgetWrapper from "../WidgetWrapper";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
@@ -12,17 +13,12 @@ interface AutoCompleteWidgetValue extends WidgetValue{
 }
 
 export class AutoCompleteWidget extends AbstractWidget {
+  protected widgetValues: AutoCompleteWidgetValue[];
     autocompleteHandler: any;
-    startClassVal: SelectedVal;
-    objectPropVal: SelectedVal;
-    endClassVal: SelectedVal;
   
     constructor(parentComponent: WidgetWrapper, autocompleteHandler: any,startClassValue:SelectedVal,objectPropVal:SelectedVal,endClassValue:SelectedVal) {
-      super('autocomplete-widget',parentComponent,null)
+      super('autocomplete-widget',parentComponent,null,startClassValue,objectPropVal,endClassValue)
       this.autocompleteHandler = autocompleteHandler;
-      this.startClassVal = startClassValue
-      this.objectPropVal = objectPropVal
-      this.endClassVal = endClassValue
     }
   
     render() {
@@ -108,7 +104,19 @@ export class AutoCompleteWidget extends AbstractWidget {
     }
 
     getRdfJsPattern(): Pattern[] {
-        throw new Error("Method not implemented.");
+
+      let vals = this.widgetValues.map(v=>{
+        let vl:ValuePatternRow = {}
+        vl[this.endClassVal.variable] = DataFactory.literal(v.value.uri)
+        return vl
+      })
+        let valuePattern:ValuesPattern ={
+          type: "values",
+          values: vals
+        }
+        return [valuePattern]
+
     }
+
   }
   

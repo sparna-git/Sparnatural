@@ -14,18 +14,14 @@ export interface DateValue extends WidgetValue {
   }
 
 export class DatesWidget extends AbstractWidget {
-
     datesHandler: any;
-    startClassVal: SelectedVal;
-    objectPropVal: SelectedVal;
-    endClassVal: SelectedVal;
     addWidgetValueBtn: AddUserInputBtn
     input: JQuery<HTMLElement>;
     inputStart: JQuery<HTMLElement>;
     inputEnd: JQuery<HTMLElement>;
     inputValue: JQuery<HTMLElement>;
     constructor(parentComponent: WidgetWrapper, datesHandler: any,startClassVal:SelectedVal,objectPropVal:SelectedVal,endClassVal:SelectedVal) {
-      super('date-widget',parentComponent,null)
+      super('date-widget',parentComponent,null,startClassVal,objectPropVal,endClassVal)
       this.datesHandler = datesHandler;
       this.startClassVal = startClassVal
       this.objectPropVal = objectPropVal

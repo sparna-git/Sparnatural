@@ -1,5 +1,7 @@
-import { BaseExpression, Expression, Pattern } from "sparqljs";
+import { DataFactory } from "n3";
+import { BgpPattern,  Pattern } from "sparqljs";
 import { getSettings } from "../../../../../../../configs/client-configs/settings";
+import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
 import HTMLComponent from "../../../../../HtmlComponent";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
@@ -13,12 +15,12 @@ export interface SearchWidgetValue extends WidgetValue{
   }
 
 export class SearchWidget extends AbstractWidget {
-
+  protected widgetValues: SearchWidgetValue[];
     addValueBtn: AddUserInputBtn;
     searchInput: JQuery<HTMLElement>;
   
-    constructor(parentComponent: HTMLComponent) {
-      super('search-widget',parentComponent,null)
+    constructor(parentComponent: HTMLComponent,startClassVal:SelectedVal,objectPropVal:SelectedVal,endClassVal:SelectedVal) {
+      super('search-widget',parentComponent,null,startClassVal,objectPropVal,endClassVal)
     }
   
     render() {
@@ -51,7 +53,22 @@ export class SearchWidget extends AbstractWidget {
     }
 
     getRdfJsPattern(): Pattern[] {
-        throw new Error("Method not implemented.");
+      let ptrn:BgpPattern = {
+        type: "bgp",
+        triples: [
+          {
+            subject: DataFactory.variable(this.startClassVal.variable),
+            predicate: DataFactory.namedNode('http://www.ontotext.com/connectors/lucene#query'),
+            object: DataFactory.literal(`text:${this.widgetValues[0].value.search}`)
+          },
+          {
+            subject: DataFactory.variable(this.startClassVal.variable),
+            predicate: DataFactory.namedNode('http://www.ontotext.com/connectors/lucene#entities'),
+            object: DataFactory.variable(this.endClassVal.variable)
+          }
+        ]
+      }
+      return [ptrn]
     }
   }
   

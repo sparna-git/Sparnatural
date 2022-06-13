@@ -1,14 +1,16 @@
-import { FilterPattern, GroupPattern, Pattern, UnionPattern } from "sparqljs";
+import {Pattern } from "sparqljs";
 import tippy from "tippy.js";
-import { getSettings } from "../../../../../../../configs/client-configs/settings";
-import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
-import InfoBtn from "../../../../../buttons/InfoBtn";
-import WidgetWrapper from "../WidgetWrapper";
-import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+import { getSettings } from "../../../../../../../../configs/client-configs/settings";
+import AddUserInputBtn from "../../../../../../buttons/AddUserInputBtn";
+import InfoBtn from "../../../../../../buttons/InfoBtn";
+import WidgetWrapper from "../../WidgetWrapper";
+import { AbstractWidget, ValueType, WidgetValue } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
 import { DataFactory } from "n3";
 import { namedNode } from "@rdfjs/data-model";
-import { SelectedVal } from "../../../../../../sparql/ISparJson";
+import { SelectedVal } from "../../../../../../../sparql/ISparJson";
+import { getTimeDatePattern } from "./TimeDatePattern";
+import ISpecProvider from "../../../../../../../spec-providers/ISpecProviders";
 
 
 
@@ -35,20 +37,20 @@ export class TimeDatePickerWidget extends AbstractWidget {
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
+  specProvider: ISpecProvider;
     constructor(
       parentComponent: WidgetWrapper,
       datesHandler: any,
       format: any,
       startClassCal:SelectedVal,
       objectPropVal:SelectedVal,
-      endClassVal:SelectedVal
+      endClassVal:SelectedVal,
+      specProvider:ISpecProvider
     ) {
-      super('date-widget',parentComponent,null)
+      super('date-widget',parentComponent,null,startClassCal,objectPropVal,endClassVal)
       this.datesHandler = datesHandler;
       this.formatDate = format;
-      this.startClassVal = startClassCal
-      this.objectPropVal = objectPropVal
-      this.endClassVal = endClassVal
+      this.specProvider = specProvider
       this.formatDate == "day"
         ? getSettings().langSearch.PlaceholderTimeDateDayFormat
         : getSettings().langSearch.PlaceholderTimeDateFormat;
@@ -207,55 +209,13 @@ export class TimeDatePickerWidget extends AbstractWidget {
     }
 
     getRdfJsPattern(): Pattern[]{
-        let biggerThenStart:FilterPattern = {
-          type: "filter",
-          expression: {
-            type:'operation',
-            operator: '&&',
-            args:[
-              {
-                type:'operation',
-                operator: '>=',
-                args:[
-                  {    
-                    type: 'functionCall',
-                    function: 'http://www.w3.org/2001/XMLSchema#dateTime',
-                    args: [DataFactory.variable('?Date_1_exact')]
-                  },
-                  DataFactory.literal(
-                    this.widgetValues[0].value.start.toISOString(),
-                    namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-                  )
-                ]
-              },
-              {
-                type: "operation",
-                operator: "<=",
-                args: [
-                    {
-                        type: "functioncall",
-                        function: "http://www.w3.org/2001/XMLSchema#dateTime",
-                        args: [DataFactory.variable('?Date_1_exact')]
-                    },
-                    DataFactory.literal(
-                      this.widgetValues[0].value.end.toISOString(),
-                      namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-                    )
-                ]
-            }
-            ]
-          }
-        }
+      let startLit = DataFactory.literal(this.widgetValues[0].value.start.toISOString(), namedNode("http://www.w3.org/2001/XMLSchema#dateTime"))
+      let stopLit =  DataFactory.literal(this.widgetValues[0].value.start.toISOString(), namedNode("http://www.w3.org/2001/XMLSchema#dateTime"))
+      let startClassVar = DataFactory.variable(this.startClassVal.variable)
+      let beginDatePred = DataFactory.namedNode(this.specProvider.getBeginDateProperty(this.objectPropVal.type))
+      let exactDatePred = DataFactory.namedNode(this.specProvider.getBeginDateProperty(this.objectPropVal.type))
+      let endDatePred = DataFactory.namedNode(this.specProvider.getEndDateProperty(this.objectPropVal.type)) 
 
-        let grpPatterns:GroupPattern[] = this.widgetValues.map(v=>{
-          return {
-            type: 'group',
-            patterns: ;
-          }
-        })
-        let unionPtrn: UnionPattern = {
-          type: "union",
-          patterns: []
-        }
+      return [getTimeDatePattern(startLit,stopLit,startClassVar,beginDatePred,endDatePred,exactDatePred,1)]
     }
   }

@@ -2,8 +2,8 @@
 import { getSettings } from "../../../configs/client-configs/settings";
 
 import ActionStore from "../ActionStore";
-import {QuerySPARQLWriter} from '../../sparql/Query'
 import SparnaturalJsonGenerator from "../../sparql/SparnaturalJsonGenerator";
+import RdfJsGenerator from "../../sparql/RdfJsQuery";
 
 export default function generateQuery(actionStore: ActionStore) {
   // triggered when Sparnatural is submitted : generates output SPARQL query
@@ -18,16 +18,18 @@ export default function generateQuery(actionStore: ActionStore) {
     
     // prints the SPARQL generated from the writing of the JSON data structure
     console.log("*** New SPARQL from JSON data structure ***");
-    var writer = new QuerySPARQLWriter(
+    var writer = new RdfJsGenerator(
+      actionStore.sparnatural,
       settings.typePredicate,
       actionStore.specProvider
     );
     writer.setPrefixes(settings.sparqlPrefixes);
-    console.log(writer.toSPARQL(jsonQuery));
+    let selectQuery = writer.generateQuery(actionStore.variables,actionStore.distinct,actionStore.order,actionStore.language);
+    console.log(selectQuery)
 
     // fire callback
     settings.onQueryUpdated(
-      writer.toSPARQL(jsonQuery),
+     selectQuery,
       jsonQuery,
       actionStore.specProvider
     );

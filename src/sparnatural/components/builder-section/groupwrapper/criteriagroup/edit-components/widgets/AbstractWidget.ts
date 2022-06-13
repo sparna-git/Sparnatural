@@ -1,4 +1,5 @@
 import { Pattern } from "sparqljs"
+import { SelectedVal } from "../../../../../../sparql/ISparJson"
 import HTMLComponent from "../../../../../HtmlComponent"
 
 // 
@@ -16,8 +17,14 @@ export interface WidgetValue {
 
 export abstract class AbstractWidget extends HTMLComponent{
   protected widgetValues:Array<WidgetValue>
-  constructor(baseCssClass:string,parentComponent:HTMLComponent,widgetHTML:JQuery<HTMLElement>){
+  startClassVal: SelectedVal
+  objectPropVal: SelectedVal
+  endClassVal: SelectedVal
+  constructor(baseCssClass:string,parentComponent:HTMLComponent,widgetHTML:JQuery<HTMLElement>,startClassVal:SelectedVal,objectPropVal:SelectedVal,endClassVal:SelectedVal){
     super(baseCssClass,parentComponent,widgetHTML)
+    this.startClassVal = startClassVal
+    this.objectPropVal = objectPropVal
+    this.endClassVal = endClassVal
   }
   // Must be implemented by the developper of the widget
   abstract getRdfJsPattern():Pattern[]

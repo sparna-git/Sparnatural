@@ -19,5 +19,8 @@ interface ISpecProvider {
   getTooltip(value_selected: string): string;
   hasConnectedClasses(value_selected: string): any;
   getConnectingProperties(domain:string,range:string): Array<string>;
+  getBeginDateProperty(propertyId:string): string
+  getEndDateProperty(propertyId:string): string
+  getExactDateProperty(propertyId:string):string
 }
 export default ISpecProvider;

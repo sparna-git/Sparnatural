@@ -1,6 +1,6 @@
 import { PreLoadQueries } from "../../../configs/client-configs/ISettings"
 import { Branch, CriteriaLine, ISparJson, Order } from "../../sparql/ISparJson"
-import { IWidget } from "../builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget"
+import { WidgetValue } from "../builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget"
 import HTMLComponent from "../HtmlComponent"
 import Sparnatural from "../Sparnatural"
 import { Dropdown } from "./dropdown/dropdown"
@@ -117,7 +117,7 @@ export default class LoadQuery extends HTMLComponent {
         return hasKeys && every
     }
     //some basic validation if the provided value is an IWidget['value']
-    #isWidgetValue(val: IWidget['value']): val is IWidget['value']{
+    #isWidgetValue(val: WidgetValue): val is WidgetValue{
         //every WidgetVal needs to have at least a label
         let hasKeys = 'label' in val
         return hasKeys

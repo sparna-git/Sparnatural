@@ -3,11 +3,13 @@ import L, { LatLng, Rectangle } from "leaflet";
 import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
 import { getSettings } from "../../../../../../../configs/client-configs/settings";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
-import { Pattern } from "sparqljs";
-
+import { BgpPattern, FilterPattern, FunctionCallExpression, Pattern } from "sparqljs";
 import "leaflet/dist/leaflet.css";
 import '@geoman-io/leaflet-geoman-free';  
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
+import { SelectedVal } from "../../../../../../sparql/ISparJson";
+import { DataFactory, Literal, Triple } from "n3";
+import { namedNode } from "@rdfjs/data-model";
 
 export interface MapWidgetValue extends WidgetValue {
     value:{
@@ -17,12 +19,12 @@ export interface MapWidgetValue extends WidgetValue {
 }
 
 export default class MapWidget extends AbstractWidget {
+    protected widgetValues: MapWidgetValue[];
     renderMapValueBtn: AddUserInputBtn
     map:L.DrawMap
     drawingLayer: L.Layer
-    constructor(parentComponent:WidgetWrapper){
-
-        super('map-widget',parentComponent,null)
+    constructor(parentComponent:WidgetWrapper,startClassVal:SelectedVal,objectPropVal:SelectedVal,endClassVal:SelectedVal){
+        super('map-widget',parentComponent,null,startClassVal,objectPropVal,endClassVal)
     }
 
     render(): this {
@@ -96,7 +98,53 @@ export default class MapWidget extends AbstractWidget {
         this.renderMapValueBtn = new AddUserInputBtn(this,'Close Map', this.#closeMap).render() 
     }
 
+    // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
     getRdfJsPattern(): Pattern[] {
-        throw new Error("Method not implemented.");
+       
+        let geomA:Triple = DataFactory.triple(
+            DataFactory.variable(this.startClassVal.variable),
+            DataFactory.namedNode('http://example.org/ApplicationSchema#hasExactGeometry'),
+            DataFactory.variable('?geomA')
+        )
+        let asWKT:Triple = DataFactory.triple(
+            DataFactory.variable(geomA.object.value),
+            DataFactory.namedNode('http://www.opengis.net/ont/geosparql#asWKT'),
+            DataFactory.variable('?aWKT')
+        )
+
+        let PolyLiteral:Literal = DataFactory.literal(this.#buildPolygon(this.widgetValues[0].value.coordinates[0]),namedNode( "http://www.opengis.net/ont/geosparql#wktLiteral"))
+
+        let filterPtrn:FilterPattern = {
+            type: "filter",
+            expression: <FunctionCallExpression>{
+                type: 'functionCall',
+                function: 'geof:sfWithin',
+                args:[
+                    asWKT.object,
+                    PolyLiteral
+                ]
+            }
+        }
+
+        let ptrn:BgpPattern = {
+            type: "bgp",
+            triples: [
+                geomA,
+                asWKT
+            ]
+        }
+        return [ptrn,filterPtrn]
+    }
+
+    #buildPolygon(coordinates:L.LatLng[]){
+        let polygon = ''
+        coordinates.forEach(coordinat =>{
+            polygon = `${polygon} ${coordinat.lat} ${coordinat.lng},`
+        })
+        // polygon must be closed with the starting point
+        return `'''
+         <http://www.opengis.net/def/crs/OGC/1.3/CRS84> 
+        Polygon((${polygon} ${this.widgetValues[0].value.coordinates[0][0]}))
+        '''`
     }
 }

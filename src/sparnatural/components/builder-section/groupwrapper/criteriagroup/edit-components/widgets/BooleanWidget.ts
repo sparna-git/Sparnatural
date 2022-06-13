@@ -1,5 +1,8 @@
-import { BaseExpression, Expression, Pattern } from "sparqljs"
+import { namedNode } from "@rdfjs/data-model"
+import { DataFactory } from "n3"
+import { BaseExpression, BgpPattern, Expression, Pattern } from "sparqljs"
 import { getSettings } from "../../../../../../../configs/client-configs/settings"
+import { SelectedVal } from "../../../../../../sparql/ISparJson"
 import WidgetWrapper from "../WidgetWrapper"
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget"
 
@@ -13,9 +16,9 @@ export interface BooleanWidgetValue extends WidgetValue {
   
 
 export class BooleanWidget extends AbstractWidget{
-
-    constructor(parentComponent: WidgetWrapper) {
-      super('boolean-widget',parentComponent,null)
+  protected widgetValues: BooleanWidgetValue[]
+    constructor(parentComponent: WidgetWrapper,startClassVal:SelectedVal,objectPropVal:SelectedVal,endClassVal:SelectedVal) {
+      super('boolean-widget',parentComponent,null,startClassVal,objectPropVal,endClassVal)
     }
   
     render() {
@@ -51,6 +54,14 @@ export class BooleanWidget extends AbstractWidget{
     }
 
     getRdfJsPattern(): Pattern[] {
-        throw new Error("Method not implemented.")
+        let ptrn:BgpPattern = {
+          type: "bgp",
+          triples: [{
+            subject: DataFactory.variable(this.startClassVal.variable),
+            predicate:DataFactory.namedNode(this.objectPropVal.type),
+            object: DataFactory.literal(this.widgetValues[0].value.boolean.toString(),namedNode('http://www.w3.org/2001/XMLSchema#boolean'))
+          }]
+        }
+        return [ptrn]
     }
   }

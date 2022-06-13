@@ -14,7 +14,7 @@ import { BooleanWidget } from "./widgets/BooleanWidget";
 import { DatesWidget } from "./widgets/DatesWidget";
 import { ListWidget } from "./widgets/ListWidget";
 import { SearchWidget } from "./widgets/SearchWidget";
-import { TimeDatePickerWidget } from "./widgets/TimeDatePickerWidget";
+import { TimeDatePickerWidget } from "./widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { NoWidget } from "./widgets/NoWidget";
 
 /**
@@ -375,7 +375,7 @@ class WidgetWrapper extends HTMLComponent {
       case Config.GRAPHDB_SEARCH_PROPERTY:
       case Config.STRING_EQUALS_PROPERTY:
       case Config.SEARCH_PROPERTY:
-        return new SearchWidget(this);
+        return new SearchWidget(this,this.startClassVal,this.objectPropVal,this.endClassVal);
         break;
       case Config.TIME_PROPERTY_YEAR:
         return new TimeDatePickerWidget(
@@ -384,7 +384,8 @@ class WidgetWrapper extends HTMLComponent {
           false,
           this.startClassVal,
           this.objectPropVal,
-          this.endClassVal
+          this.endClassVal,
+          this.specProvider
         );
         break;
       case Config.TIME_PROPERTY_DATE:
@@ -394,7 +395,8 @@ class WidgetWrapper extends HTMLComponent {
           "day",
           this.startClassVal,
           this.objectPropVal,
-          this.endClassVal
+          this.endClassVal,
+          this.specProvider
         );
         break;
       case Config.TIME_PROPERTY_PERIOD:
@@ -410,7 +412,7 @@ class WidgetWrapper extends HTMLComponent {
         return new NoWidget(this);
         break;
       case Config.BOOLEAN_PROPERTY:
-        return new BooleanWidget(this);
+        return new BooleanWidget(this,this.startClassVal,this.objectPropVal,this.endClassVal);
         break;
       case Config.TREE_PROPERTY:
         var theSpecProvider = this.specProvider;
@@ -498,7 +500,7 @@ class WidgetWrapper extends HTMLComponent {
         return new NoWidget(this)
 
       case Config.Map_PROPERTY:
-        return new MapWidget(this).render()
+        return new MapWidget(this,this.startClassVal,this.objectPropVal,this.endClassVal).render()
       default:
         throw new Error(`WidgetType for ${widgetType} not recognized`)
     }

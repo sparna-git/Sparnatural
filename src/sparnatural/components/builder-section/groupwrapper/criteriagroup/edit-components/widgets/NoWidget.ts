@@ -7,7 +7,7 @@ export class NoWidget extends AbstractWidget {
 
     value:any = null
     constructor(parentComponent: WidgetWrapper) {
-      super('no-widget',parentComponent,null)
+      super('no-widget',parentComponent,null,null,null,null)
     }
   
     render() {

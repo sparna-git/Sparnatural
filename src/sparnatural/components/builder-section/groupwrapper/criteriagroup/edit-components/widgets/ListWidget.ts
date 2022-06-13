@@ -24,9 +24,6 @@ export class ListWidget extends AbstractWidget {
     listHandler: SparqlTemplateListHandler;
     sort: boolean;
     settings: ISettings;
-    startClassVal: SelectedVal;
-    objectPropVal: SelectedVal;
-    endClassVal: SelectedVal;
     selectHtml: JQuery<HTMLElement>;
     constructor(
       parentComponent: WidgetWrapper,
@@ -36,7 +33,7 @@ export class ListWidget extends AbstractWidget {
       objectPropVal:SelectedVal,
       endClassVal:SelectedVal
     ) {
-      super('list-widget',parentComponent,null)
+      super('list-widget',parentComponent,null,startClassVal,objectPropVal,endClassVal)
       this.listHandler = listHandler;
       this.sort = sort;
       this.startClassVal = startClassVal;
