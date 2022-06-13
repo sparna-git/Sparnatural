@@ -351,6 +351,10 @@ UiuxConfig = require("./UiuxConfig.js");
 					form.sparnatural.components[i].CriteriaGroup.onRemoveCriteria() ;
 				}
 			}
+			// reset SELECT variables and sort order
+			form.queryOptions.displayVariableList = ["?this"];
+			form.queryOptions.orderSort = null;
+
 			form.submitOpened = true ;
 			return form ;
 		}
