@@ -1046,6 +1046,7 @@ export class VariableSelector extends HTMLComponent {
 		}
 
 		if (this.currentValue !== newValue) {
+			var old_value = this.currentValue ;
 			this.currentValue = newValue;
 			$(this.contentEditableElement).trigger('change');
 			$(this.contentEditableElement).parents('.variableSelected').attr('data-variableName', '?'+this.currentValue);
@@ -1054,11 +1055,13 @@ export class VariableSelector extends HTMLComponent {
 			//Set variable name for childs criteria
 			var curent_value = this.currentValue ;
 			var childs_index= [] ;
-			//Set variable neme displayed for childs
-			$(this.GroupContenaire.html).parents('.haveWhereChild').first().find('.childsList>li>.CriteriaGroup>.StartClassGroup').each(function(index) {
-				childs_index[index] = $(this).parents('li').first().attr('data-index') ;
-				$(this).find('.variableName').first().text(curent_value) ;
-			});
+			//Set variable neme displayed for childs if endClassGroup
+			if (this.GroupContenaire instanceof EndClassGroup) {
+				$(this.GroupContenaire.html).parents('.haveWhereChild').first().find('.childsList>li>.CriteriaGroup>.StartClassGroup').each(function(index) {
+					childs_index[index] = $(this).parents('li').first().attr('data-index') ;
+					$(this).find('.variableName').first().text(curent_value) ;
+				});
+			}
 			// If is startClassGroup, update siblings. (normaly is root)
 			if (this.GroupContenaire instanceof StartClassGroup) {
 				$(this.GroupContenaire.html).parents('ul').first().find('>li>.CriteriaGroup>.StartClassGroup').each(function(index) {
