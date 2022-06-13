@@ -1,6 +1,6 @@
 import { PreLoadQueries } from "../../../configs/client-configs/ISettings"
 import { Branch, CriteriaLine, ISparJson, Order } from "../../sparql/ISparJson"
-import { IWidget } from "../builder-section/groupwrapper/criteriagroup/edit-components/widgets/IWidget"
+import { IWidget } from "../builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget"
 import HTMLComponent from "../HtmlComponent"
 import Sparnatural from "../Sparnatural"
 import { Dropdown } from "./dropdown/dropdown"

@@ -3,22 +3,19 @@ import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfi
 import Datasources from "../../../../../../configs/fixed-configs/SparnaturalConfigDatasources";
 import { SparqlTreeHandler } from "./handlers/TreeHandlers";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
-import {
-  AutoCompleteWidget,
-  BooleanWidget,
-  DatesWidget,
-  ListWidget,
-  NoWidget,
-  SearchWidget,
-  TimeDatePickerWidget,
-  //TreeWidget,
-} from "./widgets/Widgets";
 import HTMLComponent from "../../../../HtmlComponent";
-import { AutocompleteValue, DateValue, IWidget, ListWidgetValue } from "./widgets/IWidget";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import EditComponents from "./EditComponents";
 import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "./handlers/AutocompleteAndListHandlers";
 import MapWidget from "./widgets/MapWidget";
+import { AbstractWidget } from "./widgets/AbstractWidget";
+import { AutoCompleteWidget } from "./widgets/AutoCompleteWidget";
+import { BooleanWidget } from "./widgets/BooleanWidget";
+import { DatesWidget } from "./widgets/DatesWidget";
+import { ListWidget } from "./widgets/ListWidget";
+import { SearchWidget } from "./widgets/SearchWidget";
+import { TimeDatePickerWidget } from "./widgets/TimeDatePickerWidget";
+import { NoWidget } from "./widgets/NoWidget";
 
 /**
  *  creates the corresponding widget
@@ -29,8 +26,7 @@ class WidgetWrapper extends HTMLComponent {
   objectPropertype: string;
   rangeClassId: string;
   classLabel: string;
-  widgetComponent: IWidget;
-  widgetVal: ListWidgetValue | DateValue | AutocompleteValue
+  widgetComponent: AbstractWidget;
   specProvider: ISpecProvider;
   objectPropVal: SelectedVal;
   startClassVal: SelectedVal;
@@ -176,7 +172,7 @@ class WidgetWrapper extends HTMLComponent {
     widgetType: string,
     objectPropertyId: any,
     rangeClassId: any
-  ): IWidget {
+  ): AbstractWidget {
     switch (widgetType) {
       case Config.LITERAL_LIST_PROPERTY: {
         // defaut handler to be used
@@ -385,14 +381,20 @@ class WidgetWrapper extends HTMLComponent {
         return new TimeDatePickerWidget(
           this,
           this.settings.dates,
-          false
+          false,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
         );
         break;
       case Config.TIME_PROPERTY_DATE:
         return new TimeDatePickerWidget(
           this,
           this.settings.dates,
-          "day"
+          "day",
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
         );
         break;
       case Config.TIME_PROPERTY_PERIOD:

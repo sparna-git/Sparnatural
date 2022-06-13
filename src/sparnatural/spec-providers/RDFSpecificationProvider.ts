@@ -7,7 +7,7 @@ import ISpecProvider from "./ISpecProviders";
 import Datasources from "../../configs/fixed-configs/SparnaturalConfigDatasources";
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-const RDF = {
+export const RDF = {
   TYPE: factory.namedNode(RDF_NAMESPACE + "type"),
   FIRST: factory.namedNode(RDF_NAMESPACE + "first"),
   REST: factory.namedNode(RDF_NAMESPACE + "rest"),
@@ -15,7 +15,7 @@ const RDF = {
 };
 
 const RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
-const RDFS = {
+export const RDFS = {
   LABEL: factory.namedNode(RDFS_NAMESPACE + "label"),
   DOMAIN: factory.namedNode(RDFS_NAMESPACE + "domain"),
   RANGE: factory.namedNode(RDFS_NAMESPACE + "range"),
@@ -24,7 +24,7 @@ const RDFS = {
 };
 
 const OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
-const OWL = {
+export const OWL = {
   EQUIVALENT_PROPERTY: factory.namedNode(OWL_NAMESPACE + "equivalentProperty"),
   EQUIVALENT_CLASS: factory.namedNode(OWL_NAMESPACE + "equivalentClass"),
   UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf"),

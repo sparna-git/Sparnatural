@@ -5,9 +5,14 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import ActionWhere from "../../../../actions/actioncomponents/ActionWhere";
 import HTMLComponent from "../../../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import { SelectAllValue } from "./widgets/IWidget";
+import { ValueType, WidgetValue } from "./widgets/AbstractWidget";
 import WidgetWrapper from "./WidgetWrapper";
 
+export interface SelectAllValue extends WidgetValue{
+  value:{
+    label:string
+  }
+}
 
 enum RENDER_WHERE_ENUM {
     LIST_PROPERTY = Config.LIST_PROPERTY,
@@ -71,7 +76,11 @@ class EditComponents extends HTMLComponent {
 
     #onSelectAll() {
       let selectAllVal:SelectAllValue ={
-        label: getSettings().langSearch.SelectAllValues
+        valueType:ValueType.SINGLE,
+        value:{
+          label: getSettings().langSearch.SelectAllValues
+        }
+
       }
       this.html[0].dispatchEvent(
         new CustomEvent("renderWidgetVal", { bubbles: true,detail:selectAllVal })

@@ -1,19 +1,23 @@
-import HTMLComponent from "../../../../../HtmlComponent";
 import WidgetWrapper from "../WidgetWrapper";
 import L, { LatLng, Rectangle } from "leaflet";
 import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
-import { MapValue } from "./IWidget";
+import { getSettings } from "../../../../../../../configs/client-configs/settings";
+import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+import { Pattern } from "sparqljs";
+
 import "leaflet/dist/leaflet.css";
 import '@geoman-io/leaflet-geoman-free';  
 import '@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css';
-import { getSettings } from "../../../../../../../configs/client-configs/settings";
 
-export default class MapWidget extends HTMLComponent {
-    renderMapValueBtn: AddUserInputBtn
-    value:MapValue = {
-        label:null,
-        coordinates:null
+export interface MapWidgetValue extends WidgetValue {
+    value:{
+        label:string
+        coordinates: LatLng[][]
     }
+}
+
+export default class MapWidget extends AbstractWidget {
+    renderMapValueBtn: AddUserInputBtn
     map:L.DrawMap
     drawingLayer: L.Layer
     constructor(parentComponent:WidgetWrapper){
@@ -47,8 +51,6 @@ export default class MapWidget extends HTMLComponent {
             drawPolygon:false,
             cutPolygon:false,        
         })
-
-
         this.map.on('pm:create', (e)=> {
             //If there is already a drawing, then delete it
             // allows only for one drawing at a time
@@ -71,22 +73,30 @@ export default class MapWidget extends HTMLComponent {
         shape: string;
         layer: L.Layer;
     }){
-        //double cast: 1. cast.layer payload to recantgle, 2. cast LatLng to RectancleResult LatLng[][]
-        this.value.coordinates = ((e.layer as Rectangle).getLatLngs() as LatLng[][])
-        // if the user didn't draw a rectangle no value was selected and it counts as 'any'
-        this.value.label = 'Area selected' 
-        console.dir(this)
+         //double cast: 1. cast.layer payload to recantgle, 2. cast LatLng to RectancleResult LatLng[][]
+        let widgetValue:MapWidgetValue = {
+            valueType:ValueType.SINGLE,
+            value:{
+                label:'Area selected',
+                coordinates: ((e.layer as Rectangle).getLatLngs() as LatLng[][])
+            }
+           
+        } 
+        this.addWidgetValue(widgetValue)
     }
 
     #closeMap=()=>{
-        
         this.map.remove();
-        if(!this.value.coordinates) this.value.label = getSettings().langSearch.SelectAllValues
-        this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:this.value}))
+        if(this.getwidgetValues().length < 1) this.renderWidgetVal({value:{label: getSettings().langSearch.SelectAllValues},valueType:ValueType.SINGLE})
+        this.renderWidgetVal(this.getLastValue())
     }
 
     #changeButton(){
         this.renderMapValueBtn.html.remove()
         this.renderMapValueBtn = new AddUserInputBtn(this,'Close Map', this.#closeMap).render() 
+    }
+
+    getRdfJsPattern(): Pattern[] {
+        throw new Error("Method not implemented.");
     }
 }

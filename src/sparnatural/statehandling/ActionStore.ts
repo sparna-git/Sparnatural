@@ -30,7 +30,7 @@ class ActionStore {
   sparnatural: Sparnatural;
   specProvider: any;
   order: Order = Order.DESC; //default descending order
-  variables: Array<string> = []
+  variables: Array<string> = [] // example ?musuem
   distinct = true // default
   language = Language.EN //default
   

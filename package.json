@@ -18,6 +18,7 @@
     "@babel/preset-react": "^7.0.0",
     "@types/jquery": "^3.5.14",
     "@types/leaflet-draw": "^1.0.5",
+    "@types/rdfjs__dataset": "^2.0.0",
     "@types/select2": "^4.0.55",
     "@webpack-cli/serve": "^1.6.1",
     "babel-loader": "^8.0.6",

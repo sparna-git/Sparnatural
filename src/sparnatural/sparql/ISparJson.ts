@@ -1,4 +1,4 @@
-import { IWidget } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/IWidget"
+import { WidgetValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget"
 
 export interface SelectedVal {
     variable: string
@@ -12,7 +12,7 @@ export interface CriteriaLine {
     o:string,
     sType:string,
     oType:string,
-    values:IWidget['value'][]
+    values:WidgetValue[]
 }
 
 export interface Branch {
@@ -26,7 +26,7 @@ export interface ISparJson {
     distinct: boolean,
     variables: Array<string>,
     lang: Language,
-    order: Order
+    order: Order,
     branches:Array<Branch>
 }
 

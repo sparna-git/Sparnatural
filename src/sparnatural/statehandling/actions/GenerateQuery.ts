@@ -14,7 +14,6 @@ export default function generateQuery(actionStore: ActionStore) {
   if (jsonQuery != null) {
     console.log("*** New JSON Data structure ***");
     console.dir(jsonQuery)
-    let jsonstring = JSON.stringify(jsonQuery, null, 4)
     console.log(JSON.stringify(jsonQuery, null, 4));
     
     // prints the SPARQL generated from the writing of the JSON data structure

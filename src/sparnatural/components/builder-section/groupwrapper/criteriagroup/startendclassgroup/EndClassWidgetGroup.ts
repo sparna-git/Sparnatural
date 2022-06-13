@@ -5,11 +5,11 @@ import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import HTMLComponent from "../../../../HtmlComponent";
 import AddWidgetValueBtn from "../../../../buttons/AddWidgetValueBtn";
-import { IWidget, MapValue, SelectAllValue} from "../edit-components/widgets/IWidget";
+import { ValueType, WidgetValue } from "../edit-components/widgets/AbstractWidget";
 
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
-  selectedValues: Array<EndClassWidgetValue> = [];
+  widgetValues: Array<EndClassWidgetValue> = [];
   selectAllValue: boolean = false;
   specProvider: ISpecProvider;
   addWidgetValueBtn: AddWidgetValueBtn;
@@ -42,7 +42,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.selectAllValue = false;
 
     let unselectedValue: EndClassWidgetValue;
-    this.selectedValues = this.selectedValues.filter(
+    this.widgetValues = this.widgetValues.filter(
       (val: EndClassWidgetValue) => {
         if (val.value_lbl === valueToDel.value_lbl) {
           unselectedValue = val;
@@ -52,15 +52,15 @@ export class EndClassWidgetGroup extends HTMLComponent {
       }
     );
     if (unselectedValue === undefined)
-      throw Error("Unselected val not found in the selectedValues list!");
+      throw Error("Unselected val not found in the widgetValues list!");
     unselectedValue.html.remove();
     
 
-    if(this.selectedValues.length < getSettings().maxOr){
+    if(this.widgetValues.length < getSettings().maxOr){
       this.addWidgetValueBtn.html.show;
     }
 
-    if (this.selectedValues.length < 1) {
+    if (this.widgetValues.length < 1) {
       //$(this.ParentCriteriaGroup.ComponentHtml).removeClass("completed");
 
       // reattach eventlistener. it got removed
@@ -68,7 +68,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       //if there is an addWidgetValueBtn then remove it as well
       this.addWidgetValueBtn?.html?.remove();
       this.html[0].dispatchEvent(
-        new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{NrOfSelValues:this.selectedValues.length} })
+        new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{NrOfSelValues:this.widgetValues.length} })
       );
     }
     this.html[0].dispatchEvent(
@@ -77,24 +77,24 @@ export class EndClassWidgetGroup extends HTMLComponent {
   }
 
   // user selects a value for example a country from the listwidget
-  renderWidgetVal(selectedVal:IWidget['value']) {
+  renderWidgetVal(selectedVal:WidgetValue) {
     
     
     // check if value already got selected before
-    if (this.selectedValues.some((val) => val.value_lbl === selectedVal.label))
+    if (this.widgetValues.some((val) => val.value_lbl === selectedVal.value.label))
       return;
     // if not, then create the EndclassWidgetValue and add it to the list
     this.#renderEndClassWidgetVal(selectedVal)
   }
 
-  #renderEndClassWidgetVal(selectedVal:IWidget["value"]){
-    let endClassWidgetVal = new EndClassWidgetValue(this, selectedVal);
-    this.selectedValues.push(endClassWidgetVal);
+  #renderEndClassWidgetVal(widgetVal:WidgetValue){
+    let endClassWidgetVal = new EndClassWidgetValue(this, widgetVal);
+    this.widgetValues.push(endClassWidgetVal);
 
     this.#renderNewSelectedValue(endClassWidgetVal);
 
     // if selectAllvalues then we don't need a AddWidgetValueBtn
-    if((!this.#instanceOfAllValues(selectedVal)) && (!this.#instanceOfMapValue(selectedVal))){
+    if(widgetVal.valueType == ValueType.MULTIPLE){
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
       ? this.addWidgetValueBtn.render()
@@ -105,7 +105,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     }
 
     //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
-    if (this.selectedValues.length == getSettings().maxOr) {
+    if (this.widgetValues.length == getSettings().maxOr) {
       this.addWidgetValueBtn.html.hide;
     }
 
@@ -131,29 +131,16 @@ export class EndClassWidgetGroup extends HTMLComponent {
   // when more values should be added then render the inputypecomponent again
   #addMoreValues = () => {
     this.html[0].dispatchEvent(
-      new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{NrOfSelValues:this.selectedValues.length} })
+      new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{NrOfSelValues:this.widgetValues.length} })
     );
     this.#addEventListener();
   };
 
   getWidgetValue(){
-    let vals = this.selectedValues.map((val)=>{
-      return val.selectedVal
+    let vals = this.widgetValues.map((val)=>{
+      return val.widgetVal
     })
     return vals
-  }
-
-  //set's
-  setWidgetValue(){
-
-  }
-  //TS typeguard
-  //https://www.typescriptlang.org/docs/handbook/advanced-types.html
-  #instanceOfAllValues(selectedVal: IWidget['value']): selectedVal is SelectAllValue {
-    return selectedVal.label == getSettings().langSearch.SelectAllValues;
-  }
-  #instanceOfMapValue(selectedVal: IWidget['value']):selectedVal is MapValue{
-    return selectedVal.label == 'Area selected'
   }
 }
 
@@ -162,12 +149,12 @@ export class EndClassWidgetValue extends HTMLComponent {
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   unselectBtn: UnselectBtn;
   value_lbl: string;
-  selectedVal: IWidget['value']
-  constructor(ParentComponent: EndClassWidgetGroup,selectedVal:IWidget['value']) {
+  widgetVal: WidgetValue
+  constructor(ParentComponent: EndClassWidgetGroup,selectedVal:WidgetValue) {
     super('EndClassWidgetValue', ParentComponent, null);
     // set a tooltip if the label is a bit long
-    this.selectedVal = selectedVal
-    this.value_lbl = selectedVal.label;
+    this.widgetVal = selectedVal
+    this.value_lbl = selectedVal.value.label;
   }
 
   render(): this {
