@@ -168,6 +168,7 @@ export class GroupContenaire extends HTMLComponent {
 		
 	}
 
+	// switches the "eye" icon in the arrow to indicate the variable is selected in the SELECT or not
 	onchangeViewVariable() {
 		if (this.variableSelector === null) {
 			//Add varableSelector on variableSelector list ;
