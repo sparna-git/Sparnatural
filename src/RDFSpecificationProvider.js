@@ -530,7 +530,7 @@ export class RDFSpecificationProvider {
 		  		if(order1 == order2) {
 		  			return me.getLabel(item1).localeCompare(me.getLabel(item2));
 		  		} else {
-		  			return order1 > order2;
+		  			return (order1 > order2)?1:-1;
 		  		}
 		  	} else {
 		  		return -1;
