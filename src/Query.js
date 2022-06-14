@@ -284,25 +284,32 @@ export class QuerySPARQLWriter {
 		) {
 			var labelProperty = this.specProvider.getDefaultLabelProperty(branch.line.sType);
 
-			if(branch.parent == null) {
-				// add criteria to fetch the label
-				var newBranch = new QueryBranch();
-				newBranch.line = new QueryLine(
-					branch.line.s,
-					branch.line.sType,
-					labelProperty,
-					this.specProvider.readRange(labelProperty)[0],
-					branch.line.s+"_label"
-				);
-				// set it optional if declared
-				newBranch.optional = this.specProvider.isEnablingOptional(labelProperty);
-				jsonQuery.branches.push(newBranch);
-				// and select the new variable, right after the original one
-				jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.s)+1, 0, branch.line.s+"_label");
-				// and adjust sort criteria on the label, if requested
-				if((jsonQuery.order != null) && (jsonQuery.order.expression == branch.line.s)) {
-					jsonQuery.order.expression = branch.line.s+"_label";
+			if(
+				// enforce that a range - and a single range - is defined on the property
+				this.specProvider.readRange(labelProperty).length == 1
+			) {
+				if(branch.parent == null) {
+					// add criteria to fetch the label
+					var newBranch = new QueryBranch();
+					newBranch.line = new QueryLine(
+						branch.line.s,
+						branch.line.sType,
+						labelProperty,
+						this.specProvider.readRange(labelProperty)[0],
+						branch.line.s+"_label"
+					);
+					// set it optional if declared
+					newBranch.optional = this.specProvider.isEnablingOptional(labelProperty);
+					jsonQuery.branches.push(newBranch);
+					// and select the new variable, right after the original one
+					jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.s)+1, 0, branch.line.s+"_label");
+					// and adjust sort criteria on the label, if requested
+					if((jsonQuery.order != null) && (jsonQuery.order.expression == branch.line.s)) {
+						jsonQuery.order.expression = branch.line.s+"_label";
+					}
 				}
+			} else {
+				console.log("defaultLabelProperty '"+labelProperty+"' must have one and only one range");
 			}
 		}
 
@@ -314,23 +321,30 @@ export class QuerySPARQLWriter {
 		) {
 			var labelProperty = this.specProvider.getDefaultLabelProperty(branch.line.oType);
 
-			// add criteria to fetch the label
-			var newBranch = new QueryBranch();
-			newBranch.line = new QueryLine(
-				branch.line.o,
-				branch.line.oType,
-				labelProperty,
-				this.specProvider.readRange(labelProperty)[0],
-				branch.line.o+"_label"
-			);
-			// set it optional if declared
-			newBranch.optional = this.specProvider.isEnablingOptional(labelProperty);
-			branch.children.push(newBranch);
-			// and select the new variable, right after the original one
-			jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.o)+1, 0, branch.line.o+"_label");
-			// and adjust sort criteria on the label, if requested
-			if((jsonQuery.order != null) && (jsonQuery.order.expression == branch.line.s)) {
-				jsonQuery.order.expression = branch.line.s+"_label";
+			if(
+				// enforce that a range - and a single range - is defined on the property
+				this.specProvider.readRange(labelProperty).length == 1
+			) {
+				// add criteria to fetch the label
+				var newBranch = new QueryBranch();
+				newBranch.line = new QueryLine(
+					branch.line.o,
+					branch.line.oType,
+					labelProperty,
+					this.specProvider.readRange(labelProperty)[0],
+					branch.line.o+"_label"
+				);
+				// set it optional if declared
+				newBranch.optional = this.specProvider.isEnablingOptional(labelProperty);
+				branch.children.push(newBranch);
+				// and select the new variable, right after the original one
+				jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.o)+1, 0, branch.line.o+"_label");
+				// and adjust sort criteria on the label, if requested
+				if((jsonQuery.order != null) && (jsonQuery.order.expression == branch.line.s)) {
+					jsonQuery.order.expression = branch.line.s+"_label";
+				}
+			} else {
+				console.log("defaultLabelProperty '"+labelProperty+"' must have one and only one range");
 			}
 		}
 
