@@ -300,7 +300,7 @@ export class QuerySPARQLWriter {
 				// and select the new variable, right after the original one
 				jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.s)+1, 0, branch.line.s+"_label");
 				// and adjust sort criteria on the label, if requested
-				if(jsonQuery.order.expression = branch.line.s) {
+				if((jsonQuery.order != null) && (jsonQuery.order.expression == branch.line.s)) {
 					jsonQuery.order.expression = branch.line.s+"_label";
 				}
 			}
@@ -329,7 +329,7 @@ export class QuerySPARQLWriter {
 			// and select the new variable, right after the original one
 			jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.o)+1, 0, branch.line.o+"_label");
 			// and adjust sort criteria on the label, if requested
-			if(jsonQuery.order.expression = branch.line.s) {
+			if((jsonQuery.order != null) && (jsonQuery.order.expression == branch.line.s)) {
 				jsonQuery.order.expression = branch.line.s+"_label";
 			}
 		}
