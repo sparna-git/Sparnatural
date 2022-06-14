@@ -299,6 +299,10 @@ export class QuerySPARQLWriter {
 				jsonQuery.branches.push(newBranch);
 				// and select the new variable, right after the original one
 				jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.s)+1, 0, branch.line.s+"_label");
+				// and adjust sort criteria on the label, if requested
+				if(jsonQuery.order.expression = branch.line.s) {
+					jsonQuery.order.expression = branch.line.s+"_label";
+				}
 			}
 		}
 
@@ -324,6 +328,10 @@ export class QuerySPARQLWriter {
 			branch.children.push(newBranch);
 			// and select the new variable, right after the original one
 			jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.o)+1, 0, branch.line.o+"_label");
+			// and adjust sort criteria on the label, if requested
+			if(jsonQuery.order.expression = branch.line.s) {
+				jsonQuery.order.expression = branch.line.s+"_label";
+			}
 		}
 
 		
@@ -352,7 +360,7 @@ export class QuerySPARQLWriter {
 		}
 
 		if(
-			// if the object is select in the query variables...
+			// if the object is selected in the query variables...
 			jsonQuery.variables.includes(branch.line.o)
 			&&
 			// ... and the property is associated to begin/end date ...
@@ -456,6 +464,21 @@ export class QuerySPARQLWriter {
 						queryLine.values[0].toDate
 					);
 					bitsOfQuery.forEach(element => parentInSparqlQuery.push(element));
+				} else {
+					// if the eye is selected on the end class, then add the optionals
+					// at this stage the query is already pre-processed to include the xxx_begin and xxx_end variables
+					// so we test on the presence of xxx_begin in the select clause
+					if(completeSparqlQuery.variables.includes(queryLine.o+"_begin")) {
+
+						var bitsOfQuery = this._initDateRangeSelection(
+							beginDateProp,
+							endDateProp,
+							exactDateProp,
+							queryLine.s,
+							queryLine.o
+						);
+						bitsOfQuery.forEach(element => parentInSparqlQuery.push(element));	
+					}
 				}
 			} else {
 				if(queryLine.values.length == 0) {
@@ -844,6 +867,45 @@ export class QuerySPARQLWriter {
 			);
 		}
 	}
+
+	// init a serie of 2 or 3 optional to fetch the begin date and end date (and exact date, if any)
+	// when the eye is clicked on a date range property
+	_initDateRangeSelection(
+		beginDateProp,
+		endDateProp,
+		exactDateProp,
+		subjectVariable,
+		objectVariable
+	) {
+		var result = [];
+
+		var opt1 = this._initOptional();
+		var bgp1 = this._initBasicGraphPattern();
+		var beginDateVarName = objectVariable+"_begin";
+		bgp1.triples.push(this._buildTriple(subjectVariable, beginDateProp, beginDateVarName));
+		opt1.patterns.push(bgp1);
+
+		var opt2 = this._initOptional();
+		var bgp2 = this._initBasicGraphPattern();
+		var endDateVarName = objectVariable+"_end";
+		bgp2.triples.push(this._buildTriple(subjectVariable, endDateProp, endDateVarName));
+		opt2.patterns.push(bgp2);
+
+		result.push(opt1);
+		result.push(opt2);
+
+		if(exactDateProp != null) {
+			var opt3 = this._initOptional();
+			var bgp3 = this._initBasicGraphPattern();
+			var exactDateVarName = objectVariable+"_exact";
+			bgp3.triples.push(this._buildTriple(subjectVariable, exactDateProp, exactDateVarName));
+			opt3.patterns.push(bgp3);
+			result.push(opt3);
+		} 
+
+		return result;
+	}
+
 
 	// builds a date range criteria to test the overlap between a date range of the resource
 	// and the provided date range.
