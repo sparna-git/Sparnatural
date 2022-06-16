@@ -304,6 +304,8 @@ export class QuerySPARQLWriter {
 					// and select the new variable, right after the original one
 					jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.s)+1, 0, branch.line.s+"_label");
 					// and adjust sort criteria on the label, if requested
+					console.log(jsonQuery.order);
+					console.log(branch.line.s);
 					if((jsonQuery.order != null) && (jsonQuery.order.expression == branch.line.s)) {
 						jsonQuery.order.expression = branch.line.s+"_label";
 					}
@@ -340,8 +342,8 @@ export class QuerySPARQLWriter {
 				// and select the new variable, right after the original one
 				jsonQuery.variables.splice(jsonQuery.variables.indexOf(branch.line.o)+1, 0, branch.line.o+"_label");
 				// and adjust sort criteria on the label, if requested
-				if((jsonQuery.order != null) && (jsonQuery.order.expression == branch.line.s)) {
-					jsonQuery.order.expression = branch.line.s+"_label";
+				if((jsonQuery.order != null) && (jsonQuery.order.expression == branch.line.o)) {
+					jsonQuery.order.expression = branch.line.o+"_label";
 				}
 			} else {
 				console.log("defaultLabelProperty '"+labelProperty+"' must have one and only one range");
@@ -483,7 +485,8 @@ export class QuerySPARQLWriter {
 					// at this stage the query is already pre-processed to include the xxx_begin and xxx_end variables
 					// so we test on the presence of xxx_begin in the select clause
 					if(completeSparqlQuery.variables.includes(queryLine.o+"_begin")) {
-
+						// may be null
+						var exactDateProp = this.specProvider.getExactDateProperty(queryLine.p);
 						var bitsOfQuery = this._initDateRangeSelection(
 							beginDateProp,
 							endDateProp,
