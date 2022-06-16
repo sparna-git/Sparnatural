@@ -319,7 +319,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			$(thisForm.sparnatural).find('.submitSection a').addClass('submitDisable') ;
 		}	
 		this.enableLoading = function() {
-			$(thisForm.sparnatural).find('.submitSection a').addClass('submitDisable, loadingEnabled') ; /// Need to be disabled with loading
+			$(thisForm.sparnatural).find('.submitSection a').addClass('submitDisable loadingEnabled') ; /// Need to be disabled with loading
 		}	
 		this.disableLoading = function() {
 			$(thisForm.sparnatural).find('.submitSection a').removeClass('loadingEnabled') ;
@@ -400,7 +400,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			
 			if (settings.onSubmit instanceof Function) {
 				$(form.sparnatural).find('.submitSection a').on('click', function(event) {
-					if (!$(this).hasClass('submitDisable')) {
+					if ((!$(this).hasClass('submitDisable')) && (!$(this).hasClass('loadingEnabled'))) {
+						console.log('submit clicked');
 						form.sparnatural.disableSubmit() ;
 						settings.onSubmit(form) ;
 					}

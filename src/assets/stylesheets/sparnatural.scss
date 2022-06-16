@@ -1174,18 +1174,20 @@ body {
 								fill:$custom-silver;
 							}
 						}
-						&.loadingEnabled {
-							padding: 4px;
-							svg.playIcon {
-								display: none;
+					}
+					&.loadingEnabled {
+						padding: 4px;
+						background: $custom-silver-light;
+						cursor: default;
+						svg.playIcon {
+							display: none;
+						}
+						svg.playLoader {
+							display: block;
+							path {
+								fill:$custom-green-bold;
 							}
-							svg.playLoader {
-								display: block;
-								path {
-									fill:$custom-green-bold;
-								}
 								
-							}
 						}
 					}
 				}
