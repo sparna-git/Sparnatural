@@ -158,7 +158,7 @@
 				} else {
 					document.getElementById(id_input).style.display = 'none' ;
 					document.getElementById(id_input).closest('.list-widget').querySelector('.no-items').style.display = 'block' ;
-					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+options.url) ;
+					console.warn('No item in widget list for :'+'\n'+' - Start Class => '+startClassGroup_value+'\n'+' - Object property => '+ObjectPropertyGroup_value+'\n'+' - End Class =>'+ endClassGroup_value+' '+'\n'+' - Get data on Url => '+url) ;
 				}  ;
 			});
 			
