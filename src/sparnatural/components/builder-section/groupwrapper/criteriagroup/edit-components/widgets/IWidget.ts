@@ -45,8 +45,14 @@ export interface DateTimePickerValue{
   stop:Date
 }
 
+export interface TreeWidgetValue{
+  key:string
+  label:string
+  uri:string
+}
+
 export interface IWidget {
   html:JQuery<HTMLElement>
   render: ()=> any
-  value: ListWidgetValue | DateValue | AutocompleteValue | DateTimePickerValue | SearchWidgetValue | BooleanWidgetValue | SelectAllValue | MapValue
+  value: ListWidgetValue | DateValue | AutocompleteValue | DateTimePickerValue | SearchWidgetValue | BooleanWidgetValue | SelectAllValue | MapValue | TreeWidgetValue
 }

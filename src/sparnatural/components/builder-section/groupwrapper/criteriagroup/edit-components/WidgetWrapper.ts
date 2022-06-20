@@ -11,6 +11,7 @@ import {
   NoWidget,
   SearchWidget,
   TimeDatePickerWidget,
+  TreeWidget,
   //TreeWidget,
 } from "./widgets/Widgets";
 import HTMLComponent from "../../../../HtmlComponent";
@@ -453,7 +454,7 @@ class WidgetWrapper extends HTMLComponent {
           // if we have a datasource, possibly the default one, provide a config based
           // on a SparqlTemplate, otherwise use the handler provided
 
-          handler = new SparqlTreeHandler(
+          let handler = new SparqlTreeHandler(
             // endpoint URL
             // we read it on the roots datasource
             treeRootsDatasource.sparqlEndpointUrl != null
@@ -485,15 +486,19 @@ class WidgetWrapper extends HTMLComponent {
             this.getFinalQueryString(treeRootsDatasource),
             this.getFinalQueryString(treeChildrenDatasource)
           );
+
+          return new TreeWidget(
+            this,
+            handler,
+            this.settings,
+            this.settings.langSearch,
+            this.startClassVal,
+            this.objectPropVal,
+            this.endClassVal
+          );
         }
-        /*
-        return new TreeWidget(
-          this,
-          handler,
-          this.settings,
-          this.settings.langSearch
-        );*/
-        return new NoWidget(this)
+
+
 
       case Config.Map_PROPERTY:
         return new MapWidget(this).render()
