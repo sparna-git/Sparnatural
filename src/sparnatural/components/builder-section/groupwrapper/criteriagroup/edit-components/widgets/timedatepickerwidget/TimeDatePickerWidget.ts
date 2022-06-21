@@ -27,8 +27,8 @@ export class TimeDatePickerWidget extends AbstractWidget {
     protected widgetValues: DateTimePickerValue[];
     datesHandler: any;
     ParentComponent: any;
-    formatDate: any;
-    format: any;inputStart: JQuery<HTMLElement>;
+    dateFormat: any;
+    inputStart: JQuery<HTMLElement>;
     inputEnd: JQuery<HTMLElement>;
     inputValue: JQuery<HTMLElement>;
     infoBtn: InfoBtn;
@@ -41,7 +41,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
     constructor(
       parentComponent: WidgetWrapper,
       datesHandler: any,
-      format: any,
+      dateFormat: any,
       startClassCal:SelectedVal,
       objectPropVal:SelectedVal,
       endClassVal:SelectedVal,
@@ -49,33 +49,37 @@ export class TimeDatePickerWidget extends AbstractWidget {
     ) {
       super('date-widget',parentComponent,null,startClassCal,objectPropVal,endClassVal)
       this.datesHandler = datesHandler;
-      this.formatDate = format;
+      this.dateFormat = dateFormat;
       this.specProvider = specProvider
-      this.formatDate == "day"
-        ? getSettings().langSearch.PlaceholderTimeDateDayFormat
-        : getSettings().langSearch.PlaceholderTimeDateFormat;
+      this.dateFormat == "day"
+        ? this.dateFormat = getSettings().langSearch.PlaceholderTimeDateDayFormat
+        : this.dateFormat = getSettings().langSearch.PlaceholderTimeDateFormat;
   
     }
   
     render() {
       super.render()
-      this.formatDate == "day"
-        ? getSettings().langSearch.PlaceholderTimeDateDayFormat
-        : getSettings().langSearch.PlaceholderTimeDateFormat;
       this.html.append($(`<span>${getSettings().langSearch.LabelDateFrom}</span>`))
       this.inputStart = $(`<input id="input-start" placeholder="${getSettings().langSearch.TimeWidgetDateFrom}" autocomplete="off"/>`)
       this.inputEnd = $(`<input id="input-end" placeholder="${getSettings().langSearch.TimeWidgetDateTo}"/>`)
       this.inputValue= $(`<input id="input-value" type="hidden"/>`)
       let span = $(`<span>${getSettings().langSearch.LabelDateTo}</span>`)
       this.html.append(this.inputStart).append(span).append(this.inputEnd).append(this.inputValue)
-      let datatippy = (this.formatDate == 'day')?getSettings().langSearch.TimeWidgetDateHelp:getSettings().langSearch.TimeWidgetYearHelp
-      this.infoBtn = new InfoBtn(this,datatippy).render()
+      // Build datatippy info
+      let datatippy = (this.dateFormat == 'day')? getSettings().langSearch.TimeWidgetDateHelp : getSettings().langSearch.TimeWidgetYearHelp
+      // set a tooltip on the info circle
+      var tippySettings = Object.assign(
+        {},
+        getSettings().tooltipConfig
+      );
+      tippySettings.placement = "left";
+      tippySettings.trigger = "click";
+      tippySettings.offset = [this.dateFormat == "day" ? 75 : 50, -20];
+      tippySettings.delay = [0, 0];
+      this.infoBtn = new InfoBtn(this,datatippy,tippySettings).render()
+      //finish datatippy
+
       this.addValueBtn = new AddUserInputBtn(this,getSettings().langSearch.ButtonAdd,this.#addValueBtnClicked).render()
-  
-      this.format =
-        this.formatDate == "day"
-          ? getSettings().langSearch.InputTimeDateDayFormat
-          : getSettings().langSearch.InputTimeDateFormat;
   
       var options: {
         language: any;
@@ -86,24 +90,14 @@ export class TimeDatePickerWidget extends AbstractWidget {
       } = {
         language: getSettings().langSearch.LangCodeTimeDate,
         autoHide: true,
-        format: this.format,
+        format: this.dateFormat,
         date: null,
         startView: 2,
       };
   
       this.inputStart.datepicker(options);
       this.inputEnd.datepicker(options)
-  
-      // set a tooltip on the info circle
-      var tippySettings = Object.assign(
-        {},
-        getSettings().tooltipConfig
-      );
-      tippySettings.placement = "left";
-      tippySettings.trigger = "click";
-      tippySettings.offset = [this.formatDate == "day" ? 75 : 50, -20];
-      tippySettings.delay = [0, 0];
-      tippy(this.infoBtn.widgetHtml[0], tippySettings);
+     
       return this
     }
   
@@ -114,12 +108,13 @@ export class TimeDatePickerWidget extends AbstractWidget {
         value:{
             key:'',
             label:'',
-            start: this.inputStart.datepicker('getDate'),
-            stop: this.inputEnd.datepicker('getDate'),
+            start: new Date(this.inputStart.datepicker('getDate')),
+            stop: new Date(this.inputEnd.datepicker('getDate')),
         }
 
       }
       let widgetVal:DateTimePickerValue = this.#validateInput(val)
+      if(!widgetVal) return
       this.renderWidgetVal(this.#validateInput(widgetVal))
     }
     //TODO add dialog for user if input is unreasonable
@@ -128,42 +123,30 @@ export class TimeDatePickerWidget extends AbstractWidget {
         console.warn(`no input received on DateTimePicker`)
         return null
       }
+      if(!widgetValue.value.start || !widgetValue.value.stop){
+        console.warn(`no input received on DateTimePicker`)
+        return null
+      }
       if(widgetValue.value.start > widgetValue.value.stop){
         console.warn(`startVal is bigger then endVal`)
         return null
       }
       let tmpValue:{start:Date,stop:Date}
-      if (this.formatDate == "day") {
-        this.dateToYMD(widgetValue.value.start, "day");
+      if (this.dateFormat == "day") {
         tmpValue = {
-          start: this.dateToYMD(widgetValue.value.start, "day"),
-          stop: this.dateToYMD(widgetValue.value.stop, "day"),
+          start: new Date(widgetValue.value.start.setHours(0,0,0,0)),
+          stop: new Date(widgetValue.value.stop.setHours(23,59,59,59)),
         };
-        if (widgetValue.value.start != null) {
-            widgetValue.value.start = new Date(widgetValue.value.start + "T00:00:00");
-        }
-        if (widgetValue.value.stop != null) {
-            widgetValue.value.stop = new Date(widgetValue.value.stop + "T23:59:59");
-        }
       } else {
         tmpValue = {
-          start: this.dateToYMD(widgetValue.value.start, false),
-          stop: this.dateToYMD(widgetValue.value.stop, false),
+          start: new Date(widgetValue.value.start.getFullYear(),0,1,0,0,1,0 ), // first day
+          stop:new Date(widgetValue.value.stop.getFullYear(),11,31,23,59,59) // last day
         };
-        if (widgetValue.value.start != null) {
-            widgetValue.value.start = new Date(widgetValue.value.start + "-01-01T00:00:00");
-        }
-        if (widgetValue.value.stop != null) {
-            widgetValue.value.stop = new Date(widgetValue.value.stop + "-12-31T23:59:59");
-        }
-      }
-      if (widgetValue.value.start == null && widgetValue.value.stop == null) {
-        widgetValue.value = null;
       }
       let dateTimePickerVal:DateTimePickerValue = {
           valueType: ValueType.SINGLE,
           value:{
-            key: tmpValue.start + " " + tmpValue.stop,
+            key: this.getValueLabel(tmpValue.start,tmpValue.stop),
             // TODO : this is not translated
             label: this.getValueLabel(tmpValue.start,tmpValue.stop),
             start: tmpValue.start,
@@ -174,38 +157,27 @@ export class TimeDatePickerWidget extends AbstractWidget {
       return dateTimePickerVal
     }
   
-    getValueLabel = function (start:any,stop:any) {
+    getValueLabel = function (start:Date,stop:Date) {
       let lbl = ''
       
-      if(start != ''){
-        lbl = lbl.concat(` ${start.toISOString().slice(0,10)}`)
+      if(start){
+        lbl = lbl.concat(`${this.#formatDate(start)}`)
       } 
       if(stop){
-        lbl = lbl.concat(` - ${stop.toISOString().slice(0,10)}`)
+        lbl = lbl.concat(` - ${this.#formatDate(stop)}`)
       } 
       return lbl;
     };
-  
-    dateToYMD(
-      date: {
-        getDate: () => any;
-        getMonth: () => number;
-        getFullYear: () => any;
-      },
-      format: string | boolean
-    ) {
-      if (date == null) {
-        return date;
-      }
-      var d = date.getDate();
-      var m = date.getMonth() + 1; //Month from 0 to 11
-      var y = date.getFullYear();
-      if (format == "day") {
-        return (
-          "" + y + "-" + (m <= 9 ? "0" + m : m) + "-" + (d <= 9 ? "0" + d : d)
-        );
-      }
-      return y;
+    #padTo2Digits(num:number) {
+      return num.toString().padStart(2, '0');
+    }
+    
+    #formatDate(date:Date) {
+      return [
+        this.#padTo2Digits(date.getDate()),
+        this.#padTo2Digits(date.getMonth() + 1),
+        date.getFullYear(),
+      ].join('/');
     }
 
     getRdfJsPattern(): Pattern[]{
