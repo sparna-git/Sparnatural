@@ -57,14 +57,14 @@ export class SearchWidget extends AbstractWidget {
         type: "bgp",
         triples: [
           {
-            subject: DataFactory.variable(this.startClassVal.variable),
+            subject: DataFactory.variable(this.startClassVal.variable.replace('?','')),
             predicate: DataFactory.namedNode('http://www.ontotext.com/connectors/lucene#query'),
             object: DataFactory.literal(`text:${this.widgetValues[0].value.search}`)
           },
           {
-            subject: DataFactory.variable(this.startClassVal.variable),
+            subject: DataFactory.variable(this.startClassVal.variable.replace('?','')),
             predicate: DataFactory.namedNode('http://www.ontotext.com/connectors/lucene#entities'),
-            object: DataFactory.variable(this.endClassVal.variable)
+            object: DataFactory.variable(this.endClassVal.variable.replace('?',''))
           }
         ]
       }

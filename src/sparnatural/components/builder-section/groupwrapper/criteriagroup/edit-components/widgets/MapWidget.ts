@@ -104,12 +104,12 @@ export default class MapWidget extends AbstractWidget {
         let geomA:Triple = DataFactory.triple(
             DataFactory.variable(this.startClassVal.variable),
             DataFactory.namedNode('http://example.org/ApplicationSchema#hasExactGeometry'),
-            DataFactory.variable('?geomA')
+            DataFactory.variable('geomA')
         )
         let asWKT:Triple = DataFactory.triple(
             DataFactory.variable(geomA.object.value),
             DataFactory.namedNode('http://www.opengis.net/ont/geosparql#asWKT'),
-            DataFactory.variable('?aWKT')
+            DataFactory.variable('aWKT')
         )
 
         let PolyLiteral:Literal = DataFactory.literal(this.#buildPolygon(this.widgetValues[0].value.coordinates[0]),namedNode( "http://www.opengis.net/ont/geosparql#wktLiteral"))

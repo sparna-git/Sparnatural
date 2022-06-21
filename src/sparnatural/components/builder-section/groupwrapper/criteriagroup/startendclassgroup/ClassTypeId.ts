@@ -134,10 +134,13 @@ class ClassTypeId extends HTMLComponent {
 
   // show the sparql variable name instead of the type
   toggleVarName(){
+    //val shows what currently is displayed
     let val = (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent.trimStart()
     if(this.ParentComponent.getVarName() === val){
+      //display label
       (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent = this.specProvider.getLabel(this.ParentComponent.getTypeSelected());
     }else{
+      //display variable
       (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent = this.ParentComponent.getVarName()
    }
   }
