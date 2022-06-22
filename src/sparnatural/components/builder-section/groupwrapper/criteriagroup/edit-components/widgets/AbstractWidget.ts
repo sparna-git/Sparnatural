@@ -49,6 +49,10 @@ export abstract class AbstractWidget extends HTMLComponent{
     return this.widgetValues
   }
 
+  getVariableValue(selectedVal:SelectedVal):string{
+    return selectedVal.variable.replace('?','')
+  }
+
   // fires the event to render the label of the WidgetValue on the UI
   renderWidgetVal(widgetValue:WidgetValue){
     this.widgetValues.push(widgetValue)

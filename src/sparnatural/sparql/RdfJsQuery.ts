@@ -1,8 +1,8 @@
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
-import {  Language, Order } from "./ISparJson";
+import { Language, Order } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import ISpecProvider from "../spec-providers/ISpecProviders";
-import { BgpPattern, FilterPattern, Generator, OptionalPattern, Ordering, Pattern, SelectQuery, Triple, Variable, VariableExpression, VariableTerm } from "sparqljs";
+import { BgpPattern, FilterPattern, Generator, OptionalPattern, Ordering, Pattern, SelectQuery, Triple, Variable, VariableTerm } from "sparqljs";
 import Sparnatural from "../components/Sparnatural";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import { DataFactory } from "n3";
@@ -61,10 +61,12 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
           return generatedQuery;
     }
 
+    // this method traverses through the groupwrappers and retrieves the information from each widget.
     #processGrpWrapper(grpWrapper:GroupWrapper,isInOption:boolean){
         let ptrns:Pattern[] = []
 
         let triples = this.#buildTripples(grpWrapper.CriteriaGroup)
+        //get the infromation from the widget
         let widgetVals = grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.getRdfJsPattern()
         let hasOption = ((grpWrapper.optionState == OptionTypes.OPTIONAL)||(grpWrapper.optionState == OptionTypes.NOTEXISTS))? true : false
         //whereChild

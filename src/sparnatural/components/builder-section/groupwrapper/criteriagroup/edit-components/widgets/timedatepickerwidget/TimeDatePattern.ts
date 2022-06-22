@@ -10,7 +10,7 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
             patterns: [
                 { 
                     type: "filter",
-                    expression: [<OperationExpression>{
+                    expression: <OperationExpression>{
                         type: "operation",
                         operator: "&&",
                         args: [
@@ -20,9 +20,9 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                 args: [
                                     {
                                         type: "functioncall",
-                                        function: "http://www.w3.org/2001/XMLSchema#dateTime",
+                                        function: DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime"),
                                         args: [
-                                            "?Date_1_exact"
+                                            DataFactory.variable("Date_1_exact")
                                         ]
                                     },
                                     startDate
@@ -34,16 +34,16 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                 args: [
                                     {
                                         type: "functioncall",
-                                        function: "http://www.w3.org/2001/XMLSchema#dateTime",
+                                        function: DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime"),
                                         args: [
-                                            "?Date_1_exact"
+                                            DataFactory.variable("Date_1_exact")
                                         ]
                                     },
                                     endDate
                                 ]
                             }
                         ]
-                    }]
+                    }
                 },
                 {
                     type: "bgp",
@@ -51,7 +51,7 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                         {
                             subject: startClassVar ,
                             predicate: exactDatePred,
-                            object: DataFactory.variable(`?Date_${variableNumber}_exact`)
+                            object: DataFactory.variable(`Date_${variableNumber}_exact`)
                         }
                     ]
                 }
@@ -72,12 +72,12 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                         {
                                             subject: startClassVar,
                                             predicate: beginDatePred,
-                                            object: DataFactory.variable(`?Date_${variableNumber}_begin`)
+                                            object: DataFactory.variable(`Date_${variableNumber}_begin`)
                                         },
                                         {
                                             subject: startClassVar,
                                             predicate: exactDatePred,
-                                            object: DataFactory.variable(`?Date_${variableNumber}_end`)
+                                            object: DataFactory.variable(`Date_${variableNumber}_end`)
                                         }
                                     ]
                                 },
@@ -89,9 +89,9 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                         args: [
                                             {
                                                 type: "functioncall",
-                                                function: "http://www.w3.org/2001/XMLSchema#dateTime",
+                                                function: DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime"),
                                                 args: [
-                                                    DataFactory.variable(`?Date_${variableNumber}_begin`)
+                                                    DataFactory.variable(`Date_${variableNumber}_begin`)
                                                 ]
                                             },
                                             endDate
@@ -106,9 +106,9 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                         args: [
                                             {
                                                 type: "functioncall",
-                                                function: "http://www.w3.org/2001/XMLSchema#dateTime",
+                                                function: DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime"),
                                                 args: [
-                                                    DataFactory.variable(`?Date_${variableNumber}_end`)
+                                                    DataFactory.variable(`Date_${variableNumber}_end`)
                                                 ]
                                             },
                                             startDate
@@ -126,7 +126,7 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                         {
                                             subject: startClassVar,
                                             predicate: beginDatePred,
-                                            object: DataFactory.variable(`?Date_${variableNumber}_begin`)
+                                            object: DataFactory.variable(`Date_${variableNumber}_begin`)
                                         }
                                     ]
                                 },
@@ -141,9 +141,9 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                                 patterns: [
                                                     {type:'bgp',
                                                     triples:[{
-                                                        subject: startClassVar, //replace with startClassVal.variable
+                                                        subject: startClassVar, //replace with startClassVal.variable.fullname
                                                         predicate: endDatePred,
-                                                        object: DataFactory.variable(`?Date_${variableNumber}_end`)
+                                                        object: DataFactory.variable(`Date_${variableNumber}_end`)
                                                     }]
                                                 }
                                                 ]
@@ -159,9 +159,9 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                         args: [
                                             {
                                                 type: "functioncall",
-                                                function: "http://www.w3.org/2001/XMLSchema#dateTime",
+                                                function: DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime"),
                                                 args: [
-                                                    DataFactory.variable(`?Date_${variableNumber}_begin`)
+                                                    DataFactory.variable(`Date_${variableNumber}_begin`)
                                                 ]
                                             },
                                             endDate
@@ -179,7 +179,7 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                         {
                                             subject: startClassVar,
                                             predicate:endDatePred,
-                                            object: DataFactory.variable(`?Date_${variableNumber}_end`)
+                                            object: DataFactory.variable(`Date_${variableNumber}_end`)
                                         }
                                     ]
                                 },
@@ -197,7 +197,7 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                                         {
                                                             subject: startClassVar, 
                                                             predicate:beginDatePred,
-                                                            object: DataFactory.variable(`?Date_${variableNumber}_begin`)
+                                                            object: DataFactory.variable(`Date_${variableNumber}_begin`)
                                                         }
                                                     ]
                                                 }
@@ -214,9 +214,9 @@ export const getTimeDatePattern = (startDate:Literal,endDate:Literal,startClassV
                                         args: [
                                             {
                                                 type: "functioncall",
-                                                function: "http://www.w3.org/2001/XMLSchema#dateTime",
+                                                function: DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime"),
                                                 args: [
-                                                    DataFactory.variable(`?Date_${variableNumber}_end`)
+                                                    DataFactory.variable(`Date_${variableNumber}_end`)
                                                 ]
                                             },
                                             startDate

@@ -102,7 +102,7 @@ export default class MapWidget extends AbstractWidget {
     getRdfJsPattern(): Pattern[] {
        
         let geomA:Triple = DataFactory.triple(
-            DataFactory.variable(this.startClassVal.variable),
+            DataFactory.variable(this.getVariableValue(this.startClassVal)),
             DataFactory.namedNode('http://example.org/ApplicationSchema#hasExactGeometry'),
             DataFactory.variable('geomA')
         )
@@ -118,7 +118,7 @@ export default class MapWidget extends AbstractWidget {
             type: "filter",
             expression: <FunctionCallExpression>{
                 type: 'functionCall',
-                function: 'geof:sfWithin',
+                function: DataFactory.namedNode('geof:sfWithin'),
                 args:[
                     asWKT.object,
                     PolyLiteral
@@ -142,8 +142,7 @@ export default class MapWidget extends AbstractWidget {
             polygon = `${polygon} ${coordinat.lat} ${coordinat.lng},`
         })
         // polygon must be closed with the starting point
-        return `'''
-         <http://www.opengis.net/def/crs/OGC/1.3/CRS84> 
+        return `'''<http://www.opengis.net/def/crs/OGC/1.3/CRS84> 
         Polygon((${polygon} ${this.widgetValues[0].value.coordinates[0][0]}))
         '''`
     }

@@ -183,7 +183,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
     getRdfJsPattern(): Pattern[]{
       let startLit = DataFactory.literal(this.widgetValues[0].value.start.toISOString(), namedNode("http://www.w3.org/2001/XMLSchema#dateTime"))
       let stopLit =  DataFactory.literal(this.widgetValues[0].value.start.toISOString(), namedNode("http://www.w3.org/2001/XMLSchema#dateTime"))
-      let startClassVar = DataFactory.variable(this.startClassVal.variable)
+      let startClassVar = DataFactory.variable(this.getVariableValue(this.startClassVal))
       let beginDatePred = DataFactory.namedNode(this.specProvider.getBeginDateProperty(this.objectPropVal.type))
       let exactDatePred = DataFactory.namedNode(this.specProvider.getBeginDateProperty(this.objectPropVal.type))
       let endDatePred = DataFactory.namedNode(this.specProvider.getEndDateProperty(this.objectPropVal.type)) 
