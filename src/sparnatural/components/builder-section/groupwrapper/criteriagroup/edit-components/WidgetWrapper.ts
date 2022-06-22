@@ -52,7 +52,10 @@ class WidgetWrapper extends HTMLComponent {
 
   render() {
     super.render();
-    this.widgetHtml = null;
+    if(this.widgetComponent!=null){
+      this.widgetComponent.render()
+    }
+   // this.widgetHtml = null;
     this.objectPropertype = this.objectPropVal.type; // shows which objectproperty got chosen for which subject object combination
 
     this.widgetType = this.specProvider.getObjectPropertyType(
@@ -64,87 +67,44 @@ class WidgetWrapper extends HTMLComponent {
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
       if (this.specProvider.isLiteralClass(this.endClassVal.type)) {
-        //this.GrandParent.initCompleted();
-
-        //Add variable on results view
-        /* STILL NECESSARY?
-        if (!this.GrandParent.notSelectForview) {
-          this.GrandParent.onchangeViewVariable();
-        }*/
-        this.add_all = false;
         this.html[0].dispatchEvent(
           new CustomEvent("initGeneralEvent", { bubbles: true })
         );
       }
-      //var endLabel = null ; //Imporant is this still necessary?
-      this.add_or = false;
-
-      //return true;
+      return this;
     } else {
-      // pour les autres type de widgets
-      if (
-        this.widgetType == Config.SEARCH_PROPERTY ||
-        this.widgetType == Config.STRING_EQUALS_PROPERTY ||
-        this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY ||
-        this.widgetType == Config.TREE_PROPERTY
-      ) {
-        // label of the "Search" pseudo-class is inserted alone in this case
-        endLabel = this.classLabel;
-      } else if (
-        this.widgetType == Config.LIST_PROPERTY ||
-        this.widgetType == Config.TIME_PROPERTY_DATE ||
-        this.widgetType == Config.TIME_PROPERTY_YEAR
-      ) {
-        endLabel = this.settings.langSearch.Select + " :";
-      } else if (this.widgetType == Config.BOOLEAN_PROPERTY) {
-        endLabel = "";
-      } else {
-        endLabel = this.settings.langSearch.Find + " :";
-      }
-    }
-    var parenthesisLabel = " (" + this.classLabel + ") ";
+      endLabel = this.#getEndLabel()
+
+      var parenthesisLabel = " (" + this.classLabel + ") ";
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
-
-    //Ajout de l'option all si pas de valeur déjà selectionées
-    var selectAll = "";
-
-      if (this.add_all) {
-        selectAll =
-          '<span class="selectAll"><span class="underline">' +
-          this.settings.langSearch.SelectAllValues +
-          "</span>" +
-          parenthesisLabel +
-          "</span>";
-
-      }
-      if (this.add_all && this.add_or) {
-        selectAll +=
-          '<span class="or">' + this.settings.langSearch.Or + "</span> ";
-      }
-
-
-    var widgetLabel =
-      '<span class="edit-trait first"><span class="edit-trait-top"></span><span class="edit-num">1</span></span>' +
-      selectAll;
-
-    if (endLabel) {
-      widgetLabel += "<span>" + endLabel + "</span>";
-    }
-
-    // init HTML by concatenating bit of HTML + widget HTML
+      let widgetSpan = 
+      `<span class="edit-trait first">
+        <span class="edit-trait-top"></span>
+        <span class="edit-num">
+          1
+        </span>
+      </span>
+      <span class="selectAll">
+        <span class="underline">
+        ${this.settings.langSearch.SelectAllValues}
+        </span> 
+        ${parenthesisLabel} 
+      </span>
+      <span class="or">
+        ${this.settings.langSearch.Or}
+      </span>
+      `
+      // init HTML by concatenating bit of HTML + widget HTML
     this.widgetComponent = this.createWidgetComponent(
       this.widgetType,
       this.objectPropertype,
       this.rangeClassId
     );
 
-    if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-      this.widgetHtml = $(widgetLabel);
-    } else {
-      this.widgetHtml = $(widgetLabel + this.widgetComponent.html);
-    }
+   
+    this.widgetHtml = $(widgetSpan + this.widgetComponent.html);
     this.html.append(this.widgetHtml)
 
 
@@ -155,17 +115,32 @@ class WidgetWrapper extends HTMLComponent {
       .on("click", () => {
         this.html[0].dispatchEvent(new CustomEvent('selectAll',{bubbles:true}))
       });
+    }
+    
     return this;
   }
 
-  canHaveSelectAll() {
+  #getEndLabel(){
+    // pour les autres type de widgets
     if (
-      this.widgetType == Config.NON_SELECTABLE_PROPERTY &&
-      this.specProvider.isLiteralClass(this.endClassVal.type)
+      this.widgetType == Config.SEARCH_PROPERTY ||
+      this.widgetType == Config.STRING_EQUALS_PROPERTY ||
+      this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY ||
+      this.widgetType == Config.TREE_PROPERTY
     ) {
-      return false;
+      // label of the "Search" pseudo-class is inserted alone in this case
+      return this.classLabel;
+    } else if (
+      this.widgetType == Config.LIST_PROPERTY ||
+      this.widgetType == Config.TIME_PROPERTY_DATE ||
+      this.widgetType == Config.TIME_PROPERTY_YEAR
+    ) {
+      return this.settings.langSearch.Select + " :";
+    } else if (this.widgetType == Config.BOOLEAN_PROPERTY) {
+      return "";
+    } else {
+     return this.settings.langSearch.Find + " :";
     }
-    return true;
   }
 
   createWidgetComponent(

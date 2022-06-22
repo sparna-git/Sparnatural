@@ -57,7 +57,6 @@ export abstract class AbstractWidget extends HTMLComponent{
   renderWidgetVal(widgetValue:WidgetValue){
     this.widgetValues.push(widgetValue)
     this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:widgetValue}))
-
   }
 
 } 

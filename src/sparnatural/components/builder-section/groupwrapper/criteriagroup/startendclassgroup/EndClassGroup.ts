@@ -66,7 +66,7 @@ class EndClassGroup extends HTMLComponent {
       // remove: if add btn got clicked mutiple times or the old widgetwrapper is still rendered while the last selectedvalue got deleted 
       this.html[0].dispatchEvent(new CustomEvent('removeEditComponents'))
 
-      this.editComponents = new EditComponents(this,this.startClassVal,this.objectPropVal,this.endClassVal,this.specProvider)
+      //this.editComponents = new EditComponents(this,this.startClassVal,this.objectPropVal,this.endClassVal,this.specProvider)
       if(e.detail.NrOfSelValues === 0) {
         // Render WidgetsWrapper and ActionWhere
         this.editComponents.render()

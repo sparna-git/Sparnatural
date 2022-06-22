@@ -40,7 +40,14 @@ class EditComponents extends HTMLComponent {
     render(): this {
       super.render()
 
-      this.renderWidgetsWrapper(true)
+      this.widgetWrapper = new WidgetWrapper(
+        this,
+        this.specProvider,
+        this.startClassVal,
+        this.objectPropVal,
+        this.endClassVal,
+        true
+      ).render();
 
       let widgetType = this.widgetWrapper.getWidgetType()
       if(Object.values(this.RENDER_WHERE).includes(widgetType)){
@@ -56,14 +63,7 @@ class EditComponents extends HTMLComponent {
     // boolean decides wether the 'any' clickable span should be added
     renderWidgetsWrapper(add_all:boolean){
       super.render()
-      this.widgetWrapper = new WidgetWrapper(
-        this,
-        this.specProvider,
-        this.startClassVal,
-        this.objectPropVal,
-        this.endClassVal,
-        add_all
-      ).render();
+      this.widgetWrapper.render();
     }
     
     #addEventListeners(){
