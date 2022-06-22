@@ -12,6 +12,7 @@ export interface BooleanWidgetValue extends WidgetValue {
         key:boolean,
         boolean:boolean
     }
+    valueType:ValueType.SINGLE
   }
   
 

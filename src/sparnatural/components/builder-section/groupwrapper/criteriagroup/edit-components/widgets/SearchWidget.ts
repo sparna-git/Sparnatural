@@ -12,6 +12,7 @@ export interface SearchWidgetValue extends WidgetValue{
         label:string
         search:string
     }
+    valueType:ValueType.SINGLE
   }
 
 export class SearchWidget extends AbstractWidget {

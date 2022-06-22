@@ -17,6 +17,7 @@ export interface ListWidgetValue extends WidgetValue{
         label:string
         uri:string
     }
+    valueType:ValueType.MULTIPLE
   }
 
 export class ListWidget extends AbstractWidget {

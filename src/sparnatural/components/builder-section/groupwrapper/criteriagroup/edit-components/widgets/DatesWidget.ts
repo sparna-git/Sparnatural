@@ -11,6 +11,7 @@ export interface DateValue extends WidgetValue {
         start: string,
         stop: string
     }
+    valueType:ValueType.SINGLE
   }
 
 export class DatesWidget extends AbstractWidget {

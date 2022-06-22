@@ -120,7 +120,7 @@ class PropertySelectBuilder {
   buildPropertySelect(
     domainClassID: string,
     rangeClassID: string,
-    default_value: any
+    default_value: string
   ) {
     this.items = this.specProvider.getConnectingProperties(
       domainClassID,

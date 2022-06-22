@@ -16,6 +16,7 @@ export interface MapWidgetValue extends WidgetValue {
         label:string
         coordinates: LatLng[][]
     }
+    valueType:ValueType.SINGLE
 }
 
 export default class MapWidget extends AbstractWidget {
