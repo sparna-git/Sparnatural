@@ -217,14 +217,17 @@
             padding: 5px 5px 5px 5px;
             font-size: 14px;
             font-weight: bolder;
-            
+
             p {
-                margin-right: 50px;
+                // name of the variableOptionSelection
+                border-top: 10px;
+                margin-bottom: auto;
+                margin-right: 10px;
             }
         }
 
         color: themes.$default-text-color;
-        //
+        //section Sort
         a {
             display: inline-block;
             padding: 5px;
