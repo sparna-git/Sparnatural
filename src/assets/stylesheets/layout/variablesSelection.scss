@@ -1,7 +1,8 @@
 @use "../themes";
 @use'../base';
+
 .variablesSelection {
-    
+
     .flexWrap {
         display: flex;
         flex-direction: row;
@@ -11,14 +12,12 @@
     background: rgb(255, 231, 203);
     margin-bottom: 22px;
     border-top: 2px solid #8D8D8D;
-
     background: themes.$custom-red-light;
     margin-bottom: 22px;
     border-top: 2px solid themes.$custom-silver-line;
 
     .linesWrapper {
-        /*display: none;*/
-
+        // display: none;
         height: 0;
         overflow: hidden;
     }
@@ -86,12 +85,11 @@
         width: base.$component-width;
         max-width: base.$component-max-width;
         margin: 0 auto;
-
         border: 1px solid #ddd;
         background: #fff;
 
 
-        &>div.variablesOtherSelect {
+        & > div.variablesOtherSelect {
             display: block;
         }
     }
@@ -111,7 +109,7 @@
             }
         }
 
-        .variablesOtherSelect>div:first-child {
+        .variablesOtherSelect > div:first-child {
             background: lightgray;
             height: 100%;
             display: block;
@@ -151,13 +149,13 @@
 
             input {
                 line-height: 30px;
-                padding:1px;
+                padding: 1px;
                 min-width: 4ch;
-
             }
+
             input:invalid {
                 border: 2px dashed red;
-              }
+            }
 
             [contenteditable="true"]:active,
             [contenteditable="true"]:focus {
@@ -185,7 +183,8 @@
         .variablesOrdersSelect {
             background: lightgray;
             padding: 0 10px;
-            min-width: 140px;
+            min-width: 148px;
+
 
             strong {
                 font-size: 12px;
@@ -218,13 +217,14 @@
             padding: 5px 5px 5px 5px;
             font-size: 14px;
             font-weight: bolder;
-            p{
-                margin-right: 5px;
+            
+            p {
+                margin-right: 50px;
             }
         }
 
         color: themes.$default-text-color;
-
+        //
         a {
             display: inline-block;
             padding: 5px;
@@ -270,21 +270,20 @@
         transition: .4s;
     }
 
-    input:checked+.slider {
+    input:checked + .slider {
         background-color: themes.$custom-red-medium;
     }
 
-    input:focus+.slider {
+    input:focus + .slider {
         box-shadow: 0 0 1px #ccc;
     }
 
-    input:checked+.slider:before {
+    input:checked + .slider:before {
         -webkit-transform: translateX(22px);
         -ms-transform: translateX(22px);
         transform: translateX(22px);
         background-color: themes.$custom-red;
     }
-
     /* Rounded sliders */
     .slider.round {
         border-radius: 26px;
@@ -295,5 +294,4 @@
         border-radius: 50%;
         border: 1px solid #555;
     }
-
 }
