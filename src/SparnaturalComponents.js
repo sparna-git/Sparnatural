@@ -555,6 +555,7 @@ export class EndClassGroup extends GroupContenaire {
 			this.variableSelector.remove() ;
 			this.variableSelector = null ;
 			$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
+			$(this.html).removeClass('VariableSelected') ;
 		}
 	}
 
