@@ -172,7 +172,13 @@
       let settings = {
         //config: config,
         currentTab: tab, // link sparnatural with yasgui
-        language:lang
+        language:lang,
+        onSubmit: function(form) {
+          // enable loader on button
+          form.sparnatural.enableLoading() ; 
+          // trigger the query from YasQE
+          // yasqe.query();
+        }
       }
       sparnatural.setSettings(settings);
     </script>
