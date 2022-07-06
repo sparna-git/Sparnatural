@@ -1058,7 +1058,7 @@ export class VariableSelector extends HTMLComponent {
 			var childs_index= [] ;
 			//Set variable neme displayed for childs if endClassGroup
 			if (this.GroupContenaire instanceof EndClassGroup) {
-				$(this.GroupContenaire.html).parents('li').first().find('.childsList>li>.CriteriaGroup>.StartClassGroup').each(function(index) {
+				$(this.GroupContenaire.html).parents('li').first().find('>.childsList>li>.CriteriaGroup>.StartClassGroup').each(function(index) {
 					childs_index[index] = $(this).parents('li').first().attr('data-index') ;
 					$(this).find('.variableName').first().text(curent_value) ;
 				});
