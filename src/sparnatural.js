@@ -897,6 +897,8 @@ UiuxConfig = require("./UiuxConfig.js");
 		}
 		this.id =  context.ContextComponentIndex ;
 		this.html = $('<div id="CriteriaGroup-'+this.id+'" class="CriteriaGroup"></div>').appendTo(this.ComponentHtml) ;
+
+		this.checkForHideVariableViewChilds = true;
 		
 		// create all the elements of the criteria
 		this.StartClassGroup = new SparnaturalComponents.StartClassGroup(this, specProvider, settings) ;
@@ -1011,7 +1013,25 @@ UiuxConfig = require("./UiuxConfig.js");
 			}
 			
 			return false ;
-		}		
+		}
+		
+		//#311 Launched when option is selscted and remove variable to select for query
+		this.checkForHideVariableView = function() {
+			if ((this.EndClassGroup.allValueSelected == true ) && (this.EndClassGroup.html.parents('.notExists-enabled').length > 0 )) {
+				this.EndClassGroup.removeSelectedVariable() ;
+			}
+			if ( this.checkForHideVariableViewChilds == true ) {
+				var childs = this.EndClassGroup.html.parents('.notExists-enabled').first().find('li.groupe').get() ;
+				for (var item in  childs) {
+					var id = $(childs[item]).attr('data-index') ;
+					var criteria = SparnaturalComponents.findCriteria(this.thisForm_, id) ;
+					//recursive way, ensure that not infinite loop
+					criteria.checkForHideVariableViewChilds = false ;
+					criteria.checkForHideVariableView() ;
+					criteria.checkForHideVariableViewChilds = true ;
+				}
+			}
+		}
 	}
 	
 	function GroupContenaire() {
@@ -1118,6 +1138,7 @@ UiuxConfig = require("./UiuxConfig.js");
 			if(this.selectAllValue) {
 				//unselect the endClass for view
 				this.parentCriteriaGroup.EndClassGroup.onchangeViewVariable() ;
+				this.parentCriteriaGroup.EndClassGroup.unsetStateAllValueSelected() ;
 			}
 			//On all case, selectAllValue will be set to false
 			this.selectAllValue = false;
@@ -1186,6 +1207,8 @@ UiuxConfig = require("./UiuxConfig.js");
 			if ($(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup>div').length == 0) {
 				$(this.parentCriteriaGroup.html).find('.EndClassWidgetGroup').append($('<div class="EndClassWidgetValue flexWrap"><div class="componentBackArrow">'+UiuxConfig.COMPONENT_ARROW_BACK+'</div><p>'+theValueLabel+'</p><div class="componentFrontArrow">'+UiuxConfig.COMPONENT_ARROW_FRONT+'</div></div>')).find('div').first().append(this.unselect) ;
 			}
+
+			this.parentCriteriaGroup.EndClassGroup.setStateAllValueSelected() ;
 
 			this.unselect.on(
 				'click',

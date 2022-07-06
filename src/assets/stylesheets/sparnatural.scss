@@ -1501,6 +1501,11 @@ body {
 				.CriteriaGroup {
 					border: 3px dotted #000 ;
 				}
+				.allValueSelected {
+					.selectViewVariable {
+						opacity: 0.5;
+					}
+				}
 				ul.childsList {
 					.ActionAnd {
 						&>.trait-and-bottom {

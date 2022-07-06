@@ -390,6 +390,7 @@ export class EndClassGroup extends GroupContenaire {
 		this.inputTypeComponent = new ClassTypeId(this, specProvider) ;
 		this.inputTypeComponent.needBackArrow= true ;
 		this.inputTypeComponent.needFrontArrow= true ;
+		this.allValueSelected = false ;
 
 		// contains the name of the SPARQL variable associated to this component
 		this.varName = (this.parentCriteriaGroup.jsonQueryBranch)?this.parentCriteriaGroup.jsonQueryBranch.line.o:null;
@@ -443,6 +444,11 @@ export class EndClassGroup extends GroupContenaire {
 	}
 
 	onchangeViewVariable() {
+		//#311 Not recommanded to display value when option not exist is enabled and all values is selected
+		if ((this.allValueSelected == true) && (this.html.parents('.notExists-enabled').length > 0)) {
+			this.removeSelectedVariable() ;
+			return false ;
+		}
 		if (this.variableSelector === null) {
 			//Add varableSelector on variableSelector list ;
 			this.variableSelector = new VariableSelector(this) ;
@@ -533,6 +539,25 @@ export class EndClassGroup extends GroupContenaire {
 
 		// clean the variable name so that it is regenerated when a new value is selected in the onChange
 		this.varName = null;
+	}
+
+	setStateAllValueSelected() {
+		this.allValueSelected = true ;
+		$(this.html).addClass('allValueSelected') ;
+	}
+
+	unsetStateAllValueSelected() {
+		this.allValueSelected = false ;
+		$(this.html).removeClass('allValueSelected') ;
+	}
+
+	removeSelectedVariable() {
+		if (this.variableSelector !== null) {
+			this.variableSelector.remove() ;
+			this.variableSelector = null ;
+			$(this.selectViewVariable).html(UiuxConfig.ICON_NOT_SELECTED_VARIABLE) ;
+			$(this.html).removeClass('VariableSelected') ;
+		}
 	}
 
 	getVarName() {
@@ -700,6 +725,9 @@ export class OptionsGroup extends GroupContenaire {
 			$('li.groupe').each(function() {
 				redrawBottomLink($(this)) ;
 			});
+
+			
+			this.parentCriteriaGroup.checkForHideVariableView() ;
 
 		} else {
 			$(this.parentCriteriaGroup.html).parents('li').first().removeClass('optionEnabled') ;
@@ -1295,6 +1323,22 @@ export function findParentOrSiblingCriteria(thisForm_, id) {
 	}) ;
 
 	return dependant ;
+}
+
+/**
+ * Utility function to find the criteria by criteria ID
+ **/
+export function findCriteria(thisForm_, id) {
+	var criteria = null ;
+	var criteria_id = id ;
+
+	$(thisForm_.sparnatural.components).each(function(index) {			
+		if (this.index == criteria_id) {
+			criteria = this.CriteriaGroup ;
+		}
+	}) ;
+
+	return criteria ;
 }
 
 export function eventProxiCriteria(e) {
