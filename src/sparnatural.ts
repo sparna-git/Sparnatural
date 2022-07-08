@@ -16,7 +16,6 @@ import Sparnatural from "./sparnatural/components/Sparnatural";
   e.g. Interface to the outside world
   Used to configure the Settings
 */
-import config from '../static/config'
 import ISettings from './configs/client-configs/ISettings';
 
 import { queries } from './sparnatural/preloadedqueries';
@@ -27,12 +26,14 @@ export class SparNatural extends HTMLElement {
   components: any = [];
   constructor() {
     super();
-    this.setSettings({config:config,language:'en',preLoadedQueries:queries})
+    // this.setSettings({config:config,language:'en',preLoadedQueries:queries})
   }
+
   //gets called when the component was rendered
   connectedCallback(){
-    this.initSparnatural()
+    
   }
+  
   // Used by calling Calling component to set or get the settings.
   // e.g index.html can overwride default settings
   getSettings() {
@@ -41,6 +42,7 @@ export class SparNatural extends HTMLElement {
 
   setSettings(options: ISettings) {
     mergeSettings(options);
+    this.initSparnatural();
   }
 
   initSparnatural() {

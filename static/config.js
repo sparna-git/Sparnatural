@@ -573,4 +573,3 @@ BIND(true AS ?hasChildren)
     },
   ],
 };
-export default config
