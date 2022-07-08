@@ -23,16 +23,12 @@ import { NoWidget } from "./widgets/NoWidget";
 class WidgetWrapper extends HTMLComponent {
   settings: ISettings;
   widgetType: Config
-  objectPropertype: string;
-  rangeClassId: string;
-  classLabel: string;
   widgetComponent: AbstractWidget;
   specProvider: ISpecProvider;
   objectPropVal: SelectedVal;
   startClassVal: SelectedVal;
   endClassVal: SelectedVal;
   add_or:boolean = true;
-  add_all = true; // render only when widgets allows it AND no widgetvalue is already selected
 
   constructor(
     ParentComponent: EditComponents,
@@ -40,30 +36,41 @@ class WidgetWrapper extends HTMLComponent {
     startClassVal:SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal,
-    add_all:boolean //if the add_all option should be rendered
   ) {
     super("WidgetWrapper", ParentComponent, null);
     this.specProvider = specProvider;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
-    this.add_all=add_all
   }
 
   render() {
     super.render();
-    if(this.widgetComponent!=null){
-      this.widgetComponent.render()
-    }
-   // this.widgetHtml = null;
-    this.objectPropertype = this.objectPropVal.type; // shows which objectproperty got chosen for which subject object combination
 
+    if(!this.widgetComponent){
+      this.#createNewWidget()
+    } else {
+      //only rerendering it since it already exists
+      this.#renderWidget()
+    }
+    this.#addSelectAllListener()
+    return this;
+  }
+
+  #addSelectAllListener(){
+    $(this.html)
+      .find(".selectAll")
+      .first()
+      .on("click", () => {
+        this.html[0].dispatchEvent(new CustomEvent('selectAll',{bubbles:true}))
+      });
+  }
+
+  #createNewWidget(){
+    
     this.widgetType = this.specProvider.getObjectPropertyType(
-      this.objectPropertype
+      this.objectPropVal.type
     );
-    this.rangeClassId = this.endClassVal.type;
-    this.classLabel = this.specProvider.getLabel(this.rangeClassId);
-    let endLabel: string;
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
       if (this.specProvider.isLiteralClass(this.endClassVal.type)) {
@@ -72,71 +79,69 @@ class WidgetWrapper extends HTMLComponent {
         );
       }
       return this;
-    } else {
-      endLabel = this.#getEndLabel()
+    }
+    this.#addWidgetHTML()
 
-      var parenthesisLabel = " (" + this.classLabel + ") ";
+
+    this.widgetComponent = this.createWidgetComponent(
+      this.widgetType,
+      this.objectPropVal.type,
+      this.endClassVal.type,
+    );
+    this.widgetComponent.render()
+
+}
+
+  #renderWidget(){
+    //if there is already a widget component rendered, then only render it since we would like to keep the state
+    this.widgetComponent.render()
+  }
+
+  #addWidgetHTML(){
+    let endLabel = this.#getEndLabel(this.widgetType)
+
+    var parenthesisLabel = " (" + endLabel + ") ";
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
-      let widgetSpan = 
-      `<span class="edit-trait first">
-        <span class="edit-trait-top"></span>
-        <span class="edit-num">
-          1
-        </span>
+    let widgetSpan = 
+    `<span class="edit-trait first">
+      <span class="edit-trait-top"></span>
+      <span class="edit-num">
+        1
       </span>
-      <span class="selectAll">
-        <span class="underline">
-        ${this.settings.langSearch.SelectAllValues}
-        </span> 
-        ${parenthesisLabel} 
-      </span>
-      <span class="or">
-        ${this.settings.langSearch.Or}
-      </span>
-      `
-      // init HTML by concatenating bit of HTML + widget HTML
-    this.widgetComponent = this.createWidgetComponent(
-      this.widgetType,
-      this.objectPropertype,
-      this.rangeClassId
-    );
-
-   
-    this.widgetHtml = $(widgetSpan + this.widgetComponent.html);
+    </span>
+    <span class="selectAll">
+      <span class="underline">
+      ${this.settings.langSearch.SelectAllValues}
+      </span> 
+      ${parenthesisLabel} 
+    </span>
+    <span class="or">
+      ${this.settings.langSearch.Or}
+    </span>
+    `
+    this.widgetHtml = $(widgetSpan);
     this.html.append(this.widgetHtml)
-
-
-    this.widgetComponent.render();
-    $(this.html)
-      .find(".selectAll")
-      .first()
-      .on("click", () => {
-        this.html[0].dispatchEvent(new CustomEvent('selectAll',{bubbles:true}))
-      });
-    }
-    
-    return this;
   }
 
-  #getEndLabel(){
-    // pour les autres type de widgets
+  #getEndLabel(widgetType:Config){
+
     if (
-      this.widgetType == Config.SEARCH_PROPERTY ||
-      this.widgetType == Config.STRING_EQUALS_PROPERTY ||
-      this.widgetType == Config.GRAPHDB_SEARCH_PROPERTY ||
-      this.widgetType == Config.TREE_PROPERTY
+      widgetType == Config.SEARCH_PROPERTY ||
+      widgetType == Config.STRING_EQUALS_PROPERTY ||
+      widgetType == Config.GRAPHDB_SEARCH_PROPERTY ||
+      widgetType == Config.TREE_PROPERTY
     ) {
       // label of the "Search" pseudo-class is inserted alone in this case
-      return this.classLabel;
+      return this.specProvider.getLabel(this.endClassVal.type);;
     } else if (
-      this.widgetType == Config.LIST_PROPERTY ||
-      this.widgetType == Config.TIME_PROPERTY_DATE ||
-      this.widgetType == Config.TIME_PROPERTY_YEAR
+      widgetType == Config.LIST_PROPERTY ||
+      widgetType == Config.TIME_PROPERTY_DATE ||
+      widgetType == Config.TIME_PROPERTY_YEAR
     ) {
       return this.settings.langSearch.Select + " :";
-    } else if (this.widgetType == Config.BOOLEAN_PROPERTY) {
+    } else if (widgetType == Config.BOOLEAN_PROPERTY) {
       return "";
     } else {
      return this.settings.langSearch.Find + " :";
@@ -146,7 +151,7 @@ class WidgetWrapper extends HTMLComponent {
   createWidgetComponent(
     widgetType: string,
     objectPropertyId: any,
-    rangeClassId: any
+    endClassType: any
   ): AbstractWidget {
     switch (widgetType) {
       case Config.LITERAL_LIST_PROPERTY: {
@@ -161,7 +166,7 @@ class WidgetWrapper extends HTMLComponent {
 
         if (datasource == null) {
           // try to read it on the class
-          datasource = this.specProvider.getDatasource(rangeClassId);
+          datasource = this.specProvider.getDatasource(endClassType);
         }
 
         if (datasource == null) {
@@ -231,7 +236,7 @@ class WidgetWrapper extends HTMLComponent {
 
         if (datasource == null) {
           // try to read it on the class
-          datasource = this.specProvider.getDatasource(rangeClassId);
+          datasource = this.specProvider.getDatasource(endClassType);
         }
 
         if (datasource == null) {
@@ -297,7 +302,7 @@ class WidgetWrapper extends HTMLComponent {
 
         if (datasource == null) {
           // try to read it on the class
-          datasource = this.specProvider.getDatasource(rangeClassId);
+          datasource = this.specProvider.getDatasource(endClassType);
         }
 
         if (datasource == null) {
@@ -398,7 +403,7 @@ class WidgetWrapper extends HTMLComponent {
         if (treeRootsDatasource == null) {
           // try to read it on the class
           treeRootsDatasource =
-            this.specProvider.getTreeRootsDatasource(rangeClassId);
+            this.specProvider.getTreeRootsDatasource(endClassType);
         }
         if (treeRootsDatasource == null) {
           // datasource still null
@@ -416,7 +421,7 @@ class WidgetWrapper extends HTMLComponent {
         if (treeChildrenDatasource == null) {
           // try to read it on the class
           treeChildrenDatasource =
-            this.specProvider.getTreeChildrenDatasource(rangeClassId);
+            this.specProvider.getTreeChildrenDatasource(endClassType);
         }
         if (treeChildrenDatasource == null) {
           // datasource still null

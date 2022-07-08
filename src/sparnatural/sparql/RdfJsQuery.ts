@@ -66,8 +66,11 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
         let ptrns:Pattern[] = []
 
         let triples = this.#buildTripples(grpWrapper.CriteriaGroup)
-        //get the infromation from the widget
-        let widgetVals = grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.getRdfJsPattern()
+        //get the infromation from the widget if there are widgetvalues selected
+        let widgetVals: Array<any> = []
+        if(grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.getwidgetValues().length > 0){
+            widgetVals = grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.getRdfJsPattern()
+        }
         let hasOption = ((grpWrapper.optionState == OptionTypes.OPTIONAL)||(grpWrapper.optionState == OptionTypes.NOTEXISTS))? true : false
         //whereChild
         let wherePtrn = grpWrapper.whereChild ? this.#processGrpWrapper(grpWrapper.whereChild,hasOption) : null
@@ -105,6 +108,7 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
             ptrns.push(notExistPtrn)
             return ptrns
         }
+        
         //normal case
         ptrns.push(this.#buildBGP(triples))
         ptrns.push(...widgetVals)

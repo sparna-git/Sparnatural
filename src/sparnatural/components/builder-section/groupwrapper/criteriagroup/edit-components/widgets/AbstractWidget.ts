@@ -49,8 +49,18 @@ export abstract class AbstractWidget extends HTMLComponent{
     return this.widgetValues
   }
 
-  getVariableValue(selectedVal:SelectedVal):string{
+  getVariableValue(selectedVal:SelectedVal):string {
     return selectedVal.variable.replace('?','')
+  }
+
+
+  // This method gets called when an selected value gets deleted again.
+  // For example: Germany and France are chosen from the list widget and now get deleted
+  onRemoveValue(val: WidgetValue){
+    this.widgetValues = this.widgetValues.filter((v)=>{
+      if(v === val ) return false
+      return true
+    })
   }
 
   // fires the event to render the label of the WidgetValue on the UI

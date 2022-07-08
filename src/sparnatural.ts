@@ -32,7 +32,7 @@ import Sparnatural from "./sparnatural/components/Sparnatural";
 */
 import {rdfconfig} from '../static/config'
 
-import { queries } from './sparnatural/preloadedqueries';
+import { queries } from './sparnatural/preloadedqueries'; //SHOULD COME FROM PAGE
 export class SparNatural extends HTMLElement {
   Sparnatural = new Sparnatural();
   specProvider: any;

@@ -10,7 +10,6 @@ import { ValueType, WidgetValue } from "../edit-components/widgets/AbstractWidge
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
   widgetValues: Array<EndClassWidgetValue> = [];
-  selectAllValue: boolean = false;
   specProvider: ISpecProvider;
   addWidgetValueBtn: AddWidgetValueBtn;
   constructor(parentComponent: HTMLComponent, specProvider: ISpecProvider) {
@@ -38,8 +37,6 @@ export class EndClassWidgetGroup extends HTMLComponent {
   // input : the 'key' of the value to be deleted
   #onRemoveValue(e: CustomEvent) {
     let valueToDel: EndClassWidgetValue = e.detail;
-    //On all case, selectAllValue will be set to false
-    this.selectAllValue = false;
 
     let unselectedValue: EndClassWidgetValue;
     this.widgetValues = this.widgetValues.filter(
@@ -55,22 +52,23 @@ export class EndClassWidgetGroup extends HTMLComponent {
       throw Error("Unselected val not found in the widgetValues list!");
     unselectedValue.html.remove();
     
-
+    // if the number of widgetValues is now less than the maximum
     if(this.widgetValues.length < getSettings().maxOr){
       this.addWidgetValueBtn.html.show;
     }
 
     if (this.widgetValues.length < 1) {
-      //$(this.ParentCriteriaGroup.ComponentHtml).removeClass("completed");
 
       // reattach eventlistener. it got removed
       this.#addEventListener()
       //if there is an addWidgetValueBtn then remove it as well
       this.addWidgetValueBtn?.html?.remove();
+
       this.html[0].dispatchEvent(
-        new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{NrOfSelValues:this.widgetValues.length} })
+        new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{selectedValues:this.widgetValues} })
       );
     }
+    this.html[0].dispatchEvent(new CustomEvent("updateWidgetList",{bubbles:true,detail:{unselectedVal:unselectedValue}}))
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
@@ -78,7 +76,6 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   // user selects a value for example a country from the listwidget
   renderWidgetVal(selectedVal:WidgetValue) {
-    
     
     // check if value already got selected before
     if (this.widgetValues.some((val) => val.value_lbl === selectedVal.value.label))
@@ -117,10 +114,6 @@ export class EndClassWidgetGroup extends HTMLComponent {
       new CustomEvent("onGrpInputCompleted", { bubbles: true })
     );
 
-    this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
-    );
-
   }
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
@@ -131,9 +124,9 @@ export class EndClassWidgetGroup extends HTMLComponent {
   // when more values should be added then render the inputypecomponent again
   #addMoreValues = () => {
     this.html[0].dispatchEvent(
-      new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{NrOfSelValues:this.widgetValues.length} })
+      new CustomEvent("renderWidgetWrapper", { bubbles: true,detail:{selectedValues:this.widgetValues} })
     );
-    this.#addEventListener();
+    //this.#addEventListener();
   };
 
   getWidgetValue(){

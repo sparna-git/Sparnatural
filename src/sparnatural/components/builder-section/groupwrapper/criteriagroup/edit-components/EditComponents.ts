@@ -45,8 +45,7 @@ class EditComponents extends HTMLComponent {
         this.specProvider,
         this.startClassVal,
         this.objectPropVal,
-        this.endClassVal,
-        true
+        this.endClassVal
       ).render();
 
       let widgetType = this.widgetWrapper.getWidgetType()
@@ -60,18 +59,19 @@ class EditComponents extends HTMLComponent {
       this.#addEventListeners()
         return this
     }
-    // boolean decides wether the 'any' clickable span should be added
-    renderWidgetsWrapper(add_all:boolean){
+    // The selectedValues are widgetValues which got selected by the user
+    //For example a list of countries
+    renderWidgetsWrapper(){
       super.render()
       this.widgetWrapper.render();
     }
     
     #addEventListeners(){
-        // binds a selection in an input widget with the display of the value in the line
-        this.widgetWrapper.html[0].addEventListener("selectAll", (e:CustomEvent) => {
-            e.stopImmediatePropagation()
-            this.#onSelectAll();
-        });
+      // binds a selection in an input widget with the display of the value in the line
+      this.widgetWrapper.html[0].addEventListener("selectAll", (e:CustomEvent) => {
+          e.stopImmediatePropagation()
+          this.#onSelectAll();
+      });
     }
 
     #onSelectAll() {

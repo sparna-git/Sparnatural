@@ -3,7 +3,7 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import tippy from "tippy.js";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
-import { EndClassWidgetGroup } from "./EndClassWidgetGroup";
+import { EndClassWidgetGroup, EndClassWidgetValue } from "./EndClassWidgetGroup";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import EditComponents from "../edit-components/EditComponents";
@@ -59,25 +59,34 @@ class EndClassGroup extends HTMLComponent {
       //this.editComponents = null
     });
 
-    // when the addmorevaluesbtn is clicked then render the widgets again to select further values
-    this.html[0].addEventListener("renderWidgetWrapper", (e: CustomEvent) => {
-      if(!('NrOfSelValues' in e.detail)) throw Error('renderWidgetWrapper expects boolean if add_all should be rendered')
-      e.stopImmediatePropagation();
-      // remove: if add btn got clicked mutiple times or the old widgetwrapper is still rendered while the last selectedvalue got deleted 
-      this.html[0].dispatchEvent(new CustomEvent('removeEditComponents'))
 
-      //this.editComponents = new EditComponents(this,this.startClassVal,this.objectPropVal,this.endClassVal,this.specProvider)
-      if(e.detail.NrOfSelValues === 0) {
+    // gets called when the user adds widgetvalues or removes widgetvalues
+    this.html[0].addEventListener("renderWidgetWrapper", (e: CustomEvent) => {
+      if((!('selectedValues' in e.detail)) && e.detail.selectedValues.isArray) throw Error('renderWidgetWrapper expects list of selected values.')
+      e.stopImmediatePropagation();
+      // removeEditComponents: if add btn got clicked mutiple times or the old widgetwrapper is still rendered while the last selectedvalue got deleted 
+      this.html[0].dispatchEvent(new CustomEvent('removeEditComponents'))
+      if(e.detail.selectedValues.length === 0) {
         // Render WidgetsWrapper and ActionWhere
         this.editComponents.render()
         this.html[0].dispatchEvent(new CustomEvent('onGrpInputNotCompleted',{bubbles:true}))
       } else {
         //we only need widgetswrapper
-        this.editComponents.renderWidgetsWrapper(false)
+        this.editComponents.renderWidgetsWrapper()
       }
     });
 
-    // when the addmorevaluesbtn is clicked then render the widgets again to select further values
+    //gets called when a user removes a previously selected widgetValue
+    //removes the widgetValue from the widgetvalues list in the widget
+    this.html[0].addEventListener("updateWidgetList",(e:CustomEvent)=>{
+      if(!('unselectedVal' in e.detail)) throw Error('updateWidgetList expects an object of type EndClassWidgetValue')
+      e.stopImmediatePropagation();
+      let removed = e.detail.unselectedVal as EndClassWidgetValue
+      this.editComponents.widgetWrapper.widgetComponent.onRemoveValue(removed.widgetVal)
+      this.html[0].dispatchEvent(new CustomEvent("generateQuery",{bubbles:true}))
+    })
+
+    // gets called by the widget.
     this.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       if(e.detail == '' || (!e.detail)) throw Error('No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"')
