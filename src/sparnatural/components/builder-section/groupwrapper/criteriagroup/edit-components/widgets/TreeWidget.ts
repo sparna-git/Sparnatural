@@ -1,63 +1,96 @@
 import { Pattern } from "sparqljs";
 import UiuxConfig from "../../../../../../../configs/fixed-configs/UiuxConfig";
-import { EndClassWidgetGroup } from "../../startendclassgroup/EndClassWidgetGroup";
-import WidgetWrapper from "../WidgetWrapper";
-import { AbstractWidget } from "./AbstractWidget";
-/*
+import { SelectedVal } from "../../../../../../sparql/ISparJson";
+import HTMLComponent from "../../../../../HtmlComponent";
+import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+
+
+require("jstree/dist/themes/default/style.min.css");
+
+export interface TreeWidgetValue extends WidgetValue{
+  value:{
+    key:string
+    label:string
+    uri:string
+}
+  valueType:ValueType.MULTIPLE
+}
+
 export class TreeWidget extends AbstractWidget {
+
   loaderHandler: any;
-  ParentComponent: any;
   langSearch: any;
   IdCriteriaGroupe: any;
+
   itc_obj: any;
   jsTree: any;
-  EndClassWidgetParent: EndClassWidgetGroup;
+  value: TreeWidgetValue;
+
+  // html content
+  button: any;
+  displayLayer: any;
+  hiddenInput: any;
+
+  startClassVal: SelectedVal;
+  objectPropVal: SelectedVal;
+  endClassVal: SelectedVal;
+  
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: any,
     loaderHandler: any,
     settings: any,
-    langSearch: any
+    langSearch: any,
+    startClassVal:SelectedVal,
+    objectPropVal:SelectedVal,
+    endClassVal:SelectedVal
   ) {
-      super('tree-widget',parentComponent,null);
+    super('tree-widget',parentComponent,null,startClassVal,objectPropVal,endClassVal);
     this.loaderHandler = loaderHandler;
     this.langSearch = langSearch;
-    this.IdCriteriaGroupe =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.id;
-    this.html =
+    // TODO : remove
+    this.IdCriteriaGroupe = "id"; 
+    
+    this.startClassVal=startClassVal;
+    this.endClassVal=endClassVal;
+    this.objectPropVal=objectPropVal;
+  }
+
+  render() {
+    super.render()
+
+    this.button = $(
       '<a id="ecgrw-' +
       this.IdCriteriaGroupe +
       '-input" class="treeBtnDisplay">' +
       UiuxConfig.ICON_TREE +
-      '</a><input id="ecgrw-' +
-      this.IdCriteriaGroupe +
-      '-input-value" type="hidden"/><div  id="ecgrw-' +
-      this.IdCriteriaGroupe +
-      '-displayLayer" class="treeLayer"><div class="treeClose"><i class="far fa-times-circle"></i></div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-' +
-      this.IdCriteriaGroupe +
-      '-display"></div><div class="treeActions"><a class="treeCancel">' +
-      this.langSearch.TreeWidgetDelete +
-      '</a><a class="treeSubmit">' +
-      this.langSearch.TreeWidgetSelect +
-      "</a></div></div>";
-    this.EndClassWidgetParent = this.ParentComponent.ParentComponent;
-  }
+      '</a>');
 
-  render() {
+    this.hiddenInput = $('<input id="ecgrw-' +
+    this.IdCriteriaGroupe +
+    '-input-value" type="hidden"/>');
+
+    this.displayLayer = $('<div  id="ecgrw-' +
+    this.IdCriteriaGroupe +
+    '-displayLayer" class="treeLayer"><div class="treeClose"><i class="far fa-times-circle"></i></div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-' +
+    this.IdCriteriaGroupe +
+    '-display"></div><div class="treeActions"><a class="treeCancel">' +
+    this.langSearch.TreeWidgetDelete +
+    '</a><a class="treeSubmit">' +
+    this.langSearch.TreeWidgetSelect +
+    "</a></div></div>");
+
+    this.html.append(this.button).append(this.hiddenInput).append(this.displayLayer);
+
     //render this element
-    var startClassGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.StartClassGroup
-        .startClassVal.type;
-    var endClassGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.EndClassGroup
-        .endClassVal.type;
-    var ObjectPropertyGroup_value =
-      this.ParentComponent.GrandParent.ParentCriteriaGroup.ObjectPropertyGroup
-        .objectPropVal;
+    var startClassGroup_value = this.startClassVal.type;
+    var endClassGroup_value = this.endClassVal.type;
+    var ObjectPropertyGroup_value = this.objectPropVal.type;
 
     var id_inputs = this.IdCriteriaGroupe;
     this.itc_obj = this.ParentComponent;
 
     var self = this;
+    var loaderHandler = this.loaderHandler;
     var options = {
       core: {
         multiple: true,
@@ -70,12 +103,12 @@ export class TreeWidget extends AbstractWidget {
           var options = {
             url:
               node.id === "#"
-                ? this.loaderHandler.treeRootUrl(
+                ? loaderHandler.treeRootUrl(
                     startClassGroup_value,
                     ObjectPropertyGroup_value,
                     endClassGroup_value
                   )
-                : this.loaderHandler.treeChildrenUrl(
+                : loaderHandler.treeChildrenUrl(
                     startClassGroup_value,
                     ObjectPropertyGroup_value,
                     endClassGroup_value,
@@ -92,7 +125,7 @@ export class TreeWidget extends AbstractWidget {
 
           request.done(function (data) {
             var result = [];
-            var items = this.loaderHandler.nodeListLocation(
+            var items = loaderHandler.nodeListLocation(
               startClassGroup_value,
               ObjectPropertyGroup_value,
               endClassGroup_value,
@@ -106,13 +139,13 @@ export class TreeWidget extends AbstractWidget {
                 state?: { disabled: boolean };
                 parent?: any;
               } = {
-                id: this.loaderHandler.nodeUri(items[i]),
-                text: this.loaderHandler.nodeLabel(items[i]),
+                id: loaderHandler.nodeUri(items[i]),
+                text: loaderHandler.nodeLabel(items[i]),
               };
-              if (this.loaderHandler.nodeHasChildren(items[i])) {
+              if (loaderHandler.nodeHasChildren(items[i])) {
                 aNode.children = true;
               }
-              if (this.loaderHandler.nodeDisabled(items[i])) {
+              if (loaderHandler.nodeDisabled(items[i])) {
                 aNode.state = {
                   disabled: true, // node disabled
                 };
@@ -120,7 +153,9 @@ export class TreeWidget extends AbstractWidget {
               aNode.parent = node.id;
               result.push(aNode);
             }
+
             callback.call(this, result);
+
             if (node.id === "#") {
               self.onTreeDataLoaded(result);
             }
@@ -130,24 +165,35 @@ export class TreeWidget extends AbstractWidget {
           icons: false,
         },
       },
+
+        
       "massload" : {
-					"url" : loaderHandler.treeChildrenUrl(startClassGroup_value, ObjectPropertyGroup_value, endClassGroup_value, node.id),
-					"data" : function (nodes) {
+					"url" : this.loaderHandler.treeChildrenUrl(
+            startClassGroup_value,
+            ObjectPropertyGroup_value,
+            endClassGroup_value,
+            node.id
+          ),
+					"data" : function (nodes:any) {
 					  return { "ids" : nodes.join(",") };
 					}
-				},
+			},
+      
+
       checkbox: {
         keep_selected_style: false,
         three_state: false,
         cascade: "down+undetermined",
         cascade_to_disabled: true,
       },
+
       plugins: ["changed", "wholerow", "checkbox" ],
     };
 
-    this.jsTree = $("#ecgrw-" + id_inputs + "-display").jstree(options);
+    // this.jsTree = $("#ecgrw-" + id_inputs + "-display").jstree(options);
+    this.jsTree = this.displayLayer.jstree(options);
 
-    $("#ecgrw-" + this.IdCriteriaGroupe + "-input").on(
+    this.button.on(
       "click",
       { arg1: this },
       this.onClickDisplay
@@ -156,17 +202,19 @@ export class TreeWidget extends AbstractWidget {
     this.jsTree.on("changed.jstree", { arg1: this }, this.onChangedJstree);
     this.jsTree.on("after_open.jstree", { arg1: this }, this.onChangedJstree);
 
-    $("#ecgrw-" + this.IdCriteriaGroupe + "-displayLayer")
+    this.displayLayer
       .find(".treeSubmit")
       .on("click", { arg1: this }, this.onClickSelect);
-    $("#ecgrw-" + this.IdCriteriaGroupe + "-displayLayer")
+      this.displayLayer
       .find(".treeCancel")
       .on("click", { arg1: this }, this.onClickCancel);
-    $("#ecgrw-" + this.IdCriteriaGroupe + "-displayLayer")
+      this.displayLayer
       .find(".treeClose")
       .on("click", { arg1: this }, this.onClickClose);
 
-    $("#ecgrw-" + this.IdCriteriaGroupe + "-displayLayer").hide();
+    this.displayLayer.hide();
+
+    return this
   }
 
   onTreeDataLoaded = function onTreeDataLoaded(result: string | any[]) {
@@ -242,22 +290,22 @@ export class TreeWidget extends AbstractWidget {
   };
 
   onClickDisplay = function (e: any) {
-    let this_ = e.data.arg1;
-    $("#ecgrw-" + this_.IdCriteriaGroupe + "-displayLayer").show();
+    this.displayLayer.show();
   };
+
   onClickCancel = function (e: any) {
     let this_ = e.data.arg1;
     this_.jsTree.jstree().deselect_all();
-    //$('#ecgrw-'+this_.IdCriteriaGroupe+'-displayLayer').hide() ;
   };
+
   onClickSelect = function (e: any) {
     let this_ = e.data.arg1;
-    $("#ecgrw-" + this_.IdCriteriaGroupe + "-displayLayer").hide();
+    this.displayLayer.hide();
     $(this_.itc_obj).trigger("change");
   };
+
   onClickClose = function (e: any) {
-    let this_ = e.data.arg1;
-    $("#ecgrw-" + this_.IdCriteriaGroupe + "-displayLayer").hide();
+    this.displayLayer.hide();
   };
 
   getValue = function () {
@@ -277,8 +325,7 @@ export class TreeWidget extends AbstractWidget {
     return values;
   };
 
-  getRdfJsPattern(): BaseExpression {
+  getRdfJsPattern(): Pattern[] {
     throw new Error("Method not implemented.");
+  }
 }
-}
-*/

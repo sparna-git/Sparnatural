@@ -2,7 +2,9 @@ import { Pattern } from "sparqljs"
 import { SelectedVal } from "../../../../../../sparql/ISparJson"
 import HTMLComponent from "../../../../../HtmlComponent"
 
-
+// The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
+// example for multiples: List of countries in ListWidget
+// example for single: Search string in SearchWidget
 export enum ValueType {
   SINGLE, // only one value can be chosen. 
   MULTIPLE, // multiple values can be selected like a list of values
