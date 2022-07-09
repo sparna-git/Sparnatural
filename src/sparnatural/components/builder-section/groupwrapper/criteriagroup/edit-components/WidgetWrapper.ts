@@ -71,16 +71,15 @@ class WidgetWrapper extends HTMLComponent {
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropVal.type
     );
+
+    this.#addWidgetHTML(this.widgetType)
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
-      if (this.specProvider.isLiteralClass(this.endClassVal.type)) {
-        this.html[0].dispatchEvent(
-          new CustomEvent("initGeneralEvent", { bubbles: true })
-        );
-      }
+      this.html[0].dispatchEvent(
+        new CustomEvent("initGeneralEvent", { bubbles: true })
+      );
       return this;
     }
-    this.#addWidgetHTML()
 
 
     this.widgetComponent = this.createWidgetComponent(
@@ -97,31 +96,36 @@ class WidgetWrapper extends HTMLComponent {
     this.widgetComponent.render()
   }
 
-  #addWidgetHTML(){
+  #addWidgetHTML(widgetType:string){
     let endLabel = this.#getEndLabel(this.widgetType)
 
-    var parenthesisLabel = " (" + endLabel + ") ";
+    var parenthesisLabel = " (" + this.specProvider.getLabel(this.endClassVal.type) + ") ";
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
-    let widgetSpan = 
+    let selectAllSpan = 
     `<span class="edit-trait first">
-      <span class="edit-trait-top"></span>
-      <span class="edit-num">
-        1
-      </span>
+    <span class="edit-trait-top"></span>
+    <span class="edit-num">
+      1
     </span>
-    <span class="selectAll">
-      <span class="underline">
-      ${this.settings.langSearch.SelectAllValues}
-      </span> 
-      ${parenthesisLabel} 
-    </span>
-    <span class="or">
+  </span>
+  <span class="selectAll">
+    <span class="underline">
+    ${this.settings.langSearch.SelectAllValues}
+    </span> 
+    ${parenthesisLabel} 
+  </span>`
+    let orSpan = 
+    `<span class="or">
       ${this.settings.langSearch.Or}
     </span>
+    <span>
+      ${endLabel}
+    </span>
     `
-    this.widgetHtml = $(widgetSpan);
+
+    widgetType == Config.NON_SELECTABLE_PROPERTY? this.widgetHtml = $(selectAllSpan) : this.widgetHtml = $(selectAllSpan+orSpan)
     this.html.append(this.widgetHtml)
   }
 

@@ -2,7 +2,7 @@ import { Pattern } from "sparqljs"
 import { SelectedVal } from "../../../../../../sparql/ISparJson"
 import HTMLComponent from "../../../../../HtmlComponent"
 
-// 
+
 export enum ValueType {
   SINGLE, // only one value can be chosen. 
   MULTIPLE, // multiple values can be selected like a list of values
@@ -39,13 +39,11 @@ export abstract class AbstractWidget extends HTMLComponent{
   }
 
   getLastValue(){
-    if(this.widgetValues.length < 1) throw Error('Property #widgetValue is empty! addWidgetValue() must be called before')
     return this.widgetValues[this.widgetValues.length-1]
   }
 
   // returns null if valueObject has not been set before
   getwidgetValues(): WidgetValue[]{
-    if(this.widgetValues.length < 1) throw Error('Property #widgetValue is empty! addWidgetValue() must be called before')
     return this.widgetValues
   }
 

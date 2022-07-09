@@ -39,7 +39,7 @@ class EditComponents extends HTMLComponent {
     }
     render(): this {
       super.render()
-
+      console.warn('debug here')
       this.widgetWrapper = new WidgetWrapper(
         this,
         this.specProvider,
@@ -47,7 +47,7 @@ class EditComponents extends HTMLComponent {
         this.objectPropVal,
         this.endClassVal
       ).render();
-
+      
       let widgetType = this.widgetWrapper.getWidgetType()
       if(Object.values(this.RENDER_WHERE).includes(widgetType)){
         this.actionWhere = new ActionWhere(
