@@ -13,11 +13,19 @@ class VariableOptionsSelectBtn extends HTMLComponent {
       </span>
     </input>
     `)
+
+    let swithHtml = $(`<label class="switch"> </label>`).append(input)
+
+    let labelName = $(`<p>${getSettings().langSearch.SwitchVariablesNames} </p>`)
+     
+
     let widgetHtml = 
-    $(`<label class="switch">
-      </label>
-     `).append(input).prepend($(`<p>${getSettings().langSearch.SwitchVariablesNames}</p>`))
-    super("variablesOptionsSelect", ParentComponent, widgetHtml);
+    //$(`<label class="switch">
+    //  </label>
+    // `).append(input).prepend($(`<p>${getSettings().langSearch.SwitchVariablesNames}</p>`))
+
+        $(labelName).append(swithHtml)
+      super("variablesOptionsSelect", ParentComponent, widgetHtml);
     // add clicklistener
     input[0].addEventListener("change", (e) => {
       this.selected = this.selected ? false : true;

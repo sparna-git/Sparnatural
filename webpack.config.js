@@ -105,7 +105,7 @@ module.exports = {
 	}),
 	new CopyPlugin({
 	  patterns: [
-		{from:'static', to: './dist'}
+		{from:'static'}
 	  ]
 	}),
 	new DashboardPlugin(),

@@ -3,6 +3,7 @@ import {  BgpPattern, Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import WidgetWrapper from "../WidgetWrapper";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+require("easy-autocomplete");
 
 interface AutoCompleteWidgetValue extends WidgetValue{
     value:{

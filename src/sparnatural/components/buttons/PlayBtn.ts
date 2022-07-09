@@ -6,7 +6,7 @@ class PlayBtn extends HTMLComponent {
     //TODO generateQuery enable disable as binary state
     let widgetHtml = $(`${UiuxConfig.ICON_PLAY}`);
     super("playBtn", ParentComponent, widgetHtml);
-    this.html.on("click", (e: JQuery.ClickEvent) => {
+    this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       callBack();
     });
   }

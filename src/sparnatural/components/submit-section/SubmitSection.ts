@@ -12,13 +12,13 @@ class SubmitSection extends HTMLComponent {
   }
   render(): this {
     super.render();
-    this.playBtn = new PlayBtn(this, this.sumbitAction).render()
+    this.playBtn = new PlayBtn(this, this.submitAction).render()
     return this;
   }
 
   // Make arrow function to bind the this lexically
   // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
-  sumbitAction = () => {
+  submitAction = () => {
     if (getSettings().onSubmit) {
       let e = new CustomEvent("onSubmit", { bubbles: true });
       this.html[0].dispatchEvent(e);

@@ -1,13 +1,6 @@
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.css';
 
-
-
-
-require("jstree/dist/themes/default/style.min.css");
-
-require("easy-autocomplete");
-
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 
 require("./assets/stylesheets/sparnatural.scss");
@@ -30,7 +23,7 @@ import Sparnatural from "./sparnatural/components/Sparnatural";
   e.g. Interface to the outside world
   Used to configure the Settings
 */
-import {rdfconfig} from '../static/config'
+import ISettings from './configs/client-configs/ISettings';
 
 import { queries } from './sparnatural/preloadedqueries'; //SHOULD COME FROM PAGE
 export class SparNatural extends HTMLElement {
@@ -43,13 +36,15 @@ export class SparNatural extends HTMLElement {
   }
   constructor() {
     super();
-    mergeSettings({config:rdfconfig,language:'en',preLoadedQueries:queries})
+    // this.setSettings({config:config,language:'en',preLoadedQueries:queries})
   }
+
   //gets called when the component was rendered
   connectedCallback(){
     this.dispatchEvent(new CustomEvent('componentLoaded',{bubbles:true}))
     this.initSparnatural()
   }
+  
   // Used by calling Calling component to set or get the settings.
   // e.g index.html can overwride default settings
   get settings() {
@@ -58,6 +53,7 @@ export class SparNatural extends HTMLElement {
 
   set settings(options: any) {
     mergeSettings(options);
+    this.initSparnatural();
   }
 
   initSparnatural() {
