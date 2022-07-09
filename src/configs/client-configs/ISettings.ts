@@ -1,11 +1,9 @@
-import Tab from "@triply/yasgui";
 export interface PreLoadQueries {
   queries:Array<{  queryName:string,
     query:string}>
 }
 interface ISettings {
   preLoadedQueries?: PreLoadQueries;
-  currentTab?: Tab;
   noTypeCriteriaForObjects?: any;
   config: any;
   language: string;

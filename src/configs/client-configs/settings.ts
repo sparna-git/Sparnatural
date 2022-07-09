@@ -3,13 +3,12 @@ import ISettings from "./ISettings";
 
 const settings: ISettings = {
   langSearch: null,
-  currentTab: null, // needs to be set with a ref to the tab from Yasgui
   config: null,
   language: "en",
   maxDepth: 4, // max amount of where clauses
   addDistinct: true,
   backgroundBaseColor: "2,184,117",
-  defaultEndpoint (){ return null },
+  defaultEndpoint (){ if(this.language == 'fr'){return `http://fr.dbpedia.org/sparql`} else {return`http://dbpedia.org/sparql`} },
   sparqlPrefixes: {},
   localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
   filterConfigOnEndpoint: false,

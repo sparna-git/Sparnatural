@@ -1,5 +1,5 @@
 
-export const rdfconfig = {
+export default {
   "@context": {
     Ontology: "http://www.w3.org/2002/07/owl#Ontology",
     Class: "http://www.w3.org/2002/07/owl#Class",

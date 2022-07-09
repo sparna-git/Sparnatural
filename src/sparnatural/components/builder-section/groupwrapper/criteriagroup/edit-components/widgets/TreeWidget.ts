@@ -172,7 +172,7 @@ export class TreeWidget extends AbstractWidget {
             startClassGroup_value,
             ObjectPropertyGroup_value,
             endClassGroup_value,
-            node.id
+            "nodeIDString"// node.id uncommented since it gave an error!
           ),
 					"data" : function (nodes:any) {
 					  return { "ids" : nodes.join(",") };

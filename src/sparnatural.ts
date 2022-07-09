@@ -23,9 +23,6 @@ import Sparnatural from "./sparnatural/components/Sparnatural";
   e.g. Interface to the outside world
   Used to configure the Settings
 */
-import ISettings from './configs/client-configs/ISettings';
-
-import { queries } from './sparnatural/preloadedqueries'; //SHOULD COME FROM PAGE
 export class SparNatural extends HTMLElement {
   Sparnatural = new Sparnatural();
   specProvider: any;
@@ -36,13 +33,11 @@ export class SparNatural extends HTMLElement {
   }
   constructor() {
     super();
-    // this.setSettings({config:config,language:'en',preLoadedQueries:queries})
   }
 
   //gets called when the component was rendered
   connectedCallback(){
     this.dispatchEvent(new CustomEvent('componentLoaded',{bubbles:true}))
-    this.initSparnatural()
   }
   
   // Used by calling Calling component to set or get the settings.
@@ -53,6 +48,7 @@ export class SparNatural extends HTMLElement {
 
   set settings(options: any) {
     mergeSettings(options);
+    if(getSettings().config === null) throw Error('No config provided for sparnatural! Please provide config file. see Documentation: https://github.com/sparna-git/Sparnatural')
     this.initSparnatural();
   }
 

@@ -68,7 +68,7 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
         let triples = this.#buildTripples(grpWrapper.CriteriaGroup)
         //get the infromation from the widget if there are widgetvalues selected
         let widgetVals: Array<any> = []
-        if(grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.getwidgetValues().length > 0){
+        if(grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper?.widgetComponent?.getwidgetValues()?.length > 0){
             widgetVals = grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.getRdfJsPattern()
         }
         let hasOption = ((grpWrapper.optionState == OptionTypes.OPTIONAL)||(grpWrapper.optionState == OptionTypes.NOTEXISTS))? true : false

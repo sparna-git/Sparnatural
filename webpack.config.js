@@ -20,7 +20,7 @@ let multipleHtmlPlugins = htmlPageNames.map(name => {
 
 module.exports = {
   mode:'development',
-  entry: [ "./src/yasgui/YasguiComponent.ts","./src/sparnatural.ts" ],
+  entry: ["./src/sparnatural.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "sparnatural.js"
@@ -105,7 +105,7 @@ module.exports = {
 	}),
 	new CopyPlugin({
 	  patterns: [
-		{from:'static'}
+		{from:__dirname +'/static'}
 	  ]
 	}),
 	new DashboardPlugin(),

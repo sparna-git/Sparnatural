@@ -50,26 +50,20 @@
 
 	&.optionalEnabled {
 		border: 3px dashed themes.$custom-red;
-<<<<<<< HEAD
-=======
 
 		& > span {
 			border: 2px dashed themes.$custom-red;
 			border-radius: 15px;
 		}
->>>>>>> dff5d756927fd8c229a4a6cd0e85b300fe1d96bb
 	}
 
 	&.notExistsEnabled {
 		border: 3px dashed #000;
-<<<<<<< HEAD
-=======
 
 		& > span {
 			border: 2px dashed #000;
 			border-radius: 15px;
 		}
->>>>>>> dff5d756927fd8c229a4a6cd0e85b300fe1d96bb
 	}
 	
 	/* Unselect to graphique  */
