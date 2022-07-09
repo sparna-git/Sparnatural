@@ -120,9 +120,9 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
 
     #buildTripples(crtGrp: CriteriaGroup): Triple[]{
     let triples:Triple[] = []
-    let startClass = this.#buildTripple(crtGrp.StartClassGroup.getVarName(),RDF.TYPE.value,crtGrp.StartClassGroup.getTypeSelected())
-    let endClass = this.#buildTripple(crtGrp.EndClassGroup.getVarName(),RDF.TYPE.value,crtGrp.EndClassGroup.getTypeSelected())
-    let connectingTripple = this.#buildTripple(startClass.subject.value,crtGrp.ObjectPropertyGroup.getTypeSelected(),endClass.subject.value)
+    let startClass = this.#buildTypeTripple(crtGrp.StartClassGroup.getVarName(),RDF.TYPE.value,crtGrp.StartClassGroup.getTypeSelected())
+    let endClass = this.#buildTypeTripple(crtGrp.EndClassGroup.getVarName(),RDF.TYPE.value,crtGrp.EndClassGroup.getTypeSelected())
+    let connectingTripple = this.#buildIntersectionTriple(startClass.subject as Variable,crtGrp.ObjectPropertyGroup.getTypeSelected(),endClass.subject as Variable)
     triples.push(startClass,endClass,connectingTripple)
     return triples
     }
@@ -134,12 +134,20 @@ import { RDF } from "../spec-providers/RDFSpecificationProvider";
         }
     }
 
-    #buildTripple(subj:string,pred:string,obj:string):Triple{
-    return {
-        subject: DataFactory.variable(subj.replace('?','')),
-        predicate: DataFactory.namedNode(pred),
-        object: DataFactory.namedNode(obj)
+    #buildTypeTripple(subj:string,pred:string,obj:string):Triple{
+        return {
+            subject: DataFactory.variable(subj.replace('?','')),
+            predicate: DataFactory.namedNode(pred),
+            object: DataFactory.namedNode(obj)
+        }
     }
+
+    #buildIntersectionTriple(subj:Variable,pred:string,obj:Variable):Triple{
+        return {
+            subject: subj as VariableTerm, 
+            predicate: DataFactory.namedNode(pred),
+            object: obj as VariableTerm
+        }
     }
 
     #buildFilterPattern(patterns:Pattern[]): FilterPattern{

@@ -1,7 +1,6 @@
 import Datasources from "../../configs/fixed-configs/SparnaturalConfigDatasources";
 import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
 import ISpecProvider from "./ISpecProviders";
-import WidgetWrapper from "../components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 
 interface IDataSources {
   // one of queryString or queryTemplate must be set
