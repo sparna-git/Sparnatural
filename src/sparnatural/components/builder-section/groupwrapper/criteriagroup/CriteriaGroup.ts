@@ -93,6 +93,7 @@ class CriteriaGroup extends HTMLComponent {
         // if there is already a where connection, don't change anything  
         if(!this.ParentGroupWrapper.whereChild) this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
         this.OptionsGroup.onObjectPropertyGroupSelected(this.ParentGroupWrapper.optionState);
+        // if there is already a andSibling don't allow to rerender the ActionAnd again
         if(!this.ParentGroupWrapper.andSibling) this.ActionsGroup.onObjectPropertyGroupSelected();
       }
     );
