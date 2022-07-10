@@ -12,7 +12,7 @@ export function removeEndClass(grpWrapper:GroupWrapper) {
   grpWrapper.CriteriaGroup = new CriteriaGroup(grpWrapper, grpWrapper.specProvider).render();
 
   // set StartClassVal
-  let inputTypeComponent =  grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent
+  let inputTypeComponent =  grpWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent
   inputTypeComponent.oldWidget.val(startVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   inputTypeComponent.html[0].children[2].classList.add('disabled')
