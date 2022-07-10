@@ -8,8 +8,9 @@
         transform: rotate(-90deg); //line will get transformed 90deg. transform the span back to horizontal
         display: block;
         background: #fff;
-        //position:absolute;
-        left: 50px;
+        position:relative;
+        left: 50%;
+        top:-12px;
         border: 2px solid themes.$custom-red ;
         border-radius: 15px;
         height: 30px;
