@@ -56,7 +56,7 @@ class EndClassGroup extends HTMLComponent {
     this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.editComponents?.html?.empty()?.remove()
-      this.editComponents = null
+      //this.editComponents = null
     });
 
 
@@ -120,10 +120,17 @@ class EndClassGroup extends HTMLComponent {
 
   onObjectPropertyGroupSelected(objectPropVal: SelectedVal) {
     this.objectPropVal = objectPropVal
-    if (this.editComponents) return;
-    this.endClassWidgetGroup.render()
-    //whereaction only needs to be rendered on certain widgets
-    this.editComponents = new EditComponents(this,this.startClassVal,objectPropVal,this.endClassVal,this.specProvider).render()
+    if (this.editComponents){
+      // html needs to be destroyed if present. Otherwise gets double rendered when and Action is called
+      // multiple times
+      //this.editComponents?.html?.empty()?.remove()
+      //this.editComponents.render();
+    } else {
+      this.editComponents = new EditComponents(this,this.startClassVal,objectPropVal,this.endClassVal,this.specProvider).render()
+      this.endClassWidgetGroup.render()
+    } 
+    
+  
 
   }
   renderSelectViewVar(){
