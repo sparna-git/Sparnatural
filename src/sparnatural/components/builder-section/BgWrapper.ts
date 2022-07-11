@@ -27,12 +27,11 @@ class BgWrapper extends HTMLComponent {
   resetCallback = () => {
     this.componentsList.html.empty();
     this.componentsList.html.remove();
-    this.componentsList = null
+    this.componentsList = null;
     this.resetBtn.html.empty();
     this.resetBtn.html.remove();
     this.html[0].dispatchEvent(new CustomEvent("resetVars", { bubbles: true }));
     this.#renderComponents();
-    
   };
 }
 export default BgWrapper;

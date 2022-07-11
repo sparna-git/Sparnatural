@@ -5,27 +5,29 @@ import VariableOrderMenu from "./variableorder/VariableOrderMenu";
 import VariableSortOption from "./variablesort/VariableSortOptions";
 
 class VariableSection extends HTMLComponent {
-
-  displayBtn: DisplayBtn
-  variableSortOption: VariableSortOption
-  variableOrderMenu: VariableOrderMenu
+  displayBtn: DisplayBtn;
+  variableSortOption: VariableSortOption;
+  variableOrderMenu: VariableOrderMenu;
   linesWrapper: JQuery<HTMLElement>;
   specProvider: ISpecProvider;
 
-  constructor(ParentComponent: HTMLComponent,specProvider:ISpecProvider) {
+  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
     super("variablesSelection", ParentComponent, null);
-    this.specProvider = specProvider
+    this.specProvider = specProvider;
   }
 
   render(): this {
     super.render();
     this.linesWrapper = $('<div class="linesWrapper"></div>');
-    let line1 = $('<div class="line1"></div>')
-    let line2 = $('<div class="line2"></div>')
-    this.linesWrapper.append(line1).append(line2)
-    this.html.append(this.linesWrapper)
-    this.variableOrderMenu = new VariableOrderMenu(this,this.specProvider).render()
-    this.variableSortOption = new VariableSortOption(this).render()
+    let line1 = $('<div class="line1"></div>');
+    let line2 = $('<div class="line2"></div>');
+    this.linesWrapper.append(line1).append(line2);
+    this.html.append(this.linesWrapper);
+    this.variableOrderMenu = new VariableOrderMenu(
+      this,
+      this.specProvider
+    ).render();
+    this.variableSortOption = new VariableSortOption(this).render();
 
     this.#renderShowHideBtn();
 
@@ -56,7 +58,5 @@ class VariableSection extends HTMLComponent {
 
     this.displayBtn = new DisplayBtn(this, displayaction).render();
   }
-
-
 }
 export default VariableSection;

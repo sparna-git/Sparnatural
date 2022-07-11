@@ -7,12 +7,10 @@ import { getSettings } from "../../../../../../../configs/client-configs/setting
     When Clicked changes the SPARQL of the query to a NOTEXISTS form
 */
 class OptionalComponent extends BaseOptionComponent {
-  stateType = OptionTypes.OPTIONAL
+  stateType = OptionTypes.OPTIONAL;
   // If you would like to change the shape of the Arrow. Do it here
-  constructor(
-    ParentComponent: OptionsGroup
-  ) {
-    super("Optional",OptionTypes.OPTIONAL,ParentComponent, "optional");
+  constructor(ParentComponent: OptionsGroup) {
+    super("Optional", OptionTypes.OPTIONAL, ParentComponent, "optional");
   }
 
   render(): this {

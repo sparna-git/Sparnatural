@@ -2,7 +2,6 @@ import ISettings from "../../configs/client-configs/ISettings";
 import { getSettings } from "../../configs/client-configs/settings";
 import BaseClassFactory from "./baseClassFactory/BaseClassFactory";
 
-
 interface IRenderable {
   render: () => this;
 }
@@ -53,8 +52,9 @@ class HTMLComponent implements IRenderable {
   }
 
   render() {
-    if (this.html != null){ // TODO: Probably useless? it's always going to be null if super.render() called in the begining of render()
-      this.html.empty()
+    if (this.html != null) {
+      // TODO: Probably useless? it's always going to be null if super.render() called in the begining of render()
+      this.html.empty();
       this.html.remove();
     }
     this.#initHtml();

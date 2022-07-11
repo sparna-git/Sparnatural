@@ -5,11 +5,10 @@ import CriteriaGroup from "../CriteriaGroup";
 import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";
 
-
 export enum OptionTypes {
-  OPTIONAL = 'optionalEnabled',
-  NOTEXISTS = 'notExistsEnabled',
-  NONE = 'noOption',
+  OPTIONAL = "optionalEnabled",
+  NOTEXISTS = "notExistsEnabled",
+  NONE = "noOption",
 }
 
 /**
@@ -28,12 +27,8 @@ export class OptionsGroup extends HTMLComponent {
     super("OptionsGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;
-    this.OptionalComponent = new OptionalComponent(
-      this
-    );
-    this.NotExistsComponent = new NotExistsComponent(
-      this
-    );
+    this.OptionalComponent = new OptionalComponent(this);
+    this.NotExistsComponent = new NotExistsComponent(this);
   }
 
   render() {
@@ -42,13 +37,17 @@ export class OptionsGroup extends HTMLComponent {
   }
 
   // called by ParentCriteriaGroup
-  onObjectPropertyGroupSelected(optionState:OptionTypes) {
+  onObjectPropertyGroupSelected(optionState: OptionTypes) {
     this.#checkIfoptionalArrowisRenderable(optionState);
   }
 
   // validates if the Options Arrow can be rendered or not
-  #checkIfoptionalArrowisRenderable(optionState:OptionTypes) {
-    if (this.#checkIfOptionsPossible && !this.optionalArrow && (optionState == OptionTypes.NONE)) {
+  #checkIfoptionalArrowisRenderable(optionState: OptionTypes) {
+    if (
+      this.#checkIfOptionsPossible &&
+      !this.optionalArrow &&
+      optionState == OptionTypes.NONE
+    ) {
       //Options like NOTEXISTS are possible and none of the parent has it already activated
       this.#addOptionsPossible();
     }
@@ -58,7 +57,9 @@ export class OptionsGroup extends HTMLComponent {
     // MUST BE WRAPPED INTO LIST DIV
     this.OptionalComponent.render();
     this.NotExistsComponent.render();
-    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
+    this.html[0].dispatchEvent(
+      new CustomEvent("initGeneralEvent", { bubbles: true })
+    );
   }
 
   #addOptionsPossible() {
@@ -79,7 +80,9 @@ export class OptionsGroup extends HTMLComponent {
   #removeOptionalComponents() {
     this.OptionalComponent.html.remove();
     this.NotExistsComponent.html.remove();
-    this.html[0].dispatchEvent(new CustomEvent('initGeneralEvent',{bubbles:true}))
+    this.html[0].dispatchEvent(
+      new CustomEvent("initGeneralEvent", { bubbles: true })
+    );
   }
 
   #renderOptionsGroupoptionalArrow() {

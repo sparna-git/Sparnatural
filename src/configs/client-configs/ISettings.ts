@@ -1,6 +1,5 @@
 export interface PreLoadQueries {
-  queries:Array<{  queryName:string,
-    query:string}>
+  queries: Array<{ queryName: string; query: string }>;
 }
 interface ISettings {
   preLoadedQueries?: PreLoadQueries;
@@ -13,7 +12,7 @@ interface ISettings {
   maxOr?: number;
   backgroundBaseColor?: string; //TODO '250,136,3'
   sparqlPrefixes?: any;
-  defaultEndpoint?: ()=>string;
+  defaultEndpoint?: () => string;
   localCacheDataTtl?: number;
   filterConfigOnEndpoint?: boolean;
   langSearch?: any;

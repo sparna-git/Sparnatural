@@ -6,7 +6,10 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import EditComponents from "./EditComponents";
-import { SparqlTemplateAutocompleteHandler, SparqlTemplateListHandler } from "./handlers/AutocompleteAndListHandlers";
+import {
+  SparqlTemplateAutocompleteHandler,
+  SparqlTemplateListHandler,
+} from "./handlers/AutocompleteAndListHandlers";
 import MapWidget from "./widgets/MapWidget";
 import { AbstractWidget } from "./widgets/AbstractWidget";
 import { AutoCompleteWidget } from "./widgets/AutoCompleteWidget";
@@ -23,20 +26,20 @@ import { TreeWidget } from "./widgets/TreeWidget";
  **/
 class WidgetWrapper extends HTMLComponent {
   settings: ISettings;
-  widgetType: Config
+  widgetType: Config;
   widgetComponent: AbstractWidget;
   specProvider: ISpecProvider;
   objectPropVal: SelectedVal;
   startClassVal: SelectedVal;
   endClassVal: SelectedVal;
-  add_or:boolean = true;
+  add_or: boolean = true;
 
   constructor(
     ParentComponent: EditComponents,
     specProvider: ISpecProvider,
-    startClassVal:SelectedVal,
+    startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal,
+    endClassVal: SelectedVal
   ) {
     super("WidgetWrapper", ParentComponent, null);
     this.specProvider = specProvider;
@@ -48,32 +51,33 @@ class WidgetWrapper extends HTMLComponent {
   render() {
     super.render();
 
-    if(!this.widgetComponent){
-      this.#createNewWidget()
+    if (!this.widgetComponent) {
+      this.#createNewWidget();
     } else {
       //only rerendering it since it already exists
-      this.#renderWidget()
+      this.#renderWidget();
     }
-    this.#addSelectAllListener()
+    this.#addSelectAllListener();
     return this;
   }
 
-  #addSelectAllListener(){
+  #addSelectAllListener() {
     $(this.html)
       .find(".selectAll")
       .first()
       .on("click", () => {
-        this.html[0].dispatchEvent(new CustomEvent('selectAll',{bubbles:true}))
+        this.html[0].dispatchEvent(
+          new CustomEvent("selectAll", { bubbles: true })
+        );
       });
   }
 
-  #createNewWidget(){
-    
+  #createNewWidget() {
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropVal.type
     );
 
-    this.#addWidgetHTML(this.widgetType)
+    this.#addWidgetHTML(this.widgetType);
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
       this.html[0].dispatchEvent(
@@ -82,30 +86,28 @@ class WidgetWrapper extends HTMLComponent {
       return this;
     }
 
-
     this.widgetComponent = this.createWidgetComponent(
       this.widgetType,
       this.objectPropVal.type,
-      this.endClassVal.type,
+      this.endClassVal.type
     );
-    this.widgetComponent.render()
-
-}
-
-  #renderWidget(){
-    //if there is already a widget component rendered, then only render it since we would like to keep the state
-    this.widgetComponent.render()
+    this.widgetComponent.render();
   }
 
-  #addWidgetHTML(widgetType:string){
-    let endLabel = this.#getEndLabel(this.widgetType)
+  #renderWidget() {
+    //if there is already a widget component rendered, then only render it since we would like to keep the state
+    this.widgetComponent.render();
+  }
 
-    var parenthesisLabel = " (" + this.specProvider.getLabel(this.endClassVal.type) + ") ";
+  #addWidgetHTML(widgetType: string) {
+    let endLabel = this.#getEndLabel(this.widgetType);
+
+    var parenthesisLabel =
+      " (" + this.specProvider.getLabel(this.endClassVal.type) + ") ";
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
-    let selectAllSpan = 
-    `<span class="edit-trait first">
+    let selectAllSpan = `<span class="edit-trait first">
     <span class="edit-trait-top"></span>
     <span class="edit-num">
       1
@@ -116,22 +118,22 @@ class WidgetWrapper extends HTMLComponent {
     ${this.settings.langSearch.SelectAllValues}
     </span> 
     ${parenthesisLabel} 
-  </span>`
-    let orSpan = 
-    `<span class="or">
+  </span>`;
+    let orSpan = `<span class="or">
       ${this.settings.langSearch.Or}
     </span>
     <span>
       ${endLabel}
     </span>
-    `
+    `;
 
-    widgetType == Config.NON_SELECTABLE_PROPERTY? this.widgetHtml = $(selectAllSpan) : this.widgetHtml = $(selectAllSpan+orSpan)
-    this.html.append(this.widgetHtml)
+    widgetType == Config.NON_SELECTABLE_PROPERTY
+      ? (this.widgetHtml = $(selectAllSpan))
+      : (this.widgetHtml = $(selectAllSpan + orSpan));
+    this.html.append(this.widgetHtml);
   }
 
-  #getEndLabel(widgetType:Config){
-
+  #getEndLabel(widgetType: Config) {
     if (
       widgetType == Config.SEARCH_PROPERTY ||
       widgetType == Config.STRING_EQUALS_PROPERTY ||
@@ -139,7 +141,7 @@ class WidgetWrapper extends HTMLComponent {
       widgetType == Config.TREE_PROPERTY
     ) {
       // label of the "Search" pseudo-class is inserted alone in this case
-      return this.specProvider.getLabel(this.endClassVal.type);;
+      return this.specProvider.getLabel(this.endClassVal.type);
     } else if (
       widgetType == Config.LIST_PROPERTY ||
       widgetType == Config.TIME_PROPERTY_DATE ||
@@ -149,7 +151,7 @@ class WidgetWrapper extends HTMLComponent {
     } else if (widgetType == Config.BOOLEAN_PROPERTY) {
       return "";
     } else {
-     return this.settings.langSearch.Find + " :";
+      return this.settings.langSearch.Find + " :";
     }
   }
 
@@ -354,13 +356,24 @@ class WidgetWrapper extends HTMLComponent {
             this.getFinalQueryString(datasource)
           );
         }
-        return new AutoCompleteWidget(this, handler, this.startClassVal,this.objectPropVal,this.endClassVal);
+        return new AutoCompleteWidget(
+          this,
+          handler,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
+        );
 
         break;
       case Config.GRAPHDB_SEARCH_PROPERTY:
       case Config.STRING_EQUALS_PROPERTY:
       case Config.SEARCH_PROPERTY:
-        return new SearchWidget(this,this.startClassVal,this.objectPropVal,this.endClassVal);
+        return new SearchWidget(
+          this,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
+        );
         break;
       case Config.TIME_PROPERTY_YEAR:
         return new TimeDatePickerWidget(
@@ -397,7 +410,12 @@ class WidgetWrapper extends HTMLComponent {
         return new NoWidget(this);
         break;
       case Config.BOOLEAN_PROPERTY:
-        return new BooleanWidget(this,this.startClassVal,this.objectPropVal,this.endClassVal);
+        return new BooleanWidget(
+          this,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
+        );
         break;
       case Config.TREE_PROPERTY:
         var theSpecProvider = this.specProvider;
@@ -486,12 +504,15 @@ class WidgetWrapper extends HTMLComponent {
           );
         }
 
-
-
       case Config.Map_PROPERTY:
-        return new MapWidget(this,this.startClassVal,this.objectPropVal,this.endClassVal).render()
+        return new MapWidget(
+          this,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
+        ).render();
       default:
-        throw new Error(`WidgetType for ${widgetType} not recognized`)
+        throw new Error(`WidgetType for ${widgetType} not recognized`);
     }
   }
 
@@ -525,8 +546,8 @@ class WidgetWrapper extends HTMLComponent {
     }
   }
 
-  getWidgetType(){
-    return this.widgetType
+  getWidgetType() {
+    return this.widgetType;
   }
 }
 

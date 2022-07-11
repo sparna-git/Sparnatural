@@ -25,10 +25,9 @@ class ActionsGroup extends HTMLComponent {
     super.render();
     return this;
   }
-  
 
   onObjectPropertyGroupSelected() {
-    if(!(this.maxDepthIsReached())){
+    if (!this.maxDepthIsReached()) {
       this.actions = {
         ActionAnd: new ActionAnd(this, this.#onAddAnd).render(),
       };

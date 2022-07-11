@@ -15,8 +15,7 @@ class OptionalArrow extends HTMLComponent {
   ) {
     let widgetHtml = $(UiuxConfig.COMPONENT_OPTION_ARROW_FRONT);
     super("optionalArrow", ParentComponent, widgetHtml);
-    this.callBack = callBack
-
+    this.callBack = callBack;
   }
   render(): this {
     super.render();

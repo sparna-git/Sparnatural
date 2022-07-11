@@ -1,4 +1,3 @@
-
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
@@ -14,7 +13,7 @@ import HTMLComponent from "../../../../HtmlComponent";
  * Refactored to extract this from InputTypeComponent.
  **/
 class ClassTypeId extends HTMLComponent {
-  ParentComponent: EndClassGroup | StartClassGroup
+  ParentComponent: EndClassGroup | StartClassGroup;
   id: string;
   frontArrow: ArrowComponent = new ArrowComponent(
     this,
@@ -28,12 +27,12 @@ class ClassTypeId extends HTMLComponent {
   selectBuilder: ClassSelectBuilder;
   startClassVal: SelectedVal = {
     variable: null,
-    type: null
+    type: null,
   }; // if it is a whereChild, the startclassVal is already set
   oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
   UnselectButton: any;
   selectViewVariableBtn: SelectViewVariableBtn;
-  specProvider:ISpecProvider
+  specProvider: ISpecProvider;
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
@@ -42,7 +41,7 @@ class ClassTypeId extends HTMLComponent {
     super("ClassTypeId", ParentComponent, null);
     this.selectBuilder = new ClassSelectBuilder(this, specProvider);
     this.startClassVal = startClassVal;
-    this.specProvider = specProvider
+    this.specProvider = specProvider;
   }
 
   render() {
@@ -50,7 +49,7 @@ class ClassTypeId extends HTMLComponent {
     this.selectViewVariableBtn = new SelectViewVariableBtn(
       this,
       this.#onchangeViewVariable
-    )
+    );
     super.render();
 
     this.backArrow.render();
@@ -77,7 +76,7 @@ class ClassTypeId extends HTMLComponent {
   }
 
   // is called by EndClassGroup
-  renderUnselectBtn(){
+  renderUnselectBtn() {
     let removeEndClassEvent = () => {
       this.html[0].dispatchEvent(
         new CustomEvent("onRemoveEndClass", { bubbles: true })
@@ -85,7 +84,6 @@ class ClassTypeId extends HTMLComponent {
     };
     this.UnselectButton = new UnselectBtn(this, removeEndClassEvent).render();
   }
-
 
   // If this Component is a child of the EndClassGroup component, we want the range of possible end values
   #getRangeOfEndValues(selectBuilder: ClassSelectBuilder) {
@@ -103,8 +101,8 @@ class ClassTypeId extends HTMLComponent {
     selectWidget.on("change", () => {
       let selectedValue = selectWidget.val();
       //disable further choice on nice-select
-      this.widgetHtml[0].classList.add('disabled')
-      this.widgetHtml[0].classList.remove('open')
+      this.widgetHtml[0].classList.add("disabled");
+      this.widgetHtml[0].classList.remove("open");
       this.html[0].dispatchEvent(
         new CustomEvent("classTypeValueSelected", {
           bubbles: true,
@@ -114,14 +112,15 @@ class ClassTypeId extends HTMLComponent {
     });
   }
 
-    
-  #onchangeViewVariable = (selected:boolean) => {
-    if(isEndClassGroup(this.ParentComponent)){
+  #onchangeViewVariable = (selected: boolean) => {
+    if (isEndClassGroup(this.ParentComponent)) {
       let payload = {
-        val:this.ParentComponent.endClassVal,
-        selected:selected
-      }
-      this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true,detail:payload }));
+        val: this.ParentComponent.endClassVal,
+        selected: selected,
+      };
+      this.html[0].dispatchEvent(
+        new CustomEvent("onSelectViewVar", { bubbles: true, detail: payload })
+      );
     }
   };
 
@@ -133,16 +132,20 @@ class ClassTypeId extends HTMLComponent {
   }
 
   // show the sparql variable name instead of the type
-  toggleVarName(){
+  toggleVarName() {
     //val shows what currently is displayed
-    let val = (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent.trimStart()
-    if(this.ParentComponent.getVarName() === val){
+    let val = (
+      this.widgetHtml.first()[0] as HTMLSpanElement
+    ).firstChild.textContent.trimStart();
+    if (this.ParentComponent.getVarName() === val) {
       //display label
-      (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent = this.specProvider.getLabel(this.ParentComponent.getTypeSelected());
-    }else{
+      (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent =
+        this.specProvider.getLabel(this.ParentComponent.getTypeSelected());
+    } else {
       //display variable
-      (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent = this.ParentComponent.getVarName()
-   }
+      (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent =
+        this.ParentComponent.getVarName();
+    }
   }
 }
 export default ClassTypeId;

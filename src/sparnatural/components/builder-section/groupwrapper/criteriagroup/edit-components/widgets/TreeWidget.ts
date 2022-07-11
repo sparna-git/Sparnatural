@@ -4,20 +4,18 @@ import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import HTMLComponent from "../../../../../HtmlComponent";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
 
-
 require("jstree/dist/themes/default/style.min.css");
 
-export interface TreeWidgetValue extends WidgetValue{
-  value:{
-    key:string
-    label:string
-    uri:string
-}
-  valueType:ValueType.MULTIPLE
+export interface TreeWidgetValue extends WidgetValue {
+  value: {
+    key: string;
+    label: string;
+    uri: string;
+  };
+  valueType: ValueType.MULTIPLE;
 }
 
 export class TreeWidget extends AbstractWidget {
-
   loaderHandler: any;
   langSearch: any;
   IdCriteriaGroupe: any;
@@ -34,52 +32,67 @@ export class TreeWidget extends AbstractWidget {
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
-  
+
   constructor(
     parentComponent: any,
     loaderHandler: any,
     settings: any,
     langSearch: any,
-    startClassVal:SelectedVal,
-    objectPropVal:SelectedVal,
-    endClassVal:SelectedVal
+    startClassVal: SelectedVal,
+    objectPropVal: SelectedVal,
+    endClassVal: SelectedVal
   ) {
-    super('tree-widget',parentComponent,null,startClassVal,objectPropVal,endClassVal);
+    super(
+      "tree-widget",
+      parentComponent,
+      null,
+      startClassVal,
+      objectPropVal,
+      endClassVal
+    );
     this.loaderHandler = loaderHandler;
     this.langSearch = langSearch;
     // TODO : remove
-    this.IdCriteriaGroupe = "id"; 
-    
-    this.startClassVal=startClassVal;
-    this.endClassVal=endClassVal;
-    this.objectPropVal=objectPropVal;
+    this.IdCriteriaGroupe = "id";
+
+    this.startClassVal = startClassVal;
+    this.endClassVal = endClassVal;
+    this.objectPropVal = objectPropVal;
   }
 
   render() {
-    super.render()
+    super.render();
 
     this.button = $(
       '<a id="ecgrw-' +
-      this.IdCriteriaGroupe +
-      '-input" class="treeBtnDisplay">' +
-      UiuxConfig.ICON_TREE +
-      '</a>');
+        this.IdCriteriaGroupe +
+        '-input" class="treeBtnDisplay">' +
+        UiuxConfig.ICON_TREE +
+        "</a>"
+    );
 
-    this.hiddenInput = $('<input id="ecgrw-' +
-    this.IdCriteriaGroupe +
-    '-input-value" type="hidden"/>');
+    this.hiddenInput = $(
+      '<input id="ecgrw-' +
+        this.IdCriteriaGroupe +
+        '-input-value" type="hidden"/>'
+    );
 
-    this.displayLayer = $('<div  id="ecgrw-' +
-    this.IdCriteriaGroupe +
-    '-displayLayer" class="treeLayer"><div class="treeClose"><i class="far fa-times-circle"></i></div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-' +
-    this.IdCriteriaGroupe +
-    '-display"></div><div class="treeActions"><a class="treeCancel">' +
-    this.langSearch.TreeWidgetDelete +
-    '</a><a class="treeSubmit">' +
-    this.langSearch.TreeWidgetSelect +
-    "</a></div></div>");
+    this.displayLayer = $(
+      '<div  id="ecgrw-' +
+        this.IdCriteriaGroupe +
+        '-displayLayer" class="treeLayer"><div class="treeClose"><i class="far fa-times-circle"></i></div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-' +
+        this.IdCriteriaGroupe +
+        '-display"></div><div class="treeActions"><a class="treeCancel">' +
+        this.langSearch.TreeWidgetDelete +
+        '</a><a class="treeSubmit">' +
+        this.langSearch.TreeWidgetSelect +
+        "</a></div></div>"
+    );
 
-    this.html.append(this.button).append(this.hiddenInput).append(this.displayLayer);
+    this.html
+      .append(this.button)
+      .append(this.hiddenInput)
+      .append(this.displayLayer);
 
     //render this element
     var startClassGroup_value = this.startClassVal.type;
@@ -166,19 +179,17 @@ export class TreeWidget extends AbstractWidget {
         },
       },
 
-        
-      "massload" : {
-					"url" : this.loaderHandler.treeChildrenUrl(
-            startClassGroup_value,
-            ObjectPropertyGroup_value,
-            endClassGroup_value,
-            "nodeIDString"// node.id uncommented since it gave an error!
-          ),
-					"data" : function (nodes:any) {
-					  return { "ids" : nodes.join(",") };
-					}
-			},
-      
+      massload: {
+        url: this.loaderHandler.treeChildrenUrl(
+          startClassGroup_value,
+          ObjectPropertyGroup_value,
+          endClassGroup_value,
+          "nodeIDString" // node.id uncommented since it gave an error!
+        ),
+        data: function (nodes: any) {
+          return { ids: nodes.join(",") };
+        },
+      },
 
       checkbox: {
         keep_selected_style: false,
@@ -187,17 +198,13 @@ export class TreeWidget extends AbstractWidget {
         cascade_to_disabled: true,
       },
 
-      plugins: ["changed", "wholerow", "checkbox" ],
+      plugins: ["changed", "wholerow", "checkbox"],
     };
 
     // this.jsTree = $("#ecgrw-" + id_inputs + "-display").jstree(options);
     this.jsTree = this.displayLayer.jstree(options);
 
-    this.button.on(
-      "click",
-      { arg1: this },
-      this.onClickDisplay
-    );
+    this.button.on("click", { arg1: this }, this.onClickDisplay);
     //disable/enable on max selction
     this.jsTree.on("changed.jstree", { arg1: this }, this.onChangedJstree);
     this.jsTree.on("after_open.jstree", { arg1: this }, this.onChangedJstree);
@@ -205,16 +212,16 @@ export class TreeWidget extends AbstractWidget {
     this.displayLayer
       .find(".treeSubmit")
       .on("click", { arg1: this }, this.onClickSelect);
-      this.displayLayer
+    this.displayLayer
       .find(".treeCancel")
       .on("click", { arg1: this }, this.onClickCancel);
-      this.displayLayer
+    this.displayLayer
       .find(".treeClose")
       .on("click", { arg1: this }, this.onClickClose);
 
     this.displayLayer.hide();
 
-    return this
+    return this;
   }
 
   onTreeDataLoaded = function onTreeDataLoaded(result: string | any[]) {

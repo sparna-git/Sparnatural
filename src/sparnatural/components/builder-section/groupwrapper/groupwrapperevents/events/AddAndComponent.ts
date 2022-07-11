@@ -1,38 +1,45 @@
-
-
 import { SelectedVal } from "../../../../../sparql/ISparJson";
 import { MaxVarAction } from "../../../../../statehandling/ActionStore";
 import GroupWrapper from "../../GroupWrapper";
 import LinkAndBottom from "../../LinkAndBottom";
 
 //add GroupWrapper as a Sibling
-export function addAndComponent(grpWrapper:GroupWrapper,startClassVal: SelectedVal) {
-grpWrapper.andSibling = new GroupWrapper(
+export function addAndComponent(
+  grpWrapper: GroupWrapper,
+  startClassVal: SelectedVal
+) {
+  grpWrapper.andSibling = new GroupWrapper(
     grpWrapper.ParentComponent,
     grpWrapper.specProvider,
     startClassVal
-).render();
-//set state to startClassValSelected and trigger change
-let inputTypeComponent =  grpWrapper.andSibling.CriteriaGroup.StartClassGroup.inputTypeComponent
-inputTypeComponent.oldWidget.val(startClassVal.type).niceSelect("update");
-// nice-select is 2nd place in childrenslist. move away from nice-select...
-inputTypeComponent.html[0].children[2].classList.add('disabled')
+  ).render();
+  //set state to startClassValSelected and trigger change
+  let inputTypeComponent =
+    grpWrapper.andSibling.CriteriaGroup.StartClassGroup.inputTypeComponent;
+  inputTypeComponent.oldWidget.val(startClassVal.type).niceSelect("update");
+  // nice-select is 2nd place in childrenslist. move away from nice-select...
+  inputTypeComponent.html[0].children[2].classList.add("disabled");
 
-// draw the AND link
-grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();
-grpWrapper.html[0].dispatchEvent(
+  // draw the AND link
+  grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();
+  grpWrapper.html[0].dispatchEvent(
     new CustomEvent("initGeneralEvent", { bubbles: true })
-);
-grpWrapper.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{bubbles:true,detail:MaxVarAction.INCREASE}))
-removeActionAnd(grpWrapper)
+  );
+  grpWrapper.html[0].dispatchEvent(
+    new CustomEvent("changeMaxVarIndex", {
+      bubbles: true,
+      detail: MaxVarAction.INCREASE,
+    })
+  );
+  removeActionAnd(grpWrapper);
 }
 
-function removeActionAnd(grpWarpper:GroupWrapper){
-    // deactivate onHover function and remove it. Could also make it invisible?
-    let remCss = grpWarpper.CriteriaGroup.ActionsGroup.actions.ActionAnd.widgetHtml.remove();
-    if (remCss.length == 0)
+function removeActionAnd(grpWarpper: GroupWrapper) {
+  // deactivate onHover function and remove it. Could also make it invisible?
+  let remCss =
+    grpWarpper.CriteriaGroup.ActionsGroup.actions.ActionAnd.widgetHtml.remove();
+  if (remCss.length == 0)
     throw Error(
-        `Didn't find ActionAnd Component. ActionAnd.html:${this.actions.ActionAnd.html}`
+      `Didn't find ActionAnd Component. ActionAnd.html:${this.actions.ActionAnd.html}`
     );
 }
-

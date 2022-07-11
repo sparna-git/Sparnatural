@@ -1,72 +1,79 @@
-import { Pattern } from "sparqljs"
-import { SelectedVal } from "../../../../../../sparql/ISparJson"
-import HTMLComponent from "../../../../../HtmlComponent"
+import { Pattern } from "sparqljs";
+import { SelectedVal } from "../../../../../../sparql/ISparJson";
+import HTMLComponent from "../../../../../HtmlComponent";
 
 // The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
 // example for multiples: List of countries in ListWidget
 // example for single: Search string in SearchWidget
 export enum ValueType {
-  SINGLE, // only one value can be chosen. 
+  SINGLE, // only one value can be chosen.
   MULTIPLE, // multiple values can be selected like a list of values
 }
 
 export interface WidgetValue {
-  value:{
-    label:string // that's the human readable string representation shown as a WidgetValue to the user
-  }
-  valueType:ValueType 
+  value: {
+    label: string; // that's the human readable string representation shown as a WidgetValue to the user
+  };
+  valueType: ValueType;
 }
 
-export abstract class AbstractWidget extends HTMLComponent{
-  protected widgetValues:Array<WidgetValue> = []
-  startClassVal: SelectedVal
-  objectPropVal: SelectedVal
-  endClassVal: SelectedVal
-  constructor(baseCssClass:string,parentComponent:HTMLComponent,widgetHTML:JQuery<HTMLElement>,startClassVal:SelectedVal,objectPropVal:SelectedVal,endClassVal:SelectedVal){
-    super(baseCssClass,parentComponent,widgetHTML)
-    this.startClassVal = startClassVal
-    this.objectPropVal = objectPropVal
-    this.endClassVal = endClassVal
+export abstract class AbstractWidget extends HTMLComponent {
+  protected widgetValues: Array<WidgetValue> = [];
+  startClassVal: SelectedVal;
+  objectPropVal: SelectedVal;
+  endClassVal: SelectedVal;
+  constructor(
+    baseCssClass: string,
+    parentComponent: HTMLComponent,
+    widgetHTML: JQuery<HTMLElement>,
+    startClassVal: SelectedVal,
+    objectPropVal: SelectedVal,
+    endClassVal: SelectedVal
+  ) {
+    super(baseCssClass, parentComponent, widgetHTML);
+    this.startClassVal = startClassVal;
+    this.objectPropVal = objectPropVal;
+    this.endClassVal = endClassVal;
   }
   // Must be implemented by the developper of the widget
-  abstract getRdfJsPattern():Pattern[]
+  abstract getRdfJsPattern(): Pattern[];
 
   getSparnaturalRepresentation() {
-    let vals = this.widgetValues.map( v=> v.value)
-    return JSON.stringify(vals)
+    let vals = this.widgetValues.map((v) => v.value);
+    return JSON.stringify(vals);
   }
 
-  addWidgetValue(widgetValue:WidgetValue){
-    this.widgetValues.push(widgetValue)
+  addWidgetValue(widgetValue: WidgetValue) {
+    this.widgetValues.push(widgetValue);
   }
 
-  getLastValue(){
-    return this.widgetValues[this.widgetValues.length-1]
+  getLastValue() {
+    return this.widgetValues[this.widgetValues.length - 1];
   }
 
   // returns null if valueObject has not been set before
-  getwidgetValues(): WidgetValue[]{
-    return this.widgetValues
+  getwidgetValues(): WidgetValue[] {
+    return this.widgetValues;
   }
 
-  getVariableValue(selectedVal:SelectedVal):string {
-    return selectedVal.variable.replace('?','')
+  getVariableValue(selectedVal: SelectedVal): string {
+    return selectedVal.variable.replace("?", "");
   }
-
 
   // This method gets called when an selected value gets deleted again.
   // For example: Germany and France are chosen from the list widget and now get deleted
-  onRemoveValue(val: WidgetValue){
-    this.widgetValues = this.widgetValues.filter((v)=>{
-      if(v === val ) return false
-      return true
-    })
+  onRemoveValue(val: WidgetValue) {
+    this.widgetValues = this.widgetValues.filter((v) => {
+      if (v === val) return false;
+      return true;
+    });
   }
 
   // fires the event to render the label of the WidgetValue on the UI
-  renderWidgetVal(widgetValue:WidgetValue){
-    this.widgetValues.push(widgetValue)
-    this.html[0].dispatchEvent(new CustomEvent('renderWidgetVal',{bubbles:true,detail:widgetValue}))
+  renderWidgetVal(widgetValue: WidgetValue) {
+    this.widgetValues.push(widgetValue);
+    this.html[0].dispatchEvent(
+      new CustomEvent("renderWidgetVal", { bubbles: true, detail: widgetValue })
+    );
   }
-
-} 
+}

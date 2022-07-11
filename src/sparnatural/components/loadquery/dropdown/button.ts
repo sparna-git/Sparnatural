@@ -1,7 +1,7 @@
-import globalStyle from './global-style';
-import basicAtom from './basic-atom';
+import globalStyle from "./global-style";
+import basicAtom from "./basic-atom";
 
-const template = document.createElement('template');
+const template = document.createElement("template");
 
 template.innerHTML = `
   <style>
@@ -74,44 +74,44 @@ class Button extends HTMLElement {
   constructor() {
     super();
 
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
-    this.$container = this.shadowRoot.querySelector('.container');
-    this.$button = this.shadowRoot.querySelector('button');
+    this.$container = this.shadowRoot.querySelector(".container");
+    this.$button = this.shadowRoot.querySelector("button");
 
-    this.$button.addEventListener('click', () => {
+    this.$button.addEventListener("click", () => {
       this.dispatchEvent(
-        new CustomEvent('onClick', {
-          detail: 'Hello from within the Custom Element',
+        new CustomEvent("onClick", {
+          detail: "Hello from within the Custom Element",
         })
       );
     });
   }
 
   connectedCallback() {
-    if (this.hasAttribute('as-atom')) {
+    if (this.hasAttribute("as-atom")) {
       this.updateAsAtom();
     }
   }
 
   updateAsAtom() {
-    this.$container.style.padding = '0px';
+    this.$container.style.padding = "0px";
   }
 
   get label() {
-    return this.getAttribute('label');
+    return this.getAttribute("label");
   }
 
   set label(value) {
-    this.setAttribute('label', value);
+    this.setAttribute("label", value);
   }
 
   static get observedAttributes() {
-    return ['label'];
+    return ["label"];
   }
 
-  attributeChangedCallback(name:string, oldVal:string, newVal:string) {
+  attributeChangedCallback(name: string, oldVal: string, newVal: string) {
     this.render();
   }
 
@@ -120,4 +120,4 @@ class Button extends HTMLElement {
   }
 }
 
-window.customElements.define('road-button', Button);
+window.customElements.define("road-button", Button);

@@ -12,20 +12,21 @@ class VariableOptionsSelectBtn extends HTMLComponent {
       <span class="slider round">
       </span>
     </input>
-    `)
+    `);
 
-    let swithHtml = $(`<label class="switch"> </label>`).append(input)
+    let swithHtml = $(`<label class="switch"> </label>`).append(input);
 
-    let labelName = $(`<p>${getSettings().langSearch.SwitchVariablesNames} </p>`)
-     
+    let labelName = $(
+      `<p>${getSettings().langSearch.SwitchVariablesNames} </p>`
+    );
 
-    let widgetHtml = 
-    //$(`<label class="switch">
-    //  </label>
-    // `).append(input).prepend($(`<p>${getSettings().langSearch.SwitchVariablesNames}</p>`))
+    let widgetHtml =
+      //$(`<label class="switch">
+      //  </label>
+      // `).append(input).prepend($(`<p>${getSettings().langSearch.SwitchVariablesNames}</p>`))
 
-        $(labelName).append(swithHtml)
-      super("variablesOptionsSelect", ParentComponent, widgetHtml);
+      $(labelName).append(swithHtml);
+    super("variablesOptionsSelect", ParentComponent, widgetHtml);
     // add clicklistener
     input[0].addEventListener("change", (e) => {
       this.selected = this.selected ? false : true;
@@ -37,7 +38,7 @@ class VariableOptionsSelectBtn extends HTMLComponent {
   }
 
   render(): this {
-    this.htmlParent = this.ParentComponent.htmlParent
+    this.htmlParent = this.ParentComponent.htmlParent;
     super.render();
     return this;
   }

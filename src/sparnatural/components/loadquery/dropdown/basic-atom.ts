@@ -1,4 +1,4 @@
-import * as COLORS from './colors';
+import * as COLORS from "./colors";
 
 export default `
   .basic-atom {
@@ -6,20 +6,14 @@ export default `
     position: relative;
     border: 1px solid ${COLORS.trgrey2.hex};
     background: ${COLORS.trwhite.hex};
-    box-shadow: 0 2px 4px 0 rgba(${
-      COLORS.trblack.rgb
-    }, 0.05), 0 2px 8px 0 rgba(${COLORS.trgrey2.rgb}, 0.4);
+    box-shadow: 0 2px 4px 0 rgba(${COLORS.trblack.rgb}, 0.05), 0 2px 8px 0 rgba(${COLORS.trgrey2.rgb}, 0.4);
     color: ${COLORS.trgrey3.hex};
     cursor: pointer;
   }
 
   .basic-atom:focus {
     border: 1px solid ${COLORS.trblue2.hex};
-    box-shadow: 0 2px 4px 0 rgba(${
-      COLORS.trgrey2.rgb
-    }, 0.4), 0 2px 8px 0 rgba(${
-  COLORS.trblack.rgb
-}, 0.05), inset 0 0 0 1px ${COLORS.trblue2.hex};
+    box-shadow: 0 2px 4px 0 rgba(${COLORS.trgrey2.rgb}, 0.4), 0 2px 8px 0 rgba(${COLORS.trblack.rgb}, 0.05), inset 0 0 0 1px ${COLORS.trblue2.hex};
   }
 
   .basic-atom.selected {

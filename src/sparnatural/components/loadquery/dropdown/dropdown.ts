@@ -1,10 +1,10 @@
-import globalStyle from './global-style'
-import basicAtom from './basic-atom';
-import * as COLORS from './colors';
+import globalStyle from "./global-style";
+import basicAtom from "./basic-atom";
+import * as COLORS from "./colors";
 
-import './button';
+import "./button";
 
-const template = document.createElement('template');
+const template = document.createElement("template");
 
 /*
   Checkout: 
@@ -66,9 +66,7 @@ template.innerHTML = `
       padding: 0;
       background-color: ${COLORS.trwhite.hex};
       border: 1px solid ${COLORS.trgrey2.hex};
-      box-shadow: 0 2px 4px 0 rgba(${
-        COLORS.trblack.rgb
-      }, 0.05), 0 2px 8px 0 rgba(${COLORS.trgrey2.rgb}, 0.4);
+      box-shadow: 0 2px 4px 0 rgba(${COLORS.trblack.rgb}, 0.05), 0 2px 8px 0 rgba(${COLORS.trgrey2.rgb}, 0.4);
       list-style: none;
     }
 
@@ -130,92 +128,86 @@ export class Dropdown extends HTMLElement {
   $dropdown: any;
   $dropdownList: any;
   constructor() {
-    super()
-    this.attachShadow({ mode: 'open' });
+    super();
+    this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
     this.open = false;
 
-    this.$label = this.shadowRoot.querySelector('.label');
-    this.$button = this.shadowRoot.querySelector('road-button');
-    this.$dropdown = this.shadowRoot.querySelector('.dropdown');
-    this.$dropdownList = this.shadowRoot.querySelector('.dropdown-list');
+    this.$label = this.shadowRoot.querySelector(".label");
+    this.$button = this.shadowRoot.querySelector("road-button");
+    this.$dropdown = this.shadowRoot.querySelector(".dropdown");
+    this.$dropdownList = this.shadowRoot.querySelector(".dropdown-list");
 
-    this.$button.addEventListener(
-      'onClick',
-      this.toggleOpen.bind(this)
-    );
+    this.$button.addEventListener("onClick", this.toggleOpen.bind(this));
   }
 
   static get observedAttributes() {
-    return ['label', 'option', 'options'];
+    return ["label", "option", "options"];
   }
 
   get label() {
-    return this.getAttribute('label');
+    return this.getAttribute("label");
   }
 
   set label(value) {
-    this.setAttribute('label', value);
+    this.setAttribute("label", value);
   }
 
   get option() {
-    return this.getAttribute('option');
+    return this.getAttribute("option");
   }
 
   set option(value) {
-    this.setAttribute('option', value);
+    this.setAttribute("option", value);
   }
 
   get options() {
-    return JSON.parse(this.getAttribute('options'));
+    return JSON.parse(this.getAttribute("options"));
   }
 
   set options(value) {
-    this.setAttribute('options', JSON.stringify(value));
+    this.setAttribute("options", JSON.stringify(value));
   }
 
   toggleOpen() {
     this.open = !this.open;
 
     this.open
-      ? this.$dropdown.classList.add('open')
-      : this.$dropdown.classList.remove('open');
+      ? this.$dropdown.classList.add("open")
+      : this.$dropdown.classList.remove("open");
   }
 
-  attributeChangedCallback(name:string, oldVal:string, newVal:string) {
+  attributeChangedCallback(name: string, oldVal: string, newVal: string) {
     this.render();
   }
 
   render() {
     this.$label.innerHTML = this.label;
     if (this.options && this.option) {
-      this.$button.setAttribute(
-        'label',
-        this.options[this.option].label
-      );
+      this.$button.setAttribute("label", this.options[this.option].label);
     }
 
-    this.$dropdownList.innerHTML = '';
+    this.$dropdownList.innerHTML = "";
 
-    Object.keys(this.options || {}).forEach(key => {
+    Object.keys(this.options || {}).forEach((key) => {
       let option = this.options[key];
-      let $option = document.createElement('li');
+      let $option = document.createElement("li");
 
       $option.innerHTML = option.label;
-      $option.classList.add('basic-atom');
+      $option.classList.add("basic-atom");
 
       if (this.option && this.option === key) {
-        $option.classList.add('selected');
+        $option.classList.add("selected");
       }
 
-      $option.addEventListener('click', () => {
+      $option.addEventListener("click", () => {
         this.option = key;
 
         this.toggleOpen();
 
         this.dispatchEvent(
-          new CustomEvent('onChange', { detail: this.options[this.option] })
+          new CustomEvent("onChange", { detail: this.options[this.option] })
         );
 
         this.render();
@@ -226,4 +218,4 @@ export class Dropdown extends HTMLElement {
   }
 }
 
-window.customElements.define('custom-dropdown', Dropdown);
+window.customElements.define("custom-dropdown", Dropdown);

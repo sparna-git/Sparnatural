@@ -19,22 +19,23 @@ class BaseOptionComponent extends HTMLComponent {
   );
   default_value: string = "";
   ParentOptionsGroup: OptionsGroup;
-  parentWrapper:GroupWrapper
+  parentWrapper: GroupWrapper;
   label: string;
   name: string;
   type: OptionTypes;
-  selected = false
+  selected = false;
   constructor(
     baseCssClass: string,
-    type:OptionTypes,
+    type: OptionTypes,
     ParentComponent: OptionsGroup,
     name: string
   ) {
     super(baseCssClass, ParentComponent, null);
     this.name = name;
     this.ParentOptionsGroup = ParentComponent as OptionsGroup;
-    this.parentWrapper = this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper;
-    this.type = type
+    this.parentWrapper =
+      this.ParentOptionsGroup.ParentCriteriaGroup.ParentGroupWrapper;
+    this.type = type;
   }
 
   render(): this {
@@ -48,8 +49,10 @@ class BaseOptionComponent extends HTMLComponent {
   }
 
   // Optional or notExists button got clicked. handle the css and state
-  onChange() { 
-    this.html[0].dispatchEvent(new CustomEvent('optionTriggered',{bubbles:true,detail:this.type}))
+  onChange() {
+    this.html[0].dispatchEvent(
+      new CustomEvent("optionTriggered", { bubbles: true, detail: this.type })
+    );
   }
 }
 

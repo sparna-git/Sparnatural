@@ -5,7 +5,6 @@ import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import TippyInfo from "../../../../buttons/TippyInfo";
 
-
 /**
  * Selection of the start class in a criteria/line
  **/
@@ -15,15 +14,21 @@ class StartClassGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
 
-  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider,startClassVal?:SelectedVal) {
+  constructor(
+    ParentCriteriaGroup: CriteriaGroup,
+    specProvider: ISpecProvider,
+    startClassVal?: SelectedVal
+  ) {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.inputTypeComponent = new ClassTypeId(this, this.specProvider);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
-    this.startClassVal = startClassVal ? startClassVal : {
-      type:null,
-      variable:null
-    };
+    this.startClassVal = startClassVal
+      ? startClassVal
+      : {
+          type: null,
+          variable: null,
+        };
   }
 
   render() {
@@ -41,28 +46,38 @@ class StartClassGroup extends HTMLComponent {
           throw Error('No value received on "classTypeValueSelected"');
         e.stopImmediatePropagation();
         //only create new SPARQL variable if the startClassVal is not set by the parent component
-        if(!this.startClassVal.variable)this.#createSparqlVar(e.detail)
+        if (!this.startClassVal.variable) this.#createSparqlVar(e.detail);
         this.#valueWasSelected();
       }
     );
   }
 
-  #createSparqlVar(type:string){
-    this.startClassVal.type = type
-    this.html[0].dispatchEvent(new CustomEvent('getSparqlVarId',{
-      bubbles:true,
-      detail:(id: number) => { //callback
-        this.startClassVal.variable = `?${this.specProvider.getLabel(type)}_${id}`
-        // id==1 -> first StartClassGroup of first GroupWrapper, create variable automatically
-        if(id === 1){
-          let payload = {
-            val: this.startClassVal,
-            selected:true
+  #createSparqlVar(type: string) {
+    this.startClassVal.type = type;
+    this.html[0].dispatchEvent(
+      new CustomEvent("getSparqlVarId", {
+        bubbles: true,
+        detail: (id: number) => {
+          //callback
+          this.startClassVal.variable = `?${this.specProvider.getLabel(
+            type
+          )}_${id}`;
+          // id==1 -> first StartClassGroup of first GroupWrapper, create variable automatically
+          if (id === 1) {
+            let payload = {
+              val: this.startClassVal,
+              selected: true,
+            };
+            this.html[0].dispatchEvent(
+              new CustomEvent("onSelectViewVar", {
+                bubbles: true,
+                detail: payload,
+              })
+            );
           }
-          this.html[0].dispatchEvent(new CustomEvent("onSelectViewVar", { bubbles: true,detail:payload }));
-        } 
-      }
-    }))
+        },
+      })
+    );
   }
 
   #valueWasSelected() {
@@ -83,17 +98,17 @@ class StartClassGroup extends HTMLComponent {
       // tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
       var tippySettings = Object.assign({}, this.settings.tooltipConfig);
       tippySettings.placement = "top-start";
-      new TippyInfo(this,desc,tippySettings)
+      new TippyInfo(this, desc, tippySettings);
     }
   }
   getVarName() {
     return this.startClassVal.variable;
   }
-  setVarName(name:string){
-    this.startClassVal.variable = name
+  setVarName(name: string) {
+    this.startClassVal.variable = name;
   }
-  getTypeSelected(){
-    return this.startClassVal.type
+  getTypeSelected() {
+    return this.startClassVal.type;
   }
 }
 export default StartClassGroup;

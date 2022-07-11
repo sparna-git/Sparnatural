@@ -12,30 +12,30 @@ class DisplayBtn extends HTMLComponent {
         ${UiuxConfig.ICON_ARROW_BOTTOM}
         </a>`);
     super("VariableSelectorDisplay", ParentComponent, widgetHtml);
-    this.callBack = callBack
+    this.callBack = callBack;
   }
 
   render(): this {
     super.render();
-    this.#addClickListener()
+    this.#addClickListener();
     return this;
   }
 
-  #addClickListener(){
+  #addClickListener() {
     // add clicklistener
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       this.selected = this.selected ? false : true;
-      if(this.selected){
+      if (this.selected) {
         this.widgetHtml = $(`<a class="displayButton">
         ${UiuxConfig.ICON_ARROW_TOP}
         </a>`);
-      } else{
+      } else {
         this.widgetHtml = $(`<a class="displayButton">
         ${UiuxConfig.ICON_ARROW_BOTTOM}
         </a>`);
       }
       this.callBack(this.selected);
-      this.render()
+      this.render();
     });
   }
 }

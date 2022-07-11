@@ -12,7 +12,7 @@ class SubmitSection extends HTMLComponent {
   }
   render(): this {
     super.render();
-    this.playBtn = new PlayBtn(this, this.submitAction).render()
+    this.playBtn = new PlayBtn(this, this.submitAction).render();
     return this;
   }
 

@@ -23,15 +23,17 @@ class LinkAndBottom extends HTMLComponent {
       grpWrapper.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
     let posLowerStart =
       grpWrapper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
-    
-    let ax = posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4
-    let bx = posLowerStart.left + (posLowerStart.right - posLowerStart.left) / 4
-    let ay = posUpperStart.bottom
-    let by = posLowerStart.top
-    
-    let css = this.#getLine(ax,bx,ay,by)
 
-    this.html.css(css)
+    let ax =
+      posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4;
+    let bx =
+      posLowerStart.left + (posLowerStart.right - posLowerStart.left) / 4;
+    let ay = posUpperStart.bottom;
+    let by = posLowerStart.top;
+
+    let css = this.#getLine(ax, bx, ay, by);
+
+    this.html.css(css);
   }
 
   #getLine(ax: number, bx: number, ay: number, by: number) {
@@ -42,8 +44,8 @@ class LinkAndBottom extends HTMLComponent {
     }
     let distance = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
     // we always need a vertical line. So 90degree is fixed
-    let degree = 90
-    
+    let degree = 90;
+
     return {
       transformOrigin: "top left",
       width: distance,

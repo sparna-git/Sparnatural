@@ -1,79 +1,97 @@
-
 abstract class Handler {
   sparqlEndpointUrl: any;
   sparqlPostprocessor: any;
   language: any;
   searchPath: any;
   listOrder: string;
- 
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, searchPath: any){
+
+  constructor(
+    sparqlEndpointUrl: any,
+    sparqlPostprocessor: any,
+    language: any,
+    searchPath: any
+  ) {
     this.sparqlEndpointUrl = sparqlEndpointUrl;
     this.sparqlPostprocessor = sparqlPostprocessor;
     this.language = language;
     this.searchPath = searchPath != null ? searchPath : "rdfs:label";
     this.listOrder = "alphabetical";
- }
-   /**
+  }
+  /**
    * Post-processes the SPARQL query and builds the full URL for list content
    **/
-    buildURL(sparql:string):string {
+  buildURL(sparql: string): string {
+    sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
+    //remove linebreaks
+    sparql = sparql.replace(/(\r\n|\n|\r)/gm, "");
+    //remove all backslashes
+    sparql = sparql.replace(/\\/g, "");
+    var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
 
-      sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
-      //remove linebreaks
-      sparql = sparql.replace(/(\r\n|\n|\r)/gm, "");
-      //remove all backslashes
-      sparql = sparql.replace(/\\/g, '');
-      var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
-      
-      var url =
-        this.sparqlEndpointUrl +
-        separator +
-        "query=" +
-        encodeURIComponent(sparql) +
-        "&format=json";
-      return url;
-    }
-    listLocation(domain: any, property: any, range: any, data: { results: { bindings: any; }; }) {
-      return data.results.bindings;
-    }
-  
-    elementLabel(element: { label: { value: any; }; }) {
-      return element.label.value;
-    }
-  
-    /* TODO : rename to elementValue */
-    elementUri(element: { uri: { value: any; }; value: { value: any; }; }) {
-      if (element.uri) {
-        return element.uri.value;
-      } else if (element.value) {
-        return element.value.value;
-      }
-    }
-  
-    enableMatch(domain: any, property: any, range: any) {
-      return false;
-    }
-}
-
-
-abstract class AbstractSparqlListHandler extends Handler {
-
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, searchPath: any) {
-    super(sparqlEndpointUrl,sparqlPostprocessor,language,language)
+    var url =
+      this.sparqlEndpointUrl +
+      separator +
+      "query=" +
+      encodeURIComponent(sparql) +
+      "&format=json";
+    return url;
+  }
+  listLocation(
+    domain: any,
+    property: any,
+    range: any,
+    data: { results: { bindings: any } }
+  ) {
+    return data.results.bindings;
   }
 
-  abstract listUrl(domain: string, property: string, range: string):string
+  elementLabel(element: { label: { value: any } }) {
+    return element.label.value;
+  }
 
+  /* TODO : rename to elementValue */
+  elementUri(element: { uri: { value: any }; value: { value: any } }) {
+    if (element.uri) {
+      return element.uri.value;
+    } else if (element.value) {
+      return element.value.value;
+    }
+  }
+
+  enableMatch(domain: any, property: any, range: any) {
+    return false;
+  }
+}
+
+abstract class AbstractSparqlListHandler extends Handler {
+  constructor(
+    sparqlEndpointUrl: any,
+    sparqlPostprocessor: any,
+    language: any,
+    searchPath: any
+  ) {
+    super(sparqlEndpointUrl, sparqlPostprocessor, language, language);
+  }
+
+  abstract listUrl(domain: string, property: string, range: string): string;
 }
 
 abstract class AbstractSparqlAutocompleteHandler extends Handler {
-
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, searchPath: any) {
-    super(sparqlEndpointUrl,sparqlPostprocessor,language,language)
+  constructor(
+    sparqlEndpointUrl: any,
+    sparqlPostprocessor: any,
+    language: any,
+    searchPath: any
+  ) {
+    super(sparqlEndpointUrl, sparqlPostprocessor, language, language);
   }
 
-  abstract autocompleteUrl(domain: string, property: string, range: string, key:string):string
-
+  abstract autocompleteUrl(
+    domain: string,
+    property: string,
+    range: string,
+    key: string
+  ): string;
 }
 
 /**
@@ -82,14 +100,19 @@ abstract class AbstractSparqlAutocompleteHandler extends Handler {
  **/
 export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
   queryString: any;
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, queryString: string) {
+  constructor(
+    sparqlEndpointUrl: any,
+    sparqlPostprocessor: any,
+    language: any,
+    queryString: string
+  ) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
     this.queryString = queryString;
   }
   /**
    * Constructs the SPARQL query to use for list widget search.
    **/
-  listUrl(domain: string, property: string, range: string):string {
+  listUrl(domain: string, property: string, range: string): string {
     var reDomain = new RegExp("\\$domain", "g");
     var reProperty = new RegExp("\\$property", "g");
     var reRange = new RegExp("\\$range", "g");
@@ -99,8 +122,8 @@ export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
       .replace(reProperty, "<" + property + ">")
       .replace(reRange, "<" + range + ">")
       .replace(reLang, "'" + this.language + "'");
-    sparql = sparql.replace("\\", "")
-  return this.buildURL(sparql)
+    sparql = sparql.replace("\\", "");
+    return this.buildURL(sparql);
   }
 }
 
@@ -109,17 +132,25 @@ export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
  * $domain, $property and $range will be replaced by actual values.
  **/
 export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteHandler {
-
-
   queryString: any;
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, queryString: any) {
+  constructor(
+    sparqlEndpointUrl: any,
+    sparqlPostprocessor: any,
+    language: any,
+    queryString: any
+  ) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
     this.queryString = queryString;
   }
   /**
    * Constructs the SPARQL query to use for autocomplete widget search.
-  **/
-  autocompleteUrl(domain: string, property: string, range: string, key: string): string {
+   **/
+  autocompleteUrl(
+    domain: string,
+    property: string,
+    range: string,
+    key: string
+  ): string {
     var reDomain = new RegExp("\\$domain", "g");
     var reProperty = new RegExp("\\$property", "g");
     var reRange = new RegExp("\\$range", "g");
@@ -132,12 +163,17 @@ export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocomplet
       .replace(reRange, "<" + range + ">")
       .replace(reLang, "'" + this.language + "'")
       .replace(reKey, "" + key + "");
-    return this.buildURL(sparql)
+    return this.buildURL(sparql);
   }
 }
 
 export class SimpleSparqlAutocompleteAndListHandler extends Handler {
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, searchPath: any) {
+  constructor(
+    sparqlEndpointUrl: any,
+    sparqlPostprocessor: any,
+    language: any,
+    searchPath: any
+  ) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
   }
 
@@ -273,7 +309,12 @@ ORDER BY DESC(?count)
 }
 
 export class SparqlBifContainsAutocompleteAndListHandler extends Handler {
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any, searchPath: any) {
+  constructor(
+    sparqlEndpointUrl: any,
+    sparqlPostprocessor: any,
+    language: any,
+    searchPath: any
+  ) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
   }
 
@@ -353,7 +394,7 @@ ORDER BY ?label
 
 export class WikidataAutocompleteAndListHandler extends Handler {
   constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language,null);
+    super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
   }
 
   /**
@@ -432,7 +473,6 @@ ORDER BY ?uriLabel
 		`;
     return sparql;
   }
-
 }
 
 export class RangeBasedAutocompleteAndListHandler {
@@ -509,4 +549,3 @@ export class PropertyBasedAutocompleteAndListHandler extends RangeBasedAutocompl
     }
   }
 }
-

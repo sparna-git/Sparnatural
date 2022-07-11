@@ -8,12 +8,18 @@ const settings: ISettings = {
   maxDepth: 4, // max amount of where clauses
   addDistinct: true,
   backgroundBaseColor: "2,184,117",
-  defaultEndpoint (){ if(this.language == 'fr'){return `http://fr.dbpedia.org/sparql`} else {return`http://dbpedia.org/sparql`} },
+  defaultEndpoint() {
+    if (this.language == "fr") {
+      return `http://fr.dbpedia.org/sparql`;
+    } else {
+      return `http://dbpedia.org/sparql`;
+    }
+  },
   sparqlPrefixes: {},
   localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
   filterConfigOnEndpoint: false,
-  
-  autocomplete : {
+
+  autocomplete: {
     /**
      * This must return the URL that will be called when the user starts
      * typing a few letter in a search field.
@@ -23,29 +29,36 @@ const settings: ISettings = {
      * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
      * @param {string} key - The letters that the user has typed in the search field.
      **/
-    autocompleteUrl : function(domain: any, property: any, range: any, key: any) {
-      console.log("Please specify function for autocompleteUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
+    autocompleteUrl: function (
+      domain: any,
+      property: any,
+      range: any,
+      key: any
+    ) {
+      console.log(
+        "Please specify function for autocompleteUrl option in in init parameters of Sparnatural : function(domain, property, range, key)"
+      );
     },
 
     /**
-        * Returns the path in the returned JSON structure where the list of entries should be read.
-        * This is typically the data structure itself, but can correspond to a subentry inside.
-        *
+     * Returns the path in the returned JSON structure where the list of entries should be read.
+     * This is typically the data structure itself, but can correspond to a subentry inside.
+     *
      * @param {string} domain - The domain of the criteria currently being edited
      * @param {string} property - The predicate of the criteria currently being edited
      * @param {string} range - The range of the criteria currently being edited
      * @param {object} data - The data structure returned from an autocomplete call
-        **/
-    listLocation: function(domain: any, property: any, range: any, data: any) {
+     **/
+    listLocation: function (domain: any, property: any, range: any, data: any) {
       return data;
     },
 
     /**
-        * Returns the label to display for a single autocomplete result; defaults to `element.label`.
-        *
-        * @param {object} element - A single autocomplete result
-        **/
-    elementLabel: function(element: any) {
+     * Returns the label to display for a single autocomplete result; defaults to `element.label`.
+     *
+     * @param {object} element - A single autocomplete result
+     **/
+    elementLabel: function (element: any) {
       return element.label;
     },
 
@@ -54,7 +67,7 @@ const settings: ISettings = {
      *
      * @param {object} element - A single autocomplete result
      **/
-    elementUri: function(element: any) {
+    elementUri: function (element: any) {
       return element.uri;
     },
 
@@ -63,12 +76,11 @@ const settings: ISettings = {
      * be useful only when loading the autocomplete results from a local file, leave to
      * false otherwise.
      **/
-    enableMatch: function(domain: any, property: any, range: any) {
+    enableMatch: function (domain: any, property: any, range: any) {
       return false;
     },
-  },			
-  list : {
-
+  },
+  list: {
     /**
      * This must return the URL that will be called to list the values to populate the dropdown.
      *
@@ -76,50 +88,54 @@ const settings: ISettings = {
      * @param {string} property - The predicate of the criteria currently being edited
      * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
      **/
-    listUrl : function(domain: any, property: any, range: any) {
-      console.log("Please specify function for listUrl option in in init parameters of Sparnatural : function(domain, property, range)" ) ;
+    listUrl: function (domain: any, property: any, range: any) {
+      console.log(
+        "Please specify function for listUrl option in in init parameters of Sparnatural : function(domain, property, range)"
+      );
     },
 
     /**
-        * Returns the path in the returned JSON structure where the list of entries should be read.
-        * This is typically the data structure itself, but can correspond to a subentry inside.
-        *
+     * Returns the path in the returned JSON structure where the list of entries should be read.
+     * This is typically the data structure itself, but can correspond to a subentry inside.
+     *
      * @param {string} domain - The domain of the criteria currently being edited
      * @param {string} property - The predicate of the criteria currently being edited
      * @param {string} range - The range of the criteria currently being edited
      * @param {object} data - The data structure returned from a list call
-        **/
-    listLocation: function(domain: any, property: any, range: any, data: any) {
+     **/
+    listLocation: function (domain: any, property: any, range: any, data: any) {
       return data;
     },
 
     /**
-        * Returns the label to display for a single list entry; defaults to `element.label`.
-        *
-        * @param {object} element - A single list entry
-        **/
-    elementLabel: function(element: any) {
+     * Returns the label to display for a single list entry; defaults to `element.label`.
+     *
+     * @param {object} element - A single list entry
+     **/
+    elementLabel: function (element: any) {
       return element.label;
     },
 
     /**
-        * Returns the URI for a single list entry; defaults to `element.uri`.
-        *
-        * @param {object} element - A single list entry
-        **/
-    elementUri: function(element: any) {
+     * Returns the URI for a single list entry; defaults to `element.uri`.
+     *
+     * @param {object} element - A single list entry
+     **/
+    elementUri: function (element: any) {
       return element.uri;
-    }
+    },
   },
-  
+
   onQueryUpdated: function (
     queryString: string,
     queryJson: any,
     specProvider: ISpecProvider
   ) {
-    console.log("Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête" ) ;
+    console.log(
+      "Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête"
+    );
   },
-  
+
   dates: {
     datesUrl: function (domain: any, property: any, range: any, key: any) {
       console.log(

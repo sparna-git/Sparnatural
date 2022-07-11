@@ -23,7 +23,7 @@ class ActionWhere extends HTMLComponent {
     super("ActionWhere", parentComponent, null);
     this.specProvider = specProvider;
     this.callBack = callBack;
-    this.parentComponent = parentComponent
+    this.parentComponent = parentComponent;
   }
   render = () => {
     super.render();
@@ -36,24 +36,24 @@ class ActionWhere extends HTMLComponent {
     }
     var endLabel = this.specProvider.getLabel(
       this.parentComponent.endClassVal.type
-    )
-    
+    );
+
     let editTrait = $(`
     <span class="edit-trait">
       <span class="edit-num"> ${choiceNumber}</span>
-    </span>`)
+    </span>`);
     let where = $(`
       <div> ${getSettings().langSearch.Search} ${endLabel} ${
       getSettings().langSearch.That
     } </div>
     `);
     this.btn = $(`<a>+</a>`);
-    where = where.add(this.btn[0])
+    where = where.add(this.btn[0]);
     editTrait = editTrait.add(where);
     this.btn[0].addEventListener("click", () => {
       this.callBack();
     });
-    this.html.append(editTrait)
+    this.html.append(editTrait);
     return this;
   };
 }

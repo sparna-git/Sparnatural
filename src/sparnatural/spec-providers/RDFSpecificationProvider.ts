@@ -19,14 +19,20 @@ export const RDFS = {
   LABEL: factory.namedNode(RDFS_NAMESPACE + "label") as NamedNode,
   DOMAIN: factory.namedNode(RDFS_NAMESPACE + "domain") as NamedNode,
   RANGE: factory.namedNode(RDFS_NAMESPACE + "range") as NamedNode,
-  SUBPROPERTY_OF: factory.namedNode(RDFS_NAMESPACE + "subPropertyOf") as NamedNode,
+  SUBPROPERTY_OF: factory.namedNode(
+    RDFS_NAMESPACE + "subPropertyOf"
+  ) as NamedNode,
   SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf") as NamedNode,
 };
 
 const OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
 export const OWL = {
-  EQUIVALENT_PROPERTY: factory.namedNode(OWL_NAMESPACE + "equivalentProperty") as NamedNode,
-  EQUIVALENT_CLASS: factory.namedNode(OWL_NAMESPACE + "equivalentClass") as NamedNode,
+  EQUIVALENT_PROPERTY: factory.namedNode(
+    OWL_NAMESPACE + "equivalentProperty"
+  ) as NamedNode,
+  EQUIVALENT_CLASS: factory.namedNode(
+    OWL_NAMESPACE + "equivalentClass"
+  ) as NamedNode,
   UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode,
 };
 

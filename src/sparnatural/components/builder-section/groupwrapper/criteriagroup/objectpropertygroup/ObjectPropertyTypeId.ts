@@ -11,9 +11,9 @@ import CriteriaGroup from "../CriteriaGroup";
 class ObjectPropertyTypeId extends HTMLComponent {
   GrandParent: CriteriaGroup;
   temporaryLabel: string;
-  startClassVal:SelectedVal;
-  endClassVal:SelectedVal;
-  oldWidget:JQuery<HTMLElement>
+  startClassVal: SelectedVal;
+  endClassVal: SelectedVal;
+  oldWidget: JQuery<HTMLElement>;
   arrow: ArrowComponent = new ArrowComponent(
     this,
     UiuxConfig.COMPONENT_ARROW_FRONT
@@ -24,13 +24,13 @@ class ObjectPropertyTypeId extends HTMLComponent {
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
     temporaryLabel: string,
-    startClassVal:SelectedVal
+    startClassVal: SelectedVal
   ) {
     super("ObjectPropertyTypeId", ParentComponent, null);
     this.temporaryLabel = temporaryLabel;
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.specProvider = specProvider;
-    this.startClassVal = startClassVal
+    this.startClassVal = startClassVal;
   }
 
   /*
@@ -98,8 +98,8 @@ class ObjectPropertyTypeId extends HTMLComponent {
       default_value
     );
   }
-  setEndClassVal(endClassVal:SelectedVal){
-    this.endClassVal = endClassVal
+  setEndClassVal(endClassVal: SelectedVal) {
+    this.endClassVal = endClassVal;
   }
 }
 export default ObjectPropertyTypeId;

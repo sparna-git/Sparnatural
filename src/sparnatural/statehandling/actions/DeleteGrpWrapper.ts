@@ -10,36 +10,48 @@ export default function deleteGrpWrapper(
 ) {
   let elToDel = e.detail as GroupWrapper;
   let deleteIt = (el: GroupWrapper) => {
-    el?.linkWhereBottom?.html?.empty()?.remove()
-    el?.linkAndBottom?.html?.empty()?.remove()
+    el?.linkWhereBottom?.html?.empty()?.remove();
+    el?.linkAndBottom?.html?.empty()?.remove();
     el.html.empty();
     el.html.remove();
   };
   // traversePreOrder through components and calculate background / linkAndBottoms /  for them
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
-      if(grpWrapper === elToDel){
+      if (grpWrapper === elToDel) {
         //grpWrapper is root node. call resetCallBack like resetBtn would have been clicked
-        actionStore.sparnatural.BgWrapper.resetCallback()
-        actionStore.sparnatural.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{detail:MaxVarAction.DECREASE}))
+        actionStore.sparnatural.BgWrapper.resetCallback();
+        actionStore.sparnatural.html[0].dispatchEvent(
+          new CustomEvent("changeMaxVarIndex", {
+            detail: MaxVarAction.DECREASE,
+          })
+        );
       }
-      if(grpWrapper.andSibling === elToDel){
-        grpWrapper.andSibling.traversePostOrder((grpWrapper:GroupWrapper)=>{
-          deleteIt(grpWrapper)
-          actionStore.sparnatural.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{detail:MaxVarAction.DECREASE}))
-        })
-        grpWrapper.andSibling = null
-        grpWrapper.linkAndBottom.html.empty().remove()
-        grpWrapper.setObjectPropertySelectedState()
+      if (grpWrapper.andSibling === elToDel) {
+        grpWrapper.andSibling.traversePostOrder((grpWrapper: GroupWrapper) => {
+          deleteIt(grpWrapper);
+          actionStore.sparnatural.html[0].dispatchEvent(
+            new CustomEvent("changeMaxVarIndex", {
+              detail: MaxVarAction.DECREASE,
+            })
+          );
+        });
+        grpWrapper.andSibling = null;
+        grpWrapper.linkAndBottom.html.empty().remove();
+        grpWrapper.setObjectPropertySelectedState();
       }
       if (grpWrapper.whereChild === elToDel) {
-        grpWrapper.whereChild.traversePostOrder((grpWrapper:GroupWrapper)=>{
-          deleteIt(grpWrapper)
-          actionStore.sparnatural.html[0].dispatchEvent(new CustomEvent('changeMaxVarIndex',{detail:MaxVarAction.DECREASE}))
-        })
-        grpWrapper.whereChild = null
-        grpWrapper.linkWhereBottom.html.empty().remove()
-        grpWrapper.setObjectPropertySelectedState()
+        grpWrapper.whereChild.traversePostOrder((grpWrapper: GroupWrapper) => {
+          deleteIt(grpWrapper);
+          actionStore.sparnatural.html[0].dispatchEvent(
+            new CustomEvent("changeMaxVarIndex", {
+              detail: MaxVarAction.DECREASE,
+            })
+          );
+        });
+        grpWrapper.whereChild = null;
+        grpWrapper.linkWhereBottom.html.empty().remove();
+        grpWrapper.setObjectPropertySelectedState();
       }
     }
   );
@@ -48,6 +60,6 @@ export default function deleteGrpWrapper(
   );
   // there might have been variables in the variable section which now got deleted
   actionStore.sparnatural.html[0].dispatchEvent(
-    new CustomEvent('updateVarList')
-  )
+    new CustomEvent("updateVarList")
+  );
 }

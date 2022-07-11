@@ -1,4 +1,3 @@
-
 /**
  * A single line/criteria
  **/
@@ -27,7 +26,11 @@ class CriteriaGroup extends HTMLComponent {
   ParentGroupWrapper: GroupWrapper;
   unselectBtn: UnselectBtn;
 
-  constructor(ParentComponent: GroupWrapper, specProvider: any,startClassVal?:SelectedVal) {
+  constructor(
+    ParentComponent: GroupWrapper,
+    specProvider: any,
+    startClassVal?: SelectedVal
+  ) {
     super("CriteriaGroup", ParentComponent, null);
     this.specProvider = specProvider;
     this.ParentGroupWrapper = ParentComponent;
@@ -35,7 +38,7 @@ class CriteriaGroup extends HTMLComponent {
       this,
       this.specProvider,
       startClassVal
-    )
+    );
   }
 
   render(): this {
@@ -71,7 +74,10 @@ class CriteriaGroup extends HTMLComponent {
       "StartClassGroupSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        if (!this.#isSelectedVal(e.detail))  throw Error('StartClassGroupSelected expects object of type SelectedVal')
+        if (!this.#isSelectedVal(e.detail))
+          throw Error(
+            "StartClassGroupSelected expects object of type SelectedVal"
+          );
         this.ObjectPropertyGroup.onStartClassGroupSelected(e.detail);
         this.EndClassGroup.onStartClassGroupSelected(e.detail);
       }
@@ -80,7 +86,8 @@ class CriteriaGroup extends HTMLComponent {
     // 2. User Selects EndClassVal
     this.html[0].addEventListener("EndClassGroupSelected", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      if (!this.#isSelectedVal(e.detail)) throw Error('EndClassGroupSelected expects object of type SelectedVal')
+      if (!this.#isSelectedVal(e.detail))
+        throw Error("EndClassGroupSelected expects object of type SelectedVal");
       this.ObjectPropertyGroup.onEndClassGroupSelected(e.detail);
     });
 
@@ -89,12 +96,19 @@ class CriteriaGroup extends HTMLComponent {
       "onObjectPropertyGroupSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        if (!this.#isSelectedVal(e.detail)) throw Error('onObjectPropertyGroupSelected expects object of type SelectedVal')
-        // if there is already a where connection, don't change anything  
-        if(!this.ParentGroupWrapper.whereChild) this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
-        this.OptionsGroup.onObjectPropertyGroupSelected(this.ParentGroupWrapper.optionState);
+        if (!this.#isSelectedVal(e.detail))
+          throw Error(
+            "onObjectPropertyGroupSelected expects object of type SelectedVal"
+          );
+        // if there is already a where connection, don't change anything
+        if (!this.ParentGroupWrapper.whereChild)
+          this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
+        this.OptionsGroup.onObjectPropertyGroupSelected(
+          this.ParentGroupWrapper.optionState
+        );
         // if there is already a andSibling don't allow to rerender the ActionAnd again
-        if(!this.ParentGroupWrapper.andSibling) this.ActionsGroup.onObjectPropertyGroupSelected();
+        if (!this.ParentGroupWrapper.andSibling)
+          this.ActionsGroup.onObjectPropertyGroupSelected();
       }
     );
   };
@@ -103,8 +117,8 @@ class CriteriaGroup extends HTMLComponent {
   initCompleted() {
     this.ParentGroupWrapper.html.addClass("completed");
   }
-  #isSelectedVal(payload:any): payload is SelectedVal{
-    return ('type' in payload) && ('variable' in payload)
+  #isSelectedVal(payload: any): payload is SelectedVal {
+    return "type" in payload && "variable" in payload;
   }
 }
 export default CriteriaGroup;

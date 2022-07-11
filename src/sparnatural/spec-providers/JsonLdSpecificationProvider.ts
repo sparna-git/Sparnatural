@@ -31,7 +31,7 @@ enum WIDGETSTYPES {
   "sparnatural:NonSelectableProperty",
   "sparnatural:BooleanProperty",
   "sparnatural:TreeProperty",
-  "sparnatural:MapProperty"
+  "sparnatural:MapProperty",
 }
 
 export default class JsonLdSpecificationProvider implements ISpecProvider {
@@ -56,7 +56,9 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
       if (value in WIDGETSTYPES) {
         return this._expand(value);
       }
-      throw Error(`Couldn't find object property type for ${value}. Make sure there is a Widget for this object property type!`)
+      throw Error(
+        `Couldn't find object property type for ${value}. Make sure there is a Widget for this object property type!`
+      );
     }
   };
 
@@ -320,7 +322,10 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
 		@Id of Class
 		return array of @type ObjectProperty in jsonSpecs 
 	*/
-  getConnectingProperties = function (domainClassId: string, rangeClassId: string) {
+  getConnectingProperties = function (
+    domainClassId: string,
+    rangeClassId: string
+  ) {
     var items: any[] = [];
 
     for (var i in this.jsonSpecs["@graph"]) {
@@ -480,7 +485,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
         return anEntry;
       }
     }
-    console.warn(`Couldn't find an entry with id: ${id}`)
+    console.warn(`Couldn't find an entry with id: ${id}`);
     return null;
   };
 

@@ -2,12 +2,11 @@
     This is just a sample file to demonstrate the feature of preloaded queries
 */
 
-
 export const queries = {
-    queries: [
-        {
-            queryName:`Museums in Cuba OR Egypt`,
-            query:`{
+  queries: [
+    {
+      queryName: `Museums in Cuba OR Egypt`,
+      query: `{
                 "distinct": true,
                 "variables": [
                     "Museum_1"
@@ -41,11 +40,11 @@ export const queries = {
                         "notExists": false
                     }
                 ]
-            }`
-        },
-        {
-            queryName:`Country with person named peter who died the last 4 years`,
-            query:`{
+            }`,
+    },
+    {
+      queryName: `Country with person named peter who died the last 4 years`,
+      query: `{
                 "distinct": true,
                 "variables": [
                     "Country_1"
@@ -110,11 +109,11 @@ export const queries = {
                         "notExists": false
                     }
                 ]
-            }`
-        },
-        {
-            queryName:`Museum with Artwork with name monalisa and OPTIONAL author who was born the last 30years`,
-            query:`{
+            }`,
+    },
+    {
+      queryName: `Museum with Artwork with name monalisa and OPTIONAL author who was born the last 30years`,
+      query: `{
                 "distinct": true,
                 "variables": [
                     "Museum_1"
@@ -194,11 +193,11 @@ export const queries = {
                         "notExists": false
                     }
                 ]
-            }`
-        },
-        {
-            queryName:'optionaltest',
-            query:`{
+            }`,
+    },
+    {
+      queryName: "optionaltest",
+      query: `{
                 "distinct": true,
                 "variables": [
                     "Museum_1"
@@ -271,8 +270,7 @@ export const queries = {
                         "notExists": false
                     }
                 ]
-            }`
-        }
-
-    ]
-}
+            }`,
+    },
+  ],
+};
