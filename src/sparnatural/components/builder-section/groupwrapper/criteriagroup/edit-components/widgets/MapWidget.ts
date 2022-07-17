@@ -15,6 +15,7 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import { DataFactory, Literal, Triple } from "n3";
 import { namedNode } from "@rdfjs/data-model";
+import { GEOF, RDF } from "../../../../../../spec-providers/RDFSpecificationProvider";
 
 export interface MapWidgetValue extends WidgetValue {
   value: {
@@ -146,7 +147,7 @@ export default class MapWidget extends AbstractWidget {
       type: "filter",
       expression: <FunctionCallExpression>{
         type: "functionCall",
-        function: DataFactory.namedNode("geof:sfWithin"),
+        function: DataFactory.namedNode(GEOF.WITHIN.value),
         args: [asWKT.object, PolyLiteral],
       },
     };
@@ -163,9 +164,10 @@ export default class MapWidget extends AbstractWidget {
     coordinates.forEach((coordinat) => {
       polygon = `${polygon} ${coordinat.lat} ${coordinat.lng},`;
     });
+    let startPt = this.widgetValues[0].value.coordinates[0][0]
     // polygon must be closed with the starting point
     return `'''<http://www.opengis.net/def/crs/OGC/1.3/CRS84> 
-        Polygon((${polygon} ${this.widgetValues[0].value.coordinates[0][0]}))
+        Polygon((${polygon} ${startPt.lat} ${startPt.lng}))
         '''`;
   }
 }

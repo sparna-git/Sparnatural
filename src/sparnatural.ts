@@ -15,17 +15,16 @@ library.add(fas);
 
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
 import Sparnatural from "./sparnatural/components/Sparnatural";
+import ISpecProvider from "./sparnatural/spec-providers/ISpecProviders";
 
 /*
   This is the SparNatural HTMLElement. 
   e.g. Interface to the outside world
   Used to configure the Settings
 */
-export class SparNatural extends HTMLElement {
+class SparNatural extends HTMLElement {
   Sparnatural = new Sparnatural();
-  specProvider: any;
-  // all the components in Sparnatural
-  components: any = [];
+  specProvider: ISpecProvider;
   static get observedAttributes() {
     return ["settings"];
   }
@@ -35,9 +34,7 @@ export class SparNatural extends HTMLElement {
 
   //gets called when the component was rendered
   connectedCallback() {
-    console.warn("componentloaded firing");
     this.dispatchEvent(new CustomEvent("componentLoaded", { bubbles: true }));
-    console.warn("event fired");
   }
 
   // Used by calling Calling component to set or get the settings.

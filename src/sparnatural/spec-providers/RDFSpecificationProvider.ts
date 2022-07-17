@@ -25,6 +25,14 @@ export const RDFS = {
   SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf") as NamedNode,
 };
 
+const GEOSPARQL_NAMESPACE = 'http://www.opengis.net/ont/geosparql#'
+
+const GEOFUNCTIONS_NAMESPACE = 'http://www.opengis.net/def/function/geosparql/'
+
+export const GEOF = {
+  WITHIN: factory.namedNode(GEOFUNCTIONS_NAMESPACE + 'sfWithin') as NamedNode
+}
+
 const OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
 export const OWL = {
   EQUIVALENT_PROPERTY: factory.namedNode(
