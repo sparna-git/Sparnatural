@@ -56,6 +56,8 @@ export abstract class AbstractWidget extends HTMLComponent {
     return this.widgetValues;
   }
 
+  // Sparnatural stores the variable name always with the questionmark. 
+  // for the DataFactory from "n3" lib we need the variable name without '?'
   getVariableValue(selectedVal: SelectedVal): string {
     return selectedVal.variable.replace("?", "");
   }

@@ -18,6 +18,7 @@ import Sparnatural from "../components/Sparnatural";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import { DataFactory } from "n3";
 import { RDF } from "../spec-providers/RDFSpecificationProvider";
+import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
 /*
   Reads out the UI and creates the internal JSON structure described here:
   https://docs.sparnatural.eu/Query-JSON-format
@@ -89,12 +90,12 @@ export default class RdfJsGenerator {
 
     let triples = this.#buildTripples(grpWrapper.CriteriaGroup);
     //get the infromation from the widget if there are widgetvalues selected
-    let widgetVals: Array<any> = [];
+    let rdfPattern: Array<any> = [];
     if (
       grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper?.widgetComponent?.getwidgetValues()
         ?.length > 0
     ) {
-      widgetVals =
+      rdfPattern =
         grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.getRdfJsPattern();
     }
     let hasOption =
@@ -115,7 +116,7 @@ export default class RdfJsGenerator {
     //if it is a child of a parent with either optional or notexists
     if (isInOption) {
       ptrns.push(this.#buildBGP(triples));
-      ptrns.push(...widgetVals);
+      ptrns.push(...rdfPattern);
       if (wherePtrn) ptrns.push(...wherePtrn);
       if (andPtrn) ptrns.push(...andPtrn);
       return ptrns;
@@ -125,7 +126,7 @@ export default class RdfJsGenerator {
     if (grpWrapper.optionState == OptionTypes.OPTIONAL) {
       ptrns.push(this.#buildBGP([triples[0]])); // triples[0] = startclasstriple
       let inOptional = [];
-      if (widgetVals) inOptional.push(...widgetVals);
+      if (rdfPattern) inOptional.push(...rdfPattern);
       if (wherePtrn) inOptional.push(...wherePtrn);
       let optionalPtrn = this.#buildOptionalPattern(inOptional);
       ptrns.push(optionalPtrn);
@@ -136,7 +137,7 @@ export default class RdfJsGenerator {
     if (grpWrapper.optionState == OptionTypes.NOTEXISTS) {
       ptrns.push(this.#buildBGP([triples[0]])); // triples[0] = startclasstriple
       let inNotExists = [];
-      if (widgetVals) inNotExists.push(...widgetVals);
+      if (rdfPattern) inNotExists.push(...rdfPattern);
       if (wherePtrn) inNotExists.push(...wherePtrn);
       let notExistPtrn = this.#buildFilterPattern(inNotExists);
       ptrns.push(notExistPtrn);
@@ -145,7 +146,7 @@ export default class RdfJsGenerator {
 
     //normal case
     ptrns.push(this.#buildBGP(triples));
-    ptrns.push(...widgetVals);
+    ptrns.push(...rdfPattern);
     if (wherePtrn) ptrns.push(...wherePtrn);
     if (andPtrn) ptrns.push(...andPtrn);
     return ptrns;
@@ -158,19 +159,34 @@ export default class RdfJsGenerator {
       RDF.TYPE.value,
       crtGrp.StartClassGroup.getTypeSelected()
     );
-    let endClass = this.#buildTypeTripple(
-      crtGrp.EndClassGroup.getVarName(),
-      RDF.TYPE.value,
-      crtGrp.EndClassGroup.getTypeSelected()
-    );
+   
+      let endClass = this.#buildTypeTripple(
+        crtGrp.EndClassGroup.getVarName(),
+        RDF.TYPE.value,
+        crtGrp.EndClassGroup.getTypeSelected()
+      );
+    
+
     let connectingTripple = this.#buildIntersectionTriple(
       startClass.subject as Variable,
       crtGrp.ObjectPropertyGroup.getTypeSelected(),
       endClass.subject as Variable
     );
-    triples.push(startClass, endClass, connectingTripple);
+     // If it is a literal class then it doesn't have the endclass Tiple.
+    // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
+    if(crtGrp.EndClassGroup.editComponents.widgetWrapper.getWidgetType() == Config.Map_PROPERTY) {
+      // TODO: refactor this to a config property
+      triples.push(startClass)
+    } else if(this.specProvider.isLiteralClass(crtGrp.EndClassGroup.getTypeSelected())) {
+      triples.push(startClass,connectingTripple)
+    } else{
+      triples.push(startClass, endClass, connectingTripple);
+    }
+
     return triples;
   }
+
+  
 
   #buildBGP(triples: Triple[]): BgpPattern {
     return {

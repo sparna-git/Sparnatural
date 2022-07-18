@@ -7,15 +7,18 @@ import {
   BgpPattern,
   FilterPattern,
   FunctionCallExpression,
+  LiteralTerm,
   Pattern,
+  ValuePatternRow,
+  ValuesPattern,
 } from "sparqljs";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
-import { DataFactory, Literal, Triple } from "n3";
+import { DataFactory, Triple } from "n3";
 import { namedNode } from "@rdfjs/data-model";
-import { GEOF, RDF } from "../../../../../../spec-providers/RDFSpecificationProvider";
+import { GEOF} from "../../../../../../spec-providers/RDFSpecificationProvider";
 
 export interface MapWidgetValue extends WidgetValue {
   value: {
@@ -83,26 +86,30 @@ export default class MapWidget extends AbstractWidget {
       this.drawingLayer = e.layer;
 
       this.map.addLayer(this.drawingLayer);
-      this.#saveValues(e);
+
+      let widgetValue: MapWidgetValue = {
+        valueType: ValueType.SINGLE,
+        value: {
+          label: "Area selected",
+          coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
+        },
+      };
+      this.renderWidgetVal(widgetValue);
       //add listener when the shape gets changed
       this.drawingLayer.on("pm:edit", (e) => {
-        this.#saveValues(e);
+        let widgetValue: MapWidgetValue = {
+        valueType: ValueType.SINGLE,
+        value: {
+          label: "Area selected",
+          coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
+        },
+      };
+      this.renderWidgetVal(widgetValue);
       });
     });
 
     this.#changeButton();
   };
-  #saveValues(e: { shape: string; layer: L.Layer }) {
-    //double cast: 1. cast.layer payload to recantgle, 2. cast LatLng to RectancleResult LatLng[][]
-    let widgetValue: MapWidgetValue = {
-      valueType: ValueType.SINGLE,
-      value: {
-        label: "Area selected",
-        coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
-      },
-    };
-    this.addWidgetValue(widgetValue);
-  }
 
   #closeMap = () => {
     this.map.remove();
@@ -111,7 +118,6 @@ export default class MapWidget extends AbstractWidget {
         value: { label: getSettings().langSearch.SelectAllValues },
         valueType: ValueType.SINGLE,
       });
-    this.renderWidgetVal(this.getLastValue());
   };
 
   #changeButton() {
@@ -125,30 +131,38 @@ export default class MapWidget extends AbstractWidget {
 
   // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
   getRdfJsPattern(): Pattern[] {
+
     let geomA: Triple = DataFactory.triple(
       DataFactory.variable(this.getVariableValue(this.startClassVal)),
       DataFactory.namedNode(
-        "http://example.org/ApplicationSchema#hasExactGeometry"
+        "http://www.opengis.net/ont/geosparql#hasGeometry"
       ),
       DataFactory.variable("geomA")
     );
+
     let asWKT: Triple = DataFactory.triple(
       DataFactory.variable(geomA.object.value),
       DataFactory.namedNode("http://www.opengis.net/ont/geosparql#asWKT"),
       DataFactory.variable("aWKT")
     );
 
-    let PolyLiteral: Literal = DataFactory.literal(
-      this.#buildPolygon(this.widgetValues[0].value.coordinates[0]),
-      namedNode("http://www.opengis.net/ont/geosparql#wktLiteral")
-    );
+    let vals = this.widgetValues.map((v) => {
+      let vl: ValuePatternRow = {};
+      vl[this.endClassVal.variable] = this.#buildPolygon(v.value.coordinates[0]);
+      return vl;
+    });
+
+    let polygonValues: ValuesPattern = {
+      type: "values",
+      values: vals
+    } 
 
     let filterPtrn: FilterPattern = {
       type: "filter",
       expression: <FunctionCallExpression>{
         type: "functionCall",
         function: DataFactory.namedNode(GEOF.WITHIN.value),
-        args: [asWKT.object, PolyLiteral],
+        args: [asWKT.object, DataFactory.variable(this.getVariableValue(this.endClassVal)) ],
       },
     };
 
@@ -156,7 +170,9 @@ export default class MapWidget extends AbstractWidget {
       type: "bgp",
       triples: [geomA, asWKT],
     };
-    return [ptrn, filterPtrn];
+
+
+    return [ptrn, polygonValues, filterPtrn];
   }
 
   #buildPolygon(coordinates: L.LatLng[]) {
@@ -164,10 +180,14 @@ export default class MapWidget extends AbstractWidget {
     coordinates.forEach((coordinat) => {
       polygon = `${polygon} ${coordinat.lat} ${coordinat.lng},`;
     });
-    let startPt = this.widgetValues[0].value.coordinates[0][0]
     // polygon must be closed with the starting point
-    return `'''<http://www.opengis.net/def/crs/OGC/1.3/CRS84> 
-        Polygon((${polygon} ${startPt.lat} ${startPt.lng}))
-        '''`;
+    let startPt = coordinates[0]
+    let literal: LiteralTerm = DataFactory.literal(`<http://www.opengis.net/def/crs/OGC/1.3/CRS84> 
+    Polygon((${polygon} ${startPt.lat} ${startPt.lng}))
+    `,namedNode("http://www.opengis.net/ont/geosparql#wktLiteral"))
+
+    return literal;
   }
+
+  
 }
