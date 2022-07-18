@@ -160,13 +160,12 @@ export default {
     {
       "@id":"http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
       "@type": "Class",
-      subClassOf: "http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing",
+      subClassOf: "http://www.w3.org/2000/01/rdf-schema#Literal",
       label: [
         { "@value": "Area", "@language": "en" },
         { "@value": "Région", "@language": "fr" },
       ],
-      faIcon: "fas fa-map-marked-alt",
-      
+      faIcon: "fas fa-map-marked-alt"
     },
     {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text",
@@ -226,7 +225,7 @@ export default {
       ],
       domain: "http://dbpedia.org/ontology/Tree",
       range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
-      sparqlString: "<http://dbpedia.org/ontology/withinArea>",
+      sparqlString: "<http://www.opengis.net/ont/geosparql#hasGeometry>"
     },
     {
       "@id":
