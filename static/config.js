@@ -62,7 +62,7 @@ export default {
       faIcon: "fa-solid fa-earth-africa",
     },
     {
-      "@id": "http://dbpedia.org/ontology/Tree",
+      "@id": "http://twin-example/geneva#Tree",
       "@type": "Class",
       label: [
         { "@value": "Tree", "@language": "en" },
@@ -223,9 +223,9 @@ export default {
         { "@value": "withinArea", "@language": "en" },
         { "@value": "dans la zone", "@language": "fr" },
       ],
-      domain: "http://dbpedia.org/ontology/Tree",
+      domain: "http://twin-example/geneva#Tree",
       range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
-      sparqlString: "<http://www.opengis.net/ont/geosparql#hasGeometry>"
+      sparqlString: "<http://www.opengis.net/ont/geosparql#hasGeometry>/<http://www.opengis.net/ont/geosparql#asWKT>"
     },
     {
       "@id":
@@ -236,7 +236,7 @@ export default {
         { "@value": "outsideArea", "@language": "en" },
         { "@value": "dehors de la zone", "@language": "fr" },
       ],
-      domain: "http://dbpedia.org/ontology/Tree",
+      domain: "http://twin-example/geneva#Tree",
       range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
       sparqlString: "<http://dbpedia.org/ontology/outsideArea>",
     },
