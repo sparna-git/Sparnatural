@@ -89,7 +89,7 @@ export default class RdfJsGenerator {
   #processGrpWrapper(grpWrapper: GroupWrapper, isInOption: boolean, isChild: boolean) {
     let ptrns: Pattern[] = [];
 
-    let triples = this.#buildTripples(grpWrapper.CriteriaGroup,isChild);
+    let triples = this.#buildCrtGrpTriples(grpWrapper.CriteriaGroup,isChild);
     //get the infromation from the widget if there are widgetvalues selected
     let rdfPattern: Pattern[] = [];
     if (
@@ -157,7 +157,7 @@ export default class RdfJsGenerator {
     return ptrns;
   }
 
-  #buildTripples(crtGrp: CriteriaGroup,isChild: boolean): Triple[] {
+  #buildCrtGrpTriples(crtGrp: CriteriaGroup,isChild: boolean): Triple[] {
     let triples: Triple[] = [];
     let startClass = this.#buildTypeTripple(
       crtGrp.StartClassGroup.getVarName(),
@@ -188,7 +188,7 @@ export default class RdfJsGenerator {
       // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
       triples.push(endClass)
     }
-    
+
     triples.push(connectingTripple) // gets pushed in any case
 
     return triples;
