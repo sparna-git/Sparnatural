@@ -16,9 +16,8 @@ import { SelectedVal } from "../../../../sparql/ISparJson";
 
 class CriteriaGroup extends HTMLComponent {
   settings: any;
-  // create all the elements of the criteria
   StartClassGroup: StartClassGroup;
-  OptionsGroup: OptionsGroup;
+  OptionsGroup: OptionsGroup; // optional or notexists
   ObjectPropertyGroup: ObjectPropertyGroup;
   EndClassGroup: EndClassGroup;
   ActionsGroup: ActionsGroup;

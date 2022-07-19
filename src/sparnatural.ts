@@ -44,7 +44,6 @@ class SparNatural extends HTMLElement {
   }
 
   set settings(options: any) {
-    console.warn("setting settings");
     mergeSettings(options);
     if (getSettings().config === null)
       throw Error(

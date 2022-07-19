@@ -61,6 +61,7 @@ export default class RdfJsGenerator {
       type: "query",
       where: this.#processGrpWrapper(
         this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,
+        false,
         false
       ),
       prefixes: {
@@ -85,14 +86,14 @@ export default class RdfJsGenerator {
   }
 
   // this method traverses through the groupwrappers and retrieves the information from each widget.
-  #processGrpWrapper(grpWrapper: GroupWrapper, isInOption: boolean) {
+  #processGrpWrapper(grpWrapper: GroupWrapper, isInOption: boolean, isChild: boolean) {
     let ptrns: Pattern[] = [];
 
-    let triples = this.#buildTripples(grpWrapper.CriteriaGroup);
+    let triples = this.#buildTripples(grpWrapper.CriteriaGroup,isChild);
     //get the infromation from the widget if there are widgetvalues selected
-    let rdfPattern: Array<any> = [];
+    let rdfPattern: Pattern[] = [];
     if (
-      grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper?.widgetComponent?.getwidgetValues()
+      grpWrapper.CriteriaGroup.EndClassGroup.editComponents?.widgetWrapper?.widgetComponent?.getwidgetValues()
         ?.length > 0
     ) {
       rdfPattern =
@@ -103,14 +104,14 @@ export default class RdfJsGenerator {
       grpWrapper.optionState == OptionTypes.NOTEXISTS
         ? true
         : false;
-    //whereChild
+    // recursive whereChild
     let wherePtrn = grpWrapper.whereChild
-      ? this.#processGrpWrapper(grpWrapper.whereChild, hasOption)
+      ? this.#processGrpWrapper(grpWrapper.whereChild, hasOption, true)
       : null;
 
-    //andSiblings
+    //recursive andSiblings
     let andPtrn = grpWrapper.andSibling
-      ? this.#processGrpWrapper(grpWrapper.andSibling, hasOption)
+      ? this.#processGrpWrapper(grpWrapper.andSibling, hasOption, true)
       : null;
 
     //if it is a child of a parent with either optional or notexists
@@ -122,10 +123,12 @@ export default class RdfJsGenerator {
       return ptrns;
     }
 
-    //optional case
+    // starting from this grpWrapper Optional might be enabled
+    // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableOptional
     if (grpWrapper.optionState == OptionTypes.OPTIONAL) {
       ptrns.push(this.#buildBGP([triples[0]])); // triples[0] = startclasstriple
-      let inOptional = [];
+      let inOptional = []; // everything in this array goes into OPTIONAL Brackets in SPARQL
+      inOptional.push(this.#buildBGP([triples[1],triples[2]]))
       if (rdfPattern) inOptional.push(...rdfPattern);
       if (wherePtrn) inOptional.push(...wherePtrn);
       let optionalPtrn = this.#buildOptionalPattern(inOptional);
@@ -133,18 +136,20 @@ export default class RdfJsGenerator {
       return ptrns;
     }
 
-    //not exists case
+    //Starting from this grpWrapper not exists might be enabled
+    // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableNegation
     if (grpWrapper.optionState == OptionTypes.NOTEXISTS) {
       ptrns.push(this.#buildBGP([triples[0]])); // triples[0] = startclasstriple
-      let inNotExists = [];
+      let inNotExists = []; // everything in this array goes into FILTER NOT EXISTS bracket in SPARQL
+      inNotExists.push(this.#buildBGP([triples[1],triples[2]]))
       if (rdfPattern) inNotExists.push(...rdfPattern);
       if (wherePtrn) inNotExists.push(...wherePtrn);
-      let notExistPtrn = this.#buildFilterPattern(inNotExists);
+      let notExistPtrn = this.#buildNotExistsPattern(inNotExists);
       ptrns.push(notExistPtrn);
       return ptrns;
     }
 
-    //normal case
+    // normal case, no OPTIONAL or NOTEXISTS
     ptrns.push(this.#buildBGP(triples));
     ptrns.push(...rdfPattern);
     if (wherePtrn) ptrns.push(...wherePtrn);
@@ -152,7 +157,7 @@ export default class RdfJsGenerator {
     return ptrns;
   }
 
-  #buildTripples(crtGrp: CriteriaGroup): Triple[] {
+  #buildTripples(crtGrp: CriteriaGroup,isChild: boolean): Triple[] {
     let triples: Triple[] = [];
     let startClass = this.#buildTypeTripple(
       crtGrp.StartClassGroup.getVarName(),
@@ -172,16 +177,19 @@ export default class RdfJsGenerator {
       crtGrp.ObjectPropertyGroup.getTypeSelected(),
       endClass.subject as Variable
     );
-     // If it is a literal class then it doesn't have the endclass Tiple.
-    // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
-    if(crtGrp.EndClassGroup.editComponents.widgetWrapper.getWidgetType() == Config.Map_PROPERTY) {
-      // TODO: refactor this to a config property
+
+    if(!isChild){
+      // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
       triples.push(startClass)
-    } else if(this.specProvider.isLiteralClass(crtGrp.EndClassGroup.getTypeSelected())) {
-      triples.push(startClass,connectingTripple)
-    } else{
-      triples.push(startClass, endClass, connectingTripple);
     }
+
+    if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup.getTypeSelected())){
+      // If it is a literal class then it doesn't have the endclass Tiple.
+      // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
+      triples.push(endClass)
+    }
+    
+    triples.push(connectingTripple) // gets pushed in any case
 
     return triples;
   }
@@ -215,7 +223,7 @@ export default class RdfJsGenerator {
     };
   }
 
-  #buildFilterPattern(patterns: Pattern[]): FilterPattern {
+  #buildNotExistsPattern(patterns: Pattern[]): FilterPattern {
     return {
       type: "filter",
       expression: {
