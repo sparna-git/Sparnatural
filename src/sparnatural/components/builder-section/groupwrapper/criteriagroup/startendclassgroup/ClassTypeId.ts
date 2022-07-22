@@ -113,6 +113,10 @@ class ClassTypeId extends HTMLComponent {
   }
 
   #onchangeViewVariable = (selected: boolean) => {
+    selected
+        ? this.html.addClass("VariableSelected")
+        : this.html.removeClass("VariableSelected");
+        
     if (isEndClassGroup(this.ParentComponent)) {
       let payload = {
         val: this.ParentComponent.endClassVal,

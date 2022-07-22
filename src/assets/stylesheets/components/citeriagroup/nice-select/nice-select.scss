@@ -27,11 +27,15 @@
 }
 
 .nice-select {
+    height: 48px;
     background: transparent;
     border-color: transparent;
     padding-left: 10px;
     padding-right: 26px;
-    margin-top: 3px;
+    border-width: 0;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-color: #fff;
     ul.list li {
         border-bottom: solid 1px #e8e8e8;
         img {
