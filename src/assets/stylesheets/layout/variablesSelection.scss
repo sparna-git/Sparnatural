@@ -69,7 +69,7 @@
         flex-direction: row;
         flex-wrap: wrap;
         width: base.$component-width;
-        max-width: base.$component-max-width;
+        min-width: base.$component-min-width;
         margin: 0 auto;
         border: 1px solid #ddd;
         background: #fff;
