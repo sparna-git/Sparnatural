@@ -177,8 +177,13 @@
             }
         }
     }
-    .TreeWidget {
+    .tree-widget {
+        height: 100%;
         .treeBtnDisplay {
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translate(0, -50%);
             border: 1px solid #ddd;
             border-radius: 5px;
             background: #fff;
@@ -192,6 +197,7 @@
             }
         }
         .treeLayer {
+            display: none;
             position: absolute;
             top: 50%;
             margin-top: -19px;
