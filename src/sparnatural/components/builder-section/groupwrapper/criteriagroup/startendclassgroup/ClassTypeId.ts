@@ -51,8 +51,10 @@ class ClassTypeId extends HTMLComponent {
       this.#onchangeViewVariable
     );
     super.render();
-
-    this.backArrow.render();
+    // no back arrow on start class
+    if (!isStartClassGroup(this.ParentComponent)) {
+      this.backArrow.render();
+    }
 
     if (isStartClassGroup(this.ParentComponent)) {
       this.widgetHtml = this.#getStartValues(
