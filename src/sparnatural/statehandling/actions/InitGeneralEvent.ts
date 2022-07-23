@@ -16,14 +16,25 @@ export default function initGeneralevent(actionStore: ActionStore) {
     (grpWrapper: GroupWrapper) => {
       renderLinks(grpWrapper);
       rerenderOptionState(grpWrapper);
-      //render background
-      previousHeight = currentHeight;
+      //render background      
       currentHeight = grpWrapper.html.outerHeight(true) + 1;
+      if(grpWrapper.whereChild != null) {
+        // compute total height of children
+        let childrenHeight = 0;
+        grpWrapper.whereChild.traversePreOrder(
+          (g: GroupWrapper) => {
+            childrenHeight += g.html.outerHeight(true)
+          }
+        );
+        // remove height of children
+        currentHeight -= childrenHeight;
+      }
       cssdef += drawBackgroungOfGroupWrapper(
         index,
         previousHeight,
         currentHeight
       );
+      previousHeight = previousHeight + currentHeight + 1;
       index++;
     }
   );
@@ -61,12 +72,13 @@ function drawBackgroungOfGroupWrapper(
   prev: number,
   currHeight: number
 ) {
+  console.log("currHeught "+currHeight)
   var ratio = 100 / 10 / 100;
   let a = (index + 1) * ratio;
   let rgba = `rgba(${getSettings().backgroundBaseColor},${a})`;
   if (index !== 0) {
     // comma in the string beginning
-    return ` ,${rgba} ${prev}px, ${rgba} ${currHeight}px`;
+    return ` ,${rgba} ${prev}px, ${rgba} ${prev+currHeight}px`;
   }
   return `${rgba} ${prev}px, ${rgba} ${currHeight}px`;
 }
