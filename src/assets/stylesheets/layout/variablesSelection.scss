@@ -137,7 +137,10 @@
             input {
                 line-height: 30px;
                 padding: 1px;
-                min-width: 4ch;
+                min-width: 3ch;
+                margin-left: 5px;
+                border: 0px;
+                text-align:center;
             }
 
             input:invalid {
