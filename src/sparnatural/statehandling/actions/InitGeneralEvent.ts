@@ -72,7 +72,6 @@ function drawBackgroungOfGroupWrapper(
   prev: number,
   currHeight: number
 ) {
-  console.log("currHeught "+currHeight)
   var ratio = 100 / 10 / 100;
   let a = (index + 1) * ratio;
   let rgba = `rgba(${getSettings().backgroundBaseColor},${a})`;
