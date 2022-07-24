@@ -114,6 +114,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.addWidgetValueBtn.html.hide;
     }
 
+    // asks to remove the value selection part, with 1 and 2
     this.html[0].dispatchEvent(
       new CustomEvent("removeEditComponents", { bubbles: true })
     );
