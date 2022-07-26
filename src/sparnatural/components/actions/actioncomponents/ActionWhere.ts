@@ -47,7 +47,7 @@ class ActionWhere extends HTMLComponent {
       getSettings().langSearch.That
     } </div>
     `);
-    this.btn = $(`<a>+</a>`);
+    this.btn = $(`<a><i class="fa-solid fa-plus"></i></a>`);
     where = where.add(this.btn[0]);
     editTrait = editTrait.add(where);
     this.btn[0].addEventListener("click", () => {

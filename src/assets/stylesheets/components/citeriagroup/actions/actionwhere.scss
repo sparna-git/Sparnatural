@@ -1,10 +1,11 @@
 @use '../../../base';
 @use '../../../themes';
 .ActionWhere {
-    line-height: 20px;
+    line-height: 26px;
     position: absolute;
     display: flex;
-    margin-top: -1px;
+    margin-top: -4px;
+    border-left: 3px solid transparent;
     div{
         margin-left: 25px;
         width:max-content;
@@ -13,14 +14,15 @@
         position: absolute;
         left: 100%;
         cursor: pointer;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         background: #fff;
         border: 2px solid themes.$custom-red ;
         border-radius: 13px;
         height: 26px;
         min-width: 26px !important;
-        text-align: center;
-        font-size: 18px;
+        font-size: 12px;
         color: themes.$custom-red !important ;
         font-weight: bold;  
         margin-left: 10px;  
