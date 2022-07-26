@@ -46,7 +46,7 @@ class LinkWhereBottom extends HTMLComponent {
       endClassClientRect.left +
       (endClassClientRect.right - endClassClientRect.left) / 2;
     let topWhereChild = whereChildRect.top;
-    let yEndClass = endClassClientRect.bottom;
+    let yEndClass = endClassClientRect.bottom + 3;
 
     // middleOfEndClass can be used twice since line is orthogonal to EndClassGroup
     let css = this.#getLine(
