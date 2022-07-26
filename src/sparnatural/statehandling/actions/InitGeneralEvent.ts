@@ -16,26 +16,35 @@ export default function initGeneralevent(actionStore: ActionStore) {
     (grpWrapper: GroupWrapper) => {
       renderLinks(grpWrapper);
       rerenderOptionState(grpWrapper);
-      //render background      
-      currentHeight = grpWrapper.html.outerHeight(true) + 1;
-      if(grpWrapper.whereChild != null) {
-        // compute total height of children
-        let childrenHeight = 0;
-        grpWrapper.whereChild.traversePreOrder(
-          (g: GroupWrapper) => {
-            childrenHeight += g.html.outerHeight(true)
-          }
-        );
-        // remove height of children
-        currentHeight -= childrenHeight;
-      }
+      //render background
+      currentHeight = grpWrapper.CriteriaGroup.html.outerHeight(true) + 1;
       cssdef += drawBackgroungOfGroupWrapper(
         index,
         previousHeight,
         currentHeight
       );
+      //Calculate start distance for next line.
       previousHeight = previousHeight + currentHeight + 1;
       index++;
+
+      if(grpWrapper.whereChild != null) {
+        // compute total height of children
+        let childrenHeight = 0;
+        grpWrapper.whereChild.traversePreOrder(
+          (g: GroupWrapper) => {
+            childrenHeight = g.CriteriaGroup.html.outerHeight(true)
+
+            cssdef += drawBackgroungOfGroupWrapper(
+              index,
+              previousHeight,
+              currentHeight
+            );
+            //Calculate start distance for next line.
+            previousHeight = previousHeight + currentHeight + 1;
+            index++;
+          }
+        );
+      }
     }
   );
   let linGradCss = `linear-gradient(${cssdef})`;
