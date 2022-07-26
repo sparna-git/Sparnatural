@@ -6,12 +6,13 @@
     background: themes.$custom-green ;
     position: relative;
     margin: 0 auto;
+    width: 100%;
     a {
-        position: relative;
+        position: absolute;
         display: flex;
         top: 14px;
         width: fit-content;
-        left:93%;
+        right:30px;
         padding: 10px;
         padding-left: 12px;
         border-radius: 5px;
