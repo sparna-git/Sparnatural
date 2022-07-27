@@ -30,13 +30,15 @@ class ActionWhere extends HTMLComponent {
     var choiceNumber = 2;
     if (
       this.parentComponent.widgetWrapper.getWidgetType() ==
-      Config.NON_SELECTABLE_PROPERTY
+      Config.RDFS_LITERAL
     ) {
       choiceNumber = 1;
     }
     var endLabel = this.specProvider.getLabel(
       this.parentComponent.endClassVal.type
     );
+
+    this.parentComponent.html[0].classList.add("nb-choice-"+ choiceNumber );
 
     let editTrait = $(`
     <span class="edit-trait">
