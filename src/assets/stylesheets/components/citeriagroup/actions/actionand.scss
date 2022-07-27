@@ -15,6 +15,7 @@
     .ActionAnd {
         display:none;
         left: math.div(base.$margin-children-li - 45, 2);
+        left: 36px;
         top: math.div(base.$margin-component, 2);
         line-height: 46px;
         /*width: 46px;*/
@@ -22,7 +23,7 @@
         .trait-and-bottom {
             position: absolute;
             top: -14px;
-            left: 50%;
+            left: -1px;
             border-left: 3px solid themes.$custom-red ;
             margin-left: -1px;
             height: 15px;
@@ -50,6 +51,7 @@
             height: 30px;
             line-height: 20px;
             padding: 2px 10px;
+            transform: translate(-50%, 0);
             &:hover {
                 color: themes.$custom-red ;
             }
