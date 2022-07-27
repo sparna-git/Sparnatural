@@ -4,6 +4,7 @@
     position:absolute;
     background-color: themes.$custom-red;
     height: 3px;
+    z-index: 0;
     span {
         transform: rotate(-90deg); //line will get transformed 90deg. transform the span back to horizontal
         display: block;

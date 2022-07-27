@@ -18,6 +18,7 @@
 	-o-box-shadow: 0px 2px 3px 0px #cfcfcf;
 	box-shadow: 0px 2px 3px 0px #cfcfcf;
 	filter: progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
+	z-index: 1;
 
 	.flexWrap {
 		display: flex;

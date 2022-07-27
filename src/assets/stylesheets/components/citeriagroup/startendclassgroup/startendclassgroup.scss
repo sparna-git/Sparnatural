@@ -36,7 +36,7 @@
         .EditComponents {
             position: absolute;
             left: 36px;
-            top: base.$height-components;
+            top: base.$height-components - 3;
             line-height: base.$height-components-hover;
             z-index: 101;
             height: base.$height-components;

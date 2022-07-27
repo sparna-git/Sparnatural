@@ -6,7 +6,7 @@
         position: absolute;
         background-color: themes.$custom-red;
         display: block;
-        z-index: -1;
+        z-index: 0;
     }
     .horizontal{
         z-index: 1; // span or should be overlayd over .lower-vertical
