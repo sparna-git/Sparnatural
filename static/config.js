@@ -168,6 +168,16 @@ export default {
       faIcon: "fas fa-map-marked-alt"
     },
     {
+      "@id":"http://twin-example/geneva#Location",
+      "@type": "Class",
+      subClassOf: "http://www.w3.org/2000/01/rdf-schema#Literal",
+      label: [
+        { "@value": "Location", "@language": "en" },
+        { "@value": "Location", "@language": "fr" },
+      ],
+      faIcon: "fas fa-map-marked-alt"
+    },
+    {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text",
       "@type": "Class",
       subClassOf: "http://www.w3.org/2000/01/rdf-schema#Literal",
@@ -223,9 +233,8 @@ export default {
         { "@value": "withinArea", "@language": "en" },
         { "@value": "dans la zone", "@language": "fr" },
       ],
-      domain: "http://twin-example/geneva#Tree",
-      range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
-      sparqlString: "<http://www.opengis.net/ont/geosparql#hasGeometry>/<http://www.opengis.net/ont/geosparql#asWKT>"
+      domain: "http://twin-example/geneva#Location",
+      range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area"
     },
     {
       "@id":
@@ -236,9 +245,20 @@ export default {
         { "@value": "outsideArea", "@language": "en" },
         { "@value": "dehors de la zone", "@language": "fr" },
       ],
+      domain: "http://twin-example/geneva#Location",
+      range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area"
+    },
+    {
+      "@id":
+        "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#hasLocation",
+      "@type": "ObjectProperty",
+      subPropertyOf: "sparnatural:NonSelectableProperty",
+      label: [
+        { "@value": "withinArea", "@language": "en" },
+        { "@value": "dans la zone", "@language": "fr" },
+      ],
       domain: "http://twin-example/geneva#Tree",
-      range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
-      sparqlString: "<http://dbpedia.org/ontology/outsideArea>",
+      range: "http://twin-example/geneva#Location"
     },
     {
       "@id": "http://dbpedia.org/ontology/museum",
