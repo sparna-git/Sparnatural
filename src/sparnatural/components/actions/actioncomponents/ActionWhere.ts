@@ -43,7 +43,7 @@ class ActionWhere extends HTMLComponent {
     );
     
 
-    this.parentComponent.html[0].classList.add("nb-choice-"+ choiceNumber );
+    this.parentComponent.html[0].classList.add("nb-choice-2");
 
     let editTrait = $(`
     <span class="edit-trait">
