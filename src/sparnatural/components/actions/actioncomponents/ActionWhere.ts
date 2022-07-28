@@ -37,10 +37,11 @@ class ActionWhere extends HTMLComponent {
     ) {
       choiceNumber = 1;
     }
+    */
     var endLabel = this.specProvider.getLabel(
       this.parentComponent.endClassVal.type
     );
-    */
+    
 
     this.parentComponent.html[0].classList.add("nb-choice-"+ choiceNumber );
 
