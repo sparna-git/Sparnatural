@@ -69,5 +69,13 @@ class Sparnatural extends HTMLComponent {
     // uncomment to trigger gathering of statistics
     // initStatistics(specProvider);
   }
+
+  onQuerySubmitted() {
+    this.SubmitSection.playBtn.enableLoading();
+  }
+
+  onQueryFinished() {
+    this.SubmitSection.playBtn.disableLoading();
+  }
 }
 export default Sparnatural;

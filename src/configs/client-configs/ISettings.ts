@@ -1,3 +1,5 @@
+import Sparnatural from "../../sparnatural/components/Sparnatural";
+
 export interface PreLoadQueries {
   queries: Array<{ queryName: string; query: string }>;
 }
@@ -27,6 +29,6 @@ interface ISettings {
     elementCount: (data: any) => void;
   };
   onQueryUpdated?: (queryString: any, queryJson: any, pivotJson?: any) => void;
-  onSubmit?: (form: any) => void;
+  onSubmit?: (sparnatural: Sparnatural) => void;
 }
 export default ISettings;

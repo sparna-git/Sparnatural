@@ -20,6 +20,7 @@ import { SearchWidget } from "./widgets/SearchWidget";
 import { TimeDatePickerWidget } from "./widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { NoWidget } from "./widgets/NoWidget";
 import { TreeWidget } from "./widgets/TreeWidget";
+import EndClassGroup from "../startendclassgroup/EndClassGroup";
 
 /**
  *  creates the corresponding widget
@@ -107,6 +108,7 @@ class WidgetWrapper extends HTMLComponent {
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
+
     let selectAllSpan = `<span class="edit-trait first">
     <span class="edit-trait-top"></span>
     <span class="edit-num">
@@ -119,17 +121,24 @@ class WidgetWrapper extends HTMLComponent {
     </span> 
     ${parenthesisLabel} 
   </span>`;
+
     let orSpan = `<span class="or">
       ${this.settings.langSearch.Or}
-    </span>
-    <span>
+    </span> `;
+    
+    let endLabelSpan = `<span>
       ${endLabel}
     </span>
     `;
 
-    widgetType == Config.NON_SELECTABLE_PROPERTY
+    // if(((EndClassGroup)(this.ParentComponent.ParentComponent).ParentCriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) {
+    //   this.widgetHtml = $(endLabelSpan)
+    // } else {
+      widgetType == Config.NON_SELECTABLE_PROPERTY
       ? (this.widgetHtml = $(selectAllSpan))
-      : (this.widgetHtml = $(selectAllSpan + orSpan));
+      : (this.widgetHtml = $(selectAllSpan + orSpan + endLabelSpan));
+    // }
+    
     this.html.append(this.widgetHtml);
   }
 

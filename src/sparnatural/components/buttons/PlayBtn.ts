@@ -15,5 +15,13 @@ class PlayBtn extends HTMLComponent {
     super.render();
     return this;
   }
+
+  enableLoading() {
+    this.widgetHtml.addClass('submitDisable loadingEnabled');
+  }
+
+  disableLoading() {
+    this.widgetHtml.removeClass('loadingEnabled');
+  }
 }
 export default PlayBtn;

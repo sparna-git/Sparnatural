@@ -70,6 +70,9 @@ class ActionStore {
 
     this.sparnatural.html[0].addEventListener("onSubmit", (e) => {
       e.stopImmediatePropagation();
+      if(this.sparnatural.settings.onSubmit) {
+        this.sparnatural.settings.onSubmit(this.sparnatural);
+      }
     });
 
     this.sparnatural.html[0].addEventListener(
