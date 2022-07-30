@@ -1,9 +1,10 @@
 .selectViewVariableBtn {
     color: #fff;
-    position: relative;
-    top: 30%;
-    right: 45px;
+    position: absolute;
+    top: 50%;
+    right: 38px;
     height: 16px;
+    margin-top: -8px;
     z-index: 2;
     cursor: pointer;
     svg{

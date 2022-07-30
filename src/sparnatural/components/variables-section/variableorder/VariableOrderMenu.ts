@@ -66,9 +66,8 @@ class VariableOrderMenu extends HTMLComponent {
         let fromIndex = evt.oldDraggableIndex;
         let toIndex = evt.newDraggableIndex;
         that.#updateVariableList(fromIndex, toIndex);
-        // same properties as onEnd
-        var width = $(".sortableItem").first().width();
-        $(".variablesOrdersSelect").width(width);
+        // adjust sort option width
+        that.#onFirstVariableWidthChanged();
       },
     });
   }
@@ -85,11 +84,14 @@ class VariableOrderMenu extends HTMLComponent {
   }
 
   removeDraggableComponent(selected_val: SelectedVal) {
+    let that = this;
     this.draggables = this.draggables.filter((d) => {
       if (d.varName == selected_val.variable.replace("?", "")) {
         d.html.remove();
         return false;
       }
+      // adjust sort option width (even if not first was removed)
+      that.#onFirstVariableWidthChanged();
       return d;
     });
   }
@@ -102,6 +104,8 @@ class VariableOrderMenu extends HTMLComponent {
         detail: { oldName: oldName, newName: newName },
       })
     );
+    // adjust sort option width (even if not first was edited)
+    this.#onFirstVariableWidthChanged();
   };
 
   // The ordering of the variables got changed.
@@ -109,6 +113,15 @@ class VariableOrderMenu extends HTMLComponent {
     let tmp = this.draggables[oldIndex];
     this.draggables.splice(oldIndex, 1);
     this.draggables.splice(newIndex, 0, tmp);
+  }
+
+  #onFirstVariableWidthChanged() {
+    this.html[0].dispatchEvent(
+      new CustomEvent("updateSortOptionWidth", {
+        bubbles: true,
+        detail: { },
+      })
+    );
   }
 }
 

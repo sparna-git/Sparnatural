@@ -5,7 +5,7 @@ import LinkWhereBottom from "../../LinkWhereBottom";
 
 let removeEditComponents = (grpWrapper: GroupWrapper) => {
   grpWrapper.CriteriaGroup.EndClassGroup.html[0].dispatchEvent(
-    new CustomEvent("removeEditComponents")
+    new CustomEvent("removeEditComponents", {bubbles:true})
   );
   grpWrapper.CriteriaGroup.EndClassGroup.editComponents = null;
 };

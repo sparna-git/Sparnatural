@@ -5,16 +5,16 @@
     .reset-wrapper {
 		position: relative;
 		height: 0;
-		max-width: base.$component-max-width;
+		max-width: 100%;
 		margin: 0 auto;
 		&>.reset-form {
 			position: absolute;
 			right: 0;
-			top: 0;
+			top: 1px;
 			width: 54px;
 			height: 54px;
-			margin-top: 31px;
-			margin-bottom: 80px;
+			margin-top: base.$margin-component;
+			margin-bottom: base.$margin-component;
 			border: 1px solid #ddd;
 			border-radius: 5px;
 			background: #fff;
@@ -26,5 +26,6 @@
 			}
 		}
 	}
-    display: flex;
+    display: block;
+	padding: 0 base.$margin-component;
 }

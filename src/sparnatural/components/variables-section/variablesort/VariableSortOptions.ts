@@ -57,6 +57,10 @@ class VariableSortOption extends HTMLComponent {
       new CustomEvent("toggleVarNames", { bubbles: true })
     );
   };
+
+  setWidth = (width: number) => {
+    this.html.width(width);
+  }
 }
 
 export default VariableSortOption;
