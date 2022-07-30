@@ -35,7 +35,11 @@
     border-width: 0;
     border-top-width: 3px;
     border-bottom-width: 3px;
-    border-color: #fff;
+    border-top: 3px solid #fff;
+    border-bottom: 3px solid #fff;
+    &.open, &:active, &:focus, &:hover {
+        border-color: #fff;
+    }
     ul.list li {
         border-bottom: solid 1px #e8e8e8;
         img {
@@ -93,6 +97,9 @@
 }
 
 .StartClassGroup {
+    .ClassTypeId .nice-select{
+        border-left: 3px solid #fff;
+    }
     .ClassTypeId.Highlited .nice-select{
         border-top-left-radius: 6px;
         border-bottom-left-radius: 6px;

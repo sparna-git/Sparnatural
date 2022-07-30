@@ -117,7 +117,7 @@ export class AutoCompleteWidget extends AbstractWidget {
   getRdfJsPattern(): Pattern[] {
     let vals = this.widgetValues.map((v) => {
       let vl: ValuePatternRow = {};
-      vl[this.endClassVal.variable] = DataFactory.literal(v.value.uri);
+      vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
       return vl;
     });
     let valuePattern: ValuesPattern = {

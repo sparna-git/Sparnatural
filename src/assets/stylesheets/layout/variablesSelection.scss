@@ -68,12 +68,11 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        width: base.$component-width;
-        min-width: base.$component-min-width;
+        width: calc(base.$component-width - 60px);
         margin: 0 auto;
         border: 1px solid #ddd;
         background: #fff;
-        max-width: 90%;
+        max-width: 96%;
 
 
         & > div.variablesOtherSelect {

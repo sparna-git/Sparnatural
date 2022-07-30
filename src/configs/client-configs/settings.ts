@@ -7,7 +7,8 @@ const settings: ISettings = {
   language: "en",
   maxDepth: 4, // max amount of where clauses
   addDistinct: true,
-  backgroundBaseColor: "2,184,117",
+  // backgroundBaseColor: "2,184,117",
+  backgroundBaseColor: "29, 224, 153",
   defaultEndpoint() {
     if (this.language == "fr") {
       return `http://fr.dbpedia.org/sparql`;
