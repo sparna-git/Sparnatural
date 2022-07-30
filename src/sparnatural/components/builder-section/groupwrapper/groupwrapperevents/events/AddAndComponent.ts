@@ -18,7 +18,7 @@ export function addAndComponent(
     grpWrapper.andSibling.CriteriaGroup.StartClassGroup.inputTypeComponent;
   inputTypeComponent.oldWidget.val(startClassVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
-  inputTypeComponent.html[0].children[2].classList.add("disabled");
+  inputTypeComponent.html[0].children[1].classList.add("disabled");
 
   // draw the AND link
   grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();
