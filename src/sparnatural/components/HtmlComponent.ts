@@ -23,7 +23,6 @@ class HTMLComponent implements IRenderable {
   ) {
     this.baseCssClass = baseCssClass;
     this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass);
-    this.baseCssClass = baseCssClass;
     this.ParentComponent = ParentComponent;
     this.widgetHtml = widgetHtml;
   }
