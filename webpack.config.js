@@ -44,7 +44,10 @@ module.exports = {
 				loader: MiniCssExtractPlugin.loader
 			},
 			{
-			    loader: "css-loader" // translates CSS into CommonJS
+			    loader: "css-loader", // translates CSS into CommonJS
+				options: {
+					sourceMap: true,
+				}
 			}, 
 			{
 			    loader: "sass-loader" // compiles Sass to CSS
@@ -134,5 +137,5 @@ module.exports = {
 	},
   /* terrible, generates huge output files */
 	/* devtool: "eval-source-map" */
-  devtool: "eval-source-map"
+  devtool: "source-map"
 }

@@ -13,6 +13,7 @@ import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup } from "./optionsgroup/OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
 import { SelectedVal } from "../../../../sparql/ISparJson";
+import { EndClassWidgetGroup, EndClassWidgetValue } from "./startendclassgroup/EndClassWidgetGroup";
 
 class CriteriaGroup extends HTMLComponent {
   settings: any;
@@ -20,6 +21,7 @@ class CriteriaGroup extends HTMLComponent {
   OptionsGroup: OptionsGroup; // optional or notexists
   ObjectPropertyGroup: ObjectPropertyGroup;
   EndClassGroup: EndClassGroup;
+  endClassWidgetGroup: EndClassWidgetGroup;
   ActionsGroup: ActionsGroup;
   specProvider: ISpecProvider;
   ParentGroupWrapper: GroupWrapper;
@@ -62,6 +64,7 @@ class CriteriaGroup extends HTMLComponent {
       getSettings().langSearch.ObjectPropertyTemporaryLabel
     ).render();
     this.EndClassGroup = new EndClassGroup(this, this.specProvider).render();
+    this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
     this.ActionsGroup = new ActionsGroup(this, this.specProvider).render();
 
     this.#assembleComponents();
@@ -102,7 +105,8 @@ class CriteriaGroup extends HTMLComponent {
         // if there is already a where connection, don't change anything
         if (!this.ParentGroupWrapper.whereChild)
           this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
-        this.OptionsGroup.onObjectPropertyGroupSelected(
+          this.endClassWidgetGroup.render();
+          this.OptionsGroup.onObjectPropertyGroupSelected(
           this.ParentGroupWrapper.optionState
         );
         // if there is already a andSibling don't allow to rerender the ActionAnd again
@@ -110,6 +114,60 @@ class CriteriaGroup extends HTMLComponent {
           this.ActionsGroup.onObjectPropertyGroupSelected();
       }
     );
+
+    // gets called by the widget.
+    this.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
+      e.stopImmediatePropagation();
+      if (e.detail == "" || !e.detail)
+        throw Error(
+          'No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"'
+        );
+      this.endClassWidgetGroup.renderWidgetVal(e.detail);
+    });
+
+    // when inputgot selected then we remove the where btn and EditComponents
+    this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
+      e.stopImmediatePropagation();
+      this.EndClassGroup.editComponents?.html?.empty()?.remove();
+      //this.editComponents = null
+    });
+
+    //gets called when a user removes a previously selected widgetValue
+    //removes the widgetValue from the widgetvalues list in the widget
+    this.html[0].addEventListener("updateWidgetList", (e: CustomEvent) => {
+      if (!("unselectedVal" in e.detail))
+        throw Error(
+          "updateWidgetList expects an object of type EndClassWidgetValue"
+        );
+      e.stopImmediatePropagation();
+      let removed = e.detail.unselectedVal as EndClassWidgetValue;
+      this.EndClassGroup.editComponents.widgetWrapper.widgetComponent.onRemoveValue(
+        removed.widgetVal
+      );
+      this.html[0].dispatchEvent(
+        new CustomEvent("generateQuery", { bubbles: true })
+      );
+    });
+
+  // gets called when the user adds widgetvalues or removes widgetvalues
+  this.html[0].addEventListener("renderWidgetWrapper", (e: CustomEvent) => {
+    if (!("selectedValues" in e.detail) && e.detail.selectedValues.isArray)
+      throw Error("renderWidgetWrapper expects list of selected values.");
+    e.stopImmediatePropagation();
+    // removeEditComponents: if add btn got clicked mutiple times or the old widgetwrapper is still rendered while the last selectedvalue got deleted
+    this.html[0].dispatchEvent(new CustomEvent("removeEditComponents"));
+    if (e.detail.selectedValues.length === 0) {
+      // Render WidgetsWrapper and ActionWhere
+      this.EndClassGroup.editComponents.render();
+      this.html[0].dispatchEvent(
+        new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
+      );
+    } else {
+      //we only need widgetswrapper
+      this.EndClassGroup.editComponents.renderWidgetsWrapper();
+    }
+  });
+
   };
 
   //set css completed class on GroupWrapper

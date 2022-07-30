@@ -30,6 +30,7 @@ class VariableSection extends HTMLComponent {
     this.variableSortOption = new VariableSortOption(this).render();
 
     this.#renderShowHideBtn();
+    this.#addEventListener();
 
     return this;
   }
@@ -57,6 +58,14 @@ class VariableSection extends HTMLComponent {
     };
 
     this.displayBtn = new DisplayBtn(this, displayaction).render();
+  }
+
+  #addEventListener() {
+    this.html[0].addEventListener("updateSortOptionWidth", (e: CustomEvent) => {
+      e.stopImmediatePropagation();
+      let width = this.variableOrderMenu.html.find("div").find(".sortableItem").first().width();
+      this.variableSortOption.setWidth(width);
+    });
   }
 }
 export default VariableSection;

@@ -27,11 +27,15 @@
 }
 
 .nice-select {
+    height: 48px;
     background: transparent;
     border-color: transparent;
     padding-left: 10px;
     padding-right: 26px;
-    margin-top: 3px;
+    border-width: 0;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+    border-color: #fff;
     ul.list li {
         border-bottom: solid 1px #e8e8e8;
         img {
@@ -86,4 +90,12 @@
     color: themes.$default-text-color;
     border-color: transparent;
     border-radius: 0;
+}
+
+.StartClassGroup {
+    .ClassTypeId.Highlited .nice-select{
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+        border-left: 3px solid #fff;
+    }
 }

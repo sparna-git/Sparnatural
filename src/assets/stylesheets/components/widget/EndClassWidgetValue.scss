@@ -15,18 +15,12 @@
     font-size: 14px;
     /*display: inline-block;*/
     padding: 0;
-    span {
-        /*line-height: base.$height-components-under;*/
-        display: inline-block;
-        vertical-align: middle;
-        margin: 0;
-    }
     span.label-two-line {
         line-height: math.div(base.$height-components-under, 2);
         line-height: 21px;
     }
     max-width: 220px;
-    height: 48px;
+    height: 46px;
     margin-right: -13px;
     p {
         line-height: 48px;
@@ -34,7 +28,7 @@
         background: themes.$custom-red-medium;
         background-clip: padding-box;
         margin: 0;
-        padding: 0 0 0 5px;
+        padding: 0 5px 0 5px;
         display: inline-block;
         overflow: hidden;
         /*text-overflow: ellipsis;*/

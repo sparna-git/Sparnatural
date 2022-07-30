@@ -1,7 +1,10 @@
 @use "../themes";
 @use '../base';
+ul.componentsListe li.groupe:first-child > .CriteriaGroup {
+    width: calc(100% - 54px - 20px);
+}
+
 li.groupe {
-    width: 95%;
     margin: 0;
     padding-top: 1px;
     padding-bottom: 1px;
@@ -12,6 +15,5 @@ li.groupe {
     /*first line*/
     &>li.groupe {
         margin-left: base.$margin-children-li;
-        width: 90%;
      }
 }

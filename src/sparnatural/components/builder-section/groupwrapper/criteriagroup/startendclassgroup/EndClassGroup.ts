@@ -24,7 +24,7 @@ class EndClassGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   editComponents: EditComponents;
-  endClassWidgetGroup: EndClassWidgetGroup;
+  // endClassWidgetGroup: EndClassWidgetGroup;
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
 
@@ -32,7 +32,7 @@ class EndClassGroup extends HTMLComponent {
     super("EndClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
-    this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
+    // this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
   }
 
   render() {
@@ -54,57 +54,13 @@ class EndClassGroup extends HTMLComponent {
         this.#valueWasSelected();
       }
     );
-    // when inputgot selected then we remove the where btn
-    this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
-      e.stopImmediatePropagation();
-      this.editComponents?.html?.empty()?.remove();
-      //this.editComponents = null
-    });
 
-    // gets called when the user adds widgetvalues or removes widgetvalues
-    this.html[0].addEventListener("renderWidgetWrapper", (e: CustomEvent) => {
-      if (!("selectedValues" in e.detail) && e.detail.selectedValues.isArray)
-        throw Error("renderWidgetWrapper expects list of selected values.");
-      e.stopImmediatePropagation();
-      // removeEditComponents: if add btn got clicked mutiple times or the old widgetwrapper is still rendered while the last selectedvalue got deleted
-      this.html[0].dispatchEvent(new CustomEvent("removeEditComponents"));
-      if (e.detail.selectedValues.length === 0) {
-        // Render WidgetsWrapper and ActionWhere
-        this.editComponents.render();
-        this.html[0].dispatchEvent(
-          new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
-        );
-      } else {
-        //we only need widgetswrapper
-        this.editComponents.renderWidgetsWrapper();
+    this.html[0].addEventListener("onSelectViewVar", (e: CustomEvent) => {
+      if(e.detail.selected) {
+        e.detail.selected
+        ? this.html.addClass("VariableSelected")
+        : this.html.removeClass("VariableSelected");
       }
-    });
-
-    //gets called when a user removes a previously selected widgetValue
-    //removes the widgetValue from the widgetvalues list in the widget
-    this.html[0].addEventListener("updateWidgetList", (e: CustomEvent) => {
-      if (!("unselectedVal" in e.detail))
-        throw Error(
-          "updateWidgetList expects an object of type EndClassWidgetValue"
-        );
-      e.stopImmediatePropagation();
-      let removed = e.detail.unselectedVal as EndClassWidgetValue;
-      this.editComponents.widgetWrapper.widgetComponent.onRemoveValue(
-        removed.widgetVal
-      );
-      this.html[0].dispatchEvent(
-        new CustomEvent("generateQuery", { bubbles: true })
-      );
-    });
-
-    // gets called by the widget.
-    this.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
-      e.stopImmediatePropagation();
-      if (e.detail == "" || !e.detail)
-        throw Error(
-          'No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"'
-        );
-      this.endClassWidgetGroup.renderWidgetVal(e.detail);
     });
   }
 
@@ -151,7 +107,7 @@ class EndClassGroup extends HTMLComponent {
         this.endClassVal,
         this.specProvider
       ).render();
-      this.endClassWidgetGroup.render();
+      // this.endClassWidgetGroup.render();
     }
   }
   renderSelectViewVar() {

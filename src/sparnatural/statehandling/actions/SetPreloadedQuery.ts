@@ -59,7 +59,7 @@ function buildCriteriaGroup(grpWarpper: GroupWrapper, branch: Branch) {
 
   // set WidgetValues
   branch.line.values.forEach((v) => {
-    grpWarpper.CriteriaGroup.EndClassGroup.endClassWidgetGroup.renderWidgetVal(
+    grpWarpper.CriteriaGroup.endClassWidgetGroup.renderWidgetVal(
       v
     );
   });
