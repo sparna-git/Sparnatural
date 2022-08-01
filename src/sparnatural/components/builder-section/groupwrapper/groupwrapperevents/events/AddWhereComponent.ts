@@ -5,7 +5,7 @@ import LinkWhereBottom from "../../LinkWhereBottom";
 
 let removeEditComponents = (grpWrapper: GroupWrapper) => {
   grpWrapper.CriteriaGroup.EndClassGroup.html[0].dispatchEvent(
-    new CustomEvent("removeEditComponents")
+    new CustomEvent("removeEditComponents", {bubbles:true})
   );
   grpWrapper.CriteriaGroup.EndClassGroup.editComponents = null;
 };
@@ -21,14 +21,19 @@ export function addWhereComponent(
     grpWrapper,
     grpWrapper.specProvider,
     endClassVal
-  ).render();
+  )
+  // Insert ul Tag so that the whereChild <li> tag gets rendered into an <ul> tag
+  const ulTag = $('<ul/>')
+  grpWrapper.html.append(ulTag)
+  grpWrapper.whereChild.htmlParent = ulTag
+  grpWrapper.whereChild.render();
 
   //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
   let inputTypeComponent =
     grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent;
   inputTypeComponent.oldWidget.val(endClassVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
-  inputTypeComponent.html[0].children[2].classList.add("disabled");
+  inputTypeComponent.html[0].children[1].classList.add("disabled");
   // render the link where
   grpWrapper.linkWhereBottom = new LinkWhereBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(

@@ -17,14 +17,34 @@ export default function initGeneralevent(actionStore: ActionStore) {
       renderLinks(grpWrapper);
       rerenderOptionState(grpWrapper);
       //render background
-      previousHeight = currentHeight;
-      currentHeight = grpWrapper.html.outerHeight(true) + 1;
+      currentHeight = grpWrapper.CriteriaGroup.html.outerHeight(true) + 1;
       cssdef += drawBackgroungOfGroupWrapper(
         index,
         previousHeight,
         currentHeight
       );
+      //Calculate start distance for next line.
+      previousHeight = previousHeight + currentHeight + 1;
       index++;
+
+      if(grpWrapper.whereChild != null) {
+        // compute total height of children
+        let childrenHeight = 0;
+        grpWrapper.whereChild.traversePreOrder(
+          (g: GroupWrapper) => {
+            childrenHeight = g.CriteriaGroup.html.outerHeight(true)
+
+            cssdef += drawBackgroungOfGroupWrapper(
+              index,
+              previousHeight,
+              currentHeight
+            );
+            //Calculate start distance for next line.
+            previousHeight = previousHeight + currentHeight + 1;
+            index++;
+          }
+        );
+      }
     }
   );
   let linGradCss = `linear-gradient(${cssdef})`;
@@ -66,7 +86,7 @@ function drawBackgroungOfGroupWrapper(
   let rgba = `rgba(${getSettings().backgroundBaseColor},${a})`;
   if (index !== 0) {
     // comma in the string beginning
-    return ` ,${rgba} ${prev}px, ${rgba} ${currHeight}px`;
+    return ` ,${rgba} ${prev}px, ${rgba} ${prev+currHeight}px`;
   }
   return `${rgba} ${prev}px, ${rgba} ${currHeight}px`;
 }

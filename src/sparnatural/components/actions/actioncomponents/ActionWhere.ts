@@ -28,15 +28,22 @@ class ActionWhere extends HTMLComponent {
   render = () => {
     super.render();
     var choiceNumber = 2;
+    // TODO : if we ever want to remove the Any option for NON_SELECTABLE_PROPERTY, then uncomment this code
+    // see https://github.com/sparna-git/Sparnatural/issues/338
+    /*
     if (
       this.parentComponent.widgetWrapper.getWidgetType() ==
       Config.NON_SELECTABLE_PROPERTY
     ) {
       choiceNumber = 1;
     }
+    */
     var endLabel = this.specProvider.getLabel(
       this.parentComponent.endClassVal.type
     );
+    
+
+    this.parentComponent.html[0].classList.add("nb-choice-2");
 
     let editTrait = $(`
     <span class="edit-trait">
@@ -47,7 +54,7 @@ class ActionWhere extends HTMLComponent {
       getSettings().langSearch.That
     } </div>
     `);
-    this.btn = $(`<a>+</a>`);
+    this.btn = $(`<a><i class="fa-solid fa-plus"></i></a>`);
     where = where.add(this.btn[0]);
     editTrait = editTrait.add(where);
     this.btn[0].addEventListener("click", () => {

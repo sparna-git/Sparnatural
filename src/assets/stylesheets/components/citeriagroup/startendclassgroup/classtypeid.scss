@@ -16,12 +16,13 @@
             border-radius: unset;
             color: #fff;
             background-color: themes.$custom-red;
+            border-color: #fff;
         }
         &.VariableSelected{
             @include mixins.arrow-front-colors(themes.$custom-red, themes.$custom-green-bold);
             @include mixins.arrow-back-colors(themes.$custom-red, themes.$custom-green-bold);
             .nice-select{
-                border: themes.$custom-green-bold;
+                border-color: themes.$custom-green-bold;
             }
         }
 	}

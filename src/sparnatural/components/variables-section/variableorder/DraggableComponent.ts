@@ -24,7 +24,7 @@ class DraggableComponent extends HTMLComponent {
     );
     var icon = specProvider.getIcon(selected_val.type);
     let editVar = $(`
-        <input type="text" minlength="2" maxlength="13">
+        <input type="text" minlength="2">
         </input>
         `).val(varName);
     editVar[0].addEventListener("change", (event) => {

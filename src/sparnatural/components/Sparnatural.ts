@@ -36,6 +36,8 @@ class Sparnatural extends HTMLComponent {
 
   render(): this {
     this.initSparnatural();
+    //Think this will be launched before load query ???
+    this.actionStore = new ActionStore(this, this.specProvider);
 
     if (getSettings().preLoadedQueries) {
       this.loadQueries = new LoadQuery(
@@ -54,7 +56,7 @@ class Sparnatural extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
-    this.actionStore = new ActionStore(this, this.specProvider);
+    
     return this;
   }
 
@@ -66,6 +68,14 @@ class Sparnatural extends HTMLComponent {
     });
     // uncomment to trigger gathering of statistics
     // initStatistics(specProvider);
+  }
+
+  onQuerySubmitted() {
+    this.SubmitSection.playBtn.enableLoading();
+  }
+
+  onQueryFinished() {
+    this.SubmitSection.playBtn.disableLoading();
   }
 }
 export default Sparnatural;

@@ -23,14 +23,14 @@ class GroupWrapper extends HTMLComponent {
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
-    startClassVal?: SelectedVal
+    startOrEndClassVal?: SelectedVal
   ) {
     super("groupe", ParentComponent, null);
     this.specProvider = specProvider;
     this.CriteriaGroup = new CriteriaGroup(
       this,
       this.specProvider,
-      startClassVal
+      startOrEndClassVal
     );
   }
 

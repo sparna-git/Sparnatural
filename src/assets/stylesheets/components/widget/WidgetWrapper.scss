@@ -1,9 +1,20 @@
 @use "../../themes";
 @use '../../base';
+
+.nb-choice-2 {
+    .WidgetWrapper {
+        border-left: 3px solid themes.$custom-red;
+
+        &:before {
+            display: none;;
+        }
+    }
+}
 .WidgetWrapper {
     position: relative;
-    border-left: 3px solid themes.$custom-red;
-    height: 48px;
+   
+    height: 51px;
+    padding-bottom: 3px;
     padding-left: 25px;
     padding-right: 5px;
     line-height: 48px;
@@ -13,6 +24,32 @@
     display:block;
     width:100%;
     min-width:1px;
+
+    &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left:-3px;
+        width: 3px;
+        height: 20px;
+        background: themes.$custom-red;
+    }
+
+    &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top:-10px;
+        left:-6px;
+        width: 9px;
+        height: 9px;
+        -moz-box-shadow: 0px 6px 3px -3px #cfcfcf;
+        -webkit-box-shadow: 0px 6px 3px -3px #cfcfcf;
+        -o-box-shadow: 0px 6px 3px -3px #cfcfcf;
+        box-shadow: 0px 6px 3px -3px #cfcfcf;
+        filter: progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
+    }
 
     /*text-decoration: underline;*/
     /*&.DatesWidget {
@@ -177,8 +214,13 @@
             }
         }
     }
-    .TreeWidget {
+    .tree-widget {
+        height: 100%;
         .treeBtnDisplay {
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translate(0, -50%);
             border: 1px solid #ddd;
             border-radius: 5px;
             background: #fff;
@@ -192,6 +234,7 @@
             }
         }
         .treeLayer {
+            display: none;
             position: absolute;
             top: 50%;
             margin-top: -19px;

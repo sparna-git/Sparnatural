@@ -46,7 +46,7 @@ class LinkWhereBottom extends HTMLComponent {
       endClassClientRect.left +
       (endClassClientRect.right - endClassClientRect.left) / 2;
     let topWhereChild = whereChildRect.top;
-    let yEndClass = endClassClientRect.bottom;
+    let yEndClass = endClassClientRect.bottom + 3;
 
     // middleOfEndClass can be used twice since line is orthogonal to EndClassGroup
     let css = this.#getLine(
@@ -70,8 +70,7 @@ class LinkWhereBottom extends HTMLComponent {
     let startClassClientRect =
       whereChild.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
     let middleOfStartClass =
-      startClassClientRect.left +
-      (startClassClientRect.right - startClassClientRect.left) / 2;
+      startClassClientRect.left + 36;
     let topStrClsGrp = startClassClientRect.top;
 
     let whereChildRect = whereChild.html[0].getBoundingClientRect();

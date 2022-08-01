@@ -1,5 +1,5 @@
 import WidgetWrapper from "../WidgetWrapper";
-import L, { LatLng, Rectangle } from "leaflet";
+import L, { LatLng, Rectangle,Map } from "leaflet";
 import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
 import { getSettings } from "../../../../../../../configs/client-configs/settings";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
@@ -31,7 +31,7 @@ export interface MapWidgetValue extends WidgetValue {
 export default class MapWidget extends AbstractWidget {
   protected widgetValues: MapWidgetValue[];
   renderMapValueBtn: AddUserInputBtn;
-  map: L.DrawMap;
+  map: L.Map;
   drawingLayer: L.Layer;
   constructor(
     parentComponent: WidgetWrapper,
@@ -60,9 +60,10 @@ export default class MapWidget extends AbstractWidget {
   }
 
   #renderMap = () => {
+
     this.html.append($(`<div id="map"></div>`));
 
-    this.map = L.map("map").setView([46.20222, 6.14569], 13);
+    this.map = new Map("map").setView([46.20222, 6.14569], 13);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "© OpenStreetMap",
@@ -78,7 +79,7 @@ export default class MapWidget extends AbstractWidget {
       drawPolygon: false,
       cutPolygon: false,
     });
-    this.map.on("pm:create", (e) => {
+    this.map.on("pm:create", (e:any) => {
       //If there is already a drawing, then delete it
       // allows only for one drawing at a time
       if (this.drawingLayer) this.map.removeLayer(this.drawingLayer);
@@ -161,10 +162,10 @@ export default class MapWidget extends AbstractWidget {
     /*
     let filterPtrn: FilterPattern = {
       type: "filter",
-      expression: <FunctionCallExpression>{
+      expression: <FunctionCallExpression><unknown>{
         type: "functionCall",
         function: DataFactory.namedNode(GEOF.WITHIN.value),
-        args: [asWKT.object, DataFactory.variable(this.getVariableValue(this.endClassVal)) ],
+        args: [asWKT.object, DataFactory.variable(this.getVariableValue(this.endClassVal))],
       },
     };
     */

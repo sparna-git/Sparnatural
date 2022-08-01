@@ -68,11 +68,11 @@
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        width: base.$component-width;
-        max-width: base.$component-max-width;
+        width: calc(base.$component-width - 60px);
         margin: 0 auto;
         border: 1px solid #ddd;
         background: #fff;
+        max-width: 96%;
 
 
         & > div.variablesOtherSelect {
@@ -136,7 +136,10 @@
             input {
                 line-height: 30px;
                 padding: 1px;
-                min-width: 4ch;
+                min-width: 3ch;
+                margin-left: 5px;
+                border: 0px;
+                text-align:center;
             }
 
             input:invalid {

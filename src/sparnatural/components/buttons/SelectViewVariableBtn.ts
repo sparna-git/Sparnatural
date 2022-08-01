@@ -30,9 +30,6 @@ class SelectViewVariableBtn extends HTMLComponent {
   #addClickListener() {
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       this.selected = this.selected ? false : true;
-      this.selected
-        ? this.html.addClass("VariableSelected")
-        : this.html.removeClass("VariableSelected");
       this.render();
       this.callBack(this.selected);
     });

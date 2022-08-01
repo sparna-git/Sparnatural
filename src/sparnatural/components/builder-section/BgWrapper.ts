@@ -20,8 +20,8 @@ class BgWrapper extends HTMLComponent {
   }
 
   #renderComponents() {
-    this.componentsList = new ComponentsList(this, this.specProvider).render();
     this.resetBtn = new ResetBtn(this, this.resetCallback).render();
+    this.componentsList = new ComponentsList(this, this.specProvider).render();
   }
 
   resetCallback = () => {

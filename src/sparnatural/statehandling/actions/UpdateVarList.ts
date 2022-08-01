@@ -15,8 +15,9 @@ export function updateVarList(actionStore: ActionStore) {
       let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
       let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
       //always remove the '?' as the first char
-      varNames.add(startGrp.getVarName().slice(1));
-      varNames.add(endGrp.getVarName().slice(1));
+      if(startGrp.getVarName()) varNames.add(startGrp.getVarName()?.slice(1));
+      if(endGrp.getVarName()) varNames.add(endGrp.getVarName()?.slice(1));
+      
     }
   );
   updateDraggables(actionStore, varNames);

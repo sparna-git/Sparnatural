@@ -171,7 +171,6 @@ export default class RdfJsGenerator {
         crtGrp.EndClassGroup.getTypeSelected()
       );
     
-
     let connectingTripple = this.#buildIntersectionTriple(
       startClass.subject as Variable,
       crtGrp.ObjectPropertyGroup.getTypeSelected(),

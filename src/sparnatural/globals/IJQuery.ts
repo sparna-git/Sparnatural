@@ -1,4 +1,3 @@
-import { Select2Plugin } from "select2";
 
 export {};
 declare global {

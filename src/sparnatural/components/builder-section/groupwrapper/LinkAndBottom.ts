@@ -27,7 +27,7 @@ class LinkAndBottom extends HTMLComponent {
     let ax =
       posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4;
     let bx =
-      posLowerStart.left + (posLowerStart.right - posLowerStart.left) / 4;
+      posLowerStart.left + 36;
     let ay = posUpperStart.bottom;
     let by = posLowerStart.top;
 
