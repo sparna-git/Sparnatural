@@ -121,7 +121,7 @@ class EditComponents extends HTMLComponent {
         bubbles: true,
         detail: (index: number) => {
           //getting the value Sparnatural
-          if (index >= getSettings().maxDepth) maxreached = true;
+          if (index > getSettings().maxDepth) maxreached = true;
         },
       })
     );
