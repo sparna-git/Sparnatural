@@ -8,12 +8,17 @@ class AscendBtn extends HTMLComponent {
     super("asc", ParentComponent, widgetHtml);
     // add clicklistener
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
-      this.selected = this.selected ? false : true;
-      this.selected
+      if(!this.selected) {
+        callBack();
+      }
+    });
+  }
+
+  setSelected = (selected: boolean) => {
+    this.selected = selected;
+    this.selected
         ? this.html.addClass("selected")
         : this.html.removeClass("selected");
-      callBack();
-    });
   }
 
   render(): this {

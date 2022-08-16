@@ -113,6 +113,12 @@ class VariableOrderMenu extends HTMLComponent {
     let tmp = this.draggables[oldIndex];
     this.draggables.splice(oldIndex, 1);
     this.draggables.splice(newIndex, 0, tmp);
+    
+    this.html[0].dispatchEvent(
+      new CustomEvent("updateVariablesOrder", {
+        bubbles: true
+      })
+    );
   }
 
   #onFirstVariableWidthChanged() {
