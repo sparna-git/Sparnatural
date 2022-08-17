@@ -365,7 +365,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
   isLiteralClass = function (classUri: string) {
     var classEntity = this._getResourceById(classUri);
 
-    if (classEntity["subClassOf"]) {
+    if (classEntity && classEntity["subClassOf"]) {
       var superClasses =
         classEntity["subClassOf"] === "object"
           ? classEntity["subClassOf"]

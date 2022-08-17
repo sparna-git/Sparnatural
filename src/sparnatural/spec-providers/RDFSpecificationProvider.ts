@@ -288,7 +288,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
     return undefined;
   }
 
-  isRemoteClass(classUri: any) {
+  isRemoteClass(classUri: string) {
     return (
       RDFSpecificationProvider.store.getQuads(
         factory.namedNode(classUri),
@@ -299,7 +299,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
     );
   }
 
-  isLiteralClass(classUri: any) {
+  isLiteralClass(classUri: string) {
     return (
       RDFSpecificationProvider.store.getQuads(
         factory.namedNode(classUri),
@@ -310,7 +310,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
     );
   }
 
-  isSparnaturalClass(classUri: any) {
+  isSparnaturalClass(classUri: string) {
     return (
       RDFSpecificationProvider.store.getQuads(
         factory.namedNode(classUri),

@@ -13,6 +13,7 @@ import {
   Triple,
   Variable,
   VariableTerm,
+  Wildcard,
 } from "sparqljs";
 import Sparnatural from "../components/Sparnatural";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
@@ -77,8 +78,24 @@ export default class RdfJsGenerator {
     for (var key in this.additionnalPrefixes) {
       RdfJsQuery.prefixes[key] = this.additionnalPrefixes[key];
     }
-    console.log(RdfJsQuery);
 
+    // catch some empty things otherwise generator can crash
+    if(RdfJsQuery.where.length === 0 ){
+      // if the length is zero, then create beginning query
+      RdfJsQuery.where = [{
+        type: 'bgp',
+        triples: [{
+          subject: DataFactory.variable('sub'),
+          predicate: DataFactory.variable('pred'),
+          object: DataFactory.variable('obj'),
+        }]
+      }]
+    }
+    if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
+     
+    if(!RdfJsQuery?.order[0]?.expression) delete RdfJsQuery.order
+    console.log('tst2')
+    console.log(RdfJsQuery);
     var generator = new Generator();
     var generatedQuery = generator.stringify(RdfJsQuery);
 
@@ -150,8 +167,8 @@ export default class RdfJsGenerator {
     }
 
     // normal case, no OPTIONAL or NOTEXISTS
-    ptrns.push(this.#buildBGP(triples));
-    ptrns.push(...rdfPattern);
+    if(triples.length > 0) ptrns.push(this.#buildBGP(triples));
+    if(rdfPattern.length > 0) ptrns.push(...rdfPattern);
     if (wherePtrn) ptrns.push(...wherePtrn);
     if (andPtrn) ptrns.push(...andPtrn);
     return ptrns;
@@ -172,23 +189,26 @@ export default class RdfJsGenerator {
       );
     
     let connectingTripple = this.#buildIntersectionTriple(
-      startClass.subject as Variable,
+      startClass?.subject as Variable,
       crtGrp.ObjectPropertyGroup.getTypeSelected(),
-      endClass.subject as Variable
+      endClass?.subject as Variable
     );
 
-    if(!isChild){
+      // always 
+
+    if(!isChild && startClass){
       // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
       triples.push(startClass)
     }
 
-    if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup.getTypeSelected())){
+    if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup.getTypeSelected()) && endClass){
       // If it is a literal class then it doesn't have the endclass Tiple.
       // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
       triples.push(endClass)
     }
 
-    triples.push(connectingTripple) // gets pushed in any case
+    if(connectingTripple) triples.push(connectingTripple)
+   
 
     return triples;
   }
@@ -202,9 +222,10 @@ export default class RdfJsGenerator {
     };
   }
 
-  #buildTypeTripple(subj: string, pred: string, obj: string): Triple {
+  #buildTypeTripple(subj: string, pred: string, obj: string): Triple | null {
+    if(!subj || !pred || !obj) return null
     return {
-      subject: DataFactory.variable(subj.replace("?", "")),
+      subject: DataFactory.variable(subj?.replace("?", "")),
       predicate: DataFactory.namedNode(pred),
       object: DataFactory.namedNode(obj),
     };
@@ -214,7 +235,8 @@ export default class RdfJsGenerator {
     subj: Variable,
     pred: string,
     obj: Variable
-  ): Triple {
+  ): Triple | null{
+    if(!subj || !pred || !obj) return null
     return {
       subject: subj as VariableTerm,
       predicate: DataFactory.namedNode(pred),
