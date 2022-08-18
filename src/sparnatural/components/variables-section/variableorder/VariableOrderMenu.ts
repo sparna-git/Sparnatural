@@ -115,11 +115,11 @@ class VariableOrderMenu extends HTMLComponent {
     this.draggables.splice(newIndex, 0, tmp);
   }
 
+  // Adjust the width of they background for the VariableSortOption area
   #onFirstVariableWidthChanged() {
     this.html[0].dispatchEvent(
       new CustomEvent("updateSortOptionWidth", {
         bubbles: true,
-        detail: { },
       })
     );
   }
