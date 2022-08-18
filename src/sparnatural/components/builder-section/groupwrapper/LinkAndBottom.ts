@@ -28,8 +28,8 @@ class LinkAndBottom extends HTMLComponent {
       posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4;
     let bx =
       posLowerStart.left + 36;
-    let ay = posUpperStart.bottom;
-    let by = posLowerStart.top;
+    let ay = posUpperStart.bottom  + window.scrollY;
+    let by = posLowerStart.top  + window.scrollY;
 
     let css = this.#getLine(ax, bx, ay, by);
 
