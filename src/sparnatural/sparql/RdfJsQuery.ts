@@ -13,15 +13,16 @@ import {
   Triple,
   Variable,
   VariableTerm,
+  Wildcard,
 } from "sparqljs";
 import Sparnatural from "../components/Sparnatural";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import { DataFactory } from "n3";
 import { RDF } from "../spec-providers/RDFSpecificationProvider";
-import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
 /*
-  Reads out the UI and creates the internal JSON structure described here:
-  https://docs.sparnatural.eu/Query-JSON-format
+  Reads out the UI and creates the and sparqljs pattern. 
+  sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
+  It goes recursively through all the grpWrappers and reads out their values.
 */
 export default class RdfJsGenerator {
   typePredicate: string;
@@ -74,11 +75,28 @@ export default class RdfJsGenerator {
         this.#varsToRDFJS(variables)[0] as VariableTerm
       ),
     };
+
     for (var key in this.additionnalPrefixes) {
       RdfJsQuery.prefixes[key] = this.additionnalPrefixes[key];
     }
-    console.log(RdfJsQuery);
 
+    // if the RdfJsQuery contains keys with empty arrays, then the generator crashes.
+    if(RdfJsQuery.where.length === 0 ){
+      // if the length is zero, then create beginning query
+      //e.g ?sub ?pred ?obj
+      RdfJsQuery.where = [{
+        type: 'bgp',
+        triples: [{
+          subject: DataFactory.variable('sub'),
+          predicate: DataFactory.variable('pred'),
+          object: DataFactory.variable('obj'),
+        }]
+      }]
+    }
+    // if there are now variables defined just create the Wildcard e.g: *
+    if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
+    // don't set an order if there is no expression for it
+    if(!RdfJsQuery?.order || !RdfJsQuery?.order[0]?.expression) delete RdfJsQuery.order
     var generator = new Generator();
     var generatedQuery = generator.stringify(RdfJsQuery);
 
@@ -104,12 +122,12 @@ export default class RdfJsGenerator {
       grpWrapper.optionState == OptionTypes.NOTEXISTS
         ? true
         : false;
-    // recursive whereChild
+    // if it has whereChild
     let wherePtrn = grpWrapper.whereChild
       ? this.#processGrpWrapper(grpWrapper.whereChild, hasOption, true)
       : null;
 
-    //recursive andSiblings
+    // if it hasandSiblings
     let andPtrn = grpWrapper.andSibling
       ? this.#processGrpWrapper(grpWrapper.andSibling, hasOption, true)
       : null;
@@ -123,38 +141,47 @@ export default class RdfJsGenerator {
       return ptrns;
     }
 
-    // starting from this grpWrapper Optional might be enabled
+    // starting from this grpWrapper to all where descendants: Optional might be enabled
     // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableOptional
     if (grpWrapper.optionState == OptionTypes.OPTIONAL) {
-      ptrns.push(this.#buildBGP([triples[0]])); // triples[0] = startclasstriple
-      let inOptional = []; // everything in this array goes into OPTIONAL Brackets in SPARQL
-      inOptional.push(this.#buildBGP([triples[1],triples[2]]))
-      if (rdfPattern) inOptional.push(...rdfPattern);
-      if (wherePtrn) inOptional.push(...wherePtrn);
+      ptrns.push(this.#buildBGP([triples[0]])); // triples[0] = startclasstriple is excluded from optional
+      let inOptional = this.#buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into OPTIONAL Brackets in SPARQL
       let optionalPtrn = this.#buildOptionalPattern(inOptional);
       ptrns.push(optionalPtrn);
       return ptrns;
     }
 
-    //Starting from this grpWrapper not exists might be enabled
+    //Starting from this grpWrapper to all where descendants: not exists might be enabled
     // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableNegation
     if (grpWrapper.optionState == OptionTypes.NOTEXISTS) {
       ptrns.push(this.#buildBGP([triples[0]])); // triples[0] = startclasstriple
-      let inNotExists = []; // everything in this array goes into FILTER NOT EXISTS bracket in SPARQL
-      inNotExists.push(this.#buildBGP([triples[1],triples[2]]))
-      if (rdfPattern) inNotExists.push(...rdfPattern);
-      if (wherePtrn) inNotExists.push(...wherePtrn);
+      let inNotExists = this.#buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into FILTER NOT EXISTS bracket in SPARQL
       let notExistPtrn = this.#buildNotExistsPattern(inNotExists);
       ptrns.push(notExistPtrn);
       return ptrns;
     }
 
     // normal case, no OPTIONAL or NOTEXISTS
-    ptrns.push(this.#buildBGP(triples));
-    ptrns.push(...rdfPattern);
+    if(triples.length > 0) ptrns.push(this.#buildBGP(triples));
+    if(rdfPattern.length > 0) ptrns.push(...rdfPattern);
     if (wherePtrn) ptrns.push(...wherePtrn);
     if (andPtrn) ptrns.push(...andPtrn);
     return ptrns;
+  }
+
+  // Builds the 'filter' triples for OPTIONAL or NOTEXISTS
+  #buildFilterTriples(triples:Triple[],rdfPattern:Pattern[],wherePtrn:Pattern[]):Pattern[]{
+    const ptrn:Array<Pattern> = []
+    if(triples.length > 2){
+      ptrn.push(this.#buildBGP([triples[1],triples[2]]))
+    } else {
+      // In a where child we don't have three triples. see: #buildCrtGrpTriples
+      // the rdf:type triple of the start triple was then already defined by the parent
+      ptrn.push(this.#buildBGP([triples[1]]))
+    }
+    if (rdfPattern) ptrn.push(...rdfPattern);
+    if (wherePtrn) ptrn.push(...wherePtrn);
+    return ptrn
   }
 
   #buildCrtGrpTriples(crtGrp: CriteriaGroup,isChild: boolean): Triple[] {
@@ -172,28 +199,29 @@ export default class RdfJsGenerator {
       );
     
     let connectingTripple = this.#buildIntersectionTriple(
-      startClass.subject as Variable,
+      startClass?.subject as Variable,
       crtGrp.ObjectPropertyGroup.getTypeSelected(),
-      endClass.subject as Variable
+      endClass?.subject as Variable
     );
 
-    if(!isChild){
+      // always 
+
+    if(!isChild && startClass){
       // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
       triples.push(startClass)
     }
 
-    if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup.getTypeSelected())){
+    if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup.getTypeSelected()) && endClass){
       // If it is a literal class then it doesn't have the endclass Tiple.
       // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
       triples.push(endClass)
     }
 
-    triples.push(connectingTripple) // gets pushed in any case
+    if(connectingTripple) triples.push(connectingTripple)
+   
 
     return triples;
   }
-
-  
 
   #buildBGP(triples: Triple[]): BgpPattern {
     return {
@@ -202,19 +230,23 @@ export default class RdfJsGenerator {
     };
   }
 
-  #buildTypeTripple(subj: string, pred: string, obj: string): Triple {
+  // example: ?person rdf:type dpedia:Person
+  #buildTypeTripple(subj: string, pred: string, obj: string): Triple | null {
+    if(!subj || !pred || !obj) return null
     return {
-      subject: DataFactory.variable(subj.replace("?", "")),
+      subject: DataFactory.variable(subj?.replace("?", "")),
       predicate: DataFactory.namedNode(pred),
       object: DataFactory.namedNode(obj),
     };
   }
-
+  // It is the intersection between the startclass and endclass chosen.
+  // example: ?person dpedia:birthplace ?country
   #buildIntersectionTriple(
     subj: Variable,
     pred: string,
     obj: Variable
-  ): Triple {
+  ): Triple | null{
+    if(!subj || !pred || !obj) return null
     return {
       subject: subj as VariableTerm,
       predicate: DataFactory.namedNode(pred),

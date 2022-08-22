@@ -157,9 +157,7 @@ export default class MapWidget extends AbstractWidget {
       type: "values",
       values: vals
     } 
-
-    let filterPtrn: FilterPattern = null
-    /*
+    
     let filterPtrn: FilterPattern = {
       type: "filter",
       expression: <FunctionCallExpression><unknown>{
@@ -168,7 +166,7 @@ export default class MapWidget extends AbstractWidget {
         args: [asWKT.object, DataFactory.variable(this.getVariableValue(this.endClassVal))],
       },
     };
-    */
+    
 
     let ptrn: BgpPattern = {
       type: "bgp",

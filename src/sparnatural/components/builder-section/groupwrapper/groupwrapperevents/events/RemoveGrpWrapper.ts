@@ -5,7 +5,4 @@ export function removeGrpWrapper(grpWrapper: GroupWrapper) {
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("deleteGrpWrapper", { bubbles: true, detail: grpWrapper })
   );
-  grpWrapper.html[0].dispatchEvent(
-    new CustomEvent("generateQuery", { bubbles: true })
-  );
 }

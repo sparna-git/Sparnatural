@@ -9,6 +9,7 @@ export default function deleteGrpWrapper(
   e: CustomEvent
 ) {
   let elToDel = e.detail as GroupWrapper;
+  // utility function
   let deleteIt = (el: GroupWrapper) => {
     el?.linkWhereBottom?.html?.empty()?.remove();
     el?.linkAndBottom?.html?.empty()?.remove();
@@ -61,5 +62,9 @@ export default function deleteGrpWrapper(
   // there might have been variables in the variable section which now got deleted
   actionStore.sparnatural.html[0].dispatchEvent(
     new CustomEvent("updateVarList")
+  );
+  // update the query
+  actionStore.sparnatural.html[0].dispatchEvent(
+    new CustomEvent("generateQuery", { bubbles: true })
   );
 }

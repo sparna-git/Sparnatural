@@ -41,9 +41,10 @@ class DraggableComponent extends HTMLComponent {
             <span class="variable-handle">
                 ${UiuxConfig.COMPONENT_DRAG_HANDLE}
             </span>
-            ${icon}
+            <div class="tmpicon">${icon}</div>
         </div>
         `).append(editVar);
+   
     super("sortableItem", parentComponent, widgetHtml);
     this.varName = varName;
     this.#resize(editVar, varName);
@@ -53,7 +54,20 @@ class DraggableComponent extends HTMLComponent {
       ".variablesOtherSelect"
     );
     super.render();
+    this.#addHtmlChangeListener()
     return this;
+  }
+
+  // The fa-icon is loaded async. This listener waits till the icon is loaded and then updates the with of SortOption
+  #addHtmlChangeListener(){
+    this.html[0].getElementsByClassName('tmpicon')[0].addEventListener('DOMSubtreeModified', (e) => {
+      e.stopImmediatePropagation()
+      this.html[0].dispatchEvent(
+        new CustomEvent("updateSortOptionWidth", {
+          bubbles: true,
+        })
+      );
+    })
   }
 
   #resize(el: JQuery<HTMLElement>, varName: string): void {

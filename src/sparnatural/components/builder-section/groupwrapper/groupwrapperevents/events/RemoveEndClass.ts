@@ -26,4 +26,7 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("updateVarList", { bubbles: true })
   );
+  grpWrapper.html[0].dispatchEvent(
+    new CustomEvent("generateQuery", { bubbles: true })
+  );
 }
