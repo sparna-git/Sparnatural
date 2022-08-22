@@ -26,10 +26,45 @@ class VariableSortOption extends HTMLComponent {
     this.ascendBtn = new AscendBtn(this, this.ascendCallBack).render();
     this.descendBtn = new DescendBtn(this, this.descendCallBack).render();
     this.noOrderBtn = new NoOrderBtn(this, this.noOrderCallback).render();
+    // select no order by default
+    this.noOrderBtn.setSelected(true);
     this.variableOptionSelectBtn = new VariableOptionsSelectBtn(
       this,
       this.toggleVarNames
     ).render();
+
+    // when one of the button is clicked, unselect the other ones
+    this.html[0].addEventListener(
+      "changeSortOrder",
+      (e: CustomEvent) => {
+        console.log("hhhhh")
+        console.log(e.detail)
+        switch(e.detail) {
+          case Order.ASC : {
+            this.ascendBtn.setSelected(true);
+            this.descendBtn.setSelected(false);
+            this.noOrderBtn.setSelected(false);
+            break;
+          }
+          case Order.DESC : {
+            this.ascendBtn.setSelected(false);
+            this.descendBtn.setSelected(true);
+            this.noOrderBtn.setSelected(false);
+            break;
+          }
+          case Order.NOORDER : {
+            this.ascendBtn.setSelected(false);
+            this.descendBtn.setSelected(false);
+            this.noOrderBtn.setSelected(true);
+            break;
+          }
+          default: {
+            break;
+          }
+        }
+      }
+    );
+
     return this;
   }
 

@@ -9,6 +9,7 @@ import initGeneralevent from "./actions/InitGeneralEvent";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
+import { readVariablesFromUI } from "./actions/SelectViewVar";
 import { setPreloadedQuery } from "./actions/SetPreloadedQuery";
 
 export enum MaxVarAction {
@@ -29,8 +30,8 @@ const i18nLabels = {
 class ActionStore {
   sparnatural: Sparnatural;
   specProvider: any;
-  order: Order = Order.DESC; //default descending order
-  variables: Array<string> = []; // example ?musuem
+  order: Order = Order.NOORDER; //default no order
+  variables: Array<string> = []; // example ?museum
   distinct = true; // default
   language = Language.EN; //default
 
@@ -64,7 +65,10 @@ class ActionStore {
           throw Error(
             "onSelectViewVar expects object of type {val:SelectedVal,selected:boolean}"
           );
+        // add variable to selected variables
         selectViewVar(this, e.detail);
+        // trigger query generation
+        generateQuery(this);
       }
     );
 
@@ -136,6 +140,18 @@ class ActionStore {
         if (!Object.values(Order).includes(e.detail))
           throw Error("changeSortOrder expects a payload of Order enum");
         this.order = e.detail;
+        // trigger query generation
+        generateQuery(this);
+      }
+    );
+
+    this.sparnatural.html[0].addEventListener(
+      "updateVariablesOrder",
+      (e: CustomEvent) => {
+        // update/reset variable names in the state
+        readVariablesFromUI(this);
+        // trigger query generation
+        generateQuery(this);
       }
     );
 
@@ -148,6 +164,8 @@ class ActionStore {
             "updateVarName event requires an object of {oldName:string,newName:string}"
           );
         updateVarName(this, payload.oldName, payload.newName);
+        // trigger query generation
+        generateQuery(this);
       }
     );
 

@@ -285,11 +285,16 @@ export default class RdfJsGenerator {
 
   // It will be ordered by the Provided variable
   #orderToRDFJS(order: Order, variable: VariableTerm): Ordering[] {
-    return [
-      {
-        expression: variable,
-        descending: order == Order.DESC ? true : false,
-      },
-    ];
+    if(order == Order.DESC || order == Order.ASC) {
+      return [
+        {
+          expression: variable,
+          descending: order == Order.DESC ? true : false,
+        },
+      ];
+    } else {
+      // no order
+      return null;
+    }
   }
 }

@@ -27,11 +27,9 @@ class ActionsGroup extends HTMLComponent {
   }
 
   onObjectPropertyGroupSelected() {
-    if (!this.maxDepthIsReached()) {
-      this.actions = {
-        ActionAnd: new ActionAnd(this, this.#onAddAnd).render(),
-      };
-    }
+    this.actions = {
+      ActionAnd: new ActionAnd(this, this.#onAddAnd).render(),
+    };
   }
 
   // This code should probably be in a higher located component such as criteria group or even higher(might need to introduce one)
@@ -43,19 +41,5 @@ class ActionsGroup extends HTMLComponent {
       })
     );
   };
-
-  maxDepthIsReached() {
-    let maxreached = false;
-    this.html[0].dispatchEvent(
-      new CustomEvent("getMaxVarIndex", {
-        bubbles: true,
-        detail: (index: number) => {
-          //getting the value Sparnatural
-          if (index >= getSettings().maxDepth) maxreached = true;
-        },
-      })
-    );
-    return maxreached;
-  }
 }
 export default ActionsGroup;
