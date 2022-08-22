@@ -96,7 +96,7 @@ export default class RdfJsGenerator {
     // if there are now variables defined just create the Wildcard e.g: *
     if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
     // don't set an order if there is no expression for it
-    if(!RdfJsQuery?.order[0]?.expression) delete RdfJsQuery.order
+    if(!RdfJsQuery?.order || !RdfJsQuery?.order[0]?.expression) delete RdfJsQuery.order
     var generator = new Generator();
     var generatedQuery = generator.stringify(RdfJsQuery);
 
