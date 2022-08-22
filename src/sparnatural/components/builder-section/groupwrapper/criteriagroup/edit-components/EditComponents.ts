@@ -55,7 +55,12 @@ class EditComponents extends HTMLComponent {
     ).render();
 
     let widgetType = this.widgetWrapper.getWidgetType();
-    if (Object.values(this.RENDER_WHERE).includes(widgetType)) {
+    if (
+      Object.values(this.RENDER_WHERE).includes(widgetType)
+      &&
+      // do not allow WHERE if wehave reached max depth
+      !this.maxDepthIsReached()
+    ) {
       this.actionWhere = new ActionWhere(
         this,
         this.specProvider,
@@ -108,6 +113,20 @@ class EditComponents extends HTMLComponent {
       })
     );
   };
+
+  maxDepthIsReached() {
+    let maxreached = false;
+    this.html[0].dispatchEvent(
+      new CustomEvent("getMaxVarIndex", {
+        bubbles: true,
+        detail: (index: number) => {
+          //getting the value Sparnatural
+          if (index > getSettings().maxDepth) maxreached = true;
+        },
+      })
+    );
+    return maxreached;
+  }
 }
 
 export default EditComponents;

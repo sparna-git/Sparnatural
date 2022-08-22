@@ -44,8 +44,10 @@ export class OptionsGroup extends HTMLComponent {
   // validates if the Options Arrow can be rendered or not
   #checkIfoptionalArrowisRenderable(optionState: OptionTypes) {
     if (
-      this.#checkIfOptionsPossible &&
-      !this.optionalArrow &&
+      this.#checkIfOptionsPossible()
+      &&
+      !this.optionalArrow
+      &&
       optionState == OptionTypes.NONE
     ) {
       //Options like NOTEXISTS are possible and none of the parent has it already activated
@@ -55,8 +57,22 @@ export class OptionsGroup extends HTMLComponent {
 
   #renderOptionalComponents() {
     // MUST BE WRAPPED INTO LIST DIV
-    this.OptionalComponent.render();
-    this.NotExistsComponent.render();
+    if(
+      this.specProvider.isEnablingOptional(
+        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+      )
+    ) {
+      this.OptionalComponent.render();
+    }
+
+    if(
+      this.specProvider.isEnablingNegation(
+        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+      )
+    ) {
+      this.NotExistsComponent.render();
+    }
+    
     this.html[0].dispatchEvent(
       new CustomEvent("initGeneralEvent", { bubbles: true })
     );
@@ -70,7 +86,8 @@ export class OptionsGroup extends HTMLComponent {
     return (
       this.specProvider.isEnablingOptional(
         this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
-      ) &&
+      )
+      ||
       this.specProvider.isEnablingNegation(
         this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
       )

@@ -11,11 +11,7 @@ export function selectViewVar(
     : deleteVariable(actionStore, payload.val);
 }
 
-function addVariable(actionStore: ActionStore, val: SelectedVal) {
-  //add a draggable
-  actionStore.sparnatural.VariableSelection.variableOrderMenu.addDraggableComponent(
-    val
-  );
+export function readVariablesFromUI(actionStore: ActionStore) {
   //update the varnames
   actionStore.variables =
     actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.map(
@@ -25,16 +21,22 @@ function addVariable(actionStore: ActionStore, val: SelectedVal) {
     );
 }
 
+function addVariable(actionStore: ActionStore, val: SelectedVal) {
+  //add a draggable
+  actionStore.sparnatural.VariableSelection.variableOrderMenu.addDraggableComponent(
+    val
+  );
+  //update the varnames
+  readVariablesFromUI(actionStore);
+}
+
 function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
   //add a draggable
   actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableComponent(
     val
   );
   //update the varnames
-  actionStore.variables =
-    actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.map(
-      (d: DraggableComponent) => {
-        return d.varName;
-      }
-    );
+  readVariablesFromUI(actionStore);
 }
+
+
