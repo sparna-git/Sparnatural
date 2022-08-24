@@ -164,7 +164,9 @@ export class EndClassWidgetValue extends HTMLComponent {
   render(): this {
     super.render();
     this.backArrow.render();
-    let valuelbl = `<p><span> ${this.value_lbl} </span></p>`;
+    // set a tooltip if the label is a bit long
+    var tooltip = (this.value_lbl.length > 25)?'title="'+this.value_lbl+'"':"";
+    let valuelbl = `<p ${tooltip}><span> ${this.value_lbl} </span></p>`;
     this.html.append($(valuelbl));
     this.frontArrow.render();
     this.unselectBtn = new UnselectBtn(this, () => {

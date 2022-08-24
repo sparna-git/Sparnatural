@@ -6,11 +6,11 @@ import InfoBtn from "../../../../../../buttons/InfoBtn";
 import WidgetWrapper from "../../WidgetWrapper";
 import { AbstractWidget, ValueType, WidgetValue } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
-import { DataFactory } from "n3";
-import { namedNode } from "@rdfjs/data-model";
+import * as DataFactory from "@rdfjs/data-model" ;
 import { SelectedVal } from "../../../../../../../sparql/ISparJson";
-import { getTimeDatePattern } from "./TimeDatePattern";
 import ISpecProvider from "../../../../../../../spec-providers/ISpecProviders";
+import SparqlFactory from "../../../../../../../sparql/SparqlFactory";
+import { buildDateRangeOrExactDatePattern, buildDateRangePattern } from "./TimeDatePattern";
 
 export interface DateTimePickerValue extends WidgetValue {
   value: {
@@ -36,6 +36,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
   specProvider: ISpecProvider;
+
   constructor(
     parentComponent: WidgetWrapper,
     datesHandler: any,
@@ -46,7 +47,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
     specProvider: ISpecProvider
   ) {
     super(
-      "date-widget",
+      "timedatepicker-widget",
       parentComponent,
       null,
       startClassCal,
@@ -56,29 +57,25 @@ export class TimeDatePickerWidget extends AbstractWidget {
     this.datesHandler = datesHandler;
     this.dateFormat = dateFormat;
     this.specProvider = specProvider;
-    this.dateFormat == "day"
-      ? (this.dateFormat =
-          getSettings().langSearch.PlaceholderTimeDateDayFormat)
-      : (this.dateFormat = getSettings().langSearch.PlaceholderTimeDateFormat);
   }
 
   render() {
     super.render();
     this.html.append(
-      $(`<span>${getSettings().langSearch.LabelDateFrom}</span>`)
+      $(`<span>${getSettings().langSearch.LabelDateFrom}&nbsp;</span>`)
     );
     this.inputStart = $(
       `<input id="input-start" placeholder="${
         getSettings().langSearch.TimeWidgetDateFrom
-      }" autocomplete="off"/>`
+      }" autocomplete="off" class="${this.dateFormat}" />`
     );
     this.inputEnd = $(
       `<input id="input-end" placeholder="${
         getSettings().langSearch.TimeWidgetDateTo
-      }"/>`
+      }" autocomplete="off" class="${this.dateFormat}" />`
     );
     this.inputValue = $(`<input id="input-value" type="hidden"/>`);
-    let span = $(`<span>${getSettings().langSearch.LabelDateTo}</span>`);
+    let span = $(`<span>&nbsp;${getSettings().langSearch.LabelDateTo}&nbsp;</span>`);
     this.html
       .append(this.inputStart)
       .append(span)
@@ -104,6 +101,11 @@ export class TimeDatePickerWidget extends AbstractWidget {
       this.#addValueBtnClicked
     ).render();
 
+    let calendarFormat = 
+    (this.dateFormat == "day")
+    ? getSettings().langSearch.PlaceholderTimeDateDayFormat
+    : getSettings().langSearch.PlaceholderTimeDateFormat;
+
     var options: {
       language: any;
       autoHide: boolean;
@@ -113,7 +115,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
     } = {
       language: getSettings().langSearch.LangCodeTimeDate,
       autoHide: true,
-      format: this.dateFormat,
+      format: calendarFormat,
       date: null,
       startView: 2,
     };
@@ -130,64 +132,79 @@ export class TimeDatePickerWidget extends AbstractWidget {
       value: {
         key: "",
         label: "",
-        start: new Date(this.inputStart.datepicker("getDate")),
-        stop: new Date(this.inputEnd.datepicker("getDate")),
+        start: (this.inputStart.val() != '')?new Date(this.inputStart.datepicker("getDate")):null,
+        stop: (this.inputEnd.val() != '')?new Date(this.inputEnd.datepicker("getDate")):null,
+        startLabel:this.inputStart.val(),
+        endLabel:this.inputEnd.val()
       },
     };
-    let widgetVal: DateTimePickerValue = this.#validateInput(val);
+    let widgetVal: DateTimePickerValue = this.#validateInput(
+      (this.inputStart.val() != '')?new Date(this.inputStart.datepicker("getDate")):null,
+      this.inputStart.val(),
+      (this.inputEnd.val() != '')?new Date(this.inputEnd.datepicker("getDate")):null,
+      this.inputEnd.val()
+    );
     if (!widgetVal) return;
-    this.renderWidgetVal(this.#validateInput(widgetVal));
+    this.renderWidgetVal(widgetVal);
   };
+
   //TODO add dialog for user if input is unreasonable
-  #validateInput(widgetValue: DateTimePickerValue) {
+  #validateInput(
+    startValue: Date,
+    startLabel: any,
+    endValue: Date,
+    endLabel: any
+  ) {
     if (
-      widgetValue.value.start.toString() == "" ||
-      widgetValue.value.stop.toString() == ""
+      startValue == null &&
+      endValue == null
     ) {
       console.warn(`no input received on DateTimePicker`);
       return null;
     }
-    if (!widgetValue.value.start || !widgetValue.value.stop) {
-      console.warn(`no input received on DateTimePicker`);
-      return null;
-    }
-    if (widgetValue.value.start > widgetValue.value.stop) {
+    if (startValue && endValue && (startValue > endValue)) {
       console.warn(`startVal is bigger then endVal`);
       return null;
     }
+
     let tmpValue: { start: Date; stop: Date };
+
     if (this.dateFormat == "day") {
       tmpValue = {
-        start: new Date(widgetValue.value.start.setHours(0, 0, 0, 0)),
-        stop: new Date(widgetValue.value.stop.setHours(23, 59, 59, 59)),
+        start: (startValue)?new Date(startValue.setHours(0, 0, 0, 0)):null,
+        stop: (endValue)?new Date(endValue.setHours(23, 59, 59, 59)):null,
       };
     } else {
       tmpValue = {
-        start: new Date(
-          widgetValue.value.start.getFullYear(),
+        start: (startValue)?
+        (new Date(
+          startValue.getFullYear(),
           0,
           1,
           0,
           0,
           1,
           0
-        ), // first day
-        stop: new Date(
-          widgetValue.value.stop.getFullYear(),
+        )) // first day
+        :null, 
+        stop: (endValue)?
+        (new Date(
+          endValue.getFullYear(),
           11,
           31,
           23,
           59,
           59
-        ), // last day
+        )) // last day
+        :null
       };
     }
     let dateTimePickerVal: DateTimePickerValue = {
       valueType: ValueType.SINGLE,
       value: {
-        key: this.getValueLabel(tmpValue.start, tmpValue.stop),
+        key: tmpValue.start+" - "+tmpValue.stop,
         // TODO : this is not translated
-        label: this.getValueLabel(tmpValue.start, tmpValue.stop),
+        label: this.getValueLabel(startLabel, endLabel),
         start: tmpValue.start,
         stop: tmpValue.stop,
       },
@@ -195,17 +212,19 @@ export class TimeDatePickerWidget extends AbstractWidget {
     return dateTimePickerVal;
   }
 
-  getValueLabel = function (start: Date, stop: Date) {
-    let lbl = "";
+  getValueLabel = function (startLabel: string, stopLabel: string) {
+    let valueLabel = "";
+    if ((startLabel != "") && (stopLabel != "")) {
+      valueLabel = getSettings().langSearch.LabelDateFrom+' '+ startLabel +' '+getSettings().langSearch.LabelDateTo+' '+ stopLabel ;
+    } else if (startLabel != "") {
+      valueLabel = getSettings().langSearch.DisplayValueDateFrom+' '+ startLabel ;
+    } else if (stopLabel != "") {
+      valueLabel = getSettings().langSearch.DisplayValueDateTo+' '+ stopLabel ;
+    }
 
-    if (start) {
-      lbl = lbl.concat(`${this.#formatDate(start)}`);
-    }
-    if (stop) {
-      lbl = lbl.concat(` - ${this.#formatDate(stop)}`);
-    }
-    return lbl;
+    return valueLabel;
   };
+
   #padTo2Digits(num: number) {
     return num.toString().padStart(2, "0");
   }
@@ -219,37 +238,51 @@ export class TimeDatePickerWidget extends AbstractWidget {
   }
 
   getRdfJsPattern(): Pattern[] {
-    let startLit = DataFactory.literal(
-      this.widgetValues[0].value.start.toISOString(),
-      namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-    );
-    let stopLit = DataFactory.literal(
-      this.widgetValues[0].value.start.toISOString(),
-      namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-    );
-    let startClassVar = DataFactory.variable(
-      this.getVariableValue(this.startClassVal)
-    );
-    let beginDatePred = DataFactory.namedNode(
-      this.specProvider.getBeginDateProperty(this.objectPropVal.type)
-    );
-    let exactDatePred = DataFactory.namedNode(
-      this.specProvider.getBeginDateProperty(this.objectPropVal.type)
-    );
-    let endDatePred = DataFactory.namedNode(
-      this.specProvider.getEndDateProperty(this.objectPropVal.type)
-    );
+    let beginDateProp = this.specProvider.getBeginDateProperty(this.objectPropVal.type);
+    let endDateProp = this.specProvider.getEndDateProperty(this.objectPropVal.type);
 
-    return [
-      getTimeDatePattern(
-        startLit,
-        stopLit,
-        startClassVar,
-        beginDatePred,
-        endDatePred,
-        exactDatePred,
-        1
-      ),
-    ];
+    if(beginDateProp != null && endDateProp != null) {
+      let exactDateProp = this.specProvider.getExactDateProperty(this.objectPropVal.type);
+
+      return [
+        buildDateRangeOrExactDatePattern(
+          this.widgetValues[0].value.start?DataFactory.literal(
+            this.widgetValues[0].value.start.toISOString(),
+            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+          ):null,
+          this.widgetValues[0].value.stop?DataFactory.literal(
+            this.widgetValues[0].value.stop.toISOString(),
+            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+          ):null,
+          DataFactory.variable(
+            this.getVariableValue(this.startClassVal)
+          ),
+          DataFactory.namedNode(beginDateProp),
+          DataFactory.namedNode(endDateProp),
+          exactDateProp != null?DataFactory.namedNode(exactDateProp):null,
+          DataFactory.variable(this.getVariableValue(this.startClassVal))
+        ),
+      ];
+    } else {
+      return [
+        SparqlFactory.buildFilterTime(
+          this.widgetValues[0].value.start?DataFactory.literal(
+            this.widgetValues[0].value.start.toISOString(),
+            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+          ):null,
+          this.widgetValues[0].value.stop?DataFactory.literal(
+            this.widgetValues[0].value.stop.toISOString(),
+            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+          ):null,
+          DataFactory.variable(
+            this.getVariableValue(this.startClassVal)
+          )
+        ),
+      ];
+    }
+
+    
+
+    
   }
 }

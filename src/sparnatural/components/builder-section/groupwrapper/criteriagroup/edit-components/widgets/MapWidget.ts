@@ -9,6 +9,7 @@ import {
   FunctionCallExpression,
   LiteralTerm,
   Pattern,
+  Triple,
   ValuePatternRow,
   ValuesPattern,
 } from "sparqljs";
@@ -16,9 +17,9 @@ import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
-import { DataFactory, Triple } from "n3";
-import { namedNode } from "@rdfjs/data-model";
+import * as DataFactory from "@rdfjs/data-model" ;
 import { GEOF} from "../../../../../../spec-providers/RDFSpecificationProvider";
+import SparqlFactory from "../../../../../../sparql/SparqlFactory";
 
 export interface MapWidgetValue extends WidgetValue {
   value: {
@@ -133,7 +134,7 @@ export default class MapWidget extends AbstractWidget {
   // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
   getRdfJsPattern(): Pattern[] {
 
-    let geomA: Triple = DataFactory.triple(
+    let geomA: Triple = SparqlFactory.buildTriple(
       DataFactory.variable(this.getVariableValue(this.startClassVal)),
       DataFactory.namedNode(
         "http://www.opengis.net/ont/geosparql#hasGeometry"
@@ -141,7 +142,7 @@ export default class MapWidget extends AbstractWidget {
       DataFactory.variable("geomA")
     );
 
-    let asWKT: Triple = DataFactory.triple(
+    let asWKT: Triple = SparqlFactory.buildTriple(
       DataFactory.variable(geomA.object.value),
       DataFactory.namedNode("http://www.opengis.net/ont/geosparql#asWKT"),
       DataFactory.variable("aWKT")
@@ -186,7 +187,7 @@ export default class MapWidget extends AbstractWidget {
     let startPt = coordinates[0]
     let literal: LiteralTerm = DataFactory.literal(`<http://www.opengis.net/def/crs/OGC/1.3/CRS84> 
     Polygon((${polygon} ${startPt.lat} ${startPt.lng}))
-    `,namedNode("http://www.opengis.net/ont/geosparql#wktLiteral"))
+    `,DataFactory.namedNode("http://www.opengis.net/ont/geosparql#wktLiteral"))
 
     return literal;
   }

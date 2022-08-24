@@ -17,8 +17,9 @@ import {
 } from "sparqljs";
 import Sparnatural from "../components/Sparnatural";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
-import { DataFactory } from "n3";
+import * as DataFactory from "@rdfjs/data-model" ;
 import { RDF } from "../spec-providers/RDFSpecificationProvider";
+
 /*
   Reads out the UI and creates the and sparqljs pattern. 
   sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
@@ -54,7 +55,7 @@ export default class RdfJsGenerator {
     distinct: boolean,
     order: Order,
     lang: Language
-  ) {
+  ):SelectQuery {
     let RdfJsQuery: SelectQuery = {
       queryType: "SELECT",
       distinct: distinct,
@@ -97,10 +98,8 @@ export default class RdfJsGenerator {
     if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
     // don't set an order if there is no expression for it
     if(!RdfJsQuery?.order || !RdfJsQuery?.order[0]?.expression) delete RdfJsQuery.order
-    var generator = new Generator();
-    var generatedQuery = generator.stringify(RdfJsQuery);
-
-    return generatedQuery;
+    
+    return RdfJsQuery;
   }
 
   // this method traverses through the groupwrappers and retrieves the information from each widget.
@@ -186,15 +185,13 @@ export default class RdfJsGenerator {
 
   #buildCrtGrpTriples(crtGrp: CriteriaGroup,isChild: boolean): Triple[] {
     let triples: Triple[] = [];
-    let startClass = this.#buildTypeTripple(
+    let startClass = this.#buildTypeTriple(
       crtGrp.StartClassGroup.getVarName(),
-      RDF.TYPE.value,
       crtGrp.StartClassGroup.getTypeSelected()
     );
    
-      let endClass = this.#buildTypeTripple(
+      let endClass = this.#buildTypeTriple(
         crtGrp.EndClassGroup.getVarName(),
-        RDF.TYPE.value,
         crtGrp.EndClassGroup.getTypeSelected()
       );
     
@@ -231,14 +228,15 @@ export default class RdfJsGenerator {
   }
 
   // example: ?person rdf:type dpedia:Person
-  #buildTypeTripple(subj: string, pred: string, obj: string): Triple | null {
-    if(!subj || !pred || !obj) return null
+  #buildTypeTriple(subj: string, obj: string): Triple | null {
+    if(!subj || !obj) return null
     return {
-      subject: DataFactory.variable(subj?.replace("?", "")),
-      predicate: DataFactory.namedNode(pred),
+      subject: DataFactory.variable(subj.replace("?", "")),
+      predicate: DataFactory.namedNode(RDF.TYPE.value),
       object: DataFactory.namedNode(obj),
     };
   }
+
   // It is the intersection between the startclass and endclass chosen.
   // example: ?person dpedia:birthplace ?country
   #buildIntersectionTriple(
@@ -285,7 +283,7 @@ export default class RdfJsGenerator {
 
   // It will be ordered by the Provided variable
   #orderToRDFJS(order: Order, variable: VariableTerm): Ordering[] {
-    if(order == Order.DESC || order == Order.ASC) {
+    if(order == Order.DESC || order == Order.ASC) {
       return [
         {
           expression: variable,
