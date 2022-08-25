@@ -19,6 +19,7 @@ import Sparnatural from "../components/Sparnatural";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import { DataFactory } from "n3";
 import { RDF } from "../spec-providers/RDFSpecificationProvider";
+import { AbstractWidget } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget";
 /*
   Reads out the UI and creates the and sparqljs pattern. 
   sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
@@ -105,30 +106,27 @@ export default class RdfJsGenerator {
 
   // this method traverses through the groupwrappers and retrieves the information from each widget.
   #processGrpWrapper(grpWrapper: GroupWrapper, isInOption: boolean, isChild: boolean) {
-    let ptrns: Pattern[] = [];
-
-    let triples = this.#buildCrtGrpTriples(grpWrapper.CriteriaGroup,isChild);
+    const ptrns: Pattern[] = [];    
     //get the infromation from the widget if there are widgetvalues selected
     let rdfPattern: Pattern[] = [];
-    if (
-      grpWrapper.CriteriaGroup.EndClassGroup.editComponents?.widgetWrapper?.widgetComponent?.getwidgetValues()
-        ?.length > 0
-    ) {
-      rdfPattern =
-        grpWrapper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.getRdfJsPattern();
-    }
-    let hasOption =
+
+    let triples = this.#buildCrtGrpTriples(grpWrapper.CriteriaGroup,isChild);
+
+    const widgetComponent:AbstractWidget | null | undefined = grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
+    if (widgetComponent.getwidgetValues()?.length > 0 ) rdfPattern = widgetComponent.getRdfJsPattern();
+    
+    const hasOption =
       grpWrapper.optionState == OptionTypes.OPTIONAL ||
       grpWrapper.optionState == OptionTypes.NOTEXISTS
         ? true
         : false;
     // if it has whereChild
-    let wherePtrn = grpWrapper.whereChild
+    const wherePtrn = grpWrapper.whereChild
       ? this.#processGrpWrapper(grpWrapper.whereChild, hasOption, true)
       : null;
 
     // if it hasandSiblings
-    let andPtrn = grpWrapper.andSibling
+    const andPtrn = grpWrapper.andSibling
       ? this.#processGrpWrapper(grpWrapper.andSibling, hasOption, true)
       : null;
 
@@ -184,6 +182,7 @@ export default class RdfJsGenerator {
     return ptrn
   }
 
+  // Writes The default triples 
   #buildCrtGrpTriples(crtGrp: CriteriaGroup,isChild: boolean): Triple[] {
     let triples: Triple[] = [];
     let startClass = this.#buildTypeTripple(
