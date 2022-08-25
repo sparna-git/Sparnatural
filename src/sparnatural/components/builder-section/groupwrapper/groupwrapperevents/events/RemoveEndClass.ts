@@ -12,7 +12,9 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
   grpWrapper.CriteriaGroup.html.remove();
   grpWrapper.CriteriaGroup = new CriteriaGroup(
     grpWrapper,
-    grpWrapper.specProvider
+    grpWrapper.specProvider,
+    undefined,
+    grpWrapper.isRootGrpWrapper()
   ).render();
 
   // set StartClassVal

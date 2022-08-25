@@ -13,11 +13,13 @@ class StartClassGroup extends HTMLComponent {
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
+  renderEyeBtn:Boolean = false
 
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
-    startClassVal?: SelectedVal
+    startClassVal?: SelectedVal,
+    renderEyeBtn?: Boolean
   ) {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
@@ -29,12 +31,14 @@ class StartClassGroup extends HTMLComponent {
           type: null,
           variable: null,
         };
+    this.renderEyeBtn = renderEyeBtn
   }
 
   render() {
     super.render();
     this.inputTypeComponent.render();
     this.#addEventListener();
+    if (this.renderEyeBtn) this.inputTypeComponent.selectViewVariableBtn.render()
     return this;
   }
 
