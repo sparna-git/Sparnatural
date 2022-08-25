@@ -23,6 +23,8 @@ class ComponentsList extends HTMLComponent {
 
   initFirstGroupWrapper() {
     this.rootGroupWrapper = new GroupWrapper(this, this.specProvider).render();
+    // The first criteriaGrp always has the "eye" icon to select it as a variable in the result set
+    this.rootGroupWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent.selectViewVariableBtn.render()
   }
 }
 
