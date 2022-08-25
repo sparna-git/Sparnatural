@@ -20,7 +20,7 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
     grpWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent;
   inputTypeComponent.oldWidget.val(startVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
-  inputTypeComponent.html[0].children[2].classList.add("disabled");
+  inputTypeComponent.html[0].children[1].classList.add("disabled");
 
   // there might have been variables in the variable section which now got deleted
   grpWrapper.html[0].dispatchEvent(
