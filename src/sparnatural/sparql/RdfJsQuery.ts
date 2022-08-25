@@ -109,11 +109,11 @@ export default class RdfJsGenerator {
     const ptrns: Pattern[] = [];    
     //get the infromation from the widget if there are widgetvalues selected
     let rdfPattern: Pattern[] = [];
-
-    let triples = this.#buildCrtGrpTriples(grpWrapper.CriteriaGroup,isChild);
-
     const widgetComponent:AbstractWidget | null | undefined = grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
-    if (widgetComponent.getwidgetValues()?.length > 0 ) rdfPattern = widgetComponent.getRdfJsPattern();
+
+    let triples = this.#buildCrtGrpTriples(grpWrapper.CriteriaGroup,widgetComponent,isChild);
+
+    if (widgetComponent?.getwidgetValues()?.length > 0 ) rdfPattern = widgetComponent.getRdfJsPattern();
     
     const hasOption =
       grpWrapper.optionState == OptionTypes.OPTIONAL ||
@@ -183,38 +183,45 @@ export default class RdfJsGenerator {
   }
 
   // Writes The default triples 
-  #buildCrtGrpTriples(crtGrp: CriteriaGroup,isChild: boolean): Triple[] {
+  #buildCrtGrpTriples(crtGrp: CriteriaGroup,widgeComponent:AbstractWidget,isChild: boolean): Triple[] {
     let triples: Triple[] = [];
-    let startClass = this.#buildTypeTripple(
-      crtGrp.StartClassGroup.getVarName(),
-      RDF.TYPE.value,
-      crtGrp.StartClassGroup.getTypeSelected()
-    );
-   
-      let endClass = this.#buildTypeTripple(
+
+    // startClassTriple
+    let startClass
+    if(!widgeComponent?.getblockStartTriple())
+      startClass = this.#buildTypeTripple(
+        crtGrp.StartClassGroup.getVarName(),
+        RDF.TYPE.value,
+        crtGrp.StartClassGroup.getTypeSelected()
+      );
+      if(!isChild && startClass){
+        // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
+        triples.push(startClass)
+      }
+    
+
+    // endClassTriple
+    let endClass
+    if(!widgeComponent?.getBlockEndTriple())
+      endClass = this.#buildTypeTripple(
         crtGrp.EndClassGroup.getVarName(),
         RDF.TYPE.value,
         crtGrp.EndClassGroup.getTypeSelected()
       );
+      if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup?.getTypeSelected()) && endClass){
+        // If it is a literal class then it doesn't have the endclass Tiple.
+        // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
+        triples.push(endClass)
+      }
     
-    let connectingTripple = this.#buildIntersectionTriple(
-      startClass?.subject as Variable,
-      crtGrp.ObjectPropertyGroup.getTypeSelected(),
-      endClass?.subject as Variable
-    );
 
-      // always 
-
-    if(!isChild && startClass){
-      // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
-      triples.push(startClass)
-    }
-
-    if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup.getTypeSelected()) && endClass){
-      // If it is a literal class then it doesn't have the endclass Tiple.
-      // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
-      triples.push(endClass)
-    }
+    let connectingTripple
+    if(!widgeComponent?.getBlockObjectPropTiple())
+      connectingTripple = this.#buildIntersectionTriple(
+        startClass?.subject as Variable,
+        crtGrp.ObjectPropertyGroup.getTypeSelected(),
+        endClass?.subject as Variable
+      );
 
     if(connectingTripple) triples.push(connectingTripple)
    

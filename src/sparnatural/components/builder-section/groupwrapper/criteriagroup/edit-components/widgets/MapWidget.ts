@@ -30,6 +30,7 @@ export interface MapWidgetValue extends WidgetValue {
 
 export default class MapWidget extends AbstractWidget {
   protected widgetValues: MapWidgetValue[];
+  protected blockObjectPropTriple: boolean = true
   renderMapValueBtn: AddUserInputBtn;
   map: L.Map;
   drawingLayer: L.Layer;

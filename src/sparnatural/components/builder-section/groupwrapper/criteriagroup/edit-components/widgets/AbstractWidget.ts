@@ -22,6 +22,9 @@ export abstract class AbstractWidget extends HTMLComponent {
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
+  protected blockStartTriple = false;
+  protected blockObjectPropTriple = false;
+  protected blockEndTriple = false;
   constructor(
     baseCssClass: string,
     parentComponent: HTMLComponent,
@@ -56,6 +59,7 @@ export abstract class AbstractWidget extends HTMLComponent {
     return this.widgetValues;
   }
 
+
   // Sparnatural stores the variable name always with the questionmark. 
   // for the DataFactory from "n3" lib we need the variable name without '?'
   getVariableValue(selectedVal: SelectedVal): string {
@@ -77,5 +81,15 @@ export abstract class AbstractWidget extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetVal", { bubbles: true, detail: widgetValue })
     );
+  }
+
+  getblockStartTriple() {
+    return this.blockStartTriple
+  }
+  getBlockObjectPropTiple() {
+    return this.blockObjectPropTriple
+  }
+  getBlockEndTriple() {
+    return this.blockEndTriple
   }
 }
