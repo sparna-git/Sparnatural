@@ -66,18 +66,9 @@ class StartClassGroup extends HTMLComponent {
           this.startClassVal.variable = `?${this.specProvider.getLabel(
             type
           )}_${id}`;
-          // id==1 -> first StartClassGroup of first GroupWrapper, create variable automatically
-          if (id === 1) {
-            let payload = {
-              val: this.startClassVal,
-              selected: true,
-            };
-            this.html[0].dispatchEvent(
-              new CustomEvent("onSelectViewVar", {
-                bubbles: true,
-                detail: payload,
-              })
-            );
+          // first StartClassGroup of first GroupWrapper, create variable automatically
+          if (this.renderEyeBtn) {
+            this.inputTypeComponent.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
           }
         },
       })

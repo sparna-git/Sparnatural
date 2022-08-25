@@ -66,7 +66,7 @@ class ActionStore {
             "onSelectViewVar expects object of type {val:SelectedVal,selected:boolean}"
           );
         // add variable to selected variables
-        selectViewVar(this, e.detail);
+        selectViewVar(this, e.detail,e.target);
         // trigger query generation
         generateQuery(this);
       }
