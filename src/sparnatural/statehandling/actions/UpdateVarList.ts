@@ -17,6 +17,9 @@ export function updateVarList(actionStore: ActionStore) {
       //always remove the '?' as the first char
       if(startGrp.getVarName()) varNames.add(startGrp.getVarName()?.slice(1));
       if(endGrp.getVarName()) varNames.add(endGrp.getVarName()?.slice(1));
+      // Do the same for the defaultLabelVar
+      if(startGrp.getDefaultLblVar()) varNames.add(startGrp.getDefaultLblVar()?.slice(1));
+      if(endGrp.getDefaultLblVar()) varNames.add(endGrp.getDefaultLblVar()?.slice(1));
       
     }
   );

@@ -14,6 +14,7 @@ class StartClassGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   renderEyeBtn:Boolean = false
+  defaultLblVar: SelectedVal
 
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
@@ -73,6 +74,26 @@ class StartClassGroup extends HTMLComponent {
         },
       })
     );
+    this.#addDefaultLblVar(type)
+  }
+
+  // adding a defaultlblProperty
+  // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
+  #addDefaultLblVar(type:string) {
+    const lbl = this.specProvider.getDefaultLabelProperty(type)
+    if(lbl) {
+      this.defaultLblVar.type = lbl
+      this.html[0].dispatchEvent(new CustomEvent("getSparqlVarId", {
+        bubbles: true,
+        detail: (id: number) => {
+          //callback
+          this.defaultLblVar.variable = `?${this.specProvider.getLabel(
+            type
+          )}_lbl_${id}`;
+        },
+      })
+      )
+    }
   }
 
   #valueWasSelected() {
@@ -105,5 +126,12 @@ class StartClassGroup extends HTMLComponent {
   getTypeSelected() {
     return this.startClassVal.type;
   }
+  getDefaultLblVar(){
+    return this.defaultLblVar?.variable
+  }
+  setDefaultLblVar(lbl:string){
+    this.defaultLblVar.variable = lbl
+  }
+
 }
 export default StartClassGroup;

@@ -6,7 +6,7 @@ import ActionStore from "../ActionStore";
 // This Action gets called when an SelctViewVar ("eye") Button is clicked
 export function selectViewVar(
   actionStore: ActionStore,
-  payload: { val: SelectedVal; selected: boolean },
+  payload: { val: SelectedVal; selected: boolean, defaultLbl:SelectedVal },
   target:EventTarget
 ) {
   
@@ -20,9 +20,14 @@ export function selectViewVar(
       return
     } 
 
-  payload.selected
-    ? addVariable(actionStore, payload.val)
-    : deleteVariable(actionStore, payload.val);
+  if(payload.selected){
+    addVariable(actionStore, payload.val)
+    if(payload.defaultLbl?.variable) addVariable(actionStore,payload.defaultLbl)
+  } else {
+    deleteVariable(actionStore, payload.val);
+    if(payload.defaultLbl?.variable) deleteVariable(actionStore, payload.defaultLbl);
+  }
+  
 }
 
 

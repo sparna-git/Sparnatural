@@ -23,6 +23,8 @@ import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagr
 import * as DataFactory from "@rdfjs/data-model" ;
 import { RDF } from "../spec-providers/RDFSpecificationProvider";
 import { AbstractWidget } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget";
+import StartClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
+import EndClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 /*
   Reads out the UI and creates the and sparqljs pattern. 
   sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
@@ -204,8 +206,8 @@ export default class RdfJsGenerator {
       if(!isChild && startClass){
         // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
         triples.push(startClass)
-        if(crtGrp?.EndClassGroup.inputTypeComponent.selectViewVariableBtn.selected){
-          const lbl = this.#getDefaultLabel(startClass)
+        if(crtGrp?.EndClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
+          const lbl = this.#getDefaultLabel(startClass,crtGrp.StartClassGroup)
           if(lbl) triples.push(lbl)
         } 
       } 
@@ -225,7 +227,7 @@ export default class RdfJsGenerator {
         // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
         triples.push(endClass)
         if(crtGrp?.EndClassGroup.inputTypeComponent.selectViewVariableBtn.selected){
-          const lbl = this.#getDefaultLabel(endClass)
+          const lbl = this.#getDefaultLabel(endClass,crtGrp.EndClassGroup)
           if(lbl) triples.push(lbl)
         } 
       }
@@ -300,20 +302,20 @@ export default class RdfJsGenerator {
 
   // creating additional triples for classes with the defaultlabel property defined
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
-  #getDefaultLabel(triple:Triple):Triple | null{
+  #getDefaultLabel(triple:Triple,ClassGrp:StartClassGroup | EndClassGroup):Triple | null{
     // the triple MUST be of type: ?var rdf:typ <namedNode>
     if((triple.subject?.termType === "Variable") && (isNamedNode(triple.predicate)) && (isNamedNode(triple.object))){
       const lbl = this.specProvider.getDefaultLabelProperty(triple.object.value)
       if(lbl){
         const trpl = {
           subject: DataFactory.variable(triple.subject.value.replace("?", "")),
-          predicate: DataFactory.namedNode(lbl),
-          object:DataFactory.variable(`${triple.subject.value.replace("?", "")}_lbl`)
+          predicate: DataFactory.namedNode(ClassGrp.defaultLblVar.type),
+          object:DataFactory.variable(`${ClassGrp.defaultLblVar.variable.replace("?", "")}`)
         } as Triple
         if(this.sparnatural.actionStore.variables.includes(trpl.object.value)) return // lbl variable is already included
-        this.defaultLabelVars.push(DataFactory.variable(trpl.object.value))
+        //this.defaultLabelVars.push(DataFactory.variable(trpl.object.value))
         //add it as draggable into the variable list
-        this.sparnatural.html[0].dispatchEvent(new CustomEvent('onSelectViewVar',{detail:{val:{type:triple.object.value,variable:`?${trpl.object.value}`},selected:true}}))
+        //this.sparnatural.html[0].dispatchEvent(new CustomEvent('onSelectViewVar',{detail:{val:{type:triple.object.value,variable:`?${trpl.object.value}`},selected:true}}))
         return trpl
       }
     }

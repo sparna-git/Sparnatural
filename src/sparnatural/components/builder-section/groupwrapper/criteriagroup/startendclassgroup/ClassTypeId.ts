@@ -120,18 +120,19 @@ class ClassTypeId extends HTMLComponent {
         : this.html.removeClass("VariableSelected");
         
     if (isEndClassGroup(this.ParentComponent)) 
-      this.#onSelectViewVar(this.ParentComponent.endClassVal,selected)
+      this.#onSelectViewVar(this.ParentComponent.endClassVal,selected,this.ParentComponent.defaultLblVar)
 
      // The first StartClass gets an eye Btn to de/select
     if(isStartClassGroup(this.ParentComponent) && this.ParentComponent.renderEyeBtn) 
-      this.#onSelectViewVar(this.ParentComponent.startClassVal,selected)
+      this.#onSelectViewVar(this.ParentComponent.startClassVal,selected,this.ParentComponent.defaultLblVar)
     
   };
 
-  #onSelectViewVar(val:SelectedVal,selected:boolean){
+  #onSelectViewVar(val:SelectedVal,selected:boolean,defaultLbl:SelectedVal){
     let payload ={
       val: val,
-      selected: selected
+      selected: selected,
+      defaultLbl:defaultLbl
     }
     this.selectViewVariableBtn.widgetHtml[0].dispatchEvent(
       new CustomEvent("onSelectViewVar", { bubbles: true, detail: payload })

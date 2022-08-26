@@ -61,9 +61,9 @@ class ActionStore {
       "onSelectViewVar",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        if (!("val" in e.detail && "selected" in e.detail))
+        if (!("val" in e.detail && "selected" in e.detail && 'defaultLbl' in e.detail))
           throw Error(
-            "onSelectViewVar expects object of type {val:SelectedVal,selected:boolean}"
+            "onSelectViewVar expects object of type {val:SelectedVal,selected:boolean, defaultLbl:SelectedVal}"
           );
         // add variable to selected variables
         selectViewVar(this, e.detail,e.target);
