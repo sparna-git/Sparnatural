@@ -1,5 +1,4 @@
-import { namedNode } from "@rdfjs/data-model";
-import { DataFactory } from "n3";
+import * as DataFactory from "@rdfjs/data-model" ;
 import { BaseExpression, BgpPattern, Expression, Pattern } from "sparqljs";
 import { getSettings } from "../../../../../../../configs/client-configs/settings";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
@@ -79,7 +78,7 @@ export class BooleanWidget extends AbstractWidget {
           predicate: DataFactory.namedNode(this.objectPropVal.type),
           object: DataFactory.literal(
             this.widgetValues[0].value.boolean.toString(),
-            namedNode("http://www.w3.org/2001/XMLSchema#boolean")
+            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
           ),
         },
       ],

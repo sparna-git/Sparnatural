@@ -8,6 +8,6 @@ declare global {
     getSelectedItemData: () => void;
     easyAutocomplete: (options: any) => void;
     datepicker: (method: any) => Date;
-    jstree: (options: any) => void;
+    jstree: (options: any) => any;
   }
 }

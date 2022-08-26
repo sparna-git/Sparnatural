@@ -16,7 +16,7 @@
   "PlaceholderTimeDateFormat": "YYYY",
   "PlaceholderTimeDateDayFormat": "dd-mm-yyyy",
   "LangCodeTimeDate": "en-EN",
-  "LabelDateFrom": "From",
+  "LabelDateFrom": "from",
   "LabelDateTo": "to",
   "DisplayValueDateFrom": "From",
   "DisplayValueDateTo": "Until",
