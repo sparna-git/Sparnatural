@@ -388,7 +388,7 @@ class WidgetWrapper extends HTMLComponent {
         return new TimeDatePickerWidget(
           this,
           this.settings.dates,
-          false,
+          "year",
           this.startClassVal,
           this.objectPropVal,
           this.endClassVal,

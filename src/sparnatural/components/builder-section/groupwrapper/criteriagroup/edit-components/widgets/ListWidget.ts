@@ -6,7 +6,7 @@ import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import { SparqlTemplateListHandler } from "../handlers/AutocompleteAndListHandlers";
 import WidgetWrapper from "../WidgetWrapper";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
-import { DataFactory } from "n3";
+import * as DataFactory from "@rdfjs/data-model" ;
 
 import "select2";
 import "select2/dist/css/select2.css";
