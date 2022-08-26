@@ -206,7 +206,7 @@ export default class RdfJsGenerator {
       if(!isChild && startClass){
         // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
         triples.push(startClass)
-        if(crtGrp?.EndClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
+        if(crtGrp?.StartClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
           const lbl = this.#getDefaultLabel(startClass,crtGrp.StartClassGroup)
           if(lbl) triples.push(lbl)
         } 
