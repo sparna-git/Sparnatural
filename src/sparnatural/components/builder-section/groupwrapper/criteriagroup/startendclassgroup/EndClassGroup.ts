@@ -169,6 +169,7 @@ class EndClassGroup extends HTMLComponent {
   getDefaultLblVar(){
     return this.defaultLblVar?.variable
   }
+  
   setDefaultLblVar(lbl:string){
     this.defaultLblVar.variable = lbl
   }
