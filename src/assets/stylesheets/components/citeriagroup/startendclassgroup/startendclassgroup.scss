@@ -7,11 +7,10 @@
     position: relative;
     margin-right: 9px;
 
-    .selectViewVariable {
-        display: none;
+    .selectViewVariableBtn {
         position: absolute;
         top: 50%;
-        right: 18px; //+9 pour retrait dans fleche
+        margin-left: 112px; //+9 pour retrait dans fleche
         margin-top: -8px;
         width: 16px;
         height: 16px;
