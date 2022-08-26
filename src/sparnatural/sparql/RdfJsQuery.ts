@@ -188,7 +188,7 @@ export default class RdfJsGenerator {
 
     // startClassTriple
     let startClass
-    if(!widgeComponent?.getblockStartTriple())
+    if(!widgeComponent?.isBlockingStart())
       startClass = this.#buildTypeTripple(
         crtGrp.StartClassGroup.getVarName(),
         RDF.TYPE.value,
@@ -202,7 +202,7 @@ export default class RdfJsGenerator {
 
     // endClassTriple
     let endClass
-    if(!widgeComponent?.getBlockEndTriple())
+    if(!widgeComponent?.isBlockingEnd())
       endClass = this.#buildTypeTripple(
         crtGrp.EndClassGroup.getVarName(),
         RDF.TYPE.value,
@@ -216,7 +216,7 @@ export default class RdfJsGenerator {
     
 
     let connectingTripple
-    if(!widgeComponent?.getBlockObjectPropTiple())
+    if(!widgeComponent?.isBlockingObjectProp())
       connectingTripple = this.#buildIntersectionTriple(
         startClass?.subject as Variable,
         crtGrp.ObjectPropertyGroup.getTypeSelected(),

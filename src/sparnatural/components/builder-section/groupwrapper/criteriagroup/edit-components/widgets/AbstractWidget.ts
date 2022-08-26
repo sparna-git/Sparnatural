@@ -83,13 +83,13 @@ export abstract class AbstractWidget extends HTMLComponent {
     );
   }
 
-  getblockStartTriple() {
+  isBlockingStart() {
     return this.blockStartTriple
   }
-  getBlockObjectPropTiple() {
+  isBlockingObjectProp() {
     return this.blockObjectPropTriple
   }
-  getBlockEndTriple() {
+  isBlockingEnd() {
     return this.blockEndTriple
   }
 }
