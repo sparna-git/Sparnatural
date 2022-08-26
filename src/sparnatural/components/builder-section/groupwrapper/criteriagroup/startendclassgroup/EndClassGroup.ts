@@ -77,25 +77,16 @@ class EndClassGroup extends HTMLComponent {
         },
       })
     );
-    this.#addDefaultLblVar(type)
+    this.#addDefaultLblVar(type,this.endClassVal.variable)
   }
 
   // adding a defaultlblProperty
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
-  #addDefaultLblVar(type:string) {
+  #addDefaultLblVar(type:string,varName:string) {
     const lbl = this.specProvider.getDefaultLabelProperty(type)
     if(lbl) {
       this.defaultLblVar.type = lbl
-      this.html[0].dispatchEvent(new CustomEvent("getSparqlVarId", {
-        bubbles: true,
-        detail: (id: number) => {
-          //callback
-          this.defaultLblVar.variable = `?${this.specProvider.getLabel(
-            type
-          )}_lbl_${id}`;
-        },
-      })
-      )
+      this.defaultLblVar.variable = `${varName}_label`
     }
   }
 

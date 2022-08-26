@@ -70,7 +70,7 @@ class StartClassGroup extends HTMLComponent {
           this.startClassVal.variable = `?${this.specProvider.getLabel(
             type
           )}_${id}`;
-          this.#addDefaultLblVar(type)
+          this.#addDefaultLblVar(type,this.startClassVal.variable)
           // first StartClassGroup of first GroupWrapper, create variable automatically
           if (this.renderEyeBtn) {
             this.inputTypeComponent.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
@@ -83,20 +83,11 @@ class StartClassGroup extends HTMLComponent {
 
   // adding a defaultlblProperty
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
-  #addDefaultLblVar(type:string) {
+  #addDefaultLblVar(type:string,varName:string) {
     const lbl = this.specProvider.getDefaultLabelProperty(type)
     if(lbl) {
       this.defaultLblVar.type = lbl
-      this.html[0].dispatchEvent(new CustomEvent("getSparqlVarId", {
-        bubbles: true,
-        detail: (id: number) => {
-          //callback
-          this.defaultLblVar.variable = `?${this.specProvider.getLabel(
-            type
-          )}_lbl_${id}`;
-        },
-      })
-      )
+      this.defaultLblVar.variable = `${varName}_label`
     }
   }
 
