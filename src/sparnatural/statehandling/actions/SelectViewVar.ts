@@ -41,10 +41,15 @@ function blockAction(target:EventTarget){
 }
 
 function addVariable(actionStore: ActionStore, val: SelectedVal) {
+  if(actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.find((d:DraggableComponent)=>{
+    return d.varName === val.variable.replace('?','')
+  })) return // draggable already exists
   //add a draggable
   actionStore.sparnatural.VariableSelection.variableOrderMenu.addDraggableComponent(
     val
   );
+  //update stateobject
+  actionStore.variables.push(val.variable.replace('?',''))
   //update the varnames
   readVariablesFromUI(actionStore);
 }
@@ -54,8 +59,13 @@ function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
   actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableComponent(
     val
   );
+  // look for the defaultLabelProperty as well
+  // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
+  actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableComponent({type:"-",variable:`${val.variable}_lbl`})
   //update the varnames
   readVariablesFromUI(actionStore);
+  //update the variables in the state
+  actionStore.variables.filter((v)=> v!=val.variable.replace('?',''))
 }
 
 

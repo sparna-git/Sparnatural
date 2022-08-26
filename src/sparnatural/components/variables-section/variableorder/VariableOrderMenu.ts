@@ -84,14 +84,13 @@ class VariableOrderMenu extends HTMLComponent {
   }
 
   removeDraggableComponent(selected_val: SelectedVal) {
-    let that = this;
     this.draggables = this.draggables.filter((d) => {
       if (d.varName == selected_val.variable.replace("?", "")) {
         d.html.remove();
         return false;
       }
       // adjust sort option width (even if not first was removed)
-      that.#onFirstVariableWidthChanged();
+      this.#onFirstVariableWidthChanged();
       return d;
     });
   }

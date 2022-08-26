@@ -204,8 +204,10 @@ export default class RdfJsGenerator {
       if(!isChild && startClass){
         // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
         triples.push(startClass)
-        const defaultLblTriple = this.#getDefaultLabel(startClass)
-        if(defaultLblTriple) triples.push(defaultLblTriple)
+        if(crtGrp?.EndClassGroup.inputTypeComponent.selectViewVariableBtn.selected){
+          const lbl = this.#getDefaultLabel(startClass)
+          if(lbl) triples.push(lbl)
+        } 
       } 
     }
 
@@ -222,10 +224,11 @@ export default class RdfJsGenerator {
         // If it is a literal class then it doesn't have the endclass Tiple.
         // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
         triples.push(endClass)
-        const defaultLblTriple = this.#getDefaultLabel(endClass)
-        if(defaultLblTriple) triples.push(defaultLblTriple)
+        if(crtGrp?.EndClassGroup.inputTypeComponent.selectViewVariableBtn.selected){
+          const lbl = this.#getDefaultLabel(endClass)
+          if(lbl) triples.push(lbl)
+        } 
       }
-
     }
 
     let connectingTripple:Triple
@@ -305,9 +308,12 @@ export default class RdfJsGenerator {
         const trpl = {
           subject: DataFactory.variable(triple.subject.value.replace("?", "")),
           predicate: DataFactory.namedNode(lbl),
-          object:DataFactory.variable(`lbl_${triple.subject.value.replace("?", "")}`)
+          object:DataFactory.variable(`${triple.subject.value.replace("?", "")}_lbl`)
         } as Triple
-        this.defaultLabelVars.push(DataFactory.variable(trpl.object.value) )
+        if(this.sparnatural.actionStore.variables.includes(trpl.object.value)) return // lbl variable is already included
+        this.defaultLabelVars.push(DataFactory.variable(trpl.object.value))
+        //add it as draggable into the variable list
+        this.sparnatural.html[0].dispatchEvent(new CustomEvent('onSelectViewVar',{detail:{val:{type:triple.object.value,variable:`?${trpl.object.value}`},selected:true}}))
         return trpl
       }
     }
