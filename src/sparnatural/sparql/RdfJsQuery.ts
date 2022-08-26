@@ -312,10 +312,6 @@ export default class RdfJsGenerator {
           predicate: DataFactory.namedNode(ClassGrp.defaultLblVar.type),
           object:DataFactory.variable(`${ClassGrp.defaultLblVar.variable.replace("?", "")}`)
         } as Triple
-        if(this.sparnatural.actionStore.variables.includes(trpl.object.value)) return // lbl variable is already included
-        //this.defaultLabelVars.push(DataFactory.variable(trpl.object.value))
-        //add it as draggable into the variable list
-        //this.sparnatural.html[0].dispatchEvent(new CustomEvent('onSelectViewVar',{detail:{val:{type:triple.object.value,variable:`?${trpl.object.value}`},selected:true}}))
         return trpl
       }
     }

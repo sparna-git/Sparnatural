@@ -14,7 +14,10 @@ class StartClassGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   renderEyeBtn:Boolean = false
-  defaultLblVar: SelectedVal
+  defaultLblVar: SelectedVal ={
+    type:null,
+    variable:null
+  }
 
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
@@ -67,6 +70,7 @@ class StartClassGroup extends HTMLComponent {
           this.startClassVal.variable = `?${this.specProvider.getLabel(
             type
           )}_${id}`;
+          this.#addDefaultLblVar(type)
           // first StartClassGroup of first GroupWrapper, create variable automatically
           if (this.renderEyeBtn) {
             this.inputTypeComponent.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
@@ -74,7 +78,7 @@ class StartClassGroup extends HTMLComponent {
         },
       })
     );
-    this.#addDefaultLblVar(type)
+
   }
 
   // adding a defaultlblProperty

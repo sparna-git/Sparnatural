@@ -10,12 +10,13 @@ export function selectViewVar(
   target:EventTarget
 ) {
   
-  if( // If there is only one variable left then don't allow to deselect it.
-    actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.length <= 1
+  if( // If there is only one variable left (or one var and its default label) then don't allow to deselect it.
+    actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.length <= 2
     && !payload.selected
     ) {
       //delete Var since with the blockAction (click Event) it will be reselected
       deleteVariable(actionStore,payload.val)
+      deleteVariable(actionStore,payload.defaultLbl)
       blockAction(target)
       return
     } 
@@ -64,9 +65,6 @@ function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
   actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableComponent(
     val
   );
-  // look for the defaultLabelProperty as well
-  // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
-  actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableComponent({type:"-",variable:`${val.variable}_lbl`})
   //update the varnames
   readVariablesFromUI(actionStore);
   //update the variables in the state
