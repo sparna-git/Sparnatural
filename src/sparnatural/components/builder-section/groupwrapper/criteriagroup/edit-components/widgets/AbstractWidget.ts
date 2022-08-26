@@ -61,7 +61,7 @@ export abstract class AbstractWidget extends HTMLComponent {
 
 
   // Sparnatural stores the variable name always with the questionmark. 
-  // for the DataFactory from "n3" lib we need the variable name without '?'
+  // for the DataFactory from "rdfjs" lib we need the variable name without '?'
   getVariableValue(selectedVal: SelectedVal): string {
     return selectedVal.variable.replace("?", "");
   }
@@ -83,13 +83,13 @@ export abstract class AbstractWidget extends HTMLComponent {
     );
   }
 
-  getblockStartTriple() {
+  isBlockingStart() {
     return this.blockStartTriple
   }
-  getBlockObjectPropTiple() {
+  isBlockingObjectProp() {
     return this.blockObjectPropTriple
   }
-  getBlockEndTriple() {
+  isBlockingEnd() {
     return this.blockEndTriple
   }
 }

@@ -17,12 +17,14 @@ export default function updateVarName(
       let newSparqlVar = `?${newName}`;
       let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
       let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
-      if (startGrp.getVarName() === sparqlVar)
-        startGrp.setVarName(newSparqlVar);
+      if (startGrp.getVarName() === sparqlVar) startGrp.setVarName(newSparqlVar);
       if (endGrp.getVarName() === sparqlVar) endGrp.setVarName(newSparqlVar);
+      //same for the possible default var
+      if (startGrp.getDefaultLblVar() === sparqlVar) startGrp.setDefaultLblVar(newSparqlVar);
+      if (endGrp.getDefaultLblVar() === sparqlVar) endGrp.setDefaultLblVar(newSparqlVar);
     }
   );
-  //add variables list in actionstor
+  //add variables list in actionstore
   actionStore.variables =
     actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.map(
       (d: DraggableComponent) => {

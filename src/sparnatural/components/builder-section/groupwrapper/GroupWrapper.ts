@@ -14,6 +14,7 @@ class GroupWrapper extends HTMLComponent {
   whereChild: GroupWrapper = null;
   andSibling: GroupWrapper = null;
   optionState = OptionTypes.NONE;
+  #isRoot = false // Wether this GrpWrapper is the root (first) GrpWrapper
   linkAndBottom: LinkAndBottom; // connection line drawn from this CriteriaList with hasAnd CriteriaList
   linkWhereBottom: LinkWhereBottom;
   CriteriaGroup: CriteriaGroup;
@@ -23,15 +24,18 @@ class GroupWrapper extends HTMLComponent {
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
-    startOrEndClassVal?: SelectedVal
+    startOrEndClassVal?: SelectedVal,
+    isRoot?:boolean 
   ) {
     super("groupe", ParentComponent, null);
     this.specProvider = specProvider;
     this.CriteriaGroup = new CriteriaGroup(
       this,
       this.specProvider,
-      startOrEndClassVal
+      startOrEndClassVal,
+      isRoot
     );
+    this.#isRoot = isRoot
   }
 
   render(): this {
@@ -39,6 +43,10 @@ class GroupWrapper extends HTMLComponent {
     this.groupWrapperEventStore = new GroupWrapperEventStore(this);
     this.CriteriaGroup = this.CriteriaGroup.render();
     return this;
+  }
+
+  isRootGrpWrapper(){
+    return this.#isRoot
   }
 
   // set back state to when objectproperty was selected

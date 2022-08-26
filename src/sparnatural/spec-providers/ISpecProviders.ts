@@ -11,6 +11,7 @@ interface ISpecProvider {
   getTreeChildrenDatasource(objectPropertyId: string): string;
   getTreeRootsDatasource(objectPropertyId: string): any;
   expandSparql(sparql: string): string;
+  getDefaultLabelProperty(classId: string):string;
   getDatasource(objectPropertyId: string): any;
   isLiteralClass(value_selected: string): any;
   getObjectPropertyType(objectPropertyId: string): Config;

@@ -3,13 +3,13 @@ import { Language, Order } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import ISpecProvider from "../spec-providers/ISpecProviders";
 import {
-  BgpPattern,
-  FilterPattern,
-  Generator,
-  OptionalPattern,
+  GroupPattern,
+  IriTerm,
   Ordering,
   Pattern,
+  PropertyPath,
   SelectQuery,
+  Term,
   Triple,
   Variable,
   VariableTerm,
@@ -17,9 +17,11 @@ import {
 } from "sparqljs";
 import Sparnatural from "../components/Sparnatural";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
-import { DataFactory } from "n3";
-import { RDF } from "../spec-providers/RDFSpecificationProvider";
+import * as DataFactory from "@rdfjs/data-model" ;
 import { AbstractWidget } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget";
+import StartClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
+import EndClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
+import SparqlFactory from "./SparqlFactory";
 /*
   Reads out the UI and creates the and sparqljs pattern. 
   sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
@@ -30,6 +32,7 @@ export default class RdfJsGenerator {
   specProvider: ISpecProvider;
   additionnalPrefixes: { [key: string]: string } = {};
   sparnatural: Sparnatural;
+  defaultLabelVars:Variable[] = []// see: #checkForDefaultLabel()
   constructor(
     sparnatural: Sparnatural,
     typePredicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
@@ -55,7 +58,7 @@ export default class RdfJsGenerator {
     distinct: boolean,
     order: Order,
     lang: Language
-  ) {
+  ):SelectQuery {
     let RdfJsQuery: SelectQuery = {
       queryType: "SELECT",
       distinct: distinct,
@@ -94,14 +97,14 @@ export default class RdfJsGenerator {
         }]
       }]
     }
+    // post processing for defaultlabel property
+    if(this.defaultLabelVars.length > 0) RdfJsQuery.variables = [...(RdfJsQuery.variables as Variable[]).filter((v:Variable)=> isVariable(v)),...this.defaultLabelVars]
     // if there are now variables defined just create the Wildcard e.g: *
     if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
     // don't set an order if there is no expression for it
     if(!RdfJsQuery?.order || !RdfJsQuery?.order[0]?.expression) delete RdfJsQuery.order
-    var generator = new Generator();
-    var generatedQuery = generator.stringify(RdfJsQuery);
-
-    return generatedQuery;
+    
+    return RdfJsQuery;
   }
 
   // this method traverses through the groupwrappers and retrieves the information from each widget.
@@ -132,7 +135,7 @@ export default class RdfJsGenerator {
 
     //if it is a child of a parent with either optional or notexists
     if (isInOption) {
-      ptrns.push(this.#buildBGP(triples));
+      ptrns.push(SparqlFactory.buildBgpPattern(triples));
       ptrns.push(...rdfPattern);
       if (wherePtrn) ptrns.push(...wherePtrn);
       if (andPtrn) ptrns.push(...andPtrn);
@@ -142,9 +145,9 @@ export default class RdfJsGenerator {
     // starting from this grpWrapper to all where descendants: Optional might be enabled
     // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableOptional
     if (grpWrapper.optionState == OptionTypes.OPTIONAL) {
-      ptrns.push(this.#buildBGP([triples[0]])); // triples[0] = startclasstriple is excluded from optional
+      ptrns.push(SparqlFactory.buildBgpPattern([triples[0]])); // triples[0] = startclasstriple is excluded from optional
       let inOptional = this.#buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into OPTIONAL Brackets in SPARQL
-      let optionalPtrn = this.#buildOptionalPattern(inOptional);
+      let optionalPtrn = SparqlFactory.buildOptionalPattern(inOptional.patterns);
       ptrns.push(optionalPtrn);
       return ptrns;
     }
@@ -152,15 +155,15 @@ export default class RdfJsGenerator {
     //Starting from this grpWrapper to all where descendants: not exists might be enabled
     // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableNegation
     if (grpWrapper.optionState == OptionTypes.NOTEXISTS) {
-      ptrns.push(this.#buildBGP([triples[0]])); // triples[0] = startclasstriple
+      ptrns.push(SparqlFactory.buildBgpPattern([triples[0]])); // triples[0] = startclasstriple
       let inNotExists = this.#buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into FILTER NOT EXISTS bracket in SPARQL
-      let notExistPtrn = this.#buildNotExistsPattern(inNotExists);
+      let notExistPtrn = SparqlFactory.buildNotExistsPattern(inNotExists);
       ptrns.push(notExistPtrn);
       return ptrns;
     }
 
     // normal case, no OPTIONAL or NOTEXISTS
-    if(triples.length > 0) ptrns.push(this.#buildBGP(triples));
+    if(triples.length > 0) ptrns.push(SparqlFactory.buildBgpPattern(triples));
     if(rdfPattern.length > 0) ptrns.push(...rdfPattern);
     if (wherePtrn) ptrns.push(...wherePtrn);
     if (andPtrn) ptrns.push(...andPtrn);
@@ -168,18 +171,21 @@ export default class RdfJsGenerator {
   }
 
   // Builds the 'filter' triples for OPTIONAL or NOTEXISTS
-  #buildFilterTriples(triples:Triple[],rdfPattern:Pattern[],wherePtrn:Pattern[]):Pattern[]{
+  #buildFilterTriples(triples:Triple[],rdfPattern:Pattern[],wherePtrn:Pattern[]):GroupPattern{
     const ptrn:Array<Pattern> = []
     if(triples.length > 2){
-      ptrn.push(this.#buildBGP([triples[1],triples[2]]))
+      ptrn.push(SparqlFactory.buildBgpPattern([triples[1],triples[2]]))
     } else {
       // In a where child we don't have three triples. see: #buildCrtGrpTriples
       // the rdf:type triple of the start triple was then already defined by the parent
-      ptrn.push(this.#buildBGP([triples[1]]))
+      ptrn.push(SparqlFactory.buildBgpPattern([triples[1]]))
     }
     if (rdfPattern) ptrn.push(...rdfPattern);
     if (wherePtrn) ptrn.push(...wherePtrn);
-    return ptrn
+    return {
+      type: 'group',
+      patterns: ptrn
+    }
   }
 
   // Writes The default triples 
@@ -187,100 +193,71 @@ export default class RdfJsGenerator {
     let triples: Triple[] = [];
 
     // startClassTriple
-    let startClass
-    if(!widgeComponent?.getblockStartTriple())
-      startClass = this.#buildTypeTripple(
-        crtGrp.StartClassGroup.getVarName(),
-        RDF.TYPE.value,
-        crtGrp.StartClassGroup.getTypeSelected()
+    let startClass:Triple
+    if(!widgeComponent?.isBlockingStart()){
+      startClass = SparqlFactory.buildRdfTypeTriple(
+        DataFactory.variable(crtGrp.StartClassGroup.getVarName().replace('?','')) ,
+        DataFactory.namedNode(crtGrp.StartClassGroup.getTypeSelected()) 
       );
+
       if(!isChild && startClass){
         // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
         triples.push(startClass)
-      }
-    
+        if(crtGrp?.StartClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
+          const lbl = this.#getDefaultLabel(startClass,crtGrp.StartClassGroup)
+          if(lbl) triples.push(lbl)
+        } 
+      } 
+    }
 
     // endClassTriple
-    let endClass
-    if(!widgeComponent?.getBlockEndTriple())
-      endClass = this.#buildTypeTripple(
-        crtGrp.EndClassGroup.getVarName(),
-        RDF.TYPE.value,
-        crtGrp.EndClassGroup.getTypeSelected()
+    let endClass:Triple
+    if(!widgeComponent?.isBlockingEnd()){
+      endClass = SparqlFactory.buildRdfTypeTriple(
+        DataFactory.variable(crtGrp.EndClassGroup?.getVarName()?.replace('?','')) ,
+        DataFactory.namedNode(crtGrp.EndClassGroup.getTypeSelected()) ,
       );
+
       if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup?.getTypeSelected()) && endClass){
         // If it is a literal class then it doesn't have the endclass Tiple.
         // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
         triples.push(endClass)
+        if(crtGrp?.EndClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
+          const lbl = this.#getDefaultLabel(endClass,crtGrp.EndClassGroup)
+          if(lbl) triples.push(lbl)
+        } 
       }
-    
+    }
 
-    let connectingTripple
-    if(!widgeComponent?.getBlockObjectPropTiple())
-      connectingTripple = this.#buildIntersectionTriple(
-        startClass?.subject as Variable,
+    let connectingTripple:Triple
+    if(!widgeComponent?.isBlockingObjectProp()){
+      connectingTripple = SparqlFactory.buildIntersectionTriple(
+        startClass?.subject as VariableTerm,
         crtGrp.ObjectPropertyGroup.getTypeSelected(),
-        endClass?.subject as Variable
+        endClass?.subject as VariableTerm
       );
-
-    if(connectingTripple) triples.push(connectingTripple)
-   
+      if(connectingTripple) triples.push(connectingTripple)
+    }
 
     return triples;
   }
 
-  #buildBGP(triples: Triple[]): BgpPattern {
-    return {
-      type: "bgp",
-      triples: triples,
-    };
-  }
-
-  // example: ?person rdf:type dpedia:Person
-  #buildTypeTripple(subj: string, pred: string, obj: string): Triple | null {
-    if(!subj || !pred || !obj) return null
-    return {
-      subject: DataFactory.variable(subj?.replace("?", "")),
-      predicate: DataFactory.namedNode(pred),
-      object: DataFactory.namedNode(obj),
-    };
-  }
-  // It is the intersection between the startclass and endclass chosen.
-  // example: ?person dpedia:birthplace ?country
-  #buildIntersectionTriple(
-    subj: Variable,
-    pred: string,
-    obj: Variable
-  ): Triple | null{
-    if(!subj || !pred || !obj) return null
-    return {
-      subject: subj as VariableTerm,
-      predicate: DataFactory.namedNode(pred),
-      object: obj as VariableTerm,
-    };
-  }
-
-  #buildNotExistsPattern(patterns: Pattern[]): FilterPattern {
-    return {
-      type: "filter",
-      expression: {
-        type: "operation",
-        operator: "notexists",
-        args: [
-          {
-            type: "group",
-            patterns: patterns,
-          },
-        ],
-      },
-    };
-  }
-
-  #buildOptionalPattern(patterns: Pattern[]): OptionalPattern {
-    return {
-      type: "optional",
-      patterns: patterns,
-    };
+  // creating additional triples for classes with the defaultlabel property defined
+  // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
+  #getDefaultLabel(triple:Triple,ClassGrp:StartClassGroup | EndClassGroup):Triple | null{
+    // the triple MUST be of type: ?var rdf:typ <namedNode>
+    if((triple.subject?.termType === "Variable") && (isNamedNode(triple.predicate)) && (isNamedNode(triple.object))){
+      const lbl = this.specProvider.getDefaultLabelProperty(triple.object.value)
+      if(lbl){
+        const trpl = {
+          subject: DataFactory.variable(triple.subject.value.replace("?", "")),
+          predicate: DataFactory.namedNode(ClassGrp.defaultLblVar.type),
+          object:DataFactory.variable(`${ClassGrp.defaultLblVar.variable.replace("?", "")}`)
+        } as Triple
+        return trpl
+      }
+    }
+    return null
   }
 
   #varsToRDFJS(variables: Array<string>): Variable[] {
@@ -291,7 +268,7 @@ export default class RdfJsGenerator {
 
   // It will be ordered by the Provided variable
   #orderToRDFJS(order: Order, variable: VariableTerm): Ordering[] {
-    if(order == Order.DESC || order == Order.ASC) {
+    if(order == Order.DESC || order == Order.ASC) {
       return [
         {
           expression: variable,
@@ -303,4 +280,10 @@ export default class RdfJsGenerator {
       return null;
     }
   }
+}
+function isNamedNode(val:IriTerm | Variable | PropertyPath | Term): val is IriTerm{
+  return "termType" in val && val.termType == "NamedNode"
+}
+function isVariable(val:Wildcard | Variable): val is Variable{
+  return "termType" in val && val.termType == "Variable"
 }

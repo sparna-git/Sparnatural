@@ -13,11 +13,17 @@ class StartClassGroup extends HTMLComponent {
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
+  renderEyeBtn:Boolean = false
+  defaultLblVar: SelectedVal ={
+    type:null,
+    variable:null
+  }
 
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
-    startClassVal?: SelectedVal
+    startClassVal?: SelectedVal,
+    renderEyeBtn?: Boolean
   ) {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
@@ -29,12 +35,14 @@ class StartClassGroup extends HTMLComponent {
           type: null,
           variable: null,
         };
+    this.renderEyeBtn = renderEyeBtn
   }
 
   render() {
     super.render();
     this.inputTypeComponent.render();
     this.#addEventListener();
+    if (this.renderEyeBtn) this.inputTypeComponent.selectViewVariableBtn.render()
     return this;
   }
 
@@ -62,22 +70,25 @@ class StartClassGroup extends HTMLComponent {
           this.startClassVal.variable = `?${this.specProvider.getLabel(
             type
           )}_${id}`;
-          // id==1 -> first StartClassGroup of first GroupWrapper, create variable automatically
-          if (id === 1) {
-            let payload = {
-              val: this.startClassVal,
-              selected: true,
-            };
-            this.html[0].dispatchEvent(
-              new CustomEvent("onSelectViewVar", {
-                bubbles: true,
-                detail: payload,
-              })
-            );
+          this.#addDefaultLblVar(type,this.startClassVal.variable)
+          // first StartClassGroup of first GroupWrapper, create variable automatically
+          if (this.renderEyeBtn) {
+            this.inputTypeComponent.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
           }
         },
       })
     );
+
+  }
+
+  // adding a defaultlblProperty
+  // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
+  #addDefaultLblVar(type:string,varName:string) {
+    const lbl = this.specProvider.getDefaultLabelProperty(type)
+    if(lbl) {
+      this.defaultLblVar.type = lbl
+      this.defaultLblVar.variable = `${varName}_label`
+    }
   }
 
   #valueWasSelected() {
@@ -110,5 +121,12 @@ class StartClassGroup extends HTMLComponent {
   getTypeSelected() {
     return this.startClassVal.type;
   }
+  getDefaultLblVar(){
+    return this.defaultLblVar?.variable
+  }
+  setDefaultLblVar(lbl:string){
+    this.defaultLblVar.variable = lbl
+  }
+
 }
 export default StartClassGroup;

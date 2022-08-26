@@ -3,10 +3,6 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import tippy from "tippy.js";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
 import { SelectedVal } from "../../../../../sparql/ISparJson";
-import {
-  EndClassWidgetGroup,
-  EndClassWidgetValue,
-} from "./EndClassWidgetGroup";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import EditComponents from "../edit-components/EditComponents";
@@ -19,6 +15,10 @@ class EndClassGroup extends HTMLComponent {
   endClassVal: SelectedVal = {
     type: null,
     variable: null,
+  };
+  defaultLblVar: SelectedVal ={
+    type:null,
+    variable:null
   };
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
@@ -77,6 +77,17 @@ class EndClassGroup extends HTMLComponent {
         },
       })
     );
+    this.#addDefaultLblVar(type,this.endClassVal.variable)
+  }
+
+  // adding a defaultlblProperty
+  // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
+  #addDefaultLblVar(type:string,varName:string) {
+    const lbl = this.specProvider.getDefaultLabelProperty(type)
+    if(lbl) {
+      this.defaultLblVar.type = lbl
+      this.defaultLblVar.variable = `${varName}_label`
+    }
   }
 
   // triggered when the subject/domain is selected
@@ -145,6 +156,15 @@ class EndClassGroup extends HTMLComponent {
   getVarName() {
     return this.endClassVal.variable;
   }
+
+  getDefaultLblVar(){
+    return this.defaultLblVar?.variable
+  }
+  
+  setDefaultLblVar(lbl:string){
+    this.defaultLblVar.variable = lbl
+  }
+
   setVarName(name: string) {
     this.endClassVal.variable = name;
   }

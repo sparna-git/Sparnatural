@@ -1,4 +1,4 @@
-import { DataFactory } from "n3";
+import * as DataFactory from "@rdfjs/data-model" ;
 import { BgpPattern, Pattern } from "sparqljs";
 import { getSettings } from "../../../../../../../configs/client-configs/settings";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";

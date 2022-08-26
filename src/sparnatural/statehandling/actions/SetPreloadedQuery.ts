@@ -100,7 +100,7 @@ function setSelectedValue(
 ) {
   component.inputTypeComponent.oldWidget.val(value).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
-  component.inputTypeComponent.html[0].children[2].classList.add("disabled");
+  component.inputTypeComponent.html[0].children[1].classList.add("disabled");
 }
 
 function clickOn(el: JQuery<HTMLElement>) {
