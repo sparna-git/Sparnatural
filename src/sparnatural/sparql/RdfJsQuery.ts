@@ -6,10 +6,13 @@ import {
   BgpPattern,
   FilterPattern,
   Generator,
+  IriTerm,
   OptionalPattern,
   Ordering,
   Pattern,
+  PropertyPath,
   SelectQuery,
+  Term,
   Triple,
   Variable,
   VariableTerm,
@@ -17,7 +20,7 @@ import {
 } from "sparqljs";
 import Sparnatural from "../components/Sparnatural";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
-import { DataFactory } from "n3";
+import * as DataFactory from "@rdfjs/data-model" ;
 import { RDF } from "../spec-providers/RDFSpecificationProvider";
 import { AbstractWidget } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget";
 /*
@@ -30,6 +33,7 @@ export default class RdfJsGenerator {
   specProvider: ISpecProvider;
   additionnalPrefixes: { [key: string]: string } = {};
   sparnatural: Sparnatural;
+  defaultLabelVars:Variable[] = []// see: #checkForDefaultLabel()
   constructor(
     sparnatural: Sparnatural,
     typePredicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
@@ -94,6 +98,8 @@ export default class RdfJsGenerator {
         }]
       }]
     }
+    // post processing for defaultlabel property
+    if(this.defaultLabelVars.length > 0) RdfJsQuery.variables = [...(RdfJsQuery.variables as Variable[]).filter((v:Variable)=> isVariable(v)),...this.defaultLabelVars]
     // if there are now variables defined just create the Wildcard e.g: *
     if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
     // don't set an order if there is no expression for it
@@ -187,44 +193,50 @@ export default class RdfJsGenerator {
     let triples: Triple[] = [];
 
     // startClassTriple
-    let startClass
-    if(!widgeComponent?.isBlockingStart())
-      startClass = this.#buildTypeTripple(
+    let startClass:Triple
+    if(!widgeComponent?.isBlockingStart()){
+      startClass = this.#buildDefaultTriple(
         crtGrp.StartClassGroup.getVarName(),
         RDF.TYPE.value,
         crtGrp.StartClassGroup.getTypeSelected()
       );
+
       if(!isChild && startClass){
         // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
         triples.push(startClass)
-      }
-    
+        const defaultLblTriple = this.#getDefaultLabel(startClass)
+        if(defaultLblTriple) triples.push(defaultLblTriple)
+      } 
+    }
 
     // endClassTriple
-    let endClass
-    if(!widgeComponent?.isBlockingEnd())
-      endClass = this.#buildTypeTripple(
+    let endClass:Triple
+    if(!widgeComponent?.isBlockingEnd()){
+      endClass = this.#buildDefaultTriple(
         crtGrp.EndClassGroup.getVarName(),
         RDF.TYPE.value,
         crtGrp.EndClassGroup.getTypeSelected()
       );
+
       if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup?.getTypeSelected()) && endClass){
         // If it is a literal class then it doesn't have the endclass Tiple.
         // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
         triples.push(endClass)
+        const defaultLblTriple = this.#getDefaultLabel(endClass)
+        if(defaultLblTriple) triples.push(defaultLblTriple)
       }
-    
 
-    let connectingTripple
-    if(!widgeComponent?.isBlockingObjectProp())
+    }
+
+    let connectingTripple:Triple
+    if(!widgeComponent?.isBlockingObjectProp()){
       connectingTripple = this.#buildIntersectionTriple(
         startClass?.subject as Variable,
         crtGrp.ObjectPropertyGroup.getTypeSelected(),
         endClass?.subject as Variable
       );
-
-    if(connectingTripple) triples.push(connectingTripple)
-   
+      if(connectingTripple) triples.push(connectingTripple)
+    }
 
     return triples;
   }
@@ -237,7 +249,7 @@ export default class RdfJsGenerator {
   }
 
   // example: ?person rdf:type dpedia:Person
-  #buildTypeTripple(subj: string, pred: string, obj: string): Triple | null {
+  #buildDefaultTriple(subj: string, pred: string, obj: string): Triple | null {
     if(!subj || !pred || !obj) return null
     return {
       subject: DataFactory.variable(subj?.replace("?", "")),
@@ -283,6 +295,25 @@ export default class RdfJsGenerator {
     };
   }
 
+  // creating additional triples for classes with the defaultlabel property defined
+  // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
+  #getDefaultLabel(triple:Triple):Triple | null{
+    // the triple MUST be of type: ?var rdf:typ <namedNode>
+    if((triple.subject?.termType === "Variable") && (isNamedNode(triple.predicate)) && (isNamedNode(triple.object))){
+      const lbl = this.specProvider.getDefaultLabelProperty(triple.object.value)
+      if(lbl){
+        const trpl = {
+          subject: DataFactory.variable(triple.subject.value.replace("?", "")),
+          predicate: DataFactory.namedNode(lbl),
+          object:DataFactory.variable(`lbl_${triple.subject.value.replace("?", "")}`)
+        } as Triple
+        this.defaultLabelVars.push(DataFactory.variable(trpl.object.value) )
+        return trpl
+      }
+    }
+    return null
+  }
+
   #varsToRDFJS(variables: Array<string>): Variable[] {
     return variables.map((v) => {
       return DataFactory.variable(v.replace("?", ""));
@@ -303,4 +334,10 @@ export default class RdfJsGenerator {
       return null;
     }
   }
+}
+function isNamedNode(val:IriTerm | Variable | PropertyPath | Term): val is IriTerm{
+  return "termType" in val && val.termType == "NamedNode"
+}
+function isVariable(val:Wildcard | Variable): val is Variable{
+  return "termType" in val && val.termType == "Variable"
 }
