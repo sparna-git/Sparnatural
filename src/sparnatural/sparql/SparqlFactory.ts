@@ -124,6 +124,8 @@ export default class SparqlFactory {
         subject: IriTerm | BlankTerm | VariableTerm | QuadTerm,
         object: Term
     ): Triple | null {
+      console.log(subject)
+        if(!subject || !object) return null
         return SparqlFactory.buildTriple(
             subject,
             DataFactory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),

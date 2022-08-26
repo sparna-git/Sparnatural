@@ -212,7 +212,8 @@ export default class RdfJsGenerator {
 
     // endClassTriple
     let endClass:Triple
-    if(!widgeComponent?.isBlockingEnd()){
+    // generate only if EndClassGroup is present
+    if(!widgeComponent?.isBlockingEnd() && crtGrp.EndClassGroup.getTypeSelected() != null){
       endClass = SparqlFactory.buildRdfTypeTriple(
         DataFactory.variable(crtGrp.EndClassGroup?.getVarName()?.replace('?','')) ,
         DataFactory.namedNode(crtGrp.EndClassGroup.getTypeSelected()) ,
