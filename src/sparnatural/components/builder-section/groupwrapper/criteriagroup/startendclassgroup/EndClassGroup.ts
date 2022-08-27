@@ -64,6 +64,7 @@ class EndClassGroup extends HTMLComponent {
     });
   }
 
+  // Creating the Variable for the variable menu
   #createSparqlVar(type: string) {
     this.endClassVal.type = type;
     this.html[0].dispatchEvent(
@@ -71,13 +72,16 @@ class EndClassGroup extends HTMLComponent {
         bubbles: true,
         detail: (id: number) => {
           //callback
-          this.endClassVal.variable = `?${this.specProvider.getLabel(
-            type
-          )}_${id}`;
+          this.endClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
         },
       })
     );
     this.#addDefaultLblVar(type,this.endClassVal.variable)
+  }
+
+  #getUriClassName(uri:string){
+    if(uri.includes('#')) return uri.split('#').pop()
+    return uri.split('/').pop()
   }
 
   // adding a defaultlblProperty
