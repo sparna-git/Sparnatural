@@ -67,9 +67,7 @@ class StartClassGroup extends HTMLComponent {
         bubbles: true,
         detail: (id: number) => {
           //callback
-          this.startClassVal.variable = `?${this.specProvider.getLabel(
-            type
-          )}_${id}`;
+          this.startClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
           this.#addDefaultLblVar(type,this.startClassVal.variable)
           // first StartClassGroup of first GroupWrapper, create variable automatically
           if (this.renderEyeBtn) {
@@ -78,7 +76,11 @@ class StartClassGroup extends HTMLComponent {
         },
       })
     );
+  }
 
+  #getUriClassName(uri:string){
+    if(uri.includes('#')) return uri.split('#').pop()
+    return uri.split('/').pop()
   }
 
   // adding a defaultlblProperty
