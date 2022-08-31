@@ -192,7 +192,7 @@ export class QuerySPARQLWriter {
 		var parser = new SparqlParser();
 		// var query = parser.parse("SELECT ?x WHERE { ?x a <http://ex.fr/Museum> FILTER(LCASE(?label) = LCASE(\"Key\")) } ORDER BY DESC(?x)");
 		// var query = parser.parse("SELECT ?x WHERE { ?x <http://ex.fr/test> true }");
-		var query = parser.parse("PREFIX ex: <http://exemple.fr/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  SELECT ?this WHERE { { ?this ex:date ?date . FILTER('1575-01-01'^^xsd:date < ?date && ?date < '1580-12-31'^^xsd:date) } UNION { ?this ex:beginDate ?beginDate .  FILTER(?beginDate < '1580-12-31'^^xsd:date) ?this ex:endDate ?endDate . FILTER(?endDate > '1575-01-01'^^xsd:date) } }");
+		var query = parser.parse("PREFIX ex: <http://exemple.fr/> PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>  SELECT ?this WHERE { ?x a ex:Test . ?x ex:numericProperty ?num . FILTER(REGEX(STR(?num),\"toto\")) }");
 
 		console.log(query);
 	}
@@ -778,8 +778,12 @@ export class QuerySPARQLWriter {
 			"expression": {
 				"type": "operation",
 				"operator": "regex",
-				"args": [					
-					""+variable+"",
+				"args": [	
+					{
+						"type": "operation",
+						"operator": "str",
+						"args": [ ""+variable+"" ]
+					},	
 					"\""+texte+"\"",
 					"\"i\""
 				]
