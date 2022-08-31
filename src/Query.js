@@ -548,7 +548,7 @@ export class QuerySPARQLWriter {
 						// either a URI or a literal in case of LiteralList widget
 						(queryLine.values[0].uri)?queryLine.values[0].uri:queryLine.values[0].literal,
 						// insert as a literal if the value is a literal value
-						queryLine.values[0] instanceof LiteralValue
+						(!queryLine.values[0].uri && queryLine.values[0].literal)
 					)) ;
 				} else if(
 					queryLine.values.length == 1
