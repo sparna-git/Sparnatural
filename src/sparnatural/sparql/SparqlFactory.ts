@@ -124,6 +124,7 @@ export default class SparqlFactory {
         subject: IriTerm | BlankTerm | VariableTerm | QuadTerm,
         object: Term
     ): Triple | null {
+        if(!subject || !object) throw Error('Either subject or the object provided is null | undefined !')
         return SparqlFactory.buildTriple(
             subject,
             DataFactory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),

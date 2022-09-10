@@ -211,19 +211,19 @@ export default class RdfJsGenerator {
     }
 
     // endClassTriple
-    let endClass:Triple
-    if(!widgeComponent?.isBlockingEnd()){
-      endClass = SparqlFactory.buildRdfTypeTriple(
+    let endClassTriple:Triple
+    if(widgeComponent && !widgeComponent?.isBlockingEnd()){
+      endClassTriple = SparqlFactory.buildRdfTypeTriple(
         DataFactory.variable(crtGrp.EndClassGroup?.getVarName()?.replace('?','')) ,
         DataFactory.namedNode(crtGrp.EndClassGroup.getTypeSelected()) ,
       );
 
-      if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup?.getTypeSelected()) && endClass){
+      if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup?.getTypeSelected()) && endClassTriple){
         // If it is a literal class then it doesn't have the endclass Tiple.
         // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
-        triples.push(endClass)
+        triples.push(endClassTriple)
         if(crtGrp?.EndClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
-          const lbl = this.#getDefaultLabel(endClass,crtGrp.EndClassGroup)
+          const lbl = this.#getDefaultLabel(endClassTriple,crtGrp.EndClassGroup)
           if(lbl) triples.push(lbl)
         } 
       }
@@ -234,7 +234,7 @@ export default class RdfJsGenerator {
       connectingTripple = SparqlFactory.buildIntersectionTriple(
         startClass?.subject as VariableTerm,
         crtGrp.ObjectPropertyGroup.getTypeSelected(),
-        endClass?.subject as VariableTerm
+        endClassTriple?.subject as VariableTerm
       );
       if(connectingTripple) triples.push(connectingTripple)
     }
