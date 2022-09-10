@@ -152,7 +152,7 @@ export default class SparqlFactory {
     pred: string,
     obj: Variable
   ): Triple | null{
-    if(!subj || !pred || !obj) return null
+    if(!subj?.value || !pred || !obj?.value) return null
     return {
       subject: subj as VariableTerm,
       predicate: DataFactory.namedNode(pred),
