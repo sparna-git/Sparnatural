@@ -149,6 +149,7 @@ export default class RdfJsGenerator {
       let inOptional = SparqlFactory.buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into OPTIONAL Brackets in SPARQL
       let optionalPtrn = SparqlFactory.buildOptionalPattern(inOptional.patterns);
       ptrns.push(optionalPtrn);
+      if (andPtrn) ptrns.push(...andPtrn);
       return ptrns;
     }
 
@@ -159,6 +160,7 @@ export default class RdfJsGenerator {
       let inNotExists = SparqlFactory.buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into FILTER NOT EXISTS bracket in SPARQL
       let notExistPtrn = SparqlFactory.buildNotExistsPattern(inNotExists);
       ptrns.push(notExistPtrn);
+      if (andPtrn) ptrns.push(...andPtrn);
       return ptrns;
     }
 
