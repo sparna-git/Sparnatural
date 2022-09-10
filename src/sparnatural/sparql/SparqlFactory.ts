@@ -4,6 +4,18 @@ import { Literal, Variable } from "@rdfjs/types";
 
 export default class SparqlFactory {
 
+    // Builds the 'filter' triples for OPTIONAL or NOTEXISTS
+    static buildFilterTriples(triples:Triple[],rdfPattern:Pattern[],wherePtrn:Pattern[]):GroupPattern{
+      const ptrn:Array<Pattern> = []
+      ptrn.push(SparqlFactory.buildBgpPattern(triples))
+      if (rdfPattern) ptrn.push(...rdfPattern);
+      if (wherePtrn) ptrn.push(...wherePtrn);
+      return {
+        type: 'group',
+        patterns: ptrn
+      }
+    }
+
     static buildBgpPattern(triples: Triple[]): BgpPattern {
         return {
             type: "bgp",
@@ -124,7 +136,7 @@ export default class SparqlFactory {
         subject: IriTerm | BlankTerm | VariableTerm | QuadTerm,
         object: Term
     ): Triple | null {
-        if(!subject || !object) throw Error('Either subject or the object provided is null | undefined !')
+        if(!subject?.value || !object?.value) return null
         return SparqlFactory.buildTriple(
             subject,
             DataFactory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),

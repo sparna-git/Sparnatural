@@ -145,8 +145,8 @@ export default class RdfJsGenerator {
     // starting from this grpWrapper to all where descendants: Optional might be enabled
     // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableOptional
     if (grpWrapper.optionState == OptionTypes.OPTIONAL) {
-      ptrns.push(SparqlFactory.buildBgpPattern([triples[0]])); // triples[0] = startclasstriple is excluded from optional
-      let inOptional = this.#buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into OPTIONAL Brackets in SPARQL
+      ptrns.push(SparqlFactory.buildBgpPattern([triples.shift()])); // triples[0] = startclasstriple (buildRdfTypeTriple) is excluded from optional
+      let inOptional = SparqlFactory.buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into OPTIONAL Brackets in SPARQL
       let optionalPtrn = SparqlFactory.buildOptionalPattern(inOptional.patterns);
       ptrns.push(optionalPtrn);
       return ptrns;
@@ -155,8 +155,8 @@ export default class RdfJsGenerator {
     //Starting from this grpWrapper to all where descendants: not exists might be enabled
     // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableNegation
     if (grpWrapper.optionState == OptionTypes.NOTEXISTS) {
-      ptrns.push(SparqlFactory.buildBgpPattern([triples[0]])); // triples[0] = startclasstriple
-      let inNotExists = this.#buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into FILTER NOT EXISTS bracket in SPARQL
+      ptrns.push(SparqlFactory.buildBgpPattern([triples.shift()])); // triples[0] = startclasstriple (buildRdfTypeTriple) is excluded from notexists
+      let inNotExists = SparqlFactory.buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into FILTER NOT EXISTS bracket in SPARQL
       let notExistPtrn = SparqlFactory.buildNotExistsPattern(inNotExists);
       ptrns.push(notExistPtrn);
       return ptrns;
@@ -168,24 +168,6 @@ export default class RdfJsGenerator {
     if (wherePtrn) ptrns.push(...wherePtrn);
     if (andPtrn) ptrns.push(...andPtrn);
     return ptrns;
-  }
-
-  // Builds the 'filter' triples for OPTIONAL or NOTEXISTS
-  #buildFilterTriples(triples:Triple[],rdfPattern:Pattern[],wherePtrn:Pattern[]):GroupPattern{
-    const ptrn:Array<Pattern> = []
-    if(triples.length > 2){
-      ptrn.push(SparqlFactory.buildBgpPattern([triples[1],triples[2]]))
-    } else {
-      // In a where child we don't have three triples. see: #buildCrtGrpTriples
-      // the rdf:type triple of the start triple was then already defined by the parent
-      ptrn.push(SparqlFactory.buildBgpPattern([triples[1]]))
-    }
-    if (rdfPattern) ptrn.push(...rdfPattern);
-    if (wherePtrn) ptrn.push(...wherePtrn);
-    return {
-      type: 'group',
-      patterns: ptrn
-    }
   }
 
   // Writes The default triples 
@@ -212,7 +194,7 @@ export default class RdfJsGenerator {
 
     // endClassTriple
     let endClassTriple:Triple
-    if(widgeComponent && !widgeComponent?.isBlockingEnd()){
+    if(!widgeComponent?.isBlockingEnd()){
       endClassTriple = SparqlFactory.buildRdfTypeTriple(
         DataFactory.variable(crtGrp.EndClassGroup?.getVarName()?.replace('?','')) ,
         DataFactory.namedNode(crtGrp.EndClassGroup.getTypeSelected()) ,
@@ -241,6 +223,7 @@ export default class RdfJsGenerator {
 
     return triples;
   }
+
 
   // creating additional triples for classes with the defaultlabel property defined
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
