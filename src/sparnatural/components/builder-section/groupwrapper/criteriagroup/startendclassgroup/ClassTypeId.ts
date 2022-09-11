@@ -146,20 +146,16 @@ class ClassTypeId extends HTMLComponent {
     this.backArrow.html.removeClass("disable");
   }
 
-  // show the sparql variable name instead of the type
+  // toggle between the variable name in the sparql query and the label value defined in the configs
   toggleVarName() {
-    //val shows what currently is displayed
-    let val = (
-      this.widgetHtml.first()[0] as HTMLSpanElement
-    ).firstChild.textContent.trimStart();
-    if (this.ParentComponent.getVarName() === val) {
+    //current span of jquery nice-select
+    const currentSpan = this.widgetHtml.first()[0].getElementsByClassName('current').item(0).getElementsByClassName('label').item(0)
+    if (this.ParentComponent.getVarName() === currentSpan.textContent) {
       //display label
-      (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent =
-        this.specProvider.getLabel(this.ParentComponent.getTypeSelected());
+      currentSpan.textContent = this.specProvider.getLabel(this.ParentComponent.getTypeSelected());
     } else {
-      //display variable
-      (this.widgetHtml.first()[0] as HTMLSpanElement).firstChild.textContent =
-        this.ParentComponent.getVarName();
+      // display variable
+      currentSpan.textContent = this.ParentComponent.getVarName();
     }
   }
 }
