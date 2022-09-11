@@ -10,8 +10,8 @@ interface ISettings {
   language: string;
   addDistinct?: boolean;
   typePredicate?: string;
-  maxDepth?: number;
-  maxOr?: number;
+  maxDepth: number;
+  maxOr: number;
   backgroundBaseColor?: string; //TODO '250,136,3'
   sparqlPrefixes?: any;
   defaultEndpoint?: () => string;

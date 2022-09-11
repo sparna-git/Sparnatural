@@ -258,7 +258,7 @@ export class TreeWidget extends AbstractWidget {
       }
     }
 
-    if (this_.jsTree.jstree().get_top_checked().length >= this.settings.maxOr) {
+    if (this_.jsTree.jstree().get_top_checked().length >= this_.settings.maxOr) {
       for (var i = 0; i < items.length; i++) {
         var id = $(items[i]).attr("id");
         if (selecteds.indexOf(id) == -1) {
@@ -303,27 +303,35 @@ export class TreeWidget extends AbstractWidget {
 
   onClickSelect = function (e: any) {
     let this_ = e.data.arg1;
+    const values = this_.getValue()
+    values.forEach((val:TreeWidgetValue) => {
+      this_.renderWidgetVal(val)
+    });
     this.displayLayer.hide();
   };
 
   onClickClose = function (e: any) {
     let this_ = e.data.arg1;
-    this.displayLayer.hide();
+    this?.displayLayer?.hide();
     $(this_.ParentComponent).trigger("change");
   };
 
-  getValue = function () {
+  getValue = function ():Array<TreeWidgetValue> {
     var checked = this.jsTree.jstree().get_top_checked(true);
 
     // rebuild a clean data structure
     var values = [];
     for (var node in checked) {
-      var v = {
-        key: checked[node].id,
-        label: checked[node].original.text,
-        uri: checked[node].id,
-      };
-      values.push(v);
+      const val:TreeWidgetValue = {
+        value: {
+          key: checked[node].id,
+          label: checked[node].original.text,
+          uri: checked[node].id
+        },
+        valueType: ValueType.MULTIPLE
+      }
+      
+      values.push(val);
     }
 
     return values;

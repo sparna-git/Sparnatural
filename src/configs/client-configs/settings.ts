@@ -6,6 +6,7 @@ const settings: ISettings = {
   config: null,
   language: "en",
   maxDepth: 4, // max amount of where clauses
+  maxOr:6,
   addDistinct: true,
   // backgroundBaseColor: "2,184,117",
   backgroundBaseColor: "29, 224, 153",
