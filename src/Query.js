@@ -564,7 +564,10 @@ export class QuerySPARQLWriter {
 						"\""+queryLine.values[0].boolean+"\"^^http://www.w3.org/2001/XMLSchema#boolean",
 						false
 					)) ;
-				} else {
+				} else if(
+					// we don't generate the predicate triple for GraphDB searches
+					!queryLine.values[0].luceneQueryValue
+				){
 
 					// more than one value for an URI, or a search criteria
 					// push in the bgp only s/p/o, values are inserted after
