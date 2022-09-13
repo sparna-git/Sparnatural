@@ -47,7 +47,7 @@ class SparnaturalJsonGenerator {
         o: CrtGrp.EndClassGroup.getVarName(),
         sType: CrtGrp.StartClassGroup.getTypeSelected(),
         oType: CrtGrp.EndClassGroup.getTypeSelected(),
-        values: CrtGrp.endClassWidgetGroup.getWidgetValue(),
+        [CrtGrp.EndClassGroup.editComponents.widgetWrapper.widgetComponent.baseCssClass]: CrtGrp.endClassWidgetGroup.getWidgetValue(),
       },
       children: grpWrapper.whereChild
         ? this.#getBranch(grpWrapper.whereChild)
