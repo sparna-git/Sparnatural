@@ -18,6 +18,10 @@ export function setPreloadedQuery(actionStore: ActionStore, query: ISparJson) {
   resetSparnatural(actionStore);
   // build Sparnatural query
   buildSparnatural(actionStore, query.branches);
+  // trigger query generation
+  actionStore.sparnatural.html[0].dispatchEvent(
+    new CustomEvent("initGeneralEvent")
+  );
 }
 
 function buildSparnatural(actionStore: ActionStore, branches: Array<Branch>) {
@@ -28,7 +32,7 @@ function buildSparnatural(actionStore: ActionStore, branches: Array<Branch>) {
   let rootBranch = branches.shift();
   buildCriteriaGroup(rootGrpWrapper, rootBranch);
   let parent = rootGrpWrapper;
-  let every = branches.forEach((b) => {
+  branches.forEach((b) => {
     clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
     buildCriteriaGroup(parent.andSibling, b);
     parent = parent.andSibling;
@@ -59,9 +63,7 @@ function buildCriteriaGroup(grpWarpper: GroupWrapper, branch: Branch) {
 
   // set WidgetValues
   branch.line.values.forEach((v) => {
-    grpWarpper.CriteriaGroup.endClassWidgetGroup.renderWidgetVal(
-      v
-    );
+    grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(v)
   });
 
   // trigger option state

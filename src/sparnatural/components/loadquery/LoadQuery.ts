@@ -86,7 +86,7 @@ export default class LoadQuery extends HTMLComponent {
     queries = queries.filter((q) => {
       if (!("queryName" in q && this.#instanceOfISparJson(q.query))) {
         console.warn(
-          `The provided query "${q}" doesn't hold the Sparnatural JSON structure`
+          `The provided query "${q.queryName}" doesn't hold the Sparnatural JSON structure`
         );
         return false;
       }
@@ -133,7 +133,7 @@ export default class LoadQuery extends HTMLComponent {
   //some basic validation if the provided value is an IWidget['value']
   #isWidgetValue(val: WidgetValue): val is WidgetValue {
     //every WidgetVal needs to have at least a label
-    let hasKeys = "label" in val;
+    let hasKeys = "label" in val.value;
     return hasKeys;
   }
 }

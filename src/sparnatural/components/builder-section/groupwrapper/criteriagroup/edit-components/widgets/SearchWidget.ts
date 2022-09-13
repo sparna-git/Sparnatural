@@ -4,6 +4,7 @@ import { getSettings } from "../../../../../../../configs/client-configs/setting
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
 import HTMLComponent from "../../../../../HtmlComponent";
+import WidgetWrapper from "../WidgetWrapper";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
 
 export interface SearchWidgetValue extends WidgetValue {
@@ -21,7 +22,7 @@ export class SearchWidget extends AbstractWidget {
   searchInput: JQuery<HTMLElement>;
 
   constructor(
-    parentComponent: HTMLComponent,
+    parentComponent: WidgetWrapper,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
