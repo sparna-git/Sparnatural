@@ -58,6 +58,14 @@ class SparNatural extends HTMLElement {
     $(this).append(this.Sparnatural.html);
     this.Sparnatural.render();
   }
+
+  enablePlayBtn(){
+    this.Sparnatural.enablePlayBtn()
+  }
+
+  disablePlayBtn(){
+    this.Sparnatural.disablePlayBtn()
+  }
 }
 
 customElements.get("spar-natural") ||

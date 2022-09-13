@@ -119,11 +119,12 @@
               yasqe.setValue(queryString);
             },
           // triggered when "play" button is clicked
-          onSubmit: function(sparnat) {
+          onSubmit: ()=> {
+            sparnatural.disablePlayBtn();
             // trigger the query from YasQE
             yasqe.query();
-            sparnat.onQuerySubmitted();
-          }
+
+          },
         }
         sparnatural.settings = settings
       })
@@ -156,7 +157,7 @@
       // link yasqe and yasr
       yasqe.on("queryResponse", function(_yasqe, response, duration) {
         yasr.setResponse(response, duration);
-        sparnatural.onQueryFinished() ;
+        sparnatural.enablePlayBtn() ;
       }); 
     </script>
   </body>
