@@ -48,26 +48,27 @@ export class AutoCompleteWidget extends AbstractWidget {
       this.endClassVal.type
     );
 
+    let that=this;
     let options = {
       // ajaxSettings: {crossDomain: true, type: 'GET'} ,
       url: function (phrase: any) {
-        return this.autocompleteHandler.autocompleteUrl(
-          this.startClassVal.type,
-          this.objectPropVal.type,
-          this.endClassVal.type,
+        return that.autocompleteHandler.autocompleteUrl(
+          that.startClassVal.type,
+          that.objectPropVal.type,
+          that.endClassVal.type,
           phrase
         );
       },
       listLocation: function (data: any) {
-        return this.autocompleteHandler.listLocation(
-          this.startClassVal.type,
-          this.objectPropVal.type,
-          this.endClassVal.type,
+        return that.autocompleteHandler.listLocation(
+          that.startClassVal.type,
+          that.objectPropVal.type,
+          that.endClassVal.type,
           data
         );
       },
       getValue: function (element: any) {
-        return this.autocompleteHandler.elementLabel(element);
+        return that.autocompleteHandler.elementLabel(element);
       },
 
       adjustWidth: false,
