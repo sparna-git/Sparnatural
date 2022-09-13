@@ -16,11 +16,11 @@ class PlayBtn extends HTMLComponent {
     return this;
   }
 
-  enableLoading() {
+  disable() {
     this.widgetHtml.addClass('submitDisable loadingEnabled');
   }
 
-  disableLoading() {
+  enable() {
     this.widgetHtml.removeClass('loadingEnabled');
   }
 }
