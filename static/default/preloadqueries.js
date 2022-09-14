@@ -144,6 +144,75 @@ export default {
                 }
             ]
         }`
+    },
+    {
+        queryName:`Map test`,
+        query:`{
+            "distinct": true,
+            "variables": [
+                "Tree_1"
+            ],
+            "lang": "en",
+            "order": "noord",
+            "branches": [
+                {
+                    "line": {
+                        "s": "?Tree_1",
+                        "p": "?danslazone_3",
+                        "pType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#hasLocation",
+                        "o": "?Location_2",
+                        "sType": "http://twin-example/geneva#Tree",
+                        "oType": "http://twin-example/geneva#Location",
+                        "values": []
+                    },
+                    "children": [
+                        {
+                            "line": {
+                                "s": "?Location_2",
+                                "p": "?danslazone_5",
+                                "pType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#withinArea",
+                                "o": "?Area_4",
+                                "sType": "http://twin-example/geneva#Location",
+                                "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
+                                "values": [
+                                    {
+                                        "valueType": 0,
+                                        "value": {
+                                            "label": "Area selected",
+                                            "coordinates": [
+                                                [
+                                                    {
+                                                        "lat": 46.18643962153715,
+                                                        "lng": 6.108911409974098
+                                                    },
+                                                    {
+                                                        "lat": 46.22469393152102,
+                                                        "lng": 6.108911409974098
+                                                    },
+                                                    {
+                                                        "lat": 46.22469393152102,
+                                                        "lng": 6.175516024231912
+                                                    },
+                                                    {
+                                                        "lat": 46.18643962153715,
+                                                        "lng": 6.175516024231912
+                                                    }
+                                                ]
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "children": [],
+                            "optional": false,
+                            "notExists": false
+                        }
+                    ],
+                    "optional": false,
+                    "notExists": false
+                }
+            ]
+        }`
     }
     ],
   };

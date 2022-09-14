@@ -30,17 +30,17 @@ export interface MapWidgetValue extends WidgetValue {
 }
 
 // converts props of type Date to type string
-type StringifyLatLng<T> = T extends LatLng[][]
-  ? string
+type ObjectifyLatLng<T> = T extends LatLng[][]
+  ? [[{lat:number,lng:number}]]
   : T extends object
   ? {
-      [k in keyof T]: StringifyLatLng<T[k]>;
+      [k in keyof T]: ObjectifyLatLng<T[k]>;
     }
   : T;
 
 // stringified type of MapWidgetValue
 // see: https://effectivetypescript.com/2020/04/09/jsonify/
-type StringMapWidgetValue = StringifyLatLng<MapWidgetValue>
+type ObjectMapWidgetValue = ObjectifyLatLng<MapWidgetValue>
 
 export default class MapWidget extends AbstractWidget {
   protected widgetValues: MapWidgetValue[];
@@ -136,20 +136,20 @@ export default class MapWidget extends AbstractWidget {
       });
   };
 
-  parseInput(input:StringMapWidgetValue): MapWidgetValue {
-    const splits = input.value.coordinates.split(',')
-    const parsedCoords = splits.map(latlng=>{
-      const xy = latlng.split(',')
-      const x = Number(xy[0])
-      const y = Number(xy[1])
-      if(isNaN(x) || isNaN(y)) throw Error(`Parsing of ${latlng} failed`)
-      return L.latLng(x,y)
+  parseInput(input:ObjectMapWidgetValue): MapWidgetValue {
+
+    const parsedCoords = input.value.coordinates.map((c)=>{
+      return c.map((latlng)=>{
+        if(!("lat" in latlng) || !('lng' in LatLng) || isNaN(latlng.lat) || isNaN(latlng.lng))
+        return new L.LatLng(latlng.lat,latlng.lng)
+      })
     })
+    if(parsedCoords.length === 0) throw Error(`Parsing of ${input.value.coordinates} failed`)
     return{
       valueType: ValueType.SINGLE,
       value:{
         label: input.value.label,
-        coordinates: parsedCoords as unknown as LatLng[][]
+        coordinates: parsedCoords
       }
     }
   }
@@ -162,8 +162,6 @@ export default class MapWidget extends AbstractWidget {
       this.#closeMap
     ).render();
   }
-
-
 
   // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
   getRdfJsPattern(): Pattern[] {
