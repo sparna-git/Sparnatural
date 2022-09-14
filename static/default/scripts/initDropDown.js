@@ -1,4 +1,6 @@
-export default renderDropDown = (dropDown)=> {
+import { Dropdown } from "../dropdown/dropdown.js";
+export const renderDropDown = function(dropDown,parsedQueries) {
+    dropDown = new Dropdown()
     dropDown.label = "Preloaded SPARQL queries";
     // Set the queries as aptions
     let options = {};

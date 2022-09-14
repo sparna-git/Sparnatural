@@ -1,11 +1,12 @@
-import globalStyle from "./global-style";
-import basicAtom from "./basic-atom";
+import basicAtom from "./basic-atom.js";
 
 const template = document.createElement("template");
 
 template.innerHTML = `
   <style>
-    ${globalStyle}
+  :host {
+    font-family: sans-serif;
+  }
 
     ${basicAtom}
 
@@ -69,8 +70,8 @@ template.innerHTML = `
 `;
 
 class Button extends HTMLElement {
-  $container: any;
-  $button: any;
+  $container
+  $button
   constructor() {
     super();
 
@@ -111,7 +112,7 @@ class Button extends HTMLElement {
     return ["label"];
   }
 
-  attributeChangedCallback(name: string, oldVal: string, newVal: string) {
+  attributeChangedCallback(name, oldVal, newVal) {
     this.render();
   }
 

@@ -83,14 +83,12 @@
     <!-- YASGUI stuff -->
     <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
 
-
-
     <script type="module">
       /*
         Dropdown
       */
-      //import renderDropdown from './scripts/initDropDown.js'
-      //renderDropdown(document.querySelector("custom-dropdown"))
+      import {renderDropDown} from './default/scripts/initDropDown.js'
+      import preLoadedQueries from './default/configs/preloadqueries.js'
 
       let prefixesPostProcess = function(queryString, queryJson) {
         if(queryString.indexOf("rdf-schema#") == -1) {
@@ -113,7 +111,6 @@
         Init Sparnatural component
       */
       import config from './default/configs/config.js';
-      import preLoadedQueries from './default/configs/preloadqueries.js'
       let sparnatural = document.querySelector("spar-natural");
       sparnatural.addEventListener('componentLoaded',(e)=>{
         // If you would like to overwride default settings
@@ -136,6 +133,7 @@
           },
         }
         sparnatural.settings = settings
+        //renderDropDown(dropDown,sparnatural.parseQueries(preLoadedQueries))
       })
       
       let semanticPostProcess = function(queryString, queryJson) {
