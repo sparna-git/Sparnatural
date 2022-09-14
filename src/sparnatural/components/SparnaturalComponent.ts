@@ -6,7 +6,8 @@ import SpecificationProviderFactory from "../spec-providers/SpecificationProvide
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
 import HTMLComponent from "./HtmlComponent";
-import LoadQuery from "./loadquery/LoadQuery";
+import QueryLoader from "../queryloader/QueryLoader";
+
 
 const i18nLabels = {
   en: require("../../assets/lang/en.json"),
@@ -17,7 +18,7 @@ class Sparnatural extends HTMLComponent {
   specProvider: ISpecProvider;
   submitOpened = true; // is responsible if the generateQuery button works or not
   actionStore: ActionStore;
-  loadQueries: LoadQuery;
+  queryLoader:QueryLoader;
   BgWrapper: BgWrapper;
   SubmitSection: SubmitSection;
   VariableSelection: VariableSection;
@@ -33,19 +34,13 @@ class Sparnatural extends HTMLComponent {
     } else {
       getSettings().langSearch = i18nLabels["en"];
     }
+    this.queryLoader = new QueryLoader(this)
   }
 
   render(): this {
     this.initSparnatural();
     //Think this will be launched before load query ???
     this.actionStore = new ActionStore(this, this.specProvider);
-
-    if (getSettings().preLoadedQueries) {
-      this.loadQueries = new LoadQuery(
-        this,
-        getSettings().preLoadedQueries
-      ).render();
-    }
     this.BgWrapper = new BgWrapper(this, this.specProvider).render();
     this.SubmitSection = new SubmitSection(this).render();
     this.VariableSelection = new VariableSection(
@@ -80,6 +75,5 @@ class Sparnatural extends HTMLComponent {
   disablePlayBtn = () => {
     this.SubmitSection.playBtn.disable();
   }
-
 }
 export default Sparnatural;

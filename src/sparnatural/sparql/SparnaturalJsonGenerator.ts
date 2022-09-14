@@ -1,4 +1,4 @@
-import Sparnatural from "../components/Sparnatural";
+import Sparnatural from "../components/SparnaturalComponent";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { Branch, ISparJson, Language, Order, SelectedVal } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";

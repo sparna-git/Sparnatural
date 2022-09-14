@@ -31,6 +31,9 @@
     
     <div class="container-fluid" style="margin-top:1em;">
       <div class="row">
+        <custom-dropdown></custom-dropdown>
+      </div>
+      <div class="row">
         <div class="col-md-7">
           <div id="ui-search" style="width:auto">
             <spar-natural></spar-natural>
@@ -83,7 +86,9 @@
 
 
     <script type="module">
+      /*
 
+      */
       let prefixesPostProcess = function(queryString, queryJson) {
         if(queryString.indexOf("rdf-schema#") == -1) {
           queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
@@ -112,7 +117,6 @@
         let settings = {
           config: config,
           language: "fr",
-          preLoadedQueries:preLoadedQueries,
           defaultEndpoint: function() { return $('#endpoint').text() },
           //language:lang,
           onQueryUpdated: function(queryString, queryJson, specProvider) {
@@ -139,7 +143,6 @@
       /*
         Init Yasgui component
       */
-      //let defaultEndpoint = "http://fr.dbpedia.org/sparql"
 
       const yasqe = new Yasqe(document.getElementById("yasqe"), {
         requestConfig: { endpoint: $('#endpoint').text() },

@@ -16,8 +16,11 @@ library.add(fas);
 library.add(far as IconPack);
 
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
-import Sparnatural from "./sparnatural/components/Sparnatural";
+import Sparnatural from "./sparnatural/components/SparnaturalComponent";
 import ISpecProvider from "./sparnatural/spec-providers/ISpecProviders";
+import { ISparJson } from "./sparnatural/sparql/ISparJson";
+import QueryLoader from "./sparnatural/queryloader/QueryParser";
+import { PreLoadQueries } from "./configs/client-configs/ISettings";
 
 /*
   This is the SparNatural HTMLElement. 
@@ -65,6 +68,14 @@ class SparNatural extends HTMLElement {
 
   disablePlayBtn(){
     this.Sparnatural.disablePlayBtn()
+  }
+
+  parseQueries(queries:PreLoadQueries){
+    return QueryLoader.parseQueries(queries)
+  }
+
+  loadQuery(query:ISparJson){
+    
   }
 }
 

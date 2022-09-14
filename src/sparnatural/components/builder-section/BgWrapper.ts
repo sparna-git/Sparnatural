@@ -1,6 +1,6 @@
 import ResetBtn from "../buttons/ResetBtn";
 import ComponentsList from "./ComponentsList";
-import Sparnatural from "../Sparnatural";
+import Sparnatural from "../SparnaturalComponent";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../HtmlComponent";
 

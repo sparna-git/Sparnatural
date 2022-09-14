@@ -15,7 +15,7 @@ import {
   VariableTerm,
   Wildcard,
 } from "sparqljs";
-import Sparnatural from "../components/Sparnatural";
+import Sparnatural from "../components/SparnaturalComponent";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import * as DataFactory from "@rdfjs/data-model" ;
 import { AbstractWidget } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget";
