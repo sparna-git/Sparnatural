@@ -130,7 +130,6 @@ export class Dropdown extends HTMLElement {
   $dropdownList;
   constructor() {
     super();
-    console.warn('WHHHHAT')
     this.attachShadow({ mode: "open" });
     this.shadowRoot.appendChild(template.content.cloneNode(true));
 
@@ -142,11 +141,6 @@ export class Dropdown extends HTMLElement {
     this.$dropdownList = this.shadowRoot.querySelector(".dropdown-list");
 
     this.$button.addEventListener("onClick", this.toggleOpen.bind(this));
-  }
-
-  //gets called when the component was rendered
-  connectedCallback() {
-    console.warn('connnneeeected')
   }
 
   static get observedAttributes() {
@@ -224,5 +218,4 @@ export class Dropdown extends HTMLElement {
     });
   }
 }
-console.warn('inside file')
 window.customElements.define("custom-dropdown", Dropdown);
