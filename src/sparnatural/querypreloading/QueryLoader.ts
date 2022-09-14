@@ -21,6 +21,7 @@ export default class QueryLoader{
     }
     
     static #buildSparnatural(sparnatural: Sparnatural, branches: Array<Branch>) {
+        if(branches?.length === 0) throw Error('No Branches on query detected')
         // first build the rootGroupWrapper
         let rootGrpWrapper =
         sparnatural.BgWrapper.componentsList.rootGroupWrapper;

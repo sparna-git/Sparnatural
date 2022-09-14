@@ -84,11 +84,6 @@
     <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
 
     <script type="module">
-      /*
-        Dropdown
-      */
-      import {renderDropDown} from './default/scripts/initDropDown.js'
-      import preLoadedQueries from './default/configs/preloadqueries.js'
 
       let prefixesPostProcess = function(queryString, queryJson) {
         if(queryString.indexOf("rdf-schema#") == -1) {
@@ -112,28 +107,34 @@
       */
       import config from './default/configs/config.js';
       let sparnatural = document.querySelector("spar-natural");
-      sparnatural.addEventListener('componentLoaded',(e)=>{
-        // If you would like to overwride default settings
-        let settings = {
-          config: config,
-          language: "fr",
-          defaultEndpoint: function() { return $('#endpoint').text() },
-          //language:lang,
-          onQueryUpdated: function(queryString, queryJson, specProvider) {
-              queryString = semanticPostProcess(queryString, queryJson);
-              queryString = specProvider.expandSparql(queryString);
-              yasqe.setValue(queryString);
-            },
-          // triggered when "play" button is clicked
-          onSubmit: ()=> {
-            sparnatural.disablePlayBtn();
-            // trigger the query from YasQE
-            yasqe.query();
-
+              // If you would like to overwride default settings
+      let settings = {
+        config: config,
+        language: "fr",
+        defaultEndpoint: function() { return $('#endpoint').text() },
+        //language:lang,
+        onQueryUpdated: function(queryString, queryJson, specProvider) {
+            queryString = semanticPostProcess(queryString, queryJson);
+            queryString = specProvider.expandSparql(queryString);
+            yasqe.setValue(queryString);
           },
-        }
+        // triggered when "play" button is clicked
+        onSubmit: ()=> {
+          sparnatural.disablePlayBtn();
+          // trigger the query from YasQE
+          yasqe.query();
+
+        },
+      }
+      
+      sparnatural.addEventListener('componentLoaded',(e)=>{
         sparnatural.settings = settings
-        //renderDropDown(dropDown,sparnatural.parseQueries(preLoadedQueries))
+        // set the queries to the dropdown
+        const dropDown = document.querySelector("custom-dropdown")
+        renderDropDown(dropDown,sparnatural.parseQueries(preLoadedQueries))
+        dropDown.addEventListener('loadQuery',(e)=>{
+          sparnatural.loadQuery(e.detail.query)
+        })
       })
       
       let semanticPostProcess = function(queryString, queryJson) {
@@ -165,6 +166,14 @@
         yasr.setResponse(response, duration);
         sparnatural.enablePlayBtn() ;
       }); 
+
+
+      /*
+        Dropdown for preloaded queries
+      */
+      import { Dropdown } from "./default/dropdown/dropdown.js";
+      import {renderDropDown} from './default/scripts/initDropDown.js'
+      import preLoadedQueries from './default/configs/preloadqueries.js'
     </script>
   </body>
 </html>

@@ -1,6 +1,6 @@
-import { Dropdown } from "../dropdown/dropdown.js";
+
 export const renderDropDown = function(dropDown,parsedQueries) {
-    dropDown = new Dropdown()
+    console.dir(dropDown)
     dropDown.label = "Preloaded SPARQL queries";
     // Set the queries as aptions
     let options = {};
@@ -24,8 +24,8 @@ export const renderDropDown = function(dropDown,parsedQueries) {
         return false;
       });
       // send a deep copy of that object
-      html[0].dispatchEvent(
-        new CustomEvent("setPreloadedQuery", {
+      dropDown.dispatchEvent(
+        new CustomEvent("loadQuery", {
           bubbles: true,
           detail: JSON.parse(JSON.stringify(payload)),
         })
