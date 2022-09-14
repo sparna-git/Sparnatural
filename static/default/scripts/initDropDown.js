@@ -11,8 +11,6 @@ export default renderDropDown = (dropDown)=> {
     // set the first query as default query
     dropDown.option = Object.keys(options)[0];
 
-    html.append(dropDown);
-
     // gets called when the user selects a query from the dropdown
     dropDown.addEventListener("onChange", (value) => {
       if (!("detail" in value) || !("label" in value.detail))

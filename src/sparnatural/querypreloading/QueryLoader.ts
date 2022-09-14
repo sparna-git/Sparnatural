@@ -9,10 +9,6 @@ import { Branch, ISparJson } from "../sparql/ISparJson";
 export default class QueryLoader{
     static sparnatural: Sparnatural;
 
-    constructor(sparnatural:Sparnatural){
-        QueryLoader.sparnatural = sparnatural
-    }
-
     static loadQuery(query:ISparJson){
         // first reset the current query
         this.sparnatural.BgWrapper.resetCallback();
@@ -109,6 +105,10 @@ export default class QueryLoader{
   
   static #clickOn(el: JQuery<HTMLElement>) {
     el[0].dispatchEvent(new Event("click"));
+  }
+
+  static setSparnatural(sparnatural:Sparnatural){
+    this.sparnatural = sparnatural
   }
 
 }

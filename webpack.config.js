@@ -10,7 +10,7 @@ const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').
 
 module.exports = {
   mode:'development',
-  entry: ["./src/sparnatural.ts" ],
+  entry: ["./src/SparnaturalElement.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "sparnatural.js"

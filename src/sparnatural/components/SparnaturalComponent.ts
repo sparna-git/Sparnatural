@@ -6,7 +6,6 @@ import SpecificationProviderFactory from "../spec-providers/SpecificationProvide
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
 import HTMLComponent from "./HtmlComponent";
-import QueryLoader from "../queryloader/QueryLoader";
 
 
 const i18nLabels = {
@@ -18,7 +17,6 @@ class Sparnatural extends HTMLComponent {
   specProvider: ISpecProvider;
   submitOpened = true; // is responsible if the generateQuery button works or not
   actionStore: ActionStore;
-  queryLoader:QueryLoader;
   BgWrapper: BgWrapper;
   SubmitSection: SubmitSection;
   VariableSelection: VariableSection;
@@ -34,7 +32,6 @@ class Sparnatural extends HTMLComponent {
     } else {
       getSettings().langSearch = i18nLabels["en"];
     }
-    this.queryLoader = new QueryLoader(this)
   }
 
   render(): this {

@@ -87,8 +87,11 @@
 
     <script type="module">
       /*
-
+        Dropdown
       */
+      //import renderDropdown from './scripts/initDropDown.js'
+      //renderDropdown(document.querySelector("custom-dropdown"))
+
       let prefixesPostProcess = function(queryString, queryJson) {
         if(queryString.indexOf("rdf-schema#") == -1) {
           queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
@@ -109,8 +112,8 @@
       /*
         Init Sparnatural component
       */
-      import config from './default/config.js';
-      import preLoadedQueries from './default/preloadqueries.js'
+      import config from './default/configs/config.js';
+      import preLoadedQueries from './default/configs/preloadqueries.js'
       let sparnatural = document.querySelector("spar-natural");
       sparnatural.addEventListener('componentLoaded',(e)=>{
         // If you would like to overwride default settings

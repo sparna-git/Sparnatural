@@ -1,12 +1,8 @@
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
-
 require("./assets/stylesheets/sparnatural.scss");
-
 import $ from "jquery";
-
 /* FONT AWESOME*/
 require("@fortawesome/fontawesome-free");
 import { IconPack, library } from "@fortawesome/fontawesome-svg-core";
@@ -14,13 +10,14 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 library.add(fas);
 library.add(far as IconPack);
-
+/*SPARNATURAL*/
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
 import Sparnatural from "./sparnatural/components/SparnaturalComponent";
 import ISpecProvider from "./sparnatural/spec-providers/ISpecProviders";
 import { ISparJson } from "./sparnatural/sparql/ISparJson";
-import QueryLoader from "./sparnatural/queryloader/QueryParser";
 import { PreLoadQueries } from "./configs/client-configs/ISettings";
+import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
+import QueryParser from "./sparnatural/querypreloading/QueryParser";
 
 /*
   This is the SparNatural HTMLElement. 
@@ -71,11 +68,12 @@ class SparNatural extends HTMLElement {
   }
 
   parseQueries(queries:PreLoadQueries){
-    return QueryLoader.parseQueries(queries)
+    return QueryParser.parseQueries(queries)
   }
 
   loadQuery(query:ISparJson){
-    
+    QueryLoader.setSparnatural(this.Sparnatural)
+    QueryLoader.loadQuery(query)
   }
 }
 
