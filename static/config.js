@@ -528,6 +528,7 @@ BIND(true AS ?hasChildren)
         { "@value": "name", "@language": "en" },
         { "@value": "nom", "@language": "fr" },
       ],
+      enableOptional: true,
       sparqlString: "rdfs:label",
       range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text",
     },
