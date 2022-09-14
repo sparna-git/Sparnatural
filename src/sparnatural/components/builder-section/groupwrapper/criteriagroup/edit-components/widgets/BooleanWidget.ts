@@ -1,5 +1,5 @@
 import * as DataFactory from "@rdfjs/data-model" ;
-import { BaseExpression, BgpPattern, Expression, Pattern } from "sparqljs";
+import { BgpPattern, Pattern } from "sparqljs";
 import { getSettings } from "../../../../../../../configs/client-configs/settings";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import WidgetWrapper from "../WidgetWrapper";
@@ -68,6 +68,11 @@ export class BooleanWidget extends AbstractWidget {
     });
     return this;
   }
+
+  parseInput(input: BooleanWidgetValue): BooleanWidgetValue {
+    input.value.boolean.toString() === 'true' ? input.value.boolean = true : input.value.boolean = false
+    return input
+   }
 
   getRdfJsPattern(): Pattern[] {
     let ptrn: BgpPattern = {

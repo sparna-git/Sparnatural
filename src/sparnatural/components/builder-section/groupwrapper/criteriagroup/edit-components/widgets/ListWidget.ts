@@ -21,6 +21,7 @@ export interface ListWidgetValue extends WidgetValue {
 }
 
 export class ListWidget extends AbstractWidget {
+
   protected widgetValues: ListWidgetValue[];
   listHandler: SparqlTemplateListHandler;
   sort: boolean;
@@ -150,6 +151,8 @@ export class ListWidget extends AbstractWidget {
       });
     return this;
   }
+
+  parseInput(input:ListWidgetValue): ListWidgetValue { return input }
 
   getRdfJsPattern(): Pattern[] {
     let vals = this.widgetValues.map((v) => {

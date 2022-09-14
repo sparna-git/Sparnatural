@@ -63,7 +63,8 @@ function buildCriteriaGroup(grpWarpper: GroupWrapper, branch: Branch) {
 
   // set WidgetValues
   branch.line.values.forEach((v) => {
-    grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(v)
+    const parsedVal = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
+    grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(parsedVal)
   });
 
   // trigger option state

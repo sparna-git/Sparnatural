@@ -40,7 +40,9 @@ export abstract class AbstractWidget extends HTMLComponent {
   }
   // Must be implemented by the developper of the widget
   abstract getRdfJsPattern(): Pattern[];
-
+  // 
+  abstract parseInput(value:any):WidgetValue
+  
   getSparnaturalRepresentation() {
     let vals = this.widgetValues.map((v) => v.value);
     return JSON.stringify(vals);

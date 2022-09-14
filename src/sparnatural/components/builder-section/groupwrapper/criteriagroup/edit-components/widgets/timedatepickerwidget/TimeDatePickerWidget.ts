@@ -10,7 +10,7 @@ import * as DataFactory from "@rdfjs/data-model" ;
 import { SelectedVal } from "../../../../../../../sparql/ISparJson";
 import ISpecProvider from "../../../../../../../spec-providers/ISpecProviders";
 import SparqlFactory from "../../../../../../../sparql/SparqlFactory";
-import { buildDateRangeOrExactDatePattern, buildDateRangePattern } from "./TimeDatePattern";
+import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
 
 export interface DateTimePickerValue extends WidgetValue {
   value: {
@@ -21,7 +21,21 @@ export interface DateTimePickerValue extends WidgetValue {
   };
 }
 
+// converts props of type Date to type string
+type StringifyDate<T> = T extends Date
+  ? string
+  : T extends object
+  ? {
+      [k in keyof T]: StringifyDate<T[k]>;
+    }
+  : T;
+
+// stringified type of DateTimePickerValue
+// see: https://effectivetypescript.com/2020/04/09/jsonify/
+type StringDateTimeValue = StringifyDate<DateTimePickerValue>
+
 export class TimeDatePickerWidget extends AbstractWidget {
+ 
   protected widgetValues: DateTimePickerValue[];
   datesHandler: any;
   ParentComponent: any;
@@ -127,45 +141,27 @@ export class TimeDatePickerWidget extends AbstractWidget {
   }
 
   #addValueBtnClicked = () => {
-    let val = {
-      valueType: ValueType.SINGLE,
+    let stringDateTimeVal:StringDateTimeValue ={
       value: {
-        key: "",
-        label: "",
-        start: (this.inputStart.val() != '')?new Date(this.inputStart.datepicker("getDate")):null,
-        stop: (this.inputEnd.val() != '')?new Date(this.inputEnd.datepicker("getDate")):null,
-        startLabel:this.inputStart.val(),
-        endLabel:this.inputEnd.val()
+        key: null,
+        label: null,
+        start:(this.inputStart.val() != '')?this.inputStart.datepicker("getDate").toISOString():null,
+        stop:(this.inputEnd.val() != '')?this.inputEnd.datepicker("getDate").toISOString():null,
       },
-    };
-    let widgetVal: DateTimePickerValue = this.#validateInput(
-      (this.inputStart.val() != '')?new Date(this.inputStart.datepicker("getDate")):null,
-      this.inputStart.val(),
-      (this.inputEnd.val() != '')?new Date(this.inputEnd.datepicker("getDate")):null,
-      this.inputEnd.val()
+      valueType: ValueType.SINGLE
+    } 
+    let widgetVal: DateTimePickerValue = this.parseInput(
+      stringDateTimeVal
     );
     if (!widgetVal) return;
     this.renderWidgetVal(widgetVal);
   };
 
-  //TODO add dialog for user if input is unreasonable
-  #validateInput(
-    startValue: Date,
-    startLabel: any,
-    endValue: Date,
-    endLabel: any
-  ) {
-    if (
-      startValue == null &&
-      endValue == null
-    ) {
-      console.warn(`no input received on DateTimePicker`);
-      return null;
-    }
-    if (startValue && endValue && (startValue > endValue)) {
-      console.warn(`startVal is bigger then endVal`);
-      return null;
-    }
+  parseInput(input: StringDateTimeValue): DateTimePickerValue {
+    if(!this.#isValidDate(input.value.start) && !this.#isValidDate(input.value.stop)) throw Error('No valid Date received')
+    let startValue = new Date(input.value.start)
+    let endValue = new Date(input.value.stop)
+    if (startValue && endValue && (startValue > endValue)) throw Error('StartDate is bigger than Enddate!')
 
     let tmpValue: { start: Date; stop: Date };
 
@@ -204,37 +200,13 @@ export class TimeDatePickerWidget extends AbstractWidget {
       value: {
         key: tmpValue.start+" - "+tmpValue.stop,
         // TODO : this is not translated
-        label: this.getValueLabel(startLabel, endLabel),
+        label: this.#getValueLabel(this.inputStart.val().toString(), this.inputEnd.val().toString()),
         start: tmpValue.start,
         stop: tmpValue.stop,
       },
     };
     return dateTimePickerVal;
-  }
 
-  getValueLabel = function (startLabel: string, stopLabel: string) {
-    let valueLabel = "";
-    if ((startLabel != "") && (stopLabel != "")) {
-      valueLabel = getSettings().langSearch.LabelDateFrom+' '+ startLabel +' '+getSettings().langSearch.LabelDateTo+' '+ stopLabel ;
-    } else if (startLabel != "") {
-      valueLabel = getSettings().langSearch.DisplayValueDateFrom+' '+ startLabel ;
-    } else if (stopLabel != "") {
-      valueLabel = getSettings().langSearch.DisplayValueDateTo+' '+ stopLabel ;
-    }
-
-    return valueLabel;
-  };
-
-  #padTo2Digits(num: number) {
-    return num.toString().padStart(2, "0");
-  }
-
-  #formatDate(date: Date) {
-    return [
-      this.#padTo2Digits(date.getDate()),
-      this.#padTo2Digits(date.getMonth() + 1),
-      date.getFullYear(),
-    ].join("/");
   }
 
   getRdfJsPattern(): Pattern[] {
@@ -279,10 +251,23 @@ export class TimeDatePickerWidget extends AbstractWidget {
           )
         ),
       ];
+    }    
+  }
+
+  #getValueLabel = function (startLabel: string, stopLabel: string) {
+    let valueLabel = "";
+    if ((startLabel != "") && (stopLabel != "")) {
+      valueLabel = getSettings().langSearch.LabelDateFrom+' '+ startLabel +' '+getSettings().langSearch.LabelDateTo+' '+ stopLabel ;
+    } else if (startLabel != "") {
+      valueLabel = getSettings().langSearch.DisplayValueDateFrom+' '+ startLabel ;
+    } else if (stopLabel != "") {
+      valueLabel = getSettings().langSearch.DisplayValueDateTo+' '+ stopLabel ;
     }
 
-    
+    return valueLabel;
+  };
 
-    
+  #isValidDate(dateString:string){
+    return (new Date(dateString).toString() !== "Invalid Date") && !isNaN(Date.parse(dateString));
   }
 }

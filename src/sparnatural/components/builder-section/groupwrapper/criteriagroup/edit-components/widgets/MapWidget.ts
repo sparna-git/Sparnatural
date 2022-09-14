@@ -29,6 +29,19 @@ export interface MapWidgetValue extends WidgetValue {
   valueType: ValueType.SINGLE;
 }
 
+// converts props of type Date to type string
+type StringifyLatLng<T> = T extends LatLng[][]
+  ? string
+  : T extends object
+  ? {
+      [k in keyof T]: StringifyLatLng<T[k]>;
+    }
+  : T;
+
+// stringified type of MapWidgetValue
+// see: https://effectivetypescript.com/2020/04/09/jsonify/
+type StringMapWidgetValue = StringifyLatLng<MapWidgetValue>
+
 export default class MapWidget extends AbstractWidget {
   protected widgetValues: MapWidgetValue[];
   protected blockObjectPropTriple: boolean = true
@@ -123,6 +136,24 @@ export default class MapWidget extends AbstractWidget {
       });
   };
 
+  parseInput(input:StringMapWidgetValue): MapWidgetValue {
+    const splits = input.value.coordinates.split(',')
+    const parsedCoords = splits.map(latlng=>{
+      const xy = latlng.split(',')
+      const x = Number(xy[0])
+      const y = Number(xy[1])
+      if(isNaN(x) || isNaN(y)) throw Error(`Parsing of ${latlng} failed`)
+      return L.latLng(x,y)
+    })
+    return{
+      valueType: ValueType.SINGLE,
+      value:{
+        label: input.value.label,
+        coordinates: parsedCoords as unknown as LatLng[][]
+      }
+    }
+  }
+
   #changeButton() {
     this.renderMapValueBtn.html.remove();
     this.renderMapValueBtn = new AddUserInputBtn(
@@ -131,6 +162,8 @@ export default class MapWidget extends AbstractWidget {
       this.#closeMap
     ).render();
   }
+
+
 
   // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
   getRdfJsPattern(): Pattern[] {
