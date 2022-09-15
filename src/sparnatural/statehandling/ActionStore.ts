@@ -32,11 +32,9 @@ class ActionStore {
   variables: Array<string> = []; // example ?museum
   distinct = true; // default
   language = Language.EN; //default
-
   sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
-
   maxVarIndex = 0; //maxVarIndex indicates how many AND and WHERE siblings are allowed to be added
-
+  showVariableNames = false //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
   //submitOpened = false still implement
   constructor(sparnatural: Sparnatural, specProvider: ISpecProvider) {
     this.specProvider = specProvider;
@@ -80,7 +78,8 @@ class ActionStore {
     // Switch which toggles if the Start and Endvalues are shown as their Var name. e.g Country_1
     this.sparnatural.html[0].addEventListener("toggleVarNames", (e) => {
       e.stopImmediatePropagation();
-      toggleVarNames(this);
+      this.showVariableNames? this.showVariableNames = false : this.showVariableNames = true
+      toggleVarNames(this,this.showVariableNames);
     });
 
     this.sparnatural.html[0].addEventListener(
