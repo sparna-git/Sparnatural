@@ -65,6 +65,8 @@ export default class QueryLoader{
     // set WidgetValues
     branch.line.values.forEach((v) => {
       const parsedVal = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
+      // if there are multiple values rendered, click first the 'plus' btn, to add more values
+      if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
       grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(parsedVal)
     });
   

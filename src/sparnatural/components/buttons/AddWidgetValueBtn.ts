@@ -15,15 +15,15 @@ class AddWidgetValueBtn extends HTMLComponent {
   render(): this {
     super.render();
     this.backArrow.render();
-    let widgetHtml = $(`<p><span>+</span></p>`);
+    const widgetHtml = $(`<p><span>+</span></p>`);
     this.html.append(widgetHtml);
     this.frontArrow.render();
-    this.#addEventListener(widgetHtml);
+    this.#addEventListener(this.html);
     return this;
   }
 
-  #addEventListener(widgetHtml: JQuery<HTMLElement>) {
-    widgetHtml[0].addEventListener("click", () => {
+  #addEventListener(el: JQuery<HTMLElement>) {
+    el[0].addEventListener("click", () => {
       this.callBack();
     });
   }
