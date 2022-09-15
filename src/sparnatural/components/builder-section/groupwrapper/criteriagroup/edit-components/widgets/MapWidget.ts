@@ -29,6 +29,19 @@ export interface MapWidgetValue extends WidgetValue {
   valueType: ValueType.SINGLE;
 }
 
+// converts props of type Date to type string
+type ObjectifyLatLng<T> = T extends LatLng[][]
+  ? [[{lat:number,lng:number}]]
+  : T extends object
+  ? {
+      [k in keyof T]: ObjectifyLatLng<T[k]>;
+    }
+  : T;
+
+// stringified type of MapWidgetValue
+// see: https://effectivetypescript.com/2020/04/09/jsonify/
+type ObjectMapWidgetValue = ObjectifyLatLng<MapWidgetValue>
+
 export default class MapWidget extends AbstractWidget {
   protected widgetValues: MapWidgetValue[];
   protected blockObjectPropTriple: boolean = true
@@ -122,6 +135,24 @@ export default class MapWidget extends AbstractWidget {
         valueType: ValueType.SINGLE,
       });
   };
+
+  parseInput(input:ObjectMapWidgetValue): MapWidgetValue {
+
+    const parsedCoords = input.value.coordinates.map((c)=>{
+      return c.map((latlng)=>{
+        if(!("lat" in latlng) || !('lng' in LatLng) || isNaN(latlng.lat) || isNaN(latlng.lng))
+        return new L.LatLng(latlng.lat,latlng.lng)
+      })
+    })
+    if(parsedCoords.length === 0) throw Error(`Parsing of ${input.value.coordinates} failed`)
+    return{
+      valueType: ValueType.SINGLE,
+      value:{
+        label: input.value.label,
+        coordinates: parsedCoords
+      }
+    }
+  }
 
   #changeButton() {
     this.renderMapValueBtn.html.remove();

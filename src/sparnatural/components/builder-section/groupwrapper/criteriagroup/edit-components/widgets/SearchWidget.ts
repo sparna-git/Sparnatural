@@ -3,7 +3,7 @@ import { BgpPattern, Pattern } from "sparqljs";
 import { getSettings } from "../../../../../../../configs/client-configs/settings";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
-import HTMLComponent from "../../../../../HtmlComponent";
+import WidgetWrapper from "../WidgetWrapper";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
 
 export interface SearchWidgetValue extends WidgetValue {
@@ -16,12 +16,13 @@ export interface SearchWidgetValue extends WidgetValue {
 }
 
 export class SearchWidget extends AbstractWidget {
+
   protected widgetValues: SearchWidgetValue[];
   addValueBtn: AddUserInputBtn;
   searchInput: JQuery<HTMLElement>;
 
   constructor(
-    parentComponent: HTMLComponent,
+    parentComponent: WidgetWrapper,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
@@ -57,18 +58,16 @@ export class SearchWidget extends AbstractWidget {
         search: this.searchInput.val().toString(),
       },
     };
-    this.renderWidgetVal(this.#validateInput(searchWidgetValue));
+    this.renderWidgetVal(this.parseInput(searchWidgetValue));
   };
 
-  //TODO add dialog for input sanitation
-  #validateInput(val: SearchWidgetValue) {
+  parseInput(input:SearchWidgetValue): SearchWidgetValue {
     if (this.searchInput.val().toString() == "") {
-      console.warn("empty string provided in searchWidget");
-      val = null;
+      throw Error('Empty String in Search Widget')
     }
-    return val;
+    return input;
   }
-
+  
   getRdfJsPattern(): Pattern[] {
     let ptrn: BgpPattern = {
       type: "bgp",

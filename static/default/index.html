@@ -31,6 +31,9 @@
     
     <div class="container-fluid" style="margin-top:1em;">
       <div class="row">
+        <custom-dropdown></custom-dropdown>
+      </div>
+      <div class="row">
         <div class="col-md-7">
           <div id="ui-search" style="width:auto">
             <spar-natural></spar-natural>
@@ -80,85 +83,21 @@
     <!-- YASGUI stuff -->
     <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
 
-
-
     <script type="module">
 
-      let prefixesPostProcess = function(queryString, queryJson) {
-        if(queryString.indexOf("rdf-schema#") == -1) {
-          queryString = queryString.replace("SELECT ", "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> \nSELECT ");
-        }         
-        return queryString;
-      }
 
-      let isPrimaryTopicOfPostProcess = function(queryString, queryJson) {
-        queryString = queryString.replace(new RegExp('\n\}'), "  ?this <http://xmlns.com/foaf/0.1/isPrimaryTopicOf> ?wikipedia \n}");
-        return queryString;
-      }
-
-      const queryString = window.location.search;
-      const urlParams = new URLSearchParams(queryString);
-      const lang = urlParams.get('lang')
-
+      /*
+        Dropdown for preloaded queries
+      */
+      import { Dropdown } from "./default/dropdown/dropdown.js";
+      import {renderDropDown} from './default/scripts/initDropDown.js'
+      import preLoadedQueries from './default/configs/preloadqueries.js'
+      /*
+        Import Sparnatural initialization
+      */
+      import * as SparNatural from './default/scripts/initSparnatural.js'
      
-      /*
-        Init Sparnatural component
-      */
-      import config from './config.js';
-      let sparnatural = document.querySelector("spar-natural");
-      sparnatural.addEventListener('componentLoaded',(e)=>{
-        // If you would like to overwride default settings
-        let settings = {
-          config: config,
-          language: "fr",
-          defaultEndpoint: function() { return $('#endpoint').text() },
-          //language:lang,
-          onQueryUpdated: function(queryString, queryJson, specProvider) {
-              queryString = semanticPostProcess(queryString, queryJson);
-              queryString = specProvider.expandSparql(queryString);
-              yasqe.setValue(queryString);
-            },
-          // triggered when "play" button is clicked
-          onSubmit: ()=> {
-            sparnatural.disablePlayBtn();
-            // trigger the query from YasQE
-            yasqe.query();
 
-          },
-        }
-        sparnatural.settings = settings
-      })
-      
-      let semanticPostProcess = function(queryString, queryJson) {
-        queryString = prefixesPostProcess(queryString, queryJson);
-        return queryString;
-      } 
-
-      /*
-        Init Yasgui component
-      */
-      //let defaultEndpoint = "http://fr.dbpedia.org/sparql"
-
-      const yasqe = new Yasqe(document.getElementById("yasqe"), {
-        requestConfig: { endpoint: $('#endpoint').text() },
-        copyEndpointOnNewTab: false  
-      });
-
-      const yasr = new Yasr(document.getElementById("yasr"), {
-        //this way, the URLs in the results are prettified using the defined prefixes in the query
-        getUsedPrefixes : yasqe.getPrefixesFromQuery,
-        "drawOutputSelector": false,
-        "drawDownloadIcon": false,
-        // avoid persistency side-effects
-        "persistency": { "prefix": false, "results": { "key": false }}
-      });
-
-
-      // link yasqe and yasr
-      yasqe.on("queryResponse", function(_yasqe, response, duration) {
-        yasr.setResponse(response, duration);
-        sparnatural.enablePlayBtn() ;
-      }); 
     </script>
   </body>
 </html>

@@ -18,6 +18,7 @@ export interface TreeWidgetValue extends WidgetValue {
 }
 
 export class TreeWidget extends AbstractWidget {
+
   loaderHandler: any;
   langSearch: any;
   IdCriteriaGroupe: any;
@@ -336,6 +337,10 @@ export class TreeWidget extends AbstractWidget {
 
     return values;
   };
+
+  parseInput(input: TreeWidgetValue): TreeWidgetValue {
+    return input
+  }
 
   getRdfJsPattern(): Pattern[] {
     throw new Error("Method not implemented.");

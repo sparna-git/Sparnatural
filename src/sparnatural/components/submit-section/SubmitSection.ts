@@ -1,7 +1,7 @@
 import { getSettings } from "../../../configs/client-configs/settings";
 import PlayBtn from "../buttons/PlayBtn";
 import HTMLComponent from "../HtmlComponent";
-import Sparnatural from "../Sparnatural";
+import Sparnatural from "../SparnaturalComponent";
 
 class SubmitSection extends HTMLComponent {
   playBtn: PlayBtn;

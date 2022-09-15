@@ -1,7 +1,6 @@
 import ISpecProvider from "../spec-providers/ISpecProviders";
-import Sparnatural from "../components/Sparnatural";
-
-import { ISparJson, Language, Order } from "../sparql/ISparJson";
+import Sparnatural from "../components/SparnaturalComponent";
+import { Language, Order } from "../sparql/ISparJson";
 import generateQuery from "./actions/GenerateQuery";
 import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
@@ -10,7 +9,6 @@ import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
 import { readVariablesFromUI } from "./actions/SelectViewVar";
-import { setPreloadedQuery } from "./actions/SetPreloadedQuery";
 
 export enum MaxVarAction {
   INCREASE,
@@ -78,14 +76,6 @@ class ActionStore {
         this.sparnatural.settings.onSubmit(this.sparnatural);
       }
     });
-
-    this.sparnatural.html[0].addEventListener(
-      "setPreloadedQuery",
-      (e: CustomEvent) => {
-        let payload = e.detail as { queryName: string; query: ISparJson };
-        setPreloadedQuery(this, payload.query);
-      }
-    );
 
     // Switch which toggles if the Start and Endvalues are shown as their Var name. e.g Country_1
     this.sparnatural.html[0].addEventListener("toggleVarNames", (e) => {

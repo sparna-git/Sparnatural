@@ -140,7 +140,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     //this.#addEventListener();
   };
 
-  getWidgetValue() {
+  getWidgetValues(): WidgetValue[] {
     let vals = this.widgetValues.map((val) => {
       return val.widgetVal;
     });

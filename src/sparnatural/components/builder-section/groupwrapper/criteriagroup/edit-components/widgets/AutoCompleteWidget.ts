@@ -1,5 +1,5 @@
 import * as DataFactory from "@rdfjs/data-model" ;
-import { BgpPattern, Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
+import { Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../../../../../../sparql/ISparJson";
 import WidgetWrapper from "../WidgetWrapper";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
@@ -114,6 +114,8 @@ export class AutoCompleteWidget extends AbstractWidget {
     inputHtml.easyAutocomplete(options);
     return this;
   }
+
+  parseInput(input: AutoCompleteWidgetValue): AutoCompleteWidgetValue {return input}
 
   getRdfJsPattern(): Pattern[] {
     let vals = this.widgetValues.map((v) => {

@@ -1,10 +1,9 @@
-import Sparnatural from "../../sparnatural/components/Sparnatural";
+import Sparnatural from "../../sparnatural/components/SparnaturalComponent";
 
 export interface PreLoadQueries {
   queries: Array<{ queryName: string; query: string }>;
 }
 interface ISettings {
-  preLoadedQueries?: PreLoadQueries;
   noTypeCriteriaForObjects?: any;
   config: any;
   language: string;

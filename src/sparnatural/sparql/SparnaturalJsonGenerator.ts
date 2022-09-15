@@ -1,4 +1,4 @@
-import Sparnatural from "../components/Sparnatural";
+import Sparnatural from "../components/SparnaturalComponent";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { Branch, ISparJson, Language, Order, SelectedVal } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
@@ -47,7 +47,7 @@ class SparnaturalJsonGenerator {
         o: CrtGrp.EndClassGroup.getVarName(),
         sType: CrtGrp.StartClassGroup.getTypeSelected(),
         oType: CrtGrp.EndClassGroup.getTypeSelected(),
-        values: CrtGrp.endClassWidgetGroup.getWidgetValue(),
+        values: CrtGrp.endClassWidgetGroup.getWidgetValues(),
       },
       children: grpWrapper.whereChild
         ? this.#getBranch(grpWrapper.whereChild)

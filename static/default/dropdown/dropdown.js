@@ -1,8 +1,7 @@
-import globalStyle from "./global-style";
-import basicAtom from "./basic-atom";
-import * as COLORS from "./colors";
+import basicAtom from "./basic-atom.js";
+import * as COLORS from "./colors.js";
 
-import "./button";
+import "./button.js";
 
 const template = document.createElement("template");
 
@@ -13,7 +12,9 @@ const template = document.createElement("template");
 */
 template.innerHTML = `
   <style>
-    ${globalStyle}
+  :host {
+    font-family: sans-serif;
+  }
 
     ${basicAtom}
 
@@ -122,11 +123,11 @@ template.innerHTML = `
 `;
 
 export class Dropdown extends HTMLElement {
-  open: boolean;
-  $label: any;
-  $button: any;
-  $dropdown: any;
-  $dropdownList: any;
+  open;
+  $label;
+  $button;
+  $dropdown;
+  $dropdownList;
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
@@ -178,7 +179,7 @@ export class Dropdown extends HTMLElement {
       : this.$dropdown.classList.remove("open");
   }
 
-  attributeChangedCallback(name: string, oldVal: string, newVal: string) {
+  attributeChangedCallback(name, oldVal, newVal) {
     this.render();
   }
 
@@ -217,5 +218,4 @@ export class Dropdown extends HTMLElement {
     });
   }
 }
-
 window.customElements.define("custom-dropdown", Dropdown);
