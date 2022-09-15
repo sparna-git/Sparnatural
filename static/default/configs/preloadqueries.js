@@ -359,6 +359,87 @@ export default {
                 }
             ]
         }`
+    },
+    {
+        queryName:`test Optional & negatif`,
+        query:`{
+            "distinct": true,
+            "variables": [
+                "Museum_1",
+                "Museum_1_label"
+            ],
+            "lang": "en",
+            "order": "noord",
+            "branches": [
+                {
+                    "line": {
+                        "s": "?Museum_1",
+                        "p": "?pays_3",
+                        "pType": "http://dbpedia.org/ontology/country",
+                        "o": "?Country_2",
+                        "sType": "http://dbpedia.org/ontology/Museum",
+                        "oType": "http://dbpedia.org/ontology/Country",
+                        "values": [
+                            {
+                                "valueType": 1,
+                                "value": {
+                                    "key": "http://fr.dbpedia.org/resource/Åland",
+                                    "label": "Åland (4)",
+                                    "uri": "http://fr.dbpedia.org/resource/Åland"
+                                }
+                            },
+                            {
+                                "valueType": 1,
+                                "value": {
+                                    "key": "http://fr.dbpedia.org/resource/Allemagne",
+                                    "label": "Allemagne (6681)",
+                                    "uri": "http://fr.dbpedia.org/resource/Allemagne"
+                                }
+                            }
+                        ]
+                    },
+                    "children": [],
+                    "optional": true,
+                    "notExists": false
+                },
+                {
+                    "line": {
+                        "s": "?Museum_1",
+                        "p": "?expose_5",
+                        "pType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#displays",
+                        "o": "?Artwork_4",
+                        "sType": "http://dbpedia.org/ontology/Museum",
+                        "oType": "http://dbpedia.org/ontology/Artwork",
+                        "values": []
+                    },
+                    "children": [
+                        {
+                            "line": {
+                                "s": "?Artwork_4",
+                                "p": "?auteur_7",
+                                "pType": "http://dbpedia.org/ontology/author",
+                                "o": "?Person_6",
+                                "sType": "http://dbpedia.org/ontology/Artwork",
+                                "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
+                                "values": [
+                                    {
+                                        "valueType": 0,
+                                        "value": {
+                                            "label": "Any"
+                                        }
+                                    }
+                                ]
+                            },
+                            "children": [],
+                            "optional": false,
+                            "notExists": true
+                        }
+                    ],
+                    "optional": false,
+                    "notExists": true
+                }
+            ]
+        }`
     }
     ],
   };
