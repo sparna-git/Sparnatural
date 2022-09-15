@@ -1,6 +1,5 @@
 import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
 import { SelectedVal } from "../../../sparql/ISparJson";
-
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
 import VariableOrderMenu from "./VariableOrderMenu";
@@ -11,7 +10,8 @@ import VariableOrderMenu from "./VariableOrderMenu";
 */
 class DraggableComponent extends HTMLComponent {
   icon: any;
-  varName: string; // withut the ?
+  varName: string; // without the ?
+  selectedVal:SelectedVal
   constructor(
     parentComponent: VariableOrderMenu,
     specProvider: ISpecProvider,
@@ -46,6 +46,7 @@ class DraggableComponent extends HTMLComponent {
         `).append(editVar);
    
     super("sortableItem", parentComponent, widgetHtml);
+    this.selectedVal = selected_val
     this.varName = varName;
     this.#resize(editVar, varName);
   }

@@ -16,6 +16,8 @@ export default class QueryLoader{
         this.sparnatural.BgWrapper.resetCallback();
         // build Sparnatural query
         this.#buildSparnatural(this.sparnatural, query.branches);
+        // set the correct ordering of the draggables
+        this.#updateOrderingOfVariables()
         // trigger query generation
         this.sparnatural.html[0].dispatchEvent(
         new CustomEvent("initGeneralEvent")
@@ -122,6 +124,19 @@ export default class QueryLoader{
       // click on eye btn
       this.#clickOn((endClassComponent.inputTypeComponent as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
     }
+  }
+
+  static #updateOrderingOfVariables(){
+    const varMenu =this.sparnatural.VariableSelection.variableOrderMenu
+    this.query.variables.forEach(v=>{
+      varMenu.draggables.forEach(d=>{
+        if(d.varName === v){
+          const tmpVal = d.selectedVal
+          varMenu.removeDraggableByVarName(v)
+          varMenu.addDraggableComponent(tmpVal)
+        }
+      })
+    })
   }
   
   static #clickOn(el: JQuery<HTMLElement>) {

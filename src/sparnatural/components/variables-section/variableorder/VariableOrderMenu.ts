@@ -83,9 +83,9 @@ class VariableOrderMenu extends HTMLComponent {
     this.draggables.push(dragbl);
   }
 
-  removeDraggableComponent(selected_val: SelectedVal) {
+  removeDraggableByVarName(varName: string) {
     this.draggables = this.draggables.filter((d) => {
-      if (d.varName == selected_val.variable.replace("?", "")) {
+      if (d.varName == varName.replace("?", "")) {
         d.html.remove();
         return false;
       }

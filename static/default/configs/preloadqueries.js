@@ -286,6 +286,79 @@ export default {
                 }
             ]
         }`
+    },
+    {
+        queryName:`test variable ordering`,
+        query:`{
+            "distinct": true,
+            "variables": [
+                "Person_6",
+                "Museum_1",
+                "Museum_1_label",
+                "Country_2"
+            ],
+            "lang": "en",
+            "order": "noord",
+            "branches": [
+                {
+                    "line": {
+                        "s": "?Museum_1",
+                        "p": "?pays_3",
+                        "pType": "http://dbpedia.org/ontology/country",
+                        "o": "?Country_2",
+                        "sType": "http://dbpedia.org/ontology/Museum",
+                        "oType": "http://dbpedia.org/ontology/Country",
+                        "values": [
+                            {
+                                "valueType": 0,
+                                "value": {
+                                    "label": "Any"
+                                }
+                            }
+                        ]
+                    },
+                    "children": [],
+                    "optional": false,
+                    "notExists": false
+                },
+                {
+                    "line": {
+                        "s": "?Museum_1",
+                        "p": "?pays_5",
+                        "pType": "http://dbpedia.org/ontology/country",
+                        "o": "?Country_4",
+                        "sType": "http://dbpedia.org/ontology/Museum",
+                        "oType": "http://dbpedia.org/ontology/Country",
+                        "values": []
+                    },
+                    "children": [
+                        {
+                            "line": {
+                                "s": "?Country_4",
+                                "p": "?lieudenaissance_7",
+                                "pType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#birthPlace",
+                                "o": "?Person_6",
+                                "sType": "http://dbpedia.org/ontology/Country",
+                                "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
+                                "values": [
+                                    {
+                                        "valueType": 0,
+                                        "value": {
+                                            "label": "Any"
+                                        }
+                                    }
+                                ]
+                            },
+                            "children": [],
+                            "optional": false,
+                            "notExists": false
+                        }
+                    ],
+                    "optional": false,
+                    "notExists": false
+                }
+            ]
+        }`
     }
     ],
   };

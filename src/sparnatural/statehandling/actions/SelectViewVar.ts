@@ -62,8 +62,8 @@ function addVariable(actionStore: ActionStore, val: SelectedVal) {
 
 function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
   //add a draggable
-  actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableComponent(
-    val
+  actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableByVarName(
+    val.variable
   );
   //update the varnames
   readVariablesFromUI(actionStore);
