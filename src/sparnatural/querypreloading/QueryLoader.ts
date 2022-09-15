@@ -1,15 +1,17 @@
 import ObjectPropertyGroup from "../components/builder-section/groupwrapper/criteriagroup/objectpropertygroup/ObjectPropertyGroup";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
+import ClassTypeId from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/ClassTypeId";
 import EndClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import StartClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import Sparnatural from "../components/SparnaturalComponent";
-import { Branch, ISparJson } from "../sparql/ISparJson";
+import { Branch, ISparJson, SelectedVal } from "../sparql/ISparJson";
 
 export default class QueryLoader{
     static sparnatural: Sparnatural;
-
+    static query: ISparJson
     static loadQuery(query:ISparJson){
+      this.query = query
         // first reset the current query
         this.sparnatural.BgWrapper.resetCallback();
         // build Sparnatural query
@@ -38,24 +40,24 @@ export default class QueryLoader{
   
     static #buildCriteriaGroup(grpWarpper: GroupWrapper, branch: Branch) {
         // set StartClassVal only if there wasn't one set by the parent (e.g whereChild andSibling have it already set)
-        if (!grpWarpper.CriteriaGroup.StartClassGroup.startClassVal.type) {
+      const startClassVal = { type: branch.line.sType, variable: branch.line.s };
+      if (!grpWarpper.CriteriaGroup.StartClassGroup.startClassVal.type) {
         //set StartClassGroup
-        let startClassVal = { type: branch.line.sType, variable: branch.line.s };
         this.#setSelectedValue(
             grpWarpper.CriteriaGroup.StartClassGroup,
-            startClassVal.type
+            startClassVal
         );
         }
   
     // set EndClassGroup
-    let endClassVal = { type: branch.line.oType, variable: branch.line.o };
-    this.#setSelectedValue(grpWarpper.CriteriaGroup.EndClassGroup, endClassVal.type);
+    const endClassVal = { type: branch.line.oType, variable: branch.line.o };
+    this.#setSelectedValue(grpWarpper.CriteriaGroup.EndClassGroup, endClassVal);
   
     //set ObjectPropertyGroup
-    let objectPropVal = { type: branch.line.pType, variable: branch.line.p };
+    const objectPropVal = { type: branch.line.pType, variable: branch.line.p };
     this.#setSelectedValue(
       grpWarpper.CriteriaGroup.ObjectPropertyGroup,
-      objectPropVal.type
+      objectPropVal
     );
   
     // set WidgetValues
@@ -80,6 +82,8 @@ export default class QueryLoader{
         parent = parent.andSibling;
       });
     }
+    // select if the var is viewed (eye btn)
+    this.#setSelectViewVariableBtn(startClassVal,grpWarpper.CriteriaGroup.StartClassGroup,endClassVal,grpWarpper.CriteriaGroup.EndClassGroup)
   }
   
   static #triggerOptions(grpWrapper: GroupWrapper, branch: Branch) {
@@ -96,12 +100,28 @@ export default class QueryLoader{
   // set the value for an inputTypeComponent and trigger the corresponding event
   static #setSelectedValue(
     component: StartClassGroup | EndClassGroup | ObjectPropertyGroup,
-    value: string
+    selectedVal: SelectedVal
   ) {
-    component.inputTypeComponent.oldWidget.val(value).niceSelect("update");
+    // set the values to the ClassTypeId component
+    component.inputTypeComponent.oldWidget.val(selectedVal.type).niceSelect("update");
     let niceSelect = component.inputTypeComponent.html[0].querySelectorAll('.nice-select')
     if (niceSelect.length > 1) console.warn('More than one nice-select found!')
     niceSelect[0].classList.add("disabled")
+   
+  }
+
+  // this method checks if the eye btn was enabled in the loaded query
+  static #setSelectViewVariableBtn(startClassVal:SelectedVal,startClassComponent:StartClassGroup,endClassVal:SelectedVal,endClassComponent:EndClassGroup){
+     // check if the variable is selected to show (eye btn clicked) and if then selected as well
+     if(this.query.variables.includes(startClassVal.variable.replace('?',''))) {
+      // click on eye btn
+      this.#clickOn((startClassComponent.inputTypeComponent as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
+    }
+
+    if(this.query.variables.includes(endClassVal.variable.replace('?',''))){
+      // click on eye btn
+      this.#clickOn((endClassComponent.inputTypeComponent as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
+    }
   }
   
   static #clickOn(el: JQuery<HTMLElement>) {
