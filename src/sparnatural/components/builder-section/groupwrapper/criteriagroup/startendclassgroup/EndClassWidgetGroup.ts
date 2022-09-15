@@ -52,11 +52,6 @@ export class EndClassWidgetGroup extends HTMLComponent {
       throw Error("Unselected val not found in the widgetValues list!");
     unselectedValue.html.remove();
 
-    // if the number of widgetValues is now less than the maximum
-    if (this.widgetValues.length < getSettings().maxOr) {
-      this.addWidgetValueBtn.html.show;
-    }
-
     if (this.widgetValues.length < 1) {
       // reattach eventlistener. it got removed
       this.#addEventListener();
@@ -70,6 +65,12 @@ export class EndClassWidgetGroup extends HTMLComponent {
         })
       );
     }
+
+    // if the number of widgetValues is now less than the maximum
+    if (this.widgetValues.length < getSettings().maxOr && this.addWidgetValueBtn?.html) {
+      this.addWidgetValueBtn.html.show;
+    }
+
     this.html[0].dispatchEvent(
       new CustomEvent("updateWidgetList", {
         bubbles: true,

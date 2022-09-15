@@ -180,7 +180,7 @@ export default class RdfJsGenerator {
     let startClass:Triple
     if(!widgeComponent?.isBlockingStart()){
       startClass = SparqlFactory.buildRdfTypeTriple(
-        DataFactory.variable(crtGrp.StartClassGroup.getVarName().replace('?','')) ,
+        DataFactory.variable(crtGrp.StartClassGroup.getVarName()?.replace('?','')) ,
         DataFactory.namedNode(crtGrp.StartClassGroup.getTypeSelected()) 
       );
 
