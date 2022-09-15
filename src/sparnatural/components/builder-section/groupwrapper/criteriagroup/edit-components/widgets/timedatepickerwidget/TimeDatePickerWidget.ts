@@ -211,37 +211,12 @@ export class TimeDatePickerWidget extends AbstractWidget {
       value: {
         key: tmpValue.start+" - "+tmpValue.stop,
         // TODO : this is not translated
-        label: this.getValueLabel(this.inputStart.val().toString(), this.inputEnd.val().toString()),
+        label: this.#getValueLabel(this.inputStart.val().toString(), this.inputEnd.val().toString()),
         start: tmpValue.start,
         stop: tmpValue.stop,
       },
     };
     return dateTimePickerVal;
-  }
-
-  getValueLabel = function (startLabel: string, stopLabel: string) {
-    let valueLabel = "";
-    if ((startLabel != "") && (stopLabel != "")) {
-      valueLabel = getSettings().langSearch.LabelDateFrom+' '+ startLabel +' '+getSettings().langSearch.LabelDateTo+' '+ stopLabel ;
-    } else if (startLabel != "") {
-      valueLabel = getSettings().langSearch.DisplayValueDateFrom+' '+ startLabel ;
-    } else if (stopLabel != "") {
-      valueLabel = getSettings().langSearch.DisplayValueDateTo+' '+ stopLabel ;
-    }
-
-    return valueLabel;
-  };
-
-  #padTo2Digits(num: number) {
-    return num.toString().padStart(2, "0");
-  }
-
-  #formatDate(date: Date) {
-    return [
-      this.#padTo2Digits(date.getDate()),
-      this.#padTo2Digits(date.getMonth() + 1),
-      date.getFullYear(),
-    ].join("/");
   }
 
   getRdfJsPattern(): Pattern[] {
