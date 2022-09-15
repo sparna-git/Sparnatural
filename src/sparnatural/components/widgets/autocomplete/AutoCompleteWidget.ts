@@ -1,8 +1,9 @@
 import * as DataFactory from "@rdfjs/data-model" ;
 import { Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
-import { SelectedVal } from "../../../../../../sparql/ISparJson";
-import WidgetWrapper from "../WidgetWrapper";
-import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+import { SelectedVal } from "../../../generators/ISparJson";
+import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
+import { AbstractWidget, ValueType, WidgetValue } from "../AbstractWidget";
+
 require("easy-autocomplete");
 
 interface AutoCompleteWidgetValue extends WidgetValue {

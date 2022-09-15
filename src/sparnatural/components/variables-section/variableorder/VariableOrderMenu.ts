@@ -1,5 +1,5 @@
 import Sortable, { SortableEvent } from "sortablejs";
-import { SelectedVal } from "../../../sparql/ISparJson";
+import { SelectedVal } from "../../../generators/ISparJson";
 import ISpecProvider from "../../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../HtmlComponent";
 import VariableSelection from "../VariableSelection";

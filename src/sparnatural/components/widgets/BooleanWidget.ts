@@ -1,8 +1,8 @@
 import * as DataFactory from "@rdfjs/data-model" ;
 import { BgpPattern, Pattern } from "sparqljs";
-import { getSettings } from "../../../../../../../configs/client-configs/settings";
-import { SelectedVal } from "../../../../../../sparql/ISparJson";
-import WidgetWrapper from "../WidgetWrapper";
+import { getSettings } from "../../../configs/client-configs/settings";
+import { SelectedVal } from "../../generators/ISparJson";
+import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
 
 export interface BooleanWidgetValue extends WidgetValue {

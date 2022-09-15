@@ -3,7 +3,7 @@ import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
-import { SelectedVal } from "../../../../../sparql/ISparJson";
+import { SelectedVal } from "../../../../../generators/ISparJson";
 
 /**
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId

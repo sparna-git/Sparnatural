@@ -8,7 +8,7 @@ import AddWidgetValueBtn from "../../../../buttons/AddWidgetValueBtn";
 import {
   ValueType,
   WidgetValue,
-} from "../edit-components/widgets/AbstractWidget";
+} from "../../../../widgets/AbstractWidget";
 
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;

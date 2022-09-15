@@ -1,7 +1,7 @@
-import WidgetWrapper from "../WidgetWrapper";
+import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import L, { LatLng, Rectangle,Map } from "leaflet";
-import AddUserInputBtn from "../../../../../buttons/AddUserInputBtn";
-import { getSettings } from "../../../../../../../configs/client-configs/settings";
+import AddUserInputBtn from "../buttons/AddUserInputBtn";
+import { getSettings } from "../../../configs/client-configs/settings";
 import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
 import {
   BgpPattern,
@@ -16,10 +16,10 @@ import {
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
-import { SelectedVal } from "../../../../../../sparql/ISparJson";
+import { SelectedVal } from "../../generators/ISparJson";
 import * as DataFactory from "@rdfjs/data-model" ;
-import { GEOF} from "../../../../../../spec-providers/RDFSpecificationProvider";
-import SparqlFactory from "../../../../../../sparql/SparqlFactory";
+import { GEOF} from "../../spec-providers/RDFSpecificationProvider";
+import SparqlFactory from "../../generators/SparqlFactory";
 
 export interface MapWidgetValue extends WidgetValue {
   value: {

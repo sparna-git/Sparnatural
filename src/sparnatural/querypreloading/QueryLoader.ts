@@ -5,7 +5,7 @@ import EndClassGroup from "../components/builder-section/groupwrapper/criteriagr
 import StartClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import Sparnatural from "../components/SparnaturalComponent";
-import { Branch, ISparJson, SelectedVal } from "../sparql/ISparJson";
+import { Branch, ISparJson, SelectedVal } from "../generators/ISparJson";
 
 export default class QueryLoader{
     static sparnatural: Sparnatural;

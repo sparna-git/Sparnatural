@@ -1,14 +1,14 @@
 import { Pattern } from "sparqljs";
-import { getSettings } from "../../../../../../../../configs/client-configs/settings";
-import AddUserInputBtn from "../../../../../../buttons/AddUserInputBtn";
-import InfoBtn from "../../../../../../buttons/InfoBtn";
-import WidgetWrapper from "../../WidgetWrapper";
+import { getSettings } from "../../../../configs/client-configs/settings";
+import AddUserInputBtn from "../../buttons/AddUserInputBtn";
+import InfoBtn from "../../buttons/InfoBtn";
+import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueType, WidgetValue } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
 import * as DataFactory from "@rdfjs/data-model" ;
-import { SelectedVal } from "../../../../../../../sparql/ISparJson";
-import ISpecProvider from "../../../../../../../spec-providers/ISpecProviders";
-import SparqlFactory from "../../../../../../../sparql/SparqlFactory";
+import { SelectedVal } from "../../../generators/ISparJson";
+import ISpecProvider from "../../../spec-providers/ISpecProviders";
+import SparqlFactory from "../../../generators/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
 
 export interface DateTimePickerValue extends WidgetValue {

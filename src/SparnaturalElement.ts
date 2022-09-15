@@ -14,7 +14,7 @@ library.add(far as IconPack);
 import { getSettings, mergeSettings } from "./configs/client-configs/settings";
 import Sparnatural from "./sparnatural/components/SparnaturalComponent";
 import ISpecProvider from "./sparnatural/spec-providers/ISpecProviders";
-import { ISparJson } from "./sparnatural/sparql/ISparJson";
+import { ISparJson } from "./sparnatural/generators/ISparJson";
 import { PreLoadQueries } from "./configs/client-configs/ISettings";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import QueryParser from "./sparnatural/querypreloading/QueryParser";

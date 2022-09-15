@@ -1,4 +1,4 @@
-import { WidgetValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget";
+import { WidgetValue } from "../components/widgets/AbstractWidget";
 
 export interface SelectedVal {
   variable: string;

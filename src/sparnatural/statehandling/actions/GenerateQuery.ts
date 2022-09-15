@@ -1,8 +1,8 @@
 import { getSettings } from "../../../configs/client-configs/settings";
 
 import ActionStore from "../ActionStore";
-import SparnaturalJsonGenerator from "../../sparql/SparnaturalJsonGenerator";
-import RdfJsGenerator from "../../sparql/RdfJsQuery";
+import SparnaturalJsonGenerator from "../../generators/SparnaturalJsonGenerator";
+import RdfJsGenerator from "../../generators/RdfJsQuery";
 import {
   Generator
 } from "sparqljs";
@@ -18,6 +18,7 @@ export default function generateQuery(actionStore: ActionStore) {
     actionStore.order,
     actionStore.language
   );
+  actionStore.sparnaturalJSON = jsonQuery
   if (jsonQuery != null) {
     console.log("*** Sparnatural JSON Data structure ***");
     console.dir(jsonQuery);
@@ -31,23 +32,20 @@ export default function generateQuery(actionStore: ActionStore) {
       actionStore.specProvider
     );
     writer.setPrefixes(settings.sparqlPrefixes);
-    let rdfJsQuery = writer.generateQuery(
+    let selectQuery = writer.generateQuery(
       actionStore.variables,
       actionStore.distinct,
       actionStore.order,
       actionStore.language
     );
-
+    actionStore.rdfjsSelect = selectQuery
     // debug rdfJsQuery
-    console.log(rdfJsQuery);
+    console.log(selectQuery);
 
     var generator = new Generator();
-    var queryString = generator.stringify(rdfJsQuery);
-
+    var queryString = generator.stringify(selectQuery);
+      actionStore.sparqlString = queryString
     // fire callback
     settings.onQueryUpdated(queryString, jsonQuery, actionStore.specProvider);
-
-    //TODO enable disable geying out the submitbtn
-    //this.SubmitSection.enableSubmit();
   }
 }

@@ -1,5 +1,5 @@
 import {  Pattern } from "sparqljs";
-import WidgetWrapper from "../WidgetWrapper";
+import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, WidgetValue } from "./AbstractWidget";
 
 export class NoWidget extends AbstractWidget {

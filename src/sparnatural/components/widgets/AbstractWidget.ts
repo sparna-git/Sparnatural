@@ -1,6 +1,6 @@
 import { Pattern } from "sparqljs";
-import { SelectedVal } from "../../../../../../sparql/ISparJson";
-import HTMLComponent from "../../../../../HtmlComponent";
+import { SelectedVal } from "../../generators/ISparJson";
+import HTMLComponent from "../HtmlComponent";
 
 // The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
 // example for multiples: List of countries in ListWidget

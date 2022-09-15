@@ -5,7 +5,7 @@ import CriteriaGroup from "./criteriagroup/CriteriaGroup";
 import HTMLComponent from "../../HtmlComponent";
 import { OptionTypes } from "./criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapperEventStore from "./groupwrapperevents/GroupWrapperEventStore";
-import { SelectedVal } from "../../../sparql/ISparJson";
+import { SelectedVal } from "../../../generators/ISparJson";
 
 /*
   GroupWrapper class represents a row in Sparnatural. It is the WrapperClass for the CriteriaGroup

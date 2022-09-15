@@ -12,7 +12,7 @@ import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup } from "./optionsgroup/OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
-import { SelectedVal } from "../../../../sparql/ISparJson";
+import { SelectedVal } from "../../../../generators/ISparJson";
 import { EndClassWidgetGroup, EndClassWidgetValue } from "./startendclassgroup/EndClassWidgetGroup";
 
 class CriteriaGroup extends HTMLComponent {

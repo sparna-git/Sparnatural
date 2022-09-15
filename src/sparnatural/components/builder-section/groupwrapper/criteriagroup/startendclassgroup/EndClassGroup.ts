@@ -2,7 +2,7 @@ import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import tippy from "tippy.js";
 import { getSettings } from "../../../../../../configs/client-configs/settings";
-import { SelectedVal } from "../../../../../sparql/ISparJson";
+import { SelectedVal } from "../../../../../generators/ISparJson";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import EditComponents from "../edit-components/EditComponents";

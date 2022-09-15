@@ -1,7 +1,7 @@
 import { Literal, NamedNode, Variable } from "@rdfjs/types";
 import * as DataFactory from "@rdfjs/data-model" ;
 import { BgpPattern, GroupPattern, OperationExpression, Pattern, UnionPattern, Triple, IriTerm, BlankTerm, VariableTerm, QuadTerm, PropertyPath, Term } from "sparqljs";
-import SparqlFactory from "../../../../../../../sparql/SparqlFactory";
+import SparqlFactory from "../../../generators/SparqlFactory";
 
 
 export const buildDateRangeOrExactDatePattern = (

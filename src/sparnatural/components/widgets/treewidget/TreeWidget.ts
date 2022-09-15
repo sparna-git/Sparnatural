@@ -1,10 +1,10 @@
 import { Pattern } from "sparqljs";
-import UiuxConfig from "../../../../../../../configs/fixed-configs/UiuxConfig";
-import { SelectedVal } from "../../../../../../sparql/ISparJson";
-import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
+import { SelectedVal } from "../../../generators/ISparJson";
+import { AbstractWidget, ValueType, WidgetValue } from "../AbstractWidget";
 import "jstree"
-import ISettings from "../../../../../../../configs/client-configs/ISettings";
-import WidgetWrapper from "../WidgetWrapper";
+import ISettings from "../../../../configs/client-configs/ISettings";
+import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 
 require("jstree/dist/themes/default/style.min.css");
 

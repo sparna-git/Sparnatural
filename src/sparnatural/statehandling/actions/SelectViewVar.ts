@@ -1,5 +1,5 @@
 import DraggableComponent from "../../components/variables-section/variableorder/DraggableComponent";
-import { SelectedVal } from "../../sparql/ISparJson";
+import { SelectedVal } from "../../generators/ISparJson";
 import ActionStore from "../ActionStore";
 
 

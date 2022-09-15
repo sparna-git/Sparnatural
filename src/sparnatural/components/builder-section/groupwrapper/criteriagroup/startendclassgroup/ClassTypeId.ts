@@ -4,7 +4,7 @@ import EndClassGroup from "./EndClassGroup";
 import ArrowComponent from "../../../../arrows/ArrowComponent";
 import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
-import { SelectedVal } from "../../../../../sparql/ISparJson";
+import { SelectedVal } from "../../../../../generators/ISparJson";
 import SelectViewVariableBtn from "../../../../buttons/SelectViewVariableBtn";
 import HTMLComponent from "../../../../HtmlComponent";
 /**

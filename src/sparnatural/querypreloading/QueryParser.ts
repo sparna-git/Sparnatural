@@ -1,6 +1,6 @@
 import { PreLoadQueries } from "../../configs/client-configs/ISettings";
-import { Branch, CriteriaLine, ISparJson } from "../sparql/ISparJson";
-import { WidgetValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget";
+import { Branch, CriteriaLine, ISparJson } from "../generators/ISparJson";
+import { WidgetValue } from "../components/widgets/AbstractWidget";
 
 /*
     This Class takes an Array with Jsons in the form of ISparJson together with a queryname.

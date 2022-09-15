@@ -1,5 +1,5 @@
 import { getSettings } from "../../../../configs/client-configs/settings";
-import { Order } from "../../../sparql/ISparJson";
+import { Order } from "../../../generators/ISparJson";
 import AscendBtn from "../../buttons/AscendBtn";
 import DescendBtn from "../../buttons/DescendBtn";
 import NoOrderBtn from "../../buttons/NoOrderBtn";

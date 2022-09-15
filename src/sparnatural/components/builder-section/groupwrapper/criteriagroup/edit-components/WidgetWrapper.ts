@@ -1,26 +1,25 @@
 import ISettings from "../../../../../../configs/client-configs/ISettings";
 import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
 import Datasources from "../../../../../../configs/fixed-configs/SparnaturalConfigDatasources";
-import { SparqlTreeHandler } from "./handlers/TreeHandlers";
+import { SparqlTreeHandler } from "../../../../widgets/treewidget/TreeHandlers";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import HTMLComponent from "../../../../HtmlComponent";
-import { SelectedVal } from "../../../../../sparql/ISparJson";
+import { SelectedVal } from "../../../../../generators/ISparJson";
 import EditComponents from "./EditComponents";
 import {
   SparqlTemplateAutocompleteHandler,
   SparqlTemplateListHandler,
-} from "./handlers/AutocompleteAndListHandlers";
-import MapWidget from "./widgets/MapWidget";
-import { AbstractWidget } from "./widgets/AbstractWidget";
-import { AutoCompleteWidget } from "./widgets/AutoCompleteWidget";
-import { BooleanWidget } from "./widgets/BooleanWidget";
-import { DatesWidget } from "./widgets/DatesWidget";
-import { ListWidget } from "./widgets/ListWidget";
-import { SearchWidget } from "./widgets/SearchWidget";
-import { TimeDatePickerWidget } from "./widgets/timedatepickerwidget/TimeDatePickerWidget";
-import { NoWidget } from "./widgets/NoWidget";
-import { TreeWidget } from "./widgets/TreeWidget";
-import EndClassGroup from "../startendclassgroup/EndClassGroup";
+} from "../../../../widgets/autocomplete/AutocompleteAndListHandlers";
+import MapWidget from "../../../../widgets/MapWidget";
+import { AbstractWidget } from "../../../../widgets/AbstractWidget";
+import { BooleanWidget } from "../../../../widgets/BooleanWidget";
+import { DatesWidget } from "../../../../widgets/DatesWidget";
+import { ListWidget } from "../../../../widgets/ListWidget";
+import { SearchWidget } from "../../../../widgets/SearchWidget";
+import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
+import { NoWidget } from "../../../../widgets/NoWidget";
+import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
+import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
 
 /**
  *  creates the corresponding widget

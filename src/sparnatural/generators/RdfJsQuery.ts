@@ -18,7 +18,7 @@ import {
 import Sparnatural from "../components/SparnaturalComponent";
 import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import * as DataFactory from "@rdfjs/data-model" ;
-import { AbstractWidget } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/widgets/AbstractWidget";
+import { AbstractWidget } from "../components/widgets/AbstractWidget";
 import StartClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import EndClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import SparqlFactory from "./SparqlFactory";
