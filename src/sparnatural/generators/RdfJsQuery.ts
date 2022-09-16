@@ -5,6 +5,7 @@ import ISpecProvider from "../spec-providers/ISpecProviders";
 import {
   GroupPattern,
   IriTerm,
+  OptionalPattern,
   Ordering,
   Pattern,
   PropertyPath,
@@ -85,7 +86,7 @@ export default class RdfJsGenerator {
     }
 
     // if the RdfJsQuery contains keys with empty arrays, then the generator crashes.
-    if(RdfJsQuery.where.length === 0 ){
+    if(RdfJsQuery.where?.length === 0 ){
       // if the length is zero, then create beginning query
       //e.g ?sub ?pred ?obj
       RdfJsQuery.where = [{
@@ -109,23 +110,10 @@ export default class RdfJsGenerator {
 
   // this method traverses through the groupwrappers and retrieves the information from each widget.
   #processGrpWrapper(grpWrapper: GroupWrapper, isInOption: boolean, isChild: boolean) {
-    const ptrns: Pattern[] = [];    
-    //get the infromation from the widget if there are widgetvalues selected
-    let rdfPattern: Pattern[] = [];
-    const widgetComponent:AbstractWidget | null | undefined = grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
 
-    let triples = this.#buildCrtGrpTriples(grpWrapper.CriteriaGroup,widgetComponent,isChild);
-
-    if (widgetComponent?.getwidgetValues()?.length > 0 ) rdfPattern = widgetComponent.getRdfJsPattern();
-    
-    const hasOption =
-      grpWrapper.optionState == OptionTypes.OPTIONAL ||
-      grpWrapper.optionState == OptionTypes.NOTEXISTS
-        ? true
-        : false;
     // if it has whereChild
     const wherePtrn = grpWrapper.whereChild
-      ? this.#processGrpWrapper(grpWrapper.whereChild, hasOption, true)
+      ? this.#processGrpWrapper(grpWrapper.whereChild, grpWrapper.optionState != OptionTypes.NOTEXISTS, true)
       : null;
 
     // if it hasandSiblings
@@ -133,114 +121,165 @@ export default class RdfJsGenerator {
       ? this.#processGrpWrapper(grpWrapper.andSibling, false, true)
       : null;
 
-    //if it is a child of a parent with either optional or notexists
-    if (isInOption) {
-      ptrns.push(SparqlFactory.buildBgpPattern(triples));
-      ptrns.push(...rdfPattern);
+       
+   
+    const widgetComponent:AbstractWidget | null | undefined = grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
+    //get the infromation from the widget if there are widgetvalues selected
+    let rdfPattern: Pattern[] = [];
+    if (widgetComponent?.getwidgetValues()?.length > 0 ) rdfPattern = widgetComponent.getRdfJsPattern();
+
+    let crtPtrns = this.#buildCrtGrpPtrns(grpWrapper.CriteriaGroup,widgetComponent,isChild, grpWrapper.optionState,isInOption);
+
+    if(grpWrapper.optionState === OptionTypes.NONE || isInOption ){
+      const ptrns: Pattern[] = [];
+      // normal case, no OPTIONAL/NOTEXISTS, OR is a child of a OPTIONAL/NOTEXISTS
+      if(crtPtrns.length > 0) ptrns.push(...crtPtrns);
+      if(rdfPattern.length > 0) ptrns.push(...rdfPattern);
       if (wherePtrn) ptrns.push(...wherePtrn);
       if (andPtrn) ptrns.push(...andPtrn);
-      return ptrns;
+      return ptrns
+    } else {
+      const ptrns: Pattern[] = [];
+      // starting from this grpWrapper to all where descendants: Optional might be enabled
+      // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableOptional
+      if(crtPtrns.length > 0) ptrns.push(crtPtrns.shift());
+      const inOption = SparqlFactory.buildFilterTriples(crtPtrns,rdfPattern,wherePtrn)
+      let optionPtrn 
+      if(grpWrapper.optionState === OptionTypes.OPTIONAL) optionPtrn = SparqlFactory.buildOptionalPattern(inOption.patterns)
+      if(grpWrapper.optionState === OptionTypes.NOTEXISTS) optionPtrn = SparqlFactory.buildNotExistsPattern(inOption)
+      ptrns.push(optionPtrn)
+      if(andPtrn) ptrns.push(...andPtrn)
+      return ptrns
     }
-
-    // starting from this grpWrapper to all where descendants: Optional might be enabled
-    // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableOptional
-    if (grpWrapper.optionState == OptionTypes.OPTIONAL) {
-      ptrns.push(SparqlFactory.buildBgpPattern([triples.shift()])); // triples[0] = startclasstriple (buildRdfTypeTriple) is excluded from optional
-      let inOptional = SparqlFactory.buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into OPTIONAL Brackets in SPARQL
-      let optionalPtrn = SparqlFactory.buildOptionalPattern(inOptional.patterns);
-      ptrns.push(optionalPtrn);
-      if (andPtrn) ptrns.push(...andPtrn);
-      return ptrns;
-    }
-
-    //Starting from this grpWrapper to all where descendants: not exists might be enabled
-    // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableNegation
-    if (grpWrapper.optionState == OptionTypes.NOTEXISTS) {
-      ptrns.push(SparqlFactory.buildBgpPattern([triples.shift()])); // triples[0] = startclasstriple (buildRdfTypeTriple) is excluded from notexists
-      let inNotExists = SparqlFactory.buildFilterTriples(triples,rdfPattern,wherePtrn) // everything in this array goes into FILTER NOT EXISTS bracket in SPARQL
-      let notExistPtrn = SparqlFactory.buildNotExistsPattern(inNotExists);
-      ptrns.push(notExistPtrn);
-      if (andPtrn) ptrns.push(...andPtrn);
-      return ptrns;
-    }
-
-    // normal case, no OPTIONAL or NOTEXISTS
-    if(triples.length > 0) ptrns.push(SparqlFactory.buildBgpPattern(triples));
-    if(rdfPattern.length > 0) ptrns.push(...rdfPattern);
-    if (wherePtrn) ptrns.push(...wherePtrn);
-    if (andPtrn) ptrns.push(...andPtrn);
-    return ptrns;
   }
 
-  // Writes The default triples 
-  #buildCrtGrpTriples(crtGrp: CriteriaGroup,widgeComponent:AbstractWidget,isChild: boolean): Triple[] {
-    let triples: Triple[] = [];
+  // Writes the patterns from the selected criterias 
+  #buildCrtGrpPtrns(crtGrp: CriteriaGroup,widgetComponent:AbstractWidget,isChild: boolean,optionState:OptionTypes,isInOption:boolean) {
 
-    // startClassTriple
-    let startClass:Triple
-    if(!widgeComponent?.isBlockingStart()){
-      startClass = SparqlFactory.buildRdfTypeTriple(
-        DataFactory.variable(crtGrp.StartClassGroup.getVarName()?.replace('?','')) ,
-        DataFactory.namedNode(crtGrp.StartClassGroup.getTypeSelected()) 
+    const startClassTuple = this.#getStartClassTuple(crtGrp)
+    const endClassTuple = this.#getEndClassTuple(crtGrp,widgetComponent)
+
+    let connectingTripple:Triple
+    if(!widgetComponent?.isBlockingObjectProp() && startClassTuple[0] && endClassTuple[0]){
+      connectingTripple = SparqlFactory.buildIntersectionTriple(
+        startClassTuple[0].subject as VariableTerm,
+        crtGrp.ObjectPropertyGroup.getTypeSelected(),
+        endClassTuple[0].subject as VariableTerm
       );
-
-      if(!isChild && startClass) {
-        // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
-        triples.push(startClass)
-        if(crtGrp?.StartClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
-          const lbl = this.#getDefaultLabel(startClass,crtGrp.StartClassGroup)
-          if(lbl) triples.push(lbl)
-        } 
-      } 
     }
 
+    const critPatterns: Pattern[] = []
+    const startPtrn = this.#buildStartClassPtrn(startClassTuple,isChild,widgetComponent)
+    if(startPtrn.length > 0) critPatterns.push(...startPtrn)
+    const endPtrn = this.#buildEndClassPtrn(endClassTuple,crtGrp)
+    if(endPtrn.length > 0 ) critPatterns.push(...endPtrn)
+    if(connectingTripple){
+      const connPtrn = this.#buildConnectingPtrn(connectingTripple)
+      if(connPtrn) critPatterns.push(connPtrn)
+    }
+ 
+    return critPatterns
+  }
+
+  // [StartClassTriple,defaultLabel]
+  #getStartClassTuple(crtGrp:CriteriaGroup): [Triple,Triple | OptionalPattern | null] {
+    // startClassTuple: [startTriple, defaultLabel]
+    let startClassTuple:[Triple, null |Triple | OptionalPattern] = [null,null]
+    startClassTuple[0] = SparqlFactory.buildRdfTypeTriple(
+      DataFactory.variable(crtGrp.StartClassGroup.getVarName()?.replace('?','')) ,
+      DataFactory.namedNode(crtGrp.StartClassGroup.getTypeSelected()) 
+    );
+
+    if(crtGrp?.StartClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
+      const lbl = this.#getDefaultLabel(startClassTuple[0],crtGrp.StartClassGroup)
+      if(lbl) startClassTuple[1] = lbl
+    } 
+    return startClassTuple
+  }
+
+  // [EndClassTriple,defaultLabel]
+  #getEndClassTuple(crtGrp:CriteriaGroup,widgeComponent:AbstractWidget){
     // endClassTriple
-    let endClassTriple:Triple
+    let endClassTuple:[Triple,Triple | OptionalPattern | null] = [null,null]
     // generate only if EndClassGroup is present
     if(!widgeComponent?.isBlockingEnd() && crtGrp.EndClassGroup.getTypeSelected() != null){
-      endClassTriple = SparqlFactory.buildRdfTypeTriple(
+      endClassTuple[0] = SparqlFactory.buildRdfTypeTriple(
         DataFactory.variable(crtGrp.EndClassGroup?.getVarName()?.replace('?','')) ,
         DataFactory.namedNode(crtGrp.EndClassGroup.getTypeSelected()) ,
       );
 
-      if(!this.specProvider.isLiteralClass(crtGrp.EndClassGroup?.getTypeSelected()) && endClassTriple){
-        // If it is a literal class then it doesn't have the endclass Tiple.
-        // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
-        triples.push(endClassTriple)
-        if(crtGrp?.EndClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
-          const lbl = this.#getDefaultLabel(endClassTriple,crtGrp.EndClassGroup)
-          if(lbl) triples.push(lbl)
-        } 
+      // If it is a literal class then it doesn't have the endclass Tiple.
+      // see: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal
+      if(crtGrp?.EndClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
+        const lbl = this.#getDefaultLabel(endClassTuple[0],crtGrp.EndClassGroup)
+        if(lbl) endClassTuple[1] = lbl
+      } 
+    }
+    return endClassTuple
+  } 
+
+  #buildStartClassPtrn(startTuple:[Triple, null | Triple | OptionalPattern],isChild:boolean,widgeComponent:AbstractWidget){
+    const ptrns: Pattern[] = []
+    if(!isChild && !widgeComponent?.isBlockingStart()){
+      // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
+      if(isOptionalPattern(startTuple[1])) {
+        //create startClass + the defaultLabel inside OPTIONAL pattern
+        ptrns.push(SparqlFactory.buildBgpPattern([startTuple[0]]))
+        ptrns.push(startTuple[1])
+      } else {
+        if(startTuple[1]){
+          ptrns.push(SparqlFactory.buildBgpPattern([startTuple[0],startTuple[1]]))
+        } else {
+          ptrns.push(SparqlFactory.buildBgpPattern([startTuple[0]]))
+        }
+        // create startClass + the defaultLabel both inside bgp pattern
+        
       }
     }
-
-    let connectingTripple:Triple
-    if(!widgeComponent?.isBlockingObjectProp()){
-      connectingTripple = SparqlFactory.buildIntersectionTriple(
-        startClass?.subject as VariableTerm,
-        crtGrp.ObjectPropertyGroup.getTypeSelected(),
-        endClassTriple?.subject as VariableTerm
-      );
-      if(connectingTripple) triples.push(connectingTripple)
-    }
-
-    return triples;
+    return ptrns
   }
 
+  #buildEndClassPtrn(endClassTuple:[Triple, null | Triple | OptionalPattern],crtGrp:CriteriaGroup){
+    const ptrns: Pattern[] = []
+    if((!this.specProvider.isLiteralClass(crtGrp.EndClassGroup?.getTypeSelected()) && endClassTuple[0])){
+        
+      if(isOptionalPattern(endClassTuple[1])){
+        //create endClass + the defaultLabel inside OPTIONAL pattern
+        ptrns.push(SparqlFactory.buildBgpPattern([endClassTuple[0]]))
+        ptrns.push(endClassTuple[1])
+      } else {
+        if(endClassTuple[1]){
+          // create startClass + the defaultLabel both inside bgp pattern
+          ptrns.push(SparqlFactory.buildBgpPattern([endClassTuple[0],endClassTuple[1]]))
+        } else {
+          ptrns.push(SparqlFactory.buildBgpPattern([endClassTuple[0]]))
+        }
+      }
+    }
+    return ptrns
+  }
+
+  #buildConnectingPtrn(connectingTripple:Triple){
+    if(!connectingTripple) return
+    return SparqlFactory.buildBgpPattern([connectingTripple])
+  }
 
   // creating additional triples for classes with the defaultlabel property defined
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
-  #getDefaultLabel(triple:Triple,ClassGrp:StartClassGroup | EndClassGroup):Triple | null{
+  #getDefaultLabel(triple:Triple,ClassGrp:StartClassGroup | EndClassGroup):Triple | OptionalPattern |null{
     // the triple MUST be of type: ?var rdf:typ <namedNode>
     if((triple.subject?.termType === "Variable") && (isNamedNode(triple.predicate)) && (isNamedNode(triple.object))){
       const lbl = this.specProvider.getDefaultLabelProperty(triple.object.value)
       if(lbl){
-        const trpl = {
-          subject: DataFactory.variable(triple.subject.value.replace("?", "")),
-          predicate: DataFactory.namedNode(ClassGrp.defaultLblVar.type),
-          object:DataFactory.variable(`${ClassGrp.defaultLblVar.variable.replace("?", "")}`)
-        } as Triple
-        return trpl
+        const lblTriple = SparqlFactory.buildTriple(
+          DataFactory.variable(triple.subject.value.replace("?", "")),
+          DataFactory.namedNode(ClassGrp.defaultLblVar.type),
+          DataFactory.variable(`${ClassGrp.defaultLblVar.variable.replace("?", "")}`)
+        ) 
+        if(this.specProvider.isEnablingOptional(lbl)){
+          return SparqlFactory.buildOptionalPattern([SparqlFactory.buildBgpPattern([lblTriple])])
+        }
+        return lblTriple
       }
     }
     return null
@@ -268,8 +307,11 @@ export default class RdfJsGenerator {
   }
 }
 function isNamedNode(val:IriTerm | Variable | PropertyPath | Term): val is IriTerm{
-  return "termType" in val && val.termType == "NamedNode"
+  return val && "termType" in val && val.termType == "NamedNode"
 }
 function isVariable(val:Wildcard | Variable | any): val is Variable{
-  return "termType" in val && val.termType == "Variable"
+  return val && "termType" in val && val.termType == "Variable"
+}
+function isOptionalPattern(val: Triple | OptionalPattern): val is OptionalPattern {
+  return val && "type" in val && val.type === "optional"
 }

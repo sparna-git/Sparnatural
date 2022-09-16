@@ -5,9 +5,9 @@ import { Literal, Variable } from "@rdfjs/types";
 export default class SparqlFactory {
 
     // Builds the 'filter' triples for OPTIONAL or NOTEXISTS
-    static buildFilterTriples(triples:Triple[],rdfPattern:Pattern[],wherePtrn:Pattern[]):GroupPattern{
+    static buildFilterTriples(criteriaPtrns:Pattern[],rdfPattern:Pattern[],wherePtrn:Pattern[]):GroupPattern{
       const ptrn:Array<Pattern> = []
-      ptrn.push(SparqlFactory.buildBgpPattern(triples))
+      ptrn.push(...criteriaPtrns)
       if (rdfPattern) ptrn.push(...rdfPattern);
       if (wherePtrn) ptrn.push(...wherePtrn);
       return {
