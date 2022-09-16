@@ -130,7 +130,7 @@ export default class RdfJsGenerator {
 
     // if it hasandSiblings
     const andPtrn = grpWrapper.andSibling
-      ? this.#processGrpWrapper(grpWrapper.andSibling, hasOption, true)
+      ? this.#processGrpWrapper(grpWrapper.andSibling, false, true)
       : null;
 
     //if it is a child of a parent with either optional or notexists
@@ -178,14 +178,14 @@ export default class RdfJsGenerator {
 
     // startClassTriple
     let startClass:Triple
-    if(!widgeComponent?.isBlockingStart()){
+    if(!isChild && !widgeComponent?.isBlockingStart()){
+      // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
       startClass = SparqlFactory.buildRdfTypeTriple(
         DataFactory.variable(crtGrp.StartClassGroup.getVarName()?.replace('?','')) ,
         DataFactory.namedNode(crtGrp.StartClassGroup.getTypeSelected()) 
       );
 
-      if(!isChild && startClass){
-        // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
+      if(startClass){
         triples.push(startClass)
         if(crtGrp?.StartClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
           const lbl = this.#getDefaultLabel(startClass,crtGrp.StartClassGroup)
@@ -270,6 +270,6 @@ export default class RdfJsGenerator {
 function isNamedNode(val:IriTerm | Variable | PropertyPath | Term): val is IriTerm{
   return "termType" in val && val.termType == "NamedNode"
 }
-function isVariable(val:Wildcard | Variable): val is Variable{
+function isVariable(val:Wildcard | Variable | any): val is Variable{
   return "termType" in val && val.termType == "Variable"
 }
