@@ -178,14 +178,14 @@ export default class RdfJsGenerator {
 
     // startClassTriple
     let startClass:Triple
-    if(!isChild && !widgeComponent?.isBlockingStart()){
-      // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
+    if(!widgeComponent?.isBlockingStart()){
       startClass = SparqlFactory.buildRdfTypeTriple(
         DataFactory.variable(crtGrp.StartClassGroup.getVarName()?.replace('?','')) ,
         DataFactory.namedNode(crtGrp.StartClassGroup.getTypeSelected()) 
       );
 
-      if(startClass){
+      if(!isChild && startClass) {
+        // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
         triples.push(startClass)
         if(crtGrp?.StartClassGroup?.inputTypeComponent?.selectViewVariableBtn?.selected){
           const lbl = this.#getDefaultLabel(startClass,crtGrp.StartClassGroup)

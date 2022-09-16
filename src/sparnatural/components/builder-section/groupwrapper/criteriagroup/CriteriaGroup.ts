@@ -146,7 +146,7 @@ class CriteriaGroup extends HTMLComponent {
         );
       e.stopImmediatePropagation();
       let removed = e.detail.unselectedVal as EndClassWidgetValue;
-      this.EndClassGroup.editComponents.widgetWrapper.widgetComponent.onRemoveValue(
+      this.EndClassGroup.editComponents.widgetWrapper.widgetComponent?.onRemoveValue(
         removed.widgetVal
       );
       this.html[0].dispatchEvent(
