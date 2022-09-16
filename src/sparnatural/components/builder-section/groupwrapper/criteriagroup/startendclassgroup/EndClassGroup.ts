@@ -109,12 +109,7 @@ class EndClassGroup extends HTMLComponent {
 
   onObjectPropertyGroupSelected(objectPropVal: SelectedVal) {
     this.objectPropVal = objectPropVal;
-    if (this.editComponents) {
-      // html needs to be destroyed if present. Otherwise gets double rendered when and Action is called
-      // multiple times
-      //this.editComponents?.html?.empty()?.remove()
-      //this.editComponents.render();
-    } else {
+    if (!this.editComponents) {    
       this.editComponents = new EditComponents(
         this,
         this.startClassVal,
@@ -122,7 +117,6 @@ class EndClassGroup extends HTMLComponent {
         this.endClassVal,
         this.specProvider
       ).render();
-      // this.endClassWidgetGroup.render();
     }
   }
   renderSelectViewVar() {
