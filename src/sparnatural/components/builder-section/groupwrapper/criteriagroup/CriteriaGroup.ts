@@ -127,14 +127,19 @@ class CriteriaGroup extends HTMLComponent {
         throw Error(
           'No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"'
         );
-      this.endClassWidgetGroup.renderWidgetVal(e.detail);
+      if(Array.isArray(e.detail)){
+        // if there is an array with values provided, render all of them
+        e.detail.forEach(v=>this.endClassWidgetGroup.renderWidgetVal(v))
+      } else{
+        this.endClassWidgetGroup.renderWidgetVal(e.detail);
+      } 
+
     });
 
     // when inputgot selected then we remove the where btn and EditComponents
     this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.EndClassGroup.editComponents?.html?.empty()?.remove();
-      //this.editComponents = null
     });
 
     //gets called when a user removes a previously selected widgetValue

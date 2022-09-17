@@ -113,7 +113,7 @@ export default class RdfJsGenerator {
 
     // if it has whereChild
     const wherePtrn = grpWrapper.whereChild
-      ? this.#processGrpWrapper(grpWrapper.whereChild, grpWrapper.optionState != OptionTypes.NOTEXISTS, true)
+      ? this.#processGrpWrapper(grpWrapper.whereChild, grpWrapper.optionState !== OptionTypes.NONE, true)
       : null;
 
     // if it hasandSiblings
@@ -128,7 +128,7 @@ export default class RdfJsGenerator {
     let rdfPattern: Pattern[] = [];
     if (widgetComponent?.getwidgetValues()?.length > 0 ) rdfPattern = widgetComponent.getRdfJsPattern();
 
-    let crtPtrns = this.#buildCrtGrpPtrns(grpWrapper.CriteriaGroup,widgetComponent,isChild, grpWrapper.optionState,isInOption);
+    let crtPtrns = this.#buildCrtGrpPtrns(grpWrapper.CriteriaGroup,widgetComponent,isChild);
 
     if(grpWrapper.optionState === OptionTypes.NONE || isInOption ){
       const ptrns: Pattern[] = [];
@@ -140,13 +140,15 @@ export default class RdfJsGenerator {
       return ptrns
     } else {
       const ptrns: Pattern[] = [];
-      // starting from this grpWrapper to all where descendants: Optional might be enabled
+      // starting from this grpWrapper to all where descendants: OPTIONAL/NOTEXISTS is enabled
       // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableOptional
       if(crtPtrns.length > 0) ptrns.push(crtPtrns.shift());
+      if(crtPtrns.length > 0 && (crtPtrns[0].type == "optional")) ptrns.push(crtPtrns.shift()) // default label got created inside optional pattern
       const inOption = SparqlFactory.buildFilterTriples(crtPtrns,rdfPattern,wherePtrn)
       let optionPtrn 
       if(grpWrapper.optionState === OptionTypes.OPTIONAL) optionPtrn = SparqlFactory.buildOptionalPattern(inOption.patterns)
       if(grpWrapper.optionState === OptionTypes.NOTEXISTS) optionPtrn = SparqlFactory.buildNotExistsPattern(inOption)
+      // ADD here OPTIONTYPE SERVICE keyword for federated queries
       ptrns.push(optionPtrn)
       if(andPtrn) ptrns.push(...andPtrn)
       return ptrns
@@ -154,7 +156,7 @@ export default class RdfJsGenerator {
   }
 
   // Writes the patterns from the selected criterias 
-  #buildCrtGrpPtrns(crtGrp: CriteriaGroup,widgetComponent:AbstractWidget,isChild: boolean,optionState:OptionTypes,isInOption:boolean) {
+  #buildCrtGrpPtrns(crtGrp: CriteriaGroup,widgetComponent:AbstractWidget,isChild: boolean) {
 
     const startClassTuple = this.#getStartClassTuple(crtGrp)
     const endClassTuple = this.#getEndClassTuple(crtGrp,widgetComponent)
@@ -177,7 +179,6 @@ export default class RdfJsGenerator {
       const connPtrn = this.#buildConnectingPtrn(connectingTripple)
       if(connPtrn) critPatterns.push(connPtrn)
     }
- 
     return critPatterns
   }
 
@@ -220,16 +221,19 @@ export default class RdfJsGenerator {
 
   #buildStartClassPtrn(startTuple:[Triple, null | Triple | OptionalPattern],isChild:boolean,widgeComponent:AbstractWidget){
     const ptrns: Pattern[] = []
-    if(!isChild && !widgeComponent?.isBlockingStart()){
-      // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
+    if(isChild) return ptrns
+    // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
+    if(!widgeComponent?.isBlockingStart() && startTuple[0]){
       if(isOptionalPattern(startTuple[1])) {
-        //create startClass + the defaultLabel inside OPTIONAL pattern
+        // create startClass + the defaultLabel inside OPTIONAL pattern
         ptrns.push(SparqlFactory.buildBgpPattern([startTuple[0]]))
         ptrns.push(startTuple[1])
       } else {
         if(startTuple[1]){
+          // create startClass + defaultLabel in one bgp pattern
           ptrns.push(SparqlFactory.buildBgpPattern([startTuple[0],startTuple[1]]))
         } else {
+          // no default label got created. only insert start tuple
           ptrns.push(SparqlFactory.buildBgpPattern([startTuple[0]]))
         }
         // create startClass + the defaultLabel both inside bgp pattern

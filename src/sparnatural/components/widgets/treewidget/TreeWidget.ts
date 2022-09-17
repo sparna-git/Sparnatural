@@ -1,10 +1,13 @@
-import { Pattern } from "sparqljs";
+import { Pattern, ValuesPattern } from "sparqljs";
 import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
 import { SelectedVal } from "../../../generators/ISparJson";
 import { AbstractWidget, ValueType, WidgetValue } from "../AbstractWidget";
 import "jstree"
 import ISettings from "../../../../configs/client-configs/ISettings";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
+import { ValuePatternRow } from "sparqljs";
+import * as DataFactory from "@rdfjs/data-model" ;
+
 
 require("jstree/dist/themes/default/style.min.css");
 
@@ -18,7 +21,7 @@ export interface TreeWidgetValue extends WidgetValue {
 }
 
 export class TreeWidget extends AbstractWidget {
-
+  protected widgetValues: TreeWidgetValue[];
   loaderHandler: any;
   langSearch: any;
   IdCriteriaGroupe: any;
@@ -305,10 +308,9 @@ export class TreeWidget extends AbstractWidget {
   onClickSelect = function (e: any) {
     let this_ = e.data.arg1;
     const values = this_.getValue()
-    values.forEach((val:TreeWidgetValue) => {
-      this_.renderWidgetVal(val)
-    });
-    this.displayLayer.hide();
+    this_.displayLayer?.hide();
+    this_.renderWidgetValues(values)
+    
   };
 
   onClickClose = function (e: any) {
@@ -343,6 +345,15 @@ export class TreeWidget extends AbstractWidget {
   }
 
   getRdfJsPattern(): Pattern[] {
-    throw new Error("Method not implemented.");
+    let vals = this.widgetValues.map((v) => {
+      let vl: ValuePatternRow = {};
+      vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
+      return vl;
+    });
+    let valuePattern: ValuesPattern = {
+      type: "values",
+      values: vals,
+    };
+    return [valuePattern];
   }
 }
