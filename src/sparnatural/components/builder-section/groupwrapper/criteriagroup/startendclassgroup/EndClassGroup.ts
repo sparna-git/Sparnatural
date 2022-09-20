@@ -16,6 +16,7 @@ class EndClassGroup extends HTMLComponent {
     type: null,
     variable: null,
   };
+  // shadow variable for http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#defaultLabelProperty
   defaultLblVar: SelectedVal ={
     type:null,
     variable:null
@@ -38,7 +39,6 @@ class EndClassGroup extends HTMLComponent {
   render() {
     super.render();
     this.variableSelector = null;
-
     this.#addEventListener();
     return this;
   }
@@ -119,6 +119,8 @@ class EndClassGroup extends HTMLComponent {
       ).render();
     }
   }
+
+  // renders the "eye" btn
   renderSelectViewVar() {
     this.inputTypeComponent.selectViewVariableBtn.render();
   }

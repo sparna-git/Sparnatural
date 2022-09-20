@@ -2,8 +2,9 @@ import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
 import HTMLComponent from "../HtmlComponent";
 
 /*
+  
     Switch Component having a binary state:
-    selected: Switching beteween the states on Click
+    selected: Switching beteween the states with onClick
 */
 class SelectViewVariableBtn extends HTMLComponent {
   selected = false;

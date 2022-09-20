@@ -534,6 +534,19 @@ BIND(true AS ?hasChildren)
     },
     {
       "@id":
+        "http://www.opengis.net/ont/geosparql#asWKT",
+      "@type": "ObjectProperty",
+      subPropertyOf: "sparnatural:NonSelectableProperty",
+      label: [
+        { "@value": "name", "@language": "en" },
+        { "@value": "nom", "@language": "fr" },
+      ],
+      enableOptional: true,
+      sparqlString: "<http://www.opengis.net/ont/geosparql#asWKT>",
+      range: "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text",
+    },
+    {
+      "@id":
         "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#unknownProperty",
       "@type": "ObjectProperty",
       subPropertyOf: "sparnatural:ListProperty",

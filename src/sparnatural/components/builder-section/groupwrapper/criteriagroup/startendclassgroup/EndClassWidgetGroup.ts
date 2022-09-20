@@ -10,6 +10,11 @@ import {
   WidgetValue,
 } from "../../../../widgets/AbstractWidget";
 
+
+/*
+  This class is responsible for rendering the WidgetValues, selected by a widget.
+  This values are added in a 'list' after the EndClassGroup
+*/
 export class EndClassWidgetGroup extends HTMLComponent {
   ParentComponent: HTMLComponent;
   widgetValues: Array<EndClassWidgetValue> = [];

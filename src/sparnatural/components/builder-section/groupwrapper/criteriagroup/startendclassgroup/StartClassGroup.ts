@@ -14,6 +14,7 @@ class StartClassGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   renderEyeBtn:Boolean = false
+  // shadow variable for http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#defaultLabelProperty
   defaultLblVar: SelectedVal ={
     type:null,
     variable:null
@@ -78,6 +79,7 @@ class StartClassGroup extends HTMLComponent {
     );
   }
 
+  // get the classname of the uri
   #getUriClassName(uri:string){
     if(uri.includes('#')) return uri.split('#').pop()
     return uri.split('/').pop()
@@ -102,13 +104,7 @@ class StartClassGroup extends HTMLComponent {
     );
 
     var desc = this.specProvider.getTooltip(this.startClassVal.type);
-
-    /*
-      Not sure what the following code does
-    */
-
     if (desc) {
-      // tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
       var tippySettings = Object.assign({}, this.settings.tooltipConfig);
       tippySettings.placement = "top-start";
       new TippyInfo(this, desc, tippySettings);
