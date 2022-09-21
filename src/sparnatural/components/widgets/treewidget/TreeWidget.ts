@@ -1,7 +1,7 @@
 import { Pattern, ValuesPattern } from "sparqljs";
 import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
 import { SelectedVal } from "../../../generators/ISparJson";
-import { AbstractWidget, ValueType, WidgetValue } from "../AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "jstree"
 import ISettings from "../../../../configs/client-configs/ISettings";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
@@ -17,7 +17,6 @@ export interface TreeWidgetValue extends WidgetValue {
     label: string;
     uri: string;
   };
-  valueType: ValueType.MULTIPLE;
 }
 
 export class TreeWidget extends AbstractWidget {
@@ -51,7 +50,8 @@ export class TreeWidget extends AbstractWidget {
       null,
       startClassVal,
       objectPropVal,
-      endClassVal
+      endClassVal,
+      ValueRepetition.MULTIPLE
     );
     this.loaderHandler = loaderHandler;
     this.langSearch = langSearch;
@@ -330,8 +330,7 @@ export class TreeWidget extends AbstractWidget {
           key: checked[node].id,
           label: checked[node].original.text,
           uri: checked[node].id
-        },
-        valueType: ValueType.MULTIPLE
+        }
       }
       
       values.push(val);

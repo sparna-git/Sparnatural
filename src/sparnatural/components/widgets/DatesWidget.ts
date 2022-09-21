@@ -3,7 +3,7 @@ import { getSettings } from "../../../configs/client-configs/settings";
 import { SelectedVal } from "../../generators/ISparJson";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 
 export interface DateValue extends WidgetValue {
   value: {
@@ -11,7 +11,6 @@ export interface DateValue extends WidgetValue {
     start: string;
     stop: string;
   };
-  valueType: ValueType.SINGLE;
 }
 
 export class DatesWidget extends AbstractWidget {
@@ -35,7 +34,8 @@ export class DatesWidget extends AbstractWidget {
       null,
       startClassVal,
       objectPropVal,
-      endClassVal
+      endClassVal,
+      ValueRepetition.SINGLE
     );
     this.datesHandler = datesHandler;
     this.startClassVal = startClassVal;
@@ -141,7 +141,6 @@ export class DatesWidget extends AbstractWidget {
 
   #addValueBtnClicked = () => {
     let val: DateValue = {
-      valueType: ValueType.SINGLE,
       value: {
         start: this.inputStart.val().toString(),
         stop: this.inputEnd.val().toString(),

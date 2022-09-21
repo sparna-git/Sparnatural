@@ -3,15 +3,14 @@ import { BgpPattern, Pattern } from "sparqljs";
 import { getSettings } from "../../../configs/client-configs/settings";
 import { SelectedVal } from "../../generators/ISparJson";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 
 export interface BooleanWidgetValue extends WidgetValue {
   value: {
     label: string;
     key: boolean;
     boolean: boolean;
-  };
-  valueType: ValueType.SINGLE;
+  }
 }
 
 export class BooleanWidget extends AbstractWidget {
@@ -28,7 +27,8 @@ export class BooleanWidget extends AbstractWidget {
       null,
       startClassVal,
       objectPropVal,
-      endClassVal
+      endClassVal,
+      ValueRepetition.SINGLE
     );
   }
 
@@ -45,7 +45,6 @@ export class BooleanWidget extends AbstractWidget {
 
     trueSpan[0].addEventListener("click", (e) => {
       let widgetValue: BooleanWidgetValue = {
-        valueType: ValueType.SINGLE,
         value: {
           key: true,
           label: getSettings().langSearch.true,
@@ -57,7 +56,6 @@ export class BooleanWidget extends AbstractWidget {
 
     falseSpan[0].addEventListener("click", (e) => {
       let widgetValue: BooleanWidgetValue = {
-        valueType: ValueType.SINGLE,
         value: {
           key: false,
           label: getSettings().langSearch.false,

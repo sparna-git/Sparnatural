@@ -2,7 +2,7 @@ import * as DataFactory from "@rdfjs/data-model" ;
 import { Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../../../generators/ISparJson";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueType, WidgetValue } from "../AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 
 require("easy-autocomplete");
 
@@ -31,7 +31,8 @@ export class AutoCompleteWidget extends AbstractWidget {
       null,
       startClassValue,
       objectPropVal,
-      endClassValue
+      endClassValue,
+      ValueRepetition.MULTIPLE
     );
     this.autocompleteHandler = autocompleteHandler;
   }
@@ -96,7 +97,6 @@ export class AutoCompleteWidget extends AbstractWidget {
         onChooseEvent: () => {
           let val = inputHtml.getSelectedItemData();
           let autocompleteValue: AutoCompleteWidgetValue = {
-            valueType: ValueType.SINGLE,
             value: {
               key: this.autocompleteHandler.elementUri(val),
               label: this.autocompleteHandler.elementLabel(val),

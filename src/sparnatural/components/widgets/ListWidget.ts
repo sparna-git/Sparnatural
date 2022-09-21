@@ -5,7 +5,7 @@ import LocalCacheData from "../../datastorage/LocalCacheData";
 import { SelectedVal } from "../../generators/ISparJson";
 import { SparqlTemplateListHandler } from "./autocomplete/AutocompleteAndListHandlers";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import * as DataFactory from "@rdfjs/data-model" ;
 
 import "select2";
@@ -17,7 +17,6 @@ export interface ListWidgetValue extends WidgetValue {
     label: string;
     uri: string;
   };
-  valueType: ValueType.MULTIPLE;
 }
 
 export class ListWidget extends AbstractWidget {
@@ -41,7 +40,8 @@ export class ListWidget extends AbstractWidget {
       null,
       startClassVal,
       objectPropVal,
-      endClassVal
+      endClassVal,
+      ValueRepetition.MULTIPLE
     );
     this.listHandler = listHandler;
     this.sort = sort;
@@ -116,7 +116,6 @@ export class ListWidget extends AbstractWidget {
                   "List widget should allow only for one el to be selected!"
                 );
               let listWidgetValue: ListWidgetValue = {
-                valueType: ValueType.MULTIPLE,
                 value: {
                   key: option[0].value,
                   label: option[0].label,
@@ -135,7 +134,6 @@ export class ListWidget extends AbstractWidget {
                   "List widget should allow only for one el to be selected!"
                 );
               let listWidgetValue: ListWidgetValue = {
-                valueType: ValueType.MULTIPLE,
                 value: {
                   key: option[0].value,
                   label: option[0].label,

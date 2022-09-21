@@ -1,6 +1,6 @@
 import {  Pattern } from "sparqljs";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 
 export class NoWidget extends AbstractWidget {
   parseInput(): WidgetValue {
@@ -8,7 +8,7 @@ export class NoWidget extends AbstractWidget {
   }
   value: any = null;
   constructor(parentComponent: WidgetWrapper) {
-    super("no-widget", parentComponent, null, null, null, null);
+    super("no-widget", parentComponent, null, null, null, null, ValueRepetition.SINGLE);
   }
 
   render() {

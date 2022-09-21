@@ -4,7 +4,7 @@ import { getSettings } from "../../../configs/client-configs/settings";
 import { SelectedVal } from "../../generators/ISparJson";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 
 export interface SearchWidgetValue extends WidgetValue {
   value: {
@@ -12,7 +12,6 @@ export interface SearchWidgetValue extends WidgetValue {
     label: string;
     search: string;
   };
-  valueType: ValueType.SINGLE;
 }
 
 export class SearchWidget extends AbstractWidget {
@@ -33,7 +32,8 @@ export class SearchWidget extends AbstractWidget {
       null,
       startClassVal,
       objectPropVal,
-      endClassVal
+      endClassVal,
+      ValueRepetition.SINGLE
     );
   }
 
@@ -51,7 +51,6 @@ export class SearchWidget extends AbstractWidget {
   #addValueBtnClicked = () => {
     this.searchInput.trigger("change");
     let searchWidgetValue: SearchWidgetValue = {
-      valueType: ValueType.SINGLE,
       value: {
         key: this.searchInput.val().toString(),
         label: this.searchInput.val().toString(),

@@ -5,7 +5,7 @@ import HTMLComponent from "../HtmlComponent";
 // The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
 // example for multiples: List of countries in ListWidget
 // example for single: Search string in SearchWidget
-export enum ValueType {
+export enum ValueRepetition {
   SINGLE, // only one value can be chosen.
   MULTIPLE, // multiple values can be selected like a list of values
 }
@@ -14,10 +14,10 @@ export interface WidgetValue {
   value: {
     label: string; // that's the human readable string representation shown as a WidgetValue to the user
   };
-  valueType: ValueType;
 }
 
 export abstract class AbstractWidget extends HTMLComponent {
+  public valueRepetition: ValueRepetition;
   protected widgetValues: Array<WidgetValue> = [];
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
@@ -25,18 +25,21 @@ export abstract class AbstractWidget extends HTMLComponent {
   protected blockStartTriple = false;
   protected blockObjectPropTriple = false;
   protected blockEndTriple = false;
+
   constructor(
     baseCssClass: string,
     parentComponent: HTMLComponent,
     widgetHTML: JQuery<HTMLElement>,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    endClassVal: SelectedVal,
+    valueRepetition: ValueRepetition
   ) {
     super(baseCssClass, parentComponent, widgetHTML);
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
+    this.valueRepetition = valueRepetition;
   }
   // Must be implemented by the developper of the widget
   abstract getRdfJsPattern(): Pattern[];
