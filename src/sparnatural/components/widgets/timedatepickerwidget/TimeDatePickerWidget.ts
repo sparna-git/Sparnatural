@@ -170,8 +170,8 @@ export class TimeDatePickerWidget extends AbstractWidget {
 
   parseInput(input: StringDateTimeValue): DateTimePickerValue {
     if(!this.#isValidDate(input.value.start) && !this.#isValidDate(input.value.stop)) throw Error('No valid Date received')
-    let startValue = new Date(input.value.start)
-    let endValue = new Date(input.value.stop)
+    let startValue = (this.#isValidDate(input.value.start))?new Date(input.value.start):null
+    let endValue = (this.#isValidDate(input.value.stop))?new Date(input.value.stop):null
     if (startValue && endValue && (startValue > endValue)) throw Error('StartDate is bigger than Enddate!')
 
     let tmpValue: { start: Date; stop: Date };
@@ -209,8 +209,8 @@ export class TimeDatePickerWidget extends AbstractWidget {
     let dateTimePickerVal: DateTimePickerValue = {
       valueType: ValueType.SINGLE,
       value: {
-        key: tmpValue.start+" - "+tmpValue.stop,
-        // TODO : this is not translated
+        // here : we get the JSON representation of the date, as a lazy way to format date
+        key: JSON.stringify(tmpValue.start).replace(/["]+/g,'')+" - "+JSON.stringify(tmpValue.stop).replace(/["]+/g,''),
         label: this.#getValueLabel(this.inputStart.val().toString(), this.inputEnd.val().toString()),
         start: tmpValue.start,
         stop: tmpValue.stop,
