@@ -166,16 +166,8 @@ export default class MapWidget extends AbstractWidget {
   // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
   getRdfJsPattern(): Pattern[] {
 
-    let geomA: Triple = SparqlFactory.buildTriple(
-      DataFactory.variable(this.getVariableValue(this.startClassVal)),
-      DataFactory.namedNode(
-        "http://www.opengis.net/ont/geosparql#hasGeometry"
-      ),
-      DataFactory.variable("geomA")
-    );
-
     let asWKT: Triple = SparqlFactory.buildTriple(
-      DataFactory.variable(geomA.object.value),
+      DataFactory.variable(this.getVariableValue(this.startClassVal)),
       DataFactory.namedNode("http://www.opengis.net/ont/geosparql#asWKT"),
       DataFactory.variable("aWKT")
     );
@@ -203,7 +195,7 @@ export default class MapWidget extends AbstractWidget {
 
     let ptrn: BgpPattern = {
       type: "bgp",
-      triples: [geomA, asWKT],
+      triples: [asWKT],
     };
 
 
