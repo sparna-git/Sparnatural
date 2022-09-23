@@ -201,11 +201,7 @@ class ClassSelectBuilder extends HTMLComponent {
       if (!highlightedIcon || 0 === highlightedIcon.length) {
         highlightedIcon = icon;
       }
-
-      var image =
-        icon != null
-          ? ' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"'
-          : "";
+      let image = icon != null ? `data-icon="${icon}" data-iconh="${highlightedIcon}"` :""
       //var selected = (default_value == val)?'selected="selected"':'';
       var desc = this.specProvider.getTooltip(val);
       var selected = default_value == val ? ' selected="selected"' : "";
@@ -213,20 +209,7 @@ class ClassSelectBuilder extends HTMLComponent {
       if (desc) {
         description_attr = ' data-desc="' + desc + '"';
       }
-      list.push(
-        '<option value="' +
-          val +
-          '" data-id="' +
-          val +
-          '"' +
-          image +
-          selected +
-          " " +
-          description_attr +
-          "  >" +
-          label +
-          "</option>"
-      );
+      list.push(`<option value="${val}" data-id"${val}" ${image} ${selected} ${description_attr}> ${label}</option>` );
     }
 
     var html_list = $("<select/>", {
