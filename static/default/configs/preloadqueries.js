@@ -106,30 +106,9 @@ export default {
                                     {
                                         "valueType": 0,
                                         "value": {
-                                            "key": "testtext",
-                                            "label": "testtext",
-                                            "search": "testtext"
-                                        }
-                                    }
-                                ]
-                            },
-                            "children": [],
-                            "optional": false,
-                            "notExists": false
-                        },
-                        {
-                            "line": {
-                                "s": "?Artwork_4",
-                                "p": "?exposéeà_9",
-                                "pType": "http://dbpedia.org/ontology/museum",
-                                "o": "?Museum_8",
-                                "sType": "http://dbpedia.org/ontology/Artwork",
-                                "oType": "http://dbpedia.org/ontology/Museum",
-                                "values": [
-                                    {
-                                        "valueType": 0,
-                                        "value": {
-                                            "label": "Any"
+                                            "key": "testText",
+                                            "label": "testText",
+                                            "search": "testText"
                                         }
                                     }
                                 ]
