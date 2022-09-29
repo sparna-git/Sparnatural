@@ -73,8 +73,29 @@ export class SearchWidget extends AbstractWidget {
   getRdfJsPattern(): Pattern[] {
     console.log((this.ParentComponent as WidgetWrapper).widgetType)
     switch((this.ParentComponent as WidgetWrapper).widgetType) {
-      case Config.GRAPHDB_SEARCH_PROPERTY: {
+      case Config.STRING_EQUALS_PROPERTY: {
+        // builds a FILTER(lcase(...) = lcase(...))
+        return [SparqlFactory.buildFilterStringEquals(
+          DataFactory.literal(
+            `${this.widgetValues[0].value.search}`
+          ),
+          DataFactory.variable(this.getVariableValue(this.endClassVal))
+        )];
 
+
+        break;
+      }
+      case Config.SEARCH_PROPERTY: {
+        // builds a FILTER(regex(...,...,"i"))
+        return [SparqlFactory.buildFilterRegex(
+          DataFactory.literal(
+            `${this.widgetValues[0].value.search}`
+          ),
+          DataFactory.variable(this.getVariableValue(this.endClassVal))
+        )];
+      }
+      case Config.GRAPHDB_SEARCH_PROPERTY: {
+        // builds a GraphDB-specific search pattern
         let ptrn: BgpPattern = {
           type: "bgp",
           triples: [
@@ -101,17 +122,6 @@ export class SearchWidget extends AbstractWidget {
           ],
         };
         return [ptrn];
-      }
-      case Config.STRING_EQUALS_PROPERTY: {
-        break;
-      }
-      case Config.SEARCH_PROPERTY: {
-        return [SparqlFactory.buildFilterRegex(
-          DataFactory.literal(
-            `${this.widgetValues[0].value.search}`
-          ),
-          DataFactory.variable(this.getVariableValue(this.endClassVal))
-        )];
       }
     }
   }

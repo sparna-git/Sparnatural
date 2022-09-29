@@ -57,7 +57,7 @@ export default class SparqlFactory {
         };
     }
 
-    static buildFilterRegex(texte: Literal, variable: Variable): Pattern {			
+    static buildFilterRegex(texte: Literal, variable: Variable): FilterPattern {			
       return {
         type: "filter",
         expression: {
@@ -74,6 +74,28 @@ export default class SparqlFactory {
           ],
         },
       };
+    }
+
+    static buildFilterStringEquals(texte: Literal, variable: Variable): FilterPattern {			
+      return {
+        type: "filter",
+        expression: {
+          type: "operation",
+          operator: "=",
+          args: [					
+            {
+              type: "operation",
+              operator: "lcase",
+              args : [ variable ]
+            },
+            {
+              type: "operation",
+              operator: "lcase",
+              args : [texte]
+            }
+          ]
+        }
+      } ;
     }
 
     static buildFilterTime(
