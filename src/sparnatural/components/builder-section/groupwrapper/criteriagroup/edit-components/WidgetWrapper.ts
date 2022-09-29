@@ -509,7 +509,8 @@ class WidgetWrapper extends HTMLComponent {
             this.settings.langSearch,
             this.startClassVal,
             this.objectPropVal,
-            this.endClassVal
+            this.endClassVal,
+            !(treeChildrenDatasource.noSort == true)
           );
         }
 
