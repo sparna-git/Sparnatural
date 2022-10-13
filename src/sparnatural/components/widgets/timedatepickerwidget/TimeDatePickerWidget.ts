@@ -183,39 +183,30 @@ export class TimeDatePickerWidget extends AbstractWidget {
       };
     } else {
       tmpValue = {
-        start: (startValue)?
-        (new Date(
-          startValue.getFullYear(),
-          0,
-          1,
-          0,
-          0,
-          1,
-          0
-        )) // first day
-        :null, 
-        stop: (endValue)?
-        (new Date(
-          endValue.getFullYear(),
-          11,
-          31,
-          23,
-          59,
-          59
-        )) // last day
-        :null
+        start: this.#getFirstDayYear(startValue), 
+        stop: this.#getLastDayOfYear(endValue)
       };
     }
     let dateTimePickerVal: DateTimePickerValue = {
       value: {
         // here : we get the JSON representation of the date, as a lazy way to format date
         key: JSON.stringify(tmpValue.start).replace(/["]+/g,'')+" - "+JSON.stringify(tmpValue.stop).replace(/["]+/g,''),
-        label: this.#getValueLabel(this.inputStart.val().toString(), this.inputEnd.val().toString()),
+        label: this.#getValueLabel(startValue.getFullYear().toString(), endValue.getFullYear().toString()),
         start: tmpValue.start,
         stop: tmpValue.stop,
       },
     };
     return dateTimePickerVal;
+  }
+  #getFirstDayYear(startValue:Date) {
+    return startValue ?
+    new Date(startValue.getFullYear(),0,1,0,0,1,0) 
+    :null
+  }
+  #getLastDayOfYear(endValue:Date) {
+    return endValue ? 
+    new Date(endValue.getFullYear(),11,31,23,59,59) 
+    :null
   }
 
   getRdfJsPattern(): Pattern[] {
