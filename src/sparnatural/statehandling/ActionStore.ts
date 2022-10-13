@@ -81,6 +81,11 @@ class ActionStore {
       toggleVarNames(this,this.showVariableNames);
     });
 
+    this.sparnatural.html[0].addEventListener("resetVarIndex",(e:CustomEvent)=>{
+      console.log('resetaction WAS called')
+      this.maxVarIndex = 0;
+    });
+
     this.sparnatural.html[0].addEventListener(
       "getMaxVarIndex",
       (e: CustomEvent) => {
