@@ -20,6 +20,7 @@ import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/T
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
+import { LiteralListWidget } from "../../../../widgets/LiteralListWidget";
 
 /**
  *  creates the corresponding widget
@@ -228,7 +229,7 @@ class WidgetWrapper extends HTMLComponent {
             this.getFinalQueryString(datasource)
           );
         }
-        return new ListWidget(
+        return new LiteralListWidget(
           this,
           handler,
           !(datasource.noSort == true),
@@ -508,7 +509,8 @@ class WidgetWrapper extends HTMLComponent {
             this.settings.langSearch,
             this.startClassVal,
             this.objectPropVal,
-            this.endClassVal
+            this.endClassVal,
+            !(treeChildrenDatasource.noSort == true)
           );
         }
 

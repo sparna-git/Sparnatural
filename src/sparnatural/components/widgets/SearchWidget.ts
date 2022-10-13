@@ -4,7 +4,9 @@ import { getSettings } from "../../../configs/client-configs/settings";
 import { SelectedVal } from "../../generators/ISparJson";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
+
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+
 
 export interface SearchWidgetValue extends WidgetValue {
   value: {
@@ -68,31 +70,58 @@ export class SearchWidget extends AbstractWidget {
   }
   
   getRdfJsPattern(): Pattern[] {
-    let ptrn: BgpPattern = {
-      type: "bgp",
-      triples: [
-        {
-          subject: DataFactory.variable(
-            this.getVariableValue(this.startClassVal)
+    console.log((this.ParentComponent as WidgetWrapper).widgetType)
+    switch((this.ParentComponent as WidgetWrapper).widgetType) {
+      case Config.STRING_EQUALS_PROPERTY: {
+        // builds a FILTER(lcase(...) = lcase(...))
+        return [SparqlFactory.buildFilterStringEquals(
+          DataFactory.literal(
+            `${this.widgetValues[0].value.search}`
           ),
-          predicate: DataFactory.namedNode(
-            "http://www.ontotext.com/connectors/lucene#query"
+          DataFactory.variable(this.getVariableValue(this.endClassVal))
+        )];
+
+
+        break;
+      }
+      case Config.SEARCH_PROPERTY: {
+        // builds a FILTER(regex(...,...,"i"))
+        return [SparqlFactory.buildFilterRegex(
+          DataFactory.literal(
+            `${this.widgetValues[0].value.search}`
           ),
-          object: DataFactory.literal(
-            `text:${this.widgetValues[0].value.search}`
-          ),
-        },
-        {
-          subject: DataFactory.variable(
-            this.getVariableValue(this.startClassVal)
-          ),
-          predicate: DataFactory.namedNode(
-            "http://www.ontotext.com/connectors/lucene#entities"
-          ),
-          object: DataFactory.variable(this.getVariableValue(this.endClassVal)),
-        },
-      ],
-    };
-    return [ptrn];
+          DataFactory.variable(this.getVariableValue(this.endClassVal))
+        )];
+      }
+      case Config.GRAPHDB_SEARCH_PROPERTY: {
+        // builds a GraphDB-specific search pattern
+        let ptrn: BgpPattern = {
+          type: "bgp",
+          triples: [
+            {
+              subject: DataFactory.variable(
+                this.getVariableValue(this.startClassVal)
+              ),
+              predicate: DataFactory.namedNode(
+                "http://www.ontotext.com/connectors/lucene#query"
+              ),
+              object: DataFactory.literal(
+                `text:${this.widgetValues[0].value.search}`
+              ),
+            },
+            {
+              subject: DataFactory.variable(
+                this.getVariableValue(this.startClassVal)
+              ),
+              predicate: DataFactory.namedNode(
+                "http://www.ontotext.com/connectors/lucene#entities"
+              ),
+              object: DataFactory.variable(this.getVariableValue(this.endClassVal)),
+            },
+          ],
+        };
+        return [ptrn];
+      }
+    }
   }
 }

@@ -57,6 +57,47 @@ export default class SparqlFactory {
         };
     }
 
+    static buildFilterRegex(texte: Literal, variable: Variable): FilterPattern {			
+      return {
+        type: "filter",
+        expression: {
+          type: "operation",
+          operator: "regex",
+          args: [
+            {
+              type: "operation",
+              operator: "str",
+              args: [ variable ]
+            },
+            texte,
+            DataFactory.literal(`i`)
+          ],
+        },
+      };
+    }
+
+    static buildFilterStringEquals(texte: Literal, variable: Variable): FilterPattern {			
+      return {
+        type: "filter",
+        expression: {
+          type: "operation",
+          operator: "=",
+          args: [					
+            {
+              type: "operation",
+              operator: "lcase",
+              args : [ variable ]
+            },
+            {
+              type: "operation",
+              operator: "lcase",
+              args : [texte]
+            }
+          ]
+        }
+      } ;
+    }
+
     static buildFilterTime(
         startDate: Literal,
         endDate: Literal,

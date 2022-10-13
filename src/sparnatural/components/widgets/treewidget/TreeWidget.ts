@@ -34,6 +34,7 @@ export class TreeWidget extends AbstractWidget {
   endClassVal: SelectedVal;
   settings:ISettings
   displayLayer: JQuery<HTMLElement>
+  sort:boolean;
 
   constructor(
     parentComponent: WidgetWrapper,
@@ -42,7 +43,8 @@ export class TreeWidget extends AbstractWidget {
     langSearch: string,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    endClassVal: SelectedVal,
+    sort: boolean
   ) {
     super(
       "tree-widget",
@@ -60,6 +62,7 @@ export class TreeWidget extends AbstractWidget {
     this.startClassVal = startClassVal;
     this.endClassVal = endClassVal;
     this.objectPropVal = objectPropVal;
+    this.sort = sort;
   }
 
   render() {
@@ -143,7 +146,23 @@ export class TreeWidget extends AbstractWidget {
               endClassGroup_value,
               data
             );
+
+            if(self.sort) {
+              // here, if we need to sort, then sort according to lang
+              var collator = new Intl.Collator(self.settings.language);					
+              items.sort(function(a:string, b:string) {
+                return collator.compare(loaderHandler.nodeLabel(a),loaderHandler.nodeLabel(b));
+              });
+            }
+
+
             for (var i = 0; i < items.length; i++) {
+              var text = loaderHandler.nodeLabel(items[i]);
+              // shorten the label if too long to avoid tree goind far right
+              if(text.length > 90) {
+                text = text.substring(0,90)+" (...)";
+              }
+
               var aNode: {
                 id: string;
                 text: string;
@@ -152,7 +171,7 @@ export class TreeWidget extends AbstractWidget {
                 parent?: any;
               } = {
                 id: loaderHandler.nodeUri(items[i]),
-                text: loaderHandler.nodeLabel(items[i]),
+                text: text,
               };
               if (loaderHandler.nodeHasChildren(items[i])) {
                 aNode.children = true;
