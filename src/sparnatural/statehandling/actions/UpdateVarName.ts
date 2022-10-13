@@ -19,9 +19,6 @@ export default function updateVarName(
       let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
       if (startGrp.getVarName() === sparqlVar) startGrp.setVarName(newSparqlVar);
       if (endGrp.getVarName() === sparqlVar) endGrp.setVarName(newSparqlVar);
-      //same for the possible default var
-      if (startGrp.getDefaultLblVar() === sparqlVar) startGrp.setDefaultLblVar(newSparqlVar);
-      if (endGrp.getDefaultLblVar() === sparqlVar) endGrp.setDefaultLblVar(newSparqlVar);
     }
   );
   //add variables list in actionstore
