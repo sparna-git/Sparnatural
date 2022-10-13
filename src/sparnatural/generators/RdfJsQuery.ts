@@ -279,7 +279,8 @@ export default class RdfJsGenerator {
           DataFactory.variable(triple.subject.value.replace("?", "")),
           DataFactory.namedNode(ClassGrp.defaultLblVar.type),
           DataFactory.variable(`${ClassGrp.defaultLblVar.variable.replace("?", "")}`)
-        ) 
+        )
+        this.defaultLabelVars.push(DataFactory.variable(ClassGrp.defaultLblVar.variable.replace("?","")))
         if(this.specProvider.isEnablingOptional(lbl)){
           return SparqlFactory.buildOptionalPattern([SparqlFactory.buildBgpPattern([lblTriple])])
         }
