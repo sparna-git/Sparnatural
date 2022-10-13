@@ -116,12 +116,6 @@ export default class QueryLoader{
 
   // this method checks if the eye btn was enabled in the loaded query
   static #setSelectViewVariableBtn(startClassVal:SelectedVal,startClassComponent:StartClassGroup,endClassVal:SelectedVal,endClassComponent:EndClassGroup){
-     // check if the variable is selected to show (eye btn clicked) and if then selected as well
-     if(this.query.variables.includes(startClassVal.variable.replace('?',''))) {
-      // click on eye btn
-      this.#clickOn((startClassComponent.inputTypeComponent as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
-    }
-
     if(this.query.variables.includes(endClassVal.variable.replace('?',''))){
       // click on eye btn
       this.#clickOn((endClassComponent.inputTypeComponent as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
