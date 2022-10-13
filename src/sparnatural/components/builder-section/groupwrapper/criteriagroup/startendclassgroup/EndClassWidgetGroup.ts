@@ -74,7 +74,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
     // if the number of widgetValues is now less than the maximum
     if (this.widgetValues.length < getSettings().maxOr && this.addWidgetValueBtn?.html) {
-      this.addWidgetValueBtn.html.show;
+      this.addWidgetValueBtn.html.show();
     }
 
     this.html[0].dispatchEvent(
@@ -106,7 +106,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.#renderNewSelectedValue(endClassWidgetVal);
 
     // if the widget allows multiple values then AddWidgetValueBtn
-    if((this.ParentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent().valueRepetition == ValueRepetition.MULTIPLE) {
+    if((this.ParentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent().valueRepetition == ValueRepetition.MULTIPLE ) {
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
         ? this.addWidgetValueBtn.render()
@@ -116,6 +116,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
           ).render());
     }
 
+    
     // If we reached maxOr hide the AddWidgetValueBtn
     if (this.widgetValues.length == getSettings().maxOr) {
       this.addWidgetValueBtn.html.hide();
