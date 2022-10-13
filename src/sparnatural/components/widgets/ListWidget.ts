@@ -10,6 +10,7 @@ import * as DataFactory from "@rdfjs/data-model" ;
 
 import "select2";
 import "select2/dist/css/select2.css";
+import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
 
 export interface ListWidgetValue extends WidgetValue {
   value: {
@@ -22,7 +23,7 @@ export interface ListWidgetValue extends WidgetValue {
 
 export class ListWidget extends AbstractWidget {
 
-  protected widgetValues: ListWidgetValue[];
+  protected widgetValues: WidgetValue[];
   listHandler: SparqlTemplateListHandler;
   sort: boolean;
   settings: ISettings;
@@ -134,14 +135,7 @@ export class ListWidget extends AbstractWidget {
                 throw Error(
                   "List widget should allow only for one el to be selected!"
                 );
-              let listWidgetValue: ListWidgetValue = {
-                valueType: ValueType.MULTIPLE,
-                value: {
-                  key: option[0].value,
-                  label: option[0].label,
-                  uri: option[0].value,
-                },
-              };
+              let listWidgetValue = this.buildValue(option[0].value, option[0].label);
               this.renderWidgetVal(listWidgetValue);
             });
           }
@@ -152,10 +146,23 @@ export class ListWidget extends AbstractWidget {
     return this;
   }
 
-  parseInput(input:ListWidgetValue): ListWidgetValue { return input }
+  // separate the creation of the value from the widget code itself
+  // so that it can be overriden by LiteralListWidget
+  buildValue(uri:string,label:string): WidgetValue {
+    return {
+      valueType: ValueType.MULTIPLE,
+      value: {
+        key: uri,
+        label: label,
+        uri: uri,
+      }
+    } as ListWidgetValue
+  }
+
+  parseInput(input:WidgetValue): WidgetValue { return input as ListWidgetValue }
 
   getRdfJsPattern(): Pattern[] {
-    let vals = this.widgetValues.map((v) => {
+    let vals = (this.widgetValues as ListWidgetValue[]).map((v) => {
       let vl: ValuePatternRow = {};
       vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
       return vl;
