@@ -64,7 +64,7 @@ export class SearchWidget extends AbstractWidget {
   };
 
   parseInput(input:SearchWidgetValue): SearchWidgetValue {
-    if (this.searchInput.val().toString() == "") {
+    if (input.value.search.toString() == "") {
       throw Error('Empty String in Search Widget')
     }
     return input;
