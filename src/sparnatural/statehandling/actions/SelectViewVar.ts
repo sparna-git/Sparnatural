@@ -16,16 +16,10 @@ export function selectViewVar(
     ) {
       //delete Var since with the blockAction (click Event) it will be reselected
       deleteVariable(actionStore,payload.val)
-      deleteVariable(actionStore,payload.defaultLbl)
-      blockAction(target)
       return
     } 
 
-  if(payload.selected){
-    addVariable(actionStore, payload.val)
-  } else {
-    deleteVariable(actionStore, payload.val);
-  }
+  if(payload.selected) addVariable(actionStore, payload.val)
   
 }
 
@@ -38,10 +32,6 @@ export function readVariablesFromUI(actionStore: ActionStore) {
         return d.varName;
       }
     );
-}
-
-function blockAction(target:EventTarget){
- target.dispatchEvent(new Event('click'))
 }
 
 function addVariable(actionStore: ActionStore, val: SelectedVal) {
@@ -59,7 +49,7 @@ function addVariable(actionStore: ActionStore, val: SelectedVal) {
 }
 
 function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
-  //add a draggable
+  //remove a draggable
   actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableByVarName(
     val.variable
   );
