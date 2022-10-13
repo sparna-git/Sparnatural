@@ -6,6 +6,7 @@ import { SelectedVal } from "../../../../../generators/ISparJson";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import EditComponents from "../edit-components/EditComponents";
+import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
@@ -109,7 +110,8 @@ class EndClassGroup extends HTMLComponent {
 
   onObjectPropertyGroupSelected(objectPropVal: SelectedVal) {
     this.objectPropVal = objectPropVal;
-    if (!this.editComponents) {    
+    if (!this.editComponents) {
+      // this is where the widgets will be determined and rendered    
       this.editComponents = new EditComponents(
         this,
         this.startClassVal,
@@ -168,8 +170,18 @@ class EndClassGroup extends HTMLComponent {
   setVarName(name: string) {
     this.endClassVal.variable = name;
   }
+
   getTypeSelected() {
     return this.endClassVal.type;
   }
+
+  /**
+   * @returns the widgetComponent inside this EndClassGroup, to examine its characteristics
+   * (e.g. determine if single or multiple values)
+   */
+  getWidgetComponent():AbstractWidget {
+    return this.editComponents.widgetWrapper.widgetComponent;
+  }
+
 }
 export default EndClassGroup;

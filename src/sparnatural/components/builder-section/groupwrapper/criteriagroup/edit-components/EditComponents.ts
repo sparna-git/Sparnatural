@@ -5,7 +5,7 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
 import ActionWhere from "../../../../actions/actioncomponents/ActionWhere";
 import HTMLComponent from "../../../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import { ValueType, WidgetValue } from "../../../../widgets/AbstractWidget";
+import { ValueRepetition, WidgetValue } from "../../../../widgets/AbstractWidget";
 import WidgetWrapper from "./WidgetWrapper";
 
 export interface SelectAllValue extends WidgetValue {
@@ -90,7 +90,6 @@ class EditComponents extends HTMLComponent {
 
   #onSelectAll() {
     let selectAllVal: SelectAllValue = {
-      valueType: ValueType.SINGLE,
       value: {
         label: getSettings().langSearch.SelectAllValues,
       },

@@ -2,7 +2,7 @@ import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-co
 import L, { LatLng, Rectangle,Map } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import { getSettings } from "../../../configs/client-configs/settings";
-import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import {
   BgpPattern,
   FilterPattern,
@@ -26,7 +26,6 @@ export interface MapWidgetValue extends WidgetValue {
     label: string;
     coordinates: LatLng[][];
   };
-  valueType: ValueType.SINGLE;
 }
 
 // converts props of type Date to type string
@@ -60,7 +59,8 @@ export default class MapWidget extends AbstractWidget {
       null,
       startClassVal,
       objectPropVal,
-      endClassVal
+      endClassVal,
+      ValueRepetition.SINGLE
     );
   }
 
@@ -104,7 +104,6 @@ export default class MapWidget extends AbstractWidget {
       this.map.addLayer(this.drawingLayer);
 
       let widgetValue: MapWidgetValue = {
-        valueType: ValueType.SINGLE,
         value: {
           label: "Area selected",
           coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
@@ -114,7 +113,6 @@ export default class MapWidget extends AbstractWidget {
       //add listener when the shape gets changed
       this.drawingLayer.on("pm:edit", (e) => {
         let widgetValue: MapWidgetValue = {
-        valueType: ValueType.SINGLE,
         value: {
           label: "Area selected",
           coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
@@ -131,8 +129,7 @@ export default class MapWidget extends AbstractWidget {
     this.map.remove();
     if (this.getwidgetValues().length < 1)
       this.renderWidgetVal({
-        value: { label: getSettings().langSearch.SelectAllValues },
-        valueType: ValueType.SINGLE,
+        value: { label: getSettings().langSearch.SelectAllValues }
       });
   };
 
@@ -146,7 +143,6 @@ export default class MapWidget extends AbstractWidget {
     })
     if(parsedCoords.length === 0) throw Error(`Parsing of ${input.value.coordinates} failed`)
     return{
-      valueType: ValueType.SINGLE,
       value:{
         label: input.value.label,
         coordinates: parsedCoords

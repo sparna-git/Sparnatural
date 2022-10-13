@@ -3,7 +3,7 @@ import { getSettings } from "../../../../configs/client-configs/settings";
 import AddUserInputBtn from "../../buttons/AddUserInputBtn";
 import InfoBtn from "../../buttons/InfoBtn";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueType, WidgetValue } from "../AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
 import * as DataFactory from "@rdfjs/data-model" ;
 import { SelectedVal } from "../../../generators/ISparJson";
@@ -65,7 +65,8 @@ export class TimeDatePickerWidget extends AbstractWidget {
       null,
       startClassCal,
       objectPropVal,
-      endClassVal
+      endClassVal,
+      ValueRepetition.SINGLE
     );
     this.datesHandler = datesHandler;
     this.dateFormat = dateFormat;
@@ -158,8 +159,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
         label: null,
         start:(this.inputStart.val() != '')?this.inputStart.datepicker("getDate").toISOString():null,
         stop:(this.inputEnd.val() != '')?this.inputEnd.datepicker("getDate").toISOString():null,
-      },
-      valueType: ValueType.SINGLE
+      }
     } 
     let widgetVal: DateTimePickerValue = this.parseInput(
       stringDateTimeVal
@@ -207,7 +207,6 @@ export class TimeDatePickerWidget extends AbstractWidget {
       };
     }
     let dateTimePickerVal: DateTimePickerValue = {
-      valueType: ValueType.SINGLE,
       value: {
         // here : we get the JSON representation of the date, as a lazy way to format date
         key: JSON.stringify(tmpValue.start).replace(/["]+/g,'')+" - "+JSON.stringify(tmpValue.stop).replace(/["]+/g,''),

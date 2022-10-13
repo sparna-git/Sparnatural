@@ -6,9 +6,11 @@ import UnselectBtn from "../../../../buttons/UnselectBtn";
 import HTMLComponent from "../../../../HtmlComponent";
 import AddWidgetValueBtn from "../../../../buttons/AddWidgetValueBtn";
 import {
-  ValueType,
+  ValueRepetition,
   WidgetValue,
 } from "../../../../widgets/AbstractWidget";
+import EndClassGroup from "./EndClassGroup";
+import CriteriaGroup from "../CriteriaGroup";
 
 
 /*
@@ -16,7 +18,6 @@ import {
   This values are added in a 'list' after the EndClassGroup
 */
 export class EndClassWidgetGroup extends HTMLComponent {
-  ParentComponent: HTMLComponent;
   widgetValues: Array<EndClassWidgetValue> = [];
   specProvider: ISpecProvider;
   addWidgetValueBtn: AddWidgetValueBtn;
@@ -104,8 +105,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
     this.#renderNewSelectedValue(endClassWidgetVal);
 
-    // if selectAllvalues then we don't need a AddWidgetValueBtn
-    if (widgetVal.valueType == ValueType.MULTIPLE) {
+    // if the widget allows multiple values then AddWidgetValueBtn
+    if((this.ParentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent().valueRepetition == ValueRepetition.MULTIPLE) {
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
         ? this.addWidgetValueBtn.render()
@@ -115,9 +116,9 @@ export class EndClassWidgetGroup extends HTMLComponent {
           ).render());
     }
 
-    //Plus d'ajout possible si nombre de valeur suppérieur à l'option maxOr
+    // If we reached maxOr hide the AddWidgetValueBtn
     if (this.widgetValues.length == getSettings().maxOr) {
-      this.addWidgetValueBtn.html.hide;
+      this.addWidgetValueBtn.html.hide();
     }
 
     // asks to remove the value selection part, with 1 and 2
