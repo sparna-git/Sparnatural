@@ -6,6 +6,7 @@ import UnselectBtn from "../../../../buttons/UnselectBtn";
 import HTMLComponent from "../../../../HtmlComponent";
 import AddWidgetValueBtn from "../../../../buttons/AddWidgetValueBtn";
 import {
+  AbstractWidget,
   ValueRepetition,
   WidgetValue,
 } from "../../../../widgets/AbstractWidget";
@@ -105,8 +106,10 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
     this.#renderNewSelectedValue(endClassWidgetVal);
 
-    // if the widget allows multiple values then AddWidgetValueBtn
-    if((this.ParentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent().valueRepetition == ValueRepetition.MULTIPLE ) {
+    // if the widget allows multiple values to be selected then AddWidgetValueBtn
+    // undefined for NON_SELECTABLE_PROPERTY
+    const widgetComp:AbstractWidget | undefined = (this.ParentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent()
+    if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE ) {
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
         ? this.addWidgetValueBtn.render()

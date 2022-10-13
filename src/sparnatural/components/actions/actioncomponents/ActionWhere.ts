@@ -28,16 +28,6 @@ class ActionWhere extends HTMLComponent {
   render = () => {
     super.render();
     var choiceNumber = 2;
-    // TODO : if we ever want to remove the Any option for NON_SELECTABLE_PROPERTY, then uncomment this code
-    // see https://github.com/sparna-git/Sparnatural/issues/338
-    /*
-    if (
-      this.parentComponent.widgetWrapper.getWidgetType() ==
-      Config.NON_SELECTABLE_PROPERTY
-    ) {
-      choiceNumber = 1;
-    }
-    */
     var endLabel = this.specProvider.getLabel(
       this.parentComponent.endClassVal.type
     );
