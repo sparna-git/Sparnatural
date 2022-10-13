@@ -31,6 +31,7 @@ class BgWrapper extends HTMLComponent {
     this.resetBtn.html.empty();
     this.resetBtn.html.remove();
     this.html[0].dispatchEvent(new CustomEvent("resetVars", { bubbles: true }));
+    this.html[0].dispatchEvent(new CustomEvent("resetVarIndex",{bubbles: true}))
     this.#renderComponents();
   };
 }
