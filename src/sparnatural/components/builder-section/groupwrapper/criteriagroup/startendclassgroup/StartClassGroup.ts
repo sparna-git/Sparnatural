@@ -43,7 +43,6 @@ class StartClassGroup extends HTMLComponent {
     super.render();
     this.inputTypeComponent.render();
     this.#addEventListener();
-    if (this.renderEyeBtn) this.inputTypeComponent.selectViewVariableBtn.render()
     return this;
   }
 
@@ -56,9 +55,16 @@ class StartClassGroup extends HTMLComponent {
         e.stopImmediatePropagation();
         //only create new SPARQL variable if the startClassVal is not set by the parent component
         if (!this.startClassVal.variable) this.#createSparqlVar(e.detail);
+        // Iff(!) First StartClass of first GrpWrapper: eye btn automatically rendered + selected
+        if (this.renderEyeBtn) this.#autoSelectEyeBtn()
         this.#valueWasSelected();
       }
     );
+  }
+
+  #autoSelectEyeBtn(){
+    this.inputTypeComponent.selectViewVariableBtn.render() 
+    this.inputTypeComponent.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
   }
 
   #createSparqlVar(type: string) {
@@ -70,10 +76,6 @@ class StartClassGroup extends HTMLComponent {
           //callback
           this.startClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
           this.#addDefaultLblVar(type,this.startClassVal.variable)
-          // first StartClassGroup of first GroupWrapper, create variable automatically
-          if (this.renderEyeBtn) {
-            this.inputTypeComponent.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
-          }
         },
       })
     );
