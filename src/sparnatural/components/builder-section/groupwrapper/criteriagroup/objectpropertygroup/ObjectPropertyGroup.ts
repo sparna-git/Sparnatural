@@ -70,13 +70,11 @@ class ObjectPropertyGroup extends HTMLComponent {
         bubbles: true,
         detail: (id: number) => {
           //callback
-          this.objectPropVal.variable = `?${this.specProvider
-            .getLabel(type)
-            .replace(/\s+/g, "")}_${id}`;
-        },
-      })
+          this.objectPropVal.variable = `?${this.#getUriClassName(type)}_${id}`
+      }})
     );
   }
+
   #valueWasSelected() {
     this.html[0].dispatchEvent(
       new CustomEvent("onObjectPropertyGroupSelected", {
@@ -99,6 +97,12 @@ class ObjectPropertyGroup extends HTMLComponent {
         "data-tippy-content"
       );
     }
+  }
+
+  // get the classname of the uri
+  #getUriClassName(uri:string){
+    if(uri.includes('#')) return uri.split('#').pop()
+    return uri.split('/').pop()
   }
 
   getTypeSelected() {

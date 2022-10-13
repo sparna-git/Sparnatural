@@ -8,7 +8,7 @@ interface ISpecProvider {
   isEnablingOptional(value_selected: string): boolean;
   getHighlightedIcon(value_selected: string): any;
   getIcon(value_selected: string): any;
-  getTreeChildrenDatasource(objectPropertyId: string): string;
+  getTreeChildrenDatasource(objectPropertyId: string): any;
   getTreeRootsDatasource(objectPropertyId: string): any;
   expandSparql(sparql: string): string;
   getDefaultLabelProperty(classId: string):string;

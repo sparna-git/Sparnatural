@@ -5,7 +5,7 @@
 export default {
     queries: [
       {
-        queryName: `Museums in Cuba OR Egypt`,
+        queryName: `Museums in South Africa OR Albania`,
         query:`{
             "distinct": true,
             "variables": [
