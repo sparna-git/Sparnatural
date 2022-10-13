@@ -115,6 +115,7 @@ class StartClassGroup extends HTMLComponent {
   }
   setVarName(name: string) {
     this.startClassVal.variable = name;
+    this.#setDefaultLblVar(name)
   }
   getTypeSelected() {
     return this.startClassVal.type;
@@ -122,8 +123,8 @@ class StartClassGroup extends HTMLComponent {
   getDefaultLblVar(){
     return this.defaultLblVar?.variable
   }
-  setDefaultLblVar(lbl:string){
-    this.defaultLblVar.variable = lbl
+  #setDefaultLblVar(name:string){
+    this.defaultLblVar.variable = `${name}_label`
   }
 
 }

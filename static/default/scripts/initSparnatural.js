@@ -34,8 +34,8 @@ let semanticPostProcess = function(queryString, queryJson) {
 // If you would like to overwride default settings
 const settings = {
   language: lang ? lang : "fr",
-  language: lang,
   defaultEndpoint: function() { return $('#endpoint').text() },
+  config: config,
   //language:lang,
   onQueryUpdated: function(queryString, queryJson, specProvider) {
       queryString = semanticPostProcess(queryString, queryJson);

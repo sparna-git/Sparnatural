@@ -23,10 +23,8 @@ export function selectViewVar(
 
   if(payload.selected){
     addVariable(actionStore, payload.val)
-    if(payload.defaultLbl?.variable) addVariable(actionStore,payload.defaultLbl)
   } else {
     deleteVariable(actionStore, payload.val);
-    if(payload.defaultLbl?.variable) deleteVariable(actionStore, payload.defaultLbl);
   }
   
 }

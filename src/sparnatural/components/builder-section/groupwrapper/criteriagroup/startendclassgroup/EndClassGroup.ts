@@ -163,12 +163,13 @@ class EndClassGroup extends HTMLComponent {
     return this.defaultLblVar?.variable
   }
   
-  setDefaultLblVar(lbl:string){
-    this.defaultLblVar.variable = lbl
+  #setDefaultLblVar(name:string){
+    this.defaultLblVar.variable = `${name}_label`
   }
 
   setVarName(name: string) {
     this.endClassVal.variable = name;
+    this.#setDefaultLblVar(name)
   }
 
   getTypeSelected() {
