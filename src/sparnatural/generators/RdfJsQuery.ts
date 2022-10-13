@@ -139,10 +139,11 @@ export default class RdfJsGenerator {
       if (andPtrn) ptrns.push(...andPtrn);
       return ptrns
     } else {
-      const ptrns: Pattern[] = [];
       // starting from this grpWrapper to all where descendants: OPTIONAL/NOTEXISTS is enabled
       // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableOptional
-      if(crtPtrns.length > 0) ptrns.push(crtPtrns.shift());
+      const ptrns: Pattern[] = [];
+      // if it is a where/and child, keep the first triple of ctrPtrns in the optional pattern
+      if(crtPtrns.length > 0 && isChild === false) ptrns.push(crtPtrns.shift());
       if(crtPtrns.length > 0 && (crtPtrns[0].type == "optional")) ptrns.push(crtPtrns.shift()) // default label got created inside optional pattern
       const inOption = SparqlFactory.buildFilterTriples(crtPtrns,rdfPattern,wherePtrn)
       let optionPtrn 
