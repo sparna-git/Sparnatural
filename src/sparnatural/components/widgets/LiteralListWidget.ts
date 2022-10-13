@@ -1,16 +1,14 @@
 import { Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
-import ISettings from "../../../configs/client-configs/ISettings";
-import { getSettings } from "../../../configs/client-configs/settings";
-import LocalCacheData from "../../datastorage/LocalCacheData";
 import { SelectedVal } from "../../generators/ISparJson";
 import { SparqlTemplateListHandler } from "./autocomplete/AutocompleteAndListHandlers";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueType, WidgetValue } from "./AbstractWidget";
+
 import * as DataFactory from "@rdfjs/data-model" ;
 
 import "select2";
 import "select2/dist/css/select2.css";
 import { ListWidget } from "./ListWidget";
+import { ValueRepetition, WidgetValue } from "./AbstractWidget";
 
 export interface LiteralListWidgetValue extends WidgetValue {
   value: {
@@ -18,7 +16,7 @@ export interface LiteralListWidgetValue extends WidgetValue {
     label: string;
     literal: string;
   };
-  valueType: ValueType.MULTIPLE;
+  valueRepetition: ValueRepetition.MULTIPLE;
 }
 
 export class LiteralListWidget extends ListWidget {
@@ -42,7 +40,7 @@ export class LiteralListWidget extends ListWidget {
 
   buildValue(uri:string,label:string): WidgetValue {
     return {
-      valueType: ValueType.MULTIPLE,
+      valueRepetition: ValueRepetition.MULTIPLE,
       value: {
         key: uri,
         label: label,

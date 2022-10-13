@@ -157,7 +157,7 @@ export class ListWidget extends AbstractWidget {
   // so that it can be overriden by LiteralListWidget
   buildValue(uri:string,label:string): WidgetValue {
     return {
-      valueType: ValueType.MULTIPLE,
+      valueRepetition: ValueRepetition.MULTIPLE,
       value: {
         key: uri,
         label: label,
