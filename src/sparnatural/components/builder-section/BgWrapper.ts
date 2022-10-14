@@ -31,7 +31,7 @@ class BgWrapper extends HTMLComponent {
     this.componentsList = null;
     this.resetBtn.html.empty();
     this.resetBtn.html.remove();
-    this.html[0].dispatchEvent(new CustomEvent("changeMaxChildIndex",{bubbles: true,detail:MaxVarAction.RESET}))
+    this.html[0].dispatchEvent(new CustomEvent("resetVars",{bubbles: true}))
     this.#renderComponents();
   };
 }
