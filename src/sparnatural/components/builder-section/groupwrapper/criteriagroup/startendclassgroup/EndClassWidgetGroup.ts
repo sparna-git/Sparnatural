@@ -74,7 +74,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
     // if the number of widgetValues is now less than the maximum
     if (this.widgetValues.length < getSettings().maxOr && this.addWidgetValueBtn?.html) {
-      this.addWidgetValueBtn.html.show;
+      this.addWidgetValueBtn.html.show();
     }
 
     this.html[0].dispatchEvent(
@@ -118,6 +118,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
           ).render());
     }
 
+    
     // If we reached maxOr hide the AddWidgetValueBtn
     if (this.widgetValues.length == getSettings().maxOr) {
       this.addWidgetValueBtn.html.hide();

@@ -43,7 +43,7 @@ export function addWhereComponent(
     new CustomEvent("initGeneralEvent", { bubbles: true })
   );
   grpWrapper.html[0].dispatchEvent(
-    new CustomEvent("changeMaxVarIndex", {
+    new CustomEvent("changeMaxChildIndex", {
       bubbles: true,
       detail: MaxVarAction.INCREASE,
     })

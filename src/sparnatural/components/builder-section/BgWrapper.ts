@@ -3,6 +3,7 @@ import ComponentsList from "./ComponentsList";
 import Sparnatural from "../SparnaturalComponent";
 import ISpecProvider from "../../spec-providers/ISpecProviders";
 import HTMLComponent from "../HtmlComponent";
+import { MaxVarAction } from "../../statehandling/ActionStore";
 
 class BgWrapper extends HTMLComponent {
   ParentSparnatural: Sparnatural;
@@ -30,7 +31,7 @@ class BgWrapper extends HTMLComponent {
     this.componentsList = null;
     this.resetBtn.html.empty();
     this.resetBtn.html.remove();
-    this.html[0].dispatchEvent(new CustomEvent("resetVars", { bubbles: true }));
+    this.html[0].dispatchEvent(new CustomEvent("changeMaxChildIndex",{bubbles: true,detail:MaxVarAction.RESET}))
     this.#renderComponents();
   };
 }

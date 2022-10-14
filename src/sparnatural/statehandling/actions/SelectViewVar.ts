@@ -2,33 +2,16 @@ import DraggableComponent from "../../components/variables-section/variableorder
 import { SelectedVal } from "../../generators/ISparJson";
 import ActionStore from "../ActionStore";
 
-
 // This Action gets called when an SelctViewVar ("eye") Button is clicked
 export function selectViewVar(
   actionStore: ActionStore,
   payload: { val: SelectedVal; selected: boolean, defaultLbl:SelectedVal },
   target:EventTarget
 ) {
-  
-  if( // If there is only one variable left (or one var and its default label) then don't allow to deselect it.
-    actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.length <= 2
-    && !payload.selected
-    ) {
-      //delete Var since with the blockAction (click Event) it will be reselected
-      deleteVariable(actionStore,payload.val)
-      deleteVariable(actionStore,payload.defaultLbl)
-      blockAction(target)
-      return
-    } 
-
-  if(payload.selected){
-    addVariable(actionStore, payload.val)
-  } else {
-    deleteVariable(actionStore, payload.val);
-  }
-  
+    //delete Var since with the blockAction (click Event) it will be reselected
+    if(!payload.selected) deleteVariable(actionStore,payload.val)
+    if(payload.selected) addVariable(actionStore, payload.val)
 }
-
 
 export function readVariablesFromUI(actionStore: ActionStore) {
   //update the varnames
@@ -38,10 +21,6 @@ export function readVariablesFromUI(actionStore: ActionStore) {
         return d.varName;
       }
     );
-}
-
-function blockAction(target:EventTarget){
- target.dispatchEvent(new Event('click'))
 }
 
 function addVariable(actionStore: ActionStore, val: SelectedVal) {
@@ -59,7 +38,7 @@ function addVariable(actionStore: ActionStore, val: SelectedVal) {
 }
 
 function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
-  //add a draggable
+  //remove a draggable
   actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableByVarName(
     val.variable
   );
@@ -68,5 +47,3 @@ function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
   //update the variables in the state
   actionStore.variables.filter((v)=> v!=val.variable.replace('?',''))
 }
-
-
