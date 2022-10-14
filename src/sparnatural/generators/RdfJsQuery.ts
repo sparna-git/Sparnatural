@@ -3,7 +3,6 @@ import { Language, Order } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import ISpecProvider from "../spec-providers/ISpecProviders";
 import {
-  GroupPattern,
   IriTerm,
   OptionalPattern,
   Ordering,
@@ -118,11 +117,9 @@ export default class RdfJsGenerator {
 
     // if it hasandSiblings
     const andPtrn = grpWrapper.andSibling
-      ? this.#processGrpWrapper(grpWrapper.andSibling, false, true)
+      ? this.#processGrpWrapper(grpWrapper.andSibling, isInOption, true)
       : null;
 
-       
-   
     const widgetComponent:AbstractWidget | null | undefined = grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
     //get the infromation from the widget if there are widgetvalues selected
     let rdfPattern: Pattern[] = [];
@@ -139,10 +136,11 @@ export default class RdfJsGenerator {
       if (andPtrn) ptrns.push(...andPtrn);
       return ptrns
     } else {
-      const ptrns: Pattern[] = [];
       // starting from this grpWrapper to all where descendants: OPTIONAL/NOTEXISTS is enabled
       // see spec: http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#enableOptional
-      if(crtPtrns.length > 0) ptrns.push(crtPtrns.shift());
+      const ptrns: Pattern[] = [];
+      // if it is a where/and child, keep the first triple of ctrPtrns in the optional pattern
+      if(crtPtrns.length > 0 && isChild === false) ptrns.push(crtPtrns.shift());
       if(crtPtrns.length > 0 && (crtPtrns[0].type == "optional")) ptrns.push(crtPtrns.shift()) // default label got created inside optional pattern
       const inOption = SparqlFactory.buildFilterTriples(crtPtrns,rdfPattern,wherePtrn)
       let optionPtrn 
@@ -182,7 +180,6 @@ export default class RdfJsGenerator {
     return critPatterns
   }
 
-  // [StartClassTriple,defaultLabel]
   #getStartClassTuple(crtGrp:CriteriaGroup): [Triple,Triple | OptionalPattern | null] {
     // startClassTuple: [startTriple, defaultLabel]
     let startClassTuple:[Triple, null |Triple | OptionalPattern] = [null,null]
@@ -198,9 +195,8 @@ export default class RdfJsGenerator {
     return startClassTuple
   }
 
-  // [EndClassTriple,defaultLabel]
   #getEndClassTuple(crtGrp:CriteriaGroup,widgeComponent:AbstractWidget){
-    // endClassTriple
+    // endClassTuple: [EndClassTriple,defaultLabel]
     let endClassTuple:[Triple,Triple | OptionalPattern | null] = [null,null]
     // generate only if EndClassGroup is present
     if(!widgeComponent?.isBlockingEnd() && crtGrp.EndClassGroup.getTypeSelected() != null){
@@ -225,7 +221,8 @@ export default class RdfJsGenerator {
     // if it is a child branch (WHERE or AND) then don't create startClass triple. It's already done in the parent
     if(!widgeComponent?.isBlockingStart() && startTuple[0]){
       if(isOptionalPattern(startTuple[1])) {
-        // create startClass + the defaultLabel inside OPTIONAL pattern
+        // startClass + the defaultLabel inside OPTIONAL pattern
+        // Don't put OPTIONAL inside BgpPattern It's not allowed
         ptrns.push(SparqlFactory.buildBgpPattern([startTuple[0]]))
         ptrns.push(startTuple[1])
       } else {
@@ -235,9 +232,7 @@ export default class RdfJsGenerator {
         } else {
           // no default label got created. only insert start tuple
           ptrns.push(SparqlFactory.buildBgpPattern([startTuple[0]]))
-        }
-        // create startClass + the defaultLabel both inside bgp pattern
-        
+        }        
       }
     }
     return ptrns
@@ -249,6 +244,7 @@ export default class RdfJsGenerator {
         
       if(isOptionalPattern(endClassTuple[1])){
         //create endClass + the defaultLabel inside OPTIONAL pattern
+        // Don't put OPTIONAL inside BgpPattern. It's not allowed
         ptrns.push(SparqlFactory.buildBgpPattern([endClassTuple[0]]))
         ptrns.push(endClassTuple[1])
       } else {

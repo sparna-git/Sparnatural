@@ -28,8 +28,18 @@ class SelectViewVariableBtn extends HTMLComponent {
     this.#addClickListener();
     return this;
   }
+
+
+
   #addClickListener() {
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
+      // one Variable always(!) needs to be selected
+      let lastSelectedVar = false
+      this.widgetHtml[0].dispatchEvent(new CustomEvent("getSelectedVarLength",{bubbles:true,detail:(length:number)=>{
+        // add here Toast notification
+        if(length < 2 && this.selected === true) lastSelectedVar = true
+      }}))
+      if(lastSelectedVar) return
       this.selected = this.selected ? false : true;
       this.render();
       this.callBack(this.selected);

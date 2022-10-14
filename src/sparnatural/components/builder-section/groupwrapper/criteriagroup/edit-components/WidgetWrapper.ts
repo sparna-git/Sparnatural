@@ -115,7 +115,7 @@ class WidgetWrapper extends HTMLComponent {
       1
     </span>
   </span>
-  <span class="selectAll">
+  <span class="selectAll" id="selectAll">
     <span class="underline">
     ${this.settings.langSearch.SelectAllValues}
     </span> 
