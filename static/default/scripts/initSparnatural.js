@@ -41,6 +41,8 @@ const settings = {
       queryString = semanticPostProcess(queryString, queryJson);
       queryString = specProvider.expandSparql(queryString);
       yasqe.setValue(queryString);
+      // store JSON in hidden field
+      document.getElementById('query-json').value = JSON.stringify(queryJson);
       },
   // triggered when "play" button is clicked
   onSubmit: ()=> {
@@ -62,3 +64,21 @@ sparnatural.addEventListener('componentLoaded',(e)=>{
     sparnatural.loadQuery(e.detail.query)
   })
 })
+
+document.getElementById('export').onclick = function() {
+  var jsonString = JSON.stringify(
+      JSON.parse(document.getElementById('query-json').value),
+      null,
+      2
+    );
+  $('#export-json').val(jsonString);
+  $('#exportModal').modal('show');       
+}
+
+
+document.getElementById('stored-queries').onchange = function() {
+var key = $('#stored-queries option:selected').val();
+if(sampleQueries.hasOwnProperty(key)) {
+    sparnatural.loadQuery(sampleQueries[key]) ;
+}
+}
