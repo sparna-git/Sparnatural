@@ -14,6 +14,7 @@ import { SelectQuery } from "sparqljs";
 export enum MaxVarAction {
   INCREASE,
   DECREASE,
+  RESET
 }
 
 /*
@@ -52,6 +53,7 @@ class ActionStore {
     );
 
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
+    // called by click on "Eye" btn
     this.sparnatural.html[0].addEventListener(
       "onSelectViewVar",
       (e: CustomEvent) => {
@@ -81,10 +83,9 @@ class ActionStore {
       toggleVarNames(this,this.showVariableNames);
     });
 
-    this.sparnatural.html[0].addEventListener("resetVarIndex",(e:CustomEvent)=>{
-      console.log('resetaction WAS called')
-      this.maxVarIndex = 0;
-    });
+    this.sparnatural.html[0].addEventListener("getSelectedVariables",(e:CustomEvent)=>{
+
+    })
 
     this.sparnatural.html[0].addEventListener(
       "getMaxVarIndex",
@@ -101,11 +102,12 @@ class ActionStore {
     });
 
     this.sparnatural.html[0].addEventListener(
-      "changeMaxVarIndex",
+      "changeMaxChildIndex",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        if (e.detail == MaxVarAction.DECREASE) this.maxVarIndex--;
-        if (e.detail == MaxVarAction.INCREASE) this.maxVarIndex++;
+        if (e.detail === MaxVarAction.DECREASE) this.maxVarIndex--;
+        if (e.detail === MaxVarAction.INCREASE) this.maxVarIndex++;
+        if(e.detail === MaxVarAction.RESET) this.maxVarIndex = 0;
       }
     );
 
@@ -123,6 +125,7 @@ class ActionStore {
       e.stopImmediatePropagation();
       this.sparqlVarID = 0;
       this.variables = [];
+      this.maxVarIndex = 0;
       this.sparnatural.VariableSelection.html.remove();
       this.sparnatural.VariableSelection.render();
     });

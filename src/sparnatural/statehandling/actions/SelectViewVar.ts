@@ -11,7 +11,7 @@ export function selectViewVar(
 ) {
   
   if( // If there is only one variable left (or one var and its default label) then don't allow to deselect it.
-    actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.length <= 2
+    actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.length >= 2
     && !payload.selected
     ) {
       //delete Var since with the blockAction (click Event) it will be reselected

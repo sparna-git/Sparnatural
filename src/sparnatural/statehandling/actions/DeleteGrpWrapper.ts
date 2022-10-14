@@ -23,7 +23,7 @@ export default function deleteGrpWrapper(
         //grpWrapper is root node. call resetCallBack like resetBtn would have been clicked
         actionStore.sparnatural.BgWrapper.resetCallback();
         actionStore.sparnatural.html[0].dispatchEvent(
-          new CustomEvent("changeMaxVarIndex", {
+          new CustomEvent("changeMaxChildIndex", {
             detail: MaxVarAction.DECREASE,
           })
         );
@@ -32,7 +32,7 @@ export default function deleteGrpWrapper(
         grpWrapper.andSibling.traversePostOrder((grpWrapper: GroupWrapper) => {
           deleteIt(grpWrapper);
           actionStore.sparnatural.html[0].dispatchEvent(
-            new CustomEvent("changeMaxVarIndex", {
+            new CustomEvent("changeMaxChildIndex", {
               detail: MaxVarAction.DECREASE,
             })
           );
@@ -45,7 +45,7 @@ export default function deleteGrpWrapper(
         grpWrapper.whereChild.traversePostOrder((grpWrapper: GroupWrapper) => {
           deleteIt(grpWrapper);
           actionStore.sparnatural.html[0].dispatchEvent(
-            new CustomEvent("changeMaxVarIndex", {
+            new CustomEvent("changeMaxChildIndex", {
               detail: MaxVarAction.DECREASE,
             })
           );
