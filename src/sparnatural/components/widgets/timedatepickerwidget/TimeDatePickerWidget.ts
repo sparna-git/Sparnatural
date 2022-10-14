@@ -191,7 +191,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
       value: {
         // here : we get the JSON representation of the date, as a lazy way to format date
         key: JSON.stringify(tmpValue.start).replace(/["]+/g,'')+" - "+JSON.stringify(tmpValue.stop).replace(/["]+/g,''),
-        label: this.#getValueLabel(startValue.getFullYear().toString(), endValue.getFullYear().toString()),
+        label: this.#getValueLabel(startValue?startValue.getFullYear().toString():"", endValue?endValue.getFullYear().toString():""),
         start: tmpValue.start,
         stop: tmpValue.stop,
       },
