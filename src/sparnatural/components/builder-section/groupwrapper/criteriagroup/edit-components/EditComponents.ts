@@ -58,9 +58,12 @@ class EditComponents extends HTMLComponent {
     if (
       Object.values(this.RENDER_WHERE).includes(widgetType)
       &&
-      // do not allow WHERE if wehave reached max depth
+      // Do not allow WHERE if wehave reached max depth
       !this.maxDepthIsReached()
-    ) {
+      &&
+      // If this owl:Class is not in a rdf:domain of a owl:ObjectProperty don't allow
+      (this.specProvider.getConnectedClasses(this.endClassVal.type).length !== 0)
+    ){
       this.actionWhere = new ActionWhere(
         this,
         this.specProvider,
@@ -71,14 +74,14 @@ class EditComponents extends HTMLComponent {
     return this;
   }
   // The selectedValues are widgetValues which got selected by the user
-  //For example a list of countries
+  // For example a list of countries
   renderWidgetsWrapper() {
     super.render();
     this.widgetWrapper.render();
   }
 
   #addEventListeners() {
-    // binds a selection in an input widget with the display of the value in the line
+    // Binds a selection in an input widget with the display of the value in the line
     this.widgetWrapper.html[0].addEventListener(
       "selectAll",
       (e: CustomEvent) => {
@@ -102,9 +105,9 @@ class EditComponents extends HTMLComponent {
     );
   }
 
-  //MUST be arrowfunction
+  // MUST be arrowfunction
   #onAddWhere = () => {
-    // render the ViewVarBtn
+    // Render the ViewVarBtn
     this.html[0].dispatchEvent(
       new CustomEvent("addWhereComponent", {
         bubbles: true,
@@ -119,7 +122,6 @@ class EditComponents extends HTMLComponent {
       new CustomEvent("getMaxVarIndex", {
         bubbles: true,
         detail: (index: number) => {
-          //getting the value Sparnatural
           if (index > getSettings().maxDepth) maxreached = true;
         },
       })
