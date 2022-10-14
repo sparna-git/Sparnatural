@@ -115,6 +115,7 @@ class ClassTypeId extends HTMLComponent {
   }
 
   #onchangeViewVariable = (selected: boolean) => {
+    // css selector to highlight the component 
     selected
         ? this.html.addClass("VariableSelected")
         : this.html.removeClass("VariableSelected");

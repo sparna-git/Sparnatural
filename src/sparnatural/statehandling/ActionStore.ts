@@ -121,6 +121,13 @@ class ActionStore {
       }
     );
 
+    this.sparnatural.html[0].addEventListener(
+      "getSelectedVarLength",
+      (e:CustomEvent)=>{
+        e.stopImmediatePropagation();
+        e.detail(this.variables.length)
+    })
+
     this.sparnatural.html[0].addEventListener("resetVars", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.sparqlVarID = 0;
