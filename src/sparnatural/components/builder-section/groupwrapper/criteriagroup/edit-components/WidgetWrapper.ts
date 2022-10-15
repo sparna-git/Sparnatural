@@ -14,13 +14,13 @@ import MapWidget from "../../../../widgets/MapWidget";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { DatesWidget } from "../../../../widgets/DatesWidget";
-import { ListWidget } from "../../../../widgets/ListWidget";
+import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
 import { SearchWidget } from "../../../../widgets/SearchWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
-import { LiteralListWidget } from "../../../../widgets/LiteralListWidget";
+import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWidget";
 
 /**
  *  creates the corresponding widget
@@ -87,7 +87,7 @@ class WidgetWrapper extends HTMLComponent {
       return this;
     }
 
-    this.widgetComponent = this.createWidgetComponent(
+    this.widgetComponent = this.#createWidgetComponent(
       this.widgetType,
       this.objectPropVal.type,
       this.endClassVal.type
@@ -131,14 +131,10 @@ class WidgetWrapper extends HTMLComponent {
     </span>
     `;
 
-    // if(((EndClassGroup)(this.ParentComponent.ParentComponent).ParentCriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) {
-    //   this.widgetHtml = $(endLabelSpan)
-    // } else {
-      widgetType == Config.NON_SELECTABLE_PROPERTY
-      ? (this.widgetHtml = $(selectAllSpan))
-      : (this.widgetHtml = $(selectAllSpan + orSpan + endLabelSpan));
-    // }
-    
+    widgetType == Config.NON_SELECTABLE_PROPERTY
+    ? (this.widgetHtml = $(selectAllSpan))
+    : (this.widgetHtml = $(selectAllSpan + orSpan + endLabelSpan));
+
     this.html.append(this.widgetHtml);
   }
 
@@ -164,7 +160,7 @@ class WidgetWrapper extends HTMLComponent {
     }
   }
 
-  createWidgetComponent(
+  #createWidgetComponent(
     widgetType: string,
     objectPropertyId: any,
     endClassType: any

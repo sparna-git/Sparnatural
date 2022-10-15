@@ -12,7 +12,7 @@ interface ISettings {
   maxDepth: number;
   maxOr: number;
   backgroundBaseColor?: string; //TODO '250,136,3'
-  sparqlPrefixes?: any;
+  sparqlPrefixes?: { [key: string]: string };
   defaultEndpoint?: () => string;
   localCacheDataTtl?: number;
   filterConfigOnEndpoint?: boolean;
