@@ -28,9 +28,8 @@ export default class  ClassBuilder {
     }
 
     #ifDefaultTrpl(){
-        const varIsSelected = this.classGroup.inputTypeComponent?.selectViewVariableBtn?.selected
         const defaultLbl = this.specProvider.getDefaultLabelProperty(this.classTriple.object.value)
-        if (! defaultLbl) return
+        if (!defaultLbl) return
         this.#buildDefaultLblTrpl()
         this.#ifDefaultTrplInOptional(defaultLbl) 
     }
