@@ -114,13 +114,20 @@ export default class SelectBuilder{
         } 
 
         if(this.#grpWrapper.optionState === OptionTypes.OPTIONAL){
+            servicePtrn ? 
+            this.#resultPtrns.push(SparqlFactory.buildOptionalPattern([servicePtrn]))
+            :
             this.#resultPtrns.push(SparqlFactory.buildOptionalPattern(exceptStartPtrn))
             return
         }
 
         if(this.#grpWrapper.optionState === OptionTypes.NOTEXISTS){
-            const grpPtrn = SparqlFactory.buildGroupPattern(exceptStartPtrn)
-            this.#resultPtrns.push(SparqlFactory.buildNotExistsPattern(grpPtrn))
+            let ptrn
+            servicePtrn ? 
+            ptrn = SparqlFactory.buildGroupPattern([servicePtrn])
+            :
+            ptrn = SparqlFactory.buildGroupPattern(exceptStartPtrn)
+            this.#resultPtrns.push(SparqlFactory.buildNotExistsPattern(ptrn))
             return
         }
     }
