@@ -101,10 +101,10 @@ export default class SelectBuilder{
     #createOptionStatePtrn(hasStartClass:boolean,exceptStartPtrn:Pattern[]){
         if(hasStartClass) this.#resultPtrns.push(...this.#startClassPtrn)
 
-        const inService = false
+        const inService = this.#specProvider.getSparqlEndpointUrl(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())
         let servicePtrn
         if(this.#grpWrapper.optionState === OptionTypes.SERVICE || inService){
-            const endpoint = DataFactory.namedNode('test')
+            const endpoint = DataFactory.namedNode(inService)
             servicePtrn = SparqlFactory.buildServicePattern(exceptStartPtrn,endpoint)
         }
 

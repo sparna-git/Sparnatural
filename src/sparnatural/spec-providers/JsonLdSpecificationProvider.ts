@@ -532,8 +532,8 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
       !Array.isArray(val) &&
       typeof val !== 'string'
     )
-    const query = "queryString" in val || "queryTemplate" in val
-    return isObj && query
+    
+    return isObj && ("queryString" in val || "queryTemplate" in val)
   }
 
 }
