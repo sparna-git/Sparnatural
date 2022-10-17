@@ -1,5 +1,5 @@
 import * as DataFactory from "@rdfjs/data-model" ;
-import { BgpPattern, Pattern } from "sparqljs";
+import { BgpPattern, Pattern, Variable } from "sparqljs";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { AbstractWidget } from "../components/widgets/AbstractWidget";
@@ -21,6 +21,7 @@ export default class SelectBuilder{
     #whereChildPtrns: Pattern[] = []
     #andChildPtrns: Pattern[] = []
     #rdfPtrns: Pattern[] = []
+    #defaultVars: Variable[] =[]
     constructor(grpWrapper:GroupWrapper,specProvider:ISpecProvider,isChild:boolean,isInOption:boolean){
         this.#grpWrapper = grpWrapper
         this.#specProvider = specProvider
@@ -46,12 +47,14 @@ export default class SelectBuilder{
         const builder = new SelectBuilder(this.#grpWrapper.whereChild,this.#specProvider,true,this.#grpWrapper.optionState !== OptionTypes.NONE)
         builder.build()
         this.#whereChildPtrns = builder.getResultPtrns()
+        this.#defaultVars.push(...builder.getDefaultVars())
     }
 
     #buildAndChildPtrn(){
         const builder = new SelectBuilder(this.#grpWrapper.andSibling,this.#specProvider,true,this.#isInOption)
         builder.build()
         this.#andChildPtrns = builder.getResultPtrns()
+        this.#defaultVars.push(...builder.getDefaultVars())
     }
 
     #buildRdfPtrn(){
@@ -65,6 +68,7 @@ export default class SelectBuilder{
         const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent)
         endClsBuilder.build()
         this.#endClassPtrn = endClsBuilder.getPattern()
+        if(endClsBuilder.getDefaultVar())this.#defaultVars.push(endClsBuilder.getDefaultVar())
     }
 
     #buildStartClassPtrn() {
@@ -72,6 +76,7 @@ export default class SelectBuilder{
         const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent)
         startClsBuilder.build()
         this.#startClassPtrn = startClsBuilder.getPattern()
+        if(startClsBuilder.getDefaultVar())this.#defaultVars.push(startClsBuilder.getDefaultVar())
     }
 
     #buildIntersectionPtrn(){
@@ -134,5 +139,9 @@ export default class SelectBuilder{
 
     getResultPtrns(){
         return this.#resultPtrns
+    }
+
+    getDefaultVars(){
+        return this.#defaultVars
     }
 }

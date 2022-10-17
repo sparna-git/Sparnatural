@@ -107,6 +107,7 @@ export default class RdfJsGenerator {
   #createSelectQuery(){
     const builder = new SelectBuilder(this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,this.specProvider,false,false)
     builder.build()
+    this.defaultLabelVars = builder.getDefaultVars()
     return builder.getResultPtrns()
   }
 

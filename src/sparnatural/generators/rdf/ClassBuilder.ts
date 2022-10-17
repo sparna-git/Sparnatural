@@ -1,5 +1,5 @@
 import { DataFactory } from "n3";
-import { OptionalPattern, Pattern, Triple } from "sparqljs";
+import { OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
 import EndClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import StartClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
@@ -29,6 +29,7 @@ export default class  ClassBuilder {
 
     #ifDefaultTrpl(){
         const defaultLbl = this.specProvider.getDefaultLabelProperty(this.classTriple.object.value)
+        
         if (!defaultLbl) return
         this.#buildDefaultLblTrpl()
         this.#ifDefaultTrplInOptional(defaultLbl) 
@@ -82,5 +83,10 @@ export default class  ClassBuilder {
 
     getPattern():Pattern[]{
         return this.resultPtrn
+    }
+
+    getDefaultVar():Variable {
+        const selected = this.classGroup.inputTypeComponent?.selectViewVariableBtn?.selected
+        if(selected) return this.defaultLblTriple?.object as Variable
     }
 }
