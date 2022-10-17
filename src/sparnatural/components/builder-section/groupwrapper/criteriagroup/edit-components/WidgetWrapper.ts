@@ -14,13 +14,15 @@ import MapWidget from "../../../../widgets/MapWidget";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { DatesWidget } from "../../../../widgets/DatesWidget";
-import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
+
 import { SearchWidget } from "../../../../widgets/SearchWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
-import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWidget";
+import { LiteralListWidget } from "../../../../widgets/LiteralListWidget";
+import { ListWidget } from "../../../../widgets/ListWidget";
+
 
 /**
  *  creates the corresponding widget

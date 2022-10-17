@@ -8,6 +8,7 @@ import OptionalComponent from "./optioncomponents/OptionalComponent";
 export enum OptionTypes {
   OPTIONAL = "optionalEnabled",
   NOTEXISTS = "notExistsEnabled",
+  SERVICE = "serviceEnabled",
   NONE = "noOption",
 }
 

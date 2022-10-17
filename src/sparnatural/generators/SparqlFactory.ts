@@ -1,20 +1,8 @@
-import { BgpPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, Term, Triple, UnionPattern, VariableTerm } from "sparqljs";
+import { BgpPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableTerm } from "sparqljs";
 import * as DataFactory from "@rdfjs/data-model" ;
 import { Literal, Variable } from "@rdfjs/types";
 
 export default class SparqlFactory {
-
-    // Builds the 'filter' triples for OPTIONAL or NOTEXISTS
-    static buildFilterTriples(criteriaPtrns:Pattern[],rdfPattern:Pattern[],wherePtrn:Pattern[]):GroupPattern{
-      const ptrn:Array<Pattern> = []
-      ptrn.push(...criteriaPtrns)
-      if (rdfPattern) ptrn.push(...rdfPattern);
-      if (wherePtrn) ptrn.push(...wherePtrn);
-      return {
-        type: 'group',
-        patterns: ptrn
-      }
-    }
 
     static buildBgpPattern(triples: Triple[]): BgpPattern {
         return {
@@ -35,6 +23,15 @@ export default class SparqlFactory {
           type: "union",
           patterns: patterns
         };
+    }
+
+    static buildServicePattern(patterns:Pattern[],serviceIRI:IriTerm): ServicePattern {
+      return {
+        type:'service',
+        name:serviceIRI,
+        silent:false,
+        patterns: patterns
+      }
     }
 
     static buildNotExistsPattern(groupPattern: GroupPattern): FilterPattern {
