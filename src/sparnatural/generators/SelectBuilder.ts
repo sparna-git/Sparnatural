@@ -92,8 +92,8 @@ export default class SelectBuilder{
         const hasIntersectionTriple = (this.#intersectionPtrn)
 
         let exceptStartPtrn:Pattern[] = []
-        if(hasEndClass) exceptStartPtrn.push(...this.#endClassPtrn)
         if(hasIntersectionTriple && this.#intersectionPtrn) exceptStartPtrn.push(this.#intersectionPtrn)
+        if(hasEndClass) exceptStartPtrn.push(...this.#endClassPtrn)
         exceptStartPtrn.push(...this.#rdfPtrns)
         exceptStartPtrn.push(...this.#whereChildPtrns)
 
