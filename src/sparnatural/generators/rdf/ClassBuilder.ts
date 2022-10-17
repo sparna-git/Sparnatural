@@ -29,7 +29,6 @@ export default class  ClassBuilder {
 
     #ifDefaultTrpl(){
         const defaultLbl = this.specProvider.getDefaultLabelProperty(this.classTriple.object.value)
-        
         if (!defaultLbl) return
         this.#buildDefaultLblTrpl()
         this.#ifDefaultTrplInOptional(defaultLbl) 

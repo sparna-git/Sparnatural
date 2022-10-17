@@ -54,7 +54,12 @@ class StartClassGroup extends HTMLComponent {
           throw Error('No value received on "classTypeValueSelected"');
         e.stopImmediatePropagation();
         //only create new SPARQL variable if the startClassVal is not set by the parent component
-        if (!this.startClassVal.variable) this.#createSparqlVar(e.detail);
+        if (!this.startClassVal.variable){
+          this.#createSparqlVar(e.detail);
+          this.#addDefaultLblVar(this.startClassVal.type,this.startClassVal.variable)
+        } else{
+          this.#addDefaultLblVar(this.startClassVal.type,this.startClassVal.variable)
+        }
         // Iff(!) First StartClass of first GrpWrapper: eye btn automatically rendered + selected
         if (this.renderEyeBtn) this.#autoSelectEyeBtn()
         this.#valueWasSelected();
@@ -75,7 +80,6 @@ class StartClassGroup extends HTMLComponent {
         detail: (id: number) => {
           //callback
           this.startClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
-          this.#addDefaultLblVar(type,this.startClassVal.variable)
         },
       })
     );
