@@ -113,7 +113,7 @@ export default class SelectBuilder{
             servicePtrn = SparqlFactory.buildServicePattern(exceptStartPtrn,endpoint)
         }
 
-        if(this.#grpWrapper.optionState === OptionTypes.NONE || this.#isInOption || this.#isChild) {
+        if(this.#grpWrapper.optionState === OptionTypes.NONE || this.#isInOption ) {
             servicePtrn ? this.#resultPtrns.push(servicePtrn) : this.#resultPtrns.push(...exceptStartPtrn)
             return
         } 
