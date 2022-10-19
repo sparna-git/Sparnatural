@@ -22,14 +22,16 @@
     &.optionalEnabled{
         height: 3px;
         position: absolute;
-        background: repeating-linear-gradient( 90deg, #fff, #fff 5px, themes.$custom-red 5px, themes.$custom-red 10px);
+        // rgba(255,255,255,0) is white transparent = completely transparent
+        background: repeating-linear-gradient( 90deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, themes.$custom-red 8px, themes.$custom-red 16px);
         display: block;
         span{
             border: 2px dashed themes.$custom-red
         }
     }
     &.notExistsEnabled {
-		background: repeating-linear-gradient( 90deg, #fff, #fff 5px, #000 5px, #000 10px);
+		// rgba(255,255,255,0) is white transparent = completely transparent
+        background: repeating-linear-gradient( 90deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, #000 8px, #000 16px);
 		span {
 			border: 3px dashed #000;
 			border-radius: 15px;

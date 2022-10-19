@@ -174,24 +174,28 @@ export class TimeDatePickerWidget extends AbstractWidget {
     let endValue = (this.#isValidDate(input.value.stop))?new Date(input.value.stop):null
     if (startValue && endValue && (startValue > endValue)) throw Error('StartDate is bigger than Enddate!')
 
-    let tmpValue: { start: Date; stop: Date };
+    let tmpValue: { start: Date; stop: Date; startLabel: string; endLabel: string };
 
     if (this.dateFormat == "day") {
       tmpValue = {
         start: (startValue)?new Date(startValue.setHours(0, 0, 0, 0)):null,
         stop: (endValue)?new Date(endValue.setHours(23, 59, 59, 59)):null,
+        startLabel: startValue?startValue.toLocaleDateString():"",
+        endLabel: endValue?endValue.toLocaleDateString():""
       };
     } else {
       tmpValue = {
         start: this.#getFirstDayYear(startValue), 
-        stop: this.#getLastDayOfYear(endValue)
+        stop: this.#getLastDayOfYear(endValue),
+        startLabel: startValue?startValue.getFullYear().toString():"",
+        endLabel: endValue?endValue.getFullYear().toString():""
       };
     }
     let dateTimePickerVal: DateTimePickerValue = {
       value: {
         // here : we get the JSON representation of the date, as a lazy way to format date
         key: JSON.stringify(tmpValue.start).replace(/["]+/g,'')+" - "+JSON.stringify(tmpValue.stop).replace(/["]+/g,''),
-        label: this.#getValueLabel(startValue.getFullYear().toString(), endValue.getFullYear().toString()),
+        label: this.#getValueLabel(tmpValue.startLabel, tmpValue.endLabel),
         start: tmpValue.start,
         stop: tmpValue.stop,
       },

@@ -8,7 +8,7 @@
     <!-- YASGUI stuff -->
     <link href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" rel="stylesheet" type="text/css" />
 
-    <title>SPARnatural - requêtes SPARQL au naturel !</title>
+    <title>SPARnatural - test page</title>
 
     <style>
       .yasqe .CodeMirror { font-size: 0.8em; height: 380px; }
@@ -22,7 +22,7 @@
   <body>
     <header>
       <nav class="navbar navbar-expand  navbar-dark bg-dark">
-        <a class="navbar-brand display-1 mr-auto" href="#">SPARnatural - requêtes SPARQL au naturel !</a>
+        <a class="navbar-brand display-1 mr-auto" href="#">SPARnatural - test page</a>
         <span class="navbar-text" style="margin-right:100px;">
         <a href="?lang=fr">fr</a>&nbsp;|&nbsp;<a href="?lang=en">en</a>
           </span>
@@ -38,12 +38,14 @@
           <div id="ui-search" style="width:auto">
             <spar-natural></spar-natural>
           </div>
+          <input type="hidden" id="query-json" />
+          <div><a id="export" href="#">Export query in JSON</a></div>
         </div>
         <div class="col-md-5">
           <div class="row" style="margin-bottom:0.5em;">
             <div class="col-md-12">
              <span style="font-size:90%;"> 
-             Les requêtes sont envoyées à <a id="endpoint" href="http://fr.dbpedia.org/sparql">http://fr.dbpedia.org/sparql</a>
+             Les requêtes sont envoyées à <a id="endpoint" href="https://fr.dbpedia.org/sparql">https://fr.dbpedia.org/sparql</a>
              </span>
             </div>
           </div>
@@ -52,16 +54,28 @@
              <div id="yasqe"></div>
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-12">
-             <div id="shareQuery">Lien direct vers la requête : <a href="" target="_blank">...</a></div>
-            </div>
-          </div>
         </div>
       </div>
       <div class="row justify-content-center">
         <div class="col-md-12">
           <div id="yasr"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="exportModal" tabindex="-1" role="dialog" aria-labelledby="jsonModelLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="jsonModelLabel">Export query</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" style="overflow:hidden;">
+            <textarea class="form-control" rows="20" id="export-json" style="width:100%" readonly="readonly"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
         </div>
       </div>
     </div>

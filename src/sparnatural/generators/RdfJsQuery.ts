@@ -169,14 +169,21 @@ export default class RdfJsGenerator {
     }
 
     const critPatterns: Pattern[] = []
+
+    // first, start class pattern
     const startPtrn = this.#buildStartClassPtrn(startClassTuple,isChild,widgetComponent)
     if(startPtrn.length > 0) critPatterns.push(...startPtrn)
-    const endPtrn = this.#buildEndClassPtrn(endClassTuple,crtGrp)
-    if(endPtrn.length > 0 ) critPatterns.push(...endPtrn)
+    
+    // then connecting triple
     if(connectingTripple){
       const connPtrn = this.#buildConnectingPtrn(connectingTripple)
       if(connPtrn) critPatterns.push(connPtrn)
     }
+
+    // then end class pattern
+    const endPtrn = this.#buildEndClassPtrn(endClassTuple,crtGrp)
+    if(endPtrn.length > 0 ) critPatterns.push(...endPtrn)
+
     return critPatterns
   }
 
