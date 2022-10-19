@@ -1,27 +1,14 @@
-import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { Language, Order } from "./ISparJson";
-import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import ISpecProvider from "../spec-providers/ISpecProviders";
 import {
-  IriTerm,
-  OptionalPattern,
   Ordering,
-  Pattern,
-  PropertyPath,
   SelectQuery,
-  Term,
-  Triple,
   Variable,
   VariableTerm,
   Wildcard,
 } from "sparqljs";
 import Sparnatural from "../components/SparnaturalComponent";
-import CriteriaGroup from "../components/builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import * as DataFactory from "@rdfjs/data-model" ;
-import { AbstractWidget } from "../components/widgets/AbstractWidget";
-import StartClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
-import EndClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import SparqlFactory from "./SparqlFactory";
 import SelectBuilder from "./SelectBuilder";
 /*
   Reads out the UI and creates the and sparqljs pattern. 
