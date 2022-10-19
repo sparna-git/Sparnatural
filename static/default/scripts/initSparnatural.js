@@ -74,11 +74,3 @@ document.getElementById('export').onclick = function() {
   $('#export-json').val(jsonString);
   $('#exportModal').modal('show');       
 }
-
-
-document.getElementById('stored-queries').onchange = function() {
-var key = $('#stored-queries option:selected').val();
-if(sampleQueries.hasOwnProperty(key)) {
-    sparnatural.loadQuery(sampleQueries[key]) ;
-}
-}
