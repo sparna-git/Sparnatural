@@ -150,6 +150,7 @@
 							$(itc_obj).trigger('change') ;
 						});
 					} else {
+						$('#'+id_input).attr("style", "width:100%;");
 						$('#'+id_input).select2();
 						$('#'+id_input).on("select2:close", function() {
 							$(itc_obj).trigger('change') ;
