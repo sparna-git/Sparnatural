@@ -9,7 +9,7 @@ import {
 } from "sparqljs";
 import Sparnatural from "../components/SparnaturalComponent";
 import * as DataFactory from "@rdfjs/data-model" ;
-import WhereBuilder from "./WhereBuilder";
+import WhereBuilder from "./helpers/WhereBuilder";
 /*
   Reads out the UI and creates the and sparqljs pattern. 
   sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
