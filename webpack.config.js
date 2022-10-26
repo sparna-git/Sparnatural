@@ -6,7 +6,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require('copy-webpack-plugin');
-const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
 
 module.exports = {
   mode:'development',
@@ -101,15 +100,6 @@ module.exports = {
 	  $: 'jquery',
 	  jQuery: 'jquery',
 	})
-	/*
-	new webpack.ProvidePlugin({
-        datepicker: '@chenfengyuan/datepicke',
-	  }),
-	*/
-	/*
-	new WebpackBundleSizeAnalyzerPlugin('./webpack-bundle-size-analyzer-report.txt')
-	*/
-
   ],
 	devServer: {
 	static:{
@@ -119,7 +109,5 @@ module.exports = {
 	open: true,
 	hot: true
 	},
-  /* terrible, generates huge output files */
-	/* devtool: "eval-source-map" */
   devtool: "source-map"
 }
