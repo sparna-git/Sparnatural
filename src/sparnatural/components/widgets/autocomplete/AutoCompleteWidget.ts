@@ -1,6 +1,7 @@
 import * as DataFactory from "@rdfjs/data-model" ;
-import { Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
+import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../../../generators/ISparJson";
+import SparqlFactory from "../../../generators/SparqlFactory";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 
@@ -118,16 +119,49 @@ export class AutoCompleteWidget extends AbstractWidget {
 
   parseInput(input: AutoCompleteWidgetValue): AutoCompleteWidgetValue {return input}
 
+  /**
+   * @returns  true if the number of values is 1, in which case the widget will handle the generation of the triple itself,
+   * not using a VALUES clause; returns false otherwise.
+   */
+   isBlockingObjectProp() {
+    return (this.widgetValues.length == 1);
+  }
+
+  /**
+   * @returns  true if at least one value is selected, in which case we don't need to insert an rdf:type constraint
+   * on the end class
+   */
+   isBlockingEnd(): boolean {
+    return (this.widgetValues.length > 0);
+   }
+
+
   getRdfJsPattern(): Pattern[] {
-    let vals = this.widgetValues.map((v) => {
-      let vl: ValuePatternRow = {};
-      vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
-      return vl;
-    });
-    let valuePattern: ValuesPattern = {
-      type: "values",
-      values: vals,
-    };
-    return [valuePattern];
+    if(this.widgetValues.length == 1) {
+      let singleTriple: Triple = SparqlFactory.buildTriple(
+        DataFactory.variable(this.getVariableValue(this.startClassVal)),
+        DataFactory.namedNode(this.objectPropVal.type),
+        DataFactory.namedNode((this.widgetValues[0] as AutoCompleteWidgetValue).value.uri)
+      );
+
+      let ptrn: BgpPattern = {
+        type: "bgp",
+        triples: [singleTriple],
+      };
+  
+
+      return [ptrn];
+    } else {
+      let vals = (this.widgetValues as AutoCompleteWidgetValue[]).map((v) => {
+        let vl: ValuePatternRow = {};
+        vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
+        return vl;
+      });
+      let valuePattern: ValuesPattern = {
+        type: "values",
+        values: vals,
+      };
+      return [valuePattern];
+    }
   }
 }
