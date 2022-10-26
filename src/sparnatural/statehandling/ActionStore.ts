@@ -135,6 +135,7 @@ class ActionStore {
       this.maxVarIndex = 0;
       this.sparnatural.VariableSelection.html.remove();
       this.sparnatural.VariableSelection.render();
+      generateQuery(this)
     });
 
     this.sparnatural.html[0].addEventListener(

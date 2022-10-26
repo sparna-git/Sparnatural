@@ -26,8 +26,6 @@ export default function generateQuery(actionStore: ActionStore) {
       console.log(JSON.stringify(jsonQuery, null, 4));
     }
 
-
-
     var writer = new RdfJsGenerator(
       actionStore.sparnatural,
       settings.typePredicate,
