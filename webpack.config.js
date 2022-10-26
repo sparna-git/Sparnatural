@@ -1,7 +1,6 @@
 const webpack = require("webpack");
 const path = require("path");
 const WriteFilePlugin = require('write-file-webpack-plugin')
-
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const DashboardPlugin = require("webpack-dashboard/plugin");
@@ -82,7 +81,7 @@ module.exports = {
 	new WriteFilePlugin(),
 	new HtmlWebpackPlugin({
 		filename: 'index.html',
-		template: __dirname + "/static/default/index.html",
+		template: __dirname + "/static/demo-dpedia/index.html",
 		inject: 'body'
 	}),
 	new MiniCssExtractPlugin({

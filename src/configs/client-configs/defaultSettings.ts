@@ -20,7 +20,7 @@ const defaultSettings: ISettings = {
   sparqlPrefixes: {},
   localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
   filterConfigOnEndpoint: false,
-
+  debugJson:false,
   autocomplete: {
     /**
      * This must return the URL that will be called when the user starts

@@ -22,7 +22,7 @@ import QueryParser from "./sparnatural/querypreloading/QueryParser";
 /*
   This is the SparNatural HTMLElement. 
   e.g. Interface to the outside world
-  Used to configure the Settings
+  Used to configure the Settings and load queries
 */
 class SparNatural extends HTMLElement {
   Sparnatural = new Sparnatural();

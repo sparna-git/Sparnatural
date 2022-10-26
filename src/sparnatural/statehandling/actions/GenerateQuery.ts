@@ -19,7 +19,7 @@ export default function generateQuery(actionStore: ActionStore) {
     actionStore.language
   );
   actionStore.sparnaturalJSON = jsonQuery
-  if (jsonQuery != null) {
+  if (jsonQuery != null && getSettings().debugJson) {
     console.log("*** Sparnatural JSON Data structure ***");
     console.dir(jsonQuery);
     console.log(JSON.stringify(jsonQuery, null, 4));
