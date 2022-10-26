@@ -1,14 +1,14 @@
 import { Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
-import { SelectedVal } from "../../generators/ISparJson";
-import { SparqlTemplateListHandler } from "./autocomplete/AutocompleteAndListHandlers";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
+import { SelectedVal } from "../../../generators/ISparJson";
+import { SparqlTemplateListHandler } from "../autocomplete/AutocompleteAndListHandlers";
+import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 
 import * as DataFactory from "@rdfjs/data-model" ;
 
 import "select2";
 import "select2/dist/css/select2.css";
 import { ListWidget } from "./ListWidget";
-import { ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { ValueRepetition, WidgetValue } from "../AbstractWidget";
 
 export interface LiteralListWidgetValue extends WidgetValue {
   value: {

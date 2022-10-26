@@ -1,17 +1,15 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
-import ISettings from "../../../configs/client-configs/ISettings";
-import { getSettings } from "../../../configs/client-configs/settings";
-import LocalCacheData from "../../datastorage/LocalCacheData";
-import { SelectedVal } from "../../generators/ISparJson";
-import { SparqlTemplateListHandler } from "./autocomplete/AutocompleteAndListHandlers";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import ISettings from "../../../../configs/client-configs/ISettings";
+import { getSettings } from "../../../../configs/client-configs/settings";
+import LocalCacheData from "../../../datastorage/LocalCacheData";
+import { SelectedVal } from "../../../generators/ISparJson";
+import { SparqlTemplateListHandler } from "./../autocomplete/AutocompleteAndListHandlers";
+import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "./../AbstractWidget";
 import * as DataFactory from "@rdfjs/data-model" ;
-
 import "select2";
 import "select2/dist/css/select2.css";
-import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
-import SparqlFactory from "../../generators/SparqlFactory";
+import SparqlFactory from "../../../generators/SparqlFactory";
 
 export interface ListWidgetValue extends WidgetValue {
   value: {
