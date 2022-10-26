@@ -1,5 +1,6 @@
-import { getSettings } from "../../../../configs/client-configs/settings";
-import HTMLComponent from "../../HtmlComponent";
+import { getSettings } from "../../../../../configs/client-configs/settings";
+import HTMLComponent from "../../../HtmlComponent";
+
 
 class ActionAnd extends HTMLComponent {
   btn: JQuery<HTMLElement>;

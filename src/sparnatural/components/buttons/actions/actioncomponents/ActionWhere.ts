@@ -1,8 +1,7 @@
-import ISpecProvider from "../../../spec-providers/ISpecProviders";
-import { getSettings } from "../../../../configs/client-configs/settings";
-import HTMLComponent from "../../HtmlComponent";
-import EditComponents from "../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
-import { Config } from "../../../../configs/fixed-configs/SparnaturalConfig";
+import { getSettings } from "../../../../../configs/client-configs/settings";
+import ISpecProvider from "../../../../spec-providers/ISpecProviders";
+import EditComponents from "../../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
+import HTMLComponent from "../../../HtmlComponent";
 
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 

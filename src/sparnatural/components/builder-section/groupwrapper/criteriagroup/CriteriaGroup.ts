@@ -1,10 +1,8 @@
 /**
  * A single line/criteria
  **/
-
 import { getSettings } from "../../../../../configs/client-configs/settings";
 import ISpecProvider from "../../../../spec-providers/ISpecProviders";
-import ActionsGroup from "../../../actions/ActionsGroup";
 import UnselectBtn from "../../../buttons/UnselectBtn";
 import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
@@ -14,6 +12,7 @@ import { OptionsGroup } from "./optionsgroup/OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
 import { SelectedVal } from "../../../../generators/ISparJson";
 import { EndClassWidgetGroup, EndClassWidgetValue } from "./startendclassgroup/EndClassWidgetGroup";
+import ActionsGroup from "../../../buttons/actions/ActionsGroup";
 
 class CriteriaGroup extends HTMLComponent {
   settings: any;

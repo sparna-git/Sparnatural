@@ -2,11 +2,11 @@ import { getSettings } from "../../../../../../configs/client-configs/settings";
 import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
-import ActionWhere from "../../../../actions/actioncomponents/ActionWhere";
 import HTMLComponent from "../../../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import { ValueRepetition, WidgetValue } from "../../../../widgets/AbstractWidget";
+import { WidgetValue } from "../../../../widgets/AbstractWidget";
 import WidgetWrapper from "./WidgetWrapper";
+import ActionWhere from "../../../../buttons/actions/actioncomponents/ActionWhere";
 
 export interface SelectAllValue extends WidgetValue {
   value: {
