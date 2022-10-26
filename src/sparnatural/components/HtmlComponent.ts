@@ -1,5 +1,5 @@
 import ISettings from "../../configs/client-configs/ISettings";
-import { getSettings } from "../../configs/client-configs/settings";
+import { getSettings } from "../../configs/client-configs/defaultSettings";
 import BaseClassFactory from "./baseClassFactory/BaseClassFactory";
 
 interface IRenderable {

@@ -23,5 +23,6 @@ interface ISpecProvider {
   getEndDateProperty(propertyId: string): string;
   getExactDateProperty(propertyId: string): string;
   getConnectedClasses(classId:string):Array<string>;
+  getServiceEndpoint(classId:string):string | null;
 }
 export default ISpecProvider;

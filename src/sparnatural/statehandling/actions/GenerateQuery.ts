@@ -1,8 +1,8 @@
-import { getSettings } from "../../../configs/client-configs/settings";
+import { getSettings } from "../../../configs/client-configs/defaultSettings";
 
 import ActionStore from "../ActionStore";
 import SparnaturalJsonGenerator from "../../generators/SparnaturalJsonGenerator";
-import RdfJsGenerator from "../../generators/RdfJsQuery";
+import RdfJsGenerator from "../../generators/SparqlSelectBuilder";
 import {
   Generator
 } from "sparqljs";

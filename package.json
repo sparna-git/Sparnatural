@@ -1,7 +1,7 @@
 {
-  "name": "Sparnatural",
-  "version": "3.0.0",
-  "description": "",
+  "name": "sparnatural",
+  "version": "7.1.0",
+  "description": "Visual query builder for SPARQL queries.",
   "main": "dist/sparnatural.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,8 +9,37 @@
     "start": "webpack serve --hot --config webpack.config.js",
     "pretty": "prettier --write \"./src/**/*.{ts,js,json}\""
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "visual",
+    "SPARQL",
+    "RDF",
+    "OWL",
+    "query builder",
+    "react",
+    "angular"
+  ],
+  "homepage": "https://sparnatural.eu/",
+  "bugs": {
+    "url": "https://github.com/sparna-git/Sparnatural/issues"
+  },
+  "author": {
+    "name": "Thomas Francart",
+    "url": "https://sparnatural.eu/"
+  },
+  "contributors": [
+    {
+      "name": "Pascal Steiner",
+      "url": "https://github.com/SteinerPascal"
+    },
+    {
+      "name": "Antoine",
+      "url": "https://github.com/antoine37120"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sparna-git/Sparnatural"
+  },
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -19,6 +48,7 @@
     "@types/jquery": "^3.5.14",
     "@types/leaflet": "^1.7.10",
     "@types/leaflet-draw": "^1.0.5",
+    "@types/n3": "^1.10.4",
     "@types/rdfjs__dataset": "^2.0.0",
     "@types/select2": "^4.0.55",
     "@types/sortablejs": "^1.13.0",
@@ -59,7 +89,6 @@
     "@fortawesome/free-regular-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@geoman-io/leaflet-geoman-free": "^2.13.0",
-    "@popperjs/core": "^2.10.2",
     "@rdfjs/data-model": "^1.1.2",
     "bootstrap": "^5.1.3",
     "easy-autocomplete": "^1.3.5",
@@ -68,14 +97,11 @@
     "jstree": "^3.3.12",
     "leaflet": "^1.8.0",
     "n3": "^1.3.5",
-    "popper.js": "^1.16.1",
-    "rdf-dereference": "^1.4.0",
-    "rdf-parse": "^1.2.1",
-    "rdf-store-stream": "^1.0.0",
+    "rdf-parse": "^2.1.0",
+    "rdf-store-stream": "^1.3.0",
     "select2": "^4.0.13",
     "sortablejs": "^1.14.0",
     "sparqljs": "^3.5.2",
-    "tippy.js": "^6.3.5",
-    "whatwg-fetch": "^3.6.2"
+    "tippy.js": "^6.3.5"
   }
 }

@@ -6,7 +6,7 @@ interface IDataSources {
   // one of queryString or queryTemplate must be set
   queryString?: string;
   queryTemplate?: any;
-  // one of labelPath or labelProperty must be present if queryTemplate is set
+
   labelPath?: any;
   labelProperty?: any;
   // one of childrenPath or childrenProperty must be present if queryTemplate is set, only for Trees datasource
@@ -94,7 +94,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
 
     var datasource: IDataSources = {};
 
-    if (typeof datasourceObject === "object") {
+    if (datasource && this.#isDataSourceObject(datasourceObject)) {
       // if datasource is an object...
 
       // Alternative 1 : read optional queryString
@@ -206,6 +206,12 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
   getDefaultLabelProperty = function (classId: string) {
     return this._readValue(classId, "defaultLabelProperty");
   };
+
+  getServiceEndpoint = function(classId:string){
+    const serviceId = this._readValue(classId,"sparqlService")
+    if (serviceId) return this._readValue(serviceId,"endpoint")
+    return null
+  }
 
   getBeginDateProperty = function (propertyId: string) {
     return this._readValue(propertyId, "beginDateProperty");
@@ -485,7 +491,6 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
         return anEntry;
       }
     }
-    console.warn(`Couldn't find an entry with id: ${id}`);
     return null;
   };
 
@@ -519,4 +524,16 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
 
     return items;
   };
+
+  #isDataSourceObject(val:any): val is IDataSources{
+    const isObj = (
+      typeof val === 'object' &&
+      val !== null &&
+      !Array.isArray(val) &&
+      typeof val !== 'string'
+    )
+    
+    return isObj && ("queryString" in val || "queryTemplate" in val)
+  }
+
 }
