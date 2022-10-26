@@ -27,8 +27,7 @@ export default function generateQuery(actionStore: ActionStore) {
     }
 
 
-    // prints the SPARQL generated from the writing of the JSON data structure
-    console.log("*** New SPARQL from JSON data structure ***");
+
     var writer = new RdfJsGenerator(
       actionStore.sparnatural,
       settings.typePredicate,
@@ -43,7 +42,11 @@ export default function generateQuery(actionStore: ActionStore) {
     );
     actionStore.rdfjsSelect = selectQuery
     // debug rdfJsQuery
-    if(getSettings().debugJson) console.log(selectQuery);
+    if(getSettings().debugJson){
+      // prints the SPARQL generated from the writing of the JSON data structure
+      console.log("*** New SPARQL from JSON data structure ***");
+      console.log(selectQuery);
+    } 
 
     var generator = new Generator();
     var queryString = generator.stringify(selectQuery);
