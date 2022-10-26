@@ -31,7 +31,7 @@ class ActionStore {
   language = Language.EN; //default
   sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
   maxVarIndex = 0; //maxVarIndex indicates how many AND and WHERE siblings are allowed to be added
-  showVariableNames = false //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
+  showVariableNames = true //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
   sparnaturalJSON:ISparJson;
   sparqlString:string;
   rdfjsSelect:SelectQuery;
@@ -79,8 +79,8 @@ class ActionStore {
     // Switch which toggles if the Start and Endvalues are shown as their Var name. e.g Country_1
     this.sparnatural.html[0].addEventListener("toggleVarNames", (e) => {
       e.stopImmediatePropagation();
-      this.showVariableNames? this.showVariableNames = false : this.showVariableNames = true
       toggleVarNames(this,this.showVariableNames);
+      this.showVariableNames? this.showVariableNames = false : this.showVariableNames = true
     });
 
     this.sparnatural.html[0].addEventListener("getSelectedVariables",(e:CustomEvent)=>{
