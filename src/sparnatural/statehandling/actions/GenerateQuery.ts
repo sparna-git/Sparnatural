@@ -20,9 +20,12 @@ export default function generateQuery(actionStore: ActionStore) {
   );
   actionStore.sparnaturalJSON = jsonQuery
   if (jsonQuery != null) {
-    console.log("*** Sparnatural JSON Data structure ***");
-    console.dir(jsonQuery);
-    console.log(JSON.stringify(jsonQuery, null, 4));
+    if(getSettings().debugJson){
+      console.log("*** Sparnatural JSON Data structure ***");
+      console.dir(jsonQuery);
+      console.log(JSON.stringify(jsonQuery, null, 4));
+    }
+
 
     // prints the SPARQL generated from the writing of the JSON data structure
     console.log("*** New SPARQL from JSON data structure ***");
@@ -40,7 +43,7 @@ export default function generateQuery(actionStore: ActionStore) {
     );
     actionStore.rdfjsSelect = selectQuery
     // debug rdfJsQuery
-    console.log(selectQuery);
+    if(getSettings().debugJson) console.log(selectQuery);
 
     var generator = new Generator();
     var queryString = generator.stringify(selectQuery);
