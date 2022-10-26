@@ -212,6 +212,31 @@ export default {
       enableNegation: true,
     },
     {
+      "@id": "http://dbpedia.org/ontology/country",
+      "@type": "ObjectProperty",
+      subPropertyOf: "sparnatural:ListProperty",
+      sparqlService: "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
+      datasource: "datasources:list_rdfslabel_alpha_with_count",
+      label: [
+        { "@value": "DPedia country", "@language": "en" },
+        { "@value": "DPedia pays", "@language": "fr" },
+      ],
+      tooltip: [
+        {
+          "@value": "The countries are fetched from the DPedia endpoint",
+          "@language": "en",
+        },
+        {
+          "@value": "Un musée peut se trouver dans un pays dans la database DPedia",
+          "@language": "fr",
+        },
+      ],
+      domain: "http://dbpedia.org/ontology/Museum",
+      range: "http://dbpedia.org/ontology/Country",
+      enableOptional: true,
+      enableNegation: true,
+    },
+    {
       "@id":
         "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#countryOf",
       "@type": "ObjectProperty",
@@ -590,6 +615,13 @@ BIND(true AS ?hasChildren)
       domain:
         "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       range: "http://dbpedia.org/ontology/Museum",
+    },
+    {
+      "@id":
+        "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
+      "@type": "sd:Service",
+      endpoint: "https://dbpeida/org/sparql" ,
+      label: "DBPedia (english)"
     },
     {
       "@id":
