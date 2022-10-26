@@ -9,7 +9,7 @@ import {
 } from "sparqljs";
 import Sparnatural from "../components/SparnaturalComponent";
 import * as DataFactory from "@rdfjs/data-model" ;
-import SelectBuilder from "./SelectBuilder";
+import WhereBuilder from "./WhereBuilder";
 /*
   Reads out the UI and creates the and sparqljs pattern. 
   sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
@@ -92,7 +92,7 @@ export default class RdfJsGenerator {
   }
 
   #createSelectQuery(){
-    const builder = new SelectBuilder(this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,this.specProvider,false,false)
+    const builder = new WhereBuilder(this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,this.specProvider,false,false)
     builder.build()
     this.defaultLabelVars = builder.getDefaultVars()
     return builder.getResultPtrns()

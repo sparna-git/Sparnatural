@@ -4,11 +4,11 @@ import { OptionTypes } from "../components/builder-section/groupwrapper/criteria
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { AbstractWidget } from "../components/widgets/AbstractWidget";
 import ISpecProvider from "../spec-providers/ISpecProviders";
-import ClassBuilder from "./rdf/ClassBuilder";
-import IntersectionBuilder from "./rdf/IntersectionBuilder";
+import ClassBuilder from "./builders/ClassBuilder";
+import IntersectionBuilder from "./builders/IntersectionBuilder";
 import SparqlFactory from "./SparqlFactory";
 
-export default class SelectBuilder{
+export default class WhereBuilder{
     #resultPtrns: Pattern[] = []
     #grpWrapper
     #specProvider
@@ -44,14 +44,14 @@ export default class SelectBuilder{
     }
 
     #buildWhereChildPtrn(){
-        const builder = new SelectBuilder(this.#grpWrapper.whereChild,this.#specProvider,true,this.#grpWrapper.optionState !== OptionTypes.NONE)
+        const builder = new WhereBuilder(this.#grpWrapper.whereChild,this.#specProvider,true,this.#grpWrapper.optionState !== OptionTypes.NONE)
         builder.build()
         this.#whereChildPtrns = builder.getResultPtrns()
         this.#defaultVars.push(...builder.getDefaultVars())
     }
 
     #buildAndChildPtrn(){
-        const builder = new SelectBuilder(this.#grpWrapper.andSibling,this.#specProvider,true,this.#isInOption)
+        const builder = new WhereBuilder(this.#grpWrapper.andSibling,this.#specProvider,true,this.#isInOption)
         builder.build()
         this.#andChildPtrns = builder.getResultPtrns()
         this.#defaultVars.push(...builder.getDefaultVars())
