@@ -1,7 +1,7 @@
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-require("./assets/js/jquery-nice-select/jquery.nice-select.js");
-require("./assets/stylesheets/sparnatural.scss");
+require("../static/assets/js/jquery-nice-select/jquery.nice-select.js");
+require("../static/assets/stylesheets/sparnatural.scss");
 import $ from "jquery";
 /* FONT AWESOME*/
 require("@fortawesome/fontawesome-free");

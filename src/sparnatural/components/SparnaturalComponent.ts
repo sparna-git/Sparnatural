@@ -9,8 +9,8 @@ import HTMLComponent from "./HtmlComponent";
 
 
 const i18nLabels = {
-  en: require("../../assets/lang/en.json"),
-  fr: require("../../assets/lang/fr.json"),
+  en: require("../../../static/assets/lang/en.json"),
+  fr: require("../../../static/assets/lang/fr.json"),
 };
 
 class Sparnatural extends HTMLComponent {

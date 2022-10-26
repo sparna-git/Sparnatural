@@ -3,7 +3,7 @@
     Made by Hernán Sartorio  */
 
 import tippy from "tippy.js";
-import { getSettings } from "../../../configs/client-configs/settings";
+import { getSettings } from "../../../../src/configs/client-configs/settings";
 
 (function ($) {
   $.fn.niceSelect = function (method, settings) {
