@@ -212,7 +212,7 @@ export default {
       enableNegation: true,
     },
     {
-      "@id": "http://dbpedia.org/ontology/country",
+      "@id": "http://dbpedia.org/ontology/countryConfig",
       "@type": "ObjectProperty",
       subPropertyOf: "sparnatural:ListProperty",
       sparqlService: "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
@@ -233,6 +233,7 @@ export default {
       ],
       domain: "http://dbpedia.org/ontology/Museum",
       range: "http://dbpedia.org/ontology/Country",
+      sparqlString: "http://dbpedia.org/ontology/country",
       enableOptional: true,
       enableNegation: true,
     },
