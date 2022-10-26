@@ -207,9 +207,9 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
     return this._readValue(classId, "defaultLabelProperty");
   };
 
-  getSparqlEndpointUrl = function(classId:string){
-    const ds = this._readValue(classId,"datasource")
-    if (ds && this.#isDataSourceObject(ds) && "sparqlEndpointUrl" in ds) return ds.sparqlEndpointUrl
+  getServiceEndpoint = function(classId:string){
+    const serviceId = this._readValue(classId,"sparqlService")
+    if (serviceId) return this._readValue(serviceId,"endpoint")
     return null
   }
 

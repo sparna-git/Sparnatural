@@ -117,9 +117,9 @@ export class RDFSpecificationProvider implements ISpecProvider {
     return result;
   }
 
-  getSparqlEndpointUrl = function(classId:string){
-    const ds = this._readAsSingleResource(classId,"datasource")
-    if (this._readAsSingleResource(classId,"sparqlEndpointUrl")) return ds.sparqlEndpointUrl
+  getServiceEndpoint = function(classId:string){
+    const ds = this._readAsSingleResource(classId,"sparqlService")
+    if (this._readAsSingleResource(ds,"endpoint")) return ds.endpoint
     return null
   }
 

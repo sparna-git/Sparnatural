@@ -87,6 +87,7 @@ export default class WhereBuilder{
     }
 
     #buildGrpWrapperPtrn(){
+        // The startClassPtrn does not need to be created if it is a WHERE or ANDChild
         const hasStartClass = (!this.#isChild)
         const hasEndClass = (!this.#specProvider.isLiteralClass(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected()))
         const hasIntersectionTriple = (this.#intersectionPtrn)
@@ -106,7 +107,7 @@ export default class WhereBuilder{
     #createOptionStatePtrn(hasStartClass:boolean,exceptStartPtrn:Pattern[]){
         if(hasStartClass) this.#resultPtrns.push(...this.#startClassPtrn)
 
-        const serviceDatasource = this.#specProvider.getSparqlEndpointUrl(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())
+        const serviceDatasource = this.#specProvider.getServiceEndpoint(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())
         let servicePtrn
         if(this.#grpWrapper.optionState === OptionTypes.SERVICE || serviceDatasource){
             const endpoint = DataFactory.namedNode(serviceDatasource)
