@@ -5,7 +5,6 @@ import { WidgetValue } from "../components/widgets/AbstractWidget";
 /*
     This Class takes an Array with Jsons in the form of ISparJson together with a queryname.
     It validates the queries and shows them in a Dropdownlist.
-    If a query gets chosen
 */
 
 export default class QueryParser{

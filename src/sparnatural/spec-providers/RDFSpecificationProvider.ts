@@ -117,6 +117,12 @@ export class RDFSpecificationProvider implements ISpecProvider {
     return result;
   }
 
+  getServiceEndpoint = function(classId:string){
+    const ds = this._readAsSingleResource(classId,"sparqlService")
+    if (this._readAsSingleResource(ds,"endpoint")) return ds.endpoint
+    return null
+  }
+
   getClassesInDomainOfAnyProperty() {
     const quadsArray = RDFSpecificationProvider.store.getQuads(
       undefined,

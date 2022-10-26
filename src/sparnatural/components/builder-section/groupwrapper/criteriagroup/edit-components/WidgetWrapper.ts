@@ -19,8 +19,8 @@ import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/T
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
-import { LiteralListWidget } from "../../../../widgets/LiteralListWidget";
-import { ListWidget } from "../../../../widgets/ListWidget";
+import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWidget";
+import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
 
 
 /**

@@ -1,5 +1,5 @@
 import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
-import ArrowComponent from "../arrows/ArrowComponent";
+import ArrowComponent from "./ArrowComponent";
 import HTMLComponent from "../HtmlComponent";
 
 class AddWidgetValueBtn extends HTMLComponent {

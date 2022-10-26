@@ -21,6 +21,7 @@ interface ISettings {
   list?: any; //Handler function
   dates?: any; //Handler function?
   tooltipConfig?: any;
+  debugJson: boolean;
   statistics?: {
     countClassUrl: (aClass: any) => void;
     countPropertyUrl: (domain: any, property: any, range: any) => void;

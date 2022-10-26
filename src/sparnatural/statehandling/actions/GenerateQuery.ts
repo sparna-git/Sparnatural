@@ -1,8 +1,8 @@
-import { getSettings } from "../../../configs/client-configs/settings";
+import { getSettings } from "../../../configs/client-configs/defaultSettings";
 
 import ActionStore from "../ActionStore";
 import SparnaturalJsonGenerator from "../../generators/SparnaturalJsonGenerator";
-import RdfJsGenerator from "../../generators/RdfJsQuery";
+import RdfJsGenerator from "../../generators/SparqlSelectBuilder";
 import {
   Generator
 } from "sparqljs";
@@ -19,7 +19,7 @@ export default function generateQuery(actionStore: ActionStore) {
     actionStore.language
   );
   actionStore.sparnaturalJSON = jsonQuery
-  if (jsonQuery != null) {
+  if (jsonQuery != null && getSettings().debugJson) {
     console.log("*** Sparnatural JSON Data structure ***");
     console.dir(jsonQuery);
     console.log(JSON.stringify(jsonQuery, null, 4));

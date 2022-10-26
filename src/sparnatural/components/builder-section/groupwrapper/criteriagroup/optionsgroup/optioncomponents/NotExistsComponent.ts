@@ -1,5 +1,5 @@
 import BaseOptionComponent from "./BaseOptionComponent";
-import { getSettings } from "../../../../../../../configs/client-configs/settings";
+import { getSettings } from "../../../../../../../configs/client-configs/defaultSettings";
 import { OptionsGroup, OptionTypes } from "../OptionsGroup";
 
 /*

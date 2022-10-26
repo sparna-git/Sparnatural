@@ -19,7 +19,6 @@ class LocalCacheData {
       init.cache = "reload";
       return fetch(uri, init);
     } else {
-      console.log("force-cache");
       init.cache = "force-cache";
       return fetch(uri, init);
     }

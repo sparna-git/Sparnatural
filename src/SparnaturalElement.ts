@@ -1,7 +1,7 @@
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-require("./assets/js/jquery-nice-select/jquery.nice-select.js");
-require("./assets/stylesheets/sparnatural.scss");
+require("../static/assets/js/jquery-nice-select/jquery.nice-select.js");
+require("../static/assets/stylesheets/sparnatural.scss");
 import $ from "jquery";
 /* FONT AWESOME*/
 require("@fortawesome/fontawesome-free");
@@ -11,7 +11,7 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 library.add(fas);
 library.add(far as IconPack);
 /*SPARNATURAL*/
-import { getSettings, mergeSettings } from "./configs/client-configs/settings";
+import { getSettings, mergeSettings } from "./configs/client-configs/defaultSettings";
 import Sparnatural from "./sparnatural/components/SparnaturalComponent";
 import ISpecProvider from "./sparnatural/spec-providers/ISpecProviders";
 import { ISparJson } from "./sparnatural/generators/ISparJson";
@@ -22,7 +22,7 @@ import QueryParser from "./sparnatural/querypreloading/QueryParser";
 /*
   This is the SparNatural HTMLElement. 
   e.g. Interface to the outside world
-  Used to configure the Settings
+  Used to configure the Settings and load queries
 */
 class SparNatural extends HTMLElement {
   Sparnatural = new Sparnatural();
