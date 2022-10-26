@@ -1,4 +1,4 @@
-import { getSettings } from "../../configs/client-configs/settings";
+import { getSettings } from "../../configs/client-configs/defaultSettings";
 import ISpecProvider from "../spec-providers/ISpecProviders";
 import BgWrapper from "./builder-section/BgWrapper";
 import SubmitSection from "./submit-section/SubmitSection";

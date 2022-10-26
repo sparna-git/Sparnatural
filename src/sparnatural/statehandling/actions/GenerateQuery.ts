@@ -1,4 +1,4 @@
-import { getSettings } from "../../../configs/client-configs/settings";
+import { getSettings } from "../../../configs/client-configs/defaultSettings";
 
 import ActionStore from "../ActionStore";
 import SparnaturalJsonGenerator from "../../generators/SparnaturalJsonGenerator";

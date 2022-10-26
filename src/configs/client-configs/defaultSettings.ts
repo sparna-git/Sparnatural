@@ -1,7 +1,7 @@
 import ISpecProvider from "../../sparnatural/spec-providers/ISpecProviders";
 import ISettings from "./ISettings";
 
-const settings: ISettings = {
+const defaultSettings: ISettings = {
   langSearch: null,
   config: null,
   language: "en",
@@ -186,10 +186,10 @@ const settings: ISettings = {
 };
 
 export function getSettings() {
-  return settings;
+  return defaultSettings;
 }
 
 // merge given options with default setting values
 export function mergeSettings(options: any) {
-  $.extend(true, settings, settings, options);
+  $.extend(true, defaultSettings, defaultSettings, options);
 }

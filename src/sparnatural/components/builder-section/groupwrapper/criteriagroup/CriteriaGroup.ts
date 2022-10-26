@@ -1,7 +1,7 @@
 /**
  * A single line/criteria
  **/
-import { getSettings } from "../../../../../configs/client-configs/settings";
+import { getSettings } from "../../../../../configs/client-configs/defaultSettings";
 import ISpecProvider from "../../../../spec-providers/ISpecProviders";
 import UnselectBtn from "../../../buttons/UnselectBtn";
 import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";

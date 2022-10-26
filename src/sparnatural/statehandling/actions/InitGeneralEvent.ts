@@ -1,4 +1,4 @@
-import { getSettings } from "../../../configs/client-configs/settings";
+import { getSettings } from "../../../configs/client-configs/defaultSettings";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import ActionStore from "../ActionStore";

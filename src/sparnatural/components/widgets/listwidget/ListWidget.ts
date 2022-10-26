@@ -1,6 +1,6 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import ISettings from "../../../../configs/client-configs/ISettings";
-import { getSettings } from "../../../../configs/client-configs/settings";
+import { getSettings } from "../../../../configs/client-configs/defaultSettings";
 import LocalCacheData from "../../../datastorage/LocalCacheData";
 import { SelectedVal } from "../../../generators/ISparJson";
 import { SparqlTemplateListHandler } from "./../autocomplete/AutocompleteAndListHandlers";

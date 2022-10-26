@@ -1,4 +1,4 @@
-import { getSettings } from "../../../../../configs/client-configs/settings";
+import { getSettings } from "../../../../../configs/client-configs/defaultSettings";
 import ISpecProvider from "../../../../spec-providers/ISpecProviders";
 import EditComponents from "../../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import HTMLComponent from "../../../HtmlComponent";

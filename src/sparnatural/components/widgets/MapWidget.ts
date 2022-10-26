@@ -1,7 +1,7 @@
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import L, { LatLng, Rectangle,Map } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
-import { getSettings } from "../../../configs/client-configs/settings";
+import { getSettings } from "../../../configs/client-configs/defaultSettings";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import {
   BgpPattern,

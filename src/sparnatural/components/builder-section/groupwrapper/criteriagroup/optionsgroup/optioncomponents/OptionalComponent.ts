@@ -1,6 +1,6 @@
 import BaseOptionComponent from "./BaseOptionComponent";
 import { OptionsGroup, OptionTypes } from "../OptionsGroup";
-import { getSettings } from "../../../../../../../configs/client-configs/settings";
+import { getSettings } from "../../../../../../../configs/client-configs/defaultSettings";
 
 /*
     Not Exists Component. Get's rendered by OptionsGroup if this is enabled.

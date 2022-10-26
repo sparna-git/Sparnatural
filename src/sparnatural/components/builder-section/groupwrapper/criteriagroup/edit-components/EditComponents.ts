@@ -1,4 +1,4 @@
-import { getSettings } from "../../../../../../configs/client-configs/settings";
+import { getSettings } from "../../../../../../configs/client-configs/defaultSettings";
 import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";

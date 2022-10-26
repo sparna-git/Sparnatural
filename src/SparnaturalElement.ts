@@ -11,7 +11,7 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 library.add(fas);
 library.add(far as IconPack);
 /*SPARNATURAL*/
-import { getSettings, mergeSettings } from "./configs/client-configs/settings";
+import { getSettings, mergeSettings } from "./configs/client-configs/defaultSettings";
 import Sparnatural from "./sparnatural/components/SparnaturalComponent";
 import ISpecProvider from "./sparnatural/spec-providers/ISpecProviders";
 import { ISparJson } from "./sparnatural/generators/ISparJson";
