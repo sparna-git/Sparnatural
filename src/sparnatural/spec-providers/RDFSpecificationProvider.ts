@@ -60,7 +60,6 @@ export class RDFSpecificationProvider implements ISpecProvider {
     this.store = new Store();
 
     // parse input specs
-    // console.log(specs);
     const textStream = require("streamify-string")(specs);
 
     var quadStream;

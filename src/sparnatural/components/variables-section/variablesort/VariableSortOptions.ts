@@ -37,8 +37,6 @@ class VariableSortOption extends HTMLComponent {
     this.html[0].addEventListener(
       "changeSortOrder",
       (e: CustomEvent) => {
-        console.log("hhhhh")
-        console.log(e.detail)
         switch(e.detail) {
           case Order.ASC : {
             this.ascendBtn.setSelected(true);
