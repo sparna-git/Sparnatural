@@ -1,7 +1,7 @@
 {
-  "name": "Sparnatural",
-  "version": "3.0.0",
-  "description": "",
+  "name": "sparnatural",
+  "version": "7.1.0",
+  "description": "Visual Query builder for SPARQL queries.",
   "main": "dist/sparnatural.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,8 +9,19 @@
     "start": "webpack serve --hot --config webpack.config.js",
     "pretty": "prettier --write \"./src/**/*.{ts,js,json}\""
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["visual","SPARQL","RDF","OWL","query builder","react","angular"],
+  "homepage": "https://sparnatural.eu/",
+  "bugs": {"url": "https://github.com/sparna-git/Sparnatural/issues"},
+  "author": {
+    "name" : "Thomas Francart",
+    "url" : "https://sparnatural.eu/"
+  },
+  "contributors": [{"name": "Pascal Steiner","url": "https://github.com/SteinerPascal"},{"name": "Antoine","url": "https://github.com/antoine37120"}],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sparna-git/Sparnatural"
+  },
+  
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -68,8 +79,6 @@
     "jstree": "^3.3.12",
     "leaflet": "^1.8.0",
     "n3": "^1.3.5",
-    "popper.js": "^1.16.1",
-    "rdf-dereference": "^1.4.0",
     "rdf-parse": "^1.2.1",
     "rdf-store-stream": "^1.0.0",
     "select2": "^4.0.13",
