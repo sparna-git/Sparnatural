@@ -1,7 +1,7 @@
 import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
-import ArrowComponent from "../../../../arrows/ArrowComponent";
+import ArrowComponent from "../../../../buttons/ArrowComponent";
 import HTMLComponent from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
 
