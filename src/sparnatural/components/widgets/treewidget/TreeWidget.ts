@@ -334,7 +334,7 @@ export class TreeWidget extends AbstractWidget {
 
   onClickClose = function (e: any) {
     let this_ = e.data.arg1;
-    this?.displayLayer?.hide();
+    this_.displayLayer?.hide();
     $(this_.ParentComponent).trigger("change");
   };
 
