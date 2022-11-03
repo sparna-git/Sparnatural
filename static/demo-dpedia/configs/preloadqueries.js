@@ -454,6 +454,40 @@ export default {
                     }
                   ]
                 }`
+    },
+    {
+        queryName : "Test load sort criteria",
+        query:`{
+          "distinct": true,
+          "variables": [
+            "Country_2",
+            "Museum_1"
+          ],
+          "lang": "en",
+          "order": "asc",
+          "branches": [
+            {
+              "line": {
+                "s": "?Museum_1",
+                "p": "?country_3",
+                "pType": "http://dbpedia.org/ontology/country",
+                "o": "?Country_2",
+                "sType": "http://dbpedia.org/ontology/Museum",
+                "oType": "http://dbpedia.org/ontology/Country",
+                "values": [
+                  {
+                    "value": {
+                      "label": "Any"
+                    }
+                  }
+                ]
+              },
+              "children": [],
+              "optional": false,
+              "notExists": false
+            }
+          ]
+        }`
     }
     ],
   };
