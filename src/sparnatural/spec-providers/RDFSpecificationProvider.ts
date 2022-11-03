@@ -57,8 +57,6 @@ export class RDFSpecificationProvider implements ISpecProvider {
   static async build(specs: any, filePath: string, lang: any) {
     console.log("Building RDFSpecificationProvider from " + filePath);
 
-    // init memory store
-    let theStore:Store<Quad, Quad, Quad, Quad> = new Store();
 
     // parse input specs
     const textStream = require("streamify-string")(specs);
@@ -85,7 +83,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
 
     // import into store
     // note the await keyword to wait for the asynchronous call to finish
-    var store = await storeStream(quadStream);
+    let theStore:any = await storeStream(quadStream);
     console.log(
       "Specification store populated with " +
         theStore.countQuads(
