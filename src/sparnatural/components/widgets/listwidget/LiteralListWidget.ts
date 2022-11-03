@@ -4,11 +4,13 @@ import { SparqlTemplateListHandler } from "../autocomplete/AutocompleteAndListHa
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 
 import * as DataFactory from "@rdfjs/data-model" ;
+import { Literal, Variable } from "@rdfjs/types";
 
 import "select2";
 import "select2/dist/css/select2.css";
 import { ListWidget } from "./ListWidget";
 import { ValueRepetition, WidgetValue } from "../AbstractWidget";
+import SparqlFactory from "../../../generators/SparqlFactory";
 
 export interface LiteralListWidgetValue extends WidgetValue {
   value: {
@@ -52,6 +54,7 @@ export class LiteralListWidget extends ListWidget {
   parseInput(input:WidgetValue): WidgetValue { return input as LiteralListWidgetValue }
 
   getRdfJsPattern(): Pattern[] {
+    /*
     let vals = (this.widgetValues as LiteralListWidgetValue[]).map((v) => {
       let vl: ValuePatternRow = {};
       vl[this.endClassVal.variable] = DataFactory.literal(v.value.literal);
@@ -62,5 +65,10 @@ export class LiteralListWidget extends ListWidget {
       values: vals,
     };
     return [valuePattern];
+    */
+    let vals : Literal[] = (this.widgetValues as LiteralListWidgetValue[]).map((v) => {
+      return DataFactory.literal(v.value.literal)
+    });
+    return [SparqlFactory.buildFilterStrInOrEquals(vals, DataFactory.variable(this.getVariableValue(this.endClassVal)))];
   }
 }

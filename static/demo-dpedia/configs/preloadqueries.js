@@ -419,6 +419,41 @@ export default {
                 }
             ]
         }`
+    },
+    {
+        queryName: "test literal list widget ",
+        query: `{
+                  "distinct": true,
+                  "variables": [
+                    "Person_1"
+                  ],
+                  "lang": "en",
+                  "order": "noord",
+                  "branches": [
+                    {
+                      "line": {
+                        "s": "?Person_1",
+                        "p": "?nationalité_3",
+                        "pType": "http://fr.dbpedia.org/property/nationalité",
+                        "o": "?Country_2",
+                        "sType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
+                        "oType": "http://dbpedia.org/ontology/Country",
+                        "values": [
+                          {
+                            "value": {
+                              "key": "Afghane",
+                              "label": "Afghane",
+                              "literal": "Afghane"
+                            }
+                          }
+                        ]
+                      },
+                      "children": [],
+                      "optional": false,
+                      "notExists": false
+                    }
+                  ]
+                }`
     }
     ],
   };

@@ -73,6 +73,43 @@ export default class SparqlFactory {
       };
     }
 
+    static buildFilterStrInOrEquals(values: Literal[], variable: Variable): FilterPattern {			
+      if(values.length == 1) {
+        return {
+          type: "filter",
+          expression: {
+            type: "operation",
+            operator: "=",
+            args: [
+              {
+                type: "operation",
+                operator: "str",
+                args: [ variable ]
+              },
+              values[0]
+            ],
+          },
+        };
+      } else {
+        return {
+          type: "filter",
+          expression: {
+            type: "operation",
+            operator: "in",
+            args: [
+              {
+                type: "operation",
+                operator: "str",
+                args: [ variable ]
+              },
+              values
+            ],
+          },
+        };
+      }
+
+    }
+
     static buildFilterStringEquals(texte: Literal, variable: Variable): FilterPattern {			
       return {
         type: "filter",
