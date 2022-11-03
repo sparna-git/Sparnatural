@@ -19,8 +19,8 @@ export const yasr = new Yasr(document.getElementById("yasr"), {
     "persistency": { "prefix": false, "results": { "key": false }}
 });
 
-    // link yasqe and yasr
-    yasqe.on("queryResponse", function(_yasqe, response, duration) {
+// link yasqe and yasr
+yasqe.on("queryResponse", function(_yasqe, response, duration) {
     yasr.setResponse(response, duration);
     sparnatural.enablePlayBtn() ;
 }); 

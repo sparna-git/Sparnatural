@@ -33,7 +33,7 @@ class SpecificationProviderFactory {
           dataType: "text",
         })
           .done(function (configData) {
-            new RDFSpecificationProvider.build(
+            RDFSpecificationProvider.build(
               configData,
               config,
               language

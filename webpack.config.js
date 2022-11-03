@@ -78,35 +78,37 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
-	new WriteFilePlugin(),
-	new HtmlWebpackPlugin({
-		filename: 'index.html',
-		template: __dirname + "/static/demo-dpedia/index.html",
-		inject: 'body'
-	}),
-	new MiniCssExtractPlugin({
-	  filename: "sparnatural.css",
-	  chunkFilename: "[id].css"
-	}),
-	new CopyPlugin({
-	  patterns: [
-		{from:__dirname +'/static'}
-	  ]
-	}),
-	new DashboardPlugin(),
-	// so that JQuery is automatically inserted
-	new webpack.ProvidePlugin({
-	  $: 'jquery',
-	  jQuery: 'jquery',
-	})
+		new WriteFilePlugin(),
+		new HtmlWebpackPlugin({
+			filename: 'index.html',
+			template: __dirname + "/src/index.html",
+			inject: 'body'
+		}),
+		new MiniCssExtractPlugin({
+		  filename: "sparnatural.css",
+		  chunkFilename: "[id].css"
+		}),
+		new CopyPlugin({
+		  patterns: [
+			{
+				from:__dirname +'/static'
+			}
+		  ]
+		}),
+		new DashboardPlugin(),
+		// so that JQuery is automatically inserted
+		new webpack.ProvidePlugin({
+		  $: 'jquery',
+		  jQuery: 'jquery',
+		})
   ],
 	devServer: {
-	static:{
-		directory: path.resolve(__dirname, "./dist"),
-	},
-	historyApiFallback: true,
-	open: true,
-	hot: true
+		static:{
+			directory: path.resolve(__dirname, "./static"),
+		},
+		historyApiFallback: true,
+		open: true,
+		hot: true
 	},
   devtool: "source-map"
 }
