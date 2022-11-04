@@ -1,5 +1,7 @@
-const factory = require("@rdfjs/data-model");
-const rdfParser = require("rdf-parse").default;
+import factory from "@rdfjs/data-model";
+// import Streamify from 'streamify-string';
+var Readable = require('stream').Readable
+import rdfParser from "rdf-parse";
 import { NamedNode, Quad, Store } from "n3";
 import { storeStream } from "rdf-store-stream";
 import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
@@ -46,24 +48,31 @@ export const OWL = {
 
 export class RDFSpecificationProvider implements ISpecProvider {
   lang: string;
-  store: Store<Quad, Quad, Quad, Quad>;
+  store: Store<Quad>;
 
-  constructor(n3store: Store<Quad, Quad, Quad, Quad>, lang: string) {
+  constructor(n3store: Store<Quad>, lang: string) {
     // init memory store
     this.store = n3store;
     this.lang = lang;
   }
 
-  static async build(specs: any, filePath: string, lang: any) {
+  static build(specs: any, filePath: string, lang: any, callback: any) {
     console.log("Building RDFSpecificationProvider from " + filePath);
 
 
     // parse input specs
-    const textStream = require("streamify-string")(specs);
+    console.log("Calling streamify... ");
+    // const textStream = Streamify(specs);
+
+    var textStream = new Readable()
+    textStream.push(specs)    // the string you want
+    textStream.push(null)     // indicates end-of-file basically - the end of the stream
+
 
     var quadStream;
     try {
       // attempt to parse based on path
+      console.log("Attempt to parse determining format from path " + filePath+"...");
       quadStream = rdfParser.parse(textStream, { path: filePath });
     } catch (exception) {
       try {
@@ -83,22 +92,29 @@ export class RDFSpecificationProvider implements ISpecProvider {
 
     // import into store
     // note the await keyword to wait for the asynchronous call to finish
-    let theStore:any = await storeStream(quadStream);
-    console.log(
-      "Specification store populated with " +
-        theStore.countQuads(
-          undefined,
-          undefined,
-          undefined,
-          undefined
-        ) +
-        " triples."
-    );
-    var provider = new RDFSpecificationProvider(
-      theStore,
-      lang
-    );
-    return provider;
+    console.log("calling storeStream...");
+
+    storeStream(quadStream).then((theStore:Store<Quad>) => {
+      console.log(
+        "Specification store populated with " +
+          theStore.countQuads(
+            undefined,
+            undefined,
+            undefined,
+            undefined
+          ) +
+          " triples."
+      );
+      var provider = new RDFSpecificationProvider(
+        theStore,
+        lang
+      );
+      callback(provider);
+    });
+
+
+    // let theStore:any = await storeStream(quadStream);
+
   }
 
   getAllSparnaturalClasses() {

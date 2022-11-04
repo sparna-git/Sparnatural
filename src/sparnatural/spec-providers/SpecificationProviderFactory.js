@@ -36,11 +36,12 @@ class SpecificationProviderFactory {
             RDFSpecificationProvider.build(
               configData,
               config,
-              language
-            ).then(function (provider) {
-              console.log(provider);
-              callback(provider);
-            });
+              language,
+              function(provider) {
+                console.log(provider);
+                callback(provider);
+              }
+            );
           })
           .fail(function (response) {
             console.log(
