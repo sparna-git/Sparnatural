@@ -1,7 +1,7 @@
 import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import tippy from "tippy.js";
-import { getSettings } from "../../../../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../../../../sparnatural/settings/defaultSettings";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";

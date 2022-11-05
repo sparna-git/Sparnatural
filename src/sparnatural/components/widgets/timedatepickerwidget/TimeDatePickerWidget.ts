@@ -1,5 +1,5 @@
 import { Pattern } from "sparqljs";
-import { getSettings } from "../../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import AddUserInputBtn from "../../buttons/AddUserInputBtn";
 import InfoBtn from "../../buttons/InfoBtn";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";

@@ -1,5 +1,4 @@
-import { getSettings } from "../../../../configs/client-configs/defaultSettings";
-import { Order } from "../../../generators/ISparJson";
+import { getSettings } from "../../../../sparnatural/settings
 import AscendBtn from "../../buttons/AscendBtn";
 import DescendBtn from "../../buttons/DescendBtn";
 import NoOrderBtn from "../../buttons/NoOrderBtn";

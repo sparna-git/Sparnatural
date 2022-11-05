@@ -1,7 +1,7 @@
 /**
  * A single line/criteria
  **/
-import { getSettings } from "../../../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../../../sparnatural/settings/defaultSettings";
 import ISpecProvider from "../../../../spec-providers/ISpecProvider";
 import UnselectBtn from "../../../buttons/UnselectBtn";
 import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";

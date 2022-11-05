@@ -16,7 +16,7 @@ export function selectViewVar(
 export function readVariablesFromUI(actionStore: ActionStore) {
   //update the varnames
   actionStore.variables =
-    actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.map(
+    actionStore.sparnatural.variableSection.variableOrderMenu.draggables.map(
       (d: DraggableComponent) => {
         return d.varName;
       }
@@ -24,11 +24,11 @@ export function readVariablesFromUI(actionStore: ActionStore) {
 }
 
 function addVariable(actionStore: ActionStore, val: SelectedVal) {
-  if(actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.find((d:DraggableComponent)=>{
+  if(actionStore.sparnatural.variableSection.variableOrderMenu.draggables.find((d:DraggableComponent)=>{
     return d.varName === val.variable.replace('?','')
   })) return // draggable already exists
   //add a draggable
-  actionStore.sparnatural.VariableSelection.variableOrderMenu.addDraggableComponent(
+  actionStore.sparnatural.variableSection.variableOrderMenu.addDraggableComponent(
     val
   );
   //update stateobject
@@ -39,7 +39,7 @@ function addVariable(actionStore: ActionStore, val: SelectedVal) {
 
 function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
   //remove a draggable
-  actionStore.sparnatural.VariableSelection.variableOrderMenu.removeDraggableByVarName(
+  actionStore.sparnatural.variableSection.variableOrderMenu.removeDraggableByVarName(
     val.variable
   );
   //update the varnames

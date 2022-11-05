@@ -1,5 +1,5 @@
 import BaseOptionComponent from "./BaseOptionComponent";
-import { getSettings } from "../../../../../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../../../../../sparnatural/settings/defaultSettings";
 import { OptionsGroup, OptionTypes } from "../OptionsGroup";
 
 /*

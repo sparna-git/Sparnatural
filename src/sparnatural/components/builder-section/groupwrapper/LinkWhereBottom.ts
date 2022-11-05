@@ -1,4 +1,4 @@
-import { getSettings } from "../../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import HTMLComponent from "../../HtmlComponent";
 import EndClassGroup from "./criteriagroup/startendclassgroup/EndClassGroup";
 import GroupWrapper from "./GroupWrapper";

@@ -133,8 +133,8 @@ class ActionStore {
       this.sparqlVarID = 0;
       this.variables = [];
       this.maxVarIndex = 0;
-      this.sparnatural.VariableSelection.html.remove();
-      this.sparnatural.VariableSelection.render();
+      this.sparnatural.variableSection.html.remove();
+      this.sparnatural.variableSection.render();
       generateQuery(this)
     });
 

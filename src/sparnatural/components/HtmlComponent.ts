@@ -1,5 +1,5 @@
-import ISettings from "../../configs/client-configs/ISettings";
-import { getSettings } from "../../configs/client-configs/defaultSettings";
+import ISettings from "../../sparnatural/settings/ISettings";
+import { getSettings } from "../../sparnatural/settings/defaultSettings";
 import BaseClassFactory from "./baseClassFactory/BaseClassFactory";
 
 interface IRenderable {

@@ -11,11 +11,11 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 library.add(fas);
 library.add(far as IconPack);
 /*SPARNATURAL*/
-import { getSettings, mergeSettings } from "./configs/client-configs/defaultSettings";
+import { getSettings, mergeSettings } from "./sparnatural/settings/defaultSettings";
 import Sparnatural from "./sparnatural/components/SparnaturalComponent";
 import ISpecProvider from "./sparnatural/spec-providers/ISpecProvider";
 import { ISparJson } from "./sparnatural/generators/ISparJson";
-import { PreLoadQueries } from "./configs/client-configs/ISettings";
+import { PreLoadQueries } from "./sparnatural/settings/ISettings";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import QueryParser from "./sparnatural/querypreloading/QueryParser";
 

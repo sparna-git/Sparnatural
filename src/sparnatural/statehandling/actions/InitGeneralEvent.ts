@@ -1,4 +1,4 @@
-import { getSettings } from "../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import ActionStore from "../ActionStore";
