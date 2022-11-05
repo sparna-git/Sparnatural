@@ -1,7 +1,7 @@
 import ResetBtn from "../buttons/ResetBtn";
 import ComponentsList from "./ComponentsList";
 import Sparnatural from "../SparnaturalComponent";
-import ISpecProvider from "../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../spec-providers/ISpecProvider";
 import HTMLComponent from "../HtmlComponent";
 import { MaxVarAction } from "../../statehandling/ActionStore";
 

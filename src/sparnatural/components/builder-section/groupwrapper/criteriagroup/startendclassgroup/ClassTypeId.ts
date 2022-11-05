@@ -1,4 +1,4 @@
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
 import ArrowComponent from "../../../../buttons/ArrowComponent";

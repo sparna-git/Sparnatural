@@ -1,4 +1,4 @@
-import ISpecProvider from "../spec-providers/ISpecProviders";
+import ISpecProvider from "../spec-providers/ISpecProvider";
 import Sparnatural from "../components/SparnaturalComponent";
 import { ISparJson, Language, Order } from "../generators/ISparJson";
 import generateQuery from "./actions/GenerateQuery";

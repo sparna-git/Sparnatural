@@ -1,5 +1,5 @@
 import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import { getSettings } from "../../../../../../configs/client-configs/defaultSettings";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";

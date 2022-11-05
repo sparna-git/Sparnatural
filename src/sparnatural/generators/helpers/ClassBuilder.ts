@@ -3,7 +3,7 @@ import { OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
 import EndClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import StartClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
-import ISpecProvider from "../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../spec-providers/ISpecProvider";
 import SparqlFactory from "../SparqlFactory";
 
 export default class  ClassBuilder {

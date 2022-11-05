@@ -1,5 +1,5 @@
 import { getSettings } from "../../configs/client-configs/defaultSettings";
-import ISpecProvider from "../spec-providers/ISpecProviders";
+import ISpecProvider from "../spec-providers/ISpecProvider";
 import BgWrapper from "./builder-section/BgWrapper";
 import SubmitSection from "./submit-section/SubmitSection";
 import SpecificationProviderFactory from "../spec-providers/SpecificationProviderFactory";
@@ -35,30 +35,34 @@ class Sparnatural extends HTMLComponent {
   }
 
   render(): this {
-    this.initSparnatural();
-    //Think this will be launched before load query ???
-    this.actionStore = new ActionStore(this, this.specProvider);
-    this.BgWrapper = new BgWrapper(this, this.specProvider).render();
-    this.SubmitSection = new SubmitSection(this).render();
-    this.VariableSelection = new VariableSection(
-      this,
-      this.specProvider
-    ).render();
-    this.html.append(this.filter);
-    //BGWrapper must be rendered first
-    this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
-    );
+    let that = this;
+    this.initSpecificationProvider((sp: ISpecProvider) => {
+      that.specProvider = sp;
+      //Think this will be launched before load query ???
+      that.actionStore = new ActionStore(that, that.specProvider);
+      that.BgWrapper = new BgWrapper(that, that.specProvider).render();
+      that.SubmitSection = new SubmitSection(that).render();
+      that.VariableSelection = new VariableSection(
+        that,
+        that.specProvider
+      ).render();
+      that.html.append(that.filter);
+      //BGWrapper must be rendered first
+      that.html[0].dispatchEvent(
+        new CustomEvent("initGeneralEvent", { bubbles: true })
+      );      
+    });
     
     return this;
   }
 
-  initSparnatural() {
+  initSpecificationProvider(callback:any) {
     let settings = getSettings();
     let specProviderFactory = new SpecificationProviderFactory();
     specProviderFactory.build(settings.config, settings.language, (sp: any) => {
-      this.specProvider = sp;
-    });
+      // call the call back when done
+      callback(sp);
+    });    
     // uncomment to trigger gathering of statistics
     // initStatistics(specProvider);
   }

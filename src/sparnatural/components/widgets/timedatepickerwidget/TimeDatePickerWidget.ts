@@ -7,7 +7,7 @@ import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget"
 import "@chenfengyuan/datepicker";
 import * as DataFactory from "@rdfjs/data-model" ;
 import { SelectedVal } from "../../../generators/ISparJson";
-import ISpecProvider from "../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../spec-providers/ISpecProvider";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
 

@@ -1,7 +1,7 @@
 import { getSettings } from "../../../../../../configs/client-configs/defaultSettings";
 import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
 import { SelectedVal } from "../../../../../generators/ISparJson";
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import HTMLComponent from "../../../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import { WidgetValue } from "../../../../widgets/AbstractWidget";

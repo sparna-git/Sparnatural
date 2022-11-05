@@ -2,7 +2,7 @@ import ISettings from "../../../../../../configs/client-configs/ISettings";
 import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
 import Datasources from "../../../../../../configs/fixed-configs/SparnaturalConfigDatasources";
 import { SparqlTreeHandler } from "../../../../widgets/treewidget/TreeHandlers";
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import EditComponents from "./EditComponents";

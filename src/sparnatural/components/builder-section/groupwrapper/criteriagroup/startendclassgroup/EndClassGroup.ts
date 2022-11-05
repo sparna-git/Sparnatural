@@ -1,5 +1,5 @@
 import ClassTypeId from "./ClassTypeId";
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import tippy from "tippy.js";
 import { getSettings } from "../../../../../../configs/client-configs/defaultSettings";
 import { SelectedVal } from "../../../../../generators/ISparJson";

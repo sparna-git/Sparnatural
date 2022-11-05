@@ -100,6 +100,11 @@ module.exports = {
 		new webpack.ProvidePlugin({
 		  $: 'jquery',
 		  jQuery: 'jquery',
+		}),
+		// so that stream works properly, necessary for RDFSpec provider
+		// see https://stackoverflow.com/questions/68542553/webpack-5process-is-not-defined-triggered-by-stream-browserify
+		new webpack.ProvidePlugin({
+		  process: 'process/browser'
 		})
   ],
 	devServer: {

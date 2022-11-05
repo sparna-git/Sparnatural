@@ -1,4 +1,4 @@
-import ISpecProvider from "../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../spec-providers/ISpecProvider";
 import LinkAndBottom from "./LinkAndBottom";
 import LinkWhereBottom from "./LinkWhereBottom";
 import CriteriaGroup from "./criteriagroup/CriteriaGroup";

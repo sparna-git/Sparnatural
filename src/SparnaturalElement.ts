@@ -13,7 +13,7 @@ library.add(far as IconPack);
 /*SPARNATURAL*/
 import { getSettings, mergeSettings } from "./configs/client-configs/defaultSettings";
 import Sparnatural from "./sparnatural/components/SparnaturalComponent";
-import ISpecProvider from "./sparnatural/spec-providers/ISpecProviders";
+import ISpecProvider from "./sparnatural/spec-providers/ISpecProvider";
 import { ISparJson } from "./sparnatural/generators/ISparJson";
 import { PreLoadQueries } from "./configs/client-configs/ISettings";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";

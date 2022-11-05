@@ -5,7 +5,7 @@ import rdfParser from "rdf-parse";
 import { NamedNode, Quad, Store } from "n3";
 import { storeStream } from "rdf-store-stream";
 import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
-import ISpecProvider from "./ISpecProviders";
+import ISpecProvider from "./ISpecProvider";
 import Datasources from "../../configs/fixed-configs/SparnaturalConfigDatasources";
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -59,15 +59,10 @@ export class RDFSpecificationProvider implements ISpecProvider {
   static build(specs: any, filePath: string, lang: any, callback: any) {
     console.log("Building RDFSpecificationProvider from " + filePath);
 
-
-    // parse input specs
-    console.log("Calling streamify... ");
-    // const textStream = Streamify(specs);
-
-    var textStream = new Readable()
+    // turn input string into a stream
+    var textStream = new Readable();
     textStream.push(specs)    // the string you want
     textStream.push(null)     // indicates end-of-file basically - the end of the stream
-
 
     var quadStream;
     try {
@@ -91,9 +86,6 @@ export class RDFSpecificationProvider implements ISpecProvider {
     }
 
     // import into store
-    // note the await keyword to wait for the asynchronous call to finish
-    console.log("calling storeStream...");
-
     storeStream(quadStream).then((theStore:Store<Quad>) => {
       console.log(
         "Specification store populated with " +
@@ -111,10 +103,6 @@ export class RDFSpecificationProvider implements ISpecProvider {
       );
       callback(provider);
     });
-
-
-    // let theStore:any = await storeStream(quadStream);
-
   }
 
   getAllSparnaturalClasses() {

@@ -1,5 +1,5 @@
 import { Language, Order } from "./ISparJson";
-import ISpecProvider from "../spec-providers/ISpecProviders";
+import ISpecProvider from "../spec-providers/ISpecProvider";
 import {
   Ordering,
   SelectQuery,

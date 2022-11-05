@@ -1,6 +1,6 @@
 import tippy from "tippy.js";
 import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../generators/ISparJson";

@@ -1,5 +1,6 @@
 import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
 import { RDFSpecificationProvider } from "./RDFSpecificationProvider";
+
 class SpecificationProviderFactory {
   build(config, language, callback) {
     if (typeof config == "object") {
@@ -20,7 +21,7 @@ class SpecificationProviderFactory {
           $.getJSON(config, function (data) {
             callback(new JsonLdSpecificationProvider(data, language));
           }).fail(function (response) {
-            console.log(
+            console.error(
               "Sparnatural - unable to load JSON config file : " + config
             );
             console.log(response);
@@ -44,7 +45,7 @@ class SpecificationProviderFactory {
             );
           })
           .fail(function (response) {
-            console.log(
+            console.error(
               "Sparnatural - unable to load RDF config file : " + config
             );
             console.log(response);
