@@ -1,4 +1,4 @@
-import { PreLoadQueries } from "../../configs/client-configs/ISettings";
+import { PreLoadQueries } from "../../sparnatural/settings/ISettings";
 import { Branch, CriteriaLine, ISparJson } from "../generators/ISparJson";
 import { WidgetValue } from "../components/widgets/AbstractWidget";
 

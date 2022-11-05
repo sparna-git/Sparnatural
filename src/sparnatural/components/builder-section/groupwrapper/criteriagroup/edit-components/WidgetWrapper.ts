@@ -1,4 +1,4 @@
-import ISettings from "../../../../../../configs/client-configs/ISettings";
+import ISettings from "../../../../../../sparnatural/settings/ISettings";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import Datasources from "../../../../../ontologies/SparnaturalConfigDatasources";
 import { SparqlTreeHandler } from "../../../../widgets/treewidget/TreeHandlers";

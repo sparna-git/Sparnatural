@@ -3,7 +3,7 @@ import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../../generators/ISparJson";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "jstree"
-import ISettings from "../../../../configs/client-configs/ISettings";
+import ISettings from "../../../../sparnatural/settings/ISettings";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { ValuePatternRow } from "sparqljs";
 import * as DataFactory from "@rdfjs/data-model" ;

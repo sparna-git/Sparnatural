@@ -1,5 +1,5 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
-import ISettings from "../../../../configs/client-configs/ISettings";
+import ISettings from "../../../../sparnatural/settings/ISettings";
 import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import LocalCacheData from "../../../datastorage/LocalCacheData";
 import { SelectedVal } from "../../../generators/ISparJson";
