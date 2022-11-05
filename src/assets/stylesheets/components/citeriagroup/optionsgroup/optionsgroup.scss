@@ -9,6 +9,7 @@
     /*padding-right: 15px;*/
     margin-left: -22px;
     @include mixins.arrow-back-colors(themes.$custom-green, #fff);
+    
     &.Disabled {
         display: flex;
         @include mixins.arrow-back-colors(themes.$custom-silver, #fff);
