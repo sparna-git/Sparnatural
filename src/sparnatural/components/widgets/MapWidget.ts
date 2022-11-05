@@ -68,7 +68,7 @@ export default class MapWidget extends AbstractWidget {
     super.render();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
-      "Open Map",
+      getSettings().langSearch.MapWidgetOpenMap,
       this.#renderMap
     ).render();
     return this;
@@ -109,7 +109,7 @@ export default class MapWidget extends AbstractWidget {
 
       let widgetValue: MapWidgetValue = {
         value: {
-          label: "Area selected",
+          label: getSettings().langSearch.MapWidgetAreaSelected,
           coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
         },
       };
@@ -118,7 +118,7 @@ export default class MapWidget extends AbstractWidget {
       this.drawingLayer.on("pm:edit", (e) => {
         let widgetValue: MapWidgetValue = {
         value: {
-          label: "Area selected",
+          label: getSettings().langSearch.MapWidgetAreaSelected,
           coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
         },
       };
@@ -158,7 +158,7 @@ export default class MapWidget extends AbstractWidget {
     this.renderMapValueBtn.html.remove();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
-      "Close Map",
+      getSettings().langSearch.MapWidgetCloseMap,
       this.#closeMap
     ).render();
   }
