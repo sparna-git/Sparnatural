@@ -86,13 +86,17 @@ export default class MapWidget extends AbstractWidget {
 
     this.map.pm.addControls({
       position: "topleft",
+      cutPolygon: false,
       drawCircle: false,
       drawPolyline: false,
       drawCircleMarker: false,
       drawMarker: false,
       drawText: false,
       drawPolygon: false,
-      cutPolygon: false,
+      editMode: false,
+      dragMode: false,
+      rotateMode: false,
+      removalMode: false
     });
     this.map.on("pm:create", (e:any) => {
       //If there is already a drawing, then delete it
