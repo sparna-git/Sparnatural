@@ -19,10 +19,13 @@
     p {
         height: inherit;
         background: themes.$custom-red-medium;
-        padding: 0 0 0 5px;
+        padding: 0 0 0 3px;
         border: base.$center-arrow-bd-width solid #fff;
         border-left: 0;
         border-right: 0;
+        width: 0px;
+        overflow: visible;
+        position: relative;
         span {
             line-height: 42px;
             color: themes.$default-text-color;
