@@ -7,6 +7,7 @@ import { storeStream } from "rdf-store-stream";
 import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
 import ISpecProvider from "./ISpecProvider";
 import Datasources from "../../configs/fixed-configs/SparnaturalConfigDatasources";
+import initGeneralevent from "../statehandling/actions/InitGeneralEvent";
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 export const RDF = {
@@ -632,8 +633,12 @@ export class RDFSpecificationProvider implements ISpecProvider {
           if (order1 == order2) {
             return me.getLabel(item1).localeCompare(me.getLabel(item2));
           } else {
-            // return order1 - order2;
+            // if the order is actually a number, convert it to number and use a number conversion
+            if(!isNaN(Number(order1)) && !isNaN(Number(order2))) {
+              return Number(order1) - Number(order2);
+            } else {
               return (order1 > order2) ? 1 : -1;
+            }
           }
         } else {
           return -1;
