@@ -1,5 +1,5 @@
 import { getSettings } from "../../../../../../configs/client-configs/defaultSettings";
-import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
+import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import HTMLComponent from "../../../../HtmlComponent";

@@ -6,7 +6,7 @@ import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import SparqlFactory from "../../generators/SparqlFactory";
-import { Config } from "../../../configs/fixed-configs/SparnaturalConfig";
+import { Config } from "../../ontologies/SparnaturalConfig";
 
 
 export interface SearchWidgetValue extends WidgetValue {

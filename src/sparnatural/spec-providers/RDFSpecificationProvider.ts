@@ -4,9 +4,9 @@ var Readable = require('stream').Readable
 import rdfParser from "rdf-parse";
 import { NamedNode, Quad, Store } from "n3";
 import { storeStream } from "rdf-store-stream";
-import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
+import { Config } from "../ontologies/SparnaturalConfig";
 import ISpecProvider from "./ISpecProvider";
-import Datasources from "../../configs/fixed-configs/SparnaturalConfigDatasources";
+import Datasources from "../ontologies/SparnaturalConfigDatasources";
 import initGeneralevent from "../statehandling/actions/InitGeneralEvent";
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";

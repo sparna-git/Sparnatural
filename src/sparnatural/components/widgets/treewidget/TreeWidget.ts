@@ -1,5 +1,5 @@
 import { Pattern, ValuesPattern } from "sparqljs";
-import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
+import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../../generators/ISparJson";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "jstree"

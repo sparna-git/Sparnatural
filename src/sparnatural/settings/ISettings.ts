@@ -1,4 +1,4 @@
-import Sparnatural from "../../sparnatural/components/SparnaturalComponent";
+import Sparnatural from "../components/SparnaturalComponent";
 
 export interface PreLoadQueries {
   queries: Array<{ queryName: string; query: string }>;

@@ -1,4 +1,4 @@
-import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
+import UiuxConfig from "../IconsConstants";
 import HTMLComponent from "../HtmlComponent";
 import TippyInfo from "./TippyInfo";
 

@@ -1,4 +1,4 @@
-import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
+import UiuxConfig from "../IconsConstants";
 import ArrowComponent from "./ArrowComponent";
 import HTMLComponent from "../HtmlComponent";
 

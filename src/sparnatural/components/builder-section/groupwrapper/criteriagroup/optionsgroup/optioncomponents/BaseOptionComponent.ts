@@ -1,4 +1,4 @@
-import UiuxConfig from "../../../../../../../configs/fixed-configs/UiuxConfig";
+import UiuxConfig from "../../../../../IconsConstants";
 import ArrowComponent from "../../../../../buttons/ArrowComponent";
 import HTMLComponent from "../../../../../HtmlComponent";
 import GroupWrapper from "../../../GroupWrapper";

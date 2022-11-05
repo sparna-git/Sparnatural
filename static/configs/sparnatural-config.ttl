@@ -457,7 +457,7 @@ rdfs:Literal rdf:type owl:Class .
           rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#defaultLabelProperty> :aPourIntitule ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fad fa-archive" ;
-          <http://data.sparna.fr/ontologies/sparnatural-config-core#order> 1 ;
+          <http://data.sparna.fr/ontologies/sparnatural-config-core#order> 20 ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<https://sparnatural-demo-anf.huma-num.fr/ontology#Archive>" ;
           <http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip> "Any type of archival resource, whether it is an item (such as a minute or a registry) or a group of documents (series of minutes or registry of a notary, bundle of minutes, client file...)."@en ,
                                                                              "Tout type de ressource archivistique, qu'il s'agisse d'un item (comme une minute ou un répertoire) ou d'un groupe de documents (série des minutes ou des répertoires d'un notaire, liasse de minutes, dossier de client...)."@fr ;

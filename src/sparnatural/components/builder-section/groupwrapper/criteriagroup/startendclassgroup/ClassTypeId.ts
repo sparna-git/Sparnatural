@@ -2,7 +2,7 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
-import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
+import UiuxConfig from "../../../../IconsConstants";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import SelectViewVariableBtn from "../../../../buttons/SelectViewVariableBtn";

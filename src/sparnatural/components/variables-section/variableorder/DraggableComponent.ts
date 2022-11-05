@@ -1,4 +1,4 @@
-import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
+import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../../generators/ISparJson";
 import ISpecProvider from "../../../spec-providers/ISpecProvider";
 import HTMLComponent from "../../HtmlComponent";

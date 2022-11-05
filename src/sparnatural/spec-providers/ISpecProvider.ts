@@ -1,4 +1,4 @@
-import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
+import { Config } from "../ontologies/SparnaturalConfig";
 
 /*
     All SpecificationProvider provided by the SpecificationProviderFactory MUST implement this interface

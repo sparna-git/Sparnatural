@@ -1,4 +1,4 @@
-import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
+import UiuxConfig from "../../../../IconsConstants";
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import { getSettings } from "../../../../../../configs/client-configs/defaultSettings";
 import ArrowComponent from "../../../../buttons/ArrowComponent";

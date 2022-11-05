@@ -1,5 +1,5 @@
-import Datasources from "../../configs/fixed-configs/SparnaturalConfigDatasources";
-import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
+import Datasources from "../ontologies/SparnaturalConfigDatasources";
+import { Config } from "../ontologies/SparnaturalConfig";
 import ISpecProvider from "./ISpecProvider";
 
 interface IDataSources {

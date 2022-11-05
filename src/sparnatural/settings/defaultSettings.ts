@@ -1,4 +1,4 @@
-import ISpecProvider from "../../sparnatural/spec-providers/ISpecProvider";
+import ISpecProvider from "../spec-providers/ISpecProvider";
 import ISettings from "./ISettings";
 
 const defaultSettings: ISettings = {

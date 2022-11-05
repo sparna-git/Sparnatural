@@ -1,6 +1,6 @@
 import ISettings from "../../../../../../configs/client-configs/ISettings";
-import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
-import Datasources from "../../../../../../configs/fixed-configs/SparnaturalConfigDatasources";
+import { Config } from "../../../../../ontologies/SparnaturalConfig";
+import Datasources from "../../../../../ontologies/SparnaturalConfigDatasources";
 import { SparqlTreeHandler } from "../../../../widgets/treewidget/TreeHandlers";
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import HTMLComponent from "../../../../HtmlComponent";
