@@ -10,6 +10,7 @@ export function inCompleteGrpInput(grpWrapper: GroupWrapper) {
     );
   }
 
+  // grpWrapper.CriteriaGroup.html[0].classList.remove("completed");
   grpWrapper.CriteriaGroup.EndClassGroup.inputTypeComponent.html[0].classList.remove(
     "Highlited"
   );
