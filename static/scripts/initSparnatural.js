@@ -35,8 +35,8 @@ let semanticPostProcess = function(queryString, queryJson) {
 const settings = {
   language: lang ? lang : "fr",
   defaultEndpoint: function() { return $('#endpoint').text() },
-  // config: config,
-  config: "configs/sparnatural-config.ttl",
+  config: config,
+  // config: "configs/sparnatural-config.ttl",
   //language:lang,
   onQueryUpdated: function(queryString, queryJson, specProvider) {
       queryString = semanticPostProcess(queryString, queryJson);
