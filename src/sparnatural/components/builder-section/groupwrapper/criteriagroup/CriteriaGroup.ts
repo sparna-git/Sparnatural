@@ -176,15 +176,11 @@ class CriteriaGroup extends HTMLComponent {
       this.EndClassGroup.editComponents.renderWidgetsWrapper();
     }
   });
-
   };
 
-  //set css completed class on GroupWrapper
-  initCompleted() {
-    this.ParentGroupWrapper.html.addClass("completed");
-  }
   #isSelectedVal(payload: any): payload is SelectedVal {
     return "type" in payload && "variable" in payload;
   }
+
 }
 export default CriteriaGroup;
