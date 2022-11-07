@@ -12,7 +12,6 @@ export default {
                 "Museum_1",
                 "Museum_1_label"
             ],
-            "lang": "en",
             "order": "noord",
             "branches": [
                 {
@@ -48,7 +47,6 @@ export default {
             "variables": [
                 "Person_1"
             ],
-            "lang": "en",
             "order": "noord",
             "branches": [
                 {
@@ -115,7 +113,6 @@ export default {
             "variables": [
                 "Tree_1"
             ],
-            "lang": "en",
             "order": "noord",
             "branches": [
                 {
@@ -184,7 +181,6 @@ export default {
                 "Person_12",
                 "Country_2"
             ],
-            "lang": "en",
             "order": "noord",
             "branches": [
                 {
@@ -243,7 +239,6 @@ export default {
                 "Museum_1_label",
                 "Country_2"
             ],
-            "lang": "en",
             "order": "noord",
             "branches": [
                 {
@@ -300,7 +295,6 @@ export default {
                 "Museum_1",
                 "Museum_1_label"
             ],
-            "lang": "en",
             "order": "noord",
             "branches": [
                 {
@@ -365,7 +359,6 @@ export default {
                   "variables": [
                     "Person_1"
                   ],
-                  "lang": "en",
                   "order": "noord",
                   "branches": [
                     {
@@ -398,7 +391,6 @@ export default {
             "Country_2",
             "Museum_1"
           ],
-          "lang": "en",
           "order": "asc",
           "branches": [
             {

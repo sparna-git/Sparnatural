@@ -15,8 +15,7 @@ export default function generateQuery(actionStore: ActionStore) {
   var jsonQuery = qryGen.generateQuery(
     actionStore.variables,
     actionStore.distinct,
-    actionStore.order,
-    actionStore.language
+    actionStore.order
   );
   actionStore.sparnaturalJSON = jsonQuery
   if (jsonQuery != null) {
