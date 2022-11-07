@@ -2,6 +2,7 @@ import Sparnatural from "../components/SparnaturalComponent";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { Branch, ISparJson, Language, Order, SelectedVal } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
+import { SelectAllValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 
 /*
   Reads out the UI and creates the internal JSON structure described here:
@@ -48,7 +49,7 @@ class SparnaturalJsonGenerator {
         sType: CrtGrp.StartClassGroup.getTypeSelected(),
         oType: CrtGrp.EndClassGroup.getTypeSelected(),
         // extract only the value part, not the key
-        values: CrtGrp.endClassWidgetGroup.getWidgetValues().map(v => {return v.value;}),
+        values: CrtGrp.endClassWidgetGroup.getWidgetValues().filter(v => !(v instanceof SelectAllValue)).map(v => {return v.value;}),
       },
       children: grpWrapper.whereChild
         ? this.#getBranch(grpWrapper.whereChild)

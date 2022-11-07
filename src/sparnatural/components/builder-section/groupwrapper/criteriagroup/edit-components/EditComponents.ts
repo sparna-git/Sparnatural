@@ -9,12 +9,14 @@ import WidgetWrapper from "./WidgetWrapper";
 import ActionWhere from "../../../../buttons/actions/actioncomponents/ActionWhere";
 
 export class SelectAllValue implements WidgetValue {
+  static key = "SelectAllValue";
+
   value: {
     label: string;
   };
 
   key():string {
-    return "SelectAllValue";
+    return SelectAllValue.key;
   }
 
   constructor(v:SelectAllValue["value"]){
@@ -94,12 +96,15 @@ class EditComponents extends HTMLComponent {
       "selectAll",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        this.#onSelectAll();
+        this.onSelectAll();
       }
     );
   }
 
-  #onSelectAll() {
+  /**
+   * Can be called from the outside when loading queries
+   */
+  onSelectAll() {
     let selectAllVal = new SelectAllValue(
       {
         label: getSettings().langSearch.SelectAllValues,

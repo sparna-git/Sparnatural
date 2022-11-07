@@ -1,3 +1,4 @@
+import { SelectAllValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import ObjectPropertyGroup from "../components/builder-section/groupwrapper/criteriagroup/objectpropertygroup/ObjectPropertyGroup";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import ClassTypeId from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/ClassTypeId";
@@ -22,7 +23,7 @@ export default class QueryLoader{
         this.#updateOrderingOfVariables()
         // trigger query generation
         this.sparnatural.html[0].dispatchEvent(
-        new CustomEvent("initGeneralEvent")
+          new CustomEvent("initGeneralEvent")
         );
     }
     
@@ -66,7 +67,7 @@ export default class QueryLoader{
   
     // set WidgetValues
     branch.line.values.forEach((v) => {
-      const parsedVal: WidgetValue = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v as WidgetValue["value"])
+      const parsedVal: WidgetValue = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
       // if there are multiple values rendered, click first the 'plus' btn, to add more values
       if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
       if(parsedVal.value.label === "Any"){
@@ -78,6 +79,11 @@ export default class QueryLoader{
       } 
       grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(parsedVal)
     });
+
+    // if there is no value, and no children, set an "Any" value
+    if(branch.line.values.length == 0 && branch.children.length == 0) {
+      grpWarpper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
+    }
   
     // trigger option state
     this.#triggerOptions(grpWarpper, branch);

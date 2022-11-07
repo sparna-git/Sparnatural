@@ -11,6 +11,7 @@ import {
   WidgetValue,
 } from "../../../../widgets/AbstractWidget";
 import CriteriaGroup from "../CriteriaGroup";
+import { SelectAllValue } from "../edit-components/EditComponents";
 
 
 /*
@@ -108,7 +109,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
     // undefined for NON_SELECTABLE_PROPERTY
     const widgetComp:AbstractWidget | undefined = (this.ParentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent()
-    if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE && widgetVal.value.label !== "Any" ) {
+    if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE && !(widgetVal instanceof SelectAllValue) ) {
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
         ? this.addWidgetValueBtn.render()

@@ -195,11 +195,7 @@ export default {
                         "o": "?Country_2",
                         "sType": "http://dbpedia.org/ontology/Museum",
                         "oType": "http://dbpedia.org/ontology/Country",
-                        "values": [
-                            {
-                                "label": "Any"
-                            }
-                        ]
+                        "values": []
                     },
                     "children": [],
                     "optional": false,
@@ -224,11 +220,7 @@ export default {
                                 "o": "?Person_12",
                                 "sType": "http://dbpedia.org/ontology/Country",
                                 "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
-                                "values": [
-                                    {
-                                        "label": "Any"
-                                    }
-                                ]
+                                "values": []
                             },
                             "children": [],
                             "optional": false,
@@ -262,11 +254,7 @@ export default {
                         "o": "?Country_2",
                         "sType": "http://dbpedia.org/ontology/Museum",
                         "oType": "http://dbpedia.org/ontology/Country",
-                        "values": [
-                            {
-                                "label": "Any"
-                            }
-                        ]
+                        "values": []
                     },
                     "children": [],
                     "optional": false,
@@ -291,11 +279,7 @@ export default {
                                 "o": "?Person_6",
                                 "sType": "http://dbpedia.org/ontology/Country",
                                 "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
-                                "values": [
-                                    {
-                                        "label": "Any"
-                                    }
-                                ]
+                                "values": []
                             },
                             "children": [],
                             "optional": false,
@@ -361,11 +345,7 @@ export default {
                                 "o": "?Person_6",
                                 "sType": "http://dbpedia.org/ontology/Artwork",
                                 "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
-                                "values": [
-                                    {
-                                        "label": "Any"
-                                    }
-                                ]
+                                "values": []
                             },
                             "children": [],
                             "optional": false,
@@ -429,11 +409,7 @@ export default {
                 "o": "?Country_2",
                 "sType": "http://dbpedia.org/ontology/Museum",
                 "oType": "http://dbpedia.org/ontology/Country",
-                "values": [
-                  {
-                    "label": "Any"
-                  }
-                ]
+                "values": []
               },
               "children": [],
               "optional": false,
