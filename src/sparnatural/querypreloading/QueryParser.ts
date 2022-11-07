@@ -43,7 +43,6 @@ export default class QueryParser{
     let hasKeys =
       "distinct" in queryObj &&
       "variables" in queryObj &&
-      "lang" in queryObj &&
       "order" in queryObj;
 
     let branches = queryObj.branches as Array<Branch>;

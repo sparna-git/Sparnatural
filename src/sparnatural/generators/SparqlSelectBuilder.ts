@@ -1,4 +1,4 @@
-import { Language, Order } from "./ISparJson";
+import { Order } from "./ISparJson";
 import ISpecProvider from "../spec-providers/ISpecProvider";
 import {
   Ordering,
@@ -44,8 +44,7 @@ export default class RdfJsGenerator {
   generateQuery(
     variables: Array<string>,
     distinct: boolean,
-    order: Order,
-    lang: Language
+    order: Order
   ):SelectQuery {
     let RdfJsQuery: SelectQuery = {
       queryType: "SELECT",

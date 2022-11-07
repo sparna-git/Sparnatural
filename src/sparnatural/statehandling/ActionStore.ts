@@ -1,6 +1,6 @@
 import ISpecProvider from "../spec-providers/ISpecProvider";
 import Sparnatural from "../components/SparnaturalComponent";
-import { ISparJson, Language, Order } from "../generators/ISparJson";
+import { ISparJson, Order } from "../generators/ISparJson";
 import generateQuery from "./actions/GenerateQuery";
 import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
@@ -28,7 +28,7 @@ class ActionStore {
   order: Order = Order.NOORDER; //default no order
   variables: Array<string> = []; // example ?museum
   distinct = true; // default
-  language = Language.EN; //default
+  language = "en"; //default
   sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
   maxVarIndex = 0; //maxVarIndex indicates how many AND and WHERE siblings are allowed to be added
   showVariableNames = true //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
