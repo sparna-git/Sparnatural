@@ -65,7 +65,7 @@ export default class WhereBuilder{
 
     #buildEndClassPtrn(){
         const endClsGrp = this.#grpWrapper.CriteriaGroup.EndClassGroup
-        const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent)
+        const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent.isBlockingEnd())
         endClsBuilder.build()
         this.#endClassPtrn = endClsBuilder.getPattern()
         if(endClsBuilder.getDefaultVar())this.#defaultVars.push(endClsBuilder.getDefaultVar())
@@ -73,7 +73,7 @@ export default class WhereBuilder{
 
     #buildStartClassPtrn() {
         const startClsGrp = this.#grpWrapper.CriteriaGroup.StartClassGroup
-        const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent)
+        const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent.isBlockingStart())
         startClsBuilder.build()
         this.#startClassPtrn = startClsBuilder.getPattern()
         if(startClsBuilder.getDefaultVar())this.#defaultVars.push(startClsBuilder.getDefaultVar())

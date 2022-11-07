@@ -13,11 +13,11 @@ export default class  ClassBuilder {
     protected classTriple:Triple
     protected defaultLblTriple:Triple
     protected defaultInOptional:OptionalPattern
-    protected widgetComponent:AbstractWidget
-    constructor(classGroup:StartClassGroup | EndClassGroup,specProvider:ISpecProvider,widgetComponent:AbstractWidget){
+    protected widgetIsBlocking:boolean
+    constructor(classGroup:StartClassGroup | EndClassGroup,specProvider:ISpecProvider,widgetIsBlocking:boolean){
         this.classGroup = classGroup
         this.specProvider = specProvider
-        this.widgetComponent = widgetComponent
+        this.widgetIsBlocking = widgetIsBlocking
     }
 
     build(){
@@ -39,7 +39,7 @@ export default class  ClassBuilder {
     }
 
     #ifBlocking(){
-        if(this.widgetComponent?.isBlockingStart() || this.classGroup.getTypeSelected() === null) return true
+        if(this.widgetIsBlocking || this.classGroup.getTypeSelected() === null) return true
         this.#buildClsTriple()
         return false
     }
