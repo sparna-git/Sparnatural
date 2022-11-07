@@ -7,12 +7,19 @@ import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget"
 
 require("easy-autocomplete");
 
-interface AutoCompleteWidgetValue extends WidgetValue {
+export class AutoCompleteWidgetValue implements WidgetValue {
   value: {
     label: string;
-    key: string;
     uri: string;
   };
+
+  key():string {
+    return this.value.uri;
+  }
+
+  constructor(v:AutoCompleteWidgetValue["value"]) {
+    this.value = v;
+  }
 }
 
 export class AutoCompleteWidget extends AbstractWidget {
@@ -97,13 +104,10 @@ export class AutoCompleteWidget extends AbstractWidget {
 
         onChooseEvent: () => {
           let val = inputHtml.getSelectedItemData();
-          let autocompleteValue: AutoCompleteWidgetValue = {
-            value: {
-              key: this.autocompleteHandler.elementUri(val),
+          let autocompleteValue= new AutoCompleteWidgetValue({
               label: this.autocompleteHandler.elementLabel(val),
               uri: this.autocompleteHandler.elementUri(val),
-            },
-          };
+          });
           inputHtml.val(autocompleteValue.value.label);
           listHtml.val(autocompleteValue.value.uri).trigger("change");
           this.renderWidgetVal(autocompleteValue);
@@ -117,7 +121,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     return this;
   }
 
-  parseInput(input: AutoCompleteWidgetValue): AutoCompleteWidgetValue {return input}
+  parseInput(input: AutoCompleteWidgetValue["value"]): AutoCompleteWidgetValue {return new AutoCompleteWidgetValue(input)}
 
   /**
    * @returns  true if the number of values is 1, in which case the widget will handle the generation of the triple itself,

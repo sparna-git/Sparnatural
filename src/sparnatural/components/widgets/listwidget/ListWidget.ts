@@ -11,12 +11,19 @@ import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../../generators/SparqlFactory";
 
-export interface ListWidgetValue extends WidgetValue {
+export class ListWidgetValue implements WidgetValue {
   value: {
-    key: string;
     label: string;
-    uri: string;
+    uri?: string;
   };
+
+  key():string {
+    return this.value.uri;
+  }
+
+  constructor(v:ListWidgetValue["value"]) {
+    this.value = v;
+  }
 }
 
 export class ListWidget extends AbstractWidget {
@@ -155,17 +162,13 @@ export class ListWidget extends AbstractWidget {
   // separate the creation of the value from the widget code itself
   // so that it can be overriden by LiteralListWidget
   buildValue(uri:string,label:string): WidgetValue {
-    return {
-      valueRepetition: ValueRepetition.MULTIPLE,
-      value: {
-        key: uri,
-        label: label,
-        uri: uri,
-      }
-    } as ListWidgetValue
+    return new ListWidgetValue({
+      label: label,
+      uri: uri,
+    });
   }
 
-  parseInput(input:WidgetValue): WidgetValue { return input as ListWidgetValue }
+  parseInput(input:ListWidgetValue["value"]): WidgetValue { return new ListWidgetValue(input) }
 
   /**
    * @returns  true if the number of values is 1, in which case the widget will handle the generation of the triple itself,

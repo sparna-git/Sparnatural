@@ -9,12 +9,19 @@ import SparqlFactory from "../../generators/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 
 
-export interface SearchWidgetValue extends WidgetValue {
+export class SearchWidgetValue implements WidgetValue {
   value: {
-    key: string;
     label: string;
     search: string;
   };
+
+  key():string {
+    return this.value.search;
+  }
+
+  constructor(v:SearchWidgetValue["value"]) {
+    this.value = v;
+  }
 }
 
 export class SearchWidget extends AbstractWidget {
@@ -53,21 +60,18 @@ export class SearchWidget extends AbstractWidget {
   }
   #addValueBtnClicked = () => {
     this.searchInput.trigger("change");
-    let searchWidgetValue: SearchWidgetValue = {
-      value: {
-        key: this.searchInput.val().toString(),
+    let searchWidgetValue = {
         label: this.searchInput.val().toString(),
         search: this.searchInput.val().toString(),
-      },
     };
     this.renderWidgetVal(this.parseInput(searchWidgetValue));
   };
 
-  parseInput(input:SearchWidgetValue): SearchWidgetValue {
-    if (input.value.search.toString() == "") {
+  parseInput(input:SearchWidgetValue["value"]): SearchWidgetValue {
+    if (input.search.toString() == "") {
       throw Error('Empty String in Search Widget')
     }
-    return input;
+    return new SearchWidgetValue(input);
   }
   
   getRdfJsPattern(): Pattern[] {

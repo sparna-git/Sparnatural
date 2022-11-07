@@ -11,13 +11,21 @@ import ISpecProvider from "../../../spec-providers/ISpecProvider";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
 
-export interface DateTimePickerValue extends WidgetValue {
+export class DateTimePickerValue implements WidgetValue {
   value: {
-    key: string;
     label: string;
     start: Date;
     stop: Date;
   };
+
+  key():string {
+    return JSON.stringify(this.value.start).replace(/["]+/g,'')+" - "+JSON.stringify(this.value.stop).replace(/["]+/g,'');
+  }
+
+  constructor(v:DateTimePickerValue["value"]) {
+    this.value = v;
+  }
+
 }
 
 // converts props of type Date to type string
@@ -153,13 +161,10 @@ export class TimeDatePickerWidget extends AbstractWidget {
   }
 
   #addValueBtnClicked = () => {
-    let stringDateTimeVal:StringDateTimeValue ={
-      value: {
-        key: null,
-        label: null,
-        start:(this.inputStart.val() != '')?this.inputStart.datepicker("getDate").toISOString():null,
-        stop:(this.inputEnd.val() != '')?this.inputEnd.datepicker("getDate").toISOString():null,
-      }
+    let stringDateTimeVal:StringDateTimeValue["value"] ={
+      label: null,
+      start:(this.inputStart.val() != '')?this.inputStart.datepicker("getDate").toISOString():null,
+      stop:(this.inputEnd.val() != '')?this.inputEnd.datepicker("getDate").toISOString():null,
     } 
     let widgetVal: DateTimePickerValue = this.parseInput(
       stringDateTimeVal
@@ -168,10 +173,10 @@ export class TimeDatePickerWidget extends AbstractWidget {
     this.renderWidgetVal(widgetVal);
   };
 
-  parseInput(input: StringDateTimeValue): DateTimePickerValue {
-    if(!this.#isValidDate(input.value.start) && !this.#isValidDate(input.value.stop)) throw Error('No valid Date received')
-    let startValue = (this.#isValidDate(input.value.start))?new Date(input.value.start):null
-    let endValue = (this.#isValidDate(input.value.stop))?new Date(input.value.stop):null
+  parseInput(input: StringDateTimeValue["value"]): DateTimePickerValue {
+    if(!this.#isValidDate(input.start) && !this.#isValidDate(input.stop)) throw Error('No valid Date received')
+    let startValue = (this.#isValidDate(input.start))?new Date(input.start):null
+    let endValue = (this.#isValidDate(input.stop))?new Date(input.stop):null
     if (startValue && endValue && (startValue > endValue)) throw Error('StartDate is bigger than Enddate!')
 
     let tmpValue: { start: Date; stop: Date; startLabel: string; endLabel: string };
@@ -191,15 +196,11 @@ export class TimeDatePickerWidget extends AbstractWidget {
         endLabel: endValue?endValue.getFullYear().toString():""
       };
     }
-    let dateTimePickerVal: DateTimePickerValue = {
-      value: {
-        // here : we get the JSON representation of the date, as a lazy way to format date
-        key: JSON.stringify(tmpValue.start).replace(/["]+/g,'')+" - "+JSON.stringify(tmpValue.stop).replace(/["]+/g,''),
+    let dateTimePickerVal = new DateTimePickerValue({
         label: this.#getValueLabel(tmpValue.startLabel, tmpValue.endLabel),
         start: tmpValue.start,
         stop: tmpValue.stop,
-      },
-    };
+      });
     return dateTimePickerVal;
   }
   #getFirstDayYear(startValue:Date) {

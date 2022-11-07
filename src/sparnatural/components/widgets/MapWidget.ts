@@ -21,11 +21,19 @@ import * as DataFactory from "@rdfjs/data-model" ;
 import { GEOF} from "../../spec-providers/RDFSpecificationProvider";
 import SparqlFactory from "../../generators/SparqlFactory";
 
-export interface MapWidgetValue extends WidgetValue {
+export class MapWidgetValue implements WidgetValue {
   value: {
     label: string;
     coordinates: LatLng[][];
   };
+
+  key():string {
+    return this.value.coordinates.toString();
+  }
+
+  constructor(v:MapWidgetValue["value"]) {
+    this.value = v;
+  }
 }
 
 // converts props of type Date to type string
@@ -107,21 +115,17 @@ export default class MapWidget extends AbstractWidget {
 
       this.map.addLayer(this.drawingLayer);
 
-      let widgetValue: MapWidgetValue = {
-        value: {
-          label: getSettings().langSearch.MapWidgetAreaSelected,
-          coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
-        },
-      };
+      let widgetValue = new MapWidgetValue({
+        label: getSettings().langSearch.MapWidgetAreaSelected,
+         coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
+      });
       this.renderWidgetVal(widgetValue);
       //add listener when the shape gets changed
       this.drawingLayer.on("pm:edit", (e) => {
-        let widgetValue: MapWidgetValue = {
-        value: {
+        let widgetValue = new MapWidgetValue({
           label: getSettings().langSearch.MapWidgetAreaSelected,
           coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
-        },
-      };
+        });
       this.renderWidgetVal(widgetValue);
       });
     });
@@ -131,27 +135,28 @@ export default class MapWidget extends AbstractWidget {
 
   #closeMap = () => {
     this.map.remove();
+    /*
     if (this.getwidgetValues().length < 1)
       this.renderWidgetVal({
         value: { label: getSettings().langSearch.SelectAllValues }
       });
+    */
   };
 
-  parseInput(input:ObjectMapWidgetValue): MapWidgetValue {
+  parseInput(input:ObjectMapWidgetValue["value"]): MapWidgetValue {
 
-    const parsedCoords = input.value.coordinates.map((c)=>{
+    const parsedCoords = input.coordinates.map((c)=>{
       return c.map((latlng)=>{
         if(!("lat" in latlng) || !('lng' in LatLng) || isNaN(latlng.lat) || isNaN(latlng.lng))
         return new L.LatLng(latlng.lat,latlng.lng)
       })
     })
-    if(parsedCoords.length === 0) throw Error(`Parsing of ${input.value.coordinates} failed`)
-    return{
-      value:{
-        label: input.value.label,
+    if(parsedCoords.length === 0) throw Error(`Parsing of ${input.coordinates} failed`)
+    return new MapWidgetValue({
+        label: input.label,
         coordinates: parsedCoords
       }
-    }
+    );
   }
 
   #changeButton() {

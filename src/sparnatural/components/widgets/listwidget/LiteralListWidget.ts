@@ -12,13 +12,19 @@ import { ListWidget } from "./ListWidget";
 import { ValueRepetition, WidgetValue } from "../AbstractWidget";
 import SparqlFactory from "../../../generators/SparqlFactory";
 
-export interface LiteralListWidgetValue extends WidgetValue {
+export class LiteralListWidgetValue implements WidgetValue {
   value: {
-    key: string;
     label: string;
     literal: string;
   };
-  valueRepetition: ValueRepetition.MULTIPLE;
+
+  key():string {
+    return this.value.literal;
+  }
+
+  constructor(v:LiteralListWidgetValue["value"]) {
+    this.value = v;
+  }
 }
 
 export class LiteralListWidget extends ListWidget {
@@ -41,17 +47,13 @@ export class LiteralListWidget extends ListWidget {
   }
 
   buildValue(uri:string,label:string): WidgetValue {
-    return {
-      valueRepetition: ValueRepetition.MULTIPLE,
-      value: {
-        key: uri,
-        label: label,
-        literal: label,
-      }
-    } as LiteralListWidgetValue
+    return new LiteralListWidgetValue({
+      label: label,
+      literal: label,
+    });
   }
 
-  parseInput(input:WidgetValue): WidgetValue { return input as LiteralListWidgetValue }
+  parseInput(input:LiteralListWidgetValue["value"]): WidgetValue { return new LiteralListWidgetValue(input); }
 
   getRdfJsPattern(): Pattern[] {
     /*

@@ -76,9 +76,9 @@ export default class QueryParser{
     return hasKeys && every;
   }
   //some basic validation if the provided value is an IWidget['value']
-  static #isWidgetValue(val: WidgetValue): val is WidgetValue {
+  static #isWidgetValue(val: WidgetValue["value"]): val is WidgetValue["value"] {
     //every WidgetVal needs to have at least a label
-    let hasKeys = "label" in val.value;
+    let hasKeys = "label" in val;
     return hasKeys;
   }
 }

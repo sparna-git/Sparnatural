@@ -25,20 +25,12 @@ export default {
                         "oType": "http://dbpedia.org/ontology/Country",
                         "values": [
                             {
-                                "valueType": 1,
-                                "value": {
-                                    "key": "http://fr.dbpedia.org/resource/Afrique_du_Sud",
-                                    "label": "Afrique du Sud (104)",
-                                    "uri": "http://fr.dbpedia.org/resource/Afrique_du_Sud"
-                                }
+                                "label": "Afrique du Sud (104)",
+                                "uri": "http://fr.dbpedia.org/resource/Afrique_du_Sud"
                             },
                             {
-                                "valueType": 1,
-                                "value": {
-                                    "key": "http://fr.dbpedia.org/resource/Albanie",
-                                    "label": "Albanie (31)",
-                                    "uri": "http://fr.dbpedia.org/resource/Albanie"
-                                }
+                                "label": "Albanie (31)",
+                                "uri": "http://fr.dbpedia.org/resource/Albanie"
                             }
                         ]
                     },
@@ -69,13 +61,9 @@ export default {
                         "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Date",
                         "values": [
                             {
-                                "valueType": 0,
-                                "value": {
-                                    "key": "Sun Jan 01 2017 00:00:01 GMT+0100 (Central European Standard Time) - Fri Dec 31 2021 23:59:59 GMT+0100 (Central European Standard Time)",
-                                    "label": "from 2017 to 2021",
-                                    "start": "2016-12-31T23:00:01.000Z",
-                                    "stop": "2021-12-31T22:59:59.000Z"
-                                }
+                                "label": "from 2017 to 2021",
+                                "start": "2016-12-31T23:00:01.000Z",
+                                "stop": "2021-12-31T22:59:59.000Z"
                             }
                         ]
                     },
@@ -104,12 +92,8 @@ export default {
                                 "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text",
                                 "values": [
                                     {
-                                        "valueType": 0,
-                                        "value": {
-                                            "key": "testText",
-                                            "label": "testText",
-                                            "search": "testText"
-                                        }
+                                        "label": "testText",
+                                        "search": "testText"
                                     }
                                 ]
                             },
@@ -155,10 +139,8 @@ export default {
                                 "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Area",
                                 "values": [
                                     {
-                                        "valueType": 0,
-                                        "value": {
-                                            "label": "Area selected",
-                                            "coordinates": [
+                                        "label": "Area selected",
+                                        "coordinates": [
                                                 [
                                                     {
                                                         "lat": 46.18643962153715,
@@ -177,8 +159,7 @@ export default {
                                                         "lng": 6.175516024231912
                                                     }
                                                 ]
-                                            ]
-                                        }
+                                        ]
                                     }
                                 ]
                             },
@@ -216,10 +197,7 @@ export default {
                         "oType": "http://dbpedia.org/ontology/Country",
                         "values": [
                             {
-                                "valueType": 0,
-                                "value": {
-                                    "label": "Any"
-                                }
+                                "label": "Any"
                             }
                         ]
                     },
@@ -248,10 +226,7 @@ export default {
                                 "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
                                 "values": [
                                     {
-                                        "valueType": 0,
-                                        "value": {
-                                            "label": "Any"
-                                        }
+                                        "label": "Any"
                                     }
                                 ]
                             },
@@ -289,10 +264,7 @@ export default {
                         "oType": "http://dbpedia.org/ontology/Country",
                         "values": [
                             {
-                                "valueType": 0,
-                                "value": {
-                                    "label": "Any"
-                                }
+                                "label": "Any"
                             }
                         ]
                     },
@@ -321,10 +293,7 @@ export default {
                                 "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
                                 "values": [
                                     {
-                                        "valueType": 0,
-                                        "value": {
-                                            "label": "Any"
-                                        }
+                                        "label": "Any"
                                     }
                                 ]
                             },
@@ -360,20 +329,12 @@ export default {
                         "oType": "http://dbpedia.org/ontology/Country",
                         "values": [
                             {
-                                "valueType": 1,
-                                "value": {
-                                    "key": "http://fr.dbpedia.org/resource/Åland",
-                                    "label": "Åland (4)",
-                                    "uri": "http://fr.dbpedia.org/resource/Åland"
-                                }
+                                "label": "Åland (4)",
+                                "uri": "http://fr.dbpedia.org/resource/Åland"
                             },
                             {
-                                "valueType": 1,
-                                "value": {
-                                    "key": "http://fr.dbpedia.org/resource/Allemagne",
-                                    "label": "Allemagne (6681)",
-                                    "uri": "http://fr.dbpedia.org/resource/Allemagne"
-                                }
+                                "label": "Allemagne (6681)",
+                                "uri": "http://fr.dbpedia.org/resource/Allemagne"
                             }
                         ]
                     },
@@ -402,10 +363,7 @@ export default {
                                 "oType": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
                                 "values": [
                                     {
-                                        "valueType": 0,
-                                        "value": {
-                                            "label": "Any"
-                                        }
+                                        "label": "Any"
                                     }
                                 ]
                             },
@@ -440,11 +398,8 @@ export default {
                         "oType": "http://dbpedia.org/ontology/Country",
                         "values": [
                           {
-                            "value": {
-                              "key": "Afghane",
                               "label": "Afghane",
                               "literal": "Afghane"
-                            }
                           }
                         ]
                       },
@@ -476,9 +431,7 @@ export default {
                 "oType": "http://dbpedia.org/ontology/Country",
                 "values": [
                   {
-                    "value": {
-                      "label": "Any"
-                    }
+                    "label": "Any"
                   }
                 ]
               },

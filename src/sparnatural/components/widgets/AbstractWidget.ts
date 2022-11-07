@@ -14,6 +14,7 @@ export interface WidgetValue {
   value: {
     label: string; // that's the human readable string representation shown as a WidgetValue to the user
   };
+  key: ()=>string; // a function that returns the value key as a string.
 }
 
 export abstract class AbstractWidget extends HTMLComponent {
@@ -44,7 +45,7 @@ export abstract class AbstractWidget extends HTMLComponent {
   // Must be implemented by the developper of the widget
   abstract getRdfJsPattern(): Pattern[];
   // 
-  abstract parseInput(value:any):WidgetValue
+  abstract parseInput(value:WidgetValue["value"]):WidgetValue
   
   getSparnaturalRepresentation() {
     let vals = this.widgetValues.map((v) => v.value);

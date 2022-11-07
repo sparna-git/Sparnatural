@@ -12,7 +12,7 @@ export interface CriteriaLine {
   o: string;
   sType: string;
   oType: string;
-  values: WidgetValue[];
+  values: WidgetValue["value"][];
 }
 
 export interface Branch {

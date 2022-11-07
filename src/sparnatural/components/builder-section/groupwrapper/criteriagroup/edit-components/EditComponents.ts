@@ -8,10 +8,18 @@ import { WidgetValue } from "../../../../widgets/AbstractWidget";
 import WidgetWrapper from "./WidgetWrapper";
 import ActionWhere from "../../../../buttons/actions/actioncomponents/ActionWhere";
 
-export interface SelectAllValue extends WidgetValue {
+export class SelectAllValue implements WidgetValue {
   value: {
     label: string;
   };
+
+  key():string {
+    return "SelectAllValue";
+  }
+
+  constructor(v:SelectAllValue["value"]){
+    this.value = v;
+  }
 }
 
 enum RENDER_WHERE_ENUM {
@@ -92,11 +100,11 @@ class EditComponents extends HTMLComponent {
   }
 
   #onSelectAll() {
-    let selectAllVal: SelectAllValue = {
-      value: {
+    let selectAllVal = new SelectAllValue(
+      {
         label: getSettings().langSearch.SelectAllValues,
-      },
-    };
+      }
+    );
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetVal", {
         bubbles: true,
