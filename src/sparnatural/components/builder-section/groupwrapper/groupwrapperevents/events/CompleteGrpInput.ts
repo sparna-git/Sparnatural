@@ -11,7 +11,7 @@ export function completeGrpInput(grpWrapper: GroupWrapper) {
     );
   }
 
-  // grpWrapper.CriteriaGroup.html[0].classList.add("completed");
+  grpWrapper.html[0].classList.add("completed");
   grpWrapper.CriteriaGroup.EndClassGroup.inputTypeComponent.html[0].classList.add(
     "Highlited"
   );

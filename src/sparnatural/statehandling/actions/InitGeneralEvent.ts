@@ -37,10 +37,10 @@ export default function initGeneralevent(actionStore: ActionStore) {
             cssdef += drawBackgroungOfGroupWrapper(
               index,
               previousHeight,
-              currentHeight
+              childrenHeight
             );
             //Calculate start distance for next line.
-            previousHeight = previousHeight + currentHeight + 1;
+            previousHeight = previousHeight + childrenHeight + 1;
             index++;
           }
         );
@@ -78,7 +78,7 @@ function rerenderOptionState(grpWrapper: GroupWrapper) {
 
 function drawBackgroungOfGroupWrapper(
   index: number,
-  prev: number,
+  prevHeight: number,
   currHeight: number
 ) {
   var ratio = 100 / 10 / 100;
@@ -86,7 +86,7 @@ function drawBackgroungOfGroupWrapper(
   let rgba = `rgba(${getSettings().backgroundBaseColor},${a})`;
   if (index !== 0) {
     // comma in the string beginning
-    return ` ,${rgba} ${prev}px, ${rgba} ${prev+currHeight}px`;
+    return ` ,${rgba} ${prevHeight}px, ${rgba} ${prevHeight+currHeight}px`;
   }
-  return `${rgba} ${prev}px, ${rgba} ${currHeight}px`;
+  return `${rgba} ${prevHeight}px, ${rgba} ${currHeight}px`;
 }

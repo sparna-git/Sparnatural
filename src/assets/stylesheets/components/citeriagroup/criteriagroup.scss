@@ -81,6 +81,8 @@
 }
 
 /* When a value is selected or Where is enabled */
-.CriteriaGroup.completed {
-	margin-bottom: base.$margin-component;
+li.groupe.completed {
+	&>.CriteriaGroup {
+		margin-bottom: base.$margin-component;
+	}
 }

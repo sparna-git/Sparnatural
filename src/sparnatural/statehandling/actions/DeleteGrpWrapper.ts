@@ -53,6 +53,8 @@ export default function deleteGrpWrapper(
         grpWrapper.whereChild = null;
         grpWrapper.linkWhereBottom.html.empty().remove();
         grpWrapper.setObjectPropertySelectedState();
+        // remove completed class so that it returns to its original height
+        grpWrapper.html[0].classList.remove("completed");
       }
     }
   );
