@@ -24,10 +24,9 @@ class LinkAndBottom extends HTMLComponent {
     let posLowerStart =
       grpWrapper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
 
-    let ax =
-      posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4;
-    let bx =
-      posLowerStart.left + 36;
+    let ax = posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4;
+    // left padding of the AND link
+    let bx = posLowerStart.left + 36;
     let ay = posUpperStart.bottom  + window.scrollY;
     let by = posLowerStart.top  + window.scrollY;
 
