@@ -32,7 +32,9 @@ class BgWrapper extends HTMLComponent {
     this.resetBtn.html.empty();
     this.resetBtn.html.remove();
     this.#renderComponents();
-    this.html[0].dispatchEvent(new CustomEvent("resetVars",{bubbles: true}))
+    this.html[0].dispatchEvent(new CustomEvent("resetVars",{bubbles: true}));
+    // redraw background so that background height of first line is recomputed - otherwise it can stay small
+    this.html[0].dispatchEvent(new CustomEvent("redrawBackgroundAndLinks",{bubbles: true}));
   };
 }
 export default BgWrapper;
