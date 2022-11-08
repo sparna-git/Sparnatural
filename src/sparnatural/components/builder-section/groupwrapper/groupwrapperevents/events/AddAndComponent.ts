@@ -23,7 +23,7 @@ export function addAndComponent(
   // draw the AND link
   grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(
-    new CustomEvent("initGeneralEvent", { bubbles: true })
+    new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
   );
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("changeMaxChildIndex", {

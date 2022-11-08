@@ -75,7 +75,7 @@ export class OptionsGroup extends HTMLComponent {
     }
     
     this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
+      new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
     );
   }
 
@@ -99,7 +99,7 @@ export class OptionsGroup extends HTMLComponent {
     this.OptionalComponent.html.remove();
     this.NotExistsComponent.html.remove();
     this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
+      new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
     );
   }
 

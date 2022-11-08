@@ -23,7 +23,7 @@ export default class QueryLoader{
         this.#updateOrderingOfVariables()
         // trigger query generation
         this.sparnatural.html[0].dispatchEvent(
-          new CustomEvent("initGeneralEvent")
+          new CustomEvent("redrawBackgroundAndLinks")
         );
     }
     

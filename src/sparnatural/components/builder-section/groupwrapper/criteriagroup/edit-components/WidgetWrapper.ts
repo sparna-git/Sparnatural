@@ -83,7 +83,7 @@ class WidgetWrapper extends HTMLComponent {
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
       this.html[0].dispatchEvent(
-        new CustomEvent("initGeneralEvent", { bubbles: true })
+        new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
       );
       return this;
     }

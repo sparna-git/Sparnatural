@@ -50,7 +50,7 @@ class Sparnatural extends HTMLComponent {
       
       //BGWrapper must be rendered first
       that.html[0].dispatchEvent(
-        new CustomEvent("initGeneralEvent", { bubbles: true })
+        new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
       );
       that.html.append(that.filter);      
     });

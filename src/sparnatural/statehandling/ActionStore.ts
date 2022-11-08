@@ -4,7 +4,7 @@ import { ISparJson, Order } from "../generators/ISparJson";
 import generateQuery from "./actions/GenerateQuery";
 import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
-import initGeneralevent from "./actions/InitGeneralEvent";
+import redrawBackgroundAndLinks from "./actions/InitGeneralEvent";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
@@ -173,10 +173,11 @@ class ActionStore {
       }
     );
 
-    this.sparnatural.html[0].addEventListener("initGeneralEvent", (e) => {
+    this.sparnatural.html[0].addEventListener("redrawBackgroundAndLinks", (e) => {
       e.stopImmediatePropagation();
-      initGeneralevent(this);
+      redrawBackgroundAndLinks(this);
     });
+
     this.sparnatural.html[0].addEventListener(
       "deleteGrpWrapper",
       (e: CustomEvent) => {

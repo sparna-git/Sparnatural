@@ -19,6 +19,6 @@ export function completeGrpInput(grpWrapper: GroupWrapper) {
     new CustomEvent("generateQuery", { bubbles: true })
   );
   grpWrapper.html[0].dispatchEvent(
-    new CustomEvent("initGeneralEvent", { bubbles: true })
+    new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
   );
 }

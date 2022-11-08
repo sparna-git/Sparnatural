@@ -29,6 +29,6 @@ export default function updateVarName(
       }
     );
   actionStore.sparnatural.html[0].dispatchEvent(
-    new CustomEvent("initGeneralEvent")
+    new CustomEvent("redrawBackgroundAndLinks")
   );
 }

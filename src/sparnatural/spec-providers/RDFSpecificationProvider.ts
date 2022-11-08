@@ -7,7 +7,6 @@ import { storeStream } from "rdf-store-stream";
 import { Config } from "../ontologies/SparnaturalConfig";
 import ISpecProvider from "./ISpecProvider";
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
-import initGeneralevent from "../statehandling/actions/InitGeneralEvent";
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 export const RDF = {

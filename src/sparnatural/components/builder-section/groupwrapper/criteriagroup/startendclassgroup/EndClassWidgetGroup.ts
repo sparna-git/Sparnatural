@@ -85,7 +85,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       })
     );
     this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
+      new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
     );
   }
 

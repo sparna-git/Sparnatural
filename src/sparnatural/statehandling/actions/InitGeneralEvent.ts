@@ -3,9 +3,9 @@ import { OptionTypes } from "../../components/builder-section/groupwrapper/crite
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import ActionStore from "../ActionStore";
 /*
-  A general Event is either an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper
+  Triggered either on an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper
 */
-export default function initGeneralevent(actionStore: ActionStore) {
+export default function redrawBackgroundAndLinks(actionStore: ActionStore) {
   let cssdef = ``;
   //index used in callback
   let index = 0;
