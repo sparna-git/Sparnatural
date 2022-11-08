@@ -27,7 +27,8 @@ class LinkAndBottom extends HTMLComponent {
     let ax = posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4;
     // left padding of the AND link
     let bx = posLowerStart.left + 36;
-    let ay = posUpperStart.bottom  + window.scrollY;
+    // +3 so that it looks connected to white group and not orange arrow
+    let ay = posUpperStart.bottom  + window.scrollY +3;
     let by = posLowerStart.top  + window.scrollY;
 
     let css = this.#getLine(ax, bx, ay, by);
