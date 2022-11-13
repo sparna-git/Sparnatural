@@ -12,6 +12,7 @@ class BaseClassFactory {
     "selectViewVariable",
     "unselect",
     "circle-info",
+    "loadingspinner"
   ];
   aTags: Array<string> = ["asc", "dsc", "none", "playBtn"];
   labelTags: Array<string> = ["switch"];

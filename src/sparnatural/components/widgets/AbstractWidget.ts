@@ -1,6 +1,8 @@
 import { Pattern } from "sparqljs";
 import { SelectedVal } from "../../generators/ISparJson";
 import HTMLComponent from "../HtmlComponent";
+import { Handler } from "./autocomplete/AutocompleteAndListHandlers";
+import LoadingSpinner from "./LoadingSpinner";
 
 // The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
 // example for multiples: List of countries in ListWidget
@@ -26,6 +28,9 @@ export abstract class AbstractWidget extends HTMLComponent {
   protected blockStartTriple = false;
   protected blockObjectPropTriple = false;
   protected blockEndTriple = false;
+  protected Spinner = new LoadingSpinner(this)
+  // If the widget contains a datasourceHandler such as ListHandler
+  protected datasourceHandler:Handler;
 
   constructor(
     baseCssClass: string,
@@ -42,9 +47,16 @@ export abstract class AbstractWidget extends HTMLComponent {
     this.endClassVal = endClassVal;
     this.valueRepetition = valueRepetition;
   }
+
+  render(): this {
+    super.render()
+    this.Spinner.render()
+    return this
+  }
+
   // Must be implemented by the developper of the widget
   abstract getRdfJsPattern(): Pattern[];
-  // 
+  // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
   abstract parseInput(value:WidgetValue["value"]):WidgetValue
   
   getSparnaturalRepresentation() {
@@ -64,7 +76,6 @@ export abstract class AbstractWidget extends HTMLComponent {
   getwidgetValues(): WidgetValue[] {
     return this.widgetValues;
   }
-
 
   // Sparnatural stores the variable name always with the questionmark. 
   // for the DataFactory from "rdfjs" lib we need the variable name without '?'
@@ -94,6 +105,11 @@ export abstract class AbstractWidget extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetVal", { bubbles: true, detail: widgetValues })
     );
+  }
+
+  // toggle spinner component when loading a datasource
+  toggleSpinner(message?:string){
+    this.Spinner.html[0].classList.toggle('show')
   }
 
   isBlockingStart() {

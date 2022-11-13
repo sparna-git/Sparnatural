@@ -1,4 +1,4 @@
-abstract class Handler {
+export abstract class Handler {
   sparqlEndpointUrl: any;
   sparqlPostprocessor: any;
   language: any;

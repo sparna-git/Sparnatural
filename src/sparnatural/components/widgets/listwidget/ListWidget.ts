@@ -29,7 +29,7 @@ export class ListWidgetValue implements WidgetValue {
 export class ListWidget extends AbstractWidget {
 
   protected widgetValues: WidgetValue[];
-  listHandler: SparqlTemplateListHandler;
+  datasourceHandler: SparqlTemplateListHandler;
   sort: boolean;
   settings: ISettings;
   selectHtml: JQuery<HTMLElement>;
@@ -50,7 +50,7 @@ export class ListWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.MULTIPLE
     );
-    this.listHandler = listHandler;
+    this.datasourceHandler = listHandler;
     this.sort = sort;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
@@ -66,7 +66,7 @@ export class ListWidget extends AbstractWidget {
     </div>`);
     this.html.append(this.selectHtml);
 
-    let url = this.listHandler.listUrl(
+    let url = this.datasourceHandler.listUrl(
       this.startClassVal.type,
       this.objectPropVal.type,
       this.endClassVal.type
@@ -84,11 +84,13 @@ export class ListWidget extends AbstractWidget {
       cache: "default",
     };
     let temp = new LocalCacheData();
+    //this.toggleSpinner()
     let fetchpromise = temp.fetch(url, init, this.settings.localCacheDataTtl);
     fetchpromise
       .then((response: { json: () => any }) => response.json())
       .then((data: any) => {
-        var items = this.listHandler.listLocation(
+        //this.toggleSpinner("success")
+        var items = this.datasourceHandler.listLocation(
           this.startClassVal.type,
           this.objectPropVal.type,
           this.endClassVal.type,
@@ -100,15 +102,15 @@ export class ListWidget extends AbstractWidget {
             var collator = new Intl.Collator(this.settings.language);
             items.sort((a: any, b: any) => {
               return collator.compare(
-                this.listHandler.elementLabel(a),
-                this.listHandler.elementLabel(b)
+                this.datasourceHandler.elementLabel(a),
+                this.datasourceHandler.elementLabel(b)
               );
             });
           }
 
           $.each(items, (key, val) => {
-            var label = this.listHandler.elementLabel(val);
-            var uri = this.listHandler.elementUri(val);
+            var label = this.datasourceHandler.elementLabel(val);
+            var uri = this.datasourceHandler.elementUri(val);
             this.selectHtml.append(
               $("<option value='" + uri + "'>" + label + "</option>")
             );

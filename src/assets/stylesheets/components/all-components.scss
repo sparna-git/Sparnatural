@@ -27,6 +27,8 @@
 @use './widget/WidgetWrapper.scss';
 @use './widget/MapWidget.scss';
 @use './widget/TreeWidget.scss';
+// LoadingSpinner
+@use './widget/LoadingSpinner.scss';
 // link components
 @use './link-and-component.scss';
 @use './link-where-child.scss';
