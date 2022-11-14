@@ -4,6 +4,7 @@ import { SelectedVal } from "../../../generators/ISparJson";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
+import { AbstractSparqlAutocompleteHandler } from "./AutocompleteAndListHandlers";
 
 require("easy-autocomplete");
 
@@ -24,7 +25,7 @@ export class AutoCompleteWidgetValue implements WidgetValue {
 
 export class AutoCompleteWidget extends AbstractWidget {
   protected widgetValues: AutoCompleteWidgetValue[];
-  autocompleteHandler: any;
+  protected datasourceHandler: AbstractSparqlAutocompleteHandler;
 
   constructor(
     parentComponent: WidgetWrapper,
@@ -42,7 +43,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       endClassValue,
       ValueRepetition.MULTIPLE
     );
-    this.autocompleteHandler = autocompleteHandler;
+    this.datasourceHandler = autocompleteHandler;
   }
 
   render() {
@@ -52,48 +53,74 @@ export class AutoCompleteWidget extends AbstractWidget {
     this.html.append(inputHtml);
     this.html.append(listHtml);
 
-    var isMatch = this.autocompleteHandler.enableMatch(
+    var isMatch = this.datasourceHandler.enableMatch(
       this.startClassVal.type,
       this.objectPropVal.type,
       this.endClassVal.type
     );
 
-    let that=this;
     let options = {
       // ajaxSettings: {crossDomain: true, type: 'GET'} ,
-      url: function (phrase: any) {
-        return that.autocompleteHandler.autocompleteUrl(
-          that.startClassVal.type,
-          that.objectPropVal.type,
-          that.endClassVal.type,
+      url: (phrase: any) => {
+        return this.datasourceHandler.autocompleteUrl(
+          this.startClassVal.type,
+          this.objectPropVal.type,
+          this.endClassVal.type,
           phrase
         );
       },
-      listLocation: function (data: any) {
-        return that.autocompleteHandler.listLocation(
-          that.startClassVal.type,
-          that.objectPropVal.type,
-          that.endClassVal.type,
+      listLocation: (data: any) => {
+        return this.datasourceHandler.listLocation(
+          this.startClassVal.type,
+          this.objectPropVal.type,
+          this.endClassVal.type,
           data
         );
       },
-      getValue: function (element: any) {
-        return that.autocompleteHandler.elementLabel(element);
+      getValue: (element: any) => {
+        return this.datasourceHandler.elementLabel(element);
       },
 
       adjustWidth: false,
 
       ajaxSettings: {
         crossDomain: true,
+        timeout: 7000,
         dataType: "json",
         method: "GET",
         data: {
           dataType: "json",
         },
+        beforeSend: ( xhr: { abort: () => void; }, obj: { data: boolean; } ) => {
+
+          if (obj.data == false) {
+            xhr.abort();
+            this.Spinner.renderMessage('Please 3 characters min')
+          } else {          
+            this.toggleSpinner('Request send....')
+          }
+        },
+        error: ( xhr: any ) => {
+          this.toggleSpinner('Sorry no results...')
+        },
+        success: (data: any ) => {
+          var results = this.datasourceHandler.listLocation(this.startClassVal, this.objectPropVal, this.endClassVal, data)
+          if (results.length == 0) {
+            this.toggleSpinner('Sorry no results...');
+          } else {
+            this.toggleSpinner('')
+          }
+        },
+        complete: ( xhr: any ) => {
+          //nothing
+        }
       },
 
       preparePostData: function (data: { phrase: string | number | string[] }) {
-        data.phrase = inputHtml.val();
+        data.phrase = inputHtml.val() as string; // (!) numbers won't work
+        if (data.phrase.length < 3) {
+          return false ;
+        }
         return data;
       },
 
@@ -103,10 +130,10 @@ export class AutoCompleteWidget extends AbstractWidget {
         },
 
         onChooseEvent: () => {
-          let val = inputHtml.getSelectedItemData();
+          let val = inputHtml.getSelectedItemData() as any;
           let autocompleteValue= new AutoCompleteWidgetValue({
-              label: this.autocompleteHandler.elementLabel(val),
-              uri: this.autocompleteHandler.elementUri(val),
+              label: this.datasourceHandler.elementLabel(val),
+              uri: this.datasourceHandler.elementUri(val),
           });
           inputHtml.val(autocompleteValue.value.label);
           listHtml.val(autocompleteValue.value.uri).trigger("change");

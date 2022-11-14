@@ -1,13 +1,12 @@
 @use '../../themes';
 .loadingspinner {
     position: absolute;
+    z-index: 1;
+    top:0.6em;
     left: 100%;
-    top: 44px;
     line-height: 32px;
     background: #fff;
-    width: 185px;
     border-radius: 0 0 4px 4px;
-    display: none;
     padding: 0 5px;
     border: 1px solid #ccc;
     border-top: 1px solid transparent;

@@ -6,7 +6,6 @@ import UiuxConfig from "../IconsConstants";
 import { AbstractWidget } from "./AbstractWidget";
 
 export default class LoadingSpinner extends HTMLComponent{
-    spinner: UiuxConfig.ICON_LOOADER
 
     constructor(parentComponent:AbstractWidget){
         super(`loadingspinner`,parentComponent,null)
@@ -14,7 +13,7 @@ export default class LoadingSpinner extends HTMLComponent{
 
     render(): this {
         super.render()
-        this.html.append(`<span class="loadingspinner"><span class="load">${this.spinner}</span><span class="spinner-message"></span></span>`) 
+        this.html.append(`<span class="load">${UiuxConfig.ICON_LOOADER}</span><span class="spinner-message"></span>`) 
         return this
     }
     
