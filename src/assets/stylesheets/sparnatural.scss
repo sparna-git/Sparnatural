@@ -11,7 +11,7 @@
 
 @import "themes.scss";
 
-sparnatural {
+spar-natural {
 	section {
 		padding-top: 30px;
 	}	
@@ -37,6 +37,11 @@ sparnatural {
 					}
 				}
 			}
+		}
+		
+		// in order to work properly even if no bootstrap included
+		*, ::after, ::before {
+			box-sizing: border-box;
 		}		
 	}
 }
