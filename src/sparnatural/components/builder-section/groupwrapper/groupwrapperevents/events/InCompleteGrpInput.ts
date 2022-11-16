@@ -17,4 +17,7 @@ export function inCompleteGrpInput(grpWrapper: GroupWrapper) {
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("generateQuery", { bubbles: true })
   );
+  grpWrapper.html[0].dispatchEvent(
+    new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
+  );
 }

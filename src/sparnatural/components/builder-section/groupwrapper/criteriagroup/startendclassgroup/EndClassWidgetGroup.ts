@@ -142,6 +142,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   // when more values should be added then render the inputypecomponent again
   #addMoreValues = () => {
+    // tell it is not completed so that it is higher
+    this.html[0].dispatchEvent(
+      new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
+    );
+
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetWrapper", {
         bubbles: true,

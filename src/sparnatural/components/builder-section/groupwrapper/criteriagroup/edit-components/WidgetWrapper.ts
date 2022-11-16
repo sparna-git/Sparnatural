@@ -21,6 +21,7 @@ import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
 import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWidget";
 import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
+import CriteriaGroup from "../CriteriaGroup";
 
 
 /**
@@ -48,17 +49,29 @@ class WidgetWrapper extends HTMLComponent {
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
+
+    this.widgetType = this.specProvider.getObjectPropertyType(
+      this.objectPropVal.type
+    );
   }
 
   render() {
     super.render();
 
     if (!this.widgetComponent) {
-      this.#createNewWidget();
-    } else {
-      //only rerendering it since it already exists
-      this.#renderWidget();
+      this.#initWidgetComponent();
     }
+
+    // always re-render the few labels before widget that can change depending if a value has already been selected or not
+    $(this.html).find("#selectAllWrapper").remove();
+    this.#addWidgetHTML(this.widgetType);
+
+    //if there is already a widget component rendered, then only render it since we would like to keep the state
+    if (this.widgetComponent) {
+      // could still be null in case of non selectable property
+      this.widgetComponent.render();
+    }
+
     this.#addSelectAllListener();
     return this;
   }
@@ -74,12 +87,7 @@ class WidgetWrapper extends HTMLComponent {
       });
   }
 
-  #createNewWidget() {
-    this.widgetType = this.specProvider.getObjectPropertyType(
-      this.objectPropVal.type
-    );
-
-    this.#addWidgetHTML(this.widgetType);
+  #initWidgetComponent() {
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
       this.html[0].dispatchEvent(
@@ -93,48 +101,49 @@ class WidgetWrapper extends HTMLComponent {
       this.objectPropVal.type,
       this.endClassVal.type
     );
-    this.widgetComponent.render();
-  }
-
-  #renderWidget() {
-    //if there is already a widget component rendered, then only render it since we would like to keep the state
-    this.widgetComponent.render();
   }
 
   #addWidgetHTML(widgetType: string) {
-    let endLabel = this.#getEndLabel(this.widgetType);
-
     var parenthesisLabel =
       " (" + this.specProvider.getLabel(this.endClassVal.type) + ") ";
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
 
-    let selectAllSpan = `<span class="edit-trait first">
+    let lineSpan = `<span class="edit-trait first">
     <span class="edit-trait-top"></span>
     <span class="edit-num">
       1
     </span>
-  </span>
-  <span class="selectAll" id="selectAll">
+    </span>`;
+
+    let selectAnySpan = `<span class="selectAll" id="selectAll">
     <span class="underline">
     ${this.settings.langSearch.SelectAllValues}
     </span> 
     ${parenthesisLabel} 
-  </span>`;
+    </span>`;
 
     let orSpan = `<span class="or">
       ${this.settings.langSearch.Or}
     </span> `;
     
+    let endLabel = this.#getEndLabel(this.widgetType);
     let endLabelSpan = `<span>
       ${endLabel}
     </span>
     `;
 
+    console.log(((this.ParentComponent.ParentComponent.ParentComponent as CriteriaGroup).endClassWidgetGroup.widgetValues.length));
+    let htmlString = '';
     widgetType == Config.NON_SELECTABLE_PROPERTY
-    ? (this.widgetHtml = $(selectAllSpan))
-    : (this.widgetHtml = $(selectAllSpan + orSpan + endLabelSpan));
+    ? (htmlString = lineSpan + selectAnySpan)
+    // if there is a value, do not propose the "Any" selection option
+    : ((this.ParentComponent.ParentComponent.ParentComponent as CriteriaGroup).endClassWidgetGroup.widgetValues.length > 0)
+      ?(htmlString = lineSpan + endLabelSpan) 
+      :(htmlString = lineSpan + selectAnySpan + orSpan + endLabelSpan);
+
+    this.widgetHtml = $(`<span id="selectAllWrapper">${htmlString}</span>`);
 
     this.html.append(this.widgetHtml);
   }

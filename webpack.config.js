@@ -7,7 +7,8 @@ const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  mode:'development',
+	mode: 'development',
+  // mode: 'production',
   entry: ["./src/SparnaturalElement.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
