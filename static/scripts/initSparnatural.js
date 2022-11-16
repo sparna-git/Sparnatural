@@ -2,7 +2,7 @@
   This file shows how to integrate SparNatural into your website. 
 */
 
-export const sparnatural = document.querySelector("spar-natural");
+export const sparnatural = document.querySelector("sparnatural");
 import config from '../configs/config.js';
 import {renderDropDown} from './initDropDown.js'
 import preLoadedQueries from '../configs/preloadqueries.js'

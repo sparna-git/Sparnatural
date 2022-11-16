@@ -77,5 +77,5 @@ class SparNatural extends HTMLElement {
   }
 }
 
-customElements.get("spar-natural") ||
-  window.customElements.define("spar-natural", SparNatural);
+customElements.get("sparnatural") ||
+  window.customElements.define("sparnatural", SparNatural);
