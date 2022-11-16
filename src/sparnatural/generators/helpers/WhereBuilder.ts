@@ -68,7 +68,9 @@ export default class WhereBuilder{
         const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingEnd())
         endClsBuilder.build()
         this.#endClassPtrn = endClsBuilder.getPattern()
-        if(endClsBuilder.getDefaultVar())this.#defaultVars.push(endClsBuilder.getDefaultVar())
+        if(endClsBuilder.getDefaultVar()) {
+            this.#defaultVars.push(endClsBuilder.getDefaultVar())
+        }
     }
 
     #buildStartClassPtrn() {
@@ -76,7 +78,9 @@ export default class WhereBuilder{
         const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingStart())
         startClsBuilder.build()
         this.#startClassPtrn = startClsBuilder.getPattern()
-        if(startClsBuilder.getDefaultVar())this.#defaultVars.push(startClsBuilder.getDefaultVar())
+        if(startClsBuilder.getDefaultVar()) {
+            this.#defaultVars.push(startClsBuilder.getDefaultVar())
+        }
     }
 
     #buildIntersectionPtrn(){

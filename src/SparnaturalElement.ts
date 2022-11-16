@@ -1,5 +1,3 @@
-import "bootstrap";
-import "bootstrap/dist/css/bootstrap.css";
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 require("./assets/stylesheets/sparnatural.scss");
 import $ from "jquery";
@@ -20,7 +18,7 @@ import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import QueryParser from "./sparnatural/querypreloading/QueryParser";
 
 /*
-  This is the SparNatural HTMLElement. 
+  This is the sparnatural HTMLElement. 
   e.g. Interface to the outside world
   Used to configure the Settings and load queries
 */
@@ -59,10 +57,16 @@ class SparNatural extends HTMLElement {
     this.Sparnatural.render();
   }
 
+  /**
+   * Enable the play button when a query has finished executing
+   */
   enablePlayBtn(){
     this.Sparnatural.enablePlayBtn()
   }
 
+  /**
+   * Disable the play button when query is triggered
+   */
   disablePlayBtn(){
     this.Sparnatural.disablePlayBtn()
   }
@@ -71,11 +75,19 @@ class SparNatural extends HTMLElement {
     return QueryParser.parseQueries(queries)
   }
 
+  /**
+   * Load a saved/predefined query in the visual query builder
+   * @param query 
+   */
   loadQuery(query:ISparJson){
     QueryLoader.setSparnatural(this.Sparnatural)
     QueryLoader.loadQuery(query)
   }
+
+  expandSparql(query:string) {
+    return this.Sparnatural.specProvider.expandSparql(query);
+  }
 }
 
-customElements.get("sparnatural") ||
-  window.customElements.define("sparnatural", SparNatural);
+customElements.get("spar-natural") ||
+  window.customElements.define("spar-natural", SparNatural);

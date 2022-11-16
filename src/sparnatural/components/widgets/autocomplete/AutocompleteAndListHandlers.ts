@@ -22,10 +22,6 @@ export abstract class Handler {
    **/
   buildURL(sparql: string): string {
     sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
-    //remove linebreaks with whitespaces
-    sparql = sparql.replace(/(\r\n|\n|\r)/gm, " ");
-    //remove all backslashes
-    sparql = sparql.replace(/\\/g, "");
     var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
 
     var url =

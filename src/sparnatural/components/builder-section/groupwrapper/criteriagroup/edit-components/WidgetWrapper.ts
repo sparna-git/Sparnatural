@@ -235,7 +235,6 @@ class WidgetWrapper extends HTMLComponent {
           this.endClassVal
         );
 
-        break;
       }
       case Config.LIST_PROPERTY:
         // defaut handler to be used
@@ -304,7 +303,7 @@ class WidgetWrapper extends HTMLComponent {
           this.objectPropVal,
           this.endClassVal
         );
-        break;
+
       case Config.AUTOCOMPLETE_PROPERTY:
         var handler = this.settings.autocomplete;
         // to be passed in anonymous functions
