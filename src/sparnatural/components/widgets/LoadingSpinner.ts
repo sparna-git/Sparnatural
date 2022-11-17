@@ -18,6 +18,7 @@ export default class LoadingSpinner extends HTMLComponent{
     }
     
     renderMessage(message:string){
+        console.log("rendering message '"+message+"'")
         const elements = this.html[0].getElementsByClassName(`spinner-message`)
         if(elements.length > 1) throw Error(`More than one spinner-message found in${this.html[0]}`)
         elements[0].textContent = message

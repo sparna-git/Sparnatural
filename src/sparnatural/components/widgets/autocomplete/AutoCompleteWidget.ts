@@ -26,10 +26,12 @@ export class AutoCompleteWidgetValue implements WidgetValue {
 export class AutoCompleteWidget extends AbstractWidget {
   protected widgetValues: AutoCompleteWidgetValue[];
   protected datasourceHandler: AbstractSparqlAutocompleteHandler;
+  protected langSearch: any;
 
   constructor(
     parentComponent: WidgetWrapper,
     autocompleteHandler: any,
+    langSearch: any,
     startClassValue: SelectedVal,
     objectPropVal: SelectedVal,
     endClassValue: SelectedVal
@@ -43,6 +45,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       endClassValue,
       ValueRepetition.MULTIPLE
     );
+    this.langSearch = langSearch;
     this.datasourceHandler = autocompleteHandler;
   }
 
@@ -95,18 +98,18 @@ export class AutoCompleteWidget extends AbstractWidget {
 
           if (obj.data == false) {
             xhr.abort();
-            this.Spinner.renderMessage('Please 3 characters min')
+            this.spinner.renderMessage(this.langSearch.AutocompleteSpinner_3Chars)
           } else {          
-            this.toggleSpinner('Request send....')
+            this.toggleSpinner(this.langSearch.AutocompleteSpinner_Searching)
           }
         },
         error: ( xhr: any ) => {
-          this.toggleSpinner('Sorry no results...')
+          this.toggleSpinner(this.langSearch.AutocompleteSpinner_NoResults)
         },
         success: (data: any ) => {
           var results = this.datasourceHandler.listLocation(this.startClassVal, this.objectPropVal, this.endClassVal, data)
           if (results.length == 0) {
-            this.toggleSpinner('Sorry no results...');
+            this.toggleSpinner(this.langSearch.AutocompleteSpinner_NoResults);
           } else {
             this.toggleSpinner('')
           }

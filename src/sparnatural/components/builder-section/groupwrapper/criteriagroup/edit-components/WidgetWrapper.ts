@@ -134,7 +134,6 @@ class WidgetWrapper extends HTMLComponent {
     </span>
     `;
 
-    console.log(((this.ParentComponent.ParentComponent.ParentComponent as CriteriaGroup).endClassWidgetGroup.widgetValues.length));
     let htmlString = '';
     widgetType == Config.NON_SELECTABLE_PROPERTY
     ? (htmlString = lineSpan + selectAnySpan)
@@ -373,6 +372,7 @@ class WidgetWrapper extends HTMLComponent {
         return new AutoCompleteWidget(
           this,
           handler,
+          this.settings.langSearch,
           this.startClassVal,
           this.objectPropVal,
           this.endClassVal

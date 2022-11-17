@@ -36,5 +36,8 @@
   "TreeWidgetSelect": "Sélectionner",
   "MapWidgetOpenMap": "Sur la carte",
   "MapWidgetCloseMap": "Fermer",
-  "MapWidgetAreaSelected": "Zone sélectionnée"
+  "MapWidgetAreaSelected": "Zone sélectionnée",
+  "AutocompleteSpinner_3Chars": "3 caractères minimum",
+  "AutocompleteSpinner_Searching": "(recherche...)",
+  "AutocompleteSpinner_NoResults": "pas de résultats"
 }

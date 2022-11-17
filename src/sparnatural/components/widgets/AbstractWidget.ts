@@ -28,7 +28,7 @@ export abstract class AbstractWidget extends HTMLComponent {
   protected blockStartTriple = false;
   protected blockObjectPropTriple = false;
   protected blockEndTriple = false;
-  protected Spinner = new LoadingSpinner(this).render()
+  protected spinner = new LoadingSpinner(this).render()
   // If the widget contains a datasourceHandler such as ListHandler
   protected datasourceHandler:Handler;
 
@@ -50,7 +50,7 @@ export abstract class AbstractWidget extends HTMLComponent {
 
   render(): this {
     super.render()
-    this.Spinner.render()
+    this.spinner.render()
     return this
   }
 
@@ -109,9 +109,9 @@ export abstract class AbstractWidget extends HTMLComponent {
 
   // toggle spinner component when loading a datasource
   toggleSpinner(message?:string){
-    const elements = this.Spinner.html[0].getElementsByClassName('load')
+    const elements = this.spinner.html[0].getElementsByClassName('load')
     if(elements.length > 0) elements[0].classList.toggle('show')
-    if(message) this.Spinner.renderMessage(message)
+    if(message != null) this.spinner.renderMessage(message)
   }
 
   isBlockingStart() {

@@ -5,11 +5,15 @@
     top:0.6em;
     left: 100%;
     line-height: 32px;
-    background: #fff;
+    /* background: #fff; */
     border-radius: 0 0 4px 4px;
     padding: 0 5px;
-    border: 1px solid #ccc;
-    border-top: 1px solid transparent;
+    margin-left:7px;
+    font-style:italic;
+    font-size: 0.9em;
+    /* border: 1px solid #ccc; */
+    /* border-top: 1px solid transparent; */
+
     &.show {
         display: block;
     }
