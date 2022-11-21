@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "en-US" }}">
+  <head>
+
+    {% if site.google_analytics %}
+      <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ site.google_analytics }}');
+      </script>
+    {% endif %}
+    <meta charset="UTF-8">
+
+{% seo %}
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,700|Open+Sans:300,300i,400,400i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Font Awesome -->    
+    <link rel="stylesheet" href="/assets/fa/css/all.min.css" />
+
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+
+    <style>
+
+      #documentation-section {
+        padding-top: 115px;
+        height: auto;
+        overflow: visible;
+      }
+
+      .anchorjs-link {
+        transition: all .25s linear;
+      }
+      *:hover > .anchorjs-link {
+        margin-left: -1.125em !important;
+      }
+
+    </style>
+
+
+  </head>
+  <body>
+    <!-- <a id="skip-to-content" href="#content">Skip to the content.</a> -->
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex justify-content-between align-items-center">
+
+      <div id="logo">
+        <h1><a href="#">Sparnatural documentation</a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li class="dropdown"><a href="#"><i style="font-size:25px;" class="fad fa-globe-africa"></i>&nbsp;<span>Lang.</span> <i class="bi bi-chevron-down"></i></a>
+            <ul style="width:80%;">
+              <li><a href="/fr">fr</a></li>
+              <li><a href="/">en</a></li>
+            </ul>
+          </li>
+          <li><a class="nav-link" href="https://github.com/sparna-git/Sparnatural"><i style="font-size:25px;" class="fab fa-github"></i>&nbsp; Github</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+    </div>
+  </header><!-- End Header -->
+
+
+    <main id="content" class="main-content" role="main">
+      
+      <!-- ======= Documentation Section ======= -->
+      <section id="documentation-section">
+        <div class="container">
+
+        {{ content }}
+
+        </div>
+      </section><!-- End Documentation Section -->
+
+
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/anchor-js/anchor.min.js"></script>
+    <script>
+      anchors.options.placement = 'left';
+      anchors.add();
+    </script>
+
+    <script>
+      $( document ).ready(function($) {          
+        // add bootstrap table class on all tables
+        $('table').addClass("table");
+      }) ;
+    </script>
+
+
+  </body>
+</html>
