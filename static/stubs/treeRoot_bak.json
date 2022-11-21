@@ -1,8 +1,0 @@
-[
-       { "id" : "http://fr.dbpedia.org/resource/Baroque", "parent" : "#", "text" : "Baroque" },
-       { "id" : "http://fr.dbpedia.org/resource/Romantisme", "parent" : "#", "text" : "Romantisme" },
-       { "id" : "http://fr.dbpedia.org/resource/Impressionnisme", "parent" : "#", "text" : "Impressionnisme"},
-       { "id" : "http://fr.dbpedia.org/resource/Surréalisme", "parent" : "#", "text" : "Surréalisme", "hasChildren":true  },
-       { "id" : "http://fr.dbpedia.org/resource/Postimpressionnisme", "parent" : "#", "text" : "Postimpressionnisme", "disabled" : true, "hasChildren":true },
-       { "id" : "http://fr.dbpedia.org/resource/Naturalisme", "parent" : "#", "text" : "Naturalisme" }
-]
