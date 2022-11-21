@@ -1,0 +1,88 @@
+@use "../../_themes";
+@use "../../_base";
+@use "../../_mixins";
+
+/* Structure flex */
+.CriteriaGroup {
+	border: 1px solid #ddd;
+	display: flex;
+	position: relative;
+	border-radius: 5px;
+	background: #fff;
+	margin-top: base.$margin-component;
+	margin-bottom: base.$margin-component-onEdit;
+	padding: 2px 0 2px 5px;
+	clear: both;
+	-moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
+	-webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;
+	-o-box-shadow: 0px 2px 3px 0px #cfcfcf;
+	box-shadow: 0px 2px 3px 0px #cfcfcf;
+	filter: progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
+
+
+	.flexWrap {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+	}
+
+	.componentBackArrow svg {
+		height: 48px;
+
+		path {
+			fill: transparent;
+			stroke: transparent;
+			stroke-width: 2.5px;
+		}
+	}
+
+	.componentFrontArrow svg {
+		height: 48px;
+
+		path {
+			fill: transparent;
+			stroke: themes.$custom-silver-light;
+			stroke-width: 3px;
+		}
+
+		rect {
+			fill: #fff;
+		}
+	}
+
+	&.optionalEnabled {
+		border: 3px dashed themes.$custom-red;
+	}
+
+	&.notExistsEnabled {
+		border: 3px dashed #000;
+	}
+	
+	/* Unselect to graphique  */
+	span.unselect {
+		/*position: absolute;*/
+		display: block;
+		position: absolute;
+		top: 15px;
+		right: 10px;
+		width: 22px;
+		height: 22px !important;
+		padding: 0 0;
+		text-align: center;
+		cursor: pointer;
+		color: themes.$custom-red-bold;
+		background: #fff !important;
+		line-height: 22px;
+		font-size: 18px;
+		box-sizing: border-box;
+		border-radius: 11px;
+		z-index: 2;
+	}
+}
+
+/* When a value is selected or Where is enabled */
+li.groupe.completed {
+	&>.CriteriaGroup {
+		margin-bottom: base.$margin-component;
+	}
+}

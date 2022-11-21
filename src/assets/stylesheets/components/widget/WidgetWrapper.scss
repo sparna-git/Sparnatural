@@ -1,0 +1,235 @@
+@use "../../themes";
+@use '../../base';
+
+.nb-choice-2 {
+    .WidgetWrapper {
+        border-left: 3px solid themes.$custom-red;
+
+        &:before {
+            display: none;;
+        }
+    }
+}
+.WidgetWrapper {
+    position: relative;
+   
+    height: 51px;
+    padding-bottom: 3px;
+    padding-left: 25px;
+    padding-right: 5px;
+    line-height: 48px;
+    /*overflow: hidden;*/
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display:block;
+    width:100%;
+    min-width:1px;
+
+    &:before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0;
+        left:-3px;
+        width: 3px;
+        height: 20px;
+        background: themes.$custom-red;
+    }
+
+    &:after {
+        content: '';
+        display: block;
+        position: absolute;
+        top:-10px;
+        left:-6px;
+        width: 9px;
+        height: 9px;
+        -moz-box-shadow: 0px 6px 3px -3px #cfcfcf;
+        -webkit-box-shadow: 0px 6px 3px -3px #cfcfcf;
+        -o-box-shadow: 0px 6px 3px -3px #cfcfcf;
+        box-shadow: 0px 6px 3px -3px #cfcfcf;
+        filter: progid:DXImageTransform.Microsoft.Shadow(color=#cfcfcf, Direction=180, Strength=3);
+    }
+
+    /*text-decoration: underline;*/
+    /*&.DatesWidget {
+        border-left-color: transparent;
+        
+        .edit-trait-top {
+            display: block;
+        }
+    }*/
+    .underline {
+        text-decoration: underline;
+    }
+    .boolean-value {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .or {
+        color: themes.$custom-red;
+        font-weight: 600;
+    }
+    .selectAll .underline {
+        cursor: pointer;
+    }
+    &>a,
+    &>div {
+        position: absolute;
+        left: 100%;
+        top: 0; 
+    }
+
+    &>.listwidget,
+    &>.search-widget,    
+    &>.timedatepicker-widget {
+        &>div,
+        &>input {
+            display: inline-block;
+        }
+        &>input {
+            // margin-left: 5px;
+            // height: 35px;
+            // width: 60px;
+            height: 35px;
+            border-color: #ccc;
+            border-radius: 4px;
+            border-style: solid;
+            border-width: 1px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
+            color: #555;
+            float: none;
+            padding: 6px 12px;
+        }
+        &>input.day {
+            width: 105px;
+        }
+        &>input.year {
+            width: 60px;
+        }
+    }
+
+    &>.date-widget {
+        &>.easy-autocomplete {
+            width: 176px!important;
+            
+            .easy-autocomplete-container {
+                
+                ul {
+                    
+                    li {
+                        position: relative;
+                        width: 296px;
+                        padding-right: 120px;
+                        
+                        span {
+                            display: block;
+                            position: absolute;
+                            top: 0;
+                            right: 0;
+                            height: 30px;
+                            width: 60px;
+                            line-height: 20px;
+                            text-align: left;
+                            padding: 5px 12px;
+                            font-size: 14px;
+                            
+                            &.start {
+                                right: 60px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        input {
+            border-color: #ccc;
+            border-radius: 4px;
+            border-style: solid;
+            border-width: 1px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
+            color: #555;
+            float: none;
+            padding: 6px 10px;
+        }
+    }
+
+    &>.search-widget {
+        
+        &>input {
+            width: 150px;
+            border-color: #ccc;
+            border-radius: 4px;
+            border-style: solid;
+            border-width: 1px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
+            color: #555;
+            float: none;
+            padding: 6px 12px;
+        }
+        
+    }
+    .easy-autocomplete-container>ul>li {
+        white-space: normal;
+    }
+
+    .SearchWidget,
+    .DatesWidget {
+        max-width: 600px;
+        white-space: nowrap;
+        &>div,
+        &>input {
+            display: inline-block;
+            
+        }
+        &>input {
+            width: 70px;
+            height: base.$height-components-under;
+            border-color: #ccc;
+            border-radius: 4px;
+            border-style: solid;
+            border-width: 1px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
+            color: #555;
+            float: none;
+            padding: 6px 12px;
+        }
+        .easy-autocomplete>input {
+            width: 100%;
+        }
+    }
+    
+    .SearchWidget {
+        &>input {
+            width: 200px;
+        }
+    }
+
+    .ListeWidget {
+        .nice-select{
+            background: #fff;
+            height: base.$height-components-hover;
+            line-height: base.$height-components-hover - 6;
+            padding-right: 26px;
+            .current {
+                display: inline-block;
+                height: base.$height-components-hover - 6;
+                line-height: base.$height-components-hover - 6;
+                vertical-align: bottom;
+                &>span {
+                    vertical-align: bottom;
+                }
+            }
+            .list {
+                li.option {
+                    min-height: base.$height-components-hover;
+                    line-height: base.$height-components-hover;
+                }
+            }
+            &:after {
+                margin-top: -2px;
+            }
+        }
+    }
+
+}

@@ -1,0 +1,58 @@
+@use "../themes";
+@use '../base';
+
+ul.componentsListe {
+    padding: 0;
+    width: base.$component-width;
+    margin: 0 auto;
+
+    &,
+    ul {
+        list-style-type: none;
+        padding: 0;
+        background: transparent;
+        clear: both;
+        border: 0 solid transparent;
+    }
+    //
+    ul {
+        /*li>div {
+					margin-left: 46px;
+				}
+				li li>div {
+					margin-left: 92px;
+					*
+				}*/
+        li li.OnEdit > div > div > .ActionWhere.ShowOnEdit {
+            display: none;
+        }
+    }
+
+    li.groupe.optional-enabled {
+        .CriteriaGroup {
+            border: 3px dashed themes.$custom-red;
+        }
+
+        ul.childsList {
+            .ActionAnd {
+                & > .trait-and-bottom {
+                    border-left: 3px dashed themes.$custom-red;
+                }
+
+                & > a {
+                    border: 2px dashed themes.$custom-red;
+                }
+            }
+
+            & > li.hasAnd {
+                & > span {
+                    border-left: 3px dashed themes.$custom-red;
+                }
+
+                & > span > span {
+                    border: 2px dashed themes.$custom-red;
+                }
+            }
+        }
+    }
+} 

@@ -1,0 +1,64 @@
+@use "../themes";
+
+
+.submitSection {
+    height: 41px;
+    background: themes.$custom-green ;
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    a {
+        position: absolute;
+        display: flex;
+        top: 14px;
+        width: fit-content;
+        right:30px;
+        padding: 10px;
+        padding-left: 12px;
+        border-radius: 5px;
+        background: themes.$custom-green-bold;
+        box-shadow: 0px 2px 3px 0px #cfcfcf;
+        cursor: pointer;
+        z-index: 2;
+        svg {
+            display: block;
+            max-width:  34px;
+            height: 34px;
+            path {
+                fill:#FFFFFF;
+                width: auto;
+                height: auto;
+            }
+        }
+        svg.playLoader {
+            display: none;
+            max-width:  44px;
+            height: 44px;
+        }
+
+        &.submitDisable {
+            background: themes.$custom-silver-light;
+            cursor: default;
+            svg {
+                path {
+                    fill:themes.$custom-silver;
+                }
+            }
+            &.loadingEnabled {
+                padding: 4px;
+                svg.playIcon {
+                    display: none;
+                }
+                svg.playLoader {
+                    display: block;
+                    path {
+                        fill:themes.$custom-green-bold;
+                    }
+                    
+                }
+            }
+        }
+    }
+}
+
+

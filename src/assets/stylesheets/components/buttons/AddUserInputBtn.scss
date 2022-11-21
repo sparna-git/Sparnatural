@@ -1,0 +1,13 @@
+@use '../../themes';
+.button-add {
+    border: 3px solid themes.$custom-red;
+    border-radius: 15px;
+    background: #fff;
+    padding: 0 10px;
+    line-height: 25px;
+    margin-left: 5px;
+    &:hover {
+        color: themes.$custom-red;
+        cursor: pointer;
+    }
+}

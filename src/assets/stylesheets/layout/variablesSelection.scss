@@ -1,0 +1,288 @@
+@use "../themes";
+@use'../base';
+
+.variablesSelection {
+
+    .flexWrap {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+    }
+
+    background: rgb(255, 231, 203);
+    margin-bottom: 22px;
+    border-top: 2px solid #8D8D8D;
+    background: themes.$custom-red-light;
+    margin-bottom: 22px;
+    border-top: 2px solid themes.$custom-silver-line;
+
+    .linesWrapper {
+        // display: none;
+        height: 0;
+        overflow: hidden;
+    }
+
+    &.displayed {
+        .linesWrapper {
+            height: auto;
+        }
+
+        .VariableSelectorDisplay {
+            a {
+                margin-top: -22px;
+                transition: margin-top 0.700s ease;
+            }
+        }
+    }
+
+    .VariableSelectorDisplay {
+        background: themes.$custom-red-medium;
+        height: 41px;
+        position: relative;
+
+        a {
+            position: absolute;
+            left: 50%;
+            display: block;
+            height: 44px;
+            width: 44px;
+            margin: 0 auto;
+            margin-top: 18px;
+            margin-left: -22px;
+            border-radius: 22px;
+            background: themes.$custom-red-medium;
+            line-height: 1;
+            padding: 10px;
+            transition: margin-top 0.700s ease;
+            cursor: pointer;
+
+            .arrow-icon {
+                margin-top: 4px;
+                display: inline;
+            }
+        }
+    }
+
+    .line1,
+    .line2 {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        width: calc(base.$component-width - 60px);
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        background: #fff;
+        max-width: 96%;
+
+
+        & > div.variablesOtherSelect {
+            display: block;
+        }
+    }
+
+    .line1 {
+        border-radius: 5px 5px 0 0;
+        border-bottom: 0px solid transparent;
+        min-height: 61px;
+        margin-top: 41px;
+
+        .sortableItem {
+            padding: 10px;
+            display: inline-block;
+
+            &:first-child {
+                min-width: 140px;
+            }
+        }
+
+        .variablesOtherSelect > div:first-child {
+            background: lightgray;
+            height: 100%;
+            display: block;
+            float: left;
+        }
+
+        .variableSelected {
+            padding: 3px 7px 3px 2px;
+            border: 1px solid gray;
+            font-size: 12px;
+            color: themes.$default-text-color;
+            border-radius: 5px;
+            background: #fff;
+            align-items: center;
+            width: fit-content;
+            min-width: 110px;
+
+            .variable-handle {
+                display: inline-block;
+                padding: 0 3px;
+                height: 24px;
+                color: transparent;
+                /*border-left: 2px dashed lightgray;
+						border-right: 2px dashed lightgray;*/
+                cursor: grab;
+
+                svg {
+                    width: 15px;
+                    height: 24px;
+
+                    path {
+                        stroke: themes.$custom-silver;
+                        stroke-width: 0.264583;
+                    }
+                }
+            }
+
+            input {
+                line-height: 30px;
+                padding: 1px;
+                min-width: 3ch;
+                margin-left: 5px;
+                border: 0px;
+                text-align:center;
+            }
+
+            input:invalid {
+                border: 2px dashed red;
+            }
+
+            [contenteditable="true"]:active,
+            [contenteditable="true"]:focus {
+                border-color: #ccc;
+                border-radius: 4px;
+                border-style: solid;
+                border-width: 1px;
+                padding: 0 5px;
+                outline: none;
+            }
+        }
+    }
+
+    .line2 {
+        margin-bottom: 41px;
+        border-radius: 0 0 5px 5px;
+        justify-content: space-between;
+        border-top: 1px solid darkgray;
+        line-height: 20px;
+        -moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
+        -webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;
+        -o-box-shadow: 0px 2px 3px 0px #cfcfcf;
+        box-shadow: 0px 2px 3px 0px #cfcfcf;
+
+        .variablesOrdersSelect {
+            background: lightgray;
+            padding: 0 10px;
+            min-width: 148px;
+
+            strong {
+                font-size: 12px;
+            }
+
+            a {
+                cursor: pointer;
+
+                svg {
+                    width: 20px;
+                    height: 20px;
+                }
+            }
+
+            a.selected {
+                cursor: default;
+
+                svg {
+                    path {
+                        fill: themes.$custom-red;
+                    }
+                }
+            }
+        }
+
+
+        .variablesOptionsSelect {
+            display: flex;
+            text-align: right;
+            padding: 5px 5px 5px 5px;
+            font-size: 14px;
+            font-weight: bolder;
+
+            p {
+                // name of the variableOptionSelection
+                border-top: 10px;
+                margin-bottom: auto;
+                margin-right: 10px;
+            }
+        }
+
+        color: themes.$default-text-color;
+        //section Sort
+        a {
+            display: inline-block;
+            padding: 5px;
+            color: themes.$default-text-color;
+        }
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 50px;
+        height: 26px;
+        margin-bottom: 0;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 3px;
+        bottom: 2px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: themes.$custom-red-medium;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #ccc;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(22px);
+        -ms-transform: translateX(22px);
+        transform: translateX(22px);
+        background-color: themes.$custom-red;
+    }
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 26px;
+        border: 1px solid #555;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+        border: 1px solid #555;
+    }
+}

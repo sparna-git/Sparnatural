@@ -1,0 +1,96 @@
+@use "../../../themes";
+@use '../../../base';
+@use '../../../mixins';
+
+.StartClassGroup,
+.EndClassGroup {
+    position: relative;
+    margin-right: 9px;
+
+    .selectViewVariableBtn {
+        position: absolute;
+        top: 50%;
+        margin-left: 112px; //+9 pour retrait dans fleche
+        margin-top: -8px;
+        width: 16px;
+        height: 16px;
+        line-height: 16px;
+        z-index: 2;
+        cursor: pointer;
+
+        svg {
+            width: 100%;
+            height: 100%;
+            vertical-align: top;
+        }
+    }
+
+}
+
+// When optional arrow is rendered move it a bit to the right
+.StartClassGroup, .ClassTypeId{
+    &.Highlited{
+        .componentFrontArrow {
+            margin-right:5px;
+        }
+    }
+}   
+
+
+.EndClassGroup {
+    position: relative;
+    min-width: auto;
+    display: flex;
+
+    .EditComponents {
+        position: absolute;
+        left: 36px;
+        top: base.$height-components - 3;
+        line-height: base.$height-components-hover;
+        z-index: 101;
+        height: base.$height-components;
+        padding: 0 0;
+        width: auto;
+        font-size: 14px;
+
+
+
+        .edit-trait {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 20px;
+            border-top: 3px solid themes.$custom-red;
+            display: inline-block;
+
+            .edit-trait-top {
+                position: absolute;
+                bottom: 3px;
+                left: -2px;
+                display: none;
+                border-left: 3px solid themes.$custom-red;
+                height: 24px;
+            }
+        }
+
+        .edit-num {
+            position: absolute;
+            top: -2px;
+            left: -1px;
+            transform: translate(-50%,-50%);
+            border: 3px solid themes.$custom-red;
+            border-radius: 10px;
+            width: 20px;
+            height: 20px;
+            text-align: center;
+            line-height: 14px;
+            font-size: 10px;
+            background: #fff;
+            font-style: italic;
+        }
+    }
+}
+
+
+
+   
