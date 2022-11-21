@@ -1,12 +1,14 @@
+import { SelectAllValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import ObjectPropertyGroup from "../components/builder-section/groupwrapper/criteriagroup/objectpropertygroup/ObjectPropertyGroup";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import ClassTypeId from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/ClassTypeId";
 import EndClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import StartClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
+import NoOrderBtn from "../components/buttons/NoOrderBtn";
 import Sparnatural from "../components/SparnaturalComponent";
 import { WidgetValue } from "../components/widgets/AbstractWidget";
-import { Branch, ISparJson, SelectedVal } from "../generators/ISparJson";
+import { Branch, ISparJson, SelectedVal, Order } from "../generators/ISparJson";
 
 export default class QueryLoader{
     static sparnatural: Sparnatural;
@@ -21,7 +23,7 @@ export default class QueryLoader{
         this.#updateOrderingOfVariables()
         // trigger query generation
         this.sparnatural.html[0].dispatchEvent(
-        new CustomEvent("initGeneralEvent")
+          new CustomEvent("redrawBackgroundAndLinks")
         );
     }
     
@@ -77,6 +79,11 @@ export default class QueryLoader{
       } 
       grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(parsedVal)
     });
+
+    // if there is no value, and no children, set an "Any" value
+    if(branch.line.values.length == 0 && branch.children.length == 0) {
+      grpWarpper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
+    }
   
     // trigger option state
     this.#triggerOptions(grpWarpper, branch);
@@ -131,7 +138,7 @@ export default class QueryLoader{
   }
 
   static #updateOrderingOfVariables(){
-    const varMenu =this.sparnatural.VariableSelection.variableOrderMenu
+    const varMenu =this.sparnatural.variableSection.variableOrderMenu
     this.query.variables.forEach(v=>{
       varMenu.draggables.forEach(d=>{
         if(d.varName === v){
@@ -141,6 +148,14 @@ export default class QueryLoader{
         }
       })
     })
+    const variableSortOption =this.sparnatural.variableSection.variableSortOption;
+    if(this.query.order == Order.ASC) {
+      variableSortOption.ascendCallBack();
+    } else if(this.query.order == Order.DESC) {
+      variableSortOption.descendCallBack();
+    } else {
+      variableSortOption.noOrderCallback();
+    }
   }
   
   static #clickOn(el: JQuery<HTMLElement>) {

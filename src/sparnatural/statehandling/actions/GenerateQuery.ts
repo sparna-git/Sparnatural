@@ -1,4 +1,4 @@
-import { getSettings } from "../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 
 import ActionStore from "../ActionStore";
 import SparnaturalJsonGenerator from "../../generators/SparnaturalJsonGenerator";
@@ -15,8 +15,7 @@ export default function generateQuery(actionStore: ActionStore) {
   var jsonQuery = qryGen.generateQuery(
     actionStore.variables,
     actionStore.distinct,
-    actionStore.order,
-    actionStore.language
+    actionStore.order
   );
   actionStore.sparnaturalJSON = jsonQuery
   if (jsonQuery != null) {
@@ -35,8 +34,7 @@ export default function generateQuery(actionStore: ActionStore) {
     let selectQuery = writer.generateQuery(
       actionStore.variables,
       actionStore.distinct,
-      actionStore.order,
-      actionStore.language
+      actionStore.order
     );
     actionStore.rdfjsSelect = selectQuery
     // debug rdfJsQuery

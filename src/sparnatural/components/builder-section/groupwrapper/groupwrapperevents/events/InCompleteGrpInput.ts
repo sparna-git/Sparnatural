@@ -10,10 +10,14 @@ export function inCompleteGrpInput(grpWrapper: GroupWrapper) {
     );
   }
 
+  grpWrapper.html[0].classList.remove("completed");
   grpWrapper.CriteriaGroup.EndClassGroup.inputTypeComponent.html[0].classList.remove(
     "Highlited"
   );
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("generateQuery", { bubbles: true })
+  );
+  grpWrapper.html[0].dispatchEvent(
+    new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
   );
 }

@@ -1,16 +1,24 @@
 import { Pattern } from "sparqljs";
-import { getSettings } from "../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 
-export interface DateValue extends WidgetValue {
+export class DateValue implements WidgetValue {
   value: {
     label: string;
     start: string;
     stop: string;
   };
+
+  key():string {
+    return this.value.start+" - "+this.value.stop;
+  }
+
+  constructor(v:DateValue["value"]) {
+    this.value = v;
+  }
 }
 
 export class DatesWidget extends AbstractWidget {
@@ -140,45 +148,46 @@ export class DatesWidget extends AbstractWidget {
   }
 
   #addValueBtnClicked = () => {
-    let val: DateValue = {
-      value: {
-        start: this.inputStart.val().toString(),
-        stop: this.inputEnd.val().toString(),
-        label: "",
-      },
+    let val = {
+      start: this.inputStart.val().toString(),
+      stop: this.inputEnd.val().toString(),
+      label: "",
     };
     this.renderWidgetVal(this.parseInput(val));
   };
-  parseInput(dateValue:DateValue): DateValue {if (dateValue.value.start == "" || dateValue.value.stop == "") {
-    dateValue.value = null;
-  } else {
-    if (parseInt(dateValue.value.start) > parseInt(dateValue.value.stop)) {
-      dateValue.value = null;
-    } else {
-      var absoluteStartYear = dateValue.value.start.startsWith("-")
-        ? dateValue.value.start.substring(1)
-        : dateValue.value.start;
-      var paddedAbsoluteStartYear = absoluteStartYear.padStart(4, "0");
-      var paddedStartYear = dateValue.value.start.startsWith("-")
-        ? "-" + paddedAbsoluteStartYear
-        : paddedAbsoluteStartYear;
-      dateValue.value.start = paddedStartYear + "-01-01T00:00:00";
 
-      var absoluteStopYear = dateValue.value.stop.startsWith("-")
-        ? dateValue.value.stop.substring(1)
-        : dateValue.value.stop;
-      var paddedAbsoluteStopYear = absoluteStopYear.padStart(4, "0");
-      var paddedStopYear = dateValue.value.stop.startsWith("-")
-        ? "-" + paddedAbsoluteStopYear
-        : paddedAbsoluteStopYear;
-      dateValue.value.stop = paddedStopYear + "-12-31T23:59:59";
+  parseInput(dateValue:DateValue["value"]): DateValue {
+    if (dateValue.start == "" || dateValue.stop == "") {
+      dateValue = null;
+    } else {
+      if (parseInt(dateValue.start) > parseInt(dateValue.stop)) {
+        dateValue = null;
+      } else {
+        var absoluteStartYear = dateValue.start.startsWith("-")
+          ? dateValue.start.substring(1)
+          : dateValue.start;
+        var paddedAbsoluteStartYear = absoluteStartYear.padStart(4, "0");
+        var paddedStartYear = dateValue.start.startsWith("-")
+          ? "-" + paddedAbsoluteStartYear
+          : paddedAbsoluteStartYear;
+        dateValue.start = paddedStartYear + "-01-01T00:00:00";
+
+        var absoluteStopYear = dateValue.stop.startsWith("-")
+          ? dateValue.stop.substring(1)
+          : dateValue.stop;
+        var paddedAbsoluteStopYear = absoluteStopYear.padStart(4, "0");
+        var paddedStopYear = dateValue.stop.startsWith("-")
+          ? "-" + paddedAbsoluteStopYear
+          : paddedAbsoluteStopYear;
+        dateValue.stop = paddedStopYear + "-12-31T23:59:59";
+      }
     }
+    dateValue.label = this.#getValueLabel(
+      dateValue.start,
+      dateValue.stop
+    );
+    return new DateValue(dateValue);
   }
-  dateValue.value.label = this.#getValueLabel(
-    dateValue.value.start,
-    dateValue.value.stop
-  );
-  return dateValue; }
 
   #getValueLabel = function (start: any, stop: any) {
     let lbl = "";

@@ -1,4 +1,4 @@
-import ISpecProvider from "../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../spec-providers/ISpecProvider";
 import HTMLComponent from "../HtmlComponent";
 import GroupWrapper from "./groupwrapper/GroupWrapper";
 

@@ -1,4 +1,4 @@
-abstract class Handler {
+export abstract class Handler {
   sparqlEndpointUrl: any;
   sparqlPostprocessor: any;
   language: any;
@@ -22,10 +22,6 @@ abstract class Handler {
    **/
   buildURL(sparql: string): string {
     sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
-    //remove linebreaks
-    sparql = sparql.replace(/(\r\n|\n|\r)/gm, "");
-    //remove all backslashes
-    sparql = sparql.replace(/\\/g, "");
     var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
 
     var url =
@@ -63,7 +59,7 @@ abstract class Handler {
   }
 }
 
-abstract class AbstractSparqlListHandler extends Handler {
+export abstract class AbstractSparqlListHandler extends Handler {
   constructor(
     sparqlEndpointUrl: any,
     sparqlPostprocessor: any,
@@ -76,7 +72,7 @@ abstract class AbstractSparqlListHandler extends Handler {
   abstract listUrl(domain: string, property: string, range: string): string;
 }
 
-abstract class AbstractSparqlAutocompleteHandler extends Handler {
+export abstract class AbstractSparqlAutocompleteHandler extends Handler {
   constructor(
     sparqlEndpointUrl: any,
     sparqlPostprocessor: any,

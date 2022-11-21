@@ -1,4 +1,4 @@
-import ISpecProvider from "../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../spec-providers/ISpecProvider";
 import DisplayBtn from "../buttons/DisplayBtn";
 import HTMLComponent from "../HtmlComponent";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";

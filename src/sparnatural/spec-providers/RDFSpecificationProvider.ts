@@ -1,10 +1,12 @@
-const factory = require("@rdfjs/data-model");
-const rdfParser = require("rdf-parse").default;
+import factory from "@rdfjs/data-model";
+// import Streamify from 'streamify-string';
+var Readable = require('stream').Readable
+import rdfParser from "rdf-parse";
 import { NamedNode, Quad, Store } from "n3";
 import { storeStream } from "rdf-store-stream";
-import { Config } from "../../configs/fixed-configs/SparnaturalConfig";
-import ISpecProvider from "./ISpecProviders";
-import Datasources from "../../configs/fixed-configs/SparnaturalConfigDatasources";
+import { Config } from "../ontologies/SparnaturalConfig";
+import ISpecProvider from "./ISpecProvider";
+import Datasources from "../ontologies/SparnaturalConfigDatasources";
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 export const RDF = {
@@ -46,25 +48,26 @@ export const OWL = {
 
 export class RDFSpecificationProvider implements ISpecProvider {
   lang: string;
-  static store: Store<Quad, Quad, Quad, Quad>;
-  constructor(n3store: Store<Quad, Quad, Quad, Quad>, lang: string) {
+  store: Store<Quad>;
+
+  constructor(n3store: Store<Quad>, lang: string) {
     // init memory store
-    RDFSpecificationProvider.store = n3store;
+    this.store = n3store;
     this.lang = lang;
   }
 
-  static async build(specs: any, filePath: string, lang: any) {
+  static build(specs: any, filePath: string, lang: any, callback: any) {
     console.log("Building RDFSpecificationProvider from " + filePath);
 
-    // init memory store
-    this.store = new Store();
-
-    // parse input specs
-    const textStream = require("streamify-string")(specs);
+    // turn input string into a stream
+    var textStream = new Readable();
+    textStream.push(specs)    // the string you want
+    textStream.push(null)     // indicates end-of-file basically - the end of the stream
 
     var quadStream;
     try {
       // attempt to parse based on path
+      console.log("Attempt to parse determining format from path " + filePath+"...");
       quadStream = rdfParser.parse(textStream, { path: filePath });
     } catch (exception) {
       try {
@@ -83,23 +86,23 @@ export class RDFSpecificationProvider implements ISpecProvider {
     }
 
     // import into store
-    // note the await keyword to wait for the asynchronous call to finish
-    var store = await storeStream(quadStream);
-    console.log(
-      "Specification store populated with " +
-        RDFSpecificationProvider.store.countQuads(
-          undefined,
-          undefined,
-          undefined,
-          undefined
-        ) +
-        " triples."
-    );
-    var provider = new RDFSpecificationProvider(
-      RDFSpecificationProvider.store,
-      lang
-    );
-    return provider;
+    storeStream(quadStream).then((theStore:Store<Quad>) => {
+      console.log(
+        "Specification store populated with " +
+          theStore.countQuads(
+            undefined,
+            undefined,
+            undefined,
+            undefined
+          ) +
+          " triples."
+      );
+      var provider = new RDFSpecificationProvider(
+        theStore,
+        lang
+      );
+      callback(provider);
+    });
   }
 
   getAllSparnaturalClasses() {
@@ -123,7 +126,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   }
 
   getClassesInDomainOfAnyProperty() {
-    const quadsArray = RDFSpecificationProvider.store.getQuads(
+    const quadsArray = this.store.getQuads(
       undefined,
       RDFS.DOMAIN,
       undefined,
@@ -295,7 +298,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
 
   isRemoteClass(classUri: string) {
     return (
-      RDFSpecificationProvider.store.getQuads(
+      this.store.getQuads(
         factory.namedNode(classUri),
         RDFS.SUBCLASS_OF,
         factory.namedNode(Config.NOT_INSTANTIATED_CLASS),
@@ -306,7 +309,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
 
   isLiteralClass(classUri: string) {
     return (
-      RDFSpecificationProvider.store.getQuads(
+      this.store.getQuads(
         factory.namedNode(classUri),
         RDFS.SUBCLASS_OF,
         factory.namedNode(Config.RDFS_LITERAL),
@@ -317,19 +320,19 @@ export class RDFSpecificationProvider implements ISpecProvider {
 
   isSparnaturalClass(classUri: string) {
     return (
-      RDFSpecificationProvider.store.getQuads(
+      this.store.getQuads(
         factory.namedNode(classUri),
         RDFS.SUBCLASS_OF,
         factory.namedNode(Config.SPARNATURAL_CLASS),
         undefined
       ).length > 0 ||
-      RDFSpecificationProvider.store.getQuads(
+      this.store.getQuads(
         factory.namedNode(classUri),
         RDFS.SUBCLASS_OF,
         factory.namedNode(Config.NOT_INSTANTIATED_CLASS),
         undefined
       ).length > 0 ||
-      RDFSpecificationProvider.store.getQuads(
+      this.store.getQuads(
         factory.namedNode(classUri),
         RDFS.SUBCLASS_OF,
         factory.namedNode(Config.RDFS_LITERAL),
@@ -341,7 +344,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   expandSparql(sparql: string) {
     // for each owl:equivalentProperty ...
     var equivalentPropertiesPerProperty: any = {};
-    RDFSpecificationProvider.store
+    this.store
       .getQuads(undefined, OWL.EQUIVALENT_PROPERTY, undefined, undefined)
       .forEach(
         (quad: { subject: { id: string | number }; object: { id: any } }) => {
@@ -365,7 +368,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
 
     // for each owl:equivalentClass ...
     var equivalentClassesPerClass: any = {};
-    RDFSpecificationProvider.store
+    this.store
       .getQuads(undefined, OWL.EQUIVALENT_CLASS, undefined, undefined)
       .forEach(
         (quad: { subject: { id: string | number }; object: { id: any } }) => {
@@ -400,7 +403,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
     }
 
     // for each sparqlString
-    RDFSpecificationProvider.store
+    this.store
       .getQuads(undefined, Config.SPARQL_STRING, undefined, undefined)
       .forEach((quad: { subject: { id: string }; object: { value: any } }) => {
         // find it with the full URI
@@ -475,7 +478,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
     datasourceAnnotationProperty: any
   ) {
     // read predicate datasource
-    const datasourceQuads = RDFSpecificationProvider.store.getQuads(
+    const datasourceQuads = this.store.getQuads(
       factory.namedNode(propertyOrClassId),
       datasourceAnnotationProperty,
       undefined,
@@ -629,8 +632,12 @@ export class RDFSpecificationProvider implements ISpecProvider {
           if (order1 == order2) {
             return me.getLabel(item1).localeCompare(me.getLabel(item2));
           } else {
-            // return order1 - order2;
+            // if the order is actually a number, convert it to number and use a number conversion
+            if(!isNaN(Number(order1)) && !isNaN(Number(order2))) {
+              return Number(order1) - Number(order2);
+            } else {
               return (order1 > order2) ? 1 : -1;
+            }
           }
         } else {
           return -1;
@@ -652,7 +659,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   _readPropertiesWithDomain(classId: any) {
     var properties: any[] = [];
 
-    const propertyQuads = RDFSpecificationProvider.store.getQuads(
+    const propertyQuads = this.store.getQuads(
       undefined,
       RDFS.DOMAIN,
       factory.namedNode(classId),
@@ -671,7 +678,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
 
     for (const aUnionContainingThisClass of unionsContainingThisClass) {
       const propertyQuadsHavingUnionAsDomain =
-        RDFSpecificationProvider.store.getQuads(
+        this.store.getQuads(
           undefined,
           RDFS.DOMAIN,
           aUnionContainingThisClass,
@@ -704,7 +711,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   _readClassesInRangeOfProperty(propertyId: any) {
     var classes: any[] = [];
 
-    const propertyQuads = RDFSpecificationProvider.store.getQuads(
+    const propertyQuads = this.store.getQuads(
       factory.namedNode(propertyId),
       RDFS.RANGE,
       undefined,
@@ -729,7 +736,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   _readImmediateSuperClasses(classId: any) {
     var classes: any[] = [];
 
-    const subClassQuads = RDFSpecificationProvider.store.getQuads(
+    const subClassQuads = this.store.getQuads(
       factory.namedNode(classId),
       RDFS.SUBCLASS_OF,
       undefined,
@@ -746,7 +753,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   _readImmediateSubClasses(classId: any) {
     var classes: any[] = [];
 
-    const subClassQuads = RDFSpecificationProvider.store.getQuads(
+    const subClassQuads = this.store.getQuads(
       undefined,
       RDFS.SUBCLASS_OF,
       factory.namedNode(classId),
@@ -778,7 +785,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
    * Reads the given property on an entity, and return values as an array
    **/
   _readAsResource(uri: any, property: any) {
-    return RDFSpecificationProvider.store
+    return this.store
       .getQuads(factory.namedNode(uri), property, undefined, undefined)
       .map((quad: { object: { id: any } }) => quad.object.id);
   }
@@ -797,7 +804,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   }
 
   _readAsLiteral(uri: any, property: any) {
-    return RDFSpecificationProvider.store
+    return this.store
       .getQuads(factory.namedNode(uri), property, undefined, undefined)
       .map((quad: { object: { value: any } }) => quad.object.value);
   }
@@ -817,13 +824,13 @@ export class RDFSpecificationProvider implements ISpecProvider {
     lang: any,
     defaultToNoLang = true
   ) {
-    var values = RDFSpecificationProvider.store
+    var values = this.store
       .getQuads(factory.namedNode(uri), property, undefined, undefined)
       .filter((quad: any) => quad.object.language == lang)
       .map((quad: { object: { value: any } }) => quad.object.value);
 
     if (values.length == 0 && defaultToNoLang) {
-      values = RDFSpecificationProvider.store
+      values = this.store
         .getQuads(factory.namedNode(uri), property, undefined, undefined)
         .filter((quad: any) => quad.object.language == "")
         .map((quad: { object: { value: any } }) => quad.object.value);
@@ -833,14 +840,14 @@ export class RDFSpecificationProvider implements ISpecProvider {
   }
 
   _readAsRdfNode(rdfNode: any, property: any) {
-    return RDFSpecificationProvider.store
+    return this.store
       .getQuads(rdfNode, property, undefined, undefined)
       .map((quad: { object: any }) => quad.object);
   }
 
   _hasProperty(rdfNode: any, property: any) {
     return (
-      RDFSpecificationProvider.store.getQuads(
+      this.store.getQuads(
         rdfNode,
         property,
         undefined,
@@ -857,7 +864,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
 
   _isInUnion(classUri: any) {
     return (
-      RDFSpecificationProvider.store.getQuads(
+      this.store.getQuads(
         undefined,
         RDF.FIRST,
         classUri,
@@ -874,7 +881,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   }
 
   _readList_rec(list: any) {
-    var result = RDFSpecificationProvider.store
+    var result = this.store
       .getQuads(list, RDF.FIRST, undefined, undefined)
       .map((quad: { object: { id: any } }) => quad.object.id);
 
@@ -896,7 +903,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   }
 
   _readSuperList(listId: any) {
-    const propertyQuads = RDFSpecificationProvider.store.getQuads(
+    const propertyQuads = this.store.getQuads(
       undefined,
       RDF.REST,
       listId,
@@ -913,7 +920,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
   _readUnionsContaining(classId: any) {
     var unions = [];
 
-    var listsContainingThisClass = RDFSpecificationProvider.store
+    var listsContainingThisClass = this.store
       .getQuads(undefined, RDF.FIRST, factory.namedNode(classId), undefined)
       .map((quad: { subject: any }) => quad.subject);
 
@@ -921,7 +928,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
       var rootList = this._readRootList(aListContainingThisClass);
 
       // now read the union pointing to this list
-      var unionPointingToThisList = RDFSpecificationProvider.store
+      var unionPointingToThisList = this.store
         .getQuads(undefined, OWL.UNION_OF, rootList, undefined)
         .map((quad: { subject: any }) => quad.subject);
 

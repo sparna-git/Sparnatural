@@ -1,9 +1,9 @@
 import { Pattern, ValuesPattern } from "sparqljs";
-import UiuxConfig from "../../../../configs/fixed-configs/UiuxConfig";
+import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../../generators/ISparJson";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "jstree"
-import ISettings from "../../../../configs/client-configs/ISettings";
+import ISettings from "../../../../sparnatural/settings/ISettings";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { ValuePatternRow } from "sparqljs";
 import * as DataFactory from "@rdfjs/data-model" ;
@@ -11,12 +11,19 @@ import * as DataFactory from "@rdfjs/data-model" ;
 
 require("jstree/dist/themes/default/style.min.css");
 
-export interface TreeWidgetValue extends WidgetValue {
+export class TreeWidgetValue implements WidgetValue {
   value: {
-    key: string;
     label: string;
     uri: string;
   };
+
+  key():string {
+    return this.value.uri;
+  }
+
+  constructor(v:TreeWidgetValue["value"]) {
+    this.value = v;
+  }
 }
 
 export class TreeWidget extends AbstractWidget {
@@ -344,13 +351,10 @@ export class TreeWidget extends AbstractWidget {
     // rebuild a clean data structure
     var values = [];
     for (var node in checked) {
-      const val:TreeWidgetValue = {
-        value: {
-          key: checked[node].id,
-          label: checked[node].original.text,
-          uri: checked[node].id
-        }
-      }
+      const val = new TreeWidgetValue({
+        label: checked[node].original.text,
+        uri: checked[node].id
+      });
       
       values.push(val);
     }
@@ -358,8 +362,8 @@ export class TreeWidget extends AbstractWidget {
     return values;
   };
 
-  parseInput(input: TreeWidgetValue): TreeWidgetValue {
-    return input
+  parseInput(input: TreeWidgetValue["value"]): TreeWidgetValue {
+    return new TreeWidgetValue(input);
   }
 
   getRdfJsPattern(): Pattern[] {

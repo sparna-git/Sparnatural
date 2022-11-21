@@ -2,7 +2,7 @@
     This is the green arrow which gets rendered. Pressing the arrow renders the Optional and NotExist component
 */
 
-import UiuxConfig from "../../../configs/fixed-configs/UiuxConfig";
+import UiuxConfig from "../IconsConstants";
 import { OptionsGroup } from "../builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import HTMLComponent from "../HtmlComponent";
 

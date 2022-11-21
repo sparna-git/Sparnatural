@@ -23,12 +23,12 @@ export default function updateVarName(
   );
   //add variables list in actionstore
   actionStore.variables =
-    actionStore.sparnatural.VariableSelection.variableOrderMenu.draggables.map(
+    actionStore.sparnatural.variableSection.variableOrderMenu.draggables.map(
       (d: DraggableComponent) => {
         return d.varName;
       }
     );
   actionStore.sparnatural.html[0].dispatchEvent(
-    new CustomEvent("initGeneralEvent")
+    new CustomEvent("redrawBackgroundAndLinks")
   );
 }

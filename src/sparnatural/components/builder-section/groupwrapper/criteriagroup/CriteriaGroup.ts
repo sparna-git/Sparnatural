@@ -1,8 +1,8 @@
 /**
  * A single line/criteria
  **/
-import { getSettings } from "../../../../../configs/client-configs/defaultSettings";
-import ISpecProvider from "../../../../spec-providers/ISpecProviders";
+import { getSettings } from "../../../../../sparnatural/settings/defaultSettings";
+import ISpecProvider from "../../../../spec-providers/ISpecProvider";
 import UnselectBtn from "../../../buttons/UnselectBtn";
 import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
@@ -176,15 +176,11 @@ class CriteriaGroup extends HTMLComponent {
       this.EndClassGroup.editComponents.renderWidgetsWrapper();
     }
   });
-
   };
 
-  //set css completed class on GroupWrapper
-  initCompleted() {
-    this.ParentGroupWrapper.html.addClass("completed");
-  }
   #isSelectedVal(payload: any): payload is SelectedVal {
     return "type" in payload && "variable" in payload;
   }
+
 }
 export default CriteriaGroup;

@@ -1,0 +1,34 @@
+@use '../../themes';
+.loadingspinner {
+    position: absolute;
+    z-index: 1;
+    top:0.6em;
+    left: 100%;
+    line-height: 32px;
+    /* background: #fff; */
+    border-radius: 0 0 4px 4px;
+    padding: 0 5px;
+    margin-left:7px;
+    font-style:italic;
+    font-size: 0.9em;
+    /* border: 1px solid #ccc; */
+    /* border-top: 1px solid transparent; */
+
+    &.show {
+        display: block;
+    }
+    .load {
+        display: none;
+        width: 32px;
+        height: 32px;
+        svg {
+            vertical-align: top;
+            path {
+                fill: themes.$custom-red;
+            }
+        }
+        &.show {
+            display: inline-block;
+        }
+    }
+}

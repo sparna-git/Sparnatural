@@ -1,4 +1,4 @@
-import { getSettings } from "../../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import HTMLComponent from "../../HtmlComponent";
 import GroupWrapper from "./GroupWrapper";
 
@@ -24,11 +24,11 @@ class LinkAndBottom extends HTMLComponent {
     let posLowerStart =
       grpWrapper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
 
-    let ax =
-      posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4;
-    let bx =
-      posLowerStart.left + 36;
-    let ay = posUpperStart.bottom  + window.scrollY;
+    let ax = posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4;
+    // left padding of the AND link
+    let bx = posLowerStart.left + 36;
+    // +3 so that it looks connected to white group and not orange arrow
+    let ay = posUpperStart.bottom  + window.scrollY +3;
     let by = posLowerStart.top  + window.scrollY;
 
     let css = this.#getLine(ax, bx, ay, by);

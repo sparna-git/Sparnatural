@@ -1,6 +1,6 @@
-import UiuxConfig from "../../../../../../configs/fixed-configs/UiuxConfig";
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
-import { getSettings } from "../../../../../../configs/client-configs/defaultSettings";
+import UiuxConfig from "../../../../IconsConstants";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import { getSettings } from "../../../../../../sparnatural/settings/defaultSettings";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import HTMLComponent from "../../../../HtmlComponent";
@@ -11,6 +11,7 @@ import {
   WidgetValue,
 } from "../../../../widgets/AbstractWidget";
 import CriteriaGroup from "../CriteriaGroup";
+import { SelectAllValue } from "../edit-components/EditComponents";
 
 
 /*
@@ -84,7 +85,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       })
     );
     this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
+      new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
     );
   }
 
@@ -108,7 +109,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
     // undefined for NON_SELECTABLE_PROPERTY
     const widgetComp:AbstractWidget | undefined = (this.ParentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent()
-    if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE && widgetVal.value.label !== "Any" ) {
+    if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE && !(widgetVal instanceof SelectAllValue) ) {
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
         ? this.addWidgetValueBtn.render()
@@ -141,6 +142,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   // when more values should be added then render the inputypecomponent again
   #addMoreValues = () => {
+    // tell it is not completed so that it is higher
+    this.html[0].dispatchEvent(
+      new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
+    );
+
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetWrapper", {
         bubbles: true,

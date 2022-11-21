@@ -1,7 +1,8 @@
 import Sparnatural from "../components/SparnaturalComponent";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
-import { Branch, ISparJson, Language, Order, SelectedVal } from "./ISparJson";
+import { Branch, ISparJson, Order } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
+import { SelectAllValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 
 /*
   Reads out the UI and creates the internal JSON structure described here:
@@ -12,7 +13,6 @@ class SparnaturalJsonGenerator {
   json: ISparJson = {
     distinct: null,
     variables: null,
-    lang: null,
     order: null,
     branches: null,
   };
@@ -23,13 +23,11 @@ class SparnaturalJsonGenerator {
   generateQuery(
     variables: Array<string>,
     distinct: boolean,
-    order: Order,
-    lang: Language
+    order: Order
   ) {
     this.json.distinct = distinct;
     this.json.variables = variables;
     this.json.order = order;
-    this.json.lang = lang;
     this.json.branches = this.#getBranch(
       this.sparnatural.BgWrapper.componentsList.rootGroupWrapper
     );
@@ -42,12 +40,13 @@ class SparnaturalJsonGenerator {
     let branch: Branch = {
       line: {
         s: CrtGrp.StartClassGroup.getVarName(),
+        sType: CrtGrp.StartClassGroup.getTypeSelected(),
         p: CrtGrp.ObjectPropertyGroup.getVarName(),
         pType: CrtGrp.ObjectPropertyGroup.getTypeSelected(),
         o: CrtGrp.EndClassGroup.getVarName(),
-        sType: CrtGrp.StartClassGroup.getTypeSelected(),
         oType: CrtGrp.EndClassGroup.getTypeSelected(),
-        values: CrtGrp.endClassWidgetGroup.getWidgetValues(),
+        // extract only the value part, not the key
+        values: CrtGrp.endClassWidgetGroup.getWidgetValues().filter(v => !(v instanceof SelectAllValue)).map(v => {return v.value;}),
       },
       children: grpWrapper.whereChild
         ? this.#getBranch(grpWrapper.whereChild)

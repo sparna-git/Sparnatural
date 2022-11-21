@@ -3,7 +3,7 @@ import { BgpPattern, Pattern, Variable } from "sparqljs";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
-import ISpecProvider from "../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../spec-providers/ISpecProvider";
 import ClassBuilder from "./ClassBuilder";
 import IntersectionBuilder from "./IntersectionBuilder";
 import SparqlFactory from "../SparqlFactory";
@@ -65,18 +65,22 @@ export default class WhereBuilder{
 
     #buildEndClassPtrn(){
         const endClsGrp = this.#grpWrapper.CriteriaGroup.EndClassGroup
-        const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent)
+        const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingEnd())
         endClsBuilder.build()
         this.#endClassPtrn = endClsBuilder.getPattern()
-        if(endClsBuilder.getDefaultVar())this.#defaultVars.push(endClsBuilder.getDefaultVar())
+        if(endClsBuilder.getDefaultVar()) {
+            this.#defaultVars.push(endClsBuilder.getDefaultVar())
+        }
     }
 
     #buildStartClassPtrn() {
         const startClsGrp = this.#grpWrapper.CriteriaGroup.StartClassGroup
-        const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent)
+        const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingStart())
         startClsBuilder.build()
         this.#startClassPtrn = startClsBuilder.getPattern()
-        if(startClsBuilder.getDefaultVar())this.#defaultVars.push(startClsBuilder.getDefaultVar())
+        if(startClsBuilder.getDefaultVar()) {
+            this.#defaultVars.push(startClsBuilder.getDefaultVar())
+        }
     }
 
     #buildIntersectionPtrn(){

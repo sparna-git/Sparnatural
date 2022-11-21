@@ -53,11 +53,13 @@ export default function deleteGrpWrapper(
         grpWrapper.whereChild = null;
         grpWrapper.linkWhereBottom.html.empty().remove();
         grpWrapper.setObjectPropertySelectedState();
+        // remove completed class so that it returns to its original height
+        grpWrapper.html[0].classList.remove("completed");
       }
     }
   );
   actionStore.sparnatural.html[0].dispatchEvent(
-    new CustomEvent("initGeneralEvent")
+    new CustomEvent("redrawBackgroundAndLinks")
   );
   // there might have been variables in the variable section which now got deleted
   actionStore.sparnatural.html[0].dispatchEvent(

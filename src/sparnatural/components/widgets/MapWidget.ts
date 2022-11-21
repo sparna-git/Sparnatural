@@ -1,7 +1,7 @@
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import L, { LatLng, Rectangle,Map } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
-import { getSettings } from "../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import {
   BgpPattern,
@@ -21,11 +21,19 @@ import * as DataFactory from "@rdfjs/data-model" ;
 import { GEOF} from "../../spec-providers/RDFSpecificationProvider";
 import SparqlFactory from "../../generators/SparqlFactory";
 
-export interface MapWidgetValue extends WidgetValue {
+export class MapWidgetValue implements WidgetValue {
   value: {
     label: string;
     coordinates: LatLng[][];
   };
+
+  key():string {
+    return this.value.coordinates.toString();
+  }
+
+  constructor(v:MapWidgetValue["value"]) {
+    this.value = v;
+  }
 }
 
 // converts props of type Date to type string
@@ -68,7 +76,7 @@ export default class MapWidget extends AbstractWidget {
     super.render();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
-      "Open Map",
+      getSettings().langSearch.MapWidgetOpenMap,
       this.#renderMap
     ).render();
     return this;
@@ -86,13 +94,17 @@ export default class MapWidget extends AbstractWidget {
 
     this.map.pm.addControls({
       position: "topleft",
+      cutPolygon: false,
       drawCircle: false,
       drawPolyline: false,
       drawCircleMarker: false,
       drawMarker: false,
       drawText: false,
       drawPolygon: false,
-      cutPolygon: false,
+      editMode: false,
+      dragMode: false,
+      rotateMode: false,
+      removalMode: false
     });
     this.map.on("pm:create", (e:any) => {
       //If there is already a drawing, then delete it
@@ -103,21 +115,17 @@ export default class MapWidget extends AbstractWidget {
 
       this.map.addLayer(this.drawingLayer);
 
-      let widgetValue: MapWidgetValue = {
-        value: {
-          label: "Area selected",
-          coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
-        },
-      };
+      let widgetValue = new MapWidgetValue({
+        label: getSettings().langSearch.MapWidgetAreaSelected,
+         coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
+      });
       this.renderWidgetVal(widgetValue);
       //add listener when the shape gets changed
       this.drawingLayer.on("pm:edit", (e) => {
-        let widgetValue: MapWidgetValue = {
-        value: {
-          label: "Area selected",
+        let widgetValue = new MapWidgetValue({
+          label: getSettings().langSearch.MapWidgetAreaSelected,
           coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
-        },
-      };
+        });
       this.renderWidgetVal(widgetValue);
       });
     });
@@ -127,34 +135,35 @@ export default class MapWidget extends AbstractWidget {
 
   #closeMap = () => {
     this.map.remove();
+    /*
     if (this.getwidgetValues().length < 1)
       this.renderWidgetVal({
         value: { label: getSettings().langSearch.SelectAllValues }
       });
+    */
   };
 
-  parseInput(input:ObjectMapWidgetValue): MapWidgetValue {
+  parseInput(input:ObjectMapWidgetValue["value"]): MapWidgetValue {
 
-    const parsedCoords = input.value.coordinates.map((c)=>{
+    const parsedCoords = input.coordinates.map((c)=>{
       return c.map((latlng)=>{
         if(!("lat" in latlng) || !('lng' in LatLng) || isNaN(latlng.lat) || isNaN(latlng.lng))
         return new L.LatLng(latlng.lat,latlng.lng)
       })
     })
-    if(parsedCoords.length === 0) throw Error(`Parsing of ${input.value.coordinates} failed`)
-    return{
-      value:{
-        label: input.value.label,
+    if(parsedCoords.length === 0) throw Error(`Parsing of ${input.coordinates} failed`)
+    return new MapWidgetValue({
+        label: input.label,
         coordinates: parsedCoords
       }
-    }
+    );
   }
 
   #changeButton() {
     this.renderMapValueBtn.html.remove();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
-      "Close Map",
+      getSettings().langSearch.MapWidgetCloseMap,
       this.#closeMap
     ).render();
   }

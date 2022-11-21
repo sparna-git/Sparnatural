@@ -1,4 +1,4 @@
-import { getSettings } from "../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import PlayBtn from "../buttons/PlayBtn";
 import HTMLComponent from "../HtmlComponent";
 import Sparnatural from "../SparnaturalComponent";

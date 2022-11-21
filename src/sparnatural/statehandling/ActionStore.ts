@@ -1,10 +1,10 @@
-import ISpecProvider from "../spec-providers/ISpecProviders";
+import ISpecProvider from "../spec-providers/ISpecProvider";
 import Sparnatural from "../components/SparnaturalComponent";
-import { ISparJson, Language, Order } from "../generators/ISparJson";
+import { ISparJson, Order } from "../generators/ISparJson";
 import generateQuery from "./actions/GenerateQuery";
 import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
-import initGeneralevent from "./actions/InitGeneralEvent";
+import redrawBackgroundAndLinks from "./actions/InitGeneralEvent";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
@@ -28,7 +28,7 @@ class ActionStore {
   order: Order = Order.NOORDER; //default no order
   variables: Array<string> = []; // example ?museum
   distinct = true; // default
-  language = Language.EN; //default
+  language = "en"; //default
   sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
   maxVarIndex = 0; //maxVarIndex indicates how many AND and WHERE siblings are allowed to be added
   showVariableNames = true //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
@@ -133,8 +133,8 @@ class ActionStore {
       this.sparqlVarID = 0;
       this.variables = [];
       this.maxVarIndex = 0;
-      this.sparnatural.VariableSelection.html.remove();
-      this.sparnatural.VariableSelection.render();
+      this.sparnatural.variableSection.html.remove();
+      this.sparnatural.variableSection.render();
       generateQuery(this)
     });
 
@@ -173,10 +173,11 @@ class ActionStore {
       }
     );
 
-    this.sparnatural.html[0].addEventListener("initGeneralEvent", (e) => {
+    this.sparnatural.html[0].addEventListener("redrawBackgroundAndLinks", (e) => {
       e.stopImmediatePropagation();
-      initGeneralevent(this);
+      redrawBackgroundAndLinks(this);
     });
+
     this.sparnatural.html[0].addEventListener(
       "deleteGrpWrapper",
       (e: CustomEvent) => {

@@ -1,11 +1,11 @@
-import { getSettings } from "../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import ActionStore from "../ActionStore";
 /*
-  A general Event is either an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper
+  Triggered either on an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper
 */
-export default function initGeneralevent(actionStore: ActionStore) {
+export default function redrawBackgroundAndLinks(actionStore: ActionStore) {
   let cssdef = ``;
   //index used in callback
   let index = 0;
@@ -37,10 +37,10 @@ export default function initGeneralevent(actionStore: ActionStore) {
             cssdef += drawBackgroungOfGroupWrapper(
               index,
               previousHeight,
-              currentHeight
+              childrenHeight
             );
             //Calculate start distance for next line.
-            previousHeight = previousHeight + currentHeight + 1;
+            previousHeight = previousHeight + childrenHeight + 1;
             index++;
           }
         );
@@ -78,7 +78,7 @@ function rerenderOptionState(grpWrapper: GroupWrapper) {
 
 function drawBackgroungOfGroupWrapper(
   index: number,
-  prev: number,
+  prevHeight: number,
   currHeight: number
 ) {
   var ratio = 100 / 10 / 100;
@@ -86,7 +86,7 @@ function drawBackgroungOfGroupWrapper(
   let rgba = `rgba(${getSettings().backgroundBaseColor},${a})`;
   if (index !== 0) {
     // comma in the string beginning
-    return ` ,${rgba} ${prev}px, ${rgba} ${prev+currHeight}px`;
+    return ` ,${rgba} ${prevHeight}px, ${rgba} ${prevHeight+currHeight}px`;
   }
-  return `${rgba} ${prev}px, ${rgba} ${currHeight}px`;
+  return `${rgba} ${prevHeight}px, ${rgba} ${currHeight}px`;
 }

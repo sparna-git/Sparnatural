@@ -1,4 +1,4 @@
-import { getSettings } from "../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { FilteringSpecificationProvider } from "../../spec-providers/FilteringSpecificationProvider";
 import { SimpleStatisticsHandler } from "./StatisticsHandlers";
 

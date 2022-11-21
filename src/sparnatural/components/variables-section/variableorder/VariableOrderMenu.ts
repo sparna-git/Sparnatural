@@ -1,6 +1,6 @@
 import Sortable, { SortableEvent } from "sortablejs";
 import { SelectedVal } from "../../../generators/ISparJson";
-import ISpecProvider from "../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../spec-providers/ISpecProvider";
 import HTMLComponent from "../../HtmlComponent";
 import VariableSelection from "../VariableSelection";
 import DraggableComponent from "./DraggableComponent";

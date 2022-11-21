@@ -1,6 +1,8 @@
 import { Pattern } from "sparqljs";
 import { SelectedVal } from "../../generators/ISparJson";
 import HTMLComponent from "../HtmlComponent";
+import { Handler } from "./autocomplete/AutocompleteAndListHandlers";
+import LoadingSpinner from "./LoadingSpinner";
 
 // The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
 // example for multiples: List of countries in ListWidget
@@ -14,6 +16,7 @@ export interface WidgetValue {
   value: {
     label: string; // that's the human readable string representation shown as a WidgetValue to the user
   };
+  key: ()=>string; // a function that returns the value key as a string.
 }
 
 export abstract class AbstractWidget extends HTMLComponent {
@@ -25,6 +28,9 @@ export abstract class AbstractWidget extends HTMLComponent {
   protected blockStartTriple = false;
   protected blockObjectPropTriple = false;
   protected blockEndTriple = false;
+  protected spinner = new LoadingSpinner(this).render()
+  // If the widget contains a datasourceHandler such as ListHandler
+  protected datasourceHandler:Handler;
 
   constructor(
     baseCssClass: string,
@@ -41,10 +47,17 @@ export abstract class AbstractWidget extends HTMLComponent {
     this.endClassVal = endClassVal;
     this.valueRepetition = valueRepetition;
   }
+
+  render(): this {
+    super.render()
+    this.spinner.render()
+    return this
+  }
+
   // Must be implemented by the developper of the widget
   abstract getRdfJsPattern(): Pattern[];
-  // 
-  abstract parseInput(value:any):WidgetValue
+  // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
+  abstract parseInput(value:WidgetValue["value"]):WidgetValue
   
   getSparnaturalRepresentation() {
     let vals = this.widgetValues.map((v) => v.value);
@@ -63,7 +76,6 @@ export abstract class AbstractWidget extends HTMLComponent {
   getwidgetValues(): WidgetValue[] {
     return this.widgetValues;
   }
-
 
   // Sparnatural stores the variable name always with the questionmark. 
   // for the DataFactory from "rdfjs" lib we need the variable name without '?'
@@ -93,6 +105,13 @@ export abstract class AbstractWidget extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetVal", { bubbles: true, detail: widgetValues })
     );
+  }
+
+  // toggle spinner component when loading a datasource
+  toggleSpinner(message?:string){
+    const elements = this.spinner.html[0].getElementsByClassName('load')
+    if(elements.length > 0) elements[0].classList.toggle('show')
+    if(message != null) this.spinner.renderMessage(message)
   }
 
   isBlockingStart() {

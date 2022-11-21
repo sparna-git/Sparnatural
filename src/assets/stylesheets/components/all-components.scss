@@ -1,0 +1,36 @@
+@use './componentslist.scss'; 
+@use './groupwrapper.scss';
+//CriteriaGroup
+@use './citeriagroup/criteriagroup.scss';
+//OptionsGroup
+@use './citeriagroup/optionsgroup/optionsgroup.scss';
+//ObjectPropertyGroup
+@use './citeriagroup/objectpropertygroup/objectpropertygroup.scss';
+@use './citeriagroup/objectpropertygroup/objectpropertytypeid.scss';
+//StartEndClassGroup
+@use './citeriagroup/startendclassgroup/startendclassgroup.scss';
+@use './citeriagroup/startendclassgroup/classtypeid.scss';
+//Actions
+@use './citeriagroup/actions/actionand.scss';
+@use './citeriagroup/actions/actionwhere.scss';
+//Buttons
+@use './buttons/unselectbtn.scss';
+@use './buttons/optionalarrow.scss';
+@use './buttons/resetbtn.scss';
+@use './buttons/selectviewvariablebtn.scss';
+@use './buttons/AddUserInputBtn.scss';
+@use './buttons/InfoBtn.scss';
+@use './buttons/AddMoreValuesBtn.scss';
+//Widget
+@use './widget/EndClassWidgetGroup.scss';
+@use './widget/EndClassWidgetValue.scss';
+@use './widget/WidgetWrapper.scss';
+@use './widget/MapWidget.scss';
+@use './widget/TreeWidget.scss';
+// LoadingSpinner
+@use './widget/LoadingSpinner.scss';
+// link components
+@use './link-and-component.scss';
+@use './link-where-child.scss';
+// jquery nice-select
+@use './citeriagroup/nice-select/nice-select.scss'

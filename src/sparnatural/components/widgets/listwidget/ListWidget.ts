@@ -1,6 +1,6 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
-import ISettings from "../../../../configs/client-configs/ISettings";
-import { getSettings } from "../../../../configs/client-configs/defaultSettings";
+import ISettings from "../../../../sparnatural/settings/ISettings";
+import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import LocalCacheData from "../../../datastorage/LocalCacheData";
 import { SelectedVal } from "../../../generators/ISparJson";
 import { SparqlTemplateListHandler } from "./../autocomplete/AutocompleteAndListHandlers";
@@ -11,18 +11,25 @@ import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../../generators/SparqlFactory";
 
-export interface ListWidgetValue extends WidgetValue {
+export class ListWidgetValue implements WidgetValue {
   value: {
-    key: string;
     label: string;
-    uri: string;
+    uri?: string;
   };
+
+  key():string {
+    return this.value.uri;
+  }
+
+  constructor(v:ListWidgetValue["value"]) {
+    this.value = v;
+  }
 }
 
 export class ListWidget extends AbstractWidget {
 
   protected widgetValues: WidgetValue[];
-  listHandler: SparqlTemplateListHandler;
+  datasourceHandler: SparqlTemplateListHandler;
   sort: boolean;
   settings: ISettings;
   selectHtml: JQuery<HTMLElement>;
@@ -43,7 +50,7 @@ export class ListWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.MULTIPLE
     );
-    this.listHandler = listHandler;
+    this.datasourceHandler = listHandler;
     this.sort = sort;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
@@ -59,7 +66,7 @@ export class ListWidget extends AbstractWidget {
     </div>`);
     this.html.append(this.selectHtml);
 
-    let url = this.listHandler.listUrl(
+    let url = this.datasourceHandler.listUrl(
       this.startClassVal.type,
       this.objectPropVal.type,
       this.endClassVal.type
@@ -77,11 +84,13 @@ export class ListWidget extends AbstractWidget {
       cache: "default",
     };
     let temp = new LocalCacheData();
+    //this.toggleSpinner()
     let fetchpromise = temp.fetch(url, init, this.settings.localCacheDataTtl);
     fetchpromise
       .then((response: { json: () => any }) => response.json())
       .then((data: any) => {
-        var items = this.listHandler.listLocation(
+        //this.toggleSpinner("success")
+        var items = this.datasourceHandler.listLocation(
           this.startClassVal.type,
           this.objectPropVal.type,
           this.endClassVal.type,
@@ -93,15 +102,15 @@ export class ListWidget extends AbstractWidget {
             var collator = new Intl.Collator(this.settings.language);
             items.sort((a: any, b: any) => {
               return collator.compare(
-                this.listHandler.elementLabel(a),
-                this.listHandler.elementLabel(b)
+                this.datasourceHandler.elementLabel(a),
+                this.datasourceHandler.elementLabel(b)
               );
             });
           }
 
           $.each(items, (key, val) => {
-            var label = this.listHandler.elementLabel(val);
-            var uri = this.listHandler.elementUri(val);
+            var label = this.datasourceHandler.elementLabel(val);
+            var uri = this.datasourceHandler.elementUri(val);
             this.selectHtml.append(
               $("<option value='" + uri + "'>" + label + "</option>")
             );
@@ -155,17 +164,13 @@ export class ListWidget extends AbstractWidget {
   // separate the creation of the value from the widget code itself
   // so that it can be overriden by LiteralListWidget
   buildValue(uri:string,label:string): WidgetValue {
-    return {
-      valueRepetition: ValueRepetition.MULTIPLE,
-      value: {
-        key: uri,
-        label: label,
-        uri: uri,
-      }
-    } as ListWidgetValue
+    return new ListWidgetValue({
+      label: label,
+      uri: uri,
+    });
   }
 
-  parseInput(input:WidgetValue): WidgetValue { return input as ListWidgetValue }
+  parseInput(input:ListWidgetValue["value"]): WidgetValue { return new ListWidgetValue(input) }
 
   /**
    * @returns  true if the number of values is 1, in which case the widget will handle the generation of the triple itself,

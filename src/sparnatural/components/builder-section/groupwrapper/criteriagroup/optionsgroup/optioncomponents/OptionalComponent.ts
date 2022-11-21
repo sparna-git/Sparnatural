@@ -1,6 +1,6 @@
 import BaseOptionComponent from "./BaseOptionComponent";
 import { OptionsGroup, OptionTypes } from "../OptionsGroup";
-import { getSettings } from "../../../../../../../configs/client-configs/defaultSettings";
+import { getSettings } from "../../../../../../../sparnatural/settings/defaultSettings";
 
 /*
     Not Exists Component. Get's rendered by OptionsGroup if this is enabled.

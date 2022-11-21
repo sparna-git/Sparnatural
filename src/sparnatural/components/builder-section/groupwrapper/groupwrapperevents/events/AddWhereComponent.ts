@@ -40,7 +40,7 @@ export function addWhereComponent(
   // render the link where
   grpWrapper.linkWhereBottom = new LinkWhereBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(
-    new CustomEvent("initGeneralEvent", { bubbles: true })
+    new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
   );
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("changeMaxChildIndex", {

@@ -1,4 +1,4 @@
-import ISpecProvider from "../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../spec-providers/ISpecProvider";
 import CriteriaGroup from "../../builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import HTMLComponent from "../../HtmlComponent";
 import ActionAnd from "./actioncomponents/ActionAnd";

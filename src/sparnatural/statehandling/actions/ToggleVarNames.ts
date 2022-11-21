@@ -16,6 +16,6 @@ export default function toggleVarNames(actionsStore: ActionStore,showVarNames:bo
     }
   );
   actionsStore.sparnatural.html[0].dispatchEvent(
-    new CustomEvent("initGeneralEvent")
+    new CustomEvent("redrawBackgroundAndLinks")
   );
 }

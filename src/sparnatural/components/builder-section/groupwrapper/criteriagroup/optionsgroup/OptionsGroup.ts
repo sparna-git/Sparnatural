@@ -1,4 +1,4 @@
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import OptionalArrow from "../../../../buttons/OptionalArrow";
 import HTMLComponent from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
@@ -75,7 +75,7 @@ export class OptionsGroup extends HTMLComponent {
     }
     
     this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
+      new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
     );
   }
 
@@ -99,7 +99,7 @@ export class OptionsGroup extends HTMLComponent {
     this.OptionalComponent.html.remove();
     this.NotExistsComponent.html.remove();
     this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
+      new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
     );
   }
 

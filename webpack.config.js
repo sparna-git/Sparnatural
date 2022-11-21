@@ -7,7 +7,8 @@ const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  mode:'development',
+	mode: 'development',
+  // mode: 'production',
   entry: ["./src/SparnaturalElement.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
@@ -78,35 +79,42 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
-	new WriteFilePlugin(),
-	new HtmlWebpackPlugin({
-		filename: 'index.html',
-		template: __dirname + "/static/demo-dpedia/index.html",
-		inject: 'body'
-	}),
-	new MiniCssExtractPlugin({
-	  filename: "sparnatural.css",
-	  chunkFilename: "[id].css"
-	}),
-	new CopyPlugin({
-	  patterns: [
-		{from:__dirname +'/static'}
-	  ]
-	}),
-	new DashboardPlugin(),
-	// so that JQuery is automatically inserted
-	new webpack.ProvidePlugin({
-	  $: 'jquery',
-	  jQuery: 'jquery',
-	})
+		new WriteFilePlugin(),
+		new HtmlWebpackPlugin({
+			filename: 'index.html',
+			template: __dirname + "/src/index.html",
+			inject: 'body'
+		}),
+		new MiniCssExtractPlugin({
+		  filename: "sparnatural.css",
+		  chunkFilename: "[id].css"
+		}),
+		new CopyPlugin({
+		  patterns: [
+			{
+				from:__dirname +'/static'
+			}
+		  ]
+		}),
+		new DashboardPlugin(),
+		// so that JQuery is automatically inserted
+		new webpack.ProvidePlugin({
+		  $: 'jquery',
+		  jQuery: 'jquery',
+		}),
+		// so that stream works properly, necessary for RDFSpec provider
+		// see https://stackoverflow.com/questions/68542553/webpack-5process-is-not-defined-triggered-by-stream-browserify
+		new webpack.ProvidePlugin({
+		  process: 'process/browser'
+		})
   ],
 	devServer: {
-	static:{
-		directory: path.resolve(__dirname, "./dist"),
-	},
-	historyApiFallback: true,
-	open: true,
-	hot: true
+		static:{
+			directory: path.resolve(__dirname, "./static"),
+		},
+		historyApiFallback: true,
+		open: true,
+		hot: true
 	},
   devtool: "source-map"
 }

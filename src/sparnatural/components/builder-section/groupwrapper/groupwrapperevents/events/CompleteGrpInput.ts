@@ -11,6 +11,7 @@ export function completeGrpInput(grpWrapper: GroupWrapper) {
     );
   }
 
+  grpWrapper.html[0].classList.add("completed");
   grpWrapper.CriteriaGroup.EndClassGroup.inputTypeComponent.html[0].classList.add(
     "Highlited"
   );
@@ -18,6 +19,6 @@ export function completeGrpInput(grpWrapper: GroupWrapper) {
     new CustomEvent("generateQuery", { bubbles: true })
   );
   grpWrapper.html[0].dispatchEvent(
-    new CustomEvent("initGeneralEvent", { bubbles: true })
+    new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
   );
 }

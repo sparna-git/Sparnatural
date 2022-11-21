@@ -1,5 +1,5 @@
-import { getSettings } from "../../configs/client-configs/defaultSettings";
-import ISpecProvider from "../spec-providers/ISpecProviders";
+import { getSettings } from "../../sparnatural/settings/defaultSettings";
+import ISpecProvider from "../spec-providers/ISpecProvider";
 import BgWrapper from "./builder-section/BgWrapper";
 import SubmitSection from "./submit-section/SubmitSection";
 import SpecificationProviderFactory from "../spec-providers/SpecificationProviderFactory";
@@ -9,8 +9,8 @@ import HTMLComponent from "./HtmlComponent";
 
 
 const i18nLabels = {
-  en: require("../../../static/assets/lang/en.json"),
-  fr: require("../../../static/assets/lang/fr.json"),
+  en: require("../../assets/lang/en.json"),
+  fr: require("../../assets/lang/fr.json"),
 };
 
 class Sparnatural extends HTMLComponent {
@@ -19,7 +19,8 @@ class Sparnatural extends HTMLComponent {
   actionStore: ActionStore;
   BgWrapper: BgWrapper;
   SubmitSection: SubmitSection;
-  VariableSelection: VariableSection;
+  variableSection: VariableSection;
+  // filter that is applied to optional/not exists green arrows, based on its ID
   filter = $(
     '<svg data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" style="width:0;height:0;display:block"><defs><filter style="color-interpolation-filters:sRGB;" inkscape:label="Drop Shadow" id="filter19278" x="-0.15483875" y="-0.11428573" width="1.3096775" height="1.2714286"><feFlood flood-opacity="0.811765" flood-color="rgb(120,120,120)" result="flood" id="feFlood19268" /><feComposite in="flood" in2="SourceGraphic" operator="out" result="composite1" id="feComposite19270" /><feGaussianBlur in="composite1" stdDeviation="2" result="blur" id="feGaussianBlur19272" /><feOffset dx="3.60822e-16" dy="1.8" result="offset" id="feOffset19274" /><feComposite in="offset" in2="SourceGraphic" operator="atop" result="composite2" id="feComposite19276" /></filter></defs></svg>'
   );
@@ -35,30 +36,35 @@ class Sparnatural extends HTMLComponent {
   }
 
   render(): this {
-    this.initSparnatural();
-    //Think this will be launched before load query ???
-    this.actionStore = new ActionStore(this, this.specProvider);
-    this.BgWrapper = new BgWrapper(this, this.specProvider).render();
-    this.SubmitSection = new SubmitSection(this).render();
-    this.VariableSelection = new VariableSection(
-      this,
-      this.specProvider
-    ).render();
-    this.html.append(this.filter);
-    //BGWrapper must be rendered first
-    this.html[0].dispatchEvent(
-      new CustomEvent("initGeneralEvent", { bubbles: true })
-    );
+    let that = this;
+    this.initSpecificationProvider((sp: ISpecProvider) => {
+      that.specProvider = sp;
+      //Think this will be launched before load query ???
+      that.actionStore = new ActionStore(that, that.specProvider);
+      that.BgWrapper = new BgWrapper(that, that.specProvider).render();
+      that.SubmitSection = new SubmitSection(that).render();
+      that.variableSection = new VariableSection(
+        that,
+        that.specProvider
+      ).render();
+      
+      //BGWrapper must be rendered first
+      that.html[0].dispatchEvent(
+        new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
+      );
+      that.html.append(that.filter);      
+    });
     
     return this;
   }
 
-  initSparnatural() {
+  initSpecificationProvider(callback:any) {
     let settings = getSettings();
     let specProviderFactory = new SpecificationProviderFactory();
     specProviderFactory.build(settings.config, settings.language, (sp: any) => {
-      this.specProvider = sp;
-    });
+      // call the call back when done
+      callback(sp);
+    });    
     // uncomment to trigger gathering of statistics
     // initStatistics(specProvider);
   }

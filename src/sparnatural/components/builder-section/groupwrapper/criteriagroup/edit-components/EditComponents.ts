@@ -1,17 +1,27 @@
-import { getSettings } from "../../../../../../configs/client-configs/defaultSettings";
-import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
+import { getSettings } from "../../../../../../sparnatural/settings/defaultSettings";
+import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import { SelectedVal } from "../../../../../generators/ISparJson";
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import HTMLComponent from "../../../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import { WidgetValue } from "../../../../widgets/AbstractWidget";
 import WidgetWrapper from "./WidgetWrapper";
 import ActionWhere from "../../../../buttons/actions/actioncomponents/ActionWhere";
 
-export interface SelectAllValue extends WidgetValue {
+export class SelectAllValue implements WidgetValue {
+  static key = "SelectAllValue";
+
   value: {
     label: string;
   };
+
+  key():string {
+    return SelectAllValue.key;
+  }
+
+  constructor(v:SelectAllValue["value"]){
+    this.value = v;
+  }
 }
 
 enum RENDER_WHERE_ENUM {
@@ -86,17 +96,20 @@ class EditComponents extends HTMLComponent {
       "selectAll",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        this.#onSelectAll();
+        this.onSelectAll();
       }
     );
   }
 
-  #onSelectAll() {
-    let selectAllVal: SelectAllValue = {
-      value: {
+  /**
+   * Can be called from the outside when loading queries
+   */
+  onSelectAll() {
+    let selectAllVal = new SelectAllValue(
+      {
         label: getSettings().langSearch.SelectAllValues,
-      },
-    };
+      }
+    );
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetVal", {
         bubbles: true,

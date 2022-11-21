@@ -1,5 +1,5 @@
-import { Language, Order } from "./ISparJson";
-import ISpecProvider from "../spec-providers/ISpecProviders";
+import { Order } from "./ISparJson";
+import ISpecProvider from "../spec-providers/ISpecProvider";
 import {
   Ordering,
   SelectQuery,
@@ -44,8 +44,7 @@ export default class RdfJsGenerator {
   generateQuery(
     variables: Array<string>,
     distinct: boolean,
-    order: Order,
-    lang: Language
+    order: Order
   ):SelectQuery {
     let RdfJsQuery: SelectQuery = {
       queryType: "SELECT",
@@ -71,19 +70,21 @@ export default class RdfJsGenerator {
     // if the RdfJsQuery contains keys with empty arrays, then the generator crashes.
     if(RdfJsQuery.where?.length === 0 ){
       // if the length is zero, then create beginning query
-      //e.g ?sub ?pred ?obj
+      //e.g ?subject ?predicate ?object
       RdfJsQuery.where = [{
         type: 'bgp',
         triples: [{
-          subject: DataFactory.variable('sub'),
-          predicate: DataFactory.variable('pred'),
-          object: DataFactory.variable('obj'),
+          subject: DataFactory.variable('subject'),
+          predicate: DataFactory.variable('predicate'),
+          object: DataFactory.variable('object'),
         }]
       }]
     }
     // post processing for defaultlabel property
-    if(this.defaultLabelVars.length > 0) RdfJsQuery.variables = [...(RdfJsQuery.variables as Variable[]).filter((v:Variable)=> this.#isVariable(v)),...this.defaultLabelVars]
-    // if there are now variables defined just create the Wildcard e.g: *
+    if(this.defaultLabelVars.length > 0) {
+      this.defaultLabelVars.forEach(defaultLabelVar => this.#insertDefaultLabelVar(RdfJsQuery, defaultLabelVar));
+    }
+    // if there are no variables defined just create the Wildcard e.g: *
     if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
     // don't set an order if there is no expression for it
     if(!RdfJsQuery?.order || !RdfJsQuery?.order[0]?.expression) delete RdfJsQuery.order
@@ -118,7 +119,16 @@ export default class RdfJsGenerator {
       return null;
     }
   }
-  #isVariable(val:Wildcard | Variable | any): val is Variable{
-    return val && "termType" in val && val.termType == "Variable"
+
+  // inserts the default label var right after the variable of the same name
+  #insertDefaultLabelVar(sparqlQuery: SelectQuery, defaultLabelVar:Variable) {
+    var originalVar = (defaultLabelVar  as VariableTerm).value.substring(0,(defaultLabelVar  as VariableTerm).value.length-"_label".length);
+    for(var i=0;i<sparqlQuery.variables.length;i++) {
+      if((sparqlQuery.variables[i] as VariableTerm).value == originalVar) {
+        sparqlQuery.variables.splice(i+1, 0, defaultLabelVar);
+        // don't forget, otherwise infinite loop
+        break;
+      }
+    }
   }
 }

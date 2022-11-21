@@ -1,8 +1,8 @@
-import ISettings from "../../../../../../configs/client-configs/ISettings";
-import { Config } from "../../../../../../configs/fixed-configs/SparnaturalConfig";
-import Datasources from "../../../../../../configs/fixed-configs/SparnaturalConfigDatasources";
+import ISettings from "../../../../../../sparnatural/settings/ISettings";
+import { Config } from "../../../../../ontologies/SparnaturalConfig";
+import Datasources from "../../../../../ontologies/SparnaturalConfigDatasources";
 import { SparqlTreeHandler } from "../../../../widgets/treewidget/TreeHandlers";
-import ISpecProvider from "../../../../../spec-providers/ISpecProviders";
+import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import EditComponents from "./EditComponents";
@@ -21,6 +21,7 @@ import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
 import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWidget";
 import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
+import CriteriaGroup from "../CriteriaGroup";
 
 
 /**
@@ -48,17 +49,29 @@ class WidgetWrapper extends HTMLComponent {
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
+
+    this.widgetType = this.specProvider.getObjectPropertyType(
+      this.objectPropVal.type
+    );
   }
 
   render() {
     super.render();
 
     if (!this.widgetComponent) {
-      this.#createNewWidget();
-    } else {
-      //only rerendering it since it already exists
-      this.#renderWidget();
+      this.#initWidgetComponent();
     }
+
+    // always re-render the few labels before widget that can change depending if a value has already been selected or not
+    $(this.html).find("#selectAllWrapper").remove();
+    this.#addWidgetHTML(this.widgetType);
+
+    //if there is already a widget component rendered, then only render it since we would like to keep the state
+    if (this.widgetComponent) {
+      // could still be null in case of non selectable property
+      this.widgetComponent.render();
+    }
+
     this.#addSelectAllListener();
     return this;
   }
@@ -74,16 +87,11 @@ class WidgetWrapper extends HTMLComponent {
       });
   }
 
-  #createNewWidget() {
-    this.widgetType = this.specProvider.getObjectPropertyType(
-      this.objectPropVal.type
-    );
-
-    this.#addWidgetHTML(this.widgetType);
+  #initWidgetComponent() {
     // if non selectable, simply exit
     if (this.widgetType == Config.NON_SELECTABLE_PROPERTY) {
       this.html[0].dispatchEvent(
-        new CustomEvent("initGeneralEvent", { bubbles: true })
+        new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
       );
       return this;
     }
@@ -93,48 +101,48 @@ class WidgetWrapper extends HTMLComponent {
       this.objectPropVal.type,
       this.endClassVal.type
     );
-    this.widgetComponent.render();
-  }
-
-  #renderWidget() {
-    //if there is already a widget component rendered, then only render it since we would like to keep the state
-    this.widgetComponent.render();
   }
 
   #addWidgetHTML(widgetType: string) {
-    let endLabel = this.#getEndLabel(this.widgetType);
-
     var parenthesisLabel =
       " (" + this.specProvider.getLabel(this.endClassVal.type) + ") ";
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
 
-    let selectAllSpan = `<span class="edit-trait first">
+    let lineSpan = `<span class="edit-trait first">
     <span class="edit-trait-top"></span>
     <span class="edit-num">
       1
     </span>
-  </span>
-  <span class="selectAll" id="selectAll">
+    </span>`;
+
+    let selectAnySpan = `<span class="selectAll" id="selectAll">
     <span class="underline">
     ${this.settings.langSearch.SelectAllValues}
     </span> 
     ${parenthesisLabel} 
-  </span>`;
+    </span>`;
 
     let orSpan = `<span class="or">
       ${this.settings.langSearch.Or}
     </span> `;
     
+    let endLabel = this.#getEndLabel(this.widgetType);
     let endLabelSpan = `<span>
       ${endLabel}
     </span>
     `;
 
+    let htmlString = '';
     widgetType == Config.NON_SELECTABLE_PROPERTY
-    ? (this.widgetHtml = $(selectAllSpan))
-    : (this.widgetHtml = $(selectAllSpan + orSpan + endLabelSpan));
+    ? (htmlString = lineSpan + selectAnySpan)
+    // if there is a value, do not propose the "Any" selection option
+    : ((this.ParentComponent.ParentComponent.ParentComponent as CriteriaGroup).endClassWidgetGroup.widgetValues.length > 0)
+      ?(htmlString = lineSpan + endLabelSpan) 
+      :(htmlString = lineSpan + selectAnySpan + orSpan + endLabelSpan);
+
+    this.widgetHtml = $(`<span id="selectAllWrapper">${htmlString}</span>`);
 
     this.html.append(this.widgetHtml);
   }
@@ -235,7 +243,6 @@ class WidgetWrapper extends HTMLComponent {
           this.endClassVal
         );
 
-        break;
       }
       case Config.LIST_PROPERTY:
         // defaut handler to be used
@@ -304,7 +311,7 @@ class WidgetWrapper extends HTMLComponent {
           this.objectPropVal,
           this.endClassVal
         );
-        break;
+
       case Config.AUTOCOMPLETE_PROPERTY:
         var handler = this.settings.autocomplete;
         // to be passed in anonymous functions
@@ -365,6 +372,7 @@ class WidgetWrapper extends HTMLComponent {
         return new AutoCompleteWidget(
           this,
           handler,
+          this.settings.langSearch,
           this.startClassVal,
           this.objectPropVal,
           this.endClassVal
