@@ -1,8 +1,0 @@
-/resources
-/assets/js/sparql
-/assets/icons/*
-!/assets/icons/buttons
-prepros-6.config
-/node_modules
-package-lock.json
-/dist/webpack-bundle-size-analyzer-report.txt
