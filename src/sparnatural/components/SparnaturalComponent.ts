@@ -36,23 +36,22 @@ class Sparnatural extends HTMLComponent {
   }
 
   render(): this {
-    let that = this;
     this.initSpecificationProvider((sp: ISpecProvider) => {
-      that.specProvider = sp;
+      this.specProvider = sp;
       //Think this will be launched before load query ???
-      that.actionStore = new ActionStore(that, that.specProvider);
-      that.BgWrapper = new BgWrapper(that, that.specProvider).render();
-      that.SubmitSection = new SubmitSection(that).render();
-      that.variableSection = new VariableSection(
-        that,
-        that.specProvider
+      this.actionStore = new ActionStore(this, this.specProvider);
+      this.BgWrapper = new BgWrapper(this, this.specProvider).render();
+      this.SubmitSection = new SubmitSection(this).render();
+      this.variableSection = new VariableSection(
+        this,
+        this.specProvider
       ).render();
       
       //BGWrapper must be rendered first
-      that.html[0].dispatchEvent(
+      this.html[0].dispatchEvent(
         new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
       );
-      that.html.append(that.filter);      
+      this.html.append(this.filter);      
     });
     
     return this;
