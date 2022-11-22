@@ -124,14 +124,8 @@ export class ListWidget extends AbstractWidget {
                 throw Error(
                   "List widget should allow only for one el to be selected!"
                 );
-              let listWidgetValue: ListWidgetValue = {
-                value: {
-                  key: option[0].value,
-                  label: option[0].label,
-                  uri: option[0].value,
-                },
-              };
-              this.renderWidgetVal(listWidgetValue);
+                let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
+                this.renderWidgetVal(listWidgetValue);
             });
           } else {
             this.selectHtml = this.selectHtml.select2();
@@ -143,15 +137,8 @@ export class ListWidget extends AbstractWidget {
                   "List widget should allow only for one el to be selected!"
                 );
 
-              let listWidgetValue: ListWidgetValue = {
-                value: {
-                  key: option[0].value,
-                  label: option[0].label,
-                  uri: option[0].value,
-                },
-              };
-
-              this.renderWidgetVal(listWidgetValue);
+                let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
+                this.renderWidgetVal(listWidgetValue);
             });
           }
         } else {

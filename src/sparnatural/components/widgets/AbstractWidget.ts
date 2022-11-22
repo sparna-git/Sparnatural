@@ -94,10 +94,12 @@ export abstract class AbstractWidget extends HTMLComponent {
 
   // fires the event to render the label of the WidgetValue on the UI
   renderWidgetVal(widgetValue: WidgetValue ) {
-    this.widgetValues.push(widgetValue)
-    this.html[0].dispatchEvent(
-      new CustomEvent("renderWidgetVal", { bubbles: true, detail: widgetValue })
-    );
+    if(!this.widgetValues.find(v => v.key() == widgetValue.key())){  // don't add double values
+      this.widgetValues.push(widgetValue)
+      this.html[0].dispatchEvent(
+        new CustomEvent("renderWidgetVal", { bubbles: true, detail: widgetValue })
+      );
+    }
   }
 
   renderWidgetValues(widgetValues:WidgetValue[]){
