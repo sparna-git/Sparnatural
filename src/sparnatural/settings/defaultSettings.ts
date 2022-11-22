@@ -4,7 +4,7 @@ import ISettings from "./ISettings";
 const defaultSettings: ISettings = {
   langSearch: null,
   config: null,
-  language: "en",
+  language: "fr",
   maxDepth: 4, // max amount of where clauses
   maxOr:3,
   addDistinct: true,
