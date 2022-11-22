@@ -46,7 +46,7 @@ export default class RdfJsGenerator {
     distinct: boolean,
     order: Order
   ):SelectQuery {
-    let RdfJsQuery: SelectQuery = {
+    const RdfJsQuery: SelectQuery = {
       queryType: "SELECT",
       distinct: distinct,
       variables: this.#varsToRDFJS(variables),
@@ -67,25 +67,20 @@ export default class RdfJsGenerator {
       RdfJsQuery.prefixes[key] = this.additionnalPrefixes[key];
     }
 
-    // if the RdfJsQuery contains keys with empty arrays, then the generator crashes.
+    // if the RdfJsQuery contains empty where array, then the generator crashes.
+    // create query with no triples
     if(RdfJsQuery.where?.length === 0 ){
-      // if the length is zero, then create beginning query
-      //e.g ?subject ?predicate ?object
       RdfJsQuery.where = [{
         type: 'bgp',
-        triples: [{
-          subject: DataFactory.variable('subject'),
-          predicate: DataFactory.variable('predicate'),
-          object: DataFactory.variable('object'),
-        }]
+        triples: []
       }]
     }
+    // if there are no variables defined just create the Wildcard e.g: *
+    if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
     // post processing for defaultlabel property
     if(this.defaultLabelVars.length > 0) {
       this.defaultLabelVars.forEach(defaultLabelVar => this.#insertDefaultLabelVar(RdfJsQuery, defaultLabelVar));
     }
-    // if there are no variables defined just create the Wildcard e.g: *
-    if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
     // don't set an order if there is no expression for it
     if(!RdfJsQuery?.order || !RdfJsQuery?.order[0]?.expression) delete RdfJsQuery.order
     
