@@ -124,8 +124,8 @@ export class ListWidget extends AbstractWidget {
                 throw Error(
                   "List widget should allow only for one el to be selected!"
                 );
-                let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
-                this.renderWidgetVal(listWidgetValue);
+              let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
+              this.renderWidgetVal(listWidgetValue);
             });
           } else {
             this.selectHtml = this.selectHtml.select2();
@@ -176,7 +176,7 @@ export class ListWidget extends AbstractWidget {
    }
 
 
-  getRdfJsPattern(): Pattern[] {
+   getRdfJsPattern(): Pattern[] {
     if(this.widgetValues.length == 1) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
         DataFactory.variable(this.getVariableValue(this.startClassVal)),
