@@ -736,10 +736,10 @@ LIMIT 500</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?count (?theLabel as ?value) (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
 {
-  SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+  SELECT ?theLabel (COUNT(?theLabel) AS ?count)
   WHERE {
     ?domain a $domain .
     ?domain $property ?theLabel .
@@ -759,10 +759,10 @@ LIMIT 500</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?count (?theLabel as ?value) (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
 {
-  SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+  SELECT ?theLabel (COUNT(?theLabel) AS ?count)
   WHERE {
     ?domain a $domain .
     ?domain $property ?theLabel .
