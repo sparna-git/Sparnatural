@@ -23,9 +23,9 @@ class VariableSortOption extends HTMLComponent {
   render(): this {
     this.htmlParent = $(this.ParentComponent.html).find(".line2");
     super.render();
-    this.ascendBtn = new AscendBtn(this, this.ascendCallBack).render();
-    this.descendBtn = new DescendBtn(this, this.descendCallBack).render();
-    this.noOrderBtn = new NoOrderBtn(this, this.noOrderCallback).render();
+    this.ascendBtn = new AscendBtn(this, this.changeSortOrderCallBack).render();
+    this.descendBtn = new DescendBtn(this, this.changeSortOrderCallBack).render();
+    this.noOrderBtn = new NoOrderBtn(this, this.changeSortOrderCallBack).render();
     // select no order by default
     this.noOrderBtn.setSelected(true);
     this.variableOptionSelectBtn = new VariableOptionsSelectBtn(
@@ -66,24 +66,12 @@ class VariableSortOption extends HTMLComponent {
     return this;
   }
 
-  ascendCallBack = () => {
+  changeSortOrderCallBack = (order:Order) =>{
     this.html[0].dispatchEvent(
-      new CustomEvent("changeSortOrder", { bubbles: true, detail: Order.ASC })
+      new CustomEvent("changeSortOrder", { bubbles: true, detail: order })
     );
-  };
-  descendCallBack = () => {
-    this.html[0].dispatchEvent(
-      new CustomEvent("changeSortOrder", { bubbles: true, detail: Order.DESC })
-    );
-  };
-  noOrderCallback = () => {
-    this.html[0].dispatchEvent(
-      new CustomEvent("changeSortOrder", {
-        bubbles: true,
-        detail: Order.NOORDER,
-      })
-    );
-  };
+  }
+
 
   toggleVarNames = (selected: boolean) => {
     this.html[0].dispatchEvent(

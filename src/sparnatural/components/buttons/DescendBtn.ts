@@ -1,15 +1,16 @@
 import UiuxConfig from "../IconsConstants";
 import HTMLComponent from "../HtmlComponent";
+import { Order } from "../../generators/ISparJson";
 
 class DescendBtn extends HTMLComponent {
   selected: boolean = false;
-  constructor(ParentComponent: HTMLComponent, callBack: () => void) {
+  constructor(ParentComponent: HTMLComponent, callBack: (order:Order) => void) {
     let widgetHtml = $(UiuxConfig.ICON_ZA);
     super("asc", ParentComponent, widgetHtml);
     // add clicklistener
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       if(!this.selected) {
-        callBack();
+        callBack(Order.DESC);
       }
     });
   }

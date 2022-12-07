@@ -1,10 +1,11 @@
 import UiuxConfig from "../IconsConstants";
 import HTMLComponent from "../HtmlComponent";
+import { Order } from "../../generators/ISparJson";
 
 class NoOrderBtn extends HTMLComponent {
   selected: boolean = false;
   
-  constructor(ParentComponent: HTMLComponent, callBack: () => void) {
+  constructor(ParentComponent: HTMLComponent, callBack: (order:Order) => void) {
     let widgetHtml = $(UiuxConfig.ICON_NO_ORDER);
     super("none", ParentComponent, widgetHtml);
     
@@ -12,7 +13,7 @@ class NoOrderBtn extends HTMLComponent {
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
       if(!this.selected) {
         // notify other buttons
-        callBack();
+        callBack(Order.NOORDER);
       }
     });
   }

@@ -150,11 +150,11 @@ export default class QueryLoader{
     })
     const variableSortOption =this.sparnatural.variableSection.variableSortOption;
     if(this.query.order == Order.ASC) {
-      variableSortOption.ascendCallBack();
+      variableSortOption.changeSortOrderCallBack(Order.ASC);
     } else if(this.query.order == Order.DESC) {
-      variableSortOption.descendCallBack();
+      variableSortOption.changeSortOrderCallBack(Order.DESC);
     } else {
-      variableSortOption.noOrderCallback();
+      variableSortOption.changeSortOrderCallBack(Order.NOORDER);
     }
   }
   
