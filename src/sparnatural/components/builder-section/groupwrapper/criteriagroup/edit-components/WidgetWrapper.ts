@@ -138,7 +138,7 @@ class WidgetWrapper extends HTMLComponent {
     widgetType == Config.NON_SELECTABLE_PROPERTY
     ? (htmlString = lineSpan + selectAnySpan)
     // if there is a value, do not propose the "Any" selection option
-    : ((this.ParentComponent.ParentComponent.ParentComponent as CriteriaGroup).endClassWidgetGroup.widgetValues.length > 0)
+    : (this.widgetComponent.getwidgetValues().length > 0)
       ?(htmlString = lineSpan + endLabelSpan) 
       :(htmlString = lineSpan + selectAnySpan + orSpan + endLabelSpan);
 
