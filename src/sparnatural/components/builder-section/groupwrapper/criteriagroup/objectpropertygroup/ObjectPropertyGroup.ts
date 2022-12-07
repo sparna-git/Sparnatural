@@ -84,19 +84,15 @@ class ObjectPropertyGroup extends HTMLComponent {
     );
     var desc = this.specProvider.getTooltip(this.objectPropVal.type);
 
-    if (desc) {
-      $(this.ParentCriteriaGroup.StartClassGroup.html)
-        .find(".ClassTypeId")
-        .attr("data-tippy-content", desc);
-      // tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
-      var tippySettings = Object.assign({}, this.settings.tooltipConfig);
-      tippySettings.placement = "top-start";
-      tippy(".StartClassGroup .ClassTypeId[data-tippy-content]", tippySettings);
-    } else {
-      $(this.ParentCriteriaGroup.StartClassGroup.html).removeAttr(
-        "data-tippy-content"
-      );
-    }
+    if(desc) {
+			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
+			// tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
+			var tippySettings = Object.assign({}, this.settings.tooltipConfig);
+			tippySettings.placement = "top-start";
+			tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', tippySettings);
+		} else {
+			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
+		}
   }
 
   // get the classname of the uri

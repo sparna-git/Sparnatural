@@ -56,8 +56,8 @@ export default {
         { "@value": "Pays", "@language": "fr" },
       ],
       tooltip: [
-        { "@value": "en", "@language": "en" },
-        { "@value": "fr", "@language": "fr" },
+        { "@value": "tooltip in english", "@language": "en" },
+        { "@value": "tooltip en français", "@language": "fr" },
       ],
       faIcon: "fa-solid fa-earth-africa",
     },

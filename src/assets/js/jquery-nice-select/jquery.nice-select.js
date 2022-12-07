@@ -120,6 +120,14 @@ import { getSettings } from "../../../../src/sparnatural/settings/defaultSetting
             .html(icon + '<span class="label">' + $option.text() + "</span>")
         );
       });
+
+      // activate tooltips on the dropdown list
+      // positioning it on the right
+      var settings = getSettings();
+      tippy(
+        ".nice-select .option[data-tippy-content]",
+        settings.tooltipConfig
+      );
     }
 
     /* Event listeners */
@@ -140,6 +148,7 @@ import { getSettings } from "../../../../src/sparnatural/settings/defaultSetting
           .val($dropdown.find(".selected").data("value"))
           .trigger("change");
       } else {
+        // I don't think this is ever called
         $(".nice-select").not($dropdown).removeClass("open");
         $dropdown.toggleClass("open");
         if (settings && settings.tooltipConfig) {

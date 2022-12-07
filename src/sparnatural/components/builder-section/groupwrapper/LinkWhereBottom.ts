@@ -74,6 +74,7 @@ class LinkWhereBottom extends HTMLComponent {
     let topStrClsGrp = startClassClientRect.top + window.scrollY;
 
     let whereChildRect = whereChild.html[0].getBoundingClientRect();
+    // if you want to see funny non-horizontal connectors, try to "+ 10" here :-)
     let topWhereChild = whereChildRect.top + window.scrollY;
 
     // middleOfStartClass can be used twice since line is horizontal

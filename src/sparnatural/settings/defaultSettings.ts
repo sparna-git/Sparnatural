@@ -178,8 +178,14 @@ const defaultSettings: ISettings = {
     },
   },
   tooltipConfig: {
-    delay: [800, 100],
-    duration: [100, 100],
+    allowHTML: true,
+    plugins: [], 
+    placement: 'right-start',
+    offset: [5, 5],
+    theme: 'sparnatural',
+    arrow: false,
+    delay: [800, 100], //Delay in ms once a trigger event is fired before a tippy shows or hides.
+    duration: [200, 200], //Duration in ms of the transition animation.
   },
   // triggered when "play" button is clicked
   onSubmit: null,
