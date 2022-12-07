@@ -67,7 +67,7 @@ export default class RdfJsGenerator {
       RdfJsQuery.prefixes[key] = this.additionnalPrefixes[key];
     }
 
-    // if the RdfJsQuery contains empty where array, then the generator crashes.
+    // if the RdfJsQuery contains empty 'where' array, then the generator crashes.
     // create query with no triples
     if(RdfJsQuery.where?.length === 0 ){
       RdfJsQuery.where = [{
