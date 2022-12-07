@@ -63,8 +63,8 @@ class VariableSection extends HTMLComponent {
   #addEventListener() {
     this.html[0].addEventListener("updateSortOptionWidth", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      let width = this.variableOrderMenu.html.find("div").find(".sortableItem").first().width();
-      this.variableSortOption.setWidth(width);
+      const firstItem = this.variableOrderMenu.html[0].getElementsByClassName('sortableItem').item(0) as HTMLElement
+      if(firstItem) this.variableSortOption.setWidth(firstItem.offsetWidth)
     });
   }
 }

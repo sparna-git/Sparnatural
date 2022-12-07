@@ -120,7 +120,7 @@ class VariableOrderMenu extends HTMLComponent {
     );
   }
 
-  // Adjust the width of they background for the VariableSortOption area
+  // Adjust the width of the background for the VariableSortOption area
   #onFirstVariableWidthChanged() {
     this.html[0].dispatchEvent(
       new CustomEvent("updateSortOptionWidth", {

@@ -72,7 +72,6 @@ class VariableSortOption extends HTMLComponent {
     );
   }
 
-
   toggleVarNames = (selected: boolean) => {
     this.html[0].dispatchEvent(
       new CustomEvent("toggleVarNames", { bubbles: true })
@@ -80,7 +79,7 @@ class VariableSortOption extends HTMLComponent {
   };
 
   setWidth = (width: number) => {
-    this.html.width(width);
+    (this.html[0] as HTMLElement).style.width = `${width}px`;
   }
 }
 
