@@ -49,18 +49,22 @@ export default function deleteGrpWrapper(
         grpWrapper.whereChild = elToDel.andSibling
         if(!grpWrapper.whereChild){
           grpWrapper.linkWhereBottom.html.empty().remove();
+          grpWrapper.setObjectPropertySelectedState();
           // remove completed class so that it returns to its original height
           grpWrapper.html[0].classList.remove("completed");
         } 
       }
       if(grpWrapper.andSibling === elToDel) {
         grpWrapper.andSibling = elToDel.andSibling
-        if (!grpWrapper.andSibling) grpWrapper.linkAndBottom.html.empty().remove();
-      }
+        if (!grpWrapper.andSibling){
+          grpWrapper.linkAndBottom.html.empty().remove();
+          grpWrapper.setObjectPropertySelectedState();
+        }
+      } 
       // whether grpWrapper.andSibling | grpWrapper.whereChild, do the following
       if (elToDel.whereChild) deleteWhereChilds(elToDel)
       deleteIt(elToDel)
-      grpWrapper.setObjectPropertySelectedState();
+
       actionStore.sparnatural.html[0].dispatchEvent(
         new CustomEvent("changeMaxChildIndex", {
           detail: MaxVarAction.DECREASE,
