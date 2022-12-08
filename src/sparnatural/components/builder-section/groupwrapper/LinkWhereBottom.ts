@@ -8,6 +8,11 @@ import GroupWrapper from "./GroupWrapper";
     The first vertical goes from the EndClassGroup to the end of the CriteriaGroup
     Then the Horizontal connects the first vertical to the left. Till the height of the WhereStartClassGroup
     The last vertical connects the Horizontal line with the new whereChild.StartClassGroup
+    Some helpful notes:
+     - window.scrollX | window.scrollY is used to correct the positioning of the line if the window is scrollable.
+     - ax & ay are the position of the upper Element
+     - bx & by are the position of the lower Element
+     - (posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4) is used to calculate one quarter of the width from the left side
 */
 class LinkWhereBottom extends HTMLComponent {
   ParentGroupWrapper: GroupWrapper;
@@ -34,59 +39,60 @@ class LinkWhereBottom extends HTMLComponent {
   }
 
   #drawWhereConnection(EndClassGroup: EndClassGroup, whereChild: GroupWrapper) {
-    let xyUpper = this.#drawUpperVertical(EndClassGroup, whereChild);
-    let xyLower = this.#drawLowerVertical(whereChild);
+    const xyUpper = this.#drawUpperVertical(EndClassGroup, whereChild);
+    const xyLower = this.#drawLowerVertical(whereChild);
     this.#drawHorizontal(xyLower, xyUpper);
   }
   // line from the middle of the endclassgroup till the end of GroupWrapper
   #drawUpperVertical(endClassGroup: EndClassGroup, whereChild: GroupWrapper) {
-    let endClassClientRect = endClassGroup.html[0].getBoundingClientRect();
-    let whereChildRect = whereChild.html[0].getBoundingClientRect();
-    let middleOfEndClass =
-      endClassClientRect.left +
-      (endClassClientRect.right - endClassClientRect.left) / 2;
-    let topWhereChild = whereChildRect.top + window.scrollY;
-    let yEndClass = endClassClientRect.bottom + 3 + window.scrollY;
+    const endClassClientRect = endClassGroup.html[0].getBoundingClientRect();
+    const whereChildRect = whereChild.html[0].getBoundingClientRect();
+    const ax = (endClassClientRect.left + (endClassClientRect.right - endClassClientRect.left) / 2) + window.scrollX;
+    const ay = endClassClientRect.bottom + 3 + window.scrollY;
+    const by = whereChildRect.top + window.scrollY;
 
-    // middleOfEndClass can be used twice since line is orthogonal to EndClassGroup
+    // ax can be used twice since the line is orthogonal to the upper element
     let css = this.#getLine(
-      middleOfEndClass,
-      middleOfEndClass,
-      yEndClass,
-      topWhereChild
+      ax,
+      ax,
+      ay,
+      by
     );
     this.upperVertical.css(css);
 
-    return { x: middleOfEndClass, y: topWhereChild };
+    return { x: ax, y: by };
   }
+
   #drawHorizontal(
     xyLower: { x: number; y: number },
     xyUpper: { x: number; y: number }
   ) {
-    let css = this.#getLine(xyLower.x, xyUpper.x, xyLower.y, xyUpper.y);
+    const css = this.#getLine(xyLower.x, xyUpper.x, xyLower.y, xyUpper.y);
     this.horizontal.css(css);
   }
+
   #drawLowerVertical(whereChild: GroupWrapper) {
-    let startClassClientRect =
+    const startClassClientRect =
       whereChild.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
-    let middleOfStartClass =
-      startClassClientRect.left + 36;
-    let topStrClsGrp = startClassClientRect.top + window.scrollY;
+    const bx =
+      (startClassClientRect.left + (startClassClientRect.right - startClassClientRect.left) / 4) + window.scrollX;
+    // -2 so that it looks connected to white group
+    const by = startClassClientRect.top + window.scrollY - 2;
 
-    let whereChildRect = whereChild.html[0].getBoundingClientRect();
-    // if you want to see funny non-horizontal connectors, try to "+ 10" here :-)
-    let topWhereChild = whereChildRect.top + window.scrollY;
+    const whereChildRect = whereChild.html[0].getBoundingClientRect();
 
-    // middleOfStartClass can be used twice since line is horizontal
-    let css = this.#getLine(
-      middleOfStartClass,
-      middleOfStartClass,
-      topWhereChild,
-      topStrClsGrp
+    const ay = whereChildRect.top + window.scrollY;
+
+    // bx can be used twice since line is orthogonal from the lower element
+    const css = this.#getLine(
+      bx,
+      bx,
+      ay,
+      by
     );
     this.lowerVertical.css(css);
 
-    return { x: middleOfStartClass, y: topWhereChild };
+    return { x: bx, y: ay };
   }
 
   #getLine(ax: number, bx: number, ay: number, by: number) {
