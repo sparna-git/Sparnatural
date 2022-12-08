@@ -61,6 +61,11 @@ export default function deleteGrpWrapper(
       if (elToDel.whereChild) deleteWhereChilds(elToDel)
       deleteIt(elToDel)
       grpWrapper.setObjectPropertySelectedState();
+      actionStore.sparnatural.html[0].dispatchEvent(
+        new CustomEvent("changeMaxChildIndex", {
+          detail: MaxVarAction.DECREASE,
+        })
+      );
     }
   );
 
