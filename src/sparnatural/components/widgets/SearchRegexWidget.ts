@@ -1,6 +1,6 @@
 import * as DataFactory from "@rdfjs/data-model" ;
 import { BgpPattern, Pattern } from "sparqljs";
-import { getSettings } from "../../../sparnatural/settings/defaultSettings";
+import { getSettings } from "../../settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
@@ -9,24 +9,24 @@ import SparqlFactory from "../../generators/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 
 
-export class SearchWidgetValue implements WidgetValue {
+export class SearchRegexWidgetValue implements WidgetValue {
   value: {
     label: string;
-    search: string;
+    regex: string;
   };
 
   key():string {
-    return this.value.search;
+    return this.value.regex;
   }
 
-  constructor(v:SearchWidgetValue["value"]) {
+  constructor(v:SearchRegexWidgetValue["value"]) {
     this.value = v;
   }
 }
 
-export class SearchWidget extends AbstractWidget {
+export class SearchRegexWidget extends AbstractWidget {
 
-  protected widgetValues: SearchWidgetValue[];
+  protected widgetValues: SearchRegexWidgetValue[];
   addValueBtn: AddUserInputBtn;
   searchInput: JQuery<HTMLElement>;
 
@@ -62,16 +62,16 @@ export class SearchWidget extends AbstractWidget {
     this.searchInput.trigger("change");
     let searchWidgetValue = {
         label: this.searchInput.val().toString(),
-        search: this.searchInput.val().toString(),
+        regex: this.searchInput.val().toString(),
     };
     this.renderWidgetVal(this.parseInput(searchWidgetValue));
   };
 
-  parseInput(input:SearchWidgetValue["value"]): SearchWidgetValue {
-    if (input.search.toString() == "") {
-      throw Error('Empty String in Search Widget')
+  parseInput(input:SearchRegexWidgetValue["value"]): SearchRegexWidgetValue {
+    if (input.regex.toString() == "") {
+      throw Error('Empty String in SearchRegex Widget')
     }
-    return new SearchWidgetValue(input);
+    return new SearchRegexWidgetValue(input);
   }
   
   getRdfJsPattern(): Pattern[] {
@@ -81,7 +81,7 @@ export class SearchWidget extends AbstractWidget {
         // builds a FILTER(lcase(...) = lcase(...))
         return [SparqlFactory.buildFilterStringEquals(
           DataFactory.literal(
-            `${this.widgetValues[0].value.search}`
+            `${this.widgetValues[0].value.regex}`
           ),
           DataFactory.variable(this.getVariableValue(this.endClassVal))
         )];
@@ -93,7 +93,7 @@ export class SearchWidget extends AbstractWidget {
         // builds a FILTER(regex(...,...,"i"))
         return [SparqlFactory.buildFilterRegex(
           DataFactory.literal(
-            `${this.widgetValues[0].value.search}`
+            `${this.widgetValues[0].value.regex}`
           ),
           DataFactory.variable(this.getVariableValue(this.endClassVal))
         )];
@@ -111,7 +111,7 @@ export class SearchWidget extends AbstractWidget {
                 "http://www.ontotext.com/connectors/lucene#query"
               ),
               object: DataFactory.literal(
-                `text:${this.widgetValues[0].value.search}`
+                `text:${this.widgetValues[0].value.regex}`
               ),
             },
             {

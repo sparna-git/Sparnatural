@@ -44,25 +44,24 @@ export default class QueryLoader{
     }
   
     static #buildCriteriaGroup(grpWarpper: GroupWrapper, branch: Branch) {
-        // set StartClassVal only if there wasn't one set by the parent (e.g whereChild andSibling have it already set)
+      // set StartClassVal only if there wasn't one set by the parent (e.g whereChild andSibling have it already set)
       const startClassVal = { type: branch.line.sType, variable: branch.line.s };
       if (!grpWarpper.CriteriaGroup.StartClassGroup.startClassVal.type) {
         //set StartClassGroup
         this.#setSelectedValue(
             grpWarpper.CriteriaGroup.StartClassGroup,
-            startClassVal
+            branch.line.sType
         );
         }
   
     // set EndClassGroup
     const endClassVal = { type: branch.line.oType, variable: branch.line.o };
-    this.#setSelectedValue(grpWarpper.CriteriaGroup.EndClassGroup, endClassVal);
+    this.#setSelectedValue(grpWarpper.CriteriaGroup.EndClassGroup, branch.line.oType);
   
     //set ObjectPropertyGroup
-    const objectPropVal = { type: branch.line.pType, variable: branch.line.p };
     this.#setSelectedValue(
       grpWarpper.CriteriaGroup.ObjectPropertyGroup,
-      objectPropVal
+      branch.line.p
     );
   
     // set WidgetValues
@@ -102,7 +101,12 @@ export default class QueryLoader{
       });
     }
     // select if the var is viewed (eye btn)
-    this.#setSelectViewVariableBtn(startClassVal,grpWarpper.CriteriaGroup.StartClassGroup,endClassVal,grpWarpper.CriteriaGroup.EndClassGroup)
+    this.#setSelectViewVariableBtn(
+      startClassVal,
+      grpWarpper.CriteriaGroup.StartClassGroup,
+      endClassVal,
+      grpWarpper.CriteriaGroup.EndClassGroup
+    )
   }
   
   static #triggerOptions(grpWrapper: GroupWrapper, branch: Branch) {
@@ -119,10 +123,10 @@ export default class QueryLoader{
   // set the value for an inputTypeComponent and trigger the corresponding event
   static #setSelectedValue(
     component: StartClassGroup | EndClassGroup | ObjectPropertyGroup,
-    selectedVal: SelectedVal
+    value: string
   ) {
     // set the values to the ClassTypeId component
-    component.inputTypeComponent.oldWidget.val(selectedVal.type).niceSelect("update");
+    component.inputTypeComponent.oldWidget.val(value).niceSelect("update");
     let niceSelect = component.inputTypeComponent.html[0].querySelectorAll('.nice-select')
     if (niceSelect.length > 1) console.warn('More than one nice-select found!')
     niceSelect[0].classList.add("disabled")

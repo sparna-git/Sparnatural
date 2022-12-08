@@ -6,11 +6,10 @@ export interface SelectedVal {
 }
 
 export interface CriteriaLine {
-  s: string;
-  sType: string;
+  s: string;  
   p: string;
-  pType: string;
   o: string;
+  sType: string;
   oType: string;
   values: WidgetValue["value"][];
 }
@@ -18,8 +17,8 @@ export interface CriteriaLine {
 export interface Branch {
   line: CriteriaLine;
   children: Array<Branch> | [];
-  optional: boolean;
-  notExists: boolean;
+  optional?: boolean;
+  notExists?: boolean;
 }
 
 export interface ISparJson {

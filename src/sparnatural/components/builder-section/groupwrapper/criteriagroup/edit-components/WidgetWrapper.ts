@@ -14,7 +14,7 @@ import MapWidget from "../../../../widgets/MapWidget";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { DatesWidget } from "../../../../widgets/DatesWidget";
-import { SearchWidget } from "../../../../widgets/SearchWidget";
+import { SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
@@ -382,7 +382,7 @@ class WidgetWrapper extends HTMLComponent {
       case Config.GRAPHDB_SEARCH_PROPERTY:
       case Config.STRING_EQUALS_PROPERTY:
       case Config.SEARCH_PROPERTY:
-        return new SearchWidget(
+        return new SearchRegexWidget(
           this,
           this.startClassVal,
           this.objectPropVal,

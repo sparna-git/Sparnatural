@@ -27,7 +27,13 @@ class SparnaturalJsonGenerator {
   ) {
     this.json.distinct = distinct;
     this.json.variables = variables;
-    this.json.order = order;
+    // don't output "noord", just set it to null
+    if(order != Order.NOORDER) {
+      this.json.order = order;
+    } else {
+      this.json.order = null;
+    }
+    
     this.json.branches = this.#getBranch(
       this.sparnatural.BgWrapper.componentsList.rootGroupWrapper
     );
@@ -40,20 +46,26 @@ class SparnaturalJsonGenerator {
     let branch: Branch = {
       line: {
         s: CrtGrp.StartClassGroup.getVarName(),
-        sType: CrtGrp.StartClassGroup.getTypeSelected(),
-        p: CrtGrp.ObjectPropertyGroup.getVarName(),
-        pType: CrtGrp.ObjectPropertyGroup.getTypeSelected(),
+        p: CrtGrp.ObjectPropertyGroup.getTypeSelected(),
         o: CrtGrp.EndClassGroup.getVarName(),
+        sType: CrtGrp.StartClassGroup.getTypeSelected(),
         oType: CrtGrp.EndClassGroup.getTypeSelected(),
         // extract only the value part, not the key
         values: CrtGrp.endClassWidgetGroup.getWidgetValues().filter(v => !(v instanceof SelectAllValue)).map(v => {return v.value;}),
       },
       children: grpWrapper.whereChild
         ? this.#getBranch(grpWrapper.whereChild)
-        : [],
-      optional: grpWrapper.optionState == OptionTypes.OPTIONAL,
-      notExists: grpWrapper.optionState == OptionTypes.NOTEXISTS,
+        : []
     };
+
+    // don't set the flags if they are not true
+    if(grpWrapper.optionState == OptionTypes.OPTIONAL) {
+      branch.optional = true;
+    }
+    if(grpWrapper.optionState == OptionTypes.NOTEXISTS) {
+      branch.notExists = true;
+    }
+
     branches.push(branch);
     if (grpWrapper.andSibling)
       branches.push(...this.#getBranch(grpWrapper.andSibling)); // spread operatore since getBranch() returns an array
