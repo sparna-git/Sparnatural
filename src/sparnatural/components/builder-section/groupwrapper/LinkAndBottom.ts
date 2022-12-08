@@ -2,6 +2,15 @@ import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import HTMLComponent from "../../HtmlComponent";
 import GroupWrapper from "./GroupWrapper";
 
+/*
+  This class is used to draw the connecting line between two group wrappers if an AND connection is made
+  Some helpful notes:
+   - window.scrollX | window.scrollY is used to correct the positioning of the line if the window is scrollable.
+   - ax & ay are the position of the upper (Parent) group wrapper
+   - bx & by are the position of the lower (Sibling) group wrapper
+   - (posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4) is used to calculate one quarter of the width from the left side
+*/
+
 class LinkAndBottom extends HTMLComponent {
   length: number;
   ParentGroupWrapper: GroupWrapper;
@@ -19,19 +28,18 @@ class LinkAndBottom extends HTMLComponent {
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect/element-box-diagram.png
   #drawLinkAndBottom(grpWrapper: GroupWrapper) {
-    let posUpperStart =
+    const posUpperStart =
       grpWrapper.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
-    let posLowerStart =
+    const posLowerStart =
       grpWrapper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
-
-    let ax = posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4;
-    // left padding of the AND link
-    let bx = posLowerStart.left + 36;
+    // from the upper and from the upperelement move 25% into the middle
+    const ax = (posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4) + window.scrollX;
+    let bx = (posLowerStart.left + (posLowerStart.right - posLowerStart.left) / 4) + window.scrollX;
     // +3 so that it looks connected to white group and not orange arrow
-    let ay = posUpperStart.bottom  + window.scrollY +3;
-    let by = posLowerStart.top  + window.scrollY;
+    const ay = posUpperStart.bottom  + window.scrollY + 3;
+    const by = posLowerStart.top  + window.scrollY;
 
-    let css = this.#getLine(ax, bx, ay, by);
+    const css = this.#getLine(ax, bx, ay, by);
 
     this.html.css(css);
   }
@@ -42,9 +50,9 @@ class LinkAndBottom extends HTMLComponent {
       ax = bx - ax;
       bx = bx - ax;
     }
-    let distance = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
+    const distance = Math.sqrt(Math.pow(bx - ax, 2) + Math.pow(by - ay, 2));
     // we always need a vertical line. So 90degree is fixed
-    let degree = 90;
+    const degree = 90;
 
     return {
       transformOrigin: "top left",
