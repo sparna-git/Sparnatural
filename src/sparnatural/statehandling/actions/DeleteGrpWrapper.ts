@@ -20,11 +20,6 @@ export default function deleteGrpWrapper(
   const deleteWhereChilds = (grpWrapper:GroupWrapper) => {
     grpWrapper.whereChild.traversePostOrder((grpWrapper: GroupWrapper) => {
       deleteIt(grpWrapper);
-      actionStore.sparnatural.html[0].dispatchEvent(
-        new CustomEvent("changeMaxChildIndex", {
-          detail: MaxVarAction.DECREASE,
-        })
-      );
     });
     grpWrapper.whereChild = null;
     grpWrapper.linkWhereBottom.html.empty().remove();
@@ -64,12 +59,6 @@ export default function deleteGrpWrapper(
       // whether grpWrapper.andSibling | grpWrapper.whereChild, do the following
       if (elToDel.whereChild) deleteWhereChilds(elToDel)
       deleteIt(elToDel)
-
-      actionStore.sparnatural.html[0].dispatchEvent(
-        new CustomEvent("changeMaxChildIndex", {
-          detail: MaxVarAction.DECREASE,
-        })
-      );
     }
   );
 

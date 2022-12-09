@@ -10,6 +10,7 @@ import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
 import { readVariablesFromUI } from "./actions/SelectViewVar";
 import { SelectQuery } from "sparqljs";
+import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 
 export enum MaxVarAction {
   INCREASE,
@@ -30,17 +31,18 @@ class ActionStore {
   distinct = true; // default
   language = "en"; //default
   sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
-  maxVarIndex = 0; //maxVarIndex indicates how many AND and WHERE siblings are allowed to be added
   showVariableNames = true //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
   sparnaturalJSON:ISparJson;
   sparqlString:string;
   rdfjsSelect:SelectQuery;
   //submitOpened = false still implement
+  
   constructor(sparnatural: Sparnatural, specProvider: ISpecProvider) {
     this.specProvider = specProvider;
     this.sparnatural = sparnatural;
     this.#addCustomEventListners();
   }
+
   // register the event listeners to listen for event from the components
   #addCustomEventListners() {
     this.sparnatural.html[0].addEventListener(
@@ -91,8 +93,15 @@ class ActionStore {
       "getMaxVarIndex",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
+        var maxDepth = 1;
+        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePostOrder((grpWrapper: GroupWrapper) => {
+          if(grpWrapper.depth > maxDepth) {
+            maxDepth = grpWrapper.depth;
+          }
+        });
+
         // return the index in callback
-        e.detail(this.maxVarIndex);
+        e.detail(maxDepth);
       }
     );
 
@@ -100,16 +109,6 @@ class ActionStore {
       e.stopImmediatePropagation();
       updateVarList(this);
     });
-
-    this.sparnatural.html[0].addEventListener(
-      "changeMaxChildIndex",
-      (e: CustomEvent) => {
-        e.stopImmediatePropagation();
-        if (e.detail === MaxVarAction.DECREASE) this.maxVarIndex--;
-        if (e.detail === MaxVarAction.INCREASE) this.maxVarIndex++;
-        if(e.detail === MaxVarAction.RESET) this.maxVarIndex = 0;
-      }
-    );
 
     this.sparnatural.html[0].addEventListener(
       "getSparqlVarId",
@@ -132,7 +131,6 @@ class ActionStore {
       e.stopImmediatePropagation();
       this.sparqlVarID = 0;
       this.variables = [];
-      this.maxVarIndex = 0;
       this.sparnatural.variableSection.html.remove();
       this.sparnatural.variableSection.render();
       generateQuery(this)

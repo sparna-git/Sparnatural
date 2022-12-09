@@ -20,12 +20,14 @@ class GroupWrapper extends HTMLComponent {
   CriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   groupWrapperEventStore: GroupWrapperEventStore;
-  // ParentComponent: ComponentsList | GroupWrapper
+  depth: number;
+
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
-    startOrEndClassVal?: SelectedVal,
-    isRoot?:boolean 
+    depth:number,
+    startOrEndClassVal?: SelectedVal,    
+    isRoot?:boolean
   ) {
     super("groupe", ParentComponent, null);
     this.specProvider = specProvider;
@@ -36,6 +38,7 @@ class GroupWrapper extends HTMLComponent {
       isRoot
     );
     this.#isRoot = isRoot
+    this.depth = depth;
   }
 
   render(): this {

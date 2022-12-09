@@ -5,7 +5,7 @@ const defaultSettings: ISettings = {
   langSearch: null,
   config: null,
   language: "en",
-  maxDepth: 4, // max amount of where clauses
+  maxDepth: 4, // max amount of where clauses in a branch
   maxOr:3,
   addDistinct: true,
   typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",

@@ -20,6 +20,8 @@ export function addWhereComponent(
   grpWrapper.whereChild = new GroupWrapper(
     grpWrapper,
     grpWrapper.specProvider,
+    // depth = parent depth + 1
+    grpWrapper.depth + 1,
     endClassVal
   ).render();
 
@@ -41,11 +43,5 @@ export function addWhereComponent(
   grpWrapper.linkWhereBottom = new LinkWhereBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
-  );
-  grpWrapper.html[0].dispatchEvent(
-    new CustomEvent("changeMaxChildIndex", {
-      bubbles: true,
-      detail: MaxVarAction.INCREASE,
-    })
   );
 }

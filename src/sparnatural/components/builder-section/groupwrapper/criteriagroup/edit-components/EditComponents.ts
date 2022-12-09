@@ -65,6 +65,7 @@ class EditComponents extends HTMLComponent {
     ).render();
 
     let widgetType = this.widgetWrapper.getWidgetType();
+    console.log("this.maxDepthIsReached()"+this.maxDepthIsReached())
     if (
       Object.values(this.RENDER_WHERE).includes(widgetType)
       &&
@@ -135,7 +136,7 @@ class EditComponents extends HTMLComponent {
       new CustomEvent("getMaxVarIndex", {
         bubbles: true,
         detail: (index: number) => {
-          if (index > getSettings().maxDepth) maxreached = true;
+          if (index >= getSettings().maxDepth) maxreached = true;
         },
       })
     );

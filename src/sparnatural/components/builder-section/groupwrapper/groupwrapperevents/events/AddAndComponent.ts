@@ -11,6 +11,8 @@ export function addAndComponent(
   grpWrapper.andSibling = new GroupWrapper(
     grpWrapper.ParentComponent,
     grpWrapper.specProvider,
+    // same depth
+    grpWrapper.depth,
     startClassVal
   ).render();
   //set state to startClassValSelected and trigger change
@@ -24,12 +26,6 @@ export function addAndComponent(
   grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(
     new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
-  );
-  grpWrapper.html[0].dispatchEvent(
-    new CustomEvent("changeMaxChildIndex", {
-      bubbles: true,
-      detail: MaxVarAction.INCREASE,
-    })
   );
   removeActionAnd(grpWrapper);
 }
