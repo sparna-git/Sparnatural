@@ -25,7 +25,7 @@ export enum Config {
     "BooleanProperty",
   TREE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "TreeProperty",
-  Map_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+  MAP_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "MapProperty",
 
   SPARQL_STRING = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
@@ -44,6 +44,13 @@ export enum Config {
     "enableNegation",
   IS_MULTILINGUAL = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "isMultilingual",
+
+  SERVICE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "service",
+  SERVICE_CLASS = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "Service",
+  ENDPOINT = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "endpoint",
 
   DEFAULT_LABEL_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "defaultLabelProperty",

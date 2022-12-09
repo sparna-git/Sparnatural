@@ -260,7 +260,10 @@
                                 ] ;
                     rdfs:range :Date ;
                     <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<https://www.ica.org/standards/RiC/ontology#beginningDate>|<https://www.ica.org/standards/RiC/ontology#birthDate>" ;
-                    rdfs:label "a pour date de début d'existence"@fr ,
+                    <http://data.sparna.fr/ontologies/sparnatural-config-core#service> [
+                      <http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint> <https://dbpedia.org/sparql>;
+                    ];
+                    rdfs:label "a pour date de début d'existence <br /> (service distant)"@fr ,
                                "has beginning date of existence"@en .
 
 

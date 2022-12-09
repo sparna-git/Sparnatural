@@ -35,12 +35,12 @@ let semanticPostProcess = function(queryString, queryJson) {
 const settings = {
   language: lang ? lang : "fr",
   defaultEndpoint: function() { return $('#endpoint').text() },
-  config: config,
-  // config: "configs/sparnatural-config.ttl",
+  // config: config,
+  config: "configs/sparnatural-config.ttl",
   //language:lang,
   onQueryUpdated: function(queryString, queryJson, specProvider) {
       queryString = semanticPostProcess(queryString, queryJson);
-      queryString = specProvider.expandSparql(queryString);
+      queryString = sparnatural.expandSparql(queryString);
       yasqe.setValue(queryString);
       // store JSON in hidden field
       document.getElementById('query-json').value = JSON.stringify(queryJson);

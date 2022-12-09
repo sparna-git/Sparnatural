@@ -134,6 +134,16 @@ Search in FontAwesome at https://fontawesome.com/icons</rdfs:comment>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#service -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#service">
+        <rdfs:comment xml:lang="en">Set this annotation with an instance of Service as a value to indicate that this property needs to be executed within a SERVICE clause to the target endpoint.</rdfs:comment>
+        <rdfs:label xml:lang="en">service</rdfs:label>
+        <rdfs:range rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#Service"/>
+    </owl:AnnotationProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString">
@@ -328,6 +338,19 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint -->
+
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#Service"/>
+        <rdfs:comment xml:lang="en">Relates an instance of Service to a SPARQL endpoint that implements the SPARQL Protocol service for the service. 
+
+Equivalent to http://www.w3.org/ns/sparql-service-description#endpoint</rdfs:comment>
+        <rdfs:label xml:lang="en">endpoint</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -350,6 +373,15 @@ These URIs do not hold any information in the graph, but are useful to connect o
   - a Not-Instantiated-Class must not yield an rdf:type criteria in the SPARQL query
   - a Not-Instantiated-Class can still be used to connect entites in the graph with a &quot;WHERE&quot; clause</rdfs:comment>
         <rdfs:label xml:lang="en">Not Instantiated Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#Service -->
+
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#Service">
+        <rdfs:comment xml:lang="en">A SPARQL service made available via the SPARQL Protocol. Equivalent to http://www.w3.org/ns/sparql-service-description#Service</rdfs:comment>
+        <rdfs:label xml:lang="en">SPARQL Service</rdfs:label>
     </owl:Class>
     
 

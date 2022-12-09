@@ -519,7 +519,7 @@ class WidgetWrapper extends HTMLComponent {
           );
         }
 
-      case Config.Map_PROPERTY:
+      case Config.MAP_PROPERTY:
         return new MapWidget(
           this,
           this.startClassVal,

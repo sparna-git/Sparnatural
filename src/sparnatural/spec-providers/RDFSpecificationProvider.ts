@@ -27,8 +27,6 @@ export const RDFS = {
   SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf") as NamedNode,
 };
 
-const GEOSPARQL_NAMESPACE = 'http://www.opengis.net/ont/geosparql#'
-
 const GEOFUNCTIONS_NAMESPACE = 'http://www.opengis.net/def/function/geosparql/'
 
 export const GEOF = {
@@ -119,10 +117,15 @@ export class RDFSpecificationProvider implements ISpecProvider {
     return result;
   }
 
-  getServiceEndpoint = function(classId:string){
-    const ds = this._readAsSingleResource(classId,"sparqlService")
-    if (this._readAsSingleResource(ds,"endpoint")) return ds.endpoint
-    return null
+  getServiceEndpoint = function(propertyId:string){
+    const service = this._readAsSingleResource(propertyId,Config.SERVICE_PROPERTY)
+    if(service) {
+      const endpoint = this._readAsSingleResource(service,Config.ENDPOINT);
+      if (endpoint) {
+        return endpoint;
+      } 
+    }    
+    return null;
   }
 
   getClassesInDomainOfAnyProperty() {

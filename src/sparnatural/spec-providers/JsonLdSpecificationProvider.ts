@@ -207,8 +207,8 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
     return this._readValue(classId, "defaultLabelProperty");
   };
 
-  getServiceEndpoint = function(classId:string){
-    const serviceId = this._readValue(classId,"sparqlService")
+  getServiceEndpoint = function(propertyId:string){
+    const serviceId = this._readValue(propertyId,"service")
     if (serviceId) return this._readValue(serviceId,"endpoint")
     return null
   }
