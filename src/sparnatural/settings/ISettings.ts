@@ -3,8 +3,8 @@ import Sparnatural from "../components/SparnaturalComponent";
 export interface PreLoadQueries {
   queries: Array<{ queryName: string; query: string }>;
 }
+
 interface ISettings {
-  noTypeCriteriaForObjects?: any;
   config: any;
   language: string;
   addDistinct?: boolean;
@@ -15,20 +15,21 @@ interface ISettings {
   sparqlPrefixes?: { [key: string]: string };
   defaultEndpoint?: () => string;
   localCacheDataTtl?: number;
-  filterConfigOnEndpoint?: boolean;
   langSearch?: any;
-  autocomplete?: any; //Handler function
-  list?: any; //Handler function
-  dates?: any; //Handler function?
+  autocomplete?: any;
+  list?: any;
+  dates?: any;
   tooltipConfig?: any;
-  debugJson: boolean;
-  statistics?: {
-    countClassUrl: (aClass: any) => void;
-    countPropertyUrl: (domain: any, property: any, range: any) => void;
-    countPropertyWithoutRangeUrl: (domain: any, property: any) => void;
-    elementCount: (data: any) => void;
-  };
-  onQueryUpdated?: (queryString: any, queryJson: any, pivotJson?: any) => void;
+  debug: boolean;
+  onQueryUpdated?: (
+    // the SPARQL query String
+    queryString: any,
+    // the Sparnatural JSON format
+    queryJson: any,
+    // the SPARQL data structure, as sparql.js
+    sparqlAsJson: any
+  ) => void;
   onSubmit?: (sparnatural: Sparnatural) => void;
 }
+
 export default ISettings;

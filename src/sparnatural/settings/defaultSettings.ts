@@ -4,23 +4,17 @@ import ISettings from "./ISettings";
 const defaultSettings: ISettings = {
   langSearch: null,
   config: null,
-  language: "fr",
+  language: "en",
   maxDepth: 4, // max amount of where clauses
   maxOr:3,
   addDistinct: true,
+  typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
   // backgroundBaseColor: "2,184,117",
   backgroundBaseColor: "29, 224, 153",
-  defaultEndpoint() {
-    if (this.language == "fr") {
-      return `http://fr.dbpedia.org/sparql`;
-    } else {
-      return `http://dbpedia.org/sparql`;
-    }
-  },
+  defaultEndpoint: function () { return null; },
   sparqlPrefixes: {},
-  localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in miiseconds
-  filterConfigOnEndpoint: false,
-  debugJson:false,
+  localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in mimmiseconds
+  debug:false,
   autocomplete: {
     /**
      * This must return the URL that will be called when the user starts
@@ -129,13 +123,11 @@ const defaultSettings: ISettings = {
   },
 
   onQueryUpdated: function (
-    queryString: string,
+    queryString: any,
     queryJson: any,
-    specProvider: ISpecProvider
+    sparqlAsJson: any
   ) {
-    console.log(
-      "Veuillez préciser le nom de la fonction pour l'option onQueryUpdated dans les parametre d'initalisation de Sparnatural. Les parêtres envoyés à la fonction contiendront la requête convertie en Sparql et le Json servant à générer la requête"
-    );
+    console.warn("Please provide the onQueryUpdated callback with a queryString and query JSON parameters");
   },
 
   dates: {
@@ -157,26 +149,6 @@ const defaultSettings: ISettings = {
       return element.stop.year;
     },
   },
-  statistics: {
-    countClassUrl: function (aClass: any) {
-      console.log(
-        "Please specify function to count number of instances of each class : function(aClass)"
-      );
-    },
-    countPropertyUrl: function (domain: any, property: any, range: any) {
-      console.log(
-        "Please specify function to count number of instances of each property : function(domain, property, range)"
-      );
-    },
-    countPropertyWithoutRangeUrl: function (domain: any, property: any) {
-      console.log(
-        "Please specify function to count number of instances of each property without a range : function(domain, property)"
-      );
-    },
-    elementCount: function (data: any) {
-      return data.results.bindings[0].count.value;
-    },
-  },
   tooltipConfig: {
     allowHTML: true,
     plugins: [], 
@@ -188,7 +160,7 @@ const defaultSettings: ISettings = {
     duration: [200, 200], //Duration in ms of the transition animation.
   },
   // triggered when "play" button is clicked
-  onSubmit: null,
+  onSubmit: null  ,
 };
 
 export function getSettings() {

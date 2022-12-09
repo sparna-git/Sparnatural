@@ -69,13 +69,6 @@ export default class QueryLoader{
       const parsedVal: WidgetValue = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
       // if there are multiple values rendered, click first the 'plus' btn, to add more values
       if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
-      if(parsedVal.value.label === "Any"){
-        const el = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.html[0]
-        const elements = el.getElementsByClassName("selectAll")
-        if(elements.length > 1) throw Error('LOADING QUERY: Found more than one "selectAll El"')
-        elements[0].dispatchEvent(new Event("click"))
-        return
-      } 
       grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(parsedVal)
     });
 
