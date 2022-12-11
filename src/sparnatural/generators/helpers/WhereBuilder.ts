@@ -127,9 +127,11 @@ export default class WhereBuilder{
 
         const sparqlService = this.#specProvider.getServiceEndpoint(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())
         let servicePtrn = null;
-        if(this.#grpWrapper.optionState === OptionTypes.SERVICE || sparqlService){
+        if(this.#grpWrapper.optionState === OptionTypes.SERVICE || (sparqlService != null)){
             const endpoint = DataFactory.namedNode(sparqlService)
-            servicePtrn = SparqlFactory.buildServicePattern(exceptStartPtrn,endpoint)
+            if(exceptStartPtrn.length > 0) {
+                servicePtrn = SparqlFactory.buildServicePattern(exceptStartPtrn,endpoint)
+            }
         }
 
         let finalResultPtrns:Pattern[] = [];
