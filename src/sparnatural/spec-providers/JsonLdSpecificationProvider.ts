@@ -214,7 +214,8 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
   }
 
   isLogicallyExecutedAfter(propertyId: string): boolean {
-      return true;
+    const executedAfter = this._readValue(propertyId,"executedAfter");
+    return executedAfter?executedAfter:false;
   }
 
   getBeginDateProperty = function (propertyId: string) {

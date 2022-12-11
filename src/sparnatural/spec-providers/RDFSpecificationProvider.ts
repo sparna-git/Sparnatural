@@ -157,7 +157,8 @@ export class RDFSpecificationProvider implements ISpecProvider {
   }
 
   isLogicallyExecutedAfter(propertyId:string):boolean {
-    return true;
+    var executedAfter = this._readAsSingleLiteral(propertyId, Config.SPARNATURAL_CONFIG_CORE+"executedAfter");
+    return executedAfter;
   }
 
   getClassesInDomainOfAnyProperty() {

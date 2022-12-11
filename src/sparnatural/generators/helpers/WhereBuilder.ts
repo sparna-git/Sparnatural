@@ -125,18 +125,22 @@ export default class WhereBuilder{
         // always store the startClassPattern in the final result pattern (no OPTIONAL, no NOT EXISTS, no SERVICE)
         if(hasStartClass) this.#resultPtrns.push(...this.#startClassPtrn)
 
+        // create a SERVICE clause if needed
         const sparqlService = this.#specProvider.getServiceEndpoint(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())
         let servicePtrn = null;
         if(this.#grpWrapper.optionState === OptionTypes.SERVICE || (sparqlService != null)){
             const endpoint = DataFactory.namedNode(sparqlService)
+            // to be on the safe side : when rollback an endclass group, we may come here with only the start class group criteria
+            // and nothing in this array
             if(exceptStartPtrn.length > 0) {
                 servicePtrn = SparqlFactory.buildServicePattern(exceptStartPtrn,endpoint)
             }
         }
-
-        let finalResultPtrns:Pattern[] = [];
+        
         let normalOrServicePatterns:Pattern[] = servicePtrn ? [servicePtrn] : exceptStartPtrn;
 
+        // produce the generated patterns, maybe wrapped in OPTIONAL or NOT EXISTS
+        let finalResultPtrns:Pattern[] = [];
         if(this.#grpWrapper.optionState === OptionTypes.OPTIONAL && !this.#isInOption){
             finalResultPtrns.push(SparqlFactory.buildOptionalPattern(normalOrServicePatterns));
         } else if(this.#grpWrapper.optionState === OptionTypes.NOTEXISTS && !this.#isInOption){
@@ -146,6 +150,8 @@ export default class WhereBuilder{
             finalResultPtrns.push(...normalOrServicePatterns);
         }
 
+        // then decide where to store the generated patterns : either in "normal" patterns
+        // or in patterns that shall be executed after the rest of the query
         if(servicePtrn && this.#specProvider.isLogicallyExecutedAfter(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())) {
             this.#executedAfterPtrns = finalResultPtrns;
         } else {
