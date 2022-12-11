@@ -7,6 +7,12 @@ import { storeStream } from "rdf-store-stream";
 import { Config } from "../ontologies/SparnaturalConfig";
 import ISpecProvider from "./ISpecProvider";
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
+import {
+  Parser,
+  Generator,
+  SparqlParser,
+  SparqlGenerator
+} from "sparqljs";
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 export const RDF = {
@@ -47,11 +53,31 @@ export const OWL = {
 export class RDFSpecificationProvider implements ISpecProvider {
   lang: string;
   store: Store<Quad>;
+  #parser: SparqlParser;
+  #generator: SparqlGenerator;
 
   constructor(n3store: Store<Quad>, lang: string) {
     // init memory store
     this.store = n3store;
     this.lang = lang;
+
+    // init SPARQL parser and generator once
+    this.#parser = new Parser();
+    this.#generator = new Generator();
+
+    /*
+    var sparql = `
+    SELECT ?o2 WHERE {
+        {
+            SELECT ?x WHERE { ?x ?p ?o }
+        }
+        ?x ?p2 ?o2 .
+    }
+    `;
+
+    var query = this.#parser.parse(sparql);
+    console.log(query)
+    */
   }
 
   static build(specs: any, filePath: string, lang: any, callback: any) {
@@ -117,8 +143,10 @@ export class RDFSpecificationProvider implements ISpecProvider {
     return result;
   }
 
-  getServiceEndpoint = function(propertyId:string){
-    const service = this._readAsSingleResource(propertyId,Config.SERVICE_PROPERTY)
+  getServiceEndpoint(propertyId:string){
+    if(propertyId == null) return null;
+
+    const service = this._readAsSingleResource(propertyId,Config.SPARQL_SERVICE);
     if(service) {
       const endpoint = this._readAsSingleResource(service,Config.ENDPOINT);
       if (endpoint) {
@@ -126,6 +154,10 @@ export class RDFSpecificationProvider implements ISpecProvider {
       } 
     }    
     return null;
+  }
+
+  isLogicallyExecutedAfter(propertyId:string):boolean {
+    return true;
   }
 
   getClassesInDomainOfAnyProperty() {
@@ -344,7 +376,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
     );
   }
 
-  expandSparql(sparql: string) {
+  expandSparql(sparql: string, prefixes:{ [key: string]: string }) {
     // for each owl:equivalentProperty ...
     var equivalentPropertiesPerProperty: any = {};
     this.store
@@ -414,7 +446,15 @@ export class RDFSpecificationProvider implements ISpecProvider {
         sparql = sparql.replace(re, quad.object.value);
       });
 
-    return sparql;
+    // reparse the query, apply prefixes, and reserialize the query
+    console.log(sparql)
+    var query = this.#parser.parse(sparql);
+    for (var key in prefixes) {
+      query.prefixes[key] = prefixes[key];
+    }
+    return this.#generator.stringify(query);
+
+    // return sparql;
   }
 
   getDefaultLabelProperty(classId: any) {

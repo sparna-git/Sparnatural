@@ -223,7 +223,7 @@ class WidgetWrapper extends HTMLComponent {
                       "> \nSELECT "
                   );
                 }
-                return theSpecProvider.expandSparql(sparql);
+                return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
               },
             },
 
@@ -292,7 +292,7 @@ class WidgetWrapper extends HTMLComponent {
                       "> \nSELECT "
                   );
                 }
-                return theSpecProvider.expandSparql(sparql);
+                return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
               },
             },
 
@@ -358,7 +358,7 @@ class WidgetWrapper extends HTMLComponent {
                       "> \nSELECT "
                   );
                 }
-                return theSpecProvider.expandSparql(sparql);
+                return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
               },
             },
 
@@ -495,7 +495,7 @@ class WidgetWrapper extends HTMLComponent {
                       "> \nSELECT "
                   );
                 }
-                return theSpecProvider.expandSparql(sparql);
+                return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
               },
             },
 

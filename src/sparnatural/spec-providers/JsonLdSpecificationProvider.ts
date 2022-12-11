@@ -208,9 +208,13 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
   };
 
   getServiceEndpoint = function(propertyId:string){
-    const serviceId = this._readValue(propertyId,"service")
+    const serviceId = this._readValue(propertyId,"sparqlService")
     if (serviceId) return this._readValue(serviceId,"endpoint")
     return null
+  }
+
+  isLogicallyExecutedAfter(propertyId: string): boolean {
+      return true;
   }
 
   getBeginDateProperty = function (propertyId: string) {

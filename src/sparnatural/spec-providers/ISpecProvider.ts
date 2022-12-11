@@ -10,7 +10,7 @@ interface ISpecProvider {
   getIcon(value_selected: string): any;
   getTreeChildrenDatasource(objectPropertyId: string): any;
   getTreeRootsDatasource(objectPropertyId: string): any;
-  expandSparql(sparql: string): string;
+  expandSparql(sparql: string, prefixes: { [key: string]: string }): string;
   getDefaultLabelProperty(classId: string):string;
   getDatasource(objectPropertyId: string): any;
   isLiteralClass(value_selected: string): any;
@@ -23,6 +23,7 @@ interface ISpecProvider {
   getEndDateProperty(propertyId: string): string;
   getExactDateProperty(propertyId: string): string;
   getConnectedClasses(classId:string):Array<string>;
-  getServiceEndpoint(classId:string):string | null;
+  getServiceEndpoint(propertyId:string):string | null;
+  isLogicallyExecutedAfter(propertyId:string):boolean;
 }
 export default ISpecProvider;
