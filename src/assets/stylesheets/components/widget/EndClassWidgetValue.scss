@@ -6,8 +6,8 @@
 
 
 .EndClassWidgetValue {
-    @include mixins.arrow-back-colors(themes.$custom-red-medium, #fff);
-    @include mixins.arrow-front-colors(themes.$custom-red-medium, #fff);
+    @include mixins.arrow-back-colors(themes.$primary-color-medium, #fff);
+    @include mixins.arrow-front-colors(themes.$primary-color-medium, #fff);
     position: relative;
     display: flex;
     /*line-height: 0;*/
@@ -25,7 +25,7 @@
     p {
         line-height: 48px;
         height: 48px;
-        background: themes.$custom-red-medium;
+        background: themes.$primary-color-medium;
         background-clip: padding-box;
         margin: 0;
         padding: 0 5px 0 5px;

@@ -6,12 +6,12 @@
     position: relative;
     cursor:pointer;
     svg {
-        stroke: themes.$custom-silver-light;
+        stroke: themes.$silver-color-light;
         stroke-width: 3px;
         path{
             filter:url(#filter19278);
         }
-        fill: themes.$custom-green;
+        fill: themes.$secondary-color-main;
         stroke-width: 2.5px;
         position: absolute;
         z-index: 1;

@@ -33,7 +33,7 @@ spar-natural {
 					padding: 5px;
 					&.selected {
 						
-						background: $custom-red ;
+						background: $primary-color-main ;
 					}
 				}
 			}
@@ -51,15 +51,15 @@ body .select2-container--default {
 	font-size: 14px;
 	line-height: 1.2;
 	.select2-results__option--highlighted.select2-results__option--highlighted {
-		background-color: $custom-red;
+		background-color: $primary-color-main;
 	}
 }
 //tippy overides
 .tippy-box[data-theme~='sparnatural'] {
-    background-color: $custom-red-light;
+    background-color: $primary-color-light;
     color: #000;
 	border-radius: 5px;
-	border: 1px dashed $custom-red;
+	border: 1px dashed $primary-color-main;
 	padding: 2px;
 	font-size:0.75em;
   }

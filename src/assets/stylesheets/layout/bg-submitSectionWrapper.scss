@@ -3,7 +3,7 @@
 
 .submitSection {
     height: 41px;
-    background: themes.$custom-green ;
+    background: themes.$secondary-color-main ;
     position: relative;
     margin: 0 auto;
     width: 100%;
@@ -16,7 +16,7 @@
         padding: 10px;
         padding-left: 12px;
         border-radius: 5px;
-        background: themes.$custom-green-bold;
+        background: themes.$secondary-color-important;
         box-shadow: 0px 2px 3px 0px #cfcfcf;
         cursor: pointer;
         z-index: 2;
@@ -37,11 +37,11 @@
         }
 
         &.submitDisable {
-            background: themes.$custom-silver-light;
+            background: themes.$silver-color-light;
             cursor: default;
             svg {
                 path {
-                    fill:themes.$custom-silver;
+                    fill:themes.$silver-color-main;
                 }
             }
             &.loadingEnabled {
@@ -52,7 +52,7 @@
                 svg.playLoader {
                     display: block;
                     path {
-                        fill:themes.$custom-green-bold;
+                        fill:themes.$secondary-color-important;
                     }
                     
                 }

@@ -12,9 +12,9 @@
     background: rgb(255, 231, 203);
     margin-bottom: 22px;
     border-top: 2px solid #8D8D8D;
-    background: themes.$custom-red-light;
+    background: themes.$primary-color-light;
     margin-bottom: 22px;
-    border-top: 2px solid themes.$custom-silver-line;
+    border-top: 2px solid themes.$silver-color-main;
 
     .linesWrapper {
         // display: none;
@@ -36,7 +36,7 @@
     }
 
     .VariableSelectorDisplay {
-        background: themes.$custom-red-medium;
+        background: themes.$primary-color-medium;
         height: 41px;
         position: relative;
 
@@ -50,7 +50,7 @@
             margin-top: 18px;
             margin-left: -22px;
             border-radius: 22px;
-            background: themes.$custom-red-medium;
+            background: themes.$primary-color-medium;
             line-height: 1;
             padding: 10px;
             transition: margin-top 0.700s ease;
@@ -127,7 +127,7 @@
                     height: 24px;
 
                     path {
-                        stroke: themes.$custom-silver;
+                        stroke: themes.$silver-color-main;
                         stroke-width: 0.264583;
                     }
                 }
@@ -192,7 +192,7 @@
 
                 svg {
                     path {
-                        fill: themes.$custom-red;
+                        fill: themes.$primary-color-main;
                     }
                 }
             }
@@ -262,7 +262,7 @@
     }
 
     input:checked + .slider {
-        background-color: themes.$custom-red-medium;
+        background-color: themes.$primary-color-medium;
     }
 
     input:focus + .slider {
@@ -273,7 +273,7 @@
         -webkit-transform: translateX(22px);
         -ms-transform: translateX(22px);
         transform: translateX(22px);
-        background-color: themes.$custom-red;
+        background-color: themes.$primary-color-main;
     }
     /* Rounded sliders */
     .slider.round {

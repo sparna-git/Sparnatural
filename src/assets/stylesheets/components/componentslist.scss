@@ -30,27 +30,27 @@ ul.componentsListe {
 
     li.groupe.optional-enabled {
         .CriteriaGroup {
-            border: 3px dashed themes.$custom-red;
+            border: 3px dashed themes.$primary-color-main;
         }
 
         ul.childsList {
             .ActionAnd {
                 & > .trait-and-bottom {
-                    border-left: 3px dashed themes.$custom-red;
+                    border-left: 3px dashed themes.$primary-color-main;
                 }
 
                 & > a {
-                    border: 2px dashed themes.$custom-red;
+                    border: 2px dashed themes.$primary-color-main;
                 }
             }
 
             & > li.hasAnd {
                 & > span {
-                    border-left: 3px dashed themes.$custom-red;
+                    border-left: 3px dashed themes.$primary-color-main;
                 }
 
                 & > span > span {
-                    border: 2px dashed themes.$custom-red;
+                    border: 2px dashed themes.$primary-color-main;
                 }
             }
         }

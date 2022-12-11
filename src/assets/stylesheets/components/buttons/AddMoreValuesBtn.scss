@@ -4,8 +4,8 @@
 @use 'sass:math';
 
 .AddWidgetValueBtn {
-    @include mixins.arrow-back-colors(themes.$custom-red-medium, #fff);
-    @include mixins.arrow-front-colors(themes.$custom-red-medium, #fff);
+    @include mixins.arrow-back-colors(themes.$primary-color-medium, #fff);
+    @include mixins.arrow-front-colors(themes.$primary-color-medium, #fff);
     display: flex;
     color: black;
     font-size: 20px;
@@ -18,7 +18,7 @@
     padding: 0;
     p {
         height: inherit;
-        background: themes.$custom-red-medium;
+        background: themes.$primary-color-medium;
         padding: 0 0 0 3px;
         border: base.$center-arrow-bd-width solid #fff;
         border-left: 0;

@@ -28,7 +28,7 @@
 		height: 0;
 		border-style: solid;
 		border-width: 0 15px 21px 0;
-		border-color: transparent $custom-red transparent transparent;
+		border-color: transparent $primary-color-main transparent transparent;
 		top: 0
 	}
 	&>.triangle-b {
@@ -36,7 +36,7 @@
 		height: 0;
 		border-style: solid;
 		border-width: 0 0 21px 15px;
-		border-color: transparent transparent $custom-red transparent;
+		border-color: transparent transparent $primary-color-main transparent;
 		bottom: 0;
 	}
 	
@@ -52,7 +52,7 @@
 		display: inline-block;float: right;margin-right: 0;
 		border-style: solid;
 		border-width: 21px 0 21px 15px;
-		border-color: transparent transparent transparent $custom-red;
+		border-color: transparent transparent transparent $primary-color-main;
 	}
 	
 }
@@ -77,7 +77,7 @@
 		border-top: 21px solid transparent;
 		border-left: 15px solid $color;
 		border-bottom: 21px solid transparent;
-		/*border-color: transparent transparent transparent $custom-green-light;
+		/*border-color: transparent transparent transparent $secondary-color-light;
 		margin: -10px 90px 0 10px; */
 	  	z-index: 1;
 	}

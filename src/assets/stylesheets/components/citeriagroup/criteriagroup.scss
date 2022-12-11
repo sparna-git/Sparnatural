@@ -41,7 +41,7 @@
 
 		path {
 			fill: transparent;
-			stroke: themes.$custom-silver-light;
+			stroke: themes.$silver-color-light;
 			stroke-width: 3px;
 		}
 
@@ -51,11 +51,15 @@
 	}
 
 	&.optionalEnabled {
-		border: 3px dashed themes.$custom-red;
+		border: 3px dashed themes.$primary-color-main;
 	}
 
 	&.notExistsEnabled {
 		border: 3px dashed #000;
+	}
+
+	&.serviceEnabled {
+		border: 3px dashed themes.$ternary-color-main;
 	}
 	
 	/* Unselect to graphique  */
@@ -70,7 +74,7 @@
 		padding: 0 0;
 		text-align: center;
 		cursor: pointer;
-		color: themes.$custom-red-bold;
+		color: themes.$primary-color-important;
 		background: #fff !important;
 		line-height: 22px;
 		font-size: 18px;

@@ -10,19 +10,19 @@
     }
 
     &.Highlited {
-        @include mixins.arrow-back-colors(themes.$custom-red, #fff);
-		@include mixins.arrow-front-colors(themes.$custom-red, #fff);
+        @include mixins.arrow-back-colors(themes.$primary-color-main, #fff);
+		@include mixins.arrow-front-colors(themes.$primary-color-main, #fff);
         .nice-select{
             border-radius: unset;
             color: #fff;
-            background-color: themes.$custom-red;
+            background-color: themes.$primary-color-main;
             border-color: #fff;
         }
         &.VariableSelected{
-            @include mixins.arrow-front-colors(themes.$custom-red, themes.$custom-green-bold);
-            @include mixins.arrow-back-colors(themes.$custom-red, themes.$custom-green-bold);
+            @include mixins.arrow-front-colors(themes.$primary-color-main, themes.$secondary-color-important);
+            @include mixins.arrow-back-colors(themes.$primary-color-main, themes.$secondary-color-important);
             .nice-select{
-                border-color: themes.$custom-green-bold;
+                border-color: themes.$secondary-color-important;
             }
         }
 	}

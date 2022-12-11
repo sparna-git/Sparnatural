@@ -3,7 +3,7 @@
 
 .nb-choice-2 {
     .WidgetWrapper {
-        border-left: 3px solid themes.$custom-red;
+        border-left: 3px solid themes.$primary-color-main;
 
         &:before {
             display: none;;
@@ -33,7 +33,7 @@
         left:-3px;
         width: 3px;
         height: 20px;
-        background: themes.$custom-red;
+        background: themes.$primary-color-main;
     }
 
     &:after {
@@ -67,7 +67,7 @@
         cursor: pointer;
     }
     .or {
-        color: themes.$custom-red;
+        color: themes.$primary-color-main;
         font-weight: 600;
     }
     .selectAll .underline {
