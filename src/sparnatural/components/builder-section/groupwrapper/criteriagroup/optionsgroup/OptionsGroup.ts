@@ -5,6 +5,10 @@ import CriteriaGroup from "../CriteriaGroup";
 import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";
 
+/**
+ * Name corresponds to the CSS class set on the CriteriaGroup and the linkWhereBottom
+ * See TriggerOption.switchState()
+ */
 export enum OptionTypes {
   OPTIONAL = "optionalEnabled",
   NOTEXISTS = "notExistsEnabled",

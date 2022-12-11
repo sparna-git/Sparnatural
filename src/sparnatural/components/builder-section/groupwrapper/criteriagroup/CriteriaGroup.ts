@@ -8,11 +8,12 @@ import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
 import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import GroupWrapper from "../GroupWrapper";
-import { OptionsGroup } from "./optionsgroup/OptionsGroup";
+import { OptionsGroup, OptionTypes } from "./optionsgroup/OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
 import { SelectedVal } from "../../../../generators/ISparJson";
 import { EndClassWidgetGroup, EndClassWidgetValue } from "./startendclassgroup/EndClassWidgetGroup";
 import ActionsGroup from "../../../buttons/actions/ActionsGroup";
+import { triggerOption } from "../groupwrapperevents/events/TriggerOption";
 
 class CriteriaGroup extends HTMLComponent {
   settings: any;
@@ -101,21 +102,32 @@ class CriteriaGroup extends HTMLComponent {
       "onObjectPropertyGroupSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
+        
         if (!this.#isSelectedVal(e.detail))
           throw Error(
             "onObjectPropertyGroupSelected expects object of type SelectedVal"
           );
-        // if there is already a where connection or widget values selected, don't change anything
+        
+          // if there is already a where connection or widget values selected, don't change anything
         if (!(this.ParentGroupWrapper.whereChild) && this.endClassWidgetGroup?.widgetValues?.length === 0){
           this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
           this.endClassWidgetGroup.render();
         }
-          this.OptionsGroup.onObjectPropertyGroupSelected(
+        
+        this.OptionsGroup.onObjectPropertyGroupSelected(
           this.ParentGroupWrapper.optionState
         );
+
         // if there is already a andSibling don't allow to rerender the ActionAnd again
         if (!this.ParentGroupWrapper.andSibling)
           this.ActionsGroup.onObjectPropertyGroupSelected();
+
+        // if property has a sparqlService, switch the state
+        if(this.specProvider.getServiceEndpoint(e.detail.type)) {
+          triggerOption(this.ParentGroupWrapper, OptionTypes.SERVICE);
+        } else {
+          triggerOption(this.ParentGroupWrapper, this.ParentGroupWrapper.optionState);
+        }
       }
     );
 
