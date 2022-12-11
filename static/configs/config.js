@@ -41,8 +41,8 @@ export default {
       "@id": "http://dbpedia.org/ontology/Museum",
       "@type": "Class",
       label: [
-        { "@value": "Museum", "@language": "en" },
-        { "@value": "Musée", "@language": "fr" },
+        { "@value": "Museum with a long label", "@language": "en" },
+        { "@value": "Musée avec un long libellé", "@language": "fr" },
       ],
       faIcon: "fa-solid fa-building-columns",
       defaultLabelProperty:
