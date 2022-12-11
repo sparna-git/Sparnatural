@@ -10,6 +10,7 @@ import {
 import Sparnatural from "../components/SparnaturalComponent";
 import * as DataFactory from "@rdfjs/data-model" ;
 import WhereBuilder from "./helpers/WhereBuilder";
+import SparqlFactory from "./SparqlFactory";
 /*
   Reads out the UI and creates the and sparqljs pattern. 
   sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
@@ -46,12 +47,12 @@ export default class RdfJsGenerator {
     distinct: boolean,
     order: Order
   ):SelectQuery {
-    const RdfJsQuery: SelectQuery = {
+    const SparqlJsQuery: SelectQuery = {
       queryType: "SELECT",
       distinct: distinct,
       variables: this.#varsToRDFJS(variables),
       type: "query",
-      where: this.#createSelectQuery(),
+      where: this.#createWhereClause(),
       prefixes: {
         rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
         rdfs: "http://www.w3.org/2000/01/rdf-schema#",
@@ -64,34 +65,52 @@ export default class RdfJsGenerator {
     };
 
     for (var key in this.additionnalPrefixes) {
-      RdfJsQuery.prefixes[key] = this.additionnalPrefixes[key];
+      SparqlJsQuery.prefixes[key] = this.additionnalPrefixes[key];
     }
 
     // if the RdfJsQuery contains empty 'where' array, then the generator crashes.
     // create query with no triples
-    if(RdfJsQuery.where?.length === 0 ){
-      RdfJsQuery.where = [{
+    if(SparqlJsQuery.where?.length === 0 ){
+      SparqlJsQuery.where = [{
         type: 'bgp',
         triples: []
       }]
     }
     // if there are no variables defined just create the Wildcard e.g: *
-    if(RdfJsQuery?.variables?.length === 0) RdfJsQuery.variables = [new Wildcard()];
+    // note : this should not happen
+    if(SparqlJsQuery?.variables?.length === 0) SparqlJsQuery.variables = [new Wildcard()];
+    
     // post processing for defaultlabel property
     if(this.defaultLabelVars.length > 0) {
-      this.defaultLabelVars.forEach(defaultLabelVar => this.#insertDefaultLabelVar(RdfJsQuery, defaultLabelVar));
+      this.defaultLabelVars.forEach(defaultLabelVar => this.#insertDefaultLabelVar(SparqlJsQuery, defaultLabelVar));
     }
-    // don't set an order if there is no expression for it
-    if(!RdfJsQuery?.order || !RdfJsQuery?.order[0]?.expression) delete RdfJsQuery.order
     
-    return RdfJsQuery;
+    // don't set an order if there is no expression for it
+    if(!SparqlJsQuery?.order || !SparqlJsQuery?.order[0]?.expression) delete SparqlJsQuery.order
+    
+    return SparqlJsQuery;
   }
 
-  #createSelectQuery(){
-    const builder = new WhereBuilder(this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,this.specProvider,false,false)
+  #createWhereClause(){
+    const builder = new WhereBuilder(
+      this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,
+      this.specProvider,
+      false,
+      false
+    )
     builder.build()
     this.defaultLabelVars = builder.getDefaultVars()
-    return builder.getResultPtrns()
+    
+    if(builder.getExecutedAfterPtrns().length > 0) {
+      // put all normal patterns in a subquery to garantee they are logically executed before
+      // and their variables are bound in the rest of the query outside the subquery
+      let subquery = SparqlFactory.buildSubQuery(builder.getResultPtrns());
+      // and the patterns to be executed after in the normal where clause
+      return [subquery, ...builder.getExecutedAfterPtrns()];
+    } else {
+      return builder.getResultPtrns()
+    }
+    
   }
 
   #varsToRDFJS(variables: Array<string>): Variable[] {
