@@ -134,6 +134,16 @@ Search in FontAwesome at https://fontawesome.com/icons</rdfs:comment>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService -->
+
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService">
+        <rdfs:comment xml:lang="en">Set this annotation with an instance of Service as a value to indicate that this property needs to be executed within a SERVICE clause to the target endpoint.</rdfs:comment>
+        <rdfs:label xml:lang="en">SPARQL service</rdfs:label>
+        <rdfs:range rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#Service"/>
+    </owl:AnnotationProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString -->
 
     <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString">
@@ -228,7 +238,7 @@ The list options can be configured using a datasource annotation, that will typi
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
-        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which no value selection widget (list, autocomplete field, etc.) should be displayed. Only a &quot;Where&quot; option is available to traverse the entity in the graph.
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which no value selection widget (list, autocomplete field, etc.) should be displayed. Only a &quot;Where&quot; option is available to traversePreOrder the entity in the graph.
 
 This is typically used to link entities that serve as connectors between other entities but that don&apos;t have intrinsic selection criterias by themselves, such as blank nodes or Activities in the CIDOC-CRM model.</rdfs:comment>
         <rdfs:label xml:lang="en">non-selectable property</rdfs:label>
@@ -328,6 +338,19 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint -->
+
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#Service"/>
+        <rdfs:comment xml:lang="en">Relates an instance of Service to a SPARQL endpoint that implements the SPARQL Protocol service for the service. 
+
+Equivalent to http://www.w3.org/ns/sparql-service-description#endpoint</rdfs:comment>
+        <rdfs:label xml:lang="en">endpoint</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
     //
@@ -350,6 +373,15 @@ These URIs do not hold any information in the graph, but are useful to connect o
   - a Not-Instantiated-Class must not yield an rdf:type criteria in the SPARQL query
   - a Not-Instantiated-Class can still be used to connect entites in the graph with a &quot;WHERE&quot; clause</rdfs:comment>
         <rdfs:label xml:lang="en">Not Instantiated Class</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#Service -->
+
+    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#Service">
+        <rdfs:comment xml:lang="en">A SPARQL service made available via the SPARQL Protocol. Equivalent to http://www.w3.org/ns/sparql-service-description#Service</rdfs:comment>
+        <rdfs:label xml:lang="en">SPARQL Service</rdfs:label>
     </owl:Class>
     
 

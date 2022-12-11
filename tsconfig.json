@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "sourceMap": true,
+      "outDir": "./dist/",
+      "noImplicitAny": true,
+      "module": "es2015",
+      "target": "es2015",
+      "allowJs": true,
+      "moduleResolution": "node",
+      "allowSyntheticDefaultImports":true,
+      "declaration": true
+    },
+    "include": [
+      "src/**/*.ts",
+    ]
+  }

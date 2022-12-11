@@ -1,0 +1,19 @@
+@use "../themes";
+@use '../base';
+ul.componentsListe li.groupe:first-child > .CriteriaGroup {
+    width: calc(100% - 54px - 20px);
+}
+
+li.groupe {
+    margin: 0;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    display: block;
+    clear: both;
+    /*overflow: hidden;*/
+
+    /*first line*/
+    &>li.groupe {
+        margin-left: base.$margin-children-li;
+     }
+}

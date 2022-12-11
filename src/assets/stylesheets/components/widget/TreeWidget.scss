@@ -1,0 +1,92 @@
+@use '../../mixins';
+@use '../../base';
+@use '../../themes';
+
+.tree-widget {
+    height: 100%;
+    .treeBtnDisplay {
+        position: absolute;
+        left: 100%;
+        top: 50%;
+        transform: translate(0, -50%);
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #fff;
+        box-shadow: 0px 2px 3px 0px #cfcfcf;
+        padding: 5px;
+        line-height: 1;
+        z-index: 1;
+        cursor: pointer;
+        img {
+            height: 26px;
+        }
+    }
+    .treeLayer {
+        display: none;
+        position: absolute;
+        top: 50%;
+        margin-top: -19px;
+        left: 95%;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background: #fff;
+        box-shadow: 0px 2px 3px 0px #cfcfcf;
+        z-index: 2;
+
+        .treeClose {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 22px;
+            height: 22px;
+            vertical-align: top;
+            line-height: 22px;
+            cursor: pointer;
+            i {
+                text-align: center;
+                color: themes.$primary-color-important;
+                background: #fff !important;
+                font-size: 18px;
+            }
+        }
+
+        .treeNotice {
+            padding: 5px;
+            display: none;
+            line-height: 20px;
+        }
+        .treeDisplay {
+            overflow: auto;
+            max-height: 500px;
+            min-width: 275px;
+            padding: 25px 10px 5px;
+
+            &.jstree-default .jstree-disabled {
+                opacity: 0.5;
+            }
+            &.jstree-default .jstree-checkbox-disabled {
+                opacity: 0.5;
+            }
+        }
+        .treeActions {
+            border-top: 2px solid #ddd;
+            padding: 5px 10px;
+            text-align: right;
+            a {
+                border-radius: 5px;
+                color: #fff;
+                display: inline-block;
+                margin-left: 10px;
+                padding: 15px 5px;
+                line-height: 1;
+                cursor: pointer;
+            }
+            a.treeCancel {
+                background: #EE8D67;
+            }
+            a.treeSubmit {
+                background: #84C99E;
+            }
+        }
+    }
+}

@@ -1,0 +1,14 @@
+@use '../../themes';
+
+span.unselect{
+    cursor: pointer;
+    color: themes.$primary-color-important;
+    position: absolute;
+    top: 12px;
+    right: 25px;
+    border-radius: 100%;
+    i {
+        background-color: white;
+        border-radius: 100%;
+    }
+}

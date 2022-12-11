@@ -1,12 +1,11 @@
-# Sparnatural - A natural way of building SPARQL queries
-
+# WIP port sparnatural to TS
 Sparnatural is a **visual SPARQL query builder written in javascript**.
 
 It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists. It can be configured through a JSON-LD or OWL configuration file (that can be edited in Protégé) that defines the classes and properties to be presented in the component.
 
 ![](documentation/screencast-sparnatural-dbpedia-v3-en.gif)
 
-You can play with **online demos at http://sparnatural.eu/#demos**.
+You can play with **online demos at http://sparnatural.eu#demos**.
 
 # Getting Started
 
@@ -15,7 +14,7 @@ To get started :
 1. Read the following README;
 2. Read [the documentation](https://docs.sparnatural.eu)
 3. Look at how things work in file `sparnatural-demo-dbpedia/index.html`; 
-4. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/Sparnatural/blob/19dd3e30690c13dd0c820437111c45538e1d6472/sparnatural-demo-dbpedia/index.html#L100)
+4. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/Sparnatural/blob/master/sparnatural-demo-dbpedia/index.html#L100)
 5. Adapt `sparnatural-demo-dbpedia/index.html` by changing the configuration and adapting the SPARQL endpoint URL;
 
 To get started with docker :

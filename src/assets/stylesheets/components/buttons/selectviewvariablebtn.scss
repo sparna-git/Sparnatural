@@ -1,0 +1,35 @@
+.StartClassGroup{
+    .selectViewVariableBtn {
+        color: #fff;
+        position: absolute;
+        top: 50%;
+        right: 20px;
+        height: 16px;
+        margin-top: -8px;
+        z-index: 2;
+        cursor: pointer;
+        svg{
+            width: 100%;
+            height: 100%;
+            vertical-align: top;
+        }
+    }
+}
+
+.EndClassGroup{
+    .selectViewVariableBtn {
+        color: #fff;
+        position: absolute;
+        top: 50%;
+        right: 43px;
+        height: 16px;
+        margin-top: -8px;
+        z-index: 2;
+        cursor: pointer;
+        svg{
+            width: 100%;
+            height: 100%;
+            vertical-align: top;
+        }
+    }
+}

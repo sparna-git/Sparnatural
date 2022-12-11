@@ -1,0 +1,33 @@
+@use '../../../base';
+@use '../../../themes';
+.ActionWhere {
+    line-height: 26px;
+    position: absolute;
+    display: flex;
+    margin-top: -4px;
+    border-left: 3px solid transparent;
+    div{
+        margin-left: 25px;
+        width:max-content;
+    }
+    a{
+        position: absolute;
+        left: 100%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        border: 2px solid themes.$primary-color-main ;
+        border-radius: 13px;
+        height: 26px;
+        min-width: 26px !important;
+        font-size: 12px;
+        color: themes.$primary-color-main !important ;
+        font-weight: bold;  
+        margin-left: 10px;  
+        &:hover {
+            color: themes.$primary-color-main ;
+        }
+    }
+}

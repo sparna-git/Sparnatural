@@ -1,24 +1,15 @@
 const webpack = require("webpack");
 const path = require("path");
-
+const WriteFilePlugin = require('write-file-webpack-plugin')
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const HtmlWebpackPlugin = require('html-webpack-plugin'); // Require  html-webpack-plugin plugin
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require('copy-webpack-plugin');
-const WebpackBundleSizeAnalyzerPlugin = require('webpack-bundle-size-analyzer').WebpackBundleSizeAnalyzerPlugin;
-
-let htmlPageNames = ['index-saved-query'];
-let multipleHtmlPlugins = htmlPageNames.map(name => {
-  return new HtmlWebpackPlugin({
-    template: __dirname +`/src/${name}.html`, // relative path to the HTML files
-    filename: `${name}.html`, // output HTML files
-	inject: true,
-    chunks: [name] // respective JS files
-  })
-});
 
 module.exports = {
-  entry: [ "babel-polyfill", "./src/sparnatural.js" ],
+	mode: 'development',
+  // mode: 'production',
+  entry: ["./src/SparnaturalElement.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
     filename: "sparnatural.js"
@@ -30,6 +21,11 @@ module.exports = {
 			 exclude: /node_modules/,
 			 use: { loader: "babel-loader" }
     	},
+		{
+			test: /\.ts$/,
+			use: 'ts-loader',
+			exclude: /node_modules/,
+		},
     	{
 			test: /\.(sass|scss)$/,
 			use: [
@@ -37,7 +33,10 @@ module.exports = {
 				loader: MiniCssExtractPlugin.loader
 			},
 			{
-			    loader: "css-loader" // translates CSS into CommonJS
+			    loader: "css-loader", // translates CSS into CommonJS
+				options: {
+					sourceMap: true,
+				}
 			}, 
 			{
 			    loader: "sass-loader" // compiles Sass to CSS
@@ -69,48 +68,53 @@ module.exports = {
         }
     ]
   },
+  resolve: {
+	fallback:{
+		"util": require.resolve('util/'),
+		"buffer": require.resolve('buffer/'),
+		"stream": require.resolve("stream-browserify"),
+		"querystring": require.resolve("querystring-es3"),
+		"url": require.resolve("url/")
+	},
+    extensions: ['.tsx', '.ts', '.js']
+  },
   plugins: [
-	new HtmlWebpackPlugin({
-		filename: 'index.html',
-		template: __dirname + "/src/index.html",
-		inject: 'body'
-	}),
-	new HtmlWebpackPlugin({
-		filename: 'index-saved-query.html',
-		template: __dirname + "/src/index-saved-query.html",
-		inject: 'body'
-	}),
-	new MiniCssExtractPlugin({
-	  filename: "sparnatural.css",
-	  chunkFilename: "[id].css"
-	}),
-	new CopyPlugin([
-      { from: 'static' }
-    ]),
-	new DashboardPlugin(),
-	// so that JQuery is automatically inserted
-	new webpack.ProvidePlugin({
-	  $: 'jquery',
-	  jQuery: 'jquery',
-	})
-	/*
-	new webpack.ProvidePlugin({
-        datepicker: '@chenfengyuan/datepicke',
-	  }),
-	*/
-	/*
-	new WebpackBundleSizeAnalyzerPlugin('./webpack-bundle-size-analyzer-report.txt')
-	*/
-
+		new WriteFilePlugin(),
+		new HtmlWebpackPlugin({
+			filename: 'index.html',
+			template: __dirname + "/src/index.html",
+			inject: 'body'
+		}),
+		new MiniCssExtractPlugin({
+		  filename: "sparnatural.css",
+		  chunkFilename: "[id].css"
+		}),
+		new CopyPlugin({
+		  patterns: [
+			{
+				from:__dirname +'/static'
+			}
+		  ]
+		}),
+		new DashboardPlugin(),
+		// so that JQuery is automatically inserted
+		new webpack.ProvidePlugin({
+		  $: 'jquery',
+		  jQuery: 'jquery',
+		}),
+		// so that stream works properly, necessary for RDFSpec provider
+		// see https://stackoverflow.com/questions/68542553/webpack-5process-is-not-defined-triggered-by-stream-browserify
+		new webpack.ProvidePlugin({
+		  process: 'process/browser'
+		})
   ],
 	devServer: {
-	  contentBase: path.resolve(__dirname, "./dist"),
-	  historyApiFallback: true,
-	  inline: true,
-	  open: true,
-	  hot: true
+		static:{
+			directory: path.resolve(__dirname, "./static"),
+		},
+		historyApiFallback: true,
+		open: true,
+		hot: true
 	},
-  /* terrible, generates huge output files */
-	/* devtool: "eval-source-map" */
   devtool: "source-map"
 }

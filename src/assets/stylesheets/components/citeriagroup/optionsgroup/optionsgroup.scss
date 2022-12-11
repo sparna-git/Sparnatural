@@ -1,0 +1,57 @@
+@use "../../../themes";
+@use '../../../mixins';
+
+.OptionsGroup {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    min-width: fit-content;
+    /*padding-right: 15px;*/
+    margin-left: -22px;
+    @include mixins.arrow-back-colors(themes.$secondary-color-main, #fff);
+    
+    &.Disabled {
+        display: flex;
+        @include mixins.arrow-back-colors(themes.$silver-color-main, #fff);
+        /*@include arrow-front-colors($silver-color-main, #fff);*/
+    }
+    &.NoOptionEnabled {
+        display: none!important;
+        @include mixins.arrow-back-colors(themes.$silver-color-light, #fff);
+    }
+    .Optional, .NotExists {
+        padding-right: 13px;
+        margin-left: -7px;
+        @include mixins.arrow-back-colors(themes.$secondary-color-light, #fff);
+        @include mixins.arrow-front-colors(themes.$secondary-color-light, #fff);
+            position: relative;
+            display: flex;
+            zoom: 1;
+            /*background: $secondary-color-light;*/
+            margin-bottom: 0;
+            line-height: 42px;
+            color: #fff;
+            margin-left: 3px;
+            padding-right: 0;
+            font-size: 14px;
+            margin-right: -20px;
+            cursor: pointer;
+            span {
+                text-indent: 13px;
+                background: themes.$secondary-color-light;
+                border-top: 3px solid #fff;
+                border-bottom: 3px solid #fff;
+            }
+            input {
+                display: none;
+            }
+            &:hover,
+            &.Enabled {
+                @include mixins.arrow-back-colors(themes.$secondary-color-important, #fff);
+				@include mixins.arrow-front-colors(themes.$secondary-color-important, #fff);
+                span {
+                    background: themes.$secondary-color-important;
+                }
+            }
+    }
+}

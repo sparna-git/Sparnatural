@@ -1,0 +1,51 @@
+
+@use 'sass:math';
+@use '../../mixins';
+@use '../../base';
+@use '../../themes';
+
+
+.EndClassWidgetValue {
+    @include mixins.arrow-back-colors(themes.$primary-color-medium, #fff);
+    @include mixins.arrow-front-colors(themes.$primary-color-medium, #fff);
+    position: relative;
+    display: flex;
+    /*line-height: 0;*/
+    color: black;
+    font-size: 14px;
+    /*display: inline-block;*/
+    padding: 0;
+    span.label-two-line {
+        line-height: math.div(base.$height-components-under, 2);
+        line-height: 21px;
+    }
+    max-width: 220px;
+    height: 46px;
+    margin-right: -13px;
+    p {
+        line-height: 48px;
+        height: 48px;
+        background: themes.$primary-color-medium;
+        background-clip: padding-box;
+        margin: 0;
+        padding: 0 5px 0 5px;
+        display: inline-block;
+        overflow: hidden;
+        /*text-overflow: ellipsis;*/
+        border: base.$center-arrow-bd-width solid #fff;
+        border-left: 0;
+        border-right: 0;
+        
+        text-align: center;
+        span {
+            line-height: 42px;
+            display: inline-block;
+            vertical-align: baseline;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color:themes.$default-text-color;
+            width: 100%;
+        }
+    }
+}

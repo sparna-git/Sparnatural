@@ -1,0 +1,62 @@
+/**
+ * Color of the criteria arrows (orange)
+ * primary-color-main
+ **/
+$primary-color-main: rgb(250,136,3) ;
+
+/**
+ * Color of the "unselect" buttons in criterias (dark orange)
+ * primary-color-important
+ **/
+$primary-color-important: rgb(182, 97, 0) ;
+
+/**
+ * Color of a selected value in a criteria (light orange)
+ * primary-color-medium
+ **/
+$primary-color-medium: rgb(255, 210, 157) ;
+
+/**
+ * variable selector background & tooltip background (even lighter orange)
+ * primary-color-light
+ **/
+$primary-color-light: rgb(255, 231, 203) ;
+
+/** 
+ * Color of the options arrow (optional / negation) (strong green)
+ * secondary-color-main
+ **/
+$secondary-color-main: rgb(107,215,171) ;
+
+/** 
+ * Color of the highlight of arrows
+ * secondary-color-important
+ **/
+ $secondary-color-important: rgb(2,184,117) ;
+
+/**
+ * Color of the options arrow when not selected (light green)
+ * secondary-color-light
+ **/
+$secondary-color-light: rgb(151,227,196) ;
+
+/**
+ * Color of the service option enabled
+ * ternary-color-main
+ **/
+ $ternary-color-main: rgb(3, 201, 250) ;
+
+/**
+ * Color of variable d&d grip, disabled query button, disabled options
+ **/
+$silver-color-main: rgb(167,167,167) ;
+
+/**
+ *
+ **/
+$silver-color-light: rgb(230, 230, 230) ;
+
+/**
+ * Default text color
+ **/
+$default-text-color: #666 ;

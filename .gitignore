@@ -5,4 +5,15 @@
 prepros-6.config
 /node_modules
 package-lock.json
-/dist/webpack-bundle-size-analyzer-report.txt
+/dist/
+/.vscode/
+
+ontologies/sparnatural-config-core/
+
+ontologies/sparnatural-config-datasources/
+
+ontologies/catalog-v001.xml
+
+ontologies/graph_statistics.rq
+
+ontologies/widoco-1.4.14-jar-with-dependencies.jar
