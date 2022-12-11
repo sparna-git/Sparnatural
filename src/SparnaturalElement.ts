@@ -85,7 +85,7 @@ class SparNatural extends HTMLElement {
   }
 
   expandSparql(query:string) {
-    return this.Sparnatural.specProvider.expandSparql(query);
+    return this.Sparnatural.specProvider.expandSparql(query, this.Sparnatural.settings.sparqlPrefixes);
   }
 }
 
