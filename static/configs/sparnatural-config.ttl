@@ -96,6 +96,9 @@
              owl:inverseOf :estMembreDe ;
              rdfs:domain :Organization ;
              rdfs:range :Personne ;
+             <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService> [
+                      <http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint> <https://dbpedia.org/sparql>;
+                    ];
              <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<https://www.ica.org/standards/RiC/ontology#groupIsSourceOfMembershipRelation>/<https://www.ica.org/standards/RiC/ontology#membershipRelationHasTarget>" ;
              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :list_rdfslabel_with_range_alpha_langfr ;
              rdfs:label "a pour membre"@fr ,
@@ -260,7 +263,7 @@
                                 ] ;
                     rdfs:range :Date ;
                     <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<https://www.ica.org/standards/RiC/ontology#beginningDate>|<https://www.ica.org/standards/RiC/ontology#birthDate>" ;
-                    <http://data.sparna.fr/ontologies/sparnatural-config-core#service> [
+                    <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService> [
                       <http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint> <https://dbpedia.org/sparql>;
                     ];
                     rdfs:label "a pour date de début d'existence <br /> (service distant)"@fr ,
