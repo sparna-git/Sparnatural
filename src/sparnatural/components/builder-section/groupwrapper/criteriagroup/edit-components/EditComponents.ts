@@ -65,7 +65,6 @@ class EditComponents extends HTMLComponent {
     ).render();
 
     let widgetType = this.widgetWrapper.getWidgetType();
-    console.log("this.maxDepthIsReached()"+this.maxDepthIsReached())
     if (
       Object.values(this.RENDER_WHERE).includes(widgetType)
       &&
