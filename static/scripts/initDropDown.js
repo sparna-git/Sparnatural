@@ -1,6 +1,6 @@
 
 export const renderDropDown = function(dropDown,parsedQueries) {
-    console.dir(dropDown)
+    // console.dir(dropDown)
     dropDown.label = "Preloaded SPARQL queries";
     // Set the queries as aptions
     let options = {};
