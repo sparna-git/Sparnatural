@@ -1,4 +1,4 @@
-import { BgpPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableTerm } from "sparqljs";
+import { BgpPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableTerm, Wildcard } from "sparqljs";
 import * as DataFactory from "@rdfjs/data-model" ;
 import { Literal, Variable } from "@rdfjs/types";
 
@@ -33,6 +33,21 @@ export default class SparqlFactory {
         patterns: patterns
       }
     }
+
+    static buildSubQuery(patterns: Pattern[]):GroupPattern {
+      return {
+        type: "group",
+        patterns: [
+          {
+            type:"query",
+            queryType:"SELECT",
+            prefixes:{},
+            variables: [new Wildcard()],
+            where: patterns
+          }
+        ]
+      };
+  }
 
     static buildNotExistsPattern(groupPattern: GroupPattern): FilterPattern {
         return {
