@@ -45,8 +45,8 @@ export enum Config {
   IS_MULTILINGUAL = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "isMultilingual",
 
-  SERVICE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "service",
+  SPARQL_SERVICE = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "sparqlService",
   SERVICE_CLASS = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "Service",
   ENDPOINT = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +

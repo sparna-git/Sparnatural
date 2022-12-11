@@ -134,11 +134,11 @@ Search in FontAwesome at https://fontawesome.com/icons</rdfs:comment>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#service -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService -->
 
-    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#service">
+    <owl:AnnotationProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService">
         <rdfs:comment xml:lang="en">Set this annotation with an instance of Service as a value to indicate that this property needs to be executed within a SERVICE clause to the target endpoint.</rdfs:comment>
-        <rdfs:label xml:lang="en">service</rdfs:label>
+        <rdfs:label xml:lang="en">SPARQL service</rdfs:label>
         <rdfs:range rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#Service"/>
     </owl:AnnotationProperty>
     
