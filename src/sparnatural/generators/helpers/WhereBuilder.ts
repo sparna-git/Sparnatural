@@ -9,24 +9,32 @@ import IntersectionBuilder from "./IntersectionBuilder";
 import SparqlFactory from "../SparqlFactory";
 
 export default class WhereBuilder{
-    #resultPtrns: Pattern[] = []
-    #grpWrapper
-    #specProvider
-    #widgetComponent:AbstractWidget | null | undefined = null
-    #startClassPtrn:Pattern[] = []
-    #endClassPtrn:Pattern[] = []
+    // variables set in construtor
+    #grpWrapper:GroupWrapper
+    #specProvider: ISpecProvider
     #isChild:boolean
     #isInOption:boolean
+    #widgetComponent:AbstractWidget | null | undefined = null
+    
+    // patterns built in the build process
+    #resultPtrns: Pattern[] = []    
+    #startClassPtrn:Pattern[] = []
+    #endClassPtrn:Pattern[] = []
     #intersectionPtrn:BgpPattern 
     #whereChildPtrns: Pattern[] = []
     #andChildPtrns: Pattern[] = []
     #rdfPtrns: Pattern[] = []
+    #executedAfterPtrns: Pattern[] = []
+
+    // default vars gathered from children
     #defaultVars: Variable[] =[]
+
     constructor(grpWrapper:GroupWrapper,specProvider:ISpecProvider,isChild:boolean,isInOption:boolean){
         this.#grpWrapper = grpWrapper
         this.#specProvider = specProvider
         this.#isChild = isChild
         this.#isInOption = isInOption
+        this.#widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
     }
 
     build() {
@@ -47,18 +55,23 @@ export default class WhereBuilder{
         const builder = new WhereBuilder(this.#grpWrapper.whereChild,this.#specProvider,true,this.#grpWrapper.optionState !== OptionTypes.NONE)
         builder.build()
         this.#whereChildPtrns = builder.getResultPtrns()
+        // gather default vars from children
         this.#defaultVars.push(...builder.getDefaultVars())
+        // gather patterns to be executed after
+        this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns())
     }
 
     #buildAndChildPtrn(){
         const builder = new WhereBuilder(this.#grpWrapper.andSibling,this.#specProvider,true,this.#isInOption)
         builder.build()
         this.#andChildPtrns = builder.getResultPtrns()
+        // gather default vars from children
         this.#defaultVars.push(...builder.getDefaultVars())
+        // gather patterns to be executed after
+        this.#executedAfterPtrns.push(...builder.getExecutedAfterPtrns())
     }
 
     #buildRdfPtrn(){
-        this.#widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
         //get the infromation from the widget if there are widgetvalues selected
         if (this.#widgetComponent?.getwidgetValues()?.length > 0 ) this.#rdfPtrns = this.#widgetComponent.getRdfJsPattern();
     }
@@ -109,37 +122,34 @@ export default class WhereBuilder{
     }
 
     #createOptionStatePtrn(hasStartClass:boolean,exceptStartPtrn:Pattern[]){
+        // always store the startClassPattern in the final result pattern (no OPTIONAL, no NOT EXISTS, no SERVICE)
         if(hasStartClass) this.#resultPtrns.push(...this.#startClassPtrn)
 
-        const serviceDatasource = this.#specProvider.getServiceEndpoint(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())
-        let servicePtrn
-        if(this.#grpWrapper.optionState === OptionTypes.SERVICE || serviceDatasource){
-            const endpoint = DataFactory.namedNode(serviceDatasource)
+        const sparqlService = this.#specProvider.getServiceEndpoint(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())
+        let servicePtrn = null;
+        if(this.#grpWrapper.optionState === OptionTypes.SERVICE || sparqlService){
+            const endpoint = DataFactory.namedNode(sparqlService)
             servicePtrn = SparqlFactory.buildServicePattern(exceptStartPtrn,endpoint)
         }
 
-        if(this.#grpWrapper.optionState === OptionTypes.NONE || this.#isInOption ) {
-            servicePtrn ? this.#resultPtrns.push(servicePtrn) : this.#resultPtrns.push(...exceptStartPtrn)
-            return
-        } 
+        let finalResultPtrns:Pattern[] = [];
+        let normalOrServicePatterns:Pattern[] = servicePtrn ? [servicePtrn] : exceptStartPtrn;
 
-        if(this.#grpWrapper.optionState === OptionTypes.OPTIONAL){
-            servicePtrn ? 
-            this.#resultPtrns.push(SparqlFactory.buildOptionalPattern([servicePtrn]))
-            :
-            this.#resultPtrns.push(SparqlFactory.buildOptionalPattern(exceptStartPtrn))
-            return
+        if(this.#grpWrapper.optionState === OptionTypes.OPTIONAL && !this.#isInOption){
+            finalResultPtrns.push(SparqlFactory.buildOptionalPattern(normalOrServicePatterns));
+        } else if(this.#grpWrapper.optionState === OptionTypes.NOTEXISTS && !this.#isInOption){
+            finalResultPtrns.push(SparqlFactory.buildNotExistsPattern(SparqlFactory.buildGroupPattern(normalOrServicePatterns)))
+        } else {
+            // nothing special, just retain the patterns in the final result pattern
+            finalResultPtrns.push(...normalOrServicePatterns);
         }
 
-        if(this.#grpWrapper.optionState === OptionTypes.NOTEXISTS){
-            let ptrn
-            servicePtrn ? 
-            ptrn = SparqlFactory.buildGroupPattern([servicePtrn])
-            :
-            ptrn = SparqlFactory.buildGroupPattern(exceptStartPtrn)
-            this.#resultPtrns.push(SparqlFactory.buildNotExistsPattern(ptrn))
-            return
+        if(servicePtrn && this.#specProvider.isLogicallyExecutedAfter(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())) {
+            this.#executedAfterPtrns = finalResultPtrns;
+        } else {
+            this.#resultPtrns = finalResultPtrns;
         }
+        
     }
 
     getResultPtrns(){
@@ -148,5 +158,9 @@ export default class WhereBuilder{
 
     getDefaultVars(){
         return this.#defaultVars
+    }
+
+    getExecutedAfterPtrns(){
+        return this.#executedAfterPtrns;
     }
 }
