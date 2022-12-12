@@ -8,6 +8,11 @@ import {
 } from "sparqljs";
 
 export default function generateQuery(actionStore: ActionStore) {
+  // if we are quiet, don't do anything
+  if(actionStore.quiet) {
+    return;
+  }
+
   // triggered when Sparnatural is submitted : generates output SPARQL query
   let settings = getSettings();
   let qryGen = new SparnaturalJsonGenerator(actionStore.sparnatural);

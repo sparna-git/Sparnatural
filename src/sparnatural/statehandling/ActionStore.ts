@@ -37,6 +37,10 @@ class ActionStore {
   rdfjsSelect:SelectQuery;
   //submitOpened = false still implement
   
+  // when quiet, don't emit onQueryUpdated events
+  // this is set when a query is loaded
+  quiet = false;
+  
   constructor(sparnatural: Sparnatural, specProvider: ISpecProvider) {
     this.specProvider = specProvider;
     this.sparnatural = sparnatural;

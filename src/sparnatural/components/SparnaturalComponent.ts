@@ -80,5 +80,9 @@ class Sparnatural extends HTMLComponent {
   disablePlayBtn = () => {
     this.SubmitSection.playBtn.disable();
   }
+
+  setQuiet(quiet:boolean) {
+    this.actionStore.quiet = quiet;
+  }
 }
 export default Sparnatural;

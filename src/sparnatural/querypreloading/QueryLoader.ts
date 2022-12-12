@@ -13,15 +13,23 @@ import { Branch, ISparJson, SelectedVal, Order } from "../generators/ISparJson";
 export default class QueryLoader{
     static sparnatural: Sparnatural;
     static query: ISparJson
+    
     static loadQuery(query:ISparJson){
-      this.query = query
+        this.query = query
+        // set Sparnatural quiet so it does not emit the update callbacks
+        this.sparnatural.setQuiet(true);
         // first reset the current query
         this.sparnatural.BgWrapper.resetCallback();
         // build Sparnatural query
         this.#buildSparnatural(this.sparnatural, query.branches);
         // set the correct ordering of the draggables
         this.#updateOrderingOfVariables()
-        // trigger query generation
+        // then reset the quiet flag
+        this.sparnatural.setQuiet(false);
+        // trigger query generation at then
+        this.sparnatural.html[0].dispatchEvent(
+          new CustomEvent("generateQuery")
+        );
         this.sparnatural.html[0].dispatchEvent(
           new CustomEvent("redrawBackgroundAndLinks")
         );
@@ -37,9 +45,9 @@ export default class QueryLoader{
         this.#buildCriteriaGroup(rootGrpWrapper, rootBranch);
         let parent = rootGrpWrapper;
         branches.forEach((b) => {
-        this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
-        this.#buildCriteriaGroup(parent.andSibling, b);
-        parent = parent.andSibling;
+          this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
+          this.#buildCriteriaGroup(parent.andSibling, b);
+          parent = parent.andSibling;
         });
     }
   
