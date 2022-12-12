@@ -41,7 +41,10 @@ class Sparnatural extends HTMLComponent {
       //Think this will be launched before load query ???
       this.actionStore = new ActionStore(this, this.specProvider);
       this.BgWrapper = new BgWrapper(this, this.specProvider).render();
-      this.SubmitSection = new SubmitSection(this).render();
+      // display the submit button only if a callback was provided
+      if(this.settings.onSubmit) {
+        this.SubmitSection = new SubmitSection(this).render();
+      }
       this.variableSection = new VariableSection(
         this,
         this.specProvider
