@@ -320,6 +320,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
       Config.NON_SELECTABLE_PROPERTY,
       Config.BOOLEAN_PROPERTY,
       Config.TREE_PROPERTY,
+      Config.MAP_PROPERTY,
     ];
 
     // only return the type if it is a known type
