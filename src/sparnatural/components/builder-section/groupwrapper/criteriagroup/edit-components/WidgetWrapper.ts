@@ -169,6 +169,16 @@ class WidgetWrapper extends HTMLComponent {
     }
   }
 
+  #readDefaultEndpoint(defaultEndpoint:string | (() => string) | undefined):string{
+    if(defaultEndpoint instanceof Function) {
+      return (defaultEndpoint as (()=> string))();
+    } else if(defaultEndpoint) {
+      return defaultEndpoint as string;
+    } else {
+      return undefined;
+    }
+  }
+
   #createWidgetComponent(
     widgetType: string,
     objectPropertyId: any,
@@ -193,7 +203,7 @@ class WidgetWrapper extends HTMLComponent {
         if (datasource == null) {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
-          if (this.settings.defaultEndpoint() != null) {
+          if (this.settings.defaultEndpoint) {
             datasource = Datasources.DATASOURCES_CONFIG.get(
               Datasources.LITERAL_LIST_ALPHA
             );
@@ -207,7 +217,7 @@ class WidgetWrapper extends HTMLComponent {
             // endpoint URL
             datasource.sparqlEndpointUrl != null
               ? datasource.sparqlEndpointUrl
-              : this.settings.defaultEndpoint(),
+              : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
 
             // sparqlPostProcessor
             {
@@ -262,7 +272,7 @@ class WidgetWrapper extends HTMLComponent {
         if (datasource == null) {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
-          if (this.settings.defaultEndpoint() != null) {
+          if (this.settings.defaultEndpoint) {
             datasource = Datasources.DATASOURCES_CONFIG.get(
               Datasources.LIST_URI_COUNT
             );
@@ -276,7 +286,7 @@ class WidgetWrapper extends HTMLComponent {
             // endpoint URL
             datasource.sparqlEndpointUrl != null
               ? datasource.sparqlEndpointUrl
-              : this.settings.defaultEndpoint(),
+              : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
 
             // sparqlPostProcessor
             {
@@ -328,7 +338,7 @@ class WidgetWrapper extends HTMLComponent {
         if (datasource == null) {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
-          if (this.settings.defaultEndpoint() != null) {
+          if (this.settings.defaultEndpoint) {
             datasource = Datasources.DATASOURCES_CONFIG.get(
               Datasources.SEARCH_URI_CONTAINS
             );
@@ -342,7 +352,7 @@ class WidgetWrapper extends HTMLComponent {
             // endpoint URL
             datasource.sparqlEndpointUrl != null
               ? datasource.sparqlEndpointUrl
-              : this.settings.defaultEndpoint(),
+              : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
 
             // sparqlPostProcessor
             {
@@ -445,7 +455,7 @@ class WidgetWrapper extends HTMLComponent {
         if (treeRootsDatasource == null) {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
-          if (this.settings.defaultEndpoint() != null) {
+          if (this.settings.defaultEndpoint) {
             treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(
               Datasources.TREE_ROOT_SKOSTOPCONCEPT
             );
@@ -463,7 +473,7 @@ class WidgetWrapper extends HTMLComponent {
         if (treeChildrenDatasource == null) {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
-          if (this.settings.defaultEndpoint() != null) {
+          if (this.settings.defaultEndpoint) {
             treeChildrenDatasource = Datasources.DATASOURCES_CONFIG.get(
               Datasources.TREE_CHILDREN_SKOSNARROWER
             );
@@ -479,7 +489,7 @@ class WidgetWrapper extends HTMLComponent {
             // we read it on the roots datasource
             treeRootsDatasource.sparqlEndpointUrl != null
               ? treeRootsDatasource.sparqlEndpointUrl
-              : this.settings.defaultEndpoint(),
+              : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
 
             // sparqlPostProcessor
             {

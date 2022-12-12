@@ -13,7 +13,7 @@ interface ISettings {
   maxOr: number;
   backgroundBaseColor?: string; //TODO '250,136,3'
   sparqlPrefixes?: { [key: string]: string };
-  defaultEndpoint?: () => string;
+  defaultEndpoint?: string | (() => string);
   localCacheDataTtl?: number;
   langSearch?: any;
   autocomplete?: any;
