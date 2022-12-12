@@ -153,9 +153,9 @@ export default class WhereBuilder{
         // then decide where to store the generated patterns : either in "normal" patterns
         // or in patterns that shall be executed after the rest of the query
         if(servicePtrn && this.#specProvider.isLogicallyExecutedAfter(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())) {
-            this.#executedAfterPtrns = finalResultPtrns;
+            this.#executedAfterPtrns.push(...finalResultPtrns);
         } else {
-            this.#resultPtrns = finalResultPtrns;
+            this.#resultPtrns.push(...finalResultPtrns);
         }
         
     }
