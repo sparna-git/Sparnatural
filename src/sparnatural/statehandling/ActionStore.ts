@@ -50,6 +50,8 @@ class ActionStore {
       (event: CustomEvent) => {
         event.stopImmediatePropagation();
         event.preventDefault();
+        // re-enable the submit button if it was disabled
+        this.sparnatural.SubmitSection.enableSubmit();
         generateQuery(this);
       }
     );

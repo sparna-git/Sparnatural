@@ -26,11 +26,11 @@ class SubmitSection extends HTMLComponent {
   };
 
   enableSubmit() {
-    this.html.removeClass("submitDisable");
+    this.playBtn.enable();
   }
 
   disableSubmit() {
-    this.html.addClass("submitDisable");
+    this.playBtn.disable();
   }
 }
 export default SubmitSection;

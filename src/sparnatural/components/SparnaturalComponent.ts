@@ -73,7 +73,7 @@ class Sparnatural extends HTMLComponent {
 
   // method is exposed from the HTMLElement
   enablePlayBtn = () =>{
-    this.SubmitSection.playBtn.enable();
+    this.SubmitSection.playBtn.removeLoading();
   }
   
   // method is exposed from the HTMLElement

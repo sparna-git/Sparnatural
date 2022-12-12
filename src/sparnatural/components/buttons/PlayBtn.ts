@@ -2,12 +2,16 @@ import UiuxConfig from "../IconsConstants";
 import HTMLComponent from "../HtmlComponent";
 
 class PlayBtn extends HTMLComponent {
-  constructor(ParentComponent: HTMLComponent, callBack: () => void) {
+  callback: () => void;
+
+
+  constructor(ParentComponent: HTMLComponent, callback: () => void) {
     //TODO generateQuery enable disable as binary state
     let widgetHtml = $(`${UiuxConfig.ICON_PLAY}`);
     super("playBtn", ParentComponent, widgetHtml);
+    this.callback = callback;
     this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
-      callBack();
+      callback();
     });
   }
 
@@ -17,11 +21,29 @@ class PlayBtn extends HTMLComponent {
   }
 
   disable() {
-    this.widgetHtml.addClass('submitDisable loadingEnabled');
+    // set a disabled CSS class, trigger the loader, and remove click event
+    this.html.addClass('submitDisable loadingEnabled');
+    this.widgetHtml.off("click");
   }
 
-  enable() {
-    this.widgetHtml.removeClass('loadingEnabled');
+  /**
+   * Triggered when query has finished executing. Just removes the loading but keep the button disabled
+   */
+  removeLoading() {
+    this.html.removeClass('loadingEnabled');
   }
+
+  /**
+   * Re-enables the grey button
+   */
+  enable() {
+    this.html.removeClass('submitDisable');
+    // re-enable the click event
+    let that = this;
+    this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
+      that.callback();
+    });
+  }
+
 }
 export default PlayBtn;
