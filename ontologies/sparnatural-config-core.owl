@@ -234,6 +234,16 @@ The list options can be configured using a datasource annotation, that will typi
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#MapProperty -->
+
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#MapProperty">
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a map selection should be displayed.</rdfs:comment>
+        <rdfs:label xml:lang="en">map property</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty">
