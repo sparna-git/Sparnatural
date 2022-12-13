@@ -13,6 +13,7 @@ class BgWrapper extends HTMLComponent {
   constructor(ParentComponent: Sparnatural, specProvider: ISpecProvider) {
     super("builder-section", ParentComponent, null);
     this.specProvider = specProvider;
+    this.ParentSparnatural = ParentComponent;
   }
   render(): this {
     super.render();

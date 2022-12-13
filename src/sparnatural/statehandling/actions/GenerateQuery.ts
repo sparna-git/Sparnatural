@@ -12,6 +12,10 @@ export default function generateQuery(actionStore: ActionStore) {
   if(actionStore.quiet) {
     return;
   }
+  // if the query editor is empty, don't do anything
+  if(actionStore.sparnatural.isEmpty()) {
+    return;
+  }
 
   // triggered when Sparnatural is submitted : generates output SPARQL query
   let settings = getSettings();

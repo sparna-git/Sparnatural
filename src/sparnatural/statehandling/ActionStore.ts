@@ -139,6 +139,7 @@ class ActionStore {
       this.variables = [];
       this.sparnatural.variableSection.html.remove();
       this.sparnatural.variableSection.render();
+      // not sure we should regenerate the query here
       generateQuery(this)
     });
 

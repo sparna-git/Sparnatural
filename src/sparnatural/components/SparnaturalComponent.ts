@@ -84,5 +84,9 @@ class Sparnatural extends HTMLComponent {
   setQuiet(quiet:boolean) {
     this.actionStore.quiet = quiet;
   }
+
+  isEmpty() {
+    return (this.BgWrapper.componentsList.rootGroupWrapper.CriteriaGroup.StartClassGroup.startClassVal?.type == null)
+  }
 }
 export default Sparnatural;
