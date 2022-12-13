@@ -161,10 +161,29 @@ export class TimeDatePickerWidget extends AbstractWidget {
   }
 
   #addValueBtnClicked = () => {
+
+    // fix for negative years
+    // set a minus in front of the date if there was one in the value
+    let startDate:Date;
+    if(this.inputStart.val() != '') {
+      startDate = this.inputStart.datepicker("getDate");
+      if((this.inputStart.val() as string).startsWith("-") && !startDate.toISOString().startsWith("-")) {
+        startDate.setFullYear(parseInt(this.inputStart.val().toString()));
+      }
+    }
+    
+    let endDate:Date;
+    if(this.inputEnd.val() != '') {
+      endDate = this.inputEnd.datepicker("getDate");
+      if((this.inputEnd.val() as string).startsWith("-") && !endDate.toISOString().startsWith("-")) {
+        endDate.setFullYear(parseInt(this.inputEnd.val().toString()));
+      }
+    }
+
     let stringDateTimeVal:StringDateTimeValue["value"] ={
       label: null,
-      start:(this.inputStart.val() != '')?this.inputStart.datepicker("getDate").toISOString():null,
-      stop:(this.inputEnd.val() != '')?this.inputEnd.datepicker("getDate").toISOString():null,
+      start:(startDate)?startDate.toISOString():null,
+      stop:(endDate)?endDate.toISOString():null,
     } 
     let widgetVal: DateTimePickerValue = this.parseInput(
       stringDateTimeVal
@@ -224,11 +243,11 @@ export class TimeDatePickerWidget extends AbstractWidget {
       return [
         buildDateRangeOrExactDatePattern(
           this.widgetValues[0].value.start?DataFactory.literal(
-            this.widgetValues[0].value.start.toISOString(),
+            this.#formatSparqlDate(this.widgetValues[0].value.start),
             DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
           this.widgetValues[0].value.stop?DataFactory.literal(
-            this.widgetValues[0].value.stop.toISOString(),
+            this.#formatSparqlDate(this.widgetValues[0].value.stop),
             DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
           DataFactory.variable(
@@ -244,11 +263,11 @@ export class TimeDatePickerWidget extends AbstractWidget {
       return [
         SparqlFactory.buildFilterTime(
           this.widgetValues[0].value.start?DataFactory.literal(
-            this.widgetValues[0].value.start.toISOString(),
+            this.#formatSparqlDate(this.widgetValues[0].value.start),
             DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
           this.widgetValues[0].value.stop?DataFactory.literal(
-            this.widgetValues[0].value.stop.toISOString(),
+            this.#formatSparqlDate(this.widgetValues[0].value.stop),
             DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
           DataFactory.variable(
@@ -257,6 +276,38 @@ export class TimeDatePickerWidget extends AbstractWidget {
         ),
       ];
     }    
+  }
+
+  /**
+   * 
+   * @param date Formats the date to insert in the SPARQL query. We cannot rely on toISOString() method
+   * since it does not properly handle negative year and generates "-000600-12-31" while we want "-0600-12-31"
+   * @returns 
+   */
+  #formatSparqlDate(date:Date) {
+    if(date == null) return null;
+
+    return this.#padYear(date.getUTCFullYear()) +
+    '-' + this.#pad(date.getUTCMonth() + 1) +
+    '-' + this.#pad(date.getUTCDate()) +
+    'T' + this.#pad(date.getUTCHours()) +
+    ':' + this.#pad(date.getUTCMinutes()) +
+    ':' + this.#pad(date.getUTCSeconds()) +
+    'Z';
+  }
+
+  #pad(number:number) {
+    if (number < 10) {
+      return '0' + number;
+    }
+    return number;
+  }
+
+  #padYear(number:number) {
+    let absoluteValue = (number < 0)?-number:number;
+    let absoluteString = (absoluteValue < 1000)?absoluteValue.toString().padStart(4,'0'):absoluteValue.toString();
+    let finalString = (number < 0)?"-"+absoluteString:absoluteString;
+    return finalString;
   }
 
   #getValueLabel = function (startLabel: string, stopLabel: string) {
