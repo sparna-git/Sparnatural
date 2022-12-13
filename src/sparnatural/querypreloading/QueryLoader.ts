@@ -21,7 +21,9 @@ export default class QueryLoader{
         // first reset the current query
         this.sparnatural.BgWrapper.resetCallback();
         // build Sparnatural query
-        this.#buildSparnatural(this.sparnatural, query.branches);
+        // use a deep copy of the query to avoid modifying the original copy
+        let clone = JSON.parse(JSON.stringify(query)) as ISparJson;
+        this.#buildSparnatural(this.sparnatural, clone.branches);
         // set the correct ordering of the draggables
         this.#updateOrderingOfVariables()
         // then reset the quiet flag
