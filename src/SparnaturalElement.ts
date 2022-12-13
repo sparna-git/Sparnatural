@@ -43,6 +43,9 @@ class SparNatural extends HTMLElement {
     return getSettings();
   }
 
+  /**
+   * Can be called from the outside
+   */
   set settings(options: any) {
     mergeSettings(options);
     if (getSettings().config === null)
@@ -59,6 +62,7 @@ class SparNatural extends HTMLElement {
 
   /**
    * Enable the play button when a query has finished executing
+   * Can be called from the outside
    */
   enablePlayBtn(){
     this.Sparnatural.enablePlayBtn()
@@ -66,17 +70,15 @@ class SparNatural extends HTMLElement {
 
   /**
    * Disable the play button when query is triggered
+   * Can be called from the outside
    */
   disablePlayBtn(){
     this.Sparnatural.disablePlayBtn()
   }
 
-  parseQueries(queries:PreLoadQueries){
-    return QueryParser.parseQueries(queries)
-  }
-
   /**
    * Load a saved/predefined query in the visual query builder
+   * Can be called from the outside
    * @param query 
    */
   loadQuery(query:ISparJson){
@@ -84,8 +86,28 @@ class SparNatural extends HTMLElement {
     QueryLoader.loadQuery(query)
   }
 
+  /**
+   * Expands the SPARQL query according to the configuration.
+   * Can be called from the outside
+   * @returns 
+   */
   expandSparql(query:string) {
     return this.Sparnatural.specProvider.expandSparql(query, this.Sparnatural.settings.sparqlPrefixes);
+  }
+
+  /**
+   * Clears the current query.
+   * Can be called from the outside
+   */
+  clear() {
+    this.Sparnatural.BgWrapper.resetCallback();
+  }
+
+  /**
+   * TODO : should be removed
+   */
+  parseQueries(queries:PreLoadQueries){
+    return QueryParser.parseQueries(queries)
   }
 }
 

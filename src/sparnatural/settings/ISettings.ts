@@ -30,6 +30,7 @@ interface ISettings {
     sparqlAsJson: any
   ) => void;
   onSubmit?: (sparnatural: Sparnatural) => void;
+  onReset?: (sparnatural: Sparnatural) => void;
 }
 
 export default ISettings;

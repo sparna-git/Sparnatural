@@ -35,6 +35,11 @@ class BgWrapper extends HTMLComponent {
     this.html[0].dispatchEvent(new CustomEvent("resetVars",{bubbles: true}));
     // redraw background so that background height of first line is recomputed - otherwise it can stay small
     this.html[0].dispatchEvent(new CustomEvent("redrawBackgroundAndLinks",{bubbles: true}));
+
+    // fire a callback to the outside world
+    if (this.ParentSparnatural.settings.onReset) {
+      this.ParentSparnatural.settings.onReset(this.ParentSparnatural);
+    }
   };
 }
 export default BgWrapper;
