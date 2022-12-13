@@ -89,6 +89,8 @@ A typical integration in a web page looks like this :
 | A Javascript object providing the necessary functions for the date widget. See the [dates reference](#dates-reference) below. |
 | **onQueryUpdated** |  |
 | A Javascript `function(queryString, queryJson, sparqlAsJson?) { ... }` taking as a parameter the SPARQL query String and the SPARQL query JSON data structure. The third optional parameter is the SPARQL query data structure, in the (SPARQL.js format)[https://github.com/RubenVerborgh/SPARQL.js/] See the [onQueryUpdated reference](#onQueryUpdated-reference) below| 
+| **onReset** |  |
+| A Javascript `function(sparnatural) { ... }` that is triggered when the reset button inside Sparnatural is clicked. This function is optional, if not provided, it is not called.| 
 | **onSubmit** |  |
 | A Javascript `function(sparnatural) { ... }` that is triggered when the submit button inside Sparnatural is clicked. This function is optional, if not provided, no submit button is displayed. See the See the [onSubmit reference](#onsubmit-reference) below| 
 | **tooltipConfig** |  |
@@ -99,6 +101,26 @@ A typical integration in a web page looks like this :
 | The time that the dropdown lists will be stored in cache on the client, if the server has allowed it in its response headers, that is if `Cache-Control: no-cache` header is returned in the response, no cache will happen, whatever the value of this field. The server can return `Cache-Control: public` for lists to be properly cached. | 
 | **debug** | false |
 | If set to `true`, Sparnatural will log JSON and SPARQL queries on the console, as they are generated. | 
+
+
+## Sparnatural element API
+
+The table below summarizes the various functions that can be called on the Sparnatural element.
+
+| Function | Parameters |
+| -------- | ----------- |
+| **sparnatural.settings = ....** | A `settings` object as documented above |
+| Sets the settings on the Sparnatural element, and displays it. Sparnatural is displayed only when its settings have been set. |
+| **sparnatural.enablePlayBtn()** | none |
+| Removes the loading from the play button once a query has finished executing. |
+| **sparnatural.disablePlayBtn()** | none |
+| Disables the play button once a query has started its execution. |
+| **sparnatural.loadQuery(query)** | Query as documented in [the query JSON format](Query-JSON-format) |
+| Loads a query structure in Sparnatural |
+| **sparnatural.expandSparql(sparqlString)** | A SPARQL query string |
+| Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration)|
+| **sparnatural.clear()** | none |
+| Clears the Sparnatural editor, as if the reset button was clicked. |
 
 ## autocomplete reference
 

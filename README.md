@@ -1,5 +1,5 @@
-# WIP port sparnatural to TS
-Sparnatural is a **visual SPARQL query builder written in javascript**.
+# Sparnatural SPARQL query builder
+Sparnatural is a **visual SPARQL query builder written in Typescript**.
 
 It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists. It can be configured through a JSON-LD or OWL configuration file (that can be edited in Protégé) that defines the classes and properties to be presented in the component.
 
@@ -16,13 +16,6 @@ To get started :
 3. Look at how things work in file `sparnatural-demo-dbpedia/index.html`; 
 4. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/Sparnatural/blob/master/sparnatural-demo-dbpedia/index.html#L100)
 5. Adapt `sparnatural-demo-dbpedia/index.html` by changing the configuration and adapting the SPARQL endpoint URL;
-
-To get started with docker :
-
-1. Clone the git repository
-2. Run ``docker-compose build``
-3. Run ``docker-compose up``
-4. Open your browser: http://127.0.0.1:8080
 
 # Features
 
