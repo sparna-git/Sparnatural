@@ -19,18 +19,17 @@ LIMIT 500
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_literal_list_count",
   `
-SELECT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT DISTINCT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
 WHERE {
 {
   SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
   WHERE {
     ?domain a $domain .
     ?domain $property ?theLabel .
+    FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
   }
   GROUP BY ?theLabel
 }
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
 }
 ORDER BY DESC(?count) UCASE(?label)
 LIMIT 500
@@ -40,18 +39,17 @@ LIMIT 500
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_literal_list_alpha_with_count",
   `
-SELECT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT DISTINCT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
 WHERE {
 {
   SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
   WHERE {
     ?domain a $domain .
     ?domain $property ?theLabel .
+    FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
   }
   GROUP BY ?theLabel
 }
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
 }
 ORDER BY UCASE(?label)
 LIMIT 500
