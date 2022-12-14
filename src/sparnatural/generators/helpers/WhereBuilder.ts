@@ -106,7 +106,11 @@ export default class WhereBuilder{
     #buildGrpWrapperPtrn(){
         // The startClassPtrn does not need to be created if it is a WHERE or ANDChild
         const hasStartClass = (!this.#isChild)
-        const hasEndClass = (!this.#specProvider.isLiteralClass(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected()))
+        const hasEndClass = (
+            !this.#specProvider.isLiteralClass(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected())
+            &&
+            !this.#specProvider.isRemoteClass(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected())
+        );
         const hasIntersectionTriple = (this.#intersectionPtrn)
 
         let exceptStartPtrn:Pattern[] = []

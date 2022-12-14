@@ -28,7 +28,7 @@ class StartClassGroup extends HTMLComponent {
   ) {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
-    this.inputTypeComponent = new ClassTypeId(this, this.specProvider);
+    this.inputTypeComponent = new ClassTypeId(this, this.specProvider, startClassVal);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
     this.startClassVal = startClassVal
       ? startClassVal

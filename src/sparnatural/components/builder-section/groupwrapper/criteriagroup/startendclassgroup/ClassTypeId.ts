@@ -57,12 +57,18 @@ class ClassTypeId extends HTMLComponent {
     }
 
     if (isStartClassGroup(this.ParentComponent)) {
-      this.widgetHtml = this.#getStartValues(
-        this.selectBuilder,
-        this.startClassVal?.type
-      );
+      if(!this.startClassVal?.type) {
+        // If this Component is a child of the StartClassGroup component in the first row with no value selected
+        this.widgetHtml = this.selectBuilder.buildSelect_FirstStartClassGroup();
+      } else {
+        // If this is under a WHERE, we want only the selected value
+        this.widgetHtml = this.selectBuilder.buildSelect_StartClassGroupInWhere(this.startClassVal.type);
+      }
     } else {
-      this.widgetHtml = this.#getRangeOfEndValues(this.selectBuilder);
+      // If this Component is a child of the EndClassGroup component, we want the range of possible end values
+      this.widgetHtml = this.selectBuilder.buildSelect_EndClassGroup(
+        this.startClassVal.type
+      );
     }
 
     this.html.append(this.widgetHtml);
@@ -85,17 +91,6 @@ class ClassTypeId extends HTMLComponent {
       );
     };
     this.UnselectButton = new UnselectBtn(this, removeEndClassEvent).render();
-  }
-
-  // If this Component is a child of the EndClassGroup component, we want the range of possible end values
-  #getRangeOfEndValues(selectBuilder: ClassSelectBuilder) {
-    // if you would like to have a default value selected, then change the null
-    return selectBuilder.buildClassSelect(this.startClassVal.type, null);
-  }
-
-  // If this Component is a child of the StartClassGroup component, we want the possible StartValues
-  #getStartValues(selectBuilder: ClassSelectBuilder, default_value: string) {
-    return selectBuilder.buildClassSelect(null, default_value);
   }
 
   // when a value gets selected from the dropdown menu (niceselect), then change is called
@@ -181,17 +176,30 @@ class ClassSelectBuilder extends HTMLComponent {
     return this;
   }
 
-  buildClassSelect(domainId: string, default_value: string) {
-    let list: Array<string> = [];
-    let items = [];
+  buildSelect_FirstStartClassGroup() {
+    return this.buildClassSelectFromItems(
+      this.specProvider.getClassesInDomainOfAnyProperty(),
+      null
+    );
+  }
 
-    if (domainId === null) {
-      // if we are on the first class selection
-      items = this.specProvider.getClassesInDomainOfAnyProperty();
-    } else {
-      items = this.specProvider.getConnectedClasses(domainId);
-    }
-    
+  buildSelect_EndClassGroup(domainId: string) {
+    return this.buildClassSelectFromItems(
+      this.specProvider.getConnectedClasses(domainId),
+      null
+    );
+  }
+
+  buildSelect_StartClassGroupInWhere(selectedClass:string) {
+    console.log(selectedClass);
+    return this.buildClassSelectFromItems(
+      [selectedClass],
+      null
+    );
+  }
+
+  buildClassSelectFromItems(items:any[], default_value: string) {
+    let list: Array<string> = [];
     for (var key in items) {
       var val = items[key];
       var label = this.specProvider.getLabel(val);

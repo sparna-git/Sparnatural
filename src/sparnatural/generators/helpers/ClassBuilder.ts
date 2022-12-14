@@ -39,7 +39,11 @@ export default class  ClassBuilder {
     }
 
     #ifBlocking(){
-        if(this.widgetIsBlocking || this.classGroup.getTypeSelected() === null) return true
+        if(
+            this.widgetIsBlocking
+            ||
+            this.classGroup.getTypeSelected() === null
+        ) return true
         this.#buildClsTriple()
         return false
     }
