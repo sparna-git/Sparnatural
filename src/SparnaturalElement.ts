@@ -16,6 +16,7 @@ import { ISparJson } from "./sparnatural/generators/ISparJson";
 import { PreLoadQueries } from "./sparnatural/settings/ISettings";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import QueryParser from "./sparnatural/querypreloading/QueryParser";
+import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
 
 /*
   This is the sparnatural HTMLElement. 
@@ -23,7 +24,7 @@ import QueryParser from "./sparnatural/querypreloading/QueryParser";
   Used to configure the Settings and load queries
 */
 class SparNatural extends HTMLElement {
-  Sparnatural = new Sparnatural();
+  Sparnatural:SparnaturalComponent;
   specProvider: ISpecProvider;
   static get observedAttributes() {
     return ["settings"];
@@ -56,6 +57,7 @@ class SparNatural extends HTMLElement {
   }
 
   initSparnatural() {
+    this.Sparnatural = new Sparnatural();
     $(this).append(this.Sparnatural.html);
     this.Sparnatural.render();
   }

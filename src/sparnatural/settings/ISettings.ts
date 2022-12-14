@@ -15,6 +15,8 @@ interface ISettings {
   sparqlPrefixes?: { [key: string]: string };
   defaultEndpoint?: string | (() => string);
   localCacheDataTtl?: number;
+  // TODO : this should not be exposed.
+  // Only the language parametre is exposed, but the actual labels content should not
   langSearch?: any;
   autocomplete?: any;
   list?: any;

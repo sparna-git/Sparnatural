@@ -163,11 +163,13 @@ const defaultSettings: ISettings = {
   onSubmit: null  ,
 };
 
+// the actual settings, result of merge between defaultSettings and settings passed as parameters
+let settings:ISettings;
 export function getSettings() {
-  return defaultSettings;
+  return settings;
 }
 
 // merge given options with default setting values
 export function mergeSettings(options: any) {
-  $.extend(true, defaultSettings, defaultSettings, options);
+  settings = $.extend(true, {}, defaultSettings, options);
 }

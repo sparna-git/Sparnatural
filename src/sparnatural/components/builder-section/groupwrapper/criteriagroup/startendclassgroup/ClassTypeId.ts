@@ -191,6 +191,7 @@ class ClassSelectBuilder extends HTMLComponent {
     } else {
       items = this.specProvider.getConnectedClasses(domainId);
     }
+    
     for (var key in items) {
       var val = items[key];
       var label = this.specProvider.getLabel(val);
@@ -221,6 +222,7 @@ class ClassSelectBuilder extends HTMLComponent {
   }
 }
 
+
 function isStartClassGroup(
   ParentComponent: HTMLComponent
 ): ParentComponent is StartClassGroup {
@@ -229,6 +231,8 @@ function isStartClassGroup(
     "StartClassGroup"
   );
 } // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards
+
+
 function isEndClassGroup(
   ParentComponent: HTMLComponent
 ): ParentComponent is EndClassGroup {

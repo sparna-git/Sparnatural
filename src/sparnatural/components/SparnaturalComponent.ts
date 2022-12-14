@@ -15,7 +15,6 @@ const i18nLabels = {
 
 class Sparnatural extends HTMLComponent {
   specProvider: ISpecProvider;
-  submitOpened = true; // is responsible if the generateQuery button works or not
   actionStore: ActionStore;
   BgWrapper: BgWrapper;
   SubmitSection: SubmitSection;
@@ -28,7 +27,7 @@ class Sparnatural extends HTMLComponent {
   constructor() {
     //Sparnatural: Does not have a ParentComponent!
     super("Sparnatural", null, null);
-    if (getSettings().langSearch == "fr") {
+    if (getSettings().language === "fr") {
       getSettings().langSearch = i18nLabels["fr"];
     } else {
       getSettings().langSearch = i18nLabels["en"];

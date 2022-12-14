@@ -204,18 +204,6 @@ export class TreeWidget extends AbstractWidget {
         },
       },
 
-      massload: {
-        url: this.loaderHandler.treeChildrenUrl(
-          startClassGroup_value,
-          ObjectPropertyGroup_value,
-          endClassGroup_value,
-          "nodeIDString" // node.id uncommented since it gave an error!
-        ),
-        data: function (nodes: any) {
-          return { ids: nodes.join(",") };
-        },
-      },
-
       checkbox: {
         keep_selected_style: false,
         three_state: false,
