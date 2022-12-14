@@ -77,6 +77,10 @@ Sparnatural offers currently 6 ways of selecting a value for a criteria : autoco
 
 ![](documentation/17-tree.png)
 
+### Map selector
+
+![](documentation/18-map.png)
+
 ### String value (text search)
 
 ![](documentation/11-search.png)
@@ -114,11 +118,15 @@ See here how to search for French Museums and the name of Italian painters they 
 ![](documentation/16-optional.gif)
 
 
+## Support for SERVICE keyword
+
+There is currently an experimental support for the SERVICE keyword for federated querying.
+
 ## Limitations
 
 ### No UNION or BIND, etc.
 
-Sparnatural does not support the creation of UNION, SERVICE, BIND, etc...
+Sparnatural does not support the creation of UNION, BIND, etc...
 
 ### SPARQL endpoint needs to be CORS-enabled
 
