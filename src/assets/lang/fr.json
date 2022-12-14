@@ -34,9 +34,9 @@
   "TreeWidgetNoData": "Aucune information trouvée...",
   "TreeWidgetDelete": "Effacer la sélection",
   "TreeWidgetSelect": "Sélectionner",
-  "MapWidgetOpenMap": "Sur la carte",
+  "MapWidgetOpenMap": "Ouvrir la carte",
   "MapWidgetCloseMap": "Fermer",
-  "MapWidgetAreaSelected": "Zone sélectionnée",
+  "MapWidgetAreaSelected": "Sélection sur la carte",
   "AutocompleteSpinner_3Chars": "3 caractères minimum",
   "AutocompleteSpinner_Searching": "(recherche...)",
   "AutocompleteSpinner_NoResults": "pas de résultats"
