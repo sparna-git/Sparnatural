@@ -6,12 +6,12 @@ import EndClassGroup from "../components/builder-section/groupwrapper/criteriagr
 import StartClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import NoOrderBtn from "../components/buttons/NoOrderBtn";
-import Sparnatural from "../components/SparnaturalComponent";
+import SparnaturalComponent from "../components/SparnaturalComponent";
 import { WidgetValue } from "../components/widgets/AbstractWidget";
 import { Branch, ISparJson, SelectedVal, Order } from "../generators/ISparJson";
 
 export default class QueryLoader{
-    static sparnatural: Sparnatural;
+    static sparnatural: SparnaturalComponent;
     static query: ISparJson
     
     static loadQuery(query:ISparJson){
@@ -37,7 +37,7 @@ export default class QueryLoader{
         );
     }
     
-    static #buildSparnatural(sparnatural: Sparnatural, branches: Array<Branch>) {
+    static #buildSparnatural(sparnatural: SparnaturalComponent, branches: Array<Branch>) {
         if(branches?.length === 0) throw Error('No Branches on query detected')
         // first build the rootGroupWrapper
         let rootGrpWrapper =
@@ -169,7 +169,7 @@ export default class QueryLoader{
     el[0].dispatchEvent(new Event("click"));
   }
 
-  static setSparnatural(sparnatural:Sparnatural){
+  static setSparnatural(sparnatural:SparnaturalComponent){
     this.sparnatural = sparnatural
   }
 

@@ -6,6 +6,7 @@ import RdfJsGenerator from "../../generators/SparqlSelectBuilder";
 import {
   Generator
 } from "sparqljs";
+import { SparnaturalElement } from "../../../SparnaturalElement";
 
 export default function generateQuery(actionStore: ActionStore) {
   // if we are quiet, don't do anything
@@ -23,8 +24,8 @@ export default function generateQuery(actionStore: ActionStore) {
 
   var jsonQuery = qryGen.generateQuery(
     actionStore.variables,
-    actionStore.distinct,
-    actionStore.order
+    actionStore.order,
+    getSettings().addDistinct    
   );
   actionStore.sparnaturalJSON = jsonQuery
   if (jsonQuery != null) {
@@ -42,8 +43,9 @@ export default function generateQuery(actionStore: ActionStore) {
     writer.setPrefixes(settings.sparqlPrefixes);
     let selectQuery = writer.generateQuery(
       actionStore.variables,
-      actionStore.distinct,
-      actionStore.order
+      actionStore.order,
+      getSettings().addDistinct,      
+      getSettings().limit
     );
     actionStore.rdfjsSelect = selectQuery
     // debug rdfJsQuery
@@ -56,7 +58,14 @@ export default function generateQuery(actionStore: ActionStore) {
     var generator = new Generator();
     var queryString = generator.stringify(selectQuery);
       actionStore.sparqlString = queryString
-    // fire callback
-    settings.onQueryUpdated(queryString, jsonQuery, selectQuery);
+    // fire the event
+    actionStore.sparnatural.html[0].dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_QUERY_UPDATED, {
+      bubbles: true,
+      detail: {
+        queryString:queryString,
+        jsonQuery:jsonQuery,
+        selectQuery:selectQuery
+      }
+    }));
   }
 }

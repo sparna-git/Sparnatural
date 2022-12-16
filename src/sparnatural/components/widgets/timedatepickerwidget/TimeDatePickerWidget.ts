@@ -1,5 +1,5 @@
 import { Pattern } from "sparqljs";
-import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
+import { getSettings, TOOLTIP_CONFIG } from "../../../../sparnatural/settings/defaultSettings";
 import AddUserInputBtn from "../../buttons/AddUserInputBtn";
 import InfoBtn from "../../buttons/InfoBtn";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
@@ -109,7 +109,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
         ? getSettings().langSearch.TimeWidgetDateHelp
         : getSettings().langSearch.TimeWidgetYearHelp;
     // set a tooltip on the info circle
-    var tippySettings = Object.assign({}, getSettings().tooltipConfig);
+    var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
     tippySettings.placement = "left";
     tippySettings.trigger = "click";
     tippySettings.offset = [this.dateFormat == "day" ? 75 : 50, -20];

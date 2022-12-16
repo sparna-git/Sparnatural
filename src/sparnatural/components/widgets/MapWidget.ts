@@ -51,7 +51,7 @@ type ObjectMapWidgetValue = ObjectifyLatLng<MapWidgetValue>
 
 export default class MapWidget extends AbstractWidget {
   protected widgetValues: MapWidgetValue[];
-  protected blockObjectPropTriple: boolean = true
+  // protected blockObjectPropTriple: boolean = true
   renderMapValueBtn: AddUserInputBtn;
   map: L.Map;
   drawingLayer: L.Layer;
@@ -171,6 +171,23 @@ export default class MapWidget extends AbstractWidget {
   // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
   getRdfJsPattern(): Pattern[] {
 
+    // the property between the subject and its position expressed as wkt value, e.g. http://www.w3.org/2003/01/geo/wgs84_pos#geometry
+
+    let filterPtrn: FilterPattern = {
+      type: "filter",
+      expression: <FunctionCallExpression><unknown>{
+        type: "functionCall",
+        function: DataFactory.namedNode(GEOF.WITHIN.value),
+        args: [
+          DataFactory.variable(this.getVariableValue(this.endClassVal)),
+          this.#buildPolygon(this.widgetValues[0].value.coordinates[0])
+        ],
+      },
+    };
+
+    return [filterPtrn];
+
+    /*
     let asWKT: Triple = SparqlFactory.buildTriple(
       DataFactory.variable(this.getVariableValue(this.startClassVal)),
       DataFactory.namedNode("http://www.opengis.net/ont/geosparql#asWKT"),
@@ -205,18 +222,20 @@ export default class MapWidget extends AbstractWidget {
 
 
     return [ptrn, polygonValues, filterPtrn];
+    */
   }
 
   #buildPolygon(coordinates: L.LatLng[]) {
     let polygon = "";
     coordinates.forEach((coordinat) => {
-      polygon = `${polygon} ${coordinat.lat} ${coordinat.lng},`;
+      polygon = `${polygon}${coordinat.lng} ${coordinat.lat}, `;
     });
     // polygon must be closed with the starting point
     let startPt = coordinates[0]
-    let literal: LiteralTerm = DataFactory.literal(`<http://www.opengis.net/def/crs/OGC/1.3/CRS84> 
-    Polygon((${polygon} ${startPt.lat} ${startPt.lng}))
-    `,DataFactory.namedNode("http://www.opengis.net/ont/geosparql#wktLiteral"))
+    let literal: LiteralTerm = DataFactory.literal(
+      `Polygon((${polygon}${startPt.lng} ${startPt.lat}))`,
+      DataFactory.namedNode("http://www.opengis.net/ont/geosparql#wktLiteral")
+    )
 
     return literal;
   }

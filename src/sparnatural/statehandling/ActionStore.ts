@@ -1,5 +1,5 @@
 import ISpecProvider from "../spec-providers/ISpecProvider";
-import Sparnatural from "../components/SparnaturalComponent";
+import SparnaturalComponent from "../components/SparnaturalComponent";
 import { ISparJson, Order } from "../generators/ISparJson";
 import generateQuery from "./actions/GenerateQuery";
 import toggleVarNames from "./actions/ToggleVarNames";
@@ -11,6 +11,8 @@ import { selectViewVar } from "./actions/SelectViewVar";
 import { readVariablesFromUI } from "./actions/SelectViewVar";
 import { SelectQuery } from "sparqljs";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
+import { SparnaturalElement } from "../../SparnaturalElement";
+import { getSettings } from "../settings/defaultSettings";
 
 export enum MaxVarAction {
   INCREASE,
@@ -24,11 +26,10 @@ export enum MaxVarAction {
     by the Eventlisteners. They then change the state and trigger the right actions in the UI
 */
 class ActionStore {
-  sparnatural: Sparnatural;
+  sparnatural: SparnaturalComponent;
   specProvider: any;
   order: Order = Order.NOORDER; //default no order
   variables: Array<string> = []; // example ?museum
-  distinct = true; // default
   language = "en"; //default
   sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
   showVariableNames = true //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
@@ -41,7 +42,7 @@ class ActionStore {
   // this is set when a query is loaded
   quiet = false;
   
-  constructor(sparnatural: Sparnatural, specProvider: ISpecProvider) {
+  constructor(sparnatural: SparnaturalComponent, specProvider: ISpecProvider) {
     this.specProvider = specProvider;
     this.sparnatural = sparnatural;
     this.#addCustomEventListners();
@@ -76,13 +77,6 @@ class ActionStore {
         generateQuery(this);
       }
     );
-
-    this.sparnatural.html[0].addEventListener("onSubmit", (e) => {
-      e.stopImmediatePropagation();
-      if(this.sparnatural.settings.onSubmit) {
-        this.sparnatural.settings.onSubmit(this.sparnatural);
-      }
-    });
 
     // Switch which toggles if the Start and Endvalues are shown as their Var name. e.g Country_1
     this.sparnatural.html[0].addEventListener("toggleVarNames", (e) => {

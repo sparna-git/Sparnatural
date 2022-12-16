@@ -10,56 +10,75 @@ library.add(fas);
 library.add(far as IconPack);
 /*SPARNATURAL*/
 import { getSettings, mergeSettings } from "./sparnatural/settings/defaultSettings";
-import Sparnatural from "./sparnatural/components/SparnaturalComponent";
+import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
 import ISpecProvider from "./sparnatural/spec-providers/ISpecProvider";
 import { ISparJson } from "./sparnatural/generators/ISparJson";
 import { PreLoadQueries } from "./sparnatural/settings/ISettings";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import QueryParser from "./sparnatural/querypreloading/QueryParser";
-import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
+import { SparnaturalAttributes } from "./SparnaturalAttributes";
+import { SparnaturalHandlers } from "./SparnaturalHandlers";
 
 /*
   This is the sparnatural HTMLElement. 
   e.g. Interface to the outside world
   Used to configure the Settings and load queries
 */
-class SparNatural extends HTMLElement {
+export class SparnaturalElement extends HTMLElement {
+
+  static HTML_ELEMENT_NAME = "spar-natural";
+
+  static EVENT_SUBMIT = "submit";
+  static EVENT_QUERY_UPDATED = "queryUpdated";
+  static EVENT_RESET = "reset";
+  
+  // just to avoid name clash with "attributes"
+  _attributes: SparnaturalAttributes;
+  // for the moment, just keep the handlers in the settings
+  // handlers: SparnaturalHandlers;
+
   Sparnatural:SparnaturalComponent;
   specProvider: ISpecProvider;
-  static get observedAttributes() {
-    return ["settings"];
-  }
+
   constructor() {
     super();
-  }
+    // parse all attributes in the HTML element
+    this._attributes = new SparnaturalAttributes(this);
+    // TODO : migrate handlers outside of settings
+    // this.handlers = new SparnaturalHandlers();
 
-  //gets called when the component was rendered
-  connectedCallback() {
-    this.dispatchEvent(new CustomEvent("componentLoaded", { bubbles: true }));
-  }
+    // just set the settings with this
+    // TODO : re-enginer the global settings variable to something more OO
+    mergeSettings(this._attributes);
 
-  // Used by calling Calling component to set or get the settings.
-  // e.g index.html can overwride default settings
-  get settings() {
-    return getSettings();
-  }
-
-  /**
-   * Can be called from the outside
-   */
-  set settings(options: any) {
-    mergeSettings(options);
-    if (getSettings().config === null)
-      throw Error(
-        "No config provided for sparnatural! Please provide config file. see Documentation: https://github.com/sparna-git/Sparnatural"
-      );
-    this.initSparnatural();
-  }
-
-  initSparnatural() {
-    this.Sparnatural = new Sparnatural();
+    // init the Sparnatural component and render it
+    this.Sparnatural = new SparnaturalComponent(this);
     $(this).append(this.Sparnatural.html);
     this.Sparnatural.render();
+  }
+
+  set autocomplete(autocomplete: any) {
+    getSettings().autocomplete = autocomplete;
+  }
+
+  set list(list: any) {
+    getSettings().list = list;
+  }
+
+  set dates(dates: any) {
+    getSettings().dates = dates;
+  }
+
+  get autocomplete() {
+    return getSettings().autocomplete;
+  }
+
+  get list() {
+    return getSettings().list;
+  }
+
+  get dates() {
+    return getSettings().dates;
   }
 
   /**
@@ -113,5 +132,6 @@ class SparNatural extends HTMLElement {
   }
 }
 
-customElements.get("spar-natural") ||
-  window.customElements.define("spar-natural", SparNatural);
+customElements.get(SparnaturalElement.HTML_ELEMENT_NAME) ||
+  window.customElements.define(SparnaturalElement.HTML_ELEMENT_NAME, SparnaturalElement);
+  

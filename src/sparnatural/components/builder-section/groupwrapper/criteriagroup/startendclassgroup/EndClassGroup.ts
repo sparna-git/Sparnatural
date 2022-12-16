@@ -1,7 +1,7 @@
 import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import tippy from "tippy.js";
-import { getSettings } from "../../../../../../sparnatural/settings/defaultSettings";
+import { getSettings, TOOLTIP_CONFIG } from "../../../../../../sparnatural/settings/defaultSettings";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
@@ -140,8 +140,7 @@ class EndClassGroup extends HTMLComponent {
     var desc = this.specProvider.getTooltip(this.endClassVal.type);
     if (desc) {
       $(this.html).find(".ClassTypeId").attr("data-tippy-content", desc);
-      // tippy('.EndClassGroup .ClassTypeId[data-tippy-content]', settings.tooltipConfig);
-      var tippySettings = Object.assign({}, getSettings()?.tooltipConfig);
+      var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
       tippySettings.placement = "top-start";
       tippy(".EndClassGroup .ClassTypeId[data-tippy-content]", tippySettings);
     } else {
