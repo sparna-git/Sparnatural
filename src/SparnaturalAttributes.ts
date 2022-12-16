@@ -37,7 +37,7 @@ export class SparnaturalAttributes {
   }
 
   #parsePrefixes(element:HTMLElement) {
-    if(element.getAttribute("prefix")) {
+    if(!element.getAttribute("prefix")) {
       return;
     }
 
