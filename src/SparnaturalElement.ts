@@ -51,8 +51,14 @@ export class SparnaturalElement extends HTMLElement {
     // TODO : re-enginer the global settings variable to something more OO
     mergeSettings(this._attributes);
 
+    this.initSparnatural();
+  }
+
+  initSparnatural() {
     // init the Sparnatural component and render it
     this.Sparnatural = new SparnaturalComponent(this);
+    // empty the content in case we reinit after an attribut change
+    $(this).empty();
     $(this).append(this.Sparnatural.html);
     this.Sparnatural.render();
   }
@@ -79,6 +85,34 @@ export class SparnaturalElement extends HTMLElement {
 
   get dates() {
     return getSettings().dates;
+  }
+
+  /* Experimental : re-init Sparnatural when some attributes change dynamically */
+  static get observedAttributes() {
+    return ["language", "src", "endpoint"];
+  }
+
+  attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null): void {
+    if (oldValue === newValue) {
+     return;
+    }
+
+    if(oldValue != null) {
+      if(name === "language") {        
+          getSettings().language = newValue;
+          this.initSparnatural();
+      }
+
+      if(name === "src") {        
+        getSettings().config = newValue;
+        this.initSparnatural();
+      }
+
+      if(name === "endpoint") {        
+        getSettings().defaultEndpoint = newValue;
+        this.initSparnatural();
+      }
+    }
   }
 
   /**

@@ -26,6 +26,10 @@ sparnatural.addEventListener("submit", (event) => {
   yasqe.query();
 });
 
+document.getElementById('switch-language').onclick = function() {
+  document.querySelector("spar-natural").setAttribute("language", "en");
+};
+
 
 document.getElementById('export').onclick = function() {
   var jsonString = JSON.stringify(

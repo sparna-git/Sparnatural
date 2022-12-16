@@ -157,7 +157,6 @@ export function getSettings() {
 // merge given options with default setting values
 export function mergeSettings(options: any) {
   settings = $.extend(true, {}, defaultSettings, options);
-  console.log(settings)
 }
 
 // tooltip configs are constant
