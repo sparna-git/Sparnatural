@@ -68,6 +68,11 @@ class SparnaturalComponent extends HTMLComponent {
 
   initSpecificationProvider(callback:any) {
     let settings = getSettings();
+    
+    // if we miss some of the dynamic settings, don't do anything
+    if(!settings.config || !settings.defaultEndpoint) {
+      return;
+    }
     let specProviderFactory = new SpecificationProviderFactory();
     specProviderFactory.build(settings.config, settings.language, (sp: any) => {
       // call the call back when done

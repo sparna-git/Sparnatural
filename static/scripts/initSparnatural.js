@@ -13,11 +13,6 @@ const urlParams = new URLSearchParams(queryString);
 const lang = urlParams.get('lang')
 
 
-sparnatural.addEventListener("init", (event) => {
-  sparnatural.display();
-});
-
-
 sparnatural.addEventListener("queryUpdated", (event) => {
   var queryString = sparnatural.expandSparql(event.detail.queryString);
   yasqe.setValue(queryString);
@@ -26,14 +21,13 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 });
 
 sparnatural.addEventListener("submit", (event) => {
-  console.log("onSubmit");
   sparnatural.disablePlayBtn();
   // trigger the query from YasQE
   yasqe.query();
 });
 
 document.getElementById('switch-language').onclick = function() {
-  document.querySelector("spar-natural").setAttribute("language", "en");
+  document.querySelector("spar-natural").setAttribute("lang", "en");
   sparnatural.display();
 };
 

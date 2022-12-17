@@ -16,7 +16,7 @@ export class SparnaturalAttributes {
   constructor(element:HTMLElement) {
     // not the differences in attribute names
     this.config = this.#read(element, "src");
-    this.language = this.#read(element, "language");
+    this.language = this.#read(element, "lang");
     this.defaultEndpoint = this.#read(element, "endpoint");
     // use the singular to match RDFa attribute name
     this.sparqlPrefixes = this.#parsePrefixes(element);

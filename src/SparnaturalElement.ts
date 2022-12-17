@@ -31,7 +31,6 @@ export class SparnaturalElement extends HTMLElement {
   static EVENT_SUBMIT = "submit";
   static EVENT_QUERY_UPDATED = "queryUpdated";
   static EVENT_RESET = "reset";
-  static EVENT_INIT = "init";
   static EVENT_DISPLAY = "display";
   
   // just to avoid name clash with "attributes"
@@ -52,10 +51,13 @@ export class SparnaturalElement extends HTMLElement {
     // just set the settings with this
     // TODO : re-enginer the global settings variable to something more OO
     mergeSettings(this._attributes);
+  }
 
-    this.dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_INIT, {
-      bubbles: true
-    }));
+  /**
+   * Call display only in the connectedCallback
+   */
+  connectedCallback() {
+    this.display();
   }
 
   set autocomplete(autocomplete: any) {
@@ -83,16 +85,48 @@ export class SparnaturalElement extends HTMLElement {
   }
 
   display() {
-    // init the Sparnatural component and render it
+    // create the Sparnatural component and render it
     this.Sparnatural = new SparnaturalComponent(this);
-    // empty the content in case we reinit after an attribut change
+    // empty the content in case we re-display after an attribut change
     $(this).empty();
     $(this).append(this.Sparnatural.html);
     this.Sparnatural.render();
 
     this.dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_DISPLAY, {
-      bubbles: true
+      bubbles: true,
+      detail: {
+        sparnatural: this
+      }
     }));
+  }
+
+  static get observedAttributes() {
+    return ["src", "lang", "endpoint"];
+  }
+  attributeChangedCallback(name: string, oldValue:string|null, newValue:string|null) {
+    if (oldValue === newValue) {
+     return;
+   }
+   
+   // prevents callback to be called on initial creation
+   if(oldValue != null) {  
+    if(getSettings().debug) {
+      console.log(`${name}'s value has been changed from ${oldValue} to ${newValue}`);
+    }  
+
+    if(name == "src") {
+      getSettings().config = newValue;
+    }
+    if(name == "lang") {
+      getSettings().language = newValue;
+    }
+    if(name == "endpoint") {
+      getSettings().defaultEndpoint = newValue;
+    }
+
+    // then display
+    this.display();
+   }
   }
 
   /**
