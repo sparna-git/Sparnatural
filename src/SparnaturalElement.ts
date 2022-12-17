@@ -31,6 +31,8 @@ export class SparnaturalElement extends HTMLElement {
   static EVENT_SUBMIT = "submit";
   static EVENT_QUERY_UPDATED = "queryUpdated";
   static EVENT_RESET = "reset";
+  static EVENT_INIT = "init";
+  static EVENT_DISPLAY = "display";
   
   // just to avoid name clash with "attributes"
   _attributes: SparnaturalAttributes;
@@ -51,16 +53,9 @@ export class SparnaturalElement extends HTMLElement {
     // TODO : re-enginer the global settings variable to something more OO
     mergeSettings(this._attributes);
 
-    this.initSparnatural();
-  }
-
-  initSparnatural() {
-    // init the Sparnatural component and render it
-    this.Sparnatural = new SparnaturalComponent(this);
-    // empty the content in case we reinit after an attribut change
-    $(this).empty();
-    $(this).append(this.Sparnatural.html);
-    this.Sparnatural.render();
+    this.dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_INIT, {
+      bubbles: true
+    }));
   }
 
   set autocomplete(autocomplete: any) {
@@ -87,32 +82,17 @@ export class SparnaturalElement extends HTMLElement {
     return getSettings().dates;
   }
 
-  /* Experimental : re-init Sparnatural when some attributes change dynamically */
-  static get observedAttributes() {
-    return ["language", "src", "endpoint"];
-  }
+  display() {
+    // init the Sparnatural component and render it
+    this.Sparnatural = new SparnaturalComponent(this);
+    // empty the content in case we reinit after an attribut change
+    $(this).empty();
+    $(this).append(this.Sparnatural.html);
+    this.Sparnatural.render();
 
-  attributeChangedCallback(name: string, oldValue: string|null, newValue: string|null): void {
-    if (oldValue === newValue) {
-     return;
-    }
-
-    if(oldValue != null) {
-      if(name === "language") {        
-          getSettings().language = newValue;
-          this.initSparnatural();
-      }
-
-      if(name === "src") {        
-        getSettings().config = newValue;
-        this.initSparnatural();
-      }
-
-      if(name === "endpoint") {        
-        getSettings().defaultEndpoint = newValue;
-        this.initSparnatural();
-      }
-    }
+    this.dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_DISPLAY, {
+      bubbles: true
+    }));
   }
 
   /**

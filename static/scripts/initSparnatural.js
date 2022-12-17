@@ -12,8 +12,14 @@ const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const lang = urlParams.get('lang')
 
+
+sparnatural.addEventListener("init", (event) => {
+  sparnatural.display();
+});
+
+
 sparnatural.addEventListener("queryUpdated", (event) => {
-  var queryString = sparnatural.expandSparql(queryString);
+  var queryString = sparnatural.expandSparql(event.detail.queryString);
   yasqe.setValue(queryString);
   // store JSON in hidden field
   document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
@@ -28,6 +34,7 @@ sparnatural.addEventListener("submit", (event) => {
 
 document.getElementById('switch-language').onclick = function() {
   document.querySelector("spar-natural").setAttribute("language", "en");
+  sparnatural.display();
 };
 
 

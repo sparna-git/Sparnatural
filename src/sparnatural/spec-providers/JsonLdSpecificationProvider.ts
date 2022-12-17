@@ -355,6 +355,8 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
   };
 
   isRemoteClass = function (classUri: string) {
+    if(!classUri) return false
+
     var classEntity = this._getResourceById(classUri);
 
     if (classEntity["subClassOf"]) {
@@ -374,6 +376,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
   };
 
   isLiteralClass = function (classUri: string) {
+    if(!classUri) return false
     var classEntity = this._getResourceById(classUri);
 
     if (classEntity && classEntity["subClassOf"]) {
