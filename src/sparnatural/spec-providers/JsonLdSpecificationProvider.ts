@@ -165,9 +165,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
       );
     } else if (this._getResourceById(classId)["icon"] != null) {
       
-      return  "<span style='font-size: 170%;' >&nbsp;<i class='" +
-      this._getResourceById(classId)["icon"] +
-      " fa-fw'></i></span>"
+      return  this._getResourceById(classId)["icon"]
     } else {
       // this is ugly, just so it aligns with other entries having an icon
       return "<span style='font-size: 10%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
