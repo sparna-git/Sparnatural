@@ -118,16 +118,7 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 
 
 #### <a name="#annotation-for-service-keyword"></a>Annotation for SERVICE keyword
-*Example*:
-```
-    {
-      "@id":
-        "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
-      "@type": "sd:Service",
-      "endpoint": "https://dbpedia.org/sparql" ,
-      "label": "DBPedia (english)"
-    },
-```
+
 | Annotation / Axiom | Label | Card. | Description |
 | ------------------ | ----- | ----- | ----------- |
 | [`endpoint`](https://www.w3.org/TR/sparql11-service-description/#sd-endpoint) | define the sparql URL endpoint | 0..1 | Define where the SERVCICE KEYWORD should fetch the results for the federated query |

@@ -270,6 +270,7 @@ Each property must declare its associated value selection widget in the `subProp
   - `sparnatural:TimeProperty-Period` (forget this one)
   - `sparnatural:SearchProperty`
   - `sparnatural:NonSelectableProperty`
+  - `sparnatural:MapProperty`
 
 ```json
     {
@@ -461,6 +462,34 @@ A typical use-case for this is to provide inverse links to the user that are not
       "sparqlString": "^<http://xmlns.com/foaf/0.1/member>"
     }
 ```
+
+### Federated Queries
+Sparnatural v.8 >= provides support for basic query federation.
+In order to define a sparql endpoint, a sparql service has to be defined:
+```
+    {
+      "@id":
+        "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
+      "@type": "sd:Service",
+      "endpoint": "https://dbpedia.org/sparql" ,
+      "label": "DBPedia (english)"
+    },
+```
+Such a service endpoint definition can then be referenced within an object property with the *sparqlService* property:
+```
+    {
+      "@id":"http://twin-example/geneva#Location",
+      "@type": "Class",
+      "subClassOf": "http://www.w3.org/2000/01/rdf-schema#Literal",
+      "sparqlService": "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
+      "label": [
+        { "@value": "Location", "@language": "en" },
+        { "@value": "Location", "@language": "fr" }
+      ],
+      "faIcon": "fas fa-map-marked-alt"
+    },
+```
+
 
 ### Literal properties
 
