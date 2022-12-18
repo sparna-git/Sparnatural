@@ -63,8 +63,8 @@ export default function generateQuery(actionStore: ActionStore) {
       bubbles: true,
       detail: {
         queryString:queryString,
-        jsonQuery:jsonQuery,
-        selectQuery:selectQuery
+        queryJson:jsonQuery,
+        querySparqlJs:selectQuery
       }
     }));
   }
