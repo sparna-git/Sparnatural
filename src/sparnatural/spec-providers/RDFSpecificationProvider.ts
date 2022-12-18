@@ -50,7 +50,7 @@ export const OWL = {
   UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode,
 };
 
-export class RDFSpecificationProvider implements ISpecProvider {
+export class OWLSpecificationProvider implements ISpecProvider {
   lang: string;
   store: Store<Quad>;
   #parser: SparqlParser;
@@ -121,7 +121,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
           ) +
           " triples."
       );
-      var provider = new RDFSpecificationProvider(
+      var provider = new OWLSpecificationProvider(
         theStore,
         lang
       );

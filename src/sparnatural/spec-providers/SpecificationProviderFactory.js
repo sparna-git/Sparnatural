@@ -1,5 +1,5 @@
 import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
-import { RDFSpecificationProvider } from "./RDFSpecificationProvider";
+import { OWLSpecificationProvider } from "./RDFSpecificationProvider";
 
 class SpecificationProviderFactory {
   build(config, language, callback) {
@@ -8,7 +8,7 @@ class SpecificationProviderFactory {
       callback(new JsonLdSpecificationProvider(config, language));
     } else if (config.includes("@prefix") || config.includes("<http")) {
       // inline Turtle
-      new RDFSpecificationProvider.build(config, language).then(function (
+      new OWLSpecificationProvider.build(config, language).then(function (
         provider
       ) {
         console.log(provider);
@@ -34,7 +34,7 @@ class SpecificationProviderFactory {
           dataType: "text",
         })
           .done(function (configData) {
-            RDFSpecificationProvider.build(
+            OWLSpecificationProvider.build(
               configData,
               config,
               language,
