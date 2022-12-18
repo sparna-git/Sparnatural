@@ -88,6 +88,24 @@ export default class SparqlFactory {
       };
     }
 
+    static buildFilterLangEquals(variable: Variable, lang:Literal): FilterPattern {			
+      return {
+        type: "filter",
+        expression: {
+          type: "operation",
+          operator: "=",
+          args: [
+            {
+              type: "operation",
+              operator: "lang",
+              args: [ variable ]
+            },
+            lang
+          ],
+        },
+      };
+    }
+
     static buildFilterStrInOrEquals(values: Literal[], variable: Variable): FilterPattern {			
       if(values.length == 1) {
         return {

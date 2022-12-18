@@ -20,7 +20,7 @@ export default class WhereBuilder{
     #resultPtrns: Pattern[] = []    
     #startClassPtrn:Pattern[] = []
     #endClassPtrn:Pattern[] = []
-    #intersectionPtrn:BgpPattern 
+    #intersectionPtrn:Pattern[] = [] 
     #whereChildPtrns: Pattern[] = []
     #andChildPtrns: Pattern[] = []
     #rdfPtrns: Pattern[] = []
@@ -98,7 +98,7 @@ export default class WhereBuilder{
 
     #buildIntersectionPtrn(){
         const objectPropCls = this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup
-        const intersectionBuilder = new IntersectionBuilder(this.#startClassPtrn,this.#endClassPtrn,this.#widgetComponent,objectPropCls)
+        const intersectionBuilder = new IntersectionBuilder(this.#startClassPtrn,this.#endClassPtrn,this.#widgetComponent,objectPropCls,this.#specProvider)
         intersectionBuilder.build()
         this.#intersectionPtrn = intersectionBuilder.getPattern()
     }
@@ -114,7 +114,7 @@ export default class WhereBuilder{
         const hasIntersectionTriple = (this.#intersectionPtrn)
 
         let exceptStartPtrn:Pattern[] = []
-        if(hasIntersectionTriple && this.#intersectionPtrn) exceptStartPtrn.push(this.#intersectionPtrn)
+        if(hasIntersectionTriple && this.#intersectionPtrn) exceptStartPtrn.push(...this.#intersectionPtrn)
         if(hasEndClass) exceptStartPtrn.push(...this.#endClassPtrn)
         exceptStartPtrn.push(...this.#rdfPtrns)
         exceptStartPtrn.push(...this.#whereChildPtrns)
