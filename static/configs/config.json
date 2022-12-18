@@ -29,8 +29,9 @@
     "sparnatural":
       "http://data.sparna.fr/ontologies/sparnatural-config-core#",
     "datasources":
-      "http://data.sparna.fr/ontologies/sparnatural-config-datasources#"
-  },
+      "http://data.sparna.fr/ontologies/sparnatural-config-datasources#",
+    "service": "http://www.w3.org/ns/sparql-service-description#"
+   },
   "@graph": [
     {
       "@id": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto",
@@ -633,7 +634,7 @@
     {
       "@id":
         "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
-      "@type": "sd:Service",
+      "@type": "Service",
       "endpoint": "https://dbpedia.org/sparql" ,
       "label": "DBPedia (english)"
     },
