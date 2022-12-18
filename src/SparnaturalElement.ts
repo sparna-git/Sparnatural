@@ -1,13 +1,6 @@
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
 require("./assets/stylesheets/sparnatural.scss");
 import $ from "jquery";
-/* FONT AWESOME*/
-require("@fortawesome/fontawesome-free");
-import { IconPack, library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-import { far } from "@fortawesome/free-regular-svg-icons";
-library.add(fas);
-library.add(far as IconPack);
 /*SPARNATURAL*/
 import { getSettings, mergeSettings } from "./sparnatural/settings/defaultSettings";
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";

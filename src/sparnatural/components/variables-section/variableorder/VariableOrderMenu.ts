@@ -67,7 +67,6 @@ class VariableOrderMenu extends HTMLComponent {
         let toIndex = evt.newDraggableIndex;
         that.#updateVariableList(fromIndex, toIndex);
         // adjust sort option width
-        that.#onFirstVariableWidthChanged();
       },
     });
   }
@@ -89,8 +88,6 @@ class VariableOrderMenu extends HTMLComponent {
         d.html.remove();
         return false;
       }
-      // adjust sort option width (even if not first was removed)
-      this.#onFirstVariableWidthChanged();
       return d;
     });
   }
@@ -103,8 +100,7 @@ class VariableOrderMenu extends HTMLComponent {
         detail: { oldName: oldName, newName: newName },
       })
     );
-    // adjust sort option width (even if not first was edited)
-    this.#onFirstVariableWidthChanged();
+
   };
 
   // The ordering of the variables got changed.
@@ -116,15 +112,6 @@ class VariableOrderMenu extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("updateVariablesOrder", {
         bubbles: true
-      })
-    );
-  }
-
-  // Adjust the width of the background for the VariableSortOption area
-  #onFirstVariableWidthChanged() {
-    this.html[0].dispatchEvent(
-      new CustomEvent("updateSortOptionWidth", {
-        bubbles: true,
       })
     );
   }

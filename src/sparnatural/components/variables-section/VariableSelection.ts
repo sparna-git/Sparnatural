@@ -30,8 +30,7 @@ class VariableSection extends HTMLComponent {
     this.variableSortOption = new VariableSortOption(this).render();
 
     this.#renderShowHideBtn();
-    this.#addEventListener();
-
+    this.#addMutationObserver()
     return this;
   }
 
@@ -60,11 +59,21 @@ class VariableSection extends HTMLComponent {
     this.displayBtn = new DisplayBtn(this, displayaction).render();
   }
 
-  #addEventListener() {
-    this.html[0].addEventListener("updateSortOptionWidth", (e: CustomEvent) => {
-      e.stopImmediatePropagation();
-      const firstItem = this.variableOrderMenu.html[0].getElementsByClassName('sortableItem').item(0) as HTMLElement
-      if(firstItem) this.variableSortOption.setWidth(firstItem.offsetWidth)
+   // See: https://github.com/sparna-git/Sparnatural/issues/391
+   #addMutationObserver() {
+    let observer = new MutationObserver(mutationRecords => {
+      const firstItem = (this.variableOrderMenu.html[0].getElementsByClassName('sortableItem').item(0) as HTMLElement);
+      const sortOption = (this.variableSortOption.html[0] as HTMLElement)
+      
+      if(!firstItem || firstItem.getBoundingClientRect().width === sortOption.getBoundingClientRect().width) return
+
+      sortOption.style.width = `${firstItem.getBoundingClientRect().width}px`
+    });
+    
+    observer.observe(this.html[0], {
+      childList: true, // observe direct children
+      subtree: true, // and lower descendants too
+      attributes: true
     });
   }
 }

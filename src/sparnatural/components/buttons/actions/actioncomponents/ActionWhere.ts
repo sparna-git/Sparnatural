@@ -2,6 +2,7 @@ import { getSettings } from "../../../../../sparnatural/settings/defaultSettings
 import ISpecProvider from "../../../../spec-providers/ISpecProvider";
 import EditComponents from "../../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import HTMLComponent from "../../../HtmlComponent";
+import UiuxConfig from "../../../IconsConstants";
 
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 
@@ -43,7 +44,7 @@ class ActionWhere extends HTMLComponent {
       getSettings().langSearch.That
     } </div>
     `);
-    this.btn = $(`<a><i class="fa-solid fa-plus"></i></a>`);
+    this.btn = $(`<a>${UiuxConfig.ICON_PLUS}</a>`);
     where = where.add(this.btn[0]);
     editTrait = editTrait.add(where);
     this.btn[0].addEventListener("click", () => {
