@@ -161,7 +161,8 @@ class PropertySelectBuilder {
           '" data-id="' +
           i +
           '"' +
-          image +
+          // never try to set an icon on object properties lists
+          // image +
           selected +
           " " +
           description_attr +
