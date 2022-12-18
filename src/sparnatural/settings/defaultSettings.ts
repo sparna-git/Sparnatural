@@ -1,4 +1,4 @@
-import ISpecProvider from "../spec-providers/ISpecProvider";
+import { Props } from "tippy.js";
 import ISettings from "./ISettings";
 
 const defaultSettings: ISettings = {
@@ -8,13 +8,17 @@ const defaultSettings: ISettings = {
   maxDepth: 4, // max amount of where clauses in a branch
   maxOr:3,
   addDistinct: true,
+  limit: 1000,
   typePredicate: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
   // backgroundBaseColor: "2,184,117",
   backgroundBaseColor: "29, 224, 153",
-  defaultEndpoint: function () { return null; },
+  defaultEndpoint: null,
   sparqlPrefixes: {},
   localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in mimmiseconds
   debug:false,
+  submitButton:true,
+
+
   autocomplete: {
     /**
      * This must return the URL that will be called when the user starts
@@ -122,14 +126,6 @@ const defaultSettings: ISettings = {
     },
   },
 
-  onQueryUpdated: function (
-    queryString: any,
-    queryJson: any,
-    sparqlAsJson: any
-  ) {
-    console.warn("Please provide the onQueryUpdated callback with a queryString and query JSON parameters");
-  },
-
   dates: {
     datesUrl: function (domain: any, property: any, range: any, key: any) {
       console.log(
@@ -148,19 +144,8 @@ const defaultSettings: ISettings = {
     elementEnd: function (element: any) {
       return element.stop.year;
     },
-  },
-  tooltipConfig: {
-    allowHTML: true,
-    plugins: [], 
-    placement: 'right-start',
-    offset: [5, 5],
-    theme: 'sparnatural',
-    arrow: false,
-    delay: [800, 100], //Delay in ms once a trigger event is fired before a tippy shows or hides.
-    duration: [200, 200], //Duration in ms of the transition animation.
-  },
-  // triggered when "play" button is clicked
-  onSubmit: null  ,
+  }
+  
 };
 
 // the actual settings, result of merge between defaultSettings and settings passed as parameters
@@ -172,4 +157,16 @@ export function getSettings() {
 // merge given options with default setting values
 export function mergeSettings(options: any) {
   settings = $.extend(true, {}, defaultSettings, options);
+}
+
+// tooltip configs are constant
+export const TOOLTIP_CONFIG : Partial<Props> = {
+  allowHTML: true,
+  plugins: [] as any[], 
+  placement: 'right-start',
+  offset: [5, 5],
+  theme: 'sparnatural',
+  arrow: false,
+  delay: [800, 100], //Delay in ms once a trigger event is fired before a tippy shows or hides.
+  duration: [200, 200], //Duration in ms of the transition animation.
 }

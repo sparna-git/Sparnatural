@@ -38,8 +38,20 @@
       </div>
       <div class="row">
         <div class="col-md-7">
+          <a href="#" id="switch-language">switch to en</a>
           <div id="ui-search" style="width:auto">
-            <spar-natural></spar-natural>
+            <!-- Other src to test with :
+              https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1wIVJIIg7q-dZJQmvbKsSGdoS2gbFk3xwoZ_6ud_MiS4%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true
+            -->
+            <spar-natural
+              src="configs/config.json"
+              lang="fr"
+              endpoint="https://fr.dbpedia.org/sparql"
+              distinct="true"
+              limit="100"
+              prefix="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"
+              debug="true"              
+            />
           </div>
           <input type="hidden" id="query-json" />
           <div><a id="export" href="#">Export query in JSON</a></div>

@@ -1,14 +1,15 @@
 import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import PlayBtn from "../buttons/PlayBtn";
 import HTMLComponent from "../HtmlComponent";
-import Sparnatural from "../SparnaturalComponent";
+import SparnaturalComponent from "../SparnaturalComponent";
+import { SparnaturalElement } from "../../../SparnaturalElement";
 
 class SubmitSection extends HTMLComponent {
   playBtn: PlayBtn;
-  ParentSparnatural: Sparnatural;
+  ParentSparnatural: SparnaturalComponent;
   constructor(ParentComponent: HTMLComponent) {
     super("submitSection", ParentComponent, null);
-    this.ParentSparnatural = ParentComponent as Sparnatural;
+    this.ParentSparnatural = ParentComponent as SparnaturalComponent;
   }
   render(): this {
     super.render();
@@ -19,8 +20,11 @@ class SubmitSection extends HTMLComponent {
   // Make arrow function to bind the this lexically
   // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
   submitAction = () => {
-    if (getSettings().onSubmit) {
-      let e = new CustomEvent("onSubmit", { bubbles: true });
+    if (getSettings().submitButton) {
+      let e = new CustomEvent(SparnaturalElement.EVENT_SUBMIT, { 
+        bubbles: true,
+        detail : this.ParentSparnatural
+      });
       this.html[0].dispatchEvent(e);
     }
   };

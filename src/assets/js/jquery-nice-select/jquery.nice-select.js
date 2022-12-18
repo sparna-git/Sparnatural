@@ -3,7 +3,7 @@
     Made by Hernán Sartorio  */
 
 import tippy from "tippy.js";
-import { getSettings } from "../../../../src/sparnatural/settings/defaultSettings";
+import { TOOLTIP_CONFIG } from "../../../../src/sparnatural/settings/defaultSettings";
 
 (function ($) {
   $.fn.niceSelect = function (method, settings) {
@@ -123,10 +123,9 @@ import { getSettings } from "../../../../src/sparnatural/settings/defaultSetting
 
       // activate tooltips on the dropdown list
       // positioning it on the right
-      var settings = getSettings();
       tippy(
         ".nice-select .option[data-tippy-content]",
-        settings.tooltipConfig
+        TOOLTIP_CONFIG
       );
     }
 
@@ -139,7 +138,6 @@ import { getSettings } from "../../../../src/sparnatural/settings/defaultSetting
     $(document).on("click.nice_select", ".nice-select", function (event) {
       var $dropdown = $(this);
 
-      var settings = getSettings();
       //var settings = $dropdown.prev('select')[0].sparnaturalSettings ;
       if ($dropdown.hasClass("open")) {
         $dropdown.toggleClass("open");
@@ -151,12 +149,10 @@ import { getSettings } from "../../../../src/sparnatural/settings/defaultSetting
         // I don't think this is ever called
         $(".nice-select").not($dropdown).removeClass("open");
         $dropdown.toggleClass("open");
-        if (settings && settings.tooltipConfig) {
-          tippy(
-            ".nice-select .option[data-tippy-content]",
-            settings.tooltipConfig
-          );
-        }
+        tippy(
+          ".nice-select .option[data-tippy-content]",
+          TOOLTIP_CONFIG
+        );
       }
 
       //

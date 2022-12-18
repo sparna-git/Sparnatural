@@ -7,7 +7,7 @@ import {
   VariableTerm,
   Wildcard,
 } from "sparqljs";
-import Sparnatural from "../components/SparnaturalComponent";
+import SparnaturalComponent from "../components/SparnaturalComponent";
 import * as DataFactory from "@rdfjs/data-model" ;
 import WhereBuilder from "./helpers/WhereBuilder";
 import SparqlFactory from "./SparqlFactory";
@@ -20,10 +20,10 @@ export default class RdfJsGenerator {
   typePredicate: string;
   specProvider: ISpecProvider;
   additionnalPrefixes: { [key: string]: string } = {};
-  sparnatural: Sparnatural;
+  sparnatural: SparnaturalComponent;
   defaultLabelVars:Variable[] = []// see: #checkForDefaultLabel()
   constructor(
-    sparnatural: Sparnatural,
+    sparnatural: SparnaturalComponent,
     typePredicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
     specProvider: ISpecProvider
   ) {
@@ -44,8 +44,9 @@ export default class RdfJsGenerator {
 
   generateQuery(
     variables: Array<string>,
+    order: Order,
     distinct: boolean,
-    order: Order
+    limit: number
   ):SelectQuery {
     const SparqlJsQuery: SelectQuery = {
       queryType: "SELECT",
@@ -62,6 +63,7 @@ export default class RdfJsGenerator {
         order,
         this.#varsToRDFJS(variables)[0] as VariableTerm
       ),
+      limit: (limit)?limit:undefined
     };
 
     for (var key in this.additionnalPrefixes) {

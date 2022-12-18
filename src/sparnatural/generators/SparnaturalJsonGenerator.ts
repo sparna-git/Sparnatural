@@ -1,4 +1,4 @@
-import Sparnatural from "../components/SparnaturalComponent";
+import SparnaturalComponent from "../components/SparnaturalComponent";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { Branch, ISparJson, Order } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
@@ -9,21 +9,21 @@ import { SelectAllValue } from "../components/builder-section/groupwrapper/crite
   https://docs.sparnatural.eu/Query-JSON-format
 */
 class SparnaturalJsonGenerator {
-  sparnatural: Sparnatural;
+  sparnatural: SparnaturalComponent;
   json: ISparJson = {
     distinct: null,
     variables: null,
     order: null,
     branches: null,
   };
-  constructor(sparnatural: Sparnatural) {
+  constructor(sparnatural: SparnaturalComponent) {
     this.sparnatural = sparnatural;
   }
 
   generateQuery(
     variables: Array<string>,
+    order: Order,
     distinct: boolean,
-    order: Order
   ) {
     this.json.distinct = distinct;
     this.json.variables = variables;

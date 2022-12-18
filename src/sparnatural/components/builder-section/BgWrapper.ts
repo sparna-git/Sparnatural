@@ -1,16 +1,17 @@
 import ResetBtn from "../buttons/ResetBtn";
 import ComponentsList from "./ComponentsList";
-import Sparnatural from "../SparnaturalComponent";
+import SparnaturalComponent from "../SparnaturalComponent";
 import ISpecProvider from "../../spec-providers/ISpecProvider";
 import HTMLComponent from "../HtmlComponent";
 import { MaxVarAction } from "../../statehandling/ActionStore";
+import { SparnaturalElement } from "../../../SparnaturalElement";
 
 class BgWrapper extends HTMLComponent {
-  ParentSparnatural: Sparnatural;
+  ParentSparnatural: SparnaturalComponent;
   resetBtn: ResetBtn;
   componentsList: ComponentsList;
   specProvider: ISpecProvider;
-  constructor(ParentComponent: Sparnatural, specProvider: ISpecProvider) {
+  constructor(ParentComponent: SparnaturalComponent, specProvider: ISpecProvider) {
     super("builder-section", ParentComponent, null);
     this.specProvider = specProvider;
     this.ParentSparnatural = ParentComponent;
@@ -37,10 +38,11 @@ class BgWrapper extends HTMLComponent {
     // redraw background so that background height of first line is recomputed - otherwise it can stay small
     this.html[0].dispatchEvent(new CustomEvent("redrawBackgroundAndLinks",{bubbles: true}));
 
-    // fire a callback to the outside world
-    if (this.ParentSparnatural.settings.onReset) {
-      this.ParentSparnatural.settings.onReset(this.ParentSparnatural);
-    }
+    // fire an event to the outside world
+    this.html[0].dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_RESET, {
+      bubbles: true,
+      detail: this.ParentSparnatural
+    }));
   };
 }
 export default BgWrapper;

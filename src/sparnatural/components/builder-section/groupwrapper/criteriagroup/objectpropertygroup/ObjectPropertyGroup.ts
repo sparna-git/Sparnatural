@@ -4,6 +4,7 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../generators/ISparJson";
+import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
 
 /**
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
@@ -86,8 +87,7 @@ class ObjectPropertyGroup extends HTMLComponent {
 
     if(desc) {
 			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
-			// tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', settings.tooltipConfig);
-			var tippySettings = Object.assign({}, this.settings.tooltipConfig);
+			var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
 			tippySettings.placement = "top-start";
 			tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', tippySettings);
 		} else {

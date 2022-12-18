@@ -4,6 +4,7 @@ import { SelectedVal } from "../../../../../generators/ISparJson";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import TippyInfo from "../../../../buttons/TippyInfo";
+import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
 
 /**
  * Selection of the start class in a criteria/line
@@ -111,7 +112,7 @@ class StartClassGroup extends HTMLComponent {
 
     var desc = this.specProvider.getTooltip(this.startClassVal.type);
     if (desc) {
-      var tippySettings = Object.assign({}, this.settings.tooltipConfig);
+      var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
       tippySettings.placement = "top-start";
       new TippyInfo(this, desc, tippySettings);
     }
