@@ -21,7 +21,6 @@ interface ISettings {
   langSearch?: any;
   debug: boolean;
   submitButton?: boolean;
-
   autocomplete?: any;
   list?: any;
   dates?: any;  

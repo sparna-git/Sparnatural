@@ -4,13 +4,12 @@ import HTMLComponent from "../HtmlComponent";
 class PlayBtn extends HTMLComponent {
   callback: () => void;
 
-
   constructor(ParentComponent: HTMLComponent, callback: () => void) {
     //TODO generateQuery enable disable as binary state
     let widgetHtml = $(`${UiuxConfig.ICON_PLAY}`);
     super("playBtn", ParentComponent, widgetHtml);
     this.callback = callback;
-    this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
+    this.html.on("click", (e: JQuery.ClickEvent) => {
       callback();
     });
   }
@@ -23,7 +22,6 @@ class PlayBtn extends HTMLComponent {
   disable() {
     // set a disabled CSS class, trigger the loader, and remove click event
     this.html.addClass('submitDisable loadingEnabled');
-    this.widgetHtml.off("click");
   }
 
   /**

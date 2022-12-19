@@ -124,7 +124,7 @@ export class SparnaturalElement extends HTMLElement {
 
   /**
    * Enable the play button when a query has finished executing
-   * Can be called from the outside
+   * Can be called from the outside. Removes the loading spinner on the btn
    */
   enablePlayBtn(){
     this.Sparnatural.enablePlayBtn()
