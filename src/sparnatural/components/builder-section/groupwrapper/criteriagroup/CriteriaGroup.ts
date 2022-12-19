@@ -5,13 +5,12 @@ import { getSettings } from "../../../../../sparnatural/settings/defaultSettings
 import ISpecProvider from "../../../../spec-providers/ISpecProvider";
 import UnselectBtn from "../../../buttons/UnselectBtn";
 import PredicateSelector from "./predicateselector/PredicateSelector";
-
 import SubjectSelector from "./subject-object-selectors/SubjectSelector";
 import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup, OptionTypes } from "./optionsgroup/OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
 import { SelectedVal } from "../../../../generators/ISparJson";
-import { EndClassWidgetGroup, EndClassWidgetValue } from "./subject-object-selectors/EndClassWidgetGroup";
+import { ObjectSelectorWidgetGroup, ObjectSelectorWidgetValue } from "./subject-object-selectors/ObjectSelectorWidgetGroup";
 import ActionsGroup from "../../../buttons/actions/ActionsGroup";
 import { triggerOption } from "../groupwrapperevents/events/TriggerOption";
 import ObjectSelector from "./subject-object-selectors/ObjectSelector";
@@ -22,18 +21,18 @@ class CriteriaGroup extends HTMLComponent {
   OptionsGroup: OptionsGroup; // optional or notexists
   PredicateSelector: PredicateSelector;
   ObjectSelector: ObjectSelector;
-  endClassWidgetGroup: EndClassWidgetGroup;
+  objectSelectorWidgetGroup: ObjectSelectorWidgetGroup;
   ActionsGroup: ActionsGroup;
   specProvider: ISpecProvider;
   ParentGroupWrapper: GroupWrapper;
   unselectBtn: UnselectBtn;
-  startClassEyeBtn = false // Decides if the selectviewvarBtn is rendered on the startClass. That is the case only for the first one
+  subjectSelectorEyeBtn = false // Decides if the selectviewvarBtn is rendered on the subjectSelector. That is the case only for the first one
 
   constructor(
     ParentComponent: GroupWrapper,
     specProvider: any,
     subjectVal?: SelectedVal,
-    startClassEyeBtn?:boolean
+    subjectSelectorEyeBtn?:boolean
   ) {
     super("CriteriaGroup", ParentComponent, null);
     this.specProvider = specProvider;
@@ -42,9 +41,9 @@ class CriteriaGroup extends HTMLComponent {
       this,
       this.specProvider,
       subjectVal,
-      startClassEyeBtn
+      subjectSelectorEyeBtn
     );
-    this.startClassEyeBtn = startClassEyeBtn
+    this.subjectSelectorEyeBtn = subjectSelectorEyeBtn
   }
 
   render(): this {
@@ -69,14 +68,14 @@ class CriteriaGroup extends HTMLComponent {
       getSettings().langSearch.ObjectPropertyTemporaryLabel
     ).render();
     this.ObjectSelector = new ObjectSelector(this, this.specProvider).render();
-    this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
+    this.objectSelectorWidgetGroup = new ObjectSelectorWidgetGroup(this, this.specProvider);
     this.ActionsGroup = new ActionsGroup(this, this.specProvider).render();
 
     this.#assembleComponents();
   }
 
   #assembleComponents = () => {
-    // 1. User selects StartClassVal
+    // 1. User selects subjectSelectorVal
     this.html[0].addEventListener(
       "SubjectSelectorSelected",
       (e: CustomEvent) => {
@@ -90,7 +89,7 @@ class CriteriaGroup extends HTMLComponent {
       }
     );
 
-    // 2. User Selects EndClassVal
+    // 2. User Selects ObjectSelectorVal
     this.html[0].addEventListener("ObjectSelectorSelected", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       if (!this.#isSelectedVal(e.detail))
@@ -110,9 +109,9 @@ class CriteriaGroup extends HTMLComponent {
           );
         
           // if there is already a where connection or widget values selected, don't change anything
-        if (!(this.ParentGroupWrapper.whereChild) && this.endClassWidgetGroup?.widgetValues?.length === 0){
+        if (!(this.ParentGroupWrapper.whereChild) && this.objectSelectorWidgetGroup?.widgetValues?.length === 0){
           this.ObjectSelector.onPredicateSelectorSelected(e.detail);
-          this.endClassWidgetGroup.render();
+          this.objectSelectorWidgetGroup.render();
         }
         
         this.OptionsGroup.onPredicateSelectorSelected(
@@ -139,7 +138,7 @@ class CriteriaGroup extends HTMLComponent {
         throw Error(
           'No widgetValues received. "renderWidgetValues expects type Array<WidgetValue>'
         );
-        e.detail.forEach(v=> this.endClassWidgetGroup.renderWidgetVal(v))
+        e.detail.forEach(v=> this.objectSelectorWidgetGroup.renderWidgetVal(v))
       // Removes the value selection part, with 1 and 2
       this.html[0].dispatchEvent(
         new CustomEvent("removeEditComponents", { bubbles: true })
@@ -160,10 +159,10 @@ class CriteriaGroup extends HTMLComponent {
     this.html[0].addEventListener("updateWidgetList", (e: CustomEvent) => {
       if (!("unselectedVal" in e.detail))
         throw Error(
-          "updateWidgetList expects an object of type EndClassWidgetValue"
+          "updateWidgetList expects an object of type ObjectSelectorWidgetValue"
         );
       e.stopImmediatePropagation();
-      let removed = e.detail.unselectedVal as EndClassWidgetValue;
+      let removed = e.detail.unselectedVal as ObjectSelectorWidgetValue;
       this.ObjectSelector.editComponents.widgetWrapper.widgetComponent?.onRemoveValue(
         removed.widgetVal
       );

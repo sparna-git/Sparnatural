@@ -7,7 +7,7 @@ import UiuxConfig from "../../../IconsConstants";
 /*
     The parent component here is in the beginning the ActionsGroup component. That seems very useless. 
     check if there are any things going on eith ActionWhere.ParenComponent except the rendering in render()
-    There the Endclassgroup is foun
+    There the objectselectorgroup is foun
 */
 class ActionWhere extends HTMLComponent {
   parentComponent: EditComponents;

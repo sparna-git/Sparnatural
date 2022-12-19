@@ -61,7 +61,7 @@ class ActionStore {
       }
     );
 
-    // executed by VariableSelection, Start-EndclassGroup & VariableSelector
+    // executed by VariableSelection, Start-objectselectorGroup & VariableSelector
     // called by click on "Eye" btn
     this.sparnatural.html[0].addEventListener(
       "onSelectViewVar",

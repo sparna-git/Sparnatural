@@ -7,7 +7,7 @@
 //PredicateSelector
 @use './citeriagroup/predicateselector/predicateselector.scss';
 @use './citeriagroup/predicateselector/predicatetypeid.scss';
-//StartObjectSelector
+//SubjectSelector
 @use './citeriagroup/subject-object-selectors/subjectobjectselectors.scss';
 @use './citeriagroup/subject-object-selectors/subjectobjecttypeid.scss';
 //Actions
@@ -22,8 +22,8 @@
 @use './buttons/InfoBtn.scss';
 @use './buttons/AddMoreValuesBtn.scss';
 //Widget
-@use './widget/EndClassWidgetGroup.scss';
-@use './widget/EndClassWidgetValue.scss';
+@use './widget/ObjectSelectorWidgetGroup.scss';
+@use './widget/ObjectSelectorWidgetValue.scss';
 @use './widget/WidgetWrapper.scss';
 @use './widget/MapWidget.scss';
 @use './widget/TreeWidget.scss';

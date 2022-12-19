@@ -52,7 +52,7 @@ export default class QueryLoader{
     }
   
     static #buildCriteriaGroup(grpWarpper: GroupWrapper, branch: Branch) {
-      // set StartClassVal only if there wasn't one set by the parent (e.g whereChild andSibling have it already set)
+      // set SubjectSelectorVal only if there wasn't one set by the parent (e.g whereChild andSibling have it already set)
       const subjectVal = { type: branch.line.sType, variable: branch.line.s };
       if (!grpWarpper.CriteriaGroup.SubjectSelector.subjectVal.type) {
         //set SubjectSelector
@@ -76,7 +76,7 @@ export default class QueryLoader{
     branch.line.values.forEach((v) => {
       const parsedVal: WidgetValue = grpWarpper.CriteriaGroup.ObjectSelector.editComponents.widgetWrapper.widgetComponent.parseInput(v)
       // if there are multiple values rendered, click first the 'plus' btn, to add more values
-      if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
+      if(grpWarpper.CriteriaGroup.objectSelectorWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.objectSelectorWidgetGroup.addWidgetValueBtn.html)
       grpWarpper.CriteriaGroup.ObjectSelector.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(parsedVal)
     });
 
@@ -135,10 +135,10 @@ export default class QueryLoader{
   }
 
   // this method checks if the eye btn was enabled in the loaded query
-  static #setSelectViewVariableBtn(subjectVal:SelectedVal,startClassComponent:SubjectSelector,objectVal:SelectedVal,endClassComponent:ObjectSelector){
+  static #setSelectViewVariableBtn(subjectVal:SelectedVal,subjectSelectorComponent:SubjectSelector,objectVal:SelectedVal,objectSelectorComponent:ObjectSelector){
     if(this.query.variables.includes(objectVal.variable.replace('?',''))){
       // click on eye btn
-      this.#clickOn((endClassComponent.inputTypeComponent as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
+      this.#clickOn((objectSelectorComponent.inputTypeComponent as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
     }
   }
 

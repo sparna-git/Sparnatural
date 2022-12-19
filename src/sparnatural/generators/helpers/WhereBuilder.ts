@@ -23,8 +23,8 @@ export default class WhereBuilder{
     
     // patterns built in the build process
     #resultPtrns: Pattern[] = []    
-    #startClassPtrn:Pattern[] = []
-    #endClassPtrn:Pattern[] = []
+    #subjectSelectorPtrn:Pattern[] = []
+    #objectSelectorPtrn:Pattern[] = []
     #predicatePtrn:Pattern[] = [] 
     #whereChildPtrns: Pattern[] = []
     #andChildPtrns: Pattern[] = []
@@ -45,8 +45,8 @@ export default class WhereBuilder{
     build() {
         this.#buildChildPatterns()
         this.#buildRdfPtrn()
-        this.#buildStartClassPtrn()
-        this.#buildEndClassPtrn()
+        this.#buildSubjectSelectorPtrn()
+        this.#buildObjectSelectorPtrn()
         this.#buildPredicatePtrn()
         this.#buildGrpWrapperPtrn()
     }
@@ -81,21 +81,21 @@ export default class WhereBuilder{
         if (this.#widgetComponent?.getwidgetValues()?.length > 0 ) this.#rdfPtrns = this.#widgetComponent.getRdfJsPattern();
     }
 
-    #buildEndClassPtrn(){
+    #buildObjectSelectorPtrn(){
         const endClsGrp = this.#grpWrapper.CriteriaGroup.ObjectSelector
         const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingEnd())
         endClsBuilder.build()
-        this.#endClassPtrn = endClsBuilder.getPattern()
+        this.#objectSelectorPtrn = endClsBuilder.getPattern()
         if(endClsBuilder.getDefaultVar()) {
             this.#defaultVars.push(endClsBuilder.getDefaultVar())
         }
     }
 
-    #buildStartClassPtrn() {
+    #buildSubjectSelectorPtrn() {
         const startClsGrp = this.#grpWrapper.CriteriaGroup.SubjectSelector
         const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingStart())
         startClsBuilder.build()
-        this.#startClassPtrn = startClsBuilder.getPattern()
+        this.#subjectSelectorPtrn = startClsBuilder.getPattern()
         if(startClsBuilder.getDefaultVar()) {
             this.#defaultVars.push(startClsBuilder.getDefaultVar())
         }
@@ -103,46 +103,46 @@ export default class WhereBuilder{
 
     #buildPredicatePtrn(){
         const objectPropCls = this.#grpWrapper.CriteriaGroup.PredicateSelector
-        const predicateBuilder = new PredicateBuilder(this.#startClassPtrn,this.#endClassPtrn,this.#widgetComponent,objectPropCls,this.#specProvider)
+        const predicateBuilder = new PredicateBuilder(this.#subjectSelectorPtrn,this.#objectSelectorPtrn,this.#widgetComponent,objectPropCls,this.#specProvider)
         predicateBuilder.build()
         this.#predicatePtrn = predicateBuilder.getPattern()
     }
 
     #buildGrpWrapperPtrn(){
-        // The startClassPtrn does not need to be created if it is a WHERE or ANDChild
-        const hasStartClass = (!this.#isChild && this.#startClassPtrn.length > 0)
-        // endClassPtrn is not shown if it is a literal or InstantiatedClass
-        const hasEndClass = (
+        // The subjectSelectorPtrn does not need to be created if it is a WHERE or ANDChild
+        const hasSubjectSelector = (!this.#isChild && this.#subjectSelectorPtrn.length > 0)
+        // objectSelectorPtrn is not shown if it is a literal or InstantiatedClass
+        const hasObjectSelector = (
             !this.#specProvider.isLiteralClass(this.#grpWrapper.CriteriaGroup.ObjectSelector.getTypeSelected())
             &&
             !this.#specProvider.isNotInstantiatedClass(this.#grpWrapper.CriteriaGroup.ObjectSelector.getTypeSelected())
             &&
-            this.#endClassPtrn.length > 0
+            this.#objectSelectorPtrn.length > 0
         );
         const hasIntersectionTriple = (this.#predicatePtrn)
 
         let exceptStartPtrn:Pattern[] = []
         if(hasIntersectionTriple) exceptStartPtrn.push(...this.#predicatePtrn)
-        if(hasEndClass) exceptStartPtrn.push(...this.#endClassPtrn)
+        if(hasObjectSelector) exceptStartPtrn.push(...this.#objectSelectorPtrn)
         exceptStartPtrn.push(...this.#rdfPtrns)
         exceptStartPtrn.push(...this.#whereChildPtrns)
 
-        this.#createOptionStatePtrn(hasStartClass,exceptStartPtrn)
+        this.#createOptionStatePtrn(hasSubjectSelector,exceptStartPtrn)
 
         this.#resultPtrns.push(...this.#andChildPtrns)
 
     }
 
-    #createOptionStatePtrn(hasStartClass:boolean,exceptStartPtrn:Pattern[]){
-        // always store the startClassPattern in the final result pattern (no OPTIONAL, no NOT EXISTS, no SERVICE)
-        if(hasStartClass) this.#resultPtrns.push(...this.#startClassPtrn)
+    #createOptionStatePtrn(hasSubjectSelector:boolean,exceptStartPtrn:Pattern[]){
+        // always store the subjectSelectorPattern in the final result pattern (no OPTIONAL, no NOT EXISTS, no SERVICE)
+        if(hasSubjectSelector) this.#resultPtrns.push(...this.#subjectSelectorPtrn)
 
         // create a SERVICE clause if needed
         const sparqlService = this.#specProvider.getServiceEndpoint(this.#grpWrapper.CriteriaGroup.PredicateSelector?.getTypeSelected())
         let servicePtrn = null;
         if(this.#grpWrapper.optionState === OptionTypes.SERVICE || (sparqlService != null)){
             const endpoint = DataFactory.namedNode(sparqlService)
-            // to be on the safe side : when rollback an endclass group, we may come here with only the start class group criteria
+            // to be on the safe side : when rollback an objectselector group, we may come here with only the start class group criteria
             // and nothing in this array
             if(exceptStartPtrn.length > 0) {
                 servicePtrn = SparqlFactory.buildServicePattern(exceptStartPtrn,endpoint)

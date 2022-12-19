@@ -44,12 +44,12 @@ class LinkWhereBottom extends HTMLComponent {
     this.#drawHorizontal(xyLower, xyUpper);
   }
 
-  // line from the middle of the endclassgroup till the end of GroupWrapper
-  #drawUpperVertical(endClassGroup: ObjectSelector, whereChild: GroupWrapper) {
-    const endClassClientRect = endClassGroup.html[0].getBoundingClientRect();
+  // line from the middle of the objectselectorgroup till the end of GroupWrapper
+  #drawUpperVertical(objectSelectorGroup: ObjectSelector, whereChild: GroupWrapper) {
+    const objectSelectorClientRect = objectSelectorGroup.html[0].getBoundingClientRect();
     const whereChildRect = whereChild.html[0].getBoundingClientRect();
-    const ax = (endClassClientRect.left + (endClassClientRect.right - endClassClientRect.left) / 2) + window.scrollX;
-    const ay = endClassClientRect.bottom + 3 + window.scrollY;
+    const ax = (objectSelectorClientRect.left + (objectSelectorClientRect.right - objectSelectorClientRect.left) / 2) + window.scrollX;
+    const ay = objectSelectorClientRect.bottom + 3 + window.scrollY;
     const by = whereChildRect.top + window.scrollY;
 
     // ax can be used twice since the line is orthogonal to the upper element
@@ -76,12 +76,12 @@ class LinkWhereBottom extends HTMLComponent {
   }
 
   #drawLowerVertical(whereChild: GroupWrapper) {
-    const startClassClientRect =
+    const subjectSelectorClientRect =
       whereChild.CriteriaGroup.SubjectSelector.html[0].getBoundingClientRect();
     const bx =
-      (startClassClientRect.left + (startClassClientRect.right - startClassClientRect.left) / 4) + window.scrollX;
+      (subjectSelectorClientRect.left + (subjectSelectorClientRect.right - subjectSelectorClientRect.left) / 4) + window.scrollX;
     // -2 so that it looks connected to white group
-    const by = startClassClientRect.top + window.scrollY - 2;
+    const by = subjectSelectorClientRect.top + window.scrollY - 2;
 
     const whereChildRect = whereChild.html[0].getBoundingClientRect();
 

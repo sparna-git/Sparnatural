@@ -5,7 +5,7 @@
 @use '../../themes';
 
 
-.EndClassWidgetValue {
+.ObjectSelectorWidgetValue {
     @include mixins.arrow-back-colors(themes.$primary-color-medium, #fff);
     @include mixins.arrow-front-colors(themes.$primary-color-medium, #fff);
     position: relative;

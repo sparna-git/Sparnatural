@@ -1,8 +1,8 @@
 import CriteriaGroup from "../../criteriagroup/CriteriaGroup";
 import GroupWrapper from "../../GroupWrapper";
 
-// Remove the EndClass and rerender from the point where the subjectVal got selected
-export function removeEndClass(grpWrapper: GroupWrapper) {
+// Remove the ObjectSelector and rerender from the point where the subjectVal got selected
+export function removeObjectSelector(grpWrapper: GroupWrapper) {
   // first delete the whereChild classes
   if (grpWrapper.whereChild)
     grpWrapper.whereChild.html[0].dispatchEvent(new CustomEvent("onRemoveGrp"));
@@ -17,7 +17,7 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
     grpWrapper.isRootGrpWrapper()
   ).render();
 
-  // set StartClassVal
+  // set subjectSelectorVal
   let inputTypeComponent =
     grpWrapper.CriteriaGroup.SubjectSelector.inputTypeComponent;
   inputTypeComponent.oldWidget.val(startVal.type).niceSelect("update");

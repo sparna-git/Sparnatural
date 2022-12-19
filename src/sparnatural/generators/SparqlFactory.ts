@@ -253,7 +253,7 @@ export default class SparqlFactory {
       }
 
       
-  // It is the intersection between the startclass and endclass chosen.
+  // It is the intersection between the subjectSelector and objectselector chosen.
   // example: ?person dpedia:birthplace ?country
   static buildPredicateTriple(
     subj: Variable,

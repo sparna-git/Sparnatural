@@ -1,6 +1,6 @@
 import UiuxConfig from "../../../../IconsConstants";
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
-import { getSettings } from "../../../../../../sparnatural/settings/defaultSettings";
+import { getSettings } from "../../../../../settings/defaultSettings";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import HTMLComponent from "../../../../HtmlComponent";
@@ -18,12 +18,12 @@ import { SelectAllValue } from "../edit-components/EditComponents";
   This class is responsible for rendering the WidgetValues, selected by a widget.
   This values are added in a 'list' after the ObjectSelector
 */
-export class EndClassWidgetGroup extends HTMLComponent {
-  widgetValues: Array<EndClassWidgetValue> = [];
+export class ObjectSelectorWidgetGroup extends HTMLComponent {
+  widgetValues: Array<ObjectSelectorWidgetValue> = [];
   specProvider: ISpecProvider;
   addWidgetValueBtn: AddWidgetValueBtn;
   constructor(parentComponent: HTMLComponent, specProvider: ISpecProvider) {
-    super("EndClassWidgetGroup", parentComponent, null);
+    super("ObjectSelectorWidgetGroup", parentComponent, null);
     this.specProvider = specProvider;
   }
 
@@ -35,7 +35,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   #addEventListener() {
     this.html[0].addEventListener(
-      "onRemoveEndClassWidgetValue",
+      "onRemoveObjectSelectorWidgetValue",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
         this.#onRemoveValue(e);
@@ -45,10 +45,10 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
   // input : the 'key' of the value to be deleted
   #onRemoveValue(e: CustomEvent) {
-    let valueToDel: EndClassWidgetValue = e.detail;
+    let valueToDel: ObjectSelectorWidgetValue = e.detail;
 
-    let unselectedValue: EndClassWidgetValue;
-    this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
+    let unselectedValue: ObjectSelectorWidgetValue;
+    this.widgetValues = this.widgetValues.filter((val: ObjectSelectorWidgetValue) => {
       if (val.value_lbl === valueToDel.value_lbl) {
         unselectedValue = val;
         return false;
@@ -96,15 +96,15 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.widgetValues.some((val) => val.value_lbl === widgetVal.value.label)
     )
       return;
-    // if not, then create the EndclassWidgetValue and add it to the list
-    this.#renderEndClassWidgetVal(widgetVal);
+    // if not, then create the objectselectorWidgetValue and add it to the list
+    this.#renderObjectSelectorWidgetVal(widgetVal);
   }
 
-  #renderEndClassWidgetVal(widgetVal: WidgetValue) {
-    let endClassWidgetVal = new EndClassWidgetValue(this, widgetVal);
-    this.widgetValues.push(endClassWidgetVal);
+  #renderObjectSelectorWidgetVal(widgetVal: WidgetValue) {
+    let objectSelectorWidgetVal = new ObjectSelectorWidgetValue(this, widgetVal);
+    this.widgetValues.push(objectSelectorWidgetVal);
 
-    this.#renderNewSelectedValue(endClassWidgetVal);
+    this.#renderNewSelectedValue(objectSelectorWidgetVal);
 
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
     // undefined for NON_SELECTABLE_PROPERTY
@@ -127,8 +127,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
   }
 
   // All items which got selected in the widget will be added add the back of the ObjectSelector.
-  #renderNewSelectedValue(endClassWidgetVal: EndClassWidgetValue) {
-    endClassWidgetVal.render();
+  #renderNewSelectedValue(objectSelectorWidgetVal: ObjectSelectorWidgetValue) {
+    objectSelectorWidgetVal.render();
   }
 
   // when more values should be added then render the inputypecomponent again
@@ -155,14 +155,14 @@ export class EndClassWidgetGroup extends HTMLComponent {
   }
 }
 
-export class EndClassWidgetValue extends HTMLComponent {
+export class ObjectSelectorWidgetValue extends HTMLComponent {
   backArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_BACK);
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   unselectBtn: UnselectBtn;
   value_lbl: string;
   widgetVal: WidgetValue;
-  constructor(ParentComponent: EndClassWidgetGroup, selectedVal: WidgetValue) {
-    super("EndClassWidgetValue", ParentComponent, null);
+  constructor(ParentComponent: ObjectSelectorWidgetGroup, selectedVal: WidgetValue) {
+    super("ObjectSelectorWidgetValue", ParentComponent, null);
     // set a tooltip if the label is a bit long
     this.widgetVal = selectedVal;
     this.value_lbl = selectedVal.value.label;
@@ -178,7 +178,7 @@ export class EndClassWidgetValue extends HTMLComponent {
     this.frontArrow.render();
     this.unselectBtn = new UnselectBtn(this, () => {
       this.html[0].dispatchEvent(
-        new CustomEvent("onRemoveEndClassWidgetValue", {
+        new CustomEvent("onRemoveObjectSelectorWidgetValue", {
           bubbles: true,
           detail: this,
         })

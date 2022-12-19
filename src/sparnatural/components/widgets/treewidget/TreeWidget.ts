@@ -108,7 +108,7 @@ export class TreeWidget extends AbstractWidget {
 
     //render this element
     var SubjectSelector_value = this.subjectVal.type;
-    var endClassGroup_value = this.objectVal.type;
+    var objectSelectorGroup_value = this.objectVal.type;
     var PredicateSelector_value = this.objectPropVal.type;
 
     var self = this;
@@ -128,12 +128,12 @@ export class TreeWidget extends AbstractWidget {
                 ? loaderHandler.treeRootUrl(
                     SubjectSelector_value,
                     PredicateSelector_value,
-                    endClassGroup_value
+                    objectSelectorGroup_value
                   )
                 : loaderHandler.treeChildrenUrl(
                     SubjectSelector_value,
                     PredicateSelector_value,
-                    endClassGroup_value,
+                    objectSelectorGroup_value,
                     node.id
                   ),
             dataType: "json",
@@ -150,7 +150,7 @@ export class TreeWidget extends AbstractWidget {
             var items = loaderHandler.nodeListLocation(
               SubjectSelector_value,
               PredicateSelector_value,
-              endClassGroup_value,
+              objectSelectorGroup_value,
               data
             );
 

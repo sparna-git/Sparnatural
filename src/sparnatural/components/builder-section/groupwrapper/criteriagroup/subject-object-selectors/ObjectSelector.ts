@@ -26,7 +26,7 @@ class ObjectSelector extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   editComponents: EditComponents;
-  // endClassWidgetGroup: EndClassWidgetGroup;
+  // objectSelectorWidgetGroup: ObjectSelectorWidgetGroup;
   subjectVal: SelectedVal;
   objectPropVal: SelectedVal;
 
@@ -34,7 +34,7 @@ class ObjectSelector extends HTMLComponent {
     super("ObjectSelector", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
-    // this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
+    // this.objectSelectorWidgetGroup = new ObjectSelectorWidgetGroup(this, this.specProvider);
   }
 
   render() {

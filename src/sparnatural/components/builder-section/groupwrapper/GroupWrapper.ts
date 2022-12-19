@@ -26,7 +26,7 @@ class GroupWrapper extends HTMLComponent {
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
     depth:number,
-    startOrEndClassVal?: SelectedVal,    
+    startOrObjectSelectorVal?: SelectedVal,    
     isRoot?:boolean
   ) {
     super("groupe", ParentComponent, null);
@@ -34,7 +34,7 @@ class GroupWrapper extends HTMLComponent {
     this.CriteriaGroup = new CriteriaGroup(
       this,
       this.specProvider,
-      startOrEndClassVal,
+      startOrObjectSelectorVal,
       isRoot
     );
     this.#isRoot = isRoot
@@ -55,7 +55,7 @@ class GroupWrapper extends HTMLComponent {
   // set back state to when objectproperty was selected
   setObjectPropertySelectedState() {
     let opVal = this.CriteriaGroup.PredicateSelector.objectPropVal;
-    //if opVal is null, then temporary lbl is shown an no endclassgroup has been selected
+    //if opVal is null, then temporary lbl is shown an no objectselectorgroup has been selected
     if (!opVal) return;
     this.CriteriaGroup.html[0].dispatchEvent(
       new CustomEvent("onPredicateSelectorSelected", { detail: opVal })

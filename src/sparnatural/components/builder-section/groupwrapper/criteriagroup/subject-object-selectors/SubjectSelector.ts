@@ -61,7 +61,7 @@ class SubjectSelector extends HTMLComponent {
         } else{
           this.#addDefaultLblVar(this.subjectVal.type,this.subjectVal.variable)
         }
-        // Iff(!) First StartClass of first GrpWrapper: eye btn automatically rendered + selected
+        // Iff(!) First SubjectSelector of first GrpWrapper: eye btn automatically rendered + selected
         if (this.renderEyeBtn) this.#autoSelectEyeBtn()
         this.#valueWasSelected();
       }

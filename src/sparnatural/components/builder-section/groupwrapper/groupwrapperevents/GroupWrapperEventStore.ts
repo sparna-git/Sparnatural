@@ -5,7 +5,7 @@ import { addWhereComponent } from "./events/AddWhereComponent";
 
 import { completeGrpInput } from "./events/CompleteGrpInput";
 import { inCompleteGrpInput } from "./events/InCompleteGrpInput";
-import { removeEndClass } from "./events/RemoveEndClass";
+import { removeObjectSelector } from "./events/RemoveObjectSelector";
 import { removeGrpWrapper } from "./events/RemoveGrpWrapper";
 import { triggerOption } from "./events/TriggerOption";
 
@@ -32,10 +32,10 @@ export default class GroupWrapperEventStore {
       }
     );
     this.grpWrapper.html[0].addEventListener(
-      "onRemoveEndClass",
+      "onRemoveObjectSelector",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        removeEndClass(this.grpWrapper);
+        removeObjectSelector(this.grpWrapper);
       }
     );
     this.grpWrapper.html[0].addEventListener(

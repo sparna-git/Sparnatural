@@ -28,7 +28,7 @@ class ClassTypeId extends HTMLComponent {
   subjectVal: SelectedVal = {
     variable: null,
     type: null,
-  }; // if it is a whereChild, the startclassVal is already set
+  }; // if it is a whereChild, the subjectSelectorVal is already set
   oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
   UnselectButton: any;
   selectViewVariableBtn: SelectViewVariableBtn;
@@ -85,12 +85,12 @@ class ClassTypeId extends HTMLComponent {
 
   // is called by ObjectSelector
   renderUnselectBtn() {
-    let removeEndClassEvent = () => {
+    let removeObjectSelectorEvent = () => {
       this.html[0].dispatchEvent(
-        new CustomEvent("onRemoveEndClass", { bubbles: true })
+        new CustomEvent("onRemoveObjectSelector", { bubbles: true })
       );
     };
-    this.UnselectButton = new UnselectBtn(this, removeEndClassEvent).render();
+    this.UnselectButton = new UnselectBtn(this, removeObjectSelectorEvent).render();
   }
 
   // when a value gets selected from the dropdown menu (niceselect), then change is called
@@ -118,7 +118,7 @@ class ClassTypeId extends HTMLComponent {
     if (isObjectSelector(this.ParentComponent)) 
       this.#onSelectViewVar(this.ParentComponent.objectVal,selected)
 
-     // The first StartClass gets an eye Btn to de/select
+     // The first SubjectSelector gets an eye Btn to de/select
     if(isSubjectSelector(this.ParentComponent) && this.ParentComponent.renderEyeBtn) 
       this.#onSelectViewVar(this.ParentComponent.subjectVal,selected)
     

@@ -62,7 +62,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
     parentComponent: WidgetWrapper,
     datesHandler: any,
     dateFormat: any,
-    startClassCal: SelectedVal,
+    subjectSelectorCal: SelectedVal,
     objectPropVal: SelectedVal,
     objectVal: SelectedVal,
     specProvider: ISpecProvider
@@ -71,7 +71,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
       "timedatepicker-widget",
       parentComponent,
       null,
-      startClassCal,
+      subjectSelectorCal,
       objectPropVal,
       objectVal,
       ValueRepetition.SINGLE

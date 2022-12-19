@@ -7,7 +7,7 @@ import SparqlFactory from "../../../generators/SparqlFactory";
 export const buildDateRangeOrExactDatePattern = (
   startDate: Literal,
   endDate: Literal,
-  startClassVar: Variable,
+  subjectSelectorVar: Variable,
   beginDatePred: NamedNode,
   endDatePred: NamedNode,
   exactDatePred: NamedNode,
@@ -23,7 +23,7 @@ export const buildDateRangeOrExactDatePattern = (
         SparqlFactory.buildBgpPattern(
           [
             SparqlFactory.buildTriple(
-              startClassVar,
+              subjectSelectorVar,
               exactDatePred,
               exactDateVarName
             )
@@ -42,7 +42,7 @@ export const buildDateRangeOrExactDatePattern = (
     let secondAlternative = buildDateRangePattern(
       startDate,
       endDate,
-      startClassVar,
+      subjectSelectorVar,
       beginDatePred,
       endDatePred,      
       objectVariable
@@ -55,7 +55,7 @@ export const buildDateRangeOrExactDatePattern = (
     return buildDateRangePattern(
       startDate,
       endDate,
-      startClassVar,
+      subjectSelectorVar,
       beginDatePred,
       endDatePred,      
       objectVariable
@@ -66,7 +66,7 @@ export const buildDateRangeOrExactDatePattern = (
 export const buildDateRangePattern = (
   startDate: Literal,
   endDate: Literal,
-  startClassVar: Variable,
+  subjectSelectorVar: Variable,
   beginDatePred: NamedNode,
   endDatePred: NamedNode,
   objectVariable: Variable
@@ -85,7 +85,7 @@ export const buildDateRangePattern = (
 
     bgp.triples.push(
       SparqlFactory.buildTriple(
-        startClassVar,
+        subjectSelectorVar,
         beginDatePred,
         beginDateVarName
       )
@@ -93,7 +93,7 @@ export const buildDateRangePattern = (
 
     bgp.triples.push(
       SparqlFactory.buildTriple(
-        startClassVar,
+        subjectSelectorVar,
         endDatePred,
         endDateVarName
       )
@@ -112,7 +112,7 @@ export const buildDateRangePattern = (
     let secondBgp:BgpPattern = SparqlFactory.buildBgpPattern([]);
     secondBgp.triples.push(
       SparqlFactory.buildTriple(
-        startClassVar,
+        subjectSelectorVar,
         beginDatePred,
         endDateVarName
       )
@@ -124,7 +124,7 @@ export const buildDateRangePattern = (
           SparqlFactory.buildBgpPattern(
             [
               SparqlFactory.buildTriple(
-                startClassVar,
+                subjectSelectorVar,
                 endDatePred,
                 endDateVarName
               )
@@ -143,7 +143,7 @@ export const buildDateRangePattern = (
     let thirdBgp:BgpPattern = SparqlFactory.buildBgpPattern([]);
     thirdBgp.triples.push(
       SparqlFactory.buildTriple(
-        startClassVar,
+        subjectSelectorVar,
         endDatePred,
         endDateVarName
       )
@@ -156,7 +156,7 @@ export const buildDateRangePattern = (
           SparqlFactory.buildBgpPattern(
             [
               SparqlFactory.buildTriple(
-                startClassVar,
+                subjectSelectorVar,
                 beginDatePred,
                 beginDateVarName
               )
@@ -178,7 +178,7 @@ export const buildDateRangePattern = (
     let endDateVarName = DataFactory.variable(objectVariable.value+"_end");
     var bgp = SparqlFactory.buildBgpPattern([
       SparqlFactory.buildTriple(
-        startClassVar,
+        subjectSelectorVar,
         endDatePred,
         endDateVarName
       )
@@ -197,7 +197,7 @@ export const buildDateRangePattern = (
     let beginDateVarName = DataFactory.variable(objectVariable.value+"_begin");
     var bgp = SparqlFactory.buildBgpPattern([
       SparqlFactory.buildTriple(
-        startClassVar,
+        subjectSelectorVar,
         beginDatePred,
         beginDateVarName
       )

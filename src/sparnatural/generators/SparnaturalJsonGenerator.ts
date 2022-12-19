@@ -51,7 +51,7 @@ class SparnaturalJsonGenerator {
         sType: CrtGrp.SubjectSelector.getTypeSelected(),
         oType: CrtGrp.ObjectSelector.getTypeSelected(),
         // extract only the value part, not the key
-        values: CrtGrp.endClassWidgetGroup.getWidgetValues().filter(v => !(v instanceof SelectAllValue)).map(v => {return v.value;}),
+        values: CrtGrp.objectSelectorWidgetGroup.getWidgetValues().filter(v => !(v instanceof SelectAllValue)).map(v => {return v.value;}),
       },
       children: grpWrapper.whereChild
         ? this.#getBranch(grpWrapper.whereChild)

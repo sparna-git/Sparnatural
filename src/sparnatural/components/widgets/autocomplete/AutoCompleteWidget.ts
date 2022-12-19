@@ -34,7 +34,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     langSearch: any,
     subjectValue: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassValue: SelectedVal
+    objectSelectorValue: SelectedVal
   ) {
     super(
       "autocomplete-widget",
@@ -42,7 +42,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       null,
       subjectValue,
       objectPropVal,
-      endClassValue,
+      objectSelectorValue,
       ValueRepetition.MULTIPLE
     );
     this.langSearch = langSearch;

@@ -16,7 +16,7 @@ export function addWhereComponent(
   objectVal: SelectedVal
 ) {
   removeEditComponents(grpWrapper);
-  //provide endclassval as startvalue for the new group
+  //provide objectselectorval as startvalue for the new group
   grpWrapper.whereChild = new GroupWrapper(
     grpWrapper,
     grpWrapper.specProvider,

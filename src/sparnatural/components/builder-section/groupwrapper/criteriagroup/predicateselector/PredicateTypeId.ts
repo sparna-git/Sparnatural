@@ -54,7 +54,7 @@ class PredicateTypeId extends HTMLComponent {
         this.oldWidget.trigger("change");
       }
     } else {
-      // there hasn't been an Object in Endclassgroup chosen. render a temporary label
+      // there hasn't been an Object in objectselectorgroup chosen. render a temporary label
       this.widgetHtml = $(
         '<span class="current temporary-label">' +
           this.temporaryLabel +
@@ -98,7 +98,7 @@ class PredicateTypeId extends HTMLComponent {
       default_value
     );
   }
-  setEndClassVal(objectVal: SelectedVal) {
+  setObjectSelectorVal(objectVal: SelectedVal) {
     this.objectVal = objectVal;
   }
 }

@@ -115,7 +115,7 @@ class PredicateSelector extends HTMLComponent {
 	*/
   onObjectSelectorSelected(objectVal: SelectedVal) {
     // this will update the temporarly label
-    this.inputTypeComponent.setEndClassVal(objectVal);
+    this.inputTypeComponent.setObjectSelectorVal(objectVal);
     this.inputTypeComponent.render();
   }
 }

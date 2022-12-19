@@ -182,7 +182,7 @@ class WidgetWrapper extends HTMLComponent {
   #createWidgetComponent(
     widgetType: string,
     objectPropertyId: any,
-    endClassType: any
+    objectSelectorType: any
   ): AbstractWidget {
     switch (widgetType) {
       case Config.LITERAL_LIST_PROPERTY: {
@@ -197,7 +197,7 @@ class WidgetWrapper extends HTMLComponent {
 
         if (datasource == null) {
           // try to read it on the class
-          datasource = this.specProvider.getDatasource(endClassType);
+          datasource = this.specProvider.getDatasource(objectSelectorType);
         }
 
         if (datasource == null) {
@@ -266,7 +266,7 @@ class WidgetWrapper extends HTMLComponent {
 
         if (datasource == null) {
           // try to read it on the class
-          datasource = this.specProvider.getDatasource(endClassType);
+          datasource = this.specProvider.getDatasource(objectSelectorType);
         }
 
         if (datasource == null) {
@@ -332,7 +332,7 @@ class WidgetWrapper extends HTMLComponent {
 
         if (datasource == null) {
           // try to read it on the class
-          datasource = this.specProvider.getDatasource(endClassType);
+          datasource = this.specProvider.getDatasource(objectSelectorType);
         }
 
         if (datasource == null) {
@@ -450,7 +450,7 @@ class WidgetWrapper extends HTMLComponent {
         if (treeRootsDatasource == null) {
           // try to read it on the class
           treeRootsDatasource =
-            this.specProvider.getTreeRootsDatasource(endClassType);
+            this.specProvider.getTreeRootsDatasource(objectSelectorType);
         }
         if (treeRootsDatasource == null) {
           // datasource still null
@@ -468,7 +468,7 @@ class WidgetWrapper extends HTMLComponent {
         if (treeChildrenDatasource == null) {
           // try to read it on the class
           treeChildrenDatasource =
-            this.specProvider.getTreeChildrenDatasource(endClassType);
+            this.specProvider.getTreeChildrenDatasource(objectSelectorType);
         }
         if (treeChildrenDatasource == null) {
           // datasource still null
