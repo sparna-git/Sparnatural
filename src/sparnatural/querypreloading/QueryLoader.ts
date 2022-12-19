@@ -1,4 +1,4 @@
-import ObjectPropertyGroup from "../components/builder-section/groupwrapper/criteriagroup/objectpropertygroup/ObjectPropertyGroup";
+import PredicateSelector from "../components/builder-section/groupwrapper/criteriagroup/predicateselector/PredicateSelector";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import ClassTypeId from "../components/builder-section/groupwrapper/criteriagroup/subject-object-selectors/ClassTypeId";
 import ObjectSelector from "../components/builder-section/groupwrapper/criteriagroup/subject-object-selectors/ObjectSelector";
@@ -53,8 +53,8 @@ export default class QueryLoader{
   
     static #buildCriteriaGroup(grpWarpper: GroupWrapper, branch: Branch) {
       // set StartClassVal only if there wasn't one set by the parent (e.g whereChild andSibling have it already set)
-      const startClassVal = { type: branch.line.sType, variable: branch.line.s };
-      if (!grpWarpper.CriteriaGroup.SubjectSelector.startClassVal.type) {
+      const subjectVal = { type: branch.line.sType, variable: branch.line.s };
+      if (!grpWarpper.CriteriaGroup.SubjectSelector.subjectVal.type) {
         //set SubjectSelector
         this.#setSelectedValue(
             grpWarpper.CriteriaGroup.SubjectSelector,
@@ -63,12 +63,12 @@ export default class QueryLoader{
         }
   
     // set ObjectSelector
-    const endClassVal = { type: branch.line.oType, variable: branch.line.o };
+    const objectVal = { type: branch.line.oType, variable: branch.line.o };
     this.#setSelectedValue(grpWarpper.CriteriaGroup.ObjectSelector, branch.line.oType);
   
-    //set ObjectPropertyGroup
+    //set PredicateSelector
     this.#setSelectedValue(
-      grpWarpper.CriteriaGroup.ObjectPropertyGroup,
+      grpWarpper.CriteriaGroup.PredicateSelector,
       branch.line.p
     );
   
@@ -103,9 +103,9 @@ export default class QueryLoader{
     }
     // select if the var is viewed (eye btn)
     this.#setSelectViewVariableBtn(
-      startClassVal,
+      subjectVal,
       grpWarpper.CriteriaGroup.SubjectSelector,
-      endClassVal,
+      objectVal,
       grpWarpper.CriteriaGroup.ObjectSelector
     )
   }
@@ -123,7 +123,7 @@ export default class QueryLoader{
   
   // set the value for an inputTypeComponent and trigger the corresponding event
   static #setSelectedValue(
-    component: SubjectSelector | ObjectSelector | ObjectPropertyGroup,
+    component: SubjectSelector | ObjectSelector | PredicateSelector,
     value: string
   ) {
     // set the values to the ClassTypeId component
@@ -135,8 +135,8 @@ export default class QueryLoader{
   }
 
   // this method checks if the eye btn was enabled in the loaded query
-  static #setSelectViewVariableBtn(startClassVal:SelectedVal,startClassComponent:SubjectSelector,endClassVal:SelectedVal,endClassComponent:ObjectSelector){
-    if(this.query.variables.includes(endClassVal.variable.replace('?',''))){
+  static #setSelectViewVariableBtn(subjectVal:SelectedVal,startClassComponent:SubjectSelector,objectVal:SelectedVal,endClassComponent:ObjectSelector){
+    if(this.query.variables.includes(objectVal.variable.replace('?',''))){
       // click on eye btn
       this.#clickOn((endClassComponent.inputTypeComponent as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
     }

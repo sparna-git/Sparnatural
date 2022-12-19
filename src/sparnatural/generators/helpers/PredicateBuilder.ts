@@ -1,5 +1,5 @@
 import { BgpPattern, Pattern, Triple, VariableTerm } from "sparqljs";
-import ObjectPropertyGroup from "../../components/builder-section/groupwrapper/criteriagroup/objectpropertygroup/ObjectPropertyGroup";
+import PredicateSelector from "../../components/builder-section/groupwrapper/criteriagroup/predicateselector/PredicateSelector";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import SparqlFactory from "../SparqlFactory";
 
@@ -8,9 +8,9 @@ export default class PredicateBuilder{
     #endClsPtrn:Pattern[]
     #widgetComponent:AbstractWidget
     #predicateTriple:Triple
-    #objectPropCls:ObjectPropertyGroup
+    #objectPropCls:PredicateSelector
     resultPtrn:BgpPattern
-    constructor(startClsPtrn:Pattern[],endClsPtrn:Pattern[],widgetComponent:AbstractWidget,objectPropCls:ObjectPropertyGroup){
+    constructor(startClsPtrn:Pattern[],endClsPtrn:Pattern[],widgetComponent:AbstractWidget,objectPropCls:PredicateSelector){
         this.#startClsPtrn = startClsPtrn
         this.#endClsPtrn = endClsPtrn
         this.#widgetComponent = widgetComponent

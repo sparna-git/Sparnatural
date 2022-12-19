@@ -13,7 +13,7 @@ let removeEditComponents = (grpWrapper: GroupWrapper) => {
 //give it additional class childsList
 export function addWhereComponent(
   grpWrapper: GroupWrapper,
-  endClassVal: SelectedVal
+  objectVal: SelectedVal
 ) {
   removeEditComponents(grpWrapper);
   //provide endclassval as startvalue for the new group
@@ -22,7 +22,7 @@ export function addWhereComponent(
     grpWrapper.specProvider,
     // depth = parent depth + 1
     grpWrapper.depth + 1,
-    endClassVal
+    objectVal
   ).render();
 
   /*
@@ -33,10 +33,10 @@ export function addWhereComponent(
   grpWrapper.whereChild.render();
   */
 
-  //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
+  //objectVal is new subjectVal and trigger 'change' event on ClassTypeId
   let inputTypeComponent =
     grpWrapper.whereChild.CriteriaGroup.SubjectSelector.inputTypeComponent;
-  inputTypeComponent.oldWidget.val(endClassVal.type).niceSelect("update");
+  inputTypeComponent.oldWidget.val(objectVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   inputTypeComponent.html[0].children[1].classList.add("disabled");
   // render the link where

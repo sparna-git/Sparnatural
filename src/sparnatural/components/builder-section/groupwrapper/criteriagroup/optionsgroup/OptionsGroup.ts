@@ -42,7 +42,7 @@ export class OptionsGroup extends HTMLComponent {
   }
 
   // called by ParentCriteriaGroup
-  onObjectPropertyGroupSelected(optionState: OptionTypes) {
+  onPredicateSelectorSelected(optionState: OptionTypes) {
     this.#checkIfoptionalArrowisRenderable(optionState);
   }
 
@@ -64,7 +64,7 @@ export class OptionsGroup extends HTMLComponent {
     // MUST BE WRAPPED INTO LIST DIV
     if(
       this.specProvider.isEnablingOptional(
-        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+        this.ParentCriteriaGroup.PredicateSelector.objectPropVal.type
       )
     ) {
       this.OptionalComponent.render();
@@ -72,7 +72,7 @@ export class OptionsGroup extends HTMLComponent {
 
     if(
       this.specProvider.isEnablingNegation(
-        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+        this.ParentCriteriaGroup.PredicateSelector.objectPropVal.type
       )
     ) {
       this.NotExistsComponent.render();
@@ -90,11 +90,11 @@ export class OptionsGroup extends HTMLComponent {
   #checkIfOptionsPossible(): boolean {
     return (
       this.specProvider.isEnablingOptional(
-        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+        this.ParentCriteriaGroup.PredicateSelector.objectPropVal.type
       )
       ||
       this.specProvider.isEnablingNegation(
-        this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
+        this.ParentCriteriaGroup.PredicateSelector.objectPropVal.type
       )
     );
   }

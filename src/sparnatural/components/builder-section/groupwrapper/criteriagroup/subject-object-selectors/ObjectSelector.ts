@@ -13,7 +13,7 @@ import { AbstractWidget } from "../../../../widgets/AbstractWidget";
  **/
 class ObjectSelector extends HTMLComponent {
   variableSelector: any;
-  endClassVal: SelectedVal = {
+  objectVal: SelectedVal = {
     type: null,
     variable: null,
   };
@@ -27,7 +27,7 @@ class ObjectSelector extends HTMLComponent {
   specProvider: ISpecProvider;
   editComponents: EditComponents;
   // endClassWidgetGroup: EndClassWidgetGroup;
-  startClassVal: SelectedVal;
+  subjectVal: SelectedVal;
   objectPropVal: SelectedVal;
 
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
@@ -67,17 +67,17 @@ class ObjectSelector extends HTMLComponent {
 
   // Creating the Variable for the variable menu
   #createSparqlVar(type: string) {
-    this.endClassVal.type = type;
+    this.objectVal.type = type;
     this.html[0].dispatchEvent(
       new CustomEvent("getSparqlVarId", {
         bubbles: true,
         detail: (id: number) => {
           //callback
-          this.endClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
+          this.objectVal.variable = `?${this.#getUriClassName(type)}_${id}`;
         },
       })
     );
-    this.#addDefaultLblVar(type,this.endClassVal.variable)
+    this.#addDefaultLblVar(type,this.objectVal.variable)
   }
 
   #getUriClassName(uri:string){
@@ -96,27 +96,27 @@ class ObjectSelector extends HTMLComponent {
   }
 
   // triggered when the subject/domain is selected
-  onSubjectSelectorSelected(startClassVal: SelectedVal) {
-    this.startClassVal = startClassVal;
+  onSubjectSelectorSelected(subjectVal: SelectedVal) {
+    this.subjectVal = subjectVal;
 
     // render the inputComponent for a user to select an Object
     this.inputTypeComponent = new ClassTypeId(
       this,
       this.specProvider,
-      startClassVal
+      subjectVal
     );
     this.inputTypeComponent.render();
   }
 
-  onObjectPropertyGroupSelected(objectPropVal: SelectedVal) {
+  onPredicateSelectorSelected(objectPropVal: SelectedVal) {
     this.objectPropVal = objectPropVal;
     if (!this.editComponents) {
       // this is where the widgets will be determined and rendered    
       this.editComponents = new EditComponents(
         this,
-        this.startClassVal,
+        this.subjectVal,
         objectPropVal,
-        this.endClassVal,
+        this.objectVal,
         this.specProvider
       ).render();
     }
@@ -129,15 +129,15 @@ class ObjectSelector extends HTMLComponent {
 
   #valueWasSelected() {
     this.#renderUnselectBtn();
-    // trigger the event that will call the ObjectPropertyGroup
+    // trigger the event that will call the PredicateSelector
     this.html[0].dispatchEvent(
       new CustomEvent("ObjectSelectorSelected", {
         bubbles: true,
-        detail: this.endClassVal,
+        detail: this.objectVal,
       })
     );
 
-    var desc = this.specProvider.getTooltip(this.endClassVal.type);
+    var desc = this.specProvider.getTooltip(this.objectVal.type);
     if (desc) {
       $(this.html).find(".ClassTypeId").attr("data-tippy-content", desc);
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
@@ -155,7 +155,7 @@ class ObjectSelector extends HTMLComponent {
   }
 
   getVarName() {
-    return this.endClassVal.variable;
+    return this.objectVal.variable;
   }
 
   getDefaultLblVar(){
@@ -167,12 +167,12 @@ class ObjectSelector extends HTMLComponent {
   }
 
   setVarName(name: string) {
-    this.endClassVal.variable = name;
+    this.objectVal.variable = name;
     this.#setDefaultLblVar(name)
   }
 
   getTypeSelected() {
-    return this.endClassVal.type;
+    return this.objectVal.type;
   }
 
   /**

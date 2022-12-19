@@ -22,9 +22,9 @@ export interface WidgetValue {
 export abstract class AbstractWidget extends HTMLComponent {
   public valueRepetition: ValueRepetition;
   protected widgetValues: Array<WidgetValue> = [];
-  startClassVal: SelectedVal;
+  subjectVal: SelectedVal;
   objectPropVal: SelectedVal;
-  endClassVal: SelectedVal;
+  objectVal: SelectedVal;
   protected blockStartTriple = false;
   protected blockPredicateTriple = false;
   protected blockEndTriple = false;
@@ -36,15 +36,15 @@ export abstract class AbstractWidget extends HTMLComponent {
     baseCssClass: string,
     parentComponent: HTMLComponent,
     widgetHTML: JQuery<HTMLElement>,
-    startClassVal: SelectedVal,
+    subjectVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal,
+    objectVal: SelectedVal,
     valueRepetition: ValueRepetition
   ) {
     super(baseCssClass, parentComponent, widgetHTML);
-    this.startClassVal = startClassVal;
+    this.subjectVal = subjectVal;
     this.objectPropVal = objectPropVal;
-    this.endClassVal = endClassVal;
+    this.objectVal = objectVal;
     this.valueRepetition = valueRepetition;
   }
 

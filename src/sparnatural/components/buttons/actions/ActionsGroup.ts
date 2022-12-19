@@ -25,7 +25,7 @@ class ActionsGroup extends HTMLComponent {
     return this;
   }
 
-  onObjectPropertyGroupSelected() {
+  onPredicateSelectorSelected() {
     this.actions = {
       ActionAnd: new ActionAnd(this, this.#onAddAnd).render(),
     };
@@ -36,7 +36,7 @@ class ActionsGroup extends HTMLComponent {
     this.actions.ActionAnd.html[0].dispatchEvent(
       new CustomEvent("addAndComponent", {
         bubbles: true,
-        detail: this.ParentCriteriaGroup.SubjectSelector.startClassVal,
+        detail: this.ParentCriteriaGroup.SubjectSelector.subjectVal,
       })
     );
   };

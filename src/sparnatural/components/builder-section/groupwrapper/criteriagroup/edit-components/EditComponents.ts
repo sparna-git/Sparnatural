@@ -34,9 +34,9 @@ enum RENDER_WHERE_ENUM {
 }
 
 class EditComponents extends HTMLComponent {
-  startClassVal: SelectedVal;
+  subjectVal: SelectedVal;
   objectPropVal: SelectedVal;
-  endClassVal: SelectedVal;
+  objectVal: SelectedVal;
   actionWhere: ActionWhere;
   widgetWrapper: WidgetWrapper;
   specProvider: ISpecProvider;
@@ -45,13 +45,13 @@ class EditComponents extends HTMLComponent {
     parentComponent: ObjectSelector,
     startCassVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal,
+    objectVal: SelectedVal,
     specProvider: ISpecProvider
   ) {
     super("EditComponents", parentComponent, null);
-    this.startClassVal = startCassVal;
+    this.subjectVal = startCassVal;
     this.objectPropVal = objectPropVal;
-    this.endClassVal = endClassVal;
+    this.objectVal = objectVal;
     this.specProvider = specProvider;
   }
   render(): this {
@@ -59,9 +59,9 @@ class EditComponents extends HTMLComponent {
     this.widgetWrapper = new WidgetWrapper(
       this,
       this.specProvider,
-      this.startClassVal,
+      this.subjectVal,
       this.objectPropVal,
-      this.endClassVal
+      this.objectVal
     ).render();
 
     let widgetType = this.widgetWrapper.getWidgetType();
@@ -72,7 +72,7 @@ class EditComponents extends HTMLComponent {
       !this.maxDepthIsReached()
       &&
       // If this owl:Class is not in a rdf:domain of a owl:ObjectProperty don't allow
-      (this.specProvider.getConnectedClasses(this.endClassVal.type).length !== 0)
+      (this.specProvider.getConnectedClasses(this.objectVal.type).length !== 0)
     ){
       this.actionWhere = new ActionWhere(
         this,
@@ -124,7 +124,7 @@ class EditComponents extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("addWhereComponent", {
         bubbles: true,
-        detail: this.endClassVal,
+        detail: this.objectVal,
       })
     );
   };

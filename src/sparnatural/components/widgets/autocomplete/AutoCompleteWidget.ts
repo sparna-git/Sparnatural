@@ -32,7 +32,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     parentComponent: WidgetWrapper,
     autocompleteHandler: any,
     langSearch: any,
-    startClassValue: SelectedVal,
+    subjectValue: SelectedVal,
     objectPropVal: SelectedVal,
     endClassValue: SelectedVal
   ) {
@@ -40,7 +40,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       "autocomplete-widget",
       parentComponent,
       null,
-      startClassValue,
+      subjectValue,
       objectPropVal,
       endClassValue,
       ValueRepetition.MULTIPLE
@@ -57,26 +57,26 @@ export class AutoCompleteWidget extends AbstractWidget {
     this.html.append(listHtml);
 
     var isMatch = this.datasourceHandler.enableMatch(
-      this.startClassVal.type,
+      this.subjectVal.type,
       this.objectPropVal.type,
-      this.endClassVal.type
+      this.objectVal.type
     );
 
     let options = {
       // ajaxSettings: {crossDomain: true, type: 'GET'} ,
       url: (phrase: any) => {
         return this.datasourceHandler.autocompleteUrl(
-          this.startClassVal.type,
+          this.subjectVal.type,
           this.objectPropVal.type,
-          this.endClassVal.type,
+          this.objectVal.type,
           phrase
         );
       },
       listLocation: (data: any) => {
         return this.datasourceHandler.listLocation(
-          this.startClassVal.type,
+          this.subjectVal.type,
           this.objectPropVal.type,
-          this.endClassVal.type,
+          this.objectVal.type,
           data
         );
       },
@@ -107,7 +107,7 @@ export class AutoCompleteWidget extends AbstractWidget {
           this.toggleSpinner(this.langSearch.AutocompleteSpinner_NoResults)
         },
         success: (data: any ) => {
-          var results = this.datasourceHandler.listLocation(this.startClassVal, this.objectPropVal, this.endClassVal, data)
+          var results = this.datasourceHandler.listLocation(this.subjectVal, this.objectPropVal, this.objectVal, data)
           if (results.length == 0) {
             this.toggleSpinner(this.langSearch.AutocompleteSpinner_NoResults);
           } else {
@@ -173,7 +173,7 @@ export class AutoCompleteWidget extends AbstractWidget {
   getRdfJsPattern(): Pattern[] {
     if(this.widgetValues.length == 1) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
-        DataFactory.variable(this.getVariableValue(this.startClassVal)),
+        DataFactory.variable(this.getVariableValue(this.subjectVal)),
         DataFactory.namedNode(this.objectPropVal.type),
         DataFactory.namedNode((this.widgetValues[0] as AutoCompleteWidgetValue).value.uri)
       );
@@ -188,7 +188,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     } else {
       let vals = (this.widgetValues as AutoCompleteWidgetValue[]).map((v) => {
         let vl: ValuePatternRow = {};
-        vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
+        vl[this.objectVal.variable] = DataFactory.namedNode(v.value.uri);
         return vl;
       });
       let valuePattern: ValuesPattern = {

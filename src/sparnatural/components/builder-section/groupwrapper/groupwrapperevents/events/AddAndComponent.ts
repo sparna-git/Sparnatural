@@ -6,19 +6,19 @@ import LinkAndBottom from "../../LinkAndBottom";
 //add GroupWrapper as a Sibling
 export function addAndComponent(
   grpWrapper: GroupWrapper,
-  startClassVal: SelectedVal
+  subjectVal: SelectedVal
 ) {
   grpWrapper.andSibling = new GroupWrapper(
     grpWrapper.ParentComponent,
     grpWrapper.specProvider,
     // same depth
     grpWrapper.depth,
-    startClassVal
+    subjectVal
   ).render();
-  //set state to startClassValSelected and trigger change
+  //set state to subjectValSelected and trigger change
   let inputTypeComponent =
     grpWrapper.andSibling.CriteriaGroup.SubjectSelector.inputTypeComponent;
-  inputTypeComponent.oldWidget.val(startClassVal.type).niceSelect("update");
+  inputTypeComponent.oldWidget.val(subjectVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   inputTypeComponent.html[0].children[1].classList.add("disabled");
 

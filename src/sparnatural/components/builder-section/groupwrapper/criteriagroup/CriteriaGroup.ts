@@ -4,7 +4,7 @@
 import { getSettings } from "../../../../../sparnatural/settings/defaultSettings";
 import ISpecProvider from "../../../../spec-providers/ISpecProvider";
 import UnselectBtn from "../../../buttons/UnselectBtn";
-import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
+import PredicateSelector from "./predicateselector/PredicateSelector";
 
 import SubjectSelector from "./subject-object-selectors/SubjectSelector";
 import GroupWrapper from "../GroupWrapper";
@@ -20,7 +20,7 @@ class CriteriaGroup extends HTMLComponent {
   settings: any;
   SubjectSelector: SubjectSelector;
   OptionsGroup: OptionsGroup; // optional or notexists
-  ObjectPropertyGroup: ObjectPropertyGroup;
+  PredicateSelector: PredicateSelector;
   ObjectSelector: ObjectSelector;
   endClassWidgetGroup: EndClassWidgetGroup;
   ActionsGroup: ActionsGroup;
@@ -32,7 +32,7 @@ class CriteriaGroup extends HTMLComponent {
   constructor(
     ParentComponent: GroupWrapper,
     specProvider: any,
-    startClassVal?: SelectedVal,
+    subjectVal?: SelectedVal,
     startClassEyeBtn?:boolean
   ) {
     super("CriteriaGroup", ParentComponent, null);
@@ -41,7 +41,7 @@ class CriteriaGroup extends HTMLComponent {
     this.SubjectSelector = new SubjectSelector(
       this,
       this.specProvider,
-      startClassVal,
+      subjectVal,
       startClassEyeBtn
     );
     this.startClassEyeBtn = startClassEyeBtn
@@ -63,7 +63,7 @@ class CriteriaGroup extends HTMLComponent {
     // create all the elements of the criteria
     this.SubjectSelector.render();
     this.OptionsGroup = new OptionsGroup(this, this.specProvider).render();
-    this.ObjectPropertyGroup = new ObjectPropertyGroup(
+    this.PredicateSelector = new PredicateSelector(
       this,
       this.specProvider,
       getSettings().langSearch.ObjectPropertyTemporaryLabel
@@ -85,7 +85,7 @@ class CriteriaGroup extends HTMLComponent {
           throw Error(
             "SubjectSelectorSelected expects object of type SelectedVal"
           );
-        this.ObjectPropertyGroup.onSubjectSelectorSelected(e.detail);
+        this.PredicateSelector.onSubjectSelectorSelected(e.detail);
         this.ObjectSelector.onSubjectSelectorSelected(e.detail);
       }
     );
@@ -95,33 +95,33 @@ class CriteriaGroup extends HTMLComponent {
       e.stopImmediatePropagation();
       if (!this.#isSelectedVal(e.detail))
         throw Error("ObjectSelectorSelected expects object of type SelectedVal");
-      this.ObjectPropertyGroup.onObjectSelectorSelected(e.detail);
+      this.PredicateSelector.onObjectSelectorSelected(e.detail);
     });
 
     // 3. Automatically selected or User selects ObjectPropertyGrpVal
     this.html[0].addEventListener(
-      "onObjectPropertyGroupSelected",
+      "onPredicateSelectorSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
         
         if (!this.#isSelectedVal(e.detail))
           throw Error(
-            "onObjectPropertyGroupSelected expects object of type SelectedVal"
+            "onPredicateSelectorSelected expects object of type SelectedVal"
           );
         
           // if there is already a where connection or widget values selected, don't change anything
         if (!(this.ParentGroupWrapper.whereChild) && this.endClassWidgetGroup?.widgetValues?.length === 0){
-          this.ObjectSelector.onObjectPropertyGroupSelected(e.detail);
+          this.ObjectSelector.onPredicateSelectorSelected(e.detail);
           this.endClassWidgetGroup.render();
         }
         
-        this.OptionsGroup.onObjectPropertyGroupSelected(
+        this.OptionsGroup.onPredicateSelectorSelected(
           this.ParentGroupWrapper.optionState
         );
 
         // if there is already a andSibling don't allow to rerender the ActionAnd again
         if (!this.ParentGroupWrapper.andSibling)
-          this.ActionsGroup.onObjectPropertyGroupSelected();
+          this.ActionsGroup.onPredicateSelectorSelected();
 
         // if property has a sparqlService, switch the state
         if(this.specProvider.getServiceEndpoint(e.detail.type)) {

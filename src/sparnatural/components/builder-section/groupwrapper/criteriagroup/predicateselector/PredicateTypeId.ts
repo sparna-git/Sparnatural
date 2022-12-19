@@ -8,11 +8,11 @@ import CriteriaGroup from "../CriteriaGroup";
 /**
  * Refactored to extract this from InputTypeComponent
  **/
-class ObjectPropertyTypeId extends HTMLComponent {
+class PredicateTypeId extends HTMLComponent {
   GrandParent: CriteriaGroup;
   temporaryLabel: string;
-  startClassVal: SelectedVal;
-  endClassVal: SelectedVal;
+  subjectVal: SelectedVal;
+  objectVal: SelectedVal;
   oldWidget: JQuery<HTMLElement>;
   arrow: ArrowComponent = new ArrowComponent(
     this,
@@ -24,13 +24,13 @@ class ObjectPropertyTypeId extends HTMLComponent {
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
     temporaryLabel: string,
-    startClassVal: SelectedVal
+    subjectVal: SelectedVal
   ) {
-    super("ObjectPropertyTypeId", ParentComponent, null);
+    super("PredicateTypeId", ParentComponent, null);
     this.temporaryLabel = temporaryLabel;
     this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
     this.specProvider = specProvider;
-    this.startClassVal = startClassVal;
+    this.subjectVal = subjectVal;
   }
 
   /*
@@ -41,7 +41,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   render() {
     super.render();
     // if there is an Object selected
-    if (this.endClassVal) {
+    if (this.objectVal) {
       this.#removeTempLbl();
       // set the correct objectProperty matching to Start and End value
       this.oldWidget = this.#getObjectProperty();
@@ -74,7 +74,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
       this.widgetHtml.addClass("disabled");
       this.widgetHtml.removeClass("open");
       this.html[0].dispatchEvent(
-        new CustomEvent("onObjectPropertyTypeIdSelected", {
+        new CustomEvent("onPredicateTypeIdSelected", {
           bubbles: true,
           detail: selectedValue,
         })
@@ -93,16 +93,16 @@ class ObjectPropertyTypeId extends HTMLComponent {
     var default_value = null;
 
     return this.selectBuilder.buildPropertySelect(
-      this.startClassVal.type,
-      this.endClassVal.type,
+      this.subjectVal.type,
+      this.objectVal.type,
       default_value
     );
   }
-  setEndClassVal(endClassVal: SelectedVal) {
-    this.endClassVal = endClassVal;
+  setEndClassVal(objectVal: SelectedVal) {
+    this.objectVal = objectVal;
   }
 }
-export default ObjectPropertyTypeId;
+export default PredicateTypeId;
 
 /**
  * Builds a selector for property based on provided domain and range, by reading the

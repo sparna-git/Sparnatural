@@ -46,7 +46,7 @@ class SparnaturalJsonGenerator {
     let branch: Branch = {
       line: {
         s: CrtGrp.SubjectSelector.getVarName(),
-        p: CrtGrp.ObjectPropertyGroup.getTypeSelected(),
+        p: CrtGrp.PredicateSelector.getTypeSelected(),
         o: CrtGrp.ObjectSelector.getVarName(),
         sType: CrtGrp.SubjectSelector.getTypeSelected(),
         oType: CrtGrp.ObjectSelector.getTypeSelected(),

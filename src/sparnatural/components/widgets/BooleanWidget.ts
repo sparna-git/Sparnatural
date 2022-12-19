@@ -24,17 +24,17 @@ export class BooleanWidget extends AbstractWidget {
   protected widgetValues: BooleanWidgetValue[];
   constructor(
     parentComponent: WidgetWrapper,
-    startClassVal: SelectedVal,
+    subjectVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    objectVal: SelectedVal
   ) {
     super(
       "boolean-widget",
       parentComponent,
       null,
-      startClassVal,
+      subjectVal,
       objectPropVal,
-      endClassVal,
+      objectVal,
       ValueRepetition.SINGLE
     );
   }
@@ -79,7 +79,7 @@ export class BooleanWidget extends AbstractWidget {
       type: "bgp",
       triples: [
         {
-          subject: DataFactory.variable(this.startClassVal.variable),
+          subject: DataFactory.variable(this.subjectVal.variable),
           predicate: DataFactory.namedNode(this.objectPropVal.type),
           object: DataFactory.literal(
             this.widgetValues[0].value.boolean.toString(),

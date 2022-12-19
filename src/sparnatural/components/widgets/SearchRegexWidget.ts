@@ -32,17 +32,17 @@ export class SearchRegexWidget extends AbstractWidget {
 
   constructor(
     parentComponent: WidgetWrapper,
-    startClassVal: SelectedVal,
+    subjectVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    objectVal: SelectedVal
   ) {
     super(
       "search-widget",
       parentComponent,
       null,
-      startClassVal,
+      subjectVal,
       objectPropVal,
-      endClassVal,
+      objectVal,
       ValueRepetition.SINGLE
     );
   }
@@ -83,7 +83,7 @@ export class SearchRegexWidget extends AbstractWidget {
           DataFactory.literal(
             `${this.widgetValues[0].value.regex}`
           ),
-          DataFactory.variable(this.getVariableValue(this.endClassVal))
+          DataFactory.variable(this.getVariableValue(this.objectVal))
         )];
 
 
@@ -95,7 +95,7 @@ export class SearchRegexWidget extends AbstractWidget {
           DataFactory.literal(
             `${this.widgetValues[0].value.regex}`
           ),
-          DataFactory.variable(this.getVariableValue(this.endClassVal))
+          DataFactory.variable(this.getVariableValue(this.objectVal))
         )];
       }
       case Config.GRAPHDB_SEARCH_PROPERTY: {
@@ -105,7 +105,7 @@ export class SearchRegexWidget extends AbstractWidget {
           triples: [
             {
               subject: DataFactory.variable(
-                this.getVariableValue(this.startClassVal)
+                this.getVariableValue(this.subjectVal)
               ),
               predicate: DataFactory.namedNode(
                 "http://www.ontotext.com/connectors/lucene#query"
@@ -116,12 +116,12 @@ export class SearchRegexWidget extends AbstractWidget {
             },
             {
               subject: DataFactory.variable(
-                this.getVariableValue(this.startClassVal)
+                this.getVariableValue(this.subjectVal)
               ),
               predicate: DataFactory.namedNode(
                 "http://www.ontotext.com/connectors/lucene#entities"
               ),
-              object: DataFactory.variable(this.getVariableValue(this.endClassVal)),
+              object: DataFactory.variable(this.getVariableValue(this.objectVal)),
             },
           ],
         };

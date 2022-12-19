@@ -1,5 +1,5 @@
 import tippy from "tippy.js";
-import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
+import PredicateTypeId from "./PredicateTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
@@ -7,25 +7,25 @@ import { SelectedVal } from "../../../../../generators/ISparJson";
 import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
 
 /**
- * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
+ * The property selection part of a criteria/line, encapsulating an PredicateTypeId
  **/
-class ObjectPropertyGroup extends HTMLComponent {
-  inputTypeComponent: ObjectPropertyTypeId;
+class PredicateSelector extends HTMLComponent {
+  inputTypeComponent: PredicateTypeId;
   objectPropVal: SelectedVal = {
     variable: null,
     type: null,
   }; // value which shows which object property got chosen by the config for subject and object
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
-  startClassVal: SelectedVal;
-  endClassVal: SelectedVal;
+  subjectVal: SelectedVal;
+  objectVal: SelectedVal;
   temporaryLabel: string;
   constructor(
     ParentComponent: CriteriaGroup,
     specProvider: ISpecProvider,
     temporaryLabel: string
   ) {
-    super("ObjectPropertyGroup", ParentComponent, null);
+    super("PredicateSelector", ParentComponent, null);
     this.ParentCriteriaGroup = ParentComponent;
     this.temporaryLabel = temporaryLabel;
     this.specProvider = specProvider;
@@ -39,25 +39,25 @@ class ObjectPropertyGroup extends HTMLComponent {
   /*
 		renders the temporarly object property
 	*/
-  onSubjectSelectorSelected(startClassVal: SelectedVal) {
-    this.startClassVal = startClassVal;
+  onSubjectSelectorSelected(subjectVal: SelectedVal) {
+    this.subjectVal = subjectVal;
     //this will set the temporary label since there hasn't been a Value chosen for ObjectSelector
-    this.inputTypeComponent = new ObjectPropertyTypeId(
+    this.inputTypeComponent = new PredicateTypeId(
       this,
       this.specProvider,
       this.temporaryLabel,
-      this.startClassVal
+      this.subjectVal
     ).render();
   }
 
   #addEventListener() {
     // event is caught here and then bubbles up to the CriteriaGroup
     this.html[0].addEventListener(
-      "onObjectPropertyTypeIdSelected",
+      "onPredicateTypeIdSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
         if (e.detail === "" || !e.detail)
-          throw Error('No value received on "onObjectPropertyGroupSelected"');
+          throw Error('No value received on "onPredicateSelectorSelected"');
         this.#createSparqlVar(e.detail);
         this.#valueWasSelected();
       }
@@ -78,7 +78,7 @@ class ObjectPropertyGroup extends HTMLComponent {
 
   #valueWasSelected() {
     this.html[0].dispatchEvent(
-      new CustomEvent("onObjectPropertyGroupSelected", {
+      new CustomEvent("onPredicateSelectorSelected", {
         bubbles: true,
         detail: this.objectPropVal,
       })
@@ -86,12 +86,12 @@ class ObjectPropertyGroup extends HTMLComponent {
     var desc = this.specProvider.getTooltip(this.objectPropVal.type);
 
     if(desc) {
-			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
+			$(this.ParentCriteriaGroup.PredicateSelector.html).find('.PredicateTypeId').attr('data-tippy-content', desc ) ;
 			var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
 			tippySettings.placement = "top-start";
-			tippy('.ObjectPropertyGroup .ObjectPropertyTypeId[data-tippy-content]', tippySettings);
+			tippy('.PredicateSelector .PredicateTypeId[data-tippy-content]', tippySettings);
 		} else {
-			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).removeAttr('data-tippy-content') ;
+			$(this.ParentCriteriaGroup.PredicateSelector.html).removeAttr('data-tippy-content') ;
 		}
   }
 
@@ -113,10 +113,10 @@ class ObjectPropertyGroup extends HTMLComponent {
 		This method is triggered when an Object is selected.
 		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
 	*/
-  onObjectSelectorSelected(endClassVal: SelectedVal) {
+  onObjectSelectorSelected(objectVal: SelectedVal) {
     // this will update the temporarly label
-    this.inputTypeComponent.setEndClassVal(endClassVal);
+    this.inputTypeComponent.setEndClassVal(objectVal);
     this.inputTypeComponent.render();
   }
 }
-export default ObjectPropertyGroup;
+export default PredicateSelector;

@@ -32,23 +32,23 @@ export class DatesWidget extends AbstractWidget {
   constructor(
     parentComponent: WidgetWrapper,
     datesHandler: any,
-    startClassVal: SelectedVal,
+    subjectVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    objectVal: SelectedVal
   ) {
     super(
       "date-widget",
       parentComponent,
       null,
-      startClassVal,
+      subjectVal,
       objectPropVal,
-      endClassVal,
+      objectVal,
       ValueRepetition.SINGLE
     );
     this.datesHandler = datesHandler;
-    this.startClassVal = startClassVal;
+    this.subjectVal = subjectVal;
     this.objectPropVal = objectPropVal;
-    this.endClassVal = endClassVal;
+    this.objectVal = objectVal;
   }
 
   render() {
@@ -84,9 +84,9 @@ export class DatesWidget extends AbstractWidget {
 
     $.ajax({
       url: this.datesHandler.datesUrl(
-        this.startClassVal.type,
+        this.subjectVal.type,
         this.objectPropVal.type,
-        this.endClassVal.type,
+        this.objectVal.type,
         phrase
       ),
       async: false,

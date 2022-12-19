@@ -53,9 +53,9 @@ export class TimeDatePickerWidget extends AbstractWidget {
   infoBtn: InfoBtn;
   addValueBtn: AddUserInputBtn;
   value: DateTimePickerValue;
-  startClassVal: SelectedVal;
+  subjectVal: SelectedVal;
   objectPropVal: SelectedVal;
-  endClassVal: SelectedVal;
+  objectVal: SelectedVal;
   specProvider: ISpecProvider;
 
   constructor(
@@ -64,7 +64,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
     dateFormat: any,
     startClassCal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal,
+    objectVal: SelectedVal,
     specProvider: ISpecProvider
   ) {
     super(
@@ -73,7 +73,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
       null,
       startClassCal,
       objectPropVal,
-      endClassVal,
+      objectVal,
       ValueRepetition.SINGLE
     );
     this.datesHandler = datesHandler;
@@ -251,12 +251,12 @@ export class TimeDatePickerWidget extends AbstractWidget {
             DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
           DataFactory.variable(
-            this.getVariableValue(this.startClassVal)
+            this.getVariableValue(this.subjectVal)
           ),
           DataFactory.namedNode(beginDateProp),
           DataFactory.namedNode(endDateProp),
           exactDateProp != null?DataFactory.namedNode(exactDateProp):null,
-          DataFactory.variable(this.getVariableValue(this.startClassVal))
+          DataFactory.variable(this.getVariableValue(this.subjectVal))
         ),
       ];
     } else {
@@ -271,7 +271,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
             DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
           DataFactory.variable(
-            this.getVariableValue(this.endClassVal)
+            this.getVariableValue(this.objectVal)
           )
         ),
       ];

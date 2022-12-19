@@ -57,17 +57,17 @@ export default class MapWidget extends AbstractWidget {
   drawingLayer: L.Layer;
   constructor(
     parentComponent: WidgetWrapper,
-    startClassVal: SelectedVal,
+    subjectVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    objectVal: SelectedVal
   ) {
     super(
       "map-widget",
       parentComponent,
       null,
-      startClassVal,
+      subjectVal,
       objectPropVal,
-      endClassVal,
+      objectVal,
       ValueRepetition.SINGLE
     );
   }
@@ -179,7 +179,7 @@ export default class MapWidget extends AbstractWidget {
         type: "functionCall",
         function: DataFactory.namedNode(GEOF.WITHIN.value),
         args: [
-          DataFactory.variable(this.getVariableValue(this.endClassVal)),
+          DataFactory.variable(this.getVariableValue(this.objectVal)),
           this.#buildPolygon(this.widgetValues[0].value.coordinates[0])
         ],
       },
@@ -189,14 +189,14 @@ export default class MapWidget extends AbstractWidget {
 
     /*
     let asWKT: Triple = SparqlFactory.buildTriple(
-      DataFactory.variable(this.getVariableValue(this.startClassVal)),
+      DataFactory.variable(this.getVariableValue(this.subjectVal)),
       DataFactory.namedNode("http://www.opengis.net/ont/geosparql#asWKT"),
       DataFactory.variable("aWKT")
     );
 
     let vals = this.widgetValues.map((v) => {
       let vl: ValuePatternRow = {};
-      vl[this.endClassVal.variable] = this.#buildPolygon(v.value.coordinates[0]);
+      vl[this.objectVal.variable] = this.#buildPolygon(v.value.coordinates[0]);
       return vl;
     });
 
@@ -210,7 +210,7 @@ export default class MapWidget extends AbstractWidget {
       expression: <FunctionCallExpression><unknown>{
         type: "functionCall",
         function: DataFactory.namedNode(GEOF.WITHIN.value),
-        args: [asWKT.object, DataFactory.variable(this.getVariableValue(this.endClassVal))],
+        args: [asWKT.object, DataFactory.variable(this.getVariableValue(this.objectVal))],
       },
     };
     

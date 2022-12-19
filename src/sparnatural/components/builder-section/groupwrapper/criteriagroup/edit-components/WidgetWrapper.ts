@@ -33,22 +33,22 @@ class WidgetWrapper extends HTMLComponent {
   widgetComponent: AbstractWidget;
   specProvider: ISpecProvider;
   objectPropVal: SelectedVal;
-  startClassVal: SelectedVal;
-  endClassVal: SelectedVal;
+  subjectVal: SelectedVal;
+  objectVal: SelectedVal;
   add_or: boolean = true;
 
   constructor(
     ParentComponent: EditComponents,
     specProvider: ISpecProvider,
-    startClassVal: SelectedVal,
+    subjectVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    objectVal: SelectedVal
   ) {
     super("WidgetWrapper", ParentComponent, null);
     this.specProvider = specProvider;
-    this.startClassVal = startClassVal;
+    this.subjectVal = subjectVal;
     this.objectPropVal = objectPropVal;
-    this.endClassVal = endClassVal;
+    this.objectVal = objectVal;
 
     this.widgetType = this.specProvider.getObjectPropertyType(
       this.objectPropVal.type
@@ -99,13 +99,13 @@ class WidgetWrapper extends HTMLComponent {
     this.widgetComponent = this.#createWidgetComponent(
       this.widgetType,
       this.objectPropVal.type,
-      this.endClassVal.type
+      this.objectVal.type
     );
   }
 
   #addWidgetHTML(widgetType: string) {
     var parenthesisLabel =
-      " (" + this.specProvider.getLabel(this.endClassVal.type) + ") ";
+      " (" + this.specProvider.getLabel(this.objectVal.type) + ") ";
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
@@ -155,7 +155,7 @@ class WidgetWrapper extends HTMLComponent {
       widgetType == Config.TREE_PROPERTY
     ) {
       // label of the "Search" pseudo-class is inserted alone in this case
-      return this.specProvider.getLabel(this.endClassVal.type);
+      return this.specProvider.getLabel(this.objectVal.type);
     } else if (
       widgetType == Config.LIST_PROPERTY ||
       widgetType == Config.TIME_PROPERTY_DATE ||
@@ -248,9 +248,9 @@ class WidgetWrapper extends HTMLComponent {
           this,
           handler,
           !(datasource.noSort == true),
-          this.startClassVal,
+          this.subjectVal,
           this.objectPropVal,
-          this.endClassVal
+          this.objectVal
         );
 
       }
@@ -317,9 +317,9 @@ class WidgetWrapper extends HTMLComponent {
           this,
           handler,
           !(datasource.noSort == true),
-          this.startClassVal,
+          this.subjectVal,
           this.objectPropVal,
-          this.endClassVal
+          this.objectVal
         );
 
       case Config.AUTOCOMPLETE_PROPERTY:
@@ -383,9 +383,9 @@ class WidgetWrapper extends HTMLComponent {
           this,
           handler,
           this.settings.langSearch,
-          this.startClassVal,
+          this.subjectVal,
           this.objectPropVal,
-          this.endClassVal
+          this.objectVal
         );
 
         break;
@@ -394,9 +394,9 @@ class WidgetWrapper extends HTMLComponent {
       case Config.SEARCH_PROPERTY:
         return new SearchRegexWidget(
           this,
-          this.startClassVal,
+          this.subjectVal,
           this.objectPropVal,
-          this.endClassVal
+          this.objectVal
         );
         break;
       case Config.TIME_PROPERTY_YEAR:
@@ -404,9 +404,9 @@ class WidgetWrapper extends HTMLComponent {
           this,
           this.settings.dates,
           "year",
-          this.startClassVal,
+          this.subjectVal,
           this.objectPropVal,
-          this.endClassVal,
+          this.objectVal,
           this.specProvider
         );
         break;
@@ -415,9 +415,9 @@ class WidgetWrapper extends HTMLComponent {
           this,
           this.settings.dates,
           "day",
-          this.startClassVal,
+          this.subjectVal,
           this.objectPropVal,
-          this.endClassVal,
+          this.objectVal,
           this.specProvider
         );
         break;
@@ -425,9 +425,9 @@ class WidgetWrapper extends HTMLComponent {
         return new DatesWidget(
           this,
           this.settings.dates,
-          this.startClassVal,
+          this.subjectVal,
           this.objectPropVal,
-          this.endClassVal
+          this.objectVal
         );
         break;
       case Config.NON_SELECTABLE_PROPERTY:
@@ -436,9 +436,9 @@ class WidgetWrapper extends HTMLComponent {
       case Config.BOOLEAN_PROPERTY:
         return new BooleanWidget(
           this,
-          this.startClassVal,
+          this.subjectVal,
           this.objectPropVal,
-          this.endClassVal
+          this.objectVal
         );
         break;
       case Config.TREE_PROPERTY:
@@ -522,9 +522,9 @@ class WidgetWrapper extends HTMLComponent {
             handler,
             this.settings,
             this.settings.langSearch,
-            this.startClassVal,
+            this.subjectVal,
             this.objectPropVal,
-            this.endClassVal,
+            this.objectVal,
             !(treeChildrenDatasource.noSort == true)
           );
         }
@@ -532,9 +532,9 @@ class WidgetWrapper extends HTMLComponent {
       case Config.MAP_PROPERTY:
         return new MapWidget(
           this,
-          this.startClassVal,
+          this.subjectVal,
           this.objectPropVal,
-          this.endClassVal
+          this.objectVal
         ).render();
       default:
         throw new Error(`WidgetType for ${widgetType} not recognized`);

@@ -36,9 +36,9 @@ export class TreeWidget extends AbstractWidget {
   // html content
   button: any;
   hiddenInput: any;
-  startClassVal: SelectedVal;
+  subjectVal: SelectedVal;
   objectPropVal: SelectedVal;
-  endClassVal: SelectedVal;
+  objectVal: SelectedVal;
   settings:ISettings
   displayLayer: JQuery<HTMLElement>
   sort:boolean;
@@ -48,26 +48,26 @@ export class TreeWidget extends AbstractWidget {
     loaderHandler: any,
     settings: ISettings,
     langSearch: string,
-    startClassVal: SelectedVal,
+    subjectVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal,
+    objectVal: SelectedVal,
     sort: boolean
   ) {
     super(
       "tree-widget",
       parentComponent,
       null,
-      startClassVal,
+      subjectVal,
       objectPropVal,
-      endClassVal,
+      objectVal,
       ValueRepetition.MULTIPLE
     );
     this.loaderHandler = loaderHandler;
     this.langSearch = langSearch;
     this.IdCriteriaGroupe = "id";
 
-    this.startClassVal = startClassVal;
-    this.endClassVal = endClassVal;
+    this.subjectVal = subjectVal;
+    this.objectVal = objectVal;
     this.objectPropVal = objectPropVal;
     this.sort = sort;
   }
@@ -107,9 +107,9 @@ export class TreeWidget extends AbstractWidget {
       .append(this.displayLayer);
 
     //render this element
-    var SubjectSelector_value = this.startClassVal.type;
-    var endClassGroup_value = this.endClassVal.type;
-    var ObjectPropertyGroup_value = this.objectPropVal.type;
+    var SubjectSelector_value = this.subjectVal.type;
+    var endClassGroup_value = this.objectVal.type;
+    var PredicateSelector_value = this.objectPropVal.type;
 
     var self = this;
     var loaderHandler = this.loaderHandler;
@@ -127,12 +127,12 @@ export class TreeWidget extends AbstractWidget {
               node.id === "#"
                 ? loaderHandler.treeRootUrl(
                     SubjectSelector_value,
-                    ObjectPropertyGroup_value,
+                    PredicateSelector_value,
                     endClassGroup_value
                   )
                 : loaderHandler.treeChildrenUrl(
                     SubjectSelector_value,
-                    ObjectPropertyGroup_value,
+                    PredicateSelector_value,
                     endClassGroup_value,
                     node.id
                   ),
@@ -149,7 +149,7 @@ export class TreeWidget extends AbstractWidget {
             var result = [];
             var items = loaderHandler.nodeListLocation(
               SubjectSelector_value,
-              ObjectPropertyGroup_value,
+              PredicateSelector_value,
               endClassGroup_value,
               data
             );
@@ -357,7 +357,7 @@ export class TreeWidget extends AbstractWidget {
   getRdfJsPattern(): Pattern[] {
     let vals = this.widgetValues.map((v) => {
       let vl: ValuePatternRow = {};
-      vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
+      vl[this.objectVal.variable] = DataFactory.namedNode(v.value.uri);
       return vl;
     });
     let valuePattern: ValuesPattern = {

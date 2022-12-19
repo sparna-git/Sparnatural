@@ -37,24 +37,24 @@ export class ListWidget extends AbstractWidget {
     parentComponent: WidgetWrapper,
     listHandler: SparqlTemplateListHandler,
     sort: boolean,
-    startClassVal: SelectedVal,
+    subjectVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    objectVal: SelectedVal
   ) {
     super(
       "list-widget",
       parentComponent,
       null,
-      startClassVal,
+      subjectVal,
       objectPropVal,
-      endClassVal,
+      objectVal,
       ValueRepetition.MULTIPLE
     );
     this.datasourceHandler = listHandler;
     this.sort = sort;
-    this.startClassVal = startClassVal;
+    this.subjectVal = subjectVal;
     this.objectPropVal = objectPropVal;
-    this.endClassVal = endClassVal;
+    this.objectVal = objectVal;
   }
 
   render() {
@@ -67,9 +67,9 @@ export class ListWidget extends AbstractWidget {
     this.html.append(this.selectHtml);
 
     let url = this.datasourceHandler.listUrl(
-      this.startClassVal.type,
+      this.subjectVal.type,
       this.objectPropVal.type,
-      this.endClassVal.type
+      this.objectVal.type
     );
 
     var headers = new Headers();
@@ -91,9 +91,9 @@ export class ListWidget extends AbstractWidget {
       .then((data: any) => {
         //this.toggleSpinner("success")
         var items = this.datasourceHandler.listLocation(
-          this.startClassVal.type,
+          this.subjectVal.type,
           this.objectPropVal.type,
-          this.endClassVal.type,
+          this.objectVal.type,
           data
         );
         if (items.length > 0) {
@@ -179,7 +179,7 @@ export class ListWidget extends AbstractWidget {
    getRdfJsPattern(): Pattern[] {
     if(this.widgetValues.length == 1) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
-        DataFactory.variable(this.getVariableValue(this.startClassVal)),
+        DataFactory.variable(this.getVariableValue(this.subjectVal)),
         DataFactory.namedNode(this.objectPropVal.type),
         DataFactory.namedNode((this.widgetValues[0] as ListWidgetValue).value.uri)
       );
@@ -194,7 +194,7 @@ export class ListWidget extends AbstractWidget {
     } else {
       let vals = (this.widgetValues as ListWidgetValue[]).map((v) => {
         let vl: ValuePatternRow = {};
-        vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
+        vl[this.objectVal.variable] = DataFactory.namedNode(v.value.uri);
         return vl;
       });
       let valuePattern: ValuesPattern = {

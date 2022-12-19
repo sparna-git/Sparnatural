@@ -25,7 +25,7 @@ class ClassTypeId extends HTMLComponent {
   );
 
   selectBuilder: ClassSelectBuilder;
-  startClassVal: SelectedVal = {
+  subjectVal: SelectedVal = {
     variable: null,
     type: null,
   }; // if it is a whereChild, the startclassVal is already set
@@ -36,11 +36,11 @@ class ClassTypeId extends HTMLComponent {
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
-    startClassVal?: any
+    subjectVal?: any
   ) {
     super("ClassTypeId", ParentComponent, null);
     this.selectBuilder = new ClassSelectBuilder(this, specProvider);
-    this.startClassVal = startClassVal;
+    this.subjectVal = subjectVal;
     this.specProvider = specProvider;
   }
 
@@ -57,17 +57,17 @@ class ClassTypeId extends HTMLComponent {
     }
 
     if (isSubjectSelector(this.ParentComponent)) {
-      if(!this.startClassVal?.type) {
+      if(!this.subjectVal?.type) {
         // If this Component is a child of the SubjectSelector component in the first row with no value selected
         this.widgetHtml = this.selectBuilder.buildSelect_FirstSubjectSelector();
       } else {
         // If this is under a WHERE, we want only the selected value
-        this.widgetHtml = this.selectBuilder.buildSelect_SubjectSelectorInWhere(this.startClassVal.type);
+        this.widgetHtml = this.selectBuilder.buildSelect_SubjectSelectorInWhere(this.subjectVal.type);
       }
     } else {
       // If this Component is a child of the ObjectSelector component, we want the range of possible end values
       this.widgetHtml = this.selectBuilder.buildSelect_ObjectSelector(
-        this.startClassVal.type
+        this.subjectVal.type
       );
     }
 
@@ -116,11 +116,11 @@ class ClassTypeId extends HTMLComponent {
         : this.html.removeClass("VariableSelected");
         
     if (isObjectSelector(this.ParentComponent)) 
-      this.#onSelectViewVar(this.ParentComponent.endClassVal,selected)
+      this.#onSelectViewVar(this.ParentComponent.objectVal,selected)
 
      // The first StartClass gets an eye Btn to de/select
     if(isSubjectSelector(this.ParentComponent) && this.ParentComponent.renderEyeBtn) 
-      this.#onSelectViewVar(this.ParentComponent.startClassVal,selected)
+      this.#onSelectViewVar(this.ParentComponent.subjectVal,selected)
     
   };
 

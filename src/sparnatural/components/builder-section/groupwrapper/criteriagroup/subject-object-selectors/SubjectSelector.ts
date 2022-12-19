@@ -10,7 +10,7 @@ import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
  * Selection of the start class in a criteria/line
  **/
 class SubjectSelector extends HTMLComponent {
-  startClassVal: SelectedVal;
+  subjectVal: SelectedVal;
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
@@ -24,15 +24,15 @@ class SubjectSelector extends HTMLComponent {
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISpecProvider,
-    startClassVal?: SelectedVal,
+    subjectVal?: SelectedVal,
     renderEyeBtn?: Boolean
   ) {
     super("SubjectSelector", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
-    this.inputTypeComponent = new ClassTypeId(this, this.specProvider, startClassVal);
+    this.inputTypeComponent = new ClassTypeId(this, this.specProvider, subjectVal);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
-    this.startClassVal = startClassVal
-      ? startClassVal
+    this.subjectVal = subjectVal
+      ? subjectVal
       : {
           type: null,
           variable: null,
@@ -54,12 +54,12 @@ class SubjectSelector extends HTMLComponent {
         if (e.detail === "" || !e.detail)
           throw Error('No value received on "classTypeValueSelected"');
         e.stopImmediatePropagation();
-        //only create new SPARQL variable if the startClassVal is not set by the parent component
-        if (!this.startClassVal.variable){
+        //only create new SPARQL variable if the subjectVal is not set by the parent component
+        if (!this.subjectVal.variable){
           this.#createSparqlVar(e.detail);
-          this.#addDefaultLblVar(this.startClassVal.type,this.startClassVal.variable)
+          this.#addDefaultLblVar(this.subjectVal.type,this.subjectVal.variable)
         } else{
-          this.#addDefaultLblVar(this.startClassVal.type,this.startClassVal.variable)
+          this.#addDefaultLblVar(this.subjectVal.type,this.subjectVal.variable)
         }
         // Iff(!) First StartClass of first GrpWrapper: eye btn automatically rendered + selected
         if (this.renderEyeBtn) this.#autoSelectEyeBtn()
@@ -74,13 +74,13 @@ class SubjectSelector extends HTMLComponent {
   }
 
   #createSparqlVar(type: string) {
-    this.startClassVal.type = type;
+    this.subjectVal.type = type;
     this.html[0].dispatchEvent(
       new CustomEvent("getSparqlVarId", {
         bubbles: true,
         detail: (id: number) => {
           //callback
-          this.startClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
+          this.subjectVal.variable = `?${this.#getUriClassName(type)}_${id}`;
         },
       })
     );
@@ -106,11 +106,11 @@ class SubjectSelector extends HTMLComponent {
     this.html[0].dispatchEvent(
       new CustomEvent("SubjectSelectorSelected", {
         bubbles: true,
-        detail: this.startClassVal,
+        detail: this.subjectVal,
       })
     );
 
-    var desc = this.specProvider.getTooltip(this.startClassVal.type);
+    var desc = this.specProvider.getTooltip(this.subjectVal.type);
     if (desc) {
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
       tippySettings.placement = "top-start";
@@ -118,14 +118,14 @@ class SubjectSelector extends HTMLComponent {
     }
   }
   getVarName() {
-    return this.startClassVal.variable;
+    return this.subjectVal.variable;
   }
   setVarName(name: string) {
-    this.startClassVal.variable = name;
+    this.subjectVal.variable = name;
     this.#setDefaultLblVar(name)
   }
   getTypeSelected() {
-    return this.startClassVal.type;
+    return this.subjectVal.type;
   }
   getDefaultLblVar(){
     return this.defaultLblVar?.variable

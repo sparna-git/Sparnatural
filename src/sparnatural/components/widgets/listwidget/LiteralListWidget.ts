@@ -32,17 +32,17 @@ export class LiteralListWidget extends ListWidget {
     parentComponent: WidgetWrapper,
     listHandler: SparqlTemplateListHandler,
     sort: boolean,
-    startClassVal: SelectedVal,
+    subjectVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal
+    objectVal: SelectedVal
   ) {
     super(
       parentComponent,
       listHandler,
       sort,
-      startClassVal,
+      subjectVal,
       objectPropVal,
-      endClassVal
+      objectVal
     );
   }
 
@@ -59,7 +59,7 @@ export class LiteralListWidget extends ListWidget {
     /*
     let vals = (this.widgetValues as LiteralListWidgetValue[]).map((v) => {
       let vl: ValuePatternRow = {};
-      vl[this.endClassVal.variable] = DataFactory.literal(v.value.literal);
+      vl[this.objectVal.variable] = DataFactory.literal(v.value.literal);
       return vl;
     });
     let valuePattern: ValuesPattern = {
@@ -71,6 +71,6 @@ export class LiteralListWidget extends ListWidget {
     let vals : Literal[] = (this.widgetValues as LiteralListWidgetValue[]).map((v) => {
       return DataFactory.literal(v.value.literal)
     });
-    return [SparqlFactory.buildFilterStrInOrEquals(vals, DataFactory.variable(this.getVariableValue(this.endClassVal)))];
+    return [SparqlFactory.buildFilterStrInOrEquals(vals, DataFactory.variable(this.getVariableValue(this.objectVal)))];
   }
 }

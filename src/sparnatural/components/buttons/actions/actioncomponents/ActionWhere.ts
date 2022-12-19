@@ -28,7 +28,7 @@ class ActionWhere extends HTMLComponent {
     super.render();
     var choiceNumber = 2;
     var endLabel = this.specProvider.getLabel(
-      this.parentComponent.endClassVal.type
+      this.parentComponent.objectVal.type
     );
     
 
