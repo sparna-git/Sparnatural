@@ -132,19 +132,20 @@ class CriteriaGroup extends HTMLComponent {
     );
 
     // gets called by the widget.
-    this.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
+    this.html[0].addEventListener("renderWidgetValues", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      if (e.detail == "" || !e.detail)
+      if (e.detail == "" || !e.detail || !Array.isArray(e.detail))
         throw Error(
-          'No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"'
+          'No widgetValues received. "renderWidgetValues expects type Array<WidgetValue>'
         );
-      if(Array.isArray(e.detail)){
-        // if there is an array with values provided, render all of them
-        e.detail.forEach(v=>this.endClassWidgetGroup.renderWidgetVal(v))
-      } else{
-        this.endClassWidgetGroup.renderWidgetVal(e.detail);
-      } 
-
+        e.detail.forEach(v=> this.endClassWidgetGroup.renderWidgetVal(v))
+      // Removes the value selection part, with 1 and 2
+      this.html[0].dispatchEvent(
+        new CustomEvent("removeEditComponents", { bubbles: true })
+      );
+      this.html[0].dispatchEvent(
+        new CustomEvent("onGrpInputCompleted", { bubbles: true })
+      );
     });
 
     // when inputgot selected then we remove the where btn and EditComponents

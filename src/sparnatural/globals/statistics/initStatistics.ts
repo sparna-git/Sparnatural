@@ -34,7 +34,7 @@ export function initStatistics(aSpecProvider: any) {
     var aClass = items[key];
 
     if (
-      !specProvider.isRemoteClass(aClass) &&
+      !specProvider.isNotInstantiatedClass(aClass) &&
       !specProvider.isLiteralClass(aClass)
     ) {
       var options = {
@@ -63,7 +63,7 @@ export function initStatistics(aSpecProvider: any) {
             )) {
               var url;
               if (
-                specProvider.isRemoteClass(aRange) ||
+                specProvider.isNotInstantiatedClass(aRange) ||
                 specProvider.isLiteralClass(aRange)
               ) {
                 url = statisticsHandler.countPropertyWithoutRangeUrl(

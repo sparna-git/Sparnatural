@@ -26,7 +26,7 @@ export abstract class AbstractWidget extends HTMLComponent {
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
   protected blockStartTriple = false;
-  protected blockObjectPropTriple = false;
+  protected blockIntersectionTriple = false;
   protected blockEndTriple = false;
   protected spinner = new LoadingSpinner(this).render()
   // If the widget contains a datasourceHandler such as ListHandler
@@ -94,18 +94,23 @@ export abstract class AbstractWidget extends HTMLComponent {
 
   // fires the event to render the label of the WidgetValue on the UI
   renderWidgetVal(widgetValue: WidgetValue ) {
-    if(!this.widgetValues.find(v => v.key() == widgetValue.key())){  // don't add double values
-      this.widgetValues.push(widgetValue)
-      this.html[0].dispatchEvent(
-        new CustomEvent("renderWidgetVal", { bubbles: true, detail: widgetValue })
-      );
-    }
+    this.renderWidgetValues([widgetValue])
   }
 
+  // renders multiple labels of the chosen values to the UI
   renderWidgetValues(widgetValues:WidgetValue[]){
-    widgetValues.forEach(v=>this.widgetValues.push(v))
+    widgetValues.forEach(val=>{
+      if(!this.#isWidgetValueType(val)){
+        throw Error(`${JSON.stringify(val)} is not of type WidgetValue`)
+      }
+      if(!this.widgetValues.find(v => {
+        v.key() == val.key()
+      })){  // don't add double values
+        this.widgetValues.push(val)
+      }
+    });
     this.html[0].dispatchEvent(
-      new CustomEvent("renderWidgetVal", { bubbles: true, detail: widgetValues })
+      new CustomEvent("renderWidgetValues", { bubbles: true, detail: this.widgetValues })
     );
   }
 
@@ -116,13 +121,21 @@ export abstract class AbstractWidget extends HTMLComponent {
     if(message != null) this.spinner.renderMessage(message)
   }
 
+
   isBlockingStart() {
     return this.blockStartTriple
   }
-  isBlockingObjectProp() {
-    return this.blockObjectPropTriple
+  isBlockingIntersection() {
+    return this.blockIntersectionTriple
   }
   isBlockingEnd() {
     return this.blockEndTriple
+  }
+
+  #isWidgetValueType(val:any):val is WidgetValue{
+    const hasProps = ("value" in val && "key" in val )
+    const isFunction = (typeof val.key === "function")
+    const hasLbl = ("label" in val.value && typeof val.value.label === "string")
+    return hasProps && isFunction && hasLbl
   }
 }

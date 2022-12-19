@@ -90,14 +90,14 @@ export class EndClassWidgetGroup extends HTMLComponent {
   }
 
   // user selects a value for example a country from the listwidget
-  renderWidgetVal(selectedVal: WidgetValue) {
+  renderWidgetVal(widgetVal: WidgetValue) {
     // check if value already got selected before
     if (
-      this.widgetValues.some((val) => val.value_lbl === selectedVal.value.label)
+      this.widgetValues.some((val) => val.value_lbl === widgetVal.value.label)
     )
       return;
     // if not, then create the EndclassWidgetValue and add it to the list
-    this.#renderEndClassWidgetVal(selectedVal);
+    this.#renderEndClassWidgetVal(widgetVal);
   }
 
   #renderEndClassWidgetVal(widgetVal: WidgetValue) {
@@ -124,15 +124,6 @@ export class EndClassWidgetGroup extends HTMLComponent {
     if (this.widgetValues.length == getSettings().maxOr) {
       this.addWidgetValueBtn.html.hide();
     }
-
-    // asks to remove the value selection part, with 1 and 2
-    this.html[0].dispatchEvent(
-      new CustomEvent("removeEditComponents", { bubbles: true })
-    );
-
-    this.html[0].dispatchEvent(
-      new CustomEvent("onGrpInputCompleted", { bubbles: true })
-    );
   }
 
   // All items which got selected in the widget will be added add the back of the EndClassGroup.
