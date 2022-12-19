@@ -12,7 +12,11 @@ export function triggerOption(
 ) {
   if (grpWrapper.optionState == newOptionState)
     newOptionState = OptionTypes.NONE; //btn with already active state got clicked again. switch back to normal
-  //set css on linkWhereBottom
+    //If there is a service endpoint and newOptionState is NONE, then set it to SERVICE
+    if(hasServiceEndpoint(grpWrapper) && newOptionState === OptionTypes.NONE) {
+      newOptionState = OptionTypes.SERVICE
+    }
+    //set css on linkWhereBottom
   if (grpWrapper.whereChild)
     switchState(
       grpWrapper.linkWhereBottom.html[0],
@@ -95,4 +99,8 @@ function setArrowCss(grWrapper: GroupWrapper, newState: OptionTypes) {
     notExistsEl.classList.remove("Enabled");
     optionalEl.classList.add("Enabled");
   }
+}
+
+const hasServiceEndpoint = (grpWrapper:GroupWrapper)=> {
+ return (grpWrapper.specProvider.getServiceEndpoint(grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal.type) !== null)
 }

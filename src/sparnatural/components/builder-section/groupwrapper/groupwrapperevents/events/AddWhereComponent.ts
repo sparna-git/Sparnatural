@@ -25,14 +25,6 @@ export function addWhereComponent(
     endClassVal
   ).render();
 
-  /*
-  // Insert ul Tag so that the whereChild <li> tag gets rendered into an <ul> tag
-  const ulTag = $('<ul/>')
-  grpWrapper.html.append(ulTag)
-  grpWrapper.whereChild.htmlParent = ulTag
-  grpWrapper.whereChild.render();
-  */
-
   //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
   let inputTypeComponent =
     grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent;
