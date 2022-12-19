@@ -2,7 +2,6 @@ import { DataFactory } from "n3";
 import { OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
 import ObjectSelector from "../../components/builder-section/groupwrapper/criteriagroup/subject-object-selectors/ObjectSelector";
 import SubjectSelector from "../../components/builder-section/groupwrapper/criteriagroup/subject-object-selectors/SubjectSelector";
-import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import { getSettings } from "../../settings/defaultSettings";
 import ISpecProvider from "../../spec-providers/ISpecProvider";
 import SparqlFactory from "../SparqlFactory";
@@ -77,7 +76,7 @@ export default class  ClassBuilder {
     }
 
     #putDefaultLblInOptional(){
-        this.defaultInOptional = SparqlFactory.buildOptionalPattern([SparqlFactory.buildGroupPattern(this.defaultLblPatterns)])
+        this.defaultInOptional = SparqlFactory.buildOptionalPattern(this.defaultLblPatterns)
     }
 
     #createPtrn(){
