@@ -22,4 +22,5 @@ export const yasr = new Yasr(document.getElementById("yasr"), {
 // link yasqe and yasr
 yasqe.on("queryResponse", function(_yasqe, response, duration) {
     yasr.setResponse(response, duration);
+    sparnatural.enablePlayBtn() ;
 }); 
