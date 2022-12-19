@@ -315,7 +315,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
         for (var i in domains) {
           var aClass = domains[i];
           // always exclude RemoteClasses from first list
-          if (!this.isRemoteClass(aClass)) {
+          if (!this.isNotInstantiatedClass(aClass)) {
             items = this._pushIfNotExist(aClass, items);
           }
         }
@@ -354,7 +354,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
     return items;
   };
 
-  isRemoteClass = function (classUri: string) {
+  isNotInstantiatedClass = function (classUri: string) {
     if(!classUri) return false
 
     var classEntity = this._getResourceById(classUri);

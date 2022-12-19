@@ -115,8 +115,8 @@ export class FilteringSpecificationProvider {
     );
   }
 
-  isRemoteClass(classUri) {
-    return this.delegateSpecificationProvider.isRemoteClass(classUri);
+  isNotInstantiatedClass(classUri) {
+    return this.delegateSpecificationProvider.isNotInstantiatedClass(classUri);
   }
 
   isLiteralClass(classUri) {

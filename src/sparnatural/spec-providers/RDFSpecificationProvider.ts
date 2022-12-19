@@ -181,7 +181,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
         // keep only Sparnatural classes in the list
         if (this.isSparnaturalClass(classId) || typeClass == "BlankNode") {
           // always exclude RemoteClasses from first list
-          if (!this.isRemoteClass(classId)) {
+          if (!this.isNotInstantiatedClass(classId)) {
             if (!this._isUnionClass(classId)) {
               this._pushIfNotExist(classId, items);
             } else {
@@ -333,7 +333,7 @@ export class RDFSpecificationProvider implements ISpecProvider {
     return undefined;
   }
 
-  isRemoteClass(classUri: string) {
+  isNotInstantiatedClass(classUri: string) {
     return (
       this.store.getQuads(
         factory.namedNode(classUri),

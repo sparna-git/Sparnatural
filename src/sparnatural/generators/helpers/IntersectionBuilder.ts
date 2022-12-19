@@ -18,7 +18,7 @@ export default class IntersectionBuilder{
     }
 
     build(){
-        if(!this.#widgetComponent?.isBlockingObjectProp() && this.#startClsPtrn.length > 0 && this.#endClsPtrn.length > 0){
+        if(!this.#widgetComponent?.isBlockingIntersection() && this.#startClsPtrn.length > 0 && this.#endClsPtrn.length > 0){
             this.#intersectiontriple = SparqlFactory.buildIntersectionTriple(
               (this.#startClsPtrn[0] as BgpPattern).triples[0].subject as VariableTerm,
               this.#objectPropCls.getTypeSelected(),
