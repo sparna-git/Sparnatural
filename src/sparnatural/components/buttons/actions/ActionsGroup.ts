@@ -5,7 +5,7 @@ import ActionAnd from "./actioncomponents/ActionAnd";
 
 /**
  	Groups all the actions on a line/criteria (AND / REMOVE / WHERE)
-	even if they are visually not connected. ActionWhere for example is rendered under EndClassGroup -> EditComponent -> ActionWhere
+	even if they are visually not connected. ActionWhere for example is rendered under ObjectSelector -> EditComponent -> ActionWhere
  **/
 class ActionsGroup extends HTMLComponent {
   actions: {
@@ -36,7 +36,7 @@ class ActionsGroup extends HTMLComponent {
     this.actions.ActionAnd.html[0].dispatchEvent(
       new CustomEvent("addAndComponent", {
         bubbles: true,
-        detail: this.ParentCriteriaGroup.StartClassGroup.startClassVal,
+        detail: this.ParentCriteriaGroup.SubjectSelector.startClassVal,
       })
     );
   };

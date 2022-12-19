@@ -1,7 +1,7 @@
 import { DataFactory } from "n3";
 import { OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
-import EndClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import StartClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
+import ObjectSelector from "../../components/builder-section/groupwrapper/criteriagroup/subject-object-selectors/ObjectSelector";
+import SubjectSelector from "../../components/builder-section/groupwrapper/criteriagroup/subject-object-selectors/SubjectSelector";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import ISpecProvider from "../../spec-providers/ISpecProvider";
 import SparqlFactory from "../SparqlFactory";
@@ -9,12 +9,12 @@ import SparqlFactory from "../SparqlFactory";
 export default class  ClassBuilder {
     protected resultPtrn:Pattern[] = []
     protected specProvider:ISpecProvider
-    protected classGroup: StartClassGroup | EndClassGroup
+    protected classGroup: SubjectSelector | ObjectSelector
     protected classTriple:Triple
     protected defaultLblTriple:Triple
     protected defaultInOptional:OptionalPattern
     protected widgetIsBlocking:boolean
-    constructor(classGroup:StartClassGroup | EndClassGroup,specProvider:ISpecProvider,widgetIsBlocking:boolean){
+    constructor(classGroup:SubjectSelector | ObjectSelector,specProvider:ISpecProvider,widgetIsBlocking:boolean){
         this.classGroup = classGroup
         this.specProvider = specProvider
         this.widgetIsBlocking = widgetIsBlocking

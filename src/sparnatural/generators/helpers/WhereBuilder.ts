@@ -5,8 +5,9 @@ import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWra
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import ISpecProvider from "../../spec-providers/ISpecProvider";
 import ClassBuilder from "./ClassBuilder";
-import IntersectionBuilder from "./IntersectionBuilder";
+
 import SparqlFactory from "../SparqlFactory";
+import PredicateBuilder from "./PredicateBuilder";
 
 /*
     This Class builds the WHERE clause of the SPARQL query.
@@ -24,7 +25,7 @@ export default class WhereBuilder{
     #resultPtrns: Pattern[] = []    
     #startClassPtrn:Pattern[] = []
     #endClassPtrn:Pattern[] = []
-    #intersectionPtrn:BgpPattern 
+    #predicatePtrn:BgpPattern 
     #whereChildPtrns: Pattern[] = []
     #andChildPtrns: Pattern[] = []
     #rdfPtrns: Pattern[] = []
@@ -38,7 +39,7 @@ export default class WhereBuilder{
         this.#specProvider = specProvider
         this.#isChild = isChild
         this.#isInOption = isInOption
-        this.#widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
+        this.#widgetComponent = this.#grpWrapper.CriteriaGroup.ObjectSelector?.editComponents?.widgetWrapper?.widgetComponent
     }
 
     build() {
@@ -46,7 +47,7 @@ export default class WhereBuilder{
         this.#buildRdfPtrn()
         this.#buildStartClassPtrn()
         this.#buildEndClassPtrn()
-        this.#buildIntersectionPtrn()
+        this.#buildPredicatePtrn()
         this.#buildGrpWrapperPtrn()
     }
 
@@ -81,7 +82,7 @@ export default class WhereBuilder{
     }
 
     #buildEndClassPtrn(){
-        const endClsGrp = this.#grpWrapper.CriteriaGroup.EndClassGroup
+        const endClsGrp = this.#grpWrapper.CriteriaGroup.ObjectSelector
         const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingEnd())
         endClsBuilder.build()
         this.#endClassPtrn = endClsBuilder.getPattern()
@@ -91,7 +92,7 @@ export default class WhereBuilder{
     }
 
     #buildStartClassPtrn() {
-        const startClsGrp = this.#grpWrapper.CriteriaGroup.StartClassGroup
+        const startClsGrp = this.#grpWrapper.CriteriaGroup.SubjectSelector
         const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingStart())
         startClsBuilder.build()
         this.#startClassPtrn = startClsBuilder.getPattern()
@@ -100,11 +101,11 @@ export default class WhereBuilder{
         }
     }
 
-    #buildIntersectionPtrn(){
+    #buildPredicatePtrn(){
         const objectPropCls = this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup
-        const intersectionBuilder = new IntersectionBuilder(this.#startClassPtrn,this.#endClassPtrn,this.#widgetComponent,objectPropCls)
-        intersectionBuilder.build()
-        this.#intersectionPtrn = intersectionBuilder.getPattern()
+        const predicateBuilder = new PredicateBuilder(this.#startClassPtrn,this.#endClassPtrn,this.#widgetComponent,objectPropCls)
+        predicateBuilder.build()
+        this.#predicatePtrn = predicateBuilder.getPattern()
     }
 
     #buildGrpWrapperPtrn(){
@@ -112,15 +113,15 @@ export default class WhereBuilder{
         const hasStartClass = (!this.#isChild && this.#startClassPtrn.length > 0)
         // endClassPtrn is not shown if it is a literal or InstantiatedClass
         const hasEndClass = (
-            !this.#specProvider.isLiteralClass(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected())
+            !this.#specProvider.isLiteralClass(this.#grpWrapper.CriteriaGroup.ObjectSelector.getTypeSelected())
             &&
-            !this.#specProvider.isNotInstantiatedClass(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected())
+            !this.#specProvider.isNotInstantiatedClass(this.#grpWrapper.CriteriaGroup.ObjectSelector.getTypeSelected())
             &&
             this.#endClassPtrn.length > 0
         );
         
         let exceptStartPtrn:Pattern[] = [] // except #startClassPtrn 
-        if(this.#intersectionPtrn) exceptStartPtrn.push(this.#intersectionPtrn)
+        if(this.#predicatePtrn) exceptStartPtrn.push(this.#predicatePtrn)
         if(hasEndClass) exceptStartPtrn.push(...this.#endClassPtrn)
         exceptStartPtrn.push(...this.#rdfPtrns)
         exceptStartPtrn.push(...this.#whereChildPtrns)

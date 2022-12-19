@@ -3,11 +3,11 @@ import ObjectPropertyGroup from "../../components/builder-section/groupwrapper/c
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import SparqlFactory from "../SparqlFactory";
 
-export default class IntersectionBuilder{
+export default class PredicateBuilder{
     #startClsPtrn:Pattern[]
     #endClsPtrn:Pattern[]
     #widgetComponent:AbstractWidget
-    #intersectiontriple:Triple
+    #predicateTriple:Triple
     #objectPropCls:ObjectPropertyGroup
     resultPtrn:BgpPattern
     constructor(startClsPtrn:Pattern[],endClsPtrn:Pattern[],widgetComponent:AbstractWidget,objectPropCls:ObjectPropertyGroup){
@@ -18,8 +18,8 @@ export default class IntersectionBuilder{
     }
 
     build(){
-        if(!this.#widgetComponent?.isBlockingIntersection() && this.#startClsPtrn.length > 0 && this.#endClsPtrn.length > 0){
-            this.#intersectiontriple = SparqlFactory.buildIntersectionTriple(
+        if(!this.#widgetComponent?.isBlockingPredicate() && this.#startClsPtrn.length > 0 && this.#endClsPtrn.length > 0){
+            this.#predicateTriple = SparqlFactory.buildPredicateTriple(
               (this.#startClsPtrn[0] as BgpPattern).triples[0].subject as VariableTerm,
               this.#objectPropCls.getTypeSelected(),
               (this.#endClsPtrn[0] as BgpPattern).triples[0].subject as VariableTerm
@@ -30,7 +30,7 @@ export default class IntersectionBuilder{
     }
 
     #createPattern(){
-        this.resultPtrn = SparqlFactory.buildBgpPattern([this.#intersectiontriple])
+        this.resultPtrn = SparqlFactory.buildBgpPattern([this.#predicateTriple])
     }
 
     getPattern(){

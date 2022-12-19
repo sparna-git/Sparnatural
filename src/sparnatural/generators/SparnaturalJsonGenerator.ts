@@ -45,11 +45,11 @@ class SparnaturalJsonGenerator {
     let CrtGrp = grpWrapper.CriteriaGroup;
     let branch: Branch = {
       line: {
-        s: CrtGrp.StartClassGroup.getVarName(),
+        s: CrtGrp.SubjectSelector.getVarName(),
         p: CrtGrp.ObjectPropertyGroup.getTypeSelected(),
-        o: CrtGrp.EndClassGroup.getVarName(),
-        sType: CrtGrp.StartClassGroup.getTypeSelected(),
-        oType: CrtGrp.EndClassGroup.getTypeSelected(),
+        o: CrtGrp.ObjectSelector.getVarName(),
+        sType: CrtGrp.SubjectSelector.getTypeSelected(),
+        oType: CrtGrp.ObjectSelector.getTypeSelected(),
         // extract only the value part, not the key
         values: CrtGrp.endClassWidgetGroup.getWidgetValues().filter(v => !(v instanceof SelectAllValue)).map(v => {return v.value;}),
       },

@@ -9,7 +9,7 @@ import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
 /**
  * Selection of the start class in a criteria/line
  **/
-class StartClassGroup extends HTMLComponent {
+class SubjectSelector extends HTMLComponent {
   startClassVal: SelectedVal;
   inputTypeComponent: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
@@ -27,7 +27,7 @@ class StartClassGroup extends HTMLComponent {
     startClassVal?: SelectedVal,
     renderEyeBtn?: Boolean
   ) {
-    super("StartClassGroup", ParentCriteriaGroup, null);
+    super("SubjectSelector", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.inputTypeComponent = new ClassTypeId(this, this.specProvider, startClassVal);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
@@ -104,7 +104,7 @@ class StartClassGroup extends HTMLComponent {
 
   #valueWasSelected() {
     this.html[0].dispatchEvent(
-      new CustomEvent("StartClassGroupSelected", {
+      new CustomEvent("SubjectSelectorSelected", {
         bubbles: true,
         detail: this.startClassVal,
       })
@@ -135,4 +135,4 @@ class StartClassGroup extends HTMLComponent {
   }
 
 }
-export default StartClassGroup;
+export default SubjectSelector;

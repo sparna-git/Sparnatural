@@ -3,10 +3,10 @@ import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import HTMLComponent from "../../../../HtmlComponent";
-import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import { WidgetValue } from "../../../../widgets/AbstractWidget";
 import WidgetWrapper from "./WidgetWrapper";
 import ActionWhere from "../../../../buttons/actions/actioncomponents/ActionWhere";
+import ObjectSelector from "../subject-object-selectors/ObjectSelector";
 
 export class SelectAllValue implements WidgetValue {
   static key = "SelectAllValue";
@@ -42,7 +42,7 @@ class EditComponents extends HTMLComponent {
   specProvider: ISpecProvider;
   RENDER_WHERE = RENDER_WHERE_ENUM;
   constructor(
-    parentComponent: EndClassGroup,
+    parentComponent: ObjectSelector,
     startCassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal,

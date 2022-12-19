@@ -4,10 +4,10 @@ import GroupWrapper from "../../GroupWrapper";
 import LinkWhereBottom from "../../LinkWhereBottom";
 
 let removeEditComponents = (grpWrapper: GroupWrapper) => {
-  grpWrapper.CriteriaGroup.EndClassGroup.html[0].dispatchEvent(
+  grpWrapper.CriteriaGroup.ObjectSelector.html[0].dispatchEvent(
     new CustomEvent("removeEditComponents", {bubbles:true})
   );
-  grpWrapper.CriteriaGroup.EndClassGroup.editComponents = null;
+  grpWrapper.CriteriaGroup.ObjectSelector.editComponents = null;
 };
 
 //give it additional class childsList
@@ -35,7 +35,7 @@ export function addWhereComponent(
 
   //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
   let inputTypeComponent =
-    grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputTypeComponent;
+    grpWrapper.whereChild.CriteriaGroup.SubjectSelector.inputTypeComponent;
   inputTypeComponent.oldWidget.val(endClassVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   inputTypeComponent.html[0].children[1].classList.add("disabled");

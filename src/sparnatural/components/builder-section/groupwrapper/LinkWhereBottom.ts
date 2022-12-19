@@ -1,13 +1,13 @@
 import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import HTMLComponent from "../../HtmlComponent";
-import EndClassGroup from "./criteriagroup/startendclassgroup/EndClassGroup";
+import ObjectSelector from "./criteriagroup/subject-object-selectors/ObjectSelector";
 import GroupWrapper from "./GroupWrapper";
 
 /*
     This Component consists of three lines.
-    The first vertical goes from the EndClassGroup to the end of the CriteriaGroup
-    Then the Horizontal connects the first vertical to the left. Till the height of the WhereStartClassGroup
-    The last vertical connects the Horizontal line with the new whereChild.StartClassGroup
+    The first vertical goes from the ObjectSelector to the end of the CriteriaGroup
+    Then the Horizontal connects the first vertical to the left. Till the height of the WhereSubjectSelector
+    The last vertical connects the Horizontal line with the new whereChild.SubjectSelector
     Some helpful notes:
      - window.scrollX | window.scrollY is used to correct the positioning of the line if the window is scrollable.
      - ax & ay are the position of the upper Element
@@ -32,19 +32,19 @@ class LinkWhereBottom extends HTMLComponent {
     this.html.append(this.horizontal);
     this.html.append(this.lowerVertical);
     this.#drawWhereConnection(
-      this.ParentGroupWrapper.CriteriaGroup.EndClassGroup,
+      this.ParentGroupWrapper.CriteriaGroup.ObjectSelector,
       this.ParentGroupWrapper.whereChild
     );
     return this;
   }
 
-  #drawWhereConnection(EndClassGroup: EndClassGroup, whereChild: GroupWrapper) {
-    const xyUpper = this.#drawUpperVertical(EndClassGroup, whereChild);
+  #drawWhereConnection(ObjectSelector: ObjectSelector, whereChild: GroupWrapper) {
+    const xyUpper = this.#drawUpperVertical(ObjectSelector, whereChild);
     const xyLower = this.#drawLowerVertical(whereChild);
     this.#drawHorizontal(xyLower, xyUpper);
   }
   // line from the middle of the endclassgroup till the end of GroupWrapper
-  #drawUpperVertical(endClassGroup: EndClassGroup, whereChild: GroupWrapper) {
+  #drawUpperVertical(endClassGroup: ObjectSelector, whereChild: GroupWrapper) {
     const endClassClientRect = endClassGroup.html[0].getBoundingClientRect();
     const whereChildRect = whereChild.html[0].getBoundingClientRect();
     const ax = (endClassClientRect.left + (endClassClientRect.right - endClassClientRect.left) / 2) + window.scrollX;
@@ -73,7 +73,7 @@ class LinkWhereBottom extends HTMLComponent {
 
   #drawLowerVertical(whereChild: GroupWrapper) {
     const startClassClientRect =
-      whereChild.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
+      whereChild.CriteriaGroup.SubjectSelector.html[0].getBoundingClientRect();
     const bx =
       (startClassClientRect.left + (startClassClientRect.right - startClassClientRect.left) / 4) + window.scrollX;
     // -2 so that it looks connected to white group

@@ -107,7 +107,7 @@ export class TreeWidget extends AbstractWidget {
       .append(this.displayLayer);
 
     //render this element
-    var startClassGroup_value = this.startClassVal.type;
+    var SubjectSelector_value = this.startClassVal.type;
     var endClassGroup_value = this.endClassVal.type;
     var ObjectPropertyGroup_value = this.objectPropVal.type;
 
@@ -126,12 +126,12 @@ export class TreeWidget extends AbstractWidget {
             url:
               node.id === "#"
                 ? loaderHandler.treeRootUrl(
-                    startClassGroup_value,
+                    SubjectSelector_value,
                     ObjectPropertyGroup_value,
                     endClassGroup_value
                   )
                 : loaderHandler.treeChildrenUrl(
-                    startClassGroup_value,
+                    SubjectSelector_value,
                     ObjectPropertyGroup_value,
                     endClassGroup_value,
                     node.id
@@ -148,7 +148,7 @@ export class TreeWidget extends AbstractWidget {
           request.done(function (data) {
             var result = [];
             var items = loaderHandler.nodeListLocation(
-              startClassGroup_value,
+              SubjectSelector_value,
               ObjectPropertyGroup_value,
               endClassGroup_value,
               data

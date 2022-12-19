@@ -5,11 +5,11 @@
 //OptionsGroup
 @use './citeriagroup/optionsgroup/optionsgroup.scss';
 //ObjectPropertyGroup
-@use './citeriagroup/objectpropertygroup/objectpropertygroup.scss';
-@use './citeriagroup/objectpropertygroup/objectpropertytypeid.scss';
-//StartEndClassGroup
-@use './citeriagroup/startendclassgroup/startendclassgroup.scss';
-@use './citeriagroup/startendclassgroup/classtypeid.scss';
+@use './citeriagroup/predicateselector/predicateselector.scss';
+@use './citeriagroup/predicateselector/predicatetypeid.scss';
+//StartObjectSelector
+@use './citeriagroup/subject-object-selectors/subjectobjectselectors.scss';
+@use './citeriagroup/subject-object-selectors/subjectobjecttypeid.scss';
 //Actions
 @use './citeriagroup/actions/actionand.scss';
 @use './citeriagroup/actions/actionwhere.scss';

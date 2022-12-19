@@ -7,7 +7,7 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
   if (grpWrapper.whereChild)
     grpWrapper.whereChild.html[0].dispatchEvent(new CustomEvent("onRemoveGrp"));
 
-  let startVal = grpWrapper.CriteriaGroup.StartClassGroup.startClassVal;
+  let startVal = grpWrapper.CriteriaGroup.SubjectSelector.startClassVal;
   grpWrapper.CriteriaGroup.html.empty();
   grpWrapper.CriteriaGroup.html.remove();
   grpWrapper.CriteriaGroup = new CriteriaGroup(
@@ -19,7 +19,7 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
 
   // set StartClassVal
   let inputTypeComponent =
-    grpWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent;
+    grpWrapper.CriteriaGroup.SubjectSelector.inputTypeComponent;
   inputTypeComponent.oldWidget.val(startVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   inputTypeComponent.html[0].children[1].classList.add("disabled");

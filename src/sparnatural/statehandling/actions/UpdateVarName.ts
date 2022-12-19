@@ -15,8 +15,8 @@ export default function updateVarName(
     (grpWrapper: GroupWrapper) => {
       let sparqlVar = `?${oldName}`;
       let newSparqlVar = `?${newName}`;
-      let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
-      let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
+      let startGrp = grpWrapper.CriteriaGroup.SubjectSelector;
+      let endGrp = grpWrapper.CriteriaGroup.ObjectSelector;
       if (startGrp.getVarName() === sparqlVar) startGrp.setVarName(newSparqlVar);
       if (endGrp.getVarName() === sparqlVar) endGrp.setVarName(newSparqlVar);
     }

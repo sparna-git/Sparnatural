@@ -16,7 +16,7 @@ import { SelectAllValue } from "../edit-components/EditComponents";
 
 /*
   This class is responsible for rendering the WidgetValues, selected by a widget.
-  This values are added in a 'list' after the EndClassGroup
+  This values are added in a 'list' after the ObjectSelector
 */
 export class EndClassWidgetGroup extends HTMLComponent {
   widgetValues: Array<EndClassWidgetValue> = [];
@@ -108,7 +108,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
     // undefined for NON_SELECTABLE_PROPERTY
-    const widgetComp:AbstractWidget | undefined = (this.ParentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent()
+    const widgetComp:AbstractWidget | undefined = (this.ParentComponent as CriteriaGroup).ObjectSelector.getWidgetComponent()
     if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE && !(widgetVal instanceof SelectAllValue) ) {
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
@@ -126,7 +126,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     }
   }
 
-  // All items which got selected in the widget will be added add the back of the EndClassGroup.
+  // All items which got selected in the widget will be added add the back of the ObjectSelector.
   #renderNewSelectedValue(endClassWidgetVal: EndClassWidgetValue) {
     endClassWidgetVal.render();
   }

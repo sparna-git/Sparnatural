@@ -2,14 +2,14 @@
 @use '../../../base';
 @use '../../../mixins';
 
-.StartClassGroup,
-.EndClassGroup {
+.SubjectSelector,
+.ObjectSelector {
     position: relative;
     margin-right: 9px;
 }
 
 // When optional arrow is rendered move it a bit to the right
-.StartClassGroup, .ClassTypeId{
+.SubjectSelector, .ClassTypeId{
     &.Highlited{
         .componentFrontArrow {
             margin-right:5px;
@@ -18,7 +18,7 @@
 }   
 
 
-.EndClassGroup {
+.ObjectSelector {
     position: relative;
     min-width: auto;
     display: flex;

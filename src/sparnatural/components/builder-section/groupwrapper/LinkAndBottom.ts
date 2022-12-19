@@ -29,9 +29,9 @@ class LinkAndBottom extends HTMLComponent {
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect/element-box-diagram.png
   #drawLinkAndBottom(grpWrapper: GroupWrapper) {
     const posUpperStart =
-      grpWrapper.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
+      grpWrapper.CriteriaGroup.SubjectSelector.html[0].getBoundingClientRect();
     const posLowerStart =
-      grpWrapper.andSibling.CriteriaGroup.StartClassGroup.html[0].getBoundingClientRect();
+      grpWrapper.andSibling.CriteriaGroup.SubjectSelector.html[0].getBoundingClientRect();
     // from the upper and from the upperelement move 25% into the middle
     const ax = (posUpperStart.left + (posUpperStart.right - posUpperStart.left) / 4) + window.scrollX;
     let bx = (posLowerStart.left + (posLowerStart.right - posLowerStart.left) / 4) + window.scrollX;

@@ -1,6 +1,6 @@
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
-import StartClassGroup from "./StartClassGroup";
-import EndClassGroup from "./EndClassGroup";
+import SubjectSelector from "./SubjectSelector";
+import ObjectSelector from "./ObjectSelector";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import UiuxConfig from "../../../../IconsConstants";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
@@ -13,7 +13,7 @@ import HTMLComponent from "../../../../HtmlComponent";
  * Refactored to extract this from InputTypeComponent.
  **/
 class ClassTypeId extends HTMLComponent {
-  ParentComponent: EndClassGroup | StartClassGroup;
+  ParentComponent: ObjectSelector | SubjectSelector;
   id: string;
   frontArrow: ArrowComponent = new ArrowComponent(
     this,
@@ -52,21 +52,21 @@ class ClassTypeId extends HTMLComponent {
     );
     super.render();
     // no back arrow on start class
-    if (!isStartClassGroup(this.ParentComponent)) {
+    if (!isSubjectSelector(this.ParentComponent)) {
       this.backArrow.render();
     }
 
-    if (isStartClassGroup(this.ParentComponent)) {
+    if (isSubjectSelector(this.ParentComponent)) {
       if(!this.startClassVal?.type) {
-        // If this Component is a child of the StartClassGroup component in the first row with no value selected
-        this.widgetHtml = this.selectBuilder.buildSelect_FirstStartClassGroup();
+        // If this Component is a child of the SubjectSelector component in the first row with no value selected
+        this.widgetHtml = this.selectBuilder.buildSelect_FirstSubjectSelector();
       } else {
         // If this is under a WHERE, we want only the selected value
-        this.widgetHtml = this.selectBuilder.buildSelect_StartClassGroupInWhere(this.startClassVal.type);
+        this.widgetHtml = this.selectBuilder.buildSelect_SubjectSelectorInWhere(this.startClassVal.type);
       }
     } else {
-      // If this Component is a child of the EndClassGroup component, we want the range of possible end values
-      this.widgetHtml = this.selectBuilder.buildSelect_EndClassGroup(
+      // If this Component is a child of the ObjectSelector component, we want the range of possible end values
+      this.widgetHtml = this.selectBuilder.buildSelect_ObjectSelector(
         this.startClassVal.type
       );
     }
@@ -83,7 +83,7 @@ class ClassTypeId extends HTMLComponent {
     return this;
   }
 
-  // is called by EndClassGroup
+  // is called by ObjectSelector
   renderUnselectBtn() {
     let removeEndClassEvent = () => {
       this.html[0].dispatchEvent(
@@ -115,11 +115,11 @@ class ClassTypeId extends HTMLComponent {
         ? this.html.addClass("VariableSelected")
         : this.html.removeClass("VariableSelected");
         
-    if (isEndClassGroup(this.ParentComponent)) 
+    if (isObjectSelector(this.ParentComponent)) 
       this.#onSelectViewVar(this.ParentComponent.endClassVal,selected)
 
      // The first StartClass gets an eye Btn to de/select
-    if(isStartClassGroup(this.ParentComponent) && this.ParentComponent.renderEyeBtn) 
+    if(isSubjectSelector(this.ParentComponent) && this.ParentComponent.renderEyeBtn) 
       this.#onSelectViewVar(this.ParentComponent.startClassVal,selected)
     
   };
@@ -176,21 +176,21 @@ class ClassSelectBuilder extends HTMLComponent {
     return this;
   }
 
-  buildSelect_FirstStartClassGroup() {
+  buildSelect_FirstSubjectSelector() {
     return this.buildClassSelectFromItems(
       this.specProvider.getClassesInDomainOfAnyProperty(),
       null
     );
   }
 
-  buildSelect_EndClassGroup(domainId: string) {
+  buildSelect_ObjectSelector(domainId: string) {
     return this.buildClassSelectFromItems(
       this.specProvider.getConnectedClasses(domainId),
       null
     );
   }
 
-  buildSelect_StartClassGroupInWhere(selectedClass:string) {
+  buildSelect_SubjectSelectorInWhere(selectedClass:string) {
     console.log(selectedClass);
     return this.buildClassSelectFromItems(
       [selectedClass],
@@ -231,21 +231,21 @@ class ClassSelectBuilder extends HTMLComponent {
 }
 
 
-function isStartClassGroup(
+function isSubjectSelector(
   ParentComponent: HTMLComponent
-): ParentComponent is StartClassGroup {
+): ParentComponent is SubjectSelector {
   return (
-    (ParentComponent as unknown as StartClassGroup).baseCssClass ===
-    "StartClassGroup"
+    (ParentComponent as unknown as SubjectSelector).baseCssClass ===
+    "SubjectSelector"
   );
 } // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards
 
 
-function isEndClassGroup(
+function isObjectSelector(
   ParentComponent: HTMLComponent
-): ParentComponent is EndClassGroup {
+): ParentComponent is ObjectSelector {
   return (
-    (ParentComponent as unknown as EndClassGroup).baseCssClass ===
-    "EndClassGroup"
+    (ParentComponent as unknown as ObjectSelector).baseCssClass ===
+    "ObjectSelector"
   );
 } // https://www.typescriptlang.org/docs/handbook/advanced-types.html#user-defined-type-guards

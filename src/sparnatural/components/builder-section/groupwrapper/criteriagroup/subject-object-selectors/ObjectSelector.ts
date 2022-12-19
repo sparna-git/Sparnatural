@@ -1,7 +1,7 @@
 import ClassTypeId from "./ClassTypeId";
 import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import tippy from "tippy.js";
-import { getSettings, TOOLTIP_CONFIG } from "../../../../../../sparnatural/settings/defaultSettings";
+import { getSettings, TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
@@ -11,7 +11,7 @@ import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 /**
  * The "range" select, encapsulating a ClassTypeId, with a niceselect
  **/
-class EndClassGroup extends HTMLComponent {
+class ObjectSelector extends HTMLComponent {
   variableSelector: any;
   endClassVal: SelectedVal = {
     type: null,
@@ -31,7 +31,7 @@ class EndClassGroup extends HTMLComponent {
   objectPropVal: SelectedVal;
 
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
-    super("EndClassGroup", ParentCriteriaGroup, null);
+    super("ObjectSelector", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
     // this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
@@ -96,7 +96,7 @@ class EndClassGroup extends HTMLComponent {
   }
 
   // triggered when the subject/domain is selected
-  onStartClassGroupSelected(startClassVal: SelectedVal) {
+  onSubjectSelectorSelected(startClassVal: SelectedVal) {
     this.startClassVal = startClassVal;
 
     // render the inputComponent for a user to select an Object
@@ -131,7 +131,7 @@ class EndClassGroup extends HTMLComponent {
     this.#renderUnselectBtn();
     // trigger the event that will call the ObjectPropertyGroup
     this.html[0].dispatchEvent(
-      new CustomEvent("EndClassGroupSelected", {
+      new CustomEvent("ObjectSelectorSelected", {
         bubbles: true,
         detail: this.endClassVal,
       })
@@ -142,9 +142,9 @@ class EndClassGroup extends HTMLComponent {
       $(this.html).find(".ClassTypeId").attr("data-tippy-content", desc);
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
       tippySettings.placement = "top-start";
-      tippy(".EndClassGroup .ClassTypeId[data-tippy-content]", tippySettings);
+      tippy(".ObjectSelector .ClassTypeId[data-tippy-content]", tippySettings);
     } else {
-      $(this.ParentCriteriaGroup.EndClassGroup.html).removeAttr(
+      $(this.ParentCriteriaGroup.ObjectSelector.html).removeAttr(
         "data-tippy-content"
       );
     }
@@ -176,7 +176,7 @@ class EndClassGroup extends HTMLComponent {
   }
 
   /**
-   * @returns the widgetComponent inside this EndClassGroup, to examine its characteristics
+   * @returns the widgetComponent inside this ObjectSelector, to examine its characteristics
    * (e.g. determine if single or multiple values)
    */
   getWidgetComponent():AbstractWidget {
@@ -184,4 +184,4 @@ class EndClassGroup extends HTMLComponent {
   }
 
 }
-export default EndClassGroup;
+export default ObjectSelector;

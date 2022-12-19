@@ -39,9 +39,9 @@ class ObjectPropertyGroup extends HTMLComponent {
   /*
 		renders the temporarly object property
 	*/
-  onStartClassGroupSelected(startClassVal: SelectedVal) {
+  onSubjectSelectorSelected(startClassVal: SelectedVal) {
     this.startClassVal = startClassVal;
-    //this will set the temporary label since there hasn't been a Value chosen for EndClassGroup
+    //this will set the temporary label since there hasn't been a Value chosen for ObjectSelector
     this.inputTypeComponent = new ObjectPropertyTypeId(
       this,
       this.specProvider,
@@ -113,7 +113,7 @@ class ObjectPropertyGroup extends HTMLComponent {
 		This method is triggered when an Object is selected.
 		For example: Museum isRelatedTo Country. As soon as Country is chosen this method gets called
 	*/
-  onEndClassGroupSelected(endClassVal: SelectedVal) {
+  onObjectSelectorSelected(endClassVal: SelectedVal) {
     // this will update the temporarly label
     this.inputTypeComponent.setEndClassVal(endClassVal);
     this.inputTypeComponent.render();

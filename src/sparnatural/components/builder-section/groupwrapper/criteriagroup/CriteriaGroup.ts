@@ -5,22 +5,23 @@ import { getSettings } from "../../../../../sparnatural/settings/defaultSettings
 import ISpecProvider from "../../../../spec-providers/ISpecProvider";
 import UnselectBtn from "../../../buttons/UnselectBtn";
 import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
-import EndClassGroup from "./startendclassgroup/EndClassGroup";
-import StartClassGroup from "./startendclassgroup/StartClassGroup";
+
+import SubjectSelector from "./subject-object-selectors/SubjectSelector";
 import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup, OptionTypes } from "./optionsgroup/OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
 import { SelectedVal } from "../../../../generators/ISparJson";
-import { EndClassWidgetGroup, EndClassWidgetValue } from "./startendclassgroup/EndClassWidgetGroup";
+import { EndClassWidgetGroup, EndClassWidgetValue } from "./subject-object-selectors/EndClassWidgetGroup";
 import ActionsGroup from "../../../buttons/actions/ActionsGroup";
 import { triggerOption } from "../groupwrapperevents/events/TriggerOption";
+import ObjectSelector from "./subject-object-selectors/ObjectSelector";
 
 class CriteriaGroup extends HTMLComponent {
   settings: any;
-  StartClassGroup: StartClassGroup;
+  SubjectSelector: SubjectSelector;
   OptionsGroup: OptionsGroup; // optional or notexists
   ObjectPropertyGroup: ObjectPropertyGroup;
-  EndClassGroup: EndClassGroup;
+  ObjectSelector: ObjectSelector;
   endClassWidgetGroup: EndClassWidgetGroup;
   ActionsGroup: ActionsGroup;
   specProvider: ISpecProvider;
@@ -37,7 +38,7 @@ class CriteriaGroup extends HTMLComponent {
     super("CriteriaGroup", ParentComponent, null);
     this.specProvider = specProvider;
     this.ParentGroupWrapper = ParentComponent;
-    this.StartClassGroup = new StartClassGroup(
+    this.SubjectSelector = new SubjectSelector(
       this,
       this.specProvider,
       startClassVal,
@@ -60,14 +61,14 @@ class CriteriaGroup extends HTMLComponent {
 
   #renderChildComponents() {
     // create all the elements of the criteria
-    this.StartClassGroup.render();
+    this.SubjectSelector.render();
     this.OptionsGroup = new OptionsGroup(this, this.specProvider).render();
     this.ObjectPropertyGroup = new ObjectPropertyGroup(
       this,
       this.specProvider,
       getSettings().langSearch.ObjectPropertyTemporaryLabel
     ).render();
-    this.EndClassGroup = new EndClassGroup(this, this.specProvider).render();
+    this.ObjectSelector = new ObjectSelector(this, this.specProvider).render();
     this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
     this.ActionsGroup = new ActionsGroup(this, this.specProvider).render();
 
@@ -77,24 +78,24 @@ class CriteriaGroup extends HTMLComponent {
   #assembleComponents = () => {
     // 1. User selects StartClassVal
     this.html[0].addEventListener(
-      "StartClassGroupSelected",
+      "SubjectSelectorSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
         if (!this.#isSelectedVal(e.detail))
           throw Error(
-            "StartClassGroupSelected expects object of type SelectedVal"
+            "SubjectSelectorSelected expects object of type SelectedVal"
           );
-        this.ObjectPropertyGroup.onStartClassGroupSelected(e.detail);
-        this.EndClassGroup.onStartClassGroupSelected(e.detail);
+        this.ObjectPropertyGroup.onSubjectSelectorSelected(e.detail);
+        this.ObjectSelector.onSubjectSelectorSelected(e.detail);
       }
     );
 
     // 2. User Selects EndClassVal
-    this.html[0].addEventListener("EndClassGroupSelected", (e: CustomEvent) => {
+    this.html[0].addEventListener("ObjectSelectorSelected", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       if (!this.#isSelectedVal(e.detail))
-        throw Error("EndClassGroupSelected expects object of type SelectedVal");
-      this.ObjectPropertyGroup.onEndClassGroupSelected(e.detail);
+        throw Error("ObjectSelectorSelected expects object of type SelectedVal");
+      this.ObjectPropertyGroup.onObjectSelectorSelected(e.detail);
     });
 
     // 3. Automatically selected or User selects ObjectPropertyGrpVal
@@ -110,7 +111,7 @@ class CriteriaGroup extends HTMLComponent {
         
           // if there is already a where connection or widget values selected, don't change anything
         if (!(this.ParentGroupWrapper.whereChild) && this.endClassWidgetGroup?.widgetValues?.length === 0){
-          this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
+          this.ObjectSelector.onObjectPropertyGroupSelected(e.detail);
           this.endClassWidgetGroup.render();
         }
         
@@ -151,7 +152,7 @@ class CriteriaGroup extends HTMLComponent {
     // when inputgot selected then we remove the where btn and EditComponents
     this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
       e.stopImmediatePropagation();
-      this.EndClassGroup.editComponents?.html?.empty()?.remove();
+      this.ObjectSelector.editComponents?.html?.empty()?.remove();
     });
 
     //gets called when a user removes a previously selected widgetValue
@@ -163,7 +164,7 @@ class CriteriaGroup extends HTMLComponent {
         );
       e.stopImmediatePropagation();
       let removed = e.detail.unselectedVal as EndClassWidgetValue;
-      this.EndClassGroup.editComponents.widgetWrapper.widgetComponent?.onRemoveValue(
+      this.ObjectSelector.editComponents.widgetWrapper.widgetComponent?.onRemoveValue(
         removed.widgetVal
       );
       this.html[0].dispatchEvent(
@@ -180,13 +181,13 @@ class CriteriaGroup extends HTMLComponent {
     this.html[0].dispatchEvent(new CustomEvent("removeEditComponents"));
     if (e.detail.selectedValues.length === 0) {
       // Render WidgetsWrapper and ActionWhere
-      this.EndClassGroup.editComponents.render();
+      this.ObjectSelector.editComponents.render();
       this.html[0].dispatchEvent(
         new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
       );
     } else {
       //we only need widgetswrapper
-      this.EndClassGroup.editComponents.renderWidgetsWrapper();
+      this.ObjectSelector.editComponents.renderWidgetsWrapper();
     }
   });
   };

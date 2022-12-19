@@ -4,8 +4,8 @@ import ActionStore from "../ActionStore";
 export default function toggleVarNames(actionsStore: ActionStore,showVarNames:boolean) {
   actionsStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
-      let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
-      let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
+      let startGrp = grpWrapper.CriteriaGroup.SubjectSelector;
+      let endGrp = grpWrapper.CriteriaGroup.ObjectSelector;
       if(showVarNames){
         startGrp.inputTypeComponent.showVarName()
         endGrp.inputTypeComponent.showVarName()

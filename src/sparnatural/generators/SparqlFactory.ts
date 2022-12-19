@@ -237,7 +237,7 @@ export default class SparqlFactory {
       
   // It is the intersection between the startclass and endclass chosen.
   // example: ?person dpedia:birthplace ?country
-  static buildIntersectionTriple(
+  static buildPredicateTriple(
     subj: Variable,
     pred: string,
     obj: Variable

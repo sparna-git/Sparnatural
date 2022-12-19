@@ -97,7 +97,7 @@ class SparnaturalComponent extends HTMLComponent {
   }
 
   isEmpty() {
-    return (this.BgWrapper.componentsList.rootGroupWrapper.CriteriaGroup.StartClassGroup.startClassVal?.type == null)
+    return (this.BgWrapper.componentsList.rootGroupWrapper.CriteriaGroup.SubjectSelector.startClassVal?.type == null)
   }
 }
 export default SparnaturalComponent;

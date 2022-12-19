@@ -2,16 +2,16 @@ import GroupWrapper from "../../GroupWrapper";
 
 //Input is incompleted
 export function inCompleteGrpInput(grpWrapper: GroupWrapper) {
-  grpWrapper.CriteriaGroup.EndClassGroup.renderSelectViewVar();
-  if(grpWrapper.CriteriaGroup.StartClassGroup.renderEyeBtn){
+  grpWrapper.CriteriaGroup.ObjectSelector.renderSelectViewVar();
+  if(grpWrapper.CriteriaGroup.SubjectSelector.renderEyeBtn){
     // is only highlited when "eye" btn is rendered
-    grpWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent.html[0].classList.remove(
+    grpWrapper.CriteriaGroup.SubjectSelector.inputTypeComponent.html[0].classList.remove(
       "Highlited"
     );
   }
 
   grpWrapper.html[0].classList.remove("completed");
-  grpWrapper.CriteriaGroup.EndClassGroup.inputTypeComponent.html[0].classList.remove(
+  grpWrapper.CriteriaGroup.ObjectSelector.inputTypeComponent.html[0].classList.remove(
     "Highlited"
   );
   grpWrapper.html[0].dispatchEvent(

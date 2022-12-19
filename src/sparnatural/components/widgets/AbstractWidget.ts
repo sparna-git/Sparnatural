@@ -26,7 +26,7 @@ export abstract class AbstractWidget extends HTMLComponent {
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
   protected blockStartTriple = false;
-  protected blockIntersectionTriple = false;
+  protected blockPredicateTriple = false;
   protected blockEndTriple = false;
   protected spinner = new LoadingSpinner(this).render()
   // If the widget contains a datasourceHandler such as ListHandler
@@ -125,8 +125,8 @@ export abstract class AbstractWidget extends HTMLComponent {
   isBlockingStart() {
     return this.blockStartTriple
   }
-  isBlockingIntersection() {
-    return this.blockIntersectionTriple
+  isBlockingPredicate() {
+    return this.blockPredicateTriple
   }
   isBlockingEnd() {
     return this.blockEndTriple
