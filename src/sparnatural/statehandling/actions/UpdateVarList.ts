@@ -12,11 +12,11 @@ export function updateVarList(actionStore: ActionStore) {
   let varNames = new Set<string>();
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
-      let startGrp = grpWrapper.CriteriaGroup.SubjectSelector;
-      let endGrp = grpWrapper.CriteriaGroup.ObjectSelector;
+      let SubjectSlct = grpWrapper.CriteriaGroup.SubjectSelector;
+      let objectSlct = grpWrapper.CriteriaGroup.ObjectSelector;
       //always remove the '?' as the first char
-      if(startGrp.getVarName()) varNames.add(startGrp.getVarName()?.slice(1));
-      if(endGrp.getVarName()) varNames.add(endGrp.getVarName()?.slice(1));      
+      if(SubjectSlct.getVarName()) varNames.add(SubjectSlct.getVarName()?.slice(1));
+      if(objectSlct.getVarName()) varNames.add(objectSlct.getVarName()?.slice(1));      
     }
   );
   updateDraggables(actionStore, varNames);

@@ -82,22 +82,22 @@ export default class WhereBuilder{
     }
 
     #buildObjectSelectorPtrn(){
-        const endClsGrp = this.#grpWrapper.CriteriaGroup.ObjectSelector
-        const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingEnd())
-        endClsBuilder.build()
-        this.#objectSelectorPtrn = endClsBuilder.getPattern()
-        if(endClsBuilder.getDefaultVar()) {
-            this.#defaultVars.push(endClsBuilder.getDefaultVar())
+        const objectSelectGrp = this.#grpWrapper.CriteriaGroup.ObjectSelector
+        const objectSelectBuilder = new ClassBuilder(objectSelectGrp,this.#specProvider,this.#widgetComponent?.isBlockingEnd())
+        objectSelectBuilder.build()
+        this.#objectSelectorPtrn = objectSelectBuilder.getPattern()
+        if(objectSelectBuilder.getDefaultVar()) {
+            this.#defaultVars.push(objectSelectBuilder.getDefaultVar())
         }
     }
 
     #buildSubjectSelectorPtrn() {
-        const startClsGrp = this.#grpWrapper.CriteriaGroup.SubjectSelector
-        const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingStart())
-        startClsBuilder.build()
-        this.#subjectSelectorPtrn = startClsBuilder.getPattern()
-        if(startClsBuilder.getDefaultVar()) {
-            this.#defaultVars.push(startClsBuilder.getDefaultVar())
+        const SubjectSelectGrp = this.#grpWrapper.CriteriaGroup.SubjectSelector
+        const SubjectSelectBuilder = new ClassBuilder(SubjectSelectGrp,this.#specProvider,this.#widgetComponent?.isBlockingStart())
+        SubjectSelectBuilder.build()
+        this.#subjectSelectorPtrn = SubjectSelectBuilder.getPattern()
+        if(SubjectSelectBuilder.getDefaultVar()) {
+            this.#defaultVars.push(SubjectSelectBuilder.getDefaultVar())
         }
     }
 
@@ -121,19 +121,19 @@ export default class WhereBuilder{
         );
         const hasIntersectionTriple = (this.#predicatePtrn)
 
-        let exceptStartPtrn:Pattern[] = []
-        if(hasIntersectionTriple) exceptStartPtrn.push(...this.#predicatePtrn)
-        if(hasObjectSelector) exceptStartPtrn.push(...this.#objectSelectorPtrn)
-        exceptStartPtrn.push(...this.#rdfPtrns)
-        exceptStartPtrn.push(...this.#whereChildPtrns)
+        let exceptSubjPtrn:Pattern[] = []
+        if(hasIntersectionTriple) exceptSubjPtrn.push(...this.#predicatePtrn)
+        if(hasObjectSelector) exceptSubjPtrn.push(...this.#objectSelectorPtrn)
+        exceptSubjPtrn.push(...this.#rdfPtrns)
+        exceptSubjPtrn.push(...this.#whereChildPtrns)
 
-        this.#createOptionStatePtrn(hasSubjectSelector,exceptStartPtrn)
+        this.#createOptionStatePtrn(hasSubjectSelector,exceptSubjPtrn)
 
         this.#resultPtrns.push(...this.#andChildPtrns)
 
     }
 
-    #createOptionStatePtrn(hasSubjectSelector:boolean,exceptStartPtrn:Pattern[]){
+    #createOptionStatePtrn(hasSubjectSelector:boolean,exceptSubjPtrn:Pattern[]){
         // always store the subjectSelectorPattern in the final result pattern (no OPTIONAL, no NOT EXISTS, no SERVICE)
         if(hasSubjectSelector) this.#resultPtrns.push(...this.#subjectSelectorPtrn)
 
@@ -144,12 +144,12 @@ export default class WhereBuilder{
             const endpoint = DataFactory.namedNode(sparqlService)
             // to be on the safe side : when rollback an objectselector group, we may come here with only the start class group criteria
             // and nothing in this array
-            if(exceptStartPtrn.length > 0) {
-                servicePtrn = SparqlFactory.buildServicePattern(exceptStartPtrn,endpoint)
+            if(exceptSubjPtrn.length > 0) {
+                servicePtrn = SparqlFactory.buildServicePattern(exceptSubjPtrn,endpoint)
             }
         }
         
-        let normalOrServicePatterns:Pattern[] = servicePtrn ? [servicePtrn] : exceptStartPtrn;
+        let normalOrServicePatterns:Pattern[] = servicePtrn ? [servicePtrn] : exceptSubjPtrn;
 
         // produce the generated patterns, maybe wrapped in OPTIONAL or NOT EXISTS
         let finalResultPtrns:Pattern[] = [];

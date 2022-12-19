@@ -7,34 +7,34 @@ import ISpecProvider from "../../spec-providers/ISpecProvider";
 import SparqlFactory from "../SparqlFactory";
 
 export default class PredicateBuilder{
-    #startClsPtrn:Pattern[]
-    #endClsPtrn:Pattern[]
+    #SubjectSelectPtrn:Pattern[]
+    #objectSelectPtrn:Pattern[]
     #widgetComponent:AbstractWidget
     #objectPropCls:PredicateSelector
     resultPtrn:Pattern[] = []
     specProvider:ISpecProvider
-    constructor(startClsPtrn:Pattern[],endClsPtrn:Pattern[],widgetComponent:AbstractWidget,objectPropCls:PredicateSelector,specProvider:ISpecProvider){
-        this.#startClsPtrn = startClsPtrn
-        this.#endClsPtrn = endClsPtrn
+    constructor(SubjectSelectPtrn:Pattern[],objectSelectPtrn:Pattern[],widgetComponent:AbstractWidget,objectPropCls:PredicateSelector,specProvider:ISpecProvider){
+        this.#SubjectSelectPtrn = SubjectSelectPtrn
+        this.#objectSelectPtrn = objectSelectPtrn
         this.#widgetComponent = widgetComponent
         this.#objectPropCls = objectPropCls
         this.specProvider = specProvider
     }
 
     build(){
-        if(!this.#widgetComponent?.isBlockingPredicate() && this.#startClsPtrn.length > 0 && this.#endClsPtrn.length > 0){
+        if(!this.#widgetComponent?.isBlockingPredicate() && this.#SubjectSelectPtrn.length > 0 && this.#objectSelectPtrn.length > 0){
             this.resultPtrn.push(
                 SparqlFactory.buildBgpPattern([SparqlFactory.buildPredicateTriple(
-                (this.#startClsPtrn[0] as BgpPattern).triples[0].subject as VariableTerm,
+                (this.#SubjectSelectPtrn[0] as BgpPattern).triples[0].subject as VariableTerm,
                 this.#objectPropCls.getTypeSelected(),
-                (this.#endClsPtrn[0] as BgpPattern).triples[0].subject as VariableTerm
+                (this.#objectSelectPtrn[0] as BgpPattern).triples[0].subject as VariableTerm
                 )])
             );
 
             // add language filter if property is set to be multilingual
             if(this.specProvider.isMultilingual(this.#objectPropCls.getTypeSelected())) {
                 this.resultPtrn.push(SparqlFactory.buildFilterLangEquals(
-                    (this.#endClsPtrn[0] as BgpPattern).triples[0].subject as VariableTerm,
+                    (this.#objectSelectPtrn[0] as BgpPattern).triples[0].subject as VariableTerm,
                     DataFactory.literal(getSettings().language)
                 ));
             }

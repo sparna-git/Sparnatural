@@ -4,14 +4,14 @@ import ActionStore from "../ActionStore";
 export default function toggleVarNames(actionsStore: ActionStore,showVarNames:boolean) {
   actionsStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
-      let startGrp = grpWrapper.CriteriaGroup.SubjectSelector;
-      let endGrp = grpWrapper.CriteriaGroup.ObjectSelector;
+      let SubjectSlct = grpWrapper.CriteriaGroup.SubjectSelector;
+      let objectSlct = grpWrapper.CriteriaGroup.ObjectSelector;
       if(showVarNames){
-        startGrp.inputTypeComponent.showVarName()
-        endGrp.inputTypeComponent.showVarName()
+        SubjectSlct.inputTypeComponent.showVarName()
+        objectSlct.inputTypeComponent.showVarName()
       } else {
-        startGrp.inputTypeComponent.showTypeName()
-        endGrp.inputTypeComponent.showTypeName()
+        SubjectSlct.inputTypeComponent.showTypeName()
+        objectSlct.inputTypeComponent.showTypeName()
       }
     }
   );

@@ -4,7 +4,7 @@ import ActionStore from "../ActionStore";
 
 /*
     Fired when a variable name got changed in the DraggableComponent
-    traverse through Sparnatural and change the var names in the StartGrp and EndGrp
+    traverse through Sparnatural and change the var names in the SubjectSlct and ObjectSlct
 */
 export default function updateVarName(
   actionStore: ActionStore,
@@ -16,10 +16,10 @@ export default function updateVarName(
     (grpWrapper: GroupWrapper) => {
       let sparqlVar = `?${oldName}`;
       let newSparqlVar = `?${newName}`;
-      let startGrp = grpWrapper.CriteriaGroup.SubjectSelector;
-      let endGrp = grpWrapper.CriteriaGroup.ObjectSelector;
-      if (startGrp.getVarName() === sparqlVar) startGrp.setVarName(newSparqlVar);
-      if (endGrp.getVarName() === sparqlVar) endGrp.setVarName(newSparqlVar);
+      let SubjectSlct = grpWrapper.CriteriaGroup.SubjectSelector;
+      let objectSlct = grpWrapper.CriteriaGroup.ObjectSelector;
+      if (SubjectSlct.getVarName() === sparqlVar) SubjectSlct.setVarName(newSparqlVar);
+      if (objectSlct.getVarName() === sparqlVar) objectSlct.setVarName(newSparqlVar);
     }
   );
   //add variables list in actionstore
