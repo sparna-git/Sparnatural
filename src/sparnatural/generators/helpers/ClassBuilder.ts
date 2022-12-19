@@ -1,8 +1,7 @@
 import { DataFactory } from "n3";
-import { BgpPattern, GroupPattern, OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
+import { OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
 import EndClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import StartClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
-import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import { getSettings } from "../../settings/defaultSettings";
 import ISpecProvider from "../../spec-providers/ISpecProvider";
 import SparqlFactory from "../SparqlFactory";
@@ -77,7 +76,7 @@ export default class  ClassBuilder {
     }
 
     #putDefaultLblInOptional(){
-        this.defaultInOptional = SparqlFactory.buildOptionalPattern([SparqlFactory.buildGroupPattern(this.defaultLblPatterns)])
+        this.defaultInOptional = SparqlFactory.buildOptionalPattern(this.defaultLblPatterns)
     }
 
     #createPtrn(){
