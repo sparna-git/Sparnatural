@@ -29,7 +29,6 @@ class PlayBtn extends HTMLComponent {
    */
   removeLoading() {
     this.html.removeClass('loadingEnabled');
-    this.html.removeClass('submitDisable')
   }
 
   /**
