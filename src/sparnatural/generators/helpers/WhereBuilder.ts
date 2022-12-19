@@ -1,5 +1,5 @@
 import * as DataFactory from "@rdfjs/data-model" ;
-import { BgpPattern, Pattern, Variable } from "sparqljs";
+import { Pattern, Variable } from "sparqljs";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
@@ -25,7 +25,7 @@ export default class WhereBuilder{
     #resultPtrns: Pattern[] = []    
     #startClassPtrn:Pattern[] = []
     #endClassPtrn:Pattern[] = []
-    #predicatePtrn:BgpPattern 
+    #predicatePtrn:Pattern[] = [] 
     #whereChildPtrns: Pattern[] = []
     #andChildPtrns: Pattern[] = []
     #rdfPtrns: Pattern[] = []
@@ -103,7 +103,7 @@ export default class WhereBuilder{
 
     #buildPredicatePtrn(){
         const objectPropCls = this.#grpWrapper.CriteriaGroup.PredicateSelector
-        const predicateBuilder = new PredicateBuilder(this.#startClassPtrn,this.#endClassPtrn,this.#widgetComponent,objectPropCls)
+        const predicateBuilder = new PredicateBuilder(this.#startClassPtrn,this.#endClassPtrn,this.#widgetComponent,objectPropCls,this.#specProvider)
         predicateBuilder.build()
         this.#predicatePtrn = predicateBuilder.getPattern()
     }
@@ -119,9 +119,10 @@ export default class WhereBuilder{
             &&
             this.#endClassPtrn.length > 0
         );
-        
-        let exceptStartPtrn:Pattern[] = [] // except #startClassPtrn 
-        if(this.#predicatePtrn) exceptStartPtrn.push(this.#predicatePtrn)
+        const hasIntersectionTriple = (this.#predicatePtrn)
+
+        let exceptStartPtrn:Pattern[] = []
+        if(hasIntersectionTriple) exceptStartPtrn.push(...this.#predicatePtrn)
         if(hasEndClass) exceptStartPtrn.push(...this.#endClassPtrn)
         exceptStartPtrn.push(...this.#rdfPtrns)
         exceptStartPtrn.push(...this.#whereChildPtrns)

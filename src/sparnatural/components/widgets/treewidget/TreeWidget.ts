@@ -92,7 +92,7 @@ export class TreeWidget extends AbstractWidget {
     this.displayLayer = $(
       '<div  id="ecgrw-' +
         this.IdCriteriaGroupe +
-        '-displayLayer" class="treeLayer"><div class="treeClose"><i class="far fa-times-circle"></i></div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-' +
+        `-displayLayer" class="treeLayer"><div class="treeClose">${UiuxConfig.ICON_REG_XMARK}</div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-` +
         this.IdCriteriaGroupe +
         '-display"></div><div class="treeActions"><a class="treeCancel">' +
         this.langSearch.TreeWidgetDelete +

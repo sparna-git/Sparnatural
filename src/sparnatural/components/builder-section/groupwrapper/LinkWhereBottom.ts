@@ -43,6 +43,7 @@ class LinkWhereBottom extends HTMLComponent {
     const xyLower = this.#drawLowerVertical(whereChild);
     this.#drawHorizontal(xyLower, xyUpper);
   }
+
   // line from the middle of the endclassgroup till the end of GroupWrapper
   #drawUpperVertical(endClassGroup: ObjectSelector, whereChild: GroupWrapper) {
     const endClassClientRect = endClassGroup.html[0].getBoundingClientRect();
@@ -67,7 +68,10 @@ class LinkWhereBottom extends HTMLComponent {
     xyLower: { x: number; y: number },
     xyUpper: { x: number; y: number }
   ) {
-    const css = this.#getLine(xyLower.x, xyUpper.x, xyLower.y, xyUpper.y);
+    // adapt line length according to width of the WHERE span.
+    const width:number = this.widgetHTML.outerWidth()
+    const adaptedLowerx = xyLower.x - (width / 2)
+    const css = this.#getLine(adaptedLowerx, xyUpper.x, xyLower.y, xyUpper.y);
     this.horizontal.css(css);
   }
 

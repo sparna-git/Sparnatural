@@ -3,6 +3,7 @@ import { OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
 import ObjectSelector from "../../components/builder-section/groupwrapper/criteriagroup/subject-object-selectors/ObjectSelector";
 import SubjectSelector from "../../components/builder-section/groupwrapper/criteriagroup/subject-object-selectors/SubjectSelector";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
+import { getSettings } from "../../settings/defaultSettings";
 import ISpecProvider from "../../spec-providers/ISpecProvider";
 import SparqlFactory from "../SparqlFactory";
 
@@ -11,7 +12,8 @@ export default class  ClassBuilder {
     protected specProvider:ISpecProvider
     protected classGroup: SubjectSelector | ObjectSelector
     protected classTriple:Triple
-    protected defaultLblTriple:Triple
+    // can consist of multiple patterns in case there is a FILTER(lang(?var) = "xx") if the property is multilingual
+    protected defaultLblPatterns:Pattern[] =[]
     protected defaultInOptional:OptionalPattern
     protected widgetIsBlocking:boolean
     constructor(classGroup:SubjectSelector | ObjectSelector,specProvider:ISpecProvider,widgetIsBlocking:boolean){
@@ -56,15 +58,26 @@ export default class  ClassBuilder {
     }
 
     #buildDefaultLblTrpl(){
-        this.defaultLblTriple = SparqlFactory.buildTriple(
-            DataFactory.variable(this.classTriple.subject.value.replace("?", "")),
-            DataFactory.namedNode(this.classGroup.defaultLblVar.type),
-            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
-          )
+        this.defaultLblPatterns.push(
+        SparqlFactory.buildBgpPattern([
+            SparqlFactory.buildTriple(
+                DataFactory.variable(this.classTriple.subject.value.replace("?", "")),
+                DataFactory.namedNode(this.classGroup.defaultLblVar.type),
+                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
+            )
+        ])
+        );
+
+        if(this.specProvider.isMultilingual(this.classGroup.defaultLblVar.type)) {
+            this.defaultLblPatterns.push(SparqlFactory.buildFilterLangEquals(
+                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
+                DataFactory.literal(getSettings().language)
+            ));
+        }
     }
 
     #putDefaultLblInOptional(){
-        this.defaultInOptional = SparqlFactory.buildOptionalPattern([SparqlFactory.buildBgpPattern([this.defaultLblTriple])])
+        this.defaultInOptional = SparqlFactory.buildOptionalPattern([SparqlFactory.buildGroupPattern(this.defaultLblPatterns)])
     }
 
     #createPtrn(){
@@ -74,9 +87,10 @@ export default class  ClassBuilder {
             this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple]))
             this.resultPtrn.push(this.defaultInOptional)
         } else {
-            if(this.defaultLblTriple){
-              // create classtriple + defaultLabel in one bgp pattern
-              this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple,this.defaultLblTriple]))
+            if(this.defaultLblPatterns){
+              // create classtriple + defaultLabel
+              this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple]));
+              this.resultPtrn.push(...this.defaultLblPatterns)
             } else {
               // no default label got created. only insert start tuple
               this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple]))
@@ -90,6 +104,6 @@ export default class  ClassBuilder {
 
     getDefaultVar():Variable {
         const selected = this.classGroup.inputTypeComponent?.selectViewVariableBtn?.selected
-        if(selected) return this.defaultLblTriple?.object as Variable
+        if(selected && this.classGroup.defaultLblVar.variable) return DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
     }
 }

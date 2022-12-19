@@ -3,7 +3,8 @@ import DraggableComponent from "../../components/variables-section/variableorder
 import ActionStore from "../ActionStore";
 
 /*
-    Fired when a variable name got changed in the Draggable Component
+    Fired when a variable name got changed in the DraggableComponent
+    traverse through Sparnatural and change the var names in the StartGrp and EndGrp
 */
 export default function updateVarName(
   actionStore: ActionStore,

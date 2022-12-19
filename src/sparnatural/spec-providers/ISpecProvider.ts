@@ -15,6 +15,7 @@ interface ISpecProvider {
   getDatasource(objectPropertyId: string): any;
   isLiteralClass(classUri: string): boolean;
   isNotInstantiatedClass(classUri: string): boolean;
+  isMultilingual(propertyUri: string): boolean;
   getObjectPropertyType(objectPropertyId: string): Config;
   getLabel(value_selected: string): string;
   getTooltip(value_selected: string): string;

@@ -3,12 +3,13 @@ import { SelectedVal } from "../../generators/ISparJson";
 import ActionStore from "../ActionStore";
 
 // This Action gets called when an SelctViewVar ("eye") Button is clicked
+// Is also always called for the first variable added
 export function selectViewVar(
   actionStore: ActionStore,
   payload: { val: SelectedVal; selected: boolean, defaultLbl:SelectedVal },
   target:EventTarget
 ) {
-    //delete Var since with the blockAction (click Event) it will be reselected
+    // delete if unselected OR add if variable was selected
     if(!payload.selected) deleteVariable(actionStore,payload.val)
     if(payload.selected) addVariable(actionStore, payload.val)
 }

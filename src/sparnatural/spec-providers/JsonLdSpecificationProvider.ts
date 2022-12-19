@@ -164,7 +164,8 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
         " fa-fw'></i></span>"
       );
     } else if (this._getResourceById(classId)["icon"] != null) {
-      return this._getResourceById(classId)["icon"];
+      
+      return  this._getResourceById(classId)["icon"]
     } else {
       // this is ugly, just so it aligns with other entries having an icon
       return "<span style='font-size: 10%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
@@ -249,6 +250,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
   };
 
   isMultilingual = function (propertyId: string) {
+    if(!propertyId) return;
     var item = this._getResourceById(propertyId);
     if (item !== null) {
       return item["isMultilingual"] == true;
