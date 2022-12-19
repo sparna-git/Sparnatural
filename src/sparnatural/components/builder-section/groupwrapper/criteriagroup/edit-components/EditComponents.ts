@@ -111,9 +111,9 @@ class EditComponents extends HTMLComponent {
       }
     );
     this.html[0].dispatchEvent(
-      new CustomEvent("renderWidgetVal", {
+      new CustomEvent("renderWidgetValues", {
         bubbles: true,
-        detail: selectAllVal,
+        detail: [selectAllVal],
       })
     );
   }
