@@ -61,7 +61,7 @@ let setOptionCss = (
       grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.render();
     }
     if (newState == OptionTypes.NOTEXISTS || newState == OptionTypes.OPTIONAL) {
-      grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.html.remove();
+      grpWrapper.CriteriaGroup.OptionsGroup.optionalArrow.html[0].classList.add('disabledbutton');
       grpWrapper.CriteriaGroup.OptionsGroup.OptionalComponent.html.remove();
       grpWrapper.CriteriaGroup.OptionsGroup.NotExistsComponent.html.remove();
     }
