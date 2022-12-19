@@ -17,4 +17,11 @@
         z-index: 1;
         left: -7px;
     }
+    &.disabledbutton {
+        svg{
+            fill: gray;
+            opacity: 0.4;
+        }
+        pointer-events: none;
+    }
 }
