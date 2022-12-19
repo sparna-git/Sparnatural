@@ -8,6 +8,10 @@ import ClassBuilder from "./ClassBuilder";
 import IntersectionBuilder from "./IntersectionBuilder";
 import SparqlFactory from "../SparqlFactory";
 
+/*
+    This Class builds the WHERE clause of the SPARQL query.
+*/
+
 export default class WhereBuilder{
     // variables set in construtor
     #grpWrapper:GroupWrapper
@@ -105,16 +109,18 @@ export default class WhereBuilder{
 
     #buildGrpWrapperPtrn(){
         // The startClassPtrn does not need to be created if it is a WHERE or ANDChild
-        const hasStartClass = (!this.#isChild)
+        const hasStartClass = (!this.#isChild && this.#startClassPtrn.length > 0)
+        // endClassPtrn is not shown if it is a literal or InstantiatedClass
         const hasEndClass = (
             !this.#specProvider.isLiteralClass(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected())
             &&
-            !this.#specProvider.isRemoteClass(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected())
+            !this.#specProvider.isNotInstantiatedClass(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected())
+            &&
+            this.#endClassPtrn.length > 0
         );
-        const hasIntersectionTriple = (this.#intersectionPtrn)
-
-        let exceptStartPtrn:Pattern[] = []
-        if(hasIntersectionTriple && this.#intersectionPtrn) exceptStartPtrn.push(this.#intersectionPtrn)
+        
+        let exceptStartPtrn:Pattern[] = [] // except #startClassPtrn 
+        if(this.#intersectionPtrn) exceptStartPtrn.push(this.#intersectionPtrn)
         if(hasEndClass) exceptStartPtrn.push(...this.#endClassPtrn)
         exceptStartPtrn.push(...this.#rdfPtrns)
         exceptStartPtrn.push(...this.#whereChildPtrns)
