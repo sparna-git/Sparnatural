@@ -1,4 +1,5 @@
 import CriteriaGroup from "../../criteriagroup/CriteriaGroup";
+import { OptionTypes } from "../../criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../GroupWrapper";
 
 // Remove the EndClass and rerender from the point where the startClassVal got selected
@@ -16,7 +17,8 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
     undefined,
     grpWrapper.isRootGrpWrapper()
   ).render();
-
+  // Set state back to NONE
+  grpWrapper.optionState = OptionTypes.NONE
   // set StartClassVal
   let inputTypeComponent =
     grpWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent;

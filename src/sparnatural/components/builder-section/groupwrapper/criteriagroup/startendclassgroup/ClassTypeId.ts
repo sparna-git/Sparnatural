@@ -30,7 +30,7 @@ class ClassTypeId extends HTMLComponent {
     type: null,
   }; // if it is a whereChild, the startclassVal is already set
   oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
-  UnselectButton: any;
+  UnselectButton: UnselectBtn;
   selectViewVariableBtn: SelectViewVariableBtn;
   specProvider: ISpecProvider;
   constructor(

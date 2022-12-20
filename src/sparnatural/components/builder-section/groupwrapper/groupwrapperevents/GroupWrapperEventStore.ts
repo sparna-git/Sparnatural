@@ -1,8 +1,6 @@
-import { OptionTypes } from "../criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../GroupWrapper";
 import { addAndComponent } from "./events/AddAndComponent";
 import { addWhereComponent } from "./events/AddWhereComponent";
-
 import { completeGrpInput } from "./events/CompleteGrpInput";
 import { inCompleteGrpInput } from "./events/InCompleteGrpInput";
 import { removeEndClass } from "./events/RemoveEndClass";
