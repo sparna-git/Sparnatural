@@ -6,7 +6,6 @@ import SpecificationProviderFactory from "../spec-providers/SpecificationProvide
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
 import HTMLComponent from "./HtmlComponent";
-import { SparnaturalElement } from "../../SparnaturalElement";
 
 
 const i18nLabels = {
@@ -25,30 +24,21 @@ class SparnaturalComponent extends HTMLComponent {
     '<svg data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 0 0" style="width:0;height:0;display:block"><defs><filter style="color-interpolation-filters:sRGB;" inkscape:label="Drop Shadow" id="filter19278" x="-0.15483875" y="-0.11428573" width="1.3096775" height="1.2714286"><feFlood flood-opacity="0.811765" flood-color="rgb(120,120,120)" result="flood" id="feFlood19268" /><feComposite in="flood" in2="SourceGraphic" operator="out" result="composite1" id="feComposite19270" /><feGaussianBlur in="composite1" stdDeviation="2" result="blur" id="feGaussianBlur19272" /><feOffset dx="3.60822e-16" dy="1.8" result="offset" id="feOffset19274" /><feComposite in="offset" in2="SourceGraphic" operator="atop" result="composite2" id="feComposite19276" /></filter></defs></svg>'
   );
 
-  sparnaturalElement:SparnaturalElement;
 
-  constructor(sparnaturalElement:SparnaturalElement) {
+  constructor() {
     //Sparnatural: Does not have a ParentComponent!
     super("Sparnatural", null, null);
-
-    // maintain a reference back to the HTML element
-    this.sparnaturalElement = sparnaturalElement;
-    
-    if (getSettings().language === "fr") {
-      getSettings().langSearch = i18nLabels["fr"];
-    } else {
-      getSettings().langSearch = i18nLabels["en"];
-    }
   }
 
   render(): this {
+    this.#initLang()
     this.initSpecificationProvider((sp: ISpecProvider) => {
       this.specProvider = sp;
       //Think this will be launched before load query ???
       this.actionStore = new ActionStore(this, this.specProvider);
       this.BgWrapper = new BgWrapper(this, this.specProvider).render();
       // display the submit button only if a callback was provided
-      if(this.settings.submitButton) {
+      if(getSettings().submitButton) {
         this.SubmitSection = new SubmitSection(this).render();
       }
       this.variableSection = new VariableSection(
@@ -67,10 +57,6 @@ class SparnaturalComponent extends HTMLComponent {
 
   initSpecificationProvider(callback:any) {
     let settings = getSettings();
-    // if we miss some of the dynamic settings, don't do anything
-    if(!settings.config || !settings.defaultEndpoint) {
-      throw Error('No config or deault Endpoint provided ');
-    }
     let specProviderFactory = new SpecificationProviderFactory();
     specProviderFactory.build(settings.config, settings.language, (sp: any) => {
       // call the call back when done
@@ -96,6 +82,14 @@ class SparnaturalComponent extends HTMLComponent {
 
   isEmpty() {
     return (this.BgWrapper.componentsList.rootGroupWrapper.CriteriaGroup.StartClassGroup.startClassVal?.type == null)
+  }
+
+  #initLang() {
+    if (getSettings().language === "fr") {
+      getSettings().langSearch = i18nLabels["fr"];
+    } else {
+      getSettings().langSearch = i18nLabels["en"];
+    }
   }
 }
 export default SparnaturalComponent;

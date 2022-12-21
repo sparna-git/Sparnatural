@@ -1,5 +1,5 @@
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
-require("./assets/stylesheets/sparnatural.scss");
+require("./assets/stylesheets/sparnatural.scss")
 import $ from "jquery";
 /*SPARNATURAL*/
 import { getSettings, mergeSettings } from "./sparnatural/settings/defaultSettings";
@@ -10,7 +10,6 @@ import { PreLoadQueries } from "./sparnatural/settings/ISettings";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import QueryParser from "./sparnatural/querypreloading/QueryParser";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
-import { SparnaturalHandlers } from "./SparnaturalHandlers";
 
 /*
   This is the sparnatural HTMLElement. 
@@ -18,7 +17,7 @@ import { SparnaturalHandlers } from "./SparnaturalHandlers";
   Used to configure the Settings and load queries
 */
 export class SparnaturalElement extends HTMLElement {
-
+  
   static HTML_ELEMENT_NAME = "spar-natural";
 
   static EVENT_SUBMIT = "submit";
@@ -36,14 +35,6 @@ export class SparnaturalElement extends HTMLElement {
 
   constructor() {
     super();
-    // parse all attributes in the HTML element
-    this._attributes = new SparnaturalAttributes(this);
-    // TODO : migrate handlers outside of settings
-    // this.handlers = new SparnaturalHandlers();
-
-    // just set the settings with this
-    // TODO : re-enginer the global settings variable to something more OO
-    mergeSettings(this._attributes);
   }
 
   /**
@@ -78,13 +69,20 @@ export class SparnaturalElement extends HTMLElement {
   }
 
   display() {
-    // create the Sparnatural component and render it
-    this.Sparnatural = new SparnaturalComponent(this);
+    // render sparnatural 
+    this.Sparnatural = new SparnaturalComponent();
     // empty the content in case we re-display after an attribut change
     $(this).empty();
     $(this).append(this.Sparnatural.html);
-    this.Sparnatural.render();
+    // parse all attributes in the HTML element
+    this._attributes = new SparnaturalAttributes(this);
+    // TODO : migrate handlers outside of settings
+    // this.handlers = new SparnaturalHandlers();
 
+    // just set the settings with this
+    // TODO : re-enginer the global settings variable to something more OO
+    mergeSettings(this._attributes); 
+    this.Sparnatural.render();
     this.dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_DISPLAY, {
       bubbles: true,
       detail: {
