@@ -41,7 +41,9 @@ class BgWrapper extends HTMLComponent {
     // fire an event to the outside world
     this.html[0].dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_RESET, {
       bubbles: true,
-      detail: this.ParentSparnatural
+      detail: {
+        sparnatural: this.ParentSparnatural
+      }
     }));
   };
 }
