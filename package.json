@@ -1,6 +1,6 @@
 {
   "name": "sparnatural",
-  "version": "7.1.0",
+  "version": "8.0-rc1",
   "description": "Visual query builder for SPARQL queries.",
   "main": "dist/sparnatural.js",
   "scripts": {
@@ -16,7 +16,8 @@
     "OWL",
     "query builder",
     "react",
-    "angular"
+    "angular",
+    "Typescript"
   ],
   "homepage": "https://sparnatural.eu/",
   "bugs": {
@@ -32,7 +33,7 @@
       "url": "https://github.com/SteinerPascal"
     },
     {
-      "name": "Antoine",
+      "name": "Antoine Dupré",
       "url": "https://github.com/antoine37120"
     }
   ],
