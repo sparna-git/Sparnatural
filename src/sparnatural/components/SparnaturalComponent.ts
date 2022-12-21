@@ -55,7 +55,6 @@ class SparnaturalComponent extends HTMLComponent {
         this,
         this.specProvider
       ).render();
-      
       //BGWrapper must be rendered first
       this.html[0].dispatchEvent(
         new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
@@ -68,10 +67,9 @@ class SparnaturalComponent extends HTMLComponent {
 
   initSpecificationProvider(callback:any) {
     let settings = getSettings();
-    
     // if we miss some of the dynamic settings, don't do anything
     if(!settings.config || !settings.defaultEndpoint) {
-      return;
+      throw Error('No config or deault Endpoint provided ');
     }
     let specProviderFactory = new SpecificationProviderFactory();
     specProviderFactory.build(settings.config, settings.language, (sp: any) => {
