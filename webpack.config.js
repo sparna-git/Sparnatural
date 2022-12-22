@@ -8,7 +8,7 @@ const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
-  // mode: 'production',
+   //mode: 'production',
   entry: ["./src/SparnaturalElement.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
@@ -86,7 +86,7 @@ module.exports = {
 			inject: 'body'
 		}),
 		new MiniCssExtractPlugin({
-		  filename: "sparnatural.css",
+		  filename: "mycss.css",
 		  chunkFilename: "[id].css"
 		}),
 		new CopyPlugin({
