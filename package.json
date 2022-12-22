@@ -3,6 +3,8 @@
   "version": "7.1.0",
   "description": "Visual query builder for SPARQL queries.",
   "main": "dist/sparnatural.js",
+  "module": "dist/sparnatural.js",
+  "types": "dist/Sparnaturalelement.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
@@ -68,7 +70,6 @@
     "sass": "^1.49.8",
     "sass-loader": "^13.0.0",
     "stream-browserify": "^3.0.0",
-    "style-loader": "^0.23.1",
     "ts-loader": "^9.3.0",
     "typescript": "^4.6.3",
     "url": "^0.11.0",
