@@ -58,13 +58,11 @@ export class SparnaturalAttributes {
 
     let is_json = true; //true at first
 
-    //Try-catch and JSON.parse function is used here.
-
+    // Check if config is given as JSON string or as URL
     try {
-        const object = JSON.parse(json);
+      JSON.parse(json);
     } catch (error) {
         is_json = false;
-        console.log("might be a problem in key or value's data type");
     }
     return is_json
   }
