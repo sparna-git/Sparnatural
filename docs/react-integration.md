@@ -9,6 +9,8 @@ If you discover any issues let us know!
 - download the latest Sparnatural version with `npm install sparnatural`
 
 ## Usage
+
+### JSX integration
 ```
 import './App.css';
 import "sparnatural"
@@ -25,7 +27,8 @@ function App() {
       <div id="ui-search" style={{width:"auto"}}>
         <spar-natural 
           src={JSON.stringify(config)} 
-          lang={'fr'} endpoint={'https://fr.dbpedia.org/sparql'} 
+          lang={'fr'} 
+          endpoint={'https://fr.dbpedia.org/sparql'} 
           distinct={'true'} 
           limit={'100'}
           prefix={"skos:http://www.w3.org/2004/02/skos/core#"} 
@@ -38,4 +41,25 @@ function App() {
 
 export default App;
 ```
+### add Declaration file for JSX (Typescript only)
+This is only necesarry when you are using React together with typescript. <br>
+The declaration file must be call `declaration.d.ts` and be located on the root level of the src/ folder.
+```
+namespace JSX {
+    interface IntrinsicElements {
+        "spar-natural": SparnaturalAttributes;
+    }
+
+    interface SparnaturalAttributes {
+        src: string;
+        lang: string;
+        endpoint: string;
+        distinct: string;
+        limit: string;
+        prefix: string;
+        debug:string
+    }
+}
+```
+
 This shows examplary how to integrate sparnatural inside a React component. For more information on the configuration refer to [Javascript integration v8](Javascript-integration)
