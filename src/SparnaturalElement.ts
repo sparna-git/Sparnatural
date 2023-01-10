@@ -152,7 +152,7 @@ export class SparnaturalElement extends HTMLElement {
    * @returns 
    */
   expandSparql(query:string) {
-    return this.Sparnatural.specProvider.expandSparql(query, this.Sparnatural.settings.sparqlPrefixes);
+    return this.Sparnatural.specProvider.expandSparql(query, this.Sparnatural.settings?.sparqlPrefixes);
   }
 
   /**

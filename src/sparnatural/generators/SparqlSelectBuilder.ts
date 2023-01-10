@@ -19,27 +19,19 @@ import SparqlFactory from "./SparqlFactory";
 export default class RdfJsGenerator {
   typePredicate: string;
   specProvider: ISpecProvider;
-  additionnalPrefixes: { [key: string]: string } = {};
+  prefixes: { [key: string]: string } = {};
   sparnatural: SparnaturalComponent;
   defaultLabelVars:Variable[] = []// see: #checkForDefaultLabel()
   constructor(
     sparnatural: SparnaturalComponent,
     typePredicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
-    specProvider: ISpecProvider
+    specProvider: ISpecProvider,
+    prefixes: { [key: string]: string } = {}
   ) {
     this.sparnatural = sparnatural;
     this.typePredicate = typePredicate;
     this.specProvider = specProvider;
-    this.additionnalPrefixes = {};
-  }
-
-  // add a new prefix to the generated query
-  addPrefix(prefix: string | number, uri: any) {
-    this.additionnalPrefixes[prefix] = uri;
-  }
-
-  setPrefixes(prefixes: any) {
-    this.additionnalPrefixes = prefixes;
+    this.prefixes = prefixes;
   }
 
   generateQuery(
@@ -54,21 +46,13 @@ export default class RdfJsGenerator {
       variables: this.#varsToRDFJS(variables),
       type: "query",
       where: this.#createWhereClause(),
-      prefixes: {
-        rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-        rdfs: "http://www.w3.org/2000/01/rdf-schema#",
-        xsd: "http://www.w3.org/2001/XMLSchema#",
-      },
+      prefixes: this.prefixes,
       order: this.#orderToRDFJS(
         order,
         this.#varsToRDFJS(variables)[0] as VariableTerm
       ),
       limit: (limit)?limit:undefined
     };
-
-    for (var key in this.additionnalPrefixes) {
-      SparqlJsQuery.prefixes[key] = this.additionnalPrefixes[key];
-    }
 
     // if the RdfJsQuery contains empty 'where' array, then the generator crashes.
     // create query with no triples

@@ -38,9 +38,9 @@ export default function generateQuery(actionStore: ActionStore) {
     var writer = new RdfJsGenerator(
       actionStore.sparnatural,
       settings.typePredicate,
-      actionStore.specProvider
+      actionStore.specProvider,
+      settings.sparqlPrefixes
     );
-    writer.setPrefixes(settings.sparqlPrefixes);
     let selectQuery = writer.generateQuery(
       actionStore.variables,
       actionStore.order,

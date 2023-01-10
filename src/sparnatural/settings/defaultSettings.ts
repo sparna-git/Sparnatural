@@ -13,7 +13,11 @@ const defaultSettings: ISettings = {
   // backgroundBaseColor: "2,184,117",
   backgroundBaseColor: "29, 224, 153",
   defaultEndpoint: null,
-  sparqlPrefixes: {},
+  sparqlPrefixes: {
+    rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    rdfs: "http://www.w3.org/2000/01/rdf-schema#",
+    xsd: "http://www.w3.org/2001/XMLSchema#",
+  },
   localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in mimmiseconds
   debug:false,
   submitButton:true,
