@@ -21,6 +21,7 @@ export class SparnaturalAttributes {
       throw Error('No config or deault endpoint provided!');
     }
     this.language = this.#read(element, "lang");
+    this.backgroundBaseColor = this.#read(element, "background");
     // use the singular to match RDFa attribute name
     this.sparqlPrefixes = this.#parsePrefixes(element);
     this.addDistinct = this.#read(element, "distinct", true);
@@ -28,7 +29,7 @@ export class SparnaturalAttributes {
     this.typePredicate = this.#read(element, "typePredicate");
     this.maxDepth = this.#read(element, "maxDepth");
     this.maxOr = this.#read(element, "maxOr");
-    this.backgroundBaseColor = this.#read(element, "backgroundbaseColor");
+    
     this.localCacheDataTtl = this.#read(element, "localCacheDataTtl", true);
     this.debug = this.#read(element, "debug", true);
     this.submitButton = this.#read(element, "submitButton", true);
