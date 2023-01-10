@@ -41,7 +41,7 @@ function App() {
 
 export default App;
 ```
-### add Declaration file for JSX (Typescript only)
+### Add Declaration file for JSX (Typescript only)
 This is only necesarry when you are using React together with typescript. <br>
 The declaration file must be call `declaration.d.ts` and be located on the root level of the src/ folder.
 ```
