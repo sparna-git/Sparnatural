@@ -26,4 +26,3 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 ### For developers
 
   - [Developing and Compiling](Developing-and-Compiling) - How to make modifications to the source code in a development environment and recompile Sparnatural
-  - [Internal](Internal) - **/!\ deprecated** Internal code structure documentation
