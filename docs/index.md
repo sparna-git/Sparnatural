@@ -26,7 +26,7 @@ Other configuration related topics:
   - [Javascript integration v7](Javascript-integration-v7) - Reference page for Javascript integration and parameters for version 7
   - [Query JSON format](Query-JSON-format) - Documentation on the JSON structure used by Sparnatural to output and reload queries
   - [Querying a password protected SPARQL endpoint](Querying-a-password-protected-SPARQL-endpoint)
-  - [SPARQL service integration](SPARQL-service-integration) - **/!\ deprecated** How to fetch autocomplete results and list contents from a SPARQL endpoint
+
 
   
 ### For developers
