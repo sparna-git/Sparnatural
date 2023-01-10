@@ -1,6 +1,5 @@
 require("./assets/js/jquery-nice-select/jquery.nice-select.js");
-import "./assets/stylesheets/mycss.scss"
-require("./assets/stylesheets/mycss.scss")
+import "./assets/stylesheets/sparnatural.scss"
 import $ from "jquery";
 /*SPARNATURAL*/
 import { getSettings, mergeSettings } from "./sparnatural/settings/defaultSettings";

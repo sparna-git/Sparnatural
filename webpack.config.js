@@ -86,7 +86,7 @@ module.exports = {
 			inject: 'body'
 		}),
 		new MiniCssExtractPlugin({
-		  filename: "mycss.css",
+		  filename: "sparnatural.css",
 		  chunkFilename: "[id].css"
 		}),
 		new CopyPlugin({
