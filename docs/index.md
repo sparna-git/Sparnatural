@@ -23,10 +23,10 @@ Other configuration related topics:
 ### Integration in webpages
 
   - [Javascript integration v8](Javascript-integration) - Reference page for Javascript integration and parameters for version 8
+  - [React integration v8](react-integration) - Initialization of Sparnatural as a custom component within react
   - [Javascript integration v7](Javascript-integration-v7) - Reference page for Javascript integration and parameters for version 7
   - [Query JSON format](Query-JSON-format) - Documentation on the JSON structure used by Sparnatural to output and reload queries
   - [Querying a password protected SPARQL endpoint](Querying-a-password-protected-SPARQL-endpoint)
-
 
   
 ### For developers
