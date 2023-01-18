@@ -50,10 +50,19 @@ export default class  ClassBuilder {
     }
 
     #buildClsTriple(){
-        this.classTriple= SparqlFactory.buildRdfTypeTriple(
-            DataFactory.variable(this.classGroup.getVarName()?.replace('?','')) ,
-            DataFactory.namedNode(this.classGroup.getTypeSelected())
-        )
+        if(getSettings().typePredicate.slice(-1) === '*'){
+            //https://github.com/sparna-git/Sparnatural/issues/72
+            this.classTriple = SparqlFactory.buildPropertyPathTriple(
+                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')) ,
+                DataFactory.namedNode(getSettings().typePredicate) ,
+                DataFactory.namedNode(this.classGroup.getTypeSelected())
+            )
+        } else {
+            this.classTriple= SparqlFactory.buildRdfTypeTriple(
+                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')) ,
+                DataFactory.namedNode(this.classGroup.getTypeSelected())
+            )
+        }
     }
 
     #buildDefaultLblTrpl(){

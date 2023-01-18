@@ -240,6 +240,22 @@ export default class SparqlFactory {
         };
       }
 
+      static buildPropertyPathTriple(
+        subject: IriTerm | BlankTerm | VariableTerm | QuadTerm,
+        predicate: IriTerm | PropertyPath,
+        object: Term
+      ):Triple {
+        return {
+          subject: subject,
+          predicate: {
+            type: 'path',
+            pathType:'*' ,
+            items: [predicate]
+          },
+          object: object,
+      };
+      }
+
       static buildRdfTypeTriple(
         subject: IriTerm | BlankTerm | VariableTerm | QuadTerm,
         object: Term
