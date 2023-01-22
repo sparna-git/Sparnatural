@@ -97,6 +97,7 @@ export default class RdfJsGenerator {
     const builder = new WhereBuilder(
       this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,
       this.specProvider,
+      this.typePredicate,
       false,
       false
     )

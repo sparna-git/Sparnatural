@@ -12,6 +12,7 @@ export default class WhereBuilder{
     // variables set in construtor
     #grpWrapper:GroupWrapper
     #specProvider: ISpecProvider
+    #typePredicate: string
     #isChild:boolean
     #isInOption:boolean
     #widgetComponent:AbstractWidget | null | undefined = null
@@ -29,9 +30,10 @@ export default class WhereBuilder{
     // default vars gathered from children
     #defaultVars: Variable[] =[]
 
-    constructor(grpWrapper:GroupWrapper,specProvider:ISpecProvider,isChild:boolean,isInOption:boolean){
+    constructor(grpWrapper:GroupWrapper,specProvider:ISpecProvider,typePredicate:string,isChild:boolean,isInOption:boolean){
         this.#grpWrapper = grpWrapper
         this.#specProvider = specProvider
+        this.#typePredicate = typePredicate
         this.#isChild = isChild
         this.#isInOption = isInOption
         this.#widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
@@ -52,7 +54,13 @@ export default class WhereBuilder{
     }
 
     #buildWhereChildPtrn(){
-        const builder = new WhereBuilder(this.#grpWrapper.whereChild,this.#specProvider,true,this.#grpWrapper.optionState !== OptionTypes.NONE)
+        const builder = new WhereBuilder(
+            this.#grpWrapper.whereChild,
+            this.#specProvider,
+            this.#typePredicate,
+            true,
+            this.#grpWrapper.optionState !== OptionTypes.NONE
+        )
         builder.build()
         this.#whereChildPtrns = builder.getResultPtrns()
         // gather default vars from children
@@ -62,7 +70,13 @@ export default class WhereBuilder{
     }
 
     #buildAndChildPtrn(){
-        const builder = new WhereBuilder(this.#grpWrapper.andSibling,this.#specProvider,true,this.#isInOption)
+        const builder = new WhereBuilder(
+            this.#grpWrapper.andSibling,
+            this.#specProvider,
+            this.#typePredicate,
+            true,
+            this.#isInOption
+        )
         builder.build()
         this.#andChildPtrns = builder.getResultPtrns()
         // gather default vars from children
@@ -78,7 +92,7 @@ export default class WhereBuilder{
 
     #buildEndClassPtrn(){
         const endClsGrp = this.#grpWrapper.CriteriaGroup.EndClassGroup
-        const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingEnd())
+        const endClsBuilder = new ClassBuilder(endClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingEnd(),this.#typePredicate)
         endClsBuilder.build()
         this.#endClassPtrn = endClsBuilder.getPattern()
         if(endClsBuilder.getDefaultVar()) {
@@ -88,7 +102,7 @@ export default class WhereBuilder{
 
     #buildStartClassPtrn() {
         const startClsGrp = this.#grpWrapper.CriteriaGroup.StartClassGroup
-        const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingStart())
+        const startClsBuilder = new ClassBuilder(startClsGrp,this.#specProvider,this.#widgetComponent?.isBlockingStart(),this.#typePredicate)
         startClsBuilder.build()
         this.#startClassPtrn = startClsBuilder.getPattern()
         if(startClsBuilder.getDefaultVar()) {
