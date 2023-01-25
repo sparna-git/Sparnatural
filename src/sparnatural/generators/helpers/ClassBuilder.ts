@@ -15,10 +15,13 @@ export default class  ClassBuilder {
     protected defaultLblPatterns:Pattern[] =[]
     protected defaultInOptional:OptionalPattern
     protected widgetIsBlocking:boolean
-    constructor(classGroup:StartClassGroup | EndClassGroup,specProvider:ISpecProvider,widgetIsBlocking:boolean){
+    protected typePredicate:string
+
+    constructor(classGroup:StartClassGroup | EndClassGroup,specProvider:ISpecProvider,widgetIsBlocking:boolean,typePredicate:string="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"){
         this.classGroup = classGroup
         this.specProvider = specProvider
         this.widgetIsBlocking = widgetIsBlocking
+        this.typePredicate = typePredicate
     }
 
     build(){
