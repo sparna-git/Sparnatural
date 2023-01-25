@@ -24,12 +24,10 @@ export default class RdfJsGenerator {
   defaultLabelVars:Variable[] = []// see: #checkForDefaultLabel()
   constructor(
     sparnatural: SparnaturalComponent,
-    typePredicate = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
     specProvider: ISpecProvider,
     prefixes: { [key: string]: string } = {}
   ) {
     this.sparnatural = sparnatural;
-    this.typePredicate = typePredicate;
     this.specProvider = specProvider;
     this.prefixes = prefixes;
   }
