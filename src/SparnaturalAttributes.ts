@@ -7,7 +7,6 @@ export class SparnaturalAttributes {
   typePredicate?: string;
   maxDepth: number;
   maxOr: number;
-  backgroundBaseColor?: string; //TODO '250,136,3'
   sparqlPrefixes?: { [key: string]: string };
   localCacheDataTtl?: number;
   debug: boolean;
@@ -21,7 +20,6 @@ export class SparnaturalAttributes {
       throw Error('No config or deault endpoint provided!');
     }
     this.language = this.#read(element, "lang");
-    this.backgroundBaseColor = this.#read(element, "background");
     // use the singular to match RDFa attribute name
     this.sparqlPrefixes = this.#parsePrefixes(element);
     this.addDistinct = this.#read(element, "distinct", true);

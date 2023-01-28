@@ -82,8 +82,6 @@ A typical integration in a web page looks like this :
 | **Mandatory**. Provides the configuration that specifies the classes and properties to be displayed, and how they are mapped to SPARQL. This can be either the URL of an OWL Turtle or RDF/XML file, or a URL to a JSON file. Example : `sparnatural-config.ttl` |
 | **endpoint** | `undefined` |
 | **Mandatory**, except for advanced use-cases. The URL of a SPARQL endpoint that will be used as the default service for the datasource queries provided in the configuration. If not specified, each datasource should indicate explicitely a SPARQL endpoint, or the `autocomplete` and `list` parameters must be provided for low-level datasource integration.| 
-| **background** | `29, 224, 153` |
-| The base color to use as the background. This color should be given in the format 'R,G,B'. Transparency is applied to the base color to generate the color gradient. |
 | **debug** | `false` |
 | If set to `true`, Sparnatural will log JSON and SPARQL queries on the console, as they are generated. | 
 | **distinct** | `true` |
@@ -103,7 +101,7 @@ A typical integration in a web page looks like this :
 | **submitButton** | `true` |
 | Whether Sparnatural should display a submit button to allow the user to execute the query. A click on the submit button will trigger a `submit` event. In case it is not provided, it is the page responsibility to either execute the query automatically at each update in the `queryUpdated` event or provide its own way to submit the query. |
 | **typePredicate** | `rdf:type` |
-| The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to `<http://www.wikidata.org/prop/direct/P31>` | `<http://www.wikidata.org/prop/direct/P31>*` for Wikidata integration. |
+| The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to e.g. `<http://www.wikidata.org/prop/direct/P31>+` for Wikidata integration, or `<http://www.w3.org/2000/01/rdf-schema#subClassOf>+` to query OWL-style models. |
 
 
 | **autocomplete** |  |

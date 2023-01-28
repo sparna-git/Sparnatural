@@ -12,7 +12,6 @@ interface ISettings {
   typePredicate?: string;
   maxDepth: number;
   maxOr: number;
-  backgroundBaseColor?: string; //TODO '250,136,3'
   sparqlPrefixes?: { [key: string]: string };
   defaultEndpoint?: string;
   localCacheDataTtl?: number;
