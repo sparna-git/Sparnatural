@@ -83,7 +83,8 @@ function drawBackgroungOfGroupWrapper(
 ) {
   var ratio = 100 / 10 / 100;
   let a = (index + 1) * ratio;
-  let rgba = `rgba(${getSettings().backgroundBaseColor},${a})`;
+  // build the gradient using the RGB variables from the theme, plus the computed alpha value
+  let rgba = `rgba(var(--bg-red),var(--bg-green),var(--bg-blue),${a})`;
   if (index !== 0) {
     // comma in the string beginning
     return ` ,${rgba} ${prevHeight}px, ${rgba} ${prevHeight+currHeight}px`;

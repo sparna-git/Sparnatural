@@ -1,11 +1,10 @@
-@use '../../themes';
 @use '../../base';
 @use '../../mixins';
 @use 'sass:math';
 
 .AddWidgetValueBtn {
-    @include mixins.arrow-back-colors(themes.$primary-color-medium, #fff);
-    @include mixins.arrow-front-colors(themes.$primary-color-medium, #fff);
+    @include mixins.arrow-back-colors(var(--primary-color-medium), #fff);
+    @include mixins.arrow-front-colors(var(--primary-color-medium), #fff);
     display: flex;
     color: black;
     font-size: 20px;
@@ -18,7 +17,7 @@
     padding: 0;
     p {
         height: inherit;
-        background: themes.$primary-color-medium;
+        background: var(--primary-color-medium);
         padding: 0 0 0 3px;
         border: base.$center-arrow-bd-width solid #fff;
         border-left: 0;
@@ -28,7 +27,7 @@
         position: relative;
         span {
             line-height: 42px;
-            color: themes.$default-text-color;
+            color: var(--default-text-color);
         }
     }
     /* Not sure what this does */

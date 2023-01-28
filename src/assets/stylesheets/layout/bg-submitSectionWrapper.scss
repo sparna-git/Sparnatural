@@ -1,9 +1,8 @@
-@use "../themes";
 
 
 .submitSection {
     height: 41px;
-    background: themes.$secondary-color-main ;
+    background: var(--secondary-color-main) ;
     position: relative;
     margin: 0 auto;
     width: 100%;
@@ -16,7 +15,7 @@
         padding: 10px;
         padding-left: 12px;
         border-radius: 5px;
-        background: themes.$secondary-color-important;
+        background: var(--secondary-color-important);
         box-shadow: 0px 2px 3px 0px #cfcfcf;
         cursor: pointer;
         z-index: 2;
@@ -37,11 +36,11 @@
         }
 
         &.submitDisable {
-            background: themes.$silver-color-light;
+            background: var(--silver-color-light);
             cursor: default;
             svg {
                 path {
-                    fill:themes.$silver-color-main;
+                    fill:var(--silver-color-main);
                 }
             }
             &.loadingEnabled {
@@ -52,7 +51,7 @@
                 svg.playLoader {
                     display: block;
                     path {
-                        fill:themes.$secondary-color-important;
+                        fill:var(--secondary-color-important);
                     }
                     
                 }

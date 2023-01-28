@@ -1,5 +1,4 @@
 @use '../../../base';
-@use '../../../themes';
 .ActionWhere {
     line-height: 26px;
     position: absolute;
@@ -18,11 +17,11 @@
         align-items: center;
         justify-content: center;
         background: #fff;
-        border: 2px solid themes.$primary-color-main ;
+        border: 2px solid var(--primary-color-main) ;
         border-radius: 13px;
         height: 23px;
         min-width: 23px !important;
-        fill: themes.$primary-color-main !important ;
+        fill: var(--primary-color-main) !important ;
         font-weight: bold;  
         margin-left: 10px;  
         svg{

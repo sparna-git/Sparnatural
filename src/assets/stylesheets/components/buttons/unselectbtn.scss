@@ -1,4 +1,3 @@
-@use '../../themes';
 
 span.unselect{
     cursor: pointer;
@@ -7,7 +6,7 @@ span.unselect{
     right: 25px;
     border-radius: 100%;
     svg {
-        fill: themes.$primary-color-important;
+        fill: var(--primary-color-important);
         width: 18px;
         background-color: white;
         border-radius: 100%;

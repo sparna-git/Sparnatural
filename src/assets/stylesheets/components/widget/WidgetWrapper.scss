@@ -1,9 +1,8 @@
-@use "../../themes";
 @use '../../base';
 
 .nb-choice-2 {
     .WidgetWrapper {
-        border-left: 3px solid themes.$primary-color-main;
+        border-left: 3px solid var(--primary-color-main);
 
         &:before {
             display: none;;
@@ -33,7 +32,7 @@
         left:-3px;
         width: 3px;
         height: 20px;
-        background: themes.$primary-color-main;
+        background: var(--primary-color-main);
     }
 
     &:after {
@@ -67,7 +66,7 @@
         cursor: pointer;
     }
     .or {
-        color: themes.$primary-color-main;
+        color: var(--primary-color-main);
         font-weight: 600;
     }
     .selectAll .underline {

@@ -93,6 +93,11 @@ module.exports = {
 		  patterns: [
 			{
 				from:__dirname +'/static'
+			},
+			// Copy the themes CSS directly as static files in a themes subfolder
+			{
+				from:__dirname +'/src/assets/stylesheets/themes',
+				to:'themes'
 			}
 		  ]
 		}),

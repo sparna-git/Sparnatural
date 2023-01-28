@@ -1,4 +1,3 @@
-@use "../../../themes";
 @use '../../../mixins';
 
 .OptionsGroup {
@@ -8,22 +7,22 @@
     min-width: fit-content;
     /*padding-right: 15px;*/
     margin-left: -22px;
-    @include mixins.arrow-back-colors(themes.$secondary-color-main, #fff);
+    @include mixins.arrow-back-colors(var(--secondary-color-main), #fff);
     
     &.Disabled {
         display: flex;
-        @include mixins.arrow-back-colors(themes.$silver-color-main, #fff);
+        @include mixins.arrow-back-colors(var(--silver-color-main), #fff);
         /*@include arrow-front-colors($silver-color-main, #fff);*/
     }
     &.NoOptionEnabled {
         display: none!important;
-        @include mixins.arrow-back-colors(themes.$silver-color-light, #fff);
+        @include mixins.arrow-back-colors(var(--silver-color-light), #fff);
     }
     .Optional, .NotExists {
         padding-right: 13px;
         margin-left: -7px;
-        @include mixins.arrow-back-colors(themes.$secondary-color-light, #fff);
-        @include mixins.arrow-front-colors(themes.$secondary-color-light, #fff);
+        @include mixins.arrow-back-colors(var(--secondary-color-light), #fff);
+        @include mixins.arrow-front-colors(var(--secondary-color-light), #fff);
             position: relative;
             display: flex;
             zoom: 1;
@@ -38,7 +37,7 @@
             cursor: pointer;
             span {
                 text-indent: 13px;
-                background: themes.$secondary-color-light;
+                background: var(--secondary-color-light);
                 border-top: 3px solid #fff;
                 border-bottom: 3px solid #fff;
             }
@@ -47,10 +46,10 @@
             }
             &:hover,
             &.Enabled {
-                @include mixins.arrow-back-colors(themes.$secondary-color-important, #fff);
-				@include mixins.arrow-front-colors(themes.$secondary-color-important, #fff);
+                @include mixins.arrow-back-colors(var(--secondary-color-important), #fff);
+				@include mixins.arrow-front-colors(var(--secondary-color-important), #fff);
                 span {
-                    background: themes.$secondary-color-important;
+                    background: var(--secondary-color-important);
                 }
             }
     }
