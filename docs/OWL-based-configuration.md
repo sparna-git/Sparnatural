@@ -94,7 +94,7 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 | [`core:order`](http://data.sparna.fr/ontologies/sparnatural-config-core#order) | order | 0..1 | Order of this property in property lists. If not set, alphabetical order is used. |
 | [`core:tooltip`](http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip) | tooltip | 0..n | Text that appears as tooltip when hovering this property, in lists and when selected. Multiple values are allowed in different languages. HTML markup is supported. |
 | [`core:isMultilingual`](http://data.sparna.fr/ontologies/sparnatural-config-core#isMultilingual) | is optional | 0..1 | used to indicate that the values of the property are multilingual (in other words, that there are multiple values with different language tags). In this case, when the value of such a property is selected as a column, a FILTER will automatically be added to filter the value based on the default language of Sparnatural (passed as a parameter at init) |
-
+| [`sd:sparqlService`](http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService) | sparql service endpoint | 0..1 | This annotation allows to specify a remote endpoint for federated queries. The [`federated queries`](https://www.w3.org/TR/sparql11-federated-query/) works with the SERVICE keyword. This annotation must specify a [sd:Service](#annotation-for-service-keyword) endpoint.  |
 
 #### Annotations for a SelectResourceProperty
 
@@ -110,3 +110,11 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 | [`core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty) | begin date property | 0..1 | Applicable to properties under `TimeProperty`. Indicates the property that is used in the graph to express the beginning of a validity range on resources, for example [`rico:beginningDate`](https://www.ica.org/standards/RiC/ontology#beginningDate). Specifying `core:beginDateProperty` and `core:endDateProperty` will trigger the [specific date range query behavior](Querying-date-ranges). |
 | [`core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) | end date property | 0..1 | Applicable to properties under `TimeProperty`. Indicates the property that is used in the graph to express the end of a validity range on resources, for example [`rico:endDate`](https://www.ica.org/standards/RiC/ontology#endDate). Specifying `core:beginDateProperty` and `core:endDateProperty` will trigger the [specific date range query behavior](Querying-date-ranges). |
 | [`core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) | exact date property | 0..1 | Applicable to properties under `TimeProperty`. Used in combination with `core:beginDateProperty` and `core:endDateProperty`, to indicate the the property that is used in the graph to express the exact date of a resource, for example [`rico:endDate`](https://www.ica.org/standards/RiC/ontology#date). This is used for the [specific date range query behavior](Querying-date-ranges). |
+
+
+#### <a name="#annotation-for-service-keyword"></a>Annotation for SERVICE keyword
+
+| Annotation / Axiom | Label | Card. | Description |
+| ------------------ | ----- | ----- | ----------- |
+| [`endpoint`](https://www.w3.org/TR/sparql11-service-description/#sd-endpoint) | define the sparql URL endpoint | 0..1 | Define where the SERVCICE KEYWORD should fetch the results for the federated query |
+| [`rdfs:label`] | sparql endpoint | 0..1 | A human readable label for the sparql endpoint. |

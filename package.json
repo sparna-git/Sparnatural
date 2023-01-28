@@ -3,6 +3,8 @@
   "version": "8.0.0",
   "description": "Visual query builder for SPARQL queries.",
   "main": "dist/sparnatural.js",
+  "module": "dist/sparnatural.js",
+  "types": "dist/Sparnaturalelement.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
@@ -69,7 +71,6 @@
     "sass": "^1.49.8",
     "sass-loader": "^13.0.0",
     "stream-browserify": "^3.0.0",
-    "style-loader": "^0.23.1",
     "ts-loader": "^9.3.0",
     "typescript": "^4.6.3",
     "url": "^0.11.0",
@@ -98,7 +99,7 @@
     "rdf-store-stream": "^1.3.0",
     "select2": "^4.0.13",
     "sortablejs": "^1.14.0",
-    "sparqljs": "^3.5.2",
+    "sparqljs": "^3.6.2",
     "streamify-string": "^1.0.1",
     "tippy.js": "^6.3.5"
   }

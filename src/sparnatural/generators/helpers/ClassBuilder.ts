@@ -6,6 +6,7 @@ import { getSettings } from "../../settings/defaultSettings";
 import ISpecProvider from "../../spec-providers/ISpecProvider";
 import SparqlFactory from "../SparqlFactory";
 
+
 export default class  ClassBuilder {
     protected resultPtrn:Pattern[] = []
     protected specProvider:ISpecProvider
@@ -53,11 +54,21 @@ export default class  ClassBuilder {
     }
 
     #buildClsTriple(){
-        this.classTriple= SparqlFactory.buildTriple(
-            DataFactory.variable(this.classGroup.getVarName()?.replace('?','')) ,
-            DataFactory.namedNode(this.typePredicate),
-            DataFactory.namedNode(this.classGroup.getTypeSelected())
-        )
+        //https://github.com/sparna-git/Sparnatural/issues/72
+        if(getSettings().typePredicate){
+            const parsed = SparqlFactory.parsePropertyPath(getSettings().typePredicate)
+            this.classTriple = SparqlFactory.buildTypeTriple(
+                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')) ,
+                parsed,
+                DataFactory.namedNode(this.classGroup.getTypeSelected())
+            )
+        } else {
+            this.classTriple= SparqlFactory.buildTypeTriple(
+                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')) ,
+                DataFactory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+                DataFactory.namedNode(this.classGroup.getTypeSelected())
+            )
+        }
     }
 
     #buildDefaultLblTrpl(){

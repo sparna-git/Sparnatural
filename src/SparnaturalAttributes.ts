@@ -1,6 +1,7 @@
 export class SparnaturalAttributes {
   config: any;
-  language: string;
+  defaultEndpoint: string;
+  language?: string;
   addDistinct?: boolean;
   limit?: number;
   typePredicate?: string;
@@ -8,22 +9,23 @@ export class SparnaturalAttributes {
   maxOr: number;
   backgroundBaseColor?: string; //TODO '250,136,3'
   sparqlPrefixes?: { [key: string]: string };
-  defaultEndpoint?: string | (() => string);
   localCacheDataTtl?: number;
   debug: boolean;
   submitButton?: boolean;
 
   constructor(element:HTMLElement) {
     // not the differences in attribute names
-    this.config = this.#read(element, "src");
-    this.language = this.#read(element, "lang");
+    this.config = this.#read(element,"src",this.#isJSON(element.getAttribute('src')));
     this.defaultEndpoint = this.#read(element, "endpoint");
+    if(!this.config || !this.defaultEndpoint) {
+      throw Error('No config or deault endpoint provided!');
+    }
+    this.language = this.#read(element, "lang");
     this.backgroundBaseColor = this.#read(element, "background");
     // use the singular to match RDFa attribute name
     this.sparqlPrefixes = this.#parsePrefixes(element);
     this.addDistinct = this.#read(element, "distinct", true);
     this.limit = this.#read(element, "limit", true);
-    
     this.typePredicate = this.#read(element, "typePredicate");
     this.maxDepth = this.#read(element, "maxDepth");
     this.maxOr = this.#read(element, "maxOr");
@@ -52,6 +54,18 @@ export class SparnaturalAttributes {
     }
 
     return sparqlPrefixes;
+  }
+  #isJSON =(json:string)=> {
+
+    let is_json = true; //true at first
+
+    // Check if config is given as JSON string or as URL
+    try {
+      JSON.parse(json);
+    } catch (error) {
+        is_json = false;
+    }
+    return is_json
   }
 
 }

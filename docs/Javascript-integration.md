@@ -103,7 +103,7 @@ A typical integration in a web page looks like this :
 | **submitButton** | `true` |
 | Whether Sparnatural should display a submit button to allow the user to execute the query. A click on the submit button will trigger a `submit` event. In case it is not provided, it is the page responsibility to either execute the query automatically at each update in the `queryUpdated` event or provide its own way to submit the query. |
 | **typePredicate** | `rdf:type` |
-| The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to `http://www.wikidata.org/prop/direct/P31` for Wikidata integration. |
+| The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to `<http://www.wikidata.org/prop/direct/P31>` | `<http://www.wikidata.org/prop/direct/P31>*` for Wikidata integration. |
 
 
 | **autocomplete** |  |
