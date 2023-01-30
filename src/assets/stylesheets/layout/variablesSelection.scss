@@ -12,9 +12,9 @@
     background: rgb(255, 231, 203);
     margin-bottom: 22px;
     border-top: 2px solid #8D8D8D;
-    background: themes.$primary-color-light;
+    background: var(--primary-color-light);
     margin-bottom: 22px;
-    border-top: 2px solid themes.$silver-color-main;
+    border-top: 2px solid var(--silver-color-main);
 
     .linesWrapper {
         // display: none;
@@ -36,7 +36,7 @@
     }
 
     .VariableSelectorDisplay {
-        background: themes.$primary-color-medium;
+        background: var(--primary-color-medium);
         height: 41px;
         position: relative;
 
@@ -50,7 +50,7 @@
             margin-top: 18px;
             margin-left: -22px;
             border-radius: 22px;
-            background: themes.$primary-color-medium;
+            background: var(--primary-color-medium);
             line-height: 1;
             padding: 10px;
             transition: margin-top 0.700s ease;
@@ -106,7 +106,7 @@
             padding: 3px 7px 3px 2px;
             border: 1px solid gray;
             font-size: 12px;
-            color: themes.$default-text-color;
+            color: var(--default-text-color);
             border-radius: 5px;
             background: #fff;
             align-items: center;
@@ -127,7 +127,7 @@
                     height: 24px;
 
                     path {
-                        stroke: themes.$silver-color-main;
+                        stroke: var(--silver-color-main);
                         stroke-width: 0.264583;
                     }
                 }
@@ -192,7 +192,7 @@
 
                 svg {
                     path {
-                        fill: themes.$primary-color-main;
+                        fill: var(--primary-color-main);
                     }
                 }
             }
@@ -214,12 +214,12 @@
             }
         }
 
-        color: themes.$default-text-color;
+        color: var(--default-text-color);
         //section Sort
         a {
             display: inline-block;
             padding: 5px;
-            color: themes.$default-text-color;
+            color: var(--default-text-color);
         }
     }
 
@@ -262,7 +262,7 @@
     }
 
     input:checked + .slider {
-        background-color: themes.$primary-color-medium;
+        background-color: var(--primary-color-medium);
     }
 
     input:focus + .slider {
@@ -273,7 +273,7 @@
         -webkit-transform: translateX(22px);
         -ms-transform: translateX(22px);
         transform: translateX(22px);
-        background-color: themes.$primary-color-main;
+        background-color: var(--primary-color-main);
     }
     /* Rounded sliders */
     .slider.round {

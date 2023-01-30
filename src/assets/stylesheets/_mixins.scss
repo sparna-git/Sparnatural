@@ -28,7 +28,7 @@
 		height: 0;
 		border-style: solid;
 		border-width: 0 15px 21px 0;
-		border-color: transparent $primary-color-main transparent transparent;
+		border-color: transparent var(--primary-color-main) transparent transparent;
 		top: 0
 	}
 	&>.triangle-b {
@@ -36,7 +36,7 @@
 		height: 0;
 		border-style: solid;
 		border-width: 0 0 21px 15px;
-		border-color: transparent transparent $primary-color-main transparent;
+		border-color: transparent transparent var(--primary-color-main) transparent;
 		bottom: 0;
 	}
 	
@@ -52,7 +52,7 @@
 		display: inline-block;float: right;margin-right: 0;
 		border-style: solid;
 		border-width: 21px 0 21px 15px;
-		border-color: transparent transparent transparent $primary-color-main;
+		border-color: transparent transparent transparent var(--primary-color-main);
 	}
 	
 }

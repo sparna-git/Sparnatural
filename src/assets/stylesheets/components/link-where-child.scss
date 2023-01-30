@@ -1,10 +1,9 @@
 @use '../base';
-@use '../themes';
 .link-where-bottom {
     .upper-vertical, .horizontal, .lower-vertical{
         height: 3px;
         position: absolute;
-        background-color: themes.$primary-color-main;
+        background-color: var(--primary-color-main);
         display: block;
         z-index: 0;
     }
@@ -14,7 +13,7 @@
             position: relative;
             top: -10px;
             background: #fff;
-            border: 2px solid themes.$primary-color-main ;
+            border: 2px solid var(--primary-color-main) ;
             border-radius: 15px;
             height: 30px;
             line-height: 20px;
@@ -27,11 +26,11 @@
             height: 3px;
             position: absolute;
             // rgba(255,255,255,0) is white transparent = completely transparent
-            background: repeating-linear-gradient( 90deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, themes.$primary-color-main 8px, themes.$primary-color-main 16px);
+            background: repeating-linear-gradient( 90deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, var(--primary-color-main) 8px, var(--primary-color-main) 16px);
             display: block;
         }
         span{
-            border: 2px dashed themes.$primary-color-main
+            border: 2px dashed var(--primary-color-main)
         }
     }
 
@@ -51,11 +50,11 @@
             height: 3px;
             position: absolute;
             // rgba(255,255,255,0) is white transparent = completely transparent
-            background: repeating-linear-gradient( 90deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, themes.$ternary-color-main 8px, themes.$ternary-color-main 16px);
+            background: repeating-linear-gradient( 90deg, rgba(255,255,255,0), rgba(255,255,255,0) 8px, var(--ternary-color-main) 8px, var(--ternary-color-main) 16px);
             display: block;
         }
         span{
-            border: 2px dashed themes.$ternary-color-main
+            border: 2px dashed var(--ternary-color-main)
         }
 	}
 }

@@ -1,4 +1,3 @@
-@use "../../../themes";
 @use '../../../base';
 @use '../../../mixins';
 /*Hide select widget list arrow*/
@@ -52,7 +51,7 @@
         &.selected,
         &.focus,
         &:hover {
-            background: themes.$primary-color-main ;
+            background: var(--primary-color-main) ;
             color: #fff;
             img {
                 display: none;
@@ -92,7 +91,7 @@
     }
 }
 .nice-select.disabled {
-    color: themes.$default-text-color;
+    color: var(--default-text-color);
     border-color: transparent;
     border-radius: 0;
 }

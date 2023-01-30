@@ -1,5 +1,4 @@
 @use '../../../base';
-@use '../../../themes';
 @use 'sass:math';
 .ActionsGroup { // acts als hover div
     position: absolute;
@@ -26,7 +25,7 @@
             position: absolute;
             top: -14px;
             left: -1px;
-            border-left: 3px solid themes.$primary-color-main ;
+            border-left: 3px solid var(--primary-color-main) ;
             margin-left: -1px;
             height: 15px;
             &:before {
@@ -48,14 +47,14 @@
             cursor: pointer;
             display: block;
             background: #fff;
-            border: 2px solid themes.$primary-color-main ;
+            border: 2px solid var(--primary-color-main) ;
             border-radius: 15px;
             height: 30px;
             line-height: 20px;
             padding: 2px 10px;
             transform: translate(-50%, 0);
             &:hover {
-                color: themes.$primary-color-main ;
+                color: var(--primary-color-main) ;
             }
         }
     }

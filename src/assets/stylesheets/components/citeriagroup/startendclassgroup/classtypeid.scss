@@ -1,4 +1,3 @@
-@use "../../../themes";
 @use '../../../base';
 @use '../../../mixins';
 .ClassTypeId{
@@ -10,19 +9,19 @@
     }
 
     &.Highlited {
-        @include mixins.arrow-back-colors(themes.$primary-color-main, #fff);
-		@include mixins.arrow-front-colors(themes.$primary-color-main, #fff);
+        @include mixins.arrow-back-colors(var(--primary-color-main), #fff);
+		@include mixins.arrow-front-colors(var(--primary-color-main), #fff);
         .nice-select{
             border-radius: unset;
             color: #fff;
-            background-color: themes.$primary-color-main;
+            background-color: var(--primary-color-main);
             border-color: #fff;
         }
         &.VariableSelected{
-            @include mixins.arrow-front-colors(themes.$primary-color-main, themes.$secondary-color-important);
-            @include mixins.arrow-back-colors(themes.$primary-color-main, themes.$secondary-color-important);
+            @include mixins.arrow-front-colors(var(--primary-color-main), var(--secondary-color-important));
+            @include mixins.arrow-back-colors(var(--primary-color-main), var(--secondary-color-important));
             .nice-select{
-                border-color: themes.$secondary-color-important;
+                border-color: var(--secondary-color-important);
             }
         }
 	}

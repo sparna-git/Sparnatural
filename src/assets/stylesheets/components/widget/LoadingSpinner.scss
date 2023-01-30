@@ -1,4 +1,3 @@
-@use '../../themes';
 .loadingspinner {
     position: absolute;
     z-index: 1;
@@ -24,7 +23,7 @@
         svg {
             vertical-align: top;
             path {
-                fill: themes.$primary-color-main;
+                fill: var(--primary-color-main);
             }
         }
         &.show {

@@ -2,12 +2,11 @@
 @use 'sass:math';
 @use '../../mixins';
 @use '../../base';
-@use '../../themes';
 
 
 .EndClassWidgetValue {
-    @include mixins.arrow-back-colors(themes.$primary-color-medium, #fff);
-    @include mixins.arrow-front-colors(themes.$primary-color-medium, #fff);
+    @include mixins.arrow-back-colors(var(--primary-color-medium), #fff);
+    @include mixins.arrow-front-colors(var(--primary-color-medium), #fff);
     position: relative;
     display: flex;
     /*line-height: 0;*/
@@ -25,7 +24,7 @@
     p {
         line-height: 48px;
         height: 48px;
-        background: themes.$primary-color-medium;
+        background: var(--primary-color-medium);
         background-clip: padding-box;
         margin: 0;
         padding: 0 5px 0 5px;
@@ -44,7 +43,7 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color:themes.$default-text-color;
+            color:var(--default-text-color);
             width: 100%;
         }
     }

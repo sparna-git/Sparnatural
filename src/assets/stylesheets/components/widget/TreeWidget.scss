@@ -1,6 +1,5 @@
 @use '../../mixins';
 @use '../../base';
-@use '../../themes';
 
 .tree-widget {
     height: 100%;
@@ -44,7 +43,7 @@
             cursor: pointer;
             i {
                 text-align: center;
-                color: themes.$primary-color-important;
+                color: var(--primary-color-important);
                 background: #fff !important;
                 font-size: 18px;
             }

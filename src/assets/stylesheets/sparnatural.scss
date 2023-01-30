@@ -7,9 +7,11 @@
 @import "nice-select.css";
 @import "~easy-autocomplete/dist/easy-autocomplete.css";
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
+// we are importing one default theme,
+// so that all the variables have a default value.
+// they can be overriden by importing another theme CSS in the HTML page
+@import "themes/sparnatural-theme-grass.css";
 
-
-@import "themes.scss";
 
 spar-natural {
 	section {
@@ -33,7 +35,7 @@ spar-natural {
 					padding: 5px;
 					&.selected {
 						
-						background: $primary-color-main ;
+						background: var(--primary-color-main) ;
 					}
 				}
 			}
@@ -51,15 +53,15 @@ body .select2-container--default {
 	font-size: 14px;
 	line-height: 1.2;
 	.select2-results__option--highlighted.select2-results__option--highlighted {
-		background-color: $primary-color-main;
+		background-color: var(--primary-color-main);
 	}
 }
 //tippy overides
 .tippy-box[data-theme~='sparnatural'] {
-    background-color: $primary-color-light;
+    background-color: var(--primary-color-light);
     color: #000;
 	border-radius: 5px;
-	border: 1px dashed $primary-color-main;
+	border: 1px dashed var(--primary-color-main);
 	padding: 2px;
 	font-size:0.75em;
   }

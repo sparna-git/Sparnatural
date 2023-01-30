@@ -10,8 +10,6 @@ const defaultSettings: ISettings = {
   addDistinct: true,
   limit: 1000,
   typePredicate: "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>",
-  // backgroundBaseColor: "2,184,117",
-  backgroundBaseColor: "29, 224, 153",
   defaultEndpoint: null,
   sparqlPrefixes: {
     rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
