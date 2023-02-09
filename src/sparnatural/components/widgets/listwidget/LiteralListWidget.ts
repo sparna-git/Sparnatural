@@ -55,6 +55,22 @@ export class LiteralListWidget extends ListWidget {
 
   parseInput(input:LiteralListWidgetValue["value"]): WidgetValue { return new LiteralListWidgetValue(input); }
 
+  /**
+   * 
+   * @returns As we are generating a FILTER for literal lists, never block the object prop
+   */
+  isBlockingObjectProp() {
+    return false;
+  }
+
+  /**
+   * Yes, I know it's weird but you MUST NOT block end here, otherwise the intersection triple is not generated
+   * @returns 
+   */
+  isBlockingEnd(): boolean {
+    return false;
+   }
+
   getRdfJsPattern(): Pattern[] {
     /*
     let vals = (this.widgetValues as LiteralListWidgetValue[]).map((v) => {
