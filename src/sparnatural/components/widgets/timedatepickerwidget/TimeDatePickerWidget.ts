@@ -124,9 +124,9 @@ export class TimeDatePickerWidget extends AbstractWidget {
     ).render();
 
     let calendarFormat = 
-    (this.dateFormat == "day")
-    ? getSettings().langSearch.PlaceholderTimeDateDayFormat
-    : getSettings().langSearch.PlaceholderTimeDateFormat;
+    (this.dateFormat === "day")
+    ? getSettings().langSearch.TimeWidgetDateFormat
+    : getSettings().langSearch.TimeWidgetYearFormat;
 
     var options: {
       language: any;
