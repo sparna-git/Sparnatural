@@ -4,14 +4,6 @@ _[Home](index.html) > JSON-based configuration_
 
 Sparnatural can be configured using a JSON(-LD) data structure. The data structure looks very much like [JSON-LD](https://www.w3.org/TR/json-ld/), but is really interpreted and parsed like a JSON, so stick with the JSON keys given below.
 
-## Structure of the JSON configuration
-
-The JSON configuration consists of :
-1. A fixed `@context` declaration
-1. A URI for the configuration
-1. A list of classes declaration
-1. A list of properties declaration
-
 ## Minimal JSON configuration
 
 A minimal JSON configuration for Sparnatural looks like the following example. It declares 1 class `foaf:Person` and a single property `foaf:knows` that has `foaf:Person` as its domain and range (a Person can know another Person). The config is stored in a `config` javascript variable that will be passed as a parameter to init Sparnatural.
@@ -77,7 +69,7 @@ var config =
   ]
 }
 ;
-    </script>
+</script>
 ```
 ## @context
 
@@ -298,12 +290,7 @@ The preconfigured datasource identifiers for children datasource on a TreeProper
 #### Reference to a preconfigured SPARQL query + a property
 
 If the preconfigured datasources do not fit the data model to be queried, you have the ability to refer to the same SPARQL queries used by these datasources, but adjust the property to be searched or used as a label. To do so, the `datasource` key should hold:
-1. a `queryTemplate` reference to one of the preconfigured SPARQL query template, namely:
-  1. `datasources:query_list_label_alpha`
-  1. `datasources:query_list_label_count`
-  1. `datasources:query_list_label_alpha_with_count`
-  1. `datasources:query_search_label_strstarts`
-  1. `datasources:query_search_label_bifcontains`
+1. a `queryTemplate` reference to one of the preconfigured SPARQL query template from table [A reference to a preconfigured datasource](#A reference-to-a-preconfigured-datasource)
 1. a `labelProperty` or `labelPath` specifying either the full URI of the labelling property to use or a SPARQL property path (using angle brackets) to use.
 
 e.g. to create a list widget based on `http://foo.bar/label` ordered by count :
