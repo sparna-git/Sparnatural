@@ -290,7 +290,7 @@ The preconfigured datasource identifiers for children datasource on a TreeProper
 #### Reference to a preconfigured SPARQL query + a property
 
 If the preconfigured datasources do not fit the data model to be queried, you have the ability to refer to the same SPARQL queries used by these datasources, but adjust the property to be searched or used as a label. To do so, the `datasource` key should hold:
-1. a `queryTemplate` reference to one of the preconfigured SPARQL query template from table [A reference to a preconfigured datasource](#A reference-to-a-preconfigured-datasource)
+1. a `queryTemplate` reference to one of the preconfigured SPARQL query template from table [A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource)
 1. a `labelProperty` or `labelPath` specifying either the full URI of the labelling property to use or a SPARQL property path (using angle brackets) to use.
 
 e.g. to create a list widget based on `http://foo.bar/label` ordered by count :
