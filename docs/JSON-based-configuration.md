@@ -150,7 +150,7 @@ Example:
 |  `subPropertyOf`  |The key `subPropertyOf` for object properties defines the value selection for the range. It defines which widget should be used or if the value is a literal. More information in the [subPropertyOf table](#subPropertyOf-table)| Mandatory |
 |  `label`  | Just like classes, properties need to have labels, at least one, always associated to a language code. | Mandatory |
 |  `domain & range`  | Connects classes with each other. Can be specified with single value or `unionOf`. Example above shows single value for domain and `unionOf` for the range.   | Mandatory |
-|  `propertyPath`  |  Similarly to classes, the URI ( `@id` ) of the property is inserted in the SPARQL query, unless you specify a replacement string (typically a property path) using `sparqlString`. A typical use-case for this is to provide inverse links to the user that are not explicit in the data graph.| Optional |
+|  `sparqlString`  |  Similarly to classes, the URI ( `@id` ) of the property is inserted in the SPARQL query, unless you specify a replacement string (typically a property path) using `sparqlString`. A typical use-case for this is to provide inverse links to the user that are not explicit in the data graph.| Optional |
 |  `datasource`  |  Some widgets such as `sparnatural:AutocompleteProperty` or `sparnatural:ListProperty` require a datasource. This datasource is actually SPARQL query which returns the necessary information needed by the widget. This can be achieved in many different ways and is thoroughly explained [here](OWL-based-configuration-datasources) | Optional |
 | [`enableNegation`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableNegation) |  Enables the additional option to express a negation (using a `FILTER NOT EXISTS`) on this property. The `FILTER NOT EXISTS` will apply to the whole "branch" in the query (this criteria and all children criterias) |
 | [`enableOptional`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableOptional) |  Enables the additional option to express an `OPTIONAL` on this property. The `OPTIONAL` will apply to the whole "branch" in the query (this criteria and all children criterias) |
@@ -177,15 +177,34 @@ This table shows possible values for the subPropertyOf of properties (not classe
 |  sparnatural:NonSelectableProperty  | ![](../documentation/13-no-value.png) |
 |  sparnatural:BooleanProperty  | ![](../documentation/15-boolean.png) |
 
-## Configure Datasources
+## Configure datasources on object properties
 
 Some widgets such as `sparnatural:AutocompleteProperty` and `sparnatural:ListProperty ` require a `datasource` key to populate respectively the list of values or the values proposed by autocompletion. Creating a datasource for a widget can be achieved in 4 ways:
-1. A reference to a preconfigured datasource.
-2. A reference to a preconfigured SPARQL query, plus a property URI to be injected in this query;
-3. Your own SPARQL query;
-4. Callback method provided in the JavaScript code;
+
+|  Nr  | method | JSON example |
+| ---- | ------ | ------------ |
+| 1. | [A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource) | <pre>"datasource": {<br> &emsp;queryTemplate":"query_list_label_count", <br> }</pre>
+| 2. | Reference to a preconfigured SPARQL query + a URI to be injected(#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected) | <pre>"datasource": {<br> &emsp; "queryTemplate":"query_list_label_count", <br> &emsp; "labelProperty":"http://foo.bar/label",<br> }</pre> |
+| 3. | [Your own SPARQL query](#your-own-sparql-query) | <pre>"datasource": {<br> &emsp;queryString":"Your-SELECT-query-string", <br> }</pre> |
+| 4. | Callback method provided in the JavaScript code | see settings integration |
+
+1. [A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource)
+2. Reference to a preconfigured SPARQL query + a URI to be injected(#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected)
+3. [Your own SPARQL query](#your-own-sparql-query)
+4. 
 
 ### A reference to a preconfigured datasource
+JSON:
+```
+{
+      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
+      ...
+      "datasource": {
+        "queryTemplate" : "datasources:query_list_label_count",
+        "labelProperty" : "http://foo.bar/label"
+      } 
+    }
+```
 Sparnatural comes preconfigured with datasources that can populate lists based on `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` or the URI of the entity (which is the default behavior). For each of these properties, 3 flavors of datasource exist : either with an alphabetical ordering, an alphabetical ordering plus the count shown in parenthesis, or a descending count ordering.
 
 |  queryTemplate  | property path | widget |
@@ -264,7 +283,7 @@ ORDER BY UCASE(?label)
 LIMIT 500
 ```
 
-### Preconfigured datasources for a TreeProperty
+#### Preconfigured datasources for a TreeProperty
 
 Sparnatural comes preconfigured with datasources that can populate a tree selector with the roots and the children of each node.
 
@@ -287,7 +306,7 @@ The preconfigured datasource identifiers for children datasource on a TreeProper
 1. [`datasources:tree_children_skosnarrower_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower_with_count) : same as previous, but returns the number of occurences of each node in parenthesis
 
 
-#### Reference to a preconfigured SPARQL query + a property
+### Reference to a preconfigured SPARQL query + a property
 
 If the preconfigured datasources do not fit the data model to be queried, you have the ability to refer to the same SPARQL queries used by these datasources, but adjust the property to be searched or used as a label. To do so, the `datasource` key should hold:
 1. a `queryTemplate` reference to one of the preconfigured SPARQL query template from table [A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource)
@@ -364,36 +383,3 @@ e.g. to populate a list with `rdfs:label`s fetched from DBPedia:
       } 
     }
 ```
-
-Cool, isn't it ?
-
-### Federated Queries
-Sparnatural v.8 >= provides support for basic query federation.
-In order to define a sparql endpoint, a sparql service has to be defined:
-```
-    {
-      "@id":
-        "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
-      "@type": "sd:Service",
-      "endpoint": "https://dbpedia.org/sparql" ,
-      "label": "DBPedia (english)"
-    },
-```
-Such a service endpoint definition can then be referenced within an object property with the *sparqlService* property:
-```
-    {
-      "@id":"http://twin-example/geneva#Location",
-      "@type": "Class",
-      "subClassOf": "http://www.w3.org/2000/01/rdf-schema#Literal",
-      "sparqlService": "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
-      "label": [
-        { "@value": "Location", "@language": "en" },
-        { "@value": "Location", "@language": "fr" }
-      ],
-      "faIcon": "fas fa-map-marked-alt"
-    },
-```
-
-### Literal properties
-
-TODO
