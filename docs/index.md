@@ -5,16 +5,17 @@
 
 _For examples of how Sparnatural works and can be configured, have a look at the [**demos folder**](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) of [sparnatural.eu](http://sparnatural.eu) website._
 
-## Configure Sparnatural
-1. Create a config file
-The config file is a JSON-LD can be created via 3 different means:
-- Via [Protege](OWL-based-configuration)
-- Via [raw JSON-LD](JSON-based-configuration)
 
-2. Configure the datasources for the widgets (Protege and raw JSON-LD)
-- [guide on datasources](OWL-based-configuration-datasources)
+## 1. Create a config file
 
-3. Integrate Sparnatural
+#### Via Protege
+- [Create basic OWL](OWL-based-configuration)
+- [Configure datasources](./OWL-based-configuration-datasources.md)
+#### Via JSON-LD
+- [Create basic OWL](./JSON-based-configuration.md)
+- [Configure datasources](./JSON-based-configuration-datasources.md)
+
+## 2. Embed Sparnatural
 - [Javascript integration v8](Javascript-integration) - Reference page for Javascript integration and parameters for version 8
 - [React integration v8](react-integration) - Initialization of Sparnatural as a custom component within react
 - [Javascript integration v7](Javascript-integration-v7) - Reference page for Javascript integration and parameters for version 7
