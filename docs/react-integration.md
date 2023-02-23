@@ -73,7 +73,7 @@ namespace JSX {
     }
 
     interface SparnaturalAttributes {
-        ref:React.RefObject<unknown>
+        ref:React.RefObject<HTMLElement>
         src: string;
         lang: string;
         endpoint: string;
