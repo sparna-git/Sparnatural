@@ -8,9 +8,10 @@ Sparnatural can be configured using a JSON(-LD) data structure. The data structu
 
 A minimal JSON configuration for Sparnatural looks like the following example. It declares 1 class `foaf:Person` and a single property `foaf:knows` that has `foaf:Person` as its domain and range (a Person can know another Person). The config is stored in a `config` javascript variable that will be passed as a parameter to init Sparnatural.
 
+<details>
+<summary>Show minimal JSON</summary>
+
 ```javascript
-    <script>
-var config = 
 {
   "@context":
   {
@@ -68,9 +69,10 @@ var config =
     }
   ]
 }
-;
-</script>
 ```
+</details>
+
+
 ## @context
 
 Copy-paste the `@context` key given in the minimal example and do not modify it. Keep it like this for your own configuration.
@@ -78,6 +80,7 @@ Copy-paste the `@context` key given in the minimal example and do not modify it.
 ## Classes configuration
 
 The configuration lists the types of entities that are searchable in Sparnatural. These types either map to real RDF resources, or are used to express search criterias on literal values.
+
 ```
 {
     "@id" : "http://xmlns.com/foaf/0.1/Person",
@@ -161,7 +164,7 @@ Example:
 
 ### subPropertyOf table
 
-This table shows possible values for the subPropertyOf of properties (not classes!)
+This table shows possible values for the subPropertyOf of [object properties](#object-properties) (not classes!)
 
 |  Value  | Description |
 | -----   | ----------- |
@@ -179,19 +182,14 @@ This table shows possible values for the subPropertyOf of properties (not classe
 
 ## Configure datasources on object properties
 
-Some widgets such as `sparnatural:AutocompleteProperty` and `sparnatural:ListProperty ` require a `datasource` key to populate respectively the list of values or the values proposed by autocompletion. Creating a datasource for a widget can be achieved in 4 ways:
+This is an extension chapter for the property `datasource` shown in [Object properties](#object-properties)Some widgets such as `sparnatural:AutocompleteProperty` and `sparnatural:ListProperty ` require a `datasource` key to populate respectively the list of values or the values proposed by autocompletion. Creating a datasource for a widget can be achieved in 4 ways:
 
 |  Nr  | method | JSON example |
 | ---- | ------ | ------------ |
 | 1. | [A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource) | <pre>"datasource": {<br> &emsp;queryTemplate":"query_list_label_count", <br> }</pre>
-| 2. | Reference to a preconfigured SPARQL query + a URI to be injected(#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected) | <pre>"datasource": {<br> &emsp; "queryTemplate":"query_list_label_count", <br> &emsp; "labelProperty":"http://foo.bar/label",<br> }</pre> |
+| 2. | [Reference to a preconfigured SPARQL query + a URI to be injected](#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected) | <pre>"datasource": {<br> &emsp; "queryTemplate":"query_list_label_count", <br> &emsp; "labelProperty":"http://foo.bar/label",<br> }</pre> |
 | 3. | [Your own SPARQL query](#your-own-sparql-query) | <pre>"datasource": {<br> &emsp;queryString":"Your-SELECT-query-string", <br> }</pre> |
 | 4. | Callback method provided in the JavaScript code | see settings integration |
-
-1. [A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource)
-2. Reference to a preconfigured SPARQL query + a URI to be injected(#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected)
-3. [Your own SPARQL query](#your-own-sparql-query)
-4. 
 
 ### A reference to a preconfigured datasource
 JSON:
