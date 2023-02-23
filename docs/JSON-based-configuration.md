@@ -169,7 +169,7 @@ This table shows possible values for the subPropertyOf of [object properties](#o
 |  Value  | Description |
 | -----   | ----------- |
 |  rdfs:Literal  | For classes that correspond either to a Literal (typically a date), either to a search, set the class as subclass of rdfs:Literal. <br>1. No rdf:type criteria corresponding to this class will be put in SPARQL queries. <br> 2. The class will never appear in the initial class list <br>3. it will not be possible to traverse this class with WHERE clauses |
-|  core:NotInstantiatedClass  | For classes that are references to "external" URIs that are not themselves described in the graph (i.e. they are not the subject of any triples in the graph, in particular no rdf:type), set the class as subclass of core:NotInstantiatedClass. 1. No rdf:type criteria corresponding to this class will be put in SPARQL queries 2. The class will never appear in the initial class list. It can still be used to be traversed in WHERE clause |
+|  core:NotInstantiatedClass  | For classes that are references to "external" URIs that are not themselves described in the graph (i.e. they are not the subject of any triples in the graph, in particular no rdf:type), set the class as subclass of core:NotInstantiatedClass. <br>1. No rdf:type criteria corresponding to this class will be put in SPARQL queries <br>2. The class will never appear in the initial class list but can still be used to be traversed in WHERE clause |
 |  sparnatural:ListProperty  | <img src="../documentation/10-list.png" width="150" height="90">  |
 |  sparnatural:AutocompleteProperty  | <img src="../documentation/9-autocomplete.png" width="150" height="90"> |
 |  sparnatural:TreeProperty  | <img src="../documentation/17-tree.png" width="150" height="100"> |
@@ -189,7 +189,7 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 | 1. | [A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource) | <pre>"datasource": {<br> &emsp;queryTemplate":"query_list_label_count", <br> }</pre>
 | 2. | [Reference to a preconfigured SPARQL query + a URI to be injected](#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected) | <pre>"datasource": {<br> &emsp; "queryTemplate":"query_list_label_count", <br> &emsp; "labelProperty":"http://foo.bar/label",<br> }</pre> |
 | 3. | [Your own SPARQL query](#your-own-sparql-query) | <pre>"datasource": {<br> &emsp;queryString":"Your-SELECT-query-string", <br> }</pre> |
-| 4. | Callback method provided in the JavaScript code | see settings integration |
+| 4. | Callback method provided in the JavaScript code | [see Advanced : customizing lists and autocomplete](./Javascript-integration.md#advanced--customizing-lists-and-autocomplete) |
 
 ### A reference to a preconfigured datasource
 JSON:
