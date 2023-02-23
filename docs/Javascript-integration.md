@@ -106,11 +106,11 @@ The `queryUpdated` event is triggered everytime the query is modified. The event
   - The (SPARQL.js format)[https://github.com/RubenVerborgh/SPARQL.js/] structure in `querySparqlJs`
 
 ```javascript
-	sparnatural.addEventListener("queryUpdated", (event) => {
-		console.log(event.detail.queryString);
-		console.log(event.detail.queryJson);
-		console.log(event.detail.querySparqlJs);
-	});
+sparnatural.addEventListener("queryUpdated", (event) => {
+	console.log(event.detail.queryString);
+	console.log(event.detail.queryJson);
+	console.log(event.detail.querySparqlJs);
+});
 ```
 
 ### "submit" event
@@ -155,9 +155,9 @@ yasqe.on("queryResponse", function(_yasqe, response, duration) {
 The `submit` event is triggered when the reset button is clicked. It can be used to empty or reset other part of the page, typically YasQE. A typical integration is the following:
 
 ```javascript
-	sparnatural.addEventListener("reset", (event) => {
-    	yasqe.setValue("");
-    });
+sparnatural.addEventListener("reset", (event) => {
+	yasqe.setValue("");
+});
 ```
 
 ### "display" event
@@ -165,28 +165,22 @@ The `submit` event is triggered when the reset button is clicked. It can be used
 The `display` event is triggered when Sparnatural gets displayed.
 
 ```javascript
-	sparnatural.addEventListener("display", (event) => {
-    	console.log("Sparnatural is displayed");
-    });
+sparnatural.addEventListener("display", (event) => {
+	console.log("Sparnatural is displayed");
+});
 ```
 
 ## Sparnatural element API
 
 The table below summarizes the various functions that can be called on the Sparnatural element.
 
-| Function | Parameters |
-| -------- | ----------- |
-| **sparnatural.enablePlayBtn()** | none |
-| Removes the loading from the play button once a query has finished executing. |
-| **sparnatural.disablePlayBtn()** | none |
-| Disables the play button once a query has started its execution. |
-| **sparnatural.loadQuery(query)** | Query as documented in [the query JSON format](Query-JSON-format) |
-| Loads a query structure in Sparnatural |
-| **sparnatural.expandSparql(sparqlString)** | A SPARQL query string |
-| Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration)|
-| **sparnatural.clear()** | none |
-| Clears the Sparnatural editor, as if the reset button was clicked. |
-
+| Function | Description | Parameters |
+| -------- | ----------- | ---------- |
+| **sparnatural.enablePlayBtn()**| Removes the loading from the play button once a query has finished executing.  | none |
+| **sparnatural.disablePlayBtn()** | Disables the play button once a query has started its execution.| none |
+| **sparnatural.loadQuery(query)** | Loads a query structure in Sparnatural. | Query structure as documented in [the query JSON format](Query-JSON-format)
+| **sparnatural.expandSparql(sparqlString)** | Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration) A SPARQL query string | string |
+| **sparnatural.clear()** | Clears the Sparnatural editor, as if the reset button was clicked.| none |
 
 ## Advanced : customizing lists and autocomplete
 
