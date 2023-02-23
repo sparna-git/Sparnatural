@@ -9,7 +9,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 ## 1. Create a config file
 
 #### Via Protege
-- [Create basic OWL](OWL-based-configuration)
+- [Create basic OWL](./OWL-based-configuration.md)
 - [Configure datasources](./OWL-based-configuration-datasources.md)
 #### Via JSON-LD
 - [Create basic OWL](./JSON-based-configuration.md)

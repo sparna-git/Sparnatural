@@ -5,6 +5,9 @@ _[Home](index.html) > Javascript integration version 8_
 
 _/!\This documentation applies to version 8 of Sparnatural. See the [version 7 integration documentation](Javascript-integration-v7) for version 7._
 
+## NPM
+`npm i sparnatural`
+
 ## Constructor
 
 Sparnatural is inserted as custom HTML element named `spar-natural` (note the dash), with specific attributes. It looks like so:
@@ -43,22 +46,22 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
 Then the HTML page needs to listen to specific events triggered by Sparnatural, notably `queryUpdated` and `submit` :
 
 ```javascript
-	const sparnatural = document.querySelector("spar-natural");
+const sparnatural = document.querySelector("spar-natural");
  
-  // triggered as soon there is a modification in the query
-	sparnatural.addEventListener("queryUpdated", (event) => {
- 		// do something with the query
-	});
+// triggered as soon there is a modification in the query
+sparnatural.addEventListener("queryUpdated", (event) => {
+ 	// do something with the query
+});
 
-	// triggered when submit button is called
-	sparnatural.addEventListener("submit", (event) => {
+// triggered when submit button is called
+sparnatural.addEventListener("submit", (event) => {
     // so something
-  });
+});
 
-	// triggered when reset button is clicked
-  sparnatural.addEventListener("reset", (event) => {
-    // do something
-  });
+// triggered when reset button is clicked
+sparnatural.addEventListener("reset", (event) => {
+	// do something
+});
 
 ```
 
@@ -68,28 +71,31 @@ A typical integration in a web page looks like this :
 
 ```javascript
 
-	const sparnatural = document.querySelector("spar-natural");
+const sparnatural = document.querySelector("spar-natural");
 
-    sparnatural.addEventListener("queryUpdated", (event) => {
-        // expand query to replace identifiers with content of sparqlScript annotation
-        queryString = sparnatural.expandSparql(event.detail.queryString);
-        // set query on YasQE
-        yasqe.setValue(queryString);
+sparnatural.addEventListener("queryUpdated", (event) => {
+	// expand query to replace identifiers with content of sparqlScript annotation
+	console.log(event.detail.queryString);
+	console.log(event.detail.queryJson);
+	console.log(event.detail.querySparqlJs);
+	queryString = sparnatural.expandSparql(event.detail.queryString);
+	// set query on YasQE
+	yasqe.setValue(queryString);
 
-        // save JSON query
-        document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
-    });
+	// save JSON query
+	document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
+});
 
-    sparnatural.addEventListener("submit", (event) => {
-        // enable loader on button
-        sparnatural.disablePlayBtn() ; 
-        // trigger the query from YasQE
-        yasqe.query();
-    });
+sparnatural.addEventListener("submit", (event) => {
+	// enable loader on button
+	sparnatural.disablePlayBtn() ; 
+	// trigger the query from YasQE
+	yasqe.query();
+});
 
-    sparnatural.addEventListener("reset", (event) => {
-        yasqe.setValue("");
-    });
+sparnatural.addEventListener("reset", (event) => {
+	yasqe.setValue("");
+});
 ```
 
 ### "queryUpdated" event
@@ -119,29 +125,29 @@ In typical integrations, the state of the submit button can be updated upon subm
 
 ```javascript
 
-	const sparnatural = document.querySelector("spar-natural");
+const sparnatural = document.querySelector("spar-natural");
 
-	sparnatural.addEventListener("queryUpdated", (event) => {
-        queryString = sparnatural.expandSparql(event.detail.queryString);
-        yasqe.setValue(queryString);
-    });
+sparnatural.addEventListener("queryUpdated", (event) => {
+	queryString = sparnatural.expandSparql(event.detail.queryString);
+	yasqe.setValue(queryString);
+});
 
-    sparnatural.addEventListener("submit", (event) => {
-        // disable the button and show a spinning loader
-        sparnatural.disablePlayBtn() ; 
-        // trigger the query from YasQE
-        yasqe.query();
-    });
+sparnatural.addEventListener("submit", (event) => {
+	// disable the button and show a spinning loader
+	sparnatural.disablePlayBtn() ; 
+	// trigger the query from YasQE
+	yasqe.query();
+});
 
-    const yasqe = new Yasqe(document.getElementById("yasqe"));
-    const yasr = new Yasr(document.getElementById("yasr"));
+const yasqe = new Yasqe(document.getElementById("yasqe"));
+const yasr = new Yasr(document.getElementById("yasr"));
 
-    yasqe.on("queryResponse", function(_yasqe, response, duration) {
-        // print the responses in YASR
-        yasr.setResponse(response, duration);
-        // re-enable play button in Sparnatural
-        sparnatural.enablePlayBtn() ;
-    }); 
+yasqe.on("queryResponse", function(_yasqe, response, duration) {
+	// print the responses in YASR
+	yasr.setResponse(response, duration);
+	// re-enable play button in Sparnatural
+	sparnatural.enablePlayBtn() ;
+}); 
 ```
 
 ### "reset" event

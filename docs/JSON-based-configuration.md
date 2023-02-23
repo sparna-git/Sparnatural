@@ -7,6 +7,7 @@ Sparnatural can be configured using a JSON(-LD) data structure. The data structu
 ## Minimal JSON configuration
 
 A minimal JSON configuration for Sparnatural looks like the following example. It declares 1 class `foaf:Person` and a single property `foaf:knows` that has `foaf:Person` as its domain and range (a Person can know another Person). The config is stored in a `config` javascript variable that will be passed as a parameter to init Sparnatural.
+It's advised to Copy-paste the `@context` key given in the minimal example and do not modify it. Keep it like this for your own configuration.
 
 <details>
 <summary>Show minimal JSON</summary>
@@ -70,12 +71,7 @@ A minimal JSON configuration for Sparnatural looks like the following example. I
   ]
 }
 ```
-</details>
-
-
-## @context
-
-Copy-paste the `@context` key given in the minimal example and do not modify it. Keep it like this for your own configuration.
+</details> 
 
 ## Classes configuration
 
@@ -109,7 +105,7 @@ The configuration lists the types of entities that are searchable in Sparnatural
 `tooltip` | Text that appears as tooltip when hovering this class, in lists and when selected. Multiple values are allowed in different languages. HTML markup is supported. | Optional|
 `defaultLabelProperty` | Use this annotation to relate a class in a Sparnatural configuration to a property that will be used as the default to fetch the labels of instances of this class. When a user selects this class as a column in the result set, if the class has this annotation set, everything behaves as if the user had selected also the corresponding property to be included. The label property may have no domain specified if you don't want it to be proposed to the user. The property must have a range specified to a single class. | Optional |
 
-## Object properties
+## Object properties 
 
 Each property represents a possible connection between one or more classes declared in the configuration.
 
