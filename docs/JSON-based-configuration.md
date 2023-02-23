@@ -152,12 +152,12 @@ Example:
 |  `domain & range`  | Connects classes with each other. Can be specified with single value or `unionOf`. Example above shows single value for domain and `unionOf` for the range.   | Mandatory |
 |  `sparqlString`  |  Similarly to classes, the URI ( `@id` ) of the property is inserted in the SPARQL query, unless you specify a replacement string (typically a property path) using `sparqlString`. A typical use-case for this is to provide inverse links to the user that are not explicit in the data graph.| Optional |
 |  `datasource`  |  Some widgets such as `sparnatural:AutocompleteProperty` or `sparnatural:ListProperty` require a datasource. This datasource is actually SPARQL query which returns the necessary information needed by the widget. This can be achieved in many different ways and is thoroughly explained [here](OWL-based-configuration-datasources) | Optional |
-| [`enableNegation`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableNegation) |  Enables the additional option to express a negation (using a `FILTER NOT EXISTS`) on this property. The `FILTER NOT EXISTS` will apply to the whole "branch" in the query (this criteria and all children criterias) |
-| [`enableOptional`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableOptional) |  Enables the additional option to express an `OPTIONAL` on this property. The `OPTIONAL` will apply to the whole "branch" in the query (this criteria and all children criterias) |
-| [`order`](http://data.sparna.fr/ontologies/sparnatural-config-core#order) |  Order of this property in property lists. If not set, alphabetical order is used. |
-| [`tooltip`](http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip) | Text that appears as tooltip when hovering this property, in lists and when selected. Multiple values are allowed in different languages. HTML markup is supported. |
-| [`isMultilingual`](http://data.sparna.fr/ontologies/sparnatural-config-core#isMultilingual) | If set to `true` used to indicate that the values of the property are multilingual. A FILTER ( `FILTER((LANG(?Tree_1_label)) = "en")` )will automatically be added based on the language parameter when intiatilizing Sparnatural.  |
-| [`sparqlService`](http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService) | This annotation allows to specify a remote endpoint for federated queries. The [`federated queries`](https://www.w3.org/TR/sparql11-federated-query/) works with the SERVICE keyword. This annotation must specify a [sd:Service](#annotation-for-service-keyword) endpoint. For example: <pre> { <br>&emsp; "@id":"http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",<br>&emsp; "@type":"sd:Service",<br> &emsp;"endpoint": "https://dbpedia.org/sparql"<br>}</pre>
+| [`enableNegation`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableNegation) |  Enables the additional option to express a negation (using a `FILTER NOT EXISTS`) on this property. The `FILTER NOT EXISTS` will apply to the whole "branch" in the query (this criteria and all children criterias) | Optional 
+| [`enableOptional`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableOptional) |  Enables the additional option to express an `OPTIONAL` on this property. The `OPTIONAL` will apply to the whole "branch" in the query (this criteria and all children criterias) | Optional
+| [`order`](http://data.sparna.fr/ontologies/sparnatural-config-core#order) |  Order of this property in property lists. If not set, alphabetical order is used. | Optional
+| [`tooltip`](http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip) | Text that appears as tooltip when hovering this property, in lists and when selected. Multiple values are allowed in different languages. HTML markup is supported. | Optional
+| [`isMultilingual`](http://data.sparna.fr/ontologies/sparnatural-config-core#isMultilingual) | If set to `true` used to indicate that the values of the property are multilingual. A FILTER ( `FILTER((LANG(?Tree_1_label)) = "en")` )will automatically be added based on the language parameter when intiatilizing Sparnatural.  | Optional
+| [`sparqlService`](http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService) | This annotation allows to specify a remote endpoint for federated queries. The [`federated queries`](https://www.w3.org/TR/sparql11-federated-query/) works with the SERVICE keyword. This annotation must specify a [sd:Service](#annotation-for-service-keyword) endpoint. For example: <pre> { <br>&emsp; "@id":"http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",<br>&emsp; "@type":"sd:Service",<br> &emsp;"endpoint": "https://dbpedia.org/sparql"<br>}</pre> | Optional
 
 ### subPropertyOf table
 
@@ -167,15 +167,15 @@ This table shows possible values for the subPropertyOf of properties (not classe
 | -----   | ----------- |
 |  rdfs:Literal  | For classes that correspond either to a Literal (typically a date), either to a search, set the class as subclass of rdfs:Literal. <br>1. No rdf:type criteria corresponding to this class will be put in SPARQL queries. <br> 2. The class will never appear in the initial class list <br>3. it will not be possible to traverse this class with WHERE clauses |
 |  core:NotInstantiatedClass  | For classes that are references to "external" URIs that are not themselves described in the graph (i.e. they are not the subject of any triples in the graph, in particular no rdf:type), set the class as subclass of core:NotInstantiatedClass. 1. No rdf:type criteria corresponding to this class will be put in SPARQL queries 2. The class will never appear in the initial class list. It can still be used to be traversed in WHERE clause |
-|  sparnatural:ListProperty  | ![](../documentation/10-list.png)  |
-|  sparnatural:AutocompleteProperty  | ![](../documentation/9-autocomplete.png)  |
-|  sparnatural:TreeProperty  | ![](../documentation/17-tree.png)  |
-|  sparnatural:TimeProperty-Date  | ![](../documentation/14-chronocultural-period.png)  |
-|  sparnatural:MapProperty  | ![](../documentation/18-map.png)  |
-|  sparnatural:TimeProperty-Year  | ![](../documentation/12-time-date.png)  |
-|  sparnatural:SearchProperty  | ![](../documentation/11-search.png)  |
-|  sparnatural:NonSelectableProperty  | ![](../documentation/13-no-value.png) |
-|  sparnatural:BooleanProperty  | ![](../documentation/15-boolean.png) |
+|  sparnatural:ListProperty  | <img src="../documentation/10-list.png" width="150" height="100">  |
+|  sparnatural:AutocompleteProperty  | <img src="../documentation/9-autocomplete.png" width="150" height="100"> |
+|  sparnatural:TreeProperty  | <img src="../documentation/17-tree.png" width="150" height="100"> |
+|  sparnatural:TimeProperty-Date  |<img src="../documentation/14-chronocultural-period.png" width="150" height="100"> |
+|  sparnatural:MapProperty  | <img src="../documentation/18-map.png" width="150" height="100">  |
+|  sparnatural:TimeProperty-Year  | <img src="../documentation/12-time-date.png" width="150" height="100"> |
+|  sparnatural:SearchProperty  | <img src="../documentation/11-search.png" width="150" height="100"> |
+|  sparnatural:NonSelectableProperty  | <img src="../documentation/13-no-value.png" width="150" height="100"> |
+|  sparnatural:BooleanProperty  | <img src="../documentation/15-boolean.png" width="150" height="100"> |
 
 ## Configure datasources on object properties
 
@@ -306,7 +306,7 @@ The preconfigured datasource identifiers for children datasource on a TreeProper
 1. [`datasources:tree_children_skosnarrower_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower_with_count) : same as previous, but returns the number of occurences of each node in parenthesis
 
 
-### Reference to a preconfigured SPARQL query + a property
+### Reference to a preconfigured SPARQL query + a URI to be injected
 
 If the preconfigured datasources do not fit the data model to be queried, you have the ability to refer to the same SPARQL queries used by these datasources, but adjust the property to be searched or used as a label. To do so, the `datasource` key should hold:
 1. a `queryTemplate` reference to one of the preconfigured SPARQL query template from table [A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource)
