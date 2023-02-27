@@ -44,11 +44,21 @@ export class SparnaturalAttributes {
 
     let sparqlPrefixes = {};
     let prefixArray = element.getAttribute("prefix").trim().split(/:\s+|\s+/);
-    for (let i = 0; i < prefixArray.length; i = i + 2) {
-      Object.defineProperty(sparqlPrefixes, prefixArray[i], {
-          value: prefixArray[i + 1].toLocaleLowerCase(),
+    for (let i = 0; i < prefixArray.length; i++) {
+      try{
+        const prefixPair = {
+          prefix: prefixArray[i].split(':')[0],
+          iri: prefixArray[i].split(':').slice(1).join(':')
+        }
+        Object.defineProperty(sparqlPrefixes, prefixPair.prefix, {
+          value: prefixPair.iri,
           writable: true
-      })
+        })
+      } catch(e){
+        console.error('Parsing of attribute prexis failed!')
+        console.error(`Can not parse ${prefixArray[i]}`)
+      }
+
     }
 
     return sparqlPrefixes;
