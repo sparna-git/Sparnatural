@@ -21,14 +21,14 @@ import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
 import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWidget";
 import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
-import CriteriaGroup from "../CriteriaGroup";
+import { getSettings } from "../../../../../settings/defaultSettings";
 
 
 /**
  *  creates the corresponding widget
  **/
 class WidgetWrapper extends HTMLComponent {
-  settings: ISettings;
+  settings: ISettings = getSettings()
   widgetType: Config;
   widgetComponent: AbstractWidget;
   specProvider: ISpecProvider;
