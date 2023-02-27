@@ -25,7 +25,7 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
 
 | Setting | Description | Default | Mandatory/Optional |
 | ------- | ----------- | ------- | ------------------ |
-| src | Provides the configuration that specifies the classes and properties to be displayed, and how they are mapped to SPARQL. This can be either the URL of an OWL Turtle or RDF/XML file, or a URL to a JSON file. Example : `sparnatural-config.ttl` |`undefined` | Mandatory
+| src | Provides the configuration that specifies the classes and properties to be displayed, and how they are mapped to SPARQL. This can be either the URL of an OWL Turtle or RDF/XML file, or a URL to a JSON file. Example : `sparnatural-config.ttl` another option is to provide a serialized JSON obj as a string. For example: `JSON.stringify(configAsJsonObj)`  | `undefined` | Mandatory
 | endpoint | except for advanced use-cases. The URL of a SPARQL endpoint that will be used as the default service for the datasource queries provided in the configuration. If not specified, each datasource should indicate explicitely a SPARQL endpoint, or the `autocomplete` and `list` parameters must be provided for low-level datasource integration.| `undefined` | Mandatory |
 | debug | If set to `true`, Sparnatural will log JSON and SPARQL queries on the console, as they are generated. | `false` | Optional |
 | distinct | Whether the `DISTINCT` keyword should be inserted to the generated SPARQL query. | `true` | Optional|
