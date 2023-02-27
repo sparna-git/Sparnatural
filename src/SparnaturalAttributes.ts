@@ -11,6 +11,16 @@ export class SparnaturalAttributes {
   localCacheDataTtl?: number;
   debug: boolean;
   submitButton?: boolean;
+  dataEndpoints:Array<{
+    endpoint:string;
+    credentials: "omit" | "same-origin" | "include";
+    cache: "default" | "reload" | "no-cache";
+    mode: "cors" | "no-cors" | 'same-origin' | 'navigate';
+    method: "GET" | "POST"
+    headers:{
+      [key: string]: string;
+    }
+  }>
 
   constructor(element:HTMLElement) {
     // not the differences in attribute names
@@ -30,10 +40,30 @@ export class SparnaturalAttributes {
     this.localCacheDataTtl = this.#read(element, "localCacheDataTtl", true);
     this.debug = this.#read(element, "debug", true);
     this.submitButton = this.#read(element, "submitButton", true);
+    this.dataEndpoints = this.#parseDataEndpoints(element)
   }
 
   #read(element:HTMLElement, attribute:string, asJson:boolean = false) {
     return element.getAttribute(attribute)?(asJson)?JSON.parse(element.getAttribute(attribute)):element.getAttribute(attribute):undefined
+  }
+
+  #parseDataEndpoints(element:HTMLElement){
+    if(!element.getAttribute("dataEndpoints")) {
+      return;
+    }
+    let arr:Array<any>
+    try{
+      // must be parsable as a JSON
+      arr = JSON.parse(this.#read(element,"dataEndpoints"))
+    } catch(e){
+      console.error(`element attribut dataEndpoints must be a valid JSON`)
+      console.error((e as Error).stack)
+    }
+    // objects must have endpoint specified
+    arr.forEach(o=>{
+      if(!("endpoint" in o))throw Error('Object in dataEndpoints must specify an endpoint!')
+    })
+    return arr
   }
 
   #parsePrefixes(element:HTMLElement) {
@@ -58,15 +88,11 @@ export class SparnaturalAttributes {
         console.error('Parsing of attribute prexis failed!')
         console.error(`Can not parse ${prefixArray[i]}`)
       }
-
     }
-
     return sparqlPrefixes;
   }
   #isJSON =(json:string)=> {
-
     let is_json = true; //true at first
-
     // Check if config is given as JSON string or as URL
     try {
       JSON.parse(json);
