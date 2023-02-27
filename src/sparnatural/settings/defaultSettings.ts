@@ -19,8 +19,7 @@ const defaultSettings: ISettings = {
   localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in mimmiseconds
   debug:false,
   submitButton:true,
-
-
+  dataEndpoints:[],
   autocomplete: {
     /**
      * This must return the URL that will be called when the user starts
@@ -147,7 +146,6 @@ const defaultSettings: ISettings = {
       return element.stop.year;
     },
   }
-  
 };
 
 // the actual settings, result of merge between defaultSettings and settings passed as parameters
