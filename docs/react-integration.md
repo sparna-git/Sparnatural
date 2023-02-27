@@ -10,36 +10,58 @@ If you discover any issues let us know!
 
 ## Usage
 
-### JSX integration
+### JSX integration (without YASGUI)
 ```
 import './App.css';
+import { useEffect, useRef } from 'react';
 import "sparnatural"
 import "sparnatural/dist/sparnatural.css"
 
 // import the JSON-LD config file
 import config from "./config.json"
+
+interface  SparnaturalEvent extends Event {
+  detail?:{
+    queryString:string,
+    queryJson:string,
+    querySparqlJs:string
+  }
+}
+
 function App() {  
+   const sparnaturalRef = useRef<HTMLElement>(null);
+   useEffect(
+    () => {
+      sparnaturalRef?.current?.addEventListener("queryUpdated", (event:SparnaturalEvent) => {
+        console.log(event?.detail?.queryString);
+        console.log(event?.detail?.queryJson);
+        console.log(event?.detail?.querySparqlJs);
+     });
+    },
+    [],
+  );
+
   return (
     <div className="App">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossOrigin="anonymous"></link>
-    {/*FontAwesome is only needed when the fontawesome features is used to display icons*/}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  />
+      {/*FontAwesome is only needed when the fontawesome features is used to display icons*/}
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"  />
       <div id="ui-search" style={{width:"auto"}}>
         <spar-natural 
+          ref={sparnaturalRef}
           src={JSON.stringify(config)} 
-          lang={'fr'} 
-          endpoint={'https://fr.dbpedia.org/sparql'} 
+          lang={'fr'} endpoint={'https://fr.dbpedia.org/sparql'} 
           distinct={'true'} 
           limit={'100'}
-          prefix={"skos:http://www.w3.org/2004/02/skos/core#"} 
+          prefix={"skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"} 
           debug={"true"}
         />
-     </div>
+      </div>
     </div>
   );
 }
 
 export default App;
+
 ```
 ### Add Declaration file for JSX (Typescript only)
 This is only necesarry when you are using React together with typescript. <br>
@@ -51,6 +73,7 @@ namespace JSX {
     }
 
     interface SparnaturalAttributes {
+        ref:React.RefObject<HTMLElement>
         src: string;
         lang: string;
         endpoint: string;

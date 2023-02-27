@@ -5,6 +5,9 @@ _[Home](index.html) > Javascript integration version 8_
 
 _/!\This documentation applies to version 8 of Sparnatural. See the [version 7 integration documentation](Javascript-integration-v7) for version 7._
 
+## NPM
+`npm i sparnatural`
+
 ## Constructor
 
 Sparnatural is inserted as custom HTML element named `spar-natural` (note the dash), with specific attributes. It looks like so:
@@ -18,27 +21,47 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
     debug="true"
   />
 ```
-See below for the complete reference of the available attributes.
+## HTML attributes reference
+
+| Setting | Description | Default | Mandatory/Optional |
+| ------- | ----------- | ------- | ------------------ |
+| src | Provides the configuration that specifies the classes and properties to be displayed, and how they are mapped to SPARQL. This can be either the URL of an OWL Turtle or RDF/XML file, or a URL to a JSON file. Example : `sparnatural-config.ttl` another option is to provide a serialized JSON obj as a string. For example: `JSON.stringify(configAsJsonObj)`  | `undefined` | Mandatory
+| endpoint | except for advanced use-cases. The URL of a SPARQL endpoint that will be used as the default service for the datasource queries provided in the configuration. If not specified, each datasource should indicate explicitely a SPARQL endpoint, or the `autocomplete` and `list` parameters must be provided for low-level datasource integration.| `undefined` | Mandatory |
+| debug | If set to `true`, Sparnatural will log JSON and SPARQL queries on the console, as they are generated. | `false` | Optional |
+| distinct | Whether the `DISTINCT` keyword should be inserted to the generated SPARQL query. | `true` | Optional|
+| lang | Possible values are `en`/`fr` Language code to use to display the labels of classes and properties from the configuration file. | `en` | Optional|
+|limit |A number that will be used to add a `LIMIT` keyword in the generated SPARQL queries. It not provided, no `LIMIT` keyword is inserted. | `1000` | Optional
+| maxDepth | Maximum depth of the constructed query (number of inner 'Where' clauses). | `4` | Optional
+| maxOr | Maximum number of different values that can be selected for a given property criteria. For example how many country can be chosen on the list widget| `3` | Optional
+| prefixes (*unstable*) | A set of prefixes in the form `foaf: http://xmlns.com/foaf/0.1/ skos:http://www.w3.org/2004/02/skos/core#` to be added to the output SPARQL query. This is applied in the `expand` method. | `none`
+| submitButton | Whether Sparnatural should display a submit button to allow the user to execute the query. A click on the submit button will trigger a `submit` event. In case it is not provided, it is the page responsibility to either execute the query automatically at each update in the `queryUpdated` event or provide its own way to submit the query. | `true` | Optional
+| typePredicate | The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to e.g. `<http://www.wikidata.org/prop/direct/P31>+` for Wikidata integration, or `<http://www.w3.org/2000/01/rdf-schema#subClassOf>+` to query OWL-style models.|`rdf:type` | Optional |
+| localCacheDataTtl (*beta*) | The time that the dropdown lists will be stored in cache on the client, if the server has allowed it in its response headers, that is if `Cache-Control: no-cache` header is returned in the response, no cache will happen, whatever the value of this field. The server can return `Cache-Control: public` for lists to be properly cached. | `1000 * 60 * 60 * 24` | Optional|
+| autocomplete | A Javascript object providing the necessary functions for the autocomplete widget. If using SPARQL datasources to populate the widgets, this is optional. This provides a low-level hook to populate autocomplete fields. See the [autocomplete reference](#autocomplete-reference) below | `undefined` | Optional|
+| list | A Javascript object providing the necessary functions for the list widget. If using SPARQL datasources to populate the widgets, this is optional. This provides a low-level hook to populate list fields. See the [list reference](#list-reference) below. | `undefined` | Optional
+| dates |  A Javascript object providing the necessary functions for the date widget. See the [dates reference](#dates-reference) below. | `undefined` | Optional
+
+## Sparnatural events
 
 Then the HTML page needs to listen to specific events triggered by Sparnatural, notably `queryUpdated` and `submit` :
 
 ```javascript
-	const sparnatural = document.querySelector("spar-natural");
+const sparnatural = document.querySelector("spar-natural");
  
-  // triggered as soon there is a modification in the query
-	sparnatural.addEventListener("queryUpdated", (event) => {
- 		// do something with the query
-	});
+// triggered as soon there is a modification in the query
+sparnatural.addEventListener("queryUpdated", (event) => {
+ 	// do something with the query
+});
 
-	// triggered when submit button is called
-	sparnatural.addEventListener("submit", (event) => {
+// triggered when submit button is called
+sparnatural.addEventListener("submit", (event) => {
     // so something
-  });
+});
 
-	// triggered when reset button is clicked
-  sparnatural.addEventListener("reset", (event) => {
-    // do something
-  });
+// triggered when reset button is clicked
+sparnatural.addEventListener("reset", (event) => {
+	// do something
+});
 
 ```
 
@@ -48,72 +71,32 @@ A typical integration in a web page looks like this :
 
 ```javascript
 
-			const sparnatural = document.querySelector("spar-natural");
+const sparnatural = document.querySelector("spar-natural");
 
-      sparnatural.addEventListener("queryUpdated", (event) => {
-        // expand query to replace identifiers with content of sparqlScript annotation
-        queryString = sparnatural.expandSparql(event.detail.queryString);
-        // set query on YasQE
-        yasqe.setValue(queryString);
+sparnatural.addEventListener("queryUpdated", (event) => {
+	// expand query to replace identifiers with content of sparqlScript annotation
+	console.log(event.detail.queryString);
+	console.log(event.detail.queryJson);
+	console.log(event.detail.querySparqlJs);
+	queryString = sparnatural.expandSparql(event.detail.queryString);
+	// set query on YasQE
+	yasqe.setValue(queryString);
 
-        // save JSON query
-        document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
-      });
+	// save JSON query
+	document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
+});
 
-      sparnatural.addEventListener("submit", (event) => {
-        // enable loader on button
-        sparnatural.disablePlayBtn() ; 
-        // trigger the query from YasQE
-        yasqe.query();
-      });
+sparnatural.addEventListener("submit", (event) => {
+	// enable loader on button
+	sparnatural.disablePlayBtn() ; 
+	// trigger the query from YasQE
+	yasqe.query();
+});
 
-      sparnatural.addEventListener("reset", (event) => {
-        yasqe.setValue("");
-      });
+sparnatural.addEventListener("reset", (event) => {
+	yasqe.setValue("");
+});
 ```
-
-
-## HTML attributes reference
-
-
-| Setting / Description | Default value if not set |
-| ----- | --------- |
-| **src** | `undefined` |
-| **Mandatory**. Provides the configuration that specifies the classes and properties to be displayed, and how they are mapped to SPARQL. This can be either the URL of an OWL Turtle or RDF/XML file, or a URL to a JSON file. Example : `sparnatural-config.ttl` |
-| **endpoint** | `undefined` |
-| **Mandatory**, except for advanced use-cases. The URL of a SPARQL endpoint that will be used as the default service for the datasource queries provided in the configuration. If not specified, each datasource should indicate explicitely a SPARQL endpoint, or the `autocomplete` and `list` parameters must be provided for low-level datasource integration.| 
-| **debug** | `false` |
-| If set to `true`, Sparnatural will log JSON and SPARQL queries on the console, as they are generated. | 
-| **distinct** | `true` |
-| Whether the `DISTINCT` keyword should be inserted to the generated SPARQL query. |
-| **lang** | `en` |
-| Language code to use to display the labels of classes and properties from the configuration file. |  
-| **limit** | `undefined` |
-| A number that will be used to add a `LIMIT` keyword in the generated SPARQL queries. It not provided, no `LIMIT` keyword is inserted. | 
-| **localCacheDataTtl** **/!\ beta feature** | 1000 * 60 * 60 * 24 |
-| The time that the dropdown lists will be stored in cache on the client, if the server has allowed it in its response headers, that is if `Cache-Control: no-cache` header is returned in the response, no cache will happen, whatever the value of this field. The server can return `Cache-Control: public` for lists to be properly cached. |  
-| **maxDepth** | `4` |
-| Maximum depth of the constructed query (number of inner 'Where' clauses). | 
-| **maxOr** | `3` |
-| Maximum number of different values that can be selected for a given property criteria. |
-| **prefixes** **/!\ unstable** | `none` |
-| A set of prefixes in the form `foaf: http://xmlns.com/foaf/0.1/ skos:http://www.w3.org/2004/02/skos/core#` to be added to the output SPARQL query. This is applied in the `expand` method. | 
-| **submitButton** | `true` |
-| Whether Sparnatural should display a submit button to allow the user to execute the query. A click on the submit button will trigger a `submit` event. In case it is not provided, it is the page responsibility to either execute the query automatically at each update in the `queryUpdated` event or provide its own way to submit the query. |
-| **typePredicate** | `rdf:type` |
-| The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to e.g. `<http://www.wikidata.org/prop/direct/P31>+` for Wikidata integration, or `<http://www.w3.org/2000/01/rdf-schema#subClassOf>+` to query OWL-style models. |
-
-
-| **autocomplete** |  |
-| A Javascript object providing the necessary functions for the autocomplete widget. If using SPARQL datasources to populate the widgets, this is optional. This provides a low-level hook to populate autocomplete fields. See the [autocomplete reference](#autocomplete-reference) below | 
-| **list** |  |
-| A Javascript object providing the necessary functions for the list widget. If using SPARQL datasources to populate the widgets, this is optional. This provides a low-level hook to populate list fields. See the [list reference](#list-reference) below. | 
-| **dates** |  |
-| A Javascript object providing the necessary functions for the date widget. See the [dates reference](#dates-reference) below. |
-
-## Sparnatural events
-
-Sparnatural sends the following events:
 
 ### "queryUpdated" event
 
@@ -124,9 +107,9 @@ The `queryUpdated` event is triggered everytime the query is modified. The event
 
 ```javascript
 sparnatural.addEventListener("queryUpdated", (event) => {
-  console.log(event.detail.queryString);
-  console.log(event.detail.queryJson);
-  console.log(event.detail.querySparqlJs);
+	console.log(event.detail.queryString);
+	console.log(event.detail.queryJson);
+	console.log(event.detail.querySparqlJs);
 });
 ```
 
@@ -142,29 +125,29 @@ In typical integrations, the state of the submit button can be updated upon subm
 
 ```javascript
 
-			const sparnatural = document.querySelector("spar-natural");
+const sparnatural = document.querySelector("spar-natural");
 
-			sparnatural.addEventListener("queryUpdated", (event) => {
-        queryString = sparnatural.expandSparql(event.detail.queryString);
-        yasqe.setValue(queryString);
-      });
+sparnatural.addEventListener("queryUpdated", (event) => {
+	queryString = sparnatural.expandSparql(event.detail.queryString);
+	yasqe.setValue(queryString);
+});
 
-      sparnatural.addEventListener("submit", (event) => {
-        // disable the button and show a spinning loader
-        sparnatural.disablePlayBtn() ; 
-        // trigger the query from YasQE
-        yasqe.query();
-      });
+sparnatural.addEventListener("submit", (event) => {
+	// disable the button and show a spinning loader
+	sparnatural.disablePlayBtn() ; 
+	// trigger the query from YasQE
+	yasqe.query();
+});
 
-      const yasqe = new Yasqe(document.getElementById("yasqe"));
-      const yasr = new Yasr(document.getElementById("yasr"));
+const yasqe = new Yasqe(document.getElementById("yasqe"));
+const yasr = new Yasr(document.getElementById("yasr"));
 
-      yasqe.on("queryResponse", function(_yasqe, response, duration) {
-        // print the responses in YASR
-        yasr.setResponse(response, duration);
-        // re-enable play button in Sparnatural
-        sparnatural.enablePlayBtn() ;
-      }); 
+yasqe.on("queryResponse", function(_yasqe, response, duration) {
+	// print the responses in YASR
+	yasr.setResponse(response, duration);
+	// re-enable play button in Sparnatural
+	sparnatural.enablePlayBtn() ;
+}); 
 ```
 
 ### "reset" event
@@ -172,9 +155,9 @@ In typical integrations, the state of the submit button can be updated upon subm
 The `submit` event is triggered when the reset button is clicked. It can be used to empty or reset other part of the page, typically YasQE. A typical integration is the following:
 
 ```javascript
-	sparnatural.addEventListener("reset", (event) => {
-    yasqe.setValue("");
-  });
+sparnatural.addEventListener("reset", (event) => {
+	yasqe.setValue("");
+});
 ```
 
 ### "display" event
@@ -182,28 +165,22 @@ The `submit` event is triggered when the reset button is clicked. It can be used
 The `display` event is triggered when Sparnatural gets displayed.
 
 ```javascript
-	sparnatural.addEventListener("display", (event) => {
-    console.log("Sparnatural is displayed");
-  });
+sparnatural.addEventListener("display", (event) => {
+	console.log("Sparnatural is displayed");
+});
 ```
 
 ## Sparnatural element API
 
 The table below summarizes the various functions that can be called on the Sparnatural element.
 
-| Function | Parameters |
-| -------- | ----------- |
-| **sparnatural.enablePlayBtn()** | none |
-| Removes the loading from the play button once a query has finished executing. |
-| **sparnatural.disablePlayBtn()** | none |
-| Disables the play button once a query has started its execution. |
-| **sparnatural.loadQuery(query)** | Query as documented in [the query JSON format](Query-JSON-format) |
-| Loads a query structure in Sparnatural |
-| **sparnatural.expandSparql(sparqlString)** | A SPARQL query string |
-| Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration)|
-| **sparnatural.clear()** | none |
-| Clears the Sparnatural editor, as if the reset button was clicked. |
-
+| Function | Description | Parameters |
+| -------- | ----------- | ---------- |
+| **sparnatural.enablePlayBtn()**| Removes the loading from the play button once a query has finished executing.  | none |
+| **sparnatural.disablePlayBtn()** | Disables the play button once a query has started its execution.| none |
+| **sparnatural.loadQuery(query)** | Loads a query structure in Sparnatural. | Query structure as documented in [the query JSON format](Query-JSON-format)
+| **sparnatural.expandSparql(sparqlString)** | Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration) A SPARQL query string | string |
+| **sparnatural.clear()** | Clears the Sparnatural editor, as if the reset button was clicked.| none |
 
 ## Advanced : customizing lists and autocomplete
 
