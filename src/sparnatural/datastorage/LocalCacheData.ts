@@ -3,7 +3,7 @@ import LocalDataStorage from "./LocalDataStorage";
 class LocalCacheData {
   constructor() {}
 
-  fetch(uri: any, init: any, ttl: any) {
+  fetch(uri: string, init: {[key:string]:any}, ttl: number) {
     var datastorage = new LocalDataStorage().getInstance();
     //var lastLoading = localStorage[uri] ;
     var now = Date.now();
