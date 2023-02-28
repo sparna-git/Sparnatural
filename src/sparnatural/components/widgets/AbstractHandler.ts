@@ -82,7 +82,15 @@ export default abstract class Handler {
     if(config) {
         // the sparqlEndpointUrl equals an endpoint in Settings.dataEndpoints
         for (const [key, value] of Object.entries(config)) {
-            requestOptions[key] = value
+            if(key === 'endpoint') {
+                if (typeof value !== 'string') {
+                    console.error('endpoint in dataEndpoints must be a string!')
+                }
+                this.sparqlEndpointUrl = value as string
+            } else {
+                requestOptions[key] = value
+            }
+            
         }
     } 
 

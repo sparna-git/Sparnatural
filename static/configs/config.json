@@ -200,8 +200,10 @@
       "@id": "http://dbpedia.org/ontology/country",
       "@type": "ObjectProperty",
       "subPropertyOf": "sparnatural:ListProperty",
-      "datasource": "datasources:list_rdfslabel_alpha_with_count",
-
+      "datasource": {
+        "queryTemplate": "datasources:list_rdfslabel_alpha_with_count",
+        "sparqlEndpointUrl": "https://dbpedia.org/sparql"
+      },
       "label": [
         { "@value": "country", "@language": "en" },
         { "@value": "pays", "@language": "fr" }

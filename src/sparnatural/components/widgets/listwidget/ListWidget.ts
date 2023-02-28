@@ -66,13 +66,14 @@ export class ListWidget extends AbstractWidget {
     </div>`);
     this.html.append(this.selectHtml);
 
+    // Request building MUST come before listUrl method
+    const requestOpt = this.datasourceHandler.buildHttpRequest()
+
     let url = this.datasourceHandler.listUrl(
       this.startClassVal.type,
       this.objectPropVal.type,
       this.endClassVal.type
     );
-   
-    const requestOpt = this.datasourceHandler.buildHttpRequest()
    
     let temp = new LocalCacheData();
     //this.toggleSpinner()

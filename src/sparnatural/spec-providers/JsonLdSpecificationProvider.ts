@@ -109,39 +109,38 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
           Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
             expandedQueryTemplate
           );
-        if (knownQueryTemplate != null) {
-          // 2.1 It is known in default Sparnatural ontology
-          datasource.queryTemplate = knownQueryTemplate;
-        } else {
-          // 2.2 Unknown, could be defined in the config itself
-          // TODO
-          console.error(
-            "Reference to custom query template currently unsupported in JSON config"
+        datasource.queryTemplate = knownQueryTemplate;
+        // labelPath
+        datasource.labelPath = datasourceObject["labelPath"];
+
+        // labelProperty
+        datasource.labelProperty = datasourceObject["labelProperty"];
+
+        // childrenPath
+        datasource.childrenPath = datasourceObject["childrenPath"];
+
+        // childrenProperty
+        datasource.childrenProperty = datasourceObject["childrenProperty"];
+
+        // read optional sparqlEndpointUrl
+        datasource.sparqlEndpointUrl = datasourceObject["sparqlEndpointUrl"];
+
+        // read optional noSort
+        datasource.noSort = datasourceObject["noSort"];
+
+        // also allow for preconfigured templates without
+        if(!knownQueryTemplate) {
+          const defDataSource = Datasources.DATASOURCES_CONFIG.get(
+            this._expand(expandedQueryTemplate)
           );
+          if(!defDataSource) console.error(`${expandedQueryTemplate} was not found as preconfigured`)
+          datasource = defDataSource
         }
       }
-
-      // labelPath
-      datasource.labelPath = datasourceObject["labelPath"];
-
-      // labelProperty
-      datasource.labelProperty = datasourceObject["labelProperty"];
-
-      // childrenPath
-      datasource.childrenPath = datasourceObject["childrenPath"];
-
-      // childrenProperty
-      datasource.childrenProperty = datasourceObject["childrenProperty"];
-
-      // read optional sparqlEndpointUrl
-      datasource.sparqlEndpointUrl = datasourceObject["sparqlEndpointUrl"];
-
-      // read optional noSort
-      datasource.noSort = datasourceObject["noSort"];
+      return datasource;
     } else {
       // if datasource is a URI...
       // look it up in known datasources config
-      const expanded = this._expand(datasourceObject)
       datasource = Datasources.DATASOURCES_CONFIG.get(
         this._expand(datasourceObject)
       );
@@ -152,8 +151,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
         );
       }
     }
-
-    return datasource;
+    
   };
 
   getIcon = function (classId: any) {
