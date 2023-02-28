@@ -1,7 +1,5 @@
 import Handler from "../AbstractHandler";
 
-
-
 export abstract class AbstractSparqlAutocompleteHandler extends Handler {
   constructor(
     sparqlEndpointUrl: string,
@@ -19,8 +17,6 @@ export abstract class AbstractSparqlAutocompleteHandler extends Handler {
     key: string
   ): string;
 }
-
-
 
 /**
  * Handles a list widget based on a provided SPARQL query in which
@@ -296,27 +292,6 @@ export class WikidataAutocompleteAndListHandler extends Handler {
    * Constructs the SPARQL query to use for autocomplete widget search.
    **/
   _buildAutocompleteSparql(domain: any, property: any, range: any, key: any) {
-    /*
-
-SELECT ?uri ?uriLabel
-WHERE {
-{
-SELECT ?uri ?uriLabel WHERE {
-  {
-  SELECT DISTINCT ?uri WHERE {  
-    ?domain wdt:P31 wd:Q34770 .
-    ?domain wdt:P17 ?uri .
-  }
-  }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
-}
-}
-  
-  FILTER(STRSTARTS(lcase(?uriLabel), "f"))  
-}
-ORDER BY ?uriLabel
-
-*/
     var sparql = `
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 SELECT DISTINCT ?uri ?uriLabel WHERE {
@@ -344,18 +319,6 @@ ORDER BY ?uriLabel
   }
 
   _buildListSparql(domain: any, property: any, range: any) {
-    /*
-SELECT ?uri ?uriLabel WHERE {
-  {
-  SELECT DISTINCT ?uri WHERE {  
-    ?domain wdt:P31 wd:Q34770 .
-    ?domain wdt:P17 ?uri .
-  }
-  }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
-}
-ORDER BY ?uriLabel
-*/
     var sparql = `
 PREFIX wdt: <http://www.wikidata.org/prop/direct/>
 SELECT DISTINCT ?uri ?uriLabel WHERE {

@@ -1,3 +1,5 @@
+import { getSettings } from "../../settings/defaultSettings";
+
 export default abstract class Handler {
     sparqlEndpointUrl;
     semanticPostProcess;
@@ -59,16 +61,31 @@ export default abstract class Handler {
     }
   
     buildHttpRequest( ) {
-      var headers = new Headers();
-      headers.append(
+
+    var headers = new Headers();
+    headers.append(
         "Accept",
         "application/sparql-results+json, application/json, */*;q=0.01"
-      );
-      return {
+    );
+    let requestOptions = {
         method: "GET",
         headers: headers,
         mode: "cors",
         cache: "default",
-      };
+    } as {[key:string]:any};
+
+    const config = getSettings().dataEndpoints.find((val)=>{
+    if(val?.endpoint === this.sparqlEndpointUrl)
+    return val
+    })
+    
+    if(config) {
+        // the sparqlEndpointUrl equals an endpoint in Settings.dataEndpoints
+        for (const [key, value] of Object.entries(config)) {
+            requestOptions[key] = value
+        }
+    } 
+
+    return config
     }
   }
