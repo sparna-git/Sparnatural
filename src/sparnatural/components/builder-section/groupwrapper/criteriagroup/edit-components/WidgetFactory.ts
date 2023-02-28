@@ -33,22 +33,22 @@ interface DataSource {
 export default class WidgetFactory {
     specProvider:ISpecProvider
     widgetWrapper:WidgetWrapper
-    defaultSparqlPostProcess = {
-        semanticPostProcess: (sparql: any) => {
-          // also add prefixes
-          for (let key in getSettings().sparqlPrefixes) {
-            sparql = sparql.replace(
-              "SELECT ",
-              "PREFIX " +
-                key +
-                ": <" +
-                getSettings().sparqlPrefixes[key] +
-                "> \nSELECT "
-            );
-          }
-          return this.specProvider.expandSparql(sparql, getSettings().sparqlPrefixes);
-        },
+    
+    semanticPostProcess = (sparql: string) => {
+        // also add prefixes
+        for (let key in getSettings().sparqlPrefixes) {
+        sparql = sparql.replace(
+            "SELECT ",
+            "PREFIX " +
+            key +
+            ": <" +
+            getSettings().sparqlPrefixes[key] +
+            "> \nSELECT "
+        );
+        }
+        return this.specProvider.expandSparql(sparql, getSettings().sparqlPrefixes);
     }
+    
 
     constructor(widgetWrapper:WidgetWrapper, specProvider:ISpecProvider) {
         this.specProvider = specProvider
@@ -80,7 +80,7 @@ export default class WidgetFactory {
                     ? datasource.sparqlEndpointUrl
                     : getSettings().defaultEndpoint,
                   // sparqlPostProcessor
-                  this.defaultSparqlPostProcess,
+                  this.semanticPostProcess,
                   language,
                   // sparql query (with labelPath interpreted)
                   this.getFinalQueryString(datasource)
@@ -119,7 +119,7 @@ export default class WidgetFactory {
                     ? datasource.sparqlEndpointUrl
                     : getSettings().defaultEndpoint,
                   // sparqlPostProcessor
-                  this.defaultSparqlPostProcess,
+                  this.semanticPostProcess,
                   // language,
                   language,
                   // sparql query (with labelPath interpreted)
@@ -157,7 +157,7 @@ export default class WidgetFactory {
                     ? datasource.sparqlEndpointUrl
                     : getSettings().defaultEndpoint,
       
-                 this.defaultSparqlPostProcess,
+                 this.semanticPostProcess,
                   language,
                   // sparql query (with labelPath interpreted)
                   this.getFinalQueryString(datasource)
@@ -274,7 +274,7 @@ export default class WidgetFactory {
                     ? treeRootsDatasource.sparqlEndpointUrl
                     : getSettings().defaultEndpoint,
       
-                  this.defaultSparqlPostProcess,
+                  this.semanticPostProcess,
       
                   // IMPORTANT is this deletable?
                   language,

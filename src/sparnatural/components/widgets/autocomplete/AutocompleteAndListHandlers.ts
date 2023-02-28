@@ -1,18 +1,18 @@
 export abstract class Handler {
-  sparqlEndpointUrl: any;
-  sparqlPostprocessor: any;
-  language: any;
-  searchPath: any;
-  listOrder: string;
+  sparqlEndpointUrl;
+  semanticPostProcess;
+  language;
+  searchPath;
+  listOrder;
 
   constructor(
-    sparqlEndpointUrl: any,
-    sparqlPostprocessor: any,
-    language: any,
-    searchPath: any
+    sparqlEndpointUrl: string,
+    semanticPostProcess: (sparql: any) => string,
+    language: string,
+    searchPath: string
   ) {
     this.sparqlEndpointUrl = sparqlEndpointUrl;
-    this.sparqlPostprocessor = sparqlPostprocessor;
+    this.semanticPostProcess = semanticPostProcess;
     this.language = language;
     this.searchPath = searchPath != null ? searchPath : "rdfs:label";
     this.listOrder = "alphabetical";
@@ -21,7 +21,7 @@ export abstract class Handler {
    * Post-processes the SPARQL query and builds the full URL for list content
    **/
   buildURL(sparql: string): string {
-    sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
+    sparql = this.semanticPostProcess(sparql);
     var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
 
     var url =
@@ -61,12 +61,12 @@ export abstract class Handler {
 
 export abstract class AbstractSparqlListHandler extends Handler {
   constructor(
-    sparqlEndpointUrl: any,
-    sparqlPostprocessor: any,
-    language: any,
-    searchPath: any
+    sparqlEndpointUrl: string,
+    semanticPostProcess: (sparql: any) => string,
+    language: string,
+    searchPath: string
   ) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, language);
+    super(sparqlEndpointUrl, semanticPostProcess, language, language);
   }
 
   abstract listUrl(domain: string, property: string, range: string): string;
@@ -74,12 +74,12 @@ export abstract class AbstractSparqlListHandler extends Handler {
 
 export abstract class AbstractSparqlAutocompleteHandler extends Handler {
   constructor(
-    sparqlEndpointUrl: any,
-    sparqlPostprocessor: any,
-    language: any,
-    searchPath: any
+    sparqlEndpointUrl: string,
+    semanticPostProcess: (sparql: any) => string,
+    language: string,
+    searchPath: string
   ) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, language);
+    super(sparqlEndpointUrl, semanticPostProcess, language, language);
   }
 
   abstract autocompleteUrl(
@@ -97,12 +97,12 @@ export abstract class AbstractSparqlAutocompleteHandler extends Handler {
 export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
   queryString: any;
   constructor(
-    sparqlEndpointUrl: any,
-    sparqlPostprocessor: any,
-    language: any,
+    sparqlEndpointUrl: string,
+    semanticPostProcess: (sparql: any) => string,
+    language: string,
     queryString: string
   ) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
+    super(sparqlEndpointUrl, semanticPostProcess, language, null);
     this.queryString = queryString;
   }
   /**
@@ -130,12 +130,12 @@ export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
 export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteHandler {
   queryString: any;
   constructor(
-    sparqlEndpointUrl: any,
-    sparqlPostprocessor: any,
-    language: any,
-    queryString: any
+    sparqlEndpointUrl: string,
+    semanticPostProcess: (sparql: any) => string,
+    language: string,
+    queryString: string
   ) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
+    super(sparqlEndpointUrl, semanticPostProcess, language, null);
     this.queryString = queryString;
   }
   /**
@@ -165,12 +165,12 @@ export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocomplet
 
 export class SimpleSparqlAutocompleteAndListHandler extends Handler {
   constructor(
-    sparqlEndpointUrl: any,
-    sparqlPostprocessor: any,
-    language: any,
-    searchPath: any
+    sparqlEndpointUrl: string,
+    semanticPostProcess: (sparql: any) => string,
+    language: string,
+    searchPath: string
   ) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
+    super(sparqlEndpointUrl, semanticPostProcess, language, searchPath);
   }
 
   /**
@@ -274,8 +274,8 @@ ORDER BY ?label
 }
 
 export class UriOnlyListHandler extends Handler {
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, null, null);
+  constructor(sparqlEndpointUrl: string, semanticPostProcess: (sparql: any) => string,) {
+    super(sparqlEndpointUrl, semanticPostProcess, null, null);
   }
 
   /**
@@ -306,12 +306,12 @@ ORDER BY DESC(?count)
 
 export class SparqlBifContainsAutocompleteAndListHandler extends Handler {
   constructor(
-    sparqlEndpointUrl: any,
-    sparqlPostprocessor: any,
-    language: any,
-    searchPath: any
+    sparqlEndpointUrl: string,
+    semanticPostProcess: (sparql: any) => string,
+    language: string,
+    searchPath: string
   ) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
+    super(sparqlEndpointUrl, semanticPostProcess, language, searchPath);
   }
 
   /**
@@ -351,14 +351,14 @@ export class GraphDbLuceneConnectorSparqlAutocompleteAndListHandler extends Hand
    * not to search
    **/
   constructor(
-    sparqlEndpointUrl: any,
-    sparqlPostprocessor: any,
-    language: any,
-    searchPath: any,
-    connectorName: any,
-    fieldName: any
+    sparqlEndpointUrl: string,
+    semanticPostProcess: (sparql: any) => string,
+    language: string,
+    searchPath: string,
+    connectorName: string,
+    fieldName: string
   ) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
+    super(sparqlEndpointUrl, semanticPostProcess, language, searchPath);
     this.connectorName = connectorName;
     this.fieldName = fieldName;
   }
@@ -389,8 +389,8 @@ ORDER BY ?label
 }
 
 export class WikidataAutocompleteAndListHandler extends Handler {
-  constructor(sparqlEndpointUrl: any, sparqlPostprocessor: any, language: any) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
+  constructor(sparqlEndpointUrl: string, semanticPostProcess: (sparql: any) => string, language: string) {
+    super(sparqlEndpointUrl, semanticPostProcess, language, null);
   }
 
   /**
