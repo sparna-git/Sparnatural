@@ -6,6 +6,7 @@ import { SelectedVal } from "../../../../../generators/ISparJson";
 import EditComponents from "./EditComponents";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
+import WidgetFactory from "./WidgetFactory";
 
 
 /**
@@ -79,12 +80,8 @@ class WidgetWrapper extends HTMLComponent {
       );
       return this;
     }
-
-    this.widgetComponent = this.#createWidgetComponent(
-      this.widgetType,
-      this.objectPropVal.type,
-      this.endClassVal.type
-    );
+    const factory = new WidgetFactory(this,this.specProvider)
+    this.widgetComponent = factory.createWidget(this.widgetType,this.startClassVal,this.objectPropVal,this.endClassVal)
   }
 
   #addWidgetHTML(widgetType: string) {
@@ -152,18 +149,6 @@ class WidgetWrapper extends HTMLComponent {
       return this.settings.langSearch.Find + " :";
     }
   }
-
-
-
-  #createWidgetComponent(
-    widgetType: string,
-    objectPropertyId: any,
-    endClassType: any
-  ): AbstractWidget {
- 
-  }
-
-
 
   getWidgetType() {
     return this.widgetType;

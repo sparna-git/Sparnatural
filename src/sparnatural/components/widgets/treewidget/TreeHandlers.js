@@ -1,13 +1,13 @@
 class SparqlTreeHandler {
   constructor(
     sparqlEndpointUrl,
-    sparqlPostprocessor,
+    semanticPostProcess,
     language,
     rootsSparqlQuery,
     childrenSparqlQuery
   ) {
     this.sparqlEndpointUrl = sparqlEndpointUrl;
-    this.sparqlPostprocessor = sparqlPostprocessor;
+    this.semanticPostProcess = semanticPostProcess;
     this.language = language;
     this.rootsSparqlQuery = rootsSparqlQuery;
     this.childrenSparqlQuery = childrenSparqlQuery;
@@ -18,7 +18,7 @@ class SparqlTreeHandler {
    **/
   treeRootUrl(domain, property, range) {
     var sparql = this._buildTreeRootSparql(domain, property, range);
-    sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
+    sparql = this.semanticPostProcess(sparql);
 
     var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
     var url =
@@ -34,7 +34,7 @@ class SparqlTreeHandler {
    **/
   treeChildrenUrl(domain, property, range, node) {
     var sparql = this._buildTreeChildrenSparql(domain, property, range, node);
-    sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
+    sparql = this.semanticPostProcess(sparql);
 
     var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
     var url =
