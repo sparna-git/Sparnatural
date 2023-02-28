@@ -16,7 +16,7 @@ interface ISettings {
   defaultEndpoint?: string;
   localCacheDataTtl?: number;
   dataEndpoints:Array<{
-    endpoint:string;
+    endpoint: string;
     credentials: "omit" | "same-origin" | "include";
     cache: "default" | "reload" | "no-cache";
     mode: "cors" | "no-cors" | 'same-origin' | 'navigate';
