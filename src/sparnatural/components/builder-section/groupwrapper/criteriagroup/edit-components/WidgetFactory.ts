@@ -21,6 +21,14 @@ import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import WidgetWrapper from "./WidgetWrapper";
 
+interface DataSource {
+    queryTemplate:string;
+    queryString:string;
+    labelPath:string;
+    labelProperty:string;
+    sparqlEndpointUrl:string;
+    noSort: boolean;
+}
 
 export default class WidgetFactory {
     specProvider:ISpecProvider
@@ -48,13 +56,12 @@ export default class WidgetFactory {
     }
 
     createWidget(widgetType:string, startClassVal:SelectedVal, objectPropVal:SelectedVal, endClassVal:SelectedVal): AbstractWidget {
-        let datasource = this.#getDataSource(objectPropVal,endClassVal)
+        let datasource = this.#getDataSource(objectPropVal,endClassVal) as DataSource
         const language = getSettings().language;
         switch (widgetType) {
             case Config.LITERAL_LIST_PROPERTY: {
               // defaut handler to be used
-              var handler = getSettings()?.list; //IMPORTANT: what is this list?
-
+              var handler = getSettings()?.list; 
               if (datasource == null) {
                 // datasource still null
                 // if a default endpoint was provided, provide default datasource
@@ -64,7 +71,6 @@ export default class WidgetFactory {
                   );
                 }
               }
-      
               if (datasource != null) {
                 // if we have a datasource, possibly the default one, provide a config based
                 // on a SparqlTemplate, otherwise use the handler provided
@@ -72,8 +78,7 @@ export default class WidgetFactory {
                   // endpoint URL
                   datasource.sparqlEndpointUrl != null
                     ? datasource.sparqlEndpointUrl
-                    : this.#readDefaultEndpoint(getSettings().defaultEndpoint),
-      
+                    : getSettings().defaultEndpoint,
                   // sparqlPostProcessor
                   this.defaultSparqlPostProcess,
                   language,
@@ -112,14 +117,11 @@ export default class WidgetFactory {
                   // endpoint URL
                   datasource.sparqlEndpointUrl != null
                     ? datasource.sparqlEndpointUrl
-                    : this.#readDefaultEndpoint(getSettings().defaultEndpoint),
-      
+                    : getSettings().defaultEndpoint,
                   // sparqlPostProcessor
                   this.defaultSparqlPostProcess,
-      
                   // language,
                   language,
-      
                   // sparql query (with labelPath interpreted)
                   this.getFinalQueryString(datasource)
                 );
@@ -153,7 +155,7 @@ export default class WidgetFactory {
                   // endpoint URL
                   datasource.sparqlEndpointUrl != null
                     ? datasource.sparqlEndpointUrl
-                    : this.#readDefaultEndpoint(getSettings().defaultEndpoint),
+                    : getSettings().defaultEndpoint,
       
                  this.defaultSparqlPostProcess,
                   language,
@@ -270,7 +272,7 @@ export default class WidgetFactory {
                   // we read it on the roots datasource
                   treeRootsDatasource.sparqlEndpointUrl != null
                     ? treeRootsDatasource.sparqlEndpointUrl
-                    : this.#readDefaultEndpoint(getSettings().defaultEndpoint),
+                    : getSettings().defaultEndpoint,
       
                   this.defaultSparqlPostProcess,
       
@@ -305,21 +307,11 @@ export default class WidgetFactory {
               throw new Error(`WidgetType for ${widgetType} not recognized`);
           }
     }
-
-    #readDefaultEndpoint(defaultEndpoint:string | (() => string) | undefined):string{
-        if(defaultEndpoint instanceof Function) {
-          return (defaultEndpoint as (()=> string))();
-        } else if(defaultEndpoint) {
-          return defaultEndpoint as string;
-        } else {
-          return undefined;
-        }
-    }
     
-      /**
+  /**
    * Builds the final query string from a query source, by injecting
    * labelPath/property and childrenPath/property
-   **/
+  **/
   getFinalQueryString(datasource: any) {
     if (datasource.queryString != null) {
       return datasource.queryString;
