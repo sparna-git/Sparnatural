@@ -1,76 +1,6 @@
-export abstract class Handler {
-  sparqlEndpointUrl;
-  semanticPostProcess;
-  language;
-  searchPath;
-  listOrder;
+import Handler from "../AbstractHandler";
 
-  constructor(
-    sparqlEndpointUrl: string,
-    semanticPostProcess: (sparql: any) => string,
-    language: string,
-    searchPath: string
-  ) {
-    this.sparqlEndpointUrl = sparqlEndpointUrl;
-    this.semanticPostProcess = semanticPostProcess;
-    this.language = language;
-    this.searchPath = searchPath != null ? searchPath : "rdfs:label";
-    this.listOrder = "alphabetical";
-  }
-  /**
-   * Post-processes the SPARQL query and builds the full URL for list content
-   **/
-  buildURL(sparql: string): string {
-    sparql = this.semanticPostProcess(sparql);
-    var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
 
-    var url =
-      this.sparqlEndpointUrl +
-      separator +
-      "query=" +
-      encodeURIComponent(sparql) +
-      "&format=json";
-    return url;
-  }
-  listLocation(
-    domain: any,
-    property: any,
-    range: any,
-    data: { results: { bindings: any } }
-  ) {
-    return data.results.bindings;
-  }
-
-  elementLabel(element: { label: { value: any } }) {
-    return element.label.value;
-  }
-
-  /* TODO : rename to elementValue */
-  elementUri(element: { uri: { value: any }; value: { value: any } }) {
-    if (element.uri) {
-      return element.uri.value;
-    } else if (element.value) {
-      return element.value.value;
-    }
-  }
-
-  enableMatch(domain: any, property: any, range: any) {
-    return false;
-  }
-}
-
-export abstract class AbstractSparqlListHandler extends Handler {
-  constructor(
-    sparqlEndpointUrl: string,
-    semanticPostProcess: (sparql: any) => string,
-    language: string,
-    searchPath: string
-  ) {
-    super(sparqlEndpointUrl, semanticPostProcess, language, language);
-  }
-
-  abstract listUrl(domain: string, property: string, range: string): string;
-}
 
 export abstract class AbstractSparqlAutocompleteHandler extends Handler {
   constructor(
@@ -90,38 +20,7 @@ export abstract class AbstractSparqlAutocompleteHandler extends Handler {
   ): string;
 }
 
-/**
- * Handles a list widget based on a provided SPARQL query in which
- * $domain, $property and $range will be replaced by actual values.
- **/
-export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
-  queryString: any;
-  constructor(
-    sparqlEndpointUrl: string,
-    semanticPostProcess: (sparql: any) => string,
-    language: string,
-    queryString: string
-  ) {
-    super(sparqlEndpointUrl, semanticPostProcess, language, null);
-    this.queryString = queryString;
-  }
-  /**
-   * Constructs the SPARQL query to use for list widget search.
-   **/
-  listUrl(domain: string, property: string, range: string): string {
-    var reDomain = new RegExp("\\$domain", "g");
-    var reProperty = new RegExp("\\$property", "g");
-    var reRange = new RegExp("\\$range", "g");
-    var reLang = new RegExp("\\$lang", "g");
-    var sparql = this.queryString
-      .replace(reDomain, "<" + domain + ">")
-      .replace(reProperty, "<" + property + ">")
-      .replace(reRange, "<" + range + ">")
-      .replace(reLang, "'" + this.language + "'");
-    sparql = sparql.replace("\\", "");
-    return this.buildURL(sparql);
-  }
-}
+
 
 /**
  * Handles a list widget based on a provided SPARQL query in which

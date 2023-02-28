@@ -4,7 +4,7 @@ import { SelectedVal } from "../../../generators/ISparJson";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
-import { AbstractSparqlAutocompleteHandler } from "./AutocompleteAndListHandlers";
+import { AbstractSparqlAutocompleteHandler } from "./AutocompleteHandler";
 
 require("easy-autocomplete");
 

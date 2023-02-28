@@ -3,13 +3,13 @@ import ISettings from "../../../../sparnatural/settings/ISettings";
 import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import LocalCacheData from "../../../datastorage/LocalCacheData";
 import { SelectedVal } from "../../../generators/ISparJson";
-import { SparqlTemplateListHandler } from "./../autocomplete/AutocompleteAndListHandlers";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./../AbstractWidget";
 import * as DataFactory from "@rdfjs/data-model" ;
 import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../../generators/SparqlFactory";
+import { SparqlTemplateListHandler } from "./ListHandler";
 
 export class ListWidgetValue implements WidgetValue {
   value: {
@@ -71,21 +71,12 @@ export class ListWidget extends AbstractWidget {
       this.objectPropVal.type,
       this.endClassVal.type
     );
-
-    var headers = new Headers();
-    headers.append(
-      "Accept",
-      "application/sparql-results+json, application/json, */*;q=0.01"
-    );
-    let init = {
-      method: "GET",
-      headers: headers,
-      mode: "cors",
-      cache: "default",
-    };
+   
+    const requestOpt = this.datasourceHandler.buildHttpRequest()
+   
     let temp = new LocalCacheData();
     //this.toggleSpinner()
-    let fetchpromise = temp.fetch(url, init, this.settings.localCacheDataTtl);
+    let fetchpromise = temp.fetch(url, requestOpt, this.settings.localCacheDataTtl);
     fetchpromise
       .then((response: { json: () => any }) => response.json())
       .then((data: any) => {
@@ -158,6 +149,7 @@ export class ListWidget extends AbstractWidget {
   }
 
   parseInput(input:ListWidgetValue["value"]): WidgetValue { return new ListWidgetValue(input) }
+
 
   /**
    * @returns  true if the number of values is 1, in which case the widget will handle the generation of the triple itself,

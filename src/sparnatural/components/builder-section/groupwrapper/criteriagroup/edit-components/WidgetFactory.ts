@@ -5,8 +5,7 @@ import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import {
   SparqlTemplateAutocompleteHandler,
-  SparqlTemplateListHandler,
-} from "../../../../widgets/autocomplete/AutocompleteAndListHandlers";
+} from "../../../../widgets/autocomplete/AutocompleteHandler";
 import MapWidget from "../../../../widgets/MapWidget";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
@@ -20,6 +19,7 @@ import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWid
 import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import WidgetWrapper from "./WidgetWrapper";
+import { SparqlTemplateListHandler } from "../../../../widgets/listwidget/ListHandler";
 
 interface DataSource {
     queryTemplate:string;

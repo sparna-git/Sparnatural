@@ -1,7 +1,7 @@
 import { Pattern } from "sparqljs";
 import { SelectedVal } from "../../generators/ISparJson";
 import HTMLComponent from "../HtmlComponent";
-import { Handler } from "./autocomplete/AutocompleteAndListHandlers";
+import Handler from "./AbstractHandler";
 import LoadingSpinner from "./LoadingSpinner";
 
 // The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
