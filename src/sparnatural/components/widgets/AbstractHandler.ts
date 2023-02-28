@@ -86,6 +86,6 @@ export default abstract class Handler {
         }
     } 
 
-    return config
+    return requestOptions
     }
   }

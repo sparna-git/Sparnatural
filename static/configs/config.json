@@ -201,6 +201,7 @@
       "@type": "ObjectProperty",
       "subPropertyOf": "sparnatural:ListProperty",
       "datasource": "datasources:list_rdfslabel_alpha_with_count",
+
       "label": [
         { "@value": "country", "@language": "en" },
         { "@value": "pays", "@language": "fr" }
@@ -225,7 +226,7 @@
       "@type": "ObjectProperty",
       "subPropertyOf": "sparnatural:ListProperty",
       "sparqlService": "http://data.mydomain.org/ontology/sparnatural-config#DBPediaService",
-      "datasource": "datasources:list_rdfslabel_alpha_with_count",
+      "datasource": "list_rdfslabel_alpha_with_count",
       "label": [
         { "@value": "DPedia country", "@language": "en" },
         { "@value": "DPedia pays", "@language": "fr" }
