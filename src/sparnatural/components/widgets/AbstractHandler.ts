@@ -1,6 +1,6 @@
 import { getSettings } from "../../settings/defaultSettings";
 
-export default abstract class Handler {
+export default abstract class AbstractHandler {
     sparqlEndpointUrl;
     semanticPostProcess;
     language;

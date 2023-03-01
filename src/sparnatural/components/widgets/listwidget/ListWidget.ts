@@ -67,6 +67,7 @@ export class ListWidget extends AbstractWidget {
     this.html.append(this.selectHtml);
 
     // Request building MUST come before listUrl method
+    // endpoint for url will change
     const requestOpt = this.datasourceHandler.buildHttpRequest()
 
     let url = this.datasourceHandler.listUrl(

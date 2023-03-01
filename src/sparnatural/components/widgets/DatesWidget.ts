@@ -4,6 +4,7 @@ import { SelectedVal } from "../../generators/ISparJson";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import ISettings from "../../settings/ISettings";
 
 export class DateValue implements WidgetValue {
   value: {
@@ -23,7 +24,7 @@ export class DateValue implements WidgetValue {
 
 export class DatesWidget extends AbstractWidget {
 
-  datesHandler: any;
+  datesHandler;
   addWidgetValueBtn: AddUserInputBtn;
   input: JQuery<HTMLElement>;
   inputStart: JQuery<HTMLElement>;
@@ -31,7 +32,7 @@ export class DatesWidget extends AbstractWidget {
   inputValue: JQuery<HTMLElement>;
   constructor(
     parentComponent: WidgetWrapper,
-    datesHandler: any,
+    datesHandler: ISettings['dates'],
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal

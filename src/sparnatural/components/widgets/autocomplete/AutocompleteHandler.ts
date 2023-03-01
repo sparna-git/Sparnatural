@@ -1,6 +1,6 @@
-import Handler from "../AbstractHandler";
+import AbstractHandler from "../AbstractHandler";
 
-export abstract class AbstractSparqlAutocompleteHandler extends Handler {
+export abstract class AbstractSparqlAutocompleteHandler extends AbstractHandler {
   constructor(
     sparqlEndpointUrl: string,
     semanticPostProcess: (sparql: any) => string,
@@ -58,7 +58,7 @@ export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocomplet
   }
 }
 
-export class SimpleSparqlAutocompleteAndListHandler extends Handler {
+export class SimpleSparqlAutocompleteAndListHandler extends AbstractHandler {
   constructor(
     sparqlEndpointUrl: string,
     semanticPostProcess: (sparql: any) => string,
@@ -168,7 +168,7 @@ ORDER BY ?label
   }
 }
 
-export class UriOnlyListHandler extends Handler {
+export class UriOnlyListHandler extends AbstractHandler {
   constructor(sparqlEndpointUrl: string, semanticPostProcess: (sparql: any) => string,) {
     super(sparqlEndpointUrl, semanticPostProcess, null, null);
   }
@@ -199,7 +199,7 @@ ORDER BY DESC(?count)
   }
 }
 
-export class SparqlBifContainsAutocompleteAndListHandler extends Handler {
+export class SparqlBifContainsAutocompleteAndListHandler extends AbstractHandler {
   constructor(
     sparqlEndpointUrl: string,
     semanticPostProcess: (sparql: any) => string,
@@ -238,7 +238,7 @@ ORDER BY ?label
  * Takes as input the name of the connector, the field to search on, and the property to read to display
  * TODO : the property to display should come from the snippet
  **/
-export class GraphDbLuceneConnectorSparqlAutocompleteAndListHandler extends Handler {
+export class GraphDbLuceneConnectorSparqlAutocompleteAndListHandler extends AbstractHandler {
   connectorName: any;
   fieldName: any;
   /**
@@ -283,7 +283,7 @@ ORDER BY ?label
   }
 }
 
-export class WikidataAutocompleteAndListHandler extends Handler {
+export class WikidataAutocompleteAndListHandler extends AbstractHandler {
   constructor(sparqlEndpointUrl: string, semanticPostProcess: (sparql: any) => string, language: string) {
     super(sparqlEndpointUrl, semanticPostProcess, language, null);
   }

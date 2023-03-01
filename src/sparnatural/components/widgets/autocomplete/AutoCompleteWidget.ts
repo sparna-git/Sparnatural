@@ -4,7 +4,7 @@ import { SelectedVal } from "../../../generators/ISparJson";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
-import { AbstractSparqlAutocompleteHandler } from "./AutocompleteHandler";
+import { AbstractSparqlAutocompleteHandler, SparqlTemplateAutocompleteHandler } from "./AutocompleteHandler";
 
 require("easy-autocomplete");
 
@@ -30,7 +30,7 @@ export class AutoCompleteWidget extends AbstractWidget {
 
   constructor(
     parentComponent: WidgetWrapper,
-    autocompleteHandler: any,
+    autocompleteHandler: SparqlTemplateAutocompleteHandler,
     langSearch: any,
     startClassValue: SelectedVal,
     objectPropVal: SelectedVal,

@@ -1,6 +1,6 @@
-import Handler from "../AbstractHandler";
+import AbstractHandler from "../AbstractHandler";
 
-export abstract class AbstractSparqlListHandler extends Handler {
+export abstract class AbstractSparqlListHandler extends AbstractHandler {
     constructor(
       sparqlEndpointUrl: string,
       semanticPostProcess: (sparql: any) => string,
