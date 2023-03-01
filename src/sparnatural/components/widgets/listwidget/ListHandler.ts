@@ -1,3 +1,4 @@
+import { getSettings } from "../../../settings/defaultSettings";
 import AbstractHandler from "../AbstractHandler";
 
 export abstract class AbstractSparqlListHandler extends AbstractHandler {
@@ -44,4 +45,41 @@ export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
       sparql = sparql.replace("\\", "");
       return this.buildURL(sparql);
     }
+
+    buildHttpRequest() {
+
+      var headers = new Headers();
+      headers.append(
+          "Accept",
+          "application/sparql-results+json, application/json, */*;q=0.01"
+      );
+      let requestOptions = {
+          method: "GET",
+          headers: headers,
+          mode: "cors",
+          cache: "default",
+      } as {[key:string]:any};
+  
+      const config = getSettings().dataEndpoints.find((val)=>{
+      if(val?.endpoint === this.sparqlEndpointUrl)
+      return val
+      })
+      
+      if(config) {
+          // the sparqlEndpointUrl equals an endpoint in Settings.dataEndpoints
+          for (const [key, value] of Object.entries(config)) {
+              if(key === 'endpoint') {
+                  if (typeof value !== 'string') {
+                      console.error('endpoint in dataEndpoints must be a string!')
+                  }
+                  this.sparqlEndpointUrl = value as string
+              } else {
+                  requestOptions[key] = value
+              }
+              
+          }
+      } 
+  
+          return requestOptions
+      }
 }
