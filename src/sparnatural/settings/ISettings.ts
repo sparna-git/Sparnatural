@@ -5,7 +5,7 @@ export interface PreLoadQueries {
 }
 
 interface ISettings {
-  config: any;
+  config: {[key:string]:any};
   language: string;
   addDistinct?: boolean;
   limit?:number;
@@ -30,8 +30,19 @@ interface ISettings {
   langSearch?: any;
   debug: boolean;
   submitButton?: boolean;
-  autocomplete?: any;
-  list?: any;
+  autocomplete?:{
+    autocompleteUrl: (domain: any, property: any, range: any, key: any) => void,
+    listLocation: (domain: any, property: any, range: any, data: any) => any,
+    elementLabel: (element: any) => any,
+    elementUri: (element: any) => any,
+    enableMatch: (domain: any, property: any, range: any) => boolean
+  };
+  list?: {
+    listUrl: (domain: any, property: any, range: any) => void,
+    listLocation: (domain: any, property: any, range: any, data: any) => any,
+    elementLabel: (element: any) => any,
+    elementUri: (element: any) => any
+  };
   dates?: any;  
 }
 

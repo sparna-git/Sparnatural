@@ -106,7 +106,7 @@ export class SparnaturalElement extends HTMLElement {
     }  
 
     if(name == "src") {
-      getSettings().config = newValue;
+      getSettings().config = JSON.parse(newValue);
     }
     if(name == "lang") {
       getSettings().language = newValue;

@@ -20,6 +20,7 @@ import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import WidgetWrapper from "./WidgetWrapper";
 import { SparqlTemplateListHandler } from "../../../../widgets/listwidget/ListHandler";
+import ISettings from "../../../../../settings/ISettings";
 
 interface DataSource {
     queryTemplate:string;
@@ -136,7 +137,7 @@ export default class WidgetFactory {
               );
       
             case Config.AUTOCOMPLETE_PROPERTY:
-              var handler = getSettings().autocomplete;
+              var handler = getSettings().autocomplete as ISettings['autocomplete'];
       
               if (datasource == null) {
                 // datasource still null
