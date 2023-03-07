@@ -1,5 +1,6 @@
 import { Pattern } from "sparqljs";
 import { SelectedVal } from "../../generators/ISparJson";
+import { LowLevelHook } from "../../settings/ISettings";
 import HTMLComponent from "../HtmlComponent";
 import AbstractHandler from "./AbstractHandler";
 import LoadingSpinner from "./LoadingSpinner";
@@ -30,7 +31,7 @@ export abstract class AbstractWidget extends HTMLComponent {
   protected blockEndTriple = false;
   protected spinner = new LoadingSpinner(this).render()
   // If the widget contains a datasourceHandler such as ListHandler
-  protected datasourceHandler:AbstractHandler;
+  protected datasourceHandler: AbstractHandler | LowLevelHook;
 
   constructor(
     baseCssClass: string,

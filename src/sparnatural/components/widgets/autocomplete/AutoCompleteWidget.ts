@@ -2,9 +2,10 @@ import * as DataFactory from "@rdfjs/data-model" ;
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../../../generators/ISparJson";
 import SparqlFactory from "../../../generators/SparqlFactory";
+import { AutocompleteHook } from "../../../settings/ISettings";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
-import { AbstractSparqlAutocompleteHandler, SparqlTemplateAutocompleteHandler } from "./AutocompleteHandler";
+import { AbstractSparqlAutocompleteHandler } from "./AutocompleteHandler";
 
 require("easy-autocomplete");
 
@@ -25,12 +26,12 @@ export class AutoCompleteWidgetValue implements WidgetValue {
 
 export class AutoCompleteWidget extends AbstractWidget {
   protected widgetValues: AutoCompleteWidgetValue[];
-  protected datasourceHandler: AbstractSparqlAutocompleteHandler;
+  protected datasourceHandler: AbstractSparqlAutocompleteHandler | AutocompleteHook;
   protected langSearch: any;
 
   constructor(
     parentComponent: WidgetWrapper,
-    autocompleteHandler: SparqlTemplateAutocompleteHandler,
+    autocompleteHandler: AbstractSparqlAutocompleteHandler | AutocompleteHook,
     langSearch: any,
     startClassValue: SelectedVal,
     objectPropVal: SelectedVal,
@@ -54,18 +55,23 @@ export class AutoCompleteWidget extends AbstractWidget {
     let inputHtml = $(`<input class="autocompleteinput"/>`);
     let listHtml = $(`<input class="inputvalue" type="hidden"/>`);
     this.html.append(inputHtml);
-    this.html.append(listHtml);
+    this.html.append(listHtml);    
 
-    var isMatch = this.datasourceHandler.enableMatch(
-      this.startClassVal.type,
-      this.objectPropVal.type,
-      this.endClassVal.type
-    );
+    let options
+    if (this.datasourceHandler instanceof AbstractSparqlAutocompleteHandler) {
+      options = this.#getDatasourceViaHandler(this.datasourceHandler, inputHtml, listHtml)
+    } else {
+      options = this.#getDatasourceViaHook(this.datasourceHandler, inputHtml, listHtml)
+    }
+    //Need to add in html befor
+    inputHtml.easyAutocomplete(options);
+    return this;
+  }
 
-    let options = {
-      // ajaxSettings: {crossDomain: true, type: 'GET'} ,
+  #getDatasourceViaHandler(datasourceHandler: AbstractSparqlAutocompleteHandler, inputHtml:JQuery<HTMLElement>, listHtml:JQuery<HTMLElement>) {
+    return {
       url: (phrase: any) => {
-        return this.datasourceHandler.autocompleteUrl(
+        return datasourceHandler.autocompleteUrl(
           this.startClassVal.type,
           this.objectPropVal.type,
           this.endClassVal.type,
@@ -73,19 +79,12 @@ export class AutoCompleteWidget extends AbstractWidget {
         );
       },
       listLocation: (data: any) => {
-        return this.datasourceHandler.listLocation(
-          this.startClassVal.type,
-          this.objectPropVal.type,
-          this.endClassVal.type,
-          data
-        );
+        return datasourceHandler.listLocation(this.startClassVal.type, this.objectPropVal.type, this.endClassVal.type, data );
       },
       getValue: (element: any) => {
-        return this.datasourceHandler.elementLabel(element);
+        return datasourceHandler.elementLabel(element);
       },
-
       adjustWidth: false,
-
       ajaxSettings: {
         crossDomain: true,
         timeout: 7000,
@@ -94,8 +93,9 @@ export class AutoCompleteWidget extends AbstractWidget {
         data: {
           dataType: "json",
         },
-        beforeSend: ( xhr: { abort: () => void; }, obj: { data: boolean; } ) => {
-
+        beforeSend: ( xhr: {
+          [x: string]: any; abort: () => void; 
+        }, obj: { data: boolean; } ) => {
           if (obj.data == false) {
             xhr.abort();
             this.spinner.renderMessage(this.langSearch.AutocompleteSpinner_3Chars)
@@ -107,8 +107,8 @@ export class AutoCompleteWidget extends AbstractWidget {
           this.toggleSpinner(this.langSearch.AutocompleteSpinner_NoResults)
         },
         success: (data: any ) => {
-          var results = this.datasourceHandler.listLocation(this.startClassVal, this.objectPropVal, this.endClassVal, data)
-          if (results.length == 0) {
+          var results = datasourceHandler.listLocation(this.startClassVal.type, this.objectPropVal.type, this.endClassVal.type, data)
+          if (results.length === 0) {
             this.toggleSpinner(this.langSearch.AutocompleteSpinner_NoResults);
           } else {
             this.toggleSpinner('')
@@ -128,10 +128,6 @@ export class AutoCompleteWidget extends AbstractWidget {
       },
 
       list: {
-        match: {
-          enabled: isMatch,
-        },
-
         onChooseEvent: () => {
           let val = inputHtml.getSelectedItemData() as any;
           let autocompleteValue= new AutoCompleteWidgetValue({
@@ -145,10 +141,33 @@ export class AutoCompleteWidget extends AbstractWidget {
       },
       requestDelay: 400,
     };
-    //Need to add in html befor
+  }
 
-    inputHtml.easyAutocomplete(options);
-    return this;
+  #getDatasourceViaHook(datasourceHandler: AutocompleteHook, inputHtml:JQuery<HTMLElement>, listHtml:JQuery<HTMLElement>) {
+    return {
+      data: datasourceHandler.getData(this.startClassVal.type, this.objectPropVal.type, this.endClassVal.type),
+      getValue: (element: any) => {
+        return datasourceHandler.elementLabel(element);
+      },
+      
+      adjustWidth: false,
+      list: {
+        match: {
+          enabled: true
+        },
+        onChooseEvent: () => {
+          let val = inputHtml.getSelectedItemData() as any;
+          let autocompleteValue= new AutoCompleteWidgetValue({
+              label: this.datasourceHandler.elementLabel(val),
+              uri: this.datasourceHandler.elementUri(val),
+          });
+          inputHtml.val(autocompleteValue.value.label);
+          listHtml.val(autocompleteValue.value.uri).trigger("change");
+          this.renderWidgetVal(autocompleteValue);
+        },
+      },
+      requestDelay: 400,
+    };
   }
 
   parseInput(input: AutoCompleteWidgetValue["value"]): AutoCompleteWidgetValue {return new AutoCompleteWidgetValue(input)}
@@ -182,8 +201,6 @@ export class AutoCompleteWidget extends AbstractWidget {
         type: "bgp",
         triples: [singleTriple],
       };
-  
-
       return [ptrn];
     } else {
       let vals = (this.widgetValues as AutoCompleteWidgetValue[]).map((v) => {

@@ -1,5 +1,5 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
-import ISettings from "../../../../sparnatural/settings/ISettings";
+import  { ListHook } from "../../../../sparnatural/settings/ISettings";
 import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import LocalCacheData from "../../../datastorage/LocalCacheData";
 import { SelectedVal } from "../../../generators/ISparJson";
@@ -9,7 +9,7 @@ import * as DataFactory from "@rdfjs/data-model" ;
 import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../../generators/SparqlFactory";
-import { SparqlTemplateListHandler } from "./ListHandler";
+import { AbstractSparqlListHandler } from "./ListHandler";
 
 export class ListWidgetValue implements WidgetValue {
   value: {
@@ -27,15 +27,13 @@ export class ListWidgetValue implements WidgetValue {
 }
 
 export class ListWidget extends AbstractWidget {
-
   protected widgetValues: WidgetValue[];
-  datasourceHandler: SparqlTemplateListHandler;
+  datasourceHandler: AbstractSparqlListHandler | ListHook;
   sort: boolean;
-  settings: ISettings;
   selectHtml: JQuery<HTMLElement>;
   constructor(
     parentComponent: WidgetWrapper,
-    listHandler: SparqlTemplateListHandler,
+    listHandler: AbstractSparqlListHandler | ListHook,
     sort: boolean,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -60,85 +58,110 @@ export class ListWidget extends AbstractWidget {
   render() {
     super.render();
     this.selectHtml = $(`<select></select>`);
-    let noItemsHtml =
-      $(`<div class="no-items" style="display: none; font-style:italic;">
-      ${getSettings().langSearch.ListWidgetNoItem}
-    </div>`);
     this.html.append(this.selectHtml);
+    this.toggleSpinner(getSettings().langSearch.AutocompleteSpinner_Searching)
+    if (this.datasourceHandler instanceof AbstractSparqlListHandler) {
+      // asyncHandler requesting list from sparql endpoint
+      this.#getDatasourceViaHandler(this.datasourceHandler,this.#renderItems).then((items)=>{
+        this.#renderItems(items)
+      })
+    } else {
+      // local listhandler provided by the settings
+      const items = this.#getDatasourceViaHook(this.datasourceHandler)
+      this.#renderItems(items)
+    }
+   
+    return this;
+  }
 
+  async #getDatasourceViaHandler(datasourceHandler:AbstractSparqlListHandler, cb:(items: any, sort:boolean)=> void) {
     // Request building MUST come before listUrl method
     // endpoint for url will change
-    const requestOpt = this.datasourceHandler.buildHttpRequest()
+    const requestOpt = datasourceHandler.buildHttpRequest()
 
-    let url = this.datasourceHandler.listUrl(
+    let url = datasourceHandler.listUrl(
       this.startClassVal.type,
       this.objectPropVal.type,
       this.endClassVal.type
     );
-   
     let temp = new LocalCacheData();
     //this.toggleSpinner()
-    let fetchpromise = temp.fetch(url, requestOpt, this.settings.localCacheDataTtl);
-    fetchpromise
-      .then((response: { json: () => any }) => response.json())
-      .then((data: any) => {
-        //this.toggleSpinner("success")
-        var items = this.datasourceHandler.listLocation(
-          this.startClassVal.type,
-          this.objectPropVal.type,
-          this.endClassVal.type,
-          data
+    let fetchpromise = await temp.fetch(url, requestOpt, getSettings().localCacheDataTtl);
+    console.log('databack')
+    let data = await fetchpromise.json()
+    console.log('return data')
+    const items = datasourceHandler.listLocation(
+      this.startClassVal.type,
+      this.objectPropVal.type,
+      this.endClassVal.type,
+      data
+    );
+    return items
+  }
+
+  #getDatasourceViaHook (datasourceHandler:ListHook) {
+    const items = datasourceHandler.listLocation(
+      this.startClassVal.type,
+      this.objectPropVal.type,
+      this.endClassVal.type,
+      null
+    );
+   return items
+  }
+
+  #renderItems(items:any) {
+    console.log('render Items')
+    console.log(items.length)
+    if (items.length > 0) {
+      this.toggleSpinner('')
+      if (this.sort) {
+        // here, if we need to sort, then sort according to lang
+        var collator = new Intl.Collator(getSettings().language);
+        items.sort((a: any, b: any) => {
+          return collator.compare(
+            this.datasourceHandler.elementLabel(a),
+            this.datasourceHandler.elementLabel(b)
+          );
+        });
+      }
+
+      $.each(items, (key, val) => {
+        var label = this.datasourceHandler.elementLabel(val);
+        var uri = this.datasourceHandler.elementUri(val);
+        this.selectHtml.append(
+          $("<option value='" + uri + "'>" + label + "</option>")
         );
-        if (items.length > 0) {
-          if (this.sort) {
-            // here, if we need to sort, then sort according to lang
-            var collator = new Intl.Collator(this.settings.language);
-            items.sort((a: any, b: any) => {
-              return collator.compare(
-                this.datasourceHandler.elementLabel(a),
-                this.datasourceHandler.elementLabel(b)
-              );
-            });
-          }
-
-          $.each(items, (key, val) => {
-            var label = this.datasourceHandler.elementLabel(val);
-            var uri = this.datasourceHandler.elementUri(val);
-            this.selectHtml.append(
-              $("<option value='" + uri + "'>" + label + "</option>")
-            );
-          });
-          if (items.length < 20) {
-            this.selectHtml.niceSelect();
-            this.selectHtml.on("change", (e: Event) => {
-              let option = (e.currentTarget as HTMLSelectElement)
-                .selectedOptions;
-              if (option.length > 1)
-                throw Error(
-                  "List widget should allow only for one el to be selected!"
-                );
-              let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
-              this.renderWidgetVal(listWidgetValue);
-            });
-          } else {
-            this.selectHtml = this.selectHtml.select2();
-            this.selectHtml.on("select2:close", (e: any) => {
-              let option = (e.currentTarget as HTMLSelectElement)
-                .selectedOptions;
-              if (option.length > 1)
-                throw Error(
-                  "List widget should allow only for one el to be selected!"
-                );
-
-                let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
-                this.renderWidgetVal(listWidgetValue);
-            });
-          }
-        } else {
-          this.html.append(noItemsHtml);
-        }
       });
-    return this;
+      if (items.length < 20) {
+        this.selectHtml.niceSelect();
+        this.selectHtml.on("change", (e: Event) => {
+          let option = (e.currentTarget as HTMLSelectElement)
+            .selectedOptions;
+          if (option.length > 1)
+            throw Error(
+              "List widget should allow only for one el to be selected!"
+            );
+          let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
+          this.renderWidgetVal(listWidgetValue);
+        });
+      } else {
+        this.selectHtml = this.selectHtml.select2();
+        this.selectHtml.on("select2:close", (e: any) => {
+          let option = (e.currentTarget as HTMLSelectElement)
+            .selectedOptions;
+          if (option.length > 1)
+            throw Error(
+              "List widget should allow only for one el to be selected!"
+            );
+
+            let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
+            this.renderWidgetVal(listWidgetValue);
+        });
+      }
+    } else {
+      console.log('else')
+      this.toggleSpinner(getSettings().langSearch.ListWidgetNoItem)
+    }
   }
 
   // separate the creation of the value from the widget code itself
@@ -182,8 +205,6 @@ export class ListWidget extends AbstractWidget {
         type: "bgp",
         triples: [singleTriple],
       };
-  
-
       return [ptrn];
     } else {
       let vals = (this.widgetValues as ListWidgetValue[]).map((v) => {
