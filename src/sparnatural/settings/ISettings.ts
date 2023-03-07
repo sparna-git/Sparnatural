@@ -1,8 +1,4 @@
-import SparnaturalComponent from "../components/SparnaturalComponent";
-
-export interface PreLoadQueries {
-  queries: Array<{ queryName: string; query: string }>;
-}
+import {  DataSourceResult } from "../components/widgets/AbstractHandler";
 
 interface ISettings {
   config: {[key:string]:any};
@@ -30,20 +26,57 @@ interface ISettings {
   langSearch?: any;
   debug: boolean;
   submitButton?: boolean;
-  autocomplete?:{
-    autocompleteUrl: (domain: any, property: any, range: any, key: any) => void,
-    listLocation: (domain: any, property: any, range: any, data: any) => any,
-    elementLabel: (element: any) => any,
-    elementUri: (element: any) => any,
-    enableMatch: (domain: any, property: any, range: any) => boolean
+  autocomplete?:AutocompleteHook;
+  list?:ListHook;
+  dates?: DatesHook
+}
+
+export interface PreLoadQueries {
+  queries: Array<{ queryName: string; query: string }>;
+}
+
+// LowLevelHook is providing callbacks instead of an AbstractHandler
+export interface LowLevelHook {
+  elementLabel: (element: DataSourceResult) => string;
+}
+
+export interface ListHook extends LowLevelHook {
+  listUrl: (domain: string, property: string, range: string) => string;
+  elementUri: (element: DataSourceResult) => string;
+  listLocation: (domain: string, property: string, range: string, data: {
+    results: {
+        bindings: any;
+    };
+  }) => {
+      results: {
+          bindings: any;
+      };
+  }
+}
+
+export interface AutocompleteHook extends LowLevelHook {
+  [x: string]: any;
+  autocompleteUrl: (domain: string, property: string, range: string, key: string) => string;
+  elementUri: (element: DataSourceResult) => string;
+  getData: (domain: string, property: string, range: string) => {
+    label:string;
+    uri:string;
   };
-  list?: {
-    listUrl: (domain: any, property: any, range: any) => void,
-    listLocation: (domain: any, property: any, range: any, data: any) => any,
-    elementLabel: (element: any) => any,
-    elementUri: (element: any) => any
-  };
-  dates?: any;  
+}
+
+export interface DatesHook extends LowLevelHook {
+  datesUrl: (domain: string, property: string, range: string, key: string) => string;
+
+  elementStart: (element: {
+      start: {
+          year: number;
+      };
+  }) => number;
+  elementEnd: (element: {
+      stop: {
+          year: number;
+      };
+  }) => number;
 }
 
 export default ISettings;

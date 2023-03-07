@@ -1,4 +1,5 @@
 import { Props } from "tippy.js";
+import { DataSourceResult } from "../components/widgets/AbstractHandler";
 import ISettings from "./ISettings";
 
 const defaultSettings: ISettings = {
@@ -21,6 +22,11 @@ const defaultSettings: ISettings = {
   submitButton:true,
   dataEndpoints:[],
   autocomplete: {
+
+    getData: function(domain:string, property:string, range:string) {
+      console.error("Please specify function for getData option in in init parameters of Sparnatural : function(domain, property, range, key) => {label:string, uri:string}")
+      return null
+    },
     /**
      * This must return the URL that will be called when the user starts
      * typing a few letter in a search field.
@@ -31,27 +37,15 @@ const defaultSettings: ISettings = {
      * @param {string} key - The letters that the user has typed in the search field.
      **/
     autocompleteUrl: function (
-      domain: any,
-      property: any,
-      range: any,
-      key: any
+      domain: string,
+      property: string,
+      range: string,
+      key: string
     ) {
-      console.log(
+      console.error(
         "Please specify function for autocompleteUrl option in in init parameters of Sparnatural : function(domain, property, range, key)"
       );
-    },
-
-    /**
-     * Returns the path in the returned JSON structure where the list of entries should be read.
-     * This is typically the data structure itself, but can correspond to a subentry inside.
-     *
-     * @param {string} domain - The domain of the criteria currently being edited
-     * @param {string} property - The predicate of the criteria currently being edited
-     * @param {string} range - The range of the criteria currently being edited
-     * @param {object} data - The data structure returned from an autocomplete call
-     **/
-    listLocation: function (domain: any, property: any, range: any, data: any) {
-      return data;
+      return null
     },
 
     /**
@@ -59,8 +53,8 @@ const defaultSettings: ISettings = {
      *
      * @param {object} element - A single autocomplete result
      **/
-    elementLabel: function (element: any) {
-      return element.label;
+    elementLabel: function (element: DataSourceResult) {
+      return element.label.value;
     },
 
     /**
@@ -68,17 +62,8 @@ const defaultSettings: ISettings = {
      *
      * @param {object} element - A single autocomplete result
      **/
-    elementUri: function (element: any) {
-      return element.uri;
-    },
-
-    /**
-     * Whether the Easyautocomplete 'enableMatch' flag should be set; this should
-     * be useful only when loading the autocomplete results from a local file, leave to
-     * false otherwise.
-     **/
-    enableMatch: function (domain: any, property: any, range: any) {
-      return false;
+    elementUri: function (element: DataSourceResult) {
+      return element.uri.value;
     },
   },
   list: {
@@ -89,10 +74,11 @@ const defaultSettings: ISettings = {
      * @param {string} property - The predicate of the criteria currently being edited
      * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
      **/
-    listUrl: function (domain: any, property: any, range: any) {
-      console.log(
+    listUrl: function (domain: string, property: string, range: string) {
+      console.error(
         "Please specify function for listUrl option in in init parameters of Sparnatural : function(domain, property, range)"
       );
+      return null
     },
 
     /**
@@ -104,7 +90,7 @@ const defaultSettings: ISettings = {
      * @param {string} range - The range of the criteria currently being edited
      * @param {object} data - The data structure returned from a list call
      **/
-    listLocation: function (domain: any, property: any, range: any, data: any) {
+    listLocation: function (domain: string, property: string, range: string, data: { results: { bindings: any }}) {
       return data;
     },
 
@@ -113,8 +99,8 @@ const defaultSettings: ISettings = {
      *
      * @param {object} element - A single list entry
      **/
-    elementLabel: function (element: any) {
-      return element.label;
+    elementLabel: function (element: DataSourceResult) {
+      return element.label.value;
     },
 
     /**
@@ -122,27 +108,26 @@ const defaultSettings: ISettings = {
      *
      * @param {object} element - A single list entry
      **/
-    elementUri: function (element: any) {
-      return element.uri;
+    elementUri: function (element: DataSourceResult) {
+      return element.uri.value;
     },
   },
 
   dates: {
-    datesUrl: function (domain: any, property: any, range: any, key: any) {
-      console.log(
+    datesUrl: function (domain: string, property: string, range: string, key: string) {
+      console.error(
         "Please specify function for datesUrl option in in init parameters of Sparnatural : function(domain, property, range, key)"
       );
+      return null
     },
-    listLocation: function (domain: any, property: any, range: any, data: any) {
-      return data;
+
+    elementLabel: function (element: DataSourceResult) {
+      return element.label.value
     },
-    elementLabel: function (element: any) {
-      return element.label + " " + element.synonyms.join(" ");
-    },
-    elementStart: function (element: any) {
+    elementStart: function (element:{start:{year:number}}) {
       return element.start.year;
     },
-    elementEnd: function (element: any) {
+    elementEnd: function (element:{stop:{year:number}}) {
       return element.stop.year;
     },
   }

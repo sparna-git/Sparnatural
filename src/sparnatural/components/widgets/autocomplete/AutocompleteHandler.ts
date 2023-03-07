@@ -56,4 +56,9 @@ export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocomplet
       .replace(reKey, "" + key + "");
     return this.buildURL(sparql);
   }
+
+  buildHttpRequest(): { [key: string]: any; } {
+    throw new Error("Method not implemented.");
+  }
+
 }

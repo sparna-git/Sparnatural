@@ -8,7 +8,8 @@ import "select2/dist/css/select2.css";
 import { ListWidget } from "./ListWidget";
 import { WidgetValue } from "../AbstractWidget";
 import SparqlFactory from "../../../generators/SparqlFactory";
-import { SparqlTemplateListHandler } from "./ListHandler";
+import { AbstractSparqlListHandler } from "./ListHandler";
+import { ListHook } from "../../../settings/ISettings";
 
 export class LiteralListWidgetValue implements WidgetValue {
   value: {
@@ -28,7 +29,7 @@ export class LiteralListWidgetValue implements WidgetValue {
 export class LiteralListWidget extends ListWidget {
   constructor(
     parentComponent: WidgetWrapper,
-    listHandler: SparqlTemplateListHandler,
+    listHandler: AbstractSparqlListHandler | ListHook,
     sort: boolean,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
