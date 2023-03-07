@@ -21,6 +21,7 @@ import { getSettings } from "../../../../../settings/defaultSettings";
 import WidgetWrapper from "./WidgetWrapper";
 import { SparqlTemplateListHandler } from "../../../../widgets/listwidget/ListHandler";
 import ISettings from "../../../../../settings/ISettings";
+import AbstractHandler from "../../../../widgets/AbstractHandler";
 
 interface DataSource {
     queryTemplate:string;
@@ -62,7 +63,7 @@ export default class WidgetFactory {
         switch (widgetType) {
             case Config.LITERAL_LIST_PROPERTY: {
               // defaut handler to be used
-              var handler = getSettings()?.list; 
+              var listHandler = getSettings()?.list; 
               if (datasource == null) {
                 // datasource still null
                 // if a default endpoint was provided, provide default datasource
@@ -75,7 +76,7 @@ export default class WidgetFactory {
               if (datasource != null) {
                 // if we have a datasource, possibly the default one, provide a config based
                 // on a SparqlTemplate, otherwise use the handler provided
-                handler = new SparqlTemplateListHandler(
+                listHandler = new SparqlTemplateListHandler(
                   // endpoint URL
                   datasource.sparqlEndpointUrl != null
                     ? datasource.sparqlEndpointUrl
@@ -89,7 +90,7 @@ export default class WidgetFactory {
               }
               return new LiteralListWidget(
                 this.widgetWrapper,
-                handler,
+                listHandler,
                 !(datasource.noSort == true),
                 startClassVal,
                 objectPropVal,
@@ -99,7 +100,7 @@ export default class WidgetFactory {
             }
             case Config.LIST_PROPERTY:
               // defaut handler to be used
-              var handler = getSettings().list;
+              var listHandler = getSettings().list;
       
               if (datasource == null) {
                 // datasource still null
@@ -114,7 +115,7 @@ export default class WidgetFactory {
               if (datasource != null) {
                 // if we have a datasource, possibly the default one, provide a config based
                 // on a SparqlTemplate, otherwise use the handler provided
-                handler = new SparqlTemplateListHandler(
+                listHandler = new SparqlTemplateListHandler(
                   // endpoint URL
                   datasource.sparqlEndpointUrl != null
                     ? datasource.sparqlEndpointUrl
@@ -129,7 +130,7 @@ export default class WidgetFactory {
               }
               return new ListWidget(
                 this.widgetWrapper,
-                handler,
+                listHandler,
                 !(datasource.noSort == true),
                 startClassVal,
                 objectPropVal,
@@ -137,7 +138,7 @@ export default class WidgetFactory {
               );
       
             case Config.AUTOCOMPLETE_PROPERTY:
-              var handler = getSettings().autocomplete as ISettings['autocomplete'];
+              var autocompleteHandler = getSettings().autocomplete;
       
               if (datasource == null) {
                 // datasource still null
@@ -152,7 +153,7 @@ export default class WidgetFactory {
               if (datasource != null) {
                 // if we have a datasource, possibly the default one, provide a config based
                 // on a SparqlTemplate, otherwise use the handler provided
-                handler = new SparqlTemplateAutocompleteHandler(
+                autocompleteHandler = new SparqlTemplateAutocompleteHandler(
                   // endpoint URL
                   datasource.sparqlEndpointUrl != null
                     ? datasource.sparqlEndpointUrl
@@ -162,11 +163,11 @@ export default class WidgetFactory {
                   language,
                   // sparql query (with labelPath interpreted)
                   this.getFinalQueryString(datasource)
-                );
+                ) as any;
               }
               return new AutoCompleteWidget(
                 this.widgetWrapper,
-                handler,
+                autocompleteHandler,
                 getSettings().langSearch,
                 startClassVal,
                 objectPropVal,
