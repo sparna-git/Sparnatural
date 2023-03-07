@@ -1,4 +1,9 @@
-import { getSettings } from "../../settings/defaultSettings";
+
+export interface DataSourceResult {
+    label: { value: string } 
+    uri: { value: string },
+    value: { value: string } 
+}
 
 export default abstract class AbstractHandler {
     sparqlEndpointUrl;
@@ -35,29 +40,26 @@ export default abstract class AbstractHandler {
       return url;
     }
     listLocation(
-      domain: any,
-      property: any,
-      range: any,
+      domain: string,
+      property: string,
+      range: string,
       data: { results: { bindings: any } }
     ) {
       return data.results.bindings;
     }
   
-    elementLabel(element: { label: { value: any } }) {
+    elementLabel(element: DataSourceResult) {
       return element.label.value;
     }
   
     /* TODO : rename to elementValue */
-    elementUri(element: { uri: { value: any }; value: { value: any } }) {
+    elementUri(element: DataSourceResult) {
       if (element.uri) {
         return element.uri.value;
       } else if (element.value) {
         return element.value.value;
       }
     }
-  
-    enableMatch(domain: any, property: any, range: any) {
-      return false;
-    }
+    abstract buildHttpRequest(): {[key:string]:any}
   
   }

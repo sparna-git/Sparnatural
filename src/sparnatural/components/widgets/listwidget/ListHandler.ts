@@ -1,6 +1,12 @@
 import { getSettings } from "../../../settings/defaultSettings";
 import AbstractHandler from "../AbstractHandler";
 
+export interface ListDataSourceResult {
+  label: { value: string } 
+  uri: { value: string },
+  value: { value: string }
+}
+
 export abstract class AbstractSparqlListHandler extends AbstractHandler {
     constructor(
       sparqlEndpointUrl: string,
