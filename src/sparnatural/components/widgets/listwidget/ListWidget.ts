@@ -10,6 +10,7 @@ import * as DataFactory from "@rdfjs/data-model" ;
 import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../../generators/SparqlFactory";
+import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 
 export class ListWidgetValue implements WidgetValue {
   value: {
@@ -164,7 +165,11 @@ export class ListWidget extends AbstractWidget {
    * not using a VALUES clause; returns false otherwise.
    */
   isBlockingObjectProp() {
-    return (this.widgetValues.length == 1);
+    return (
+      this.widgetValues.length == 1
+      &&
+      !((this.ParentComponent.ParentComponent.ParentComponent as EndClassGroup).isVarSelected())
+    );
   }
 
   /**
@@ -177,7 +182,7 @@ export class ListWidget extends AbstractWidget {
 
 
    getRdfJsPattern(): Pattern[] {
-    if(this.widgetValues.length == 1) {
+    if(this.isBlockingObjectProp()) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
         DataFactory.variable(this.getVariableValue(this.startClassVal)),
         DataFactory.namedNode(this.objectPropVal.type),

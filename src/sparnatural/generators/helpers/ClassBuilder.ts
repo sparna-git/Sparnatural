@@ -117,7 +117,7 @@ export default class  ClassBuilder {
     }
 
     getDefaultVar():Variable {
-        const selected = this.classGroup.inputTypeComponent?.selectViewVariableBtn?.selected
+        const selected = this.classGroup.inputSelector?.selectViewVariableBtn?.selected
         if(selected && this.classGroup.defaultLblVar.variable) return DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
     }
 }

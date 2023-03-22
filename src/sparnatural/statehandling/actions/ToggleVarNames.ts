@@ -7,11 +7,11 @@ export default function toggleVarNames(actionsStore: ActionStore,showVarNames:bo
       let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
       let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
       if(showVarNames){
-        startGrp.inputTypeComponent.showVarName()
-        endGrp.inputTypeComponent.showVarName()
+        startGrp.inputSelector.showVarName()
+        endGrp.inputSelector.showVarName()
       } else {
-        startGrp.inputTypeComponent.showTypeName()
-        endGrp.inputTypeComponent.showTypeName()
+        startGrp.inputSelector.showTypeName()
+        endGrp.inputSelector.showTypeName()
       }
     }
   );

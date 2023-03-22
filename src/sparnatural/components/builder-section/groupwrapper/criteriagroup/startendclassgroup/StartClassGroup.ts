@@ -11,7 +11,7 @@ import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
  **/
 class StartClassGroup extends HTMLComponent {
   startClassVal: SelectedVal;
-  inputTypeComponent: ClassTypeId;
+  inputSelector: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   renderEyeBtn:Boolean = false
@@ -29,7 +29,7 @@ class StartClassGroup extends HTMLComponent {
   ) {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
-    this.inputTypeComponent = new ClassTypeId(this, this.specProvider, startClassVal);
+    this.inputSelector = new ClassTypeId(this, this.specProvider, startClassVal);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
     this.startClassVal = startClassVal
       ? startClassVal
@@ -42,7 +42,7 @@ class StartClassGroup extends HTMLComponent {
 
   render() {
     super.render();
-    this.inputTypeComponent.render();
+    this.inputSelector.render();
     this.#addEventListener();
     return this;
   }
@@ -69,8 +69,8 @@ class StartClassGroup extends HTMLComponent {
   }
 
   #autoSelectEyeBtn(){
-    this.inputTypeComponent.selectViewVariableBtn.render() 
-    this.inputTypeComponent.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
+    this.inputSelector.selectViewVariableBtn.render() 
+    this.inputSelector.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
   }
 
   #createSparqlVar(type: string) {

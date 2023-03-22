@@ -21,7 +21,7 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
   grpWrapper.optionState = OptionTypes.NONE
   // set StartClassVal
   let inputTypeComponent =
-    grpWrapper.CriteriaGroup.StartClassGroup.inputTypeComponent;
+    grpWrapper.CriteriaGroup.StartClassGroup.inputSelector;
   inputTypeComponent.oldWidget.val(startVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   inputTypeComponent.html[0].children[1].classList.add("disabled");

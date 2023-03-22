@@ -86,7 +86,7 @@ export default class WhereBuilder{
     }
 
     #buildRdfPtrn(){
-        //get the infromation from the widget if there are widgetvalues selected
+        //get the information from the widget if there are widgetvalues selected
         if (this.#widgetComponent?.getwidgetValues()?.length > 0 ) this.#rdfPtrns = this.#widgetComponent.getRdfJsPattern();
     }
 
@@ -112,7 +112,13 @@ export default class WhereBuilder{
 
     #buildIntersectionPtrn(){
         const objectPropCls = this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup
-        const intersectionBuilder = new IntersectionBuilder(this.#startClassPtrn,this.#endClassPtrn,this.#widgetComponent,objectPropCls,this.#specProvider)
+        const intersectionBuilder = new IntersectionBuilder(
+            this.#grpWrapper.CriteriaGroup.StartClassGroup.getVarName() ,
+            this.#grpWrapper.CriteriaGroup.EndClassGroup.getVarName(),
+            this.#widgetComponent,
+            objectPropCls,
+            this.#specProvider
+        );
         intersectionBuilder.build()
         this.#intersectionPtrn = intersectionBuilder.getPattern()
     }

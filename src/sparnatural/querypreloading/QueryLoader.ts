@@ -129,8 +129,8 @@ export default class QueryLoader{
     value: string
   ) {
     // set the values to the ClassTypeId component
-    component.inputTypeComponent.oldWidget.val(value).niceSelect("update");
-    let niceSelect = component.inputTypeComponent.html[0].querySelectorAll('.nice-select')
+    component.inputSelector.oldWidget.val(value).niceSelect("update");
+    let niceSelect = component.inputSelector.html[0].querySelectorAll('.nice-select')
     if (niceSelect.length > 1) console.warn('More than one nice-select found!')
     niceSelect[0].classList.add("disabled")
    
@@ -140,7 +140,7 @@ export default class QueryLoader{
   static #setSelectViewVariableBtn(startClassVal:SelectedVal,startClassComponent:StartClassGroup,endClassVal:SelectedVal,endClassComponent:EndClassGroup){
     if(this.query.variables.includes(endClassVal.variable.replace('?',''))){
       // click on eye btn
-      this.#clickOn((endClassComponent.inputTypeComponent as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
+      this.#clickOn((endClassComponent.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
     }
   }
 

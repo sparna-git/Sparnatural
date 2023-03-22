@@ -10,7 +10,7 @@ import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
  * The property selection part of a criteria/line, encapsulating an ObjectPropertyTypeId
  **/
 class ObjectPropertyGroup extends HTMLComponent {
-  inputTypeComponent: ObjectPropertyTypeId;
+  inputSelector: ObjectPropertyTypeId;
   objectPropVal: SelectedVal = {
     variable: null,
     type: null,
@@ -42,7 +42,7 @@ class ObjectPropertyGroup extends HTMLComponent {
   onStartClassGroupSelected(startClassVal: SelectedVal) {
     this.startClassVal = startClassVal;
     //this will set the temporary label since there hasn't been a Value chosen for EndClassGroup
-    this.inputTypeComponent = new ObjectPropertyTypeId(
+    this.inputSelector = new ObjectPropertyTypeId(
       this,
       this.specProvider,
       this.temporaryLabel,
@@ -115,8 +115,8 @@ class ObjectPropertyGroup extends HTMLComponent {
 	*/
   onEndClassGroupSelected(endClassVal: SelectedVal) {
     // this will update the temporarly label
-    this.inputTypeComponent.setEndClassVal(endClassVal);
-    this.inputTypeComponent.render();
+    this.inputSelector.setEndClassVal(endClassVal);
+    this.inputSelector.render();
   }
 }
 export default ObjectPropertyGroup;

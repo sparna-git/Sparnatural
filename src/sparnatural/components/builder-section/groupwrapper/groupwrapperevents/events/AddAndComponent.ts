@@ -16,7 +16,7 @@ export function addAndComponent(
   ).render();
   //set state to startClassValSelected and trigger change
   let inputTypeComponent =
-    grpWrapper.andSibling.CriteriaGroup.StartClassGroup.inputTypeComponent;
+    grpWrapper.andSibling.CriteriaGroup.StartClassGroup.inputSelector;
   inputTypeComponent.oldWidget.val(startClassVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   inputTypeComponent.html[0].children[1].classList.add("disabled");

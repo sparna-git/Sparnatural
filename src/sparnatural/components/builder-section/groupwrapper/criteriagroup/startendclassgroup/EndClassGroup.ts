@@ -22,7 +22,7 @@ class EndClassGroup extends HTMLComponent {
     type:null,
     variable:null
   };
-  inputTypeComponent: ClassTypeId;
+  inputSelector: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   editComponents: EditComponents;
@@ -100,12 +100,12 @@ class EndClassGroup extends HTMLComponent {
     this.startClassVal = startClassVal;
 
     // render the inputComponent for a user to select an Object
-    this.inputTypeComponent = new ClassTypeId(
+    this.inputSelector = new ClassTypeId(
       this,
       this.specProvider,
       startClassVal
     );
-    this.inputTypeComponent.render();
+    this.inputSelector.render();
   }
 
   onObjectPropertyGroupSelected(objectPropVal: SelectedVal) {
@@ -124,7 +124,7 @@ class EndClassGroup extends HTMLComponent {
 
   // renders the "eye" btn
   renderSelectViewVar() {
-    this.inputTypeComponent.selectViewVariableBtn.render();
+    this.inputSelector.selectViewVariableBtn.render();
   }
 
   #valueWasSelected() {
@@ -151,7 +151,7 @@ class EndClassGroup extends HTMLComponent {
   }
 
   #renderUnselectBtn() {
-    this.inputTypeComponent.renderUnselectBtn();
+    this.inputSelector.renderUnselectBtn();
   }
 
   getVarName() {
@@ -173,6 +173,13 @@ class EndClassGroup extends HTMLComponent {
 
   getTypeSelected() {
     return this.endClassVal.type;
+  }
+
+  /**
+   * @returns true if the 'eye' icon on this arrow is selected
+   */
+  isVarSelected() {
+    return this.inputSelector?.selectViewVariableBtn?.selected;
   }
 
   /**
