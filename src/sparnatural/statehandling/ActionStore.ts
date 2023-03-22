@@ -73,6 +73,8 @@ class ActionStore {
           );
         // add variable to selected variables
         selectViewVar(this, e.detail,e.target);
+        // re-enable the submit button if it was disabled
+        this.sparnatural.SubmitSection.enableSubmit();
         // trigger query generation
         generateQuery(this);
       }
