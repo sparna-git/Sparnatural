@@ -81,8 +81,9 @@ class EndClassGroup extends HTMLComponent {
   }
 
   #getUriClassName(uri:string){
-    if(uri.includes('#')) return uri.split('#').pop()
-    return uri.split('/').pop()
+    // replaces all non-ASCII characters with an underscore in variable names
+    if(uri.includes('#')) return uri.split('#').pop().replace(/[^\x00-\x7F]/g, "_")
+    return uri.split('/').pop().replace(/[^\x00-\x7F]/g, "_")
   }
 
   // adding a defaultlblProperty
