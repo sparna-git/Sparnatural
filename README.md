@@ -13,9 +13,9 @@ To get started :
 
 1. Read the following README;
 2. Read [the documentation](https://docs.sparnatural.eu)
-3. Look at how things work in file `sparnatural-demo-dbpedia/index.html`; 
-4. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/Sparnatural/blob/master/sparnatural-demo-dbpedia/index.html#L100)
-5. Adapt `sparnatural-demo-dbpedia/index.html` by changing the configuration and adapting the SPARQL endpoint URL;
+3. Look at how things work in [sparnatural-demo-dbpedia](https://github.com/sparna-git/sparnatural.eu/tree/main/demos/demo-dbpedia); 
+4. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/sparnatural.eu/blob/main/demos/demo-dbpedia/index.html)
+5. Adapt [`sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/sparnatural.eu/blob/main/demos/demo-dbpedia/index.html) by changing the configuration and adapting the SPARQL endpoint URL;
 
 # Features
 
