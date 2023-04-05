@@ -30,7 +30,7 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
 | debug | If set to `true`, Sparnatural will log JSON and SPARQL queries on the console, as they are generated. | `false` | Optional |
 | distinct | Whether the `DISTINCT` keyword should be inserted to the generated SPARQL query. | `true` | Optional|
 | lang | Possible values are `en`/`fr` Language code to use to display the labels of classes and properties from the configuration file. | `en` | Optional|
-|limit |A number that will be used to add a `LIMIT` keyword in the generated SPARQL queries. It not provided, no `LIMIT` keyword is inserted. | `1000` | Optional
+|limit |A number that will be used to add a `LIMIT` keyword in the generated SPARQL queries. If set to an empty string, no `LIMIT` keyword is inserted. | `1000` | Optional
 | maxDepth | Maximum depth of the constructed query (number of inner 'Where' clauses). | `4` | Optional
 | maxOr | Maximum number of different values that can be selected for a given property criteria. For example how many country can be chosen on the list widget| `3` | Optional
 | prefixes (*unstable*) | A set of prefixes in the form `foaf: http://xmlns.com/foaf/0.1/ skos:http://www.w3.org/2004/02/skos/core#` to be added to the output SPARQL query. This is applied in the `expand` method. | `none`
