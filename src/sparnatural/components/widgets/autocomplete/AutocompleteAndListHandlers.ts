@@ -32,6 +32,7 @@ export abstract class Handler {
       "&format=json";
     return url;
   }
+
   listLocation(
     domain: any,
     property: any,
@@ -59,14 +60,14 @@ export abstract class Handler {
   }
 }
 
-export abstract class AbstractSparqlListHandler extends Handler {
+export abstract class AbstractSparqlListHandler extends Handler { 
   constructor(
     sparqlEndpointUrl: any,
     sparqlPostprocessor: any,
     language: any,
     searchPath: any
   ) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, language);
+    super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
   }
 
   abstract listUrl(domain: string, property: string, range: string): string;
@@ -79,7 +80,7 @@ export abstract class AbstractSparqlAutocompleteHandler extends Handler {
     language: any,
     searchPath: any
   ) {
-    super(sparqlEndpointUrl, sparqlPostprocessor, language, language);
+    super(sparqlEndpointUrl, sparqlPostprocessor, language, searchPath);
   }
 
   abstract autocompleteUrl(
@@ -95,30 +96,41 @@ export abstract class AbstractSparqlAutocompleteHandler extends Handler {
  * $domain, $property and $range will be replaced by actual values.
  **/
 export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
-  queryString: any;
+  queryString: string;
+  // predicate or path to use in SPARQL queries - defaults to "a"
+  typePath: string;
+
   constructor(
     sparqlEndpointUrl: any,
     sparqlPostprocessor: any,
     language: any,
+    typePath: string = "a",
     queryString: string
   ) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
     this.queryString = queryString;
+    this.typePath = typePath;
   }
   /**
    * Constructs the SPARQL query to use for list widget search.
    **/
-  listUrl(domain: string, property: string, range: string): string {
+  listUrl(
+    domain: string,
+    property: string,
+    range: string
+  ): string {
     var reDomain = new RegExp("\\$domain", "g");
     var reProperty = new RegExp("\\$property", "g");
     var reRange = new RegExp("\\$range", "g");
     var reLang = new RegExp("\\$lang", "g");
+    var reType = new RegExp("\\$type", "g");
     var sparql = this.queryString
       .replace(reDomain, "<" + domain + ">")
       .replace(reProperty, "<" + property + ">")
       .replace(reRange, "<" + range + ">")
-      .replace(reLang, "'" + this.language + "'");
-    sparql = sparql.replace("\\", "");
+      .replace(reLang, "'" + this.language + "'")
+      .replace(reType, this.typePath );
+
     return this.buildURL(sparql);
   }
 }
@@ -128,15 +140,20 @@ export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
  * $domain, $property and $range will be replaced by actual values.
  **/
 export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteHandler {
-  queryString: any;
+  queryString: string;
+  // predicate or path to use in SPARQL queries - defaults to "a"
+  typePath: string;
+
   constructor(
     sparqlEndpointUrl: any,
     sparqlPostprocessor: any,
     language: any,
+    typePath: string = "a",
     queryString: any
   ) {
     super(sparqlEndpointUrl, sparqlPostprocessor, language, null);
     this.queryString = queryString;
+    this.typePath = typePath;
   }
   /**
    * Constructs the SPARQL query to use for autocomplete widget search.
@@ -151,6 +168,7 @@ export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocomplet
     var reProperty = new RegExp("\\$property", "g");
     var reRange = new RegExp("\\$range", "g");
     var reLang = new RegExp("\\$lang", "g");
+    var reType = new RegExp("\\$type", "g");
     var reKey = new RegExp("\\$key", "g");
 
     var sparql = this.queryString
@@ -158,6 +176,7 @@ export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocomplet
       .replace(reProperty, "<" + property + ">")
       .replace(reRange, "<" + range + ">")
       .replace(reLang, "'" + this.language + "'")
+      .replace(reType, this.typePath)
       .replace(reKey, "" + key + "");
     return this.buildURL(sparql);
   }

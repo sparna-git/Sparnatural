@@ -8,7 +8,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?value (STR(?value) AS ?label)
 WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?value .
 }
 ORDER BY UCASE(?label)
@@ -24,7 +24,7 @@ WHERE {
 {
   SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?theLabel .
     FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
   }
@@ -44,7 +44,7 @@ WHERE {
 {
   SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?theLabel .
     FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
   }
@@ -61,7 +61,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri (STR(?uri) AS ?label)
 WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
 }
@@ -78,7 +78,7 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
   }
@@ -95,7 +95,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     ?uri $labelPath ?label .
     FILTER(lang(?label) = "" || lang(?label) = $lang)
@@ -114,7 +114,7 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
   }
@@ -136,7 +136,7 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
   }
@@ -155,9 +155,9 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
-    ?uri a $range .
+    ?uri $type $range .
     ?uri $labelPath ?label .
     FILTER(isIRI(?uri))
     FILTER(lang(?label) = "" || lang(?label) = $lang)
@@ -175,10 +175,10 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
-    ?uri a $range .
+    ?uri $type $range .
   }
   GROUP BY ?uri
 }
@@ -199,11 +199,11 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
     # range criteria
-    ?uri a $range .
+    ?uri $type $range .
   }
   GROUP BY ?uri
 }
@@ -220,9 +220,9 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-  ?domain a $domain .
+  ?domain $type $domain .
   ?domain $property ?uri .
-  ?uri a $range .
+  ?uri $type $range .
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
   FILTER(lang(?label) = '' || lang(?label) = $lang)
@@ -238,9 +238,9 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-  ?domain a $domain .
+  ?domain $type $domain .
   ?domain $property ?uri .
-  ?uri a $range .
+  ?uri $type $range .
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
   FILTER(lang(?label) = '' || lang(?label) = $lang)
@@ -256,9 +256,9 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
  WHERE {
-  ?domain a $domain .
+  ?domain $type $domain .
   ?domain $property ?uri .
-  ?uri a $range .
+  ?uri $type $range .
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
   FILTER(lang(?label) = '' || lang(?label) = $lang )
@@ -274,9 +274,9 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT DISTINCT ?uri ?label
 WHERE {
-  ?domain a $domain .
+  ?domain $type $domain .
   ?domain $property ?uri .
-  ?uri a $range .
+  ?uri $type $range .
   FILTER(isIRI(?uri))
   BIND(STR(?uri) AS ?label)
   FILTER(CONTAINS(LCASE(?label), LCASE("$key"))) 
@@ -325,7 +325,7 @@ WHERE {
   }
 
   OPTIONAL {
-    ?x a $domain .
+    ?x $type $domain .
     ?x $property ?uri .
     # no range criteria
     # ?uri a $range .
@@ -341,7 +341,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT ?uri ?label ?hasChildren
 WHERE {
-  ?uri a $range .
+  ?uri $type $range .
   FILTER NOT EXISTS {
     ?parent $childrenPath ?uri .
   }
@@ -365,7 +365,7 @@ WHERE {
   {
     SELECT ?uri ?theLabel ?hasChildren
     WHERE {
-      ?uri a $range .
+      ?uri $type $range .
       FILTER NOT EXISTS {
         ?parent $childrenPath ?uri .
       }
@@ -380,7 +380,7 @@ WHERE {
   }
 
   OPTIONAL {
-    ?x a $domain .
+    ?x $type $domain .
     ?x $property ?uri .
   }
 }

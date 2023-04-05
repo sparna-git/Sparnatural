@@ -236,9 +236,11 @@ class WidgetWrapper extends HTMLComponent {
                 return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
               },
             },
-
-            // IMPORTANT is this deletable?
+            
             this.settings.language,
+
+            // typePath
+            this.settings.typePredicate,
 
             // sparql query (with labelPath interpreted)
             this.getFinalQueryString(datasource)
@@ -309,6 +311,9 @@ class WidgetWrapper extends HTMLComponent {
             // language,
             this.settings.language,
 
+            // typePath
+            this.settings.typePredicate,
+
             // sparql query (with labelPath interpreted)
             this.getFinalQueryString(datasource)
           );
@@ -374,6 +379,9 @@ class WidgetWrapper extends HTMLComponent {
 
             // language,
             this.settings.language,
+
+            // typePath
+            this.settings.typePredicate,
 
             // sparql query (with labelPath interpreted)
             this.getFinalQueryString(datasource)
