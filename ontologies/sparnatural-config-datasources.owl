@@ -542,7 +542,7 @@ This is typically the default behavior for a list without a datasource specified
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri (STR(?uri) AS ?label)
 WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
     # Note how the range criteria is not used in this query
@@ -562,7 +562,7 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
     # Note how the range criteria is not used in this query
@@ -582,7 +582,7 @@ LIMIT 500</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
 WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     # Note how the range criteria is not used in this query
     ?uri $labelPath ?label .
@@ -604,7 +604,7 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
     # Note how the range criteria is not used in this query
@@ -629,7 +629,7 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
     # Note how the range criteria is not used in this query
@@ -651,10 +651,10 @@ LIMIT 500</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
 WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     # range criteria
-    ?uri a $range .
+    ?uri $type $range .
     ?uri $labelPath ?label .
     FILTER(isIRI(?uri))
     FILTER(lang(?label) = &quot;&quot; || lang(?label) = $lang)
@@ -674,11 +674,11 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
     # range criteria
-    ?uri a $range .
+    ?uri $type $range .
   }
   GROUP BY ?uri
 }
@@ -700,11 +700,11 @@ WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
     # range criteria
-    ?uri a $range .
+    ?uri $type $range .
   }
   GROUP BY ?uri
 }
@@ -723,7 +723,7 @@ LIMIT 500</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value (STR(?value) AS ?label)
 WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?value .
 }
 ORDER BY UCASE(?label)
@@ -741,7 +741,7 @@ WHERE {
 {
   SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?theLabel .
     FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
   }
@@ -763,7 +763,7 @@ WHERE {
 {
   SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
   WHERE {
-    ?domain a $domain .
+    ?domain $type $domain .
     ?domain $property ?theLabel .
     FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
   }
@@ -782,9 +782,9 @@ LIMIT 500</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
 WHERE {
-  ?domain a $domain .
+  ?domain $type $domain .
   ?domain $property ?uri .
-  ?uri a $range .
+  ?uri $type $range .
   FILTER(isIRI(?uri))
   BIND(STR(?uri) AS ?label)
   FILTER(CONTAINS(LCASE(?label), LCASE(&quot;$key&quot;))) 
@@ -801,9 +801,9 @@ LIMIT 50</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
  WHERE {
-  ?domain a $domain .
+  ?domain $type $domain .
   ?domain $property ?uri .
-  ?uri a $range .
+  ?uri $type $range .
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang )
@@ -822,9 +822,9 @@ LIMIT 50</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
 WHERE {
-  ?domain a $domain .
+  ?domain $type $domain .
   ?domain $property ?uri .
-  ?uri a $range .
+  ?uri $type $range .
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
@@ -842,9 +842,9 @@ LIMIT 50</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
 WHERE {
-  ?domain a $domain .
+  ?domain $type $domain .
   ?domain $property ?uri .
-  ?uri a $range .
+  ?uri $type $range .
   ?uri $labelPath ?label .
   FILTER(isIRI(?uri))
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
@@ -898,10 +898,10 @@ WHERE {
   }
 
   OPTIONAL {
-    ?x a $domain .
+    ?x $type $domain .
     ?x $property ?uri .
     # no range criteria
-    # ?uri a $range .
+    # ?uri $type $range .
   }
 }
 GROUP BY ?uri ?theLabel ?hasChildren
@@ -916,7 +916,7 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT ?uri ?label ?hasChildren
 WHERE {
-  ?uri a $range .
+  ?uri $type $range .
   FILTER NOT EXISTS {
     ?parent $childrenPath ?uri .
   }
@@ -942,7 +942,7 @@ WHERE {
   {
     SELECT ?uri ?theLabel ?hasChildren
     WHERE {
-      ?uri a $range .
+      ?uri $type $range .
       FILTER NOT EXISTS {
         ?parent $childrenPath ?uri .
       }
@@ -957,7 +957,7 @@ WHERE {
   }
 
   OPTIONAL {
-    ?x a $domain .
+    ?x $type $domain .
     ?x $property ?uri .
   }
 }
@@ -1207,10 +1207,10 @@ WHERE {
   }
 
   OPTIONAL {
-    ?x a $domain .
+    ?x $type $domain .
     ?x $property ?uri .
     # no range criteria
-    # ?uri a $range .
+    # ?uri $type $range .
   }
 }
 GROUP BY ?uri ?theLabel ?hasChildren

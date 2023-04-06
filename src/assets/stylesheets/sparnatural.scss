@@ -56,12 +56,17 @@ body .select2-container--default {
 		background-color: var(--primary-color-main);
 	}
 }
-//tippy overides
+
+// tippy overides
+// WARNING : this is outside of the Sparnatural div and hance cannot use the variables in the theme CSS
+// for the moment the colors are thus hardcoded and cannot be customised
 .tippy-box[data-theme~='sparnatural'] {
-    background-color: var(--primary-color-light);
+    // background-color: var(--primary-color-light);
+	background-color: rgb(255, 231, 203);	
     color: #000;
 	border-radius: 5px;
-	border: 1px dashed var(--primary-color-main);
+	// border: 1px dashed var(--primary-color-main);
+	border: 1px dashed rgb(250,136,3);
 	padding: 2px;
 	font-size:0.75em;
-  }
+}
