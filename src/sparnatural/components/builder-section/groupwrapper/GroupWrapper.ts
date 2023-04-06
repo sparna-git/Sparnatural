@@ -6,17 +6,18 @@ import HTMLComponent from "../../HtmlComponent";
 import { OptionTypes } from "./criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapperEventStore from "./groupwrapperevents/GroupWrapperEventStore";
 import { SelectedVal } from "../../../generators/ISparJson";
+import ComponentsList from "../ComponentsList";
 
 /*
   GroupWrapper class represents a row in Sparnatural. It is the WrapperClass for the CriteriaGroup
 */
 class GroupWrapper extends HTMLComponent {
-  whereChild: GroupWrapper = null;
-  andSibling: GroupWrapper = null;
+  whereChild?: GroupWrapper;
+  andSibling?: GroupWrapper;
   optionState = OptionTypes.NONE;
   #isRoot = false // Wether this GrpWrapper is the root (first) GrpWrapper
-  linkAndBottom: LinkAndBottom; // connection line drawn from this CriteriaList with hasAnd CriteriaList
-  linkWhereBottom: LinkWhereBottom;
+  linkAndBottom?: LinkAndBottom; // connection line drawn from this CriteriaList with hasAnd CriteriaList
+  linkWhereBottom?: LinkWhereBottom;
   CriteriaGroup: CriteriaGroup;
   specProvider: ISpecProvider;
   groupWrapperEventStore: GroupWrapperEventStore;
@@ -26,8 +27,7 @@ class GroupWrapper extends HTMLComponent {
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
     depth:number,
-    startOrEndClassVal?: SelectedVal,    
-    isRoot?:boolean
+    startOrEndClassVal?: SelectedVal
   ) {
     super("groupe", ParentComponent, null);
     this.specProvider = specProvider;
@@ -35,9 +35,8 @@ class GroupWrapper extends HTMLComponent {
       this,
       this.specProvider,
       startOrEndClassVal,
-      isRoot
+      this.isRootGrpWrapper()
     );
-    this.#isRoot = isRoot
     this.depth = depth;
   }
 
@@ -48,8 +47,12 @@ class GroupWrapper extends HTMLComponent {
     return this;
   }
 
-  isRootGrpWrapper(){
-    return this.#isRoot
+  isRootGrpWrapper(): boolean{
+    return (
+      (this.ParentComponent instanceof ComponentsList)
+      &&
+      ((this.ParentComponent as ComponentsList).rootGroupWrapper == this)
+    );
   }
 
   // set back state to when objectproperty was selected

@@ -1,3 +1,4 @@
+import ComponentsList from "../../components/builder-section/ComponentsList";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import ActionStore, { MaxVarAction } from "../ActionStore";
 /*
@@ -22,7 +23,7 @@ export default function deleteGrpWrapper(
       deleteIt(grpWrapper);
     });
     grpWrapper.whereChild = null;
-    grpWrapper.linkWhereBottom.html.empty().remove();
+    grpWrapper.linkWhereBottom?.html.empty().remove();
     grpWrapper.setObjectPropertySelectedState();
   }
 
@@ -30,9 +31,10 @@ export default function deleteGrpWrapper(
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       if(grpWrapper === elToDel && grpWrapper.isRootGrpWrapper()) {
-        if (elToDel.whereChild) deleteWhereChilds(elToDel)
+        if(elToDel.whereChild) deleteWhereChilds(elToDel)
         if(elToDel.andSibling) {
-          grpWrapper.whereChild = elToDel.andSibling
+          // We are making the andSibling the root grpWrapper
+          (grpWrapper.ParentComponent as ComponentsList).attachNewRoot(elToDel.andSibling);
           deleteIt(elToDel)
         } else {
           actionStore.sparnatural.BgWrapper.resetCallback();
@@ -43,7 +45,7 @@ export default function deleteGrpWrapper(
       if(grpWrapper.whereChild === elToDel) {
         grpWrapper.whereChild = elToDel.andSibling
         if(!grpWrapper.whereChild){
-          grpWrapper.linkWhereBottom.html.empty().remove();
+          grpWrapper.linkWhereBottom?.html.empty().remove();
           grpWrapper.setObjectPropertySelectedState();
           // remove completed class so that it returns to its original height
           grpWrapper.html[0].classList.remove("completed");
@@ -52,7 +54,7 @@ export default function deleteGrpWrapper(
       if(grpWrapper.andSibling === elToDel) {
         grpWrapper.andSibling = elToDel.andSibling
         if (!grpWrapper.andSibling){
-          grpWrapper.linkAndBottom.html.empty().remove();
+          grpWrapper.linkAndBottom?.html.empty().remove();
           grpWrapper.setObjectPropertySelectedState();
         }
       } 
