@@ -39,7 +39,7 @@ import { TOOLTIP_CONFIG } from "../../../../src/sparnatural/settings/defaultSett
           $(document).off(".nice_select");
         }
       } else {
-        console.log('Method "' + method + '" does not exist.');
+        console.error('Method "' + method + '" does not exist.');
       }
       return this;
     }

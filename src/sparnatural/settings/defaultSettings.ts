@@ -37,7 +37,7 @@ const defaultSettings: ISettings = {
       range: any,
       key: any
     ) {
-      console.log(
+      console.error(
         "Please specify function for autocompleteUrl option in in init parameters of Sparnatural : function(domain, property, range, key)"
       );
     },
@@ -91,7 +91,7 @@ const defaultSettings: ISettings = {
      * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
      **/
     listUrl: function (domain: any, property: any, range: any) {
-      console.log(
+      console.error(
         "Please specify function for listUrl option in in init parameters of Sparnatural : function(domain, property, range)"
       );
     },
@@ -130,7 +130,7 @@ const defaultSettings: ISettings = {
 
   dates: {
     datesUrl: function (domain: any, property: any, range: any, key: any) {
-      console.log(
+      console.error(
         "Please specify function for datesUrl option in in init parameters of Sparnatural : function(domain, property, range, key)"
       );
     },

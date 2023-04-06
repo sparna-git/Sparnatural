@@ -11,7 +11,6 @@ class SpecificationProviderFactory {
       new OWLSpecificationProvider.build(config, language).then(function (
         provider
       ) {
-        console.log(provider);
         callback(provider);
       });
     } else {
@@ -39,7 +38,6 @@ class SpecificationProviderFactory {
               config,
               language,
               function(provider) {
-                console.log(provider);
                 callback(provider);
               }
             );

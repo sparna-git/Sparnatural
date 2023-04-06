@@ -191,7 +191,6 @@ class ClassSelectBuilder extends HTMLComponent {
   }
 
   buildSelect_StartClassGroupInWhere(selectedClass:string) {
-    console.log(selectedClass);
     return this.buildClassSelectFromItems(
       [selectedClass],
       null

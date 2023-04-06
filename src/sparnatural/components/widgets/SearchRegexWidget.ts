@@ -75,7 +75,6 @@ export class SearchRegexWidget extends AbstractWidget {
   }
   
   getRdfJsPattern(): Pattern[] {
-    console.log((this.ParentComponent as WidgetWrapper).widgetType)
     switch((this.ParentComponent as WidgetWrapper).widgetType) {
       case Config.STRING_EQUALS_PROPERTY: {
         // builds a FILTER(lcase(...) = lcase(...))

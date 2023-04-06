@@ -30,9 +30,8 @@ export default function generateQuery(actionStore: ActionStore) {
   actionStore.sparnaturalJSON = jsonQuery
   if (jsonQuery != null) {
     if(getSettings().debug){
-      console.log("*** Sparnatural JSON Data structure ***");
+      console.log("*** Sparnatural JSON Query ***");
       console.dir(jsonQuery);
-      console.log(JSON.stringify(jsonQuery, null, 4));
     }
 
     var writer = new RdfJsGenerator(
@@ -50,7 +49,7 @@ export default function generateQuery(actionStore: ActionStore) {
     // debug rdfJsQuery
     if(getSettings().debug){
       // prints the SPARQL generated from the writing of the JSON data structure
-      console.log("*** New SPARQL from JSON data structure ***");
+      console.log("*** Sparnatural SPARQL Query ***");
       console.log(selectQuery);
     } 
 

@@ -115,7 +115,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
         } else {
           // 2.2 Unknown, could be defined in the config itself
           // TODO
-          console.log(
+          console.error(
             "Reference to custom query template currently unsupported in JSON config"
           );
         }
@@ -146,7 +146,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
       );
       if (datasource == null) {
         // look it up in the config
-        console.log(
+        console.error(
           "Reference to custom datasource URI currently unsupported in JSON config"
         );
       }
