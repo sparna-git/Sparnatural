@@ -12,7 +12,8 @@ module.exports = {
   entry: ["./src/SparnaturalElement.ts" ],
   output: {
     path: path.resolve(__dirname, "./dist"),
-    filename: "sparnatural.js"
+    filename: "sparnatural.js",
+    clean: true
   },
   module: {
     rules: [
@@ -79,47 +80,47 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js']
   },
   plugins: [
-		new WriteFilePlugin(),
-		new HtmlWebpackPlugin({
-			filename: 'index.html',
-			template: __dirname + "/src/index.html",
-			inject: 'body'
-		}),
-		new MiniCssExtractPlugin({
-		  filename: "sparnatural.css",
-		  chunkFilename: "[id].css"
-		}),
-		new CopyPlugin({
-		  patterns: [
-			{
-				from:__dirname +'/static'
-			},
-			// Copy the themes CSS directly as static files in a themes subfolder
-			{
-				from:__dirname +'/src/assets/stylesheets/themes',
-				to:'themes'
-			}
-		  ]
-		}),
-		new DashboardPlugin(),
-		// so that JQuery is automatically inserted
-		new webpack.ProvidePlugin({
-		  $: 'jquery',
-		  jQuery: 'jquery',
-		}),
-		// so that stream works properly, necessary for RDFSpec provider
-		// see https://stackoverflow.com/questions/68542553/webpack-5process-is-not-defined-triggered-by-stream-browserify
-		new webpack.ProvidePlugin({
-		  process: 'process/browser'
-		})
-  ],
-	devServer: {
-		static:{
-			directory: path.resolve(__dirname, "./static"),
+	// new WriteFilePlugin(),
+	new HtmlWebpackPlugin({
+		filename: 'index.html',
+		template: __dirname + "/src/index.html",
+		inject: 'body'
+	}),
+	new MiniCssExtractPlugin({
+	  filename: "sparnatural.css",
+	  chunkFilename: "[id].css"
+	}),
+	new CopyPlugin({
+	  patterns: [
+		{
+			from:__dirname +'/static'
 		},
-		historyApiFallback: true,
-		open: true,
-		hot: true
+		// Copy the themes CSS directly as static files in a themes subfolder
+		{
+			from:__dirname +'/src/assets/stylesheets/themes',
+			to:'themes'
+		}
+	  ]
+	}),
+	new DashboardPlugin(),
+	// so that JQuery is automatically inserted
+	new webpack.ProvidePlugin({
+	  $: 'jquery',
+	  jQuery: 'jquery',
+	}),
+	// so that stream works properly, necessary for RDFSpec provider
+	// see https://stackoverflow.com/questions/68542553/webpack-5process-is-not-defined-triggered-by-stream-browserify
+	new webpack.ProvidePlugin({
+	  process: 'process/browser'
+	})
+  ],
+  devServer: {
+	static:{
+		directory: path.resolve(__dirname, "./static"),
 	},
+	historyApiFallback: true,
+	open: true,
+	hot: true
+  },
   devtool: "source-map"
 }
