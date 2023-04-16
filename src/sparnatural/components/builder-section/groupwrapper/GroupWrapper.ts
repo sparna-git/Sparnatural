@@ -27,7 +27,8 @@ class GroupWrapper extends HTMLComponent {
     ParentComponent: HTMLComponent,
     specProvider: ISpecProvider,
     depth:number,
-    startOrEndClassVal?: SelectedVal
+    startOrEndClassVal?: SelectedVal,
+    renderEyeButtonOnStartClassGroup?: boolean
   ) {
     super("groupe", ParentComponent, null);
     this.specProvider = specProvider;
@@ -35,7 +36,7 @@ class GroupWrapper extends HTMLComponent {
       this,
       this.specProvider,
       startOrEndClassVal,
-      this.isRootGrpWrapper()
+      renderEyeButtonOnStartClassGroup
     );
     this.depth = depth;
   }
