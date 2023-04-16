@@ -1,16 +1,21 @@
+import { BaseRDFReader } from "./BaseRDFReader";
 import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
 import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
+import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
+import { Quad, Store } from "n3";
 
 class SpecificationProviderFactory {
-  build(config, language, callback) {
+  build(config:any, language:string, callback:any) {
     if (typeof config == "object") {
       // if the config is a JSON object in the page, read it directly
       callback(new JsonLdSpecificationProvider(config, language));
     } else if (config.includes("@prefix") || config.includes("<http")) {
       // inline Turtle
-      new OWLSpecificationProvider.build(config, language).then(function (
-        provider
-      ) {
+      BaseRDFReader.buildStore(config, "http://sparnatural.eu#", (theStore:Store<Quad>) => {
+        var provider = new SHACLSpecificationProvider(
+          theStore,
+          language
+        );
         callback(provider);
       });
     } else {
@@ -33,14 +38,25 @@ class SpecificationProviderFactory {
           dataType: "text",
         })
           .done(function (configData) {
-            OWLSpecificationProvider.build(
-              configData,
-              config,
-              language,
-              function(provider) {
+
+            if(config.includes("shacl")) {
+              BaseRDFReader.buildStore(configData, config, (theStore:Store<Quad>) => {
+                var provider = new SHACLSpecificationProvider(
+                  theStore,
+                  language
+                );
                 callback(provider);
-              }
-            );
+              });
+            } else {
+              BaseRDFReader.buildStore(configData, config, (theStore:Store<Quad>) => {
+                var provider = new OWLSpecificationProvider(
+                  theStore,
+                  language
+                );
+                callback(provider);
+              });
+            }
+
           })
           .fail(function (response) {
             console.error(

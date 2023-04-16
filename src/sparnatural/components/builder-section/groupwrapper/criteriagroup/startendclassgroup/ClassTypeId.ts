@@ -165,8 +165,8 @@ export default ClassTypeId;
  *
  **/
 class ClassSelectBuilder extends HTMLComponent {
-  specProvider: any;
-  constructor(ParentComponent: HTMLComponent, specProvider: any) {
+  specProvider: ISpecProvider;
+  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
     super("ClassTypeId", ParentComponent, null);
     this.specProvider = specProvider;
   }

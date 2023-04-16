@@ -13,6 +13,7 @@ import {
   SparqlParser,
   SparqlGenerator
 } from "sparqljs";
+import { BaseRDFReader } from "./BaseRDFReader";
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 export const RDF = {
@@ -50,16 +51,12 @@ export const OWL = {
   UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode,
 };
 
-export class OWLSpecificationProvider implements ISpecProvider {
-  lang: string;
-  store: Store<Quad>;
+export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProvider {
   #parser: SparqlParser;
   #generator: SparqlGenerator;
 
   constructor(n3store: Store<Quad>, lang: string) {
-    // init memory store
-    this.store = n3store;
-    this.lang = lang;
+    super(n3store, lang);
 
     // init SPARQL parser and generator once
     this.#parser = new Parser();
@@ -78,55 +75,6 @@ export class OWLSpecificationProvider implements ISpecProvider {
     var query = this.#parser.parse(sparql);
     console.log(query)
     */
-  }
-
-  static build(specs: any, filePath: string, lang: any, callback: any) {
-    console.log("Building RDFSpecificationProvider from " + filePath);
-
-    // turn input string into a stream
-    var textStream = new Readable();
-    textStream.push(specs)    // the string you want
-    textStream.push(null)     // indicates end-of-file basically - the end of the stream
-
-    var quadStream;
-    try {
-      // attempt to parse based on path
-      console.log("Attempt to parse determining format from path " + filePath+"...");
-      quadStream = rdfParser.parse(textStream, { path: filePath });
-    } catch (exception) {
-      try {
-        console.log("Attempt to parse in Turtle...");
-        // attempt to parse in turtle
-        quadStream = rdfParser.parse(textStream, {
-          contentType: "text/turtle",
-        });
-      } catch (exception) {
-        console.log("Attempt to parse in RDF/XML...");
-        // attempt to parse in RDF/XML
-        quadStream = rdfParser.parse(textStream, {
-          contentType: "application/rdf+xml",
-        });
-      }
-    }
-
-    // import into store
-    storeStream(quadStream).then((theStore:Store<Quad>) => {
-      console.log(
-        "Specification store populated with " +
-          theStore.countQuads(
-            undefined,
-            undefined,
-            undefined,
-            undefined
-          ) +
-          " triples."
-      );
-      var provider = new OWLSpecificationProvider(
-        theStore,
-        lang
-      );
-      callback(provider);
-    });
   }
 
   getAllSparnaturalClasses() {
@@ -812,12 +760,6 @@ export class OWLSpecificationProvider implements ISpecProvider {
     return classes;
   }
 
-  /**
-   * Reads rdf:type(s) of an entity, and return them as an array
-   **/
-  _readRdfTypes(uri: any) {
-    return this._readAsResource(uri, RDF.TYPE);
-  }
 
   /**
    * Reads config:order of an entity and returns it, or null if not set
@@ -826,80 +768,7 @@ export class OWLSpecificationProvider implements ISpecProvider {
     return this._readAsSingleLiteral(uri, Config.ORDER);
   }
 
-  /**
-   * Reads the given property on an entity, and return values as an array
-   **/
-  _readAsResource(uri: any, property: any) {
-    return this.store
-      .getQuads(factory.namedNode(uri), property, undefined, undefined)
-      .map((quad: { object: { id: any } }) => quad.object.id);
-  }
 
-  /**
-   * Reads the given property on an entity, and returns the first value found, or null if not found
-   **/
-  _readAsSingleResource(uri: any, property: any) {
-    var values = this._readAsResource(uri, property);
-
-    if (values.length > 0) {
-      return values[0];
-    }
-
-    return null;
-  }
-
-  _readAsLiteral(uri: any, property: any) {
-    return this.store
-      .getQuads(factory.namedNode(uri), property, undefined, undefined)
-      .map((quad: { object: { value: any } }) => quad.object.value);
-  }
-
-  _readAsSingleLiteral(uri: any, property: any) {
-    var values = this._readAsLiteral(uri, property);
-    if (values.length == 0) {
-      return undefined;
-    } else {
-      return values[0];
-    }
-  }
-
-  _readAsLiteralWithLang(
-    uri: any,
-    property: any,
-    lang: any,
-    defaultToNoLang = true
-  ) {
-    var values = this.store
-      .getQuads(factory.namedNode(uri), property, undefined, undefined)
-      .filter((quad: any) => quad.object.language == lang)
-      .map((quad: { object: { value: any } }) => quad.object.value);
-
-    if (values.length == 0 && defaultToNoLang) {
-      values = this.store
-        .getQuads(factory.namedNode(uri), property, undefined, undefined)
-        .filter((quad: any) => quad.object.language == "")
-        .map((quad: { object: { value: any } }) => quad.object.value);
-    }
-
-    return values.join(", ");
-  }
-
-  _readAsRdfNode(rdfNode: any, property: any) {
-    return this.store
-      .getQuads(rdfNode, property, undefined, undefined)
-      .map((quad: { object: any }) => quad.object);
-  }
-
-  _hasProperty(rdfNode: any, property: any) {
-    return (
-      this.store.getQuads(
-        rdfNode,
-        property,
-        undefined,
-        undefined
-      ).length > 0
-    );
-  }
 
   /*** Handling of UNION classes ***/
 
@@ -922,43 +791,6 @@ export class OWLSpecificationProvider implements ISpecProvider {
     var lists = this._readAsRdfNode(factory.namedNode(classUri), OWL.UNION_OF);
     if (lists.length > 0) {
       return this._readList_rec(lists[0]);
-    }
-  }
-
-  _readList_rec(list: any) {
-    var result = this.store
-      .getQuads(list, RDF.FIRST, undefined, undefined)
-      .map((quad: { object: { id: any } }) => quad.object.id);
-
-    var subLists = this._readAsRdfNode(list, RDF.REST);
-    if (subLists.length > 0) {
-      result = result.concat(this._readList_rec(subLists[0]));
-    }
-
-    return result;
-  }
-
-  _readRootList(listId: any): any {
-    var root = this._readSuperList(listId);
-    if (root == null) {
-      return listId;
-    } else {
-      return this._readRootList(root);
-    }
-  }
-
-  _readSuperList(listId: any) {
-    const propertyQuads = this.store.getQuads(
-      undefined,
-      RDF.REST,
-      listId,
-      undefined
-    );
-
-    if (propertyQuads.length > 0) {
-      return propertyQuads[0].subject.id;
-    } else {
-      return null;
     }
   }
 
@@ -987,11 +819,5 @@ export class OWLSpecificationProvider implements ISpecProvider {
 
   /*** / Handling of UNION classes ***/
 
-  _pushIfNotExist(item: any, items: any[]) {
-    if (items.indexOf(item) < 0) {
-      items.push(item);
-    }
 
-    return items;
-  }
 }

@@ -250,7 +250,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
   };
 
   isMultilingual = function (propertyId: string) {
-    if(!propertyId) return;
+    if(!propertyId) return false;
     var item = this._getResourceById(propertyId);
     if (item !== null) {
       return item["isMultilingual"] == true;

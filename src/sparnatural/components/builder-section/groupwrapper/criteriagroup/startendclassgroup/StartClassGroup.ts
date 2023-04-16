@@ -47,6 +47,8 @@ class StartClassGroup extends HTMLComponent {
     return this;
   }
 
+  
+
   #addEventListener() {
     this.html[0].addEventListener(
       "classTypeValueSelected",
