@@ -154,8 +154,8 @@ export class TimeDatePickerWidget extends AbstractWidget {
    * @returns true if the property has been configured with a begin and an end date property
    */
   isBlockingObjectProp() {
-    let beginDateProp = this.specProvider.getBeginDateProperty(this.objectPropVal.type);
-    let endDateProp = this.specProvider.getEndDateProperty(this.objectPropVal.type);
+    let beginDateProp = this.specProvider.getProperty(this.objectPropVal.type).getBeginDateProperty();
+    let endDateProp = this.specProvider.getProperty(this.objectPropVal.type).getEndDateProperty();
 
     return (beginDateProp != null && endDateProp != null);
   }
@@ -234,11 +234,11 @@ export class TimeDatePickerWidget extends AbstractWidget {
   }
 
   getRdfJsPattern(): Pattern[] {
-    let beginDateProp = this.specProvider.getBeginDateProperty(this.objectPropVal.type);
-    let endDateProp = this.specProvider.getEndDateProperty(this.objectPropVal.type);
+    let beginDateProp = this.specProvider.getProperty(this.objectPropVal.type).getBeginDateProperty();
+    let endDateProp = this.specProvider.getProperty(this.objectPropVal.type).getEndDateProperty();
 
     if(beginDateProp != null && endDateProp != null) {
-      let exactDateProp = this.specProvider.getExactDateProperty(this.objectPropVal.type);
+      let exactDateProp = this.specProvider.getProperty(this.objectPropVal.type).getExactDateProperty();
 
       return [
         buildDateRangeOrExactDatePattern(

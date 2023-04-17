@@ -29,7 +29,7 @@ import { getSettings } from "../../../../../settings/defaultSettings";
  **/
 class WidgetWrapper extends HTMLComponent {
   settings: ISettings = getSettings()
-  widgetType: Config;
+  widgetType?: string;
   widgetComponent: AbstractWidget;
   specProvider: ISparnaturalSpecification;
   objectPropVal: SelectedVal;
@@ -50,9 +50,7 @@ class WidgetWrapper extends HTMLComponent {
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
 
-    this.widgetType = this.specProvider.getPropertyType(
-      this.objectPropVal.type
-    );
+    this.widgetType = this.specProvider.getProperty(this.objectPropVal.type).getPropertyType();
   }
 
   render() {
@@ -103,9 +101,9 @@ class WidgetWrapper extends HTMLComponent {
     );
   }
 
-  #addWidgetHTML(widgetType: string) {
+  #addWidgetHTML(widgetType?: string) {
     var parenthesisLabel =
-      " (" + this.specProvider.getLabel(this.endClassVal.type) + ") ";
+      " (" + this.specProvider.getEntity(this.endClassVal.type).getLabel() + ") ";
     if (this.widgetType == Config.BOOLEAN_PROPERTY) {
       parenthesisLabel = " ";
     }
@@ -147,7 +145,7 @@ class WidgetWrapper extends HTMLComponent {
     this.html.append(this.widgetHtml);
   }
 
-  #getEndLabel(widgetType: Config) {
+  #getEndLabel(widgetType: string) {
     if (
       widgetType == Config.SEARCH_PROPERTY ||
       widgetType == Config.STRING_EQUALS_PROPERTY ||
@@ -155,7 +153,7 @@ class WidgetWrapper extends HTMLComponent {
       widgetType == Config.TREE_PROPERTY
     ) {
       // label of the "Search" pseudo-class is inserted alone in this case
-      return this.specProvider.getLabel(this.endClassVal.type);
+      return this.specProvider.getEntity(this.endClassVal.type).getLabel();
     } else if (
       widgetType == Config.LIST_PROPERTY ||
       widgetType == Config.TIME_PROPERTY_DATE ||
@@ -193,11 +191,11 @@ class WidgetWrapper extends HTMLComponent {
         var theSpecProvider = this.specProvider;
 
         // determine custom datasource
-        var datasource = this.specProvider.getDatasource(objectPropertyId);
+        var datasource = this.specProvider.getProperty(objectPropertyId).getDatasource();
 
         if (datasource == null) {
           // try to read it on the class
-          datasource = this.specProvider.getDatasource(endClassType);
+          datasource = this.specProvider.getEntity(endClassType).getDatasource();
         }
 
         if (datasource == null) {
@@ -264,11 +262,11 @@ class WidgetWrapper extends HTMLComponent {
         var theSpecProvider = this.specProvider;
 
         // determine custom datasource
-        var datasource = this.specProvider.getDatasource(objectPropertyId);
+        var datasource = this.specProvider.getProperty(objectPropertyId).getDatasource();
 
         if (datasource == null) {
           // try to read it on the class
-          datasource = this.specProvider.getDatasource(endClassType);
+          datasource = this.specProvider.getEntity(endClassType).getDatasource();
         }
 
         if (datasource == null) {
@@ -333,11 +331,11 @@ class WidgetWrapper extends HTMLComponent {
         var theSpecProvider = this.specProvider;
 
         // determine custom datasource
-        var datasource = this.specProvider.getDatasource(objectPropertyId);
+        var datasource = this.specProvider.getProperty(objectPropertyId).getDatasource();
 
         if (datasource == null) {
           // try to read it on the class
-          datasource = this.specProvider.getDatasource(endClassType);
+          datasource = this.specProvider.getEntity(endClassType).getDatasource();
         }
 
         if (datasource == null) {
@@ -454,11 +452,11 @@ class WidgetWrapper extends HTMLComponent {
 
         // determine custom roots datasource
         var treeRootsDatasource =
-          this.specProvider.getTreeRootsDatasource(objectPropertyId);
+          this.specProvider.getProperty(objectPropertyId).getTreeRootsDatasource();
         if (treeRootsDatasource == null) {
           // try to read it on the class
           treeRootsDatasource =
-            this.specProvider.getTreeRootsDatasource(endClassType);
+            this.specProvider.getEntity(endClassType).getTreeRootsDatasource();
         }
         if (treeRootsDatasource == null) {
           // datasource still null
@@ -472,11 +470,11 @@ class WidgetWrapper extends HTMLComponent {
 
         // determine custom children datasource
         var treeChildrenDatasource =
-          this.specProvider.getTreeChildrenDatasource(objectPropertyId);
+          this.specProvider.getProperty(objectPropertyId).getTreeChildrenDatasource();
         if (treeChildrenDatasource == null) {
           // try to read it on the class
           treeChildrenDatasource =
-            this.specProvider.getTreeChildrenDatasource(endClassType);
+            this.specProvider.getEntity(endClassType).getTreeChildrenDatasource();
         }
         if (treeChildrenDatasource == null) {
           // datasource still null

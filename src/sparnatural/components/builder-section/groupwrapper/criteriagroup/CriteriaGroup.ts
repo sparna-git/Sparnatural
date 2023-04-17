@@ -123,7 +123,7 @@ class CriteriaGroup extends HTMLComponent {
           this.ActionsGroup.onObjectPropertyGroupSelected();
 
         // if property has a sparqlService, switch the state
-        if(this.specProvider.getServiceEndpoint(e.detail.type)) {
+        if(this.specProvider.getProperty(e.detail.type).getServiceEndpoint()) {
           triggerOption(this.ParentGroupWrapper, OptionTypes.SERVICE);
         } else {
           triggerOption(this.ParentGroupWrapper, this.ParentGroupWrapper.optionState);

@@ -1,6 +1,6 @@
 import factory from "@rdfjs/data-model";
-import { NamedNode, Quad, Store } from "n3";
-import { RDF } from "./OWLSpecificationProvider";
+import { Quad, Store } from "n3";
+import { RDF } from "./owl/OWLSpecificationProvider";
 import rdfParser from "rdf-parse";
 var Readable = require('stream').Readable
 import { storeStream } from "rdf-store-stream";
@@ -49,10 +49,10 @@ export class BaseRDFReader {
           console.log(
             "Specification store populated with " +
               theStore.countQuads(
-                undefined,
-                undefined,
-                undefined,
-                undefined
+                null,
+                null,
+                null,
+                null
               ) +
               " triples."
           );
@@ -65,7 +65,7 @@ export class BaseRDFReader {
    **/
   _readAsResource(uri: any, property: any) {
     return this.store
-      .getQuads(factory.namedNode(uri), property, undefined, undefined)
+      .getQuads(factory.namedNode(uri), property, null, null)
       .map((quad: { object: { id: any } }) => quad.object.id);
   }
 
@@ -84,7 +84,7 @@ export class BaseRDFReader {
 
   _readAsLiteral(uri: any, property: any) {
     return this.store
-      .getQuads(factory.namedNode(uri), property, undefined, undefined)
+      .getQuads(factory.namedNode(uri), property, null, null)
       .map((quad: { object: { value: any } }) => quad.object.value);
   }
 
@@ -104,13 +104,13 @@ export class BaseRDFReader {
     defaultToNoLang = true
   ) {
     var values = this.store
-      .getQuads(factory.namedNode(uri), property, undefined, undefined)
+      .getQuads(factory.namedNode(uri), property, null, null)
       .filter((quad: any) => quad.object.language == lang)
       .map((quad: { object: { value: any } }) => quad.object.value);
 
     if (values.length == 0 && defaultToNoLang) {
       values = this.store
-        .getQuads(factory.namedNode(uri), property, undefined, undefined)
+        .getQuads(factory.namedNode(uri), property, null, null)
         .filter((quad: any) => quad.object.language == "")
         .map((quad: { object: { value: any } }) => quad.object.value);
     }
@@ -120,7 +120,7 @@ export class BaseRDFReader {
 
   _readAsRdfNode(rdfNode: any, property: any) {
     return this.store
-      .getQuads(rdfNode, property, undefined, undefined)
+      .getQuads(rdfNode, property, null, null)
       .map((quad: { object: any }) => quad.object);
   }
 
@@ -129,8 +129,8 @@ export class BaseRDFReader {
       this.store.getQuads(
         rdfNode,
         property,
-        undefined,
-        undefined
+        null,
+        null
       ).length > 0
     );
   }
@@ -147,7 +147,7 @@ export class BaseRDFReader {
 
     _readList_rec(list: any) {
         var result = this.store
-          .getQuads(list, RDF.FIRST, undefined, undefined)
+          .getQuads(list, RDF.FIRST, null, null)
           .map((quad: { object: { id: any } }) => quad.object.id);
     
         var subLists = this._readAsRdfNode(list, RDF.REST);
@@ -169,10 +169,10 @@ export class BaseRDFReader {
     
       _readSuperList(listId: any) {
         const propertyQuads = this.store.getQuads(
-          undefined,
+          null,
           RDF.REST,
           listId,
-          undefined
+          null
         );
     
         if (propertyQuads.length > 0) {

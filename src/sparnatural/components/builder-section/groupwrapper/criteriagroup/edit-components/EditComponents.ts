@@ -72,7 +72,7 @@ class EditComponents extends HTMLComponent {
       !this.maxDepthIsReached()
       &&
       // If this owl:Class is not in a rdf:domain of a owl:ObjectProperty don't allow
-      (this.specProvider.getConnectedEntities(this.endClassVal.type).length !== 0)
+      (this.specProvider.getEntity(this.endClassVal.type).getConnectedEntities().length !== 0)
     ){
       this.actionWhere = new ActionWhere(
         this,

@@ -145,7 +145,7 @@ class ClassTypeId extends HTMLComponent {
   showTypeName(){
     const currentSpan = this.widgetHtml.first()[0].getElementsByClassName('current').item(0).getElementsByClassName('label').item(0)
      //display label
-     currentSpan.textContent = this.specProvider.getLabel(this.ParentComponent.getTypeSelected());
+     currentSpan.textContent = this.specProvider.getEntity(this.ParentComponent.getTypeSelected()).getLabel();
   }
 
   // renders the variable name
@@ -185,7 +185,7 @@ class ClassSelectBuilder extends HTMLComponent {
 
   buildSelect_EndClassGroup(domainId: string) {
     return this.buildClassSelectFromItems(
-      this.specProvider.getConnectedEntities(domainId),
+      this.specProvider.getEntity(domainId).getConnectedEntities(),
       null
     );
   }
@@ -201,9 +201,9 @@ class ClassSelectBuilder extends HTMLComponent {
     let list: Array<string> = [];
     for (var key in items) {
       var val = items[key];
-      var label = this.specProvider.getLabel(val);
-      var icon = this.specProvider.getIcon(val);
-      var highlightedIcon = this.specProvider.getHighlightedIcon(val);
+      var label = this.specProvider.getEntity(val).getLabel();
+      var icon = this.specProvider.getEntity(val).getIcon();
+      var highlightedIcon = this.specProvider.getEntity(val).getHighlightedIcon();
 
       // highlighted icon defaults to icon
       if (!highlightedIcon || 0 === highlightedIcon.length) {
@@ -211,7 +211,7 @@ class ClassSelectBuilder extends HTMLComponent {
       }
       let image = icon != null ? `data-icon="${icon}" data-iconh="${highlightedIcon}"` :""
       //var selected = (default_value == val)?'selected="selected"':'';
-      var desc = this.specProvider.getTooltip(val);
+      var desc = this.specProvider.getEntity(val).getTooltip();
       var selected = default_value == val ? ' selected="selected"' : "";
       var description_attr = "";
       if (desc) {

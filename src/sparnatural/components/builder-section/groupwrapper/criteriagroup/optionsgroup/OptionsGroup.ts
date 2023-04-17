@@ -63,17 +63,17 @@ export class OptionsGroup extends HTMLComponent {
   #renderOptionalComponents() {
     // MUST BE WRAPPED INTO LIST DIV
     if(
-      this.specProvider.isEnablingOptional(
+      this.specProvider.getProperty(
         this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
-      )
+      ).isEnablingOptional()
     ) {
       this.OptionalComponent.render();
     }
 
     if(
-      this.specProvider.isEnablingNegation(
+      this.specProvider.getProperty(
         this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
-      )
+      ).isEnablingNegation()
     ) {
       this.NotExistsComponent.render();
     }
@@ -89,13 +89,13 @@ export class OptionsGroup extends HTMLComponent {
 
   #checkIfOptionsPossible(): boolean {
     return (
-      this.specProvider.isEnablingOptional(
+      this.specProvider.getProperty(
         this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
-      )
+      ).isEnablingOptional()
       ||
-      this.specProvider.isEnablingNegation(
+      this.specProvider.getProperty(
         this.ParentCriteriaGroup.ObjectPropertyGroup.objectPropVal.type
-      )
+      ).isEnablingNegation()
     );
   }
 

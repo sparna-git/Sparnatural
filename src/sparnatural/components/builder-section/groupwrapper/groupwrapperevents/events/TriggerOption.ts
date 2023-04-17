@@ -102,5 +102,5 @@ function setArrowCss(grWrapper: GroupWrapper, newState: OptionTypes) {
 }
 
 const hasServiceEndpoint = (grpWrapper:GroupWrapper)=> {
- return (grpWrapper.specProvider.getServiceEndpoint(grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal.type) !== null)
+ return (grpWrapper.specProvider.getProperty(grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal.type).getServiceEndpoint() !== null)
 }

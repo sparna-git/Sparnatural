@@ -1,7 +1,7 @@
 import { BaseRDFReader } from "./BaseRDFReader";
-import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
-import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
-import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
+import JsonLdSpecificationProvider from "./jsonld//JsonLdSpecificationProvider";
+import { OWLSpecificationProvider } from "./owl//OWLSpecificationProvider";
+import { SHACLSpecificationProvider } from "./shacl/SHACLSpecificationProvider";
 import { Quad, Store } from "n3";
 
 class SparnaturalSpecificationFactory {

@@ -98,7 +98,7 @@ class StartClassGroup extends HTMLComponent {
   // adding a defaultlblProperty
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
   #addDefaultLblVar(type:string,varName:string) {
-    const lbl = this.specProvider.getDefaultLabelProperty(type)
+    const lbl = this.specProvider.getEntity(type).getDefaultLabelProperty()
     if(lbl) {
       this.defaultLblVar.type = lbl
       this.defaultLblVar.variable = `${varName}_label`
@@ -113,7 +113,7 @@ class StartClassGroup extends HTMLComponent {
       })
     );
 
-    var desc = this.specProvider.getTooltip(this.startClassVal.type);
+    var desc = this.specProvider.getEntity(this.startClassVal.type).getTooltip();
     if (desc) {
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
       tippySettings.placement = "top-start";

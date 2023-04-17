@@ -122,10 +122,7 @@ class PropertySelectBuilder {
     rangeClassID: string,
     default_value: string
   ) {
-    this.items = this.specProvider.getConnectingProperties(
-      domainClassID,
-      rangeClassID
-    );
+    this.items = this.specProvider.getEntity(domainClassID).getConnectingProperties(rangeClassID);
 
     if (this.items.length > 1) {
       return this.#multipleConnectingProperty(this.items);
@@ -137,9 +134,9 @@ class PropertySelectBuilder {
     let default_value = items[0];
     let list: Array<string> = [];
     items.forEach((i) => {
-      var label = this.specProvider.getLabel(i);
-      var icon = this.specProvider.getIcon(i);
-      var highlightedIcon = this.specProvider.getHighlightedIcon(i);
+      var label = this.specProvider.getProperty(i).getLabel();
+      var icon = this.specProvider.getProperty(i).getIcon();
+      var highlightedIcon = this.specProvider.getProperty(i).getHighlightedIcon();
       // highlighted icon defaults to icon
       if (!highlightedIcon || 0 === highlightedIcon.length) {
         highlightedIcon = icon;
@@ -149,7 +146,7 @@ class PropertySelectBuilder {
           ? ' data-icon="' + icon + '" data-iconh="' + highlightedIcon + '"'
           : "";
       //var selected = (default_value == val)?'selected="selected"':'';
-      var desc = this.specProvider.getTooltip(i);
+      var desc = this.specProvider.getProperty(i).getTooltip();
       var selected = default_value == i ? ' selected="selected"' : "";
       var description_attr = "";
       if (desc) {
@@ -181,8 +178,8 @@ class PropertySelectBuilder {
 
   #singleConnectingProperty(items: Array<string>) {
     let val = items[0];
-    var label = this.specProvider.getLabel(val);
-    var desc = this.specProvider.getTooltip(val);
+    var label = this.specProvider.getProperty(val).getLabel();
+    var desc = this.specProvider.getProperty(val).getTooltip();
     var description_attr = "";
     if (desc) {
       description_attr = ' data-desc="' + desc + '"';

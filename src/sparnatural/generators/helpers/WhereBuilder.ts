@@ -127,9 +127,9 @@ export default class WhereBuilder{
         // The startClassPtrn does not need to be created if it is a WHERE or ANDChild
         const hasStartClass = (!this.#isChild)
         const hasEndClass = (
-            !this.#specProvider.isLiteralEntity(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected())
+            !this.#specProvider.getEntity(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected()).isLiteralEntity()
             &&
-            !this.#specProvider.isRemoteEntity(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected())
+            !this.#specProvider.getEntity(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected()).isRemoteEntity()
         );
         const hasIntersectionTriple = (this.#intersectionPtrn)
 
@@ -150,7 +150,7 @@ export default class WhereBuilder{
         if(hasStartClass) this.#resultPtrns.push(...this.#startClassPtrn)
 
         // create a SERVICE clause if needed
-        const sparqlService = this.#specProvider.getServiceEndpoint(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())
+        const sparqlService = this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected()).getServiceEndpoint()
         let servicePtrn = null;
         if(this.#grpWrapper.optionState === OptionTypes.SERVICE || (sparqlService != null)){
             const endpoint = DataFactory.namedNode(sparqlService)
@@ -176,7 +176,7 @@ export default class WhereBuilder{
 
         // then decide where to store the generated patterns : either in "normal" patterns
         // or in patterns that shall be executed after the rest of the query
-        if(servicePtrn && this.#specProvider.isLogicallyExecutedAfter(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())) {
+        if(servicePtrn && this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected()).isLogicallyExecutedAfter()) {
             this.#executedAfterPtrns.push(...finalResultPtrns);
         } else {
             this.#resultPtrns.push(...finalResultPtrns);

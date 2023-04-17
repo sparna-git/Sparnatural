@@ -33,14 +33,14 @@ export default class  ClassBuilder {
     }
 
     #ifDefaultTrpl(){
-        const defaultLbl = this.specProvider.getDefaultLabelProperty(this.classTriple.object.value)
+        const defaultLbl = this.specProvider.getEntity(this.classTriple.object.value).getDefaultLabelProperty()
         if (!defaultLbl) return
         this.#buildDefaultLblTrpl()
         this.#ifDefaultTrplInOptional(defaultLbl) 
     }
 
     #ifDefaultTrplInOptional(defaultLbl:string){
-        if (this.specProvider.isEnablingOptional(defaultLbl)) this.#putDefaultLblInOptional()  
+        if (this.specProvider.getProperty(defaultLbl).isEnablingOptional()) this.#putDefaultLblInOptional()  
     }
 
     #ifBlocking(){
@@ -82,7 +82,7 @@ export default class  ClassBuilder {
         ])
         );
 
-        if(this.specProvider.isMultilingual(this.classGroup.defaultLblVar.type)) {
+        if(this.specProvider.getProperty(this.classGroup.defaultLblVar.type).isMultilingual()) {
             this.defaultLblPatterns.push(SparqlFactory.buildFilterLangEquals(
                 DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
                 DataFactory.literal(getSettings().language)

@@ -89,7 +89,7 @@ class EndClassGroup extends HTMLComponent {
   // adding a defaultlblProperty
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
   #addDefaultLblVar(type:string,varName:string) {
-    const lbl = this.specProvider.getDefaultLabelProperty(type)
+    const lbl = this.specProvider.getEntity(type).getDefaultLabelProperty()
     if(lbl) {
       this.defaultLblVar.type = lbl
       this.defaultLblVar.variable = `${varName}_label`
@@ -138,7 +138,7 @@ class EndClassGroup extends HTMLComponent {
       })
     );
 
-    var desc = this.specProvider.getTooltip(this.endClassVal.type);
+    var desc = this.specProvider.getEntity(this.endClassVal.type).getTooltip();
     if (desc) {
       $(this.html).find(".ClassTypeId").attr("data-tippy-content", desc);
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);

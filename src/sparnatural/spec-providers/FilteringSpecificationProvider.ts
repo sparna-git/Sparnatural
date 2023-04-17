@@ -1,11 +1,13 @@
 import ISparnaturalSpecification from "./ISparnaturalSpecification";
+import ISpecificationEntity from "./ISpecificationEntity";
+import ISpecificationProperty from "./ISpecificationProperty";
 
 interface CountMap {
   [key: string]: number;
 }
 
 /**
- * This class should not be used anymore
+ * @deprecated don't use anymore
  */
 export class FilteringSpecificationProvider implements ISparnaturalSpecification {
   delegateSpecificationProvider: ISparnaturalSpecification;
@@ -21,41 +23,12 @@ export class FilteringSpecificationProvider implements ISparnaturalSpecification
     this.propertiesCount = {};
   }
 
-  getDefaultLabelProperty(entityUri: string): string | null {
-    throw new Error("Method not implemented.");
+  getEntity(entityUri: string): ISpecificationEntity {
+    return this.delegateSpecificationProvider.getEntity(entityUri);
   }
-  getTooltip(value_selected: string): string {
-    throw new Error("Method not implemented.");
-  }
-  getTreeChildrenDatasource(propertyId: string) {
-    throw new Error("Method not implemented.");
-  }
-  getTreeRootsDatasource(propertyId: string) {
-    throw new Error("Method not implemented.");
-  }
-  isMultilingual(propertyId: string): boolean {
-    throw new Error("Method not implemented.");
-  }
-  getBeginDateProperty(propertyId: string): string | null {
-    throw new Error("Method not implemented.");
-  }
-  getEndDateProperty(propertyId: string): string | null {
-    throw new Error("Method not implemented.");
-  }
-  getExactDateProperty(propertyId: string): string | null {
-    throw new Error("Method not implemented.");
-  }
-  isEnablingNegation(propertyId: string): boolean {
-    throw new Error("Method not implemented.");
-  }
-  isEnablingOptional(propertyId: string): boolean {
-    throw new Error("Method not implemented.");
-  }
-  getServiceEndpoint(propertyId: string): string | null {
-    throw new Error("Method not implemented.");
-  }
-  isLogicallyExecutedAfter(propertyId: string): boolean {
-    throw new Error("Method not implemented.");
+
+  getProperty(property: string): ISpecificationProperty {
+    return this.delegateSpecificationProvider.getProperty(property);
   }
 
   notifyClassCount(classUri: string, count: number) {
@@ -83,38 +56,9 @@ export class FilteringSpecificationProvider implements ISparnaturalSpecification
     return items.filter((classUri:string) => {
       return (
         this._isClassAvailable(classUri) &&
-        this.getConnectedEntities(classUri).length > 0
+        this.getEntity(classUri).getConnectedEntities().length > 0
       );
     });
-  }
-
-  getConnectedEntities(domainClassUri: string) {
-    var items =
-      this.delegateSpecificationProvider.getConnectedEntities(domainClassUri);
-    return items.filter((rangeClassUri) => {
-      return (
-        this._isClassAvailable(rangeClassUri) &&
-        this.getConnectingProperties(domainClassUri, rangeClassUri).length > 0
-      );
-    });
-  }
-
-  getConnectingProperties(domainClassId: string, rangeClassId: string) {
-    var items = this.delegateSpecificationProvider.getConnectingProperties(
-      domainClassId,
-      rangeClassId
-    );
-    return items.filter((propertyUri) => {
-      return this._isPropertyAvailable(
-        domainClassId,
-        propertyUri,
-        rangeClassId
-      );
-    });
-  }
-
-  hasConnectedEntities(classId: string) {
-    return this.getConnectedEntities(classId).length > 0;
   }
 
   _isClassAvailable(classUri: string) {
@@ -149,37 +93,8 @@ export class FilteringSpecificationProvider implements ISparnaturalSpecification
     return this.delegateSpecificationProvider.getAllSparnaturalEntities();
   }
 
-  getLabel(entityId: string) {
-    return this.delegateSpecificationProvider.getLabel(entityId);
-  }
-
-  getIcon(classId: string) {
-    return this.delegateSpecificationProvider.getIcon(classId);
-  }
-
-  getHighlightedIcon(classId: string) {
-    return this.delegateSpecificationProvider.getHighlightedIcon(classId);
-  }
-
-  getPropertyType(objectPropertyId: string) {
-    return this.delegateSpecificationProvider.getPropertyType(
-      objectPropertyId
-    );
-  }
-
-  isRemoteEntity(classUri: string) {
-    return this.delegateSpecificationProvider.isRemoteEntity(classUri);
-  }
-
-  isLiteralEntity(classUri: string) {
-    return this.delegateSpecificationProvider.isLiteralEntity(classUri);
-  }
-
   expandSparql(sparql: string, prefixes: { [key: string]: string; }) {
     return this.delegateSpecificationProvider.expandSparql(sparql, prefixes);
   }
 
-  getDatasource(propertyOrClassId: string) {
-    return this.delegateSpecificationProvider.getDatasource(propertyOrClassId);
-  }
 }

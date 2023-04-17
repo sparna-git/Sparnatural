@@ -1,4 +1,6 @@
 import { Config } from "../ontologies/SparnaturalConfig";
+import ISpecificationEntity from "./ISpecificationEntity";
+import ISpecificationProperty from "./ISpecificationProperty";
 
 /*
     All Sparnatural specifications provided by the SparnaturalSpecificationFactory MUST implement this interface
@@ -11,23 +13,24 @@ interface ISparnaturalSpecification {
   expandSparql(sparql: string, prefixes: { [key: string]: string }): string;
  
   /** Common methods on entities and properties **/
-  getLabel(classOrPropertyId: string): string;
+  /*
+  getLabel(classOrPropertyId: string): string|null;
   getTooltip(classOrPropertyId: string): string;
   getDatasource(classOrPropertyId: string): any;
   getTreeChildrenDatasource(classOrPropertyId: string): any;
   getTreeRootsDatasource(classOrPropertyId: string): any;
-
-  /** Methods on entities/classes **/
-  getConnectedEntities(entityUri:string):Array<string>;
-  hasConnectedEntities(value_selected: string): any;
-  getConnectingProperties(domain: string, range: string): Array<string>;
-  isLiteralEntity(entityUri: string): boolean;
-  isRemoteEntity(entityUri: string): boolean;
-  getDefaultLabelProperty(entityUri: string):string|null;
   getIcon(entityUri: string): string;
   getHighlightedIcon(entityUri: string): string;
+  */
+
+
+  getEntity(entity:string):ISpecificationEntity;
+
+  getProperty(property:string):ISpecificationProperty;
+
   
   /** Methods on properties **/
+  /*
   getPropertyType(objectPropertyId: string): Config;
   isMultilingual(propertyId: string): boolean;
   
@@ -40,5 +43,6 @@ interface ISparnaturalSpecification {
 
   getServiceEndpoint(propertyId:string):string | null;
   isLogicallyExecutedAfter(propertyId:string):boolean;
+  */
 }
 export default ISparnaturalSpecification;

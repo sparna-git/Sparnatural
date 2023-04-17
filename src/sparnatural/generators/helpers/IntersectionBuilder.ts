@@ -51,7 +51,7 @@ export default class IntersectionBuilder{
             );
 
             // add language filter if property is set to be multilingual
-            if(this.specProvider.isMultilingual(this.#objectPropCls.getTypeSelected())) {
+            if(this.specProvider.getProperty(this.#objectPropCls.getTypeSelected()).isMultilingual()) {
                 this.resultPtrn.push(SparqlFactory.buildFilterLangEquals(
                     DataFactory.variable(this.#endClassVar.replace('?','')),
                     DataFactory.literal(getSettings().language)

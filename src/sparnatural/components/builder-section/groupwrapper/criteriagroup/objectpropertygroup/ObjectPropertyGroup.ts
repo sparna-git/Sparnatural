@@ -83,7 +83,7 @@ class ObjectPropertyGroup extends HTMLComponent {
         detail: this.objectPropVal,
       })
     );
-    var desc = this.specProvider.getTooltip(this.objectPropVal.type);
+    var desc = this.specProvider.getProperty(this.objectPropVal.type).getTooltip();
 
     if(desc) {
 			$(this.ParentCriteriaGroup.ObjectPropertyGroup.html).find('.ObjectPropertyTypeId').attr('data-tippy-content', desc ) ;
