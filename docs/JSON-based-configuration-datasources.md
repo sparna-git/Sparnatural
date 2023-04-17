@@ -152,6 +152,7 @@ In this SPARQL query, the following replacements will happen:
 - `$range`, if present, will be replaced by the URI of the range class;
 - `$property`, if present, will be replaced by the URI of the property;
 - `$lang`, if present, will be replaced by the language Sparnatural is configured with;
+- `$type`, if present, will be replace by the `typePredicate` config parameter of Sparnatural; this is useful if you query wikibase endpoints where the type rpedicate is something else than rdf:type;
 - `$key`, if present, will be replaced by the searched key for autocomplete fields;
 
 Take a look at the preconfigured SPARQL queries in the [Sparnatural datasources ontology](http://data.sparna.fr/ontologies/sparnatural-config-datasources) to get you started.
