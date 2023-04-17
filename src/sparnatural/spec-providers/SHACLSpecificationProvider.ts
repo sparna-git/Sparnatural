@@ -42,11 +42,11 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   }
 
   getIcon(classId: string) {
-    
+    return "";
   }
 
   getHighlightedIcon(classId: string) {
-    
+    return "";
   }
 
   getConnectedEntities(classId: string) {

@@ -11,8 +11,11 @@ interface ISparnaturalSpecification {
   expandSparql(sparql: string, prefixes: { [key: string]: string }): string;
  
   /** Common methods on entities and properties **/
-  getLabel(value_selected: string): string;
-  getTooltip(value_selected: string): string;
+  getLabel(classOrPropertyId: string): string;
+  getTooltip(classOrPropertyId: string): string;
+  getDatasource(classOrPropertyId: string): any;
+  getTreeChildrenDatasource(classOrPropertyId: string): any;
+  getTreeRootsDatasource(classOrPropertyId: string): any;
 
   /** Methods on entities/classes **/
   getConnectedEntities(entityUri:string):Array<string>;
@@ -21,15 +24,11 @@ interface ISparnaturalSpecification {
   isLiteralEntity(entityUri: string): boolean;
   isRemoteEntity(entityUri: string): boolean;
   getDefaultLabelProperty(entityUri: string):string|null;
-  getIcon(entityUri: string): any;
-  getHighlightedIcon(entityUri: string): any;
+  getIcon(entityUri: string): string;
+  getHighlightedIcon(entityUri: string): string;
   
   /** Methods on properties **/
   getPropertyType(objectPropertyId: string): Config;
-  getDatasource(propertyId: string): any;
-  getTreeChildrenDatasource(propertyId: string): any;
-  getTreeRootsDatasource(propertyId: string): any;
-
   isMultilingual(propertyId: string): boolean;
   
   getBeginDateProperty(propertyId: string): string|null;

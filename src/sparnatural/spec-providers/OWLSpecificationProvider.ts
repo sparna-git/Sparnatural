@@ -171,9 +171,9 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
         " fa-fw'></i></span>"
       );
     } else {
-      var icon = this._readAsLiteral(classId, factory.namedNode(Config.ICON));
-      if (icon.length > 0) {
-        return icon;
+      var icons = this._readAsLiteral(classId, factory.namedNode(Config.ICON));
+      if (icons.length > 0) {
+        return icons[0];
       } else {
         // this is ugly, just so it aligns with other entries having an icon
         return "<span style='font-size: 175%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
@@ -182,10 +182,13 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
   }
 
   getHighlightedIcon(classId: string) {
-    return this._readAsLiteral(
+    var icons = this._readAsLiteral(
       classId,
       factory.namedNode(Config.HIGHLIGHTED_ICON)
     );
+    if (icons.length > 0) {
+      return icons[0];
+    } 
   }
 
   getConnectedEntities(classId: string) {
