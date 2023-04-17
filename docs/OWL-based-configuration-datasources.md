@@ -126,7 +126,8 @@ In this SPARQL query, the following replacements will happen:
 - **`$range`**, if present, will be replaced by the URI of the range class;
 - **`$property`**, if present, will be replaced by the URI of the property;
 - **`$lang`**, if present, will be replaced by the language Sparnatural is configured with;
-- **`$key`**, if present, will be replaced by the searched key for autocomplete fields;
+- **`$type`**, if present, will be replaced by the `typePredicate` parameter value of Sparnatural config (useful if you query a wikibase endpoint where the type predicate is something else than rdf:type);
+- **`$key`**, if present, will be replaced by the searched key (only useful for autocomplete fields);
 
 Take a look at the preconfigured SPARQL queries in the [Sparnatural datasources ontology](http://data.sparna.fr/ontologies/sparnatural-config-datasources) to get you started.
 
