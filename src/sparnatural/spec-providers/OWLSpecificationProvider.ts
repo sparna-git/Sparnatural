@@ -77,13 +77,13 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
     */
   }
 
-  getAllSparnaturalClasses() {
-    var classes = this.getClassesInDomainOfAnyProperty();
+  getAllSparnaturalEntities() {
+    var classes = this.getEntitiesInDomainOfAnyProperty();
     // copy initial array
     var result = classes.slice();
     // now look for all classes we can reach from this class list
     for (const aClass of classes) {
-      var connectedClasses = this.getConnectedClasses(aClass);
+      var connectedClasses = this.getConnectedEntities(aClass);
       for (const aConnectedClass of connectedClasses) {
         this._pushIfNotExist(aConnectedClass, result);
       }
@@ -109,7 +109,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
     return executedAfter;
   }
 
-  getClassesInDomainOfAnyProperty() {
+  getEntitiesInDomainOfAnyProperty() {
     const quadsArray = this.store.getQuads(
       undefined,
       RDFS.DOMAIN,
@@ -125,11 +125,11 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
       var typeClass = quad.object.termType;
       var classId = quad.object.id;
 
-      if (this.getObjectPropertyType(objectPropertyId)) {
+      if (this.getPropertyType(objectPropertyId)) {
         // keep only Sparnatural classes in the list
         if (this.isSparnaturalClass(classId) || typeClass == "BlankNode") {
           // always exclude RemoteClasses from first list
-          if (!this.isRemoteClass(classId)) {
+          if (!this.isRemoteEntity(classId)) {
             if (!this._isUnionClass(classId)) {
               this._pushIfNotExist(classId, items);
             } else {
@@ -188,7 +188,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
     );
   }
 
-  getConnectedClasses(classId: string) {
+  getConnectedEntities(classId: string) {
     var items: any[] = [];
 
     const properties = this._readPropertiesWithDomain(classId);
@@ -218,8 +218,8 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
     return items;
   }
 
-  hasConnectedClasses(classId: any) {
-    return this.getConnectedClasses(classId).length > 0;
+  hasConnectedEntities(classId: any) {
+    return this.getConnectedEntities(classId).length > 0;
   }
 
   getConnectingProperties(domainClassId: any, rangeClassId: any) {
@@ -249,7 +249,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
     return items;
   }
 
-  getObjectPropertyType(objectPropertyId: any) {
+  getPropertyType(objectPropertyId: any) {
     var superProperties = this._readAsResource(
       objectPropertyId,
       RDFS.SUBPROPERTY_OF
@@ -281,7 +281,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
     return undefined;
   }
 
-  isRemoteClass(classUri: string) {
+  isRemoteEntity(classUri: string) {
     return (
       this.store.getQuads(
         factory.namedNode(classUri),
@@ -292,7 +292,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
     );
   }
 
-  isLiteralClass(classUri: string) {
+  isLiteralEntity(classUri: string) {
     return (
       this.store.getQuads(
         factory.namedNode(classUri),
@@ -661,7 +661,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
 
     for (const aQuad of propertyQuads) {
       // only select properties with proper Sparnatural configuration
-      if (this.getObjectPropertyType(aQuad.subject.id)) {
+      if (this.getPropertyType(aQuad.subject.id)) {
         this._pushIfNotExist(aQuad.subject.id, properties);
       }
     }
@@ -680,7 +680,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProv
 
       for (const aQuad of propertyQuadsHavingUnionAsDomain) {
         // only select properties with proper Sparnatural configuration
-        if (this.getObjectPropertyType(aQuad.subject.id)) {
+        if (this.getPropertyType(aQuad.subject.id)) {
           this._pushIfNotExist(aQuad.subject.id, properties);
         }
       }

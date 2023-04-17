@@ -42,7 +42,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
     this.lang = lang;
   }
 
-  getObjectPropertyType = function (objectPropertyId: any) {
+  getPropertyType = function (objectPropertyId: any) {
     var objectProperty = this._getResourceById(objectPropertyId);
 
     var superProperties =
@@ -259,13 +259,13 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
     return false;
   };
 
-  getAllSparnaturalClasses = function () {
+  getAllSparnaturalEntities = function () {
     var classes = this.getClassesInDomainOfAnyProperty();
     // copy initial array
     var result = classes.slice();
     // now look for all classes we can reach from this class list
     for (const aClass of classes) {
-      var connectedClasses = this.getConnectedClasses(aClass);
+      var connectedClasses = this.getConnectedEntities(aClass);
       for (const aConnectedClass of connectedClasses) {
         this._pushIfNotExist(aConnectedClass, result);
       }
@@ -277,7 +277,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
 		List of possible Class relative to a Class
 		return array of @type Class in jsonSpecs 
 	*/
-  getConnectedClasses = function (classId: string) {
+  getConnectedEntities = function (classId: string) {
     var items: any[] = [];
 
     for (var j in this.jsonSpecs["@graph"]) {
@@ -299,15 +299,15 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
     return items;
   };
 
-  hasConnectedClasses = function (classId: string) {
-    return this.getConnectedClasses(classId).length > 0;
+  hasConnectedEntities = function (classId: string) {
+    return this.getConnectedEntities(classId).length > 0;
   };
 
   /*
 		Reads "first-level" classes, i.e. classes that are in the domain
 		of at least one property that connects them to other classes
 	*/
-  getClassesInDomainOfAnyProperty = function () {
+  getEntitiesInDomainOfAnyProperty = function () {
     var items: any[] = [];
 
     for (var j in this.jsonSpecs["@graph"]) {
@@ -356,7 +356,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
     return items;
   };
 
-  isRemoteClass = function (classUri: string) {
+  isRemoteEntity = function (classUri: string) {
     if(!classUri) return false
 
     var classEntity = this._getResourceById(classUri);
@@ -377,7 +377,7 @@ export default class JsonLdSpecificationProvider implements ISpecProvider {
     return false;
   };
 
-  isLiteralClass = function (classUri: string) {
+  isLiteralEntity = function (classUri: string) {
     if(!classUri) return false
     var classEntity = this._getResourceById(classUri);
 

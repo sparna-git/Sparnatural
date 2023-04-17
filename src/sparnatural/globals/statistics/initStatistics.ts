@@ -34,8 +34,8 @@ export function initStatistics(aSpecProvider: any) {
     var aClass = items[key];
 
     if (
-      !specProvider.isRemoteClass(aClass) &&
-      !specProvider.isLiteralClass(aClass)
+      !specProvider.isRemoteEntity(aClass) &&
+      !specProvider.isLiteralEntity(aClass)
     ) {
       var options = {
         url: statisticsHandler.countClassUrl(aClass),
@@ -54,7 +54,7 @@ export function initStatistics(aSpecProvider: any) {
         specProvider.notifyClassCount(this.classUri, count);
 
         if (count > 0) {
-          for (const aRange of specProvider.getConnectedClasses(
+          for (const aRange of specProvider.getConnectedEntities(
             this.classUri
           )) {
             for (const aProperty of specProvider.getConnectingProperties(
@@ -63,8 +63,8 @@ export function initStatistics(aSpecProvider: any) {
             )) {
               var url;
               if (
-                specProvider.isRemoteClass(aRange) ||
-                specProvider.isLiteralClass(aRange)
+                specProvider.isRemoteEntity(aRange) ||
+                specProvider.isLiteralEntity(aRange)
               ) {
                 url = statisticsHandler.countPropertyWithoutRangeUrl(
                   this.classUri,

@@ -178,14 +178,14 @@ class ClassSelectBuilder extends HTMLComponent {
 
   buildSelect_FirstStartClassGroup() {
     return this.buildClassSelectFromItems(
-      this.specProvider.getClassesInDomainOfAnyProperty(),
+      this.specProvider.getEntitiesInDomainOfAnyProperty(),
       null
     );
   }
 
   buildSelect_EndClassGroup(domainId: string) {
     return this.buildClassSelectFromItems(
-      this.specProvider.getConnectedClasses(domainId),
+      this.specProvider.getConnectedEntities(domainId),
       null
     );
   }

@@ -17,11 +17,11 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISpecPr
     super(n3store, lang);
   }
 
-  getClassesInDomainOfAnyProperty() {
+  getEntitiesInDomainOfAnyProperty() {
     return new Array<string>();
   }
 
-  getAllSparnaturalClasses() {
+  getAllSparnaturalEntities() {
     return new Array<string>();
   }
 
@@ -49,32 +49,28 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISpecPr
     
   }
 
-  getConnectedClasses(classId: string) {
+  getConnectedEntities(classId: string) {
     return new Array<string>();
   }
 
-  hasConnectedClasses(classId: any) {
-    return this.getConnectedClasses(classId).length > 0;
+  hasConnectedEntities(classId: any) {
+    return this.getConnectedEntities(classId).length > 0;
   }
 
   getConnectingProperties(domainClassId: any, rangeClassId: any) {
     return new Array<string>();
   }
 
-  getObjectPropertyType(objectPropertyId: any) {
+  getPropertyType(objectPropertyId: any) {
     return Config.AUTOCOMPLETE_PROPERTY;
   }
 
-  isRemoteClass(classUri: string) {
+  isRemoteEntity(classUri: string) {
     return false;
   }
 
-  isLiteralClass(classUri: string) {
+  isLiteralEntity(classUri: string) {
     return false;
-  }
-
-  isSparnaturalClass(classUri: string) {
-    
   }
 
   expandSparql(sparql: string, prefixes:{ [key: string]: string }) {
