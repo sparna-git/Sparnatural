@@ -1,5 +1,5 @@
 import { getSettings } from "../../../../../sparnatural/settings/defaultSettings";
-import ISpecProvider from "../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../spec-providers/ISparnaturalSpecification";
 import EditComponents from "../../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import HTMLComponent from "../../../HtmlComponent";
 import UiuxConfig from "../../../IconsConstants";
@@ -11,12 +11,12 @@ import UiuxConfig from "../../../IconsConstants";
 */
 class ActionWhere extends HTMLComponent {
   parentComponent: EditComponents;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   callBack: () => void;
   btn: JQuery<HTMLElement>;
   constructor(
     parentComponent: EditComponents,
-    specProvider: ISpecProvider,
+    specProvider: ISparnaturalSpecification,
     callBack: () => void
   ) {
     //TODO refactor the null init in html widget

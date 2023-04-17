@@ -1,4 +1,4 @@
-import ISpecProvider from "../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../spec-providers/ISparnaturalSpecification";
 import SparnaturalComponent from "../components/SparnaturalComponent";
 import { ISparJson, Order } from "../generators/ISparJson";
 import generateQuery from "./actions/GenerateQuery";
@@ -42,7 +42,7 @@ class ActionStore {
   // this is set when a query is loaded
   quiet = false;
   
-  constructor(sparnatural: SparnaturalComponent, specProvider: ISpecProvider) {
+  constructor(sparnatural: SparnaturalComponent, specProvider: ISparnaturalSpecification) {
     this.specProvider = specProvider;
     this.sparnatural = sparnatural;
     this.#addCustomEventListners();

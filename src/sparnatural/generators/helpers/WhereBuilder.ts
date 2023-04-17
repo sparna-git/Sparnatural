@@ -3,7 +3,7 @@ import { BgpPattern, Pattern, Variable } from "sparqljs";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
-import ISpecProvider from "../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import ClassBuilder from "./ClassBuilder";
 import IntersectionBuilder from "./IntersectionBuilder";
 import SparqlFactory from "../SparqlFactory";
@@ -11,7 +11,7 @@ import SparqlFactory from "../SparqlFactory";
 export default class WhereBuilder{
     // variables set in construtor
     #grpWrapper:GroupWrapper
-    #specProvider: ISpecProvider
+    #specProvider: ISparnaturalSpecification
     #typePredicate: string
     #isChild:boolean
     #isInOption:boolean
@@ -30,7 +30,7 @@ export default class WhereBuilder{
     // default vars gathered from children
     #defaultVars: Variable[] =[]
 
-    constructor(grpWrapper:GroupWrapper,specProvider:ISpecProvider,typePredicate:string,isChild:boolean,isInOption:boolean){
+    constructor(grpWrapper:GroupWrapper,specProvider:ISparnaturalSpecification,typePredicate:string,isChild:boolean,isInOption:boolean){
         this.#grpWrapper = grpWrapper
         this.#specProvider = specProvider
         this.#typePredicate = typePredicate

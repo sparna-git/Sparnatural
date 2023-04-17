@@ -2,7 +2,7 @@
  * A single line/criteria
  **/
 import { getSettings } from "../../../../../sparnatural/settings/defaultSettings";
-import ISpecProvider from "../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../spec-providers/ISparnaturalSpecification";
 import UnselectBtn from "../../../buttons/UnselectBtn";
 import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
@@ -23,7 +23,7 @@ class CriteriaGroup extends HTMLComponent {
   EndClassGroup: EndClassGroup;
   endClassWidgetGroup: EndClassWidgetGroup;
   ActionsGroup: ActionsGroup;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   ParentGroupWrapper: GroupWrapper;
   unselectBtn: UnselectBtn;
   startClassEyeBtn = false // Decides if the selectviewvarBtn is rendered on the startClass. That is the case only for the first one

@@ -1,4 +1,4 @@
-import ISpecProvider from "../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../HtmlComponent";
 import GroupWrapper from "./groupwrapper/GroupWrapper";
 
@@ -8,9 +8,9 @@ import GroupWrapper from "./groupwrapper/GroupWrapper";
     Componentslist holds a list of GroupWrapper siblings added with 'addAndComponent'.
 */
 class ComponentsList extends HTMLComponent {
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   rootGroupWrapper: GroupWrapper;
-  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
+  constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     super("componentsListe", ParentComponent, null);
     this.specProvider = specProvider;
   }

@@ -1,6 +1,6 @@
 import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../../generators/ISparJson";
-import ISpecProvider from "../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../HtmlComponent";
 import VariableOrderMenu from "./VariableOrderMenu";
 /*
@@ -14,7 +14,7 @@ class DraggableComponent extends HTMLComponent {
   selectedVal:SelectedVal
   constructor(
     parentComponent: VariableOrderMenu,
-    specProvider: ISpecProvider,
+    specProvider: ISparnaturalSpecification,
     selected_val: SelectedVal,
     varEdited: (oldName: string, newName: string) => void
   ) {

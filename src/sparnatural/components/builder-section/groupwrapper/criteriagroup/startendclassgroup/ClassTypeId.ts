@@ -1,4 +1,4 @@
-import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
@@ -32,10 +32,10 @@ class ClassTypeId extends HTMLComponent {
   oldWidget: JQuery<HTMLElement>; // oldWidget exists cause nice-select can't listen for 'change' Events...
   UnselectButton: UnselectBtn;
   selectViewVariableBtn: SelectViewVariableBtn;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   constructor(
     ParentComponent: HTMLComponent,
-    specProvider: ISpecProvider,
+    specProvider: ISparnaturalSpecification,
     startClassVal?: any
   ) {
     super("ClassTypeId", ParentComponent, null);
@@ -165,8 +165,8 @@ export default ClassTypeId;
  *
  **/
 class ClassSelectBuilder extends HTMLComponent {
-  specProvider: ISpecProvider;
-  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
+  specProvider: ISparnaturalSpecification;
+  constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     super("ClassTypeId", ParentComponent, null);
     this.specProvider = specProvider;
   }

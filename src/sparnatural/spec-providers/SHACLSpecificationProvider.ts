@@ -1,7 +1,7 @@
 import factory from "@rdfjs/data-model";
 import { NamedNode, Quad, Store } from "n3";
 import { Config } from "../ontologies/SparnaturalConfig";
-import ISpecProvider from "./ISpecProvider";
+import ISparnaturalSpecification from "./ISparnaturalSpecification";
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
 import {
   Parser,
@@ -11,7 +11,7 @@ import {
 } from "sparqljs";
 import { BaseRDFReader } from "./BaseRDFReader";
 
-export class SHACLSpecificationProvider extends BaseRDFReader implements ISpecProvider {
+export class SHACLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {
 
   constructor(n3store: Store<Quad>, lang: string) {
     super(n3store, lang);

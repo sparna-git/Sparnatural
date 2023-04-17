@@ -1,7 +1,7 @@
 import { getSettings } from "../../../../../../sparnatural/settings/defaultSettings";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import { SelectedVal } from "../../../../../generators/ISparJson";
-import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import { WidgetValue } from "../../../../widgets/AbstractWidget";
@@ -39,14 +39,14 @@ class EditComponents extends HTMLComponent {
   endClassVal: SelectedVal;
   actionWhere: ActionWhere;
   widgetWrapper: WidgetWrapper;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   RENDER_WHERE = RENDER_WHERE_ENUM;
   constructor(
     parentComponent: EndClassGroup,
     startCassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal,
-    specProvider: ISpecProvider
+    specProvider: ISparnaturalSpecification
   ) {
     super("EditComponents", parentComponent, null);
     this.startClassVal = startCassVal;

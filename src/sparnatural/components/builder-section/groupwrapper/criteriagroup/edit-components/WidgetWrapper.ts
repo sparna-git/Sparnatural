@@ -2,7 +2,7 @@ import ISettings from "../../../../../../sparnatural/settings/ISettings";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import Datasources from "../../../../../ontologies/SparnaturalConfigDatasources";
 import { SparqlTreeHandler } from "../../../../widgets/treewidget/TreeHandlers";
-import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import EditComponents from "./EditComponents";
@@ -31,7 +31,7 @@ class WidgetWrapper extends HTMLComponent {
   settings: ISettings = getSettings()
   widgetType: Config;
   widgetComponent: AbstractWidget;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   objectPropVal: SelectedVal;
   startClassVal: SelectedVal;
   endClassVal: SelectedVal;
@@ -39,7 +39,7 @@ class WidgetWrapper extends HTMLComponent {
 
   constructor(
     ParentComponent: EditComponents,
-    specProvider: ISpecProvider,
+    specProvider: ISparnaturalSpecification,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal

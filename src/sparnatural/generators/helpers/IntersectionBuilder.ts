@@ -3,7 +3,7 @@ import { BgpPattern, Pattern, Triple, VariableTerm } from "sparqljs";
 import ObjectPropertyGroup from "../../components/builder-section/groupwrapper/criteriagroup/objectpropertygroup/ObjectPropertyGroup";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import { getSettings } from "../../settings/defaultSettings";
-import ISpecProvider from "../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../SparqlFactory";
 
 export default class IntersectionBuilder{
@@ -12,14 +12,14 @@ export default class IntersectionBuilder{
     #widgetComponent:AbstractWidget
     #objectPropCls:ObjectPropertyGroup
     resultPtrn:Pattern[] = []
-    specProvider:ISpecProvider
+    specProvider:ISparnaturalSpecification
     
     constructor(
         startClassVar:string|undefined,
         endClassVar:string|undefined,
         widgetComponent:AbstractWidget,
         objectPropCls:ObjectPropertyGroup,
-        specProvider:ISpecProvider
+        specProvider:ISparnaturalSpecification
     ){
         this.#startClassVar = startClassVar
         this.#endClassVar = endClassVar

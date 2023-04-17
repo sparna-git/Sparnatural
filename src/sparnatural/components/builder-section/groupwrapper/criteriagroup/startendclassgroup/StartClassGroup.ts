@@ -1,5 +1,5 @@
 import ClassTypeId from "./ClassTypeId";
-import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
@@ -13,7 +13,7 @@ class StartClassGroup extends HTMLComponent {
   startClassVal: SelectedVal;
   inputSelector: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   renderEyeBtn:Boolean = false
   // shadow variable for http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#defaultLabelProperty
   defaultLblVar: SelectedVal ={
@@ -23,7 +23,7 @@ class StartClassGroup extends HTMLComponent {
 
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
-    specProvider: ISpecProvider,
+    specProvider: ISparnaturalSpecification,
     startClassVal?: SelectedVal,
     renderEyeBtn?: Boolean
   ) {

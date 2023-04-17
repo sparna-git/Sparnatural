@@ -2,8 +2,8 @@ import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { FilteringSpecificationProvider } from "../../spec-providers/FilteringSpecificationProvider";
 import { SimpleStatisticsHandler } from "./StatisticsHandlers";
 
-export function initStatistics(aSpecProvider: any) {
-  let specProvider = new FilteringSpecificationProvider(aSpecProvider);
+export function initStatistics(aSpecProvider: any, lang: string) {
+  let specProvider = new FilteringSpecificationProvider(aSpecProvider, lang);
   let settings = getSettings();
   /* Run statistics queries */
   var statisticsHandler = new SimpleStatisticsHandler(
@@ -24,12 +24,12 @@ export function initStatistics(aSpecProvider: any) {
               "> \nSELECT "
           );
         }
-        return specProvider.expandSparql(sparql);
+        return specProvider.expandSparql(sparql, {});
       },
     }
   );
 
-  const items = specProvider.getAllSparnaturalClasses();
+  const items = specProvider.getAllSparnaturalEntities();
   for (var key in items) {
     var aClass = items[key];
 

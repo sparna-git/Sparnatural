@@ -1,6 +1,6 @@
 import tippy from "tippy.js";
 import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
-import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../generators/ISparJson";
@@ -16,13 +16,13 @@ class ObjectPropertyGroup extends HTMLComponent {
     type: null,
   }; // value which shows which object property got chosen by the config for subject and object
   ParentCriteriaGroup: CriteriaGroup;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   startClassVal: SelectedVal;
   endClassVal: SelectedVal;
   temporaryLabel: string;
   constructor(
     ParentComponent: CriteriaGroup,
-    specProvider: ISpecProvider,
+    specProvider: ISparnaturalSpecification,
     temporaryLabel: string
   ) {
     super("ObjectPropertyGroup", ParentComponent, null);

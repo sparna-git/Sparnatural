@@ -1,4 +1,4 @@
-import ISpecProvider from "../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import DisplayBtn from "../buttons/DisplayBtn";
 import HTMLComponent from "../HtmlComponent";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";
@@ -9,9 +9,9 @@ class VariableSection extends HTMLComponent {
   variableSortOption: VariableSortOption;
   variableOrderMenu: VariableOrderMenu;
   linesWrapper: JQuery<HTMLElement>;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
 
-  constructor(ParentComponent: HTMLComponent, specProvider: ISpecProvider) {
+  constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     super("variablesSelection", ParentComponent, null);
     this.specProvider = specProvider;
   }

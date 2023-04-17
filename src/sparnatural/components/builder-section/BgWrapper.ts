@@ -1,7 +1,7 @@
 import ResetBtn from "../buttons/ResetBtn";
 import ComponentsList from "./ComponentsList";
 import SparnaturalComponent from "../SparnaturalComponent";
-import ISpecProvider from "../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../HtmlComponent";
 import { MaxVarAction } from "../../statehandling/ActionStore";
 import { SparnaturalElement } from "../../../SparnaturalElement";
@@ -10,8 +10,8 @@ class BgWrapper extends HTMLComponent {
   ParentSparnatural: SparnaturalComponent;
   resetBtn: ResetBtn;
   componentsList: ComponentsList;
-  specProvider: ISpecProvider;
-  constructor(ParentComponent: SparnaturalComponent, specProvider: ISpecProvider) {
+  specProvider: ISparnaturalSpecification;
+  constructor(ParentComponent: SparnaturalComponent, specProvider: ISparnaturalSpecification) {
     super("builder-section", ParentComponent, null);
     this.specProvider = specProvider;
     this.ParentSparnatural = ParentComponent;

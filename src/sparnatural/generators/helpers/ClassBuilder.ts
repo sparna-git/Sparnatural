@@ -3,13 +3,13 @@ import { OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
 import EndClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import StartClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import { getSettings } from "../../settings/defaultSettings";
-import ISpecProvider from "../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../SparqlFactory";
 
 
 export default class  ClassBuilder {
     protected resultPtrn:Pattern[] = []
-    protected specProvider:ISpecProvider
+    protected specProvider:ISparnaturalSpecification
     protected classGroup: StartClassGroup | EndClassGroup
     protected classTriple:Triple
     // can consist of multiple patterns in case there is a FILTER(lang(?var) = "xx") if the property is multilingual
@@ -18,7 +18,7 @@ export default class  ClassBuilder {
     protected widgetIsBlocking:boolean
     protected typePredicate:string
 
-    constructor(classGroup:StartClassGroup | EndClassGroup,specProvider:ISpecProvider,widgetIsBlocking:boolean,typePredicate:string="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"){
+    constructor(classGroup:StartClassGroup | EndClassGroup,specProvider:ISparnaturalSpecification,widgetIsBlocking:boolean,typePredicate:string="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"){
         this.classGroup = classGroup
         this.specProvider = specProvider
         this.widgetIsBlocking = widgetIsBlocking

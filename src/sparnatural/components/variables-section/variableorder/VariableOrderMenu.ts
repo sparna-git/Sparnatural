@@ -1,14 +1,14 @@
 import Sortable, { SortableEvent } from "sortablejs";
 import { SelectedVal } from "../../../generators/ISparJson";
-import ISpecProvider from "../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../HtmlComponent";
 import VariableSelection from "../VariableSelection";
 import DraggableComponent from "./DraggableComponent";
 
 class VariableOrderMenu extends HTMLComponent {
   draggables: Array<DraggableComponent> = [];
-  specProvider: ISpecProvider;
-  constructor(parentComponent: VariableSelection, specProvider: ISpecProvider) {
+  specProvider: ISparnaturalSpecification;
+  constructor(parentComponent: VariableSelection, specProvider: ISparnaturalSpecification) {
     super("VariableOrderMenu", parentComponent, null);
     this.specProvider = specProvider;
   }

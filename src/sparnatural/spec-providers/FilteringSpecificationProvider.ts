@@ -1,20 +1,24 @@
-import ISpecProvider from "./ISpecProvider";
+import ISparnaturalSpecification from "./ISparnaturalSpecification";
+
+interface CountMap {
+  [key: string]: number;
+}
 
 /**
  * This class should not be used anymore
  */
-export class FilteringSpecificationProvider implements ISpecProvider {
-  delegateSpecificationProvider: ISpecProvider;
+export class FilteringSpecificationProvider implements ISparnaturalSpecification {
+  delegateSpecificationProvider: ISparnaturalSpecification;
   lang: string;
-  classesCount:Array<any>;
-  propertiesCount:Array<any>;
+  classesCount:CountMap;
+  propertiesCount:CountMap;
 
   
-  constructor(delegateSpecificationProvider, lang) {
+  constructor(delegateSpecificationProvider: ISparnaturalSpecification, lang: string) {
     this.delegateSpecificationProvider = delegateSpecificationProvider;
     this.lang = lang;
-    this.classesCount = [];
-    this.propertiesCount = [];
+    this.classesCount = {};
+    this.propertiesCount = {};
   }
 
   getDefaultLabelProperty(entityUri: string): string | null {
@@ -54,12 +58,12 @@ export class FilteringSpecificationProvider implements ISpecProvider {
     throw new Error("Method not implemented.");
   }
 
-  notifyClassCount(classUri, count) {
+  notifyClassCount(classUri: string, count: number) {
     console.log("Notified of class count : " + classUri + " = " + count);
     this.classesCount[classUri] = count;
   }
 
-  notifyPropertyCount(domain, property, range, count) {
+  notifyPropertyCount(domain: string, property: string, range: string, count: number) {
     var key =
       "domain=" +
       domain +

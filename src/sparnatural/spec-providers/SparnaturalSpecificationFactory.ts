@@ -4,7 +4,7 @@ import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { Quad, Store } from "n3";
 
-class SpecificationProviderFactory {
+class SparnaturalSpecificationFactory {
   build(config:any, language:string, callback:any) {
     if (typeof config == "object") {
       // if the config is a JSON object in the page, read it directly
@@ -68,4 +68,4 @@ class SpecificationProviderFactory {
     }
   }
 }
-export default SpecificationProviderFactory;
+export default SparnaturalSpecificationFactory;

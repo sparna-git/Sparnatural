@@ -1,4 +1,4 @@
-import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import OptionalArrow from "../../../../buttons/OptionalArrow";
 import HTMLComponent from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
@@ -25,10 +25,10 @@ export class OptionsGroup extends HTMLComponent {
   ParentCriteriaGroup: CriteriaGroup;
   OptionalComponent: OptionalComponent;
   NotExistsComponent: NotExistsComponent;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   optionalArrow: OptionalArrow;
 
-  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
+  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISparnaturalSpecification) {
     super("OptionsGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.ParentCriteriaGroup = ParentCriteriaGroup as CriteriaGroup;

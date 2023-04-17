@@ -1,5 +1,5 @@
 import ClassTypeId from "./ClassTypeId";
-import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import tippy from "tippy.js";
 import { getSettings, TOOLTIP_CONFIG } from "../../../../../../sparnatural/settings/defaultSettings";
 import { SelectedVal } from "../../../../../generators/ISparJson";
@@ -24,13 +24,13 @@ class EndClassGroup extends HTMLComponent {
   };
   inputSelector: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   editComponents: EditComponents;
   // endClassWidgetGroup: EndClassWidgetGroup;
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
 
-  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
+  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISparnaturalSpecification) {
     super("EndClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;

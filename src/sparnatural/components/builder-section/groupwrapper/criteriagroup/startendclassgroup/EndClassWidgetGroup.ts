@@ -1,5 +1,5 @@
 import UiuxConfig from "../../../../IconsConstants";
-import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import { getSettings } from "../../../../../../sparnatural/settings/defaultSettings";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
@@ -20,9 +20,9 @@ import { SelectAllValue } from "../edit-components/EditComponents";
 */
 export class EndClassWidgetGroup extends HTMLComponent {
   widgetValues: Array<EndClassWidgetValue> = [];
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   addWidgetValueBtn: AddWidgetValueBtn;
-  constructor(parentComponent: HTMLComponent, specProvider: ISpecProvider) {
+  constructor(parentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     super("EndClassWidgetGroup", parentComponent, null);
     this.specProvider = specProvider;
   }

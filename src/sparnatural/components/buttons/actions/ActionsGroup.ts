@@ -1,4 +1,4 @@
-import ISpecProvider from "../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import CriteriaGroup from "../../builder-section/groupwrapper/criteriagroup/CriteriaGroup";
 import HTMLComponent from "../../HtmlComponent";
 import ActionAnd from "./actioncomponents/ActionAnd";
@@ -12,8 +12,8 @@ class ActionsGroup extends HTMLComponent {
     ActionAnd: ActionAnd;
   };
   ParentCriteriaGroup: CriteriaGroup;
-  specProvider: ISpecProvider;
-  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISpecProvider) {
+  specProvider: ISparnaturalSpecification;
+  constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISparnaturalSpecification) {
     super("ActionsGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
     //TODO refactor is this even necessary

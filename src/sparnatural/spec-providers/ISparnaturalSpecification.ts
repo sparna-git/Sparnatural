@@ -1,9 +1,9 @@
 import { Config } from "../ontologies/SparnaturalConfig";
 
 /*
-    All SpecificationProvider provided by the SpecificationProviderFactory MUST implement this interface
+    All Sparnatural specifications provided by the SparnaturalSpecificationFactory MUST implement this interface
 */
-interface ISpecProvider {
+interface ISparnaturalSpecification {
 
   /** Global methods at the config level */
   getAllSparnaturalEntities():Array<string>;
@@ -42,4 +42,4 @@ interface ISpecProvider {
   getServiceEndpoint(propertyId:string):string | null;
   isLogicallyExecutedAfter(propertyId:string):boolean;
 }
-export default ISpecProvider;
+export default ISparnaturalSpecification;

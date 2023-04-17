@@ -1,6 +1,6 @@
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
 import { Config } from "../ontologies/SparnaturalConfig";
-import ISpecProvider from "./ISpecProvider";
+import ISparnaturalSpecification from "./ISparnaturalSpecification";
 
 interface IDataSources {
   // one of queryString or queryTemplate must be set
@@ -34,7 +34,7 @@ enum WIDGETSTYPES {
   "sparnatural:MapProperty",
 }
 
-export default class JsonLdSpecificationProvider implements ISpecProvider {
+export default class JsonLdSpecificationProvider implements ISparnaturalSpecification {
   jsonSpecs: any;
   lang: any;
   constructor(specs: any, lang: any) {

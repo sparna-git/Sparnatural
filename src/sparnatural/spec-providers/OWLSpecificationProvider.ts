@@ -5,7 +5,7 @@ import rdfParser from "rdf-parse";
 import { NamedNode, Quad, Store } from "n3";
 import { storeStream } from "rdf-store-stream";
 import { Config } from "../ontologies/SparnaturalConfig";
-import ISpecProvider from "./ISpecProvider";
+import ISparnaturalSpecification from "./ISparnaturalSpecification";
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
 import {
   Parser,
@@ -51,7 +51,7 @@ export const OWL = {
   UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode,
 };
 
-export class OWLSpecificationProvider extends BaseRDFReader implements ISpecProvider {
+export class OWLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {
   #parser: SparqlParser;
   #generator: SparqlGenerator;
 

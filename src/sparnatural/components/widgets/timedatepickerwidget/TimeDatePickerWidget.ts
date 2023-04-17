@@ -7,7 +7,7 @@ import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget"
 import "@chenfengyuan/datepicker";
 import * as DataFactory from "@rdfjs/data-model" ;
 import { SelectedVal } from "../../../generators/ISparJson";
-import ISpecProvider from "../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
 
@@ -56,7 +56,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
 
   constructor(
     parentComponent: WidgetWrapper,
@@ -65,7 +65,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
     startClassCal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal,
-    specProvider: ISpecProvider
+    specProvider: ISparnaturalSpecification
   ) {
     super(
       "timedatepicker-widget",

@@ -1,4 +1,4 @@
-import ISpecProvider from "../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import LinkAndBottom from "./LinkAndBottom";
 import LinkWhereBottom from "./LinkWhereBottom";
 import CriteriaGroup from "./criteriagroup/CriteriaGroup";
@@ -19,13 +19,13 @@ class GroupWrapper extends HTMLComponent {
   linkAndBottom?: LinkAndBottom; // connection line drawn from this CriteriaList with hasAnd CriteriaList
   linkWhereBottom?: LinkWhereBottom;
   CriteriaGroup: CriteriaGroup;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   groupWrapperEventStore: GroupWrapperEventStore;
   depth: number;
 
   constructor(
     ParentComponent: HTMLComponent,
-    specProvider: ISpecProvider,
+    specProvider: ISparnaturalSpecification,
     depth:number,
     startOrEndClassVal?: SelectedVal,
     renderEyeButtonOnStartClassGroup?: boolean

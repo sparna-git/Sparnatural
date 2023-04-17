@@ -1,5 +1,5 @@
 import { Order } from "./ISparJson";
-import ISpecProvider from "../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../spec-providers/ISparnaturalSpecification";
 import {
   Ordering,
   SelectQuery,
@@ -18,13 +18,13 @@ import SparqlFactory from "./SparqlFactory";
 */
 export default class RdfJsGenerator {
   typePredicate: string;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   prefixes: { [key: string]: string } = {};
   sparnatural: SparnaturalComponent;
   defaultLabelVars:Variable[] = []// see: #checkForDefaultLabel()
   constructor(
     sparnatural: SparnaturalComponent,
-    specProvider: ISpecProvider,
+    specProvider: ISparnaturalSpecification,
     prefixes: { [key: string]: string } = {}
   ) {
     this.sparnatural = sparnatural;

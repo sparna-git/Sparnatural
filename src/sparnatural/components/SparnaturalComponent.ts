@@ -1,8 +1,8 @@
 import { getSettings } from "../../sparnatural/settings/defaultSettings";
-import ISpecProvider from "../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../spec-providers/ISparnaturalSpecification";
 import BgWrapper from "./builder-section/BgWrapper";
 import SubmitSection from "./submit-section/SubmitSection";
-import SpecificationProviderFactory from "../spec-providers/SpecificationProviderFactory";
+import SparnaturalSpecificationFactory from "../spec-providers/SparnaturalSpecificationFactory";
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
 import HTMLComponent from "./HtmlComponent";
@@ -14,7 +14,7 @@ const i18nLabels = {
 };
 
 class SparnaturalComponent extends HTMLComponent {
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   actionStore: ActionStore;
   BgWrapper: BgWrapper;
   SubmitSection: SubmitSection;
@@ -32,7 +32,7 @@ class SparnaturalComponent extends HTMLComponent {
 
   render(): this {
     this.#initLang()
-    this.initSpecificationProvider((sp: ISpecProvider) => {
+    this.initSpecificationProvider((sp: ISparnaturalSpecification) => {
       this.specProvider = sp;
       //Think this will be launched before load query ???
       this.actionStore = new ActionStore(this, this.specProvider);
@@ -57,7 +57,7 @@ class SparnaturalComponent extends HTMLComponent {
 
   initSpecificationProvider(callback:any) {
     let settings = getSettings();
-    let specProviderFactory = new SpecificationProviderFactory();
+    let specProviderFactory = new SparnaturalSpecificationFactory();
     specProviderFactory.build(settings.config, settings.language, (sp: any) => {
       // call the call back when done
       callback(sp);

@@ -1,6 +1,6 @@
 import UiuxConfig from "../../../../IconsConstants";
 import { SelectedVal } from "../../../../../generators/ISparJson";
-import ISpecProvider from "../../../../../spec-providers/ISpecProvider";
+import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import HTMLComponent from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
@@ -18,11 +18,11 @@ class ObjectPropertyTypeId extends HTMLComponent {
     this,
     UiuxConfig.COMPONENT_ARROW_FRONT
   );
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   selectBuilder: PropertySelectBuilder;
   constructor(
     ParentComponent: HTMLComponent,
-    specProvider: ISpecProvider,
+    specProvider: ISparnaturalSpecification,
     temporaryLabel: string,
     startClassVal: SelectedVal
   ) {
@@ -112,7 +112,7 @@ export default ObjectPropertyTypeId;
  **/
 class PropertySelectBuilder {
   items: Array<string>;
-  specProvider: ISpecProvider;
+  specProvider: ISparnaturalSpecification;
   constructor(specProvider: any) {
     this.specProvider = specProvider;
   }
