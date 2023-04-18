@@ -1,9 +1,11 @@
 import * as DataFactory from "@rdfjs/data-model" ;
-import { BgpPattern, Pattern } from "sparqljs";
+import { BgpPattern, Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { SelectAllValue } from "../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
+import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 
 export class BooleanWidgetValue implements WidgetValue {
   value: {
@@ -44,9 +46,9 @@ export class BooleanWidget extends AbstractWidget {
     let trueSpan = $(
       `<span class="boolean-value">${getSettings().langSearch.true}</span>'`
     );
-    let orSpan = $(`<span class="or">${getSettings().langSearch.Or}</span>`);
+    let orSpan = $(`<span class="or">&nbsp;${getSettings().langSearch.Or}&nbsp;</span>`);
     let falseSpan = $(
-      `<span class="boolean-value"">'${getSettings().langSearch.false}</span>`
+      `<span class="boolean-value"">${getSettings().langSearch.false}</span>`
     );
     this.html.append(trueSpan).append(orSpan).append(falseSpan);
 
@@ -74,20 +76,52 @@ export class BooleanWidget extends AbstractWidget {
     return new BooleanWidgetValue(input);
    }
 
+   /**
+    * Blocks if a value is selected and this is not the "all" special value
+    * @returns true
+    */
+   isBlockingObjectProp() {
+    return (
+      this.widgetValues.length == 1
+      &&
+      !(this.widgetValues[0] instanceof SelectAllValue)
+      &&
+      !((this.ParentComponent.ParentComponent.ParentComponent as EndClassGroup).isVarSelected())
+    );
+   }
+
   getRdfJsPattern(): Pattern[] {
-    let ptrn: BgpPattern = {
-      type: "bgp",
-      triples: [
-        {
-          subject: DataFactory.variable(this.startClassVal.variable),
-          predicate: DataFactory.namedNode(this.objectPropVal.type),
-          object: DataFactory.literal(
-            this.widgetValues[0].value.boolean.toString(),
-            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
-          ),
-        },
-      ],
-    };
-    return [ptrn];
+    // if we are blocking the object prop, we create it directly here with the value as the object
+    if(this.isBlockingObjectProp()) {
+      let ptrn: BgpPattern = {
+        type: "bgp",
+        triples: [
+          {
+            subject: DataFactory.variable(this.getVariableValue(this.startClassVal)),
+            predicate: DataFactory.namedNode(this.objectPropVal.type),
+            object: DataFactory.literal(
+              this.widgetValues[0].value.boolean.toString(),
+              DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
+            ),
+          },
+        ],
+      };
+      return [ptrn];
+    } else {
+      // otherwise the object prop is created and we create a VALUES clause with the actual boolean
+      let vals = (this.widgetValues as BooleanWidgetValue[]).map((v) => {
+        let vl: ValuePatternRow = {};
+        vl[this.endClassVal.variable] = DataFactory.literal(
+          this.widgetValues[0].value.boolean.toString(),
+          DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
+        );
+        return vl;
+      });
+      let valuePattern: ValuesPattern = {
+        type: "values",
+        values: vals,
+      };
+      return [valuePattern];
+    }
   }
 }
