@@ -1,5 +1,6 @@
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 import ISpecificationEntry from "../ISpecificationEntry";
+import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
 
 interface IDataSources {
     // one of queryString or queryTemplate must be set
@@ -34,7 +35,7 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
     }
 
     getLabel(): string {
-        var item = this._getResourceById(this.id);
+        var item = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
         if (item !== null) {
             for (var i in item["label"]) {
                 var aLabel = item["label"][i];
@@ -47,7 +48,7 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
     }
 
     getTooltip(): string {
-        var item = this._getResourceById(this.id);
+        var item = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
         if (item !== null) {
           for (var i in item["tooltip"]) {
             var aLabel = item["tooltip"][i];
@@ -61,16 +62,16 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
     }
 
     getIcon(): string {
-        if (this._getResourceById(this.id)["faIcon"] != null) {
+        if (JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs)["faIcon"] != null) {
             // use of fa-fw for fixed-width icons
             return (
               "<span style='font-size: 170%;' >&nbsp;<i class='" +
-              this._getResourceById(this.id)["faIcon"] +
+              JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs)["faIcon"] +
               " fa-fw'></i></span>"
             );
-          } else if (this._getResourceById(this.id)["icon"] != null) {
+          } else if (JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs)["icon"] != null) {
             
-            return  this._getResourceById(this.id)["icon"]
+            return  JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs)["icon"]
           } else {
             // this is ugly, just so it aligns with other entries having an icon
             return "<span style='font-size: 10%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
@@ -78,33 +79,22 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
     }
 
     getHighlightedIcon(): string {
-        return this._getResourceById(this.id)["highlightedIcon"];
+        return JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs)["highlightedIcon"];
     }
 
     getDatasource() {
-        var propertyOrClass = this._getResourceById(this.id);
+        var propertyOrClass = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
         return this.#_buildDatasource(propertyOrClass["datasource"]);
     }
 
     getTreeChildrenDatasource() {
-        var propertyOrClass = this._getResourceById(this.id);
+        var propertyOrClass = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
         return this.#_buildDatasource(propertyOrClass["treeRootsDatasource"]);
     }
     getTreeRootsDatasource() {
-        var propertyOrClass = this._getResourceById(this.id);
+        var propertyOrClass = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
         return this.#_buildDatasource(propertyOrClass["treeChildrenDatasource"]);
     }
-
-    
-    protected _getResourceById = function (id: any) {
-        for (var i in this.jsonSpecs["@graph"]) {
-          var anEntry = this.jsonSpecs["@graph"][i];
-          if (anEntry["@id"] == id) {
-            return anEntry;
-          }
-        }
-        return null;
-      };
 
   /**
    * {
@@ -116,7 +106,7 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
    *   childrenProperty: "..."
    * }
    **/
-  #_buildDatasource = function (datasourceObject: { [x: string]: any }) {
+  #_buildDatasource(datasourceObject: { [x: string]: any }|string) {
     if (datasourceObject == null) {
       return null;
     }
@@ -171,7 +161,7 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
       // if datasource is a URI...
       // look it up in known datasources config
       datasource = Datasources.DATASOURCES_CONFIG.get(
-        this._expand(datasourceObject)
+        this._expand(datasourceObject as string)
       );
       if (datasource == null) {
         // look it up in the config
@@ -196,7 +186,7 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
   }
 
   protected _readValue(id: any, key: string | number) {
-    var theObject = this._getResourceById(id);
+    var theObject = JsonLdSpecificationProvider.getResourceById(id, this.jsonSpecs);
 
     if (theObject !== null && theObject[key]) {
       return theObject[key];
@@ -205,34 +195,11 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
     return null;
   };
 
-  protected _isObjectProperty(item: { [x: string]: any }) {
-    if (typeof item["@type"] === "object") {
-      for (var i in item["@type"]) {
-        var value = item["@type"][i];
-        if (value == "ObjectProperty") {
-          return true;
-        }
-      }
-
-      return false;
-    } else {
-      return item["@type"] == "ObjectProperty";
-    }
-  };
-
-  protected _pushIfNotExist(item: any, items: any[]) {
-    if (items.indexOf(item) < 0) {
-      items.push(item);
-    }
-
-    return items;
-  };
-
   protected _sortItemsByIndex(items: any[]) {
     var me = this;
     items.sort(function (c1: any, c2: any) {
-      const c1Value = me.jsonSpecs["@graph"].indexOf(me._getResourceById(c1));
-      const c2Value = me.jsonSpecs["@graph"].indexOf(me._getResourceById(c2));
+      const c1Value = me.jsonSpecs["@graph"].indexOf(JsonLdSpecificationProvider.getResourceById(c1, me.jsonSpecs));
+      const c2Value = me.jsonSpecs["@graph"].indexOf(JsonLdSpecificationProvider.getResourceById(c2, me.jsonSpecs));
 
       let comparison = 0;
       if (c1Value > c2Value) {

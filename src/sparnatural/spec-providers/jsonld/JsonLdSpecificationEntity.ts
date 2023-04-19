@@ -1,6 +1,8 @@
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationEntity from "../ISpecificationEntity";
 import JsonLdSpecificationEntry from "./JsonLdSpecificationEntry";
+import JsonLdSpecificationProperty from "./JsonLdSpecificationProperty";
+import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
 
 export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry implements ISpecificationEntity {
     constructor(jsonSpecs:any, id:string, lang:string) {
@@ -13,12 +15,13 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
 
         for (var j in this.jsonSpecs["@graph"]) {
             var item = this.jsonSpecs["@graph"][j];
-            if (this._isObjectProperty(item)) {
-                if (this._inDomainOf(item, this.id)) {
-                var values = this._readRange(item);
-                for (var i in values) {
-                    items = this._pushIfNotExist(values[i], items);
-                }
+            if (JsonLdSpecificationProvider._isObjectProperty(item)) {
+                let prop:JsonLdSpecificationProperty = new JsonLdSpecificationProperty(this.jsonSpecs, item["@id"], this.lang);
+                if (prop.readDomain().indexOf(this.id) >= 0) {
+                  var values = prop.readRange();
+                  for (var i in values) {
+                      items = JsonLdSpecificationProvider.pushIfNotExist(values[i], items);
+                  }
                 }
             }
         }
@@ -39,21 +42,23 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
 
         for (var i in this.jsonSpecs["@graph"]) {
           var item = this.jsonSpecs["@graph"][i];
-          if (this._isObjectProperty(item)) {
+          if (JsonLdSpecificationProvider._isObjectProperty(item)) {
+            let prop:JsonLdSpecificationProperty = new JsonLdSpecificationProperty(this.jsonSpecs, item["@id"], this.lang);
             if (
-              (this._inDomainOf(item, this.id)) &&
-              (range === null || this._inRangeOf(item, range))
+              (prop.readDomain().indexOf(this.id) >= 0) &&
+              (range === null || prop.readRange().indexOf(range) >= 0)
             ) {
-              items = this._pushIfNotExist(item["@id"], items);
+              items = JsonLdSpecificationProvider.pushIfNotExist(item["@id"], items);
             }
           }
         }
-    
+
         return items;
     }
 
     isLiteralEntity(): boolean {
-        var classEntity = this._getResourceById(this.id);
+        var classEntity = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
+        if(classEntity == null) return false;
     
         if (classEntity && classEntity["subClassOf"]) {
           var superClasses =
@@ -72,60 +77,29 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
     }
 
     isRemoteEntity(): boolean {
-        var classEntity = this._getResourceById(this.id);
-    
-        if (classEntity["subClassOf"]) {
-          var superClasses =
-            classEntity["subClassOf"] === "object"
-              ? classEntity["subClassOf"]
-              : new Array(classEntity["subClassOf"]);
-          for (var i in superClasses) {
-            var value = superClasses[i];
-            if (this._expand(value) == Config.NOT_INSTANTIATED_CLASS) {
-              return true;
-            }
+      var classEntity = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
+      if(classEntity == null) return false;
+
+      if (classEntity["subClassOf"]) {
+        var superClasses =
+          classEntity["subClassOf"] === "object"
+            ? classEntity["subClassOf"]
+            : new Array(classEntity["subClassOf"]);
+        for (var i in superClasses) {
+          var value = superClasses[i];
+          if (this._expand(value) == Config.NOT_INSTANTIATED_CLASS) {
+            return true;
           }
         }
-    
-        return false;
+      }
+  
+      return false;
     }
+
+    
 
     getDefaultLabelProperty(): string | null {
         return this._readValue(this.id, "defaultLabelProperty");
     }
-
-    _inDomainOf(objectProperty: {}, classId: string) {
-        return this._readDomain(objectProperty).indexOf(classId) >= 0;
-      };
-    
-      _inRangeOf(objectProperty: {}, classId: string) {
-        return this._readRange(objectProperty).indexOf(classId) >= 0;
-      };
-    
-      _readDomain(objectProperty: {}) {
-        return this._readDomainOrRange(objectProperty, "domain");
-      };
-    
-      _readRange(objectProperty: {}) {
-        return this._readDomainOrRange(objectProperty, "range");
-      };
-    
-      _readDomainOrRange(
-        objectProperty: any,
-        domainOrRange: string
-      ) : string[] {
-        var result = new Array<string>();
-        if (typeof objectProperty[domainOrRange] === "object") {
-          for (var i in objectProperty[domainOrRange]["unionOf"]["@list"]) {
-            var value = objectProperty[domainOrRange]["unionOf"]["@list"][i];
-            result.push(value["@id"] as string);
-          }
-        } else if (objectProperty[domainOrRange]) {
-          result.push(objectProperty[domainOrRange]);
-        }
-    
-        return result;
-      };
-
-    
+      
 }

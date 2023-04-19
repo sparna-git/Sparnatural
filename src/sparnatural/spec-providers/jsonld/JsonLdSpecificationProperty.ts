@@ -1,5 +1,6 @@
 import ISpecificationProperty from "../ISpecificationProperty";
 import JsonLdSpecificationEntry from "./JsonLdSpecificationEntry";
+import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
 
 enum WIDGETSTYPES {
   "sparnatural:AutocompleteProperty",
@@ -19,11 +20,16 @@ enum WIDGETSTYPES {
 
 export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntry implements ISpecificationProperty {
   constructor(jsonSpecs:any, id:string, lang:string) {
-      super(jsonSpecs, id, lang);
+    if (id != null && typeof id === "object") {
+      throw Error("Property expects a string id");
+    }
+
+    super(jsonSpecs, id, lang);
   }
 
   getPropertyType(): string|undefined {
-    var objectProperty = this._getResourceById(this.id);
+    var objectProperty = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
+    if(objectProperty == null) return undefined;
 
     var superProperties =
       objectProperty["subPropertyOf"] === "object"
@@ -43,7 +49,7 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
   }
 
   isMultilingual(): boolean {
-    var item = this._getResourceById(this.id);
+    var item = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
     if (item !== null) {
       return item["isMultilingual"] == true;
     }
@@ -64,7 +70,7 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
   }
 
   isEnablingNegation(): boolean {
-    var item = this._getResourceById(this.id);
+    var item = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
     if (item !== null) {
       return item["enableNegation"] == true;
     }
@@ -73,7 +79,7 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
   }
 
   isEnablingOptional(): boolean {
-    var item = this._getResourceById(this.id);
+    var item = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
     if (item !== null) {
       return item["enableOptional"] == true;
     }
@@ -91,6 +97,31 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
     const executedAfter = this._readValue(this.id,"executedAfter");
     return executedAfter?executedAfter:false;
   }
+
+  readDomain() {
+    return this.#readDomainOrRange("domain");
+  };
+  
+  readRange() {
+    return this.#readDomainOrRange("range");
+  };
+
+  #readDomainOrRange(domainOrRange: string) : string[] {
+    var result = new Array<string>();
+    var item = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
+    if(item == null) return result;
+
+    if (typeof item[domainOrRange] === "object") {
+      for (var i in item[domainOrRange]["unionOf"]["@list"]) {
+        var value = item[domainOrRange]["unionOf"]["@list"][i];
+        result.push(value["@id"] as string);
+      }
+    } else if (item[domainOrRange]) {
+      result.push(item[domainOrRange]);
+    }
+
+    return result;
+  };
 
    
 }

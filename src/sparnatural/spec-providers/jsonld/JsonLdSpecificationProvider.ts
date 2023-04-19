@@ -37,9 +37,9 @@ enum WIDGETSTYPES {
 }
 
 export default class JsonLdSpecificationProvider implements ISparnaturalSpecification {
-  jsonSpecs: {};
+  jsonSpecs: any;
   lang: any;
-  constructor(specs: {}, lang: any) {
+  constructor(specs: any, lang: any) {
     this.jsonSpecs = specs;
     this.lang = lang;
   }
@@ -61,15 +61,16 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
     );
   }
 
-  getAllSparnaturalEntities = function () {
-    var classes = this.getClassesInDomainOfAnyProperty();
+  getAllSparnaturalEntities() {
+    var classes = this.getEntitiesInDomainOfAnyProperty();
     // copy initial array
     var result = classes.slice();
     // now look for all classes we can reach from this class list
     for (const aClass of classes) {
-      var connectedClasses = this.getConnectedEntities(aClass);
+      let c = new JsonLdSpecificationEntity(this.jsonSpecs, aClass, this.lang);
+      var connectedClasses = c.getConnectedEntities();
       for (const aConnectedClass of connectedClasses) {
-        this._pushIfNotExist(aConnectedClass, result);
+        JsonLdSpecificationProvider.pushIfNotExist(aConnectedClass, result);
       }
     }
     return result;
@@ -79,18 +80,20 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
 		Reads "first-level" classes, i.e. classes that are in the domain
 		of at least one property that connects them to other classes
 	*/
-  getEntitiesInDomainOfAnyProperty = function () {
+  getEntitiesInDomainOfAnyProperty() {
     var items: any[] = [];
 
     for (var j in this.jsonSpecs["@graph"]) {
       var item = this.jsonSpecs["@graph"][j];
-      if (this._isObjectProperty(item)) {
-        var domains = this._readDomain(item);
+      if (JsonLdSpecificationProvider._isObjectProperty(item)) {
+        let prop = new JsonLdSpecificationProperty(this.jsonSpecs, item["@id"], this.lang);
+        var domains = prop.readDomain();
         for (var i in domains) {
           var aClass = domains[i];
+          let c = new JsonLdSpecificationEntity(this.jsonSpecs, aClass, this.lang);
           // always exclude RemoteClasses from first list
-          if (!this.isRemoteClass(aClass)) {
-            items = this._pushIfNotExist(aClass, items);
+          if (!c.isRemoteEntity()) {
+            items = JsonLdSpecificationProvider.pushIfNotExist(aClass, items);
           }
         }
       }
@@ -104,7 +107,7 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
   };
 
  
-  expandSparql = function (sparql: string) {
+  expandSparql(sparql: string) {
     for (var i in this.jsonSpecs["@graph"]) {
       var item = this.jsonSpecs["@graph"][i];
 
@@ -117,11 +120,44 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
     return sparql;
   };
 
-  _sortItemsByIndex = function (items: any[]) {
+  public static _isObjectProperty(item: { [x: string]: any }) {
+    if (typeof item["@type"] === "object") {
+      for (var i in item["@type"]) {
+        var value = item["@type"][i];
+        if (value == "ObjectProperty") {
+          return true;
+        }
+      }
+
+      return false;
+    } else {
+      return item["@type"] == "ObjectProperty";
+    }
+  };
+
+  public static pushIfNotExist(item: any, items: any[]) {
+    if (items.indexOf(item) < 0) {
+      items.push(item);
+    }
+
+    return items;
+  };
+
+  public static getResourceById = function (id: any, jsonSpecs:any) {
+    for (var i in jsonSpecs["@graph"]) {
+      var anEntry = jsonSpecs["@graph"][i];
+      if (anEntry["@id"] == id) {
+        return anEntry;
+      }
+    }
+    return null;
+  };
+
+  _sortItemsByIndex(items: any[]) {
     var me = this;
     items.sort(function (c1: any, c2: any) {
-      const c1Value = me.jsonSpecs["@graph"].indexOf(me._getResourceById(c1));
-      const c2Value = me.jsonSpecs["@graph"].indexOf(me._getResourceById(c2));
+      const c1Value = me.jsonSpecs["@graph"].indexOf(JsonLdSpecificationProvider.getResourceById(c1, me.jsonSpecs));
+      const c2Value = me.jsonSpecs["@graph"].indexOf(JsonLdSpecificationProvider.getResourceById(c2, me.jsonSpecs));
 
       let comparison = 0;
       if (c1Value > c2Value) {
@@ -135,7 +171,7 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
     return items;
   };
 
-  _expand = function (id: string) {
+  _expand(id: string) {
     if (id.startsWith("http")) {
       return id;
     }
