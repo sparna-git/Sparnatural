@@ -568,7 +568,7 @@
         { "@value": "nom", "@language": "fr" }
       ],
       "enableOptional": true,
-      "sparqlString": "rdfs:label",
+      "sparqlString": "<http://www.w3.org/2000/01/rdf-schema#label>",
       "range": "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Text"
     },
     {
