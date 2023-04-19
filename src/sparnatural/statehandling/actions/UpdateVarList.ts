@@ -36,4 +36,5 @@ function updateDraggables(actionStore: ActionStore, varNames: Set<string>) {
       d.html.remove();
     }
   });
+  actionStore.sparnatural.variableSection.variableOrderMenu.draggables = draggables;
 }
