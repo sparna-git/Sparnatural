@@ -185,6 +185,15 @@ class ActionStore {
         deleteGrpWrapper(this, e);
       }
     );
+
+    // called by RemoveEndClass to adjust the sparqlVarID after a CriteriaGroup deletion and recreation
+    this.sparnatural.html[0].addEventListener(
+      "adjustSparqlVarID",
+      (e: CustomEvent) => {
+        let payload = e.detail;
+        this.sparqlVarID += payload;
+      }
+    );
   }
 }
 
