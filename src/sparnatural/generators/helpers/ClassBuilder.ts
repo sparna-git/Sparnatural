@@ -27,13 +27,13 @@ export default class  ClassBuilder {
 
     build(){
         const blocking = this.#ifBlocking()
-        if(blocking) return
+        // if(blocking) return
         this.#ifDefaultTrpl()
         this.#createPtrn()
     }
 
     #ifDefaultTrpl(){
-        const defaultLbl = this.specProvider.getEntity(this.classTriple.object.value).getDefaultLabelProperty()
+        const defaultLbl = this.specProvider.getEntity(this.classGroup.getTypeSelected()).getDefaultLabelProperty()
         if (!defaultLbl) return
         this.#buildDefaultLblTrpl()
         this.#ifDefaultTrplInOptional(defaultLbl) 
@@ -63,7 +63,7 @@ export default class  ClassBuilder {
                 DataFactory.namedNode(this.classGroup.getTypeSelected())
             )
         } else {
-            this.classTriple= SparqlFactory.buildTypeTriple(
+            this.classTriple = SparqlFactory.buildTypeTriple(
                 DataFactory.variable(this.classGroup.getVarName()?.replace('?','')) ,
                 DataFactory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
                 DataFactory.namedNode(this.classGroup.getTypeSelected())
@@ -72,42 +72,53 @@ export default class  ClassBuilder {
     }
 
     #buildDefaultLblTrpl(){
-        this.defaultLblPatterns.push(
-        SparqlFactory.buildBgpPattern([
-            SparqlFactory.buildTriple(
-                DataFactory.variable(this.classTriple.subject.value.replace("?", "")),
-                DataFactory.namedNode(this.classGroup.defaultLblVar.type),
-                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
-            )
-        ])
-        );
+        // generate only in the case the defaultVar exists
+        if(this.getDefaultVar()) {
+            this.defaultLblPatterns.push(
+            SparqlFactory.buildBgpPattern([
+                SparqlFactory.buildTriple(
+                    DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
+                    DataFactory.namedNode(this.classGroup.defaultLblVar.type),
+                    DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
+                )
+            ])
+            );
 
-        if(this.specProvider.getProperty(this.classGroup.defaultLblVar.type).isMultilingual()) {
-            this.defaultLblPatterns.push(SparqlFactory.buildFilterLangEquals(
-                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
-                DataFactory.literal(getSettings().language)
-            ));
+            if(this.specProvider.getProperty(this.classGroup.defaultLblVar.type).isMultilingual()) {
+                this.defaultLblPatterns.push(SparqlFactory.buildFilterLangEquals(
+                    DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
+                    DataFactory.literal(getSettings().language)
+                ));
+            }
         }
     }
 
     #putDefaultLblInOptional(){
-        this.defaultInOptional = SparqlFactory.buildOptionalPattern(this.defaultLblPatterns)
+        if(this.defaultLblPatterns.length > 0){
+            this.defaultInOptional = SparqlFactory.buildOptionalPattern(this.defaultLblPatterns)
+        }
     }
 
     #createPtrn(){
         if(this.defaultInOptional) {
             // classTriple + the defaultLabel inside OPTIONAL pattern
             // Don't put OPTIONAL inside BgpPattern It's not allowed
-            this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple]))
+            if(this.classTriple) {
+                this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple]))
+            }
             this.resultPtrn.push(this.defaultInOptional)
         } else {
-            if(this.defaultLblPatterns){
+            if(this.defaultLblPatterns.length > 0){
               // create classtriple + defaultLabel
-              this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple]));
+              if(this.classTriple) {
+                 this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple]));
+              }
               this.resultPtrn.push(...this.defaultLblPatterns)
             } else {
               // no default label got created. only insert start tuple
-              this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple]))
+              if(this.classTriple) {
+                  this.resultPtrn.push(SparqlFactory.buildBgpPattern([this.classTriple]))
+              }
             }        
         }
     }
@@ -116,6 +127,9 @@ export default class  ClassBuilder {
         return this.resultPtrn
     }
 
+    /**
+     * @returns the defaultLabel variable, only in the case the variable is selected for inclusion as a column
+     */
     getDefaultVar():Variable {
         const selected = this.classGroup.inputSelector?.selectViewVariableBtn?.selected
         if(selected && this.classGroup.defaultLblVar.variable) return DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)

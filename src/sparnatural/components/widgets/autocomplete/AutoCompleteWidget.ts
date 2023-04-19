@@ -5,6 +5,7 @@ import SparqlFactory from "../../../generators/SparqlFactory";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import { AbstractSparqlAutocompleteHandler } from "./AutocompleteAndListHandlers";
+import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 
 require("easy-autocomplete");
 
@@ -158,7 +159,11 @@ export class AutoCompleteWidget extends AbstractWidget {
    * not using a VALUES clause; returns false otherwise.
    */
    isBlockingObjectProp() {
-    return (this.widgetValues.length == 1);
+    return (
+      this.widgetValues.length == 1
+      &&
+      !((this.ParentComponent.ParentComponent.ParentComponent as EndClassGroup).isVarSelected())
+    );
   }
 
   /**
@@ -171,7 +176,7 @@ export class AutoCompleteWidget extends AbstractWidget {
 
 
   getRdfJsPattern(): Pattern[] {
-    if(this.widgetValues.length == 1) {
+    if(this.isBlockingObjectProp()) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
         DataFactory.variable(this.getVariableValue(this.startClassVal)),
         DataFactory.namedNode(this.objectPropVal.type),
