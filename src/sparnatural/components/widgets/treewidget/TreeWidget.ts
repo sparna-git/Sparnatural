@@ -1,4 +1,4 @@
-import { Pattern, ValuesPattern } from "sparqljs";
+import { BgpPattern, Pattern, Triple, ValuesPattern } from "sparqljs";
 import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../../generators/ISparJson";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
@@ -7,6 +7,8 @@ import ISettings from "../../../../sparnatural/settings/ISettings";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { ValuePatternRow } from "sparqljs";
 import * as DataFactory from "@rdfjs/data-model" ;
+import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
+import SparqlFactory from "../../../generators/SparqlFactory";
 
 
 require("jstree/dist/themes/default/style.min.css");
@@ -354,16 +356,50 @@ export class TreeWidget extends AbstractWidget {
     return new TreeWidgetValue(input);
   }
 
+  isBlockingObjectProp() {
+    return (
+      this.widgetValues.length == 1
+      &&
+      !((this.ParentComponent.ParentComponent.ParentComponent as EndClassGroup).isVarSelected())
+    );
+  }
+
+  /**
+   * @returns  true if at least one value is selected, in which case we don't need to insert an rdf:type constraint
+   * on the end class
+   */
+  isBlockingEnd(): boolean {
+    return (this.widgetValues.length > 0);
+  }
+
   getRdfJsPattern(): Pattern[] {
-    let vals = this.widgetValues.map((v) => {
-      let vl: ValuePatternRow = {};
-      vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
-      return vl;
-    });
-    let valuePattern: ValuesPattern = {
-      type: "values",
-      values: vals,
-    };
-    return [valuePattern];
+    if(this.isBlockingObjectProp()) {
+      // single value not selected, set it directly as the value of the triple
+      let singleTriple: Triple = SparqlFactory.buildTriple(
+        DataFactory.variable(this.getVariableValue(this.startClassVal)),
+        DataFactory.namedNode(this.objectPropVal.type),
+        DataFactory.namedNode((this.widgetValues[0]).value.uri)
+      );
+
+      let ptrn: BgpPattern = {
+        type: "bgp",
+        triples: [singleTriple],
+      };  
+
+      return [ptrn];
+    } else {
+      // multiple values, use a VALUES
+      let vals = this.widgetValues.map((v) => {
+        let vl: ValuePatternRow = {};
+        vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
+        return vl;
+      });
+      let valuePattern: ValuesPattern = {
+        type: "values",
+        values: vals,
+      };
+      return [valuePattern];
+    }
+
   }
 }
