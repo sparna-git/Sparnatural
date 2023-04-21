@@ -73,6 +73,17 @@ export class SearchRegexWidget extends AbstractWidget {
     }
     return new SearchRegexWidgetValue(input);
   }
+
+  isBlockingObjectProp() {
+    // TODO : customize depending on widget type, e.g. Virtuoso, Jena, etc.
+    return super.isBlockingObjectProp();
+  }
+  
+
+  isBlockingEnd(): boolean {
+    // TODO : customize depending on widget type, e.g. Virtuoso, Jena, etc.
+    return super.isBlockingEnd();
+  }
   
   getRdfJsPattern(): Pattern[] {
     switch((this.ParentComponent as WidgetWrapper).widgetType) {
@@ -125,6 +136,12 @@ export class SearchRegexWidget extends AbstractWidget {
           ],
         };
         return [ptrn];
+      }
+      case Config.VIRTUOSO_SEARCH_PROPERTY: {
+        throw new Error("Not implemented yet")
+      }
+      case Config.JENA_SEARCH_PROPERTY: {
+        throw new Error("Not implemented yet")
       }
     }
   }

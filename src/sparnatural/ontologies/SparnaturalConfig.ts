@@ -19,6 +19,10 @@ export enum Config {
     "StringEqualsProperty",
   GRAPHDB_SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "GraphDBSearchProperty",
+  VIRTUOSO_SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "VirtuosoSearchProperty",
+  JENA_SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "JenaSearchProperty",
   NON_SELECTABLE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "NonSelectableProperty",
   BOOLEAN_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
