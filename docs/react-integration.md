@@ -1,3 +1,5 @@
+_[Home](index.html) > Use Sparnatural in React_
+
 # Use Sparnatural in React
 Sparnatural is not published as a seperated React component but it is still possible to use it. However, there are some important need to be considered:
 - Sparnatural still uses a bit of JQuery current testing hasn't shown any problems but be aware.
@@ -11,7 +13,8 @@ If you discover any issues let us know!
 ## Usage
 
 ### JSX integration (without YASGUI)
-```
+
+```typescript
 import './App.css';
 import { useEffect, useRef } from 'react';
 import "sparnatural"
@@ -64,9 +67,11 @@ export default App;
 
 ```
 ### Add Declaration file for JSX (Typescript only)
+
 This is only necesarry when you are using React together with typescript. <br>
 The declaration file must be call `declaration.d.ts` and be located on the root level of the src/ folder.
-```
+
+```typescript
 namespace JSX {
     interface IntrinsicElements {
         "spar-natural": SparnaturalAttributes;
