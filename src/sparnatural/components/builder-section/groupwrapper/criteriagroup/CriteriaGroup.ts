@@ -26,7 +26,7 @@ class CriteriaGroup extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
   ParentGroupWrapper: GroupWrapper;
   unselectBtn: UnselectBtn;
-  startClassEyeBtn = false // Decides if the selectviewvarBtn is rendered on the startClass. That is the case only for the first one
+  
 
   constructor(
     ParentComponent: GroupWrapper,
@@ -41,9 +41,9 @@ class CriteriaGroup extends HTMLComponent {
       this,
       this.specProvider,
       startClassVal,
+      // Decides if the selectviewvarBtn is rendered on the startClass. That is the case only for the first one
       startClassEyeBtn
     );
-    this.startClassEyeBtn = startClassEyeBtn
   }
 
   render(): this {

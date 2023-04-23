@@ -64,13 +64,16 @@ class StartClassGroup extends HTMLComponent {
           this.#addDefaultLblVar(this.startClassVal.type,this.startClassVal.variable)
         }
         // Iff(!) First StartClass of first GrpWrapper: eye btn automatically rendered + selected
-        if (this.renderEyeBtn) this.#autoSelectEyeBtn()
+        if (this.renderEyeBtn) this.autoSelectEyeBtn()
         this.#valueWasSelected();
       }
     );
   }
 
-  #autoSelectEyeBtn(){
+  /**
+   * This can be called from the outside when deleting the first row and the second row becomes root
+   */
+  autoSelectEyeBtn(){
     this.inputSelector.selectViewVariableBtn.render() 
     this.inputSelector.selectViewVariableBtn.widgetHtml[0].dispatchEvent(new Event('click'))
   }

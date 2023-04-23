@@ -35,11 +35,22 @@ class ComponentsList extends HTMLComponent {
     this.rootGroupWrapper.CriteriaGroup.StartClassGroup.inputSelector.selectViewVariableBtn.render()
   }
 
+  /**
+   * Called when the first GroupWrapper is deleted and there is a sibling AND : the sibling becomes the root
+   * @param grpWrapper the sibling GroupWrapper that becomes the new root
+   */
   attachNewRoot(grpWrapper: GroupWrapper) {
     this.rootGroupWrapper = grpWrapper;
     // this should already be the case, but we are just making sure it is
     this.rootGroupWrapper.ParentComponent = this;
-    this.rootGroupWrapper.CriteriaGroup.StartClassGroup.inputSelector.selectViewVariableBtn.render()
+
+    // display its eye and selects it
+    // TODO : this should be done only if previous StartClassGroup was itself selected
+    this.rootGroupWrapper.CriteriaGroup.StartClassGroup.renderEyeBtn = true
+    this.rootGroupWrapper.CriteriaGroup.StartClassGroup.autoSelectEyeBtn()
+    this.rootGroupWrapper.CriteriaGroup.StartClassGroup.inputSelector.html[0].classList.add(
+      "Highlited"
+    );
   }
 }
 
