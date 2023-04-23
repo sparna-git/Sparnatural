@@ -5,7 +5,8 @@ Sparnatural offers a range of different widgets for sparql value selection. Furt
 ## 1. Create new widget Class
 Go to the widget folder `./src/sparnatural/components/widgets/`
 We will create a new Class extending from Abstract Widget:
-```
+
+```typescript
 import { Pattern } from "sparqljs";
 import { AbstractWidget, WidgetValue } from "./AbstractWidget";
 export class BooleanWidget extends AbstractWidget {
@@ -24,7 +25,8 @@ With the help of some intellisense we can see that the two methods `getRdfJsPatt
 `parseInput`: Returns a WidgetValue and has two functions. It is used to parse the input given by the user and it parses string input when a query is imported.
 
 Let's first proceed with rendering the html of the widget. The `AbstractWidget` itself inherits from the HTMLComponent class which is the top class for all Sparnatural Components. Each component can therefore implement the `render()` method to render some HTML.
-```
+
+```typescript
 super.render();
     let trueSpan = $(
       `<span class="boolean-value">${getSettings().langSearch.true}</span>'`
@@ -55,7 +57,8 @@ This renders to the following and has some clickListener to listen for the click
 ![](../documentation/15-boolean.png)
 
 Noticable above is the widgetValue creation inside the click listener. This leads us to the next requirement SparnaturalWidgets have. Each Sparnatural widget SHOULD come with a "*data class*". This data class needs to inherit from the WidgetValue Interface:
-```
+
+```typescript
 export class BooleanWidgetValue implements WidgetValue {
   value: {
     label: string;
