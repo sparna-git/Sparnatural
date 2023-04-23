@@ -65,13 +65,15 @@ Callback method provided in the JavaScript code
 
 ## A reference to a preconfigured datasource
 JSON:
-```
+
+```json
 {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
       ...
       "datasource": "datasources:list_rdfslabel_alpha" 
     }
 ```
+
 Sparnatural comes preconfigured with datasources that can populate lists based on `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` or the URI of the entity (which is the default behavior). For each of these properties, 3 flavors of datasource exist : either with an alphabetical ordering, an alphabetical ordering plus the count shown in parenthesis, or a descending count ordering.
 
 |  queryTemplate  | property path | widget |
