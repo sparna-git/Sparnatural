@@ -105,7 +105,7 @@ Sparnatural comes preconfigured with datasources that can populate lists based o
 | `datasources:list_schemaname_alpha` | `schema:name` | `sparnatural:ListProperty` |
 | `datasources:list_schemaname_count` | `schema:name` | `sparnatural:ListProperty` |
 | `datasources:list_schemaname_alpha_with_count` | `schema:name` | `sparnatural:ListProperty` |
-| `datasources:search_URI_contains` |  | `sparnatural:AutocompleteProperty` |
+| `datasources:search_URI_contains` |  none | `sparnatural:AutocompleteProperty` |
 | `datasources:search_rdfslabel_strstarts` | `rdfs:label` | `sparnatural:AutocompleteProperty` |
 | `datasources:search_rdfslabel_contains` | `rdfs:label` | `sparnatural:AutocompleteProperty` |
 | `datasources:search_rdfslabel_bifcontains` | `rdfs:label` | `sparnatural:AutocompleteProperty` |
