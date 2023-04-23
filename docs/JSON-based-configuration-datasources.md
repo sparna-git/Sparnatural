@@ -11,7 +11,7 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 <td> 1. </td>
 <td>
       
-[A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource)
+      <a href="#a-reference-to-a-preconfigured-datasource">A reference to a preconfigured datasource</a>
 
 </td>
 <td>
@@ -27,7 +27,7 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 <td> 2. </td>
 <td>
       
-[Reference to a preconfigured SPARQL query + a URI to be injected](#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected)
+<a href="#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected">Reference to a preconfigured SPARQL query + a URI to be injected</a>
 
 </td>
 <td>
@@ -47,7 +47,7 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 <td> 3. </td>
 <td>
       
-[Your own SPARQL query](#your-own-sparql-query)
+      <a href="#your-own-sparql-query">Your own SPARQL query</a>
 
 </td>
 <td>
@@ -70,7 +70,7 @@ Callback method provided in the JavaScript code
 </td>
 <td>
                   
-[see Advanced : customizing lists and autocomplete](./Javascript-integration.md#advanced--customizing-lists-and-autocomplete)
+<a href="./Javascript-integration.md#advanced--customizing-lists-and-autocomplete">see Advanced : customizing lists and autocomplete</a>
       
 </td>
 </tr>
