@@ -12,7 +12,7 @@ It's advised to Copy-paste the `@context` key given in the minimal example and d
 <details>
 <summary>Show minimal JSON</summary>
 
-```javascript
+<pre lang="javascript">
 {
   "@context":
   {
@@ -70,7 +70,7 @@ It's advised to Copy-paste the `@context` key given in the minimal example and d
     }
   ]
 }
-```
+<pre>
 </details> 
 
 ## Classes configuration
@@ -79,8 +79,7 @@ The configuration lists the types of entities that are searchable in Sparnatural
 
 <details>
 <summary>Show example for a class</summary>
-
-```
+<pre lang="json">
 {
     "@id" : "http://xmlns.com/foaf/0.1/Person",
     "@type" : "Class",
@@ -90,7 +89,7 @@ The configuration lists the types of entities that are searchable in Sparnatural
     ],
     "faIcon":  "fas fa-user"
 }
-```
+</pre>
 </details>
 
 
@@ -112,7 +111,7 @@ Each property represents a possible connection between one or more classes decla
 <details>
 <summary>Show example for an object property </summary>
 
-```
+<pre lang="json">
  {
       "@id" : "http://xmlns.com/foaf/0.1/knows",
       "@type" : "ObjectProperty",
@@ -148,7 +147,7 @@ Each property represents a possible connection between one or more classes decla
         "sparqlEndpointUrl" : "http://dbpedia.org/sparql"
       }
   }
-```
+</pre>
 </details>
 
 |  Key  | Description | Mandatory/Optional |
