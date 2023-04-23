@@ -31,10 +31,10 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 - [Querying a password protected SPARQL endpoint](Querying-a-password-protected-SPARQL-endpoint)
 
 
-## Extending Sparnatural
+## 3. Extending Sparnatural
 
 - [How to create your own widget](diy-widget)
 
-## 3. FAQ
+## 4. FAQ
 
 - [FAQ](FAQ) - Frequently Asked Questions
