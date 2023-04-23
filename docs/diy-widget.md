@@ -56,7 +56,7 @@ super.render();
 ```
 This renders to the following and has some clickListener to listen for the click:
 
-![](../documentation/15-boolean.png)
+![](https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/15-boolean.png)
 
 Noticable above is the widgetValue creation inside the click listener. This leads us to the next requirement SparnaturalWidgets have. Each Sparnatural widget SHOULD come with a "*data class*". This data class needs to inherit from the WidgetValue Interface:
 
