@@ -3,9 +3,9 @@
 This is an extension chapter for the property `datasource` shown in [Object properties](./JSON-based-configuration.md#object-properties). Some widgets such as `sparnatural:AutocompleteProperty` and `sparnatural:ListProperty ` require a `datasource` key to populate respectively the list of values or the values proposed by autocompletion. Creating a datasource for a widget can be achieved in 4 ways:
 
 <table>
-      <tr>
-            <td> Nr </td> <td> Method </td> <td> JSON example</td>
-      </tr>
+      <thead>
+            <th> Nr </th> <th> Method </th> <th> JSON example </th>
+      </thead>
 
 <tr>
 <td> 1. </td>
@@ -15,11 +15,11 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 
 </td>
 <td>
-                  
+
 ```json
 "datasource": "datasources:list_rdfslabel_alpha"
 ```
-      
+
 </td>
 </tr>
       
@@ -31,14 +31,14 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 
 </td>
 <td>
-                  
+
 ```json
 "datasource": {
       "queryTemplate":"query_list_label_count",
       "labelProperty":"http://foo.bar/label"
 }
 ```
-      
+
 </td>
 </tr>
 
@@ -51,13 +51,13 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 
 </td>
 <td>
-                  
+
 ```json
 "datasource": {
       "queryString":"SELECT ?uri ?label WHERE { here your own query }"
 }
 ```
-      
+
 </td>
 </tr>
 
