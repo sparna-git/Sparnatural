@@ -16,9 +16,9 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 </td>
 <td>
 
-```json
+<pre lang="json">
 "datasource": "datasources:list_rdfslabel_alpha"
-```
+</pre>
 
 </td>
 </tr>
@@ -32,12 +32,12 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 </td>
 <td>
 
-```json
+<pre lang="json">
 "datasource": {
       "queryTemplate":"query_list_label_count",
       "labelProperty":"http://foo.bar/label"
 }
-```
+</pre>
 
 </td>
 </tr>
@@ -52,11 +52,11 @@ This is an extension chapter for the property `datasource` shown in [Object prop
 </td>
 <td>
 
-```json
+<pre lang="json">
 "datasource": {
       "queryString":"SELECT ?uri ?label WHERE { here your own query }"
 }
-```
+</pre>
 
 </td>
 </tr>
