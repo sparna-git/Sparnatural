@@ -175,14 +175,14 @@ This table shows possible values for the subPropertyOf of [object properties](#o
 | -----   | ----------- |
 |  rdfs:Literal  | For classes that correspond either to a Literal (typically a date), either to a search, set the class as subclass of rdfs:Literal. <br>1. No rdf:type criteria corresponding to this class will be put in SPARQL queries. <br> 2. The class will never appear in the initial class list <br>3. it will not be possible to traverse this class with WHERE clauses |
 |  core:NotInstantiatedClass  | For classes that are references to "external" URIs that are not themselves described in the graph (i.e. they are not the subject of any triples in the graph, in particular no rdf:type), set the class as subclass of core:NotInstantiatedClass. <br>1. No rdf:type criteria corresponding to this class will be put in SPARQL queries <br>2. The class will never appear in the initial class list but can still be used to be traversed in WHERE clause |
-|  sparnatural:ListProperty  | <img src="../documentation/10-list.png" width="150" height="90">  |
-|  sparnatural:AutocompleteProperty  | <img src="../documentation/9-autocomplete.png" width="150" height="90"> |
-|  sparnatural:TreeProperty  | <img src="../documentation/17-tree.png" width="150" height="100"> |
-|  sparnatural:TimeProperty-Date  |<img src="../documentation/14-chronocultural-period.png" width="150" height="90"> |
-|  sparnatural:MapProperty  | <img src="../documentation/18-map.png" width="150" height="100">  |
-|  sparnatural:TimeProperty-Year  | <img src="../documentation/12-time-date.png" width="140" height="100"> |
-|  sparnatural:SearchProperty  | <img src="../documentation/11-search.png" width="150" height="90"> |
-|  sparnatural:NonSelectableProperty  | <img src="../documentation/13-no-value.png" width="150" height="90"> |
-|  sparnatural:BooleanProperty  | <img src="../documentation/15-boolean.png" width="150" height="70"> |
+|  sparnatural:ListProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/10-list.png" width="150" height="90">  |
+|  sparnatural:AutocompleteProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/9-autocomplete.png" width="150" height="90"> |
+|  sparnatural:TreeProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/17-tree.png" width="150" height="100"> |
+|  sparnatural:TimeProperty-Date  |<img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/14-chronocultural-period.png" width="150" height="90"> |
+|  sparnatural:MapProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/18-map.png" width="150" height="100">  |
+|  sparnatural:TimeProperty-Year  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/12-time-date.png" width="140" height="100"> |
+|  sparnatural:SearchProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/11-search.png" width="150" height="90"> |
+|  sparnatural:NonSelectableProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/13-no-value.png" width="150" height="90"> |
+|  sparnatural:BooleanProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/15-boolean.png" width="150" height="70"> |
 
 
