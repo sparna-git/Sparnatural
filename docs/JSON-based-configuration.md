@@ -71,11 +71,14 @@ It's advised to Copy-paste the `@context` key given in the minimal example and d
   ]
 }
 <pre>
-</details> 
+</details>
+
 
 ## Classes configuration
 
+
 The configuration lists the types of entities that are searchable in Sparnatural. These types either map to real RDF resources, or are used to express search criterias on literal values.
+
 
 <details>
 <summary>Show example for a class</summary>
