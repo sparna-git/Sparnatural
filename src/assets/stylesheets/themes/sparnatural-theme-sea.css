@@ -1,4 +1,11 @@
-.Sparnatural {
+
+/**
+ Note how the theme applies to Sparnatural as well as other technical classes with absolute positioning that
+ also needs to benefits from the variables.
+ **/
+.Sparnatural,
+.select2-container--default,
+.tippy-box {
 /**
  * Color of the criteria arrows (orange)
  **/
