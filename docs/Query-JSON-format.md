@@ -15,7 +15,7 @@ This allows to implement 2 important features to showcase your knowledge graph :
 This is illustrated in the following code snippet :
 
 
-```
+```javascript
 $( document ).ready(function($) {          
 
         sparnatural = document.getElementById('sparnatural-container').Sparnatural({
@@ -65,7 +65,7 @@ The following query in Sparnatural (_All Artworks displayed in French or Italian
 
 Is modelled in the following JSON data structure :
 
-```
+```json
 {
   "distinct": true,
   "variables": [
@@ -139,7 +139,7 @@ The data structure is composed of a top "Query" structure, that contains "branch
 
 ### Query structure
 
-```
+```json
 {
   "distinct": true,
   "variables": [
@@ -162,7 +162,7 @@ The data structure is composed of a top "Query" structure, that contains "branch
 
 ### Query branch structure
 
-```
+```json
 {
       "line": {
         ...
@@ -182,7 +182,7 @@ The data structure is composed of a top "Query" structure, that contains "branch
 
 ### Query line structure
 
-```
+```json
 {
   "s": "?Museum_1",
   "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#country",
@@ -215,7 +215,7 @@ The structure of the values depend on the structure of the criteria/line. This c
 
 - A URI selection widget (dropdown list, autocomplete, tree widget):
 
-```
+```json
   {
       "label": "France (222)",
       "uri": "http://fr.dbpedia.org/resource/France"
@@ -224,7 +224,7 @@ The structure of the values depend on the structure of the criteria/line. This c
 
 - A time/date selection widget:
 
-```
+```json
   {
     "label": "From 1800 to 1901",
     "fromDate": "1800-01-01T00:00:00",
@@ -234,7 +234,7 @@ The structure of the values depend on the structure of the criteria/line. This c
 
 - A boolean widget:
 
-```
+```json
   {
     "label": "Vrai",
     "boolean": true
@@ -243,7 +243,7 @@ The structure of the values depend on the structure of the criteria/line. This c
 
 - A regex search widget:
 
-```
+```json
   {
     "label": "...",
     "search": "..."
@@ -252,7 +252,7 @@ The structure of the values depend on the structure of the criteria/line. This c
 
 - A literal list widget:
 
-```
+```json
   {
     "label": "..."
   }

@@ -133,7 +133,7 @@ Take a look at the preconfigured SPARQL queries in the [Sparnatural datasources 
 
 Here is an example of such a query: (note the use of the placeholder variables that will be replaced with the corresponding values):
 
-```
+```sparql
 SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
 WHERE { 
   { 
@@ -168,7 +168,7 @@ In these SPARQL query, the same replacement of the **`$domain`**, **`$range`**, 
 
 A typical query that populates the `?hasChildren` and `?count` variable looks like the following :
 
-```
+```sparql
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT DISTINCT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
 WHERE {

@@ -2,31 +2,84 @@
 
 This is an extension chapter for the property `datasource` shown in [Object properties](./JSON-based-configuration.md#object-properties). Some widgets such as `sparnatural:AutocompleteProperty` and `sparnatural:ListProperty ` require a `datasource` key to populate respectively the list of values or the values proposed by autocompletion. Creating a datasource for a widget can be achieved in 4 ways:
 
-|  Nr  | method | JSON example |
-| ---- | ------ | ------------ |
-| 1. | [A reference to a preconfigured datasource](#a-reference-to-a-preconfigured-datasource) | <pre>"datasource": {<br> &emsp;queryTemplate":"query_list_label_count", <br> }</pre>
-| 2. | [Reference to a preconfigured SPARQL query + a URI to be injected](#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected) | <pre>"datasource": {<br> &emsp; "queryTemplate":"query_list_label_count", <br> &emsp; "labelProperty":"http://foo.bar/label",<br> }</pre> |
-| 3. | [Your own SPARQL query](#your-own-sparql-query) | <pre>"datasource": {<br> &emsp;queryString":"Your-SELECT-query-string", <br> }</pre> |
-| 4. | Callback method provided in the JavaScript code | [see Advanced : customizing lists and autocomplete](./Javascript-integration.md#advanced--customizing-lists-and-autocomplete) |
+<table>
+      <thead>
+            <th> Nr </th> <th> Method </th> <th> JSON example </th>
+      </thead>
+
+<tr>
+<td> 1. </td>
+<td>
+<a href="#a-reference-to-a-preconfigured-datasource">A reference to a preconfigured datasource</a>
+</td>
+<td>
+<pre lang="json">
+"datasource": "datasources:list_rdfslabel_alpha"
+</pre>
+</td>
+</tr>
+      
+<tr>
+<td> 2. </td>
+<td>
+<a href="#reference-to-a-preconfigured-sparql-query--a-uri-to-be-injected">Reference to a preconfigured SPARQL query + a URI to be injected</a>
+</td>
+<td>
+<pre lang="json">
+"datasource": {
+      "queryTemplate":"query_list_label_count",
+      "labelProperty":"http://foo.bar/label"
+}
+</pre>
+</td>
+</tr>
+
+
+<tr>
+<td> 3. </td>
+<td>
+<a href="#your-own-sparql-query">Your own SPARQL query</a>
+</td>
+<td>
+<pre lang="json">
+"datasource": {
+      "queryString":"SELECT ?uri ?label WHERE { here your own query }"
+}
+</pre>
+</td>
+</tr>
+
+<tr>
+<td> 4. </td>
+<td>
+Callback method provided in the JavaScript code
+</td>
+<td>
+<a href="./Javascript-integration.md#advanced--customizing-lists-and-autocomplete">see Advanced : customizing lists and autocomplete</a>
+</td>
+</tr>
+      
+      
+</table>
+
 
 ## A reference to a preconfigured datasource
 JSON:
-```
+
+```json
 {
       "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
       ...
-      "datasource": {
-        "queryTemplate" : "query_list_label_count",
-        "labelProperty" : "http://foo.bar/label"
-      } 
+      "datasource": "datasources:list_rdfslabel_alpha" 
     }
 ```
+
 Sparnatural comes preconfigured with datasources that can populate lists based on `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` or the URI of the entity (which is the default behavior). For each of these properties, 3 flavors of datasource exist : either with an alphabetical ordering, an alphabetical ordering plus the count shown in parenthesis, or a descending count ordering.
 
 |  queryTemplate  | property path | widget |
 | --------------- | ------------- | ------ |
-| `datasources:list_URI_alpha` | | `sparnatural:ListProperty` |
-| `datasources:list_URI_count` |  | `sparnatural:ListProperty` |
+| `datasources:list_URI_alpha` | none | `sparnatural:ListProperty` |
+| `datasources:list_URI_count` |  none | `sparnatural:ListProperty` |
 | `datasources:list_rdfslabel_alpha` |`rdfs:label`  | `sparnatural:ListProperty` |
 | `datasources:list_rdfslabel_count` | `rdfs:label` | `sparnatural:ListProperty` |
 | `datasources:list_skospreflabel_alpha` | `skos:prefLabel` | `sparnatural:ListProperty` |
@@ -38,7 +91,7 @@ Sparnatural comes preconfigured with datasources that can populate lists based o
 | `datasources:list_schemaname_alpha` | `schema:name` | `sparnatural:ListProperty` |
 | `datasources:list_schemaname_count` | `schema:name` | `sparnatural:ListProperty` |
 | `datasources:list_schemaname_alpha_with_count` | `schema:name` | `sparnatural:ListProperty` |
-| `datasources:search_URI_contains` |  | `sparnatural:AutocompleteProperty` |
+| `datasources:search_URI_contains` |  none | `sparnatural:AutocompleteProperty` |
 | `datasources:search_rdfslabel_strstarts` | `rdfs:label` | `sparnatural:AutocompleteProperty` |
 | `datasources:search_rdfslabel_contains` | `rdfs:label` | `sparnatural:AutocompleteProperty` |
 | `datasources:search_rdfslabel_bifcontains` | `rdfs:label` | `sparnatural:AutocompleteProperty` |
