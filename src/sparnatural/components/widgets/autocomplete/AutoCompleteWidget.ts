@@ -1,22 +1,28 @@
 import * as DataFactory from "@rdfjs/data-model" ;
-import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
+import { BgpPattern, BlankTerm, IriTerm, LiteralTerm, Pattern, Term, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../../../generators/ISparJson";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { AutocompleteDataProviderIfc } from "../data/DataProviders";
+import { BlankNode, Literal } from "n3";
 
 require("easy-autocomplete");
 
 export class AutoCompleteWidgetValue implements WidgetValue {
   value: {
     label: string;
-    uri: string;
+    rdfTerm: {
+      type: string,
+      value: string,
+      "xml:lang"?: string,
+      datatype?:string
+    }
   };
 
   key():string {
-    return this.value.uri;
+    return this.value.rdfTerm.value;
   }
 
   constructor(v:AutoCompleteWidgetValue["value"]) {
@@ -53,9 +59,9 @@ export class AutoCompleteWidget extends AbstractWidget {
   render() {
     super.render();
     let inputHtml = $(`<input class="autocompleteinput"/>`);
-    let listHtml = $(`<input class="inputvalue" type="hidden"/>`);
+    // let listHtml = $(`<input class="inputvalue" type="hidden"/>`);
     this.html.append(inputHtml);
-    this.html.append(listHtml);
+    // this.html.append(listHtml);
 
 
     let options = {
@@ -135,10 +141,10 @@ export class AutoCompleteWidget extends AbstractWidget {
           let val = inputHtml.getSelectedItemData() as any;
           let autocompleteValue= new AutoCompleteWidgetValue({
               label: this.dataProvider.elementLabel(val),
-              uri: this.dataProvider.elementUri(val),
+              rdfTerm: this.dataProvider.elementRdfTerm(val),
           });
           inputHtml.val(autocompleteValue.value.label);
-          listHtml.val(autocompleteValue.value.uri).trigger("change");
+          // listHtml.val(autocompleteValue.value.uri).trigger("change");
           this.renderWidgetVal(autocompleteValue);
         },
       },
@@ -177,7 +183,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       let singleTriple: Triple = SparqlFactory.buildTriple(
         DataFactory.variable(this.getVariableValue(this.startClassVal)),
         DataFactory.namedNode(this.objectPropVal.type),
-        DataFactory.namedNode((this.widgetValues[0] as AutoCompleteWidgetValue).value.uri)
+        this.rdfTermToSparqlQuery((this.widgetValues[0] as AutoCompleteWidgetValue).value.rdfTerm)
       );
 
       let ptrn: BgpPattern = {
@@ -190,7 +196,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     } else {
       let vals = (this.widgetValues as AutoCompleteWidgetValue[]).map((v) => {
         let vl: ValuePatternRow = {};
-        vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
+        vl[this.endClassVal.variable] = this.rdfTermToSparqlQuery(v.value.rdfTerm);
         return vl;
       });
       let valuePattern: ValuesPattern = {
@@ -198,6 +204,25 @@ export class AutoCompleteWidget extends AbstractWidget {
         values: vals,
       };
       return [valuePattern];
+    }
+  }
+
+  rdfTermToSparqlQuery(rdfTerm:AutoCompleteWidgetValue["value"]["rdfTerm"]): IriTerm | BlankTerm | LiteralTerm {
+    if(rdfTerm.type == "uri") {
+      return DataFactory.namedNode(rdfTerm.value);
+    } else if(rdfTerm.type == "literal") {
+      if(rdfTerm["xml:lang"]) {
+        return DataFactory.literal(rdfTerm.value, rdfTerm["xml:lang"]);
+      } else if(rdfTerm.datatype) {
+        return DataFactory.literal(rdfTerm.value, rdfTerm.datatype);
+      } else {
+        return DataFactory.literal(rdfTerm.value);
+      }
+    } else if(rdfTerm.type == "bnode") {
+      // we don't know what to do with this, but don't trigger an error
+      return DataFactory.blankNode(rdfTerm.value);
+    } else {
+      throw new Error("Unexpected rdfTerm type "+rdfTerm.type)
     }
   }
 }

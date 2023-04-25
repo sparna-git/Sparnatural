@@ -1216,6 +1216,60 @@ WHERE {
 GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_search_literal_contains -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_search_literal_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?label
+WHERE {
+  ?domain $type $domain .
+  ?domain $property ?value .
+  FILTER(isLiteral(?value))
+  BIND(STR(?value) AS ?label)
+  FILTER(CONTAINS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
+} 
+ORDER BY UCASE(?label)
+LIMIT 50</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_search_literal_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_search_literal_strstarts">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?label
+WHERE {
+  ?domain $type $domain .
+  ?domain $property ?value .
+  FILTER(isLiteral(?value))
+  BIND(STR(?value) AS ?label)
+  FILTER(STRSTARTS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
+} 
+ORDER BY UCASE(?label)
+LIMIT 50</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources/search_literal_contains -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/search_literal_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_search_literal_contains"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources/search_literal_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/search_literal_strstarts">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_search_literal_strstarts"/>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 

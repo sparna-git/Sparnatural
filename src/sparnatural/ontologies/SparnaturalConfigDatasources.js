@@ -287,6 +287,39 @@ LIMIT 50
 );
 
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_search_literal_contains",
+  `
+SELECT DISTINCT ?value ?label
+WHERE {
+  ?domain $type $domain .
+  ?domain $property ?value .
+  FILTER(isLiteral(?value))
+  BIND(STR(?value) AS ?label)
+  FILTER(CONTAINS(LCASE(STR(?value)), LCASE("$key"))) 
+} 
+ORDER BY UCASE(?label)
+LIMIT 50
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_search_literal_strstarts",
+  `
+SELECT DISTINCT ?value ?label
+WHERE {
+  ?domain $type $domain .
+  ?domain $property ?value .
+  FILTER(isLiteral(?value))
+  BIND(STR(?value) AS ?label)
+  FILTER(STRSTARTS(LCASE(STR(?value)), LCASE("$key"))) 
+} 
+ORDER BY UCASE(?label)
+LIMIT 50
+`
+);
+
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children",
   `
 # Selects the children of a node
@@ -741,6 +774,22 @@ DATASOURCES_CONFIG.set(SPARNATURAL_CONFIG_DATASOURCES + "search_URI_contains", {
     SPARNATURAL_CONFIG_DATASOURCES + "query_search_URI_contains"
   ),
 });
+
+// ## search on literals
+
+DATASOURCES_CONFIG.set(SPARNATURAL_CONFIG_DATASOURCES + "search_literal_contains", {
+  queryTemplate: QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+    SPARNATURAL_CONFIG_DATASOURCES + "query_search_literal_contains"
+  ),
+});
+
+DATASOURCES_CONFIG.set(SPARNATURAL_CONFIG_DATASOURCES + "search_literal_strstarts", {
+  queryTemplate: QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+    SPARNATURAL_CONFIG_DATASOURCES + "query_search_literal_strstarts"
+  ),
+});
+
+
 
 // # Tree datasources
 

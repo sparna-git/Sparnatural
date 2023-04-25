@@ -217,7 +217,7 @@ export interface AutocompleteDataProviderIfc {
 
     elementLabel(element:any):string;
 
-    elementUri(element:any):any;
+    elementRdfTerm(element:any):any;
 
 }
 
@@ -264,8 +264,9 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         return element.label.value;
     }
 
-    elementUri(element: any) {
-        return element.uri.value;
+    elementRdfTerm(element: any) {
+        if(element.value) return element.value
+        else return element.uri;
     }
 
 }
