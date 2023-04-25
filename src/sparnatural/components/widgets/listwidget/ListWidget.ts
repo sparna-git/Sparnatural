@@ -90,35 +90,22 @@ export class ListWidget extends AbstractWidget {
             $("<option value='" + val.uri + "'>" + val.label + "</option>")
           );
         });
-  
-        // if we have very few values, then default to a nice select
-        if (items.length < 20) {
-          this.selectHtml.niceSelect();
-  
-          // set a listener for when a value is selected
-          this.selectHtml.on("change", (e: Event) => {
-            let option = (e.currentTarget as HTMLSelectElement).selectedOptions;
-            if (option.length > 1)
-              throw Error("List widget should allow only for one el to be selected!");
-  
+
+        // use the minimumResultsForSearch parameter to avoid using a search box when only a few items are present
+        this.selectHtml = this.selectHtml.select2({
+          minimumResultsForSearch: 20}
+        );
+
+        // set a listener for when a value is selected
+        this.selectHtml.on("select2:close", (e: any) => {
+          let option = (e.currentTarget as HTMLSelectElement).selectedOptions;
+          if (option.length > 1)
+            throw Error("List widget should allow only for one el to be selected!");
+
             let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
             this.renderWidgetVal(listWidgetValue);
-          });
-  
-        // if we have a larger number of values, then use a select2
-        } else {
-          this.selectHtml = this.selectHtml.select2();
-  
-          // set a listener for when a value is selected
-          this.selectHtml.on("select2:close", (e: any) => {
-            let option = (e.currentTarget as HTMLSelectElement).selectedOptions;
-            if (option.length > 1)
-              throw Error("List widget should allow only for one el to be selected!");
-  
-              let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
-              this.renderWidgetVal(listWidgetValue);
-          });
-        }
+        });
+
       } else {
         this.html.append(noItemsHtml);
       }  
