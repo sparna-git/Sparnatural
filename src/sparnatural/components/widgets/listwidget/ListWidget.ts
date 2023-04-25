@@ -1,9 +1,7 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import ISettings from "../../../settings/ISettings";
 import { getSettings } from "../../../settings/defaultSettings";
-import LocalCacheData from "../../../datastorage/LocalCacheData";
 import { SelectedVal } from "../../../generators/ISparJson";
-import { SparqlTemplateListHandler } from "../data/AutocompleteAndListHandlers";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import * as DataFactory from "@rdfjs/data-model" ;

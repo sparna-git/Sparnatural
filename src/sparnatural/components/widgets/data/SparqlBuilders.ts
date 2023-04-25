@@ -51,3 +51,60 @@ export class ListSparqlTemplateQueryBuilder implements ListSparqlQueryBuilderIfc
     }
 
 }
+
+export interface AutocompleteSparqlQueryBuilderIfc  {
+
+    buildSparqlQuery(
+        domain:string,
+        predicate:string,
+        range:string,
+        key:string,
+        language: any,
+        typePath: string
+    ):string;
+
+}
+
+export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparqlQueryBuilderIfc {
+    
+    queryString: string;
+    sparqlPostProcessor: any;
+
+    constructor(
+        queryString: string,
+        sparqlPostProcessor: any,
+
+    ) {
+        this.queryString = queryString;
+        this.sparqlPostProcessor = sparqlPostProcessor;
+    }
+
+    buildSparqlQuery(
+        domain: string,
+        property: string,
+        range: string,
+        key:string,        
+        language: any,
+        typePath: string
+    ): string {
+        var reDomain = new RegExp("\\$domain", "g");
+        var reProperty = new RegExp("\\$property", "g");
+        var reRange = new RegExp("\\$range", "g");
+        var reKey = new RegExp("\\$key", "g");
+        var reLang = new RegExp("\\$lang", "g");
+        var reType = new RegExp("\\$type", "g");
+    
+        var sparql = this.queryString
+          .replace(reDomain, "<" + domain + ">")
+          .replace(reProperty, "<" + property + ">")
+          .replace(reRange, "<" + range + ">")
+          .replace(reKey, "" + key + "")
+          .replace(reLang, "'" + language + "'")
+          .replace(reType, typePath);
+          
+        sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
+
+        return sparql;
+    }
+
+}

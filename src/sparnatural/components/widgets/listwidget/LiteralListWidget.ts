@@ -1,6 +1,5 @@
-import { Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
+import { Pattern } from "sparqljs";
 import { SelectedVal } from "../../../generators/ISparJson";
-import { SparqlTemplateListHandler } from "../data/AutocompleteAndListHandlers";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 
 import * as DataFactory from "@rdfjs/data-model" ;

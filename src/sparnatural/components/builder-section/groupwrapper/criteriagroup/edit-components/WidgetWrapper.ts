@@ -6,10 +6,6 @@ import ISparnaturalSpecification from "../../../../../spec-providers/ISparnatura
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import EditComponents from "./EditComponents";
-import {
-  SparqlTemplateAutocompleteHandler,
-  SparqlTemplateListHandler,
-} from "../../../../widgets/data/AutocompleteAndListHandlers";
 import MapWidget from "../../../../widgets/MapWidget";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
@@ -21,8 +17,8 @@ import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
 import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
-import { ListSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { SparqlListDataProvider, SparqlLiteralListDataProvider } from "../../../../widgets/data/DataProviders";
+import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
+import { SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider } from "../../../../widgets/data/DataProviders";
 import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
 
 
@@ -328,7 +324,8 @@ class WidgetWrapper extends HTMLComponent {
         );
 
       case Config.AUTOCOMPLETE_PROPERTY:
-        var handler = this.settings.autocomplete;
+        var autocompleteDataProvider = this.settings.autocomplete;
+
         // to be passed in anonymous functions
         var theSpecProvider = this.specProvider;
 
@@ -351,45 +348,41 @@ class WidgetWrapper extends HTMLComponent {
         }
 
         if (datasource != null) {
-          // if we have a datasource, possibly the default one, provide a config based
-          // on a SparqlTemplate, otherwise use the handler provided
-          handler = new SparqlTemplateAutocompleteHandler(
+
+          autocompleteDataProvider = new SparqlAutocompleDataProvider(
+
             // endpoint URL
             datasource.sparqlEndpointUrl != null
               ? datasource.sparqlEndpointUrl
               : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
 
-            // sparqlPostProcessor
-            {
-              semanticPostProcess: (sparql: any) => {
-                // also add prefixes
-                for (let key in this.settings.sparqlPrefixes) {
-                  sparql = sparql.replace(
-                    "SELECT ",
-                    "PREFIX " +
-                      key +
-                      ": <" +
-                      this.settings.sparqlPrefixes[key] +
-                      "> \nSELECT "
-                  );
-                }
-                return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-              },
-            },
+            new AutocompleteSparqlTemplateQueryBuilder(
+              // sparql query (with labelPath interpreted)
+              this.getFinalQueryString(datasource),
 
-            // language,
-            this.settings.language,
-
-            // typePath
-            this.settings.typePredicate,
-
-            // sparql query (with labelPath interpreted)
-            this.getFinalQueryString(datasource)
+              // sparqlPostProcessor
+              {
+                semanticPostProcess: (sparql: any) => {
+                  // also add prefixes
+                  for (let key in this.settings.sparqlPrefixes) {
+                    sparql = sparql.replace(
+                      "SELECT ",
+                      "PREFIX " +
+                        key +
+                        ": <" +
+                        this.settings.sparqlPrefixes[key] +
+                        "> \nSELECT "
+                    );
+                  }
+                  return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
+                },
+              }
+            )
           );
         }
         return new AutoCompleteWidget(
           this,
-          handler,
+          autocompleteDataProvider,
           this.settings.langSearch,
           this.startClassVal,
           this.objectPropVal,

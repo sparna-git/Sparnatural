@@ -1,7 +1,6 @@
 import { Pattern } from "sparqljs";
 import { SelectedVal } from "../../generators/ISparJson";
 import HTMLComponent from "../HtmlComponent";
-import { Handler } from "./data/AutocompleteAndListHandlers";
 import LoadingSpinner from "./LoadingSpinner";
 
 // The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
@@ -29,8 +28,6 @@ export abstract class AbstractWidget extends HTMLComponent {
   protected blockObjectPropTriple = false;
   protected blockEndTriple = false;
   protected spinner = new LoadingSpinner(this).render()
-  // If the widget contains a datasourceHandler such as ListHandler
-  protected datasourceHandler:Handler;
 
   constructor(
     baseCssClass: string,

@@ -1,5 +1,5 @@
 import { getSettings } from "../../../settings/defaultSettings";
-import { ListSparqlQueryBuilderIfc } from "./SparqlBuilders";
+import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc } from "./SparqlBuilders";
 import { SparqlFetcher, UrlFetcher } from "./UrlFetcher";
 
 
@@ -193,6 +193,79 @@ export class ListDataProviderFromLiteralListAdpater implements ListDataProviderI
                 callback(result);
             }
         );
+    }
+
+}
+
+
+/**
+ * Interface for objects that can provide data to an AutocompleteWidget :
+ * either through a SPARQL query, or through custom mean (calling an API)
+ */
+export interface AutocompleteDataProviderIfc {
+
+    autocompleteUrl(
+        domain:string,
+        predicate:string,
+        range:string,
+        key:string,
+        lang:string,
+        typePredicate:string
+    ):string
+
+    listLocation(data:any):any;
+
+    elementLabel(element:any):string;
+
+    elementUri(element:any):any;
+
+}
+
+/**
+ * Implementation of AutocompleteDataProviderIfc that executes a SPARQL query against an endpoint,
+ * and read the 'uri' and 'label' columns.
+ */
+export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc {
+    
+    queryBuilder:AutocompleteSparqlQueryBuilderIfc;
+    sparqlFetcher:SparqlFetcher;
+
+    constructor(
+        sparqlEndpointUrl: any,
+        queryBuilder: AutocompleteSparqlQueryBuilderIfc
+    ) {
+        this.queryBuilder = queryBuilder;
+        this.sparqlFetcher = new SparqlFetcher(
+            UrlFetcher.build(getSettings()),
+            sparqlEndpointUrl
+        );
+    }
+
+    autocompleteUrl(domain: string, predicate: string, range: string, key: string, lang: string, typePredicate: string): string {
+        // 1. create the SPARQL
+        let sparql = this.queryBuilder.buildSparqlQuery(
+            domain,
+            predicate,
+            range,
+            key,
+            lang,
+            typePredicate
+        );
+
+        // 2. encode it into a URL
+        return this.sparqlFetcher.buildUrl(sparql);
+    }
+
+    listLocation(data: any) {
+        return data.results.bindings;
+    }
+
+    elementLabel(element: any): string {
+        return element.label.value;
+    }
+
+    elementUri(element: any) {
+        return element.uri.value;
     }
 
 }

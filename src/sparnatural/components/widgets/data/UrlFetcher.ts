@@ -64,10 +64,7 @@ export class SparqlFetcher {
         this.sparqlEndpointUrl = sparqlEndpointUrl;
     }
 
-    executeSparql(
-        sparql:string,
-        callback: (data: any) => void
-    ) {
+    buildUrl(sparql:string):string {
         var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
 
         var url =
@@ -76,6 +73,15 @@ export class SparqlFetcher {
             "query=" +
             encodeURIComponent(sparql) +
             "&format=json";
+
+        return url;
+    }
+
+    executeSparql(
+        sparql:string,
+        callback: (data: any) => void
+    ) {
+        let url = this.buildUrl(sparql);
 
         this.urlFetcher.fetchUrl(
             url,
