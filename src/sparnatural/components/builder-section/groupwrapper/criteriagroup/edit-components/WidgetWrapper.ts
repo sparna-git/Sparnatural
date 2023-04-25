@@ -9,7 +9,7 @@ import EditComponents from "./EditComponents";
 import {
   SparqlTemplateAutocompleteHandler,
   SparqlTemplateListHandler,
-} from "../../../../widgets/autocomplete/AutocompleteAndListHandlers";
+} from "../../../../widgets/data/AutocompleteAndListHandlers";
 import MapWidget from "../../../../widgets/MapWidget";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
@@ -20,8 +20,10 @@ import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
 import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWidget";
-import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
+import { ListSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
+import { SparqlListDataProvider, SparqlLiteralListDataProvider } from "../../../../widgets/data/DataProviders";
+import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
 
 
 /**
@@ -184,8 +186,9 @@ class WidgetWrapper extends HTMLComponent {
   ): AbstractWidget {
     switch (widgetType) {
       case Config.LITERAL_LIST_PROPERTY: {
+        
         // defaut handler to be used
-        var handler = this.settings.list; //IMPORTANT: what is this list?
+        var listDataProvider = this.settings.list;
 
         // to be passed in anonymous functions
         var theSpecProvider = this.specProvider;
@@ -209,44 +212,43 @@ class WidgetWrapper extends HTMLComponent {
         }
 
         if (datasource != null) {
-          // if we have a datasource, possibly the default one, provide a config based
-          // on a SparqlTemplate, otherwise use the handler provided
-          handler = new SparqlTemplateListHandler(
+
+          listDataProvider = new SparqlLiteralListDataProvider(
+
             // endpoint URL
             datasource.sparqlEndpointUrl != null
               ? datasource.sparqlEndpointUrl
               : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
 
-            // sparqlPostProcessor
-            {
-              semanticPostProcess: (sparql: any) => {
-                // also add prefixes
-                for (let key in this.settings.sparqlPrefixes) {
-                  sparql = sparql.replace(
-                    "SELECT ",
-                    "PREFIX " +
-                      key +
-                      ": <" +
-                      this.settings.sparqlPrefixes[key] +
-                      "> \nSELECT "
-                  );
-                }
-                return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-              },
-            },
-            
-            this.settings.language,
+            new ListSparqlTemplateQueryBuilder(
+              // sparql query (with labelPath interpreted)
+              this.getFinalQueryString(datasource),
 
-            // typePath
-            this.settings.typePredicate,
-
-            // sparql query (with labelPath interpreted)
-            this.getFinalQueryString(datasource)
+              // sparqlPostProcessor
+              {
+                semanticPostProcess: (sparql: any) => {
+                  // also add prefixes
+                  for (let key in this.settings.sparqlPrefixes) {
+                    sparql = sparql.replace(
+                      "SELECT ",
+                      "PREFIX " +
+                        key +
+                        ": <" +
+                        this.settings.sparqlPrefixes[key] +
+                        "> \nSELECT "
+                    );
+                  }
+                  return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
+                },
+              }
+            )
           );
+
         }
+
         return new LiteralListWidget(
           this,
-          handler,
+          listDataProvider,
           !(datasource.noSort == true),
           this.startClassVal,
           this.objectPropVal,
@@ -256,7 +258,8 @@ class WidgetWrapper extends HTMLComponent {
       }
       case Config.LIST_PROPERTY:
         // defaut handler to be used
-        var handler = this.settings.list;
+        // TODO : change interface in settings
+        var listDataProvider = this.settings.list;
 
         // to be passed in anonymous functions
         var theSpecProvider = this.specProvider;
@@ -282,43 +285,42 @@ class WidgetWrapper extends HTMLComponent {
         if (datasource != null) {
           // if we have a datasource, possibly the default one, provide a config based
           // on a SparqlTemplate, otherwise use the handler provided
-          handler = new SparqlTemplateListHandler(
+          
+          listDataProvider = new SparqlListDataProvider(
+
             // endpoint URL
             datasource.sparqlEndpointUrl != null
               ? datasource.sparqlEndpointUrl
               : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
 
-            // sparqlPostProcessor
-            {
-              semanticPostProcess: (sparql: any) => {
-                // also add prefixes
-                for (let key in this.settings.sparqlPrefixes) {
-                  sparql = sparql.replace(
-                    "SELECT ",
-                    "PREFIX " +
-                      key +
-                      ": <" +
-                      this.settings.sparqlPrefixes[key] +
-                      "> \nSELECT "
-                  );
-                }
-                return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-              },
-            },
+            new ListSparqlTemplateQueryBuilder(
+              // sparql query (with labelPath interpreted)
+              this.getFinalQueryString(datasource),
 
-            // language,
-            this.settings.language,
-
-            // typePath
-            this.settings.typePredicate,
-
-            // sparql query (with labelPath interpreted)
-            this.getFinalQueryString(datasource)
+              // sparqlPostProcessor
+              {
+                semanticPostProcess: (sparql: any) => {
+                  // also add prefixes
+                  for (let key in this.settings.sparqlPrefixes) {
+                    sparql = sparql.replace(
+                      "SELECT ",
+                      "PREFIX " +
+                        key +
+                        ": <" +
+                        this.settings.sparqlPrefixes[key] +
+                        "> \nSELECT "
+                    );
+                  }
+                  return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
+                },
+              }
+            )
           );
         }
+
         return new ListWidget(
           this,
-          handler,
+          listDataProvider,
           !(datasource.noSort == true),
           this.startClassVal,
           this.objectPropVal,
@@ -542,7 +544,8 @@ class WidgetWrapper extends HTMLComponent {
           this.objectPropVal,
           this.endClassVal
         ).render();
-      default:
+      
+        default:
         throw new Error(`WidgetType for ${widgetType} not recognized`);
     }
   }

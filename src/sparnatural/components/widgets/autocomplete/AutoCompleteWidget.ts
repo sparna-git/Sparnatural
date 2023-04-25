@@ -4,7 +4,7 @@ import { SelectedVal } from "../../../generators/ISparJson";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
-import { AbstractSparqlAutocompleteHandler } from "./AutocompleteAndListHandlers";
+import { AbstractSparqlAutocompleteHandler } from "../data/AutocompleteAndListHandlers";
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 
 require("easy-autocomplete");
@@ -137,7 +137,7 @@ export class AutoCompleteWidget extends AbstractWidget {
           let val = inputHtml.getSelectedItemData() as any;
           let autocompleteValue= new AutoCompleteWidgetValue({
               label: this.datasourceHandler.elementLabel(val),
-              uri: this.datasourceHandler.elementUri(val),
+              uri: this.datasourceHandler.elementValue(val),
           });
           inputHtml.val(autocompleteValue.value.label);
           listHtml.val(autocompleteValue.value.uri).trigger("change");

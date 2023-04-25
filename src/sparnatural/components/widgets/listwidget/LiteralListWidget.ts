@@ -1,6 +1,6 @@
 import { Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../../../generators/ISparJson";
-import { SparqlTemplateListHandler } from "../autocomplete/AutocompleteAndListHandlers";
+import { SparqlTemplateListHandler } from "../data/AutocompleteAndListHandlers";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 
 import * as DataFactory from "@rdfjs/data-model" ;
@@ -9,8 +9,9 @@ import { Literal, Variable } from "@rdfjs/types";
 import "select2";
 import "select2/dist/css/select2.css";
 import { ListWidget } from "./ListWidget";
-import { ValueRepetition, WidgetValue } from "../AbstractWidget";
 import SparqlFactory from "../../../generators/SparqlFactory";
+import { ListDataProviderFromLiteralListAdpater, ListDataProviderIfc, LiteralListDataProviderIfc } from "../data/DataProviders";
+import { WidgetValue } from "../AbstractWidget";
 
 export class LiteralListWidgetValue implements WidgetValue {
   value: {
@@ -28,9 +29,10 @@ export class LiteralListWidgetValue implements WidgetValue {
 }
 
 export class LiteralListWidget extends ListWidget {
+  
   constructor(
     parentComponent: WidgetWrapper,
-    listHandler: SparqlTemplateListHandler,
+    dataProvider: LiteralListDataProviderIfc,
     sort: boolean,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -38,7 +40,7 @@ export class LiteralListWidget extends ListWidget {
   ) {
     super(
       parentComponent,
-      listHandler,
+      new ListDataProviderFromLiteralListAdpater(dataProvider),
       sort,
       startClassVal,
       objectPropVal,
@@ -68,22 +70,10 @@ export class LiteralListWidget extends ListWidget {
    * @returns 
    */
   isBlockingEnd(): boolean {
-    return false;
+    return true;
    }
 
   getRdfJsPattern(): Pattern[] {
-    /*
-    let vals = (this.widgetValues as LiteralListWidgetValue[]).map((v) => {
-      let vl: ValuePatternRow = {};
-      vl[this.endClassVal.variable] = DataFactory.literal(v.value.literal);
-      return vl;
-    });
-    let valuePattern: ValuesPattern = {
-      type: "values",
-      values: vals,
-    };
-    return [valuePattern];
-    */
     let vals : Literal[] = (this.widgetValues as LiteralListWidgetValue[]).map((v) => {
       return DataFactory.literal(v.value.literal)
     });

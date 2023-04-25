@@ -1,16 +1,17 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
-import ISettings from "../../../../sparnatural/settings/ISettings";
-import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
+import ISettings from "../../../settings/ISettings";
+import { getSettings } from "../../../settings/defaultSettings";
 import LocalCacheData from "../../../datastorage/LocalCacheData";
 import { SelectedVal } from "../../../generators/ISparJson";
-import { SparqlTemplateListHandler } from "./../autocomplete/AutocompleteAndListHandlers";
+import { SparqlTemplateListHandler } from "../data/AutocompleteAndListHandlers";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "./../AbstractWidget";
+import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import * as DataFactory from "@rdfjs/data-model" ;
 import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
+import { ListDataProviderIfc } from "../data/DataProviders";
 
 export class ListWidgetValue implements WidgetValue {
   value: {
@@ -29,14 +30,16 @@ export class ListWidgetValue implements WidgetValue {
 
 export class ListWidget extends AbstractWidget {
 
+  dataProvider: ListDataProviderIfc;
+
   protected widgetValues: WidgetValue[];
-  datasourceHandler: SparqlTemplateListHandler;
   sort: boolean;
   settings: ISettings;
   selectHtml: JQuery<HTMLElement>;
+
   constructor(
     parentComponent: WidgetWrapper,
-    listHandler: SparqlTemplateListHandler,
+    dataProvider: ListDataProviderIfc,
     sort: boolean,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -51,7 +54,8 @@ export class ListWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.MULTIPLE
     );
-    this.datasourceHandler = listHandler;
+
+    this.dataProvider = dataProvider;
     this.sort = sort;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
@@ -67,85 +71,68 @@ export class ListWidget extends AbstractWidget {
     </div>`);
     this.html.append(this.selectHtml);
 
-    let url = this.datasourceHandler.listUrl(
-      this.startClassVal.type,
-      this.objectPropVal.type,
-      this.endClassVal.type
-    );
+    let callback = (items:{uri:string;label:string}[]) => {
 
-    var headers = new Headers();
-    headers.append(
-      "Accept",
-      "application/sparql-results+json, application/json, */*;q=0.01"
-    );
-    let init = {
-      method: "GET",
-      headers: headers,
-      mode: "cors",
-      cache: "default",
-    };
-    let temp = new LocalCacheData();
-    //this.toggleSpinner()
-    let fetchpromise = temp.fetch(url, init, this.settings.localCacheDataTtl);
-    fetchpromise
-      .then((response: { json: () => any }) => response.json())
-      .then((data: any) => {
-        //this.toggleSpinner("success")
-        var items = this.datasourceHandler.listLocation(
-          this.startClassVal.type,
-          this.objectPropVal.type,
-          this.endClassVal.type,
-          data
-        );
-        if (items.length > 0) {
-          if (this.sort) {
-            // here, if we need to sort, then sort according to lang
-            var collator = new Intl.Collator(this.settings.language);
-            items.sort((a: any, b: any) => {
-              return collator.compare(
-                this.datasourceHandler.elementLabel(a),
-                this.datasourceHandler.elementLabel(b)
-              );
-            });
-          }
-
-          $.each(items, (key, val) => {
-            var label = this.datasourceHandler.elementLabel(val);
-            var uri = this.datasourceHandler.elementUri(val);
-            this.selectHtml.append(
-              $("<option value='" + uri + "'>" + label + "</option>")
+      if (items.length > 0) {
+        if (this.sort) {
+          // here, if we need to sort, then sort according to lang
+          var collator = new Intl.Collator(this.settings.language);
+          items.sort((a: any, b: any) => {
+            return collator.compare(
+              a.label,
+              b.label
             );
           });
-          if (items.length < 20) {
-            this.selectHtml.niceSelect();
-            this.selectHtml.on("change", (e: Event) => {
-              let option = (e.currentTarget as HTMLSelectElement)
-                .selectedOptions;
-              if (option.length > 1)
-                throw Error(
-                  "List widget should allow only for one el to be selected!"
-                );
+        }
+  
+        $.each(items, (key, val) => {
+          this.selectHtml.append(
+            $("<option value='" + val.uri + "'>" + val.label + "</option>")
+          );
+        });
+  
+        // if we have very few values, then default to a nice select
+        if (items.length < 20) {
+          this.selectHtml.niceSelect();
+  
+          // set a listener for when a value is selected
+          this.selectHtml.on("change", (e: Event) => {
+            let option = (e.currentTarget as HTMLSelectElement).selectedOptions;
+            if (option.length > 1)
+              throw Error("List widget should allow only for one el to be selected!");
+  
+            let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
+            this.renderWidgetVal(listWidgetValue);
+          });
+  
+        // if we have a larger number of values, then use a select2
+        } else {
+          this.selectHtml = this.selectHtml.select2();
+  
+          // set a listener for when a value is selected
+          this.selectHtml.on("select2:close", (e: any) => {
+            let option = (e.currentTarget as HTMLSelectElement).selectedOptions;
+            if (option.length > 1)
+              throw Error("List widget should allow only for one el to be selected!");
+  
               let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
               this.renderWidgetVal(listWidgetValue);
-            });
-          } else {
-            this.selectHtml = this.selectHtml.select2();
-            this.selectHtml.on("select2:close", (e: any) => {
-              let option = (e.currentTarget as HTMLSelectElement)
-                .selectedOptions;
-              if (option.length > 1)
-                throw Error(
-                  "List widget should allow only for one el to be selected!"
-                );
-
-                let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
-                this.renderWidgetVal(listWidgetValue);
-            });
-          }
-        } else {
-          this.html.append(noItemsHtml);
+          });
         }
-      });
+      } else {
+        this.html.append(noItemsHtml);
+      }  
+    }
+
+    this.dataProvider.getListContent(
+      this.startClassVal.type,
+      this.objectPropVal.type,
+      this.endClassVal.type,
+      this.settings.language,
+      this.settings.typePredicate,
+      callback
+    );
+
     return this;
   }
 

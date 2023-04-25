@@ -17,6 +17,7 @@ export abstract class Handler {
     this.searchPath = searchPath != null ? searchPath : "rdfs:label";
     this.listOrder = "alphabetical";
   }
+
   /**
    * Post-processes the SPARQL query and builds the full URL for list content
    **/
@@ -33,6 +34,10 @@ export abstract class Handler {
     return url;
   }
 
+  /**
+   * Tells to easyAutocomplete where is the list of items in the result data structure 
+   * @returns the "bindings" part of the data
+   */
   listLocation(
     domain: any,
     property: any,
@@ -46,8 +51,11 @@ export abstract class Handler {
     return element.label.value;
   }
 
-  /* TODO : rename to elementValue */
-  elementUri(element: { uri: { value: any }; value: { value: any } }) {
+  // This means that we expect a data structure with either a 'uri' key or a 'value' key
+  elementValue(element: { 
+    uri?: { value: any };
+    value?: { value: any }
+  }) {
     if (element.uri) {
       return element.uri.value;
     } else if (element.value) {
@@ -136,8 +144,8 @@ export class SparqlTemplateListHandler extends AbstractSparqlListHandler {
 }
 
 /**
- * Handles a list widget based on a provided SPARQL query in which
- * $domain, $property and $range will be replaced by actual values.
+ * Handles an autocomplete widget based on a provided SPARQL query in which
+ * $domain, $property $range and $key will be replaced by actual values.
  **/
 export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocompleteHandler {
   queryString: string;
@@ -181,6 +189,37 @@ export class SparqlTemplateAutocompleteHandler extends AbstractSparqlAutocomplet
     return this.buildURL(sparql);
   }
 }
+
+/**
+ * Same as a normal AutocompleteHandler except the value returned is the complete literal value,
+ * not the URI. And the label to display is just the literal form without lang and datatype
+ **/
+export class SparqlTemplateAutocompleteLiteralHandler extends SparqlTemplateAutocompleteHandler {
+
+  constructor(
+    sparqlEndpointUrl: any,
+    sparqlPostprocessor: any,
+    language: any,
+    typePath: string = "a",
+    queryString: any
+  ) {
+    super(sparqlEndpointUrl, sparqlPostprocessor, language, typePath, queryString);
+  }
+
+  elementLabel(element: { label: { value: any } }) {
+    return element.label.value;
+  }
+
+  elementValue(element: { 
+      uri: { value: any };
+      value: { value: any }
+  }) {
+    return element.value;
+  }
+
+}
+
+
 
 export class SimpleSparqlAutocompleteAndListHandler extends Handler {
   constructor(
@@ -487,80 +526,5 @@ SELECT DISTINCT ?uri ?uriLabel WHERE {
 ORDER BY ?uriLabel
 		`;
     return sparql;
-  }
-}
-
-export class RangeBasedAutocompleteAndListHandler {
-  defaultHandler: any;
-  handlerByKeyMap: any;
-  constructor(defaultHandler: any, handlerByKeyMap: any) {
-    this.defaultHandler = defaultHandler;
-    this.handlerByKeyMap = handlerByKeyMap;
-  }
-
-  _findHandler(domain: any, property: any, range: string | number) {
-    if (this.handlerByKeyMap[range] != null) {
-      return this.handlerByKeyMap[range];
-    } else {
-      return this.defaultHandler;
-    }
-  }
-
-  autocompleteUrl(domain: any, property: any, range: any, key: any) {
-    return this._findHandler(domain, property, range).autocompleteUrl(
-      domain,
-      property,
-      range,
-      key
-    );
-  }
-
-  listUrl(domain: any, property: any, range: any) {
-    return this._findHandler(domain, property, range).listUrl(
-      domain,
-      property,
-      range
-    );
-  }
-
-  listLocation(domain: any, property: any, range: any, data: any) {
-    return this._findHandler(domain, property, range).listLocation(
-      domain,
-      property,
-      range,
-      data
-    );
-  }
-
-  elementLabel(element: any) {
-    // TODO : forces that every handler must have the same result structure than the default one
-    return this.defaultHandler.elementLabel(element);
-  }
-
-  elementUri(element: any) {
-    // TODO : forces that every handler must have the same result structure than the default one
-    return this.defaultHandler.elementUri(element);
-  }
-
-  enableMatch(domain: any, property: any, range: any) {
-    return this._findHandler(domain, property, range).enableMatch(
-      domain,
-      property,
-      range
-    );
-  }
-}
-
-export class PropertyBasedAutocompleteAndListHandler extends RangeBasedAutocompleteAndListHandler {
-  constructor(defaultHandler: any, handlerByKeyMap: any) {
-    super(defaultHandler, handlerByKeyMap);
-  }
-
-  _findHandler(domain: any, property: string | number, range: any) {
-    if (this.handlerByKeyMap[property] != null) {
-      return this.handlerByKeyMap[property];
-    } else {
-      return this.defaultHandler;
-    }
   }
 }
