@@ -11,8 +11,7 @@ It's advised to Copy-paste the `@context` key given in the minimal example and d
 
 <details>
 <summary>Show minimal JSON</summary>
-
-<pre lang="javascript">
+<pre lang="json">
 {
   "@context":
   {
@@ -70,7 +69,7 @@ It's advised to Copy-paste the `@context` key given in the minimal example and d
     }
   ]
 }
-<pre>
+</pre>
 </details>
 
 
