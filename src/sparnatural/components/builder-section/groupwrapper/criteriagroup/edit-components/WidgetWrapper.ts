@@ -14,12 +14,11 @@ import { SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
-import { AutoCompleteWidget } from "../../../../widgets/autocomplete/AutoCompleteWidget";
-import { LiteralListWidget } from "../../../../widgets/listwidget/LiteralListWidget";
+import { AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
 import { SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider } from "../../../../widgets/data/DataProviders";
-import { ListWidget } from "../../../../widgets/listwidget/ListWidget";
+import { ListWidget } from "../../../../widgets/ListWidget";
 
 
 /**
@@ -181,77 +180,7 @@ class WidgetWrapper extends HTMLComponent {
     endClassType: any
   ): AbstractWidget {
     switch (widgetType) {
-      case Config.LITERAL_LIST_PROPERTY: {
-        
-        // defaut handler to be used
-        var listDataProvider = this.settings.list;
-
-        // to be passed in anonymous functions
-        var theSpecProvider = this.specProvider;
-
-        // determine custom datasource
-        var datasource = this.specProvider.getProperty(objectPropertyId).getDatasource();
-
-        if (datasource == null) {
-          // try to read it on the class
-          datasource = this.specProvider.getEntity(endClassType).getDatasource();
-        }
-
-        if (datasource == null) {
-          // datasource still null
-          // if a default endpoint was provided, provide default datasource
-          if (this.settings.defaultEndpoint) {
-            datasource = Datasources.DATASOURCES_CONFIG.get(
-              Datasources.LITERAL_LIST_ALPHA
-            );
-          }
-        }
-
-        if (datasource != null) {
-
-          listDataProvider = new SparqlLiteralListDataProvider(
-
-            // endpoint URL
-            datasource.sparqlEndpointUrl != null
-              ? datasource.sparqlEndpointUrl
-              : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
-
-            new ListSparqlTemplateQueryBuilder(
-              // sparql query (with labelPath interpreted)
-              this.getFinalQueryString(datasource),
-
-              // sparqlPostProcessor
-              {
-                semanticPostProcess: (sparql: any) => {
-                  // also add prefixes
-                  for (let key in this.settings.sparqlPrefixes) {
-                    sparql = sparql.replace(
-                      "SELECT ",
-                      "PREFIX " +
-                        key +
-                        ": <" +
-                        this.settings.sparqlPrefixes[key] +
-                        "> \nSELECT "
-                    );
-                  }
-                  return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-                },
-              }
-            )
-          );
-
-        }
-
-        return new LiteralListWidget(
-          this,
-          listDataProvider,
-          !(datasource.noSort == true),
-          this.startClassVal,
-          this.objectPropVal,
-          this.endClassVal
-        );
-
-      }
+      case Config.LITERAL_LIST_PROPERTY:
       case Config.LIST_PROPERTY:
         // defaut handler to be used
         // TODO : change interface in settings

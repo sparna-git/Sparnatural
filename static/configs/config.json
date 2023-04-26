@@ -362,7 +362,7 @@
     {
       "@id": "http://fr.dbpedia.org/property/nationalité",
       "@type": "ObjectProperty",
-      "subPropertyOf": "sparnatural:AutocompleteProperty",
+      "subPropertyOf": "sparnatural:ListProperty",
       "label": [
         { "@value": "nationality", "@language": "en" },
         { "@value": "nationalité", "@language": "fr" }
@@ -370,7 +370,7 @@
       "domain":
         "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#Person",
       "range": "http://dbpedia.org/ontology/Country",
-      "datasource" : "datasources:search_literal_contains"
+      "datasource" : "datasources:literal_list_alpha"
     },
 
     {

@@ -1,4 +1,5 @@
 import { getSettings } from "../../../settings/defaultSettings";
+import { RDFTerm } from "../AbstractWidget";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc } from "./SparqlBuilders";
 import { SparqlFetcher, UrlFetcher } from "./UrlFetcher";
 
@@ -15,7 +16,7 @@ export interface ListDataProviderIfc {
         range:string,
         lang:string,
         typePredicate:string,
-        callback:(items:{uri:string;label:string}[]) => void
+        callback:(items:{term:RDFTerm;label:string}[]) => void
     ):void
 
 }
@@ -46,7 +47,7 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
         rangeType: string,
         lang:string,
         typePredicate:string,
-        callback:(items:{uri:string;label:string}[]) => void
+        callback:(items:{term:RDFTerm;label:string}[]) => void
     ):void {
         // 1. create the SPARQL
         let sparql = this.queryBuilder.buildSparqlQuery(
@@ -60,14 +61,22 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
         // 2. execute it
         this.sparqlFetcher.executeSparql(sparql,(data:{results:{bindings:any}}) => {
             // 3. parse the results
-            let result = new Array<{uri:string, label:string}>;
+            let result = new Array<{term:RDFTerm, label:string}>;
             for (let index = 0; index < data.results.bindings.length; index++) {
                 const element = data.results.bindings[index];
-                if(element.uri.value) {
+                if(element.uri) {
                     // read uri key & label key
-                    result[result.length] ={uri:element.uri.value, label:element.label.value};
-                } else if(element.value.value) {
-                    result[result.length] ={uri:element.value.value, label:element.value.value};
+                    result[result.length] ={term:element.uri, label:element.label.value};
+                } else if(element.value) {
+                    result[result.length] ={term:element.value, label:element.value.value};
+                } else {
+                    // try to determine the payload column by taking the column other than label
+                    let columnName = this.getRdfTermColumn(element);
+                    if(columnName) {
+                        result[result.length] ={term:element[columnName], label:element.value.value};
+                    } else {
+                        throw Error("Could not determine which column to read from the result set")
+                    }
                 }
             }
 
@@ -76,6 +85,22 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
             
         });
 
+    }
+
+    getRdfTermColumn(aBindingSet:any):string|undefined {
+        let foundKey:string|undefined = undefined;
+        for (const key of Object.keys(aBindingSet)) {
+            if(key != "label") {
+                if(!foundKey) {
+                    foundKey = key;
+                } else {
+                    // it means there are more than one column, don't know which one to take, break
+                    return undefined;
+                }
+            }
+            // console.log(`${key}: ${(aBindingSet as {[key: string]: string})[key]}`);
+        }
+        return foundKey;
     }
 
 }
@@ -177,7 +202,7 @@ export class ListDataProviderFromLiteralListAdpater implements ListDataProviderI
         rangeType: string,
         lang:string,
         typePredicate:string,
-        callback:(items:{uri:string;label:string}[]) => void
+        callback:(items:{term:RDFTerm;label:string}[]) => void
     ):void {
         this.literalListDataProvider.getListContent(
             domainType,
@@ -186,9 +211,9 @@ export class ListDataProviderFromLiteralListAdpater implements ListDataProviderI
             lang,
             typePredicate,
             (values:{literal:string}[]) => {
-                let result = new Array<{uri:string, label:string}>;
+                let result = new Array<{term:RDFTerm, label:string}>;
                 values.forEach(function(value) {
-                    result[result.length] ={uri:value.literal, label:value.literal};
+                    result[result.length] ={term:{type:"literal",value:value.literal}, label:value.literal};
                 })
                 callback(result);
             }

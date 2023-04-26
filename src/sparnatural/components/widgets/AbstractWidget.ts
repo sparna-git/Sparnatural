@@ -1,7 +1,8 @@
-import { Pattern } from "sparqljs";
+import { BlankTerm, IriTerm, LiteralTerm, Pattern } from "sparqljs";
 import { SelectedVal } from "../../generators/ISparJson";
 import HTMLComponent from "../HtmlComponent";
 import LoadingSpinner from "./LoadingSpinner";
+import { DataFactory } from "n3";
 
 // The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
 // example for multiples: List of countries in ListWidget
@@ -16,6 +17,16 @@ export interface WidgetValue {
     label: string; // that's the human readable string representation shown as a WidgetValue to the user
   };
   key: ()=>string; // a function that returns the value key as a string.
+}
+
+/**
+ * Generic RDFTerm value structure, either an IRI or a Literal with lang or datatype
+ */
+export class RDFTerm {
+  type: string;
+  value: string;
+  "xml:lang"?: string;
+  datatype?:string 
 }
 
 export abstract class AbstractWidget extends HTMLComponent {
@@ -122,4 +133,28 @@ export abstract class AbstractWidget extends HTMLComponent {
   isBlockingEnd() {
     return this.blockEndTriple
   }
+
+  /**
+   * Translates an IRI, Literal or BNode into the corresponding SPARQL query term
+   * to be inserted in a SPARQL query.
+   * @returns 
+   */
+    rdfTermToSparqlQuery(rdfTerm:RDFTerm): IriTerm | BlankTerm | LiteralTerm {
+      if(rdfTerm.type == "uri") {
+        return DataFactory.namedNode(rdfTerm.value);
+      } else if(rdfTerm.type == "literal") {
+        if(rdfTerm["xml:lang"]) {
+          return DataFactory.literal(rdfTerm.value, rdfTerm["xml:lang"]);
+        } else if(rdfTerm.datatype) {
+          return DataFactory.literal(rdfTerm.value, rdfTerm.datatype);
+        } else {
+          return DataFactory.literal(rdfTerm.value);
+        }
+      } else if(rdfTerm.type == "bnode") {
+        // we don't know what to do with this, but don't trigger an error
+        return DataFactory.blankNode(rdfTerm.value);
+      } else {
+        throw new Error("Unexpected rdfTerm type "+rdfTerm.type)
+      }
+    }
 }

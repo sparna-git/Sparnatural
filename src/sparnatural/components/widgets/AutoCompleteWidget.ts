@@ -1,24 +1,18 @@
 import * as DataFactory from "@rdfjs/data-model" ;
-import { BgpPattern, BlankTerm, IriTerm, LiteralTerm, Pattern, Term, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
-import { SelectedVal } from "../../../generators/ISparJson";
-import SparqlFactory from "../../../generators/SparqlFactory";
-import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
-import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { AutocompleteDataProviderIfc } from "../data/DataProviders";
-import { BlankNode, Literal } from "n3";
+import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
+import { SelectedVal } from "../../generators/ISparJson";
+import SparqlFactory from "../../generators/SparqlFactory";
+import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
+import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
+import { AutocompleteDataProviderIfc } from "./data/DataProviders";
 
 require("easy-autocomplete");
 
 export class AutoCompleteWidgetValue implements WidgetValue {
   value: {
     label: string;
-    rdfTerm: {
-      type: string,
-      value: string,
-      "xml:lang"?: string,
-      datatype?:string
-    }
+    rdfTerm: RDFTerm
   };
 
   key():string {
@@ -207,22 +201,4 @@ export class AutoCompleteWidget extends AbstractWidget {
     }
   }
 
-  rdfTermToSparqlQuery(rdfTerm:AutoCompleteWidgetValue["value"]["rdfTerm"]): IriTerm | BlankTerm | LiteralTerm {
-    if(rdfTerm.type == "uri") {
-      return DataFactory.namedNode(rdfTerm.value);
-    } else if(rdfTerm.type == "literal") {
-      if(rdfTerm["xml:lang"]) {
-        return DataFactory.literal(rdfTerm.value, rdfTerm["xml:lang"]);
-      } else if(rdfTerm.datatype) {
-        return DataFactory.literal(rdfTerm.value, rdfTerm.datatype);
-      } else {
-        return DataFactory.literal(rdfTerm.value);
-      }
-    } else if(rdfTerm.type == "bnode") {
-      // we don't know what to do with this, but don't trigger an error
-      return DataFactory.blankNode(rdfTerm.value);
-    } else {
-      throw new Error("Unexpected rdfTerm type "+rdfTerm.type)
-    }
-  }
 }

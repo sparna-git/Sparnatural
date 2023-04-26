@@ -1,24 +1,24 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
-import ISettings from "../../../settings/ISettings";
-import { getSettings } from "../../../settings/defaultSettings";
-import { SelectedVal } from "../../../generators/ISparJson";
-import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
+import ISettings from "../../settings/ISettings";
+import { getSettings } from "../../settings/defaultSettings";
+import { SelectedVal } from "../../generators/ISparJson";
+import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
+import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import * as DataFactory from "@rdfjs/data-model" ;
 import "select2";
 import "select2/dist/css/select2.css";
-import SparqlFactory from "../../../generators/SparqlFactory";
-import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { ListDataProviderIfc } from "../data/DataProviders";
+import SparqlFactory from "../../generators/SparqlFactory";
+import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
+import { ListDataProviderIfc } from "./data/DataProviders";
 
 export class ListWidgetValue implements WidgetValue {
   value: {
     label: string;
-    uri?: string;
+    rdfTerm: RDFTerm
   };
 
   key():string {
-    return this.value.uri;
+    return this.value.rdfTerm.value;
   }
 
   constructor(v:ListWidgetValue["value"]) {
@@ -69,7 +69,7 @@ export class ListWidget extends AbstractWidget {
     </div>`);
     this.html.append(this.selectHtml);
 
-    let callback = (items:{uri:string;label:string}[]) => {
+    let callback = (items:{term:RDFTerm;label:string}[]) => {
 
       if (items.length > 0) {
         if (this.sort) {
@@ -83,9 +83,9 @@ export class ListWidget extends AbstractWidget {
           });
         }
   
-        $.each(items, (key, val) => {
+        $.each(items, (key, item) => {
           this.selectHtml.append(
-            $("<option value='" + val.uri + "'>" + val.label + "</option>")
+            $("<option value='" + JSON.stringify(item.term) + "'>" + item.label + "</option>")
           );
         });
 
@@ -123,10 +123,11 @@ export class ListWidget extends AbstractWidget {
 
   // separate the creation of the value from the widget code itself
   // so that it can be overriden by LiteralListWidget
-  buildValue(uri:string,label:string): WidgetValue {
+  buildValue(termString:string,label:string): WidgetValue {
+    let term = (JSON.parse(termString) as RDFTerm);
     return new ListWidgetValue({
       label: label,
-      uri: uri,
+      rdfTerm: term
     });
   }
 
@@ -149,7 +150,9 @@ export class ListWidget extends AbstractWidget {
    * on the end class
    */
    isBlockingEnd(): boolean {
-    return (this.widgetValues.length > 0);
+    return (
+      this.widgetValues.length > 0
+    );
    }
 
 
@@ -158,7 +161,7 @@ export class ListWidget extends AbstractWidget {
       let singleTriple: Triple = SparqlFactory.buildTriple(
         DataFactory.variable(this.getVariableValue(this.startClassVal)),
         DataFactory.namedNode(this.objectPropVal.type),
-        DataFactory.namedNode((this.widgetValues[0] as ListWidgetValue).value.uri)
+        this.rdfTermToSparqlQuery((this.widgetValues[0] as ListWidgetValue).value.rdfTerm)
       );
 
       let ptrn: BgpPattern = {
@@ -171,7 +174,7 @@ export class ListWidget extends AbstractWidget {
     } else {
       let vals = (this.widgetValues as ListWidgetValue[]).map((v) => {
         let vl: ValuePatternRow = {};
-        vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
+        vl[this.endClassVal.variable] = this.rdfTermToSparqlQuery(v.value.rdfTerm);
         return vl;
       });
       let valuePattern: ValuesPattern = {
