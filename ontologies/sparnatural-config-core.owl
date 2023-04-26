@@ -181,7 +181,7 @@ When used to annotate a class, this annotation must contain a class URI, expande
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty">
-        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty"/>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectRDFTermProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which an autocomplete search field should be displayed to select a value.
 
 The autocomplete suggestions can be configured using a datasource annotation, that will typically hold a reference to a SPARQL query to generate the autocomplete suggestions.</rdfs:comment>
@@ -213,7 +213,7 @@ The autocomplete suggestions can be configured using a datasource annotation, th
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty">
-        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty"/>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectRDFTermProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a dropdown list should be displayed to select a value.
 
 The list options can be configured using a datasource annotation, that will typically hold a reference to a SPARQL query to generate the list entries.</rdfs:comment>
@@ -226,10 +226,9 @@ The list options can be configured using a datasource annotation, that will typi
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#LiteralListProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
-        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a dropdown list should be displayed to select a _literal_ value. Use this when the list of distinct literal values is small (e.g. foaf:gender).
-
-The list options can be configured using a datasource annotation, that will typically hold a reference to a SPARQL query to generate the list entries.</rdfs:comment>
+        <rdfs:comment xml:lang="en">This is deprecated starting from Sparnatural 8.3. Use ListProperty instead, with a datasource returning literals.</rdfs:comment>
         <rdfs:label xml:lang="en">literal list property</rdfs:label>
+        <owl:deprecated rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</owl:deprecated>
     </owl:ObjectProperty>
     
 
@@ -266,13 +265,13 @@ This is typically used to link entities that serve as connectors between other e
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty -->
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SelectRDFTermProperty -->
 
-    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty">
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectRDFTermProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
-        <rdfs:comment xml:lang="en">The super-property of any property in a Sparnatural configuration for which a resource can be selected, through a list, an autocomplete field, or a tree.
+        <rdfs:comment xml:lang="en">The super-property of any property in a Sparnatural configuration for which an RDF term (URi or Literal) can be selected, through a list, an autocomplete field, or a tree.
 Do not use this super-property directly, use its subproperties.</rdfs:comment>
-        <rdfs:label xml:lang="en">select resource property</rdfs:label>
+        <rdfs:label xml:lang="en">select RDF term property</rdfs:label>
     </owl:ObjectProperty>
     
 
@@ -341,7 +340,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty">
-        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectResourceProperty"/>
+        <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectRDFTermProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a tree selection widget should be displayed.</rdfs:comment>
         <rdfs:label xml:lang="en">tree property</rdfs:label>
     </owl:ObjectProperty>
@@ -352,7 +351,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#Service"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/ns/sparql-service-description#Service"/>
         <rdfs:comment xml:lang="en">Relates an instance of Service to a SPARQL endpoint that implements the SPARQL Protocol service for the service. 
 
 Equivalent to http://www.w3.org/ns/sparql-service-description#endpoint</rdfs:comment>
@@ -407,15 +406,6 @@ These URIs do not hold any information in the graph, but are useful to connect o
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#Service -->
-
-    <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#Service">
-        <rdfs:comment xml:lang="en">A SPARQL service made available via the SPARQL Protocol. Equivalent to http://www.w3.org/ns/sparql-service-description#Service</rdfs:comment>
-        <rdfs:label xml:lang="en">SPARQL Service</rdfs:label>
-    </owl:Class>
-    
-
-
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass -->
 
     <owl:Class rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass">
@@ -438,6 +428,15 @@ This is rdfs:Literal, provided here for being able to refer to it in Protege.
   - a Literal canot be used to connect entites in the graph with a &quot;WHERE&quot; clause
   - a Literal can only be used to place FILTER criterias on it</rdfs:comment>
         <rdfs:label xml:lang="en">Literal</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- http://www.w3.org/ns/sparql-service-description#Service -->
+
+    <owl:Class rdf:about="http://www.w3.org/ns/sparql-service-description#Service">
+        <rdfs:comment xml:lang="en">A SPARQL service made available via the SPARQL Protocol. This is defined in the SPARQL service description vocabulary : http://www.w3.org/ns/sparql-service-description#Service</rdfs:comment>
+        <rdfs:label xml:lang="en">SPARQL Service</rdfs:label>
     </owl:Class>
 </rdf:RDF>
 
