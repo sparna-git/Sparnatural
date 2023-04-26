@@ -347,19 +347,6 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     
 
 
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint -->
-
-    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#endpoint">
-        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
-        <rdfs:domain rdf:resource="http://www.w3.org/ns/sparql-service-description#Service"/>
-        <rdfs:comment xml:lang="en">Relates an instance of Service to a SPARQL endpoint that implements the SPARQL Protocol service for the service. 
-
-Equivalent to http://www.w3.org/ns/sparql-service-description#endpoint</rdfs:comment>
-        <rdfs:label xml:lang="en">endpoint</rdfs:label>
-    </owl:ObjectProperty>
-    
-
-
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core/JenaSearchProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core/JenaSearchProperty">
@@ -376,6 +363,19 @@ Equivalent to http://www.w3.org/ns/sparql-service-description#endpoint</rdfs:com
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for that will act like search properties but will generate Virtuoso specific SPARQL criteria (i.e. using bif:contains and splitting the tokens)</rdfs:comment>
         <rdfs:label xml:lang="en">search property in Virtuoso</rdfs:label>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.w3.org/ns/sparql-service-description#endpoint -->
+
+    <owl:ObjectProperty rdf:about="http://www.w3.org/ns/sparql-service-description#endpoint">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/ns/sparql-service-description#Service"/>
+        <rdfs:comment xml:lang="en">Relates an instance of Service to a SPARQL endpoint that implements the SPARQL Protocol service for the service. 
+
+Defined by the SPARQL Service Description vocabulary at http://www.w3.org/ns/sparql-service-description#endpoint</rdfs:comment>
+        <rdfs:label xml:lang="en">endpoint</rdfs:label>
     </owl:ObjectProperty>
     
 
