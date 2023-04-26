@@ -51,10 +51,10 @@ export enum Config {
 
   SPARQL_SERVICE = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "sparqlService",
-  SERVICE_CLASS = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "Service",
-  ENDPOINT = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "endpoint",
+  // note how this is not in the same namespace
+    SERVICE_CLASS = "http://www.w3.org/ns/sparql-service-description#Service",
+  // note how this is not in the same namespace
+  ENDPOINT = "http://www.w3.org/ns/sparql-service-description#endpoint",
 
   DEFAULT_LABEL_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "defaultLabelProperty",
