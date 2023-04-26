@@ -17,6 +17,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 
 - [Integration with GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector.md) - Special configuration to interact with a GraphDB Lucene index 
 - [Querying date ranges](Querying-date-ranges.md) - How to generate SPARQL queries that can match on resources with a begin date and a end date 
+- [Federated query support](Federated-querying.md) - How to enable federated querying using SERVICE keyword in your configuration
 
 ## 2. Integrating Sparnatural in HTML / React
 
