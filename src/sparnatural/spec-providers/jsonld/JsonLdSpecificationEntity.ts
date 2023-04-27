@@ -18,7 +18,7 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
             if (JsonLdSpecificationProvider._isObjectProperty(item)) {
                 let prop:JsonLdSpecificationProperty = new JsonLdSpecificationProperty(this.jsonSpecs, item["@id"], this.lang);
                 if (prop.readDomain().indexOf(this.id) >= 0) {
-                  var values = prop.readRange();
+                  var values = prop.getRange();
                   for (var i in values) {
                       items = JsonLdSpecificationProvider.pushIfNotExist(values[i], items);
                   }
@@ -46,7 +46,7 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
             let prop:JsonLdSpecificationProperty = new JsonLdSpecificationProperty(this.jsonSpecs, item["@id"], this.lang);
             if (
               (prop.readDomain().indexOf(this.id) >= 0) &&
-              (range === null || prop.readRange().indexOf(range) >= 0)
+              (range === null || prop.getRange().indexOf(range) >= 0)
             ) {
               items = JsonLdSpecificationProvider.pushIfNotExist(item["@id"], items);
             }

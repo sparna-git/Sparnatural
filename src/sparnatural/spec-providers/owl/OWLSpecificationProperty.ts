@@ -14,6 +14,34 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
   }
 
 
+  getRange(): string[] {
+    var classes: any[] = [];
+
+    const propertyQuads = this.store.getQuads(
+      factory.namedNode(this.uri),
+      RDFS.RANGE,
+      null,
+      null
+    );
+
+    for (const aQuad of propertyQuads) {
+      if (!this._isUnionClass(aQuad.object.id)) {
+        this._pushIfNotExist(aQuad.object.id, classes);
+      } else {
+        // read union content
+        var classesInUnion = this._readUnionContent(aQuad.object.id);
+        if(classesInUnion) {
+            for (const aUnionClass of classesInUnion) {
+            this._pushIfNotExist(aUnionClass, classes);
+            }
+        }
+      }
+    }
+
+    return classes;
+  }
+
+
   getPropertyType():string|undefined {
     var superProperties = this._readAsResource(
       this.uri,
@@ -92,7 +120,16 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     return executedAfter;
   }
 
+  _isUnionClass(classUri: any) {
+    return this._hasProperty(factory.namedNode(classUri), OWL.UNION_OF);
+  }
 
+  _readUnionContent(classUri: any) {
+    var lists = this._readAsRdfNode(factory.namedNode(classUri), OWL.UNION_OF);
+    if (lists.length > 0) {
+      return this._readList_rec(lists[0]);
+    }
+  }
 
     
 }

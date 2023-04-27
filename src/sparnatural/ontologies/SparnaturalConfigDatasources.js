@@ -91,6 +91,80 @@ LIMIT 500
 );
 
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha",
+  `
+SELECT DISTINCT ?value (STR(?value) AS ?label)
+WHERE {
+    ?domain $type $domain .
+    {
+      {?domain $property ?value . FILTER(isIRI(?value))}
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) && (lang(?value) = "" || lang(?value) = $lang))
+      }
+    }
+    # Note how the range criteria is not used in this query
+}
+ORDER BY UCASE(?label)
+LIMIT 500
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha_with_count",
+  `
+SELECT DISTINCT ?value ?count (CONCAT(STR(?value), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?value (COUNT(?domain) AS ?count)
+  WHERE {
+    ?domain $type $domain .
+    {
+      {?domain $property ?value . FILTER(isIRI(?value))}
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) && (lang(?value) = "" || lang(?value) = $lang))
+      }
+    }
+  }
+  GROUP BY ?value
+}
+}
+ORDER BY UCASE(?label)
+LIMIT 500
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_count",
+  `
+SELECT ?value ?count (CONCAT(STR(?value), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?value (COUNT(?domain) AS ?count)
+  WHERE {
+    ?domain $type $domain .
+    {
+      {?domain $property ?value . FILTER(isIRI(?value))}
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) && (lang(?value) = "" || lang(?value) = $lang))
+      }
+    }
+    # Note how the range criteria is not used in this query
+  }
+  GROUP BY ?value
+}
+}
+ORDER BY DESC(?count) UCASE(?label)
+LIMIT 500
+`
+);
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_alpha",
   `
 SELECT DISTINCT ?uri ?label
@@ -229,7 +303,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 50
+LIMIT 10
 `
 );
 
@@ -247,7 +321,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 50
+LIMIT 10
 `
 );
 
@@ -265,7 +339,7 @@ SELECT DISTINCT ?uri ?label
   ?label bif:contains "'$key'" . 
 } 
 ORDER BY UCASE(?label)
-LIMIT 50
+LIMIT 10
 `
 );
 
@@ -282,7 +356,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(?label), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 50
+LIMIT 10
 `
 );
 
@@ -298,7 +372,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?value)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 50
+LIMIT 10
 `
 );
 
@@ -314,7 +388,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?value)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 50
+LIMIT 10
 `
 );
 
@@ -462,6 +536,28 @@ DATASOURCES_CONFIG.set(SPARNATURAL_CONFIG_DATASOURCES + "list_URI_count", {
   ),
   labelProperty: null,
   noSort: true,
+});
+
+// # URI or literals lists
+
+DATASOURCES_CONFIG.set(SPARNATURAL_CONFIG_DATASOURCES + "list_URI_or_literal_alpha", {
+  queryTemplate: QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+    SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha"
+  ),
+  labelProperty: null,
+});
+DATASOURCES_CONFIG.set(SPARNATURAL_CONFIG_DATASOURCES + "list_URI_or_literal_count", {
+  queryTemplate: QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+    SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_count"
+  ),
+  labelProperty: null,
+  noSort: true,
+});
+DATASOURCES_CONFIG.set(SPARNATURAL_CONFIG_DATASOURCES + "list_URI_or_literal_alpha_with_count", {
+  queryTemplate: QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+    SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha_with_count"
+  ),
+  labelProperty: null,
 });
 
 // # URI with labels lists
@@ -906,6 +1002,12 @@ const Datasources = Object.freeze({
     SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_with_range_alpha",
   QUERY_LIST_LABEL_WITH_RANGE_COUNT:
     SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_with_range_count",
+  QUERY_LIST_URI_OR_LITERAL_ALPHA:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha",
+  QUERY_LIST_URI_OR_LITERAL_COUNT:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_count",
+  QUERY_LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha_with_count",
   QUERY_SEARCH_LABEL_STRSTARTS:
     SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_starstarts",
   QUERY_SEARCH_LABEL_BIFCONTAINS:
@@ -927,6 +1029,10 @@ const Datasources = Object.freeze({
 
   LIST_URI_ALPHA: SPARNATURAL_CONFIG_DATASOURCES + "list_URI_alpha",
   LIST_URI_COUNT: SPARNATURAL_CONFIG_DATASOURCES + "list_URI_count",
+
+  LIST_URI_OR_LITERAL_COUNT: SPARNATURAL_CONFIG_DATASOURCES + "list_URI_or_literal_count",
+  LIST_URI_OR_LITERAL_ALPHA: SPARNATURAL_CONFIG_DATASOURCES + "list_URI_or_literal_alpha",
+  LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT: SPARNATURAL_CONFIG_DATASOURCES + "list_URI_or_literal_alpha_with_count",
 
   LIST_RDFSLABEL_ALPHA: SPARNATURAL_CONFIG_DATASOURCES + "list_rdfslabel_alpha",
   LIST_RDFSLABEL_COUNT: SPARNATURAL_CONFIG_DATASOURCES + "list_rdfslabel_count",
@@ -983,6 +1089,9 @@ const Datasources = Object.freeze({
     SPARNATURAL_CONFIG_DATASOURCES + "search_skospreflabel_bifcontains",
 
   SEARCH_URI_CONTAINS: SPARNATURAL_CONFIG_DATASOURCES + "search_URI_contains",
+
+  SEARCH_LITERAL_CONTAINS: SPARNATURAL_CONFIG_DATASOURCES + "search_literal_contains",
+  SEARCH_LITERAL_STRSTARTS: SPARNATURAL_CONFIG_DATASOURCES + "search_literal_strstrats",
 
   TREE_ROOT_SKOSTOPCONCEPT:
     SPARNATURAL_CONFIG_DATASOURCES + "tree_root_skostopconcept",

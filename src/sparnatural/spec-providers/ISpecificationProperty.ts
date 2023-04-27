@@ -5,6 +5,8 @@ import ISpecificationEntry from "./ISpecificationEntry";
 interface ISpecificationProperty extends ISpecificationEntry {
   getPropertyType(): string|undefined;
   isMultilingual(): boolean;
+
+  getRange():Array<string>;
   
   getBeginDateProperty(): string|null;
   getEndDateProperty(): string|null;

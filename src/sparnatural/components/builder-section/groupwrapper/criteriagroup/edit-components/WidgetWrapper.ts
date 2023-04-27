@@ -201,8 +201,10 @@ class WidgetWrapper extends HTMLComponent {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
           if (this.settings.defaultEndpoint) {
+            // that datasource can work indifferently with URIs or Literals
             datasource = Datasources.DATASOURCES_CONFIG.get(
-              Datasources.LIST_URI_COUNT
+              // better use alphabetical ordering first since URIs will be segregated in the "h" letter and not mixed
+              Datasources.LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT
             );
           }
         }
@@ -270,9 +272,17 @@ class WidgetWrapper extends HTMLComponent {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
           if (this.settings.defaultEndpoint) {
-            datasource = Datasources.DATASOURCES_CONFIG.get(
-              Datasources.SEARCH_URI_CONTAINS
-            );
+            let range: Array<string> = this.specProvider.getProperty(objectPropertyId).getRange();
+            if(range && range.length == 1 && this.specProvider.getEntity(range[0]).isLiteralEntity()) {
+              datasource = Datasources.DATASOURCES_CONFIG.get(
+                Datasources.SEARCH_LITERAL_CONTAINS
+              );
+            } else {
+              datasource = Datasources.DATASOURCES_CONFIG.get(
+                Datasources.SEARCH_URI_CONTAINS
+              );
+            }
+            
           }
         }
 
@@ -439,8 +449,7 @@ class WidgetWrapper extends HTMLComponent {
               },
             },
 
-            // IMPORTANT is this deletable?
-            this.settings.language,
+            this.settings.queryLanguage,
 
             // sparql strings
             this.getFinalQueryString(treeRootsDatasource),

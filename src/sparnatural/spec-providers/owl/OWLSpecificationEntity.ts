@@ -21,22 +21,22 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
 
         // now read their ranges
         for (const aProperty of properties) {
-        var classesInRange = this.#_readClassesInRangeOfProperty(aProperty);
-
-        for (const aClass of classesInRange) {
-            // if it is not a Sparnatural Class, read all its subClasses that are Sparnatural classes
-            if (!this.#_isSparnaturalClass(aClass)) {
-            // TODO : recursivity
-            var subClasses = this.#_readImmediateSubClasses(aClass);
-            for (const aSubClass of subClasses) {
-                if (this.#_isSparnaturalClass(aSubClass)) {
-                this._pushIfNotExist(aSubClass, items);
-                }
-            }
-            } else {
-            this._pushIfNotExist(aClass, items);
-            }
-        }
+          let prop = new OWLSpecificationProperty(aProperty, this.provider, this.store, this.lang);
+          var classesInRange = prop.getRange();
+          for (const aClass of classesInRange) {
+              // if it is not a Sparnatural Class, read all its subClasses that are Sparnatural classes
+              if (!this.#_isSparnaturalClass(aClass)) {
+              // TODO : recursivity
+              var subClasses = this.#_readImmediateSubClasses(aClass);
+              for (const aSubClass of subClasses) {
+                  if (this.#_isSparnaturalClass(aSubClass)) {
+                  this._pushIfNotExist(aSubClass, items);
+                  }
+              }
+              } else {
+              this._pushIfNotExist(aClass, items);
+              }
+          }
         }
 
         items = this.provider._sort(items);
@@ -55,7 +55,8 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         const properties = this.#_readPropertiesWithDomain(this.uri);
     
         for (const aProperty of properties) {
-          var classesInRange = this.#_readClassesInRangeOfProperty(aProperty);
+          let prop = new OWLSpecificationProperty(aProperty, this.provider, this.store, this.lang);
+          var classesInRange = prop.getRange();
     
           if (classesInRange.indexOf(range) > -1) {
             this._pushIfNotExist(aProperty, items);
@@ -177,33 +178,6 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     return properties;
   }
 
-  #_readClassesInRangeOfProperty(propertyId: any) {
-    var classes: any[] = [];
-
-    const propertyQuads = this.store.getQuads(
-      factory.namedNode(propertyId),
-      RDFS.RANGE,
-      null,
-      null
-    );
-
-    for (const aQuad of propertyQuads) {
-      if (!this._isUnionClass(aQuad.object.id)) {
-        this._pushIfNotExist(aQuad.object.id, classes);
-      } else {
-        // read union content
-        var classesInUnion = this._readUnionContent(aQuad.object.id);
-        if(classesInUnion) {
-            for (const aUnionClass of classesInUnion) {
-            this._pushIfNotExist(aUnionClass, classes);
-            }
-        }
-      }
-    }
-
-    return classes;
-  }
-
   #_readImmediateSuperClasses(classId: any) {
     var classes: any[] = [];
 
@@ -239,10 +213,6 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
   }
 
     /*** Handling of UNION classes ***/
-
-    _isUnionClass(classUri: any) {
-        return this._hasProperty(factory.namedNode(classUri), OWL.UNION_OF);
-      }
     
       _isInUnion(classUri: any) {
         return (
@@ -254,13 +224,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
           ).length > 0
         );
       }
-    
-      _readUnionContent(classUri: any) {
-        var lists = this._readAsRdfNode(factory.namedNode(classUri), OWL.UNION_OF);
-        if (lists.length > 0) {
-          return this._readList_rec(lists[0]);
-        }
-      }
+  
     
       _readUnionsContaining(classId: any) {
         var unions = Array<any>();

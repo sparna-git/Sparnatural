@@ -68,12 +68,12 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
                     // read uri key & label key
                     result[result.length] ={term:element.uri, label:element.label.value};
                 } else if(element.value) {
-                    result[result.length] ={term:element.value, label:element.value.value};
+                    result[result.length] ={term:element.value, label:element.label.value};
                 } else {
                     // try to determine the payload column by taking the column other than label
                     let columnName = this.getRdfTermColumn(element);
                     if(columnName) {
-                        result[result.length] ={term:element[columnName], label:element.value.value};
+                        result[result.length] ={term:element[columnName], label:element.label.value};
                     } else {
                         throw Error("Could not determine which column to read from the result set")
                     }

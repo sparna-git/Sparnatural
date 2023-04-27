@@ -27,6 +27,10 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
     super(jsonSpecs, id, lang);
   }
 
+  getRange(): string[] {
+    throw new Error("Method not implemented.");
+  }
+
   getPropertyType(): string|undefined {
     var objectProperty = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
     if(objectProperty == null) return undefined;
@@ -100,10 +104,6 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
 
   readDomain() {
     return this.#readDomainOrRange("domain");
-  };
-  
-  readRange() {
-    return this.#readDomainOrRange("range");
   };
 
   #readDomainOrRange(domainOrRange: string) : string[] {
