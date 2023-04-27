@@ -87,7 +87,7 @@ export default class  ClassBuilder {
             if(this.specProvider.getProperty(this.classGroup.defaultLblVar.type).isMultilingual()) {
                 this.defaultLblPatterns.push(SparqlFactory.buildFilterLangEquals(
                     DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
-                    DataFactory.literal(getSettings().language)
+                    DataFactory.literal(getSettings().queryLanguage)
                 ));
             }
         }

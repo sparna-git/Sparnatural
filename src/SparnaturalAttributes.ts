@@ -2,6 +2,7 @@ export class SparnaturalAttributes {
   config: any;
   defaultEndpoint: string;
   language: string;
+  queryLanguage: string;
   addDistinct?: boolean;
   limit?: number;
   typePredicate?: string;
@@ -20,6 +21,13 @@ export class SparnaturalAttributes {
       throw Error('No config or deault endpoint provided!');
     }
     this.language = this.#read(element, "lang");
+    this.queryLanguage = this.#read(element, "queryLang");
+
+    // if queryLang was not set, then by default set it to be equal to lang
+    if(!this.queryLanguage) {
+      this.queryLanguage = this.language;
+    }
+
     // use the singular to match RDFa attribute name
     this.sparqlPrefixes = this.#parsePrefixes(element);
     this.addDistinct = this.#read(element, "distinct", true);
@@ -42,6 +50,7 @@ export class SparnaturalAttributes {
     }
 
     let sparqlPrefixes = {};
+    // use the singular to match RDFa attribute name
     let prefixArray = element.getAttribute("prefix").trim().split(/:\s+|\s+/);
     for (let i = 0; i < prefixArray.length; i++) {
       try{

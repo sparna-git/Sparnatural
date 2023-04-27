@@ -74,7 +74,7 @@ export class ListWidget extends AbstractWidget {
       if (items.length > 0) {
         if (this.sort) {
           // here, if we need to sort, then sort according to lang
-          var collator = new Intl.Collator(this.settings.language);
+          var collator = new Intl.Collator(this.settings.queryLanguage);
           items.sort((a: any, b: any) => {
             return collator.compare(
               a.label,
@@ -113,7 +113,7 @@ export class ListWidget extends AbstractWidget {
       this.startClassVal.type,
       this.objectPropVal.type,
       this.endClassVal.type,
-      this.settings.language,
+      this.settings.queryLanguage,
       this.settings.typePredicate,
       callback
     );

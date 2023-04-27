@@ -67,7 +67,7 @@ export class AutoCompleteWidget extends AbstractWidget {
           this.objectPropVal.type,
           this.endClassVal.type,
           phrase,
-          this.settings.language,
+          this.settings.queryLanguage,
           this.settings.typePredicate
         );
       },

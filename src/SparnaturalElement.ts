@@ -91,13 +91,15 @@ export class SparnaturalElement extends HTMLElement {
     }));
   }
 
+  /* NOTE : querylang is all lowercase, see https://stackoverflow.com/questions/60566257/web-components-attributechangedcallback-not-firing */
   static get observedAttributes() {
-    return ["src", "lang", "endpoint"];
+    return ["src", "lang", "querylang", "endpoint"];
   }
-  attributeChangedCallback(name: string, oldValue:string|null, newValue:string|null) {
+  attributeChangedCallback(name: string, oldValue:string|null, newValue:string|null) {    
+    console.log(`attributeChangedCallback called on ${name}`);
     if (oldValue === newValue) {
      return;
-   }
+    }
    
    // prevents callback to be called on initial creation
    if(oldValue != null) {  
@@ -105,17 +107,29 @@ export class SparnaturalElement extends HTMLElement {
       console.log(`${name}'s value has been changed from ${oldValue} to ${newValue}`);
     }  
 
-    if(name == "src") {
-      getSettings().config = newValue;
-    }
-    if(name == "lang") {
-      getSettings().language = newValue;
-    }
-    if(name == "endpoint") {
-      getSettings().defaultEndpoint = newValue;
+    switch(name) {
+      case "src" : {
+        getSettings().config = newValue;
+        break;
+      }
+      case "lang" : {
+        getSettings().language = newValue;
+        break;
+      }
+      case "querylang" : {
+        getSettings().queryLanguage = newValue;
+        break;
+      }
+      case "endpoint" : {
+        getSettings().defaultEndpoint = newValue;
+        break;
+      }
+      default : {
+        throw new Error("unknown observed attribute ${name}");
+      }
     }
 
-    // then display
+    // then display/reprint
     this.display();
    }
   }

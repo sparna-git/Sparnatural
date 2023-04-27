@@ -158,7 +158,7 @@ export class TreeWidget extends AbstractWidget {
 
             if(self.sort) {
               // here, if we need to sort, then sort according to lang
-              var collator = new Intl.Collator(self.settings.language);					
+              var collator = new Intl.Collator(self.settings.queryLanguage);					
               items.sort(function(a:string, b:string) {
                 return collator.compare(loaderHandler.nodeLabel(a),loaderHandler.nodeLabel(b));
               });
