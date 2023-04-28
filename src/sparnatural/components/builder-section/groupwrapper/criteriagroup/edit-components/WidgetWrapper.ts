@@ -150,6 +150,7 @@ class WidgetWrapper extends HTMLComponent {
       widgetType == Config.SEARCH_PROPERTY ||
       widgetType == Config.STRING_EQUALS_PROPERTY ||
       widgetType == Config.GRAPHDB_SEARCH_PROPERTY ||
+      widgetType == Config.VIRTUOSO_SEARCH_PROPERTY ||
       widgetType == Config.TREE_PROPERTY
     ) {
       // label of the "Search" pseudo-class is inserted alone in this case
@@ -395,6 +396,7 @@ class WidgetWrapper extends HTMLComponent {
         );
 
         break;
+      case Config.VIRTUOSO_SEARCH_PROPERTY:
       case Config.GRAPHDB_SEARCH_PROPERTY:
       case Config.STRING_EQUALS_PROPERTY:
       case Config.SEARCH_PROPERTY:

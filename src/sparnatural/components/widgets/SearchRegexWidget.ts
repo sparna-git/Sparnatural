@@ -138,7 +138,26 @@ export class SearchRegexWidget extends AbstractWidget {
         return [ptrn];
       }
       case Config.VIRTUOSO_SEARCH_PROPERTY: {
-        throw new Error("Not implemented yet")
+        let bif_query = this.widgetValues[0].value.label
+          .split(" ")
+          .map((e) => `'${e}'`)
+          .join(" and ");
+        console.log(bif_query);
+        let ptrn: BgpPattern = {
+          type: "bgp",
+          triples: [
+            {
+              subject: DataFactory.variable(
+                this.getVariableValue(this.endClassVal)
+              ),
+              predicate: DataFactory.namedNode(
+                "http://www.openlinksw.com/schemas/bif#contains"
+              ),
+              object: DataFactory.literal(`${bif_query}`),
+            },
+          ],
+        };
+        return [ptrn];
       }
       case Config.JENA_SEARCH_PROPERTY: {
         throw new Error("Not implemented yet")
