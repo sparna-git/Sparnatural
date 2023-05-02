@@ -58,6 +58,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
       Config.SEARCH_PROPERTY,
       Config.STRING_EQUALS_PROPERTY,
       Config.GRAPHDB_SEARCH_PROPERTY,
+      Config.VIRTUOSO_SEARCH_PROPERTY,
       Config.NON_SELECTABLE_PROPERTY,
       Config.BOOLEAN_PROPERTY,
       Config.TREE_PROPERTY,

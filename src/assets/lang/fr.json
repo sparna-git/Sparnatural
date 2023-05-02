@@ -39,5 +39,6 @@
   "MapWidgetAreaSelected": "Sélection sur la carte",
   "AutocompleteSpinner_3Chars": "3 caractères minimum",
   "AutocompleteSpinner_Searching": "(recherche...)",
-  "AutocompleteSpinner_NoResults": "pas de résultats"
+  "AutocompleteSpinner_NoResults": "pas de résultats",
+  "VirtuosoSearchHelp": "Écrivez des mots séparés par des espaces que le champ devra contenir. Cette entrée ne doit pas contenir de guillemets ou d'apostrophes. Vous pouvez entrer des expressions avec une * pour des mots devant commencer par une séquence de 4 lettres minimum, e.g., \"archiv*\" trouvera \"archives\", \"archivage\", etc."
 }

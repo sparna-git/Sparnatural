@@ -9,6 +9,7 @@ enum WIDGETSTYPES {
   "sparnatural:SearchProperty",
   "sparnatural:StringEqualsProperty",
   "sparnatural:GraphDBSearchProperty",
+  "sparnatural:VirtuosoSearchProperty",
   "sparnatural:TimeProperty-Year",
   "sparnatural:TimeProperty-Date",
   "sparnatural:TimeProperty-Period",

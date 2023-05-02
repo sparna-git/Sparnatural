@@ -26,6 +26,7 @@ enum WIDGETSTYPES {
   "sparnatural:LiteralListProperty",
   "sparnatural:SearchProperty",
   "sparnatural:StringEqualsProperty",
+  "sparnatural:VirtuosoSearchProperty",
   "sparnatural:GraphDBSearchProperty",
   "sparnatural:TimeProperty-Year",
   "sparnatural:TimeProperty-Date",

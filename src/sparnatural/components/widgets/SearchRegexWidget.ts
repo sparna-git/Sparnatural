@@ -1,12 +1,13 @@
 import * as DataFactory from "@rdfjs/data-model" ;
 import { BgpPattern, Pattern } from "sparqljs";
-import { getSettings } from "../../settings/defaultSettings";
+import { getSettings, TOOLTIP_CONFIG } from "../../settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import SparqlFactory from "../../generators/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
+import InfoBtn from "../buttons/InfoBtn";
 
 
 export class SearchRegexWidgetValue implements WidgetValue {
@@ -29,6 +30,7 @@ export class SearchRegexWidget extends AbstractWidget {
   protected widgetValues: SearchRegexWidgetValue[];
   addValueBtn: AddUserInputBtn;
   searchInput: JQuery<HTMLElement>;
+  infoBtn: InfoBtn;
 
   constructor(
     parentComponent: WidgetWrapper,
@@ -51,6 +53,20 @@ export class SearchRegexWidget extends AbstractWidget {
     super.render();
     this.searchInput = $(`<input />`);
     this.html.append(this.searchInput);
+    // Build datatippy info
+    if (
+      (this.ParentComponent as WidgetWrapper).widgetType ==
+      Config.VIRTUOSO_SEARCH_PROPERTY
+    ) {
+      let datatippy = getSettings().langSearch.VirtuosoSearchHelp;
+      // set a tooltip on the info circle
+      var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
+      tippySettings.placement = "left";
+      tippySettings.trigger = "click";
+      tippySettings.offset = [50, -20];
+      tippySettings.delay = [0, 0];
+      this.infoBtn = new InfoBtn(this, datatippy, tippySettings).render();
+    } //finish datatippy
     this.addValueBtn = new AddUserInputBtn(
       this,
       getSettings().langSearch.ButtonAdd,
@@ -138,7 +154,26 @@ export class SearchRegexWidget extends AbstractWidget {
         return [ptrn];
       }
       case Config.VIRTUOSO_SEARCH_PROPERTY: {
-        throw new Error("Not implemented yet")
+        let bif_query = this.widgetValues[0].value.label
+          .split(" ")
+          .map((e) => `'${e}'`)
+          .join(" and ");
+        console.log(bif_query);
+        let ptrn: BgpPattern = {
+          type: "bgp",
+          triples: [
+            {
+              subject: DataFactory.variable(
+                this.getVariableValue(this.endClassVal)
+              ),
+              predicate: DataFactory.namedNode(
+                "http://www.openlinksw.com/schemas/bif#contains"
+              ),
+              object: DataFactory.literal(`${bif_query}`),
+            },
+          ],
+        };
+        return [ptrn];
       }
       case Config.JENA_SEARCH_PROPERTY: {
         throw new Error("Not implemented yet")
