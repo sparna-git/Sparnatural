@@ -65,17 +65,16 @@ Is modelled in the following JSON data structure :
 {
   "distinct": true,
   "variables": [
-    "?this",
-    "?Date_3"
+    "Artwork_1",
+    "Date_6"
   ],
-  "defaultLang": "en",
   "order": null,
   "branches": [
     {
       "line": {
-        "s": "?this",
+        "s": "?Artwork_1",
         "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#displayedAt",
-        "o": "?Museum_1",
+        "o": "?Museum_2",
         "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
         "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
         "values": []
@@ -83,19 +82,25 @@ Is modelled in the following JSON data structure :
       "children": [
         {
           "line": {
-            "s": "?Museum_1",
+            "s": "?Museum_2",
             "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#country",
-            "o": "?Country_2",
+            "o": "?Country_4",
             "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
             "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
             "values": [
               {
-                "label": "France (222)",
-                "uri": "http://fr.dbpedia.org/resource/France"
+                "label": "France (3987)",
+                "rdfTerm": {
+                  "type": "uri",
+                  "value": "http://fr.dbpedia.org/resource/France"
+                }
               },
               {
-                "label": "Italy (44)",
-                "uri": "http://fr.dbpedia.org/resource/Italie"
+                "label": "Italy (1091)",
+                "rdfTerm": {
+                  "type": "uri",
+                  "value": "http://fr.dbpedia.org/resource/Italie"
+                }
               }
             ]
           },
@@ -105,16 +110,16 @@ Is modelled in the following JSON data structure :
     },
     {
       "line": {
-        "s": "?this",
+        "s": "?Artwork_1",
         "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#creationYear",
-        "o": "?Date_3",
+        "o": "?Date_6",
         "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
         "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Date",
         "values": [
           {
             "label": "From 1800 to 1901",
-            "fromDate": "1800-01-01T00:00:00",
-            "toDate": "1901-12-31T23:59:59"
+            "start": "1799-12-31T23:50:40.000Z",
+            "stop": "1901-12-31T23:50:38.000Z"
           }
         ]
       },
@@ -142,7 +147,6 @@ The data structure is composed of a top "Query" structure, that contains "branch
     "?this",
     "?that"
   ],
-  "defaultLang": "en",
   "order": null,
   "branches": [
     ...
@@ -152,7 +156,6 @@ The data structure is composed of a top "Query" structure, that contains "branch
 
 - `distinct` : whether the `DISTINCT` SPARQL keyword should be added
 - `variables` : ordered list of ?-prefixed variables selected in the `WHERE` clause
-- `defaultLang` : the default language to use to filter the labels fetched automatically
 - `order` : e.g. `"order": { "expression": "?this", "sort": "asc" }`, or null if no order
 - `branches` : ordered list of query branches, each containing a "tree" of criteria under it
 
@@ -174,7 +177,7 @@ The data structure is composed of a top "Query" structure, that contains "branch
 - `line` : one single query line / criteria
 - `children` : the children of that line / criteria, the ones that are below it in the Sparnatural query builder
 - `optional` : whether the line and all its children are optional (use a SPARQL "OPTIONAL")
-- `notExists` : whether the line and all its children and negative (use a SPARQL "FILTER NOT EXISTS")
+- `notExists` : whether the line and all its children are negative (use a SPARQL "FILTER NOT EXISTS")
 
 ### Query line structure
 
@@ -186,14 +189,20 @@ The data structure is composed of a top "Query" structure, that contains "branch
   "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
   "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
   "values": [
-    {
-      "label": "France (222)",
-      "uri": "http://fr.dbpedia.org/resource/France"
-    },
-    {
-      "label": "Italy (44)",
-      "uri": "http://fr.dbpedia.org/resource/Italie"
-    }
+      {
+        "label": "France (3987)",
+        "rdfTerm": {
+          "type": "uri",
+          "value": "http://fr.dbpedia.org/resource/France"
+        }
+      },
+      {
+        "label": "Italy (1091)",
+        "rdfTerm": {
+          "type": "uri",
+          "value": "http://fr.dbpedia.org/resource/Italie"
+        }
+      }
   ]
 }
 ```
@@ -211,10 +220,42 @@ The structure of the values depend on the structure of the criteria/line. This c
 
 - A URI selection widget (dropdown list, autocomplete, tree widget):
 
+If the value is a URI:
+
 ```json
   {
-      "label": "France (222)",
-      "uri": "http://fr.dbpedia.org/resource/France"
+        "label": "Italy (1091)",
+        "rdfTerm": {
+          "type": "uri",
+          "value": "http://fr.dbpedia.org/resource/Italie"
+        }
+  }
+```
+
+
+If the value is a Literal (with a language):
+
+```json
+  {
+        "label": "foo",
+        "rdfTerm": {
+          "type": "literal",
+          "value": "foo",
+          "xml:lang": "en"
+        }
+  }
+```
+
+If the value is a Literal (with a datatype):
+
+```json
+  {
+        "label": "1",
+        "rdfTerm": {
+          "type": "literal",
+          "value": "1",
+          "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+        }
   }
 ```
 
@@ -223,8 +264,8 @@ The structure of the values depend on the structure of the criteria/line. This c
 ```json
   {
     "label": "From 1800 to 1901",
-    "fromDate": "1800-01-01T00:00:00",
-    "toDate": "1901-12-31T23:59:59"
+    "start": "1800-01-01T00:00:00",
+    "stop": "1901-12-31T23:59:59"
   }
 ```
 
@@ -243,13 +284,5 @@ The structure of the values depend on the structure of the criteria/line. This c
   {
     "label": "...",
     "search": "..."
-  }
-```
-
-- A literal list widget:
-
-```json
-  {
-    "label": "..."
   }
 ```
