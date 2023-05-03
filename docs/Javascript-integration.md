@@ -29,11 +29,12 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
 | endpoint | The URL of a SPARQL endpoint that will be used as the default service for the datasource queries provided in the configuration. If not specified, each datasource should indicate explicitely a SPARQL endpoint, or the `autocomplete` and `list` parameters must be provided for low-level datasource integration. Note that this URL can use the `default-graph-uri` parameter to restrict the query to a specified named graph, as per [SPARQL protocol specification](https://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#dataset), e.g. `http://ex.com/sparql?default-graph-uri=http%3A%2F%2Fencoded-named-graph-uri`. | `undefined` | Mandatory except for advanced use-cases. |
 | debug | If set to `true`, Sparnatural will log JSON and SPARQL queries on the console, as they are generated. | `false` | Optional |
 | distinct | Whether the `DISTINCT` keyword should be inserted to the generated SPARQL query. | `true` | Optional|
-| lang | Possible values are `en`/`fr` Language code to use to display the labels of classes and properties from the configuration file. | `en` | Optional|
+| lang | Possible values are `en`/`fr`. Language code to use to display the labels of classes and properties from the configuration file. | `en` | Recommended|
 |limit |A number that will be used to add a `LIMIT` keyword in the generated SPARQL queries. If set to an empty string, no `LIMIT` keyword is inserted. | `1000` | Optional
 | maxDepth | Maximum depth of the constructed query (number of inner 'Where' clauses). | `4` | Optional
 | maxOr | Maximum number of different values that can be selected for a given property criteria. For example how many country can be chosen on the list widget| `3` | Optional
 | prefixes (*unstable*) | A set of prefixes in the form `foaf: http://xmlns.com/foaf/0.1/ skos:http://www.w3.org/2004/02/skos/core#` to be added to the output SPARQL query. This is applied in the `expand` method. | `none`
+| queryLang | The language used as a parameters to datasources, to e.g. populate dropdown lists with labels of this language. | same value as `lang` | Recommended|
 | submitButton | Whether Sparnatural should display a submit button to allow the user to execute the query. A click on the submit button will trigger a `submit` event. In case it is not provided, it is the page responsibility to either execute the query automatically at each update in the `queryUpdated` event or provide its own way to submit the query. | `true` | Optional
 | typePredicate | The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to e.g. `<http://www.wikidata.org/prop/direct/P31>+` for Wikidata integration, or `<http://www.w3.org/2000/01/rdf-schema#subClassOf>+` to query OWL-style models.|`rdf:type` | Optional |
 | localCacheDataTtl (*beta*) | The time that the dropdown lists will be stored in cache on the client, if the server has allowed it in its response headers, that is if `Cache-Control: no-cache` header is returned in the response, no cache will happen, whatever the value of this field. The server can return `Cache-Control: public` for lists to be properly cached. | `1000 * 60 * 60 * 24` | Optional|
@@ -182,11 +183,13 @@ The table below summarizes the various functions that can be called on the Sparn
 | **sparnatural.expandSparql(sparqlString)** | Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration) A SPARQL query string | string |
 | **sparnatural.clear()** | Clears the Sparnatural editor, as if the reset button was clicked.| none |
 
-## Advanced : customizing lists and autocomplete
+## Advanced : customizing lists and autocomplete handlers
 
-By default, Sparnatural sends SPARQL queries to populate lists and autocomplete fields. You can change this behavior by specifying the following properties :
+TODO
 
-### "autocomplete" property reference
+### customize autocomplete handler
+
+TODO
 
 ```
 sparnatural.autocomplete = { ... }
@@ -196,63 +199,12 @@ If set, the `autocomplete` property must provide the functions documented below.
 The autocomplete feature relies on [Easyautocomplete](http://easyautocomplete.com/guide) so interested readers are invited to refer to Easyautocomplete documentation for more information.
 
 ```javascript
-autocomplete : {
-	/**
-	 * This must return the URL that will be called when the user starts
-	 * typing a few letter in a search field.
-	 *
-	 * @param {string} domain - The domain of the criteria currently being edited, i.e. type of the triple subjects.
-	 * @param {string} property - The predicate of the criteria currently being edited
-	 * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
-	 * @param {string} key - The letters that the user has typed in the search field.
-	 **/
-	autocompleteUrl : function(domain, property, range, key) {
-		console.log("Please specify function for autocompleteUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
-	},
-
-	/**
-   	 * Returns the path in the returned JSON structure where the list of entries should be read.
-   	 * This is typically the data structure itself, but can correspond to a subentry inside.
-   	 *
-	 * @param {string} domain - The domain of the criteria currently being edited
-	 * @param {string} property - The predicate of the criteria currently being edited
-	 * @param {string} range - The range of the criteria currently being edited
-	 * @param {object} data - The data structure returned from an autocomplete call
-   	 **/
-	listLocation: function(domain, property, range, data) {
-		return data;
-	},
-
-	/**
-   	 * Returns the label to display for a single autocomplete result; defaults to `element.label`.
-   	 *
-   	 * @param {object} element - A single autocomplete result
-   	 **/
-	elementLabel: function(element) {
-		return element.label;
-	},
-
-	/**
-	 * Returns the URI to of a single autocomplete result; ; defaults to `element.uri`.
-	 *
-	 * @param {object} element - A single autocomplete result
-	 **/
-	elementUri: function(element) {
-		return element.uri;
-	},
-
-	/**
-	 * Whether the Easyautocomplete 'enableMatch' flag should be set; this should
-	 * be useful only when loading the autocomplete results from a local file, leave to
-	 * false otherwise.
-	 **/
-	enableMatch: function(domain, property, range) {
-		return false;
-	},
-}
+TODO
 ```
 
-### "list" property reference
+### customize list handler
+
+TODO
 
 ```
 sparnatural.list = { ... }
@@ -261,73 +213,5 @@ sparnatural.list = { ... }
 If set, the `list` property must provide the functions documented below to populate select dropdowns. It is not necessary to provide this parameter if the dropdown fields are populated from the SPARQL endpoint being queried.
 
 ```javascript
-list : {
-
-	/**
-	 * This must return the URL that will be called to list the values to populate the dropdown.
-	 *
-	 * @param {string} domain - The domain of the criteria currently being edited, i.e. type of the triple subjects.
-	 * @param {string} property - The predicate of the criteria currently being edited
-	 * @param {string} range - The range of the criteria currently being edited, i.e. type of the triple objects. This is the class of the entities being searched for.
-	 **/
-	listUrl : function(domain, property, range) {
-		console.log("Please specify function for listUrl option in in init parameters of Sparnatural : function(domain, property, range)" ) ;
-	},
-
-	/**
-   	 * Returns the path in the returned JSON structure where the list of entries should be read.
-   	 * This is typically the data structure itself, but can correspond to a subentry inside.
-   	 *
-	 * @param {string} domain - The domain of the criteria currently being edited
-	 * @param {string} property - The predicate of the criteria currently being edited
-	 * @param {string} range - The range of the criteria currently being edited
-	 * @param {object} data - The data structure returned from a list call
-   	 **/
-	listLocation: function(domain, property, range, data) {
-		return data;
-	},
-
-	/**
-   	 * Returns the label to display for a single list entry; defaults to `element.label`.
-   	 *
-   	 * @param {object} element - A single list entry
-   	 **/
-	elementLabel: function(element) {
-		return element.label;
-	},
-
-	/**
-   	 * Returns the URI for a single list entry; defaults to `element.uri`.
-   	 *
-   	 * @param {object} element - A single list entry
-   	 **/
-	elementUri: function(element) {
-		return element.uri;
-	}
-```
-
-### "dates" property reference
-
-```
-sparnatural.dates = { ... }
-```
-
-```javascript
-dates : {
-	datesUrl : function(domain, property, range, key) {
-		console.log("Please specify function for datesUrl option in in init parameters of Sparnatural : function(domain, property, range, key)") ;
-	},
-	listLocation: function(domain, property, range, data) {
-		return data;
-	},
-	elementLabel: function(element) {
-		return element.label+' '+element.synonyms.join(' ');
-	},
-	elementStart: function(element) {
-		return element.start.year;
-	},
-	elementEnd: function(element) {
-		return element.stop.year;
-	}				
-}
+TODO
 ```
