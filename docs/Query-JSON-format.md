@@ -5,7 +5,7 @@ _[Home](index.html) > Query JSON format_
 
 ## How it works : onQueryUpdated / loadQuery
 
-Sparnatural emits the `onQueryUpdated(sparqlQuery, jsonQuery)` event each time the query is modified. This event takes 2 parameters : the generated SPARQL query, and a JSON data structure that encodes the query. This JSON data structure is custom to Sparnatural, and enables it to **load previously generated query**, using the method **`sparnatural.loadQuery(jsonQuery)`**.
+Sparnatural emits the [`queryUpdated` event](http://docs.sparnatural.eu/Javascript-integration.html#queryupdated-event) each time the query is modified. This event contains 3 files : the generated SPARQL query string, the SPARQL query in JSON in the sparqljs syntax, and a custom JSON data structure that encodes the query. This custom JSON data structure is specific to Sparnatural, and enables it to **load previously generated query**, using the method [**`sparnatural.loadQuery(jsonQuery)`**](http://docs.sparnatural.eu/Javascript-integration.html#sparnatural-element-api).
 
 This allows to implement 2 important features to showcase your knowledge graph :
 
@@ -18,41 +18,37 @@ This is illustrated in the following code snippet :
 ```javascript
 $( document ).ready(function($) {          
 
-        sparnatural = document.getElementById('sparnatural-container').Sparnatural({
-          config: "sparnatural-config.ttl",
-          // ...lot of other parameters...
+        const sparnatural = document.querySelector("spar-natural");
+        
+        sparnatural.addEventListener("queryUpdated", (event) => {
+                // here we get the SPARQL query string and the JSON data structure
+                // if integrating with YasQE we set the value :
+                queryString = sparnatural.expandSparql(event.detail.queryString);
+                yasqe.setValue(queryString);
 
-          // called when query is updated
-          onQueryUpdated: function(sparqlQueryString, queryJson) {
-            // here we get the SPARQL query string and the JSON data structure
-            // if integrating with YasQE we set the value :
-            yasqe.setValue(queryString);
-
-            // and we could save the JSON query for later, e.g. to pass it as a parameter in a URL
-            document.getElementById('query-json').value = JSON.stringify(queryJson);
-          }
+                // and we could save the JSON query for later, e.g. to pass it as a parameter in a URL
+                document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
         });
 
 
         // if we have received a JSON data structure as a URL parameter "?query="
         // then uncompress it, and pass it to the loadQuery() function of Sparnatural
-        var UrlString = window.location.search;
-        var urlParams = new URLSearchParams(UrlString);
-        if (urlParams.has("query") === true) {
-          var compressedJson = urlParams.get("query") ;
-          var compressCodec = JsonUrl('lzma');
-          compressCodec.decompress(compressedJson).then(json => {
-            sparnatural.loadQuery(JSON.parse(json)) ;
-          });
-        }
+      var UrlString = window.location.search;
+      var urlParams = new URLSearchParams(UrlString);
+      if (urlParams.has("query") === true) {
+        var compressedJson = urlParams.get("query") ;
+        var compressCodec = JsonUrl('lzma');
+        compressCodec.decompress(compressedJson).then(json => {
+          sparnatural.loadQuery(JSON.parse(json)) ;
+        });
+      }
 });
 
 
 // if we have a dropdown to select example query from...
 document.getElementById('select-examples').onchange = function() {
-  var key = $('#select-examples option:selected').val();
-  // init Sparnatural with a sample query
-  sparnatural.loadQuery(sampleQueries[key]) ;
+        var key = $('#select-examples option:selected').val();
+        sparnatural.loadQuery(sampleQueries[key]) ;
 }
 
 ```
