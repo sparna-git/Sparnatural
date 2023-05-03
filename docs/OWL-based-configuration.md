@@ -114,7 +114,8 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 
 #### <a name="#annotation-for-service-keyword"></a>Annotation for a sd:Service
 
+Note: sd:Service is a class [defined in the SPARQL service description ontology](https://www.w3.org/TR/sparql11-service-description/#sd-Service).
+
 | Annotation / Axiom | Label | Card. | Description |
 | ------------------ | ----- | ----- | ----------- |
-| [`endpoint`](https://www.w3.org/TR/sparql11-service-description/#sd-endpoint) | define the sparql URL endpoint | 1..1 | Define where the SERVCICE KEYWORD should fetch the results for the federated query |
-| `rdfs:label` | label | 0..1 | A human readable label for the sparql endpoint. |
+| [`endpoint`](https://www.w3.org/TR/sparql11-service-description/#sd-endpoint) | endpoint URL | 1..1 | Defines the URL of the endpoint to be used in combination with the SERVICE keyword |
