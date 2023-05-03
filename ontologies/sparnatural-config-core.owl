@@ -351,7 +351,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#JenaSearchProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty"/>
-        <rdfs:label xml:lang="en">Use this super property to classify properties in Sparnatural configuration for that will act like search properties but will generate Jena specific SPARQL syntax (i.e. the text:query operator, documented at https://jena.apache.org/documentation/query/text-query.html)</rdfs:label>
+        <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for that will act like search properties but will generate Jena specific SPARQL syntax (i.e. the text:query operator, documented at https://jena.apache.org/documentation/query/text-query.html)</rdfs:comment>
         <rdfs:label xml:lang="en">search property in Jena - NOT YET IMPLEMENTED</rdfs:label>
     </owl:ObjectProperty>
     
