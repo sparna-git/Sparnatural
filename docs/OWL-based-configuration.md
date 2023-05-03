@@ -118,4 +118,4 @@ Note: sd:Service is a class [defined in the SPARQL service description ontology]
 
 | Annotation / Axiom | Label | Card. | Description |
 | ------------------ | ----- | ----- | ----------- |
-| [`endpoint`](https://www.w3.org/TR/sparql11-service-description/#sd-endpoint) | endpoint URL | 1..1 | Defines the URL of the endpoint to be used in combination with the SERVICE keyword |
+| [`sd:endpoint`](https://www.w3.org/TR/sparql11-service-description/#sd-endpoint) | endpoint URL | 1..1 | Defines the URL of the endpoint to be used in combination with the SERVICE keyword |
