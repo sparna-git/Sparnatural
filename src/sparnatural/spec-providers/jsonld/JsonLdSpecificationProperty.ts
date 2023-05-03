@@ -28,7 +28,7 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
   }
 
   getRange(): string[] {
-    throw new Error("Method not implemented.");
+    return this.#readDomainOrRange("range");
   }
 
   getPropertyType(): string|undefined {

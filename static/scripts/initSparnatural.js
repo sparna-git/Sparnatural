@@ -41,3 +41,7 @@ document.getElementById('export').onclick = function() {
   $('#export-json').val(jsonString);
   $('#exportModal').modal('show');       
 }
+
+document.getElementById('clear').onclick = function() {
+  sparnatural.clear();     
+}
