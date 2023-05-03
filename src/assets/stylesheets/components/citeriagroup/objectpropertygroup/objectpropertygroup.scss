@@ -3,6 +3,9 @@
 .ObjectPropertyGroup {
     margin-right: -15px;
     padding-left: 10px;
+    .nice-select{
+        padding-left:1em;
+    }
     .current {
         font-style: italic;
     }
