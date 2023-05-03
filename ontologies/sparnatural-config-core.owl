@@ -349,7 +349,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
 
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core/JenaSearchProperty -->
 
-    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core/JenaSearchProperty">
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#JenaSearchProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty"/>
         <rdfs:label xml:lang="en">Use this super property to classify properties in Sparnatural configuration for that will act like search properties but will generate Jena specific SPARQL syntax (i.e. the text:query operator, documented at https://jena.apache.org/documentation/query/text-query.html)</rdfs:label>
         <rdfs:label xml:lang="en">search property in Jena - NOT YET IMPLEMENTED</rdfs:label>
@@ -359,7 +359,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
 
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core/VirtuosoSearchProperty -->
 
-    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core/VirtuosoSearchProperty">
+    <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#VirtuosoSearchProperty">
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for that will act like search properties but will generate Virtuoso specific SPARQL criteria (i.e. using bif:contains and splitting the tokens)</rdfs:comment>
         <rdfs:label xml:lang="en">search property in Virtuoso</rdfs:label>
