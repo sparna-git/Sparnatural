@@ -1,4 +1,4 @@
-_[Home](index.html) > Querying date ranges_
+_[Home](index.html) > Federated query support_
 
 # Federated query support (SERVICE keyword)
 

@@ -5,7 +5,7 @@ _[Home](index.html) > Query JSON format_
 
 ## How it works : onQueryUpdated / loadQuery
 
-Sparnatural emits the `onQueryUpdated(sparqlQuery, jsonQuery)` event each time the query is modified. This event takes 2 parameters : the generated SPARQL query, and a JSON data structure that encodes the query. This JSON data structure is custom to Sparnatural, and enables it to **load previously generated query**, using the method **`sparnatural.loadQuery(jsonQuery)`**.
+Sparnatural emits the [`queryUpdated` event](http://docs.sparnatural.eu/Javascript-integration.html#queryupdated-event) each time the query is modified. This event contains 3 files : the generated SPARQL query string, the SPARQL query in JSON in the sparqljs syntax, and a custom JSON data structure that encodes the query. This custom JSON data structure is specific to Sparnatural, and enables it to **load previously generated query**, using the method [**`sparnatural.loadQuery(jsonQuery)`**](http://docs.sparnatural.eu/Javascript-integration.html#sparnatural-element-api).
 
 This allows to implement 2 important features to showcase your knowledge graph :
 
@@ -18,41 +18,37 @@ This is illustrated in the following code snippet :
 ```javascript
 $( document ).ready(function($) {          
 
-        sparnatural = document.getElementById('sparnatural-container').Sparnatural({
-          config: "sparnatural-config.ttl",
-          // ...lot of other parameters...
+        const sparnatural = document.querySelector("spar-natural");
+        
+        sparnatural.addEventListener("queryUpdated", (event) => {
+                // here we get the SPARQL query string and the JSON data structure
+                // if integrating with YasQE we set the value :
+                queryString = sparnatural.expandSparql(event.detail.queryString);
+                yasqe.setValue(queryString);
 
-          // called when query is updated
-          onQueryUpdated: function(sparqlQueryString, queryJson) {
-            // here we get the SPARQL query string and the JSON data structure
-            // if integrating with YasQE we set the value :
-            yasqe.setValue(queryString);
-
-            // and we could save the JSON query for later, e.g. to pass it as a parameter in a URL
-            document.getElementById('query-json').value = JSON.stringify(queryJson);
-          }
+                // and we could save the JSON query for later, e.g. to pass it as a parameter in a URL
+                document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
         });
 
 
         // if we have received a JSON data structure as a URL parameter "?query="
         // then uncompress it, and pass it to the loadQuery() function of Sparnatural
-        var UrlString = window.location.search;
-        var urlParams = new URLSearchParams(UrlString);
-        if (urlParams.has("query") === true) {
-          var compressedJson = urlParams.get("query") ;
-          var compressCodec = JsonUrl('lzma');
-          compressCodec.decompress(compressedJson).then(json => {
-            sparnatural.loadQuery(JSON.parse(json)) ;
-          });
-        }
+      var UrlString = window.location.search;
+      var urlParams = new URLSearchParams(UrlString);
+      if (urlParams.has("query") === true) {
+        var compressedJson = urlParams.get("query") ;
+        var compressCodec = JsonUrl('lzma');
+        compressCodec.decompress(compressedJson).then(json => {
+          sparnatural.loadQuery(JSON.parse(json)) ;
+        });
+      }
 });
 
 
 // if we have a dropdown to select example query from...
 document.getElementById('select-examples').onchange = function() {
-  var key = $('#select-examples option:selected').val();
-  // init Sparnatural with a sample query
-  sparnatural.loadQuery(sampleQueries[key]) ;
+        var key = $('#select-examples option:selected').val();
+        sparnatural.loadQuery(sampleQueries[key]) ;
 }
 
 ```
@@ -69,17 +65,16 @@ Is modelled in the following JSON data structure :
 {
   "distinct": true,
   "variables": [
-    "?this",
-    "?Date_3"
+    "Artwork_1",
+    "Date_6"
   ],
-  "defaultLang": "en",
   "order": null,
   "branches": [
     {
       "line": {
-        "s": "?this",
+        "s": "?Artwork_1",
         "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#displayedAt",
-        "o": "?Museum_1",
+        "o": "?Museum_2",
         "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
         "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
         "values": []
@@ -87,19 +82,25 @@ Is modelled in the following JSON data structure :
       "children": [
         {
           "line": {
-            "s": "?Museum_1",
+            "s": "?Museum_2",
             "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#country",
-            "o": "?Country_2",
+            "o": "?Country_4",
             "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
             "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
             "values": [
               {
-                "label": "France (222)",
-                "uri": "http://fr.dbpedia.org/resource/France"
+                "label": "France (3987)",
+                "rdfTerm": {
+                  "type": "uri",
+                  "value": "http://fr.dbpedia.org/resource/France"
+                }
               },
               {
-                "label": "Italy (44)",
-                "uri": "http://fr.dbpedia.org/resource/Italie"
+                "label": "Italy (1091)",
+                "rdfTerm": {
+                  "type": "uri",
+                  "value": "http://fr.dbpedia.org/resource/Italie"
+                }
               }
             ]
           },
@@ -109,16 +110,16 @@ Is modelled in the following JSON data structure :
     },
     {
       "line": {
-        "s": "?this",
+        "s": "?Artwork_1",
         "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#creationYear",
-        "o": "?Date_3",
+        "o": "?Date_6",
         "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
         "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Date",
         "values": [
           {
             "label": "From 1800 to 1901",
-            "fromDate": "1800-01-01T00:00:00",
-            "toDate": "1901-12-31T23:59:59"
+            "start": "1799-12-31T23:50:40.000Z",
+            "stop": "1901-12-31T23:50:38.000Z"
           }
         ]
       },
@@ -146,7 +147,6 @@ The data structure is composed of a top "Query" structure, that contains "branch
     "?this",
     "?that"
   ],
-  "defaultLang": "en",
   "order": null,
   "branches": [
     ...
@@ -156,7 +156,6 @@ The data structure is composed of a top "Query" structure, that contains "branch
 
 - `distinct` : whether the `DISTINCT` SPARQL keyword should be added
 - `variables` : ordered list of ?-prefixed variables selected in the `WHERE` clause
-- `defaultLang` : the default language to use to filter the labels fetched automatically
 - `order` : e.g. `"order": { "expression": "?this", "sort": "asc" }`, or null if no order
 - `branches` : ordered list of query branches, each containing a "tree" of criteria under it
 
@@ -178,7 +177,7 @@ The data structure is composed of a top "Query" structure, that contains "branch
 - `line` : one single query line / criteria
 - `children` : the children of that line / criteria, the ones that are below it in the Sparnatural query builder
 - `optional` : whether the line and all its children are optional (use a SPARQL "OPTIONAL")
-- `notExists` : whether the line and all its children and negative (use a SPARQL "FILTER NOT EXISTS")
+- `notExists` : whether the line and all its children are negative (use a SPARQL "FILTER NOT EXISTS")
 
 ### Query line structure
 
@@ -190,14 +189,20 @@ The data structure is composed of a top "Query" structure, that contains "branch
   "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
   "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
   "values": [
-    {
-      "label": "France (222)",
-      "uri": "http://fr.dbpedia.org/resource/France"
-    },
-    {
-      "label": "Italy (44)",
-      "uri": "http://fr.dbpedia.org/resource/Italie"
-    }
+      {
+        "label": "France (3987)",
+        "rdfTerm": {
+          "type": "uri",
+          "value": "http://fr.dbpedia.org/resource/France"
+        }
+      },
+      {
+        "label": "Italy (1091)",
+        "rdfTerm": {
+          "type": "uri",
+          "value": "http://fr.dbpedia.org/resource/Italie"
+        }
+      }
   ]
 }
 ```
@@ -215,10 +220,42 @@ The structure of the values depend on the structure of the criteria/line. This c
 
 - A URI selection widget (dropdown list, autocomplete, tree widget):
 
+If the value is a URI:
+
 ```json
   {
-      "label": "France (222)",
-      "uri": "http://fr.dbpedia.org/resource/France"
+        "label": "Italy (1091)",
+        "rdfTerm": {
+          "type": "uri",
+          "value": "http://fr.dbpedia.org/resource/Italie"
+        }
+  }
+```
+
+
+If the value is a Literal (with a language):
+
+```json
+  {
+        "label": "foo",
+        "rdfTerm": {
+          "type": "literal",
+          "value": "foo",
+          "xml:lang": "en"
+        }
+  }
+```
+
+If the value is a Literal (with a datatype):
+
+```json
+  {
+        "label": "1",
+        "rdfTerm": {
+          "type": "literal",
+          "value": "1",
+          "datatype": "http://www.w3.org/2001/XMLSchema#integer"
+        }
   }
 ```
 
@@ -227,8 +264,8 @@ The structure of the values depend on the structure of the criteria/line. This c
 ```json
   {
     "label": "From 1800 to 1901",
-    "fromDate": "1800-01-01T00:00:00",
-    "toDate": "1901-12-31T23:59:59"
+    "start": "1800-01-01T00:00:00",
+    "stop": "1901-12-31T23:59:59"
   }
 ```
 
@@ -247,13 +284,5 @@ The structure of the values depend on the structure of the criteria/line. This c
   {
     "label": "...",
     "search": "..."
-  }
-```
-
-- A literal list widget:
-
-```json
-  {
-    "label": "..."
   }
 ```
