@@ -161,13 +161,13 @@ sparnatural.addEventListener("reset", (event) => {
 });
 ```
 
-### "display" event
+### "init" event
 
-The `display` event is triggered when Sparnatural gets displayed.
+The `init` event is triggered when Sparnatural has finished reading its configuration.
 
 ```javascript
-sparnatural.addEventListener("display", (event) => {
-	console.log("Sparnatural is displayed");
+sparnatural.addEventListener("init", (event) => {
+	console.log("Sparnatural is initialized");
 });
 ```
 
