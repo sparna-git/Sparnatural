@@ -81,6 +81,14 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     */
   }
 
+  getLanguages(): string[] {
+    let languages = this.store
+      .getQuads(null, RDFS.LABEL, null, null)
+      .map((quad: { object: any }) => quad.object.language);
+    // deduplicate the list of languages
+    return [...new Set(languages)];
+  }
+
   getEntity(entityUri: string): ISpecificationEntity {
     return new OWLSpecificationEntity(
       entityUri,

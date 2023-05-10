@@ -23,6 +23,10 @@ export class FilteringSpecificationProvider implements ISparnaturalSpecification
     this.propertiesCount = {};
   }
 
+  getLanguages(): string[] {
+    return this.delegateSpecificationProvider.getLanguages();
+  }
+
   getEntity(entityUri: string): ISpecificationEntity {
     return this.delegateSpecificationProvider.getEntity(entityUri);
   }

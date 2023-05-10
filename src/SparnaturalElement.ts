@@ -23,7 +23,7 @@ export class SparnaturalElement extends HTMLElement {
   static EVENT_SUBMIT = "submit";
   static EVENT_QUERY_UPDATED = "queryUpdated";
   static EVENT_RESET = "reset";
-  static EVENT_DISPLAY = "display";
+  static EVENT_INIT = "init";
   
   // just to avoid name clash with "attributes"
   _attributes: SparnaturalAttributes;
@@ -31,7 +31,6 @@ export class SparnaturalElement extends HTMLElement {
   // handlers: SparnaturalHandlers;
 
   Sparnatural:SparnaturalComponent;
-  specProvider: ISparnaturalSpecification;
 
   constructor() {
     super();
@@ -83,12 +82,6 @@ export class SparnaturalElement extends HTMLElement {
     // TODO : re-enginer the global settings variable to something more OO
     mergeSettings(this._attributes); 
     this.Sparnatural.render();
-    this.dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_DISPLAY, {
-      bubbles: true,
-      detail: {
-        sparnatural: this
-      }
-    }));
   }
 
   /* NOTE : querylang is all lowercase, see https://stackoverflow.com/questions/60566257/web-components-attributechangedcallback-not-firing */

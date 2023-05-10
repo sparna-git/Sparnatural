@@ -6,6 +6,7 @@ import SparnaturalSpecificationFactory from "../spec-providers/SparnaturalSpecif
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
 import HTMLComponent from "./HtmlComponent";
+import { SparnaturalElement } from "../../SparnaturalElement";
 
 
 const i18nLabels = {
@@ -49,7 +50,15 @@ class SparnaturalComponent extends HTMLComponent {
       this.html[0].dispatchEvent(
         new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
       );
-      this.html.append(this.filter);      
+      this.html.append(this.filter);  
+      console.log("Found languages in configuration : "+this.specProvider.getLanguages());
+      
+      this.html[0].dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_INIT, {
+        bubbles: true,
+        detail: {
+          sparnatural: this
+        }
+      }));
     });
     
     return this;

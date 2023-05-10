@@ -77,6 +77,19 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
     return result;
   };
 
+  getLanguages(): string[] {
+
+    let languages:Set<string> = new Set();
+    for (var j in this.jsonSpecs["@graph"]) {
+      var item = this.jsonSpecs["@graph"][j];
+      for (var i in item["label"]) {
+        var aLabel = item["label"][i];
+        languages.add(aLabel["@language"]);
+      }
+    }
+    return [...languages];
+  }
+
   /*
 		Reads "first-level" classes, i.e. classes that are in the domain
 		of at least one property that connects them to other classes
