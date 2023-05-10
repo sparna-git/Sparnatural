@@ -15,6 +15,7 @@ export interface ListDataProviderIfc {
         predicate:string,
         range:string,
         lang:string,
+        defaultLang:string,
         typePredicate:string,
         callback:(items:{term:RDFTerm;label:string}[]) => void
     ):void
@@ -46,6 +47,7 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
         predicate: string,
         rangeType: string,
         lang:string,
+        defaultLang:string,
         typePredicate:string,
         callback:(items:{term:RDFTerm;label:string}[]) => void
     ):void {
@@ -55,6 +57,7 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
             predicate,
             rangeType,
             lang,
+            defaultLang,
             typePredicate
         );
 
@@ -117,6 +120,7 @@ export interface LiteralListDataProviderIfc {
         predicate:string,
         range:string,
         lang:string,
+        defaultLang:string,
         typePredicate:string,
         callback:(values:{literal:string}[]) => void
     ):void
@@ -149,6 +153,7 @@ export class SparqlLiteralListDataProvider implements LiteralListDataProviderIfc
         predicate: string,
         rangeType: string,
         lang:string,
+        defaultLang:string,
         typePredicate:string,
         callback:(values:{literal:string}[]) => void
     ):void {
@@ -158,6 +163,7 @@ export class SparqlLiteralListDataProvider implements LiteralListDataProviderIfc
             predicate,
             rangeType,
             lang,
+            defaultLang,
             typePredicate
         );
 
@@ -201,6 +207,7 @@ export class ListDataProviderFromLiteralListAdpater implements ListDataProviderI
         predicate: string,
         rangeType: string,
         lang:string,
+        defaultLang:string,
         typePredicate:string,
         callback:(items:{term:RDFTerm;label:string}[]) => void
     ):void {
@@ -209,6 +216,7 @@ export class ListDataProviderFromLiteralListAdpater implements ListDataProviderI
             predicate,
             rangeType,
             lang,
+            defaultLang,
             typePredicate,
             (values:{literal:string}[]) => {
                 let result = new Array<{term:RDFTerm, label:string}>;
@@ -235,6 +243,7 @@ export interface AutocompleteDataProviderIfc {
         range:string,
         key:string,
         lang:string,
+        defaultLang:string,
         typePredicate:string
     ):string
 
@@ -266,7 +275,7 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         );
     }
 
-    autocompleteUrl(domain: string, predicate: string, range: string, key: string, lang: string, typePredicate: string): string {
+    autocompleteUrl(domain: string, predicate: string, range: string, key: string, lang: string, defaultLang:string, typePredicate: string): string {
         // 1. create the SPARQL
         let sparql = this.queryBuilder.buildSparqlQuery(
             domain,
@@ -274,6 +283,7 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
             range,
             key,
             lang,
+            defaultLang,
             typePredicate
         );
 

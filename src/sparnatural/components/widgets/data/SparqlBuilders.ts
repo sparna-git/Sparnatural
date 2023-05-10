@@ -6,6 +6,7 @@ export interface ListSparqlQueryBuilderIfc  {
         predicate:string,
         range:string,
         language: any,
+        defaultLanguage: any,
         typePath: string
     ):string;
 
@@ -30,12 +31,14 @@ export class ListSparqlTemplateQueryBuilder implements ListSparqlQueryBuilderIfc
         property: string,
         range: string,        
         language: any,
+        defaultLanguage: any,
         typePath: string
     ): string {
         var reDomain = new RegExp("\\$domain", "g");
         var reProperty = new RegExp("\\$property", "g");
         var reRange = new RegExp("\\$range", "g");
         var reLang = new RegExp("\\$lang", "g");
+        var reDefaultLang = new RegExp("\\$defaultLang", "g");
         var reType = new RegExp("\\$type", "g");
     
         var sparql = this.queryString
@@ -43,6 +46,7 @@ export class ListSparqlTemplateQueryBuilder implements ListSparqlQueryBuilderIfc
           .replace(reProperty, "<" + property + ">")
           .replace(reRange, "<" + range + ">")
           .replace(reLang, "'" + language + "'")
+          .replace(reDefaultLang, "'" + defaultLanguage + "'")
           .replace(reType, typePath);
           
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
@@ -60,6 +64,7 @@ export interface AutocompleteSparqlQueryBuilderIfc  {
         range:string,
         key:string,
         language: any,
+        defaultLang : any,
         typePath: string
     ):string;
 
@@ -85,6 +90,7 @@ export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparq
         range: string,
         key:string,        
         language: any,
+        defaultLanguage : any,
         typePath: string
     ): string {
         var reDomain = new RegExp("\\$domain", "g");
@@ -92,6 +98,7 @@ export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparq
         var reRange = new RegExp("\\$range", "g");
         var reKey = new RegExp("\\$key", "g");
         var reLang = new RegExp("\\$lang", "g");
+        var reDefaultLang = new RegExp("\\$defaultLang", "g");
         var reType = new RegExp("\\$type", "g");
     
         var sparql = this.queryString
@@ -100,6 +107,7 @@ export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparq
           .replace(reRange, "<" + range + ">")
           .replace(reKey, "" + key + "")
           .replace(reLang, "'" + language + "'")
+          .replace(reDefaultLang, "'" + defaultLanguage + "'")
           .replace(reType, typePath);
           
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);

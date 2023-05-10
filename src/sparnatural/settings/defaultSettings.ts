@@ -5,7 +5,7 @@ const defaultSettings: ISettings = {
   langSearch: null,
   config: null,
   language: "en",
-  queryLanguage: "en",
+  defaultLanguage: "en",
   maxDepth: 4, // max amount of where clauses in a branch
   maxOr:3,
   addDistinct: true,

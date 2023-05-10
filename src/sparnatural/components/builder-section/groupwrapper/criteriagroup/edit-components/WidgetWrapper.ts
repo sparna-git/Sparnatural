@@ -451,7 +451,8 @@ class WidgetWrapper extends HTMLComponent {
               },
             },
 
-            this.settings.queryLanguage,
+            this.settings.language,
+            this.settings.defaultLanguage,
 
             // sparql strings
             this.getFinalQueryString(treeRootsDatasource),

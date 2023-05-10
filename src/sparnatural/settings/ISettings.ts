@@ -7,7 +7,7 @@ export interface PreLoadQueries {
 interface ISettings {
   config: any;
   language: string;
-  queryLanguage: string;
+  defaultLanguage: string;
   addDistinct?: boolean;
   limit?:number;
   typePredicate?: string;

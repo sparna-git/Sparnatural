@@ -3,12 +3,14 @@ class SparqlTreeHandler {
     sparqlEndpointUrl,
     sparqlPostprocessor,
     language,
+    defaultLanguage,
     rootsSparqlQuery,
     childrenSparqlQuery
   ) {
     this.sparqlEndpointUrl = sparqlEndpointUrl;
     this.sparqlPostprocessor = sparqlPostprocessor;
     this.language = language;
+    this.defaultLanguage = defaultLanguage;
     this.rootsSparqlQuery = rootsSparqlQuery;
     this.childrenSparqlQuery = childrenSparqlQuery;
   }
@@ -77,12 +79,15 @@ class SparqlTreeHandler {
     var reProperty = new RegExp("\\$property", "g");
     var reRange = new RegExp("\\$range", "g");
     var reLang = new RegExp("\\$lang", "g");
+    var reDefaultLang = new RegExp("\\$defaultLang", "g");
 
     var sparql = theSparqlQuery
       .replace(reDomain, "<" + domain + ">")
       .replace(reProperty, "<" + property + ">")
       .replace(reRange, "<" + range + ">")
-      .replace(reLang, "'" + this.language + "'");
+      .replace(reLang, "'" + this.language + "'")
+      .replace(reDefaultLang, "'" + this.defaultLanguage + "'")
+      ;
 
     if (node != null) {
       var reNode = new RegExp("\\$node", "g");

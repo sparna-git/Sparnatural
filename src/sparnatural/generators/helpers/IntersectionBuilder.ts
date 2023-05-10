@@ -54,7 +54,7 @@ export default class IntersectionBuilder{
             if(this.specProvider.getProperty(this.#objectPropCls.getTypeSelected()).isMultilingual()) {
                 this.resultPtrn.push(SparqlFactory.buildFilterLangEquals(
                     DataFactory.variable(this.#endClassVar.replace('?','')),
-                    DataFactory.literal(getSettings().queryLanguage)
+                    DataFactory.literal(getSettings().language)
                 ));
             }
         }

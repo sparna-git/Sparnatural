@@ -84,9 +84,9 @@ export class SparnaturalElement extends HTMLElement {
     this.Sparnatural.render();
   }
 
-  /* NOTE : querylang is all lowercase, see https://stackoverflow.com/questions/60566257/web-components-attributechangedcallback-not-firing */
+  /* NOTE : defaultlang is all lowercase, see https://stackoverflow.com/questions/60566257/web-components-attributechangedcallback-not-firing */
   static get observedAttributes() {
-    return ["src", "lang", "querylang", "endpoint"];
+    return ["src", "lang", "defaultlang", "endpoint"];
   }
   attributeChangedCallback(name: string, oldValue:string|null, newValue:string|null) {    
     console.log(`attributeChangedCallback called on ${name}`);
@@ -109,8 +109,8 @@ export class SparnaturalElement extends HTMLElement {
         getSettings().language = newValue;
         break;
       }
-      case "querylang" : {
-        getSettings().queryLanguage = newValue;
+      case "defaultlang" : {
+        getSettings().defaultLanguage = newValue;
         break;
       }
       case "endpoint" : {
