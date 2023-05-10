@@ -25,6 +25,7 @@ Use one of these datasources if your RDF data relies on one of these properties.
 
 The preconfigured datasource identifiers for a ListProperty are :
 
+1. [`datasources:list_URI_or_literal_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha) and [`datasources:list_URI_or_literal_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha_with_count) and [`datasources:list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_count)
 1. [`datasources:list_URI_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_alpha) and [`datasources:list_URI_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_count)
 1. [`datasources:list_rdfslabel_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_alpha) and [`datasources:list_rdfslabel_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_count) and [`datasources:list_rdfslabel_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_rdfslabel_alpha_with_count)
 1. [`datasources:list_skospreflabel_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha) and [`datasources:list_skospreflabel_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_count) and [`datasources:list_skospreflabel_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha_with_count)
@@ -125,7 +126,8 @@ In this SPARQL query, the following replacements will happen:
 - **`$domain`**, if present, will be replaced by the URI of the domain class;
 - **`$range`**, if present, will be replaced by the URI of the range class;
 - **`$property`**, if present, will be replaced by the URI of the property;
-- **`$lang`**, if present, will be replaced by the language Sparnatural is configured with;
+- **`$lang`**, if present, will be replaced by the `lang` parameter of Sparnatural;
+- **`$defaultLang`**, if present, will be replaced by the `defaultLang` parameter of Sparnatural;
 - **`$type`**, if present, will be replaced by the `typePredicate` parameter value of Sparnatural config (useful if you query a wikibase endpoint where the type predicate is something else than rdf:type);
 - **`$key`**, if present, will be replaced by the searched key (only useful for autocomplete fields);
 
