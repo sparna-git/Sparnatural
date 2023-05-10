@@ -131,7 +131,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SELECT DISTINCT ?value ?count (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value)), ' (', STR(?count), ')') AS ?label)
   WHERE {
   {
-    SELECT DISTINCT ?value (COUNT(?domain) AS ?count)
+    SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
     WHERE {
       ?domain $type $domain .
       {
@@ -171,7 +171,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SELECT ?value ?count (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value)), ' (', STR(?count), ')') AS ?label)
   WHERE {
   {
-    SELECT DISTINCT ?value (COUNT(?domain) AS ?count)
+    SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
     WHERE {
       ?domain $type $domain .
       {

@@ -97,6 +97,7 @@ export class ListWidget extends AbstractWidget {
           // pass a JQUery object so that HTML markup is preserved
           // TODO : this does not work ATM
           // templateResult: function formatLabel(label:any) {return $(label)}
+          width: "100%"
         });
 
         // set a listener for when a value is selected
