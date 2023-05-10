@@ -1,7 +1,8 @@
-import { BgpPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableTerm, Wildcard } from "sparqljs";
+import { BgpPattern, BindPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableTerm, Wildcard } from "sparqljs";
 import * as DataFactory from "@rdfjs/data-model" ;
 import { Literal, Variable } from "@rdfjs/types";
 import {  Parser as SparqlParser } from "sparqljs";
+import { NamedNode } from "n3";
 
 export default class SparqlFactory {
   static sparqlParser =  new SparqlParser({ pathOnly: true } as any);
@@ -105,6 +106,21 @@ export default class SparqlFactory {
         ],
       },
     };
+  }
+
+  static buildBindCoalescePattern(firstVariable:Variable, secondvariable:Variable, finalVariable:Variable): BindPattern {				
+    return {
+        type: "bind",
+        expression: {
+          type: "operation",
+          operator: "coalesce",
+          args: [
+            firstVariable,
+            secondvariable
+          ]
+        },
+        variable:finalVariable
+      };
   }
 
   static buildFilterStrInOrEquals(values: Literal[], variable: Variable): FilterPattern {			

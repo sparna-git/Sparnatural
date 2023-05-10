@@ -40,7 +40,14 @@ export default class  ClassBuilder {
     }
 
     #ifDefaultTrplInOptional(defaultLbl:string){
-        if (this.specProvider.getProperty(defaultLbl).isEnablingOptional()) this.#putDefaultLblInOptional()  
+        if (
+            this.specProvider.getProperty(defaultLbl).isEnablingOptional()
+            // don't put in optional if we are already doing an "OPTIONAL {...} OPTIONAL{...} BIND(COALESCE(...))" pattern
+            &&
+            !(
+                getSettings().defaultLanguage != getSettings().language
+            )
+        ) this.#putDefaultLblInOptional()  
     }
 
     #ifBlocking(){
@@ -74,21 +81,62 @@ export default class  ClassBuilder {
     #buildDefaultLblTrpl(){
         // generate only in the case the defaultVar exists
         if(this.getDefaultVar()) {
-            this.defaultLblPatterns.push(
-            SparqlFactory.buildBgpPattern([
-                SparqlFactory.buildTriple(
-                    DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
-                    DataFactory.namedNode(this.classGroup.defaultLblVar.type),
-                    DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
-                )
-            ])
-            );
 
             if(this.specProvider.getProperty(this.classGroup.defaultLblVar.type).isMultilingual()) {
-                this.defaultLblPatterns.push(SparqlFactory.buildFilterLangEquals(
-                    DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
-                    DataFactory.literal(getSettings().language)
-                ));
+                if(getSettings().language == getSettings().defaultLanguage) {
+                    this.defaultLblPatterns.push(SparqlFactory.buildFilterLangEquals(
+                        DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
+                        DataFactory.literal(getSettings().language)
+                    ));
+                } else {
+                    this.defaultLblPatterns.push(SparqlFactory.buildOptionalPattern(
+                        [
+                        SparqlFactory.buildBgpPattern(
+                            [SparqlFactory.buildTriple(
+                                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
+                                DataFactory.namedNode(this.classGroup.defaultLblVar.type),
+                                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_lang`)
+                            )]
+                        ),
+                        SparqlFactory.buildFilterLangEquals(
+                            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_lang`),
+                            DataFactory.literal(getSettings().language)
+                        )
+                        ]
+                    ));
+
+                    this.defaultLblPatterns.push(SparqlFactory.buildOptionalPattern(
+                        [
+                        SparqlFactory.buildBgpPattern(
+                            [SparqlFactory.buildTriple(
+                                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
+                                DataFactory.namedNode(this.classGroup.defaultLblVar.type),
+                                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_defaultLang`)
+                            )]
+                        ),
+                        SparqlFactory.buildFilterLangEquals(
+                            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_defaultLang`),
+                            DataFactory.literal(getSettings().defaultLanguage)
+                        )
+                        ]
+                    ));
+
+                    this.defaultLblPatterns.push(SparqlFactory.buildBindCoalescePattern(
+                        DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_lang`),
+                        DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_defaultLang`),
+                        DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
+                    ));
+                }
+            } else {
+                this.defaultLblPatterns.push(
+                    SparqlFactory.buildBgpPattern([
+                        SparqlFactory.buildTriple(
+                            DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
+                            DataFactory.namedNode(this.classGroup.defaultLblVar.type),
+                            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
+                        )
+                    ])
+                    );
             }
         }
     }

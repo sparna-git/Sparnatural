@@ -70,15 +70,18 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     var sparql = `
     SELECT ?o2 WHERE {
         {
-            SELECT ?x WHERE { ?x ?p ?o }
+          OPTIONAL {?x ?p1 ?var_1 }
+          OPTIONAL {?x ?p2 ?var_2 }
+          BIND(COALESCE(?var_1, ?var_2) AS ?var)
         }
         ?x ?p2 ?o2 .
     }
     `;
 
     var query = this.#parser.parse(sparql);
-    console.log(query)
+    console.dir(query)
     */
+
   }
 
   getLanguages(): string[] {
