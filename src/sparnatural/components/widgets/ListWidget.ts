@@ -89,10 +89,15 @@ export class ListWidget extends AbstractWidget {
           );
         });
 
-        // use the minimumResultsForSearch parameter to avoid using a search box when only a few items are present
+        
+        ;
         this.selectHtml = this.selectHtml.select2({
-          minimumResultsForSearch: 20}
-        );
+          // use the minimumResultsForSearch parameter to avoid using a search box when only a few items are present
+          minimumResultsForSearch: 20,
+          // pass a JQUery object so that HTML markup is preserved
+          // TODO : this does not work ATM
+          // templateResult: function formatLabel(label:any) {return $(label)}
+        });
 
         // set a listener for when a value is selected
         this.selectHtml.on("select2:close", (e: any) => {
