@@ -17,6 +17,7 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
   	src="sparnatural-config.ttl"
     endpoint="https://dbpedia.org/sparql"
     lang="en"
+    defaultLang="en"
     limit="1000"
     debug="true"
   />
@@ -29,7 +30,8 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
 | endpoint | The URL of a SPARQL endpoint that will be used as the default service for the datasource queries provided in the configuration. If not specified, each datasource should indicate explicitely a SPARQL endpoint, or the `autocomplete` and `list` parameters must be provided for low-level datasource integration. Note that this URL can use the `default-graph-uri` parameter to restrict the query to a specified named graph, as per [SPARQL protocol specification](https://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#dataset), e.g. `http://ex.com/sparql?default-graph-uri=http%3A%2F%2Fencoded-named-graph-uri`. | `undefined` | Mandatory except for advanced use-cases. |
 | debug | If set to `true`, Sparnatural will log JSON and SPARQL queries on the console, as they are generated. | `false` | Optional |
 | distinct | Whether the `DISTINCT` keyword should be inserted to the generated SPARQL query. | `true` | Optional|
-| lang | Possible values are `en`/`fr`. Language code to use to display the labels of classes and properties from the configuration file. | `en` | Recommended|
+| lang | User language preference. The language code to use to display labels of classes and properties from the configuration file, and to query for values in lists and search fields. | `en` | Recommended|
+| defaultLang | Dataset default language. A language in which the dataset always provides labels/titles that can be used as default if a label in the user language is not present. | `en` | Recommended|
 |limit |A number that will be used to add a `LIMIT` keyword in the generated SPARQL queries. If set to an empty string, no `LIMIT` keyword is inserted. | `1000` | Optional
 | maxDepth | Maximum depth of the constructed query (number of inner 'Where' clauses). | `4` | Optional
 | maxOr | Maximum number of different values that can be selected for a given property criteria. For example how many country can be chosen on the list widget| `3` | Optional
