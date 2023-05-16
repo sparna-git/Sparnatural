@@ -18,8 +18,7 @@ import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../../generators/ISparJson";
 import * as DataFactory from "@rdfjs/data-model" ;
-import { GEOF} from "../../spec-providers/owl/OWLSpecificationProvider";
-import SparqlFactory from "../../generators/SparqlFactory";
+import { GEOF } from "../../spec-providers/BaseRDFReader";
 
 export class MapWidgetValue implements WidgetValue {
   value: {

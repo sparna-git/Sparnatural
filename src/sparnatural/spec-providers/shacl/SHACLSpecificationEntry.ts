@@ -1,8 +1,9 @@
-import { BaseRDFReader } from "../BaseRDFReader";
+import { BaseRDFReader, RDFS } from "../BaseRDFReader";
 import ISpecificationEntry from "../ISpecificationEntry";
 import { Quad, Store } from "n3";
 import factory from "@rdfjs/data-model";
-import { SH, SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
+import { SH, SHACLSpecificationProvider, VOLIPI } from "./SHACLSpecificationProvider";
+import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 
 export class SHACLSpecificationEntry extends BaseRDFReader implements ISpecificationEntry {
     uri:string;
@@ -22,37 +23,78 @@ export class SHACLSpecificationEntry extends BaseRDFReader implements ISpecifica
     getLabel(): string {
         // first try to read an sh:name
         // and if not present read an rdfs:label
-        return "xxx";
+        let label = this._readAsLiteralWithLang(this.uri, SH.NAME, this.lang);
+        if(!label) {
+          label = this._readAsLiteralWithLang(this.uri, RDFS.LABEL, this.lang)
+        }
+
+        return label;
     }
 
     getTooltip(): string | null {
-        throw new Error("Method not implemented.");
+      return this._readAsLiteralWithLang(this.uri, VOLIPI.MESSAGE, this.lang);
     }
 
-    getDatasource() {
-        throw new Error("Method not implemented.");
-    }
-
-    getTreeChildrenDatasource() {
-        throw new Error("Method not implemented.");
-    }
-
-    getTreeRootsDatasource() {
-        throw new Error("Method not implemented.");
-    }
 
     getIcon(): string {
-        throw new Error("Method not implemented.");
+      var faIcon = this._readAsLiteral(
+        this.uri,
+        VOLIPI.ICON_NAME
+      );
+      
+      if (faIcon.length > 0) {
+        return SHACLSpecificationEntry.buildIconHtml(faIcon[0]);
+      } else {
+        var icons = this._readAsLiteral(this.uri, VOLIPI.ICON);
+        if (icons.length > 0) {
+          return icons[0];
+        } else {
+          // this is ugly, just so it aligns with other entries having an icon
+          return "<span style='font-size: 175%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
+        }
+      }
     }
 
+    static buildIconHtml(iconCode:string) {
+      // use of fa-fw for fixed-width icons
+      return (
+        "<span style='font-size: 170%;' >&nbsp;<i class='" +
+        iconCode +
+        " fa-fw'></i></span>"
+      );
+    }
+
+    /**
+     * @returns always return an empty icon. TODO : implement
+     */
     getHighlightedIcon(): string {
-        throw new Error("Method not implemented.");
+      return "";
     }
 
     getShOrder() {
         return this._readAsSingleLiteral(this.uri, SH.ORDER);
     }
 
+    getDatasource() {
+      return this._readDatasourceAnnotationProperty(
+          this.uri,
+          Datasources.DATASOURCE
+      );
+    }
+
+    getTreeChildrenDatasource() {
+      return this._readDatasourceAnnotationProperty(
+          this.uri,
+          Datasources.TREE_CHILDREN_DATASOURCE
+        );
+    }
+
+    getTreeRootsDatasource() {
+        return this._readDatasourceAnnotationProperty(
+            this.uri,
+            Datasources.TREE_ROOTS_DATASOURCE
+        );
+    }
 
     static sort(items: SHACLSpecificationEntry[]) {
         const compareFunction = function (item1: SHACLSpecificationEntry, item2: SHACLSpecificationEntry) {

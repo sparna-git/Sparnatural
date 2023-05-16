@@ -9,6 +9,10 @@ interface ISpecificationEntity extends ISpecificationEntry {
   hasConnectedEntities(): boolean;
   getConnectingProperties(range: string): Array<string>;
   isLiteralEntity(): boolean;
+
+  /**
+   * @deprecated
+   */
   isRemoteEntity(): boolean;
   getDefaultLabelProperty():string|null;
 

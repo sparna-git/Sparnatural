@@ -62,6 +62,10 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
     return false;
   }
 
+  omitClassCriteria(): boolean {
+    return false;
+  }
+
   getBeginDateProperty(): string | null {
     return this._readValue(this.id, "beginDateProperty");
   }

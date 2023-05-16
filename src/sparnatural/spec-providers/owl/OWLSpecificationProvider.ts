@@ -13,36 +13,11 @@ import {
   SparqlParser,
   SparqlGenerator
 } from "sparqljs";
-import { BaseRDFReader } from "../BaseRDFReader";
+import { BaseRDFReader, RDFS } from "../BaseRDFReader";
 import ISpecificationEntity from "../ISpecificationEntity";
 import { OWLSpecificationEntity } from "./OWLSpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
-
-const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-export const RDF = {
-  TYPE: factory.namedNode(RDF_NAMESPACE + "type") as NamedNode,
-  FIRST: factory.namedNode(RDF_NAMESPACE + "first") as NamedNode,
-  REST: factory.namedNode(RDF_NAMESPACE + "rest") as NamedNode,
-  NIL: factory.namedNode(RDF_NAMESPACE + "nil") as NamedNode,
-};
-
-const RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
-export const RDFS = {
-  LABEL: factory.namedNode(RDFS_NAMESPACE + "label") as NamedNode,
-  DOMAIN: factory.namedNode(RDFS_NAMESPACE + "domain") as NamedNode,
-  RANGE: factory.namedNode(RDFS_NAMESPACE + "range") as NamedNode,
-  SUBPROPERTY_OF: factory.namedNode(
-    RDFS_NAMESPACE + "subPropertyOf"
-  ) as NamedNode,
-  SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf") as NamedNode,
-};
-
-const GEOFUNCTIONS_NAMESPACE = 'http://www.opengis.net/def/function/geosparql/'
-
-export const GEOF = {
-  WITHIN: factory.namedNode(GEOFUNCTIONS_NAMESPACE + 'sfWithin') as NamedNode
-}
 
 const OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
 export const OWL = {

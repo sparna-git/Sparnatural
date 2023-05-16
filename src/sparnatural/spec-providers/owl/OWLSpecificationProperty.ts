@@ -1,8 +1,8 @@
-import { BaseRDFReader } from "../BaseRDFReader";
+import { BaseRDFReader, RDFS } from "../BaseRDFReader";
 import ISpecificationEntity from "../ISpecificationEntity";
 import { Quad, Store } from "n3";
 import { OWLSpecificationEntry } from "./OWLSpecificationEntry";
-import { OWL, OWLSpecificationProvider, RDF, RDFS } from "./OWLSpecificationProvider";
+import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import factory from "@rdfjs/data-model";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
@@ -79,6 +79,10 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     return (
       this._readAsSingleLiteral(this.uri, Config.IS_MULTILINGUAL) == "true"
     );
+  }
+
+  omitClassCriteria(): boolean {
+    return false;
   }
 
   getBeginDateProperty(): string | null {

@@ -1237,15 +1237,29 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_list_URI_or_literal_alpha">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value (STR(?value) AS ?label)
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value (CONCAT(IF(isLiteral(?value) &amp;&amp; LANG(?value) != &apos;&apos; &amp;&amp; LANG(?value) != $lang,CONCAT(STR(?value), &quot; &lt;sup&gt;(&quot;,LANG(?value),&quot;)&lt;/sup&gt;&quot;),STR(?value)), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
     ?domain $type $domain .
     {
-      {?domain $property ?value . FILTER(isIRI(?value))}
+      {
+        ?domain $property ?value . FILTER(isIRI(?value))
+      }
       UNION
       {
-        ?domain $property ?value . 
-        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = &quot;&quot; || lang(?value) = $lang))
+        ?domain $property ?anything . 
+        OPTIONAL {
+          ?domain $property ?valueLang . 
+          FILTER(isLiteral(?valueLang) &amp;&amp; (lang(?valueLang) = &quot;&quot; || lang(?valueLang) = $lang))
+        }
+        OPTIONAL {
+          ?domain $property ?valueDefaultLang . 
+          FILTER(isLiteral(?valueDefaultLang) &amp;&amp; (lang(?valueDefaultLang) = $defaultLang))
+        }
+        OPTIONAL {
+          ?domain $property ?valueNoLang . 
+          FILTER(isLiteral(?valueNoLang) &amp;&amp; (lang(?valueNoLang) = &quot;&quot;))
+        }
+        BIND(COALESCE(?valueLang, ?valueDefaultLang, ?valueNoLang) AS ?value)
       }
     }
     # Note how the range criteria is not used in this query
@@ -1260,18 +1274,32 @@ LIMIT 500</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_list_URI_or_literal_alpha_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?count (CONCAT(STR(?value), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?count (CONCAT(IF(isLiteral(?value) &amp;&amp; LANG(?value) != &apos;&apos; &amp;&amp; LANG(?value) != $lang,CONCAT(STR(?value), &quot; &lt;sup&gt;(&quot;,LANG(?value),&quot;)&lt;/sup&gt;&quot;),STR(?value)), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
 {
-  SELECT DISTINCT ?value (COUNT(?domain) AS ?count)
+  SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
   WHERE {
     ?domain $type $domain .
     {
-      {?domain $property ?value . FILTER(isIRI(?value))}
+      {
+        ?domain $property ?value . FILTER(isIRI(?value))
+      }
       UNION
       {
-        ?domain $property ?value . 
-        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = &quot;&quot; || lang(?value) = $lang))
+        ?domain $property ?anything . 
+        OPTIONAL {
+          ?domain $property ?valueLang . 
+          FILTER(isLiteral(?valueLang) &amp;&amp; (lang(?valueLang) = &quot;&quot; || lang(?valueLang) = $lang))
+        }
+        OPTIONAL {
+          ?domain $property ?valueDefaultLang . 
+          FILTER(isLiteral(?valueDefaultLang) &amp;&amp; (lang(?valueDefaultLang) = $defaultLang))
+        }
+        OPTIONAL {
+          ?domain $property ?valueNoLang . 
+          FILTER(isLiteral(?valueNoLang) &amp;&amp; (lang(?valueNoLang) = &quot;&quot;))
+        }
+        BIND(COALESCE(?valueLang, ?valueDefaultLang, ?valueNoLang) AS ?value)
       }
     }
   }
@@ -1288,21 +1316,34 @@ LIMIT 500</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_list_URI_or_literal_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT ?value ?count (CONCAT(STR(?value), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+        <sparnatural-config-datasources:queryString>SELECT ?value ?count (CONCAT(IF(isLiteral(?value) &amp;&amp; LANG(?value) != &apos;&apos; &amp;&amp; LANG(?value) != $lang,CONCAT(STR(?value), &quot; &lt;sup&gt;(&quot;,LANG(?value),&quot;)&lt;/sup&gt;&quot;),STR(?value)), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
 {
-  SELECT DISTINCT ?value (COUNT(?domain) AS ?count)
+  SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
   WHERE {
     ?domain $type $domain .
     {
-      {?domain $property ?value . FILTER(isIRI(?value))}
+      {
+        ?domain $property ?value . FILTER(isIRI(?value))
+      }
       UNION
       {
-        ?domain $property ?value . 
-        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = &quot;&quot; || lang(?value) = $lang))
+        ?domain $property ?anything . 
+        OPTIONAL {
+          ?domain $property ?valueLang . 
+          FILTER(isLiteral(?valueLang) &amp;&amp; (lang(?valueLang) = &quot;&quot; || lang(?valueLang) = $lang))
+        }
+        OPTIONAL {
+          ?domain $property ?valueDefaultLang . 
+          FILTER(isLiteral(?valueDefaultLang) &amp;&amp; (lang(?valueDefaultLang) = $defaultLang))
+        }
+        OPTIONAL {
+          ?domain $property ?valueNoLang . 
+          FILTER(isLiteral(?valueNoLang) &amp;&amp; (lang(?valueNoLang) = &quot;&quot;))
+        }
+        BIND(COALESCE(?valueLang, ?valueDefaultLang, ?valueNoLang) AS ?value)
       }
     }
-    # Note how the range criteria is not used in this query
   }
   GROUP BY ?value
 }

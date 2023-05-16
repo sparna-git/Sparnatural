@@ -1,0 +1,38 @@
+@prefix : <https://sparna-git.github.io/sparnatural-demonstrateur-an/ontology#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix config-core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix config-datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@base <https://sparnatural.eu/demos/demo-shacl#> .
+
+:foaf_Person a sh:NodeShape ;
+  sh:targetClass foaf:name;
+  sh:property :foaf_name, :foaf_livesIn ;
+  rdfs:label "Person"@en ;
+.
+
+:Name a sh:NodeShape ;
+  sh:nodeKind sh:Literal ;
+  sh:name "Name"@en ;
+.
+
+:foaf_name 
+  sh:path foaf:name ;
+  sh:node :Name ;
+  sh:name "name"@en ;
+  dash:searchWidget config-core:SearchProperty ;
+  dash:propertyRole dash:LabelRole ;
+.
+
+:foaf_livesIn 
+  sh:path foaf:livesIn  ;
+  sh:name "livesIn"@en ;
+  sh:nodeKind sh:IRI ;
+  dash:searchWidget config-core:ListProperty ;
+.

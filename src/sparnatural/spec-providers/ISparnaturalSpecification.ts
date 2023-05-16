@@ -7,6 +7,10 @@ import ISpecificationProperty from "./ISpecificationProperty";
 */
 interface ISparnaturalSpecification {
 
+  /**
+   * Lists all the entity ids - currently only used for filtering purposes, but could probably be deleted
+   * @deprecated
+   */
   getAllSparnaturalEntities():Array<string>;
   getEntitiesInDomainOfAnyProperty():Array<string>;
   expandSparql(sparql: string, prefixes: { [key: string]: string }): string; 

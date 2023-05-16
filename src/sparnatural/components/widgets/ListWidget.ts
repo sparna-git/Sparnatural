@@ -62,7 +62,7 @@ export class ListWidget extends AbstractWidget {
 
   render() {
     super.render();
-    this.selectHtml = $(`<select style="width:100%; min-width:200px"></select>`);
+    this.selectHtml = $(`<select style="width:100%; min-width:200px;"></select>`);
     let noItemsHtml =
       $(`<div class="no-items" style="display: none; font-style:italic;">
       ${getSettings().langSearch.ListWidgetNoItem}
@@ -96,8 +96,7 @@ export class ListWidget extends AbstractWidget {
           minimumResultsForSearch: 20,
           // pass a JQUery object so that HTML markup is preserved
           // TODO : this does not work ATM
-          // templateResult: function formatLabel(label:any) {return $(label)}
-
+          // templateResult: function formatLabel(label:any) {return $(label)},
           width: "style"
         });
 

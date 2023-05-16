@@ -1,0 +1,422 @@
+@prefix dce:      <http://purl.org/dc/elements/1.1/> .
+@prefix edm:      <http://www.europeana.eu/schemas/edm/> .
+@prefix myshapes: <http://exemple.be/shapes/> .
+@prefix ore:      <http://www.openarchives.org/ore/terms/> .
+@prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:       <http://www.w3.org/ns/shacl#> .
+@prefix terms:    <http://purl.org/dc/terms/> .
+@prefix xsd:      <http://www.w3.org/2001/XMLSchema#> .
+
+myshapes:Proxy_spatial
+        <http://rdfs.org/ns/void#property>
+                terms:spatial ;
+        <http://rdfs.org/ns/void#triples>
+                "57681"^^xsd:int ;
+        sh:description  "57681 triples" ;
+        sh:name         "spatial"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         terms:spatial .
+
+myshapes:Proxy_subject
+        <http://rdfs.org/ns/void#property>
+                dce:subject ;
+        <http://rdfs.org/ns/void#triples>
+                "94262"^^xsd:int ;
+        sh:description  "94262 triples" ;
+        sh:name         "subject"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         dce:subject .
+
+myshapes:Proxy_source
+        <http://rdfs.org/ns/void#property>
+                dce:source ;
+        <http://rdfs.org/ns/void#triples>
+                "8828"^^xsd:int ;
+        sh:description  "8828 triples" ;
+        sh:name         "source"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         dce:source .
+
+<https://sage-ails.ails.ece.ntua.gr/api/content/semanticsearch-digital-repository-of-ireland/sparql>
+        a                 <http://rdfs.org/ns/void#Dataset> ;
+        terms:conformsTo  <http://exemple.be/shapes> ;
+        <http://rdfs.org/ns/void#classPartition>
+                myshapes:Aggregation , myshapes:ProvidedCHO , myshapes:Proxy ;
+        <http://rdfs.org/ns/void#triples>
+                "1090950"^^xsd:int .
+
+myshapes:Proxy_lineage
+        <http://rdfs.org/ns/void#property>
+                ore:lineage ;
+        <http://rdfs.org/ns/void#triples>
+                "4702"^^xsd:int ;
+        sh:class        ore:Proxy ;
+        sh:description  "4702 triples" ;
+        sh:maxCount     1 ;
+        sh:name         "lineage"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:lineage .
+
+myshapes:Proxy_description
+        <http://rdfs.org/ns/void#property>
+                dce:description ;
+        <http://rdfs.org/ns/void#triples>
+                "30010"^^xsd:int ;
+        sh:description  "30010 triples" ;
+        sh:name         "description"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( myshapes:Proxy_description_datatype_0 myshapes:Proxy_description_datatype_1 ) ;
+        sh:path         dce:description .
+
+myshapes:Aggregation_hasView
+        <http://rdfs.org/ns/void#property>
+                edm:hasView ;
+        <http://rdfs.org/ns/void#triples>
+                "8720"^^xsd:int ;
+        sh:description  "8720 triples" ;
+        sh:name         "hasView"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:hasView .
+
+myshapes:ProvidedCHO  a  sh:NodeShape ;
+        rdfs:comment    "27685 instances" ;
+        rdfs:label      "ProvidedCHO"@en ;
+        <http://rdfs.org/ns/void#class>
+                edm:ProvidedCHO ;
+        <http://rdfs.org/ns/void#entities>
+                "27685"^^xsd:int ;
+        sh:targetClass  edm:ProvidedCHO .
+
+myshapes:Proxy_description_datatype_1
+        sh:datatype  xsd:string .
+
+myshapes:Proxy  a       sh:NodeShape ;
+        rdfs:comment    "55370 instances" ;
+        rdfs:label      "Proxy"@en ;
+        <http://rdfs.org/ns/void#class>
+                ore:Proxy ;
+        <http://rdfs.org/ns/void#entities>
+                "55370"^^xsd:int ;
+        <http://rdfs.org/ns/void#propertyPartition>
+                myshapes:Proxy_publisher , myshapes:Proxy_format , myshapes:Proxy_isPartOf , myshapes:Proxy_medium , myshapes:Proxy_coverage , myshapes:Proxy_proxyIn , myshapes:Proxy_type_2 , myshapes:Proxy_type , myshapes:Proxy_contributor , myshapes:Proxy_date , myshapes:Proxy_source , myshapes:Proxy_lineage , myshapes:Proxy_europeanaProxy , myshapes:Proxy_title , myshapes:Proxy_creator , myshapes:Proxy_created , myshapes:Proxy_temporal , myshapes:Proxy_proxyFor , myshapes:Proxy_rights , myshapes:Proxy_identifier , myshapes:Proxy_spatial , myshapes:Proxy_language , myshapes:Proxy_description , myshapes:Proxy_subject ;
+        sh:property     myshapes:Proxy_proxyIn , myshapes:Proxy_creator , myshapes:Proxy_europeanaProxy , myshapes:Proxy_temporal , myshapes:Proxy_medium , myshapes:Proxy_title , myshapes:Proxy_format , myshapes:Proxy_date , myshapes:Proxy_source , myshapes:Proxy_created , myshapes:Proxy_type , myshapes:Proxy_isPartOf , myshapes:Proxy_language , myshapes:Proxy_publisher , myshapes:Proxy_identifier , myshapes:Proxy_spatial , myshapes:Proxy_rights , myshapes:Proxy_type_2 , myshapes:Proxy_coverage , myshapes:Proxy_proxyFor , myshapes:Proxy_lineage , myshapes:Proxy_contributor , myshapes:Proxy_subject , myshapes:Proxy_description ;
+        sh:targetClass  ore:Proxy .
+
+myshapes:Proxy_medium
+        <http://rdfs.org/ns/void#property>
+                terms:medium ;
+        <http://rdfs.org/ns/void#triples>
+                "755"^^xsd:int ;
+        sh:description  "755 triples" ;
+        sh:name         "medium"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         terms:medium .
+
+myshapes:Proxy_type  <http://rdfs.org/ns/void#property>
+                dce:type ;
+        <http://rdfs.org/ns/void#triples>
+                "31047"^^xsd:int ;
+        sh:description  "31047 triples" ;
+        sh:name         "type"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         dce:type .
+
+myshapes:Proxy_europeanaProxy
+        <http://rdfs.org/ns/void#property>
+                edm:europeanaProxy ;
+        <http://rdfs.org/ns/void#triples>
+                "55370"^^xsd:int ;
+        sh:datatype     xsd:string ;
+        sh:description  "55370 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "europeanaProxy"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         edm:europeanaProxy .
+
+myshapes:Proxy_created
+        <http://rdfs.org/ns/void#property>
+                terms:created ;
+        <http://rdfs.org/ns/void#triples>
+                "16198"^^xsd:int ;
+        sh:description  "16198 triples" ;
+        sh:name         "created"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         terms:created .
+
+myshapes:Proxy_creator
+        <http://rdfs.org/ns/void#property>
+                dce:creator ;
+        <http://rdfs.org/ns/void#triples>
+                "35954"^^xsd:int ;
+        sh:description  "35954 triples" ;
+        sh:name         "creator"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         dce:creator .
+
+<http://exemple.be/shapes>
+        a               <http://www.w3.org/2002/07/owl#Ontology> ;
+        terms:abstract  "Created automatically by SHACL Play!.\n1090950 triples in the dataset..\nRemoved rarely used property shapes, below threshold of 0.1%. 2 property shapes filtered out." ;
+        terms:created   "2023-04-21T13:51:18.664Z"^^xsd:dateTime .
+
+myshapes:Proxy_description_datatype_0
+        sh:datatype  <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString> .
+
+myshapes:Aggregation_isShownBy
+        <http://rdfs.org/ns/void#property>
+                edm:isShownBy ;
+        <http://rdfs.org/ns/void#triples>
+                "27685"^^xsd:int ;
+        sh:description  "27685 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "isShownBy"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:isShownBy .
+
+myshapes:Aggregation_rights
+        <http://rdfs.org/ns/void#property>
+                edm:rights ;
+        <http://rdfs.org/ns/void#triples>
+                "27685"^^xsd:int ;
+        sh:description  "27685 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "rights"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:rights .
+
+myshapes:Aggregation  a  sh:NodeShape ;
+        rdfs:comment    "27685 instances" ;
+        rdfs:label      "Aggregation"@en ;
+        <http://rdfs.org/ns/void#class>
+                ore:Aggregation ;
+        <http://rdfs.org/ns/void#entities>
+                "27685"^^xsd:int ;
+        <http://rdfs.org/ns/void#propertyPartition>
+                myshapes:Aggregation_object , myshapes:Aggregation_provider , myshapes:Aggregation_isShownBy , myshapes:Aggregation_dataProvider , myshapes:Aggregation_rights , myshapes:Aggregation_aggregatedCHO , myshapes:Aggregation_isShownAt , myshapes:Aggregation_hasView ;
+        sh:property     myshapes:Aggregation_provider , myshapes:Aggregation_hasView , myshapes:Aggregation_isShownBy , myshapes:Aggregation_aggregatedCHO , myshapes:Aggregation_object , myshapes:Aggregation_isShownAt , myshapes:Aggregation_dataProvider , myshapes:Aggregation_rights ;
+        sh:targetClass  ore:Aggregation .
+
+myshapes:Aggregation_object
+        <http://rdfs.org/ns/void#property>
+                edm:object ;
+        <http://rdfs.org/ns/void#triples>
+                "27685"^^xsd:int ;
+        sh:description  "27685 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "object"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:object .
+
+myshapes:Proxy_title_datatype_1
+        sh:datatype  xsd:string .
+
+myshapes:Proxy_rights
+        <http://rdfs.org/ns/void#property>
+                dce:rights ;
+        <http://rdfs.org/ns/void#triples>
+                "27886"^^xsd:int ;
+        sh:description  "27886 triples" ;
+        sh:name         "rights"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         dce:rights .
+
+myshapes:Proxy_contributor
+        <http://rdfs.org/ns/void#property>
+                dce:contributor ;
+        <http://rdfs.org/ns/void#triples>
+                "76027"^^xsd:int ;
+        sh:description  "76027 triples" ;
+        sh:name         "contributor"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         dce:contributor .
+
+myshapes:Aggregation_isShownAt
+        <http://rdfs.org/ns/void#property>
+                edm:isShownAt ;
+        <http://rdfs.org/ns/void#triples>
+                "27685"^^xsd:int ;
+        sh:description  "27685 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "isShownAt"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:isShownAt .
+
+myshapes:Proxy_proxyIn
+        <http://rdfs.org/ns/void#property>
+                ore:proxyIn ;
+        <http://rdfs.org/ns/void#triples>
+                "55370"^^xsd:int ;
+        sh:class        ore:Aggregation ;
+        sh:description  "55370 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "proxyIn"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:proxyIn .
+
+myshapes:Proxy_isPartOf
+        <http://rdfs.org/ns/void#property>
+                terms:isPartOf ;
+        <http://rdfs.org/ns/void#triples>
+                "2575"^^xsd:int ;
+        sh:datatype     xsd:string ;
+        sh:description  "2575 triples" ;
+        sh:maxCount     1 ;
+        sh:name         "isPartOf"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         terms:isPartOf .
+
+myshapes:Proxy_date  <http://rdfs.org/ns/void#property>
+                dce:date ;
+        <http://rdfs.org/ns/void#triples>
+                "12119"^^xsd:int ;
+        sh:description  "12119 triples" ;
+        sh:name         "date"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         dce:date .
+
+myshapes:Proxy_identifier
+        <http://rdfs.org/ns/void#property>
+                dce:identifier ;
+        <http://rdfs.org/ns/void#triples>
+                "27685"^^xsd:int ;
+        sh:datatype     xsd:string ;
+        sh:description  "27685 triples" ;
+        sh:maxCount     1 ;
+        sh:name         "identifier"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         dce:identifier .
+
+myshapes:Proxy_title_datatype_0
+        sh:datatype  <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString> .
+
+myshapes:Proxy_title  <http://rdfs.org/ns/void#property>
+                dce:title ;
+        <http://rdfs.org/ns/void#triples>
+                "28521"^^xsd:int ;
+        sh:description  "28521 triples" ;
+        sh:name         "title"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( myshapes:Proxy_title_datatype_0 myshapes:Proxy_title_datatype_1 ) ;
+        sh:path         dce:title .
+
+myshapes:Proxy_type_2
+        <http://rdfs.org/ns/void#property>
+                edm:type ;
+        <http://rdfs.org/ns/void#triples>
+                "55370"^^xsd:int ;
+        sh:datatype     xsd:string ;
+        sh:description  "55370 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "type"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         edm:type .
+
+myshapes:Proxy_proxyFor
+        <http://rdfs.org/ns/void#property>
+                ore:proxyFor ;
+        <http://rdfs.org/ns/void#triples>
+                "55370"^^xsd:int ;
+        sh:class        edm:ProvidedCHO ;
+        sh:description  "55370 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "proxyFor"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:proxyFor .
+
+myshapes:Proxy_publisher
+        <http://rdfs.org/ns/void#property>
+                dce:publisher ;
+        <http://rdfs.org/ns/void#triples>
+                "27540"^^xsd:int ;
+        sh:datatype     xsd:string ;
+        sh:description  "27540 triples" ;
+        sh:name         "publisher"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         dce:publisher .
+
+myshapes:Proxy_temporal
+        <http://rdfs.org/ns/void#property>
+                terms:temporal ;
+        <http://rdfs.org/ns/void#triples>
+                "6914"^^xsd:int ;
+        sh:description  "6914 triples" ;
+        sh:name         "temporal"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         terms:temporal .
+
+myshapes:Proxy_coverage
+        <http://rdfs.org/ns/void#property>
+                dce:coverage ;
+        <http://rdfs.org/ns/void#triples>
+                "5478"^^xsd:int ;
+        sh:description  "5478 triples" ;
+        sh:name         "coverage"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         dce:coverage .
+
+myshapes:Aggregation_provider
+        <http://rdfs.org/ns/void#property>
+                edm:provider ;
+        <http://rdfs.org/ns/void#triples>
+                "27685"^^xsd:int ;
+        sh:description  "27685 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "provider"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:provider .
+
+myshapes:Aggregation_aggregatedCHO
+        <http://rdfs.org/ns/void#property>
+                edm:aggregatedCHO ;
+        <http://rdfs.org/ns/void#triples>
+                "27685"^^xsd:int ;
+        sh:class        edm:ProvidedCHO ;
+        sh:description  "27685 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "aggregatedCHO"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:aggregatedCHO .
+
+myshapes:Proxy_format
+        <http://rdfs.org/ns/void#property>
+                dce:format ;
+        <http://rdfs.org/ns/void#triples>
+                "27739"^^xsd:int ;
+        sh:datatype     <http://www.w3.org/1999/02/22-rdf-syntax-ns#langString> ;
+        sh:description  "27739 triples" ;
+        sh:languageIn   ( "en" ) ;
+        sh:name         "format"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         dce:format .
+
+myshapes:Aggregation_dataProvider
+        <http://rdfs.org/ns/void#property>
+                edm:dataProvider ;
+        <http://rdfs.org/ns/void#triples>
+                "27685"^^xsd:int ;
+        sh:description  "27685 triples" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "dataProvider"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:path         edm:dataProvider .
+
+myshapes:Proxy_language
+        <http://rdfs.org/ns/void#property>
+                dce:language ;
+        <http://rdfs.org/ns/void#triples>
+                "33917"^^xsd:int ;
+        sh:datatype     xsd:string ;
+        sh:description  "33917 triples" ;
+        sh:name         "language"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         dce:language .

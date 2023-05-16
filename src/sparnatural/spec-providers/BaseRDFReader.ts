@@ -1,9 +1,37 @@
 import factory from "@rdfjs/data-model";
-import { Quad, Store } from "n3";
-import { RDF } from "./owl/OWLSpecificationProvider";
+import { NamedNode, Quad, Store } from "n3";
 import rdfParser from "rdf-parse";
 var Readable = require('stream').Readable
 import { storeStream } from "rdf-store-stream";
+import Datasources from "../ontologies/SparnaturalConfigDatasources";
+
+
+const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+export const RDF = {
+  LANG_STRING: factory.namedNode(RDF_NAMESPACE + "langString") as NamedNode,
+  TYPE: factory.namedNode(RDF_NAMESPACE + "type") as NamedNode,
+  FIRST: factory.namedNode(RDF_NAMESPACE + "first") as NamedNode,
+  REST: factory.namedNode(RDF_NAMESPACE + "rest") as NamedNode,
+  NIL: factory.namedNode(RDF_NAMESPACE + "nil") as NamedNode,
+};
+
+const RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
+export const RDFS = {
+  CLASS: factory.namedNode(RDFS_NAMESPACE + "Class") as NamedNode,
+  LABEL: factory.namedNode(RDFS_NAMESPACE + "label") as NamedNode,
+  DOMAIN: factory.namedNode(RDFS_NAMESPACE + "domain") as NamedNode,
+  RANGE: factory.namedNode(RDFS_NAMESPACE + "range") as NamedNode,
+  SUBPROPERTY_OF: factory.namedNode(
+    RDFS_NAMESPACE + "subPropertyOf"
+  ) as NamedNode,
+  SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf") as NamedNode,
+};
+
+const GEOFUNCTIONS_NAMESPACE = 'http://www.opengis.net/def/function/geosparql/'
+
+export const GEOF = {
+  WITHIN: factory.namedNode(GEOFUNCTIONS_NAMESPACE + 'sfWithin') as NamedNode
+}
 
 export class BaseRDFReader {
     protected lang: string;
@@ -59,6 +87,153 @@ export class BaseRDFReader {
           callback(theStore);
         });
       }
+
+      _readDatasourceAnnotationProperty(
+        propertyOrClassId: any,
+        datasourceAnnotationProperty: any
+      ) {
+        // read predicate datasource
+        const datasourceQuads = this.store.getQuads(
+          factory.namedNode(propertyOrClassId),
+          datasourceAnnotationProperty,
+          null,
+          null
+        );
+    
+        if (datasourceQuads.length == 0) {
+          return null;
+        }
+    
+        for (const datasourceQuad of datasourceQuads) {
+          const datasourceUri = datasourceQuad.object.id;
+          var knownDatasource = Datasources.DATASOURCES_CONFIG.get(datasourceUri);
+          if (knownDatasource != null) {
+            return knownDatasource;
+          } else {
+            return this.#_buildDatasource(datasourceUri);
+          }
+        }
+    
+        // IMPORTANT should here be propper error handling?
+        return {};
+      }
+
+   /**
+   * {
+   *   queryString: "...",
+   *   queryTemplate: "...",
+   *   labelPath: "...",
+   *   labelProperty: "...",
+   *   childrenPath: "...",
+   *   childrenProperty: "...",
+   *   noSort: true
+   * }
+   **/
+
+  #_buildDatasource(datasourceUri: any) {
+    var datasource: {
+      queryString?: string;
+      queryTemplate?: any;
+      labelPath?: any;
+      labelProperty?: any;
+      childrenPath?: any;
+      childrenProperty?: any;
+      sparqlEndpointUrl?: any;
+      noSort?: any;
+    } = {};
+    // read datasource characteristics
+
+    // Alternative 1 : read optional queryString
+    var queryStrings = this._readAsLiteral(
+      datasourceUri,
+      Datasources.QUERY_STRING
+    );
+    if (queryStrings.length > 0) {
+      datasource.queryString = queryStrings[0];
+    }
+
+    // Alternative 2 : query template + label path
+    var queryTemplates = this._readAsResource(
+      datasourceUri,
+      Datasources.QUERY_TEMPLATE
+    );
+    if (queryTemplates.length > 0) {
+      var theQueryTemplate = queryTemplates[0];
+      var knownQueryTemplate =
+        Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(theQueryTemplate);
+      if (knownQueryTemplate != null) {
+        // 2.1 It is known in default Sparnatural ontology
+        datasource.queryTemplate = knownQueryTemplate;
+      } else {
+        // 2.2 Unknown, read the query string on the query template
+        var queryStrings = this._readAsResource(
+          theQueryTemplate,
+          Datasources.QUERY_STRING
+        );
+        if (queryStrings.length > 0) {
+          var queryString = queryStrings[0];
+          datasource.queryTemplate =
+            queryString.startsWith('"') && queryString.endsWith('"')
+              ? queryString.substring(1, queryString.length - 1)
+              : queryString;
+        }
+      }
+
+      // labelPath
+      var labelPaths = this._readAsLiteral(
+        datasourceUri,
+        Datasources.LABEL_PATH
+      );
+      if (labelPaths.length > 0) {
+        datasource.labelPath = labelPaths[0];
+      }
+
+      // labelProperty
+      var labelProperties = this._readAsResource(
+        datasourceUri,
+        Datasources.LABEL_PROPERTY
+      );
+      if (labelProperties.length > 0) {
+        datasource.labelProperty = labelProperties[0];
+      }
+
+      // childrenPath
+      var childrenPaths = this._readAsLiteral(
+        datasourceUri,
+        Datasources.CHILDREN_PATH
+      );
+      if (childrenPaths.length > 0) {
+        datasource.childrenPath = childrenPaths[0];
+      }
+
+      // childrenProperty
+      var childrenProperties = this._readAsResource(
+        datasourceUri,
+        Datasources.CHILDREN_PROPERTY
+      );
+      if (childrenProperties.length > 0) {
+        datasource.childrenProperty = childrenProperties[0];
+      }
+    }
+
+    // read optional sparqlEndpointUrl
+    var sparqlEndpointUrls = this._readAsLiteral(
+      datasourceUri,
+      Datasources.SPARQL_ENDPOINT_URL
+    );
+    if (sparqlEndpointUrls.length > 0) {
+      datasource.sparqlEndpointUrl = sparqlEndpointUrls[0];
+    }
+
+    // read optional noSort
+    var noSorts = this._readAsLiteral(datasourceUri, Datasources.NO_SORT);
+    if (noSorts.length > 0) {
+      datasource.noSort = noSorts[0] === "true";
+    }
+
+    return datasource;
+  }
+
 
   /**
    * Reads the given property on an entity, and return values as an array
@@ -125,11 +300,15 @@ export class BaseRDFReader {
   }
 
   _hasProperty(rdfNode: any, property: any) {
+    return this._hasTriple(rdfNode, property, null);
+  }
+
+  _hasTriple(rdfNode: any, property: any, value:any) {
     return (
       this.store.getQuads(
         rdfNode,
         property,
-        null,
+        value,
         null
       ).length > 0
     );
@@ -189,4 +368,5 @@ export class BaseRDFReader {
     
         return items;
       }
+
 }

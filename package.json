@@ -7,8 +7,8 @@
   "types": "dist/Sparnaturalelement.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack",
-    "start": "webpack serve --hot --config webpack.config.js",
+    "build": "webpack --mode production",
+    "start": "webpack serve --hot --config webpack.config.js --mode development",
     "pretty": "prettier --write \"./src/**/*.{ts,js,json}\""
   },
   "keywords": [

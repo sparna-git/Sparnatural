@@ -140,6 +140,8 @@ export default class WhereBuilder{
             !this.#specProvider.getEntity(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected()).isLiteralEntity()
             &&
             !this.#specProvider.getEntity(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected()).isRemoteEntity()
+            &&
+            !this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected()).omitClassCriteria()
         );
         const hasIntersectionTriple = (this.#intersectionPtrn)
 

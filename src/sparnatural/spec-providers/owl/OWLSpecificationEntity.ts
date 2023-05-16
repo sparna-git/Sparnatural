@@ -1,8 +1,8 @@
-import { BaseRDFReader } from "../BaseRDFReader";
+import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
 import ISpecificationEntity from "../ISpecificationEntity";
 import { Quad, Store } from "n3";
 import { OWLSpecificationEntry } from "./OWLSpecificationEntry";
-import { OWL, OWLSpecificationProvider, RDF, RDFS } from "./OWLSpecificationProvider";
+import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import factory from "@rdfjs/data-model";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
