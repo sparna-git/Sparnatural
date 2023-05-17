@@ -78,11 +78,70 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 ## Autocomplete widget
 
 ### Appearance
-
 ### Description
-
 ### Configuration
-
 ### Datasources
+### SPARQL clause
 
+
+## Tree widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## String search widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## Date range widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## Year range widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## Boolean widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## Map widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## No selection widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
 ### SPARQL clause
