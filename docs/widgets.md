@@ -8,21 +8,12 @@ This is a reference documentation for Sparnatural widgets.
 
 ### Appearance
 
-Typical appearance of a list widget, allowing to select a URI value, shown with a label and number of occurrences, ordered by decreasing number of occurrences:
-
-<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-basic.png" />
-
-Showing literal values only (EDM Type is a literal value) :
-
-<img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" />
-
-Showing a mix of literal values and URIs :
-
-<img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-mix-literal-URIs.png" />
-
-Listing URI values with a label listed alphabetically :
-
-<img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-no-occurrences.png" />
+|  Example  | Description |
+| -----   | ----------- |
+| <img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-basic.png" width="75%" /> | Typical appearance of a list widget, allowing to select a URI value, shown with a label and number of occurrences, ordered by decreasing number of occurrences |
+| <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Showing literal values only (EDM Type is a literal value) |
+| <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-mix-literal-URIs.png" width="75%" /> | Showing a mix of literal values and URIs |
+| <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Listing URI values with a label listed alphabetically |
 
 
 ### Description
@@ -36,13 +27,14 @@ The sort order of the elements in the list, as well as their precise labels, dep
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty)
+In OWL configuration, declare a sub-property of [`config-core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty)
 
 ### Datasources
 
 The list of URI as well as their labels need to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty).
+The default datasource used is [`datasources:list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources/list_URI_or_literal_count), itself relying on the SPARQL query [`datasources:query_list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_list_URI_or_literal_count)
 
-### SPARQL clause
+### SPARQL generation
 
 If a single value is selected, the value is inserted directly as the triple object:
 
@@ -77,9 +69,70 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 ## Autocomplete widget
 
 ### Appearance
-
 ### Description
-
 ### Configuration
-
 ### Datasources
+### SPARQL clause
+
+
+## Tree widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## String search widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## Date range widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## Year range widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## Boolean widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## Map widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
+
+
+## No selection widget
+
+### Appearance
+### Description
+### Configuration
+### Datasources
+### SPARQL clause
