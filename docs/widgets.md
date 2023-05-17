@@ -2,9 +2,9 @@ _[Home](index.html) > Widgets_
 
 # Sparnatural widgets
 
-This is a reference documentation for Sparnatural widgets
+This is a reference documentation for Sparnatural widgets.
 
-## List query widget
+## List widget
 
 ### Appearance
 
@@ -42,4 +42,44 @@ In OWL configuration, declare a sub-property of [`http://data.sparna.fr/ontologi
 
 The list of URI as well as their labels need to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty).
 
-## Autocomplete query widget
+### SPARQL clause
+
+If a single value is selected, the value is inserted directly as the triple object:
+
+```
+  ?Museum_1 <http://dbpedia.org/ontology/country> <http://fr.dbpedia.org/resource/France>.
+```
+
+If more than one value is selected, or if the corresponding variable is selected for inclusion in the result set, then a `VALUES` keyword is used:
+
+With more than one values:
+
+```
+  ?Museum_1 <http://dbpedia.org/ontology/country> ?Country_2.
+  VALUES ?Country_2 {
+    <http://fr.dbpedia.org/resource/France>
+    <http://fr.dbpedia.org/resource/Italie>
+  }
+}
+```
+
+or with the variable selected:
+
+```
+SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
+  ?Museum_1 <http://dbpedia.org/ontology/country> ?Country_2.
+  VALUES ?Country_2 {
+    <http://fr.dbpedia.org/resource/France>
+  }
+}
+```
+
+## Autocomplete widget
+
+### Appearance
+
+### Description
+
+### Configuration
+
+### Datasources
