@@ -36,13 +36,14 @@ The sort order of the elements in the list, as well as their precise labels, dep
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty)
+In OWL configuration, declare a sub-property of [`config-core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty)
 
 ### Datasources
 
 The list of URI as well as their labels need to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty).
+The default datasource used is [`datasources:list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources/list_URI_or_literal_count), itself relying on the SPARQL query [`datasources:query_list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_list_URI_or_literal_count)
 
-### SPARQL clause
+### SPARQL generation
 
 If a single value is selected, the value is inserted directly as the triple object:
 
@@ -83,3 +84,5 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 ### Configuration
 
 ### Datasources
+
+### SPARQL clause
