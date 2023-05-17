@@ -8,9 +8,8 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 
 ## 1. Configuring Sparnatural
 
+
 - [Reference documentation of Sparnatural widgets](Sparnatural-widgets-documentation.md)
-
-
 - [Configure in OWL using Protégé](OWL-based-configuration.md)
 - [Configure datasources in OWL](OWL-based-configuration-datasources.md)
 - [Configure in JSON(-LD)](JSON-based-configuration.md)
