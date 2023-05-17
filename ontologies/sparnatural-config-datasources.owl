@@ -783,7 +783,8 @@ LIMIT 10</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_bifcontains">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
+        <sparnatural-config-datasources:queryString>PREFIX bif: &lt;http://www.openlinksw.com/schemas/bif#&gt;
+SELECT DISTINCT ?uri ?label
  WHERE {
   ?domain $type $domain .
   ?domain $property ?uri .

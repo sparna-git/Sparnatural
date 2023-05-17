@@ -369,6 +369,7 @@ LIMIT 10
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_bifcontains",
   `
+PREFIX bif: <http://www.openlinksw.com/schemas/bif#>
 SELECT DISTINCT ?uri ?label
  WHERE {
   ?domain $type $domain .
