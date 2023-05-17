@@ -8,6 +8,21 @@ This is a reference documentation for Sparnatural widgets
 
 ### Appearance
 
+Typical appearance of a list widget, allowing to select a URI value, shown with a label and number of occurrences, ordered by decreasing number of occurrences:
+
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-basic.png" />
+
+Showing literal values only (EDM Type is a literal value) :
+
+<img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" />
+
+Showing a mix of literal values and URIs :
+
+<img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-mix-literal-URIs.png" />
+
+Listing URI values with a label listed alphabetically :
+
+<img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-no-occurrences.png" />
 
 
 ### Description
@@ -21,7 +36,7 @@ The sort order of the elements in the list, as well as their precise labels, dep
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of `http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty`
+In OWL configuration, declare a sub-property of [`http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty)
 
 ### Datasources
 
