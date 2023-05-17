@@ -19,7 +19,7 @@ This is a reference documentation for Sparnatural widgets.
 ### Description
 
 List widgets allow to select a value from a dropdown list. They are suitable if the list of distinct values is limited in size (typically less than 500 items). The widget provides a dropdown list combined with a filtering/search input to search within the list content. The input field to search within the list does not appear if the list is very small, under 20 items.
-List widgets are implemented using the [select2 JQuery component](https://select2.org/).
+List widget is implemented using the [select2 JQuery component](https://select2.org/).
 
 List widgets can work both with URIs + labels, or with literal values. It can even mix URIs and literals in the same list.
 
@@ -31,8 +31,8 @@ In OWL configuration, declare a sub-property of [`config-core:ListProperty`](htt
 
 ### Datasources
 
-The list of URI as well as their labels need to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty).
-The default datasource used is [`datasources:list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources/list_URI_or_literal_count), itself relying on the SPARQL query [`datasources:query_list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_list_URI_or_literal_count)
+The list of URI as well as their labels needs to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty).
+The default datasource used is [`datasources:list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_count), itself relying on the SPARQL query [`datasources:query_list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count)
 
 ### SPARQL generation
 
@@ -69,15 +69,28 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 ## Autocomplete widget
 
 ### Appearance
+
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-basic.png" width="75%" />
+
 ### Description
+
+The autocomplete widget allows to select a URI by typing a few letters, and selecting a value from a list of proposals. The search is triggered when 3 characters at least have been entered. The search is done on one or more properties configured in the widget datasource. The search
+Autocomplete widget is implemented based on [easyautocomplete library](https://github.com/pawelczak/EasyAutocomplete).
+
 ### Configuration
 ### Datasources
+
+The list of proposals displayed to the user needs to be [configured using a SPARQL datasource](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-an-autocompleteproperty). The default datasource used is [`datasources:search_URI_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_URI_contains), itself relying on the SPARQL query [`datasources:query_search_URI_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_URI_contains)
+
 ### SPARQL clause
 
 
 ## Tree widget
 
 ### Appearance
+
+
+
 ### Description
 ### Configuration
 ### Datasources
