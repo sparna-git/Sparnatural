@@ -40,3 +40,10 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 ## 4. FAQ
 
 - [FAQ](FAQ.md) - Frequently Asked Questions
+
+## 5. Other resources
+
+- Check out [the bibliography section of the website](https://sparnatural.eu#bibliography) where you can find presentation material on Sparnatural
+- Check out [the YouTube channel](https://www.youtube.com/playlist?list=PL3kB_eBB1Pc3FBOtevNtRkSw4YmWar4q5) for videos of Sparnatural
+- Don't hesitate to [ask questions on the Github issue tracker](https://github.com/sparna-git/Sparnatural/issues)
+- [Sparna](http://sparna.fr) can provide some support on setting up Sparnatural, so get in touch at thomas /dot/ francart /at/ sparna /dot/ fr 
