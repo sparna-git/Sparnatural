@@ -181,7 +181,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
     items = (SHACLSpecificationEntry.sort(items) as SHACLSpecificationEntity[]);
 
-    console.log("NodeShapes with at least one property " + items);
+    console.log("NodeShapes with at least one property " + items.map(i => i.getId()));
     return items;
   }
 

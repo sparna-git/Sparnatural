@@ -177,9 +177,9 @@ export class SpecialSHACLSpecificationEntityRegistry {
 
     private registry:Map<string,SpecialSHACLSpecificationEntity> = new Map<string,SpecialSHACLSpecificationEntity>();
 
-    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/other";
+    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/Attribute";
 
-    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/otherDates";
+    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/Date";
 
     static instance = new SpecialSHACLSpecificationEntityRegistry();
 
@@ -194,7 +194,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
         )
         this.registry.set(
             SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_DATES,
-            new SpecialSHACLSpecificationEntity(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_DATES, "fa-solid fa-calendar", "Dates")
+            new SpecialSHACLSpecificationEntity(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_DATES, "fa-solid fa-calendar", "Date")
         )
     }
 
