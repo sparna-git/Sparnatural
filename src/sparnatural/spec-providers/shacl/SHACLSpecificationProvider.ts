@@ -20,6 +20,7 @@ const SH_NAMESPACE = "http://www.w3.org/ns/shacl#";
 export const SH = {
   CLASS: factory.namedNode(SH_NAMESPACE + "class") as NamedNode,
   DATATYPE: factory.namedNode(SH_NAMESPACE + "datatype") as NamedNode,
+  DESCRIPTION: factory.namedNode(SH_NAMESPACE + "description") as NamedNode,
   IRI: factory.namedNode(SH_NAMESPACE + "IRI") as NamedNode, 
   LANGUAGE_IN: factory.namedNode(SH_NAMESPACE + "languageIn") as NamedNode, 
   LITERAL: factory.namedNode(SH_NAMESPACE + "Literal") as NamedNode, 
@@ -116,7 +117,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       .forEach((quad: Quad) => {
         // find it with the full URI
         var re = new RegExp("<" + quad.subject.id + ">", "g");
-        let sparqlReplacementString = this.pathToSparql(quad.object);
+        let sparqlReplacementString = SHACLSpecificationProvider.pathToSparql(quad.object);
         sparql = sparql.replace(re, sparqlReplacementString);
       });
 
@@ -184,12 +185,17 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     return items;
   }
 
-  pathToSparql(object:Quad_Object) {
+  public static pathToSparql(object:Quad_Object) {
     if(object instanceof NamedNode) {
       return "<" + (object as NamedNode).id + ">";
     } else {
       throw new Error("SHACL blank node paths not implemented yet")
     }
+  }
+
+  public static getLocalName(uri:string){
+    if(uri.includes('#')) return uri.split('#').pop()
+    return uri.split('/').pop()
   }
 
 }

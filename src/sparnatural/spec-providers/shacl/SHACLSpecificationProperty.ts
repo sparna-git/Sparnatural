@@ -16,6 +16,17 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     super(uri, provider, n3store, lang);
   }
 
+    getLabel(): string {
+      // first try to read an sh:name
+      let label = this._readAsLiteralWithLang(this.uri, SH.NAME, this.lang);
+      // no sh:name present, read the local part of the URI
+      if(!label) {
+        label = SHACLSpecificationProvider.getLocalName(this.uri) as string;
+      }
+
+      return label;
+    }
+
     getPropertyType(): string | undefined {
         let result:string[] = new Array<string>();
 

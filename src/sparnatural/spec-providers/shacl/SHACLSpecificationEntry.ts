@@ -5,10 +5,9 @@ import factory from "@rdfjs/data-model";
 import { SH, SHACLSpecificationProvider, VOLIPI } from "./SHACLSpecificationProvider";
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 
-export class SHACLSpecificationEntry extends BaseRDFReader implements ISpecificationEntry {
+export abstract class SHACLSpecificationEntry extends BaseRDFReader implements ISpecificationEntry {
     uri:string;
     provider:SHACLSpecificationProvider;
-
 
     constructor(uri:string, provider: SHACLSpecificationProvider, n3store: Store<Quad>, lang: string) {
         super(n3store, lang);
@@ -16,23 +15,19 @@ export class SHACLSpecificationEntry extends BaseRDFReader implements ISpecifica
         this.provider=provider;
     }
 
+    abstract getLabel():string;
+
     getId(): string {
         return this.uri;
     }
 
-    getLabel(): string {
-        // first try to read an sh:name
-        // and if not present read an rdfs:label
-        let label = this._readAsLiteralWithLang(this.uri, SH.NAME, this.lang);
-        if(!label) {
-          label = this._readAsLiteralWithLang(this.uri, RDFS.LABEL, this.lang)
-        }
-
-        return label;
-    }
-
     getTooltip(): string | null {
-      return this._readAsLiteralWithLang(this.uri, VOLIPI.MESSAGE, this.lang);
+      let tooltip = this._readAsLiteralWithLang(this.uri, VOLIPI.MESSAGE, this.lang);
+      if(!tooltip) {
+        // try with sh:description
+        tooltip = this._readAsLiteralWithLang(this.uri, SH.DESCRIPTION, this.lang);
+      }
+      return tooltip;
     }
 
 

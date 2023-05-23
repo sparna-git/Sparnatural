@@ -1,4 +1,4 @@
-import { BaseRDFReader } from "../BaseRDFReader";
+import { BaseRDFReader, RDFS } from "../BaseRDFReader";
 import ISpecificationEntity from "../ISpecificationEntity";
 import { Quad, Store } from "n3";
 import factory from "@rdfjs/data-model";
@@ -12,6 +12,17 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     constructor(uri:string, provider: SHACLSpecificationProvider, n3store: Store<Quad>, lang: string) {
         super(uri, provider, n3store, lang);
     }
+
+    getLabel(): string {
+        // first try to read an rdfs:label
+        let label = this._readAsLiteralWithLang(this.uri, RDFS.LABEL, this.lang);
+        // no rdfs:label present, read the local part of the URI
+        if(!label) {
+          label = SHACLSpecificationProvider.getLocalName(this.uri) as string;
+        }
+  
+        return label;
+      }
     
     getConnectingProperties(range: string): string[] {
         var items: any[] = [];

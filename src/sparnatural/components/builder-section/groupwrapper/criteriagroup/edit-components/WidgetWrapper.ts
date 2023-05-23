@@ -379,11 +379,7 @@ class WidgetWrapper extends HTMLComponent {
         // determine custom roots datasource
         var treeRootsDatasource =
           this.specProvider.getProperty(objectPropertyId).getTreeRootsDatasource();
-        if (treeRootsDatasource == null) {
-          // try to read it on the class
-          treeRootsDatasource =
-            this.specProvider.getEntity(endClassType).getTreeRootsDatasource();
-        }
+
         if (treeRootsDatasource == null) {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
@@ -397,11 +393,7 @@ class WidgetWrapper extends HTMLComponent {
         // determine custom children datasource
         var treeChildrenDatasource =
           this.specProvider.getProperty(objectPropertyId).getTreeChildrenDatasource();
-        if (treeChildrenDatasource == null) {
-          // try to read it on the class
-          treeChildrenDatasource =
-            this.specProvider.getEntity(endClassType).getTreeChildrenDatasource();
-        }
+
         if (treeChildrenDatasource == null) {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
