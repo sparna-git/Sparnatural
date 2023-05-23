@@ -11,10 +11,6 @@ export default interface ISpecificationEntry {
     getLabel(): string;
     getTooltip(): string|null;
 
-    getDatasource(): any;
-    getTreeChildrenDatasource(): any;
-    getTreeRootsDatasource(): any;
-
     getIcon(): string;
     getHighlightedIcon(): string;
 }

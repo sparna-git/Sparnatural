@@ -6,6 +6,7 @@ import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import factory from "@rdfjs/data-model";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
+import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 
 export class OWLSpecificationProperty extends OWLSpecificationEntry implements ISpecificationProperty {
 
@@ -73,6 +74,27 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     }
 
     return undefined;
+  }
+
+  getDatasource() {
+    return this._readDatasourceAnnotationProperty(
+        this.uri,
+        Datasources.DATASOURCE
+    );
+  }
+
+  getTreeChildrenDatasource() {
+      return this._readDatasourceAnnotationProperty(
+          this.uri,
+          Datasources.TREE_CHILDREN_DATASOURCE
+        );
+  }
+
+  getTreeRootsDatasource() {
+      return this._readDatasourceAnnotationProperty(
+          this.uri,
+          Datasources.TREE_ROOTS_DATASOURCE
+      );
   }
 
   isMultilingual(): boolean {

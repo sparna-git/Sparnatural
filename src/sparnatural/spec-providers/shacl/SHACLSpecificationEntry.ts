@@ -75,27 +75,6 @@ export class SHACLSpecificationEntry extends BaseRDFReader implements ISpecifica
         return this._readAsSingleLiteral(this.uri, SH.ORDER);
     }
 
-    getDatasource() {
-      return this._readDatasourceAnnotationProperty(
-          this.uri,
-          Datasources.DATASOURCE
-      );
-    }
-
-    getTreeChildrenDatasource() {
-      return this._readDatasourceAnnotationProperty(
-          this.uri,
-          Datasources.TREE_CHILDREN_DATASOURCE
-        );
-    }
-
-    getTreeRootsDatasource() {
-        return this._readDatasourceAnnotationProperty(
-            this.uri,
-            Datasources.TREE_ROOTS_DATASOURCE
-        );
-    }
-
     static sort(items: SHACLSpecificationEntry[]) {
         const compareFunction = function (item1: SHACLSpecificationEntry, item2: SHACLSpecificationEntry) {
           // return me.getLabel(item1).localeCompare(me.getLabel(item2));

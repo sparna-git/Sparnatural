@@ -8,6 +8,7 @@ import { DASH, SH, SHACLSpecificationProvider, XSD } from "./SHACLSpecificationP
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { ListWidget, SparnaturalSearchWidget, SparnaturalSearchWidgetsRegistry } from "./SHACLSearchWidgets";
 import { SpecialSHACLSpecificationEntityRegistry } from "./SHACLSpecificationEntity";
+import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 
 export class SHACLSpecificationProperty extends SHACLSpecificationEntry implements ISpecificationProperty {
 
@@ -136,6 +137,27 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
         // return a dedup array
         return [...new Set(classes)];
+    }
+
+    getDatasource() {
+      return this._readDatasourceAnnotationProperty(
+          this.uri,
+          Datasources.DATASOURCE
+      );
+    }
+
+    getTreeChildrenDatasource() {
+      return this._readDatasourceAnnotationProperty(
+          this.uri,
+          Datasources.TREE_CHILDREN_DATASOURCE
+        );
+    }
+
+    getTreeRootsDatasource() {
+        return this._readDatasourceAnnotationProperty(
+            this.uri,
+            Datasources.TREE_ROOTS_DATASOURCE
+        );
     }
 
     getBeginDateProperty(): string | null {

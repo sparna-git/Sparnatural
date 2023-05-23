@@ -3,7 +3,6 @@ import ISpecificationEntry from "../ISpecificationEntry";
 import { Quad, Store } from "n3";
 import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { Config } from "../../ontologies/SparnaturalConfig";
-import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 import factory from "@rdfjs/data-model";
 
 export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificationEntry {
@@ -61,27 +60,7 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
         return icons[0];
       } 
     }
-    
-    getDatasource() {
-        return this._readDatasourceAnnotationProperty(
-            this.uri,
-            Datasources.DATASOURCE
-        );
-    }
 
-    getTreeChildrenDatasource() {
-        return this._readDatasourceAnnotationProperty(
-            this.uri,
-            Datasources.TREE_CHILDREN_DATASOURCE
-          );
-    }
-
-    getTreeRootsDatasource() {
-        return this._readDatasourceAnnotationProperty(
-            this.uri,
-            Datasources.TREE_ROOTS_DATASOURCE
-        );
-    }
 
     /**
      * Reads config:order of an entity and returns it, or null if not set

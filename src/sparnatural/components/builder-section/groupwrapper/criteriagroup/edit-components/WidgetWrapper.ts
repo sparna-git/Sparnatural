@@ -194,11 +194,6 @@ class WidgetWrapper extends HTMLComponent {
         var datasource = this.specProvider.getProperty(objectPropertyId).getDatasource();
 
         if (datasource == null) {
-          // try to read it on the class
-          datasource = this.specProvider.getEntity(endClassType).getDatasource();
-        }
-
-        if (datasource == null) {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
           if (this.settings.defaultEndpoint) {
@@ -263,11 +258,6 @@ class WidgetWrapper extends HTMLComponent {
 
         // determine custom datasource
         var datasource = this.specProvider.getProperty(objectPropertyId).getDatasource();
-
-        if (datasource == null) {
-          // try to read it on the class
-          datasource = this.specProvider.getEntity(endClassType).getDatasource();
-        }
 
         if (datasource == null) {
           // datasource still null

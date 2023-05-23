@@ -18,6 +18,10 @@ interface ISpecificationProperty extends ISpecificationEntry {
   getServiceEndpoint():string | null;
   isLogicallyExecutedAfter():boolean;
 
+  getDatasource(): any;
+  getTreeChildrenDatasource(): any;
+  getTreeRootsDatasource(): any;
+
   /**
    * @returns true if the query should omit the class criteria of its range all the time
    */
