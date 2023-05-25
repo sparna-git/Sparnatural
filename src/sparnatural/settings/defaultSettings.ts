@@ -9,7 +9,7 @@ const defaultSettings: ISettings = {
   maxDepth: 4, // max amount of where clauses in a branch
   maxOr:3,
   addDistinct: true,
-  limit: 1000,
+  limit: -1,
   typePredicate: "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>",
   defaultEndpoint: null,
   sparqlPrefixes: {

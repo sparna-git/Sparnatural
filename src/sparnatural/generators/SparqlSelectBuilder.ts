@@ -49,7 +49,7 @@ export default class RdfJsGenerator {
         order,
         this.#varsToRDFJS(variables)[0] as VariableTerm
       ),
-      limit: (limit)?limit:undefined
+      limit: (limit && (limit > 0))?limit:undefined
     };
 
     // if the RdfJsQuery contains empty 'where' array, then the generator crashes.
