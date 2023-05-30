@@ -124,7 +124,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
               this._pushIfNotExist(classId, items);
             } else {
               // read union content
-              var classesInUnion = this._readUnionContent(classId);
+              var classesInUnion = this._readAsList(factory.namedNode(classId), OWL.UNION_OF);
               for (const aUnionClass of classesInUnion) {
                 this._pushIfNotExist(aUnionClass, items);
               }

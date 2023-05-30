@@ -67,7 +67,8 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
     }
 
     getShOrder() {
-        return this._readAsSingleLiteral(this.uri, SH.ORDER);
+        let order = this._readAsSingleLiteral(this.uri, SH.ORDER);
+        return order
     }
 
     static sort(items: SHACLSpecificationEntry[]) {

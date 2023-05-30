@@ -30,7 +30,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
         this._pushIfNotExist(aQuad.object.id, classes);
       } else {
         // read union content
-        var classesInUnion = this._readUnionContent(aQuad.object.id);
+        var classesInUnion = this._readAsList(aQuad.object, OWL.UNION_OF).map(o => o.id)
         if(classesInUnion) {
             for (const aUnionClass of classesInUnion) {
             this._pushIfNotExist(aUnionClass, classes);
@@ -149,13 +149,6 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
 
   _isUnionClass(classUri: any) {
     return this._hasProperty(factory.namedNode(classUri), OWL.UNION_OF);
-  }
-
-  _readUnionContent(classUri: any) {
-    var lists = this._readAsRdfNode(factory.namedNode(classUri), OWL.UNION_OF);
-    if (lists.length > 0) {
-      return this._readList_rec(lists[0]);
-    }
   }
 
     

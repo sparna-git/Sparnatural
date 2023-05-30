@@ -67,10 +67,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       var hasNodeKindIri = this._hasTriple(factory.namedNode(this.uri), SH.NODE_KIND, SH.IRI);
 
       if(hasNodeKindIri) {
-        var hasShClass = this._hasTriple(factory.namedNode(this.uri), SH.CLASS, null);
-        var hasShNode = this._hasTriple(factory.namedNode(this.uri), SH.NODE, null);
-        // TODO : test on sh:or ?
-        return !hasShClass && !hasShNode;
+        return (this.#getShClassAndShNodeRange().length == 0);
       }
 
       return false;
@@ -84,51 +81,11 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
 
     /**
-     * TODO : support multiple ranges with sh:or combined with sh:class + sh:node
      * @returns 
      */
     getRange(): string[] {
         // read the sh:class
-        var classes: any[] = [];
-
-        const shclassQuads = this.store.getQuads(
-          factory.namedNode(this.uri),
-          SH.CLASS,
-          null,
-          null
-        );
-
-        // then for each of them, find all NodeShapes targeting this class
-        shclassQuads.forEach((quad:Quad) => {
-            this.store.getQuads(
-                null,
-                SH.TARGET_CLASS,
-                quad.object,
-                null
-            ).forEach((quad:Quad) => {
-                classes.push(quad.subject.id);
-            });
-
-            // also look for nodeshapes that have directly this URI and that are themselves classes
-            this.store.getQuads(
-                quad.object,
-                RDF.TYPE,
-                RDFS.CLASS,
-                null
-            ).forEach((quad:Quad) => {
-                classes.push(quad.subject.id);
-            });
-        });
-
-        // read the sh:node
-        const shnodeQuads = this.store.getQuads(
-            factory.namedNode(this.uri),
-            SH.NODE,
-            null,
-            null
-        ).forEach((quad:Quad) => {
-            classes.push(quad.object.id);
-        });
+        var classes: any[] = this.#getShClassAndShNodeRange();
 
         // no sh:class, no sh:node, consider the range to be a special class
         // based on the datatype analysis
@@ -150,6 +107,67 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         return [...new Set(classes)];
     }
 
+    #getShClassAndShNodeRange() {
+        // read the sh:class
+        var classes: any[] = [];
+
+        classes = this.#readShClassAndShNodeOn(this.uri);
+
+        // read sh:or content
+        var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
+        orMembers?.forEach(m => {
+          classes.push(...this.#readShClassAndShNodeOn(m));
+        });
+
+        return classes;
+    }
+
+    #readShClassAndShNodeOn(theUri:string):string[] {         
+         var classes: any[] = [];
+
+         // read the sh:class
+         const shclassQuads = this.store.getQuads(
+           factory.namedNode(theUri),
+           SH.CLASS,
+           null,
+           null
+         );
+ 
+         // then for each of them, find all NodeShapes targeting this class
+         shclassQuads.forEach((quad:Quad) => {
+             this.store.getQuads(
+                 null,
+                 SH.TARGET_CLASS,
+                 quad.object,
+                 null
+             ).forEach((quad:Quad) => {
+                 classes.push(quad.subject.id);
+             });
+ 
+             // also look for nodeshapes that have directly this URI and that are themselves classes
+             this.store.getQuads(
+                 quad.object,
+                 RDF.TYPE,
+                 RDFS.CLASS,
+                 null
+             ).forEach((quad:Quad) => {
+                 classes.push(quad.subject.id);
+             });
+         });
+ 
+         // read the sh:node
+         const shnodeQuads = this.store.getQuads(
+             factory.namedNode(theUri),
+             SH.NODE,
+             null,
+             null
+         ).forEach((quad:Quad) => {
+             classes.push(quad.object.id);
+         });  
+         
+         return classes;
+    }
+
     getDatasource() {
       return this._readDatasourceAnnotationProperty(
           this.uri,
@@ -165,49 +183,49 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
 
     getTreeRootsDatasource() {
-        return this._readDatasourceAnnotationProperty(
-            this.uri,
-            Datasources.TREE_ROOTS_DATASOURCE
-        );
+      return this._readDatasourceAnnotationProperty(
+          this.uri,
+          Datasources.TREE_ROOTS_DATASOURCE
+      );
     }
 
     getBeginDateProperty(): string | null {
-        return this._readAsSingleResource(this.uri, Config.BEGIN_DATE_PROPERTY);
-      }
-    
-      getEndDateProperty(): string | null {
-        return this._readAsSingleResource(this.uri, Config.END_DATE_PROPERTY);
-      }
-    
-      getExactDateProperty(): string | null {
-        return this._readAsSingleResource(this.uri, Config.EXACT_DATE_PROPERTY);
-      }
-    
-      isEnablingNegation(): boolean {
-        return (
-          this._readAsSingleLiteral(this.uri, Config.ENABLE_NEGATION) == "true"
-        );
-      }
-    
-      isEnablingOptional(): boolean {
-        return (
-          this._readAsSingleLiteral(this.uri, Config.ENABLE_OPTIONAL) == "true"
-        );
-      }
-    
-      getServiceEndpoint(): string | null {
-        const service = this._readAsSingleResource(this.uri,Config.SPARQL_SERVICE);
-        if(service) {
-          const endpoint = this._readAsSingleResource(service,Config.ENDPOINT);
-          if (endpoint) {
-            return endpoint;
-          } 
-        }    
-        return null;
-      }
-    
-      isLogicallyExecutedAfter(): boolean {
-        var executedAfter = this._readAsSingleLiteral(this.uri, Config.SPARNATURAL_CONFIG_CORE+"executedAfter");
-        return executedAfter;
-      }
+      return this._readAsSingleResource(this.uri, Config.BEGIN_DATE_PROPERTY);
+    }
+  
+    getEndDateProperty(): string | null {
+      return this._readAsSingleResource(this.uri, Config.END_DATE_PROPERTY);
+    }
+  
+    getExactDateProperty(): string | null {
+      return this._readAsSingleResource(this.uri, Config.EXACT_DATE_PROPERTY);
+    }
+  
+    isEnablingNegation(): boolean {
+      return !(
+        this._readAsSingleLiteral(this.uri, Config.ENABLE_NEGATION) == "false"
+      );
+    }
+  
+    isEnablingOptional(): boolean {
+      return !(
+        this._readAsSingleLiteral(this.uri, Config.ENABLE_OPTIONAL) == "false"
+      );
+    }
+  
+    getServiceEndpoint(): string | null {
+      const service = this._readAsSingleResource(this.uri,Config.SPARQL_SERVICE);
+      if(service) {
+        const endpoint = this._readAsSingleResource(service,Config.ENDPOINT);
+        if (endpoint) {
+          return endpoint;
+        } 
+      }    
+      return null;
+    }
+  
+    isLogicallyExecutedAfter(): boolean {
+      var executedAfter = this._readAsSingleLiteral(this.uri, Config.SPARNATURAL_CONFIG_CORE+"executedAfter");
+      return executedAfter;
+    }
 }

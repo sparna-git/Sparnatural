@@ -263,7 +263,7 @@ export class BaseRDFReader {
       .map((quad: { object: { value: any } }) => quad.object.value);
   }
 
-  _readAsSingleLiteral(uri: any, property: any) {
+    _readAsSingleLiteral(uri: any, property: any) {
     var values = this._readAsLiteral(uri, property);
     if (values.length == 0) {
       return undefined;
@@ -324,10 +324,29 @@ export class BaseRDFReader {
 
     /****** LIST HANDLING ********/
 
+    _listContains(rdfNode: any, propertyList: any, property:any, value:any) {
+      let found:boolean = false;
+      let listContent:any[] = this._readAsList(rdfNode, propertyList);
+      listContent.forEach(node => {
+        if(this._hasTriple(node, property, value)) found=true;
+      });
+      return found;
+    }
+
+    _readAsList(rdfNode: any, property: any) {
+      let result:any[] = new Array<any>();
+      this.store
+        .getQuads(rdfNode, property, null, null)
+        .map((quad: { object: any }) => {
+          result.push(this._readList_rec(quad.object))
+        });
+      return result;
+    }
+
     _readList_rec(list: any) {
         var result = this.store
           .getQuads(list, RDF.FIRST, null, null)
-          .map((quad: { object: { id: any } }) => quad.object.id);
+          .map((quad: { object: { id: any } }) => quad.object);
     
         var subLists = this._readAsRdfNode(list, RDF.REST);
         if (subLists.length > 0) {
