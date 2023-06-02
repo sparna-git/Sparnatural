@@ -4,10 +4,10 @@
   "description": "Visual query builder for SPARQL queries.",
   "main": "dist/sparnatural.js",
   "module": "dist/sparnatural.js",
-  "types": "dist/Sparnaturalelement.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
+    "build-dev": "rm -rf dist && webpack --mode development",
     "start": "webpack serve --hot --config webpack.config.js --mode development",
     "pretty": "prettier --write \"./src/**/*.{ts,js,json}\""
   },
@@ -64,6 +64,7 @@
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^3.1.0",
     "file-loader": "^6.2.0",
+    "filemanager-webpack-plugin": "^8.0.0",
     "html-webpack-plugin": "^5.5.0",
     "mini-css-extract-plugin": "^2.6.0",
     "prettier": "^2.6.2",

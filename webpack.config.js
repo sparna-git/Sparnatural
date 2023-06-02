@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require('copy-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 module.exports = {
   entry: ["./src/SparnaturalElement.ts" ],
@@ -80,8 +81,8 @@ module.exports = {
   plugins: [
 	// new WriteFilePlugin(),
 	new HtmlWebpackPlugin({
-		filename: 'index.html',
-		template: __dirname + "/src/index.html",
+		filename: 'dev-page/index.html',
+		template: __dirname + "/static/index.html",
 		inject: 'body'
 	}),
 	new MiniCssExtractPlugin({
@@ -91,7 +92,11 @@ module.exports = {
 	new CopyPlugin({
 	  patterns: [
 		{
-			from:__dirname +'/static'
+			from:__dirname +'/static',
+			to:'dev-page',
+			globOptions: {
+	          ignore: ["**/index.html"],
+	        }
 		},
 		// Copy the themes CSS directly as static files in a themes subfolder
 		{
@@ -110,15 +115,31 @@ module.exports = {
 	// see https://stackoverflow.com/questions/68542553/webpack-5process-is-not-defined-triggered-by-stream-browserify
 	new webpack.ProvidePlugin({
 	  process: 'process/browser'
-	})
+	}),
+	new FileManagerPlugin({
+      events: {
+        onEnd: [
+          { copy: [
+	            { source: './hello-sparnatural/**', destination: './dist/hello-sparnatural' },
+	            { source: './dist/sparnatural.js', destination: './dist/hello-sparnatural/' },
+	            { source: './dist/sparnatural.css', destination: './dist/hello-sparnatural/' },
+	            { source: './dist/sparnatural.js.map', destination: './dist/hello-sparnatural/' },
+	            { source: './dist/sparnatural.css.map', destination: './dist/hello-sparnatural/' }
+	      ] },
+      	  { archive: [
+	            { source: './dist/hello-sparnatural', destination: './dist/hello-sparnatural.zip' }
+	      ] }
+        ],
+      },
+    })
   ],
   devServer: {
 	static:{
 		directory: path.resolve(__dirname, "./static"),
 	},
 	historyApiFallback: true,
-	open: true,
-	hot: true
+	hot: true,
+	open: ['/dev-page']
   },
   devtool: "source-map"
 }
