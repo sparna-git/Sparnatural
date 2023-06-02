@@ -29,6 +29,8 @@
             line-height: 42px;
             color: var(--default-text-color);
         }
+        // so that it works even without Bootstrap
+        margin-top: 0;
     }
     /* Not sure what this does */
     span.label-two-line {
