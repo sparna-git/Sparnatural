@@ -1,0 +1,1102 @@
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix eli-ep: <https://data.europarl.europa.eu/def/eli-ep#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix eli: <http://data.europa.eu/eli/ontology#> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix eli-dl: <http://data.europa.eu/eli/eli-draft-legislation-ontology#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix epvoc: <https://data.europarl.europa.eu/def/epvoc#> .
+@prefix op-aut: <http://publications.europa.eu/resource/authority/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<https://data.europarl.europa.eu/def/eli-ep#> a owl:Ontology, adms:Asset;
+  dcterms:type <http://publications.europa.eu/resource/authority/dataset-type/APROF>;
+  rdfs:label "ELI-EP Application Profile"@en;
+  dcterms:title "ELI-EP Application Profile"@en;
+  dcterms:description "ELI-EP is an application profile based on the ELI / ELI-DL Ontology, specifically designed to describe the documents and the activities of the European Parliament."@en;
+  owl:versionInfo "1.1";
+  adms:versionNotes """1.1 - 2023-04-14
+- (new) object properties: eli-dl:adopts, epvoc:isAboutSubjectMatter, epvoc:isAboutDirectoryCode
+- (new) eli-dl:Process
+- (update) eli:date_document sh:datatype changed from xsd:dateTime to xsd:date"""@en;
+  adms:status <http://publications.europa.eu/resource/dataset/dataset-status/COMPLETED>;
+  owl:versionIRI <https://data.europarl.europa.eu/def/eli-ep#>;
+  dcterms:conformsTo <https://www.w3.org/TR/shacl>;
+  dcterms:created "2022-11-24"^^xsd:date;
+  dcterms:modified "2023-04-17T00:00:00.000Z"^^xsd:dateTime;
+  dcterms:dateCopyrighted "2022"^^xsd:gYear;
+  dcterms:license <https://www.europarl.europa.eu/legal-notice/>;
+  dcterms:creator <http://publications.europa.eu/resource/dataset/corporate-body/EP>;
+  dcterms:publisher <http://publications.europa.eu/resource/dataset/corporate-body/EP>;
+  dcterms:rigthsHolder <http://publications.europa.eu/resource/dataset/corporate-body/EURUN>;
+  dcat:distribution _:24b883f25d9e4a03a5050a6b1d409209852 .
+
+_:24b883f25d9e4a03a5050a6b1d409209852 dcterms:format <https://www.iana.org/assignments/media-types/text/turtle>;
+  dcat:downloadURL <https://europarl.github.io/eli-ep/1.1/eli-ep.shacl.ttl> .
+
+eli:Work a sh:NodeShape, rdfs:Class;
+  skos:example "https://data.europarl.europa.eu/eli/dl/doc/A-9-2019-0001";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/eli/dl/doc/[A-Za-z0-9\\-_]+$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209853;
+  rdfs:label "Work"@en;
+  sh:order "1"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "Orange";
+  sh:property eli-ep:P10, eli-ep:P11, eli-ep:P12, eli-ep:P13, eli-ep:P14, eli-ep:P15,
+    eli-ep:P16, eli-ep:P17, eli-ep:P18, eli-ep:P19, eli-ep:P20, eli-ep:P21, eli-ep:P22,
+    eli-ep:P23, eli-ep:P24, eli-ep:P25, eli-ep:P28, eli-ep:P29, eli-ep:P30, eli-ep:P31,
+    eli-ep:P32, eli-ep:P33, eli-ep:P34, eli-ep:P35, eli-ep:P36, eli-ep:P37, eli-ep:P38,
+    eli-ep:P39, eli-ep:P40, eli-ep:P41, eli-ep:P42 .
+
+_:24b883f25d9e4a03a5050a6b1d409209853 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli:ComplexWork a sh:NodeShape, rdfs:Class;
+  skos:example "https://data.europarl.europa.eu/eli/dl/doc/OJ-9-2020-10-21";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/eli/dl/doc/[A-Za-z0-9\\-_]+$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209854;
+  rdfs:label "Complex work"@en;
+  sh:order "2"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "Orange";
+  sh:property eli-ep:P10, eli-ep:P11, eli-ep:P12, eli-ep:P13, eli-ep:P14, eli-ep:P15,
+    eli-ep:P16, eli-ep:P17, eli-ep:P18, eli-ep:P19, eli-ep:P20, eli-ep:P21, eli-ep:P22,
+    eli-ep:P23, eli-ep:P24, eli-ep:P25, eli-ep:P45, eli-ep:P46 .
+
+_:24b883f25d9e4a03a5050a6b1d409209854 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli:Expression a sh:NodeShape, rdfs:Class;
+  skos:example "https://data.europarl.europa.eu/eli/dl/doc/A-9-2019-0001/en";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/eli/dl/doc/[A-Za-z0-9\\-_]+/[a-z][a-z]$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209855;
+  rdfs:label "Expression"@en;
+  sh:order "3"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "RoyalBlue";
+  sh:property eli-ep:P66, eli-ep:P67, eli-ep:P68, eli-ep:P69 .
+
+_:24b883f25d9e4a03a5050a6b1d409209855 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli:Manifestation a sh:NodeShape, rdfs:Class;
+  skos:example "https://data.europarl.europa.eu/eli/dl/doc/A-9-2019-0001/en/pdf";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/eli/dl/doc/[A-Za-z0-9\\-_]+/[a-z][a-z]/.*$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209856;
+  rdfs:label "Manifestation"@en;
+  sh:order "4"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "SeaGreen";
+  sh:property eli-ep:P73, eli-ep:P74, eli-ep:P75, eli-ep:P76, eli-ep:P77 .
+
+_:24b883f25d9e4a03a5050a6b1d409209856 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli-dl:Activity a sh:NodeShape, rdfs:Class;
+  skos:example "https://data.europarl.europa.eu/eli/dl/event/MTG-PL-2020-10-23";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/eli/dl/event/[A-Za-z0-9\\-_]+$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209857;
+  rdfs:label "Activity"@en;
+  sh:order "5"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkBlue";
+  sh:property eli-ep:P51, eli-ep:P52, eli-ep:P53, eli-ep:P54, eli-ep:P55, eli-ep:P56,
+    eli-ep:P57, eli-ep:P58, eli-ep:P59, eli-ep:P60, eli-ep:P61, eli-ep:P62, eli-ep:P63 .
+
+_:24b883f25d9e4a03a5050a6b1d409209857 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli-dl:ForeseenActivity a sh:NodeShape, rdfs:Class;
+  skos:example "https://data.europarl.europa.eu/eli/dl/event/MTG-PL-2020-10-23-TF-9000";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/eli/dl/event/[A-Za-z0-9\\-_]+$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209858;
+  rdfs:label "ForeseenActivity"@en;
+  sh:order "6"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkBlue";
+  sh:property eli-ep:P49 .
+
+_:24b883f25d9e4a03a5050a6b1d409209858 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli-dl:Participation a sh:NodeShape, rdfs:Class;
+  skos:example "https://data.europarl.europa.eu/eli/dl/participation/A-9-2021-0226_112611";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/eli/dl/participation/[A-Za-z0-9\\-_]+_+[A-Za-z0-9\\-_]+$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209859;
+  rdfs:label "Participation"@en;
+  sh:order "7"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "Purple";
+  sh:property eli-ep:P80, eli-ep:P81, eli-ep:P82, eli-ep:P83 .
+
+_:24b883f25d9e4a03a5050a6b1d409209859 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+epvoc:Room a sh:NodeShape, rdfs:Class;
+  skos:example "https://data.europarl.europa.eu/room/LOWHEM";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/room/[A-Za-z0-9\\-_]+$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209860;
+  rdfs:label "Room"@en;
+  sh:order "8"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "Black";
+  sh:property eli-ep:P86, eli-ep:P87, eli-ep:P88 .
+
+_:24b883f25d9e4a03a5050a6b1d409209860 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli-dl:ParliamentaryTerm a sh:NodeShape, rdfs:Class;
+  skos:example "https://data.europarl.europa.eu/org/ep-9";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/org/ep-[0-9].*$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209861;
+  rdfs:label "Parliamentary term"@en;
+  sh:order "9"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "Black";
+  sh:property eli-ep:P94 .
+
+_:24b883f25d9e4a03a5050a6b1d409209861 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli:LegalResource a sh:NodeShape, rdfs:Class;
+  sh:nodeKind sh:IRI;
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209862;
+  rdfs:label "Legal Resource"@en;
+  sh:order "10"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "Orange" .
+
+_:24b883f25d9e4a03a5050a6b1d409209862 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli-dl:Process a sh:NodeShape, rdfs:Class;
+  rdfs:comment "Remark: Process data will not be yet available. For now, this inverse relation will be provided only in adopted-texts dumps and APIs."@en;
+  skos:example "https://data.europarl.europa.eu/eli/dl/proc/2019-0001";
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/eli/dl/proc/[A-Za-z0-9\\-_]+$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209863;
+  rdfs:label "Process"@en;
+  sh:order "11"^^xsd:integer;
+  owl:versionInfo "v1.1";
+  shacl-play:color "Plum";
+  sh:property eli-ep:P91 .
+
+_:24b883f25d9e4a03a5050a6b1d409209863 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli:WorkType a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/resource-type/ADOPT_TEXT";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/resource-type/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209864;
+  rdfs:label "Work type"@en;
+  sh:order "12"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey" .
+
+_:24b883f25d9e4a03a5050a6b1d409209864 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli-dl:ParticipationRole a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/role/RAPP";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/role/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209865;
+  rdfs:label "Participation Role"@en;
+  sh:order "13"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey";
+  sh:property eli-ep:P101, eli-ep:P102 .
+
+_:24b883f25d9e4a03a5050a6b1d409209865 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+dcterms:LinguisticSystem a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/language/LIT";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/langauge/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209866;
+  rdfs:label "Linguistic System"@en;
+  sh:order "14"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey";
+  sh:property eli-ep:P121, eli-ep:P122 .
+
+_:24b883f25d9e4a03a5050a6b1d409209866 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+dcterms:MediaTypeOrExtent a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/file-type/PDF";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/file-type/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209867;
+  rdfs:label "Media Type or Extent"@en;
+  sh:order "15"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey" .
+
+_:24b883f25d9e4a03a5050a6b1d409209867 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+dcterms:MediaType a sh:NodeShape, rdfs:Class;
+  skos:example "https://www.iana.org/assignments/media-types/application/pdf";
+  sh:nodeKind sh:IRI;
+  sh:pattern "https://www.iana.org/assignments/media-types/application/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209868;
+  rdfs:label "Media Type"@en;
+  sh:order "16"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey" .
+
+_:24b883f25d9e4a03a5050a6b1d409209868 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+euvoc:Country a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/country/FRA";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/country/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209869;
+  rdfs:label "Country"@en;
+  sh:order "17"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey";
+  sh:property eli-ep:P125, eli-ep:P126 .
+
+_:24b883f25d9e4a03a5050a6b1d409209869 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+dcterms:Location a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/place/FRA_SXB";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/place/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209870;
+  rdfs:label "Place"@en;
+  sh:order "18"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey";
+  sh:property eli-ep:P129, eli-ep:P130, eli-ep:P131 .
+
+_:24b883f25d9e4a03a5050a6b1d409209870 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+euvoc:FileStatus a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/file-status/ADOPTED";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/file-status/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209871;
+  rdfs:label "Status"@en;
+  sh:order "19"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey";
+  sh:property eli-ep:P109, eli-ep:P110 .
+
+_:24b883f25d9e4a03a5050a6b1d409209871 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+org:Organization a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/corporate-body/EP";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/corporate-body/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209872;
+  rdfs:label "Corporate Body"@en;
+  sh:order "20"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey";
+  sh:property eli-ep:P138, eli-ep:P139 .
+
+_:24b883f25d9e4a03a5050a6b1d409209872 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+org:Site a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/site/ASP";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/site/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209873;
+  rdfs:label "Site"@en;
+  sh:order "21"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey";
+  sh:property eli-ep:P134, eli-ep:P135 .
+
+_:24b883f25d9e4a03a5050a6b1d409209873 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+skos:Concept a sh:NodeShape, rdfs:Class;
+  skos:example "http://eurovoc.europa.eu/434743";
+  sh:nodeKind sh:IRI;
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209874;
+  rdfs:label "Concept"@en;
+  sh:order "22"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey";
+  sh:property eli-ep:P97, eli-ep:P98 .
+
+_:24b883f25d9e4a03a5050a6b1d409209874 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli-dl:ActivityType a sh:NodeShape, rdfs:Class;
+  skos:example "http://publications.europa.eu/resource/authority/event/EP_PLENARY_PART_SESSION";
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/event/.*$";
+  sh:ignoredProperties _:24b883f25d9e4a03a5050a6b1d409209875;
+  rdfs:label "Activity Type"@en;
+  sh:order "23"^^xsd:integer;
+  owl:versionInfo "v1.0";
+  shacl-play:color "DarkGrey";
+  sh:property eli-ep:P142, eli-ep:P143 .
+
+_:24b883f25d9e4a03a5050a6b1d409209875 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli-ep:P10 owl:versionInfo "v1.0";
+  sh:path eli-dl:parliamentary_term;
+  sh:name "parliamentary term"@en;
+  sh:description "The parliamentary term in which the activity took place"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli-dl:ParliamentaryTerm .
+
+eli-ep:P11 owl:versionInfo "v1.0";
+  sh:path eli:work_type;
+  sh:name "work type"@en;
+  sh:description "The type of a work, taken from a controlled vocabulary."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Worktype .
+
+eli-ep:P12 owl:versionInfo "v1.1";
+  sh:path eli:date_document;
+  sh:name "date document"@en;
+  sh:description "Date of adoption or signature (of the form yyyy-mm-dd) of the document"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class xsd:date .
+
+eli-ep:P13 owl:versionInfo "v1.0";
+  sh:path epvoc:epNumber;
+  sh:name "ep number"@en;
+  sh:description "European Parliament number"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+eli-ep:P14 owl:versionInfo "v1.0";
+  sh:path rdfs:label;
+  sh:name "display label"@en;
+  sh:description "Label to by displayed in user interfaces"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+eli-ep:P15 owl:versionInfo "v1.0";
+  sh:path dcterms:identifier;
+  sh:name "identifier"@en;
+  sh:description "An unambiguous reference to the resource."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+eli-ep:P16 owl:versionInfo "v1.0";
+  sh:path epvoc:identifierYear;
+  sh:name "identifier year"@en;
+  sh:description "A year linked to the reference of the resource."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+eli-ep:P17 owl:versionInfo "v1.0";
+  sh:path dcterms:title;
+  sh:name "title"@en;
+  sh:description "use ISO639-1 of controlled vocabulary"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+eli-ep:P18 owl:versionInfo "v1.0";
+  sh:path skos:notation;
+  sh:name "notation in EP Public Register"@en;
+  sh:description "A notation is a string of characters such as \"T58.5\" or \"303.4833\" used to uniquely identify a concept within the scope of a given concept scheme."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype epvoc:publicRegister .
+
+eli-ep:P19 owl:versionInfo "v1.0";
+  sh:path eli:is_derivative_of;
+  sh:name "is derivative of"@en;
+  sh:description "This work is derived from the other work. Example: a motion derived from an oral question."@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P20 owl:versionInfo "v1.0";
+  sh:path eli:is_annex_of;
+  sh:name "is annex of"@en;
+  sh:description "Indicates that the Work is Annex of another Work"@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P21 owl:versionInfo "v1.0";
+  sh:path dcterms:publisher;
+  sh:name "publisher"@en;
+  sh:description "The property refers to the institution responsible for making the document available. The values are concepts of op-aut:corporate-body."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class org:Organization .
+
+eli-ep:P22 owl:versionInfo "v1.0";
+  sh:path epvoc:numbering;
+  sh:name "numbering"@en;
+  sh:description "This property refers to a number sequence that indicates order or is used for identification."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+eli-ep:P23 owl:versionInfo "v1.0";
+  sh:path epvoc:itemNumberBegin;
+  sh:name "numbering range begin"@en;
+  sh:description "This property identifies the starting number in a list of items."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:integer .
+
+eli-ep:P24 owl:versionInfo "v1.0";
+  sh:path epvoc:itemNumberEnd;
+  sh:name "numbering range end"@en;
+  sh:description "This property identifies the ending number in a list of items."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:integer .
+
+eli-ep:P25 owl:versionInfo "v1.0";
+  sh:path epvoc:workHadParticipation;
+  sh:name "stakeholder participant"@en;
+  sh:description "Indicates the participation of a stakeholder to an activity involving the work. The role of the agent in this participation is described in the participation resource."@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli-dl:Participation .
+
+eli-ep:P28 owl:versionInfo "v1.0";
+  sh:path epvoc:epNumberVersion;
+  sh:name "ep number version"@en;
+  sh:description "European Parliament number version"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+eli-ep:P29 owl:versionInfo "v1.0";
+  sh:path eli-dl:foresees_change_of;
+  sh:name "amends"@en;
+  sh:description """Indicates a LegalResource already published that the future law, if adopted, will change. Readers should refer to the definition of the eli:changes property.
+Note the legal impacts can change in successive versions of the same document."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P30 owl:versionInfo "v1.0";
+  sh:path eli:consolidated_by;
+  sh:name "consolidated by"@en;
+  sh:description "Indicates that this legal resource or expression is taken into account in a consolidated text"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P31 owl:versionInfo "v1.0";
+  sh:path eli-dl:answers_to;
+  sh:name "answers"@en;
+  sh:description "Indicates that this work is an answer the other work."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P32 owl:versionInfo "v1.0";
+  sh:path eli:based_on;
+  sh:name "based on"@en;
+  sh:description "Indicates that this work is empowered by another one, typically rules, constitution, a treaty or an enabling act."@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:LegalResource .
+
+eli-ep:P33 owl:versionInfo "v1.0";
+  sh:path dcterms:contributor;
+  sh:name "contributor"@en;
+  sh:description "An entity responsible for making contributions to the resource."@en;
+  sh:nodeKind sh:IRI;
+  sh:class foaf:Agent .
+
+eli-ep:P34 owl:versionInfo "v1.0";
+  sh:path dcterms:creator;
+  sh:name "creator"@en;
+  sh:description "An agent responsible for making the resource."@en;
+  sh:nodeKind sh:IRI;
+  sh:class foaf:Agent .
+
+eli-ep:P35 owl:versionInfo "v1.0";
+  sh:path epvoc:versiontype;
+  sh:name "version status"@en;
+  sh:description "Indicates the version type of a Work part of a Complex Work, like Agenda or Minutes."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class euvoc:FileStatus .
+
+eli-ep:P36 owl:versionInfo "v1.0";
+  sh:path epvoc:originalLanguage;
+  sh:name "original language"@en;
+  sh:description "Original language of a work"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dcterms:LinguisticSystem .
+
+eli-ep:P37 owl:versionInfo "v1.0";
+  sh:path eli:corrects;
+  sh:name "corrects"@en;
+  sh:description "Indicates that this work / expression corrects the other work / expression. Corrects is used for minor corrections made to a work / expression. The property used to relate works describe the fact that a work expresses some corrections to be made to the an other work. The property used to relate expression indicate that a specific linguistic expression correct a specific expression."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P38 owl:versionInfo "v1.0";
+  sh:path eli:is_realized_by;
+  sh:name "is realized by"@en;
+  sh:description "Relates a work to an expression that realizes it. Inverse of \"realizes\"."@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Expression .
+
+eli-ep:P39 owl:versionInfo "v1.0";
+  sh:path eli:is_about;
+  sh:name "is about"@en;
+  sh:description "A subject for this legal resource. The use of Eurovoc (http://eurovoc.europa.eu) is encouraged to select values for this property. Member states are encouraged to align local values to Eurovoc."@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+eli-ep:P40 owl:versionInfo "v1.1";
+  sh:path epvoc:isAboutSubjectMatter;
+  sh:name "is about subject matter"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+eli-ep:P41 owl:versionInfo "v1.1";
+  sh:path epvoc:isAboutDirectoryCode;
+  sh:name "is about directory code"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+eli-ep:P42 owl:versionInfo "v1.1";
+  sh:path eli-dl:adopts;
+  sh:name "adopts"@en;
+  sh:description "Indicates that the work represents the adopted work of one or several related works"@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P45 owl:versionInfo "v1.0";
+  sh:path eli:has_member;
+  sh:name "has member"@en;
+  sh:description "Indicates that a Work is part of a Complex Work."@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P46 owl:versionInfo "v1.0";
+  sh:path dcat:hasCurrentVersion;
+  sh:name "has current version"@en;
+  sh:description "This property is intended for relating a non-versioned or abstract resource to a single snapshot that can be used as a permalink to indicate the current version of the content [PAV].The notion of version used by this property is limited to versions resulting from revisions occurring to a resource as part of its life-cycle."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P49 owl:versionInfo "v1.0";
+  sh:path dcterms:identifier;
+  sh:name "identifier in pericles"@en;
+  sh:description "An identifier is a string of characters such as \"12345-33\" used to uniquely identify a concept within the scope of a given concept scheme."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype epvoc:periclesId .
+
+eli-ep:P51 owl:versionInfo "v1.0";
+  sh:path eli-dl:had_activity_type;
+  sh:name "activity type"@en;
+  sh:description "The type of a process. The type of a process often determine the workflow being followed to create the law."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli-dl:Activitytype .
+
+eli-ep:P52 owl:versionInfo "v1.0";
+  sh:path eli-dl:activity_date;
+  sh:name "activity date"@en;
+  sh:description """The date of an activity, to indicate a single date. Alternatively, if an activity spans a time range, \\\"activity_start_date\\\" and \\\"activity_end_date\\\" can be used to indicate the beginning and end of the activity.
+
+Dates can be expressed either at a date precision (yyyy-mm-dd), or with time precision (yyyy-dd-mmYhh:mm:ss)"""@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime .
+
+eli-ep:P53 owl:versionInfo "v1.0";
+  sh:path eli-dl:activity_start_date;
+  sh:name "activity start date"@en;
+  sh:description """The date at which an activity started.
+
+Dates can be expressed either at a date precision (yyyy-mm-dd), or with time precision (yyyy-dd-mmYhh:mm:ss)"""@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime .
+
+eli-ep:P54 owl:versionInfo "v1.0";
+  sh:path eli-dl:activity_end_date;
+  sh:name "activity end date"@en;
+  sh:description """The date at which an activity ended.
+
+Dates can be expressed either at a date precision (yyyy-mm-dd), or with time precision (yyyy-dd-mmYhh:mm:ss)"""@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime .
+
+eli-ep:P55 owl:versionInfo "v1.0";
+  sh:path eli-dl:documented_by_a_realization_of;
+  sh:name "documented by a realization of"@en;
+  sh:description "Indicates that the activity was or will be conducted according to the plan described by a Work. Typically these works are agendas that foreseen how future activities will take place."@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P56 owl:versionInfo "v1.0";
+  sh:path eli-dl:recorded_in_realization_of;
+  sh:name "recorded in realization of"@en;
+  sh:description """Indicates that an activity was recorded in a related work.
+
+Note : this property is shortcut for an implicit FRBR \\\"Recording Event\\\" that would have created the Recording of the event."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P57 owl:versionInfo "v1.0";
+  sh:path eli-dl:consists_of;
+  sh:name "consists of"@en;
+  sh:description """Indicates a more fine-grained activity that is taking place within this one. This allows to nest activities inside each other, at an arbitrary level of precision.
+
+Example : \\\"Legislative process number 384\\\" consists of \\\"Initiation of the process 384\\\", \\\"First lecture in assemblée nationale of legislative process 384\\\", \\\"First lecture in senate of legislative process 384\\\", \\\"joint commitee reading of legislative process 384\\\" and \\\"enactement of legislative process 384\\\"."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli-dl:Activity .
+
+eli-ep:P58 owl:versionInfo "v1.0";
+  sh:path epvoc:scheduledIn;
+  sh:name "scheduled in"@en;
+  sh:description "Indicates a more fine-grained foreseen activity that is taking place within this one (ex:time slot)."@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli-dl:ForeseenActivity .
+
+eli-ep:P59 owl:versionInfo "v1.0";
+  sh:path eli-dl:parliamentary_term;
+  sh:name "parliamentary term"@en;
+  sh:description "The parliamentary term in which the activity took place"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli-dl:ParliamentaryTerm .
+
+eli-ep:P60 owl:versionInfo "v1.0";
+  sh:path vcard:hasLocality;
+  sh:name "locality"@en;
+  sh:description "Used to support property parameters for the locality data property"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dcterms:Location .
+
+eli-ep:P61 owl:versionInfo "v1.0";
+  sh:path eli-dl:activity_id;
+  sh:name "activity id"@en;
+  sh:description """An identifier for the process. This is meant to capture how the process is identified by law makers. A process can have multiple identifiers for different institutions, e.g. an identifier for the government, and an identifier for the parliament.
+
+Note that a subproperty process_external_id exists to capture the identifier of another institution, depending on the point of view."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+eli-ep:P62 owl:versionInfo "v1.0";
+  sh:path eli-dl:activity_label;
+  sh:name "activity label"@en;
+  sh:description "A label on the activity, describing what is being carried out."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+eli-ep:P63 owl:versionInfo "v1.0";
+  sh:path epvoc:hasRoom;
+  sh:name "has room"@en;
+  sh:description "This property associates a resource with a room (physical or virtual), . E.g., it can be the room where an activity takes place or a person's office."@en;
+  sh:nodeKind sh:IRI;
+  sh:class epvoc:Room .
+
+eli-ep:P66 owl:versionInfo "v1.0";
+  sh:path eli:title;
+  sh:name "title"@en;
+  sh:description "use ISO639-1 of controlled vocabulary"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+eli-ep:P67 owl:versionInfo "v1.0";
+  sh:path eli:title_alternative;
+  sh:name "alternative title"@en;
+  sh:description "An alternative title of the expression (if any)."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+eli-ep:P68 owl:versionInfo "v1.0";
+  sh:path eli:language;
+  sh:name "language"@en;
+  sh:description "A language of an expression."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dcterms:LinguisticSystem .
+
+eli-ep:P69 owl:versionInfo "v1.0";
+  sh:path eli:is_embodied_by;
+  sh:name "is embodied by"@en;
+  sh:description "Relates an expression to the manifestation that embodies it. Inverse of \"embodies\"."@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Manifestation .
+
+eli-ep:P73 owl:versionInfo "v1.0";
+  sh:path eli:is_exemplified_by;
+  sh:name "is exemplified by"@en;
+  sh:description "Link to a concrete file URL.Relates a manifestation to a single exemplar or instance of that manifestation."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rdfs:Resource .
+
+eli-ep:P74 owl:versionInfo "v1.0";
+  sh:path dcterms:format;
+  sh:name "format"@en;
+  sh:description "The file format, physical medium, or dimensions of the resource."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dcterms:MediatypeOrExtent .
+
+eli-ep:P75 owl:versionInfo "v1.0";
+  sh:path eli:media_type;
+  sh:name "format"@en;
+  sh:description """The file format of the manifestation (IANA).
+This field is intended to capture the technical file format and will serve as a basis for content negotiation for the server to return the appropriate file based on the client preference."""@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dcterms:Mediatype;
+  sh:pattern "https://www.iana.org/assignments/media-types/.*$" .
+
+eli-ep:P76 owl:versionInfo "v1.0";
+  sh:path epvoc:byteSize;
+  sh:name "byte size"@en;
+  sh:description "Indicates the byte size of the file exemplified by the manifestation."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:long .
+
+eli-ep:P77 owl:versionInfo "v1.0";
+  sh:path dcterms:issued;
+  sh:name "issued"@en;
+  sh:description "Date of formal issuance of the work."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime .
+
+eli-ep:P80 owl:versionInfo "v1.0";
+  sh:path eli-dl:had_participant_organization;
+  sh:name "participation has Organization"@en;
+  sh:description "Describes that the organisation is the actor in a participation description."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class org:Organization .
+
+eli-ep:P81 owl:versionInfo "v1.0";
+  sh:path eli-dl:had_participant_person;
+  sh:name "participation has Person"@en;
+  sh:description "Describes that the person is the actor in a participation description."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class foaf:Person .
+
+eli-ep:P82 owl:versionInfo "v1.0";
+  sh:path eli-dl:participation_role;
+  sh:name "stakeholder has role"@en;
+  sh:description "Describes the role of the agent in a stakeholder description."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class eli-dl:ParticipationRole .
+
+eli-ep:P83 owl:versionInfo "v1.0";
+  sh:path eli-dl:participation_in_name_of;
+  sh:name "participation in name of"@en;
+  sh:description "Indicate in the name of which organization an agent was acting has stakeholder."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class org:Organization .
+
+eli-ep:P86 owl:versionInfo "v1.0";
+  sh:path euvoc:officeAddress;
+  sh:name "office address"@en;
+  sh:description "The office address idendentifier"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+eli-ep:P87 owl:versionInfo "v1.0";
+  sh:path dcterms:identifier;
+  sh:name "identifier"@en;
+  sh:description "An unambiguous reference to the resource."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+eli-ep:P88 owl:versionInfo "v1.0";
+  sh:path epvoc:hasSite;
+  sh:name "site"@en;
+  sh:description "This property identifies the site where a resource is located."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class org:Site .
+
+eli-ep:P91 owl:versionInfo "v1.1";
+  sh:path eli-dl:created_a_realization_of;
+  sh:name "created a realization of"@en;
+  sh:description """Indicates that a Process created some Work . The works are seen as the \\\"output\\\" of the activity.
+Remark: Process data will not be yet available. For now, this inverse relation will be provided only in adopted-texts dumps and APIs."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class eli:Work .
+
+eli-ep:P94 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue org:Organization .
+
+eli-ep:P97 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P98 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:in _:24b883f25d9e4a03a5050a6b1d409209876 .
+
+_:24b883f25d9e4a03a5050a6b1d409209876 rdf:first op-aut:subject-matter;
+  rdf:rest _:24b883f25d9e4a03a5050a6b1d409209877 .
+
+_:24b883f25d9e4a03a5050a6b1d409209877 rdf:first op-aut:dir-eu-legal-act;
+  rdf:rest _:24b883f25d9e4a03a5050a6b1d409209878 .
+
+_:24b883f25d9e4a03a5050a6b1d409209878 rdf:first <http://eurovoc.europa.eu>;
+  rdf:rest rdf:nil .
+
+eli-ep:P101 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:role .
+
+eli-ep:P102 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P105 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:resource-type .
+
+eli:Worktype sh:property eli-ep:P105, eli-ep:P106 .
+
+eli-ep:P106 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P109 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:status .
+
+eli-ep:P110 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P113 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:file-type .
+
+dcterms:MediatypeOrExtent sh:property eli-ep:P113, eli-ep:P114 .
+
+eli-ep:P114 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P117 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:file-type .
+
+dcterms:Mediatype sh:property eli-ep:P117, eli-ep:P118 .
+
+eli-ep:P118 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P121 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:language .
+
+eli-ep:P122 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P125 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:country .
+
+eli-ep:P126 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P129 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:place .
+
+eli-ep:P130 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P131 owl:versionInfo "v1.0";
+  sh:path geosparql:sfWithin;
+  sh:name "Within country"@en;
+  sh:description "States that the subject is spatially within the object"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class euvoc:Country;
+  sh:hasValue skos:Concept .
+
+eli-ep:P134 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:site .
+
+eli-ep:P135 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P138 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:corporate-body .
+
+eli-ep:P139 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+eli-ep:P142 owl:versionInfo "v1.0";
+  sh:path rdf:type;
+  sh:name "type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue eli-dl:ActivityType .
+
+eli-ep:P143 owl:versionInfo "v1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:language .

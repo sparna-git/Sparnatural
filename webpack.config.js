@@ -82,7 +82,7 @@ module.exports = {
 	// new WriteFilePlugin(),
 	new HtmlWebpackPlugin({
 		filename: 'dev-page/index.html',
-		template: __dirname + "/static/index.html",
+		template: __dirname + "/dev-page/index.html",
 		inject: 'body'
 	}),
 	new MiniCssExtractPlugin({
@@ -92,7 +92,7 @@ module.exports = {
 	new CopyPlugin({
 	  patterns: [
 		{
-			from:__dirname +'/static',
+			from:__dirname +'/dev-page',
 			to:'dev-page',
 			globOptions: {
 	          ignore: ["**/index.html"],
@@ -135,7 +135,7 @@ module.exports = {
   ],
   devServer: {
 	static:{
-		directory: path.resolve(__dirname, "./static"),
+		directory: path.resolve(__dirname, "./dev-page"),
 	},
 	historyApiFallback: true,
 	hot: true,

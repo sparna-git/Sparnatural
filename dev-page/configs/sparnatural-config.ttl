@@ -85,6 +85,7 @@
                rdfs:range :Intitule ;
                <http://data.sparna.fr/ontologies/sparnatural-config-core#enableNegation> "true"^^xsd:boolean ;
                <http://data.sparna.fr/ontologies/sparnatural-config-core#enableOptional> "true"^^xsd:boolean ;
+               <http://data.sparna.fr/ontologies/sparnatural-config-core#isMultilingual> "true"^^xsd:boolean ;
                <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://www.w3.org/2000/01/rdf-schema#label>" ;
                rdfs:label "contiennent dans l'intitulé"@fr ,
                           "has title"@en .
