@@ -27,16 +27,17 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 ### Enable CORS for local files in your browser
 
 Before you can test your configuration locally, you need to ensure your browser is CORS-enabled for local files.
-    1. To make Firefox CORS-enables for local files :
-        1. Open Firefox
-        1. Type "about:config" in the address bar
-        1. Accept security warning
-        1. Search for the config **security.fileuri.strict_origin_policy**
-        1. Set this config to "false"
-    1. To make Chrome / Chromium CORS-enabled for local files :
-        1. Close Chrome
-        2. Open a command-line or a terminal
-        3. Run chrome with the flag "**--allow-file-access-from-files**", e.g. on Ubuntu Linux "chromium --allow-file-access-from-files"
+
+1. To make Firefox CORS-enables for local files :
+    1. Open Firefox
+    1. Type "about:config" in the address bar
+    1. Accept security warning
+    1. Search for the config **security.fileuri.strict_origin_policy**
+    1. Set this config to "false"
+1. To make Chrome / Chromium CORS-enabled for local files :
+    1. Close Chrome
+    2. Open a command-line or a terminal
+    3. Run chrome with the flag "**--allow-file-access-from-files**", e.g. on Ubuntu Linux "chromium --allow-file-access-from-files"
 
 ### Defining your own configuration
 
