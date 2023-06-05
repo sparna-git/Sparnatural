@@ -1,7 +1,7 @@
 # Sparnatural SPARQL query builder
-Sparnatural is a **visual SPARQL query builder written in Typescript**.
+Sparnatural is a **visual client-side SPARQL query builder**. It is written in Typescript.
 
-It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists. It can be configured through a JSON-LD or OWL configuration file (that can be edited in Protégé) that defines the classes and properties to be presented in the component.
+It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists, or other widgets. It can be configured through an OWL configuration file (that can be edited in Protégé) that defines the classes and properties to be presented in the component. SHACL-based configuration will be added soon.
 
 ![](docs/assets/screencasts/screencast-sparnatural-dbpedia-v3-en.gif)
 
@@ -13,9 +13,9 @@ To get started :
 
 1. Read the following README;
 2. Read [the documentation](https://docs.sparnatural.eu)
-3. Look at how things work in [sparnatural-demo-dbpedia](https://github.com/sparna-git/sparnatural.eu/tree/main/demos/demo-dbpedia); 
-4. In particular look at how the specifications are written by looking at [the source of `sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/sparnatural.eu/blob/main/demos/demo-dbpedia/index.html)
-5. Adapt [`sparnatural-demo-dbpedia/index.html`](https://github.com/sparna-git/sparnatural.eu/blob/main/demos/demo-dbpedia/index.html) by changing the configuration and adapting the SPARQL endpoint URL;
+3. Look at how things work in the ["Hello Sparnatural folder"](https://github.com/sparna-git/Sparnatural/tree/master/hello-sparnatural) that demonstrates a simple integration against the DBPedia endpoint; 
+4. In particular look at [the OWL configuration file](https://github.com/sparna-git/Sparnatural/blob/master/hello-sparnatural/config.ttl) that defines the classes and properties used in this page;
+5. Adapt this configuration and the endpoint URL in the index.html webpage if you want to test on your own data;
 
 # Features
 
@@ -61,41 +61,45 @@ Select multiple values for a criteria :
 
 ![](docs/assets/images/readme/8-or.png)
 
+(UNIONs are not supported)
+
 ## Values selection
 
-Sparnatural offers currently 6 ways of selecting a value for a criteria : autocomplete field, dropdown list, simple string value, date range (year or date precision), date range with a search in a period name (e.g. "bronze age"), or no selection at all.
+Sparnatural offers currently 9 ways of selecting a value for a criteria :
+- dropdown list widget
+- autocomplete search field
+- tree browsing widget
+- map selection widget
+- string search widget, searched as regex or as exact string
+- date range widget (year or date precision)
+- boolean widget
+- no value selection (useful for 'intermediate' entities)
 
-### Autocomplete field
-
-![](docs/assets/images/readme/9-autocomplete.png)
-
-### Dropdown list
+### Dropdown list widget
 
 ![](docs/assets/images/readme/10-list.png)
 
-### Tree selector
+### Autocomplete search widget
+
+![](docs/assets/images/readme/9-autocomplete.png)
+
+### Tree browsing widget
 
 ![](docs/assets/images/readme/17-tree.png)
 
-### Map selector
+### Map selection widget
 
 ![](docs/assets/images/readme/18-map.png)
 
-### String value (text search)
+### String search widget (text search)
 
 ![](docs/assets/images/readme/11-search.png)
 
-### Date range (year or date precision)
+### Date range widget (year or date precision)
 
 ![](docs/assets/images/readme/12-time-date.png)
 
-### Date range with search in period name (chronocultural periods)
-
-![](docs/assets/images/readme/14-chronocultural-period.png)
-
-(this requires data from [Perio.do](https://perio.do), a gazeeter of periods for linking and visualizing data)
-
-### Boolean selection
+### Boolean widget
 
 ![](docs/assets/images/readme/15-boolean.png)
 
@@ -120,85 +124,83 @@ See here how to search for French Museums and the name of Italian painters they 
 
 ## Support for SERVICE keyword
 
-There is currently an experimental support for the SERVICE keyword for federated querying.
+There is currently an [experimental support for the SERVICE keyword](http://docs.sparnatural.eu/Federated-querying.html) for federated querying.
 
 ## Limitations
 
-### No UNION or BIND, etc.
+### No UNION or BIND, no Aggregations
 
-Sparnatural does not support the creation of UNION, BIND, etc...
+Sparnatural does not support the creation of UNION, BIND, or aggregation functions (like `COUNT`)
 
 ### SPARQL endpoint needs to be CORS-enabled
 
-To send SPARQL queries to a service that is not hosted on the same domain name as the web page in which Sparnatural is included, the SPARQL endpoint needs to allow [Cross-Origin Resource Sharing (CORS)](https://enable-cors.org/). But we have SPARQL proxies for those who are not, don't worry ;-)
+To send SPARQL queries to a service that is not hosted on the same domain name as the web page in which Sparnatural is included, the SPARQL endpoint needs to allow [Cross-Origin Resource Sharing (CORS)](https://enable-cors.org/). But we have a [SPARQL proxy](http://docs.sparnatural.eu/SPARQL-proxy.html) for those who are not, don't worry ;-)
 
-# Integration
+# Integration in a webpage
+
+1. Look at the [hello-sparnatural folder](https://github.com/sparna-git/Sparnatural/tree/master/hello-sparnatural) that demonstrates a simple integration
+2. Read [this page in the documentation](https://docs.sparnatural.eu/Javascript-integration).
+3. Look at a [typical demo page on DBPedia](https://github.com/sparna-git/sparnatural.eu/tree/main/demos/demo-dbpedia-v2)
+
+# Configuration
 
 ## Specification of classes and properties
 
-The component is configurable using a an [OWL configuration file](https://docs.sparnatural.eu/OWL-based-configuration) editable in Protégé.. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. 
+The component is configurable using a an [OWL configuration file](https://docs.sparnatural.eu/OWL-based-configuration) editable in Protégé. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. 
 
-Alternatively one can also use a [JSON(-LD) ontology file](https://docs.sparnatural.eu/JSON-based-configuration). A JSON(-LD) configuration file contains :
+Alternatively one can also use a [JSON(-LD) ontology file](https://docs.sparnatural.eu/JSON-based-configuration). This is however discouraged.
+
 
 ### Class definition
 
-```json
-    {
-      "@id" : "http://dbpedia.org/ontology/Museum",
-      "@type" : "Class",
-      "label": [
-        {"@value" : "Museum", "@language" : "en"},
-        {"@value" : "Musée","@language" : "fr"}
-      ],
-      "faIcon":  "fas fa-university"
-    },
+```turtle
+    :Museum rdf:type owl:Class ;
+        rdfs:subClassOf core:SparnaturalClass ;
+        core:faIcon "fad fa-university" ;
+        core:sparqlString "<http://dbpedia.org/ontology/Museum>" ;
+        core:tooltip "A <b>DBPedia Museum</b>"@en ,
+                     "Un <b>Musée DBPedia</b>"@fr ;
+        rdfs:label "Museum"@en ,
+                   "Musée"@fr .
 ```
 
 ### Property definitions with domains and ranges
 
-```json
-    {
-      "@id" : "http://dbpedia.org/ontology/museum",
-      "@type" : "ObjectProperty",
-      "subPropertyOf" : "sparnatural:AutocompleteProperty",
-      "label": [
-        {"@value" : "displayed at","@language" : "en"},
-        {"@value" : "exposée à","@language" : "fr"}
-      ],
-      "domain": "http://dbpedia.org/ontology/Artwork",
-      "range": "http://dbpedia.org/ontology/Museum",
-      "datasource" : "datasources:search_rdfslabel_bifcontains"
-    },
+```turtle
+:displayedAt rdf:type owl:ObjectProperty ;
+             rdfs:subPropertyOf core:AutocompleteProperty ;
+             owl:inverseOf :displays ;
+             rdfs:domain :Artwork ;
+             rdfs:range :Museum ;
+             core:sparqlString "<http://dbpedia.org/ontology/museum>" ;
+             datasources:datasource datasources:search_rdfslabel_bifcontains ;
+             rdfs:label "displayed at"@en ,
+                        "exposée à"@fr .
 ```
 
 ### Using font-awesome icons
 
-It is possible to directly use font-awesome icons in place of icons embedded in your application :
+It is possible to directly reference an icon class from font-awesome if you embed them in your application :
 
-```json
-"faIcon":  "fas fa-user",
+```turtle
+    :Person rdf:type owl:Class ;
+        core:faIcon "fad fa-male" ;
 ```
-
-## How to integrate Sparnatural in a webpage
-
-Look at [this page in the documentation](https://docs.sparnatural.eu/Javascript-integration).
-
 
 ## Map the query structure to a different graph structure
 
-Map classes or properties in the config to a corresponding SPARQL property path or a corresponding class URI, using the `sparqlString` JSON key, e.g. :
+The OWL file to use is **different** from your knowledge graph ontology definition. You should create a different OWL file. You can refer to the [documentation page](https://docs.sparnatural.eu/OWL-based-configuration.html) for more details.
 
-```
-    {
-      "@id" : "http://labs.sparna.fr/sparnatural-demo-dbpedia/onto#bornIn",
-      "@type" : "ObjectProperty",
-      ...
-      "sparqlString": "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>",
-    },
-```
+Classes or properties in the config can either:
+- use the same URI as a class or a property in your knowledge graph.
+- be mapped to a corresponding SPARQL property path or a corresponding class URI, using the `core:sparqlString` annotation.
 
-Then call `expandSparql` on the `sparnatural` instance by passing the original SPARQL query, to replace all mentions of original classes and properties URI with the corresponding SPARQL string :
+Here is an example of a simple property in a Sparnatural configuration that is mapped to a property path in the underlying knowledge graph:
 
-```
-queryString = sparnatural.expandSparql(queryString);
+```turtle
+    :bornIn rdf:type owl:ObjectProperty ;
+        rdfs:subPropertyOf core:ListProperty ;
+        rdfs:domain :Person ;
+        rdfs:range :Country ;
+        core:sparqlString "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>" ;
 ```
