@@ -181,6 +181,7 @@ When used to annotate a class, this annotation must contain a class URI, expande
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectRDFTermProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which an autocomplete search field should be displayed to select a value.
 
@@ -193,6 +194,7 @@ The autocomplete suggestions can be configured using a datasource annotation, th
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#BooleanProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#BooleanProperty">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a choice between &quot;true&quot; and &quot;false&quot; should be proposed.</rdfs:comment>
         <rdfs:label xml:lang="en">boolean property</rdfs:label>
@@ -213,6 +215,7 @@ The autocomplete suggestions can be configured using a datasource annotation, th
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectRDFTermProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a dropdown list should be displayed to select a value.
 
@@ -236,6 +239,7 @@ The list options can be configured using a datasource annotation, that will typi
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#MapProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#MapProperty">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a map selection should be displayed.</rdfs:comment>
         <rdfs:label xml:lang="en">map property</rdfs:label>
@@ -258,6 +262,7 @@ This is typically used to link entities that serve as connectors between other e
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a simple text field should be used to enter a string to be searched for.</rdfs:comment>
         <rdfs:label xml:lang="en">search property</rdfs:label>
@@ -288,6 +293,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#StringEqualsProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#StringEqualsProperty">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a simple text field should be used to enter a string to be searched for, in an exact way, case-insensitive.</rdfs:comment>
         <rdfs:label xml:lang="en">string equals property</rdfs:label>
@@ -310,6 +316,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a datepicker with day/month/year precision should be displayed to select the beginning and end of a time span.</rdfs:comment>
         <rdfs:label xml:lang="en">time property with a date-picker</rdfs:label>
@@ -320,6 +327,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Period -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Period">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a datepicker with year precision combined with an autocomplete field on period name should be displayed to select the beginning and end of a time span.</rdfs:comment>
         <rdfs:label xml:lang="en">time property with chronocultural period selection</rdfs:label>
@@ -330,6 +338,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a datepicker with year precision should be displayed to select the beginning and end of a time span.</rdfs:comment>
         <rdfs:label xml:lang="en">time property with a year-picker</rdfs:label>
@@ -340,6 +349,7 @@ Do not use this super-property directly, use its subproperties.</rdfs:comment>
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty -->
 
     <owl:ObjectProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty">
+        <rdf:type rdf:resource="http://datashapes.org/dash#SearchWidget" />
         <rdfs:subPropertyOf rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-core#SelectRDFTermProperty"/>
         <rdfs:comment xml:lang="en">Use this super property to classify properties in Sparnatural configuration for which a tree selection widget should be displayed.</rdfs:comment>
         <rdfs:label xml:lang="en">tree property</rdfs:label>
