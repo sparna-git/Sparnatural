@@ -3,7 +3,7 @@ Sparnatural is a **visual SPARQL query builder written in Typescript**.
 
 It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists. It can be configured through a JSON-LD or OWL configuration file (that can be edited in Protégé) that defines the classes and properties to be presented in the component.
 
-![](documentation/screencast-sparnatural-dbpedia-v3-en.gif)
+![](docs/assets/screencasts/screencast-sparnatural-dbpedia-v3-en.gif)
 
 You can play with **online demos at http://sparnatural.eu#demos**.
 
@@ -25,41 +25,41 @@ To get started :
 
 Select the type of entity to search...
 
-![](documentation/1-screenshot-class-selection.png)
+![](docs/assets/images/readme/1-screenshot-class-selection.png)
 
 ... then select the type of the related entity.
 
-![](documentation/2-screenshot-object-type-selection.png)
+![](docs/assets/images/readme/2-screenshot-object-type-selection.png)
 
 In this case there is only one possible type of relation that can connect the 2 entities, so it gets selected automatically. Then select a value for the related entity, in this case in a dropdown list :
 
-![](documentation/3-screenshot-value-selection.png)
+![](docs/assets/images/readme/3-screenshot-value-selection.png)
 
 Congratulations, your first SPARQL query criteria is complete !
 
-![](documentation/4-screenshot-criteria.png)
+![](docs/assets/images/readme/4-screenshot-criteria.png)
 
 Now you can fetch the generated SPARQL query :
 
-![](documentation/5-screenshot-sparql.png)
+![](docs/assets/images/readme/5-screenshot-sparql.png)
 
 ### "WHERE"
 
 This enables to navigate the graph :
 
-![](documentation/6-where.png)
+![](docs/assets/images/readme/6-where.png)
 
 ### "AND"
 
 Combine criterias :
 
-![](documentation/7-and.png)
+![](docs/assets/images/readme/7-and.png)
 
 ### "OR"
 
 Select multiple values for a criteria :
 
-![](documentation/8-or.png)
+![](docs/assets/images/readme/8-or.png)
 
 ## Values selection
 
@@ -67,43 +67,43 @@ Sparnatural offers currently 6 ways of selecting a value for a criteria : autoco
 
 ### Autocomplete field
 
-![](documentation/9-autocomplete.png)
+![](docs/assets/images/readme/9-autocomplete.png)
 
 ### Dropdown list
 
-![](documentation/10-list.png)
+![](docs/assets/images/readme/10-list.png)
 
 ### Tree selector
 
-![](documentation/17-tree.png)
+![](docs/assets/images/readme/17-tree.png)
 
 ### Map selector
 
-![](documentation/18-map.png)
+![](docs/assets/images/readme/18-map.png)
 
 ### String value (text search)
 
-![](documentation/11-search.png)
+![](docs/assets/images/readme/11-search.png)
 
 ### Date range (year or date precision)
 
-![](documentation/12-time-date.png)
+![](docs/assets/images/readme/12-time-date.png)
 
 ### Date range with search in period name (chronocultural periods)
 
-![](documentation/14-chronocultural-period.png)
+![](docs/assets/images/readme/14-chronocultural-period.png)
 
 (this requires data from [Perio.do](https://perio.do), a gazeeter of periods for linking and visualizing data)
 
 ### Boolean selection
 
-![](documentation/15-boolean.png)
+![](docs/assets/images/readme/15-boolean.png)
 
 ### No value selection
 
 This is useful when a type a of entity is used only to navigate the graph, but without the ability to select an instance of these entities.
 
-![](documentation/13-no-value.png)
+![](docs/assets/images/readme/13-no-value.png)
 
 
 ## Multilingual
@@ -115,7 +115,7 @@ Sparnatural is multilingual and supports displaying labels of classes and proper
 Sparnatural supports the `OPTIONAL` and `FILTER NOT EXISTS {}` keywords applied to a whole "branch" of the query.
 See here how to search for French Museums and the name of Italian painters they display, _if any_ :
 
-![](documentation/16-optional.gif)
+![](docs/assets/images/readme/16-optional.gif)
 
 
 ## Support for SERVICE keyword
