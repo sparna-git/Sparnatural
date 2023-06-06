@@ -1,0 +1,16 @@
+name: Save to Software Heritage
+
+on:
+  release:
+    types: [published]
+
+  workflow_dispatch:
+
+jobs:
+  swh:
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+      - name: Save to Software Heritage
+        uses: sdruskat/swh-save-action@v1.0.1
