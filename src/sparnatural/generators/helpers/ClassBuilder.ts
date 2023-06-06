@@ -84,19 +84,20 @@ export default class  ClassBuilder {
 
             if(this.specProvider.getProperty(this.classGroup.defaultLblVar.type).isMultilingual()) {
                 if(getSettings().language == getSettings().defaultLanguage) {
-                    [
-                    SparqlFactory.buildBgpPattern(
-                        [SparqlFactory.buildTriple(
-                            DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
-                            DataFactory.namedNode(this.classGroup.defaultLblVar.type),
-                            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
-                        )]
-                    ),
-                    SparqlFactory.buildFilterLangEquals(
-                        DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
-                        DataFactory.literal(getSettings().language)
-                    )
-                    ]
+                    this.defaultLblPatterns.push(
+                        SparqlFactory.buildBgpPattern(
+                            [SparqlFactory.buildTriple(
+                                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
+                                DataFactory.namedNode(this.classGroup.defaultLblVar.type),
+                                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
+                            )]
+                    ));
+                    this.defaultLblPatterns.push(
+                        SparqlFactory.buildFilterLangEquals(
+                            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
+                            DataFactory.literal(getSettings().language)
+                        )
+                    );
                 } else {
                     this.defaultLblPatterns.push(SparqlFactory.buildOptionalPattern(
                         [
