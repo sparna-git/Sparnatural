@@ -1,0 +1,42 @@
+{
+    "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+    "@type": "SoftwareSourceCode",
+    "codeRepository": "git+https://github.com/sparna-git/Sparnatural.git",
+    "dateCreated": "2018-01-01",
+    "downloadUrl": "https://github.com/sparna-git/Sparnatural/releases",
+    "issueTracker": "https://github.com/sparna-git/Sparnatural/issues",
+    "name": "Sparnatural",
+    "description": "Sparnatural is a visual client-side SPARQL query builder. It is written in Typescript.\n\nIt supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists, or other widgets. It can be configured through an OWL configuration file (that can be edited in Protégé) that defines the classes and properties to be presented in the component.",
+    "applicationCategory": "Semantic web",
+    "keywords": [
+        "SPARQL",
+        "RDF",
+        "OWL"
+    ],
+    "programmingLanguage": [
+        "Typescript"
+    ],
+    "relatedLink": [
+        "https://sparnatural.eu",
+        "https://docs.sparnatural.eu"
+    ],
+    "author": [
+        {
+            "@type": "Person",
+            "givenName": "Thomas",
+            "familyName": "Francart",
+            "email": "thomas.francart@sparna.fr",
+            "affiliation": {
+                "@type": "Organization",
+                "name": "Sparna"
+            }
+        }
+    ],
+    "contributor": [
+        {
+            "@type": "Person",
+            "givenName": "Pascal",
+            "familyName": "Steiner"
+        }
+    ]
+}
