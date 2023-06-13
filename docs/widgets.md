@@ -71,7 +71,7 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 
 ### Appearance
 
-<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/autocomplete-widget.png" width="75%" />
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/autocomplete-widget.png" />
 
 ### Description
 
@@ -96,7 +96,7 @@ The SPARQL query generation logic is identical to the ListWidget (see above).
 
 ### Appearance
 
-<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/17-tree.png" width="75%" />
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/17-tree.png" />
 
 ### Description
 
@@ -124,7 +124,7 @@ The SPARQL query generation logic is identical to the ListWidget (see above). Ho
 
 ### Appearance
 
-<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/11-search.png" width="75%" />
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/11-search.png" />
 
 ### Description
 
@@ -170,7 +170,7 @@ The string will be searched using Virtuoso proprietary `bif:contains` operator.
 
 ### Appearance
 
-<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/12-time-date.png" width="75%" />
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/12-time-date.png" />
 
 ### Description
 
@@ -227,7 +227,7 @@ FILTER((xsd:dateTime(?Date_2)) >= "2017-12-31T23:00:01Z"^^xsd:dateTime)
 
 ### Appearance
 
-<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/15-boolean.png" width="75%" />
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/15-boolean.png" />
 
 ### Description
 
@@ -249,7 +249,7 @@ No datasource required.
 
 ### Appearance
 
-<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/18-map.png" width="75%" />
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/18-map.png" />
 
 ### Description
 
@@ -274,7 +274,7 @@ No datasource required.
 
 ### Appearance
 
-<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/13-no-value.png" width="75%" />
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/13-no-value.png" />
 
 ### Description
 
