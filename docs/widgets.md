@@ -169,24 +169,66 @@ The string will be searched using Virtuoso proprietary `bif:contains` operator.
 ## Date range widget
 
 ### Appearance
+
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/12-time-date.png" width="75%" />
+
 ### Description
+
+Allows to express a date range to search on, using a begin date and end date selected from calendars. Open ranges are allowed (only the start date or only the end date).
+Date range widget is implemented using [@chenfengyuan/datepicker](https://fengyuanchen.github.io/datepicker/).
+
 ### Configuration
+
+In OWL configuration, declare a sub-property of [`config-core:TimeProperty-Date`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date).
+In addition, if the entities in the knowledge graph are associated to a date range and possibly an exact date, you could use the [`config-core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty), [`config-core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) and optionnaly [`config-core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) to indicate respectively the URIs used to express the begin date, end date and exact date on the entities. More details can be found in the [detailled documentation of the date-range query feature](http://docs.sparnatural.eu/Querying-date-ranges.html).
+
 ### Datasources
+
+No datasource required.
+
 ### SPARQL clause
+
+```sparql
+FILTER(((xsd:dateTime(?Date_2)) >= "1948-06-12T23:00:00Z"^^xsd:dateTime) && ((xsd:dateTime(?Date_2)) <= "1948-12-31T22:59:59Z"^^xsd:dateTime))
+```
+
+For advanced date-range querying, see the [detailled documentation](http://docs.sparnatural.eu/Querying-date-ranges.html).
 
 
 ## Year range widget
 
 ### Appearance
+
+
+
 ### Description
+
+Allows to express a year range to search on, using a begin year and end year. Open ranges are allowed (only the start year or only the end year).
+Year range widget is implemented using [@chenfengyuan/datepicker](https://fengyuanchen.github.io/datepicker/), configured to use only years.
+
 ### Configuration
+
+In OWL configuration, declare a sub-property of [`config-core:TimeProperty-Year`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year).
+
 ### Datasources
+
+No datasource required.
+
 ### SPARQL clause
+
+```sparql
+FILTER((xsd:dateTime(?Date_2)) >= "2017-12-31T23:00:01Z"^^xsd:dateTime)
+```
+
+(here with only a start year). Note how the values is cast to an xsd:dateTime explicitely.
 
 
 ## Boolean widget
 
 ### Appearance
+
+
+
 ### Description
 ### Configuration
 ### Datasources
