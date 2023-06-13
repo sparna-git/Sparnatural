@@ -25,7 +25,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
       }
     
     getConnectingProperties(range: string): string[] {
-        var items: any[] = [];
+        var items: string[] = [];
 
         // read all properties
         let propShapes = this._readAsResource(this.uri, SH.PROPERTY);
@@ -37,12 +37,16 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             }
         })
 
-        // return dedup array, although probably dedup is not necessary here
-        return [...new Set(items)]; 
+        // dedup, although probably dedup is not necessary here
+        var dedupItems = [...new Set(items)];
+        // sort dedups
+        var sortedDedups = SHACLSpecificationEntry.sort(dedupItems.map(s => new SHACLSpecificationProperty(s, this.provider, this.store, this.lang)));
+        // return dedup array of strings
+        return sortedDedups.map(e => e.getId());
     }
 
     getConnectedEntities(): string[] {
-        var items: any[] = [];
+        var items: string[] = [];
 
         // read all properties
         let propShapes = this._readAsResource(this.uri, SH.PROPERTY);
@@ -52,8 +56,13 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             // and then read their ranges
             items.push(...prop.getRange());
         })
-        // return dedup array
-        return [...new Set(items)];        
+
+        // dedup
+        var dedupItems = [...new Set(items)];
+        // sort dedups
+        var sortedDedups = SHACLSpecificationEntry.sort(dedupItems.map(s => new SHACLSpecificationEntity(s, this.provider, this.store, this.lang)));
+        // return dedup array of strings
+        return sortedDedups.map(e => e.getId());        
     }
 
     hasConnectedEntities(): boolean {
@@ -152,6 +161,10 @@ export class SpecialSHACLSpecificationEntity implements ISpecificationEntity {
         return null;
     }
 
+    getColor(): string | null {
+        return "slategray";
+    }
+
     getDatasource(): any {
         return null;
     }
@@ -177,7 +190,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
 
     private registry:Map<string,SpecialSHACLSpecificationEntity> = new Map<string,SpecialSHACLSpecificationEntity>();
 
-    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/Attribute";
+    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/Other";
 
     public static SPECIAL_SHACL_ENTITY_DATES = "http://special/Date";
 

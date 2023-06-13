@@ -30,6 +30,10 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
       return tooltip;
     }
 
+    getColor(): string | null {
+      return this._readAsSingleLiteral(this.uri, VOLIPI.COLOR);
+    }
+
 
     getIcon(): string {
       var faIcon = this._readAsLiteral(

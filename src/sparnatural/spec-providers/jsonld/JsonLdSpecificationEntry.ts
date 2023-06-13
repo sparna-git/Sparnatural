@@ -45,6 +45,15 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
         return "";
     }
 
+    getColor(): string|null {
+      var item = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
+      if (item !== null) {
+        return item["color"];
+      }
+  
+      return null;
+  }
+
     getIcon(): string {
         if (JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs)["faIcon"] != null) {
             // use of fa-fw for fixed-width icons

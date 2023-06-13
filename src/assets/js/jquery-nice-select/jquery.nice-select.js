@@ -112,6 +112,7 @@ import { TOOLTIP_CONFIG } from "../../../../src/sparnatural/settings/defaultSett
             .attr("data-value", $option.val())
             .attr("data-tippy-content", $option.attr("data-desc"))
             .attr("data-display", display || null)
+            .attr("style", $option.attr("style") || null)
             .addClass(
               "option" +
                 ($option.is(":selected") ? " selected" : "") +

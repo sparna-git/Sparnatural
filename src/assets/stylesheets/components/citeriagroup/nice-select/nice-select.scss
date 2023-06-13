@@ -51,7 +51,7 @@
         &.selected,
         &.focus,
         &:hover {
-            background: var(--primary-color-main) ;
+            background-color: var(--primary-color-main) ;
             color: #fff;
             img {
                 display: none;

@@ -13,4 +13,6 @@ export default interface ISpecificationEntry {
 
     getIcon(): string;
     getHighlightedIcon(): string;
+
+    getColor(): string|null;
 }

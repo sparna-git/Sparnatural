@@ -107,11 +107,9 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         return [...new Set(classes)];
     }
 
-    #getShClassAndShNodeRange() {
+    #getShClassAndShNodeRange():string[] {
         // read the sh:class
-        var classes: any[] = [];
-
-        classes = this.#readShClassAndShNodeOn(this.uri);
+        var classes: string[] = this.#readShClassAndShNodeOn(this.uri);
 
         // read sh:or content
         var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
@@ -123,7 +121,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
 
     #readShClassAndShNodeOn(theUri:string):string[] {         
-         var classes: any[] = [];
+         var classes: string[] = [];
 
          // read the sh:class
          const shclassQuads = this.store.getQuads(

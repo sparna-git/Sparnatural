@@ -190,6 +190,9 @@ class ClassSelectBuilder extends HTMLComponent {
     );
   }
 
+  /**
+   * Return it with a single selected class inside
+   */
   buildSelect_StartClassGroupInWhere(selectedClass:string) {
     return this.buildClassSelectFromItems(
       [selectedClass],
@@ -204,6 +207,7 @@ class ClassSelectBuilder extends HTMLComponent {
       var label = this.specProvider.getEntity(val).getLabel();
       var icon = this.specProvider.getEntity(val).getIcon();
       var highlightedIcon = this.specProvider.getEntity(val).getHighlightedIcon();
+      var color = this.specProvider.getEntity(val).getColor();
 
       // highlighted icon defaults to icon
       if (!highlightedIcon || 0 === highlightedIcon.length) {
@@ -217,7 +221,8 @@ class ClassSelectBuilder extends HTMLComponent {
       if (desc) {
         description_attr = ' data-desc="' + desc + '"';
       }
-      list.push(`<option value="${val}" data-id"${val}" ${image} ${selected} ${description_attr}> ${label}</option>` );
+      var bgColor = color ? `style='background: ${color};'`:"";
+      list.push(`<option value="${val}" data-id="${val}" ${image} ${selected} ${description_attr} ${bgColor}> ${label}</option>` );
     }
 
     var html_list = $("<select/>", {

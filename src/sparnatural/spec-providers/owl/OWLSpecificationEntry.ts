@@ -4,6 +4,7 @@ import { Quad, Store } from "n3";
 import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import factory from "@rdfjs/data-model";
+import { VOLIPI } from "../shacl/SHACLSpecificationProvider";
 
 export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificationEntry {
     uri:string;
@@ -26,6 +27,11 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
 
     getTooltip(): string {
         return this._readAsLiteralWithLang(this.uri, Config.TOOLTIP, this.lang);
+    }
+
+    getColor(): string | null {
+     return "#56778A";
+      // return this._readAsSingleLiteral(this.uri, VOLIPI.COLOR);
     }
 
     getIcon(): string {
