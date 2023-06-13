@@ -23,7 +23,7 @@ List widget is implemented using the [select2 JQuery component](https://select2.
 
 List widgets can work both with URIs + labels, or with literal values. It can even mix URIs and literals in the same list.
 
-The sort order of the elements in the list, as well as their precise labels, depends on the underlying SPARQL query that populates the list. Sparnatural provides default datasources that can be ordered alphabetically, alphabetically showing the number of occurrences in parenthesis, or ordered by decreasing number of occurrences.
+The sort order of the elements in the list, as well as their precise labels, depends on the underlying SPARQL query that populates the list. Sparnatural provides [default datasources](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty) that can be ordered alphabetically, alphabetically showing the number of occurrences in parenthesis, or ordered by decreasing number of occurrences.
 
 ### Configuration
 
@@ -39,7 +39,7 @@ The default datasource used is [`datasources:list_URI_or_literal_count`](http://
 
 If a single value is selected, the value is inserted directly as the triple object:
 
-```
+```sparql
   ?Museum_1 <http://dbpedia.org/ontology/country> <http://fr.dbpedia.org/resource/France>.
 ```
 
@@ -47,7 +47,7 @@ If more than one value is selected, or if the corresponding variable is selected
 
 With more than one values:
 
-```
+```sparql
   ?Museum_1 <http://dbpedia.org/ontology/country> ?Country_2.
   VALUES ?Country_2 {
     <http://fr.dbpedia.org/resource/France>
@@ -58,7 +58,7 @@ With more than one values:
 
 or with the variable selected:
 
-```
+```sparql
 SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
   ?Museum_1 <http://dbpedia.org/ontology/country> ?Country_2.
   VALUES ?Country_2 {
@@ -71,7 +71,7 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 
 ### Appearance
 
-<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-basic.png" width="75%" />
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/autocomplete-widget.png" width="75%" />
 
 ### Description
 
