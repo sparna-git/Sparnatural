@@ -113,8 +113,8 @@ A tree widget requires 2 datasources:
 - One to list the root nodes to be displayed (at the first level).
 - One to list the children of a node, when a node is clicked.
 
-The root datasource is configured using the [treeRootsDatasource](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource) annotation. The default datasource used if none is indicated is [datasources:tree_root_skostopconcept].
-The children datasource is configured using the [treeChildrenDatasource](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource) annotation. The default datasource used if none is indicated is [datasources:tree_children_skosnarrower](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower).
+The root datasource is configured using the [`datasources:treeRootsDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource) annotation. The default datasource used if none is indicated is [`datasources:tree_root_skostopconcept`].
+The children datasource is configured using the [`datasources:treeChildrenDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource) annotation. The default datasource used if none is indicated is [`datasources:tree_children_skosnarrower`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower).
 
 ### SPARQL clause
 
