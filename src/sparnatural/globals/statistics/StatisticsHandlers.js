@@ -10,7 +10,6 @@ class AbstractSparqlStatisticsHandler {
   countClassUrl(aClass) {
     var sparql = this._buildClassCountSparql(aClass);
     sparql = this.sparqlPostprocessor.semanticPostProcess(sparql);
-    console.log(sparql);
     var separator = this.sparqlEndpointUrl.indexOf("?") > 0 ? "&" : "?";
     var url =
       this.sparqlEndpointUrl +
