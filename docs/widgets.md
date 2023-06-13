@@ -180,7 +180,7 @@ Date range widget is implemented using [@chenfengyuan/datepicker](https://fengyu
 ### Configuration
 
 In OWL configuration, declare a sub-property of [`config-core:TimeProperty-Date`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date).
-In addition, if the entities in the knowledge graph are associated to a date range and possibly an exact date, you could use the [`config-core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty), [`config-core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) and optionnaly [`config-core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) to indicate respectively the URIs used to express the begin date, end date and exact date on the entities. More details can be found in the [detailled documentation of the date-range query feature](http://docs.sparnatural.eu/Querying-date-ranges.html).
+In addition, if the entities in the knowledge graph are associated to a date range and possibly an exact date, and you want to test if the searche ddate range overlaps with the entities date range, you could use the [`config-core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty), [`config-core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) and optionnaly [`config-core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) to indicate respectively the URIs used to express the begin date, end date and exact date on the entities. More details can be found in the [detailled documentation of the date-range query feature](http://docs.sparnatural.eu/Querying-date-ranges.html).
 
 ### Datasources
 
@@ -231,7 +231,7 @@ FILTER((xsd:dateTime(?Date_2)) >= "2017-12-31T23:00:01Z"^^xsd:dateTime)
 
 ### Description
 
-Allows to select either the value "true" or false.
+Allows to select either a boolean value "true" or "false".
 
 ### Configuration
 
