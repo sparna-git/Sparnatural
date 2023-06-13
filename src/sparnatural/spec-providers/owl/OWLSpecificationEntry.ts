@@ -30,8 +30,7 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
     }
 
     getColor(): string | null {
-     return "#56778A";
-      // return this._readAsSingleLiteral(this.uri, VOLIPI.COLOR);
+      return this._readAsSingleLiteral(this.uri, VOLIPI.COLOR);
     }
 
     getIcon(): string {
