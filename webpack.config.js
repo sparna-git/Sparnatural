@@ -119,16 +119,24 @@ module.exports = {
 	new FileManagerPlugin({
       events: {
         onEnd: [
-          { copy: [
-	            { source: './hello-sparnatural/**', destination: './dist/hello-sparnatural' },
-	            { source: './dist/sparnatural.js', destination: './dist/hello-sparnatural/' },
-	            { source: './dist/sparnatural.css', destination: './dist/hello-sparnatural/' },
-	            { source: './dist/sparnatural.js.map', destination: './dist/hello-sparnatural/' },
-	            { source: './dist/sparnatural.css.map', destination: './dist/hello-sparnatural/' }
-	      ] },
-      	  { archive: [
-	            { source: './dist/hello-sparnatural', destination: './dist/hello-sparnatural.zip' }
-	      ] }
+          { 
+          	copy: [{ source: './hello-sparnatural/**', destination: './dist/hello-sparnatural', options: { overwrite: true } }]
+          },
+          { 
+          	copy: [{ source: './dist/sparnatural.js', destination: './dist/hello-sparnatural/', options: { overwrite: true } }]
+          },
+          { 
+          	copy: [{ source: './dist/sparnatural.css', destination: './dist/hello-sparnatural/', options: { overwrite: true } }]
+          },
+          { 
+          	copy: [{ source: './dist/sparnatural.js.map', destination: './dist/hello-sparnatural/', options: { overwrite: true } }]
+          },
+          { 
+          	copy: [{ source: './dist/sparnatural.css.map', destination: './dist/hello-sparnatural/', options: { overwrite: true } }]
+          },
+      	  { 
+      	  	archive: [ { source: './dist/hello-sparnatural', destination: './dist/hello-sparnatural.zip' }]
+      	  }
         ],
       },
     })
