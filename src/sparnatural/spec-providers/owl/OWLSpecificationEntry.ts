@@ -75,7 +75,7 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
     }
 
     /**
-     * Reads config:order of an entity and returns it, or null if not set
+     * Reads rdfs:label of an entity and returns it, or null if not set
      **/
     #_readLabel(uri: any, lang:string) {
         return this._readAsLiteralWithLang(uri, RDFS.LABEL, lang);

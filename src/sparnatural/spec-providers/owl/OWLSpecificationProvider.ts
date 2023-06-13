@@ -99,7 +99,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     return result;
   }
 
-  getEntitiesInDomainOfAnyProperty() {
+    getEntitiesInDomainOfAnyProperty() {
     const quadsArray = this.store.getQuads(
       null,
       RDFS.DOMAIN,
@@ -124,7 +124,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
               this._pushIfNotExist(classId, items);
             } else {
               // read union content
-              var classesInUnion = this._readAsList(factory.namedNode(classId), OWL.UNION_OF);
+              var classesInUnion = this._readAsList(factory.blankNode(classId), OWL.UNION_OF);
               for (const aUnionClass of classesInUnion) {
                 this._pushIfNotExist(aUnionClass, items);
               }
