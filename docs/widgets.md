@@ -96,11 +96,26 @@ The SPARQL query generation logic is identical to the ListWidget (see above).
 
 ### Appearance
 
-
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/17-tree.png" width="75%" />
 
 ### Description
+
+The tree widget allows to select entities from a tree of values, typically a SKOS ConceptScheme. A maximum of 3 values can be selected. The typical behavior is that the complete tree is always shown, even with the values that are never used, which will appear disabled and can't be selected.
+Tree widget is implemented using the [JS tree library](https://www.jstree.com/).
+
 ### Configuration
+
+In OWL configuration, declare a sub-property of [`config-core:TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty)
+
 ### Datasources
+
+A tree widget requires 2 datasources:
+- One to list the root nodes to be displayed (at the first level).
+- One to list the children of a node, when a node is clicked.
+
+The root datasource is configured using the [treeRootsDatasource](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource) annotation. The default datasource used if none is indicated is [datasources:tree_root_skostopconcept].
+The children datasource is configured using the [treeChildrenDatasource](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource) annotation. The default datasource used if none is indicated is [datasources:tree_children_skosnarrower](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower).
+
 ### SPARQL clause
 
 
