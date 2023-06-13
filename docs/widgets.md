@@ -118,7 +118,7 @@ The children datasource is configured using the [`datasources:treeChildrenDataso
 
 ### SPARQL clause
 
-The SPARQL query generation logic is identical to the ListWidget (see above). However please note that it is expected that Tree widgets are configured on properties that use the a "*" SPARQL property path, indicating that the search is made recursively on the selected node but also all its children. A typical SPARQL property path configured on a property associated to a tree widget is `<http://purl.org/dc/terms/subject>/(<http://www.w3.org/2004/02/skos/core#broader>|^<http://www.w3.org/2004/02/skos/core#narrower>)*` : note how it searches for a connection using the dcterms:subject predicate, extended to either a `skos:broader` or inverse of `skos:narrower` up to the selected node in the tree.
+The SPARQL query generation logic is identical to the ListWidget (see above). However please note that it is expected that Tree widgets are configured on properties that use a "*" SPARQL property path, indicating that the search is made recursively on the selected node but also all its children. A typical SPARQL property path configured on a property associated to a tree widget is `<http://purl.org/dc/terms/subject>/(<http://www.w3.org/2004/02/skos/core#broader>|^<http://www.w3.org/2004/02/skos/core#narrower>)*` : note how it searches for a connection using the `dcterms:subject` predicate, extended to either a `skos:broader` or inverse of `skos:narrower` up to the selected node in the tree.
 
 ## String search widget
 
@@ -136,13 +136,13 @@ In OWL configuration, declare a sub-property of [`config-core:SearchProperty`](h
 
 ### Datasources
 
-This widget does not require a datasource.
+No datasource required.
 
 ### SPARQL clause
 
-The generated SPARQL clause depends on the exact sub-property used as the super-property of this one.
+The generated SPARQL clause depends on the exact super-property used when configuring the property:
 
-#### SearchProperty
+**SearchProperty**
 
 The string will be searched using a `regex` function.
 
@@ -150,7 +150,7 @@ The string will be searched using a `regex` function.
 FILTER(REGEX(STR(?Text_6), "picasso", "i"))
 ```
 
-#### StringEqualsProperty
+**StringEqualsProperty**
 
 The string will be searched in an exact way, case-insensitive. This is useful when searching for exact identifiers.
 
@@ -158,11 +158,11 @@ The string will be searched in an exact way, case-insensitive. This is useful wh
 FILTER((LCASE(?Cote_1)) = (LCASE("ABC")))
 ```
 
-#### GraphDBSearchProperty
+**GraphDBSearchProperty**
 
 The string will be searched using GraphDB proprietary Lucene connector. Make sure you follow the [additional documentation](http://docs.sparnatural.eu/Integration-with-GraphDB-Lucene-Connector.html) provided for this, as this imposes some naming convention on the URI of the range class and the property.
 
-#### VirtuosoSearchProperty  
+**VirtuosoSearchProperty**
 
 The string will be searched using Virtuoso proprietary `bif:contains` operator.
 
