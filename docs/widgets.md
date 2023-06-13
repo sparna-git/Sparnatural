@@ -227,27 +227,67 @@ FILTER((xsd:dateTime(?Date_2)) >= "2017-12-31T23:00:01Z"^^xsd:dateTime)
 
 ### Appearance
 
-
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/15-boolean.png" width="75%" />
 
 ### Description
+
+Allows to select either the value "true" or false.
+
 ### Configuration
+
+In OWL configuration, declare a sub-property of [`config-core:BooleanProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#BooleanProperty).
+
 ### Datasources
+
+No datasource required.
+
 ### SPARQL clause
 
+`TODO`
 
 ## Map widget
 
 ### Appearance
+
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/18-map.png" width="75%" />
+
 ### Description
+
+Allows to select a rectangle on a map, and generates a corresponding GeoSPARQL query, using a `geof:sfWithin` function.
+
 ### Configuration
+
+In OWL configuration, declare a sub-property of [`config-core:MapProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#MapProperty).
+
 ### Datasources
+
+No datasource required.
+
 ### SPARQL clause
 
+```sparql
+    ?MuseumWikidata_2 <http://www.wikidata.org/prop/direct/P625> ?Map_4.
+    FILTER(<http://www.opengis.net/def/function/geosparql/sfWithin>(?Map_4, "Polygon((6.113179202657193 46.196063994634265, 6.113179202657193 46.21649770912313, 6.149914737325163 46.21649770912313, 6.149914737325163 46.196063994634265, 6.113179202657193 46.196063994634265))"^^<http://www.opengis.net/ont/geosparql#wktLiteral>))
+```
 
 ## No selection widget
 
 ### Appearance
+
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/13-no-value.png" width="75%" />
+
 ### Description
+
+Completely disables the possibility for the user to select a value. Only the "where" option is active in order to "traverse" this entity. This is useful to show intermediate nodes to the user without allowing for a selection on a label, but only on other properties attached to that node. This is typically useful for event-based models like the CIDOC-CRM where events are usually not selectables by themselves but serves to connect other properties.
+
 ### Configuration
+
+In OWL configuration, declare a sub-property of [`config-core:NonSelectableProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty).
+
 ### Datasources
+
+No datasource required.
+
 ### SPARQL clause
+
+No SPARQL generated.
