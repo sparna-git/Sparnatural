@@ -118,6 +118,7 @@ The children datasource is configured using the [treeChildrenDatasource](http://
 
 ### SPARQL clause
 
+The SPARQL query generation logic is identical to the ListWidget (see above). However please note that it is expected that Tree widgets are configured on properties that use the a "*" SPARQL property path, indicating that the search is made recursively on the selected node but also all its children. A typical SPARQL property path configured on a property associated to a tree widget is `<http://purl.org/dc/terms/subject>/(<http://www.w3.org/2004/02/skos/core#broader>|^<http://www.w3.org/2004/02/skos/core#narrower>)*` : note how it searches for a connection using the dcterms:subject predicate, extended to either a `skos:broader` or inverse of `skos:narrower` up to the selected node in the tree.
 
 ## String search widget
 
