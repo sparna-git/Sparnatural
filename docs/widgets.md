@@ -123,11 +123,48 @@ The SPARQL query generation logic is identical to the ListWidget (see above). Ho
 ## String search widget
 
 ### Appearance
+
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/11-search.png" width="75%" />
+
 ### Description
+
+The search widget simply allows to enter some characters that will be searched for, using different techniques (see below), either using a regex or custom proprietary full-text search functions.
+
 ### Configuration
+
+In OWL configuration, declare a sub-property of [`config-core:SearchProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty), **or one of its sub-properties**, which will influence the SPARQL generation logic (see below).
+
 ### Datasources
+
+This widget does not require a datasource.
+
 ### SPARQL clause
 
+The generated SPARQL clause depends on the exact sub-property used as the super-property of this one.
+
+#### SearchProperty
+
+The string will be searched using a `regex` function.
+
+```sparql
+FILTER(REGEX(STR(?Text_6), "picasso", "i"))
+```
+
+#### StringEqualsProperty
+
+The string will be searched in an exact way, case-insensitive. This is useful when searching for exact identifiers.
+
+```sparql
+FILTER((LCASE(?Cote_1)) = (LCASE("ABC")))
+```
+
+#### GraphDBSearchProperty
+
+The string will be searched using GraphDB proprietary Lucene connector. Make sure you follow the [additional documentation](http://docs.sparnatural.eu/Integration-with-GraphDB-Lucene-Connector.html) provided for this, as this imposes some naming convention on the URI of the range class and the property.
+
+#### VirtuosoSearchProperty  
+
+The string will be searched using Virtuoso proprietary `bif:contains` operator.
 
 ## Date range widget
 
