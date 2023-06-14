@@ -321,6 +321,36 @@ This is typically the default behavior for a list without a datasource specified
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of URI or Literals, ordered alphabetically based on their string representation. It can work indifferently with URIs or Literal values.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha_with_count"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of URIs or Literals, ordered alphabetically based on their string representation, with their number of occurrences in parenthesis.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count"/>
+        <rdfs:comment xml:lang="en">A datasource that returns a list of URI or Literals, ordered on their descending number of occurrences. It can work indifferently with URIs or Literal values.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha">
@@ -556,6 +586,146 @@ WHERE {
 }
 ORDER BY DESC(?count) UCASE(?label)
 LIMIT 500</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value (CONCAT(IF(isLiteral(?value) &amp;&amp; LANG(?value) != &apos;&apos; &amp;&amp; LANG(?value) != $lang,CONCAT(STR(?value), &quot; &lt;sup&gt;(&quot;,LANG(?value),&quot;)&lt;/sup&gt;&quot;),STR(?value))) AS ?label)
+WHERE {
+    ?domain $type $domain .
+    {
+      {
+        ?domain $property ?value . FILTER(isIRI(?value))
+      }
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = $lang))
+      }
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = $defaultLang))
+        FILTER NOT EXISTS {
+          ?domain $property ?valuePrefLang .
+          FILTER(LANG(?valuePrefLang) = $lang)
+        }
+      }
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = &quot;&quot;))
+        FILTER NOT EXISTS {
+          ?domain $property ?valueAnyLang .
+          FILTER((LANG(?valueAnyLang) = $lang) || (LANG(?valueAnyLang) = $defaultLang))
+        }
+      }
+    }
+    # Note how the range criteria is not used in this query
+}
+ORDER BY UCASE(?label)
+LIMIT 500</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha_with_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha_with_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?count (CONCAT(IF(isLiteral(?value) &amp;&amp; LANG(?value) != &apos;&apos; &amp;&amp; LANG(?value) != $lang,CONCAT(STR(?value), &quot; &lt;sup&gt;(&quot;,LANG(?value),&quot;)&lt;/sup&gt;&quot;),STR(?value)), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
+  WHERE {
+    ?domain $type $domain .
+    {
+      {
+        ?domain $property ?value . FILTER(isIRI(?value))
+      }
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = $lang))
+      }
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = $defaultLang))
+        FILTER NOT EXISTS {
+          ?domain $property ?valuePrefLang .
+          FILTER(LANG(?valuePrefLang) = $lang)
+        }
+      }
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = &quot;&quot;))
+        FILTER NOT EXISTS {
+          ?domain $property ?valueAnyLang .
+          FILTER((LANG(?valueAnyLang) = $lang) || (LANG(?valueAnyLang) = $defaultLang))
+        }
+      }      
+    }
+  }
+  GROUP BY ?value
+}
+}
+ORDER BY UCASE(?label)
+LIMIT 500</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT ?value ?count (CONCAT(IF(isLiteral(?value) &amp;&amp; LANG(?value) != &apos;&apos; &amp;&amp; LANG(?value) != $lang,CONCAT(STR(?value), &quot; &lt;sup&gt;(&quot;,LANG(?value),&quot;)&lt;/sup&gt;&quot;),STR(?value)), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+WHERE {
+{
+  SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
+  WHERE {
+    ?domain $type $domain .
+    {
+      {
+        ?domain $property ?value . FILTER(isIRI(?value))
+      }
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = $lang))
+      }
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = $defaultLang))
+        FILTER NOT EXISTS {
+          ?domain $property ?valuePrefLang .
+          FILTER(LANG(?valuePrefLang) = $lang)
+        }
+      }
+      UNION
+      {
+        ?domain $property ?value . 
+        FILTER(isLiteral(?value) &amp;&amp; (lang(?value) = &quot;&quot;))
+        FILTER NOT EXISTS {
+          ?domain $property ?valueAnyLang .
+          FILTER((LANG(?valueAnyLang) = $lang) || (LANG(?valueAnyLang) = $defaultLang))
+        }
+      }      
+    }
+  }
+  GROUP BY ?value
+}
+}
+ORDER BY DESC(?count) UCASE(?label)
+LIMIT 500</sparnatural-config-datasources:queryString>
+        <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
     </owl:NamedIndividual>
     
 
@@ -841,6 +1011,42 @@ LIMIT 10</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?label
+WHERE {
+  ?domain $type $domain .
+  ?domain $property ?value .
+  FILTER(isLiteral(?value))
+  BIND(STR(?value) AS ?label)
+  FILTER(CONTAINS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
+} 
+ORDER BY UCASE(?label)
+LIMIT 10</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_strstarts">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?label
+WHERE {
+  ?domain $type $domain .
+  ?domain $property ?value .
+  FILTER(isLiteral(?value))
+  BIND(STR(?value) AS ?label)
+  FILTER(STRSTARTS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
+} 
+ORDER BY UCASE(?label)
+LIMIT 10</sparnatural-config-datasources:queryString>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children">
@@ -1028,6 +1234,24 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     
 
 
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_contains -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_contains">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains"/>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_strstarts -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_strstarts">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_strstarts"/>
+    </owl:NamedIndividual>
+    
+
+
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_bifcontains -->
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_rdfslabel_bifcontains">
@@ -1200,212 +1424,6 @@ WHERE {
 }
 GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
-        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha"/>
-        <rdfs:comment xml:lang="en">A datasource that returns a list of URI or Literals, ordered alphabetically based on their string representation. It can work indifferently with URIs or Literal values.</rdfs:comment>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha_with_count -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_alpha_with_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
-        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha_with_count"/>
-        <rdfs:comment xml:lang="en">A datasource that returns a list of URIs or Literals, ordered alphabetically based on their string representation, with their number of occurrences in parenthesis.</rdfs:comment>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_count -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlListDatasource"/>
-        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count"/>
-        <rdfs:comment xml:lang="en">A datasource that returns a list of URI or Literals, ordered on their descending number of occurrences. It can work indifferently with URIs or Literal values.</rdfs:comment>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value (CONCAT(IF(isLiteral(?value) &amp;&amp; LANG(?value) != &apos;&apos; &amp;&amp; LANG(?value) != $lang,CONCAT(STR(?value), &quot; &lt;sup&gt;(&quot;,LANG(?value),&quot;)&lt;/sup&gt;&quot;),STR(?value)), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
-WHERE {
-    ?domain $type $domain .
-    {
-      {
-        ?domain $property ?value . FILTER(isIRI(?value))
-      }
-      UNION
-      {
-        ?domain $property ?anything . 
-        OPTIONAL {
-          ?domain $property ?valueLang . 
-          FILTER(isLiteral(?valueLang) &amp;&amp; (lang(?valueLang) = &quot;&quot; || lang(?valueLang) = $lang))
-        }
-        OPTIONAL {
-          ?domain $property ?valueDefaultLang . 
-          FILTER(isLiteral(?valueDefaultLang) &amp;&amp; (lang(?valueDefaultLang) = $defaultLang))
-        }
-        OPTIONAL {
-          ?domain $property ?valueNoLang . 
-          FILTER(isLiteral(?valueNoLang) &amp;&amp; (lang(?valueNoLang) = &quot;&quot;))
-        }
-        BIND(COALESCE(?valueLang, ?valueDefaultLang, ?valueNoLang) AS ?value)
-      }
-    }
-    # Note how the range criteria is not used in this query
-}
-ORDER BY UCASE(?label)
-LIMIT 500</sparnatural-config-datasources:queryString>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha_with_count -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_alpha_with_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?count (CONCAT(IF(isLiteral(?value) &amp;&amp; LANG(?value) != &apos;&apos; &amp;&amp; LANG(?value) != $lang,CONCAT(STR(?value), &quot; &lt;sup&gt;(&quot;,LANG(?value),&quot;)&lt;/sup&gt;&quot;),STR(?value)), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
-WHERE {
-{
-  SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
-  WHERE {
-    ?domain $type $domain .
-    {
-      {
-        ?domain $property ?value . FILTER(isIRI(?value))
-      }
-      UNION
-      {
-        ?domain $property ?anything . 
-        OPTIONAL {
-          ?domain $property ?valueLang . 
-          FILTER(isLiteral(?valueLang) &amp;&amp; (lang(?valueLang) = &quot;&quot; || lang(?valueLang) = $lang))
-        }
-        OPTIONAL {
-          ?domain $property ?valueDefaultLang . 
-          FILTER(isLiteral(?valueDefaultLang) &amp;&amp; (lang(?valueDefaultLang) = $defaultLang))
-        }
-        OPTIONAL {
-          ?domain $property ?valueNoLang . 
-          FILTER(isLiteral(?valueNoLang) &amp;&amp; (lang(?valueNoLang) = &quot;&quot;))
-        }
-        BIND(COALESCE(?valueLang, ?valueDefaultLang, ?valueNoLang) AS ?value)
-      }
-    }
-  }
-  GROUP BY ?value
-}
-}
-ORDER BY UCASE(?label)
-LIMIT 500</sparnatural-config-datasources:queryString>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT ?value ?count (CONCAT(IF(isLiteral(?value) &amp;&amp; LANG(?value) != &apos;&apos; &amp;&amp; LANG(?value) != $lang,CONCAT(STR(?value), &quot; &lt;sup&gt;(&quot;,LANG(?value),&quot;)&lt;/sup&gt;&quot;),STR(?value)), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
-WHERE {
-{
-  SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
-  WHERE {
-    ?domain $type $domain .
-    {
-      {
-        ?domain $property ?value . FILTER(isIRI(?value))
-      }
-      UNION
-      {
-        ?domain $property ?anything . 
-        OPTIONAL {
-          ?domain $property ?valueLang . 
-          FILTER(isLiteral(?valueLang) &amp;&amp; (lang(?valueLang) = &quot;&quot; || lang(?valueLang) = $lang))
-        }
-        OPTIONAL {
-          ?domain $property ?valueDefaultLang . 
-          FILTER(isLiteral(?valueDefaultLang) &amp;&amp; (lang(?valueDefaultLang) = $defaultLang))
-        }
-        OPTIONAL {
-          ?domain $property ?valueNoLang . 
-          FILTER(isLiteral(?valueNoLang) &amp;&amp; (lang(?valueNoLang) = &quot;&quot;))
-        }
-        BIND(COALESCE(?valueLang, ?valueDefaultLang, ?valueNoLang) AS ?value)
-      }
-    }
-  }
-  GROUP BY ?value
-}
-}
-ORDER BY DESC(?count) UCASE(?label)
-LIMIT 500</sparnatural-config-datasources:queryString>
-        <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?label
-WHERE {
-  ?domain $type $domain .
-  ?domain $property ?value .
-  FILTER(isLiteral(?value))
-  BIND(STR(?value) AS ?label)
-  FILTER(CONTAINS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
-} 
-ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_strstarts -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_strstarts">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?value ?label
-WHERE {
-  ?domain $type $domain .
-  ?domain $property ?value .
-  FILTER(isLiteral(?value))
-  BIND(STR(?value) AS ?label)
-  FILTER(STRSTARTS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
-} 
-ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_contains -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_contains">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
-        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_contains"/>
-    </owl:NamedIndividual>
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_strstarts -->
-
-    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_literal_strstarts">
-        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlSearchDatasource"/>
-        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_literal_strstarts"/>
     </owl:NamedIndividual>
 </rdf:RDF>
 

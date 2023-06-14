@@ -338,7 +338,7 @@ export class BaseRDFReader {
       this.store
         .getQuads(rdfNode, property, null, null)
         .map((quad: { object: any }) => {
-          result.push(this._readList_rec(quad.object))
+          result.push(...this._readList_rec(quad.object))
         });
       return result;
     }

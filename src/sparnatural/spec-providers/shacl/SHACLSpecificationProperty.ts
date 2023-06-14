@@ -114,13 +114,13 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         // read sh:or content
         var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
         orMembers?.forEach(m => {
-          classes.push(...this.#readShClassAndShNodeOn(m));
+          classes.push(...this.#readShClassAndShNodeOn(m.id));
         });
 
         return classes;
     }
 
-    #readShClassAndShNodeOn(theUri:string):string[] {         
+    #readShClassAndShNodeOn(theUri:any):string[] {         
          var classes: string[] = [];
 
          // read the sh:class
