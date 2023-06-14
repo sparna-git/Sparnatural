@@ -157,12 +157,17 @@ export class SpecialSHACLSpecificationEntity implements ISpecificationEntity {
         return this.label;
     }
 
+    getOrder(): string|null {
+        return null;
+    }
+
     getTooltip(): string | null {
         return null;
     }
 
     getColor(): string | null {
-        return "slategray";
+        // return "slategray";
+        return null;
     }
 
     getDatasource(): any {
@@ -190,9 +195,9 @@ export class SpecialSHACLSpecificationEntityRegistry {
 
     private registry:Map<string,SpecialSHACLSpecificationEntity> = new Map<string,SpecialSHACLSpecificationEntity>();
 
-    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/Other";
+    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/ZZ_Other";
 
-    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/Date";
+    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/ZY_Date";
 
     static instance = new SpecialSHACLSpecificationEntityRegistry();
 

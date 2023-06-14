@@ -70,7 +70,7 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
       return "";
     }
 
-    getShOrder() {
+    getOrder() {
         let order = this._readAsSingleLiteral(this.uri, SH.ORDER);
         return order
     }
@@ -79,8 +79,8 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
         const compareFunction = function (item1: SHACLSpecificationEntry, item2: SHACLSpecificationEntry) {
           // return me.getLabel(item1).localeCompare(me.getLabel(item2));
     
-          var order1 = item1.getShOrder();
-          var order2 = item2.getShOrder();
+          var order1 = item1.getOrder();
+          var order2 = item2.getOrder();
     
           if (order1) {
             if (order2) {

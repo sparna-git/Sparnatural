@@ -248,13 +248,16 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     const compareFunction = function (item1: any, item2: any) {
       // return me.getLabel(item1).localeCompare(me.getLabel(item2));
 
-      var order1 = me._readOrder(item1);
-      var order2 = me._readOrder(item2);
+      var entity1 = this.getEntity(item1).getOrder();
+      var entity2 = this.getEntity(item2).getOrder();
+
+      var order1 = entity1.getOrder();
+      var order2 = entity2.getOrder();
 
       if (order1) {
         if (order2) {
           if (order1 == order2) {
-            return me.getEntity(item1).getLabel().localeCompare(me.getEntity(item2).getLabel());
+            return entity1.getLabel().localeCompare(entity2.getLabel());
           } else {
             // if the order is actually a number, convert it to number and use a number conversion
             if(!isNaN(Number(order1)) && !isNaN(Number(order2))) {
@@ -270,7 +273,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
         if (order2) {
           return 1;
         } else {
-          return me.getEntity(item1).getLabel().localeCompare(me.getEntity(item2).getLabel());
+          return entity1.getLabel().localeCompare(entity2.getLabel());
         }
       }
     };

@@ -33,6 +33,13 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
       return this._readAsSingleLiteral(this.uri, VOLIPI.COLOR);
     }
 
+    /**
+     * Reads config:order of an entity and returns it, or null if not set
+     **/
+    getOrder() {
+      return this._readAsSingleLiteral(this.uri, Config.ORDER);
+    }
+
     getIcon(): string {
         var faIcon = this._readAsLiteral(
             this.uri,
@@ -64,14 +71,6 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
       if (icons.length > 0) {
         return icons[0];
       } 
-    }
-
-
-    /**
-     * Reads config:order of an entity and returns it, or null if not set
-     **/
-    #_readOrder(uri: any) {
-        return this._readAsSingleLiteral(uri, Config.ORDER);
     }
 
     /**

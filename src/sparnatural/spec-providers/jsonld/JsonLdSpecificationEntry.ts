@@ -75,6 +75,10 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
         return JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs)["highlightedIcon"];
     }
 
+    getOrder(): string {
+      return this.jsonSpecs["@graph"].indexOf(JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs));
+    }
+
 
   protected _readValue(id: any, key: string | number) {
     var theObject = JsonLdSpecificationProvider.getResourceById(id, this.jsonSpecs);
