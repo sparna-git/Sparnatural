@@ -31,6 +31,7 @@ export class ListWidget extends AbstractWidget {
   dataProvider: ListDataProviderIfc;
 
   protected widgetValues: WidgetValue[];
+  langSearch: any;
   sort: boolean;
   settings: ISettings;
   selectHtml: JQuery<HTMLElement>;
@@ -38,6 +39,7 @@ export class ListWidget extends AbstractWidget {
   constructor(
     parentComponent: WidgetWrapper,
     dataProvider: ListDataProviderIfc,
+    langSearch: any,
     sort: boolean,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -54,6 +56,7 @@ export class ListWidget extends AbstractWidget {
     );
 
     this.dataProvider = dataProvider;
+    this.langSearch = langSearch,
     this.sort = sort;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
@@ -113,7 +116,13 @@ export class ListWidget extends AbstractWidget {
       } else {
         this.html.append(noItemsHtml);
       }  
+
+      // switch off spinner
+      this.toggleSpinner('')
     }
+
+    // toggle spinner before loading
+    this.toggleSpinner(this.langSearch.AutocompleteSpinner_Searching);
 
     this.dataProvider.getListContent(
       this.startClassVal.type,

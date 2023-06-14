@@ -93,7 +93,7 @@ LIMIT 500
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha",
   `
-  SELECT DISTINCT ?value (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value)), ' (', STR(?count), ')') AS ?label)
+  SELECT DISTINCT ?value (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value))) AS ?label)
   WHERE {
       ?domain $type $domain .
       {
@@ -102,20 +102,26 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
         }
         UNION
         {
-          ?domain $property ?anything . 
-          OPTIONAL {
-            ?domain $property ?valueLang . 
-            FILTER(isLiteral(?valueLang) && (lang(?valueLang) = "" || lang(?valueLang) = $lang))
+          ?domain $property ?value . 
+          FILTER(isLiteral(?value) && (lang(?value) = $lang))
+        }
+        UNION
+        {
+          ?domain $property ?value . 
+          FILTER(isLiteral(?value) && (lang(?value) = $defaultLang))
+          FILTER NOT EXISTS {
+            ?domain $property ?valuePrefLang .
+            FILTER(LANG(?valuePrefLang) = $lang)
           }
-          OPTIONAL {
-            ?domain $property ?valueDefaultLang . 
-            FILTER(isLiteral(?valueDefaultLang) && (lang(?valueDefaultLang) = $defaultLang))
+        }
+        UNION
+        {
+          ?domain $property ?value . 
+          FILTER(isLiteral(?value) && (lang(?value) = ""))
+          FILTER NOT EXISTS {
+            ?domain $property ?valueAnyLang .
+            FILTER((LANG(?valueAnyLang) = $lang) || (LANG(?valueAnyLang) = $defaultLang))
           }
-          OPTIONAL {
-            ?domain $property ?valueNoLang . 
-            FILTER(isLiteral(?valueNoLang) && (lang(?valueNoLang) = ""))
-          }
-          BIND(COALESCE(?valueLang, ?valueDefaultLang, ?valueNoLang) AS ?value)
         }
       }
       # Note how the range criteria is not used in this query
@@ -140,20 +146,26 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
         }
         UNION
         {
-          ?domain $property ?anything . 
-          OPTIONAL {
-            ?domain $property ?valueLang . 
-            FILTER(isLiteral(?valueLang) && (lang(?valueLang) = "" || lang(?valueLang) = $lang))
+          ?domain $property ?value . 
+          FILTER(isLiteral(?value) && (lang(?value) = $lang))
+        }
+        UNION
+        {
+          ?domain $property ?value . 
+          FILTER(isLiteral(?value) && (lang(?value) = $defaultLang))
+          FILTER NOT EXISTS {
+            ?domain $property ?valuePrefLang .
+            FILTER(LANG(?valuePrefLang) = $lang)
           }
-          OPTIONAL {
-            ?domain $property ?valueDefaultLang . 
-            FILTER(isLiteral(?valueDefaultLang) && (lang(?valueDefaultLang) = $defaultLang))
+        }
+        UNION
+        {
+          ?domain $property ?value . 
+          FILTER(isLiteral(?value) && (lang(?value) = ""))
+          FILTER NOT EXISTS {
+            ?domain $property ?valueAnyLang .
+            FILTER((LANG(?valueAnyLang) = $lang) || (LANG(?valueAnyLang) = $defaultLang))
           }
-          OPTIONAL {
-            ?domain $property ?valueNoLang . 
-            FILTER(isLiteral(?valueNoLang) && (lang(?valueNoLang) = ""))
-          }
-          BIND(COALESCE(?valueLang, ?valueDefaultLang, ?valueNoLang) AS ?value)
         }
       }
     }
@@ -180,20 +192,26 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
         }
         UNION
         {
-          ?domain $property ?anything . 
-          OPTIONAL {
-            ?domain $property ?valueLang . 
-            FILTER(isLiteral(?valueLang) && (lang(?valueLang) = "" || lang(?valueLang) = $lang))
+          ?domain $property ?value . 
+          FILTER(isLiteral(?value) && (lang(?value) = $lang))
+        }
+        UNION
+        {
+          ?domain $property ?value . 
+          FILTER(isLiteral(?value) && (lang(?value) = $defaultLang))
+          FILTER NOT EXISTS {
+            ?domain $property ?valuePrefLang .
+            FILTER(LANG(?valuePrefLang) = $lang)
           }
-          OPTIONAL {
-            ?domain $property ?valueDefaultLang . 
-            FILTER(isLiteral(?valueDefaultLang) && (lang(?valueDefaultLang) = $defaultLang))
+        }
+        UNION
+        {
+          ?domain $property ?value . 
+          FILTER(isLiteral(?value) && (lang(?value) = ""))
+          FILTER NOT EXISTS {
+            ?domain $property ?valueAnyLang .
+            FILTER((LANG(?valueAnyLang) = $lang) || (LANG(?valueAnyLang) = $defaultLang))
           }
-          OPTIONAL {
-            ?domain $property ?valueNoLang . 
-            FILTER(isLiteral(?valueNoLang) && (lang(?valueNoLang) = ""))
-          }
-          BIND(COALESCE(?valueLang, ?valueDefaultLang, ?valueNoLang) AS ?value)
         }
       }
     }

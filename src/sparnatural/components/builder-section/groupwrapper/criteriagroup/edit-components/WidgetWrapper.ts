@@ -200,7 +200,8 @@ class WidgetWrapper extends HTMLComponent {
             // that datasource can work indifferently with URIs or Literals
             datasource = Datasources.DATASOURCES_CONFIG.get(
               // better use alphabetical ordering first since URIs will be segregated in the "h" letter and not mixed
-              Datasources.LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT
+              // Datasources.LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT
+              Datasources.LIST_URI_OR_LITERAL_ALPHA
             );
           }
         }
@@ -244,6 +245,7 @@ class WidgetWrapper extends HTMLComponent {
         return new ListWidget(
           this,
           listDataProvider,
+          this.settings.langSearch,
           !(datasource.noSort == true),
           this.startClassVal,
           this.objectPropVal,
