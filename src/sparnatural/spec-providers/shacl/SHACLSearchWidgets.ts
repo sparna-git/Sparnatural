@@ -1,7 +1,7 @@
-import { Quad, Store } from "n3";
+import { Quad, Quad_Subject, Store } from "n3";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import factory from "@rdfjs/data-model";
-import { SH, XSD } from "./SHACLSpecificationProvider";
+import { DCT, SH, VOID, XSD } from "./SHACLSpecificationProvider";
 import { RDF } from "../BaseRDFReader";
 
 
@@ -52,7 +52,14 @@ export class AutocompleteWidget {
     }
 
     score(propertyShape:string, n3store: Store<Quad>):number {
-        return -1;
+        // if there is a count and the count is > 500, then this will score higher
+        let count = readCountOf(n3store, propertyShape);
+        if(count && count > 500) {
+            return 20;
+        } else {
+            return -1;
+        }
+        
     }
 
 }
@@ -204,11 +211,46 @@ SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new Searc
 
 function _hasTriple(n3store: Store<Quad>, rdfNode: any, property: any, value:any) {
     return (
-        n3store.getQuads(
+      n3store.getQuads(
         rdfNode,
         property,
         value,
         null
       ).length > 0
     );
+}
+
+function readCountOf(n3store: Store<Quad>, propertyShape:string) {
+    let partitions:Quad_Subject[] = n3store
+      .getQuads(null, DCT.CONFORMS_TO, factory.namedNode(propertyShape), null)
+      .map((quad: { subject: any }) => quad.subject);
+
+      let result:number|undefined = undefined
+      partitions.forEach(partition => {
+        result = _readAsSingleInteger(n3store, partition, VOID.TRIPLES);
+      });
+
+      return result
+}
+
+function _readAsSingleInteger(n3store: Store<Quad>, subject: Quad_Subject, property: any):number|undefined {
+    var value = _readAsSingleLiteral(n3store, subject, property);
+    if(value) {
+        return Number.parseInt(value);
+    }
+}
+
+function _readAsSingleLiteral(n3store: Store<Quad>, subject: Quad_Subject, property: any) {
+    var values = _readAsLiteral(n3store, subject, property);
+    if (values.length == 0) {
+      return undefined;
+    } else {
+      return values[0];
+    }
+}
+
+function _readAsLiteral(n3store: Store<Quad>, subject: Quad_Subject, property: any) {
+    return n3store
+      .getQuads(subject, property, null, null)
+      .map((quad: { object: { value: any } }) => quad.object.value);
   }

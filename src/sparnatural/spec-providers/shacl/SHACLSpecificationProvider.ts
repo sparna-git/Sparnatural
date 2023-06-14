@@ -62,6 +62,17 @@ export const XSD = {
   STRING: factory.namedNode(XSD_NAMESPACE + "string") as NamedNode
 };
 
+const DCT_NAMESPACE = "http://purl.org/dc/terms/";
+export const DCT = {
+  CONFORMS_TO: factory.namedNode(DCT_NAMESPACE + "conformsTo") as NamedNode,
+};
+
+const VOID_NAMESPACE = "http://rdfs.org/ns/void#";
+export const VOID = {
+  ENTITIES: factory.namedNode(VOID_NAMESPACE + "entities") as NamedNode,
+  TRIPLES: factory.namedNode(VOID_NAMESPACE + "triples") as NamedNode,
+};
+
 export class SHACLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {
 
   #parser: SparqlParser;

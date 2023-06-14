@@ -197,12 +197,25 @@ class WidgetWrapper extends HTMLComponent {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
           if (this.settings.defaultEndpoint) {
-            // that datasource can work indifferently with URIs or Literals
-            datasource = Datasources.DATASOURCES_CONFIG.get(
-              // better use alphabetical ordering first since URIs will be segregated in the "h" letter and not mixed
-              // Datasources.LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT
-              Datasources.LIST_URI_OR_LITERAL_ALPHA
-            );
+
+            // if there is a default label property on the end class, use it to populate the dropdown
+            if(this.specProvider.getEntity(endClassType).getDefaultLabelProperty()) {
+              datasource = {
+                queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+                  Datasources.QUERY_LIST_LABEL_ALPHA
+                ),
+                labelProperty: this.specProvider.getEntity(endClassType).getDefaultLabelProperty(),
+              }
+            } else {
+              // that datasource can work indifferently with URIs or Literals
+              datasource = Datasources.DATASOURCES_CONFIG.get(
+                // better use alphabetical ordering first since URIs will be segregated in the "h" letter and not mixed
+                // Datasources.LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT
+                Datasources.LIST_URI_OR_LITERAL_ALPHA
+              );
+            }
+
+
           }
         }
 
@@ -265,15 +278,27 @@ class WidgetWrapper extends HTMLComponent {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
           if (this.settings.defaultEndpoint) {
-            let range: Array<string> = this.specProvider.getProperty(objectPropertyId).getRange();
-            if(range && range.length == 1 && this.specProvider.getEntity(range[0]).isLiteralEntity()) {
+            if(this.specProvider.getEntity(endClassType).isLiteralEntity()) {
               datasource = Datasources.DATASOURCES_CONFIG.get(
                 Datasources.SEARCH_LITERAL_CONTAINS
               );
             } else {
-              datasource = Datasources.DATASOURCES_CONFIG.get(
-                Datasources.SEARCH_URI_CONTAINS
-              );
+
+              // if there is a default label property on the end class, use it to search in the autocomplete
+              if(this.specProvider.getEntity(endClassType).getDefaultLabelProperty()) {
+                datasource = {
+                  queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+                    Datasources.QUERY_SEARCH_LABEL_CONTAINS
+                  ),
+                  labelProperty: this.specProvider.getEntity(endClassType).getDefaultLabelProperty(),
+                }
+              } else {
+                // otherwise just search on the URI 
+                datasource = Datasources.DATASOURCES_CONFIG.get(
+                  Datasources.SEARCH_URI_CONTAINS
+                );
+              }
+              
             }
             
           }

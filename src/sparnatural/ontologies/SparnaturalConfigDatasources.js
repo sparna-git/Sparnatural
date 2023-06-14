@@ -1069,9 +1069,11 @@ const Datasources = Object.freeze({
   QUERY_LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT:
     SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha_with_count",
   QUERY_SEARCH_LABEL_STRSTARTS:
-    SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_starstarts",
+    SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_strstarts",
+  QUERY_SEARCH_LABEL_CONTAINS:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_contains",
   QUERY_SEARCH_LABEL_BIFCONTAINS:
-    SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_bitcontains",
+    SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_bifcontains",
   QUERY_SEARCH_URI_CONTAINS:
     SPARNATURAL_CONFIG_DATASOURCES + "query_search_URI_contains",
   QUERY_TREE_CHILDREN: SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children",

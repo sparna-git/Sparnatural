@@ -263,7 +263,7 @@ export class BaseRDFReader {
       .map((quad: { object: { value: any } }) => quad.object.value);
   }
 
-    _readAsSingleLiteral(uri: any, property: any) {
+  _readAsSingleLiteral(uri: any, property: any) {
     var values = this._readAsLiteral(uri, property);
     if (values.length == 0) {
       return undefined;
