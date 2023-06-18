@@ -33,6 +33,13 @@ export function triggerOption(
   // set new optionstate as classvariable
   grpWrapper.optionState = newOptionState;
 
+  // disable the eye button on the line itself, or re-enable it
+  if (newOptionState == OptionTypes.NOTEXISTS) {
+    grpWrapper.CriteriaGroup.EndClassGroup.inputSelector.selectViewVariableBtn.disable();
+  } else {
+    grpWrapper.CriteriaGroup.EndClassGroup.inputSelector.selectViewVariableBtn.enable();
+  }
+
   setOptnTypeToDescendants(grpWrapper, newOptionState);
 }
 
@@ -69,6 +76,13 @@ let setOptionCss = (
       grpWrapper.CriteriaGroup.OptionsGroup.OptionalComponent.html.remove();
       grpWrapper.CriteriaGroup.OptionsGroup.NotExistsComponent.html.remove();
     }
+  }
+
+  // disable the eye button on the descendants, or re-enable it
+  if (newState == OptionTypes.NOTEXISTS) {
+    grpWrapper.CriteriaGroup.EndClassGroup.inputSelector.selectViewVariableBtn.disable();
+  } else {
+    grpWrapper.CriteriaGroup.EndClassGroup.inputSelector.selectViewVariableBtn.enable();
   }
 };
 

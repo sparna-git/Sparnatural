@@ -45,5 +45,23 @@ class SelectViewVariableBtn extends HTMLComponent {
       this.callBack(this.selected);
     });
   }
+
+  #removeClickListener() {
+    this.widgetHtml.off("click");
+  }
+
+  disable() {
+    this.html.addClass("disabled");
+    this.#removeClickListener();
+  }
+
+  enable() {
+    // make sure we don't enable twise
+    if(this.html.hasClass("disabled")) {
+      this.html.removeClass("disabled");
+      this.#addClickListener();
+    }
+  }
+
 }
 export default SelectViewVariableBtn;

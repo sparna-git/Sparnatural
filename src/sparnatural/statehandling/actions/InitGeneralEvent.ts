@@ -18,7 +18,7 @@ export default function redrawBackgroundAndLinks(actionStore: ActionStore) {
       rerenderOptionState(grpWrapper);
       //render background
       currentHeight = grpWrapper.CriteriaGroup.html.outerHeight(true) + 1;
-      cssdef += drawBackgroungOfGroupWrapper(
+      cssdef += drawBackgroundOfGroupWrapper(
         index,
         previousHeight,
         currentHeight
@@ -34,7 +34,7 @@ export default function redrawBackgroundAndLinks(actionStore: ActionStore) {
           (g: GroupWrapper) => {
             childrenHeight = g.CriteriaGroup.html.outerHeight(true)
 
-            cssdef += drawBackgroungOfGroupWrapper(
+            cssdef += drawBackgroundOfGroupWrapper(
               index,
               previousHeight,
               childrenHeight
@@ -76,7 +76,7 @@ function rerenderOptionState(grpWrapper: GroupWrapper) {
   }
 }
 
-function drawBackgroungOfGroupWrapper(
+function drawBackgroundOfGroupWrapper(
   index: number,
   prevHeight: number,
   currHeight: number
