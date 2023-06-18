@@ -42,6 +42,16 @@ document.getElementById('export').onclick = function() {
   $('#exportModal').modal('show');       
 }
 
+document.getElementById('load').onclick = function() {
+  $('#loadModal').modal('show');       
+}
+
+document.getElementById('loadJson').onclick = function() {
+  sparnatural.loadQuery(JSON.parse(document.getElementById('load-json').value));   
+  $('#loadModal').modal('hide'); 
+}
+
+
 document.getElementById('clear').onclick = function() {
   sparnatural.clear();     
 }

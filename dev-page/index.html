@@ -54,10 +54,10 @@
             -->
             <!-- You can try adding typePredicate="http://www.w3.org/2000/01/rdf-schema#subClassOf" -->
             <spar-natural
-              src="configs/config.ttl"
+              src="configs/nakala-shapes-filtered.shacl.ttl"
               lang="en"
               defaultLang="fr"
-              endpoint="https://fr.dbpedia.org/sparql"
+              endpoint="https://nakala.fr/sparql"
               distinct="true"
               limit="100"
               prefix="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"
@@ -66,6 +66,7 @@
           </div>
           <input type="hidden" id="query-json" />
           <div><a id="export" href="#">Export query in JSON</a></div>
+          <div><a id="load" href="#">Load query from JSON</a></div>
           <div><a id="clear" href="#">Clear query</a></div>
         </div>
         <div class="col-md-5">
@@ -102,6 +103,25 @@
             <textarea class="form-control" rows="20" id="export-json" style="width:100%" readonly="readonly"></textarea>
           </div>
           <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="loadModal" tabindex="-1" role="dialog" aria-labelledby="loadModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="loadModalLabel">Load query</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" style="overflow:hidden;">
+            <textarea class="form-control" rows="20" id="load-json" style="width:100%"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" id="loadJson">Load</button>
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
