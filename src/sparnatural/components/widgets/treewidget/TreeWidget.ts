@@ -9,6 +9,7 @@ import { ValuePatternRow } from "sparqljs";
 import * as DataFactory from "@rdfjs/data-model" ;
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import SparqlFactory from "../../../generators/SparqlFactory";
+import { getSettings } from "../../../settings/defaultSettings";
 
 
 require("jstree/dist/themes/default/style.min.css");
@@ -143,6 +144,7 @@ export class TreeWidget extends AbstractWidget {
             data: {
               dataType: "json",
             },
+            headers: getSettings().headers
           };
 
           var request = $.ajax(options);
