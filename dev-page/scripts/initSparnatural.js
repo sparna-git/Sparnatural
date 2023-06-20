@@ -13,6 +13,14 @@ const urlParams = new URLSearchParams(queryString);
 const lang = urlParams.get('lang')
 
 
+
+
+sparnatural.addEventListener("init", (event) => {
+  sparnatural.headers = {
+    "User-Agent" : "This is Sparnatural calling"
+  };
+});
+
 sparnatural.addEventListener("queryUpdated", (event) => {
   var queryString = sparnatural.expandSparql(event.detail.queryString);
   yasqe.setValue(queryString);
@@ -53,5 +61,5 @@ document.getElementById('loadJson').onclick = function() {
 
 
 document.getElementById('clear').onclick = function() {
-  sparnatural.clear();     
+  sparnatural.clear();
 }

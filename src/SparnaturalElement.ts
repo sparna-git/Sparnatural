@@ -55,6 +55,10 @@ export class SparnaturalElement extends HTMLElement {
     getSettings().dates = dates;
   }
 
+  set headers(headers: any) {
+    getSettings().headers = headers;
+  }
+
   get autocomplete() {
     return getSettings().autocomplete;
   }
@@ -67,10 +71,14 @@ export class SparnaturalElement extends HTMLElement {
     return getSettings().dates;
   }
 
-  display() {
+  get headers() {
+    return getSettings().headers;
+  }
+
+  display() {    
     // render sparnatural 
     this.Sparnatural = new SparnaturalComponent();
-    // empty the content in case we re-display after an attribut change
+    // empty the content in case we re-display after an attribute change
     $(this).empty();
     $(this).append(this.Sparnatural.html);
     // parse all attributes in the HTML element
@@ -89,7 +97,6 @@ export class SparnaturalElement extends HTMLElement {
     return ["src", "lang", "defaultlang", "endpoint"];
   }
   attributeChangedCallback(name: string, oldValue:string|null, newValue:string|null) {    
-    console.log(`attributeChangedCallback called on ${name}`);
     if (oldValue === newValue) {
      return;
     }

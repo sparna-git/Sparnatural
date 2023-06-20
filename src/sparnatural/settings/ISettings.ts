@@ -24,6 +24,7 @@ interface ISettings {
   autocomplete?: any;
   list?: any;
   dates?: any;  
+  headers?: any;
 }
 
 export default ISettings;

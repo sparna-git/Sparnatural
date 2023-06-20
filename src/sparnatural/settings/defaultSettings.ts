@@ -20,6 +20,7 @@ const defaultSettings: ISettings = {
   localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in mimmiseconds
   debug:false,
   submitButton:true,
+  headers: {},
 
 
   autocomplete: {
@@ -152,14 +153,23 @@ const defaultSettings: ISettings = {
 };
 
 // the actual settings, result of merge between defaultSettings and settings passed as parameters
-let settings:ISettings;
+let settings:ISettings = {
+  config: undefined,
+  language: "",
+  defaultLanguage: "",
+  maxDepth: 0,
+  maxOr: 0,
+  debug: false
+};
 export function getSettings() {
   return settings;
 }
 
 // merge given options with default setting values
 export function mergeSettings(options: ISettings) {
-  settings = extend(true,{},defaultSettings,options) as ISettings
+  // note how settings is used also as starting object so that properties
+  // that were set are preserved if display is called again
+  settings = extend(true,settings,defaultSettings,options) as ISettings
 }
 
 // Pass in the objects to merge as arguments.

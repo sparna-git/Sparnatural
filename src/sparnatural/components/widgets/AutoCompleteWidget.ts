@@ -6,6 +6,7 @@ import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-co
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { AutocompleteDataProviderIfc } from "./data/DataProviders";
+import { getSettings } from "../../settings/defaultSettings";
 
 require("easy-autocomplete");
 
@@ -53,10 +54,7 @@ export class AutoCompleteWidget extends AbstractWidget {
   render() {
     super.render();
     let inputHtml = $(`<input class="autocompleteinput"/>`);
-    // let listHtml = $(`<input class="inputvalue" type="hidden"/>`);
     this.html.append(inputHtml);
-    // this.html.append(listHtml);
-
 
     let options = {
    
@@ -88,6 +86,7 @@ export class AutoCompleteWidget extends AbstractWidget {
         timeout: 7000,
         dataType: "json",
         method: "GET",
+        headers: getSettings().headers,
         data: {
           dataType: "json",
         },

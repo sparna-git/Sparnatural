@@ -8,15 +8,19 @@ import ISettings from "../../../settings/ISettings";
 export class UrlFetcher {
 
     private localCacheDataTtl:number;
+    // private extraHeaders: Map<string, string>;
+    private extraHeaders: any;
 
     // private constructor
-    private constructor(localCacheDataTtl:any) {
+    private constructor(localCacheDataTtl:any, extraHeaders:Map<string,string>) {
         this.localCacheDataTtl = localCacheDataTtl;
+        this.extraHeaders = extraHeaders;
+        
     }
 
     // static factory builder method from settings
     static build(settings:ISettings):UrlFetcher {
-        return new UrlFetcher(settings.localCacheDataTtl);
+        return new UrlFetcher(settings.localCacheDataTtl, settings.headers);
     }
 
     fetchUrl(
@@ -25,6 +29,10 @@ export class UrlFetcher {
     ): void {
     
         var headers = new Headers();
+        // honor extra headers
+        for (const k in this.extraHeaders) {
+            headers.append(k, this.extraHeaders[k]);
+        }
         headers.append(
             "Accept",
             "application/sparql-results+json, application/json, */*;q=0.01"

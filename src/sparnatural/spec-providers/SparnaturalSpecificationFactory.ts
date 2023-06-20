@@ -28,7 +28,6 @@ class SparnaturalSpecificationFactory {
             console.error(
               "Sparnatural - unable to load JSON config file : " + config
             );
-            console.log(response);
           })
         ).done(function () {});
       } else {
