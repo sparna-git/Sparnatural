@@ -1,6 +1,6 @@
 _[Home](index.html) > Querying a password-protected SPARQL endpoint_
 
-# uerying a password-protected SPARQL endpoint
+# Querying a password-protected SPARQL endpoint
 
 ## The problem
 
