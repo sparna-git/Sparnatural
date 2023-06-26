@@ -45,6 +45,15 @@ export default class QueryLoader{
         // build the root groupwrapper and remove from branches array
         let rootBranch = branches.shift();
         this.#buildCriteriaGroup(rootGrpWrapper, rootBranch);
+        
+        // by default, the very first start class group will be selected
+        // if the first variable is *not* selected, then unselect it
+        const firstStartClassVal = { type: rootBranch.line.sType, variable: rootBranch.line.s };
+        if(!this.query.variables.includes(firstStartClassVal.variable.replace('?',''))){
+          // click on first eye btn to unselect it
+          this.#clickOn((rootGrpWrapper.CriteriaGroup.StartClassGroup.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
+        }
+
         let parent = rootGrpWrapper;
         branches.forEach((b) => {
           this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
@@ -64,52 +73,52 @@ export default class QueryLoader{
         );
         }
   
-    // set EndClassGroup
-    const endClassVal = { type: branch.line.oType, variable: branch.line.o };
-    this.#setSelectedValue(grpWarpper.CriteriaGroup.EndClassGroup, branch.line.oType);
-  
-    //set ObjectPropertyGroup
-    this.#setSelectedValue(
-      grpWarpper.CriteriaGroup.ObjectPropertyGroup,
-      branch.line.p
-    );
-  
-    // set WidgetValues
-    branch.line.values.forEach((v) => {
-      const parsedVal: WidgetValue = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
-      // if there are multiple values rendered, click first the 'plus' btn, to add more values
-      if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
-      grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(parsedVal)
-    });
-
-    // if there is no value, and no children, set an "Any" value
-    if(branch.line.values.length == 0 && branch.children.length == 0) {
-      grpWarpper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
-    }
-  
-    // trigger option state
-    this.#triggerOptions(grpWarpper, branch);
-  
-    if (branch.children.length > 0) {
-      this.#clickOn(
-        grpWarpper.CriteriaGroup.EndClassGroup.editComponents.actionWhere.btn
+      // set EndClassGroup
+      const endClassVal = { type: branch.line.oType, variable: branch.line.o };
+      this.#setSelectedValue(grpWarpper.CriteriaGroup.EndClassGroup, branch.line.oType);
+    
+      //set ObjectPropertyGroup
+      this.#setSelectedValue(
+        grpWarpper.CriteriaGroup.ObjectPropertyGroup,
+        branch.line.p
       );
-      this.#buildCriteriaGroup(grpWarpper.whereChild, branch.children.shift());
-      // the rest of the children are AND connected
-      let parent = grpWarpper.whereChild;
-      branch.children.forEach((c) => {
-        this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
-        this.#buildCriteriaGroup(parent.andSibling, c);
-        parent = parent.andSibling;
+    
+      // set WidgetValues
+      branch.line.values.forEach((v) => {
+        const parsedVal: WidgetValue = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
+        // if there are multiple values rendered, click first the 'plus' btn, to add more values
+        if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
+        grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.renderWidgetVal(parsedVal)
       });
-    }
-    // select if the var is viewed (eye btn)
-    this.#setSelectViewVariableBtn(
-      startClassVal,
-      grpWarpper.CriteriaGroup.StartClassGroup,
-      endClassVal,
-      grpWarpper.CriteriaGroup.EndClassGroup
-    )
+
+      // if there is no value, and no children, set an "Any" value
+      if(branch.line.values.length == 0 && branch.children.length == 0) {
+        grpWarpper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
+      }
+    
+      // trigger option state
+      this.#triggerOptions(grpWarpper, branch);
+    
+      if (branch.children.length > 0) {
+        this.#clickOn(
+          grpWarpper.CriteriaGroup.EndClassGroup.editComponents.actionWhere.btn
+        );
+        this.#buildCriteriaGroup(grpWarpper.whereChild, branch.children.shift());
+        // the rest of the children are AND connected
+        let parent = grpWarpper.whereChild;
+        branch.children.forEach((c) => {
+          this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
+          this.#buildCriteriaGroup(parent.andSibling, c);
+          parent = parent.andSibling;
+        });
+      }
+      // select if the var is viewed (eye btn)
+      this.#setSelectViewVariableBtn(
+        startClassVal,
+        grpWarpper.CriteriaGroup.StartClassGroup,
+        endClassVal,
+        grpWarpper.CriteriaGroup.EndClassGroup
+      )
   }
   
   static #triggerOptions(grpWrapper: GroupWrapper, branch: Branch) {
@@ -137,7 +146,12 @@ export default class QueryLoader{
   }
 
   // this method checks if the eye btn was enabled in the loaded query
-  static #setSelectViewVariableBtn(startClassVal:SelectedVal,startClassComponent:StartClassGroup,endClassVal:SelectedVal,endClassComponent:EndClassGroup){
+  static #setSelectViewVariableBtn(
+    startClassVal:SelectedVal,
+    startClassComponent:StartClassGroup,
+    endClassVal:SelectedVal,
+    endClassComponent:EndClassGroup
+  ){
     if(this.query.variables.includes(endClassVal.variable.replace('?',''))){
       // click on eye btn
       this.#clickOn((endClassComponent.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
