@@ -185,6 +185,14 @@ The table below summarizes the various functions that can be called on the Sparn
 | **sparnatural.expandSparql(sparqlString)** | Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration) A SPARQL query string | string |
 | **sparnatural.clear()** | Clears the Sparnatural editor, as if the reset button was clicked.| none |
 
+## Sparnatural properties API
+
+The table below summarizes the properties that can set on the sparnatural object, with `sparnatural.property_name = ...`.
+
+| Function | Description | Parameters |
+| -------- | ----------- | ---------- |
+| **sparnatural.headers**| Sets the headers that Sparnatural must send with each request, e.g. when populating dropdown lists or autocomplete fields. | an object `{"key":"value"} |
+
 ## Advanced : customizing lists and autocomplete handlers
 
 TODO
