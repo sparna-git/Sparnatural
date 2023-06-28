@@ -27,12 +27,6 @@ export const RDFS = {
   SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf") as NamedNode,
 };
 
-const GEOFUNCTIONS_NAMESPACE = 'http://www.opengis.net/def/function/geosparql/'
-
-export const GEOF = {
-  WITHIN: factory.namedNode(GEOFUNCTIONS_NAMESPACE + 'sfWithin') as NamedNode
-}
-
 export class BaseRDFReader {
     protected lang: string;
     protected store: Store<Quad>;

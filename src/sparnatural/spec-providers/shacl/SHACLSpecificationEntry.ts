@@ -1,9 +1,8 @@
 import { BaseRDFReader, RDFS } from "../BaseRDFReader";
 import ISpecificationEntry from "../ISpecificationEntry";
 import { Quad, Store } from "n3";
-import factory from "@rdfjs/data-model";
 import { SH, SHACLSpecificationProvider, VOLIPI } from "./SHACLSpecificationProvider";
-import Datasources from "../../ontologies/SparnaturalConfigDatasources";
+import { SpecialSHACLSpecificationEntity } from "./SHACLSpecificationEntity";
 
 export abstract class SHACLSpecificationEntry extends BaseRDFReader implements ISpecificationEntry {
     uri:string;
@@ -77,7 +76,30 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
 
     static sort(items: SHACLSpecificationEntry[]) {
         const compareFunction = function (item1: SHACLSpecificationEntry, item2: SHACLSpecificationEntry) {
-          // return me.getLabel(item1).localeCompare(me.getLabel(item2));
+
+          /*
+          if(item1 instanceof SpecialSHACLSpecificationEntity) {
+            if(!(item2 instanceof SpecialSHACLSpecificationEntity)) {
+              return -1;
+            }
+          } else {
+            if(item2 instanceof SpecialSHACLSpecificationEntity) {
+              return 1;
+            }
+          }*/
+
+          /*
+          console.log(item1.getLabel())
+          console.log(Object.getPrototypeOf(item1))
+          */
+
+          /*
+          if(Object.getPrototypeOf(item1) === SpecialSHACLSpecificationEntity.prototype) {
+            if(!(Object.getPrototypeOf(item2) === SpecialSHACLSpecificationEntity.prototype)) {
+              return -1;
+            }
+          }
+          */
     
           var order1 = item1.getOrder();
           var order2 = item2.getOrder();

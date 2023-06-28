@@ -1,3 +1,5 @@
+import factory from "@rdfjs/data-model";
+import { NamedNode } from "n3";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import L, { LatLng, Rectangle,Map } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
@@ -18,7 +20,16 @@ import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../../generators/ISparJson";
 import * as DataFactory from "@rdfjs/data-model" ;
-import { GEOF } from "../../spec-providers/BaseRDFReader";
+
+const GEOFUNCTIONS_NAMESPACE = 'http://www.opengis.net/def/function/geosparql/'
+export const GEOFUNCTIONS = {
+  WITHIN: factory.namedNode(GEOFUNCTIONS_NAMESPACE + 'sfWithin') as NamedNode
+}
+
+const GEOSPARQL_NAMESPACE = "http://www.opengis.net/ont/geosparql#"
+export const GEOSPARQL = {
+  WKT_LITERAL: factory.namedNode(GEOSPARQL_NAMESPACE + 'wktLiteral') as NamedNode
+}
 
 export class MapWidgetValue implements WidgetValue {
   value: {
@@ -85,7 +96,7 @@ export default class MapWidget extends AbstractWidget {
 
     this.html.append($(`<div id="map"></div>`));
 
-    this.map = new Map("map").setView([46.20222, 6.14569], 13);
+    this.map = new Map("map").setView([46.20222, 6.14569], 5);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "© OpenStreetMap",
@@ -133,7 +144,8 @@ export default class MapWidget extends AbstractWidget {
   };
 
   #closeMap = () => {
-    this.map.remove();
+    this.render();
+    // this.map.remove();
     /*
     if (this.getwidgetValues().length < 1)
       this.renderWidgetVal({
@@ -176,7 +188,7 @@ export default class MapWidget extends AbstractWidget {
       type: "filter",
       expression: <FunctionCallExpression><unknown>{
         type: "functionCall",
-        function: DataFactory.namedNode(GEOF.WITHIN.value),
+        function: GEOFUNCTIONS.WITHIN,
         args: [
           DataFactory.variable(this.getVariableValue(this.endClassVal)),
           this.#buildPolygon(this.widgetValues[0].value.coordinates[0])
@@ -233,7 +245,7 @@ export default class MapWidget extends AbstractWidget {
     let startPt = coordinates[0]
     let literal: LiteralTerm = DataFactory.literal(
       `Polygon((${polygon}${startPt.lng} ${startPt.lat}))`,
-      DataFactory.namedNode("http://www.opengis.net/ont/geosparql#wktLiteral")
+      GEOSPARQL.WKT_LITERAL
     )
 
     return literal;

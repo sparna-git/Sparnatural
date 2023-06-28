@@ -3,6 +3,7 @@ import { Config } from "../../ontologies/SparnaturalConfig";
 import factory from "@rdfjs/data-model";
 import { DCT, SH, VOID, XSD } from "./SHACLSpecificationProvider";
 import { RDF } from "../BaseRDFReader";
+import { GEOSPARQL } from "../../components/widgets/MapWidget";
 
 
 
@@ -129,8 +130,15 @@ export class MapWidget {
     }
 
     score(propertyShape:string, n3store: Store<Quad>):number {
-        // TODO : if the datatype is wktLiteral
-        return -1;
+        // if the datatype is geo:wktLiteral
+        if(
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, GEOSPARQL.WKT_LITERAL) 
+        ) {
+            return 50;
+        } else {
+            return -1;
+        }
+        ;
     }
 
 }

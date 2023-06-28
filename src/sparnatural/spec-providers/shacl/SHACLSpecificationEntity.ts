@@ -195,9 +195,9 @@ export class SpecialSHACLSpecificationEntityRegistry {
 
     private registry:Map<string,SpecialSHACLSpecificationEntity> = new Map<string,SpecialSHACLSpecificationEntity>();
 
-    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/ZZ_Other";
+    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/Attribute";
 
-    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/ZY_Date";
+    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/Date";
 
     static instance = new SpecialSHACLSpecificationEntityRegistry();
 
