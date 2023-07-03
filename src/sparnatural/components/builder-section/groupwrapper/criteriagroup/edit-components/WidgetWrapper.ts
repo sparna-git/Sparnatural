@@ -47,7 +47,7 @@ class WidgetWrapper extends HTMLComponent {
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
 
-    this.widgetType = this.specProvider.getProperty(this.objectPropVal.type).getPropertyType();
+    this.widgetType = this.specProvider.getProperty(this.objectPropVal.type).getPropertyType(this.endClassVal.type);
   }
 
   render() {

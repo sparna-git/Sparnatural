@@ -138,7 +138,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
 
     for (const aQuad of propertyQuads) {
       // only select properties with proper Sparnatural configuration
-      if (new OWLSpecificationProperty(aQuad.subject.id, this.provider, this.store, this.lang).getPropertyType()) {
+      if (new OWLSpecificationProperty(aQuad.subject.id, this.provider, this.store, this.lang).getPropertyType("")) {
         this._pushIfNotExist(aQuad.subject.id, properties);
       }
     }
@@ -157,7 +157,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
 
       for (const aQuad of propertyQuadsHavingUnionAsDomain) {
         // only select properties with proper Sparnatural configuration
-        if (new OWLSpecificationProperty(aQuad.subject.id, this.provider, this.store, this.lang).getPropertyType()) {
+        if (new OWLSpecificationProperty(aQuad.subject.id, this.provider, this.store, this.lang).getPropertyType("")) {
           this._pushIfNotExist(aQuad.subject.id, properties);
         }
       }

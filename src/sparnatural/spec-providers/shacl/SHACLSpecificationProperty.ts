@@ -1,5 +1,4 @@
 import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
-import ISpecificationEntity from "../ISpecificationEntity";
 import { Quad, Store } from "n3";
 import factory from "@rdfjs/data-model";
 import { Config } from "../../ontologies/SparnaturalConfig";
@@ -7,8 +6,9 @@ import ISpecificationProperty from "../ISpecificationProperty";
 import { DASH, SH, SHACLSpecificationProvider, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { ListWidget, SparnaturalSearchWidget, SparnaturalSearchWidgetsRegistry } from "./SHACLSearchWidgets";
-import { SpecialSHACLSpecificationEntityRegistry } from "./SHACLSpecificationEntity";
+import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntity, SHACLSpecificationEntity } from "./SHACLSpecificationEntity";
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
+import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 
 export class SHACLSpecificationProperty extends SHACLSpecificationEntry implements ISpecificationProperty {
 
@@ -27,12 +27,42 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       return label;
     }
 
-    getPropertyType(): string | undefined {
+    getPropertyType(range:string): string | undefined {
+        // select the shape on which this is applied
+        // either the property shape, or one of the shape in an inner sh:or
+
+        let rangeEntity:ISHACLSpecificationEntity;
+        if(SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().has(range)) {
+          rangeEntity = SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().get(range) as ISHACLSpecificationEntity;
+        } else {
+          rangeEntity = new SHACLSpecificationEntity(range,this.provider,this.store,this.lang);
+        }
+
+        var shapeUri:string|null = null;
+        var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
+        orMembers?.forEach(m => {
+          if(rangeEntity.isRangeOf(this.store, m.id)) {
+            shapeUri = m.id;
+          }
+          // recurse one level more
+          var orOrMembers = this._readAsList(m.id, SH.OR);
+          orOrMembers?.forEach(orOrMember => {
+            if(rangeEntity.isRangeOf(this.store, orOrMember.id)) {
+              shapeUri = orOrMember.id;
+            }
+          });
+        });
+
+        // defaults to this property shape
+        if(!shapeUri) {
+          shapeUri = this.uri;
+        }
+
         let result:string[] = new Array<string>();
 
-        // read the dash:editor property
+        // read the dash:searchWidget annotation
         this.store.getQuads(
-            factory.namedNode(this.uri),
+            factory.namedNode(shapeUri),
             DASH.SEARCH_WIDGET,
             null,
             null
@@ -43,16 +73,16 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         if(result.length) {
           return result[0];
         } else {
-          return this.getDefaultPropertyType();
+          return this.getDefaultPropertyType(shapeUri);
         }
     }
 
-    getDefaultPropertyType(): string {
+    getDefaultPropertyType(shapeUri:string): string {
       let highest:SparnaturalSearchWidget = new ListWidget();
       let highestScore:number = 0;
       for (let index = 0; index < SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().length; index++) {
         const currentWidget = SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets()[index];
-        let currentScore = currentWidget.score(this.uri, this.store)
+        let currentScore = currentWidget.score(shapeUri, this.store)
         if(currentScore > highestScore) {
           highestScore = currentScore;
           highest = currentWidget;
@@ -84,23 +114,72 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
      * @returns 
      */
     getRange(): string[] {
-        // read the sh:class
-        var classes: any[] = this.#getShClassAndShNodeRange();
+        // first read on property shape itself
+        var classes: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, this.uri);
 
-        // no sh:class, no sh:node, consider the range to be a special class
-        // based on the datatype analysis
+        // nothing, see if some default can apply on the property shape itself
+        if(classes.length == 0) { 
+          SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
+            if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
+              if(value.isRangeOf(this.store, this.uri)) {
+                classes.push(key);
+              }
+            }
+          });
+        }
+
+        // still nothing, look on the sh:or members
         if(classes.length == 0) {
-          if(
-            this._hasTriple(factory.namedNode(this.uri), SH.DATATYPE, XSD.DATE) 
-            ||
-            this._hasTriple(factory.namedNode(this.uri), SH.DATATYPE, XSD.DATE_TIME) 
-            ||
-            this._hasTriple(factory.namedNode(this.uri), SH.DATATYPE, XSD.GYEAR)
-          ) {
-            classes.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_DATES);
-          } else {
-            classes.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER);
-          }
+          var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
+          orMembers?.forEach(m => {
+            // read sh:class / sh:node
+            var orClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.id);
+
+            // nothing, see if default applies on this sh:or member
+            if(orClasses.length == 0) {
+              SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
+                if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
+                  if(value.isRangeOf(this.store, m.id)) {
+                    orClasses.push(key);
+                  }
+                }
+              });
+            }
+
+            // still nothing, recurse one level more
+            if(orClasses.length == 0) {
+              var orOrMembers = this._readAsList(m.id, SH.OR);
+              orOrMembers?.forEach(orOrMember => {
+                // read sh:class / sh:node
+                var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember.id);
+                // nothing, see if default applies on this sh:or member
+                if(orOrClasses.length == 0) {
+                  SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
+                    if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
+                      if(value.isRangeOf(this.store, orOrMember.id)) {
+                        orClasses.push(key);
+                      }
+                    }
+                  });
+                }
+              });
+            }
+
+            // still nothing, add default, only if not added previously
+            if(orClasses.length == 0) {
+              if(orClasses.indexOf(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) == -1) {
+                orClasses.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER);
+              }
+            }
+
+            // add sh:or range to final list of ranges
+            classes.push(...orClasses);
+          });
+        }
+
+        // still nothing, add the default
+        if(classes.length == 0) {
+          classes.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER);
         }
 
         // return a dedup array
@@ -108,62 +187,62 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
 
     #getShClassAndShNodeRange():string[] {
-        // read the sh:class
-        var classes: string[] = this.#readShClassAndShNodeOn(this.uri);
+      // read the sh:class
+      var classes: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, this.uri);
 
-        // read sh:or content
-        var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
-        orMembers?.forEach(m => {
-          classes.push(...this.#readShClassAndShNodeOn(m.id));
-        });
+      // read sh:or content
+      var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
+      orMembers?.forEach(m => {
+        classes.push(...SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.id));
+      });
 
-        return classes;
-    }
+      return classes;
+  }
 
-    #readShClassAndShNodeOn(theUri:any):string[] {         
-         var classes: string[] = [];
+    static readShClassAndShNodeOn(n3store:Store<Quad>, theUri:any):string[] {         
+      var classes: string[] = [];
 
-         // read the sh:class
-         const shclassQuads = this.store.getQuads(
-           factory.namedNode(theUri),
-           SH.CLASS,
-           null,
-           null
-         );
- 
-         // then for each of them, find all NodeShapes targeting this class
-         shclassQuads.forEach((quad:Quad) => {
-             this.store.getQuads(
-                 null,
-                 SH.TARGET_CLASS,
-                 quad.object,
-                 null
-             ).forEach((quad:Quad) => {
-                 classes.push(quad.subject.id);
-             });
- 
-             // also look for nodeshapes that have directly this URI and that are themselves classes
-             this.store.getQuads(
-                 quad.object,
-                 RDF.TYPE,
-                 RDFS.CLASS,
-                 null
-             ).forEach((quad:Quad) => {
-                 classes.push(quad.subject.id);
-             });
-         });
- 
-         // read the sh:node
-         const shnodeQuads = this.store.getQuads(
-             factory.namedNode(theUri),
-             SH.NODE,
-             null,
-             null
-         ).forEach((quad:Quad) => {
-             classes.push(quad.object.id);
-         });  
-         
-         return classes;
+      // read the sh:class
+      const shclassQuads = n3store.getQuads(
+        factory.namedNode(theUri),
+        SH.CLASS,
+        null,
+        null
+      );
+
+      // then for each of them, find all NodeShapes targeting this class
+      shclassQuads.forEach((quad:Quad) => {
+          n3store.getQuads(
+              null,
+              SH.TARGET_CLASS,
+              quad.object,
+              null
+          ).forEach((quad:Quad) => {
+              classes.push(quad.subject.id);
+          });
+
+          // also look for nodeshapes that have directly this URI and that are themselves classes
+          n3store.getQuads(
+              quad.object,
+              RDF.TYPE,
+              RDFS.CLASS,
+              null
+          ).forEach((quad:Quad) => {
+              classes.push(quad.subject.id);
+          });
+      });
+
+      // read the sh:node
+      const shnodeQuads = n3store.getQuads(
+          factory.namedNode(theUri),
+          SH.NODE,
+          null,
+          null
+      ).forEach((quad:Quad) => {
+          classes.push(quad.object.id);
+      });  
+      
+      return classes;
     }
 
     getDatasource() {

@@ -43,7 +43,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
   }
 
 
-  getPropertyType():string|undefined {
+  getPropertyType(range:string):string|undefined {
     var superProperties = this._readAsResource(
       this.uri,
       RDFS.SUBPROPERTY_OF

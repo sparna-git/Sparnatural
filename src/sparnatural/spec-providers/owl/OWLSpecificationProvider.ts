@@ -115,7 +115,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
       var typeClass = quad.object.termType;
       var classId = quad.object.id;
 
-      if (this.getProperty(objectPropertyId).getPropertyType()) {
+      if (this.getProperty(objectPropertyId).getPropertyType("")) {
         // keep only Sparnatural classes in the list
         if (this.isSparnaturalClass(classId) || typeClass == "BlankNode") {
           // always exclude RemoteClasses from first list
@@ -248,8 +248,8 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     const compareFunction = function (item1: any, item2: any) {
       // return me.getLabel(item1).localeCompare(me.getLabel(item2));
 
-      var entity1 = this.getEntity(item1).getOrder();
-      var entity2 = this.getEntity(item2).getOrder();
+      var entity1 = me.getEntity(item1);
+      var entity2 = me.getEntity(item2);
 
       var order1 = entity1.getOrder();
       var order2 = entity2.getOrder();

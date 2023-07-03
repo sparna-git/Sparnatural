@@ -3,7 +3,10 @@ import ISpecificationEntity from "./ISpecificationEntity";
 import ISpecificationEntry from "./ISpecificationEntry";
 
 interface ISpecificationProperty extends ISpecificationEntry {
-  getPropertyType(): string|undefined;
+  /**
+   * @param range the selected range in the criteria, in cas the widget varies depending on the range
+   */
+  getPropertyType(range:string): string|undefined;
   isMultilingual(): boolean;
 
   getRange():Array<string>;

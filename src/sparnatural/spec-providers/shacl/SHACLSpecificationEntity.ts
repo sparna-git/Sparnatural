@@ -1,13 +1,15 @@
-import { BaseRDFReader, RDFS } from "../BaseRDFReader";
+import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
 import ISpecificationEntity from "../ISpecificationEntity";
 import { Quad, Store } from "n3";
 import factory from "@rdfjs/data-model";
 import { Config } from "../../ontologies/SparnaturalConfig";
-import { DASH, SH, SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
+import { DASH, SH, SHACLSpecificationProvider, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
+import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
+import { GEOSPARQL } from "../../components/widgets/MapWidget";
 
-export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements ISpecificationEntity {
+export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements ISHACLSpecificationEntity {
 
     constructor(uri:string, provider: SHACLSpecificationProvider, n3store: Store<Quad>, lang: string) {
         super(uri, provider, n3store, lang);
@@ -84,7 +86,6 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
     isRemoteEntity(): boolean {
         return false;
-        throw new Error("Method not implemented.");
     }
 
     /**
@@ -110,19 +111,25 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return items.length>0?items[0]:null;
     }
 
+    isRangeOf(n3store:Store<Quad>, shapeUri:any) {
+       return (SHACLSpecificationProperty.readShClassAndShNodeOn(n3store, shapeUri).indexOf(this.uri) > -1);
+    }
+
 }
 
 
-export class SpecialSHACLSpecificationEntity implements ISpecificationEntity {
+export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntity {
 
     private id:string;
     private icon:string;
     private label:string;
+    private isRangeOfFunction:Function;
 
-    constructor(id:string, icon:string,label:string) {
+    constructor(id:string, icon:string,label:string, isRangeOfFunction:Function) {
         this.id = id;
         this.icon = icon;
         this.label = label;
+        this.isRangeOfFunction = isRangeOfFunction;
     }
 
     getConnectedEntities(): string[] {
@@ -189,15 +196,23 @@ export class SpecialSHACLSpecificationEntity implements ISpecificationEntity {
     getHighlightedIcon(): string {
         return "";
     }
+
+    isRangeOf(n3store:Store<Quad>, shapeUri:any):boolean {
+        return this.isRangeOfFunction(n3store, shapeUri);
+    }
 }
 
 export class SpecialSHACLSpecificationEntityRegistry {
 
     private registry:Map<string,SpecialSHACLSpecificationEntity> = new Map<string,SpecialSHACLSpecificationEntity>();
 
-    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/Attribute";
+    public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/ZZ_Other";
 
-    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/Date";
+    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/ZZ_Date";
+
+    public static SPECIAL_SHACL_ENTITY_LOCATION = "http://special/ZZ_Location";
+
+    public static SPECIAL_SHACL_ENTITY_TEXT = "http://special/ZZ_Text";
 
     static instance = new SpecialSHACLSpecificationEntityRegistry();
 
@@ -208,11 +223,81 @@ export class SpecialSHACLSpecificationEntityRegistry {
     private constructor() { 
         this.registry.set(
             SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER,
-            new SpecialSHACLSpecificationEntity(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER, "fa-solid fa-ellipsis", "Other")
+            new SpecialSHACLSpecificationEntity(
+                SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER,
+                "fa-solid fa-ellipsis",
+                "Other",
+                function(n3store:Store<Quad>, shapeUri:any):boolean {
+                    // this is in range if nothing else is in range
+                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+                    return (
+                        !reader._hasTriple(factory.namedNode(shapeUri), SH.NODE, null) 
+                        &&
+                        !reader._hasTriple(factory.namedNode(shapeUri), SH.CLASS, null) 
+                        &&
+                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE) 
+                        &&
+                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE_TIME) 
+                        &&
+                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.GYEAR)
+                        &&
+                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, GEOSPARQL.WKT_LITERAL)
+                        &&
+                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.STRING) 
+                        &&
+                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, RDF.LANG_STRING) 
+                    );
+                }
+            )
         )
+
         this.registry.set(
             SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_DATES,
-            new SpecialSHACLSpecificationEntity(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_DATES, "fa-solid fa-calendar", "Date")
+            new SpecialSHACLSpecificationEntity(
+                SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_DATES,
+                "fa-solid fa-calendar",
+                "Date",
+                function(n3store:Store<Quad>, shapeUri:any):boolean {
+                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+                    return (
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE) 
+                        ||
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE_TIME) 
+                        ||
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.GYEAR)
+                    );
+                }
+            )
+        )
+
+        this.registry.set(
+            SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_LOCATION,
+            new SpecialSHACLSpecificationEntity(
+                SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_LOCATION,
+                "fa-solid fa-map-location-dot",
+                "Location",
+                function(n3store:Store<Quad>, shapeUri:any):boolean {
+                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+                    return reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, GEOSPARQL.WKT_LITERAL)
+                }
+            )
+        )
+
+        this.registry.set(
+            SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_TEXT,
+            new SpecialSHACLSpecificationEntity(
+                SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_TEXT,
+                "fa-solid fa-font",
+                "Text",
+                function(n3store:Store<Quad>, shapeUri:any):boolean {
+                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+                    return (
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.STRING) 
+                        ||
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, RDF.LANG_STRING) 
+                    );
+                }
+            )
         )
     }
 

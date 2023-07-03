@@ -49,7 +49,7 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
     return this.#readDomainOrRange("range");
   }
 
-  getPropertyType(): string|undefined {
+  getPropertyType(range:string): string|undefined {
     var objectProperty = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
     if(objectProperty == null) return undefined;
 

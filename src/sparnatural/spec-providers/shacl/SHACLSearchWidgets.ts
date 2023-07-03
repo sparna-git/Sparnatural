@@ -2,7 +2,7 @@ import { Quad, Quad_Subject, Store } from "n3";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import factory from "@rdfjs/data-model";
 import { DCT, SH, VOID, XSD } from "./SHACLSpecificationProvider";
-import { RDF } from "../BaseRDFReader";
+import { BaseRDFReader, RDF } from "../BaseRDFReader";
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
 
 
@@ -86,12 +86,23 @@ export class DatePickerWidget {
     }
 
     score(propertyShape:string, n3store: Store<Quad>):number {
+        let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+
+        let hasDateOrDateTimePredicate = function(rdfNode: any) {
+            if(
+            reader._hasTriple(rdfNode, SH.DATATYPE, XSD.DATE) 
+            || 
+            reader._hasTriple(rdfNode, SH.DATATYPE, XSD.DATE_TIME)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         // if the datatype is xsd:date or xsd:dateTime
         if(
-        _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.DATE) 
-        || 
-        _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.DATE_TIME)
-        ) {
+            hasDateOrDateTimePredicate(factory.namedNode(propertyShape))
+        ){
             return 50;
         } else {
             return -1;

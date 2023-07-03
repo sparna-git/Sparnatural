@@ -32,7 +32,6 @@ export class BaseRDFReader {
     protected store: Store<Quad>;
 
     constructor(n3store: Store<Quad>, lang: string) {
-        // init memory store
         this.store = n3store;
         this.lang = lang;
     }

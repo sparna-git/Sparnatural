@@ -195,15 +195,7 @@ export default class SparqlFactory {
           type: "operation",
           operator: ">=",
           args: [
-            {
-              type: "functioncall",
-              function: DataFactory.namedNode(
-                "http://www.w3.org/2001/XMLSchema#dateTime"
-              ),
-              args : [
-                variable
-              ]
-            },
+            variable,
             startDate
           ]
         }) ;
@@ -213,15 +205,7 @@ export default class SparqlFactory {
           type: "operation",
           operator: "<=",
           args: [
-            {
-              type: "functioncall",
-              function: DataFactory.namedNode(
-                "http://www.w3.org/2001/XMLSchema#dateTime"
-              ),
-              "args" : [
-                variable
-              ]
-            },
+            variable,
             endDate
           ]
         }) ;
