@@ -39,6 +39,7 @@ function App() {
         console.log(event?.detail?.queryString);
         console.log(event?.detail?.queryJson);
         console.log(event?.detail?.querySparqlJs);
+        // here : don't forget to call expandSparql so that core:sparqlString annotation is taken into account
      });
     },
     [],
