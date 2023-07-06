@@ -155,6 +155,7 @@ export class SearchRegexWidget extends AbstractWidget {
       }
       case Config.VIRTUOSO_SEARCH_PROPERTY: {
         let bif_query = this.widgetValues[0].value.label
+          .replace(/[\"']/g, " ")
           .split(" ")
           .map((e) => `'${e}'`)
           .join(" and ");
