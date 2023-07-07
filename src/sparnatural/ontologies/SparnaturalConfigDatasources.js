@@ -472,6 +472,8 @@ ORDER BY UCASE(?label)
 `
 );
 
+
+
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children_with_count",
   `
@@ -555,6 +557,24 @@ GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)
 `
 );
+
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "query_tree_root_domain",
+  `
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT DISTINCT ?uri ?label ?hasChildren
+WHERE {
+  VALUES ?uri {$domain}
+  ?uri $labelPath ?label .
+  OPTIONAL {
+    ?uri $childrenPath ?children .
+  }
+  FILTER(lang(?label) = '' || lang(?label) = $lang)
+  BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}
+`
+);
+
 
 var DATASOURCES_CONFIG = new Map();
 
@@ -1006,6 +1026,18 @@ ORDER BY UCASE(?label)
   }
 );
 
+DATASOURCES_CONFIG.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "tree_root_domain_subClassOf",
+  {
+    queryTemplate: QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+      SPARNATURAL_CONFIG_DATASOURCES + "query_tree_root_domain"
+    ),
+    childrenPath:
+      "^<http://www.w3.org/2000/01/rdf-schema#subClassOf>",
+    labelPath: "<http://www.w3.org/2000/01/rdf-schema#label>",
+  }
+);
+
 // ## Tree children datasources
 
 DATASOURCES_CONFIG.set(
@@ -1029,6 +1061,18 @@ DATASOURCES_CONFIG.set(
     childrenPath:
       "<http://www.w3.org/2004/02/skos/core#narrower>|^<http://www.w3.org/2004/02/skos/core#broader>",
     labelPath: "<http://www.w3.org/2004/02/skos/core#prefLabel>",
+  }
+);
+
+DATASOURCES_CONFIG.set(
+  SPARNATURAL_CONFIG_DATASOURCES + "tree_children_subClassOf",
+  {
+    queryTemplate: QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+      SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children"
+    ),
+    childrenPath:
+      "^<http://www.w3.org/2000/01/rdf-schema#subClassOf>",
+    labelPath: "<http://www.w3.org/2000/01/rdf-schema#label>",
   }
 );
 
@@ -1083,6 +1127,8 @@ const Datasources = Object.freeze({
     SPARNATURAL_CONFIG_DATASOURCES + "query_tree_root_noparent",
   QUERY_TREE_ROOT_NOPARENT_WITH_COUNT:
     SPARNATURAL_CONFIG_DATASOURCES + "query_tree_root_noparent_with_count",
+  QUERY_TREE_ROOT_DOMAIN:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_tree_root_domain",
 
   LITERAL_LIST_ALPHA: SPARNATURAL_CONFIG_DATASOURCES + "literal_list_alpha",
   LITERAL_LIST_COUNT: SPARNATURAL_CONFIG_DATASOURCES + "literal_list_count",
@@ -1159,11 +1205,15 @@ const Datasources = Object.freeze({
     SPARNATURAL_CONFIG_DATASOURCES + "tree_root_skostopconcept",
   TREE_ROOT_SKOSTOPCONCEPT_WITH_COUNT:
     SPARNATURAL_CONFIG_DATASOURCES + "tree_root_skostopconcept_with_count",
+  TREE_ROOT_DOMAIN_SUBCLASSOF:
+    SPARNATURAL_CONFIG_DATASOURCES + "tree_root_domain_subClassOf",
 
   TREE_CHILDREN_SKOSNARROWER:
     SPARNATURAL_CONFIG_DATASOURCES + "tree_children_skosnarrower",
   TREE_CHILDREN_SKOSNARROWER_WITH_COUNT:
     SPARNATURAL_CONFIG_DATASOURCES + "tree_children_skosnarrower_with_count",
+  TREE_CHILDREN_SUBCLASSOF:
+    SPARNATURAL_CONFIG_DATASOURCES + "tree_children_subClassOf",
 
   QUERY_STRINGS_BY_QUERY_TEMPLATE: QUERY_STRINGS_BY_QUERY_TEMPLATE,
   DATASOURCES_CONFIG: DATASOURCES_CONFIG,

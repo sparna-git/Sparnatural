@@ -1425,6 +1425,48 @@ WHERE {
 GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_tree_root_domain -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_tree_root_domain">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>PREFIX rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt;
+SELECT DISTINCT ?uri ?label ?hasChildren
+WHERE {
+  VALUES ?uri {$domain}
+  ?uri $labelPath ?label .
+  OPTIONAL {
+    ?uri $childrenPath ?children .
+  }
+  FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
+  BIND(IF(bound(?children),true,false) AS ?hasChildren)
+}</sparnatural-config-datasources:queryString>
+        <rdfs:comment xml:lang="en">Assumes that the domain URI is the root of the tree we want to build. Useful to build hierarchies based on rdfs:subClassOf.</rdfs:comment>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources/tree_children_subClassOf -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/tree_children_subClassOf">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeChildrenDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children"/>
+        <sparnatural-config-datasources:childrenPath>^&lt;http://www.w3.org/2000/01/rdf-schema#subClassOf&gt;</sparnatural-config-datasources:childrenPath>
+        <sparnatural-config-datasources:labelPath>&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;</sparnatural-config-datasources:labelPath>
+    </owl:NamedIndividual>
+    
+
+
+    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources/tree_root_domain_subClassOf -->
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/tree_root_domain_subClassOf">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
+        <sparnatural-config-datasources:queryTemplate rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_tree_root_domain"/>
+        <sparnatural-config-datasources:childrenPath>^&lt;http://www.w3.org/2000/01/rdf-schema#subClassOf&gt;</sparnatural-config-datasources:childrenPath>
+        <sparnatural-config-datasources:labelPath>&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;</sparnatural-config-datasources:labelPath>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 
