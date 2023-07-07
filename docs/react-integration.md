@@ -39,6 +39,7 @@ function App() {
         console.log(event?.detail?.queryString);
         console.log(event?.detail?.queryJson);
         console.log(event?.detail?.querySparqlJs);
+        // here : don't forget to call expandSparql so that core:sparqlString annotation is taken into account
      });
     },
     [],
@@ -52,7 +53,9 @@ function App() {
         <spar-natural 
           ref={sparnaturalRef}
           src={JSON.stringify(config)} 
-          lang={'fr'} endpoint={'https://fr.dbpedia.org/sparql'} 
+          lang={'en'}
+          defaultLang={'en'}
+          endpoint={'https://fr.dbpedia.org/sparql'} 
           distinct={'true'} 
           limit={'100'}
           prefix={"skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"} 
