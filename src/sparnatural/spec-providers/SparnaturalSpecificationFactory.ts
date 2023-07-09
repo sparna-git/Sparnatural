@@ -11,7 +11,7 @@ class SparnaturalSpecificationFactory {
       callback(new JsonLdSpecificationProvider(config, language));
     } else if (config.includes("@prefix") || config.includes("<http")) {
       // inline Turtle
-      BaseRDFReader.buildStore(config, "http://sparnatural.eu#", (theStore:Store<Quad>) => {
+      BaseRDFReader.buildStore(config, "https://sparnatural.eu#", (theStore:Store<Quad>) => {
         var provider = new SHACLSpecificationProvider(
           theStore,
           language
@@ -20,7 +20,7 @@ class SparnaturalSpecificationFactory {
       });
     } else {
       if (config.includes("json")) {
-        // otherwise interpret it as a URL, load id and parse the result
+        // if it contains "json" parse the result as JSON
         $.when(
           $.getJSON(config, function (data) {
             callback(new JsonLdSpecificationProvider(data, language));
@@ -31,13 +31,14 @@ class SparnaturalSpecificationFactory {
           })
         ).done(function () {});
       } else {
+        // otherwise interpret it as a URL, load id and parse the result as RDF
         $.ajax({
           method: "GET",
           url: config,
           dataType: "text",
         })
           .done(function (configData) {
-
+            // special case : if the file contains shacl", then use a SHACL spec provider
             if(config.includes("shacl")) {
               BaseRDFReader.buildStore(configData, config, (theStore:Store<Quad>) => {
                 var provider = new SHACLSpecificationProvider(

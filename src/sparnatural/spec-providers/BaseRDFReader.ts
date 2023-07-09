@@ -2,8 +2,8 @@ import factory from "@rdfjs/data-model";
 import { NamedNode, Quad, Store } from "n3";
 import rdfParser from "rdf-parse";
 var Readable = require('stream').Readable
-import { storeStream } from "rdf-store-stream";
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
+import { RdfStore } from 'rdf-stores';
 
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
@@ -39,6 +39,10 @@ export class BaseRDFReader {
     static buildStore(string: any, filePath: string, callback: any) {
         console.log("Building Store from " + filePath);
     
+        // Create a new store with default settings
+        // see https://www.npmjs.com/package/rdf-stores
+        const store = RdfStore.createDefault();
+
         // turn input string into a stream
         var textStream = new Readable();
         textStream.push(string)    // the string you want
@@ -66,10 +70,11 @@ export class BaseRDFReader {
         }
     
         // import into store
-        storeStream(quadStream).then((theStore:Store<Quad>) => {
+        const importPromise = store.import(quadStream);
+        importPromise.on("end", () => {
           console.log(
             "Specification store populated with " +
-              theStore.countQuads(
+              store.countQuads(
                 null,
                 null,
                 null,
@@ -77,7 +82,7 @@ export class BaseRDFReader {
               ) +
               " triples."
           );
-          callback(theStore);
+          callback(store);
         });
       }
 
