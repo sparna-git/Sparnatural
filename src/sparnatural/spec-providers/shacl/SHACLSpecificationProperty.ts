@@ -1,6 +1,5 @@
-import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
-import { Quad, Store } from "n3";
-import factory from "@rdfjs/data-model";
+import { RDF, RDFS } from "../BaseRDFReader";
+import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { DASH, SH, SHACLSpecificationProvider, XSD } from "./SHACLSpecificationProvider";
@@ -9,10 +8,14 @@ import { ListWidget, SparnaturalSearchWidget, SparnaturalSearchWidgetsRegistry }
 import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntity, SHACLSpecificationEntity } from "./SHACLSpecificationEntity";
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
+import { RdfStore } from "rdf-stores";
+import { Quad } from "@rdfjs/types/data-model";
+
+const factory = new DataFactory();
 
 export class SHACLSpecificationProperty extends SHACLSpecificationEntry implements ISpecificationProperty {
 
-  constructor(uri:string, provider: SHACLSpecificationProvider, n3store: Store<Quad>, lang: string) {
+  constructor(uri:string, provider: SHACLSpecificationProvider, n3store: RdfStore, lang: string) {
     super(uri, provider, n3store, lang);
   }
 
@@ -67,7 +70,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
             null,
             null
         ).forEach((quad:Quad) => {
-            result.push(quad.object.id);
+            result.push(quad.object.value);
         });
 
         if(result.length) {
@@ -199,7 +202,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       return classes;
   }
 
-    static readShClassAndShNodeOn(n3store:Store<Quad>, theUri:any):string[] {         
+    static readShClassAndShNodeOn(n3store:RdfStore, theUri:any):string[] {         
       var classes: string[] = [];
 
       // read the sh:class
@@ -218,7 +221,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
               quad.object,
               null
           ).forEach((quad:Quad) => {
-              classes.push(quad.subject.id);
+              classes.push(quad.subject.value);
           });
 
           // also look for nodeshapes that have directly this URI and that are themselves classes
@@ -228,7 +231,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
               RDFS.CLASS,
               null
           ).forEach((quad:Quad) => {
-              classes.push(quad.subject.id);
+              classes.push(quad.subject.value);
           });
       });
 
@@ -239,7 +242,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
           null,
           null
       ).forEach((quad:Quad) => {
-          classes.push(quad.object.id);
+          classes.push(quad.object.value);
       });  
       
       return classes;

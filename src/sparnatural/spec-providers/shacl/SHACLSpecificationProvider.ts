@@ -1,5 +1,4 @@
-import factory from "@rdfjs/data-model";
-import { NamedNode, Quad, Quad_Object, Store } from "n3";
+import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISparnaturalSpecification from "../ISparnaturalSpecification";
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
@@ -15,6 +14,10 @@ import ISpecificationProperty from "../ISpecificationProperty";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationEntity, SpecialSHACLSpecificationEntityRegistry } from "./SHACLSpecificationEntity";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
+import { RdfStore } from "rdf-stores";
+import { NamedNode, Quad, Quad_Object } from '@rdfjs/types/data-model';
+
+const factory = new DataFactory();
 
 const SH_NAMESPACE = "http://www.w3.org/ns/shacl#";
 export const SH = {
@@ -78,7 +81,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   #parser: SparqlParser;
   #generator: SparqlGenerator;
 
-  constructor(n3store: Store<Quad>, lang: string) {
+  constructor(n3store: RdfStore, lang: string) {
     super(n3store, lang);
 
     // init SPARQL parser and generator once
@@ -96,7 +99,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
     var items: SHACLSpecificationEntry[] = [];
     for (const quad of quadsArray) {
-      var nodeShapeId = quad.subject.id;
+      var nodeShapeId = quad.subject.value;
       this._pushIfNotExist(this.getEntity(nodeShapeId), items);
     }
 
@@ -117,8 +120,8 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       .getQuads(null, SH.TARGET_CLASS, null, null)
       .forEach((quad: Quad) => {
         // find it with the full URI
-        var re = new RegExp("<" + quad.subject.id + ">", "g");
-        sparql = sparql.replace(re, "<" + quad.object.id + ">");
+        var re = new RegExp("<" + quad.subject.value + ">", "g");
+        sparql = sparql.replace(re, "<" + quad.object.value + ">");
       });
 
     // for each NodeShape that is itself a rdfs:Class ...
@@ -129,7 +132,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       .getQuads(null, SH.PATH, null, null)
       .forEach((quad: Quad) => {
         // find it with the full URI
-        var re = new RegExp("<" + quad.subject.id + ">", "g");
+        var re = new RegExp("<" + quad.subject.value + ">", "g");
         let sparqlReplacementString = SHACLSpecificationProvider.pathToSparql(quad.object);
         sparql = sparql.replace(re, sparqlReplacementString);
       });
@@ -182,7 +185,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       SH.PROPERTY,
       null,
       null
-    ).map(triple => triple.subject.id);
+    ).map(triple => triple.subject.value);
 
     let dedupNodeShapes = [...new Set(duplicatedNodeShapes)];
 
@@ -198,8 +201,8 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   }
 
   public static pathToSparql(object:Quad_Object) {
-    if(object instanceof NamedNode) {
-      return "<" + (object as NamedNode).id + ">";
+    if(object as NamedNode) {
+      return "<" + (object as NamedNode).value + ">";
     } else {
       throw new Error("SHACL blank node paths not implemented yet")
     }

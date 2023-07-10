@@ -1,10 +1,12 @@
-import { DataFactory } from "n3";
-import { BgpPattern, Pattern, Triple, VariableTerm } from "sparqljs";
+import { DataFactory } from 'rdf-data-factory';
+import { Pattern } from "sparqljs";
 import ObjectPropertyGroup from "../../components/builder-section/groupwrapper/criteriagroup/objectpropertygroup/ObjectPropertyGroup";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import { getSettings } from "../../settings/defaultSettings";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../SparqlFactory";
+
+const factory = new DataFactory();
 
 export default class IntersectionBuilder{
     #startClassVar:string|undefined
@@ -44,17 +46,17 @@ export default class IntersectionBuilder{
 
             this.resultPtrn.push(
                 SparqlFactory.buildBgpPattern([SparqlFactory.buildIntersectionTriple(
-                DataFactory.variable(this.#startClassVar.replace('?','')),
+                factory.variable(this.#startClassVar.replace('?','')),
                 this.#objectPropCls.getTypeSelected(),
-                DataFactory.variable(this.#endClassVar.replace('?',''))
+                factory.variable(this.#endClassVar.replace('?',''))
                 )])
             );
 
             // add language filter if property is set to be multilingual
             if(this.specProvider.getProperty(this.#objectPropCls.getTypeSelected()).isMultilingual()) {
                 this.resultPtrn.push(SparqlFactory.buildFilterLangEquals(
-                    DataFactory.variable(this.#endClassVar.replace('?','')),
-                    DataFactory.literal(getSettings().language)
+                    factory.variable(this.#endClassVar.replace('?','')),
+                    factory.literal(getSettings().language)
                 ));
             }
         }

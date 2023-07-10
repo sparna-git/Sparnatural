@@ -5,11 +5,13 @@ import InfoBtn from "../../buttons/InfoBtn";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
-import * as DataFactory from "@rdfjs/data-model" ;
+import { DataFactory } from 'rdf-data-factory';
 import { SelectedVal } from "../../../generators/ISparJson";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
+
+const factory = new DataFactory();
 
 export class DateTimePickerValue implements WidgetValue {
   value: {
@@ -242,35 +244,35 @@ export class TimeDatePickerWidget extends AbstractWidget {
 
       return [
         buildDateRangeOrExactDatePattern(
-          this.widgetValues[0].value.start?DataFactory.literal(
+          this.widgetValues[0].value.start?factory.literal(
             this.#formatSparqlDate(this.widgetValues[0].value.start),
-            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+            factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
-          this.widgetValues[0].value.stop?DataFactory.literal(
+          this.widgetValues[0].value.stop?factory.literal(
             this.#formatSparqlDate(this.widgetValues[0].value.stop),
-            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+            factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
-          DataFactory.variable(
+          factory.variable(
             this.getVariableValue(this.startClassVal)
           ),
-          DataFactory.namedNode(beginDateProp),
-          DataFactory.namedNode(endDateProp),
-          exactDateProp != null?DataFactory.namedNode(exactDateProp):null,
-          DataFactory.variable(this.getVariableValue(this.startClassVal))
+          factory.namedNode(beginDateProp),
+          factory.namedNode(endDateProp),
+          exactDateProp != null?factory.namedNode(exactDateProp):null,
+          factory.variable(this.getVariableValue(this.startClassVal))
         ),
       ];
     } else {
       return [
         SparqlFactory.buildFilterTime(
-          this.widgetValues[0].value.start?DataFactory.literal(
+          this.widgetValues[0].value.start?factory.literal(
             this.#formatSparqlDate(this.widgetValues[0].value.start),
-            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+            factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
-          this.widgetValues[0].value.stop?DataFactory.literal(
+          this.widgetValues[0].value.stop?factory.literal(
             this.#formatSparqlDate(this.widgetValues[0].value.stop),
-            DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+            factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
           ):null,
-          DataFactory.variable(
+          factory.variable(
             this.getVariableValue(this.endClassVal)
           )
         ),

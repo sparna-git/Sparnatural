@@ -1,4 +1,4 @@
-import * as DataFactory from "@rdfjs/data-model" ;
+import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
@@ -6,6 +6,8 @@ import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-co
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { SelectAllValue } from "../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
+
+const factory = new DataFactory();
 
 export class BooleanWidgetValue implements WidgetValue {
   value: {
@@ -97,11 +99,11 @@ export class BooleanWidget extends AbstractWidget {
         type: "bgp",
         triples: [
           {
-            subject: DataFactory.variable(this.getVariableValue(this.startClassVal)),
-            predicate: DataFactory.namedNode(this.objectPropVal.type),
-            object: DataFactory.literal(
+            subject: factory.variable(this.getVariableValue(this.startClassVal)),
+            predicate: factory.namedNode(this.objectPropVal.type),
+            object: factory.literal(
               this.widgetValues[0].value.boolean.toString(),
-              DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
+              factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
             ),
           },
         ],
@@ -111,9 +113,9 @@ export class BooleanWidget extends AbstractWidget {
       // otherwise the object prop is created and we create a VALUES clause with the actual boolean
       let vals = (this.widgetValues as BooleanWidgetValue[]).map((v) => {
         let vl: ValuePatternRow = {};
-        vl[this.endClassVal.variable] = DataFactory.literal(
+        vl[this.endClassVal.variable] = factory.literal(
           this.widgetValues[0].value.boolean.toString(),
-          DataFactory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
+          factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
         );
         return vl;
       });

@@ -6,11 +6,12 @@ import "jstree"
 import ISettings from "../../../../sparnatural/settings/ISettings";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { ValuePatternRow } from "sparqljs";
-import * as DataFactory from "@rdfjs/data-model" ;
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { getSettings } from "../../../settings/defaultSettings";
+import { DataFactory } from 'rdf-data-factory';
 
+const factory = new DataFactory();
 
 require("jstree/dist/themes/default/style.min.css");
 
@@ -378,9 +379,9 @@ export class TreeWidget extends AbstractWidget {
     if(this.isBlockingObjectProp()) {
       // single value not selected, set it directly as the value of the triple
       let singleTriple: Triple = SparqlFactory.buildTriple(
-        DataFactory.variable(this.getVariableValue(this.startClassVal)),
-        DataFactory.namedNode(this.objectPropVal.type),
-        DataFactory.namedNode((this.widgetValues[0]).value.uri)
+        factory.variable(this.getVariableValue(this.startClassVal)),
+        factory.namedNode(this.objectPropVal.type),
+        factory.namedNode((this.widgetValues[0]).value.uri)
       );
 
       let ptrn: BgpPattern = {
@@ -393,7 +394,7 @@ export class TreeWidget extends AbstractWidget {
       // multiple values, use a VALUES
       let vals = this.widgetValues.map((v) => {
         let vl: ValuePatternRow = {};
-        vl[this.endClassVal.variable] = DataFactory.namedNode(v.value.uri);
+        vl[this.endClassVal.variable] = factory.namedNode(v.value.uri);
         return vl;
       });
       let valuePattern: ValuesPattern = {

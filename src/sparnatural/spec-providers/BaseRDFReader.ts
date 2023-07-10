@@ -1,10 +1,11 @@
-import factory from "@rdfjs/data-model";
-import { NamedNode, Quad, Store } from "n3";
+import { DataFactory } from 'rdf-data-factory';
 import rdfParser from "rdf-parse";
 var Readable = require('stream').Readable
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from 'rdf-stores';
+import { NamedNode, Quad, Stream } from "@rdfjs/types";
 
+const factory = new DataFactory();
 
 const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 export const RDF = {
@@ -29,20 +30,108 @@ export const RDFS = {
 
 export class BaseRDFReader {
     protected lang: string;
-    protected store: Store<Quad>;
+    protected store: RdfStore;
 
-    constructor(n3store: Store<Quad>, lang: string) {
+    constructor(n3store: RdfStore, lang: string) {
         this.store = n3store;
         this.lang = lang;
     }
 
-    static buildStore(string: any, filePath: string, callback: any) {
-        console.log("Building Store from " + filePath);
-    
+    static buildStoreFromString(configData:string, filePath:string, callback: any) {
+      const store:RdfStore = RdfStore.createDefault();
+      let quadStream: Stream<Quad> = BaseRDFReader.#toQuadStream(configData,filePath);
+
+      store.import(quadStream)
+        .on('error', () => console.log("Problem parsing inline config"))
+        .once('end', () => callback(store));
+
+    }
+
+
+    static buildStore(files: Array<string>, callback: any) {
+      // Create a new store with default settings
+      // see https://www.npmjs.com/package/rdf-stores
+      const store:RdfStore = RdfStore.createDefault();
+
+      let promises = new Array<Promise<RdfStore>>();
+      for(let config of files) {
+        console.log("Importing in store '" + config + "'");
+
+        let p:Promise<RdfStore> = new Promise((resolve, reject) =>
+          $.ajax({
+            method: "GET",
+            url: config,
+            dataType: "text",
+          }).done(function (configData) {
+
+            let quadStream: Stream<Quad> = BaseRDFReader.#toQuadStream(configData,config);
+
+            store.import(quadStream)
+              .on('error', reject)
+              .once('end', () => resolve(store));
+
+          }).fail(function (response) {
+            console.error(
+              "Sparnatural - unable to load RDF config file : " + config
+            );
+            console.log(response);
+            reject();
+          })
+        ); // end Promise
+
+        promises.push(p);
+      }
+
+      // when all done, call callback
+      Promise.all(promises).then((values) => {
+        console.log(
+          "Specification store populated with " +
+            store.countQuads(
+              null,
+              null,
+              null,
+              null
+            ) +
+            " triples."
+        );
+        callback(store);
+      })
+  }
+
+    static buildStoreBak(files: Map<string,string>, callback: any) {
         // Create a new store with default settings
         // see https://www.npmjs.com/package/rdf-stores
-        const store = RdfStore.createDefault();
+        const store:RdfStore = RdfStore.createDefault();
 
+        let promises = new Array<Promise<RdfStore>>();
+        for(let key of files.keys()) {
+          console.log("Importing in store '" + key + "'");
+          let quadStream: Stream<Quad> = BaseRDFReader.#toQuadStream(files.get(key),key);
+          
+          let p:Promise<RdfStore> = new Promise((resolve, reject) => store.import(quadStream)
+            .on('error', reject)
+            .once('end', () => resolve(store)));
+          
+          promises.push(p);
+        }
+
+        // when all done, call callback
+        Promise.all(promises).then((values) => {
+          console.log(
+            "Specification store populated with " +
+              store.countQuads(
+                null,
+                null,
+                null,
+                null
+              ) +
+              " triples."
+          );
+          callback(store);
+        })
+    }
+
+      static #toQuadStream(string:any, filePath:any) {
         // turn input string into a stream
         var textStream = new Readable();
         textStream.push(string)    // the string you want
@@ -68,22 +157,8 @@ export class BaseRDFReader {
             });
           }
         }
-    
-        // import into store
-        const importPromise = store.import(quadStream);
-        importPromise.on("end", () => {
-          console.log(
-            "Specification store populated with " +
-              store.countQuads(
-                null,
-                null,
-                null,
-                null
-              ) +
-              " triples."
-          );
-          callback(store);
-        });
+
+        return quadStream;
       }
 
       _readDatasourceAnnotationProperty(
@@ -103,7 +178,7 @@ export class BaseRDFReader {
         }
     
         for (const datasourceQuad of datasourceQuads) {
-          const datasourceUri = datasourceQuad.object.id;
+          const datasourceUri = datasourceQuad.object.value;
           var knownDatasource = Datasources.DATASOURCES_CONFIG.get(datasourceUri);
           if (knownDatasource != null) {
             return knownDatasource;
@@ -239,7 +314,7 @@ export class BaseRDFReader {
   _readAsResource(uri: any, property: any) {
     return this.store
       .getQuads(factory.namedNode(uri), property, null, null)
-      .map((quad: { object: { id: any } }) => quad.object.id);
+      .map((quad: { object: { value: any } }) => quad.object.value);
   }
 
   /**
@@ -344,7 +419,7 @@ export class BaseRDFReader {
     _readList_rec(list: any) {
         var result = this.store
           .getQuads(list, RDF.FIRST, null, null)
-          .map((quad: { object: { id: any } }) => quad.object);
+          .map((quad: { object: { value: any } }) => quad.object);
     
         var subLists = this._readAsRdfNode(list, RDF.REST);
         if (subLists.length > 0) {
@@ -372,7 +447,7 @@ export class BaseRDFReader {
         );
     
         if (propertyQuads.length > 0) {
-          return propertyQuads[0].subject.id;
+          return propertyQuads[0].subject.value;
         } else {
           return null;
         }

@@ -1,4 +1,4 @@
-import * as DataFactory from "@rdfjs/data-model" ;
+import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern, Variable } from "sparqljs";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
@@ -7,6 +7,8 @@ import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecific
 import ClassBuilder from "./ClassBuilder";
 import IntersectionBuilder from "./IntersectionBuilder";
 import SparqlFactory from "../SparqlFactory";
+
+const factory = new DataFactory();
 
 export default class WhereBuilder{
     // variables set in construtor
@@ -165,7 +167,7 @@ export default class WhereBuilder{
         const sparqlService = this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected()).getServiceEndpoint()
         let servicePtrn = null;
         if(this.#grpWrapper.optionState === OptionTypes.SERVICE || (sparqlService != null)){
-            const endpoint = DataFactory.namedNode(sparqlService)
+            const endpoint = factory.namedNode(sparqlService)
             // to be on the safe side : when rollback an endclass group, we may come here with only the start class group criteria
             // and nothing in this array
             if(exceptStartPtrn.length > 0) {

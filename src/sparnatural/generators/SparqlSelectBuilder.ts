@@ -8,9 +8,12 @@ import {
   Wildcard,
 } from "sparqljs";
 import SparnaturalComponent from "../components/SparnaturalComponent";
-import * as DataFactory from "@rdfjs/data-model" ;
 import WhereBuilder from "./helpers/WhereBuilder";
 import SparqlFactory from "./SparqlFactory";
+import { DataFactory } from 'rdf-data-factory';
+
+const factory = new DataFactory();
+
 /*
   Reads out the UI and creates the and sparqljs pattern. 
   sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
@@ -100,7 +103,7 @@ export default class RdfJsGenerator {
 
   #varsToRDFJS(variables: Array<string>): Variable[] {
     return variables.map((v) => {
-      return DataFactory.variable(v.replace("?", ""));
+      return factory.variable(v.replace("?", ""));
     });
   }
 

@@ -1,5 +1,4 @@
-import factory from "@rdfjs/data-model";
-import { NamedNode } from "n3";
+import { DataFactory } from 'rdf-data-factory';
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import L, { LatLng, Rectangle,Map } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
@@ -11,15 +10,14 @@ import {
   FunctionCallExpression,
   LiteralTerm,
   Pattern,
-  Triple,
-  ValuePatternRow,
-  ValuesPattern,
 } from "sparqljs";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../../generators/ISparJson";
-import * as DataFactory from "@rdfjs/data-model" ;
+import { NamedNode } from '@rdfjs/types/data-model';
+
+const factory = new DataFactory();
 
 const GEOFUNCTIONS_NAMESPACE = 'http://www.opengis.net/def/function/geosparql/'
 export const GEOFUNCTIONS = {
@@ -190,7 +188,7 @@ export default class MapWidget extends AbstractWidget {
         type: "functionCall",
         function: GEOFUNCTIONS.WITHIN,
         args: [
-          DataFactory.variable(this.getVariableValue(this.endClassVal)),
+          factory.variable(this.getVariableValue(this.endClassVal)),
           this.#buildPolygon(this.widgetValues[0].value.coordinates[0])
         ],
       },
@@ -243,7 +241,7 @@ export default class MapWidget extends AbstractWidget {
     });
     // polygon must be closed with the starting point
     let startPt = coordinates[0]
-    let literal: LiteralTerm = DataFactory.literal(
+    let literal: LiteralTerm = factory.literal(
       `Polygon((${polygon}${startPt.lng} ${startPt.lat}))`,
       GEOSPARQL.WKT_LITERAL
     )

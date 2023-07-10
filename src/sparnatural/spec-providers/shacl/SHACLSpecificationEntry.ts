@@ -1,14 +1,13 @@
-import { BaseRDFReader, RDFS } from "../BaseRDFReader";
+import { BaseRDFReader } from "../BaseRDFReader";
 import ISpecificationEntry from "../ISpecificationEntry";
-import { Quad, Store } from "n3";
 import { SH, SHACLSpecificationProvider, VOLIPI } from "./SHACLSpecificationProvider";
-import { SpecialSHACLSpecificationEntity } from "./SHACLSpecificationEntity";
+import { RdfStore } from "rdf-stores";
 
 export abstract class SHACLSpecificationEntry extends BaseRDFReader implements ISpecificationEntry {
     uri:string;
     provider:SHACLSpecificationProvider;
 
-    constructor(uri:string, provider: SHACLSpecificationProvider, n3store: Store<Quad>, lang: string) {
+    constructor(uri:string, provider: SHACLSpecificationProvider, n3store: RdfStore, lang: string) {
         super(n3store, lang);
         this.uri=uri;
         this.provider=provider;

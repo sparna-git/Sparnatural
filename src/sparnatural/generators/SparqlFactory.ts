@@ -1,8 +1,9 @@
 import { BgpPattern, BindPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableTerm, Wildcard } from "sparqljs";
-import * as DataFactory from "@rdfjs/data-model" ;
 import { Literal, Variable } from "@rdfjs/types";
 import {  Parser as SparqlParser } from "sparqljs";
-import { NamedNode } from "n3";
+import { DataFactory } from 'rdf-data-factory';
+
+const factory = new DataFactory();
 
 export default class SparqlFactory {
   static sparqlParser =  new SparqlParser({ pathOnly: true } as any);
@@ -84,7 +85,7 @@ export default class SparqlFactory {
             args: [ variable ]
           },
           texte,
-          DataFactory.literal(`i`)
+          factory.literal(`i`)
         ],
       },
     };
@@ -280,7 +281,7 @@ export default class SparqlFactory {
     if(!subj?.value || !pred || !obj?.value) return null
     return {
       subject: subj as VariableTerm,
-      predicate: DataFactory.namedNode(pred),
+      predicate: factory.namedNode(pred),
       object: obj as VariableTerm,
     };
   }

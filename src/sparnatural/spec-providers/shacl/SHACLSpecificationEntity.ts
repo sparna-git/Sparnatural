@@ -1,17 +1,17 @@
 import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
-import ISpecificationEntity from "../ISpecificationEntity";
-import { Quad, Store } from "n3";
-import factory from "@rdfjs/data-model";
-import { Config } from "../../ontologies/SparnaturalConfig";
+import { DataFactory } from 'rdf-data-factory';
 import { DASH, SH, SHACLSpecificationProvider, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
+import { RdfStore } from "rdf-stores";
+
+const factory = new DataFactory();
 
 export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements ISHACLSpecificationEntity {
 
-    constructor(uri:string, provider: SHACLSpecificationProvider, n3store: Store<Quad>, lang: string) {
+    constructor(uri:string, provider: SHACLSpecificationProvider, n3store: RdfStore, lang: string) {
         super(uri, provider, n3store, lang);
     }
 
@@ -111,7 +111,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return items.length>0?items[0]:null;
     }
 
-    isRangeOf(n3store:Store<Quad>, shapeUri:any) {
+    isRangeOf(n3store:RdfStore, shapeUri:any) {
        return (SHACLSpecificationProperty.readShClassAndShNodeOn(n3store, shapeUri).indexOf(this.uri) > -1);
     }
 
@@ -197,7 +197,7 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
         return "";
     }
 
-    isRangeOf(n3store:Store<Quad>, shapeUri:any):boolean {
+    isRangeOf(n3store:RdfStore, shapeUri:any):boolean {
         return this.isRangeOfFunction(n3store, shapeUri);
     }
 }
@@ -227,7 +227,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER,
                 "fa-solid fa-ellipsis",
                 "Other",
-                function(n3store:Store<Quad>, shapeUri:any):boolean {
+                function(n3store:RdfStore, shapeUri:any):boolean {
                     // this is in range if nothing else is in range
                     let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
                     return (
@@ -257,7 +257,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_DATES,
                 "fa-solid fa-calendar",
                 "Date",
-                function(n3store:Store<Quad>, shapeUri:any):boolean {
+                function(n3store:RdfStore, shapeUri:any):boolean {
                     let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
                     return (
                         reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE) 
@@ -276,7 +276,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_LOCATION,
                 "fa-solid fa-map-location-dot",
                 "Location",
-                function(n3store:Store<Quad>, shapeUri:any):boolean {
+                function(n3store:RdfStore, shapeUri:any):boolean {
                     let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
                     return reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, GEOSPARQL.WKT_LITERAL)
                 }
@@ -289,7 +289,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_TEXT,
                 "fa-solid fa-font",
                 "Text",
-                function(n3store:Store<Quad>, shapeUri:any):boolean {
+                function(n3store:RdfStore, shapeUri:any):boolean {
                     let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
                     return (
                         reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.STRING) 

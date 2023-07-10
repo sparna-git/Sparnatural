@@ -1,16 +1,17 @@
-import { Quad, Quad_Subject, Store } from "n3";
 import { Config } from "../../ontologies/SparnaturalConfig";
-import factory from "@rdfjs/data-model";
+import { DataFactory } from 'rdf-data-factory';
 import { DCT, SH, VOID, XSD } from "./SHACLSpecificationProvider";
 import { BaseRDFReader, RDF } from "../BaseRDFReader";
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
+import { RdfStore } from "rdf-stores";
+import { Quad_Subject } from "@rdfjs/types/data-model";
 
-
+const factory = new DataFactory();
 
 
 export interface SparnaturalSearchWidget {
     getUri():string;
-    score(propertyShape:string, n3store: Store<Quad>):number;
+    score(propertyShape:string, n3store: RdfStore):number;
 }
 
 export class SparnaturalSearchWidgetsRegistry {
@@ -39,7 +40,7 @@ export class ListWidget implements SparnaturalSearchWidget {
         return Config.LIST_PROPERTY;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         return 10;
     }
 
@@ -52,7 +53,7 @@ export class AutocompleteWidget {
         return Config.AUTOCOMPLETE_PROPERTY;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         // if there is a count and the count is > 500, then this will score higher
         let count = readCountOf(n3store, propertyShape);
         if(count && count > 500) {
@@ -72,7 +73,7 @@ export class TreeWidget {
         return Config.TREE_PROPERTY;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         return -1;
     }
 
@@ -85,7 +86,7 @@ export class DatePickerWidget {
         return Config.TIME_PROPERTY_DATE;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
 
         let hasDateOrDateTimePredicate = function(rdfNode: any) {
@@ -119,7 +120,7 @@ export class YearPickerWidget {
         return Config.TIME_PROPERTY_YEAR;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         // if the datatype is xsd:gYear
         if(
             _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.GYEAR) 
@@ -140,7 +141,7 @@ export class MapWidget {
         return Config.MAP_PROPERTY;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         // if the datatype is geo:wktLiteral
         if(
             _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, GEOSPARQL.WKT_LITERAL) 
@@ -161,7 +162,7 @@ export class BooleanWidget {
         return Config.BOOLEAN_PROPERTY;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         // if the datatype is xsd:boolean
         if(
             _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.BOOLEAN) 
@@ -183,7 +184,7 @@ export class NoWidget {
         return Config.NON_SELECTABLE_PROPERTY;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         return -1;
     }
 
@@ -197,7 +198,7 @@ export class SearchRegexWidget {
         return Config.SEARCH_PROPERTY;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         // if the datatype is xsd:string or rdf:langString
         if(
             _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.STRING) 
@@ -220,7 +221,7 @@ export class SearchEqualWidget {
         return Config.STRING_EQUALS_PROPERTY;
     }
 
-    score(propertyShape:string, n3store: Store<Quad>):number {
+    score(propertyShape:string, n3store: RdfStore):number {
         return -1;
     }
 
@@ -228,7 +229,7 @@ export class SearchEqualWidget {
 SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new SearchEqualWidget());
 
 
-function _hasTriple(n3store: Store<Quad>, rdfNode: any, property: any, value:any) {
+function _hasTriple(n3store: RdfStore, rdfNode: any, property: any, value:any) {
     return (
       n3store.getQuads(
         rdfNode,
@@ -239,7 +240,7 @@ function _hasTriple(n3store: Store<Quad>, rdfNode: any, property: any, value:any
     );
 }
 
-function readCountOf(n3store: Store<Quad>, propertyShape:string) {
+function readCountOf(n3store: RdfStore, propertyShape:string) {
     let partitions:Quad_Subject[] = n3store
       .getQuads(null, DCT.CONFORMS_TO, factory.namedNode(propertyShape), null)
       .map((quad: { subject: any }) => quad.subject);
@@ -252,14 +253,14 @@ function readCountOf(n3store: Store<Quad>, propertyShape:string) {
       return result
 }
 
-function _readAsSingleInteger(n3store: Store<Quad>, subject: Quad_Subject, property: any):number|undefined {
+function _readAsSingleInteger(n3store: RdfStore, subject: Quad_Subject, property: any):number|undefined {
     var value = _readAsSingleLiteral(n3store, subject, property);
     if(value) {
         return Number.parseInt(value);
     }
 }
 
-function _readAsSingleLiteral(n3store: Store<Quad>, subject: Quad_Subject, property: any) {
+function _readAsSingleLiteral(n3store: RdfStore, subject: Quad_Subject, property: any) {
     var values = _readAsLiteral(n3store, subject, property);
     if (values.length == 0) {
       return undefined;
@@ -268,7 +269,7 @@ function _readAsSingleLiteral(n3store: Store<Quad>, subject: Quad_Subject, prope
     }
 }
 
-function _readAsLiteral(n3store: Store<Quad>, subject: Quad_Subject, property: any) {
+function _readAsLiteral(n3store: RdfStore, subject: Quad_Subject, property: any) {
     return n3store
       .getQuads(subject, property, null, null)
       .map((quad: { object: { value: any } }) => quad.object.value);

@@ -4,12 +4,14 @@ import { getSettings } from "../../settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import * as DataFactory from "@rdfjs/data-model" ;
+import { DataFactory } from 'rdf-data-factory';
 import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../generators/SparqlFactory";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { ListDataProviderIfc } from "./data/DataProviders";
+
+const factory = new DataFactory();
 
 export class ListWidgetValue implements WidgetValue {
   value: {
@@ -175,8 +177,8 @@ export class ListWidget extends AbstractWidget {
    getRdfJsPattern(): Pattern[] {
     if(this.isBlockingObjectProp()) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
-        DataFactory.variable(this.getVariableValue(this.startClassVal)),
-        DataFactory.namedNode(this.objectPropVal.type),
+        factory.variable(this.getVariableValue(this.startClassVal)),
+        factory.namedNode(this.objectPropVal.type),
         this.rdfTermToSparqlQuery((this.widgetValues[0] as ListWidgetValue).value.rdfTerm)
       );
 

@@ -1,4 +1,4 @@
-import * as DataFactory from "@rdfjs/data-model" ;
+import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../../generators/ISparJson";
 import SparqlFactory from "../../generators/SparqlFactory";
@@ -9,6 +9,9 @@ import { AutocompleteDataProviderIfc } from "./data/DataProviders";
 import { getSettings } from "../../settings/defaultSettings";
 
 require("easy-autocomplete");
+
+const factory = new DataFactory();
+
 
 export class AutoCompleteWidgetValue implements WidgetValue {
   value: {
@@ -175,8 +178,8 @@ export class AutoCompleteWidget extends AbstractWidget {
   getRdfJsPattern(): Pattern[] {
     if(this.isBlockingObjectProp()) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
-        DataFactory.variable(this.getVariableValue(this.startClassVal)),
-        DataFactory.namedNode(this.objectPropVal.type),
+        factory.variable(this.getVariableValue(this.startClassVal)),
+        factory.namedNode(this.objectPropVal.type),
         this.rdfTermToSparqlQuery((this.widgetValues[0] as AutoCompleteWidgetValue).value.rdfTerm)
       );
 

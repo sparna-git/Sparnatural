@@ -2,7 +2,9 @@ import { BlankTerm, IriTerm, LiteralTerm, Pattern } from "sparqljs";
 import { SelectedVal } from "../../generators/ISparJson";
 import HTMLComponent from "../HtmlComponent";
 import LoadingSpinner from "./LoadingSpinner";
-import { DataFactory } from "n3";
+import { DataFactory } from 'rdf-data-factory'; ;
+
+const factory = new DataFactory();
 
 // The ValueType decides wheter a widget has the possibility to choose only one value or multiple values
 // example for multiples: List of countries in ListWidget
@@ -141,18 +143,18 @@ export abstract class AbstractWidget extends HTMLComponent {
    */
     rdfTermToSparqlQuery(rdfTerm:RDFTerm): IriTerm | BlankTerm | LiteralTerm {
       if(rdfTerm.type == "uri") {
-        return DataFactory.namedNode(rdfTerm.value);
+        return factory.namedNode(rdfTerm.value);
       } else if(rdfTerm.type == "literal") {
         if(rdfTerm["xml:lang"]) {
-          return DataFactory.literal(rdfTerm.value, rdfTerm["xml:lang"]);
+          return factory.literal(rdfTerm.value, rdfTerm["xml:lang"]);
         } else if(rdfTerm.datatype) {
-          return DataFactory.literal(rdfTerm.value, rdfTerm.datatype);
+          return factory.literal(rdfTerm.value, rdfTerm.datatype);
         } else {
-          return DataFactory.literal(rdfTerm.value);
+          return factory.literal(rdfTerm.value);
         }
       } else if(rdfTerm.type == "bnode") {
         // we don't know what to do with this, but don't trigger an error
-        return DataFactory.blankNode(rdfTerm.value);
+        return factory.blankNode(rdfTerm.value);
       } else {
         throw new Error("Unexpected rdfTerm type "+rdfTerm.type)
       }

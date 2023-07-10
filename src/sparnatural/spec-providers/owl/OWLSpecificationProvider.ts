@@ -1,8 +1,6 @@
-import factory from "@rdfjs/data-model";
-import { NamedNode, Quad, Store } from "n3";
+import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISparnaturalSpecification from "../ISparnaturalSpecification";
-import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 import {
   Parser,
   Generator,
@@ -14,6 +12,10 @@ import ISpecificationEntity from "../ISpecificationEntity";
 import { OWLSpecificationEntity } from "./OWLSpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
+import { RdfStore } from "rdf-stores";
+import { NamedNode } from '@rdfjs/types/data-model';
+
+const factory = new DataFactory();
 
 const OWL_NAMESPACE = "http://www.w3.org/2002/07/owl#";
 export const OWL = {
@@ -30,7 +32,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
   #parser: SparqlParser;
   #generator: SparqlGenerator;
 
-  constructor(n3store: Store<Quad>, lang: string) {
+  constructor(n3store: RdfStore, lang: string) {
     super(n3store, lang);
 
     // init SPARQL parser and generator once
@@ -107,9 +109,9 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     for (const quad of quadsArray) {
       // we are not looking at domains of _any_ property
       // the property we are looking at must be a Sparnatural property, with a known type
-      var objectPropertyId = quad.subject.id;
+      var objectPropertyId = quad.subject.value;
       var typeClass = quad.object.termType;
-      var classId = quad.object.id;
+      var classId = quad.object.value;
 
       if (this.getProperty(objectPropertyId).getPropertyType("")) {
         // keep only Sparnatural classes in the list
@@ -165,12 +167,12 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     this.store
       .getQuads(null, OWL.EQUIVALENT_PROPERTY, null, null)
       .forEach(
-        (quad: { subject: { id: string | number }; object: { id: any } }) => {
+        (quad: { subject: { value: string | number }; object: { value: any } }) => {
           // store it if multiple equivalences are declared
-          if (!equivalentPropertiesPerProperty[quad.subject.id]) {
-            equivalentPropertiesPerProperty[quad.subject.id] = [];
+          if (!equivalentPropertiesPerProperty[quad.subject.value]) {
+            equivalentPropertiesPerProperty[quad.subject.value] = [];
           }
-          equivalentPropertiesPerProperty[quad.subject.id].push(quad.object.id);
+          equivalentPropertiesPerProperty[quad.subject.value].push(quad.object.value);
         }
       );
     // join the equivalences with a |
@@ -189,12 +191,12 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     this.store
       .getQuads(null, OWL.EQUIVALENT_CLASS, null, null)
       .forEach(
-        (quad: { subject: { id: string | number }; object: { id: any } }) => {
+        (quad: { subject: { value: string | number }; object: { value: any } }) => {
           // store it if multiple equivalences are declared
-          if (!equivalentClassesPerClass[quad.subject.id]) {
-            equivalentClassesPerClass[quad.subject.id] = [];
+          if (!equivalentClassesPerClass[quad.subject.value]) {
+            equivalentClassesPerClass[quad.subject.value] = [];
           }
-          equivalentClassesPerClass[quad.subject.id].push(quad.object.id);
+          equivalentClassesPerClass[quad.subject.value].push(quad.object.value);
         }
       );
     // use a VALUES if needed
@@ -222,10 +224,10 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
 
     // for each sparqlString
     this.store
-      .getQuads(null, Config.SPARQL_STRING, null, null)
-      .forEach((quad: { subject: { id: string }; object: { value: any } }) => {
+      .getQuads(null, factory.namedNode(Config.SPARQL_STRING), null, null)
+      .forEach((quad: { subject: { value: string }; object: { value: any } }) => {
         // find it with the full URI
-        var re = new RegExp("<" + quad.subject.id + ">", "g");
+        var re = new RegExp("<" + quad.subject.value + ">", "g");
         sparql = sparql.replace(re, quad.object.value);
       });
 

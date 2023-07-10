@@ -1,4 +1,4 @@
-import { DataFactory } from "n3";
+import { DataFactory } from 'rdf-data-factory';
 import { OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
 import EndClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import StartClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
@@ -6,6 +6,7 @@ import { getSettings } from "../../settings/defaultSettings";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../SparqlFactory";
 
+const factory = new DataFactory();
 
 export default class  ClassBuilder {
     protected resultPtrn:Pattern[] = []
@@ -65,15 +66,15 @@ export default class  ClassBuilder {
         if(getSettings().typePredicate){
             const parsed = SparqlFactory.parsePropertyPath(getSettings().typePredicate)
             this.classTriple = SparqlFactory.buildTypeTriple(
-                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')) ,
+                factory.variable(this.classGroup.getVarName()?.replace('?','')) ,
                 parsed,
-                DataFactory.namedNode(this.classGroup.getTypeSelected())
+                factory.namedNode(this.classGroup.getTypeSelected())
             )
         } else {
             this.classTriple = SparqlFactory.buildTypeTriple(
-                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')) ,
-                DataFactory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                DataFactory.namedNode(this.classGroup.getTypeSelected())
+                factory.variable(this.classGroup.getVarName()?.replace('?','')) ,
+                factory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+                factory.namedNode(this.classGroup.getTypeSelected())
             )
         }
     }
@@ -81,21 +82,20 @@ export default class  ClassBuilder {
     #buildDefaultLblTrpl(){
         // generate only in the case the defaultVar exists
         if(this.getDefaultVar()) {
-
             if(this.specProvider.getProperty(this.classGroup.defaultLblVar.type).isMultilingual()) {
                 if(getSettings().language == getSettings().defaultLanguage) {
                     this.defaultLblPatterns.push(
                         SparqlFactory.buildBgpPattern(
                             [SparqlFactory.buildTriple(
-                                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
-                                DataFactory.namedNode(this.classGroup.defaultLblVar.type),
-                                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
+                                factory.variable(this.classGroup.getVarName()?.replace('?','')),
+                                factory.namedNode(this.classGroup.defaultLblVar.type),
+                                factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
                             )]
                     ));
                     this.defaultLblPatterns.push(
                         SparqlFactory.buildFilterLangEquals(
-                            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
-                            DataFactory.literal(getSettings().language)
+                            factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`),
+                            factory.literal(getSettings().language)
                         )
                     );
                 } else {
@@ -103,14 +103,14 @@ export default class  ClassBuilder {
                         [
                         SparqlFactory.buildBgpPattern(
                             [SparqlFactory.buildTriple(
-                                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
-                                DataFactory.namedNode(this.classGroup.defaultLblVar.type),
-                                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_lang`)
+                                factory.variable(this.classGroup.getVarName()?.replace('?','')),
+                                factory.namedNode(this.classGroup.defaultLblVar.type),
+                                factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_lang`)
                             )]
                         ),
                         SparqlFactory.buildFilterLangEquals(
-                            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_lang`),
-                            DataFactory.literal(getSettings().language)
+                            factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_lang`),
+                            factory.literal(getSettings().language)
                         )
                         ]
                     ));
@@ -119,31 +119,31 @@ export default class  ClassBuilder {
                         [
                         SparqlFactory.buildBgpPattern(
                             [SparqlFactory.buildTriple(
-                                DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
-                                DataFactory.namedNode(this.classGroup.defaultLblVar.type),
-                                DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_defaultLang`)
+                                factory.variable(this.classGroup.getVarName()?.replace('?','')),
+                                factory.namedNode(this.classGroup.defaultLblVar.type),
+                                factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_defaultLang`)
                             )]
                         ),
                         SparqlFactory.buildFilterLangEquals(
-                            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_defaultLang`),
-                            DataFactory.literal(getSettings().defaultLanguage)
+                            factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_defaultLang`),
+                            factory.literal(getSettings().defaultLanguage)
                         )
                         ]
                     ));
 
                     this.defaultLblPatterns.push(SparqlFactory.buildBindCoalescePattern(
-                        DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_lang`),
-                        DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_defaultLang`),
-                        DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
+                        factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_lang`),
+                        factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}_defaultLang`),
+                        factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
                     ));
                 }
             } else {
                 this.defaultLblPatterns.push(
                     SparqlFactory.buildBgpPattern([
                         SparqlFactory.buildTriple(
-                            DataFactory.variable(this.classGroup.getVarName()?.replace('?','')),
-                            DataFactory.namedNode(this.classGroup.defaultLblVar.type),
-                            DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
+                            factory.variable(this.classGroup.getVarName()?.replace('?','')),
+                            factory.namedNode(this.classGroup.defaultLblVar.type),
+                            factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
                         )
                     ])
                     );
@@ -190,6 +190,6 @@ export default class  ClassBuilder {
      */
     getDefaultVar():Variable {
         const selected = this.classGroup.inputSelector?.selectViewVariableBtn?.selected
-        if(selected && this.classGroup.defaultLblVar.variable) return DataFactory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
+        if(selected && this.classGroup.defaultLblVar.variable) return factory.variable(`${this.classGroup.defaultLblVar.variable.replace("?", "")}`)
     }
 }

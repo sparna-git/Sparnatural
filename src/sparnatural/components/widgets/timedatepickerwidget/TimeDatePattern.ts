@@ -1,8 +1,9 @@
 import { Literal, NamedNode, Variable } from "@rdfjs/types";
-import * as DataFactory from "@rdfjs/data-model" ;
+import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, GroupPattern, OperationExpression, Pattern, UnionPattern, Triple, IriTerm, BlankTerm, VariableTerm, QuadTerm, PropertyPath, Term } from "sparqljs";
 import SparqlFactory from "../../../generators/SparqlFactory";
 
+const factory = new DataFactory();
 
 export const buildDateRangeOrExactDatePattern = (
   startDate: Literal,
@@ -17,7 +18,7 @@ export const buildDateRangeOrExactDatePattern = (
   if(exactDatePred != null) {
 
     // first alternative of the union to test exact date
-    let exactDateVarName = DataFactory.variable(objectVariable.value+"_exact");
+    let exactDateVarName = factory.variable(objectVariable.value+"_exact");
     let firstAlternative = SparqlFactory.buildGroupPattern(
       [
         SparqlFactory.buildBgpPattern(
@@ -80,8 +81,8 @@ export const buildDateRangePattern = (
 
     let bgp:BgpPattern = SparqlFactory.buildBgpPattern([]);
     
-    let beginDateVarName = DataFactory.variable(objectVariable.value+`_begin`);
-		let endDateVarName = DataFactory.variable(objectVariable.value+`_end`);
+    let beginDateVarName = factory.variable(objectVariable.value+`_begin`);
+		let endDateVarName = factory.variable(objectVariable.value+`_end`);
 
     bgp.triples.push(
       SparqlFactory.buildTriple(
@@ -175,7 +176,7 @@ export const buildDateRangePattern = (
   // we have provided only a start date
   } else if(startDate != null && endDate === null) {
     
-    let endDateVarName = DataFactory.variable(objectVariable.value+"_end");
+    let endDateVarName = factory.variable(objectVariable.value+"_end");
     var bgp = SparqlFactory.buildBgpPattern([
       SparqlFactory.buildTriple(
         startClassVar,
@@ -194,7 +195,7 @@ export const buildDateRangePattern = (
 
   // we have provided only a end date
   } else if(startDate === null && endDate != null) {
-    let beginDateVarName = DataFactory.variable(objectVariable.value+"_begin");
+    let beginDateVarName = factory.variable(objectVariable.value+"_begin");
     var bgp = SparqlFactory.buildBgpPattern([
       SparqlFactory.buildTriple(
         startClassVar,

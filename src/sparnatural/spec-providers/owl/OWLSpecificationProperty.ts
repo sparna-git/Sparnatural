@@ -1,16 +1,17 @@
-import { BaseRDFReader, RDFS } from "../BaseRDFReader";
-import ISpecificationEntity from "../ISpecificationEntity";
-import { Quad, Store } from "n3";
+import { RDFS } from "../BaseRDFReader";
 import { OWLSpecificationEntry } from "./OWLSpecificationEntry";
 import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
-import factory from "@rdfjs/data-model";
+import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
+import { RdfStore } from "rdf-stores";
+
+const factory = new DataFactory();
 
 export class OWLSpecificationProperty extends OWLSpecificationEntry implements ISpecificationProperty {
 
-  constructor(uri:string, provider: OWLSpecificationProvider, n3store: Store<Quad>, lang: string) {
+  constructor(uri:string, provider: OWLSpecificationProvider, n3store: RdfStore, lang: string) {
     super(uri, provider, n3store, lang);
   }
 
@@ -26,8 +27,8 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     );
 
     for (const aQuad of propertyQuads) {
-      if (!this._isUnionClass(aQuad.object.id)) {
-        this._pushIfNotExist(aQuad.object.id, classes);
+      if (!this._isUnionClass(aQuad.object.value)) {
+        this._pushIfNotExist(aQuad.object.value, classes);
       } else {
         // read union content
         var classesInUnion = this._readAsList(aQuad.object, OWL.UNION_OF).map(o => o.id)

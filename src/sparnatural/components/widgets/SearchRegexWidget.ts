@@ -1,4 +1,4 @@
-import * as DataFactory from "@rdfjs/data-model" ;
+import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern } from "sparqljs";
 import { getSettings, TOOLTIP_CONFIG } from "../../settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
@@ -9,6 +9,7 @@ import SparqlFactory from "../../generators/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import InfoBtn from "../buttons/InfoBtn";
 
+const factory = new DataFactory();
 
 export class SearchRegexWidgetValue implements WidgetValue {
   value: {
@@ -106,22 +107,19 @@ export class SearchRegexWidget extends AbstractWidget {
       case Config.STRING_EQUALS_PROPERTY: {
         // builds a FILTER(lcase(...) = lcase(...))
         return [SparqlFactory.buildFilterStringEquals(
-          DataFactory.literal(
+          factory.literal(
             `${this.widgetValues[0].value.regex}`
           ),
-          DataFactory.variable(this.getVariableValue(this.endClassVal))
+          factory.variable(this.getVariableValue(this.endClassVal))
         )];
-
-
-        break;
       }
       case Config.SEARCH_PROPERTY: {
         // builds a FILTER(regex(...,...,"i"))
         return [SparqlFactory.buildFilterRegex(
-          DataFactory.literal(
+          factory.literal(
             `${this.widgetValues[0].value.regex}`
           ),
-          DataFactory.variable(this.getVariableValue(this.endClassVal))
+          factory.variable(this.getVariableValue(this.endClassVal))
         )];
       }
       case Config.GRAPHDB_SEARCH_PROPERTY: {
@@ -130,24 +128,24 @@ export class SearchRegexWidget extends AbstractWidget {
           type: "bgp",
           triples: [
             {
-              subject: DataFactory.variable(
+              subject: factory.variable(
                 this.getVariableValue(this.startClassVal)
               ),
-              predicate: DataFactory.namedNode(
+              predicate: factory.namedNode(
                 "http://www.ontotext.com/connectors/lucene#query"
               ),
-              object: DataFactory.literal(
+              object: factory.literal(
                 `text:${this.widgetValues[0].value.regex}`
               ),
             },
             {
-              subject: DataFactory.variable(
+              subject: factory.variable(
                 this.getVariableValue(this.startClassVal)
               ),
-              predicate: DataFactory.namedNode(
+              predicate: factory.namedNode(
                 "http://www.ontotext.com/connectors/lucene#entities"
               ),
-              object: DataFactory.variable(this.getVariableValue(this.endClassVal)),
+              object: factory.variable(this.getVariableValue(this.endClassVal)),
             },
           ],
         };
@@ -164,13 +162,13 @@ export class SearchRegexWidget extends AbstractWidget {
           type: "bgp",
           triples: [
             {
-              subject: DataFactory.variable(
+              subject: factory.variable(
                 this.getVariableValue(this.endClassVal)
               ),
-              predicate: DataFactory.namedNode(
+              predicate: factory.namedNode(
                 "http://www.openlinksw.com/schemas/bif#contains"
               ),
-              object: DataFactory.literal(`${bif_query}`),
+              object: factory.literal(`${bif_query}`),
             },
           ],
         };

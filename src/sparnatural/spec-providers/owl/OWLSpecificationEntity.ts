@@ -1,15 +1,17 @@
-import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
+import { RDF, RDFS } from "../BaseRDFReader";
 import ISpecificationEntity from "../ISpecificationEntity";
-import { Quad, Store } from "n3";
 import { OWLSpecificationEntry } from "./OWLSpecificationEntry";
 import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
-import factory from "@rdfjs/data-model";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
+import { RdfStore } from "rdf-stores";
+import { DataFactory } from 'rdf-data-factory';
+
+const factory = new DataFactory();
 
 export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISpecificationEntity {
 
-    constructor(uri:string, provider: OWLSpecificationProvider, n3store: Store<Quad>, lang: string) {
+    constructor(uri:string, provider: OWLSpecificationProvider, n3store: RdfStore, lang: string) {
         super(uri, provider, n3store, lang);
     }
 
@@ -138,8 +140,8 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
 
     for (const aQuad of propertyQuads) {
       // only select properties with proper Sparnatural configuration
-      if (new OWLSpecificationProperty(aQuad.subject.id, this.provider, this.store, this.lang).getPropertyType("")) {
-        this._pushIfNotExist(aQuad.subject.id, properties);
+      if (new OWLSpecificationProperty(aQuad.subject.value, this.provider, this.store, this.lang).getPropertyType("")) {
+        this._pushIfNotExist(aQuad.subject.value, properties);
       }
     }
 
@@ -157,8 +159,8 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
 
       for (const aQuad of propertyQuadsHavingUnionAsDomain) {
         // only select properties with proper Sparnatural configuration
-        if (new OWLSpecificationProperty(aQuad.subject.id, this.provider, this.store, this.lang).getPropertyType("")) {
-          this._pushIfNotExist(aQuad.subject.id, properties);
+        if (new OWLSpecificationProperty(aQuad.subject.value, this.provider, this.store, this.lang).getPropertyType("")) {
+          this._pushIfNotExist(aQuad.subject.value, properties);
         }
       }
     }
@@ -189,7 +191,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     );
 
     for (const aQuad of subClassQuads) {
-      this._pushIfNotExist(aQuad.object.id, classes);
+      this._pushIfNotExist(aQuad.object.value, classes);
     }
 
     return classes;
@@ -206,7 +208,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     );
 
     for (const aQuad of subClassQuads) {
-      this._pushIfNotExist(aQuad.subject.id, classes);
+      this._pushIfNotExist(aQuad.subject.value, classes);
     }
 
     return classes;
