@@ -48,7 +48,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
             shapeUri = m.id;
           }
           // recurse one level more
-          var orOrMembers = this._readAsList(m.id, SH.OR);
+          var orOrMembers = this._readAsList(m, SH.OR);
           orOrMembers?.forEach(orOrMember => {
             if(rangeEntity.isRangeOf(this.store, orOrMember.id)) {
               shapeUri = orOrMember.id;
@@ -117,76 +117,78 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
      * @returns 
      */
     getRange(): string[] {
-        // first read on property shape itself
-        var classes: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, this.uri);
+      // first read on property shape itself
+      var classes: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, this.uri);
 
-        // nothing, see if some default can apply on the property shape itself
-        if(classes.length == 0) { 
-          SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
-            if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
-              if(value.isRangeOf(this.store, this.uri)) {
-                classes.push(key);
-              }
+      // nothing, see if some default can apply on the property shape itself
+      if(classes.length == 0) { 
+        SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
+          if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
+            if(value.isRangeOf(this.store, this.uri)) {
+              classes.push(key);
             }
-          });
-        }
+          }
+        });
+      }
 
-        // still nothing, look on the sh:or members
-        if(classes.length == 0) {
-          var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
-          orMembers?.forEach(m => {
-            // read sh:class / sh:node
-            var orClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.id);
+      // still nothing, look on the sh:or members
+      if(classes.length == 0) {
+        var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
+        
+        orMembers?.forEach(m => {
+          // read sh:class / sh:node
+          var orClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.id);
 
-            // nothing, see if default applies on this sh:or member
-            if(orClasses.length == 0) {
-              SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
-                if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
-                  if(value.isRangeOf(this.store, m.id)) {
-                    orClasses.push(key);
-                  }
+          // nothing, see if default applies on this sh:or member
+          if(orClasses.length == 0) {
+            SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
+              if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
+                if(value.isRangeOf(this.store, m.id)) {
+                  orClasses.push(key);
                 }
-              });
-            }
+              }
+            });
+          }
 
-            // still nothing, recurse one level more
-            if(orClasses.length == 0) {
-              var orOrMembers = this._readAsList(m.id, SH.OR);
-              orOrMembers?.forEach(orOrMember => {
-                // read sh:class / sh:node
-                var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember.id);
-                // nothing, see if default applies on this sh:or member
-                if(orOrClasses.length == 0) {
-                  SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
-                    if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
-                      if(value.isRangeOf(this.store, orOrMember.id)) {
-                        orClasses.push(key);
-                      }
+          // still nothing, recurse one level more
+          if(orClasses.length == 0) {
+            var orOrMembers = this._readAsList(m, SH.OR);
+            orOrMembers?.forEach(orOrMember => {
+              // read sh:class / sh:node
+              var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember.id);
+              // nothing, see if default applies on this sh:or member
+              if(orOrClasses.length == 0) {
+                SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
+                  if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
+                    if(value.isRangeOf(this.store, orOrMember.id)) {
+                      orClasses.push(key);
                     }
-                  });
-                }
-              });
-            }
-
-            // still nothing, add default, only if not added previously
-            if(orClasses.length == 0) {
-              if(orClasses.indexOf(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) == -1) {
-                orClasses.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER);
+                  }
+                });
               }
+            });
+          }
+
+          // still nothing, add default, only if not added previously
+          if(orClasses.length == 0) {
+            if(orClasses.indexOf(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) == -1) {
+              orClasses.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER);
             }
+          }
 
-            // add sh:or range to final list of ranges
-            classes.push(...orClasses);
-          });
-        }
+          // add sh:or range to final list of ranges
+          classes.push(...orClasses);
+        });
+      }
 
-        // still nothing, add the default
-        if(classes.length == 0) {
-          classes.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER);
-        }
+      // still nothing, add the default
+      if(classes.length == 0) {
+        classes.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER);
+      }
 
-        // return a dedup array
-        return [...new Set(classes)];
+      console.log("range of "+this.uri+" is "+classes)
+      // return a dedup array
+      return [...new Set(classes)];
     }
 
     #getShClassAndShNodeRange():string[] {
