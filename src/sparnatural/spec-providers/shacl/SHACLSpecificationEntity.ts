@@ -206,13 +206,14 @@ export class SpecialSHACLSpecificationEntityRegistry {
 
     private registry:Map<string,SpecialSHACLSpecificationEntity> = new Map<string,SpecialSHACLSpecificationEntity>();
 
+    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/Z_Date";
+
+    public static SPECIAL_SHACL_ENTITY_LOCATION = "http://special/Z_Location";
+
+    public static SPECIAL_SHACL_ENTITY_TEXT = "http://special/Z_Text";
+
     public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/ZZ_Other";
 
-    public static SPECIAL_SHACL_ENTITY_DATES = "http://special/ZZ_Date";
-
-    public static SPECIAL_SHACL_ENTITY_LOCATION = "http://special/ZZ_Location";
-
-    public static SPECIAL_SHACL_ENTITY_TEXT = "http://special/ZZ_Text";
 
     static instance = new SpecialSHACLSpecificationEntityRegistry();
 
