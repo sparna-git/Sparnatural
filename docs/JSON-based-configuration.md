@@ -2,6 +2,8 @@ _[Home](index.html) > JSON-based configuration_
 
 # Sparnatural JSON configuration
 
+**/!\ This is now deprecated. Please transition to OWL or SHACL configuration**
+
 Sparnatural can be configured using a JSON(-LD) data structure. The data structure looks very much like [JSON-LD](https://www.w3.org/TR/json-ld/), but is really interpreted and parsed like a JSON, so stick with the JSON keys given below.
 
 ## Minimal JSON configuration

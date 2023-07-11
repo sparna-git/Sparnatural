@@ -1,5 +1,7 @@
 # Configure datasources on object properties
 
+**/!\ This is now deprecated. Please transition to OWL or SHACL configuration**
+
 This is an extension chapter for the property `datasource` shown in [Object properties](./JSON-based-configuration.md#object-properties). Some widgets such as `sparnatural:AutocompleteProperty` and `sparnatural:ListProperty ` require a `datasource` key to populate respectively the list of values or the values proposed by autocompletion. Creating a datasource for a widget can be achieved in 4 ways:
 
 <table>
