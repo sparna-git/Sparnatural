@@ -54,8 +54,8 @@ export class AutocompleteWidget {
     }
 
     score(propertyShape:string, n3store: RdfStore):number {
-        // if there is a count and the count is > 500, then this will score higher
-        let count = readCountOf(n3store, propertyShape);
+        // if there is a distinctObjectsCount and the distinctObjectsCount is > 500, then this will score higher
+        let count = distinctObjectsCount(n3store, propertyShape);
         if(count && count > 500) {
             return 20;
         } else {
@@ -199,11 +199,16 @@ export class SearchRegexWidget {
     }
 
     score(propertyShape:string, n3store: RdfStore):number {
-        // if the datatype is xsd:string or rdf:langString
+        let count = distinctObjectsCount(n3store, propertyShape);
+        // if the datatype is xsd:string or rdf:langString, and there is a large number, otherwise we stick with list widget
         if(
-            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.STRING) 
-            ||
-            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, RDF.LANG_STRING)
+            (
+                _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.STRING) 
+                ||
+                _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, RDF.LANG_STRING)
+            )
+            &&
+            (count && count > 500)
         ) {
             return 50;
         } else {
@@ -240,14 +245,14 @@ function _hasTriple(n3store: RdfStore, rdfNode: any, property: any, value:any) {
     );
 }
 
-function readCountOf(n3store: RdfStore, propertyShape:string) {
+function distinctObjectsCount(n3store: RdfStore, propertyShape:string) {
     let partitions:Quad_Subject[] = n3store
       .getQuads(null, DCT.CONFORMS_TO, factory.namedNode(propertyShape), null)
       .map((quad: { subject: any }) => quad.subject);
 
       let result:number|undefined = undefined
       partitions.forEach(partition => {
-        result = _readAsSingleInteger(n3store, partition, VOID.TRIPLES);
+        result = _readAsSingleInteger(n3store, partition, VOID.DISTINCT_OBJECTS);
       });
 
       return result
