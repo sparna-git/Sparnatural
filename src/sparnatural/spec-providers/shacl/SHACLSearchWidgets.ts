@@ -208,7 +208,8 @@ export class SearchRegexWidget {
                 _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, RDF.LANG_STRING)
             )
             &&
-            (count && count > 500)
+            // if there is no count, this will always score high
+            (!count || (count > 500))
         ) {
             return 50;
         } else {
