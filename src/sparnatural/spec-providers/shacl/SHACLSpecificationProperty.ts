@@ -186,7 +186,6 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         classes.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER);
       }
 
-      console.log("range of "+this.uri+" is "+classes)
       // return a dedup array
       return [...new Set(classes)];
     }

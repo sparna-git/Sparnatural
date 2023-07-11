@@ -34,19 +34,6 @@ export class SparnaturalSearchWidgetsRegistry {
     }
 }
 
-export class ListWidget implements SparnaturalSearchWidget {
-
-    getUri():string {
-        return Config.LIST_PROPERTY;
-    }
-
-    score(propertyShape:string, n3store: RdfStore):number {
-        return 10;
-    }
-
-}
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new ListWidget());
-
 export class AutocompleteWidget {
 
     getUri():string {
@@ -54,18 +41,30 @@ export class AutocompleteWidget {
     }
 
     score(propertyShape:string, n3store: RdfStore):number {
-        // if there is a distinctObjectsCount and the distinctObjectsCount is > 500, then this will score higher
-        let count = distinctObjectsCount(n3store, propertyShape);
-        if(count && count > 500) {
-            return 20;
-        } else {
-            return -1;
-        }
-        
+        return 10;
     }
 
 }
 SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new AutocompleteWidget());
+
+export class ListWidget implements SparnaturalSearchWidget {
+
+    getUri():string {
+        return Config.LIST_PROPERTY;
+    }
+
+    score(propertyShape:string, n3store: RdfStore):number {
+        // if there is a distinctObjectsCount and the distinctObjectsCount is < 500, then this will score higher
+        let count = distinctObjectsCount(n3store, propertyShape);
+        if(count && count < 500) {
+            return 20;
+        } else {
+            return -1;
+        }
+    }
+
+}
+SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new ListWidget());
 
 export class TreeWidget {
 
