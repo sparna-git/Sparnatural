@@ -6,26 +6,46 @@
 _For examples of how Sparnatural works and can be configured, have a look at the [**demos folder**](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) of [sparnatural.eu](http://sparnatural.eu) website._
 
 
-## 1. Configuring Sparnatural
+## 1. Features
+
+- [Reference documentation of Sparnatural widgets](widgets.md) : all the possible ways to select a criteria value in Sparnatural
 
 
-- [Reference documentation of Sparnatural widgets](widgets.md)
-- [Configure in OWL using Protégé](OWL-based-configuration.md)
-- [Configure datasources in OWL](OWL-based-configuration-datasources.md)
-- [Configure in SHACL](SHACL-based-configuration.md)
+## 2. Getting started
 
-**Advanced configuration**
+- [Hello Sparnatural](Hello-Sparnatural/Hello-Sparnatural.md) : start here to integrate Sparnatural in your own website.
+
+
+## 3. Configuring Sparnatural
+
+### 3.1 Configure in OWL
+
+OWL is the recommmended way to configure Sparnatural :
+
+- [Configure in OWL using Protégé](OWL-based-configuration.md) : a reference page of all useful OWL axioms and annotations to configure Sparnatural with OWL
+- [Configure datasources in OWL](OWL-based-configuration-datasources.md) : a reference page of all included datasources and how-to write your own datasource
+
+### 3.2 Configure in SHACL
+
+_This is a beta feature_
+SHACL is also supported to configure Sparnatural.
+
+- [Configure in SHACL](SHACL-based-configuration.md) : a reference page 
+
+### 3.3 (Deprecated) configure in JSON
+
+_This is a deprecated feature_
+- [Configure in JSON(-LD)](JSON-based-configuration.md)
+- [Configure datasources in JSON](JSON-based-configuration-datasources.md)
+
+### 3.4 Advanced configuration
 
 - [Using a SPARQL proxy](SPARQL-proxy.md) - if your SPARQL endpoint is not CORS-enabled, or uses http while your query page uses https
 - [Integration with GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector.md) - Special configuration to interact with a GraphDB Lucene index 
 - [Querying date ranges](Querying-date-ranges.md) - How to generate SPARQL queries that can match on resources with a begin date and a end date 
 - [Federated query support](Federated-querying.md) - How to enable federated querying using SERVICE keyword in your configuration
 
-**Deprecated JSON configuration**
-- [Configure in JSON(-LD)](JSON-based-configuration.md)
-- [Configure datasources in JSON](JSON-based-configuration-datasources.md)
-
-## 2. Integrating Sparnatural in HTML / React
+## 4. Integrating Sparnatural in HTML / React
 
 - [Javascript integration v8](Javascript-integration.md) - Reference page for Javascript integration and parameters for version 8
 - [React integration v8](react-integration.md) - Initialization of Sparnatural as a custom component within react
@@ -38,15 +58,15 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 - [Querying a password protected SPARQL endpoint](Querying-a-password-protected-SPARQL-endpoint.md)
 
 
-## 3. Extending Sparnatural
+## 5. Extending Sparnatural
 
 - [How to create your own widget](diy-widget.md)
 
-## 4. FAQ
+## 6. FAQ
 
 - [FAQ](FAQ.md) - Frequently Asked Questions
 
-## 5. Other resources
+## 7. Other resources
 
 - Check out [the bibliography section of the website](https://sparnatural.eu#bibliography) where you can find presentation material on Sparnatural
 - Check out [the YouTube channel](https://www.youtube.com/playlist?list=PL3kB_eBB1Pc3FBOtevNtRkSw4YmWar4q5) for videos of Sparnatural
