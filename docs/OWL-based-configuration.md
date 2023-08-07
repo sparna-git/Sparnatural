@@ -21,35 +21,15 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 
 ### Prerequisites
 
-- This documentation assumes you are familiar with Protégé.
+- You need to be familiar with Protégé.
 - You need to know the URL of the SPARQL endpoint containing your data, either locally in your machine, or on a remote server
 
-### Enable CORS for local files in your browser
+### Setup your environment
 
-Before you can test your configuration locally, you need to ensure your browser is CORS-enabled for local files.
-
-1. To make Firefox CORS-enables for local files :
-    1. Open Firefox
-    1. Type "about:config" in the address bar
-    1. Accept security warning
-    1. Search for the config **security.fileuri.strict_origin_policy**
-    1. Set this config to "false"
-1. To make Chrome / Chromium CORS-enabled for local files :
-    1. Close Chrome
-    2. Open a command-line or a terminal
-    3. Run chrome with the flag "**--allow-file-access-from-files**", e.g. on Ubuntu Linux "chromium --allow-file-access-from-files"
-
-### Defining your own configuration
-
-1. Create a new ontology in Protégé;
-2. Import the 2 Sparnatural configuration in your ontology;
-  - To import these ontologies in Protégé use section under "Imported Ontologies > Direct imports" and then in the dialog select "Import an ontology contained in a document located on the web", and then enter the URI of an ontology above. Repeat the process for the other one. You will get a warning from Protégé stating that "_The following ontologies are already loaded in this workspace_", you can safely ignore the warning.  
-4. Specify the classes and properties in your configuration (see below all the possible [configuration parameters](#reference-for-classes-and-properties-of-a-sparnatural-configuration));
-5. Save your ontology preferably in Turtle, or in RDF/XML, but NOT in an OWL-specific serialisation (such as OWL/XML);
-6. Use the *Hello Sparnatural* tutorial page by [downloading the hello-sparnatural.zip file from the latest release](https://github.com/sparna-git/Sparnatural/releases/latest) and change the URL of the SPARQL service to be queried in the `endpoint` attribute of the `spar-natural` tag:
-     1. You can test with a local GraphDB repository by providing the URL of the repository : http://localhost:7200/repositories/{repositoryName}
-     1. If necessary (may not be mandatory for latest GraphDB version), make sure GraphDB is CORS-enabled and is launched with the flag **graphdb.workbench.cors.enable** (see the [GraphDB documentation page](https://graphdb.ontotext.com/documentation/standard/workbench-user-interface.html))
-7. Provide the relative path to the configuration file in Sparnatural `src` attribute of the `spar-natural` tag.
+Follow the steps of the [Hello Sparnatural getting started guide](Hello-Sparnatural/Hello-Sparnatural.md). This will enable you to:
+    - setup CORS on your local environment
+    - start with a minimal OWL configuration ontology
+    - setup a test page where you can test your configuration against your endpoint
 
 ## How to publish your configuration
 
