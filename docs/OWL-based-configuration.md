@@ -26,7 +26,7 @@ Sparnatural comes with 2 ontologies that need to be imported (through `owl:impor
 
 ### Setup your environment
 
-Follow the steps of the [Hello Sparnatural getting started guide](Hello-Sparnatural/Hello-Sparnatural.md). This will enable you to:
+Follow the steps of the [Hello Sparnatural getting started guide](hello-sparnatural/Hello-Sparnatural.md). This will enable you to:
     - setup CORS on your local environment
     - start with a minimal OWL configuration ontology
     - setup a test page where you can test your configuration against your endpoint

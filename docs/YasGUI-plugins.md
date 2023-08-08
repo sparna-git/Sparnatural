@@ -27,7 +27,7 @@ You would get this:
 
 ### How to use it
 
-This plugin is already used in the "Hello Sparnatural" tutorial page (see the [getting started guide](Hello-Sparnatural/Hello-Sparnatural.md)), so you can see how it is integrated.
+This plugin is already used in the "Hello Sparnatural" tutorial page (see the [getting started guide](hello-sparnatural/Hello-Sparnatural.md)), so you can see how it is integrated.
 
 To deploy it:
 

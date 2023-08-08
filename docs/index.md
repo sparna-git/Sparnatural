@@ -13,7 +13,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 
 ## 2. Getting started
 
-- [Hello Sparnatural](Hello-Sparnatural/Hello-Sparnatural.md) : start here to integrate Sparnatural in your own website.
+- [Hello Sparnatural](hello-sparnatural/Hello-Sparnatural.md) : start here to integrate Sparnatural in your own website.
 
 
 ## 3. Configuring Sparnatural
