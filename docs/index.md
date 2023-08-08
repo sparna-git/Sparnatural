@@ -13,7 +13,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 
 ## 2. Getting started
 
-- [Hello Sparnatural](hello-sparnatural/Hello-Sparnatural.md) : start here to integrate Sparnatural in your own website.
+- **[Hello Sparnatural](hello-sparnatural/Hello-Sparnatural.md)** : start here to integrate Sparnatural in your own website.
 
 
 ## 3. Configuring Sparnatural
@@ -31,7 +31,7 @@ _This is a beta feature_
 
 SHACL is also supported to configure Sparnatural.
 
-- [Configure in SHACL](SHACL-based-configuration.md) : a reference page 
+- [Configure in SHACL](SHACL-based-configuration.md) : a reference page detailling how Sparnatural can be configured in SHACL.
 
 **in JSON (deprecated)**
 
