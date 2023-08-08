@@ -21,10 +21,6 @@ The formal specification of the subset of SHACL to use, in combination with a fe
 
 ### NodeShapes configuration reference
 
-| Property | Label | Card. | Description |
-| -------- | ----- | ----- | ----------- |
-| [`...`](http://...) | prop label | 0..1 | TODO description |
-
 <table class="sp_table_propertyshapes table-striped table-responsive">
  <thead>
     <tr>
@@ -43,7 +39,7 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        <td>
           <div style="width:30px">1..*</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">Class</td>
+       <td class="sp_table_propertyshapes_col_description">Class. Value must always be sh:NodeShape.</td>
     </tr>
     <tr>
        <td>label</td>
@@ -53,7 +49,8 @@ The formal specification of the subset of SHACL to use, in combination with a fe
           <div style="width:30px">0..*</div>
        </td>
        <td class="sp_table_propertyshapes_col_description">The label of the entity to be displayed in Sparnatural. 
-          Labels are multilingual, the label in the current user language is displayed;
+          Labels are multilingual, and can provide multiple labels in different languages. Lhe
+          label in the current user language is displayed;
           If no label is given, the local part of the URI is used.</td>
     </tr>
     <tr>
@@ -63,7 +60,7 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        <td>
           <div style="width:30px">0..*</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">The order of this entity in its sibling list of entities</td>
+       <td class="sp_table_propertyshapes_col_description">The order of this entity in the entity selection dropdown.</td>
     </tr>
     <tr>
        <td>tooltip</td>
@@ -73,7 +70,9 @@ The formal specification of the subset of SHACL to use, in combination with a fe
           <div style="width:30px">0..*</div>
        </td>
        <td class="sp_table_propertyshapes_col_description">The preferred tooltip that will be displayed when this entity is hovered. This can
-          contain HTML markup.</td>
+          contain HTML markup.
+          Tooltips are also multilingual, you can provide one tooltip per language, and the
+          tooltip in the current user language is used.</td>
     </tr>
     <tr>
        <td>fontawesome icon code, tooltip</td>
@@ -82,8 +81,9 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        <td>
           <div style="width:30px">0..1</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">The default tooltip that will be displayed when this entity is hovered. This can contain
-          HTML markup., The fontawesome icon code that will be displayed by Sparnatural.</td>
+       <td class="sp_table_propertyshapes_col_description">The fontawesome icon code that will be displayed by Sparnatural, e.g. "fa-solid fa-user",
+          The default tooltip that will be displayed when this entity is hovered, if no preferred
+          tooltip is provided. This can contain HTML markup.</td>
     </tr>
     <tr>
        <td>icon url</td>
@@ -104,7 +104,8 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        </td>
        <td class="sp_table_propertyshapes_col_description">The actual URI of the class that this shape corresponds to, that will be inserted
           in the SPARQL queries. NodeShapes can either have sh:targetClass or they can be rdf:type
-          rdfs:Class.</td>
+          rdfs:Class, in which case the URI of the NodeShape is assumed to be the URI of the
+          class itself.</td>
     </tr>
     <tr>
        <td>node kind</td>
@@ -160,10 +161,6 @@ The formal specification of the subset of SHACL to use, in combination with a fe
 
 ### PropertyShapes configuration reference
 
-| Property | Label | Card. | Description |
-| -------- | ----- | ----- | ----------- |
-| [`...`](http://...) | prop label | 0..1 | TODO description |
-
 <table class="sp_table_propertyshapes table-striped table-responsive">
  <thead>
     <tr>
@@ -176,14 +173,15 @@ The formal specification of the subset of SHACL to use, in combination with a fe
  </thead>
  <tbody>
     <tr>
-       <td>class / shape</td>
+       <td>entity / shape</td>
        <td><code>^sh:property</code></td>
        <td><code><a href="#scs:Entity">Sparnatural entity</a></code><br></td>
        <td>
           <div style="width:30px">1..*</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">NodeShape to which the constraint is applied (a reference to a NodeShape IRI from
-          the first list)</td>
+       <td class="sp_table_propertyshapes_col_description">The entity from the configuration to which the property is attached. Note that this
+          is expressed as an inverse property on the PropertyShapes, for ease of use when defining
+          SHACL configurations in Excel tables.</td>
     </tr>
     <tr>
        <td>property</td>
@@ -192,8 +190,8 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        <td>
           <div style="width:30px">1..1</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">The property that this property shape is constraining. This is restricted to single
-          properties, paths are not supported.</td>
+       <td class="sp_table_propertyshapes_col_description">The property URI that this property shape is constraining. This is restricted to single
+          properties, paths are not supported (yet)</td>
     </tr>
     <tr>
        <td>order</td>
@@ -202,7 +200,7 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        <td>
           <div style="width:30px">0..1</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">The order of this property in its sibling list of entities</td>
+       <td class="sp_table_propertyshapes_col_description">The order of this property in the property selection drpdown.</td>
     </tr>
     <tr>
        <td>name</td>
@@ -212,7 +210,8 @@ The formal specification of the subset of SHACL to use, in combination with a fe
           <div style="width:30px">0..*</div>
        </td>
        <td class="sp_table_propertyshapes_col_description">The name of the property to be displayed.
-          Labels are multilingual, the label in the current user language is displayed;
+          Labels are multilingual, and can provide multiple labels in different languages. Lhe
+          label in the current user language is displayed;
           If no label is given, the local part of the URI is used.</td>
     </tr>
     <tr>
@@ -223,7 +222,9 @@ The formal specification of the subset of SHACL to use, in combination with a fe
           <div style="width:30px">0..*</div>
        </td>
        <td class="sp_table_propertyshapes_col_description">The preferred tooltip that will be displayed when this entity is hovered. This can
-          contain HTML markup.</td>
+          contain HTML markup.
+          Tooltips are also multilingual, you can provide one tooltip per language, and the
+          tooltip in the current user language is used.</td>
     </tr>
     <tr>
        <td>tooltip</td>
@@ -232,8 +233,8 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        <td>
           <div style="width:30px">0..*</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">The default tooltip that will be displayed when this entity is hovered. This can contain
-          HTML markup.</td>
+       <td class="sp_table_propertyshapes_col_description">The default tooltip that will be displayed when this entity is hovered, if no preferred
+          tooltip is provided. This can contain HTML markup.</td>
     </tr>
     <tr>
        <td>search widget</td>
@@ -266,8 +267,8 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        <td>
           <div style="width:30px">0..1</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">References the URI of a class that is itself referred to by an sh:targetClass from
-          a NodeShape.</td>
+       <td class="sp_table_propertyshapes_col_description">Defines the entity in the configuration that is the value of this property. References
+          the URI of a class that is itself referred to by an sh:targetClass from a NodeShape.</td>
     </tr>
     <tr>
        <td>node shape (of the property value)</td>
@@ -276,7 +277,8 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        <td>
           <div style="width:30px">0..1</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">References a NodeShape that describes the target entity of the property.
+       <td class="sp_table_propertyshapes_col_description">Defines the entity in the configuration that is the value of this property. References
+          a NodeShape that describes the target entity of the property.
           If no sh:class or sh:node is found, then a default behavior is proposed</td>
     </tr>
     <tr>
@@ -286,7 +288,8 @@ The formal specification of the subset of SHACL to use, in combination with a fe
        <td>
           <div style="width:30px">0..1</div>
        </td>
-       <td class="sp_table_propertyshapes_col_description">The datasource to populate this widget. If not provided, a default datasource is used.</td>
+       <td class="sp_table_propertyshapes_col_description">The datasource to populate the widget of the property. If not provided, a default
+          datasource is used.</td>
     </tr>
     <tr>
        <td>datasource (for tree childrens)</td>
@@ -319,7 +322,11 @@ The formal specification of the subset of SHACL to use, in combination with a fe
           2 levels of sh:or are supported to deal with properties that can be either IRI or
           literals, and then indicate the sh:class(es) of the IRI shape, and the sh:datatype(s)
           of the literal shape.
-          The actual list value of sh:or can be either a blank node or an IRI.</td>
+          The actual list value of sh:or can be either a blank node or an IRI.
+          
+          Example : property with 2 datatypes : ([sh:datatype xsd:string][sh:datatype xsd:dateTime]),
+          Example : property either IRI or literal ([sh:nodeKind sh:IRI; sh:class ex:class1][sh:nodeKind
+          sh:Literal sh:or([sh:datatype xsd:string][sh:datatype xsd:date])])</td>
     </tr>
  </tbody>
 </table>
