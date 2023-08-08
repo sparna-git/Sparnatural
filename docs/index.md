@@ -18,27 +18,27 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 
 ## 3. Configuring Sparnatural
 
-### 3.1 Configure in OWL
+**in OWL**
 
 OWL is the recommmended way to configure Sparnatural :
 
 - [Configure in OWL using Protégé](OWL-based-configuration.md) : a reference page of all useful OWL axioms and annotations to configure Sparnatural with OWL
 - [Configure datasources in OWL](OWL-based-configuration-datasources.md) : a reference page of all included datasources and how-to write your own datasource
 
-### 3.2 Configure in SHACL
+**in SHACL**
 
 _This is a beta feature_
 SHACL is also supported to configure Sparnatural.
 
 - [Configure in SHACL](SHACL-based-configuration.md) : a reference page 
 
-### 3.3 (Deprecated) configure in JSON
+**in JSON (deprecated)**
 
 _This is a deprecated feature_
 - [Configure in JSON(-LD)](JSON-based-configuration.md)
 - [Configure datasources in JSON](JSON-based-configuration-datasources.md)
 
-### 3.4 Advanced configuration
+**Advanced configuration**
 
 - [Using a SPARQL proxy](SPARQL-proxy.md) - if your SPARQL endpoint is not CORS-enabled, or uses http while your query page uses https
 - [Integration with GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector.md) - Special configuration to interact with a GraphDB Lucene index 
