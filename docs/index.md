@@ -28,6 +28,7 @@ OWL is the recommmended way to configure Sparnatural :
 **in SHACL**
 
 _This is a beta feature_
+
 SHACL is also supported to configure Sparnatural.
 
 - [Configure in SHACL](SHACL-based-configuration.md) : a reference page 
@@ -35,6 +36,7 @@ SHACL is also supported to configure Sparnatural.
 **in JSON (deprecated)**
 
 _This is a deprecated feature_
+
 - [Configure in JSON(-LD)](JSON-based-configuration.md)
 - [Configure datasources in JSON](JSON-based-configuration-datasources.md)
 
