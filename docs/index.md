@@ -47,15 +47,17 @@ _This is a deprecated feature_
 
 ## 4. Integrating Sparnatural in HTML / React
 
-- [Javascript integration v8](Javascript-integration.md) - Reference page for Javascript integration and parameters for version 8
-- [React integration v8](react-integration.md) - Initialization of Sparnatural as a custom component within react
-- [Javascript integration v7](Javascript-integration-v7.md) - Reference page for Javascript integration and parameters for version 7
+- [Javascript integration](Javascript-integration.md) - Reference page for Javascript integration and parameters
+- [React integration](react-integration.md) - Initialization of Sparnatural as a custom component within react
+- [YasGUI specific plugins](YasGUI-plugins.md) - Read if you are using YasGUI in combination with Sparnatural
 - [Customize colors](Customize-colors.md) - How to customize colors of Sparnatural
 
 **Advanced integration**
 
 - [Query JSON format](Query-JSON-format.md) - Documentation on the JSON structure used by Sparnatural to output and reload queries
 - [Querying a password protected SPARQL endpoint](Querying-a-password-protected-SPARQL-endpoint.md)
+- [Javascript integration v7 (old)](Javascript-integration-v7.md) - Reference page for Javascript integration and parameters for the old version 7
+
 
 
 ## 5. Extending Sparnatural

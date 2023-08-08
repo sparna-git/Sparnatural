@@ -1,9 +1,7 @@
-_[Home](index.html) > Javascript integration version 8_
+_[Home](index.html) > Javascript integration_
 
 
-# Javascript integration and parameters reference - version 8
-
-_/!\This documentation applies to version 8 of Sparnatural. See the [version 7 integration documentation](Javascript-integration-v7) for version 7._
+# Javascript integration and parameters reference
 
 ## NPM
 `npm i sparnatural`
@@ -191,7 +189,7 @@ The table below summarizes the properties that can set on the sparnatural object
 
 | Function | Description | Parameters |
 | -------- | ----------- | ---------- |
-| **sparnatural.headers**| Sets the headers that Sparnatural must send with each request, e.g. when populating dropdown lists or autocomplete fields. | an object `{"key":"value"} |
+| **sparnatural.headers**| Sets the headers that Sparnatural must send with each request, e.g. when populating dropdown lists or autocomplete fields. | an object `{"key":"value"}` |
 
 ## Advanced : customizing lists and autocomplete handlers
 
