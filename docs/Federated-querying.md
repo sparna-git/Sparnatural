@@ -76,7 +76,7 @@ Now when a query is issued involving this property, it is automatically wrapped 
 
 ![](assets/images/protege-screenshot-service-final-sparql.png)
 
-### Additionnal (experimental) config : axecutedAfter
+### Additionnal (experimental) config : executedAfter
 
 Some - if not most - of the federated query use-cases involve *first* querying the local triplestore, retrieve some URIs, and *then second* fetch some properties of these URIs in a remote federated triplestore. And not the reverse. For these kinds of query to be successfull, we need to instruct Sparnatural to execute first the local part of the query, and in a second time the remote part of the query. This involves wrapping the first part of the query in nested SELECT clause.
 
