@@ -2,6 +2,9 @@ import { BaseRDFReader } from "../BaseRDFReader";
 import ISpecificationEntry from "../ISpecificationEntry";
 import { SH, SHACLSpecificationProvider, VOLIPI } from "./SHACLSpecificationProvider";
 import { RdfStore } from "rdf-stores";
+import { DataFactory } from 'rdf-data-factory';
+
+const factory = new DataFactory();
 
 export abstract class SHACLSpecificationEntry extends BaseRDFReader implements ISpecificationEntry {
     uri:string;
@@ -20,29 +23,29 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
     }
 
     getTooltip(): string | null {
-      let tooltip = this._readAsLiteralWithLang(this.uri, VOLIPI.MESSAGE, this.lang);
+      let tooltip = this._readAsLiteralWithLang(factory.namedNode(this.uri), VOLIPI.MESSAGE, this.lang);
       if(!tooltip) {
         // try with sh:description
-        tooltip = this._readAsLiteralWithLang(this.uri, SH.DESCRIPTION, this.lang);
+        tooltip = this._readAsLiteralWithLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang);
       }
       return tooltip;
     }
 
     getColor(): string | null {
-      return this._readAsSingleLiteral(this.uri, VOLIPI.COLOR);
+      return this._readAsSingleLiteral(factory.namedNode(this.uri), VOLIPI.COLOR);
     }
 
 
     getIcon(): string {
       var faIcon = this._readAsLiteral(
-        this.uri,
+        factory.namedNode(this.uri),
         VOLIPI.ICON_NAME
       );
       
       if (faIcon.length > 0) {
         return SHACLSpecificationEntry.buildIconHtml(faIcon[0]);
       } else {
-        var icons = this._readAsLiteral(this.uri, VOLIPI.ICON);
+        var icons = this._readAsLiteral(factory.namedNode(this.uri), VOLIPI.ICON);
         if (icons.length > 0) {
           return icons[0];
         } else {
@@ -69,7 +72,7 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
     }
 
     getOrder() {
-        let order = this._readAsSingleLiteral(this.uri, SH.ORDER);
+        let order = this._readAsSingleLiteral(factory.namedNode(this.uri), SH.ORDER);
         return order
     }
 

@@ -17,7 +17,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
     getLabel(): string {
         // first try to read an rdfs:label
-        let label = this._readAsLiteralWithLang(this.uri, RDFS.LABEL, this.lang);
+        let label = this._readAsLiteralWithLang(factory.namedNode(this.uri), RDFS.LABEL, this.lang);
         // no rdfs:label present, read the local part of the URI
         if(!label) {
           label = SHACLSpecificationProvider.getLocalName(this.uri) as string;
@@ -30,7 +30,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var items: string[] = [];
 
         // read all properties
-        let propShapes = this._readAsResource(this.uri, SH.PROPERTY);
+        let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
         propShapes.forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
             let pRange = prop.getRange();
@@ -51,7 +51,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var items: string[] = [];
 
         // read all properties
-        let propShapes = this._readAsResource(this.uri, SH.PROPERTY);
+        let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
 
         propShapes.forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
@@ -95,7 +95,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var items: any[] = [];
 
         // read all properties
-        let propShapes = this._readAsResource(this.uri, SH.PROPERTY);
+        let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
 
         propShapes.forEach(ps => {
             if (this.store.getQuads(

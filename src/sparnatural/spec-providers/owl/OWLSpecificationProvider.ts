@@ -285,7 +285,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
    * Reads config:order of an entity and returns it, or null if not set
    **/
   _readOrder(uri: any) {
-    return this._readAsSingleLiteral(uri, Config.ORDER);
+    return this._readAsSingleLiteral(uri, factory.namedNode(Config.ORDER));
   }
 
 

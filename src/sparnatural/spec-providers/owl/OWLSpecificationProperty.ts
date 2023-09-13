@@ -46,7 +46,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
 
   getPropertyType(range:string):string|undefined {
     var superProperties = this._readAsResource(
-      this.uri,
+      factory.namedNode(this.uri),
       RDFS.SUBPROPERTY_OF
     );
 
@@ -78,6 +78,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
   }
 
   getDatasource() {
+    console.log(this.uri)
     return this._readDatasourceAnnotationProperty(
         this.uri,
         Datasources.DATASOURCE
@@ -100,7 +101,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
 
   isMultilingual(): boolean {
     return (
-      this._readAsSingleLiteral(this.uri, Config.IS_MULTILINGUAL) == "true"
+      this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.IS_MULTILINGUAL)) == "true"
     );
   }
 
@@ -109,33 +110,33 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
   }
 
   getBeginDateProperty(): string | null {
-    return this._readAsSingleResource(this.uri, Config.BEGIN_DATE_PROPERTY);
+    return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.BEGIN_DATE_PROPERTY));
   }
 
   getEndDateProperty(): string | null {
-    return this._readAsSingleResource(this.uri, Config.END_DATE_PROPERTY);
+    return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.END_DATE_PROPERTY));
   }
 
   getExactDateProperty(): string | null {
-    return this._readAsSingleResource(this.uri, Config.EXACT_DATE_PROPERTY);
+    return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.EXACT_DATE_PROPERTY));
   }
 
   isEnablingNegation(): boolean {
     return (
-      this._readAsSingleLiteral(this.uri, Config.ENABLE_NEGATION) == "true"
+      this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_NEGATION)) == "true"
     );
   }
 
   isEnablingOptional(): boolean {
     return (
-      this._readAsSingleLiteral(this.uri, Config.ENABLE_OPTIONAL) == "true"
+      this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_OPTIONAL)) == "true"
     );
   }
 
   getServiceEndpoint(): string | null {
-    const service = this._readAsSingleResource(this.uri,Config.SPARQL_SERVICE);
+    const service = this._readAsSingleResource(factory.namedNode(this.uri),factory.namedNode(Config.SPARQL_SERVICE));
     if(service) {
-      const endpoint = this._readAsSingleResource(service,Config.ENDPOINT);
+      const endpoint = this._readAsSingleResource(service,factory.namedNode(Config.ENDPOINT));
       if (endpoint) {
         return endpoint;
       } 
@@ -144,7 +145,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
   }
 
   isLogicallyExecutedAfter(): boolean {
-    var executedAfter = this._readAsSingleLiteral(this.uri, Config.SPARNATURAL_CONFIG_CORE+"executedAfter");
+    var executedAfter = this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"));
     return executedAfter;
   }
 

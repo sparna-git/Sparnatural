@@ -21,7 +21,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
     getLabel(): string {
       // first try to read an sh:name
-      let label = this._readAsLiteralWithLang(this.uri, SH.NAME, this.lang);
+      let label = this._readAsLiteralWithLang(factory.namedNode(this.uri), SH.NAME, this.lang);
       // no sh:name present, read the local part of the URI
       if(!label) {
         label = SHACLSpecificationProvider.getLocalName(this.uri) as string;
@@ -271,33 +271,33 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
 
     getBeginDateProperty(): string | null {
-      return this._readAsSingleResource(this.uri, Config.BEGIN_DATE_PROPERTY);
+      return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.BEGIN_DATE_PROPERTY));
     }
   
     getEndDateProperty(): string | null {
-      return this._readAsSingleResource(this.uri, Config.END_DATE_PROPERTY);
+      return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.END_DATE_PROPERTY));
     }
   
     getExactDateProperty(): string | null {
-      return this._readAsSingleResource(this.uri, Config.EXACT_DATE_PROPERTY);
+      return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.EXACT_DATE_PROPERTY));
     }
   
     isEnablingNegation(): boolean {
       return !(
-        this._readAsSingleLiteral(this.uri, Config.ENABLE_NEGATION) == "false"
+        this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_NEGATION)) == "false"
       );
     }
   
     isEnablingOptional(): boolean {
       return !(
-        this._readAsSingleLiteral(this.uri, Config.ENABLE_OPTIONAL) == "false"
+        this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_OPTIONAL)) == "false"
       );
     }
   
     getServiceEndpoint(): string | null {
-      const service = this._readAsSingleResource(this.uri,Config.SPARQL_SERVICE);
+      const service = this._readAsSingleResource(factory.namedNode(this.uri),factory.namedNode(Config.SPARQL_SERVICE));
       if(service) {
-        const endpoint = this._readAsSingleResource(service,Config.ENDPOINT);
+        const endpoint = this._readAsSingleResource(service,factory.namedNode(Config.ENDPOINT));
         if (endpoint) {
           return endpoint;
         } 
@@ -306,7 +306,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
   
     isLogicallyExecutedAfter(): boolean {
-      var executedAfter = this._readAsSingleLiteral(this.uri, Config.SPARNATURAL_CONFIG_CORE+"executedAfter");
+      var executedAfter = this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"));
       return executedAfter;
     }
 }

@@ -28,23 +28,23 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
     }
 
     getTooltip(): string {
-        return this._readAsLiteralWithLang(this.uri, factory.namedNode(Config.TOOLTIP), this.lang);
+        return this._readAsLiteralWithLang(factory.namedNode(this.uri), factory.namedNode(Config.TOOLTIP), this.lang);
     }
 
     getColor(): string | null {
-      return this._readAsSingleLiteral(this.uri, VOLIPI.COLOR);
+      return this._readAsSingleLiteral(factory.namedNode(this.uri), VOLIPI.COLOR);
     }
 
     /**
      * Reads config:order of an entity and returns it, or null if not set
      **/
     getOrder() {
-      return this._readAsSingleLiteral(this.uri, Config.ORDER);
+      return this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ORDER));
     }
 
     getIcon(): string {
         var faIcon = this._readAsLiteral(
-            this.uri,
+          factory.namedNode(this.uri),
             factory.namedNode(Config.FA_ICON)
           );
           if (faIcon.length > 0) {
@@ -55,7 +55,7 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
               " fa-fw'></i></span>"
             );
           } else {
-            var icons = this._readAsLiteral(this.uri, factory.namedNode(Config.ICON));
+            var icons = this._readAsLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ICON));
             if (icons.length > 0) {
               return icons[0];
             } else {
@@ -67,7 +67,7 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
 
     getHighlightedIcon() {
       var icons = this._readAsLiteral(
-        this.uri,
+        factory.namedNode(this.uri),
         factory.namedNode(Config.HIGHLIGHTED_ICON)
       );
       if (icons.length > 0) {
@@ -79,6 +79,6 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
      * Reads rdfs:label of an entity and returns it, or null if not set
      **/
     #_readLabel(uri: any, lang:string) {
-        return this._readAsLiteralWithLang(uri, RDFS.LABEL, lang);
+        return this._readAsLiteralWithLang(factory.namedNode(uri), RDFS.LABEL, lang);
     }
 }

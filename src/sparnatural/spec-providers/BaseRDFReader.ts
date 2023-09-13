@@ -3,7 +3,7 @@ import rdfParser from "rdf-parse";
 var Readable = require('stream').Readable
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from 'rdf-stores';
-import { NamedNode, Quad, Stream } from "@rdfjs/types";
+import { NamedNode, Quad, Stream, Term } from "@rdfjs/types";
 
 const factory = new DataFactory();
 
@@ -168,7 +168,7 @@ export class BaseRDFReader {
         // read predicate datasource
         const datasourceQuads = this.store.getQuads(
           factory.namedNode(propertyOrClassId),
-          datasourceAnnotationProperty,
+          factory.namedNode(datasourceAnnotationProperty),
           null,
           null
         );
@@ -203,7 +203,7 @@ export class BaseRDFReader {
    * }
    **/
 
-  #_buildDatasource(datasourceUri: any) {
+  #_buildDatasource(datasourceUri: string) {
     var datasource: {
       queryString?: string;
       queryTemplate?: any;
@@ -218,17 +218,18 @@ export class BaseRDFReader {
 
     // Alternative 1 : read optional queryString
     var queryStrings = this._readAsLiteral(
-      datasourceUri,
-      Datasources.QUERY_STRING
+      factory.namedNode(datasourceUri),
+      factory.namedNode(Datasources.QUERY_STRING)
     );
+
     if (queryStrings.length > 0) {
       datasource.queryString = queryStrings[0];
     }
 
     // Alternative 2 : query template + label path
     var queryTemplates = this._readAsResource(
-      datasourceUri,
-      Datasources.QUERY_TEMPLATE
+      factory.namedNode(datasourceUri),
+      factory.namedNode(Datasources.QUERY_TEMPLATE)
     );
     if (queryTemplates.length > 0) {
       var theQueryTemplate = queryTemplates[0];
@@ -240,8 +241,8 @@ export class BaseRDFReader {
       } else {
         // 2.2 Unknown, read the query string on the query template
         var queryStrings = this._readAsResource(
-          theQueryTemplate,
-          Datasources.QUERY_STRING
+          factory.namedNode(theQueryTemplate),
+          factory.namedNode(Datasources.QUERY_STRING)
         );
         if (queryStrings.length > 0) {
           var queryString = queryStrings[0];
@@ -254,8 +255,8 @@ export class BaseRDFReader {
 
       // labelPath
       var labelPaths = this._readAsLiteral(
-        datasourceUri,
-        Datasources.LABEL_PATH
+        factory.namedNode(datasourceUri),
+        factory.namedNode(Datasources.LABEL_PATH)
       );
       if (labelPaths.length > 0) {
         datasource.labelPath = labelPaths[0];
@@ -263,8 +264,8 @@ export class BaseRDFReader {
 
       // labelProperty
       var labelProperties = this._readAsResource(
-        datasourceUri,
-        Datasources.LABEL_PROPERTY
+        factory.namedNode(datasourceUri),
+        factory.namedNode(Datasources.LABEL_PROPERTY)
       );
       if (labelProperties.length > 0) {
         datasource.labelProperty = labelProperties[0];
@@ -272,8 +273,8 @@ export class BaseRDFReader {
 
       // childrenPath
       var childrenPaths = this._readAsLiteral(
-        datasourceUri,
-        Datasources.CHILDREN_PATH
+        factory.namedNode(datasourceUri),
+        factory.namedNode(Datasources.CHILDREN_PATH)
       );
       if (childrenPaths.length > 0) {
         datasource.childrenPath = childrenPaths[0];
@@ -281,8 +282,8 @@ export class BaseRDFReader {
 
       // childrenProperty
       var childrenProperties = this._readAsResource(
-        datasourceUri,
-        Datasources.CHILDREN_PROPERTY
+        factory.namedNode(datasourceUri),
+        factory.namedNode(Datasources.CHILDREN_PROPERTY)
       );
       if (childrenProperties.length > 0) {
         datasource.childrenProperty = childrenProperties[0];
@@ -291,15 +292,15 @@ export class BaseRDFReader {
 
     // read optional sparqlEndpointUrl
     var sparqlEndpointUrls = this._readAsLiteral(
-      datasourceUri,
-      Datasources.SPARQL_ENDPOINT_URL
+      factory.namedNode(datasourceUri),
+      factory.namedNode(Datasources.SPARQL_ENDPOINT_URL)
     );
     if (sparqlEndpointUrls.length > 0) {
       datasource.sparqlEndpointUrl = sparqlEndpointUrls[0];
     }
 
     // read optional noSort
-    var noSorts = this._readAsLiteral(datasourceUri, Datasources.NO_SORT);
+    var noSorts = this._readAsLiteral(factory.namedNode(datasourceUri), factory.namedNode(Datasources.NO_SORT));
     if (noSorts.length > 0) {
       datasource.noSort = noSorts[0] === "true";
     }
@@ -311,16 +312,16 @@ export class BaseRDFReader {
   /**
    * Reads the given property on an entity, and return values as an array
    **/
-  _readAsResource(uri: any, property: any) {
+  _readAsResource(uri: Term, property: Term) {
     return this.store
-      .getQuads(factory.namedNode(uri), property, null, null)
+      .getQuads(uri, property, null, null)
       .map((quad: { object: { value: any } }) => quad.object.value);
   }
 
   /**
    * Reads the given property on an entity, and returns the first value found, or null if not found
    **/
-  _readAsSingleResource(uri: any, property: any) {
+  _readAsSingleResource(uri: Term, property: Term) {
     var values = this._readAsResource(uri, property);
 
     if (values.length > 0) {
@@ -330,13 +331,13 @@ export class BaseRDFReader {
     return null;
   }
 
-  _readAsLiteral(uri: any, property: any) {
+  _readAsLiteral(uri: Term, property: Term) {
     return this.store
-      .getQuads(factory.namedNode(uri), property, null, null)
+      .getQuads(uri, property, null, null)
       .map((quad: { object: { value: any } }) => quad.object.value);
   }
 
-  _readAsSingleLiteral(uri: any, property: any) {
+  _readAsSingleLiteral(uri: Term, property: Term) {
     var values = this._readAsLiteral(uri, property);
     if (values.length == 0) {
       return undefined;
@@ -346,19 +347,19 @@ export class BaseRDFReader {
   }
 
   _readAsLiteralWithLang(
-    uri: any,
-    property: any,
-    lang: any,
+    uri: Term,
+    property: Term,
+    lang: string,
     defaultToNoLang = true
   ) {
     var values = this.store
-      .getQuads(factory.namedNode(uri), property, null, null)
+      .getQuads(uri, property, null, null)
       .filter((quad: any) => quad.object.language == lang)
       .map((quad: { object: { value: any } }) => quad.object.value);
 
     if (values.length == 0 && defaultToNoLang) {
       values = this.store
-        .getQuads(factory.namedNode(uri), property, null, null)
+        .getQuads(uri, property, null, null)
         .filter((quad: any) => quad.object.language == "")
         .map((quad: { object: { value: any } }) => quad.object.value);
     }
@@ -366,17 +367,17 @@ export class BaseRDFReader {
     return values.join(", ");
   }
 
-  _readAsRdfNode(rdfNode: any, property: any) {
+  _readAsRdfNode(rdfNode: Term, property: Term) {
     return this.store
       .getQuads(rdfNode, property, null, null)
       .map((quad: { object: any }) => quad.object);
   }
 
-  _hasProperty(rdfNode: any, property: any) {
+  _hasProperty(rdfNode: Term, property: Term) {
     return this._hasTriple(rdfNode, property, null);
   }
 
-  _hasTriple(rdfNode: any, property: any, value:any) {
+  _hasTriple(rdfNode: Term, property: Term, value:Term|null) {
     return (
       this.store.getQuads(
         rdfNode,
@@ -390,7 +391,7 @@ export class BaseRDFReader {
    /**
    * Reads rdf:type(s) of an entity, and return them as an array
    **/
-    _readRdfTypes(uri: any) {
+    _readRdfTypes(uri: Term) {
         return this._readAsResource(uri, RDF.TYPE);
     }
 

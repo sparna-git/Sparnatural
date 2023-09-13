@@ -102,7 +102,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     }
 
     getDefaultLabelProperty(): string | null {
-        return this._readAsSingleResource(this.uri, Config.DEFAULT_LABEL_PROPERTY);
+        return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.DEFAULT_LABEL_PROPERTY));
     }
 
     #_isSparnaturalClass(classUri: string) {
