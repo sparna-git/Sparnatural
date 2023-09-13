@@ -25,7 +25,8 @@ export class UrlFetcher {
 
     fetchUrl(
         url:string,
-        callback: (data: {}) => void
+        callback: (data: {}) => void,
+        errorCallback?:(error: any) => void
     ): void {
     
         var headers = new Headers();
@@ -45,13 +46,24 @@ export class UrlFetcher {
         };
         
         let temp = new LocalCacheData();
-        let fetchpromise = temp.fetch(url, init, this.localCacheDataTtl);
-
-        fetchpromise
-        .then((response: { json: () => any }) => response.json())
-        .then((data: any) => {
-            callback(data);
-        });
+        try {
+            let fetchpromise:Promise<Response> = temp.fetch(url, init, this.localCacheDataTtl);        
+            fetchpromise
+            .then((response: Response) => {
+                if (!response.ok) {
+                    if(errorCallback) errorCallback(response);
+                }
+                return response.json();
+            })
+            .catch((error) => {
+                if(errorCallback) errorCallback("There was a problem calling "+url);
+            })
+            .then((data: any) => {
+                if(data) callback(data);
+            });
+        } catch (error) {
+            if(errorCallback) errorCallback("There was a problem calling "+url);
+        }
     }
 
 }
@@ -87,13 +99,15 @@ export class SparqlFetcher {
 
     executeSparql(
         sparql:string,
-        callback: (data: any) => void
+        callback: (data: any) => void,
+        errorCallback?:(error: any) => void
     ) {
         let url = this.buildUrl(sparql);
 
         this.urlFetcher.fetchUrl(
             url,
-            callback
+            callback,
+            errorCallback
         );
     }
 }

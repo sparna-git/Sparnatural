@@ -3,7 +3,7 @@ import LocalDataStorage from "./LocalDataStorage";
 class LocalCacheData {
   constructor() {}
 
-  fetch(uri: any, init: any, ttl: any) {
+  fetch(uri: any, parameters: any, ttl: any):Promise<Response> {
     var datastorage = new LocalDataStorage().getInstance();
     //var lastLoading = localStorage[uri] ;
     var now = Date.now();
@@ -16,11 +16,11 @@ class LocalCacheData {
     if (lastLoading < now - ttl) {
       // ttl exceeded, reload
       datastorage.set(uri, now);
-      init.cache = "reload";
-      return fetch(uri, init);
+      parameters.cache = "reload";
+      return fetch(uri, parameters);
     } else {
-      init.cache = "force-cache";
-      return fetch(uri, init);
+      parameters.cache = "force-cache";
+      return fetch(uri, parameters);
     }
   }
 }

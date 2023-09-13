@@ -17,7 +17,8 @@ export interface ListDataProviderIfc {
         lang:string,
         defaultLang:string,
         typePredicate:string,
-        callback:(items:{term:RDFTerm;label:string}[]) => void
+        callback:(items:{term:RDFTerm;label:string}[]) => void,
+        errorCallback?:(payload:any) => void
     ):void
 
 }
@@ -49,7 +50,8 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
         lang:string,
         defaultLang:string,
         typePredicate:string,
-        callback:(items:{term:RDFTerm;label:string}[]) => void
+        callback:(items:{term:RDFTerm;label:string}[]) => void,
+        errorCallback?:(payload:any) => void
     ):void {
         // 1. create the SPARQL
         let sparql = this.queryBuilder.buildSparqlQuery(
@@ -84,9 +86,10 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
             }
 
             // 4. call the callback
-            callback(result);
-            
-        });
+            callback(result);            
+        },
+        errorCallback
+        );
 
     }
 
@@ -155,7 +158,8 @@ export class SparqlLiteralListDataProvider implements LiteralListDataProviderIfc
         lang:string,
         defaultLang:string,
         typePredicate:string,
-        callback:(values:{literal:string}[]) => void
+        callback:(values:{literal:string}[]) => void,
+        errorCallback?:(payload:any) => void
     ):void {
         // 1. create the SPARQL
         let sparql = this.queryBuilder.buildSparqlQuery(
@@ -182,7 +186,9 @@ export class SparqlLiteralListDataProvider implements LiteralListDataProviderIfc
             // 4. call the callback
             callback(result);
             
-        });
+        },
+        errorCallback
+        );
 
     }
 

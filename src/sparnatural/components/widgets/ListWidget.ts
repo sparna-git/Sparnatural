@@ -67,12 +67,18 @@ export class ListWidget extends AbstractWidget {
 
   render() {
     super.render();
-    this.selectHtml = $(`<select style="width:100%; min-width:200px;"></select>`);
+    this.selectHtml = $(`<select style="width:100%; min-width:200px;"></select>`);    
+    this.html.append(this.selectHtml);
+
     let noItemsHtml =
       $(`<div class="no-items" style="display: none; font-style:italic;">
       ${getSettings().langSearch.ListWidgetNoItem}
     </div>`);
-    this.html.append(this.selectHtml);
+
+    let errorHtml =
+      $(`<div class="no-items" style="display: none; font-style:italic;">
+      ${getSettings().langSearch.ListWidgetNoItem}
+    </div>`);
 
     let callback = (items:{term:RDFTerm;label:string}[]) => {
 
@@ -123,6 +129,11 @@ export class ListWidget extends AbstractWidget {
       this.toggleSpinner('')
     }
 
+    // TODO : this is not working for now
+    let errorCallback = (payload:any) => {
+      this.html.append(errorHtml);
+    }
+
     // toggle spinner before loading
     this.toggleSpinner(this.langSearch.AutocompleteSpinner_Searching);
 
@@ -133,7 +144,8 @@ export class ListWidget extends AbstractWidget {
       this.settings.language,
       this.settings.defaultLanguage,
       this.settings.typePredicate,
-      callback
+      callback,
+      errorCallback
     );
 
     return this;
