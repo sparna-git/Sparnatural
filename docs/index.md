@@ -8,15 +8,19 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 
 ## 1. Features
 
-- [Reference documentation of Sparnatural widgets](widgets.md) : all the possible ways to select a criteria value in Sparnatural
+- [Reference documentation of Sparnatural widgets](widgets.md) : all the possible ways to select a criteria value in Sparnatural. Read this to learn some of the features of Sparnatural.
 
 
 ## 2. Getting started
 
-- **[Hello Sparnatural](hello-sparnatural/Hello-Sparnatural.md)** : start here to integrate Sparnatural in your own website.
+- **[Hello Sparnatural](hello-sparnatural/Hello-Sparnatural.md)** : start here to integrate Sparnatural in your own website, from the tutorial page.
 
 
 ## 3. Configuring Sparnatural
+
+**in a Spreadsheet**
+
+- **[How-to configure](how-to-configure/How-to-configure-Sparnatural.md)** : a detailled documentation for configuring Sparnatural in a spreadsheet (that is converted into a OWL configuration file). Start here to learn the different configuration options of Sparnatural.
 
 **in OWL**
 
