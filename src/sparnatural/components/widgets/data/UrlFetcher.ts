@@ -111,3 +111,88 @@ export class SparqlFetcher {
         );
     }
 }
+
+
+export class MultipleEndpointSparqlFetcher {
+
+    urlFetcher:UrlFetcher;
+    sparqlEndpointUrls: string[];
+  
+    constructor(
+        urlFetcher:UrlFetcher,
+        sparqlEndpointUrls: string[]
+    ) {
+        this.urlFetcher = urlFetcher,
+        this.sparqlEndpointUrls = sparqlEndpointUrls;
+    }
+
+    #buildUrl(endpoint:string, sparql:string):string {
+        var separator = endpoint.indexOf("?") > 0 ? "&" : "?";
+
+        var url =
+            endpoint +
+            separator +
+            "query=" +
+            encodeURIComponent(sparql) +
+            "&format=json";
+
+        return url;
+    }
+
+    executeSparql(
+        sparql:string,
+        callback: (data: any) => void,
+        errorCallback?:(error: any) => void
+    ) {
+
+        const promises:Promise<{}>[] = [];
+        for(const e in this.sparqlEndpointUrls) {
+            let url = this.#buildUrl(e,sparql);
+
+            // build array of Promises
+            promises[promises.length] = new Promise((resolve, reject) => {
+                this.urlFetcher.fetchUrl(
+                    url,
+                    (data: any) =>{resolve({ endpoint: e, sparqlResult: data })},
+                    (error: any)=>{reject(error)}
+                )
+            });            
+        }
+
+        // then wait for all Promises
+        let finalResult:any = {};
+        Promise.all(promises).then((values:any) => {
+          // copy the same head as first result, with an extra "endpoint" column
+          finalResult.head = values[0].sparqlResult.head;
+          finalResult.head.vars.push("endpoint");
+
+          // prepare the "results" section
+          finalResult.results = {
+            // same distinct as first result
+            distinct: values[0].sparqlResult.results.distinct,
+            // never ordered
+            ordered: false,
+            // prepare bindings section
+            bindings: []
+          };
+
+          // then for each SPARQL results of structure {endpoint : xx, sparqlJson: {...}}
+          for (const v of values) {            
+            // add an extra "endpoint" column with the endpoint at the end of each binding
+            finalResult.results.bindings.push(
+              // remap each binding to add the endpoint column at the end
+              // then unpack the array
+              ...v.sparqlJson.results.bindings.map(b => {
+                b.endpoint = {type: "uri", value:v.endpoint};
+                return b;
+              })
+            );
+          }
+        });
+
+        // and then call the callback
+        callback(finalResult);
+
+        // TODO : handle errors
+    }
+}
