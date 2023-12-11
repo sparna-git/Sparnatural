@@ -68,10 +68,18 @@ export class UrlFetcher {
 
 }
 
+export interface SparqlFetcherIfc {
+    executeSparql(
+        sparql:string,
+        callback: (data: any) => void,
+        errorCallback?:(error: any) => void
+    ):void;
+}
+
 /**
  * Executes a SPARQL query against the triplestore
  */
-export class SparqlFetcher {
+export class SparqlFetcher implements SparqlFetcherIfc {
 
     urlFetcher:UrlFetcher;
     sparqlEndpointUrl: any;
@@ -101,7 +109,7 @@ export class SparqlFetcher {
         sparql:string,
         callback: (data: any) => void,
         errorCallback?:(error: any) => void
-    ) {
+    ):void {
         let url = this.buildUrl(sparql);
 
         this.urlFetcher.fetchUrl(
@@ -113,10 +121,13 @@ export class SparqlFetcher {
 }
 
 
-export class MultipleEndpointSparqlFetcher {
+export class MultipleEndpointSparqlFetcher implements SparqlFetcherIfc {
 
     urlFetcher:UrlFetcher;
     sparqlEndpointUrls: string[];
+    addExtraEndpointColumn:boolean;
+    // name of the extra column to add in the result set to express the endpoint
+    extraColumnName = "group";
   
     constructor(
         urlFetcher:UrlFetcher,
@@ -124,47 +135,36 @@ export class MultipleEndpointSparqlFetcher {
     ) {
         this.urlFetcher = urlFetcher,
         this.sparqlEndpointUrls = sparqlEndpointUrls;
-    }
-
-    #buildUrl(endpoint:string, sparql:string):string {
-        var separator = endpoint.indexOf("?") > 0 ? "&" : "?";
-
-        var url =
-            endpoint +
-            separator +
-            "query=" +
-            encodeURIComponent(sparql) +
-            "&format=json";
-
-        return url;
+        this.addExtraEndpointColumn = true;
     }
 
     executeSparql(
         sparql:string,
         callback: (data: any) => void,
         errorCallback?:(error: any) => void
-    ) {
+    ):void {
 
         const promises:Promise<{}>[] = [];
-        for(const e in this.sparqlEndpointUrls) {
-            let url = this.#buildUrl(e,sparql);
+        for(const i in this.sparqlEndpointUrls) {
+            console.log("Calling "+this.sparqlEndpointUrls[i])
+            let fetcher = new SparqlFetcher(this.urlFetcher, this.sparqlEndpointUrls[i]);
 
-            // build array of Promises
             promises[promises.length] = new Promise((resolve, reject) => {
-                this.urlFetcher.fetchUrl(
-                    url,
-                    (data: any) =>{resolve({ endpoint: e, sparqlResult: data })},
+                fetcher.executeSparql(
+                    sparql,
+                    (data: any) =>{resolve({ endpoint: this.sparqlEndpointUrls[i], sparqlResult: data })},
                     (error: any)=>{reject(error)}
                 )
-            });            
+            });         
         }
 
-        // then wait for all Promises
-        let finalResult:any = {};
-        Promise.all(promises).then((values:any) => {
-          // copy the same head as first result, with an extra "endpoint" column
+        // then wait for all Promises        
+        Promise.all(promises).then((values:any[]) => {
+          let finalResult:any = {};
+          
+            // copy the same head as first result, with an extra "endpoint" column
           finalResult.head = values[0].sparqlResult.head;
-          finalResult.head.vars.push("endpoint");
+          finalResult.head.vars.push(this.extraColumnName);
 
           // prepare the "results" section
           finalResult.results = {
@@ -182,17 +182,18 @@ export class MultipleEndpointSparqlFetcher {
             finalResult.results.bindings.push(
               // remap each binding to add the endpoint column at the end
               // then unpack the array
-              ...v.sparqlJson.results.bindings.map(b => {
-                b.endpoint = {type: "uri", value:v.endpoint};
+              ...v.sparqlResult.results.bindings.map((b: { [x: string]: { type: string; value: any; }; }) => {
+                if(this.addExtraEndpointColumn) {
+                    b[this.extraColumnName] = {type: "uri", value:v.endpoint};
+                }
                 return b;
               })
             );
           }
-        });
-
-        // and then call the callback
-        callback(finalResult);
-
-        // TODO : handle errors
+          
+          // TODO : handle errors
+          // and then call the callback
+          callback(finalResult);
+        });        
     }
 }

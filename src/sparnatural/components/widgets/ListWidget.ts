@@ -80,7 +80,7 @@ export class ListWidget extends AbstractWidget {
       ${getSettings().langSearch.ListWidgetNoItem}
     </div>`);
 
-    let callback = (items:{term:RDFTerm;label:string}[]) => {
+    let callback = (items:{term:RDFTerm;label:string;group?:string}[]) => {
 
       if (items.length > 0) {
         if (this.sort) {
@@ -94,14 +94,29 @@ export class ListWidget extends AbstractWidget {
           });
         }
   
-        $.each(items, (key, item) => {
-          this.selectHtml.append(
-            $("<option value='" + JSON.stringify(item.term) + "'>" + item.label + "</option>")
-          );
-        });
+        // find distinct values of the 'group' binding
+        const groups = [...new Set(items.map(item => item.group))];
 
-        
-        ;
+        if(groups.length == 1 && groups[0] == undefined) {
+          // no groups were defined at all
+          items.forEach(item => {
+            this.selectHtml.append(
+              $("<option value='" + JSON.stringify(item.term) + "'>" + item.label + "</option>")
+            );
+          });
+        } else {
+          // we found some group, organise the list content with optgroup
+          groups.forEach(group => {
+            let html = "<optgroup label=\""+group+"\">";
+            items.filter(item => (item.group == group)).forEach(item => {
+              html += "<option value='" + JSON.stringify(item.term) + "'>" + item.label + "</option>";
+            });
+            html += "</optgroup>"
+            this.selectHtml.append($(html));
+          })
+        }
+
+
         this.selectHtml = this.selectHtml.select2({
           // use the minimumResultsForSearch parameter to avoid using a search box when only a few items are present
           minimumResultsForSearch: 20,
