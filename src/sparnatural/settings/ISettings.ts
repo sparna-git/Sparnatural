@@ -15,6 +15,7 @@ interface ISettings {
   maxOr: number;
   sparqlPrefixes?: { [key: string]: string };
   defaultEndpoint?: string;
+  catalog?: string;
   localCacheDataTtl?: number;
   // TODO : this should not be exposed.
   // Only the language parametre is exposed, but the actual labels content should not

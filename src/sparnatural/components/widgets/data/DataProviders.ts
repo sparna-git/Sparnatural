@@ -1,7 +1,7 @@
 import { getSettings } from "../../../settings/defaultSettings";
 import { RDFTerm } from "../AbstractWidget";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc } from "./SparqlBuilders";
-import { MultipleEndpointSparqlFetcher, SparqlFetcher, SparqlFetcherIfc, UrlFetcher } from "./UrlFetcher";
+import { MultipleEndpointSparqlFetcher, SparqlFetcher, SparqlFetcherFactory, SparqlFetcherIfc, UrlFetcher } from "./UrlFetcher";
 
 
 /**
@@ -33,22 +33,11 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
     sparqlFetcher:SparqlFetcherIfc;
 
     constructor(
-        sparqlEndpointUrl: any,
+        sparqlFetcherFactory:SparqlFetcherFactory,
         queryBuilder: ListSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
-        if((sparqlEndpointUrl as string).lastIndexOf(' ') > 0) {
-            this.sparqlFetcher = new MultipleEndpointSparqlFetcher(
-                UrlFetcher.build(getSettings()),
-                (sparqlEndpointUrl as string).split(' ')
-            );
-        } else {
-            this.sparqlFetcher = new SparqlFetcher(
-                UrlFetcher.build(getSettings()),
-                sparqlEndpointUrl
-            );
-        }
-        
+        this.sparqlFetcher = sparqlFetcherFactory.buildSparqlFetcher();        
     }
 
     getListContent(

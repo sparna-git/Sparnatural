@@ -1,4 +1,5 @@
 import LocalCacheData from "../../../datastorage/LocalCacheData";
+import { Catalog } from "../../../settings/Catalog";
 import ISettings from "../../../settings/ISettings";
 
 
@@ -76,6 +77,33 @@ export interface SparqlFetcherIfc {
     ):void;
 }
 
+export class SparqlFetcherFactory {
+
+    protected endpointUrl:string;
+    protected catalog:Catalog;
+    protected settings:ISettings;
+
+    constructor(endpointUrl:string, catalog:Catalog, settings:ISettings) {
+        this.endpointUrl = endpointUrl;
+        this.catalog = catalog;
+        this.settings = settings;
+    }
+
+    buildSparqlFetcher():SparqlFetcherIfc {   
+        if(this.catalog) {
+            return new MultipleEndpointSparqlFetcher(
+                UrlFetcher.build(this.settings),
+                this.catalog,
+                this.settings.language
+            );
+        } else {
+            console.log("here!! "+this.endpointUrl)
+            return new SparqlFetcher(UrlFetcher.build(this.settings), this.endpointUrl);
+        }
+    }
+
+}
+
 /**
  * Executes a SPARQL query against the triplestore
  */
@@ -124,18 +152,21 @@ export class SparqlFetcher implements SparqlFetcherIfc {
 export class MultipleEndpointSparqlFetcher implements SparqlFetcherIfc {
 
     urlFetcher:UrlFetcher;
-    sparqlEndpointUrls: string[];
+    catalog: Catalog;
     addExtraEndpointColumn:boolean;
     // name of the extra column to add in the result set to express the endpoint
     extraColumnName = "group";
+    lang:string;
   
     constructor(
         urlFetcher:UrlFetcher,
-        sparqlEndpointUrls: string[]
+        catalog: Catalog,
+        lang:string
     ) {
         this.urlFetcher = urlFetcher,
-        this.sparqlEndpointUrls = sparqlEndpointUrls;
+        this.catalog = catalog;
         this.addExtraEndpointColumn = true;
+        this.lang = lang;
     }
 
     executeSparql(
@@ -145,14 +176,14 @@ export class MultipleEndpointSparqlFetcher implements SparqlFetcherIfc {
     ):void {
 
         const promises:Promise<{}>[] = [];
-        for(const i in this.sparqlEndpointUrls) {
-            console.log("Calling "+this.sparqlEndpointUrls[i])
-            let fetcher = new SparqlFetcher(this.urlFetcher, this.sparqlEndpointUrls[i]);
+        for(const i in this.catalog.getServices()) {
+            console.log("Calling "+this.catalog.getServices()[i].getEndpointURL())
+            let fetcher = new SparqlFetcher(this.urlFetcher, this.catalog.getServices()[i].getEndpointURL());
 
             promises[promises.length] = new Promise((resolve, reject) => {
                 fetcher.executeSparql(
                     sparql,
-                    (data: any) =>{resolve({ endpoint: this.sparqlEndpointUrls[i], sparqlResult: data })},
+                    (data: any) =>{resolve({ endpoint: this.catalog.getServices()[i], sparqlResult: data })},
                     (error: any)=>{reject(error)}
                 )
             });         
@@ -184,7 +215,7 @@ export class MultipleEndpointSparqlFetcher implements SparqlFetcherIfc {
               // then unpack the array
               ...v.sparqlResult.results.bindings.map((b: { [x: string]: { type: string; value: any; }; }) => {
                 if(this.addExtraEndpointColumn) {
-                    b[this.extraColumnName] = {type: "uri", value:v.endpoint};
+                    b[this.extraColumnName] = {type: "literal", value:v.endpoint.getTitle(this.lang)};
                 }
                 return b;
               })
