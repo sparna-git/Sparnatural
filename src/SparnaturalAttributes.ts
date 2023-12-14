@@ -21,10 +21,10 @@ export class SparnaturalAttributes {
       throw Error('No config provided!');
     }
     this.defaultEndpoint = this.#read(element, "endpoint");
-    this.catalog = this.#read(element, "catalog");
-    if(!this.defaultEndpoint && !this.catalog) {
-      throw Error('No defaultEndpoint or catalog provided!');
+    if(!this.defaultEndpoint) {
+      throw Error('No endpoint provided!');
     }
+    this.catalog = this.#read(element, "catalog");
     this.language = this.#read(element, "lang");
     this.defaultLanguage = this.#read(element, "defaultLang");
 

@@ -79,26 +79,28 @@ export interface SparqlFetcherIfc {
 
 export class SparqlFetcherFactory {
 
-    protected endpointUrl:string;
+    protected endpoints:string;
     protected catalog:Catalog;
     protected settings:ISettings;
 
-    constructor(endpointUrl:string, catalog:Catalog, settings:ISettings) {
-        this.endpointUrl = endpointUrl;
+    constructor(endpoints:string, catalog:Catalog, settings:ISettings) {
+        this.endpoints = endpoints;
         this.catalog = catalog;
         this.settings = settings;
     }
 
     buildSparqlFetcher():SparqlFetcherIfc {   
-        if(this.catalog) {
+        if(this.endpoints.indexOf(' ') > 0) {
+            // extract selected endpoints from full catalog
+            let endpoints = this.endpoints.split(' ');
+            let subCatalog = this.catalog.extractSubCatalog(endpoints);
             return new MultipleEndpointSparqlFetcher(
                 UrlFetcher.build(this.settings),
-                this.catalog,
+                subCatalog,
                 this.settings.language
             );
         } else {
-            console.log("here!! "+this.endpointUrl)
-            return new SparqlFetcher(UrlFetcher.build(this.settings), this.endpointUrl);
+            return new SparqlFetcher(UrlFetcher.build(this.settings), this.endpoints);
         }
     }
 
