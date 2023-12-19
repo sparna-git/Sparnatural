@@ -182,7 +182,7 @@ export class MultipleEndpointSparqlFetcher {
             finalResult.results.bindings.push(
               // remap each binding to add the endpoint column at the end
               // then unpack the array
-              ...v.sparqlJson.results.bindings.map(b => {
+              ...v.sparqlJson.results.bindings.map((b: { endpoint: { type: string; value: any; }; }) => {
                 b.endpoint = {type: "uri", value:v.endpoint};
                 return b;
               })

@@ -7,8 +7,7 @@ import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./Abstrac
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { AutocompleteDataProviderIfc } from "./data/DataProviders";
 import { getSettings } from "../../settings/defaultSettings";
-
-require("easy-autocomplete");
+import Awesomplete from 'awesomplete';
 
 const factory = new DataFactory();
 
@@ -56,99 +55,88 @@ export class AutoCompleteWidget extends AbstractWidget {
 
   render() {
     super.render();
-    let inputHtml = $(`<input class="autocompleteinput"/>`);
+
+    let inputHtml = $(`<input class="awesomplete"/>`);
     this.html.append(inputHtml);
 
-    let options = {
-   
-      // ajaxSettings: {crossDomain: true, type: 'GET'} ,
-      url: (phrase: any) => {
-        return this.dataProvider.autocompleteUrl(
+    let errorHtml =
+      $(`<div class="no-items" style="display: none; font-style:italic;">
+      ${getSettings().langSearch.ListWidgetNoItem}
+    </div>`);
+
+    const queryInput:HTMLElement = inputHtml[0];
+
+    // $( "#foo" )[ 0 ] is pulling the DOM element from the JQuery object
+    // see https://learn.jquery.com/using-jquery-core/faq/how-do-i-pull-a-native-dom-element-from-a-jquery-object/
+    const awesomplete = new Awesomplete(queryInput, {
+      filter: () => { // We will provide a list that is already filtered ...
+        return true;
+      },
+      sort: false,    // ... and sorted.
+      minChars: 3,
+      maxItems: 10,
+      list: []
+    });
+
+
+    // the callback called when proposals have been fetched, to populate the suggestion list
+    let callback = (items:{term:RDFTerm;label:string}[]) => {
+      
+      let list = new Array<{label:String, value:String}>();
+      $.each(items, (key, item) => {
+        // Awesomplete list will contain the label as 'label', and the RDFTerm JSON serialization as 'value'
+        list.push({
+          label: item.label,
+          value: JSON.stringify(item.term)
+        });
+      });
+
+      // build final list
+      awesomplete.list = list;
+      awesomplete.evaluate();
+    }
+
+    // TODO : this is not working for now
+    let errorCallback = (payload:any) => {
+      this.html.append(errorHtml);
+    }
+
+    // when user selects a value from the autocompletion list...
+    queryInput.addEventListener("awesomplete-selectcomplete", (event:Event) => {
+      // fetch the autocomplete event payload, which is the JSON serialization of the RDFTerm
+      let awesompleteEvent:{label:string, value:string} = (event as unknown as {text:{label:string, value:string}}).text;
+
+      let autocompleteValue= new AutoCompleteWidgetValue({
+          label: awesompleteEvent.label,
+          // parse back the RDFTerm as an object
+          rdfTerm: (JSON.parse(awesompleteEvent.value) as RDFTerm),
+      });
+
+      // set the value on the criteria
+      inputHtml.val(autocompleteValue.value.label);
+      this.renderWidgetVal(autocompleteValue);
+    });
+
+    // add the behavior on the input HTML element to fetch the autocompletion value
+    queryInput.addEventListener("input", (event:Event) => {
+      const phrase = (event.target as HTMLInputElement)?.value;
+      // Process inputText as you want, e.g. make an API request.
+
+      if(phrase.length >= 3) {
+        this.dataProvider.getAutocompleteSuggestions(
           this.startClassVal.type,
           this.objectPropVal.type,
           this.endClassVal.type,
           phrase,
           this.settings.language,
           this.settings.defaultLanguage,
-          this.settings.typePredicate
+          this.settings.typePredicate,
+          callback,
+          errorCallback
         );
-      },
-   
-      listLocation: (data: any) => {
-        return this.dataProvider.listLocation(data);
-      },
-   
-      getValue: (element: any) => {
-        return this.dataProvider.elementLabel(element);
-      },
+      }
+    });
 
-      adjustWidth: false,
-
-      ajaxSettings: {
-        crossDomain: true,
-        timeout: 7000,
-        dataType: "json",
-        method: "GET",
-        headers: getSettings().headers,
-        data: {
-          dataType: "json",
-        },
-
-        beforeSend: ( xhr: { abort: () => void; }, obj: { data: boolean; } ) => {
-          if (obj.data == false) {
-            xhr.abort();
-            this.spinner.renderMessage(this.langSearch.AutocompleteSpinner_3Chars)
-          } else {          
-            this.toggleSpinner(this.langSearch.AutocompleteSpinner_Searching)
-          }
-        },
-        
-        error: ( xhr: any ) => {
-          this.toggleSpinner(this.langSearch.AutocompleteSpinner_NoResults)
-        },
-        
-        success: (data: any ) => {
-          var results = this.dataProvider.listLocation(data)
-          if (results.length == 0) {
-            this.toggleSpinner(this.langSearch.AutocompleteSpinner_NoResults);
-          } else {
-            this.toggleSpinner('')
-          }
-        },
-        
-        complete: ( xhr: any ) => {
-          //nothing
-        }
-      },
-
-      preparePostData: function (data: { phrase: string | number | string[] }) {
-        data.phrase = inputHtml.val() as string; // (!) numbers won't work
-        if (data.phrase.length < 3) {
-          return false ;
-        }
-        return data;
-      },
-
-      list: {
-        match: {
-          enabled: false,
-        },
-
-        onChooseEvent: () => {
-          let val = inputHtml.getSelectedItemData() as any;
-          let autocompleteValue= new AutoCompleteWidgetValue({
-              label: this.dataProvider.elementLabel(val),
-              rdfTerm: this.dataProvider.elementRdfTerm(val),
-          });
-          inputHtml.val(autocompleteValue.value.label);
-          // listHtml.val(autocompleteValue.value.uri).trigger("change");
-          this.renderWidgetVal(autocompleteValue);
-        },
-      },
-      requestDelay: 400,
-    };
-
-    inputHtml.easyAutocomplete(options);
     return this;
   }
 
