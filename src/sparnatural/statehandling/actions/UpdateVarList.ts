@@ -15,10 +15,11 @@ export function updateVarList(actionStore: ActionStore) {
       let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
       let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
       //always remove the '?' as the first char
-      if(startGrp.getVarName()) varNames.add(startGrp.getVarName()?.slice(1));
-      if(endGrp.getVarName()) varNames.add(endGrp.getVarName()?.slice(1));      
+      if(startGrp.isVarSelected() && startGrp.getVarName()) varNames.add(startGrp.getVarName()?.slice(1));
+      if(endGrp.isVarSelected() && endGrp.getVarName()) varNames.add(endGrp.getVarName()?.slice(1));      
     }
   );
+  console.dir(varNames);
   updateDraggables(actionStore, varNames);
   actionStore.variables = [...varNames];
 }

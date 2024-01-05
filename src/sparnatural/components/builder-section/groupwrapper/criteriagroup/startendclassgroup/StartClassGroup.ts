@@ -136,6 +136,14 @@ class StartClassGroup extends HTMLComponent {
   getDefaultLblVar(){
     return this.defaultLblVar?.variable
   }
+
+  /**
+   * @returns true if the 'eye' icon on this arrow is selected
+   */
+  isVarSelected() {
+    return this.inputSelector?.selectViewVariableBtn?.selected;
+  }
+
   #setDefaultLblVar(name:string){
     this.defaultLblVar.variable = `${name}_label`
   }
