@@ -55,8 +55,7 @@ class ActionStore {
       (event: CustomEvent) => {
         event.stopImmediatePropagation();
         event.preventDefault();
-        // re-enable the submit button if it was disabled
-        this.sparnatural.SubmitSection.enableSubmit();
+        // trigger query generation + re-enable submit button
         generateQuery(this);
       }
     );
@@ -73,9 +72,7 @@ class ActionStore {
           );
         // add variable to selected variables
         selectViewVar(this, e.detail,e.target);
-        // re-enable the submit button if it was disabled
-        this.sparnatural.SubmitSection.enableSubmit();
-        // trigger query generation
+        // trigger query generation + re-enable submit button
         generateQuery(this);
       }
     );
@@ -145,7 +142,7 @@ class ActionStore {
         if (!Object.values(Order).includes(e.detail))
           throw Error("changeSortOrder expects a payload of Order enum");
         this.order = e.detail;
-        // trigger query generation
+        // trigger query generation + re-enable submit button
         generateQuery(this);
       }
     );
@@ -155,7 +152,7 @@ class ActionStore {
       (e: CustomEvent) => {
         // update/reset variable names in the state
         readVariablesFromUI(this);
-        // trigger query generation
+        // trigger query generation + re-enable submit button
         generateQuery(this);
       }
     );
@@ -168,8 +165,10 @@ class ActionStore {
           throw Error(
             "updateVarName event requires an object of {oldName:string,newName:string}"
           );
+        
         updateVarName(this, payload.oldName, payload.newName);
-        // trigger query generation
+        
+        // trigger query generation + re-enable submit button
         generateQuery(this);
       }
     );

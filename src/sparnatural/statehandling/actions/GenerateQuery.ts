@@ -55,7 +55,8 @@ export default function generateQuery(actionStore: ActionStore) {
 
     var generator = new Generator();
     var queryString = generator.stringify(selectQuery);
-      actionStore.sparqlString = queryString
+    actionStore.sparqlString = queryString;
+    
     // fire the event
     actionStore.sparnatural.html[0].dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_QUERY_UPDATED, {
       bubbles: true,
@@ -65,5 +66,9 @@ export default function generateQuery(actionStore: ActionStore) {
         querySparqlJs:selectQuery
       }
     }));
+
+    // re-enable submit button if it was disabled
+    actionStore.sparnatural.SubmitSection.enableSubmit();
+
   }
 }
