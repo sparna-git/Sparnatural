@@ -19,7 +19,6 @@ export function updateVarList(actionStore: ActionStore) {
       if(endGrp.isVarSelected() && endGrp.getVarName()) varNames.add(endGrp.getVarName()?.slice(1));      
     }
   );
-  console.dir(varNames);
   updateDraggables(actionStore, varNames);
   actionStore.variables = [...varNames];
 }
