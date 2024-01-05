@@ -5,6 +5,10 @@ ul.componentsListe {
     width: base.$component-width;
     margin: 0 auto;
 
+    /*
+    Thomas 20231219 : As I don't understand these rules and they are too generic and mess up with awesomplete
+    I comment them
+
     &,
     ul {
         list-style-type: none;
@@ -13,19 +17,14 @@ ul.componentsListe {
         clear: both;
         border: 0 solid transparent;
     }
+    */
     //
     ul {
-        /*li>div {
-					margin-left: 46px;
-				}
-				li li>div {
-					margin-left: 92px;
-					*
-				}*/
         li li.OnEdit > div > div > .ActionWhere.ShowOnEdit {
             display: none;
         }
     }
+    
 
     li.groupe.optional-enabled {
         .CriteriaGroup {
