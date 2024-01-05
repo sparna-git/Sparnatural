@@ -9,8 +9,13 @@ class PlayBtn extends HTMLComponent {
     let widgetHtml = $(`${UiuxConfig.ICON_PLAY}`);
     super("playBtn", ParentComponent, widgetHtml);
     this.callback = callback;
-    this.html.on("click", (e: JQuery.ClickEvent) => {
-      callback();
+    // add clicklistener
+    let that = this;
+    this.widgetHtml.on("click", function (e: JQuery.ClickEvent) {
+      // don't call the callback when the button is disabled
+      if(!that.isDisabled()) {
+        callback();
+      }
     });
   }
 
@@ -19,8 +24,15 @@ class PlayBtn extends HTMLComponent {
     return this;
   }
 
+  /**
+   * @returns true when the button is disabled
+   */
+  isDisabled():boolean {
+    return this.html.hasClass('submitDisable');
+  }
+
   disable() {
-    // set a disabled CSS class, trigger the loader, and remove click event
+    // set a disabled CSS class, trigger the loader
     this.html.addClass('submitDisable loadingEnabled');
   }
 
@@ -36,11 +48,6 @@ class PlayBtn extends HTMLComponent {
    */
   enable() {
     this.html.removeClass('submitDisable');
-    // re-enable the click event
-    let that = this;
-    this.widgetHtml.on("click", (e: JQuery.ClickEvent) => {
-      that.callback();
-    });
   }
 
 }
