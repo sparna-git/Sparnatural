@@ -17,7 +17,7 @@ export interface ListDataProviderIfc {
         lang:string,
         defaultLang:string,
         typePredicate:string,
-        callback:(items:{term:RDFTerm;label:string}[]) => void,
+        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void
 
@@ -246,6 +246,7 @@ export class ListDataProviderFromLiteralListAdpater implements ListDataProviderI
  */
 export interface AutocompleteDataProviderIfc {
 
+    /*
     autocompleteUrl(
         domain:string,
         predicate:string,
@@ -261,6 +262,7 @@ export interface AutocompleteDataProviderIfc {
     elementLabel(element:any):string;
 
     elementRdfTerm(element:any):any;
+    */
 
     /**
      * Used by new Awesomplete implementation
@@ -273,7 +275,7 @@ export interface AutocompleteDataProviderIfc {
         lang:string,
         defaultLang:string,
         typePredicate:string,
-        callback:(items:{term:RDFTerm;label:string}[]) => void,
+        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void
 }
@@ -285,17 +287,14 @@ export interface AutocompleteDataProviderIfc {
 export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc {
     
     queryBuilder:AutocompleteSparqlQueryBuilderIfc;
-    sparqlFetcher:SparqlFetcher;
+    sparqlFetcher:SparqlFetcherIfc;
 
     constructor(
-        sparqlEndpointUrl: any,
+        sparqlFetcherFactory: SparqlFetcherFactory,
         queryBuilder: AutocompleteSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
-        this.sparqlFetcher = new SparqlFetcher(
-            UrlFetcher.build(getSettings()),
-            sparqlEndpointUrl
-        );
+        this.sparqlFetcher = sparqlFetcherFactory.buildSparqlFetcher();
     }
 
     getAutocompleteSuggestions(
@@ -306,7 +305,7 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         lang: string,
         defaultLang: string,
         typePredicate: string,
-        callback:(items:{term:RDFTerm;label:string}[]) => void,
+        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ): void {
 
@@ -324,19 +323,19 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         // 2. execute it
         this.sparqlFetcher.executeSparql(sparql,(data:{results:{bindings:any}}) => {
             // 3. parse the results
-            let result = new Array<{term:RDFTerm, label:string}>;
+            let result = new Array<{term:RDFTerm, label:string;group?:string}>;
             for (let index = 0; index < data.results.bindings.length; index++) {
-                const element = data.results.bindings[index];
-                if(element.uri) {
+                const solution = data.results.bindings[index];
+                if(solution.uri) {
                     // read uri key & label key
-                    result[result.length] ={term:element.uri, label:element.label.value};
-                } else if(element.value) {
-                    result[result.length] ={term:element.value, label:element.label.value};
+                    result[result.length] ={term:solution.uri, label:solution.label.value, group:solution.group?.value};
+                } else if(solution.value) {
+                    result[result.length] ={term:solution.value, label:solution.label.value, group:solution.group?.value};
                 } else {
                     // try to determine the payload column by taking the column other than label
-                    let columnName = this.getRdfTermColumn(element);
+                    let columnName = this.getRdfTermColumn(solution);
                     if(columnName) {
-                        result[result.length] ={term:element[columnName], label:element.label.value};
+                        result[result.length] ={term:solution[columnName], label:solution.label.value};
                     } else {
                         throw Error("Could not determine which column to read from the result set")
                     }
@@ -366,6 +365,7 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         return foundKey;
     }
 
+    /*
     autocompleteUrl(domain: string, predicate: string, range: string, key: string, lang: string, defaultLang:string, typePredicate: string): string {
         // 1. create the SPARQL
         let sparql = this.queryBuilder.buildSparqlQuery(
@@ -394,7 +394,6 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         if(element.value) return element.value
         else return element.uri;
     }
-
-    
+    */    
 
 }

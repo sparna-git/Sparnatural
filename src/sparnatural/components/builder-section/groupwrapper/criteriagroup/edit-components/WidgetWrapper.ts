@@ -314,9 +314,13 @@ class WidgetWrapper extends HTMLComponent {
           autocompleteDataProvider = new SparqlAutocompleDataProvider(
 
             // endpoint URL
-            datasource.sparqlEndpointUrl != null
+            new SparqlFetcherFactory(
+              datasource.sparqlEndpointUrl != null
               ? datasource.sparqlEndpointUrl
               : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
+              (this.getRootComponent() as SparnaturalComponent).catalog,
+              this.settings
+            ), 
 
             new AutocompleteSparqlTemplateQueryBuilder(
               // sparql query (with labelPath interpreted)

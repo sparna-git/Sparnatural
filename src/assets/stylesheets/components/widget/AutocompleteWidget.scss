@@ -1,5 +1,5 @@
-@import "~awesomplete/awesomplete.css";
-@import "~awesomplete/awesomplete.theme.css";
+@use './awesomplete.sparnatural.theme.scss';
+@import "~awesomplete/awesomplete.base.css";
 
 .awesomplete {
     line-height: normal;

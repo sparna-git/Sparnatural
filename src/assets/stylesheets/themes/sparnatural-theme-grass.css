@@ -46,6 +46,11 @@
   * Color of the service option enabled
   **/
 --ternary-color-main: rgb(3, 201, 250) ;
+
+/**
+  * Color of the hover of autocomplete selection
+  **/
+--ternary-color-light: rgb(184, 211, 224);
  
  /**
   * Color of variable d&d grip, disabled query button, disabled options

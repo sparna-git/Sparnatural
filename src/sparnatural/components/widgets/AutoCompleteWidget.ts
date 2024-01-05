@@ -80,13 +80,13 @@ export class AutoCompleteWidget extends AbstractWidget {
 
 
     // the callback called when proposals have been fetched, to populate the suggestion list
-    let callback = (items:{term:RDFTerm;label:string}[]) => {
+    let callback = (items:{term:RDFTerm;label:string;group?:string}[]) => {
       
       let list = new Array<{label:String, value:String}>();
       $.each(items, (key, item) => {
         // Awesomplete list will contain the label as 'label', and the RDFTerm JSON serialization as 'value'
         list.push({
-          label: item.label,
+          label: (item.group)?"<span title='"+item.group+"'>"+item.label+"</span>":item.label,
           value: JSON.stringify(item.term)
         });
       });
