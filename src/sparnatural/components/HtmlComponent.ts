@@ -1,5 +1,6 @@
 import ISettings from "../../sparnatural/settings/ISettings";
 import { getSettings } from "../../sparnatural/settings/defaultSettings";
+import SparnaturalComponent from "./SparnaturalComponent";
 import BaseClassFactory from "./baseClassFactory/BaseClassFactory";
 
 interface IRenderable {
@@ -59,6 +60,15 @@ class HTMLComponent implements IRenderable {
     this.#initHtml();
     this.#attachComponentHtml();
     return this;
+  }
+
+  getRootComponent():HTMLComponent {
+    if(this.ParentComponent == null) {
+      return this;
+    } else {
+      return this.ParentComponent.getRootComponent();
+    }
+
   }
 }
 export default HTMLComponent;

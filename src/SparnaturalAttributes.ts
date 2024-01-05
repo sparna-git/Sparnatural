@@ -12,14 +12,19 @@ export class SparnaturalAttributes {
   localCacheDataTtl?: number;
   debug: boolean;
   submitButton?: boolean;
+  catalog: string;
 
   constructor(element:HTMLElement) {
     // not the differences in attribute names
-    this.config = this.#read(element,"src",this.#isJSON(element.getAttribute('src')));
-    this.defaultEndpoint = this.#read(element, "endpoint");
-    if(!this.config || !this.defaultEndpoint) {
-      throw Error('No config or deault endpoint provided!');
+    this.config = this.#read(element,"src",this.#isJSON(element.getAttribute('src')));    
+    if(!this.config) {
+      throw Error('No config provided!');
     }
+    this.defaultEndpoint = this.#read(element, "endpoint");
+    if(!this.defaultEndpoint) {
+      throw Error('No endpoint provided!');
+    }
+    this.catalog = this.#read(element, "catalog");
     this.language = this.#read(element, "lang");
     this.defaultLanguage = this.#read(element, "defaultLang");
 
@@ -33,6 +38,7 @@ export class SparnaturalAttributes {
     this.localCacheDataTtl = this.#read(element, "localCacheDataTtl", true);
     this.debug = this.#read(element, "debug", true);
     this.submitButton = this.#read(element, "submitButton", true);
+    
   }
 
   #read(element:HTMLElement, attribute:string, asJson:boolean = false) {
@@ -59,7 +65,7 @@ export class SparnaturalAttributes {
           enumerable:true
         })
       } catch(e){
-        console.error('Parsing of attribute prexis failed!')
+        console.error('Parsing of attribute prefix failed!')
         console.error(`Can not parse ${prefixArray[i]}`)
       }
 

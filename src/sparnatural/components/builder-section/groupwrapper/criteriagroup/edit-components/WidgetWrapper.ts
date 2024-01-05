@@ -19,6 +19,8 @@ import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
 import { SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider } from "../../../../widgets/data/DataProviders";
 import { ListWidget } from "../../../../widgets/ListWidget";
+import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
+import SparnaturalComponent from "../../../../SparnaturalComponent";
 
 
 /**
@@ -196,7 +198,7 @@ class WidgetWrapper extends HTMLComponent {
         if (datasource == null) {
           // datasource still null
           // if a default endpoint was provided, provide default datasource
-          if (this.settings.defaultEndpoint) {
+          if (this.settings.defaultEndpoint || this.settings.catalog) {
 
             // if there is a default label property on the end class, use it to populate the dropdown
             if(this.specProvider.getEntity(endClassType).getDefaultLabelProperty()) {
@@ -215,7 +217,6 @@ class WidgetWrapper extends HTMLComponent {
               );
             }
 
-
           }
         }
 
@@ -226,9 +227,13 @@ class WidgetWrapper extends HTMLComponent {
           listDataProvider = new SparqlListDataProvider(
 
             // endpoint URL
-            datasource.sparqlEndpointUrl != null
+            new SparqlFetcherFactory(
+              datasource.sparqlEndpointUrl != null
               ? datasource.sparqlEndpointUrl
               : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
+              (this.getRootComponent() as SparnaturalComponent).catalog,
+              this.settings
+            ),            
 
             new ListSparqlTemplateQueryBuilder(
               // sparql query (with labelPath interpreted)

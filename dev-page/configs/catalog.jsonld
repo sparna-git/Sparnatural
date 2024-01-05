@@ -1,0 +1,38 @@
+[
+    {
+      "id": "https://sparna-git.github.io/europeana-linkeddata-taskforce-poc/dataset/rijksmuseum",
+      "type": "DataService",
+      "title": {
+        "en" : "Rijksmuseum Collection",
+        "fr" : "Rijksmuseum Collection (fr)"
+      },
+      "endpointURL" : "https://sage-ails.ails.ece.ntua.gr/api/content/rijksmuseum-poc/sparql",
+      "description": {
+        "en" : "Lorem ipsum..."
+      }
+    },
+    {
+      "id": "https://sparna-git.github.io/europeana-linkeddata-taskforce-poc/dataset/gooi-en-vecht",
+      "type": "DataService",
+      "title": {
+        "en" : "Gooi en Vecht Historisch",
+        "fr" : "Gooi en Vecht Historisch (fr)"
+      },
+      "endpointURL" : "https://sage-ails.ails.ece.ntua.gr/api/content/gooi-en-vecht-poc/sparql",
+      "description": {
+        "en" : "Lorem ipsum..."
+      }
+    },
+    {
+      "id": "https://sparna-git.github.io/europeana-linkeddata-taskforce-poc/dataset/gelderland",
+      "type": "DataService",
+      "title": {
+        "en" : "Collectie Gelderland",
+        "fr" : "Collectie Gelderland (fr)"
+      },
+      "endpointURL" : "https://sage-ails.ails.ece.ntua.gr/api/content/gelderland-poc/sparql",
+      "description": {
+        "en" : "Lorem ipsum..."
+      }
+    }
+]

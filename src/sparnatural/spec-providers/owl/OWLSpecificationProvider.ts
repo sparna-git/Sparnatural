@@ -58,7 +58,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
   }
 
   getLanguages(): string[] {
-    let languages = this.store
+    let languages:string[] = this.store
       .getQuads(null, RDFS.LABEL, null, null)
       .map((quad: { object: any }) => quad.object.language);
     // deduplicate the list of languages
