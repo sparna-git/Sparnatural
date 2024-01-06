@@ -59,9 +59,8 @@ class StartClassGroup extends HTMLComponent {
         //only create new SPARQL variable if the startClassVal is not set by the parent component
         if (!this.startClassVal.variable){
           this.#createSparqlVar(e.detail);
-          this.#addDefaultLblVar(this.startClassVal.type,this.startClassVal.variable)
         } else{
-          this.#addDefaultLblVar(this.startClassVal.type,this.startClassVal.variable)
+          this.#syncDefaultLblVar()
         }
         // Iff(!) First StartClass of first GrpWrapper: eye btn automatically rendered + selected
         if (this.renderEyeBtn) this.autoSelectEyeBtn()
@@ -86,6 +85,7 @@ class StartClassGroup extends HTMLComponent {
         detail: (id: number) => {
           //callback
           this.startClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
+          this.#syncDefaultLblVar();
         },
       })
     );
@@ -100,11 +100,13 @@ class StartClassGroup extends HTMLComponent {
 
   // adding a defaultlblProperty
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
-  #addDefaultLblVar(type:string,varName:string) {
+  #syncDefaultLblVar() {
+    let type = this.startClassVal.type;
+    let name = this.startClassVal.variable;
     const lbl = this.specProvider.getEntity(type).getDefaultLabelProperty()
     if(lbl) {
       this.defaultLblVar.type = lbl
-      this.defaultLblVar.variable = `${varName}_label`
+      this.defaultLblVar.variable = `${name}_label`
     }
   }
 
@@ -128,7 +130,7 @@ class StartClassGroup extends HTMLComponent {
   }
   setVarName(name: string) {
     this.startClassVal.variable = name;
-    this.#setDefaultLblVar(name)
+    this.#syncDefaultLblVar();
   }
   getTypeSelected() {
     return this.startClassVal.type;
@@ -142,10 +144,6 @@ class StartClassGroup extends HTMLComponent {
    */
   isVarSelected() {
     return this.inputSelector?.selectViewVariableBtn?.selected;
-  }
-
-  #setDefaultLblVar(name:string){
-    this.defaultLblVar.variable = `${name}_label`
   }
 
 }

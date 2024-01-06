@@ -12,6 +12,9 @@ class DraggableComponent extends HTMLComponent {
   icon: any;
   varName: string; // without the ?
   selectedVal:SelectedVal
+  // listener
+  varEdited: (oldName: string, newName: string) => void;
+
   constructor(
     parentComponent: VariableOrderMenu,
     specProvider: ISparnaturalSpecification,
@@ -24,18 +27,10 @@ class DraggableComponent extends HTMLComponent {
     );
     var icon = specProvider.getEntity(selected_val.type).getIcon();
     let editVar = $(`
-        <input type="text" minlength="2">
+        <input type="text" minlength="1">
         </input>
         `).val(varName);
-    editVar[0].addEventListener("change", (event) => {
-      //variableName got edited by user
-      let val = this.#validateInput(event.currentTarget as HTMLInputElement);
-      let oldName = this.varName;
-      this.varName = val;
 
-      this.#resize(editVar, this.varName);
-      varEdited(oldName, this.varName);
-    });
     let widgetHtml =
       $(`<div class="variableSelected flexWrap" data-variableName="${varName}">
             <span class="variable-handle">
@@ -49,7 +44,16 @@ class DraggableComponent extends HTMLComponent {
     this.selectedVal = selected_val
     this.varName = varName;
     this.#resize(editVar, varName);
+    this.varEdited = varEdited;
+    
+    let that = this;
+    editVar[0].addEventListener("change", (event) => {
+      //variableName got edited by user
+      let val = this.#validateInput(event.currentTarget as HTMLInputElement);
+      that.onVarNameChange(val);
+    });
   }
+
   render(): this {
     this.htmlParent = $(this.ParentComponent.html).find(
       ".variablesOtherSelect"
@@ -58,13 +62,29 @@ class DraggableComponent extends HTMLComponent {
     return this;
   }
 
+  onVarNameChange(newName:string) {
+    let oldName = this.varName;
+    this.varName = newName;
+    let editVar = this.widgetHtml.find("input");
+    this.#resize(editVar, this.varName);
+
+    // call callback
+    this.varEdited(oldName, this.varName);
+  }
+
+  setVarName(newName:string) {
+    this.onVarNameChange(newName);
+    this.widgetHtml.find("input").val(newName);
+  }
+
   #resize(el: JQuery<HTMLElement>, varName: string): void {
     el[0].style.width = 10 + "ch";
 
     if (varName.length > 10) el[0].style.width = varName.length + "ch";
   }
+
   #validateInput(inputEl: HTMLInputElement) {
-    if (inputEl.value.length < 2) {
+    if (inputEl.value.length < 1) {
       inputEl.value = this.varName; // keep old variable
       return this.varName;
     }

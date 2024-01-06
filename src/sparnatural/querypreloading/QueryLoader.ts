@@ -23,7 +23,9 @@ export default class QueryLoader{
         // build Sparnatural query
         // use a deep copy of the query to avoid modifying the original copy
         let clone = JSON.parse(JSON.stringify(query)) as ISparJson;
-        this.#buildSparnatural(this.sparnatural, clone.branches);
+        let varMapping = this.#buildSparnatural(this.sparnatural, clone.branches);
+        // set the correct variable names
+        this.#updateNamingOfVariables(varMapping)
         // set the correct ordering of the draggables
         this.#updateOrderingOfVariables()
         // then reset the quiet flag
@@ -37,14 +39,16 @@ export default class QueryLoader{
         );
     }
     
-    static #buildSparnatural(sparnatural: SparnaturalComponent, branches: Array<Branch>) {
+    static #buildSparnatural(sparnatural: SparnaturalComponent, branches: Array<Branch>):Map<string,string> {
+        let varMapping = new Map<string,string>();
         if(branches?.length === 0) throw Error('No Branches on query detected')
         // first build the rootGroupWrapper
         let rootGrpWrapper =
         sparnatural.BgWrapper.componentsList.rootGroupWrapper;
         // build the root groupwrapper and remove from branches array
         let rootBranch = branches.shift();
-        this.#buildCriteriaGroup(rootGrpWrapper, rootBranch);
+        let localVarMapping = this.#buildCriteriaGroup(rootGrpWrapper, rootBranch);
+        localVarMapping.forEach((value: string, key:string) => { varMapping.set(key, value); });
         
         // by default, the very first start class group will be selected
         // if the first variable is *not* selected, then unselect it
@@ -57,12 +61,16 @@ export default class QueryLoader{
         let parent = rootGrpWrapper;
         branches.forEach((b) => {
           this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
-          this.#buildCriteriaGroup(parent.andSibling, b);
+          let localVarMapping = this.#buildCriteriaGroup(parent.andSibling, b);
+          localVarMapping.forEach((value: string, key:string) => { varMapping.set(key, value); });
           parent = parent.andSibling;
         });
+
+        return varMapping;
     }
   
-    static #buildCriteriaGroup(grpWarpper: GroupWrapper, branch: Branch) {
+    static #buildCriteriaGroup(grpWarpper: GroupWrapper, branch: Branch):Map<string,string> {
+      let varMapping = new Map<string,string>();
       // set StartClassVal only if there wasn't one set by the parent (e.g whereChild andSibling have it already set)
       const startClassVal = { type: branch.line.sType, variable: branch.line.s };
       if (!grpWarpper.CriteriaGroup.StartClassGroup.startClassVal.type) {
@@ -71,12 +79,19 @@ export default class QueryLoader{
             grpWarpper.CriteriaGroup.StartClassGroup,
             branch.line.sType
         );
-        }
+      }
+      // also set the variable name
+      // grpWarpper.CriteriaGroup.StartClassGroup.startClassVal = startClassVal;
+      varMapping.set(grpWarpper.CriteriaGroup.StartClassGroup.startClassVal.variable, branch.line.s);
   
       // set EndClassGroup
       const endClassVal = { type: branch.line.oType, variable: branch.line.o };
       this.#setSelectedValue(grpWarpper.CriteriaGroup.EndClassGroup, branch.line.oType);
-    
+      // transparently set the variable name to the one in the query
+      // before we click on the select button, so that the column is selected with the proper name
+      // grpWarpper.CriteriaGroup.EndClassGroup.endClassVal = endClassVal;
+      varMapping.set(grpWarpper.CriteriaGroup.EndClassGroup.endClassVal.variable, branch.line.o);
+
       //set ObjectPropertyGroup
       this.#setSelectedValue(
         grpWarpper.CriteriaGroup.ObjectPropertyGroup,
@@ -108,10 +123,12 @@ export default class QueryLoader{
         let parent = grpWarpper.whereChild;
         branch.children.forEach((c) => {
           this.#clickOn(parent.CriteriaGroup.ActionsGroup.actions.ActionAnd.btn);
-          this.#buildCriteriaGroup(parent.andSibling, c);
+          let localVarMapping = this.#buildCriteriaGroup(parent.andSibling, c);
+          localVarMapping.forEach((value:string,key: string) => varMapping.set(key, value));
           parent = parent.andSibling;
         });
       }
+      
       // select if the var is viewed (eye btn)
       this.#setSelectViewVariableBtn(
         startClassVal,
@@ -119,6 +136,8 @@ export default class QueryLoader{
         endClassVal,
         grpWarpper.CriteriaGroup.EndClassGroup
       )
+
+      return varMapping;
   }
   
   static #triggerOptions(grpWrapper: GroupWrapper, branch: Branch) {
@@ -169,6 +188,10 @@ export default class QueryLoader{
         }
       })
     })
+
+    // once variables are sorted, synchronize with the actionstore
+    this.sparnatural.actionStore.variables = this.sparnatural.variableSection.listVariables();
+
     const variableSortOption =this.sparnatural.variableSection.variableSortOption;
     if(this.query.order == Order.ASC) {
       variableSortOption.changeSortOrderCallBack(Order.ASC);
@@ -177,6 +200,18 @@ export default class QueryLoader{
     } else {
       variableSortOption.changeSortOrderCallBack(Order.NOORDER);
     }
+  }
+
+  // map of the names of variables in the current query to their target name
+  static #updateNamingOfVariables(varNameMapping:Map<string,string>){
+    const varMenu = this.sparnatural.variableSection.variableOrderMenu
+    this.query.variables.forEach(v=>{
+      varMenu.draggables.forEach(d=>{
+        if(varNameMapping.get("?"+d.varName) === "?"+v){
+          d.setVarName(v);
+        }
+      })
+    })
   }
   
   static #clickOn(el: JQuery<HTMLElement>) {

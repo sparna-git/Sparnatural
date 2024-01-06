@@ -74,10 +74,11 @@ class EndClassGroup extends HTMLComponent {
         detail: (id: number) => {
           //callback
           this.endClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
+          this.#syncDefaultLblVar();
         },
       })
     );
-    this.#addDefaultLblVar(type,this.endClassVal.variable)
+    
   }
 
   #getUriClassName(uri:string){
@@ -86,13 +87,16 @@ class EndClassGroup extends HTMLComponent {
     return uri.split('/').pop().replace(/[^\x00-\x7F]/g, "_")
   }
 
+  
   // adding a defaultlblProperty
   // see: https://docs.sparnatural.eu/OWL-based-configuration#classes-configuration-reference
-  #addDefaultLblVar(type:string,varName:string) {
+  #syncDefaultLblVar() {
+    let type = this.endClassVal.type;
+    let name = this.endClassVal.variable;
     const lbl = this.specProvider.getEntity(type).getDefaultLabelProperty()
     if(lbl) {
       this.defaultLblVar.type = lbl
-      this.defaultLblVar.variable = `${varName}_label`
+      this.defaultLblVar.variable = `${name}_label`
     }
   }
 
@@ -162,14 +166,10 @@ class EndClassGroup extends HTMLComponent {
   getDefaultLblVar(){
     return this.defaultLblVar?.variable
   }
-  
-  #setDefaultLblVar(name:string){
-    this.defaultLblVar.variable = `${name}_label`
-  }
 
   setVarName(name: string) {
     this.endClassVal.variable = name;
-    this.#setDefaultLblVar(name)
+    this.#syncDefaultLblVar()
   }
 
   getTypeSelected() {

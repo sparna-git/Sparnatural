@@ -3,6 +3,7 @@ import DisplayBtn from "../buttons/DisplayBtn";
 import HTMLComponent from "../HtmlComponent";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";
 import VariableSortOption from "./variablesort/VariableSortOptions";
+import DraggableComponent from "./variableorder/DraggableComponent";
 
 class VariableSection extends HTMLComponent {
   displayBtn: DisplayBtn;
@@ -32,6 +33,10 @@ class VariableSection extends HTMLComponent {
     this.#renderShowHideBtn();
     this.#addMutationObserver()
     return this;
+  }
+
+  listVariables():string[] {
+    return this.variableOrderMenu.draggables.map((d: DraggableComponent) => d.varName);
   }
 
   #renderShowHideBtn() {
