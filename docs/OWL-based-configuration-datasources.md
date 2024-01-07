@@ -120,7 +120,7 @@ To use the range as a criteria in the query and filter the list based on the typ
 
 You can provide your own SPARQL queries to populate lists or autocomplete suggestions. To do so, attach a `queryString` data property assertion on your datasource object, holding the SPARQL query that should be used to populate the list/autocomplete.
 
-**The SPARQL query MUST return 2 variables : `?uri` and `?label`, populated anyway you like.**
+**The SPARQL query MUST return 2 variables : `?uri` and `?label`, populated anyway you like.** Additionnally, since version 8.6.0, the query can return, optionnally, an extra `?group` variable, which will be used to generate `optgroup` sections in lists widgets, and will be used as hover tooltips in autocompletion lists. This is used to indicate the source endpoint of the result in cases of multiple endpoints.
 
 In this SPARQL query, the following replacements will happen:
 - **`$domain`**, if present, will be replaced by the URI of the domain class;

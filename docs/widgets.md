@@ -14,6 +14,7 @@ This is a reference documentation for Sparnatural widgets.
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Showing literal values only (EDM Type is a literal value) |
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-mix-literal-URIs.png" width="75%" /> | Showing a mix of literal values and URIs |
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Listing URI values with a label listed alphabetically |
+| TODO | Listing values using optgroup |
 
 
 ### Description
@@ -24,6 +25,8 @@ List widget is implemented using the [select2 JQuery component](https://select2.
 List widgets can work both with URIs + labels, or with literal values. It can even mix URIs and literals in the same list.
 
 The sort order of the elements in the list, as well as their precise labels, depends on the underlying SPARQL query that populates the list. Sparnatural provides [default datasources](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty) that can be ordered alphabetically, alphabetically showing the number of occurrences in parenthesis, or ordered by decreasing number of occurrences.
+
+List widgets supports `optgroup` to group values into sections. The grouping is also provided by the SPARQL query, and is used in particular when [querying multiple endpoints](Querying-multiple-endpoints).
 
 ### Configuration
 
@@ -77,7 +80,7 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 
 The autocomplete widget allows to select a URI by typing a few letters, and selecting a value from a list of proposals. The search is triggered when 3 characters at least have been entered. The search is done on one or more properties configured in the widget datasource (it can be configured to search on preferred label as well as synonyms, acronyms, identifiers, etc.).
 Autocompletion also works for searching on literal values.
-Autocomplete widget is implemented based on [easyautocomplete library](https://github.com/pawelczak/EasyAutocomplete).
+Autocomplete widget is implemented based on [awesomeplete library](https://projects.verou.me/awesomplete/).
 
 ### Configuration
 
