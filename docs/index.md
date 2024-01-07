@@ -50,6 +50,8 @@ _This is a deprecated feature_
 - [Integration with GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector.md) - Special configuration to interact with a GraphDB Lucene index 
 - [Querying date ranges](Querying-date-ranges.md) - How to generate SPARQL queries that can match on resources with a begin date and a end date 
 - [Federated query support](Federated-querying.md) - How to enable federated querying using SERVICE keyword in your configuration
+- [Querying multiple endpoints](Querying-multiple-endpoints.md) - How to configure Sparnatural so that it can query multiple endpoints at the same time in a transparent way
+
 
 ## 4. Integrating Sparnatural in HTML / React
 

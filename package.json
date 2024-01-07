@@ -1,7 +1,7 @@
 {
   "name": "sparnatural",
-  "version": "8.5.0",
-  "description": "Visual query builder for SPARQL queries.",
+  "version": "8.6.0",
+  "description": "Visual SPARQL query builder",
   "main": "dist/sparnatural.js",
   "module": "dist/sparnatural.js",
   "scripts": {
@@ -12,10 +12,12 @@
     "pretty": "prettier --write \"./src/**/*.{ts,js,json}\""
   },
   "keywords": [
+    "knowledge graphs",
     "visual",
     "SPARQL",
     "RDF",
     "OWL",
+    "SHACL",
     "query builder",
     "react",
     "angular",
@@ -27,7 +29,7 @@
   },
   "author": {
     "name": "Thomas Francart",
-    "url": "https://sparnatural.eu/"
+    "url": "https://github.com/tfrancart"
   },
   "contributors": [
     {
