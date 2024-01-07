@@ -4,7 +4,7 @@ import ISpecificationEntry from "./ISpecificationEntry";
 
 interface ISpecificationProperty extends ISpecificationEntry {
   /**
-   * @param range the selected range in the criteria, in cas the widget varies depending on the range
+   * @param range the selected range in the criteria, in case the widget varies depending on the range
    */
   getPropertyType(range:string): string|undefined;
   isMultilingual(): boolean;

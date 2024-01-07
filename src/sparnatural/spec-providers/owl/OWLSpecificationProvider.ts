@@ -13,7 +13,7 @@ import { OWLSpecificationEntity } from "./OWLSpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
-import { NamedNode } from '@rdfjs/types/data-model';
+import { NamedNode, Term } from '@rdfjs/types/data-model';
 
 const factory = new DataFactory();
 
@@ -112,17 +112,18 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
       var objectPropertyId = quad.subject.value;
       var typeClass = quad.object.termType;
       var classId = quad.object.value;
+      var classAsRDFTerm = quad.object;
 
       if (this.getProperty(objectPropertyId).getPropertyType("")) {
         // keep only Sparnatural classes in the list
-        if (this.isSparnaturalClass(classId) || typeClass == "BlankNode") {
+        if (typeClass == "BlankNode" || this.isSparnaturalClass(classId)) {
           // always exclude RemoteClasses from first list
           if (!this.getEntity(classId).isRemoteEntity()) {
-            if (!this._isUnionClass(classId)) {
+            if (!this._isUnionClass(classAsRDFTerm)) {
               this._pushIfNotExist(classId, items);
             } else {
               // read union content
-              var classesInUnion = this._readAsList(factory.blankNode(classId), OWL.UNION_OF);
+              var classesInUnion = this._readAsList(classId, OWL.UNION_OF);
               for (const aUnionClass of classesInUnion) {
                 this._pushIfNotExist(aUnionClass, items);
               }
@@ -299,8 +300,8 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     }
   }
 
-  _isUnionClass(classUri: any) {
-    return this._hasProperty(factory.namedNode(classUri), OWL.UNION_OF);
+  _isUnionClass(classUriOrBNodeIdentifier: Term) {
+    return this._hasProperty(classUriOrBNodeIdentifier, OWL.UNION_OF);
   }
 
   /*** / Handling of UNION classes ***/
