@@ -130,6 +130,21 @@ A `DataService` describes one endpoint to be queried. It contains:
     }
 ```
 
+
+## Sparnatural behavior
+
+When configured with more than one endpoint, Sparnatural will behave this way:
+
+### In lists, values are presented in a different section for each endpoint
+
+![image](https://github.com/sparna-git/Sparnatural/docs/images/multiple-endpoints-list.png)
+
+### In autocomplete, endpoint is visible by hovering the result
+
+![image](https://github.com/sparna-git/Sparnatural/docs/images/multiple-endpoints-autocomplete.png)
+
+
+
 ## Executing the final SPARQL query against all endpoints
 
 Sparnatural can deal with the population of dropdown lists and autocomplete fields against multiple endpoints. You also need to execute the final query returned by Sparnatural against all endpoints. This is using the [sparql.js library](http://www.thefigtrees.net/lee/sw/sparql.js) from [http://thefigtrees.net](http://thefigtrees.net). Pretty old stuff, but still works. The execution of the query could very well be done by hand by simply constructing the URL.

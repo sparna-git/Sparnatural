@@ -1,0 +1,497 @@
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix dce: <http://purl.org/dc/elements/1.1/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sd: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix terms: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix ore: <http://www.openarchives.org/ore/terms/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix this: <http://sparnatural.eu/demos/demo-edm/sparnatural-config.ttl/> .
+@prefix edm: <http://www.europeana.eu/schemas/edm/> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://sparnatural.eu/demos/demo-edm/sparnatural-config.ttl> a owl:Ontology;
+  terms:source <https://docs.google.com/spreadsheets/d/1Esxpody3AsnB4lI-5QqgMY4DDvJ85TDJEnn2WJhQUA8>;
+  terms:format <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1Esxpody3AsnB4lI-5QqgMY4DDvJ85TDJEnn2WJhQUA8%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true>,
+    <https://docs.google.com/spreadsheets/d/1Esxpody3AsnB4lI-5QqgMY4DDvJ85TDJEnn2WJhQUA8/export?format=xlsx>;
+  owl:imports <http://data.sparna.fr/ontologies/sparnatural-config-core>, <http://data.sparna.fr/ontologies/sparnatural-config-datasources> .
+
+edm:ProvidedCHO a owl:Class;
+  rdfs:subClassOf core:SparnaturalClass;
+  rdfs:label "Cultural object"@en, "Objet culturel"@fr;
+  core:faIcon "fa-regular fa-palette";
+  core:tooltip "The subject of the package of data that has been submitted to Europeana."@en,
+    "Sujet principal du lot de données qui a été fourni à Europeana."@fr;
+  core:order "4"^^xsd:integer;
+  core:defaultLabelProperty this:providedCHO_defaultLabel .
+
+edm:WebResource a owl:Class;
+  rdfs:subClassOf core:NotInstantiatedClass, rdfs:Literal;
+  rdfs:label "Web Resource"@en, "Visuel"@fr;
+  core:faIcon "fa-regular fa-image";
+  core:order "5"^^xsd:integer .
+
+this:CatalogURL a owl:Class;
+  rdfs:subClassOf core:NotInstantiatedClass, rdfs:Literal;
+  rdfs:label "Catalog URL"@en, "URL Catalogue"@fr;
+  core:faIcon "fa-regular fa-globe";
+  core:order "7"^^xsd:integer .
+
+cc:License a owl:Class;
+  rdfs:subClassOf core:NotInstantiatedClass;
+  rdfs:label "License"@en, "Licence"@fr;
+  core:faIcon "fa-brands fa-creative-commons";
+  core:order "6"^^xsd:integer .
+
+skos:Concept a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Subject"@en, "Sujet"@fr;
+  core:faIcon "fa-regular fa-hashtag";
+  core:order "14"^^xsd:integer .
+
+edm:Agent a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Agent"@en, "Personne"@fr;
+  core:faIcon "fa-regular fa-user-large";
+  core:order "3"^^xsd:integer .
+
+edm:Place a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Place"@en, "Localisation"@fr;
+  core:faIcon "fa-regular fa-location-dot";
+  core:order "12"^^xsd:integer .
+
+edm:TimeSpan a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Time Span"@en, "Période"@fr;
+  core:faIcon "fa-regular fa-hourglass";
+  core:order "11"^^xsd:integer .
+
+foaf:Organization a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Organization"@en, "Centre culturel"@fr;
+  core:faIcon "fa-regular fa-landmark";
+  core:order "3"^^xsd:integer .
+
+this:Aggregator a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Aggregator"@en, "Agrégateur"@fr;
+  core:faIcon "fa-regular fa-diagram-project";
+  core:order "2"^^xsd:integer .
+
+this:Date a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Date"@en, "Date"@fr;
+  core:faIcon "fa-regular fa-calendar-days";
+  core:order "4"^^xsd:integer .
+
+this:Description a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Description"@en, "Notes"@fr;
+  core:faIcon "fa-sharp fa-regular fa-circle-info";
+  core:order "13"^^xsd:integer .
+
+this:Format a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Format"@en, "Format"@fr;
+  core:faIcon "fa-sharp fa-regular fa-expand";
+  core:order "8"^^xsd:integer .
+
+this:Identifier a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Identifier"@en, "Identifiant"@fr;
+  core:faIcon "fa-regular fa-barcode";
+  core:order "15"^^xsd:integer .
+
+this:Language a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Language"@en, "Langue"@fr;
+  core:faIcon "fa-regular fa-language";
+  core:order "5"^^xsd:integer .
+
+this:Title a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Title"@en, "Titre"@fr;
+  core:faIcon "fa-regular fa-angles-left";
+  core:order "2"^^xsd:integer .
+
+this:Type a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Type"@en, "Type"@fr;
+  core:faIcon "fa-regular fa-photo-film-music";
+  core:order "6"^^xsd:integer .
+
+this:Provenance a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Provenance (RM)"@en, "Donateur (RM)"@fr;
+  core:faIcon "fa-regular fa-hand-holding";
+  core:order "10"^^xsd:integer .
+
+this:Extent a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Extent (RM)"@en, "Dimensions (RM)"@fr;
+  core:faIcon "fa-regular fa-ruler-horizontal";
+  core:order "9"^^xsd:integer .
+
+this:Coverage a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Coverage"@en, "Couverture spatio-temporelle"@fr;
+  core:faIcon "fa-regular fa-arrows-up-down-left-right";
+  core:order "10.1"^^xsd:integer .
+
+this:OtherResource a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Other resource"@en, "Autre ressource"@fr;
+  core:faIcon "fa-regular fa-puzzle-piece-simple" .
+
+this:Medium a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Medium"@en, "Matériau"@fr;
+  core:faIcon "fa-regular fa-block-question";
+  core:order "8.5"^^xsd:integer .
+
+this:Rights a owl:Class;
+  rdfs:subClassOf rdfs:Literal;
+  rdfs:label "Rights"@en, "Droits"@fr;
+  core:faIcon "fa-regular fa-copyright" .
+
+edm:dataProvider a owl:ObjectProperty;
+  rdfs:label "data provider"@en, "est fournie par"@fr;
+  rdfs:subPropertyOf core:ListProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range foaf:Organization;
+  core:sparqlString "^<http://www.europeana.eu/schemas/edm/aggregatedCHO>/<http://www.europeana.eu/schemas/edm/dataProvider>";
+  core:enableOptional "true"^^xsd:boolean .
+
+edm:isShownAt a owl:ObjectProperty;
+  rdfs:label "is shown at"@en, "est accessible à l'adresse"@fr;
+  rdfs:subPropertyOf core:NonSelectableProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:CatalogURL;
+  core:sparqlString "^<http://www.europeana.eu/schemas/edm/aggregatedCHO>/<http://www.europeana.eu/schemas/edm/isShownAt>";
+  core:enableOptional "true"^^xsd:boolean .
+
+edm:provider a owl:ObjectProperty;
+  rdfs:label "provider"@en, "est issue de"@fr;
+  rdfs:subPropertyOf core:ListProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Aggregator;
+  core:sparqlString "^<http://www.europeana.eu/schemas/edm/aggregatedCHO>/<http://www.europeana.eu/schemas/edm/provider>";
+  core:enableOptional "true"^^xsd:boolean .
+
+edm:rights a owl:ObjectProperty;
+  rdfs:label "rights"@en, "est protégée par"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range cc:License;
+  core:sparqlString "^<http://www.europeana.eu/schemas/edm/aggregatedCHO>/<http://www.europeana.eu/schemas/edm/rights>";
+  core:enableOptional "true"^^xsd:boolean .
+
+edm:hasView a owl:ObjectProperty;
+  rdfs:label "has view"@en, "a pour visuel"@fr;
+  rdfs:subPropertyOf core:NonSelectableProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range edm:WebResource;
+  core:sparqlString "^<http://www.europeana.eu/schemas/edm/aggregatedCHO>/(<http://www.europeana.eu/schemas/edm/hasView>|<http://www.europeana.eu/schemas/edm/isShownBy>)";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:creator a owl:ObjectProperty;
+  rdfs:label "creator"@en, "créé par"@fr;
+  rdfs:subPropertyOf core:AutocompleteProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range edm:Agent;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/creator>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:description a owl:ObjectProperty;
+  rdfs:label "description"@en, "a pour description"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Description;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/description>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:format a owl:ObjectProperty;
+  rdfs:label "format"@en, "est au format"@fr;
+  rdfs:subPropertyOf core:ListProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Format;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/format>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:identifier a owl:ObjectProperty;
+  rdfs:label "identifier"@en, "est référencé sous"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Identifier;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/identifier>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:language a owl:ObjectProperty;
+  rdfs:label "language"@en, "est disponible en"@fr;
+  rdfs:subPropertyOf core:ListProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Language;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/language>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:subject a owl:ObjectProperty;
+  rdfs:label "subject"@en, "a pour sujet"@fr;
+  rdfs:subPropertyOf core:AutocompleteProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range skos:Concept;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/subject>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:title a owl:ObjectProperty;
+  rdfs:label "title"@en, "a pour titre"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Title;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/title>";
+  core:enableOptional "true"^^xsd:boolean .
+
+this:type a owl:ObjectProperty;
+  rdfs:label "type"@en, "type"@fr;
+  rdfs:subPropertyOf core:ListProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Type;
+  core:sparqlString "(<http://purl.org/dc/elements/1.1/type>|<http://www.europeana.eu/schemas/edm/type>)";
+  core:enableOptional "true"^^xsd:boolean .
+
+terms:created a owl:ObjectProperty;
+  rdfs:label "created"@en, "créé en"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Date;
+  core:sparqlString "<http://purl.org/dc/terms/created>";
+  core:enableOptional "true"^^xsd:boolean .
+
+terms:extent a owl:ObjectProperty;
+  rdfs:label "extent"@en, "a pour étendue"@fr;
+  rdfs:subPropertyOf core:ListProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Extent;
+  core:sparqlString "<http://purl.org/dc/terms/extent>";
+  core:enableOptional "true"^^xsd:boolean .
+
+terms:provenance a owl:ObjectProperty;
+  rdfs:label "provenance"@en, "a pour origine"@fr;
+  rdfs:subPropertyOf core:ListProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Provenance;
+  core:sparqlString "<http://purl.org/dc/terms/provenance>";
+  core:enableOptional "true"^^xsd:boolean .
+
+terms:spatial a owl:ObjectProperty;
+  rdfs:label "spatial"@en, "concerne"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Coverage;
+  core:sparqlString "<http://purl.org/dc/terms/spatial>";
+  core:enableOptional "true"^^xsd:boolean .
+
+this:providedCHO_defaultLabel a owl:ObjectProperty;
+  rdfs:subPropertyOf core:AutocompleteProperty;
+  rdfs:range this:Title;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/title>";
+  core:enableOptional "true"^^xsd:boolean;
+  core:isMultilingual "true"^^xsd:boolean .
+
+this:aggredatedCHO_title a owl:ObjectProperty;
+  rdfs:subPropertyOf core:AutocompleteProperty;
+  rdfs:range this:Title;
+  core:sparqlString "<http://www.europeana.eu/schemas/edm/aggregatedCHO>/<http://purl.org/dc/elements/1.1/title>";
+  core:enableOptional "true"^^xsd:boolean .
+
+this:aggredatedIn a owl:ObjectProperty;
+  rdfs:label "aggregated in"@en, "présenté dans"@fr;
+  rdfs:subPropertyOf core:NonSelectableProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range ore:Aggregation;
+  core:sparqlString "^<http://www.europeana.eu/schemas/edm/aggregatedCHO>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:contributor a owl:ObjectProperty;
+  rdfs:label "contributor"@en, "contributeur"@fr;
+  rdfs:subPropertyOf core:AutocompleteProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range edm:Agent;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/contributor>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:coverage a owl:ObjectProperty;
+  rdfs:label "coverage"@en, "concerne"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Coverage;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/coverage>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:date a owl:ObjectProperty;
+  rdfs:label "significant date"@en, "date associée"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Date;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/date>";
+  core:enableOptional "true"^^xsd:boolean .
+
+terms:isPartOf a owl:ObjectProperty;
+  rdfs:label "is part of"@en, "est une partie de"@fr;
+  rdfs:subPropertyOf core:ListProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:OtherResource;
+  core:sparqlString "<http://purl.org/dc/terms/isPartOf>";
+  core:enableOptional "true"^^xsd:boolean .
+
+terms:medium a owl:ObjectProperty;
+  rdfs:label "made of"@en, "est réalisé en"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Medium;
+  core:sparqlString "<http://purl.org/dc/terms/medium>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:publisher a owl:ObjectProperty;
+  rdfs:label "publisher"@en, "éditeur"@fr;
+  rdfs:subPropertyOf core:AutocompleteProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range edm:Agent;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/creator>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:rights a owl:ObjectProperty;
+  rdfs:label "associated rights"@en, "droits associés"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Rights;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/rights>";
+  core:enableOptional "true"^^xsd:boolean .
+
+dce:source a owl:ObjectProperty;
+  rdfs:label "source"@en, "source"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:OtherResource;
+  core:sparqlString "<http://purl.org/dc/elements/1.1/source>";
+  core:enableOptional "true"^^xsd:boolean .
+
+terms:temporal a owl:ObjectProperty;
+  rdfs:label "temporal"@en, "couverture temporelle"@fr;
+  rdfs:subPropertyOf core:SearchProperty;
+  rdfs:domain edm:ProvidedCHO;
+  rdfs:range this:Coverage;
+  core:sparqlString "<http://purl.org/dc/terms/temporal>";
+  core:enableOptional "true"^^xsd:boolean .
+
+this:list_skosprefLabel_alpha_with_count_langfr a datasources:SparqlDatasource;
+  datasources:queryTemplate this:query_list_label_alpha_with_count_langfr;
+  datasources:labelProperty skos:prefLabel .
+
+this:list_skosprefLabel_count_langfr a datasources:SparqlDatasource;
+  datasources:queryTemplate this:query_list_label_count_langfr;
+  datasources:labelProperty skos:prefLabel .
+
+this:list_rdfslabel_alpha_with_count_langfr a datasources:SparqlDatasource;
+  datasources:queryTemplate this:query_list_label_alpha_with_count_langfr;
+  datasources:labelProperty rdfs:label .
+
+this:list_skosprefLabel_alpha_langfr a datasources:SparqlDatasource;
+  datasources:queryTemplate this:query_list_label_alpha_langfr;
+  datasources:labelProperty skos:prefLabel .
+
+this:search_skospreflabel_contains_langfr a datasources:SparqlDatasource;
+  datasources:queryTemplate this:query_search_label_contains_langfr;
+  datasources:labelProperty skos:prefLabel .
+
+this:search_rdfslabel_contains_langfr a datasources:SparqlDatasource;
+  datasources:queryTemplate this:query_search_label_contains_langfr;
+  datasources:labelProperty rdfs:label .
+
+this:query_list_label_alpha_with_count_langfr a "config-datatsources:SPARQLQuery";
+  datasources:queryString """SELECT DISTINCT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+ SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+ WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ FILTER(isIRI(?uri))
+ # Note how the range criteria is not used in this query
+ }
+ GROUP BY ?uri
+}
+OPTIONAL { ?uri $labelPath ?theLabelLang . FILTER(lang(?theLabelLang) = $lang) }
+OPTIONAL { ?uri $labelPath ?theLabelNone . FILTER(lang(?theLabelNone) = \"\") }
+OPTIONAL { ?uri $labelPath ?theLabelFr . FILTER(lang(?theLabelFr) = \"fr\") }
+BIND(COALESCE(?theLabelLang, ?theLabelNone, ?theLabelFr, STR(?uri)) AS ?theLabel)
+}
+ORDER BY UCASE(?label)
+LIMIT 500""" .
+
+this:query_list_label_count_langfr a "config-datatsources:SPARQLQuery";
+  datasources:queryString """SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+ SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+ WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ FILTER(isIRI(?uri))
+ # Note how the range criteria is not used in this query
+ }
+ GROUP BY ?uri
+}
+OPTIONAL { ?uri $labelPath ?theLabelLang . FILTER(lang(?theLabelLang) = $lang) }
+OPTIONAL { ?uri $labelPath ?theLabelNone . FILTER(lang(?theLabelNone) = \"\") }
+OPTIONAL { ?uri $labelPath ?theLabelFr . FILTER(lang(?theLabelFr) = \"fr\") }
+BIND(COALESCE(?theLabelLang, ?theLabelNone, ?theLabelFr) AS ?theLabel)
+}
+ORDER BY DESC(?count) UCASE(?label)
+LIMIT 500""" .
+
+this:query_list_label_alpha_langfr a "config-datatsources:SPARQLQuery";
+  datasources:queryString """SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ # Note how the range criteria is not used in this query
+ FILTER(isIRI(?uri))
+
+ OPTIONAL { ?uri $labelPath ?theLabelLang . FILTER(lang(?theLabelLang) = $lang) }
+ OPTIONAL { ?uri $labelPath ?theLabelNone . FILTER(lang(?theLabelNone) = \"\") }
+ OPTIONAL { ?uri $labelPath ?theLabelFr . FILTER(lang(?theLabelFr) = \"fr\") }
+ BIND(COALESCE(?theLabelLang, ?theLabelNone, ?theLabelFr) AS ?label)
+}
+ORDER BY UCASE(?label)
+LIMIT 500""" .
+
+this:query_search_label_contains_langfr a "config-datatsources:SPARQLQuery";
+  datasources:queryString """SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ ?uri a $range .
+ ?uri $labelPath ?label .
+ FILTER(isIRI(?uri))
+ FILTER(CONTAINS(LCASE(STR(?label)), LCASE(\"$key\"))) 
+ FILTER(lang(?label) = '' || lang(?label) = \"fr\")
+} 
+ORDER BY UCASE(?label)
+LIMIT 50""" .
