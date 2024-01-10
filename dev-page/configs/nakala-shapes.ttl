@@ -1,0 +1,2453 @@
+@prefix dash:  <http://datashapes.org/dash#> .
+@prefix dct:   <http://purl.org/dc/terms/> .
+@prefix edm:   <http://www.europeana.eu/schemas/edm/> .
+@prefix gsp:   <http://www.opengis.net/ont/geosparql#> .
+@prefix ore:   <http://www.openarchives.org/ore/terms/> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix pav:   <http://purl.org/pav/> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix shape: <https://shacl-play.sparna.fr/shapes/> .
+@prefix skos:  <http://www.w3.org/2004/02/skos/core#> .
+@prefix terms: <http://purl.org/dc/terms/> .
+@prefix void:  <http://rdfs.org/ns/void#> .
+@prefix w3geo: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix xmlns: <http://xmlns.com/foaf/0.1/> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+shape:WebResource_altLabel
+        sh:datatype     xsd:string ;
+        sh:description  "1038173 occurences and 986153 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "altLabel"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         skos:altLabel .
+
+shape:Collection_identifier_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_title>
+        terms:conformsTo      shape:ProvidedCHO_title ;
+        void:distinctObjects  "588639"^^xsd:int ;
+        void:property         terms:title ;
+        void:triples          "684983"^^xsd:int .
+
+shape:ProvidedCHO_identifier_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_temporal_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_date_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_modified>
+        terms:conformsTo      shape:ProvidedCHO_modified ;
+        void:distinctObjects  "257"^^xsd:int ;
+        void:property         terms:modified ;
+        void:triples          "26209"^^xsd:int .
+
+shape:Agent_familyName
+        sh:datatype     xsd:string ;
+        sh:description  "12825 occurences and 10269 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "familyName"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         xmlns:familyName .
+
+shape:ProvidedCHO_modified_resource
+        sh:class     edm:TimeSpan ;
+        sh:nodeKind  sh:BlankNode .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_abstract>
+        terms:conformsTo      shape:Collection_abstract ;
+        void:distinctObjects  "1159"^^xsd:int ;
+        void:property         terms:abstract ;
+        void:triples          "1167"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_spatial>
+        terms:conformsTo      shape:ProvidedCHO_spatial ;
+        void:distinctObjects  "351548"^^xsd:int ;
+        void:property         terms:spatial ;
+        void:triples          "351548"^^xsd:int .
+
+shape:ProvidedCHO_contributor_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_contributor_literal_datatype_0 shape:ProvidedCHO_contributor_literal_datatype_1 ) .
+
+shape:ProvidedCHO_coverage_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Place_long  sh:datatype  xsd:string ;
+        sh:description  "47525 occurences and 7769 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "long"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         w3geo:long .
+
+shape:Collection_isPartOf_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_contributor>
+        terms:conformsTo      shape:Collection_contributor ;
+        void:distinctObjects  "115"^^xsd:int ;
+        void:property         terms:contributor ;
+        void:triples          "148"^^xsd:int .
+
+shape:ProvidedCHO_rightsHolder_literal_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource_sha1>
+        terms:conformsTo      shape:WebResource_sha1 ;
+        void:distinctObjects  "994657"^^xsd:int ;
+        void:property         xmlns:sha1 ;
+        void:triples          "1038173"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsVariantFormOf>
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsVariantFormOf> ;
+        void:triples          "6"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource_description>
+        terms:conformsTo      shape:WebResource_description ;
+        void:distinctObjects  "54822"^^xsd:int ;
+        void:property         terms:description ;
+        void:triples          "72660"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Aggregation_isShownAt>
+        terms:conformsTo      shape:Aggregation_isShownAt ;
+        void:distinctObjects  "675094"^^xsd:int ;
+        void:property         edm:isShownAt ;
+        void:triples          "675094"^^xsd:int .
+
+shape:ProvidedCHO_type_resource_class_0
+        sh:class  skos:Concept .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_accrualMethod>
+        void:distinctObjects  "8"^^xsd:int ;
+        void:property         terms:accrualMethod ;
+        void:triples          "3480"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_medium>
+        terms:conformsTo      shape:ProvidedCHO_medium ;
+        void:distinctObjects  "2701"^^xsd:int ;
+        void:property         terms:medium ;
+        void:triples          "207268"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_source>
+        terms:conformsTo      shape:ProvidedCHO_source ;
+        void:distinctObjects  "25906"^^xsd:int ;
+        void:property         terms:source ;
+        void:triples          "142547"^^xsd:int .
+
+shape:Collection_publisher_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_format_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_dateCopyrighted>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         terms:dateCopyrighted ;
+        void:triples          "1"^^xsd:int .
+
+shape:Aggregation_rights
+        sh:description  "675094 occurences and 1 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "rights"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:rights ;
+        sh:value        <https://creativecommons.org/licenses/by/4.0/> .
+
+shape:Place_prefLabel_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Place_lat  sh:datatype  xsd:string ;
+        sh:description  "47525 occurences and 7544 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "lat"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         w3geo:lat .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_abstract>
+        terms:conformsTo      shape:ProvidedCHO_abstract ;
+        void:distinctObjects  "7145"^^xsd:int ;
+        void:property         terms:abstract ;
+        void:triples          "21706"^^xsd:int .
+
+shape:Collection_title
+        dash:propertyRole  dash:LabelRole ;
+        sh:description     "8621 occurences and 8401 distinct values" ;
+        sh:minCount        1 ;
+        sh:name            "title"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:or              ( shape:Collection_title_datatype_0 shape:Collection_title_datatype_1 ) ;
+        sh:path            terms:title .
+
+shape:ProvidedCHO_rights_resource
+        sh:class     skos:Concept ;
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_coverage>
+        void:distinctObjects  "55"^^xsd:int ;
+        void:property         terms:coverage ;
+        void:triples          "83"^^xsd:int .
+
+shape:ProvidedCHO_title_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_rightsHolder
+        sh:description  "62923 occurences and 353 distinct values" ;
+        sh:name         "rightsHolder"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_rightsHolder_literal shape:ProvidedCHO_rightsHolder_resource ) ;
+        sh:path         terms:rightsHolder .
+
+shape:Collection_identifier_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Concept  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "Concept"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:targetClass  skos:Concept .
+
+shape:Collection_accessRights_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_date_literal_datatype_3
+        sh:datatype  xsd:gYearMonth .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsCitedBy>
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsCitedBy> ;
+        void:triples          "7"^^xsd:int .
+
+shape:ProvidedCHO_relation_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_creator_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_audience>
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         terms:audience ;
+        void:triples          "2"^^xsd:int .
+
+shape:ProvidedCHO_date
+        sh:description  "54030 occurences and 2111 distinct values" ;
+        sh:name         "date"@en ;
+        sh:nodeKind     sh:BlankNodeOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_date_literal shape:ProvidedCHO_date_resource ) ;
+        sh:path         terms:date .
+
+shape:Collection_accrualPeriodicity_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_spatial_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_rightsHolder_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_language_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:TimeSpan_begin_datatype_1
+        sh:datatype  xsd:gYear .
+
+shape:Collection_created_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_Aggregation_aggregatedCHO>
+        terms:conformsTo      shape:Aggregation_aggregatedCHO ;
+        void:distinctObjects  "666689"^^xsd:int ;
+        void:property         edm:aggregatedCHO ;
+        void:triples          "666689"^^xsd:int .
+
+shape:ProvidedCHO_rights
+        sh:description  "176696 occurences and 478 distinct values" ;
+        sh:name         "rights"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_rights_literal shape:ProvidedCHO_rights_resource ) ;
+        sh:path         terms:rights .
+
+shape:ProvidedCHO_extent_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_title
+        dash:propertyRole  dash:LabelRole ;
+        sh:description     "684983 occurences and 588639 distinct values" ;
+        sh:minCount        1 ;
+        sh:name            "title"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:or              ( shape:ProvidedCHO_title_datatype_0 shape:ProvidedCHO_title_datatype_1 ) ;
+        sh:path            terms:title .
+
+shape:Collection_created_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_created_literal_datatype_0 shape:Collection_created_literal_datatype_1 ) .
+
+shape:ProvidedCHO_subject_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_subject_literal_datatype_0 shape:ProvidedCHO_subject_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_rightsHolder>
+        void:distinctObjects  "6"^^xsd:int ;
+        void:property         terms:rightsHolder ;
+        void:triples          "9"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource>
+        terms:conformsTo        shape:WebResource ;
+        void:class              edm:WebResource ;
+        void:entities           "1038173"^^xsd:int ;
+        void:propertyPartition  <http://localhost:7200/repositories/nakala/partition_WebResource_sha1> , <http://localhost:7200/repositories/nakala/partition_WebResource_primaryTopic> , <http://localhost:7200/repositories/nakala/partition_WebResource_altLabel> , <http://localhost:7200/repositories/nakala/partition_WebResource_isAggregatedBy> , <http://localhost:7200/repositories/nakala/partition_WebResource_extent> , <http://localhost:7200/repositories/nakala/partition_WebResource_type> , <http://localhost:7200/repositories/nakala/partition_WebResource_format> , <http://localhost:7200/repositories/nakala/partition_WebResource_description> , <http://localhost:7200/repositories/nakala/partition_WebResource_available> .
+
+shape:ProvidedCHO_issued_literal_datatype_2
+        sh:datatype  xsd:gYear .
+
+shape:ProvidedCHO_language
+        sh:description  "138069 occurences and 307 distinct values" ;
+        sh:name         "language"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_language_literal shape:ProvidedCHO_language_resource ) ;
+        sh:path         terms:language .
+
+shape:ProvidedCHO_contributor
+        sh:description  "123590 occurences and 2903 distinct values" ;
+        sh:name         "contributor"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_contributor_literal shape:ProvidedCHO_contributor_resource ) ;
+        sh:path         terms:contributor .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Cites>
+        void:distinctObjects  "6"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Cites> ;
+        void:triples          "7"^^xsd:int .
+
+shape:Collection_isReferencedBy_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_bibliographicCitation>
+        terms:conformsTo      shape:ProvidedCHO_bibliographicCitation ;
+        void:distinctObjects  "37990"^^xsd:int ;
+        void:property         terms:bibliographicCitation ;
+        void:triples          "54965"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Agent_familyName>
+        terms:conformsTo      shape:Agent_familyName ;
+        void:distinctObjects  "10269"^^xsd:int ;
+        void:property         xmlns:familyName ;
+        void:triples          "12825"^^xsd:int .
+
+shape:ProvidedCHO_references_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_type_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_mediator_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_source_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_source_literal_datatype_0 shape:Collection_source_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_temporal>
+        terms:conformsTo      shape:ProvidedCHO_temporal ;
+        void:distinctObjects  "1838"^^xsd:int ;
+        void:property         terms:temporal ;
+        void:triples          "55408"^^xsd:int .
+
+shape:ProvidedCHO_language_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_language_literal_datatype_0 shape:ProvidedCHO_language_literal_datatype_1 ) .
+
+shape:ProvidedCHO_created_datatype_1
+        sh:datatype  xsd:date .
+
+shape:ProvidedCHO_medium_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_TimeSpan_prefLabel>
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         skos:prefLabel ;
+        void:triples          "7"^^xsd:int .
+
+shape:ProvidedCHO_description_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_description_literal_datatype_0 shape:ProvidedCHO_description_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_accrualPeriodicity>
+        void:distinctObjects  "3"^^xsd:int ;
+        void:property         terms:accrualPeriodicity ;
+        void:triples          "3"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_rights>
+        void:distinctObjects  "13"^^xsd:int ;
+        void:property         terms:rights ;
+        void:triples          "16"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsReviewedBy>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsReviewedBy> ;
+        void:triples          "1"^^xsd:int .
+
+shape:ProvidedCHO_bibliographicCitation_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_source_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_available_literal_datatype_1
+        sh:datatype  xsd:date .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsDescribedBy>
+        void:distinctObjects  "26"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsDescribedBy> ;
+        void:triples          "26"^^xsd:int .
+
+shape:Collection_rights_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_provenance>
+        terms:conformsTo      shape:ProvidedCHO_provenance ;
+        void:distinctObjects  "993"^^xsd:int ;
+        void:property         terms:provenance ;
+        void:triples          "159591"^^xsd:int .
+
+shape:ProvidedCHO_type_resource
+        sh:nodeKind  sh:BlankNodeOrIRI ;
+        sh:or        ( shape:ProvidedCHO_type_resource_class_0 shape:ProvidedCHO_type_resource_class_1 shape:ProvidedCHO_type_resource_class_2 ) .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_isReferencedBy>
+        void:distinctObjects  "6"^^xsd:int ;
+        void:property         terms:isReferencedBy ;
+        void:triples          "6"^^xsd:int .
+
+shape:ProvidedCHO_provenance_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_provenance_literal_datatype_0 shape:ProvidedCHO_provenance_literal_datatype_1 ) .
+
+shape:Collection_isPartOf_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ResourceMap_creator
+        dash:propertyRole  dash:LabelRole ;
+        sh:datatype        xsd:string ;
+        sh:description     "675094 occurences and 1 distinct values" ;
+        sh:maxCount        1 ;
+        sh:minCount        1 ;
+        sh:name            "creator"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:path            terms:creator ;
+        sh:value           "NAKALA" .
+
+shape:ProvidedCHO_identifier_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_extent_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_temporal_literal_datatype_2
+        sh:datatype  xsd:gYear .
+
+shape:ProvidedCHO_format
+        sh:description  "190115 occurences and 10446 distinct values" ;
+        sh:name         "format"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:ProvidedCHO_format_datatype_0 shape:ProvidedCHO_format_datatype_1 ) ;
+        sh:path         terms:format .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_accessRights>
+        void:distinctObjects  "46"^^xsd:int ;
+        void:property         terms:accessRights ;
+        void:triples          "1956"^^xsd:int .
+
+shape:ProvidedCHO_rights_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_rights_literal_datatype_0 shape:ProvidedCHO_rights_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_rightsHolder>
+        terms:conformsTo      shape:ProvidedCHO_rightsHolder ;
+        void:distinctObjects  "353"^^xsd:int ;
+        void:property         terms:rightsHolder ;
+        void:triples          "62923"^^xsd:int .
+
+shape:ProvidedCHO_tableOfContents_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsSourceOf>
+        void:distinctObjects  "46"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsSourceOf> ;
+        void:triples          "46"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_alternative>
+        void:distinctObjects  "805"^^xsd:int ;
+        void:property         terms:alternative ;
+        void:triples          "1241"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_dateCopyrighted>
+        void:distinctObjects  "12"^^xsd:int ;
+        void:property         terms:dateCopyrighted ;
+        void:triples          "59"^^xsd:int .
+
+shape:Aggregation_isDescribedBy
+        sh:class        ore:ResourceMap ;
+        sh:description  "674476 occurences and 674476 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "isDescribedBy"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:isDescribedBy .
+
+shape:ProvidedCHO_conformsTo_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_Place_long>
+        terms:conformsTo      shape:Place_long ;
+        void:distinctObjects  "7769"^^xsd:int ;
+        void:property         w3geo:long ;
+        void:triples          "47525"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_extent>
+        terms:conformsTo      shape:Collection_extent ;
+        void:distinctObjects  "53"^^xsd:int ;
+        void:property         terms:extent ;
+        void:triples          "224"^^xsd:int .
+
+shape:ProvidedCHO_subject_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_issued
+        sh:description  "33253 occurences and 3506 distinct values" ;
+        sh:name         "issued"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_issued_literal shape:ProvidedCHO_issued_resource ) ;
+        sh:path         terms:issued .
+
+shape:ResourceMap_created
+        sh:datatype     xsd:dateTime ;
+        sh:description  "674476 occurences and 643368 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "created"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         terms:created .
+
+shape:Collection_alternative_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_license_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_subject_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_type_resource_class_2
+        sh:class  edm:Place .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_rights>
+        terms:conformsTo      shape:ProvidedCHO_rights ;
+        void:distinctObjects  "478"^^xsd:int ;
+        void:property         terms:rights ;
+        void:triples          "176696"^^xsd:int .
+
+shape:Collection_title_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_publisher>
+        terms:conformsTo      shape:Collection_publisher ;
+        void:distinctObjects  "79"^^xsd:int ;
+        void:property         terms:publisher ;
+        void:triples          "512"^^xsd:int .
+
+shape:ProvidedCHO_provenance_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_isReferencedBy_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_format>
+        void:distinctObjects  "6"^^xsd:int ;
+        void:property         terms:format ;
+        void:triples          "8"^^xsd:int .
+
+shape:ProvidedCHO_publisher_literal_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_subject>
+        terms:conformsTo      shape:Collection_subject ;
+        void:distinctObjects  "2447"^^xsd:int ;
+        void:property         terms:subject ;
+        void:triples          "3531"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ResourceMap_creator>
+        terms:conformsTo      shape:ResourceMap_creator ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         terms:creator ;
+        void:triples          "675094"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Place_lat>
+        terms:conformsTo      shape:Place_lat ;
+        void:distinctObjects  "7544"^^xsd:int ;
+        void:property         w3geo:lat ;
+        void:triples          "47525"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Agent_sameAs>
+        terms:conformsTo      shape:Agent_sameAs ;
+        void:distinctObjects  "525"^^xsd:int ;
+        void:property         owl:sameAs ;
+        void:triples          "540"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ResourceMap_modified>
+        terms:conformsTo      shape:ResourceMap_modified ;
+        void:distinctObjects  "98548"^^xsd:int ;
+        void:property         terms:modified ;
+        void:triples          "128815"^^xsd:int .
+
+shape:ProvidedCHO_source_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Agent  rdf:type   sh:NodeShape ;
+        rdfs:comment    "13066 instances" ;
+        rdfs:label      "Agent"@en ;
+        sh:property     shape:Agent_givenName , shape:Agent_familyName , shape:Agent_name , shape:Agent_sameAs ;
+        sh:targetClass  edm:Agent .
+
+shape:ProvidedCHO_tableOfContents
+        sh:description  "10155 occurences and 4847 distinct values" ;
+        sh:name         "tableOfContents"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:ProvidedCHO_tableOfContents_datatype_0 shape:ProvidedCHO_tableOfContents_datatype_1 ) ;
+        sh:path         terms:tableOfContents .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_type>
+        terms:conformsTo      shape:Collection_type ;
+        void:distinctObjects  "16"^^xsd:int ;
+        void:property         terms:type ;
+        void:triples          "157"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_hasVersion>
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         terms:hasVersion ;
+        void:triples          "2"^^xsd:int .
+
+shape:WebResource_extent
+        sh:datatype     xsd:integer ;
+        sh:description  "1038173 occurences and 878341 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "extent"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         terms:extent .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsVersionOf>
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsVersionOf> ;
+        void:triples          "2"^^xsd:int .
+
+shape:ProvidedCHO_relation
+        sh:description  "107367 occurences and 24845 distinct values" ;
+        sh:name         "relation"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_relation_literal shape:ProvidedCHO_relation_resource ) ;
+        sh:path         terms:relation .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_issued>
+        void:distinctObjects  "20"^^xsd:int ;
+        void:property         terms:issued ;
+        void:triples          "20"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_description>
+        terms:conformsTo      shape:Collection_description ;
+        void:distinctObjects  "973"^^xsd:int ;
+        void:property         terms:description ;
+        void:triples          "1007"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Aggregation_provider>
+        terms:conformsTo      shape:Aggregation_provider ;
+        void:distinctObjects  "642"^^xsd:int ;
+        void:property         edm:provider ;
+        void:triples          "675094"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ResourceMap_created>
+        terms:conformsTo      shape:ResourceMap_created ;
+        void:distinctObjects  "643368"^^xsd:int ;
+        void:property         terms:created ;
+        void:triples          "674476"^^xsd:int .
+
+shape:Collection_bibliographicCitation_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsPartOf>
+        void:distinctObjects  "10"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsPartOf> ;
+        void:triples          "64"^^xsd:int .
+
+shape:Collection_provenance_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_provenance_literal_datatype_0 shape:Collection_provenance_literal_datatype_1 ) .
+
+shape:Agent_name  dash:propertyRole  dash:LabelRole ;
+        sh:datatype        xsd:string ;
+        sh:description     "13066 occurences and 12861 distinct values" ;
+        sh:maxCount        1 ;
+        sh:minCount        1 ;
+        sh:name            "name"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:path            xmlns:name .
+
+shape:ProvidedCHO_abstract_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_isAggregatedBy
+        sh:class        ore:Aggregation ;
+        sh:description  "7787 occurences and 7787 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "isAggregatedBy"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:isAggregatedBy .
+
+shape:Collection_extent_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_type_resource
+        sh:class     rdfs:Class ;
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_isFormatOf>
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         terms:isFormatOf ;
+        void:triples          "2"^^xsd:int .
+
+shape:ProvidedCHO_available_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_creator>
+        terms:conformsTo      shape:Collection_creator ;
+        void:distinctObjects  "230"^^xsd:int ;
+        void:property         terms:creator ;
+        void:triples          "971"^^xsd:int .
+
+shape:ProvidedCHO_accessRights_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_contributor>
+        terms:conformsTo      shape:ProvidedCHO_contributor ;
+        void:distinctObjects  "2903"^^xsd:int ;
+        void:property         terms:contributor ;
+        void:triples          "123590"^^xsd:int .
+
+shape:Collection_rightsHolder_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_provenance_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_isGatheredInto
+        sh:class        edm:Collection ;
+        sh:description  "2170223 occurences and 7550 distinct values" ;
+        sh:minCount     1 ;
+        sh:name         "isGatheredInto"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:isGatheredInto .
+
+shape:ProvidedCHO_modified_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_date_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_extent
+        sh:description  "224 occurences and 53 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "extent"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_extent_datatype_0 shape:Collection_extent_datatype_1 ) ;
+        sh:path         terms:extent .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_created>
+        terms:conformsTo      shape:Collection_created ;
+        void:distinctObjects  "102"^^xsd:int ;
+        void:property         terms:created ;
+        void:triples          "530"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_format>
+        terms:conformsTo      shape:ProvidedCHO_format ;
+        void:distinctObjects  "10446"^^xsd:int ;
+        void:property         terms:format ;
+        void:triples          "190115"^^xsd:int .
+
+shape:ProvidedCHO_license_resource
+        sh:class     skos:Concept ;
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_type
+        sh:description  "1056795 occurences and 1096 distinct values" ;
+        sh:minCount     1 ;
+        sh:name         "type"@en ;
+        sh:or           ( shape:ProvidedCHO_type_literal shape:ProvidedCHO_type_resource ) ;
+        sh:path         terms:type .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_hasVersion>
+        void:distinctObjects  "61"^^xsd:int ;
+        void:property         terms:hasVersion ;
+        void:triples          "70"^^xsd:int .
+
+shape:ProvidedCHO_created_datatype_3
+        sh:datatype  xsd:gYearMonth .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_language>
+        void:distinctObjects  "15"^^xsd:int ;
+        void:property         terms:language ;
+        void:triples          "29"^^xsd:int .
+
+shape:ProvidedCHO_isPartOf_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_hasFormat_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_hasFormat_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_temporal_resource
+        sh:class     edm:TimeSpan ;
+        sh:nodeKind  sh:BlankNodeOrIRI .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_issued>
+        terms:conformsTo      shape:ProvidedCHO_issued ;
+        void:distinctObjects  "3506"^^xsd:int ;
+        void:property         terms:issued ;
+        void:triples          "33253"^^xsd:int .
+
+shape:ProvidedCHO_isReferencedBy
+        sh:description  "27500 occurences and 7394 distinct values" ;
+        sh:name         "isReferencedBy"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_isReferencedBy_literal shape:ProvidedCHO_isReferencedBy_resource ) ;
+        sh:path         terms:isReferencedBy .
+
+shape:WebResource_sha1
+        sh:datatype     xsd:string ;
+        sh:description  "1038173 occurences and 994657 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "sha1"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         xmlns:sha1 .
+
+shape:WebResource_isAggregatedBy
+        sh:class        ore:Aggregation ;
+        sh:description  "1038173 occurences and 666689 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "isAggregatedBy"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:isAggregatedBy .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsContinuedBy>
+        void:distinctObjects  "12"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsContinuedBy> ;
+        void:triples          "13"^^xsd:int .
+
+shape:ProvidedCHO_modified
+        sh:description  "26209 occurences and 257 distinct values" ;
+        sh:name         "modified"@en ;
+        sh:nodeKind     sh:BlankNodeOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_modified_literal shape:ProvidedCHO_modified_resource ) ;
+        sh:path         terms:modified .
+
+shape:ProvidedCHO_type_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_description
+        sh:description  "1076956 occurences and 168619 distinct values" ;
+        sh:name         "description"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_description_literal shape:ProvidedCHO_description_resource ) ;
+        sh:path         terms:description .
+
+shape:Collection_date
+        sh:description  "1337 occurences and 426 distinct values" ;
+        sh:name         "date"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_date_datatype_0 shape:Collection_date_datatype_1 ) ;
+        sh:path         terms:date .
+
+shape:Collection_format_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Obsoletes>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Obsoletes> ;
+        void:triples          "1"^^xsd:int .
+
+shape:Collection_created_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_references>
+        terms:conformsTo      shape:ProvidedCHO_references ;
+        void:distinctObjects  "652"^^xsd:int ;
+        void:property         terms:references ;
+        void:triples          "15303"^^xsd:int .
+
+shape:Collection_relation_resource
+        sh:nodeKind  sh:IRI .
+
+shape:TimeSpan_end_datatype_0
+        sh:datatype  xsd:date .
+
+shape:Collection_audience_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_isPartOf
+        sh:description  "112 occurences and 49 distinct values" ;
+        sh:name         "isPartOf"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_isPartOf_literal shape:Collection_isPartOf_resource ) ;
+        sh:path         terms:isPartOf .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_hasPart>
+        void:distinctObjects  "70"^^xsd:int ;
+        void:property         terms:hasPart ;
+        void:triples          "70"^^xsd:int .
+
+shape:Collection_relation_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_references_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_temporal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_relation_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_relation_literal_datatype_0 shape:ProvidedCHO_relation_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_tableOfContents>
+        terms:conformsTo      shape:ProvidedCHO_tableOfContents ;
+        void:distinctObjects  "4847"^^xsd:int ;
+        void:property         terms:tableOfContents ;
+        void:triples          "10155"^^xsd:int .
+
+shape:Collection_publisher_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_publisher_literal_datatype_0 shape:Collection_publisher_literal_datatype_1 ) .
+
+shape:Collection_modified_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_description_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_TimeSpan_end>
+        terms:conformsTo      shape:TimeSpan_end ;
+        void:distinctObjects  "108"^^xsd:int ;
+        void:property         edm:end ;
+        void:triples          "1044"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Agent_givenName>
+        terms:conformsTo      shape:Agent_givenName ;
+        void:distinctObjects  "5746"^^xsd:int ;
+        void:property         xmlns:givenName ;
+        void:triples          "12843"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource_format>
+        terms:conformsTo      shape:WebResource_format ;
+        void:distinctObjects  "179"^^xsd:int ;
+        void:property         terms:format ;
+        void:triples          "1038173"^^xsd:int .
+
+shape:Collection_relation
+        sh:description  "107 occurences and 33 distinct values" ;
+        sh:name         "relation"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_relation_literal shape:Collection_relation_resource ) ;
+        sh:path         terms:relation .
+
+<http://localhost:7200/repositories/nakala/partition_Aggregation_aggregates>
+        terms:conformsTo      shape:Aggregation_aggregates ;
+        void:distinctObjects  "8405"^^xsd:int ;
+        void:property         ore:aggregates ;
+        void:triples          "8405"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_mediator>
+        void:distinctObjects  "51"^^xsd:int ;
+        void:property         terms:mediator ;
+        void:triples          "90"^^xsd:int .
+
+shape:Collection_identifier
+        sh:description  "11852 occurences and 11851 distinct values" ;
+        sh:name         "identifier"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_identifier_literal shape:Collection_identifier_resource ) ;
+        sh:path         terms:identifier .
+
+shape:Collection_publisher_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsNewVersionOf>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsNewVersionOf> ;
+        void:triples          "1"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_available>
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         terms:available ;
+        void:triples          "2"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_HasPart>
+        void:distinctObjects  "61"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/HasPart> ;
+        void:triples          "62"^^xsd:int .
+
+shape:TimeSpan_begin  sh:description  "1045 occurences and 130 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "begin"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:TimeSpan_begin_datatype_0 shape:TimeSpan_begin_datatype_1 shape:TimeSpan_begin_datatype_2 ) ;
+        sh:path         edm:begin .
+
+shape:ProvidedCHO_identifier_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_type>
+        terms:conformsTo      shape:ProvidedCHO_type ;
+        void:distinctObjects  "1096"^^xsd:int ;
+        void:property         terms:type ;
+        void:triples          "1056795"^^xsd:int .
+
+shape:Collection_spatial
+        sh:description  "268 occurences and 103 distinct values" ;
+        sh:name         "spatial"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_spatial_literal shape:Collection_spatial_resource ) ;
+        sh:path         terms:spatial .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isAggregatedBy>
+        terms:conformsTo      shape:ProvidedCHO_isAggregatedBy ;
+        void:distinctObjects  "666689"^^xsd:int ;
+        void:property         ore:isAggregatedBy ;
+        void:triples          "666689"^^xsd:int .
+
+shape:ProvidedCHO_coverage_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_creator_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_creator_literal_datatype_0 shape:ProvidedCHO_creator_literal_datatype_1 ) .
+
+shape:ProvidedCHO_abstract_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_abstract_literal_datatype_0 shape:ProvidedCHO_abstract_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsOriginalFormOf>
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsOriginalFormOf> ;
+        void:triples          "5"^^xsd:int .
+
+shape:ProvidedCHO_identifier
+        sh:description  "1289921 occurences and 1179155 distinct values" ;
+        sh:minCount     1 ;
+        sh:name         "identifier"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_identifier_literal shape:ProvidedCHO_identifier_resource ) ;
+        sh:path         terms:identifier .
+
+shape:Collection_provenance_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_rightsHolder_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:TimeSpan  rdf:type  sh:NodeShape ;
+        rdfs:comment    "1051 instances" ;
+        rdfs:label      "TimeSpan"@en ;
+        sh:property     shape:TimeSpan_begin , shape:TimeSpan_end ;
+        sh:targetClass  edm:TimeSpan .
+
+shape:WebResource  rdf:type  sh:NodeShape ;
+        rdfs:comment    "1038173 instances" ;
+        rdfs:label      "WebResource"@en ;
+        sh:property     shape:WebResource_sha1 , shape:WebResource_primaryTopic , shape:WebResource_altLabel , shape:WebResource_type , shape:WebResource_isAggregatedBy , shape:WebResource_extent , shape:WebResource_available , shape:WebResource_description , shape:WebResource_format ;
+        sh:targetClass  edm:WebResource .
+
+shape:Collection_description_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_spatial_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_rights_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_abstract_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_relation>
+        terms:conformsTo      shape:Collection_relation ;
+        void:distinctObjects  "33"^^xsd:int ;
+        void:property         terms:relation ;
+        void:triples          "107"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Agent_name>
+        terms:conformsTo      shape:Agent_name ;
+        void:distinctObjects  "12861"^^xsd:int ;
+        void:property         xmlns:name ;
+        void:triples          "13066"^^xsd:int .
+
+shape:ProvidedCHO_format_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_contributor_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_temporal
+        sh:description  "55408 occurences and 1838 distinct values" ;
+        sh:name         "temporal"@en ;
+        sh:or           ( shape:ProvidedCHO_temporal_literal shape:ProvidedCHO_temporal_resource ) ;
+        sh:path         terms:temporal .
+
+shape:ProvidedCHO_relation_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isPartOf>
+        terms:conformsTo      shape:ProvidedCHO_isPartOf ;
+        void:distinctObjects  "6269"^^xsd:int ;
+        void:property         terms:isPartOf ;
+        void:triples          "39673"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsObsoletedBy>
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsObsoletedBy> ;
+        void:triples          "2"^^xsd:int .
+
+shape:ProvidedCHO_title_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_Concept_prefLabel>
+        terms:conformsTo      shape:Concept_prefLabel ;
+        void:distinctObjects  "521"^^xsd:int ;
+        void:property         skos:prefLabel ;
+        void:triples          "533"^^xsd:int .
+
+shape:ProvidedCHO_modified_literal_datatype_2
+        sh:datatype  xsd:string .
+
+shape:Collection_accessRights_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_hasFormat>
+        terms:conformsTo      shape:ProvidedCHO_hasFormat ;
+        void:distinctObjects  "1085"^^xsd:int ;
+        void:property         terms:hasFormat ;
+        void:triples          "16698"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_identifier>
+        terms:conformsTo      shape:Collection_identifier ;
+        void:distinctObjects  "11851"^^xsd:int ;
+        void:property         terms:identifier ;
+        void:triples          "11852"^^xsd:int .
+
+shape:ProvidedCHO_publisher_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_publisher_literal_datatype_0 shape:ProvidedCHO_publisher_literal_datatype_1 ) .
+
+shape:Collection_contributor_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_date_literal_datatype_2
+        sh:datatype  xsd:gYear .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_license>
+        void:distinctObjects  "11"^^xsd:int ;
+        void:property         terms:license ;
+        void:triples          "13"^^xsd:int .
+
+shape:ResourceMap  rdf:type  sh:NodeShape ;
+        rdfs:comment    "675094 instances" ;
+        rdfs:label      "ResourceMap"@en ;
+        sh:property     shape:ResourceMap_created , shape:ResourceMap_describes , shape:ResourceMap_version , shape:ResourceMap_modified , shape:ResourceMap_rights , shape:ResourceMap_creator ;
+        sh:targetClass  ore:ResourceMap .
+
+shape:Collection_contributor
+        sh:description  "148 occurences and 115 distinct values" ;
+        sh:name         "contributor"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_contributor_datatype_0 shape:Collection_contributor_datatype_1 ) ;
+        sh:path         terms:contributor .
+
+shape:ProvidedCHO_medium
+        sh:description  "207268 occurences and 2701 distinct values" ;
+        sh:name         "medium"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_medium_literal shape:ProvidedCHO_medium_resource ) ;
+        sh:path         terms:medium .
+
+shape:ProvidedCHO_source
+        sh:description  "142547 occurences and 25906 distinct values" ;
+        sh:name         "source"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_source_literal shape:ProvidedCHO_source_resource ) ;
+        sh:path         terms:source .
+
+shape:ProvidedCHO_description_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_references_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_references_literal_datatype_0 shape:ProvidedCHO_references_literal_datatype_1 ) .
+
+shape:ProvidedCHO_language_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:TimeSpan_begin_datatype_0
+        sh:datatype  xsd:date .
+
+shape:ProvidedCHO_abstract_literal_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_description>
+        terms:conformsTo      shape:ProvidedCHO_description ;
+        void:distinctObjects  "168619"^^xsd:int ;
+        void:property         terms:description ;
+        void:triples          "1076956"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsRequiredBy>
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsRequiredBy> ;
+        void:triples          "4"^^xsd:int .
+
+shape:Place_asWKT  sh:datatype  gsp:wktLiteral ;
+        sh:description  "47525 occurences and 14246 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "asWKT"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         gsp:asWKT .
+
+shape:ProvidedCHO_issued_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_issued_literal_datatype_0 shape:ProvidedCHO_issued_literal_datatype_1 shape:ProvidedCHO_issued_literal_datatype_2 shape:ProvidedCHO_issued_literal_datatype_3 ) .
+
+shape:ProvidedCHO_creator_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_issued_literal_datatype_1
+        sh:datatype  xsd:date .
+
+<http://localhost:7200/repositories/nakala/partition_Aggregation_isDescribedBy>
+        terms:conformsTo      shape:Aggregation_isDescribedBy ;
+        void:distinctObjects  "674476"^^xsd:int ;
+        void:property         ore:isDescribedBy ;
+        void:triples          "674476"^^xsd:int .
+
+shape:Place  rdf:type   sh:NodeShape ;
+        rdfs:comment    "351549 instances" ;
+        rdfs:label      "Place"@en ;
+        sh:property     shape:Place_prefLabel , shape:Place_asWKT , shape:Place_lat , shape:Place_long ;
+        sh:targetClass  edm:Place .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_coverage>
+        terms:conformsTo      shape:ProvidedCHO_coverage ;
+        void:distinctObjects  "20994"^^xsd:int ;
+        void:property         terms:coverage ;
+        void:triples          "1219537"^^xsd:int .
+
+shape:ProvidedCHO_publisher
+        sh:description  "596541 occurences and 2098 distinct values" ;
+        sh:name         "publisher"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_publisher_literal shape:ProvidedCHO_publisher_resource ) ;
+        sh:path         terms:publisher .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_modified>
+        void:distinctObjects  "3"^^xsd:int ;
+        void:property         terms:modified ;
+        void:triples          "5"^^xsd:int .
+
+shape:Collection_type_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_Aggregation>
+        terms:conformsTo        shape:Aggregation ;
+        void:class              ore:Aggregation ;
+        void:entities           "675094"^^xsd:int ;
+        void:propertyPartition  <http://localhost:7200/repositories/nakala/partition_Aggregation_aggregatedCHO> , <http://localhost:7200/repositories/nakala/partition_Aggregation_aggregates> , <http://localhost:7200/repositories/nakala/partition_Aggregation_dataProvider> , <http://localhost:7200/repositories/nakala/partition_Aggregation_isShownAt> , <http://localhost:7200/repositories/nakala/partition_Aggregation_rights> , <http://localhost:7200/repositories/nakala/partition_Aggregation_isDescribedBy> , <http://localhost:7200/repositories/nakala/partition_Aggregation_provider> , <http://localhost:7200/repositories/nakala/partition_Aggregation_hasView> .
+
+shape:TimeSpan_end_datatype_2
+        sh:datatype  xsd:gYearMonth .
+
+shape:ProvidedCHO_mediator_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_relation_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_relation_literal_datatype_0 shape:Collection_relation_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_medium>
+        void:distinctObjects  "3"^^xsd:int ;
+        void:property         terms:medium ;
+        void:triples          "3"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_source>
+        terms:conformsTo      shape:Collection_source ;
+        void:distinctObjects  "1203"^^xsd:int ;
+        void:property         terms:source ;
+        void:triples          "1352"^^xsd:int .
+
+shape:ProvidedCHO_created_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_dateSubmitted>
+        void:distinctObjects  "57"^^xsd:int ;
+        void:property         terms:dateSubmitted ;
+        void:triples          "531"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_spatial>
+        terms:conformsTo      shape:Collection_spatial ;
+        void:distinctObjects  "103"^^xsd:int ;
+        void:property         terms:spatial ;
+        void:triples          "268"^^xsd:int .
+
+shape:Agent_givenName
+        sh:datatype     xsd:string ;
+        sh:description  "12843 occurences and 5746 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "givenName"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         xmlns:givenName .
+
+shape:ResourceMap_describes
+        sh:class        ore:Aggregation ;
+        sh:description  "675094 occurences and 675094 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "describes"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:describes .
+
+shape:Collection_publisher
+        sh:description  "512 occurences and 79 distinct values" ;
+        sh:name         "publisher"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_publisher_literal shape:Collection_publisher_resource ) ;
+        sh:path         terms:publisher .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_audience>
+        void:distinctObjects  "54"^^xsd:int ;
+        void:property         terms:audience ;
+        void:triples          "282"^^xsd:int .
+
+shape:Collection_source_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Documents>
+        void:distinctObjects  "7"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Documents> ;
+        void:triples          "9"^^xsd:int .
+
+shape:ProvidedCHO_available_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_rights_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_creator_resource
+        sh:class     edm:Agent ;
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_hasFormat_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_hasFormat_literal_datatype_0 shape:ProvidedCHO_hasFormat_literal_datatype_1 ) .
+
+shape:WebResource_available
+        sh:datatype     xsd:dateTime ;
+        sh:description  "988771 occurences and 2181 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "available"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         terms:available .
+
+shape:ResourceMap_modified
+        sh:datatype     xsd:dateTime ;
+        sh:description  "128815 occurences and 98548 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "modified"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         terms:modified .
+
+shape:ResourceMap_rights
+        sh:description  "675094 occurences and 1 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "rights"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         terms:rights ;
+        sh:value        <https://creativecommons.org/licenses/by/4.0/> .
+
+<http://localhost:7200/repositories/nakala/partition_ResourceMap>
+        terms:conformsTo        shape:ResourceMap ;
+        void:class              ore:ResourceMap ;
+        void:entities           "675094"^^xsd:int ;
+        void:propertyPartition  <http://localhost:7200/repositories/nakala/partition_ResourceMap_version> , <http://localhost:7200/repositories/nakala/partition_ResourceMap_created> , <http://localhost:7200/repositories/nakala/partition_ResourceMap_rights> , <http://localhost:7200/repositories/nakala/partition_ResourceMap_creator> , <http://localhost:7200/repositories/nakala/partition_ResourceMap_describes> , <http://localhost:7200/repositories/nakala/partition_ResourceMap_modified> .
+
+shape:ProvidedCHO_extent
+        sh:description  "62717 occurences and 4040 distinct values" ;
+        sh:name         "extent"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_extent_literal shape:ProvidedCHO_extent_resource ) ;
+        sh:path         terms:extent .
+
+shape:Concept_prefLabel
+        dash:propertyRole  dash:LabelRole ;
+        sh:datatype        xsd:string ;
+        sh:description     "533 occurences and 521 distinct values" ;
+        sh:maxCount        1 ;
+        sh:minCount        1 ;
+        sh:name            "prefLabel"@en ;
+        sh:nodeKind        sh:Literal ;
+        sh:path            skos:prefLabel .
+
+shape:ProvidedCHO_bibliographicCitation_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Aggregation_hasView
+        sh:class        edm:WebResource ;
+        sh:description  "1038173 occurences and 1038173 distinct values" ;
+        sh:name         "hasView"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:hasView .
+
+<http://localhost:7200/repositories/nakala/partition_TimeSpan_begin>
+        terms:conformsTo      shape:TimeSpan_begin ;
+        void:distinctObjects  "130"^^xsd:int ;
+        void:property         edm:begin ;
+        void:triples          "1045"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_requires>
+        void:distinctObjects  "6"^^xsd:int ;
+        void:property         terms:requires ;
+        void:triples          "6"^^xsd:int .
+
+shape:Aggregation_provider
+        sh:class        edm:Agent ;
+        sh:description  "675094 occurences and 642 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "provider"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:provider .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsSupplementTo>
+        void:distinctObjects  "62"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsSupplementTo> ;
+        void:triples          "62"^^xsd:int .
+
+shape:ProvidedCHO  rdf:type  sh:NodeShape ;
+        rdfs:comment    "666689 instances" ;
+        rdfs:label      "ProvidedCHO"@en ;
+        sh:property     shape:ProvidedCHO_subject , shape:ProvidedCHO_identifier , shape:ProvidedCHO_type , shape:ProvidedCHO_relation , shape:ProvidedCHO_hasType , shape:ProvidedCHO_tableOfContents , shape:ProvidedCHO_language , shape:ProvidedCHO_title , shape:ProvidedCHO_description , shape:ProvidedCHO_bibliographicCitation , shape:ProvidedCHO_contributor , shape:ProvidedCHO_isReferencedBy , shape:ProvidedCHO_spatial , shape:ProvidedCHO_date , shape:ProvidedCHO_created , shape:ProvidedCHO_isAggregatedBy , shape:ProvidedCHO_isGatheredInto , shape:ProvidedCHO_issued , shape:ProvidedCHO_creator , shape:ProvidedCHO_rightsHolder , shape:ProvidedCHO_medium , shape:ProvidedCHO_rights , shape:ProvidedCHO_references , shape:ProvidedCHO_format , shape:ProvidedCHO_publisher , shape:ProvidedCHO_modified , shape:ProvidedCHO_provenance , shape:ProvidedCHO_source , shape:ProvidedCHO_extent , shape:ProvidedCHO_isPartOf , shape:ProvidedCHO_license , shape:ProvidedCHO_abstract , shape:ProvidedCHO_temporal , shape:ProvidedCHO_coverage , shape:ProvidedCHO_hasFormat , shape:ProvidedCHO_available ;
+        sh:targetClass  edm:ProvidedCHO .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isVersionOf>
+        void:distinctObjects  "975"^^xsd:int ;
+        void:property         terms:isVersionOf ;
+        void:triples          "1176"^^xsd:int .
+
+shape:Collection_provenance
+        sh:description  "178 occurences and 59 distinct values" ;
+        sh:name         "provenance"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_provenance_literal shape:Collection_provenance_resource ) ;
+        sh:path         terms:provenance .
+
+<http://localhost:7200/repositories/nakala/partition_Aggregation_rights>
+        terms:conformsTo      shape:Aggregation_rights ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         edm:rights ;
+        void:triples          "675094"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_isAggregatedBy>
+        terms:conformsTo      shape:Collection_isAggregatedBy ;
+        void:distinctObjects  "7787"^^xsd:int ;
+        void:property         ore:isAggregatedBy ;
+        void:triples          "7787"^^xsd:int .
+
+shape:ProvidedCHO_extent_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_date_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_temporal_literal_datatype_1
+        sh:datatype  xsd:dateTime .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsDocumentedBy>
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsDocumentedBy> ;
+        void:triples          "5"^^xsd:int .
+
+shape:ProvidedCHO_tableOfContents_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_Place_asWKT>
+        terms:conformsTo      shape:Place_asWKT ;
+        void:distinctObjects  "14246"^^xsd:int ;
+        void:property         gsp:asWKT ;
+        void:triples          "47525"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_date>
+        terms:conformsTo      shape:Collection_date ;
+        void:distinctObjects  "426"^^xsd:int ;
+        void:property         terms:date ;
+        void:triples          "1337"^^xsd:int .
+
+shape:Collection_isPartOf_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_conformsTo_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_coverage_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_publisher>
+        terms:conformsTo      shape:ProvidedCHO_publisher ;
+        void:distinctObjects  "2098"^^xsd:int ;
+        void:property         terms:publisher ;
+        void:triples          "596541"^^xsd:int .
+
+shape:ProvidedCHO_provenance_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_license_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_provenance
+        sh:description  "159591 occurences and 993 distinct values" ;
+        sh:name         "provenance"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_provenance_literal shape:ProvidedCHO_provenance_resource ) ;
+        sh:path         terms:provenance .
+
+shape:Collection_subject_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_source_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_source_literal_datatype_0 shape:ProvidedCHO_source_literal_datatype_1 ) .
+
+shape:ProvidedCHO_type_resource_class_1
+        sh:class  rdfs:Class .
+
+shape:Collection_publisher_literal_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ResourceMap_describes>
+        terms:conformsTo      shape:ResourceMap_describes ;
+        void:distinctObjects  "675094"^^xsd:int ;
+        void:property         ore:describes ;
+        void:triples          "675094"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Aggregation_hasView>
+        terms:conformsTo      shape:Aggregation_hasView ;
+        void:distinctObjects  "1038173"^^xsd:int ;
+        void:property         edm:hasView ;
+        void:triples          "1038173"^^xsd:int .
+
+shape:ProvidedCHO_license_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_license_literal_datatype_0 shape:ProvidedCHO_license_literal_datatype_1 ) .
+
+shape:ProvidedCHO_provenance_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection  rdf:type  sh:NodeShape ;
+        rdfs:comment    "8405 instances" ;
+        rdfs:label      "Collection"@en ;
+        sh:property     shape:Collection_created , shape:Collection_abstract , shape:Collection_isAggregatedBy , shape:Collection_description , shape:Collection_subject , shape:Collection_provenance , shape:Collection_source , shape:Collection_title , shape:Collection_date , shape:Collection_creator , shape:Collection_publisher , shape:Collection_spatial , shape:Collection_relation , shape:Collection_extent , shape:Collection_identifier , shape:Collection_contributor , shape:Collection_type , shape:Collection_isPartOf ;
+        sh:targetClass  edm:Collection .
+
+shape:Place_prefLabel_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_publisher_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Aggregation_dataProvider
+        sh:class        edm:Agent ;
+        sh:description  "675094 occurences and 668 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "dataProvider"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:dataProvider .
+
+shape:Collection_source
+        sh:description  "1352 occurences and 1203 distinct values" ;
+        sh:name         "source"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_source_literal shape:Collection_source_resource ) ;
+        sh:path         terms:source .
+
+shape:ResourceMap_version
+        sh:datatype     xsd:string ;
+        sh:description  "666689 occurences and 98 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "version"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         pav:version .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource_type>
+        terms:conformsTo      shape:WebResource_type ;
+        void:distinctObjects  "81"^^xsd:int ;
+        void:property         terms:type ;
+        void:triples          "1038173"^^xsd:int .
+
+shape:ProvidedCHO_subject
+        sh:description  "2115167 occurences and 40685 distinct values" ;
+        sh:name         "subject"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_subject_literal shape:ProvidedCHO_subject_resource ) ;
+        sh:path         terms:subject .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource_available>
+        terms:conformsTo      shape:WebResource_available ;
+        void:distinctObjects  "2181"^^xsd:int ;
+        void:property         terms:available ;
+        void:triples          "988771"^^xsd:int .
+
+shape:Collection_identifier_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_source_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_extent_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_extent_literal_datatype_0 shape:ProvidedCHO_extent_literal_datatype_1 ) .
+
+shape:ProvidedCHO_date_literal_datatype_4
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_temporal>
+        void:distinctObjects  "7"^^xsd:int ;
+        void:property         terms:temporal ;
+        void:triples          "7"^^xsd:int .
+
+shape:ProvidedCHO_bibliographicCitation
+        sh:description  "54965 occurences and 37990 distinct values" ;
+        sh:name         "bibliographicCitation"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_bibliographicCitation_literal shape:ProvidedCHO_bibliographicCitation_resource ) ;
+        sh:path         terms:bibliographicCitation .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource_altLabel>
+        terms:conformsTo      shape:WebResource_altLabel ;
+        void:distinctObjects  "986153"^^xsd:int ;
+        void:property         skos:altLabel ;
+        void:triples          "1038173"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_provenance>
+        terms:conformsTo      shape:Collection_provenance ;
+        void:distinctObjects  "59"^^xsd:int ;
+        void:property         terms:provenance ;
+        void:triples          "178"^^xsd:int .
+
+shape:ProvidedCHO_relation_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_creator_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_bibliographicCitation_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO>
+        terms:conformsTo        shape:ProvidedCHO ;
+        void:class              edm:ProvidedCHO ;
+        void:entities           "666689"^^xsd:int ;
+        void:propertyPartition  <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_conformsTo> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_accessRights> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_tableOfContents> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_HasVersion> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_hasPart> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_subject> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isGatheredInto> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_description> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsDerivedFrom> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_abstract> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_dateSubmitted> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsSourceOf> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_date> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_dateCopyrighted> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsDocumentedBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsObsoletedBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_PreviousVersionOf> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_accrualPeriodicity> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsPartOf> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_language> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isPartOf> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsVersionOf> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_educationLevel> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Cites> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_issued> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Obsoletes> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_hasFormat> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsNewVersionOf> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isAggregatedBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsCitedBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_references> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_source> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_audience> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_References> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_HasPart> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_available> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Continues> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsContinuedBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_bibliographicCitation> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsRequiredBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_identifier> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isReferencedBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_license> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_requires> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_created> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_temporal> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_creator> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_rights> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_title> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_alternative> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_format> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsSupplementTo> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_type> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_relation> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsSupplementedBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isRequiredBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_accrualMethod> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_contributor> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_hasVersion> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_dateAccepted> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Documents> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsCompiledBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsReviewedBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_provenance> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_medium> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_coverage> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsOriginalFormOf> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_modified> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isFormatOf> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Describes> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_extent> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_spatial> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_rightsHolder> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Reviews> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_hasType> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isVersionOf> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Requires> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsDescribedBy> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_publisher> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_mediator> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsVariantFormOf> .
+
+<http://localhost:7200/repositories/nakala/partition_Place_prefLabel>
+        terms:conformsTo      shape:Place_prefLabel ;
+        void:distinctObjects  "14097"^^xsd:int ;
+        void:property         skos:prefLabel ;
+        void:triples          "337462"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Agent>
+        terms:conformsTo        shape:Agent ;
+        void:class              edm:Agent ;
+        void:entities           "13066"^^xsd:int ;
+        void:propertyPartition  <http://localhost:7200/repositories/nakala/partition_Agent_name> , <http://localhost:7200/repositories/nakala/partition_Agent_givenName> , <http://localhost:7200/repositories/nakala/partition_Agent_sameAs> , <http://localhost:7200/repositories/nakala/partition_Agent_familyName> .
+
+shape:ProvidedCHO_medium_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_accrualPeriodicity_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_accessRights>
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         terms:accessRights ;
+        void:triples          "4"^^xsd:int .
+
+shape:Collection_spatial_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:TimeSpan_begin_datatype_2
+        sh:datatype  xsd:gYearMonth .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_dateAccepted>
+        void:distinctObjects  "17"^^xsd:int ;
+        void:property         terms:dateAccepted ;
+        void:triples          "18"^^xsd:int .
+
+shape:ProvidedCHO_isReferencedBy_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_subject
+        sh:description  "3531 occurences and 2447 distinct values" ;
+        sh:name         "subject"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_subject_datatype_0 shape:Collection_subject_datatype_1 ) ;
+        sh:path         terms:subject .
+
+shape:ProvidedCHO_creator
+        sh:description  "1139545 occurences and 19888 distinct values" ;
+        sh:minCount     1 ;
+        sh:name         "creator"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_creator_literal shape:ProvidedCHO_creator_resource ) ;
+        sh:path         terms:creator .
+
+shape:ProvidedCHO_isPartOf_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_ResourceMap_rights>
+        terms:conformsTo      shape:ResourceMap_rights ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         terms:rights ;
+        void:triples          "675094"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_extent>
+        terms:conformsTo      shape:ProvidedCHO_extent ;
+        void:distinctObjects  "4040"^^xsd:int ;
+        void:property         terms:extent ;
+        void:triples          "62717"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ResourceMap_version>
+        terms:conformsTo      shape:ResourceMap_version ;
+        void:distinctObjects  "98"^^xsd:int ;
+        void:property         pav:version ;
+        void:triples          "666689"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Concept>
+        terms:conformsTo        shape:Concept ;
+        void:class              skos:Concept ;
+        void:entities           "533"^^xsd:int ;
+        void:propertyPartition  <http://localhost:7200/repositories/nakala/partition_Concept_prefLabel> , <http://localhost:7200/repositories/nakala/partition_Concept_altLabel> .
+
+shape:Agent_sameAs  sh:description  "540 occurences and 525 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "sameAs"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         owl:sameAs .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_subject>
+        terms:conformsTo      shape:ProvidedCHO_subject ;
+        void:distinctObjects  "40685"^^xsd:int ;
+        void:property         terms:subject ;
+        void:triples          "2115167"^^xsd:int .
+
+shape:ProvidedCHO_issued_literal_datatype_3
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsDerivedFrom>
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsDerivedFrom> ;
+        void:triples          "44"^^xsd:int .
+
+shape:Collection_isReferencedBy_datatype_1
+        sh:datatype  xsd:string .
+
+<https://shacl-play.sparna.fr/shapes>
+        rdf:type        owl:Ontology ;
+        terms:abstract  "Created automatically by SHACL Play!.\n37153537 triples in the dataset..\nRemoved rarely used property shapes, below threshold of 0.1%. 69 property shapes filtered out." ;
+        terms:created   "2023-07-11T10:49:20.507Z"^^xsd:dateTime .
+
+shape:ProvidedCHO_references_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_date_resource
+        sh:class     edm:TimeSpan ;
+        sh:nodeKind  sh:BlankNode .
+
+shape:ProvidedCHO_created
+        sh:description  "717053 occurences and 34027 distinct values" ;
+        sh:minCount     1 ;
+        sh:name         "created"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:ProvidedCHO_created_datatype_0 shape:ProvidedCHO_created_datatype_1 shape:ProvidedCHO_created_datatype_2 shape:ProvidedCHO_created_datatype_3 shape:ProvidedCHO_created_datatype_4 ) ;
+        sh:path         terms:created .
+
+shape:ProvidedCHO_available
+        sh:description  "28230 occurences and 313 distinct values" ;
+        sh:name         "available"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_available_literal shape:ProvidedCHO_available_resource ) ;
+        sh:path         terms:available .
+
+shape:ProvidedCHO_publisher_resource
+        sh:nodeKind  sh:IRI .
+
+shape:Collection_description
+        sh:description  "1007 occurences and 973 distinct values" ;
+        sh:name         "description"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_description_literal shape:Collection_description_resource ) ;
+        sh:path         terms:description .
+
+shape:ProvidedCHO_created_datatype_2
+        sh:datatype  xsd:gYear .
+
+shape:ProvidedCHO_medium_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_isPartOf_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Reviews>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Reviews> ;
+        void:triples          "1"^^xsd:int .
+
+shape:ProvidedCHO_hasFormat_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_TimeSpan>
+        terms:conformsTo        shape:TimeSpan ;
+        void:class              edm:TimeSpan ;
+        void:entities           "1051"^^xsd:int ;
+        void:propertyPartition  <http://localhost:7200/repositories/nakala/partition_TimeSpan_prefLabel> , <http://localhost:7200/repositories/nakala/partition_TimeSpan_end> , <http://localhost:7200/repositories/nakala/partition_TimeSpan_begin> .
+
+shape:ProvidedCHO_bibliographicCitation_literal_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala>
+        rdf:type             void:Dataset ;
+        terms:conformsTo     <https://shacl-play.sparna.fr/shapes> ;
+        void:classPartition  <http://localhost:7200/repositories/nakala/partition_TimeSpan> , <http://localhost:7200/repositories/nakala/partition_Concept> , <http://localhost:7200/repositories/nakala/partition_Agent> , <http://localhost:7200/repositories/nakala/partition_WebResource> , <http://localhost:7200/repositories/nakala/partition_Place> , <http://localhost:7200/repositories/nakala/partition_Collection> , <http://localhost:7200/repositories/nakala/partition_ProvidedCHO> , <http://localhost:7200/repositories/nakala/partition_Aggregation> , <http://localhost:7200/repositories/nakala/partition_ResourceMap> ;
+        void:triples         "37153537"^^xsd:int .
+
+shape:Collection_creator
+        sh:description  "971 occurences and 230 distinct values" ;
+        sh:name         "creator"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_creator_datatype_0 shape:Collection_creator_datatype_1 ) ;
+        sh:path         terms:creator .
+
+shape:ProvidedCHO_modified_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_modified_literal_datatype_0 shape:ProvidedCHO_modified_literal_datatype_1 shape:ProvidedCHO_modified_literal_datatype_2 ) .
+
+shape:ProvidedCHO_available_literal_datatype_2
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_creator>
+        terms:conformsTo      shape:ProvidedCHO_creator ;
+        void:distinctObjects  "19888"^^xsd:int ;
+        void:property         terms:creator ;
+        void:triples          "1139545"^^xsd:int .
+
+shape:ProvidedCHO_isPartOf_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_isPartOf_literal_datatype_0 shape:ProvidedCHO_isPartOf_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_isVersionOf>
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         terms:isVersionOf ;
+        void:triples          "2"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_title>
+        terms:conformsTo      shape:Collection_title ;
+        void:distinctObjects  "8401"^^xsd:int ;
+        void:property         terms:title ;
+        void:triples          "8621"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Continues>
+        void:distinctObjects  "13"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Continues> ;
+        void:triples          "17"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isFormatOf>
+        void:distinctObjects  "1383"^^xsd:int ;
+        void:property         terms:isFormatOf ;
+        void:triples          "2395"^^xsd:int .
+
+shape:ProvidedCHO_isAggregatedBy
+        sh:class        ore:Aggregation ;
+        sh:description  "666689 occurences and 666689 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "isAggregatedBy"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:isAggregatedBy .
+
+shape:ProvidedCHO_coverage_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_coverage_literal_datatype_0 shape:ProvidedCHO_coverage_literal_datatype_1 ) .
+
+shape:Collection_created
+        sh:description  "530 occurences and 102 distinct values" ;
+        sh:name         "created"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_created_literal shape:Collection_created_resource ) ;
+        sh:path         terms:created .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_PreviousVersionOf>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/PreviousVersionOf> ;
+        void:triples          "1"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Aggregation_dataProvider>
+        terms:conformsTo      shape:Aggregation_dataProvider ;
+        void:distinctObjects  "668"^^xsd:int ;
+        void:property         edm:dataProvider ;
+        void:triples          "675094"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_created>
+        terms:conformsTo      shape:ProvidedCHO_created ;
+        void:distinctObjects  "34027"^^xsd:int ;
+        void:property         terms:created ;
+        void:triples          "717053"^^xsd:int .
+
+shape:Aggregation_aggregatedCHO
+        sh:class        edm:ProvidedCHO ;
+        sh:description  "666689 occurences and 666689 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "aggregatedCHO"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:aggregatedCHO .
+
+shape:ProvidedCHO_temporal_literal_datatype_3
+        sh:datatype  xsd:string .
+
+shape:Concept_altLabel
+        sh:datatype     xsd:string ;
+        sh:description  "503 occurences and 503 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "altLabel"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         skos:altLabel .
+
+shape:ProvidedCHO_available_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_available_literal_datatype_0 shape:ProvidedCHO_available_literal_datatype_1 shape:ProvidedCHO_available_literal_datatype_2 ) .
+
+shape:ProvidedCHO_identifier_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_identifier_literal_datatype_0 shape:ProvidedCHO_identifier_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_language>
+        terms:conformsTo      shape:ProvidedCHO_language ;
+        void:distinctObjects  "307"^^xsd:int ;
+        void:property         terms:language ;
+        void:triples          "138069"^^xsd:int .
+
+shape:Collection_temporal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource_extent>
+        terms:conformsTo      shape:WebResource_extent ;
+        void:distinctObjects  "878341"^^xsd:int ;
+        void:property         terms:extent ;
+        void:triples          "1038173"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_date>
+        terms:conformsTo      shape:ProvidedCHO_date ;
+        void:distinctObjects  "2111"^^xsd:int ;
+        void:property         terms:date ;
+        void:triples          "54030"^^xsd:int .
+
+shape:Collection_modified_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_subject_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_isPartOf
+        sh:description  "39673 occurences and 6269 distinct values" ;
+        sh:name         "isPartOf"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_isPartOf_literal shape:ProvidedCHO_isPartOf_resource ) ;
+        sh:path         terms:isPartOf .
+
+shape:Collection_alternative_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_available>
+        terms:conformsTo      shape:ProvidedCHO_available ;
+        void:distinctObjects  "313"^^xsd:int ;
+        void:property         terms:available ;
+        void:triples          "28230"^^xsd:int .
+
+shape:ProvidedCHO_abstract
+        sh:description  "21706 occurences and 7145 distinct values" ;
+        sh:name         "abstract"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_abstract_literal shape:ProvidedCHO_abstract_resource ) ;
+        sh:path         terms:abstract .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_bibliographicCitation>
+        void:distinctObjects  "7"^^xsd:int ;
+        void:property         terms:bibliographicCitation ;
+        void:triples          "7"^^xsd:int .
+
+shape:ProvidedCHO_hasType
+        sh:class        skos:Concept ;
+        sh:description  "666690 occurences and 30 distinct values" ;
+        sh:minCount     1 ;
+        sh:name         "hasType"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:hasType .
+
+shape:Collection_title_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Describes>
+        void:distinctObjects  "29"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Describes> ;
+        void:triples          "29"^^xsd:int .
+
+shape:ProvidedCHO_date_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_date_literal_datatype_0 shape:ProvidedCHO_date_literal_datatype_1 shape:ProvidedCHO_date_literal_datatype_2 shape:ProvidedCHO_date_literal_datatype_3 shape:ProvidedCHO_date_literal_datatype_4 ) .
+
+shape:ProvidedCHO_isReferencedBy_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_hasFormat
+        sh:description  "16698 occurences and 1085 distinct values" ;
+        sh:name         "hasFormat"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_hasFormat_literal shape:ProvidedCHO_hasFormat_resource ) ;
+        sh:path         terms:hasFormat .
+
+shape:ProvidedCHO_references
+        sh:description  "15303 occurences and 652 distinct values" ;
+        sh:name         "references"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_references_literal shape:ProvidedCHO_references_resource ) ;
+        sh:path         terms:references .
+
+<http://localhost:7200/repositories/nakala/partition_Collection>
+        terms:conformsTo        shape:Collection ;
+        void:class              edm:Collection ;
+        void:entities           "8405"^^xsd:int ;
+        void:propertyPartition  <http://localhost:7200/repositories/nakala/partition_Collection_audience> , <http://localhost:7200/repositories/nakala/partition_Collection_alternative> , <http://localhost:7200/repositories/nakala/partition_Collection_isAggregatedBy> , <http://localhost:7200/repositories/nakala/partition_Collection_isVersionOf> , <http://localhost:7200/repositories/nakala/partition_Collection_hasVersion> , <http://localhost:7200/repositories/nakala/partition_Collection_description> , <http://localhost:7200/repositories/nakala/partition_Collection_provenance> , <http://localhost:7200/repositories/nakala/partition_Collection_isReferencedBy> , <http://localhost:7200/repositories/nakala/partition_Collection_isRequiredBy> , <http://localhost:7200/repositories/nakala/partition_Collection_created> , <http://localhost:7200/repositories/nakala/partition_Collection_dateCopyrighted> , <http://localhost:7200/repositories/nakala/partition_Collection_accessRights> , <http://localhost:7200/repositories/nakala/partition_Collection_issued> , <http://localhost:7200/repositories/nakala/partition_Collection_date> , <http://localhost:7200/repositories/nakala/partition_Collection_relation> , <http://localhost:7200/repositories/nakala/partition_Collection_abstract> , <http://localhost:7200/repositories/nakala/partition_Collection_creator> , <http://localhost:7200/repositories/nakala/partition_Collection_temporal> , <http://localhost:7200/repositories/nakala/partition_Collection_publisher> , <http://localhost:7200/repositories/nakala/partition_Collection_language> , <http://localhost:7200/repositories/nakala/partition_Collection_rightsHolder> , <http://localhost:7200/repositories/nakala/partition_Collection_type> , <http://localhost:7200/repositories/nakala/partition_Collection_coverage> , <http://localhost:7200/repositories/nakala/partition_Collection_accrualPeriodicity> , <http://localhost:7200/repositories/nakala/partition_Collection_available> , <http://localhost:7200/repositories/nakala/partition_Collection_spatial> , <http://localhost:7200/repositories/nakala/partition_Collection_license> , <http://localhost:7200/repositories/nakala/partition_Collection_source> , <http://localhost:7200/repositories/nakala/partition_Collection_identifier> , <http://localhost:7200/repositories/nakala/partition_Collection_medium> , <http://localhost:7200/repositories/nakala/partition_Collection_subject> , <http://localhost:7200/repositories/nakala/partition_Collection_extent> , <http://localhost:7200/repositories/nakala/partition_Collection_isPartOf> , <http://localhost:7200/repositories/nakala/partition_Collection_bibliographicCitation> , <http://localhost:7200/repositories/nakala/partition_Collection_title> , <http://localhost:7200/repositories/nakala/partition_Collection_rights> , <http://localhost:7200/repositories/nakala/partition_Collection_format> , <http://localhost:7200/repositories/nakala/partition_Collection_hasPart> , <http://localhost:7200/repositories/nakala/partition_Collection_contributor> , <http://localhost:7200/repositories/nakala/partition_Collection_isFormatOf> , <http://localhost:7200/repositories/nakala/partition_Collection_modified> .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_hasPart>
+        void:distinctObjects  "433"^^xsd:int ;
+        void:property         terms:hasPart ;
+        void:triples          "2405"^^xsd:int .
+
+shape:Place_prefLabel
+        sh:description  "337462 occurences and 14097 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "prefLabel"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Place_prefLabel_datatype_0 shape:Place_prefLabel_datatype_1 ) ;
+        sh:path         skos:prefLabel .
+
+shape:Collection_type_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_type_literal_datatype_0 shape:Collection_type_literal_datatype_1 ) .
+
+shape:Collection_source_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_isRequiredBy>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         terms:isRequiredBy ;
+        void:triples          "1"^^xsd:int .
+
+shape:TimeSpan_end  sh:description  "1044 occurences and 108 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "end"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:TimeSpan_end_datatype_0 shape:TimeSpan_end_datatype_1 shape:TimeSpan_end_datatype_2 ) ;
+        sh:path         edm:end .
+
+shape:WebResource_format
+        sh:datatype     xsd:string ;
+        sh:description  "1038173 occurences and 179 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "format"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         terms:format .
+
+shape:WebResource_primaryTopic
+        sh:description  "1038173 occurences and 1038173 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "primaryTopic"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         xmlns:primaryTopic .
+
+shape:Collection_description_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_rights_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:Collection_extent_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_abstract_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_coverage
+        sh:description  "1219537 occurences and 20994 distinct values" ;
+        sh:name         "coverage"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_coverage_literal shape:ProvidedCHO_coverage_resource ) ;
+        sh:path         terms:coverage .
+
+shape:ProvidedCHO_isReferencedBy_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_isReferencedBy_literal_datatype_0 shape:ProvidedCHO_isReferencedBy_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_hasType>
+        terms:conformsTo      shape:ProvidedCHO_hasType ;
+        void:distinctObjects  "30"^^xsd:int ;
+        void:property         edm:hasType ;
+        void:triples          "666690"^^xsd:int .
+
+shape:Collection_spatial_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_spatial_literal_datatype_0 shape:Collection_spatial_literal_datatype_1 ) .
+
+shape:Aggregation_aggregates
+        sh:class        edm:Collection ;
+        sh:description  "8405 occurences and 8405 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "aggregates"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         ore:aggregates .
+
+shape:WebResource_description
+        sh:datatype     xsd:string ;
+        sh:description  "72660 occurences and 54822 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "description"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         terms:description .
+
+shape:ProvidedCHO_contributor_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_accessRights_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_rightsHolder_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Aggregation  rdf:type  sh:NodeShape ;
+        rdfs:comment    "675094 instances" ;
+        rdfs:label      "Aggregation"@en ;
+        sh:property     shape:Aggregation_hasView , shape:Aggregation_dataProvider , shape:Aggregation_rights , shape:Aggregation_provider , shape:Aggregation_isDescribedBy , shape:Aggregation_aggregates , shape:Aggregation_aggregatedCHO , shape:Aggregation_isShownAt ;
+        sh:targetClass  ore:Aggregation .
+
+shape:Collection_provenance_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_identifier_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_identifier_literal_datatype_0 shape:Collection_identifier_literal_datatype_1 ) .
+
+shape:Collection_description_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_temporal_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_temporal_literal_datatype_0 shape:ProvidedCHO_temporal_literal_datatype_1 shape:ProvidedCHO_temporal_literal_datatype_2 shape:ProvidedCHO_temporal_literal_datatype_3 ) .
+
+shape:ProvidedCHO_modified_literal_datatype_1
+        sh:datatype  xsd:date .
+
+shape:ProvidedCHO_rightsHolder_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_rightsHolder_literal_datatype_0 shape:ProvidedCHO_rightsHolder_literal_datatype_1 ) .
+
+shape:Collection_contributor_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_issued_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_Concept_altLabel>
+        terms:conformsTo      shape:Concept_altLabel ;
+        void:distinctObjects  "503"^^xsd:int ;
+        void:property         skos:altLabel ;
+        void:triples          "503"^^xsd:int .
+
+shape:ProvidedCHO_date_literal_datatype_1
+        sh:datatype  xsd:date .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_HasVersion>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/HasVersion> ;
+        void:triples          "1"^^xsd:int .
+
+shape:ProvidedCHO_language_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_created_datatype_4
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_license
+        sh:description  "728979 occurences and 123 distinct values" ;
+        sh:minCount     1 ;
+        sh:name         "license"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:ProvidedCHO_license_literal shape:ProvidedCHO_license_resource ) ;
+        sh:path         terms:license .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_relation>
+        terms:conformsTo      shape:ProvidedCHO_relation ;
+        void:distinctObjects  "24845"^^xsd:int ;
+        void:property         terms:relation ;
+        void:triples          "107367"^^xsd:int .
+
+shape:Collection_isPartOf_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_isPartOf_literal_datatype_0 shape:Collection_isPartOf_literal_datatype_1 ) .
+
+shape:ProvidedCHO_abstract_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isRequiredBy>
+        void:distinctObjects  "3"^^xsd:int ;
+        void:property         terms:isRequiredBy ;
+        void:triples          "4"^^xsd:int .
+
+shape:ProvidedCHO_medium_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_medium_literal_datatype_0 shape:ProvidedCHO_medium_literal_datatype_1 ) .
+
+shape:ProvidedCHO_type_literal_datatype_1
+        sh:datatype  xsd:string .
+
+shape:ProvidedCHO_creator_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+shape:ProvidedCHO_issued_literal_datatype_0
+        sh:datatype  rdf:langString .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_alternative>
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         terms:alternative ;
+        void:triples          "5"^^xsd:int .
+
+shape:Collection_format_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Collection_created_literal_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_References>
+        void:distinctObjects  "11"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/References> ;
+        void:triples          "11"^^xsd:int .
+
+shape:ProvidedCHO_source_resource
+        sh:nodeKind  sh:IRI .
+
+shape:WebResource_type
+        sh:datatype     xsd:string ;
+        sh:description  "1038173 occurences and 81 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "type"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:path         terms:type .
+
+shape:TimeSpan_end_datatype_1
+        sh:datatype  xsd:gYear .
+
+shape:Collection_audience_datatype_1
+        sh:datatype  xsd:string .
+
+shape:Aggregation_isShownAt
+        sh:description  "675094 occurences and 675094 distinct values" ;
+        sh:maxCount     1 ;
+        sh:minCount     1 ;
+        sh:name         "isShownAt"@en ;
+        sh:nodeKind     sh:IRI ;
+        sh:path         edm:isShownAt .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_license>
+        terms:conformsTo      shape:ProvidedCHO_license ;
+        void:distinctObjects  "123"^^xsd:int ;
+        void:property         terms:license ;
+        void:triples          "728979"^^xsd:int .
+
+shape:Collection_abstract
+        sh:description  "1167 occurences and 1159 distinct values" ;
+        sh:maxCount     1 ;
+        sh:name         "abstract"@en ;
+        sh:nodeKind     sh:Literal ;
+        sh:or           ( shape:Collection_abstract_datatype_0 shape:Collection_abstract_datatype_1 ) ;
+        sh:path         terms:abstract .
+
+shape:Collection_description_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:Collection_description_literal_datatype_0 shape:Collection_description_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_accrualPeriodicity>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         terms:accrualPeriodicity ;
+        void:triples          "1"^^xsd:int .
+
+shape:ProvidedCHO_spatial
+        sh:class        edm:Place ;
+        sh:description  "351548 occurences and 351548 distinct values" ;
+        sh:name         "spatial"@en ;
+        sh:nodeKind     sh:BlankNode ;
+        sh:path         terms:spatial .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsSupplementedBy>
+        void:distinctObjects  "50"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsSupplementedBy> ;
+        void:triples          "59"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_Requires>
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/Requires> ;
+        void:triples          "5"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isGatheredInto>
+        terms:conformsTo      shape:ProvidedCHO_isGatheredInto ;
+        void:distinctObjects  "7550"^^xsd:int ;
+        void:property         edm:isGatheredInto ;
+        void:triples          "2170223"^^xsd:int .
+
+shape:Collection_relation_literal_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_Place>
+        terms:conformsTo        shape:Place ;
+        void:class              edm:Place ;
+        void:entities           "351549"^^xsd:int ;
+        void:propertyPartition  <http://localhost:7200/repositories/nakala/partition_Place_lat> , <http://localhost:7200/repositories/nakala/partition_Place_long> , <http://localhost:7200/repositories/nakala/partition_Place_prefLabel> , <http://localhost:7200/repositories/nakala/partition_Place_asWKT> .
+
+shape:ProvidedCHO_type_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_type_literal_datatype_0 shape:ProvidedCHO_type_literal_datatype_1 ) .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_IsCompiledBy>
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://datacite.org/schema/kernel-4/IsCompiledBy> ;
+        void:triples          "1"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_identifier>
+        terms:conformsTo      shape:ProvidedCHO_identifier ;
+        void:distinctObjects  "1179155"^^xsd:int ;
+        void:property         terms:identifier ;
+        void:triples          "1289921"^^xsd:int .
+
+shape:ProvidedCHO_subject_resource
+        sh:nodeKind  sh:IRI .
+
+shape:ProvidedCHO_contributor_resource
+        sh:nodeKind  sh:IRI .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_educationLevel>
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         terms:educationLevel ;
+        void:triples          "2"^^xsd:int .
+
+shape:ProvidedCHO_description_literal_datatype_1
+        sh:datatype  xsd:string .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource_primaryTopic>
+        terms:conformsTo      shape:WebResource_primaryTopic ;
+        void:distinctObjects  "1038173"^^xsd:int ;
+        void:property         xmlns:primaryTopic ;
+        void:triples          "1038173"^^xsd:int .
+
+shape:ProvidedCHO_bibliographicCitation_literal
+        sh:nodeKind  sh:Literal ;
+        sh:or        ( shape:ProvidedCHO_bibliographicCitation_literal_datatype_0 shape:ProvidedCHO_bibliographicCitation_literal_datatype_1 ) .
+
+shape:Collection_type
+        sh:description  "157 occurences and 16 distinct values" ;
+        sh:name         "type"@en ;
+        sh:nodeKind     sh:IRIOrLiteral ;
+        sh:or           ( shape:Collection_type_literal shape:Collection_type_resource ) ;
+        sh:path         terms:type .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_conformsTo>
+        void:distinctObjects  "7"^^xsd:int ;
+        void:property         terms:conformsTo ;
+        void:triples          "7"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_ProvidedCHO_isReferencedBy>
+        terms:conformsTo      shape:ProvidedCHO_isReferencedBy ;
+        void:distinctObjects  "7394"^^xsd:int ;
+        void:property         terms:isReferencedBy ;
+        void:triples          "27500"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_Collection_isPartOf>
+        terms:conformsTo      shape:Collection_isPartOf ;
+        void:distinctObjects  "49"^^xsd:int ;
+        void:property         terms:isPartOf ;
+        void:triples          "112"^^xsd:int .
+
+<http://localhost:7200/repositories/nakala/partition_WebResource_isAggregatedBy>
+        terms:conformsTo      shape:WebResource_isAggregatedBy ;
+        void:distinctObjects  "666689"^^xsd:int ;
+        void:property         ore:isAggregatedBy ;
+        void:triples          "1038173"^^xsd:int .
+
+_:b0 rdf:first shape:Collection_rightsHolder_datatype_0 ; rdf:rest ( shape:Collection_rightsHolder_datatype_1 ) .
+
+_:b1 rdf:first shape:Collection_rights_datatype_0 ; rdf:rest ( shape:Collection_rights_datatype_1 ) .
+
+_:b2 rdf:first shape:Collection_accessRights_datatype_0 ; rdf:rest ( shape:Collection_accessRights_datatype_1 ) .
+
+_:b3 rdf:first shape:Collection_bibliographicCitation_datatype_0 ; rdf:rest ( shape:Collection_bibliographicCitation_datatype_1 ) .
+
+_:b4 rdf:first shape:Collection_temporal_datatype_0 ; rdf:rest ( shape:Collection_temporal_datatype_1 ) .
+
+_:b5 rdf:first shape:Collection_accrualPeriodicity_datatype_0 ; rdf:rest ( shape:Collection_accrualPeriodicity_datatype_1 ) .
+
+_:b6 rdf:first shape:Collection_audience_datatype_0 ; rdf:rest ( shape:Collection_audience_datatype_1 ) .
+
+_:b7 rdf:first shape:ProvidedCHO_accessRights_datatype_0 ; rdf:rest ( shape:ProvidedCHO_accessRights_datatype_1 ) .
+
+_:b8 rdf:first "fr" ; rdf:rest () .
+
+_:b9 rdf:first shape:Collection_modified_datatype_0 ; rdf:rest ( shape:Collection_modified_datatype_1 ) .
+
+_:b10 rdf:first shape:ProvidedCHO_conformsTo_datatype_0 ; rdf:rest ( shape:ProvidedCHO_conformsTo_datatype_1 ) .
+
+_:b11 rdf:first "fr" ; rdf:rest () .
+
+_:b12 rdf:first shape:Collection_alternative_datatype_0 ; rdf:rest ( shape:Collection_alternative_datatype_1 ) .
+
+_:b13 rdf:first shape:Collection_format_datatype_0 ; rdf:rest ( shape:Collection_format_datatype_1 ) .
+
+_:b14 rdf:first "fr" ; rdf:rest () .
+
+_:b15 rdf:first shape:Collection_isReferencedBy_datatype_0 ; rdf:rest ( shape:Collection_isReferencedBy_datatype_1 ) .
+
+_:b16 rdf:first shape:ProvidedCHO_mediator_datatype_0 ; rdf:rest ( shape:ProvidedCHO_mediator_datatype_1 ) .
+
+_:b17 rdf:first "fr" ; rdf:rest () .
