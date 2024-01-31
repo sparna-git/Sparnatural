@@ -28,7 +28,8 @@ export function addWhereComponent(
   //endClassVal is new startClassVal and trigger 'change' event on ClassTypeId
   let inputTypeComponent =
     grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputSelector;
-  inputTypeComponent.oldWidget.val(endClassVal.type).niceSelect("update");
+  
+    inputTypeComponent.oldWidget.val(endClassVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   inputTypeComponent.html[0].children[1].classList.add("disabled");
   // render the link where

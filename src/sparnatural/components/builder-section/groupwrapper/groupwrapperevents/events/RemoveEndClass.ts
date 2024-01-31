@@ -19,7 +19,7 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
   grpWrapper.CriteriaGroup = new CriteriaGroup(
     grpWrapper,
     grpWrapper.specProvider,
-    undefined,
+    startVal,
     grpWrapper.isRootGrpWrapper()
   ).render();
   // Set state back to NONE
