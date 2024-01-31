@@ -221,8 +221,8 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
               SH.TARGET_CLASS,
               quad.object,
               null
-          ).forEach((quad:Quad) => {
-              classes.push(quad.subject.value);
+          ).forEach((q:Quad) => {
+              classes.push(q.subject.value);
           });
 
           // also look for nodeshapes that have directly this URI and that are themselves classes
@@ -231,8 +231,8 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
               RDF.TYPE,
               RDFS.CLASS,
               null
-          ).forEach((quad:Quad) => {
-              classes.push(quad.subject.value);
+          ).forEach((q:Quad) => {
+              classes.push(q.subject.value);
           });
       });
 
@@ -242,8 +242,8 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
           SH.NODE,
           null,
           null
-      ).forEach((quad:Quad) => {
-          classes.push(quad.object.value);
+      ).forEach((q:Quad) => {
+          classes.push(q.object.value);
       });  
       
       return classes;

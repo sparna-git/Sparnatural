@@ -23,6 +23,7 @@ const SH_NAMESPACE = "http://www.w3.org/ns/shacl#";
 export const SH = {
   CLASS: factory.namedNode(SH_NAMESPACE + "class") as NamedNode,
   DATATYPE: factory.namedNode(SH_NAMESPACE + "datatype") as NamedNode,
+  DEACTIVATED: factory.namedNode(SH_NAMESPACE + "deactivated") as NamedNode,
   DESCRIPTION: factory.namedNode(SH_NAMESPACE + "description") as NamedNode,
   IRI: factory.namedNode(SH_NAMESPACE + "IRI") as NamedNode, 
   LANGUAGE_IN: factory.namedNode(SH_NAMESPACE + "languageIn") as NamedNode, 
@@ -111,7 +112,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
   getEntitiesInDomainOfAnyProperty(): string[] {
     // map to extract just the uri
-    return this.getNodeShapesWithAnyProperty().map(e => e.getId());
+    return this.getInitialEntityList().map(e => e.getId());
   }
 
   expandSparql(sparql: string, prefixes: { [key: string]: string; }): string {
@@ -180,26 +181,45 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     );
   }
 
-  getNodeShapesWithAnyProperty():SHACLSpecificationEntity[] {
+  getInitialEntityList():SHACLSpecificationEntity[] {
     const duplicatedNodeShapes = this.store.getQuads(
       null,
       SH.PROPERTY,
       null,
       null
-    ).map(triple => triple.subject.value);
+    ).map(triple => triple.subject);
 
     let dedupNodeShapes = [...new Set(duplicatedNodeShapes)];
 
+    // remove from the initial list the NodeShapes that are marked with sh:deactivated
+    let that = this;
+    dedupNodeShapes = dedupNodeShapes.filter(node => {
+      return !that._hasTriple(node, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
+    });
+
     var items: SHACLSpecificationEntity[] = [];
-    for (const ns of dedupNodeShapes) {
-      items.push((this.getEntity(ns) as SHACLSpecificationEntity));
+    for (const aNode of dedupNodeShapes) {
+      items.push((this.getEntity(aNode.value) as SHACLSpecificationEntity));
     }
 
     items = (SHACLSpecificationEntry.sort(items) as SHACLSpecificationEntity[]);
 
-    console.log("NodeShapes with at least one property " + items.map(i => i.getId()));
+    console.log("Initial entity list " + items.map(i => i.getId()));
     return items;
   }
+
+  getNodeShapesLocallyReferencedWithShNode():string[] {
+    const duplicatedNodeShapes = this.store.getQuads(
+      null,
+      SH.NODE,
+      null,
+      null
+    ).map(triple => triple.object.value);
+
+    let dedupNodeShapes = [...new Set(duplicatedNodeShapes)];
+    return dedupNodeShapes;
+  }
+
 
   public static pathToSparql(object:Quad_Object) {
     if(object as NamedNode) {

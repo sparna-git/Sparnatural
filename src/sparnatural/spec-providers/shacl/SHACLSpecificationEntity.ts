@@ -29,7 +29,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     getConnectingProperties(range: string): string[] {
         var items: string[] = [];
 
-        // read all properties
+        // read all sh:property
         let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
         propShapes.forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
@@ -50,10 +50,11 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     getConnectedEntities(): string[] {
         var items: string[] = [];
 
-        // read all properties
+        // read all sh:property
         let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
 
-        propShapes.forEach(ps => {
+        propShapes.forEach(ps => {            
+            // read the property
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
             // and then read their ranges
             items.push(...prop.getRange());
