@@ -113,6 +113,10 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       return this._hasTriple(factory.namedNode(this.uri), SH.DATATYPE, RDF.LANG_STRING)
     }
 
+    isDeactivated(): boolean {
+      return this._hasTriple(factory.namedNode(this.uri), SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN));
+    }
+
     /**
      * @returns 
      */

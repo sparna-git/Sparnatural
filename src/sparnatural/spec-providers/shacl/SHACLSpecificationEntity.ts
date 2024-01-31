@@ -31,13 +31,17 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
         // read all sh:property
         let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
-        propShapes.forEach(ps => {
+        let that = this;
+        propShapes
+        .forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
-            let pRange = prop.getRange();
-            if(pRange.indexOf(range) > -1) {
-                items.push(ps);
+            if(!prop.isDeactivated()) {
+                let pRange = prop.getRange();
+                if(pRange.indexOf(range) > -1) {
+                    items.push(ps);
+                }
             }
-        })
+        });
 
         // dedup, although probably dedup is not necessary here
         var dedupItems = [...new Set(items)];
@@ -53,12 +57,15 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         // read all sh:property
         let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
 
-        propShapes.forEach(ps => {            
+        propShapes
+        .forEach(ps => {            
             // read the property
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
-            // and then read their ranges
-            items.push(...prop.getRange());
-        })
+            if(!prop.isDeactivated()) {
+                // and then read their ranges
+                items.push(...prop.getRange());
+            }
+        });
 
         // dedup
         var dedupItems = [...new Set(items)];
