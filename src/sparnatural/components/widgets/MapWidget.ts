@@ -108,7 +108,7 @@ export default class MapWidget extends AbstractWidget {
       drawCircleMarker: false,
       drawMarker: false,
       drawText: false,
-      drawPolygon: false,
+      drawPolygon: true,
       editMode: false,
       dragMode: false,
       rotateMode: false,
