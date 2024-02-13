@@ -36,6 +36,8 @@ export const SH = {
   ORDER: factory.namedNode(SH_NAMESPACE + "order") as NamedNode,
   PATH: factory.namedNode(SH_NAMESPACE + "path") as NamedNode,
   PROPERTY: factory.namedNode(SH_NAMESPACE + "property") as NamedNode,
+  SELECT: factory.namedNode(SH_NAMESPACE + "select") as NamedNode,
+  TARGET: factory.namedNode(SH_NAMESPACE + "target") as NamedNode,
   TARGET_CLASS: factory.namedNode(SH_NAMESPACE + "targetClass") as NamedNode,
   UNIQUE_LANG: factory.namedNode(SH_NAMESPACE + "uniqueLang") as NamedNode, 
 };
@@ -140,6 +142,41 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       });
 
     // TODO : for each sh:target/sh:select ...
+    this.store
+      .getQuads(null, SH.TARGET, null, null)
+      .forEach((q1: Quad) => {
+
+        // get the subject URI that will be replaced
+        let nodeShapeUri = q1.subject.value;
+
+        this.store
+        .getQuads(q1.object, SH.SELECT, null, null)
+        .forEach((quad: Quad) => {          
+          let sparqlTarget = quad.object.value;
+          // extract everything between '{' and '}'
+          let beginWhere = sparqlTarget.substring(sparqlTarget.indexOf('{')+1);
+          let whereClause = beginWhere.substring(0,beginWhere.lastIndexOf('}')).trim();
+
+          // replace the $this with the name of the original variable in the query
+          // \S matches any non-whitespace charracter
+          var re = new RegExp("(\\S*) rdf:type <" + nodeShapeUri + ">", "g");      
+
+          let replacer = function(match:string, p1:string, offset:number, fullString:string) {
+            // first substitutes any other variable name with a prefix
+            // so that we garantee unicity across the complete query
+            var reVariables = new RegExp("\\?(\\S*)", "g");
+            let whereClauseReplacedVariables = whereClause.replace(reVariables, "?$1_"+p1.substring(1));
+            
+            // then, replace the match on the original URI with the whereClause of the target
+            // replacing "$this" with the original variable name
+            var reThis = new RegExp("\\$this", "g");
+            let whereClauseReplacedThis = whereClauseReplacedVariables.replace(reThis, p1);
+            return whereClauseReplacedThis;
+          }
+
+          sparql = sparql.replace(re,replacer);
+        })
+      });
 
     // reparse the query, apply prefixes, and reserialize the query
     var query = this.#parser.parse(sparql);
