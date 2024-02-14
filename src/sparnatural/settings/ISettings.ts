@@ -5,7 +5,7 @@ export interface PreLoadQueries {
 }
 
 interface ISettings {
-  config: any;
+  src: any;
   language: string;
   defaultLanguage: string;
   addDistinct?: boolean;
@@ -17,9 +17,6 @@ interface ISettings {
   defaultEndpoint?: string;
   catalog?: string;
   localCacheDataTtl?: number;
-  // TODO : this should not be exposed.
-  // Only the language parametre is exposed, but the actual labels content should not
-  langSearch?: any;
   debug: boolean;
   submitButton?: boolean;
   headers?: any;

@@ -1,11 +1,11 @@
 import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
-import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { SelectAllValue } from "../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
+import { I18n } from '../../settings/I18n';
 
 const factory = new DataFactory();
 
@@ -46,17 +46,17 @@ export class BooleanWidget extends AbstractWidget {
   render() {
     super.render();
     let trueSpan = $(
-      `<span class="boolean-value">${getSettings().langSearch.true}</span>'`
+      `<span class="boolean-value">${I18n.labels.true}</span>'`
     );
-    let orSpan = $(`<span class="or">&nbsp;${getSettings().langSearch.Or}&nbsp;</span>`);
+    let orSpan = $(`<span class="or">&nbsp;${I18n.labels.Or}&nbsp;</span>`);
     let falseSpan = $(
-      `<span class="boolean-value"">${getSettings().langSearch.false}</span>`
+      `<span class="boolean-value"">${I18n.labels.false}</span>`
     );
     this.html.append(trueSpan).append(orSpan).append(falseSpan);
 
     trueSpan[0].addEventListener("click", (e) => {
       let widgetValue: BooleanWidgetValue = new BooleanWidgetValue({
-        label: getSettings().langSearch.true,
+        label: I18n.labels.true,
         boolean: true,
       });
 
@@ -65,7 +65,7 @@ export class BooleanWidget extends AbstractWidget {
 
     falseSpan[0].addEventListener("click", (e) => {
       let widgetValue: BooleanWidgetValue = new BooleanWidgetValue({
-        label: getSettings().langSearch.false,
+        label: I18n.labels.false,
         boolean: false,
       });
 

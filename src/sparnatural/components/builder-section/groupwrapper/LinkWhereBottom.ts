@@ -1,4 +1,4 @@
-import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
+import { I18n } from "../../../settings/I18n";
 import HTMLComponent from "../../HtmlComponent";
 import EndClassGroup from "./criteriagroup/startendclassgroup/EndClassGroup";
 import GroupWrapper from "./GroupWrapper";
@@ -16,7 +16,7 @@ import GroupWrapper from "./GroupWrapper";
 */
 class LinkWhereBottom extends HTMLComponent {
   ParentGroupWrapper: GroupWrapper;
-  widgetHTML = $(`<span>${getSettings().langSearch.Where}</span>`);
+  widgetHTML = $(`<span>${I18n.labels.Where}</span>`);
   upperVertical = $(`<div class="upper-vertical"></div>`);
   horizontal = $(`<div class="horizontal"></div>`).append(this.widgetHTML);
   lowerVertical = $(`<div class="lower-vertical"></div>`);

@@ -2,7 +2,6 @@ import { DataFactory } from 'rdf-data-factory';
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import L, { LatLng, Rectangle,Map } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
-import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import {
   BgpPattern,
@@ -16,6 +15,7 @@ import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../../generators/ISparJson";
 import { NamedNode } from '@rdfjs/types/data-model';
+import { I18n } from '../../settings/I18n';
 
 const factory = new DataFactory();
 
@@ -84,7 +84,7 @@ export default class MapWidget extends AbstractWidget {
     super.render();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
-      getSettings().langSearch.MapWidgetOpenMap,
+      I18n.labels.MapWidgetOpenMap,
       this.#renderMap
     ).render();
     return this;
@@ -124,14 +124,14 @@ export default class MapWidget extends AbstractWidget {
       this.map.addLayer(this.drawingLayer);
 
       let widgetValue = new MapWidgetValue({
-        label: getSettings().langSearch.MapWidgetAreaSelected,
+        label: I18n.labels.MapWidgetAreaSelected,
          coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
       });
       this.renderWidgetVal(widgetValue);
       //add listener when the shape gets changed
       this.drawingLayer.on("pm:edit", (e) => {
         let widgetValue = new MapWidgetValue({
-          label: getSettings().langSearch.MapWidgetAreaSelected,
+          label: I18n.labels.MapWidgetAreaSelected,
           coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
         });
       this.renderWidgetVal(widgetValue);
@@ -172,7 +172,7 @@ export default class MapWidget extends AbstractWidget {
     this.renderMapValueBtn.html.remove();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
-      getSettings().langSearch.MapWidgetCloseMap,
+      I18n.labels.MapWidgetCloseMap,
       this.#closeMap
     ).render();
   }

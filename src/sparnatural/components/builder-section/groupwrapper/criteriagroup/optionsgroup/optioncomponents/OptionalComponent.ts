@@ -1,6 +1,6 @@
 import BaseOptionComponent from "./BaseOptionComponent";
 import { OptionsGroup, OptionTypes } from "../OptionsGroup";
-import { getSettings } from "../../../../../../../sparnatural/settings/defaultSettings";
+import { I18n } from "../../../../../../settings/I18n";
 
 /*
     Not Exists Component. Get's rendered by OptionsGroup if this is enabled.
@@ -14,7 +14,7 @@ class OptionalComponent extends BaseOptionComponent {
   }
 
   render(): this {
-    this.label = getSettings().langSearch.labelOptionOptional;
+    this.label = I18n.labels.labelOptionOptional;
     super.render();
     this.#addEventListeners();
     return this;

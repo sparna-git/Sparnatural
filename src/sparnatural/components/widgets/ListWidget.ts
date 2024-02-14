@@ -1,6 +1,5 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import ISettings from "../../settings/ISettings";
-import { getSettings } from "../../settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
@@ -10,6 +9,7 @@ import "select2/dist/css/select2.css";
 import SparqlFactory from "../../generators/SparqlFactory";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { ListDataProviderIfc } from "./data/DataProviders";
+import { I18n } from "../../settings/I18n";
 
 const factory = new DataFactory();
 
@@ -33,7 +33,6 @@ export class ListWidget extends AbstractWidget {
   dataProvider: ListDataProviderIfc;
 
   protected widgetValues: WidgetValue[];
-  langSearch: any;
   sort: boolean;
   settings: ISettings;
   selectHtml: JQuery<HTMLElement>;
@@ -41,7 +40,6 @@ export class ListWidget extends AbstractWidget {
   constructor(
     parentComponent: WidgetWrapper,
     dataProvider: ListDataProviderIfc,
-    langSearch: any,
     sort: boolean,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -58,7 +56,6 @@ export class ListWidget extends AbstractWidget {
     );
 
     this.dataProvider = dataProvider;
-    this.langSearch = langSearch,
     this.sort = sort;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
@@ -72,12 +69,12 @@ export class ListWidget extends AbstractWidget {
 
     let noItemsHtml =
       $(`<div class="no-items" style="display: none; font-style:italic;">
-      ${getSettings().langSearch.ListWidgetNoItem}
+      ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
     let errorHtml =
       $(`<div class="no-items" style="display: none; font-style:italic;">
-      ${getSettings().langSearch.ListWidgetNoItem}
+      ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
     let callback = (items:{term:RDFTerm;label:string;group?:string}[]) => {
@@ -150,7 +147,7 @@ export class ListWidget extends AbstractWidget {
     }
 
     // toggle spinner before loading
-    this.toggleSpinner(this.langSearch.AutocompleteSpinner_Searching);
+    this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
 
     this.dataProvider.getListContent(
       this.startClassVal.type,

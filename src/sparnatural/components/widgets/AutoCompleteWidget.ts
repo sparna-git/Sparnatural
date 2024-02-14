@@ -6,8 +6,8 @@ import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-co
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { AutocompleteDataProviderIfc } from "./data/DataProviders";
-import { getSettings } from "../../settings/defaultSettings";
 import Awesomplete from 'awesomplete';
+import { I18n } from '../../settings/I18n';
 
 const factory = new DataFactory();
 
@@ -30,12 +30,10 @@ export class AutoCompleteWidgetValue implements WidgetValue {
 export class AutoCompleteWidget extends AbstractWidget {
   protected widgetValues: AutoCompleteWidgetValue[];
   protected dataProvider: AutocompleteDataProviderIfc;
-  protected langSearch: any;
 
   constructor(
     parentComponent: WidgetWrapper,
     dataProvider: AutocompleteDataProviderIfc,
-    langSearch: any,
     startClassValue: SelectedVal,
     objectPropVal: SelectedVal,
     endClassValue: SelectedVal
@@ -49,7 +47,6 @@ export class AutoCompleteWidget extends AbstractWidget {
       endClassValue,
       ValueRepetition.MULTIPLE
     );
-    this.langSearch = langSearch;
     this.dataProvider = dataProvider;
   }
 
@@ -61,7 +58,7 @@ export class AutoCompleteWidget extends AbstractWidget {
 
     let errorHtml =
       $(`<div class="no-items" style="display: none; font-style:italic;">
-      ${getSettings().langSearch.ListWidgetNoItem}
+      ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
     const queryInput:HTMLElement = inputHtml[0];

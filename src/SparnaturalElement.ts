@@ -85,7 +85,7 @@ export class SparnaturalElement extends HTMLElement {
 
     switch(name) {
       case "src" : {
-        getSettings().config = newValue;
+        getSettings().src = newValue;
         break;
       }
       case "lang" : {

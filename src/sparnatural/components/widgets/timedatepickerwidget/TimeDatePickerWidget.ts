@@ -10,6 +10,7 @@ import { SelectedVal } from "../../../generators/ISparJson";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
+import { I18n } from "../../../settings/I18n";
 
 const factory = new DataFactory();
 
@@ -84,20 +85,20 @@ export class TimeDatePickerWidget extends AbstractWidget {
   render() {
     super.render();
     this.html.append(
-      $(`<span>${getSettings().langSearch.LabelDateFrom}&nbsp;</span>`)
+      $(`<span>${I18n.labels.LabelDateFrom}&nbsp;</span>`)
     );
     this.inputStart = $(
       `<input id="input-start" placeholder="${
-        getSettings().langSearch.TimeWidgetDateFrom
+        I18n.labels.TimeWidgetDateFrom
       }" autocomplete="off" class="${this.dateFormat}" />`
     );
     this.inputEnd = $(
       `<input id="input-end" placeholder="${
-        getSettings().langSearch.TimeWidgetDateTo
+        I18n.labels.TimeWidgetDateTo
       }" autocomplete="off" class="${this.dateFormat}" />`
     );
     this.inputValue = $(`<input id="input-value" type="hidden"/>`);
-    let span = $(`<span>&nbsp;${getSettings().langSearch.LabelDateTo}&nbsp;</span>`);
+    let span = $(`<span>&nbsp;${I18n.labels.LabelDateTo}&nbsp;</span>`);
     this.html
       .append(this.inputStart)
       .append(span)
@@ -106,8 +107,8 @@ export class TimeDatePickerWidget extends AbstractWidget {
     // Build datatippy info
     let datatippy =
       this.dateFormat == "day"
-        ? getSettings().langSearch.TimeWidgetDateHelp
-        : getSettings().langSearch.TimeWidgetYearHelp;
+        ? I18n.labels.TimeWidgetDateHelp
+        : I18n.labels.TimeWidgetYearHelp;
     // set a tooltip on the info circle
     var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
     tippySettings.placement = "left";
@@ -119,14 +120,14 @@ export class TimeDatePickerWidget extends AbstractWidget {
 
     this.addValueBtn = new AddUserInputBtn(
       this,
-      getSettings().langSearch.ButtonAdd,
+      I18n.labels.ButtonAdd,
       this.#addValueBtnClicked
     ).render();
 
     let calendarFormat = 
     (this.dateFormat === "day")
-    ? getSettings().langSearch.TimeWidgetDateFormat
-    : getSettings().langSearch.TimeWidgetYearFormat;
+    ? I18n.labels.TimeWidgetDateFormat
+    : I18n.labels.TimeWidgetYearFormat;
 
     var options: {
       language: any;
@@ -135,7 +136,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
       date: any;
       startView: number;
     } = {
-      language: getSettings().langSearch.LangCodeTimeDate,
+      language: I18n.labels.LangCodeTimeDate,
       autoHide: true,
       format: calendarFormat,
       date: null,
@@ -313,11 +314,11 @@ export class TimeDatePickerWidget extends AbstractWidget {
   #getValueLabel = function (startLabel: string, stopLabel: string) {
     let valueLabel = "";
     if ((startLabel != "") && (stopLabel != "")) {
-      valueLabel = getSettings().langSearch.LabelDateFrom+' '+ startLabel +' '+getSettings().langSearch.LabelDateTo+' '+ stopLabel ;
+      valueLabel = I18n.labels.LabelDateFrom+' '+ startLabel +' '+I18n.labels.LabelDateTo+' '+ stopLabel ;
     } else if (startLabel != "") {
-      valueLabel = getSettings().langSearch.DisplayValueDateFrom+' '+ startLabel ;
+      valueLabel = I18n.labels.DisplayValueDateFrom+' '+ startLabel ;
     } else if (stopLabel != "") {
-      valueLabel = getSettings().langSearch.DisplayValueDateTo+' '+ stopLabel ;
+      valueLabel = I18n.labels.DisplayValueDateTo+' '+ stopLabel ;
     }
 
     return valueLabel;

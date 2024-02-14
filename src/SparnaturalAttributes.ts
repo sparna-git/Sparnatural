@@ -1,5 +1,5 @@
 export class SparnaturalAttributes {
-  config: any;
+  src: any;
   defaultEndpoint: string;
   language: string;
   defaultLanguage: string;
@@ -16,9 +16,9 @@ export class SparnaturalAttributes {
 
   constructor(element:HTMLElement) {
     // not the differences in attribute names
-    this.config = this.#read(element,"src",this.#isJSON(element.getAttribute('src')));    
-    if(!this.config) {
-      throw Error('No config provided!');
+    this.src = this.#read(element,"src",this.#isJSON(element.getAttribute('src')));    
+    if(!this.src) {
+      throw Error('No src provided!');
     }
     this.defaultEndpoint = this.#read(element, "endpoint");
     if(!this.defaultEndpoint) {

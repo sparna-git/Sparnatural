@@ -1,7 +1,6 @@
 /**
  * A single line/criteria
  **/
-import { getSettings } from "../../../../../sparnatural/settings/defaultSettings";
 import ISparnaturalSpecification from "../../../../spec-providers/ISparnaturalSpecification";
 import UnselectBtn from "../../../buttons/UnselectBtn";
 import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
@@ -14,6 +13,7 @@ import { SelectedVal } from "../../../../generators/ISparJson";
 import { EndClassWidgetGroup, EndClassWidgetValue } from "./startendclassgroup/EndClassWidgetGroup";
 import ActionsGroup from "../../../buttons/actions/ActionsGroup";
 import { triggerOption } from "../groupwrapperevents/events/TriggerOption";
+import { I18n } from "../../../../settings/I18n";
 
 class CriteriaGroup extends HTMLComponent {
   settings: any;
@@ -65,7 +65,7 @@ class CriteriaGroup extends HTMLComponent {
     this.ObjectPropertyGroup = new ObjectPropertyGroup(
       this,
       this.specProvider,
-      getSettings().langSearch.ObjectPropertyTemporaryLabel
+      I18n.labels.ObjectPropertyTemporaryLabel
     ).render();
     this.EndClassGroup = new EndClassGroup(this, this.specProvider).render();
     this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);

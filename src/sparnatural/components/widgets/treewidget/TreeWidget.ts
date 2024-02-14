@@ -10,6 +10,7 @@ import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/star
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { getSettings } from "../../../settings/defaultSettings";
 import { DataFactory } from 'rdf-data-factory';
+import { I18n } from "../../../settings/I18n";
 
 const factory = new DataFactory();
 
@@ -33,7 +34,6 @@ export class TreeWidgetValue implements WidgetValue {
 export class TreeWidget extends AbstractWidget {
   protected widgetValues: TreeWidgetValue[];
   loaderHandler: any;
-  langSearch: any;
   IdCriteriaGroupe: any;
   jsTree: any;
   value: TreeWidgetValue;
@@ -51,7 +51,6 @@ export class TreeWidget extends AbstractWidget {
     parentComponent: WidgetWrapper,
     loaderHandler: any,
     settings: ISettings,
-    langSearch: string,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal,
@@ -67,7 +66,6 @@ export class TreeWidget extends AbstractWidget {
       ValueRepetition.MULTIPLE
     );
     this.loaderHandler = loaderHandler;
-    this.langSearch = langSearch;
     this.IdCriteriaGroupe = "id";
 
     this.startClassVal = startClassVal;
@@ -99,9 +97,9 @@ export class TreeWidget extends AbstractWidget {
         `-displayLayer" class="treeLayer"><div class="treeClose">${UiuxConfig.ICON_REG_XMARK}</div><div class="treeNotice"></div><div class="treeDisplay" id="ecgrw-` +
         this.IdCriteriaGroupe +
         '-display"></div><div class="treeActions"><a class="treeCancel">' +
-        this.langSearch.TreeWidgetDelete +
+        I18n.labels.TreeWidgetDelete +
         '</a><a class="treeSubmit">' +
-        this.langSearch.TreeWidgetSelect +
+        I18n.labels.TreeWidgetSelect +
         "</a></div></div>"
     );
 

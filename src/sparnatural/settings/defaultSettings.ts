@@ -2,8 +2,7 @@ import { Props } from "tippy.js";
 import ISettings from "./ISettings";
 
 const defaultSettings: ISettings = {
-  langSearch: null,
-  config: null,
+  src: null,
   language: "en",
   defaultLanguage: "en",
   maxDepth: 4, // max amount of where clauses in a branch
@@ -27,7 +26,7 @@ const defaultSettings: ISettings = {
 
 // the actual settings, result of merge between defaultSettings and settings passed as parameters
 let settings:ISettings = {
-  config: undefined,
+  src: undefined,
   language: "",
   defaultLanguage: "",
   maxDepth: 0,

@@ -21,6 +21,7 @@ import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvi
 import { ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
+import { I18n } from "../../../../../settings/I18n";
 
 
 /**
@@ -116,13 +117,13 @@ class WidgetWrapper extends HTMLComponent {
 
     let selectAnySpan = `<span class="selectAll" id="selectAll">
     <span class="underline">
-    ${this.settings.langSearch.SelectAllValues}
+    ${I18n.labels.SelectAllValues}
     </span> 
     ${parenthesisLabel} 
     </span>`;
 
     let orSpan = `<span class="or">
-      ${this.settings.langSearch.Or}
+      ${I18n.labels.Or}
     </span> `;
     
     let endLabel = this.#getEndLabel(this.widgetType);
@@ -159,11 +160,11 @@ class WidgetWrapper extends HTMLComponent {
       widgetType == Config.TIME_PROPERTY_DATE ||
       widgetType == Config.TIME_PROPERTY_YEAR
     ) {
-      return this.settings.langSearch.Select + " :";
+      return I18n.labels.Select + " :";
     } else if (widgetType == Config.BOOLEAN_PROPERTY) {
       return "";
     } else {
-      return this.settings.langSearch.Find + " :";
+      return I18n.labels.Find + " :";
     }
   }
 
@@ -261,7 +262,6 @@ class WidgetWrapper extends HTMLComponent {
         return new ListWidget(
           this,
           listDataProvider,
-          this.settings.langSearch,
           !(datasource.noSort == true),
           this.startClassVal,
           this.objectPropVal,
@@ -345,7 +345,6 @@ class WidgetWrapper extends HTMLComponent {
         return new AutoCompleteWidget(
           this,
           autocompleteDataProvider,
-          this.settings.langSearch,
           this.startClassVal,
           this.objectPropVal,
           this.endClassVal
@@ -469,7 +468,6 @@ class WidgetWrapper extends HTMLComponent {
             this,
             handler,
             this.settings,
-            this.settings.langSearch,
             this.startClassVal,
             this.objectPropVal,
             this.endClassVal,

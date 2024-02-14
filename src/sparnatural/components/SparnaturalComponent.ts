@@ -8,6 +8,7 @@ import VariableSection from "./variables-section/VariableSelection";
 import HTMLComponent from "./HtmlComponent";
 import { SparnaturalElement } from "../../SparnaturalElement";
 import { Catalog } from "../settings/Catalog";
+import { I18n } from "../settings/I18n";
 
 
 const i18nLabels = {
@@ -84,12 +85,10 @@ class SparnaturalComponent extends HTMLComponent {
   initSpecificationProvider(callback:any) {
     let settings = getSettings();
     let specProviderFactory = new SparnaturalSpecificationFactory();
-    specProviderFactory.build(settings.config, settings.language, (sp: any) => {
+    specProviderFactory.build(settings.src, settings.language, (sp: any) => {
       // call the call back when done
       callback(sp);
     });    
-    // uncomment to trigger gathering of statistics
-    // initStatistics(specProvider);
   }
 
   // method is exposed from the HTMLElement
@@ -112,9 +111,9 @@ class SparnaturalComponent extends HTMLComponent {
 
   #initLang() {
     if (getSettings().language === "fr") {
-      getSettings().langSearch = i18nLabels["fr"];
+      I18n.init("fr");
     } else {
-      getSettings().langSearch = i18nLabels["en"];
+      I18n.init("en");
     }
   }
 }
