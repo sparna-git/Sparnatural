@@ -43,32 +43,8 @@ export class SparnaturalElement extends HTMLElement {
     this.display();
   }
 
-  set autocomplete(autocomplete: any) {
-    getSettings().autocomplete = autocomplete;
-  }
-
-  set list(list: any) {
-    getSettings().list = list;
-  }
-
-  set dates(dates: any) {
-    getSettings().dates = dates;
-  }
-
   set headers(headers: any) {
     getSettings().headers = headers;
-  }
-
-  get autocomplete() {
-    return getSettings().autocomplete;
-  }
-
-  get list() {
-    return getSettings().list;
-  }
-
-  get dates() {
-    return getSettings().dates;
   }
 
   get headers() {

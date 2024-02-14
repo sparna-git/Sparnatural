@@ -20,7 +20,26 @@ export interface ListDataProviderIfc {
         callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void
+}
 
+/**
+ * An implementation of ListDataProviderIfc that does nothing !
+ */
+export class NoOpListDataProvider implements ListDataProviderIfc {
+
+    getListContent(
+        domain:string,
+        predicate:string,
+        range:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        // does nothing !
+        console.warn("Warning, a NoOpListDataProvider is being called for typePredicate "+typePredicate)
+    }
 }
 
 /**
@@ -246,24 +265,6 @@ export class ListDataProviderFromLiteralListAdpater implements ListDataProviderI
  */
 export interface AutocompleteDataProviderIfc {
 
-    /*
-    autocompleteUrl(
-        domain:string,
-        predicate:string,
-        range:string,
-        key:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string
-    ):string
-
-    listLocation(data:any):any;
-
-    elementLabel(element:any):string;
-
-    elementRdfTerm(element:any):any;
-    */
-
     /**
      * Used by new Awesomplete implementation
      */
@@ -278,6 +279,26 @@ export interface AutocompleteDataProviderIfc {
         callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void
+}
+
+/**
+ * An AutocompleteDataProviderIfc that does nothing
+ */
+export class NoOpAutocompleteProvider implements AutocompleteDataProviderIfc {
+    getAutocompleteSuggestions(
+        domain:string,
+        predicate:string,
+        range:string,
+        key:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        // does nothing !
+        console.warn("Warning, a NoOpAutocompleteProvider is being called for typePredicate "+typePredicate)
+    }
 }
 
 /**

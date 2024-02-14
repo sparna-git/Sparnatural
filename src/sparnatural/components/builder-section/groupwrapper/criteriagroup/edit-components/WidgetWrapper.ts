@@ -17,7 +17,7 @@ import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider } from "../../../../widgets/data/DataProviders";
+import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider } from "../../../../widgets/data/DataProviders";
 import { ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
@@ -185,9 +185,7 @@ class WidgetWrapper extends HTMLComponent {
     switch (widgetType) {
       case Config.LITERAL_LIST_PROPERTY:
       case Config.LIST_PROPERTY:
-        // defaut handler to be used
-        // TODO : change interface in settings
-        var listDataProvider = this.settings.list;
+        let listDataProvider:ListDataProviderIfc = new NoOpListDataProvider();
 
         // to be passed in anonymous functions
         var theSpecProvider = this.specProvider;
@@ -271,7 +269,7 @@ class WidgetWrapper extends HTMLComponent {
         );
 
       case Config.AUTOCOMPLETE_PROPERTY:
-        var autocompleteDataProvider = this.settings.autocomplete;
+        var autocompleteDataProvider:AutocompleteDataProviderIfc = new NoOpAutocompleteProvider();
 
         // to be passed in anonymous functions
         var theSpecProvider = this.specProvider;
@@ -302,10 +300,8 @@ class WidgetWrapper extends HTMLComponent {
                 datasource = Datasources.DATASOURCES_CONFIG.get(
                   Datasources.SEARCH_URI_CONTAINS
                 );
-              }
-              
+              }              
             }
-            
           }
         }
 
@@ -370,7 +366,6 @@ class WidgetWrapper extends HTMLComponent {
       case Config.TIME_PROPERTY_YEAR:
         return new TimeDatePickerWidget(
           this,
-          this.settings.dates,
           "year",
           this.startClassVal,
           this.objectPropVal,
@@ -381,7 +376,6 @@ class WidgetWrapper extends HTMLComponent {
       case Config.TIME_PROPERTY_DATE:
         return new TimeDatePickerWidget(
           this,
-          this.settings.dates,
           "day",
           this.startClassVal,
           this.objectPropVal,
@@ -390,13 +384,7 @@ class WidgetWrapper extends HTMLComponent {
         );
         break;
       case Config.TIME_PROPERTY_PERIOD:
-        return new DatesWidget(
-          this,
-          this.settings.dates,
-          this.startClassVal,
-          this.objectPropVal,
-          this.endClassVal
-        );
+        console.warn(Config.TIME_PROPERTY_PERIOD+" is not implement yet");
         break;
       case Config.NON_SELECTABLE_PROPERTY:
         return new NoWidget(this);
