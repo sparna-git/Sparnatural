@@ -16,7 +16,7 @@ import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider } from "../../../../widgets/data/DataProviders";
+import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
 import { ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
@@ -185,7 +185,7 @@ class WidgetWrapper extends HTMLComponent {
     switch (widgetType) {
       case Config.LITERAL_LIST_PROPERTY:
       case Config.LIST_PROPERTY:
-        let listDataProvider:ListDataProviderIfc = new NoOpListDataProvider();
+        let listDataProvider:ListDataProviderIfc;
 
         // to be passed in anonymous functions
         var theSpecProvider = this.specProvider;
@@ -218,7 +218,12 @@ class WidgetWrapper extends HTMLComponent {
           }
         }
 
-        if (datasource != null) {
+        if(this.settings.datasources?.getListContent) {
+          // use the provided data provider function from the outside
+          listDataProvider = {
+            getListContent: this.settings.datasources?.getListContent
+          }
+        } else if (datasource != null) {
           // if we have a datasource, possibly the default one, provide a config based
           // on a SparqlTemplate, otherwise use the handler provided
           
@@ -268,7 +273,7 @@ class WidgetWrapper extends HTMLComponent {
         );
 
       case Config.AUTOCOMPLETE_PROPERTY:
-        var autocompleteDataProvider:AutocompleteDataProviderIfc = new NoOpAutocompleteProvider();
+        var autocompleteDataProvider:AutocompleteDataProviderIfc;
 
         // to be passed in anonymous functions
         var theSpecProvider = this.specProvider;
@@ -304,8 +309,13 @@ class WidgetWrapper extends HTMLComponent {
           }
         }
 
-        if (datasource != null) {
-
+        if(this.settings.datasources?.getAutocompleteSuggestions) {
+          // use the provided data provider function from the outside
+          autocompleteDataProvider = {
+            getAutocompleteSuggestions: this.settings.datasources?.getAutocompleteSuggestions
+          }
+        } else if (datasource != null) {
+          // build a SPARQL data provider function using the SPARQL query of the datasource
           autocompleteDataProvider = new SparqlAutocompleDataProvider(
 
             // endpoint URL
@@ -397,6 +407,7 @@ class WidgetWrapper extends HTMLComponent {
         break;
       case Config.TREE_PROPERTY:
         var theSpecProvider = this.specProvider;
+        var treeDataProvider:TreeDataProviderIfc;
 
         // determine custom roots datasource
         var treeRootsDatasource =
@@ -426,11 +437,17 @@ class WidgetWrapper extends HTMLComponent {
           }
         }
 
-        if (treeRootsDatasource != null && treeChildrenDatasource != null) {
+        if(this.settings.datasources?.tree) {
+          // use the provided data provider function from the outside
+          treeDataProvider = {
+            getRoots: this.settings.datasources?.tree.getRoots,
+            getChildren: this.settings.datasources?.tree.getChildren
+          }
+        } else if (treeRootsDatasource != null && treeChildrenDatasource != null) {
           // if we have a datasource, possibly the default one, provide a config based
           // on a SparqlTemplate, otherwise use the handler provided
 
-          let dataProvider = new SparqlTreeDataProvider(
+          treeDataProvider = new SparqlTreeDataProvider(
 
             // endpoint URL
             // we read it on the roots datasource
@@ -467,17 +484,19 @@ class WidgetWrapper extends HTMLComponent {
             )
 
           );
-
-          return new TreeWidget(
-            this,
-            dataProvider,
-            this.startClassVal,
-            this.objectPropVal,
-            this.endClassVal,
-            !(treeChildrenDatasource.noSort == true)
-          );
         }
 
+      
+        return new TreeWidget(
+          this,
+          treeDataProvider,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal,
+          !(treeChildrenDatasource.noSort == true)
+        );
+
+        break;
       case Config.MAP_PROPERTY:
         return new MapWidget(
           this,

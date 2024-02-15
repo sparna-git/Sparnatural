@@ -51,6 +51,14 @@ export class SparnaturalElement extends HTMLElement {
     return getSettings().headers;
   }
 
+  set datasources(datasources: any) {
+    getSettings().datasources = datasources;
+  }
+
+  get datasources() {
+    return getSettings().datasources;
+  }
+
   display() {    
     // render sparnatural 
     this.Sparnatural = new SparnaturalComponent();
