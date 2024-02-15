@@ -1,6 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import L, { LatLng, Rectangle,Map } from "leaflet";
+import L, { LatLng, Rectangle,Polygon,Map } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
@@ -32,6 +32,7 @@ export const GEOSPARQL = {
 export class MapWidgetValue implements WidgetValue {
   value: {
     label: string;
+    type: string;
     coordinates: LatLng[][];
   };
 
@@ -123,23 +124,39 @@ export default class MapWidget extends AbstractWidget {
 
       this.map.addLayer(this.drawingLayer);
 
-      let widgetValue = new MapWidgetValue({
-        label: getSettings().langSearch.MapWidgetAreaSelected,
-         coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
-      });
+      let widgetValue = this.#getWidgetValue(e.layer) ;
+
       this.renderWidgetVal(widgetValue);
       //add listener when the shape gets changed
       this.drawingLayer.on("pm:edit", (e) => {
-        let widgetValue = new MapWidgetValue({
-          label: getSettings().langSearch.MapWidgetAreaSelected,
-          coordinates: (e.layer as Rectangle).getLatLngs() as LatLng[][],
-        });
+        let widgetValue = this.#getWidgetValue(e.layer) ;
       this.renderWidgetVal(widgetValue);
       });
     });
 
     this.#changeButton();
   };
+
+  #getWidgetValue = (layer:any) => {
+    let widgetValue = null ;
+    switch ((layer as any).pm._shape) {
+      case 'Rectangle':
+        widgetValue = new MapWidgetValue({
+          label: getSettings().langSearch.MapWidgetAreaSelected,
+          type: 'Rectangle',
+          coordinates: (layer as Rectangle).getLatLngs() as LatLng[][],
+        });
+        break;    
+      default: 
+        widgetValue = new MapWidgetValue({
+          label: getSettings().langSearch.MapWidgetAreaSelected,
+          type: 'Polygon',
+          coordinates: (layer as Polygon).getLatLngs() as LatLng[][],
+        });
+      break;
+    }
+    return widgetValue ;
+  }
 
   #closeMap = () => {
     this.render();
@@ -163,7 +180,8 @@ export default class MapWidget extends AbstractWidget {
     if(parsedCoords.length === 0) throw Error(`Parsing of ${input.coordinates} failed`)
     return new MapWidgetValue({
         label: input.label,
-        coordinates: parsedCoords
+        coordinates: parsedCoords,
+        type: input.type
       }
     );
   }
