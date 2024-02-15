@@ -1,6 +1,6 @@
 import { getSettings } from "../../../settings/defaultSettings";
 import { RDFTerm } from "../AbstractWidget";
-import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc } from "./SparqlBuilders";
+import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
 import { MultipleEndpointSparqlFetcher, SparqlFetcher, SparqlFetcherFactory, SparqlFetcherIfc, UrlFetcher } from "./UrlFetcher";
 
 
@@ -384,37 +384,136 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
             // console.log(`${key}: ${(aBindingSet as {[key: string]: string})[key]}`);
         }
         return foundKey;
+    }  
+
+}
+
+/**
+ * Interface for objects that can provide data to a TreeWidget
+ */
+export interface TreeDataProviderIfc {
+
+    getRoots(
+        domain:string,
+        predicate:string,
+        range:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void
+
+    getChildren(
+        node:string,
+        domain:string,
+        predicate:string,
+        range:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void
+
+}
+
+
+export class SparqlTreeDataProvider implements TreeDataProviderIfc {
+    
+    queryBuilder:TreeSparqlQueryBuilderIfc;
+    sparqlFetcher:SparqlFetcherIfc;
+
+    constructor(
+        sparqlFetcherFactory:SparqlFetcherFactory,
+        queryBuilder: TreeSparqlQueryBuilderIfc
+    ) {
+        this.queryBuilder = queryBuilder;
+        this.sparqlFetcher = sparqlFetcherFactory.buildSparqlFetcher();        
     }
 
-    /*
-    autocompleteUrl(domain: string, predicate: string, range: string, key: string, lang: string, defaultLang:string, typePredicate: string): string {
+    getRoots(
+        domainType: string,
+        predicate: string,
+        rangeType: string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        
         // 1. create the SPARQL
-        let sparql = this.queryBuilder.buildSparqlQuery(
-            domain,
+        let sparql = this.queryBuilder.buildRootsSparqlQuery(
+            domainType,
             predicate,
-            range,
-            key,
+            rangeType,
             lang,
             defaultLang,
             typePredicate
         );
 
-        // 2. encode it into a URL
-        return this.sparqlFetcher.buildUrl(sparql);
+        // 2. execute it
+        this.sparqlFetcher.executeSparql(
+            sparql,
+            this.#getParser(callback),
+            errorCallback
+        );
+
     }
 
-    listLocation(data: any) {
-        return data.results.bindings;
+    getChildren(
+        node: string,
+        domainType: string,
+        predicate: string,
+        rangeType: string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        
+        // 1. create the SPARQL
+        let sparql = this.queryBuilder.buildChildrenSparqlQuery(
+            node,
+            domainType,
+            predicate,
+            rangeType,
+            lang,
+            defaultLang,
+            typePredicate
+        );
+
+        // 2. execute it
+        this.sparqlFetcher.executeSparql(
+            sparql,
+            this.#getParser(callback),
+            errorCallback
+        );
+
     }
 
-    elementLabel(element: any): string {
-        return element.label.value;
-    }
+    #getParser(
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void
+    ):(data: any) => void {
+        return (data) => {
+            // 3. parse the results
+            let result = new Array<{term:RDFTerm, label:string,hasChildren:boolean,disabled:boolean}>;
+            for (let index = 0; index < data.results.bindings.length; index++) {
+                const solution = data.results.bindings[index];
 
-    elementRdfTerm(element: any) {
-        if(element.value) return element.value
-        else return element.uri;
+                result[result.length] = {
+                    term:solution.uri,
+                    label:solution.label.value,
+                    hasChildren:solution.hasChildren?solution.hasChildren.value:true,
+                    disabled:solution.count?solution.count.value == 0:false
+                };
+            }
+
+            // 4. call the callback
+            callback(result);    
+        }
     }
-    */    
 
 }

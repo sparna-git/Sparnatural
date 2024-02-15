@@ -5,7 +5,7 @@ export class SparnaturalAttributes {
   defaultLanguage: string;
   addDistinct?: boolean;
   limit?: number;
-  typePredicate?: string;
+  typePredicate: string = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
   maxDepth: number;
   maxOr: number;
   sparqlPrefixes?: { [key: string]: string };

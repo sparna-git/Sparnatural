@@ -29,6 +29,7 @@ let settings:ISettings = {
   src: undefined,
   language: "",
   defaultLanguage: "",
+  typePredicate: "",
   maxDepth: 0,
   maxOr: 0,
   debug: false

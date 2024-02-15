@@ -1,16 +1,16 @@
 import { BgpPattern, Pattern, Triple, ValuesPattern } from "sparqljs";
 import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../../generators/ISparJson";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
+import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "jstree"
 import ISettings from "../../../../sparnatural/settings/ISettings";
 import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { ValuePatternRow } from "sparqljs";
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import SparqlFactory from "../../../generators/SparqlFactory";
-import { getSettings } from "../../../settings/defaultSettings";
 import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
+import { TreeDataProviderIfc } from "../data/DataProviders";
 
 const factory = new DataFactory();
 
@@ -33,7 +33,7 @@ export class TreeWidgetValue implements WidgetValue {
 
 export class TreeWidget extends AbstractWidget {
   protected widgetValues: TreeWidgetValue[];
-  loaderHandler: any;
+  dataProvider:TreeDataProviderIfc;
   IdCriteriaGroupe: any;
   jsTree: any;
   value: TreeWidgetValue;
@@ -49,8 +49,7 @@ export class TreeWidget extends AbstractWidget {
 
   constructor(
     parentComponent: WidgetWrapper,
-    loaderHandler: any,
-    settings: ISettings,
+    dataProvider:TreeDataProviderIfc,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal,
@@ -65,7 +64,7 @@ export class TreeWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.MULTIPLE
     );
-    this.loaderHandler = loaderHandler;
+    this.dataProvider = dataProvider;
     this.IdCriteriaGroupe = "id";
 
     this.startClassVal = startClassVal;
@@ -114,7 +113,8 @@ export class TreeWidget extends AbstractWidget {
     var ObjectPropertyGroup_value = this.objectPropVal.type;
 
     var self = this;
-    var loaderHandler = this.loaderHandler;
+    let dataProvider = this.dataProvider;
+    let settings = this.settings;
     var options = {
       core: {
         multiple: true,
@@ -124,50 +124,30 @@ export class TreeWidget extends AbstractWidget {
             call: (arg0: any, arg1: { id: any; text: any }[]) => void;
           }
         ) {
-          var options = {
-            url:
-              node.id === "#"
-                ? loaderHandler.treeRootUrl(
-                    startClassGroup_value,
-                    ObjectPropertyGroup_value,
-                    endClassGroup_value
-                  )
-                : loaderHandler.treeChildrenUrl(
-                    startClassGroup_value,
-                    ObjectPropertyGroup_value,
-                    endClassGroup_value,
-                    node.id
-                  ),
-            dataType: "json",
-            method: "GET",
-            data: {
-              dataType: "json",
-            },
-            headers: getSettings().headers
-          };
 
-          var request = $.ajax(options);
+          interface TreeItem {
+            term:RDFTerm;
+            label:string;
+            hasChildren:boolean;
+            disabled:boolean
+          }
 
-          request.done(function (data) {
+          let nodeCallback:(items:TreeItem[]) => void = function(
+            items:TreeItem[]
+          ) {
             var result = [];
-            var items = loaderHandler.nodeListLocation(
-              startClassGroup_value,
-              ObjectPropertyGroup_value,
-              endClassGroup_value,
-              data
-            );
 
             if(self.sort) {
               // here, if we need to sort, then sort according to lang
               var collator = new Intl.Collator(self.settings.language);					
-              items.sort(function(a:string, b:string) {
-                return collator.compare(loaderHandler.nodeLabel(a),loaderHandler.nodeLabel(b));
+              items.sort(function(a:TreeItem, b:TreeItem) {
+                return collator.compare(a.label,b.label);
               });
             }
 
 
             for (var i = 0; i < items.length; i++) {
-              var text = loaderHandler.nodeLabel(items[i]);
+              var text = items[i].label;
               // shorten the label if too long to avoid tree goind far right
               if(text.length > 90) {
                 text = text.substring(0,90)+" (...)";
@@ -180,13 +160,13 @@ export class TreeWidget extends AbstractWidget {
                 state?: { disabled: boolean };
                 parent?: any;
               } = {
-                id: loaderHandler.nodeUri(items[i]),
+                id: items[i].term.value,
                 text: text,
               };
-              if (loaderHandler.nodeHasChildren(items[i])) {
+              if (items[i].hasChildren) {
                 aNode.children = true;
               }
-              if (loaderHandler.nodeDisabled(items[i])) {
+              if (items[i].disabled) {
                 aNode.state = {
                   disabled: true, // node disabled
                 };
@@ -200,7 +180,38 @@ export class TreeWidget extends AbstractWidget {
             if (node.id === "#") {
               self.onTreeDataLoaded(result);
             }
-          });
+
+          }
+
+          // TODO : this is not working for now
+          let errorCallback = (payload:any) => {
+            this.html.append(payload);
+          }
+
+          if(node.id === "#") {
+            dataProvider.getRoots(
+              startClassGroup_value,
+              ObjectPropertyGroup_value,
+              endClassGroup_value,
+              settings.language,
+              settings.defaultLanguage,
+              settings.typePredicate,
+              nodeCallback,
+              errorCallback
+            );
+          } else {
+            dataProvider.getChildren(
+              node.id,
+              startClassGroup_value,
+              ObjectPropertyGroup_value,
+              endClassGroup_value,
+              settings.language,
+              settings.defaultLanguage,
+              settings.typePredicate,
+              nodeCallback,
+              errorCallback
+            );
+          }
         },
         themes: {
           icons: false,

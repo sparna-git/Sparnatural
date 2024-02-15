@@ -1,7 +1,6 @@
 import ISettings from "../../../../../../sparnatural/settings/ISettings";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import Datasources from "../../../../../ontologies/SparnaturalConfigDatasources";
-import { SparqlTreeHandler } from "../../../../widgets/treewidget/TreeHandlers";
 import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../generators/ISparJson";
@@ -16,8 +15,8 @@ import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
-import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider } from "../../../../widgets/data/DataProviders";
+import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
+import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider } from "../../../../widgets/data/DataProviders";
 import { ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
@@ -431,43 +430,47 @@ class WidgetWrapper extends HTMLComponent {
           // if we have a datasource, possibly the default one, provide a config based
           // on a SparqlTemplate, otherwise use the handler provided
 
-          let handler = new SparqlTreeHandler(
+          let dataProvider = new SparqlTreeDataProvider(
+
             // endpoint URL
             // we read it on the roots datasource
-            treeRootsDatasource.sparqlEndpointUrl != null
+            new SparqlFetcherFactory(
+              treeRootsDatasource.sparqlEndpointUrl != null
               ? treeRootsDatasource.sparqlEndpointUrl
               : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
+              (this.getRootComponent() as SparnaturalComponent).catalog,
+              this.settings
+            ),
 
-            // sparqlPostProcessor
-            {
-              semanticPostProcess: (sparql: any) => {
-                // also add prefixes
-                for (let key in this.settings.sparqlPrefixes) {
-                  sparql = sparql.replace(
-                    "SELECT ",
-                    "PREFIX " +
-                      key +
-                      ": <" +
-                      this.settings.sparqlPrefixes[key] +
-                      "> \nSELECT "
-                  );
-                }
-                return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-              },
-            },
+            new TreeSparqlTemplateQueryBuilder(
+              // sparql query (with labelPath interpreted)
+              this.getFinalQueryString(treeRootsDatasource),
+              this.getFinalQueryString(treeChildrenDatasource),
 
-            this.settings.language,
-            this.settings.defaultLanguage,
+              // sparqlPostProcessor
+              {
+                semanticPostProcess: (sparql: any) => {
+                  // also add prefixes
+                  for (let key in this.settings.sparqlPrefixes) {
+                    sparql = sparql.replace(
+                      "SELECT ",
+                      "PREFIX " +
+                        key +
+                        ": <" +
+                        this.settings.sparqlPrefixes[key] +
+                        "> \nSELECT "
+                    );
+                  }
+                  return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
+                },
+              }
+            )
 
-            // sparql strings
-            this.getFinalQueryString(treeRootsDatasource),
-            this.getFinalQueryString(treeChildrenDatasource)
           );
 
           return new TreeWidget(
             this,
-            handler,
-            this.settings,
+            dataProvider,
             this.startClassVal,
             this.objectPropVal,
             this.endClassVal,

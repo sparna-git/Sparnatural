@@ -10,7 +10,7 @@ interface ISettings {
   defaultLanguage: string;
   addDistinct?: boolean;
   limit?:number;
-  typePredicate?: string;
+  typePredicate: string;
   maxDepth: number;
   maxOr: number;
   sparqlPrefixes?: { [key: string]: string };
@@ -20,6 +20,14 @@ interface ISettings {
   debug: boolean;
   submitButton?: boolean;
   headers?: any;
+  datasources? : {
+    autocomplete: any,
+    list: any,
+    tree: {
+      roots: any,
+      children: any
+    }
+  }
 }
 
 export default ISettings;
