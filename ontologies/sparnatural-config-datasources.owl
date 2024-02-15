@@ -977,7 +977,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(?label), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -999,7 +999,7 @@ SELECT DISTINCT ?uri ?label
   ?label bif:contains &quot;&apos;$key&apos;&quot; . 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1019,7 +1019,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1039,7 +1039,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1057,7 +1057,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1075,7 +1075,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 

@@ -398,7 +398,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -416,7 +416,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -435,7 +435,7 @@ SELECT DISTINCT ?uri ?label
   ?label bif:contains "'$key'" . 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -452,7 +452,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(?label), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -468,7 +468,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?value)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -484,7 +484,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?value)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 

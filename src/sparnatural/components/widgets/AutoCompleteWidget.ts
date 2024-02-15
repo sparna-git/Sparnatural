@@ -61,17 +61,17 @@ export class AutoCompleteWidget extends AbstractWidget {
       ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
-    const queryInput:HTMLElement = inputHtml[0];
-
     // $( "#foo" )[ 0 ] is pulling the DOM element from the JQuery object
     // see https://learn.jquery.com/using-jquery-core/faq/how-do-i-pull-a-native-dom-element-from-a-jquery-object/
+    const queryInput:HTMLElement = inputHtml[0];
+
     const awesomplete = new Awesomplete(queryInput, {
       filter: () => { // We will provide a list that is already filtered ...
         return true;
       },
       sort: false,    // ... and sorted.
       minChars: 3,
-      maxItems: 10,
+      maxItems: 15,
       list: []
     });
 
