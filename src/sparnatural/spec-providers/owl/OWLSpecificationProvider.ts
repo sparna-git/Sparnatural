@@ -231,9 +231,13 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
         let classUri = quad.subject.value;
         let sparqlString = quad.object.value;
 
+        // first pass to work with classes sparqlString that can contain a long expression
+        // with variables and MINUSes, like
+        // <http://exemple.com/MyClass> MINUS { $this <http://exemple.com/myProp> ?x VALUES ?x { A B } }
+
         // replace the $this with the name of the original variable in the query
-        // \S matches any non-whitespace charracter
-        var re = new RegExp("(\\S*) rdf:type <" + classUri + ">", "g");  
+        // \S matches any non-whitespace character
+        var re = new RegExp("(\\S*) (rdf:type|a) <" + classUri + ">", "g");  
 
         // prepare the function that will return the string to replace
         let replacer = function(match:string, p1:string, offset:number, fullString:string) {
@@ -251,21 +255,21 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
 
         sparql = sparql.replace(re, replacer);
 
-        // find it with the full URI
-        // var re = new RegExp("<" + quad.subject.value + ">", "g");
-        // sparql = sparql.replace(re, quad.object.value);
+        // then a second pass simpler one that will work for properties
+        var re = new RegExp("<" + quad.subject.value + ">", "g");
+        sparql = sparql.replace(re, quad.object.value);
       });
 
-      console.log(sparql);
 
     // reparse the query, apply prefixes, and reserialize the query
     var query = this.#parser.parse(sparql);
     for (var key in prefixes) {
-      query.prefixes[key] = prefixes[key];
+        query.prefixes[key] = prefixes[key];
     }
-    return this.#generator.stringify(query);
-
-    // return sparql;
+    
+    let finalString = this.#generator.stringify(query);
+    console.log(finalString);
+    return finalString
   }
 
   _sort(items: any[]) {
