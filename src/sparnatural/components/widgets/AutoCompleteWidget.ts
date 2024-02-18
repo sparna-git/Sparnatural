@@ -5,7 +5,7 @@ import SparqlFactory from "../../generators/SparqlFactory";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { AutocompleteDataProviderIfc } from "./data/DataProviders";
+import { AutocompleteDataProviderIfc, NoOpAutocompleteProvider } from "./data/DataProviders";
 import Awesomplete from 'awesomplete';
 import { I18n } from '../../settings/I18n';
 
@@ -27,13 +27,23 @@ export class AutoCompleteWidgetValue implements WidgetValue {
   }
 }
 
+export interface AutocompleteConfiguration {
+  dataProvider: AutocompleteDataProviderIfc,
+  maxItems: number
+}
+
 export class AutoCompleteWidget extends AbstractWidget {
+  
+  static defaultConfiguration:Partial<AutocompleteConfiguration> = {
+    maxItems:15
+  }
+  
   protected widgetValues: AutoCompleteWidgetValue[];
-  protected dataProvider: AutocompleteDataProviderIfc;
+  protected configuration: AutocompleteConfiguration;
 
   constructor(
     parentComponent: WidgetWrapper,
-    dataProvider: AutocompleteDataProviderIfc,
+    configuration: AutocompleteConfiguration,
     startClassValue: SelectedVal,
     objectPropVal: SelectedVal,
     endClassValue: SelectedVal
@@ -47,7 +57,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       endClassValue,
       ValueRepetition.MULTIPLE
     );
-    this.dataProvider = dataProvider;
+    this.configuration = configuration;
   }
 
   render() {
@@ -65,13 +75,14 @@ export class AutoCompleteWidget extends AbstractWidget {
     // see https://learn.jquery.com/using-jquery-core/faq/how-do-i-pull-a-native-dom-element-from-a-jquery-object/
     const queryInput:HTMLElement = inputHtml[0];
 
+    console.log(this.configuration.maxItems)
     const awesomplete = new Awesomplete(queryInput, {
       filter: () => { // We will provide a list that is already filtered ...
         return true;
       },
       sort: false,    // ... and sorted.
       minChars: 3,
-      maxItems: 15,
+      maxItems: this.configuration.maxItems,
       list: []
     });
 
@@ -120,7 +131,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       // Process inputText as you want, e.g. make an API request.
 
       if(phrase.length >= 3) {
-        this.dataProvider.getAutocompleteSuggestions(
+        this.configuration.dataProvider.getAutocompleteSuggestions(
           this.startClassVal.type,
           this.objectPropVal.type,
           this.endClassVal.type,

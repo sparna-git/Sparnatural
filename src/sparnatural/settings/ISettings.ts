@@ -20,13 +20,18 @@ interface ISettings {
   localCacheDataTtl?: number;
   debug: boolean;
   submitButton?: boolean;
-  headers?: any;
-  datasources? : {
-    getAutocompleteSuggestions?: AutocompleteDataProviderIfc["getAutocompleteSuggestions"],
-    getListContent?: ListDataProviderIfc["getListContent"],
+  configuration? : {
+    headers?: any;
+    autocomplete?: {
+      dataProvider?: AutocompleteDataProviderIfc,
+      maxItems?: number
+    },
+    list?: {
+      datasource?: ListDataProviderIfc["getListContent"],
+    },   
     tree?: {
-      getRoots: TreeDataProviderIfc["getRoots"],
-      getChildren: TreeDataProviderIfc["getChildren"]
+      rootsDatasource: TreeDataProviderIfc["getRoots"],
+      childrenDatasource: TreeDataProviderIfc["getChildren"]
     }
   }
 }

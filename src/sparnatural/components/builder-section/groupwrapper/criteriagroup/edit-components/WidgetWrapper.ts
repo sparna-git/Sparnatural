@@ -13,7 +13,7 @@ import { SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
-import { AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
+import { AutoCompleteWidget, AutocompleteConfiguration } from "../../../../widgets/AutoCompleteWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
 import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
@@ -21,6 +21,7 @@ import { ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
 import { I18n } from "../../../../../settings/I18n";
+import { AutocompleteWidget } from "../../../../../spec-providers/shacl/SHACLSearchWidgets";
 
 
 /**
@@ -218,10 +219,10 @@ class WidgetWrapper extends HTMLComponent {
           }
         }
 
-        if(this.settings.datasources?.getListContent) {
+        if(this.settings.configuration?.list?.datasource) {
           // use the provided data provider function from the outside
           listDataProvider = {
-            getListContent: this.settings.datasources?.getListContent
+            getListContent: this.settings.configuration?.list?.datasource
           }
         } else if (datasource != null) {
           // if we have a datasource, possibly the default one, provide a config based
@@ -273,7 +274,6 @@ class WidgetWrapper extends HTMLComponent {
         );
 
       case Config.AUTOCOMPLETE_PROPERTY:
-        var autocompleteDataProvider:AutocompleteDataProviderIfc;
 
         // to be passed in anonymous functions
         var theSpecProvider = this.specProvider;
@@ -309,14 +309,14 @@ class WidgetWrapper extends HTMLComponent {
           }
         }
 
-        if(this.settings.datasources?.getAutocompleteSuggestions) {
-          // use the provided data provider function from the outside
-          autocompleteDataProvider = {
-            getAutocompleteSuggestions: this.settings.datasources?.getAutocompleteSuggestions
-          }
-        } else if (datasource != null) {
+        console.log(this.settings.configuration?.autocomplete)
+        console.log(AutoCompleteWidget.defaultConfiguration)
+        let config:Partial<AutocompleteConfiguration> = {...AutoCompleteWidget.defaultConfiguration, ...this.settings.configuration?.autocomplete};
+        console.log(config)
+
+        if (!config.dataProvider && datasource != null) {
           // build a SPARQL data provider function using the SPARQL query of the datasource
-          autocompleteDataProvider = new SparqlAutocompleDataProvider(
+          config.dataProvider = new SparqlAutocompleDataProvider(
 
             // endpoint URL
             new SparqlFetcherFactory(
@@ -353,7 +353,7 @@ class WidgetWrapper extends HTMLComponent {
         }
         return new AutoCompleteWidget(
           this,
-          autocompleteDataProvider,
+          config as AutocompleteConfiguration,
           this.startClassVal,
           this.objectPropVal,
           this.endClassVal
@@ -437,11 +437,11 @@ class WidgetWrapper extends HTMLComponent {
           }
         }
 
-        if(this.settings.datasources?.tree) {
+        if(this.settings.configuration?.tree?.rootsDatasource && this.settings.configuration?.tree?.childrenDatasource) {
           // use the provided data provider function from the outside
           treeDataProvider = {
-            getRoots: this.settings.datasources?.tree.getRoots,
-            getChildren: this.settings.datasources?.tree.getChildren
+            getRoots: this.settings.configuration?.tree?.rootsDatasource,
+            getChildren: this.settings.configuration?.tree?.childrenDatasource
           }
         } else if (treeRootsDatasource != null && treeChildrenDatasource != null) {
           // if we have a datasource, possibly the default one, provide a config based

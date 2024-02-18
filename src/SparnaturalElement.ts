@@ -6,7 +6,7 @@ import { getSettings, mergeSettings } from "./sparnatural/settings/defaultSettin
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
 import ISparnaturalSpecification from "./sparnatural/spec-providers/ISparnaturalSpecification";
 import { ISparJson } from "./sparnatural/generators/ISparJson";
-import { PreLoadQueries } from "./sparnatural/settings/ISettings";
+import ISettings, { PreLoadQueries } from "./sparnatural/settings/ISettings";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import QueryParser from "./sparnatural/querypreloading/QueryParser";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
@@ -43,20 +43,13 @@ export class SparnaturalElement extends HTMLElement {
     this.display();
   }
 
-  set headers(headers: any) {
-    getSettings().headers = headers;
+  set configuration(configuration: any) {
+    console.log("setting configuration...");
+    getSettings().configuration = configuration;
   }
 
-  get headers() {
-    return getSettings().headers;
-  }
-
-  set datasources(datasources: any) {
-    getSettings().datasources = datasources;
-  }
-
-  get datasources() {
-    return getSettings().datasources;
+  get configuration() {
+    return getSettings().configuration;
   }
 
   display() {    
@@ -67,10 +60,8 @@ export class SparnaturalElement extends HTMLElement {
     $(this).append(this.Sparnatural.html);
     // parse all attributes in the HTML element
     this._attributes = new SparnaturalAttributes(this);
-    // TODO : migrate handlers outside of settings
-    // this.handlers = new SparnaturalHandlers();
 
-    // just set the settings with this
+    // just set the settings with the HTML attributes
     // TODO : re-enginer the global settings variable to something more OO
     mergeSettings(this._attributes); 
     this.Sparnatural.render();
