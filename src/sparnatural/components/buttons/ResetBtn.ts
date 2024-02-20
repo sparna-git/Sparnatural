@@ -1,14 +1,13 @@
 import UiuxConfig from "../IconsConstants";
 import HTMLComponent from "../HtmlComponent";
-import { TOOLTIP_CONFIG } from "../../settings/defaultSettings";
-import TippyInfo from "./TippyInfo";
+import { I18n } from "../../settings/I18n";
 
 class ResetBtn extends HTMLComponent {
   tippySettings: any;
 
   constructor(ParentComponent: HTMLComponent, callBack: () => void) {
     let widgetHtml = $(
-      '<p class="reset-form"><a>' + UiuxConfig.ICON_RESET + "</a></p>"
+      `<p class="reset-form"><a title="${I18n.labels["Reset.tooltip"]}">${UiuxConfig.ICON_RESET}</a></p>`
     );
 
     super("reset-wrapper", ParentComponent, widgetHtml);

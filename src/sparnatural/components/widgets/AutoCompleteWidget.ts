@@ -77,7 +77,6 @@ export class AutoCompleteWidget extends AbstractWidget {
     // see https://learn.jquery.com/using-jquery-core/faq/how-do-i-pull-a-native-dom-element-from-a-jquery-object/
     const queryInput:HTMLElement = inputHtml[0];
 
-    console.log(this.configuration.maxItems)
     const awesomplete = new Awesomplete(queryInput, {
       filter: () => { // We will provide a list that is already filtered ...
         return true;
