@@ -419,6 +419,37 @@ export interface TreeDataProviderIfc {
 }
 
 
+export class NoOpTreeDataProvider implements TreeDataProviderIfc {
+    getRoots(
+        domain:string,
+        predicate:string,
+        range:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        // does nothing !
+        console.warn("Warning, a NoOpTreeDataProvider is being called for typePredicate "+typePredicate)
+    }
+
+    getChildren(
+        node:string,
+        domain:string,
+        predicate:string,
+        range:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        // does nothing !
+        console.warn("Warning, a NoOpTreeDataProvider is being called for typePredicate "+typePredicate)
+    }
+}
+
 export class SparqlTreeDataProvider implements TreeDataProviderIfc {
     
     queryBuilder:TreeSparqlQueryBuilderIfc;

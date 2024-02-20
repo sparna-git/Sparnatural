@@ -1,5 +1,8 @@
 import SparnaturalComponent from "../components/SparnaturalComponent";
-import { AutocompleteDataProviderIfc, ListDataProviderIfc, TreeDataProviderIfc } from "../components/widgets/data/DataProviders";
+import { AutocompleteConfiguration } from "../components/widgets/AutoCompleteWidget";
+import { ListConfiguration } from "../components/widgets/ListWidget";
+import { MapConfiguration } from "../components/widgets/MapWidget";
+import { TreeConfiguration } from "../components/widgets/treewidget/TreeWidget";
 
 export interface PreLoadQueries {
   queries: Array<{ queryName: string; query: string }>;
@@ -20,19 +23,12 @@ interface ISettings {
   localCacheDataTtl?: number;
   debug: boolean;
   submitButton?: boolean;
-  configuration? : {
-    headers?: any;
-    autocomplete?: {
-      dataProvider?: AutocompleteDataProviderIfc,
-      maxItems?: number
-    },
-    list?: {
-      datasource?: ListDataProviderIfc["getListContent"],
-    },   
-    tree?: {
-      rootsDatasource: TreeDataProviderIfc["getRoots"],
-      childrenDatasource: TreeDataProviderIfc["getChildren"]
-    }
+  customization? : {
+    headers?: Map<string,string>;
+    autocomplete?: Partial<AutocompleteConfiguration>,
+    list?: Partial<ListConfiguration>,   
+    tree?: Partial<TreeConfiguration>,
+    map?: Partial<MapConfiguration>
   }
 }
 

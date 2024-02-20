@@ -10,7 +10,7 @@ import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/star
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
-import { TreeDataProviderIfc } from "../data/DataProviders";
+import { NoOpTreeDataProvider, TreeDataProviderIfc } from "../data/DataProviders";
 
 const factory = new DataFactory();
 
@@ -31,9 +31,19 @@ export class TreeWidgetValue implements WidgetValue {
   }
 }
 
+export interface TreeConfiguration {
+  dataProvider: TreeDataProviderIfc,
+}
+
 export class TreeWidget extends AbstractWidget {
+
+  // The default implementation of TreeConfiguration
+  static defaultConfiguration: TreeConfiguration = {
+    dataProvider: new NoOpTreeDataProvider()
+  }
+
   protected widgetValues: TreeWidgetValue[];
-  dataProvider:TreeDataProviderIfc;
+  configuration:TreeConfiguration;
   IdCriteriaGroupe: any;
   jsTree: any;
   value: TreeWidgetValue;
@@ -49,7 +59,7 @@ export class TreeWidget extends AbstractWidget {
 
   constructor(
     parentComponent: WidgetWrapper,
-    dataProvider:TreeDataProviderIfc,
+    configuration:TreeConfiguration,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal,
@@ -64,7 +74,7 @@ export class TreeWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.MULTIPLE
     );
-    this.dataProvider = dataProvider;
+    this.configuration = configuration;
     this.IdCriteriaGroupe = "id";
 
     this.startClassVal = startClassVal;
@@ -113,7 +123,7 @@ export class TreeWidget extends AbstractWidget {
     var ObjectPropertyGroup_value = this.objectPropVal.type;
 
     var self = this;
-    let dataProvider = this.dataProvider;
+    let dataProvider = this.configuration.dataProvider;
     let settings = this.settings;
     var options = {
       core: {

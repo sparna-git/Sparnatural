@@ -8,7 +8,7 @@ import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../generators/SparqlFactory";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { ListDataProviderIfc } from "./data/DataProviders";
+import { ListDataProviderIfc, NoOpListDataProvider } from "./data/DataProviders";
 import { I18n } from "../../settings/I18n";
 
 const factory = new DataFactory();
@@ -28,9 +28,18 @@ export class ListWidgetValue implements WidgetValue {
   }
 }
 
+export interface ListConfiguration {
+  dataProvider: ListDataProviderIfc
+}
+
 export class ListWidget extends AbstractWidget {
 
-  dataProvider: ListDataProviderIfc;
+  // The default implementation of ListConfiguration
+  static defaultConfiguration: ListConfiguration = {
+    dataProvider: new NoOpListDataProvider()
+  }
+
+  configuration: ListConfiguration;
 
   protected widgetValues: WidgetValue[];
   sort: boolean;
@@ -39,7 +48,7 @@ export class ListWidget extends AbstractWidget {
 
   constructor(
     parentComponent: WidgetWrapper,
-    dataProvider: ListDataProviderIfc,
+    config: ListConfiguration,
     sort: boolean,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -55,7 +64,7 @@ export class ListWidget extends AbstractWidget {
       ValueRepetition.MULTIPLE
     );
 
-    this.dataProvider = dataProvider;
+    this.configuration = config;
     this.sort = sort;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
@@ -149,7 +158,7 @@ export class ListWidget extends AbstractWidget {
     // toggle spinner before loading
     this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
 
-    this.dataProvider.getListContent(
+    this.configuration.dataProvider.getListContent(
       this.startClassVal.type,
       this.objectPropVal.type,
       this.endClassVal.type,

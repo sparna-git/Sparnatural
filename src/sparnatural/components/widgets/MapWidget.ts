@@ -57,13 +57,34 @@ type ObjectifyLatLng<T> = T extends LatLng[][]
 // see: https://effectivetypescript.com/2020/04/09/jsonify/
 type ObjectMapWidgetValue = ObjectifyLatLng<MapWidgetValue>
 
+
+export interface MapConfiguration {
+  zoom: number,
+  center: {
+    lat: number,
+    long: number
+  }
+}
+
 export default class MapWidget extends AbstractWidget {
+  
+  // The default implementation of MapConfiguration
+  static defaultConfiguration: MapConfiguration = {
+    zoom:5,
+    center: {
+      lat: 46.20222,
+      long: 6.14569
+    }
+  }
+  
+  protected configuration: MapConfiguration;
   protected widgetValues: MapWidgetValue[];
   // protected blockObjectPropTriple: boolean = true
   renderMapValueBtn: AddUserInputBtn;
   map: L.Map;
   drawingLayer: L.Layer;
   constructor(
+    configuration: MapConfiguration,
     parentComponent: WidgetWrapper,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -78,6 +99,8 @@ export default class MapWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.SINGLE
     );
+
+    this.configuration = configuration;
   }
 
   render(): this {
@@ -94,7 +117,7 @@ export default class MapWidget extends AbstractWidget {
 
     this.html.append($(`<div id="map"></div>`));
 
-    this.map = new Map("map").setView([46.20222, 6.14569], 5);
+    this.map = new Map("map").setView([this.configuration.center.lat, this.configuration.center.long], this.configuration.zoom);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "© OpenStreetMap",

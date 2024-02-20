@@ -21,7 +21,7 @@ export class UrlFetcher {
 
     // static factory builder method from settings
     static build(settings:ISettings):UrlFetcher {
-        return new UrlFetcher(settings.localCacheDataTtl, settings.configuration?.headers);
+        return new UrlFetcher(settings.localCacheDataTtl, settings.customization?.headers);
     }
 
     fetchUrl(

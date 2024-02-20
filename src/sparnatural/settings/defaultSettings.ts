@@ -20,7 +20,7 @@ const defaultSettings: ISettings = {
   localCacheDataTtl: 1000 * 60 * 60 * 24, // 24 hours in mimmiseconds
   debug:false,
   submitButton:true,
-  configuration: {}  
+  customization: {}  
 };
 
 // the actual settings, result of merge between defaultSettings and settings passed as parameters

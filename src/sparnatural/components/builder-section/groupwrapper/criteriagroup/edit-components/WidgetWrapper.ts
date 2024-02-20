@@ -5,19 +5,19 @@ import ISparnaturalSpecification from "../../../../../spec-providers/ISparnatura
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../../generators/ISparJson";
 import EditComponents from "./EditComponents";
-import MapWidget from "../../../../widgets/MapWidget";
+import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { DatesWidget } from "../../../../widgets/DatesWidget";
 import { SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
-import { TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
+import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 import { AutoCompleteWidget, AutocompleteConfiguration } from "../../../../widgets/AutoCompleteWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
-import { ListWidget } from "../../../../widgets/ListWidget";
+import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, NoOpTreeDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
+import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
 import { I18n } from "../../../../../settings/I18n";
@@ -186,8 +186,6 @@ class WidgetWrapper extends HTMLComponent {
     switch (widgetType) {
       case Config.LITERAL_LIST_PROPERTY:
       case Config.LIST_PROPERTY:
-        let listDataProvider:ListDataProviderIfc;
-
         // to be passed in anonymous functions
         var theSpecProvider = this.specProvider;
 
@@ -219,12 +217,8 @@ class WidgetWrapper extends HTMLComponent {
           }
         }
 
-        if(this.settings.configuration?.list?.datasource) {
-          // use the provided data provider function from the outside
-          listDataProvider = {
-            getListContent: this.settings.configuration?.list?.datasource
-          }
-        } else if (datasource != null) {
+        let listDataProvider:ListDataProviderIfc = new NoOpListDataProvider();
+        if (datasource != null) {
           // if we have a datasource, possibly the default one, provide a config based
           // on a SparqlTemplate, otherwise use the handler provided
           
@@ -264,9 +258,17 @@ class WidgetWrapper extends HTMLComponent {
           );
         }
 
+        // create the configuration object : use the default data provider, then the default configuration, then overwrite with is set in 
+        // the provided configuration object for the corresponding section
+        let listConfig:ListConfiguration = {
+          ...{dataProvider: listDataProvider},
+          ...ListWidget.defaultConfiguration,
+          ...this.settings.customization?.list
+        };
+
         return new ListWidget(
           this,
-          listDataProvider,
+          listConfig,
           !(datasource.noSort == true),
           this.startClassVal,
           this.objectPropVal,
@@ -309,14 +311,10 @@ class WidgetWrapper extends HTMLComponent {
           }
         }
 
-        console.log(this.settings.configuration?.autocomplete)
-        console.log(AutoCompleteWidget.defaultConfiguration)
-        let config:Partial<AutocompleteConfiguration> = {...AutoCompleteWidget.defaultConfiguration, ...this.settings.configuration?.autocomplete};
-        console.log(config)
-
-        if (!config.dataProvider && datasource != null) {
+        let autocompleteDataProvider:AutocompleteDataProviderIfc = new NoOpAutocompleteProvider();
+        if (datasource != null) {
           // build a SPARQL data provider function using the SPARQL query of the datasource
-          config.dataProvider = new SparqlAutocompleDataProvider(
+          autocompleteDataProvider = new SparqlAutocompleDataProvider(
 
             // endpoint URL
             new SparqlFetcherFactory(
@@ -351,9 +349,18 @@ class WidgetWrapper extends HTMLComponent {
             )
           );
         }
+
+        // create the configuration object : use the default data provider, then the default configuration, then overwrite with is set in 
+        // the provided configuration object for the corresponding section
+        let autocompleteConfig:AutocompleteConfiguration = {
+          ...AutoCompleteWidget.defaultConfiguration,
+          ...{dataProvider: autocompleteDataProvider},
+          ...this.settings.customization?.autocomplete
+        };
+
         return new AutoCompleteWidget(
           this,
-          config as AutocompleteConfiguration,
+          autocompleteConfig,
           this.startClassVal,
           this.objectPropVal,
           this.endClassVal
@@ -407,7 +414,6 @@ class WidgetWrapper extends HTMLComponent {
         break;
       case Config.TREE_PROPERTY:
         var theSpecProvider = this.specProvider;
-        var treeDataProvider:TreeDataProviderIfc;
 
         // determine custom roots datasource
         var treeRootsDatasource =
@@ -437,13 +443,9 @@ class WidgetWrapper extends HTMLComponent {
           }
         }
 
-        if(this.settings.configuration?.tree?.rootsDatasource && this.settings.configuration?.tree?.childrenDatasource) {
-          // use the provided data provider function from the outside
-          treeDataProvider = {
-            getRoots: this.settings.configuration?.tree?.rootsDatasource,
-            getChildren: this.settings.configuration?.tree?.childrenDatasource
-          }
-        } else if (treeRootsDatasource != null && treeChildrenDatasource != null) {
+        let treeDataProvider:TreeDataProviderIfc = new NoOpTreeDataProvider();
+
+        if (treeRootsDatasource != null && treeChildrenDatasource != null) {
           // if we have a datasource, possibly the default one, provide a config based
           // on a SparqlTemplate, otherwise use the handler provided
 
@@ -486,10 +488,17 @@ class WidgetWrapper extends HTMLComponent {
           );
         }
 
+        // create the configuration object : use the default data provider, then the default configuration, then overwrite with is set in 
+        // the provided configuration object for the corresponding section
+        let treeConfig:TreeConfiguration = {
+          ...TreeWidget.defaultConfiguration,
+          ...{dataProvider: treeDataProvider},
+          ...this.settings.customization?.tree
+        };
       
         return new TreeWidget(
           this,
-          treeDataProvider,
+          treeConfig,
           this.startClassVal,
           this.objectPropVal,
           this.endClassVal,
@@ -498,7 +507,13 @@ class WidgetWrapper extends HTMLComponent {
 
         break;
       case Config.MAP_PROPERTY:
+        let mapConfig:MapConfiguration = {
+          ...MapWidget.defaultConfiguration,
+          ...this.settings.customization?.map
+        };
+
         return new MapWidget(
+          mapConfig,
           this,
           this.startClassVal,
           this.objectPropVal,

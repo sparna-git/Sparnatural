@@ -34,7 +34,9 @@ export interface AutocompleteConfiguration {
 
 export class AutoCompleteWidget extends AbstractWidget {
   
-  static defaultConfiguration:Partial<AutocompleteConfiguration> = {
+  // The default implementation of AutocompleteConfiguration
+  static defaultConfiguration: AutocompleteConfiguration = {
+    dataProvider: new NoOpAutocompleteProvider(),
     maxItems:15
   }
   
