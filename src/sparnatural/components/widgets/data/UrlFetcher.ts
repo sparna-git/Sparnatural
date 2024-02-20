@@ -21,7 +21,7 @@ export class UrlFetcher {
 
     // static factory builder method from settings
     static build(settings:ISettings):UrlFetcher {
-        return new UrlFetcher(settings.localCacheDataTtl, settings.headers);
+        return new UrlFetcher(settings.localCacheDataTtl, settings.customization?.headers);
     }
 
     fetchUrl(
@@ -31,9 +31,11 @@ export class UrlFetcher {
     ): void {
     
         var headers = new Headers();
-        // honor extra headers
-        for (const k in this.extraHeaders) {
-            headers.append(k, this.extraHeaders[k]);
+        if(this.extraHeaders) {
+            // honor extra headers
+            for (const k in this.extraHeaders) {
+                headers.append(k, this.extraHeaders[k]);
+            }
         }
         headers.append(
             "Accept",

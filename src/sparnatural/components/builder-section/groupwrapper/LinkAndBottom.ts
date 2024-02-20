@@ -1,4 +1,4 @@
-import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
+import { I18n } from "../../../settings/I18n";
 import HTMLComponent from "../../HtmlComponent";
 import GroupWrapper from "./GroupWrapper";
 
@@ -15,7 +15,7 @@ class LinkAndBottom extends HTMLComponent {
   length: number;
   ParentGroupWrapper: GroupWrapper;
   constructor(ParentComponent: HTMLComponent) {
-    let widgetHTML = $(`<span>${getSettings().langSearch.And}</span>`);
+    let widgetHTML = $(`<span>${I18n.labels.And}</span>`);
     super("link-and-bottom", ParentComponent, widgetHTML);
     this.ParentGroupWrapper = ParentComponent as GroupWrapper;
   }

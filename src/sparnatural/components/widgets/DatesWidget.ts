@@ -1,9 +1,9 @@
 import { Pattern } from "sparqljs";
-import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { I18n } from "../../settings/I18n";
 
 export class DateValue implements WidgetValue {
   value: {
@@ -55,17 +55,17 @@ export class DatesWidget extends AbstractWidget {
     super.render();
     this.input = $(
       `<input id="input" placeholder="${
-        getSettings().langSearch.PlaceHolderDatePeriod
+        I18n.labels.PlaceHolderDatePeriod
       }"/>`
     );
     this.inputStart = $(
       `<input id="input-start" placeholder="${
-        getSettings().langSearch.TimeWidgetDateFrom
+        I18n.labels.TimeWidgetDateFrom
       }"/>`
     );
     this.inputEnd = $(
       `<input id="input-start" placeholder="${
-        getSettings().langSearch.TimeWidgetDateFrom
+        I18n.labels.TimeWidgetDateFrom
       }"/>`
     );
     this.inputValue = $(`<input id="input-value" type="hidden"/>`);
@@ -76,7 +76,7 @@ export class DatesWidget extends AbstractWidget {
       .append(this.inputValue);
     this.addWidgetValueBtn = new AddUserInputBtn(
       this,
-      getSettings().langSearch.ButtonAdd,
+      I18n.labels.ButtonAdd,
       this.#addValueBtnClicked
     ).render();
     var phrase = "";

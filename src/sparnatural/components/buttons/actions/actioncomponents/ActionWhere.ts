@@ -1,4 +1,4 @@
-import { getSettings } from "../../../../../sparnatural/settings/defaultSettings";
+import { I18n } from "../../../../settings/I18n";
 import ISparnaturalSpecification from "../../../../spec-providers/ISparnaturalSpecification";
 import EditComponents from "../../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import HTMLComponent from "../../../HtmlComponent";
@@ -38,8 +38,8 @@ class ActionWhere extends HTMLComponent {
       <span class="edit-num"> ${choiceNumber}</span>
     </span>`);
     let where = $(`
-      <div> ${getSettings().langSearch.Search} ${endLabel} ${
-      getSettings().langSearch.That
+      <div> ${I18n.labels.Search} ${endLabel} ${
+      I18n.labels.That
     } </div>
     `);
     this.btn = $(`<a>${UiuxConfig.ICON_PLUS}</a>`);

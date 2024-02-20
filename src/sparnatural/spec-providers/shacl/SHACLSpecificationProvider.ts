@@ -159,7 +159,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
           // replace the $this with the name of the original variable in the query
           // \S matches any non-whitespace charracter
-          var re = new RegExp("(\\S*) rdf:type <" + nodeShapeUri + ">", "g");      
+          var re = new RegExp("(\\S*) (rdf:type|a) <" + nodeShapeUri + ">", "g");      
 
           let replacer = function(match:string, p1:string, offset:number, fullString:string) {
             // first substitutes any other variable name with a prefix

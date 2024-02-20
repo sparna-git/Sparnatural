@@ -104,7 +104,7 @@
     "rdf-stores": "^1.0.0",
     "select2": "^4.0.13",
     "sortablejs": "^1.14.0",
-    "sparqljs": "^3.6.2",
+    "sparqljs": "^3.7.1",
     "streamify-string": "^1.0.1",
     "tippy.js": "^6.3.5"
   }

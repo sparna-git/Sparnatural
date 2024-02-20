@@ -7,6 +7,7 @@ import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import { WidgetValue } from "../../../../widgets/AbstractWidget";
 import WidgetWrapper from "./WidgetWrapper";
 import ActionWhere from "../../../../buttons/actions/actioncomponents/ActionWhere";
+import { I18n } from "../../../../../settings/I18n";
 
 export class SelectAllValue implements WidgetValue {
   static key = "SelectAllValue";
@@ -107,7 +108,7 @@ class EditComponents extends HTMLComponent {
   onSelectAll() {
     let selectAllVal = new SelectAllValue(
       {
-        label: getSettings().langSearch.SelectAllValues,
+        label: I18n.labels.SelectAllValues,
       }
     );
     this.html[0].dispatchEvent(

@@ -19,40 +19,52 @@ LIMIT 500
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_literal_list_count",
   `
-SELECT DISTINCT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+  {
+  SELECT DISTINCT ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?theLabel .
-    FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  {
+    SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?theLabel .
+      FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+    }
+    GROUP BY ?theLabel
   }
-  GROUP BY ?theLabel
-}
+  }
+  ORDER BY DESC(?count) UCASE(?theLabel)
+  LIMIT 500
+  }
 }
 ORDER BY DESC(?count) UCASE(?label)
-LIMIT 500
 `
 );
 
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_literal_list_alpha_with_count",
   `
-SELECT DISTINCT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+  {
+  SELECT DISTINCT ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?theLabel .
-    FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  {
+    SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?theLabel .
+      FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+    }
+    GROUP BY ?theLabel
   }
-  GROUP BY ?theLabel
-}
+  }
+  ORDER BY UCASE(?theLabel)
+  LIMIT 500
+  }
 }
 ORDER BY UCASE(?label)
-LIMIT 500
 `
 );
 
@@ -244,20 +256,26 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  {
+  SELECT ?uri ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
-    FILTER(isIRI(?uri))
+  {
+    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?uri .
+      FILTER(isIRI(?uri))
+    }
+    GROUP BY ?uri
   }
-  GROUP BY ?uri
-}
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  ?uri $labelPath ?theLabel .
+  FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  }
+  ORDER BY DESC(?count) UCASE(?theLabel)
+  LIMIT 500
+  }
 }
 ORDER BY DESC(?count) UCASE(?label)
-LIMIT 500
 `
 );
 
@@ -266,20 +284,26 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  {
+  SELECT ?uri ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
-    FILTER(isIRI(?uri))
+  {
+    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?uri .
+      FILTER(isIRI(?uri))
+    }
+    GROUP BY ?uri
   }
-  GROUP BY ?uri
-}
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  ?uri $labelPath ?theLabel .
+  FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  }
+  ORDER BY UCASE(?theLabel)
+  LIMIT 500
+  }
 }
 ORDER BY UCASE(?label)
-LIMIT 500
 `
 );
 
@@ -305,21 +329,27 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  {
+  SELECT ?uri ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
-    FILTER(isIRI(?uri))
-    ?uri $type $range .
+  {
+    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?uri .
+      FILTER(isIRI(?uri))
+      ?uri $type $range .
+    }
+    GROUP BY ?uri
   }
-  GROUP BY ?uri
-}
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  ?uri $labelPath ?theLabel .
+  FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  }
+  ORDER BY DESC(?count) UCASE(?theLabel)
+  LIMIT 500
+  }
 }
 ORDER BY DESC(?count) UCASE(?label)
-LIMIT 500
 `
 );
 
@@ -329,22 +359,28 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   `
 SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  {
+  SELECT ?uri ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
-    FILTER(isIRI(?uri))
-    # range criteria
-    ?uri $type $range .
+  {
+    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?uri .
+      FILTER(isIRI(?uri))
+      # range criteria
+      ?uri $type $range .
+    }
+    GROUP BY ?uri
   }
-  GROUP BY ?uri
-}
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  ?uri $labelPath ?theLabel .
+  FILTER(lang(?theLabel) = "" || lang(?theLabel) = $lang)
+  }
+  ORDER BY UCASE(?theLabel)
+  LIMIT 500
+  }
 }
 ORDER BY UCASE(?label)
-LIMIT 500
 `
 );
 
@@ -362,7 +398,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -380,7 +416,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -399,7 +435,7 @@ SELECT DISTINCT ?uri ?label
   ?label bif:contains "'$key'" . 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -416,7 +452,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(?label), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -432,7 +468,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?value)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -448,7 +484,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?value)), LCASE("$key"))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10
+LIMIT 15
 `
 );
 
@@ -477,30 +513,35 @@ ORDER BY UCASE(?label)
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children_with_count",
   `
-SELECT DISTINCT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren ?count
 WHERE {
   {
-    SELECT ?uri ?theLabel ?hasChildren
-    WHERE {
-      $node $childrenPath ?uri .
-      ?uri $labelPath ?theLabel .
-      FILTER(isIRI(?uri))
-      FILTER(lang(?theLabel) = '' || lang(?theLabel) = $lang)
-      OPTIONAL {
-        ?uri $childrenPath ?children .
+  SELECT DISTINCT ?uri ?theLabel ?hasChildren (COUNT(?x) AS ?count)
+  WHERE {
+    {
+      SELECT ?uri ?theLabel ?hasChildren
+      WHERE {
+        $node $childrenPath ?uri .
+        ?uri $labelPath ?theLabel .
+        FILTER(isIRI(?uri))
+        FILTER(lang(?theLabel) = '' || lang(?theLabel) = $lang)
+        OPTIONAL {
+          ?uri $childrenPath ?children .
+        }
+        BIND(IF(bound(?children),true,false) AS ?hasChildren)
       }
-      BIND(IF(bound(?children),true,false) AS ?hasChildren)
+    }
+
+    OPTIONAL {
+      ?x $type $domain .
+      ?x $property ?uri .
+      # no range criteria
+      # ?uri a $range .
     }
   }
-
-  OPTIONAL {
-    ?x $type $domain .
-    ?x $property ?uri .
-    # no range criteria
-    # ?uri a $range .
+  GROUP BY ?uri ?theLabel ?hasChildren
   }
 }
-GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)
 `
 );
@@ -529,31 +570,36 @@ ORDER BY UCASE(?label)
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_tree_root_noparent_with_count",
   `
-SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren ?count
 WHERE {
   {
-    SELECT ?uri ?theLabel ?hasChildren
-    WHERE {
-      ?uri $type $range .
-      FILTER NOT EXISTS {
-        ?parent $childrenPath ?uri .
+  SELECT ?uri ?theLabel ?hasChildren (COUNT(?x) AS ?count)
+  WHERE {
+    {
+      SELECT ?uri ?theLabel ?hasChildren
+      WHERE {
+        ?uri $type $range .
+        FILTER NOT EXISTS {
+          ?parent $childrenPath ?uri .
+        }
+        ?uri $labelPath ?theLabel .
+        FILTER(isIRI(?uri))
+        FILTER(lang(?theLabel) = '' || lang(?theLabel) = $lang)
+        OPTIONAL {
+          ?uri $childrenPath ?children .
+        }
+        BIND(IF(bound(?children),true,false) AS ?hasChildren)
       }
-      ?uri $labelPath ?theLabel .
-      FILTER(isIRI(?uri))
-      FILTER(lang(?theLabel) = '' || lang(?theLabel) = $lang)
-      OPTIONAL {
-        ?uri $childrenPath ?children .
-      }
-      BIND(IF(bound(?children),true,false) AS ?hasChildren)
+    }
+
+    OPTIONAL {
+      ?x $type $domain .
+      ?x $property ?uri .
     }
   }
-
-  OPTIONAL {
-    ?x $type $domain .
-    ?x $property ?uri .
+  GROUP BY ?uri ?theLabel ?hasChildren
   }
-}
-GROUP BY ?uri ?theLabel ?hasChildren
+} 
 ORDER BY UCASE(?label)
 `
 );
@@ -997,31 +1043,35 @@ DATASOURCES_CONFIG.set(
   {
     queryString: `
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren ?count
 WHERE {
   {
-    SELECT ?uri ?theLabel ?hasChildren
+    SELECT ?uri ?theLabel ?hasChildren (COUNT(?x) AS ?count)
     WHERE {
-      $range skos:hasTopConcept|^skos:topConceptOf ?uri .
-      ?uri skos:prefLabel ?theLabel .
-      FILTER(isIRI(?uri))
-      FILTER(lang(?theLabel) = '' || lang(?theLabel) = $lang)
-      OPTIONAL {
-        ?uri skos:narrower|^skos:broader ?children .
+      {
+        SELECT ?uri ?theLabel ?hasChildren
+        WHERE {
+          $range skos:hasTopConcept|^skos:topConceptOf ?uri .
+          ?uri skos:prefLabel ?theLabel .
+          FILTER(isIRI(?uri))
+          FILTER(lang(?theLabel) = '' || lang(?theLabel) = $lang)
+          OPTIONAL {
+            ?uri skos:narrower|^skos:broader ?children .
+          }
+          BIND(IF(bound(?children),true,false) AS ?hasChildren)
+        }
       }
-      BIND(IF(bound(?children),true,false) AS ?hasChildren)
-    }
-  }
 
-  OPTIONAL {
-    ?x a $domain .
-    ?x $property ?uri .
-    # no range criteria
-    # ?uri a $range .
+      OPTIONAL {
+        ?x a $domain .
+        ?x $property ?uri .
+        # no range criteria
+        # ?uri a $range .
+      }
+    }
+    GROUP BY ?uri ?theLabel ?hasChildren
   }
-}
-GROUP BY ?uri ?theLabel ?hasChildren
-ORDER BY UCASE(?label)
+} ORDER BY UCASE(?label)
 `,
   }
 );

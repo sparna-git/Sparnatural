@@ -1,4 +1,4 @@
-import { getSettings } from "../../../sparnatural/settings/defaultSettings";
+import { I18n } from "../../settings/I18n";
 import HTMLComponent from "../HtmlComponent";
 
 class VariableOptionsSelectBtn extends HTMLComponent {
@@ -17,7 +17,7 @@ class VariableOptionsSelectBtn extends HTMLComponent {
     let swithHtml = $(`<label class="switch"> </label>`).append(input);
 
     let labelName = $(
-      `<p>${getSettings().langSearch.SwitchVariablesNames} </p>`
+      `<p>${I18n.labels.SwitchVariablesNames} </p>`
     );
 
     let widgetHtml =
