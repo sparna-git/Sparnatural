@@ -2,7 +2,6 @@ import { DataFactory } from 'rdf-data-factory';
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import L, { LatLng, Rectangle,Polygon,Map } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
-import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import {
   BgpPattern,
@@ -16,6 +15,7 @@ import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../../generators/ISparJson";
 import { NamedNode } from '@rdfjs/types/data-model';
+import { I18n } from '../../settings/I18n';
 
 const factory = new DataFactory();
 
@@ -58,13 +58,34 @@ type ObjectifyLatLng<T> = T extends LatLng[][]
 // see: https://effectivetypescript.com/2020/04/09/jsonify/
 type ObjectMapWidgetValue = ObjectifyLatLng<MapWidgetValue>
 
+
+export interface MapConfiguration {
+  zoom: number,
+  center: {
+    lat: number,
+    long: number
+  }
+}
+
 export default class MapWidget extends AbstractWidget {
+  
+  // The default implementation of MapConfiguration
+  static defaultConfiguration: MapConfiguration = {
+    zoom:5,
+    center: {
+      lat: 46.20222,
+      long: 6.14569
+    }
+  }
+  
+  protected configuration: MapConfiguration;
   protected widgetValues: MapWidgetValue[];
   // protected blockObjectPropTriple: boolean = true
   renderMapValueBtn: AddUserInputBtn;
   map: L.Map;
   drawingLayer: L.Layer;
   constructor(
+    configuration: MapConfiguration,
     parentComponent: WidgetWrapper,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -79,13 +100,15 @@ export default class MapWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.SINGLE
     );
+
+    this.configuration = configuration;
   }
 
   render(): this {
     super.render();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
-      getSettings().langSearch.MapWidgetOpenMap,
+      I18n.labels.MapWidgetOpenMap,
       this.#renderMap
     ).render();
     return this;
@@ -95,7 +118,7 @@ export default class MapWidget extends AbstractWidget {
 
     this.html.append($(`<div id="map"></div>`));
 
-    this.map = new Map("map").setView([46.20222, 6.14569], 5);
+    this.map = new Map("map").setView([this.configuration.center.lat, this.configuration.center.long], this.configuration.zoom);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "© OpenStreetMap",
@@ -142,14 +165,14 @@ export default class MapWidget extends AbstractWidget {
     switch ((layer as any).pm._shape) {
       case 'Rectangle':
         widgetValue = new MapWidgetValue({
-          label: getSettings().langSearch.MapWidgetAreaSelected,
+          label: I18n.labels.MapWidgetAreaSelected,
           type: 'Rectangle',
           coordinates: (layer as Rectangle).getLatLngs() as LatLng[][],
         });
         break;    
       default: 
         widgetValue = new MapWidgetValue({
-          label: getSettings().langSearch.MapWidgetAreaSelected,
+          label: I18n.labels.MapWidgetAreaSelected,
           type: 'Polygon',
           coordinates: (layer as Polygon).getLatLngs() as LatLng[][],
         });
@@ -190,7 +213,7 @@ export default class MapWidget extends AbstractWidget {
     this.renderMapValueBtn.html.remove();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
-      getSettings().langSearch.MapWidgetCloseMap,
+      I18n.labels.MapWidgetCloseMap,
       this.#closeMap
     ).render();
   }

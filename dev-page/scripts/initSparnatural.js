@@ -14,11 +14,16 @@ const lang = urlParams.get('lang')
 
 
 
+	
 
-sparnatural.addEventListener("init", (event) => {
-  sparnatural.headers = {
-    "User-Agent" : "This is Sparnatural calling"
-  };
+
+sparnatural.addEventListener("init", (event) => {  
+	sparnatural.configuration = {
+	  headers: { "User-Agent" : "This is Sparnatural calling" },
+	  autocomplete: {
+	  	maxItems:40
+	  }
+	};
 });
 
 sparnatural.addEventListener("queryUpdated", (event) => {

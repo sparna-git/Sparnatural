@@ -5,6 +5,8 @@
   "And": "et",
   "That": "qui",
   "Search": "Rechercher",
+  "Submit.tooltip": "Lancer la recherche",
+  "Reset.tooltip": "Réinitialiser la recherche",
   "PlaceHolderDatePeriod": "nom de la période",
   "TimeWidgetDateFrom": "de",
   "TimeWidgetDateTo": "à",

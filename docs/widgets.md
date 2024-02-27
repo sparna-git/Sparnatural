@@ -256,7 +256,29 @@ No datasource required.
 
 ### Description
 
-Allows to select a rectangle on a map, and generates a corresponding GeoSPARQL query, using a `geof:sfWithin` function.
+Allows to select a rectangle on a map, and generates a corresponding GeoSPARQL query, using a `geof:sfWithin` function. This implies that the data in the triplestore must be encoded with literal values using the `<http://www.opengis.net/ont/geosparql#wktLiteral>` datatype, such as in this example (this is a tiny extract from Wikidata, of course you can use different predicates, the important thing is the use of `^^geo:wktLiteral` :
+
+```turtle
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+
+wd:Q16214 wdt:P31 wd:Q484170 ;
+  wdt:P625 "Point(4.613611111 47.098055555)"^^geo:wktLiteral ;
+  wdt:P1448 "Bessey-la-Fontaine"@fr .
+
+wd:Q16233 wdt:P31 wd:Q484170 ;
+  wdt:P625 "Point(4.673611111 47.091111111)"^^geo:wktLiteral ;
+  wdt:P1448 "Lusigny-sur-Ouche"@fr .
+
+wd:Q16213 wdt:P31 wd:Q484170 ;
+  wdt:P625 "Point(4.624444444 47.123611111)"^^geo:wktLiteral ;
+  wdt:P1448 "Auxant"@fr .
+```
+
+WKT literals can be used to encode points or polygons. WKT literals can also include an optional IRI before the geometry to indicate the reference system (see the example from the spec : `"<http://www.opengis.net/def/crs/EPSG/0/4326> Point(33.95 -83.38)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>`)
+
+For more information on WKT literals, see the [Wikipedia page](https://fr.wikipedia.org/wiki/Well-known_text), and the [GeoSPARQL spec](https://opengeospatial.github.io/ogc-geosparql/geosparql11/spec.html#geo:wktLiteral).
 
 ### Configuration
 

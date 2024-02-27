@@ -1,31 +1,35 @@
 import SparnaturalComponent from "../components/SparnaturalComponent";
+import { AutocompleteConfiguration } from "../components/widgets/AutoCompleteWidget";
+import { ListConfiguration } from "../components/widgets/ListWidget";
+import { MapConfiguration } from "../components/widgets/MapWidget";
+import { TreeConfiguration } from "../components/widgets/treewidget/TreeWidget";
 
 export interface PreLoadQueries {
   queries: Array<{ queryName: string; query: string }>;
 }
 
 interface ISettings {
-  config: any;
+  src: any;
   language: string;
   defaultLanguage: string;
   addDistinct?: boolean;
   limit?:number;
-  typePredicate?: string;
+  typePredicate: string;
   maxDepth: number;
   maxOr: number;
   sparqlPrefixes?: { [key: string]: string };
   defaultEndpoint?: string;
   catalog?: string;
   localCacheDataTtl?: number;
-  // TODO : this should not be exposed.
-  // Only the language parametre is exposed, but the actual labels content should not
-  langSearch?: any;
   debug: boolean;
   submitButton?: boolean;
-  autocomplete?: any;
-  list?: any;
-  dates?: any;  
-  headers?: any;
+  customization? : {
+    headers?: Map<string,string>;
+    autocomplete?: Partial<AutocompleteConfiguration>,
+    list?: Partial<ListConfiguration>,   
+    tree?: Partial<TreeConfiguration>,
+    map?: Partial<MapConfiguration>
+  }
 }
 
 export default ISettings;

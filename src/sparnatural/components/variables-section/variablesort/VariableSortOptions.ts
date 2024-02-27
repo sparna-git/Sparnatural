@@ -1,5 +1,5 @@
-import { getSettings } from "../../../../sparnatural/settings/defaultSettings";
 import { Order } from "../../../generators/ISparJson";
+import { I18n } from "../../../settings/I18n";
 import AscendBtn from "../../buttons/AscendBtn";
 import DescendBtn from "../../buttons/DescendBtn";
 import NoOrderBtn from "../../buttons/NoOrderBtn";
@@ -15,7 +15,7 @@ class VariableSortOption extends HTMLComponent {
 
   constructor(parentComponent: VariableSection) {
     let widgetHtml = $(
-      `<strong>${getSettings().langSearch.labelOrderSort}</strong>`
+      `<strong>${I18n.labels.labelOrderSort}</strong>`
     );
     super("variablesOrdersSelect", parentComponent, widgetHtml);
   }

@@ -1,6 +1,5 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import ISettings from "../../settings/ISettings";
-import { getSettings } from "../../settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
@@ -9,7 +8,8 @@ import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../generators/SparqlFactory";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { ListDataProviderIfc } from "./data/DataProviders";
+import { ListDataProviderIfc, NoOpListDataProvider } from "./data/DataProviders";
+import { I18n } from "../../settings/I18n";
 
 const factory = new DataFactory();
 
@@ -28,20 +28,27 @@ export class ListWidgetValue implements WidgetValue {
   }
 }
 
+export interface ListConfiguration {
+  dataProvider: ListDataProviderIfc
+}
+
 export class ListWidget extends AbstractWidget {
 
-  dataProvider: ListDataProviderIfc;
+  // The default implementation of ListConfiguration
+  static defaultConfiguration: ListConfiguration = {
+    dataProvider: new NoOpListDataProvider()
+  }
+
+  configuration: ListConfiguration;
 
   protected widgetValues: WidgetValue[];
-  langSearch: any;
   sort: boolean;
   settings: ISettings;
   selectHtml: JQuery<HTMLElement>;
 
   constructor(
     parentComponent: WidgetWrapper,
-    dataProvider: ListDataProviderIfc,
-    langSearch: any,
+    config: ListConfiguration,
     sort: boolean,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -57,8 +64,7 @@ export class ListWidget extends AbstractWidget {
       ValueRepetition.MULTIPLE
     );
 
-    this.dataProvider = dataProvider;
-    this.langSearch = langSearch,
+    this.configuration = config;
     this.sort = sort;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
@@ -72,12 +78,12 @@ export class ListWidget extends AbstractWidget {
 
     let noItemsHtml =
       $(`<div class="no-items" style="display: none; font-style:italic;">
-      ${getSettings().langSearch.ListWidgetNoItem}
+      ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
     let errorHtml =
       $(`<div class="no-items" style="display: none; font-style:italic;">
-      ${getSettings().langSearch.ListWidgetNoItem}
+      ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
     let callback = (items:{term:RDFTerm;label:string;group?:string}[]) => {
@@ -150,9 +156,9 @@ export class ListWidget extends AbstractWidget {
     }
 
     // toggle spinner before loading
-    this.toggleSpinner(this.langSearch.AutocompleteSpinner_Searching);
+    this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
 
-    this.dataProvider.getListContent(
+    this.configuration.dataProvider.getListContent(
       this.startClassVal.type,
       this.objectPropVal.type,
       this.endClassVal.type,

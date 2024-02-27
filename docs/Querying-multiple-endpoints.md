@@ -137,11 +137,11 @@ When configured with more than one endpoint, Sparnatural will behave this way:
 
 ### In lists, values are presented in a different section for each endpoint
 
-![image](https://github.com/sparna-git/Sparnatural/docs/images/multiple-endpoints-list.png)
+![multiple endpoints in list](/assets/images/multiple-endpoints-list.png)
 
 ### In autocomplete, endpoint is visible by hovering the result
 
-![image](https://github.com/sparna-git/Sparnatural/docs/images/multiple-endpoints-autocomplete.png)
+![multiple endpoints in autocomplete](/assets/images/multiple-endpoints-autocomplete.png)
 
 
 

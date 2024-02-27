@@ -97,7 +97,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     return result;
   }
 
-    getEntitiesInDomainOfAnyProperty() {
+  getEntitiesInDomainOfAnyProperty() {
     const quadsArray = this.store.getQuads(
       null,
       RDFS.DOMAIN,
@@ -227,19 +227,49 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     this.store
       .getQuads(null, factory.namedNode(Config.SPARQL_STRING), null, null)
       .forEach((quad: { subject: { value: string }; object: { value: any } }) => {
-        // find it with the full URI
+        // prepare the regex
+        let classUri = quad.subject.value;
+        let sparqlString = quad.object.value;
+
+        // first pass to work with classes sparqlString that can contain a long expression
+        // with variables and MINUSes, like
+        // <http://exemple.com/MyClass> MINUS { $this <http://exemple.com/myProp> ?x VALUES ?x { A B } }
+
+        // replace the $this with the name of the original variable in the query
+        // \S matches any non-whitespace character
+        var re = new RegExp("(\\S*) (rdf:type|a) <" + classUri + ">", "g");  
+
+        // prepare the function that will return the string to replace
+        let replacer = function(match:string, p1:string, offset:number, fullString:string) {
+            // first substitutes any other variable name with a prefix
+            // so that we garantee unicity across the complete query
+            var reVariables = new RegExp("\\?(\\S*)", "g");
+            let whereClauseReplacedVariables = p1+" rdf:type "+sparqlString.replace(reVariables, "?$1_"+p1.substring(1));
+            
+            // then, replace the match on the original URI with the whereClause of the target
+            // replacing "$this" with the original variable name
+            var reThis = new RegExp("\\$this", "g");
+            let whereClauseReplacedThis = whereClauseReplacedVariables.replace(reThis, p1);
+            return whereClauseReplacedThis;
+          }
+
+        sparql = sparql.replace(re, replacer);
+
+        // then a second pass simpler one that will work for properties
         var re = new RegExp("<" + quad.subject.value + ">", "g");
         sparql = sparql.replace(re, quad.object.value);
       });
 
+
     // reparse the query, apply prefixes, and reserialize the query
     var query = this.#parser.parse(sparql);
     for (var key in prefixes) {
-      query.prefixes[key] = prefixes[key];
+        query.prefixes[key] = prefixes[key];
     }
-    return this.#generator.stringify(query);
-
-    // return sparql;
+    
+    let finalString = this.#generator.stringify(query);
+    console.log(finalString);
+    return finalString
   }
 
   _sort(items: any[]) {

@@ -5,6 +5,8 @@
   "And": "And",
   "That": "where...",
   "Search": "Search",
+  "Submit.tooltip": "Launch the search",
+  "Reset.tooltip": "Reset the search",
   "PlaceHolderDatePeriod": "name of the period",
   "TimeWidgetDateFrom": "from",
   "TimeWidgetDateTo": "to",

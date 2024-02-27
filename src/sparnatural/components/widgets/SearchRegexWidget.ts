@@ -1,6 +1,5 @@
 import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern } from "sparqljs";
-import { getSettings, TOOLTIP_CONFIG } from "../../settings/defaultSettings";
 import { SelectedVal } from "../../generators/ISparJson";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
@@ -8,6 +7,8 @@ import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import SparqlFactory from "../../generators/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import InfoBtn from "../buttons/InfoBtn";
+import { I18n } from '../../settings/I18n';
+import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
 
 const factory = new DataFactory();
 
@@ -59,7 +60,7 @@ export class SearchRegexWidget extends AbstractWidget {
       (this.ParentComponent as WidgetWrapper).widgetType ==
       Config.VIRTUOSO_SEARCH_PROPERTY
     ) {
-      let datatippy = getSettings().langSearch.VirtuosoSearchHelp;
+      let datatippy = I18n.labels.VirtuosoSearchHelp;
       // set a tooltip on the info circle
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
       tippySettings.placement = "left";
@@ -70,7 +71,7 @@ export class SearchRegexWidget extends AbstractWidget {
     } //finish datatippy
     this.addValueBtn = new AddUserInputBtn(
       this,
-      getSettings().langSearch.ButtonAdd,
+      I18n.labels.ButtonAdd,
       this.#addValueBtnClicked
     ).render();
     return this;

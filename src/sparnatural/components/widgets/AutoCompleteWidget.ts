@@ -5,9 +5,9 @@ import SparqlFactory from "../../generators/SparqlFactory";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { AutocompleteDataProviderIfc } from "./data/DataProviders";
-import { getSettings } from "../../settings/defaultSettings";
+import { AutocompleteDataProviderIfc, NoOpAutocompleteProvider } from "./data/DataProviders";
 import Awesomplete from 'awesomplete';
+import { I18n } from '../../settings/I18n';
 
 const factory = new DataFactory();
 
@@ -27,15 +27,25 @@ export class AutoCompleteWidgetValue implements WidgetValue {
   }
 }
 
+export interface AutocompleteConfiguration {
+  dataProvider: AutocompleteDataProviderIfc,
+  maxItems: number
+}
+
 export class AutoCompleteWidget extends AbstractWidget {
+  
+  // The default implementation of AutocompleteConfiguration
+  static defaultConfiguration: AutocompleteConfiguration = {
+    dataProvider: new NoOpAutocompleteProvider(),
+    maxItems:15
+  }
+  
   protected widgetValues: AutoCompleteWidgetValue[];
-  protected dataProvider: AutocompleteDataProviderIfc;
-  protected langSearch: any;
+  protected configuration: AutocompleteConfiguration;
 
   constructor(
     parentComponent: WidgetWrapper,
-    dataProvider: AutocompleteDataProviderIfc,
-    langSearch: any,
+    configuration: AutocompleteConfiguration,
     startClassValue: SelectedVal,
     objectPropVal: SelectedVal,
     endClassValue: SelectedVal
@@ -49,8 +59,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       endClassValue,
       ValueRepetition.MULTIPLE
     );
-    this.langSearch = langSearch;
-    this.dataProvider = dataProvider;
+    this.configuration = configuration;
   }
 
   render() {
@@ -61,20 +70,20 @@ export class AutoCompleteWidget extends AbstractWidget {
 
     let errorHtml =
       $(`<div class="no-items" style="display: none; font-style:italic;">
-      ${getSettings().langSearch.ListWidgetNoItem}
+      ${I18n.labels.ListWidgetNoItem}
     </div>`);
-
-    const queryInput:HTMLElement = inputHtml[0];
 
     // $( "#foo" )[ 0 ] is pulling the DOM element from the JQuery object
     // see https://learn.jquery.com/using-jquery-core/faq/how-do-i-pull-a-native-dom-element-from-a-jquery-object/
+    const queryInput:HTMLElement = inputHtml[0];
+
     const awesomplete = new Awesomplete(queryInput, {
       filter: () => { // We will provide a list that is already filtered ...
         return true;
       },
       sort: false,    // ... and sorted.
       minChars: 3,
-      maxItems: 10,
+      maxItems: this.configuration.maxItems,
       list: []
     });
 
@@ -123,7 +132,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       // Process inputText as you want, e.g. make an API request.
 
       if(phrase.length >= 3) {
-        this.dataProvider.getAutocompleteSuggestions(
+        this.configuration.dataProvider.getAutocompleteSuggestions(
           this.startClassVal.type,
           this.objectPropVal.type,
           this.endClassVal.type,

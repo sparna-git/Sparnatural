@@ -163,11 +163,13 @@ sparnatural.addEventListener("reset", (event) => {
 
 ### "init" event
 
-The `init` event is triggered when Sparnatural has finished reading its configuration.
+The `init` event is triggered when Sparnatural has finished reading its configuration. Listen to this event to pass additionnal JSON customization with `sparnatural.customization = { ... }` (see below).
+
 
 ```javascript
 sparnatural.addEventListener("init", (event) => {
 	console.log("Sparnatural is initialized");
+	// sparnatural.customization = { ... }
 });
 ```
 
@@ -183,43 +185,168 @@ The table below summarizes the various functions that can be called on the Sparn
 | **sparnatural.expandSparql(sparqlString)** | Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration) A SPARQL query string | string |
 | **sparnatural.clear()** | Clears the Sparnatural editor, as if the reset button was clicked.| none |
 
-## Sparnatural properties API
 
-The table below summarizes the properties that can set on the sparnatural object, with `sparnatural.property_name = ...`.
+## Sparnatural behavior customization
 
-| Function | Description | Parameters |
-| -------- | ----------- | ---------- |
-| **sparnatural.headers**| Sets the headers that Sparnatural must send with each request, e.g. when populating dropdown lists or autocomplete fields. | an object `{"key":"value"}` |
-
-## Advanced : customizing lists and autocomplete handlers
-
-TODO
-
-### customize autocomplete handler
-
-TODO
-
-```
-sparnatural.autocomplete = { ... }
-```
-
-If set, the `autocomplete` property must provide the functions documented below. It is not necessary to provide this if the autocomplete fields are populated from the SPARQL endpoint being queried.
-The autocomplete feature relies on [Easyautocomplete](http://easyautocomplete.com/guide) so interested readers are invited to refer to Easyautocomplete documentation for more information.
+The behavior of Sparnatural can be further adjuested with the `customization` object : `sparnatural.customization = { ... }`. That call must be done within the `init` event listener, after Sparnatural has finished reading its initial specification file.
 
 ```javascript
-TODO
+sparnatural.addEventListener("init", (event) => {
+	console.log("Sparnatural is initialized");
+	sparnatural.customization = { ... }
+});
 ```
 
-### customize list handler
+In particular this object allows to pass in functions to provide data to the different widgets. See the reference documentation below.
 
-TODO
 
+### Sparnatural customization object reference
+
+The customization object structure is outlined below. All items are optionnal.
+
+
+```typescript
+{
+	autocomplete: {
+		dataProvider : {
+			getAutocompleteSuggestions: function(
+				domain:string,
+        predicate:string,
+        range:string,
+        key:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        errorCallback?:(payload:any) => void
+			)
+		},
+		// the maximum number of items to be proposed in the autocomplion list
+		maxItems: number
+	},
+	list: {
+		dataProvider : {
+			getListContent: function(
+        domain:string,
+        predicate:string,
+        range:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(values:{literal:string}[]) => void
+    	):void
+		}
+	},
+	tree: {
+		dataProvider : {
+			getRoots: function(
+        domain:string,
+        predicate:string,
+        range:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    	):void,
+
+    	getChildren: function(
+        node:string,
+        domain:string,
+        predicate:string,
+        range:string,
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    	):void
+		}
+	},
+	map: {
+		// initial zoom level of the map, when opened
+		// see https://leafletjs.com/reference.html#map-setview
+		// typically, from 0 to ~ 12
+		zoom : number,
+		// initial center of the map, when opened
+		// see https://leafletjs.com/reference.html#map-setview
+		center : {
+			lat:number,
+			long:number
+		}
+	},
+	headers: {
+		"header name": "value"
+	}
+}
 ```
-sparnatural.list = { ... }
+
+Note that the `RDFTerm` data structure referenced above is the following:
+
+```typescript
+export class RDFTerm {
+  type: string;
+  value: string;
+  "xml:lang"?: string;
+  datatype?:string 
+}
 ```
 
-If set, the `list` property must provide the functions documented below to populate select dropdowns. It is not necessary to provide this parameter if the dropdown fields are populated from the SPARQL endpoint being queried.
+### example of specifying a custom data provider function
 
 ```javascript
-TODO
+sparnatural.addEventListener("init", (event) => {  
+	sparnatural.configuration = {
+	  autocomplete: {
+	  	dataProvider: {
+	  		getAutocompleteSuggestions: function(
+				domain,
+				predicate,
+				range,
+				key,
+				lang,
+				defaultLang,
+				typePredicate,
+				callback,
+				errorCallback
+			) {
+	  		// build the list of autocomplete items to show
+	  		console.log("domain,predicate,range : "+domain+" "+predicate+" "+range);
+				let items = [
+					{
+						term: {
+							type:"IRI",
+							value:"http://exemple.fr/1"
+						},
+						label: key+" : suggestion 1" 
+					},
+					{
+						term: {
+							type:"IRI",
+							value:"http://exemple.fr/2"
+						},
+						label: key+" : suggestion 2" 
+					}
+				];
+				// call the callback function with the list of items
+				callback(items);
+			}
+	  	}
+	  }
+	};
+});
+```
+
+### headers configuration
+
+To set the headers of requests made by Sparnatural, use the customization objet above, with the `headers` key. See this example:
+
+```javascript
+sparnatural.addEventListener("init", (event) => {
+	sparnatural.customization = {
+		headers: { 
+			"User-Agent" : "This is Sparnatural calling"
+		}
+	}
+});
 ```

@@ -148,7 +148,11 @@ export abstract class AbstractWidget extends HTMLComponent {
         if(rdfTerm["xml:lang"]) {
           return factory.literal(rdfTerm.value, rdfTerm["xml:lang"]);
         } else if(rdfTerm.datatype) {
-          return factory.literal(rdfTerm.value, rdfTerm.datatype);
+          // if the second parameter is a NamedNode, then it is considered a datatype, otherwise it is
+          // considered like a language
+          // so we make the datatype a NamedNode
+          let namedNodeDatatype = factory.namedNode(rdfTerm.datatype);
+          return factory.literal(rdfTerm.value, namedNodeDatatype);
         } else {
           return factory.literal(rdfTerm.value);
         }

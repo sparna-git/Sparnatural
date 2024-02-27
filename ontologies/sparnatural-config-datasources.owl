@@ -755,21 +755,26 @@ LIMIT 500</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT ?uri ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  {
+  SELECT ?uri ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
-    FILTER(isIRI(?uri))
-    # Note how the range criteria is not used in this query
+  {
+    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?uri .
+      FILTER(isIRI(?uri))
+    }
+    GROUP BY ?uri
   }
-  GROUP BY ?uri
+  ?uri $labelPath ?theLabel .
+  FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+  }
+  ORDER BY UCASE(?theLabel)
+  LIMIT 500
+  }
 }
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
-}
-ORDER BY UCASE(?label)
-LIMIT 500</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -780,21 +785,26 @@ LIMIT 500</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT ?uri ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  {
+  SELECT ?uri ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
-    FILTER(isIRI(?uri))
-    # Note how the range criteria is not used in this query
+  {
+    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?uri .
+      FILTER(isIRI(?uri))
+    }
+    GROUP BY ?uri
   }
-  GROUP BY ?uri
+  ?uri $labelPath ?theLabel .
+  FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+  }
+  ORDER BY DESC(?count) UCASE(?theLabel)
+  LIMIT 500
+  }
 }
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
-}
-ORDER BY DESC(?count) UCASE(?label)
-LIMIT 500</sparnatural-config-datasources:queryString>
+ORDER BY DESC(?count) UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -825,22 +835,28 @@ LIMIT 500</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT ?uri ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  {
+  SELECT ?uri ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
-    FILTER(isIRI(?uri))
-    # range criteria
-    ?uri $type $range .
+  {
+    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?uri .
+      FILTER(isIRI(?uri))
+      # range criteria
+      ?uri $type $range .
+    }
+    GROUP BY ?uri
   }
-  GROUP BY ?uri
+  ?uri $labelPath ?theLabel .
+  FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+  }
+  ORDER BY UCASE(?theLabel)
+  LIMIT 500
+  }
 }
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
-}
-ORDER BY UCASE(?label)
-LIMIT 500</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -851,22 +867,27 @@ LIMIT 500</sparnatural-config-datasources:queryString>
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
         <sparnatural-config-datasources:queryString>SELECT ?uri ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+  {
+  SELECT ?uri ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?uri .
-    FILTER(isIRI(?uri))
-    # range criteria
-    ?uri $type $range .
+  {
+    SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?uri .
+      FILTER(isIRI(?uri))
+      ?uri $type $range .
+    }
+    GROUP BY ?uri
   }
-  GROUP BY ?uri
+  ?uri $labelPath ?theLabel .
+  FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+  }
+  ORDER BY DESC(?count) UCASE(?theLabel)
+  LIMIT 500
+  }
 }
-?uri $labelPath ?theLabel .
-FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
-}
-ORDER BY DESC(?count) UCASE(?label)
-LIMIT 500</sparnatural-config-datasources:queryString>
+ORDER BY DESC(?count) UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -890,20 +911,26 @@ LIMIT 500</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_alpha_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+        <sparnatural-config-datasources:queryString>SELECT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+  {
+  SELECT DISTINCT ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?theLabel .
-    FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+  {
+    SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?theLabel .
+      FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+    }
+    GROUP BY ?theLabel
   }
-  GROUP BY ?theLabel
+  }
+  ORDER BY UCASE(?theLabel)
+  LIMIT 500
+  }
 }
-}
-ORDER BY UCASE(?label)
-LIMIT 500</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -912,20 +939,26 @@ LIMIT 500</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_literal_list_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
+        <sparnatural-config-datasources:queryString>SELECT ?count (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label)
 WHERE {
-{
-  SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+  {
+  SELECT DISTINCT ?count ?theLabel
   WHERE {
-    ?domain $type $domain .
-    ?domain $property ?theLabel .
-    FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+  {
+    SELECT DISTINCT ?theLabel (COUNT(?theLabel) AS ?count)
+    WHERE {
+      ?domain $type $domain .
+      ?domain $property ?theLabel .
+      FILTER(lang(?theLabel) = &quot;&quot; || lang(?theLabel) = $lang)
+    }
+    GROUP BY ?theLabel
   }
-  GROUP BY ?theLabel
+  }
+  ORDER BY DESC(?count) UCASE(?theLabel)
+  LIMIT 500
+  }
 }
-}
-ORDER BY DESC(?count) UCASE(?label)
-LIMIT 500</sparnatural-config-datasources:queryString>
+ORDER BY DESC(?count) UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -944,7 +977,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(?label), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -966,7 +999,7 @@ SELECT DISTINCT ?uri ?label
   ?label bif:contains &quot;&apos;$key&apos;&quot; . 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -986,7 +1019,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1006,7 +1039,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1024,7 +1057,7 @@ WHERE {
   FILTER(CONTAINS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1042,7 +1075,7 @@ WHERE {
   FILTER(STRSTARTS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
 } 
 ORDER BY UCASE(?label)
-LIMIT 10</sparnatural-config-datasources:queryString>
+LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1072,30 +1105,35 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_children_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+        <sparnatural-config-datasources:queryString>SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren ?count
 WHERE {
   {
-    SELECT DISTINCT ?uri ?theLabel ?hasChildren
-    WHERE {
-      $node $childrenPath ?uri .
-      ?uri $labelPath ?theLabel .
-      FILTER(isIRI(?uri))
-      FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
-      OPTIONAL {
-        ?uri $childrenPath ?children .
+  SELECT DISTINCT ?uri ?theLabel ?hasChildren (COUNT(?x) AS ?count)
+  WHERE {
+    {
+      SELECT ?uri ?theLabel ?hasChildren
+      WHERE {
+        $node $childrenPath ?uri .
+        ?uri $labelPath ?theLabel .
+        FILTER(isIRI(?uri))
+        FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
+        OPTIONAL {
+          ?uri $childrenPath ?children .
+        }
+        BIND(IF(bound(?children),true,false) AS ?hasChildren)
       }
-      BIND(IF(bound(?children),true,false) AS ?hasChildren)
+    }
+
+    OPTIONAL {
+      ?x $type $domain .
+      ?x $property ?uri .
+      # no range criteria
+      # ?uri a $range .
     }
   }
-
-  OPTIONAL {
-    ?x $type $domain .
-    ?x $property ?uri .
-    # no range criteria
-    # ?uri $type $range .
+  GROUP BY ?uri ?theLabel ?hasChildren
   }
 }
-GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -1128,31 +1166,36 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
 
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_tree_root_noparent_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
-        <sparnatural-config-datasources:queryString>SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+        <sparnatural-config-datasources:queryString>SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren ?count
 WHERE {
   {
-    SELECT ?uri ?theLabel ?hasChildren
-    WHERE {
-      ?uri $type $range .
-      FILTER NOT EXISTS {
-        ?parent $childrenPath ?uri .
+  SELECT ?uri ?theLabel ?hasChildren (COUNT(?x) AS ?count)
+  WHERE {
+    {
+      SELECT ?uri ?theLabel ?hasChildren
+      WHERE {
+        ?uri $type $range .
+        FILTER NOT EXISTS {
+          ?parent $childrenPath ?uri .
+        }
+        ?uri $labelPath ?theLabel .
+        FILTER(isIRI(?uri))
+        FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
+        OPTIONAL {
+          ?uri $childrenPath ?children .
+        }
+        BIND(IF(bound(?children),true,false) AS ?hasChildren)
       }
-      ?uri $labelPath ?theLabel .
-      FILTER(isIRI(?uri))
-      FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
-      OPTIONAL {
-        ?uri $childrenPath ?children .
-      }
-      BIND(IF(bound(?children),true,false) AS ?hasChildren)
+    }
+
+    OPTIONAL {
+      ?x $type $domain .
+      ?x $property ?uri .
     }
   }
-
-  OPTIONAL {
-    ?x $type $domain .
-    ?x $property ?uri .
+  GROUP BY ?uri ?theLabel ?hasChildren
   }
-}
-GROUP BY ?uri ?theLabel ?hasChildren
+} 
 ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -1399,31 +1442,35 @@ ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept_with_count">
         <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlTreeRootDatasource"/>
         <sparnatural-config-datasources:queryString>PREFIX skos: &lt;http://www.w3.org/2004/02/skos/core#&gt;
-SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+SELECT ?uri (CONCAT(STR(?theLabel), &apos; (&apos;, STR(?count), &apos;)&apos;) AS ?label) ?hasChildren ?count
 WHERE {
   {
-    SELECT DISTINCT ?uri ?theLabel ?hasChildren
+    SELECT ?uri ?theLabel ?hasChildren (COUNT(?x) AS ?count)
     WHERE {
-      $range skos:hasTopConcept|^skos:topConceptOf ?uri .
-      ?uri skos:prefLabel ?theLabel .
-      FILTER(isIRI(?uri))
-      FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
-      OPTIONAL {
-        ?uri skos:narrower|^skos:broader ?children .
+      {
+        SELECT ?uri ?theLabel ?hasChildren
+        WHERE {
+          $range skos:hasTopConcept|^skos:topConceptOf ?uri .
+          ?uri skos:prefLabel ?theLabel .
+          FILTER(isIRI(?uri))
+          FILTER(lang(?theLabel) = &apos;&apos; || lang(?theLabel) = $lang)
+          OPTIONAL {
+            ?uri skos:narrower|^skos:broader ?children .
+          }
+          BIND(IF(bound(?children),true,false) AS ?hasChildren)
+        }
       }
-      BIND(IF(bound(?children),true,false) AS ?hasChildren)
-    }
-  }
 
-  OPTIONAL {
-    ?x $type $domain .
-    ?x $property ?uri .
-    # no range criteria
-    # ?uri $type $range .
+      OPTIONAL {
+        ?x a $domain .
+        ?x $property ?uri .
+        # no range criteria
+        # ?uri a $range .
+      }
+    }
+    GROUP BY ?uri ?theLabel ?hasChildren
   }
-}
-GROUP BY ?uri ?theLabel ?hasChildren
-ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+} ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1471,5 +1518,5 @@ WHERE {
 
 
 
-<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+<!-- Generated by the OWL API (version 4.5.25.2023-02-15T19:15:49Z) https://github.com/owlcs/owlapi -->
 
