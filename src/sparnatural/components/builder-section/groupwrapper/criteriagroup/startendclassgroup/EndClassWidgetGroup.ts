@@ -87,7 +87,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
     let unselectedValue: EndClassWidgetValue;
     this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
-      if (val.value_lbl === valueToDel.value_lbl) {
+      if (val.widgetVal.key() === valueToDel.widgetVal.key()) {
         unselectedValue = val;
         return false;
       }
@@ -131,10 +131,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
   renderWidgetVal(selectedVal: WidgetValue) {
     // check if value already got selected before
     if (
-      this.widgetValues.some((val) => val.value_lbl === selectedVal.value.label)
+      this.widgetValues.some((val) => val.widgetVal.key() === selectedVal.key())
     )
       return;
-    // if not, then create the EndclassWidgetValue and add it to the list
+    
+      // if not, then create the EndclassWidgetValue and add it to the list
     this.#renderEndClassWidgetVal(selectedVal);
   }
 
