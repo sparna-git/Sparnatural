@@ -42,6 +42,11 @@ export class MapWidgetValue implements WidgetValue {
   constructor(v:MapWidgetValue["value"]) {
     this.value = v;
   }
+
+  exportToGeoJson():object {
+    // TODO : recreate a GeoJSON value from the MapWidgetValue
+    return {};
+  }
 }
 
 // converts props of type Date to type string
@@ -104,12 +109,20 @@ export default class MapWidget extends AbstractWidget {
   }
 
   render(): this {
+    console.log("rendering map widget...")
+    console.log(this.widgetValues)
     super.render();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
       I18n.labels.MapWidgetOpenMap,
       this.#renderMap
     ).render();
+
+    // opens the map if there is a value - in the case we are editing the value
+    if(this.widgetValues) {
+      this.#renderMap();
+    }
+    
     return this;
   }
 

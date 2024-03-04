@@ -64,9 +64,10 @@ class WidgetWrapper extends HTMLComponent {
     $(this.html).find("#selectAllWrapper").remove();
     this.#addWidgetHTML(this.widgetType);
 
-    //if there is already a widget component rendered, then only render it since we would like to keep the state
+    // if there is already a widget component rendered, then only render it since we would like to keep the state
     if (this.widgetComponent) {
       // could still be null in case of non selectable property
+      console.log("widget component already there, rendering widget component");
       this.widgetComponent.render();
     }
 
