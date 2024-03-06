@@ -407,6 +407,9 @@ export class BaseRDFReader {
       return found;
     }
 
+    /**
+     * returns RDFTerms
+     */
     _readAsList(rdfNode: any, property: any) {
       let result:any[] = new Array<any>();
       this.store
@@ -417,6 +420,9 @@ export class BaseRDFReader {
       return result;
     }
 
+    /**
+     * returns RDFTerms
+     */
     _readList_rec(list: any) {
         var result = this.store
           .getQuads(list, RDF.FIRST, null, null)

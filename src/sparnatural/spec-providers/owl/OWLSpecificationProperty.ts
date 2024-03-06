@@ -27,14 +27,14 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     );
 
     for (const aQuad of propertyQuads) {
-      if (!this._isUnionClass(aQuad.object.value)) {
+      if (!this._isUnionClass(aQuad.object)) {
         this._pushIfNotExist(aQuad.object.value, classes);
       } else {
-        // read union content
-        var classesInUnion = this._readAsList(aQuad.object, OWL.UNION_OF).map(o => o.id)
+        // read union content - /!\ this is returning RDFTerms, so we map to extract the URI only
+        var classesInUnion = this._readAsList(aQuad.object, OWL.UNION_OF).map(o => o.value)
         if(classesInUnion) {
             for (const aUnionClass of classesInUnion) {
-            this._pushIfNotExist(aUnionClass, classes);
+              this._pushIfNotExist(aUnionClass, classes);
             }
         }
       }
@@ -149,8 +149,8 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     return executedAfter;
   }
 
-  _isUnionClass(classUri: any) {
-    return this._hasProperty(factory.namedNode(classUri), OWL.UNION_OF);
+  _isUnionClass(classNode: any) {
+    return this._hasProperty(classNode, OWL.UNION_OF);
   }
 
     

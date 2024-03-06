@@ -114,6 +114,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
       var classId = quad.object.value;
       var classAsRDFTerm = quad.object;
 
+      // empty string means we are searching without specifying a range
       if (this.getProperty(objectPropertyId).getPropertyType("")) {
         // keep only Sparnatural classes in the list
         if (typeClass == "BlankNode" || this.isSparnaturalClass(classId)) {
@@ -122,10 +123,10 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
             if (!this._isUnionClass(classAsRDFTerm)) {
               this._pushIfNotExist(classId, items);
             } else {
-              // read union content
-              var classesInUnion = this._readAsList(classId, OWL.UNION_OF);
+              // read union content - /!\ this returns RDFTerm
+              var classesInUnion = this._readAsList(classAsRDFTerm, OWL.UNION_OF);
               for (const aUnionClass of classesInUnion) {
-                this._pushIfNotExist(aUnionClass, items);
+                this._pushIfNotExist(aUnionClass.value, items);
               }
             }
           }
