@@ -54,12 +54,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
 
-        /*
         let valueToDel: EndClassWidgetValue = e.detail;
 
         let unselectedValue: EndClassWidgetValue;
         this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
-          if (val.value_lbl === valueToDel.value_lbl) {
+          if (val.widgetVal.key() === valueToDel.widgetVal.key()) {
             unselectedValue = val;
             return false;
           }
@@ -68,13 +67,15 @@ export class EndClassWidgetGroup extends HTMLComponent {
         if (unselectedValue === undefined)
           throw Error("Unselected val not found in the widgetValues list!");
         unselectedValue.html.remove();
-        */
 
 
         this.html[0].dispatchEvent(
           new CustomEvent("renderWidgetWrapper", {
             bubbles: true,
-            detail: { selectedValues: this.widgetValues },
+            detail: {
+              selectedValues: this.widgetValues,
+              editedValue: valueToDel.widgetVal
+            },
           })
         );
       }
