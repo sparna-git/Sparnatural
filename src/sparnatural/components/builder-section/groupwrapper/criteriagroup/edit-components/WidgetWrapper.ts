@@ -221,7 +221,6 @@ class WidgetWrapper extends HTMLComponent {
         if (datasource != null) {
           // if we have a datasource, possibly the default one, provide a config based
           // on a SparqlTemplate, otherwise use the handler provided
-          
           listDataProvider = new SparqlListDataProvider(
 
             // endpoint URL
@@ -258,11 +257,11 @@ class WidgetWrapper extends HTMLComponent {
           );
         }
 
-        // create the configuration object : use the default data provider, then the default configuration, then overwrite with is set in 
-        // the provided configuration object for the corresponding section
+        // create the configuration object : use the default configuration, then the generated data provider, then overwrite with 
+        // what is set in the provided configuration object for the corresponding section
         let listConfig:ListConfiguration = {
-          ...{dataProvider: listDataProvider},
           ...ListWidget.defaultConfiguration,
+          ...{dataProvider: listDataProvider},          
           ...this.settings.customization?.list
         };
 
