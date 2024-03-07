@@ -230,13 +230,21 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
           });
 
           // also look for nodeshapes that have directly this URI and that are themselves classes
+          // and nodeshapes
           n3store.getQuads(
               quad.object,
               RDF.TYPE,
               RDFS.CLASS,
               null
           ).forEach((q:Quad) => {
-              classes.push(q.subject.value);
+                n3store.getQuads(
+                  quad.object,
+                  RDF.TYPE,
+                  SH.NODE_SHAPE,
+                  null
+              ).forEach((q2:Quad) => {
+                classes.push(q2.subject.value);
+              });              
           });
       });
 
@@ -247,7 +255,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
           null,
           null
       ).forEach((q:Quad) => {
-          classes.push(q.object.value);
+        classes.push(q.object.value);
       });  
       
       return classes;
