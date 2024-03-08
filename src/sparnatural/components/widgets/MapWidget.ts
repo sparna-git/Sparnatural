@@ -130,6 +130,7 @@ export default class MapWidget extends AbstractWidget {
     className: "submitMap icon-map-validate",
     onClick: () => {
       //this.widgetValue = [this.widgetValue]
+      this.#setWidgetValue(this.drawingLayer) ;
       this.renderWidgetValues(this.widgetValue);
       $(this.parentComponent).trigger("change");
       console.log(this) ;
@@ -185,7 +186,7 @@ export default class MapWidget extends AbstractWidget {
     }
   }
 
-  #renderMap = (edit=false) => {
+  #renderMap = () => {
     let d = new Date();
     let elementId = d.valueOf();
     console.log(elementId) ;
@@ -226,9 +227,20 @@ export default class MapWidget extends AbstractWidget {
       console.log(layers) ;
       this.drawingLayer = layers[0];
       layers[0].on("pm:edit", (e) => {
+        
+      console.log('fireing pm:create')
         console.log(e);
         
-        let widgetValue = this.#setWidgetValue(e.layer) ;
+        //let widgetValue = this.#setWidgetValue(e.layer) ;
+        this.drawingLayer = e.layer;
+
+      });
+      layers[0].on("pm:update", (e) => {
+        
+      console.log('fireing pm:update')
+        console.log(e);
+        
+        //let widgetValue = this.#setWidgetValue(e.layer) ;
         this.drawingLayer = e.layer;
 
       });
@@ -248,7 +260,7 @@ export default class MapWidget extends AbstractWidget {
 
       this.map.addLayer(this.drawingLayer);
 
-      let widgetValue = this.#setWidgetValue(e.layer) ;
+      //let widgetValue = this.#setWidgetValue(e.layer) ;
 
       console.log(this.endClassWidgetGroup) ;
 
@@ -256,10 +268,11 @@ export default class MapWidget extends AbstractWidget {
 
       //this.renderWidgetVal(widgetValue);
       //add listener when the shape gets changed
-      this.drawingLayer.on("pm:edit", (e) => {
-        
-      console.log('fireing pm:create pm:edit')
-          let widgetValue = this.#setWidgetValue(e.layer) ;
+        this.drawingLayer.on("pm:edit", (e) => {
+          
+        console.log('fireing pm:create pm:edit');
+        this.drawingLayer = e.layer;
+          //let widgetValue = this.#setWidgetValue(e.layer) ;
           //this.#setWidgetValue(e.layer) ;
           //this.renderWidgetVal(widgetValue);
       });
@@ -268,16 +281,18 @@ export default class MapWidget extends AbstractWidget {
     
     this.map.on("pm:update", (e) => {
       
-      console.log('fireing pm:update')
-      let widgetValue = this.#setWidgetValue(e.layer) ;
+      console.log('fireing pm:update');
+      this.drawingLayer = e.layer;
+      //let widgetValue = this.#setWidgetValue(e.layer) ;
       //this.#setWidgetValue(e.layer) ;
       //this.renderWidgetVal(widgetValue);
       //this.endClassWidgetGroup.html[0].addEventListener("click", (evt:MouseEvent) => this.showWidgetMap(evt)) ;
     });
 
-    this.map.on("pm:drawend", (e) => {
+    /*this.map.on("pm:drawend", (e) => {
       console.log(e);
-    });
+      this.drawingLayer = e.layer;
+    });*/
 
     this.#changeButton();
   };
@@ -316,6 +331,9 @@ export default class MapWidget extends AbstractWidget {
   }
 
   #setWidgetValue = (layer:any) => {
+    if(this.widgetValue?.length > 0) {
+      this.onRemoveValue(this.widgetValue[0]) ;
+    }
     this.widgetValue = [] ;
 
     switch ((layer as any).pm._shape) {
@@ -334,11 +352,16 @@ export default class MapWidget extends AbstractWidget {
         }));
       break;
     }
+
     return this.widgetValue ;
   }
 
   #closeMap = () => {
-    this.render();
+    if(this.widgetValue?.length > 0 ) {
+      this.renderWidgetValues(this.widgetValue);
+      $(this.parentComponent).trigger("change");
+    }
+    
     // this.map.remove();
     /*
     if (this.getwidgetValues().length < 1)

@@ -1,0 +1,12 @@
+div.edit {
+    span {
+        display: inline-block;
+    }
+
+    svg {
+        fill: var(--primary-color-important);
+        width: 17px;
+        background-color: transparent;
+        border-radius: 0;
+    }
+}
