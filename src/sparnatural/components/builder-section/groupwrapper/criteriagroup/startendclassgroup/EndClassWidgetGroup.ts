@@ -12,6 +12,7 @@ import {
 } from "../../../../widgets/AbstractWidget";
 import CriteriaGroup from "../CriteriaGroup";
 import { SelectAllValue } from "../edit-components/EditComponents";
+import EditBtn from "../../../../buttons/EditBtn";
 
 
 /*
@@ -30,6 +31,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
   render() {
     super.render();
     this.#addEventListener();
+    this.#addEditEventListener();
     return this;
   }
 
@@ -43,13 +45,50 @@ export class EndClassWidgetGroup extends HTMLComponent {
     );
   }
 
+  /**
+   * Listens for the event to edit a value (e.g. edit a map selection)
+   */
+  #addEditEventListener() {
+    this.html[0].addEventListener(
+      "onEditEndClassWidgetValue",
+      (e: CustomEvent) => {
+        e.stopImmediatePropagation();
+
+        let valueToDel: EndClassWidgetValue = e.detail;
+
+        let unselectedValue: EndClassWidgetValue;
+        this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
+          if (val.widgetVal.key() === valueToDel.widgetVal.key()) {
+            unselectedValue = val;
+            return false;
+          }
+          return true;
+        });
+        if (unselectedValue === undefined)
+          throw Error("Unselected val not found in the widgetValues list!");
+        unselectedValue.html.remove();
+
+
+        this.html[0].dispatchEvent(
+          new CustomEvent("renderWidgetWrapper", {
+            bubbles: true,
+            detail: {
+              selectedValues: this.widgetValues,
+              editedValue: valueToDel.widgetVal
+            },
+          })
+        );
+      }
+    );
+  }
+
   // input : the 'key' of the value to be deleted
   #onRemoveValue(e: CustomEvent) {
     let valueToDel: EndClassWidgetValue = e.detail;
 
     let unselectedValue: EndClassWidgetValue;
     this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
-      if (val.value_lbl === valueToDel.value_lbl) {
+      if (val.widgetVal.key() === valueToDel.widgetVal.key()) {
         unselectedValue = val;
         return false;
       }
@@ -93,10 +132,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
   renderWidgetVal(selectedVal: WidgetValue) {
     // check if value already got selected before
     if (
-      this.widgetValues.some((val) => val.value_lbl === selectedVal.value.label)
+      this.widgetValues.some((val) => val.widgetVal.key() === selectedVal.key())
     )
       return;
-    // if not, then create the EndclassWidgetValue and add it to the list
+    
+      // if not, then create the EndclassWidgetValue and add it to the list
     this.#renderEndClassWidgetVal(selectedVal);
   }
 
@@ -168,6 +208,7 @@ export class EndClassWidgetValue extends HTMLComponent {
   backArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_BACK);
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   unselectBtn: UnselectBtn;
+  editBtn:UnselectBtn;
   value_lbl: string;
   widgetVal: WidgetValue;
   constructor(ParentComponent: EndClassWidgetGroup, selectedVal: WidgetValue) {
@@ -188,6 +229,16 @@ export class EndClassWidgetValue extends HTMLComponent {
     this.unselectBtn = new UnselectBtn(this, () => {
       this.html[0].dispatchEvent(
         new CustomEvent("onRemoveEndClassWidgetValue", {
+          bubbles: true,
+          detail: this,
+        })
+      );
+    }).render();
+
+    // TODO : if widgetVal is a MapWidgetValue ....
+    this.editBtn = new EditBtn(this, () => {
+      this.html[0].dispatchEvent(
+        new CustomEvent("onEditEndClassWidgetValue", {
           bubbles: true,
           detail: this,
         })
