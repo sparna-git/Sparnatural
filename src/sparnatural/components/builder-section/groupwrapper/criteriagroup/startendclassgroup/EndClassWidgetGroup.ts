@@ -181,7 +181,7 @@ export class EndClassWidgetValue extends HTMLComponent {
     super.render();
     this.backArrow.render();
     // set a tooltip if the label is a bit long
-    var tooltip = (this.value_lbl.length > 25)?'title="'+this.value_lbl+'"':"";
+    var tooltip = (this.value_lbl.length > 25)?'title="'+this.#stripLabelHtml(this.value_lbl)+'"':"";
     let valuelbl = `<p ${tooltip}><span> ${this.value_lbl} </span></p>`;
     this.html.append($(valuelbl));
     this.frontArrow.render();
@@ -194,5 +194,11 @@ export class EndClassWidgetValue extends HTMLComponent {
       );
     }).render();
     return this;
+  }
+  
+  #stripLabelHtml = (html:string) =>{
+    let tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || "";
   }
 }
