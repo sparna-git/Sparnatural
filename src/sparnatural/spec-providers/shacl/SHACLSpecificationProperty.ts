@@ -91,7 +91,8 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
           highest = currentWidget;
         }        
       }
-
+      console.log("default property type")
+      console.log(highest)
       return highest.getUri();
     }
 

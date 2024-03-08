@@ -65,7 +65,12 @@ export const XSD = {
   BOOLEAN: factory.namedNode(XSD_NAMESPACE + "boolean") as NamedNode,
   DATE: factory.namedNode(XSD_NAMESPACE + "date") as NamedNode,
   DATE_TIME: factory.namedNode(XSD_NAMESPACE + "dateTime") as NamedNode,
+  DECIMAL: factory.namedNode(XSD_NAMESPACE + "decimal") as NamedNode,
+  DOUBLE: factory.namedNode(XSD_NAMESPACE + "double") as NamedNode,
+  FLOAT: factory.namedNode(XSD_NAMESPACE + "float") as NamedNode,  
   GYEAR: factory.namedNode(XSD_NAMESPACE + "gYear") as NamedNode,
+  INT: factory.namedNode(XSD_NAMESPACE + "int") as NamedNode,
+  INTEGER: factory.namedNode(XSD_NAMESPACE + "integer") as NamedNode,
   STRING: factory.namedNode(XSD_NAMESPACE + "string") as NamedNode
 };
 

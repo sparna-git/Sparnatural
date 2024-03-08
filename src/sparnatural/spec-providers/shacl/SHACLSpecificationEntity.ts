@@ -318,6 +318,8 @@ export class SpecialSHACLSpecificationEntityRegistry {
 
     public static SPECIAL_SHACL_ENTITY_TEXT = "http://special/Z_Text";
 
+    public static SPECIAL_SHACL_ENTITY_NUMBER = "http://special/Z_Number";
+
     public static SPECIAL_SHACL_ENTITY_OTHER = "http://special/ZZ_Other";
 
 
@@ -402,6 +404,40 @@ export class SpecialSHACLSpecificationEntityRegistry {
                         reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.STRING) 
                         ||
                         reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, RDF.LANG_STRING) 
+                        ||
+                        // no datatype but we know it is a Literal
+                        (
+                            reader._hasTriple(factory.namedNode(shapeUri), SH.NODE_KIND, SH.LITERAL)
+                            &&
+                            (
+                                !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, null)
+                                ||
+                                !reader._readAsSingleLiteral(factory.namedNode(shapeUri), SH.DATATYPE)?.startsWith("http://www.w3.org/2001/XMLSchema#")
+                            )
+                        )
+                    );
+                }
+            )
+        )
+
+        this.registry.set(
+            SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_NUMBER,
+            new SpecialSHACLSpecificationEntity(
+                SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_NUMBER,
+                "fa-solid fa-1",
+                "Number",
+                function(n3store:RdfStore, shapeUri:any):boolean {
+                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+                    return (
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INT)
+                        ||
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INTEGER)
+                        ||
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DECIMAL)
+                        ||
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.FLOAT) 
+                        ||
+                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DOUBLE) 
                     );
                 }
             )

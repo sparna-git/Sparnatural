@@ -22,6 +22,7 @@ import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
 import { I18n } from "../../../../../settings/I18n";
 import { AutocompleteWidget } from "../../../../../spec-providers/shacl/SHACLSearchWidgets";
+import { NumberWidget } from "../../../../widgets/NumberWidget";
 
 
 /**
@@ -519,7 +520,15 @@ class WidgetWrapper extends HTMLComponent {
           this.endClassVal
         ).render();
       
-        default:
+      case Config.NUMBER_PROPERTY:
+        return new NumberWidget(
+          this,
+          this.startClassVal,
+          this.objectPropVal,
+          this.endClassVal
+        ).render();
+
+      default:
         throw new Error(`WidgetType for ${widgetType} not recognized`);
     }
   }

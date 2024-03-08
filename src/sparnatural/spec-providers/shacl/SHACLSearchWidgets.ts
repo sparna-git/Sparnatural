@@ -177,6 +177,36 @@ export class BooleanWidget {
 SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new BooleanWidget());
 
 
+export class NumberWidget {
+
+    getUri():string {
+        return Config.NUMBER_PROPERTY;
+    }
+
+    score(propertyShape:string, n3store: RdfStore):number {
+        // if the datatype is xsd:boolean
+        if(
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.INT)
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.INTEGER)
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.DECIMAL)
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.FLOAT) 
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.DOUBLE) 
+        ) {
+            return 50;
+        } else {
+            return -1;
+        }
+        ;
+    }
+
+}
+SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new NumberWidget());
+
+
 export class NoWidget {
 
     getUri():string {

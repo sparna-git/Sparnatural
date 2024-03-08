@@ -3,34 +3,36 @@ export enum Config {
   LITERAL_LIST_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "LiteralListProperty",
 
-  LIST_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "ListProperty",
-  TIME_PROPERTY_PERIOD = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "TimeProperty-Period",
-  TIME_PROPERTY_YEAR = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "TimeProperty-Year",
-  TIME_PROPERTY_DATE = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "TimeProperty-Date",
   AUTOCOMPLETE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "AutocompleteProperty",
+  BOOLEAN_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "BooleanProperty",
+  GRAPHDB_SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "GraphDBSearchProperty",
+  JENA_SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "JenaSearchProperty",
+  LIST_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "ListProperty",
+  MAP_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "MapProperty",
+  NON_SELECTABLE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "NonSelectableProperty",
+  NUMBER_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "NumberProperty",
   SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "SearchProperty",
   STRING_EQUALS_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "StringEqualsProperty",
-  GRAPHDB_SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "GraphDBSearchProperty",
-  VIRTUOSO_SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "VirtuosoSearchProperty",
-  JENA_SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "JenaSearchProperty",
-  NON_SELECTABLE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "NonSelectableProperty",
-  BOOLEAN_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "BooleanProperty",
+  TIME_PROPERTY_DATE = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "TimeProperty-Date",
+  TIME_PROPERTY_PERIOD = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "TimeProperty-Period",
+  TIME_PROPERTY_YEAR = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "TimeProperty-Year",
   TREE_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "TreeProperty",
-  MAP_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
-    "MapProperty",
+  VIRTUOSO_SEARCH_PROPERTY = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
+    "VirtuosoSearchProperty",
 
   SPARQL_STRING = "http://data.sparna.fr/ontologies/sparnatural-config-core#" +
     "sparqlString",
