@@ -31,7 +31,9 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var items: string[] = [];
 
         // read all sh:property
-        let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+        //let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+        let propShapes = this.getProperties();
+        
         propShapes
         .forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
@@ -55,7 +57,8 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var items: string[] = [];
 
         // read all sh:property
-        let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+        // let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+        let propShapes = this.getProperties();
 
         propShapes
         .forEach(ps => {            
@@ -71,6 +74,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var dedupItems = [...new Set(items)];
         // sort dedups
         var sortedDedups = SHACLSpecificationEntry.sort(dedupItems.map(s => new SHACLSpecificationEntity(s, this.provider, this.store, this.lang)));
+        console.log(sortedDedups)
         // return dedup array of strings
         return sortedDedups.map(e => e.getId());        
     }
@@ -79,13 +83,26 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return (this.getConnectedEntities().length > 0)
     }
     
+    /**
+     * @returns all properties available on this node shape, including inherited properties from superclasses
+     */
     getProperties(): string[] {
         var items: string[] = [];
 
         // read all sh:property
         let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+                
         // add all properties from node shapes of superclasses
-        let
+        let superClasses:Term[] = this.getSuperClasses();
+        superClasses.forEach(sc => {
+            let ns = this.provider.getNodeShapeTargetingClass(sc);
+            if(ns) {
+                let superClassEntity = new SHACLSpecificationEntity(ns.value,this.provider, this.store, this.lang);
+                propShapes.push(...superClassEntity.getProperties());
+            } else {
+                console.warn("Warning, cannot find a node shape targeting class "+sc.value);
+            }
+        });
 
         propShapes
         .forEach(ps => {
@@ -143,25 +160,6 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return items.length>0?items[0]:null;
     }
 
-    getNodeShapesTargetingSuperClasses():string[] {
-        // retrieve target classes
-        let targetClasses:Term[] = this.#getTargetClasses();
-        // then retrieve all super classes of those classes
-        let superClasses:Term[] = [];
-        targetClasses.forEach(tc => superClasses.push(...this.#getSuperClassesRec(this.store, tc)));
-        // then retrieve node shapes targeting each of those superClasses
-        let nodeShapesTargetingSuperClasses:string[] = [];
-        superClasses.forEach(sc => {
-            let ns = this.provider.getNodeShapeTargetingClass(sc);
-            if(ns) {
-                nodeShapesTargetingSuperClasses.push(ns.value);
-            } else {
-                console.warn("Warning, cannot find a node shape targeting class "+sc.value);
-            }            
-        });
-        return nodeShapesTargetingSuperClasses;
-    }
-
     /**
      * @returns the immediate superclasses of this NodeShape+Class, or of the classes being targeted by this NodeShape
      */
@@ -177,6 +175,9 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return superClasses;
     }
 
+    /**
+     * @returns all super classes, recursively, of the provided classes. This is currently not used.
+     */
     #getSuperClassesRec(n3store:RdfStore, classNode:Term): Term[] {
         var items: Term[] = [];
         let superClasses = this._readAsResource(classNode, RDFS.SUBCLASS_OF);
@@ -202,6 +203,9 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         }
     }
 
+    /**
+     * @returns true if this entity is both a NodeShape and a Class
+     */
     #isNodeShapeAndClass():boolean {
         return (
             this._hasTriple(factory.namedNode(this.uri), RDF.TYPE, RDFS.CLASS)
@@ -211,10 +215,10 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     }
 
     /**
-     * @returns all values of sh:targetClass on this entity
+     * @returns all values of sh:targetClass on this entity, as RDF Terms
      */
     getShTargetClass():Term[] {
-        return this._readAsResource(factory.namedNode(this.uri), SH.TARGET_CLASS);
+        return this._readAsRdfNode(factory.namedNode(this.uri), SH.TARGET_CLASS);
     }
 
 }
