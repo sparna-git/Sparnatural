@@ -208,7 +208,7 @@ export class EndClassWidgetValue extends HTMLComponent {
   backArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_BACK);
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   unselectBtn: UnselectBtn;
-  editBtn:UnselectBtn;
+  editBtn:EditBtn;
   value_lbl: string;
   widgetVal: WidgetValue;
   constructor(ParentComponent: EndClassWidgetGroup, selectedVal: WidgetValue) {
