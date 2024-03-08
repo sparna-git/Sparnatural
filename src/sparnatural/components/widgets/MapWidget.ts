@@ -471,7 +471,6 @@ export default class MapWidget extends AbstractWidget {
 
     let svg = `<svg id="svgelem" width="30" height="30" viewBox="0 0 `+width+` `+height+`" xmlns="http://www.w3.org/2000/svg" style="
     transform: rotateX(180deg);" preserveAspectRatio="xMidYMid meet">
-    <g transform="rotateX(180deg)"><polygon points="`+svgCoordinates+`" style="fill:#ffffff;" /></g>
     <g><polygon points="`+svgCoordinates+`" style="fill:#ffffff;" /></g>
     </svg>` ;
     return svg ;
