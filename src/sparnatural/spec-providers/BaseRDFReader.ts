@@ -367,7 +367,7 @@ export class BaseRDFReader {
     return values.join(", ");
   }
 
-  _readAsRdfNode(rdfNode: Term, property: Term) {
+  _readAsRdfNode(rdfNode: Term, property: Term):Term[] {
     return this.store
       .getQuads(rdfNode, property, null, null)
       .map((quad: { object: any }) => quad.object);
@@ -377,7 +377,7 @@ export class BaseRDFReader {
     return this._hasTriple(rdfNode, property, null);
   }
 
-  _hasTriple(rdfNode: Term, property: Term, value:Term|null) {
+  _hasTriple(rdfNode: Term, property: Term, value:Term|null):boolean {
     return (
       this.store.getQuads(
         rdfNode,
@@ -395,6 +395,11 @@ export class BaseRDFReader {
         return this._readAsResource(uri, RDF.TYPE);
     }
 
+    _findNodesWithPredicate(property: Term,rdfNode: Term):Term[] {
+      return this.store
+        .getQuads(null, property, rdfNode, null)
+        .map(quad => quad.subject);
+    }
 
     /****** LIST HANDLING ********/
 

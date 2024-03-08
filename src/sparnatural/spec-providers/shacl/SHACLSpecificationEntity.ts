@@ -6,6 +6,7 @@ import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { RdfStore } from "rdf-stores";
+import { Term } from "@rdfjs/types";
 
 const factory = new DataFactory();
 
@@ -31,7 +32,6 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
         // read all sh:property
         let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
-        let that = this;
         propShapes
         .forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
@@ -77,7 +77,31 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
     hasConnectedEntities(): boolean {
         return (this.getConnectedEntities().length > 0)
-    }    
+    }
+    
+    getProperties(): string[] {
+        var items: string[] = [];
+
+        // read all sh:property
+        let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+        // add all properties from node shapes of superclasses
+        let
+
+        propShapes
+        .forEach(ps => {
+            let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
+            if(!prop.isDeactivated()) {
+                items.push(ps);
+            }
+        });
+
+        // dedup, although probably dedup is not necessary here
+        var dedupItems = [...new Set(items)];
+        // sort dedups
+        var sortedDedups = SHACLSpecificationEntry.sort(dedupItems.map(s => new SHACLSpecificationProperty(s, this.provider, this.store, this.lang)));
+        // return dedup array of strings
+        return sortedDedups.map(e => e.getId());
+    }
 
     /**
      * 
@@ -119,8 +143,78 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return items.length>0?items[0]:null;
     }
 
+    getNodeShapesTargetingSuperClasses():string[] {
+        // retrieve target classes
+        let targetClasses:Term[] = this.#getTargetClasses();
+        // then retrieve all super classes of those classes
+        let superClasses:Term[] = [];
+        targetClasses.forEach(tc => superClasses.push(...this.#getSuperClassesRec(this.store, tc)));
+        // then retrieve node shapes targeting each of those superClasses
+        let nodeShapesTargetingSuperClasses:string[] = [];
+        superClasses.forEach(sc => {
+            let ns = this.provider.getNodeShapeTargetingClass(sc);
+            if(ns) {
+                nodeShapesTargetingSuperClasses.push(ns.value);
+            } else {
+                console.warn("Warning, cannot find a node shape targeting class "+sc.value);
+            }            
+        });
+        return nodeShapesTargetingSuperClasses;
+    }
+
+    /**
+     * @returns the immediate superclasses of this NodeShape+Class, or of the classes being targeted by this NodeShape
+     */
+    getSuperClasses(): Term[] {
+        // retrieve target classes
+        let targetClasses:Term[] = this.#getTargetClasses();
+        // then retrieve super classes of those classes
+        let superClasses:Term[] = [];
+        targetClasses.forEach(tc => {
+            let currentSuperClasses = this._readAsRdfNode(tc, RDFS.SUBCLASS_OF);
+            superClasses.push(...currentSuperClasses);
+        });
+        return superClasses;
+    }
+
+    #getSuperClassesRec(n3store:RdfStore, classNode:Term): Term[] {
+        var items: Term[] = [];
+        let superClasses = this._readAsResource(classNode, RDFS.SUBCLASS_OF);
+        items.push(...superClasses);
+        superClasses.forEach(sc => {
+            items.push(...this.#getSuperClassesRec(n3store, sc));
+        });
+        return items;
+    }
+
     isRangeOf(n3store:RdfStore, shapeUri:any) {
        return (SHACLSpecificationProperty.readShClassAndShNodeOn(n3store, shapeUri).indexOf(this.uri) > -1);
+    }
+
+    /**
+     * @returns all targeted classes, either implicitly or explicitly through sh:targetClass
+     */
+    #getTargetClasses():Term[] {
+        if(this.#isNodeShapeAndClass()) {
+            return [factory.namedNode(this.uri)];
+        } else {
+            return this.getShTargetClass();
+        }
+    }
+
+    #isNodeShapeAndClass():boolean {
+        return (
+            this._hasTriple(factory.namedNode(this.uri), RDF.TYPE, RDFS.CLASS)
+            &&
+            this._hasTriple(factory.namedNode(this.uri), RDF.TYPE, SH.NODE_SHAPE)
+        );
+    }
+
+    /**
+     * @returns all values of sh:targetClass on this entity
+     */
+    getShTargetClass():Term[] {
+        return this._readAsResource(factory.namedNode(this.uri), SH.TARGET_CLASS);
     }
 
 }

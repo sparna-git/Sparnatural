@@ -16,6 +16,7 @@ import { SHACLSpecificationEntity, SpecialSHACLSpecificationEntityRegistry } fro
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad, Quad_Object } from '@rdfjs/types/data-model';
+import { Term } from "@rdfjs/types";
 
 const factory = new DataFactory();
 
@@ -255,6 +256,26 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
     let dedupNodeShapes = [...new Set(duplicatedNodeShapes)];
     return dedupNodeShapes;
+  }
+
+  /**
+   * @returns the NodeShape targeting the provided class, either implicitly or explicitly through sh:targetClass 
+   * @param c 
+   */
+  getNodeShapeTargetingClass(c:Term):Term|null {
+    if(this._hasTriple(c, RDF.TYPE, SH.NODE_SHAPE)) {
+      // class if also a NodeShape, return it directly
+      return c;
+    } else {
+      let shapes:Term[] = this._findNodesWithPredicate(SH.TARGET_CLASS,c);
+      if(shapes.length > 0) {
+        if(shapes.length > 1) {
+          console.warn("Warning, found more than one NodeShape targeting class "+c.value);
+        }
+        return shapes[0];
+      }
+      return null;
+    }
   }
 
 
