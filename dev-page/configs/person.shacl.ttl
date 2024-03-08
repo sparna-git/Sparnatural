@@ -1,0 +1,300 @@
+@base <http://foo.bar/shacl/> .
+
+@prefix bmw:                     <http://data.bmw.com/lod/model#>.
+@prefix country:                 <http://publications.europa.eu/resource/authority/country/>.
+@prefix ex:                      <http://example.com/model#>.
+@prefix rdf:                     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs:                    <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix sh:                      <http://www.w3.org/ns/shacl#>.
+@prefix skos:                    <http://www.w3.org/2004/02/skos/core#>.
+@prefix xsd:                     <http://www.w3.org/2001/XMLSchema#>.
+
+ex:Animal a rdfs:Class .
+
+ex:Person 
+    a               rdfs:Class ;
+    rdfs:subClassOf ex:Animal ;
+.
+
+ex:Location a rdfs:Class .
+
+ex:Pet
+    a               rdfs:Class ;
+    rdfs:subClassOf ex:Animal ;
+.
+
+ex:Cat  
+    a               rdfs:Class ;
+    rdfs:subClassOf ex:Pet
+.
+
+ex:Dog  
+    a               rdfs:Class ;
+    rdfs:subClassOf ex:Pet
+.
+
+<Person>
+    a              sh:NodeShape ;
+    sh:targetClass ex:Person ;
+    sh:property    <Person/id>,
+                   <Person/birthplace>,
+                   <Person/age>,
+                   <Person/ageInNanoSeconds>,
+                   <Person/moneyInDouble>,
+                   <Person/moneyInFloat>,
+                   <Person/isAlive>,
+                   <Person/friends>,
+                   <Person/exColliding>,
+                   <Person/bmwColliding>,
+                   <Person/untypedField>,
+                   <Person/renamedField>,
+                   <Person/rawIriField>,
+                   <Person/country>,
+                   <Person/countryAsString>,
+                   <Person/country>,
+                   <Person/spouse>,
+                   <Person/pets> ;
+.
+
+# to check for id field collision with the default id field which we consider to be the uri of the node
+<Person/id>
+    a           sh:PropertyShape ;
+    sh:path     ex:id ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Person/birthplace>
+    a           sh:PropertyShape ;
+    sh:path     ex:birthplace ;
+    sh:nodeKind sh:IRI ;
+    sh:class    ex:Location ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Person/age>
+    a           sh:PropertyShape ;
+    sh:path     ex:age ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:int ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Person/ageInNanoSeconds>
+    a           sh:PropertyShape ;
+    sh:path     ex:ageInNanoSeconds ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:integer ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Person/moneyInDouble>
+    a           sh:PropertyShape ;
+    sh:path     ex:moneyInDouble ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:double ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Person/moneyInFloat>
+    a           sh:PropertyShape ;
+    sh:path     ex:moneyInFloat ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:float ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Person/isAlive>
+    a           sh:PropertyShape ;
+    sh:path     ex:isAlive ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:boolean ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Person/friends>
+    a           sh:PropertyShape ;
+    sh:path     ex:friends ;
+    sh:nodeKind sh:IRI ;
+    sh:class    ex:Person ;
+.
+
+# Since there is no datatype or class for this field, it will be ignored
+<Person/untypedField>
+    a           sh:PropertyShape ;
+    sh:path     ex:untypedField ;
+.
+
+<Person/renamedField>
+    a           sh:PropertyShape ;
+    sh:path     ex:renamedField ;
+    sh:datatype xsd:string ;
+.
+
+<Person/rawIriField>
+    a           sh:PropertyShape ;
+    sh:path     ex:rawIriField ;
+    sh:nodeKind sh:IRI ;
+.
+
+<Person/country>
+    a           sh:PropertyShape ;
+    sh:path     ex:country ;
+    sh:nodeKind sh:IRI ;
+    sh:in       (
+        country:BEL
+        country:DEU
+        country:FRA
+        country:CHE
+    ) ;
+.
+
+<Person/countryAsString>
+    a           sh:PropertyShape ;
+    sh:path     ex:countryAsString ;
+    sh:datatype xsd:string ;
+    sh:nodeKind sh:Literal ;
+    sh:in       ( "Belgium" "Germany" "France" "Switzerland" ) ;
+.
+
+<Person/spouse>
+    a           sh:PropertyShape ;
+    sh:path     ex:spouse ;
+    sh:nodeKind sh:IRI ;
+    sh:class    ex:Person ;
+    sh:maxCount 1 ;
+.
+
+<Person/pets>
+    a           sh:PropertyShape ;
+    sh:path     ex:pets ;
+    sh:nodeKind sh:IRI ;
+    sh:class    ex:Pet ;
+.
+
+# This property and the next one are here to check colliding property names
+<Person/exColliding>
+    a           sh:PropertyShape ;
+    sh:path     ex:colliding ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Person/bmwColliding>
+    a           sh:PropertyShape ;
+    sh:path     bmw:colliding ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Location>
+    a              sh:NodeShape ;
+    sh:targetClass ex:Location ;
+    sh:property    <Location/prefLabel>,
+                   <Location/notation> ;
+.
+
+<Location/prefLabel>
+    a           sh:PropertyShape ;
+    sh:path     skos:prefLabel ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype rdf:langString ;
+    sh:minCount 1 ;
+.
+
+<Location/notation>
+    a           sh:PropertyShape ;
+    sh:path     skos:notation ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype ex:customNotation ;
+.
+
+<Pet>
+    a              sh:NodeShape ;
+    sh:targetClass ex:Pet ;
+    sh:property    <Pet/owner>,
+                   <Pet/raceAsIri>,
+                   <Pet/raceAsString> ;
+.
+
+<Pet/owner>
+    a           sh:PropertyShape ;
+    sh:path     ex:owner ;
+    sh:nodeKind sh:IRI ;
+    sh:or       (
+        [
+            sh:class ex:Person ;
+        ]
+        [
+            sh:class ex:Cat ;
+        ]
+    ) ;
+.
+
+<Cat>
+    a              sh:NodeShape ;
+    sh:targetClass ex:Cat ;
+    sh:property    <Cat/lives> ;
+.
+
+<Cat/lives>
+    a           sh:PropertyShape ;
+    sh:path     ex:lives ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:int ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Dog>
+    a              sh:NodeShape ;
+    sh:targetClass ex:Dog ;
+    sh:property    <Dog/pedigree> ;
+.
+
+<Dog/pedigree>
+    a           sh:PropertyShape ;
+    sh:path     ex:pedigree ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:string ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
+
+<Animal>
+    a              sh:NodeShape ;
+    sh:targetClass ex:Animal ;
+    sh:property    <Animal/name>,
+                   <Animal/birthday> ;
+.
+
+<Animal/name>
+    a              sh:PropertyShape ;
+    sh:path        ex:name ;
+    sh:nodeKind    sh:Literal ;
+    sh:datatype    xsd:string ;
+    sh:minCount    1 ;
+    sh:maxCount    1 ;
+    sh:description "The name of the person" ;
+.
+
+<Animal/birthday>
+    a           sh:PropertyShape ;
+    sh:path     ex:birthday ;
+    sh:nodeKind sh:Literal ;
+    sh:datatype xsd:date ;
+    sh:minCount 1 ;
+    sh:maxCount 1 ;
+.
