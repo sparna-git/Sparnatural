@@ -141,7 +141,7 @@ export default class MapWidget extends AbstractWidget {
 
   render(): this {
     console.log("rendering map widget...")
-    console.log(this.widgetValues)
+    console.log(this) ;
     super.render();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
@@ -150,7 +150,7 @@ export default class MapWidget extends AbstractWidget {
     ).render();
 
     // opens the map if there is a value - in the case we are editing the value
-    if(this.widgetValues) {
+    if(this.widgetValues?.length > 0 ) {
       this.#renderMap();
     }
     
@@ -214,7 +214,8 @@ export default class MapWidget extends AbstractWidget {
       removalMode: true
     });
 
-    console.log(this.widgetValue) ;
+    console.log('------------------ Init the render map widget display ---------------') ;
+    console.log(this) ;
 
     this.#redrawSelection() ;
 
@@ -251,7 +252,7 @@ export default class MapWidget extends AbstractWidget {
 
       console.log(this.endClassWidgetGroup) ;
 
-      this.endClassWidgetGroup.html[0].addEventListener("click", (evt:MouseEvent) => this.showWidgetMap(evt)) ;
+      //this.endClassWidgetGroup.html[0].addEventListener("click", (evt:MouseEvent) => this.showWidgetMap(evt)) ;
 
       //this.renderWidgetVal(widgetValue);
       //add listener when the shape gets changed
@@ -271,7 +272,7 @@ export default class MapWidget extends AbstractWidget {
       let widgetValue = this.#setWidgetValue(e.layer) ;
       //this.#setWidgetValue(e.layer) ;
       //this.renderWidgetVal(widgetValue);
-      this.endClassWidgetGroup.html[0].addEventListener("click", (evt:MouseEvent) => this.showWidgetMap(evt)) ;
+      //this.endClassWidgetGroup.html[0].addEventListener("click", (evt:MouseEvent) => this.showWidgetMap(evt)) ;
     });
 
     this.map.on("pm:drawend", (e) => {
@@ -286,7 +287,7 @@ export default class MapWidget extends AbstractWidget {
 
   }*/
 
-  private showWidgetMap(e: MouseEvent): void {
+  /*private showWidgetMap(e: MouseEvent): void {
     let objectVal = this.endClassWidgetGroup.ParentComponent.ObjectPropertyGroup.objectPropVal ;
     this.endClassWidgetGroup.ParentComponent.EndClassGroup.editComponents = false ;
     this.endClassWidgetGroup.ParentComponent.EndClassGroup.onObjectPropertyGroupSelected(objectVal) ;
@@ -304,7 +305,7 @@ export default class MapWidget extends AbstractWidget {
     console.info(this);
     console.info(_this);
     console.warn(`Message is: "${_this.widgetValue}"`); // error
-  }
+  }*/
 
   #getValueLabel(layer: any) {
     let area = this.#polygonArea((layer as any).getLatLngs() as LatLng[][]) ; 
@@ -471,6 +472,7 @@ export default class MapWidget extends AbstractWidget {
     let svg = `<svg id="svgelem" width="30" height="30" viewBox="0 0 `+width+` `+height+`" xmlns="http://www.w3.org/2000/svg" style="
     transform: rotateX(180deg);" preserveAspectRatio="xMidYMid meet">
     <g transform="rotateX(180deg)"><polygon points="`+svgCoordinates+`" style="fill:#ffffff;" /></g>
+    <g><polygon points="`+svgCoordinates+`" style="fill:#ffffff;" /></g>
     </svg>` ;
     return svg ;
   }
