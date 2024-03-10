@@ -38,6 +38,7 @@
   "TreeWidgetSelect": "Select",
   "MapWidgetOpenMap": "Open Map",
   "MapWidgetCloseMap": "Close Map",
+  "MapWidgetValidate": "Validate search area",
   "MapWidgetAreaSelected": "AreaSelected",
   "AutocompleteSpinner_3Chars": "type at least 3 characters",
   "AutocompleteSpinner_Searching": "searching...",

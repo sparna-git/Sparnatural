@@ -122,24 +122,6 @@ export default class MapWidget extends AbstractWidget {
     this.endClassWidgetGroup = this.parentComponent.ParentComponent.ParentComponent.ParentComponent.endClassWidgetGroup ;
   }
 
-  
-  submitMapOptions: CustomControlOptions = {
-    name: "submitMap",
-    block: "custom",
-    title: "Ok",
-    className: "submitMap icon-map-validate",
-    onClick: () => {
-      //this.widgetValue = [this.widgetValue]
-      this.#setWidgetValue(this.drawingLayer) ;
-      this.renderWidgetValues(this.widgetValue);
-      $(this.parentComponent).trigger("change");
-      console.log(this) ;
-      console.log(this.endClassWidgetGroup) ;
-      //this.html.hide() ;
-      //this.endClassWidgetGroup
-    },
-  }
-
   render(): this {
     console.log("rendering map widget...")
     console.log(this) ;
@@ -252,8 +234,23 @@ export default class MapWidget extends AbstractWidget {
       });
     }
     
-
-    this.map.pm.Toolbar.createCustomControl(this.submitMapOptions);
+    let submitMapOptions: CustomControlOptions = {
+      name: "submitMap",
+      block: "custom",
+      title: I18n.labels.MapWidgetValidate,
+      className: "submitMap icon-map-validate",
+      onClick: () => {
+        //this.widgetValue = [this.widgetValue]
+        this.#setWidgetValue(this.drawingLayer) ;
+        this.renderWidgetValues(this.widgetValue);
+        $(this.parentComponent).trigger("change");
+        console.log(this) ;
+        console.log(this.endClassWidgetGroup) ;
+        //this.html.hide() ;
+        //this.endClassWidgetGroup
+      },
+    }
+    this.map.pm.Toolbar.createCustomControl(submitMapOptions);
 
     this.map.on("pm:create", (e:any) => {
 
