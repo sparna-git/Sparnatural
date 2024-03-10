@@ -36,7 +36,7 @@
         border-right: 0;
         
         text-align: center;
-        span {
+        &>span {
             line-height: 42px;
             display: inline-block;
             vertical-align: baseline;
