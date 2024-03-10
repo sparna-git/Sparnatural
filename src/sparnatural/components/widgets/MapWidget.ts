@@ -1,6 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import L, { LatLng, Rectangle,Polygon,Map,PolylineOptions } from "leaflet";
+import L, { LatLng, Rectangle,Polygon,Map,PolylineOptions, Layer } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import {
@@ -223,10 +223,16 @@ export default class MapWidget extends AbstractWidget {
     if(this.widgetValue !== undefined) {
       
       var layers = [];
-      layers = L.PM.Utils.findLayers(this.map)
-      console.log(layers) ;
-      this.drawingLayer = layers[0];
-      layers[0].on("pm:edit", (e) => {
+      //layers = L.PM.Utils.findLayers(this.map)
+      //console.log(layers) ;
+      //this.drawingLayer = layers[0] as Layer;
+      this.map.pm.getGeomanLayers(false).forEach(layer => {
+        if(layer instanceof L.Polygon) {
+            layer.pm.enable() ;
+            this.drawingLayer = layer ;
+        }
+      });
+      this.drawingLayer.on("pm:edit", (e) => {
         
       console.log('fireing pm:create')
         console.log(e);
@@ -235,7 +241,7 @@ export default class MapWidget extends AbstractWidget {
         this.drawingLayer = e.layer;
 
       });
-      layers[0].on("pm:update", (e) => {
+      this.drawingLayer.on("pm:update", (e) => {
         
       console.log('fireing pm:update')
         console.log(e);
