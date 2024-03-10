@@ -325,9 +325,7 @@ export default class MapWidget extends AbstractWidget {
   #getValueLabel(layer: any) {
     let area = this.#polygonArea((layer as any).getLatLngs() as LatLng[][]) ; 
     let coordinates = (layer as any).getLatLngs() as LatLng[][] ;
-    let d = new Date();
-    let elementId = d.valueOf();
-    return this.#getSvgSelection(coordinates) + ' ' + area +' km² - '+ elementId ;
+    return this.#getSvgSelection(coordinates) + '<span>' + area +' km²</span>' ;
   }
 
   #setWidgetValue = (layer:any) => {
@@ -492,10 +490,7 @@ export default class MapWidget extends AbstractWidget {
       svgCoordinates += lon+','+lat ;
     });
 
-    let svg = `<svg id="svgelem" width="30" height="30" viewBox="0 0 `+width+` `+height+`" xmlns="http://www.w3.org/2000/svg" style="
-    transform: rotateX(180deg);" preserveAspectRatio="xMidYMid meet">
-    <g><polygon points="`+svgCoordinates+`" style="fill:#ffffff;" /></g>
-    </svg>` ;
+    let svg = `<svg id="svgelem" width="30" height="30" viewBox="0 0 `+width+` `+height+`" xmlns="http://www.w3.org/2000/svg" style=" transform: rotateX(180deg);" preserveAspectRatio="xMidYMid meet">   <g><polygon points="`+svgCoordinates+`" style="fill:#ffffff;" /></g></svg>` ;
     return svg ;
   }
 
