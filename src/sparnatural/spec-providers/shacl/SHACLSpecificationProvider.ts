@@ -1,4 +1,4 @@
-import { DataFactory } from 'rdf-data-factory';
+import { BlankNode, DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISparnaturalSpecification from "../ISparnaturalSpecification";
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
@@ -97,6 +97,58 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     // init SPARQL parser and generator once
     this.#parser = new Parser();
     this.#generator = new Generator();
+    this.#skolemizeAnonymousPropertyShapes();
+  }
+
+  #skolemizeAnonymousPropertyShapes() {
+    // any subject of an sh:path...
+    const quadsArray = this.store.getQuads(
+      null,
+      SH.PROPERTY,
+      null,
+      null
+    );
+
+    let i=0;
+    for (const quad of quadsArray) {
+      var propertyShapeNode = quad.object;
+      if(propertyShapeNode.termType == "BlankNode") {
+        // 1. get the base URI pointing to this property shape
+        var nodeShape = quad.subject;
+        if(nodeShape.termType == "NamedNode") {
+          let uri = quad.subject.value;
+          
+          // 2. build a property shape URI from it
+          let propertyShapeUri = uri+"_"+i;
+          console.log("replace with new URI "+propertyShapeUri)
+          // 3. replace all triples where the blank node is subject
+          this.store.getQuads(
+            propertyShapeNode,
+            null,
+            null,
+            null
+          ).forEach(
+            q => {
+              this.store.removeQuad(q);
+              this.store.addQuad(factory.quad(factory.namedNode(propertyShapeUri), q.predicate, q.object, q.graph));
+            }
+          );
+          // 4. replace all triples where the blank node is object
+          this.store.getQuads(
+            null,
+            null,
+            propertyShapeNode,
+            null
+          ).forEach(
+            q => {
+              this.store.removeQuad(q);
+              this.store.addQuad(factory.quad(q.subject, q.predicate, factory.namedNode(propertyShapeUri), q.graph));
+            }
+          );
+        }
+      }
+      i++;
+    }
   }
 
   getAllSparnaturalEntities(): string[] {
@@ -285,7 +337,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
 
   public static pathToSparql(object:Quad_Object) {
-    if(object as NamedNode) {
+    if(object.termType == "NamedNode") {
       return "<" + (object as NamedNode).value + ">";
     } else {
       throw new Error("SHACL blank node paths not implemented yet")
