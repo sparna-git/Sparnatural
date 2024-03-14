@@ -22,10 +22,12 @@ const factory = new DataFactory();
 
 const SH_NAMESPACE = "http://www.w3.org/ns/shacl#";
 export const SH = {
+  ALTERNATIVE_PATH: factory.namedNode(SH_NAMESPACE + "alternativePath") as NamedNode,
   CLASS: factory.namedNode(SH_NAMESPACE + "class") as NamedNode,
   DATATYPE: factory.namedNode(SH_NAMESPACE + "datatype") as NamedNode,
   DEACTIVATED: factory.namedNode(SH_NAMESPACE + "deactivated") as NamedNode,
   DESCRIPTION: factory.namedNode(SH_NAMESPACE + "description") as NamedNode,
+  INVERSE_PATH: factory.namedNode(SH_NAMESPACE + "inversePath") as NamedNode, 
   IRI: factory.namedNode(SH_NAMESPACE + "IRI") as NamedNode, 
   LANGUAGE_IN: factory.namedNode(SH_NAMESPACE + "languageIn") as NamedNode, 
   LITERAL: factory.namedNode(SH_NAMESPACE + "Literal") as NamedNode, 
@@ -33,6 +35,7 @@ export const SH = {
   NODE: factory.namedNode(SH_NAMESPACE + "node") as NamedNode,  
   NODE_KIND: factory.namedNode(SH_NAMESPACE + "nodeKind") as NamedNode, 
   NODE_SHAPE: factory.namedNode(SH_NAMESPACE + "NodeShape") as NamedNode,  
+  ONE_OR_MORE_PATH: factory.namedNode(SH_NAMESPACE + "oneOrMorePath") as NamedNode, 
   OR: factory.namedNode(SH_NAMESPACE + "or") as NamedNode,
   ORDER: factory.namedNode(SH_NAMESPACE + "order") as NamedNode,
   PATH: factory.namedNode(SH_NAMESPACE + "path") as NamedNode,
@@ -41,6 +44,8 @@ export const SH = {
   TARGET: factory.namedNode(SH_NAMESPACE + "target") as NamedNode,
   TARGET_CLASS: factory.namedNode(SH_NAMESPACE + "targetClass") as NamedNode,
   UNIQUE_LANG: factory.namedNode(SH_NAMESPACE + "uniqueLang") as NamedNode, 
+  ZERO_OR_MORE_PATH: factory.namedNode(SH_NAMESPACE + "zeroOrMorePath") as NamedNode, 
+  ZERO_OR_ONE_PATH: factory.namedNode(SH_NAMESPACE + "zeroOrOnePath") as NamedNode, 
 };
 
 const DASH_NAMESPACE = "http://datashapes.org/dash#";
@@ -195,7 +200,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       .forEach((quad: Quad) => {
         // find it with the full URI
         var re = new RegExp("<" + quad.subject.value + ">", "g");
-        let sparqlReplacementString = SHACLSpecificationProvider.pathToSparql(quad.object);
+        let sparqlReplacementString = SHACLSpecificationProvider.pathToSparql(quad.object, this.store);
         sparql = sparql.replace(re, sparqlReplacementString);
       });
 
@@ -237,6 +242,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       });
 
     // reparse the query, apply prefixes, and reserialize the query
+    console.log(sparql)
     var query = this.#parser.parse(sparql);
     for (var key in prefixes) {
       query.prefixes[key] = prefixes[key];
@@ -336,17 +342,33 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   }
 
 
-  public static pathToSparql(object:Quad_Object) {
-    if(object.termType == "NamedNode") {
-      return "<" + (object as NamedNode).value + ">";
-    } else {
-      throw new Error("SHACL blank node paths not implemented yet")
+  public static pathToSparql(path:Quad_Object, store:RdfStore, asDisplayLabel:boolean = false):string {
+    if(path.termType == "NamedNode") {
+      if(asDisplayLabel) {
+        return SHACLSpecificationProvider.getLocalName((path as NamedNode).value);
+      } else {
+        return "<" + (path as NamedNode).value + ">";
+      }
+    } else if(path.termType == "BlankNode") {
+      if(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null).length > 0) {
+        return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"+";
+      }
+      if(store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
+        return "^"+SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel);
+      }
+      if(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
+        return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"*";
+      }
+      if(store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
+        return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"?";
+      }
     }
+    throw new Error("Unsupported SHACL property path")
   }
 
-  public static getLocalName(uri:string){
-    if(uri.includes('#')) return uri.split('#').pop()
-    return uri.split('/').pop()
+  public static getLocalName(uri:string):string{
+    if(uri.includes('#')) return uri.split('#').pop() as string
+    return uri.split('/').pop() as string
   }
 
 }

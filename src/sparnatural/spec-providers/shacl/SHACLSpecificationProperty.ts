@@ -22,7 +22,11 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     getLabel(): string {
       // first try to read an sh:name
       let label = this._readAsLiteralWithLang(factory.namedNode(this.uri), SH.NAME, this.lang);
-      // no sh:name present, read the local part of the URI
+      // no sh:name present, display the sh:path without prefixes
+      if(!label) {
+        label = SHACLSpecificationProvider.pathToSparql(this.store.getQuads(factory.namedNode(this.uri),SH.PATH, null, null)[0].object, this.store, true);
+      }      
+      // or try to read the local part of the URI, but should not happen
       if(!label) {
         label = SHACLSpecificationProvider.getLocalName(this.uri) as string;
       }
