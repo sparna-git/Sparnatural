@@ -21,161 +21,151 @@ The formal specification of the subset of SHACL to use, in combination with a fe
 
 ### NodeShapes configuration reference
 
+
 <table class="sp_table_propertyshapes table-striped table-responsive">
-                     <thead>
-                        <tr>
-                           <th>Property name</th>
-                           <th>URI</th>
-                           <th>Expected value</th>
-                           <th>Card.</th>
-                           <th class="sp_description_column">Description</th>
-                        </tr>
-                     </thead>
-                     <tbody>
-                        <tr>
-                           <td>type</td>
-                           <td><code><a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">rdf:type</a></code></td>
-                           <td><code>sh:NodeShape</code><br></td>
-                           <td>
-                              <div style="width:30px">1..*</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">Class. Value must always be sh:NodeShape.</td>
-                        </tr>
-                        <tr>
-                           <td>label</td>
-                           <td><code><a href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></code></td>
-                           <td><code>rdf:langString</code><code> or </code><code>xsd:string</code><br></td>
-                           <td>
-                              <div style="width:30px">0..*</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">The label of the entity to be displayed in Sparnatural. 
-                              Labels are multilingual, and can provide multiple labels in different languages. Lhe
-                              label in the current user language is displayed;
-                              If no label is given, the local part of the URI is used.</td>
-                        </tr>
-                        <tr>
-                           <td>order</td>
-                           <td><code><a href="http://www.w3.org/ns/shacl#order">sh:order</a></code></td>
-                           <td><code>xsd:decimal</code><br></td>
-                           <td>
-                              <div style="width:30px">0..*</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">The order of this entity in the entity selection dropdown.</td>
-                        </tr>
-                        <tr>
-                           <td>tooltip</td>
-                           <td><code><a href="http://data.sparna.fr/ontologies/volipi#message">volipi:message</a></code></td>
-                           <td><code>rdf:langString</code><code> or </code><code>xsd:string</code><br></td>
-                           <td>
-                              <div style="width:30px">0..*</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">The preferred tooltip that will be displayed when this entity is hovered. This can
-                              contain HTML markup.
-                              Tooltips are also multilingual, you can provide one tooltip per language, and the
-                              tooltip in the current user language is used.</td>
-                        </tr>
-                        <tr>
-                           <td>tooltip</td>
-                           <td><code><a href="http://www.w3.org/ns/shacl#description">sh:description</a></code></td>
-                           <td><code>rdf:langString</code><code> or </code><code>xsd:string</code><br></td>
-                           <td>
-                              <div style="width:30px">0..*</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">The default tooltip that will be displayed when this entity is hovered, if no preferred
-                              tooltip is provided. This can contain HTML markup.</td>
-                        </tr>
-                        <tr>
-                           <td>fontawesome icon code</td>
-                           <td><code><a href="http://data.sparna.fr/ontologies/volipi#iconName">volipi:iconName</a></code></td>
-                           <td><code>xsd:string</code><br></td>
-                           <td>
-                              <div style="width:30px">0..1</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">The fontawesome icon code that will be displayed by Sparnatural, e.g. "fa-solid fa-user"</td>
-                        </tr>
-                        <tr>
-                           <td>icon url</td>
-                           <td><code><a href="http://data.sparna.fr/ontologies/volipi#icon">volipi:icon</a></code></td>
-                           <td><code>IRI</code><br></td>
-                           <td>
-                              <div style="width:30px">0..1</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">A reference to an icon URL that will be displayed on Sparnatural. Use of this is discouraged,
-                              prefer volipi:iconName</td>
-                        </tr>
-                        <tr>
-                           <td>target class</td>
-                           <td><code><a href="http://www.w3.org/ns/shacl#targetClass">sh:targetClass</a></code></td>
-                           <td><code>IRI</code><br></td>
-                           <td>
-                              <div style="width:30px">0..*</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">The actual URI of the class that this shape corresponds to, that will be inserted
-                              in the SPARQL queries. NodeShapes can either have sh:targetClass or they can be rdf:type
-                              rdfs:Class, in which case the URI of the NodeShape is assumed to be the URI of the
-                              class itself.</td>
-                        </tr>
-                        <tr>
-                           <td>node kind</td>
-                           <td><code><a href="http://www.w3.org/ns/shacl#nodeKind">sh:nodeKind</a></code></td>
-                           <td><code>IRI</code><br></td>
-                           <td>
-                              <div style="width:30px">0..1</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">If used on a NodeShape with value sh:Literal, then Sparnatural will treat this shape
-                              as a Literal and will not generate an rdf:type triple in the SPARQL query.</td>
-                        </tr>
-                        <tr>
-                           <td>datatype</td>
-                           <td><code><a href="http://www.w3.org/ns/shacl#datatype">sh:datatype</a></code></td>
-                           <td><code>IRI</code><br></td>
-                           <td>
-                              <div style="width:30px">0..1</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">If used on a NodeShape, then Sparnatural will treat this shape as a Literal and will
-                              not generate an rdf:type triple in the SPARQL query.</td>
-                        </tr>
-                        <tr>
-                           <td>language in</td>
-                           <td><code><a href="http://www.w3.org/ns/shacl#languageIn">sh:languageIn</a></code></td>
-                           <td><code>BlankNode</code><br></td>
-                           <td>
-                              <div style="width:30px">0..1</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">If used on a NodeShape, then Sparnatural will treat this shape as a Literal and will
-                              not generate an rdf:type triple in the SPARQL query.</td>
-                        </tr>
-                        <tr>
-                           <td>unique lang</td>
-                           <td><code><a href="http://www.w3.org/ns/shacl#uniqueLang">sh:uniqueLang</a></code></td>
-                           <td><code>xsd:boolean</code><br></td>
-                           <td>
-                              <div style="width:30px">0..1</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">If used on a NodeShape, then Sparnatural will treat this shape as a Literal and will
-                              not generate an rdf:type triple in the SPARQL query.</td>
-                        </tr>
-                        <tr>
-                           <td>deactivated</td>
-                           <td><code><a href="http://www.w3.org/ns/shacl#deactivated">sh:deactivated</a></code></td>
-                           <td><code>xsd:boolean</code><br></td>
-                           <td>
-                              <div style="width:30px">0..1</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description">If marked with sh:deactivated, a shape will be filtered out from the initial list
-                              of classes</td>
-                        </tr>
-                        <tr>
-                           <td>or</td>
-                           <td><code><a href="http://www.w3.org/ns/shacl#or">sh:or</a></code></td>
-                           <td><code>BlankNode</code><br></td>
-                           <td>
-                              <div style="width:30px">0..*</div>
-                           </td>
-                           <td class="sp_table_propertyshapes_col_description"></td>
-                        </tr>
-                     </tbody>
-                  </table>
+   <thead>
+      <tr>
+         <th>Property name</th>
+         <th>URI</th>
+         <th>Expected value</th>
+         <th>Card.</th>
+         <th class="sp_description_column">Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>type</td>
+         <td><code><a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">rdf:type</a></code></td>
+         <td><code>sh:NodeShape</code><br></td>
+         <td>
+            <div style="width:30px">1..*</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">Class. Value must always be sh:NodeShape.</td>
+      </tr>
+      <tr>
+         <td>label</td>
+         <td><code><a href="http://www.w3.org/2000/01/rdf-schema#label">rdfs:label</a></code></td>
+         <td><code>rdf:langString</code><code> or </code><code>xsd:string</code><br></td>
+         <td>
+            <div style="width:30px">0..*</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">The label of the entity to be displayed in Sparnatural. 
+            Labels are multilingual, and can provide multiple labels in different languages. Lhe
+            label in the current user language is displayed;
+            If no label is given, the local part of the URI is used.</td>
+      </tr>
+      <tr>
+         <td>tooltip</td>
+         <td><code><a href="http://www.w3.org/ns/shacl#description">sh:description</a></code></td>
+         <td><code>rdf:langString</code><code> or </code><code>xsd:string</code><br></td>
+         <td>
+            <div style="width:30px">0..*</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">The default tooltip that will be displayed when this entity is hovered, if no preferred
+            tooltip is provided. This can contain HTML markup.</td>
+      </tr>
+      <tr>
+         <td>fontawesome icon code</td>
+         <td><code><a href="http://data.sparna.fr/ontologies/volipi#iconName">volipi:iconName</a></code></td>
+         <td><code>xsd:string</code><br></td>
+         <td>
+            <div style="width:30px">0..1</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">The fontawesome icon code that will be displayed by Sparnatural, e.g. "fa-solid fa-user"</td>
+      </tr>
+      <tr>
+         <td>icon url</td>
+         <td><code><a href="http://data.sparna.fr/ontologies/volipi#icon">volipi:icon</a></code></td>
+         <td><code>IRI</code><br></td>
+         <td>
+            <div style="width:30px">0..1</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">A reference to an icon URL that will be displayed on Sparnatural. Use of this is discouraged,
+            prefer volipi:iconName</td>
+      </tr>
+      <tr>
+         <td>target class</td>
+         <td><code><a href="http://www.w3.org/ns/shacl#targetClass">sh:targetClass</a></code></td>
+         <td><code><a href="#scs:TargetClass">Target class</a></code><br></td>
+         <td>
+            <div style="width:30px">0..*</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">The actual URI of the class that this shape corresponds to, that will be inserted
+            in the SPARQL queries. NodeShapes can either have sh:targetClass or they can be rdf:type
+            rdfs:Class, in which case the URI of the NodeShape is assumed to be the URI of the
+            class itself.</td>
+      </tr>
+      <tr>
+         <td>node kind</td>
+         <td><code><a href="http://www.w3.org/ns/shacl#nodeKind">sh:nodeKind</a></code></td>
+         <td><code>IRI</code><br></td>
+         <td>
+            <div style="width:30px">0..1</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">If used on a NodeShape with value sh:Literal, then Sparnatural will treat this shape
+            as a Literal and will not generate an rdf:type triple in the SPARQL query.</td>
+      </tr>
+      <tr>
+         <td>datatype</td>
+         <td><code><a href="http://www.w3.org/ns/shacl#datatype">sh:datatype</a></code></td>
+         <td><code>IRI</code><br></td>
+         <td>
+            <div style="width:30px">0..1</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">If used on a NodeShape, then Sparnatural will treat this shape as a Literal and will
+            not generate an rdf:type triple in the SPARQL query.</td>
+      </tr>
+      <tr>
+         <td>language in</td>
+         <td><code><a href="http://www.w3.org/ns/shacl#languageIn">sh:languageIn</a></code></td>
+         <td><code>BlankNode</code><br></td>
+         <td>
+            <div style="width:30px">0..1</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">If used on a NodeShape, then Sparnatural will treat this shape as a Literal and will
+            not generate an rdf:type triple in the SPARQL query.</td>
+      </tr>
+      <tr>
+         <td>unique lang</td>
+         <td><code><a href="http://www.w3.org/ns/shacl#uniqueLang">sh:uniqueLang</a></code></td>
+         <td><code>xsd:boolean</code><br></td>
+         <td>
+            <div style="width:30px">0..1</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">If used on a NodeShape, then Sparnatural will treat this shape as a Literal and will
+            not generate an rdf:type triple in the SPARQL query.</td>
+      </tr>
+      <tr>
+         <td>deactivated</td>
+         <td><code><a href="http://www.w3.org/ns/shacl#deactivated">sh:deactivated</a></code></td>
+         <td><code>xsd:boolean</code><br></td>
+         <td>
+            <div style="width:30px">0..1</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">If marked with sh:deactivated, a shape will be filtered out from the initial list
+            of classes</td>
+      </tr>
+      <tr>
+         <td>or</td>
+         <td><code><a href="http://www.w3.org/ns/shacl#or">sh:or</a></code></td>
+         <td><code>BlankNode</code><br></td>
+         <td>
+            <div style="width:30px">0..*</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description"></td>
+      </tr>
+      <tr>
+         <td>subclass of</td>
+         <td><code><a href="http://www.w3.org/2000/01/rdf-schema#subClassOf">rdfs:subClassOf</a></code></td>
+         <td><code><a href="#scs:TargetClass">Target class</a></code><br></td>
+         <td>
+            <div style="width:30px">0..*</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">If the NodeShape is also a Class, it can have a subClassOf reference to the class(es)
+            from which it will inherit the properties</td>
+      </tr>
+   </tbody>
+</table>
 
 ### PropertyShapes configuration reference
 
@@ -257,8 +247,7 @@ The formal specification of the subset of SHACL to use, in combination with a fe
                         <tr>
                            <td>search widget</td>
                            <td><code><a href="http://datashapes.org/dash#searchWidget">dash:searchWidget</a></code></td>
-                           <td><code>IRI</code><br><p><small>(config-core:SearchProperty, config-core:ListProperty, config-core:AutocompleteProperty, config-core:BooleanProperty, config-core:MapProperty, config-core:StringEqualsProperty, config-core:TimeProperty-Date, config-core:TimeProperty-Year, config-core:TimeProperty-Period, config-core:TreeProperty)</small></p>
-                           </td>
+                           <td><code>IRI</code><br></td>
                            <td>
                               <div style="width:30px">0..1</div>
                            </td>
@@ -357,3 +346,43 @@ The formal specification of the subset of SHACL to use, in combination with a fe
                         </tr>
                      </tbody>
                   </table>
+
+### Classes configuration reference
+
+Only rdfs:subClassOf are read on class to inherit properties of superclasses.
+
+
+<table class="sp_table_propertyshapes table-striped table-responsive">
+   <thead>
+      <tr>
+         <th>Property name</th>
+         <th>URI</th>
+         <th>Expected value</th>
+         <th>Card.</th>
+         <th class="sp_description_column">Description</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+         <td>is target of</td>
+         <td><code>^sh:targetClass</code></td>
+         <td><code><a href="#scs:Entity">Sparnatural entity</a></code><br></td>
+         <td>
+            <div style="width:30px">0..*</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">A target class may be referenced by a NodeShape through sh:targetClass, or it can
+            be itself a sh:NodeShape. The properties of the NodeShape are inherited by the subclasses.</td>
+      </tr>
+      <tr>
+         <td>subClassOf</td>
+         <td><code><a href="http://www.w3.org/2000/01/rdf-schema#subClassOf">rdfs:subClassOf</a></code></td>
+         <td><code><a href="#scs:TargetClass">Target class</a></code><br></td>
+         <td>
+            <div style="width:30px">0..*</div>
+         </td>
+         <td class="sp_table_propertyshapes_col_description">Indicates the superclass or superclasses of this class, from which this node shape
+            inherits. When a class is selected in Sparnatural, the properties of its superclasses
+            will be proposed.</td>
+      </tr>
+   </tbody>
+</table>
