@@ -94,8 +94,8 @@ class StartClassGroup extends HTMLComponent {
   // get the classname of the uri
   #getUriClassName(uri:string){
     // replaces all non-ASCII characters with an underscore in variable names
-    if(uri.includes('#')) return uri.split('#').pop().replace(/[^\x00-\x7F]/g, "_")
-    return uri.split('/').pop().replace(/[^\x00-\x7F]/g, "_")
+    if(uri.includes('#')) return uri.split('#').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
+    return uri.split('/').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
   }
 
   // adding a defaultlblProperty

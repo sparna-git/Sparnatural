@@ -11,10 +11,11 @@ import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
  **/
 class ObjectPropertyGroup extends HTMLComponent {
   inputSelector: ObjectPropertyTypeId;
+  // value which shows which object property got chosen by the config for subject and object
   objectPropVal: SelectedVal = {
     variable: null,
     type: null,
-  }; // value which shows which object property got chosen by the config for subject and object
+  };
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISparnaturalSpecification;
   startClassVal: SelectedVal;
@@ -97,8 +98,8 @@ class ObjectPropertyGroup extends HTMLComponent {
 
   // get the classname of the uri
   #getUriClassName(uri:string){
-    if(uri.includes('#')) return uri.split('#').pop()
-    return uri.split('/').pop()
+    if(uri.includes('#')) return uri.split('#').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
+    return uri.split('/').pop().replace(/[^\x00-\x7F]/g, "_").replace(/-/g, "_")
   }
 
   getTypeSelected() {
