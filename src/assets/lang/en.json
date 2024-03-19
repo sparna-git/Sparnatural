@@ -30,6 +30,7 @@
   "labelOrderSort": "Sort",
   "SelectAllValues": "Any",
   "Or": "or",
+  "Range": "between",
   "SwitchVariablesNames": "Show column names",
   "true": "True",
   "false": "False",
@@ -42,5 +43,9 @@
   "AutocompleteSpinner_3Chars": "type at least 3 characters",
   "AutocompleteSpinner_Searching": "searching...",
   "AutocompleteSpinner_NoResults": "no results found",
-  "VirtuosoSearchHelp": "Type words your field should contain. Your input should not contain quotation marks. You can type an expression to match words starting by a sequence of 4 characters minimum, e.g., \"archiv*\".will match \"archives\", \"archival\", etc."
+  "VirtuosoSearchHelp": "Type words your field should contain. Your input should not contain quotation marks. You can type an expression to match words starting by a sequence of 4 characters minimum, e.g., \"archiv*\".will match \"archives\", \"archival\", etc.",
+  "NumberLabelBetween": "between",
+  "NumberLabelAnd": "and",
+  "NumberLabelHigherThan": "greater than",
+  "NumberLabelLowerThan": "lower than"
 }

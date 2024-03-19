@@ -6,6 +6,8 @@ import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { SelectAllValue } from "../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { I18n } from '../../settings/I18n';
+import AddUserInputBtn from '../buttons/AddUserInputBtn';
+import SparqlFactory from '../../generators/SparqlFactory';
 
 const factory = new DataFactory();
 
@@ -26,7 +28,13 @@ export class NumberWidgetValue implements WidgetValue {
 }
 
 export class NumberWidget extends AbstractWidget {
+  
   protected widgetValues: NumberWidgetValue[];
+  
+  minInput: JQuery<HTMLElement>;
+  maxInput: JQuery<HTMLElement>;
+  addValueBtn: AddUserInputBtn;
+  
   constructor(
     parentComponent: WidgetWrapper,
     startClassVal: SelectedVal,
@@ -46,33 +54,78 @@ export class NumberWidget extends AbstractWidget {
 
   render() {
     super.render();
-    let testSpan = $(
-      `<span>Hello this is number widget</span>'`
-    );
-    this.html.append(testSpan);
+    this.minInput = $(`<input type="number" size="7" id="input-from" />`);
+    this.html.append(this.minInput);
+
+    this.html.append(`&nbsp;${I18n.labels.NumberLabelAnd}&nbsp;`);
+
+    this.maxInput = $(`<input type="number" size="7" id="input-to" />`);
+    this.html.append(this.maxInput);
+    
+    this.addValueBtn = new AddUserInputBtn(
+      this,
+      I18n.labels.ButtonAdd,
+      this.#addValueBtnClicked
+    ).render();
 
     return this;
   }
+
+  #addValueBtnClicked = () => {
+    let numberWidgetValue = {
+        label: this.#getValueLabel(this.minInput.val().toString(), this.maxInput.val().toString()),
+        min: Number(this.minInput.val().toString()),
+        max: Number(this.maxInput.val().toString()),
+    };
+
+    numberWidgetValue = this.#checkInput(numberWidgetValue);
+    this.renderWidgetVal(this.parseInput(numberWidgetValue));
+  }
+
+  #checkInput(input: NumberWidgetValue["value"]): NumberWidgetValue["value"] {
+    if (input.min && input.max && (input.min > input.max)) throw Error('lower bou,d is bigger than upper bound!')
+    return input;
+  }
+
+  #getValueLabel = function (startLabel: string, stopLabel: string) {
+    let valueLabel = "";
+    if ((startLabel != "") && (stopLabel != "")) {
+      valueLabel = I18n.labels.NumberLabelBetween+' '+ startLabel +' '+I18n.labels.NumberLabelAnd+' '+ stopLabel ;
+    } else if (startLabel != "") {
+      valueLabel = I18n.labels.NumberLabelHigherThan+' '+ startLabel ;
+    } else if (stopLabel != "") {
+      valueLabel = I18n.labels.NumberLabelLowerThan+' '+ stopLabel ;
+    }
+
+    return valueLabel;
+  };
 
   parseInput(input: NumberWidgetValue["value"]): NumberWidgetValue {
     return new NumberWidgetValue(input);
    }
 
    /**
-    * Blocks if a value is selected and this is not the "all" special value
-    * @returns true
+    * @returns false
     */
    isBlockingObjectProp() {
-    return (
-      this.widgetValues.length == 1
-      &&
-      !(this.widgetValues[0] instanceof SelectAllValue)
-      &&
-      !((this.ParentComponent.ParentComponent.ParentComponent as EndClassGroup).isVarSelected())
-    );
+    return false;
    }
 
   getRdfJsPattern(): Pattern[] {
-    return [];
+    return [
+      SparqlFactory.buildFilterRangeDateOrNumber(
+        this.widgetValues[0].value.min?factory.literal(
+          String(this.widgetValues[0].value.min),
+          factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
+        ):null,
+        this.widgetValues[0].value.max?factory.literal(
+          String(this.widgetValues[0].value.max),
+          factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
+        ):null,
+        factory.variable(
+          this.getVariableValue(this.endClassVal)
+        )
+      )
+    ];
   }
 }

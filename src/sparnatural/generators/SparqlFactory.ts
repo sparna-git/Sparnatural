@@ -183,9 +183,9 @@ export default class SparqlFactory {
     } ;
   }
 
-  static buildFilterTime(
-      startDate: Literal,
-      endDate: Literal,
+  static buildFilterRangeDateOrNumber(
+      startDate: Literal|null,
+      endDate: Literal|null,
       variable: Variable
   ): Pattern {
       
@@ -229,6 +229,7 @@ export default class SparqlFactory {
       }
     
     }
+
 
   static buildTriple(
     subject: IriTerm | BlankTerm | VariableTerm | QuadTerm,

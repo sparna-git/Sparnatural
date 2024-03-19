@@ -164,6 +164,8 @@ class WidgetWrapper extends HTMLComponent {
       return I18n.labels.Select + " :";
     } else if (widgetType == Config.BOOLEAN_PROPERTY) {
       return "";
+    } else if (widgetType == Config.NUMBER_PROPERTY) {
+      return I18n.labels.Range + " :";
     } else {
       return I18n.labels.Find + " :";
     }

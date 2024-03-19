@@ -258,11 +258,11 @@ export class TimeDatePickerWidget extends AbstractWidget {
           factory.namedNode(endDateProp),
           exactDateProp != null?factory.namedNode(exactDateProp):null,
           factory.variable(this.getVariableValue(this.startClassVal))
-        ),
+        )
       ];
     } else {
       return [
-        SparqlFactory.buildFilterTime(
+        SparqlFactory.buildFilterRangeDateOrNumber(
           this.widgetValues[0].value.start?factory.literal(
             this.#formatSparqlDate(this.widgetValues[0].value.start),
             factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
@@ -274,7 +274,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
           factory.variable(
             this.getVariableValue(this.endClassVal)
           )
-        ),
+        )
       ];
     }    
   }

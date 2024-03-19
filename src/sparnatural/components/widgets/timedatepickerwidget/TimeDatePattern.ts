@@ -31,7 +31,7 @@ export const buildDateRangeOrExactDatePattern = (
           ]
         ),
         // exact date is within provided date range
-        SparqlFactory.buildFilterTime(
+        SparqlFactory.buildFilterRangeDateOrNumber(
           startDate,
           endDate,
           exactDateVarName
@@ -103,9 +103,9 @@ export const buildDateRangePattern = (
 		firstAlternative.patterns.push(bgp);
 
     // begin date is before given end date
-    firstAlternative.patterns.push(SparqlFactory.buildFilterTime(null, endDate, beginDateVarName));
+    firstAlternative.patterns.push(SparqlFactory.buildFilterRangeDateOrNumber(null, endDate, beginDateVarName));
     // end date is after given start date
-    firstAlternative.patterns.push(SparqlFactory.buildFilterTime(startDate, null, endDateVarName));
+    firstAlternative.patterns.push(SparqlFactory.buildFilterRangeDateOrNumber(startDate, null, endDateVarName));
 			
     // 2. case where the resource has only a start date
     let secondAlternative:GroupPattern = SparqlFactory.buildGroupPattern([]);
@@ -137,7 +137,7 @@ export const buildDateRangePattern = (
 
     secondAlternative.patterns.push(notExistsEndDate);
     // begin date is before given end date
-    secondAlternative.patterns.push(SparqlFactory.buildFilterTime(null, endDate, beginDateVarName));
+    secondAlternative.patterns.push(SparqlFactory.buildFilterRangeDateOrNumber(null, endDate, beginDateVarName));
     
     // 3. case where the resource has only a end date
     let thirdAlternative:GroupPattern = SparqlFactory.buildGroupPattern([]);
@@ -169,7 +169,7 @@ export const buildDateRangePattern = (
 
     thirdAlternative.patterns.push(notExistsBeginDate);
     // end date is after given start date
-    thirdAlternative.patterns.push(SparqlFactory.buildFilterTime(startDate, null, endDateVarName));
+    thirdAlternative.patterns.push(SparqlFactory.buildFilterRangeDateOrNumber(startDate, null, endDateVarName));
 
 
     return SparqlFactory.buildUnionPattern([firstAlternative, secondAlternative, thirdAlternative]); 
@@ -186,7 +186,7 @@ export const buildDateRangePattern = (
     ]);
 
     // end date is after given start date
-    var filter = SparqlFactory.buildFilterTime(startDate, null, endDateVarName);
+    var filter = SparqlFactory.buildFilterRangeDateOrNumber(startDate, null, endDateVarName);
 
     // if the resource has no end date, and has only a start date
     // then it necessarily overlaps with the provided open-ended range
@@ -204,7 +204,7 @@ export const buildDateRangePattern = (
       )
     ]);
     // begin date is before given end date
-    var filter = SparqlFactory.buildFilterTime(null, endDate, beginDateVarName);
+    var filter = SparqlFactory.buildFilterRangeDateOrNumber(null, endDate, beginDateVarName);
 
     return SparqlFactory.buildGroupPattern([bgp,filter]);
   }
