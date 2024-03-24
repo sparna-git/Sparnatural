@@ -65,6 +65,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
       Config.BOOLEAN_PROPERTY,
       Config.TREE_PROPERTY,
       Config.MAP_PROPERTY,
+      Config.NUMBER_PROPERTY,
     ];
 
     // only return the type if it is a known type
