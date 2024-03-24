@@ -7,6 +7,7 @@ import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { RdfStore } from "rdf-stores";
 import { Term } from "@rdfjs/types";
+import { StoreModel } from "../StoreModel";
 
 const factory = new DataFactory();
 
@@ -18,13 +19,14 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
     getLabel(): string {
         // first try to read an rdfs:label
-        let label = this._readAsLiteralWithLang(factory.namedNode(this.uri), RDFS.LABEL, this.lang);
-        // no rdfs:label present, read the local part of the URI
-        if(!label) {
-          label = SHACLSpecificationProvider.getLocalName(this.uri) as string;
+        let labels = this.graph.readPropertyInLang(factory.namedNode(this.uri), RDFS.LABEL, this.lang);
+        
+        if(labels.length > 0) {
+            return labels[0].value;
+        } else {
+            // no rdfs:label present, read the local part of the URI
+            return StoreModel.getLocalName(this.uri) as string;
         }
-  
-        return label;
       }
     
     getConnectingProperties(range: string): string[] {
@@ -90,7 +92,9 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var items: string[] = [];
 
         // read all sh:property
-        let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+        let propShapes = 
+            this.graph.readProperty(factory.namedNode(this.uri), SH.PROPERTY)
+            .map(node => node.value);
                 
         // add all properties from node shapes of superclasses
         let superClasses:Term[] = this.getSuperClasses();
@@ -125,10 +129,10 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
      * @returns true if sh:nodeKind = sh:Literal, or if sh:datatype is present, or if sh:languageIn is present
      */
     isLiteralEntity(): boolean {
-        var hasNodeKindLiteral = this._hasTriple(factory.namedNode(this.uri), SH.NODE_KIND, SH.LITERAL);
-        var hasDatatype = this._hasTriple(factory.namedNode(this.uri), SH.DATATYPE, null);
-        var hasLanguageIn = this._hasTriple(factory.namedNode(this.uri), SH.LANGUAGE_IN, null);
-        var hasUniqueLang = this._hasTriple(factory.namedNode(this.uri), SH.UNIQUE_LANG, null);
+        var hasNodeKindLiteral = this.graph.hasTriple(factory.namedNode(this.uri), SH.NODE_KIND, SH.LITERAL);
+        var hasDatatype = this.graph.hasTriple(factory.namedNode(this.uri), SH.DATATYPE, null);
+        var hasLanguageIn = this.graph.hasTriple(factory.namedNode(this.uri), SH.LANGUAGE_IN, null);
+        var hasUniqueLang = this.graph.hasTriple(factory.namedNode(this.uri), SH.UNIQUE_LANG, null);
 
         return hasNodeKindLiteral || hasDatatype || hasLanguageIn || hasUniqueLang;
     }
@@ -140,15 +144,15 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     /**
      * @returns a property labelled with dash:propertyRole = dash:LabelRole
      */
-    getDefaultLabelProperty(): string | null {
+    getDefaultLabelProperty(): string | undefined {
         var items: any[] = [];
 
         // read all properties
-        let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+        let propShapes = this.graph.readProperty(factory.namedNode(this.uri), SH.PROPERTY);
 
         propShapes.forEach(ps => {
             if (this.store.getQuads(
-                factory.namedNode(ps),
+                ps,
                 DASH.PROPERTY_ROLE,
                 DASH.LABEL_ROLE,
                 null
@@ -157,7 +161,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             }
         });
 
-        return items.length>0?items[0]:null;
+        return items.length>0?items[0]:undefined;
     }
 
     /**
@@ -169,7 +173,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         // then retrieve super classes of those classes
         let superClasses:Term[] = [];
         targetClasses.forEach(tc => {
-            let currentSuperClasses = this._readAsRdfNode(tc, RDFS.SUBCLASS_OF);
+            let currentSuperClasses = this.graph.readProperty(tc, RDFS.SUBCLASS_OF);
             superClasses.push(...currentSuperClasses);
         });
         return superClasses;
@@ -180,7 +184,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
      */
     #getSuperClassesRec(n3store:RdfStore, classNode:Term): Term[] {
         var items: Term[] = [];
-        let superClasses = this._readAsResource(classNode, RDFS.SUBCLASS_OF);
+        let superClasses = this.graph.readProperty(classNode, RDFS.SUBCLASS_OF);
         items.push(...superClasses);
         superClasses.forEach(sc => {
             items.push(...this.#getSuperClassesRec(n3store, sc));
@@ -208,9 +212,9 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
      */
     #isNodeShapeAndClass():boolean {
         return (
-            this._hasTriple(factory.namedNode(this.uri), RDF.TYPE, RDFS.CLASS)
+            this.graph.hasTriple(factory.namedNode(this.uri), RDF.TYPE, RDFS.CLASS)
             &&
-            this._hasTriple(factory.namedNode(this.uri), RDF.TYPE, SH.NODE_SHAPE)
+            this.graph.hasTriple(factory.namedNode(this.uri), RDF.TYPE, SH.NODE_SHAPE)
         );
     }
 
@@ -218,7 +222,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
      * @returns all values of sh:targetClass on this entity, as RDF Terms
      */
     getShTargetClass():Term[] {
-        return this._readAsRdfNode(factory.namedNode(this.uri), SH.TARGET_CLASS);
+        return this.graph.readProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
     }
 
 }
@@ -258,8 +262,8 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
         return false;
     }
 
-    getDefaultLabelProperty(): string | null {
-        return null;
+    getDefaultLabelProperty(): string | undefined {
+        return undefined;
     }
 
     getId(): string {
@@ -270,17 +274,17 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
         return this.label;
     }
 
-    getOrder(): string|null {
-        return null;
+    getOrder(): string|undefined {
+        return undefined;
     }
 
-    getTooltip(): string | null {
-        return null;
+    getTooltip(): string | undefined {
+        return undefined;
     }
 
-    getColor(): string | null {
+    getColor(): string | undefined {
         // return "slategray";
-        return null;
+        return undefined;
     }
 
     getDatasource(): any {
@@ -338,23 +342,23 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "Other",
                 function(n3store:RdfStore, shapeUri:any):boolean {
                     // this is in range if nothing else is in range
-                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+                    let graph:StoreModel = new StoreModel(n3store);
                     return (
-                        !reader._hasTriple(factory.namedNode(shapeUri), SH.NODE, null) 
+                        !graph.hasTriple(factory.namedNode(shapeUri), SH.NODE, null) 
                         &&
-                        !reader._hasTriple(factory.namedNode(shapeUri), SH.CLASS, null) 
+                        !graph.hasTriple(factory.namedNode(shapeUri), SH.CLASS, null) 
                         &&
-                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE) 
+                        !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE) 
                         &&
-                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE_TIME) 
+                        !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE_TIME) 
                         &&
-                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.GYEAR)
+                        !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.GYEAR)
                         &&
-                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, GEOSPARQL.WKT_LITERAL)
+                        !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, GEOSPARQL.WKT_LITERAL)
                         &&
-                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.STRING) 
+                        !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.STRING) 
                         &&
-                        !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, RDF.LANG_STRING) 
+                        !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, RDF.LANG_STRING) 
                     );
                 }
             )
@@ -367,13 +371,13 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "fa-solid fa-calendar",
                 "Date",
                 function(n3store:RdfStore, shapeUri:any):boolean {
-                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+                    let graph:StoreModel = new StoreModel(n3store);
                     return (
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE) 
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE) 
                         ||
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE_TIME) 
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE_TIME) 
                         ||
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.GYEAR)
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.GYEAR)
                     );
                 }
             )
@@ -386,8 +390,8 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "fa-solid fa-map-location-dot",
                 "Location",
                 function(n3store:RdfStore, shapeUri:any):boolean {
-                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
-                    return reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, GEOSPARQL.WKT_LITERAL)
+                    let graph:StoreModel = new StoreModel(n3store);
+                    return graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, GEOSPARQL.WKT_LITERAL)
                 }
             )
         )
@@ -399,20 +403,20 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "fa-solid fa-font",
                 "Text",
                 function(n3store:RdfStore, shapeUri:any):boolean {
-                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+                    let graph:StoreModel = new StoreModel(n3store);
                     return (
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.STRING) 
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.STRING) 
                         ||
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, RDF.LANG_STRING) 
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, RDF.LANG_STRING) 
                         ||
                         // no datatype but we know it is a Literal
                         (
-                            reader._hasTriple(factory.namedNode(shapeUri), SH.NODE_KIND, SH.LITERAL)
+                            graph.hasTriple(factory.namedNode(shapeUri), SH.NODE_KIND, SH.LITERAL)
                             &&
                             (
-                                !reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, null)
+                                !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, null)
                                 ||
-                                !reader._readAsSingleLiteral(factory.namedNode(shapeUri), SH.DATATYPE)?.startsWith("http://www.w3.org/2001/XMLSchema#")
+                                !graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE)?.value.startsWith("http://www.w3.org/2001/XMLSchema#")
                             )
                         )
                     );
@@ -427,17 +431,17 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "fa-solid fa-1",
                 "Number",
                 function(n3store:RdfStore, shapeUri:any):boolean {
-                    let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+                    let graph:StoreModel = new StoreModel(n3store);
                     return (
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INT)
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INT)
                         ||
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INTEGER)
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INTEGER)
                         ||
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DECIMAL)
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DECIMAL)
                         ||
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.FLOAT) 
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.FLOAT) 
                         ||
-                        reader._hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DOUBLE) 
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DOUBLE) 
                     );
                 }
             )

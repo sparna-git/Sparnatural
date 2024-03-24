@@ -4,6 +4,7 @@ var Readable = require('stream').Readable
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from 'rdf-stores';
 import { NamedNode, Quad, Stream, Term } from "@rdfjs/types";
+import { StoreModel } from './StoreModel';
 
 const factory = new DataFactory();
 
@@ -31,10 +32,12 @@ export const RDFS = {
 export class BaseRDFReader {
     protected lang: string;
     protected store: RdfStore;
+    protected graph: StoreModel;
 
     constructor(n3store: RdfStore, lang: string) {
         this.store = n3store;
         this.lang = lang;
+        this.graph = new StoreModel(n3store);
     }
 
     static buildStoreFromString(configData:string, filePath:string, callback: any) {
@@ -97,39 +100,6 @@ export class BaseRDFReader {
         callback(store);
       })
   }
-
-    static buildStoreBak(files: Map<string,string>, callback: any) {
-        // Create a new store with default settings
-        // see https://www.npmjs.com/package/rdf-stores
-        const store:RdfStore = RdfStore.createDefault();
-
-        let promises = new Array<Promise<RdfStore>>();
-        for(let key of files.keys()) {
-          console.log("Importing in store '" + key + "'");
-          let quadStream: Stream<Quad> = BaseRDFReader.#toQuadStream(files.get(key),key);
-          
-          let p:Promise<RdfStore> = new Promise((resolve, reject) => store.import(quadStream)
-            .on('error', reject)
-            .once('end', () => resolve(store)));
-          
-          promises.push(p);
-        }
-
-        // when all done, call callback
-        Promise.all(promises).then((values) => {
-          console.log(
-            "Specification store populated with " +
-              store.countQuads(
-                null,
-                null,
-                null,
-                null
-              ) +
-              " triples."
-          );
-          callback(store);
-        })
-    }
 
       static #toQuadStream(string:any, filePath:any) {
         // turn input string into a stream
@@ -217,20 +187,21 @@ export class BaseRDFReader {
     // read datasource characteristics
 
     // Alternative 1 : read optional queryString
-    var queryStrings = this._readAsLiteral(
+    var queryStrings = this.graph.readProperty(
       factory.namedNode(datasourceUri),
       factory.namedNode(Datasources.QUERY_STRING)
-    );
+    ).map(n=>n.value);
 
     if (queryStrings.length > 0) {
       datasource.queryString = queryStrings[0];
     }
 
     // Alternative 2 : query template + label path
-    var queryTemplates = this._readAsResource(
+    var queryTemplates = this.graph.readProperty(
       factory.namedNode(datasourceUri),
       factory.namedNode(Datasources.QUERY_TEMPLATE)
-    );
+    ).map(n=>n.value);
+
     if (queryTemplates.length > 0) {
       var theQueryTemplate = queryTemplates[0];
       var knownQueryTemplate =
@@ -240,10 +211,10 @@ export class BaseRDFReader {
         datasource.queryTemplate = knownQueryTemplate;
       } else {
         // 2.2 Unknown, read the query string on the query template
-        var queryStrings = this._readAsResource(
+        var queryStrings = this.graph.readProperty(
           factory.namedNode(theQueryTemplate),
           factory.namedNode(Datasources.QUERY_STRING)
-        );
+        ).map(n=>n.value);
         if (queryStrings.length > 0) {
           var queryString = queryStrings[0];
           datasource.queryTemplate =
@@ -254,53 +225,56 @@ export class BaseRDFReader {
       }
 
       // labelPath
-      var labelPaths = this._readAsLiteral(
+      var labelPaths = this.graph.readProperty(
         factory.namedNode(datasourceUri),
         factory.namedNode(Datasources.LABEL_PATH)
-      );
+      ).map(n=>n.value);
       if (labelPaths.length > 0) {
         datasource.labelPath = labelPaths[0];
       }
 
       // labelProperty
-      var labelProperties = this._readAsResource(
+      var labelProperties = this.graph.readProperty(
         factory.namedNode(datasourceUri),
         factory.namedNode(Datasources.LABEL_PROPERTY)
-      );
+      ).map(n=>n.value);
       if (labelProperties.length > 0) {
         datasource.labelProperty = labelProperties[0];
       }
 
       // childrenPath
-      var childrenPaths = this._readAsLiteral(
+      var childrenPaths = this.graph.readProperty(
         factory.namedNode(datasourceUri),
         factory.namedNode(Datasources.CHILDREN_PATH)
-      );
+      ).map(n=>n.value);
       if (childrenPaths.length > 0) {
         datasource.childrenPath = childrenPaths[0];
       }
 
       // childrenProperty
-      var childrenProperties = this._readAsResource(
+      var childrenProperties = this.graph.readProperty(
         factory.namedNode(datasourceUri),
         factory.namedNode(Datasources.CHILDREN_PROPERTY)
-      );
+      ).map(n=>n.value);
       if (childrenProperties.length > 0) {
         datasource.childrenProperty = childrenProperties[0];
       }
     }
 
     // read optional sparqlEndpointUrl
-    var sparqlEndpointUrls = this._readAsLiteral(
+    var sparqlEndpointUrls = this.graph.readProperty(
       factory.namedNode(datasourceUri),
       factory.namedNode(Datasources.SPARQL_ENDPOINT_URL)
-    );
+    ).map(n=>n.value);
     if (sparqlEndpointUrls.length > 0) {
       datasource.sparqlEndpointUrl = sparqlEndpointUrls[0];
     }
 
     // read optional noSort
-    var noSorts = this._readAsLiteral(factory.namedNode(datasourceUri), factory.namedNode(Datasources.NO_SORT));
+    var noSorts = this.graph.readProperty(
+      factory.namedNode(datasourceUri),
+      factory.namedNode(Datasources.NO_SORT)
+    ).map(n=>n.value);
     if (noSorts.length > 0) {
       datasource.noSort = noSorts[0] === "true";
     }
@@ -308,169 +282,19 @@ export class BaseRDFReader {
     return datasource;
   }
 
-
-  /**
-   * Reads the given property on an entity, and return values as an array
-   **/
-  _readAsResource(uri: Term, property: Term) {
-    return this.store
-      .getQuads(uri, property, null, null)
-      .map((quad: { object: { value: any } }) => quad.object.value);
-  }
-
-  /**
-   * Reads the given property on an entity, and returns the first value found, or null if not found
-   **/
-  _readAsSingleResource(uri: Term, property: Term) {
-    var values = this._readAsResource(uri, property);
-
-    if (values.length > 0) {
-      return values[0];
-    }
-
-    return null;
-  }
-
-  _readAsLiteral(uri: Term, property: Term) {
-    return this.store
-      .getQuads(uri, property, null, null)
-      .map((quad: { object: { value: any } }) => quad.object.value);
-  }
-
-  _readAsSingleLiteral(uri: Term, property: Term) {
-    var values = this._readAsLiteral(uri, property);
-    if (values.length == 0) {
-      return undefined;
-    } else {
-      return values[0];
-    }
-  }
-
-  _readAsLiteralWithLang(
-    uri: Term,
-    property: Term,
-    lang: string,
-    defaultToNoLang = true
-  ) {
-    var values = this.store
-      .getQuads(uri, property, null, null)
-      .filter((quad: any) => quad.object.language == lang)
-      .map((quad: { object: { value: any } }) => quad.object.value);
-
-    if (values.length == 0 && defaultToNoLang) {
-      values = this.store
-        .getQuads(uri, property, null, null)
-        .filter((quad: any) => quad.object.language == "")
-        .map((quad: { object: { value: any } }) => quad.object.value);
-    }
-
-    return values.join(", ");
-  }
-
-  _readAsRdfNode(rdfNode: Term, property: Term):Term[] {
-    return this.store
-      .getQuads(rdfNode, property, null, null)
-      .map((quad: { object: any }) => quad.object);
-  }
-
-  _hasProperty(rdfNode: Term, property: Term) {
-    return this._hasTriple(rdfNode, property, null);
-  }
-
-  _hasTriple(rdfNode: Term, property: Term, value:Term|null):boolean {
-    return (
-      this.store.getQuads(
-        rdfNode,
-        property,
-        value,
-        null
-      ).length > 0
-    );
-  }
-
    /**
    * Reads rdf:type(s) of an entity, and return them as an array
    **/
     _readRdfTypes(uri: Term) {
-        return this._readAsResource(uri, RDF.TYPE);
+        return this.graph.readProperty(uri, RDF.TYPE);
     }
 
-    _findNodesWithPredicate(property: Term,rdfNode: Term):Term[] {
-      return this.store
-        .getQuads(null, property, rdfNode, null)
-        .map(quad => quad.subject);
+    _pushIfNotExist(item: any, items: any[]) {
+      if (items.indexOf(item) < 0) {
+        items.push(item);
+      }
+  
+      return items;
     }
-
-    /****** LIST HANDLING ********/
-
-    _listContains(rdfNode: any, propertyList: any, property:any, value:any) {
-      let found:boolean = false;
-      let listContent:any[] = this._readAsList(rdfNode, propertyList);
-      listContent.forEach(node => {
-        if(this._hasTriple(node, property, value)) found=true;
-      });
-      return found;
-    }
-
-    /**
-     * returns RDFTerms
-     */
-    _readAsList(rdfNode: any, property: any) {
-      let result:any[] = new Array<any>();
-      this.store
-        .getQuads(rdfNode, property, null, null)
-        .map((quad: { object: any }) => {
-          result.push(...this._readList_rec(quad.object))
-        });
-      return result;
-    }
-
-    /**
-     * returns RDFTerms
-     */
-    _readList_rec(list: any) {
-        var result = this.store
-          .getQuads(list, RDF.FIRST, null, null)
-          .map((quad: { object: { value: any } }) => quad.object);
-    
-        var subLists = this._readAsRdfNode(list, RDF.REST);
-        if (subLists.length > 0) {
-          result = result.concat(this._readList_rec(subLists[0]));
-        }
-    
-        return result;
-      }
-    
-      _readRootList(listId: any): any {
-        var root = this._readSuperList(listId);
-        if (root == null) {
-          return listId;
-        } else {
-          return this._readRootList(root);
-        }
-      }
-    
-      _readSuperList(listId: any) {
-        const propertyQuads = this.store.getQuads(
-          null,
-          RDF.REST,
-          listId,
-          null
-        );
-    
-        if (propertyQuads.length > 0) {
-          return propertyQuads[0].subject.value;
-        } else {
-          return null;
-        }
-      }
-
-      _pushIfNotExist(item: any, items: any[]) {
-        if (items.indexOf(item) < 0) {
-          items.push(item);
-        }
-    
-        return items;
-      }
 
 }

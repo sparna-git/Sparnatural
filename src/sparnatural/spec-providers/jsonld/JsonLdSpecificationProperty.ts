@@ -186,15 +186,15 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
     return false;
   }
 
-  getBeginDateProperty(): string | null {
+  getBeginDateProperty(): string | undefined {
     return this._readValue(this.id, "beginDateProperty");
   }
 
-  getEndDateProperty(): string | null {
+  getEndDateProperty(): string | undefined {
     return this._readValue(this.id, "endDateProperty");
   }
 
-  getExactDateProperty(): string | null {
+  getExactDateProperty(): string | undefined {
     return this._readValue(this.id, "exactDateProperty");
   }
 
@@ -216,10 +216,9 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
     return false;
   }
 
-  getServiceEndpoint(): string | null {
+  getServiceEndpoint(): string | undefined {
     const serviceId = this._readValue(this.id,"sparqlService")
     if (serviceId) return this._readValue(serviceId,"endpoint")
-    return null
   }
 
   isLogicallyExecutedAfter(): boolean {

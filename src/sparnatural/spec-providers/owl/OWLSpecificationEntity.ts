@@ -101,8 +101,8 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
           );
     }
 
-    getDefaultLabelProperty(): string | null {
-        return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.DEFAULT_LABEL_PROPERTY));
+    getDefaultLabelProperty(): string | undefined {
+        return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.DEFAULT_LABEL_PROPERTY))?.value;
     }
 
     #_isSparnaturalClass(classUri: string) {
@@ -236,7 +236,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
           .map((quad: { subject: any }) => quad.subject);
     
         for (const aListContainingThisClass of listsContainingThisClass) {
-          var rootList = this._readRootList(aListContainingThisClass);
+          var rootList = this.graph.readRootList(aListContainingThisClass);
     
           // now read the union pointing to this list
           var unionPointingToThisList = this.store

@@ -184,30 +184,30 @@ export default class SparqlFactory {
   }
 
   static buildFilterRangeDateOrNumber(
-      startDate: Literal|null,
-      endDate: Literal|null,
+      rangeBegin: Literal|null,
+      rangeEnd: Literal|null,
       variable: Variable
   ): Pattern {
       
       var filters = new Array ;
       
-      if (startDate != null) {
+      if (rangeBegin != null) {
         filters.push( {
           type: "operation",
           operator: ">=",
           args: [
             variable,
-            startDate
+            rangeBegin
           ]
         }) ;
       }
-      if (endDate != null) {
+      if (rangeEnd != null) {
         filters.push( {
           type: "operation",
           operator: "<=",
           args: [
             variable,
-            endDate
+            rangeEnd
           ]
         }) ;
       }

@@ -22,32 +22,32 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
         return this.uri;
     }
 
-    getTooltip(): string | null {
-      let tooltip = this._readAsLiteralWithLang(factory.namedNode(this.uri), VOLIPI.MESSAGE, this.lang);
+    getTooltip(): string | undefined {
+      let tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), VOLIPI.MESSAGE, this.lang)?.value;
       if(!tooltip) {
         // try with sh:description
-        tooltip = this._readAsLiteralWithLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang);
+        tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
       }
       return tooltip;
     }
 
-    getColor(): string | null {
-      return this._readAsSingleLiteral(factory.namedNode(this.uri), VOLIPI.COLOR);
+    getColor(): string | undefined {
+      return this.graph.readSingleProperty(factory.namedNode(this.uri), VOLIPI.COLOR)?.value;
     }
 
 
     getIcon(): string {
-      var faIcon = this._readAsLiteral(
+      var faIcon = this.graph.readProperty(
         factory.namedNode(this.uri),
         VOLIPI.ICON_NAME
       );
       
       if (faIcon.length > 0) {
-        return SHACLSpecificationEntry.buildIconHtml(faIcon[0]);
+        return SHACLSpecificationEntry.buildIconHtml(faIcon[0].value);
       } else {
-        var icons = this._readAsLiteral(factory.namedNode(this.uri), VOLIPI.ICON);
+        var icons = this.graph.readProperty(factory.namedNode(this.uri), VOLIPI.ICON);
         if (icons.length > 0) {
-          return icons[0];
+          return icons[0].value;
         } else {
           // this is ugly, just so it aligns with other entries having an icon
           return "<span style='font-size: 175%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
@@ -71,8 +71,8 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
       return "";
     }
 
-    getOrder() {
-        let order = this._readAsSingleLiteral(factory.namedNode(this.uri), SH.ORDER);
+    getOrder(): string | undefined {
+        let order = this.graph.readSingleProperty(factory.namedNode(this.uri), SH.ORDER)?.value;
         return order
     }
 

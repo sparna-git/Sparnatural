@@ -124,7 +124,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
               this._pushIfNotExist(classId, items);
             } else {
               // read union content - /!\ this returns RDFTerm
-              var classesInUnion = this._readAsList(classAsRDFTerm, OWL.UNION_OF);
+              var classesInUnion = this.graph.readAsList(classAsRDFTerm, OWL.UNION_OF);
               for (const aUnionClass of classesInUnion) {
                 this._pushIfNotExist(aUnionClass.value, items);
               }
@@ -317,7 +317,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
    * Reads config:order of an entity and returns it, or null if not set
    **/
   _readOrder(uri: any) {
-    return this._readAsSingleLiteral(uri, factory.namedNode(Config.ORDER));
+    return this.graph.readSingleProperty(uri, factory.namedNode(Config.ORDER))?.value;
   }
 
 
@@ -325,14 +325,14 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
   /*** Handling of UNION classes ***/
 
   _readUnionContent(classUri: any) {
-    var lists = this._readAsRdfNode(factory.namedNode(classUri), OWL.UNION_OF);
+    var lists = this.graph.readProperty(factory.namedNode(classUri), OWL.UNION_OF);
     if (lists.length > 0) {
-      return this._readList_rec(lists[0]);
+      return this.graph.readListContent(lists[0]);
     }
   }
 
   _isUnionClass(classUriOrBNodeIdentifier: Term) {
-    return this._hasProperty(classUriOrBNodeIdentifier, OWL.UNION_OF);
+    return this.graph.hasProperty(classUriOrBNodeIdentifier, OWL.UNION_OF);
   }
 
   /*** / Handling of UNION classes ***/

@@ -14,7 +14,7 @@ interface ISpecificationEntity extends ISpecificationEntry {
    * @deprecated
    */
   isRemoteEntity(): boolean;
-  getDefaultLabelProperty():string|null;
+  getDefaultLabelProperty():string|undefined;
 
 }
 export default ISpecificationEntity;

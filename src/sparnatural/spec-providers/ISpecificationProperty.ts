@@ -11,14 +11,14 @@ interface ISpecificationProperty extends ISpecificationEntry {
 
   getRange():Array<string>;
   
-  getBeginDateProperty(): string|null;
-  getEndDateProperty(): string|null;
-  getExactDateProperty(): string|null;
+  getBeginDateProperty(): string|undefined;
+  getEndDateProperty(): string|undefined;
+  getExactDateProperty(): string|undefined;
   
   isEnablingNegation(): boolean;
   isEnablingOptional(): boolean;
 
-  getServiceEndpoint():string | null;
+  getServiceEndpoint():string | undefined;
   isLogicallyExecutedAfter():boolean;
 
   getDatasource(): any;

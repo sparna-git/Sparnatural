@@ -10,6 +10,7 @@ import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
 import { Quad } from "@rdfjs/types/data-model";
+import { StoreModel } from "../StoreModel";
 
 const factory = new DataFactory();
 
@@ -21,14 +22,15 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
     getLabel(): string {
       // first try to read an sh:name
-      let label = this._readAsLiteralWithLang(factory.namedNode(this.uri), SH.NAME, this.lang);
+      let label = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.NAME, this.lang)?.value;
+
       // no sh:name present, display the sh:path without prefixes
       if(!label) {
         label = SHACLSpecificationProvider.pathToSparql(this.store.getQuads(factory.namedNode(this.uri),SH.PATH, null, null)[0].object, this.store, true);
       }      
       // or try to read the local part of the URI, but should not happen
       if(!label) {
-        label = SHACLSpecificationProvider.getLocalName(this.uri) as string;
+        label = StoreModel.getLocalName(this.uri) as string;
       }
 
       return label;
@@ -46,13 +48,13 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         }
 
         var shapeUri:string|null = null;
-        var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
+        var orMembers = this.graph.readAsList(factory.namedNode(this.uri), SH.OR);
         orMembers?.forEach(m => {
           if(rangeEntity.isRangeOf(this.store, m.id)) {
             shapeUri = m.id;
           }
           // recurse one level more
-          var orOrMembers = this._readAsList(m, SH.OR);
+          var orOrMembers = this.graph.readAsList(m, SH.OR);
           orOrMembers?.forEach(orOrMember => {
             if(rangeEntity.isRangeOf(this.store, orOrMember.id)) {
               shapeUri = orOrMember.id;
@@ -95,14 +97,12 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
           highest = currentWidget;
         }        
       }
-      console.log("default property type")
-      console.log(highest)
       return highest.getUri();
     }
 
     omitClassCriteria(): boolean {
       // omits the class criteria iff the property shape is an sh:IRI, but with no sh:class or no sh:node
-      var hasNodeKindIri = this._hasTriple(factory.namedNode(this.uri), SH.NODE_KIND, SH.IRI);
+      var hasNodeKindIri = this.graph.hasTriple(factory.namedNode(this.uri), SH.NODE_KIND, SH.IRI);
 
       if(hasNodeKindIri) {
         return (this.#getShClassAndShNodeRange().length == 0);
@@ -115,11 +115,11 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
      * A property is multilingual if its datatype points to rdf:langString
      */
     isMultilingual(): boolean {
-      return this._hasTriple(factory.namedNode(this.uri), SH.DATATYPE, RDF.LANG_STRING)
+      return this.graph.hasTriple(factory.namedNode(this.uri), SH.DATATYPE, RDF.LANG_STRING)
     }
 
     isDeactivated(): boolean {
-      return this._hasTriple(factory.namedNode(this.uri), SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN));
+      return this.graph.hasTriple(factory.namedNode(this.uri), SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN));
     }
 
     /**
@@ -142,7 +142,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
       // still nothing, look on the sh:or members
       if(classes.length == 0) {
-        var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
+        var orMembers = this.graph.readAsList(factory.namedNode(this.uri), SH.OR);
         
         orMembers?.forEach(m => {
           // read sh:class / sh:node
@@ -161,7 +161,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
           // still nothing, recurse one level more
           if(orClasses.length == 0) {
-            var orOrMembers = this._readAsList(m, SH.OR);
+            var orOrMembers = this.graph.readAsList(m, SH.OR);
             orOrMembers?.forEach(orOrMember => {
               // read sh:class / sh:node
               var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember.id);
@@ -204,7 +204,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       var classes: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, this.uri);
 
       // read sh:or content
-      var orMembers = this._readAsList(factory.namedNode(this.uri), SH.OR);
+      var orMembers = this.graph.readAsList(factory.namedNode(this.uri), SH.OR);
       orMembers?.forEach(m => {
         classes.push(...SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.id));
       });
@@ -287,43 +287,38 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       );
     }
 
-    getBeginDateProperty(): string | null {
-      return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.BEGIN_DATE_PROPERTY));
+    getBeginDateProperty(): string | undefined {
+      return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.BEGIN_DATE_PROPERTY))?.value;
     }
   
-    getEndDateProperty(): string | null {
-      return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.END_DATE_PROPERTY));
+    getEndDateProperty(): string | undefined {
+      return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.END_DATE_PROPERTY))?.value;
     }
   
-    getExactDateProperty(): string | null {
-      return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.EXACT_DATE_PROPERTY));
+    getExactDateProperty(): string | undefined {
+      return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.EXACT_DATE_PROPERTY))?.value;
     }
   
     isEnablingNegation(): boolean {
       return !(
-        this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_NEGATION)) == "false"
+        this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_NEGATION))?.value == "false"
       );
     }
   
     isEnablingOptional(): boolean {
       return !(
-        this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_OPTIONAL)) == "false"
+        this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_OPTIONAL))?.value == "false"
       );
     }
   
-    getServiceEndpoint(): string | null {
-      const service = this._readAsSingleResource(factory.namedNode(this.uri),factory.namedNode(Config.SPARQL_SERVICE));
+    getServiceEndpoint(): string | undefined {
+      const service = this.graph.readSingleProperty(factory.namedNode(this.uri),factory.namedNode(Config.SPARQL_SERVICE));
       if(service) {
-        const endpoint = this._readAsSingleResource(service,factory.namedNode(Config.ENDPOINT));
-        if (endpoint) {
-          return endpoint;
-        } 
-      }    
-      return null;
+        return this.graph.readSingleProperty(service,factory.namedNode(Config.ENDPOINT))?.value;
+      }
     }
   
     isLogicallyExecutedAfter(): boolean {
-      var executedAfter = this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"));
-      return executedAfter;
+      return this.graph.hasTriple(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"), null);
     }
 }

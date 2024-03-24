@@ -5,6 +5,7 @@ import { BaseRDFReader, RDF } from "../BaseRDFReader";
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { RdfStore } from "rdf-stores";
 import { Quad_Subject } from "@rdfjs/types/data-model";
+import { StoreModel } from "../StoreModel";
 
 const factory = new DataFactory();
 
@@ -86,13 +87,14 @@ export class DatePickerWidget {
     }
 
     score(propertyShape:string, n3store: RdfStore):number {
-        let reader:BaseRDFReader = new BaseRDFReader(n3store, "en");
+        let graph:StoreModel = new StoreModel(n3store);
 
         let hasDateOrDateTimePredicate = function(rdfNode: any) {
             if(
-            reader._hasTriple(rdfNode, SH.DATATYPE, XSD.DATE) 
-            || 
-            reader._hasTriple(rdfNode, SH.DATATYPE, XSD.DATE_TIME)) {
+                graph.hasTriple(rdfNode, SH.DATATYPE, XSD.DATE) 
+                || 
+                graph.hasTriple(rdfNode, SH.DATATYPE, XSD.DATE_TIME)
+            ) {
                 return true;
             } else {
                 return false;

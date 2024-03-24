@@ -9,12 +9,12 @@ export default interface ISpecificationEntry {
     getId():string;
 
     getLabel(): string;
-    getTooltip(): string|null;
+    getTooltip(): string|undefined;
 
     getIcon(): string;
-    getHighlightedIcon(): string;
+    getHighlightedIcon(): string|undefined;
 
-    getColor(): string|null;
+    getColor(): string|undefined;
 
-    getOrder(): string|null;
+    getOrder(): string|undefined;
 }

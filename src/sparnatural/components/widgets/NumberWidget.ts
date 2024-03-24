@@ -14,8 +14,8 @@ const factory = new DataFactory();
 export class NumberWidgetValue implements WidgetValue {
   value: {
     label: string;
-    min: number;
-    max: number,
+    min: number|undefined;
+    max: number|undefined,
   }
 
   key():string {
@@ -74,11 +74,12 @@ export class NumberWidget extends AbstractWidget {
   #addValueBtnClicked = () => {
     let numberWidgetValue = {
         label: this.#getValueLabel(this.minInput.val().toString(), this.maxInput.val().toString()),
-        min: Number(this.minInput.val().toString()),
-        max: Number(this.maxInput.val().toString()),
+        min: (this.minInput.val() != "")?Number(this.minInput.val().toString()):undefined,
+        max: (this.maxInput.val() != "")?Number(this.maxInput.val().toString()):undefined,
     };
 
     numberWidgetValue = this.#checkInput(numberWidgetValue);
+    console.log(numberWidgetValue)
     this.renderWidgetVal(this.parseInput(numberWidgetValue));
   }
 
@@ -114,12 +115,12 @@ export class NumberWidget extends AbstractWidget {
   getRdfJsPattern(): Pattern[] {
     return [
       SparqlFactory.buildFilterRangeDateOrNumber(
-        this.widgetValues[0].value.min?factory.literal(
-          String(this.widgetValues[0].value.min),
+        (this.widgetValues[0].value.min != undefined)?factory.literal(
+          this.widgetValues[0].value.min.toString(),
           factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
         ):null,
-        this.widgetValues[0].value.max?factory.literal(
-          String(this.widgetValues[0].value.max),
+        (this.widgetValues[0].value.max != undefined)?factory.literal(
+          this.widgetValues[0].value.max.toString(),
           factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
         ):null,
         factory.variable(

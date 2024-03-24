@@ -45,13 +45,11 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
         return "";
     }
 
-    getColor(): string|null {
+    getColor(): string|undefined {
       var item = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
       if (item !== null) {
         return item["color"];
       }
-  
-      return null;
   }
 
     getIcon(): string {
@@ -86,8 +84,6 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
     if (theObject !== null && theObject[key]) {
       return theObject[key];
     }
-
-    return null;
   };
 
   protected _sortItemsByIndex(items: any[]) {

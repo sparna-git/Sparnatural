@@ -166,7 +166,7 @@ export default class WhereBuilder{
         // create a SERVICE clause if needed
         const sparqlService = this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected()).getServiceEndpoint()
         let servicePtrn = null;
-        if(this.#grpWrapper.optionState === OptionTypes.SERVICE || (sparqlService != null)){
+        if(this.#grpWrapper.optionState === OptionTypes.SERVICE || sparqlService ){
             const endpoint = factory.namedNode(sparqlService)
             // to be on the safe side : when rollback an endclass group, we may come here with only the start class group criteria
             // and nothing in this array

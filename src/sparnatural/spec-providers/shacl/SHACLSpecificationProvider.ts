@@ -17,6 +17,7 @@ import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad, Quad_Object } from '@rdfjs/types/data-model';
 import { Term } from "@rdfjs/types";
+import { StoreModel } from '../StoreModel';
 
 const factory = new DataFactory();
 
@@ -295,7 +296,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     // remove from the initial list the NodeShapes that are marked with sh:deactivated
     let that = this;
     dedupNodeShapes = dedupNodeShapes.filter(node => {
-      return !that._hasTriple(node, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
+      return !that.graph.hasTriple(node, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
     });
 
     var items: SHACLSpecificationEntity[] = [];
@@ -326,11 +327,11 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
    * @param c 
    */
   getNodeShapeTargetingClass(c:Term):Term|null {
-    if(this._hasTriple(c, RDF.TYPE, SH.NODE_SHAPE)) {
+    if(this.graph.hasTriple(c, RDF.TYPE, SH.NODE_SHAPE)) {
       // class if also a NodeShape, return it directly
       return c;
     } else {
-      let shapes:Term[] = this._findNodesWithPredicate(SH.TARGET_CLASS,c);
+      let shapes:Term[] = this.graph.findSubjectsWithPredicate(SH.TARGET_CLASS,c);
       if(shapes.length > 0) {
         if(shapes.length > 1) {
           console.warn("Warning, found more than one NodeShape targeting class "+c.value);
@@ -342,33 +343,36 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   }
 
 
-  public static pathToSparql(path:Quad_Object, store:RdfStore, asDisplayLabel:boolean = false):string {
+  public static pathToSparql(path:Term, store:RdfStore, asDisplayLabel:boolean = false):string {
     if(path.termType == "NamedNode") {
       if(asDisplayLabel) {
-        return SHACLSpecificationProvider.getLocalName((path as NamedNode).value);
+        return StoreModel.getLocalName((path as NamedNode).value);
       } else {
         return "<" + (path as NamedNode).value + ">";
       }
     } else if(path.termType == "BlankNode") {
-      if(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null).length > 0) {
-        return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"+";
+      if(store.getQuads(path, RDF.FIRST, null, null).length > 0) {
+        // this is an RDF list, indicating a sequence path
+        let graph = new StoreModel(store);
+        let sequence:Term[] = graph.readListContent(path);
+        return sequence.map(t => SHACLSpecificationProvider.pathToSparql(t, store, asDisplayLabel)).join("/");
+      } else {
+        if(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null).length > 0) {
+          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"+";
+        }
+        if(store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
+          return "^"+SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel);
+        }
+        if(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
+          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"*";
+        }
+        if(store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
+          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"?";
+        }
       }
-      if(store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
-        return "^"+SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel);
-      }
-      if(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
-        return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"*";
-      }
-      if(store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
-        return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"?";
-      }
+      
     }
     throw new Error("Unsupported SHACL property path")
-  }
-
-  public static getLocalName(uri:string):string{
-    if(uri.includes('#')) return uri.split('#').pop() as string
-    return uri.split('/').pop() as string
   }
 
 }

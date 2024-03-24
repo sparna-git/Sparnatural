@@ -31,7 +31,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
         this._pushIfNotExist(aQuad.object.value, classes);
       } else {
         // read union content - /!\ this is returning RDFTerms, so we map to extract the URI only
-        var classesInUnion = this._readAsList(aQuad.object, OWL.UNION_OF).map(o => o.value)
+        var classesInUnion = this.graph.readAsList(aQuad.object, OWL.UNION_OF).map(o => o.value)
         if(classesInUnion) {
             for (const aUnionClass of classesInUnion) {
               this._pushIfNotExist(aUnionClass, classes);
@@ -45,12 +45,12 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
 
 
   getPropertyType(range:string):string|undefined {
-    var superProperties = this._readAsResource(
+    var superProperties = this.graph.readProperty(
       factory.namedNode(this.uri),
       RDFS.SUBPROPERTY_OF
     );
 
-    var KNOWN_PROPERTY_TYPES = [
+    var KNOWN_PROPERTY_TYPES:string[] = [
       Config.LIST_PROPERTY,
       Config.LITERAL_LIST_PROPERTY,
       Config.TIME_PROPERTY_PERIOD,
@@ -69,8 +69,8 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
 
     // only return the type if it is a known type
     for (const aSuperProperty of superProperties) {
-      if (KNOWN_PROPERTY_TYPES.includes(aSuperProperty)) {
-        return aSuperProperty;
+      if (KNOWN_PROPERTY_TYPES.includes(aSuperProperty.value)) {
+        return aSuperProperty.value;
       }
     }
 
@@ -78,7 +78,6 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
   }
 
   getDatasource() {
-    console.log(this.uri)
     return this._readDatasourceAnnotationProperty(
         this.uri,
         Datasources.DATASOURCE
@@ -101,7 +100,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
 
   isMultilingual(): boolean {
     return (
-      this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.IS_MULTILINGUAL)) == "true"
+      this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.IS_MULTILINGUAL))?.value == "true"
     );
   }
 
@@ -109,48 +108,43 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     return false;
   }
 
-  getBeginDateProperty(): string | null {
-    return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.BEGIN_DATE_PROPERTY));
+  getBeginDateProperty(): string | undefined {
+    return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.BEGIN_DATE_PROPERTY))?.value;
   }
 
-  getEndDateProperty(): string | null {
-    return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.END_DATE_PROPERTY));
+  getEndDateProperty(): string | undefined {
+    return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.END_DATE_PROPERTY))?.value;
   }
 
-  getExactDateProperty(): string | null {
-    return this._readAsSingleResource(factory.namedNode(this.uri), factory.namedNode(Config.EXACT_DATE_PROPERTY));
+  getExactDateProperty(): string | undefined {
+    return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.EXACT_DATE_PROPERTY))?.value;
   }
 
   isEnablingNegation(): boolean {
-    return (
-      this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_NEGATION)) == "true"
+    return !(
+      this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_NEGATION))?.value == "false"
     );
   }
 
   isEnablingOptional(): boolean {
-    return (
-      this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_OPTIONAL)) == "true"
+    return !(
+      this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.ENABLE_OPTIONAL))?.value == "false"
     );
   }
 
-  getServiceEndpoint(): string | null {
-    const service = this._readAsSingleResource(factory.namedNode(this.uri),factory.namedNode(Config.SPARQL_SERVICE));
+  getServiceEndpoint(): string | undefined {
+    const service = this.graph.readSingleProperty(factory.namedNode(this.uri),factory.namedNode(Config.SPARQL_SERVICE));
     if(service) {
-      const endpoint = this._readAsSingleResource(service,factory.namedNode(Config.ENDPOINT));
-      if (endpoint) {
-        return endpoint;
-      } 
-    }    
-    return null;
+      return this.graph.readSingleProperty(service,factory.namedNode(Config.ENDPOINT))?.value;
+    }
   }
 
   isLogicallyExecutedAfter(): boolean {
-    var executedAfter = this._readAsSingleLiteral(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"));
-    return executedAfter;
+    return this.graph.hasTriple(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"), null);
   }
 
   _isUnionClass(classNode: any) {
-    return this._hasProperty(classNode, OWL.UNION_OF);
+    return this.graph.hasProperty(classNode, OWL.UNION_OF);
   }
 
     
