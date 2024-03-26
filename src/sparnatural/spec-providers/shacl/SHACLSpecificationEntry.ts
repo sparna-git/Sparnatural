@@ -18,17 +18,10 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
 
     abstract getLabel():string;
 
+    abstract getTooltip():string|undefined;
+
     getId(): string {
         return this.uri;
-    }
-
-    getTooltip(): string | undefined {
-      let tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), VOLIPI.MESSAGE, this.lang)?.value;
-      if(!tooltip) {
-        // try with sh:description
-        tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
-      }
-      return tooltip;
     }
 
     getColor(): string | undefined {

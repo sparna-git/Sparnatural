@@ -1,6 +1,6 @@
 import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
 import { DataFactory } from 'rdf-data-factory';
-import { DASH, SH, SHACLSpecificationProvider, XSD } from "./SHACLSpecificationProvider";
+import { DASH, SH, SHACLSpecificationProvider, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
@@ -19,16 +19,45 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
     getLabel(): string {
         // first try to read an rdfs:label
-        let labels = this.graph.readPropertyInLang(factory.namedNode(this.uri), RDFS.LABEL, this.lang);
+        let label = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), RDFS.LABEL, this.lang)?.value;
         
-        if(labels.length > 0) {
-            return labels[0].value;
-        } else {
-            // no rdfs:label present, read the local part of the URI
-            return StoreModel.getLocalName(this.uri) as string;
+        if(!label) {
+            // attempt to read it on the targetClass, if we have it
+            if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
+                let targetClass = this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
+                label = this.graph.readSinglePropertyInLang(targetClass as Term, RDFS.LABEL, this.lang)?.value;
+            }
         }
+
+        if(!label) {
+            // default : read the local part of the URI
+            label = StoreModel.getLocalName(this.uri) as string;
+        }
+
+        return label;
       }
-    
+
+      getTooltip(): string | undefined {
+        let tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), VOLIPI.MESSAGE, this.lang)?.value;
+        if(!tooltip) {
+          // try with sh:description
+          tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
+        }
+        if(!tooltip) {
+          // try to read an rdfs:comment on the property
+          if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
+            // try to read the rdfs:label of the property itself
+            // note that we try to read an rdfs:label event in case the path is a blank node, e.g. sequence path
+            tooltip = this.graph.readSinglePropertyInLang(
+              this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS) as Term,  
+              RDFS.COMMENT, 
+              this.lang)?.value;
+          }
+        }
+        return tooltip;
+      }
+
+
     getConnectingProperties(range: string): string[] {
         var items: string[] = [];
 

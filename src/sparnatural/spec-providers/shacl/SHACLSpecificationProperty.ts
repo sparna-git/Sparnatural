@@ -2,14 +2,14 @@ import { RDF, RDFS } from "../BaseRDFReader";
 import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
-import { DASH, SH, SHACLSpecificationProvider, XSD } from "./SHACLSpecificationProvider";
+import { DASH, SH, SHACLSpecificationProvider, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { ListWidget, SparnaturalSearchWidget, SparnaturalSearchWidgetsRegistry } from "./SHACLSearchWidgets";
 import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntity, SHACLSpecificationEntity } from "./SHACLSpecificationEntity";
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
-import { Quad } from "@rdfjs/types/data-model";
+import { Quad, Term } from "@rdfjs/types/data-model";
 import { StoreModel } from "../StoreModel";
 
 const factory = new DataFactory();
@@ -24,7 +24,18 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       // first try to read an sh:name
       let label = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.NAME, this.lang)?.value;
 
-      // no sh:name present, display the sh:path without prefixes
+      if(!label) {
+        if(this.graph.hasTriple(factory.namedNode(this.uri),SH.PATH, null)) {
+          // try to read the rdfs:label of the property itself
+          // note that we try to read an rdfs:label event in case the path is a blank node, e.g. sequence path
+          label = this.graph.readSinglePropertyInLang(
+            this.graph.readSingleProperty(factory.namedNode(this.uri),SH.PATH) as Term            , 
+            RDFS.LABEL, 
+            this.lang)?.value;
+        }
+      }
+
+      // no sh:name present, no property label, display the sh:path without prefixes
       if(!label) {
         label = SHACLSpecificationProvider.pathToSparql(this.store.getQuads(factory.namedNode(this.uri),SH.PATH, null, null)[0].object, this.store, true);
       }      
@@ -34,6 +45,26 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       }
 
       return label;
+    }
+
+    getTooltip(): string | undefined {
+      let tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), VOLIPI.MESSAGE, this.lang)?.value;
+      if(!tooltip) {
+        // try with sh:description
+        tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
+      }
+      if(!tooltip) {
+        // try to read an rdfs:comment on the property
+        if(this.graph.hasTriple(factory.namedNode(this.uri),SH.PATH, null)) {
+          // try to read the rdfs:label of the property itself
+          // note that we try to read an rdfs:label event in case the path is a blank node, e.g. sequence path
+          tooltip = this.graph.readSinglePropertyInLang(
+            this.graph.readSingleProperty(factory.namedNode(this.uri),SH.PATH) as Term            , 
+            RDFS.COMMENT, 
+            this.lang)?.value;
+        }
+      }
+      return tooltip;
     }
 
     getPropertyType(range:string): string | undefined {
