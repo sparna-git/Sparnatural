@@ -43,12 +43,11 @@ export class SparnaturalElement extends HTMLElement {
     this.display();
   }
 
-  set configuration(configuration: any) {
-    console.log("setting configuration...");
-    getSettings().customization = configuration;
+  set customization(customization: any) {
+    getSettings().customization = customization;
   }
 
-  get configuration() {
+  get customization() {
     return getSettings().customization;
   }
 

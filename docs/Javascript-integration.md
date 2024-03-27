@@ -296,7 +296,7 @@ export class RDFTerm {
 
 ```javascript
 sparnatural.addEventListener("init", (event) => {  
-	sparnatural.configuration = {
+	sparnatural.customization = {
 	  autocomplete: {
 	  	dataProvider: {
 	  		getAutocompleteSuggestions: function(
