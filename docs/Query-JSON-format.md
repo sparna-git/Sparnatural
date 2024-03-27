@@ -156,7 +156,7 @@ The data structure is composed of a top "Query" structure, that contains "branch
 
 - `distinct` : whether the `DISTINCT` SPARQL keyword should be added
 - `variables` : ordered list of ?-prefixed variables selected in the `WHERE` clause
-- `order` : e.g. `"order": { "expression": "?this", "sort": "asc" }`, or null if no order
+- `order` : e.g. `"asc"` or `"desc"` depending on sort direction. Or `null` if no sort. The sort is always on the first column.
 - `branches` : ordered list of query branches, each containing a "tree" of criteria under it
 
 ### Query branch structure
