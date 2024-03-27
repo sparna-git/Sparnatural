@@ -5,7 +5,7 @@ import CriteriaGroup from "./criteriagroup/CriteriaGroup";
 import HTMLComponent from "../../HtmlComponent";
 import { OptionTypes } from "./criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapperEventStore from "./groupwrapperevents/GroupWrapperEventStore";
-import { SelectedVal } from "../../../generators/ISparJson";
+import { SelectedVal } from "../../builder-section/groupwrapper/criteriagroup/";
 import ComponentsList from "../ComponentsList";
 
 /*
