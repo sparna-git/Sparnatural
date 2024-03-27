@@ -3,7 +3,6 @@ import ComponentsList from "./ComponentsList";
 import SparnaturalComponent from "../SparnaturalComponent";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../HtmlComponent";
-import { MaxVarAction } from "../../statehandling/ActionStore";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 
 class BgWrapper extends HTMLComponent {

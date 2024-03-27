@@ -1,5 +1,5 @@
 import { BlankTerm, IriTerm, LiteralTerm, Pattern } from "sparqljs";
-import { SelectedVal } from "../../generators/ISparJson";
+import { SelectedVal } from "../SelectedVal";
 import HTMLComponent from "../HtmlComponent";
 import LoadingSpinner from "./LoadingSpinner";
 import { DataFactory } from 'rdf-data-factory'; ;

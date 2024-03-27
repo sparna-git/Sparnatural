@@ -3,7 +3,7 @@ import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import Datasources from "../../../../../ontologies/SparnaturalConfigDatasources";
 import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../../../HtmlComponent";
-import { SelectedVal } from "../../../../../generators/ISparJson";
+import { SelectedVal } from "../../../../SelectedVal";
 import EditComponents from "./EditComponents";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";

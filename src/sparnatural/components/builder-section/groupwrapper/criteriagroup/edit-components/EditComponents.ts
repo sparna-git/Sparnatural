@@ -1,6 +1,6 @@
 import { getSettings } from "../../../../../../sparnatural/settings/defaultSettings";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
-import { SelectedVal } from "../../../../../generators/ISparJson";
+import { SelectedVal } from "../../../../SelectedVal";
 import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";

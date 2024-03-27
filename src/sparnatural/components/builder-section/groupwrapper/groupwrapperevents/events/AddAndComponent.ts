@@ -1,4 +1,4 @@
-import { SelectedVal } from "../../../../../generators/ISparJson";
+import { SelectedVal } from "../../../..//SelectedVal";
 import GroupWrapper from "../../GroupWrapper";
 import LinkAndBottom from "../../LinkAndBottom";
 

@@ -1,5 +1,5 @@
 import UiuxConfig from "../../IconsConstants";
-import { SelectedVal } from "../../../generators/ISparJson";
+import { SelectedVal } from "../../../components/SelectedVal";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../HtmlComponent";
 import VariableOrderMenu from "./VariableOrderMenu";

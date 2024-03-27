@@ -1,5 +1,5 @@
 import { Pattern } from "sparqljs";
-import { SelectedVal } from "../../generators/ISparJson";
+import { SelectedVal } from "../SelectedVal";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";

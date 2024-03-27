@@ -3,7 +3,7 @@ import ObjectPropertyTypeId from "./ObjectPropertyTypeId";
 import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
-import { SelectedVal } from "../../../../../generators/ISparJson";
+import { SelectedVal } from "../../../..//SelectedVal";
 import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
 
 /**

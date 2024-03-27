@@ -1,5 +1,4 @@
-import { SelectedVal } from "../../../../../generators/ISparJson";
-import { MaxVarAction } from "../../../../../statehandling/ActionStore";
+import { SelectedVal } from "../../../../SelectedVal";
 import GroupWrapper from "../../GroupWrapper";
 import LinkWhereBottom from "../../LinkWhereBottom";
 

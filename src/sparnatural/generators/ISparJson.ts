@@ -1,17 +1,10 @@
-import { WidgetValue } from "../components/widgets/AbstractWidget";
 
-export interface SelectedVal {
-  variable: string;
-  type: string;
-}
 
-export interface CriteriaLine {
-  s: string;  
-  p: string;
-  o: string;
-  sType: string;
-  oType: string;
-  values: WidgetValue["value"][];
+export interface ISparJson {
+  distinct?: boolean;
+  variables: Array<string>;
+  order?: Order;
+  branches: Array<Branch>;
 }
 
 export interface Branch {
@@ -21,11 +14,15 @@ export interface Branch {
   notExists?: boolean;
 }
 
-export interface ISparJson {
-  distinct: boolean;
-  variables: Array<string>;
-  order: Order;
-  branches: Array<Branch>;
+export interface CriteriaLine {
+  s: string;  
+  p: string;
+  o: string;
+  sType: string;
+  oType: string;
+  // see ../components/widgets/AbstractWidget
+  // we are not making an explicit reference to this dependency
+  values: {label:string}[];
 }
 
 export enum Order {

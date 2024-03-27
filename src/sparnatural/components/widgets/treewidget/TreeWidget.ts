@@ -1,6 +1,6 @@
 import { BgpPattern, Pattern, Triple, ValuesPattern } from "sparqljs";
 import UiuxConfig from "../../IconsConstants";
-import { SelectedVal } from "../../../generators/ISparJson";
+import { SelectedVal } from "../../SelectedVal";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "jstree"
 import ISettings from "../../../../sparnatural/settings/ISettings";

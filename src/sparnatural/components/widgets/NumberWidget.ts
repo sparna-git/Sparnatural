@@ -1,10 +1,8 @@
 import { DataFactory } from 'rdf-data-factory';
-import { BgpPattern, Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
-import { SelectedVal } from "../../generators/ISparJson";
+import { Pattern } from "sparqljs";
+import { SelectedVal } from "../SelectedVal";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import { SelectAllValue } from "../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
-import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { I18n } from '../../settings/I18n';
 import AddUserInputBtn from '../buttons/AddUserInputBtn';
 import SparqlFactory from '../../generators/SparqlFactory';

@@ -9,7 +9,7 @@ import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup, OptionTypes } from "./optionsgroup/OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
-import { SelectedVal } from "../../../../generators/ISparJson";
+import { SelectedVal } from "../../../SelectedVal";
 import { EndClassWidgetGroup, EndClassWidgetValue } from "./startendclassgroup/EndClassWidgetGroup";
 import ActionsGroup from "../../../buttons/actions/ActionsGroup";
 import { triggerOption } from "../groupwrapperevents/events/TriggerOption";

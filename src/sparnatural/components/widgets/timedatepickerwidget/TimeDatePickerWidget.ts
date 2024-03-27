@@ -6,7 +6,7 @@ import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
 import { DataFactory } from 'rdf-data-factory';
-import { SelectedVal } from "../../../generators/ISparJson";
+import { SelectedVal } from "../../SelectedVal";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";

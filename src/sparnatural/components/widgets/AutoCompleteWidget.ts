@@ -1,6 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
-import { SelectedVal } from "../../generators/ISparJson";
+import { SelectedVal } from "../SelectedVal";
 import SparqlFactory from "../../generators/SparqlFactory";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";

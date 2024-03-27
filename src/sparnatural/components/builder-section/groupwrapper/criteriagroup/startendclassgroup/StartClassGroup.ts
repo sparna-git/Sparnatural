@@ -1,6 +1,6 @@
 import ClassTypeId from "./ClassTypeId";
 import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
-import { SelectedVal } from "../../../../../generators/ISparJson";
+import { SelectedVal } from "../../../..//SelectedVal";
 import CriteriaGroup from "../CriteriaGroup";
 import HTMLComponent from "../../../../HtmlComponent";
 import TippyInfo from "../../../../buttons/TippyInfo";
