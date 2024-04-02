@@ -6,9 +6,11 @@ import EndClassGroup from "../components/builder-section/groupwrapper/criteriagr
 import StartClassGroup from "../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import NoOrderBtn from "../components/buttons/NoOrderBtn";
+import { SelectedVal } from "../components/SelectedVal";
 import SparnaturalComponent from "../components/SparnaturalComponent";
 import { WidgetValue } from "../components/widgets/AbstractWidget";
-import { Branch, ISparJson, SelectedVal, Order } from "../generators/ISparJson";
+import { Branch, ISparJson, Order } from "../generators/ISparJson";
+
 
 export default class QueryLoader{
     static sparnatural: SparnaturalComponent;
