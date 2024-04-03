@@ -4,7 +4,6 @@ import $ from "jquery";
 /*SPARNATURAL*/
 import { getSettings, mergeSettings } from "./sparnatural/settings/defaultSettings";
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
-import ISparnaturalSpecification from "./sparnatural/spec-providers/ISparnaturalSpecification";
 import { ISparJson } from "./sparnatural/generators/ISparJson";
 import ISettings, { PreLoadQueries } from "./sparnatural/settings/ISettings";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";

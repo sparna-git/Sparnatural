@@ -188,15 +188,31 @@ export class NumberWidget {
     score(propertyShape:string, n3store: RdfStore):number {
         // if the datatype is xsd:boolean
         if(
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.BYTE)
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.DECIMAL)
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.DOUBLE) 
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.FLOAT) 
+            ||
             _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.INT)
             ||
             _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.INTEGER)
             ||
-            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.DECIMAL)
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.LONG)
             ||
-            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.FLOAT) 
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.NONNEGATIVE_INTEGER)
             ||
-            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.DOUBLE) 
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.SHORT)
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.UNSIGNED_BYTE)
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.UNSIGNED_INT)
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.UNSIGNED_LONG)
+            ||
+            _hasTriple(n3store, factory.namedNode(propertyShape), SH.DATATYPE, XSD.UNSIGNED_SHORT)            
         ) {
             return 50;
         } else {

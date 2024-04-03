@@ -286,7 +286,7 @@ export class BaseRDFReader {
    /**
    * Reads rdf:type(s) of an entity, and return them as an array
    **/
-    _readRdfTypes(uri: Term) {
+    _readRdfTypes(uri: Term):Term[] {
         return this.graph.readProperty(uri, RDF.TYPE);
     }
 

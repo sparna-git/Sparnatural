@@ -190,7 +190,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             }
         });
 
-        return items.length>0?items[0]:undefined;
+        return items.length>0?items[0].value:undefined;
     }
 
     /**
@@ -462,15 +462,31 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 function(n3store:RdfStore, shapeUri:any):boolean {
                     let graph:StoreModel = new StoreModel(n3store);
                     return (
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.BYTE)
+                        ||
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DECIMAL)
+                        ||
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DOUBLE) 
+                        ||
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.FLOAT) 
+                        ||
                         graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INT)
                         ||
                         graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INTEGER)
                         ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DECIMAL)
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.LONG)
                         ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.FLOAT) 
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.NONNEGATIVE_INTEGER)
                         ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DOUBLE) 
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.SHORT)
+                        ||
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.UNSIGNED_BYTE)
+                        ||
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.UNSIGNED_INT)
+                        ||
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.UNSIGNED_LONG)
+                        ||
+                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.UNSIGNED_SHORT)  
                     );
                 }
             )

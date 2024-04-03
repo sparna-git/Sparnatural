@@ -6,8 +6,12 @@ import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { I18n } from '../../settings/I18n';
 import AddUserInputBtn from '../buttons/AddUserInputBtn';
 import SparqlFactory from '../../generators/SparqlFactory';
+import InfoBtn from '../buttons/InfoBtn';
+import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
+
 
 const factory = new DataFactory();
+
 
 export class NumberWidgetValue implements WidgetValue {
   value: {
@@ -25,16 +29,30 @@ export class NumberWidgetValue implements WidgetValue {
   }
 }
 
+export interface NumberConfiguration {
+  min?: string,
+  max?: string,
+}
+
 export class NumberWidget extends AbstractWidget {
   
+  // The default implementation of TreeConfiguration
+  static defaultConfiguration: NumberConfiguration = {
+    
+  }
+
   protected widgetValues: NumberWidgetValue[];
   
+  configuration: NumberConfiguration;
+  form: JQuery<HTMLElement>;
   minInput: JQuery<HTMLElement>;
   maxInput: JQuery<HTMLElement>;
+  infoBtn: InfoBtn;
   addValueBtn: AddUserInputBtn;
   
   constructor(
     parentComponent: WidgetWrapper,
+    configuration:NumberConfiguration,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
@@ -48,18 +66,36 @@ export class NumberWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.SINGLE
     );
+
+    this.configuration = configuration;
   }
 
   render() {
     super.render();
-    this.minInput = $(`<input type="number" size="7" id="input-from" />`);
-    this.html.append(this.minInput);
+    this.form = $('<form />');
+    this.html.append(this.form);
 
-    this.html.append(`&nbsp;${I18n.labels.NumberLabelAnd}&nbsp;`);
+    this.form[0].addEventListener("submit", this.#onFormSubmit);
 
-    this.maxInput = $(`<input type="number" size="7" id="input-to" />`);
-    this.html.append(this.maxInput);
+    this.minInput = $(`<input type="number" size="7" id="input-from" ${this.#getMinMaxHtmlAttributes()} />`);
+    this.form.append(this.minInput);
+
+    this.form.append(`&nbsp;&nbsp;${I18n.labels.NumberLabelAnd}&nbsp;&nbsp;`);
+
+    this.maxInput = $(`<input type="number" size="7" id="input-to" ${this.#getMinMaxHtmlAttributes()} />`);
+    this.form.append(this.maxInput);
     
+    // set a tooltip on the info circle
+    var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
+    tippySettings.placement = "left";
+    tippySettings.trigger = "click";
+    tippySettings.offset = [40, -20];
+    tippySettings.delay = [0, 0];
+
+    let tooltip = this.#getValueLabel(this.configuration.min, this.configuration.max);
+
+    this.infoBtn = new InfoBtn(this, tooltip, tippySettings).render();
+
     this.addValueBtn = new AddUserInputBtn(
       this,
       I18n.labels.ButtonAdd,
@@ -69,24 +105,42 @@ export class NumberWidget extends AbstractWidget {
     return this;
   }
 
-  #addValueBtnClicked = () => {
+  #getMinMaxHtmlAttributes() {
+    let result:string = "";
+    if(this.configuration.min) {
+      result += ` min="${this.configuration.min}"`
+    }
+    if(this.configuration.max) {
+      result += ` max="${this.configuration.max}"`
+    }
+    return result;
+  }
+
+  #onFormSubmit = (event:SubmitEvent) => {
+
     let numberWidgetValue = {
-        label: this.#getValueLabel(this.minInput.val().toString(), this.maxInput.val().toString()),
-        min: (this.minInput.val() != "")?Number(this.minInput.val().toString()):undefined,
-        max: (this.maxInput.val() != "")?Number(this.maxInput.val().toString()):undefined,
+      label: this.#getValueLabel(this.minInput.val().toString(), this.maxInput.val().toString()),
+      min: (this.minInput.val() != "")?Number(this.minInput.val().toString()):undefined,
+      max: (this.maxInput.val() != "")?Number(this.maxInput.val().toString()):undefined,
     };
 
-    numberWidgetValue = this.#checkInput(numberWidgetValue);
-    console.log(numberWidgetValue)
+    numberWidgetValue = this.#checkInput(numberWidgetValue);  
     this.renderWidgetVal(this.parseInput(numberWidgetValue));
+
+    // prevent actual form submission
+    event.preventDefault();
+  }
+
+  #addValueBtnClicked = () => {
+   (this.form[0] as HTMLFormElement).requestSubmit();
   }
 
   #checkInput(input: NumberWidgetValue["value"]): NumberWidgetValue["value"] {
-    if (input.min && input.max && (input.min > input.max)) throw Error('lower bou,d is bigger than upper bound!')
+    if (input.min && input.max && (input.min > input.max)) throw Error('lower bound is bigger than upper bound!')
     return input;
   }
 
-  #getValueLabel = function (startLabel: string, stopLabel: string) {
+  #getValueLabel = function (startLabel: string|undefined, stopLabel: string|undefined) {
     let valueLabel = "";
     if ((startLabel != "") && (stopLabel != "")) {
       valueLabel = I18n.labels.NumberLabelBetween+' '+ startLabel +' '+I18n.labels.NumberLabelAnd+' '+ stopLabel ;

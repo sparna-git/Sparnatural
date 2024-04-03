@@ -99,6 +99,14 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
       );
   }
 
+  getMinValue():string|undefined {
+    return undefined;
+  }
+
+  getMaxValue():string|undefined {
+    return undefined;
+  }
+
   isMultilingual(): boolean {
     return (
       this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.IS_MULTILINGUAL))?.value == "true"

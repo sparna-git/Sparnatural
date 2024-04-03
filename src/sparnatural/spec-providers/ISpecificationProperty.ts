@@ -25,6 +25,9 @@ interface ISpecificationProperty extends ISpecificationEntry {
   getTreeChildrenDatasource(): any;
   getTreeRootsDatasource(): any;
 
+  getMinValue():string | undefined;
+  getMaxValue():string | undefined;
+
   /**
    * @returns true if the query should omit the class criteria of its range all the time
    */

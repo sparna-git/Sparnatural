@@ -22,7 +22,7 @@ import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
 import { I18n } from "../../../../../settings/I18n";
 import { AutocompleteWidget } from "../../../../../spec-providers/shacl/SHACLSearchWidgets";
-import { NumberWidget } from "../../../../widgets/NumberWidget";
+import { NumberConfiguration, NumberWidget } from "../../../../widgets/NumberWidget";
 
 
 /**
@@ -507,7 +507,6 @@ class WidgetWrapper extends HTMLComponent {
           !(treeChildrenDatasource.noSort == true)
         );
 
-        break;
       case Config.MAP_PROPERTY:
         let mapConfig:MapConfiguration = {
           ...MapWidget.defaultConfiguration,
@@ -523,8 +522,22 @@ class WidgetWrapper extends HTMLComponent {
         ).render();
       
       case Config.NUMBER_PROPERTY:
+
+        // TODO : determine min and max based on datatypes
+        let thisNumberConfig:NumberConfiguration = {
+          min: this.specProvider.getProperty(objectPropertyId).getMinValue(),
+          max: this.specProvider.getProperty(objectPropertyId).getMaxValue(),
+        }
+
+        let numberConfig:NumberConfiguration = {
+          ...NumberWidget.defaultConfiguration,
+          ...thisNumberConfig,
+          ...this.settings.customization?.number
+        };
+
         return new NumberWidget(
           this,
+          numberConfig,
           this.startClassVal,
           this.objectPropVal,
           this.endClassVal

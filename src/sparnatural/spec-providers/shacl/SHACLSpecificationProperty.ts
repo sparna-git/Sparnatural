@@ -318,6 +318,20 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       );
     }
 
+    getMinValue():string|undefined {
+      let datatype = this.graph.readSingleProperty(factory.namedNode(this.uri), SH.DATATYPE)?.value;
+      if(datatype && DATATYPES_BOUND[datatype]?.minInclusive) {
+          return DATATYPES_BOUND[datatype]?.minInclusive?.toString();
+      }
+    }
+
+    getMaxValue():string|undefined {
+      let datatype = this.graph.readSingleProperty(factory.namedNode(this.uri), SH.DATATYPE)?.value;
+      if(datatype && DATATYPES_BOUND[datatype]?.maxInclusive) {
+          return DATATYPES_BOUND[datatype]?.maxInclusive?.toString();
+      }
+    }
+
     getBeginDateProperty(): string | undefined {
       return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.BEGIN_DATE_PROPERTY))?.value;
     }
@@ -352,4 +366,47 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     isLogicallyExecutedAfter(): boolean {
       return this.graph.hasTriple(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"), null);
     }
+}
+
+
+const DATATYPES_BOUND:{[key: string]:{minInclusive?:number, maxInclusive?:number}} = {
+  "http://www.w3.org/2001/XMLSchema#byte" : {
+    minInclusive : -127,
+    maxInclusive : 128
+  },
+  "http://www.w3.org/2001/XMLSchema#unsignedByte" : {
+    minInclusive : 0,
+    maxInclusive : 255
+  },
+  "http://www.w3.org/2001/XMLSchema#short" : {
+    minInclusive : -32768,
+    maxInclusive : 32767
+  },
+  "http://www.w3.org/2001/XMLSchema#unsignedShort" : {
+    minInclusive : 0,
+    maxInclusive : 65535
+  },
+  "http://www.w3.org/2001/XMLSchema#int" : {
+    minInclusive : -2147483648,
+    maxInclusive : 2147483647
+  },
+  "http://www.w3.org/2001/XMLSchema#unsignedInt" : {
+    minInclusive : 0,
+    maxInclusive : 4294967295
+  },
+  "http://www.w3.org/2001/XMLSchema#long" : {
+    minInclusive : -9223372036854775808,
+    maxInclusive : 9223372036854775807
+  },
+  "http://www.w3.org/2001/XMLSchema#unsignedLong" : {
+    minInclusive : 0,
+    maxInclusive : 18446744073709551615
+  },
+  "http://www.w3.org/2001/XMLSchema#nonNegativeInteger" : {
+    minInclusive : 0
+  },
+  "http://www.w3.org/2001/XMLSchema#integer" : {
+    // nothing
+  }
+
 }

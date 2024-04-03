@@ -173,6 +173,14 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
     return isObj && ("queryString" in val || "queryTemplate" in val)
   }
 
+  getMinValue():string|undefined {
+    return undefined;
+  }
+
+  getMaxValue():string|undefined {
+    return undefined;
+  }
+
   isMultilingual(): boolean {
     var item = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
     if (item !== null) {
