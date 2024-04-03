@@ -80,8 +80,8 @@
         }
     }
 
-    .line1 {
-        border-radius: 5px 5px 0 0;
+    .line2 {
+        border-radius: 0 0 5px 5px;
         border-bottom: 0px solid transparent;
         min-height: 61px;
         margin-top: 41px;
@@ -158,11 +158,11 @@
         }
     }
 
-    .line2 {
+    .line1 {
         margin-bottom: 41px;
-        border-radius: 0 0 5px 5px;
+        border-radius: 5px 5px 0 0;
         justify-content: space-between;
-        border-top: 1px solid darkgray;
+        border-bottom: 1px solid darkgray;
         line-height: 20px;
         -moz-box-shadow: 0px 2px 3px 0px #cfcfcf;
         -webkit-box-shadow: 0px 2px 3px 0px #cfcfcf;

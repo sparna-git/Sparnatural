@@ -14,7 +14,7 @@ class VariableOrderMenu extends HTMLComponent {
   }
 
   render(): this {
-    this.htmlParent = $(this.ParentComponent.html).find(".line1");
+    this.htmlParent = $(this.ParentComponent.html).find(".line2");
     super.render();
     let otherSelectHtml = $('<div class="variablesOtherSelect"></div>');
     this.html.append(otherSelectHtml);
