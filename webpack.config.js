@@ -142,12 +142,12 @@ module.exports = {
     })
   ],
   devServer: {
-	static:{
-		directory: path.resolve(__dirname, "./dev-page"),
-	},
-	historyApiFallback: true,
-	hot: true,
-	open: ['/dev-page']
+		static:{
+			directory: path.resolve(__dirname, "./dev-page"),
+		},
+		historyApiFallback: true,
+		hot: true,
+		open: ['/dev-page']
   },
   devtool: "source-map"
 }
