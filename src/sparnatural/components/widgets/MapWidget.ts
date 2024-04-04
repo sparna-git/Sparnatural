@@ -1,7 +1,7 @@
 import { DataFactory } from 'rdf-data-factory';
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 // L needs to be imported *before* leaflet-geoman-free
-import L, { LatLng, Rectangle, PolylineOptions, Polygon } from "leaflet";
+import L, { LatLng, Rectangle, PolylineOptions, Polygon, PM } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import {
