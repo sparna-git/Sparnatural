@@ -1,10 +1,10 @@
 import { DataFactory } from 'rdf-data-factory';
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
-import L, { LatLng, Rectangle,Polygon,Map,PolylineOptions, Layer } from "leaflet";
+// L needs to be imported *before* leaflet-geoman-free
+import L, { LatLng, Rectangle, PolylineOptions, Polygon } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import {
-  BgpPattern,
   FilterPattern,
   FunctionCallExpression,
   LiteralTerm,
@@ -13,9 +13,10 @@ import {
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
-import { SelectedVal } from "../../generators/ISparJson";
 import { NamedNode } from '@rdfjs/types/data-model';
 import { I18n } from '../../settings/I18n';
+import { SelectedVal } from '../../generators/ISparJson';
+
 
 const factory = new DataFactory();
 
@@ -377,7 +378,7 @@ export default class MapWidget extends AbstractWidget {
     const parsedCoords = input.coordinates.map((c)=>{
       return c.map((latlng)=>{
         if(!("lat" in latlng) || !('lng' in LatLng) || isNaN(latlng.lat) || isNaN(latlng.lng))
-        return new L.LatLng(latlng.lat,latlng.lng)
+        return new LatLng(latlng.lat,latlng.lng)
       })
     })
     if(parsedCoords.length === 0) throw Error(`Parsing of ${input.coordinates} failed`)
@@ -455,7 +456,7 @@ export default class MapWidget extends AbstractWidget {
     */
   }
 
-  #buildPolygon(coordinates: L.LatLng[]) {
+  #buildPolygon(coordinates: LatLng[]) {
     let polygon = "";
     coordinates.forEach((coordinat) => {
       polygon = `${polygon}${coordinat.lng} ${coordinat.lat}, `;

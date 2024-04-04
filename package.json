@@ -52,7 +52,6 @@
     "@babel/preset-react": "^7.0.0",
     "@types/jquery": "^3.5.14",
     "@types/leaflet": "^1.7.10",
-    "@types/leaflet-draw": "^1.0.5",
     "@types/n3": "^1.10.4",
     "@types/rdfjs__dataset": "^2.0.0",
     "@types/select2": "^4.0.55",
@@ -90,7 +89,7 @@
   },
   "dependencies": {
     "@chenfengyuan/datepicker": "^1.0.10",
-    "@geoman-io/leaflet-geoman-free": "^2.16.0",
+    "@geoman-io/leaflet-geoman-free": "^2.13.0",
     "@rdfjs/types": "^1.1.0",
     "rdf-data-factory": "^1.1.2",
     "bootstrap": "^5.1.3",
