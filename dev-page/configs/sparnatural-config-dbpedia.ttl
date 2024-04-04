@@ -238,6 +238,20 @@
                   "nom"@fr .
 
 
+:age rdf:type owl:ObjectProperty ;
+       rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#NumberProperty> ;
+       rdfs:domain [ rdf:type owl:Class ;
+                     owl:unionOf ( 
+                                   :Person
+                                 )
+                   ] ;
+       rdfs:range :Text ;
+       <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://www.w3.org/2000/01/rdf-schema#label>" ;
+       rdfs:label "age"@en ,
+                  "age"@fr .
+
+
+
 ###  http://ontologies.sparna.fr/sparnatural-demo-dbpedia#label_select-only
 :label_select-only rdf:type owl:ObjectProperty ;
                    rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty> ;
