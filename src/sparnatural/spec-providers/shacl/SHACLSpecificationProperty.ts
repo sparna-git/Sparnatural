@@ -81,14 +81,14 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         var shapeUri:string|null = null;
         var orMembers = this.graph.readAsList(factory.namedNode(this.uri), SH.OR);
         orMembers?.forEach(m => {
-          if(rangeEntity.isRangeOf(this.store, m.id)) {
-            shapeUri = m.id;
+          if(rangeEntity.isRangeOf(this.store, m.value)) {
+            shapeUri = m.value;
           }
           // recurse one level more
           var orOrMembers = this.graph.readAsList(m, SH.OR);
           orOrMembers?.forEach(orOrMember => {
-            if(rangeEntity.isRangeOf(this.store, orOrMember.id)) {
-              shapeUri = orOrMember.id;
+            if(rangeEntity.isRangeOf(this.store, orOrMember.value)) {
+              shapeUri = orOrMember.value;
             }
           });
         });
@@ -177,13 +177,13 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         
         orMembers?.forEach(m => {
           // read sh:class / sh:node
-          var orClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.id);
+          var orClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.value);
 
           // nothing, see if default applies on this sh:or member
           if(orClasses.length == 0) {
             SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
               if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
-                if(value.isRangeOf(this.store, m.id)) {
+                if(value.isRangeOf(this.store, m.value)) {
                   orClasses.push(key);
                 }
               }
@@ -195,12 +195,12 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
             var orOrMembers = this.graph.readAsList(m, SH.OR);
             orOrMembers?.forEach(orOrMember => {
               // read sh:class / sh:node
-              var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember.id);
+              var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember.value);
               // nothing, see if default applies on this sh:or member
               if(orOrClasses.length == 0) {
                 SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
                   if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
-                    if(value.isRangeOf(this.store, orOrMember.id)) {
+                    if(value.isRangeOf(this.store, orOrMember.value)) {
                       orClasses.push(key);
                     }
                   }
@@ -237,7 +237,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       // read sh:or content
       var orMembers = this.graph.readAsList(factory.namedNode(this.uri), SH.OR);
       orMembers?.forEach(m => {
-        classes.push(...SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.id));
+        classes.push(...SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.value));
       });
 
       return classes;
@@ -330,6 +330,10 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       if(datatype && DATATYPES_BOUND[datatype]?.maxInclusive) {
           return DATATYPES_BOUND[datatype]?.maxInclusive?.toString();
       }
+    }
+
+    getValues():Term[] | undefined {
+      return this.graph.readAsList(factory.namedNode(this.uri), SH.IN);
     }
 
     getBeginDateProperty(): string | undefined {

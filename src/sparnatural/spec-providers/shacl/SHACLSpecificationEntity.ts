@@ -105,7 +105,6 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var dedupItems = [...new Set(items)];
         // sort dedups
         var sortedDedups = SHACLSpecificationEntry.sort(dedupItems.map(s => new SHACLSpecificationEntity(s, this.provider, this.store, this.lang)));
-        console.log(sortedDedups)
         // return dedup array of strings
         return sortedDedups.map(e => e.getId());        
     }

@@ -264,7 +264,10 @@ class WidgetWrapper extends HTMLComponent {
         // what is set in the provided configuration object for the corresponding section
         let listConfig:ListConfiguration = {
           ...ListWidget.defaultConfiguration,
-          ...{dataProvider: listDataProvider},          
+          ...{
+            dataProvider: listDataProvider,
+            values:this.specProvider.getProperty(objectPropertyId).getValues(),
+          },          
           ...this.settings.customization?.list
         };
 

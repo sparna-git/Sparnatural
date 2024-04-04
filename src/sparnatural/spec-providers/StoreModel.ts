@@ -1,4 +1,4 @@
-import { Quad, Quad_Object, Term } from "@rdfjs/types";
+import { Quad, Term } from "@rdfjs/types/data-model";
 import { RdfStore } from "rdf-stores";
 import { RDF } from "./BaseRDFReader";
 
@@ -109,8 +109,8 @@ export class StoreModel {
     /**
      * returns RDFTerms
      */
-    readAsList(rdfNode: any, property: any) {
-        let result: any[] = new Array<any>();
+    readAsList(rdfNode: any, property: any):Term[] {
+        let result: Term[] = new Array<Term>();
         this.store
             .getQuads(rdfNode, property, null, null)
             .map((quad: { object: any }) => {

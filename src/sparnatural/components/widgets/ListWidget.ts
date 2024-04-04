@@ -3,13 +3,14 @@ import ISettings from "../../settings/ISettings";
 import { SelectedVal } from "../SelectedVal";
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import { DataFactory } from 'rdf-data-factory';
+import { DataFactory, Literal } from 'rdf-data-factory';
 import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../generators/SparqlFactory";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { ListDataProviderIfc, NoOpListDataProvider } from "./data/DataProviders";
 import { I18n } from "../../settings/I18n";
+import { Term } from "@rdfjs/types/data-model";
 
 const factory = new DataFactory();
 
@@ -29,14 +30,16 @@ export class ListWidgetValue implements WidgetValue {
 }
 
 export interface ListConfiguration {
-  dataProvider: ListDataProviderIfc
+  dataProvider: ListDataProviderIfc,
+  values?: Term[]
 }
 
 export class ListWidget extends AbstractWidget {
 
   // The default implementation of ListConfiguration
   static defaultConfiguration: ListConfiguration = {
-    dataProvider: new NoOpListDataProvider()
+    dataProvider: new NoOpListDataProvider(),
+    values: undefined
   }
 
   configuration: ListConfiguration;
@@ -158,16 +161,28 @@ export class ListWidget extends AbstractWidget {
     // toggle spinner before loading
     this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
 
-    this.configuration.dataProvider.getListContent(
-      this.startClassVal.type,
-      this.objectPropVal.type,
-      this.endClassVal.type,
-      this.settings.language,
-      this.settings.defaultLanguage,
-      this.settings.typePredicate,
-      callback,
-      errorCallback
-    );
+    if(this.configuration.values) {
+      let items: {term:RDFTerm;label:string;group?:string}[] = [];
+      this.configuration.values.forEach(v => {
+        items.push({
+          term: new RDFTerm(v),
+          label:v.value
+        });
+      });
+      callback(items);
+    } else {
+      this.configuration.dataProvider.getListContent(
+        this.startClassVal.type,
+        this.objectPropVal.type,
+        this.endClassVal.type,
+        this.settings.language,
+        this.settings.defaultLanguage,
+        this.settings.typePredicate,
+        callback,
+        errorCallback
+      );
+    }
+
 
     return this;
   }
@@ -235,4 +250,8 @@ export class ListWidget extends AbstractWidget {
       return [valuePattern];
     }
   }
+
+
+
+
 }

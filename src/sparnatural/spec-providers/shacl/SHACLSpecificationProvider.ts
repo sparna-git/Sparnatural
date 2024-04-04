@@ -28,6 +28,7 @@ export const SH = {
   DATATYPE: factory.namedNode(SH_NAMESPACE + "datatype") as NamedNode,
   DEACTIVATED: factory.namedNode(SH_NAMESPACE + "deactivated") as NamedNode,
   DESCRIPTION: factory.namedNode(SH_NAMESPACE + "description") as NamedNode,
+  IN: factory.namedNode(SH_NAMESPACE + "in") as NamedNode, 
   INVERSE_PATH: factory.namedNode(SH_NAMESPACE + "inversePath") as NamedNode, 
   IRI: factory.namedNode(SH_NAMESPACE + "IRI") as NamedNode, 
   LANGUAGE_IN: factory.namedNode(SH_NAMESPACE + "languageIn") as NamedNode, 

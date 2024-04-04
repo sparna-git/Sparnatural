@@ -2,7 +2,8 @@ import { BlankTerm, IriTerm, LiteralTerm, Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import HTMLComponent from "../HtmlComponent";
 import LoadingSpinner from "./LoadingSpinner";
-import { DataFactory } from 'rdf-data-factory'; ;
+import { DataFactory, Literal } from 'rdf-data-factory';import { Term } from "@rdfjs/types/data-model";
+ ;
 
 const factory = new DataFactory();
 
@@ -29,6 +30,18 @@ export class RDFTerm {
   value: string;
   "xml:lang"?: string;
   datatype?:string 
+
+  constructor(term:Term) {
+    switch(term.termType) {
+      case "Literal": this.type = "literal"; break;
+      case "BlankNode": this.type = "bnode"; break;
+      case "NamedNode": this.type = "iri"; break;
+      default : throw new Error("Unsupported termType here "+term.termType)
+    };
+    this.value = term.value;
+    this["xml:lang"] = (term instanceof Literal)?(term as Literal).language:undefined;
+    this.datatype = (term instanceof Literal)?(term as Literal).datatype.value:undefined;
+  }
 }
 
 export abstract class AbstractWidget extends HTMLComponent {
