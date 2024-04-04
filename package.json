@@ -90,7 +90,7 @@
   },
   "dependencies": {
     "@chenfengyuan/datepicker": "^1.0.10",
-    "@geoman-io/leaflet-geoman-free": "^2.13.0",
+    "@geoman-io/leaflet-geoman-free": "^2.16.0",
     "@rdfjs/types": "^1.1.0",
     "rdf-data-factory": "^1.1.2",
     "bootstrap": "^5.1.3",
