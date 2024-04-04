@@ -161,7 +161,11 @@ export class ListWidget extends AbstractWidget {
     // toggle spinner before loading
     this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
 
+    // if there are some provided values...
     if(this.configuration.values) {
+      // never sort to keep the original list order
+      this.sort = false;
+      // convert the provided list of terms to RDFTerm[]
       let items: {term:RDFTerm;label:string;group?:string}[] = [];
       this.configuration.values.forEach(v => {
         items.push({
@@ -169,6 +173,7 @@ export class ListWidget extends AbstractWidget {
           label:v.value
         });
       });
+      // then call the callback with it
       callback(items);
     } else {
       this.configuration.dataProvider.getListContent(
