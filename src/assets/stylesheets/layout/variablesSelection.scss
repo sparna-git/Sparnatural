@@ -103,6 +103,7 @@
         }
 
         .variableSelected {
+            position: relative;
             padding: 3px 7px 3px 2px;
             border: 1px solid gray;
             font-size: 12px;
@@ -157,7 +158,6 @@
             }
         }
         .variableSelectedAggr {
-                position: relative;
             /*border-left: 1px solid var(--default-text-color) ;
             margin-top: -3px;
             margin-bottom: -3px;
@@ -182,19 +182,20 @@
                     }
                 }
             }
-            .aggrOptions {
-                background-color: #fff;
-                position: absolute;
-                right: 0;
-                top: 100%;
-                width: 130px;
-                z-index: 100;
-                ul {
-                    list-style-type: none;
-                    li {
-                        padding: 3px 5px;
-                        border-bottom: 1px solid var(--silver-color-main);
-                    }
+        }
+        
+        .aggrOptions {
+            background-color: #fff;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            width: 130px;
+            z-index: 100;
+            ul {
+                list-style-type: none;
+                li {
+                    padding: 3px 5px;
+                    border-bottom: 1px solid var(--silver-color-main);
                 }
             }
         }

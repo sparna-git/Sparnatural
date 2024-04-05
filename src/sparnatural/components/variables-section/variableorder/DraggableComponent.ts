@@ -33,12 +33,15 @@ class DraggableComponent extends HTMLComponent {
         `).val(varName);
 
 
-    let aggrAction = $(`
+        let aggrAction = $(`
         <div class="variableSelectedAggr flexWrap" data-variableName="${varName}">
           <span class="variableAggr-handle">
               ${UiuxConfig.ICON_ARROW_BOTTOM}
           </span>
           <input type="hidden" name="selectedAggr" />
+        </div>`) ;
+
+        let aggrOptions = $(`
           <div class="aggrOptions">
             <ul>
               <li data-value="">Aucune</li>
@@ -49,8 +52,7 @@ class DraggableComponent extends HTMLComponent {
               <li data-value="SAMPLE">SAMPLE</li>
               <li data-value="SUM">SUM</li>
             </ul>
-          </div>
-        </div>`)
+        </div>`) ;
 
     let widgetHtml =
       $(`<div class="variableSelected flexWrap" data-variableName="${varName}">
@@ -58,12 +60,14 @@ class DraggableComponent extends HTMLComponent {
                 ${UiuxConfig.COMPONENT_DRAG_HANDLE}
             </span>
             <div class="tmpicon">${icon}</div>
-        </div>`).append(editVar).append(aggrAction) ;
+        </div>`).append(editVar) ;
     
     $(widgetHtml).append(aggrAction);
+    $(widgetHtml).append(aggrOptions);
     
    
     super("sortableItem", parentComponent, widgetHtml);
+    
     this.selectedVal = selected_val
     this.varName = varName;
     this.#resize(editVar, varName);
@@ -76,6 +80,10 @@ class DraggableComponent extends HTMLComponent {
       let val = this.#validateInput(event.currentTarget as HTMLInputElement);
       that.onVarNameChange(val);
     });
+    console.log(this);
+    if(this.htmlParent != null) {
+      $(this.htmlParent[0]).append(aggrOptions);
+    }
   }
 
   render(): this {
