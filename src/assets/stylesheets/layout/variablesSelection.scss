@@ -188,13 +188,16 @@
             background-color: #fff;
             position: absolute;
             right: 0;
-            top: 100%;
-            width: 130px;
+            top: 103%;
+            width: 100%;
             z-index: 100;
+            border-radius: 5px;
             ul {
                 list-style-type: none;
+                margin: 0;
+                padding: 0;
                 li {
-                    padding: 3px 5px;
+                    padding: 3px 8px;
                     border-bottom: 1px solid var(--silver-color-main);
                 }
             }
