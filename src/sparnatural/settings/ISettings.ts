@@ -5,10 +5,6 @@ import { MapConfiguration } from "../components/widgets/MapWidget";
 import { NumberConfiguration } from "../components/widgets/NumberWidget";
 import { TreeConfiguration } from "../components/widgets/treewidget/TreeWidget";
 
-export interface PreLoadQueries {
-  queries: Array<{ queryName: string; query: string }>;
-}
-
 interface ISettings {
   src: any;
   language: string;

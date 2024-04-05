@@ -5,9 +5,7 @@ import $ from "jquery";
 import { getSettings, mergeSettings } from "./sparnatural/settings/defaultSettings";
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
 import { ISparJson } from "./sparnatural/generators/ISparJson";
-import ISettings, { PreLoadQueries } from "./sparnatural/settings/ISettings";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
-import QueryParser from "./sparnatural/querypreloading/QueryParser";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
 
 /*
@@ -29,7 +27,7 @@ export class SparnaturalElement extends HTMLElement {
   // for the moment, just keep the handlers in the settings
   // handlers: SparnaturalHandlers;
 
-  Sparnatural:SparnaturalComponent;
+  sparnatural:SparnaturalComponent;
 
   constructor() {
     super();
@@ -52,17 +50,17 @@ export class SparnaturalElement extends HTMLElement {
 
   display() {    
     // render sparnatural 
-    this.Sparnatural = new SparnaturalComponent();
+    this.sparnatural = new SparnaturalComponent();
     // empty the content in case we re-display after an attribute change
     $(this).empty();
-    $(this).append(this.Sparnatural.html);
+    $(this).append(this.sparnatural.html);
     // parse all attributes in the HTML element
     this._attributes = new SparnaturalAttributes(this);
 
     // just set the settings with the HTML attributes
     // TODO : re-enginer the global settings variable to something more OO
     mergeSettings(this._attributes); 
-    this.Sparnatural.render();
+    this.sparnatural.render();
   }
 
   /* NOTE : defaultlang is all lowercase, see https://stackoverflow.com/questions/60566257/web-components-attributechangedcallback-not-firing */
@@ -112,7 +110,7 @@ export class SparnaturalElement extends HTMLElement {
    * Can be called from the outside. Removes the loading spinner on the btn
    */
   enablePlayBtn(){
-    this.Sparnatural.enablePlayBtn()
+    this.sparnatural.enablePlayBtn()
   }
 
   /**
@@ -120,7 +118,7 @@ export class SparnaturalElement extends HTMLElement {
    * Can be called from the outside
    */
   disablePlayBtn(){
-    this.Sparnatural.disablePlayBtn()
+    this.sparnatural.disablePlayBtn()
   }
 
   /**
@@ -129,7 +127,7 @@ export class SparnaturalElement extends HTMLElement {
    * @param query 
    */
   loadQuery(query:ISparJson){
-    QueryLoader.setSparnatural(this.Sparnatural)
+    QueryLoader.setSparnatural(this.sparnatural)
     QueryLoader.loadQuery(query)
   }
 
@@ -139,7 +137,7 @@ export class SparnaturalElement extends HTMLElement {
    * @returns 
    */
   expandSparql(query:string) {
-    return this.Sparnatural.specProvider.expandSparql(query, this.Sparnatural.settings?.sparqlPrefixes);
+    return this.sparnatural.specProvider.expandSparql(query, this.sparnatural.settings?.sparqlPrefixes);
   }
 
   /**
@@ -147,15 +145,17 @@ export class SparnaturalElement extends HTMLElement {
    * Can be called from the outside
    */
   clear() {
-    this.Sparnatural.BgWrapper.resetCallback();
+    this.sparnatural.BgWrapper.resetCallback();
   }
 
-  /**
-   * TODO : should be removed
-   */
-  parseQueries(queries:PreLoadQueries){
-    return QueryParser.parseQueries(queries)
+  registerYasr(yasr:any) {
+    this.sparnatural.yasr = yasr;
   }
+
+  registerYasqe(yasqe:any) {
+    this.sparnatural.yasqe = yasqe;
+  }
+
 }
 
 customElements.get(SparnaturalElement.HTML_ELEMENT_NAME) ||

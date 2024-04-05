@@ -16,12 +16,7 @@ export function selectViewVar(
 
 export function readVariablesFromUI(actionStore: ActionStore) {
   //update the varnames
-  actionStore.variables =
-    actionStore.sparnatural.variableSection.variableOrderMenu.draggables.map(
-      (d: DraggableComponent) => {
-        return d.varName;
-      }
-    );
+  actionStore.variables = actionStore.sparnatural.variableSection.listVariables();
 }
 
 function addVariable(actionStore: ActionStore, val: SelectedVal) {

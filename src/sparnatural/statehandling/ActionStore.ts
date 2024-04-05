@@ -1,7 +1,6 @@
 import ISparnaturalSpecification from "../spec-providers/ISparnaturalSpecification";
 import SparnaturalComponent from "../components/SparnaturalComponent";
-import { ISparJson, Order } from "../generators/ISparJson";
-import generateQuery from "./actions/GenerateQuery";
+import { Order } from "../generators/ISparJson";
 import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
 import redrawBackgroundAndLinks from "./actions/InitGeneralEvent";
@@ -11,8 +10,7 @@ import { selectViewVar } from "./actions/SelectViewVar";
 import { readVariablesFromUI } from "./actions/SelectViewVar";
 import { SelectQuery } from "sparqljs";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
-import { SparnaturalElement } from "../../SparnaturalElement";
-import { getSettings } from "../settings/defaultSettings";
+import { QueryGenerator } from "./actions/GenerateQuery";
 
 export enum MaxVarAction {
   INCREASE,
@@ -30,13 +28,8 @@ class ActionStore {
   specProvider: any;
   order: Order = Order.NOORDER; //default no order
   variables: Array<string> = []; // example ?museum
-  language = "en"; //default
   sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
   showVariableNames = true //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
-  sparnaturalJSON:ISparJson;
-  sparqlString:string;
-  rdfjsSelect:SelectQuery;
-  //submitOpened = false still implement
   
   // when quiet, don't emit onQueryUpdated events
   // this is set when a query is loaded
@@ -56,7 +49,7 @@ class ActionStore {
         event.stopImmediatePropagation();
         event.preventDefault();
         // trigger query generation + re-enable submit button
-        generateQuery(this);
+        new QueryGenerator(this).generateQuery();
       }
     );
 
@@ -73,7 +66,7 @@ class ActionStore {
         // add variable to selected variables
         selectViewVar(this, e.detail,e.target);
         // trigger query generation + re-enable submit button
-        generateQuery(this);
+        new QueryGenerator(this).generateQuery();
       }
     );
 
@@ -133,7 +126,7 @@ class ActionStore {
       this.sparnatural.variableSection.html.remove();
       this.sparnatural.variableSection.render();
       // not sure we should regenerate the query here
-      generateQuery(this)
+      new QueryGenerator(this).generateQuery();
     });
 
     this.sparnatural.html[0].addEventListener(
@@ -143,7 +136,7 @@ class ActionStore {
           throw Error("changeSortOrder expects a payload of Order enum");
         this.order = e.detail;
         // trigger query generation + re-enable submit button
-        generateQuery(this);
+        new QueryGenerator(this).generateQuery();
       }
     );
 
@@ -153,7 +146,7 @@ class ActionStore {
         // update/reset variable names in the state
         readVariablesFromUI(this);
         // trigger query generation + re-enable submit button
-        generateQuery(this);
+        new QueryGenerator(this).generateQuery();
       }
     );
 
@@ -169,7 +162,7 @@ class ActionStore {
         updateVarName(this, payload.oldName, payload.newName);
         
         // trigger query generation + re-enable submit button
-        generateQuery(this);
+        new QueryGenerator(this).generateQuery();
       }
     );
 
