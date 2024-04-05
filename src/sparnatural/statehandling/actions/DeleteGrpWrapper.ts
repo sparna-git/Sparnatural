@@ -1,12 +1,13 @@
+import SparnaturalComponent from "../../components/SparnaturalComponent";
 import ComponentsList from "../../components/builder-section/ComponentsList";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
-import ActionStore, { MaxVarAction } from "../ActionStore";
+
 /*
   This method traverses first preorder through the tree and looks for the child component to delete.
   It then traverses postorder through the descendants of the element to delete and deletes them all
 */
 export default function deleteGrpWrapper(
-  actionStore: ActionStore,
+  sparnatural: SparnaturalComponent,
   e: CustomEvent
 ) {
   // element to delete
@@ -28,7 +29,7 @@ export default function deleteGrpWrapper(
   }
 
   // traversePreOrder through components and calculate background / linkAndBottoms /  for them
-  actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
+  sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       if(grpWrapper === elToDel && grpWrapper.isRootGrpWrapper()) {
         if(elToDel.whereChild) deleteWhereChilds(elToDel)
@@ -37,7 +38,7 @@ export default function deleteGrpWrapper(
           (grpWrapper.ParentComponent as ComponentsList).attachNewRoot(elToDel.andSibling);
           deleteIt(elToDel)
         } else {
-          actionStore.sparnatural.BgWrapper.resetCallback();
+          sparnatural.BgWrapper.resetCallback();
         }
         return // we are done here   
       }
@@ -64,15 +65,15 @@ export default function deleteGrpWrapper(
     }
   );
 
-  actionStore.sparnatural.html[0].dispatchEvent(
+  sparnatural.html[0].dispatchEvent(
     new CustomEvent("redrawBackgroundAndLinks")
   );
   // there might have been variables in the variable section which now got deleted
-  actionStore.sparnatural.html[0].dispatchEvent(
+  sparnatural.html[0].dispatchEvent(
     new CustomEvent("updateVarList")
   );
   // update the query
-  actionStore.sparnatural.html[0].dispatchEvent(
+  sparnatural.html[0].dispatchEvent(
     new CustomEvent("generateQuery", { bubbles: true })
   );
 }

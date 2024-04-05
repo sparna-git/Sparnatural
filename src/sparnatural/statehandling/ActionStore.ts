@@ -3,12 +3,11 @@ import SparnaturalComponent from "../components/SparnaturalComponent";
 import { Order } from "../generators/ISparJson";
 import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
-import redrawBackgroundAndLinks from "./actions/InitGeneralEvent";
+import redrawBackgroundAndLinks from "./actions/RedrawBackgroundAndLinks";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
 import { readVariablesFromUI } from "./actions/SelectViewVar";
-import { SelectQuery } from "sparqljs";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { QueryGenerator } from "./actions/GenerateQuery";
 
@@ -73,7 +72,7 @@ class ActionStore {
     // Switch which toggles if the Start and Endvalues are shown as their Var name. e.g Country_1
     this.sparnatural.html[0].addEventListener("toggleVarNames", (e) => {
       e.stopImmediatePropagation();
-      toggleVarNames(this,this.showVariableNames);
+      toggleVarNames(this.sparnatural,this.showVariableNames);
       this.showVariableNames? this.showVariableNames = false : this.showVariableNames = true
     });
 
@@ -168,13 +167,13 @@ class ActionStore {
 
     this.sparnatural.html[0].addEventListener("redrawBackgroundAndLinks", (e) => {
       e.stopImmediatePropagation();
-      redrawBackgroundAndLinks(this);
+      redrawBackgroundAndLinks(this.sparnatural);
     });
 
     this.sparnatural.html[0].addEventListener(
       "deleteGrpWrapper",
       (e: CustomEvent) => {
-        deleteGrpWrapper(this, e);
+        deleteGrpWrapper(this.sparnatural, e);
       }
     );
 
