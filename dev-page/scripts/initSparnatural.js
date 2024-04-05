@@ -3,8 +3,6 @@
 */
 
 export const sparnatural = document.querySelector("spar-natural");
-import {renderDropDown} from './initDropDown.js'
-import preLoadedQueries from '../configs/preloadqueries.js'
 import {yasqe} from './initYasgui.js'
 
 
