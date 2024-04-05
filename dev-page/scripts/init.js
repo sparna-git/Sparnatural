@@ -24,6 +24,13 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   yasqe.setValue(queryString);
   // store JSON in hidden field
   document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
+
+  // notify the query to yasr plugins
+  for (const plugin in yasr.plugins) {
+      if(yasr.plugins[plugin].notifyQuery) {
+          yasr.plugins[plugin].notifyQuery(event.detail.queryJson);
+      }
+  }
 });
 
 sparnatural.addEventListener("submit", (event) => {
@@ -39,7 +46,12 @@ const yasqe = new Yasqe(document.getElementById("yasqe"), {
 });
 
 
+Yasr.registerPlugin("TableX",SparnaturalYasguiPlugins.TableX);
+Yasr.registerPlugin("Map",SparnaturalYasguiPlugins.MapPlugin);
+delete Yasr.plugins['table'];
 const yasr = new Yasr(document.getElementById("yasr"), {
+    pluginOrder: ["TableX", "Response", "Map"],
+    defaultPlugin: "TableX",
     //this way, the URLs in the results are prettified using the defined prefixes in the query
     getUsedPrefixes : yasqe.getPrefixesFromQuery,
     "drawOutputSelector": false,
