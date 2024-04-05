@@ -11,7 +11,8 @@ import VariableOrderMenu from "./VariableOrderMenu";
 class DraggableComponent extends HTMLComponent {
   icon: any;
   varName: string; // without the ?
-  selectedVal:SelectedVal
+  selectedVal:SelectedVal;
+  aggrComponent: JQuery<HTMLElement>;
   // listener
   varEdited: (oldName: string, newName: string) => void;
 
@@ -31,20 +32,43 @@ class DraggableComponent extends HTMLComponent {
         </input>
         `).val(varName);
 
+
+    let aggrAction = $(`
+        <div class="variableSelectedAggr flexWrap" data-variableName="${varName}">
+          <span class="variableAggr-handle">
+              ${UiuxConfig.ICON_ARROW_BOTTOM}
+          </span>
+          <input type="hidden" name="selectedAggr" />
+          <div class="aggrOptions">
+            <ul>
+              <li data-value="">Aucune</li>
+              <li data-value="COUNT">COUNT</li>
+              <li data-value="GROUP_COMCAT">GROUP_COMCAT</li>
+              <li data-value="MAX">MAX</li>
+              <li data-value="MIN">MIN</li>
+              <li data-value="SAMPLE">SAMPLE</li>
+              <li data-value="SUM">SUM</li>
+            </ul>
+          </div>
+        </div>`)
+
     let widgetHtml =
       $(`<div class="variableSelected flexWrap" data-variableName="${varName}">
             <span class="variable-handle">
                 ${UiuxConfig.COMPONENT_DRAG_HANDLE}
             </span>
             <div class="tmpicon">${icon}</div>
-        </div>
-        `).append(editVar);
+        </div>`).append(editVar).append(aggrAction) ;
+    
+    $(widgetHtml).append(aggrAction);
+    
    
     super("sortableItem", parentComponent, widgetHtml);
     this.selectedVal = selected_val
     this.varName = varName;
     this.#resize(editVar, varName);
     this.varEdited = varEdited;
+    this.aggrComponent = aggrAction ;
     
     let that = this;
     editVar[0].addEventListener("change", (event) => {

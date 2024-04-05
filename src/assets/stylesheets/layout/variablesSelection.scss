@@ -156,6 +156,48 @@
                 outline: none;
             }
         }
+        .variableSelectedAggr {
+                position: relative;
+            /*border-left: 1px solid var(--default-text-color) ;
+            margin-top: -3px;
+            margin-bottom: -3px;
+            padding: 7px 0 7px 5px;
+            height: 38px;*/
+            .variableAggr-handle {
+                display: inline-block;
+                padding: 0 3px;
+                height: 24px;
+                color: transparent;
+                /*border-left: 2px dashed lightgray;
+						border-right: 2px dashed lightgray;*/
+                cursor: grab;
+
+                svg {
+                    width: 11px;
+                    height: 24px;
+
+                    .st0 {
+                        stroke: var(--default-text-color);
+                        stroke-width: 1;
+                    }
+                }
+            }
+            .aggrOptions {
+                background-color: #fff;
+                position: absolute;
+                right: 0;
+                top: 100%;
+                width: 130px;
+                z-index: 100;
+                ul {
+                    list-style-type: none;
+                    li {
+                        padding: 3px 5px;
+                        border-bottom: 1px solid var(--silver-color-main);
+                    }
+                }
+            }
+        }
     }
 
     .line1 {
