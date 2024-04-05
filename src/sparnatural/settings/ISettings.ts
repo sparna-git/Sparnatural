@@ -1,4 +1,3 @@
-import SparnaturalComponent from "../components/SparnaturalComponent";
 import { AutocompleteConfiguration } from "../components/widgets/AutoCompleteWidget";
 import { ListConfiguration } from "../components/widgets/ListWidget";
 import { MapConfiguration } from "../components/widgets/MapWidget";
