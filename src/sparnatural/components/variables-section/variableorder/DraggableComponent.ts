@@ -12,9 +12,11 @@ class DraggableComponent extends HTMLComponent {
   icon: any;
   varName: string; // without the ?
   selectedVal:SelectedVal;
+  selectedAggrFonction: string;
   aggrComponentAction: JQuery<HTMLElement>;
   aggrComponentOptions: JQuery<HTMLElement>;
   aggrComponentInput: JQuery<HTMLElement>;
+  aggrComponentBadgeValue: JQuery<HTMLElement>;
   // listener
   varEdited: (oldName: string, newName: string) => void;
 
@@ -62,21 +64,27 @@ class DraggableComponent extends HTMLComponent {
             </span>
             <div class="tmpicon">${icon}</div>
         </div>`).append(editVar) ;
+
+    let aggrBadgeValue = $(`<div class="aggrBadgeValue" style="display: none;"></div>
+      
+  </div>`) ;
     
     $(aggrAction).append(aggrActionIput);
     $(widgetHtml).append(aggrAction);
     $(widgetHtml).append(aggrOptions);
+    $(widgetHtml).append(aggrBadgeValue);
     
-   
     super("sortableItem", parentComponent, widgetHtml);
     
     this.selectedVal = selected_val
     this.varName = varName;
     this.#resize(editVar, varName);
     this.varEdited = varEdited;
+    this.selectedAggrFonction = '';
     this.aggrComponentAction = aggrAction ;
     this.aggrComponentOptions = aggrOptions ;
     this.aggrComponentInput = aggrActionIput ;
+    this.aggrComponentBadgeValue = aggrBadgeValue ;
 
     
     let that = this;
@@ -123,7 +131,7 @@ class DraggableComponent extends HTMLComponent {
     this.varName = newName;
     let editVar = this.widgetHtml.find("input");
     this.#resize(editVar, this.varName);
-
+    this.dysplayBadgeValue() ;
     // call callback
     this.varEdited(oldName, this.varName);
   }
@@ -137,7 +145,9 @@ class DraggableComponent extends HTMLComponent {
       }
     }) ;
     (<HTMLInputElement>this.aggrComponentInput[0]).value = option ;
+    this.selectedAggrFonction = option;
     this.closeAggrOptions() ;
+    this.dysplayBadgeValue() ;
   }
   toggleAggrOption() {
     if(this.aggrComponentOptions[0].style.display == 'block') {
@@ -150,6 +160,15 @@ class DraggableComponent extends HTMLComponent {
   }
   closeAggrOptions() {
     this.aggrComponentOptions[0].style.display = 'none';
+  }
+  dysplayBadgeValue() {
+    if (this.selectedAggrFonction != '') {
+      this.aggrComponentBadgeValue[0].style.display = 'block';
+      this.aggrComponentBadgeValue[0].innerText = this.selectedAggrFonction+'('+this.varName+')' ;
+    } else {
+      this.aggrComponentBadgeValue[0].style.display = 'none';
+    }
+    
   }
 
   setVarName(newName:string) {
