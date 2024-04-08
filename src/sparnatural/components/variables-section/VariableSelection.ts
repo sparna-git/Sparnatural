@@ -49,6 +49,7 @@ class VariableSection extends HTMLComponent {
           500,
           () => {
             $(this.linesWrapper).height("auto");
+            $(this.linesWrapper).css("overflow", "visible");
           }
         );
       } else {
@@ -56,7 +57,10 @@ class VariableSection extends HTMLComponent {
           {
             height: 0,
           },
-          500
+          500,
+          () => {
+            $(this.linesWrapper).css("overflow", "hidden");
+          }
         );
       }
     };
