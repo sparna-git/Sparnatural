@@ -62,6 +62,9 @@ class VariableSection extends HTMLComponent {
             $(this.linesWrapper).css("overflow", "hidden");
           }
         );
+        this.variableOrderMenu.draggables.forEach((draggableItem) => {
+          draggableItem.closeAggrOptions() ;
+        });
       }
     };
 

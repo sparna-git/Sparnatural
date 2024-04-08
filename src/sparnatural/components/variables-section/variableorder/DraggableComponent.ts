@@ -12,7 +12,9 @@ class DraggableComponent extends HTMLComponent {
   icon: any;
   varName: string; // without the ?
   selectedVal:SelectedVal;
-  aggrComponent: JQuery<HTMLElement>;
+  aggrComponentAction: JQuery<HTMLElement>;
+  aggrComponentOptions: JQuery<HTMLElement>;
+  aggrComponentInput: JQuery<HTMLElement>;
   // listener
   varEdited: (oldName: string, newName: string) => void;
 
@@ -32,17 +34,16 @@ class DraggableComponent extends HTMLComponent {
         </input>
         `).val(varName);
 
-
+        let aggrActionIput =  $(`<input type="hidden" name="selectedAggr" />`) ;
         let aggrAction = $(`
         <div class="variableSelectedAggr flexWrap" data-variableName="${varName}">
           <span class="variableAggr-handle">
               ${UiuxConfig.ICON_ARROW_BOTTOM}
           </span>
-          <input type="hidden" name="selectedAggr" />
         </div>`) ;
 
         let aggrOptions = $(`
-          <div class="aggrOptions">
+          <div class="aggrOptions" style="display: none;">
             <ul>
               <li data-value="">Aucune</li>
               <li data-value="COUNT">COUNT</li>
@@ -62,6 +63,7 @@ class DraggableComponent extends HTMLComponent {
             <div class="tmpicon">${icon}</div>
         </div>`).append(editVar) ;
     
+    $(aggrAction).append(aggrActionIput);
     $(widgetHtml).append(aggrAction);
     $(widgetHtml).append(aggrOptions);
     
@@ -72,7 +74,10 @@ class DraggableComponent extends HTMLComponent {
     this.varName = varName;
     this.#resize(editVar, varName);
     this.varEdited = varEdited;
-    this.aggrComponent = aggrAction ;
+    this.aggrComponentAction = aggrAction ;
+    this.aggrComponentOptions = aggrOptions ;
+    this.aggrComponentInput = aggrActionIput ;
+
     
     let that = this;
     editVar[0].addEventListener("change", (event) => {
@@ -81,9 +86,10 @@ class DraggableComponent extends HTMLComponent {
       that.onVarNameChange(val);
     });
     console.log(this);
-    if(this.htmlParent != null) {
+    this.initEnventListersAggr() ;
+    /*if(this.htmlParent != null) {
       $(this.htmlParent[0]).append(aggrOptions);
-    }
+    }*/
   }
 
   render(): this {
@@ -94,6 +100,24 @@ class DraggableComponent extends HTMLComponent {
     return this;
   }
 
+  initEnventListersAggr() {
+    //Toggle option menu display
+    this.aggrComponentAction[0].addEventListener("click", (event: Event) => {
+      this.toggleAggrOption() ;
+    });
+    // Capture aggregate function selection
+    this.aggrComponentOptions[0].querySelectorAll('li').forEach((optionItem) => {
+      optionItem.addEventListener("click", (event: Event) => {
+        let option = event.currentTarget as HTMLElement ;
+        let optionValue = option.getAttribute('data-value');
+        this.onAggrOptionSelected(optionValue) ;
+      });
+    });
+    
+
+
+  }
+
   onVarNameChange(newName:string) {
     let oldName = this.varName;
     this.varName = newName;
@@ -102,6 +126,30 @@ class DraggableComponent extends HTMLComponent {
 
     // call callback
     this.varEdited(oldName, this.varName);
+  }
+
+  onAggrOptionSelected(option:string) {
+    this.aggrComponentOptions[0].querySelectorAll('li').forEach((optionItem) => {
+      if(optionItem.getAttribute('data-value') == option) {
+        optionItem.classList.add('selected');
+      } else {
+        optionItem.classList.remove('selected');
+      }
+    }) ;
+    (<HTMLInputElement>this.aggrComponentInput[0]).value = option ;
+    this.closeAggrOptions() ;
+  }
+  toggleAggrOption() {
+    if(this.aggrComponentOptions[0].style.display == 'block') {
+      return this.closeAggrOptions() ;
+    }
+    return this.onpenAggrOptions() ;
+  }
+  onpenAggrOptions() {
+    this.aggrComponentOptions[0].style.display = 'block';
+  }
+  closeAggrOptions() {
+    this.aggrComponentOptions[0].style.display = 'none';
   }
 
   setVarName(newName:string) {

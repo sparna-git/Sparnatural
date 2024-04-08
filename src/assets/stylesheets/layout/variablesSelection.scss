@@ -199,6 +199,21 @@
                 li {
                     padding: 3px 8px;
                     border-bottom: 1px solid var(--silver-color-main);
+                    &:has(+ li:hover),
+                    &:has(+ li.selected) {
+                        border-bottom: 1px solid transparent;
+                    }
+                    &:hover,
+                    &.selected {
+                        color: #fff;
+                        background-color: var(--primary-color-main);
+                        margin-top: -1px;
+                        border-top: 1px solid var(--primary-color-main);
+                        border-bottom: 1px solid var(--primary-color-main);
+                        -webkit-background-clip: padding-box; /* for Safari */
+                        background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
+
+                    }
                 }
             }
         }
