@@ -101,6 +101,11 @@ export const VOID = {
   DISTINCT_OBJECTS: factory.namedNode(VOID_NAMESPACE + "distinctObjects") as NamedNode,
 };
 
+const SKOS_NAMESPACE = "http://www.w3.org/2004/02/skos/core#";
+export const SKOS = {
+  DEFINITION: factory.namedNode(SKOS_NAMESPACE + "definition") as NamedNode
+};
+
 export class SHACLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {
 
   #parser: SparqlParser;

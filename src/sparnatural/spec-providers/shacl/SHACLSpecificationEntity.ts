@@ -1,6 +1,6 @@
 import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
 import { DataFactory } from 'rdf-data-factory';
-import { DASH, SH, SHACLSpecificationProvider, VOLIPI, XSD } from "./SHACLSpecificationProvider";
+import { DASH, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
@@ -35,27 +35,38 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         }
 
         return label;
-      }
+    }
 
-      getTooltip(): string | undefined {
+    getTooltip(): string | undefined {
         let tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), VOLIPI.MESSAGE, this.lang)?.value;
+        
         if(!tooltip) {
-          // try with sh:description
-          tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
+            // try with sh:description
+            tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
         }
-        if(!tooltip) {
-          // try to read an rdfs:comment on the property
-          if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
-            // try to read the rdfs:label of the property itself
-            // note that we try to read an rdfs:label event in case the path is a blank node, e.g. sequence path
-            tooltip = this.graph.readSinglePropertyInLang(
-              this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS) as Term,  
-              RDFS.COMMENT, 
-              this.lang)?.value;
-          }
+
+        if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
+            if(!tooltip) {
+                // try to read an rdfs:comment on the class itself
+                // note that we try to read the value even in case the target is a blank node, e.g. SPARQL target
+                tooltip = this.graph.readSinglePropertyInLang(
+                    this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS) as Term,  
+                    SKOS.DEFINITION, 
+                    this.lang)?.value;
+            }
+
+            if(!tooltip) {
+                // try to read an rdfs:comment on the class itself
+                // note that we try to read the value even in case the target is a blank node, e.g. SPARQL target
+                tooltip = this.graph.readSinglePropertyInLang(
+                    this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS) as Term,  
+                    RDFS.COMMENT, 
+                    this.lang)?.value;
+            }
         }
+
         return tooltip;
-      }
+    }
 
 
     getConnectingProperties(range: string): string[] {

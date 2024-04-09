@@ -2,7 +2,7 @@ import { RDF, RDFS } from "../BaseRDFReader";
 import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
-import { DASH, SH, SHACLSpecificationProvider, VOLIPI, XSD } from "./SHACLSpecificationProvider";
+import { DASH, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { ListWidget, SparnaturalSearchWidget, SparnaturalSearchWidgetsRegistry } from "./SHACLSearchWidgets";
 import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntity, SHACLSpecificationEntity } from "./SHACLSpecificationEntity";
@@ -53,9 +53,21 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         // try with sh:description
         tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
       }
-      if(!tooltip) {
-        // try to read an rdfs:comment on the property
-        if(this.graph.hasTriple(factory.namedNode(this.uri),SH.PATH, null)) {
+
+      // make sure we have a path to read properties on the property itself
+      if(this.graph.hasTriple(factory.namedNode(this.uri),SH.PATH, null)) {
+        if(!tooltip) {
+          // try to read a skos:definition on the property
+          // try to read the value of the property itself
+          // note that we try to read an rdfs:comment even in case the path is a blank node, e.g. sequence path
+          tooltip = this.graph.readSinglePropertyInLang(
+            this.graph.readSingleProperty(factory.namedNode(this.uri),SH.PATH) as Term            , 
+            SKOS.DEFINITION, 
+            this.lang)?.value;
+        }
+
+        if(!tooltip) {
+          // try to read an rdfs:comment on the property
           // try to read the rdfs:label of the property itself
           // note that we try to read an rdfs:label event in case the path is a blank node, e.g. sequence path
           tooltip = this.graph.readSinglePropertyInLang(
@@ -64,6 +76,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
             this.lang)?.value;
         }
       }
+
       return tooltip;
     }
 
