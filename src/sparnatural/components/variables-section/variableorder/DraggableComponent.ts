@@ -17,6 +17,8 @@ class DraggableComponent extends HTMLComponent {
   aggrComponentOptions: JQuery<HTMLElement>;
   aggrComponentInput: JQuery<HTMLElement>;
   aggrComponentBadgeValue: JQuery<HTMLElement>;
+  aggrComponentOptionsExtend: JQuery<HTMLElement>;
+  ParentComponent: VariableOrderMenu;
   // listener
   varEdited: (oldName: string, newName: string) => void;
 
@@ -45,10 +47,10 @@ class DraggableComponent extends HTMLComponent {
         </div>`) ;
 
         let aggrOptions = $(`
-          <div class="aggrOptions" style="display: none;">
+          <div class="aggrOptions reducted" style="display: none;">
             <ul>
               <li data-value="">Aucune</li>
-              <li data-value="COUNT">COUNT</li>
+              <li data-value="COUNT" class="reducted-visible">COUNT</li>
               <li data-value="GROUP_COMCAT">GROUP_COMCAT</li>
               <li data-value="MAX">MAX</li>
               <li data-value="MIN">MIN</li>
@@ -56,6 +58,12 @@ class DraggableComponent extends HTMLComponent {
               <li data-value="SUM">SUM</li>
             </ul>
         </div>`) ;
+
+    let aggrOptionsExtend = $(`
+    <div class="aggrOptionsExtend">
+      <span class="reducted-action">Voir +</span>
+      <span class="extended-action">Voir -</span>
+    </div>`) ;
 
     let widgetHtml =
       $(`<div class="variableSelected flexWrap" data-variableName="${varName}">
@@ -71,6 +79,7 @@ class DraggableComponent extends HTMLComponent {
     
     $(aggrAction).append(aggrActionIput);
     $(widgetHtml).append(aggrAction);
+    $(aggrOptions).append(aggrOptionsExtend);
     $(widgetHtml).append(aggrOptions);
     $(widgetHtml).append(aggrBadgeValue);
     
@@ -82,6 +91,7 @@ class DraggableComponent extends HTMLComponent {
     this.varEdited = varEdited;
     this.selectedAggrFonction = '';
     this.aggrComponentAction = aggrAction ;
+    this.aggrComponentOptionsExtend = aggrOptionsExtend ;
     this.aggrComponentOptions = aggrOptions ;
     this.aggrComponentInput = aggrActionIput ;
     this.aggrComponentBadgeValue = aggrBadgeValue ;
@@ -95,6 +105,10 @@ class DraggableComponent extends HTMLComponent {
     });
     console.log(this);
     this.initEnventListersAggr() ;
+    console.log(this.ParentComponent) ;
+    if (parentComponent.aggrOptionsExtend) {
+      this.toggleAggrOptionsExtend() ;
+    }
     /*if(this.htmlParent != null) {
       $(this.htmlParent[0]).append(aggrOptions);
     }*/
@@ -120,6 +134,10 @@ class DraggableComponent extends HTMLComponent {
         let optionValue = option.getAttribute('data-value');
         this.onAggrOptionSelected(optionValue) ;
       });
+    });
+
+    this.aggrComponentOptionsExtend[0].addEventListener("click", (event: Event) => {
+      this.toggleAggrOptionsExtend() ;
     });
     
 
@@ -153,7 +171,25 @@ class DraggableComponent extends HTMLComponent {
     if(this.aggrComponentOptions[0].style.display == 'block') {
       return this.closeAggrOptions() ;
     }
+    if(this.ParentComponent.aggrOptionsExtend) {
+      this.aggrComponentOptions[0].classList.remove('reducted');
+      this.aggrComponentOptions[0].classList.add('extended');
+    } else {
+      this.aggrComponentOptions[0].classList.add('reducted');
+      this.aggrComponentOptions[0].classList.remove('extended');
+    }
     return this.onpenAggrOptions() ;
+  }
+  toggleAggrOptionsExtend() {
+    if(this.aggrComponentOptions[0].classList.contains('reducted')) {
+      this.aggrComponentOptions[0].classList.remove('reducted');
+      this.aggrComponentOptions[0].classList.add('extended');
+      this.ParentComponent.aggrOptionsExtend = true;
+    } else {
+      this.aggrComponentOptions[0].classList.add('reducted');
+      this.aggrComponentOptions[0].classList.remove('extended');
+      this.ParentComponent.aggrOptionsExtend = false;
+    }
   }
   onpenAggrOptions() {
     this.aggrComponentOptions[0].style.display = 'block';

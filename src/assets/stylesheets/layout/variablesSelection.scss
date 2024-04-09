@@ -216,6 +216,49 @@
                     }
                 }
             }
+            &.reducted {
+                ul {
+                    li {
+                        display: none;
+                        &.selected,
+                        &.reducted-visible {
+                            display: list-item;
+                        }
+                    }
+                }
+            }
+
+            .aggrOptionsExtend {
+                span {
+                    padding: 3px 8px;
+                }
+                &:hover {
+                    color: #fff;
+                    background-color: var(--primary-color-main);
+                    margin-top: -1px;
+                    border-top: 1px solid var(--primary-color-main);
+                }
+            }
+            &.extended {
+                .aggrOptionsExtend {
+                    .reducted-action {
+                        display: none;
+                    }
+                    .extended-action {
+                        display: block;
+                    }
+                }
+            }
+            &.reducted {
+                .aggrOptionsExtend {
+                    .reducted-action {
+                        display: block;
+                    }
+                    .extended-action {
+                        display: none;
+                    }
+                }
+            }
         }
         .aggrBadgeValue {
             position: absolute;

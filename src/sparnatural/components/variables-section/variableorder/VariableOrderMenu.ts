@@ -8,9 +8,11 @@ import DraggableComponent from "./DraggableComponent";
 class VariableOrderMenu extends HTMLComponent {
   draggables: Array<DraggableComponent> = [];
   specProvider: ISparnaturalSpecification;
+  aggrOptionsExtend: boolean;
   constructor(parentComponent: VariableSelection, specProvider: ISparnaturalSpecification) {
     super("VariableOrderMenu", parentComponent, null);
     this.specProvider = specProvider;
+    this.aggrOptionsExtend = false;
   }
 
   render(): this {
