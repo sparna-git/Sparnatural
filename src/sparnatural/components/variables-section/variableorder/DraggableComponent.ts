@@ -11,6 +11,7 @@ import VariableOrderMenu from "./VariableOrderMenu";
 class DraggableComponent extends HTMLComponent {
   icon: any;
   varName: string; // without the ?
+  varNameAggr: string; // without the ?
   selectedVal:SelectedVal;
   selectedAggrFonction: string;
   aggrComponentAction: JQuery<HTMLElement>;
@@ -20,13 +21,13 @@ class DraggableComponent extends HTMLComponent {
   aggrComponentOptionsExtend: JQuery<HTMLElement>;
   ParentComponent: VariableOrderMenu;
   // listener
-  varEdited: (oldName: string, newName: string) => void;
+  varEdited: (oldName: string, newName: string, selectedAggrFonction: string, varNameAggr: string) => void;
 
   constructor(
     parentComponent: VariableOrderMenu,
     specProvider: ISparnaturalSpecification,
     selected_val: SelectedVal,
-    varEdited: (oldName: string, newName: string) => void
+    varEdited: (oldName: string, newName: string, selectedAggrFonction: string, varNameAggr: string) => void
   ) {
     let varName = selected_val.variable.substring(
       1,
@@ -90,6 +91,7 @@ class DraggableComponent extends HTMLComponent {
     this.#resize(editVar, varName);
     this.varEdited = varEdited;
     this.selectedAggrFonction = '';
+    this.varNameAggr = '';
     this.aggrComponentAction = aggrAction ;
     this.aggrComponentOptionsExtend = aggrOptionsExtend ;
     this.aggrComponentOptions = aggrOptions ;
@@ -151,7 +153,7 @@ class DraggableComponent extends HTMLComponent {
     this.#resize(editVar, this.varName);
     this.dysplayBadgeValue() ;
     // call callback
-    this.varEdited(oldName, this.varName);
+    this.varEdited(oldName, this.varName, this.selectedAggrFonction, this.varNameAggr);
   }
 
   onAggrOptionSelected(option:string) {

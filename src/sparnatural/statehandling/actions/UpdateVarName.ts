@@ -8,8 +8,10 @@ import ActionStore from "../ActionStore";
 */
 export default function updateVarName(
   actionStore: ActionStore,
-  oldName: string,
-  newName: string
+  oldName: string, 
+  newName: string, 
+  selectedAggrFonction: string, 
+  varNameAggr: string
 ) {
   // traversePreOrder through components and calculate background / linkAndBottoms /  for them
   actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(

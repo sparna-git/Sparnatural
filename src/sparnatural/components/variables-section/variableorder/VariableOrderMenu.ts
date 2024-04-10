@@ -95,11 +95,11 @@ class VariableOrderMenu extends HTMLComponent {
   }
 
   // A variable name has been edited. Update it in the correct ClassTypeId
-  variableNameEdited = (oldName: string, newName: string) => {
+  variableNameEdited = (oldName: string, newName: string, selectedAggrFonction: string, varNameAggr: string) => {
     this.html[0].dispatchEvent(
       new CustomEvent("updateVarName", {
         bubbles: true,
-        detail: { oldName: oldName, newName: newName },
+        detail: { oldName: oldName, newName: newName, selectedAggrFonction: selectedAggrFonction, varNameAggr: varNameAggr},
       })
     );
 

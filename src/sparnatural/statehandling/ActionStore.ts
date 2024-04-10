@@ -161,12 +161,12 @@ class ActionStore {
       "updateVarName",
       (e: CustomEvent) => {
         let payload = e.detail;
-        if (!("oldName" in payload && "newName" in payload))
+        if (!("oldName" in payload && "newName" in payload && "selectedAggrFonction" in payload && "varNameAggr" in payload))
           throw Error(
-            "updateVarName event requires an object of {oldName:string,newName:string}"
+            "updateVarName event requires an object of {oldName: string, newName: string, selectedAggrFonction: string, varNameAggr: string}"
           );
         
-        updateVarName(this, payload.oldName, payload.newName);
+        updateVarName(this, payload.oldName, payload.newName, payload.selectedAggrFonction, payload.varNameAggr);
         
         // trigger query generation + re-enable submit button
         generateQuery(this);
