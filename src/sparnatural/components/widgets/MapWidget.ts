@@ -1,7 +1,7 @@
 import { DataFactory } from 'rdf-data-factory';
 import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 // L needs to be imported *before* leaflet-geoman-free
-import L, { LatLng, Rectangle, PolylineOptions, Polygon, PM } from "leaflet";
+import L, { LatLng, Rectangle, PolylineOptions, Polygon, PM, TileLayer } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import {
@@ -169,7 +169,8 @@ export default class MapWidget extends AbstractWidget {
     }
   }
 
-  #renderMap = () => {
+  #renderMap = () => {    
+
     let d = new Date();
     let elementId = d.valueOf();
     console.log(elementId) ;
@@ -177,11 +178,18 @@ export default class MapWidget extends AbstractWidget {
 
     this.html.append($('<div id="map-'+elementId+'" class="map-wrapper"></div>'));
 
-    this.map = L.map("map-"+elementId+"").setView([this.configuration.center.lat, this.configuration.center.long], this.configuration.zoom);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    this.map = L.map("map-"+elementId);    
+    let tl:TileLayer = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution: "© OpenStreetMap",
-    }).addTo(this.map);
+    });    
+    tl.addTo(this.map);
+
+    // attempt to rebind geoman - does not work at the moment
+    // see https://geoman.io/docs/lazy-loading
+    // L.PM.reInitLayer(tl);
+
+    this.map.setView([this.configuration.center.lat, this.configuration.center.long], this.configuration.zoom);
 
     this.map.pm.addControls({
       position: "topleft",
