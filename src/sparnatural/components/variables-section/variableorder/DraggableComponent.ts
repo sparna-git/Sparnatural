@@ -51,8 +51,8 @@ class DraggableComponent extends HTMLComponent {
           <div class="aggrOptions reducted" style="display: none;">
             <ul>
               <li data-value="" class="reducted-visible">Aucune</li>
-              <li data-value="COUNT" class="reducted-visible">COUNT</li>
-              <li data-value="GROUP_COMCAT">GROUP_COMCAT</li>
+              <li data-value="COUNT" data class="reducted-visible">COUNT</li>
+              <li data-value="GROUP_CONCAT">GROUP_CONCAT</li>
               <li data-value="MAX">MAX</li>
               <li data-value="MIN">MIN</li>
               <li data-value="SAMPLE">SAMPLE</li>
