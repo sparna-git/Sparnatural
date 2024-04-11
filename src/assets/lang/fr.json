@@ -47,5 +47,15 @@
   "NumberLabelBetween": "entre",
   "NumberLabelAnd": "et",
   "NumberLabelHigherThan": "supérieur à",
-  "NumberLabelLowerThan": "inférieur à"
+  "NumberLabelLowerThan": "inférieur à",
+  "AggrLabelNone": "Aucune",
+  "AggrLabelCount": "COUNT",
+  "AggrLabelGroupConcat": "GROUPE_CONCAT",
+  "AggrLabelMax": "MAX",
+  "AggrLabelMin": "MIN",
+  "AggrLabelSample": "SAMPLE",
+  "AggrLabelSum": "SUM",
+  "AggrLabelAvg": "AVG",
+  "AggrLabelSeeMore": "Voir +",
+  "AggrLabelSeeLess": "Voir -"
 }

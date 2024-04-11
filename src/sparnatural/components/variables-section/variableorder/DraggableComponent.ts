@@ -3,6 +3,7 @@ import { SelectedVal } from "../../../components/SelectedVal";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../HtmlComponent";
 import VariableOrderMenu from "./VariableOrderMenu";
+import { I18n } from "../../../settings/I18n";
 /*
     Single Draggable Component
     It consists of an "drag handle" + icon + name of the variable
@@ -50,21 +51,21 @@ class DraggableComponent extends HTMLComponent {
         let aggrOptions = $(`
           <div class="aggrOptions reducted" style="display: none;">
             <ul>
-              <li data-value="" class="reducted-visible">Aucune</li>
-              <li data-value="count" data class="reducted-visible" data-suffix="_count">COUNT</li>
-              <li data-value="group_contcat" data-suffix="_group_concat">GROUP_CONCAT</li>
-              <li data-value="max" data-suffix="_max" class="revealIf revealIf-num revealIf-time">MAX</li>
-              <li data-value="min" data-suffix="_min" class="revealIf revealIf-num revealIf-time">MIN</li>
-              <li data-value="sample" data-suffix="_sample">SAMPLE</li>
-              <li data-value="sum" data-suffix="_sum" class="revealIf revealIf-num">SUM</li>
-              <li data-value="avg" data-suffix="_avg" class="revealIf revealIf-num">AVG</li>
+              <li data-value="" class="reducted-visible">`+I18n.labels.AggrLabelNone+`</li>
+              <li data-value="count" data class="reducted-visible" data-suffix="_count">`+I18n.labels.AggrLabelCount+`</li>
+              <li data-value="group_contcat" data-suffix="_group_concat">`+I18n.labels.AggrLabelGroupConcat+`</li>
+              <li data-value="max" data-suffix="_max" class="revealIf revealIf-num revealIf-time">`+I18n.labels.AggrLabelMax+`</li>
+              <li data-value="min" data-suffix="_min" class="revealIf revealIf-num revealIf-time">`+I18n.labels.AggrLabelMin+`</li>
+              <li data-value="sample" data-suffix="_sample">`+I18n.labels.AggrLabelSample+`</li>
+              <li data-value="sum" data-suffix="_sum" class="revealIf revealIf-num">`+I18n.labels.AggrLabelSum+`</li>
+              <li data-value="avg" data-suffix="_avg" class="revealIf revealIf-num">`+I18n.labels.AggrLabelAvg+`</li>
             </ul>
         </div>`) ;
 
     let aggrOptionsExtend = $(`
     <div class="aggrOptionsExtend">
-      <span class="reducted-action">Voir +</span>
-      <span class="extended-action">Voir -</span>
+      <span class="reducted-action">`+I18n.labels.AggrLabelSeeMore+`</span>
+      <span class="extended-action">`+I18n.labels.AggrLabelSeeLess+`</span>
     </div>`) ;
 
     let widgetHtml =
