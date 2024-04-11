@@ -15,6 +15,7 @@ class DraggableComponent extends HTMLComponent {
   varNameAggr: string; // without the ?
   selectedVal:SelectedVal;
   selectedAggrFonction: string;
+  aggregateOn: any;
   aggrComponentAction: JQuery<HTMLElement>;
   aggrComponentOptions: JQuery<HTMLElement>;
   aggrComponentInput: JQuery<HTMLElement>;
@@ -22,13 +23,15 @@ class DraggableComponent extends HTMLComponent {
   aggrComponentOptionsExtend: JQuery<HTMLElement>;
   ParentComponent: VariableOrderMenu;
   // listener
-  varEdited: (oldName: string, newName: string, selectedAggrFonction: string, varNameAggr: string) => void;
+  varEdited: (oldName: string, newName: string) => void;
+  aggrChanged: (oldName: string, newName: string, selectedAggrFonction: string, aggregateOn: string) => void;
 
   constructor(
     parentComponent: VariableOrderMenu,
     specProvider: ISparnaturalSpecification,
     selected_val: SelectedVal,
-    varEdited: (oldName: string, newName: string, selectedAggrFonction: string, varNameAggr: string) => void
+    varEdited: (oldName: string, newName: string) => void,
+    aggrChanged: (oldName: string, newName: string, selectedAggrFunction: string, aggregateOn: string) => void
   ) {
     let varName = selected_val.variable.substring(
       1,
@@ -53,7 +56,7 @@ class DraggableComponent extends HTMLComponent {
             <ul>
               <li data-value="" class="reducted-visible">`+I18n.labels.AggrLabelNone+`</li>
               <li data-value="count" data class="reducted-visible" data-suffix="_count">`+I18n.labels.AggrLabelCount+`</li>
-              <li data-value="group_contcat" data-suffix="_group_concat">`+I18n.labels.AggrLabelGroupConcat+`</li>
+              <li data-value="group_concat" data-suffix="_group_concat">`+I18n.labels.AggrLabelGroupConcat+`</li>
               <li data-value="max" data-suffix="_max" class="revealIf revealIf-num revealIf-time">`+I18n.labels.AggrLabelMax+`</li>
               <li data-value="min" data-suffix="_min" class="revealIf revealIf-num revealIf-time">`+I18n.labels.AggrLabelMin+`</li>
               <li data-value="sample" data-suffix="_sample">`+I18n.labels.AggrLabelSample+`</li>
@@ -92,8 +95,10 @@ class DraggableComponent extends HTMLComponent {
     this.varName = varName;
     this.#resize(editVar, varName);
     this.varEdited = varEdited;
+    this.aggrChanged = aggrChanged;
     this.selectedAggrFonction = '';
     this.varNameAggr = '';
+    this.aggregateOn = false ;
     this.aggrComponentAction = aggrAction ;
     this.aggrComponentOptionsExtend = aggrOptionsExtend ;
     this.aggrComponentOptions = aggrOptions ;
@@ -134,9 +139,31 @@ class DraggableComponent extends HTMLComponent {
     // Capture aggregate function selection
     this.aggrComponentOptions[0].querySelectorAll('li').forEach((optionItem) => {
       optionItem.addEventListener("click", (event: Event) => {
+
         let option = event.currentTarget as HTMLElement ;
         let optionValue = option.getAttribute('data-value');
+        let optionValueSuffix = option.getAttribute('data-suffix');
+        let newName: string ;
+        let oldName: string; 
+
+        oldName =  this.varName ;
+
+        if(!this.aggregateOn) {
+          this.aggregateOn = this.varName ;
+        }
+        if(optionValue == '') {
+          newName = this.aggregateOn ;
+          this.aggregateOn = false;
+        }
+        if(this.aggregateOn) {
+          newName = this.aggregateOn+optionValueSuffix ;
+        } 
+
         this.onAggrOptionSelected(optionValue) ;
+        
+        this.aggrChanged(oldName, newName, optionValue, this.aggregateOn);
+        //this.setVarName(newName) ;
+        this.widgetHtml.find("input").val(newName);
       });
     });
 
@@ -155,7 +182,8 @@ class DraggableComponent extends HTMLComponent {
     this.#resize(editVar, this.varName);
     this.dysplayBadgeValue() ;
     // call callback
-    this.varEdited(oldName, this.varName, this.selectedAggrFonction, this.varNameAggr);
+    console.log('Sending data varName '+oldName+' '+ this.varName ) ;
+    this.varEdited(oldName, this.varName);
   }
 
   onAggrOptionSelected(option:string) {
@@ -170,6 +198,7 @@ class DraggableComponent extends HTMLComponent {
     this.selectedAggrFonction = option;
     this.closeAggrOptions() ;
     this.dysplayBadgeValue() ;
+    
   }
   toggleAggrOption() {
     if(this.aggrComponentOptions[0].style.display == 'block') {
@@ -204,7 +233,7 @@ class DraggableComponent extends HTMLComponent {
   dysplayBadgeValue() {
     if (this.selectedAggrFonction != '') {
       this.aggrComponentBadgeValue[0].style.display = 'block';
-      this.aggrComponentBadgeValue[0].innerText = this.selectedAggrFonction+'('+this.varName+')' ;
+      this.aggrComponentBadgeValue[0].innerText = this.selectedAggrFonction.toUpperCase()+'('+this.aggregateOn+')' ;
     } else {
       this.aggrComponentBadgeValue[0].style.display = 'none';
     }

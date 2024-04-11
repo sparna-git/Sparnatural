@@ -78,7 +78,8 @@ class VariableOrderMenu extends HTMLComponent {
       this,
       this.specProvider,
       selected_val,
-      this.variableNameEdited
+      this.variableNameEdited,
+      this.variableAggrChange
     );
     dragbl.render();
     this.draggables.push(dragbl);
@@ -95,11 +96,21 @@ class VariableOrderMenu extends HTMLComponent {
   }
 
   // A variable name has been edited. Update it in the correct ClassTypeId
-  variableNameEdited = (oldName: string, newName: string, selectedAggrFonction: string, varNameAggr: string) => {
+  variableNameEdited = (oldName: string, newName: string) => {
     this.html[0].dispatchEvent(
       new CustomEvent("updateVarName", {
         bubbles: true,
-        detail: { oldName: oldName, newName: newName, selectedAggrFonction: selectedAggrFonction, varNameAggr: varNameAggr},
+        detail: { oldName: oldName, newName: newName},
+      })
+    );
+
+  };
+  // A variable agregate function has been edited. Update it in the correct ClassTypeId
+  variableAggrChange = (oldName: string, newName: string, selectedAggrFonction: string, aggregateOn: string) => {
+    this.html[0].dispatchEvent(
+      new CustomEvent("updateAggr", {
+        bubbles: true,
+        detail: { oldName: oldName, newName: newName, selectedAggrFonction: selectedAggrFonction, aggregateOn: aggregateOn},
       })
     );
 
