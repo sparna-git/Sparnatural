@@ -40,8 +40,7 @@ class VariableSection extends HTMLComponent {
    * @returns the variable names from the variable selection part of the UI
    */
   listVariables():DraggableComponentState[] {
-    // return this.variableOrderMenu.draggables.map((d: DraggableComponent) => d.varName);
-    return [];
+    return this.variableOrderMenu.draggables.map((d: DraggableComponent) => d.state);
   }
 
   /**

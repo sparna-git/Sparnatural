@@ -158,9 +158,9 @@ class ActionStore {
       "updateVarName",
       (e: CustomEvent) => {
         let payload = e.detail;
-        if (!("oldName" in payload && "newName" in payload))
+        if (!("state" in payload && "previousVarName" in payload.state && "varName" in payload.state))
           throw Error(
-            "updateVarName event requires an object of {oldName: string, newName: string}"
+            "updateVarName event requires an object of { state: { previousVarName: string, varName: string } }"
           );
         
         updateVarName(this, payload.oldName, payload.newName);
