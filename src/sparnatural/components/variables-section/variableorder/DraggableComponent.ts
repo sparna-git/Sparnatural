@@ -4,12 +4,14 @@ import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpeci
 import HTMLComponent from "../../HtmlComponent";
 import VariableOrderMenu from "./VariableOrderMenu";
 import { I18n } from "../../../settings/I18n";
+import { AggregateFunction } from "../../../generators/ISparJson";
+
 /*
     Single Draggable Component
     It consists of an "drag handle" + icon + name of the variable
     The name of the variable can be edited.
 */
-class DraggableComponent extends HTMLComponent {
+export class DraggableComponent extends HTMLComponent {
   icon: any;
   varName: string; // without the ?
   varNameAggr: string; // without the ?
@@ -262,4 +264,22 @@ class DraggableComponent extends HTMLComponent {
   }
 }
 
-export default DraggableComponent;
+export interface DraggableComponentState {
+  /**
+   * Name of the variable in the white input field in the middle 
+   * (can be the original var name or the var name of the result of the aggreation)
+   */
+  varName:string;
+  /**
+   * Name of the aggragation function
+   */
+  aggregateFunction:AggregateFunction;
+  /**
+   * In case an aggregation function is selected, the name of the original var name
+   */
+  originalVarName:string;
+  /**
+   * Previous var name in case there is an edition
+   */
+  previousVarName:string;
+}

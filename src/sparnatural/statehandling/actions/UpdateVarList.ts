@@ -1,5 +1,5 @@
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
-import DraggableComponent from "../../components/variables-section/variableorder/DraggableComponent";
+import { DraggableComponent } from "../../components/variables-section/variableorder/DraggableComponent";
 import ActionStore from "../ActionStore";
 
 /*

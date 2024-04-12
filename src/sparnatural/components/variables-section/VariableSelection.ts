@@ -3,7 +3,7 @@ import DisplayBtn from "../buttons/DisplayBtn";
 import HTMLComponent from "../HtmlComponent";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";
 import VariableSortOption from "./variablesort/VariableSortOptions";
-import DraggableComponent from "./variableorder/DraggableComponent";
+import { DraggableComponent, DraggableComponentState } from "./variableorder/DraggableComponent";
 import { Order } from "../../generators/ISparJson";
 
 class VariableSection extends HTMLComponent {
@@ -39,8 +39,9 @@ class VariableSection extends HTMLComponent {
   /**
    * @returns the variable names from the variable selection part of the UI
    */
-  listVariables():string[] {
-    return this.variableOrderMenu.draggables.map((d: DraggableComponent) => d.varName);
+  listVariables():DraggableComponentState[] {
+    // return this.variableOrderMenu.draggables.map((d: DraggableComponent) => d.varName);
+    return [];
   }
 
   /**

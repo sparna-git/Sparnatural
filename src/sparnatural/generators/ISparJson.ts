@@ -30,3 +30,13 @@ export enum Order {
   DESC = "desc",
   NOORDER = "noord",
 }
+
+export enum AggregateFunction {
+  COUNT = "count",
+  MAX = "max",
+  MIN = "min",
+  SUM = "sum",
+  GROUP_CONCAT = "group_concat",
+  SAMPLE = "sample",
+  AVG = "avg"
+}

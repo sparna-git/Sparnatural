@@ -3,7 +3,7 @@ import { SelectedVal } from "../../../components/SelectedVal";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../HtmlComponent";
 import VariableSelection from "../VariableSelection";
-import DraggableComponent from "./DraggableComponent";
+import { DraggableComponent } from "./DraggableComponent";
 
 class VariableOrderMenu extends HTMLComponent {
   draggables: Array<DraggableComponent> = [];

@@ -3,6 +3,7 @@ import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrappe
 import { Branch, ISparJson, Order } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import { SelectAllValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
+import { DraggableComponentState } from "../components/variables-section/variableorder/DraggableComponent";
 
 /*
   Reads out the UI and creates the internal JSON structure described here:
@@ -21,12 +22,12 @@ class SparnaturalJsonGenerator {
   }
 
   generateQuery(
-    variables: Array<string>,
+    variables: Array<DraggableComponentState>,
     order: Order,
     distinct: boolean,
   ) {
     this.json.distinct = distinct;
-    this.json.variables = variables;
+    this.json.variables = variables.map(state => state.varName);
     // don't output "noord", just set it to null
     if(order != Order.NOORDER) {
       this.json.order = order;

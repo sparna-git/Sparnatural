@@ -1,5 +1,5 @@
-import DraggableComponent from "../../components/variables-section/variableorder/DraggableComponent";
 import { SelectedVal } from "../../components/SelectedVal";
+import { DraggableComponent } from "../../components/variables-section/variableorder/DraggableComponent";
 import ActionStore from "../ActionStore";
 
 // This Action gets called when an SelctViewVar ("eye") Button is clicked

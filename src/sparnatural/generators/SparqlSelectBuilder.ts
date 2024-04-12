@@ -11,6 +11,7 @@ import SparnaturalComponent from "../components/SparnaturalComponent";
 import WhereBuilder from "./helpers/WhereBuilder";
 import SparqlFactory from "./SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
+import { DraggableComponentState } from "../components/variables-section/variableorder/DraggableComponent";
 
 const factory = new DataFactory();
 
@@ -36,7 +37,7 @@ export default class RdfJsGenerator {
   }
 
   generateQuery(
-    variables: Array<string>,
+    variables: Array<DraggableComponentState>,
     order: Order,
     distinct: boolean,
     limit: number
@@ -44,13 +45,13 @@ export default class RdfJsGenerator {
     const SparqlJsQuery: SelectQuery = {
       queryType: "SELECT",
       distinct: distinct,
-      variables: this.#varsToRDFJS(variables),
+      variables: this.#varsToRDFJS(variables.map(state => state.varName)),
       type: "query",
       where: this.#createWhereClause(),
       prefixes: this.prefixes,
       order: this.#orderToRDFJS(
         order,
-        this.#varsToRDFJS(variables)[0] as VariableTerm
+        this.#varsToRDFJS(variables.map(state => state.varName))[0] as VariableTerm
       ),
       limit: (limit && (limit > 0))?limit:undefined
     };
