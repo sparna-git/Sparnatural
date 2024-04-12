@@ -55,7 +55,7 @@ export class DraggableComponent extends HTMLComponent {
         </div>`) ;
 
         let aggrOptions = $(`
-          <div class="aggrOptions reducted" style="display: none;">
+          <div class="aggrOptions reducted is-num is-time" style="display: none;">
             <ul>
               <li data-value="" class="reducted-visible">`+I18n.labels.AggrLabelNone+`</li>
               <li data-value="count" data class="reducted-visible" data-suffix="_count">`+I18n.labels.AggrLabelCount+`</li>
