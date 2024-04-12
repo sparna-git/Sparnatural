@@ -1,5 +1,5 @@
-import DraggableComponent from "../../components/variables-section/variableorder/DraggableComponent";
 import { SelectedVal } from "../../components/SelectedVal";
+import { DraggableComponent } from "../../components/variables-section/variableorder/DraggableComponent";
 import ActionStore from "../ActionStore";
 
 // This Action gets called when an SelctViewVar ("eye") Button is clicked
@@ -14,15 +14,18 @@ export function selectViewVar(
     if(payload.selected) addVariable(actionStore, payload.val)
 }
 
-export function readVariablesFromUI(actionStore: ActionStore) {
+
+// export function readVariablesFromUI(actionStore: ActionStore) {
   //update the varnames
+  /*
   actionStore.variables =
     actionStore.sparnatural.variableSection.variableOrderMenu.draggables.map(
       (d: DraggableComponent) => {
         return d.varName;
       }
     );
-}
+    */
+// }
 
 function addVariable(actionStore: ActionStore, val: SelectedVal) {
   if(actionStore.sparnatural.variableSection.variableOrderMenu.draggables.find((d:DraggableComponent)=>{
@@ -33,9 +36,9 @@ function addVariable(actionStore: ActionStore, val: SelectedVal) {
     val
   );
   //update stateobject
-  actionStore.variables.push(val.variable.replace('?',''))
+  // actionStore.variables.push(val.variable.replace('?',''))
   //update the varnames
-  readVariablesFromUI(actionStore);
+  // readVariablesFromUI(actionStore);
 }
 
 function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
@@ -44,7 +47,7 @@ function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
     val.variable
   );
   //update the varnames
-  readVariablesFromUI(actionStore);
+  // readVariablesFromUI(actionStore);
   //update the variables in the state
-  actionStore.variables.filter((v)=> v!=val.variable.replace('?',''))
+  // actionStore.variables.filter((v)=> v!=val.variable.replace('?',''))
 }

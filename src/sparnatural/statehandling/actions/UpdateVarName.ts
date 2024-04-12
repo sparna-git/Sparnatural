@@ -1,5 +1,4 @@
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
-import DraggableComponent from "../../components/variables-section/variableorder/DraggableComponent";
 import ActionStore from "../ActionStore";
 
 /*
@@ -23,7 +22,7 @@ export default function updateVarName(
     }
   );
   //add variables list in actionstore
-  actionStore.variables = actionStore.sparnatural.variableSection.listVariables();
+  // actionStore.variables = actionStore.sparnatural.variableSection.listVariables();
 
   actionStore.sparnatural.html[0].dispatchEvent(
     new CustomEvent("redrawBackgroundAndLinks")

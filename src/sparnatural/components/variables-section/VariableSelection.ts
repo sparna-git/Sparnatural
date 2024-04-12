@@ -3,7 +3,8 @@ import DisplayBtn from "../buttons/DisplayBtn";
 import HTMLComponent from "../HtmlComponent";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";
 import VariableSortOption from "./variablesort/VariableSortOptions";
-import DraggableComponent from "./variableorder/DraggableComponent";
+import { DraggableComponent, DraggableComponentState } from "./variableorder/DraggableComponent";
+import { Order } from "../../generators/ISparJson";
 
 class VariableSection extends HTMLComponent {
   displayBtn: DisplayBtn;
@@ -35,8 +36,26 @@ class VariableSection extends HTMLComponent {
     return this;
   }
 
-  listVariables():string[] {
-    return this.variableOrderMenu.draggables.map((d: DraggableComponent) => d.varName);
+  /**
+   * @returns the variable names from the variable selection part of the UI
+   */
+  listVariables():DraggableComponentState[] {
+    // return this.variableOrderMenu.draggables.map((d: DraggableComponent) => d.varName);
+    return [];
+  }
+
+  /**
+   * @returns the order option selected from the UI
+   */
+  getOrder():Order {
+    if(this.variableSortOption.ascendBtn.selected) {
+      return Order.ASC;
+    }
+    if(this.variableSortOption.descendBtn.selected) {
+      return Order.DESC;
+    }
+    
+    return Order.NOORDER;
   }
 
   #renderShowHideBtn() {

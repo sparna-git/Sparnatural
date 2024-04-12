@@ -192,7 +192,7 @@ export default class QueryLoader{
     })
 
     // once variables are sorted, synchronize with the actionstore
-    this.sparnatural.actionStore.variables = this.sparnatural.variableSection.listVariables();
+    // this.sparnatural.actionStore.variables = this.sparnatural.variableSection.listVariables();
 
     const variableSortOption =this.sparnatural.variableSection.variableSortOption;
     if(this.query.order == Order.ASC) {

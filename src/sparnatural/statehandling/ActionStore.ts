@@ -8,11 +8,8 @@ import redrawBackgroundAndLinks from "./actions/InitGeneralEvent";
 import deleteGrpWrapper from "./actions/DeleteGrpWrapper";
 import { updateVarList } from "./actions/UpdateVarList";
 import { selectViewVar } from "./actions/SelectViewVar";
-import { readVariablesFromUI } from "./actions/SelectViewVar";
 import { SelectQuery } from "sparqljs";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
-import { SparnaturalElement } from "../../SparnaturalElement";
-import { getSettings } from "../settings/defaultSettings";
 
 export enum MaxVarAction {
   INCREASE,
@@ -28,8 +25,8 @@ export enum MaxVarAction {
 class ActionStore {
   sparnatural: SparnaturalComponent;
   specProvider: any;
-  order: Order = Order.NOORDER; //default no order
-  variables: Array<string> = []; // example ?museum
+  // order: Order = Order.NOORDER; //default no order
+  // variables: Array<string> = []; // example ?museum
   language = "en"; //default
   sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
   showVariableNames = true //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
@@ -123,13 +120,13 @@ class ActionStore {
       "getSelectedVarLength",
       (e:CustomEvent)=>{
         e.stopImmediatePropagation();
-        e.detail(this.variables.length)
+        e.detail(this.sparnatural.variableSection.listVariables().length)
     })
 
     this.sparnatural.html[0].addEventListener("resetVars", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.sparqlVarID = 0;
-      this.variables = [];
+      // this.variables = [];
       this.sparnatural.variableSection.html.remove();
       this.sparnatural.variableSection.render();
       // not sure we should regenerate the query here
@@ -141,7 +138,7 @@ class ActionStore {
       (e: CustomEvent) => {
         if (!Object.values(Order).includes(e.detail))
           throw Error("changeSortOrder expects a payload of Order enum");
-        this.order = e.detail;
+        // this.order = e.detail;
         // trigger query generation + re-enable submit button
         generateQuery(this);
       }
@@ -151,7 +148,7 @@ class ActionStore {
       "updateVariablesOrder",
       (e: CustomEvent) => {
         // update/reset variable names in the state
-        readVariablesFromUI(this);
+        // readVariablesFromUI(this);
         // trigger query generation + re-enable submit button
         generateQuery(this);
       }
