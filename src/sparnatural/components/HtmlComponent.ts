@@ -1,6 +1,5 @@
 import ISettings from "../../sparnatural/settings/ISettings";
 import { getSettings } from "../../sparnatural/settings/defaultSettings";
-import SparnaturalComponent from "./SparnaturalComponent";
 import BaseClassFactory from "./baseClassFactory/BaseClassFactory";
 
 interface IRenderable {

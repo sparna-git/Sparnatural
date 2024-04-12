@@ -23,8 +23,8 @@ export default function generateQuery(actionStore: ActionStore) {
   let qryGen = new SparnaturalJsonGenerator(actionStore.sparnatural);
 
   var jsonQuery = qryGen.generateQuery(
-    actionStore.variables,
-    actionStore.order,
+    actionStore.sparnatural.variableSection.listVariables(),
+    actionStore.sparnatural.variableSection.getOrder(),
     getSettings().addDistinct    
   );
   actionStore.sparnaturalJSON = jsonQuery
@@ -40,8 +40,8 @@ export default function generateQuery(actionStore: ActionStore) {
       settings.sparqlPrefixes
     );
     let selectQuery = writer.generateQuery(
-      actionStore.variables,
-      actionStore.order,
+      actionStore.sparnatural.variableSection.listVariables(),
+      actionStore.sparnatural.variableSection.getOrder(),
       getSettings().addDistinct,      
       getSettings().limit
     );
