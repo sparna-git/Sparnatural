@@ -170,6 +170,14 @@ class ActionStore {
       }
     );
 
+    this.sparnatural.html[0].addEventListener(
+      "updateAggr",
+      (e: CustomEvent) => {   
+        // trigger query generation + re-enable submit button
+        generateQuery(this);
+      }
+    );
+
     this.sparnatural.html[0].addEventListener("redrawBackgroundAndLinks", (e) => {
       e.stopImmediatePropagation();
       redrawBackgroundAndLinks(this);

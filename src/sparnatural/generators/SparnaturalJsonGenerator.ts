@@ -27,7 +27,7 @@ class SparnaturalJsonGenerator {
     distinct: boolean,
   ) {
     this.json.distinct = distinct;
-    this.json.variables = variables.map(state => state.varName);
+    this.json.variables = variables.map(state => "?"+state.varName);
     // don't output "noord", just set it to null
     if(order != Order.NOORDER) {
       this.json.order = order;

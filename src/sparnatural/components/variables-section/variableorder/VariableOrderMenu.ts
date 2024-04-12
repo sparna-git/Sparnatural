@@ -103,14 +103,14 @@ class VariableOrderMenu extends HTMLComponent {
         detail: { state: state},
       })
     );
-
   };
+
   // A variable agregate function has been edited. Update it in the correct ClassTypeId
   variableAggrChange = (state: DraggableComponentState) => {
     this.html[0].dispatchEvent(
       new CustomEvent("updateAggr", {
         bubbles: true,
-        detail: { state: state},
+        detail: {state: state},
       })
     );
 
