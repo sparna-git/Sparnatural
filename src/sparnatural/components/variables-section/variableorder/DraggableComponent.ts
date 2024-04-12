@@ -13,11 +13,11 @@ import { AggregateFunction } from "../../../generators/ISparJson";
 */
 export class DraggableComponent extends HTMLComponent {
   icon: any;
-  varName: string; // without the ?
-  varNameAggr: string; // without the ?
+  //varName: string; // without the ?
+  //varNameAggr: string; // without the ?
   selectedVal:SelectedVal;
-  selectedAggrFonction: string;
-  aggregateOn: any;
+  //selectedAggrFonction: string;
+  //aggregateOn: any;
   aggrComponentAction: JQuery<HTMLElement>;
   aggrComponentOptions: JQuery<HTMLElement>;
   aggrComponentInput: JQuery<HTMLElement>;
@@ -95,13 +95,13 @@ export class DraggableComponent extends HTMLComponent {
     super("sortableItem", parentComponent, widgetHtml);
     
     this.selectedVal = selected_val
-    this.varName = varName;
+    //this.varName = varName;
     this.#resize(editVar, varName);
     this.varEdited = varEdited;
     this.aggrChanged = aggrChanged;
-    this.selectedAggrFonction = '';
-    this.varNameAggr = '';
-    this.aggregateOn = false ;
+    //this.selectedAggrFonction = '';
+    //this.varNameAggr = '';
+    //this.aggregateOn = false ;
     this.aggrComponentAction = aggrAction ;
     this.aggrComponentOptionsExtend = aggrOptionsExtend ;
     this.aggrComponentOptions = aggrOptions ;

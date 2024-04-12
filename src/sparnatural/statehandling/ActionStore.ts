@@ -163,7 +163,7 @@ class ActionStore {
             "updateVarName event requires an object of { state: { previousVarName: string, varName: string } }"
           );
         
-        updateVarName(this, payload.oldName, payload.newName);
+        updateVarName(this, payload.state);
         
         // trigger query generation + re-enable submit button
         generateQuery(this);

@@ -183,7 +183,7 @@ export default class QueryLoader{
     const varMenu =this.sparnatural.variableSection.variableOrderMenu
     this.query.variables.forEach(v=>{
       varMenu.draggables.forEach(d=>{
-        if(d.varName === v){
+        if(d.state.varName === v){
           const tmpVal = d.selectedVal
           varMenu.removeDraggableByVarName(v)
           varMenu.addDraggableComponent(tmpVal)
@@ -209,7 +209,7 @@ export default class QueryLoader{
     const varMenu = this.sparnatural.variableSection.variableOrderMenu
     this.query.variables.forEach(v=>{
       varMenu.draggables.forEach(d=>{
-        if(varNameMapping.get("?"+d.varName) === "?"+v){
+        if(varNameMapping.get("?"+d.state.varName) === "?"+v){
           d.setVarName(v);
         }
       })

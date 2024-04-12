@@ -29,7 +29,7 @@ export function selectViewVar(
 
 function addVariable(actionStore: ActionStore, val: SelectedVal) {
   if(actionStore.sparnatural.variableSection.variableOrderMenu.draggables.find((d:DraggableComponent)=>{
-    return d.varName === val.variable.replace('?','')
+    return d.state.varName === val.variable.replace('?','')
   })) return // draggable already exists
   //add a draggable
   actionStore.sparnatural.variableSection.variableOrderMenu.addDraggableComponent(

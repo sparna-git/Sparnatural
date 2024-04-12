@@ -31,7 +31,7 @@ function updateDraggables(actionStore: ActionStore, varNames: Set<string>) {
     actionStore.sparnatural.variableSection.variableOrderMenu.draggables;
   // filter out the variables which don't exist anymore
   draggables = draggables.filter((d: DraggableComponent) => {
-    if (varNames.has(d.varName)) {
+    if (varNames.has(d.state.varName)) {
       //keep draggable
       return d;
     } else {
