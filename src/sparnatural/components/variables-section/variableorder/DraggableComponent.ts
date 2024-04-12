@@ -164,6 +164,8 @@ class DraggableComponent extends HTMLComponent {
         this.aggrChanged(oldName, newName, optionValue, this.aggregateOn);
         //this.setVarName(newName) ;
         this.widgetHtml.find("input").val(newName);
+        
+        this.#resize(this.widgetHtml.find("input"), newName);
       });
     });
 
