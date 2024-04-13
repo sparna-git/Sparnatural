@@ -29,9 +29,10 @@ export function updateVarList(actionStore: ActionStore) {
 function updateDraggables(actionStore: ActionStore, varNames: Set<string>) {
   let draggables =
     actionStore.sparnatural.variableSection.variableOrderMenu.draggables;
-  // filter out the variables which don't exist anymore
+  
+    // filter out the variables which don't exist anymore
   draggables = draggables.filter((d: DraggableComponent) => {
-    if (varNames.has(d.state.varName)) {
+    if (varNames.has(d.state.selectedVariable.variable.replace("?",""))) {
       //keep draggable
       return d;
     } else {

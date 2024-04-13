@@ -12,35 +12,30 @@ import { AggregateFunction } from "../../../generators/ISparJson";
     The name of the variable can be edited.
 */
 export class DraggableComponent extends HTMLComponent {
-  icon: any;
-  //varName: string; // without the ?
-  //varNameAggr: string; // without the ?
-  selectedVal:SelectedVal;
-  //selectedAggrFonction: string;
-  //aggregateOn: any;
   aggrComponentAction: JQuery<HTMLElement>;
   aggrComponentOptions: JQuery<HTMLElement>;
   aggrComponentInput: JQuery<HTMLElement>;
   aggrComponentBadgeValue: JQuery<HTMLElement>;
   aggrComponentOptionsExtend: JQuery<HTMLElement>;
   ParentComponent: VariableOrderMenu;
+  
   state: DraggableComponentState;
+  
   // listener
-  varEdited: (state: DraggableComponentState) => void;
+  varEdited: (state: DraggableComponentState, previousVarName: SelectedVal) => void;
   aggrChanged: (state: DraggableComponentState) => void;
 
   constructor(
     parentComponent: VariableOrderMenu,
     specProvider: ISparnaturalSpecification,
     selected_val: SelectedVal,
-    varEdited: (state: DraggableComponentState) => void,
+    varEdited: (state: DraggableComponentState, previousVarName:SelectedVal) => void,
     aggrChanged: (state: DraggableComponentState) => void
   ) {
-    let varName = selected_val.variable.substring(
-      1,
-      selected_val.variable.length
-    );
-    var icon = specProvider.getEntity(selected_val.type).getIcon();
+
+    let varName = selected_val.variable;
+    let icon = specProvider.getEntity(selected_val.type).getIcon();
+    
     let editVar = $(`
         <input type="text" minlength="1">
         </input>
@@ -94,21 +89,23 @@ export class DraggableComponent extends HTMLComponent {
     
     super("sortableItem", parentComponent, widgetHtml);
     
-    this.selectedVal = selected_val
-    //this.varName = varName;
+    this.state = {
+      // make a COPY of the Selected val
+      // otherwise any change to that object is also reflected in the Start/EndClassGroup
+      selectedVariable: { ...selected_val }
+    } ;
+
     this.#resize(editVar, varName);
     this.varEdited = varEdited;
     this.aggrChanged = aggrChanged;
-    //this.selectedAggrFonction = '';
-    //this.varNameAggr = '';
-    //this.aggregateOn = false ;
+
     this.aggrComponentAction = aggrAction ;
     this.aggrComponentOptionsExtend = aggrOptionsExtend ;
     this.aggrComponentOptions = aggrOptions ;
     this.aggrComponentInput = aggrActionIput ;
     this.aggrComponentBadgeValue = aggrBadgeValue ;
 
-    this.state = {varName: varName, aggregateFunction: false, originalVarName: varName, previousVarName: '' } as DraggableComponentState ;
+    
 
     
     let that = this;
@@ -117,13 +114,10 @@ export class DraggableComponent extends HTMLComponent {
       let val = this.#validateInput(event.currentTarget as HTMLInputElement);
       that.onVarNameChange(val);
     });
-    this.initEnventListersAggr() ;
+    this.initEventListenersAggr() ;
     if (parentComponent.aggrOptionsExtend) {
       this.toggleAggrOptionsExtend() ;
     }
-    /*if(this.htmlParent != null) {
-      $(this.htmlParent[0]).append(aggrOptions);
-    }*/
   }
 
   render(): this {
@@ -134,11 +128,12 @@ export class DraggableComponent extends HTMLComponent {
     return this;
   }
 
-  initEnventListersAggr() {
+  initEventListenersAggr() {
     //Toggle option menu display
     this.aggrComponentAction[0].addEventListener("click", (event: Event) => {
       this.toggleAggrOption() ;
     });
+    
     // Capture aggregate function selection
     this.aggrComponentOptions[0].querySelectorAll('li').forEach((optionItem) => {
       optionItem.addEventListener("click", (event: Event) => {
@@ -146,65 +141,57 @@ export class DraggableComponent extends HTMLComponent {
         let option = event.currentTarget as HTMLElement ;
         let optionValue = option.getAttribute('data-value');
         let optionValueSuffix = option.getAttribute('data-suffix');
-        //let newName: string ;
-        //let oldName: string; 
-
-        //oldName =  this.varName ;
-        this.state.previousVarName = this.state.varName  ;
 
         if(!this.state.aggregateFunction) {
-          //this.aggregateOn = this.varName ;
-          this.state.originalVarName = this.state.varName ;
+          // no aggr function was selected, store original variable
+          // no NOT simply assign the selected variable to the original variable
+          // but create a new object
+          this.state.originalVariable = {variable: this.state.selectedVariable.variable, type: this.state.selectedVariable.type} ;
         }
+
         if(optionValue == '') {
-          //newName = this.aggregateOn ;
-          //this.aggregateOn = false;
-          this.state.aggregateFunction = false ;
-          this.state.varName = this.state.originalVarName ;
+          // no aggr function selected : reset to original var name
+          this.state.aggregateFunction = undefined ;
+          this.state.selectedVariable = this.state.originalVariable ;
         } else {
           this.state.aggregateFunction = this.getAggregateFunctionByValue(optionValue) ;
         }
+
         if(this.state.aggregateFunction) {
-          //newName = this.aggregateOn+optionValueSuffix ;
-          this.state.varName = this.state.originalVarName+optionValueSuffix ;
+          // compute new variable name
+          this.state.selectedVariable.variable = this.state.originalVariable.variable+optionValueSuffix ;
         } 
 
         this.onAggrOptionSelected(optionValue) ;
-        //{varName: varName, aggregateFunction: false, originalVarName: varName, previousVarName: '' }
-        console.log('Sending data state on aggrChanged:' ) ;
-        console.log(this.state) ;
+
+        // notify event
         this.aggrChanged(this.state);
-        //this.setVarName(newName) ;
-        this.widgetHtml.find("input").val(this.state.varName);
-        this.#resize(this.widgetHtml.find("input"), this.state.varName);
+
+        // set the input value to the new variable name
+        this.widgetHtml.find("input").val(this.state.selectedVariable.variable);
+        this.#resize(this.widgetHtml.find("input"), this.state.selectedVariable.variable);
       });
     });
 
     this.aggrComponentOptionsExtend[0].addEventListener("click", (event: Event) => {
       this.toggleAggrOptionsExtend() ;
     });
-    
-
-
   }
 
   onVarNameChange(newName:string) {
-    //let oldName = this.varName;
-    //this.varName = newName;
-    this.state.previousVarName = this.state.varName ;
-    this.state.varName = newName ;
-    //this.state.originalVarName = newName ;
+    let previousVarName = this.state.selectedVariable;
+    this.state.selectedVariable.variable = newName;
+    
     let editVar = this.widgetHtml.find("input");
-    this.#resize(editVar, this.state.varName);
-    if(this.state.aggregateFunction != false) {
-      this.aggrComponentOptions[0].querySelector('li.selected') ;
-      this.dysplayBadgeValue(this.aggrComponentOptions[0].querySelector('li.selected').innerHTML ) ;
+    this.#resize(editVar, newName);
+    
+    // if there is currently an aggregate function, display badge
+    if(this.state.aggregateFunction) {
+      this.displayBadgeValue(this.aggrComponentOptions[0].querySelector('li.selected').innerHTML ) ;
     }
-    // call callback
-    console.log('Sending data state on varEdited:' ) ;
-    console.log(this.state) ;
 
-    this.varEdited(this.state);
+    // call callback
+    this.varEdited(this.state, previousVarName);
   }
 
   onAggrOptionSelected(option:string) {
@@ -218,11 +205,11 @@ export class DraggableComponent extends HTMLComponent {
       }
     }) ;
     (<HTMLInputElement>this.aggrComponentInput[0]).value = option ;
-    //this.selectedAggrFonction = option;
-    this.closeAggrOptions() ;
-    this.dysplayBadgeValue(optionItemLabel) ;
     
+    this.closeAggrOptions() ;
+    this.displayBadgeValue(optionItemLabel) ;    
   }
+
   toggleAggrOption() {
     if(this.aggrComponentOptions[0].style.display == 'block') {
       return this.closeAggrOptions() ;
@@ -253,10 +240,15 @@ export class DraggableComponent extends HTMLComponent {
   closeAggrOptions() {
     this.aggrComponentOptions[0].style.display = 'none';
   }
-  dysplayBadgeValue(option: string) {
-    if (this.state.aggregateFunction != false) {
+
+  /**
+   * Displays the aggregation function badge from the selected option
+   */
+  displayBadgeValue(option: string) {
+    // if there is an aggregation function in the state...
+    if (this.state.aggregateFunction) {
       this.aggrComponentBadgeValue[0].style.display = 'block';
-      this.aggrComponentBadgeValue[0].innerText = option+'('+this.state.originalVarName+')' ;
+      this.aggrComponentBadgeValue[0].innerText = option+'('+this.state.originalVariable.variable+')' ;
     } else {
       this.aggrComponentBadgeValue[0].style.display = 'none';
     }
@@ -276,22 +268,31 @@ export class DraggableComponent extends HTMLComponent {
 
   #validateInput(inputEl: HTMLInputElement) {
     if (inputEl.value.length < 1) {
-      inputEl.value = this.state.varName; // keep old variable
-      return this.state.varName;
+      let keepValue = this.state.selectedVariable.variable;
+      inputEl.value = keepValue; // keep old variable
+      return keepValue;
     }
+
+    // if there is an aggregation function
     if (this.state.aggregateFunction) {
-      if(inputEl.value == this.state.originalVarName) {
-        inputEl.value  = this.state.varName;
-        return this.state.varName;
+      // prevent the varName from being equal to the original varName
+      if(inputEl.value == this.state.originalVariable.variable) {
+        let keepValue = this.state.selectedVariable.variable;
+        inputEl.value = keepValue
+        return keepValue;
       }
     }
 
     return inputEl.value;
   }
+
+  /**
+   * @returns the enum value from the string value 
+   */
   getAggregateFunctionByValue(value: string) {
     let str: string = value;
-    let AggregateFunction: AggregateFunction = str as AggregateFunction;
-    return AggregateFunction ;
+    let aggregateFunction:AggregateFunction = str as AggregateFunction;
+    return aggregateFunction ;
   }
 }
 
@@ -299,18 +300,18 @@ export interface DraggableComponentState {
   /**
    * Name of the variable in the white input field in the middle 
    * (can be the original var name or the var name of the result of the aggreation)
+   * Also contains the type (= class)
    */
-  varName:string;
+  selectedVariable:SelectedVal;
+
   /**
    * Name of the aggragation function
    */
-  aggregateFunction:AggregateFunction|boolean;
+  aggregateFunction?:AggregateFunction;
+
   /**
    * In case an aggregation function is selected, the name of the original var name
    */
-  originalVarName:string;
-  /**
-   * Previous var name in case there is an edition
-   */
-  previousVarName:string;
-}
+  originalVariable?:SelectedVal;
+
+ }

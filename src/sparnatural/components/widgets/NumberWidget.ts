@@ -175,9 +175,7 @@ export class NumberWidget extends AbstractWidget {
           this.widgetValues[0].value.max.toString(),
           factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
         ):null,
-        factory.variable(
-          this.getVariableValue(this.endClassVal)
-        )
+        factory.variable(this.endClassVal.variable)
       )
     ];
   }

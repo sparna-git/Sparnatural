@@ -111,7 +111,7 @@ export class SearchRegexWidget extends AbstractWidget {
           factory.literal(
             `${this.widgetValues[0].value.regex}`
           ),
-          factory.variable(this.getVariableValue(this.endClassVal))
+          factory.variable(this.endClassVal.variable)
         )];
       }
       case Config.SEARCH_PROPERTY: {
@@ -120,7 +120,7 @@ export class SearchRegexWidget extends AbstractWidget {
           factory.literal(
             `${this.widgetValues[0].value.regex}`
           ),
-          factory.variable(this.getVariableValue(this.endClassVal))
+          factory.variable(this.endClassVal.variable)
         )];
       }
       case Config.GRAPHDB_SEARCH_PROPERTY: {
@@ -129,9 +129,7 @@ export class SearchRegexWidget extends AbstractWidget {
           type: "bgp",
           triples: [
             {
-              subject: factory.variable(
-                this.getVariableValue(this.startClassVal)
-              ),
+              subject: factory.variable(this.startClassVal.variable),
               predicate: factory.namedNode(
                 "http://www.ontotext.com/connectors/lucene#query"
               ),
@@ -140,13 +138,11 @@ export class SearchRegexWidget extends AbstractWidget {
               ),
             },
             {
-              subject: factory.variable(
-                this.getVariableValue(this.startClassVal)
-              ),
+              subject: factory.variable(this.startClassVal.variable),
               predicate: factory.namedNode(
                 "http://www.ontotext.com/connectors/lucene#entities"
               ),
-              object: factory.variable(this.getVariableValue(this.endClassVal)),
+              object: factory.variable(this.endClassVal.variable),
             },
           ],
         };
@@ -163,9 +159,7 @@ export class SearchRegexWidget extends AbstractWidget {
           type: "bgp",
           triples: [
             {
-              subject: factory.variable(
-                this.getVariableValue(this.endClassVal)
-              ),
+              subject: factory.variable(this.endClassVal.variable),
               predicate: factory.namedNode(
                 "http://www.openlinksw.com/schemas/bif#contains"
               ),

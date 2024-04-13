@@ -45,13 +45,13 @@ export default class RdfJsGenerator {
     const SparqlJsQuery: SelectQuery = {
       queryType: "SELECT",
       distinct: distinct,
-      variables: this.#varsToRDFJS(variables.map(state => state.varName)),
+      variables: this.#varsToRDFJS(variables.map(state => state.selectedVariable.variable)),
       type: "query",
       where: this.#createWhereClause(),
       prefixes: this.prefixes,
       order: this.#orderToRDFJS(
         order,
-        this.#varsToRDFJS(variables.map(state => state.varName))[0] as VariableTerm
+        this.#varsToRDFJS(variables.map(state => state.selectedVariable.variable))[0] as VariableTerm
       ),
       limit: (limit && (limit > 0))?limit:undefined
     };

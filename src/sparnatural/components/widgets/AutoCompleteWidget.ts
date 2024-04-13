@@ -175,7 +175,7 @@ export class AutoCompleteWidget extends AbstractWidget {
   getRdfJsPattern(): Pattern[] {
     if(this.isBlockingObjectProp()) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
-        factory.variable(this.getVariableValue(this.startClassVal)),
+        factory.variable(this.startClassVal.variable),
         factory.namedNode(this.objectPropVal.type),
         this.rdfTermToSparqlQuery((this.widgetValues[0] as AutoCompleteWidgetValue).value.rdfTerm)
       );

@@ -84,7 +84,7 @@ class StartClassGroup extends HTMLComponent {
         bubbles: true,
         detail: (id: number) => {
           //callback
-          this.startClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
+          this.startClassVal.variable = `${this.#getUriClassName(type)}_${id}`;
           this.#syncDefaultLblVar();
         },
       })
