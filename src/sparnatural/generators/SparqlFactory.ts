@@ -1,4 +1,4 @@
-import { BgpPattern, BindPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableTerm, Wildcard } from "sparqljs";
+import { BgpPattern, BindPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableExpression, VariableTerm, Wildcard } from "sparqljs";
 import { Literal, Variable } from "@rdfjs/types";
 import {  Parser as SparqlParser } from "sparqljs";
 import { DataFactory } from 'rdf-data-factory';
@@ -7,6 +7,24 @@ const factory = new DataFactory();
 
 export default class SparqlFactory {
   static sparqlParser =  new SparqlParser({ pathOnly: true } as any);
+
+  static buildAggregateFunctionExpression(
+    aggregation:string,
+    aggregatedVar:Variable,
+    asVar:Variable
+  ):VariableExpression {
+    return {
+      expression: {
+        type: "aggregate",
+        aggregation: aggregation,
+        distinct: false,
+        expression: aggregatedVar
+      },
+      variable : asVar
+    }
+  }
+
+
   static buildBgpPattern(triples: Triple[]): BgpPattern {
       return {
           type: "bgp",

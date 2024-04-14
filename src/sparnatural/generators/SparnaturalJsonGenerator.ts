@@ -1,9 +1,12 @@
 import SparnaturalComponent from "../components/SparnaturalComponent";
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
-import { Branch, ISparJson, Order } from "./ISparJson";
+import { Branch, ISparJson, Order, VariableExpression, VariableTerm } from "./ISparJson";
 import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import { SelectAllValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import { DraggableComponentState } from "../components/variables-section/variableorder/DraggableComponent";
+import { DataFactory } from "rdf-data-factory";
+
+const factory = new DataFactory();
 
 /*
   Reads out the UI and creates the internal JSON structure described here:
@@ -27,7 +30,7 @@ class SparnaturalJsonGenerator {
     distinct: boolean,
   ) {
     this.json.distinct = distinct;
-    this.json.variables = variables.map(state => state.selectedVariable.variable);
+    this.json.variables = this.#toVariables(variables);
     // don't output "noord", just set it to null
     if(order != Order.NOORDER) {
       this.json.order = order;
@@ -40,6 +43,34 @@ class SparnaturalJsonGenerator {
     );
     return this.json;
   }
+
+  #toVariables(variables: Array<DraggableComponentState>):Array<VariableTerm | VariableExpression> {
+    return variables.map((v) => {
+      if(v.aggregateFunction) {
+        return {
+          expression: {
+            type: "aggregate",
+            aggregation: v.aggregateFunction,
+            distinct: false,
+            expression: {
+              termType: "Variable",
+            value: v.originalVariable.variable
+            },
+          },
+          variable : {
+            termType: "Variable",
+            value: v.selectedVariable.variable
+          }
+        };
+      } else {
+        return {
+          termType: "Variable",
+          value: v.selectedVariable.variable
+        };
+      }      
+    });
+  }
+
   // goes recursivly through the grpWrappers and collects all the data
   #getBranch(grpWrapper: GroupWrapper): Array<any> {
     let branches = [];

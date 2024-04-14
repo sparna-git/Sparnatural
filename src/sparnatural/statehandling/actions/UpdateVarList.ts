@@ -14,16 +14,11 @@ export function updateVarList(actionStore: ActionStore) {
     (grpWrapper: GroupWrapper) => {
       let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
       let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
-      //always remove the '?' as the first char
-      if(startGrp.isVarSelected() && startGrp.getVarName()) varNames.add(startGrp.getVarName()?.slice(1));
-      if(endGrp.isVarSelected() && endGrp.getVarName()) varNames.add(endGrp.getVarName()?.slice(1));      
+      if(startGrp.isVarSelected() && startGrp.getVarName()) varNames.add(startGrp.getVarName());
+      if(endGrp.isVarSelected() && endGrp.getVarName()) varNames.add(endGrp.getVarName());      
     }
   );
   updateDraggables(actionStore, varNames);
-  // This is loosing the variable ordering !
-  // actionStore.variables = [...varNames];
-  // Better refetch the var names from the draggables, in proper order
-  // actionStore.variables = actionStore.sparnatural.variableSection.listVariables();
 }
 
 function updateDraggables(actionStore: ActionStore, varNames: Set<string>) {

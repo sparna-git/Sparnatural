@@ -179,7 +179,8 @@ export class DraggableComponent extends HTMLComponent {
   }
 
   onVarNameChange(newName:string) {
-    let previousVarName = this.state.selectedVariable;
+    // recreate a new object, otherwise this will get changed too !
+    let previousVarName = { ... this.state.selectedVariable };
     this.state.selectedVariable.variable = newName;
     
     let editVar = this.widgetHtml.find("input");
