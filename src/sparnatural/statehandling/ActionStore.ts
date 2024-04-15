@@ -158,12 +158,12 @@ class ActionStore {
       "updateVarName",
       (e: CustomEvent) => {
         let payload = e.detail;
-        if (!("state" in payload && "previousVarName" in payload.state && "varName" in payload.state))
+        if (!("state" in payload))
           throw Error(
-            "updateVarName event requires an object of { state: { previousVarName: string, varName: string } }"
+            "updateVarName event requires an object of { state: { } }"
           );
         
-        updateVarName(this, payload.state);
+        updateVarName(this, payload.state, payload.previousVarName);
         
         // trigger query generation + re-enable submit button
         generateQuery(this);

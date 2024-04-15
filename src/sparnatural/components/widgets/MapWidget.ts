@@ -211,7 +211,7 @@ export default class MapWidget extends AbstractWidget {
         type: "functionCall",
         function: GEOFUNCTIONS.WITHIN,
         args: [
-          factory.variable(this.getVariableValue(this.endClassVal)),
+          factory.variable(this.endClassVal.variable),
           this.#buildPolygon(this.widgetValues[0].value.coordinates[0])
         ],
       },

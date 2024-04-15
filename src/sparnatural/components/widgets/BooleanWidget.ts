@@ -99,7 +99,7 @@ export class BooleanWidget extends AbstractWidget {
         type: "bgp",
         triples: [
           {
-            subject: factory.variable(this.getVariableValue(this.startClassVal)),
+            subject: factory.variable(this.startClassVal.variable),
             predicate: factory.namedNode(this.objectPropVal.type),
             object: factory.literal(
               this.widgetValues[0].value.boolean.toString(),

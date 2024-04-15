@@ -2,7 +2,7 @@
 
 export interface ISparJson {
   distinct?: boolean;
-  variables: Array<string>;
+  variables: Array<VariableTerm | VariableExpression>;
   order?: Order;
   branches: Array<Branch>;
 }
@@ -12,6 +12,21 @@ export interface Branch {
   children: Array<Branch> | [];
   optional?: boolean;
   notExists?: boolean;
+}
+
+export interface VariableTerm {
+  termType: "Variable",
+  value: string
+}
+
+export interface VariableExpression {
+  expression: {
+    type: "aggregate",
+    aggregation: string,
+    distinct: boolean,
+    expression: VariableTerm,
+  },
+  variable : VariableTerm
 }
 
 export interface CriteriaLine {

@@ -73,7 +73,7 @@ class EndClassGroup extends HTMLComponent {
         bubbles: true,
         detail: (id: number) => {
           //callback
-          this.endClassVal.variable = `?${this.#getUriClassName(type)}_${id}`;
+          this.endClassVal.variable = `${this.#getUriClassName(type)}_${id}`;
           this.#syncDefaultLblVar();
         },
       })

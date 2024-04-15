@@ -85,9 +85,12 @@ class VariableOrderMenu extends HTMLComponent {
     this.draggables.push(dragbl);
   }
 
+  /**
+   * @param varName the varName, including '?'
+   */
   removeDraggableByVarName(varName: string) {
     this.draggables = this.draggables.filter((d) => {
-      if (d.state.varName == varName.replace("?", "")) {
+      if (d.state.selectedVariable.variable == varName) {
         d.html.remove();
         return false;
       }
@@ -96,11 +99,11 @@ class VariableOrderMenu extends HTMLComponent {
   }
 
   // A variable name has been edited. Update it in the correct ClassTypeId
-  variableNameEdited = (state: DraggableComponentState) => {
+  variableNameEdited = (state: DraggableComponentState, previousVarName : SelectedVal) => {
     this.html[0].dispatchEvent(
       new CustomEvent("updateVarName", {
         bubbles: true,
-        detail: { state: state},
+        detail: { state: state, previousVarName: previousVarName },
       })
     );
   };

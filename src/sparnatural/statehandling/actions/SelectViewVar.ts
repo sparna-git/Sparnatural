@@ -15,30 +15,16 @@ export function selectViewVar(
 }
 
 
-// export function readVariablesFromUI(actionStore: ActionStore) {
-  //update the varnames
-  /*
-  actionStore.variables =
-    actionStore.sparnatural.variableSection.variableOrderMenu.draggables.map(
-      (d: DraggableComponent) => {
-        return d.varName;
-      }
-    );
-    */
-// }
-
 function addVariable(actionStore: ActionStore, val: SelectedVal) {
   if(actionStore.sparnatural.variableSection.variableOrderMenu.draggables.find((d:DraggableComponent)=>{
-    return d.state.varName === val.variable.replace('?','')
+    return d.state.selectedVariable.variable === val.variable
   })) return // draggable already exists
+  
   //add a draggable
   actionStore.sparnatural.variableSection.variableOrderMenu.addDraggableComponent(
     val
   );
-  //update stateobject
-  // actionStore.variables.push(val.variable.replace('?',''))
-  //update the varnames
-  // readVariablesFromUI(actionStore);
+
 }
 
 function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
@@ -46,8 +32,4 @@ function deleteVariable(actionStore: ActionStore, val: SelectedVal) {
   actionStore.sparnatural.variableSection.variableOrderMenu.removeDraggableByVarName(
     val.variable
   );
-  //update the varnames
-  // readVariablesFromUI(actionStore);
-  //update the variables in the state
-  // actionStore.variables.filter((v)=> v!=val.variable.replace('?',''))
 }

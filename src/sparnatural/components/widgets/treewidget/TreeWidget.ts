@@ -398,7 +398,7 @@ export class TreeWidget extends AbstractWidget {
     if(this.isBlockingObjectProp()) {
       // single value not selected, set it directly as the value of the triple
       let singleTriple: Triple = SparqlFactory.buildTriple(
-        factory.variable(this.getVariableValue(this.startClassVal)),
+        factory.variable(this.startClassVal.variable),
         factory.namedNode(this.objectPropVal.type),
         factory.namedNode((this.widgetValues[0]).value.uri)
       );
