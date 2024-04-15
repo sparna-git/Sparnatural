@@ -73,13 +73,14 @@ class VariableOrderMenu extends HTMLComponent {
     });
   }
 
-  addDraggableComponent(selected_val: SelectedVal) {
+  addDraggableComponent(selected_val: SelectedVal, state: any = null) {
     let dragbl = new DraggableComponent(
       this,
       this.specProvider,
       selected_val,
       this.variableNameEdited,
-      this.variableAggrChange
+      this.variableAggrChange,
+      state
     );
     dragbl.render();
     this.draggables.push(dragbl);

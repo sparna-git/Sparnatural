@@ -192,7 +192,7 @@ export default class QueryLoader{
 
         if(d.state.selectedVariable.variable === varName){
           varMenu.removeDraggableByVarName(varName)
-          varMenu.addDraggableComponent(d.state.selectedVariable)
+          varMenu.addDraggableComponent(d.state.selectedVariable, v)
         }       
       })
     })

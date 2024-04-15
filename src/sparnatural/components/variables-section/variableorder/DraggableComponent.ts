@@ -30,7 +30,8 @@ export class DraggableComponent extends HTMLComponent {
     specProvider: ISparnaturalSpecification,
     selected_val: SelectedVal,
     varEdited: (state: DraggableComponentState, previousVarName:SelectedVal) => void,
-    aggrChanged: (state: DraggableComponentState) => void
+    aggrChanged: (state: DraggableComponentState) => void,
+    load_state: any = null
   ) {
 
     let varName = selected_val.variable;
@@ -88,12 +89,15 @@ export class DraggableComponent extends HTMLComponent {
     $(widgetHtml).append(aggrBadgeValue);
     
     super("sortableItem", parentComponent, widgetHtml);
+
     
     this.state = {
       // make a COPY of the Selected val
       // otherwise any change to that object is also reflected in the Start/EndClassGroup
       selectedVariable: { ...selected_val }
     } ;
+
+  
 
     this.#resize(editVar, varName);
     this.varEdited = varEdited;
@@ -118,6 +122,23 @@ export class DraggableComponent extends HTMLComponent {
     if (parentComponent.aggrOptionsExtend) {
       this.toggleAggrOptionsExtend() ;
     }
+
+    // loading agreagate function called in case of load_state is not null
+    if ((load_state != null) && (load_state.expression != undefined)) { 
+      // need to init aggregate funtion selection
+      // set this/state for agregate function context
+      this.state.aggregateFunction = load_state.expression.aggregation ;
+      this.state.originalVariable =  { ...this.state.selectedVariable }
+      this.state.selectedVariable.variable = load_state.variable.value ;
+
+      //Init UI/UX elements
+      this.onAggrOptionSelected(this.state.aggregateFunction as string) ;
+      //this.aggrChanged(this.state);
+      this.widgetHtml.find("input").val(this.state.selectedVariable.variable);
+      this.#resize(this.widgetHtml.find("input"), this.state.selectedVariable.variable);
+
+    }
+
   }
 
   render(): this {
