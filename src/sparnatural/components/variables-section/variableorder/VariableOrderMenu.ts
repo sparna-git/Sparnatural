@@ -73,17 +73,17 @@ class VariableOrderMenu extends HTMLComponent {
     });
   }
 
-  addDraggableComponent(selected_val: SelectedVal, state: any = null) {
+  addDraggableComponent(selected_val: SelectedVal):DraggableComponent {
     let dragbl = new DraggableComponent(
       this,
       this.specProvider,
       selected_val,
       this.variableNameEdited,
-      this.variableAggrChange,
-      state
+      this.variableAggrChange
     );
     dragbl.render();
     this.draggables.push(dragbl);
+    return dragbl;
   }
 
   /**
@@ -91,7 +91,11 @@ class VariableOrderMenu extends HTMLComponent {
    */
   removeDraggableByVarName(varName: string) {
     this.draggables = this.draggables.filter((d) => {
-      if (d.state.selectedVariable.variable == varName) {
+      if (
+        d.state.selectedVariable.variable == varName
+        || 
+        d.state.originalVariable.variable == varName
+      ) {
         d.html.remove();
         return false;
       }

@@ -192,7 +192,11 @@ export default class QueryLoader{
 
         if(d.state.selectedVariable.variable === varName){
           varMenu.removeDraggableByVarName(varName)
-          varMenu.addDraggableComponent(d.state.selectedVariable, v)
+          let newDraggable = varMenu.addDraggableComponent(d.state.selectedVariable);
+          // if this was an aggregated variable, load it by calling a specific function of the draggable
+          if("expression" in v) {
+            newDraggable.loadAggregatedVariable(v)
+          }
         }       
       })
     })
@@ -216,9 +220,12 @@ export default class QueryLoader{
     this.query.variables.forEach(v=>{
       varMenu.draggables.forEach(d=>{
         var varToConsider: VariableTerm;
+        
         if("variable" in v) {
           // this is an aggregation
-          varToConsider = v.variable;
+          // at this stage we are setting the variable name to the *original variable*
+          // the final aggregated var name will be set when the draggable will be updated
+          varToConsider = v.expression.expression
         } else {
           // nominal case
           varToConsider = v;
@@ -231,8 +238,7 @@ export default class QueryLoader{
     })
   }
 
-  static #hasSelectedVar(vars:ISparJson["variables"], varName:string) {
-    console.log("#hasSelectedVar : "+varName)
+  static #hasSelectedVar(vars:ISparJson["variables"], varName:string):boolean {
 
     var result:boolean = false;
     vars.forEach(v => {

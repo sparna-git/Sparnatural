@@ -4,7 +4,7 @@ import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpeci
 import HTMLComponent from "../../HtmlComponent";
 import VariableOrderMenu from "./VariableOrderMenu";
 import { I18n } from "../../../settings/I18n";
-import { AggregateFunction } from "../../../generators/ISparJson";
+import { AggregateFunction, VariableExpression, VariableTerm } from "../../../generators/ISparJson";
 
 /*
     Single Draggable Component
@@ -30,8 +30,7 @@ export class DraggableComponent extends HTMLComponent {
     specProvider: ISparnaturalSpecification,
     selected_val: SelectedVal,
     varEdited: (state: DraggableComponentState, previousVarName:SelectedVal) => void,
-    aggrChanged: (state: DraggableComponentState) => void,
-    load_state: any = null
+    aggrChanged: (state: DraggableComponentState) => void
   ) {
 
     let varName = selected_val.variable;
@@ -123,22 +122,22 @@ export class DraggableComponent extends HTMLComponent {
       this.toggleAggrOptionsExtend() ;
     }
 
-    // loading agreagate function called in case of load_state is not null
-    if ((load_state != null) && (load_state.expression != undefined)) { 
-      // need to init aggregate funtion selection
-      // set this/state for agregate function context
-      this.state.aggregateFunction = load_state.expression.aggregation ;
-      this.state.originalVariable =  { ...this.state.selectedVariable }
-      this.state.selectedVariable.variable = load_state.variable.value ;
+  }
 
-      //Init UI/UX elements
-      this.onAggrOptionSelected(this.state.aggregateFunction as string) ;
-      //this.aggrChanged(this.state);
-      this.widgetHtml.find("input").val(this.state.selectedVariable.variable);
-      this.#resize(this.widgetHtml.find("input"), this.state.selectedVariable.variable);
+  /**
+   * This is called from QueryLoader when loading query
+   */
+  loadAggregatedVariable(aggregatedVar:VariableExpression) {
+    // need to init aggregate funtion selection
+    // set this/state for agregate function context
+    this.state.aggregateFunction = this.getAggregateFunctionByValue(aggregatedVar.expression.aggregation) ;
+    this.state.originalVariable =  { ...this.state.selectedVariable }
+    this.state.selectedVariable.variable = aggregatedVar.variable.value ;
 
-    }
-
+    //Init UI/UX elements
+    this.onAggrOptionSelected(this.state.aggregateFunction as string) ;
+    this.widgetHtml.find("input").val(this.state.selectedVariable.variable);
+    this.#resize(this.widgetHtml.find("input"), this.state.selectedVariable.variable);
   }
 
   render(): this {
@@ -327,7 +326,7 @@ export interface DraggableComponentState {
   selectedVariable:SelectedVal;
 
   /**
-   * Name of the aggragation function
+   * Name of the aggregation function
    */
   aggregateFunction?:AggregateFunction;
 
