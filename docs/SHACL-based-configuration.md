@@ -14,7 +14,7 @@ The formal specification of the subset of SHACL to use, in combination with a fe
 
 | Prefix | Namespaces |
 | ------ | ---------- |
-| core   | http://data.sparna.fr/ontologies/sparnatural-config-core# |
+| config-core   | http://data.sparna.fr/ontologies/sparnatural-config-core# |
 | dash   | http://datashapes.org/dash# |
 | ds     | http://data.sparna.fr/ontologies/sparnatural-config-datasources# |
 | sh     | http://www.w3.org/ns/shacl# |
