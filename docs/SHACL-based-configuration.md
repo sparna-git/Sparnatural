@@ -287,7 +287,8 @@ The formal specification of the subset of SHACL to use, in combination with a fe
                         <tr>
                            <td>search widget</td>
                            <td><code><a href="http://datashapes.org/dash#searchWidget">dash:searchWidget</a></code></td>
-                           <td><code>IRI</code><br></td>
+                           <td><code>IRI</code><br><p><small>(config-core:SearchProperty, config-core:ListProperty, config-core:AutocompleteProperty, config-core:BooleanProperty, config-core:MapProperty, config-core:StringEqualsProperty, config-core:TimeProperty-Date, config-core:TimeProperty-Year, config-core:TimeProperty-Period, config-core:TreeProperty, config-core:NumberProperty)</small></p>
+                           </td>
                            <td>
                               <div style="width:30px">0..1</div>
                            </td>
