@@ -99,7 +99,10 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
     
 
     getDefaultLabelProperty(): string | undefined {
-        return this._readValue(this.id, "defaultLabelProperty");
-    }
+      return this._readValue(this.id, "defaultLabelProperty");
+  }
+  getParentClass(): string | undefined {
+      return this._readValue(this.id, "parent");
+  }
       
 }

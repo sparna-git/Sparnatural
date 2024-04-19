@@ -10,6 +10,8 @@
 //StartEndClassGroup
 @use './citeriagroup/startendclassgroup/startendclassgroup.scss';
 @use './citeriagroup/startendclassgroup/classtypeid.scss';
+//---Millers columns class selector
+@use './citeriagroup/startendclassgroup/hierarchicalclassselectbuilder.scss';
 //Actions
 @use './citeriagroup/actions/actionand.scss';
 @use './citeriagroup/actions/actionwhere.scss';

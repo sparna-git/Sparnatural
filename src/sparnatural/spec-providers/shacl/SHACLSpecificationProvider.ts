@@ -47,6 +47,7 @@ export const SH = {
   UNIQUE_LANG: factory.namedNode(SH_NAMESPACE + "uniqueLang") as NamedNode, 
   ZERO_OR_MORE_PATH: factory.namedNode(SH_NAMESPACE + "zeroOrMorePath") as NamedNode, 
   ZERO_OR_ONE_PATH: factory.namedNode(SH_NAMESPACE + "zeroOrOnePath") as NamedNode, 
+  PARENT: factory.namedNode(SH_NAMESPACE + "parent") as NamedNode, 
 };
 
 const DASH_NAMESPACE = "http://datashapes.org/dash#";
@@ -290,6 +291,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       this.lang
     );
   }
+
 
   getInitialEntityList():SHACLSpecificationEntity[] {
     const duplicatedNodeShapes = this.store.getQuads(

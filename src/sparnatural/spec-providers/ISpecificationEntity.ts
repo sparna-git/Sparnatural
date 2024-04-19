@@ -15,6 +15,7 @@ interface ISpecificationEntity extends ISpecificationEntry {
    */
   isRemoteEntity(): boolean;
   getDefaultLabelProperty():string|undefined;
+  getParentClass() :string|undefined;
 
 }
 export default ISpecificationEntity;

@@ -254,6 +254,13 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return this.graph.readProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
     }
 
+    /**
+     * @returns all values of sh:targetClass on this entity, as RDF Terms
+     */
+    getParentClass():string {
+        return this.graph.readSingleProperty(factory.namedNode(this.uri), SH.PARENT)?.value;
+    }
+
 }
 
 
@@ -338,6 +345,9 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
 
     isRangeOf(n3store:RdfStore, shapeUri:any):boolean {
         return this.isRangeOfFunction(n3store, shapeUri);
+    }
+    getParentClass(): string {
+        return '';
     }
 }
 

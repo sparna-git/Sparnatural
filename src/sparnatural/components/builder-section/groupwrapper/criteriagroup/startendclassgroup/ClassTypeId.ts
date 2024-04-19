@@ -1,6 +1,7 @@
 import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
+import HierarchicalClassSelectBuilder from "./HierarchicalClassSelectBuilder";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import UiuxConfig from "../../../../IconsConstants";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
@@ -24,7 +25,7 @@ class ClassTypeId extends HTMLComponent {
     UiuxConfig.COMPONENT_ARROW_BACK
   );
 
-  selectBuilder: ClassSelectBuilder;
+  selectBuilder: HierarchicalClassSelectBuilder;
   startClassVal: SelectedVal = {
     variable: null,
     type: null,
@@ -39,7 +40,7 @@ class ClassTypeId extends HTMLComponent {
     startClassVal?: any
   ) {
     super("ClassTypeId", ParentComponent, null);
-    this.selectBuilder = new ClassSelectBuilder(this, specProvider);
+    this.selectBuilder = new HierarchicalClassSelectBuilder(this, specProvider);
     this.startClassVal = startClassVal;
     this.specProvider = specProvider;
   }
@@ -75,7 +76,7 @@ class ClassTypeId extends HTMLComponent {
     // convert to niceSelect: https://jqueryniceselect.hernansartorio.com/
     // needs to happen after html.append(). it uses rendered stuff on page to create a new select... should move away from that
     this.oldWidget = this.widgetHtml;
-    this.widgetHtml = this.widgetHtml.niceSelect();
+    //this.widgetHtml = this.widgetHtml.niceSelect();
     // nice-select is not a proper select tag and that's why can't listen for change events... move away from nice-select!
     this.#addOnChangeListener(this.oldWidget);
     this.frontArrow.render();

@@ -250,5 +250,9 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     
         return unions;
       }
+
+    getParentClass():string {
+        return this.graph.readSingleProperty(factory.namedNode(this.uri), OWL.PARENT)?.value;
+    }
     
 }

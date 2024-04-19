@@ -1,0 +1,138 @@
+.htmlSelectUiUx {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    /**max-height: 45vh;*/
+    border: 1px solid  var(--primary-color-main);
+    border-radius: 5px;
+    white-space: nowrap;
+    width: 400px;
+    z-index: 1000;
+    background-color: #fff;
+
+    .htmlSelectUiUxBreadCrum {
+        height: 40px;
+        background-color: var(--primary-color-main);
+        color: #fff;
+        line-height: 34px;
+        font-size: 20px;
+        font-weight: 700;
+        padding: 3px 5px;
+        &>div {
+            display: inline-block;
+            cursor: pointer;
+        }
+    }
+    .htmlSelectUiUxLists {
+        overflow-x: hidden;
+    }
+
+    ul {
+        width: 200px;
+        padding:0;
+        margin: 0;
+        list-style: none;
+        background: #fff;
+        max-height: 35vh;
+        overflow-y: auto;
+        display: none;
+        white-space: normal;
+        vertical-align: top;
+        border-right: 1px solid #e8e8e8;
+
+        &.active-pane {
+            display: inline-block;
+            margin-left: 0;
+            transition-property: margin-left;
+            transition-duration: 0.5s;
+            transition-delay: 0;
+        }
+
+        &.active-pane-hide-left {
+            margin-left: -200px;
+        }
+        
+
+        li {
+            span.item-sel {
+                display: inline-block;
+                width: 100%;
+                padding: 5px 10px;
+                height: 40px;
+            }
+            span.item-traverse {
+                display: none;
+                width: 20%;
+                text-align: center;
+                padding: 5px 5px;
+                border-left: 1px solid #e8e8e8;
+                height: 40px;
+            }
+            &.have-childs {
+                span.item-sel {
+                    width: 80%;
+                }
+                span.item-traverse {
+                    display: inline-block;
+                }
+            }
+            cursor: pointer;
+            border-bottom: solid 1px #e8e8e8;
+            height: 40px;
+            img {
+                height : 40px;
+                &.highlited {
+                    display: none;
+                }
+            }
+            &.selected,
+            &.focus,
+            &>span:hover {
+                background-color: var(--primary-color-main) ;
+                color: #fff;
+                img {
+                    display: none;
+                    &.highlited {
+                        display: inline;
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Scroll bar */
+.htmlSelectUiUx {
+    .htmlSelectUiUxLists,
+    ul {
+        /* Works on Chrome, Edge, and Safari */
+        &::-webkit-scrollbar {
+            width: 3px;
+            height: 3px;
+	        background-color: #e8e8e8;
+        }
+        
+        &::-webkit-scrollbar-track {
+            /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+            border-radius: 3px;
+            background-color: #e8e8e8;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            border-radius: 3px;
+            /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
+            background-color: var(--primary-color-main);
+        }    
+        & {
+            -moz-width: thin;
+        }    
+    }
+}
+
+@-moz-document url-prefix() {
+    .htmlSelectUiUx ul {
+        scrollbar-color: var(--primary-color-main) #e8e8e8;
+    }
+}
