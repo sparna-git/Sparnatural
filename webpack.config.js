@@ -14,11 +14,6 @@ module.exports = {
     filename: "sparnatural.js",
     clean: true
   },
-  externals: {
-    leaflet: 'leaflet',
-    leafletMarkerCluster: 'leaflet.markercluster',
-    geoman: 'leaflet-geoman-free'
-  },
   module: {
     rules: [
     	{
