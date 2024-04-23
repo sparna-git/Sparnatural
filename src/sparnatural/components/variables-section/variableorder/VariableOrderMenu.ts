@@ -3,18 +3,20 @@ import { SelectedVal } from "../../../components/SelectedVal";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../HtmlComponent";
 import VariableSelection from "../VariableSelection";
-import DraggableComponent from "./DraggableComponent";
+import { DraggableComponent, DraggableComponentState } from "./DraggableComponent";
 
 class VariableOrderMenu extends HTMLComponent {
   draggables: Array<DraggableComponent> = [];
   specProvider: ISparnaturalSpecification;
+  aggrOptionsExtend: boolean;
   constructor(parentComponent: VariableSelection, specProvider: ISparnaturalSpecification) {
     super("VariableOrderMenu", parentComponent, null);
     this.specProvider = specProvider;
+    this.aggrOptionsExtend = false;
   }
 
   render(): this {
-    this.htmlParent = $(this.ParentComponent.html).find(".line1");
+    this.htmlParent = $(this.ParentComponent.html).find(".line2");
     super.render();
     let otherSelectHtml = $('<div class="variablesOtherSelect"></div>');
     this.html.append(otherSelectHtml);
@@ -71,20 +73,29 @@ class VariableOrderMenu extends HTMLComponent {
     });
   }
 
-  addDraggableComponent(selected_val: SelectedVal) {
+  addDraggableComponent(selected_val: SelectedVal):DraggableComponent {
     let dragbl = new DraggableComponent(
       this,
       this.specProvider,
       selected_val,
-      this.variableNameEdited
+      this.variableNameEdited,
+      this.variableAggrChange
     );
     dragbl.render();
     this.draggables.push(dragbl);
+    return dragbl;
   }
 
+  /**
+   * @param varName the varName, including '?'
+   */
   removeDraggableByVarName(varName: string) {
     this.draggables = this.draggables.filter((d) => {
-      if (d.varName == varName.replace("?", "")) {
+      if (
+        d.state.selectedVariable.variable == varName
+        || 
+        d.state.originalVariable.variable == varName
+      ) {
         d.html.remove();
         return false;
       }
@@ -93,11 +104,21 @@ class VariableOrderMenu extends HTMLComponent {
   }
 
   // A variable name has been edited. Update it in the correct ClassTypeId
-  variableNameEdited = (oldName: string, newName: string) => {
+  variableNameEdited = (state: DraggableComponentState, previousVarName : SelectedVal) => {
     this.html[0].dispatchEvent(
       new CustomEvent("updateVarName", {
         bubbles: true,
-        detail: { oldName: oldName, newName: newName },
+        detail: { state: state, previousVarName: previousVarName },
+      })
+    );
+  };
+
+  // A variable agregate function has been edited. Update it in the correct ClassTypeId
+  variableAggrChange = (state: DraggableComponentState) => {
+    this.html[0].dispatchEvent(
+      new CustomEvent("updateAggr", {
+        bubbles: true,
+        detail: {state: state},
       })
     );
 

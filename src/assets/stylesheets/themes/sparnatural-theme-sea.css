@@ -9,7 +9,7 @@
 /**
  * Color of the criteria arrows (orange)
  **/
- --primary-color-main: rgba(252, 61, 14, 0.781);
+ --primary-color-main: rgba(252, 61, 14);
 
  /**
   * Color of the "unselect" buttons in criterias (dark orange)

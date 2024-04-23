@@ -9,7 +9,7 @@ import NoOrderBtn from "../components/buttons/NoOrderBtn";
 import { SelectedVal } from "../components/SelectedVal";
 import SparnaturalComponent from "../components/SparnaturalComponent";
 import { WidgetValue } from "../components/widgets/AbstractWidget";
-import { Branch, ISparJson, Order } from "../generators/ISparJson";
+import { Branch, ISparJson, Order, VariableTerm } from "../generators/ISparJson";
 
 
 export default class QueryLoader{
@@ -55,7 +55,7 @@ export default class QueryLoader{
         // by default, the very first start class group will be selected
         // if the first variable is *not* selected, then unselect it
         const firstStartClassVal = { type: rootBranch.line.sType, variable: rootBranch.line.s };
-        if(!this.query.variables.includes(firstStartClassVal.variable.replace('?',''))){
+        if(!QueryLoader.#hasSelectedVar(this.query.variables,firstStartClassVal.variable)) {
           // click on first eye btn to unselect it
           this.#clickOn((rootGrpWrapper.CriteriaGroup.StartClassGroup.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
         }
@@ -173,7 +173,7 @@ export default class QueryLoader{
     endClassVal:SelectedVal,
     endClassComponent:EndClassGroup
   ){
-    if(this.query.variables.includes(endClassVal.variable.replace('?',''))){
+    if(QueryLoader.#hasSelectedVar(this.query.variables, endClassVal.variable)) {
       // click on eye btn
       this.#clickOn((endClassComponent.inputSelector as ClassTypeId)?.selectViewVariableBtn?.widgetHtml)
     }
@@ -183,16 +183,26 @@ export default class QueryLoader{
     const varMenu =this.sparnatural.variableSection.variableOrderMenu
     this.query.variables.forEach(v=>{
       varMenu.draggables.forEach(d=>{
-        if(d.varName === v){
-          const tmpVal = d.selectedVal
-          varMenu.removeDraggableByVarName(v)
-          varMenu.addDraggableComponent(tmpVal)
+        let varName;
+        if("expression" in v) {
+          varName = v.expression.expression.value
+        } else {
+          varName = v.value;
         }
+
+        if(d.state.selectedVariable.variable === varName){
+          varMenu.removeDraggableByVarName(varName)
+          let newDraggable = varMenu.addDraggableComponent(d.state.selectedVariable);
+          // if this was an aggregated variable, load it by calling a specific function of the draggable
+          if("expression" in v) {
+            newDraggable.loadAggregatedVariable(v)
+          }
+        }       
       })
     })
 
     // once variables are sorted, synchronize with the actionstore
-    this.sparnatural.actionStore.variables = this.sparnatural.variableSection.listVariables();
+    // this.sparnatural.actionStore.variables = this.sparnatural.variableSection.listVariables();
 
     const variableSortOption =this.sparnatural.variableSection.variableSortOption;
     if(this.query.order == Order.ASC) {
@@ -209,11 +219,39 @@ export default class QueryLoader{
     const varMenu = this.sparnatural.variableSection.variableOrderMenu
     this.query.variables.forEach(v=>{
       varMenu.draggables.forEach(d=>{
-        if(varNameMapping.get("?"+d.varName) === "?"+v){
-          d.setVarName(v);
+        var varToConsider: VariableTerm;
+        
+        if("variable" in v) {
+          // this is an aggregation
+          // at this stage we are setting the variable name to the *original variable*
+          // the final aggregated var name will be set when the draggable will be updated
+          varToConsider = v.expression.expression
+        } else {
+          // nominal case
+          varToConsider = v;
+        }
+
+        if(varNameMapping.get(d.state.selectedVariable.variable) === varToConsider.value){
+          d.setVarName(varToConsider.value);
         }
       })
     })
+  }
+
+  static #hasSelectedVar(vars:ISparJson["variables"], varName:string):boolean {
+
+    var result:boolean = false;
+    vars.forEach(v => {
+      if("expression" in v) {
+        // this is an aggregation
+        // consider the variable *being aggregated*, not the result of the aggregation
+        if(v.expression.expression.value == varName) result = true;
+      }
+      if("value" in v) {
+        if(v.value == varName) result = true;
+      }
+    });
+    return result;
   }
   
   static #clickOn(el: JQuery<HTMLElement>) {

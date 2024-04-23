@@ -21,7 +21,7 @@ class VariableSortOption extends HTMLComponent {
   }
 
   render(): this {
-    this.htmlParent = $(this.ParentComponent.html).find(".line2");
+    this.htmlParent = $(this.ParentComponent.html).find(".line1");
     super.render();
     this.ascendBtn = new AscendBtn(this, this.changeSortOrderCallBack).render();
     this.descendBtn = new DescendBtn(this, this.changeSortOrderCallBack).render();

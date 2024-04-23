@@ -100,12 +100,6 @@ export abstract class AbstractWidget extends HTMLComponent {
     return this.widgetValues;
   }
 
-  // Sparnatural stores the variable name always with the questionmark. 
-  // for the DataFactory from "rdfjs" lib we need the variable name without '?'
-  getVariableValue(selectedVal: SelectedVal): string {
-    return selectedVal.variable.replace("?", "");
-  }
-
   // This method gets called when an selected value gets deleted again.
   // For example: Germany and France are chosen from the list widget and now get deleted
   onRemoveValue(val: WidgetValue) {

@@ -32,8 +32,8 @@ export class QueryGenerator {
     let qryGen = new SparnaturalJsonGenerator(this.actionStore.sparnatural);
 
     var jsonQuery = qryGen.generateQuery(
-      this.actionStore.variables,
-      this.actionStore.order,
+      actionStore.sparnatural.variableSection.listVariables(),
+      actionStore.sparnatural.variableSection.getOrder(),
       getSettings().addDistinct    
     );
 
@@ -44,13 +44,13 @@ export class QueryGenerator {
       }
 
       var writer = new RdfJsGenerator(
-        this.actionStore.sparnatural,
-        this.actionStore.specProvider,
+        actionStore.sparnatural,
+        actionStore.specProvider,
         settings.sparqlPrefixes
       );
       let selectQuery = writer.generateQuery(
-        this.actionStore.variables,
-        this.actionStore.order,
+        actionStore.sparnatural.variableSection.listVariables(),
+        actionStore.sparnatural.variableSection.getOrder(),
         getSettings().addDistinct,      
         getSettings().limit
       );
