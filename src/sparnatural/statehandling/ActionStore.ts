@@ -170,7 +170,7 @@ class ActionStore {
       "updateAggr",
       (e: CustomEvent) => {   
         // trigger query generation + re-enable submit button
-        generateQuery(this);
+        new QueryGenerator(this).generateQuery();
       }
     );
 
