@@ -413,7 +413,7 @@ export class TreeWidget extends AbstractWidget {
       // multiple values, use a VALUES
       let vals = this.widgetValues.map((v) => {
         let vl: ValuePatternRow = {};
-        vl[this.endClassVal.variable] = factory.namedNode(v.value.uri);
+        vl["?"+this.endClassVal.variable] = factory.namedNode(v.value.uri);
         return vl;
       });
       let valuePattern: ValuesPattern = {

@@ -245,7 +245,7 @@ export class ListWidget extends AbstractWidget {
     } else {
       let vals = (this.widgetValues as ListWidgetValue[]).map((v) => {
         let vl: ValuePatternRow = {};
-        vl[this.endClassVal.variable] = this.rdfTermToSparqlQuery(v.value.rdfTerm);
+        vl["?"+this.endClassVal.variable] = this.rdfTermToSparqlQuery(v.value.rdfTerm);
         return vl;
       });
       let valuePattern: ValuesPattern = {
