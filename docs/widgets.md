@@ -4,6 +4,11 @@ _[Home](index.html) > Widgets_
 
 This is a reference documentation for Sparnatural widgets.
 
+
+[TOC]
+
+
+
 ## List widget
 
 ### Appearance
@@ -70,6 +75,8 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 }
 ```
 
+
+
 ## Autocomplete widget
 
 ### Appearance
@@ -94,6 +101,8 @@ The default datasource used is [`datasources:search_URI_contains`](http://data.s
 ### SPARQL clause
 
 The SPARQL query generation logic is identical to the ListWidget (see above).
+
+
 
 ## Tree widget
 
@@ -169,6 +178,8 @@ The string will be searched using GraphDB proprietary Lucene connector. Make sur
 
 The string will be searched using Virtuoso proprietary `bif:contains` operator.
 
+
+
 ## Date range widget
 
 ### Appearance
@@ -198,6 +209,7 @@ FILTER(((xsd:dateTime(?Date_2)) >= "1948-06-12T23:00:00Z"^^xsd:dateTime) && ((xs
 For advanced date-range querying, see the [detailled documentation](http://docs.sparnatural.eu/Querying-date-ranges.html).
 
 
+
 ## Year range widget
 
 ### Appearance
@@ -224,6 +236,47 @@ FILTER((xsd:dateTime(?Date_2)) >= "2017-12-31T23:00:01Z"^^xsd:dateTime)
 ```
 
 (here with only a start year). Note how the values is cast to an xsd:dateTime explicitely.
+
+
+
+## Number widget
+
+### Appearance
+
+<img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/19-number.png" />
+
+### Description
+
+Allows to select a number range, with a lower bound and upper bound.
+Can limit the range of input fields based on the datatype indicated in the SHACL config (e.g. xsd:byte will be limited betwen -127 and 128)
+
+### Configuration
+
+In OWL configuration, declare a sub-property of [`config-core:NumberProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NumberProperty).
+
+### Datasources
+
+No datasource required.
+
+### SPARQL clause
+
+Either with a lower and upper bound:
+
+```sparql
+  FILTER((?Number_2 >= "1"^^xsd:decimal) && (?Number_2 <= "1000"^^xsd:decimal))
+```
+
+With only lower bound:
+
+```sparql
+   FILTER(?Number_2 >= "11"^^xsd:decimal)
+```
+
+With only upper bound:
+
+```sparql
+   FILTER(?Number_2 <= "11"^^xsd:decimal)
+```
 
 
 ## Boolean widget
