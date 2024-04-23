@@ -162,7 +162,7 @@ export class ListWidget extends AbstractWidget {
     this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
 
     // if there are some provided values...
-    if(this.configuration.values) {
+    if(this.configuration.values?.length > 0) {
       // never sort to keep the original list order
       this.sort = false;
       // convert the provided list of terms to RDFTerm[]
