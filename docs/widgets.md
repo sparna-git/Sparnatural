@@ -5,8 +5,7 @@ _[Home](index.html) > Widgets_
 This is a reference documentation for Sparnatural widgets.
 
 
-[TOC]
-
+-----
 
 
 ## List widget
@@ -76,6 +75,8 @@ SELECT DISTINCT ?Museum_1 ?Country_2 WHERE {
 ```
 
 
+-----
+
 
 ## Autocomplete widget
 
@@ -102,6 +103,8 @@ The default datasource used is [`datasources:search_URI_contains`](http://data.s
 
 The SPARQL query generation logic is identical to the ListWidget (see above).
 
+
+-----
 
 
 ## Tree widget
@@ -179,6 +182,8 @@ The string will be searched using GraphDB proprietary Lucene connector. Make sur
 The string will be searched using Virtuoso proprietary `bif:contains` operator.
 
 
+-----
+
 
 ## Date range widget
 
@@ -209,6 +214,8 @@ FILTER(((xsd:dateTime(?Date_2)) >= "1948-06-12T23:00:00Z"^^xsd:dateTime) && ((xs
 For advanced date-range querying, see the [detailled documentation](http://docs.sparnatural.eu/Querying-date-ranges.html).
 
 
+-----
+
 
 ## Year range widget
 
@@ -237,6 +244,8 @@ FILTER((xsd:dateTime(?Date_2)) >= "2017-12-31T23:00:01Z"^^xsd:dateTime)
 
 (here with only a start year). Note how the values is cast to an xsd:dateTime explicitely.
 
+
+-----
 
 
 ## Number widget
@@ -279,6 +288,9 @@ With only upper bound:
 ```
 
 
+-----
+
+
 ## Boolean widget
 
 ### Appearance
@@ -300,6 +312,10 @@ No datasource required.
 ### SPARQL clause
 
 `TODO`
+
+
+-----
+
 
 ## Map widget
 
@@ -347,6 +363,10 @@ No datasource required.
     ?MuseumWikidata_2 <http://www.wikidata.org/prop/direct/P625> ?Map_4.
     FILTER(<http://www.opengis.net/def/function/geosparql/sfWithin>(?Map_4, "Polygon((6.113179202657193 46.196063994634265, 6.113179202657193 46.21649770912313, 6.149914737325163 46.21649770912313, 6.149914737325163 46.196063994634265, 6.113179202657193 46.196063994634265))"^^<http://www.opengis.net/ont/geosparql#wktLiteral>))
 ```
+
+
+-----
+
 
 ## No selection widget
 
