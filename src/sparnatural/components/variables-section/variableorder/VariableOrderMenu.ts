@@ -87,14 +87,14 @@ class VariableOrderMenu extends HTMLComponent {
   }
 
   /**
-   * @param varName the varName, including '?'
+   * @param varName the varName
    */
   removeDraggableByVarName(varName: string) {
     this.draggables = this.draggables.filter((d) => {
       if (
         d.state.selectedVariable.variable == varName
         || 
-        d.state.originalVariable.variable == varName
+        d.state.originalVariable?.variable == varName
       ) {
         d.html.remove();
         return false;

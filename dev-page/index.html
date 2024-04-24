@@ -14,14 +14,6 @@
     <!-- FONTAWESOME-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
-    <!-- Make sure you put this AFTER Leaflet's CSS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
-
     <title>SPARnatural - test page</title>
 
     <style>
@@ -32,6 +24,9 @@
       }
     </style>
     
+    <!-- Webpack CSS -->
+    <%= css %>
+
   </head>
   <body>
 <!-- The HTML needs to import one Sparnatural theme CSS of their choice - and this can be customized by the client -->
@@ -154,6 +149,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- YASGUI stuff -->
     <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+
+    <!-- Webpack JS -->
+    <%= js %>
 
     <script src="sparnatural-yasgui-plugins.js"></script>
     <script src="scripts/init.js"></script>

@@ -83,7 +83,13 @@ module.exports = {
 	new HtmlWebpackPlugin({
 		filename: 'dev-page/index.html',
 		template: __dirname + "/dev-page/index.html",
-		inject: 'body'
+		// inject: 'body',
+		inject: false,
+		templateParameters: (compilation, assets) => {
+        const css = assets.css.map((filePath) => `<link rel="stylesheet" href="${filePath}" />`).join("\n");
+        const js = assets.js.map((filePath) => `<script src="${filePath}"></script>`).join("\n");
+        return { css, js };
+    },
 	}),
 	new MiniCssExtractPlugin({
 	  filename: "sparnatural.css",
