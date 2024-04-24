@@ -17,7 +17,9 @@ export default class SparqlFactory {
       expression: {
         type: "aggregate",
         aggregation: aggregation,
-        distinct: false,
+        // always use a DISTINCT, so that we don't count duplicated results
+        // e.g. same result in different named graphs
+        distinct: true,
         expression: aggregatedVar
       },
       variable : asVar
