@@ -143,7 +143,7 @@ export default class MapWidget extends AbstractWidget {
 
   #redrawSelection = () => {
     
-    if(this.widgetValues !== undefined) {
+    if ((this.widgetValues !== undefined) && (this.widgetValues.length > 0)) {
       let options = {
         color: "#3388ff",
         weight: 3,
@@ -207,7 +207,7 @@ export default class MapWidget extends AbstractWidget {
 
     this.#redrawSelection() ;
 
-    if(this.widgetValues !== undefined) {
+    if ((this.widgetValues !== undefined) && (this.widgetValues.length > 0)) {
       
       var layers = [];
       //layers = L.PM.Utils.findLayers(this.map)
