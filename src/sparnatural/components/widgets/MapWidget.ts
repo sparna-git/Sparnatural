@@ -96,7 +96,7 @@ export default class MapWidget extends AbstractWidget {
   protected parentComponent: any;
   protected endClassWidgetGroup: any;
   protected widgetValues: MapWidgetValue[];
-  protected widgetValue: MapWidgetValue[];
+  //protected widgetValue: MapWidgetValue[];
   // protected blockObjectPropTriple: boolean = true
   renderMapValueBtn: AddUserInputBtn;
   map: L.Map;
@@ -142,7 +142,8 @@ export default class MapWidget extends AbstractWidget {
   }
 
   #redrawSelection = () => {
-    if(this.widgetValue !== undefined) {
+    
+    if(this.widgetValues !== undefined) {
       let options = {
         color: "#3388ff",
         weight: 3,
@@ -154,16 +155,16 @@ export default class MapWidget extends AbstractWidget {
         fillRule: "evenodd"
       }
 
-      switch ((this.widgetValue[0].value.type as string)) {
+      switch ((this.widgetValues[0].value.type as string)) {
         case 'Rectangle':
-            console.log(this.widgetValue[0].value.coordinates) ;
-            let bounds = L.latLngBounds(this.widgetValue[0].value.coordinates[0][0],this.widgetValue[0].value.coordinates[0][2]) ;
+            console.log(this.widgetValues[0].value.coordinates) ;
+            let bounds = L.latLngBounds(this.widgetValues[0].value.coordinates[0][0],this.widgetValues[0].value.coordinates[0][2]) ;
             L.rectangle(bounds, (options as PolylineOptions)).addTo(this.map);
           break;    
         default: 
-          console.log(this.widgetValue[0].value.coordinates) ;
-          let coordinates = this.widgetValue[0].value.coordinates[0][0] ;
-          L.polygon(this.widgetValue[0].value.coordinates[0], (options as PolylineOptions)).addTo(this.map);
+          console.log(this.widgetValues[0].value.coordinates) ;
+          let coordinates = this.widgetValues[0].value.coordinates[0][0] ;
+          L.polygon(this.widgetValues[0].value.coordinates[0], (options as PolylineOptions)).addTo(this.map);
         break;
       }
     }
@@ -173,8 +174,6 @@ export default class MapWidget extends AbstractWidget {
 
     let d = new Date();
     let elementId = d.valueOf();
-    console.log(elementId) ;
-    console.log(this.html) ;
 
     this.html.append($('<div id="map-'+elementId+'" class="map-wrapper"></div>'));
 
@@ -206,12 +205,9 @@ export default class MapWidget extends AbstractWidget {
       removalMode: true
     });
 
-    console.log('------------------ Init the render map widget display ---------------') ;
-    console.log(this) ;
-
     this.#redrawSelection() ;
 
-    if(this.widgetValue !== undefined) {
+    if(this.widgetValues !== undefined) {
       
       var layers = [];
       //layers = L.PM.Utils.findLayers(this.map)
@@ -251,7 +247,7 @@ export default class MapWidget extends AbstractWidget {
       onClick: () => {
         //this.widgetValue = [this.widgetValue]
         this.#setWidgetValue(this.drawingLayer) ;
-        this.renderWidgetValues(this.widgetValue);
+        this.renderWidgetValues(this.widgetValues);
         $(this.parentComponent).trigger("change");
         console.log(this) ;
         console.log(this.endClassWidgetGroup) ;
@@ -341,21 +337,21 @@ export default class MapWidget extends AbstractWidget {
   }
 
   #setWidgetValue = (layer:any) => {
-    if(this.widgetValue?.length > 0) {
-      this.onRemoveValue(this.widgetValue[0]) ;
+    if(this.widgetValues?.length > 0) {
+      this.onRemoveValue(this.widgetValues[0]) ;
     }
-    this.widgetValue = [] ;
+    this.widgetValues = [] ;
 
     switch ((layer as any).pm._shape) {
       case 'Rectangle':
-        this.widgetValue.push(new MapWidgetValue({
+        this.widgetValues.push(new MapWidgetValue({
           label: this.#getValueLabel(layer as Rectangle),
           type: 'Rectangle',
           coordinates: (layer as Rectangle).getLatLngs() as LatLng[][],
         }))
         break;    
       default: 
-        this.widgetValue.push(new MapWidgetValue({
+        this.widgetValues.push(new MapWidgetValue({
           label: this.#getValueLabel(layer as Polygon),
           type: 'Polygon',
           coordinates: (layer as Polygon).getLatLngs() as LatLng[][],
@@ -363,12 +359,12 @@ export default class MapWidget extends AbstractWidget {
       break;
     }
 
-    return this.widgetValue ;
+    return this.widgetValues ;
   }
 
   #closeMap = () => {
-    if(this.widgetValue?.length > 0 ) {
-      this.renderWidgetValues(this.widgetValue);
+    if(this.widgetValues?.length > 0 ) {
+      this.renderWidgetValues(this.widgetValues);
       $(this.parentComponent).trigger("change");
     }
     
