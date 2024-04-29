@@ -153,7 +153,7 @@ export class StoreModel {
         );
 
         if (propertyQuads.length > 0) {
-            return propertyQuads[0].subject.value;
+            return propertyQuads[0].subject;
         } else {
             return null;
         }
