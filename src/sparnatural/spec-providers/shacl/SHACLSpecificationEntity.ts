@@ -30,6 +30,14 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         }
 
         if(!label) {
+            // attempt to read the local part of the targetClass URI
+            if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
+                let targetClass = this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
+                label = StoreModel.getLocalName(targetClass.value) as string;
+            }
+        }
+
+        if(!label) {
             // default : read the local part of the URI
             label = StoreModel.getLocalName(this.uri) as string;
         }
