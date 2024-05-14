@@ -72,6 +72,7 @@ Sparnatural offers currently 9 ways of selecting a value for a criteria :
 - map selection widget
 - string search widget, searched as regex or as exact string
 - date range widget (year or date precision)
+- numeric values widget
 - boolean widget
 - no value selection (useful for 'intermediate' entities)
 
@@ -98,6 +99,10 @@ Sparnatural offers currently 9 ways of selecting a value for a criteria :
 ### Date range widget (year or date precision)
 
 ![](docs/assets/images/readme/12-time-date.png)
+
+### Numeric values widget
+
+![](docs/assets/images/readme/19-number.png)
 
 ### Boolean widget
 
@@ -126,11 +131,15 @@ See here how to search for French Museums and the name of Italian painters they 
 
 There is currently an [experimental support for the SERVICE keyword](http://docs.sparnatural.eu/Federated-querying.html) for federated querying.
 
+## Support for Aggregation queries
+
+Since version 9.0.0, Sparnatural supports `COUNT` queries and other aggregation functions.
+
 ## Limitations
 
-### No UNION or BIND, no Aggregations
+### No UNION or BIND
 
-Sparnatural does not support the creation of UNION, BIND, or aggregation functions (like `COUNT`)
+Sparnatural does not support the creation of UNION, BIND
 
 ### SPARQL endpoint needs to be CORS-enabled
 
@@ -142,16 +151,17 @@ To send SPARQL queries to a service that is not hosted on the same domain name a
 2. Read [this page in the documentation](https://docs.sparnatural.eu/Javascript-integration).
 3. Look at a [typical demo page on DBPedia](https://github.com/sparna-git/sparnatural.eu/tree/main/demos/demo-dbpedia-v2)
 
+
 # Configuration
 
 ## Specification of classes and properties
 
-The component is configurable using a an [OWL configuration file](https://docs.sparnatural.eu/OWL-based-configuration) editable in Protégé. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. 
+Since 9.0.0, the preferred way to configure Sparnatural is with a **SHACL specification**. Look at the [supported SHACL features in the documentation](http://docs.sparnatural.eu/SHACL-based-configuration.html).
 
-Alternatively one can also use a [JSON(-LD) ontology file](https://docs.sparnatural.eu/JSON-based-configuration). This is however discouraged.
+The component is also configurable using a an [OWL configuration file](https://docs.sparnatural.eu/OWL-based-configuration) editable in Protégé. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. 
 
 
-### Class definition
+### Class definition in OWL
 
 ```turtle
     :Museum rdf:type owl:Class ;
@@ -164,7 +174,7 @@ Alternatively one can also use a [JSON(-LD) ontology file](https://docs.sparnatu
                    "Musée"@fr .
 ```
 
-### Property definitions with domains and ranges
+### Property definitions with domains and ranges in OWL
 
 ```turtle
 :displayedAt rdf:type owl:ObjectProperty ;
