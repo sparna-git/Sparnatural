@@ -375,13 +375,13 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
           return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"+";
         }
         if(store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
-          return "^"+SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel);
+          return "^"+SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.INVERSE_PATH, null, null)[0].object, store, asDisplayLabel);
         }
         if(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
-          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"*";
+          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"*";
         }
         if(store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
-          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"?";
+          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null)[0].object, store, asDisplayLabel)+"?";
         }
       }
       
