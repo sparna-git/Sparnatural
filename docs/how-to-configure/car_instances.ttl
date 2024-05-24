@@ -226,6 +226,7 @@ odb:diag_XYZ98765432109876_20230623_error_2 a odb:Error ;
 
 ###  http://example.com/ontology/odb#P1031
 odb:P1031 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1031" ;
           odb:hasComponent odb:Component1 ,
                            odb:Component20 ,
                            odb:Component32 ;
@@ -235,6 +236,7 @@ odb:P1031 rdf:type odb:ErrorCode ;
 
 ###  http://example.com/ontology/odb#P1108
 odb:P1108 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1108" ;
           odb:hasComponent odb:Component4 ,
                            odb:Component5 ;
           odb:hasSymptom odb:Symptom2 ,
@@ -243,6 +245,7 @@ odb:P1108 rdf:type odb:ErrorCode ;
 
 ###  http://example.com/ontology/odb#P1121
 odb:P1121 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1121" ;
           odb:hasComponent odb:Component2 ,
                            odb:Component50 ;
           odb:hasSymptom odb:Symptom1 ,
@@ -251,6 +254,7 @@ odb:P1121 rdf:type odb:ErrorCode ;
 
 ###  http://example.com/ontology/odb#P1133
 odb:P1133 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1133" ;
           odb:hasComponent odb:Component11 ,
                            odb:Component3 ;
           odb:hasSymptom odb:Symptom1 ,
@@ -259,6 +263,7 @@ odb:P1133 rdf:type odb:ErrorCode ;
 
 ###  http://example.com/ontology/odb#P1441
 odb:P1441 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1441" ;
           odb:hasComponent odb:Component31 ,
                            odb:Component4 ;
           odb:hasSymptom odb:Symptom2 ,

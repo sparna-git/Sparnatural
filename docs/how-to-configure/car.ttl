@@ -117,6 +117,17 @@ odb:componentCode rdf:type owl:DatatypeProperty ;
                                 "has component code"@en .
 
 
+###  http://example.com/ontology/odb#componentCode
+odb:errorCode rdf:type owl:DatatypeProperty ;
+                     rdfs:domain odb:ErrorCode ;
+                     rdfs:range xsd:string ;
+                     rdfs:comment "Contains the error code as a character string."@en ,
+                                  "Contient le code d'erreur, comme une chaine de caractères."@fr ;
+                     rdfs:label "code d'erreur"@fr ,
+                                "error code"@en .
+
+
+
 ###  http://example.com/ontology/odb#VIN
 odb:VIN rdf:type owl:DatatypeProperty ;
            rdfs:domain odb:Vehicle ;
