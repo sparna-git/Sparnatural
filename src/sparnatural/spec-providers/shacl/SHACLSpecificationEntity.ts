@@ -463,7 +463,11 @@ export class SpecialSHACLSpecificationEntityRegistry {
                             (
                                 !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, null)
                                 ||
-                                !graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE)?.value.startsWith("http://www.w3.org/2001/XMLSchema#")
+                                (
+                                    !graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE)?.value.startsWith("http://www.w3.org/2001/XMLSchema#")
+                                    &&
+                                    !graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE)?.value.startsWith("http://www.opengis.net/ont/geosparql#")
+                                )
                             )
                         )
                     );
