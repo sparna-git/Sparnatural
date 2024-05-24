@@ -377,6 +377,12 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
         if(store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
           return "^"+SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.INVERSE_PATH, null, null)[0].object, store, asDisplayLabel);
         }
+        if(store.getQuads(path, SH.ALTERNATIVE_PATH, null, null).length > 0) {
+          let list = store.getQuads(path, SH.ALTERNATIVE_PATH, null, null)[0].object;
+          let graph = new StoreModel(store);
+          let sequence:Term[] = graph.readListContent(list);
+          return sequence.map(t => SHACLSpecificationProvider.pathToSparql(t, store, asDisplayLabel)).join("|");
+        }
         if(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
           return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"*";
         }
