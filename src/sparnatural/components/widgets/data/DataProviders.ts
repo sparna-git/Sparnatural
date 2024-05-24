@@ -537,7 +537,8 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
                 result[result.length] = {
                     term:solution.uri,
                     label:solution.label.value,
-                    hasChildren:solution.hasChildren?solution.hasChildren.value:true,
+                    // make sure to parse the value as a boolean so that it is not a string
+                    hasChildren:solution.hasChildren?((solution.hasChildren.value === "true")?true:false):true,
                     disabled:solution.count?solution.count.value == 0:false
                 };
             }
