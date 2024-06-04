@@ -49,9 +49,8 @@ odb:Volkswagen rdf:type odb:Manufacturer ;
 
 ###  http://example.com/ontology/odb#A4
 odb:GHI34567890123456 rdf:type odb:Vehicle ;
-       odb:hasErrorCode odb:P1031 ,
-                        odb:P1133 ;
        odb:hasManufacturer odb:Audi ;
+       odb:weightInKg 1200 ;
        odb:VIN "GHI34567890123456" .
 
 ### Diags sur l'A4
@@ -71,8 +70,8 @@ odb:diag_GHI34567890123456_20221201_error_2 a odb:Error ;
 
 ###  http://example.com/ontology/odb#ClasseE
 odb:ABC56789012345678 rdf:type odb:Vehicle ;
-            odb:hasErrorCode odb:P1133 ;
             odb:hasManufacturer odb:Mercedes-Benz ;
+            odb:weightInKg 980 ;
             odb:VIN "ABC56789012345678" .
 
 ### Diags sur la ClasseE
@@ -111,9 +110,8 @@ odb:diag_ABC56789012345678_20230401_error_1 a odb:Error ;
 
 ###  http://example.com/ontology/odb#Corvette
 odb:MNO23456789012345 rdf:type odb:Vehicle ;
-             odb:hasErrorCode odb:P1031 ,
-                              odb:P1121 ;
              odb:hasManufacturer odb:Chevrolet ;
+             odb:weightInKg 976 ;
              odb:VIN "MNO23456789012345" .
 
 ### Diagnostics sur la Corvette
@@ -133,17 +131,27 @@ odb:diag_MNO23456789012345_20221201_error_2 a odb:Error ;
 
 ###  http://example.com/ontology/odb#Golf
 odb:JKL90123456789012 rdf:type odb:Vehicle ;
-         odb:hasErrorCode odb:P1108 ,
-                          odb:P1121 ;
          odb:hasManufacturer odb:Volkswagen ;
+         odb:weightInKg 625 ;
          odb:VIN "JKL90123456789012" .
 
 ### Golf : pas de diagnostics
 
 
+###  http://example.com/ontology/odb#Golf2
+odb:JKL90123456789012 rdf:type odb:Vehicle ;
+         odb:hasManufacturer "VW" ;
+         odb:weightInKg 625 ;
+         odb:VIN "JKL80321654876098" .
+
+### Golf 2 : pas de diagnostics
+
+
+
 ###  http://example.com/ontology/odb#Mustang
 odb:DEF90123456789012 rdf:type odb:Vehicle ;
             odb:hasManufacturer odb:Ford ;
+            odb:weightInKg 583 ;
             odb:VIN "DEF90123456789012" .
 
 ### Diagnostics sur la Mustang
@@ -172,6 +180,7 @@ odb:diag_DEF90123456789012_20230512_error_1 a odb:Error ;
 ###  http://example.com/ontology/odb#X5
 odb:WBA12345678901234 rdf:type odb:Vehicle ;
        odb:hasManufacturer odb:BMW ;
+       odb:weightInKg 875 ;
        odb:VIN "WBA12345678901234" .
 
 
@@ -193,6 +202,7 @@ odb:diag_WBA12345678901234_20230512_error_1 a odb:Error ;
 ###  http://example.com/ontology/odb#Yaris
 odb:XYZ98765432109876 rdf:type odb:Vehicle ;
           odb:hasManufacturer odb:Toyota ;
+          odb:weightInKg 512 ;
           odb:VIN "XYZ98765432109876" .
 
 ### Diagnostics sur la Toyota

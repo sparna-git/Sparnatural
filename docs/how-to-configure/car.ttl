@@ -138,6 +138,15 @@ odb:VIN rdf:type owl:DatatypeProperty ;
                       "has VIN"@en .
 
 
+###  http://example.com/ontology/odb#componentCode
+odb:weightInKg rdf:type owl:DatatypeProperty ;
+                     rdfs:domain odb:Vehicke ;
+                     rdfs:range xsd:integer ;
+                     rdfs:comment "Weight of a vehicle in kilogram"@en ,
+                                  "Poids d'un véhicule en kg"@fr ;
+                     rdfs:label "poids en kg"@fr ,
+                                "wight in kg"@en .
+
 ###  http://example.com/ontology/odb#diagnosticDate
 odb:diagnosticDate rdf:type owl:DatatypeProperty ;
                  rdfs:domain odb:Diagnostic ;
