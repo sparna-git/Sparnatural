@@ -1,7 +1,7 @@
 # Sparnatural SPARQL query builder
 Sparnatural is a **visual client-side SPARQL query builder** for exploring and navigating RDF Knowledge Graphs. It is written in Typescript.
 
-It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists, or other widgets. It can be configured through an OWL configuration file (that can be edited in Protégé) that defines the classes and properties to be presented in the component. SHACL-based configuration will be added soon.
+It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists, or other widgets. It can be configured through an OWL or SHACL configuration file that defines the classes and properties to be presented in the component.
 
 ![](docs/assets/screencasts/screencast-sparnatural-dbpedia-v3-en.gif)
 
