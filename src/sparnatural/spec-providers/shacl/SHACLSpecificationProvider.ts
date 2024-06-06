@@ -219,7 +219,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
         sparql = sparql.replace(re, sparqlReplacementString);
       });
 
-    // TODO : for each sh:target/sh:select ...
+    // for each sh:target/sh:select ...
     this.store
       .getQuads(null, SH.TARGET, null, null)
       .forEach((q1: Quad) => {
@@ -237,7 +237,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
           // replace the $this with the name of the original variable in the query
           // \S matches any non-whitespace charracter
-          var re = new RegExp("(\\S*) (rdf:type|a) <" + nodeShapeUri + ">", "g");      
+          var re = new RegExp("(\\S*) (rdf:type|a|<http://www\\.w3\\.org/1999/02/22-rdf-syntax-ns#type>) <" + nodeShapeUri + ">", "g");      
 
           let replacer = function(match:string, p1:string, offset:number, fullString:string) {
             // first substitutes any other variable name with a prefix
