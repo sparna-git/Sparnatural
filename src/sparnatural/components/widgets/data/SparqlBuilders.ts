@@ -179,7 +179,7 @@ export class TreeSparqlTemplateQueryBuilder implements TreeSparqlQueryBuilderIfc
         defaultLanguage: any,
         typePath: string
     ): string {
-        return this.#buildSparql(this.childrenQueryString,null,domain,property,range,language,defaultLanguage,typePath);
+        return this.#buildSparql(this.childrenQueryString,node,domain,property,range,language,defaultLanguage,typePath);
     }
 
     #buildSparql(
