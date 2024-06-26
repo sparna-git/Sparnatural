@@ -1,12 +1,12 @@
 import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
-import { DataFactory } from 'rdf-data-factory';
+import { DataFactory, NamedNode } from 'rdf-data-factory';
 import { DASH, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { RdfStore } from "rdf-stores";
-import { Term } from "@rdfjs/types";
+import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../StoreModel";
 
 const factory = new DataFactory();
@@ -146,7 +146,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         // add all properties from node shapes of superclasses
         let superClasses:Term[] = this.getSuperClasses();
         superClasses.forEach(sc => {
-            let ns = this.provider.getNodeShapeTargetingClass(sc);
+            let ns = this.provider.getNodeShapeTargetingClass(sc as Quad_Subject);
             if(ns) {
                 let superClassEntity = new SHACLSpecificationEntity(ns.value,this.provider, this.store, this.lang);
                 propShapes.push(...superClassEntity.getProperties());
@@ -209,6 +209,25 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         });
 
         return items.length>0?items[0].value:undefined;
+    }
+
+    getParents(): string[] {
+        
+        return this.getSuperClasses()
+            // note : we exclude blank nodes
+            .filter(term => term.termType == "NamedNode")
+            // we find the shape targeting this class - it can be the class itself
+            .map(term => {
+                if(this.graph.hasTriple(term as Quad_Subject, RDF.TYPE, RDFS.CLASS)) {
+                    return term;
+                } else {
+                    return this.graph.findSingleSubjectOf(SH.TARGET_CLASS, term);
+                }                
+            })
+            // remove those for which the shape was not found
+            .filter(term => (term != undefined))
+            // and simply return the string value
+            .map(term => term.value);
     }
 
     /**
@@ -356,6 +375,10 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
 
     isRangeOf(n3store:RdfStore, shapeUri:any):boolean {
         return this.isRangeOfFunction(n3store, shapeUri);
+    }
+
+    getParents(): string[] {
+        return [];
     }
 }
 

@@ -166,6 +166,10 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       return this.graph.hasTriple(factory.namedNode(this.uri), SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN));
     }
 
+    getParents(): string[] {
+      return [];
+    }
+
     /**
      * @returns 
      */
@@ -254,7 +258,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       });
 
       return classes;
-  }
+    }
 
     static readShClassAndShNodeOn(n3store:RdfStore, theUri:any):string[] {         
       var classes: string[] = [];

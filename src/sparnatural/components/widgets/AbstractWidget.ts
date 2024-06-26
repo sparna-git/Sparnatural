@@ -2,8 +2,8 @@ import { BlankTerm, IriTerm, LiteralTerm, Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import HTMLComponent from "../HtmlComponent";
 import LoadingSpinner from "./LoadingSpinner";
-import { DataFactory, Literal } from 'rdf-data-factory';import { Term } from "@rdfjs/types/data-model";
- ;
+import { DataFactory, Literal } from 'rdf-data-factory';
+import { Term } from "@rdfjs/types/data-model";
 
 const factory = new DataFactory();
 

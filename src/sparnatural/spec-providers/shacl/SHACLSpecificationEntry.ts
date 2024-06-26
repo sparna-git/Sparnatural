@@ -20,6 +20,8 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
 
     abstract getTooltip():string|undefined;
 
+    abstract getParents(): string[];
+
     getId(): string {
         return this.uri;
     }

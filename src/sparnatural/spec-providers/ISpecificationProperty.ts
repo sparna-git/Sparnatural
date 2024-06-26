@@ -9,7 +9,7 @@ interface ISpecificationProperty extends ISpecificationEntry {
   isMultilingual(): boolean;
 
   getRange():Array<string>;
-  
+
   getBeginDateProperty(): string|undefined;
   getEndDateProperty(): string|undefined;
   getExactDateProperty(): string|undefined;

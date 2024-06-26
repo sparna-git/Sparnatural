@@ -1,7 +1,10 @@
-import { Quad, Term } from "@rdfjs/types/data-model";
+import { Quad, Quad_Object, Quad_Predicate, Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { RdfStore } from "rdf-stores";
 import { RDF } from "./BaseRDFReader";
+import { DataFactory } from "rdf-data-factory";
+import { QuadPredicate } from "n3";
 
+let DF = new DataFactory();
 
 export class StoreModel {
 
@@ -19,7 +22,7 @@ export class StoreModel {
     /**
      * Reads the given property on an entity, and return values as an array
      **/
-    readProperty(subject: Term, property: Term): Term[] {
+    readProperty(subject: Term, property: Term): Quad_Object[] {
         return this.store
             .getQuads(subject, property, null, null)
             .map(quad => quad.object);
@@ -30,6 +33,26 @@ export class StoreModel {
      **/
     readSingleProperty(subject: Term, property: Term): Term | undefined {
         var values = this.readProperty(subject, property);
+
+        if (values.length > 0) {
+            return values[0];
+        }
+    }
+
+    /**
+     * Finds all subjects having the given property with the given object, or undefined if not found
+     **/
+    findSubjectOf(property: Term, object: Term): Quad_Subject[] {
+        return this.store
+            .getQuads(null, property, object, null)
+            .map(quad => quad.subject);
+    }
+
+    /**
+     * Finds the subjects having the given property with the given object, and returns the first value found, or undefined if not found
+     */
+    findSingleSubjectOf(property: Term, object: Term): Quad_Subject | undefined {
+        var values = this.findSubjectOf(property, object);
 
         if (values.length > 0) {
             return values[0];
@@ -73,11 +96,16 @@ export class StoreModel {
         }
     }
 
-    hasProperty(subject: Term, property: Term) {
+    size():number {
+        return this.store.size
+    }
+
+    hasProperty(subject: Quad_Subject, property: Quad_Predicate) {
         return this.hasTriple(subject, property, null);
     }
 
-    hasTriple(rdfNode: Term, property: Term, value: Term | null): boolean {
+    hasTriple(rdfNode: Quad_Subject, property: Quad_Predicate, value: Quad_Object | null): boolean {
+        
         return (
             this.store.getQuads(
                 rdfNode,
@@ -86,6 +114,14 @@ export class StoreModel {
                 null
             ).length > 0
         );
+        /*
+        return this.store.asDataset().has(DF.quad(
+            rdfNode,
+            property,
+            value,
+            null
+        ));
+        */
     }
 
     findSubjectsWithPredicate(property: Term, rdfNode: Term): Term[] {

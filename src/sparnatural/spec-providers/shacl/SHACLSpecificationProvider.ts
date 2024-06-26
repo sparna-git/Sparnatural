@@ -15,9 +15,10 @@ import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationEntity, SpecialSHACLSpecificationEntityRegistry } from "./SHACLSpecificationEntity";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
-import { NamedNode, Quad, Quad_Object } from '@rdfjs/types/data-model';
+import { NamedNode, Quad, Quad_Object, Quad_Subject } from '@rdfjs/types/data-model';
 import { Term } from "@rdfjs/types";
 import { StoreModel } from '../StoreModel';
+import { Dag, DagIfc } from '../../dag/Dag';
 
 const factory = new DataFactory();
 
@@ -191,8 +192,36 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   }
 
   getEntitiesInDomainOfAnyProperty(): string[] {
+    // This is for debugging tree reading
+    // this.getEntitiesTreeInDomainOfAnyProperty();
     // map to extract just the uri
     return this.getInitialEntityList().map(e => e.getId());
+  }
+
+  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
+    // 1. get the entities that are in a domain of a property
+    let entities:SHACLSpecificationEntity[] = this.getInitialEntityList();
+    // 2. complement the initial list with their parents
+    while(!entities.every(entity => {
+      return entity.getParents().every(parent => {
+        return (entities.find(anotherEntity => anotherEntity.getId() === parent) != undefined);
+      });      
+    })) {
+      let parentsToAdd:SHACLSpecificationEntity[] = [];
+      entities.forEach(entity => {
+        entity.getParents().forEach(parent => {
+          if(!entities.find(anotherEntity => anotherEntity.getId() === parent)) {
+            parentsToAdd.push(this.getEntity(parent) as SHACLSpecificationEntity);
+          }
+        })
+      });
+      parentsToAdd.forEach(p => entities.push(p));
+    }
+
+    let dag:Dag<SHACLSpecificationEntity> = new Dag<SHACLSpecificationEntity>();
+    dag.initFromParentableAndIdAbleEntity(entities);
+    console.log(dag.toDebugString())
+    return dag;
   }
 
   expandSparql(sparql: string, prefixes: { [key: string]: string; }): string {
@@ -340,7 +369,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
    * @returns the NodeShape targeting the provided class, either implicitly or explicitly through sh:targetClass 
    * @param c 
    */
-  getNodeShapeTargetingClass(c:Term):Term|null {
+  getNodeShapeTargetingClass(c:Quad_Subject):Term|null {
     if(this.graph.hasTriple(c, RDF.TYPE, SH.NODE_SHAPE)) {
       // class if also a NodeShape, return it directly
       return c;
