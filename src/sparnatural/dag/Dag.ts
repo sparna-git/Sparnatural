@@ -155,6 +155,9 @@ export interface DagNodeIfc<Payload> {
     toDebugString(depth:number):string;
 
     sort: (compareFn:(a:Payload, b:Payload)=> number) => void;
+
+    // TODO ajouter un fonction qui ramène le/les chemins depuis le haut de l'arbre pour arriver jusqu'à un certain noeud
+    // findPaths(id:string):Array<Array<string>>
 }
 
 /**
