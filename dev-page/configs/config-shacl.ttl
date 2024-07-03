@@ -1,0 +1,79 @@
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix eli-ep: <https://data.europarl.europa.eu/def/eli-ep#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix eli: <http://data.europa.eu/eli/ontology#> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix eli-dl: <http://data.europa.eu/eli/eli-draft-legislation-ontology#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix epvoc: <https://data.europarl.europa.eu/def/epvoc#> .
+@prefix op-aut: <http://publications.europa.eu/resource/authority/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix shapes: <http://example.com/shapes#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix obo: <http://purl.obolibrary.org/obo/> .
+
+shapes:SO_0000316 rdf:type owl:NamedIndividual ,
+    sh:NodeShape ;
+    rdfs:label "CDS"@en ;
+    rdfs:comment "Coding DNA Sequence"@en ;
+    sh:property shapes:SIO_001166 ;                      # annotation
+    sh:targetClass <http://purl.obolibrary.org/obo/SO_0000316> ;
+    volipi:iconName "fa-solid fa-dna" .
+
+shapes:SIO_001166
+    sh:name      "annotation"@en ;
+    sh:node       shapes:GO_term ;
+    sh:path      (<http://semanticscience.org/resource/SIO_001166> <http://www.w3.org/ns/hydra/core#member>) .
+
+shapes:GO_term rdf:type sh:NodeShape , owl:NamedIndividual ;
+    sh:name "Go annotation" ;
+    sh:nodeKind sh:Literal ; 
+    volipi:iconName "fa-solid fa-gopuram" ;
+    sh:targetClass <http://purl.obolibrary.org/obo/child>;
+    sh:property shapes:name , shapes:data_2091 , shapes:IAO_0000115 .
+
+shapes:GO_term_parent rdf:type sh:NodeShape , owl:NamedIndividual ;
+    sh:name "Go annotation parent" ;
+    sh:nodeKind sh:Literal ; 
+    volipi:iconName "fa-solid fa-gopuram" ;
+    sh:targetClass <http://purl.obolibrary.org/obo/parent>
+.
+
+<http://purl.obolibrary.org/obo/child> rdfs:subClassOf <http://purl.obolibrary.org/obo/parent> .
+
+
+shapes:name
+    sh:maxCount  1 ;
+    sh:minCount  1 ;
+    sh:name      "name"@en ;
+    sh:path      <https://schema.org/name> .
+
+shapes:data_2091
+    sh:maxCount  1 ;
+    sh:minCount  1 ;
+    sh:name      "ID"@en ;
+    sh:path      <http://edamontology.org/data_2091> .
+
+shapes:IAO_0000115
+    sh:name "definition"@en ;
+    sh:path obo:IAO_0000115 .
