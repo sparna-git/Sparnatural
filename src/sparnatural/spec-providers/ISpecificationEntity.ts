@@ -1,3 +1,4 @@
+import { DagIfc } from "../dag/Dag";
 import { Config } from "../ontologies/SparnaturalConfig";
 import ISpecificationEntry from "./ISpecificationEntry";
 
@@ -6,6 +7,9 @@ interface ISpecificationEntity extends ISpecificationEntry {
 
 
   getConnectedEntities():Array<string>;
+
+  getConnectedEntitiesTree():DagIfc<ISpecificationEntity>;
+
   hasConnectedEntities(): boolean;
   getConnectingProperties(range: string): Array<string>;
   isLiteralEntity(): boolean;
@@ -15,7 +19,6 @@ interface ISpecificationEntity extends ISpecificationEntry {
    */
   isRemoteEntity(): boolean;
   getDefaultLabelProperty():string|undefined;
-  getParentClass() :string|undefined;
 
 }
 export default ISpecificationEntity;

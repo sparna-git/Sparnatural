@@ -6,6 +6,7 @@ import { Config } from "../../ontologies/SparnaturalConfig";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';
+import { DagIfc, Dag } from "../../dag/Dag";
 
 const factory = new DataFactory();
 
@@ -45,6 +46,10 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
 
         return items;
     }
+
+    getConnectedEntitiesTree():DagIfc<ISpecificationEntity> {
+      return new Dag();
+  }
 
 
     hasConnectedEntities(): boolean {
@@ -250,9 +255,5 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     
         return unions;
       }
-
-    getParentClass():string {
-        return this.graph.readSingleProperty(factory.namedNode(this.uri), OWL.PARENT)?.value;
-    }
     
 }

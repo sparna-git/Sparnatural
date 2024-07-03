@@ -18,7 +18,7 @@ import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad, Quad_Object, Quad_Subject } from '@rdfjs/types/data-model';
 import { Term } from "@rdfjs/types";
 import { StoreModel } from '../StoreModel';
-import { Dag, DagIfc } from '../../dag/Dag';
+import { DagIfc, Dag } from '../../dag/Dag';
 
 const factory = new DataFactory();
 

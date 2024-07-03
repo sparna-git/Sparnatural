@@ -1,3 +1,4 @@
+import { Dag, DagIfc } from "../dag/Dag";
 import ISparnaturalSpecification from "./ISparnaturalSpecification";
 import ISpecificationEntity from "./ISpecificationEntity";
 import ISpecificationProperty from "./ISpecificationProperty";
@@ -63,6 +64,10 @@ export class FilteringSpecificationProvider implements ISparnaturalSpecification
         this.getEntity(classUri).getConnectedEntities().length > 0
       );
     });
+  }
+
+  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
+    return new Dag();
   }
 
   _isClassAvailable(classUri: string) {

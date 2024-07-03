@@ -1,3 +1,4 @@
+import { DagIfc } from "../dag/Dag";
 import { Config } from "../ontologies/SparnaturalConfig";
 import ISpecificationEntity from "./ISpecificationEntity";
 import ISpecificationProperty from "./ISpecificationProperty";
@@ -12,7 +13,14 @@ interface ISparnaturalSpecification {
    * @deprecated
    */
   getAllSparnaturalEntities():Array<string>;
+
+  /**
+   * @deprecated use the tree variant instead
+   */
   getEntitiesInDomainOfAnyProperty():Array<string>;
+
+  getEntitiesTreeInDomainOfAnyProperty():DagIfc<ISpecificationEntity>;
+
   expandSparql(sparql: string, prefixes: { [key: string]: string }): string; 
 
   /**

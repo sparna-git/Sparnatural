@@ -8,6 +8,8 @@ import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { RdfStore } from "rdf-stores";
 import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../StoreModel";
+import { DagIfc, Dag } from "../../dag/Dag";
+import ISpecificationEntity from "../ISpecificationEntity";
 
 const factory = new DataFactory();
 
@@ -126,6 +128,10 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var sortedDedups = SHACLSpecificationEntry.sort(dedupItems.map(s => new SHACLSpecificationEntity(s, this.provider, this.store, this.lang)));
         // return dedup array of strings
         return sortedDedups.map(e => e.getId());        
+    }
+
+    getConnectedEntitiesTree():DagIfc<ISpecificationEntity> {
+        return new Dag();
     }
 
     hasConnectedEntities(): boolean {
@@ -291,13 +297,6 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return this.graph.readProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
     }
 
-    /**
-     * @returns all values of sh:targetClass on this entity, as RDF Terms
-     */
-    getParentClass():string {
-        return this.graph.readSingleProperty(factory.namedNode(this.uri), SH.PARENT)?.value;
-    }
-
 }
 
 
@@ -317,6 +316,10 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
 
     getConnectedEntities(): string[] {
         return new Array<string>();
+    }
+
+    getConnectedEntitiesTree():DagIfc<ISpecificationEntity> {
+        return new Dag();
     }
 
     hasConnectedEntities(): boolean {

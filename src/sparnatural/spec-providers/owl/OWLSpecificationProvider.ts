@@ -14,6 +14,7 @@ import ISpecificationProperty from "../ISpecificationProperty";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad_Subject, Term } from '@rdfjs/types/data-model';
+import { Dag, DagIfc } from '../../dag/Dag';
 
 const factory = new DataFactory();
 
@@ -25,8 +26,7 @@ export const OWL = {
   EQUIVALENT_CLASS: factory.namedNode(
     OWL_NAMESPACE + "equivalentClass"
   ) as NamedNode,
-  UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode,
-  PARENT: factory.namedNode(OWL_NAMESPACE + "parent") as NamedNode, 
+  UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode
 };
 
 export class OWLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {
@@ -139,6 +139,10 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
 
     console.log("Classes in domain of any property " + items);
     return items;
+  }
+
+  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
+    return new Dag();
   }
 
   isSparnaturalClass(classUri: string) {

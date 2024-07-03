@@ -1,3 +1,4 @@
+import { DagIfc, Dag } from "../../dag/Dag";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationEntity from "../ISpecificationEntity";
 import JsonLdSpecificationEntry from "./JsonLdSpecificationEntry";
@@ -31,6 +32,10 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
         items = this._sortItemsByIndex(items);
 
         return items;
+    }
+
+    getConnectedEntitiesTree():DagIfc<ISpecificationEntity> {
+      return new Dag();
     }
 
     hasConnectedEntities(): boolean {
@@ -100,9 +105,6 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
 
     getDefaultLabelProperty(): string | undefined {
       return this._readValue(this.id, "defaultLabelProperty");
-  }
-  getParentClass(): string | undefined {
-      return this._readValue(this.id, "parent");
   }
       
 }
