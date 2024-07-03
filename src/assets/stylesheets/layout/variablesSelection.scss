@@ -190,9 +190,9 @@
             right: 0;
             top: 110%;
             width: 100%;
-            z-index: 100;
+            z-index: 1000;
             border-radius: 5px;
-            border: 1px solid transparent;
+            border: 1px solid gray;
             ul {
                 list-style-type: none;
                 margin: 0;
@@ -200,6 +200,9 @@
                 li {
                     padding: 3px 8px;
                     border-bottom: 1px solid var(--silver-color-light);
+                    &:first-child {
+                        border-radius: 5px 5px 0 0;
+                    }
                     &:has(+ li:hover),
                     &:has(+ li.selected) {
                         border-bottom: 1px solid transparent;
@@ -214,7 +217,9 @@
                         border-bottom: 1px solid var(--primary-color-main);
                         -webkit-background-clip: padding-box; /* for Safari */
                         background-clip: padding-box; /* for IE9+, Firefox 4+, Opera, Chrome */
-
+                        &:first-child {
+                            border-top: 1px solid gray;
+                        }
                     }
                     &.revealIf {
                         background-color: var(--silver-color-light);
@@ -293,15 +298,20 @@
             }
 
             .aggrOptionsExtend {
+                border-radius: 0 0 5px 5px;
                 span {
                     padding: 3px 8px;
+                    text-align: center;
                 }
                 &:hover {
                     cursor: pointer;
                     color: #fff;
+                    padding-bottom: 1px;
                     background-color: var(--primary-color-main);
                     margin-top: -1px;
+                    margin-bottom: -1px;
                     border-top: 1px solid var(--primary-color-main);
+                    border-bottom: 1px solid gray;
                 }
             }
             &.extended {

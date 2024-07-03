@@ -22,20 +22,19 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 
 - **[How-to configure](how-to-configure/How-to-configure-Sparnatural.md)** : a detailled documentation for configuring Sparnatural in a spreadsheet (that is converted into a OWL configuration file). Start here to learn the different configuration options of Sparnatural.
 
-**in OWL**
-
-OWL is the recommmended way to configure Sparnatural :
-
-- [Configure in OWL using Protégé](OWL-based-configuration.md) : a reference page of all useful OWL axioms and annotations to configure Sparnatural with OWL
-- [Configure datasources in OWL](OWL-based-configuration-datasources.md) : a reference page of all included datasources and how-to write your own datasource
 
 **in SHACL**
 
-_This is a beta feature_
-
-SHACL is also supported to configure Sparnatural.
+SHACL is now the recommended way to configure Sparnatual.
 
 - [Configure in SHACL](SHACL-based-configuration.md) : a reference page detailling how Sparnatural can be configured in SHACL.
+
+**in OWL**
+
+Historically, Sparnatural also supported configuration specified in OWL :
+
+- [Configure in OWL using Protégé](OWL-based-configuration.md) : a reference page of all useful OWL axioms and annotations to configure Sparnatural with OWL
+- [Configure datasources in OWL](OWL-based-configuration-datasources.md) : a reference page of all included datasources and how-to write your own datasource
 
 **in JSON (deprecated)**
 

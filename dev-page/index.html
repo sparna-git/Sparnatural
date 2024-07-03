@@ -14,8 +14,6 @@
     <!-- FONTAWESOME-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    
-
     <title>SPARnatural - test page</title>
 
     <style>
@@ -26,6 +24,9 @@
       }
     </style>
     
+    <!-- Webpack CSS -->
+    <%= css %>
+
   </head>
   <body>
 <!-- The HTML needs to import one Sparnatural theme CSS of their choice - and this can be customized by the client -->
@@ -53,6 +54,9 @@
               https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1wIVJIIg7q-dZJQmvbKsSGdoS2gbFk3xwoZ_6ud_MiS4%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true
             -->
             <!-- You can try adding typePredicate="http://www.w3.org/2000/01/rdf-schema#subClassOf" -->
+            <!-- src="configs/VehiclePropertyOntology.ttl configs/VehiclePropertyVocabulary.ttl" -->
+            <!-- src="configs/person-v2.shacl.ttl" -->
+            <!-- src="configs/vehicle-cross-domain-ontology.ttl" -->
             <spar-natural
               src="configs/nakala-shapes.ttl"
               lang="fr"
@@ -146,21 +150,11 @@
     <!-- YASGUI stuff -->
     <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
 
-    <script type="module">
+    <!-- Webpack JS -->
+    <%= js %>
 
+    <script src="sparnatural-yasgui-plugins.js"></script>
+    <script src="scripts/init.js"></script>
 
-      /*
-        Dropdown for preloaded queries
-      */
-      import { Dropdown } from "./dropdown/dropdown.js";
-      import {renderDropDown} from './scripts/initDropDown.js'
-      import preLoadedQueries from './configs/preloadqueries.js'
-      /*
-        Import Sparnatural initialization
-      */
-      import * as SparNatural from './scripts/initSparnatural.js'
-     
-
-    </script>
   </body>
 </html>

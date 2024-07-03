@@ -113,7 +113,7 @@ export class BooleanWidget extends AbstractWidget {
       // otherwise the object prop is created and we create a VALUES clause with the actual boolean
       let vals = (this.widgetValues as BooleanWidgetValue[]).map((v) => {
         let vl: ValuePatternRow = {};
-        vl[this.endClassVal.variable] = factory.literal(
+        vl["?"+this.endClassVal.variable] = factory.literal(
           this.widgetValues[0].value.boolean.toString(),
           factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
         );

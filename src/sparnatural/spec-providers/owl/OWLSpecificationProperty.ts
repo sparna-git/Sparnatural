@@ -6,6 +6,7 @@ import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from "rdf-stores";
+import { Term } from "@rdfjs/types";
 
 const factory = new DataFactory();
 
@@ -104,6 +105,10 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
   }
 
   getMaxValue():string|undefined {
+    return undefined;
+  }
+
+  getValues():Term[] | undefined {
     return undefined;
   }
 

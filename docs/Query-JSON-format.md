@@ -65,16 +65,22 @@ Is modelled in the following JSON data structure :
 {
   "distinct": true,
   "variables": [
-    "Artwork_1",
-    "Date_6"
+    {
+      "termType": "Variable",
+      "value": "Artwork_1"
+    },
+    {
+      "termType": "Variable",
+      "value": "Date_6"
+    }
   ],
   "order": null,
   "branches": [
     {
       "line": {
-        "s": "?Artwork_1",
+        "s": "Artwork_1",
         "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#displayedAt",
-        "o": "?Museum_2",
+        "o": "Museum_2",
         "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
         "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
         "values": []
@@ -82,9 +88,9 @@ Is modelled in the following JSON data structure :
       "children": [
         {
           "line": {
-            "s": "?Museum_2",
+            "s": "Museum_2",
             "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#country",
-            "o": "?Country_4",
+            "o": "Country_4",
             "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
             "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
             "values": [
@@ -110,14 +116,14 @@ Is modelled in the following JSON data structure :
     },
     {
       "line": {
-        "s": "?Artwork_1",
+        "s": "Artwork_1",
         "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#creationYear",
-        "o": "?Date_6",
+        "o": "Date_6",
         "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
         "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Date",
         "values": [
           {
-            "label": "From 1800 to 1901",
+            "label": "from 1800 to 1901",
             "start": "1799-12-31T23:50:40.000Z",
             "stop": "1901-12-31T23:50:38.000Z"
           }
@@ -144,8 +150,14 @@ The data structure is composed of a top "Query" structure, that contains "branch
 {
   "distinct": true,
   "variables": [
-    "?this",
-    "?that"
+   {
+      "termType": "Variable",
+      "value": "this"
+    },
+    {
+      "termType": "Variable",
+      "value": "that"
+    }
   ],
   "order": null,
   "branches": [
@@ -155,7 +167,7 @@ The data structure is composed of a top "Query" structure, that contains "branch
 ```
 
 - `distinct` : whether the `DISTINCT` SPARQL keyword should be added
-- `variables` : ordered list of ?-prefixed variables selected in the `WHERE` clause
+- `variables` : ordered list of variables selected in the `WHERE` clause. `termType` is always `Variable`, and `value` is the variable name (without "?")
 - `order` : e.g. `"asc"` or `"desc"` depending on sort direction. Or `null` if no sort. The sort is always on the first column.
 - `branches` : ordered list of query branches, each containing a "tree" of criteria under it
 
@@ -183,12 +195,13 @@ The data structure is composed of a top "Query" structure, that contains "branch
 
 ```json
 {
-  "s": "?Museum_1",
-  "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#country",
-  "o": "?Country_2",
-  "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
-  "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
-  "values": [
+  "line": {
+    "s": "Museum_2",
+    "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#country",
+    "o": "Country_4",
+    "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
+    "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
+    "values": [
       {
         "label": "France (3987)",
         "rdfTerm": {
@@ -203,7 +216,9 @@ The data structure is composed of a top "Query" structure, that contains "branch
           "value": "http://fr.dbpedia.org/resource/Italie"
         }
       }
-  ]
+    ]
+  },
+  "children": []
 }
 ```
 
@@ -285,4 +300,41 @@ If the value is a Literal (with a datatype):
     "label": "...",
     "search": "..."
   }
+```
+
+- A number widget:
+
+```json
+  {
+    "label": "between 10000 and 100000",
+    "min": 10000,
+    "max": 100000
+  }
+```
+
+### Aggregated variables
+
+If the query has aggregated variables (such as `COUNT(?x)`), the variable query structure changes to the following:
+
+```json
+{
+  "distinct": true,
+  "variables": [
+    {
+      "expression": {
+        "type": "aggregate",
+        "aggregation": "count",
+        "distinct": false,
+        "expression": {
+          "termType": "Variable",
+          "value": "Artwork_1"
+        }
+      },
+      "variable": {
+        "termType": "Variable",
+        "value": "Artwork_1_count"
+      }
+    }
+  ],
+}
 ```

@@ -65,9 +65,10 @@ class WidgetWrapper extends HTMLComponent {
     $(this.html).find("#selectAllWrapper").remove();
     this.#addWidgetHTML(this.widgetType);
 
-    //if there is already a widget component rendered, then only render it since we would like to keep the state
+    // if there is already a widget component rendered, then only render it since we would like to keep the state
     if (this.widgetComponent) {
       // could still be null in case of non selectable property
+      console.log("widget component already there, rendering widget component");
       this.widgetComponent.render();
     }
 
@@ -264,7 +265,10 @@ class WidgetWrapper extends HTMLComponent {
         // what is set in the provided configuration object for the corresponding section
         let listConfig:ListConfiguration = {
           ...ListWidget.defaultConfiguration,
-          ...{dataProvider: listDataProvider},          
+          ...{
+            dataProvider: listDataProvider,
+            values:this.specProvider.getProperty(objectPropertyId).getValues(),
+          },          
           ...this.settings.customization?.list
         };
 

@@ -177,7 +177,14 @@ class CriteriaGroup extends HTMLComponent {
     e.stopImmediatePropagation();
     // removeEditComponents: if add btn got clicked mutiple times or the old widgetwrapper is still rendered while the last selectedvalue got deleted
     this.html[0].dispatchEvent(new CustomEvent("removeEditComponents"));
-    if (e.detail.selectedValues.length === 0) {
+    if (
+      e.detail.selectedValues.length === 0
+      &&
+      // if we are not in the case that we edit the last value in the list
+      // note : editedValue contains the value being edited - it could be passed again to the widget, maybe, instead
+      // of keeping the state in the widget
+      !e.detail.editedValue
+    ) {
       // Render WidgetsWrapper and ActionWhere
       this.EndClassGroup.editComponents.render();
       this.html[0].dispatchEvent(

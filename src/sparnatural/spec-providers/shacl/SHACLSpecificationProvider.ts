@@ -15,9 +15,10 @@ import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationEntity, SpecialSHACLSpecificationEntityRegistry } from "./SHACLSpecificationEntity";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
-import { NamedNode, Quad, Quad_Object } from '@rdfjs/types/data-model';
+import { NamedNode, Quad, Quad_Object, Quad_Subject } from '@rdfjs/types/data-model';
 import { Term } from "@rdfjs/types";
 import { StoreModel } from '../StoreModel';
+import { Dag, DagIfc } from '../../dag/Dag';
 
 const factory = new DataFactory();
 
@@ -28,6 +29,7 @@ export const SH = {
   DATATYPE: factory.namedNode(SH_NAMESPACE + "datatype") as NamedNode,
   DEACTIVATED: factory.namedNode(SH_NAMESPACE + "deactivated") as NamedNode,
   DESCRIPTION: factory.namedNode(SH_NAMESPACE + "description") as NamedNode,
+  IN: factory.namedNode(SH_NAMESPACE + "in") as NamedNode, 
   INVERSE_PATH: factory.namedNode(SH_NAMESPACE + "inversePath") as NamedNode, 
   IRI: factory.namedNode(SH_NAMESPACE + "IRI") as NamedNode, 
   LANGUAGE_IN: factory.namedNode(SH_NAMESPACE + "languageIn") as NamedNode, 
@@ -99,6 +101,11 @@ export const VOID = {
   ENTITIES: factory.namedNode(VOID_NAMESPACE + "entities") as NamedNode,
   TRIPLES: factory.namedNode(VOID_NAMESPACE + "triples") as NamedNode,
   DISTINCT_OBJECTS: factory.namedNode(VOID_NAMESPACE + "distinctObjects") as NamedNode,
+};
+
+const SKOS_NAMESPACE = "http://www.w3.org/2004/02/skos/core#";
+export const SKOS = {
+  DEFINITION: factory.namedNode(SKOS_NAMESPACE + "definition") as NamedNode
 };
 
 export class SHACLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {
@@ -186,8 +193,36 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   }
 
   getEntitiesInDomainOfAnyProperty(): string[] {
+    // This is for debugging tree reading
+    // this.getEntitiesTreeInDomainOfAnyProperty();
     // map to extract just the uri
     return this.getInitialEntityList().map(e => e.getId());
+  }
+
+  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
+    // 1. get the entities that are in a domain of a property
+    let entities:SHACLSpecificationEntity[] = this.getInitialEntityList();
+    // 2. complement the initial list with their parents
+    while(!entities.every(entity => {
+      return entity.getParents().every(parent => {
+        return (entities.find(anotherEntity => anotherEntity.getId() === parent) != undefined);
+      });      
+    })) {
+      let parentsToAdd:SHACLSpecificationEntity[] = [];
+      entities.forEach(entity => {
+        entity.getParents().forEach(parent => {
+          if(!entities.find(anotherEntity => anotherEntity.getId() === parent)) {
+            parentsToAdd.push(this.getEntity(parent) as SHACLSpecificationEntity);
+          }
+        })
+      });
+      parentsToAdd.forEach(p => entities.push(p));
+    }
+
+    let dag:Dag<SHACLSpecificationEntity> = new Dag<SHACLSpecificationEntity>();
+    dag.initFromParentableAndIdAbleEntity(entities);
+    console.log(dag.toDebugString())
+    return dag;
   }
 
   expandSparql(sparql: string, prefixes: { [key: string]: string; }): string {
@@ -214,7 +249,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
         sparql = sparql.replace(re, sparqlReplacementString);
       });
 
-    // TODO : for each sh:target/sh:select ...
+    // for each sh:target/sh:select ...
     this.store
       .getQuads(null, SH.TARGET, null, null)
       .forEach((q1: Quad) => {
@@ -232,7 +267,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
           // replace the $this with the name of the original variable in the query
           // \S matches any non-whitespace charracter
-          var re = new RegExp("(\\S*) (rdf:type|a) <" + nodeShapeUri + ">", "g");      
+          var re = new RegExp("(\\S*) (rdf:type|a|<http://www\\.w3\\.org/1999/02/22-rdf-syntax-ns#type>) <" + nodeShapeUri + ">", "g");      
 
           let replacer = function(match:string, p1:string, offset:number, fullString:string) {
             // first substitutes any other variable name with a prefix
@@ -336,7 +371,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
    * @returns the NodeShape targeting the provided class, either implicitly or explicitly through sh:targetClass 
    * @param c 
    */
-  getNodeShapeTargetingClass(c:Term):Term|null {
+  getNodeShapeTargetingClass(c:Quad_Subject):Term|null {
     if(this.graph.hasTriple(c, RDF.TYPE, SH.NODE_SHAPE)) {
       // class if also a NodeShape, return it directly
       return c;
@@ -371,13 +406,19 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
           return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"+";
         }
         if(store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
-          return "^"+SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel);
+          return "^"+SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.INVERSE_PATH, null, null)[0].object, store, asDisplayLabel);
+        }
+        if(store.getQuads(path, SH.ALTERNATIVE_PATH, null, null).length > 0) {
+          let list = store.getQuads(path, SH.ALTERNATIVE_PATH, null, null)[0].object;
+          let graph = new StoreModel(store);
+          let sequence:Term[] = graph.readListContent(list);
+          return sequence.map(t => SHACLSpecificationProvider.pathToSparql(t, store, asDisplayLabel)).join("|");
         }
         if(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
-          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"*";
+          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"*";
         }
         if(store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
-          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"?";
+          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null)[0].object, store, asDisplayLabel)+"?";
         }
       }
       

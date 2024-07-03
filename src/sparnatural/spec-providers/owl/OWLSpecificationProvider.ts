@@ -13,7 +13,7 @@ import { OWLSpecificationEntity } from "./OWLSpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
-import { NamedNode, Term } from '@rdfjs/types/data-model';
+import { NamedNode, Quad_Subject, Term } from '@rdfjs/types/data-model';
 
 const factory = new DataFactory();
 
@@ -333,7 +333,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
   }
 
   _isUnionClass(classUriOrBNodeIdentifier: Term) {
-    return this.graph.hasProperty(classUriOrBNodeIdentifier, OWL.UNION_OF);
+    return this.graph.hasProperty(classUriOrBNodeIdentifier as Quad_Subject, OWL.UNION_OF);
   }
 
   /*** / Handling of UNION classes ***/

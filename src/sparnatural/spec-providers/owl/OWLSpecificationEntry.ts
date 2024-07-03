@@ -83,4 +83,8 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
         return icons[0].value;
       } 
     }
+
+    getParents(): string[] {
+      return [];
+    }
 }

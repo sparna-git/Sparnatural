@@ -55,6 +55,13 @@ export class ListWidget implements SparnaturalSearchWidget {
     }
 
     score(propertyShape:string, n3store: RdfStore):number {
+        let graph:StoreModel = new StoreModel(n3store);
+
+        // if there is a provided list of values, score higher
+        if(graph.hasTriple(factory.namedNode(propertyShape), SH.IN, null) ) {
+            return 100;
+        }
+        
         // if there is a distinctObjectsCount and the distinctObjectsCount is < 500, then this will score higher
         let count = distinctObjectsCount(n3store, propertyShape);
         if(count && count < 500) {

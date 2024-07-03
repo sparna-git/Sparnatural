@@ -1,18 +1,18 @@
-import { getSettings } from "../../../sparnatural/settings/defaultSettings";
+import { getSettings } from "../../settings/defaultSettings";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
-import ActionStore from "../ActionStore";
+import SparnaturalComponent from "../../components/SparnaturalComponent";
 /*
   Triggered either on an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper
 */
-export default function redrawBackgroundAndLinks(actionStore: ActionStore) {
+export default function redrawBackgroundAndLinks(sparnatural: SparnaturalComponent) {
   let cssdef = ``;
   //index used in callback
   let index = 0;
   let currentHeight = 0;
   let previousHeight = 0;
   // traversePreOrder through components and calculate background / linkAndBottoms /  for them
-  actionStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
+  sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       renderLinks(grpWrapper);
       rerenderOptionState(grpWrapper);
@@ -48,7 +48,7 @@ export default function redrawBackgroundAndLinks(actionStore: ActionStore) {
     }
   );
   let linGradCss = `linear-gradient(${cssdef})`;
-  actionStore.sparnatural.BgWrapper.html.css({ background: linGradCss });
+  sparnatural.BgWrapper.html.css({ background: linGradCss });
 }
 
 // if the grpWrapper doesn't have prop .html, then it got deleted and the links don't need to be rerendered

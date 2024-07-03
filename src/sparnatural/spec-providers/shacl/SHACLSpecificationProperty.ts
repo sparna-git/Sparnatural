@@ -2,7 +2,7 @@ import { RDF, RDFS } from "../BaseRDFReader";
 import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
-import { DASH, SH, SHACLSpecificationProvider, VOLIPI, XSD } from "./SHACLSpecificationProvider";
+import { DASH, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { ListWidget, SparnaturalSearchWidget, SparnaturalSearchWidgetsRegistry } from "./SHACLSearchWidgets";
 import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntity, SHACLSpecificationEntity } from "./SHACLSpecificationEntity";
@@ -53,9 +53,21 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         // try with sh:description
         tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
       }
-      if(!tooltip) {
-        // try to read an rdfs:comment on the property
-        if(this.graph.hasTriple(factory.namedNode(this.uri),SH.PATH, null)) {
+
+      // make sure we have a path to read properties on the property itself
+      if(this.graph.hasTriple(factory.namedNode(this.uri),SH.PATH, null)) {
+        if(!tooltip) {
+          // try to read a skos:definition on the property
+          // try to read the value of the property itself
+          // note that we try to read an rdfs:comment even in case the path is a blank node, e.g. sequence path
+          tooltip = this.graph.readSinglePropertyInLang(
+            this.graph.readSingleProperty(factory.namedNode(this.uri),SH.PATH) as Term            , 
+            SKOS.DEFINITION, 
+            this.lang)?.value;
+        }
+
+        if(!tooltip) {
+          // try to read an rdfs:comment on the property
           // try to read the rdfs:label of the property itself
           // note that we try to read an rdfs:label event in case the path is a blank node, e.g. sequence path
           tooltip = this.graph.readSinglePropertyInLang(
@@ -64,6 +76,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
             this.lang)?.value;
         }
       }
+
       return tooltip;
     }
 
@@ -81,14 +94,14 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         var shapeUri:string|null = null;
         var orMembers = this.graph.readAsList(factory.namedNode(this.uri), SH.OR);
         orMembers?.forEach(m => {
-          if(rangeEntity.isRangeOf(this.store, m.id)) {
-            shapeUri = m.id;
+          if(rangeEntity.isRangeOf(this.store, m.value)) {
+            shapeUri = m.value;
           }
           // recurse one level more
           var orOrMembers = this.graph.readAsList(m, SH.OR);
           orOrMembers?.forEach(orOrMember => {
-            if(rangeEntity.isRangeOf(this.store, orOrMember.id)) {
-              shapeUri = orOrMember.id;
+            if(rangeEntity.isRangeOf(this.store, orOrMember.value)) {
+              shapeUri = orOrMember.value;
             }
           });
         });
@@ -153,6 +166,10 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       return this.graph.hasTriple(factory.namedNode(this.uri), SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN));
     }
 
+    getParents(): string[] {
+      return [];
+    }
+
     /**
      * @returns 
      */
@@ -177,13 +194,13 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         
         orMembers?.forEach(m => {
           // read sh:class / sh:node
-          var orClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.id);
+          var orClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.value);
 
           // nothing, see if default applies on this sh:or member
           if(orClasses.length == 0) {
             SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
               if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
-                if(value.isRangeOf(this.store, m.id)) {
+                if(value.isRangeOf(this.store, m.value)) {
                   orClasses.push(key);
                 }
               }
@@ -195,12 +212,12 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
             var orOrMembers = this.graph.readAsList(m, SH.OR);
             orOrMembers?.forEach(orOrMember => {
               // read sh:class / sh:node
-              var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember.id);
+              var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember.value);
               // nothing, see if default applies on this sh:or member
               if(orOrClasses.length == 0) {
                 SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
                   if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
-                    if(value.isRangeOf(this.store, orOrMember.id)) {
+                    if(value.isRangeOf(this.store, orOrMember.value)) {
                       orClasses.push(key);
                     }
                   }
@@ -237,11 +254,11 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       // read sh:or content
       var orMembers = this.graph.readAsList(factory.namedNode(this.uri), SH.OR);
       orMembers?.forEach(m => {
-        classes.push(...SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.id));
+        classes.push(...SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.value));
       });
 
       return classes;
-  }
+    }
 
     static readShClassAndShNodeOn(n3store:RdfStore, theUri:any):string[] {         
       var classes: string[] = [];
@@ -330,6 +347,10 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       if(datatype && DATATYPES_BOUND[datatype]?.maxInclusive) {
           return DATATYPES_BOUND[datatype]?.maxInclusive?.toString();
       }
+    }
+
+    getValues():Term[] | undefined {
+      return this.graph.readAsList(factory.namedNode(this.uri), SH.IN);
     }
 
     getBeginDateProperty(): string | undefined {

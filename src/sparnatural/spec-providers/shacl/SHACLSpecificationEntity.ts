@@ -1,12 +1,12 @@
 import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
-import { DataFactory } from 'rdf-data-factory';
-import { DASH, SH, SHACLSpecificationProvider, VOLIPI, XSD } from "./SHACLSpecificationProvider";
+import { DataFactory, NamedNode } from 'rdf-data-factory';
+import { DASH, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { RdfStore } from "rdf-stores";
-import { Term } from "@rdfjs/types";
+import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../StoreModel";
 
 const factory = new DataFactory();
@@ -30,32 +30,51 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         }
 
         if(!label) {
+            // attempt to read the local part of the targetClass URI
+            if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
+                let targetClass = this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
+                label = StoreModel.getLocalName(targetClass.value) as string;
+            }
+        }
+
+        if(!label) {
             // default : read the local part of the URI
             label = StoreModel.getLocalName(this.uri) as string;
         }
 
         return label;
-      }
+    }
 
-      getTooltip(): string | undefined {
+    getTooltip(): string | undefined {
         let tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), VOLIPI.MESSAGE, this.lang)?.value;
+        
         if(!tooltip) {
-          // try with sh:description
-          tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
+            // try with sh:description
+            tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
         }
-        if(!tooltip) {
-          // try to read an rdfs:comment on the property
-          if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
-            // try to read the rdfs:label of the property itself
-            // note that we try to read an rdfs:label event in case the path is a blank node, e.g. sequence path
-            tooltip = this.graph.readSinglePropertyInLang(
-              this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS) as Term,  
-              RDFS.COMMENT, 
-              this.lang)?.value;
-          }
+
+        if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
+            if(!tooltip) {
+                // try to read an rdfs:comment on the class itself
+                // note that we try to read the value even in case the target is a blank node, e.g. SPARQL target
+                tooltip = this.graph.readSinglePropertyInLang(
+                    this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS) as Term,  
+                    SKOS.DEFINITION, 
+                    this.lang)?.value;
+            }
+
+            if(!tooltip) {
+                // try to read an rdfs:comment on the class itself
+                // note that we try to read the value even in case the target is a blank node, e.g. SPARQL target
+                tooltip = this.graph.readSinglePropertyInLang(
+                    this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS) as Term,  
+                    RDFS.COMMENT, 
+                    this.lang)?.value;
+            }
         }
+
         return tooltip;
-      }
+    }
 
 
     getConnectingProperties(range: string): string[] {
@@ -105,7 +124,6 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var dedupItems = [...new Set(items)];
         // sort dedups
         var sortedDedups = SHACLSpecificationEntry.sort(dedupItems.map(s => new SHACLSpecificationEntity(s, this.provider, this.store, this.lang)));
-        console.log(sortedDedups)
         // return dedup array of strings
         return sortedDedups.map(e => e.getId());        
     }
@@ -128,7 +146,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         // add all properties from node shapes of superclasses
         let superClasses:Term[] = this.getSuperClasses();
         superClasses.forEach(sc => {
-            let ns = this.provider.getNodeShapeTargetingClass(sc);
+            let ns = this.provider.getNodeShapeTargetingClass(sc as Quad_Subject);
             if(ns) {
                 let superClassEntity = new SHACLSpecificationEntity(ns.value,this.provider, this.store, this.lang);
                 propShapes.push(...superClassEntity.getProperties());
@@ -191,6 +209,25 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         });
 
         return items.length>0?items[0].value:undefined;
+    }
+
+    getParents(): string[] {
+        
+        return this.getSuperClasses()
+            // note : we exclude blank nodes
+            .filter(term => term.termType == "NamedNode")
+            // we find the shape targeting this class - it can be the class itself
+            .map(term => {
+                if(this.graph.hasTriple(term as Quad_Subject, RDF.TYPE, RDFS.CLASS)) {
+                    return term;
+                } else {
+                    return this.graph.findSingleSubjectOf(SH.TARGET_CLASS, term);
+                }                
+            })
+            // remove those for which the shape was not found
+            .filter(term => (term != undefined))
+            // and simply return the string value
+            .map(term => term.value);
     }
 
     /**
@@ -346,8 +383,9 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
     isRangeOf(n3store:RdfStore, shapeUri:any):boolean {
         return this.isRangeOfFunction(n3store, shapeUri);
     }
-    getParentClass(): string {
-        return '';
+
+    getParents(): string[] {
+        return [];
     }
 }
 
@@ -455,7 +493,11 @@ export class SpecialSHACLSpecificationEntityRegistry {
                             (
                                 !graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, null)
                                 ||
-                                !graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE)?.value.startsWith("http://www.w3.org/2001/XMLSchema#")
+                                (
+                                    !graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE)?.value.startsWith("http://www.w3.org/2001/XMLSchema#")
+                                    &&
+                                    !graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE)?.value.startsWith("http://www.opengis.net/ont/geosparql#")
+                                )
                             )
                         )
                     );

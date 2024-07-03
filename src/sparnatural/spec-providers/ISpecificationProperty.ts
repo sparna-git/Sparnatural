@@ -1,5 +1,4 @@
-import { Config } from "../ontologies/SparnaturalConfig";
-import ISpecificationEntity from "./ISpecificationEntity";
+import { Term } from "@rdfjs/types";
 import ISpecificationEntry from "./ISpecificationEntry";
 
 interface ISpecificationProperty extends ISpecificationEntry {
@@ -10,7 +9,7 @@ interface ISpecificationProperty extends ISpecificationEntry {
   isMultilingual(): boolean;
 
   getRange():Array<string>;
-  
+
   getBeginDateProperty(): string|undefined;
   getEndDateProperty(): string|undefined;
   getExactDateProperty(): string|undefined;
@@ -25,8 +24,20 @@ interface ISpecificationProperty extends ISpecificationEntry {
   getTreeChildrenDatasource(): any;
   getTreeRootsDatasource(): any;
 
+  /**
+   * @returns the mininum allowed value, as a string, or undefined if not set
+   */
   getMinValue():string | undefined;
+
+  /**
+   * @returns the maximum allowed value, as a string, or undefined if not set
+   */
   getMaxValue():string | undefined;
+
+  /**
+   * @returns the list of allowed values, as RDF Terms, or undefined is not set
+   */
+  getValues():Term[] | undefined;
 
   /**
    * @returns true if the query should omit the class criteria of its range all the time

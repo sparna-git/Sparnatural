@@ -43,6 +43,7 @@ export class BaseRDFReader {
 
     static buildStoreFromString(configData:string, filePath:string, callback: any) {
       const store:RdfStore = RdfStore.createDefault();
+      console.log("Building store from string...");
       let quadStream: Stream<Quad> = BaseRDFReader.#toQuadStream(configData,filePath);
 
       store.import(quadStream)

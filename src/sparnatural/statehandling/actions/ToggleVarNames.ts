@@ -1,8 +1,8 @@
+import SparnaturalComponent from "../../components/SparnaturalComponent";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
-import ActionStore from "../ActionStore";
 
-export default function toggleVarNames(actionsStore: ActionStore,showVarNames:boolean) {
-  actionsStore.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
+export default function toggleVarNames(sparnatural:SparnaturalComponent,showVarNames:boolean) {
+  sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
     (grpWrapper: GroupWrapper) => {
       let startGrp = grpWrapper.CriteriaGroup.StartClassGroup;
       let endGrp = grpWrapper.CriteriaGroup.EndClassGroup;
@@ -15,7 +15,8 @@ export default function toggleVarNames(actionsStore: ActionStore,showVarNames:bo
       }
     }
   );
-  actionsStore.sparnatural.html[0].dispatchEvent(
+
+  sparnatural.html[0].dispatchEvent(
     new CustomEvent("redrawBackgroundAndLinks")
   );
 }

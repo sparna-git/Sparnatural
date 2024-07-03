@@ -77,6 +77,10 @@ export default class JsonLdSpecificationEntry implements ISpecificationEntry {
       return this.jsonSpecs["@graph"].indexOf(JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs));
     }
 
+    getParents(): string[] {
+      return [];
+    }
+
 
   protected _readValue(id: any, key: string | number) {
     var theObject = JsonLdSpecificationProvider.getResourceById(id, this.jsonSpecs);

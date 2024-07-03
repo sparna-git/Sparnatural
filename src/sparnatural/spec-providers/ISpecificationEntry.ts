@@ -17,4 +17,10 @@ export default interface ISpecificationEntry {
     getColor(): string|undefined;
 
     getOrder(): string|undefined;
+
+    /**
+     * Returns the parents entries of this one. Usually there is only one such parent.
+     * Returns an empty array if there are no such parents (root entry)
+     */
+    getParents():Array<string>;
 }

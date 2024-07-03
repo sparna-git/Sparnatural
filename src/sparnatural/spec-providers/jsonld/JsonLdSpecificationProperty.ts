@@ -1,3 +1,4 @@
+import { Term } from "@rdfjs/types";
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 import ISpecificationProperty from "../ISpecificationProperty";
 import JsonLdSpecificationEntry from "./JsonLdSpecificationEntry";
@@ -178,6 +179,10 @@ export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntr
   }
 
   getMaxValue():string|undefined {
+    return undefined;
+  }
+
+  getValues():Term[] | undefined {
     return undefined;
   }
 

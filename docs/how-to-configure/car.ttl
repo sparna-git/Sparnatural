@@ -117,6 +117,17 @@ odb:componentCode rdf:type owl:DatatypeProperty ;
                                 "has component code"@en .
 
 
+###  http://example.com/ontology/odb#componentCode
+odb:errorCode rdf:type owl:DatatypeProperty ;
+                     rdfs:domain odb:ErrorCode ;
+                     rdfs:range xsd:string ;
+                     rdfs:comment "Contains the error code as a character string."@en ,
+                                  "Contient le code d'erreur, comme une chaine de caractères."@fr ;
+                     rdfs:label "code d'erreur"@fr ,
+                                "error code"@en .
+
+
+
 ###  http://example.com/ontology/odb#VIN
 odb:VIN rdf:type owl:DatatypeProperty ;
            rdfs:domain odb:Vehicle ;
@@ -126,6 +137,15 @@ odb:VIN rdf:type owl:DatatypeProperty ;
            rdfs:label "a un code VIN"@fr ,
                       "has VIN"@en .
 
+
+###  http://example.com/ontology/odb#componentCode
+odb:weightInKg rdf:type owl:DatatypeProperty ;
+                     rdfs:domain odb:Vehicke ;
+                     rdfs:range xsd:integer ;
+                     rdfs:comment "Weight of a vehicle in kilogram"@en ,
+                                  "Poids d'un véhicule en kg"@fr ;
+                     rdfs:label "poids en kg"@fr ,
+                                "wight in kg"@en .
 
 ###  http://example.com/ontology/odb#diagnosticDate
 odb:diagnosticDate rdf:type owl:DatatypeProperty ;

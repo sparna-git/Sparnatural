@@ -1,0 +1,74 @@
+@prefix ma: <http://anabasis-assets.com/ontologies/modelisationLycee/Matiere#> .
+@prefix pr: <http://anabasis-assets.com/ontologies/modelisationLycee/Professeur#> .
+@prefix ly: <http://anabasis-assets.com/ontologies/modelisationLycee/Lyceen> .
+@prefix lycee: <http://anabasis-assets.com/ontologies/lycee#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . 
+@prefix sparna: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix ds: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+
+#################################################################
+#    Classes
+#################################################################
+
+pr:Professeur rdfs:subClassOf sparna:SparnaturalClass ;
+    sparna:defaultLabelProperty rdfs:label ;
+    sparna:faIcon "fa fa-person-chalkboard" ;
+    sparna:tooltip "un professeur"@fr ;
+    rdfs:label "Professeur"@fr .
+
+ma:Matiere rdfs:subClassOf sparna:SparnaturalClass ;
+    sparna:defaultLabelProperty rdfs:label ;
+    sparna:faIcon "fa fa-book" ;
+    sparna:tooltip "une matiere"@fr ;
+    rdfs:label "Matiere"@fr .
+
+ly:Lyceen rdfs:subClassOf sparna:SparnaturalClass ;
+    sparna:defaultLabelProperty rdfs:label ;
+    sparna:faIcon "fa fa-person" ;
+    sparna:tooltip "un Lycéen"@fr ;
+    rdfs:label "Lycéen"@fr .
+
+###  http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Text
+lycee:Text rdf:type owl:Class ;
+      rdfs:subClassOf rdfs:Literal ;
+      sparna:faIcon "fa-solid fa-font" ;
+      sparna:tooltip "An attribute, a property that describes the object, like a name or a description. <br/><br/>Use this to select the name of the object."@en ,
+                                                                         "Un attribut qui caractérise l'objet, comme un nom ou une description. <br/><br/>Choisissez ceci pour sélectionner le nom de l'objet"@fr ;
+      rdfs:label "Text"@en ,
+                 "Texte"@fr .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+# specialise: Professeur
+pr:specialise rdfs:subPropertyOf sparna:AutocompleteProperty ;
+        rdfs:domain pr:Professeur ;
+        rdfs:range ma:Matiere ;
+        sparna:enableOptional "false"^^xsd:boolean ;
+        sparna:enableNegation "false"^^xsd:boolean ;
+        ds:datasource ds:literal_list_alpha ;
+        rdfs:label "se spécialise dans"@fr ,
+                "specialize himself in"@en .
+
+# enseigne: Professeur
+pr:enseigne rdfs:subPropertyOf sparna:ListProperty ;
+        rdfs:domain pr:Professeur ;
+        rdfs:range ly:Lyceen ;
+        sparna:enableOptional "false"^^xsd:boolean ;
+        sparna:enableNegation "false"^^xsd:boolean ;
+        ds:datasource ds:search_rdfslabel_contains ;
+        rdfs:label "enseigne à l'élève"@fr ,
+                "teach student"@en .
+
+# nom du prof
+pr:nom rdfs:subPropertyOf sparna:AutocompleteProperty ;
+        rdfs:domain pr:Professeur ;
+        rdfs:range lycee:Text ;
+        sparna:enableOptional "true"^^xsd:boolean ;
+        sparna:enableNegation "true"^^xsd:boolean ;
+        rdfs:label "a comme nom"@fr ,
+                "has name"@en .
