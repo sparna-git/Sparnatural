@@ -1,7 +1,6 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import ISettings from "../../settings/ISettings";
 import { SelectedVal } from "../SelectedVal";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { DataFactory, Literal } from 'rdf-data-factory';
 import "select2";
@@ -11,6 +10,7 @@ import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/starten
 import { ListDataProviderIfc, NoOpListDataProvider } from "./data/DataProviders";
 import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";
+import HTMLComponent from "../HtmlComponent";
 
 const factory = new DataFactory();
 
@@ -50,7 +50,7 @@ export class ListWidget extends AbstractWidget {
   selectHtml: JQuery<HTMLElement>;
 
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     config: ListConfiguration,
     sort: boolean,
     startClassVal: SelectedVal,

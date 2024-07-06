@@ -2,12 +2,12 @@ import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import SparqlFactory from "../../generators/SparqlFactory";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { AutocompleteDataProviderIfc, NoOpAutocompleteProvider } from "./data/DataProviders";
 import Awesomplete from 'awesomplete';
 import { I18n } from '../../settings/I18n';
+import HTMLComponent from '../HtmlComponent';
 
 const factory = new DataFactory();
 
@@ -44,7 +44,7 @@ export class AutoCompleteWidget extends AbstractWidget {
   protected configuration: AutocompleteConfiguration;
 
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     configuration: AutocompleteConfiguration,
     startClassValue: SelectedVal,
     objectPropVal: SelectedVal,

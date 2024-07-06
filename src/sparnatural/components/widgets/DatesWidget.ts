@@ -1,9 +1,9 @@
 import { Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { I18n } from "../../settings/I18n";
+import HTMLComponent from "../HtmlComponent";
 
 export class DateValue implements WidgetValue {
   value: {
@@ -30,7 +30,7 @@ export class DatesWidget extends AbstractWidget {
   inputEnd: JQuery<HTMLElement>;
   inputValue: JQuery<HTMLElement>;
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     datesHandler: any,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
