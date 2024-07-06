@@ -61,6 +61,9 @@ class HTMLComponent implements IRenderable {
     return this;
   }
 
+  /**
+   * @returns moves up the component hierarchy and returns the one that does not have a parent component
+   */
   getRootComponent():HTMLComponent {
     if(this.ParentComponent == null) {
       return this;
