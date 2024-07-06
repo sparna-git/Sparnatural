@@ -27,14 +27,21 @@ export class SearchRegexWidgetValue implements WidgetValue {
   }
 }
 
+export interface SearchConfiguration {
+  widgetType:string;
+}
+
 export class SearchRegexWidget extends AbstractWidget {
 
   protected widgetValues: SearchRegexWidgetValue[];
+
+  configuration: SearchConfiguration;
   addValueBtn: AddUserInputBtn;
   searchInput: JQuery<HTMLElement>;
   infoBtn: InfoBtn;
 
   constructor(
+    configuration: SearchConfiguration,
     parentComponent: WidgetWrapper,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -49,6 +56,8 @@ export class SearchRegexWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.SINGLE
     );
+
+    this.configuration = configuration;
   }
 
   render() {
@@ -57,7 +66,7 @@ export class SearchRegexWidget extends AbstractWidget {
     this.html.append(this.searchInput);
     // Build datatippy info
     if (
-      (this.ParentComponent as WidgetWrapper).widgetType ==
+      this.configuration.widgetType ==
       Config.VIRTUOSO_SEARCH_PROPERTY
     ) {
       let datatippy = I18n.labels.VirtuosoSearchHelp;
@@ -104,7 +113,7 @@ export class SearchRegexWidget extends AbstractWidget {
   }
   
   getRdfJsPattern(): Pattern[] {
-    switch((this.ParentComponent as WidgetWrapper).widgetType) {
+    switch(this.configuration.widgetType) {
       case Config.STRING_EQUALS_PROPERTY: {
         // builds a FILTER(lcase(...) = lcase(...))
         return [SparqlFactory.buildFilterStringEquals(

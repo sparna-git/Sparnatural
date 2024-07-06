@@ -1,11 +1,11 @@
 import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { SelectAllValue } from "../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { I18n } from '../../settings/I18n';
+import HTMLComponent from '../HtmlComponent';
 
 const factory = new DataFactory();
 
@@ -27,7 +27,7 @@ export class BooleanWidgetValue implements WidgetValue {
 export class BooleanWidget extends AbstractWidget {
   protected widgetValues: BooleanWidgetValue[];
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal

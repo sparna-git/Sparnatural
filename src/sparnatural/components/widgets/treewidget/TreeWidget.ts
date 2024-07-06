@@ -4,13 +4,13 @@ import { SelectedVal } from "../../SelectedVal";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "jstree"
 import ISettings from "../../../../sparnatural/settings/ISettings";
-import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { ValuePatternRow } from "sparqljs";
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
 import { NoOpTreeDataProvider, TreeDataProviderIfc } from "../data/DataProviders";
+import HTMLComponent from "../../HtmlComponent";
 
 const factory = new DataFactory();
 
@@ -58,7 +58,7 @@ export class TreeWidget extends AbstractWidget {
   sort:boolean;
 
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     configuration:TreeConfiguration,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,

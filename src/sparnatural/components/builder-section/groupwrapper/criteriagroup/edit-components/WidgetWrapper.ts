@@ -8,8 +8,7 @@ import EditComponents from "./EditComponents";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
-import { DatesWidget } from "../../../../widgets/DatesWidget";
-import { SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
+import { SearchConfiguration, SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
@@ -21,7 +20,6 @@ import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
 import { I18n } from "../../../../../settings/I18n";
-import { AutocompleteWidget } from "../../../../../spec-providers/shacl/SHACLSearchWidgets";
 import { NumberConfiguration, NumberWidget } from "../../../../widgets/NumberWidget";
 
 
@@ -377,7 +375,13 @@ class WidgetWrapper extends HTMLComponent {
       case Config.GRAPHDB_SEARCH_PROPERTY:
       case Config.STRING_EQUALS_PROPERTY:
       case Config.SEARCH_PROPERTY:
+
+        let configuration:SearchConfiguration = {
+          widgetType: this.widgetType
+        }
+
         return new SearchRegexWidget(
+          configuration,
           this,
           this.startClassVal,
           this.objectPropVal,

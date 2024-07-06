@@ -1,5 +1,4 @@
 import { DataFactory } from 'rdf-data-factory';
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 // L needs to be imported *before* leaflet-geoman-free
 import L, { LatLng, Rectangle, PolylineOptions, Polygon, PM, TileLayer } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
@@ -16,6 +15,7 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../SelectedVal";
 import { NamedNode } from '@rdfjs/types/data-model';
 import { I18n } from '../../settings/I18n';
+import HTMLComponent from '../HtmlComponent';
 
 
 const factory = new DataFactory();
@@ -103,7 +103,7 @@ export default class MapWidget extends AbstractWidget {
   drawingLayer: L.Layer;
   constructor(
     configuration: MapConfiguration,
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
