@@ -39,7 +39,7 @@ class WidgetWrapper extends HTMLComponent {
   add_or: boolean = true;
 
   constructor(
-    ParentComponent: EditComponents,
+    ParentComponent: HTMLComponent,
     specProvider: ISparnaturalSpecification,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,

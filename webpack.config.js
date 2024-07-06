@@ -8,10 +8,13 @@ const CopyPlugin = require('copy-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 module.exports = {
-  entry: ["./src/SparnaturalElement.ts" ],
+  entry: {
+  	"sparnatural" : "./src/SparnaturalElement.ts",
+  	"sparnatural-form" : "./src/SparnaturalFormElement.ts"
+  },
   output: {
     path: path.resolve(__dirname, "./dist"),
-    filename: "sparnatural.js",
+    filename: "[name].js",
     clean: true
   },
   module: {
@@ -92,7 +95,7 @@ module.exports = {
     },
 	}),
 	new MiniCssExtractPlugin({
-	  filename: "sparnatural.css",
+	  filename: "[name].css",
 	  chunkFilename: "[id].css"
 	}),
 	new CopyPlugin({
