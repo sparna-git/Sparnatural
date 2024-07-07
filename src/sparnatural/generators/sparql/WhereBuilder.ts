@@ -7,6 +7,7 @@ import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecific
 import ClassBuilder from "./ClassBuilder";
 import IntersectionBuilder from "./IntersectionBuilder";
 import SparqlFactory from "./SparqlFactory";
+import ValueBuilderIfc, { ValueBuilderFactory } from './ValueBuilder';
 
 const factory = new DataFactory();
 
@@ -17,7 +18,9 @@ export default class WhereBuilder{
     #typePredicate: string
     #isChild:boolean
     #isInOption:boolean
+    
     #widgetComponent:AbstractWidget | null | undefined = null
+    #valueBuilder:ValueBuilderIfc;
     
     // patterns built in the build process
     #resultPtrns: Pattern[] = []    
@@ -39,9 +42,34 @@ export default class WhereBuilder{
         this.#isChild = isChild
         this.#isInOption = isInOption
         this.#widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
+
+        /*
+        // create the object to convert widget values to SPARQL
+        console.log(this.#grpWrapper.CriteriaGroup.EndClassGroup)
+        console.log(this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal)
+        
+        let endClassValue = this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal.type;
+        console.log(endClassValue)
+        this.#valueBuilder = new ValueBuilderFactory().buildValueBuilder(
+            this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected()).getPropertyType(endClassValue)
+        );
+        // pass everything needed to generate SPARQL
+        this.#valueBuilder.init(
+            this.#specProvider,
+            this.#grpWrapper.CriteriaGroup.StartClassGroup.startClassVal,
+            this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal,
+            this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal,
+            this.#grpWrapper.CriteriaGroup.EndClassGroup.isVarSelected(),
+            this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent.getwidgetValues()
+        );
+        */
+
     }
 
     build() {
+
+
+
         this.#buildChildPatterns()
         this.#buildRdfPtrn()
         this.#buildStartClassPtrn()
@@ -88,6 +116,14 @@ export default class WhereBuilder{
     }
 
     #buildRdfPtrn(){
+        /*
+        let widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
+        if (widgetComponent?.getwidgetValues()?.length > 0 ) {
+            this.#rdfPtrns = this.#valueBuilder.build();
+        }
+            */
+            
+
         //get the information from the widget if there are widgetvalues selected
         if (this.#widgetComponent?.getwidgetValues()?.length > 0 ) this.#rdfPtrns = this.#widgetComponent.getRdfJsPattern();
     }
@@ -97,7 +133,7 @@ export default class WhereBuilder{
         const endClsBuilder = new ClassBuilder(
             endClsGrp,
             this.#specProvider,
-            this.#widgetComponent?.isBlockingEnd(),
+            this.#valueBuilder?.isBlockingEnd(),
             this.#typePredicate
         )
         endClsBuilder.build()
@@ -112,7 +148,7 @@ export default class WhereBuilder{
         const startClsBuilder = new ClassBuilder(
             startClsGrp,
             this.#specProvider,
-            this.#widgetComponent?.isBlockingStart(),
+            this.#valueBuilder?.isBlockingStart(),
             this.#typePredicate
         )
         startClsBuilder.build()
@@ -127,7 +163,7 @@ export default class WhereBuilder{
         const intersectionBuilder = new IntersectionBuilder(
             this.#grpWrapper.CriteriaGroup.StartClassGroup.getVarName() ,
             this.#grpWrapper.CriteriaGroup.EndClassGroup.getVarName(),
-            this.#widgetComponent,
+            this.#valueBuilder,
             objectPropCls,
             this.#specProvider
         );

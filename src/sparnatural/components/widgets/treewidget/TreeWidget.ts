@@ -1,7 +1,7 @@
 import { BgpPattern, Pattern, Triple, ValuesPattern } from "sparqljs";
 import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../SelectedVal";
-import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "../AbstractWidget";
+import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "jstree"
 import ISettings from "../../../../sparnatural/settings/ISettings";
 import { ValuePatternRow } from "sparqljs";
@@ -16,20 +16,6 @@ const factory = new DataFactory();
 
 require("jstree/dist/themes/default/style.min.css");
 
-export class TreeWidgetValue implements WidgetValue {
-  value: {
-    label: string;
-    uri: string;
-  };
-
-  key():string {
-    return this.value.uri;
-  }
-
-  constructor(v:TreeWidgetValue["value"]) {
-    this.value = v;
-  }
-}
 
 export interface TreeConfiguration {
   dataProvider: TreeDataProviderIfc,
@@ -42,11 +28,11 @@ export class TreeWidget extends AbstractWidget {
     dataProvider: new NoOpTreeDataProvider()
   }
 
-  protected widgetValues: TreeWidgetValue[];
+  protected widgetValues: RdfTermValue[];
   configuration:TreeConfiguration;
   IdCriteriaGroupe: any;
   jsTree: any;
-  value: TreeWidgetValue;
+  value: RdfTermValue;
   // html content
   button: any;
   hiddenInput: any;
@@ -244,7 +230,7 @@ export class TreeWidget extends AbstractWidget {
   onTreeDataLoaded = function onTreeDataLoaded(result: string | any[]) {
     if (result.length == 0) {
       $("#ecgrw-" + this.IdCriteriaGroupe + "-displayLayer .treeNotice")
-        .text(this.langSearch.TreeWidgetNoData)
+        .text(I18n.labels.TreeWidgetNoData)
         .show();
     } else {
       $("#ecgrw-" + this.IdCriteriaGroupe + "-displayLayer .treeNotice").hide();
@@ -337,25 +323,8 @@ export class TreeWidget extends AbstractWidget {
     $(this_.ParentComponent).trigger("change");
   };
 
-  getValue = function ():Array<TreeWidgetValue> {
-    var checked = this.jsTree.jstree().get_top_checked(true);
-
-    // rebuild a clean data structure
-    var values = [];
-    for (var node in checked) {
-      const val = new TreeWidgetValue({
-        label: checked[node].original.text,
-        uri: checked[node].id
-      });
-      
-      values.push(val);
-    }
-
-    return values;
-  };
-
-  parseInput(input: TreeWidgetValue["value"]): TreeWidgetValue {
-    return new TreeWidgetValue(input);
+  parseInput(input: RdfTermValue["value"]): RdfTermValue {
+    return new RdfTermValue(input);
   }
 
   isBlockingObjectProp() {
@@ -380,7 +349,7 @@ export class TreeWidget extends AbstractWidget {
       let singleTriple: Triple = SparqlFactory.buildTriple(
         factory.variable(this.startClassVal.variable),
         factory.namedNode(this.objectPropVal.type),
-        factory.namedNode((this.widgetValues[0]).value.uri)
+        this.rdfTermToSparqlQuery(this.widgetValues[0].value.rdfTerm)
       );
 
       let ptrn: BgpPattern = {
@@ -393,7 +362,7 @@ export class TreeWidget extends AbstractWidget {
       // multiple values, use a VALUES
       let vals = this.widgetValues.map((v) => {
         let vl: ValuePatternRow = {};
-        vl["?"+this.endClassVal.variable] = factory.namedNode(v.value.uri);
+        vl["?"+this.endClassVal.variable] = this.rdfTermToSparqlQuery(v.value.rdfTerm);
         return vl;
       });
       let valuePattern: ValuesPattern = {

@@ -361,8 +361,8 @@ export class WidgetFactory {
                 // endpoint URL
                 // we read it on the roots datasource
                 this.sparqlFetcherFactory.buildSparqlFetcher(
-                    datasource.sparqlEndpointUrl != null
-                    ? datasource.sparqlEndpointUrl
+                    treeRootsDatasource.sparqlEndpointUrl != null
+                    ? treeRootsDatasource.sparqlEndpointUrl
                     : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
                 ),
     

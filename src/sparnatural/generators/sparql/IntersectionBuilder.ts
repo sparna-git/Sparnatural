@@ -5,13 +5,14 @@ import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import { getSettings } from "../../settings/defaultSettings";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "./SparqlFactory";
+import ValueBuilderIfc from './ValueBuilder';
 
 const factory = new DataFactory();
 
 export default class IntersectionBuilder{
     #startClassVar:string|undefined
     #endClassVar:string|undefined
-    #widgetComponent:AbstractWidget
+    #valueBuilder:ValueBuilderIfc
     #objectPropCls:ObjectPropertyGroup
     resultPtrn:Pattern[] = []
     specProvider:ISparnaturalSpecification
@@ -19,20 +20,20 @@ export default class IntersectionBuilder{
     constructor(
         startClassVar:string|undefined,
         endClassVar:string|undefined,
-        widgetComponent:AbstractWidget,
+        valueBuilder:ValueBuilderIfc,
         objectPropCls:ObjectPropertyGroup,
         specProvider:ISparnaturalSpecification
     ){
         this.#startClassVar = startClassVar
         this.#endClassVar = endClassVar
-        this.#widgetComponent = widgetComponent
+        this.#valueBuilder = valueBuilder
         this.#objectPropCls = objectPropCls 
         this.specProvider = specProvider
     }
 
     build(){
         // the intersection triple can very well be generated even if no rdf:type triple is generated for the end class.
-        if(this.#startClassVar && this.#endClassVar && !this.#widgetComponent?.isBlockingObjectProp()){
+        if(this.#startClassVar && this.#endClassVar && !this.#valueBuilder?.isBlockingObjectProp()){
             
             /*
             this.resultPtrn.push(

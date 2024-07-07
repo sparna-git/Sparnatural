@@ -192,6 +192,10 @@ class WidgetWrapper extends HTMLComponent {
     );
   }
 
+  #createSparqlGenerator() {
+    
+  }
+
   getWidgetType() {
     return this.widgetType;
   }

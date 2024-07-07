@@ -511,7 +511,8 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
                     term:solution.uri,
                     label:solution.label.value,
                     // make sure to parse the value as a boolean so that it is not a string
-                    hasChildren:solution.hasChildren?((solution.hasChildren.value === "true")?true:false):true,
+                    // we also test on "1" because Virtuoso returns this as a result instead of a true boolean
+                    hasChildren:solution.hasChildren?((solution.hasChildren.value === "true" || solution.hasChildren.value == 1)?true:false):true,
                     disabled:solution.count?solution.count.value == 0:false
                 };
             }

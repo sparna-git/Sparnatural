@@ -2,7 +2,7 @@ import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import SparqlFactory from "../../generators/sparql/SparqlFactory";
-import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { AutocompleteDataProviderIfc, NoOpAutocompleteProvider } from "./data/DataProviders";
 import Awesomplete from 'awesomplete';
@@ -11,21 +11,6 @@ import HTMLComponent from '../HtmlComponent';
 
 const factory = new DataFactory();
 
-
-export class AutoCompleteWidgetValue implements WidgetValue {
-  value: {
-    label: string;
-    rdfTerm: RDFTerm
-  };
-
-  key():string {
-    return this.value.rdfTerm.value;
-  }
-
-  constructor(v:AutoCompleteWidgetValue["value"]) {
-    this.value = v;
-  }
-}
 
 export interface AutocompleteConfiguration {
   dataProvider: AutocompleteDataProviderIfc,
@@ -40,7 +25,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     maxItems:15
   }
   
-  protected widgetValues: AutoCompleteWidgetValue[];
+  protected widgetValues: RdfTermValue[];
   protected configuration: AutocompleteConfiguration;
 
   constructor(
@@ -115,7 +100,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       // fetch the autocomplete event payload, which is the JSON serialization of the RDFTerm
       let awesompleteEvent:{label:string, value:string} = (event as unknown as {text:{label:string, value:string}}).text;
 
-      let autocompleteValue= new AutoCompleteWidgetValue({
+      let autocompleteValue= new RdfTermValue({
           label: awesompleteEvent.label,
           // parse back the RDFTerm as an object
           rdfTerm: (JSON.parse(awesompleteEvent.value) as RDFTerm),
@@ -146,7 +131,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     return this;
   }
 
-  parseInput(input: AutoCompleteWidgetValue["value"]): AutoCompleteWidgetValue {return new AutoCompleteWidgetValue(input)}
+  parseInput(input: RdfTermValue["value"]): RdfTermValue {return new RdfTermValue(input)}
 
   /**
    * @returns  true if the number of values is 1, in which case the widget will handle the generation of the triple itself,
@@ -174,7 +159,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       let singleTriple: Triple = SparqlFactory.buildTriple(
         factory.variable(this.startClassVal.variable),
         factory.namedNode(this.objectPropVal.type),
-        this.rdfTermToSparqlQuery((this.widgetValues[0] as AutoCompleteWidgetValue).value.rdfTerm)
+        this.rdfTermToSparqlQuery((this.widgetValues[0] as RdfTermValue).value.rdfTerm)
       );
 
       let ptrn: BgpPattern = {
@@ -185,7 +170,7 @@ export class AutoCompleteWidget extends AbstractWidget {
 
       return [ptrn];
     } else {
-      let vals = (this.widgetValues as AutoCompleteWidgetValue[]).map((v) => {
+      let vals = (this.widgetValues as RdfTermValue[]).map((v) => {
         let vl: ValuePatternRow = {};
         vl["?"+this.endClassVal.variable] = this.rdfTermToSparqlQuery(v.value.rdfTerm);
         return vl;

@@ -1,6 +1,6 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
-import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { DataFactory } from 'rdf-data-factory';
 import "select2";
 import "select2/dist/css/select2.css";
@@ -12,21 +12,6 @@ import { Term } from "@rdfjs/types/data-model";
 import HTMLComponent from "../HtmlComponent";
 
 const factory = new DataFactory();
-
-export class ListWidgetValue implements WidgetValue {
-  value: {
-    label: string;
-    rdfTerm: RDFTerm
-  };
-
-  key():string {
-    return this.value.rdfTerm.value;
-  }
-
-  constructor(v:ListWidgetValue["value"]) {
-    this.value = v;
-  }
-}
 
 export interface ListConfiguration {
   dataProvider: ListDataProviderIfc,
@@ -176,13 +161,13 @@ export class ListWidget extends AbstractWidget {
   // so that it can be overriden by LiteralListWidget
   buildValue(termString:string,label:string): WidgetValue {
     let term = (JSON.parse(termString) as RDFTerm);
-    return new ListWidgetValue({
+    return new RdfTermValue({
       label: label,
       rdfTerm: term
     });
   }
 
-  parseInput(input:ListWidgetValue["value"]): WidgetValue { return new ListWidgetValue(input) }
+  parseInput(input:RdfTermValue["value"]): WidgetValue { return new RdfTermValue(input) }
 
   /**
    * @returns  true if the number of values is 1, in which case the widget will handle the generation of the triple itself,
@@ -212,7 +197,7 @@ export class ListWidget extends AbstractWidget {
       let singleTriple: Triple = SparqlFactory.buildTriple(
         factory.variable(this.startClassVal.variable),
         factory.namedNode(this.objectPropVal.type),
-        this.rdfTermToSparqlQuery((this.widgetValues[0] as ListWidgetValue).value.rdfTerm)
+        this.rdfTermToSparqlQuery((this.widgetValues[0] as RdfTermValue).value.rdfTerm)
       );
 
       let ptrn: BgpPattern = {
@@ -223,7 +208,7 @@ export class ListWidget extends AbstractWidget {
 
       return [ptrn];
     } else {
-      let vals = (this.widgetValues as ListWidgetValue[]).map((v) => {
+      let vals = (this.widgetValues as RdfTermValue[]).map((v) => {
         let vl: ValuePatternRow = {};
         vl["?"+this.endClassVal.variable] = this.rdfTermToSparqlQuery(v.value.rdfTerm);
         return vl;
