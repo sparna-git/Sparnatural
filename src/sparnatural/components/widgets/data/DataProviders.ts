@@ -62,11 +62,11 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
     typePredicate: string;
 
     constructor(
-        sparqlFetcherFactory:SparqlFetcherFactory,
+        sparqlFetcher:SparqlFetcherIfc,
         queryBuilder: ListSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
-        this.sparqlFetcher = sparqlFetcherFactory.buildSparqlFetcher();        
+        this.sparqlFetcher = sparqlFetcher;        
     }
 
     init(
@@ -265,11 +265,11 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
     sparqlFetcher:SparqlFetcherIfc;
 
     constructor(
-        sparqlFetcherFactory: SparqlFetcherFactory,
+        sparqlFetcher: SparqlFetcherIfc,
         queryBuilder: AutocompleteSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
-        this.sparqlFetcher = sparqlFetcherFactory.buildSparqlFetcher();
+        this.sparqlFetcher = sparqlFetcher;
     }
 
     init(
@@ -425,11 +425,11 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
 
 
     constructor(
-        sparqlFetcherFactory:SparqlFetcherFactory,
+        sparqlFetcher:SparqlFetcherIfc,
         queryBuilder: TreeSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
-        this.sparqlFetcher = sparqlFetcherFactory.buildSparqlFetcher();        
+        this.sparqlFetcher = sparqlFetcher;        
     }
 
     init(

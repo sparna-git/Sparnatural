@@ -74,30 +74,27 @@ export interface SparqlFetcherIfc {
 
 export class SparqlFetcherFactory {
 
-    protected endpoints:string;
     protected catalog:Catalog;
     protected lang:string;
     protected localCacheDataTtl:any;
     protected extraHeaders:Map<string,string>;
 
     constructor(
-        endpoints:string,
         catalog:Catalog,
         lang:string,
         localCacheDataTtl:any,
         extraHeaders:Map<string,string>
     ) {
-        this.endpoints = endpoints;
         this.catalog = catalog;
         this.lang = lang;
         this.localCacheDataTtl = localCacheDataTtl;
         this.extraHeaders = extraHeaders;
     }
 
-    buildSparqlFetcher():SparqlFetcherIfc {   
-        if(this.endpoints.indexOf(' ') > 0) {
+    buildSparqlFetcher(endpointsParam:string):SparqlFetcherIfc {   
+        if(endpointsParam.indexOf(' ') > 0) {
             // extract selected endpoints from full catalog
-            let endpoints = this.endpoints.split(' ');
+            let endpoints = endpointsParam.split(' ');
             let subCatalog = this.catalog.extractSubCatalog(endpoints);
             return new MultipleEndpointSparqlFetcher(
                 new UrlFetcher(this.localCacheDataTtl, this.extraHeaders),
@@ -105,7 +102,7 @@ export class SparqlFetcherFactory {
                 this.lang
             );
         } else {
-            return new SparqlFetcher(new UrlFetcher(this.localCacheDataTtl, this.extraHeaders), this.endpoints);
+            return new SparqlFetcher(new UrlFetcher(this.localCacheDataTtl, this.extraHeaders), endpointsParam);
         }
     }
 

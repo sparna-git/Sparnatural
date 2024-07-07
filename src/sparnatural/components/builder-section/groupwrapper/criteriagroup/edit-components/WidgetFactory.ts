@@ -17,8 +17,12 @@ import { SearchConfiguration, SearchRegexWidget } from "../../../../widgets/Sear
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 
+/**
+ * Inversion of coupling : we don't want to depend on ISettings as this class is meant to be reused
+ * elsewhere than in Sparnatural, hence we define our own interface of what we depend on.
+ */
 export class WidgetFactorySettings {
-    src: any;
+
     language: string;
     defaultLanguage: string;
     typePredicate: string;
@@ -38,12 +42,17 @@ export class WidgetFactorySettings {
     }
 }
 
+
+
 export class WidgetFactory {
 
     parentComponent:HTMLComponent;
     specProvider: any;
     settings: WidgetFactorySettings;
     catalog:Catalog;
+
+    private sparqlFetcherFactory:SparqlFetcherFactory;
+    private sparqlPostProcessor:{ semanticPostProcess: (sparql:string)=>string };
 
     constructor(
         parentComponent:HTMLComponent,
@@ -55,6 +64,31 @@ export class WidgetFactory {
         this.specProvider = specProvider;
         this.settings = settings;
         this.catalog = catalog;
+
+        // how to fetch a SPARQL query
+        this.sparqlFetcherFactory = new SparqlFetcherFactory(
+            this.catalog,
+            this.settings.language,
+            this.settings.localCacheDataTtl,
+            this.settings.customization.headers
+        );
+
+        // how to post-process the generated SPARQL after it is constructed and before it is send
+        this.sparqlPostProcessor = { semanticPostProcess: (sparql: any) => {
+            // also add prefixes
+            for (let key in this.settings.sparqlPrefixes) {
+              sparql = sparql.replace(
+                "SELECT ",
+                "PREFIX " +
+                  key +
+                  ": <" +
+                  this.settings.sparqlPrefixes[key] +
+                  "> \nSELECT "
+              );
+            }
+            return this.specProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
+          }
+        }
     }
 
 
@@ -105,37 +139,18 @@ export class WidgetFactory {
               listDataProvider = new SparqlListDataProvider(
     
                 // endpoint URL
-                new SparqlFetcherFactory(
-                  datasource.sparqlEndpointUrl != null
-                  ? datasource.sparqlEndpointUrl
-                  : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
-                  this.catalog,
-                  this.settings.language,
-                  this.settings.localCacheDataTtl,
-                  this.settings.customization.headers
-                ),            
+                this.sparqlFetcherFactory.buildSparqlFetcher(
+                    datasource.sparqlEndpointUrl != null
+                    ? datasource.sparqlEndpointUrl
+                    : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
+                ), 
     
                 new ListSparqlTemplateQueryBuilder(
                   // sparql query (with labelPath interpreted)
-                  this.getFinalQueryString(datasource),
+                  this.#getFinalQueryString(datasource),
     
                   // sparqlPostProcessor
-                  {
-                    semanticPostProcess: (sparql: any) => {
-                      // also add prefixes
-                      for (let key in this.settings.sparqlPrefixes) {
-                        sparql = sparql.replace(
-                          "SELECT ",
-                          "PREFIX " +
-                            key +
-                            ": <" +
-                            this.settings.sparqlPrefixes[key] +
-                            "> \nSELECT "
-                        );
-                      }
-                      return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-                    },
-                  }
+                  this.sparqlPostProcessor
                 )
               );
             }
@@ -213,37 +228,18 @@ export class WidgetFactory {
               autocompleteDataProvider = new SparqlAutocompleDataProvider(
     
                 // endpoint URL
-                new SparqlFetcherFactory(
-                  datasource.sparqlEndpointUrl != null
-                  ? datasource.sparqlEndpointUrl
-                  : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
-                  this.catalog,
-                  this.settings.language,
-                  this.settings.localCacheDataTtl,
-                  this.settings.customization.headers
+                this.sparqlFetcherFactory.buildSparqlFetcher(
+                    datasource.sparqlEndpointUrl != null
+                    ? datasource.sparqlEndpointUrl
+                    : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
                 ), 
     
                 new AutocompleteSparqlTemplateQueryBuilder(
                   // sparql query (with labelPath interpreted)
-                  this.getFinalQueryString(datasource),
+                  this.#getFinalQueryString(datasource),
     
                   // sparqlPostProcessor
-                  {
-                    semanticPostProcess: (sparql: any) => {
-                      // also add prefixes
-                      for (let key in this.settings.sparqlPrefixes) {
-                        sparql = sparql.replace(
-                          "SELECT ",
-                          "PREFIX " +
-                            key +
-                            ": <" +
-                            this.settings.sparqlPrefixes[key] +
-                            "> \nSELECT "
-                        );
-                      }
-                      return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-                    },
-                  }
+                  this.sparqlPostProcessor
                 )
               );
             }
@@ -364,38 +360,19 @@ export class WidgetFactory {
     
                 // endpoint URL
                 // we read it on the roots datasource
-                new SparqlFetcherFactory(
-                  treeRootsDatasource.sparqlEndpointUrl != null
-                  ? treeRootsDatasource.sparqlEndpointUrl
-                  : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
-                  this.catalog,
-                  this.settings.language,
-                  this.settings.localCacheDataTtl,
-                  this.settings.customization.headers
+                this.sparqlFetcherFactory.buildSparqlFetcher(
+                    datasource.sparqlEndpointUrl != null
+                    ? datasource.sparqlEndpointUrl
+                    : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
                 ),
     
                 new TreeSparqlTemplateQueryBuilder(
                   // sparql query (with labelPath interpreted)
-                  this.getFinalQueryString(treeRootsDatasource),
-                  this.getFinalQueryString(treeChildrenDatasource),
+                  this.#getFinalQueryString(treeRootsDatasource),
+                  this.#getFinalQueryString(treeChildrenDatasource),
     
                   // sparqlPostProcessor
-                  {
-                    semanticPostProcess: (sparql: any) => {
-                      // also add prefixes
-                      for (let key in this.settings.sparqlPrefixes) {
-                        sparql = sparql.replace(
-                          "SELECT ",
-                          "PREFIX " +
-                            key +
-                            ": <" +
-                            this.settings.sparqlPrefixes[key] +
-                            "> \nSELECT "
-                        );
-                      }
-                      return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-                    },
-                  }
+                  this.sparqlPostProcessor
                 )
     
               );
@@ -484,7 +461,7 @@ export class WidgetFactory {
      * Builds the final query string from a query source, by injecting
      * labelPath/property and childrenPath/property
      **/
-    getFinalQueryString(datasource: any) {
+    #getFinalQueryString(datasource: any) {
         if (datasource.queryString != null) {
         return datasource.queryString;
         } else {
