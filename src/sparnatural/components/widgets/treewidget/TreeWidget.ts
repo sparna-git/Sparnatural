@@ -203,9 +203,6 @@ export class TreeWidget extends AbstractWidget {
               startClassGroup_value,
               ObjectPropertyGroup_value,
               endClassGroup_value,
-              settings.language,
-              settings.defaultLanguage,
-              settings.typePredicate,
               nodeCallback,
               errorCallback
             );
@@ -215,9 +212,6 @@ export class TreeWidget extends AbstractWidget {
               startClassGroup_value,
               ObjectPropertyGroup_value,
               endClassGroup_value,
-              settings.language,
-              settings.defaultLanguage,
-              settings.typePredicate,
               nodeCallback,
               errorCallback
             );

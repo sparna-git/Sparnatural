@@ -1,8 +1,7 @@
 import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
-import ISettings from "../../settings/ISettings";
 import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import { DataFactory, Literal } from 'rdf-data-factory';
+import { DataFactory } from 'rdf-data-factory';
 import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../generators/SparqlFactory";
@@ -11,6 +10,7 @@ import { ListDataProviderIfc, NoOpListDataProvider } from "./data/DataProviders"
 import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";
 import HTMLComponent from "../HtmlComponent";
+import { getSettings } from "../../settings/defaultSettings";
 
 const factory = new DataFactory();
 
@@ -45,14 +45,11 @@ export class ListWidget extends AbstractWidget {
   configuration: ListConfiguration;
 
   protected widgetValues: WidgetValue[];
-  sort: boolean;
-  settings: ISettings;
   selectHtml: JQuery<HTMLElement>;
 
   constructor(
     parentComponent: HTMLComponent,
     config: ListConfiguration,
-    sort: boolean,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
@@ -68,7 +65,6 @@ export class ListWidget extends AbstractWidget {
     );
 
     this.configuration = config;
-    this.sort = sort;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
     this.endClassVal = endClassVal;
@@ -92,16 +88,6 @@ export class ListWidget extends AbstractWidget {
     let callback = (items:{term:RDFTerm;label:string;group?:string}[]) => {
 
       if (items.length > 0) {
-        if (this.sort) {
-          // here, if we need to sort, then sort according to lang
-          var collator = new Intl.Collator(this.settings.language);
-          items.sort((a: any, b: any) => {
-            return collator.compare(
-              a.label,
-              b.label
-            );
-          });
-        }
   
         // find distinct values of the 'group' binding
         const groups = [...new Set(items.map(item => item.group))];
@@ -163,8 +149,6 @@ export class ListWidget extends AbstractWidget {
 
     // if there are some provided values...
     if(this.configuration.values?.length > 0) {
-      // never sort to keep the original list order
-      this.sort = false;
       // convert the provided list of terms to RDFTerm[]
       let items: {term:RDFTerm;label:string;group?:string}[] = [];
       this.configuration.values.forEach(v => {
@@ -180,9 +164,6 @@ export class ListWidget extends AbstractWidget {
         this.startClassVal.type,
         this.objectPropVal.type,
         this.endClassVal.type,
-        this.settings.language,
-        this.settings.defaultLanguage,
-        this.settings.typePredicate,
         callback,
         errorCallback
       );

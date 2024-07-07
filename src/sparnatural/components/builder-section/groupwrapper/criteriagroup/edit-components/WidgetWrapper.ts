@@ -15,7 +15,7 @@ import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/Tr
 import { AutoCompleteWidget, AutocompleteConfiguration } from "../../../../widgets/AutoCompleteWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, NoOpTreeDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
+import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, NoOpTreeDataProvider, SortListDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
@@ -259,6 +259,11 @@ class WidgetWrapper extends HTMLComponent {
           );
         }
 
+        // if we need to sort things, add an explicit wrapper around the data provider
+        if(!(datasource.noSort == true)) {
+          listDataProvider = new SortListDataProvider(listDataProvider);
+        }
+
         // create the configuration object : use the default configuration, then the generated data provider, then overwrite with 
         // what is set in the provided configuration object for the corresponding section
         let listConfig:ListConfiguration = {
@@ -270,10 +275,16 @@ class WidgetWrapper extends HTMLComponent {
           ...this.settings.customization?.list
         };
 
+        // init data provider
+        listConfig.dataProvider.init(
+          this.settings.language,
+          this.settings.defaultLanguage,
+          this.settings.typePredicate
+        );
+
         return new ListWidget(
           this,
           listConfig,
-          !(datasource.noSort == true),
           this.startClassVal,
           this.objectPropVal,
           this.endClassVal
@@ -361,6 +372,13 @@ class WidgetWrapper extends HTMLComponent {
           ...{dataProvider: autocompleteDataProvider},
           ...this.settings.customization?.autocomplete
         };
+
+        // init data provider
+        autocompleteConfig.dataProvider.init(
+          this.settings.language,
+          this.settings.defaultLanguage,
+          this.settings.typePredicate
+        );
 
         return new AutoCompleteWidget(
           this,
@@ -505,6 +523,13 @@ class WidgetWrapper extends HTMLComponent {
           ...{dataProvider: treeDataProvider},
           ...this.settings.customization?.tree
         };
+
+        // init data provider
+        treeConfig.dataProvider.init(
+          this.settings.language,
+          this.settings.defaultLanguage,
+          this.settings.typePredicate
+        );
       
         return new TreeWidget(
           this,
