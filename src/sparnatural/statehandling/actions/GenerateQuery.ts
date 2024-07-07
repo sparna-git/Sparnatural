@@ -2,7 +2,7 @@ import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 
 import ActionStore from "../ActionStore";
 import SparnaturalJsonGenerator from "../../generators/SparnaturalJsonGenerator";
-import RdfJsGenerator from "../../generators/SparqlSelectBuilder";
+import SparqlGenerator from "../../generators/SparqlSelectBuilder";
 import {
   Generator
 } from "sparqljs";
@@ -43,7 +43,7 @@ export class QueryGenerator {
         console.dir(jsonQuery);
       }
 
-      var writer = new RdfJsGenerator(
+      var writer = new SparqlGenerator(
         this.actionStore.sparnatural,
         this.actionStore.specProvider,
         settings.sparqlPrefixes

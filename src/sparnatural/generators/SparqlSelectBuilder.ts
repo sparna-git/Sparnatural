@@ -21,7 +21,7 @@ const factory = new DataFactory();
   sparqljs pattern builds pattern structure on top of rdfjs datamodel. see:https://rdf.js.org/data-model-spec/
   It goes recursively through all the grpWrappers and reads out their values.
 */
-export default class RdfJsGenerator {
+export default class SparqlGenerator {
   typePredicate: string;
   specProvider: ISparnaturalSpecification;
   prefixes: { [key: string]: string } = {};
