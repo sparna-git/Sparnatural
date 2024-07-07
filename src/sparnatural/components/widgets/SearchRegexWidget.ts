@@ -2,13 +2,13 @@ import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import SparqlFactory from "../../generators/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import InfoBtn from "../buttons/InfoBtn";
 import { I18n } from '../../settings/I18n';
 import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
+import HTMLComponent from '../HtmlComponent';
 
 const factory = new DataFactory();
 
@@ -42,7 +42,7 @@ export class SearchRegexWidget extends AbstractWidget {
 
   constructor(
     configuration: SearchConfiguration,
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal

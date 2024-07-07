@@ -1,8 +1,6 @@
 import { Pattern } from "sparqljs";
-import { getSettings, TOOLTIP_CONFIG } from "../../../../sparnatural/settings/defaultSettings";
 import AddUserInputBtn from "../../buttons/AddUserInputBtn";
 import InfoBtn from "../../buttons/InfoBtn";
-import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
 import { DataFactory } from 'rdf-data-factory';
@@ -11,6 +9,8 @@ import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpeci
 import SparqlFactory from "../../../generators/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
 import { I18n } from "../../../settings/I18n";
+import HTMLComponent from "../../HtmlComponent";
+import { TOOLTIP_CONFIG } from "../../../settings/defaultSettings";
 
 const factory = new DataFactory();
 
@@ -62,7 +62,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
   specProvider: ISparnaturalSpecification;
 
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     dateFormat: any,
     startClassCal: SelectedVal,
     objectPropVal: SelectedVal,
