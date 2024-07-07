@@ -1,9 +1,9 @@
-import SparnaturalComponent from "../components/SparnaturalComponent";
-import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
+import SparnaturalComponent from "../../components/SparnaturalComponent";
+import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import { Branch, ISparJson, Order, VariableExpression, VariableTerm } from "./ISparJson";
-import { OptionTypes } from "../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
-import { SelectAllValue } from "../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
-import { DraggableComponentState } from "../components/variables-section/variableorder/DraggableComponent";
+import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
+import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
+import { DraggableComponentState } from "../../components/variables-section/variableorder/DraggableComponent";
 import { DataFactory } from "rdf-data-factory";
 
 const factory = new DataFactory();

@@ -4,7 +4,7 @@ import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { I18n } from '../../settings/I18n';
 import AddUserInputBtn from '../buttons/AddUserInputBtn';
-import SparqlFactory from '../../generators/SparqlFactory';
+import SparqlFactory from '../../generators/sparql/SparqlFactory';
 import InfoBtn from '../buttons/InfoBtn';
 import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
 import HTMLComponent from '../HtmlComponent';

@@ -3,7 +3,7 @@ import { BgpPattern, Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import SparqlFactory from "../../generators/SparqlFactory";
+import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import InfoBtn from "../buttons/InfoBtn";
 import { I18n } from '../../settings/I18n';

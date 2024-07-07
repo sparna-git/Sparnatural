@@ -1,6 +1,6 @@
 import UiuxConfig from "../IconsConstants";
 import HTMLComponent from "../HtmlComponent";
-import { Order } from "../../generators/ISparJson";
+import { Order } from "../../generators/json/ISparJson";
 
 class NoOrderBtn extends HTMLComponent {
   selected: boolean = false;

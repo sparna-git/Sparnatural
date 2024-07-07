@@ -4,7 +4,7 @@ import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "./Abstrac
 import { DataFactory } from 'rdf-data-factory';
 import "select2";
 import "select2/dist/css/select2.css";
-import SparqlFactory from "../../generators/SparqlFactory";
+import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { ListDataProviderIfc, NoOpListDataProvider } from "./data/DataProviders";
 import { I18n } from "../../settings/I18n";

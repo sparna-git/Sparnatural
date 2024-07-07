@@ -6,7 +6,7 @@ import "@chenfengyuan/datepicker";
 import { DataFactory } from 'rdf-data-factory';
 import { SelectedVal } from "../../SelectedVal";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
-import SparqlFactory from "../../../generators/SparqlFactory";
+import SparqlFactory from "../../../generators/sparql/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
 import { I18n } from "../../../settings/I18n";
 import HTMLComponent from "../../HtmlComponent";

@@ -1,5 +1,5 @@
-import { Order } from "./ISparJson";
-import ISparnaturalSpecification from "../spec-providers/ISparnaturalSpecification";
+import { Order } from "../json/ISparJson";
+import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import {
   Grouping,
   Ordering,
@@ -8,11 +8,11 @@ import {
   VariableExpression,
   VariableTerm,
 } from "sparqljs";
-import SparnaturalComponent from "../components/SparnaturalComponent";
-import WhereBuilder from "./helpers/WhereBuilder";
+import SparnaturalComponent from "../../components/SparnaturalComponent";
+import WhereBuilder from "./WhereBuilder";
 import SparqlFactory from "./SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
-import { DraggableComponentState } from "../components/variables-section/variableorder/DraggableComponent";
+import { DraggableComponentState } from "../../components/variables-section/variableorder/DraggableComponent";
 
 const factory = new DataFactory();
 

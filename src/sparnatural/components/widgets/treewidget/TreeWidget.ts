@@ -6,7 +6,7 @@ import "jstree"
 import ISettings from "../../../../sparnatural/settings/ISettings";
 import { ValuePatternRow } from "sparqljs";
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import SparqlFactory from "../../../generators/SparqlFactory";
+import SparqlFactory from "../../../generators/sparql/SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
 import { NoOpTreeDataProvider, TreeDataProviderIfc } from "../data/DataProviders";

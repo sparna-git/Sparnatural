@@ -1,13 +1,13 @@
 import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 
 import ActionStore from "../ActionStore";
-import SparnaturalJsonGenerator from "../../generators/SparnaturalJsonGenerator";
-import SparqlGenerator from "../../generators/SparqlSelectBuilder";
+import SparnaturalJsonGenerator from "../../generators/json/SparnaturalJsonGenerator";
+import SparqlGenerator from "../../generators/sparql/SparqlGenrator";
 import {
   Generator
 } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
-import { ISparJson } from "../../generators/ISparJson";
+import { ISparJson } from "../../generators/json/ISparJson";
 
 
 export class QueryGenerator {

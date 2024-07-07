@@ -6,7 +6,7 @@ import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import ClassBuilder from "./ClassBuilder";
 import IntersectionBuilder from "./IntersectionBuilder";
-import SparqlFactory from "../SparqlFactory";
+import SparqlFactory from "./SparqlFactory";
 
 const factory = new DataFactory();
 

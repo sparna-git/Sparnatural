@@ -4,7 +4,7 @@ import ObjectPropertyGroup from "../../components/builder-section/groupwrapper/c
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import { getSettings } from "../../settings/defaultSettings";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
-import SparqlFactory from "../SparqlFactory";
+import SparqlFactory from "./SparqlFactory";
 
 const factory = new DataFactory();
 

@@ -1,4 +1,4 @@
-import { Order } from "../../../generators/ISparJson";
+import { Order } from "../../../generators/json/ISparJson";
 import { I18n } from "../../../settings/I18n";
 import AscendBtn from "../../buttons/AscendBtn";
 import DescendBtn from "../../buttons/DescendBtn";

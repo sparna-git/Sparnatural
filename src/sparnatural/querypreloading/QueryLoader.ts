@@ -9,7 +9,7 @@ import NoOrderBtn from "../components/buttons/NoOrderBtn";
 import { SelectedVal } from "../components/SelectedVal";
 import SparnaturalComponent from "../components/SparnaturalComponent";
 import { WidgetValue } from "../components/widgets/AbstractWidget";
-import { Branch, ISparJson, Order, VariableTerm } from "../generators/ISparJson";
+import { Branch, ISparJson, Order, VariableTerm } from "../generators/json/ISparJson";
 
 
 export default class QueryLoader{

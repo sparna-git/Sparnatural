@@ -4,7 +4,7 @@ import EndClassGroup from "../../components/builder-section/groupwrapper/criteri
 import StartClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import { getSettings } from "../../settings/defaultSettings";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
-import SparqlFactory from "../SparqlFactory";
+import SparqlFactory from "./SparqlFactory";
 
 const factory = new DataFactory();
 
