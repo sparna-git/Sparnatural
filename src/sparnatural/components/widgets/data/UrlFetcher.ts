@@ -1,6 +1,5 @@
 import LocalCacheData from "../../../datastorage/LocalCacheData";
 import { Catalog } from "../../../settings/Catalog";
-import ISettings from "../../../settings/ISettings";
 
 
 /**
@@ -13,15 +12,9 @@ export class UrlFetcher {
     private extraHeaders: any;
 
     // private constructor
-    private constructor(localCacheDataTtl:any, extraHeaders:Map<string,string>) {
+    public constructor(localCacheDataTtl:any, extraHeaders:Map<string,string>) {
         this.localCacheDataTtl = localCacheDataTtl;
         this.extraHeaders = extraHeaders;
-        
-    }
-
-    // static factory builder method from settings
-    static build(settings:ISettings):UrlFetcher {
-        return new UrlFetcher(settings.localCacheDataTtl, settings.customization?.headers);
     }
 
     fetchUrl(
@@ -83,12 +76,22 @@ export class SparqlFetcherFactory {
 
     protected endpoints:string;
     protected catalog:Catalog;
-    protected settings:ISettings;
+    protected lang:string;
+    protected localCacheDataTtl:any;
+    protected extraHeaders:Map<string,string>;
 
-    constructor(endpoints:string, catalog:Catalog, settings:ISettings) {
+    constructor(
+        endpoints:string,
+        catalog:Catalog,
+        lang:string,
+        localCacheDataTtl:any,
+        extraHeaders:Map<string,string>
+    ) {
         this.endpoints = endpoints;
         this.catalog = catalog;
-        this.settings = settings;
+        this.lang = lang;
+        this.localCacheDataTtl = localCacheDataTtl;
+        this.extraHeaders = extraHeaders;
     }
 
     buildSparqlFetcher():SparqlFetcherIfc {   
@@ -97,12 +100,12 @@ export class SparqlFetcherFactory {
             let endpoints = this.endpoints.split(' ');
             let subCatalog = this.catalog.extractSubCatalog(endpoints);
             return new MultipleEndpointSparqlFetcher(
-                UrlFetcher.build(this.settings),
+                new UrlFetcher(this.localCacheDataTtl, this.extraHeaders),
                 subCatalog,
-                this.settings.language
+                this.lang
             );
         } else {
-            return new SparqlFetcher(UrlFetcher.build(this.settings), this.endpoints);
+            return new SparqlFetcher(new UrlFetcher(this.localCacheDataTtl, this.extraHeaders), this.endpoints);
         }
     }
 

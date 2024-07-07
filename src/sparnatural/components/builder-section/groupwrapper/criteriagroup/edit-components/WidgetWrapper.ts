@@ -15,7 +15,7 @@ import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/Tr
 import { AutoCompleteWidget, AutocompleteConfiguration } from "../../../../widgets/AutoCompleteWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, NoOpTreeDataProvider, SortListDataProvider, SortTreeDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
+import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, NoOpTreeDataProvider, SortListDataProvider, SortTreeDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
@@ -231,7 +231,9 @@ class WidgetWrapper extends HTMLComponent {
               ? datasource.sparqlEndpointUrl
               : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
               (this.getRootComponent() as SparnaturalComponent).catalog,
-              this.settings
+              this.settings.language,
+              this.settings.localCacheDataTtl,
+              this.settings.customization.headers
             ),            
 
             new ListSparqlTemplateQueryBuilder(
@@ -337,7 +339,9 @@ class WidgetWrapper extends HTMLComponent {
               ? datasource.sparqlEndpointUrl
               : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
               (this.getRootComponent() as SparnaturalComponent).catalog,
-              this.settings
+              this.settings.language,
+              this.settings.localCacheDataTtl,
+              this.settings.customization.headers
             ), 
 
             new AutocompleteSparqlTemplateQueryBuilder(
@@ -486,7 +490,9 @@ class WidgetWrapper extends HTMLComponent {
               ? treeRootsDatasource.sparqlEndpointUrl
               : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
               (this.getRootComponent() as SparnaturalComponent).catalog,
-              this.settings
+              this.settings.language,
+              this.settings.localCacheDataTtl,
+              this.settings.customization.headers
             ),
 
             new TreeSparqlTemplateQueryBuilder(

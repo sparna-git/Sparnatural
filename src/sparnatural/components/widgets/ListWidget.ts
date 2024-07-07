@@ -10,7 +10,6 @@ import { ListDataProviderIfc, NoOpListDataProvider } from "./data/DataProviders"
 import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";
 import HTMLComponent from "../HtmlComponent";
-import { getSettings } from "../../settings/defaultSettings";
 
 const factory = new DataFactory();
 

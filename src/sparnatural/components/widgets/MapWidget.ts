@@ -367,14 +367,6 @@ export default class MapWidget extends AbstractWidget {
       this.renderWidgetValues(this.widgetValues);
       $(this.parentComponent).trigger("change");
     }
-    
-    // this.map.remove();
-    /*
-    if (this.getwidgetValues().length < 1)
-      this.renderWidgetVal({
-        value: { label: getSettings().langSearch.SelectAllValues }
-      });
-    */
   };
 
   parseInput(input:ObjectMapWidgetValue["value"]): MapWidgetValue {
