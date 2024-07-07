@@ -53,7 +53,6 @@ export class TreeWidget extends AbstractWidget {
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
-  settings:ISettings
   displayLayer: JQuery<HTMLElement>
 
   constructor(
@@ -121,7 +120,6 @@ export class TreeWidget extends AbstractWidget {
 
     var self = this;
     let dataProvider = this.configuration.dataProvider;
-    let settings = this.settings;
     var options = {
       core: {
         multiple: true,

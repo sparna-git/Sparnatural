@@ -11,11 +11,6 @@ import { Catalog } from "../settings/Catalog";
 import { I18n } from "../settings/I18n";
 
 
-const i18nLabels = {
-  en: require("../../assets/lang/en.json"),
-  fr: require("../../assets/lang/fr.json"),
-};
-
 class SparnaturalComponent extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
   actionStore: ActionStore;
