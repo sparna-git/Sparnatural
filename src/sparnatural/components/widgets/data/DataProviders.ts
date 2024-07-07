@@ -149,7 +149,7 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
 }
 
 /**
- * An implementation of ListDataProviderIfc that does nothing !
+ * An implementation of ListDataProviderIfc that sorts items of another data provider
  */
 export class SortListDataProvider implements ListDataProviderIfc {
     
@@ -663,6 +663,74 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
             // 4. call the callback
             callback(result);    
         }
+    }
+
+}
+
+/**
+ * An implementation of ListDataProviderIfc that sorts items of another data provider
+ */
+export class SortTreeDataProvider implements TreeDataProviderIfc {
+    
+    delegate: TreeDataProviderIfc;
+    lang: string;
+
+    constructor(
+        delegate: TreeDataProviderIfc
+    ) {
+        this.delegate = delegate;
+    }
+
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        this.lang = lang;
+        this.delegate.init(lang, defaultLang, typePredicate);
+    }
+
+    getRoots(
+        domain:string,
+        predicate:string,
+        range:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        this.delegate.getRoots(
+            domain,
+            predicate,
+            range,
+            (items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => {
+                var collator = new Intl.Collator(this.lang);					
+                items.sort(function(a:{label:string}, b:{label:string}) {
+                    return collator.compare(a.label,b.label);
+                });
+
+                callback(items);
+            },
+            errorCallback
+        );
+    }
+
+    getChildren(
+        node:string,
+        domain:string,
+        predicate:string,
+        range:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        this.delegate.getChildren(
+            node,
+            domain,
+            predicate,
+            range,
+            (items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => {
+                callback(items);
+            },
+            errorCallback
+        );
     }
 
 }

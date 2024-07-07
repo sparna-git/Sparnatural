@@ -55,15 +55,13 @@ export class TreeWidget extends AbstractWidget {
   endClassVal: SelectedVal;
   settings:ISettings
   displayLayer: JQuery<HTMLElement>
-  sort:boolean;
 
   constructor(
     parentComponent: HTMLComponent,
     configuration:TreeConfiguration,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal,
-    sort: boolean
+    endClassVal: SelectedVal
   ) {
     super(
       "tree-widget",
@@ -80,7 +78,6 @@ export class TreeWidget extends AbstractWidget {
     this.startClassVal = startClassVal;
     this.endClassVal = endClassVal;
     this.objectPropVal = objectPropVal;
-    this.sort = sort;
   }
 
   render() {
@@ -146,15 +143,6 @@ export class TreeWidget extends AbstractWidget {
             items:TreeItem[]
           ) {
             var result = [];
-
-            if(self.sort) {
-              // here, if we need to sort, then sort according to lang
-              var collator = new Intl.Collator(self.settings.language);					
-              items.sort(function(a:TreeItem, b:TreeItem) {
-                return collator.compare(a.label,b.label);
-              });
-            }
-
 
             for (var i = 0; i < items.length; i++) {
               var text = items[i].label;

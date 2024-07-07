@@ -15,7 +15,7 @@ import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/Tr
 import { AutoCompleteWidget, AutocompleteConfiguration } from "../../../../widgets/AutoCompleteWidget";
 import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, NoOpTreeDataProvider, SortListDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
+import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, NoOpTreeDataProvider, SortListDataProvider, SortTreeDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlLiteralListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
@@ -524,6 +524,11 @@ class WidgetWrapper extends HTMLComponent {
           ...this.settings.customization?.tree
         };
 
+        // wrap inside a sort data provider if needed
+        if(!(treeChildrenDatasource.noSort == true)) {
+          treeConfig.dataProvider = new SortTreeDataProvider(treeConfig.dataProvider);
+        }
+
         // init data provider
         treeConfig.dataProvider.init(
           this.settings.language,
@@ -536,8 +541,7 @@ class WidgetWrapper extends HTMLComponent {
           treeConfig,
           this.startClassVal,
           this.objectPropVal,
-          this.endClassVal,
-          !(treeChildrenDatasource.noSort == true)
+          this.endClassVal
         );
 
       case Config.MAP_PROPERTY:
