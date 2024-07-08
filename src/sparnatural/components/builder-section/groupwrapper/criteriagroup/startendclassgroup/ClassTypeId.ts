@@ -129,6 +129,7 @@ class ClassTypeId extends HTMLComponent {
       val: val,
       selected: selected
     }
+
     this.selectViewVariableBtn.widgetHtml[0].dispatchEvent(
       new CustomEvent("onSelectViewVar", { bubbles: true, detail: payload })
     );
