@@ -1,0 +1,98 @@
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix eli-ep: <https://data.europarl.europa.eu/def/eli-ep#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix locn: <http://www.w3.org/ns/locn#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix eli: <http://data.europa.eu/eli/ontology#> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix eli-dl: <http://data.europa.eu/eli/eli-draft-legislation-ontology#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix geosparql: <http://www.opengis.net/ont/geosparql#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix epvoc: <https://data.europarl.europa.eu/def/epvoc#> .
+@prefix op-aut: <http://publications.europa.eu/resource/authority/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix ex-shapes: <http://example.com/shapes#> .
+@prefix ex-onto: <http://example.com/ontology#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+
+
+ex-shapes:Person a sh:NodeShape ;
+    rdfs:label "Personne"@fr ;
+    rdfs:comment "Une Personne"@fr ;
+    sh:targetClass foaf:Person ;
+    volipi:iconName "fa-solid fa-user" .
+
+ex-shapes:Notaire a sh:NodeShape ;
+    rdfs:label "Notaire"@fr ;
+    rdfs:comment "Un notaire"@fr ;
+    sh:target [
+        sh:select """
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+SELECT ?this
+WHERE {
+    ?this a foaf:Person .
+    ?this dcterms:type ex:Concept_Notaire .
+}
+        """;
+    ];
+    sh:node ex-shapes:Person ;
+    volipi:iconName "fa-solid fa-user" .
+
+
+ex-shapes:Document a sh:NodeShape ;
+    rdfs:label "Document"@fr ;
+    rdfs:comment "Un Document"@fr ;
+    sh:targetClass foaf:Document ;
+    volipi:iconName "fa-solid fa-file";
+    sh:property [
+        sh:path dcterms:creator ;
+        sh:class foaf:Person ;
+    ]
+.
+
+ex-onto:ActeNotarie rdfs:subClassOf foaf:Document .
+ex-shapes:ActeNotarie a sh:NodeShape ;
+    rdfs:label "Acte Notarie"@fr ;
+    rdfs:comment "Un acte notarie"@fr ;
+    sh:targetClass ex-onto:ActeNotarie ;
+    volipi:iconName "fa-solid fa-file" ;
+    sh:property [
+        sh:path dcterms:contributor ;
+        sh:node ex-shapes:Notaire ;
+    ]
+.
+
+
+
+ex-onto:ActeDeVente rdfs:subClassOf foaf:ActeNotarie .
+ex-shapes:ActeDeVente a sh:NodeShape ;
+    rdfs:label "Acte de vente"@fr ;
+    sh:targetClass ex-onto:ActeDeVente ;
+    volipi:iconName "fa-solid fa-file" .
+
+
+
+ex-onto:PACS rdfs:subClassOf foaf:ActeNotarie .
+ex-shapes:PACS a sh:NodeShape ;
+    rdfs:label "PACS"@fr ;
+    sh:targetClass ex-onto:PACS ;
+    volipi:iconName "fa-solid fa-file" .
+
