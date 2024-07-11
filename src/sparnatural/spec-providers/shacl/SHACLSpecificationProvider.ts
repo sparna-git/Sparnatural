@@ -192,8 +192,6 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   }
 
   getEntitiesInDomainOfAnyProperty(): string[] {
-    // This is for debugging tree reading
-    // this.getEntitiesTreeInDomainOfAnyProperty();
     // map to extract just the uri
     return this.getInitialEntityList().map(e => e.getId());
   }

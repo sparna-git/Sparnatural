@@ -14,6 +14,7 @@ import ISpecificationProperty from "../ISpecificationProperty";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad_Subject, Term } from '@rdfjs/types/data-model';
+import { Dag, DagIfc } from '../../dag/Dag';
 
 const factory = new DataFactory();
 
@@ -55,6 +56,10 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     console.dir(query)
     */
 
+  }
+
+  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
+    throw new Dag<ISpecificationEntity>();
   }
 
   getLanguages(): string[] {

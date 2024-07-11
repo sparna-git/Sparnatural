@@ -178,6 +178,8 @@ class ClassSelectBuilder extends HTMLComponent {
   }
 
   buildSelect_FirstStartClassGroup() {
+    // testing hierarchy
+    // console.log(this.specProvider.getEntitiesTreeInDomainOfAnyProperty().toDebugString())
     return this.buildClassSelectFromItems(
       this.specProvider.getEntitiesInDomainOfAnyProperty(),
       null
@@ -185,6 +187,8 @@ class ClassSelectBuilder extends HTMLComponent {
   }
 
   buildSelect_EndClassGroup(domainId: string) {
+    // testing hierarchy
+    // console.log(this.specProvider.getEntity(domainId).getConnectedEntitiesTree().toDebugString())
     return this.buildClassSelectFromItems(
       this.specProvider.getEntity(domainId).getConnectedEntities(),
       null
