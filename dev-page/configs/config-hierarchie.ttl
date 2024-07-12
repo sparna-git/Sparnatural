@@ -37,6 +37,10 @@ ex-shapes:Person a sh:NodeShape ;
     rdfs:label "Personne"@fr ;
     rdfs:comment "Une Personne"@fr ;
     sh:targetClass foaf:Person ;
+    sh:property [
+        sh:path ex-onto:pacsePar ;
+        sh:class ex-onto:PACS ;
+    ];
     volipi:iconName "fa-solid fa-user" .
 
 ex-shapes:Notaire a sh:NodeShape ;
@@ -82,7 +86,7 @@ ex-shapes:ActeNotarie a sh:NodeShape ;
 
 
 
-ex-onto:ActeDeVente rdfs:subClassOf foaf:ActeNotarie .
+ex-onto:ActeDeVente rdfs:subClassOf ex-onto:ActeNotarie .
 ex-shapes:ActeDeVente a sh:NodeShape ;
     rdfs:label "Acte de vente"@fr ;
     sh:targetClass ex-onto:ActeDeVente ;
@@ -90,7 +94,7 @@ ex-shapes:ActeDeVente a sh:NodeShape ;
 
 
 
-ex-onto:PACS rdfs:subClassOf foaf:ActeNotarie .
+ex-onto:PACS rdfs:subClassOf ex-onto:ActeNotarie .
 ex-shapes:PACS a sh:NodeShape ;
     rdfs:label "PACS"@fr ;
     sh:targetClass ex-onto:PACS ;
