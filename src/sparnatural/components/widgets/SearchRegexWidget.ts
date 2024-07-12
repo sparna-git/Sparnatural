@@ -2,13 +2,13 @@ import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import SparqlFactory from "../../generators/SparqlFactory";
+import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import InfoBtn from "../buttons/InfoBtn";
 import { I18n } from '../../settings/I18n';
 import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
+import HTMLComponent from '../HtmlComponent';
 
 const factory = new DataFactory();
 
@@ -27,15 +27,22 @@ export class SearchRegexWidgetValue implements WidgetValue {
   }
 }
 
+export interface SearchConfiguration {
+  widgetType:string;
+}
+
 export class SearchRegexWidget extends AbstractWidget {
 
   protected widgetValues: SearchRegexWidgetValue[];
+
+  configuration: SearchConfiguration;
   addValueBtn: AddUserInputBtn;
   searchInput: JQuery<HTMLElement>;
   infoBtn: InfoBtn;
 
   constructor(
-    parentComponent: WidgetWrapper,
+    configuration: SearchConfiguration,
+    parentComponent: HTMLComponent,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
@@ -49,6 +56,8 @@ export class SearchRegexWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.SINGLE
     );
+
+    this.configuration = configuration;
   }
 
   render() {
@@ -57,7 +66,7 @@ export class SearchRegexWidget extends AbstractWidget {
     this.html.append(this.searchInput);
     // Build datatippy info
     if (
-      (this.ParentComponent as WidgetWrapper).widgetType ==
+      this.configuration.widgetType ==
       Config.VIRTUOSO_SEARCH_PROPERTY
     ) {
       let datatippy = I18n.labels.VirtuosoSearchHelp;
@@ -104,7 +113,7 @@ export class SearchRegexWidget extends AbstractWidget {
   }
   
   getRdfJsPattern(): Pattern[] {
-    switch((this.ParentComponent as WidgetWrapper).widgetType) {
+    switch(this.configuration.widgetType) {
       case Config.STRING_EQUALS_PROPERTY: {
         // builds a FILTER(lcase(...) = lcase(...))
         return [SparqlFactory.buildFilterStringEquals(

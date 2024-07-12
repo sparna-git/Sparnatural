@@ -44,6 +44,21 @@ export class RDFTerm {
   }
 }
 
+export class RdfTermValue implements WidgetValue {
+  value: {
+    label: string;
+    rdfTerm: RDFTerm
+  };
+
+  key():string {
+    return this.value.rdfTerm.value;
+  }
+
+  constructor(v:RdfTermValue["value"]) {
+    this.value = v;
+  }
+}
+
 export abstract class AbstractWidget extends HTMLComponent {
   public valueRepetition: ValueRepetition;
   protected widgetValues: Array<WidgetValue> = [];
@@ -112,6 +127,7 @@ export abstract class AbstractWidget extends HTMLComponent {
   // fires the event to render the label of the WidgetValue on the UI
   renderWidgetVal(widgetValue: WidgetValue ) {
     if(!this.widgetValues.find(v => v.key() == widgetValue.key())){  // don't add double values
+      // store value
       this.widgetValues.push(widgetValue)
       this.html[0].dispatchEvent(
         new CustomEvent("renderWidgetVal", { bubbles: true, detail: widgetValue })

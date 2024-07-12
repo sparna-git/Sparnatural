@@ -1,12 +1,13 @@
 import { DataFactory } from 'rdf-data-factory';
-import { BgpPattern, Pattern, Variable } from "sparqljs";
+import { Pattern, Variable } from "sparqljs";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import { AbstractWidget } from "../../components/widgets/AbstractWidget";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import ClassBuilder from "./ClassBuilder";
 import IntersectionBuilder from "./IntersectionBuilder";
-import SparqlFactory from "../SparqlFactory";
+import SparqlFactory from "./SparqlFactory";
+import ValueBuilderIfc, { ValueBuilderFactory } from './ValueBuilder';
 
 const factory = new DataFactory();
 
@@ -17,7 +18,9 @@ export default class WhereBuilder{
     #typePredicate: string
     #isChild:boolean
     #isInOption:boolean
+    
     #widgetComponent:AbstractWidget | null | undefined = null
+    #valueBuilder:ValueBuilderIfc;
     
     // patterns built in the build process
     #resultPtrns: Pattern[] = []    
@@ -38,10 +41,32 @@ export default class WhereBuilder{
         this.#typePredicate = typePredicate
         this.#isChild = isChild
         this.#isInOption = isInOption
-        this.#widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
+        // this.#widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
+
+        
+        // create the object to convert widget values to SPARQL
+        let endClassValue = this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal.type;
+        // this is because the query geenration may be triggered while the end class is not there yet
+        if(endClassValue != null) {            
+            this.#valueBuilder = new ValueBuilderFactory().buildValueBuilder(
+                this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected()).getPropertyType(endClassValue)
+            );
+            // pass everything needed to generate SPARQL
+            this.#valueBuilder.init(
+                this.#specProvider,
+                this.#grpWrapper.CriteriaGroup.StartClassGroup.startClassVal,
+                this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal,
+                this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal,
+                this.#grpWrapper.CriteriaGroup.EndClassGroup.isVarSelected(),
+                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent.getwidgetValues()
+            );
+        }
     }
 
     build() {
+
+
+
         this.#buildChildPatterns()
         this.#buildRdfPtrn()
         this.#buildStartClassPtrn()
@@ -88,8 +113,14 @@ export default class WhereBuilder{
     }
 
     #buildRdfPtrn(){
+        let widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
+        if (widgetComponent?.getwidgetValues()?.length > 0 ) {
+            this.#rdfPtrns = this.#valueBuilder.build();
+        }
+            
+
         //get the information from the widget if there are widgetvalues selected
-        if (this.#widgetComponent?.getwidgetValues()?.length > 0 ) this.#rdfPtrns = this.#widgetComponent.getRdfJsPattern();
+        // if (this.#widgetComponent?.getwidgetValues()?.length > 0 ) this.#rdfPtrns = this.#widgetComponent.getRdfJsPattern();
     }
 
     #buildEndClassPtrn(){
@@ -97,7 +128,7 @@ export default class WhereBuilder{
         const endClsBuilder = new ClassBuilder(
             endClsGrp,
             this.#specProvider,
-            this.#widgetComponent?.isBlockingEnd(),
+            this.#valueBuilder?.isBlockingEnd(),
             this.#typePredicate
         )
         endClsBuilder.build()
@@ -112,7 +143,7 @@ export default class WhereBuilder{
         const startClsBuilder = new ClassBuilder(
             startClsGrp,
             this.#specProvider,
-            this.#widgetComponent?.isBlockingStart(),
+            this.#valueBuilder?.isBlockingStart(),
             this.#typePredicate
         )
         startClsBuilder.build()
@@ -127,7 +158,7 @@ export default class WhereBuilder{
         const intersectionBuilder = new IntersectionBuilder(
             this.#grpWrapper.CriteriaGroup.StartClassGroup.getVarName() ,
             this.#grpWrapper.CriteriaGroup.EndClassGroup.getVarName(),
-            this.#widgetComponent,
+            this.#valueBuilder,
             objectPropCls,
             this.#specProvider
         );

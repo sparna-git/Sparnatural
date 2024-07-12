@@ -1,5 +1,4 @@
 import { DataFactory } from 'rdf-data-factory';
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 // L needs to be imported *before* leaflet-geoman-free
 import L, { LatLng, Rectangle, PolylineOptions, Polygon, PM, TileLayer } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
@@ -16,6 +15,7 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../SelectedVal";
 import { NamedNode } from '@rdfjs/types/data-model';
 import { I18n } from '../../settings/I18n';
+import HTMLComponent from '../HtmlComponent';
 
 
 const factory = new DataFactory();
@@ -30,7 +30,7 @@ export const GEOSPARQL = {
   WKT_LITERAL: factory.namedNode(GEOSPARQL_NAMESPACE + 'wktLiteral') as NamedNode
 }
 
-export class MapWidgetValue implements WidgetValue {
+export class MapValue implements WidgetValue {
   value: {
     label: string;
     type: string;
@@ -41,7 +41,7 @@ export class MapWidgetValue implements WidgetValue {
     return this.value.coordinates.toString();
   }
 
-  constructor(v:MapWidgetValue["value"]) {
+  constructor(v:MapValue["value"]) {
     this.value = v;
   }
 
@@ -62,7 +62,7 @@ type ObjectifyLatLng<T> = T extends LatLng[][]
 
 // stringified type of MapWidgetValue
 // see: https://effectivetypescript.com/2020/04/09/jsonify/
-type ObjectMapWidgetValue = ObjectifyLatLng<MapWidgetValue>
+type ObjectMapWidgetValue = ObjectifyLatLng<MapValue>
 
 
 export interface MapConfiguration {
@@ -95,7 +95,7 @@ export default class MapWidget extends AbstractWidget {
   protected configuration: MapConfiguration;
   protected parentComponent: any;
   protected endClassWidgetGroup: any;
-  protected widgetValues: MapWidgetValue[];
+  protected widgetValues: MapValue[];
   //protected widgetValue: MapWidgetValue[];
   // protected blockObjectPropTriple: boolean = true
   renderMapValueBtn: AddUserInputBtn;
@@ -103,7 +103,7 @@ export default class MapWidget extends AbstractWidget {
   drawingLayer: L.Layer;
   constructor(
     configuration: MapConfiguration,
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
@@ -344,14 +344,14 @@ export default class MapWidget extends AbstractWidget {
 
     switch ((layer as any).pm._shape) {
       case 'Rectangle':
-        this.widgetValues.push(new MapWidgetValue({
+        this.widgetValues.push(new MapValue({
           label: this.#getValueLabel(layer as Rectangle),
           type: 'Rectangle',
           coordinates: (layer as Rectangle).getLatLngs() as LatLng[][],
         }))
         break;    
       default: 
-        this.widgetValues.push(new MapWidgetValue({
+        this.widgetValues.push(new MapValue({
           label: this.#getValueLabel(layer as Polygon),
           type: 'Polygon',
           coordinates: (layer as Polygon).getLatLngs() as LatLng[][],
@@ -367,17 +367,9 @@ export default class MapWidget extends AbstractWidget {
       this.renderWidgetValues(this.widgetValues);
       $(this.parentComponent).trigger("change");
     }
-    
-    // this.map.remove();
-    /*
-    if (this.getwidgetValues().length < 1)
-      this.renderWidgetVal({
-        value: { label: getSettings().langSearch.SelectAllValues }
-      });
-    */
   };
 
-  parseInput(input:ObjectMapWidgetValue["value"]): MapWidgetValue {
+  parseInput(input:ObjectMapWidgetValue["value"]): MapValue {
 
     const parsedCoords = input.coordinates.map((c)=>{
       return c.map((latlng)=>{
@@ -386,7 +378,7 @@ export default class MapWidget extends AbstractWidget {
       })
     })
     if(parsedCoords.length === 0) throw Error(`Parsing of ${input.coordinates} failed`)
-    return new MapWidgetValue({
+    return new MapValue({
         label: input.label,
         coordinates: parsedCoords,
         type: input.type
@@ -422,42 +414,6 @@ export default class MapWidget extends AbstractWidget {
 
     return [filterPtrn];
 
-    /*
-    let asWKT: Triple = SparqlFactory.buildTriple(
-      DataFactory.variable(this.getVariableValue(this.startClassVal)),
-      DataFactory.namedNode("http://www.opengis.net/ont/geosparql#asWKT"),
-      DataFactory.variable("aWKT")
-    );
-
-    let vals = this.widgetValues.map((v) => {
-      let vl: ValuePatternRow = {};
-      vl[this.endClassVal.variable] = this.#buildPolygon(v.value.coordinates[0]);
-      return vl;
-    });
-
-    let polygonValues: ValuesPattern = {
-      type: "values",
-      values: vals
-    } 
-    
-    let filterPtrn: FilterPattern = {
-      type: "filter",
-      expression: <FunctionCallExpression><unknown>{
-        type: "functionCall",
-        function: DataFactory.namedNode(GEOF.WITHIN.value),
-        args: [asWKT.object, DataFactory.variable(this.getVariableValue(this.endClassVal))],
-      },
-    };
-    
-
-    let ptrn: BgpPattern = {
-      type: "bgp",
-      triples: [asWKT],
-    };
-
-
-    return [ptrn, polygonValues, filterPtrn];
-    */
   }
 
   #buildPolygon(coordinates: LatLng[]) {

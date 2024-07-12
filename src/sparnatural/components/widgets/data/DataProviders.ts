@@ -1,7 +1,6 @@
-import { getSettings } from "../../../settings/defaultSettings";
 import { RDFTerm } from "../AbstractWidget";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
-import { MultipleEndpointSparqlFetcher, SparqlFetcher, SparqlFetcherFactory, SparqlFetcherIfc, UrlFetcher } from "./UrlFetcher";
+import { SparqlFetcherFactory, SparqlFetcherIfc } from "./UrlFetcher";
 
 
 /**
@@ -10,13 +9,16 @@ import { MultipleEndpointSparqlFetcher, SparqlFetcher, SparqlFetcherFactory, Spa
  */
 export interface ListDataProviderIfc {
 
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void;
+    
     getListContent(
         domain:string,
         predicate:string,
         range:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void
@@ -27,18 +29,23 @@ export interface ListDataProviderIfc {
  */
 export class NoOpListDataProvider implements ListDataProviderIfc {
 
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        // nothing
+    }
+
     getListContent(
         domain:string,
         predicate:string,
         range:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         // does nothing !
-        console.warn("Warning, a NoOpListDataProvider is being called for typePredicate "+typePredicate)
+        console.warn("Warning, a NoOpListDataProvider is being called for predicate "+predicate)
     }
 }
 
@@ -50,22 +57,32 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
     
     queryBuilder:ListSparqlQueryBuilderIfc;
     sparqlFetcher:SparqlFetcherIfc;
+    lang: string;
+    defaultLang: string;
+    typePredicate: string;
 
     constructor(
-        sparqlFetcherFactory:SparqlFetcherFactory,
+        sparqlFetcher:SparqlFetcherIfc,
         queryBuilder: ListSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
-        this.sparqlFetcher = sparqlFetcherFactory.buildSparqlFetcher();        
+        this.sparqlFetcher = sparqlFetcher;        
+    }
+
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        this.lang = lang;
+        this.defaultLang = defaultLang;
+        this.typePredicate = typePredicate;
     }
 
     getListContent(
         domainType: string,
         predicate: string,
         rangeType: string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
@@ -74,9 +91,9 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
             domainType,
             predicate,
             rangeType,
-            lang,
-            defaultLang,
-            typePredicate
+            this.lang,
+            this.defaultLang,
+            this.typePredicate
         );
 
         // 2. execute it
@@ -130,132 +147,56 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
 
 }
 
-
 /**
- * @deprecated
- * Interface for objects that can provide data to a LiteralListWidget :
- * either through a SPARQL query, or through custom mean (calling an API)
+ * An implementation of ListDataProviderIfc that sorts items of another data provider
  */
-export interface LiteralListDataProviderIfc {
+export class SortListDataProvider implements ListDataProviderIfc {
+    
+    delegate: ListDataProviderIfc;
+    lang: string;
+
+    constructor(
+        delegate: ListDataProviderIfc
+    ) {
+        this.delegate = delegate;
+    }
+
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        this.lang = lang;
+        this.delegate.init(lang, defaultLang, typePredicate);
+    }
 
     getListContent(
         domain:string,
         predicate:string,
         range:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
-        callback:(values:{literal:string}[]) => void
-    ):void
-
-}
-
-
-/**
- * @deprecated
- * Implementation of LiteralListDataProviderIfc that executes a SPARQL query against an endpoint,
- * and read the 'uri' and 'label' columns.
- */
-export class SparqlLiteralListDataProvider implements LiteralListDataProviderIfc {
-    
-    queryBuilder:ListSparqlQueryBuilderIfc;
-    sparqlFetcher:SparqlFetcher;
-
-    constructor(
-        sparqlEndpointUrl: any,
-        queryBuilder: ListSparqlQueryBuilderIfc
-    ) {
-        this.queryBuilder = queryBuilder;
-        this.sparqlFetcher = new SparqlFetcher(
-            UrlFetcher.build(getSettings()),
-            sparqlEndpointUrl
-        );
-    }
-
-    getListContent(
-        domainType: string,
-        predicate: string,
-        rangeType: string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
-        callback:(values:{literal:string}[]) => void,
+        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
-        // 1. create the SPARQL
-        let sparql = this.queryBuilder.buildSparqlQuery(
-            domainType,
+        this.delegate.getListContent(
+            domain,
             predicate,
-            rangeType,
-            lang,
-            defaultLang,
-            typePredicate
-        );
+            range,
+            (items:{term:RDFTerm;label:string;group?:string}[]) => {
+                // sort according to lang
+                var collator = new Intl.Collator(this.lang);
 
-        // 2. execute it
-        this.sparqlFetcher.executeSparql(sparql,(data:{results:{bindings:any}}) => {
-            // 3. parse the results
-            let result = new Array<{literal:string}>;
-            for (let index = 0; index < data.results.bindings.length; index++) {
-                const element = data.results.bindings[index];
-                // reads the 'value' column
-                if(element.value.value) {
-                    result[result.length] ={literal:element.value.value};
-                }
-            }
+                items.sort((a: any, b: any) => {
+                    return collator.compare(
+                    a.label,
+                    b.label
+                    );
+                });
 
-            // 4. call the callback
-            callback(result);
-            
-        },
-        errorCallback
-        );
-
-    }
-
-}
-
-/**
- * @deprecated
- * Implementation of ListDataProviderIfc that wraps a LiteralListDataProviderIfc so that the same ListWidget
- * can be used with LiteralList
- */
-export class ListDataProviderFromLiteralListAdpater implements ListDataProviderIfc {
-
-    literalListDataProvider: LiteralListDataProviderIfc
-
-    constructor(
-        literalListDataProvider: LiteralListDataProviderIfc
-    ) {
-        this.literalListDataProvider = literalListDataProvider;
-    }
-
-    getListContent(
-        domainType: string,
-        predicate: string,
-        rangeType: string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
-        callback:(items:{term:RDFTerm;label:string}[]) => void
-    ):void {
-        this.literalListDataProvider.getListContent(
-            domainType,
-            predicate,
-            rangeType,
-            lang,
-            defaultLang,
-            typePredicate,
-            (values:{literal:string}[]) => {
-                let result = new Array<{term:RDFTerm, label:string}>;
-                values.forEach(function(value) {
-                    result[result.length] ={term:{type:"literal",value:value.literal}, label:value.literal};
-                })
-                callback(result);
-            }
+                callback(items);
+            },
+            errorCallback
         );
     }
-
 }
 
 
@@ -265,6 +206,12 @@ export class ListDataProviderFromLiteralListAdpater implements ListDataProviderI
  */
 export interface AutocompleteDataProviderIfc {
 
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void;
+
     /**
      * Used by new Awesomplete implementation
      */
@@ -273,9 +220,6 @@ export interface AutocompleteDataProviderIfc {
         predicate:string,
         range:string,
         key:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void
@@ -285,19 +229,25 @@ export interface AutocompleteDataProviderIfc {
  * An AutocompleteDataProviderIfc that does nothing
  */
 export class NoOpAutocompleteProvider implements AutocompleteDataProviderIfc {
+    
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        // nothing
+    }
+    
     getAutocompleteSuggestions(
         domain:string,
         predicate:string,
         range:string,
         key:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         // does nothing !
-        console.warn("Warning, a NoOpAutocompleteProvider is being called for typePredicate "+typePredicate)
+        console.warn("Warning, a NoOpAutocompleteProvider is being called for predicate "+predicate)
     }
 }
 
@@ -307,15 +257,29 @@ export class NoOpAutocompleteProvider implements AutocompleteDataProviderIfc {
  */
 export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc {
     
+    lang: string;
+    defaultLang: string;
+    typePredicate: string;
+
     queryBuilder:AutocompleteSparqlQueryBuilderIfc;
     sparqlFetcher:SparqlFetcherIfc;
 
     constructor(
-        sparqlFetcherFactory: SparqlFetcherFactory,
+        sparqlFetcher: SparqlFetcherIfc,
         queryBuilder: AutocompleteSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
-        this.sparqlFetcher = sparqlFetcherFactory.buildSparqlFetcher();
+        this.sparqlFetcher = sparqlFetcher;
+    }
+
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        this.lang = lang;
+        this.defaultLang = defaultLang;
+        this.typePredicate = typePredicate;
     }
 
     getAutocompleteSuggestions(
@@ -323,9 +287,6 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         predicate: string,
         range: string,
         key: string,
-        lang: string,
-        defaultLang: string,
-        typePredicate: string,
         callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
         errorCallback?:(payload:any) => void
     ): void {
@@ -336,9 +297,9 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
             predicate,
             range,
             key,
-            lang,
-            defaultLang,
-            typePredicate
+            this.lang,
+            this.defaultLang,
+            this.typePredicate
         );
 
         // 2. execute it
@@ -393,13 +354,16 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
  */
 export interface TreeDataProviderIfc {
 
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void;
+
     getRoots(
         domain:string,
         predicate:string,
         range:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
         errorCallback?:(payload:any) => void
     ):void
@@ -409,9 +373,6 @@ export interface TreeDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
         errorCallback?:(payload:any) => void
     ):void
@@ -420,18 +381,24 @@ export interface TreeDataProviderIfc {
 
 
 export class NoOpTreeDataProvider implements TreeDataProviderIfc {
+
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        // nothing
+    }
+
     getRoots(
         domain:string,
         predicate:string,
         range:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         // does nothing !
-        console.warn("Warning, a NoOpTreeDataProvider is being called for typePredicate "+typePredicate)
+        console.warn("Warning, a NoOpTreeDataProvider is being called for predicate "+predicate)
     }
 
     getChildren(
@@ -439,37 +406,46 @@ export class NoOpTreeDataProvider implements TreeDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         // does nothing !
-        console.warn("Warning, a NoOpTreeDataProvider is being called for typePredicate "+typePredicate)
+        console.warn("Warning, a NoOpTreeDataProvider is being called for predicate "+predicate)
     }
 }
 
 export class SparqlTreeDataProvider implements TreeDataProviderIfc {
-    
+   
+    lang: string;
+    defaultLang: string;
+    typePredicate: string;
+
     queryBuilder:TreeSparqlQueryBuilderIfc;
     sparqlFetcher:SparqlFetcherIfc;
 
+
     constructor(
-        sparqlFetcherFactory:SparqlFetcherFactory,
+        sparqlFetcher:SparqlFetcherIfc,
         queryBuilder: TreeSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
-        this.sparqlFetcher = sparqlFetcherFactory.buildSparqlFetcher();        
+        this.sparqlFetcher = sparqlFetcher;        
+    }
+
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        this.lang = lang;
+        this.defaultLang = defaultLang;
+        this.typePredicate = typePredicate;
     }
 
     getRoots(
         domainType: string,
         predicate: string,
         rangeType: string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
@@ -479,9 +455,9 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
             domainType,
             predicate,
             rangeType,
-            lang,
-            defaultLang,
-            typePredicate
+            this.lang,
+            this.defaultLang,
+            this.typePredicate
         );
 
         // 2. execute it
@@ -498,9 +474,6 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
         domainType: string,
         predicate: string,
         rangeType: string,
-        lang:string,
-        defaultLang:string,
-        typePredicate:string,
         callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
@@ -511,9 +484,9 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
             domainType,
             predicate,
             rangeType,
-            lang,
-            defaultLang,
-            typePredicate
+            this.lang,
+            this.defaultLang,
+            this.typePredicate
         );
 
         // 2. execute it
@@ -538,7 +511,8 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
                     term:solution.uri,
                     label:solution.label.value,
                     // make sure to parse the value as a boolean so that it is not a string
-                    hasChildren:solution.hasChildren?((solution.hasChildren.value === "true")?true:false):true,
+                    // we also test on "1" because Virtuoso returns this as a result instead of a true boolean
+                    hasChildren:solution.hasChildren?((solution.hasChildren.value === "true" || solution.hasChildren.value == 1)?true:false):true,
                     disabled:solution.count?solution.count.value == 0:false
                 };
             }
@@ -546,6 +520,74 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
             // 4. call the callback
             callback(result);    
         }
+    }
+
+}
+
+/**
+ * An implementation of ListDataProviderIfc that sorts items of another data provider
+ */
+export class SortTreeDataProvider implements TreeDataProviderIfc {
+    
+    delegate: TreeDataProviderIfc;
+    lang: string;
+
+    constructor(
+        delegate: TreeDataProviderIfc
+    ) {
+        this.delegate = delegate;
+    }
+
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        this.lang = lang;
+        this.delegate.init(lang, defaultLang, typePredicate);
+    }
+
+    getRoots(
+        domain:string,
+        predicate:string,
+        range:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        this.delegate.getRoots(
+            domain,
+            predicate,
+            range,
+            (items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => {
+                var collator = new Intl.Collator(this.lang);					
+                items.sort(function(a:{label:string}, b:{label:string}) {
+                    return collator.compare(a.label,b.label);
+                });
+
+                callback(items);
+            },
+            errorCallback
+        );
+    }
+
+    getChildren(
+        node:string,
+        domain:string,
+        predicate:string,
+        range:string,
+        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        this.delegate.getChildren(
+            node,
+            domain,
+            predicate,
+            range,
+            (items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => {
+                callback(items);
+            },
+            errorCallback
+        );
     }
 
 }

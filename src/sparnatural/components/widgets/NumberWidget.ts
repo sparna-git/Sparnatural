@@ -1,13 +1,13 @@
 import { DataFactory } from 'rdf-data-factory';
 import { Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { I18n } from '../../settings/I18n';
 import AddUserInputBtn from '../buttons/AddUserInputBtn';
-import SparqlFactory from '../../generators/SparqlFactory';
+import SparqlFactory from '../../generators/sparql/SparqlFactory';
 import InfoBtn from '../buttons/InfoBtn';
 import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
+import HTMLComponent from '../HtmlComponent';
 
 
 const factory = new DataFactory();
@@ -51,7 +51,7 @@ export class NumberWidget extends AbstractWidget {
   addValueBtn: AddUserInputBtn;
   
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     configuration:NumberConfiguration,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
