@@ -19,8 +19,11 @@ class HTMLComponent implements IRenderable {
     widgetHtml: JQuery<HTMLElement>
   ) {
     this.baseCssClass = baseCssClass;
-    this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass);
     this.ParentComponent = ParentComponent;
+
+    // create the HTML element
+    this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass);
+    
     this.widgetHtml = widgetHtml;
   }
 

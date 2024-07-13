@@ -9,6 +9,8 @@ export class SparnaturalFormAttributes {
   debug: boolean;
   catalog: string;
 
+  typePredicate = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
+
   constructor(element:HTMLElement) {
     // not the differences in attribute names
     this.src = this.#read(element,"src",this.#isJSON(element.getAttribute('src')));    

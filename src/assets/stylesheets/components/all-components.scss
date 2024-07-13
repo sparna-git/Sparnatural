@@ -30,10 +30,11 @@
 @use './widget/ListWidget.scss';
 @use './widget/MapWidget.scss';
 @use './widget/TreeWidget.scss';
+@use './widget/Widgets.scss';
 // LoadingSpinner
 @use './widget/LoadingSpinner.scss';
 // link components
 @use './link-and-component.scss';
 @use './link-where-child.scss';
 // jquery nice-select
-@use './citeriagroup/nice-select/nice-select.scss'
+@use './citeriagroup/nice-select/nice-select.scss';

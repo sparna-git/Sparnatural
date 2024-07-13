@@ -1,4 +1,4 @@
-import WidgetWrapper from "../sparnatural/components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
+import { WidgetFactory } from "../sparnatural/components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetFactory";
 import HTMLComponent from "../sparnatural/components/HtmlComponent";
 import { I18n } from "../sparnatural/settings/I18n";
 import ISparnaturalSpecification from "../sparnatural/spec-providers/ISparnaturalSpecification";
@@ -19,8 +19,8 @@ class SparnaturalFormComponent extends HTMLComponent {
     // this is a root component : Does not have a ParentComponent!
     super("SparnaturalForm", null, null);
     
-    // TODO : init settings from attributes
     this.formSettings = attributes;
+    this.formSettings.customization = {};
   }
 
   render(): this {
@@ -29,28 +29,41 @@ class SparnaturalFormComponent extends HTMLComponent {
     
     this.initSpecificationProvider((sp: ISparnaturalSpecification) => {
       this.specProvider = sp;
+      
+      /*
+      let wrapper:WidgetWrapper = new WidgetWrapper(this, this.specProvider);
+      wrapper.render();      
+      */
 
+      
       let testClass:ISpecificationEntity = this.specProvider.getEntity(
         this.specProvider.getEntitiesInDomainOfAnyProperty()[0]
       );
-      let ww:WidgetWrapper = new WidgetWrapper(
+  
+      let wf:WidgetFactory = new WidgetFactory(
         this,
         this.specProvider,
+        (this.getRootComponent() as SparnaturalFormComponent).formSettings,
+        null
+      );
+  
+      let theWidget = wf.buildWidget(
+        this.specProvider.getProperty(testClass.getConnectingProperties(testClass.getConnectedEntities()[1])[0]).getPropertyType(testClass.getConnectedEntities()[0]),
         {
           variable:"Test_1",
           type:testClass.getId()
         },
         {
           variable:"Property_1",
-          type:testClass.getConnectingProperties(testClass.getConnectedEntities()[0])[0]
+          type:testClass.getConnectingProperties(testClass.getConnectedEntities()[1])[0]
         },
         {
           variable:"Test_2",
-          type:testClass.getConnectedEntities()[0]
+          type:testClass.getConnectedEntities()[1]
         }
       );
-      ww.render();
-
+      theWidget.render();
+      
     });
     
     return this;
@@ -66,7 +79,7 @@ class SparnaturalFormComponent extends HTMLComponent {
   }
 
   #initFormLabels() {
-    if (this.settings.language === "fr") {
+    if (this.formSettings.language === "fr") {
       SparnaturalFormI18n.init("fr");
     } else {
       SparnaturalFormI18n.init("en");
@@ -74,7 +87,7 @@ class SparnaturalFormComponent extends HTMLComponent {
   }
 
   #initSparnaturalLabels() {
-    if (this.settings.language === "fr") {
+    if (this.formSettings.language === "fr") {
       I18n.init("fr");
     } else {
       I18n.init("en");

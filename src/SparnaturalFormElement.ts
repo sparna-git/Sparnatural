@@ -1,4 +1,5 @@
 import $ from "jquery";
+import "./assets/stylesheets/SparnaturalForm.scss"
 import SparnaturalFormComponent from "./sparnatural-form/SparnaturalFormComponent";
 import { SparnaturalFormAttributes } from "./SparnaturalFormAttributes";
 
@@ -34,6 +35,11 @@ export class SparnaturalFormElement extends HTMLElement {
 
     // render sparnatural 
     this.sparnaturalForm = new SparnaturalFormComponent(this._attributes);
+
+    // empty the content in case we re-display after an attribute change
+    $(this).empty();
+    // attache the component to this WebComponent
+    $(this).append(this.sparnaturalForm.html);
 
     this.sparnaturalForm.render();
   }
