@@ -1,33 +1,103 @@
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import Datasources from "../../../../../ontologies/SparnaturalConfigDatasources";
-import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
+import { Catalog } from "../../../../../settings/Catalog";
 import HTMLComponent from "../../../../HtmlComponent";
-import SparnaturalComponent from "../../../../SparnaturalComponent";
+import { SelectedVal } from "../../../../SelectedVal";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
-import { ListDataProviderIfc, NoOpListDataProvider, SparqlListDataProvider, AutocompleteDataProviderIfc, NoOpAutocompleteProvider, SparqlAutocompleDataProvider, TreeDataProviderIfc, NoOpTreeDataProvider, SparqlTreeDataProvider } from "../../../../widgets/data/DataProviders";
+import { ListDataProviderIfc, NoOpListDataProvider, SparqlListDataProvider, SortListDataProvider, AutocompleteDataProviderIfc, NoOpAutocompleteProvider, SparqlAutocompleDataProvider, TreeDataProviderIfc, NoOpTreeDataProvider, SparqlTreeDataProvider, SortTreeDataProvider } from "../../../../widgets/data/DataProviders";
 import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
 import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
 import { NumberConfiguration, NumberWidget } from "../../../../widgets/NumberWidget";
-import { SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
+import { SearchConfiguration, SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
 
+/**
+ * Inversion of coupling : we don't want to depend on ISettings as this class is meant to be reused
+ * elsewhere than in Sparnatural, hence we define our own interface of what we depend on.
+ */
+export class WidgetFactorySettings {
+
+    language: string;
+    defaultLanguage: string;
+    typePredicate: string;
+    
+    sparqlPrefixes?: { [key: string]: string };
+    defaultEndpoint?: string;
+    catalog?: string;
+    localCacheDataTtl?: number;
+    
+    customization? : {
+      headers?: Map<string,string>;
+      autocomplete?: Partial<AutocompleteConfiguration>,
+      list?: Partial<ListConfiguration>,   
+      tree?: Partial<TreeConfiguration>,
+      number?: Partial<NumberConfiguration>,
+      map?: Partial<MapConfiguration>
+    }
+}
+
+
+
 export class WidgetFactory {
 
-    private specProvider:ISparnaturalSpecification;
-    private parentComponent:HTMLComponent;
+    parentComponent:HTMLComponent;
+    specProvider: any;
+    settings: WidgetFactorySettings;
+    catalog:Catalog;
 
-    
-    #createWidgetComponent(
+    private sparqlFetcherFactory:SparqlFetcherFactory;
+    private sparqlPostProcessor:{ semanticPostProcess: (sparql:string)=>string };
+
+    constructor(
+        parentComponent:HTMLComponent,
+        specProvider: any,
+        settings: WidgetFactorySettings,
+        catalog:Catalog,
+    ) {
+        this.parentComponent = parentComponent;
+        this.specProvider = specProvider;
+        this.settings = settings;
+        this.catalog = catalog;
+
+        // how to fetch a SPARQL query
+        this.sparqlFetcherFactory = new SparqlFetcherFactory(
+            this.catalog,
+            this.settings.language,
+            this.settings.localCacheDataTtl,
+            this.settings.customization.headers
+        );
+
+        // how to post-process the generated SPARQL after it is constructed and before it is send
+        this.sparqlPostProcessor = { semanticPostProcess: (sparql: any) => {
+            // also add prefixes
+            for (let key in this.settings.sparqlPrefixes) {
+              sparql = sparql.replace(
+                "SELECT ",
+                "PREFIX " +
+                  key +
+                  ": <" +
+                  this.settings.sparqlPrefixes[key] +
+                  "> \nSELECT "
+              );
+            }
+            return this.specProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
+          }
+        }
+    }
+
+
+    buildWidget(
         widgetType: string,
-        objectPropertyId: any,
-        endClassType: any
-      ): AbstractWidget {
+        startClassVal: SelectedVal,
+        objectPropVal: SelectedVal,
+        endClassVal: SelectedVal,
+    ): AbstractWidget {
         switch (widgetType) {
           case Config.LITERAL_LIST_PROPERTY:
           case Config.LIST_PROPERTY:
@@ -35,7 +105,7 @@ export class WidgetFactory {
             var theSpecProvider = this.specProvider;
     
             // determine custom datasource
-            var datasource = this.specProvider.getProperty(objectPropertyId).getDatasource();
+            var datasource = this.specProvider.getProperty(objectPropVal.type).getDatasource();
     
             if (datasource == null) {
               // datasource still null
@@ -43,12 +113,12 @@ export class WidgetFactory {
               if (this.settings.defaultEndpoint || this.settings.catalog) {
     
                 // if there is a default label property on the end class, use it to populate the dropdown
-                if(this.specProvider.getEntity(endClassType).getDefaultLabelProperty()) {
+                if(this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty()) {
                   datasource = {
                     queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
                       Datasources.QUERY_LIST_LABEL_ALPHA
                     ),
-                    labelProperty: this.specProvider.getEntity(endClassType).getDefaultLabelProperty(),
+                    labelProperty: this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty(),
                   }
                 } else {
                   // that datasource can work indifferently with URIs or Literals
@@ -69,37 +139,25 @@ export class WidgetFactory {
               listDataProvider = new SparqlListDataProvider(
     
                 // endpoint URL
-                new SparqlFetcherFactory(
-                  datasource.sparqlEndpointUrl != null
-                  ? datasource.sparqlEndpointUrl
-                  : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
-                  (this.getRootComponent() as SparnaturalComponent).catalog,
-                  this.settings
-                ),            
+                this.sparqlFetcherFactory.buildSparqlFetcher(
+                    datasource.sparqlEndpointUrl != null
+                    ? datasource.sparqlEndpointUrl
+                    : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
+                ), 
     
                 new ListSparqlTemplateQueryBuilder(
                   // sparql query (with labelPath interpreted)
-                  this.getFinalQueryString(datasource),
+                  this.#getFinalQueryString(datasource),
     
                   // sparqlPostProcessor
-                  {
-                    semanticPostProcess: (sparql: any) => {
-                      // also add prefixes
-                      for (let key in this.settings.sparqlPrefixes) {
-                        sparql = sparql.replace(
-                          "SELECT ",
-                          "PREFIX " +
-                            key +
-                            ": <" +
-                            this.settings.sparqlPrefixes[key] +
-                            "> \nSELECT "
-                        );
-                      }
-                      return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-                    },
-                  }
+                  this.sparqlPostProcessor
                 )
               );
+            }
+    
+            // if we need to sort things, add an explicit wrapper around the data provider
+            if(!(datasource.noSort == true)) {
+              listDataProvider = new SortListDataProvider(listDataProvider);
             }
     
             // create the configuration object : use the default configuration, then the generated data provider, then overwrite with 
@@ -108,18 +166,24 @@ export class WidgetFactory {
               ...ListWidget.defaultConfiguration,
               ...{
                 dataProvider: listDataProvider,
-                values:this.specProvider.getProperty(objectPropertyId).getValues(),
+                values:this.specProvider.getProperty(objectPropVal.type).getValues(),
               },          
               ...this.settings.customization?.list
             };
     
+            // init data provider
+            listConfig.dataProvider.init(
+              this.settings.language,
+              this.settings.defaultLanguage,
+              this.settings.typePredicate
+            );
+    
             return new ListWidget(
               this.parentComponent,
               listConfig,
-              !(datasource.noSort == true),
-              this.startClassVal,
-              this.objectPropVal,
-              this.endClassVal
+              startClassVal,
+              objectPropVal,
+              endClassVal
             );
     
           case Config.AUTOCOMPLETE_PROPERTY:
@@ -128,25 +192,25 @@ export class WidgetFactory {
             var theSpecProvider = this.specProvider;
     
             // determine custom datasource
-            var datasource = this.specProvider.getProperty(objectPropertyId).getDatasource();
+            var datasource = this.specProvider.getProperty(objectPropVal.type).getDatasource();
     
             if (datasource == null) {
               // datasource still null
               // if a default endpoint was provided, provide default datasource
               if (this.settings.defaultEndpoint) {
-                if(this.specProvider.getEntity(endClassType).isLiteralEntity()) {
+                if(this.specProvider.getEntity(endClassVal.type).isLiteralEntity()) {
                   datasource = Datasources.DATASOURCES_CONFIG.get(
                     Datasources.SEARCH_LITERAL_CONTAINS
                   );
                 } else {
     
                   // if there is a default label property on the end class, use it to search in the autocomplete
-                  if(this.specProvider.getEntity(endClassType).getDefaultLabelProperty()) {
+                  if(this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty()) {
                     datasource = {
                       queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
                         Datasources.QUERY_SEARCH_LABEL_CONTAINS
                       ),
-                      labelProperty: this.specProvider.getEntity(endClassType).getDefaultLabelProperty(),
+                      labelProperty: this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty(),
                     }
                   } else {
                     // otherwise just search on the URI 
@@ -164,35 +228,18 @@ export class WidgetFactory {
               autocompleteDataProvider = new SparqlAutocompleDataProvider(
     
                 // endpoint URL
-                new SparqlFetcherFactory(
-                  datasource.sparqlEndpointUrl != null
-                  ? datasource.sparqlEndpointUrl
-                  : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
-                  (this.getRootComponent() as SparnaturalComponent).catalog,
-                  this.settings
+                this.sparqlFetcherFactory.buildSparqlFetcher(
+                    datasource.sparqlEndpointUrl != null
+                    ? datasource.sparqlEndpointUrl
+                    : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
                 ), 
     
                 new AutocompleteSparqlTemplateQueryBuilder(
                   // sparql query (with labelPath interpreted)
-                  this.getFinalQueryString(datasource),
+                  this.#getFinalQueryString(datasource),
     
                   // sparqlPostProcessor
-                  {
-                    semanticPostProcess: (sparql: any) => {
-                      // also add prefixes
-                      for (let key in this.settings.sparqlPrefixes) {
-                        sparql = sparql.replace(
-                          "SELECT ",
-                          "PREFIX " +
-                            key +
-                            ": <" +
-                            this.settings.sparqlPrefixes[key] +
-                            "> \nSELECT "
-                        );
-                      }
-                      return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-                    },
-                  }
+                  this.sparqlPostProcessor
                 )
               );
             }
@@ -205,12 +252,19 @@ export class WidgetFactory {
               ...this.settings.customization?.autocomplete
             };
     
+            // init data provider
+            autocompleteConfig.dataProvider.init(
+              this.settings.language,
+              this.settings.defaultLanguage,
+              this.settings.typePredicate
+            );
+    
             return new AutoCompleteWidget(
               this.parentComponent,
               autocompleteConfig,
-              this.startClassVal,
-              this.objectPropVal,
-              this.endClassVal
+              startClassVal,
+              objectPropVal,
+              endClassVal
             );
     
             break;
@@ -218,30 +272,36 @@ export class WidgetFactory {
           case Config.GRAPHDB_SEARCH_PROPERTY:
           case Config.STRING_EQUALS_PROPERTY:
           case Config.SEARCH_PROPERTY:
+    
+            let configuration:SearchConfiguration = {
+              widgetType: widgetType
+            }
+    
             return new SearchRegexWidget(
+              configuration,
               this.parentComponent,
-              this.startClassVal,
-              this.objectPropVal,
-              this.endClassVal
+              startClassVal,
+              objectPropVal,
+              endClassVal
             );
             break;
           case Config.TIME_PROPERTY_YEAR:
             return new TimeDatePickerWidget(
-              this,
+              this.parentComponent,
               "year",
-              this.startClassVal,
-              this.objectPropVal,
-              this.endClassVal,
+              startClassVal,
+              objectPropVal,
+              endClassVal,
               this.specProvider
             );
             break;
           case Config.TIME_PROPERTY_DATE:
             return new TimeDatePickerWidget(
-              this,
+              this.parentComponent,
               "day",
-              this.startClassVal,
-              this.objectPropVal,
-              this.endClassVal,
+              startClassVal,
+              objectPropVal,
+              endClassVal,
               this.specProvider
             );
             break;
@@ -249,14 +309,14 @@ export class WidgetFactory {
             console.warn(Config.TIME_PROPERTY_PERIOD+" is not implement yet");
             break;
           case Config.NON_SELECTABLE_PROPERTY:
-            return new NoWidget(this);
+            return new NoWidget(this.parentComponent);
             break;
           case Config.BOOLEAN_PROPERTY:
             return new BooleanWidget(
-              this,
-              this.startClassVal,
-              this.objectPropVal,
-              this.endClassVal
+              this.parentComponent,
+              startClassVal,
+              objectPropVal,
+              endClassVal
             );
             break;
           case Config.TREE_PROPERTY:
@@ -264,7 +324,7 @@ export class WidgetFactory {
     
             // determine custom roots datasource
             var treeRootsDatasource =
-              this.specProvider.getProperty(objectPropertyId).getTreeRootsDatasource();
+              this.specProvider.getProperty(objectPropVal.type).getTreeRootsDatasource();
     
             if (treeRootsDatasource == null) {
               // datasource still null
@@ -278,7 +338,7 @@ export class WidgetFactory {
     
             // determine custom children datasource
             var treeChildrenDatasource =
-              this.specProvider.getProperty(objectPropertyId).getTreeChildrenDatasource();
+              this.specProvider.getProperty(objectPropVal.type).getTreeChildrenDatasource();
     
             if (treeChildrenDatasource == null) {
               // datasource still null
@@ -300,36 +360,19 @@ export class WidgetFactory {
     
                 // endpoint URL
                 // we read it on the roots datasource
-                new SparqlFetcherFactory(
-                  treeRootsDatasource.sparqlEndpointUrl != null
-                  ? treeRootsDatasource.sparqlEndpointUrl
-                  : this.#readDefaultEndpoint(this.settings.defaultEndpoint),
-                  (this.getRootComponent() as SparnaturalComponent).catalog,
-                  this.settings
+                this.sparqlFetcherFactory.buildSparqlFetcher(
+                    treeRootsDatasource.sparqlEndpointUrl != null
+                    ? treeRootsDatasource.sparqlEndpointUrl
+                    : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
                 ),
     
                 new TreeSparqlTemplateQueryBuilder(
                   // sparql query (with labelPath interpreted)
-                  this.getFinalQueryString(treeRootsDatasource),
-                  this.getFinalQueryString(treeChildrenDatasource),
+                  this.#getFinalQueryString(treeRootsDatasource),
+                  this.#getFinalQueryString(treeChildrenDatasource),
     
                   // sparqlPostProcessor
-                  {
-                    semanticPostProcess: (sparql: any) => {
-                      // also add prefixes
-                      for (let key in this.settings.sparqlPrefixes) {
-                        sparql = sparql.replace(
-                          "SELECT ",
-                          "PREFIX " +
-                            key +
-                            ": <" +
-                            this.settings.sparqlPrefixes[key] +
-                            "> \nSELECT "
-                        );
-                      }
-                      return theSpecProvider.expandSparql(sparql, this.settings.sparqlPrefixes);
-                    },
-                  }
+                  this.sparqlPostProcessor
                 )
     
               );
@@ -342,14 +385,25 @@ export class WidgetFactory {
               ...{dataProvider: treeDataProvider},
               ...this.settings.customization?.tree
             };
+    
+            // wrap inside a sort data provider if needed
+            if(!(treeChildrenDatasource.noSort == true)) {
+              treeConfig.dataProvider = new SortTreeDataProvider(treeConfig.dataProvider);
+            }
+    
+            // init data provider
+            treeConfig.dataProvider.init(
+              this.settings.language,
+              this.settings.defaultLanguage,
+              this.settings.typePredicate
+            );
           
             return new TreeWidget(
-              this,
+              this.parentComponent,
               treeConfig,
-              this.startClassVal,
-              this.objectPropVal,
-              this.endClassVal,
-              !(treeChildrenDatasource.noSort == true)
+              startClassVal,
+              objectPropVal,
+              endClassVal
             );
     
           case Config.MAP_PROPERTY:
@@ -360,18 +414,18 @@ export class WidgetFactory {
     
             return new MapWidget(
               mapConfig,
-              this,
-              this.startClassVal,
-              this.objectPropVal,
-              this.endClassVal
+              this.parentComponent,
+              startClassVal,
+              objectPropVal,
+              endClassVal
             ).render();
           
           case Config.NUMBER_PROPERTY:
     
             // TODO : determine min and max based on datatypes
             let thisNumberConfig:NumberConfiguration = {
-              min: this.specProvider.getProperty(objectPropertyId).getMinValue(),
-              max: this.specProvider.getProperty(objectPropertyId).getMaxValue(),
+              min: this.specProvider.getProperty(objectPropVal.type).getMinValue(),
+              max: this.specProvider.getProperty(objectPropVal.type).getMaxValue(),
             }
     
             let numberConfig:NumberConfiguration = {
@@ -381,47 +435,56 @@ export class WidgetFactory {
             };
     
             return new NumberWidget(
-              this,
+              this.parentComponent,
               numberConfig,
-              this.startClassVal,
-              this.objectPropVal,
-              this.endClassVal
+              startClassVal,
+              objectPropVal,
+              endClassVal
             ).render();
     
           default:
             throw new Error(`WidgetType for ${widgetType} not recognized`);
         }
       }
-
-  /**
-   * Builds the final query string from a query source, by injecting
-   * labelPath/property and childrenPath/property
-   **/
-  getFinalQueryString(datasource: any) {
-    if (datasource.queryString != null) {
-      return datasource.queryString;
-    } else {
-      var sparql = datasource.queryTemplate;
-
-      if (datasource.labelPath != null || datasource.labelProperty) {
-        var theLabelPath = datasource.labelPath
-          ? datasource.labelPath
-          : "<" + datasource.labelProperty + ">";
-        var reLabelPath = new RegExp("\\$labelPath", "g");
-        sparql = sparql.replace(reLabelPath, theLabelPath);
+    
+      #readDefaultEndpoint(defaultEndpoint:string | (() => string) | undefined):string{
+        if(defaultEndpoint instanceof Function) {
+          return (defaultEndpoint as (()=> string))();
+        } else if(defaultEndpoint) {
+          return defaultEndpoint as string;
+        } else {
+          return undefined;
+        }
       }
 
-      if (datasource.childrenPath != null || datasource.childrenProperty) {
-        var theChildrenPath = datasource.childrenPath
-          ? datasource.childrenPath
-          : "<" + datasource.childrenProperty + ">";
-        var reChildrenPath = new RegExp("\\$childrenPath", "g");
-        sparql = sparql.replace(reChildrenPath, theChildrenPath);
-      }
+    /**
+     * Builds the final query string from a query source, by injecting
+     * labelPath/property and childrenPath/property
+     **/
+    #getFinalQueryString(datasource: any) {
+        if (datasource.queryString != null) {
+        return datasource.queryString;
+        } else {
+        var sparql = datasource.queryTemplate;
 
-      return sparql;
+        if (datasource.labelPath != null || datasource.labelProperty) {
+            var theLabelPath = datasource.labelPath
+            ? datasource.labelPath
+            : "<" + datasource.labelProperty + ">";
+            var reLabelPath = new RegExp("\\$labelPath", "g");
+            sparql = sparql.replace(reLabelPath, theLabelPath);
+        }
+
+        if (datasource.childrenPath != null || datasource.childrenProperty) {
+            var theChildrenPath = datasource.childrenPath
+            ? datasource.childrenPath
+            : "<" + datasource.childrenProperty + ">";
+            var reChildrenPath = new RegExp("\\$childrenPath", "g");
+            sparql = sparql.replace(reChildrenPath, theChildrenPath);
+        }
+
+        return sparql;
+        }
     }
-  }
-      
-}
 
+}

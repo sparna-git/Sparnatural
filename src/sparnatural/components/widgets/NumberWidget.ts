@@ -4,7 +4,7 @@ import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { I18n } from '../../settings/I18n';
 import AddUserInputBtn from '../buttons/AddUserInputBtn';
-import SparqlFactory from '../../generators/SparqlFactory';
+import SparqlFactory from '../../generators/sparql/SparqlFactory';
 import InfoBtn from '../buttons/InfoBtn';
 import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
 import HTMLComponent from '../HtmlComponent';
@@ -157,26 +157,4 @@ export class NumberWidget extends AbstractWidget {
     return new NumberWidgetValue(input);
    }
 
-   /**
-    * @returns false
-    */
-   isBlockingObjectProp() {
-    return false;
-   }
-
-  getRdfJsPattern(): Pattern[] {
-    return [
-      SparqlFactory.buildFilterRangeDateOrNumber(
-        (this.widgetValues[0].value.min != undefined)?factory.literal(
-          this.widgetValues[0].value.min.toString(),
-          factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
-        ):null,
-        (this.widgetValues[0].value.max != undefined)?factory.literal(
-          this.widgetValues[0].value.max.toString(),
-          factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
-        ):null,
-        factory.variable(this.endClassVal.variable)
-      )
-    ];
-  }
 }

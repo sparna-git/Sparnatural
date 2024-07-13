@@ -30,7 +30,7 @@ export const GEOSPARQL = {
   WKT_LITERAL: factory.namedNode(GEOSPARQL_NAMESPACE + 'wktLiteral') as NamedNode
 }
 
-export class MapWidgetValue implements WidgetValue {
+export class MapValue implements WidgetValue {
   value: {
     label: string;
     type: string;
@@ -41,7 +41,7 @@ export class MapWidgetValue implements WidgetValue {
     return this.value.coordinates.toString();
   }
 
-  constructor(v:MapWidgetValue["value"]) {
+  constructor(v:MapValue["value"]) {
     this.value = v;
   }
 
@@ -62,7 +62,7 @@ type ObjectifyLatLng<T> = T extends LatLng[][]
 
 // stringified type of MapWidgetValue
 // see: https://effectivetypescript.com/2020/04/09/jsonify/
-type ObjectMapWidgetValue = ObjectifyLatLng<MapWidgetValue>
+type ObjectMapWidgetValue = ObjectifyLatLng<MapValue>
 
 
 export interface MapConfiguration {
@@ -95,7 +95,7 @@ export default class MapWidget extends AbstractWidget {
   protected configuration: MapConfiguration;
   protected parentComponent: any;
   protected endClassWidgetGroup: any;
-  protected widgetValues: MapWidgetValue[];
+  protected widgetValues: MapValue[];
   //protected widgetValue: MapWidgetValue[];
   // protected blockObjectPropTriple: boolean = true
   renderMapValueBtn: AddUserInputBtn;
@@ -344,14 +344,14 @@ export default class MapWidget extends AbstractWidget {
 
     switch ((layer as any).pm._shape) {
       case 'Rectangle':
-        this.widgetValues.push(new MapWidgetValue({
+        this.widgetValues.push(new MapValue({
           label: this.#getValueLabel(layer as Rectangle),
           type: 'Rectangle',
           coordinates: (layer as Rectangle).getLatLngs() as LatLng[][],
         }))
         break;    
       default: 
-        this.widgetValues.push(new MapWidgetValue({
+        this.widgetValues.push(new MapValue({
           label: this.#getValueLabel(layer as Polygon),
           type: 'Polygon',
           coordinates: (layer as Polygon).getLatLngs() as LatLng[][],
@@ -367,17 +367,9 @@ export default class MapWidget extends AbstractWidget {
       this.renderWidgetValues(this.widgetValues);
       $(this.parentComponent).trigger("change");
     }
-    
-    // this.map.remove();
-    /*
-    if (this.getwidgetValues().length < 1)
-      this.renderWidgetVal({
-        value: { label: getSettings().langSearch.SelectAllValues }
-      });
-    */
   };
 
-  parseInput(input:ObjectMapWidgetValue["value"]): MapWidgetValue {
+  parseInput(input:ObjectMapWidgetValue["value"]): MapValue {
 
     const parsedCoords = input.coordinates.map((c)=>{
       return c.map((latlng)=>{
@@ -386,7 +378,7 @@ export default class MapWidget extends AbstractWidget {
       })
     })
     if(parsedCoords.length === 0) throw Error(`Parsing of ${input.coordinates} failed`)
-    return new MapWidgetValue({
+    return new MapValue({
         label: input.label,
         coordinates: parsedCoords,
         type: input.type
@@ -401,78 +393,6 @@ export default class MapWidget extends AbstractWidget {
       I18n.labels.MapWidgetCloseMap,
       this.#closeMap
     ).render();
-  }
-
-  // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
-  getRdfJsPattern(): Pattern[] {
-
-    // the property between the subject and its position expressed as wkt value, e.g. http://www.w3.org/2003/01/geo/wgs84_pos#geometry
-
-    let filterPtrn: FilterPattern = {
-      type: "filter",
-      expression: <FunctionCallExpression><unknown>{
-        type: "functionCall",
-        function: GEOFUNCTIONS.WITHIN,
-        args: [
-          factory.variable(this.endClassVal.variable),
-          this.#buildPolygon(this.widgetValues[0].value.coordinates[0])
-        ],
-      },
-    };
-
-    return [filterPtrn];
-
-    /*
-    let asWKT: Triple = SparqlFactory.buildTriple(
-      DataFactory.variable(this.getVariableValue(this.startClassVal)),
-      DataFactory.namedNode("http://www.opengis.net/ont/geosparql#asWKT"),
-      DataFactory.variable("aWKT")
-    );
-
-    let vals = this.widgetValues.map((v) => {
-      let vl: ValuePatternRow = {};
-      vl[this.endClassVal.variable] = this.#buildPolygon(v.value.coordinates[0]);
-      return vl;
-    });
-
-    let polygonValues: ValuesPattern = {
-      type: "values",
-      values: vals
-    } 
-    
-    let filterPtrn: FilterPattern = {
-      type: "filter",
-      expression: <FunctionCallExpression><unknown>{
-        type: "functionCall",
-        function: DataFactory.namedNode(GEOF.WITHIN.value),
-        args: [asWKT.object, DataFactory.variable(this.getVariableValue(this.endClassVal))],
-      },
-    };
-    
-
-    let ptrn: BgpPattern = {
-      type: "bgp",
-      triples: [asWKT],
-    };
-
-
-    return [ptrn, polygonValues, filterPtrn];
-    */
-  }
-
-  #buildPolygon(coordinates: LatLng[]) {
-    let polygon = "";
-    coordinates.forEach((coordinat) => {
-      polygon = `${polygon}${coordinat.lng} ${coordinat.lat}, `;
-    });
-    // polygon must be closed with the starting point
-    let startPt = coordinates[0]
-    let literal: LiteralTerm = factory.literal(
-      `Polygon((${polygon}${startPt.lng} ${startPt.lat}))`,
-      GEOSPARQL.WKT_LITERAL
-    )
-
-    return literal;
   }
 
   #getSvgSelection(coordinates: LatLng[][]) {

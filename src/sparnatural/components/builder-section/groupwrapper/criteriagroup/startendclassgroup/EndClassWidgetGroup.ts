@@ -13,7 +13,7 @@ import {
 import CriteriaGroup from "../CriteriaGroup";
 import { SelectAllValue } from "../edit-components/EditComponents";
 import EditBtn from "../../../../buttons/EditBtn";
-import { MapWidgetValue } from "../../../../widgets/MapWidget";
+import { MapValue } from "../../../../widgets/MapWidget";
 
 
 /*
@@ -236,7 +236,7 @@ export class EndClassWidgetValue extends HTMLComponent {
       );
     }).render();
 
-    if(this.widgetVal instanceof MapWidgetValue) {
+    if(this.widgetVal instanceof MapValue) {
       this.editBtn = new EditBtn(this, () => {
         this.html[0].dispatchEvent(
           new CustomEvent("onEditEndClassWidgetValue", {

@@ -73,11 +73,11 @@ export interface AutocompleteSparqlQueryBuilderIfc  {
 export class AutocompleteSparqlTemplateQueryBuilder implements AutocompleteSparqlQueryBuilderIfc {
     
     queryString: string;
-    sparqlPostProcessor: any;
+    sparqlPostProcessor: { semanticPostProcess: (sparql:string)=>string };
 
     constructor(
         queryString: string,
-        sparqlPostProcessor: any,
+        sparqlPostProcessor: { semanticPostProcess: (sparql:string)=>string },
 
     ) {
         this.queryString = queryString;

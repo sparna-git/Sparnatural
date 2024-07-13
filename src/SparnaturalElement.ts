@@ -4,7 +4,7 @@ import $ from "jquery";
 /*SPARNATURAL*/
 import { getSettings, mergeSettings } from "./sparnatural/settings/defaultSettings";
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
-import { ISparJson } from "./sparnatural/generators/ISparJson";
+import { ISparJson } from "./sparnatural/generators/json/ISparJson";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
 
@@ -137,7 +137,7 @@ export class SparnaturalElement extends HTMLElement {
    * @returns 
    */
   expandSparql(query:string) {
-    return this.sparnatural.specProvider.expandSparql(query, this.sparnatural.settings?.sparqlPrefixes);
+    return this.sparnatural.specProvider.expandSparql(query, getSettings().sparqlPrefixes);
   }
 
   /**

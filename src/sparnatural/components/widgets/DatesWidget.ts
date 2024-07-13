@@ -201,7 +201,4 @@ export class DatesWidget extends AbstractWidget {
     return lbl;
   };
 
-  getRdfJsPattern(): Pattern[] {
-    throw new Error("Method not implemented.");
-  }
 }

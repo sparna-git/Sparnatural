@@ -1,5 +1,3 @@
-import ISettings from "../../sparnatural/settings/ISettings";
-import { getSettings } from "../../sparnatural/settings/defaultSettings";
 import BaseClassFactory from "./baseClassFactory/BaseClassFactory";
 
 interface IRenderable {
@@ -8,7 +6,6 @@ interface IRenderable {
 class HTMLComponent implements IRenderable {
   baseCssClass: string;
   static BaseClassFactory = new BaseClassFactory();
-  settings: ISettings = getSettings();
 
   ParentComponent: HTMLComponent;
   widgetHtml: JQuery<HTMLElement>;

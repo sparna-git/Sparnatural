@@ -14,7 +14,5 @@ export class NoWidget extends AbstractWidget {
   render() {
     return this;
   }
-  getRdfJsPattern(): Pattern[] {
-    throw new Error("Method not implemented.");
-  }
+
 }

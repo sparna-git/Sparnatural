@@ -6,6 +6,7 @@ import { Config } from "../../ontologies/SparnaturalConfig";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';
+import { DagIfc, Dag } from "../../dag/Dag";
 
 const factory = new DataFactory();
 
@@ -44,6 +45,10 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         items = this.provider._sort(items);
 
         return items;
+    }
+
+    getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
+      return new Dag<ISpecificationEntity>();
     }
 
 

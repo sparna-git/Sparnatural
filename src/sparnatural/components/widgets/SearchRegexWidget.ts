@@ -2,13 +2,13 @@ import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
-import WidgetWrapper from "../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import SparqlFactory from "../../generators/SparqlFactory";
+import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import InfoBtn from "../buttons/InfoBtn";
 import { I18n } from '../../settings/I18n';
 import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
+import HTMLComponent from '../HtmlComponent';
 
 const factory = new DataFactory();
 
@@ -42,7 +42,7 @@ export class SearchRegexWidget extends AbstractWidget {
 
   constructor(
     configuration: SearchConfiguration,
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
@@ -101,86 +101,4 @@ export class SearchRegexWidget extends AbstractWidget {
     return new SearchRegexWidgetValue(input);
   }
 
-  isBlockingObjectProp() {
-    // TODO : customize depending on widget type, e.g. Virtuoso, Jena, etc.
-    return super.isBlockingObjectProp();
-  }
-  
-
-  isBlockingEnd(): boolean {
-    // TODO : customize depending on widget type, e.g. Virtuoso, Jena, etc.
-    return super.isBlockingEnd();
-  }
-  
-  getRdfJsPattern(): Pattern[] {
-    switch(this.configuration.widgetType) {
-      case Config.STRING_EQUALS_PROPERTY: {
-        // builds a FILTER(lcase(...) = lcase(...))
-        return [SparqlFactory.buildFilterStringEquals(
-          factory.literal(
-            `${this.widgetValues[0].value.regex}`
-          ),
-          factory.variable(this.endClassVal.variable)
-        )];
-      }
-      case Config.SEARCH_PROPERTY: {
-        // builds a FILTER(regex(...,...,"i"))
-        return [SparqlFactory.buildFilterRegex(
-          factory.literal(
-            `${this.widgetValues[0].value.regex}`
-          ),
-          factory.variable(this.endClassVal.variable)
-        )];
-      }
-      case Config.GRAPHDB_SEARCH_PROPERTY: {
-        // builds a GraphDB-specific search pattern
-        let ptrn: BgpPattern = {
-          type: "bgp",
-          triples: [
-            {
-              subject: factory.variable(this.startClassVal.variable),
-              predicate: factory.namedNode(
-                "http://www.ontotext.com/connectors/lucene#query"
-              ),
-              object: factory.literal(
-                `text:${this.widgetValues[0].value.regex}`
-              ),
-            },
-            {
-              subject: factory.variable(this.startClassVal.variable),
-              predicate: factory.namedNode(
-                "http://www.ontotext.com/connectors/lucene#entities"
-              ),
-              object: factory.variable(this.endClassVal.variable),
-            },
-          ],
-        };
-        return [ptrn];
-      }
-      case Config.VIRTUOSO_SEARCH_PROPERTY: {
-        let bif_query = this.widgetValues[0].value.label
-          .replace(/[\"']/g, " ")
-          .split(" ")
-          .map((e) => `'${e}'`)
-          .join(" and ");
-        console.log(bif_query);
-        let ptrn: BgpPattern = {
-          type: "bgp",
-          triples: [
-            {
-              subject: factory.variable(this.endClassVal.variable),
-              predicate: factory.namedNode(
-                "http://www.openlinksw.com/schemas/bif#contains"
-              ),
-              object: factory.literal(`${bif_query}`),
-            },
-          ],
-        };
-        return [ptrn];
-      }
-      case Config.JENA_SEARCH_PROPERTY: {
-        throw new Error("Not implemented yet")
-      }
-    }
-  }
 }
