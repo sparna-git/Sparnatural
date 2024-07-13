@@ -94,22 +94,13 @@ export abstract class AbstractWidget extends HTMLComponent {
 
   // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
   abstract parseInput(value:WidgetValue["value"]):WidgetValue
-  
-  getSparnaturalRepresentation() {
-    let vals = this.widgetValues.map((v) => v.value);
-    return JSON.stringify(vals);
-  }
 
   addWidgetValue(widgetValue: WidgetValue) {
     this.widgetValues.push(widgetValue);
   }
 
-  getLastValue() {
-    return this.widgetValues[this.widgetValues.length - 1];
-  }
-
   // returns null if valueObject has not been set before
-  getwidgetValues(): WidgetValue[] {
+  getWidgetValues(): WidgetValue[] {
     return this.widgetValues;
   }
 

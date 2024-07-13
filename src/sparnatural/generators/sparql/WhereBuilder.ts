@@ -58,7 +58,7 @@ export default class WhereBuilder{
                 this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.isVarSelected(),
-                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent.getwidgetValues()
+                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent.getWidgetValues()
             );
         }
     }
@@ -114,7 +114,7 @@ export default class WhereBuilder{
 
     #buildRdfPtrn(){
         let widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
-        if (widgetComponent?.getwidgetValues()?.length > 0 ) {
+        if (widgetComponent?.getWidgetValues()?.length > 0 ) {
             this.#rdfPtrns = this.#valueBuilder.build();
         }
             

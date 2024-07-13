@@ -17,6 +17,10 @@ import { LatLng } from "leaflet";
 
 const factory = new DataFactory();
 
+/**
+ * A factory for creating ValueBuilders from the widgetType. This is the association between the widget type
+ * and the corresponding ValueBuilder
+ */
 export class ValueBuilderFactory {
 
   buildValueBuilder(
