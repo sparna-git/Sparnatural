@@ -157,26 +157,4 @@ export class NumberWidget extends AbstractWidget {
     return new NumberWidgetValue(input);
    }
 
-   /**
-    * @returns false
-    */
-   isBlockingObjectProp() {
-    return false;
-   }
-
-  getRdfJsPattern(): Pattern[] {
-    return [
-      SparqlFactory.buildFilterRangeDateOrNumber(
-        (this.widgetValues[0].value.min != undefined)?factory.literal(
-          this.widgetValues[0].value.min.toString(),
-          factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
-        ):null,
-        (this.widgetValues[0].value.max != undefined)?factory.literal(
-          this.widgetValues[0].value.max.toString(),
-          factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
-        ):null,
-        factory.variable(this.endClassVal.variable)
-      )
-    ];
-  }
 }

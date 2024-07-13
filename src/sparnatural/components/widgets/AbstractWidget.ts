@@ -92,8 +92,6 @@ export abstract class AbstractWidget extends HTMLComponent {
     return this
   }
 
-  // Must be implemented by the developper of the widget
-  abstract getRdfJsPattern(): Pattern[];
   // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
   abstract parseInput(value:WidgetValue["value"]):WidgetValue
   
@@ -149,41 +147,4 @@ export abstract class AbstractWidget extends HTMLComponent {
     if(message != null) this.spinner.renderMessage(message)
   }
 
-  isBlockingStart() {
-    return this.blockStartTriple
-  }
-  isBlockingObjectProp() {
-    return this.blockObjectPropTriple
-  }
-  isBlockingEnd() {
-    return this.blockEndTriple
-  }
-
-  /**
-   * Translates an IRI, Literal or BNode into the corresponding SPARQL query term
-   * to be inserted in a SPARQL query.
-   * @returns 
-   */
-    rdfTermToSparqlQuery(rdfTerm:RDFTerm): IriTerm | BlankTerm | LiteralTerm {
-      if(rdfTerm.type == "uri") {
-        return factory.namedNode(rdfTerm.value);
-      } else if(rdfTerm.type == "literal") {
-        if(rdfTerm["xml:lang"]) {
-          return factory.literal(rdfTerm.value, rdfTerm["xml:lang"]);
-        } else if(rdfTerm.datatype) {
-          // if the second parameter is a NamedNode, then it is considered a datatype, otherwise it is
-          // considered like a language
-          // so we make the datatype a NamedNode
-          let namedNodeDatatype = factory.namedNode(rdfTerm.datatype);
-          return factory.literal(rdfTerm.value, namedNodeDatatype);
-        } else {
-          return factory.literal(rdfTerm.value);
-        }
-      } else if(rdfTerm.type == "bnode") {
-        // we don't know what to do with this, but don't trigger an error
-        return factory.blankNode(rdfTerm.value);
-      } else {
-        throw new Error("Unexpected rdfTerm type "+rdfTerm.type)
-      }
-    }
 }

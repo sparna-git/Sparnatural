@@ -63,7 +63,9 @@ export class ValueBuilderFactory {
 
 }
 
-
+/**
+ * Builds a SPARQL pattern from a (list of) widget values
+ */
 export default interface ValueBuilderIfc {
 
     init(
@@ -75,12 +77,24 @@ export default interface ValueBuilderIfc {
         values: Array<WidgetValue>
     ):void;
 
+    /**
+     * main method : builds the SPARQL pattern
+     */
     build():Pattern[];
 
+    /**
+     * @returns true if the rdf:type criteria of the subject must not be generated
+     */
     isBlockingStart(): boolean;
     
+    /**
+     * @returns true if the rdf:type criteria of the object variable must not be generated
+     */
     isBlockingEnd(): boolean;
 
+    /**
+     * @returns true if the triple criteria between the subject and the object must not be generated
+     */
     isBlockingObjectProp(): boolean;
 
 }
@@ -126,6 +140,10 @@ export abstract class BaseValueBuilder implements ValueBuilderIfc {
 
 }
 
+/**
+ * A ValueBuilder that can work from an RdfTermValue and tests the equality either
+ * by inserting the sole unique value as the object of the triple or by using a VALUES clause
+ */
 export class RdfTermValueBuilder extends BaseValueBuilder implements ValueBuilderIfc {
 
     build(): Pattern[] {
@@ -187,12 +205,19 @@ export class RdfTermValueBuilder extends BaseValueBuilder implements ValueBuilde
         }
     }
 
+    /**
+     * @returns true if there is at least one value, because in that case the rdf:type criteria is redundant
+     */
     isBlockingEnd(): boolean {
         return (
             this.values.length > 0
         );
     }
 
+    /**
+     * @returns true if there is a single value and the end class is not selected (in which case we need the variable
+     * to put it in the SELECT clause)
+     */
     isBlockingObjectProp(): boolean {
         return (
             this.values.length == 1

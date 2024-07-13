@@ -395,42 +395,6 @@ export default class MapWidget extends AbstractWidget {
     ).render();
   }
 
-  // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
-  getRdfJsPattern(): Pattern[] {
-
-    // the property between the subject and its position expressed as wkt value, e.g. http://www.w3.org/2003/01/geo/wgs84_pos#geometry
-
-    let filterPtrn: FilterPattern = {
-      type: "filter",
-      expression: <FunctionCallExpression><unknown>{
-        type: "functionCall",
-        function: GEOFUNCTIONS.WITHIN,
-        args: [
-          factory.variable(this.endClassVal.variable),
-          this.#buildPolygon(this.widgetValues[0].value.coordinates[0])
-        ],
-      },
-    };
-
-    return [filterPtrn];
-
-  }
-
-  #buildPolygon(coordinates: LatLng[]) {
-    let polygon = "";
-    coordinates.forEach((coordinat) => {
-      polygon = `${polygon}${coordinat.lng} ${coordinat.lat}, `;
-    });
-    // polygon must be closed with the starting point
-    let startPt = coordinates[0]
-    let literal: LiteralTerm = factory.literal(
-      `Polygon((${polygon}${startPt.lng} ${startPt.lat}))`,
-      GEOSPARQL.WKT_LITERAL
-    )
-
-    return literal;
-  }
-
   #getSvgSelection(coordinates: LatLng[][]) {
     
     let bounds = L.latLngBounds(coordinates[0]) ;
