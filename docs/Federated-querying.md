@@ -19,7 +19,34 @@ In the queries involving these specific properties, all the "branch" of the quer
 
 We will illustrate this configuration with federated queries on Wikidata.
 
-## Configuration
+
+## Configuration in SHACL
+
+
+1. Add a `http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService` annotation on a property shape that is to be executed as a SERVICE
+2. This annotation will point to an entity that itself is the subject of an `http://www.w3.org/ns/sparql-service-description#endpoint` predicate holding the actual SPARQL endpoint URL
+3. Optionnaly you can add `http://data.sparna.fr/ontologies/sparnatural-config-core#executedAfter` on the property shape to force the rest of the query to be put in subquery that will be evalued before the SERVICE clause is sent
+
+
+```turtle
+PREFIX core: <http://data.sparna.fr/ontologies/sparnatural-config-core#>
+PREFIX sd: <http://www.w3.org/ns/sparql-service-description#>
+
+ex:myNodeShape a sh:NodeShape ;
+  sh:property ex:myProperty .
+
+ex:myProperty sh:path ex:myProperty ;
+  # use custom annotation to link the property to the SPARQL service
+  # the SPARQL service indicates its endpoint with the sd:endpoint property
+  core:sparqlService [sd:endpoint <https://vocab.getty.edu/sparql> ] ;
+  # rdfs:label ...
+  # the remote part of the query will be executed after the rest
+  core:executedAfter true ;
+.
+```
+
+
+## Configuration in OWL
 
 ### The short, simple, Turtle way
 
@@ -33,6 +60,7 @@ ex:myProperty owl:subPropertyOf core:NonSelectableProperty ;
   # the SPARQL service indicates its endpoint with the sd:endpoint property
   core:sparqlService [sd:endpoint <https://vocab.getty.edu/sparql> ] ;
   # rdfs:label ...
+.
 ```
 
 ### Configuring in Protégé
