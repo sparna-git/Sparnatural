@@ -153,7 +153,7 @@ export default class QueryLoader{
     }
   }
   
-  // set the value for an inputTypeComponent and trigger the corresponding event
+  // set the value for an inputSelector and trigger the corresponding event
   static #setSelectedValue(
     component: StartClassGroup | EndClassGroup | ObjectPropertyGroup,
     value: string
