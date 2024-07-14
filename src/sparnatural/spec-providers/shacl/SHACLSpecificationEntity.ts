@@ -135,7 +135,11 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
         // 1. get directly connected entities
         let entities:ISpecificationEntity[] = this.getConnectedEntities().map(s => this.provider.getEntity(s));
+        
         // 2. complement the initial list with their parents
+
+        // while not all parents of all entities are not part of the list...
+        let disabledList:string[] = new Array<string>();
         while(!entities.every(entity => {
             return entity.getParents().every(parent => {
                 return (entities.find(anotherEntity => anotherEntity.getId() === parent) != undefined);
@@ -143,17 +147,19 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         })) {
             let parentsToAdd:SHACLSpecificationEntity[] = [];
             entities.forEach(entity => {
-            entity.getParents().forEach(parent => {
-                if(!entities.find(anotherEntity => anotherEntity.getId() === parent)) {
-                    parentsToAdd.push(this.provider.getEntity(parent) as SHACLSpecificationEntity);
-                }
-            })
+                entity.getParents().forEach(parent => {
+                    if(!entities.find(anotherEntity => anotherEntity.getId() === parent)) {
+                        parentsToAdd.push(this.provider.getEntity(parent) as SHACLSpecificationEntity);
+                    }
+                })
             });
             parentsToAdd.forEach(p => entities.push(p));
+            // also keep that as a disabled node
+            parentsToAdd.forEach(p => disabledList.push(p.getId()));
         }
 
         let dag:Dag<ISpecificationEntity> = new Dag<ISpecificationEntity>();
-        dag.initFromParentableAndIdAbleEntity(entities);
+        dag.initFromParentableAndIdAbleEntity(entities, disabledList);
         console.log(dag.toDebugString())
         return dag;
     }
