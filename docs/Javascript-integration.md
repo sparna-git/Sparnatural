@@ -181,7 +181,7 @@ The table below summarizes the various functions that can be called on the Sparn
 | `sparnatural.enablePlayBtn()` | Removes the loading from the play button once a query has finished executing.  | none |
 | `sparnatural.disablePlayBtn()` | Disables the play button once a query has started its execution.| none |
 | `sparnatural.loadQuery(query)` | Loads a query structure in Sparnatural. | Query structure as documented in [the query JSON format](Query-JSON-format)
-| `sparnatural.expandSparql(sparqlString)** | Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration) A SPARQL query string | string |
+| `sparnatural.expandSparql(sparqlString)` | Expands a SPARQL query string according to the configuration, in particular the `sparqlString` annotations, as documented in the [OWL-based configuration](OWL-based-configuration) A SPARQL query string | string |
 | `sparnatural.clear()` | Clears the Sparnatural editor, as if the reset button was clicked.| none |
 
 
