@@ -186,6 +186,11 @@ The table below summarizes the various functions that can be called on the Sparn
 | `sparnatural.executeSparql(query:string, callback: (data: any) => void, errorCallback?:(error: any) => void)` | Executes the provided SPARQL query, using configured endpoint or multiple endpoints from the catalog, and using the configured headers. | 1/ The SPARQL query string 2/ the callback when execution succeeds 3/ the callback on error |
 
 
+## Sparnatural bindings
+
+Starting from 9.1, releases of Sparnatural include a [`sparnatural-bindings.js`](https://github.com/sparna-git/Sparnatural/blob/master/src/sparnatural-bindings.js) Javascript file that can be used to facilitate the integration of the events and functions of Sparnatural in typical integration scenarios.
+
+
 ## Sparnatural behavior customization
 
 The behavior of Sparnatural can be further adjuested with the `customization` object : `sparnatural.customization = { ... }`. That call must be done within the `init` event listener, after Sparnatural has finished reading its initial specification file.
