@@ -217,7 +217,8 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     }
 
     let dag:Dag<SHACLSpecificationEntity> = new Dag<SHACLSpecificationEntity>();
-    dag.initFromParentableAndIdAbleEntity(entities);
+    // for the moment : no disabled entries
+    dag.initFromParentableAndIdAbleEntity(entities, []);
     console.log(dag.toDebugString())
     return dag;
   }

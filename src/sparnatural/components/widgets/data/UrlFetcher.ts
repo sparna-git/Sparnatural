@@ -139,7 +139,7 @@ export class SparqlFetcher implements SparqlFetcherIfc {
 
     executeSparql(
         sparql:string,
-        callback: (data: any) => void,
+        callback: (data: {}) => void,
         errorCallback?:(error: any) => void
     ):void {
         let url = this.buildUrl(sparql);
@@ -197,7 +197,7 @@ export class MultipleEndpointSparqlFetcher implements SparqlFetcherIfc {
         Promise.all(promises).then((values:any[]) => {
           let finalResult:any = {};
           
-            // copy the same head as first result, with an extra "endpoint" column
+          // copy the same head as first result, with an extra "endpoint" column
           finalResult.head = values[0].sparqlResult.head;
           finalResult.head.vars.push(this.extraColumnName);
 

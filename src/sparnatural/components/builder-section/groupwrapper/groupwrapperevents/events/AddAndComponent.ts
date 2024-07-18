@@ -15,11 +15,11 @@ export function addAndComponent(
     startClassVal
   ).render();
   //set state to startClassValSelected and trigger change
-  let inputTypeComponent =
+  let inputSelector =
     grpWrapper.andSibling.CriteriaGroup.StartClassGroup.inputSelector;
-  inputTypeComponent.oldWidget.val(startClassVal.type).niceSelect("update");
+  inputSelector.oldWidget.val(startClassVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
-  inputTypeComponent.html[0].children[1].classList.add("disabled");
+  inputSelector.html[0].children[1].classList.add("disabled");
 
   // draw the AND link
   grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();

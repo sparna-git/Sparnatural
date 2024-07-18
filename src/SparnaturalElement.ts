@@ -7,6 +7,7 @@ import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent"
 import { ISparJson } from "./sparnatural/generators/json/ISparJson";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
+import { SparqlFetcher, SparqlFetcherFactory, SparqlFetcherIfc } from "./sparnatural/components/widgets/data/UrlFetcher";
 
 /*
   This is the sparnatural HTMLElement. 
@@ -141,19 +142,34 @@ export class SparnaturalElement extends HTMLElement {
   }
 
   /**
+   * Executes the provided SPARQL query, using the configured headers, and sending it to multiple
+   * endpoints, if configured through the catalog attribute (results are then merged in a single result set)
+   * @param query The SPARQL query to execute
+   * @param callback The callback to execute with the final query string
+   * @param errorCallback The callback to execute in case of an error during the query execution
+   */
+  executeSparql(
+    query:string,
+    callback: (data: any) => void,
+    errorCallback?:(error: any) => void
+  ) {
+    let sparqlFetcherFactory:SparqlFetcherFactory = new SparqlFetcherFactory(
+      this.sparnatural.catalog,
+      getSettings().language,
+      getSettings().localCacheDataTtl,
+      getSettings().customization.headers
+    );
+
+    let sparqlFetcher:SparqlFetcherIfc = sparqlFetcherFactory.buildSparqlFetcher(getSettings().defaultEndpoint);
+    sparqlFetcher.executeSparql(query, callback, errorCallback);
+  }
+
+  /**
    * Clears the current query.
    * Can be called from the outside
    */
   clear() {
     this.sparnatural.BgWrapper.resetCallback();
-  }
-
-  registerYasr(yasr:any) {
-    this.sparnatural.yasr = yasr;
-  }
-
-  registerYasqe(yasqe:any) {
-    this.sparnatural.yasqe = yasqe;
   }
 
 }

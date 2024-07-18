@@ -108,7 +108,9 @@ module.exports = {
 		{
 			from:__dirname +'/src/assets/stylesheets/themes',
 			to:'themes'
-		}
+		},
+		// Copy the bindings file in the dist directory
+
 	  ]
 	}),
 	new DashboardPlugin(),
@@ -142,7 +144,10 @@ module.exports = {
           },
       	  { 
       	  	archive: [ { source: './dist/hello-sparnatural', destination: './dist/hello-sparnatural.zip' }]
-      	  }
+      	  },
+      	  { 
+          	copy: [{ source: './src/sparnatural-bindings.js', destination: './dist/', options: { overwrite: true } }]
+          },
         ],
       },
     })
