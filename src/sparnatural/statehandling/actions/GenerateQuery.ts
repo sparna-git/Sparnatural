@@ -2,7 +2,7 @@ import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 
 import ActionStore from "../ActionStore";
 import SparnaturalJsonGenerator from "../../generators/json/SparnaturalJsonGenerator";
-import SparqlGenerator from "../../generators/sparql/SparqlGenrator";
+import SparqlGenerator from "../../generators/sparql/SparqlGenerator";
 import {
   Generator
 } from "sparqljs";
