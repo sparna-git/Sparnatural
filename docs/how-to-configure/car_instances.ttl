@@ -283,6 +283,7 @@ odb:P1441 rdf:type odb:ErrorCode ;
 ###  http://example.com/ontology/odb#Component1
 odb:Component1 rdf:type odb:Component ;
                odb:componentCode "001" ;
+               odb:criticity 1 ;
                rdfs:label "Engine"@en, "Moteur"@fr .
 
 
@@ -302,6 +303,7 @@ odb:Component11 rdf:type odb:Component ;
 ###  http://example.com/ontology/odb#Component2
 odb:Component2 rdf:type odb:Component ;
                odb:componentCode "002" ;
+               odb:criticity 1 ;
                rdfs:label "Transmission"@en, "Transmission"@fr .
 
 
@@ -321,6 +323,7 @@ odb:Component21 rdf:type odb:Component ;
 ###  http://example.com/ontology/odb#Component3
 odb:Component3 rdf:type odb:Component ;
                odb:componentCode "003" ;
+               odb:criticity 5 ;
                rdfs:label "Brakes"@en, "Freins"@fr .
 
 ###  http://example.com/ontology/odb#Component30
@@ -345,12 +348,14 @@ odb:Component32 rdf:type odb:Component ;
 ###  http://example.com/ontology/odb#Component4
 odb:Component4 rdf:type odb:Component ;
                odb:componentCode "004" ;
+               odb:criticity 6 ;
                rdfs:label "Fuel Pump"@en, "Pompe à carburant"@fr .
 
 
 ###  http://example.com/ontology/odb#Component5
 odb:Component5 rdf:type odb:Component ;
                odb:componentCode "005" ;
+               odb:criticity 3 ;
                rdfs:label "Steering System"@en, "Direction"@fr .
 
 ###  http://example.com/ontology/odb#Component50
