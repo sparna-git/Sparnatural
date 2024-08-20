@@ -1,0 +1,424 @@
+@prefix schema: <http://schema.org/> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix this: <https://data.mydomain.com/ontologies/sparnatural-config/> .
+@prefix dbpedia: <http://dbpedia.org/ontology/> .
+@prefix odb: <http://example.com/ontology/odb#> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<https://data.mydomain.com/ontologies/sparnatural-config> a owl:Ontology;
+  dct:source <https://docs.google.com/spreadsheets/d/1lduSARo-zyL8qxObwPVD4Z2m8iKQpye->;
+  dct:format <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1lduSARo-zyL8qxObwPVD4Z2m8iKQpye-%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true> .
+
+this:Vehicle a sh:NodeShape;
+  sh:order "1"^^xsd:integer;
+  volipi:iconName "fa-solid fa-car";
+  sh:targetClass odb:Vehicle;
+  rdfs:label "Vehicle"@en, "Véhicule"@fr;
+  sh:description "A vehicle is a car model for a specific brand."@en, "Un véhicule est un modèle de voiture pour une marque spécifique."@fr .
+
+this:Manufacturer a sh:NodeShape;
+  sh:order "2"^^xsd:integer;
+  volipi:iconName "fa-solid fa-industry";
+  sh:targetClass odb:Manufacturer;
+  rdfs:label "Manufacturer"@en, "Constructeur"@fr;
+  sh:description "A car manufacturer is a company whose main activity is the design, construction and marketing of cars."@en,
+    "Un constructeur automobile est une entreprise qui a pour activité principale la conception, la construction et la commercialisation de voitures."@fr;
+  sh:property this:Manufacturer_name .
+
+this:Diagnostic a sh:NodeShape;
+  sh:order "3"^^xsd:integer;
+  volipi:iconName "fa-solid fa-stethoscope";
+  sh:targetClass odb:Diagnostic;
+  rdfs:label "Diagnosis"@en, "Diagnostic"@fr;
+  sh:description "A diagnosis identifies a possible problem on your vehicle. You can request a diagnosis when you suspect a breakdown or malfunction. Using an auto diagnosis kit, the mechanic identifies the problem with your vehicle."@en,
+    "Un diagnostic permet d'identifier un éventuel problème sur votre véhicule. Vous pouvez demander un diagnostic quand vous suspectez une panne ou un dysfonctionnement. À l'aide d'une valise de diagnostic auto, le mécanicien identifie le problème subi par votre véhicule."@fr;
+  sh:property this:Diagnostic_diagnosticDate, this:Diagnostic_analysedVehicle, this:Diagnostic_hasResults,
+    this:Diagnostic_diagnosticPlace, this:Diagnostic_returnsCode .
+
+this:Error a sh:NodeShape;
+  sh:order "4"^^xsd:integer;
+  volipi:iconName "fa-solid fa-circle-exclamation";
+  sh:targetClass odb:Error;
+  rdfs:label "Error"@en, "Erreur"@fr;
+  sh:description "An error is an element that comes up during a diagnosis, which indicates that the vehicle on which the analysis was carried out is encountering a problem."@en,
+    "Une erreur est un élément qui remonte lors d'un diagnostic, qui indique que le véhicule sur lequel on a fait l'analyse rencontre un problème."@fr;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property this:Error_alreadyRaised, this:Error_hasErrorCode .
+
+this:ErrorCode a sh:NodeShape;
+  sh:order "5"^^xsd:integer;
+  volipi:iconName "fa-solid fa-ticket";
+  sh:targetClass odb:ErrorCode;
+  rdfs:label "Error code"@en, "Code d'erreur"@fr;
+  sh:description "An error code is a set of numbers following a letter corresponding to a problem detected on your vehicle. The letter gives an indication of the family of the defect."@en,
+    "Un code erreur, est un ensemble de chiffres suivant une lettre correspondant à un problème détecté sur votre véhicule. La lettre donne une indication sur la famille du défaut."@fr;
+  sh:property this:ErrorCode_errorCode, this:ErrorCode_hasSymptom, this:ErrorCode_hasComponent,
+    this:ErrorCode_hasComponent_tree .
+
+this:Symptom a sh:NodeShape;
+  sh:order "6"^^xsd:integer;
+  volipi:iconName "fa-solid fa-arrows-to-eye";
+  sh:targetClass odb:Symptom;
+  rdfs:label "Symptom"@en, "Symptôme"@fr;
+  sh:description "A symptom is a phenomenon, perceptible or observable character linked to a state, a problem that it allows to detect, of which it is the sign."@en,
+    "Un symptôme est un Phénomène, caractère perceptible ou observable lié à un état, un problème qu'il permet de déceler, dont il est le signe."@fr;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property this:Symptom_label .
+
+this:Component a sh:NodeShape;
+  sh:order "7"^^xsd:integer;
+  volipi:iconName "fa-solid fa-gear";
+  sh:targetClass odb:Component;
+  rdfs:label "Component"@en, "Composant"@fr;
+  sh:description "A class representing a component of a vehicle."@en, "Une classe représentant un composant d'un véhicule."@fr;
+  sh:property this:Component_componentCode, this:Component_label, this:Component_label_or_code .
+
+this:Search a sh:NodeShape;
+  sh:order "8"^^xsd:integer;
+  volipi:iconName "fa-solid fa-search";
+  rdfs:label "Search..."@en, "Rechercher..."@fr;
+  sh:description "Use this to search on labels and description"@en, "Sélectionnez cette entrée pour rechercher sur les libellés et les descriptions"@fr .
+
+this:Vehicle-BMW a sh:NodeShape;
+  sh:order "1"^^xsd:integer;
+  volipi:iconName "fa-solid fa-car";
+  rdfs:label "Vehicle BMW"@en, "Véhicule"@fr;
+  sh:target this:Vehicle-BMW-target;
+  sh:property this:Vehicle-BMW_VIN, this:Vehicle-BMW_hasManufacturer, this:Vehicle_hasDiagnosis,
+    this:Vehicle-BMW_weightInKg .
+
+this:Vehicle-BMW-target sh:select """SELECT ?this WHERE {
+ ?this a <http://example.com/ontology/odb#Vehicle> .
+ ?this <http://example.com/ontology/odb#hasManufacturer> <http://example.com/ontology/odb#BMW>
+}""" .
+
+this:Vehicle-BMW_VIN sh:path odb:VIN;
+  sh:order "1";
+  sh:name "has VIN"@en, "a pour VIN"@fr;
+  sh:description "Specifies the Vehicle Identification Number (VIN) of the vehicle."@en,
+    "Spécifie le numéro d'identification du véhicule (VIN)."@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:AutocompleteProperty;
+  dash:propertyRole dash:LabelRole .
+
+this:Vehicle-BMW_hasManufacturer sh:path odb:hasManufacturer;
+  sh:order "2";
+  sh:name "has manufacturer"@en, "a pour constructeur"@fr;
+  sh:description "Specifies the manufacturer of the vehicle."@en, "Spécifie le constructeur d'un véhicule."@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class odb:Manufacturer;
+  dash:searchWidget core:ListProperty;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Vehicle_hasDiagnosis sh:path _:47a0013359994feeb179cbdb3242bf2b14;
+  sh:order "3";
+  sh:name "has diagnosis"@en, "a pour diagnostic"@fr;
+  sh:description "The property is the inverse of odb:analysedVehicle."@en, "Propriété inverse de odb:analysedVehicle."@fr;
+  sh:nodeKind sh:IRI;
+  sh:class odb:Diagnostic;
+  dash:searchWidget core:NonSelectableProperty;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:47a0013359994feeb179cbdb3242bf2b14 sh:inversePath odb:analysedVehicle .
+
+this:Vehicle-BMW_weightInKg sh:path odb:weightInKg;
+  sh:order "4";
+  sh:name "weight in kg"@en, "poids en kg"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:integer;
+  dash:searchWidget core:NumberProperty;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Manufacturer_name sh:path odb:name;
+  sh:order "1";
+  sh:name "has name"@en, "nom"@fr;
+  sh:description "Specifies the name of the manufacturer."@en, "Spécifie le nom du constructeur."@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:NonSelectableProperty;
+  dash:propertyRole dash:LabelRole .
+
+this:Diagnostic_diagnosticDate sh:path odb:diagnosticDate;
+  sh:order "1";
+  sh:name "has diagnosis date"@en, "date du diagnostic"@fr;
+  sh:description "Defines the date on which the diagnosis occurs."@en, "Définit la date à laquelle le diagnostic a eu lieu."@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date;
+  dash:searchWidget core:TimeProperty-Date;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Diagnostic_analysedVehicle sh:path odb:analysedVehicle;
+  sh:order "2";
+  sh:name "analysed vehicle"@en, "véhicule analysé"@fr;
+  sh:description "Specifies that the vehicle has been analyzed, to identify a potential problem."@en,
+    "Spécifie que le véhicule a été analysé, pour identifier un potentiel problème."@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class odb:Vehicle;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource this:search_VIN_strstarts .
+
+this:Diagnostic_hasResults sh:path odb:hasResults;
+  sh:order "3";
+  sh:name "has results"@en, "a pour résultat"@fr;
+  sh:description "Specifies the results, from the analysis."@en, "Spécifie les résultats issus de l'analyse."@fr;
+  sh:nodeKind sh:IRI;
+  sh:class odb:Error;
+  dash:searchWidget core:NonSelectableProperty .
+
+this:Diagnostic_diagnosticPlace sh:path odb:diagnosticPlace;
+  sh:order "4";
+  sh:name "has diagnosis place"@en, "lieu du diagnostic"@fr;
+  sh:description "Defines the place where the diagnosis occurs."@en, "Définit le lieu où le diagnostic a été effectué."@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype geo:wktLiteral;
+  dash:searchWidget core:MapProperty .
+
+this:Diagnostic_returnsCode sh:path _:47a0013359994feeb179cbdb3242bf2b15;
+  sh:order "5";
+  sh:name "returns code"@en, "renvoie le code"@fr;
+  sh:description "The property is a shortcut between Diagnosis and Error Code."@en,
+    "Cette propriété est un raccourci entre Diagnostic et Code d'erreur."@fr;
+  sh:nodeKind sh:IRI;
+  sh:class odb:ErrorCode;
+  dash:searchWidget core:ListProperty .
+
+_:47a0013359994feeb179cbdb3242bf2b15 rdf:first odb:hasResults;
+  rdf:rest _:47a0013359994feeb179cbdb3242bf2b16 .
+
+_:47a0013359994feeb179cbdb3242bf2b16 rdf:first odb:hasErrorCode;
+  rdf:rest rdf:nil .
+
+this:Error_alreadyRaised sh:path odb:alreadyRaised;
+  sh:order "1";
+  sh:name "already raised"@en, "déjà signalée"@fr;
+  sh:description "Attribute indicating whether an error has already been detected previously."@en,
+    "Attribut permettant de savoir si une erreur a déjà été relevée précédemment."@fr;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:boolean;
+  dash:searchWidget core:BooleanProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Error_hasErrorCode sh:path odb:hasErrorCode;
+  sh:order "2";
+  sh:name "has error code"@en, "a pour code d'erreur"@fr;
+  sh:description "Specifies the error code relating to an error reported during a diagnostic."@en,
+    "Spécifie le code erreur relatif à une erreur remontée lors d'un diagnostic."@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class odb:ErrorCode;
+  dash:searchWidget core:ListProperty;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:ErrorCode_errorCode sh:path odb:errorCode;
+  sh:order "1";
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:NonSelectableProperty;
+  dash:propertyRole dash:LabelRole;
+  sh:deactivated "true"^^xsd:boolean .
+
+this:ErrorCode_hasSymptom sh:path odb:hasSymptom;
+  sh:order "1";
+  sh:name "has symptom"@en, "a pour symptôme"@fr;
+  sh:description "Specifies the symptoms associated with an error code."@en, "Spécifie le symptôme associé à un code erreur."@fr;
+  sh:nodeKind sh:IRI;
+  sh:class odb:Symptom;
+  dash:searchWidget core:ListProperty;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:ErrorCode_hasComponent sh:path odb:hasComponent;
+  sh:order "2";
+  sh:name "has component (list)"@en, "concerne le composant (liste)"@fr;
+  sh:description "Specifies the components impacted by an error code."@en, "Spécifie le composant impacté par un code erreur."@fr;
+  sh:nodeKind sh:IRI;
+  sh:class odb:Component;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource this:list_componentCode_alpha;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:ErrorCode_hasComponent_tree sh:path odb:hasComponent;
+  sh:order "3";
+  sh:name "has component (tree)"@en, "concerne le composant (arbre)"@fr;
+  sh:description "Specifies the components impacted by an error code."@en, "Spécifie le composant impacté par un code erreur."@fr;
+  sh:nodeKind sh:IRI;
+  sh:class odb:Component;
+  dash:searchWidget core:TreeProperty;
+  core:enableNegation "true"^^xsd:boolean;
+  datasources:treeChildrenDatasource this:tree_root_Component;
+  core:beginDateProperty this:tree_children_Component .
+
+this:Symptom_label sh:path rdfs:label;
+  sh:order "1";
+  sh:name "label"@en, "a pour libellé"@fr;
+  sh:description "Specifies the name of the object."@en, "Spécifie le nom du Sympôme"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  dash:searchWidget core:SearchProperty;
+  dash:propertyRole dash:LabelRole .
+
+this:Component_componentCode sh:path odb:componentCode;
+  sh:order "1";
+  sh:name "has component code"@en, "a pour code composant"@fr;
+  sh:description "Specifies the unique code of the component."@en, "Spécifie le code unique relatif à un composant."@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:searchWidget core:SearchProperty;
+  sh:deactivated "true"^^xsd:boolean .
+
+this:Component_label sh:path rdfs:label;
+  sh:order "2";
+  sh:name "label"@en, "a pour libellé"@fr;
+  sh:description "Specifies the name of the object."@en, "Spécifie le nom du Composant"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  dash:searchWidget core:SearchProperty;
+  dash:propertyRole dash:LabelRole;
+  sh:deactivated "true"^^xsd:boolean;
+  datasources:treeRootsDatasource "true" .
+
+this:Component_label_or_code sh:path _:47a0013359994feeb179cbdb3242bf2b17;
+  sh:order "3";
+  sh:name "label or code"@en, "a pour libellé ou code"@fr;
+  sh:description "Allows to search a label or a code"@en, "Permet de rechercher un libellé ou un code."@fr;
+  sh:nodeKind sh:Literal;
+  sh:node this:Search;
+  dash:searchWidget core:SearchProperty .
+
+_:47a0013359994feeb179cbdb3242bf2b17 sh:alternativePath _:47a0013359994feeb179cbdb3242bf2b18 .
+
+_:47a0013359994feeb179cbdb3242bf2b18 rdf:first odb:componentCode;
+  rdf:rest _:47a0013359994feeb179cbdb3242bf2b19 .
+
+_:47a0013359994feeb179cbdb3242bf2b19 rdf:first rdfs:label;
+  rdf:rest rdf:nil .
+
+this:search_VIN_strstarts a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_search_label_strstarts;
+  datasources:labelProperty odb:VIN .
+
+this:list_componentCode_alpha a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX odb: <http://example.com/ontology/odb#>
+ SELECT DISTINCT ?uri ?label
+ WHERE {
+ ?domain $type $domain .
+ ?domain $property ?uri .
+ # Note how the range criteria is not used in this query
+ FILTER(isIRI(?uri))
+ ?uri rdfs:label ?libelleComposant .
+ FILTER(lang(?libelleComposant) = \"\" || lang(?libelleComposant) = $lang)
+ ?uri odb:componentCode ?codeComposant .
+ # Concat component code + component label
+ BIND(CONCAT(STR(?codeComposant),\" - \",STR(?libelleComposant)) AS ?label)
+ }
+ ORDER BY UCASE(?label)
+ LIMIT 500""" .
+
+this:tree_root_Component a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX odb: <http://example.com/ontology/odb#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#label>
+SELECT ?uri ?label ?hasChildren (COUNT(?x) AS ?count) WHERE {
+ ?uri a odb:Component .
+ # Keep only roots, that do not have any parent
+ FILTER NOT EXISTS {
+ ?uri odb:parentComponent ?parent .
+ }
+ ?uri rdfs:label ?libelleComposant .
+ FILTER(lang(?libelleComposant) = \"\" || lang(?libelleComposant) = $lang)
+ ?uri odb:componentCode ?codeComposant .
+ # Concat component code + component label
+ BIND(CONCAT(STR(?codeComposant),\" - \",STR(?libelleComposant)) AS ?label)
+ OPTIONAL { ?uri ^odb:parentComponent ?children }
+ BIND(IF(bound(?children),true,false) AS ?hasChildren)
+ OPTIONAL {
+ ?x a $domain .
+ ?x $property ?uri .
+ }
+}
+GROUP BY ?uri ?label ?hasChildren
+ORDER BY ?label""" .
+
+this:tree_children_Component a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX odb: <http://example.com/ontology/odb#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#label>
+SELECT DISTINCT ?uri ?label ?hasChildren (COUNT(?x) AS ?count) WHERE {
+
+ $node ^odb:parentComponent ?uri .
+
+ ?uri rdfs:label ?libelleComposant .
+ FILTER(lang(?libelleComposant) = \"\" || lang(?libelleComposant) = $lang)
+ ?uri odb:componentCode ?codeComposant .
+ # Concat component code + component label
+ BIND(CONCAT(STR(?codeComposant),\" - \",STR(?libelleComposant)) AS ?label)
+ 
+ OPTIONAL { ?uri ^odb:parentComponent ?children }
+ BIND(IF(bound(?children),true,false) AS ?hasChildren)
+
+ OPTIONAL {
+ ?x a $domain .
+ ?x $property ?uri .
+ }
+}
+GROUP BY ?uri ?label ?hasChildren
+ORDER BY ?label""" .
+
+this:query_search_label_contains_langfr a datasources:SPARQLQuery;
+  datasources:queryString """SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ ?uri a $range .
+ ?uri $labelPath ?label .
+ FILTER(isIRI(?uri))
+ FILTER(CONTAINS(LCASE(STR(?label)), LCASE(\"$key\"))) 
+ FILTER(lang(?label) = '' || lang(?label) = \"fr\")
+} 
+ORDER BY UCASE(?label)
+LIMIT 50""";
+  rdfs:comment "A query that will search in labels using contains function, first in the user language but will default to French."@en .

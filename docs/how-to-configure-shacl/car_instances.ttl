@@ -1,0 +1,402 @@
+@prefix odb: <http://example.com/ontology/odb#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@base <http://www.w3.org/2002/07/owl#> .
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://example.com/ontology/manufacturer#Audi
+odb:Audi rdf:type odb:Manufacturer ;
+                  odb:name "Audi" .
+
+
+###  http://example.com/ontology/manufacturer#BMW
+odb:BMW rdf:type odb:Manufacturer ;
+                 odb:name "BMW" .
+
+
+###  http://example.com/ontology/manufacturer#Chevrolet
+odb:Chevrolet rdf:type odb:Manufacturer ;
+                       odb:name "Chevrolet" .
+
+
+###  http://example.com/ontology/manufacturer#Ford
+odb:Ford rdf:type odb:Manufacturer ;
+                  odb:name "Ford" .
+
+
+###  http://example.com/ontology/manufacturer#Mercedes-Benz
+odb:Mercedes-Benz rdf:type odb:Manufacturer ;
+                           odb:name "Mercedes-Benz" .
+
+
+###  http://example.com/ontology/manufacturer#Toyota
+odb:Toyota rdf:type odb:Manufacturer ;
+                    odb:name "Toyota" .
+
+
+###  http://example.com/ontology/manufacturer#Volkswagen
+odb:Volkswagen rdf:type odb:Manufacturer ;
+                        odb:name "Volkswagen" .
+
+
+###  http://example.com/ontology/odb#A4
+odb:GHI34567890123456 rdf:type odb:Vehicle ;
+       odb:hasManufacturer odb:Audi ;
+       odb:weightInKg 1200 ;
+       odb:VIN "GHI34567890123456" .
+
+### Diags sur l'A4
+
+odb:diag_GHI34567890123456_20221201 a odb:Diagnostic ;
+     odb:diagnosticDate "2022-12-01"^^xsd:date ;
+     odb:analysedVehicle odb:GHI34567890123456 ;
+     odb:diagnosticPlace "POINT(2.3488 48.85341)"^^geo:wktLiteral ;
+     odb:hasResults odb:diag_GHI34567890123456_20221201_error_1, odb:diag_GHI34567890123456_20221201_error_2 ;
+.
+odb:diag_GHI34567890123456_20221201_error_1 a odb:Error ;
+     odb:hasErrorCode odb:P1031 ;
+.
+odb:diag_GHI34567890123456_20221201_error_2 a odb:Error ;
+     odb:hasErrorCode odb:P1133 ;
+.
+
+###  http://example.com/ontology/odb#ClasseE
+odb:ABC56789012345678 rdf:type odb:Vehicle ;
+            odb:hasManufacturer odb:Mercedes-Benz ;
+            odb:weightInKg 980 ;
+            odb:VIN "ABC56789012345678" .
+
+### Diags sur la ClasseE
+
+odb:diag_ABC56789012345678_20210808 a odb:Diagnostic ;
+     odb:diagnosticDate "2021-08-08"^^xsd:date ;
+     odb:analysedVehicle odb:ABC56789012345678 ;
+     odb:diagnosticPlace "POINT(2.3488 48.85341)"^^geo:wktLiteral ;
+     odb:hasResults odb:diag_ABC56789012345678_20210808_error_1 ;
+.
+odb:diag_ABC56789012345678_20210808_error_1 a odb:Error ;
+     odb:hasErrorCode odb:P1133 ;
+.
+
+odb:diag_ABC56789012345678_20211224 a odb:Diagnostic ;
+     odb:diagnosticDate "2021-12-24"^^xsd:date ;
+     odb:analysedVehicle odb:ABC56789012345678 ;
+     odb:diagnosticPlace "POINT(2.3488 48.85341)"^^geo:wktLiteral ;
+     odb:hasResults odb:diag_ABC56789012345678_20211224_error_1 ;
+.
+odb:diag_ABC56789012345678_20211224_error_1 a odb:Error ;
+     odb:hasErrorCode odb:P1133 ;
+     odb:alreadyRaised true ;
+.
+
+odb:diag_ABC56789012345678_20230401 a odb:Diagnostic ;
+     odb:diagnosticDate "2023-04-01"^^xsd:date ;
+     odb:analysedVehicle odb:ABC56789012345678 ;
+     odb:diagnosticPlace "POINT(2.3488 48.85341)"^^geo:wktLiteral ;
+     odb:hasResults odb:diag_ABC56789012345678_20230401_error_1 ;
+.
+odb:diag_ABC56789012345678_20230401_error_1 a odb:Error ;
+     odb:hasErrorCode odb:P1133 ;
+     odb:alreadyRaised true ;
+.
+
+###  http://example.com/ontology/odb#Corvette
+odb:MNO23456789012345 rdf:type odb:Vehicle ;
+             odb:hasManufacturer odb:Chevrolet ;
+             odb:weightInKg 976 ;
+             odb:VIN "MNO23456789012345" .
+
+### Diagnostics sur la Corvette
+
+odb:diag_MNO23456789012345_20221201 a odb:Diagnostic ;
+     odb:diagnosticDate "2022-12-01"^^xsd:date ;
+     odb:analysedVehicle odb:MNO23456789012345 ;
+     odb:diagnosticPlace "POINT(13.41 52.52)"^^geo:wktLiteral ;
+     odb:hasResults odb:diag_MNO23456789012345_20221201_error_1, odb:diag_MNO23456789012345_20221201_error_2 ;
+.
+odb:diag_MNO23456789012345_20221201_error_1 a odb:Error ;
+     odb:hasErrorCode odb:P1031 ;
+.
+odb:diag_MNO23456789012345_20221201_error_2 a odb:Error ;
+     odb:hasErrorCode odb:P1121 ;
+.
+
+###  http://example.com/ontology/odb#Golf
+odb:JKL90123456789012 rdf:type odb:Vehicle ;
+         odb:hasManufacturer odb:Volkswagen ;
+         odb:weightInKg 625 ;
+         odb:VIN "JKL90123456789012" .
+
+### Golf : pas de diagnostics
+
+
+###  http://example.com/ontology/odb#Golf2
+odb:JKL90123456789012 rdf:type odb:Vehicle ;
+         odb:hasManufacturer "VW" ;
+         odb:weightInKg 625 ;
+         odb:VIN "JKL80321654876098" .
+
+### Golf 2 : pas de diagnostics
+
+
+
+###  http://example.com/ontology/odb#Mustang
+odb:DEF90123456789012 rdf:type odb:Vehicle ;
+            odb:hasManufacturer odb:Ford ;
+            odb:weightInKg 583 ;
+            odb:VIN "DEF90123456789012" .
+
+### Diagnostics sur la Mustang
+
+odb:diag_DEF90123456789012_20221201 a odb:Diagnostic ;
+     odb:diagnosticDate "2022-12-01"^^xsd:date ;
+     odb:analysedVehicle odb:DEF90123456789012 ;
+     odb:diagnosticPlace "POINT(13.41 52.52)"^^geo:wktLiteral ;
+     odb:hasResults odb:diag_DEF90123456789012_20221201_error_1 ;
+.
+odb:diag_DEF90123456789012_20221201_error_1 a odb:Error ;
+     odb:hasErrorCode odb:P1133 ;
+.
+
+
+odb:diag_DEF90123456789012_20230512 a odb:Diagnostic ;
+     odb:diagnosticDate "2023-05-12"^^xsd:date ;
+     odb:analysedVehicle odb:DEF90123456789012 ;
+     odb:diagnosticPlace "POINT(13.41 52.52)"^^geo:wktLiteral ;
+     odb:hasResults odb:diag_DEF90123456789012_20230512_error_1 ;
+.
+odb:diag_DEF90123456789012_20230512_error_1 a odb:Error ;
+     odb:hasErrorCode odb:P1108 ;
+.
+
+###  http://example.com/ontology/odb#X5
+odb:WBA12345678901234 rdf:type odb:Vehicle ;
+       odb:hasManufacturer odb:BMW ;
+       odb:weightInKg 875 ;
+       odb:VIN "WBA12345678901234" .
+
+
+### Diagnostics sur la X5
+
+odb:diag_WBA12345678901234_20230512 a odb:Diagnostic ;
+     odb:diagnosticDate "2023-05-12"^^xsd:date ;
+     odb:analysedVehicle odb:WBA12345678901234 ;
+     odb:diagnosticPlace "POINT(13.41 52.52)"^^geo:wktLiteral ;
+     odb:hasResults odb:diag_WBA12345678901234_20230512_error_1 ;
+.
+
+odb:diag_WBA12345678901234_20230512_error_1 a odb:Error ;
+     odb:hasErrorCode odb:P1031 ;
+.
+
+
+
+###  http://example.com/ontology/odb#Yaris
+odb:XYZ98765432109876 rdf:type odb:Vehicle ;
+          odb:hasManufacturer odb:Toyota ;
+          odb:weightInKg 512 ;
+          odb:VIN "XYZ98765432109876" .
+
+### Diagnostics sur la Toyota
+
+odb:diag_XYZ98765432109876_20230109 a odb:Diagnostic ;
+     odb:diagnosticDate "2023-01-09"^^xsd:date ;
+     odb:analysedVehicle odb:XYZ98765432109876 ;
+     odb:diagnosticPlace "POINT(2.3488 48.85341)"^^geo:wktLiteral ;
+     odb:hasResults odb:diag_XYZ98765432109876_20230109_error1 ;
+.
+
+odb:diag_XYZ98765432109876_20230109_error1 a odb:Error ;
+     odb:hasErrorCode odb:P1031 ;
+.
+
+odb:diag_XYZ98765432109876_20230623 a odb:Diagnostic ;
+     odb:diagnosticDate "2023-06-23"^^xsd:date ;
+     odb:analysedVehicle odb:XYZ98765432109876 ;
+     odb:diagnosticPlace "POINT(2.3488 48.85341)"^^geo:wktLiteral ;    
+     odb:hasResults odb:diag_XYZ98765432109876_20230623_error_1, odb:diag_XYZ98765432109876_20230623_error_2 ;
+.
+
+odb:diag_XYZ98765432109876_20230623_error_1 a odb:Error ;
+     odb:hasErrorCode odb:P1031 ;
+     odb:alreadyRaised true ;
+.
+
+odb:diag_XYZ98765432109876_20230623_error_2 a odb:Error ;
+     odb:hasErrorCode odb:P1108 ;
+.
+
+###  http://example.com/ontology/odb#P1031
+odb:P1031 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1031" ;
+          odb:hasComponent odb:Component1 ,
+                           odb:Component20 ,
+                           odb:Component32 ;
+          odb:hasSymptom odb:Symptom1 ,
+                         odb:Symptom2 .
+
+
+###  http://example.com/ontology/odb#P1108
+odb:P1108 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1108" ;
+          odb:hasComponent odb:Component4 ,
+                           odb:Component5 ;
+          odb:hasSymptom odb:Symptom2 ,
+                         odb:Symptom3 .
+
+
+###  http://example.com/ontology/odb#P1121
+odb:P1121 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1121" ;
+          odb:hasComponent odb:Component2 ,
+                           odb:Component50 ;
+          odb:hasSymptom odb:Symptom1 ,
+                         odb:Symptom4 .
+
+
+###  http://example.com/ontology/odb#P1133
+odb:P1133 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1133" ;
+          odb:hasComponent odb:Component11 ,
+                           odb:Component3 ;
+          odb:hasSymptom odb:Symptom1 ,
+                         odb:Symptom3 .
+
+
+###  http://example.com/ontology/odb#P1441
+odb:P1441 rdf:type odb:ErrorCode ;
+          odb:errorCode "P1441" ;
+          odb:hasComponent odb:Component31 ,
+                           odb:Component4 ;
+          odb:hasSymptom odb:Symptom2 ,
+                         odb:Symptom5 .
+
+
+###  http://example.com/ontology/odb#Component1
+odb:Component1 rdf:type odb:Component ;
+               odb:componentCode "001" ;
+               odb:criticity 1 ;
+               rdfs:label "Engine"@en, "Moteur"@fr .
+
+
+###  http://example.com/ontology/odb#Component10
+odb:Component10 rdf:type odb:Component ;
+               odb:componentCode "010" ;
+               odb:parentComponent odb:Component1 ;
+               rdfs:label "Pistons"@en, "Piston"@fr .
+
+###  http://example.com/ontology/odb#Component11
+odb:Component11 rdf:type odb:Component ;
+               odb:componentCode "011" ;
+               odb:parentComponent odb:Component1 ;
+               rdfs:label "Spark plugs"@en, "Bougies"@fr .
+
+
+###  http://example.com/ontology/odb#Component2
+odb:Component2 rdf:type odb:Component ;
+               odb:componentCode "002" ;
+               odb:criticity 1 ;
+               rdfs:label "Transmission"@en, "Transmission"@fr .
+
+
+###  http://example.com/ontology/odb#Component20
+odb:Component20 rdf:type odb:Component ;
+               odb:componentCode "020" ;
+               odb:parentComponent odb:Component2 ;
+               rdfs:label "Gear box"@en, "Boîte de vitesse"@fr .
+
+###  http://example.com/ontology/odb#Component21
+odb:Component21 rdf:type odb:Component ;
+               odb:componentCode "021" ;
+               odb:parentComponent odb:Component2 ;
+               rdfs:label "Gimbal"@en, "Cardan"@fr .
+
+
+###  http://example.com/ontology/odb#Component3
+odb:Component3 rdf:type odb:Component ;
+               odb:componentCode "003" ;
+               odb:criticity 5 ;
+               rdfs:label "Brakes"@en, "Freins"@fr .
+
+###  http://example.com/ontology/odb#Component30
+odb:Component30 rdf:type odb:Component ;
+               odb:componentCode "030" ;
+               odb:parentComponent odb:Component3 ;
+               rdfs:label "Brake caliper"@en, "Étrier"@fr .
+
+###  http://example.com/ontology/odb#Component31
+odb:Component31 rdf:type odb:Component ;
+               odb:componentCode "031" ;
+               odb:parentComponent odb:Component3 ;
+               rdfs:label "Brakes pads"@en, "Plaquette"@fr .
+
+###  http://example.com/ontology/odb#Component32
+odb:Component32 rdf:type odb:Component ;
+               odb:componentCode "032" ;
+               odb:parentComponent odb:Component3 ;
+               rdfs:label "Wear sensor"@en, "Capteur d'usure"@fr .
+
+
+###  http://example.com/ontology/odb#Component4
+odb:Component4 rdf:type odb:Component ;
+               odb:componentCode "004" ;
+               odb:criticity 6 ;
+               rdfs:label "Fuel Pump"@en, "Pompe à carburant"@fr .
+
+
+###  http://example.com/ontology/odb#Component5
+odb:Component5 rdf:type odb:Component ;
+               odb:componentCode "005" ;
+               odb:criticity 3 ;
+               rdfs:label "Steering System"@en, "Direction"@fr .
+
+###  http://example.com/ontology/odb#Component50
+odb:Component50 rdf:type odb:Component ;
+               odb:componentCode "050" ;
+               odb:parentComponent odb:Component5 ;
+               rdfs:label "Steering rods"@en, "Biellettes de direction"@fr .
+
+###  http://example.com/ontology/odb#Component51
+odb:Component51 rdf:type odb:Component ;
+               odb:componentCode "051" ;
+               odb:parentComponent odb:Component5 ;
+               rdfs:label "Steering column"@en, "Colonne de direction"@fr .
+
+
+###  http://example.com/ontology/odb#Symptom1
+odb:Symptom1 rdf:type odb:Symptom ;
+             rdfs:label "Engine Misfire"@en .
+
+
+###  http://example.com/ontology/odb#Symptom2
+odb:Symptom2 rdf:type odb:Symptom ;
+             rdfs:label "Transmission Slipping"@en .
+
+
+###  http://example.com/ontology/odb#Symptom3
+odb:Symptom3 rdf:type odb:Symptom ;
+             rdfs:label "Brake Squeaking"@en .
+
+
+###  http://example.com/ontology/odb#Symptom4
+odb:Symptom4 rdf:type odb:Symptom ;
+             rdfs:label "Fuel Leakage"@en .
+
+
+###  http://example.com/ontology/odb#Symptom5
+odb:Symptom5 rdf:type odb:Symptom ;
+             rdfs:label "Power Steering Failure"@en .
+
+
+
+
+
+###  Generated by the OWL API (version 4.5.25.2023-02-15T19:15:49Z) https://github.com/owlcs/owlapi
