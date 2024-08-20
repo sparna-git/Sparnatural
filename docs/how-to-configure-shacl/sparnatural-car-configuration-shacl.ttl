@@ -121,6 +121,7 @@ this:RootComponent a sh:NodeShape;
   sh:nodeKind sh:IRI;
   rdfs:label "Root component"@en, "Root component"@fr;
   sh:description "Components at the top of components tree"@en, "Sélectionnez cette entrée pour rechercher sur les libellés et les descriptions"@fr;
+  sh:node this:Component;
   sh:target this:RootComponent-target;
   sh:property this:RootComponent_criticity .
 
@@ -153,20 +154,20 @@ this:Vehicle_hasManufacturer sh:path odb:hasManufacturer;
   sh:minCount "1"^^xsd:integer;
   sh:maxCount "1"^^xsd:integer;
   sh:nodeKind sh:IRI;
-  sh:class odb:Manufacturer;
+  sh:node this:Manufacturer;
   dash:searchWidget core:ListProperty;
   core:enableOptional "false"^^xsd:boolean;
   core:enableNegation "false"^^xsd:boolean .
 
-this:Vehicle_hasDiagnosis sh:path _:17d00ff6071d48b4a355f4284ed63c331110;
+this:Vehicle_hasDiagnosis sh:path _:17d00ff6071d48b4a355f4284ed63c331845;
   sh:order "3";
   sh:name "has diagnosis"@en, "a pour diagnostic"@fr;
   sh:description "The property is the inverse of odb:analysedVehicle."@en, "Propriété inverse de odb:analysedVehicle."@fr;
   sh:nodeKind sh:IRI;
-  sh:class odb:Diagnostic;
+  sh:node this:Diagnostic;
   dash:searchWidget core:NonSelectableProperty .
 
-_:17d00ff6071d48b4a355f4284ed63c331110 sh:inversePath odb:analysedVehicle .
+_:17d00ff6071d48b4a355f4284ed63c331845 sh:inversePath odb:analysedVehicle .
 
 this:Vehicle_weightInKg sh:path odb:weightInKg;
   sh:order "4";
@@ -212,7 +213,7 @@ this:Diagnostic_analysedVehicle sh:path odb:analysedVehicle;
   sh:minCount "1"^^xsd:integer;
   sh:maxCount "1"^^xsd:integer;
   sh:nodeKind sh:IRI;
-  sh:class odb:Vehicle;
+  sh:node this:Vehicle;
   dash:searchWidget core:AutocompleteProperty;
   datasources:datasource this:search_VIN_strstarts;
   core:enableOptional "false"^^xsd:boolean;
@@ -223,7 +224,7 @@ this:Diagnostic_hasResults sh:path odb:hasResults;
   sh:name "has results"@en, "a pour résultat"@fr;
   sh:description "Specifies the results, from the analysis."@en, "Spécifie les résultats issus de l'analyse."@fr;
   sh:nodeKind sh:IRI;
-  sh:class odb:Error;
+  sh:node this:Error;
   dash:searchWidget core:NonSelectableProperty;
   core:enableOptional "false"^^xsd:boolean;
   core:enableNegation "false"^^xsd:boolean .
@@ -240,21 +241,21 @@ this:Diagnostic_diagnosticPlace sh:path odb:diagnosticPlace;
   core:enableOptional "false"^^xsd:boolean;
   core:enableNegation "false"^^xsd:boolean .
 
-this:Diagnostic_returnsCode sh:path _:17d00ff6071d48b4a355f4284ed63c331111;
+this:Diagnostic_returnsCode sh:path _:17d00ff6071d48b4a355f4284ed63c331846;
   sh:order "5";
   sh:name "returns code"@en, "renvoie le code"@fr;
   sh:description "The property is a shortcut between Diagnosis and Error Code."@en,
     "Cette propriété est un raccourci entre Diagnostic et Code d'erreur."@fr;
   sh:nodeKind sh:IRI;
-  sh:class odb:ErrorCode;
+  sh:node this:ErrorCode;
   dash:searchWidget core:ListProperty;
   core:enableOptional "false"^^xsd:boolean;
   core:enableNegation "false"^^xsd:boolean .
 
-_:17d00ff6071d48b4a355f4284ed63c331111 rdf:first odb:hasResults;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331112 .
+_:17d00ff6071d48b4a355f4284ed63c331846 rdf:first odb:hasResults;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331847 .
 
-_:17d00ff6071d48b4a355f4284ed63c331112 rdf:first odb:hasErrorCode;
+_:17d00ff6071d48b4a355f4284ed63c331847 rdf:first odb:hasErrorCode;
   rdf:rest rdf:nil .
 
 this:Error_alreadyRaised sh:path odb:alreadyRaised;
@@ -276,7 +277,7 @@ this:Error_hasErrorCode sh:path odb:hasErrorCode;
   sh:minCount "1"^^xsd:integer;
   sh:maxCount "1"^^xsd:integer;
   sh:nodeKind sh:IRI;
-  sh:class odb:ErrorCode;
+  sh:node this:ErrorCode;
   dash:searchWidget core:ListProperty;
   core:enableOptional "false"^^xsd:boolean;
   core:enableNegation "false"^^xsd:boolean .
@@ -294,29 +295,29 @@ this:ErrorCode_errorCode sh:path odb:errorCode;
   core:enableNegation "false"^^xsd:boolean .
 
 this:ErrorCode_hasSymptom sh:path odb:hasSymptom;
-  sh:order "1";
+  sh:order "2";
   sh:name "has symptom"@en, "a pour symptôme"@fr;
   sh:description "Specifies the symptoms associated with an error code."@en, "Spécifie le symptôme associé à un code erreur."@fr;
   sh:nodeKind sh:IRI;
-  sh:class odb:Symptom;
+  sh:node this:Symptom;
   dash:searchWidget core:ListProperty;
   datasources:datasource datasources:list_rdfslabel_count .
 
 this:ErrorCode_hasComponent sh:path odb:hasComponent;
-  sh:order "2";
+  sh:order "3";
   sh:name "has component (list)"@en, "concerne le composant (liste)"@fr;
   sh:description "Specifies the components impacted by an error code."@en, "Spécifie le composant impacté par un code erreur."@fr;
   sh:nodeKind sh:IRI;
-  sh:class odb:Component;
+  sh:node this:Component;
   dash:searchWidget core:ListProperty;
   datasources:datasource this:list_componentCode_alpha .
 
 this:ErrorCode_hasComponent_tree sh:path odb:hasComponent;
-  sh:order "3";
+  sh:order "4";
   sh:name "has component (tree)"@en, "concerne le composant (arbre)"@fr;
   sh:description "Specifies the components impacted by an error code."@en, "Spécifie le composant impacté par un code erreur."@fr;
   sh:nodeKind sh:IRI;
-  sh:class odb:Component;
+  sh:node this:Component;
   dash:searchWidget core:TreeProperty;
   datasources:treeRootsDatasource this:tree_root_Component;
   datasources:treeChildrenDatasource this:tree_children_Component .
@@ -357,10 +358,9 @@ this:Component_label sh:path rdfs:label;
   dash:searchWidget core:SearchProperty;
   dash:propertyRole dash:LabelRole;
   core:enableOptional "false"^^xsd:boolean;
-  core:enableNegation "false"^^xsd:boolean;
-  datasources:treeRootsDatasource "true" .
+  core:enableNegation "false"^^xsd:boolean .
 
-this:Component_label_or_code sh:path _:17d00ff6071d48b4a355f4284ed63c331113;
+this:Component_label_or_code sh:path _:17d00ff6071d48b4a355f4284ed63c331848;
   sh:order "3";
   sh:name "label or code"@en, "a pour libellé ou code"@fr;
   sh:description "Allows to search a label or a code"@en, "Permet de rechercher un libellé ou un code."@fr;
@@ -368,16 +368,16 @@ this:Component_label_or_code sh:path _:17d00ff6071d48b4a355f4284ed63c331113;
   sh:node this:Search;
   dash:searchWidget core:SearchProperty .
 
-_:17d00ff6071d48b4a355f4284ed63c331113 sh:alternativePath _:17d00ff6071d48b4a355f4284ed63c331114 .
+_:17d00ff6071d48b4a355f4284ed63c331848 sh:alternativePath _:17d00ff6071d48b4a355f4284ed63c331849 .
 
-_:17d00ff6071d48b4a355f4284ed63c331114 rdf:first odb:componentCode;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331115 .
+_:17d00ff6071d48b4a355f4284ed63c331849 rdf:first odb:componentCode;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331850 .
 
-_:17d00ff6071d48b4a355f4284ed63c331115 rdf:first rdfs:label;
+_:17d00ff6071d48b4a355f4284ed63c331850 rdf:first rdfs:label;
   rdf:rest rdf:nil .
 
 this:RootComponent_criticity sh:path odb:criticity;
-  sh:order "3";
+  sh:order "1";
   sh:name "criticity"@en, "criticité"@fr;
   sh:description "Cricity of the component"@en, "Criticité du composant"@fr;
   sh:nodeKind sh:Literal;
