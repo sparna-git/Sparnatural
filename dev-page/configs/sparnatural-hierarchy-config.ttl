@@ -1,0 +1,224 @@
+@prefix schema: <http://schema.org/> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix demo-anf: <https://sparnatural-demo-anf.huma-num.fr/ontology#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix this: <http://data.mydomain.com/sparnatural-page/sparnatural-config/> .
+@prefix dbpedia: <http://dbpedia.org/ontology/> .
+@prefix odb: <http://example.com/ontology/odb#> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://data.mydomain.com/sparnatural-page/sparnatural-config> a owl:Ontology .
+
+this:Lieu a sh:NodeShape;
+  sh:order "1"^^xsd:integer;
+  volipi:iconName "fas fa-map-marker-alt";
+  sh:targetClass rico:Place;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Place"@en, "Lieu"@fr .
+
+this:QuartierOuParoisse a sh:NodeShape;
+  sh:order "2"^^xsd:integer;
+  volipi:iconName "far fa-map-marked-alt";
+  sh:targetClass demo-anf:QuartierOuParoisse;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Parisian district or parish"@en, "Quartier, paroisse ou arrondissement de Paris"@fr;
+  sh:description "Old or current district, parish or arrondissement of Paris."@en, "Quartier, paroisse ou arrondissement ancien ou actuel de Paris."@fr;
+  sh:node this:Lieu .
+
+this:Voie a sh:NodeShape;
+  sh:order "3"^^xsd:integer;
+  volipi:iconName "fal fa-road";
+  sh:targetClass demo-anf:VoieParisienne;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Street in Paris"@en, "Voie de Paris"@fr;
+  sh:description "Any street located in Paris, whether it has disappeared or still exists."@en,
+    "Toute voie située dans Paris, qu'elle ait disparu ou qu'elle existe toujours."@fr;
+  sh:node this:Lieu .
+
+this:Edifice a sh:NodeShape;
+  sh:order "4"^^xsd:integer;
+  volipi:iconName "fas fa-monument";
+  sh:targetClass demo-anf:EdificeParisien;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Parisian building"@en, "Édifice parisien"@fr;
+  sh:description "Building within the current limits of Paris."@en, "Édifice dans les limites actuelles de Paris."@fr;
+  sh:node this:Lieu .
+
+this:TypeDeLieu a sh:NodeShape;
+  sh:order "5"^^xsd:integer;
+  volipi:iconName "fas fa-globe";
+  sh:targetClass rico:PlaceType;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Place type"@en, "Type de lieu"@fr;
+  sh:description "Categorization of places"@en, "Catégorisation des lieux"@fr .
+
+this:Adresse a sh:NodeShape;
+  sh:order "6"^^xsd:integer;
+  volipi:iconName "fas fa-at";
+  sh:targetClass rico:Place;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Address"@en, "Adresse"@fr;
+  sh:description "Address in Paris."@en, "Adresse à Paris."@fr;
+  sh:property this:Adresse_hasOrHadLocation, this:Adresse_inversePath_hasOrHadLocation .
+
+this:Organization a sh:NodeShape;
+  sh:order "7"^^xsd:integer;
+  volipi:iconName "fad fa-building";
+  sh:targetClass rico:CorporateBody;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Organization"@en, "Organisme"@fr;
+  sh:description "An organization, i.e., a group of persons with an identity or a social status. It includes notarial offices, and all organizations mentioned in the notarial records."@en,
+    "Un organisme, c'est-à-dire un groupe de personnes physiques ayant une identité ou un statut social. Inclut les études notariales, et toutes les collectivités mentionnées dans les archives notariales."@fr .
+
+this:Etude a sh:NodeShape;
+  sh:order "7"^^xsd:integer;
+  volipi:iconName "fas fa-landmark";
+  sh:targetClass demo-anf:EtudeNotariale;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Notarial Office"@en, "Étude notariale"@fr;
+  sh:description "Corporate body within which a notary practices. This project concerns the first forty notarial offices in Paris."@en,
+    "Organisme au sein duquel exerce un notaire. Ici il s'agit des quarante premières études notariales parisiennes."@fr;
+  sh:node this:Organization;
+  sh:property this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation .
+
+this:Personne a sh:NodeShape;
+  sh:order "7"^^xsd:integer;
+  volipi:iconName "fas fa-user";
+  sh:targetClass rico:Person;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Person"@en, "Personne"@fr;
+  sh:description "Any person. It includes notaries, and any person mentioned in notarial records."@en,
+    "Toute personne physique. Inclut les notaires, et surtout toute personne mentionnée dans les archives notariales."@fr .
+
+this:Notaire a sh:NodeShape;
+  sh:order "7"^^xsd:integer;
+  volipi:iconName "fas fa-user-edit";
+  sh:targetClass demo-anf:Notaire;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Notary"@en, "Notaire"@fr;
+  sh:description "A lawyer invested with a mission of public authority, who prepares authentic acts on behalf of his clients. In all, 1,079 notaries practiced within the forty Parisian notarial offices whose archives are described here."@en,
+    "Juriste investi d'une mission d'autorité publique, qui prépare des contrats sous la forme authentique, pour le compte de ses clients. En tout 1079 notaires ont exercé au sein des quarante études notariales parisiennes dont les archives sont décrites ici."@fr;
+  sh:node this:Personne;
+  sh:property this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation .
+
+this:Place_hasOrHadPlaceType sh:path rico:hasOrHadPlaceType;
+  sh:order "1";
+  sh:name "has place type"@en, "a pour type de lieu"@fr;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:node this:TypeDeLieu;
+  dash:searchWidget core:ListProperty;
+  dash:propertyRole dash:LabelRole .
+
+this:Place sh:property this:Place_hasOrHadPlaceType .
+
+this:Adresse_hasOrHadLocation sh:path rico:hasOrHadLocation;
+  sh:order "1";
+  sh:name "has location"@en, "est située dans"@fr;
+  sh:nodeKind sh:IRI;
+  sh:or _:17d00ff6071d48b4a355f4284ed63c331875;
+  dash:searchWidget core:ListProperty;
+  dash:propertyRole dash:LabelRole;
+  datasources:datasource this:list_rdfslabel_with_range_count_langfr .
+
+_:17d00ff6071d48b4a355f4284ed63c331875 rdf:first _:17d00ff6071d48b4a355f4284ed63c331876;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331877 .
+
+_:17d00ff6071d48b4a355f4284ed63c331876 sh:node this:Voie .
+
+_:17d00ff6071d48b4a355f4284ed63c331877 rdf:first _:17d00ff6071d48b4a355f4284ed63c331878;
+  rdf:rest rdf:nil .
+
+_:17d00ff6071d48b4a355f4284ed63c331878 sh:node this:QuartierOuParoisse .
+
+this:Adresse_inversePath_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c331879;
+  sh:order "2";
+  sh:name "is address of"@en, "est l'adresse de"@fr;
+  sh:nodeKind sh:IRI;
+  sh:or _:17d00ff6071d48b4a355f4284ed63c331880;
+  dash:searchWidget core:ListProperty;
+  dash:propertyRole dash:LabelRole;
+  datasources:datasource this:list_rdfslabel_with_range_count_langfr .
+
+_:17d00ff6071d48b4a355f4284ed63c331879 sh:inversePath rico:hasOrHadLocation .
+
+_:17d00ff6071d48b4a355f4284ed63c331880 rdf:first _:17d00ff6071d48b4a355f4284ed63c331881;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331882 .
+
+_:17d00ff6071d48b4a355f4284ed63c331881 sh:node this:Etude .
+
+_:17d00ff6071d48b4a355f4284ed63c331882 rdf:first _:17d00ff6071d48b4a355f4284ed63c331883;
+  rdf:rest rdf:nil .
+
+_:17d00ff6071d48b4a355f4284ed63c331883 sh:node this:Notaire .
+
+this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c331884;
+  sh:order "1";
+  sh:name "performs an activity in the district or street"@en, "exerce dans le quartier ou la voie"@fr;
+  sh:nodeKind sh:IRI;
+  sh:or _:17d00ff6071d48b4a355f4284ed63c331886;
+  dash:searchWidget core:ListProperty;
+  dash:propertyRole dash:LabelRole;
+  datasources:datasource this:list_rdfslabel_with_range_count_langfr .
+
+_:17d00ff6071d48b4a355f4284ed63c331884 rdf:first rico:hasOrHadLocation;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331885 .
+
+_:17d00ff6071d48b4a355f4284ed63c331885 rdf:first rico:hasOrHadLocation;
+  rdf:rest rdf:nil .
+
+_:17d00ff6071d48b4a355f4284ed63c331886 rdf:first _:17d00ff6071d48b4a355f4284ed63c331887;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331888 .
+
+_:17d00ff6071d48b4a355f4284ed63c331887 sh:node this:Voie .
+
+_:17d00ff6071d48b4a355f4284ed63c331888 rdf:first _:17d00ff6071d48b4a355f4284ed63c331889;
+  rdf:rest rdf:nil .
+
+_:17d00ff6071d48b4a355f4284ed63c331889 sh:node this:QuartierOuParoisse .
+
+this:list_rdfslabel_with_range_count_langfr a datasources:SparqlDatasource;
+  datasources:queryTemplate this:query_list_label_with_range_count_langfr;
+  datasources:labelProperty rdfs:label .
+
+this:query_list_label_with_range_count_langfr a datasources:SPARQLQuery;
+  datasources:queryString """SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+ SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+ WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ FILTER(isIRI(?uri))
+ # range criteria
+ ?uri a $range .
+ }
+ GROUP BY ?uri
+}
+?uri $labelPath ?theLabel .
+FILTER(lang(?theLabel) = \"\" || lang(?theLabel) = $lang || lang(?theLabel) = \"fr\")
+}
+ORDER BY DESC(?count) UCASE(?label)
+LIMIT 500""" .
