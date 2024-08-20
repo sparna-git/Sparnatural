@@ -463,27 +463,27 @@ export class WidgetFactory {
      **/
     #getFinalQueryString(datasource: any) {
         if (datasource.queryString != null) {
-        return datasource.queryString;
+          return datasource.queryString;
         } else {
-        var sparql = datasource.queryTemplate;
+          var sparql = datasource.queryTemplate;
 
-        if (datasource.labelPath != null || datasource.labelProperty) {
-            var theLabelPath = datasource.labelPath
-            ? datasource.labelPath
-            : "<" + datasource.labelProperty + ">";
-            var reLabelPath = new RegExp("\\$labelPath", "g");
-            sparql = sparql.replace(reLabelPath, theLabelPath);
-        }
+          if (datasource.labelPath != null || datasource.labelProperty) {
+              var theLabelPath = datasource.labelPath
+              ? datasource.labelPath
+              : "<" + datasource.labelProperty + ">";
+              var reLabelPath = new RegExp("\\$labelPath", "g");
+              sparql = sparql.replace(reLabelPath, theLabelPath);
+          }
 
-        if (datasource.childrenPath != null || datasource.childrenProperty) {
-            var theChildrenPath = datasource.childrenPath
-            ? datasource.childrenPath
-            : "<" + datasource.childrenProperty + ">";
-            var reChildrenPath = new RegExp("\\$childrenPath", "g");
-            sparql = sparql.replace(reChildrenPath, theChildrenPath);
-        }
+          if (datasource.childrenPath != null || datasource.childrenProperty) {
+              var theChildrenPath = datasource.childrenPath
+              ? datasource.childrenPath
+              : "<" + datasource.childrenProperty + ">";
+              var reChildrenPath = new RegExp("\\$childrenPath", "g");
+              sparql = sparql.replace(reChildrenPath, theChildrenPath);
+          }
 
-        return sparql;
+          return sparql;
         }
     }
 
