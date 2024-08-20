@@ -180,6 +180,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             .map(node => node.value);
                 
         // add all properties from node shapes of superclasses
+        /*
         let superClasses:Term[] = this.getSuperClasses();
         superClasses.forEach(sc => {
             let ns = this.provider.getNodeShapeTargetingClass(sc as Quad_Subject);
@@ -189,6 +190,13 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             } else {
                 console.warn("Warning, cannot find a node shape targeting class "+sc.value);
             }
+        });
+        */
+
+        let parents:string[] = this.getParents();
+        parents.forEach(p => {
+            let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);
+            propShapes.push(...parentEntity.getProperties());
         });
 
         propShapes
