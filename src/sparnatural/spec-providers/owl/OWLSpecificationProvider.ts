@@ -145,10 +145,6 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     return items;
   }
 
-  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
-    return new Dag();
-  }
-
   isSparnaturalClass(classUri: string) {
     return (
       this.store.getQuads(

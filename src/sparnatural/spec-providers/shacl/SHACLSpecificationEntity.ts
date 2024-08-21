@@ -10,8 +10,6 @@ import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../StoreModel";
 import { DagIfc, Dag } from "../../dag/Dag";
 import ISpecificationEntity from "../ISpecificationEntity";
-import { Dag, DagIfc } from "../../dag/Dag";
-import ISpecificationEntity from "../ISpecificationEntity";
 
 const factory = new DataFactory();
 
@@ -370,6 +368,10 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
 
     getConnectedEntities(): string[] {
         return new Array<string>();
+    }
+
+    getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
+        return new Dag<ISpecificationEntity>();
     }
 
     hasConnectedEntities(): boolean {

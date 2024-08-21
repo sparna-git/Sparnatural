@@ -244,7 +244,8 @@ class HierarchicalClassSelectBuilder extends HTMLComponent {
         var icon = this.specProvider.getEntity(val).getIcon();
         var highlightedIcon = this.specProvider.getEntity(val).getHighlightedIcon();
         var color = this.specProvider.getEntity(val).getColor();
-        var parent = this.specProvider.getEntity(val).getParentClass() as string;
+        // var parent = this.specProvider.getEntity(val).getParents() as string;
+        var parent = null;
   
         // highlighted icon defaults to icon
         if (!highlightedIcon || 0 === highlightedIcon.length) {
