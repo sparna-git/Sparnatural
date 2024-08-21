@@ -123,6 +123,14 @@ this:Notaire a sh:NodeShape;
   sh:node this:Personne;
   sh:property this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation .
 
+this:NotaireDeParis a sh:NodeShape;
+  sh:order "7"^^xsd:integer;
+  volipi:iconName "fas fa-user-edit";
+  sh:targetClass demo-anf:Notaire;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Notary from parie"@en, "Notaire de Paris"@fr;
+  sh:node this:Notaire .
+
 this:Place_hasOrHadPlaceType sh:path rico:hasOrHadPlaceType;
   sh:order "1";
   sh:name "has place type"@en, "a pour type de lieu"@fr;
@@ -138,66 +146,66 @@ this:Adresse_hasOrHadLocation sh:path rico:hasOrHadLocation;
   sh:order "1";
   sh:name "has location"@en, "est située dans"@fr;
   sh:nodeKind sh:IRI;
-  sh:or _:17d00ff6071d48b4a355f4284ed63c331875;
+  sh:or _:17d00ff6071d48b4a355f4284ed63c331890;
   dash:searchWidget core:ListProperty;
   dash:propertyRole dash:LabelRole;
   datasources:datasource this:list_rdfslabel_with_range_count_langfr .
 
-_:17d00ff6071d48b4a355f4284ed63c331875 rdf:first _:17d00ff6071d48b4a355f4284ed63c331876;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331877 .
+_:17d00ff6071d48b4a355f4284ed63c331890 rdf:first _:17d00ff6071d48b4a355f4284ed63c331891;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331892 .
 
-_:17d00ff6071d48b4a355f4284ed63c331876 sh:node this:Voie .
+_:17d00ff6071d48b4a355f4284ed63c331891 sh:node this:Voie .
 
-_:17d00ff6071d48b4a355f4284ed63c331877 rdf:first _:17d00ff6071d48b4a355f4284ed63c331878;
+_:17d00ff6071d48b4a355f4284ed63c331892 rdf:first _:17d00ff6071d48b4a355f4284ed63c331893;
   rdf:rest rdf:nil .
 
-_:17d00ff6071d48b4a355f4284ed63c331878 sh:node this:QuartierOuParoisse .
+_:17d00ff6071d48b4a355f4284ed63c331893 sh:node this:QuartierOuParoisse .
 
-this:Adresse_inversePath_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c331879;
+this:Adresse_inversePath_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c331894;
   sh:order "2";
   sh:name "is address of"@en, "est l'adresse de"@fr;
   sh:nodeKind sh:IRI;
-  sh:or _:17d00ff6071d48b4a355f4284ed63c331880;
+  sh:or _:17d00ff6071d48b4a355f4284ed63c331895;
   dash:searchWidget core:ListProperty;
   dash:propertyRole dash:LabelRole;
   datasources:datasource this:list_rdfslabel_with_range_count_langfr .
 
-_:17d00ff6071d48b4a355f4284ed63c331879 sh:inversePath rico:hasOrHadLocation .
+_:17d00ff6071d48b4a355f4284ed63c331894 sh:inversePath rico:hasOrHadLocation .
 
-_:17d00ff6071d48b4a355f4284ed63c331880 rdf:first _:17d00ff6071d48b4a355f4284ed63c331881;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331882 .
+_:17d00ff6071d48b4a355f4284ed63c331895 rdf:first _:17d00ff6071d48b4a355f4284ed63c331896;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331897 .
 
-_:17d00ff6071d48b4a355f4284ed63c331881 sh:node this:Etude .
+_:17d00ff6071d48b4a355f4284ed63c331896 sh:node this:Etude .
 
-_:17d00ff6071d48b4a355f4284ed63c331882 rdf:first _:17d00ff6071d48b4a355f4284ed63c331883;
+_:17d00ff6071d48b4a355f4284ed63c331897 rdf:first _:17d00ff6071d48b4a355f4284ed63c331898;
   rdf:rest rdf:nil .
 
-_:17d00ff6071d48b4a355f4284ed63c331883 sh:node this:Notaire .
+_:17d00ff6071d48b4a355f4284ed63c331898 sh:node this:Notaire .
 
-this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c331884;
+this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c331899;
   sh:order "1";
   sh:name "performs an activity in the district or street"@en, "exerce dans le quartier ou la voie"@fr;
   sh:nodeKind sh:IRI;
-  sh:or _:17d00ff6071d48b4a355f4284ed63c331886;
+  sh:or _:17d00ff6071d48b4a355f4284ed63c331901;
   dash:searchWidget core:ListProperty;
   dash:propertyRole dash:LabelRole;
   datasources:datasource this:list_rdfslabel_with_range_count_langfr .
 
-_:17d00ff6071d48b4a355f4284ed63c331884 rdf:first rico:hasOrHadLocation;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331885 .
+_:17d00ff6071d48b4a355f4284ed63c331899 rdf:first rico:hasOrHadLocation;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331900 .
 
-_:17d00ff6071d48b4a355f4284ed63c331885 rdf:first rico:hasOrHadLocation;
+_:17d00ff6071d48b4a355f4284ed63c331900 rdf:first rico:hasOrHadLocation;
   rdf:rest rdf:nil .
 
-_:17d00ff6071d48b4a355f4284ed63c331886 rdf:first _:17d00ff6071d48b4a355f4284ed63c331887;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331888 .
+_:17d00ff6071d48b4a355f4284ed63c331901 rdf:first _:17d00ff6071d48b4a355f4284ed63c331902;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331903 .
 
-_:17d00ff6071d48b4a355f4284ed63c331887 sh:node this:Voie .
+_:17d00ff6071d48b4a355f4284ed63c331902 sh:node this:Voie .
 
-_:17d00ff6071d48b4a355f4284ed63c331888 rdf:first _:17d00ff6071d48b4a355f4284ed63c331889;
+_:17d00ff6071d48b4a355f4284ed63c331903 rdf:first _:17d00ff6071d48b4a355f4284ed63c331904;
   rdf:rest rdf:nil .
 
-_:17d00ff6071d48b4a355f4284ed63c331889 sh:node this:QuartierOuParoisse .
+_:17d00ff6071d48b4a355f4284ed63c331904 sh:node this:QuartierOuParoisse .
 
 this:list_rdfslabel_with_range_count_langfr a datasources:SparqlDatasource;
   datasources:queryTemplate this:query_list_label_with_range_count_langfr;
