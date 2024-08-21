@@ -1,16 +1,16 @@
 import { Pattern } from "sparqljs";
-import { getSettings, TOOLTIP_CONFIG } from "../../../../sparnatural/settings/defaultSettings";
 import AddUserInputBtn from "../../buttons/AddUserInputBtn";
 import InfoBtn from "../../buttons/InfoBtn";
-import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
 import { DataFactory } from 'rdf-data-factory';
 import { SelectedVal } from "../../SelectedVal";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
-import SparqlFactory from "../../../generators/SparqlFactory";
+import SparqlFactory from "../../../generators/sparql/SparqlFactory";
 import { buildDateRangeOrExactDatePattern } from "./TimeDatePattern";
 import { I18n } from "../../../settings/I18n";
+import HTMLComponent from "../../HtmlComponent";
+import { TOOLTIP_CONFIG } from "../../../settings/defaultSettings";
 
 const factory = new DataFactory();
 
@@ -62,7 +62,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
   specProvider: ISparnaturalSpecification;
 
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     dateFormat: any,
     startClassCal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -232,79 +232,6 @@ export class TimeDatePickerWidget extends AbstractWidget {
     return endValue ? 
     new Date(endValue.getFullYear(),11,31,23,59,59) 
     :null
-  }
-
-  getRdfJsPattern(): Pattern[] {
-    let beginDateProp = this.specProvider.getProperty(this.objectPropVal.type).getBeginDateProperty();
-    let endDateProp = this.specProvider.getProperty(this.objectPropVal.type).getEndDateProperty();
-
-    if(beginDateProp != null && endDateProp != null) {
-      let exactDateProp = this.specProvider.getProperty(this.objectPropVal.type).getExactDateProperty();
-
-      return [
-        buildDateRangeOrExactDatePattern(
-          this.widgetValues[0].value.start?factory.literal(
-            this.#formatSparqlDate(this.widgetValues[0].value.start),
-            factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-          ):null,
-          this.widgetValues[0].value.stop?factory.literal(
-            this.#formatSparqlDate(this.widgetValues[0].value.stop),
-            factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-          ):null,
-          factory.variable(this.startClassVal.variable),
-          factory.namedNode(beginDateProp),
-          factory.namedNode(endDateProp),
-          exactDateProp != null?factory.namedNode(exactDateProp):null,
-          factory.variable(this.startClassVal.variable)
-        )
-      ];
-    } else {
-      return [
-        SparqlFactory.buildFilterRangeDateOrNumber(
-          this.widgetValues[0].value.start?factory.literal(
-            this.#formatSparqlDate(this.widgetValues[0].value.start),
-            factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-          ):null,
-          this.widgetValues[0].value.stop?factory.literal(
-            this.#formatSparqlDate(this.widgetValues[0].value.stop),
-            factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-          ):null,
-          factory.variable(this.endClassVal.variable)
-        )
-      ];
-    }    
-  }
-
-  /**
-   * 
-   * @param date Formats the date to insert in the SPARQL query. We cannot rely on toISOString() method
-   * since it does not properly handle negative year and generates "-000600-12-31" while we want "-0600-12-31"
-   * @returns 
-   */
-  #formatSparqlDate(date:Date) {
-    if(date == null) return null;
-
-    return this.#padYear(date.getUTCFullYear()) +
-    '-' + this.#pad(date.getUTCMonth() + 1) +
-    '-' + this.#pad(date.getUTCDate()) +
-    'T' + this.#pad(date.getUTCHours()) +
-    ':' + this.#pad(date.getUTCMinutes()) +
-    ':' + this.#pad(date.getUTCSeconds()) +
-    'Z';
-  }
-
-  #pad(number:number) {
-    if (number < 10) {
-      return '0' + number;
-    }
-    return number;
-  }
-
-  #padYear(number:number) {
-    let absoluteValue = (number < 0)?-number:number;
-    let absoluteString = (absoluteValue < 1000)?absoluteValue.toString().padStart(4,'0'):absoluteValue.toString();
-    let finalString = (number < 0)?"-"+absoluteString:absoluteString;
-    return finalString;
   }
 
   #getValueLabel = function (startLabel: string, stopLabel: string) {

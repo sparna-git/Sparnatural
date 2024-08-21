@@ -193,8 +193,6 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   }
 
   getEntitiesInDomainOfAnyProperty(): string[] {
-    // This is for debugging tree reading
-    // this.getEntitiesTreeInDomainOfAnyProperty();
     // map to extract just the uri
     return this.getInitialEntityList().map(e => e.getId());
   }
@@ -220,7 +218,8 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     }
 
     let dag:Dag<SHACLSpecificationEntity> = new Dag<SHACLSpecificationEntity>();
-    dag.initFromParentableAndIdAbleEntity(entities);
+    // for the moment : no disabled entries
+    dag.initFromParentableAndIdAbleEntity(entities, []);
     console.log(dag.toDebugString())
     return dag;
   }
@@ -266,10 +265,16 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
           let whereClause = beginWhere.substring(0,beginWhere.lastIndexOf('}')).trim();
 
           // replace the $this with the name of the original variable in the query
+          
           // \S matches any non-whitespace charracter
           var re = new RegExp("(\\S*) (rdf:type|a|<http://www\\.w3\\.org/1999/02/22-rdf-syntax-ns#type>) <" + nodeShapeUri + ">", "g");      
 
-          let replacer = function(match:string, p1:string, offset:number, fullString:string) {
+          let replacer = function(
+            match:string,
+            // name of the variable being matched, e.g. ?Person_1
+            p1:string,
+            offset:number,
+            fullString:string) {
             // first substitutes any other variable name with a prefix
             // so that we garantee unicity across the complete query
             var reVariables = new RegExp("\\?(\\S*)", "g");

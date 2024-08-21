@@ -11,7 +11,6 @@ import HTMLComponent from "../../../../HtmlComponent";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.
- * Refactored to extract this from InputTypeComponent.
  **/
 class ClassTypeId extends HTMLComponent {
   ParentComponent: EndClassGroup | StartClassGroup;
@@ -130,6 +129,7 @@ class ClassTypeId extends HTMLComponent {
       val: val,
       selected: selected
     }
+
     this.selectViewVariableBtn.widgetHtml[0].dispatchEvent(
       new CustomEvent("onSelectViewVar", { bubbles: true, detail: payload })
     );
@@ -178,6 +178,8 @@ class ClassSelectBuilder extends HTMLComponent {
   }
 
   buildSelect_FirstStartClassGroup() {
+    // testing hierarchy
+    // console.log(this.specProvider.getEntitiesTreeInDomainOfAnyProperty().toDebugString())
     return this.buildClassSelectFromItems(
       this.specProvider.getEntitiesInDomainOfAnyProperty(),
       null
@@ -185,6 +187,8 @@ class ClassSelectBuilder extends HTMLComponent {
   }
 
   buildSelect_EndClassGroup(domainId: string) {
+    // testing hierarchy
+    // console.log(this.specProvider.getEntity(domainId).getConnectedEntitiesTree().toDebugString())
     return this.buildClassSelectFromItems(
       this.specProvider.getEntity(domainId).getConnectedEntities(),
       null

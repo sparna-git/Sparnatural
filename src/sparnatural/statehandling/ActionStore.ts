@@ -1,6 +1,6 @@
 import ISparnaturalSpecification from "../spec-providers/ISparnaturalSpecification";
 import SparnaturalComponent from "../components/SparnaturalComponent";
-import { Order } from "../generators/ISparJson";
+import { Order } from "../generators/json/ISparJson";
 import toggleVarNames from "./actions/ToggleVarNames";
 import updateVarName from "./actions/UpdateVarName";
 import redrawBackgroundAndLinks from "./actions/RedrawBackgroundAndLinks";

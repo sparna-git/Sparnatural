@@ -58,6 +58,10 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
 
   }
 
+  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
+    throw new Dag<ISpecificationEntity>();
+  }
+
   getLanguages(): string[] {
     let languages:string[] = this.store
       .getQuads(null, RDFS.LABEL, null, null)

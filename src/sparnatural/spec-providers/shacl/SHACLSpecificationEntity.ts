@@ -10,6 +10,8 @@ import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../StoreModel";
 import { DagIfc, Dag } from "../../dag/Dag";
 import ISpecificationEntity from "../ISpecificationEntity";
+import { Dag, DagIfc } from "../../dag/Dag";
+import ISpecificationEntity from "../ISpecificationEntity";
 
 const factory = new DataFactory();
 
@@ -18,6 +20,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     constructor(uri:string, provider: SHACLSpecificationProvider, n3store: RdfStore, lang: string) {
         super(uri, provider, n3store, lang);
     }
+
 
     getLabel(): string {
         // first try to read an rdfs:label
@@ -104,6 +107,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         // return dedup array of strings
         return sortedDedups.map(e => e.getId());
     }
+    
 
     getConnectedEntities(): string[] {
         var items: string[] = [];
@@ -130,8 +134,36 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return sortedDedups.map(e => e.getId());        
     }
 
-    getConnectedEntitiesTree():DagIfc<ISpecificationEntity> {
-        return new Dag();
+    getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
+        // 1. get directly connected entities
+        let entities:ISpecificationEntity[] = this.getConnectedEntities().map(s => this.provider.getEntity(s));
+        
+        // 2. complement the initial list with their parents
+
+        // while not all parents of all entities are not part of the list...
+        let disabledList:string[] = new Array<string>();
+        while(!entities.every(entity => {
+            return entity.getParents().every(parent => {
+                return (entities.find(anotherEntity => anotherEntity.getId() === parent) != undefined);
+            });      
+        })) {
+            let parentsToAdd:SHACLSpecificationEntity[] = [];
+            entities.forEach(entity => {
+                entity.getParents().forEach(parent => {
+                    if(!entities.find(anotherEntity => anotherEntity.getId() === parent)) {
+                        parentsToAdd.push(this.provider.getEntity(parent) as SHACLSpecificationEntity);
+                    }
+                })
+            });
+            parentsToAdd.forEach(p => entities.push(p));
+            // also keep that as a disabled node
+            parentsToAdd.forEach(p => disabledList.push(p.getId()));
+        }
+
+        let dag:Dag<ISpecificationEntity> = new Dag<ISpecificationEntity>();
+        dag.initFromParentableAndIdAbleEntity(entities, disabledList);
+        console.log(dag.toDebugString())
+        return dag;
     }
 
     hasConnectedEntities(): boolean {
@@ -150,6 +182,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             .map(node => node.value);
                 
         // add all properties from node shapes of superclasses
+        /*
         let superClasses:Term[] = this.getSuperClasses();
         superClasses.forEach(sc => {
             let ns = this.provider.getNodeShapeTargetingClass(sc as Quad_Subject);
@@ -159,6 +192,13 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             } else {
                 console.warn("Warning, cannot find a node shape targeting class "+sc.value);
             }
+        });
+        */
+
+        let parents:string[] = this.getParents();
+        parents.forEach(p => {
+            let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);
+            propShapes.push(...parentEntity.getProperties());
         });
 
         propShapes
@@ -219,7 +259,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
     getParents(): string[] {
         
-        return this.getSuperClasses()
+        let parentsFromSuperClasses = this.getSuperClasses()
             // note : we exclude blank nodes
             .filter(term => term.termType == "NamedNode")
             // we find the shape targeting this class - it can be the class itself
@@ -231,7 +271,14 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
                 }                
             })
             // remove those for which the shape was not found
-            .filter(term => (term != undefined))
+            .filter(term => (term != undefined));
+
+        // get the parents from sh:node
+        let parentsFromShNode = this.#getShNode();
+        
+        // concat parents from superclasses and from node - deduplicated
+        let parents = [...new Set([...parentsFromSuperClasses, ...parentsFromShNode])];
+        return parents
             // and simply return the string value
             .map(term => term.value);
     }
@@ -262,6 +309,13 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             items.push(...this.#getSuperClassesRec(n3store, sc));
         });
         return items;
+    }
+
+    /**
+     * @returns the NodeShape IRI that are referenced from this one with sh:node - this is like subClassOf
+     */
+    #getShNode(): Term[] {
+        return this.graph.readProperty(factory.namedNode(this.uri), SH.NODE);
     }
 
     isRangeOf(n3store:RdfStore, shapeUri:any) {
@@ -316,10 +370,6 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
 
     getConnectedEntities(): string[] {
         return new Array<string>();
-    }
-
-    getConnectedEntitiesTree():DagIfc<ISpecificationEntity> {
-        return new Dag();
     }
 
     hasConnectedEntities(): boolean {

@@ -3,7 +3,7 @@ import ISpecificationEntity from "../ISpecificationEntity";
 import JsonLdSpecificationEntity from "./JsonLdSpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import JsonLdSpecificationProperty from "./JsonLdSpecificationProperty";
-import { DagIfc, Dag } from "../../dag/Dag";
+import { Dag, DagIfc } from "../../dag/Dag";
 
 interface IDataSources {
   // one of queryString or queryTemplate must be set
@@ -122,7 +122,7 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
   };
 
   getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
-    return new Dag();
+    throw new Dag<ISpecificationEntity>();
   }
 
  

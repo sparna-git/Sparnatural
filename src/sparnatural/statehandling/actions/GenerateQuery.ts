@@ -1,13 +1,13 @@
 import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 
 import ActionStore from "../ActionStore";
-import SparnaturalJsonGenerator from "../../generators/SparnaturalJsonGenerator";
-import RdfJsGenerator from "../../generators/SparqlSelectBuilder";
+import SparnaturalJsonGenerator from "../../generators/json/SparnaturalJsonGenerator";
+import SparqlGenerator from "../../generators/sparql/SparqlGenerator";
 import {
   Generator
 } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
-import { ISparJson } from "../../generators/ISparJson";
+import { ISparJson } from "../../generators/json/ISparJson";
 
 
 export class QueryGenerator {
@@ -43,7 +43,7 @@ export class QueryGenerator {
         console.dir(jsonQuery);
       }
 
-      var writer = new RdfJsGenerator(
+      var writer = new SparqlGenerator(
         this.actionStore.sparnatural,
         this.actionStore.specProvider,
         settings.sparqlPrefixes

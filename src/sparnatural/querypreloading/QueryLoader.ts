@@ -9,7 +9,7 @@ import NoOrderBtn from "../components/buttons/NoOrderBtn";
 import { SelectedVal } from "../components/SelectedVal";
 import SparnaturalComponent from "../components/SparnaturalComponent";
 import { WidgetValue } from "../components/widgets/AbstractWidget";
-import { Branch, ISparJson, Order, VariableTerm } from "../generators/ISparJson";
+import { Branch, ISparJson, Order, VariableTerm } from "../generators/json/ISparJson";
 
 
 export default class QueryLoader{
@@ -153,7 +153,7 @@ export default class QueryLoader{
     }
   }
   
-  // set the value for an inputTypeComponent and trigger the corresponding event
+  // set the value for an inputSelector and trigger the corresponding event
   static #setSelectedValue(
     component: StartClassGroup | EndClassGroup | ObjectPropertyGroup,
     value: string

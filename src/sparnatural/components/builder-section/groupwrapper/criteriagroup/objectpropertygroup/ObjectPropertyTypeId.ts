@@ -6,7 +6,7 @@ import HTMLComponent from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
 
 /**
- * Refactored to extract this from InputTypeComponent
+ * The property selector
  **/
 class ObjectPropertyTypeId extends HTMLComponent {
   GrandParent: CriteriaGroup;

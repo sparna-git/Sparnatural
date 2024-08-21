@@ -8,7 +8,10 @@ interface ISpecificationEntity extends ISpecificationEntry {
 
   getConnectedEntities():Array<string>;
 
-  getConnectedEntitiesTree():DagIfc<ISpecificationEntity>;
+  /**
+   * @returns : the Tree of the connected entities
+   */
+  getConnectedEntitiesTree(): DagIfc<ISpecificationEntity>
 
   hasConnectedEntities(): boolean;
   getConnectingProperties(range: string): Array<string>;

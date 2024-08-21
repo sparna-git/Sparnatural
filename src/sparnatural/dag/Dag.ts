@@ -14,7 +14,13 @@ export class Dag<Payload> implements DagIfc<Payload> {
         return result;
     }
 
-    initFromFlatList(hierarchy: Map<string, string[]>, data:Map<string, Payload>): void {
+    /**
+     * Creates a DAG from a map giving the relationship between a node and its parent, and a data map containing the payload
+     * for each ID.
+     * @param hierarchy The map containing the hierarchy information 
+     * @param data The map containing the payload information
+     */
+    initFromFlatList(hierarchy: Map<string, string[]>, data:Map<string, Payload>, disabled:string[]): void {
         this.roots = new Array<DagNode<Payload>>();
 
         // Create all nodes
@@ -32,6 +38,11 @@ export class Dag<Payload> implements DagIfc<Payload> {
             }
         }
 
+        // set disabled nodes
+        for(const id of disabled) {
+            nodes.get(id).disabled = true;
+        }
+
         // Establish parent-child relationships
         for (const [id, parentIds] of hierarchy.entries()) {
             const currentNode = nodes.get(id)!;
@@ -47,20 +58,31 @@ export class Dag<Payload> implements DagIfc<Payload> {
         }
     }
 
-    initFromIdableEntity(hierarchy: Map<string, string>, data:Array<Payload & {getId():string}>): void {
+    /**
+     * A simple method to create a Dag from a map containing the hierarchy, and an array of items that are the payload
+     * and that have a getId() method to retrieve their ID
+     * @param hierarchy the map containing the hierarchy (id <-> list of parent ids)
+     * @param data the array containing the payload objects, each with a getId() function
+     */
+    initFromIdableEntity(hierarchy: Map<string, string[]>, data:Array<Payload & {getId():string}>): void {
         let dataMap:Map<string, Payload> = new Map<string, Payload>();
         data.forEach((item)=> {
             dataMap.set(item.getId(), item);
         });
         
         let hierarchyMap:Map<string, string[]> = new Map<string, string[]>();
-        hierarchy.forEach((value:string, key:string) => {
-            hierarchyMap.set(key, [value]);
+        hierarchy.forEach((value:string[], key:string) => {
+            hierarchyMap.set(key, value);
         })
-        this.initFromFlatList(hierarchyMap, dataMap);
+        this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
     }
 
-    initFromParentableAndIdAbleEntity(data:Array<Payload & {getId():string} & {getParents():string[]}>): void {
+    /**
+     * A simple method to create a Dag from only an array of items that are the payload
+     * and that have a getId() method to retrieve their ID, and a getParents() methods to retrieve their parents
+     * @param data the array containing the payload objects, each with a getId() function and a getParents() function
+     */
+    initFromParentableAndIdAbleEntity(data:Array<Payload & {getId():string} & {getParents():string[]}>, disabled:string[]): void {
         let dataMap:Map<string, Payload> = new Map<string, Payload>();
         data.forEach((item)=> {
             dataMap.set(item.getId(), item);
@@ -70,7 +92,7 @@ export class Dag<Payload> implements DagIfc<Payload> {
             hierarchyMap.set(item.getId(), item.getParents());
         });
 
-        this.initFromFlatList(hierarchyMap, dataMap);
+        this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
     }
 }
 
@@ -80,6 +102,7 @@ export class DagNode<Payload> implements DagNodeIfc<Payload> {
     public parents: DagNodeIfc<Payload>[];
     // never null
     public children: DagNodeIfc<Payload>[];
+    public disabled: boolean;
     public payload: Payload;
 
     constructor(id: string, payload: Payload) {
@@ -135,7 +158,7 @@ export class DagNode<Payload> implements DagNodeIfc<Payload> {
         for (let i = 0; i < depth; i++) {
             indent += " ";            
         }
-        let result = indent+"id:"+this.id+"\n";
+        let result = indent+"id:"+this.id+(this.disabled?" !disabled":"")+"\n";
         this.children.forEach(child => {
             result += child.toDebugString(depth+2);
         })
@@ -150,6 +173,7 @@ export interface DagNodeIfc<Payload> {
     id: string;
     parents:DagNodeIfc<Payload>[];
     children:DagNodeIfc<Payload>[];
+    disabled:boolean;
     payload:Payload;
 
     toDebugString(depth:number):string;

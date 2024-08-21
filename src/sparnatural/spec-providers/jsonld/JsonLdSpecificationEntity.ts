@@ -34,8 +34,8 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
         return items;
     }
 
-    getConnectedEntitiesTree():DagIfc<ISpecificationEntity> {
-      return new Dag();
+    getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
+        return new Dag<ISpecificationEntity>();
     }
 
     hasConnectedEntities(): boolean {

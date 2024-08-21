@@ -16,7 +16,6 @@ import { triggerOption } from "../groupwrapperevents/events/TriggerOption";
 import { I18n } from "../../../../settings/I18n";
 
 class CriteriaGroup extends HTMLComponent {
-  settings: any;
   StartClassGroup: StartClassGroup;
   OptionsGroup: OptionsGroup; // optional or notexists
   ObjectPropertyGroup: ObjectPropertyGroup;

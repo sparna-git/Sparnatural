@@ -19,7 +19,10 @@ interface ISparnaturalSpecification {
    */
   getEntitiesInDomainOfAnyProperty():Array<string>;
 
-  getEntitiesTreeInDomainOfAnyProperty():DagIfc<ISpecificationEntity>;
+  /**
+   * @returns : the initial tree of entities to be displayed in Sparnatural
+   */
+  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity>;
 
   expandSparql(sparql: string, prefixes: { [key: string]: string }): string; 
 

@@ -47,9 +47,9 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         return items;
     }
 
-    getConnectedEntitiesTree():DagIfc<ISpecificationEntity> {
-      return new Dag();
-  }
+    getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
+      return new Dag<ISpecificationEntity>();
+    }
 
 
     hasConnectedEntities(): boolean {

@@ -1,35 +1,21 @@
 import { BgpPattern, Pattern, Triple, ValuesPattern } from "sparqljs";
 import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../SelectedVal";
-import { AbstractWidget, RDFTerm, ValueRepetition, WidgetValue } from "../AbstractWidget";
+import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "jstree"
 import ISettings from "../../../../sparnatural/settings/ISettings";
-import WidgetWrapper from "../../builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper";
 import { ValuePatternRow } from "sparqljs";
 import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import SparqlFactory from "../../../generators/SparqlFactory";
+import SparqlFactory from "../../../generators/sparql/SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
 import { NoOpTreeDataProvider, TreeDataProviderIfc } from "../data/DataProviders";
+import HTMLComponent from "../../HtmlComponent";
 
 const factory = new DataFactory();
 
 require("jstree/dist/themes/default/style.min.css");
 
-export class TreeWidgetValue implements WidgetValue {
-  value: {
-    label: string;
-    uri: string;
-  };
-
-  key():string {
-    return this.value.uri;
-  }
-
-  constructor(v:TreeWidgetValue["value"]) {
-    this.value = v;
-  }
-}
 
 export interface TreeConfiguration {
   dataProvider: TreeDataProviderIfc,
@@ -42,28 +28,25 @@ export class TreeWidget extends AbstractWidget {
     dataProvider: new NoOpTreeDataProvider()
   }
 
-  protected widgetValues: TreeWidgetValue[];
+  protected widgetValues: RdfTermValue[];
   configuration:TreeConfiguration;
   IdCriteriaGroupe: any;
   jsTree: any;
-  value: TreeWidgetValue;
+  value: RdfTermValue;
   // html content
   button: any;
   hiddenInput: any;
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
-  settings:ISettings
   displayLayer: JQuery<HTMLElement>
-  sort:boolean;
 
   constructor(
-    parentComponent: WidgetWrapper,
+    parentComponent: HTMLComponent,
     configuration:TreeConfiguration,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
-    endClassVal: SelectedVal,
-    sort: boolean
+    endClassVal: SelectedVal
   ) {
     super(
       "tree-widget",
@@ -80,7 +63,6 @@ export class TreeWidget extends AbstractWidget {
     this.startClassVal = startClassVal;
     this.endClassVal = endClassVal;
     this.objectPropVal = objectPropVal;
-    this.sort = sort;
   }
 
   render() {
@@ -124,7 +106,6 @@ export class TreeWidget extends AbstractWidget {
 
     var self = this;
     let dataProvider = this.configuration.dataProvider;
-    let settings = this.settings;
     var options = {
       core: {
         multiple: true,
@@ -146,15 +127,6 @@ export class TreeWidget extends AbstractWidget {
             items:TreeItem[]
           ) {
             var result = [];
-
-            if(self.sort) {
-              // here, if we need to sort, then sort according to lang
-              var collator = new Intl.Collator(self.settings.language);					
-              items.sort(function(a:TreeItem, b:TreeItem) {
-                return collator.compare(a.label,b.label);
-              });
-            }
-
 
             for (var i = 0; i < items.length; i++) {
               var text = items[i].label;
@@ -203,9 +175,6 @@ export class TreeWidget extends AbstractWidget {
               startClassGroup_value,
               ObjectPropertyGroup_value,
               endClassGroup_value,
-              settings.language,
-              settings.defaultLanguage,
-              settings.typePredicate,
               nodeCallback,
               errorCallback
             );
@@ -215,9 +184,6 @@ export class TreeWidget extends AbstractWidget {
               startClassGroup_value,
               ObjectPropertyGroup_value,
               endClassGroup_value,
-              settings.language,
-              settings.defaultLanguage,
-              settings.typePredicate,
               nodeCallback,
               errorCallback
             );
@@ -264,7 +230,7 @@ export class TreeWidget extends AbstractWidget {
   onTreeDataLoaded = function onTreeDataLoaded(result: string | any[]) {
     if (result.length == 0) {
       $("#ecgrw-" + this.IdCriteriaGroupe + "-displayLayer .treeNotice")
-        .text(this.langSearch.TreeWidgetNoData)
+        .text(I18n.labels.TreeWidgetNoData)
         .show();
     } else {
       $("#ecgrw-" + this.IdCriteriaGroupe + "-displayLayer .treeNotice").hide();
@@ -357,71 +323,8 @@ export class TreeWidget extends AbstractWidget {
     $(this_.ParentComponent).trigger("change");
   };
 
-  getValue = function ():Array<TreeWidgetValue> {
-    var checked = this.jsTree.jstree().get_top_checked(true);
-
-    // rebuild a clean data structure
-    var values = [];
-    for (var node in checked) {
-      const val = new TreeWidgetValue({
-        label: checked[node].original.text,
-        uri: checked[node].id
-      });
-      
-      values.push(val);
-    }
-
-    return values;
-  };
-
-  parseInput(input: TreeWidgetValue["value"]): TreeWidgetValue {
-    return new TreeWidgetValue(input);
+  parseInput(input: RdfTermValue["value"]): RdfTermValue {
+    return new RdfTermValue(input);
   }
 
-  isBlockingObjectProp() {
-    return (
-      this.widgetValues.length == 1
-      &&
-      !((this.ParentComponent.ParentComponent.ParentComponent as EndClassGroup).isVarSelected())
-    );
-  }
-
-  /**
-   * @returns  true if at least one value is selected, in which case we don't need to insert an rdf:type constraint
-   * on the end class
-   */
-  isBlockingEnd(): boolean {
-    return (this.widgetValues.length > 0);
-  }
-
-  getRdfJsPattern(): Pattern[] {
-    if(this.isBlockingObjectProp()) {
-      // single value not selected, set it directly as the value of the triple
-      let singleTriple: Triple = SparqlFactory.buildTriple(
-        factory.variable(this.startClassVal.variable),
-        factory.namedNode(this.objectPropVal.type),
-        factory.namedNode((this.widgetValues[0]).value.uri)
-      );
-
-      let ptrn: BgpPattern = {
-        type: "bgp",
-        triples: [singleTriple],
-      };  
-
-      return [ptrn];
-    } else {
-      // multiple values, use a VALUES
-      let vals = this.widgetValues.map((v) => {
-        let vl: ValuePatternRow = {};
-        vl["?"+this.endClassVal.variable] = factory.namedNode(v.value.uri);
-        return vl;
-      });
-      let valuePattern: ValuesPattern = {
-        type: "values",
-        values: vals,
-      };
-      return [valuePattern];
-    }
-
-  }
 }

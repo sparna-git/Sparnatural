@@ -1,7 +1,7 @@
 import { Literal, NamedNode, Variable } from "@rdfjs/types";
 import { DataFactory } from 'rdf-data-factory';
 import { BgpPattern, GroupPattern, OperationExpression, Pattern, UnionPattern, Triple, IriTerm, BlankTerm, VariableTerm, QuadTerm, PropertyPath, Term } from "sparqljs";
-import SparqlFactory from "../../../generators/SparqlFactory";
+import SparqlFactory from "../../../generators/sparql/SparqlFactory";
 
 const factory = new DataFactory();
 
