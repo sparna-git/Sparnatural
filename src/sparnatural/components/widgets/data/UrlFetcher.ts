@@ -91,10 +91,10 @@ export class SparqlFetcherFactory {
         this.extraHeaders = extraHeaders;
     }
 
-    buildSparqlFetcher(endpointsParam:string):SparqlFetcherIfc {   
-        if(endpointsParam.indexOf(' ') > 0) {
+    buildSparqlFetcher(endpoints:string[]):SparqlFetcherIfc {   
+        // if more than one endpoint
+        if(endpoints.length > 1) {
             // extract selected endpoints from full catalog
-            let endpoints = endpointsParam.split(' ');
             let subCatalog = this.catalog.extractSubCatalog(endpoints);
             return new MultipleEndpointSparqlFetcher(
                 new UrlFetcher(this.localCacheDataTtl, this.extraHeaders),
@@ -102,7 +102,9 @@ export class SparqlFetcherFactory {
                 this.lang
             );
         } else {
-            return new SparqlFetcher(new UrlFetcher(this.localCacheDataTtl, this.extraHeaders), endpointsParam);
+            // only one single endpoint
+            let endpoint:string = endpoints[0]
+            return new SparqlFetcher(new UrlFetcher(this.localCacheDataTtl, this.extraHeaders), endpoint);
         }
     }
 

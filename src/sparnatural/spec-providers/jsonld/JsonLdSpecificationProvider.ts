@@ -107,7 +107,7 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
           var aClass = domains[i];
           let c = new JsonLdSpecificationEntity(this.jsonSpecs, aClass, this.lang);
           // always exclude RemoteClasses from first list
-          if (!c.isRemoteEntity()) {
+          if (!c.hasTypeCriteria()) {
             items = JsonLdSpecificationProvider.pushIfNotExist(aClass, items);
           }
         }

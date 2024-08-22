@@ -242,10 +242,14 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     this.store
       .getQuads(null, SH.PATH, null, null)
       .forEach((quad: Quad) => {
-        // find it with the full URI
-        var re = new RegExp("<" + quad.subject.value + ">", "g");
-        let sparqlReplacementString = SHACLSpecificationProvider.pathToSparql(quad.object, this.store);
-        sparql = sparql.replace(re, sparqlReplacementString);
+        try {
+          // find it with the full URI
+          var re = new RegExp("<" + quad.subject.value + ">", "g");
+          let sparqlReplacementString = SHACLSpecificationProvider.pathToSparql(quad.object, this.store);
+          sparql = sparql.replace(re, sparqlReplacementString);
+        } catch (error) {
+          console.error("Unsupported sh:path for "+quad.subject.value+" - review your configuration");
+        }
       });
 
     // for each sh:target/sh:select ...

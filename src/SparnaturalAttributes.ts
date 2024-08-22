@@ -1,6 +1,6 @@
 export class SparnaturalAttributes {
   src: any;
-  defaultEndpoint: string;
+  endpoints: string[];
   language: string;
   defaultLanguage: string;
   addDistinct?: boolean;
@@ -20,8 +20,10 @@ export class SparnaturalAttributes {
     if(!this.src) {
       throw Error('No src provided!');
     }
-    this.defaultEndpoint = this.#read(element, "endpoint");
-    if(!this.defaultEndpoint) {
+    let endpointParam = this.#read(element, "endpoint");
+    this.endpoints = endpointParam.split(" ");
+    
+    if(!this.endpoints) {
       throw Error('No endpoint provided!');
     }
     this.catalog = this.#read(element, "catalog");

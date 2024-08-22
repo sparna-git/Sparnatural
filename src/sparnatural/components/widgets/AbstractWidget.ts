@@ -35,7 +35,7 @@ export class RDFTerm {
     switch(term.termType) {
       case "Literal": this.type = "literal"; break;
       case "BlankNode": this.type = "bnode"; break;
-      case "NamedNode": this.type = "iri"; break;
+      case "NamedNode": this.type = "uri"; break;
       default : throw new Error("Unsupported termType here "+term.termType)
     };
     this.value = term.value;
