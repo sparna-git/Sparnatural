@@ -93,7 +93,7 @@ export class SparnaturalElement extends HTMLElement {
         break;
       }
       case "endpoint" : {
-        getSettings().defaultEndpoint = newValue;
+        getSettings().endpoints = newValue.split(" ");
         break;
       }
       default : {
@@ -160,7 +160,7 @@ export class SparnaturalElement extends HTMLElement {
       getSettings().customization.headers
     );
 
-    let sparqlFetcher:SparqlFetcherIfc = sparqlFetcherFactory.buildSparqlFetcher(getSettings().defaultEndpoint);
+    let sparqlFetcher:SparqlFetcherIfc = sparqlFetcherFactory.buildSparqlFetcher(getSettings().endpoints);
     sparqlFetcher.executeSparql(query, callback, errorCallback);
   }
 
