@@ -81,7 +81,7 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
         return false;
     }
 
-    isRemoteEntity(): boolean {
+    hasTypeCriteria(): boolean {
       var classEntity = JsonLdSpecificationProvider.getResourceById(this.id, this.jsonSpecs);
       if(classEntity == null) return false;
 

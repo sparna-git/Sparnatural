@@ -95,7 +95,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         );
     }
 
-    isRemoteEntity(): boolean {
+    hasTypeCriteria(): boolean {
         return (
             this.store.getQuads(
               factory.namedNode(this.uri),

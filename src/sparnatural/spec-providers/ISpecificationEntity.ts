@@ -17,10 +17,8 @@ interface ISpecificationEntity extends ISpecificationEntry {
   getConnectingProperties(range: string): Array<string>;
   isLiteralEntity(): boolean;
 
-  /**
-   * @deprecated
-   */
-  isRemoteEntity(): boolean;
+  hasTypeCriteria(): boolean;
+
   getDefaultLabelProperty():string|undefined;
 
 }

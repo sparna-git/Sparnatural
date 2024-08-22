@@ -228,8 +228,10 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return hasNodeKindLiteral || hasDatatype || hasLanguageIn || hasUniqueLang;
     }
 
-    isRemoteEntity(): boolean {
-        return false;
+    hasTypeCriteria(): boolean {
+        var hasTargetClass = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null);
+        var hasTarget = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null);
+        return (!hasTargetClass && !hasTarget);
     }
 
     /**
@@ -386,7 +388,7 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
         return true;
     }
 
-    isRemoteEntity(): boolean {
+    hasTypeCriteria(): boolean {
         return false;
     }
 
