@@ -1,8 +1,6 @@
 
 # Sparnatural documentation
 
-[![French](https://github.com/madebybowtie/FlagKit/raw/master/Assets/PNG/FR.png) Documentation en français](/fr)
-
 _For examples of how Sparnatural works and can be configured, have a look at the [**demos folder**](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) of [sparnatural.eu](http://sparnatural.eu) website._
 
 
