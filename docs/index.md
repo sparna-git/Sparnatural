@@ -22,7 +22,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 
 Sparnatural is configured by a configuration file expressed in SHACL. The configuration file can be edited in an Excel spreadsheet.
 
-- **[How-to configure in SHACL](how-to-configure-shacl/How-to-configure-Sparnatural-shacl.md)** : a detailled documentation for configuring Sparnatural in a spreadsheet. Start here to learn the different configuration options of Sparnatural.
+- **[How-to configure in SHACL](how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html)** : a detailled documentation for configuring Sparnatural in a spreadsheet. Start here to learn the different configuration options of Sparnatural.
 - [Reference page of SHACL configuration](SHACL-based-configuration.md) : the list of all SHACL constructs Sparnatural understands
 
 ### 3.2 deprecated OWL configuration
