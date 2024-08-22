@@ -1,4 +1,4 @@
-_[Home](index.html) > Archives > JSON-based configuration_
+_[Home](../index.html) > Archives > JSON-based configuration_
 
 # Sparnatural JSON configuration
 

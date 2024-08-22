@@ -1,4 +1,4 @@
-_[Home](index.html) > Archives > Javascript integration version 7_
+_[Home](../index.html) > Archives > Javascript integration version 7_
 
 
 # Javascript integration and parameters reference - version 7

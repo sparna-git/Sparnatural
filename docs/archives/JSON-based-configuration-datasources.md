@@ -1,4 +1,4 @@
-_[Home](index.html) > Archives > Configure datasource on object properties_
+_[Home](../index.html) > Archives > Configure datasource on object properties_
 
 # Configure datasources on object properties
 
