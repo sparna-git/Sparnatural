@@ -323,6 +323,26 @@ export class TreeWidget extends AbstractWidget {
     $(this_.ParentComponent).trigger("change");
   };
 
+  getValue = function ():Array<RdfTermValue> {
+    var checked = this.jsTree.jstree().get_top_checked(true);
+
+    // rebuild a clean data structure
+    var values = [];
+    for (var node in checked) {
+      const val = new RdfTermValue({
+        label: checked[node].original.text,
+        rdfTerm: {
+           type: "uri",
+           value: checked[node].id
+        }
+      });
+      
+      values.push(val);
+    }
+
+    return values;
+  };
+
   parseInput(input: RdfTermValue["value"]): RdfTermValue {
     return new RdfTermValue(input);
   }
