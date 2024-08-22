@@ -200,7 +200,25 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
     // 1. get the entities that are in a domain of a property
     let entities:SHACLSpecificationEntity[] = this.getInitialEntityList();
-    // 2. complement the initial list with their parents
+
+    // 2. add the children of these entities - recursively
+    while(!entities.every(entity => {
+        return entity.getChildren().every(child => {
+            return (entities.find(anotherEntity => anotherEntity.getId() === child) != undefined);
+        });
+    })) {
+        let childrenToAdd:SHACLSpecificationEntity[] = [];
+        entities.forEach(entity => {
+            entity.getChildren().forEach(child => {
+                if(!entities.find(anotherEntity => anotherEntity.getId() === child)) {
+                    childrenToAdd.push(this.getEntity(child) as SHACLSpecificationEntity);
+                }
+            })
+        });
+        childrenToAdd.forEach(p => entities.push(p));
+    }
+
+    // 3. complement the initial list with their parents
     while(!entities.every(entity => {
       return entity.getParents().every(parent => {
         return (entities.find(anotherEntity => anotherEntity.getId() === parent) != undefined);
