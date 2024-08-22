@@ -134,12 +134,29 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
     getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
         // 1. get directly connected entities
-        let entities:ISpecificationEntity[] = this.getConnectedEntities().map(s => this.provider.getEntity(s));
+        let entities:SHACLSpecificationEntity[] = this.getConnectedEntities().map(s => this.provider.getEntity(s)) as SHACLSpecificationEntity[];
         
-        // 2. complement the initial list with their parents
+        // 2. add the children of these entities - recursively
+        while(!entities.every(entity => {
+            return entity.getChildren().every(child => {
+                return (entities.find(anotherEntity => anotherEntity.getId() === child) != undefined);
+            });
+        })) {
+            let childrenToAdd:SHACLSpecificationEntity[] = [];
+            entities.forEach(entity => {
+                entity.getChildren().forEach(child => {
+                    if(!entities.find(anotherEntity => anotherEntity.getId() === child)) {
+                        childrenToAdd.push(this.provider.getEntity(child) as SHACLSpecificationEntity);
+                    }
+                })
+            });
+            childrenToAdd.forEach(p => entities.push(p));
+        }
 
-        // while not all parents of all entities are not part of the list...
+
+        // 3. complement the initial list with their parents
         let disabledList:string[] = new Array<string>();
+        // while not all parents of all entities are not part of the list...
         while(!entities.every(entity => {
             return entity.getParents().every(parent => {
                 return (entities.find(anotherEntity => anotherEntity.getId() === parent) != undefined);
@@ -259,7 +276,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
     getParents(): string[] {
         
-        let parentsFromSuperClasses = this.getSuperClasses()
+        let parentsFromSuperClasses = this.getSuperClassesOfTargetClass()
             // note : we exclude blank nodes
             .filter(term => term.termType == "NamedNode")
             // we find the shape targeting this class - it can be the class itself
@@ -283,10 +300,35 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             .map(term => term.value);
     }
 
+    getChildren(): string[] {
+        let cildrenFromSuperClasses = this.getSubClassesOfTargetClass()
+            // note : we exclude blank nodes
+            .filter(term => term.termType == "NamedNode")
+            // we find the shape targeting this class - it can be the class itself
+            .map(term => {
+                if(this.graph.hasTriple(term as Quad_Subject, RDF.TYPE, RDFS.CLASS)) {
+                    return term;
+                } else {
+                    return this.graph.findSingleSubjectOf(SH.TARGET_CLASS, term);
+                }                
+            })
+            // remove those for which the shape was not found
+            .filter(term => (term != undefined));
+
+        // get the children from sh:node
+        let childrenFromShNode = this.#getInverseOfShNode();
+        
+        // concat parents from superclasses and from node - deduplicated
+        let children = [...new Set([...cildrenFromSuperClasses, ...childrenFromShNode])];
+        return children
+            // and simply return the string value
+            .map(term => term.value);
+    }
+
     /**
-     * @returns the immediate superclasses of this NodeShape+Class, or of the classes being targeted by this NodeShape
+     * @returns the immediate superclasses of the target class of this Shape (can be the shape itself)
      */
-    getSuperClasses(): Term[] {
+    getSuperClassesOfTargetClass(): Term[] {
         // retrieve target classes
         let targetClasses:Term[] = this.#getTargetClasses();
         // then retrieve super classes of those classes
@@ -296,6 +338,21 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             superClasses.push(...currentSuperClasses);
         });
         return superClasses;
+    }
+
+    /**
+     * @returns the immediate subclasses of the target class of this Shape (can be the shape itself)
+     */
+    getSubClassesOfTargetClass(): Term[] {
+        // retrieve target classes
+        let targetClasses:Term[] = this.#getTargetClasses();
+        // then retrieve sub classes of those classes
+        let subClasses:Term[] = [];
+        targetClasses.forEach(tc => {
+            let currentSubClasses = this.graph.findSubjectsOf(RDFS.SUBCLASS_OF, tc)
+            subClasses.push(...currentSubClasses);
+        });
+        return subClasses;
     }
 
     /**
@@ -316,6 +373,13 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
      */
     #getShNode(): Term[] {
         return this.graph.readProperty(factory.namedNode(this.uri), SH.NODE);
+    }
+
+    /**
+     * @returns the NodeShape IRI that reference this one with sh:node
+     */
+    #getInverseOfShNode(): Term[] {
+        return this.graph.findSubjectsOf(SH.NODE, factory.namedNode(this.uri));
     }
 
     isRangeOf(n3store:RdfStore, shapeUri:any) {

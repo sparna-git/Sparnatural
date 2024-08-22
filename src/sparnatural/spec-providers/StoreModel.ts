@@ -42,7 +42,7 @@ export class StoreModel {
     /**
      * Finds all subjects having the given property with the given object, or undefined if not found
      **/
-    findSubjectOf(property: Term, object: Term): Quad_Subject[] {
+    findSubjectsOf(property: Term, object: Term): Quad_Subject[] {
         return this.store
             .getQuads(null, property, object, null)
             .map(quad => quad.subject);
@@ -52,7 +52,7 @@ export class StoreModel {
      * Finds the subjects having the given property with the given object, and returns the first value found, or undefined if not found
      */
     findSingleSubjectOf(property: Term, object: Term): Quad_Subject | undefined {
-        var values = this.findSubjectOf(property, object);
+        var values = this.findSubjectsOf(property, object);
 
         if (values.length > 0) {
             return values[0];
