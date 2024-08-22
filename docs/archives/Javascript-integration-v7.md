@@ -1,9 +1,9 @@
-_[Home](index.html) > Javascript integration version 7_
+_[Home](index.html) > Archives > Javascript integration version 7_
 
 
 # Javascript integration and parameters reference - version 7
 
-_/!\This documentation applies to version 7 of Sparnatural. See the [version 8 integration documentation](Javascript-integration) for versions 8 and above._
+_/!\This documentation is deprecated. See the [version 8 integration documentation](../Javascript-integration) for versions 8 and above._
 
 ## Constructor
 

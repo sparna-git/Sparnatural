@@ -1,8 +1,8 @@
-_[Home](index.html) > JSON-based configuration_
+_[Home](index.html) > Archives > JSON-based configuration_
 
 # Sparnatural JSON configuration
 
-**/!\ This is now deprecated. Please transition to OWL or SHACL configuration**
+**/!\ This is now deprecated. Please transition to SHACL configuration**
 
 Sparnatural can be configured using a JSON(-LD) data structure. The data structure looks very much like [JSON-LD](https://www.w3.org/TR/json-ld/), but is really interpreted and parsed like a JSON, so stick with the JSON keys given below.
 
@@ -187,5 +187,4 @@ This table shows possible values for the subPropertyOf of [object properties](#o
 |  sparnatural:SearchProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/11-search.png" width="150" height="90"> |
 |  sparnatural:NonSelectableProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/13-no-value.png" width="150" height="90"> |
 |  sparnatural:BooleanProperty  | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/15-boolean.png" width="150" height="70"> |
-
 
