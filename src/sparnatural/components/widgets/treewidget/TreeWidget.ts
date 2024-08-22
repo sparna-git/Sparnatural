@@ -19,13 +19,15 @@ require("jstree/dist/themes/default/style.min.css");
 
 export interface TreeConfiguration {
   dataProvider: TreeDataProviderIfc,
+  maxSelectedItems: number
 }
 
 export class TreeWidget extends AbstractWidget {
 
   // The default implementation of TreeConfiguration
   static defaultConfiguration: TreeConfiguration = {
-    dataProvider: new NoOpTreeDataProvider()
+    dataProvider: new NoOpTreeDataProvider(),
+    maxSelectedItems: 3
   }
 
   protected widgetValues: RdfTermValue[];
@@ -239,7 +241,7 @@ export class TreeWidget extends AbstractWidget {
 
   //limit to 3 selction
   onChangedJstree = function (e: { data: { arg1: any } }, data: any) {
-    let this_ = e.data.arg1;
+    let this_:TreeWidget = e.data.arg1;
     var items = $(this_.jsTree).find("li.jstree-node");
 
     var selecteds = this_.jsTree.jstree().get_top_checked();
@@ -266,7 +268,7 @@ export class TreeWidget extends AbstractWidget {
       }
     }
 
-    if (this_.jsTree.jstree().get_top_checked().length >= this_.settings.maxOr) {
+    if (this_.jsTree.jstree().get_top_checked().length >= this_.configuration.maxSelectedItems) {
       for (var i = 0; i < items.length; i++) {
         var id = $(items[i]).attr("id");
         if (selecteds.indexOf(id) == -1) {

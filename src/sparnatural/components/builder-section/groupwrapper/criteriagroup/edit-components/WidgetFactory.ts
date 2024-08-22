@@ -26,6 +26,7 @@ export class WidgetFactorySettings {
     language: string;
     defaultLanguage: string;
     typePredicate: string;
+    maxOr: number;
     
     sparqlPrefixes?: { [key: string]: string };
     defaultEndpoint?: string;
@@ -382,7 +383,10 @@ export class WidgetFactory {
             // the provided configuration object for the corresponding section
             let treeConfig:TreeConfiguration = {
               ...TreeWidget.defaultConfiguration,
-              ...{dataProvider: treeDataProvider},
+              ...{
+                  dataProvider: treeDataProvider,
+                  maxSelectedItems: this.settings.maxOr
+              },
               ...this.settings.customization?.tree
             };
     
