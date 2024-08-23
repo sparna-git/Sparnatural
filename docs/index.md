@@ -35,6 +35,7 @@ Historically, Sparnatural also supported configuration specified in OWL :
 
 - [Querying date ranges](Querying-date-ranges.md) - How to generate SPARQL queries that can match on resources with a begin date and a end date 
 - [Federated query support](Federated-querying.md) - How to enable federated querying using SERVICE keyword in your configuration
+- [Query specific named graphs](Querying-named-graphs.md) - How to build an endpoint URL to be restricted to one or more named graphs
 - [Querying multiple endpoints](Querying-multiple-endpoints.md) - How to configure Sparnatural so that it can query multiple endpoints at the same time in a transparent way
 - [Integration with GraphDB Lucene Connector](Integration-with-GraphDB-Lucene-Connector.md) - Special configuration to interact with a GraphDB Lucene index 
 
