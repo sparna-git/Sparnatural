@@ -3,8 +3,6 @@ _[Home](index.html) > Javascript integration_
 
 # Javascript integration and parameters reference
 
-## NPM
-`npm i sparnatural`
 
 ## Constructor
 
@@ -20,6 +18,7 @@ Sparnatural is inserted as custom HTML element named `spar-natural` (note the da
     debug="true"
   />
 ```
+
 ## HTML attributes reference
 
 | Attribute | Description | Default | Mandatory/Optional |
@@ -190,10 +189,18 @@ The table below summarizes the various functions that can be called on the Sparn
 
 Starting from 9.1, releases of Sparnatural include a [`sparnatural-bindings.js`](https://github.com/sparna-git/Sparnatural/blob/master/src/sparnatural-bindings.js) Javascript file that can be used to facilitate the integration of the events and functions of Sparnatural in typical integration scenarios.
 
+In particular for a scenario when Sparnatural is integrated with YasQE as a read-only query viewer and YasR, and where Sparnatural is responsible for executing the query, you can call the following functions:
+
+```javascript
+// binds Sparnatural with the YasR plugins
+bindSparnaturalWithYasrPlugins(sparnatural, yasr);
+// binds Sparnatural with itself for the query execution and integration with yasqe and yasr
+bindSparnaturalWithItself(sparnatural, yasqe, yasr);
+```
 
 ## Sparnatural behavior customization
 
-The behavior of Sparnatural can be further adjuested with the `customization` object : `sparnatural.customization = { ... }`. That call must be done within the `init` event listener, after Sparnatural has finished reading its initial specification file.
+The behavior of Sparnatural can be further adjusted with the `customization` object : `sparnatural.customization = { ... }`. That call must be done within the `init` event listener, after Sparnatural has finished reading its initial specification file.
 
 ```javascript
 sparnatural.addEventListener("init", (event) => {
@@ -342,7 +349,7 @@ sparnatural.addEventListener("init", (event) => {
 });
 ```
 
-### headers configuration
+### HTTP headers configuration
 
 To set the headers of requests made by Sparnatural, use the customization objet above, with the `headers` key. See this example:
 
