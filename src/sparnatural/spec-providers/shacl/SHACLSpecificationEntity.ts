@@ -398,9 +398,12 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         let subjects:Quad_Subject[] = this.graph.findSubjectsOf(SH.NODE, factory.namedNode(this.uri));
         // keep only the sh:node references from NodeShapes, not property shapes or sh:or on property shapes
         // there could be more precise ways of doing this
-        return subjects.filter(t => {
-            this.graph.hasTriple(t, RDF.TYPE, SH.NODE_SHAPE)
-        })
+        return subjects.filter(term => 
+            term.termType == "NamedNode"
+            &&
+            this.graph.hasTriple(term, RDF.TYPE, SH.NODE_SHAPE)
+        )
+
     }
 
     isRangeOf(n3store:RdfStore, shapeUri:any) {
