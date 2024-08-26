@@ -10,6 +10,7 @@ import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../StoreModel";
 import { DagIfc, Dag } from "../../dag/Dag";
 import ISpecificationEntity from "../ISpecificationEntity";
+import ISpecificationProperty from "../ISpecificationProperty";
 
 const factory = new DataFactory();
 
@@ -104,6 +105,21 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         var sortedDedups = SHACLSpecificationEntry.sort(dedupItems.map(s => new SHACLSpecificationProperty(s, this.provider, this.store, this.lang)));
         // return dedup array of strings
         return sortedDedups.map(e => e.getId());
+    }
+
+    /**
+     * Return the tree of properties connecting this entity to the specified range entity
+     * @param range The URI of the selected target entity
+     * @returns 
+     */
+    getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
+        // 1. get list of properties
+        let entities:SHACLSpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as SHACLSpecificationProperty[];
+
+        // 2. turn it into a flat tree
+        let dag:Dag<ISpecificationProperty> = new Dag<ISpecificationProperty>();
+        dag.initFlatTreeFromFlatList(entities);
+        return dag;
     }
     
 
@@ -316,7 +332,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             .filter(term => (term != undefined));
 
         // get the children from sh:node
-        let childrenFromShNode = this.#getInverseOfShNode();
+        let childrenFromShNode = this.#getInverseOfShNodeForExplicitNodeShapes();
         
         // concat parents from superclasses and from node - deduplicated
         let children = [...new Set([...cildrenFromSuperClasses, ...childrenFromShNode])];
@@ -376,10 +392,15 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     }
 
     /**
-     * @returns the NodeShape IRI that reference this one with sh:node
+     * @returns the NodeShapes IRI that reference this one with sh:node
      */
-    #getInverseOfShNode(): Term[] {
-        return this.graph.findSubjectsOf(SH.NODE, factory.namedNode(this.uri));
+    #getInverseOfShNodeForExplicitNodeShapes(): Term[] {
+        let subjects:Quad_Subject[] = this.graph.findSubjectsOf(SH.NODE, factory.namedNode(this.uri));
+        // keep only the sh:node references from NodeShapes, not property shapes or sh:or on property shapes
+        // there could be more precise ways of doing this
+        return subjects.filter(t => {
+            this.graph.hasTriple(t, RDF.TYPE, SH.NODE_SHAPE)
+        })
     }
 
     isRangeOf(n3store:RdfStore, shapeUri:any) {
