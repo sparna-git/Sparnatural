@@ -90,7 +90,8 @@ this:Organization a sh:NodeShape;
   sh:nodeKind sh:IRI;
   rdfs:label "Organization"@en, "Organisme"@fr;
   sh:description "An organization, i.e., a group of persons with an identity or a social status. It includes notarial offices, and all organizations mentioned in the notarial records."@en,
-    "Un organisme, c'est-à-dire un groupe de personnes physiques ayant une identité ou un statut social. Inclut les études notariales, et toutes les collectivités mentionnées dans les archives notariales."@fr .
+    "Un organisme, c'est-à-dire un groupe de personnes physiques ayant une identité ou un statut social. Inclut les études notariales, et toutes les collectivités mentionnées dans les archives notariales."@fr;
+  sh:property <http://data.mydomain.com/sparnatural-page/sparnatural-config/Personne,%20this:Organization_agentIsTargetOfPerformanceRelation%20rico:beginningDate)> .
 
 this:Etude a sh:NodeShape;
   sh:order "7"^^xsd:integer;
@@ -110,7 +111,8 @@ this:Personne a sh:NodeShape;
   sh:nodeKind sh:IRI;
   rdfs:label "Person"@en, "Personne"@fr;
   sh:description "Any person. It includes notaries, and any person mentioned in notarial records."@en,
-    "Toute personne physique. Inclut les notaires, et surtout toute personne mentionnée dans les archives notariales."@fr .
+    "Toute personne physique. Inclut les notaires, et surtout toute personne mentionnée dans les archives notariales."@fr;
+  sh:property <http://data.mydomain.com/sparnatural-page/sparnatural-config/Personne,%20this:Organization_agentIsTargetOfPerformanceRelation%20rico:beginningDate)> .
 
 this:Notaire a sh:NodeShape;
   sh:order "7"^^xsd:integer;
@@ -134,7 +136,6 @@ this:NotaireDeParis a sh:NodeShape;
 this:PersonneEtOrganisation a sh:NodeShape;
   sh:order "7"^^xsd:integer;
   volipi:iconName "fas fa-user-edit";
-  sh:targetClass rico:Person;
   sh:nodeKind sh:IRI;
   rdfs:label "A person and an organisation at the same time"@en, "En même temps une personne et une organisation"@fr;
   sh:node this:Personne, this:Organization .
@@ -154,66 +155,73 @@ this:Adresse_hasOrHadLocation sh:path rico:hasOrHadLocation;
   sh:order "1";
   sh:name "has location"@en, "est située dans"@fr;
   sh:nodeKind sh:IRI;
-  sh:or _:17d00ff6071d48b4a355f4284ed63c331905;
+  sh:or _:17d00ff6071d48b4a355f4284ed63c332791;
   dash:searchWidget core:ListProperty;
   dash:propertyRole dash:LabelRole;
   datasources:datasource this:list_rdfslabel_with_range_count_langfr .
 
-_:17d00ff6071d48b4a355f4284ed63c331905 rdf:first _:17d00ff6071d48b4a355f4284ed63c331906;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331907 .
+_:17d00ff6071d48b4a355f4284ed63c332791 rdf:first _:17d00ff6071d48b4a355f4284ed63c332792;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c332793 .
 
-_:17d00ff6071d48b4a355f4284ed63c331906 sh:node this:Voie .
+_:17d00ff6071d48b4a355f4284ed63c332792 sh:node this:Voie .
 
-_:17d00ff6071d48b4a355f4284ed63c331907 rdf:first _:17d00ff6071d48b4a355f4284ed63c331908;
+_:17d00ff6071d48b4a355f4284ed63c332793 rdf:first _:17d00ff6071d48b4a355f4284ed63c332794;
   rdf:rest rdf:nil .
 
-_:17d00ff6071d48b4a355f4284ed63c331908 sh:node this:QuartierOuParoisse .
+_:17d00ff6071d48b4a355f4284ed63c332794 sh:node this:QuartierOuParoisse .
 
-this:Adresse_inversePath_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c331909;
+this:Adresse_inversePath_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c332795;
   sh:order "2";
   sh:name "is address of"@en, "est l'adresse de"@fr;
   sh:nodeKind sh:IRI;
-  sh:or _:17d00ff6071d48b4a355f4284ed63c331910;
+  sh:or _:17d00ff6071d48b4a355f4284ed63c332796;
   dash:searchWidget core:ListProperty;
   dash:propertyRole dash:LabelRole;
   datasources:datasource this:list_rdfslabel_with_range_count_langfr .
 
-_:17d00ff6071d48b4a355f4284ed63c331909 sh:inversePath rico:hasOrHadLocation .
+_:17d00ff6071d48b4a355f4284ed63c332795 sh:inversePath rico:hasOrHadLocation .
 
-_:17d00ff6071d48b4a355f4284ed63c331910 rdf:first _:17d00ff6071d48b4a355f4284ed63c331911;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331912 .
+_:17d00ff6071d48b4a355f4284ed63c332796 rdf:first _:17d00ff6071d48b4a355f4284ed63c332797;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c332798 .
 
-_:17d00ff6071d48b4a355f4284ed63c331911 sh:node this:Etude .
+_:17d00ff6071d48b4a355f4284ed63c332797 sh:node this:Etude .
 
-_:17d00ff6071d48b4a355f4284ed63c331912 rdf:first _:17d00ff6071d48b4a355f4284ed63c331913;
+_:17d00ff6071d48b4a355f4284ed63c332798 rdf:first _:17d00ff6071d48b4a355f4284ed63c332799;
   rdf:rest rdf:nil .
 
-_:17d00ff6071d48b4a355f4284ed63c331913 sh:node this:Notaire .
+_:17d00ff6071d48b4a355f4284ed63c332799 sh:node this:Notaire .
 
-this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c331914;
+this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation sh:path _:17d00ff6071d48b4a355f4284ed63c332800;
   sh:order "1";
   sh:name "performs an activity in the district or street"@en, "exerce dans le quartier ou la voie"@fr;
   sh:nodeKind sh:IRI;
-  sh:or _:17d00ff6071d48b4a355f4284ed63c331916;
+  sh:or _:17d00ff6071d48b4a355f4284ed63c332802;
   dash:searchWidget core:ListProperty;
   dash:propertyRole dash:LabelRole;
   datasources:datasource this:list_rdfslabel_with_range_count_langfr .
 
-_:17d00ff6071d48b4a355f4284ed63c331914 rdf:first rico:hasOrHadLocation;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331915 .
+_:17d00ff6071d48b4a355f4284ed63c332800 rdf:first rico:hasOrHadLocation;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c332801 .
 
-_:17d00ff6071d48b4a355f4284ed63c331915 rdf:first rico:hasOrHadLocation;
+_:17d00ff6071d48b4a355f4284ed63c332801 rdf:first rico:hasOrHadLocation;
   rdf:rest rdf:nil .
 
-_:17d00ff6071d48b4a355f4284ed63c331916 rdf:first _:17d00ff6071d48b4a355f4284ed63c331917;
-  rdf:rest _:17d00ff6071d48b4a355f4284ed63c331918 .
+_:17d00ff6071d48b4a355f4284ed63c332802 rdf:first _:17d00ff6071d48b4a355f4284ed63c332803;
+  rdf:rest _:17d00ff6071d48b4a355f4284ed63c332804 .
 
-_:17d00ff6071d48b4a355f4284ed63c331917 sh:node this:Voie .
+_:17d00ff6071d48b4a355f4284ed63c332803 sh:node this:Voie .
 
-_:17d00ff6071d48b4a355f4284ed63c331918 rdf:first _:17d00ff6071d48b4a355f4284ed63c331919;
+_:17d00ff6071d48b4a355f4284ed63c332804 rdf:first _:17d00ff6071d48b4a355f4284ed63c332805;
   rdf:rest rdf:nil .
 
-_:17d00ff6071d48b4a355f4284ed63c331919 sh:node this:QuartierOuParoisse .
+_:17d00ff6071d48b4a355f4284ed63c332805 sh:node this:QuartierOuParoisse .
+
+<http://data.mydomain.com/sparnatural-page/sparnatural-config/Personne,%20this:Organization_agentIsTargetOfPerformanceRelation%20rico:beginningDate)>
+  sh:path "(rico:agentIsTargetOfPerformanceRelation rico:beginningDate)";
+  sh:name "has beginning date of occupation"@en, "a pour date de début d'exercice"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date;
+  dash:searchWidget core:TimeProperty-Date .
 
 this:list_rdfslabel_with_range_count_langfr a datasources:SparqlDatasource;
   datasources:queryTemplate this:query_list_label_with_range_count_langfr;

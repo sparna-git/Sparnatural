@@ -47,12 +47,14 @@ export class Dag<Payload> implements DagIfc<Payload> {
         for (const [id, parentIds] of hierarchy.entries()) {
             const currentNode = nodes.get(id)!;
 
-            if(parentIds === null || parentIds.length == 0)
+            // no parents, it's a root
+            if(parentIds === null || parentIds.length == 0)
                 this.roots.push(currentNode);
             else {
                 parentIds.forEach(parentId => {
                     const parentNode = nodes.get(parentId)!;
-                    currentNode.moveUnder(parentNode);
+                    // addUnder and not moveUnder, otherwise the existing parent would be reset
+                    currentNode.addUnder(parentNode);
                 })                
             }
         }
