@@ -1,13 +1,15 @@
 import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
-import HierarchicalClassSelectBuilder from "./HierarchicalClassSelectBuilder";
+import {HierarchicalClassSelectBuilder, JsonDagRow, DagWidgetDefaultValue} from "./HierarchicalClassSelectBuilder";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import UiuxConfig from "../../../../IconsConstants";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import { SelectedVal } from "../../../..//SelectedVal";
 import SelectViewVariableBtn from "../../../../buttons/SelectViewVariableBtn";
 import HTMLComponent from "../../../../HtmlComponent";
+import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
+import ISpecificationEntity from "../../../../../spec-providers/ISpecificationEntity";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.
@@ -24,7 +26,8 @@ class ClassTypeId extends HTMLComponent {
     UiuxConfig.COMPONENT_ARROW_BACK
   );
 
-  selectBuilder: HierarchicalClassSelectBuilder;
+  //selectBuilder: HierarchicalClassSelectBuilder;
+  selectBuilder: ClassSelectBuilder;
   startClassVal: SelectedVal = {
     variable: null,
     type: null,
@@ -39,7 +42,8 @@ class ClassTypeId extends HTMLComponent {
     startClassVal?: any
   ) {
     super("ClassTypeId", ParentComponent, null);
-    this.selectBuilder = new HierarchicalClassSelectBuilder(this, specProvider);
+    //this.selectBuilder = new HierarchicalClassSelectBuilder(this, specProvider);
+    this.selectBuilder = new ClassSelectBuilder(this, specProvider);
     this.startClassVal = startClassVal;
     this.specProvider = specProvider;
   }
@@ -56,13 +60,17 @@ class ClassTypeId extends HTMLComponent {
       this.backArrow.render();
     }
 
+    console.log('------------- test dag context -----------------')
+
     if (isStartClassGroup(this.ParentComponent)) {
       if(!this.startClassVal?.type) {
+        
+        console.log('------------- test dag context start Val -----------------')
         // If this Component is a child of the StartClassGroup component in the first row with no value selected
         this.widgetHtml = this.selectBuilder.buildSelect_FirstStartClassGroup();
       } else {
         // If this is under a WHERE, we want only the selected value
-        this.widgetHtml = this.selectBuilder.buildSelect_StartClassGroupInWhere(this.startClassVal.type);
+        //this.widgetHtml = this.selectBuilder.buildSelect_StartClassGroupInWhere(this.startClassVal.type);
       }
     } else {
       // If this Component is a child of the EndClassGroup component, we want the range of possible end values
@@ -177,11 +185,13 @@ class ClassSelectBuilder extends HTMLComponent {
     return this;
   }
 
+  
+
   buildSelect_FirstStartClassGroup() {
     // testing hierarchy
     // console.log(this.specProvider.getEntitiesTreeInDomainOfAnyProperty().toDebugString())
-    return this.buildClassSelectFromItems(
-      this.specProvider.getEntitiesInDomainOfAnyProperty(),
+    return this.initDagWidget(
+      this.specProvider.getEntitiesTreeInDomainOfAnyProperty(),
       null
     );
   }
@@ -190,7 +200,7 @@ class ClassSelectBuilder extends HTMLComponent {
     // testing hierarchy
     // console.log(this.specProvider.getEntity(domainId).getConnectedEntitiesTree().toDebugString())
     return this.buildClassSelectFromItems(
-      this.specProvider.getEntity(domainId).getConnectedEntities(),
+      this.specProvider.getEntity(domainId).getConnectedEntitiesTree(),
       null
     );
   }
@@ -199,20 +209,85 @@ class ClassSelectBuilder extends HTMLComponent {
    * Return it with a single selected class inside
    */
   buildSelect_StartClassGroupInWhere(selectedClass:string) {
-    return this.buildClassSelectFromItems(
+    
+    /*return this.buildClassSelectFromItems(
       [selectedClass],
       null
-    );
+    );*/
   }
 
-  buildClassSelectFromItems(items:any[], default_value: string) {
+  buildFlatClassList(elements:any[], list: any[]) {
+
+    elements.forEach(element => {
+      list.push(element);
+      if (element.children.length > 0) {
+        list = this.buildFlatClassList(element.children, list) ;
+      }
+    });
+
+    return list ;
+  }
+
+
+  convertToJsonDag(rootNodes:any[]) {
+    let arrayToJson: Array<JsonDagRow> = [];
+
+    arrayToJson = this.getRecursiveDagElements(rootNodes) ;
+
+    return JSON.parse(JSON.stringify(arrayToJson));
+
+  }
+
+  getRecursiveDagElements(elements: Array<any>) {
+    let arrayToJson: Array<JsonDagRow> = [];
+    elements.forEach(element => {
+      console.log(element.id ) ;
+      console.log(element.payload.getParents() ) ;
+      let rowToJson = {
+        label: element.payload.getLabel(),
+        id: element.payload.getId(),
+        tooltip: element.payload.getTooltip(),
+        color: element.payload.getColor(),
+        icon: element.payload.getIcon(),
+        highlightedIcon: element.payload.getHighlightedIcon(),
+        count: 50,
+        childs: Array()
+      }
+      if (element.children.length > 0) {
+        rowToJson.childs = this.getRecursiveDagElements(element.children) ;
+      }
+      arrayToJson.push(rowToJson);
+    });
+    return arrayToJson ;
+
+  }
+
+  initDagWidget(items:DagIfc<ISpecificationEntity>, default_value: string) {
+    let defaultValue = {
+      value: '',
+      path: ''
+    }
+      console.log(items)  ;
+    let jsonDag = this.convertToJsonDag(items.roots) ;
+    let selectBuilder = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, defaultValue );
+    
+
+    return selectBuilder.buildClassSelectFromJson() ; ;
+  }
+
+  buildClassSelectFromItems(items:DagIfc<ISpecificationEntity>, default_value: string) {
+    console.log('----------------------test ClassSelectBuilder--------------') ;
+    let jsonDag = this.convertToJsonDag(items.roots) ;
+    console.log(jsonDag)
+    console.log(items) ;
     let list: Array<string> = [];
-    for (var key in items) {
-      var val = items[key];
-      var label = this.specProvider.getEntity(val).getLabel();
-      var icon = this.specProvider.getEntity(val).getIcon();
-      var highlightedIcon = this.specProvider.getEntity(val).getHighlightedIcon();
-      var color = this.specProvider.getEntity(val).getColor();
+    let flatList = this.buildFlatClassList(items.roots, list) ;
+    for (var key in flatList) {
+      var val = flatList[key];
+      var label = this.specProvider.getEntity(val.id).getLabel();
+      var icon = this.specProvider.getEntity(val.id).getIcon();
+      var highlightedIcon = this.specProvider.getEntity(val.id).getHighlightedIcon();
+      var color = this.specProvider.getEntity(val.id).getColor();
 
       // highlighted icon defaults to icon
       if (!highlightedIcon || 0 === highlightedIcon.length) {
@@ -220,8 +295,8 @@ class ClassSelectBuilder extends HTMLComponent {
       }
       let image = icon != null ? `data-icon="${icon}" data-iconh="${highlightedIcon}"` :""
       //var selected = (default_value == val)?'selected="selected"':'';
-      var desc = this.specProvider.getEntity(val).getTooltip();
-      var selected = default_value == val ? ' selected="selected"' : "";
+      var desc = this.specProvider.getEntity(val.id).getTooltip();
+      var selected = default_value == val.id ? ' selected="selected"' : "";
       var description_attr = "";
       if (desc) {
         description_attr = ' data-desc="' + desc + '"';

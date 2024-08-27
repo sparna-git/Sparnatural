@@ -7,7 +7,7 @@
     border: 1px solid  var(--primary-color-main);
     border-radius: 5px;
     white-space: nowrap;
-    width: 400px;
+    width: 345px;
     z-index: 1000;
     background-color: #fff;
 
@@ -29,9 +29,10 @@
     }
 
     ul {
-        width: 200px;
+        width: 345px;
         padding:0;
         margin: 0;
+        margin-left: 345px;
         list-style: none;
         background: #fff;
         max-height: 35vh;
@@ -41,16 +42,21 @@
         vertical-align: top;
         border-right: 1px solid #e8e8e8;
 
+        
+        transition-property: margin-left;
+        transition-duration: 1s;
+        transition-delay: 0;
+
         &.active-pane {
             display: inline-block;
             margin-left: 0;
             transition-property: margin-left;
-            transition-duration: 0.5s;
+            transition-duration: 1s;
             transition-delay: 0;
         }
 
         &.active-pane-hide-left {
-            margin-left: -200px;
+            margin-left: -345px;
         }
         
 
@@ -59,11 +65,16 @@
                 display: inline-block;
                 width: 100%;
                 padding: 5px 10px;
-                height: 40px;
+                height: 38px;
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 21.79px;
+                text-align: left;
+                
             }
             span.item-traverse {
                 display: none;
-                width: 20%;
+                width: 31px;
                 text-align: center;
                 padding: 5px 5px;
                 border-left: 1px solid #e8e8e8;
@@ -71,7 +82,7 @@
             }
             &.have-childs {
                 span.item-sel {
-                    width: 80%;
+                    width: 311px;
                 }
                 span.item-traverse {
                     display: inline-block;
@@ -96,6 +107,53 @@
                     &.highlited {
                         display: inline;
                     }
+                }
+            }
+        }
+
+        li.SubBreadcrum {
+            height: auto;
+            align-items: center;
+            width: 100%;
+
+            .wrapper {
+                display: flex;
+            }
+              
+            .returnBtn {
+                display: block;
+                width: 31px;
+                text-align: center;
+                /*height: 100%;*/
+                padding: 9px 0;
+                border-right: 1px solid #D9D9D9;
+                display: table;
+                span {
+                    
+  display: table-cell;
+  vertical-align: middle;
+                    text-align: center;
+                }
+            }
+            .parents-items {
+                display: block;
+                padding: 9px;
+                .parentLabel {
+                    display: inline-block;
+                    font-size: 10px;
+                    font-weight: 700;
+                    line-height: 13.62px;
+                    text-align: left;
+                    opacity: 0.5;
+                    
+                }
+                .parentLabel:last-child {
+                    display: block;
+                    font-size: 16px;
+                    font-weight: 700;
+                    line-height: 21.79px;
+                    text-align: left;
+                    opacity: 1;
                 }
             }
         }
