@@ -47,12 +47,14 @@ export class Dag<Payload> implements DagIfc<Payload> {
         for (const [id, parentIds] of hierarchy.entries()) {
             const currentNode = nodes.get(id)!;
 
-            if(parentIds === null || parentIds.length == 0)
+            // no parents, it's a root
+            if(parentIds === null || parentIds.length == 0)
                 this.roots.push(currentNode);
             else {
                 parentIds.forEach(parentId => {
                     const parentNode = nodes.get(parentId)!;
-                    currentNode.moveUnder(parentNode);
+                    // addUnder and not moveUnder, otherwise the existing parent would be reset
+                    currentNode.addUnder(parentNode);
                 })                
             }
         }
@@ -71,9 +73,6 @@ export class Dag<Payload> implements DagIfc<Payload> {
         });
         
         let hierarchyMap:Map<string, string[]> = new Map<string, string[]>();
-        hierarchy.forEach((value:string[], key:string) => {
-            hierarchyMap.set(key, value);
-        })
         this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
     }
 
@@ -91,6 +90,16 @@ export class Dag<Payload> implements DagIfc<Payload> {
         data.forEach((item)=> {
             hierarchyMap.set(item.getId(), item.getParents());
         });
+
+        this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
+    }
+
+    initFlatTreeFromFlatList(data:Array<Payload & {getId():string}>): void {
+        let dataMap:Map<string, Payload> = new Map<string, Payload>();
+        data.forEach((item)=> {
+            dataMap.set(item.getId(), item);
+        });
+        let hierarchyMap:Map<string, string[]> = new Map<string, string[]>();
 
         this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
     }
