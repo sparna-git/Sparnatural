@@ -12,10 +12,11 @@ You can play with **online demos at http://sparnatural.eu#demos**.
 To get started :
 
 1. Read the following README;
-2. Read [the documentation](https://docs.sparnatural.eu)
-3. Look at how things work in the ["Hello Sparnatural folder"](https://github.com/sparna-git/Sparnatural/tree/master/hello-sparnatural) that demonstrates a simple integration against the DBPedia endpoint; 
-4. In particular look at [the OWL configuration file](https://github.com/sparna-git/Sparnatural/blob/master/hello-sparnatural/config.ttl) that defines the classes and properties used in this page;
-5. Adapt this configuration and the endpoint URL in the index.html webpage if you want to test on your own data;
+2. Have a look at the [online DBPedia demo](https://sparnatural.eu/demos/demo-dbpedia-v2/)
+3. Read [the documentation](https://docs.sparnatural.eu):
+    - follow the [_Hello sparnatural tutorial_](https://docs.sparnatural.eu/hello-sparnatural/Hello-Sparnatural.html) to setup your environment
+    - follow the [_SHACL configuration guide_](https://docs.sparnatural.eu/how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html) to understand how the configuration can be expressed in SHACL
+    - have a look at the [_technical integration documentation_](https://docs.sparnatural.eu/Javascript-integration.html) to understand how to integrate the webcomponent in your webpage
 
 # Features
 
@@ -161,7 +162,100 @@ Since 9.0.0, the preferred way to configure Sparnatural is with a **SHACL specif
 The component is also configurable using a an [OWL configuration file](https://docs.sparnatural.eu/OWL-based-configuration) editable in Protégé. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. 
 
 
-### Class definition in OWL
+### SHACL-based config
+
+To give you an idea, here is an annotated SHACL-based configuration snippet below. The [SHACL configuration guide](https://docs.sparnatural.eu/how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html) explains how this file can be generated from an Excel template - no need to write that file by hands:
+
+```turtle
+<https://data.mydomain.com/ontologies/sparnatural-config> a owl:Ontology .
+
+# This is an entity declaration in Sparnatural
+this:Artwork a sh:NodeShape;
+  # order of display in the list
+  sh:order "1"^^xsd:integer;
+  # icon code
+  volipi:iconName "fa-solid fa-paint-brush";
+  # corresponding target class in the underlying knowledge graph
+  sh:targetClass dbpedia:Artwork;
+  sh:nodeKind sh:IRI;
+  # label and tooltips to be displayed in the UI
+  rdfs:label "Artwork"@en, "Oeuvre"@fr;
+  sh:description "A piece of art that can be displayed in a museum"@en, "Une Œuvre qui peut être exposée dans un musée"@fr;
+  # link to the properties that apply on this entity
+  sh:property this:Artwork_label, this:Artwork_author, this:Artwork_creationYear, this:Artwork_displayedAt,
+    this:Artwork_thumbnail .
+
+
+# a property in the config applying to Artwork
+this:Artwork_label 
+  # the corresponding predicate in the underlying knowledge graph
+  sh:path rdfs:label;
+  # label displayed in the UI
+  sh:name "label"@en, "libellé"@fr;
+  # cardinality
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  # This is a reference to the target Entity that will be used as a range in the UI
+  sh:node this:Text;
+  # the widget to use for users to enter their search criteria
+  dash:searchWidget core:SearchProperty;
+  # indicates this is the main label property for Artworks
+  dash:propertyRole dash:LabelRole;
+  # indicates that no optional or negative options should be proposed for this property in the UI
+  core:enableOptional "false"^^xsd:boolean;
+  core:enableNegation "false"^^xsd:boolean .
+
+this:Artwork_author 
+  sh:path dbpedia:author;
+  sh:name "author"@en, "auteur"@fr;
+  sh:description "the artist, painter or sculptor who created the artwork"@en, "l'artiste, le peintre ou le sculpteur qui a créé l'œuvre"@fr;
+  sh:nodeKind sh:IRI;
+  # authors apply to Artworks and have Persons as values
+  sh:class dbpedia:Person;
+  # the Persons can be searched with an autocomplete search field
+  dash:searchWidget core:AutocompleteProperty;
+  # the autocomplete search field will use a SPARQL query using Virtuoso bif:contains searching on the rdfs:label proerty
+  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Artwork_creationYear sh:path dbpedia:creationYear;
+  sh:name "creationYear"@en, "année de création"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:gYear;
+  sh:node this:Date;
+  # this will use a calendar selection widget
+  dash:searchWidget core:TimeProperty-Year;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Artwork_displayedAt 
+  # This is special : the property "displayedAt" in the config is actually translated to dbpedia:museum|^dbpedia:displays
+  # This illustrates how what is displayed to the user is different than the underlying knowledge graph
+  sh:path [ sh:alternativePath (dbpedia:museum [sh:inversePath dbpedia:displays])];
+  sh:name "displayed at"@en, "exposée à"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Museum;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Artwork_thumbnail sh:path dbpedia:thumbnail;
+  sh:name "thumbnail"@en, "vignette"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:Image;
+  # This cannot be searched (only selected as a column in the result set)
+  dash:searchWidget core:NonSelectableProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+```
+
+
+### OWL-based config
+
+#### Class definition in OWL
 
 ```turtle
     :Museum rdf:type owl:Class ;
@@ -174,7 +268,7 @@ The component is also configurable using a an [OWL configuration file](https://d
                    "Musée"@fr .
 ```
 
-### Property definitions with domains and ranges in OWL
+#### Property definitions with domains and ranges in OWL
 
 ```turtle
 :displayedAt rdf:type owl:ObjectProperty ;
@@ -188,7 +282,7 @@ The component is also configurable using a an [OWL configuration file](https://d
                         "exposée à"@fr .
 ```
 
-### Using font-awesome icons
+#### Using font-awesome icons
 
 It is possible to directly reference an icon class from font-awesome if you embed them in your application :
 
@@ -197,7 +291,7 @@ It is possible to directly reference an icon class from font-awesome if you embe
         core:faIcon "fad fa-male" ;
 ```
 
-## Map the query structure to a different graph structure
+#### Map the query structure to a different graph structure
 
 The OWL file to use is **different** from your knowledge graph ontology definition. You should create a different OWL file. You can refer to the [documentation page](https://docs.sparnatural.eu/OWL-based-configuration.html) for more details.
 
