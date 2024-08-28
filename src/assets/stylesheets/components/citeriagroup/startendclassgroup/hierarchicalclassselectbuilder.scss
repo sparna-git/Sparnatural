@@ -26,9 +26,21 @@
     }
     .htmlSelectUiUxLists {
         overflow-x: hidden;
+        /*overflow-y: auto;*/
+        position: absolute;
+        width: 100%;
+        height: 400px;
+
+        
+        transition-property: height;
+        transition-duration: 0.1s;
+        transition-delay: 0;
     }
 
     ul {
+        position: absolute;
+        top:0;
+        left: 0;
         width: 345px;
         padding:0;
         margin: 0;
@@ -37,22 +49,25 @@
         background: #fff;
         max-height: 35vh;
         overflow-y: auto;
-        display: none;
+        overflow-x: hidden;
+        display: inline-block;
         white-space: normal;
         vertical-align: top;
         border-right: 1px solid #e8e8e8;
+        
+        max-height: 400px;
 
         
         transition-property: margin-left;
-        transition-duration: 1s;
+        transition-duration: 0.5s;
         transition-delay: 0;
 
         &.active-pane {
             display: inline-block;
             margin-left: 0;
-            transition-property: margin-left;
+            /*transition-property: margin-left;
             transition-duration: 1s;
-            transition-delay: 0;
+            transition-delay: 0;*/
         }
 
         &.active-pane-hide-left {
@@ -61,20 +76,28 @@
         
 
         li {
+            cursor: pointer;
+            border-bottom: solid 1px #e8e8e8;
+            height: 40px;
+            display: flex;
+
             span.item-sel {
                 display: inline-block;
                 width: 100%;
-                padding: 5px 10px;
-                height: 38px;
+                padding: 9px 9px;
+                height: 40px;
                 font-size: 16px;
                 font-weight: 400;
                 line-height: 21.79px;
                 text-align: left;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
                 
             }
             span.item-traverse {
                 display: none;
-                width: 31px;
+                width: 30px;
                 text-align: center;
                 padding: 5px 5px;
                 border-left: 1px solid #e8e8e8;
@@ -88,9 +111,6 @@
                     display: inline-block;
                 }
             }
-            cursor: pointer;
-            border-bottom: solid 1px #e8e8e8;
-            height: 40px;
             img {
                 height : 40px;
                 &.highlited {
@@ -129,15 +149,16 @@
                 border-right: 1px solid #D9D9D9;
                 display: table;
                 span {
-                    
-  display: table-cell;
-  vertical-align: middle;
+                    display: table-cell;
+                    vertical-align: middle;
                     text-align: center;
                 }
             }
             .parents-items {
                 display: block;
-                padding: 9px;
+                padding: 8px;
+                
+                line-height: 13.62px;
                 .parentLabel {
                     display: inline-block;
                     font-size: 10px;
@@ -169,28 +190,48 @@
         &::-webkit-scrollbar {
             width: 3px;
             height: 3px;
-	        background-color: #e8e8e8;
+	        background-color: transparent;
         }
         
         &::-webkit-scrollbar-track {
             /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
             border-radius: 3px;
-            background-color: #e8e8e8;
+            background-color: transparent;
         }
         
         &::-webkit-scrollbar-thumb {
             border-radius: 3px;
             /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
-            background-color: var(--primary-color-main);
+            background-color: transparent;
         }    
         & {
             -moz-width: thin;
         }    
     }
+    ul.active-pane {
+        /* Works on Chrome, Edge, and Safari */
+        &::-webkit-scrollbar {
+	        background-color: #e8e8e8;
+        }
+        
+        &::-webkit-scrollbar-track {
+            /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);*/
+            background-color: #e8e8e8;
+        }
+        
+        &::-webkit-scrollbar-thumb {
+            /*-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);*/
+            background-color: var(--primary-color-main);
+        }       
+    }
 }
 
 @-moz-document url-prefix() {
+    .htmlSelectUiUxLists,
     .htmlSelectUiUx ul {
+        scrollbar-color: transparent transparent;
+    }
+    .htmlSelectUiUx ul.active-pane {
         scrollbar-color: var(--primary-color-main) #e8e8e8;
     }
 }

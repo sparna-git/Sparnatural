@@ -62,6 +62,38 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       return this;
     }
 
+    moveHasAncestor(el:any) {
+      el.classList.remove('active-pane') ;
+      el.classList.add('active-pane-hide-left');
+    }
+    moveHasChild(el:any) {
+      el.classList.add('active-pane') ;
+    }
+    moveHasLeaveChild(el:any) {
+      el.classList.remove('active-pane') ;
+    }
+    moveHasEnterAncestor(el:any) {
+      el.classList.remove('active-pane-hide-left');
+      el.classList.add('active-pane') ;
+    }
+    initSelectUiUxListsHeight() {
+      let listToDisplay = this.htmlSelectUiUx[0].querySelector('ul[parent].active-pane') ;
+      let allLists = this.htmlSelectUiUx[0].querySelectorAll('ul[parent]') ;
+      let listToDisplayLiCount = this.htmlSelectUiUx[0].querySelectorAll('ul[parent].active-pane li').length ;
+      let breadcrumHeight = 15;
+      if (listToDisplay.classList.contains('root')) {
+        breadcrumHeight = 0 ;
+      }
+      let newHeight = 40 * listToDisplayLiCount + breadcrumHeight ;
+      if (newHeight > 400) {
+        newHeight = 400 ;
+      }
+      this.htmlSelectUiUxLists[0].style.height = newHeight+'px' ;
+      
+      this.htmlSelectUiUx[0].querySelectorAll('ul[parent]').forEach((el:HTMLElement) => el.style.height = newHeight+'px' );
+    }
+
+
     initClassSelector() {
       console.log('initClassSelector') ;
       console.log(this.html) ;
@@ -80,14 +112,16 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
           /*if(this.parentIsAfter( element.parentElement, hasChild ) ) {
             element.parentElement.before(hasChild);
           }*/
-          element.querySelector('span.item-traverse');
+          //element.querySelector('span.item-traverse');
           element.querySelector('span.item-traverse').addEventListener(
             "click",
             (e: CustomEvent) => {
               let class_target = (e.target as any).closest('li').getAttribute('list-child-id') ;
               console.log(e.target) ;
               console.log(class_target) ;
-              this.htmlSelectUiUx[0].querySelector('ul[parent="'+class_target+'"]').classList.add("active-pane");
+              this.htmlSelectUiUx[0].querySelectorAll('ul[parent].active-pane').forEach(el => this. moveHasAncestor(el));
+              this.moveHasChild(this.htmlSelectUiUx[0].querySelector('ul[parent="'+class_target+'"]'));
+              this.initSelectUiUxListsHeight() ;
               //this.addBreadcrumItem(class_target, (e.target as any).parentElement.innerHTML ) ;
             }
           );
@@ -100,8 +134,11 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
           "click",
           (e: CustomEvent) => {
             let class_target = (e.target as any).closest('.returnBtn').getAttribute('return-target') ;
-            this.htmlSelectUiUx[0].querySelectorAll('ul[parent]').forEach(el => el.classList.remove('active-pane'));
-            this.htmlSelectUiUx[0].querySelector('ul[parent="'+class_target+'"]').classList.add("active-pane");
+            this.htmlSelectUiUx[0].querySelectorAll('ul[parent].active-pane').forEach(el => this.moveHasLeaveChild(el));
+            //this.htmlSelectUiUx[0].querySelector('ul[parent="'+class_target+'"]').classList.add("active-pane");
+            
+            this.moveHasEnterAncestor(this.htmlSelectUiUx[0].querySelector('ul[parent="'+class_target+'"]'));
+            this.initSelectUiUxListsHeight() ;
             //this.addBreadcrumItem(class_target, (e.target as any).parentElement.innerHTML ) ;
           }
         );
@@ -123,11 +160,12 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
           $(htmlBreadCrum[0].querySelector('div.wrapper')).append(breadcrumParentsList) ;
           Ul.append(htmlBreadCrum) ;
         }
-
+        let i = 0 ;
         arrayNode.forEach(element => {
           let htmlItem = this.buildClassSelectItem(element, path) ;
           let child_path = path+'$'+element.id ;
           Ul.append(htmlItem) ;
+          i++ ;
           if (element.childs.length > 0) {
             console.log(breadCrumData);
             let element_breadCrumData = null ;
@@ -138,6 +176,16 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
             htmlItem.attr('list-child-id', path+'$'+element.id) ;
           }
         });
+        let breadcrumHeight = 55;
+        if (Ul[0].classList.contains('root')) {
+          breadcrumHeight = 0 ;
+          this.htmlSelectUiUxLists[0].style.height = (40*i)+'px' ;
+        }
+        if (i > 10) {
+          Ul[0].style.height = 400+'px' ;
+        } else {
+          Ul[0].style.height = (40*i + breadcrumHeight)+'px' ;
+        }
         this.htmlSelectUiUxLists.append(Ul);
       }
     }
@@ -162,6 +210,8 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       }
 
       this.buildClassSelectList(this.hierarchyData, 'root active-pane', '', initBreadcrumData) ;
+
+
       this.htmlCoreSelect = $("<select/>", {
         // open triggers the niceselect to be open
         class: "my-new-list input-val open",
@@ -173,6 +223,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.htmlSelectUiUx.append(this.htmlSelectUiUxLists) ;
       this.html.append(this.htmlSelectUiUx) ;
       this.initClassSelector() ;
+
       return this.html.children();
     }
 
