@@ -124,6 +124,8 @@ class PropertySelectBuilder {
   ) {
     this.items = this.specProvider.getEntity(domainClassID).getConnectingProperties(rangeClassID);
 
+    console.log(this.specProvider.getEntity(domainClassID).getConnectingPropertiesTree(rangeClassID))
+
     if (this.items.length > 1) {
       return this.#multipleConnectingProperty(this.items);
     }

@@ -522,7 +522,7 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
     }
 
     getIcon(): string {
-        return SHACLSpecificationEntry.buildIconHtml(this.icon);
+        return this.icon;
     }
 
     getHighlightedIcon(): string {

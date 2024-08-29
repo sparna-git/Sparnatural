@@ -72,8 +72,8 @@ export class Dag<Payload> implements DagIfc<Payload> {
             dataMap.set(item.getId(), item);
         });
         
-        let hierarchyMap:Map<string, string[]> = new Map<string, string[]>();
-        this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
+
+        this.initFromFlatList(hierarchy, dataMap, new Array<string>());
     }
 
     /**
@@ -99,7 +99,11 @@ export class Dag<Payload> implements DagIfc<Payload> {
         data.forEach((item)=> {
             dataMap.set(item.getId(), item);
         });
+        // empty hierarchy map
         let hierarchyMap:Map<string, string[]> = new Map<string, string[]>();
+        data.forEach((item)=> {
+            hierarchyMap.set(item.getId(), []);
+        });
 
         this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
     }
