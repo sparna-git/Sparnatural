@@ -31,7 +31,7 @@ export function addWhereComponent(
     //inputSelector.oldWidget.val(endClassVal.type).niceSelect("update");
     inputSelector.submitSelected() ;
   // nice-select is 2nd place in childrenslist. move away from nice-select...
-  inputSelector.html[0].children[1].classList.add("disabled");
+  //inputSelector.html[0].children[1].classList.add("disabled");
   // render the link where
   grpWrapper.linkWhereBottom = new LinkWhereBottom(grpWrapper).render();
   grpWrapper.html[0].dispatchEvent(

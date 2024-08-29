@@ -20,7 +20,7 @@ export function addAndComponent(
   //inputSelector.oldWidget.val(startClassVal.type);
   inputSelector.submitSelected() ;
   // nice-select is 2nd place in childrenslist. move away from nice-select...
-  inputSelector.html[0].children[1].classList.add("disabled");
+  //inputSelector.html[0].children[1].classList.add("disabled");
 
   // draw the AND link
   grpWrapper.linkAndBottom = new LinkAndBottom(grpWrapper).render();
