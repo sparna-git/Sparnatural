@@ -60,17 +60,13 @@ class ClassTypeId extends HTMLComponent {
       this.backArrow.render();
     }
 
-    console.log('------------- test dag context -----------------')
-
     if (isStartClassGroup(this.ParentComponent)) {
       if(!this.startClassVal?.type) {
-        
-        console.log('------------- test dag context start Val -----------------')
         // If this Component is a child of the StartClassGroup component in the first row with no value selected
         this.widgetHtml = this.selectBuilder.buildSelect_FirstStartClassGroup();
       } else {
         // If this is under a WHERE, we want only the selected value
-        //this.widgetHtml = this.selectBuilder.buildSelect_StartClassGroupInWhere(this.startClassVal.type);
+        this.widgetHtml = this.selectBuilder.buildSelect_StartClassGroupInWhere(this.startClassVal.type);
       }
     } else {
       // If this Component is a child of the EndClassGroup component, we want the range of possible end values
@@ -82,13 +78,19 @@ class ClassTypeId extends HTMLComponent {
     this.html.append(this.widgetHtml);
     // convert to niceSelect: https://jqueryniceselect.hernansartorio.com/
     // needs to happen after html.append(). it uses rendered stuff on page to create a new select... should move away from that
-    this.oldWidget = this.widgetHtml;
+    this.oldWidget = this.selectBuilder.selectBuilder.getInput();
     //this.widgetHtml = this.widgetHtml.niceSelect();
     // nice-select is not a proper select tag and that's why can't listen for change events... move away from nice-select!
     this.#addOnChangeListener(this.oldWidget);
+
+   
     this.frontArrow.render();
 
     return this;
+  }
+
+  submitSelected() {
+    this.selectBuilder.selectBuilder.submitSelectedValue() ;
   }
 
   // is called by EndClassGroup
@@ -104,7 +106,7 @@ class ClassTypeId extends HTMLComponent {
   // when a value gets selected from the dropdown menu (niceselect), then change is called
   #addOnChangeListener(selectWidget: JQuery<HTMLElement>) {
     selectWidget.on("change", () => {
-      let selectedValue = selectWidget.val();
+      let selectedValue = this.selectBuilder.selectBuilder.getInput().val();
       //disable further choice on nice-select
       this.widgetHtml[0].classList.add("disabled");
       this.widgetHtml[0].classList.remove("open");
@@ -175,6 +177,7 @@ export default ClassTypeId;
  **/
 class ClassSelectBuilder extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
+  selectBuilder: HierarchicalClassSelectBuilder;
   constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     super("ClassTypeId", ParentComponent, null);
     this.specProvider = specProvider;
@@ -189,19 +192,26 @@ class ClassSelectBuilder extends HTMLComponent {
 
   buildSelect_FirstStartClassGroup() {
     // testing hierarchy
-    // console.log(this.specProvider.getEntitiesTreeInDomainOfAnyProperty().toDebugString())
+    let defaultValue: DagWidgetDefaultValue = {
+      value: '',
+      path: '',
+    }
     return this.initDagWidget(
       this.specProvider.getEntitiesTreeInDomainOfAnyProperty(),
-      null
+      defaultValue
     );
   }
 
   buildSelect_EndClassGroup(domainId: string) {
     // testing hierarchy
-    // console.log(this.specProvider.getEntity(domainId).getConnectedEntitiesTree().toDebugString())
-    return this.buildClassSelectFromItems(
+    let defaultValue: DagWidgetDefaultValue = {
+      value: '',
+      path: '',
+    }
+    
+    return this.initDagWidget(
       this.specProvider.getEntity(domainId).getConnectedEntitiesTree(),
-      null
+      defaultValue
     );
   }
 
@@ -210,13 +220,17 @@ class ClassSelectBuilder extends HTMLComponent {
    */
   buildSelect_StartClassGroupInWhere(selectedClass:string) {
     
-    /*return this.buildClassSelectFromItems(
-      [selectedClass],
-      null
-    );*/
+    let defaultValue: DagWidgetDefaultValue = {
+      value: selectedClass,
+      path: '',
+    }
+    return this.initDagWidget(
+      this.specProvider.getEntitiesTreeInDomainOfAnyProperty(),
+      defaultValue
+    );
   }
 
-  buildFlatClassList(elements:any[], list: any[]) {
+  /*buildFlatClassList(elements:any[], list: any[]) {
 
     elements.forEach(element => {
       list.push(element);
@@ -226,7 +240,7 @@ class ClassSelectBuilder extends HTMLComponent {
     });
 
     return list ;
-  }
+  }*/
 
 
   convertToJsonDag(rootNodes:any[]) {
@@ -241,8 +255,6 @@ class ClassSelectBuilder extends HTMLComponent {
   getRecursiveDagElements(elements: Array<any>) {
     let arrayToJson: Array<JsonDagRow> = [];
     elements.forEach(element => {
-      console.log(element.id ) ;
-      console.log(element.payload.getParents() ) ;
       let rowToJson = {
         label: element.payload.getLabel(),
         id: element.payload.getId(),
@@ -251,6 +263,7 @@ class ClassSelectBuilder extends HTMLComponent {
         icon: element.payload.getIcon(),
         highlightedIcon: element.payload.getHighlightedIcon(),
         count: 50,
+        disabled: element.disabled,
         childs: Array()
       }
       if (element.children.length > 0) {
@@ -262,20 +275,13 @@ class ClassSelectBuilder extends HTMLComponent {
 
   }
 
-  initDagWidget(items:DagIfc<ISpecificationEntity>, default_value: string) {
-    let defaultValue = {
-      value: '',
-      path: ''
-    }
-      console.log(items)  ;
+  initDagWidget(items:DagIfc<ISpecificationEntity>, default_value: DagWidgetDefaultValue) {
     let jsonDag = this.convertToJsonDag(items.roots) ;
-    let selectBuilder = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, defaultValue );
-    
-
-    return selectBuilder.buildClassSelectFromJson() ; ;
+    this.selectBuilder = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, default_value );
+    return this.selectBuilder.buildClassSelectFromJson() ; ;
   }
 
-  buildClassSelectFromItems(items:DagIfc<ISpecificationEntity>, default_value: string) {
+  /*buildClassSelectFromItems(items:DagIfc<ISpecificationEntity>, default_value: string) {
     console.log('----------------------test ClassSelectBuilder--------------') ;
     let jsonDag = this.convertToJsonDag(items.roots) ;
     console.log(jsonDag)
@@ -311,7 +317,7 @@ class ClassSelectBuilder extends HTMLComponent {
       html: list.join(""),
     });
     return html_list;
-  }
+  }*/
 }
 
 

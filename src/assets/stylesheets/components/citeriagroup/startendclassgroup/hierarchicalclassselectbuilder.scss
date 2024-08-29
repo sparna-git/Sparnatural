@@ -1,15 +1,73 @@
+
+.ClassTypeId.Highlited .htmlSelectUiUx .currentWrapper {
+    border-radius: unset;
+    color: #fff;
+    background-color: var(--primary-color-main);
+    border-color: #fff;
+}
+
+.StartClassGroup .ClassTypeId.Highlited .htmlSelectUiUx .currentWrapper {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.ClassTypeId.Highlited.VariableSelected .htmlSelectUiUx .currentWrapper {
+    border-color: var(--secondary-color-important);
+}
+.StartClassGroup .ClassTypeId .htmlSelectUiUx .currentWrapper {
+    border-left: 3px solid #fff;
+}
+
 .htmlSelectUiUx {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
     display: block;
     /**max-height: 45vh;*/
-    border: 1px solid  var(--primary-color-main);
-    border-radius: 5px;
+    /*border: 1px solid  var(--primary-color-main);
+    border-radius: 5px;*/
     white-space: nowrap;
-    width: 345px;
-    z-index: 1000;
     background-color: #fff;
+
+
+
+
+    &.open .htmlSelectUiUxLists {
+        display: block;
+    }
+    .currentWrapper {
+        height: 48px;
+        background: rgba(0, 0, 0, 0);
+        border-color: rgba(0, 0, 0, 0);
+        padding-left: 10px;
+        padding-right: 26px;
+        border-width: 0;
+        border-top-width: 3px;
+        border-bottom-width: 3px;
+        border-top: 3px solid #fff;
+        border-bottom: 3px solid #fff;
+    }
+    &.disabled .currentWrapper {
+        color: var(--default-text-color);
+        border-color: rgba(0, 0, 0, 0);
+        border-radius: 0;
+    }
+
+    span.current {
+        display: inline-block;
+        height: 42px;
+        line-height: 42px;
+        vertical-align: bottom;
+        max-width: 200px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        span {
+            display: inline-block;
+            vertical-align: bottom;
+            min-width: 20px;
+        }
+    }
 
     .htmlSelectUiUxBreadCrum {
         height: 40px;
@@ -25,10 +83,12 @@
         }
     }
     .htmlSelectUiUxLists {
+        
+        display: none;
         overflow-x: hidden;
         /*overflow-y: auto;*/
         position: absolute;
-        width: 100%;
+        width: 345px;
         height: 400px;
 
         
@@ -46,7 +106,6 @@
         margin: 0;
         margin-left: 345px;
         list-style: none;
-        background: #fff;
         max-height: 35vh;
         overflow-y: auto;
         overflow-x: hidden;
@@ -54,13 +113,11 @@
         white-space: normal;
         vertical-align: top;
         border-right: 1px solid #e8e8e8;
-        
         max-height: 400px;
-
-        
         transition-property: margin-left;
         transition-duration: 0.5s;
         transition-delay: 0;
+        z-index: 1000;
 
         &.active-pane {
             display: inline-block;
@@ -80,6 +137,7 @@
             border-bottom: solid 1px #e8e8e8;
             height: 40px;
             display: flex;
+            background: #fff;
 
             span.item-sel {
                 display: inline-block;
@@ -120,8 +178,8 @@
             &.selected,
             &.focus,
             &>span:hover {
-                background-color: var(--primary-color-main) ;
-                color: #fff;
+                background-color: var(--primary-color-light) ;
+                /*color: #fff;*/
                 img {
                     display: none;
                     &.highlited {
