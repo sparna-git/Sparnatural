@@ -91,7 +91,7 @@ export class Dag<Payload> implements DagIfc<Payload> {
             hierarchyMap.set(item.getId(), item.getParents());
         });
 
-        this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
+        this.initFromFlatList(hierarchyMap, dataMap, disabled);
     }
 
     initFlatTreeFromFlatList(data:Array<Payload & {getId():string}>): void {
