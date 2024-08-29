@@ -271,7 +271,24 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             }
         });
 
-        return items.length>0?items[0].value:undefined;
+        // nothing found, see if we can inherit it
+        if(items.length == 0) {
+            let parents = this.getParents();
+            let parentDefaultLabelProp:string|undefined;
+            parents.forEach(p => {                          
+                // if not found already, set it to the parent default label prop - otherwise keep the value we found
+                if(!parentDefaultLabelProp) {
+                    let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);   
+                    parentDefaultLabelProp = parentEntity.getDefaultLabelProperty();
+                }
+            });
+            // could be undefined or a string
+            return parentDefaultLabelProp;
+        } else {
+            // return the first one found
+            return items[0].value
+        }
+        
     }
 
     getParents(): string[] {
