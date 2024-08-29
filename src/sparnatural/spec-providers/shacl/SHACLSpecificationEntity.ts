@@ -251,7 +251,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     hasTypeCriteria(): boolean {
         var hasTargetClass = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null);
         var hasTarget = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null);
-        return (!hasTargetClass && !hasTarget);
+        return (hasTargetClass || hasTarget);
     }
 
     /**
