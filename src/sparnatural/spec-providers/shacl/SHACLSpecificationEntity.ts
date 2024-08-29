@@ -114,7 +114,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
      */
     getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
         // 1. get list of properties
-        let entities:SHACLSpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as SHACLSpecificationProperty[];
+        let entities:ISpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as ISpecificationProperty[];
 
         // 2. turn it into a flat tree
         let dag:Dag<ISpecificationProperty> = new Dag<ISpecificationProperty>();
@@ -472,6 +472,10 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
         return new Array<string>();
     }
 
+    getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
+        return new Dag<ISpecificationProperty>();
+    }
+
     isLiteralEntity(): boolean {
         return true;
     }
@@ -530,6 +534,9 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
     }
 
     getParents(): string[] {
+        return [];
+    }
+    getChildren(): string[] {
         return [];
     }
 }

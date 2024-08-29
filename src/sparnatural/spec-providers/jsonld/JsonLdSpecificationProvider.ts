@@ -50,6 +50,7 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
   getEntity(entityUri: string): ISpecificationEntity {
     return new JsonLdSpecificationEntity(
       this.jsonSpecs,
+      this,
       entityUri,
       this.lang
     );
@@ -58,6 +59,7 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
   getProperty(property: string): ISpecificationProperty {
     return new JsonLdSpecificationProperty(
       this.jsonSpecs,
+      this,
       property,
       this.lang
     );
@@ -69,7 +71,7 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
     var result = classes.slice();
     // now look for all classes we can reach from this class list
     for (const aClass of classes) {
-      let c = new JsonLdSpecificationEntity(this.jsonSpecs, aClass, this.lang);
+      let c = new JsonLdSpecificationEntity(this.jsonSpecs, this, aClass, this.lang);
       var connectedClasses = c.getConnectedEntities();
       for (const aConnectedClass of connectedClasses) {
         JsonLdSpecificationProvider.pushIfNotExist(aConnectedClass, result);
@@ -101,11 +103,11 @@ export default class JsonLdSpecificationProvider implements ISparnaturalSpecific
     for (var j in this.jsonSpecs["@graph"]) {
       var item = this.jsonSpecs["@graph"][j];
       if (JsonLdSpecificationProvider._isObjectProperty(item)) {
-        let prop = new JsonLdSpecificationProperty(this.jsonSpecs, item["@id"], this.lang);
+        let prop = new JsonLdSpecificationProperty(this.jsonSpecs, this, item["@id"], this.lang);
         var domains = prop.readDomain();
         for (var i in domains) {
           var aClass = domains[i];
-          let c = new JsonLdSpecificationEntity(this.jsonSpecs, aClass, this.lang);
+          let c = new JsonLdSpecificationEntity(this.jsonSpecs, this, aClass, this.lang);
           // always exclude RemoteClasses from first list
           if (!c.hasTypeCriteria()) {
             items = JsonLdSpecificationProvider.pushIfNotExist(aClass, items);

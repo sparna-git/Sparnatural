@@ -4,10 +4,11 @@ import ISpecificationEntity from "../ISpecificationEntity";
 import JsonLdSpecificationEntry from "./JsonLdSpecificationEntry";
 import JsonLdSpecificationProperty from "./JsonLdSpecificationProperty";
 import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
+import ISpecificationProperty from "../ISpecificationProperty";
 
 export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry implements ISpecificationEntity {
-    constructor(jsonSpecs:any, id:string, lang:string) {
-        super(jsonSpecs, id, lang);
+    constructor(jsonSpecs:any, provider:JsonLdSpecificationProvider, id:string, lang:string) {
+        super(jsonSpecs, provider, id, lang);
     }
 
 
@@ -17,7 +18,7 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
         for (var j in this.jsonSpecs["@graph"]) {
             var item = this.jsonSpecs["@graph"][j];
             if (JsonLdSpecificationProvider._isObjectProperty(item)) {
-                let prop:JsonLdSpecificationProperty = new JsonLdSpecificationProperty(this.jsonSpecs, item["@id"], this.lang);
+                let prop:JsonLdSpecificationProperty = new JsonLdSpecificationProperty(this.jsonSpecs, this.provider, item["@id"], this.lang);
                 if (prop.readDomain().indexOf(this.id) >= 0) {
                   var values = prop.getRange();
                   for (var i in values) {
@@ -48,7 +49,7 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
         for (var i in this.jsonSpecs["@graph"]) {
           var item = this.jsonSpecs["@graph"][i];
           if (JsonLdSpecificationProvider._isObjectProperty(item)) {
-            let prop:JsonLdSpecificationProperty = new JsonLdSpecificationProperty(this.jsonSpecs, item["@id"], this.lang);
+            let prop:JsonLdSpecificationProperty = new JsonLdSpecificationProperty(this.jsonSpecs, this.provider, item["@id"], this.lang);
             if (
               (prop.readDomain().indexOf(this.id) >= 0) &&
               (range === null || prop.getRange().indexOf(range) >= 0)
@@ -59,6 +60,22 @@ export default class JsonLdSpecificationEntity extends JsonLdSpecificationEntry 
         }
 
         return items;
+    }
+
+    
+    /**
+     * Return the tree of properties connecting this entity to the specified range entity
+     * @param range The URI of the selected target entity
+     * @returns 
+     */
+    getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
+      // 1. get list of properties
+      let entities:ISpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as ISpecificationProperty[];
+
+      // 2. turn it into a flat tree
+      let dag:Dag<ISpecificationProperty> = new Dag<ISpecificationProperty>();
+      dag.initFlatTreeFromFlatList(entities);
+      return dag;
     }
 
     isLiteralEntity(): boolean {

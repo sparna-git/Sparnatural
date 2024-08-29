@@ -4,12 +4,14 @@ import JsonLdSpecificationProvider from "./JsonLdSpecificationProvider";
 
 export default class JsonLdSpecificationEntry implements ISpecificationEntry {
     id:string;
+    provider:JsonLdSpecificationProvider;
     jsonSpecs:any;
     lang:string;
 
 
-    constructor(jsonSpecs:any, id:string, lang:string) {
+    constructor(jsonSpecs:any, provider:JsonLdSpecificationProvider, id:string, lang:string) {
         this.id = id;
+        this.provider = provider;
         this.jsonSpecs = jsonSpecs;
         this.lang = lang;
     }

@@ -38,12 +38,12 @@ interface IDataSources {
 }
 
 export default class JsonLdSpecificationProperty extends JsonLdSpecificationEntry implements ISpecificationProperty {
-  constructor(jsonSpecs:any, id:string, lang:string) {
+  constructor(jsonSpecs:any, provider:JsonLdSpecificationProvider, id:string, lang:string) {
     if (id != null && typeof id === "object") {
       throw Error("Property expects a string id");
     }
 
-    super(jsonSpecs, id, lang);
+    super(jsonSpecs, provider, id, lang);
   }
 
   getRange(): string[] {

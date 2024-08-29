@@ -7,6 +7,7 @@ import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';
 import { DagIfc, Dag } from "../../dag/Dag";
+import ISpecificationProperty from "../ISpecificationProperty";
 
 const factory = new DataFactory();
 
@@ -82,6 +83,22 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         items = this.provider._sort(items);
     
         return items;
+    }
+
+    
+    /**
+     * Return the tree of properties connecting this entity to the specified range entity
+     * @param range The URI of the selected target entity
+     * @returns 
+     */
+    getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
+      // 1. get list of properties
+      let entities:ISpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as ISpecificationProperty[];
+
+      // 2. turn it into a flat tree
+      let dag:Dag<ISpecificationProperty> = new Dag<ISpecificationProperty>();
+      dag.initFlatTreeFromFlatList(entities);
+      return dag;
     }
 
     isLiteralEntity(): boolean {
