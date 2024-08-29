@@ -244,22 +244,22 @@ class ClassSelectBuilder extends HTMLComponent {
 
 
   convertToJsonDag(rootNodes:any[]) {
+    console.log('rootNodes') ;
+    console.log(rootNodes) ;
     let arrayToJson: Array<JsonDagRow> = [];
-
-    arrayToJson = this.getRecursiveDagElements(rootNodes) ;
-
-    
-    console.log('arrayToJson');
-    console.log(arrayToJson);
-
+    arrayToJson = this.getRecursiveDagElements(rootNodes, '') ;
     return JSON.parse(JSON.stringify(arrayToJson));
-
   }
 
-  getRecursiveDagElements(elements: Array<any>) {
+  getRecursiveDagElements(elements: Array<any>, default_icon:string) {
     let arrayToJson: Array<JsonDagRow> = [];
     elements.forEach(element => {
       let disabled = false ;
+      let icon = element.payload.getIcon() ;
+      if (icon == '') {
+        icon = default_icon ;
+      }
+
       if (element.disabled === true) {
         disabled = true ;
       }
@@ -268,14 +268,14 @@ class ClassSelectBuilder extends HTMLComponent {
         id: element.payload.getId(),
         tooltip: element.payload.getTooltip(),
         color: element.payload.getColor(),
-        icon: element.payload.getIcon(),
+        icon: icon,
         highlightedIcon: element.payload.getHighlightedIcon(),
         count: 50,
         disabled: disabled,
         childs: Array()
       }
       if (element.children.length > 0) {
-        rowToJson.childs = this.getRecursiveDagElements(element.children) ;
+        rowToJson.childs = this.getRecursiveDagElements(element.children, icon) ;
       }
       arrayToJson.push(rowToJson);
     });

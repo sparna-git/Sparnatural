@@ -151,7 +151,14 @@
                 text-overflow: ellipsis;
                 white-space: nowrap;
                 overflow: hidden;
-                
+                .label-icon {
+                    width: 48px;
+                    font-size: 13px;
+                    display: inline-block;
+                    padding: 0 9px 0 0;
+                    text-align: right;
+                    /*text-indent: -4px;*/
+                }
             }
             &.disabled span.item-sel {
                 opacity: 0.7; 
@@ -212,7 +219,7 @@
                 width: 31px;
                 text-align: center;
                 /*height: 100%;*/
-                padding: 9px 0;
+                padding: 9px 18px;
                 border-right: 1px solid #D9D9D9;
                 display: table;
                 span {

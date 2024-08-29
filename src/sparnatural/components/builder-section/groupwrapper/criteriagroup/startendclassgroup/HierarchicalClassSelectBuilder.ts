@@ -226,7 +226,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       //let selectable = element.disabled == true ? `data-selectable="false"` : `data-selectable="true"` ;
       let enabledClass = element.disabled == true ? ` disabled` : `enabled` ;
       var selected = this.defaultValue.value == element.id ? ' selected="selected"' : "";
-      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${image} ${selected} ${element.tooltip} ${element.color} class="${enabledClass}"><span class="item-sel">${element.label}</span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
+      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${image} ${selected} ${element.tooltip} ${element.color} class="${enabledClass}"><span class="item-sel"><span class="label-icon">${element.icon}</span>${element.label}</span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
       return item ;
     }
 
