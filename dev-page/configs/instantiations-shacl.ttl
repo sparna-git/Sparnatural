@@ -1,0 +1,1173 @@
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix vocab: <http://vocab.performing-arts.ch/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix rda-u: <http://rdaregistry.info/Elements/u/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix crypto: <http://id.loc.gov/vocabulary/preservation/cryptographicHashFunctions/> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix spao-i: <http://shapes.performing-arts.ch/instantiations/> .
+@prefix olo: <http://purl.org/ontology/olo/core#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ebucore: <https://www.ebu.ch/metadata/ontologies/ebucore#> .
+@prefix spao-co: <http://shapes.performing-arts.ch/collections/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix spao: <http://ontology.performing-arts.ch/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://shapes.performing-arts.ch/instantiations> a owl:Ontology;
+  dct:hasFormat <https://docs.google.com/spreadsheets/d/1WrC2r7yDQCP5AKhu6SAK8Ba_QshzFKmm/export?format=xlsx>,
+    <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1WrC2r7yDQCP5AKhu6SAK8Ba_QshzFKmm%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true>;
+  rdfs:seeAlso <https://shacl-play.sparna.fr/play/doc?url=https%3A%2F%2Fxls2rdf.sparna.fr%2Frest%2Fconvert%3Furl%3Dhttps%253A%252F%252Fdocs.google.com%252Fspreadsheets%252Fd%252F1WrC2r7yDQCP5AKhu6SAK8Ba_QshzFKmm%252Fexport%253Fformat%253Dxlsx%26noPostProcessings%3Dtrue&includeDiagram=true&language=en> .
+
+spao-i:Instantiation a sh:NodeShape;
+  sh:order "1"^^xsd:integer;
+  volipi:iconName "fa-light fa-files";
+  sh:targetClass rico:Instantiation;
+  rdfs:label "Instantiation"@en;
+  sh:closed "true";
+  sh:ignoredProperties _:ba09c1662f6649d08454fc46fcbacca13650;
+  shacl-play:background-color "ff6363";
+  sh:property spao-i:Instantiation_aspectRatio, spao-i:Instantiation_channels, spao-i:Instantiation_descriptiveNote,
+    spao-i:Instantiation_duration, spao-i:Instantiation_hasAccessibility, spao-i:Instantiation_hasArchivalStatus,
+    spao-i:Instantiation_hasCarrierType, spao-i:Instantiation_hasCondition, spao-i:Instantiation_hasCopyPath,
+    spao-i:Instantiation_hasDerivedInstantiation, spao-i:Instantiation_hasExtent, spao-i:Instantiation_hasFormat,
+    spao-i:Instantiation_hasInternalNote, spao-i:Instantiation_hasNote, spao-i:Instantiation_hasOrHadIdentifier,
+    spao-i:Instantiation_hasOrHadLocation, spao-i:Instantiation_hasPacking, spao-i:Instantiation_hasPermission,
+    spao-i:Instantiation_hasPhysicalUsability, spao-i:Instantiation_hasProcessingDate,
+    spao-i:Instantiation_hasProtectionDuration, spao-i:Instantiation_hasRepresentationType,
+    spao-i:Instantiation_hasResponsibleEmployee, spao-i:Instantiation_hasStandard, spao-i:Instantiation_hasTermsOfProtection,
+    spao-i:Instantiation_hasVideoDamage, spao-i:Instantiation_height, spao-i:Instantiation_history,
+    spao-i:Instantiation_identifier, spao-i:Instantiation_index, spao-i:Instantiation_integrity,
+    spao-i:Instantiation_isAssociatedWithEvent, spao-i:Instantiation_lastControl, spao-i:Instantiation_legacyIdentifier,
+    spao-i:Instantiation_P45_consists_of, spao-i:Instantiation_P60558, spao-i:Instantiation_physicalCharacteristics,
+    spao-i:Instantiation_preparationDate, spao-i:Instantiation_recordingSystem, spao-i:Instantiation_samplingRate,
+    spao-i:Instantiation_scanningFormat, spao-i:Instantiation_scanningOrder, spao-i:Instantiation_seeAlso,
+    spao-i:Instantiation_width, spao-i:Instantiation_inversePath_includedIn, spao-i:Instantiation_inversePath_hasInstantiation .
+
+_:ba09c1662f6649d08454fc46fcbacca13650 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-i:File a sh:NodeShape;
+  sh:order "2"^^xsd:integer;
+  volipi:iconName "fa-light fa-file-video";
+  sh:targetClass premis:File;
+  rdfs:label "File"@en;
+  sh:closed "true";
+  sh:ignoredProperties _:ba09c1662f6649d08454fc46fcbacca13651;
+  shacl-play:background-color "ff6363";
+  sh:property spao-i:File_aspectRatio, spao-i:File_channels, spao-i:File_compositionLevel,
+    spao-i:File_duration, spao-i:File_fixity, spao-i:File_frameRate, spao-i:File_hasFormat,
+    spao-i:File_hasStandard, spao-i:File_hasVideoDamage, spao-i:File_height, spao-i:File_history,
+    spao-i:File_integrity, spao-i:File_isIncludedIn, spao-i:File_label, spao-i:File_lastControl,
+    spao-i:File_originalName, spao-i:File_P60558, spao-i:File_samplingRate, spao-i:File_scanningFormat,
+    spao-i:File_scanningOrder, spao-i:File_seeAlso, spao-i:File_size, spao-i:File_width .
+
+_:ba09c1662f6649d08454fc46fcbacca13651 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-i:InstantiationExtent a sh:NodeShape;
+  sh:order "80"^^xsd:integer;
+  volipi:iconName "fa-light fa-ruler-triangle";
+  sh:targetClass rico:InstantiationExtent;
+  rdfs:label "Instantiation Extent"@en;
+  sh:closed "true";
+  sh:ignoredProperties _:ba09c1662f6649d08454fc46fcbacca13652;
+  shacl-play:background-color "b4c7dc";
+  sh:property spao-i:InstantiationExtent_quantity, spao-i:InstantiationExtent_hasUnitOfMeasurement;
+  sh:deactivated "true"^^xsd:boolean .
+
+_:ba09c1662f6649d08454fc46fcbacca13652 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-co:Identifier a sh:NodeShape;
+  sh:order "81"^^xsd:integer;
+  sh:targetClass rico:Identifier;
+  rdfs:label "Identifier"@en;
+  sh:closed "true";
+  sh:ignoredProperties _:ba09c1662f6649d08454fc46fcbacca13653;
+  shacl-play:background-color "b4c7dc";
+  sh:property spao-i:Identifier_value, spao-i:Identifier_P2_has_type;
+  sh:deactivated "true"^^xsd:boolean .
+
+_:ba09c1662f6649d08454fc46fcbacca13653 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-co:SingleDate a sh:NodeShape;
+  sh:order "82"^^xsd:integer;
+  volipi:iconName "fa-light fa-calendar-xmark";
+  sh:targetClass rico:SingleDate;
+  rdfs:label "Date (single)"@en;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:closed "true";
+  sh:ignoredProperties _:ba09c1662f6649d08454fc46fcbacca13654;
+  shacl-play:background-color "b4c7dc";
+  sh:property spao-i:SingleDate_certainty, spao-i:SingleDate_dateQualifier, spao-i:SingleDate_dateStandard,
+    spao-i:SingleDate_expressedDate, spao-i:SingleDate_normalizedDateValue .
+
+_:ba09c1662f6649d08454fc46fcbacca13654 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-co:Date a sh:NodeShape;
+  sh:order "83"^^xsd:integer;
+  volipi:iconName "fa-light fa-calendar";
+  sh:targetClass rico:Date;
+  rdfs:label "Date"@en;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:closed "true";
+  sh:ignoredProperties _:ba09c1662f6649d08454fc46fcbacca13655;
+  shacl-play:background-color "b4c7dc";
+  sh:property spao-i:Date_dateStandard, spao-i:Date_expressedDate, spao-i:Date_normalizedDateValue .
+
+_:ba09c1662f6649d08454fc46fcbacca13655 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-co:DateRange a sh:NodeShape;
+  sh:order "84"^^xsd:integer;
+  volipi:iconName "fa-light fa-calendar-range";
+  sh:targetClass rico:DateRange;
+  rdfs:label "Date (range)"@en;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:closed "true";
+  sh:ignoredProperties _:ba09c1662f6649d08454fc46fcbacca13656;
+  shacl-play:background-color "b4c7dc";
+  sh:property spao-i:DateRange_hasBeginningDate, spao-i:DateRange_hasEndDate .
+
+_:ba09c1662f6649d08454fc46fcbacca13656 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+spao-i:Concept a sh:NodeShape;
+  rdfs:label "Concept"@en;
+  sh:property spao-i:Concept_prefLabel;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Standard a sh:NodeShape;
+  sh:order "90"^^xsd:integer;
+  sh:targetClass ebucore:Standard;
+  rdfs:label "Standard"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:Standard_inScheme .
+
+spao-i:AudioFormat a sh:NodeShape;
+  sh:order "91"^^xsd:integer;
+  sh:targetClass ebucore:AudioFormat;
+  rdfs:label "(Type of) Audio Format"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:AudioFormat_inScheme .
+
+spao-i:ContainerFormat a sh:NodeShape;
+  sh:order "92"^^xsd:integer;
+  sh:targetClass ebucore:ContainerFormat;
+  rdfs:label "(Type of) Container Format"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:ContainerFormat_inScheme .
+
+spao-i:StorageMedium a sh:NodeShape;
+  sh:order "93"^^xsd:integer;
+  sh:targetClass premis:StorageMedium;
+  rdfs:label "(Type of) Storage Medium"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:VideoFormat a sh:NodeShape;
+  sh:order "94"^^xsd:integer;
+  sh:targetClass ebucore:VideoFormat;
+  rdfs:label "(Type of) Video Format"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:VideoFormat_inScheme .
+
+spao-i:CarrierType a sh:NodeShape;
+  sh:order "95"^^xsd:integer;
+  sh:targetClass rico:CarrierType;
+  rdfs:label "Type of Carrier"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:CarrierType_inScheme .
+
+spao-i:RepresentationType a sh:NodeShape;
+  sh:order "96"^^xsd:integer, "103"^^xsd:integer;
+  sh:targetClass rico:RepresentationType;
+  rdfs:label "Type of Representation"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:RepresentationType_inScheme .
+
+spao-i:Accessibility a sh:NodeShape;
+  sh:order "97"^^xsd:integer;
+  rdfs:label "Type of Accessibility"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:Accessibility_inScheme .
+
+spao-i:PreservationState a sh:NodeShape;
+  sh:order "98"^^xsd:integer;
+  rdfs:label "Type of Preservation State"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:PreservationState_inScheme .
+
+spao-i:Condition a sh:NodeShape;
+  sh:order "99"^^xsd:integer;
+  rdfs:label "Type of Condition"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:Condition_inScheme .
+
+spao-i:Packing a sh:NodeShape;
+  sh:order "100"^^xsd:integer;
+  rdfs:label "Type of Packing"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:Packing_inScheme .
+
+spao-i:Permission a sh:NodeShape;
+  sh:order "101"^^xsd:integer;
+  rdfs:label "Type of Permission"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:Permission_inScheme .
+
+spao-i:PhysicalUsability a sh:NodeShape;
+  sh:order "102"^^xsd:integer;
+  rdfs:label "Type of Physical usability"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:PhysicalUsability_inScheme .
+
+spao-i:TermsOfProtection a sh:NodeShape;
+  sh:order "104"^^xsd:integer;
+  rdfs:label "Type of Terms of Protection"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:TermsOfProtection_inScheme .
+
+spao-i:VideoDamage a sh:NodeShape;
+  sh:order "105"^^xsd:integer;
+  rdfs:label "Type of Video Damage"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:VideoDamage_inScheme .
+
+spao-i:Material a sh:NodeShape;
+  sh:order "106"^^xsd:integer;
+  rdfs:label "Type of Material"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:Material_inScheme .
+
+spao-i:ColorContent a sh:NodeShape;
+  sh:order "107"^^xsd:integer;
+  rdfs:label "Type of Color Content"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:ColorContent_inScheme .
+
+spao-i:RecordingSystem a sh:NodeShape;
+  sh:order "108"^^xsd:integer;
+  rdfs:label "Type of Recording System"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:RecordingSystem_inScheme .
+
+spao-i:ScanningFormat a sh:NodeShape;
+  sh:order "109"^^xsd:integer;
+  rdfs:label "Type of Scanning Format"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:ScanningFormat_inScheme .
+
+spao-i:ScanningOrder a sh:NodeShape;
+  sh:order "110"^^xsd:integer;
+  rdfs:label "Type of Scanning Order"@en;
+  sh:node spao-i:Concept;
+  shacl-play:background-color "edf2fa";
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-i:ScanningOrder_inScheme .
+
+spao-i:Instantiation_aspectRatio sh:path ebucore:aspectRatio;
+  sh:name "aspect ratio"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_channels sh:path ebucore:channels;
+  sh:name "channels"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_descriptiveNote sh:path rico:descriptiveNote;
+  sh:name "descriptive note"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_duration sh:path ebucore:duration, schema:duration;
+  sh:name "duration (ebucore)"@en, "duration (schema)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_hasAccessibility sh:path spao:hasAccessibility;
+  sh:name "has accessibility"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:Accessibility;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasArchivalStatus sh:path spao:hasArchivalStatus;
+  sh:name "has archival status"@en;
+  sh:description "For historical reasons, this property is not set on old instantiations, but it is mandatory for new instantiations."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:PreservationState;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasCarrierType sh:path rico:hasCarrierType;
+  sh:name "has carrier type"@en;
+  sh:description "Note : the entries in rico:CarrierType vocabulary are also types premis:StorageMedium."@en;
+  skos:editorialNote """The class rico:RepresentationType is not expected in the range. Only rico:CarrierType is expected. This is probably an error. There is a single value that says \"visual\", here is the query:
+
+SELECT DISTINCT ?s ?result
+WHERE
+{ ?s a <https://www.ica.org/standards/RiC/ontology#Instantiation>
+;
+<https://www.ica.org/standards/RiC/ontology#hasCarrierType> ?result .
+ ?result a <https://www.ica.org/standards/RiC/ontology#RepresentationType>
+}"""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:CarrierType;
+  sh:node spao-i:CarrierType;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasCondition sh:path spao:hasCondition;
+  sh:name "has condition"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:Condition;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasCopyPath sh:path spao:hasCopyPath;
+  sh:name "has copy path"@en;
+  skos:editorialNote "20240628 : je bascule dans l'espace de nom final et je déclare dans l'ontologie"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_hasDerivedInstantiation sh:path rico:hasDerivedInstantiation;
+  sh:name "has derived instantiation"@en;
+  skos:editorialNote "Il y a toujours un double typage : les instantiations sont toujouts typées rico:Instantiation avec en plus soit ebucore:MediaResource (objet analogique) ou premis:Representation"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Instantiation .
+
+spao-i:Instantiation_hasExtent sh:path rico:hasExtent;
+  sh:name "has extent"@en;
+  skos:editorialNote """Ici je pense que rico:ResourceResourceExtent en range est une erreur. Voici la query:
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+SELECT DISTINCT ?s ?result
+WHERE
+{ ?s a <https://www.ica.org/standards/RiC/ontology#Instantiation>
+;
+<https://www.ica.org/standards/RiC/ontology#hasExtent> ?result .
+ ?result a rico:RecordResourceExtent
+}
+
+Il n'y a pas beaucoup de valeur.
+Exemple d'Instantiation : http://data.performing-arts.ch/o/c364c6e6-7a87-400f-920b-525824eab956"""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:InstantiationExtent;
+  dash:searchWidget core:NonSelectableProperty .
+
+spao-i:Instantiation_hasFormat sh:path ebucore:hasFormat;
+  sh:name "has audio or video format"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:or _:ba09c1662f6649d08454fc46fcbacca13657;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+_:ba09c1662f6649d08454fc46fcbacca13657 rdf:first _:ba09c1662f6649d08454fc46fcbacca13658;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13659 .
+
+_:ba09c1662f6649d08454fc46fcbacca13658 sh:class ebucore:AudioFormat .
+
+_:ba09c1662f6649d08454fc46fcbacca13659 rdf:first _:ba09c1662f6649d08454fc46fcbacca13660;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca13660 sh:class ebucore:VideoFormat .
+
+spao-i:Instantiation_hasInternalNote sh:path spao:hasInternalNote;
+  sh:name "has note (internal)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_hasNote sh:path spao:hasNote;
+  sh:name "has note"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_hasOrHadIdentifier sh:path rico:hasOrHadIdentifier;
+  sh:name "has or had identifier (structured)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Identifier .
+
+spao-i:Instantiation_hasOrHadLocation sh:path rico:hasOrHadLocation;
+  sh:name "has or had location"@en;
+  sh:nodeKind sh:IRI;
+  sh:class spao:ArchivalPlace .
+
+spao-i:Instantiation_hasPacking sh:path spao:hasPacking;
+  sh:name "has packing"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:Packing;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasPermission sh:path spao:hasPermission;
+  sh:name "has permission"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:Permission;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasPhysicalUsability sh:path spao:hasPhysicalUsability;
+  sh:name "has physical usability"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:PhysicalUsability;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasProcessingDate sh:path spao:hasProcessingDate;
+  sh:name "has processing date"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:SingleDate;
+  dash:searchWidget core:NonSelectableProperty .
+
+spao-i:Instantiation_hasProtectionDuration sh:path spao:hasProtectionDuration;
+  sh:name "has protection duration"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_hasRepresentationType sh:path rico:hasRepresentationType;
+  sh:name "has representation type"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:RepresentationType;
+  sh:node spao-i:RepresentationType;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasResponsibleEmployee sh:path spao:hasResponsibleEmployee;
+  sh:name "has responsible employee"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_hasStandard sh:path ebucore:hasStandard;
+  sh:name "has standard (ebucore)"@en;
+  skos:editorialNote "PAL, NTS"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class ebucore:Standard;
+  sh:node spao-i:Standard;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasTermsOfProtection sh:path spao:hasTermsOfProtection;
+  sh:name "has terms of protection"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:TermsOfProtection;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_hasVideoDamage sh:path spao:hasVideoDamage;
+  sh:name "has video damage (type)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:VideoDamage;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_height sh:path ebucore:height;
+  sh:name "height"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_history sh:path rico:history;
+  sh:name "history"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_identifier sh:path rico:identifier;
+  sh:name "identifier (literal)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_index sh:path olo:index;
+  sh:name "index"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:integer .
+
+spao-i:Instantiation_integrity sh:path rico:integrity;
+  sh:name "integrity"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_isAssociatedWithEvent sh:path rico:isAssociatedWithEvent;
+  sh:name "is associated with event"@en;
+  skos:editorialNote "Qu'est-ce que ces Event représentent ?"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Event .
+
+spao-i:Instantiation_lastControl sh:path spao:lastControl;
+  sh:name "last control (date)"@en;
+  skos:editorialNote "Ici il faudrait normaliser: soit en datatype, soit en date Rico."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRIOrLiteral;
+  sh:or _:ba09c1662f6649d08454fc46fcbacca13661 .
+
+_:ba09c1662f6649d08454fc46fcbacca13661 rdf:first _:ba09c1662f6649d08454fc46fcbacca13662;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13663 .
+
+_:ba09c1662f6649d08454fc46fcbacca13662 sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+_:ba09c1662f6649d08454fc46fcbacca13663 rdf:first _:ba09c1662f6649d08454fc46fcbacca13664;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca13664 sh:nodeKind sh:IRI;
+  sh:class rico:SingleDate .
+
+spao-i:Instantiation_legacyIdentifier sh:path spao:legacyIdentifier;
+  sh:name "legacy identifier"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_P45_consists_of sh:path crm:P45_consists_of;
+  sh:name "consists of (P45)"@en;
+  skos:editorialNote "Matériaux : glass, plastic, synthetic, etc. Pas de propriété correspondante dans RiC-O"@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:Material;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_P60558 sh:path rda-u:P60558;
+  sh:name "has colour content"@en;
+  sh:description "Possible values are \"grayscale\", \"black and white\", \"color\", \"mixed color\""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:ColorContent;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_physicalCharacteristics sh:path rico:physicalCharacteristics;
+  sh:name "physical characteristics"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_preparationDate sh:path spao:preparationDate;
+  sh:name "preparation date"@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:ba09c1662f6649d08454fc46fcbacca13665 .
+
+_:ba09c1662f6649d08454fc46fcbacca13665 rdf:first _:ba09c1662f6649d08454fc46fcbacca13666;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13667 .
+
+_:ba09c1662f6649d08454fc46fcbacca13666 sh:class rico:SingleDate .
+
+_:ba09c1662f6649d08454fc46fcbacca13667 rdf:first _:ba09c1662f6649d08454fc46fcbacca13668;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13669 .
+
+_:ba09c1662f6649d08454fc46fcbacca13668 sh:class rico:DateRange .
+
+_:ba09c1662f6649d08454fc46fcbacca13669 rdf:first _:ba09c1662f6649d08454fc46fcbacca13670;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca13670 sh:class rico:Date .
+
+spao-i:Instantiation_recordingSystem sh:path spao:recordingSystem;
+  sh:name "recording system"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:RecordingSystem;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_samplingRate sh:path ebucore:samplingRate;
+  sh:name "sampling rate"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_scanningFormat sh:path ebucore:scanningFormat;
+  sh:name "scanning format"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:ScanningFormat;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_scanningOrder sh:path ebucore:scanningOrder;
+  sh:name "scanning order"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:ScanningOrder;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:Instantiation_seeAlso sh:path spao:seeAlso;
+  sh:name "see also"@en;
+  sh:nodeKind sh:IRI .
+
+spao-i:Instantiation_width sh:path ebucore:width;
+  sh:name "width"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Instantiation_inversePath_includedIn sh:path _:ba09c1662f6649d08454fc46fcbacca13671;
+  sh:name "includes file"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-i:File .
+
+_:ba09c1662f6649d08454fc46fcbacca13671 sh:inversePath premis:isIncludedIn .
+
+spao-i:Instantiation_inversePath_hasInstantiation sh:path _:ba09c1662f6649d08454fc46fcbacca13672;
+  sh:name "instantiates"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-co:Record .
+
+_:ba09c1662f6649d08454fc46fcbacca13672 sh:inversePath rico:hasInstantiation .
+
+spao-i:File_aspectRatio sh:path ebucore:aspectRatio;
+  sh:name "aspect ratio"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal .
+
+spao-i:File_channels sh:path ebucore:channels;
+  sh:name "channels"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:File_compositionLevel sh:path premis:compositionLevel;
+  sh:name "composition level"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  sh:in _:ba09c1662f6649d08454fc46fcbacca13673 .
+
+_:ba09c1662f6649d08454fc46fcbacca13673 rdf:first "0";
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13674 .
+
+_:ba09c1662f6649d08454fc46fcbacca13674 rdf:first "1";
+  rdf:rest rdf:nil .
+
+spao-i:File_duration sh:path ebucore:duration;
+  sh:name "duration"@en;
+  skos:editorialNote """Pourquoi un ebucore:duration et un schema:duration ? A vérifier dans le triplestore
+
+ebucore:duration est réservé aux fichiers individuels.
+
+L'utilisation de schema:duration est a priori sur 4 File qui sont des tests, à cleaner
+
+SPARQL : 
+
+PREFIX schema: <http://schema.org/>
+PREFIX premis: <http://www.loc.gov/premis/rdf/v1#>
+PREFIX spav: <http://vocab.performing-arts.ch/>
+SELECT ?entity ?duration
+WHERE {
+ ?entity a premis:File .
+ ?entity schema:duration ?duration .
+}
+LIMIT 1000"""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:File_fixity sh:path premis:fixity;
+  sh:name "fixity"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class crypto:md5 .
+
+spao-i:File_frameRate sh:path ebucore:frameRate;
+  sh:name "frame rate"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:File_hasFormat sh:path ebucore:hasFormat;
+  sh:name "has audio, video or container format"@en;
+  skos:editorialNote """Revoir les range ensemble, est-ce correct ? --> oui
+
+vocabulaires cibles : cf (ContainerFormat), vf (VideoFormat), af (AudioFormat). C'est géré au niveau du formulaire - à mettre
+
+ajouter les vocabulaires cibles (idem modèle Performance)"""@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:ba09c1662f6649d08454fc46fcbacca13675;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+_:ba09c1662f6649d08454fc46fcbacca13675 rdf:first _:ba09c1662f6649d08454fc46fcbacca13676;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13677 .
+
+_:ba09c1662f6649d08454fc46fcbacca13676 sh:class ebucore:AudioFormat .
+
+_:ba09c1662f6649d08454fc46fcbacca13677 rdf:first _:ba09c1662f6649d08454fc46fcbacca13678;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13679 .
+
+_:ba09c1662f6649d08454fc46fcbacca13678 sh:class ebucore:ContainerFormat .
+
+_:ba09c1662f6649d08454fc46fcbacca13679 rdf:first _:ba09c1662f6649d08454fc46fcbacca13680;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca13680 sh:class ebucore:VideoFormat .
+
+spao-i:File_hasStandard sh:path ebucore:hasStandard;
+  sh:name "has standard"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class ebucore:Standard;
+  sh:node spao-i:Standard;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:File_hasVideoDamage sh:path spao:hasVideoDamage;
+  sh:name "has video damage (type)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:VideoDamage;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:File_height sh:path ebucore:height;
+  sh:name "height"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:File_history sh:path rico:history;
+  sh:name "history"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:File_integrity sh:path rico:integrity;
+  sh:name "integrity"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:File_isIncludedIn sh:path premis:isIncludedIn;
+  sh:name "is included in"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Instantiation .
+
+spao-i:File_label sh:path rdfs:label;
+  sh:name "label"@en;
+  skos:editorialNote """Issue existante : https://github.com/sapa/performing-arts-ch-import/issues/26 (sera déplacée dans le cleaning)
+
+Requête pour lister les File sans rdfs:label:
+
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX premis: <http://www.loc.gov/premis/rdf/v1#>
+PREFIX spav: <http://vocab.performing-arts.ch/>
+SELECT ?entity
+WHERE {
+ ?entity a premis:File .
+ FILTER NOT EXISTS { ?entity rdfs:label ?label }
+}
+LIMIT 1000"""@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-i:File_lastControl sh:path spao:lastControl;
+  sh:name "last control"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:SingleDate;
+  dash:searchWidget core:NonSelectableProperty .
+
+spao-i:File_originalName sh:path premis:originalName;
+  sh:name "original frame"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:File_P60558 sh:path rda-u:P60558;
+  sh:name "color content (P60558)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:ColorContent;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:File_samplingRate sh:path ebucore:samplingRate;
+  sh:name "sampling rate"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:File_scanningFormat sh:path ebucore:scanningFormat;
+  sh:name "scanning format"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:ScanningFormat;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:File_scanningOrder sh:path ebucore:scanningOrder;
+  sh:name "scanning order"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:node spao-i:ScanningOrder;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-i:File_seeAlso sh:path spao:seeAlso;
+  sh:name "see also"@en;
+  sh:nodeKind sh:IRI .
+
+spao-i:File_size sh:path premis:size;
+  sh:name "size"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:File_width sh:path ebucore:width;
+  sh:name "width"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:Identifier_value sh:path rdf:value;
+  sh:order "1";
+  sh:name "value"@en;
+  sh:description "The value of the identifier, as a literal string."@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-import/issues/33>;
+  skos:editorialNote "Il faut migrer cette structure en structure RiC-O : en RiC-O il y a rico:textualValue ou rico:normalizedValue"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Identifier_P2_has_type sh:path crm:P2_has_type;
+  sh:order "2";
+  sh:name "type"@en;
+  sh:description "A reference to the type of the identifier, from the \"identifier\" controlled vocabulary, with values such as \"Unique ID\", \"Old Identifier\", \"Technical Identifier\", etc."@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-import/issues/33>;
+  skos:editorialNote "Il faut migrer cette structure en structure RiC-O : rico:hasIdentifierType, et il faut typer les valeurs avec la classe rico:IdentifierType à la place d'une classe CRM"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:in _:ba09c1662f6649d08454fc46fcbacca13681;
+  sh:deactivated "true"^^xsd:boolean .
+
+_:ba09c1662f6649d08454fc46fcbacca13681 rdf:first vocab:iduni;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13682 .
+
+_:ba09c1662f6649d08454fc46fcbacca13682 rdf:first vocab:idpid;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13683 .
+
+_:ba09c1662f6649d08454fc46fcbacca13683 rdf:first vocab:idcon;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13684 .
+
+_:ba09c1662f6649d08454fc46fcbacca13684 rdf:first vocab:idold;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13685 .
+
+_:ba09c1662f6649d08454fc46fcbacca13685 rdf:first vocab:idtec;
+  rdf:rest rdf:nil .
+
+spao-i:InstantiationExtent_quantity sh:path rico:quantity;
+  sh:order "1";
+  sh:name "quantity"@en;
+  sh:description "The quantity of the extent, given either as a integer or a string."@en;
+  skos:editorialNote "Thomas : voir si dans la doc des Collections on peut faire apparaitre les 2 datatypes qui n'apparaissent pas dans la doc généré"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-i:InstantiationExtent_hasUnitOfMeasurement sh:path rico:hasUnitOfMeasurement;
+  sh:order "2";
+  sh:name "has unit"@en;
+  sh:description "A reference to the \"extent unit\" controlled vocabulary to indicate the unit of measure of the extent. Example of values are \"boxes\", \"kg\", \"linear meter\", \"envelopes\", etc."@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-import/issues/35>;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:UnitOfMeasurement .
+
+spao-i:Date_dateStandard sh:path rico:dateStandard;
+  sh:name "date standard"@en;
+  skos:editorialNote """L'utilisation de rico:Date directement est bizarre. Soit on met une SingleDate, soit un DateRange, mais pourquoi utiliser rico:Date directement ? de toutes façons c'est à migrer.
+
+Requête pour savoir où c'est utilisé :
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT ?p (COUNT(?p) AS ?count) (SAMPLE(?x) AS ?sample)
+WHERE {
+ ?x ?p ?o .
+ ?o a rico:Date .
+}
+GROUP BY ?p
+ORDER BY DESC(?count)
+
+Ce sont beaucoup des birthDate de personnes, ou des beginningDate / endDate d'organisation. On peut laisser comme cela de toutes façons"""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Date_expressedDate sh:path rico:expressedDate;
+  sh:name "expressed date"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Date_normalizedDateValue sh:path rico:normalizedDateValue;
+  sh:name "normalized date value"@en;
+  skos:editorialNote "C'est dommage que ce champs n'ait pas un datatype normalisé"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:DateRange_hasBeginningDate sh:path rico:hasBeginningDate;
+  sh:name "has beginning date"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:SingleDate;
+  dash:searchWidget core:NonSelectableProperty;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:DateRange_hasEndDate sh:path rico:hasEndDate;
+  sh:name "has end date"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:SingleDate;
+  dash:searchWidget core:NonSelectableProperty;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:SingleDate_certainty sh:path rico:certainty;
+  sh:name "certainty"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:deactivated "true"^^xsd:boolean;
+  rdfs:comment "We disable properties from these shared objects : we need to keep them here for documentation, we don't want to have them twice since we already have them in the Collections model" .
+
+spao-i:SingleDate_dateQualifier sh:path rico:dateQualifier;
+  sh:name "date qualifier"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:SingleDate_dateStandard sh:path rico:dateStandard;
+  sh:name "date standard"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:SingleDate_expressedDate sh:path rico:expressedDate;
+  sh:name "expressed date"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:SingleDate_normalizedDateValue sh:path rico:normalizedDateValue;
+  sh:name "normalized date value"@en;
+  skos:editorialNote "C'est dommage que ce champs n'ait pas un datatype normalisé"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Concept_prefLabel sh:path skos:prefLabel;
+  sh:name "preferred label"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  dash:propertyRole dash:LabelRole;
+  sh:uniqueLang "true"^^xsd:boolean .
+
+spao-i:Accessibility_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:ac .
+
+spao-i:PreservationState_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:as .
+
+spao-i:CarrierType_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:fv .
+
+spao-i:Condition_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:cd .
+
+spao-i:Packing_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:pk .
+
+spao-i:Permission_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:pm .
+
+spao-i:PhysicalUsability_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:pu .
+
+spao-i:RepresentationType_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:rt .
+
+spao-i:Standard_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:bs .
+
+spao-i:TermsOfProtection_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:tp .
+
+spao-i:VideoDamage_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:vd .
+
+spao-i:Material_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:zj .
+
+spao-i:ColorContent_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:cl .
+
+spao-i:RecordingSystem_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:zf .
+
+spao-i:ScanningFormat_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:sf .
+
+spao-i:ScanningOrder_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:so .
+
+spao-i:AudioFormat_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:af .
+
+spao-i:VideoFormat_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:vf .
+
+spao-i:ContainerFormat_inScheme sh:path skos:inScheme;
+  sh:name "in scheme"@en;
+  sh:hasValue vocab:cf .
+
+spao-co:RecordResource sh:deactivated "true"^^xsd:boolean .
+
+spao-co:Record sh:deactivated "true"^^xsd:boolean .
+
+spao-co:RecordSet sh:deactivated "true"^^xsd:boolean .
+
+spao-co:RecordPart sh:deactivated "true"^^xsd:boolean .
+
+spao-co:ArchivalPlace sh:deactivated "true"^^xsd:boolean .
+
+spao-co:Event sh:deactivated "true"^^xsd:boolean .
+
+spao-co:Concept sh:deactivated "true"^^xsd:boolean .
