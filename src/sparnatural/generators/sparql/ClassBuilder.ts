@@ -56,26 +56,32 @@ export default class  ClassBuilder {
             this.widgetIsBlocking
             ||
             this.classGroup.getTypeSelected() === null
-        ) return true
-        this.#buildClsTriple()
-        return false
+        ) {
+            return true
+        } else {
+            this.#buildClsTriple()
+            return false
+        }        
     }
 
     #buildClsTriple(){
-        //https://github.com/sparna-git/Sparnatural/issues/72
-        if(getSettings().typePredicate){
-            const parsed = SparqlFactory.parsePropertyPath(getSettings().typePredicate)
-            this.classTriple = SparqlFactory.buildTypeTriple(
-                factory.variable(this.classGroup.getVarName()?.replace('?','')) ,
-                parsed,
-                factory.namedNode(this.classGroup.getTypeSelected())
-            )
-        } else {
-            this.classTriple = SparqlFactory.buildTypeTriple(
-                factory.variable(this.classGroup.getVarName()?.replace('?','')) ,
-                factory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
-                factory.namedNode(this.classGroup.getTypeSelected())
-            )
+        // don't build the class triple if the entity does not hove type
+        if(this.specProvider.getEntity(this.classGroup.getTypeSelected()).hasTypeCriteria()) {
+            //https://github.com/sparna-git/Sparnatural/issues/72
+            if(getSettings().typePredicate){
+                const parsed = SparqlFactory.parsePropertyPath(getSettings().typePredicate)
+                this.classTriple = SparqlFactory.buildTypeTriple(
+                    factory.variable(this.classGroup.getVarName()?.replace('?','')) ,
+                    parsed,
+                    factory.namedNode(this.classGroup.getTypeSelected())
+                )
+            } else {
+                this.classTriple = SparqlFactory.buildTypeTriple(
+                    factory.variable(this.classGroup.getVarName()?.replace('?','')) ,
+                    factory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
+                    factory.namedNode(this.classGroup.getTypeSelected())
+                )
+            }
         }
     }
 

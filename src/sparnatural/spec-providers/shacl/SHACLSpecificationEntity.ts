@@ -245,6 +245,9 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return hasNodeKindLiteral || hasDatatype || hasLanguageIn || hasUniqueLang;
     }
 
+    /**
+     * @returns true if this shape has a target, either a targetClass or sh:target
+     */
     hasTypeCriteria(): boolean {
         var hasTargetClass = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null);
         var hasTarget = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null);
@@ -275,7 +278,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         if(items.length == 0) {
             let parents = this.getParents();
             let parentDefaultLabelProp:string|undefined;
-            parents.forEach(p => {                          
+            parents.forEach(p => {
                 // if not found already, set it to the parent default label prop - otherwise keep the value we found
                 if(!parentDefaultLabelProp) {
                     let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);   
