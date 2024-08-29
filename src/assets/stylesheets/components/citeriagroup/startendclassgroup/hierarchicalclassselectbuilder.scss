@@ -153,6 +153,11 @@
                 overflow: hidden;
                 
             }
+            &.disabled span.item-sel {
+                opacity: 0.7; 
+                cursor: default;
+                
+            }
             span.item-traverse {
                 display: none;
                 width: 30px;
@@ -186,6 +191,10 @@
                         display: inline;
                     }
                 }
+            }
+            
+            &.disabled>span.item-sel:hover {
+                background-color: initial ;
             }
         }
 

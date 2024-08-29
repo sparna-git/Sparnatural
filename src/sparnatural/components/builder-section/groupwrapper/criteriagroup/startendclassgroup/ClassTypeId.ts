@@ -248,6 +248,10 @@ class ClassSelectBuilder extends HTMLComponent {
 
     arrayToJson = this.getRecursiveDagElements(rootNodes) ;
 
+    
+    console.log('arrayToJson');
+    console.log(arrayToJson);
+
     return JSON.parse(JSON.stringify(arrayToJson));
 
   }
@@ -255,6 +259,10 @@ class ClassSelectBuilder extends HTMLComponent {
   getRecursiveDagElements(elements: Array<any>) {
     let arrayToJson: Array<JsonDagRow> = [];
     elements.forEach(element => {
+      let disabled = false ;
+      if (element.disabled === true) {
+        disabled = true ;
+      }
       let rowToJson = {
         label: element.payload.getLabel(),
         id: element.payload.getId(),
@@ -263,7 +271,7 @@ class ClassSelectBuilder extends HTMLComponent {
         icon: element.payload.getIcon(),
         highlightedIcon: element.payload.getHighlightedIcon(),
         count: 50,
-        disabled: element.disabled,
+        disabled: disabled,
         childs: Array()
       }
       if (element.children.length > 0) {

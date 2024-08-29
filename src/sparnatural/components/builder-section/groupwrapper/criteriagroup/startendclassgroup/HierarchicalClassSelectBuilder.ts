@@ -20,6 +20,7 @@ export interface JsonDagRow {
   icon: string,
   highlightedIcon:string,
   count: number,
+  disabled: boolean,
   childs: Array<JsonDagRow>,
 }
 export interface DagWidgetDefaultValue {
@@ -158,7 +159,8 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
         );
       }
 
-      let li_elements_sel = this.htmlSelectUiUx[0].querySelectorAll('li .item-sel');
+      // Listen click for selectable class
+      let li_elements_sel = this.htmlSelectUiUx[0].querySelectorAll('li.enabled .item-sel');
       li_elements_sel.forEach(element => {
         element.addEventListener(
           "click",
@@ -221,8 +223,10 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
 
     buildClassSelectItem(element: JsonDagRow, parent:string) {
       let image = element.icon != null ? `data-icon="${element.icon}" data-iconh="${element.highlightedIcon}"` :"" ;
+      //let selectable = element.disabled == true ? `data-selectable="false"` : `data-selectable="true"` ;
+      let enabledClass = element.disabled == true ? ` disabled` : `enabled` ;
       var selected = this.defaultValue.value == element.id ? ' selected="selected"' : "";
-      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${image} ${selected} ${element.tooltip} ${element.color}><span class="item-sel">${element.label}</span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
+      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${image} ${selected} ${element.tooltip} ${element.color} class="${enabledClass}"><span class="item-sel">${element.label}</span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
       return item ;
     }
 
