@@ -4,6 +4,9 @@ import ISparnaturalSpecification from "../../../../../spec-providers/ISparnatura
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import HTMLComponent from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
+import {HierarchicalClassSelectBuilder, JsonDagRow, DagWidgetDefaultValue} from "../startendclassgroup/HierarchicalClassSelectBuilder";
+import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
+import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
 
 /**
  * The property selector
@@ -44,15 +47,30 @@ class ObjectPropertyTypeId extends HTMLComponent {
     if (this.endClassVal) {
       this.#removeTempLbl();
       // set the correct objectProperty matching to Start and End value
-      this.oldWidget = this.#getObjectProperty();
-      this.html.append(this.oldWidget);
-      this.widgetHtml = this.oldWidget.niceSelect();
+      
+      this.widgetHtml = this.#getObjectProperty();
+      
+      this.html.append(this.widgetHtml);
+      this.oldWidget = this.selectBuilder.selectBuilder.getInput();
+      
+    this.selectBuilder.selectBuilder.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
+
+      //this.html.append(this.oldWidget);
       this.#addOnChangeListener(this.oldWidget);
 
       // if there is no options for the user to choose, then trigger the change event
-      if (this.selectBuilder.items.length <= 1) {
+      
+      /*if (this.selectBuilder.selectableItems.length <= 1) {
+        console.log(this.selectBuilder.selectableItems.length) ;
         this.oldWidget.trigger("change");
+      }*/
+
+      // If juste 1 option selectable
+      if (this.selectBuilder.selectableItems.length == 1) {
+        this.selectBuilder.selectBuilder.defaultValue.value = this.selectBuilder.selectableItems[0] ;
+        this.submitSelected();
       }
+
     } else {
       // there hasn't been an Object in Endclassgroup chosen. render a temporary label
       this.widgetHtml = $(
@@ -66,10 +84,15 @@ class ObjectPropertyTypeId extends HTMLComponent {
     return this;
   }
 
+  
+  submitSelected() {
+    this.selectBuilder.selectBuilder.submitSelectedValue() ;
+  }
+
   // when a value gets selected from the dropdown menu (niceselect), then change is called
   #addOnChangeListener(selectWidget: JQuery<HTMLElement>) {
     selectWidget.on("change", () => {
-      let selectedValue = selectWidget.val();
+      let selectedValue = this.selectBuilder.selectBuilder.getInput().val();
       //disable further choice
       this.widgetHtml.addClass("disabled");
       this.widgetHtml.removeClass("open");
@@ -89,7 +112,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
 
   // sets the ObjectProperty according to the Subject and Object e.g Country isCountryOf Musuem
   #getObjectProperty() {
-    this.selectBuilder = new PropertySelectBuilder(this.specProvider);
+    this.selectBuilder = new PropertySelectBuilder(this, this.specProvider);
     var default_value = null;
 
     return this.selectBuilder.buildPropertySelect(
@@ -110,11 +133,70 @@ export default ObjectPropertyTypeId;
  * Example: changes the relationship from 'Country relatedTo Museum' => 'Country countryOf Museum'
  * There can be multiple connectingProperties. User might need to choose.
  **/
-class PropertySelectBuilder {
-  items: Array<string>;
+class PropertySelectBuilder extends HTMLComponent {
+  selectableItems: Array<string>;
   specProvider: ISparnaturalSpecification;
-  constructor(specProvider: any) {
+  selectBuilder: HierarchicalClassSelectBuilder;
+  constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
+    
+    super("ObjectPropertyTypeId", ParentComponent, null);
     this.specProvider = specProvider;
+  }
+
+  
+  render(): this {
+    super.render();
+    return this;
+  }
+
+  convertToJsonDag(rootNodes:any[]) {
+    console.log('rootNodes') ;
+    console.log(rootNodes) ;
+    let arrayToJson: Array<JsonDagRow> = [];
+    this.selectableItems = [] ;
+    arrayToJson = this.getRecursiveDagElements(rootNodes, '') ;
+    return JSON.parse(JSON.stringify(arrayToJson));
+  }
+
+  getRecursiveDagElements(elements: Array<any>, default_icon:string) {
+    let arrayToJson: Array<JsonDagRow> = [];
+    elements.forEach(element => {
+      let disabled = false ;
+      let icon = element.payload.getIcon() ;
+      if (icon == undefined) {
+        icon = default_icon ;
+      }
+
+      if (element.disabled === true) {
+        disabled = true ;
+      } else {
+
+        this.selectableItems.push(element.payload.getId()) ;
+      }
+      let rowToJson = {
+        label: element.payload.getLabel(),
+        id: element.payload.getId(),
+        tooltip: element.payload.getTooltip(),
+        color: element.payload.getColor(),
+        icon: icon,
+        highlightedIcon: element.payload.getHighlightedIcon(),
+        count: 50,
+        disabled: disabled,
+        childs: Array()
+      }
+      if (element.children.length > 0) {
+        rowToJson.childs = this.getRecursiveDagElements(element.children, icon) ;
+      }
+      arrayToJson.push(rowToJson);
+    });
+    return arrayToJson ;
+
+  }
+
+  initDagWidget(items:DagIfc<ISpecificationProperty>, default_value: DagWidgetDefaultValue) {
+    let jsonDag = this.convertToJsonDag(items.roots) ;
+    this.selectBuilder = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, default_value );
+    return this.selectBuilder.buildClassSelectFromJson() ; ;
   }
 
   buildPropertySelect(
@@ -122,17 +204,20 @@ class PropertySelectBuilder {
     rangeClassID: string,
     default_value: string
   ) {
-    this.items = this.specProvider.getEntity(domainClassID).getConnectingProperties(rangeClassID);
-
-    console.log(this.specProvider.getEntity(domainClassID).getConnectingPropertiesTree(rangeClassID))
-
-    if (this.items.length > 1) {
-      return this.#multipleConnectingProperty(this.items);
+   
+       
+    let defaultValue: DagWidgetDefaultValue = {
+      value: default_value,
+      path: '',
     }
-    return this.#singleConnectingProperty(this.items);
+
+    return this.initDagWidget(
+      this.specProvider.getEntity(domainClassID).getConnectingPropertiesTree(rangeClassID),
+      defaultValue
+    );
   }
 
-  #multipleConnectingProperty(items: Array<string>) {
+  /*#multipleConnectingProperty(items: Array<string>) {
     let default_value = items[0];
     let list: Array<string> = [];
     items.forEach((i) => {
@@ -193,8 +278,8 @@ class PropertySelectBuilder {
       ${label}
       </option>
     </select>`
-    );
+    )
 
     return htmlnew;
-  }
+  };*/
 }
