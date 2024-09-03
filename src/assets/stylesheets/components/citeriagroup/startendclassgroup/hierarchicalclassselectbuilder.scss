@@ -1,3 +1,6 @@
+@use '../../../base';
+@use '../../../mixins';
+
 
 .ClassTypeId.Highlited .htmlSelectUiUx .currentWrapper {
     border-radius: unset;
@@ -90,11 +93,16 @@
         position: absolute;
         width: 345px;
         height: 400px;
+        top: base.$height-components - 4 ;
+        z-index: 2;
 
         
         transition-property: height;
         transition-duration: 0.1s;
         transition-delay: 0;
+        
+        border-radius: 4px;
+        box-shadow: 0px 0px 8px 0px #00000026;
     }
 
     ul {
@@ -119,8 +127,11 @@
         transition-delay: 0;
         z-index: 1000;
 
+
+
+
         &.active-pane {
-            display: inline-block;
+            /*display: inline-block;*/
             margin-left: 0;
             /*transition-property: margin-left;
             transition-duration: 1s;
@@ -160,9 +171,8 @@
                     /*text-indent: -4px;*/
                 }
             }
-            &.disabled span.item-sel {
-                opacity: 0.7; 
-                cursor: default;
+            &.disabled span.item-traverse {
+                border-left: 1px solid transparent;
                 
             }
             span.item-traverse {
@@ -200,8 +210,8 @@
                 }
             }
             
-            &.disabled>span.item-sel:hover {
-                background-color: initial ;
+            &.disabled:hover {
+                background-color: var(--primary-color-light) ;
             }
         }
 

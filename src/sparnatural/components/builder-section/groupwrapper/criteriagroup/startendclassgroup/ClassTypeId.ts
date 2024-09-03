@@ -79,6 +79,7 @@ class ClassTypeId extends HTMLComponent {
     // convert to niceSelect: https://jqueryniceselect.hernansartorio.com/
     // needs to happen after html.append(). it uses rendered stuff on page to create a new select... should move away from that
     this.oldWidget = this.selectBuilder.selectBuilder.getInput();
+    this.selectBuilder.selectBuilder.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
     //this.widgetHtml = this.widgetHtml.niceSelect();
     // nice-select is not a proper select tag and that's why can't listen for change events... move away from nice-select!
     this.#addOnChangeListener(this.oldWidget);
@@ -256,7 +257,7 @@ class ClassSelectBuilder extends HTMLComponent {
     elements.forEach(element => {
       let disabled = false ;
       let icon = element.payload.getIcon() ;
-      if (icon == '') {
+      if (icon == undefined) {
         icon = default_icon ;
       }
 

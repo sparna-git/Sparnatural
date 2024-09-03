@@ -47,6 +47,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
     htmlSelectUiUxLists: JQuery<HTMLElement>; 
     htmlInputValueClass: JQuery<HTMLElement>; 
     htmlInputValuePath: JQuery<HTMLElement>; 
+    htmlInputValueIcon: JQuery<HTMLElement>; 
     htmlCurentValue: JQuery<HTMLElement>; 
     breadcrumItems: Array<string> = [];
     hierarchyData: Array<JsonDagRow> = [];
@@ -90,10 +91,17 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
     setCurrentContent() {
       let entity_path = this.htmlInputValuePath.val() as string;
       let entity_id = this.htmlInputValueClass.val() as string;
+      let entity_icon = this.htmlInputValueIcon.val() as string;
+
+      
+      let icon = `` ;
+      if (entity_icon != '') {
+        icon = `<span><i class="fa ${entity_icon} fa-fw"></i></span>` ;
+      }
 
       let entity = this.specProvider.getEntity(entity_id) ;
 
-      this.htmlCurentValue.html(`${entity.getIcon()} ${entity.getLabel()} `) ;
+      this.htmlCurentValue.html(`${icon} ${entity.getLabel()} `) ;
     }
 
     initSelectUiUxListsHeight() {
@@ -142,6 +150,33 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
           );
         }
       }
+
+      let li_elements_disabled = this.htmlSelectUiUx[0].querySelectorAll('li.disabled');
+      //let ul_elements = this.htmlSelectUiUx[0].querySelectorAll('ul') ;
+      for (var element of li_elements_disabled) {
+        //let class_id = element.getAttribute('value') ;
+        let class_childs_list_id = element.getAttribute('list-child-id') ;
+        //Search in all ul if have parent attr with this class_id
+        let hasChild = this.htmlSelectUiUx[0].querySelector('ul[parent="'+class_childs_list_id+'"]');
+        if (hasChild !== null) {
+          element.classList.add("have-childs");
+          // if parent is after in dom move before
+          /*if(this.parentIsAfter( element.parentElement, hasChild ) ) {
+            element.parentElement.before(hasChild);
+          }*/
+          //element.querySelector('span.item-traverse');
+          element.querySelector('span.item-sel').addEventListener(
+            "click",
+            (e: CustomEvent) => {
+              let class_target = (e.target as any).closest('li').getAttribute('list-child-id') ;
+              this.htmlSelectUiUx[0].querySelectorAll('ul[parent].active-pane').forEach(el => this. moveHasAncestor(el));
+              this.moveHasChild(this.htmlSelectUiUx[0].querySelector('ul[parent="'+class_target+'"]'));
+              this.initSelectUiUxListsHeight() ;
+              //this.addBreadcrumItem(class_target, (e.target as any).parentElement.innerHTML ) ;
+            }
+          );
+        }
+      }
       //All breadcrum return action 
       let ul_breadcrum_elements = this.htmlSelectUiUx[0].querySelectorAll('div.returnBtn') ;
       for (var br_element of ul_breadcrum_elements) {
@@ -167,7 +202,9 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
           (e: CustomEvent) => {
             let class_id = (e.target as any).closest('li').getAttribute('data-id') ;
             let class_path = (e.target as any).closest('li').getAttribute('data-parent') ;
+            let class_icon = (e.target as any).closest('li').getAttribute('data-icon') ;
 
+            this.htmlInputValueIcon.val(class_icon) ;
             this.htmlInputValuePath.val(class_path) ;
             this.htmlInputValueClass.val(class_id).trigger("change");
             this.setCurrentContent() ;
@@ -222,11 +259,20 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
     }
 
     buildClassSelectItem(element: JsonDagRow, parent:string) {
-      let image = element.icon != null ? `data-icon="${element.icon}" data-iconh="${element.highlightedIcon}"` :"" ;
+      //let image = element.icon != null ? `data-icon="${element.icon}" data-iconh="${element.highlightedIcon}"` :"" ;
       //let selectable = element.disabled == true ? `data-selectable="false"` : `data-selectable="true"` ;
       let enabledClass = element.disabled == true ? ` disabled` : `enabled` ;
-      var selected = this.defaultValue.value == element.id ? ' selected="selected"' : "";
-      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${image} ${selected} ${element.tooltip} ${element.color} class="${enabledClass}"><span class="item-sel"><span class="label-icon">${element.icon}</span>${element.label}</span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
+      let icon = `` ;
+      let iconValue = ``;
+      if (element.icon != '') {
+        icon = `<span><i class="fa ${element.icon} fa-fw"></i></span>` ;
+        iconValue = `data-icon="${element.icon}"` ;
+      }
+      let selected = this.defaultValue.value == element.id ? 'selected="selected"' : "";
+      let tooltip = element.tooltip != undefined ? `title="${element.tooltip}"` : "";
+      let color = element.color != undefined ? `data-color="${element.color}"` : "";
+
+      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${selected} ${tooltip} ${color} ${iconValue} class="${enabledClass}"><span class="item-sel"><span class="label-icon">${icon}</span>${element.label}</span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
       return item ;
     }
 
@@ -263,6 +309,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.htmlSelectUiUxBreadCrum = $(`<div class="htmlSelectUiUxBreadCrum"></div>`) ;
       this.htmlInputValueClass = $(`<input type="hidden" name="value-class" value="">`) ;
       this.htmlInputValuePath = $(`<input type="hidden" name="value-path" value="">`) ;
+      this.htmlInputValueIcon = $(`<input type="hidden" name="value-icon" value="">`) ;
       this.htmlCurentValue = $('<span class="current">Chercher des ressources</span>') ;
       let initBreadcrumData: BreadCrumData = {
         parentsLabels: ['Tout'],
@@ -286,6 +333,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.htmlSelectUiUx.append(this.htmlSelectUiUxLists) ;
       this.htmlSelectUiUx.append(this.htmlInputValueClass) ;
       this.htmlSelectUiUx.append(this.htmlInputValuePath) ;
+      this.htmlSelectUiUx.append(this.htmlInputValueIcon) ;
       this.html.append(this.htmlSelectUiUx) ;
       this.initClassSelector() ;
       this.displayClassSelector() ;
