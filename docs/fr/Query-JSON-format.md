@@ -1,6 +1,7 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+_[Accueil](index.html) > Format JSON de la requête_
 
-# Format JSON de requête Sparnatural
+# Format JSON de la requête Sparnatural
+
 
 ## Comment ça marche : onQueryUpdated / loadQuery
 
@@ -9,9 +10,10 @@ Sparnatural émet l'événement [`queryUpdated`](http://docs.sparnatural.eu/Java
 Cela permet de mettre en œuvre 2 fonctionnalités importantes pour présenter votre graphe de connaissances :
 
 1. La capacité de préparer des **requêtes d'exemple qui peuvent être chargées** en un seul clic pour initialiser Sparnatural avec votre requête
-2. La capacité d'**encoder la requête dans un paramètre d'URL** et de charger directement Sparnatural avec la requête reçue. Cela permet aux utilisateurs de partager des liens directs vers leurs requêtes préférées, et votre graphe de connaissances devient viral ;-)
+2. La possibilité d'**encoder la requête dans un paramètre d'URL** et de charger directement Sparnatural avec la requête reçue. Cela permet aux utilisateurs de partager des liens directs vers leurs requêtes préférées, et votre graphe de connaissances devient viral ;-)
 
 Cela est illustré dans l'extrait de code suivant :
+
 
 ```javascript
 $( document ).ready(function($) {          
@@ -53,7 +55,7 @@ document.getElementById('select-examples').onchange = function() {
 
 ## Exemple de requête JSON
 
-La requête suivante dans Sparnatural (_Toutes les œuvres d'art exposées dans les musées français ou italiens, et créées au XIXe siècle, avec leur date de création_) :
+La requête suivante dans Sparnatural (_Toutes les œuvres d'art exposées dans des musées français ou italiens, et créées au XIXe siècle, avec leur date de création_) :
 
 ![Exemple de requête Sparnatural](/assets/images/screenshot-JSON-data-structure.png)
 
@@ -138,11 +140,9 @@ Est modélisée dans la structure de données JSON suivante :
 Fondamentalement, la structure de données JSON encode un peu plus d'informations que la requête SPARQL générée, pour faciliter notre vie lors de l'analyse de la structure de données pour initialiser Sparnatural avec celle-ci. Elle ajoute :
   - Les libellés des valeurs
   - Les types de tous les sujets et objets
-  - La structure en forme d'arbre que Sparnatural utilise, qui serait difficile à deviner en regardant la chaîne SPARQL
+  - La structure en forme d'arborescence que Sparnatural utilise, qui serait difficile à deviner en regardant la chaîne SPARQL
 
 La structure de données est composée d'une structure "Query" principale, qui contient des "branches". Chaque "branche" contient une "ligne de requête", correspondant à une ligne de l'interface Sparnatural, et les "enfants" de cette ligne, qui sont les lignes en dessous dans l'interface Sparnatural.
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 ### Structure de la requête
 
@@ -233,7 +233,7 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 La structure des valeurs dépend de la structure du critère/ligne. Cela peut être :
 
-- Un widget de sélection d'URI (liste déroulante, autocomplétion, widget arborescent) :
+- Un widget de sélection d'URI (liste déroulante, autocomplétion, arborescence) :
 
 Si la valeur est une URI :
 
@@ -314,8 +314,6 @@ Si la valeur est un littéral (avec un type de données) :
 ### Variables agrégées
 
 Si la requête contient des variables agrégées (telles que `COUNT(?x)`), la structure de la requête de variable change comme suit :
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 ```json
 {

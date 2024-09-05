@@ -1,16 +1,18 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+_[Accueil](index.html) > Interrogation de graphes nommés spécifiques_
 
 # Interroger des graphes nommés spécifiques
 
 ## Cas d'utilisation
 
-Parfois, vous devez restreindre votre requête à un ou plusieurs graphes nommés spécifiques dans votre triplestore.
+Parfois, vous avez besoin de restreindre votre requête à un ou plusieurs graphes nommés spécifiques dans votre triplestore.
+
 
 ## Fonctionnement
 
 Cela est pris en charge par le protocole SPARQL lui-même, à l'intérieur de l'URL du point de terminaison SPARQL, en ajoutant un ou plusieurs paramètres `?default-graph-uri=...` à l'URL du point de terminaison que vous fournissez à Sparnatural. (voir la [section de requête du protocole SPARQL](https://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#query-operation)). L'URI du ou des graphes nommés doit être encodé en URL.
 
 Si vous avez besoin de basculer ou de sélectionner différents graphes nommés, il incombe à la page appelante dans laquelle Sparnatural est intégré de fournir ce sélecteur et de mettre à jour l'attribut `endpoint` en conséquence.
+
 
 ## Configuration de Sparnatural
 

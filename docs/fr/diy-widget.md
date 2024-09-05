@@ -1,6 +1,4 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
-**[Accueil](index.html) > Comment créer votre propre widget**
+_[Accueil](index.html) > Comment créer votre propre widget_
 
 ** /!\ Ceci est obsolète. **
 
@@ -27,9 +25,9 @@ export class BooleanWidget extends AbstractWidget {
 ```
 Avec l'aide de l'intellisense, nous pouvons voir que les deux méthodes `getRdfJsPattern` et `parseInput` doivent être implémentées.
 
-`getRdfJsPattern` : Retourne un tableau de type `Pattern[]`. Cela est basé sur le [modèle de données sparqljs](https://github.com/RubenVerborgh/SPARQL.js/). Ce `Pattern[]` sera converti en sparql.
+`getRdfJsPattern` : Renvoie un tableau de type `Pattern[]`. Cela est basé sur le [modèle de données sparqljs](https://github.com/RubenVerborgh/SPARQL.js/). Ce `Pattern[]` sera converti en sparql.
 
-`parseInput` : Retourne une WidgetValue et possède deux fonctions. Il est utilisé pour analyser l'entrée fournie par l'utilisateur et il analyse l'entrée de chaîne lorsqu'une requête est importée.
+`parseInput` : Renvoie une WidgetValue et possède deux fonctions. Il est utilisé pour analyser l'entrée fournie par l'utilisateur et il analyse l'entrée de chaîne lorsqu'une requête est importée.
 
 ## Créer le rendu HTML du widget
 
@@ -65,9 +63,10 @@ Cela rend à ce qui suit et a un clickListener pour écouter le clic :
 
 ![](https://raw.githubusercontent.com/sparna-git/Sparnatural/master/documentation/15-boolean.png)
 
+
 ## Définir une classe de données
 
-Il est à noter ci-dessus la création de widgetValue à l'intérieur du click listener. Cela nous amène à la prochaine exigence des SparnaturalWidgets. Chaque widget Sparnatural DEVRAIT être accompagné d'une "*classe de données*". Cette classe de données doit hériter de l'interface WidgetValue :
+Remarquable ci-dessus est la création de widgetValue à l'intérieur du click listener. Cela nous amène à la prochaine exigence que les SparnaturalWidgets ont. Chaque widget Sparnatural DEVRAIT être accompagné d'une "*classe de données*". Cette classe de données doit hériter de l'interface WidgetValue :
 
 ```typescript
 export class BooleanWidgetValue implements WidgetValue {
@@ -86,9 +85,7 @@ export class BooleanWidgetValue implements WidgetValue {
 
 ## Implémenter parseInput
 
-`parseInput` est utilisé pour 2 choses : analyser la valeur entrée par l'utilisateur et analyser la valeur stockée dans la [structure de données JSON](Query-JSON-format) des requêtes enregistrées.
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+`parseInput` est utilisé pour 2 choses : analyser la valeur saisie par l'utilisateur et analyser la valeur stockée dans la [structure de données JSON](Query-JSON-format) des requêtes enregistrées.
 
 ## Implémenter getRdfJsPattern
 
@@ -101,7 +98,7 @@ TODO
 
 ## 2. Ajouter un cas pour quand le nouveau Widget doit être utilisé
 
-Dans `components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper.ts`, dans la méthode `#createWidgetComponent()`, vous verrez une directive "switch" qui teste le widgetType, c'est-à-dire l'URI d'un type de propriété provenant de l'ontologie de configuration Sparnatural :
+Dans `components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetWrapper.ts`, la méthode `#createWidgetComponent()` vous verrez une directive "switch" qui teste sur le widgetType, c'est-à-dire sur l'URI d'un type de propriété provenant de l'ontologie de configuration Sparnatural :
 
 ```typescript
     switch (widgetType) {

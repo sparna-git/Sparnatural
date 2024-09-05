@@ -1,4 +1,4 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+_[Accueil](index.html) > Widgets_
 
 # Widgets Sparnatural
 
@@ -23,16 +23,14 @@ Il s'agit d'une documentation de référence pour les widgets Sparnatural.
 
 ### Description
 
-Les widgets de liste permettent de sélectionner une valeur dans une liste déroulante. Ils sont adaptés si la liste des valeurs distinctes est de taille limitée (généralement moins de 500 éléments). Le widget fournit une liste déroulante combinée avec un champ de filtrage/recherche pour rechercher dans le contenu de la liste. Le champ de saisie pour rechercher dans la liste n'apparaît pas si la liste est très petite, moins de 20 éléments.
-Le widget de liste est implémenté en utilisant le composant [select2 JQuery](https://select2.org/).
+Les widgets de liste permettent de sélectionner une valeur dans une liste déroulante. Ils sont adaptés si la liste des valeurs distinctes est de taille limitée (typiquement moins de 500 éléments). Le widget fournit une liste déroulante combinée avec un champ de filtrage/recherche pour rechercher dans le contenu de la liste. Le champ de saisie pour rechercher dans la liste n'apparaît pas si la liste est très petite, moins de 20 éléments.
+Le widget de liste est implémenté en utilisant le [composant select2 JQuery](https://select2.org/).
 
 Les widgets de liste peuvent fonctionner à la fois avec des URIs + des libellés, ou avec des valeurs littérales. Ils peuvent même mélanger des URIs et des littéraux dans la même liste.
 
-L'ordre de tri des éléments dans la liste, ainsi que leurs libellés précis, dépend de la requête SPARQL sous-jacente qui peuple la liste. Sparnatural fournit des [sources de données par défaut](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty) qui peuvent être triées par ordre alphabétique, alphabétique montrant le nombre d'occurrences entre parenthèses, ou triées par nombre décroissant d'occurrences.
+L'ordre de tri des éléments dans la liste, ainsi que leurs libellés précis, dépend de la requête SPARQL sous-jacente qui peuple la liste. Sparnatural fournit des [sources de données par défaut](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty) qui peuvent être ordonnées alphabétiquement, alphabétiquement en montrant le nombre d'occurrences entre parenthèses, ou ordonnées par nombre décroissant d'occurrences.
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
-Les widgets de liste prennent en charge `optgroup` pour regrouper les valeurs en sections. Le regroupement est également fourni par la requête SPARQL, et est utilisé en particulier lors de [l'interrogation de plusieurs points de terminaison](Querying-multiple-endpoints).
+Les widgets prennent en charge `optgroup` pour regrouper les valeurs en sections. Le regroupement est également fourni par la requête SPARQL, et est utilisé en particulier lors de [l'interrogation de plusieurs points de terminaison](Querying-multiple-endpoints).
 
 ### Configuration
 
@@ -40,7 +38,7 @@ Dans la configuration OWL, déclarez une sous-propriété de [`config-core:ListP
 
 ### Sources de données
 
-La liste des URI ainsi que leurs libellés doivent être [configurés à l'aide d'une source de données SPARQL](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty).
+La liste des URI ainsi que leurs libellés doit être [configurée à l'aide d'une source de données SPARQL](http://docs.sparnatural.eu/OWL-based-configuration-datasources.html#preconfigured-datasources-for-a-listproperty).
 
 La source de données par défaut utilisée est [`datasources:list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_URI_or_literal_count), reposant elle-même sur la requête SPARQL [`datasources:query_list_URI_or_literal_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_list_URI_or_literal_count)
 
@@ -52,7 +50,7 @@ Si une seule valeur est sélectionnée, la valeur est insérée directement en t
   ?Museum_1 <http://dbpedia.org/ontology/country> <http://fr.dbpedia.org/resource/France>.
 ```
 
-Si plus d'une valeur est sélectionnée, ou si la variable correspondante est sélectionnée pour être incluse dans l'ensemble de résultats, alors un mot-clé `VALUES` est utilisé :
+Si plus d'une valeur est sélectionnée, ou si la variable correspondante est sélectionnée pour inclusion dans l'ensemble de résultats, alors un mot-clé `VALUES` est utilisé :
 
 Avec plus d'une valeur :
 
@@ -92,8 +90,6 @@ Le widget d'autocomplétion permet de sélectionner une URI en tapant quelques l
 L'autocomplétion fonctionne également pour la recherche sur des valeurs littérales.
 Le widget d'autocomplétion est implémenté en se basant sur la bibliothèque [awesomeplete](https://projects.verou.me/awesomplete/).
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 ### Configuration
 
 Dans la configuration OWL, déclarez une sous-propriété de [`config-core:AutocompleteProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty)
@@ -128,17 +124,15 @@ Dans la configuration OWL, déclarez une sous-propriété de [`config-core:TreeP
 ### Sources de données
 
 Un widget arborescent nécessite 2 sources de données :
-- Une pour lister les nœuds racine à afficher (au premier niveau).
+- Une pour lister les nœuds racines à afficher (au premier niveau).
 - Une pour lister les enfants d'un nœud, lorsqu'un nœud est cliqué.
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
-La source de données racine est configurée en utilisant l'annotation [`datasources:treeRootsDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource). La source de données par défaut utilisée si aucune n'est indiquée est [`datasources:tree_root_skostopconcept`].
-La source de données des enfants est configurée en utilisant l'annotation [`datasources:treeChildrenDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource). La source de données par défaut utilisée si aucune n'est indiquée est [`datasources:tree_children_skosnarrower`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower).
+Le datasource racine est configuré en utilisant l'annotation [`datasources:treeRootsDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource). Le datasource par défaut utilisé si aucun n'est indiqué est [`datasources:tree_root_skostopconcept`].
+Le datasource des enfants est configuré en utilisant l'annotation [`datasources:treeChildrenDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource). Le datasource par défaut utilisé si aucun n'est indiqué est [`datasources:tree_children_skosnarrower`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower).
 
 ### Clause SPARQL
 
-La logique de génération de requête SPARQL est identique à celle du ListWidget (voir ci-dessus). Cependant, veuillez noter qu'il est attendu que les widgets Tree soient configurés sur des propriétés qui utilisent un chemin de propriété SPARQL "*", indiquant que la recherche est effectuée de manière récursive sur le nœud sélectionné mais aussi sur tous ses enfants. Un chemin de propriété SPARQL typique configuré sur une propriété associée à un widget Tree est `<http://purl.org/dc/terms/subject>/(<http://www.w3.org/2004/02/skos/core#broader>|^<http://www.w3.org/2004/02/skos/core#narrower>)*` : notez comment il recherche une connexion en utilisant le prédicat `dcterms:subject`, étendu soit à un `skos:broader` soit à l'inverse de `skos:narrower` jusqu'au nœud sélectionné dans l'arborescence.
+La logique de génération de requête SPARQL est identique à celle du ListWidget (voir ci-dessus). Cependant, veuillez noter qu'il est attendu que les widgets Tree soient configurés sur des propriétés qui utilisent un chemin de propriété SPARQL "*", indiquant que la recherche est effectuée de manière récursive sur le nœud sélectionné mais aussi sur tous ses enfants. Un chemin de propriété SPARQL typique configuré sur une propriété associée à un widget arborescent est `<http://purl.org/dc/terms/subject>/(<http://www.w3.org/2004/02/skos/core#broader>|^<http://www.w3.org/2004/02/skos/core#narrower>)*` : notez comment il recherche une connexion en utilisant le prédicat `dcterms:subject`, étendu soit à un `skos:broader` soit à l'inverse de `skos:narrower` jusqu'au nœud sélectionné dans l'arborescence.
 
 ## Widget de recherche de chaîne de caractères
 
@@ -154,11 +148,9 @@ Le widget de recherche permet simplement d'entrer des caractères qui seront rec
 
 Dans la configuration OWL, déclarez une sous-propriété de [`config-core:SearchProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty), **ou l'une de ses sous-propriétés**, qui influencera la logique de génération SPARQL (voir ci-dessous).
 
-### Sources de données
+### Datasources
 
-Aucune source de données requise.
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+Aucun datasource requis.
 
 ### Clause SPARQL
 
@@ -199,14 +191,13 @@ La chaîne sera recherchée en utilisant l'opérateur `bif:contains` propriétai
 
 ### Description
 
-Permet d'exprimer une plage de dates à rechercher, en utilisant une date de début et une date de fin sélectionnées à partir de calendriers. Les plages ouvertes sont autorisées (seule la date de début ou seule la date de fin). Le widget de plage de dates est implémenté en utilisant [@chenfengyuan/datepicker](https://fengyuanchen.github.io/datepicker/).
+Permet d'exprimer une plage de dates à rechercher, en utilisant une date de début et une date de fin sélectionnées à partir de calendriers. Les plages ouvertes sont autorisées (seulement la date de début ou seulement la date de fin).
+Le widget de plage de dates est implémenté en utilisant [@chenfengyuan/datepicker](https://fengyuanchen.github.io/datepicker/).
 
 ### Configuration
 
 Dans la configuration OWL, déclarez une sous-propriété de [`config-core:TimeProperty-Date`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date).
 De plus, si les entités dans le graphe de connaissances sont associées à une plage de dates et éventuellement une date exacte, et que vous souhaitez tester si la plage de dates recherchée chevauche la plage de dates des entités, vous pourriez utiliser les propriétés [`config-core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty), [`config-core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) et éventuellement [`config-core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) pour indiquer respectivement les URI utilisés pour exprimer la date de début, la date de fin et la date exacte sur les entités. Plus de détails peuvent être trouvés dans la [documentation détaillée de la fonction de requête de plage de dates](http://docs.sparnatural.eu/Querying-date-ranges.html).
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 ### Sources de données
 
@@ -264,7 +255,7 @@ FILTER((xsd:dateTime(?Date_2)) >= "2017-12-31T23:00:01Z"^^xsd:dateTime)
 ### Description
 
 Permet de sélectionner une plage de nombres, avec une limite inférieure et une limite supérieure.
-Peut limiter la plage des champs de saisie en fonction du type de données indiqué dans la configuration SHACL (par exemple, xsd:byte sera limité entre -127 et 128)
+Peut limiter la plage des champs de saisie en fonction du type de données indiqué dans la configuration SHACL (par exemple, xsd:byte sera limité entre -127 et 128).
 
 ### Configuration
 
@@ -300,8 +291,6 @@ Avec seulement une limite supérieure :
 
 ## Widget booléen
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 ### Apparence
 
 <img src=" https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/readme/15-boolean.png" />
@@ -334,7 +323,7 @@ Aucune source de données requise.
 
 ### Description
 
-Permet de sélectionner un rectangle sur une carte et génère une requête GeoSPARQL correspondante en utilisant une fonction `geof:sfWithin`. Cela implique que les données dans le triplestore doivent être encodées avec des valeurs littérales en utilisant le datatype `<http://www.opengis.net/ont/geosparql#wktLiteral>`, comme dans cet exemple (il s'agit d'un petit extrait de Wikidata, bien sûr vous pouvez utiliser différents prédicats, l'important est l'utilisation de `^^geo:wktLiteral` :
+Permet de sélectionner un rectangle sur une carte, et génère une requête GeoSPARQL correspondante, en utilisant une fonction `geof:sfWithin`. Cela implique que les données dans le triplestore doivent être encodées avec des valeurs littérales en utilisant le datatype `<http://www.opengis.net/ont/geosparql#wktLiteral>`, comme dans cet exemple (il s'agit d'un petit extrait de Wikidata, bien sûr vous pouvez utiliser différents prédicats, l'important est l'utilisation de `^^geo:wktLiteral` :
 
 ```turtle
 @prefix geo: <http://www.opengis.net/ont/geosparql#> .
@@ -356,7 +345,7 @@ wd:Q16213 wdt:P31 wd:Q484170 ;
 
 Les littéraux WKT peuvent être utilisés pour encoder des points ou des polygones. Les littéraux WKT peuvent également inclure une IRI facultative avant la géométrie pour indiquer le système de référence (voir l'exemple de la spécification : `"<http://www.opengis.net/def/crs/EPSG/0/4326> Point(33.95 -83.38)"^^<http://www.opengis.net/ont/geosparql#wktLiteral>`)
 
-Pour plus d'informations sur les littéraux WKT, consultez la [page Wikipedia](https://fr.wikipedia.org/wiki/Well-known_text) et la [spécification GeoSPARQL](https://opengeospatial.github.io/ogc-geosparql/geosparql11/spec.html#geo:wktLiteral).
+Pour plus d'informations sur les littéraux WKT, consultez la [page Wikipedia](https://fr.wikipedia.org/wiki/Well-known_text), et la [spécification GeoSPARQL](https://opengeospatial.github.io/ogc-geosparql/geosparql11/spec.html#geo:wktLiteral).
 
 ### Configuration
 
@@ -373,11 +362,10 @@ Aucune source de données requise.
     FILTER(<http://www.opengis.net/def/function/geosparql/sfWithin>(?Map_4, "Polygon((6.113179202657193 46.196063994634265, 6.113179202657193 46.21649770912313, 6.149914737325163 46.21649770912313, 6.149914737325163 46.196063994634265, 6.113179202657193 46.196063994634265))"^^<http://www.opengis.net/ont/geosparql#wktLiteral>))
 ```
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 -----
 
-## Widget de non-sélection
+
+## Aucun widget de sélection
 
 ### Apparence
 

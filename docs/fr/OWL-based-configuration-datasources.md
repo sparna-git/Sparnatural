@@ -1,12 +1,10 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 _[Accueil](index.html) > Configuration des sources de données basée sur OWL_
 
 # Sources de données
 
 ## Principes de base des sources de données
 
-Comme indiqué dans la référence [[configuration basée sur OWL]], les listes et les propriétés d'autocomplétion dans Sparnatural nécessitent une annotation [`ds:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) pour peupler respectivement la liste des valeurs ou les valeurs proposées par l'autocomplétion. Dans sa forme la plus simple et la plus courante, une source de données est essentiellement une requête SPARQL qui renvoie les colonnes attendues pour être utilisées pour peupler les valeurs de la liste/d'autocomplétion.
+Comme indiqué dans la référence de la [[configuration basée sur OWL]], les listes et les propriétés d'autocomplétion dans Sparnatural nécessitent une annotation [`ds:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) pour peupler respectivement la liste des valeurs ou les valeurs proposées par l'autocomplétion. Dans sa forme la plus simple et la plus courante, une source de données est essentiellement une requête SPARQL qui renvoie les colonnes attendues pour être utilisées pour peupler les valeurs de la liste/l'autocomplétion.
 
 La configuration de l'annotation de la source de données peut être soit :
 
@@ -20,9 +18,9 @@ Ces 3 solutions sont décrites ci-dessous.
 
 ### Sources de données préconfigurées pour une propriété de liste
 
-Sparnatural est préconfiguré avec des sources de données qui peuvent peupler des listes basées sur `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` ou l'URI de l'entité (qui est le comportement par défaut). Pour chacune de ces propriétés, 3 variantes de sources de données existent : soit avec un ordre alphabétique, un ordre alphabétique plus le nombre affiché entre parenthèses, soit un ordre décroissant par nombre.
+Sparnatural est préconfiguré avec des sources de données qui peuvent peupler des listes basées sur `rdfs:label`, `skos:prefLabel`, `foaf:name`, `dcterms:title`, `schema:name` ou l'URI de l'entité (qui est le comportement par défaut). Pour chacune de ces propriétés, 3 variantes de sources de données existent : soit avec un ordre alphabétique, un ordre alphabétique plus le nombre affiché entre parenthèses, soit un ordre de comptage décroissant.
 
-Utilisez l'une de ces sources de données si vos données RDF reposent sur l'une de ces propriétés.
+Utilisez l'une de ces sources de données si vos données RDF dépendent de l'une de ces propriétés.
 
 Les identifiants des sources de données préconfigurées pour une propriété de liste sont :
 
@@ -34,9 +32,7 @@ Les identifiants des sources de données préconfigurées pour une propriété d
 1. [`datasources:list_dctermstitle_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha) et [`datasources:list_dctermstitle_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_count) et [`datasources:list_dctermstitle_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_dctermstitle_alpha_with_count)
 1. [`datasources:list_schemaname_alpha`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha) et [`datasources:list_schemaname_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_count) et [`datasources:list_schemaname_alpha_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_schemaname_alpha_with_count)
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
-Vous pouvez trouver ces identifiants dans Protégé lorsque vous créez l'annotation `ds:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) sous les onglets "Entity IRI", puis "Individuals" :
+Vous pouvez trouver ces identifiants dans Protégé lorsque vous créez l'annotation `ds:datasource` sous les onglets "Entity IRI", puis "Individuals" :
 
 ![Capture d'écran des sources de données Protégé](/assets/images/protege-screenshot-datasources-1.png)
 
@@ -62,7 +58,9 @@ Les identifiants des sources de données préconfigurées pour une AutocompleteP
 1. [`datasources:search_schemaname_contains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_contains)
 1. [`datasources:search_schemaname_bifcontains`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_schemaname_bifcontains)
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+De même que pour lister les sources de données, vous les trouvez sous l'onglet "Entity IRI" > "Individuals" de Protégé lorsque vous éditez l'annotation `ds:datasource` :
+
+![Capture d'écran des sources de données de Protégé](/assets//images/protege-screenshot-datasources-2.png)
 
 ### Sources de données préconfigurées pour une TreeProperty
 
@@ -72,21 +70,19 @@ Sparnatural est préconfiguré avec des sources de données qui peuvent peupler 
 
 Ces sources de données doivent être utilisées avec un [`treeRootsDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource) sur une [`TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty).
 
-Les identifiants de source de données préconfigurées pour la source de données des racines sur une TreeProperty sont :
+Les identifiants des sources de données préconfigurées pour la source de données racines sur une TreeProperty sont :
 
-1. [`datasources:tree_root_skostopconcept`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept) : lit les racines d'un ConceptScheme SKOS en utilisant `skos:hasTopConcept` ou `^skos:topConceptOf`, en supposant que l'URI de la classe Sparnatural est égal à l'URI du ConceptScheme
-1. [`datasources:tree_root_skostopconcept_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept_with_count) : similaire au précédent, mais renvoie le nombre d'occurrences de chaque nœud entre parenthèses
+1. [`datasources:tree_root_skostopconcept`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept) : lit les racines d'un ConceptScheme SKOS en utilisant `skos:hasTopConcept` ou `^skos:topConceptOf`, en supposant que l'URI de la classe Sparnatural est égale à l'URI du ConceptScheme
+1. [`datasources:tree_root_skostopconcept_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_root_skostopconcept_with_count) : identique au précédent, mais renvoie le nombre d'occurrences de chaque nœud entre parenthèses
 
 #### Sources de données préconfigurées pour les enfants d'une TreeProperty
 
 Ces sources de données doivent être utilisées avec un [`treeChildrenDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource) sur une [`TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty).
 
-Les identifiants de source de données préconfigurées pour la source de données des enfants sur une TreeProperty sont :
+Les identifiants des sources de données préconfigurées pour la source de données enfants sur une TreeProperty sont :
 
 1. [`datasources:tree_children_skosnarrower`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower) : lit les enfants d'un nœud en utilisant `skos:narrower` ou `^skos:broader`
-1. [`datasources:tree_children_skosnarrower_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower_with_count) : similaire au précédent, mais renvoie le nombre d'occurrences de chaque nœud entre parenthèses
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+1. [`datasources:tree_children_skosnarrower_with_count`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tree_children_skosnarrower_with_count) : identique au précédent, mais renvoie le nombre d'occurrences de chaque nœud entre parenthèses
 
 ## Requête SPARQL préconfigurée avec une autre propriété
 
@@ -108,24 +104,22 @@ Si les sources de données préconfigurées ne correspondent pas au modèle de d
    1. [`datasources:labelProperty`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#labelProperty) avec l'IRI de la propriété de libellé à utiliser
    1. [`datasources:labelPath`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#labelPath) avec le chemin de propriété SPARQL à utiliser (en utilisant des crochets angulaires, sans préfixes) pour récupérer le libellé des entités. Cela permet en particulier de gérer les situations où les libellés sont réifiés en tant qu'entités séparées.
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 Par exemple, pour créer une nouvelle source de données personnalisée qui utilisera `dc:title` comme libellé et utilisera un ordre alphabétique, suivez les étapes suivantes :
 
 ![Capture d'écran Protégé source de données personnalisée](/assets//images/screencast-protege-custom-datasource-1.gif)
 
 ### Requêtes sans plage / requêtes avec plage
 
-Les requêtes fournies pour peupler les listes **n'utilisent pas** la plage de la valeur comme critère dans la requête. En d'autres termes, toutes les valeurs de la propriété donnée dans le domaine donné sont renvoyées, indépendamment de leur type.
+Les requêtes fournies pour peupler les listes ne **tiennent pas** compte de la plage de la valeur comme critère dans la requête. En d'autres termes, toutes les valeurs de la propriété donnée dans le domaine donné sont renvoyées, indépendamment de leur type.
 Cela est généralement suffisant et plus performant, mais cela peut poser problème si la même propriété dans le même domaine peut faire référence à des entités de types différents dans la configuration Sparnatural. Par exemple, "Document > créateur > Personne ou Organisation".
 Pour utiliser la plage comme critère dans la requête et filtrer la liste en fonction du type de la valeur, créez une source de données basée sur une requête incluant "..._avec_plage_..." dans son identifiant. Cela garantira que seules les valeurs du type sélectionné apparaîtront dans la liste.
 
 
 ## Votre propre requête SPARQL (listes / suggestions d'autocomplétion)
 
-Vous pouvez fournir vos propres requêtes SPARQL pour peupler des listes ou des suggestions d'autocomplétion. Pour ce faire, attachez une assertion de propriété de données `queryString` sur votre objet source de données, contenant la requête SPARQL qui doit être utilisée pour peupler la liste/suggestion d'autocomplétion.
+Vous pouvez fournir vos propres requêtes SPARQL pour peupler des listes ou des suggestions d'autocomplétion. Pour ce faire, attachez une assertion de propriété de données `queryString` sur votre objet source de données, contenant la requête SPARQL qui doit être utilisée pour peupler la liste/suggestions d'autocomplétion.
 
-**La requête SPARQL DOIT renvoyer 2 variables : `?uri` et `?label`, remplies de la manière que vous préférez.** De plus, depuis la version 8.6.0, la requête peut renvoyer, de manière optionnelle, une variable supplémentaire `?group`, qui sera utilisée pour générer des sections `optgroup` dans les widgets de listes, et sera utilisée comme info-bulle au survol dans les listes d'autocomplétion. Cela est utilisé pour indiquer l'endpoint source du résultat en cas de multiples endpoints.
+**La requête SPARQL DOIT retourner 2 variables : `?uri` et `?label`, remplies de la manière que vous souhaitez.** De plus, depuis la version 8.6.0, la requête peut éventuellement retourner une variable supplémentaire `?group`, qui sera utilisée pour générer des sections `optgroup` dans les widgets de listes, et sera utilisée comme info-bulle au survol dans les listes d'autocomplétion. Cela est utilisé pour indiquer l'endpoint source du résultat en cas de multiples endpoints.
 
 Dans cette requête SPARQL, les remplacements suivants auront lieu :
 - **`$domain`**, s'il est présent, sera remplacé par l'URI de la classe de domaine ;
@@ -135,8 +129,6 @@ Dans cette requête SPARQL, les remplacements suivants auront lieu :
 - **`$defaultLang`**, s'il est présent, sera remplacé par le paramètre `defaultLang` de Sparnatural ;
 - **`$type`**, s'il est présent, sera remplacé par la valeur du paramètre `typePredicate` de la configuration Sparnatural (utile si vous interrogez un endpoint wikibase où le prédicat de type est autre chose que rdf:type) ;
 - **`$key`**, s'il est présent, sera remplacé par la clé recherchée (uniquement utile pour les champs d'autocomplétion) ;
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 Consultez les requêtes SPARQL préconfigurées dans l'[ontologie des sources de données Sparnatural](http://data.sparna.fr/ontologies/sparnatural-config-datasources) pour commencer.
 
@@ -164,15 +156,15 @@ LIMIT 500
 
 ## Votre propre requête SPARQL (arborescence)
 
-Vous pouvez fournir vos propres requêtes SPARQL pour peupler un widget d'arborescence. Pour ce faire, vous avez besoin de 2 sources de données : une qui peuplera les racines de l'arborescence (entrées au premier niveau), et une qui sera utilisée pour peupler les enfants d'un nœud d'arborescence, lorsqu'ils sont cliqués (voir les [annotations pour un SelectResourceProperty](https://docs.sparnatural.eu/OWL-based-configuration#annotations-for-a-selectresourceproperty) pour plus d'informations).
+Vous pouvez fournir vos propres requêtes SPARQL pour peupler un widget d'arborescence. Pour ce faire, vous avez besoin de 2 sources de données : une qui peuplera les racines de l'arborescence (entrées au premier niveau), et une qui sera utilisée pour peupler les enfants d'un nœud de l'arborescence, lorsqu'il est cliqué (voir les [annotations pour un SelectResourceProperty](https://docs.sparnatural.eu/OWL-based-configuration#annotations-for-a-selectresourceproperty) pour plus d'informations).
 
-**La requête SPARQL DOIT renvoyer 2 variables : `?uri` et `?label`, peuplées de la manière que vous souhaitez.**
-La requête SPARQL PEUT renvoyer 2 autres variables :
+**La requête SPARQL DOIT retourner 2 variables : `?uri` et `?label`, peuplées de la manière que vous souhaitez.**
+La requête SPARQL PEUT retourner 2 autres variables :
 
   - **`?hasChildren`**, un booléen pour indiquer si le nœud a des enfants. S'il n'est pas présent, tous les éléments de l'arborescence peuvent être dépliés, même s'ils n'ont pas d'enfants ; s'il est présent et défini sur false, un élément ne peut pas être déplié.
   - **`?count`** pour indiquer le nombre de fois qu'un nœud est utilisé comme valeur ; les nœuds avec un count = 0 seront désactivés et ne pourront pas être sélectionnés comme valeur.
 
-Dans ces requêtes SPARQL, le même remplacement des **`$domain`**, **`$range`**, **`$property`** et **`$lang`** que dans les requêtes pour la liste/autocomplétion se produira (voir ci-dessus). Les remplacements suivants se produiront également :
+Dans ces requêtes SPARQL, le même remplacement des **`$domain`**, **`$range`**, **`$property`** et **`$lang`** que dans les requêtes pour liste/autocomplétion se produira (voir ci-dessus). Les remplacements suivants se produiront également :
 - **`$node`**, s'il est présent, sera remplacé par l'URI du nœud cliqué ;
 
 Une requête typique qui peuple les variables `?hasChildren` et `?count` ressemble à ce qui suit :
@@ -210,6 +202,7 @@ GROUP BY ?uri ?theLabel ?hasChildren
 ORDER BY UCASE(?label)
 ```
 
+
 ## Référence de configuration de la source de données
 
 | Annotation / Axiome | Libellé | Card. | Description |
@@ -217,59 +210,7 @@ ORDER BY UCASE(?label)
 | `queryString` | chaîne de requête | 0..1 | La chaîne de requête SPARQL de la source de données. Au moins l'un des `queryTemplate` ou `queryString` doit être fourni. |
 | `queryTemplate` | modèle de requête | 0..1 | Le modèle de requête SPARQL à utiliser dans une source de données SPARQL. Au moins l'un des `queryTemplate` ou `queryString` doit être fourni. |
 | `labelProperty` | propriété de libellé | 0..1 | Utilisé en combinaison avec `queryTemplate`, indique l'URI de la propriété qui remplacera la variable `$labelPath` dans la requête SPARQL. |
-| `labelPath` | chemin du libellé | 0..1 | Utilisé en combinaison avec `queryTemplate`, indique un chemin de propriété SPARQL qui remplacera la variable `$labelPath` dans la requête SPARQL. |
-| `noSort` | pas de tri | 0..1 | Par défaut, Sparnatural trie la liste en utilisant la langue du client. Définissez ceci sur `true` si vous ne souhaitez pas que le tri se fasse de cette manière et que vous voulez vous fier à l'ordre de tri renvoyé par la requête SPARQL. |
+| `labelPath` | chemin de libellé | 0..1 | Utilisé en combinaison avec `queryTemplate`, indique un chemin de propriété SPARQL qui remplacera la variable `$labelPath` dans la requête SPARQL. |
+| `noSort` | pas de tri | 0..1 | Par défaut, Sparnatural trie la liste en utilisant la locale du client. Définissez ceci sur `true` si vous ne voulez pas que ce tri se produise et que vous voulez vous fier à l'ordre de tri retourné par la requête SPARQL. |
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
-# Sparnatural Documentation
-
-## Introduction
-
-Sparnatural is a powerful tool for managing your natural products inventory. It helps you keep track of your stock, suppliers, and orders efficiently.
-
-## Installation
-
-To install Sparnatural, follow these steps:
-
-```bash
-$ npm install -g sparnatural
-```
-
-## Getting Started
-
-Once installed, you can initialize Sparnatural in your project by running:
-
-```bash
-$ sparnatural init
-```
-
-## Usage
-
-### Adding Products
-
-To add a new product to your inventory, use the following command:
-
-```bash
-$ sparnatural add-product --name "Product Name" --price 10.99 --quantity 100
-```
-
-### Managing Orders
-
-You can manage orders with Sparnatural by using the following commands:
-
-- To create a new order:
-
-```bash
-$ sparnatural create-order --product "Product Name" --quantity 10
-```
-
-- To list all orders:
-
-```bash
-$ sparnatural list-orders
-```
-
-## Conclusion
-
-Sparnatural simplifies the management of natural products inventory. Start using it today to streamline your business operations.
+I'm ready to translate the Markdown content into French. Please go ahead and paste the content for me to start the translation.

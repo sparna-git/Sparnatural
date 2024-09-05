@@ -1,8 +1,6 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 _[Accueil](index.html) > Interrogation de plusieurs points d'accès_
 
-# Prise en charge de l'interrogation de plusieurs points d'accès
+# Prise en charge de la requête de plusieurs points d'accès
 
 ## Cas d'utilisation
 
@@ -12,7 +10,7 @@ Parfois, vous n'avez pas besoin de présenter un seul graphe de connaissances, m
 
 1. Vous devez créer un fichier JSON donnant la liste des différents points d'accès qui peuvent être interrogés, avec quelques informations à leur sujet (en particulier leurs libellés d'affichage). Ce fichier JSON est le **fichier de catalogue des points d'accès**.
 2. Sparnatural est configuré avec l'URL des différents services SPARQL à interroger, et le fichier de catalogue JSON.
-3. Lors de la population des listes déroulantes, ou lors de l'interrogation des valeurs d'autocomplétion, Sparnatural interrogera **tous** les points d'accès avec lesquels il est configuré, et agrégera les résultats. En particulier, les widgets de listes utiliseront un séparateur `optgroup` pour séparer les résultats des différents points d'accès.
+3. Lors de la population des listes déroulantes, ou lors de la recherche de valeurs d'autocomplétion, Sparnatural interrogera **tous** les points d'accès avec lesquels il est configuré, et agrégera les résultats. En particulier, les widgets de listes utiliseront un séparateur `optgroup` pour séparer les résultats des différents points d'accès.
 4. Il incombe à la page appelante d'exécuter également la requête finale fournie par Sparnatural contre tous les points d'accès, et d'agréger les résultats.
 
 ## Configuration de Sparnatural
@@ -86,8 +84,6 @@ Voici un exemple de fichier de catalogue JSON :
 }
 ```
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 ### Référence du fichier de catalogue
 
 Le fichier de catalogue JSON est essentiellement une description DCAT des DataServices encodée en JSON-LD. Les DataServices sont décrits avec quelques métadonnées. La racine du fichier de catalogue est l'objet Catalogue.
@@ -113,9 +109,9 @@ L'objet `Catalogue` est l'entité racine du fichier. Il contient une propriété
 
 Un `DataService` décrit un point de terminaison à interroger. Il contient :
   - un `id`, qui est l'identifiant interne de cette entrée dans le catalogue
-  - une `endpointURL`, qui est l'URL du point de terminaison SPARQL vers lequel Sparnatural enverra ses requêtes
+  - un `endpointURL`, qui est l'URL du point de terminaison SPARQL vers lequel Sparnatural enverra ses requêtes
   - ses `titres` dans différentes langues, qui seront utilisés lors de l'affichage de cette entrée dans l'interface
-  - d'autres métadonnées facultatives, telles qu'une `description`, non utilisée par Sparnatural mais pouvant être utile à d'autres parties de votre application
+  - d'autres métadonnées facultatives, telles qu'une `description`, non utilisée par Sparnatural mais qui peut être utile à d'autres parties de votre application
 
 ```
     {

@@ -8,9 +8,9 @@ SPARQL et le web sémantique en général ont la capacité de fonctionner dans d
 
 ## La solution
 
-À partir de la version 8, Sparnatural fournit une prise en charge de base pour les requêtes fédérées en utilisant le mot-clé `SERVICE`. L'idée est que la requête fédérée sera activée pour certaines propriétés dans votre configuration, que vous devez configurer à l'avance. Une fois configurée, l'utilisation de la requête fédérée sera transparente pour l'utilisateur, qui n'aura pas à définir quoi que ce soit lors de la rédaction de sa requête.
+À partir de la version 8, Sparnatural fournit une prise en charge de base pour les requêtes fédérées en utilisant le mot-clé `SERVICE`. L'idée est que les requêtes fédérées seront activées pour certaines propriétés dans votre configuration, que vous devez configurer à l'avance. Une fois configurée, l'utilisation des requêtes fédérées sera transparente pour l'utilisateur, qui n'aura pas à définir quoi que ce soit lors de la rédaction de sa requête.
 
-Pour configurer la requête fédérée, vous devez :
+Pour configurer les requêtes fédérées, vous devez :
 1. Déclarer le point d'accès vers lequel vous souhaitez envoyer les requêtes fédérées, en créant une instance de `sd:Service`
 2. Indiquer l'URL du point d'accès SPARQL de ce service en utilisant la propriété `sd:endpoint`
 3. Lier *des propriétés spécifiques* dans votre configuration à ce point d'accès en utilisant l'annotation `core:sparqlService`.
@@ -45,8 +45,6 @@ ex:myProperty sh:path ex:myProperty ;
 .
 ```
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 ## Configuration en OWL
 
 ### La manière courte et simple en Turtle
@@ -68,23 +66,23 @@ ex:myProperty owl:subPropertyOf core:NonSelectableProperty ;
 
 #### Déclarer une instance de sd:Service
 
-`sd:Service` est une classe déclarée dans le vocabulaire de [Description de Service SPARQL](https://www.w3.org/TR/sparql11-service-description/#sd-Service). Elle est incluse pour vous dans l'ontologie de configuration Sparnatural, donc vous n'avez pas besoin d'ajouter une import.
+`sd:Service` est une classe déclarée dans le vocabulaire de [Description de Service SPARQL](https://www.w3.org/TR/sparql11-service-description/#sd-Service). Elle est incluse pour vous dans l'ontologie de configuration Sparnatural, donc vous n'avez pas besoin d'ajouter une importation.
 
 Dans Protégé, créez une instance de cette classe et donnez-lui l'URI que vous souhaitez, par exemple `https://www.wikidata.org` :
 
 ![](assets/images/protege-screenshot-service-instance-creation.png)
 
-#### Déclarer l'URL du point de terminaison
+#### Déclarer l'URL de l'endpoint
 
 Alors que l'URI du Service peut être ce que vous voulez, vous devez formellement déclarer l'URL technique à laquelle le service écoute en utilisant la propriété `sd:endpoint` sur cette instance.
 
 Dans Protégé, vous êtes obligé de d'abord déclarer une instance de owl:Thing avec l'URL pour pouvoir la sélectionner ultérieurement (si vous éditez votre configuration manuellement, vous n'avez pas besoin de le faire).
 
-Créez une instance de owl:Thing et donnez-lui l'URL précise du point de terminaison SPARQL, dans notre cas `https://query.wikidata.org/` :
+Créez une instance de owl:Thing et donnez-lui l'URL précise du point d'extrémité SPARQL, dans notre cas `https://query.wikidata.org/` :
 
 ![](assets/images/protege-screenshot-service-endpoint-creation.png)
 
-Ensuite, revenez à votre individu de Service, éditez-le et ajoutez une assertion de propriété d'objet avec le prédicat `sd:endpoint` et la valeur `https://query.wikidata.org/`. Dans Protégé, vous êtes obligé de passer d'abord à "View > Render by prefixed name" pour pouvoir sélectionner votre URL de point de terminaison :
+Ensuite, revenez à votre individu de Service, éditez-le et ajoutez une assertion de propriété d'objet avec le prédicat `sd:endpoint` et la valeur `https://query.wikidata.org/`. Dans Protégé, vous êtes obligé de passer d'abord à "View > Render by prefixed name" pour pouvoir sélectionner votre URL de point d'extrémité :
 
 ![](assets/images/protege-screenshot-service-service-endpoint-edition.png)
 
@@ -94,11 +92,9 @@ Maintenant que notre service est prêt, nous pouvons indiquer qu'une propriété
 
 ![](assets/images/protege-screenshot-service-sparqlService.png)
 
-Remarquez comment :
+Notez comment :
 - nous sélectionnons le service www.wikidata.org, pas l'URL https://query.wikidata.org
-- Notre propriété est associée à `<http://www.wikidata.org/prop/direct/P625>`, qui est l'identifiant de propriété dans Wikidata contenant les coordonnées géographiques
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+- Notre propriété est associée à `<http://www.wikidata.org/prop/direct/P625>` qui est l'identifiant de propriété dans Wikidata contenant les coordonnées géo.
 
 #### et... TADAM !
 

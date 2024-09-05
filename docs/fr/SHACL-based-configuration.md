@@ -1,14 +1,12 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 _[Accueil](index.html) > Configuration basée sur SHACL_
 
 # Configuration basée sur SHACL
 
-Sparnatural peut être configuré à l'aide d'une spécification SHACL des entités et des propriétés à afficher dans l'interface utilisateur.
+Sparnatural peut être configuré en utilisant une spécification SHACL des entités et propriétés à afficher dans l'interface utilisateur.
 
 ## Profil de configuration SHACL de Sparnatural
 
-La spécification formelle du sous-ensemble de SHACL à utiliser, en combinaison avec quelques propriétés d'autres ontologies, est définie dans le **Profil de configuration SHACL de Sparnatural**, disponible sous forme de [documentation HTML](https://shacl-play.sparna.fr/play/doc?url=https%3A%2F%2Fxls2rdf.sparna.fr%2Frest%2Fconvert%3FnoPostProcessings%3Dtrue%26url%3Dhttps%253A%252F%252Fdocs.google.com%252Fspreadsheets%252Fd%252F195NKb43Ck1yPGrIK4H8_HYGw9GTPnbtY%252Fexport%253Fformat%253Dxlsx&includeDiagram=true), d'une [feuille de calcul en ligne](https://docs.google.com/spreadsheets/d/195NKb43Ck1yPGrIK4H8_HYGw9GTPnbtY), ou d'un [fichier SHACL technique](https://xls2rdf.sparna.fr/rest/convert?noPostProcessings=true&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F195NKb43Ck1yPGrIK4H8_HYGw9GTPnbtY%2Fexport%3Fformat%3Dxlsx).
+La spécification formelle du sous-ensemble de SHACL à utiliser, en combinaison avec quelques propriétés d'autres ontologies, est définie dans le **Profil de configuration SHACL de Sparnatural**, disponible en tant que [documentation HTML](https://shacl-play.sparna.fr/play/doc?url=https%3A%2F%2Fxls2rdf.sparna.fr%2Frest%2Fconvert%3FnoPostProcessings%3Dtrue%26url%3Dhttps%253A%252F%252Fdocs.google.com%252Fspreadsheets%252Fd%252F195NKb43Ck1yPGrIK4H8_HYGw9GTPnbtY%252Fexport%253Fformat%253Dxlsx&includeDiagram=true), un [tableur en ligne](https://docs.google.com/spreadsheets/d/195NKb43Ck1yPGrIK4H8_HYGw9GTPnbtY), ou un [fichier SHACL technique](https://xls2rdf.sparna.fr/rest/convert?noPostProcessings=true&url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F195NKb43Ck1yPGrIK4H8_HYGw9GTPnbtY%2Fexport%3Fformat%3Dxlsx).
 
 ## Référence du profil de configuration SHACL de Sparnatural
 
@@ -53,7 +51,7 @@ La spécification formelle du sous-ensemble de SHACL à utiliser, en combinaison
                            </td>
                            <td class="sp_table_propertyshapes_col_description">Le libellé de l'entité à afficher dans Sparnatural. 
                               Les libellés sont multilingues et peuvent fournir plusieurs libellés dans différentes langues. Le
-                              libellé dans la langue de l'utilisateur actuel est affiché ;
+                              libellé dans la langue de l'utilisateur actuel est affiché;
                               Si aucun libellé n'est donné, la partie locale de l'URI est utilisée.</td>
                         </tr>
                         <tr>
@@ -103,7 +101,7 @@ La spécification formelle du sous-ensemble de SHACL à utiliser, en combinaison
                            <td>
                               <div style="width:30px">0..1</div>
                            </td>
-                           <td class="sp_table_propertyshapes_col_description">Une référence à une URL d'icône qui sera affichée sur Sparnatural. Son utilisation est déconseillée,
+                           <td class="sp_table_propertyshapes_col_description">Une référence à une URL d'icône qui sera affichée sur Sparnatural. L'utilisation de ceci est déconseillée,
                               préférez volipi:iconName</td>
                         </tr>
                         <tr>
@@ -126,7 +124,7 @@ La spécification formelle du sous-ensemble de SHACL à utiliser, en combinaison
                               <div style="width:30px">0..1</div>
                            </td>
                            <td class="sp_table_propertyshapes_col_description">Si utilisé sur un NodeShape avec la valeur sh:Literal, alors Sparnatural traitera cette forme
-                              comme un littéral et ne générera pas de triplet rdf:type dans la requête SPARQL.</td>
+                              comme un littéral et ne générera pas un triple rdf:type dans la requête SPARQL.</td>
                         </tr>
                         <tr>
                            <td>datatype</td>
@@ -136,7 +134,7 @@ La spécification formelle du sous-ensemble de SHACL à utiliser, en combinaison
                               <div style="width:30px">0..1</div>
                            </td>
                            <td class="sp_table_propertyshapes_col_description">Si utilisé sur un NodeShape, alors Sparnatural traitera cette forme comme un littéral et ne
-                              générera pas de triplet rdf:type dans la requête SPARQL.</td>
+                              générera pas un triple rdf:type dans la requête SPARQL.</td>
                         </tr>
                         <tr>
                            <td>langue dans</td>
@@ -146,7 +144,7 @@ La spécification formelle du sous-ensemble de SHACL à utiliser, en combinaison
                               <div style="width:30px">0..1</div>
                            </td>
                            <td class="sp_table_propertyshapes_col_description">Si utilisé sur un NodeShape, alors Sparnatural traitera cette forme comme un littéral et ne
-                              générera pas de triplet rdf:type dans la requête SPARQL.</td>
+                              générera pas un triple rdf:type dans la requête SPARQL.</td>
                         </tr>
                         <tr>
                            <td>langue unique</td>
@@ -156,7 +154,7 @@ La spécification formelle du sous-ensemble de SHACL à utiliser, en combinaison
                               <div style="width:30px">0..1</div>
                            </td>
                            <td class="sp_table_propertyshapes_col_description">Si utilisé sur un NodeShape, alors Sparnatural traitera cette forme comme un littéral et ne
-                              générera pas de triplet rdf:type dans la requête SPARQL.</td>
+                              générera pas un triple rdf:type dans la requête SPARQL.</td>
                         </tr>
                         <tr>
                            <td>désactivé</td>
@@ -190,8 +188,6 @@ La spécification formelle du sous-ensemble de SHACL à utiliser, en combinaison
                      </tbody>
                   </table>
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 ### Référence de configuration des PropertyShapes
 
 <table class="sp_table_propertyshapes table-striped table-responsive">
@@ -214,7 +210,7 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
                            </td>
                            <td class="sp_table_propertyshapes_col_description">L'entité de la configuration à laquelle la propriété est attachée. Notez que cela
                               est exprimé comme une propriété inverse sur les PropertyShapes, pour faciliter l'utilisation lors de la définition
-                              des configurations SHACL dans des tableaux Excel.</td>
+                              des configurations SHACL dans les tableaux Excel.</td>
                         </tr>
                         <tr>
                            <td>propriété</td>
@@ -232,7 +228,7 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
                            <td>
                               <div style="width:30px">0..1</div>
                            </td>
-                           <td class="sp_table_propertyshapes_col_description">L'ordre de cette propriété dans la liste de sélection des propriétés.</td>
+                           <td class="sp_table_propertyshapes_col_description">L'ordre de cette propriété dans la sélection de propriétés déroulante.</td>
                         </tr>
                         <tr>
                            <td>nom</td>
@@ -309,7 +305,7 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
                            </td>
                            <td class="sp_table_propertyshapes_col_description">Si utilisé avec la valeur dash:LabelRole, indique que cette forme de propriété décrit
                               l'étiquette principale des entités auxquelles elle est attachée. Cela est utilisé pour récupérer automatiquement cette
-                              propriété dans les requêtes SPARQL générées, et pour remplir automatiquement
+                              propriété dans les requêtes SPARQL générées, et pour peupler automatiquement
                               les listes déroulantes et la recherche d'autocomplétion avec cette propriété.</td>
                         </tr>
                         <tr>
@@ -330,7 +326,7 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
                               <div style="width:30px">0..1</div>
                            </td>
                            <td class="sp_table_propertyshapes_col_description">Définit l'entité dans la configuration qui est la valeur de cette propriété. Référence
-                              un NodeShape qui décrit l'entité cible de la propriété.
+                              une NodeShape qui décrit l'entité cible de la propriété.
                               Si aucun sh:class ou sh:node n'est trouvé, alors un comportement par défaut est proposé</td>
                         </tr>
                         <tr>
@@ -349,7 +345,8 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
                            <td>
                               <div style="width:30px">0..1</div>
                            </td>
-                           <td class="sp_table_propertyshapes_col_description">La source de données pour remplir le widget de la propriété. Si non fournie, une source de données par défaut est utilisée.</td>
+                           <td class="sp_table_propertyshapes_col_description">La source de données pour peupler le widget de la propriété. Si non fournie, une source de données par défaut
+                              est utilisée.</td>
                         </tr>
                         <tr>
                            <td>sh:in</td>
@@ -363,22 +360,22 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
                               requête SPARQL</td>
                         </tr>
                         <tr>
-                           <td>source de données (pour les enfants d'arborescence)</td>
+                           <td>source de données (pour les enfants d'arbre)</td>
                            <td><code><a href="http://data.sparna.fr/ontologies/sparnatural-config-datasourcestreeChildrenDatasource">config-datasources:treeChildrenDatasource</a></code></td>
                            <td><code>BlankNodeOrIRI</code><br></td>
                            <td>
                               <div style="width:30px">0..1</div>
                            </td>
-                           <td class="sp_table_propertyshapes_col_description">La source de données pour remplir les nœuds enfants d'un nœud dans un widget d'arborescence</td>
+                           <td class="sp_table_propertyshapes_col_description">La source de données pour peupler les nœuds enfants d'un nœud dans un widget d'arbre</td>
                         </tr>
                         <tr>
-                           <td>source de données (pour les racines d'arborescence)</td>
+                           <td>source de données (pour les racines d'arbre)</td>
                            <td><code><a href="http://data.sparna.fr/ontologies/sparnatural-config-datasourcestreeRootsDatasource">config-datasources:treeRootsDatasource</a></code></td>
                            <td><code>BlankNodeOrIRI</code><br></td>
                            <td>
                               <div style="width:30px">0..1</div>
                            </td>
-                           <td class="sp_table_propertyshapes_col_description">La source de données pour remplir les nœuds racines d'un widget d'arborescence</td>
+                           <td class="sp_table_propertyshapes_col_description">La source de données pour peupler les nœuds racines d'un widget d'arbre</td>
                         </tr>
                         <tr>
                            <td>ou</td>
@@ -388,25 +385,24 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
                               <div style="width:30px">0..1</div>
                            </td>
                            <td class="sp_table_propertyshapes_col_description">Indique des alternatives pour plusieurs types de données (par exemple xsd:string ou xsd:dateTime),
-                              ou plusieurs sh:class/sh:node, ou différents types de nœuds (par exemple IRI ou littéral). Les valeurs attendues
+                              ou plusieurs sh:class/sh:node, ou différents types de nœuds (par exemple IRI ou Literal). Les valeurs attendues
                               sont des nœuds avec soit un sh:datatype, soit un sh:class, soit un sh:node, soit un sh:nodeKind.
                               2 niveaux de sh:or sont pris en charge pour traiter les propriétés qui peuvent être soit des IRI soit des
-                              littéraux, et indiquer ensuite le(s) sh:class(es) de la forme IRI, et le(s) sh:datatype(s)
+                              littéraux, et indiquer ensuite les sh:class(es) de la forme IRI, et les sh:datatype(s)
                               de la forme littérale.
-                              La valeur de liste réelle de sh:or peut être soit un nœud vide, soit un IRI.</td>
+                              La valeur de liste réelle de sh:or peut être soit un nœud vide soit un IRI.</td>
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
-Exemple : propriété avec 2 types de données : ([sh:datatype xsd:string][sh:datatype xsd:dateTime]),
-Exemple : propriété soit IRI soit littéral ([sh:nodeKind sh:IRI; sh:class ex:class1][sh:nodeKind
-sh:Literal sh:or([sh:datatype xsd:string][sh:datatype xsd:date])])</td>
+```html
+                              Exemple : propriété avec 2 types de données : ([sh:datatype xsd:string][sh:datatype xsd:dateTime]),
+                              Exemple : propriété soit IRI soit littéral ([sh:nodeKind sh:IRI; sh:class ex:class1][sh:nodeKind
+                              sh:Literal sh:or([sh:datatype xsd:string][sh:datatype xsd:date])])</td>
                         </tr>
                      </tbody>
                   </table>
 
 ### Référence de configuration des classes
 
-`rdfs:subClassOf` est lu sur les classes pour hériter des propriétés des superclasses, ainsi que des libellés et des définitions pour l'affichage de l'interface utilisateur.
+`rdfs:subClassOf` est lu sur les classes pour hériter des propriétés des superclasses, ainsi que des libellés et des définitions pour l'affichage UI.
 
 <table class="sp_table_propertyshapes table-striped table-responsive">
                      <thead>
@@ -469,5 +465,6 @@ sh:Literal sh:or([sh:datatype xsd:string][sh:datatype xsd:date])])</td>
                         </tr>
                      </tbody>
                   </table>
+```
 
-I'm ready to translate the Markdown content. Please paste it here.
+I'm ready to translate. Please provide the Markdown content for Sparnatural.

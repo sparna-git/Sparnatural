@@ -1,5 +1,3 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 _[Accueil](index.html) > Intégration avec le connecteur Lucene de GraphDB_
 
 # Intégration avec le connecteur Lucene de GraphDB
@@ -16,9 +14,9 @@ Reportez-vous à la [documentation du connecteur Lucene de GraphDB](http://graph
 
 1. Déterminez l'URI de la classe pour laquelle vous souhaitez construire l'index ;
 2. Énumérez chaque propriété littérale ou chemin à stocker dans l'index ;
-    - Typiquement les libellés, noms, titres, définitions, résumés, etc.
-    - mais aussi le littéral des _entités liées_ dans le graphe, comme le nom du lieu où un événement a eu lieu, le nom de l'auteur d'une œuvre, les libellés de concepts de sujet, etc.
-    - Chacune de ces propriétés ou chemins ira dans un champ séparé de l'index ;
+    - Typiquement des libellés, des noms, des titres, des définitions, des résumés, etc.
+    - mais aussi la littérale des _entités liées_ dans le graphe, tels que le nom du lieu où un événement a eu lieu, le nom de l'auteur d'une œuvre, les libellés de concepts de sujet, etc.
+    - Chacune de ces propriétés ou chemin ira dans un champ séparé de l'index ;
 3. Créez un champ "catchAll" nommé `text` qui concaténera chaque autre champ en un seul ;
 4. Définissez une _langue_ et un _analyseur_ personnalisés si vous avez besoin d'avoir un indexation liée à la langue telle que le pliage des accents en français ;
 
@@ -35,13 +33,11 @@ Reportez-vous à la [documentation du connecteur Lucene de GraphDB](http://graph
     - Chaîne de propriété = http://www.w3.org/2004/02/skos/core#prefLabel
     - Décochez la case "facet"
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 ![](/assets/images/graphdb-lucene-01.png)
 
 5. Ajoutez une nouvelle entrée "Field" en cliquant sur le "+" à droite, cette fois pour les `skos:altLabel`s :
     - Nom du champ = altLabel
-    - Chaîne de propriété = http://www.w3.org/2004/02/skos/core#altLabel
+    - Chaîne de propriétés = http://www.w3.org/2004/02/skos/core#altLabel
     - Décochez la case "facet"
 6. Répétez pour `skos:hiddenLabel` si nécessaire
 7. `skos:definition` si nécessaire
@@ -50,17 +46,17 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 ### Créer un champ de regroupement
 
-Ensuite, nous devons créer un nouveau champ `text` qui agrégera le contenu de tous les autres champs. Pour ce faire, déclarez un nouveau "champ virtuel" nommé `text/prefLabel` pour indiquer que le contenu ou le champ `prefLabel` doit être copié dans le champ `text` (reportez-vous aux parties sur [copy-fields](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html#copy-fields) combinées avec [multiple property paths](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html#multiple-property-chains-per-field) par champ pour plus de détails) :
+Ensuite, nous devons créer un nouveau champ `text` qui va agréger le contenu de tous les autres champs. Pour ce faire, déclarez un nouveau "champ virtuel" nommé `text/prefLabel` pour indiquer que le contenu ou le champ `prefLabel` doit être copié dans le champ `text` (reportez-vous aux parties sur [copy-fields](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html#copy-fields) combinées avec [multiple property paths](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html#multiple-property-chains-per-field) par champ pour plus de détails) :
 1. Créez un nouveau champ nommé `text/prefLabel`
 2. Dans le chemin de propriété, saisissez `@prefLabel`; cela doit correspondre au nom de l'un des champs créés précédemment, donc si vous avez choisi des noms différents, ajustez en conséquence ;
 3. Décochez "facet"
-4. Répétez en ajoutant à nouveau un champ, nommé `text/altLabel` et chemin de propriété `@altLabel`
+4. Répétez en ajoutant à nouveau un nouveau champ, nommé `text/altLabel` et chemin de propriété `@altLabel`
 5. Répétez avec `text/hiddenLabel` et chemin de propriété `@hiddenLabel`
 6. Répétez avec `text/definition` et chemin de propriété `@definition`
 7. Répétez avec `text/scopeNote` et chemin de propriété `@scopeNote`
 8. Répétez avec `text/example` et chemin de propriété `@example`
 
-Voici à quoi cette partie ressemble :
+Voici à quoi ressemble cette partie :
 
 ![](/assets/images/graphdb-lucene-02.png)
 
@@ -89,8 +85,6 @@ SELECT DISTINCT ?uri ?label ?snippetField ?snippet WHERE  {
 ```
 
 ## Alimenter un champ d'autocomplétion dans Sparnatural avec SPARQL en utilisant GraphDB Lucene Connector
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 Le principe est le suivant :
 1. Comme indiqué dans la [documentation de configuration Sparnatural pour vos propres requêtes](JSON-based-configuration#your-own-sparql-query), la requête SPARQL DOIT renvoyer 2 variables : `?uri` et `?label`;
@@ -157,7 +151,7 @@ SELECT DISTINCT ?uri ?label WHERE  {\
 
 Vous pouvez configurer Sparnatural pour générer des requêtes SPARQL qui interrogeront l'index de texte intégral. Pour ce faire :
 1. Créez une classe dans la configuration Sparnatural **avec l'URI de l'index**, par exemple `http://www.ontotext.com/connectors/lucene/instance#ConceptIndex`. Créez cette classe en tant que `subClassOf http://www.w3.org/2000/01/rdf-schema#Literal`, et donnez-lui un libellé tel que "Recherche en texte intégral...";
-2. Créez des propriétés qui correspondent aux **champs de l'index**. Les URI des propriétés **doivent se terminer par le nom du champ de l'index, après le dernier "#" ou le dernier "/"**. Par exemple, `http://labs.sparna.fr/sparnatural-demo-graphdb-openarchaeo/onto/search#discovery` interrogera le champ `discovery`;
+2. Créez des propriétés qui correspondent aux **champs de l'index**. Les URI des propriétés **doivent se terminer par le nom du champ de l'index, après le dernier "#" ou la dernière "/"**. Par exemple, `http://labs.sparna.fr/sparnatural-demo-graphdb-openarchaeo/onto/search#discovery` interrogera le champ `discovery`;
 3. Définissez la propriété comme `subPropertyOf sparnatural:GraphDBSearchProperty`; ce paramètre indique à Sparnatural que la requête à générer doit utiliser la syntaxe GraphDB et non la syntaxe FILTER habituelle;
 4. Créez plusieurs propriétés pour chaque champ de l'index, afin que l'utilisateur puisse choisir le champ à interroger.
 
@@ -209,6 +203,6 @@ Voici un exemple de configuration avec 2 propriétés configurées pour interrog
     },
 ```
 
-Quel donnera le comportement suivant pour l'utilisateur final :
+Ce qui donnera le comportement suivant pour l'utilisateur final :
 
 ![](/assets/images/graphdb-lucene-03.png)

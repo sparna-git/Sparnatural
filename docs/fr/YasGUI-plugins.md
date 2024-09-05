@@ -1,16 +1,14 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 _[Accueil](index.html) > Plugins personnalisés YASGUI_
 
-_Pour savoir comment intégrer Sparnatural avec YasQE et YasR, veuillez vous référer à la documentation sur l'[intégration JavaScript](Javascript-integration.md)._
+_Pour savoir comment intégrer Sparnatural avec YasQE et YasR, veuillez consulter la documentation sur l'[intégration JavaScript](Javascript-integration.md)._
 
 # Plugins personnalisés YASGUI
 
-En termes stricts, la portée de Sparnatural se limite à la sortie de la requête SPARQL générée par le composant. C'est tout. Il n'est pas responsable d'afficher la requête sur la page, de l'envoyer/l'exécuter, ou d'afficher les résultats de la requête. Ces 3 étapes relèvent généralement de la portée de [YasGUI](https://triply.cc/docs/yasgui/), et Sparnatural est donc souvent utilisé en combinaison avec cet outil.
+Strictement parlant, la portée de Sparnatural se limite à la sortie de la requête SPARQL générée par le composant. C'est tout. Il n'est pas responsable d'afficher la requête sur la page, de l'envoyer/l'exécuter, ou d'afficher les résultats de la requête. Ces 3 étapes relèvent généralement de la portée de [YasGUI](https://triply.cc/docs/yasgui/), et c'est pourquoi Sparnatural est souvent utilisé en combinaison avec cet outil.
 
 C'est pourquoi certains plugins spécifiques de YasGUI sont fournis pour être utilisés en conjonction avec Sparnatural.
 
-## Plugin "TableX" : masquer les URI derrière les libellés
+## Plugin "TableX" : masquer l'URI derrière les libellés
 
 ### Ce qu'il fait
 
@@ -22,7 +20,7 @@ Au lieu de ceci :
 
 ![YasR sans plugin](/assets/images/yasr-without-plugin.png)
 
-Vous obtiendrez ceci :
+Vous obtiendriez ceci :
 
 ![YasR avec plugin](/assets/images/yasr-with-plugin.png)
 
@@ -36,8 +34,6 @@ Pour le déployer :
 1. Téléchargez le javascript des plugins depuis la [section de publication du projet Github sparnatural-yasgui-plugins](https://github.com/sparna-git/Sparnatural-yasgui-plugins/releases)
 2. Chargez-le dans votre page web avec la balise `<script>`
 3. Initialisez YasR avec ce plugin pour qu'il remplace le plugin Table par défaut de YasR :
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 ```javascript
 Yasr.registerPlugin("TableX",SparnaturalYasguiPlugins.TableX);
@@ -67,7 +63,7 @@ Yasr.plugins.LabelledUriTable.defaults.uriHrefAdapter = function(uri) {
 };
 ```
 
-Elle est appelée pour chaque URI dans l'ensemble de résultats, dans chaque colonne. Par exemple, elle peut être utilisée pour modifier l'URI DBPedia d'entrée vers l'article correspondant sur Wikipedia :
+Elle est appelée pour chaque URI dans l'ensemble de résultats, dans chaque colonne. Par exemple, elle peut être utilisée pour modifier l'URI DBPedia d'entrée vers l'article Wikipedia correspondant :
 
 ```javascript
 Yasr.plugins.LabelledUriTable.defaults.uriHrefAdapter = function(uri) {

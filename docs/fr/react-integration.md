@@ -1,5 +1,3 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
 _[Accueil](index.html) > Utiliser Sparnatural dans React_
 
 # Utiliser Sparnatural dans React
@@ -71,10 +69,9 @@ function App() {
 export default App;
 
 ```
+### Ajouter un fichier de déclaration pour JSX (uniquement pour Typescript)
 
-### Ajouter un fichier de déclaration pour JSX (uniquement pour TypeScript)
-
-Ceci est seulement nécessaire lorsque vous utilisez React avec TypeScript. <br>
+Ceci est uniquement nécessaire lorsque vous utilisez React avec Typescript. <br>
 Le fichier de déclaration doit s'appeler `declaration.d.ts` et être situé au niveau racine du dossier src/.
 
 ```typescript
@@ -96,4 +93,4 @@ namespace JSX {
 }
 ```
 
-Cela montre un exemple d'intégration de Sparnatural à l'intérieur d'un composant React. Pour plus d'informations sur la configuration, consultez [l'intégration JavaScript v8](Javascript-integration)
+Cela montre de manière exemplaire comment intégrer Sparnatural à l'intérieur d'un composant React. Pour plus d'informations sur la configuration, consultez [Intégration Javascript v8](Javascript-integration)

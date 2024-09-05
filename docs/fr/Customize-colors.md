@@ -1,4 +1,4 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+_[Accueil](index.html) > Personnaliser les couleurs_
 
 # Comment personnaliser les couleurs de Sparnatural ?
 

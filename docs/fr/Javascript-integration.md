@@ -1,6 +1,6 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+_[Accueil](index.html) > Intégration Javascript_
 
-# Intégration JavaScript et référence des paramètres
+# Intégration Javascript et référence des paramètres
 
 ## Constructeur
 
@@ -21,23 +21,21 @@ Sparnatural est inséré en tant qu'élément HTML personnalisé nommé `spar-na
 
 | Attribut | Description | Par défaut | Obligatoire/Optionnel |
 | --------- | ----------- | ------- | ------------------ |
-| `src` | Fournit la configuration qui spécifie les classes et les propriétés à afficher, et comment elles sont mappées à SPARQL. Il peut s'agir soit de l'URL d'un fichier SHACL ou OWL, en Turtle ou RDF/XML. Exemple : `sparnatural-config.ttl`. Une autre option est de fournir un objet JSON sérialisé en tant que chaîne de caractères. Par exemple : `JSON.stringify(configAsJsonObj)`. Il est possible de passer **plusieurs** URL en les séparant par un espace, par exemple `sparnatural-config.ttl statistics.ttl` | `undefined` | Obligatoire
+| `src` | Fournit la configuration qui spécifie les classes et propriétés à afficher, et comment elles sont mappées à SPARQL. Il peut s'agir soit de l'URL d'un fichier SHACL ou OWL, en Turtle ou RDF/XML. Exemple : `sparnatural-config.ttl`. Une autre option est de fournir un objet JSON sérialisé en tant que chaîne de caractères. Par exemple : `JSON.stringify(configAsJsonObj)`. Il est possible de passer **plusieurs** URL en les séparant par un espace, par exemple `sparnatural-config.ttl statistics.ttl` | `undefined` | Obligatoire |
 | `endpoint` | L'URL d'un point d'accès SPARQL qui sera utilisé comme service par défaut pour les requêtes de la source de données fournies dans la configuration. Si non spécifié, chaque source de données doit indiquer explicitement un point d'accès SPARQL. Notez que cette URL peut utiliser le paramètre `default-graph-uri` pour restreindre la requête à un graphe nommé spécifié, conformément à la [spécification du protocole SPARQL](https://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#dataset), par exemple `http://ex.com/sparql?default-graph-uri=http%3A%2F%2Fencoded-named-graph-uri`. Cela peut également contenir **plusieurs** URL de point d'accès en combinaison avec l'attribut `catalog` (voir "[interroger plusieurs points d'accès](Querying-multiple-endpoints.md)") | `undefined` | Obligatoire sauf pour les cas d'utilisation avancés. |
-| `catalog` (*instable*) | Le catalogue des points d'accès, si vous passez plusieurs points d'accès. Il s'agit d'une configuration avancée. (voir "[interroger plusieurs points d'accès](Querying-multiple-endpoints.md)") | aucun | Optionnel|
-| `defaultLang` | Langue par défaut du jeu de données. Une langue dans laquelle le jeu de données fournit toujours des libellés/titres qui peuvent être utilisés par défaut si un libellé dans la langue de l'utilisateur n'est pas présent. | `en` | Recommandé|
+| `catalog` (*instable*) | Le catalogue des points d'accès, si vous passez plusieurs points d'accès. Il s'agit d'une configuration avancée. (voir "[interroger plusieurs points d'accès](Querying-multiple-endpoints.md)") | aucun | Optionnel |
+| `defaultLang` | Langue par défaut du jeu de données. Une langue dans laquelle le jeu de données fournit toujours des libellés/titres pouvant être utilisés par défaut si un libellé dans la langue de l'utilisateur n'est pas présent. | `en` | Recommandé |
 | `debug` | Si défini sur `true`, Sparnatural enregistrera les requêtes JSON et SPARQL dans la console au fur et à mesure de leur génération. | `false` | Optionnel |
-| `distinct` | Indique si le mot-clé `DISTINCT` doit être inséré dans la requête SPARQL générée. | `true` | Optionnel|
-| `lang` | Préférence de langue de l'utilisateur. Le code de langue à utiliser pour afficher les libellés des classes et des propriétés du fichier de configuration, et pour interroger les valeurs dans les listes et les champs de recherche. | `en` | Recommandé|
-| `limit` | Un nombre qui sera utilisé pour ajouter un mot-clé `LIMIT` dans les requêtes SPARQL générées. S'il est défini sur une chaîne vide ou un nombre négatif, aucun mot-clé `LIMIT` n'est inséré. | `-1` | Optionnel
-| `maxDepth` | Profondeur maximale de la requête construite (nombre de clauses 'Where' internes). | `4` | Optionnel
-| `localCacheDataTtl` (*bêta*) | Le temps pendant lequel les listes déroulantes seront stockées en cache sur le client, si le serveur l'a autorisé dans ses en-têtes de réponse, c'est-à-dire si l'en-tête `Cache-Control: no-cache` est renvoyé dans la réponse, aucun cache ne se produira, quelle que soit la valeur de ce champ. Le serveur peut renvoyer `Cache-Control: public` pour que les listes soient correctement mises en cache. | `1000 * 60 * 60 * 24` | Optionnel|
-| `maxOr` | Nombre maximal de valeurs différentes pouvant être sélectionnées pour un critère de propriété donné. Par exemple, combien de pays peuvent être choisis sur le widget de liste| `3` | Optionnel
-| `prefixes` (*instable*) | Un ensemble de préfixes sous la forme `foaf: http://xmlns.com/foaf/0.1/ skos:http://www.w3.org/2004/02/skos/core#` à ajouter à la requête SPARQL de sortie. Cela est appliqué dans la méthode `expand`. | `none`
-| `queryLang` | La langue utilisée comme paramètres pour les sources de données, par exemple pour peupler les listes déroulantes avec les libellés de cette langue. | même valeur que `lang` | Recommandé|
-| `submitButton` | Indique si Sparnatural doit afficher un bouton de soumission pour permettre à l'utilisateur d'exécuter la requête. Un clic sur le bouton de soumission déclenchera un événement `submit`. Si ce n'est pas fourni, il incombe à la page d'exécuter automatiquement la requête à chaque mise à jour dans l'événement `queryUpdated` ou de fournir son propre moyen de soumettre la requête. | `true` | Optionnel
-| `typePredicate` | Le prédicat de type à utiliser pour générer les critères de type. Par défaut à rdf:type, mais pourrait être modifié par exemple en `<http://www.wikidata.org/prop/direct/P31>+` pour l'intégration de Wikidata, ou `<http://www.w3.org/2000/01/rdf-schema#subClassOf>+` pour interroger des modèles de style OWL.|`rdf:type` | Optionnel |
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+| `distinct` | Indique si le mot-clé `DISTINCT` doit être inséré dans la requête SPARQL générée. | `true` | Optionnel |
+| `lang` | Préférence de langue de l'utilisateur. Le code de langue à utiliser pour afficher les libellés des classes et propriétés du fichier de configuration, et pour interroger les valeurs dans les listes et les champs de recherche. | `en` | Recommandé |
+| `limit` | Un nombre qui sera utilisé pour ajouter un mot-clé `LIMIT` dans les requêtes SPARQL générées. S'il est défini sur une chaîne vide ou un nombre négatif, aucun mot-clé `LIMIT` n'est inséré. | `-1` | Optionnel |
+| `maxDepth` | Profondeur maximale de la requête construite (nombre de clauses 'Where' internes). | `4` | Optionnel |
+| `localCacheDataTtl` (*bêta*) | Le temps pendant lequel les listes déroulantes seront stockées en cache sur le client, si le serveur l'a autorisé dans ses en-têtes de réponse, c'est-à-dire si l'en-tête `Cache-Control: no-cache` est renvoyé dans la réponse, aucun cache ne se produira, quelle que soit la valeur de ce champ. Le serveur peut renvoyer `Cache-Control: public` pour que les listes soient correctement mises en cache. | `1000 * 60 * 60 * 24` | Optionnel |
+| `maxOr` | Nombre maximal de valeurs différentes pouvant être sélectionnées pour un critère de propriété donné. Par exemple, combien de pays peuvent être choisis sur le widget de liste | `3` | Optionnel |
+| `prefixes` (*instable*) | Un ensemble de préfixes sous la forme `foaf: http://xmlns.com/foaf/0.1/ skos:http://www.w3.org/2004/02/skos/core#` à ajouter à la requête SPARQL de sortie. Cela est appliqué dans la méthode `expand`. | `none` |
+| `queryLang` | La langue utilisée comme paramètre pour les sources de données, par exemple pour peupler les listes déroulantes avec les libellés de cette langue. | même valeur que `lang` | Recommandé |
+| `submitButton` | Indique si Sparnatural doit afficher un bouton de soumission pour permettre à l'utilisateur d'exécuter la requête. Un clic sur le bouton de soumission déclenchera un événement `submit`. Si ce n'est pas fourni, il incombe à la page d'exécuter automatiquement la requête à chaque mise à jour dans l'événement `queryUpdated` ou de fournir son propre moyen de soumettre la requête. | `true` | Optionnel |
+| `typePredicate` | Le prédicat de type à utiliser pour générer les critères de type. Par défaut à rdf:type, mais pourrait être modifié par exemple en `<http://www.wikidata.org/prop/direct/P31>+` pour une intégration Wikidata, ou `<http://www.w3.org/2000/01/rdf-schema#subClassOf>+` pour interroger des modèles de style OWL. | `rdf:type` | Optionnel |
 
 ## Événements Sparnatural
 
@@ -63,7 +61,7 @@ sparnatural.addEventListener("reset", (event) => {
 
 ```
 
-Voir ci-dessous la référence complète des événements disponibles.
+Voir ci-dessous pour la référence complète des événements disponibles.
 
 Une intégration typique dans une page web ressemble à ceci :
 
@@ -127,7 +125,7 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 });
 
 sparnatural.addEventListener("submit", (event) => {
-  // désactiver le bouton et afficher un indicateur de chargement
+  // désactiver le bouton et afficher un loader en rotation
   sparnatural.disablePlayBtn();
   // déclencher la requête depuis YasQE
   yasqe.query();
@@ -184,7 +182,7 @@ Starting from 9.1, releases of Sparnatural include a [`sparnatural-bindings.js`]
 In particular for a scenario when Sparnatural is integrated with YasQE as a read-only query viewer and YasR, and where Sparnatural is responsible for executing the query, you can call the following functions:
 
 ```javascript
-// lie Sparnatural avec les plugins YasR
+// lie Sparnatural aux plugins YasR
 bindSparnaturalWithYasrPlugins(sparnatural, yasr);
 // lie Sparnatural avec lui-même pour l'exécution de la requête et l'intégration avec yasqe et yasr
 bindSparnaturalWithItself(sparnatural, yasqe, yasr);
@@ -198,8 +196,6 @@ sparnatural.addEventListener("init", (event) => {
   console.log("Sparnatural est initialisé");
   sparnatural.customization = { ... }
 });
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 ```typescript
 {
@@ -283,8 +279,7 @@ export class RDFTerm {
   "xml:lang"?: string;
   datatype?:string 
 }
-
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+```
 
 ```javascript
 sparnatural.addEventListener("init", (event) => {  

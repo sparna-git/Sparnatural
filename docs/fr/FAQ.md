@@ -1,8 +1,9 @@
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
+_[Accueil](index.html) > FAQ_
 
 # Questions Fréquemment Posées
 
 ## Configuration
+
 
 #### Comment configurer une recherche sur les dates ?
 
@@ -10,11 +11,13 @@ _/!\ Cette page a été traduite automatiquement depuis la version anglaise_
 
 Initialement posée dans [l'issue 314](https://github.com/sparna-git/Sparnatural/issues/314).
 
+
 #### Comment effectuer une recherche dans le sens inverse ?
 
 ...
 
 Initialement posée dans [l'issue 317](https://github.com/sparna-git/Sparnatural/issues/317).
+
 
 #### Comment configurer une recherche sur un champ de texte ?
 
@@ -22,11 +25,13 @@ Initialement posée dans [l'issue 317](https://github.com/sparna-git/Sparnatural
 
 Initialement posée dans [l'issue 309](https://github.com/sparna-git/Sparnatural/issues/309).
 
+
 #### Comment mapper une classe vers plus d'une classe cible ?
 
 ...
 
 Initialement posée dans [l'issue 318](https://github.com/sparna-git/Sparnatural/issues/318).
+
 
 #### Comment définir de jolis préfixes dans la requête SPARQL de sortie ? Puis-je utiliser des valeurs préfixées dans l'annotation sparqlString ?
 
@@ -56,18 +61,18 @@ ORDER BY UCASE(?label)
 LIMIT 50
 ```
 
-- Les listes déroulantes ne fonctionnent actuellement pas correctement en raison de la lenteur du service de requête de Wikidata.
+- Les listes déroulantes ne fonctionnent actuellement pas correctement en raison de la lenteur du service de requête de Wikidata
 
-#### Comment afficher automatiquement une étiquette lorsque l'utilisateur clique sur l'icône "œil" ?
+
+#### Comment obtenir automatiquement un libellé à afficher lorsque l'utilisateur clique sur l'icône "œil" ?
 
 ...
 
-Voir [l'issue 3 dans le Prototype Wikidata de Sparnatural](https://github.com/lubianat/sparnatural_wikidata_prototype/issues/3).
+Voir [issue 3 dans le Prototype Wikidata de Sparnatural](https://github.com/lubianat/sparnatural_wikidata_prototype/issues/3).
+
 
 #### Les sources de données par défaut utilisent la fonction `langMatches()` et renvoient des langues en double, est-il possible de changer cela en `lang()` à la place ?
 
-Vous devez créer une source de données personnalisée avec une requête SPARQL personnalisée pour cela. Voir https://docs.sparnatural.eu/OWL-based-configuration-datasources#your-own-sparql-query-lists--autocomplete et voir un exemple à https://github.com/sparna-git/sparnatural.eu/blob/main/demos/demo-smt-cim10/sparnatural-config.ttl#L117
+Vous devez créer une source de données personnalisée avec une requête SPARQL personnalisée pour y parvenir. Voir https://docs.sparnatural.eu/OWL-based-configuration-datasources#your-own-sparql-query-lists--autocomplete et voir un exemple à https://github.com/sparna-git/sparnatural.eu/blob/main/demos/demo-smt-cim10/sparnatural-config.ttl#L117
 
-_/!\ Cette page a été traduite automatiquement depuis la version anglaise_
-
-Originalement demandé dans [issue 327](https://github.com/sparna-git/Sparnatural/issues/327).
+Initialement demandé dans [issue 327](https://github.com/sparna-git/Sparnatural/issues/327).
