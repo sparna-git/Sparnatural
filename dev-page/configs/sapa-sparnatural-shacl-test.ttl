@@ -40,6 +40,16 @@
 <http://shapes.performing-arts.ch/sparnatural> a owl:Ontology.
 
 spao-sparnatural:FondsTheatre a sh:NodeShape;
-  rdfs:label "Fonds Théatre"@en;
+  rdfs:label "Fonds Théatre"@fr;
   sh:node spao-sparnatural:Fonds;
-  skos:definition "Un fonds sur le théatre"@en .
+  skos:definition "Un fonds sur le théatre"@fr .
+
+spao-sparnatural:FondsTheatreDeRue a sh:NodeShape;
+  rdfs:label "Fonds Théatre De Rue"@fr;
+  sh:node spao-sparnatural:FondsTheatre;
+  skos:definition "Un fonds sur le théatre de rue"@fr .
+
+spao-sparnatural:FondsTheatreDeRueMime a sh:NodeShape;
+  rdfs:label "Fonds Théatre De Rue Mimé"@fr;
+  sh:node spao-sparnatural:FondsTheatreDeRue;
+  skos:definition "Un fonds sur le théatre de rue mimé"@fr .
