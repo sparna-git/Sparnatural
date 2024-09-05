@@ -139,9 +139,16 @@
                     }
                     .htmlBreadCrumPathHome {
 
+                        &.onHiddenUp {
+                            display: none;
+                        }
                     }
                     .htmlBreadCrumPathParentsPrefix {
                         display: none;
+                        
+                        &.onHiddenUp {
+                            display: inline-block;
+                        }
                     }
                     .htmlBreadCrumPathParents {
                         .ancestor-item {
@@ -151,6 +158,9 @@
                             transition-delay: 0;
                             &.appened {
                                 margin-left: 0;
+                            }
+                            &.onHiddenUp {
+                                display: none;
                             }
                         }
                         
