@@ -61,7 +61,6 @@ sparnatural.addEventListener("submit", (event) => {
 sparnatural.addEventListener("reset", (event) => {
   // do something
 });
-
 ```
 
 See below for the complete reference of the available events.
@@ -69,7 +68,6 @@ See below for the complete reference of the available events.
 A typical integration in a web page looks like this :
 
 ```javascript
-
 const sparnatural = document.querySelector("spar-natural");
 
 sparnatural.addEventListener("queryUpdated", (event) => {
@@ -123,7 +121,6 @@ In typical integrations, the state of the submit button can be updated upon subm
 `disablePlayBtn()` should be called on `submit` event and `enablePlayBtn()` when the query has returned. In a typical integration with YasGUI this looks like this:
 
 ```javascript
-
 const sparnatural = document.querySelector("spar-natural");
 
 sparnatural.addEventListener("queryUpdated", (event) => {
