@@ -1,0 +1,211 @@
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix vocab: <http://vocab.performing-arts.ch/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix rda-u: <http://rdaregistry.info/Elements/u/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix spao-sparnatural: <http://shapes.performing-arts.ch/sparnatural/> .
+@prefix crypto: <http://id.loc.gov/vocabulary/preservation/cryptographicHashFunctions/> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix spao-i: <http://shapes.performing-arts.ch/instantiations/> .
+@prefix olo: <http://purl.org/ontology/olo/core#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ebucore: <https://www.ebu.ch/metadata/ontologies/ebucore#> .
+@prefix spao-co: <http://shapes.performing-arts.ch/collections/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix spao: <http://ontology.performing-arts.ch/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://shapes.performing-arts.ch/sparnatural> a owl:Ontology;
+  dct:hasFormat <https://docs.google.com/spreadsheets/d/1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx/export?format=xlsx>,
+    <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true>;
+  rdfs:seeAlso <https://shacl-play.sparna.fr/play/doc?url=https%3A%2F%2Fxls2rdf.sparna.fr%2Frest%2Fconvert%3Furl%3Dhttps%253A%252F%252Fdocs.google.com%252Fspreadsheets%252Fd%252F1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx%252Fexport%253Fformat%253Dxlsx%26noPostProcessings%3Dtrue&includeDiagram=true&language=en> .
+
+spao-sparnatural:Fonds a sh:NodeShape;
+  sh:target spao-sparnatural:Fonds-target;
+  rdfs:label "Fonds"@en;
+  sh:node spao-co:RecordSet;
+  skos:definition "This is the subset of RecordSet that are of type \"fonds\""@en .
+
+spao-sparnatural:Fonds-target sh:select """SELECT $this
+WHERE {
+ $this a <https://www.ica.org/standards/RiC/ontology#RecordSet> .
+ $this <https://www.ica.org/standards/RiC/ontology#hasRecordSetType> <http://vocab.performing-arts.ch/rsfnd>
+}""" .
+
+spao-sparnatural:RecordResource_optional_isOrWasConstituentOf_zeroOrMore_isOrWasIncludedIn
+  sh:path _:ba09c1662f6649d08454fc46fcbacca15832;
+  sh:name "is in fonds"@en;
+  sh:description "Connects this RecordResource (Record or RecortPart) to its Fonds"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "sh:IRI"^^xsd:integer;
+  sh:node spao-sparnatural:Fonds;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource spao-sparnatural:list_riconame_with_range .
+
+_:ba09c1662f6649d08454fc46fcbacca15832 rdf:first _:ba09c1662f6649d08454fc46fcbacca15833;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15834 .
+
+_:ba09c1662f6649d08454fc46fcbacca15833 sh:zeroOrOnePath rico:isOrWasConstituentOf .
+
+_:ba09c1662f6649d08454fc46fcbacca15834 rdf:first _:ba09c1662f6649d08454fc46fcbacca15835;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca15835 sh:zeroOrMorePath rico:isOrWasIncludedIn .
+
+spao-co:RecordResource sh:property spao-sparnatural:RecordResource_optional_isOrWasConstituentOf_zeroOrMore_isOrWasIncludedIn;
+  sh:deactivated "true"^^xsd:boolean .
+
+spao-sparnatural:Instantiation_inversePath_includedIn sh:path _:ba09c1662f6649d08454fc46fcbacca15836;
+  sh:name "includes file"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-i:File .
+
+_:ba09c1662f6649d08454fc46fcbacca15836 sh:inversePath premis:isIncludedIn .
+
+spao-i:Instantiation sh:property spao-sparnatural:Instantiation_inversePath_includedIn,
+    spao-sparnatural:Instantiation_inversePath_hasInstantiation, spao-sparnatural:Instantiation_identifier_or_hasOrHadIdentifier;
+  sh:deactivated "false"^^xsd:boolean .
+
+spao-sparnatural:Instantiation_inversePath_hasInstantiation sh:path _:ba09c1662f6649d08454fc46fcbacca15837;
+  sh:name "instantiates"@en;
+  sh:nodeKind sh:IRI;
+  sh:node spao-co:RecordResource .
+
+_:ba09c1662f6649d08454fc46fcbacca15837 sh:inversePath rico:hasInstantiation .
+
+spao-sparnatural:Instantiation_identifier_or_hasOrHadIdentifier sh:path _:ba09c1662f6649d08454fc46fcbacca15838;
+  sh:name "identifier label"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+_:ba09c1662f6649d08454fc46fcbacca15838 sh:alternativePath _:ba09c1662f6649d08454fc46fcbacca15839 .
+
+_:ba09c1662f6649d08454fc46fcbacca15839 rdf:first rico:identifier;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15840 .
+
+_:ba09c1662f6649d08454fc46fcbacca15840 rdf:first _:ba09c1662f6649d08454fc46fcbacca15841;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca15841 rdf:first rico:hasOrHadIdentifier;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15842 .
+
+_:ba09c1662f6649d08454fc46fcbacca15842 rdf:first rdf:value;
+  rdf:rest rdf:nil .
+
+spao-sparnatural:list_riconame_with_range a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_list_label_with_range_alpha_with_count;
+  datasources:labelProperty rico:name .
+
+spao-i:File sh:deactivated "false"^^xsd:boolean .
+
+spao-co:Identifier sh:deactivated "true"^^xsd:boolean .
+
+spao-i:InstantiationExtent sh:deactivated "true"^^xsd:boolean .
+
+spao-co:SingleDate sh:deactivated "true"^^xsd:boolean .
+
+spao-co:Date sh:deactivated "true"^^xsd:boolean .
+
+spao-co:DateRange sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Concept sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Standard sh:deactivated "true"^^xsd:boolean .
+
+spao-i:AudioFormat sh:deactivated "true"^^xsd:boolean .
+
+spao-i:ContainerFormat sh:deactivated "true"^^xsd:boolean .
+
+spao-i:StorageMedium sh:deactivated "true"^^xsd:boolean .
+
+spao-i:VideoFormat sh:deactivated "true"^^xsd:boolean .
+
+spao-i:CarrierType sh:deactivated "true"^^xsd:boolean .
+
+spao-i:RepresentationType sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Accessibility sh:deactivated "true"^^xsd:boolean .
+
+spao-i:PreservationState sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Condition sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Packing sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Permission sh:deactivated "true"^^xsd:boolean .
+
+spao-i:PhysicalUsability sh:deactivated "true"^^xsd:boolean .
+
+spao-i:TermsOfProtection sh:deactivated "true"^^xsd:boolean .
+
+spao-i:VideoDamage sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Material sh:deactivated "true"^^xsd:boolean .
+
+spao-i:ColorContent sh:deactivated "true"^^xsd:boolean .
+
+spao-i:RecordingSystem sh:deactivated "true"^^xsd:boolean .
+
+spao-i:ScanningFormat sh:deactivated "true"^^xsd:boolean .
+
+spao-i:ScanningOrder sh:deactivated "true"^^xsd:boolean .
+
+spao-co:Record sh:deactivated "true"^^xsd:boolean .
+
+spao-co:RecordSet sh:deactivated "true"^^xsd:boolean .
+
+spao-co:RecordPart sh:deactivated "true"^^xsd:boolean .
+
+spao-co:ArchivalPlace sh:deactivated "true"^^xsd:boolean .
+
+spao-co:Event sh:deactivated "true"^^xsd:boolean .
+
+spao-co:Concept sh:deactivated "true"^^xsd:boolean .
+
+spao-i:SingleDate_certainty sh:deactivated "true"^^xsd:boolean;
+  rdfs:comment "We disable properties from these shared objects : we need to keep them here for documentation, we don't want to have them twice since we already have them in the Collections model" .
+
+spao-i:SingleDate_dateQualifier sh:deactivated "true"^^xsd:boolean .
+
+spao-i:SingleDate_dateStandard sh:deactivated "true"^^xsd:boolean .
+
+spao-i:SingleDate_expressedDate sh:deactivated "true"^^xsd:boolean .
+
+spao-i:SingleDate_normalizedDateValue sh:deactivated "true"^^xsd:boolean .
+
+spao-i:DateRange_hasBeginningDate sh:deactivated "true"^^xsd:boolean .
+
+spao-i:DateRange_hasEndDate sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Date_dateStandard sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Date_expressedDate sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Date_normalizedDateValue sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Identifier_value sh:deactivated "true"^^xsd:boolean .
+
+spao-i:Identifier_P2_has_type sh:deactivated "true"^^xsd:boolean .

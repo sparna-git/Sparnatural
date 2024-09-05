@@ -55,20 +55,20 @@
 - Les entités `rico:RecordPart` sont utilisées princiapelement dans le domaine audiovisuel (exemple : des enregistrements différents sur une même bande vidéo).
 - La Fondation SAPA travaille de façon mutilingue (principalement allemand, français, italien). Les descriptions sont réalisées dans la langue du document. Toutefois, la propriété `rico:hasOrHadLanguage` n'est pas utilisée de façon systèmatique pour déclarer celle-ci.""";
   foaf:depiction <http://shapes.performing-arts.ch/images/diagramme-collections.png>;
-  dcat:distribution _:ba09c1662f6649d08454fc46fcbacca13624;
+  dcat:distribution _:ba09c1662f6649d08454fc46fcbacca15807;
   dct:hasFormat <https://docs.google.com/spreadsheets/d/1NnWIuwdpjKiLLIMEOiIhr9pY3Oxb6BMF/export?format=xlsx>,
     <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1NnWIuwdpjKiLLIMEOiIhr9pY3Oxb6BMF%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true>;
   rdfs:seeAlso <https://shacl-play.sparna.fr/play/doc?url=https%3A%2F%2Fxls2rdf.sparna.fr%2Frest%2Fconvert%3Furl%3Dhttps%253A%252F%252Fdocs.google.com%252Fspreadsheets%252Fd%252F1NnWIuwdpjKiLLIMEOiIhr9pY3Oxb6BMF%252Fexport%253Fformat%253Dxlsx%26noPostProcessings%3Dtrue&includeDiagram=false&language=en> .
 
-_:ba09c1662f6649d08454fc46fcbacca13624 dct:format <https://www.iana.org/assignments/media-types/text/turtle>;
+_:ba09c1662f6649d08454fc46fcbacca15807 dct:format <https://www.iana.org/assignments/media-types/text/turtle>;
   dcat:downloadURL <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1NnWIuwdpjKiLLIMEOiIhr9pY3Oxb6BMF%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true> .
 
 spao-co:RecordResource a sh:NodeShape;
   sh:order "1"^^xsd:integer;
   volipi:iconName "fa-light fa-file-heart";
-  sh:targetClass rico:RecordResource;
+  sh:target spao-co:RecordResource-target;
   rdfs:label "Record Resource"@en;
-  skos:definition "Note : the class RecordResource is never instantiated directly and groups the common properties between Record, RecordSet and RecordPart."@en;
+  skos:definition "Note : the class RecordResource is never instantiated directly and groups the common properties between Record, RecordSet and RecordPart. Instances are either rico:Record, rico:RecordSet or rico:RecordPart"@en;
   foaf:depiction spao-co:Diagram_Record, spao-co:Diagram_RecordSet, spao-co:Diagram_RecordPart;
   sh:property spao-co:RecordResource_descriptiveNote, spao-co:RecordResource_hasAccessibility,
     spao-co:RecordResource_hasCopyrightDeclaration, spao-co:RecordResource_hasInternalNote,
@@ -81,11 +81,22 @@ spao-co:RecordResource a sh:NodeShape;
     spao-co:RecordResource_isRelatedTo, spao-co:RecordResource_legacyIdentifier, spao-co:RecordResource_name,
     spao-co:RecordResource_seeAlso .
 
+spao-co:RecordResource-target sh:select """SELECT $this
+WHERE {
+ $this a ?rrType .
+ VALUES ?rrType {
+ <https://www.ica.org/standards/RiC/ontology#Record>
+ <https://www.ica.org/standards/RiC/ontology#RecordSet>
+ <https://www.ica.org/standards/RiC/ontology#RecordPart>
+ }
+}""" .
+
 spao-co:Record a sh:NodeShape;
   sh:order "2"^^xsd:integer;
   volipi:iconName "fa-light fa-file";
   sh:targetClass rico:Record;
   rdfs:label "Record"@en;
+  sh:node spao-co:RecordResource;
   skos:example <http://data.performing-arts.ch/r/01f3d044-33ea-4a23-b1f7-125d5b8b5c36>;
   foaf:depiction spao-co:Diagram_Record;
   shacl-play:background-color "F7CECC";
@@ -95,16 +106,15 @@ spao-co:Record a sh:NodeShape;
     spao-co:Record_hasDocumentaryFormType, spao-co:Record_hasDoublets, spao-co:Record_hasExtent,
     spao-co:Record_hasOrHadLanguage, spao-co:Record_hasOrHadLocation, spao-co:Record_hasPacking,
     spao-co:Record_hasProvenance, spao-co:Record_hasRecordState, spao-co:Record_isAssociatedWithEvent,
-    spao-co:Record_isAssociatedWithPlace, spao-co:Record_isOrWasIncludedIn, spao-co:RecordSet_zeroOrMore_isOrWasIncludedIn,
-    spao-co:Record_physicalCharacteristics, spao-co:Record_sameAs .
-
-rico:Record rdfs:subClassOf rico:RecordResource .
+    spao-co:Record_isAssociatedWithPlace, spao-co:Record_isOrWasIncludedIn, spao-co:Record_physicalCharacteristics,
+    spao-co:Record_sameAs .
 
 spao-co:RecordSet a sh:NodeShape;
   sh:order "3"^^xsd:integer;
   volipi:iconName "fa-light fa-box-archive";
   sh:targetClass rico:RecordSet;
   rdfs:label "Record Set"@en;
+  sh:node spao-co:RecordResource;
   skos:example <http://data.performing-arts.ch/r/0006c351-351a-4add-addf-40aafa582718>;
   foaf:depiction spao-co:Diagram_RecordSet;
   shacl-play:background-color "F7948F";
@@ -117,30 +127,27 @@ spao-co:RecordSet a sh:NodeShape;
     spao-co:RecordSet_isAssociatedWithEvent, spao-co:RecordSet_isAssociatedWithPlace,
     spao-co:RecordSet_isOrWasIncludedIn, spao-co:RecordSet_physicalCharacteristics, spao-co:RecordSet_sameAs .
 
-rico:RecordSet rdfs:subClassOf rico:RecordResource .
-
 spao-co:RecordPart a sh:NodeShape;
   sh:order "4"^^xsd:integer;
   volipi:iconName "fa-light fa-puzzle";
   sh:targetClass rico:RecordPart;
   rdfs:label "Record Part"@en;
+  sh:node spao-co:RecordResource;
   skos:definition "RecordParts are mostly used to describe video recordings with multiple recordings on the same video tape."@en;
   skos:example <http://data.performing-arts.ch/r/dd5bc0bc-4c1f-4f67-8c4f-c5040ddc04d8>;
   foaf:depiction spao-co:Diagram_RecordPart;
   shacl-play:background-color "F7E0DF";
   sh:property spao-co:RecordPart_hasDocumentaryFormType, spao-co:RecordPart_isOrWasConstituentOf .
 
-rico:RecordPart rdfs:subClassOf rico:RecordResource .
-
 spao-co:ArchivalPlace a sh:NodeShape;
-  sh:order "5"^^xsd:integer;
+  sh:order "6"^^xsd:integer;
   volipi:iconName "fa-light fa-building";
   sh:targetClass spao:ArchivalPlace;
   rdfs:label "Archival place"@en;
   sh:property spao-co:ArchivalPlace_containedBy, spao-co:ArchivalPlace_hasPacking, spao-co:ArchivalPlace_label .
 
 spao-co:Event a sh:NodeShape;
-  sh:order "6"^^xsd:integer;
+  sh:order "7"^^xsd:integer;
   volipi:iconName "fa-light fa-calendar-xmark";
   sh:targetClass rico:Event;
   rdfs:label "Event"@en;
@@ -333,22 +340,22 @@ spao-co:RecordResource_hasProcessingDate sh:path spao:hasProcessingDate;
   sh:description "Date à laquelle la description des archives a été réalisée ou modifiée."@fr,
     "Date on which the archive description was created or modified."@en;
   sh:nodeKind sh:IRI;
-  sh:or _:ba09c1662f6649d08454fc46fcbacca13625 .
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15808 .
 
-_:ba09c1662f6649d08454fc46fcbacca13625 rdf:first _:ba09c1662f6649d08454fc46fcbacca13626;
-  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13627 .
+_:ba09c1662f6649d08454fc46fcbacca15808 rdf:first _:ba09c1662f6649d08454fc46fcbacca15809;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15810 .
 
-_:ba09c1662f6649d08454fc46fcbacca13626 sh:class rico:SingleDate .
+_:ba09c1662f6649d08454fc46fcbacca15809 sh:class rico:SingleDate .
 
-_:ba09c1662f6649d08454fc46fcbacca13627 rdf:first _:ba09c1662f6649d08454fc46fcbacca13628;
-  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13629 .
+_:ba09c1662f6649d08454fc46fcbacca15810 rdf:first _:ba09c1662f6649d08454fc46fcbacca15811;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15812 .
 
-_:ba09c1662f6649d08454fc46fcbacca13628 sh:class rico:DateRange .
+_:ba09c1662f6649d08454fc46fcbacca15811 sh:class rico:DateRange .
 
-_:ba09c1662f6649d08454fc46fcbacca13629 rdf:first _:ba09c1662f6649d08454fc46fcbacca13630;
+_:ba09c1662f6649d08454fc46fcbacca15812 rdf:first _:ba09c1662f6649d08454fc46fcbacca15813;
   rdf:rest rdf:nil .
 
-_:ba09c1662f6649d08454fc46fcbacca13630 sh:class rico:Date .
+_:ba09c1662f6649d08454fc46fcbacca15813 sh:class rico:Date .
 
 spao-co:RecordResource_hasProtectionDuration sh:path spao:hasProtectionDuration;
   sh:order "21";
@@ -411,22 +418,22 @@ spao-co:RecordResource_isAssociatedWithDate sh:path rico:isAssociatedWithDate;
 
 This contains the date or date range that the resource covers (for example, for a set of documents, this will contain the date of creation of the first document until the date of creation of the last document)"""@en;
   sh:nodeKind sh:IRI;
-  sh:or _:ba09c1662f6649d08454fc46fcbacca13631 .
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15814 .
 
-_:ba09c1662f6649d08454fc46fcbacca13631 rdf:first _:ba09c1662f6649d08454fc46fcbacca13632;
-  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13633 .
+_:ba09c1662f6649d08454fc46fcbacca15814 rdf:first _:ba09c1662f6649d08454fc46fcbacca15815;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15816 .
 
-_:ba09c1662f6649d08454fc46fcbacca13632 sh:class rico:DateRange .
+_:ba09c1662f6649d08454fc46fcbacca15815 sh:class rico:DateRange .
 
-_:ba09c1662f6649d08454fc46fcbacca13633 rdf:first _:ba09c1662f6649d08454fc46fcbacca13634;
-  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13635 .
+_:ba09c1662f6649d08454fc46fcbacca15816 rdf:first _:ba09c1662f6649d08454fc46fcbacca15817;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15818 .
 
-_:ba09c1662f6649d08454fc46fcbacca13634 sh:class rico:SingleDate .
+_:ba09c1662f6649d08454fc46fcbacca15817 sh:class rico:SingleDate .
 
-_:ba09c1662f6649d08454fc46fcbacca13635 rdf:first _:ba09c1662f6649d08454fc46fcbacca13636;
+_:ba09c1662f6649d08454fc46fcbacca15818 rdf:first _:ba09c1662f6649d08454fc46fcbacca15819;
   rdf:rest rdf:nil .
 
-_:ba09c1662f6649d08454fc46fcbacca13636 sh:class rico:Date .
+_:ba09c1662f6649d08454fc46fcbacca15819 sh:class rico:Date .
 
 spao-co:RecordResource_isRelatedTo sh:path spao:isRelatedTo;
   sh:order "28";
@@ -607,17 +614,17 @@ spao-co:Record_hasProvenance sh:path rico:hasProvenance;
   sh:description "Connects a Record Resource or an Instantiation to an Agent that creates or accumulates the Record Resource, receives it, or sends it. (RiC-O 0.2)"@en;
   skos:editorialNote "Note : hasProvenance n'est plus dans RiC-O 1.0, maintenant c'est rico:hasOrganicProvenance ou rico:hasOrganicOrFunctionalProvenance"@en;
   sh:nodeKind sh:IRI;
-  sh:or _:ba09c1662f6649d08454fc46fcbacca13637 .
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15820 .
 
-_:ba09c1662f6649d08454fc46fcbacca13637 rdf:first _:ba09c1662f6649d08454fc46fcbacca13638;
-  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13639 .
+_:ba09c1662f6649d08454fc46fcbacca15820 rdf:first _:ba09c1662f6649d08454fc46fcbacca15821;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15822 .
 
-_:ba09c1662f6649d08454fc46fcbacca13638 sh:class rico:Person .
+_:ba09c1662f6649d08454fc46fcbacca15821 sh:class rico:Person .
 
-_:ba09c1662f6649d08454fc46fcbacca13639 rdf:first _:ba09c1662f6649d08454fc46fcbacca13640;
+_:ba09c1662f6649d08454fc46fcbacca15822 rdf:first _:ba09c1662f6649d08454fc46fcbacca15823;
   rdf:rest rdf:nil .
 
-_:ba09c1662f6649d08454fc46fcbacca13640 sh:class rico:CorporateBody .
+_:ba09c1662f6649d08454fc46fcbacca15823 sh:class rico:CorporateBody .
 
 spao-co:Record_hasRecordState sh:path rico:hasRecordState;
   sh:order "19";
@@ -657,18 +664,8 @@ spao-co:Record_isOrWasIncludedIn sh:path rico:isOrWasIncludedIn;
   sh:nodeKind sh:IRI;
   sh:class rico:RecordSet .
 
-spao-co:RecordSet_zeroOrMore_isOrWasIncludedIn sh:path _:ba09c1662f6649d08454fc46fcbacca13641;
-  sh:order "23";
-  sh:name "is or was included in (ancestor)"@en;
-  sh:description "Connects this Record to an ancestor RecordSet"@en;
-  sh:maxCount "1"^^xsd:integer;
-  sh:nodeKind sh:IRI;
-  sh:class rico:RecordSet .
-
-_:ba09c1662f6649d08454fc46fcbacca13641 sh:zeroOrMorePath rico:isOrWasIncludedIn .
-
 spao-co:Record_physicalCharacteristics sh:path rico:physicalCharacteristics;
-  sh:order "24";
+  sh:order "#REF!";
   sh:name "physical characteristics"@en;
   sh:description """Information about the physical features of the Instantiation. Includes information about the physical nature and condition such as conservation status. (RiC-O 0.2)
 
@@ -678,7 +675,7 @@ Theoretically this is applied to Instantiations, but is used also at the Record 
   sh:datatype xsd:string .
 
 spao-co:Record_sameAs sh:path owl:sameAs;
-  sh:order "25";
+  sh:order "#REF!";
   sh:name "same as (owl)"@en;
   sh:description "Link to the URL of this RecordSet in the legacy catalog. This information is in the public triplestore, but this is a hidden field in the layout when browsing the public website. The URL stored is not dereferencable."@en;
   sh:maxCount "1"^^xsd:integer;
@@ -918,17 +915,17 @@ spao-co:RecordResourceExtent_quantity sh:path rico:quantity;
   sh:minCount "1"^^xsd:integer;
   sh:maxCount "1"^^xsd:integer;
   sh:nodeKind sh:Literal;
-  sh:or _:ba09c1662f6649d08454fc46fcbacca13642 .
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15824 .
 
-_:ba09c1662f6649d08454fc46fcbacca13642 rdf:first _:ba09c1662f6649d08454fc46fcbacca13643;
-  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13644 .
+_:ba09c1662f6649d08454fc46fcbacca15824 rdf:first _:ba09c1662f6649d08454fc46fcbacca15825;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15826 .
 
-_:ba09c1662f6649d08454fc46fcbacca13643 sh:datatype xsd:integer .
+_:ba09c1662f6649d08454fc46fcbacca15825 sh:datatype xsd:integer .
 
-_:ba09c1662f6649d08454fc46fcbacca13644 rdf:first _:ba09c1662f6649d08454fc46fcbacca13645;
+_:ba09c1662f6649d08454fc46fcbacca15826 rdf:first _:ba09c1662f6649d08454fc46fcbacca15827;
   rdf:rest rdf:nil .
 
-_:ba09c1662f6649d08454fc46fcbacca13645 sh:datatype xsd:string .
+_:ba09c1662f6649d08454fc46fcbacca15827 sh:datatype xsd:string .
 
 spao-co:Identifier_P2_has_type sh:path crm:P2_has_type;
   sh:order "1";
@@ -969,17 +966,17 @@ spao-co:Event_label sh:path rdfs:label;
   sh:name "label"@en;
   sh:description "The name of the event."@en;
   sh:nodeKind sh:Literal;
-  sh:or _:ba09c1662f6649d08454fc46fcbacca13646 .
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15828 .
 
-_:ba09c1662f6649d08454fc46fcbacca13646 rdf:first _:ba09c1662f6649d08454fc46fcbacca13647;
-  rdf:rest _:ba09c1662f6649d08454fc46fcbacca13648 .
+_:ba09c1662f6649d08454fc46fcbacca15828 rdf:first _:ba09c1662f6649d08454fc46fcbacca15829;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15830 .
 
-_:ba09c1662f6649d08454fc46fcbacca13647 sh:datatype rdf:langString .
+_:ba09c1662f6649d08454fc46fcbacca15829 sh:datatype rdf:langString .
 
-_:ba09c1662f6649d08454fc46fcbacca13648 rdf:first _:ba09c1662f6649d08454fc46fcbacca13649;
+_:ba09c1662f6649d08454fc46fcbacca15830 rdf:first _:ba09c1662f6649d08454fc46fcbacca15831;
   rdf:rest rdf:nil .
 
-_:ba09c1662f6649d08454fc46fcbacca13649 sh:datatype xsd:string .
+_:ba09c1662f6649d08454fc46fcbacca15831 sh:datatype xsd:string .
 
 spao-co:ArchivalPlace_containedBy sh:path rico:containedBy;
   sh:order "1";
