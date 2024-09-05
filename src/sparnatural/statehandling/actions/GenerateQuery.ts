@@ -8,6 +8,7 @@ import {
 } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 import { ISparJson } from "../../generators/json/ISparJson";
+import JsonSparqlGenerator from "../../generators/sparql/fromjson/JsonSparqlGenerator";
 
 
 export class QueryGenerator {
@@ -65,11 +66,28 @@ export class QueryGenerator {
       var generator = new Generator();
       var queryString = generator.stringify(selectQuery);
       
+
+      var sparqlFromJsonGenerator = new JsonSparqlGenerator(
+        this.actionStore.specProvider,
+        settings.sparqlPrefixes,
+        getSettings().limit
+      );
+      let selectQueryFromJson = sparqlFromJsonGenerator.generateQuery(
+        jsonQuery
+      );
+      var queryStringFromJson = generator.stringify(selectQueryFromJson);
+
+      if(getSettings().debug){
+        console.log("*** Sparnatural SPARQL Query from JSON ***");
+        console.dir(queryStringFromJson);
+      }
+
       // fire the event
       let payload:QueryUpdatedPayload = {
         queryString:queryString,
         queryJson:jsonQuery,
-        querySparqlJs:selectQuery
+        querySparqlJs:selectQuery,
+        queryStringFromJson:queryStringFromJson,
       };
       this.fireQueryUpdatedEvent(payload);
 
@@ -92,5 +110,5 @@ export class QueryUpdatedPayload {
   queryString:string
   queryJson:ISparJson
   querySparqlJs:Object
-
+  queryStringFromJson:string
 }

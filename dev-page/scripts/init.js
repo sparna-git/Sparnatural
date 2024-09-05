@@ -21,6 +21,11 @@ sparnatural.addEventListener("init", (event) => {
 
 sparnatural.addEventListener("queryUpdated", (event) => {
   var queryString = sparnatural.expandSparql(event.detail.queryString);
+
+  var queryStringFromJson = sparnatural.expandSparql(event.detail.queryStringFromJson);
+
+
+
   yasqe.setValue(queryString);
   // store JSON in hidden field
   document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);

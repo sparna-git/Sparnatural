@@ -1,16 +1,17 @@
-import { ISparJson, Order, VariableExpression, VariableTerm } from "../json/ISparJson";
-import { VariableTerm as SparqlVariableTerm } from "sparqljs";
+import { ISparJson, Order, VariableExpression, VariableTerm } from "../../json/ISparJson";
+import { Pattern, VariableTerm as SparqlVariableTerm } from "sparqljs";
 import { VariableExpression as SparqlVariableExpression } from "sparqljs";
-import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
+import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import {
   Grouping,
   Ordering,
   SelectQuery,
   Variable
 } from "sparqljs";
-import WhereBuilder from "./WhereBuilder";
-import SparqlFactory from "./SparqlFactory";
+import WhereBuilder from "../WhereBuilder";
+import SparqlFactory from "../SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
+import WhereBuilderFromJson from "./WhereBuilderFromJson";
 
 const factory = new DataFactory();
 
@@ -45,8 +46,7 @@ export default class JsonSparqlGenerator {
       distinct: jsonQuery.distinct,
       variables: this.#varsToRDFJS(jsonQuery.variables),
       type: "query",
-      // where: this.#createWhereClause(),
-      where: null,
+      where: this.#createWhereClause(),
       prefixes: this.prefixes,
       order: this.#orderToRDFJS(
         this.jsonQuery.order,
@@ -110,7 +110,10 @@ export default class JsonSparqlGenerator {
     )?true:false;
   }
 
-  #createWhereClause(){
+  #createWhereClause():Pattern[]{
+    let whereBuilder = new WhereBuilderFromJson(this.jsonQuery, this.specProvider);
+    whereBuilder.build();
+    return whereBuilder.getResultPtrns();
     /*
     const builder = new WhereBuilder(
       this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,

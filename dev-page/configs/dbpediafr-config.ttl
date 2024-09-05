@@ -1,0 +1,509 @@
+@prefix schema: <http://schema.org/> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix wdt: <http://www.wikidata.org/prop/direct/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix this: <https://data.mydomain.com/ontologies/sparnatural-config/> .
+@prefix dbpedia: <http://dbpedia.org/ontology/> .
+@prefix odb: <http://example.com/ontology/odb#> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix sparql: <http://www.w3.org/ns/sparql-service-description#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<https://data.mydomain.com/ontologies/sparnatural-config> a owl:Ontology;
+  dcterms:source <https://docs.google.com/spreadsheets/d/1raPi-qimg5gdD_3jWdBVlQqwbmKGIlVf>;
+  dcterms:format <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1raPi-qimg5gdD_3jWdBVlQqwbmKGIlVf%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true> .
+
+this:Artwork a sh:NodeShape;
+  sh:order "1"^^xsd:integer;
+  volipi:iconName "fa-solid fa-paint-brush";
+  sh:targetClass dbpedia:Artwork;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Artwork"@en, "Oeuvre"@fr;
+  sh:description "A piece of art that can be displayed in a museum"@en, "Une Œuvre qui peut être exposée dans un musée"@fr;
+  sh:property this:Artwork_label, this:Artwork_author, this:Artwork_creationYear, this:Artwork_displayedAt,
+    this:Artwork_thumbnail, this:Artwork_description .
+
+this:Museum a sh:NodeShape;
+  sh:order "2"^^xsd:integer;
+  volipi:iconName "fa-solid fa-university";
+  sh:targetClass dbpedia:Museum;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Museum"@en, "Musée"@fr;
+  sh:description "A DBPedia Museum"@en, "Un Musée DBPedia"@fr;
+  sh:property this:Museum_country, this:Museum_label, this:Museum_numberOfVisitors,
+    this:Museum_displays, this:Museum_inWikidata, this:Museum_thumbnail, this:Museum_description .
+
+this:Country a sh:NodeShape;
+  sh:order "3"^^xsd:integer;
+  volipi:iconName "fa-solid fa-globe-africa";
+  sh:targetClass dbpedia:Country;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Country"@en, "Pays"@fr;
+  sh:description "A DBPedia Country"@en, "Un Pays DBPedia"@fr;
+  sh:property this:Country_countryOf, this:Country_label, this:Country_deathPlace, this:Country_birthPlace .
+
+this:Person a sh:NodeShape;
+  sh:order "4"^^xsd:integer;
+  volipi:iconName "fa-solid fa-male";
+  sh:targetClass dbpedia:Person;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Person"@en, "Personne"@fr;
+  sh:description "A person, here usually a painter or sculptor"@en, "Une personne, ici souvent un peintre ou un scupteur"@fr;
+  sh:property this:Person_bornIn, this:Person_diedIn, this:Person_label, this:Person_birthDate,
+    this:Person_classifiedIn, this:Person_created, this:Person_deathYear, this:Person_movement,
+    this:Person_thumbnail, this:Person_description .
+
+this:Movement a sh:NodeShape;
+  sh:order "5"^^xsd:integer;
+  volipi:iconName "fa-solid fa-palette";
+  sh:nodeKind sh:IRI;
+  rdfs:label "Movement"@en, "Mouvement"@fr;
+  sh:description "A school of artists, a painting style"@en, "Une école d'artistes, un style pictural"@fr;
+  sh:property this:Movement_movementIncludes, this:Movement_description, this:Movement_label .
+
+this:Category a sh:NodeShape;
+  sh:order "6"^^xsd:integer;
+  volipi:iconName "fa-solid fa-palette";
+  sh:nodeKind sh:IRI;
+  rdfs:label "Category"@en, "Catégorie"@fr;
+  sh:description "A wikipedia category"@en, "Une catégorie Wikipedia"@fr .
+
+this:MuseumWikidata a sh:NodeShape;
+  sh:order "7"^^xsd:integer;
+  volipi:iconName "fa-solid fa-university";
+  sh:nodeKind sh:IRI;
+  rdfs:label "Wikidata Museum"@en, "Musée Wikidata"@fr;
+  sh:description "The record of the Museum in Wikidata."@en, "La fiche du musée dans Wikidata"@fr;
+  sh:property this:MuseumWikidata_situe_a .
+
+this:Image a sh:NodeShape;
+  sh:order "10"^^xsd:integer;
+  volipi:iconName "fa-solid fa-image";
+  sh:nodeKind sh:Literal;
+  rdfs:label "Image"@en, "Image"@fr .
+
+this:Date a sh:NodeShape;
+  sh:order "11"^^xsd:integer;
+  volipi:iconName "fa-solid fa-calendar-alt";
+  sh:nodeKind sh:Literal;
+  rdfs:label "Date"@en, "Date"@fr;
+  sh:description "A date or a year"@en, "Une date ou une année"@fr .
+
+this:Position a sh:NodeShape;
+  sh:order "12"^^xsd:integer;
+  volipi:iconName "fa-solid fa-map";
+  sh:nodeKind sh:Literal;
+  rdfs:label "Position"@en, "Position"@fr;
+  sh:description "Position on a map, expressed as WKT datatype, queried in GeoSPARQL"@en,
+    "Position sur une carte, exprimée en WKT, requếtée avec GeoSPARQL"@fr .
+
+this:Text a sh:NodeShape;
+  sh:order "13"^^xsd:integer;
+  volipi:iconName "fa-solid fa-a";
+  sh:nodeKind sh:Literal;
+  rdfs:label "Text"@en, "Texte"@fr;
+  sh:description "An attribute, a property that describes the object, like a name or a description. <br/><br/>Use this to select the name of the object."@en,
+    "Un attribut qui caractérise l'objet, comme un nom ou une description. <br/><br/>Choisissez ceci pour sélectionner le nom de l'objet"@fr .
+
+this:Number a sh:NodeShape;
+  sh:order "14"^^xsd:integer;
+  volipi:iconName "fa-solid fa-1";
+  sh:nodeKind sh:Literal;
+  rdfs:label "Number"@en, "Nombre"@fr .
+
+this:Artwork_label sh:path rdfs:label;
+  sh:name "label"@en, "libellé"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node this:Text;
+  dash:searchWidget core:SearchProperty;
+  dash:propertyRole dash:LabelRole;
+  core:enableOptional "false"^^xsd:boolean;
+  core:enableNegation "false"^^xsd:boolean .
+
+this:Artwork_author sh:path dbpedia:author;
+  sh:name "author"@en, "auteur"@fr;
+  sh:description "the artist, painter or sculptor who created the artwork"@en, "l'artiste, le peintre ou le sculpteur qui a créé l'œuvre"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Person;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Artwork_creationYear sh:path dbpedia:creationYear;
+  sh:name "creationYear"@en, "année de création"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:gYear;
+  sh:node this:Date;
+  dash:searchWidget core:TimeProperty-Year;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Artwork_displayedAt sh:path _:a3498c4a778c4f829e250049f6184b3d5345;
+  sh:name "displayed at"@en, "exposée à"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Museum;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:a3498c4a778c4f829e250049f6184b3d5345 sh:alternativePath _:a3498c4a778c4f829e250049f6184b3d5346 .
+
+_:a3498c4a778c4f829e250049f6184b3d5346 rdf:first dbpedia:museum;
+  rdf:rest _:a3498c4a778c4f829e250049f6184b3d5347 .
+
+_:a3498c4a778c4f829e250049f6184b3d5347 rdf:first _:a3498c4a778c4f829e250049f6184b3d5348;
+  rdf:rest rdf:nil .
+
+_:a3498c4a778c4f829e250049f6184b3d5348 sh:inversePath dbpedia:displays .
+
+this:Artwork_thumbnail sh:path dbpedia:thumbnail;
+  sh:name "thumbnail"@en, "vignette"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:Image;
+  dash:searchWidget core:NonSelectableProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Artwork_description sh:path rdfs:comment;
+  sh:name "description"@en, "description"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node this:Text;
+  dash:searchWidget core:SearchProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Museum_country sh:path dbpedia:country;
+  sh:name "country"@en, "pays"@fr;
+  sh:description "Specifies the country where the museum is located."@en, "Spécifie le pays où se trouve le musée."@fr;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Country;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_rdfslabel_count;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Museum_label sh:path rdfs:label;
+  sh:name "label"@en, "libellé"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node this:Text;
+  dash:searchWidget core:SearchProperty;
+  dash:propertyRole dash:LabelRole;
+  core:enableOptional "false"^^xsd:boolean;
+  core:enableNegation "false"^^xsd:boolean .
+
+this:Museum_numberOfVisitors sh:path dbpedia:numberOfVisitors;
+  sh:name "number of visitors"@en, "nombre de visiteurs"@fr;
+  sh:nodeKind sh:Literal;
+  sh:node this:Number;
+  dash:searchWidget core:NumberProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Museum_displays sh:path _:a3498c4a778c4f829e250049f6184b3d5349;
+  sh:name "displays"@en, "expose"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Artwork;
+  dash:searchWidget core:NonSelectableProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:a3498c4a778c4f829e250049f6184b3d5349 sh:alternativePath _:a3498c4a778c4f829e250049f6184b3d5350 .
+
+_:a3498c4a778c4f829e250049f6184b3d5350 rdf:first dbpedia:displays;
+  rdf:rest _:a3498c4a778c4f829e250049f6184b3d5351 .
+
+_:a3498c4a778c4f829e250049f6184b3d5351 rdf:first _:a3498c4a778c4f829e250049f6184b3d5352;
+  rdf:rest rdf:nil .
+
+_:a3498c4a778c4f829e250049f6184b3d5352 sh:inversePath dbpedia:museum .
+
+this:Museum_inWikidata sh:path owl:sameAs;
+  sh:name "has other record"@en, "autre fiche"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:MuseumWikidata;
+  dash:searchWidget core:NonSelectableProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Museum_thumbnail sh:path dbpedia:thumbnail;
+  sh:name "thumbnail"@en, "vignette"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:Image;
+  dash:searchWidget core:NonSelectableProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Museum_description sh:path rdfs:comment;
+  sh:name "description"@en, "description"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node this:Text;
+  dash:searchWidget core:SearchProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Country_countryOf sh:path _:a3498c4a778c4f829e250049f6184b3d5353;
+  sh:name "country of"@en, "pays de"@fr;
+  sh:description "Specifies the museums located in this country."@en, "Spécifie les musées situés dans ce pays."@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Museum;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:a3498c4a778c4f829e250049f6184b3d5353 sh:inversePath dbpedia:country .
+
+this:Country_label sh:path rdfs:label;
+  sh:name "label"@en, "libellé"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node this:Text;
+  dash:searchWidget core:AutocompleteProperty;
+  dash:propertyRole dash:LabelRole;
+  core:enableOptional "false"^^xsd:boolean;
+  core:enableNegation "false"^^xsd:boolean .
+
+this:Country_deathPlace sh:path _:a3498c4a778c4f829e250049f6184b3d5354;
+  sh:order "2";
+  sh:name "death place of"@en, "lieu de décès de"@fr;
+  sh:description "Persons who died in this country.<br/><br/><em>Note : in DBPedia, persons are linked to the city where they died, and the city is linked to the country.</em>"@en,
+    "Les personnes décédées dans ce pays.<br/><br/><em>A noter : dans DBPedia, les personnes sont liées à leur ville de décès, et la ville est reliée au pays.</em>"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Person;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:a3498c4a778c4f829e250049f6184b3d5354 sh:inversePath dbpedia:deathPlace .
+
+this:Country_birthPlace sh:path _:a3498c4a778c4f829e250049f6184b3d5355;
+  sh:order "1";
+  sh:name "birth place of"@en, "lieu de naissance de"@fr;
+  sh:description "Persons who were born in this country.<br/><br/><em>Note : in DBPedia, persons are linked to the city in which they were born, and the city is linked to the country.</em>"@en,
+    "Les personnes nées dans ce pays.<br/><br/><em>A noter : dans DBPedia, les personnes sont liées à leur ville de naissance, et la ville est reliée au pays.</em>"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Person;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:a3498c4a778c4f829e250049f6184b3d5355 sh:inversePath dbpedia:birthPlace .
+
+this:Person_bornIn sh:path _:a3498c4a778c4f829e250049f6184b3d5356;
+  sh:order "1";
+  sh:name "born in"@en, "né à / né en"@fr;
+  sh:description "Persons who were born in this country.<br/><br/><em>Note : in DBPedia, persons are linked to the city in which they were born, and the city is linked to the country.</em>"@en,
+    "Les personnes nées dans ce pays.<br/><br/><em>A noter : dans DBPedia, les personnes sont liées à leur ville de naissance, et la ville est reliée au pays.</em>"@fr;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Country;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_rdfslabel_alpha_with_count;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:a3498c4a778c4f829e250049f6184b3d5356 rdf:first dbpedia:birthPlace;
+  rdf:rest _:a3498c4a778c4f829e250049f6184b3d5357 .
+
+_:a3498c4a778c4f829e250049f6184b3d5357 rdf:first dbpedia:country;
+  rdf:rest rdf:nil .
+
+this:Person_diedIn sh:path _:a3498c4a778c4f829e250049f6184b3d5358;
+  sh:order "2";
+  sh:name "died in"@en, "mort à / mort en"@fr;
+  sh:description "The country where the person died.<br/><br/><em>Note : in DBPedia, persons are linked to the city where they died, and the city is linked to the country.</em>"@en,
+    "Le pays où la personne est décédée.<br/><br/><em>A noter : dans DBPedia, les personnes sont liées à leur ville de décès, et la ville est reliée au pays.</em>"@fr;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Country;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource datasources:list_rdfslabel_alpha_with_count;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:a3498c4a778c4f829e250049f6184b3d5358 rdf:first dbpedia:deathPlace;
+  rdf:rest _:a3498c4a778c4f829e250049f6184b3d5359 .
+
+_:a3498c4a778c4f829e250049f6184b3d5359 rdf:first dbpedia:country;
+  rdf:rest rdf:nil .
+
+this:Person_label sh:path rdfs:label;
+  sh:name "label"@en, "libellé"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node this:Text;
+  dash:searchWidget core:SearchProperty;
+  dash:propertyRole dash:LabelRole;
+  core:enableOptional "false"^^xsd:boolean;
+  core:enableNegation "false"^^xsd:boolean .
+
+this:Person_birthDate sh:path dbpedia:birthDate;
+  sh:order "1";
+  sh:name "birth date"@en, "date de naissance"@fr;
+  sh:nodeKind sh:Literal;
+  sh:node this:Date;
+  dash:searchWidget core:TimeProperty-Date;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Person_classifiedIn sh:path dcterms:subject;
+  sh:name "category"@en, "catégorie"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:Category;
+  dash:searchWidget core:TreeProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean;
+  datasources:treeRootsDatasource this:tree_root_frenchPainters;
+  datasources:treeChildrenDatasource datasources:tree_children_skosnarrower .
+
+this:Person_created sh:path _:a3498c4a778c4f829e250049f6184b3d5360;
+  sh:name "created"@en, "a créé"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Artwork;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:a3498c4a778c4f829e250049f6184b3d5360 sh:inversePath dbpedia:author .
+
+this:Person_deathYear sh:path dbpedia:deathYear;
+  sh:order "2";
+  sh:name "death year"@en, "année de décès"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:gYear;
+  sh:node this:Date;
+  dash:searchWidget core:TimeProperty-Year;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Person_movement sh:path dbpedia:movement;
+  sh:name "movement"@en, "mouvement"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:Movement;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_rdfslabel_count;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Person_thumbnail sh:path dbpedia:thumbnail;
+  sh:name "thumbnail"@en, "vignette"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:Image;
+  dash:searchWidget core:NonSelectableProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Person_description sh:path rdfs:comment;
+  sh:name "description"@en, "description"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node this:Text;
+  dash:searchWidget core:SearchProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Movement_movementIncludes sh:path _:a3498c4a778c4f829e250049f6184b3d5361;
+  sh:name "participant"@en, "participant"@fr;
+  sh:nodeKind sh:IRI;
+  sh:class dbpedia:Person;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource datasources:search_rdfslabel_bifcontains;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+_:a3498c4a778c4f829e250049f6184b3d5361 sh:inversePath dbpedia:movement .
+
+this:Movement_description sh:path rdfs:comment;
+  sh:name "description"@en, "description"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node this:Text;
+  dash:searchWidget core:SearchProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean .
+
+this:Movement_label sh:path rdfs:label;
+  sh:name "label"@en, "libellé"@fr;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  sh:node this:Text;
+  dash:searchWidget core:AutocompleteProperty;
+  dash:propertyRole dash:LabelRole;
+  core:enableOptional "false"^^xsd:boolean;
+  core:enableNegation "false"^^xsd:boolean .
+
+this:MuseumWikidata_situe_a sh:path wdt:P625;
+  sh:name "located at"@en, "situé à"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:Position;
+  dash:searchWidget core:MapProperty;
+  core:enableOptional "true"^^xsd:boolean;
+  core:enableNegation "true"^^xsd:boolean;
+  core:sparqlService <https://www.wikidata.org> .
+
+this:tree_root_frenchPainters a datasources:SparqlTreeRootDatasource;
+  datasources:queryString """PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?uri ?label ?hasChildren
+WHERE {
+ VALUES ?uri {<http://fr.dbpedia.org/resource/Catégorie:Peintre_français>}
+ ?uri skos:prefLabel ?label .
+ FILTER(lang(?label) = '' || lang(?label) = $lang)
+ BIND(true AS ?hasChildren)
+}""" .
+
+<https://www.wikidata.org> a sparql:Service;
+  sparql:endpoint <https://query.wikidata.org/> .
+
+this:query_search_label_contains_langfr a datasources:SPARQLQuery;
+  datasources:queryString """SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ ?uri a $range .
+ ?uri $labelPath ?label .
+ FILTER(isIRI(?uri))
+ FILTER(CONTAINS(LCASE(STR(?label)), LCASE(\"$key\"))) 
+ FILTER(lang(?label) = '' || lang(?label) = \"fr\")
+} 
+ORDER BY UCASE(?label)
+LIMIT 50""";
+  rdfs:comment "A query that will search in labels using contains function, first in the user language but will default to French."@en .

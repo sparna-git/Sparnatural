@@ -26,7 +26,7 @@ export class WidgetFactorySettings {
     language: string;
     defaultLanguage: string;
     typePredicate: string;
-    maxOr: number;
+    maxOr?: number;
     
     sparqlPrefixes?: { [key: string]: string };
     endpoints?: string[];
