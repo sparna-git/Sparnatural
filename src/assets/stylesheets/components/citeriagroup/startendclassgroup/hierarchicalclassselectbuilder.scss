@@ -26,14 +26,8 @@
     top: 0;
     left: 0;
     display: block;
-    /**max-height: 45vh;*/
-    /*border: 1px solid  var(--primary-color-main);
-    border-radius: 5px;*/
     white-space: nowrap;
     background-color: #fff;
-
-
-
 
     &.open .htmlSelectUiUxLists {
         display: block;
@@ -65,49 +59,155 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        opacity: 0.6;
+        background-color: var(--primary-color-light) ;
+        padding: 0 14px;
         span {
             display: inline-block;
             vertical-align: bottom;
             min-width: 20px;
         }
-    }
-
-    .htmlSelectUiUxBreadCrum {
-        height: 40px;
-        background-color: var(--primary-color-main);
-        color: #fff;
-        line-height: 34px;
-        font-size: 20px;
-        font-weight: 700;
-        padding: 3px 5px;
-        &>div {
-            display: inline-block;
-            cursor: pointer;
+        &.selected {
+            background-color: #fff; 
+            opacity: 1;
+            padding: 0 0;
+            span i {
+                font-size: 22px;
+            }
         }
     }
+
     .htmlSelectUiUxLists {
-        
         display: none;
         overflow-x: hidden;
-        /*overflow-y: auto;*/
         position: absolute;
         width: 345px;
         height: 400px;
         top: base.$height-components - 4 ;
         z-index: 2;
-
-        
         transition-property: height;
         transition-duration: 0.1s;
         transition-delay: 0;
-        
         border-radius: 4px;
         box-shadow: 0px 0px 8px 0px #00000026;
+
+        .htmlSelectUiUxBreadCrum {
+            display: flex;
+            height: 55px;
+            align-items: center;
+            width: 100%;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            margin-left: 0;
+            transition-property: margin-left;
+            transition-duration: 0.5s;
+            transition-delay: 0;
+            
+            //First block for backward action
+            .htmlBreadCrumLeft {
+                .htmlBreadCrumBack {
+                    display: block;
+                    width: 31px;
+                    height: 55px;
+                    text-align: center;
+                    padding: 9px 18px;
+                    border-right: 1px solid #e8e8e8;
+                    display: table;
+                    span {
+                        display: table-cell;
+                        vertical-align: middle;
+                        text-align: center;
+                    }
+                }
+            }
+
+            //Second block for navigation path display
+            .htmlBreadCrumRight {
+                display: block;
+                padding: 8px;
+                line-height: 13.62px;
+                height: 55px;
+                .htmlBreadCrumPath {
+                    //for all texts in ancestors path
+                    &>div {
+                        display: inline-block;
+                        font-size: 10px;
+                        font-weight: 700;
+                        line-height: 13.62px;
+                        text-align: left;
+                        opacity: 0.5;
+                    }
+                    .htmlBreadCrumPathHome {
+
+                    }
+                    .htmlBreadCrumPathParentsPrefix {
+                        display: none;
+                    }
+                    .htmlBreadCrumPathParents {
+                        .ancestor-item {
+                            margin-left: 300px;
+                            transition-property: margin-left;
+                            transition-duration: 0.5s;
+                            transition-delay: 0;
+                            &.appened {
+                                margin-left: 0;
+                            }
+                        }
+                        
+                        
+                    }
+                }
+                .htmlBreadCrumParentLabel {
+                    display: block;
+                    position: relative;
+                    font-size: 16px;
+                    font-weight: 700;
+                    line-height: 21.79px;
+                    text-align: left;
+                    opacity: 1;
+                    &>span {
+                        display: inline-block;
+                        position: absolute;
+                        top: 0;
+                        left: 300px;
+                        
+                        transition-property: left;
+                        transition-duration: 0.5s;
+                        transition-delay: 0s;
+
+                        &:first-of-type {
+                            left: 0;
+                        }
+
+                        &.move-left {
+                            left: -300px;
+                        }
+                        &.move-to-display {
+                            left: 0;
+                        }
+                        &.move-right {
+                            left: 300px;
+                        }
+                    }
+                    
+                }
+            }
+        }
+        &.root-display {
+            .htmlSelectUiUxBreadCrum {
+                margin-left: 345px;
+            }
+            ul {
+                top: 0;
+                border-top: solid 0 #fff;
+            }
+        }
+      
     }
 
     ul {
         position: absolute;
-        top:0;
+        top:55px;
         left: 0;
         width: 345px;
         padding:0;
@@ -120,29 +220,22 @@
         display: inline-block;
         white-space: normal;
         vertical-align: top;
-        border-right: 1px solid #e8e8e8;
+        /*border-right: 1px solid #e8e8e8;*/
         max-height: 400px;
-        transition-property: margin-left;
-        transition-duration: 0.5s;
-        transition-delay: 0;
+        transition-property: margin-left, top;
+        transition-duration: 0.5s, 0s;
+        transition-delay: 0, 0.6s;
         z-index: 1000;
 
-
-
-
-        &.active-pane {
-            /*display: inline-block;*/
-            margin-left: 0;
-            /*transition-property: margin-left;
-            transition-duration: 1s;
-            transition-delay: 0;*/
+        &.root {
+            top: 0;
         }
-
+        &.active-pane {
+            margin-left: 0;
+        }
         &.active-pane-hide-left {
             margin-left: -345px;
         }
-        
-
         li {
             cursor: pointer;
             border-bottom: solid 1px #e8e8e8;
@@ -164,10 +257,10 @@
                 overflow: hidden;
                 .label-icon {
                     width: 48px;
-                    font-size: 13px;
+                    font-size: 22px;
                     display: inline-block;
                     padding: 0 9px 0 0;
-                    text-align: right;
+                    text-align: center;
                     /*text-indent: -4px;*/
                 }
             }
@@ -185,7 +278,7 @@
             }
             &.have-childs {
                 span.item-sel {
-                    width: 311px;
+                    width: 315px;
                 }
                 span.item-traverse {
                     display: inline-block;
@@ -209,61 +302,11 @@
                     }
                 }
             }
-            
             &.disabled:hover {
                 background-color: var(--primary-color-light) ;
             }
         }
-
-        li.SubBreadcrum {
-            height: auto;
-            align-items: center;
-            width: 100%;
-
-            .wrapper {
-                display: flex;
-            }
-              
-            .returnBtn {
-                display: block;
-                width: 31px;
-                text-align: center;
-                /*height: 100%;*/
-                padding: 9px 18px;
-                border-right: 1px solid #D9D9D9;
-                display: table;
-                span {
-                    display: table-cell;
-                    vertical-align: middle;
-                    text-align: center;
-                }
-            }
-            .parents-items {
-                display: block;
-                padding: 8px;
-                
-                line-height: 13.62px;
-                .parentLabel {
-                    display: inline-block;
-                    font-size: 10px;
-                    font-weight: 700;
-                    line-height: 13.62px;
-                    text-align: left;
-                    opacity: 0.5;
-                    
-                }
-                .parentLabel:last-child {
-                    display: block;
-                    font-size: 16px;
-                    font-weight: 700;
-                    line-height: 21.79px;
-                    text-align: left;
-                    opacity: 1;
-                }
-            }
-        }
     }
-
 }
 
 /* Scroll bar */
