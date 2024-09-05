@@ -93,7 +93,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       if (ulOfLiParent.getAttribute('parent') != '') { //need to add ancestor item label to path, need to animate first acestor
         let liAncestor = this.getParentLiToUl(ulOfLiParent);
         let liAncestorLabel = liAncestor.querySelector('.item-label').innerText ;
-        this.setAncestorInBreadcrumPath(liAncestorLabel) ;
+        this.downAncestorInBreadcrumPath(liAncestorLabel) ;
       } else {
         this.htmlBreadCrumParentLabel[0].classList.add('display');
       }
@@ -120,15 +120,28 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       return this.htmlInputValueClass ;
     }
 
-    setAncestorInBreadcrumPath(newAcestorLabel:any) {
+    downAncestorInBreadcrumPath(newAcestorLabel:any) {
       let NewAncestor = $(`<span class="ancestor-item">&nbsp;/ ${newAcestorLabel}</span>`) ;
-      this.htmlBreadCrumPathParents[0].innerHTML = '' ;
+      //this.htmlBreadCrumPathParents[0].innerHTML = '' ;
       this.htmlBreadCrumPathParents.append(NewAncestor) ;
       setTimeout(function() {
         NewAncestor[0].classList.toggle('appened');
       }, 1);
       
     }
+    
+    /*upAncestorInBreadcrumPath() {
+      let parentList = this.htmlBreadCrumPathParents[0].querySelectorAll('span') ;
+      if (parentList.length == 2) {
+        this.htmlBreadCrumPathParents[0].querySelector('span:last-of-type').classList.remove('appened') ;
+        let htmlBreadCrumPathParents = this.htmlBreadCrumPathParents[0] ;
+        setTimeout(function() {
+          htmlBreadCrumPathParents.querySelector('span:last-of-type').remove() ;
+        }, 500);
+        return true;
+      }
+      
+    }*/
     downAncestorInParentLabel(newParentLabel:any) {
       let new_item = $(`<span>${newParentLabel}</span>`) ;
       if(this.htmlBreadCrumParentLabel[0].querySelector('span:last-of-type') != null) {
