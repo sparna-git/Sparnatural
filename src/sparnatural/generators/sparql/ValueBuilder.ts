@@ -214,7 +214,7 @@ export class RdfTermValueBuilder extends BaseValueBuilder implements ValueBuilde
      */
     isBlockingEnd(): boolean {
         return (
-            this.values.length > 0
+            this.values?.length > 0
         );
     }
 
@@ -224,7 +224,7 @@ export class RdfTermValueBuilder extends BaseValueBuilder implements ValueBuilde
      */
     isBlockingObjectProp(): boolean {
         return (
-            this.values.length == 1
+            this.values?.length == 1
             &&
             !(this.endClassVarSelected)
           );
@@ -277,7 +277,7 @@ export class BooleanValueBuilder extends BaseValueBuilder implements ValueBuilde
     */
    isBlockingObjectProp() {
     return (
-      this.values.length == 1
+      this.values?.length == 1
       &&
       !(this.values[0] instanceof SelectAllValue)
       &&

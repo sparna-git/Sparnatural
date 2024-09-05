@@ -26,9 +26,10 @@ export class WidgetFactorySettings {
     language: string;
     defaultLanguage: string;
     typePredicate: string;
+    maxOr: number;
     
     sparqlPrefixes?: { [key: string]: string };
-    defaultEndpoint?: string;
+    endpoints?: string[];
     catalog?: string;
     localCacheDataTtl?: number;
     
@@ -110,7 +111,7 @@ export class WidgetFactory {
             if (datasource == null) {
               // datasource still null
               // if a default endpoint was provided, provide default datasource
-              if (this.settings.defaultEndpoint || this.settings.catalog) {
+              if (this.settings.endpoints || this.settings.catalog) {
     
                 // if there is a default label property on the end class, use it to populate the dropdown
                 if(this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty()) {
@@ -141,8 +142,8 @@ export class WidgetFactory {
                 // endpoint URL
                 this.sparqlFetcherFactory.buildSparqlFetcher(
                     datasource.sparqlEndpointUrl != null
-                    ? datasource.sparqlEndpointUrl
-                    : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
+                    ? [datasource.sparqlEndpointUrl]
+                    : this.settings.endpoints
                 ), 
     
                 new ListSparqlTemplateQueryBuilder(
@@ -197,7 +198,7 @@ export class WidgetFactory {
             if (datasource == null) {
               // datasource still null
               // if a default endpoint was provided, provide default datasource
-              if (this.settings.defaultEndpoint) {
+              if (this.settings.endpoints) {
                 if(this.specProvider.getEntity(endClassVal.type).isLiteralEntity()) {
                   datasource = Datasources.DATASOURCES_CONFIG.get(
                     Datasources.SEARCH_LITERAL_CONTAINS
@@ -230,8 +231,8 @@ export class WidgetFactory {
                 // endpoint URL
                 this.sparqlFetcherFactory.buildSparqlFetcher(
                     datasource.sparqlEndpointUrl != null
-                    ? datasource.sparqlEndpointUrl
-                    : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
+                    ? [datasource.sparqlEndpointUrl]
+                    : this.settings.endpoints
                 ), 
     
                 new AutocompleteSparqlTemplateQueryBuilder(
@@ -329,7 +330,7 @@ export class WidgetFactory {
             if (treeRootsDatasource == null) {
               // datasource still null
               // if a default endpoint was provided, provide default datasource
-              if (this.settings.defaultEndpoint) {
+              if (this.settings.endpoints) {
                 treeRootsDatasource = Datasources.DATASOURCES_CONFIG.get(
                   Datasources.TREE_ROOT_SKOSTOPCONCEPT
                 );
@@ -343,7 +344,7 @@ export class WidgetFactory {
             if (treeChildrenDatasource == null) {
               // datasource still null
               // if a default endpoint was provided, provide default datasource
-              if (this.settings.defaultEndpoint) {
+              if (this.settings.endpoints) {
                 treeChildrenDatasource = Datasources.DATASOURCES_CONFIG.get(
                   Datasources.TREE_CHILDREN_SKOSNARROWER
                 );
@@ -362,8 +363,8 @@ export class WidgetFactory {
                 // we read it on the roots datasource
                 this.sparqlFetcherFactory.buildSparqlFetcher(
                     treeRootsDatasource.sparqlEndpointUrl != null
-                    ? treeRootsDatasource.sparqlEndpointUrl
-                    : this.#readDefaultEndpoint(this.settings.defaultEndpoint)
+                    ? [treeRootsDatasource.sparqlEndpointUrl]
+                    : this.settings.endpoints
                 ),
     
                 new TreeSparqlTemplateQueryBuilder(
@@ -382,7 +383,10 @@ export class WidgetFactory {
             // the provided configuration object for the corresponding section
             let treeConfig:TreeConfiguration = {
               ...TreeWidget.defaultConfiguration,
-              ...{dataProvider: treeDataProvider},
+              ...{
+                  dataProvider: treeDataProvider,
+                  maxSelectedItems: this.settings.maxOr
+              },
               ...this.settings.customization?.tree
             };
     
@@ -446,16 +450,6 @@ export class WidgetFactory {
             throw new Error(`WidgetType for ${widgetType} not recognized`);
         }
       }
-    
-      #readDefaultEndpoint(defaultEndpoint:string | (() => string) | undefined):string{
-        if(defaultEndpoint instanceof Function) {
-          return (defaultEndpoint as (()=> string))();
-        } else if(defaultEndpoint) {
-          return defaultEndpoint as string;
-        } else {
-          return undefined;
-        }
-      }
 
     /**
      * Builds the final query string from a query source, by injecting
@@ -463,27 +457,27 @@ export class WidgetFactory {
      **/
     #getFinalQueryString(datasource: any) {
         if (datasource.queryString != null) {
-        return datasource.queryString;
+          return datasource.queryString;
         } else {
-        var sparql = datasource.queryTemplate;
+          var sparql = datasource.queryTemplate;
 
-        if (datasource.labelPath != null || datasource.labelProperty) {
-            var theLabelPath = datasource.labelPath
-            ? datasource.labelPath
-            : "<" + datasource.labelProperty + ">";
-            var reLabelPath = new RegExp("\\$labelPath", "g");
-            sparql = sparql.replace(reLabelPath, theLabelPath);
-        }
+          if (datasource.labelPath != null || datasource.labelProperty) {
+              var theLabelPath = datasource.labelPath
+              ? datasource.labelPath
+              : "<" + datasource.labelProperty + ">";
+              var reLabelPath = new RegExp("\\$labelPath", "g");
+              sparql = sparql.replace(reLabelPath, theLabelPath);
+          }
 
-        if (datasource.childrenPath != null || datasource.childrenProperty) {
-            var theChildrenPath = datasource.childrenPath
-            ? datasource.childrenPath
-            : "<" + datasource.childrenProperty + ">";
-            var reChildrenPath = new RegExp("\\$childrenPath", "g");
-            sparql = sparql.replace(reChildrenPath, theChildrenPath);
-        }
+          if (datasource.childrenPath != null || datasource.childrenProperty) {
+              var theChildrenPath = datasource.childrenPath
+              ? datasource.childrenPath
+              : "<" + datasource.childrenProperty + ">";
+              var reChildrenPath = new RegExp("\\$childrenPath", "g");
+              sparql = sparql.replace(reChildrenPath, theChildrenPath);
+          }
 
-        return sparql;
+          return sparql;
         }
     }
 

@@ -10,7 +10,7 @@ const defaultSettings: ISettings = {
   addDistinct: true,
   limit: -1,
   typePredicate: "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>",
-  defaultEndpoint: null,
+  endpoints: null,
   catalog: null,
   sparqlPrefixes: {
     rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",

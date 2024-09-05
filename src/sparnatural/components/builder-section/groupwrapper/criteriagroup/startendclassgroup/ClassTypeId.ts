@@ -10,7 +10,6 @@ import HTMLComponent from "../../../../HtmlComponent";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.
- * Refactored to extract this from InputTypeComponent.
  **/
 class ClassTypeId extends HTMLComponent {
   ParentComponent: EndClassGroup | StartClassGroup;

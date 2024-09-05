@@ -26,10 +26,10 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
   grpWrapper.optionState = OptionTypes.NONE
   // set StartClassVal back to its original value
   grpWrapper.CriteriaGroup.StartClassGroup.startClassVal = startVal;
-  let inputTypeComponent = grpWrapper.CriteriaGroup.StartClassGroup.inputSelector;
-  inputTypeComponent.oldWidget.val(startVal.type).niceSelect("update");
+  let inputSelector = grpWrapper.CriteriaGroup.StartClassGroup.inputSelector;
+  inputSelector.oldWidget.val(startVal.type).niceSelect("update");
   // nice-select is 2nd place in childrenslist. move away from nice-select...
-  inputTypeComponent.html[0].children[1].classList.add("disabled");
+  inputSelector.html[0].children[1].classList.add("disabled");
   
   // decrease the SPARQL var counter by 2 : one for the previous EndClassGroup, one for the new StartClassGroup
   // that gets its original value back

@@ -168,11 +168,11 @@ export default class WhereBuilder{
 
     #buildGrpWrapperPtrn(){
         // The startClassPtrn does not need to be created if it is a WHERE or AND child
-        const hasStartClass = (!this.#isChild)
+        const hasStartClass = (
+            !this.#isChild
+        )
         const hasEndClass = (
             !this.#specProvider.getEntity(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected()).isLiteralEntity()
-            &&
-            !this.#specProvider.getEntity(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected()).isRemoteEntity()
             &&
             !this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected()).omitClassCriteria()
         );

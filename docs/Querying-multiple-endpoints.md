@@ -147,101 +147,44 @@ When configured with more than one endpoint, Sparnatural will behave this way:
 
 ## Executing the final SPARQL query against all endpoints
 
-Sparnatural can deal with the population of dropdown lists and autocomplete fields against multiple endpoints. You also need to execute the final query returned by Sparnatural against all endpoints. This is using the [sparql.js library](http://www.thefigtrees.net/lee/sw/sparql.js) from [http://thefigtrees.net](http://thefigtrees.net). Pretty old stuff, but still works. The execution of the query could very well be done by hand by simply constructing the URL.
+Sparnatural can deal with the population of dropdown lists and autocomplete fields against multiple endpoints. You also need to execute the final query returned by Sparnatural against all endpoints. In order to do this you can call the `executeSparql()` method on Sparnatural, which will take care of:
+1. sending the SPARQL query to all endpoints in the catalog
+2. merging the results, adding an extra column for the source
+3. returning the merged result
+
+
+The full integration looks like this:
 
 ```javascript
-      var endpoints;
+    sparnatural.addEventListener("queryUpdated", (event) => {
+      queryString = sparnatural.expandSparql(event.detail.queryString);
+      yasqe.setValue(queryString);
+    });
 
-      let executeSparql = function(sparql, callback) {
+    sparnatural.addEventListener("submit", (event) => {
+      // enable loader on button
+      sparnatural.disablePlayBtn() ;
 
-        // build an array of Promises for the execution of the query against each endpoint
-        const promises = [];
-        for (const e of endpoints) {
-          console.log("querying endpoint "+e);
-
-          var sparqler = new SPARQL.Service(e);
-          var query = sparqler.createQuery();
-          
-          promises[promises.length] = new Promise((resolve, reject) => {
-            // this is where we stored the query emitted by Sparnatural
-            query.query(document.getElementById('query-sparql').value,
-              {
-                failure: function() { 
-                  console.log("Failed : "+e);
-                  reject("Failed : "+e);
-                },
-                success: function(json) { 
-                  console.log("Got answer from "+e);
-                  // return a structure with "endpoint" key and "sparqlJson" containing the result
-                  resolve({ endpoint: e, sparqlJson: json });
-                }
-              }
-            );
-          });
+      let finalResult = sparnatural.executeSparql(
+        yasqe.getValue(),
+        (finalResult) => {
+          // send final result to YasR
+          yasr.setResponse(finalResult);
+          // re-enable submit button
+          sparnatural.enablePlayBtn();
+        },
+        (error) => {
+          console.error("Got an error when executing SPARQL in Sparnatural");
+          console.dir(error);
         }
+      );
+    });
 
-        // now synchronize all the promises from all endpoints
-        // to build a final aggregated result set
-        let finalResult = {};
-        Promise.all(promises).then((values) => {
-          // copy the same head as first result, with extra "endpoint" + "endpoint_label" columns
-          // so that the final result set will contain an extra column at the end showing from
-          // which endpoint that result set cam from
-          finalResult.head = values[0].sparqlJson.head;
-          finalResult.head.vars.push("endpoint");
-          finalResult.head.vars.push("endpoint_label");
-
-          // prepare the "results" section
-          finalResult.results = {
-            // same distinct as first result
-            distinct: values[0].sparqlJson.results.distinct,
-            // never ordered
-            ordered: false,
-            // prepare bindings section
-            bindings: []
-          };
-          // then for each SPARQL results of structure {endpoint : xx, sparqlJson: {...}}
-          for (const v of values) {
-            
-            // add extra "endpoint" + "endpoint_label" columns with the endpoint at the end of each binding
-            finalResult.results.bindings.push(
-              // remap each binding to add the endpoint column at the end
-              // then unpack the array
-              ...v.sparqlJson.results.bindings.map(b => {
-                b.endpoint = {type: "uri", value:v.endpoint};
-                b.endpoint_label = {type: "literal", value:datasetsJson.service.find(s => s.endpointURL == v.endpoint).title[lang]};
-                return b;
-              })
-            );
-          }
-
-          // call the callback with the final aggregated SPARQL result
-          callback(finalResult);
-        });
-      }
-
-      // then when the query is submitted from Sparnatural
-      sparnatural.addEventListener("submit", (event) => {
-        // enable loader on button
-        sparnatural.disablePlayBtn() ;
-
-        // trigger query execution to the different endpoints
-        let finalResult = executeSparql(
-          document.getElementById('query-sparql').value,
-          // and when we receive the final result...
-          (finalResult) => {
-            // send final result to YasR
-            yasr.setResponse(finalResult);
-            // re-enable submit button
-            sparnatural.enablePlayBtn();
-          }
-        );
-      });
-
-      // Configure yasQE to hide its query execution button
-      const yasqe = new Yasqe(document.getElementById("yasqe"), {
-        // ...
-        // don't show query button
-        showQueryButton: false,
-      });
+    sparnatural.addEventListener("reset", (event) => {
+      yasqe.setValue("");
+    });
 ```
+
+The source endpoint is added as an extra column:
+
+![result list with extra column showing source](/assets/images/result-table-with-source-column.png)

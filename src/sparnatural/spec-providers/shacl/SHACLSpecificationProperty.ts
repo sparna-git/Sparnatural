@@ -175,7 +175,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
      */
     getRange(): string[] {
       // first read on property shape itself
-      var classes: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, this.uri);
+      var classes: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, factory.namedNode(this.uri));
 
       // nothing, see if some default can apply on the property shape itself
       if(classes.length == 0) { 
@@ -194,7 +194,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         
         orMembers?.forEach(m => {
           // read sh:class / sh:node
-          var orClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.value);
+          var orClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m);
 
           // nothing, see if default applies on this sh:or member
           if(orClasses.length == 0) {
@@ -212,7 +212,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
             var orOrMembers = this.graph.readAsList(m, SH.OR);
             orOrMembers?.forEach(orOrMember => {
               // read sh:class / sh:node
-              var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember.value);
+              var orOrClasses: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, orOrMember);
               // nothing, see if default applies on this sh:or member
               if(orOrClasses.length == 0) {
                 SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
@@ -249,69 +249,72 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
     #getShClassAndShNodeRange():string[] {
       // read the sh:class
-      var classes: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, this.uri);
+      var classes: string[] = SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, factory.namedNode(this.uri));
 
       // read sh:or content
       var orMembers = this.graph.readAsList(factory.namedNode(this.uri), SH.OR);
       orMembers?.forEach(m => {
-        classes.push(...SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m.value));
+        classes.push(...SHACLSpecificationProperty.readShClassAndShNodeOn(this.store, m));
       });
 
       return classes;
     }
 
-    static readShClassAndShNodeOn(n3store:RdfStore, theUri:any):string[] {         
-      var classes: string[] = [];
-
-      // read the sh:class
-      const shclassQuads = n3store.getQuads(
-        factory.namedNode(theUri),
-        SH.CLASS,
-        null,
-        null
-      );
-
-      // then for each of them, find all NodeShapes targeting this class
-      shclassQuads.forEach((quad:Quad) => {
-          n3store.getQuads(
-              null,
-              SH.TARGET_CLASS,
-              quad.object,
-              null
-          ).forEach((q:Quad) => {
-              classes.push(q.subject.value);
-          });
-
-          // also look for nodeshapes that have directly this URI and that are themselves classes
-          // and nodeshapes
-          n3store.getQuads(
-              quad.object,
-              RDF.TYPE,
-              RDFS.CLASS,
-              null
-          ).forEach((q:Quad) => {
-                n3store.getQuads(
-                  quad.object,
-                  RDF.TYPE,
-                  SH.NODE_SHAPE,
-                  null
-              ).forEach((q2:Quad) => {
-                classes.push(q2.subject.value);
-              });              
-          });
-      });
+    static readShClassAndShNodeOn(n3store:RdfStore, theUriOrBlankNode:Term):string[] {         
+      var ranges: string[] = [];
 
       // read the sh:node
       const shnodeQuads = n3store.getQuads(
-          factory.namedNode(theUri),
-          SH.NODE,
+        theUriOrBlankNode,
+        SH.NODE,
+        null,
+        null
+      ).forEach((q:Quad) => {
+        ranges.push(q.object.value);
+      });  
+
+      // sh:node has precedence over sh:class : if sh:node is found, no need to look for sh:class
+      if(ranges.length == 0) {
+        // read the sh:class
+        const shclassQuads = n3store.getQuads(
+          theUriOrBlankNode,
+          SH.CLASS,
           null,
           null
-      ).forEach((q:Quad) => {
-        classes.push(q.object.value);
-      });  
+        );
+
+        // then for each of them, find all NodeShapes targeting this class
+        shclassQuads.forEach((quad:Quad) => {
+            n3store.getQuads(
+                null,
+                SH.TARGET_CLASS,
+                quad.object,
+                null
+            ).forEach((q:Quad) => {
+                ranges.push(q.subject.value);
+            });
+
+            // also look for nodeshapes that have directly this URI and that are themselves classes
+            // and nodeshapes
+            n3store.getQuads(
+                quad.object,
+                RDF.TYPE,
+                RDFS.CLASS,
+                null
+            ).forEach((q:Quad) => {
+                  n3store.getQuads(
+                    quad.object,
+                    RDF.TYPE,
+                    SH.NODE_SHAPE,
+                    null
+                ).forEach((q2:Quad) => {
+                  ranges.push(q2.subject.value);
+                });              
+            });
+        });
+      }
       
-      return classes;
+      return ranges;
     }
 
     getDatasource() {

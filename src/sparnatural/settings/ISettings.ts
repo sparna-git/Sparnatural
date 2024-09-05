@@ -14,7 +14,7 @@ interface ISettings {
   maxDepth: number;
   maxOr: number;
   sparqlPrefixes?: { [key: string]: string };
-  defaultEndpoint?: string;
+  endpoints?: string[];
   catalog?: string;
   localCacheDataTtl?: number;
   debug: boolean;

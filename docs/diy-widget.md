@@ -1,5 +1,7 @@
 _[Home](index.html) > How to create your own widget_
 
+** /!\ This is outdated. **
+
 # How to create your own widget
 
 Sparnatural offers a range of different widgets for sparql value selection. Further Widget can be added by implementing extending the `AbstractWidget` class. Let's create the BooleanWidget to demonstrate the implementation process:
