@@ -11,23 +11,28 @@ import {
 import WhereBuilder from "../WhereBuilder";
 import SparqlFactory from "../SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
-import WhereBuilderFromJson from "./WhereBuilderFromJson";
+import QueryWhereTranslator from "./QueryWhereTranslator";
 
 const factory = new DataFactory();
 
-
-export default class JsonSparqlGenerator {
+/**
+ * Generates a Sparql query in the SparqlJs structure from the JSON query format of Sparnatural
+ */
+export default class JsonSparqlTranslator {
   typePredicate: string;
   specProvider: ISparnaturalSpecification;
   prefixes: { [key: string]: string } = {};
   jsonQuery: ISparJson;
   limit:number;
 
-  defaultLabelVars:Variable[] = []// see: #checkForDefaultLabel()
+  defaultLabelVars:Variable[] = []
   
   constructor(
+    // the Sparnatural configuration
     specProvider: ISparnaturalSpecification,
+    // the prefixes to include in the query
     prefixes: { [key: string]: string } = {},
+    // the limit parameter to include in the query
     limit: number
   ) {
     this.specProvider = specProvider;
@@ -35,7 +40,11 @@ export default class JsonSparqlGenerator {
     this.limit = limit;
   }
 
-  generateQuery(
+  /**
+   * @param jsonQuery the Sparnatural JSON query
+   * @returns a SPARQL query translated from the Sparnatural JSON query structure
+   */
+  generateQuery(    
     jsonQuery: ISparJson,
   ):SelectQuery 
   {
@@ -52,6 +61,7 @@ export default class JsonSparqlGenerator {
         this.jsonQuery.order,
         jsonQuery.variables[0]
       ),
+      // sets a limit if provided, otherwise leave to undefined
       limit: (this.limit && (this.limit > 0))?this.limit:undefined
     };
 
@@ -110,8 +120,12 @@ export default class JsonSparqlGenerator {
     )?true:false;
   }
 
+  /**
+   * Generates the WHERE clause of the SparqlJs query from the original JSON structure
+   * @returns an array of SparqlJs Pattern representing the complete content of the WHERE clause
+   */
   #createWhereClause():Pattern[]{
-    let whereBuilder = new WhereBuilderFromJson(this.jsonQuery, this.specProvider);
+    let whereBuilder = new QueryWhereTranslator(this.jsonQuery, this.specProvider);
     whereBuilder.build();
     return whereBuilder.getResultPtrns();
     /*
@@ -138,6 +152,11 @@ export default class JsonSparqlGenerator {
     
   }
 
+  /**
+   * Translates the variables from the JSON structure to variables in the SparqlJs structure
+   * @param variables The variables in the original JSON query structure
+   * @returns An array of Variable structure in the SparqlJs structure
+   */
   #varsToRDFJS(variables: Array<VariableTerm | VariableExpression>): Variable[] {
     return variables.map((v) => {
       // if it is an aggregated variable...
@@ -154,7 +173,12 @@ export default class JsonSparqlGenerator {
     });
   }
 
-  // It will be ordered by the Provided variable
+  /**
+   * Converts the order parameter in the original JSON structure to an Ordering object in SparqlJs
+   * @param order the order information in the JSON structure
+   * @param variable the variable to order on
+   * @returns an Ordering structure in SparqlJs
+   */
   #orderToRDFJS(order: Order, variable: VariableTerm | VariableExpression): Ordering[] {
     if(order == Order.DESC || order == Order.ASC) {
       let varName = ((variable as VariableExpression).expression)?(variable as VariableExpression).variable.value:(variable as VariableTerm).value;
@@ -170,11 +194,18 @@ export default class JsonSparqlGenerator {
     }
   }
 
-  // inserts the default label var right after the variable of the same name
+  /**
+   * Inserts the provided default label variable, having the name "xxx_label", after the variable named "xxx"
+   * @param sparqlQuery The SparqlJs query
+   * @param defaultLabelVar The default label variable, ending in xxx_label, to insert
+   */
   #insertDefaultLabelVar(sparqlQuery: SelectQuery, defaultLabelVar:Variable) {
+    // reconstruct the original var name by removing "_label" suffix
     var originalVar = (defaultLabelVar  as VariableTerm).value.substring(0,(defaultLabelVar  as VariableTerm).value.length-"_label".length);
     for(var i=0;i<sparqlQuery.variables.length;i++) {
+      // find variable with the original name
       if((sparqlQuery.variables[i] as VariableTerm).value == originalVar) {
+        // insert the default label var after this one
         sparqlQuery.variables.splice(i+1, 0, defaultLabelVar);
         // don't forget, otherwise infinite loop
         break;

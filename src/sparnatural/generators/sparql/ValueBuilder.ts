@@ -78,7 +78,7 @@ export default interface ValueBuilderIfc {
         propertyVal: SelectedVal,
         endClassVal: SelectedVal,
         endClassVarSelected: boolean,
-        values: Array<WidgetValue>
+        values: Array<WidgetValue["value"]>
     ):void;
 
     /**
@@ -109,7 +109,7 @@ export abstract class BaseValueBuilder implements ValueBuilderIfc {
     protected startClassVal: SelectedVal;
     protected propertyVal: SelectedVal;
     protected endClassVal: SelectedVal;
-    protected values: Array<WidgetValue>;
+    protected values: Array<WidgetValue["value"]>;
     protected endClassVarSelected: boolean;
 
     init(
@@ -118,7 +118,7 @@ export abstract class BaseValueBuilder implements ValueBuilderIfc {
         propertyVal: SelectedVal,
         endClassVal: SelectedVal,
         endClassVarSelected: boolean,
-        values: Array<WidgetValue>
+        values: Array<WidgetValue["value"]>
     ): void {
         this.specProvider = specProvider;
         this.startClassVal = startClassVal;
@@ -152,13 +152,13 @@ export class RdfTermValueBuilder extends BaseValueBuilder implements ValueBuilde
 
     build(): Pattern[] {
 
-        let widgetValues = this.values as RdfTermValue[];
+        let widgetValues = this.values as RdfTermValue["value"][];
 
         if(this.isBlockingObjectProp()) {
             let singleTriple: Triple = SparqlFactory.buildTriple(
                 factory.variable(this.startClassVal.variable),
                 factory.namedNode(this.propertyVal.type),
-                this.#rdfTermToSparqlQuery(widgetValues[0].value.rdfTerm)
+                this.#rdfTermToSparqlQuery(widgetValues[0].rdfTerm)
             );
         
             let ptrn: BgpPattern = {
@@ -170,7 +170,7 @@ export class RdfTermValueBuilder extends BaseValueBuilder implements ValueBuilde
         } else {
             let vals = widgetValues.map((v) => {
                 let vl: ValuePatternRow = {};
-                vl["?"+this.endClassVal.variable] = this.#rdfTermToSparqlQuery(v.value.rdfTerm);
+                vl["?"+this.endClassVal.variable] = this.#rdfTermToSparqlQuery(v.rdfTerm);
                 return vl;
             });
             let valuePattern: ValuesPattern = {
@@ -235,7 +235,7 @@ export class RdfTermValueBuilder extends BaseValueBuilder implements ValueBuilde
 export class BooleanValueBuilder extends BaseValueBuilder implements ValueBuilderIfc {
 
     build(): Pattern[] {
-        let widgetValues = this.values as BooleanWidgetValue[];
+        let widgetValues = this.values as BooleanWidgetValue["value"][];
 
         // if we are blocking the object prop, we create it directly here with the value as the object
         if(this.isBlockingObjectProp()) {
@@ -246,7 +246,7 @@ export class BooleanValueBuilder extends BaseValueBuilder implements ValueBuilde
                     subject: factory.variable(this.startClassVal.variable),
                     predicate: factory.namedNode(this.propertyVal.type),
                     object: factory.literal(
-                        widgetValues[0].value.boolean.toString(),
+                        widgetValues[0].boolean.toString(),
                         factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
                     ),
                 },
@@ -255,10 +255,10 @@ export class BooleanValueBuilder extends BaseValueBuilder implements ValueBuilde
             return [ptrn];
         } else {
             // otherwise the object prop is created and we create a VALUES clause with the actual boolean
-            let vals = (this.values as BooleanWidgetValue[]).map((v) => {
+            let vals = (this.values as BooleanWidgetValue["value"][]).map((v) => {
                 let vl: ValuePatternRow = {};
                 vl["?"+this.endClassVal.variable] = factory.literal(
-                    widgetValues[0].value.boolean.toString(),
+                    widgetValues[0].boolean.toString(),
                     factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
                 );
                 return vl;
@@ -291,16 +291,16 @@ export class NumberValueBuilder extends BaseValueBuilder implements ValueBuilder
 
     build(): Pattern[] {
         
-        let widgetValues = this.values as NumberWidgetValue[];
+        let widgetValues = this.values as NumberWidgetValue["value"][];
         
         return [
             SparqlFactory.buildFilterRangeDateOrNumber(
-              (widgetValues[0].value.min != undefined)?factory.literal(
-                widgetValues[0].value.min.toString(),
+              (widgetValues[0].min != undefined)?factory.literal(
+                widgetValues[0].min.toString(),
                 factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
               ):null,
-              (widgetValues[0].value.max != undefined)?factory.literal(
-                widgetValues[0].value.max.toString(),
+              (widgetValues[0].max != undefined)?factory.literal(
+                widgetValues[0].max.toString(),
                 factory.namedNode("http://www.w3.org/2001/XMLSchema#decimal")
               ):null,
               factory.variable(this.endClassVal.variable)
@@ -322,14 +322,14 @@ export class SearchRegexValueBuilder extends BaseValueBuilder implements ValueBu
     build(): Pattern[] {
  
         let widgetType = this.specProvider.getProperty(this.propertyVal.type).getPropertyType(this.endClassVal.type)
-        let widgetValues = this.values as SearchRegexWidgetValue[];
+        let widgetValues = this.values as SearchRegexWidgetValue["value"][];
 
         switch(widgetType) {
             case Config.STRING_EQUALS_PROPERTY: {
               // builds a FILTER(lcase(...) = lcase(...))
               return [SparqlFactory.buildFilterStringEquals(
                 factory.literal(
-                  `${widgetValues[0].value.regex}`
+                  `${widgetValues[0].regex}`
                 ),
                 factory.variable(this.endClassVal.variable)
               )];
@@ -338,7 +338,7 @@ export class SearchRegexValueBuilder extends BaseValueBuilder implements ValueBu
               // builds a FILTER(regex(...,...,"i"))
               return [SparqlFactory.buildFilterRegex(
                 factory.literal(
-                  `${widgetValues[0].value.regex}`
+                  `${widgetValues[0].regex}`
                 ),
                 factory.variable(this.endClassVal.variable)
               )];
@@ -354,7 +354,7 @@ export class SearchRegexValueBuilder extends BaseValueBuilder implements ValueBu
                       "http://www.ontotext.com/connectors/lucene#query"
                     ),
                     object: factory.literal(
-                      `text:${widgetValues[0].value.regex}`
+                      `text:${widgetValues[0].regex}`
                     ),
                   },
                   {
@@ -369,7 +369,7 @@ export class SearchRegexValueBuilder extends BaseValueBuilder implements ValueBu
               return [ptrn];
             }
             case Config.VIRTUOSO_SEARCH_PROPERTY: {
-              let bif_query = widgetValues[0].value.label
+              let bif_query = widgetValues[0].label
                 .replace(/[\"']/g, " ")
                 .split(" ")
                 .map((e) => `'${e}'`)
@@ -402,7 +402,7 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
 
     build(): Pattern[] {
         
-        let widgetValues = this.values as DateTimePickerValue[];
+        let widgetValues = this.values as DateTimePickerValue["value"][];
         
         let beginDateProp = this.specProvider.getProperty(this.propertyVal.type).getBeginDateProperty();
         let endDateProp = this.specProvider.getProperty(this.propertyVal.type).getEndDateProperty();
@@ -412,12 +412,12 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
     
           return [
             buildDateRangeOrExactDatePattern(
-              widgetValues[0].value.start?factory.literal(
-                this.#formatSparqlDate(widgetValues[0].value.start),
+              widgetValues[0].start?factory.literal(
+                this.#formatSparqlDate(widgetValues[0].start),
                 factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
               ):null,
-              widgetValues[0].value.stop?factory.literal(
-                this.#formatSparqlDate(widgetValues[0].value.stop),
+              widgetValues[0].stop?factory.literal(
+                this.#formatSparqlDate(widgetValues[0].stop),
                 factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
               ):null,
               factory.variable(this.startClassVal.variable),
@@ -430,12 +430,12 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
         } else {
           return [
             SparqlFactory.buildFilterRangeDateOrNumber(
-              widgetValues[0].value.start?factory.literal(
-                this.#formatSparqlDate(widgetValues[0].value.start),
+              widgetValues[0].start?factory.literal(
+                this.#formatSparqlDate(widgetValues[0].start),
                 factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
               ):null,
-              widgetValues[0].value.stop?factory.literal(
-                this.#formatSparqlDate(widgetValues[0].value.stop),
+              widgetValues[0].stop?factory.literal(
+                this.#formatSparqlDate(widgetValues[0].stop),
                 factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
               ):null,
               factory.variable(this.endClassVal.variable)
@@ -505,7 +505,7 @@ export class MapValueBuilder extends BaseValueBuilder implements ValueBuilderIfc
 
     // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
     build(): Pattern[] {
-        let widgetValues = this.values as MapValue[];
+        let widgetValues = this.values as MapValue["value"][];
 
         // the property between the subject and its position expressed as wkt value, e.g. http://www.w3.org/2003/01/geo/wgs84_pos#geometry
 
@@ -516,7 +516,7 @@ export class MapValueBuilder extends BaseValueBuilder implements ValueBuilderIfc
                 function: GEOFUNCTIONS.WITHIN,
                 args: [
                 factory.variable(this.endClassVal.variable),
-                this.#buildPolygon(widgetValues[0].value.coordinates[0])
+                this.#buildPolygon(widgetValues[0].coordinates[0])
                 ],
             },
         };

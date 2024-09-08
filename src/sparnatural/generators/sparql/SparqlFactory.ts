@@ -1,6 +1,6 @@
 import { BgpPattern, BindPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableExpression, VariableTerm, Wildcard } from "sparqljs";
 import { Literal, Variable } from "@rdfjs/types";
-import {  Parser as SparqlParser } from "sparqljs";
+import { Parser as SparqlParser } from "sparqljs";
 import { DataFactory } from 'rdf-data-factory';
 
 const factory = new DataFactory();
@@ -8,6 +8,12 @@ const factory = new DataFactory();
 export default class SparqlFactory {
   static sparqlParser =  new SparqlParser({ pathOnly: true } as any);
 
+  /**
+   * @param aggregation The aggregation function to apply
+   * @param aggregatedVar The original variable being aggregated
+   * @param asVar The final variable holding the result of the aggregation function
+   * @returns An aggregation expression, always using a DISTINCT
+   */
   static buildAggregateFunctionExpression(
     aggregation:string,
     aggregatedVar:Variable,
@@ -129,6 +135,12 @@ export default class SparqlFactory {
     };
   }
 
+  /**
+   * @param firstVariable First variable in the COALESCE
+   * @param secondvariable Second variable in the COALESCE
+   * @param finalVariable Finale variable of the BIND clause
+   * @returns BIND(COALESCE(?var1, ?var2) AS ?finalVar)
+   */
   static buildBindCoalescePattern(firstVariable:Variable, secondvariable:Variable, finalVariable:Variable): BindPattern {				
     return {
         type: "bind",
@@ -266,7 +278,7 @@ export default class SparqlFactory {
   static buildPropertyPathTriple(
     subject: IriTerm | BlankTerm | VariableTerm | QuadTerm,
     predicate: IriTerm | PropertyPath,
-    object: Term
+    object: Term 
   ):Triple {
     return {
       subject: subject,

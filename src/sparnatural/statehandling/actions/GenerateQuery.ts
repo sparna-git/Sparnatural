@@ -8,7 +8,7 @@ import {
 } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 import { ISparJson } from "../../generators/json/ISparJson";
-import JsonSparqlGenerator from "../../generators/sparql/fromjson/JsonSparqlGenerator";
+import JsonSparqlTranslator from "../../generators/sparql/fromjson/JsonSparqlTranslator";
 
 
 export class QueryGenerator {
@@ -67,7 +67,7 @@ export class QueryGenerator {
       var queryString = generator.stringify(selectQuery);
       
 
-      var sparqlFromJsonGenerator = new JsonSparqlGenerator(
+      var sparqlFromJsonGenerator = new JsonSparqlTranslator(
         this.actionStore.specProvider,
         settings.sparqlPrefixes,
         getSettings().limit

@@ -58,7 +58,7 @@ export default class WhereBuilder{
                 this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.isVarSelected(),
-                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent.getWidgetValues()
+                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent.getWidgetValues().map(v=>v.value)
             );
         }
     }
@@ -133,6 +133,7 @@ export default class WhereBuilder{
         )
         endClsBuilder.build()
         this.#endClassPtrn = endClsBuilder.getPattern()
+        console.dir(this.#endClassPtrn)
         if(endClsBuilder.getDefaultVar()) {
             this.#defaultVars.push(endClsBuilder.getDefaultVar())
         }

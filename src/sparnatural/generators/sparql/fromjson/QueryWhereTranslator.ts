@@ -1,24 +1,15 @@
 import { DataFactory } from 'rdf-data-factory';
 import { Pattern, Variable } from "sparqljs";
-import { OptionTypes } from "../../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
-import GroupWrapper from "../../../components/builder-section/groupwrapper/GroupWrapper";
-import { AbstractWidget } from "../../../components/widgets/AbstractWidget";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
-import ClassBuilder from "../ClassBuilder";
-import IntersectionBuilder from "../IntersectionBuilder";
-import SparqlFactory from "../SparqlFactory";
-import ValueBuilderIfc, { ValueBuilderFactory } from '../ValueBuilder';
 import { ISparJson } from '../../json/ISparJson';
-import BranchBuilder from './BranchBuilder';
+import BranchTranslator from './BranchTranslator';
 
 const factory = new DataFactory();
 
-export default class WhereBuilderFromJson{
+export default class QueryWhereTranslator{
     // variables set in construtor
     #jsonQuery:ISparJson
     #specProvider: ISparnaturalSpecification
-    
-    #valueBuilder:ValueBuilderIfc;
     
     // patterns built in the build process
     #resultPtrns: Pattern[] = []    
@@ -36,8 +27,16 @@ export default class WhereBuilderFromJson{
     }
 
     build() {        
-        this.#jsonQuery.branches.forEach(b => {
-            let branchBuilder = new BranchBuilder(b, this.#specProvider);
+        this.#jsonQuery.branches.forEach((branch, index) => {
+            let branchBuilder = new BranchTranslator(
+                branch,
+                this.#jsonQuery,
+                this.#specProvider,
+                // indicates if it is the very first
+                (index == 0),
+                // they are never inside optional or not exist at the first level
+                false
+            );
             branchBuilder.build();
             this.#resultPtrns.push(...branchBuilder.getResultPtrns());
         })
