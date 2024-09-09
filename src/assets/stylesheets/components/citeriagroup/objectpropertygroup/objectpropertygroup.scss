@@ -1,7 +1,7 @@
 @use "../../../base";
 
 .ObjectPropertyGroup {
-    margin-right: -15px;
+    /*margin-right: -15px;*/
     padding-left: 10px;
     .nice-select{
         padding-left:1em;
@@ -9,7 +9,7 @@
     .current {
         font-style: italic;
     }
-    .temporary-label {
+    .currentWrapper span.current.temporary-label {
         line-height: base.$height-components-under - 2;
         font-size: 14px;
         height: 42px;
@@ -17,5 +17,6 @@
         padding-right: 25px;
         display: inline-block;
         color: var(--default-text-color);
+        background-color: #fff;
     }
 }

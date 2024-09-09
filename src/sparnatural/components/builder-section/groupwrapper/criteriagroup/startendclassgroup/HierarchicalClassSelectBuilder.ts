@@ -27,6 +27,11 @@ export interface DagWidgetDefaultValue {
   value: string,
   path: string,
 }
+export interface DagWidgetValue {
+  value: string,
+  path: string,
+  icon: string,
+}
 export interface BreadCrumData {
   parentsLabels: Array<string>,
   returnPath: string,
@@ -51,10 +56,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
     htmlBreadCrumPathParents: JQuery<HTMLElement>; 
     htmlBreadCrumParentLabel: JQuery<HTMLElement>; 
     htmlSelectUiUxLists: JQuery<HTMLElement>; 
-    htmlInputValueClass: JQuery<HTMLElement>; 
-    htmlInputValuePath: JQuery<HTMLElement>; 
-    htmlInputValueIcon: JQuery<HTMLElement>; 
-    htmlCurentValue: JQuery<HTMLElement>; 
+    //htmlCurentValue: JQuery<HTMLElement>; 
     breadcrumItems: Array<string> = [];
     hierarchyData: Array<JsonDagRow> = [];
     value: string;
@@ -62,6 +64,11 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
     defaultValue: DagWidgetDefaultValue = {
       value: '',
       path: ''
+    };
+    widgetValue: DagWidgetValue = {
+      value: '',
+      path: '',
+      icon: ''
     };
     constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification, hierarchyData: Array<JsonDagRow>, defaultValue: DagWidgetDefaultValue) {
       super("HierarchicalClassSelectBuilder", ParentComponent, null);
@@ -117,7 +124,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
     }
 
     getInput() {
-      return this.htmlInputValueClass ;
+      return this.html ;
     }
 
     downAncestorInBreadcrumPath(newAcestorLabel:any) {
@@ -199,18 +206,16 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       }, 500);
     }
 
-    setCurrentContent() {
-      let entity_path = this.htmlInputValuePath.val() as string;
-      let entity_id = this.htmlInputValueClass.val() as string;
-      let entity_icon = this.htmlInputValueIcon.val() as string;
+    /*setCurrentContent() {
+      let entity = this.specProvider.getEntity(this.widgetValue.value) ;
+      let entity_icon = entity.getIcon() ;
       let icon = `` ;
       if (entity_icon != '') {
         icon = `<span><i class="fa ${entity_icon} fa-fw"></i></span>` ;
       }
-      let entity = this.specProvider.getEntity(entity_id) ;
       this.htmlCurentValue.html(`${icon} ${entity.getLabel()} `) ;
       this.htmlCurentValue[0].classList.add('selected') ;
-    }
+    }*/
 
     initSelectUiUxListsHeight() {
       let listToDisplay = this.htmlSelectUiUx[0].querySelector('ul[parent].active-pane') ;
@@ -301,10 +306,19 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
             let class_path = (e.target as any).closest('li').getAttribute('data-parent') ;
             let class_icon = (e.target as any).closest('li').getAttribute('data-icon') ;
 
-            this.htmlInputValueIcon.val(class_icon) ;
-            this.htmlInputValuePath.val(class_path) ;
-            this.htmlInputValueClass.val(class_id).trigger("change");
-            this.setCurrentContent() ;
+            this.widgetValue = {
+              value: class_id,
+              path: class_path,
+              icon: class_icon,
+            };
+      
+            this.html[0].dispatchEvent(
+              new CustomEvent("widgetItemSelected", {
+                bubbles: true,
+                detail: this.widgetValue,
+              })
+            );
+            //this.setCurrentContent() ;
 
           }
         );
@@ -413,10 +427,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.htmlSelectUiUx = $(`<div class="htmlSelectUiUx"></div>`) ;
       this.htmlSelectUiUxLists = $(`<div class="htmlSelectUiUxLists root-display"></div>`) ;
       this.htmlSelectUiUxBreadCrum = $(`<div class="htmlSelectUiUxBreadCrum"></div>`) ;
-      this.htmlInputValueClass = $(`<input type="hidden" name="value-class" value="">`) ;
-      this.htmlInputValuePath = $(`<input type="hidden" name="value-path" value="">`) ;
-      this.htmlInputValueIcon = $(`<input type="hidden" name="value-icon" value="">`) ;
-      this.htmlCurentValue = $('<span class="current">Chercher des ressources</span>') ;
+      //this.htmlCurentValue = $('<span class="current">Chercher des ressources</span>') ;
       let initBreadcrumData: BreadCrumData = {
         parentsLabels: ['Tout'],
         returnPath: '',
@@ -429,31 +440,29 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.buildClassSelectList(this.hierarchyData, 'root active-pane', '', initBreadcrumData) ;
 
       this.html = $('<div></div>');
-      let currentWrapper = $('<div class="currentWrapper"></div>') ;
-      currentWrapper.append(this.htmlCurentValue) ;
-      this.htmlSelectUiUx.append(currentWrapper) ;
+      //let currentWrapper = $('<div class="currentWrapper"></div>') ;
+      //currentWrapper.append(this.htmlCurentValue) ;
+      //this.htmlSelectUiUx.append(currentWrapper) ;
 
       this.htmlSelectUiUx.append(this.htmlSelectUiUxLists) ;
-      this.htmlSelectUiUx.append(this.htmlInputValueClass) ;
-      this.htmlSelectUiUx.append(this.htmlInputValuePath) ;
-      this.htmlSelectUiUx.append(this.htmlInputValueIcon) ;
       this.html.append(this.htmlSelectUiUx) ;
       this.initClassSelector() ;
-      
-      this.displayClassSelector() ;
 
-      this.htmlInputValueClass.on("change", () => {
-        let selectedValue: any = this.htmlInputValueClass.val();
-        this.value = selectedValue ;
-        this.valuePath = this.htmlInputValuePath.val() as string;
-        this.html[0].dispatchEvent(
-          new CustomEvent("change", {
-            bubbles: true,
-            detail: {value: this.value, valuePath: this.valuePath},
-          })
-        );
-        this.hideClassSelector() ;
-      });
+      this.displayClassSelector() ;
+      
+      this.html[0].addEventListener(
+        "widgetItemSelected",
+        (e: CustomEvent) => {
+          this.html[0].dispatchEvent(
+            new CustomEvent("change", {
+              bubbles: true,
+              detail: e.detail,
+            })
+          );
+          this.hideClassSelector() ;
+
+        }
+      );
 
       return this.html.children();
     }

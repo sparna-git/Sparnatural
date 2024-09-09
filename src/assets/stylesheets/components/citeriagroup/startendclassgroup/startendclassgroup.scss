@@ -67,6 +67,12 @@
             font-style: italic;
         }
     }
+    span.current {
+        width: 232px;
+        &.selected {
+            width: auto;
+        }
+    }
 }
 
 

@@ -36,12 +36,16 @@ class ClassTypeId extends HTMLComponent {
   UnselectButton: UnselectBtn;
   selectViewVariableBtn: SelectViewVariableBtn;
   specProvider: ISparnaturalSpecification;
+  htmlCurentValue: JQuery<HTMLElement>; 
+  temporaryLabel: string;
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISparnaturalSpecification,
+    temporaryLabel: string,
     startClassVal?: any
   ) {
     super("ClassTypeId", ParentComponent, null);
+    this.temporaryLabel = temporaryLabel;
     //this.selectBuilder = new HierarchicalClassSelectBuilder(this, specProvider);
     this.selectBuilder = new ClassSelectBuilder(this, specProvider);
     this.startClassVal = startClassVal;
@@ -55,11 +59,18 @@ class ClassTypeId extends HTMLComponent {
       this.#onchangeViewVariable
     );
     super.render();
+
+
     // no back arrow on start class
     if (!isStartClassGroup(this.ParentComponent)) {
       this.backArrow.render();
     }
 
+    this.htmlCurentValue = $(`<span class="current">${this.temporaryLabel}</span>`) ;
+    let currentWrapper = $('<div class="currentWrapper"></div>') ;
+    currentWrapper.append(this.htmlCurentValue) ;
+    this.html.append(currentWrapper);
+    
     if (isStartClassGroup(this.ParentComponent)) {
       if(!this.startClassVal?.type) {
         // If this Component is a child of the StartClassGroup component in the first row with no value selected
@@ -78,8 +89,8 @@ class ClassTypeId extends HTMLComponent {
     this.html.append(this.widgetHtml);
     // convert to niceSelect: https://jqueryniceselect.hernansartorio.com/
     // needs to happen after html.append(). it uses rendered stuff on page to create a new select... should move away from that
-    this.oldWidget = this.selectBuilder.selectBuilder.getInput();
-    this.selectBuilder.selectBuilder.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
+    this.oldWidget = this.selectBuilder.selectWidget.getInput();
+    this.selectBuilder.selectWidget.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
     //this.widgetHtml = this.widgetHtml.niceSelect();
     // nice-select is not a proper select tag and that's why can't listen for change events... move away from nice-select!
     this.#addOnChangeListener(this.oldWidget);
@@ -91,7 +102,7 @@ class ClassTypeId extends HTMLComponent {
   }
 
   submitSelected() {
-    this.selectBuilder.selectBuilder.submitSelectedValue() ;
+    this.selectBuilder.selectWidget.submitSelectedValue() ;
   }
 
   // is called by EndClassGroup
@@ -103,11 +114,38 @@ class ClassTypeId extends HTMLComponent {
     };
     this.UnselectButton = new UnselectBtn(this, removeEndClassEvent).render();
   }
+  
+  setCurrentContent(id:string) {
+    let entity = this.specProvider.getEntity(id) ;
+    let entity_icon = entity.getIcon() ;
+    let icon = `` ;
+    if (entity_icon != undefined ) {
+      icon = `<span><i class="fa ${entity_icon} fa-fw"></i></span>` ;
+    }
+    this.htmlCurentValue.html(`${icon} ${entity.getLabel()} `) ;
+    this.htmlCurentValue[0].classList.add('selected') ;
+  }
 
   // when a value gets selected from the dropdown menu (niceselect), then change is called
   #addOnChangeListener(selectWidget: JQuery<HTMLElement>) {
-    selectWidget.on("change", () => {
-      let selectedValue = this.selectBuilder.selectBuilder.getInput().val();
+    selectWidget[0].addEventListener(
+      "change",
+      (e: CustomEvent) => {
+        let selectedValue = e.detail.value ;
+        console.log(e.detail) ;
+        this.setCurrentContent(selectedValue) ;
+        //disable further choice on nice-select
+        this.widgetHtml[0].classList.add("disabled");
+        this.widgetHtml[0].classList.remove("open");
+        this.html[0].dispatchEvent(
+          new CustomEvent("classTypeValueSelected", {
+            bubbles: true,
+            detail: selectedValue,
+          })
+        );
+      });
+    /*selectWidget.on("change", (e) => {
+      let selectedValue = e.detail.value ;
       //disable further choice on nice-select
       this.widgetHtml[0].classList.add("disabled");
       this.widgetHtml[0].classList.remove("open");
@@ -117,7 +155,7 @@ class ClassTypeId extends HTMLComponent {
           detail: selectedValue,
         })
       );
-    });
+    });*/
   }
 
   #onchangeViewVariable = (selected: boolean) => {
@@ -178,7 +216,7 @@ export default ClassTypeId;
  **/
 class ClassSelectBuilder extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
-  selectBuilder: HierarchicalClassSelectBuilder;
+  selectWidget: HierarchicalClassSelectBuilder;
   constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     super("ClassTypeId", ParentComponent, null);
     this.specProvider = specProvider;
@@ -286,8 +324,8 @@ class ClassSelectBuilder extends HTMLComponent {
 
   initDagWidget(items:DagIfc<ISpecificationEntity>, default_value: DagWidgetDefaultValue) {
     let jsonDag = this.convertToJsonDag(items.roots) ;
-    this.selectBuilder = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, default_value );
-    return this.selectBuilder.buildClassSelectFromJson() ; ;
+    this.selectWidget = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, default_value );
+    return this.selectWidget.buildClassSelectFromJson() ; ;
   }
 
   /*buildClassSelectFromItems(items:DagIfc<ISpecificationEntity>, default_value: string) {

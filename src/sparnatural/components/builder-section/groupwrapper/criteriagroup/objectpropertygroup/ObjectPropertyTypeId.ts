@@ -23,6 +23,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   );
   specProvider: ISparnaturalSpecification;
   selectBuilder: PropertySelectBuilder;
+  htmlCurentValue: JQuery<HTMLElement>; 
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISparnaturalSpecification,
@@ -42,18 +43,25 @@ class ObjectPropertyTypeId extends HTMLComponent {
 		created by PropertySelectBuilder
 	*/
   render() {
-    super.render();
+    super.render(); 
+
+      this.htmlCurentValue = $('<span class="current temporary-label"></span>') ;
+      let currentWrapper = $('<div class="currentWrapper"></div>') ;
+      currentWrapper.append(this.htmlCurentValue) ;
+      this.html.append(currentWrapper);
     // if there is an Object selected
     if (this.endClassVal) {
       this.#removeTempLbl();
       // set the correct objectProperty matching to Start and End value
+
+     
       
       this.widgetHtml = this.#getObjectProperty();
       
       this.html.append(this.widgetHtml);
-      this.oldWidget = this.selectBuilder.selectBuilder.getInput();
+      this.oldWidget = this.selectBuilder.selectWidget.getInput();
       
-    this.selectBuilder.selectBuilder.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
+    this.selectBuilder.selectWidget.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
 
       //this.html.append(this.oldWidget);
       this.#addOnChangeListener(this.oldWidget);
@@ -67,17 +75,20 @@ class ObjectPropertyTypeId extends HTMLComponent {
 
       // If juste 1 option selectable
       if (this.selectBuilder.selectableItems.length == 1) {
-        this.selectBuilder.selectBuilder.defaultValue.value = this.selectBuilder.selectableItems[0] ;
+        this.selectBuilder.selectWidget.defaultValue.value = this.selectBuilder.selectableItems[0] ;
         this.submitSelected();
       }
 
     } else {
       // there hasn't been an Object in Endclassgroup chosen. render a temporary label
-      this.widgetHtml = $(
+      this.htmlCurentValue[0].innerHTML = this.temporaryLabel
+      this.htmlCurentValue[0].classList.add('temporary-label')
+
+      /*this.widgetHtml = $(
         '<span class="current temporary-label">' +
           this.temporaryLabel +
           "</span>"
-      );
+      );*/
     }
     this.html.append(this.widgetHtml);
     this.arrow.render();
@@ -86,29 +97,49 @@ class ObjectPropertyTypeId extends HTMLComponent {
 
   
   submitSelected() {
-    this.selectBuilder.selectBuilder.submitSelectedValue() ;
+    this.selectBuilder.selectWidget.submitSelectedValue() ;
+  }
+
+  
+  setCurrentContent(id:string) {
+    this.#removeTempLbl() ;
+    let entity = this.specProvider.getProperty(id) ;
+    let entity_icon = entity.getIcon() ;
+    let icon = `` ;
+    if (entity_icon != undefined ) {
+      icon = `<span><i class="fa ${entity_icon} fa-fw"></i></span>` ;
+    }
+    this.htmlCurentValue.html(`${icon} ${entity.getLabel()} `) ;
+    this.htmlCurentValue[0].classList.add('selected') ;
   }
 
   // when a value gets selected from the dropdown menu (niceselect), then change is called
   #addOnChangeListener(selectWidget: JQuery<HTMLElement>) {
-    selectWidget.on("change", () => {
-      let selectedValue = this.selectBuilder.selectBuilder.getInput().val();
-      //disable further choice
-      this.widgetHtml.addClass("disabled");
-      this.widgetHtml.removeClass("open");
-      this.html[0].dispatchEvent(
-        new CustomEvent("onObjectPropertyTypeIdSelected", {
-          bubbles: true,
-          detail: selectedValue,
-        })
-      );
-    });
+
+    selectWidget[0].addEventListener(
+      "change",
+      (e: CustomEvent) => {
+        let selectedValue = e.detail.value ;
+        console.log(e.detail) ; 
+        this.setCurrentContent(selectedValue) ;
+        //disable further choice on nice-select
+        this.widgetHtml[0].classList.add("disabled");
+        this.widgetHtml[0].classList.remove("open");
+        this.html[0].dispatchEvent(
+          new CustomEvent("onObjectPropertyTypeIdSelected", {
+            bubbles: true,
+            detail: selectedValue,
+          })
+        );
+      });
   }
 
   // removes the temporary label e.g 'relatedTo'
   #removeTempLbl() {
-    $(this.html).find(".temporary-label").remove();
+    //$(this.html).find(".temporary-label").remove();
+    this.htmlCurentValue[0].classList.remove('temporary-label') ;
   }
+  
 
   // sets the ObjectProperty according to the Subject and Object e.g Country isCountryOf Musuem
   #getObjectProperty() {
@@ -136,7 +167,7 @@ export default ObjectPropertyTypeId;
 class PropertySelectBuilder extends HTMLComponent {
   selectableItems: Array<string>;
   specProvider: ISparnaturalSpecification;
-  selectBuilder: HierarchicalClassSelectBuilder;
+  selectWidget: HierarchicalClassSelectBuilder;
   constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     
     super("ObjectPropertyTypeId", ParentComponent, null);
@@ -195,8 +226,8 @@ class PropertySelectBuilder extends HTMLComponent {
 
   initDagWidget(items:DagIfc<ISpecificationProperty>, default_value: DagWidgetDefaultValue) {
     let jsonDag = this.convertToJsonDag(items.roots) ;
-    this.selectBuilder = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, default_value );
-    return this.selectBuilder.buildClassSelectFromJson() ; ;
+    this.selectWidget = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, default_value );
+    return this.selectWidget.buildClassSelectFromJson() ; ;
   }
 
   buildPropertySelect(
