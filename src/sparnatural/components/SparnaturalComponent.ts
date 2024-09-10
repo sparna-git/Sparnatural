@@ -15,7 +15,7 @@ class SparnaturalComponent extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
   actionStore: ActionStore;
   BgWrapper: BgWrapper;
-  SubmitSection: SubmitSection;
+  submitSection: SubmitSection;
   variableSection: VariableSection;
   catalog:Catalog;
   // filter that is applied to optional/not exists green arrows, based on its ID
@@ -38,7 +38,7 @@ class SparnaturalComponent extends HTMLComponent {
       this.BgWrapper = new BgWrapper(this, this.specProvider).render();
       // display the submit button only if a callback was provided
       if(getSettings().submitButton) {
-        this.SubmitSection = new SubmitSection(this).render();
+        this.submitSection = new SubmitSection(this).render();
       }
       this.variableSection = new VariableSection(
         this,
@@ -87,12 +87,12 @@ class SparnaturalComponent extends HTMLComponent {
 
   // method is exposed from the HTMLElement
   enablePlayBtn = () =>{
-    this.SubmitSection.playBtn.removeLoading();
+    this.submitSection.playBtn.removeLoading();
   }
   
   // method is exposed from the HTMLElement
   disablePlayBtn = () => {
-    this.SubmitSection.playBtn.disable();
+    this.submitSection.playBtn.disable();
   }
 
   setQuiet(quiet:boolean) {

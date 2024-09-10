@@ -261,57 +261,60 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
 
     static readShClassAndShNodeOn(n3store:RdfStore, theUriOrBlankNode:Term):string[] {         
-      var classes: string[] = [];
-
-      // read the sh:class
-      const shclassQuads = n3store.getQuads(
-        theUriOrBlankNode,
-        SH.CLASS,
-        null,
-        null
-      );
-
-      // then for each of them, find all NodeShapes targeting this class
-      shclassQuads.forEach((quad:Quad) => {
-          n3store.getQuads(
-              null,
-              SH.TARGET_CLASS,
-              quad.object,
-              null
-          ).forEach((q:Quad) => {
-              classes.push(q.subject.value);
-          });
-
-          // also look for nodeshapes that have directly this URI and that are themselves classes
-          // and nodeshapes
-          n3store.getQuads(
-              quad.object,
-              RDF.TYPE,
-              RDFS.CLASS,
-              null
-          ).forEach((q:Quad) => {
-                n3store.getQuads(
-                  quad.object,
-                  RDF.TYPE,
-                  SH.NODE_SHAPE,
-                  null
-              ).forEach((q2:Quad) => {
-                classes.push(q2.subject.value);
-              });              
-          });
-      });
+      var ranges: string[] = [];
 
       // read the sh:node
       const shnodeQuads = n3store.getQuads(
+        theUriOrBlankNode,
+        SH.NODE,
+        null,
+        null
+      ).forEach((q:Quad) => {
+        ranges.push(q.object.value);
+      });  
+
+      // sh:node has precedence over sh:class : if sh:node is found, no need to look for sh:class
+      if(ranges.length == 0) {
+        // read the sh:class
+        const shclassQuads = n3store.getQuads(
           theUriOrBlankNode,
-          SH.NODE,
+          SH.CLASS,
           null,
           null
-      ).forEach((q:Quad) => {
-        classes.push(q.object.value);
-      });  
+        );
+
+        // then for each of them, find all NodeShapes targeting this class
+        shclassQuads.forEach((quad:Quad) => {
+            n3store.getQuads(
+                null,
+                SH.TARGET_CLASS,
+                quad.object,
+                null
+            ).forEach((q:Quad) => {
+                ranges.push(q.subject.value);
+            });
+
+            // also look for nodeshapes that have directly this URI and that are themselves classes
+            // and nodeshapes
+            n3store.getQuads(
+                quad.object,
+                RDF.TYPE,
+                RDFS.CLASS,
+                null
+            ).forEach((q:Quad) => {
+                  n3store.getQuads(
+                    quad.object,
+                    RDF.TYPE,
+                    SH.NODE_SHAPE,
+                    null
+                ).forEach((q2:Quad) => {
+                  ranges.push(q2.subject.value);
+                });              
+            });
+        });
+      }
       
-      return classes;
+      return ranges;
     }
 
     getDatasource() {
