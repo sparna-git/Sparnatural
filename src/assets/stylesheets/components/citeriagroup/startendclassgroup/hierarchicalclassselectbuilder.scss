@@ -21,10 +21,21 @@
     border-left: 3px solid #fff;
 }
 
+.ObjectPropertyTypeId {
+    .htmlSelectUiUx {
+        left: 15px;
+    }
+}
+.EndClassGroup {
+    .htmlSelectUiUx {
+        left: 28px;
+    }
+}
+
 .htmlSelectUiUx {
     position: absolute;
     top: 0;
-    left: 0;
+    left: 13px;
     display: block;
     white-space: nowrap;
     background-color: #fff;
