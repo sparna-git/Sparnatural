@@ -246,12 +246,13 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     }
 
     /**
-     * @returns true if this shape has a target, either a targetClass or sh:target
+     * @returns true if this shape has a target, either a targetClass or sh:target, or is itself a Class
      */
     hasTypeCriteria(): boolean {
         var hasTargetClass = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null);
         var hasTarget = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null);
-        return (hasTargetClass || hasTarget);
+        var isItselfClass = this.graph.hasTriple(factory.namedNode(this.uri), RDF.TYPE, RDFS.CLASS);
+        return (hasTargetClass || hasTarget || isItselfClass);
     }
 
     /**
