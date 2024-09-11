@@ -154,7 +154,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.htmlBreadCrumPathParents.append(NewAncestor) ;
       setTimeout(function() {
         NewAncestor[0].classList.toggle('appened');
-      }, 1);
+      }, 10);
       
     }
     
