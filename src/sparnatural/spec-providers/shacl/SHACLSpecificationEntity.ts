@@ -114,11 +114,29 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
      */
     getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
         // 1. get list of properties
-        let entities:ISpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as ISpecificationProperty[];
+        let properties:ISpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as ISpecificationProperty[];
+
+        // retrive the potential parents
+        while(!properties.every(property => {
+            return property.getParents().every(parent => {
+                return (properties.find(anotherProperty => anotherProperty.getId() === parent) != undefined);
+            });      
+        })) {
+            let parentsToAdd:ISpecificationProperty[] = [];
+            properties.forEach(property => {
+                property.getParents().forEach(parent => {
+                    if(!properties.find(anotherProperty => anotherProperty.getId() === parent)) {
+                        parentsToAdd.push(this.provider.getProperty(parent) as ISpecificationProperty);
+                    }
+                })
+            });
+            parentsToAdd.forEach(p => properties.push(p));
+        }
 
         // 2. turn it into a flat tree
         let dag:Dag<ISpecificationProperty> = new Dag<ISpecificationProperty>();
-        dag.initFlatTreeFromFlatList(entities);
+        // dag.initFlatTreeFromFlatList(properties);
+        dag.initFromParentableAndIdAbleEntity(properties, []);
         return dag;
     }
     
@@ -212,20 +230,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             this.graph.readProperty(factory.namedNode(this.uri), SH.PROPERTY)
             .map(node => node.value);
                 
-        // add all properties from node shapes of superclasses
-        /*
-        let superClasses:Term[] = this.getSuperClasses();
-        superClasses.forEach(sc => {
-            let ns = this.provider.getNodeShapeTargetingClass(sc as Quad_Subject);
-            if(ns) {
-                let superClassEntity = new SHACLSpecificationEntity(ns.value,this.provider, this.store, this.lang);
-                propShapes.push(...superClassEntity.getProperties());
-            } else {
-                console.warn("Warning, cannot find a node shape targeting class "+sc.value);
-            }
-        });
-        */
-
+        // add all properties from parents (either through sh:node or sh:targetClass/rdfs:subClassOf/^sh:targetClass)
         let parents:string[] = this.getParents();
         parents.forEach(p => {
             let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);
