@@ -63,6 +63,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
     hierarchyData: Array<JsonDagRow> = [];
     value: string;
     valuePath: string;
+    hasIcon: boolean = false;
     defaultValue: DagWidgetDefaultValue = {
       value: '',
       path: ''
@@ -118,6 +119,18 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
         this.htmlSelectUiUxLists[0].classList.add('root-display') ;
       }
       this.upAncestorInParentLabel() ;
+    }
+    isFlatHierarchy():boolean {
+      let isFlat = true ;
+      this.hierarchyData.forEach(element => {
+        if (element.childs.length > 0) {
+          isFlat = false ;
+        }
+      }) ;
+      return isFlat
+    }
+    withIcons() {
+      return this.hasIcon ;
     }
 
     getParentLiToUl(el:any):any {
@@ -389,6 +402,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       if (element.icon != '') {
         icon = `<span><i class="fa ${element.icon} fa-fw"></i></span>` ;
         iconValue = `data-icon="${element.icon}"` ;
+        this.hasIcon = true;
       }
       let selected = this.defaultValue.value == element.id ? 'selected="selected"' : "";
       //Add tooltip content if description
@@ -451,7 +465,6 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       
       this.initBreadCrum() ;
       this.htmlSelectUiUxLists.append(this.htmlSelectUiUxBreadCrum) ;
-
       this.buildClassSelectList(this.hierarchyData, 'root active-pane', '', initBreadcrumData) ;
 
       this.html = $('<div></div>');
@@ -462,6 +475,16 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.htmlSelectUiUx.append(this.htmlSelectUiUxLists) ;
       this.html.append(this.htmlSelectUiUx) ;
       this.initClassSelector() ;
+
+      if (this.isFlatHierarchy()) {
+        this.htmlSelectUiUx[0].classList.add('isFlat') ;
+        this.ParentComponent.html[0].classList.add('selectorIsFlat') ;
+      }
+      if (this.hasIcon) {
+        this.htmlSelectUiUx[0].classList.add('hasIcon') ;
+        this.ParentComponent.html[0].classList.add('selectorHasIcon') ;
+      }
+
 
       this.displayClassSelector() ;
 

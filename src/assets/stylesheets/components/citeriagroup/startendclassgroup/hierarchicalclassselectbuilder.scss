@@ -88,6 +88,45 @@
         }
     }
 
+    &.isFlat { // -30px
+        .htmlSelectUiUxLists {
+            width: 315px;
+            ul {
+                width: 315px;
+            }
+        }
+    }
+    &:not(.hasIcon) { // -48px
+        .htmlSelectUiUxLists {
+            width: 297px;
+            ul {
+                width: 297px;
+                .label-icon {
+                    display: none;
+                }
+            }
+            .htmlSelectUiUxBreadCrum {
+                .htmlBreadCrumRight {
+                    width: 249px;
+                    .htmlBreadCrumPath .htmlBreadCrumPathParents .ancestor-item {
+                        max-width: 101px;
+                    }
+                    .htmlBreadCrumParentLabel>span {
+                        max-width: 233px;
+                    }
+                }
+            }
+        }
+    }
+    &.isFlat:not(.hasIcon) {// -48px -30px
+        .htmlSelectUiUxLists {
+            width: 267px;
+            ul {
+                width: 267px;
+            }
+        }
+    }
+
     .htmlSelectUiUxLists {
         display: none;
         overflow-x: hidden;

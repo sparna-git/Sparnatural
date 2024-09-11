@@ -121,13 +121,29 @@
 			}
 		}
     }
-	.focus {
+	
+    .focus {
 		.currentWrapper {
 			span.current {
 				min-width: 345px;
 			}
 		}
-	}
+        &.selectorIsFlat { // -30px
+            .currentWrapper span.current {
+                min-width: 315px;
+            }
+        }
+        &:not(.selectorHasIcon) { // -48px
+            .currentWrapper span.current {
+                min-width: 297px;
+            }
+        }
+        &.selectorIsFlat:not(.selectorHasIcon) {// -48px -30px
+            .currentWrapper span.current {
+                min-width: 267px;
+            }
+        }
+    }
     .VariableSelected .currentWrapper {
         color: var(--default-text-color);
         border-color: rgba(0, 0, 0, 0);
