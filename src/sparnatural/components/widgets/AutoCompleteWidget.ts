@@ -112,18 +112,29 @@ export class AutoCompleteWidget extends AbstractWidget {
     });
 
     // add the behavior on the input HTML element to fetch the autocompletion value
+    var autocompleteTimer = 0;
     queryInput.addEventListener("input", (event:Event) => {
       const phrase = (event.target as HTMLInputElement)?.value;
       // Process inputText as you want, e.g. make an API request.
 
       if(phrase.length >= 3) {
-        this.configuration.dataProvider.getAutocompleteSuggestions(
-          this.startClassVal.type,
-          this.objectPropVal.type,
-          this.endClassVal.type,
-          phrase,
-          callback,
-          errorCallback
+
+        // cancel the previously-set timer
+        if (autocompleteTimer) {
+          window.clearTimeout(autocompleteTimer);
+        }
+
+        autocompleteTimer = window.setTimeout(() => {
+          this.configuration.dataProvider.getAutocompleteSuggestions(
+            this.startClassVal.type,
+            this.objectPropVal.type,
+            this.endClassVal.type,
+            phrase,
+            callback,
+            errorCallback
+          )
+          }, 
+          350
         );
       }
     });
