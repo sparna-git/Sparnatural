@@ -95,6 +95,10 @@ class ObjectPropertyTypeId extends HTMLComponent {
     return this;
   }
 
+  setSelected($value:string) {
+    this.selectBuilder.selectWidget.setValue($value) ;
+  }
+
   
   submitSelected() {
     this.selectBuilder.selectWidget.submitSelectedValue() ;

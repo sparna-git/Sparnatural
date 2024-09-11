@@ -431,6 +431,12 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.ParentComponent.html[0].classList.remove('focus') ;
       this.htmlSelectUiUx.removeClass('open') ;
     }
+    setValue(selectedValue:string) {
+      this.defaultValue = {
+        value: selectedValue,
+        path: '',
+      }
+    }
 
     submitSelectedValue() {
       if (this.defaultValue.value != '') {
