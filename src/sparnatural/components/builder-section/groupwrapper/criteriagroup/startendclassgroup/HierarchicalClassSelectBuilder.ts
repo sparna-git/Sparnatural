@@ -411,8 +411,10 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
 
     displayClassSelector() {
       this.htmlSelectUiUx.addClass('open') ;
+      this.ParentComponent.html[0].classList.add('focus') ;
     }
     hideClassSelector() {
+      this.ParentComponent.html[0].classList.remove('focus') ;
       this.htmlSelectUiUx.removeClass('open') ;
     }
 

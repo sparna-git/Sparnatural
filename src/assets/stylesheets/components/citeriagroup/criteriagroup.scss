@@ -121,6 +121,13 @@
 			}
 		}
     }
+	.focus {
+		.currentWrapper {
+			span.current {
+				min-width: 345px;
+			}
+		}
+	}
     .VariableSelected .currentWrapper {
         color: var(--default-text-color);
         border-color: rgba(0, 0, 0, 0);

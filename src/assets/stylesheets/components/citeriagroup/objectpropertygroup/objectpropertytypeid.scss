@@ -15,4 +15,9 @@
             width: auto;
         }
     }
+    .focus span.current {
+        &.temporary-label {
+            width: 345px;
+        }
+    }
 }
