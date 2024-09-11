@@ -10,6 +10,8 @@ import { I18n } from "../../../../../settings/I18n";
 import { DagIfc, DagNodeIfc} from "../../../../../dag/Dag";
 import ISpecificationEntity from "../../../../../spec-providers/ISpecificationEntity";
 import UiuxConfig from "../../../../IconsConstants";
+import tippy from "tippy.js";
+import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
 
 
 export interface JsonDagRow {
@@ -389,10 +391,21 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
         iconValue = `data-icon="${element.icon}"` ;
       }
       let selected = this.defaultValue.value == element.id ? 'selected="selected"' : "";
-      let tooltip = element.tooltip != undefined ? `title="${element.tooltip}"` : "";
+      //Add tooltip content if description
+      let tooltip = element.tooltip != undefined ? `${element.tooltip}` : "";
+      // Prepand label if contain more than 32 caracteres
+      if (element.label.length > 32) {
+        let sep = tooltip != '' ? ` - ` : "" ;
+        tooltip = `${element.label}${sep}${tooltip}` ;
+      }
+      // set typpy attribute if tooltip content
+      if (tooltip != '') {
+        tooltip = `data-tippy-content="${tooltip}"` ;
+      }
+
       let color = element.color != undefined ? `data-color="${element.color}"` : "";
 
-      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${selected} ${tooltip} ${color} ${iconValue} class="${enabledClass}"><span class="item-sel"><span class="label-icon">${icon}</span><span class="item-label">${element.label}</span></span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
+      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${selected} ${color} ${iconValue} class="${enabledClass}"><span class="item-sel" ${tooltip}><span class="label-icon">${icon}</span><span class="item-label">${element.label}</span></span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
       return item ;
     }
 
@@ -449,6 +462,11 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       this.initClassSelector() ;
 
       this.displayClassSelector() ;
+
+      tippy(
+        this.html[0].querySelectorAll(".item-sel[data-tippy-content]"),
+        TOOLTIP_CONFIG
+      );
       
       this.html[0].addEventListener(
         "widgetItemSelected",

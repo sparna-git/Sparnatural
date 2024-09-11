@@ -137,11 +137,14 @@
                 display: block;
                 padding: 8px;
                 line-height: 13.62px;
+                width: 297px;
                 height: 55px;
                 .htmlBreadCrumPath {
                     //for all texts in ancestors path
+                    width: 100%;
                     &>div {
                         display: inline-block;
+                        vertical-align:middle; 
                         font-size: 10px;
                         font-weight: 700;
                         line-height: 13.62px;
@@ -162,11 +165,17 @@
                         }
                     }
                     .htmlBreadCrumPathParents {
+                        vertical-align:middle; 
                         .ancestor-item {
+                            display: inline-block;
+                            vertical-align:middle; 
                             margin-left: 300px;
+                            text-overflow: ellipsis;
+                            overflow: hidden;
                             transition-property: margin-left;
                             transition-duration: 0.5s;
                             transition-delay: 0;
+                            max-width: 125px;
                             &.appened {
                                 margin-left: 0;
                             }
@@ -191,6 +200,9 @@
                         position: absolute;
                         top: 0;
                         left: 300px;
+                        max-width: 281px;
+                        overflow-x: hidden;
+                        text-overflow: ellipsis;
                         
                         transition-property: left;
                         transition-duration: 0.5s;
@@ -201,13 +213,13 @@
                         }
 
                         &.move-left {
-                            left: -300px;
+                            left: -350px;
                         }
                         &.move-to-display {
                             left: 0;
                         }
                         &.move-right {
-                            left: 300px;
+                            left: 350px;
                         }
                     }
                     
