@@ -434,19 +434,27 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
 
     submitSelectedValue() {
       if (this.defaultValue.value != '') {
-        /*this.setCurrentContent() ;
+        //this.setCurrentContent() ;
+        
+        let entity = this.specProvider.getEntity(this.defaultValue.value) ;
+        let entity_icon = entity.getIcon() ;
+        this.widgetValue = {
+          value: this.defaultValue.value,
+          path: this.defaultValue.path,
+          icon: entity_icon,
+        };
         this.html[0].dispatchEvent(
           new CustomEvent("change", {
             bubbles: true,
             detail: {value: this.defaultValue.value, valuePath: this.defaultValue.path},
           })
         );
-        this.hideClassSelector() ;*/
-        let clickEvent = new Event( 'click', { bubbles: true } );
+        this.hideClassSelector() ;
+        /*let clickEvent = new Event( 'click', { bubbles: true } );
         //let changeEvent = new Event( 'change', { bubbles: true } );
         let allWithId = this.htmlSelectUiUx[0].querySelectorAll(`li[value="${this.defaultValue.value}"] .item-sel`);
         allWithId[0].dispatchEvent(clickEvent);
-        //this.htmlInputValueClass[0].dispatchEvent(changeEvent);
+        //this.htmlInputValueClass[0].dispatchEvent(changeEvent);*/
       }
     }
 
