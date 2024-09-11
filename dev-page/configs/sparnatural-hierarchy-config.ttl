@@ -29,7 +29,10 @@
 @prefix skos: <http://www.w3.org/2004/02/skos/core#> .
 @prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
 
-<http://data.mydomain.com/sparnatural-page/sparnatural-config> a owl:Ontology .
+<http://data.mydomain.com/sparnatural-page/sparnatural-config> a owl:Ontology, skos:ConceptScheme;
+  skos:hasTopConcept this:Place_hasOrHadPlaceType, this:Adresse_hasOrHadLocation, this:Adresse_inversePath_hasOrHadLocation,
+    this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation, this:Personne_Organization_agentIsTargetOfPerformanceRelation_beginningDate,
+    this:Personne_beginningDate, this:Personne_birthDate .
 
 this:Lieu a sh:NodeShape;
   sh:order "1"^^xsd:integer;
@@ -112,7 +115,8 @@ this:Personne a sh:NodeShape;
   rdfs:label "Person"@en, "Personne"@fr;
   sh:description "Any person. It includes notaries, and any person mentioned in notarial records."@en,
     "Toute personne physique. Inclut les notaires, et surtout toute personne mentionnée dans les archives notariales."@fr;
-  sh:property this:Personne_Organization_agentIsTargetOfPerformanceRelation_beginningDate .
+  sh:property this:Personne_Organization_agentIsTargetOfPerformanceRelation_beginningDate,
+    this:Personne_beginningDate, this:Personne_birthDate .
 
 this:Notaire a sh:NodeShape;
   sh:order "7"^^xsd:integer;
@@ -140,94 +144,126 @@ this:PersonneEtOrganisation a sh:NodeShape;
   rdfs:label "A person and an organisation at the same time"@en, "En même temps une personne et une organisation"@fr;
   sh:node this:Personne, this:Organization .
 
-this:Place_hasOrHadPlaceType sh:path rico:hasOrHadPlaceType;
+this:Place_hasOrHadPlaceType a skos:Concept;
+  sh:path rico:hasOrHadPlaceType;
   sh:order "1";
   sh:name "has place type"@en, "a pour type de lieu"@fr;
   sh:maxCount "1"^^xsd:integer;
   sh:nodeKind sh:IRI;
   sh:node this:TypeDeLieu;
   dash:searchWidget core:ListProperty;
-  dash:propertyRole dash:LabelRole .
+  dash:propertyRole dash:LabelRole;
+  skos:inScheme <http://data.mydomain.com/sparnatural-page/sparnatural-config>;
+  skos:topConceptOf <http://data.mydomain.com/sparnatural-page/sparnatural-config> .
 
 this:Place sh:property this:Place_hasOrHadPlaceType .
 
-this:Adresse_hasOrHadLocation sh:path rico:hasOrHadLocation;
+this:Adresse_hasOrHadLocation a skos:Concept;
+  sh:path rico:hasOrHadLocation;
   sh:order "1";
   sh:name "has location"@en, "est située dans"@fr;
   sh:nodeKind sh:IRI;
-  sh:or _:e99289c33b654f7e8ebf0bfbdc55b464173;
+  sh:or _:e99289c33b654f7e8ebf0bfbdc55b4643011;
   dash:searchWidget core:ListProperty;
   dash:propertyRole dash:LabelRole;
-  datasources:datasource this:list_rdfslabel_with_range_count_langfr .
+  datasources:datasource this:list_rdfslabel_with_range_count_langfr;
+  skos:inScheme <http://data.mydomain.com/sparnatural-page/sparnatural-config>;
+  skos:topConceptOf <http://data.mydomain.com/sparnatural-page/sparnatural-config> .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464173 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b464174;
-  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b464175 .
+_:e99289c33b654f7e8ebf0bfbdc55b4643011 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b4643012;
+  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b4643013 .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464174 sh:node this:Voie .
+_:e99289c33b654f7e8ebf0bfbdc55b4643012 sh:node this:Voie .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464175 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b464176;
+_:e99289c33b654f7e8ebf0bfbdc55b4643013 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b4643014;
   rdf:rest rdf:nil .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464176 sh:node this:QuartierOuParoisse .
+_:e99289c33b654f7e8ebf0bfbdc55b4643014 sh:node this:QuartierOuParoisse .
 
-this:Adresse_inversePath_hasOrHadLocation sh:path _:e99289c33b654f7e8ebf0bfbdc55b464177;
+this:Adresse_inversePath_hasOrHadLocation a skos:Concept;
+  sh:path _:e99289c33b654f7e8ebf0bfbdc55b4643015;
   sh:order "2";
   sh:name "is address of"@en, "est l'adresse de"@fr;
   sh:nodeKind sh:IRI;
-  sh:or _:e99289c33b654f7e8ebf0bfbdc55b464178;
+  sh:or _:e99289c33b654f7e8ebf0bfbdc55b4643016;
   dash:searchWidget core:ListProperty;
   dash:propertyRole dash:LabelRole;
-  datasources:datasource this:list_rdfslabel_with_range_count_langfr .
+  datasources:datasource this:list_rdfslabel_with_range_count_langfr;
+  skos:inScheme <http://data.mydomain.com/sparnatural-page/sparnatural-config>;
+  skos:topConceptOf <http://data.mydomain.com/sparnatural-page/sparnatural-config> .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464177 sh:inversePath rico:hasOrHadLocation .
+_:e99289c33b654f7e8ebf0bfbdc55b4643015 sh:inversePath rico:hasOrHadLocation .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464178 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b464179;
-  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b464180 .
+_:e99289c33b654f7e8ebf0bfbdc55b4643016 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b4643017;
+  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b4643018 .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464179 sh:node this:Etude .
+_:e99289c33b654f7e8ebf0bfbdc55b4643017 sh:node this:Etude .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464180 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b464181;
+_:e99289c33b654f7e8ebf0bfbdc55b4643018 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b4643019;
   rdf:rest rdf:nil .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464181 sh:node this:Notaire .
+_:e99289c33b654f7e8ebf0bfbdc55b4643019 sh:node this:Notaire .
 
-this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation sh:path _:e99289c33b654f7e8ebf0bfbdc55b464182;
+this:EtudeNotaire_hasOrHadLocation_hasOrHadLocation a skos:Concept;
+  sh:path _:e99289c33b654f7e8ebf0bfbdc55b4643020;
   sh:order "1";
   sh:name "performs an activity in the district or street"@en, "exerce dans le quartier ou la voie"@fr;
   sh:nodeKind sh:IRI;
-  sh:or _:e99289c33b654f7e8ebf0bfbdc55b464184;
+  sh:or _:e99289c33b654f7e8ebf0bfbdc55b4643022;
   dash:searchWidget core:ListProperty;
   dash:propertyRole dash:LabelRole;
-  datasources:datasource this:list_rdfslabel_with_range_count_langfr .
+  datasources:datasource this:list_rdfslabel_with_range_count_langfr;
+  skos:inScheme <http://data.mydomain.com/sparnatural-page/sparnatural-config>;
+  skos:topConceptOf <http://data.mydomain.com/sparnatural-page/sparnatural-config> .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464182 rdf:first rico:hasOrHadLocation;
-  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b464183 .
+_:e99289c33b654f7e8ebf0bfbdc55b4643020 rdf:first rico:hasOrHadLocation;
+  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b4643021 .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464183 rdf:first rico:hasOrHadLocation;
+_:e99289c33b654f7e8ebf0bfbdc55b4643021 rdf:first rico:hasOrHadLocation;
   rdf:rest rdf:nil .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464184 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b464185;
-  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b464186 .
+_:e99289c33b654f7e8ebf0bfbdc55b4643022 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b4643023;
+  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b4643024 .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464185 sh:node this:Voie .
+_:e99289c33b654f7e8ebf0bfbdc55b4643023 sh:node this:Voie .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464186 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b464187;
+_:e99289c33b654f7e8ebf0bfbdc55b4643024 rdf:first _:e99289c33b654f7e8ebf0bfbdc55b4643025;
   rdf:rest rdf:nil .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464187 sh:node this:QuartierOuParoisse .
+_:e99289c33b654f7e8ebf0bfbdc55b4643025 sh:node this:QuartierOuParoisse .
 
-this:Personne_Organization_agentIsTargetOfPerformanceRelation_beginningDate sh:path
-    _:e99289c33b654f7e8ebf0bfbdc55b464188;
+this:Personne_Organization_agentIsTargetOfPerformanceRelation_beginningDate a skos:Concept;
+  sh:path _:e99289c33b654f7e8ebf0bfbdc55b4643026;
   sh:name "has beginning date of occupation"@en, "a pour date de début d'exercice"@fr;
   sh:nodeKind sh:Literal;
   sh:datatype xsd:date;
-  dash:searchWidget core:TimeProperty-Date .
+  dash:searchWidget core:TimeProperty-Date;
+  skos:inScheme <http://data.mydomain.com/sparnatural-page/sparnatural-config>;
+  skos:topConceptOf <http://data.mydomain.com/sparnatural-page/sparnatural-config> .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464188 rdf:first rico:agentIsTargetOfPerformanceRelation;
-  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b464189 .
+_:e99289c33b654f7e8ebf0bfbdc55b4643026 rdf:first rico:agentIsTargetOfPerformanceRelation;
+  rdf:rest _:e99289c33b654f7e8ebf0bfbdc55b4643027 .
 
-_:e99289c33b654f7e8ebf0bfbdc55b464189 rdf:first rico:beginningDate;
+_:e99289c33b654f7e8ebf0bfbdc55b4643027 rdf:first rico:beginningDate;
   rdf:rest rdf:nil .
+
+this:Personne_beginningDate a skos:Concept;
+  sh:path rico:beginningDate;
+  sh:name "has beginning date"@en, "a pour date de début"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date;
+  dash:searchWidget core:TimeProperty-Date;
+  skos:inScheme <http://data.mydomain.com/sparnatural-page/sparnatural-config>;
+  skos:topConceptOf <http://data.mydomain.com/sparnatural-page/sparnatural-config> .
+
+this:Personne_birthDate a skos:Concept;
+  sh:path rico:birthDate;
+  sh:name "has birth date"@en, "date de naissance"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date;
+  dash:searchWidget core:TimeProperty-Date;
+  skos:inScheme <http://data.mydomain.com/sparnatural-page/sparnatural-config>;
+  skos:topConceptOf <http://data.mydomain.com/sparnatural-page/sparnatural-config> .
 
 this:list_rdfslabel_with_range_count_langfr a datasources:SparqlDatasource;
   datasources:queryTemplate this:query_list_label_with_range_count_langfr;

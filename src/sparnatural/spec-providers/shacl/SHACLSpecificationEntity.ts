@@ -81,13 +81,10 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     }
 
 
-    getConnectingProperties(range: string): string[] {
+    getConnectingProperties(range: string): string[] {        
+        // read all sh:property and find the ones that can target the selected class
         var items: string[] = [];
-
-        // read all sh:property
-        //let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
         let propShapes = this.getProperties();
-        
         propShapes
         .forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
@@ -98,6 +95,12 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
                 }
             }
         });
+
+        // add properties available from parents - recursively
+        let parents = this.provider.getEntity(range).getParents();
+        parents.forEach(aParent => {
+            items = [...items, ...this.getConnectingProperties(aParent)];
+        })
 
         // dedup, although probably dedup is not necessary here
         var dedupItems = [...new Set(items)];
