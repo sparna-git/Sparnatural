@@ -120,7 +120,9 @@ export default class QueryLoader{
         this.#clickOn(
           grpWarpper.CriteriaGroup.EndClassGroup.editComponents.actionWhere.btn
         );
-        this.#buildCriteriaGroup(grpWarpper.whereChild, branch.children.shift());
+        // first child
+        let localVarMapping = this.#buildCriteriaGroup(grpWarpper.whereChild, branch.children.shift());
+        localVarMapping.forEach((value:string,key: string) => varMapping.set(key, value));
         // the rest of the children are AND connected
         let parent = grpWarpper.whereChild;
         branch.children.forEach((c) => {
