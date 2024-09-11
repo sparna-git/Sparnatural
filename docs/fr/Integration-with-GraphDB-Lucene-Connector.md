@@ -1,73 +1,73 @@
-_[Accueil](/fr) > Intégration avec un index Lucene GraphDB_
+_[Accueil](index.html) > Intégration avec le connecteur Lucene de GraphDB_
 
-# Intégration avec un index Lucene GraphDB
+# Intégration avec le connecteur Lucene de GraphDB
 
 ## Introduction
 
-GraphDB provides an integration with Lucene using the [GraphDB Lucene Connector](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html). This connector allows to create powerful full-text indexes of text properties in the graph, and write queries that combine both full-text and graph criteria, such as _"Give me the list of museums that display an artwork whose title contains word 'peace'"_
+GraphDB propose une intégration avec Lucene en utilisant le [connecteur Lucene de GraphDB](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html). Ce connecteur permet de créer de puissants index de texte intégral des propriétés de texte dans le graphe, et d'écrire des requêtes qui combinent à la fois des critères de texte intégral et de graphe, tels que _"Donnez-moi la liste des musées qui exposent une œuvre d'art dont le titre contient le mot 'paix'"_
 
-Sparnatural can be integrated with such a GraphDB Lucene index both to feed autocomplete fields and also for SPARQL query generation as described below.
+Sparnatural peut être intégré à un tel index Lucene de GraphDB à la fois pour alimenter les champs d'autocomplétion et également pour la génération de requêtes SPARQL comme décrit ci-dessous.
 
-## Create the index
+## Créer l'index
 
-Refer to the [GraphDB Lucene Connector documentation](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html) for complete details. Here is the idea:
+Reportez-vous à la [documentation du connecteur Lucene de GraphDB](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html) pour plus de détails. Voici l'idée :
 
-1. Determine the URI of the class for which you want to build the index;
-2. List each literal property or path to store in the index;
-    - Typically labels, names, titles, definitions, abstract, etc. 
-    - but also the literal of _related entities_ in the graph, such as the name of the place where an event took place, the name of the author of a work, the labels of subject concepts, etc.
-    - Each of these properties or path will go in a separate field in the index;
-3. Create a "catchAll" field named `text` that will concatenate every other field in a single one;
-4. Set a custom _language_ and _Analyzer_ if you need to have language-related indexing such as accent-folding in French;
+1. Déterminez l'URI de la classe pour laquelle vous souhaitez construire l'index ;
+2. Énumérez chaque propriété littérale ou chemin à stocker dans l'index ;
+    - Typiquement des libellés, des noms, des titres, des définitions, des résumés, etc.
+    - mais aussi la littérale des _entités liées_ dans le graphe, tels que le nom du lieu où un événement a eu lieu, le nom de l'auteur d'une œuvre, les libellés de concepts de sujet, etc.
+    - Chacune de ces propriétés ou chemin ira dans un champ séparé de l'index ;
+3. Créez un champ "catchAll" nommé `text` qui concaténera chaque autre champ en un seul ;
+4. Définissez une _langue_ et un _analyseur_ personnalisés si vous avez besoin d'avoir un indexation liée à la langue telle que le pliage des accents en français ;
 
-## Example: create an index on SKOS Concepts in French
+## Exemple : créer un index sur les concepts SKOS en français
 
-### Create individual fields
+### Créer des champs individuels
 
-1. In GraphDB Workbench go to "Setup > Connectors", and create a new Lucene Connector;
-2. Set its name to `ConceptIndex`
-3. In field languages enter `fr`
-3. In the "Types" field enter the full URI to index all SKOS Concepts : http://www.w3.org/2004/02/skos/core#Concept
-4. Fill in the "Fields" entry to index `skos:prefLabel`s :
-    - Field name = prefLabel
-    - Property chain = http://www.w3.org/2004/02/skos/core#prefLabel
-    - Uncheck the "facet" checkbox
+1. Dans GraphDB Workbench, allez à "Configuration > Connecteurs", et créez un nouveau connecteur Lucene ;
+2. Définissez son nom sur `ConceptIndex`
+3. Dans le champ des langues, saisissez `fr`
+3. Dans le champ "Types", saisissez l'URI complet pour indexer tous les concepts SKOS : http://www.w3.org/2004/02/skos/core#Concept
+4. Remplissez l'entrée "Champs" pour indexer les `skos:prefLabel`s :
+    - Nom du champ = prefLabel
+    - Chaîne de propriété = http://www.w3.org/2004/02/skos/core#prefLabel
+    - Décochez la case "facet"
 
 ![](/assets/images/graphdb-lucene-01.png)
 
-5. Add a new "Field" entry by clicking on the "+" on the right, this time for `skos:altLabel`s :
-    - Field name = altLabel
-    - Property chain = http://www.w3.org/2004/02/skos/core#altLabel
-    - Uncheck the "facet" checkbox
-6. Repeat for `skos:hiddenLabel` if needed
-7. `skos:definition` if needed
-8. `skos:scopeNote` if needed
-9. `skos:example` if needed
+5. Ajoutez une nouvelle entrée "Field" en cliquant sur le "+" à droite, cette fois pour les `skos:altLabel`s :
+    - Nom du champ = altLabel
+    - Chaîne de propriétés = http://www.w3.org/2004/02/skos/core#altLabel
+    - Décochez la case "facet"
+6. Répétez pour `skos:hiddenLabel` si nécessaire
+7. `skos:definition` si nécessaire
+8. `skos:scopeNote` si nécessaire
+9. `skos:example` si nécessaire
 
-### Create catch-all field
+### Créer un champ de regroupement
 
-Then we need to create a new field `text` that will aggregate the content of every other fields. To do that declare a new "virtual field" named `text/prefLabel` to indicate that the content or field `prefLabel` should be copied in field `text` (refer to the parts about [copy-fields](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html#copy-fields) combined with [multiple property paths](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html#multiple-property-chains-per-field) per fields for details):
-1. Create new Field named `text/prefLabel`
-2. In property path, enter `@prefLabel`; this must correspond to the name of one of the fields created earlier, so if you chose different names, adjust accordingly;
-3. Uncheck "facet"
-4. Repeat by adding a new Field again, named `text/altLabel` and property path `@altLabel`
-5. Repeat with `text/hiddenLabel` and property path `@hiddenLabel`
-6. Repeat with `text/definition` and property path `@definition`
-7. Repeat with `text/scopeNote` and property path `@scopeNote`
-8. Repeat with `text/example` and property path `@example`
+Ensuite, nous devons créer un nouveau champ `text` qui va agréger le contenu de tous les autres champs. Pour ce faire, déclarez un nouveau "champ virtuel" nommé `text/prefLabel` pour indiquer que le contenu ou le champ `prefLabel` doit être copié dans le champ `text` (reportez-vous aux parties sur [copy-fields](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html#copy-fields) combinées avec [multiple property paths](http://graphdb.ontotext.com/documentation/free/lucene-graphdb-connector.html#multiple-property-chains-per-field) par champ pour plus de détails) :
+1. Créez un nouveau champ nommé `text/prefLabel`
+2. Dans le chemin de propriété, saisissez `@prefLabel`; cela doit correspondre au nom de l'un des champs créés précédemment, donc si vous avez choisi des noms différents, ajustez en conséquence ;
+3. Décochez "facet"
+4. Répétez en ajoutant à nouveau un nouveau champ, nommé `text/altLabel` et chemin de propriété `@altLabel`
+5. Répétez avec `text/hiddenLabel` et chemin de propriété `@hiddenLabel`
+6. Répétez avec `text/definition` et chemin de propriété `@definition`
+7. Répétez avec `text/scopeNote` et chemin de propriété `@scopeNote`
+8. Répétez avec `text/example` et chemin de propriété `@example`
 
-Here is how this part looks like:
+Voici à quoi ressemble cette partie :
 
 ![](/assets/images/graphdb-lucene-02.png)
 
-### Set language and Analyzer
+### Définir la langue et l'analyseur
 
-- In the `Languages` field, set the value `fr`
-- In the `Analyzer` field enter the value for the Lucene French Analyzer `org.apache.lucene.analysis.fr.FrenchAnalyzer`. If you don't do that the search will be accent-sensitive (e.g. a search on "metal" will not match "métal");
+- Dans le champ `Languages`, définissez la valeur `fr`
+- Dans le champ `Analyzer`, saisissez la valeur de l'analyseur français Lucene `org.apache.lucene.analysis.fr.FrenchAnalyzer`. Si vous ne le faites pas, la recherche sera sensible aux accents (par exemple, une recherche sur "metal" ne correspondra pas à "métal");
 
-### Test a SPARQL query
+### Tester une requête SPARQL
 
-Test a SPARQL search like the following :
+Testez une recherche SPARQL comme suit :
 
 ```
 PREFIX : <http://www.ontotext.com/connectors/lucene#>
@@ -84,16 +84,16 @@ SELECT DISTINCT ?uri ?label ?snippetField ?snippet WHERE  {
     ?uri skos:prefLabel ?prefLabel . FILTER(lang(?prefLabel) = $lang)
 ```
 
-## Feeding an autocomplete field in Sparnatural with SPARQL using GraphDB Lucene Connector
+## Alimenter un champ d'autocomplétion dans Sparnatural avec SPARQL en utilisant GraphDB Lucene Connector
 
-The principle is the following:
-1. As stated in the [Sparnatural configuration documentation for your own queries](JSON-based-configuration#your-own-sparql-query), the SPARQL query MUST return 2 variables : `?uri` and `?label`;
-2. Set a custom SPARQL query string to the autocomplete field definition, using special `:query` operators to query the index;
-3. Add a "*" after the search key to search for the beginning of words;
-4. Query the catch-all field, so `text` in our case;
-5. Generate a `label` variable by concatenating the skos:prefLabel predicate of the entity with its snippet from the search results
+Le principe est le suivant :
+1. Comme indiqué dans la [documentation de configuration Sparnatural pour vos propres requêtes](JSON-based-configuration#your-own-sparql-query), la requête SPARQL DOIT renvoyer 2 variables : `?uri` et `?label`;
+2. Définissez une chaîne de requête SPARQL personnalisée pour la définition du champ d'autocomplétion, en utilisant des opérateurs spéciaux `:query` pour interroger l'index;
+3. Ajoutez un "*" après la clé de recherche pour rechercher le début des mots;
+4. Interrogez le champ de recherche général, donc `text` dans notre cas;
+5. Générez une variable `label` en concaténant le prédicat skos:prefLabel de l'entité avec son extrait des résultats de la recherche
 
-Here is an example query:
+Voici un exemple de requête :
 
 ```
 PREFIX : <http://www.ontotext.com/connectors/lucene#>
@@ -114,7 +114,7 @@ SELECT DISTINCT ?uri ?label WHERE  {
 }
 ```
 
-And here is a query integrated in a [JSON-LD configuration of Sparnatural](JSON-based-configuration). Note how it uses the placeholders `$domain`, `$range`, `$property`, `$key` and `$lang` that gets replaced at query time with actual values:
+Et voici une requête intégrée dans une [configuration JSON-LD de Sparnatural](JSON-based-configuration). Notez comment elle utilise les espaces réservés `$domain`, `$range`, `$property`, `$key` et `$lang` qui sont remplacés au moment de la requête par des valeurs réelles :
 
 ```json
     {
@@ -147,15 +147,15 @@ SELECT DISTINCT ?uri ?label WHERE  {\
       }
 ```
 
-## Integration with SPARQL query generation
+## Intégration avec la génération de requêtes SPARQL
 
-You can configure Sparnatural to generate SPARQL queries that will query the full-text index. To do so:
-1. Create a class in Sparnatural configuration **with the URI of index**, e.g. `http://www.ontotext.com/connectors/lucene/instance#ConceptIndex`. Create this class as a `subClassOf http://www.w3.org/2000/01/rdf-schema#Literal`, and give it a label like "Full-text Search...";
-2. Create properties that correspond to the **fields in the index**. The property URIs **must end with the index field name, after the last "#" or last "/"**. e.g. `http://labs.sparna.fr/sparnatural-demo-graphdb-openarchaeo/onto/search#discovery` will query the field `discovery`
-3. Set the property as `subPropertyOf sparnatural:GraphDBSearchProperty`; this parameter indicates to Sparnatural that the query to generate must use the GraphDB syntax and not the usual FILTER syntax;
-4. Create multiple properties for each index field, so that the user can choose which field to query.
+Vous pouvez configurer Sparnatural pour générer des requêtes SPARQL qui interrogeront l'index de texte intégral. Pour ce faire :
+1. Créez une classe dans la configuration Sparnatural **avec l'URI de l'index**, par exemple `http://www.ontotext.com/connectors/lucene/instance#ConceptIndex`. Créez cette classe en tant que `subClassOf http://www.w3.org/2000/01/rdf-schema#Literal`, et donnez-lui un libellé tel que "Recherche en texte intégral...";
+2. Créez des propriétés qui correspondent aux **champs de l'index**. Les URI des propriétés **doivent se terminer par le nom du champ de l'index, après le dernier "#" ou la dernière "/"**. Par exemple, `http://labs.sparna.fr/sparnatural-demo-graphdb-openarchaeo/onto/search#discovery` interrogera le champ `discovery`;
+3. Définissez la propriété comme `subPropertyOf sparnatural:GraphDBSearchProperty`; ce paramètre indique à Sparnatural que la requête à générer doit utiliser la syntaxe GraphDB et non la syntaxe FILTER habituelle;
+4. Créez plusieurs propriétés pour chaque champ de l'index, afin que l'utilisateur puisse choisir le champ à interroger.
 
-Here is an example configuration with 2 properties configured to query fields `commune` and `discovery`, and a third property named "all fields" / "tous les champs" to query the catch-all field:
+Voici un exemple de configuration avec 2 propriétés configurées pour interroger les champs `commune` et `discovery`, et une troisième propriété nommée "tous les champs" pour interroger le champ de recherche général :
 ```
     {
       "@id" : "http://www.ontotext.com/connectors/lucene/instance#SiteIndex",
@@ -203,6 +203,6 @@ Here is an example configuration with 2 properties configured to query fields `c
     },
 ```
 
-Which will give the following end-user behavior:
+Ce qui donnera le comportement suivant pour l'utilisateur final :
 
 ![](/assets/images/graphdb-lucene-03.png)

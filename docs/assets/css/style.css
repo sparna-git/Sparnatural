@@ -10,6 +10,12 @@
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
+
+/* so that the anchor is not hidden by the navbar when deep-linking */
+html {
+    scroll-padding-top: 90px;
+}
+
 body {
   background: #fff;
   color: #666666;

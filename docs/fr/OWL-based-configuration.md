@@ -1,86 +1,104 @@
-_[Accueil](/fr) > Configuration OWL_
+_[Accueil](index.html) > Configuration basée sur OWL_
 
-# Configurer Sparnatural en OWL
+# Configuration basée sur OWL
 
-Sparnatural peut être configuré en utilisant un fichier OWL édité dans [Protégé](http://protege.stanford.edu) et sauvegardé dans le format Turtle.
+Sparnatural peut être configuré à l'aide d'un fichier OWL édité dans [Protégé](http://protege.stanford.edu) et enregistré en Turtle.
 
-Sparnatural peut également être configuré au moyen d'une [[JSON-based configuration]], but OWL-based configuration brings:
-- an editing environement (Protégé);
-- formal machine-readable links from Sparnatural configuration to business ontology;
-- sharing, publishing and reusing configurations;
-- hosting configuration in different (CORS-enabled) servers than where Sparnatural is deployed;
+Sparnatural peut également être configuré avec une [configuration basée sur JSON](JSON-based-configuration), mais la configuration basée sur OWL apporte :
+- un environnement d'édition (Protégé) ;
+- des liens formels lisibles par machine de la configuration Sparnatural à l'ontologie métier ;
+- le partage, la publication et la réutilisation des configurations ;
+- l'hébergement de la configuration sur des serveurs différents (activés pour CORS) de celui où Sparnatural est déployé ;
 
-This documentation assumes you are familiar with Protégé.
+## Ontologies de configuration Sparnatural
 
-## Sparnatural configuration ontologies
+Sparnatural est livré avec 2 ontologies qui doivent être importées (via `owl:imports`) dans votre propre ontologie de configuration :
+1. Une ontologie de configuration de base à l'adresse [http://data.sparna.fr/ontologies/sparnatural-config-core](http://data.sparna.fr/ontologies/sparnatural-config-core)
+2. Une ontologie de configuration de source de données à l'adresse [http://data.sparna.fr/ontologies/sparnatural-config-datasources](http://data.sparna.fr/ontologies/sparnatural-config-datasources)
 
-Sparnatural comes with 2 ontologies that need to be imported (through `owl:imports`) in your own configuration ontology:
-1. A core configuration ontology at http://data.sparna.fr/ontologies/sparnatural-config-core
-2. A datasource configuration ontology at http://data.sparna.fr/ontologies/sparnatural-config-datasources
+## Comment définir et tester votre propre configuration ?
 
-## How to define and test your own configuration ?
+### Prérequis
 
-1. Create a new ontology in Protégé;
-2. Import the 2 Sparnatural configuration in your ontology;
-3. Specify your configuration (see below);
-4. Save your ontology preferably in Turtle, or in RDF/XML, but NOT in an OWL-specific serialisation (such as OWL/XML);
-5. Configure a test HTML page where Sparnatural is installed (you can clone [one the demo page of the sparnatural.eu website](https://github.com/sparna-git/sparnatural.eu)) and change the URL of the SPARQL service to be queried, and the path to your configuration file.
-     1. You can test with a local GraphDB repository by providing the URL of the repository : http://localhost:7200/repositories/{repositoryName}
-     1. If necessary (may not be mandatory for latest GraphDB version), make sure GraphDB is CORS-enabled and is launched with the flag **graphdb.workbench.cors.enable** (see the [GraphDB documentation page](https://graphdb.ontotext.com/documentation/standard/workbench-user-interface.html))
-6. To test your configuration locally, provide the relative path to the configuration file in Sparnatural Javascript initialization, and make sure your browser is CORS-enabled for local files.
-    1. To make Firefox CORS-enables for local files :
-        1. Open Firefox
-        1. Type "about:config" in the address bar
-        1. Accept security warning
-        1. Search for the config **security.fileuri.strict_origin_policy**
-        1. Set this config to "false"
-    1. To make Chrome / Chromium CORS-enabled for local files :
-        1. Close Chrome
-        2. Open a command-line or a terminal
-        3. Run chrome with the flag "**--allow-file-access-from-files**", e.g. on Ubuntu Linux "chromium --allow-file-access-from-files"
+- Vous devez être familier avec Protégé.
+- Vous devez connaître l'URL du point d'accès SPARQL contenant vos données, soit localement sur votre machine, soit sur un serveur distant.
 
-## How to publish your configuration
+### Configuration de votre environnement
 
-1. If your configuration is hosted on the same server as the Sparnatural component, there is nothing special to do, just put the configuration ontology in a file typically in the same folder as the HTML page in which Sparnatural is used.
-2. If the configuration is not on the same server as the page in which Sparnatural is inserted, it must be [CORS-enabled](https://enable-cors.org/); an easy way to do this is to host it in a Github repository or Gist;
-3. Provide the URL to your configuration ontology in Sparnatural configuration. For a file hosted on Github, this must be the "raw" link to the file, that is the link returning the turtle file, e.g. https://raw.githubusercontent.com/sparna-git/Sparnatural/master/demos/sparnatural-demo-semapps/sparnatural-config-semapps-meetup.ttl
+Suivez les étapes du guide de démarrage [Hello Sparnatural](hello-sparnatural/Hello-Sparnatural.md). Cela vous permettra de :
+    - configurer CORS sur votre environnement local
+    - commencer avec une ontologie de configuration OWL minimale
+    - configurer une page de test où vous pouvez tester votre configuration par rapport à votre point d'accès
 
-## Reference for classes and properties of a Sparnatural configuration
+## Comment publier votre configuration
 
-### Namespaces
+1. Si votre configuration est hébergée sur le même serveur que le composant Sparnatural, il n'y a rien de spécial à faire, il suffit de placer l'ontologie de configuration dans un fichier généralement dans le même dossier que la page HTML dans laquelle Sparnatural est utilisé.
+2. Si la configuration n'est pas sur le même serveur que la page dans laquelle Sparnatural est inséré, elle doit être [activée pour CORS](https://enable-cors.org/); un moyen facile de le faire est de l'héberger dans un dépôt Github ou Gist ;
+3. Fournissez l'URL de votre ontologie de configuration dans la configuration Sparnatural. Pour un fichier hébergé sur Github, il doit s'agir du lien "raw" vers le fichier, c'est-à-dire le lien renvoyant le fichier turtle, par exemple https://raw.githubusercontent.com/sparna-git/Sparnatural/master/demos/sparnatural-demo-semapps/sparnatural-config-semapps-meetup.ttl
 
-| Prefix | Namespaces |
-| ------ | ---------- |
-| core   | http://data.sparna.fr/ontologies/sparnatural-config-core# |
-| ds     | http://data.sparna.fr/ontologies/sparnatural-config-datasources# |
+## Référence pour les classes et propriétés d'une configuration Sparnatural
 
-### Classes configuration reference
+### Espaces de noms
+
+| Préfixe | Espaces de noms |
+| ------- | --------------- |
+| core    | http://data.sparna.fr/ontologies/sparnatural-config-core# |
+| ds      | http://data.sparna.fr/ontologies/sparnatural-config-datasources# |
+
+### Référence de configuration des classes
+
+| Annotation / Axiome | Libellé | Card. | Description |
+| ------------------- | ------- | ----- | ----------- |
+| `rdfs:subClassOf` [`core:SparnaturalClass`](http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass) | sous-classe de la classe Sparnatural | 1..1 | Chaque classe dans la configuration doit être déclarée comme sous-classe de core:SparnaturalClass |
+| `rdfs:label` | libellé d'affichage de la classe | 1..* | Le libellé d'affichage de la classe dans les listes de sélection de classes Sparnatural. Chaque libellé peut être associé à un code de langue. Sparnatural choisira le libellé approprié en fonction de son paramètre de langue. Sparnatural utilise par défaut un libellé sans langue si aucun libellé dans la langue configurée ne peut être trouvé. |
+| [`core:faIcon`](http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon) | code d'icône Font Awesome | 0..1 | Le code d'une icône Font Awesome à afficher à côté du libellé de la classe, par exemple `fas fa-user` ou `fad fa-male`. Si vous utilisez ceci, ne spécifiez pas `core:icon` ou `core:highlightedIcon` |
+| [`core:icon`](http://data.sparna.fr/ontologies/sparnatural-config-core#icon) | URL de l'image de l'icône | 0..1 | URL d'une icône normale (noire) à afficher à côté du libellé de la classe. |
+| [`core:highlightedIcon`](http://data.sparna.fr/ontologies/sparnatural-config-core#highlightedIcon) | URL de l'image de l'icône mise en surbrillance | 0..1 | URL d'une icône mise en surbrillance (blanche) à afficher à côté du libellé de la classe lorsqu'on survole. |
+| [`core:sparqlString`](http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString) | Chaîne SPARQL | 0..1 | La chaîne de caractères qui sera insérée dans les requêtes SPARQL à la place de l'URI de cette classe. Si cela n'est pas spécifié, l'URI de la classe est insérée. N'utilisez pas de préfixes, utilisez des URIs complètes. La chaîne de caractères peut être n'importe quel morceau de SPARQL valide, donc elle DOIT utiliser `<` et `>`, par exemple "`<http://dbpedia.org/ontology/Person>`". Pour se restreindre à un ConceptScheme SKOS spécifique, utilisez `skos:Concept; [ skos:inScheme <http://exemple.fr/MyScheme> ]` |
+| `rdfs:subClassOf` [`rdfs:Literal`](http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal) | sous-classe de Littéral | 0..1 | Pour les classes qui correspondent soit à un Littéral (typiquement une date), soit à une recherche, définissez la classe comme sous-classe de `rdfs:Literal`. 1. Aucun critère rdf:type correspondant à cette classe ne sera inclus dans les requêtes SPARQL 2. La classe n'apparaîtra jamais dans la liste initiale des classes 3. il ne sera pas possible de parcourir cette classe avec des clauses WHERE |
+| `rdfs:subClassOf` [`core:NotInstantiatedClass`](http://data.sparna.fr/ontologies/sparnatural-config-core#NotInstantiatedClass) | sous-classe de NotInstantiatedClass | 0..1 | Pour les classes qui sont des références à des URI "externes" qui ne sont pas eux-mêmes décrits dans le graphe (c'est-à-dire qu'ils ne sont pas le sujet de triples dans le graphe, en particulier aucun rdf:type), définissez la classe comme sous-classe de `core:NotInstantiatedClass`. 1. Aucun critère rdf:type correspondant à cette classe ne sera inclus dans les requêtes SPARQL 2. La classe n'apparaîtra jamais dans la liste initiale des classes. Elle peut toujours être utilisée pour être parcourue dans une clause WHERE |
+| [`core:order`](http://data.sparna.fr/ontologies/sparnatural-config-core#order) | ordre | 0..1 | Ordre de cette classe dans les listes de classes. Si non défini, l'ordre alphabétique est utilisé. |
+| [`core:tooltip`](http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip) | info-bulle | 0..n | Texte qui apparaît comme info-bulle lorsqu'on survole cette classe, dans les listes et lorsqu'elle est sélectionnée. Plusieurs valeurs sont autorisées dans différentes langues. Le balisage HTML est pris en charge. |
+| [`core:defaultLabelProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#defaultLabelProperty) | propriété de libellé par défaut | 0..1 | Utilisez cette annotation pour relier une classe dans une configuration Sparnatural à une propriété qui sera utilisée par défaut pour récupérer les libellés des instances de cette classe. Lorsqu'un utilisateur sélectionne cette classe comme colonne dans le jeu de résultats, si la classe a cette annotation définie, tout se comporte comme si l'utilisateur avait également sélectionné la propriété correspondante à inclure. Le nom de la variable de libellé est `xxx_label`, où `xxx` est le nom de la variable contenant les instances de classe : par exemple si `foaf:Person` est sélectionné dans la variable `?Person_4`, et qu'il est annoté avec une propriété de libellé par défaut définie sur `foaf:name`, alors les valeurs de cette propriété seront incluses dans la variable `?Person_4_label`. La propriété de libellé peut ne pas avoir de domaine spécifié si vous ne voulez pas qu'elle soit affichée à l'utilisateur. La propriété doit avoir une plage spécifiée à une seule classe. |
+
+### Référence de configuration des propriétés
+
+
+#### Annotations communes (applicables à toutes les propriétés)
+
+| Annotation / Axiome | Libellé | Card. | Description |
+| ------------------ | ----- | ----- | ----------- |
+| `rdfs:subPropertyOf` | sous-propriété de | 1..1 | Chaque propriété doit avoir une super-propriété correspondant à son type de widget (liste, champ de recherche, sélecteur de date, etc.). Les valeurs typiques sont [`core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty) pour une liste, [`core:SearchProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty) pour une recherche avec autocomplétion, [`core:NonSelectableProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty) pour un widget sans sélection. Voir [la documentation de l'ontologie de configuration](http://data.sparna.fr/ontologies/sparnatural-config-core) pour toutes les valeurs. |
+| `rdfs:label` | libellé d'affichage de la propriété | 1..* | Le libellé d'affichage de la propriété dans les listes de sélection des propriétés de Sparnatural. Chaque libellé peut être associé à un code de langue. Sparnatural choisira le libellé approprié en fonction de son paramètre de configuration de langue. Sparnatural utilise par défaut un libellé sans langue si aucun libellé dans la langue configurée n'est trouvé. |
+| `rdfs:domain` | domaine de la propriété | 1..1 | Le domaine de la propriété, c'est-à-dire les classes "à droite" dans Sparnatural, pour lesquelles la propriété peut être sélectionnée. Les unions de classes sont prises en charge au cas où la propriété peut s'appliquer à plusieurs classes (dans Protégé : "Personne ou Société ou Association").|
+| `rdfs:range` | plage de la propriété | 1..1 | La plage de la propriété, c'est-à-dire les classes "à gauche" dans Sparnatural, auxquelles la propriété peut pointer. Les unions de classes sont prises en charge au cas où la propriété peut se référer à plusieurs classes (dans Protégé : "Personne ou Société ou Association") |
+| [`core:sparqlString`](http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString) | Propriété SPARQL ou chemin de propriété | 0..1 | La propriété ou le chemin de propriété qui sera inséré dans les requêtes SPARQL à la place de l'URI de cette propriété. Si cela n'est pas spécifié, l'URI de la propriété est insérée. N'utilisez pas de préfixes, utilisez des URIs complètes. La chaîne de caractères peut être n'importe quel chemin de propriété valide, elle DOIT utiliser `<` et `>` autour des IRI, par exemple "`<http://dbpedia.org/ontology/birthPlace>`". Vous pouvez utiliser `^` pour un chemin inverse `/` pour des chemins en séquence, `(...)` pour le regroupement, `\|` pour les alternatives. Exemples : `<http://dbpedia.org/ontology/author>` (simple mappage de propriété unique), `^<http://dbpedia.org/ontology/museum>` (chemin inverse), `<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>` (chemin en séquence), `^(<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>)` (chemin en séquence inverse) |
+| [`core:enableNegation`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableNegation) | activer la négation | 0..1 | Permet l'option supplémentaire d'exprimer une négation (en utilisant un `FILTER NOT EXISTS`) sur cette propriété. Le `FILTER NOT EXISTS` s'appliquera à toute la "branche" dans la requête (ce critère et tous les critères enfants) |
+| [`core:enableOptional`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableOptional) | activer en option | 0..1 | Permet l'option supplémentaire d'exprimer un `OPTIONAL` sur cette propriété. L'`OPTIONAL` s'appliquera à toute la "branche" dans la requête (ce critère et tous les critères enfants) |
+| [`core:order`](http://data.sparna.fr/ontologies/sparnatural-config-core#order) | ordre | 0..1 | Ordre de cette propriété dans les listes de propriétés. Si non défini, l'ordre alphabétique est utilisé. |
+| [`core:tooltip`](http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip) | info-bulle | 0..n | Texte qui apparaît en tant qu'info-bulle lorsque vous survolez cette propriété, dans les listes et lorsqu'elle est sélectionnée. Plusieurs valeurs sont autorisées dans différentes langues. Le balisage HTML est pris en charge. |
+| [`core:isMultilingual`](http://data.sparna.fr/ontologies/sparnatural-config-core#isMultilingual) | est facultatif | 0..1 | utilisé pour indiquer que les valeurs de la propriété sont multilingues (en d'autres termes, qu'il existe plusieurs valeurs avec des balises de langue différentes). Dans ce cas, lorsque la valeur d'une telle propriété est sélectionnée comme colonne, un FILTRE sera automatiquement ajouté pour filtrer la valeur en fonction de la langue par défaut de Sparnatural (passée en paramètre à l'initialisation) |
+| [`core:sparqlService`](http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlService) | point de service SPARQL | 0..1 | Cette annotation permet de spécifier un point de terminaison distant pour les requêtes fédérées. Les [`requêtes fédérées`](https://www.w3.org/TR/sparql11-federated-query/) fonctionnent avec le mot-clé SERVICE. Cette annotation doit prendre une [sd:Service](#annotation-for-service-keyword) comme valeur.  |
+
+#### Annotations pour une SelectResourceProperty
+
+| Annotation / Axiome | Libellé | Card. | Description |
+| ------------------ | ----- | ----- | ----------- |
+| [`ds:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) | propriété datasource | 0..1 | Applicable aux propriétés sous `SelectResourceProperty` (généralement liste et autocomplétion). Le datasource à utiliser pour la propriété. Le datasource spécifiera comment peupler la liste ou comment retourner les propositions d'autocomplétion. Les propriétés de liste doivent utiliser un datasource de liste, les propriétés d'autocomplétion doivent utiliser un datasource de recherche. |
+| [`ds:treeRootsDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeRootsDatasource) | datasource pour les racines de l'arbre | 0..1 | Applicable aux propriétés sous `TreeProperty`. Le datasource à utiliser pour peupler les racines de l'arbre (nœuds de premier niveau). |
+| [`ds:treeChildrenDatasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#treeChildrenDatasource) | datasource pour les enfants de l'arbre | 0..1 | Applicable aux propriétés sous `TreeProperty`. Le datasource à utiliser pour peupler les enfants d'un nœud, lorsqu'il est cliqué. |
+
+
+#### Annotations pour une TimeProperty
+
+| [`core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty) | propriété de date de début | 0..1 | Applicable aux propriétés sous `TimeProperty`. Indique la propriété utilisée dans le graphe pour exprimer le début d'une plage de validité sur les ressources, par exemple [`rico:beginningDate`](https://www.ica.org/standards/RiC/ontology#beginningDate). Spécifier `core:beginDateProperty` et `core:endDateProperty` déclenchera le [comportement de requête de plage de dates spécifique](Querying-date-ranges). |
+| [`core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) | propriété de date de fin | 0..1 | Applicable aux propriétés sous `TimeProperty`. Indique la propriété utilisée dans le graphe pour exprimer la fin d'une plage de validité sur les ressources, par exemple [`rico:endDate`](https://www.ica.org/standards/RiC/ontology#endDate). Spécifier `core:beginDateProperty` et `core:endDateProperty` déclenchera le [comportement de requête de plage de dates spécifique](Querying-date-ranges). |
+| [`core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) | propriété de date exacte | 0..1 | Applicable aux propriétés sous `TimeProperty`. Utilisée en combinaison avec `core:beginDateProperty` et `core:endDateProperty`, pour indiquer la propriété utilisée dans le graphe pour exprimer la date exacte d'une ressource, par exemple [`rico:endDate`](https://www.ica.org/standards/RiC/ontology#date). Cela est utilisé pour le [comportement de requête de plage de dates spécifique](Querying-date-ranges). |
+
+#### <a name="#annotation-for-service-keyword"></a>Annotation pour un sd:Service
+
+Note: sd:Service est une classe [définie dans l'ontologie de description de service SPARQL](https://www.w3.org/TR/sparql11-service-description/#sd-Service).
 
 | Annotation / Axiom | Label | Card. | Description |
 | ------------------ | ----- | ----- | ----------- |
-| `rdfs:subClassOf` [`core:SparnaturalClass`](http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass) | subclass of Sparnatural class | 1..1 | Each class in the configuration must be declared subclass of core:SparnaturalClass |
-| `rdfs:label` | class display label | 1..* | The display label of the class in Sparnatural class selection lists. Each label can be associated to a language code. Sparnatural will choose the appropriate label depending on its language config parameter. Sparnatural defaults to a label with no language if no label in configured language can be found. |
-| [`core:faIcon`](http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon) | fontawesome icon code | 0..1 | The code of a Font Awesome icon to be displayed next to the class label, e.g. `fas fa-user` or `fad fa-male`. If you use this, don't specify `core:icon` or `core:highlightedIcon` |
-| [`core:icon`](http://data.sparna.fr/ontologies/sparnatural-config-core#icon) | icon image URL | 0..1 | URL of a normal (black) icon to be displayed next to the class label. |
-| [`core:highlightedIcon`](http://data.sparna.fr/ontologies/sparnatural-config-core#highlightedIcon) | highlighted icon image URL | 0..1 | URL of a highlighted (white) icon to be displayed next to the class label, when hovered. |
-| [`core:sparqlString`](http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString) | SPARQL String | 0..1 | The character string that will be inserted in SPARQL queries in place of the URI of this class. If this is not specified, the URI of the class is inserted. Do not use prefixes, use full URIs. The character string can be any piece of valid SPARQL, so it MUST use `<` and `>`, e.g. "`<http://dbpedia.org/ontology/Person>`". To restrict to a specific SKOS ConceptScheme use `skos:Concept; [ skos:inScheme <http://exemple.fr/MyScheme> ]` |
-| `rdfs:subClassOf` [`rdfs:Literal`](http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#http://www.w3.org/2000/01/rdf-schema#Literal) | subclass of Literal | 0..1 | For classes that correspond either to a Literal (typically a date), either to a search, set the class as subclass of `rdfs:Literal`. 1. No rdf:type criteria corresponding to this class will be put in SPARQL queries 2. The class will never appear in the initial class list 3. it will not be possible to traverse this class with WHERE clauses |
-| `rdfs:subClassOf` [`core:NotInstantiatedClass`](http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#NotInstantiatedClass) | subclass of NotInstantiatedClass | 0..1 | For classes that are references to "external" URIs that are not themselves described in the graph (i.e. they are not the subject of any triples in the graph, in particular no rdf:type), set the class as subclass of `core:NotInstantiatedClass`. 1. No rdf:type criteria corresponding to this class will be put in SPARQL queries 2. The class will never appear in the initial class list. It can still be used to be traversed in WHERE clause |
-| [`core:order`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#order) | order | 0..1 | Order of this class in classes lists. If not set, alphabetical order is used. |
-| [`core:tooltip`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tooltip) | tooltip | 0..n | Text that appears as tooltip when hovering this class, in lists and when selected. Multiple values are allowed in different languages. HTML markup is supported. |
-
-### Properties configuration reference
-
-| Annotation / Axiom | Label | Card. | Description |
-| ------------------ | ----- | ----- | ----------- |
-| `rdfs:subPropertyOf` | subproperty of | 1..1 | Each property must have a superperproperty that corresponds to its widget type (list, search field, date picker, etc.). Typical values are [`core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty) for a list, [`core:SearchProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty) for a search with autocomplete, [`core:NonSelectableProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty) for no selection widget. See [the configuration ontology documentation](http://data.sparna.fr/ontologies/sparnatural-config-core) for all values. |
-| `rdfs:label` | property display label | 1..* | The display label of the property in Sparnatural properties selection lists. Each label can be associated to a language code. Sparnatural will choose the appropriate label depending on its language config parameter. Sparnatural defaults to a label with no language if no label in configured language can be found. |
-| `rdfs:domain` | property domain | 1..1 | The domain of the property, i.e. the classes "on the right" in Sparnatural, for which the property can be selected. Unions of classes are supported in case the property can apply to multiple classes (in Protégé : "Person or Company or Association").|
-| `rdfs:range` | property range | 1..1 | The range of the property, i.e. the classes "on the left" in Sparnatural, to which the property can point. Unions of classes are supported in case the property can refer to multiple classes (in Protégé : "Person or Company or Association") |
-| [`core:sparqlString`](http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString) | SPARQL Property or property path | 0..1 | The property or property path that will be inserted in SPARQL queries in place of the URI of this property. If this is not specified, the URI of the property is inserted. Do not use prefixes, use full URIs. The character string can be any valid property path, so it MUST use `<` and `>` around IRIs, e.g. "`<http://dbpedia.org/ontology/birthPlace>`". You can use `^` for inverse path `/` for sequence paths, `(...)` for grouping, `\|` for alternatives. Exemples: `<http://dbpedia.org/ontology/author>` (simple single property mapping), `^<http://dbpedia.org/ontology/museum>` (reverse path), `<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>` (sequence path), `^(<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>)` (reverse sequence path) |
-| [`ds:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) | property datasource | 0..1 | Applicable to properties under `SelectResourceProperty` (typically list and autocomplete). The datasource to use for the property. The datasource will specify how to populate the list or how to return the autocomplete proposals. List properties must use a list datasource, autocomplete properties must use a search datasource. |
-| [`core:enableNegation`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableNegation) | enable negation | 0..1 | Enables the additional option to express a negation (using a `FILTER NOT EXISTS`) on this property. The `FILTER NOT EXISTS` will apply to the whole "branch" in the query (this criteria and all children criterias) |
-| [`core:enableOptional`](http://data.sparna.fr/ontologies/sparnatural-config-core#enableOptional) | enable optional | 0..1 | Enables the additional option to express an `OPTIONAL` on this property. The `OPTIONAL` will apply to the whole "branch" in the query (this criteria and all children criterias) |
-| [`core:isMultilingual`](http://data.sparna.fr/ontologies/sparnatural-config-core#isMultilingual) | is optional | 0..1 | used to indicate that the values of the property are multilingual (in other words, that there are multiple values with different language tags). In this case, when the value of such a property is selected as a column, a FILTER will automatically be added to filter the value based on the default language of Sparnatural (passed as a parameter at init) |
-| [`core:order`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#order) | order | 0..1 | Order of this property in property lists. If not set, alphabetical order is used. |
-| [`core:tooltip`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#tooltip) | tooltip | 0..n | Text that appears as tooltip when hovering this property, in lists and when selected. Multiple values are allowed in different languages. HTML markup is supported. |
+| [`sd:endpoint`](https://www.w3.org/TR/sparql11-service-description/#sd-endpoint) | URL de l'endpoint | 1..1 | Définit l'URL de l'endpoint à utiliser en combinaison avec le mot-clé SERVICE |

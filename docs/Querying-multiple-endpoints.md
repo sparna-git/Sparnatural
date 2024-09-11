@@ -184,3 +184,7 @@ The full integration looks like this:
       yasqe.setValue("");
     });
 ```
+
+The source endpoint is added as an extra column:
+
+![result list with extra column showing source](/assets/images/result-table-with-source-column.png)

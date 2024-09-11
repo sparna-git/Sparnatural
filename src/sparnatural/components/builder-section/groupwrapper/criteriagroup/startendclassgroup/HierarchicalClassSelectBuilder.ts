@@ -330,7 +330,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       let BackContent = $(`<span>${UiuxConfig.ICON_DAG_ARROW_LEFT}</span>`); 
       this.htmlBreadCrumPath = $('<div class="htmlBreadCrumPath"></div>'); 
       this.htmlBreadCrumPathHome = $('<div class="htmlBreadCrumPathHome">Tout</div>'); 
-      this.htmlBreadCrumPathParentsPrefix = $('<div class="htmlBreadCrumPathParentsPrefix">..</div>'); 
+      this.htmlBreadCrumPathParentsPrefix = $('<div class="htmlBreadCrumPathParentsPrefix">...</div>'); 
       this.htmlBreadCrumPathParents = $('<div class="htmlBreadCrumPathParents"></div>');  
       this.htmlBreadCrumParentLabel = $('<div class="htmlBreadCrumParentLabel"></div>'); 
       //First block for backward action

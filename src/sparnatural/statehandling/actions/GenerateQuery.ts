@@ -74,7 +74,8 @@ export class QueryGenerator {
       this.fireQueryUpdatedEvent(payload);
 
       // re-enable submit button if it was disabled
-      this.actionStore.sparnatural.SubmitSection.enableSubmit();
+      // note that the submitSection may not be present in case submitButton = false in the attributes
+      this.actionStore.sparnatural.submitSection?.enableSubmit();
 
     }
   }

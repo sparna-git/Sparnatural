@@ -46,6 +46,7 @@ spao-i:Instantiation a sh:NodeShape;
   volipi:iconName "fa-light fa-files";
   sh:targetClass rico:Instantiation;
   rdfs:label "Instantiation"@en;
+  sh:description "Ceci est un tooltip"@en , "Ceci est un tooltip"@fr ;
   sh:closed "true";
   sh:ignoredProperties _:ba09c1662f6649d08454fc46fcbacca15773;
   shacl-play:background-color "ff6363";
