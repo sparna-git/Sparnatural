@@ -35,6 +35,11 @@ export class DraggableComponent extends HTMLComponent {
 
     let varName = selected_val.variable;
     let icon = specProvider.getEntity(selected_val.type).getIcon();
+
+    let icon_display = `` ;
+    if (icon != undefined ) {
+      icon_display = `<div class="tmpicon"><span><i class="fa ${icon} fa-fw"></i></span></div>` ;
+    }
     
     let editVar = $(`
         <input type="text" minlength="1">
@@ -74,7 +79,7 @@ export class DraggableComponent extends HTMLComponent {
             <span class="variable-handle">
                 ${UiuxConfig.COMPONENT_DRAG_HANDLE}
             </span>
-            <div class="tmpicon">${icon}</div>
+            ${icon_display}
         </div>`).append(editVar) ;
 
     let aggrBadgeValue = $(`<div class="aggrBadgeValue" style="display: none;"></div>
