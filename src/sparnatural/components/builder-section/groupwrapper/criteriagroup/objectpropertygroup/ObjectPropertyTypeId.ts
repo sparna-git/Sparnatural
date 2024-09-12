@@ -215,7 +215,7 @@ class PropertySelectBuilder extends HTMLComponent {
         color: element.payload.getColor(),
         icon: icon,
         highlightedIcon: element.payload.getHighlightedIcon(),
-        count: 50,
+        count: Math.floor(Math.random() * 1000),
         disabled: disabled,
         childs: Array()
       }
