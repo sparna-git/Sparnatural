@@ -45,7 +45,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   render() {
     super.render(); 
 
-      this.htmlCurentValue = $(`<span class="current temporary-label">${this.temporaryLabel}</span>`) ;
+      this.htmlCurentValue = $(`<span class="current temporary-label"></span>`) ;
       let currentWrapper = $('<div class="currentWrapper"></div>') ;
       currentWrapper.append(this.htmlCurentValue) ;
       this.html.append(currentWrapper);
