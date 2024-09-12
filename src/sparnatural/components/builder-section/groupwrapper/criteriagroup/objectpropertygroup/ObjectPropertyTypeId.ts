@@ -45,7 +45,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   render() {
     super.render(); 
 
-      this.htmlCurentValue = $(`<span class="current temporary-label">${this.temporaryLabel}</span>`) ;
+      this.htmlCurentValue = $(`<span class="current temporary-label"></span>`) ;
       let currentWrapper = $('<div class="currentWrapper"></div>') ;
       currentWrapper.append(this.htmlCurentValue) ;
       this.html.append(currentWrapper);
@@ -215,7 +215,7 @@ class PropertySelectBuilder extends HTMLComponent {
         color: element.payload.getColor(),
         icon: icon,
         highlightedIcon: element.payload.getHighlightedIcon(),
-        count: 50,
+        count: Math.floor(Math.random() * 1000),
         disabled: disabled,
         childs: Array()
       }

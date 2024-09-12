@@ -367,6 +367,9 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       if(arrayNode.length > 0) {
         let Ul = $(`<ul class="`+parentClass+`" parent="${path}"></ul>`) ;
         let i = 0 ;
+        let total_count = 0;
+        let hasTraverseItem = false ;
+        let hasNoEnabledWithChilds = true ;
         arrayNode.forEach(element => {
           let htmlItem = this.buildClassSelectItem(element, path) ;
           let child_path = path+'$'+element.id ;
@@ -374,14 +377,27 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
           i++ ;
           if (element.childs.length > 0) {
             let element_breadCrumData = null ;
+            hasTraverseItem = true ;
+            if (element.disabled == false) {
+              hasNoEnabledWithChilds = false ;
+            }
             element_breadCrumData = JSON.parse(JSON.stringify(breadCrumData));
             element_breadCrumData.parentsLabels.push(element.label) ;
             element_breadCrumData.returnPath = path ;
             this.buildClassSelectList(element.childs, 'root-child', child_path, element_breadCrumData) ;
             htmlItem.attr('list-child-id', path+'$'+element.id) ;
           }
+          if (element.count != undefined) {
+            total_count += element.count ;
+          }
         });
         let breadcrumHeight = 55;
+        if (hasTraverseItem) {
+          Ul[0].classList.add('hasTraverseItem') ;
+        }
+        if (hasNoEnabledWithChilds) {
+          Ul[0].classList.add('hasNoEnabledWithChilds') ;
+        }
         if (Ul[0].classList.contains('root')) {
           breadcrumHeight = 0 ;
           this.htmlSelectUiUxLists[0].style.height = (40*i)+'px' ;
@@ -391,6 +407,19 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
         } else {
           Ul[0].style.height = (40*i + breadcrumHeight)+'px' ;
         }
+        if (total_count > 0) {
+          let li_count = Ul[0].querySelectorAll('li') ;
+          let prop_coef = 100 / total_count ;
+          li_count.forEach(element => {
+            let count = parseInt(element.getAttribute('data-count')) ;
+            let span_gradiant = element.querySelector<HTMLElement>('.item-count>span') ;
+            let span_number = element.querySelector<HTMLElement>('.item-count-number') ;
+            let pourcent = prop_coef * count ;
+            span_gradiant.style.width = pourcent + '%';
+            span_number.innerHTML = '<span>'+this.getCountDisplay(count);+ ' %</span>';
+          });
+        }
+
         this.htmlSelectUiUxLists.append(Ul);
       }
     }
@@ -416,10 +445,17 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       if (tooltip != '') {
         tooltip = `data-tippy-content="${tooltip}"` ;
       }
+      // set count attribute
+      let count = element.count ;
+      if (element.count == undefined) {
+       count = 0 ;
+      } 
+      let count_attr = `data-count="${count}"` ;
+      let countUiUX = `<span class="item-count"><span></span></span><span class="item-count-number"></span>`;
 
       let color = element.color != undefined ? `data-color="${element.color}"` : "";
 
-      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${selected} ${color} ${iconValue} class="${enabledClass}"><span class="item-sel" ${tooltip}><span class="label-icon">${icon}</span><span class="item-label">${element.label}</span></span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
+      let item = $(`<li value="${element.id}" data-id="${element.id}" data-parent="`+ parent +`" ${selected} ${color} ${iconValue} ${count_attr} class="${enabledClass}">${countUiUX}<span class="item-sel" ${tooltip}><span class="label-icon">${icon}</span><span class="item-label">${element.label}</span></span><span class="item-traverse">${UiuxConfig.ICON_DAG_ARROW_RIGHT}</span></li>`) ;
       return item ;
     }
 
@@ -479,6 +515,7 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       
       this.initBreadCrum() ;
       this.htmlSelectUiUxLists.append(this.htmlSelectUiUxBreadCrum) ;
+      console.log(this.hierarchyData) ;
       this.buildClassSelectList(this.hierarchyData, 'root active-pane', '', initBreadcrumData) ;
 
       this.html = $('<div></div>');
@@ -523,6 +560,22 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
 
       return this.html.children();
     }
+
+    getCountDisplay(count:number) {
+      let countToDiplay = '' ;
+      switch (true) {
+        case count >= 1000000:
+          countToDiplay = '~'+Math.round(count / 1000000)+ 'M' ;
+          break;
+        case count >= 1000:
+          countToDiplay = '~'+Math.round(count / 1000)+ 'K' ;
+          break;
+        default:
+          countToDiplay = count+'' ;
+      }
+      return countToDiplay ;
+    }
+
 
 }
 export default HierarchicalClassSelectBuilder;
