@@ -131,12 +131,16 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         }
     }
 
+    /**
+     * @param shapeUri the shape URI (this property shape or an or member of the range of this shape) from which to compute the default property type (e.g. by reading the associated count)
+     * @returns the default widget for this property, based on datatype and count
+     */
     getDefaultPropertyType(shapeUri:string): string {
       let highest:SparnaturalSearchWidget = new ListWidget();
       let highestScore:number = 0;
       for (let index = 0; index < SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().length; index++) {
         const currentWidget = SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets()[index];
-        let currentScore = currentWidget.score(shapeUri, this.store)
+        let currentScore = currentWidget.score(shapeUri, new StoreModel(this.store))
         if(currentScore > highestScore) {
           highestScore = currentScore;
           highest = currentWidget;
