@@ -107,6 +107,23 @@ export class Dag<Payload> implements DagIfc<Payload> {
 
         this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
     }
+
+    public traverseBreadthFirst(processor: (node: DagNodeIfc<Payload>) => void) {
+        this.roots.forEach(root => {
+            processor(root);
+        })
+        this.roots.forEach(root => {
+            root.traverseBreadthFirst(processor);
+        })
+    }
+
+    public traverseDepthFirst(processor: (node: DagNodeIfc<Payload>) => void) {
+        this.roots.forEach(root => {
+            processor(root);
+            root.traverseBreadthFirst(processor);
+        })
+    }
+    
 }
 
 export class DagNode<Payload> implements DagNodeIfc<Payload> {
@@ -177,6 +194,22 @@ export class DagNode<Payload> implements DagNodeIfc<Payload> {
         })
         return result;
     }
+
+    public traverseBreadthFirst(processor: (node: DagNodeIfc<Payload>) => void) {
+        this.children.forEach(c => {
+            processor(c);
+        })
+        this.children.forEach(c => {
+            c.traverseBreadthFirst(processor);
+        })
+    }
+
+    public traverseDepthFirst(processor: (node: DagNodeIfc<Payload>) => void) {
+        this.children.forEach(c => {
+            processor(c);
+            c.traverseBreadthFirst(processor);
+        })
+    }
 }
 
 /**
@@ -188,10 +221,14 @@ export interface DagNodeIfc<Payload> {
     children:DagNodeIfc<Payload>[];
     disabled:boolean;
     payload:Payload;
+    count?:number;
 
     toDebugString(depth:number):string;
 
     sort: (compareFn:(a:Payload, b:Payload)=> number) => void;
+
+    traverseBreadthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
+    traverseDepthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
 
     // TODO ajouter un fonction qui ramène le/les chemins depuis le haut de l'arbre pour arriver jusqu'à un certain noeud
     // findPaths(id:string):Array<Array<string>>
@@ -204,4 +241,7 @@ export interface DagIfc<Payload> {
     roots:DagNodeIfc<Payload>[];
 
     toDebugString():string;
+
+    traverseBreadthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
+    traverseDepthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
 }

@@ -18,7 +18,7 @@ import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad, Quad_Object, Quad_Subject } from '@rdfjs/types/data-model';
 import { Term } from "@rdfjs/types";
 import { StoreModel } from '../StoreModel';
-import { DagIfc, Dag } from '../../dag/Dag';
+import { DagIfc, Dag, DagNodeIfc } from '../../dag/Dag';
 
 const factory = new DataFactory();
 
@@ -239,7 +239,19 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     let dag:Dag<SHACLSpecificationEntity> = new Dag<SHACLSpecificationEntity>();
     // for the moment : no disabled entries
     dag.initFromParentableAndIdAbleEntity(entities, []);
-    console.log(dag.toDebugString())
+
+    // add count
+    dag.traverseBreadthFirst((node:DagNodeIfc<ISpecificationEntity>) => {
+      if(node.parents.length == 0) {
+        // if this is a root
+        // add a count to it
+        node.count = Math.floor(Math.random() * 10000000)
+      } else {
+        // otherwise make absolutely sure the count is undefined
+        node.count = undefined
+      }
+    })
+
     return dag;
   }
 

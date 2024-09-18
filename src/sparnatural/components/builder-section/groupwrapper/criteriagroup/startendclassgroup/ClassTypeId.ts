@@ -10,6 +10,7 @@ import SelectViewVariableBtn from "../../../../buttons/SelectViewVariableBtn";
 import HTMLComponent from "../../../../HtmlComponent";
 import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
 import ISpecificationEntity from "../../../../../spec-providers/ISpecificationEntity";
+import ISpecificationEntry from "../../../../../spec-providers/ISpecificationEntry";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.
@@ -286,7 +287,7 @@ class ClassSelectBuilder extends HTMLComponent {
   }*/
 
 
-  convertToJsonDag(rootNodes:any[]) {
+  convertToJsonDag(rootNodes:DagNodeIfc<ISpecificationEntry>[]) {
     console.log('rootNodes') ;
     console.log(rootNodes) ;
     let arrayToJson: Array<JsonDagRow> = [];
@@ -294,7 +295,7 @@ class ClassSelectBuilder extends HTMLComponent {
     return JSON.parse(JSON.stringify(arrayToJson));
   }
 
-  getRecursiveDagElements(elements: Array<any>, default_icon:string) {
+  getRecursiveDagElements(elements: Array<DagNodeIfc<ISpecificationEntry>>, default_icon:string) {
     let arrayToJson: Array<JsonDagRow> = [];
     elements.forEach(element => {
       let disabled = false ;
@@ -313,7 +314,8 @@ class ClassSelectBuilder extends HTMLComponent {
         color: element.payload.getColor(),
         icon: icon,
         highlightedIcon: element.payload.getHighlightedIcon(),
-        count: Math.floor(Math.random() * 10000000),
+        // read the count from the node
+        count: element.count,
         disabled: disabled,
         childs: Array()
       }

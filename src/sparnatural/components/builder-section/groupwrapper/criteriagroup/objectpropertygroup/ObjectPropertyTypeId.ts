@@ -7,6 +7,7 @@ import CriteriaGroup from "../CriteriaGroup";
 import {HierarchicalClassSelectBuilder, JsonDagRow, DagWidgetDefaultValue} from "../startendclassgroup/HierarchicalClassSelectBuilder";
 import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
 import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
+import ISpecificationEntry from "../../../../../spec-providers/ISpecificationEntry";
 
 /**
  * The property selector
@@ -184,7 +185,7 @@ class PropertySelectBuilder extends HTMLComponent {
     return this;
   }
 
-  convertToJsonDag(rootNodes:any[]) {
+  convertToJsonDag(rootNodes:DagNodeIfc<ISpecificationEntry>[]) {
     console.log('rootNodes') ;
     console.log(rootNodes) ;
     let arrayToJson: Array<JsonDagRow> = [];
@@ -193,7 +194,7 @@ class PropertySelectBuilder extends HTMLComponent {
     return JSON.parse(JSON.stringify(arrayToJson));
   }
 
-  getRecursiveDagElements(elements: Array<any>, default_icon:string) {
+  getRecursiveDagElements(elements: Array<DagNodeIfc<ISpecificationEntry>>, default_icon:string) {
     let arrayToJson: Array<JsonDagRow> = [];
     elements.forEach(element => {
       let disabled = false ;
@@ -215,7 +216,8 @@ class PropertySelectBuilder extends HTMLComponent {
         color: element.payload.getColor(),
         icon: icon,
         highlightedIcon: element.payload.getHighlightedIcon(),
-        count: Math.floor(Math.random() * 1000),
+        // read the count from the node
+        count: element.count,
         disabled: disabled,
         childs: Array()
       }

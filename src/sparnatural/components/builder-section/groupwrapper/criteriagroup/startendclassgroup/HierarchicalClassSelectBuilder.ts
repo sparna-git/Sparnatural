@@ -418,6 +418,14 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
             span_gradiant.style.width = pourcent + '%';
             span_number.innerHTML = '<span>'+this.getCountDisplay(count);+ ' %</span>';
           });
+        } else {
+          // explicitely set te width of the gradient to 0% if there is no count
+          // so that it is invisible
+          let li_count = Ul[0].querySelectorAll('li') ;
+          li_count.forEach(element => {
+            let span_gradiant = element.querySelector<HTMLElement>('.item-count>span') ;
+            span_gradiant.style.width = '0%';
+          });
         }
 
         this.htmlSelectUiUxLists.append(Ul);
