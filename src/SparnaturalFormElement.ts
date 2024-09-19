@@ -30,17 +30,19 @@ export class SparnaturalFormElement extends HTMLElement {
     this.display();
   }
 
-  display() {    
+  display() { 
+    // read the HTML attributes in sparnatural-form   
     this._attributes = new SparnaturalFormAttributes(this);
 
-    // render sparnatural 
+    // create the sparnatural-form instance
     this.sparnaturalForm = new SparnaturalFormComponent(this._attributes);
 
-    // empty the content in case we re-display after an attribute change
+    // empty the HTML content in case we re-display after an attribute change
     $(this).empty();
-    // attache the component to this WebComponent
+    // attach the component to this WebComponent
     $(this).append(this.sparnaturalForm.html);
 
+    // render the form
     this.sparnaturalForm.render();
   }
 }

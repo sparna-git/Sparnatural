@@ -1,5 +1,6 @@
 import { WidgetFactory } from "../sparnatural/components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetFactory";
 import HTMLComponent from "../sparnatural/components/HtmlComponent";
+import { ISparJson } from "../sparnatural/generators/json/ISparJson";
 import { I18n } from "../sparnatural/settings/I18n";
 import ISparnaturalSpecification from "../sparnatural/spec-providers/ISparnaturalSpecification";
 import ISpecificationEntity from "../sparnatural/spec-providers/ISpecificationEntity";
@@ -10,8 +11,13 @@ import { SparnaturalFormI18n } from "./SparnaturalFormI18n";
 
 class SparnaturalFormComponent extends HTMLComponent {
   
-  specProvider: ISparnaturalSpecification;
+
+  // the content of all HTML element attributes
   formSettings: ISettings;
+  // Sparnatural configuration
+  specProvider: ISparnaturalSpecification;
+  // The JSON query from the "query" attribute
+  jsonQuery: ISparJson;
 
   constructor(
     attributes : SparnaturalFormAttributes
@@ -24,51 +30,70 @@ class SparnaturalFormComponent extends HTMLComponent {
   }
 
   render(): this {
-    this.#initFormLabels()
-    this.#initSparnaturalLabels()
+    this.#initSparnaturalFormStaticLabels()
+    this.#initSparnaturalStaticLabels()
     
     this.initSpecificationProvider((sp: ISparnaturalSpecification) => {
       this.specProvider = sp;
       
-      /*
-      let wrapper:WidgetWrapper = new WidgetWrapper(this, this.specProvider);
-      wrapper.render();      
-      */
+      // ICI : générer le formulaire
 
+      // Etape 1 : lire le contenu de la query dans le paramètre "query"
+      this.initJsonQuery((query:ISparJson) => {
+        console.log("Successfully read query in " + this.formSettings.query);
+
+        /*** CODE DE TEST ***/
       
-      let testClass:ISpecificationEntity = this.specProvider.getEntity(
-        this.specProvider.getEntitiesInDomainOfAnyProperty()[0]
-      );
-  
-      let wf:WidgetFactory = new WidgetFactory(
-        this,
-        this.specProvider,
-        (this.getRootComponent() as SparnaturalFormComponent).formSettings,
-        null
-      );
-  
-      let theWidget = wf.buildWidget(
-        this.specProvider.getProperty(testClass.getConnectingProperties(testClass.getConnectedEntities()[1])[0]).getPropertyType(testClass.getConnectedEntities()[0]),
-        {
-          variable:"Test_1",
-          type:testClass.getId()
-        },
-        {
-          variable:"Property_1",
-          type:testClass.getConnectingProperties(testClass.getConnectedEntities()[1])[0]
-        },
-        {
-          variable:"Test_2",
-          type:testClass.getConnectedEntities()[1]
-        }
-      );
-      theWidget.render();
+        let testClass:ISpecificationEntity = this.specProvider.getEntity(
+          this.specProvider.getEntitiesInDomainOfAnyProperty()[0]
+        );
+    
+        let wf:WidgetFactory = new WidgetFactory(
+          this,
+          this.specProvider,
+          (this.getRootComponent() as SparnaturalFormComponent).formSettings,
+          null
+        );
+    
+        let theWidget = wf.buildWidget(
+          this.specProvider.getProperty(testClass.getConnectingProperties(testClass.getConnectedEntities()[1])[0]).getPropertyType(testClass.getConnectedEntities()[0]),
+          {
+            variable:"Test_1",
+            type:testClass.getId()
+          },
+          {
+            variable:"Property_1",
+            type:testClass.getConnectingProperties(testClass.getConnectedEntities()[1])[0]
+          },
+          {
+            variable:"Test_2",
+            type:testClass.getConnectedEntities()[1]
+          }
+        );
+
+        // renders the widget
+        theWidget.render();
+
+        /*** FIN DU CODE DE TEST ***/
+      });
+
+
+
+      // Etape 2 :
+
+
+
+
       
     });
     
     return this;
   }
 
+  /**
+   * Reads and parse the configuration provided in the "src" attribute, and fires a callback when ready
+   * @param callback the function that is called with the ISpecificationProvider instance created after reading the config
+   */
   initSpecificationProvider(callback:any) {
 
     let specProviderFactory = new SparnaturalSpecificationFactory();
@@ -78,7 +103,29 @@ class SparnaturalFormComponent extends HTMLComponent {
     });    
   }
 
-  #initFormLabels() {
+  /**
+   * Reads the Sparnatural query
+   * @param callback 
+   */
+  initJsonQuery(callback:(query:ISparJson)=>void) {
+    let queryUrl = this.formSettings.query;
+
+    $.when(
+      $.getJSON(queryUrl, function (data) {
+        callback(data as ISparJson);
+      }).fail(function (response) {
+        console.error(
+          "Sparnatural - unable to load JSON query file : " + queryUrl
+        );
+      })
+    ).done(function () {});
+
+  }
+
+  /**
+   * Initialize the static labels used to render sparnatural-form
+   */
+  #initSparnaturalFormStaticLabels() {
     if (this.formSettings.language === "fr") {
       SparnaturalFormI18n.init("fr");
     } else {
@@ -86,7 +133,10 @@ class SparnaturalFormComponent extends HTMLComponent {
     }
   }
 
-  #initSparnaturalLabels() {
+  /**
+   * Initialize the static labels used to render the widgets from Sparnatural
+   */
+  #initSparnaturalStaticLabels() {
     if (this.formSettings.language === "fr") {
       I18n.init("fr");
     } else {

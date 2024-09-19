@@ -1,3 +1,6 @@
+/**
+ * Reads the HTML attributes of the sparnatural-form element
+ */
 export class SparnaturalFormAttributes {
   src: any;
   defaultEndpoint: string;
