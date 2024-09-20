@@ -19,7 +19,6 @@ export default class WhereBuilder{
     #isChild:boolean
     #isInOption:boolean
     
-    #widgetComponent:AbstractWidget | null | undefined = null
     #valueBuilder:ValueBuilderIfc;
     
     // patterns built in the build process
@@ -46,7 +45,7 @@ export default class WhereBuilder{
         
         // create the object to convert widget values to SPARQL
         let endClassValue = this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal.type;
-        // this is because the query geenration may be triggered while the end class is not there yet
+        // this is because the query generation may be triggered while the end class is not there yet
         if(endClassValue != null) {            
             this.#valueBuilder = new ValueBuilderFactory().buildValueBuilder(
                 this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected()).getPropertyType(endClassValue)
@@ -58,7 +57,7 @@ export default class WhereBuilder{
                 this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.isVarSelected(),
-                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent.getWidgetValues().map(v=>v.value)
+                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent?.getWidgetValues().map(v=>v.value)
             );
         }
     }
