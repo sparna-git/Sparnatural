@@ -121,7 +121,7 @@ export default class BranchTranslator{
      * Generates the triple of the type of subject ("s" and "sType" in the branch JSON structure)
      */
     #buildSubjectClassPtrn() {
-        if(!this.#valueBuilder.isBlockingStart()) {
+        if(!this.#valueBuilder?.isBlockingStart()) {
             let typeTranslator:TypedVariableTranslator = new TypedVariableTranslator(
                 this.#branch.line.s,
                 this.#branch.line.sType,
@@ -137,7 +137,7 @@ export default class BranchTranslator{
     }
 
     #buildObjectClassPtrn(){
-        if(!this.#valueBuilder.isBlockingEnd()) {
+        if(!this.#valueBuilder?.isBlockingEnd()) {
             let typeTranslator:TypedVariableTranslator = new TypedVariableTranslator(
                 this.#branch.line.o,
                 this.#branch.line.oType,
