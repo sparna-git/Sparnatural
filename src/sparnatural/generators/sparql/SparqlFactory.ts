@@ -34,6 +34,9 @@ export default class SparqlFactory {
 
 
   static buildBgpPattern(triples: Triple[]): BgpPattern {
+      if(triples.findIndex(t => (t == null)) > -1) {
+        throw new Error("Trying to build a bgp pattern with null triple !");
+      }
       return {
           type: "bgp",
           triples: triples,

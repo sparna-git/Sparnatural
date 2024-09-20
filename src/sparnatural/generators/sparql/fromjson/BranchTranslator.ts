@@ -156,7 +156,7 @@ export default class BranchTranslator{
     #buildIntersectionPtrn(){
 
         // the intersection triple can very well be generated even if no rdf:type triple is generated for the end class.
-        if(!this.#valueBuilder?.isBlockingObjectProp()){
+        if(this.#branch.line.s && this.#branch.line.o && !this.#valueBuilder?.isBlockingObjectProp()){
 
             this.#intersectionPtrn.push(
                 SparqlFactory.buildBgpPattern([SparqlFactory.buildIntersectionTriple(
