@@ -59,7 +59,7 @@ export class QueryGenerator {
       // debug rdfJsQuery
       if(getSettings().debug){
         // prints the SPARQL generated from the writing of the JSON data structure
-        console.log("*** Sparnatural SPARQL Query ***");
+        console.log("*** Sparnatural SPARQL Query OLD ***");
         console.log(selectQuery);
       } 
 
@@ -75,6 +75,13 @@ export class QueryGenerator {
       let selectQueryFromJson = sparqlFromJsonGenerator.generateQuery(
         jsonQuery
       );
+
+      if(getSettings().debug){
+        // prints the SPARQL generated from the writing of the JSON data structure
+        console.log("*** Sparnatural SPARQL Query NEW ***");
+        console.log(selectQueryFromJson);
+      } 
+
       var queryStringFromJson = generator.stringify(selectQueryFromJson);
 
       if(getSettings().debug){
