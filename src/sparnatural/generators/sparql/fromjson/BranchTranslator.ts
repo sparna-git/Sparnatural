@@ -129,9 +129,9 @@ export default class BranchTranslator{
                 this.#specProvider
             );
             typeTranslator.build();
-            this.#startClassPtrn = typeTranslator.getResultPtrns();
+            this.#startClassPtrn = typeTranslator.resultPtrns;
             if(typeTranslator.hasDefaultLabel()) {
-                this.#defaultVars.push(factory.variable(typeTranslator.getDefaultLabelVarName()))
+                this.#defaultVars.push(factory.variable(typeTranslator.defaultLabelVarName))
             }
         }
     }
@@ -146,9 +146,9 @@ export default class BranchTranslator{
             );
             typeTranslator.build();
 
-            this.#endClassPtrn = typeTranslator.getResultPtrns()
+            this.#endClassPtrn = typeTranslator.resultPtrns
             if(typeTranslator.hasDefaultLabel()) {
-                this.#defaultVars.push(factory.variable(typeTranslator.getDefaultLabelVarName()))
+                this.#defaultVars.push(factory.variable(typeTranslator.defaultLabelVarName))
             }
         }
     }

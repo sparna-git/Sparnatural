@@ -14,22 +14,26 @@ const factory = new DataFactory();
  */
 export default class TypedVariableTranslator{
 
-    // The variable name
+    // The original variable name
     #variableName:string;
     // The URI of the type in the config
     #variableType:string;
     // whether the variable is selected or not
     #variableIsSelected:boolean;
-    // can consist of multiple patterns in case there is a FILTER(lang(?var) = "xx") if the property is multilingual
-    protected defaultLblPatterns:Pattern[] =[]
-
+    // the config
     #specProvider: ISparnaturalSpecification
     
-    #typeTriple:Triple
+    // the default label var name
+    public defaultLabelVarName;
 
     // patterns built in the build process
-    #resultPtrns: Pattern[] = []    
-    #executedAfterPtrns: Pattern[] = []
+    public resultPtrns: Pattern[] = []
+    // can consist of multiple patterns in case there is a FILTER(lang(?var) = "xx") if the property is multilingual
+    protected defaultLblPatterns:Pattern[] =[]
+    // the rdf:type triple
+    #typeTriple:Triple
+
+    public executedAfterPtrns: Pattern[] = []
 
     constructor(
         variableName:string,
@@ -41,6 +45,9 @@ export default class TypedVariableTranslator{
         this.#variableType = variableType
         this.#specProvider = specProvider
         this.#variableIsSelected = variableIsSelected
+
+        // build default label var name
+        this.defaultLabelVarName = this.#variableName+"_label";
     }
 
     build() {
@@ -92,13 +99,13 @@ export default class TypedVariableTranslator{
                             [SparqlFactory.buildTriple(
                                 factory.variable(this.#variableName),
                                 factory.namedNode(defaultLabelProp.getId()),
-                                factory.variable(this.getDefaultLabelVarName())
+                                factory.variable(this.defaultLabelVarName)
                             )]
                     ));
                     // FILTER(?Person_1_label = "fr")
                     this.defaultLblPatterns.push(
                         SparqlFactory.buildFilterLangEquals(
-                            factory.variable(this.getDefaultLabelVarName()),
+                            factory.variable(this.defaultLabelVarName),
                             factory.literal(getSettings().language)
                         )
                     );
@@ -113,11 +120,11 @@ export default class TypedVariableTranslator{
                             [SparqlFactory.buildTriple(
                                 factory.variable(this.#variableName),
                                 factory.namedNode(defaultLabelProp.getId()),
-                                factory.variable(this.getDefaultLabelVarName()+"_lang")
+                                factory.variable(this.defaultLabelVarName+"_lang")
                             )]
                         ),
                         SparqlFactory.buildFilterLangEquals(
-                            factory.variable(this.getDefaultLabelVarName()+"_lang"),
+                            factory.variable(this.defaultLabelVarName+"_lang"),
                             factory.literal(getSettings().language)
                         )
                         ]
@@ -130,11 +137,11 @@ export default class TypedVariableTranslator{
                             [SparqlFactory.buildTriple(
                                 factory.variable(this.#variableName),
                                 factory.namedNode(defaultLabelProp.getId()),
-                                factory.variable(this.getDefaultLabelVarName()+"_defaultLang")
+                                factory.variable(this.defaultLabelVarName+"_defaultLang")
                             )]
                         ),
                         SparqlFactory.buildFilterLangEquals(
-                            factory.variable(this.getDefaultLabelVarName()+"_defaultLang"),
+                            factory.variable(this.defaultLabelVarName+"_defaultLang"),
                             factory.literal(getSettings().defaultLanguage)
                         )
                         ]
@@ -142,9 +149,9 @@ export default class TypedVariableTranslator{
 
                     // BIND(COALESCE(?Person_1_label,?Person_1_defaultLabel) AS ?Person_1_label)
                     this.defaultLblPatterns.push(SparqlFactory.buildBindCoalescePattern(
-                        factory.variable(this.getDefaultLabelVarName()+"_lang"),
-                        factory.variable(this.getDefaultLabelVarName()+"_defaultLang"),
-                        factory.variable(this.getDefaultLabelVarName())
+                        factory.variable(this.defaultLabelVarName+"_lang"),
+                        factory.variable(this.defaultLabelVarName+"_defaultLang"),
+                        factory.variable(this.defaultLabelVarName)
                     ));
                 }
             } else {
@@ -157,7 +164,7 @@ export default class TypedVariableTranslator{
                         SparqlFactory.buildTriple(
                             factory.variable(this.#variableName),
                             factory.namedNode(defaultLabelProp.getId()),
-                            factory.variable(this.getDefaultLabelVarName())
+                            factory.variable(this.defaultLabelVarName)
                         )
                     ])
                     );
@@ -168,7 +175,7 @@ export default class TypedVariableTranslator{
     #createResultPtrns() {
         // push the type triple first
         if(this.#typeTriple) {
-            this.#resultPtrns.push(SparqlFactory.buildBgpPattern([this.#typeTriple]));
+            this.resultPtrns.push(SparqlFactory.buildBgpPattern([this.#typeTriple]));
         }
 
         if(this.defaultLblPatterns.length > 0){
@@ -181,10 +188,10 @@ export default class TypedVariableTranslator{
                 )
             ) {
                 // in that case, we push an OPTIONAL { ... } pattern
-                this.#resultPtrns.push(SparqlFactory.buildOptionalPattern(this.defaultLblPatterns))
+                this.resultPtrns.push(SparqlFactory.buildOptionalPattern(this.defaultLblPatterns))
             } else {
                 // simply push the default label patterns
-                this.#resultPtrns.push(...this.defaultLblPatterns)
+                this.resultPtrns.push(...this.defaultLblPatterns)
             }
         }
     }
@@ -205,18 +212,4 @@ export default class TypedVariableTranslator{
         return this.#specProvider.getProperty(defaultLabelProperty);
     }
 
-    /**
-     * @returns the default label variable name as a string
-     */
-    getDefaultLabelVarName():string {
-        return this.#variableName+"_label"
-    }
-
-    getResultPtrns():Pattern[]{
-        return this.#resultPtrns
-    }
-
-    getExecutedAfterPtrns(){
-        return this.#executedAfterPtrns;
-    }
 }
