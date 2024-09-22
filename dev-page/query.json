@@ -1,0 +1,79 @@
+{
+  "distinct": true,
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "Artwork_1"
+    },
+    {
+      "termType": "Variable",
+      "value": "Country_4"
+    },
+    {
+      "termType": "Variable",
+      "value": "Image_6"
+    }
+  ],
+  "order": null,
+  "branches": [
+    {
+      "line": {
+        "s": "Artwork_1",
+        "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#displayedAt",
+        "o": "Museum_2",
+        "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
+        "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
+        "values": []
+      },
+      "children": [
+        {
+          "line": {
+            "s": "Museum_2",
+            "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#country",
+            "o": "Country_4",
+            "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
+            "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
+            "values": []
+          },
+          "children": []
+        }
+      ]
+    },
+    {
+      "line": {
+        "s": "Artwork_1",
+        "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#thumbnail",
+        "o": "Image_6",
+        "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
+        "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Image",
+        "values": []
+      },
+      "children": [],
+      "optional": true
+    },
+    {
+      "line": {
+        "s": "Artwork_1",
+        "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#description",
+        "o": "Text_8",
+        "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
+        "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Text",
+        "values": []
+      },
+      "children": [],
+      "optional": true
+    },
+    {
+      "line": {
+        "s": "Artwork_1",
+        "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#author",
+        "o": "Person_10",
+        "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
+        "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Person",
+        "values": []
+      },
+      "children": [],
+      "optional": true
+    }
+  ]
+}
