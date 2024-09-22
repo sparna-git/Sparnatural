@@ -39,6 +39,8 @@ class ClassTypeId extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
   htmlCurentValue: JQuery<HTMLElement>; 
   temporaryLabel: string;
+
+
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISparnaturalSpecification,
@@ -127,7 +129,7 @@ class ClassTypeId extends HTMLComponent {
     if (entity_icon != undefined ) {
       icon = `<span><i class="fa ${entity_icon} fa-fw"></i></span>` ;
     }
-    this.htmlCurentValue.html(`${icon} ${entity.getLabel()} `) ;
+    this.htmlCurentValue.html(`${icon} <span class="label">${entity.getLabel()}</span> `) ;
     this.htmlCurentValue[0].classList.add('selected') ;
   }
 
@@ -198,14 +200,14 @@ class ClassTypeId extends HTMLComponent {
 
   // renders the type label name 
   showTypeName(){
-    const currentSpan = this.widgetHtml.first()[0].getElementsByClassName('current').item(0).getElementsByClassName('label').item(0)
+    const currentSpan = this.htmlCurentValue.first()[0].getElementsByClassName('label').item(0)
      //display label
      currentSpan.textContent = this.specProvider.getEntity(this.ParentComponent.getTypeSelected()).getLabel();
   }
 
   // renders the variable name
   showVarName(){
-    const currentSpan = this.widgetHtml.first()[0].getElementsByClassName('current').item(0).getElementsByClassName('label').item(0)
+    const currentSpan = this.htmlCurentValue.first()[0].getElementsByClassName('label').item(0)
     // display variable
     currentSpan.textContent = this.ParentComponent.getVarName();
   }
