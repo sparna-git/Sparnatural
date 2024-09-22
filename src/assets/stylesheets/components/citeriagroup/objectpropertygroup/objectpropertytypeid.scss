@@ -1,3 +1,20 @@
 .ObjectPropertyTypeId{
+    position: relative;
     display: flex;
+
+    .currentWrapper {
+        padding-left: 15px;
+        padding-right: 15px;
+        
+    }
+
+    span.current {
+        width: 232px;
+        &.selected {
+            width: auto;
+        }
+        &.temporary-label {
+            width: auto;
+        }
+    }
 }

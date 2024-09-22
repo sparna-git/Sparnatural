@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" />
 
     <!-- YASGUI stuff -->
-    <link href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/yasgui-yasqe/dist/yasqe.min.css" rel="stylesheet" type="text/css" />
 
     <!-- FONTAWESOME-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -57,9 +57,16 @@
             <!-- src="configs/VehiclePropertyOntology.ttl configs/VehiclePropertyVocabulary.ttl" -->
             <!-- src="configs/person-v2.shacl.ttl" -->
             <!-- src="configs/vehicle-cross-domain-ontology.ttl" -->
+             
+            <!-- dumb config pour tester une hierarchie -->
+            <!-- src="configs/sparnatural-hierarchy-config.ttl" -->
+
+            <!-- config pour tester une hierarchie plus complete (on appelle les 2 fichiers) -->
+            <!-- src="configs/instantiations-shacl.ttl configs/collections-shacl.ttl configs/sapa-sparnatural-shacl.ttl configs/sapa-sparnatural-shacl-test.ttl" -->
+            <!-- Test with property hierarchy: src="configs/sparnatural-hierarchy-config.ttl configs/RiC-O_1-0.rdf" -->
             <spar-natural
-              src="configs/nakala-shapes.ttl"
-              lang="en"
+              src="configs/instantiations-shacl.ttl configs/collections-shacl.ttl configs/sapa-sparnatural-shacl.ttl configs/sapa-sparnatural-shacl-test.ttl configs/instantiation_statistics_sparnatural.ttl"
+              lang="fr"
               defaultLang="fr"
               endpoint="https://nakala.fr/sparql"
               distinct="true"

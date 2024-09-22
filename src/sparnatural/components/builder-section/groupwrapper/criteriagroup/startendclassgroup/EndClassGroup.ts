@@ -108,6 +108,7 @@ class EndClassGroup extends HTMLComponent {
     this.inputSelector = new ClassTypeId(
       this,
       this.specProvider,
+      '',
       startClassVal
     );
     this.inputSelector.render();

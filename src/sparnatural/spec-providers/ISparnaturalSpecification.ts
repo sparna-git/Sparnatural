@@ -14,6 +14,9 @@ interface ISparnaturalSpecification {
    */
   getAllSparnaturalEntities():Array<string>;
 
+  /**
+   * @deprecated use the tree variant instead
+   */
   getEntitiesInDomainOfAnyProperty():Array<string>;
 
   /**

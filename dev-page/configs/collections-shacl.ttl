@@ -1,0 +1,1198 @@
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix spao-i: <http://shapes.performing-arts.ch/instantiations/> .
+@prefix olo: <http://purl.org/ontology/olo/core#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ebucore: <https://www.ebu.ch/metadata/ontologies/ebucore#> .
+@prefix spao-co: <http://shapes.performing-arts.ch/collections/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix spao: <http://ontology.performing-arts.ch/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://shapes.performing-arts.ch/collections> a owl:Ontology;
+  dct:title "Documentation of Swiss Performing Arts Collections model";
+  dct:abstract """(_english_) This page documents the structure of the Collections data published by the SAPA Foundation. The SAPA Foundation uses several RDF ontologies within the [performing-arts.ch](https://www.performing-arts.ch) platform. To describe its collections, it mainly uses the [Records in Contexts](https://www.ica.org/resource/records-in-contexts-ontology/) ontology, with the following specific features:
+
+- The [version 0.2 of RiC-O](https://github.com/ICA-EGAD/RiC-O/tree/master/ontology/previous-versions/RiC-O_v0-2_release) is used
+- `rico:Instantiation` are created mainly for audiovisual documents (including photos), and very marginally for other document types, for which only the classes `rico:RecordSet`, `rico:Record` or `rico:RecordPart` are used.
+- The class `rico:RecordResource` is never instantiated directly.
+- `rico:Record` entities are used to describe documents (e.g. a videotape).
+- `rico:RecordPart` entities are used mainly in the audiovisual field (e.g. different recordings on the same videotape).
+- The SAPA Foundation works in multiple languages (mainly German, French and Italian). Descriptions are produced in the language of the document. However, the `rico:hasOrHadLanguage` property is not systematically used to declare the language.
+
+-----
+
+(_français_) Cette page documente la structure des données de Collections publiées par la Fondation SAPA. La Fondation SAPA utilise plusieurs ontologies RDF au sein de la plateforme [performing-arts.ch](https://www.performing-arts.ch). Pour décrire ses collections, elle utilise princiaplement l'ontologie [Records in Contexts](https://www.ica.org/resource/records-in-contexts-ontology/) avec les spécificités suivantes:
+
+- la [version 0.2 de RiC-O](https://github.com/ICA-EGAD/RiC-O/tree/master/ontology/previous-versions/RiC-O_v0-2_release) est utilisée
+- les `rico:Instantiation` sont créées princiaplement pour les documents audiovisuels (y compris photo) et très marginalement pour les autres types de documents pour lesquels on se contente des entités `rico:RecordSet`, `rico:Record` et `rico:RecordPart`.
+- La classe `rico:RecordResource` n'est pas utilisée directement.
+- Les entités `rico:Record` sont utilisées pour désigner les documents (exemple une bande vidéo)
+- Les entités `rico:RecordPart` sont utilisées princiapelement dans le domaine audiovisuel (exemple : des enregistrements différents sur une même bande vidéo).
+- La Fondation SAPA travaille de façon mutilingue (principalement allemand, français, italien). Les descriptions sont réalisées dans la langue du document. Toutefois, la propriété `rico:hasOrHadLanguage` n'est pas utilisée de façon systèmatique pour déclarer celle-ci.""";
+  foaf:depiction <http://shapes.performing-arts.ch/images/diagramme-collections.png>;
+  dcat:distribution _:ba09c1662f6649d08454fc46fcbacca15807;
+  dct:hasFormat <https://docs.google.com/spreadsheets/d/1NnWIuwdpjKiLLIMEOiIhr9pY3Oxb6BMF/export?format=xlsx>,
+    <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1NnWIuwdpjKiLLIMEOiIhr9pY3Oxb6BMF%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true>;
+  rdfs:seeAlso <https://shacl-play.sparna.fr/play/doc?url=https%3A%2F%2Fxls2rdf.sparna.fr%2Frest%2Fconvert%3Furl%3Dhttps%253A%252F%252Fdocs.google.com%252Fspreadsheets%252Fd%252F1NnWIuwdpjKiLLIMEOiIhr9pY3Oxb6BMF%252Fexport%253Fformat%253Dxlsx%26noPostProcessings%3Dtrue&includeDiagram=false&language=en> .
+
+_:ba09c1662f6649d08454fc46fcbacca15807 dct:format <https://www.iana.org/assignments/media-types/text/turtle>;
+  dcat:downloadURL <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1NnWIuwdpjKiLLIMEOiIhr9pY3Oxb6BMF%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true> .
+
+spao-co:RecordResource a sh:NodeShape;
+  sh:order "1"^^xsd:integer;
+  volipi:iconName "fa-light fa-file-heart";
+  sh:target spao-co:RecordResource-target;
+  rdfs:label "Record Resource"@en;
+  skos:definition "Note : the class RecordResource is never instantiated directly and groups the common properties between Record, RecordSet and RecordPart. Instances are either rico:Record, rico:RecordSet or rico:RecordPart"@en;
+  foaf:depiction spao-co:Diagram_Record, spao-co:Diagram_RecordSet, spao-co:Diagram_RecordPart;
+  sh:property spao-co:RecordResource_descriptiveNote, spao-co:RecordResource_hasAccessibility,
+    spao-co:RecordResource_hasCopyrightDeclaration, spao-co:RecordResource_hasInternalNote,
+    spao-co:RecordResource_hasInstantiation, spao-co:RecordResource_hasNote, spao-co:RecordResource_hasOrHadIdentifier,
+    spao-co:RecordResource_hasOrHadSubject, spao-co:RecordResource_hasPermission, spao-co:RecordResource_hasPhysicalUsability,
+    spao-co:RecordResource_hasProcessingConvention, spao-co:RecordResource_hasProcessingDate,
+    spao-co:RecordResource_hasProtectionDuration, spao-co:RecordResource_hasTermsOfProtection,
+    spao-co:RecordResource_hasUsageRightsStill, spao-co:RecordResource_hasUsageRightsStreaming,
+    spao-co:RecordResource_identifier, spao-co:RecordResource_index, spao-co:RecordResource_isAssociatedWithDate,
+    spao-co:RecordResource_isRelatedTo, spao-co:RecordResource_legacyIdentifier, spao-co:RecordResource_name,
+    spao-co:RecordResource_seeAlso .
+
+spao-co:RecordResource-target sh:select """SELECT $this
+WHERE {
+ $this a ?rrType .
+ VALUES ?rrType {
+ <https://www.ica.org/standards/RiC/ontology#Record>
+ <https://www.ica.org/standards/RiC/ontology#RecordSet>
+ <https://www.ica.org/standards/RiC/ontology#RecordPart>
+ }
+}""" .
+
+spao-co:Record a sh:NodeShape;
+  sh:order "2"^^xsd:integer;
+  volipi:iconName "fa-light fa-file";
+  sh:targetClass rico:Record;
+  rdfs:label "Record"@en;
+  sh:node spao-co:RecordResource;
+  skos:example <http://data.performing-arts.ch/r/01f3d044-33ea-4a23-b1f7-125d5b8b5c36>;
+  foaf:depiction spao-co:Diagram_Record;
+  shacl-play:background-color "F7CECC";
+  sh:property spao-co:Record_conditionsOfAccess, spao-co:Record_comment, spao-co:Record_conditionsOfUse,
+    spao-co:Record_copyrightNotice, spao-co:Record_deliveryNumber, spao-co:Record_hasAnnotationRecto,
+    spao-co:Record_hasAnnotationVerso, spao-co:Record_hasCreator, spao-co:Record_hasCredit,
+    spao-co:Record_hasDocumentaryFormType, spao-co:Record_hasDoublets, spao-co:Record_hasExtent,
+    spao-co:Record_hasOrHadLanguage, spao-co:Record_hasOrHadLocation, spao-co:Record_hasPacking,
+    spao-co:Record_hasProvenance, spao-co:Record_hasRecordState, spao-co:Record_isAssociatedWithEvent,
+    spao-co:Record_isAssociatedWithPlace, spao-co:Record_isOrWasIncludedIn, spao-co:Record_physicalCharacteristics,
+    spao-co:Record_sameAs .
+
+spao-co:RecordSet a sh:NodeShape;
+  sh:order "3"^^xsd:integer;
+  volipi:iconName "fa-light fa-box-archive";
+  sh:targetClass rico:RecordSet;
+  rdfs:label "Record Set"@en;
+  sh:node spao-co:RecordResource;
+  skos:example <http://data.performing-arts.ch/r/0006c351-351a-4add-addf-40aafa582718>;
+  foaf:depiction spao-co:Diagram_RecordSet;
+  shacl-play:background-color "F7948F";
+  sh:property spao-co:RecordSet_comment, spao-co:RecordSet_cassation, spao-co:RecordSet_conditionsOfAccess,
+    spao-co:RecordSet_conditionsOfUse, spao-co:RecordSet_copyrightNotice, spao-co:RecordSet_deliveryNumber,
+    spao-co:RecordSet_hasCreator, spao-co:RecordSet_hasCredit, spao-co:RecordSet_hasDoublets,
+    spao-co:RecordSet_hasExtent, spao-co:RecordSet_hasOrHadAllMembersWithDocumentaryFormType,
+    spao-co:RecordSet_hasOrHadLanguage, spao-co:RecordSet_hasOrHadLocation, spao-co:RecordSet_hasPacking,
+    spao-co:RecordSet_hasProvenance, spao-co:RecordSet_hasRecordSetType, spao-co:RecordSet_history,
+    spao-co:RecordSet_isAssociatedWithEvent, spao-co:RecordSet_isAssociatedWithPlace,
+    spao-co:RecordSet_isOrWasIncludedIn, spao-co:RecordSet_physicalCharacteristics, spao-co:RecordSet_sameAs .
+
+spao-co:RecordPart a sh:NodeShape;
+  sh:order "4"^^xsd:integer;
+  volipi:iconName "fa-light fa-puzzle";
+  sh:targetClass rico:RecordPart;
+  rdfs:label "Record Part"@en;
+  sh:node spao-co:RecordResource;
+  skos:definition "RecordParts are mostly used to describe video recordings with multiple recordings on the same video tape."@en;
+  skos:example <http://data.performing-arts.ch/r/dd5bc0bc-4c1f-4f67-8c4f-c5040ddc04d8>;
+  foaf:depiction spao-co:Diagram_RecordPart;
+  shacl-play:background-color "F7E0DF";
+  sh:property spao-co:RecordPart_hasDocumentaryFormType, spao-co:RecordPart_isOrWasConstituentOf .
+
+spao-co:ArchivalPlace a sh:NodeShape;
+  sh:order "6"^^xsd:integer;
+  volipi:iconName "fa-light fa-building";
+  sh:targetClass spao:ArchivalPlace;
+  rdfs:label "Archival place"@en;
+  sh:property spao-co:ArchivalPlace_containedBy, spao-co:ArchivalPlace_hasPacking, spao-co:ArchivalPlace_label .
+
+spao-co:Event a sh:NodeShape;
+  sh:order "7"^^xsd:integer;
+  volipi:iconName "fa-light fa-calendar-xmark";
+  sh:targetClass rico:Event;
+  rdfs:label "Event"@en;
+  sh:property spao-co:Event_hasEventType, spao-co:Event_label .
+
+spao-co:RecordResourceExtent a sh:NodeShape;
+  sh:order "80"^^xsd:integer;
+  volipi:iconName "fa-light fa-ruler-triangle";
+  sh:targetClass rico:RecordResourceExtent;
+  rdfs:label "Extent"@en;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-co:RecordResourceExtent_hasUnitOfMeasurement, spao-co:RecordResourceExtent_quantity .
+
+spao-co:Identifier a sh:NodeShape;
+  sh:order "81"^^xsd:integer;
+  volipi:iconName "fa-light fa-barcode";
+  sh:targetClass rico:Identifier;
+  rdfs:label "Identifier"@en;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-co:Identifier_P2_has_type, spao-co:Identifier_value .
+
+spao-co:SingleDate a sh:NodeShape;
+  sh:order "82"^^xsd:integer;
+  volipi:iconName "fa-light fa-calendar-xmark";
+  sh:targetClass rico:SingleDate;
+  rdfs:label "Date (single)"@en;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-co:SingleDate_certainty, spao-co:SingleDate_dateQualifier, spao-co:SingleDate_dateStandard,
+    spao-co:SingleDate_expressedDate, spao-co:SingleDate_normalizedDateValue .
+
+spao-co:Date a sh:NodeShape;
+  sh:order "83"^^xsd:integer;
+  volipi:iconName "fa-light fa-calendar";
+  sh:targetClass rico:Date;
+  rdfs:label "Date"@en;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-co:Date_dateStandard, spao-co:Date_expressedDate, spao-co:Date_normalizedDateValue .
+
+spao-co:DateRange a sh:NodeShape;
+  sh:order "84"^^xsd:integer;
+  volipi:iconName "fa-light fa-calendar-range";
+  sh:targetClass rico:DateRange;
+  rdfs:label "Date (range)"@en;
+  sh:deactivated "true"^^xsd:boolean;
+  sh:property spao-co:DateRange_hasBeginningDate, spao-co:DateRange_hasEndDate .
+
+spao-co:Concept a sh:NodeShape;
+  sh:order "90"^^xsd:integer;
+  volipi:iconName "fa-light fa-tags";
+  sh:targetClass skos:Concept;
+  rdfs:label "Concept"@en;
+  sh:property spao-co:Concept_prefLabel, spao-co:Concept_altLabel, spao-co:Concept_hiddenLabel,
+    spao-co:Concept_broader, spao-co:Concept_narrower, spao-co:Concept_definition, spao-co:Concept_inScheme,
+    spao-co:Concept_topConceptOf, spao-co:Concept_exactMatch, spao-co:Concept_comment .
+
+spao-co:Language a sh:NodeShape;
+  sh:order "91"^^xsd:integer;
+  volipi:iconName "fa-light fa-language";
+  sh:targetClass rico:Language;
+  rdfs:label "Language"@en .
+
+rico:Language rdfs:subClassOf skos:Concept .
+
+spao-co:DocumentaryFormType a sh:NodeShape;
+  sh:order "92"^^xsd:integer;
+  volipi:iconName "fa-light fa-tags";
+  sh:targetClass rico:DocumentaryFormType;
+  rdfs:label "Documentary Form Type"@en .
+
+rico:DocumentaryFormType rdfs:subClassOf skos:Concept .
+
+spao-co:RecordState a sh:NodeShape;
+  sh:order "94"^^xsd:integer;
+  volipi:iconName "fa-light fa-tags";
+  sh:targetClass rico:RecordState;
+  rdfs:label "Record State"@en .
+
+rico:RecordState rdfs:subClassOf skos:Concept .
+
+spao-co:RecordResource_descriptiveNote sh:path rico:descriptiveNote;
+  sh:order "1";
+  sh:name "descriptive note"@en;
+  sh:description """Descriptive information about an entity that is not otherwise addressed (RiC-O 0.2)
+This is generally used in the data to describe the content of the Record (similar to rico:scopeAndContent)"""@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordResource_hasAccessibility sh:path spao:hasAccessibility;
+  sh:order "2";
+  sh:name "has accessibility"@en;
+  sh:description "Indique l'accessibilité publique aux documents, les deux valeurs possible sont \"public\" ou \"collaborateur/trice\""@fr,
+    "Indicates whether the documents are publicly accessible, the two possible values are \"public\" or \"collaborator\"."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:RecordResource_hasCopyrightDeclaration sh:path spao:hasCopyrightDeclaration;
+  sh:order "3";
+  sh:name "has copyright declaration"@en;
+  sh:description "Caractérise les informations à disposition de l'institution concernant les droits d'auteur sur les archives. Des valeurs possibles sont \"Oui\", \"Non\", \"En recherche\", \"Partiel\"."@fr,
+    "Characterizes the information available to the institution regarding copyright on the archives. Possible values are \"Yes\", \"No\", \"In research\", \"Partial\"."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:RecordResource_hasInternalNote sh:path spao:hasInternalNote;
+  sh:order "4";
+  sh:name "has internal note"@en;
+  sh:description "Note de gestion interne à l'usage des archivistes. Ce champs n'est pas exporté dans les dumps publics."@fr,
+    "Internal management note for use by archivists. This field is not exported in public dumps."@en;
+  skos:editorialNote "A migrer vers SKOS plus tard"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordResource_hasInstantiation sh:path rico:hasInstantiation;
+  sh:order "5";
+  sh:name "has instantiation"@en;
+  sh:description """Connects a Record Resource to one of its Instantiations. (RiC-O 0.2)
+There is not always an Instantiation for each RecordResource in the data, depending on the type of document. For audio, photo and video documents, there is always at least one Instantiation."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Instantiation .
+
+spao-co:RecordResource_hasNote sh:path spao:hasNote;
+  sh:order "6";
+  sh:name "has note"@en;
+  sh:description "Note générale à destination du public."@fr, "General note for the public."@en;
+  skos:editorialNote "A migrer vers SKOS plus tard"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordResource_hasOrHadIdentifier sh:path rico:hasOrHadIdentifier;
+  sh:order "7";
+  sh:name "has or had identifier"@en;
+  sh:description """Connects a Thing to one of its past or present Identifiers. (RiC-O 0.2)
+This is progressively implemented for all resources, it contains the same value as rico:identifier, with an additional qualifier."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Identifier .
+
+spao-co:RecordResource_hasOrHadSubject sh:path rico:hasOrHadSubject;
+  sh:order "16";
+  sh:name "has or had subject"@en;
+  sh:description """Connects a Record Resource to a Thing that is or was its subject. (RiC-O 0.2)
+
+This can take any type of entity as a value."""@en;
+  skos:editorialNote """Par souci de cohérence avec RiC, je mettrai en range rico:Thing, et normalement toutes les valeurs devraient avoir une classe qui est sous-classe de rico:Thing.
+Cela pose question pour les Performance_Plan et les Recording.
+
+L'ontologie SAPA pourrait déclarer des triplets additionnels pour dire que des classes FRBRoo sont subclassOf RiC-O:Thing.
+
+Si on ne souhaite pas faire cela, on pourrait enlever du range les classes CRM qui ont une correspondance RiCO (Group, Actor, E21_Person, etc...)
+
+Pour l'instant ce que je fais c'est que j'enlève du range les classes CRM qui ont leur correspondance dans RiC-O, et je laisse celles qui n'ont pas de correspondance"""@en;
+  sh:nodeKind sh:IRI .
+
+spao-co:RecordResource_hasPermission sh:path spao:hasPermission;
+  sh:order "17";
+  sh:name "has permission"@en;
+  sh:description "Pour les archives non accessibles au public, indique les groupes de collaborateurs/trices y ayant accès."@fr,
+    "For archives not accessible to the public, indicates the groups of collaborators who have access."@en;
+  skos:editorialNote "C'est un chemps de gestion interne qui définit quel groupe d'utilisateurs à droit d'accéder au contenu de cette Ressource. je mets skos:Concept en range"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:RecordResource_hasPhysicalUsability sh:path spao:hasPhysicalUsability;
+  sh:order "18";
+  sh:name "has physical usability"@en;
+  sh:description "Catégorie indiquant la possibilité de manipuler les archives par rapport à leur état de conservation physique. Les valeurs possibles sont \"Restreinte\", \"Non restreinte\", \"Impossible\""@fr,
+    "Category indicating the possibility of handling the archives in relation to their physical state of preservation. The possible values are \"Restricted\", \"Unrestricted\", \"Impossible\"."@en;
+  skos:editorialNote "je mets skos:Concept en range"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:RecordResource_hasProcessingConvention sh:path spao:hasProcessingConvention;
+  sh:order "19";
+  sh:name "has processing convention"@en;
+  sh:description "Référence à la norme suivie lors des travaux de description. Par exemple \"ISAD-G\""@fr,
+    "Reference to the standard followed during descriptive work. For example \"ISAD-G\"."@en;
+  skos:editorialNote """N'y aurait-il pas une propriété RiC-O ?
+
+THOMAS : regarder les valeurs et voir si une propriété existante existe en RiC-O"""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordResource_hasProcessingDate sh:path spao:hasProcessingDate;
+  sh:order "20";
+  sh:name "has processing date"@en;
+  sh:description "Date à laquelle la description des archives a été réalisée ou modifiée."@fr,
+    "Date on which the archive description was created or modified."@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15808 .
+
+_:ba09c1662f6649d08454fc46fcbacca15808 rdf:first _:ba09c1662f6649d08454fc46fcbacca15809;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15810 .
+
+_:ba09c1662f6649d08454fc46fcbacca15809 sh:class rico:SingleDate .
+
+_:ba09c1662f6649d08454fc46fcbacca15810 rdf:first _:ba09c1662f6649d08454fc46fcbacca15811;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15812 .
+
+_:ba09c1662f6649d08454fc46fcbacca15811 sh:class rico:DateRange .
+
+_:ba09c1662f6649d08454fc46fcbacca15812 rdf:first _:ba09c1662f6649d08454fc46fcbacca15813;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca15813 sh:class rico:Date .
+
+spao-co:RecordResource_hasProtectionDuration sh:path spao:hasProtectionDuration;
+  sh:order "21";
+  sh:name "has protection duration"@en;
+  sh:description "Indication de la durée pendant laquelle le document n'est pas accessible au public."@fr,
+    "Indication of the duration during which the document is not accessible to the public."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordResource_hasTermsOfProtection sh:path spao:hasTermsOfProtection;
+  sh:order "22";
+  sh:name "has terms of protection"@en;
+  sh:description "Indique l'événement de référence à partir duquel le délai de protection démarre. L'usage de cette propriété n'est pas stabilisée au sein de la fondation SAPA."@fr,
+    "Indicates the reference event from which the protection period starts. The use of this property is not stabilized within the SAPA foundation."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:RecordResource_hasUsageRightsStill sh:path spao:hasUsageRightsStill;
+  sh:order "23";
+  sh:name "has usage rights still"@en;
+  sh:description "Indique si la fondation détient les droits pour la publication par elle-même des captures d'écran. Les valeurs possibles sont \"Oui\", \"Non\" ou \"Inconnu\"."@fr,
+    "Indicates whether the foundation holds the rights for the publication by itself of screen captures. Possible values are \"Yes\", \"No\" or \"Unknown\"."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:RecordResource_hasUsageRightsStreaming sh:path spao:hasUsageRightsStreaming;
+  sh:order "24";
+  sh:name "has usage rights streaming"@en;
+  sh:description "Indique si la fondation détient les droits pour la publication par elle-même du streaming vidéo. Les valeurs possibles sont \"Oui\", \"Non\" ou \"Inconnu\"."@fr,
+    "Indicates whether the foundation holds the rights for the publication by itself of video streaming. Possible values are \"Yes\", \"No\" or \"Unknown\"."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:RecordResource_identifier sh:path rico:identifier;
+  sh:order "25";
+  sh:name "identifier"@en;
+  sh:description """A word, number, letter, symbol, or any combination of these used to uniquely identify or reference an individual instance of an entity within a specific information domain. Includes Global Persistent Identifiers (globally unique and persistently resolvable identifier for the entity) and/or Local Identifiers. (RiC-O 0.2)
+
+The usage of this property is deprecated and it will be replaced by rico:hasOrHadIdentifier."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordResource_index sh:path olo:index;
+  sh:order "26";
+  sh:name "index"@en;
+  skos:editorialNote "Cette propriété nous permet de définir un ordre de tri des entités soit dans les Layouts soit dans les exports."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:integer .
+
+spao-co:RecordResource_isAssociatedWithDate sh:path rico:isAssociatedWithDate;
+  sh:order "27";
+  sh:name "is associated with date"@en;
+  sh:description """Connects a Thing to a Date associated with its existence and lifecycle. (RiC-O 0.2)
+
+This contains the date or date range that the resource covers (for example, for a set of documents, this will contain the date of creation of the first document until the date of creation of the last document)"""@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15814 .
+
+_:ba09c1662f6649d08454fc46fcbacca15814 rdf:first _:ba09c1662f6649d08454fc46fcbacca15815;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15816 .
+
+_:ba09c1662f6649d08454fc46fcbacca15815 sh:class rico:DateRange .
+
+_:ba09c1662f6649d08454fc46fcbacca15816 rdf:first _:ba09c1662f6649d08454fc46fcbacca15817;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15818 .
+
+_:ba09c1662f6649d08454fc46fcbacca15817 sh:class rico:SingleDate .
+
+_:ba09c1662f6649d08454fc46fcbacca15818 rdf:first _:ba09c1662f6649d08454fc46fcbacca15819;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca15819 sh:class rico:Date .
+
+spao-co:RecordResource_isRelatedTo sh:path spao:isRelatedTo;
+  sh:order "28";
+  sh:name "is related to"@en;
+  sh:description "Information sur des ensembles documentaires conservés hors de l'institution et portant sur le même sujet."@fr,
+    "Information on documentary collections preserved outside the institution and describing with the same subject."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordResource_legacyIdentifier sh:path spao:legacyIdentifier;
+  sh:order "29";
+  sh:name "legacy identifier"@en;
+  sh:description "Lors d'un changement de cote, l'ancienne cote est conservée dans cette propriété."@fr,
+    "In case of a change in identifier, the old identifier is kept in this property."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordResource_name sh:path rico:name;
+  sh:order "30";
+  sh:name "name"@en;
+  sh:description """A label, title or term designating the entity in order to make it distinguishable from other similar entities. For Record Resource or Instantiation, the Name is generally assigned by an Agent as most do not have a Name given when created. (RiC-O 0.2)
+
+This is the label assigned to the resource."""@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-co:RecordResource_seeAlso sh:path spao:seeAlso;
+  sh:order "31";
+  sh:name "see also"@en;
+  sh:description "Propriété générique qui permet d'établir un lien entre une resource et une autre entité."@fr,
+    "Generic property that allows a link to be established between a resource and another entity."@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-templates/issues/483>;
+  skos:editorialNote "Will be migrated to rico:isRelatedTo, probably at the time of the RiC-O 1.0 conversion"@en;
+  sh:nodeKind sh:IRI .
+
+spao-co:Record_conditionsOfAccess sh:path rico:conditionsOfAccess;
+  sh:order "1";
+  sh:name "conditions of access"@en;
+  sh:description """Terms and circumstances affecting the availability of a Record Resource for consultation. Such conditions may originate in laws, regulations and policies, including those pertaining to privacy and security concerns or restrictions; they may concern a specific Instantiation of a Record Resource, for example, conditions that require preservation treatment; or they may specify the software or hardware necessary to access the Instantiation. (RiC-O 0.2)
+
+
+This property expresses the conditions of access to the document for the public, for example \"Accès libre selon le règlement de SAPA\"."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_comment sh:path rdfs:comment;
+  sh:order "2";
+  sh:name "comment"@en;
+  sh:description "This is rarely used and mostly for internal notes."@en;
+  skos:editorialNote "Note : Présent seulement 3 fois."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_conditionsOfUse sh:path rico:conditionsOfUse;
+  sh:order "3";
+  sh:name "conditions of use"@en;
+  sh:description """Terms and circumstances affecting the use of a Record Resource after access has been provided. Includes conditions governing reproduction of the Record Resource under applicable copyright (intellectual property) and/or property legislation, and of the Instantiation, due to conservation status. (RiC-O 0.2)
+
+This property expresses the conditions of reuse of the resource, for example \"Utilisation et réutilisation selon le règlement de SAPA\"."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_copyrightNotice sh:path schema:copyrightNotice;
+  sh:order "4";
+  sh:name "copyright notice"@en;
+  sh:description "Indicates how the copyright citation should be written."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_deliveryNumber sh:path spao:deliveryNumber;
+  sh:order "5";
+  sh:name "delivery number"@en;
+  sh:description "Numéro donné au moment où les archives rentrent dans l'institution, qui permet un suivi."@fr,
+    "Number given when the archives enter the institution, allowing tracking."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_hasAnnotationRecto sh:path spao:hasAnnotationRecto;
+  sh:order "6";
+  sh:name "has annotation (recto)"@en;
+  sh:description "Reprise des informations textuelles apposés au recto du document."@fr,
+    "Transcription of the textual information placed on the front of the document."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_hasAnnotationVerso sh:path spao:hasAnnotationVerso;
+  sh:order "7";
+  sh:name "has annotation (verso)"@en;
+  sh:description "Reprise des informations textuelles apposés au verso du document."@fr,
+    "Transcription of the textual information placed on the back of the document."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_hasCreator sh:path rico:hasCreator;
+  sh:order "8";
+  sh:name "has creator"@en;
+  sh:description "Connects a Record Resource or an Instantiation to an Agent that is either responsible for all or some of the content of the Record Resource or is a contributor to the genesis or production of an Instantiation. (RiC-O 0.2)"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Agent .
+
+spao-co:Record_hasCredit sh:path spao:hasCredit;
+  sh:order "9";
+  sh:name "has credit"@en;
+  sh:description "La déclaration obligatoire donnée par le détenteur des droits."@fr,
+    "The mandatory statement given by the rights holder."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_hasDocumentaryFormType sh:path rico:hasDocumentaryFormType;
+  sh:order "10";
+  sh:name "has documentary form type"@en;
+  sh:description """Connects a Record or Record Part to its Documentary Form Type. (RiC-O 0.2)
+
+Types of documents include \"Moving image\", \"Object\", \"Photography\", etc."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:DocumentaryFormType .
+
+spao-co:Record_hasDoublets sh:path spao:hasDoublets;
+  sh:order "11";
+  sh:name "has doublets"@en;
+  sh:description "Indique combien de doublons sont présents dans ce lot de documents."@fr,
+    "Indicates how many duplicates are present in this set of documents."@en;
+  skos:editorialNote "Champs de gestion administrative qui sert à repérer les doublons"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_hasExtent sh:path rico:hasExtent;
+  sh:order "12";
+  sh:name "has extent"@en;
+  sh:description """Connects a Record Resource or Instantiation to an Extent. (RiC-O 0.2)
+
+This can include a number of boxes, a number of gigabytes, etc."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:RecordResourceExtent .
+
+spao-co:Record_hasOrHadLanguage sh:path rico:hasOrHadLanguage;
+  sh:order "14";
+  sh:name "has or had language"@en;
+  sh:description """Connects an Agent or Record Resource to a Language that it uses or used. (RiC-O 0.2)
+
+This is mostly using the official Swiss languages."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Language .
+
+spao-co:Record_hasOrHadLocation sh:path rico:hasOrHadLocation;
+  sh:order "15";
+  sh:name "has or had location"@en;
+  sh:description """Connects a Thing to a Place in which this Thing ir or was located. (RiC-O 0.2)
+
+This indicates where the archive container is physically located in the hierarchy or archival places. Theoretically, the physical location should be asserted at the Instantiation level, but it is asserted here when there is no Instantiation for the RecordResource."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class spao:ArchivalPlace .
+
+spao-co:Record_hasPacking sh:path spao:hasPacking;
+  sh:order "16";
+  sh:name "has packing"@en;
+  sh:description "Référence à un type de contenant donnant des indications de taille, mais aussi une indication de localisation possible. Des valeurs possibles sont \"Boite A4\", \"Poster\", etc. (un poster serait vraisemblablement rangé dans le meuble à plans)."@fr,
+    "Reference to a type of container giving size indications, but also a possible location indication. Possible values are \"Box A4\", \"Poster\", etc. (a poster would presumably be stored in the plan cabinet)."@en;
+  skos:editorialNote """Ce champs sert à préciser le type/taille de contenant utilisé : A4, A3 etc. Nous ne l'utilisons pas beaucoup. Son intérêt devrait être réévaluer.
+Je mets skos:Concept en range"""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:Record_hasProvenance sh:path rico:hasProvenance;
+  sh:order "17";
+  sh:name "has provenance"@en;
+  sh:description "Connects a Record Resource or an Instantiation to an Agent that creates or accumulates the Record Resource, receives it, or sends it. (RiC-O 0.2)"@en;
+  skos:editorialNote "Note : hasProvenance n'est plus dans RiC-O 1.0, maintenant c'est rico:hasOrganicProvenance ou rico:hasOrganicOrFunctionalProvenance"@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15820 .
+
+_:ba09c1662f6649d08454fc46fcbacca15820 rdf:first _:ba09c1662f6649d08454fc46fcbacca15821;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15822 .
+
+_:ba09c1662f6649d08454fc46fcbacca15821 sh:class rico:Person .
+
+_:ba09c1662f6649d08454fc46fcbacca15822 rdf:first _:ba09c1662f6649d08454fc46fcbacca15823;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca15823 sh:class rico:CorporateBody .
+
+spao-co:Record_hasRecordState sh:path rico:hasRecordState;
+  sh:order "19";
+  sh:name "has record state"@en;
+  sh:description """Connects a Record or Record Part to a Record State that categorizes its state. (RiC-O 0.2)
+
+This is applied only to photography and is used to indicate if it is an original print, signed original print, etc."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:RecordState .
+
+spao-co:Record_isAssociatedWithEvent sh:path rico:isAssociatedWithEvent;
+  sh:order "20";
+  sh:name "is associated with event"@en;
+  sh:description """Connects a Thing to an Event that is associated with its existence and lifecycle. (RiC-O 0.2)
+
+This is used to describe the acquisition of the record, with only a type of Event, indicating if the acquisition resulted from a donation, a loan, etc."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Event .
+
+spao-co:Record_isAssociatedWithPlace sh:path rico:isAssociatedWithPlace;
+  sh:order "21";
+  sh:name "is associated with place"@en;
+  sh:description """Connects a Thing to a Place that is associated with its existence and lifecycle. (RiC-O 0.2)
+
+This indicates a place related to the content of the document, for example a building depicted on a photograph"""@en;
+  skos:editorialNote "Ici on utilise la classe CRM comme range et cela sera décrit dans la partie Panorama"@en;
+  sh:nodeKind sh:IRI;
+  sh:class crm:E53_Place .
+
+spao-co:Record_isOrWasIncludedIn sh:path rico:isOrWasIncludedIn;
+  sh:order "22";
+  sh:name "is or was included in (direct)"@en;
+  sh:description "Connects a Record Set or a Record to a Record Set that aggregates or aggregated it in the past. (RiC-O 0.2)"@en;
+  skos:editorialNote "RiC-O 1.0 : rico:isDirectlyIncludedIn"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:RecordSet .
+
+spao-co:Record_physicalCharacteristics sh:path rico:physicalCharacteristics;
+  sh:order "#REF!";
+  sh:name "physical characteristics"@en;
+  sh:description """Information about the physical features of the Instantiation. Includes information about the physical nature and condition such as conservation status. (RiC-O 0.2)
+
+Theoretically this is applied to Instantiations, but is used also at the Record level when there is no Instantiation declared."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Record_sameAs sh:path owl:sameAs;
+  sh:order "#REF!";
+  sh:name "same as (owl)"@en;
+  sh:description "Link to the URL of this RecordSet in the legacy catalog. This information is in the public triplestore, but this is a hidden field in the layout when browsing the public website. The URL stored is not dereferencable."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI .
+
+spao-co:RecordSet_comment sh:path rdfs:comment;
+  sh:order "1";
+  sh:name "comment"@en;
+  sh:description "This is rarely used and mostly for internal notes."@en;
+  skos:editorialNote "Utilisé 55 fois"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_cassation sh:path spao:cassation;
+  sh:order "2";
+  sh:name "cassation"@en;
+  sh:description "Note qui documente ce qui a été éliminé au moment de l'évaluation des archives. (Par exemple \"On a éliminé tous les doublons\")"@fr,
+    "Note documenting what has been eliminated during the archive evaluation. (For example \"All duplicates have been eliminated\")"@en;
+  skos:editorialNote "Voir si une propriété RiC-O permettrait d'encoder cela."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_conditionsOfAccess sh:path rico:conditionsOfAccess;
+  sh:order "3";
+  sh:name "conditions of access"@en;
+  sh:description """Terms and circumstances affecting the availability of a Record Resource for consultation. Such conditions may originate in laws, regulations and policies, including those pertaining to privacy and security concerns or restrictions; they may concern a specific Instantiation of a Record Resource, for example, conditions that require preservation treatment; or they may specify the software or hardware necessary to access the Instantiation. (RiC-O 0.2)
+
+This property expresses the conditions of access to the document for the public, for example \"Accès libre selon le règlement de SAPA\"."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_conditionsOfUse sh:path rico:conditionsOfUse;
+  sh:order "4";
+  sh:name "conditions of use"@en;
+  sh:description """Terms and circumstances affecting the use of a Record Resource after access has been provided. Includes conditions governing reproduction of the Record Resource under applicable copyright (intellectual property) and/or property legislation, and of the Instantiation, due to conservation status. (RiC-O 0.2)
+
+This property expresses the conditions of reuse of the resource, for example \"Utilisation et réutilisation selon le règlement de SAPA\"."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_copyrightNotice sh:path schema:copyrightNotice;
+  sh:order "5";
+  sh:name "copyright notice"@en;
+  sh:description "Indicates how the copyright citation should be written."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_deliveryNumber sh:path spao:deliveryNumber;
+  sh:order "6";
+  sh:name "delivery number"@en;
+  sh:description "Numéro donné au moment où les archives rentrent dans l'institution, qui permet un suivi."@fr,
+    "Number given when the archives enter the institution, allowing tracking."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_hasCreator sh:path rico:hasCreator;
+  sh:order "7";
+  sh:name "has creator"@en;
+  sh:description "Connects a Record Resource or an Instantiation to an Agent that is either responsible for all or some of the content of the Record Resource or is a contributor to the genesis or production of an Instantiation. (RiC-O 0.2)"@en;
+  skos:editorialNote "Je garde rico:Person en range"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Person .
+
+spao-co:RecordSet_hasCredit sh:path spao:hasCredit;
+  sh:order "8";
+  sh:name "has credit"@en;
+  sh:description "La déclaration obligatoire donnée par le détenteur des droits."@fr,
+    "The mandatory statement given by the rights holder."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_hasDoublets sh:path spao:hasDoublets;
+  sh:order "9";
+  sh:name "has doublets"@en;
+  sh:description "Indique combien de doublons sont présents dans ce lot de documents."@fr,
+    "Indicates how many duplicates are present in this set of documents."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_hasExtent sh:path rico:hasExtent;
+  sh:order "10";
+  sh:name "has extent"@en;
+  sh:description """Connects a Record Resource or Instantiation to an Extent. (RiC-O 0.2)
+
+This can include a number of boxes, a number of gigabytes, etc."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:RecordResourceExtent .
+
+spao-co:RecordSet_hasOrHadAllMembersWithDocumentaryFormType sh:path rico:hasOrHadAllMembersWithDocumentaryFormType;
+  sh:order "11";
+  sh:name "has or had members with documentary form type"@en;
+  sh:description """Connects a Record Set and a Documentary Form Type that categorizes all the Records or Record Parts that are or were included in the Record Set. (RiC-O 0.2)
+
+This uses the same controlled vocabulary as rico:hasDocumentaryFormType on the Records."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:DocumentaryFormType .
+
+spao-co:RecordSet_hasOrHadLanguage sh:path rico:hasOrHadLanguage;
+  sh:order "12";
+  sh:name "has or had language"@en;
+  sh:description """Connects an Agent or Record Resource to a Language that it uses or used. (RiC-O 0.2)
+
+This is mostly using the official Swiss languages."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Language .
+
+spao-co:RecordSet_hasOrHadLocation sh:path rico:hasOrHadLocation;
+  sh:order "13";
+  sh:name "has or had location"@en;
+  sh:description """Connects a Thing to a Place in which this Thing ir or was located. (RiC-O 0.2)
+
+This indicates where the archive container is physically located in the hierarchy or archival places. Theoretically, the physical location should be asserted at the Instantiation level, but it is asserted here when there is no Instantiation for the RecordResource."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class spao:ArchivalPlace .
+
+spao-co:RecordSet_hasPacking sh:path spao:hasPacking;
+  sh:order "14";
+  sh:name "has packing"@en;
+  sh:description "Référence à un type de contenant donnant des indications de taille, mais aussi une indication de localisation possible. Des valeurs possibles sont \"Boite A4\", \"Poster\", etc. (un poster serait vraisemblablement rangé dans le meuble à plans)."@fr,
+    "Reference to a type of container giving size indications, but also a possible location indication. Possible values are \"Box A4\", \"Poster\", etc. (a poster would presumably be stored in the plan cabinet)."@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:RecordSet_hasProvenance sh:path rico:hasProvenance;
+  sh:order "15";
+  sh:name "has provenance"@en;
+  sh:description "Connects a Record Resource or an Instantiation to an Agent that creates or accumulates the Record Resource, receives it, or sends it. (RiC-O 0.2)"@en;
+  skos:editorialNote "Je garde seulement les classes Ric-O en range et je simplifie pour rico:Agent"@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Agent .
+
+spao-co:RecordSet_hasRecordSetType sh:path rico:hasRecordSetType;
+  sh:order "16";
+  sh:name "has record set type"@en;
+  sh:description """Connects a Record Set to a Record Set Type that categorizes it. (RiC-O 0.2)
+
+Possible values are \"Fonds\", \"Serie\", etc."""@en;
+  skos:editorialNote "Je mets skos:Concept en range, mais pourquoi pas une classe RiC-O ? Ce n'est pas normal, les autres vocabulaires contrôlés comme DocumentaryFormType ont bien une classe dédié. Normalement ca devrait être rico:RecordSetType"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:RecordSet_history sh:path rico:history;
+  sh:order "17";
+  sh:name "history"@en;
+  sh:description "Summary of the development of an entity, since its origin until present time. (RiC-O 0.2)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_isAssociatedWithEvent sh:path rico:isAssociatedWithEvent;
+  sh:order "18";
+  sh:name "is associated with event"@en;
+  sh:description """Connects a Thing to an Event that is associated with its existence and lifecycle. (RiC-O 0.2)
+
+This is used to describe the acquisition of the record, with only a type of Event, indicating if the acquisition resulted from a donation, a loan, etc."""@en;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Event .
+
+spao-co:RecordSet_isAssociatedWithPlace sh:path rico:isAssociatedWithPlace;
+  sh:order "19";
+  sh:name "is associated with place"@en;
+  sh:description """Connects a Thing to a Place that is associated with its existence and lifecycle. (RiC-O 0.2)
+
+This indicates a place related to the content of the document, for example a building depicted on a photograph"""@en;
+  skos:editorialNote "je met rico:Place en range"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Place .
+
+spao-co:RecordSet_isOrWasIncludedIn sh:path rico:isOrWasIncludedIn;
+  sh:order "20";
+  sh:name "is or was included in"@en;
+  sh:description "Connects a Record Set or a Record to a Record Set that aggregates or aggregated it in the past. (RiC-O 0.2)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:RecordSet .
+
+spao-co:RecordSet_physicalCharacteristics sh:path rico:physicalCharacteristics;
+  sh:order "21";
+  sh:name "physical characteristics"@en;
+  sh:description """Information about the physical features of the Instantiation. Includes information about the physical nature and condition such as conservation status. (RiC-O 0.2)
+
+Theoretically this is applied to Instantiations, but is used also at the Record level when there is no Instantiation declared."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:RecordSet_sameAs sh:path owl:sameAs;
+  sh:order "22";
+  sh:name "same as (owl)"@en;
+  sh:description "Link to the URL of this RecordSet in the legacy catalog. This information is in the public triplestore, but this is a hidden field in the layout when browsing the public website. The URL stored is not dereferencable."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI .
+
+spao-co:RecordPart_hasDocumentaryFormType sh:path rico:hasDocumentaryFormType;
+  sh:order "1";
+  sh:name "has documentary form type"@en;
+  sh:description """Connects a Record or Record Part to its Documentary Form Type. (RiC-O 0.2)
+
+Types of documents include \"Moving image\", \"Object\", \"Photography\", etc."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:DocumentaryFormType .
+
+spao-co:RecordPart_isOrWasConstituentOf sh:path rico:isOrWasConstituentOf;
+  sh:order "2";
+  sh:name "is or was constituent of"@en;
+  sh:description "Connects a Record Part to a Record of which this Record Part was a component of. (RiC-O 0.2)"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:Record .
+
+spao-co:RecordResourceExtent_hasUnitOfMeasurement sh:path rico:hasUnitOfMeasurement;
+  sh:order "1";
+  sh:name "has unit"@en;
+  sh:description "A reference to the \"extent unit\" controlled vocabulary to indicate the unit of measure of the extent. Example of values are \"boxes\", \"kg\", \"linear meter\", \"envelopes\", etc."@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-import/issues/35>;
+  skos:editorialNote "There was a mistake in the type of the range : it was rico:unitOfMeasurement, it should be rico:UnitOfMeasurement, with capital \"U\""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:UnitOfMeasurement .
+
+spao-co:RecordResourceExtent_quantity sh:path rico:quantity;
+  sh:order "2";
+  sh:name "quantity"@en;
+  sh:description "The quantity of the extent, given either as a integer or a string."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15824 .
+
+_:ba09c1662f6649d08454fc46fcbacca15824 rdf:first _:ba09c1662f6649d08454fc46fcbacca15825;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15826 .
+
+_:ba09c1662f6649d08454fc46fcbacca15825 sh:datatype xsd:integer .
+
+_:ba09c1662f6649d08454fc46fcbacca15826 rdf:first _:ba09c1662f6649d08454fc46fcbacca15827;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca15827 sh:datatype xsd:string .
+
+spao-co:Identifier_P2_has_type sh:path crm:P2_has_type;
+  sh:order "1";
+  sh:name "type"@en;
+  sh:description "A reference to the type of the identifier, from the \"identifier\" controlled vocabulary, with values such as \"Unique ID\", \"Old Identifier\", \"Technical Identifier\", etc."@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-import/issues/33>;
+  skos:editorialNote "Il faut migrer cette structure en structure RiC-O : rico:hasIdentifierType, et il faut typer les valeurs avec la classe rico:IdentifierType à la place d'une classe CRM"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-co:Identifier_value sh:path rdf:value;
+  sh:order "2";
+  sh:name "value"@en;
+  sh:description "The value of the identifier, as a literal string."@en;
+  rdfs:seeAlso <https://github.com/sapa/performing-arts-ch-import/issues/33>;
+  skos:editorialNote "Il faut migrer cette structure en structure RiC-O : en RiC-O il y a rico:textualValue ou rico:normalizedValue"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Event_hasEventType sh:path rico:hasEventType;
+  sh:order "1";
+  sh:name "has event type"@en;
+  sh:description "Connects an Event to an Event Type which categorizes it. (RiC-O 0.2)"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:EventType;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-co:Event_label sh:path rdfs:label;
+  sh:order "2";
+  sh:name "label"@en;
+  sh:description "The name of the event."@en;
+  sh:nodeKind sh:Literal;
+  sh:or _:ba09c1662f6649d08454fc46fcbacca15828 .
+
+_:ba09c1662f6649d08454fc46fcbacca15828 rdf:first _:ba09c1662f6649d08454fc46fcbacca15829;
+  rdf:rest _:ba09c1662f6649d08454fc46fcbacca15830 .
+
+_:ba09c1662f6649d08454fc46fcbacca15829 sh:datatype rdf:langString .
+
+_:ba09c1662f6649d08454fc46fcbacca15830 rdf:first _:ba09c1662f6649d08454fc46fcbacca15831;
+  rdf:rest rdf:nil .
+
+_:ba09c1662f6649d08454fc46fcbacca15831 sh:datatype xsd:string .
+
+spao-co:ArchivalPlace_containedBy sh:path rico:containedBy;
+  sh:order "1";
+  sh:name "contained by"@en;
+  sh:description "A reference to the place in which this one is contained, thus forming a hierarchy of places."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class spao:ArchivalPlace .
+
+spao-co:ArchivalPlace_hasPacking sh:path spao:hasPacking;
+  sh:order "2";
+  sh:name "has packing"@en;
+  sh:description "A reference to a concept in the packing controlled vocabulary to indicate the king of packaging or format of this place, such as \"box A4\", \"box A5\", \"digital file\", \"painting\", etc. This is not stated on all archival places."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:ArchivalPlace_label sh:path rdfs:label;
+  sh:order "3";
+  sh:name "label"@en;
+  sh:description "The name of the place"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string;
+  dash:propertyRole dash:LabelRole .
+
+spao-co:Date_dateStandard sh:path rico:dateStandard;
+  sh:name "date standard"@en;
+  sh:description "Identifier of the standard of the Normalized date. (RiC-O 0.2)"@en;
+  skos:editorialNote """L'utilisation de rico:Date directement est bizarre. Soit on met une SingleDate, soit un DateRange, mais pourquoi utiliser rico:Date directement ? de toutes façons c'est à migrer.
+
+Requête pour savoir où c'est utilisé :
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT ?p (COUNT(?p) AS ?count) (SAMPLE(?x) AS ?sample)
+WHERE {
+ ?x ?p ?o .
+ ?o a rico:Date .
+}
+GROUP BY ?p
+ORDER BY DESC(?count)
+
+Ce sont beaucoup des birthDate de personnes, ou des beginningDate / endDate d'organisation. On peut laisser comme cela de toutes façons"""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Date_expressedDate sh:path rico:expressedDate;
+  sh:name "expressed date"@en;
+  sh:description "Natural language expression of a Date. (RiC-O 0.2) This is the field used to display the date on the screen."@en;
+  rdfs:seeAlso "cf issue https://github.com/sapa/performing-arts-ch-import/issues/34";
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Date_normalizedDateValue sh:path rico:normalizedDateValue;
+  sh:name "normalized date value"@en;
+  sh:description """Date representation based on a standard, preferably machine-readable. (RiC-O 0.2).
+
+Currently the rico:normalizedDateValue is a copy of the rico:expressedDate and does not use a specific datatype. It is an xsd:string."""@en;
+  skos:editorialNote """C'est dommage que ce champs n'ait pas un datatype normalisé
+
+Aujourd'hui, il y a seulement un seul champ de date dans le formulaire de saisie, qui est la date normalisée, et qui est recopiée dans le expressedDate. Il faudrait mieux que :
+1. La date normalisée soit typée avec un datatype de date (soit xsd:date, xsd:gYear, etc.)
+2. Qu'elle ne soit pas recopiée dans expressedDate
+3. Que le champs \"expressedDate\" soit visible dans le formulaire comme un champs séparé pour pouvoir renseignée une date littérale quand il y a besoin (\"aux alentours de juin 1985\")
+
+On pourrait utiliser une regex pour vérifier quelles valeurs sont invalides"""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:DateRange_hasBeginningDate sh:path rico:hasBeginningDate;
+  sh:name "has beginning date"@en;
+  sh:description "Connects a Thing to a Date at which this Thing that came into existence. (RiC-O 0.2)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:SingleDate .
+
+spao-co:DateRange_hasEndDate sh:path rico:hasEndDate;
+  sh:name "has end date"@en;
+  sh:description "Connects a Thing to a Date at which the existence of that Thing ended. (RiC-O 0.2)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class rico:SingleDate .
+
+spao-co:SingleDate_certainty sh:path rico:certainty;
+  sh:name "certainty"@en;
+  sh:description """Qualifies the level of certitude of the accuracy of a Date, an Event or a Relation. (RiC-O 0.2)
+
+Example of values are \"probable\", \"deduced\", \"uncertain\", etc."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-co:SingleDate_dateQualifier sh:path rico:dateQualifier;
+  sh:name "date qualifier"@en;
+  sh:description """Indicates the precision of a date. It specifies if, and to what extent, the value is an estimation. (RiC-O 0.2)
+
+Example of values are \"circa\", \"exact\", \"during\", etc."""@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept;
+  dash:searchWidget core:ListProperty;
+  datasources:datasource datasources:list_skospreflabel_alpha_with_count .
+
+spao-co:SingleDate_dateStandard sh:path rico:dateStandard;
+  sh:name "date standard"@en;
+  sh:description "Identifier of the standard of the Normalized date. (RiC-O 0.2)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:SingleDate_expressedDate sh:path rico:expressedDate;
+  sh:name "expressed date"@en;
+  sh:description "Natural language expression of a Date. (RiC-O 0.2)"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:SingleDate_normalizedDateValue sh:path rico:normalizedDateValue;
+  sh:name "normalized date value"@en;
+  sh:description "Date representation based on a standard, preferably machine-readable. (RiC-O 0.2)"@en;
+  skos:editorialNote "C'est dommage que ce champs n'ait pas un datatype normalisé"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+spao-co:Concept_prefLabel sh:path skos:prefLabel;
+  sh:order "1";
+  sh:name "preferred label"@en;
+  sh:description "The preferred label of the concept. There is at most one preferred label per language."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString;
+  dash:propertyRole dash:LabelRole;
+  sh:uniqueLang "true"^^xsd:boolean .
+
+spao-co:Concept_altLabel sh:path skos:altLabel;
+  sh:order "2";
+  sh:name "alternative label (synonym)"@en;
+  sh:description "A synonym, acronym, or any other non-preferred term to refer to the concept."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+spao-co:Concept_hiddenLabel sh:path skos:hiddenLabel;
+  sh:order "3";
+  sh:name "hidden label"@en;
+  sh:description "A hidden label for the concept. Hidden labels are kept for references and to be able to match user queries, but should not be presented to end users."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+spao-co:Concept_broader sh:path skos:broader;
+  sh:order "4";
+  sh:name "broader"@en;
+  sh:description "A reference to a more generic concept of this concept."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:Concept_narrower sh:path skos:narrower;
+  sh:order "5";
+  sh:name "narrower"@en;
+  sh:description "A reference to a more specific concept of this concept."@en;
+  sh:nodeKind sh:IRI;
+  sh:class skos:Concept .
+
+spao-co:Concept_definition sh:path skos:definition;
+  sh:order "6";
+  sh:name "definition"@en;
+  sh:description "A textual definition for this concept."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+spao-co:Concept_inScheme sh:path skos:inScheme;
+  sh:order "7";
+  sh:name "in scheme"@en;
+  sh:description "A reference to the controlled vocabulary to which this concept belongs. Each concept belongs to one and only one controlled vocabulary."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:ConceptScheme .
+
+spao-co:Concept_topConceptOf sh:path skos:topConceptOf;
+  sh:order "8";
+  sh:name "top concept of"@en;
+  sh:description "When the concept is a \"root\" concept (that is, without broader concept), this property will hold a reference to its controlled vocabulary to indicate it is a top concept of the vocabulary."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class skos:ConceptScheme .
+
+spao-co:Concept_exactMatch sh:path skos:exactMatch;
+  sh:order "9";
+  sh:name "exact match"@en;
+  sh:description "A reference to a matching concept in a controlled vocabulary of another organization. Depending on the vocabulary, matching concepts can be taken from the Library of Congress, Records in Contexts ontology, the Deutsche National Bibliothek, RDA registry, Getty, the ECLAP repository (European Collected Library of Artistic Performance), Wikidata, UK National Archives, etc."@en;
+  sh:nodeKind sh:IRI .
+
+spao-co:Concept_comment sh:path rdfs:comment;
+  sh:order "10";
+  sh:name "comment"@en;
+  sh:description "A comment on the concept, sometimes giving textual information on its equivalence to other concepts."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+spao-co:Diagram_Record dct:title "Record"@fr;
+  sh:order "1"^^xsd:integer .
+
+spao-co:Diagram_RecordSet dct:title "Record Set"@fr;
+  sh:order "2"^^xsd:integer .
+
+spao-co:Diagram_RecordPart dct:title "Record Part"@fr;
+  sh:order "3"^^xsd:integer .

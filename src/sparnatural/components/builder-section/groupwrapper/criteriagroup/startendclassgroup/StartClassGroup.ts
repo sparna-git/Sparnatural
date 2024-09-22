@@ -14,7 +14,8 @@ class StartClassGroup extends HTMLComponent {
   inputSelector: ClassTypeId;
   ParentCriteriaGroup: CriteriaGroup;
   specProvider: ISparnaturalSpecification;
-  renderEyeBtn:Boolean = false
+  renderEyeBtn:Boolean = false;
+  temporaryLabel: string;
   // shadow variable for http://data.sparna.fr/ontologies/sparnatural-config-core/index-en.html#defaultLabelProperty
   defaultLblVar: SelectedVal ={
     type:null,
@@ -24,12 +25,15 @@ class StartClassGroup extends HTMLComponent {
   constructor(
     ParentCriteriaGroup: CriteriaGroup,
     specProvider: ISparnaturalSpecification,
+    temporaryLabel: string,
     startClassVal?: SelectedVal,
-    renderEyeBtn?: Boolean
+    renderEyeBtn?: Boolean,
   ) {
     super("StartClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
-    this.inputSelector = new ClassTypeId(this, this.specProvider, startClassVal);
+    
+    this.temporaryLabel = temporaryLabel;
+    this.inputSelector = new ClassTypeId(this, this.specProvider, this.temporaryLabel, startClassVal);
     this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
     this.startClassVal = startClassVal
       ? startClassVal
@@ -37,7 +41,7 @@ class StartClassGroup extends HTMLComponent {
           type: null,
           variable: null,
         };
-    this.renderEyeBtn = renderEyeBtn
+    this.renderEyeBtn = renderEyeBtn;
   }
 
   render() {

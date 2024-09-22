@@ -11,7 +11,7 @@ export default interface ISpecificationEntry {
     getLabel(): string;
     getTooltip(): string|undefined;
 
-    getIcon(): string;
+    getIcon(): string|undefined;
     getHighlightedIcon(): string|undefined;
 
     getColor(): string|undefined;

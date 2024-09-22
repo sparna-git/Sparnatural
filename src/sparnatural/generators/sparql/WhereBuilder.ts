@@ -58,7 +58,7 @@ export default class WhereBuilder{
                 this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.isVarSelected(),
-                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent.getWidgetValues()
+                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent?.getWidgetValues()
             );
         }
     }

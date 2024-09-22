@@ -4,6 +4,10 @@ import ISparnaturalSpecification from "../../../../../spec-providers/ISparnatura
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import HTMLComponent from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
+import {HierarchicalClassSelectBuilder, JsonDagRow, DagWidgetDefaultValue} from "../startendclassgroup/HierarchicalClassSelectBuilder";
+import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
+import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
+import ISpecificationEntry from "../../../../../spec-providers/ISpecificationEntry";
 
 /**
  * The property selector
@@ -20,6 +24,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   );
   specProvider: ISparnaturalSpecification;
   selectBuilder: PropertySelectBuilder;
+  htmlCurentValue: JQuery<HTMLElement>; 
   constructor(
     ParentComponent: HTMLComponent,
     specProvider: ISparnaturalSpecification,
@@ -39,57 +44,111 @@ class ObjectPropertyTypeId extends HTMLComponent {
 		created by PropertySelectBuilder
 	*/
   render() {
-    super.render();
+    super.render(); 
+
+      this.htmlCurentValue = $(`<span class="current temporary-label"></span>`) ;
+      let currentWrapper = $('<div class="currentWrapper"></div>') ;
+      currentWrapper.append(this.htmlCurentValue) ;
+      this.html.append(currentWrapper);
     // if there is an Object selected
     if (this.endClassVal) {
       this.#removeTempLbl();
       // set the correct objectProperty matching to Start and End value
-      this.oldWidget = this.#getObjectProperty();
-      this.html.append(this.oldWidget);
-      this.widgetHtml = this.oldWidget.niceSelect();
+
+     
+      
+      this.widgetHtml = this.#getObjectProperty();
+      
+      this.html.append(this.widgetHtml);
+      this.oldWidget = this.selectBuilder.selectWidget.getInput();
+      
+    this.selectBuilder.selectWidget.initSelectUiUxListsHeight() ; //force init heigh after dominsertion.
+
+      //this.html.append(this.oldWidget);
       this.#addOnChangeListener(this.oldWidget);
 
       // if there is no options for the user to choose, then trigger the change event
-      if (this.selectBuilder.items.length <= 1) {
+      
+      /*if (this.selectBuilder.selectableItems.length <= 1) {
+        console.log(this.selectBuilder.selectableItems.length) ;
         this.oldWidget.trigger("change");
+      }*/
+
+      // If juste 1 option selectable
+      if (this.selectBuilder.selectableItems.length == 1) {
+        this.selectBuilder.selectWidget.defaultValue.value = this.selectBuilder.selectableItems[0] ;
+        this.submitSelected();
       }
+
     } else {
       // there hasn't been an Object in Endclassgroup chosen. render a temporary label
-      this.widgetHtml = $(
+      this.htmlCurentValue[0].innerHTML = this.temporaryLabel
+      this.htmlCurentValue[0].classList.add('temporary-label')
+
+      /*this.widgetHtml = $(
         '<span class="current temporary-label">' +
           this.temporaryLabel +
           "</span>"
-      );
+      );*/
     }
     this.html.append(this.widgetHtml);
     this.arrow.render();
     return this;
   }
 
+  setSelected($value:string) {
+    this.selectBuilder.selectWidget.setValue($value) ;
+  }
+
+  
+  submitSelected() {
+    this.selectBuilder.selectWidget.submitSelectedValue() ;
+  }
+
+  
+  setCurrentContent(id:string) {
+    this.#removeTempLbl() ;
+    let entity = this.specProvider.getProperty(id) ;
+    let entity_icon = entity.getIcon() ;
+    let icon = `` ;
+    if (entity_icon != undefined ) {
+      icon = `<span><i class="fa ${entity_icon} fa-fw"></i></span>` ;
+    }
+    this.htmlCurentValue.html(`${icon} ${entity.getLabel()} `) ;
+    this.htmlCurentValue[0].classList.add('selected') ;
+  }
+
   // when a value gets selected from the dropdown menu (niceselect), then change is called
   #addOnChangeListener(selectWidget: JQuery<HTMLElement>) {
-    selectWidget.on("change", () => {
-      let selectedValue = selectWidget.val();
-      //disable further choice
-      this.widgetHtml.addClass("disabled");
-      this.widgetHtml.removeClass("open");
-      this.html[0].dispatchEvent(
-        new CustomEvent("onObjectPropertyTypeIdSelected", {
-          bubbles: true,
-          detail: selectedValue,
-        })
-      );
-    });
+
+    selectWidget[0].addEventListener(
+      "change",
+      (e: CustomEvent) => {
+        let selectedValue = e.detail.value ;
+        console.log(e.detail) ; 
+        this.setCurrentContent(selectedValue) ;
+        //disable further choice on nice-select
+        this.widgetHtml[0].classList.add("disabled");
+        this.widgetHtml[0].classList.remove("open");
+        this.html[0].dispatchEvent(
+          new CustomEvent("onObjectPropertyTypeIdSelected", {
+            bubbles: true,
+            detail: selectedValue,
+          })
+        );
+      });
   }
 
   // removes the temporary label e.g 'relatedTo'
   #removeTempLbl() {
-    $(this.html).find(".temporary-label").remove();
+    //$(this.html).find(".temporary-label").remove();
+    this.htmlCurentValue[0].classList.remove('temporary-label') ;
   }
+  
 
   // sets the ObjectProperty according to the Subject and Object e.g Country isCountryOf Musuem
   #getObjectProperty() {
-    this.selectBuilder = new PropertySelectBuilder(this.specProvider);
+    this.selectBuilder = new PropertySelectBuilder(this, this.specProvider);
     var default_value = null;
 
     return this.selectBuilder.buildPropertySelect(
@@ -110,11 +169,71 @@ export default ObjectPropertyTypeId;
  * Example: changes the relationship from 'Country relatedTo Museum' => 'Country countryOf Museum'
  * There can be multiple connectingProperties. User might need to choose.
  **/
-class PropertySelectBuilder {
-  items: Array<string>;
+class PropertySelectBuilder extends HTMLComponent {
+  selectableItems: Array<string>;
   specProvider: ISparnaturalSpecification;
-  constructor(specProvider: any) {
+  selectWidget: HierarchicalClassSelectBuilder;
+  constructor(ParentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
+    
+    super("ObjectPropertyTypeId", ParentComponent, null);
     this.specProvider = specProvider;
+  }
+
+  
+  render(): this {
+    super.render();
+    return this;
+  }
+
+  convertToJsonDag(rootNodes:DagNodeIfc<ISpecificationEntry>[]) {
+    console.log('rootNodes') ;
+    console.log(rootNodes) ;
+    let arrayToJson: Array<JsonDagRow> = [];
+    this.selectableItems = [] ;
+    arrayToJson = this.getRecursiveDagElements(rootNodes, '') ;
+    return JSON.parse(JSON.stringify(arrayToJson));
+  }
+
+  getRecursiveDagElements(elements: Array<DagNodeIfc<ISpecificationEntry>>, default_icon:string) {
+    let arrayToJson: Array<JsonDagRow> = [];
+    elements.forEach(element => {
+      let disabled = false ;
+      let icon = element.payload.getIcon() ;
+      if (icon == undefined) {
+        icon = default_icon ;
+      }
+
+      if (element.disabled === true) {
+        disabled = true ;
+      } else {
+
+        this.selectableItems.push(element.payload.getId()) ;
+      }
+      let rowToJson = {
+        label: element.payload.getLabel(),
+        id: element.payload.getId(),
+        tooltip: element.payload.getTooltip(),
+        color: element.payload.getColor(),
+        icon: icon,
+        highlightedIcon: element.payload.getHighlightedIcon(),
+        // read the count from the node
+        count: element.count,
+        disabled: disabled,
+        childs: Array()
+      }
+      if (element.children.length > 0) {
+        rowToJson.childs = this.getRecursiveDagElements(element.children, icon) ;
+      }
+      arrayToJson.push(rowToJson);
+    });
+    return arrayToJson ;
+
+  }
+
+  initDagWidget(items:DagIfc<ISpecificationProperty>, default_value: DagWidgetDefaultValue) {
+    let jsonDag = this.convertToJsonDag(items.roots) ;
+    this.selectWidget = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, default_value );
+    return this.selectWidget.buildClassSelectFromJson() ; ;
   }
 
   buildPropertySelect(
@@ -122,15 +241,20 @@ class PropertySelectBuilder {
     rangeClassID: string,
     default_value: string
   ) {
-    this.items = this.specProvider.getEntity(domainClassID).getConnectingProperties(rangeClassID);
-
-    if (this.items.length > 1) {
-      return this.#multipleConnectingProperty(this.items);
+   
+       
+    let defaultValue: DagWidgetDefaultValue = {
+      value: default_value,
+      path: '',
     }
-    return this.#singleConnectingProperty(this.items);
+
+    return this.initDagWidget(
+      this.specProvider.getEntity(domainClassID).getConnectingPropertiesTree(rangeClassID),
+      defaultValue
+    );
   }
 
-  #multipleConnectingProperty(items: Array<string>) {
+  /*#multipleConnectingProperty(items: Array<string>) {
     let default_value = items[0];
     let list: Array<string> = [];
     items.forEach((i) => {
@@ -191,8 +315,8 @@ class PropertySelectBuilder {
       ${label}
       </option>
     </select>`
-    );
+    )
 
     return htmlnew;
-  }
+  };*/
 }

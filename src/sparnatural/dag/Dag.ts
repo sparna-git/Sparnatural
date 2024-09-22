@@ -47,12 +47,14 @@ export class Dag<Payload> implements DagIfc<Payload> {
         for (const [id, parentIds] of hierarchy.entries()) {
             const currentNode = nodes.get(id)!;
 
-            if(parentIds === null || parentIds.length == 0)
+            // no parents, it's a root
+            if(parentIds === null || parentIds.length == 0)
                 this.roots.push(currentNode);
             else {
                 parentIds.forEach(parentId => {
                     const parentNode = nodes.get(parentId)!;
-                    currentNode.moveUnder(parentNode);
+                    // addUnder and not moveUnder, otherwise the existing parent would be reset
+                    currentNode.addUnder(parentNode);
                 })                
             }
         }
@@ -70,11 +72,8 @@ export class Dag<Payload> implements DagIfc<Payload> {
             dataMap.set(item.getId(), item);
         });
         
-        let hierarchyMap:Map<string, string[]> = new Map<string, string[]>();
-        hierarchy.forEach((value:string[], key:string) => {
-            hierarchyMap.set(key, value);
-        })
-        this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
+
+        this.initFromFlatList(hierarchy, dataMap, new Array<string>());
     }
 
     /**
@@ -92,8 +91,39 @@ export class Dag<Payload> implements DagIfc<Payload> {
             hierarchyMap.set(item.getId(), item.getParents());
         });
 
+        this.initFromFlatList(hierarchyMap, dataMap, disabled);
+    }
+
+    initFlatTreeFromFlatList(data:Array<Payload & {getId():string}>): void {
+        let dataMap:Map<string, Payload> = new Map<string, Payload>();
+        data.forEach((item)=> {
+            dataMap.set(item.getId(), item);
+        });
+        // empty hierarchy map
+        let hierarchyMap:Map<string, string[]> = new Map<string, string[]>();
+        data.forEach((item)=> {
+            hierarchyMap.set(item.getId(), []);
+        });
+
         this.initFromFlatList(hierarchyMap, dataMap, new Array<string>());
     }
+
+    public traverseBreadthFirst(processor: (node: DagNodeIfc<Payload>) => void) {
+        this.roots.forEach(root => {
+            processor(root);
+        })
+        this.roots.forEach(root => {
+            root.traverseBreadthFirst(processor);
+        })
+    }
+
+    public traverseDepthFirst(processor: (node: DagNodeIfc<Payload>) => void) {
+        this.roots.forEach(root => {
+            processor(root);
+            root.traverseBreadthFirst(processor);
+        })
+    }
+    
 }
 
 export class DagNode<Payload> implements DagNodeIfc<Payload> {
@@ -164,6 +194,22 @@ export class DagNode<Payload> implements DagNodeIfc<Payload> {
         })
         return result;
     }
+
+    public traverseBreadthFirst(processor: (node: DagNodeIfc<Payload>) => void) {
+        this.children.forEach(c => {
+            processor(c);
+        })
+        this.children.forEach(c => {
+            c.traverseBreadthFirst(processor);
+        })
+    }
+
+    public traverseDepthFirst(processor: (node: DagNodeIfc<Payload>) => void) {
+        this.children.forEach(c => {
+            processor(c);
+            c.traverseBreadthFirst(processor);
+        })
+    }
 }
 
 /**
@@ -175,10 +221,17 @@ export interface DagNodeIfc<Payload> {
     children:DagNodeIfc<Payload>[];
     disabled:boolean;
     payload:Payload;
+    count?:number;
 
     toDebugString(depth:number):string;
 
     sort: (compareFn:(a:Payload, b:Payload)=> number) => void;
+
+    traverseBreadthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
+    traverseDepthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
+
+    // TODO ajouter un fonction qui ramène le/les chemins depuis le haut de l'arbre pour arriver jusqu'à un certain noeud
+    // findPaths(id:string):Array<Array<string>>
 }
 
 /**
@@ -188,4 +241,7 @@ export interface DagIfc<Payload> {
     roots:DagNodeIfc<Payload>[];
 
     toDebugString():string;
+
+    traverseBreadthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
+    traverseDepthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
 }

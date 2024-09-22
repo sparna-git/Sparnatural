@@ -160,12 +160,9 @@ export default class QueryLoader{
     component: StartClassGroup | EndClassGroup | ObjectPropertyGroup,
     value: string
   ) {
-    // set the values to the ClassTypeId component
-    component.inputSelector.oldWidget.val(value).niceSelect("update");
-    let niceSelect = component.inputSelector.html[0].querySelectorAll('.nice-select')
-    if (niceSelect.length > 1) console.warn('More than one nice-select found!')
-    niceSelect[0].classList.add("disabled")
-   
+    // set the values to the ClassTypeId | ObjectPropertyTypeId component
+    component.inputSelector.setSelected(value) ;
+    component.inputSelector.submitSelected() ;
   }
 
   // this method checks if the eye btn was enabled in the loaded query

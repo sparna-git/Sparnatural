@@ -26,7 +26,7 @@ export const OWL = {
   EQUIVALENT_CLASS: factory.namedNode(
     OWL_NAMESPACE + "equivalentClass"
   ) as NamedNode,
-  UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode,
+  UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode
 };
 
 export class OWLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {

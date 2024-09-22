@@ -17,7 +17,7 @@
         display:none;
         left: math.div(base.$margin-children-li - 45, 2);
         left: 36px;
-        top: math.div(base.$margin-component, 2);
+        top: math.div(base.$margin-component, 2)+2;
         line-height: 46px;
         /*width: 46px;*/
         text-align: center;

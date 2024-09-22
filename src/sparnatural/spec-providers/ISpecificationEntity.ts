@@ -1,6 +1,7 @@
 import { DagIfc } from "../dag/Dag";
 import { Config } from "../ontologies/SparnaturalConfig";
 import ISpecificationEntry from "./ISpecificationEntry";
+import ISpecificationProperty from "./ISpecificationProperty";
 
 
 interface ISpecificationEntity extends ISpecificationEntry {
@@ -15,6 +16,7 @@ interface ISpecificationEntity extends ISpecificationEntry {
 
   hasConnectedEntities(): boolean;
   getConnectingProperties(range: string): Array<string>;
+  getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty>;
   isLiteralEntity(): boolean;
 
   hasTypeCriteria(): boolean;

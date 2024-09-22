@@ -40,6 +40,16 @@ export class StoreModel {
     }
 
     /**
+     * Reads the given property on an entity, and returns the first value found cast to Number
+     **/
+    readSinglePropertyAsNumber(subject: Term, property: Term): number | undefined {
+        var term = this.readSingleProperty(subject, property);
+        if(term) {
+            return Number.parseInt(term.value);
+        }
+    }
+
+    /**
      * Finds all subjects having the given property with the given object, or undefined if not found
      **/
     findSubjectsOf(property: Term, object: Term): Quad_Subject[] {
@@ -114,14 +124,6 @@ export class StoreModel {
                 null
             ).length > 0
         );
-        /*
-        return this.store.asDataset().has(DF.quad(
-            rdfNode,
-            property,
-            value,
-            null
-        ));
-        */
     }
 
     findSubjectsWithPredicate(property: Term, rdfNode: Term): Term[] {
