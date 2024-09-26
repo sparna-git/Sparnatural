@@ -26,25 +26,34 @@ export default class QueryWhereTranslator{
         this.#specProvider = specProvider      
     }
 
-    build() {        
+   build() {
+    if (this.#jsonQuery && this.#jsonQuery.branches && this.#specProvider && Array.isArray(this.#jsonQuery.branches)) {
         this.#jsonQuery.branches.forEach((branch, index) => {
-            let branchBuilder = new BranchTranslator(
-                branch,
-                this.#jsonQuery,
-                this.#specProvider,
-                // indicates if it is the very first
-                (index == 0),
-                // they are never inside optional or not exist at the first level
-                false
-            );
-            branchBuilder.build();
-            this.#resultPtrns.push(...branchBuilder.getResultPtrns());
-        })
+            if (branch && this.#jsonQuery && this.#specProvider) {
+                let branchBuilder = new BranchTranslator(
+                    branch,
+                    this.#jsonQuery,
+                    this.#specProvider,
+                    // indicates if it is the very first
+                    (index === 0),
+                    // they are never inside optional or not exist at the first level
+                    false
+                );
+                branchBuilder.build();
+                this.#defaultVars.push(...branchBuilder.getDefaultVars());
+                this.#resultPtrns.push(...branchBuilder.getResultPtrns());
+            }
+        });
+    } else {
+        console.error('Required variables are missing or invalid');
     }
+}
+
 
     getResultPtrns(){
         return this.#resultPtrns
     }
+
 
     getDefaultVars(){
         return this.#defaultVars

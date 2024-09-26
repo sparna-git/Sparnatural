@@ -87,6 +87,13 @@ export default class BranchTranslator{
         this.#buildFinalResultPtrn()
     }
 
+    //!
+    //!
+    //!
+    //!
+    //!
+    //!
+    //verifier cette partie la pour la generation des childrens
     /**
      * Converts all children branches, and gather their patterns at this level
      */
