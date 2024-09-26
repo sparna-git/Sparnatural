@@ -201,7 +201,7 @@ export default class JsonSparqlTranslator {
    * @param defaultLabelVar The default label variable, ending in xxx_label, to insert
    */
   
-  #insertDefaultLabelVar2(sparqlQuery: SelectQuery, defaultLabelVar:Variable) {
+  #insertDefaultLabelVar(sparqlQuery: SelectQuery, defaultLabelVar:Variable) {
     // reconstruct the original var name by removing "_label" suffix
     var originalVar = (defaultLabelVar  as VariableTerm).value.substring(0,(defaultLabelVar  as VariableTerm).value.length-"_label".length);
     console.log('SpraqlQuery variables',sparqlQuery.variables);
@@ -214,27 +214,6 @@ export default class JsonSparqlTranslator {
         break;
       }
     }
-  }
-    #insertDefaultLabelVar(sparqlQuery: SelectQuery, defaultLabelVar: Variable) {
-      // Reconstruct the original var name by removing "_label" suffix
-      const originalVar = (defaultLabelVar as VariableTerm).value.substring(0, (defaultLabelVar as VariableTerm).value.length - "_label".length);
-      console.log('SpraqlQuery variables', sparqlQuery.variables);
-
-      // Check if the default label variable already exists to avoid duplicates
-      const alreadyExists = sparqlQuery.variables.some(variable => (variable as VariableTerm).value === (defaultLabelVar as VariableTerm).value);
-  
-      if (!alreadyExists) {
-          for (let i = 0; i < sparqlQuery.variables.length; i++) {
-              // Find variable with the original name
-              if ((sparqlQuery.variables[i] as VariableTerm).value === originalVar) {
-                  // Insert the default label var after this one
-                  sparqlQuery.variables.splice(i + 1, 0, defaultLabelVar);
-                  break; // Important to avoid an infinite loop
-              }
-          }
-      } else {
-          console.warn(`Variable already exists, skipping insertion.`);
-      }
   }
   
 }

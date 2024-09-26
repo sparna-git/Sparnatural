@@ -29,7 +29,7 @@ export default class TypedVariableTranslator{
     // patterns built in the build process
     public resultPtrns: Pattern[] = []
     // can consist of multiple patterns in case there is a FILTER(lang(?var) = "xx") if the property is multilingual
-    protected defaultLblPatterns:Pattern[] =[]
+    public defaultLblPatterns:Pattern[] =[]
     // the rdf:type triple
     #typeTriple:Triple
 
@@ -53,7 +53,8 @@ export default class TypedVariableTranslator{
     build() {
         this.#buildTypeTriple()
         // generate default label patterns only if the variable is selected
-        if(this.#variableIsSelected) {
+        // and only in the case the default label property exists
+        if(this.#variableIsSelected && this.hasDefaultLabel()) {
             this.#buildDefaultLblTrpl()
         }
         this.#createResultPtrns()
@@ -80,95 +81,92 @@ export default class TypedVariableTranslator{
         }
     }
 
-    #buildDefaultLblTrpl(){
-        // generate only in the case the default label property exists
-        if(this.hasDefaultLabel()) {
-            let defaultLabelProp:ISpecificationProperty = this.getDefaultLabelProperty();
+    #buildDefaultLblTrpl(){  
+        let defaultLabelProp:ISpecificationProperty = this.getDefaultLabelProperty();
 
-            if(defaultLabelProp.isMultilingual()) {
-                // default label property is multilingual
-                // try to match it against the lang and defaultLang parameters of Sparnatural
-                
-                if(getSettings().language == getSettings().defaultLanguage) {
-                    // lang and defaultLang are the same
-                    // try to match with an equality on the language
-
-                    // ?Person_1 foaf:name ?Person_1_label
-                    this.defaultLblPatterns.push(
-                        SparqlFactory.buildBgpPattern(
-                            [SparqlFactory.buildTriple(
-                                factory.variable(this.#variableName),
-                                factory.namedNode(defaultLabelProp.getId()),
-                                factory.variable(this.defaultLabelVarName)
-                            )]
-                    ));
-                    // FILTER(?Person_1_label = "fr")
-                    this.defaultLblPatterns.push(
-                        SparqlFactory.buildFilterLangEquals(
-                            factory.variable(this.defaultLabelVarName),
-                            factory.literal(getSettings().language)
-                        )
-                    );
-                } else {
-                    // the user langauge and default data language are different
-                    // use a pattern OPTIONAL {...} OPTIONAL {...} BIND(COALESCE(?x1,?x2) AS ?x)
-                    
-                    // OPTIONAL { ?Person_1 foaf:name ?Person_1_label_lang . FILTER(?Person_1_label_lang = "fr")}
-                    this.defaultLblPatterns.push(SparqlFactory.buildOptionalPattern(
-                        [
-                        SparqlFactory.buildBgpPattern(
-                            [SparqlFactory.buildTriple(
-                                factory.variable(this.#variableName),
-                                factory.namedNode(defaultLabelProp.getId()),
-                                factory.variable(this.defaultLabelVarName+"_lang")
-                            )]
-                        ),
-                        SparqlFactory.buildFilterLangEquals(
-                            factory.variable(this.defaultLabelVarName+"_lang"),
-                            factory.literal(getSettings().language)
-                        )
-                        ]
-                    ));
-
-                    // OPTIONAL { ?Person_1 foaf:name ?Person_1_label_defaultLang . FILTER(?Person_1_label_defaultLang = "en")}
-                    this.defaultLblPatterns.push(SparqlFactory.buildOptionalPattern(
-                        [
-                        SparqlFactory.buildBgpPattern(
-                            [SparqlFactory.buildTriple(
-                                factory.variable(this.#variableName),
-                                factory.namedNode(defaultLabelProp.getId()),
-                                factory.variable(this.defaultLabelVarName+"_defaultLang")
-                            )]
-                        ),
-                        SparqlFactory.buildFilterLangEquals(
-                            factory.variable(this.defaultLabelVarName+"_defaultLang"),
-                            factory.literal(getSettings().defaultLanguage)
-                        )
-                        ]
-                    ));
-
-                    // BIND(COALESCE(?Person_1_label,?Person_1_defaultLabel) AS ?Person_1_label)
-                    this.defaultLblPatterns.push(SparqlFactory.buildBindCoalescePattern(
-                        factory.variable(this.defaultLabelVarName+"_lang"),
-                        factory.variable(this.defaultLabelVarName+"_defaultLang"),
-                        factory.variable(this.defaultLabelVarName)
-                    ));
-                }
-            } else {
-                // default label property is not multilingual
-                // simply fetch it
+        if(defaultLabelProp.isMultilingual()) {
+            // default label property is multilingual
+            // try to match it against the lang and defaultLang parameters of Sparnatural
+            
+            if(getSettings().language == getSettings().defaultLanguage) {
+                // lang and defaultLang are the same
+                // try to match with an equality on the language
 
                 // ?Person_1 foaf:name ?Person_1_label
                 this.defaultLblPatterns.push(
-                    SparqlFactory.buildBgpPattern([
-                        SparqlFactory.buildTriple(
+                    SparqlFactory.buildBgpPattern(
+                        [SparqlFactory.buildTriple(
                             factory.variable(this.#variableName),
                             factory.namedNode(defaultLabelProp.getId()),
                             factory.variable(this.defaultLabelVarName)
-                        )
-                    ])
-                    );
+                        )]
+                ));
+                // FILTER(?Person_1_label = "fr")
+                this.defaultLblPatterns.push(
+                    SparqlFactory.buildFilterLangEquals(
+                        factory.variable(this.defaultLabelVarName),
+                        factory.literal(getSettings().language)
+                    )
+                );
+            } else {
+                // the user langauge and default data language are different
+                // use a pattern OPTIONAL {...} OPTIONAL {...} BIND(COALESCE(?x1,?x2) AS ?x)
+                
+                // OPTIONAL { ?Person_1 foaf:name ?Person_1_label_lang . FILTER(?Person_1_label_lang = "fr")}
+                this.defaultLblPatterns.push(SparqlFactory.buildOptionalPattern(
+                    [
+                    SparqlFactory.buildBgpPattern(
+                        [SparqlFactory.buildTriple(
+                            factory.variable(this.#variableName),
+                            factory.namedNode(defaultLabelProp.getId()),
+                            factory.variable(this.defaultLabelVarName+"_lang")
+                        )]
+                    ),
+                    SparqlFactory.buildFilterLangEquals(
+                        factory.variable(this.defaultLabelVarName+"_lang"),
+                        factory.literal(getSettings().language)
+                    )
+                    ]
+                ));
+
+                // OPTIONAL { ?Person_1 foaf:name ?Person_1_label_defaultLang . FILTER(?Person_1_label_defaultLang = "en")}
+                this.defaultLblPatterns.push(SparqlFactory.buildOptionalPattern(
+                    [
+                    SparqlFactory.buildBgpPattern(
+                        [SparqlFactory.buildTriple(
+                            factory.variable(this.#variableName),
+                            factory.namedNode(defaultLabelProp.getId()),
+                            factory.variable(this.defaultLabelVarName+"_defaultLang")
+                        )]
+                    ),
+                    SparqlFactory.buildFilterLangEquals(
+                        factory.variable(this.defaultLabelVarName+"_defaultLang"),
+                        factory.literal(getSettings().defaultLanguage)
+                    )
+                    ]
+                ));
+
+                // BIND(COALESCE(?Person_1_label,?Person_1_defaultLabel) AS ?Person_1_label)
+                this.defaultLblPatterns.push(SparqlFactory.buildBindCoalescePattern(
+                    factory.variable(this.defaultLabelVarName+"_lang"),
+                    factory.variable(this.defaultLabelVarName+"_defaultLang"),
+                    factory.variable(this.defaultLabelVarName)
+                ));
             }
+        } else {
+            // default label property is not multilingual
+            // simply fetch it
+
+            // ?Person_1 foaf:name ?Person_1_label
+            this.defaultLblPatterns.push(
+                SparqlFactory.buildBgpPattern([
+                    SparqlFactory.buildTriple(
+                        factory.variable(this.#variableName),
+                        factory.namedNode(defaultLabelProp.getId()),
+                        factory.variable(this.defaultLabelVarName)
+                    )
+                ])
+                );
         }
     }
 
@@ -197,7 +195,7 @@ export default class TypedVariableTranslator{
     }
 
     /**
-     * @returns ttrue in the case the current type has a default label property
+     * @returns true in the case the current type has a default label property
      */
     hasDefaultLabel():boolean {
         let defaultLabelProperty = this.#specProvider.getEntity(this.#variableType)?.getDefaultLabelProperty();

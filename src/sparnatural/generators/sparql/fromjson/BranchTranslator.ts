@@ -140,7 +140,8 @@ export default class BranchTranslator{
             );
             typeTranslator.build();
             this.#startClassPtrn = typeTranslator.resultPtrns;
-            if(typeTranslator.hasDefaultLabel()) {
+            // if there was any default label patterns generated, gather the variable names of the default label
+            if(typeTranslator.defaultLblPatterns.length > 0) {
                 this.#defaultVars.push(factory.variable(typeTranslator.defaultLabelVarName))
             }
         }
@@ -157,7 +158,7 @@ export default class BranchTranslator{
             typeTranslator.build();
 
             this.#endClassPtrn = typeTranslator.resultPtrns
-            if(typeTranslator.hasDefaultLabel()) {
+            if(typeTranslator.defaultLblPatterns.length > 0) {
                 this.#defaultVars.push(factory.variable(typeTranslator.defaultLabelVarName))
             }
         }
