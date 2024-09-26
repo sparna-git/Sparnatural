@@ -52,7 +52,7 @@ export default class TypedVariableTranslator{
 
     build() {
         this.#buildTypeTriple()
-        // generate default label patterns only if the varibale is selected
+        // generate default label patterns only if the variable is selected
         if(this.#variableIsSelected) {
             this.#buildDefaultLblTrpl()
         }

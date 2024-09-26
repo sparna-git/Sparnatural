@@ -97,7 +97,7 @@ export default class BranchTranslator{
                 this.#fullQuery,
                 this.#specProvider,
                 // children are never the very first
-                true,
+                false,
                 // children branch will be in option if this one is optional or not exists
                 this.#branch.optional || this.#branch.notExists
             )
@@ -127,6 +127,7 @@ export default class BranchTranslator{
                 this.#branch.line.sType,
                 // Note : on subject position, the only variable that can be selected is the very first one
                 // Otherwise it can be selected in the object position, but not inside a WHERE clause
+                // Anyway if it not the very first, all the startClassPtrn is ignored when building the final query
                 (BranchTranslator.isVarSelected(this.#fullQuery,this.#branch.line.s) && this.#isVeryFirst),
                 this.#specProvider
             );
