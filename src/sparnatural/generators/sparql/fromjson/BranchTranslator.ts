@@ -125,7 +125,9 @@ export default class BranchTranslator{
             let typeTranslator:TypedVariableTranslator = new TypedVariableTranslator(
                 this.#branch.line.s,
                 this.#branch.line.sType,
-                BranchTranslator.isVarSelected(this.#fullQuery,this.#branch.line.s),
+                // Note : on subject position, the only variable that can be selected is the very first one
+                // Otherwise it can be selected in the object position, but not inside a WHERE clause
+                (BranchTranslator.isVarSelected(this.#fullQuery,this.#branch.line.s) && this.#isVeryFirst),
                 this.#specProvider
             );
             typeTranslator.build();
