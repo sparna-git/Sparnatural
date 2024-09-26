@@ -38,6 +38,43 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   }
 });
 
+sparnatural.addEventListener("queryUpdated", (event) => {
+  var queryString = sparnatural.expandSparql(event.detail.queryString);
+  var queryStringFromJson = sparnatural.expandSparql(
+    event.detail.queryStringFromJson
+  );
+  console.log("PREVIOUS", queryString);
+  console.log("NEW", queryStringFromJson);
+  // Ajouter une ligne au tableau
+  const tableBody = document.getElementById("sparql-comparison-table");
+  const row = document.createElement("tr");
+  const oldCell = document.createElement("td");
+  oldCell.textContent = queryString;
+  row.appendChild(oldCell);
+  const newCell = document.createElement("td");
+  newCell.textContent = queryStringFromJson;
+  row.appendChild(newCell);
+  const statusCell = document.createElement("td");
+  statusCell.textContent =
+    queryString === queryStringFromJson ? "OK" : "Pas OK";
+  statusCell.classList.add(
+    queryString === queryStringFromJson ? "table-success" : "table-danger"
+  );
+  row.appendChild(statusCell);
+  tableBody.appendChild(row);
+  // Mettre à jour le champ caché
+  document.getElementById("query-json").value = JSON.stringify(
+    event.detail.queryJson
+  );
+  // Notifier les plugins Yasr
+  for (const plugin in yasr.plugins) {
+    if (yasr.plugins[plugin].notifyQuery) {
+      yasr.plugins[plugin].notifyQuery(event.detail.queryJson);
+    }
+  }
+});
+
+
 sparnatural.addEventListener("submit", (event) => {
   sparnatural.disablePlayBtn();
   // trigger the query from YasQE

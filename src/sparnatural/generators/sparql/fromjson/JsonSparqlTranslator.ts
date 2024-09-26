@@ -85,7 +85,7 @@ export default class JsonSparqlTranslator {
     // set a GROUP BY based on aggregation expression in the variables
     // add this after defaultLabel var have been inserted, and re-read them from the query
     sparqlJsQuery.group = this.#addGroupBy(sparqlJsQuery.variables as Variable[])
-
+    
     return sparqlJsQuery;
   }
 
@@ -127,6 +127,7 @@ export default class JsonSparqlTranslator {
   #createWhereClause():Pattern[]{
     let whereBuilder = new QueryWhereTranslator(this.jsonQuery, this.specProvider);
     whereBuilder.build();
+    this.defaultLabelVars = whereBuilder.getDefaultVars();
     return whereBuilder.getResultPtrns();
     /*
     const builder = new WhereBuilder(
@@ -199,9 +200,11 @@ export default class JsonSparqlTranslator {
    * @param sparqlQuery The SparqlJs query
    * @param defaultLabelVar The default label variable, ending in xxx_label, to insert
    */
-  #insertDefaultLabelVar(sparqlQuery: SelectQuery, defaultLabelVar:Variable) {
+  
+  #insertDefaultLabelVar2(sparqlQuery: SelectQuery, defaultLabelVar:Variable) {
     // reconstruct the original var name by removing "_label" suffix
     var originalVar = (defaultLabelVar  as VariableTerm).value.substring(0,(defaultLabelVar  as VariableTerm).value.length-"_label".length);
+    console.log('SpraqlQuery variables',sparqlQuery.variables);
     for(var i=0;i<sparqlQuery.variables.length;i++) {
       // find variable with the original name
       if((sparqlQuery.variables[i] as VariableTerm).value == originalVar) {
@@ -212,4 +215,26 @@ export default class JsonSparqlTranslator {
       }
     }
   }
+    #insertDefaultLabelVar(sparqlQuery: SelectQuery, defaultLabelVar: Variable) {
+      // Reconstruct the original var name by removing "_label" suffix
+      const originalVar = (defaultLabelVar as VariableTerm).value.substring(0, (defaultLabelVar as VariableTerm).value.length - "_label".length);
+      console.log('SpraqlQuery variables', sparqlQuery.variables);
+
+      // Check if the default label variable already exists to avoid duplicates
+      const alreadyExists = sparqlQuery.variables.some(variable => (variable as VariableTerm).value === (defaultLabelVar as VariableTerm).value);
+  
+      if (!alreadyExists) {
+          for (let i = 0; i < sparqlQuery.variables.length; i++) {
+              // Find variable with the original name
+              if ((sparqlQuery.variables[i] as VariableTerm).value === originalVar) {
+                  // Insert the default label var after this one
+                  sparqlQuery.variables.splice(i + 1, 0, defaultLabelVar);
+                  break; // Important to avoid an infinite loop
+              }
+          }
+      } else {
+          console.warn(`Variable already exists, skipping insertion.`);
+      }
+  }
+  
 }
