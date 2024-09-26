@@ -26,14 +26,14 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 
 
 
-  yasqe.setValue(queryString);
+  yasqe.setValue(queryStringFromJson);
   // store JSON in hidden field
-  document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson);
+  document.getElementById('query-json').value = JSON.stringify(event.detail.queryStringFromJson);
 
   // notify the query to yasr plugins
   for (const plugin in yasr.plugins) {
       if(yasr.plugins[plugin].notifyQuery) {
-          yasr.plugins[plugin].notifyQuery(event.detail.queryJson);
+          yasr.plugins[plugin].notifyQuery(event.detail.queryStringFromJson);
       }
   }
 });
