@@ -204,6 +204,8 @@ export default class BranchTranslator{
         }
 
         if(
+            this.#branch.line.o
+            &&
             !this.#specProvider.getEntity(this.#branch.line.oType).isLiteralEntity()
             &&
             !this.#specProvider.getProperty(this.#branch.line.p).omitClassCriteria()
@@ -219,7 +221,7 @@ export default class BranchTranslator{
 
     #createOptionStatePtrn(exceptStartPtrn:Pattern[]){
         // create a SERVICE clause if needed
-        const sparqlService = this.#specProvider.getProperty(this.#branch.line.p).getServiceEndpoint()
+        const sparqlService = this.#specProvider.getProperty(this.#branch.line.p)?.getServiceEndpoint()
         let servicePtrn = null;
         if(sparqlService ){
             const endpoint = factory.namedNode(sparqlService)
@@ -246,7 +248,7 @@ export default class BranchTranslator{
 
         // then decide where to store the generated patterns : either in "normal" patterns
         // or in patterns that shall be executed after the rest of the query
-        if(servicePtrn && this.#specProvider.getProperty(this.#branch.line.p).isLogicallyExecutedAfter()) {
+        if(servicePtrn && this.#specProvider.getProperty(this.#branch.line.p)?.isLogicallyExecutedAfter()) {
             this.#executedAfterPtrns.push(...finalResultPtrns);
         } else {
             this.#resultPtrns.push(...finalResultPtrns);
