@@ -56,6 +56,8 @@ class SparnaturalFormComponent extends HTMLComponent {
         );
     
         let theWidget = wf.buildWidget(
+          // type de widget
+          // --> list, autocomplete, date, etc...
           this.specProvider.getProperty(testClass.getConnectingProperties(testClass.getConnectedEntities()[1])[0]).getPropertyType(testClass.getConnectedEntities()[0]),
           {
             variable:"Test_1",
