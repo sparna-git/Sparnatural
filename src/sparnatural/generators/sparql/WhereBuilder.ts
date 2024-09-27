@@ -174,7 +174,11 @@ export default class WhereBuilder{
         const hasEndClass = (
             !this.#specProvider.getEntity(this.#grpWrapper.CriteriaGroup.EndClassGroup.getTypeSelected()).isLiteralEntity()
             &&
-            !this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected()).omitClassCriteria()
+            (
+                this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected() == null
+                ||
+                !this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected()).omitClassCriteria()
+            )            
         );
         const hasIntersectionTriple = (this.#intersectionPtrn)
 
@@ -195,7 +199,7 @@ export default class WhereBuilder{
         if(hasStartClass) this.#resultPtrns.push(...this.#startClassPtrn)
 
         // create a SERVICE clause if needed
-        const sparqlService = this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected()).getServiceEndpoint()
+        const sparqlService = this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())?.getServiceEndpoint()
         let servicePtrn = null;
         if(this.#grpWrapper.optionState === OptionTypes.SERVICE || sparqlService ){
             const endpoint = factory.namedNode(sparqlService)
@@ -221,7 +225,7 @@ export default class WhereBuilder{
 
         // then decide where to store the generated patterns : either in "normal" patterns
         // or in patterns that shall be executed after the rest of the query
-        if(servicePtrn && this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected()).isLogicallyExecutedAfter()) {
+        if(servicePtrn && this.#specProvider.getProperty(this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup?.getTypeSelected())?.isLogicallyExecutedAfter()) {
             this.#executedAfterPtrns.push(...finalResultPtrns);
         } else {
             this.#resultPtrns.push(...finalResultPtrns);
