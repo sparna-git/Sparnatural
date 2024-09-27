@@ -43,8 +43,6 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   var queryStringFromJson = sparnatural.expandSparql(
     event.detail.queryStringFromJson
   );
-  console.log("PREVIOUS", queryString);
-  console.log("NEW", queryStringFromJson);
   // Ajouter une ligne au tableau
   const tableBody = document.getElementById("sparql-comparison-table");
   const row = document.createElement("tr");

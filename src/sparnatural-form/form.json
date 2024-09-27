@@ -1,0 +1,24 @@
+{
+	"bindings": [
+		{
+			"variable" : "Country_4",
+			"node" : {
+				"type" : "UserPrompt",
+				"name" : {
+					"en" : "Country",
+					"fr" : "Pays"
+				}
+			}
+		},
+		{
+			"variable" : "Person_10",
+			"node" : {
+				"type" : "UserPrompt",
+				"name" : {
+					"en" : "Author",
+					"fr" : "Auteur"
+				}
+			}
+		}
+	]	
+}

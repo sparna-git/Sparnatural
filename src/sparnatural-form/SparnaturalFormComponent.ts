@@ -8,10 +8,9 @@ import SparnaturalSpecificationFactory from "../sparnatural/spec-providers/Sparn
 import { SparnaturalFormAttributes } from "../SparnaturalFormAttributes";
 import ISettings from "./ISettings";
 import { SparnaturalFormI18n } from "./SparnaturalFormI18n";
+import { Form } from "./FormStructure";
 
 class SparnaturalFormComponent extends HTMLComponent {
-  
-
   // the content of all HTML element attributes
   formSettings: ISettings;
   // Sparnatural configuration
@@ -19,74 +18,118 @@ class SparnaturalFormComponent extends HTMLComponent {
   // The JSON query from the "query" attribute
   jsonQuery: ISparJson;
 
-  constructor(
-    attributes : SparnaturalFormAttributes
-  ) {
+  constructor(attributes: SparnaturalFormAttributes) {
     // this is a root component : Does not have a ParentComponent!
     super("SparnaturalForm", null, null);
-    
+
     this.formSettings = attributes;
     this.formSettings.customization = {};
   }
 
   render(): this {
-    this.#initSparnaturalFormStaticLabels()
-    this.#initSparnaturalStaticLabels()
-    
+    this.#initSparnaturalFormStaticLabels();
+    this.#initSparnaturalStaticLabels();
+
+    // Step 1: Initialize the specification provider
     this.initSpecificationProvider((sp: ISparnaturalSpecification) => {
       this.specProvider = sp;
-      
-      // ICI : générer le formulaire
 
-      // Etape 1 : lire le contenu de la query dans le paramètre "query"
-      this.initJsonQuery((query:ISparJson) => {
+      // Step 2: Initialize the JSON query
+      this.initJsonQuery((query: ISparJson) => {
         console.log("Successfully read query in " + this.formSettings.query);
 
-        /*** CODE DE TEST ***/
-      
-        let testClass:ISpecificationEntity = this.specProvider.getEntity(
-          this.specProvider.getEntitiesInDomainOfAnyProperty()[0]
-        );
-    
-        let wf:WidgetFactory = new WidgetFactory(
-          this,
-          this.specProvider,
-          (this.getRootComponent() as SparnaturalFormComponent).formSettings,
-          null
-        );
-    
-        let theWidget = wf.buildWidget(
-          this.specProvider.getProperty(testClass.getConnectingProperties(testClass.getConnectedEntities()[1])[0]).getPropertyType(testClass.getConnectedEntities()[0]),
-          {
-            variable:"Test_1",
-            type:testClass.getId()
-          },
-          {
-            variable:"Property_1",
-            type:testClass.getConnectingProperties(testClass.getConnectedEntities()[1])[0]
-          },
-          {
-            variable:"Test_2",
-            type:testClass.getConnectedEntities()[1]
-          }
-        );
+        // Step 3: Fetch the form configuration (form.json)
+        let formUrl = this.formSettings.form;
+        $.getJSON(formUrl, (formConfig) => {
+          console.log("Form configuration loaded:", formConfig);
 
-        // renders the widget
-        theWidget.render();
+          // Step 4: Iterate through the form configuration (bindings)
+          formConfig.bindings.forEach((binding: any) => {
+            const variable = binding.variable;
+            const fieldName =
+              binding.node.name[this.formSettings.language] ||
+              binding.node.name["en"];
+            console.log(
+              "Processing variable:",
+              variable,
+              "with name:",
+              fieldName
+            );
+            // Step 5: Recursively search for the variable in the query
+            const findInBranches = (branches: any[]): any => {
+              for (const branch of branches) {
+                if (branch.line.o === variable) {
+                  return branch.line; // Found the match
+                } else if (branch.children && branch.children.length > 0) {
+                  const result = findInBranches(branch.children);
+                  if (result) return result;
+                }
+              }
+              return null;
+            };
 
-        /*** FIN DU CODE DE TEST ***/
+            const queryLine = findInBranches(query.branches);
+            if (queryLine) {
+              const subject = queryLine.sType;
+              const predicate = queryLine.p;
+              const object = queryLine.oType;
+              console.log(
+                "Found subject, predicate, object:",
+                subject,
+                predicate,
+                object
+              );
+
+              // Step 6: Use the specProvider to get the type of the field
+              let specEntity: ISpecificationEntity =
+                this.specProvider.getEntity(subject);
+              let connectingProperty = this.specProvider.getProperty(predicate);
+              const propertyType = connectingProperty.getPropertyType(object); // Get the type of property (e.g., text, list, autocomplete)
+              console.log("Field type determined:", propertyType);
+
+              // Step 7: Create the widget for this field using WidgetFactory based on property type
+              let wf: WidgetFactory = new WidgetFactory(
+                this,
+                this.specProvider,
+                (
+                  this.getRootComponent() as SparnaturalFormComponent
+                ).formSettings,
+                null
+              );
+              let theWidget = wf.buildWidget(
+                propertyType,
+                {
+                  variable: queryLine.s,
+                  type: specEntity.getId(),
+                },
+                {
+                  variable: "predicate",
+                  type: connectingProperty.getId(),
+                },
+                {
+                  variable: queryLine.o,
+                  type: object,
+                }
+              );
+
+              // Step 8: Render the widget
+              theWidget.render();
+              console.log(
+                "Rendered widget for variable: ",
+                variable,
+                "with type:",
+                propertyType
+              );
+            } else {
+              console.warn("No match found for variable: ", variable);
+            }
+          });
+        }).fail((error) => {
+          console.error("Error loading form configuration:", error);
+        });
       });
-
-
-
-      // Etape 2 :
-
-
-
-
-      
     });
-    
+
     return this;
   }
 
@@ -94,20 +137,23 @@ class SparnaturalFormComponent extends HTMLComponent {
    * Reads and parse the configuration provided in the "src" attribute, and fires a callback when ready
    * @param callback the function that is called with the ISpecificationProvider instance created after reading the config
    */
-  initSpecificationProvider(callback:any) {
-
+  initSpecificationProvider(callback: any) {
     let specProviderFactory = new SparnaturalSpecificationFactory();
-    specProviderFactory.build(this.formSettings.src, this.formSettings.language, (sp: any) => {
-      // call the call back when done
-      callback(sp);
-    });    
+    specProviderFactory.build(
+      this.formSettings.src,
+      this.formSettings.language,
+      (sp: any) => {
+        // call the call back when done
+        callback(sp);
+      }
+    );
   }
 
   /**
    * Reads the Sparnatural query
-   * @param callback 
+   * @param callback
    */
-  initJsonQuery(callback:(query:ISparJson)=>void) {
+  initJsonQuery(callback: (query: ISparJson) => void) {
     let queryUrl = this.formSettings.query;
 
     $.when(
@@ -119,7 +165,6 @@ class SparnaturalFormComponent extends HTMLComponent {
         );
       })
     ).done(function () {});
-
   }
 
   /**
@@ -143,7 +188,5 @@ class SparnaturalFormComponent extends HTMLComponent {
       I18n.init("en");
     }
   }
-
-
 }
 export default SparnaturalFormComponent;
