@@ -114,14 +114,6 @@ export class StoreModel {
                 null
             ).length > 0
         );
-        /*
-        return this.store.asDataset().has(DF.quad(
-            rdfNode,
-            property,
-            value,
-            null
-        ));
-        */
     }
 
     findSubjectsWithPredicate(property: Term, rdfNode: Term): Term[] {

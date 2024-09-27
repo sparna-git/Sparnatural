@@ -327,6 +327,10 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
   }
 
   getProperty(uri: string): ISpecificationProperty {
+    if(!this.graph.hasTriple(factory.namedNode(uri), null, null)) {
+      throw new Error("The requested property "+uri+" is unknown in the configuration. We cannot find any triple with this URI as subject.")
+    }
+
     return new SHACLSpecificationProperty(
       uri, 
       this, 
