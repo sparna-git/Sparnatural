@@ -223,7 +223,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     }
     
     /**
-     * @returns all properties available on this node shape, including inherited properties from superclasses
+     * @returns all (non-deactivated) properties available on this node shape, including inherited properties from superclasses
      */
     getProperties(): string[] {
         var items: string[] = [];
