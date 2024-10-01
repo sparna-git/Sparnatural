@@ -49,7 +49,14 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     }
 
     getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
-      return new Dag<ISpecificationEntity>();
+      // 1. get the entities that are in a domain of a property
+    let entities:OWLSpecificationEntity[] = this.getConnectedEntities().map(s => this.provider.getEntity(s) as OWLSpecificationEntity) as OWLSpecificationEntity[];
+
+    // build dag from flat list
+    let dag:Dag<OWLSpecificationEntity> = new Dag<OWLSpecificationEntity>();
+    dag.initFlatTreeFromFlatList(entities);
+
+    return dag;
     }
 
 

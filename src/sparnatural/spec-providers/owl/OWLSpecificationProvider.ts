@@ -58,9 +58,6 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
 
   }
 
-  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
-    throw new Dag<ISpecificationEntity>();
-  }
 
   getLanguages(): string[] {
     let languages:string[] = this.store
@@ -102,7 +99,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     return result;
   }
 
-  getEntitiesInDomainOfAnyProperty() {
+  getEntitiesInDomainOfAnyProperty() : string[] {
     const quadsArray = this.store.getQuads(
       null,
       RDFS.DOMAIN,
@@ -144,6 +141,19 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     console.log("Classes in domain of any property " + items);
     return items;
   }
+
+
+  getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
+    // 1. get the entities that are in a domain of a property
+    let entities:OWLSpecificationEntity[] = this.getEntitiesInDomainOfAnyProperty().map(s => this.getEntity(s) as OWLSpecificationEntity) as OWLSpecificationEntity[];
+
+    // build dag from flat list
+    let dag:Dag<OWLSpecificationEntity> = new Dag<OWLSpecificationEntity>();
+    dag.initFlatTreeFromFlatList(entities);
+
+    return dag;
+  }
+
 
   isSparnaturalClass(classUri: string) {
     return (
