@@ -221,6 +221,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     }
 
     // 3. complement the initial list with their parents
+    let disabledList:string[] = new Array<string>();
     while(!entities.every(entity => {
       return entity.getParents().every(parent => {
         return (entities.find(anotherEntity => anotherEntity.getId() === parent) != undefined);
@@ -235,11 +236,12 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
         })
       });
       parentsToAdd.forEach(p => entities.push(p));
+      // also keep that as a disabled node
+      parentsToAdd.forEach(p => disabledList.push(p.getId()));
     }
 
     let dag:Dag<SHACLSpecificationEntity> = new Dag<SHACLSpecificationEntity>();
-    // for the moment : no disabled entries
-    dag.initFromParentableAndIdAbleEntity(entities, []);
+    dag.initFromParentableAndIdAbleEntity(entities, disabledList);
 
     let statisticsReader:StatisticsReader = new StatisticsReader(new StoreModel(this.store));
 
@@ -248,7 +250,6 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       if(node.parents.length == 0) {
         // if this is a root
         // add a count to it
-        // node.count = Math.floor(Math.random() * 10000000)
         node.count = statisticsReader.getEntitiesCountForShape(factory.namedNode(node.payload.getId()))
       } else {
         // otherwise make absolutely sure the count is undefined
