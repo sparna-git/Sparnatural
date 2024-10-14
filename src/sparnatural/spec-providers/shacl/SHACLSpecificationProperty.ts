@@ -21,6 +21,23 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     super(uri, provider, n3store, lang);
   }
 
+  /**
+   * Tests whether the provided property shape URI will be turned into a Sparnatural property
+   * @param propertyShapeUri 
+   * @param n3store 
+   * @returns false if the property is deactivated, or it is on rdf:type, or it has an sh:hasValue
+   */
+  static isSparnaturalSHACLSpecificationProperty(propertyShapeUri:string, n3store: RdfStore):boolean {
+    let graph = new StoreModel(n3store);
+    return (
+      !graph.hasTriple(factory.namedNode(propertyShapeUri), SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
+      &&
+      !graph.hasTriple(factory.namedNode(propertyShapeUri), SH.PATH, RDF.TYPE)
+      &&
+      !graph.hasTriple(factory.namedNode(propertyShapeUri), SH.HAS_VALUE, null)
+    );
+  }
+
     getLabel(): string {
       // first try to read an sh:name
       let label = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.NAME, this.lang)?.value;
@@ -349,7 +366,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
                 null
             ).forEach((q:Quad) => {
                   n3store.getQuads(
-                    quad.object,
+                    q.subject,
                     RDF.TYPE,
                     SH.NODE_SHAPE,
                     null

@@ -30,6 +30,7 @@ export const SH = {
   DATATYPE: factory.namedNode(SH_NAMESPACE + "datatype") as NamedNode,
   DEACTIVATED: factory.namedNode(SH_NAMESPACE + "deactivated") as NamedNode,
   DESCRIPTION: factory.namedNode(SH_NAMESPACE + "description") as NamedNode,
+  HAS_VALUE: factory.namedNode(SH_NAMESPACE + "hasValue") as NamedNode,
   IN: factory.namedNode(SH_NAMESPACE + "in") as NamedNode, 
   INVERSE_PATH: factory.namedNode(SH_NAMESPACE + "inversePath") as NamedNode, 
   IRI: factory.namedNode(SH_NAMESPACE + "IRI") as NamedNode, 
@@ -390,7 +391,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       return !that.graph.hasTriple(node, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
     });
 
-    // remove from the initial list the NodeShapes that are connected to only deactivated properties
+    // remove from the initial list the NodeShapes that are connected to only properties that Sparnatural will not use
     // by checking the lenght of the list of properties we can make sure of that
     dedupNodeShapes = dedupNodeShapes.filter(node => {
       return (this.getEntity(node.value) as SHACLSpecificationEntity).getProperties().length > 0;

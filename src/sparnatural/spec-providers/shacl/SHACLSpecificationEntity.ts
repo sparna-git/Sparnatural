@@ -88,11 +88,9 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         propShapes
         .forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
-            if(!prop.isDeactivated()) {
-                let pRange = prop.getRange();
-                if(pRange.indexOf(range) > -1) {
-                    items.push(ps);
-                }
+            let pRange = prop.getRange();
+            if(pRange.indexOf(range) > -1) {
+                items.push(ps);
             }
         });
 
@@ -147,18 +145,15 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     getConnectedEntities(): string[] {
         var items: string[] = [];
 
-        // read all sh:property
-        // let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+        // read all properties that make sense for Sparnatural
         let propShapes = this.getProperties();
 
         propShapes
         .forEach(ps => {            
             // read the property
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
-            if(!prop.isDeactivated()) {
-                // and then read their ranges
-                items.push(...prop.getRange());
-            }
+            // and then read their ranges
+            items.push(...prop.getRange());
         });
 
         // dedup
@@ -242,8 +237,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
         propShapes
         .forEach(ps => {
-            let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
-            if(!prop.isDeactivated()) {
+            if(SHACLSpecificationProperty.isSparnaturalSHACLSpecificationProperty(ps, this.store)) {
                 items.push(ps);
             }
         });
