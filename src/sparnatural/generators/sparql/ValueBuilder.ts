@@ -10,7 +10,6 @@ import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecific
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { SearchRegexWidgetValue } from "../../components/widgets/SearchRegexWidget";
 import { DateTimePickerValue } from "../../components/widgets/timedatepickerwidget/TimeDatePickerWidget";
-import { buildDateRangeOrExactDatePattern } from "../../components/widgets/timedatepickerwidget/TimeDatePattern";
 import { MapValue } from "../../components/widgets/MapWidget";
 import { LatLng } from "leaflet";
 
@@ -411,7 +410,8 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
           let exactDateProp = this.specProvider.getProperty(this.propertyVal.type).getExactDateProperty();
     
           return [
-            buildDateRangeOrExactDatePattern(
+            // special config with a begin and end date
+            SparqlFactory.buildDateRangeOrExactDatePattern(
               widgetValues[0].value.start?factory.literal(
                 this.#formatSparqlDate(widgetValues[0].value.start),
                 factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
@@ -428,6 +428,7 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
             )
           ];
         } else {
+          // normal case, standard config
           return [
             SparqlFactory.buildFilterRangeDateOrNumber(
               widgetValues[0].value.start?factory.literal(
