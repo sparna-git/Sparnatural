@@ -424,7 +424,7 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
               factory.namedNode(beginDateProp),
               factory.namedNode(endDateProp),
               exactDateProp != null?factory.namedNode(exactDateProp):null,
-              factory.variable(this.startClassVal.variable)
+              factory.variable(this.endClassVal.variable)
             )
           ];
         } else {
