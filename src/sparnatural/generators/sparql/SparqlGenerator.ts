@@ -163,7 +163,7 @@ export default class SparqlGenerator {
           return [ factory.variable(v.selectedVariable.variable) ];
         }
 
-        if(specProperty.getBeginDateProperty() || specProperty.getEndDateProperty()) {
+        if(specProperty.getBeginDateProperty() && specProperty.getEndDateProperty()) {
           let result:Variable[] = []
           if(specProperty.getBeginDateProperty()) {
             result.push(factory.variable(v.selectedVariable.variable+"_begin"));

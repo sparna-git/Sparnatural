@@ -12,6 +12,7 @@ import { SearchRegexWidgetValue } from "../../components/widgets/SearchRegexWidg
 import { DateTimePickerValue } from "../../components/widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { MapValue } from "../../components/widgets/MapWidget";
 import { LatLng } from "leaflet";
+import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
 
 
 const factory = new DataFactory();
@@ -403,14 +404,17 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
         
         let widgetValues = this.values as DateTimePickerValue[];
         
-        let beginDateProp = this.specProvider.getProperty(this.propertyVal.type).getBeginDateProperty();
-        let endDateProp = this.specProvider.getProperty(this.propertyVal.type).getEndDateProperty();
+        let specProperty:ISpecificationProperty = this.specProvider.getProperty(this.propertyVal.type);
+        let beginDateProp = specProperty.getBeginDateProperty();
+        let endDateProp = specProperty.getEndDateProperty();
     
-        if(beginDateProp != null && endDateProp != null) {
-          let exactDateProp = this.specProvider.getProperty(this.propertyVal.type).getExactDateProperty();
-    
+        if(beginDateProp && endDateProp) {
+          // special config with a begin and end date
+          let exactDateProp = specProperty.getExactDateProperty();
+
+          // we have some values, generate the filters 
           return [
-            // special config with a begin and end date
+            
             SparqlFactory.buildDateRangeOrExactDatePattern(
               widgetValues[0].value.start?factory.literal(
                 this.#formatSparqlDate(widgetValues[0].value.start),
@@ -427,6 +431,8 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
               factory.variable(this.endClassVal.variable)
             )
           ];
+          
+
         } else {
           // normal case, standard config
           return [
@@ -455,7 +461,15 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
         let beginDateProp = this.specProvider.getProperty(this.propertyVal.type).getBeginDateProperty();
         let endDateProp = this.specProvider.getProperty(this.propertyVal.type).getEndDateProperty();
 
-        return (beginDateProp != null && endDateProp != null);
+        return (
+          this.values?.length == 1
+          &&
+          !(this.values[0] instanceof SelectAllValue)
+          &&
+          beginDateProp != null
+          &&
+          endDateProp != null
+        );
     }
 
     /**

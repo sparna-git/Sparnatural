@@ -6,6 +6,7 @@ import { getSettings } from "../../settings/defaultSettings";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "./SparqlFactory";
 import ValueBuilderIfc from './ValueBuilder';
+import ISpecificationProperty from '../../spec-providers/ISpecificationProperty';
 
 const factory = new DataFactory();
 
@@ -34,29 +35,60 @@ export default class IntersectionBuilder{
     build(){
         // the intersection triple can very well be generated even if no rdf:type triple is generated for the end class.
         if(this.#startClassVar && this.#endClassVar && !this.#valueBuilder?.isBlockingObjectProp()){
-            
-            /*
-            this.resultPtrn.push(
-                SparqlFactory.buildBgpPattern([SparqlFactory.buildIntersectionTriple(
-                (this.#startClsPtrn[0] as BgpPattern).triples[0].subject as VariableTerm,
-                this.#objectPropCls.getTypeSelected(),
-                (this.#endClsPtrn[0] as BgpPattern).triples[0].subject as VariableTerm
-                )])
-            );
-            */
 
-            this.resultPtrn.push(
-                SparqlFactory.buildBgpPattern([SparqlFactory.buildIntersectionTriple(
-                factory.variable(this.#startClassVar.replace('?','')),
-                this.#objectPropCls.getTypeSelected(),
-                factory.variable(this.#endClassVar.replace('?',''))
-                )])
-            );
+            let specProperty:ISpecificationProperty = this.specProvider.getProperty(this.#objectPropCls.getTypeSelected());
+
+            if(specProperty.getBeginDateProperty() && specProperty.getEndDateProperty()) {
+                if(specProperty.getBeginDateProperty()) {
+                    this.resultPtrn.push(
+                        SparqlFactory.buildOptionalPattern([
+                            SparqlFactory.buildBgpPattern([SparqlFactory.buildIntersectionTriple(
+                            factory.variable(this.#startClassVar),
+                            specProperty.getBeginDateProperty(),
+                            factory.variable(this.#endClassVar+"_begin")
+                            )])
+                        ])
+                    );
+                }
+
+                if(specProperty.getEndDateProperty()) {
+                    this.resultPtrn.push(
+                        SparqlFactory.buildOptionalPattern([
+                            SparqlFactory.buildBgpPattern([SparqlFactory.buildIntersectionTriple(
+                            factory.variable(this.#startClassVar),
+                            specProperty.getEndDateProperty(),
+                            factory.variable(this.#endClassVar+"_end")
+                            )])
+                        ])
+                    );
+                }
+
+                if(specProperty.getExactDateProperty()) {
+                    this.resultPtrn.push(
+                        SparqlFactory.buildOptionalPattern([
+                            SparqlFactory.buildBgpPattern([SparqlFactory.buildIntersectionTriple(
+                            factory.variable(this.#startClassVar),
+                            specProperty.getEndDateProperty(),
+                            factory.variable(this.#endClassVar+"_exact")
+                            )])
+                        ])
+                    );
+                }
+            } else {
+                this.resultPtrn.push(
+                    SparqlFactory.buildBgpPattern([SparqlFactory.buildIntersectionTriple(
+                    factory.variable(this.#startClassVar),
+                    this.#objectPropCls.getTypeSelected(),
+                    factory.variable(this.#endClassVar)
+                    )])
+                );
+            }
+
 
             // add language filter if property is set to be multilingual
             if(this.specProvider.getProperty(this.#objectPropCls.getTypeSelected()).isMultilingual()) {
                 this.resultPtrn.push(SparqlFactory.buildFilterLangEquals(
-                    factory.variable(this.#endClassVar.replace('?','')),
+                    factory.variable(this.#endClassVar),
                     factory.literal(getSettings().language)
                 ));
             }
