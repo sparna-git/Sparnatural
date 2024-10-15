@@ -44,6 +44,10 @@ bindSparnaturalWithYasqe = function(sparnatural, yasqe, yasr) {
     sparnatural.addEventListener("queryUpdated", (event) => {
       queryString = sparnatural.expandSparql(event.detail.queryString);
       yasqe.setValue(queryString);
+      if(document.getElementById('query-json') != null) {
+        // save query in JSON
+        document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson)
+      }
     });
 
     sparnatural.addEventListener("submit", (event) => {
@@ -79,6 +83,10 @@ bindSparnaturalWithItself = function(sparnatural, yasqe, yasr) {
   sparnatural.addEventListener("queryUpdated", (event) => {
     queryString = sparnatural.expandSparql(event.detail.queryString);
     yasqe.setValue(queryString);
+    if(document.getElementById('query-json') != null) {
+      // save query in JSON
+      document.getElementById('query-json').value = JSON.stringify(event.detail.queryJson)
+    }
   });
 
   sparnatural.addEventListener("submit", (event) => {
