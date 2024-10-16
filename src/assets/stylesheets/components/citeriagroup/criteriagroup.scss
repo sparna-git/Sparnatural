@@ -98,17 +98,26 @@
 			height: 42px;
 			line-height: 42px;
 			vertical-align: bottom;
-			max-width: 200px;
-			overflow: hidden;
 			white-space: nowrap;
-			text-overflow: ellipsis;
 			opacity: 0.6;
 			background-color: var(--primary-color-light) ;
 			padding: 0 14px;
+			&:not(:has(span.label)) {
+
+				max-width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
 			span {
 				display: inline-block;
 				vertical-align: middle;
 				min-width: 20px;
+			}
+			
+			&>span.label {
+				max-width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
 			}
 			&.selected {
 				background-color: #fff; 
