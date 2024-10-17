@@ -1,7 +1,7 @@
 # Sparnatural SPARQL query builder
 Sparnatural is a **visual client-side SPARQL query builder** for exploring and navigating RDF Knowledge Graphs. It is written in Typescript.
 
-It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists, or other widgets. It can be configured through an OWL or SHACL configuration file that defines the classes and properties to be presented in the component.
+It supports the creation of basic graph patterns with the selection of values with autocomplete search or dropdown lists, or other widgets. It can be configured through a SHACL configuration file that defines the classes and properties to be presented in the component.
 
 ![](docs/assets/screencasts/screencast-sparnatural-dbpedia-v3-en.gif)
 
@@ -12,7 +12,7 @@ You can play with **online demos at http://sparnatural.eu#demos**.
 To get started :
 
 1. Read the following README;
-2. Have a look at the [online DBPedia demo](https://sparnatural.eu/demos/demo-dbpedia-v2/)
+2. Have a look at the [online DBPedia demo](https://sparnatural.eu/demos/demo-dbpedia-en/)
 3. Read [the documentation](https://docs.sparnatural.eu):
     - follow the [_Hello sparnatural tutorial_](https://docs.sparnatural.eu/hello-sparnatural/Hello-Sparnatural.html) to setup your environment
     - follow the [_SHACL configuration guide_](https://docs.sparnatural.eu/how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html) to understand how the configuration can be expressed in SHACL
@@ -115,7 +115,6 @@ This is useful when a type a of entity is used only to navigate the graph, but w
 
 ![](docs/assets/images/readme/13-no-value.png)
 
-
 ## Multilingual
 
 Sparnatural is multilingual and supports displaying labels of classes and properties in multiple languages.
@@ -127,7 +126,6 @@ See here how to search for French Museums and the name of Italian painters they 
 
 ![](docs/assets/images/readme/16-optional.gif)
 
-
 ## Support for SERVICE keyword
 
 There is currently an [experimental support for the SERVICE keyword](http://docs.sparnatural.eu/Federated-querying.html) for federated querying.
@@ -135,6 +133,10 @@ There is currently an [experimental support for the SERVICE keyword](http://docs
 ## Support for Aggregation queries
 
 Since version 9.0.0, Sparnatural supports `COUNT` queries and other aggregation functions.
+
+## Querying multiple endpoints
+
+Sparnatural can also [act as a frontend for multiple SPARQL endpoints](https://docs.sparnatural.eu/Querying-multiple-endpoints.html)
 
 ## Limitations
 
@@ -149,22 +151,20 @@ To send SPARQL queries to a service that is not hosted on the same domain name a
 # Integration in a webpage
 
 1. Look at the [hello-sparnatural folder](https://github.com/sparna-git/Sparnatural/tree/master/hello-sparnatural) that demonstrates a simple integration
-2. Read [this page in the documentation](https://docs.sparnatural.eu/Javascript-integration).
-3. Look at a [typical demo page on DBPedia](https://github.com/sparna-git/sparnatural.eu/tree/main/demos/demo-dbpedia-v2)
+2. Read [the javascript integration documentation](https://docs.sparnatural.eu/Javascript-integration).
+3. Look at a [typical demo page on DBPedia](https://github.com/sparna-git/sparnatural.eu/tree/main/demos/demo-dbpedia-en)
 
 
 # Configuration
 
 ## Specification of classes and properties
 
-Since 9.0.0, the preferred way to configure Sparnatural is with a **SHACL specification**. Look at the [supported SHACL features in the documentation](http://docs.sparnatural.eu/SHACL-based-configuration.html).
-
-The component is also configurable using a an [OWL configuration file](https://docs.sparnatural.eu/OWL-based-configuration) editable in Protégé. Look at the specification files of [the demos](https://github.com/sparna-git/sparnatural.eu/tree/main/demos) to get an idea. 
+Sparnatural is configured with a **SHACL specification**. Look at the [supported SHACL features in the documentation](http://docs.sparnatural.eu/SHACL-based-configuration.html).
 
 
 ### SHACL-based config
 
-To give you an idea, here is an annotated SHACL-based configuration snippet below. The [SHACL configuration guide](https://docs.sparnatural.eu/how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html) explains how this file can be generated from an Excel template - no need to write that file by hands:
+To give you an idea, here is an annotated SHACL-based configuration snippet below. The [SHACL configuration guide](https://docs.sparnatural.eu/how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html) explains how this file can be generated from an [Excel template](https://docs.google.com/spreadsheets/d/1lduSARo-zyL8qxObwPVD4Z2m8iKQpye-) - no need to write that file by hands:
 
 ```turtle
 <https://data.mydomain.com/ontologies/sparnatural-config> a owl:Ontology .
@@ -252,59 +252,3 @@ this:Artwork_thumbnail sh:path dbpedia:thumbnail;
   core:enableNegation "true"^^xsd:boolean .
 ```
 
-
-### OWL-based config
-
-#### Class definition in OWL
-
-```turtle
-    :Museum rdf:type owl:Class ;
-        rdfs:subClassOf core:SparnaturalClass ;
-        core:faIcon "fad fa-university" ;
-        core:sparqlString "<http://dbpedia.org/ontology/Museum>" ;
-        core:tooltip "A <b>DBPedia Museum</b>"@en ,
-                     "Un <b>Musée DBPedia</b>"@fr ;
-        rdfs:label "Museum"@en ,
-                   "Musée"@fr .
-```
-
-#### Property definitions with domains and ranges in OWL
-
-```turtle
-:displayedAt rdf:type owl:ObjectProperty ;
-             rdfs:subPropertyOf core:AutocompleteProperty ;
-             owl:inverseOf :displays ;
-             rdfs:domain :Artwork ;
-             rdfs:range :Museum ;
-             core:sparqlString "<http://dbpedia.org/ontology/museum>" ;
-             datasources:datasource datasources:search_rdfslabel_bifcontains ;
-             rdfs:label "displayed at"@en ,
-                        "exposée à"@fr .
-```
-
-#### Using font-awesome icons
-
-It is possible to directly reference an icon class from font-awesome if you embed them in your application :
-
-```turtle
-    :Person rdf:type owl:Class ;
-        core:faIcon "fad fa-male" ;
-```
-
-#### Map the query structure to a different graph structure
-
-The OWL file to use is **different** from your knowledge graph ontology definition. You should create a different OWL file. You can refer to the [documentation page](https://docs.sparnatural.eu/OWL-based-configuration.html) for more details.
-
-Classes or properties in the config can either:
-- use the same URI as a class or a property in your knowledge graph.
-- be mapped to a corresponding SPARQL property path or a corresponding class URI, using the `core:sparqlString` annotation.
-
-Here is an example of a simple property in a Sparnatural configuration that is mapped to a property path in the underlying knowledge graph:
-
-```turtle
-    :bornIn rdf:type owl:ObjectProperty ;
-        rdfs:subPropertyOf core:ListProperty ;
-        rdfs:domain :Person ;
-        rdfs:range :Country ;
-        core:sparqlString "<http://dbpedia.org/ontology/birthPlace>/<http://dbpedia.org/ontology/country>" ;
-```
