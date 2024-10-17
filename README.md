@@ -159,7 +159,7 @@ To send SPARQL queries to a service that is not hosted on the same domain name a
 
 ## Specification of classes and properties
 
-Sparnatural is configured with a **SHACL specification**. Look at the [supported SHACL features in the documentation](http://docs.sparnatural.eu/SHACL-based-configuration.html).
+Sparnatural is configured with a **SHACL specification**. Look at the [supported SHACL features in the documentation](http://docs.sparnatural.eu/SHACL-based-configuration.html). If you already have a SHACL spec, you can try passing it directly to Sparnatural and see the result ofr yourself - it should work :-). It is possible to pass multiple configuration files, so another config file can contain sparnatural annotations over an standard SHACL spec.
 
 
 ### SHACL-based config
