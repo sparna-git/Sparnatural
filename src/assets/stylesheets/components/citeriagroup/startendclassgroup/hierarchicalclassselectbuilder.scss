@@ -134,7 +134,7 @@
         width: 345px;
         height: 400px;
         top: base.$height-components - 4 ;
-        z-index: 2;
+        z-index: 3;
         transition-property: height;
         transition-duration: 0.1s;
         transition-delay: 0;
@@ -329,7 +329,7 @@
                 &>span {
                     display: block;
                     height: 39px;
-                    background-color: var(--primary-color-medium) ;
+                    background-color: var(--primary-color-light) ;
                 }
             }
             .item-count-number {
@@ -435,6 +435,9 @@
                 background-color: var(--primary-color-light) ;
             }
             &:hover {
+                .item-count>span {
+                    background-color: var(--primary-color-medium) ;
+                }
                 .item-count-number {
                     display: block;
                 }
