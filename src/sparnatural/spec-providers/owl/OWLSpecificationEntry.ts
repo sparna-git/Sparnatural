@@ -63,7 +63,13 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
         var icons = this.graph.readProperty(factory.namedNode(this.uri), VOLIPI.ICON);
         if (icons.length > 0) {
           return icons[0].value;
-        } 
+        } else {
+          // backward compatibility : read config-core:faIcon from OWL config
+          var icons = this.graph.readProperty(factory.namedNode(this.uri), factory.namedNode(Config.FA_ICON));
+          if (icons.length > 0) {
+            return icons[0].value;
+          }
+        }
       }
     }
 
