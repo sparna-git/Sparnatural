@@ -1,0 +1,104 @@
+{
+  "bindings": [
+    {
+      "variable": "OriginalName",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "original name",
+          "fr": "nom d'origine"
+        }
+      }
+    },
+    {
+      "variable": "VideoFormat",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "video format",
+          "fr": "format vidéo"
+        }
+      }
+    },
+    {
+      "variable": "AudioFormat",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "audio format",
+          "fr": "format audio"
+        }
+      }
+    },
+    {
+      "variable": "ContainerFormat",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "container format",
+          "fr": "format container"
+        }
+      }
+    },
+    {
+      "variable": "Size",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "size",
+          "fr": "taille"
+        }
+      }
+    },
+    {
+      "variable": "LastControlExprDate",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "last control (literal)",
+          "fr": "dernier contrôle (littéral)"
+        }
+      }
+    },
+    {
+      "variable": "LastControlNormDate",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "last control (entity)",
+          "fr": "dernier contrôle (entité)"
+        }
+      }
+    },
+    {
+      "variable": "History",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "history",
+          "fr": "historique"
+        }
+      }
+    },
+    {
+      "variable": "Integrity",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "integrity",
+          "fr": "intégrité"
+        }
+      }
+    },
+    {
+      "variable": "Standard",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "standard",
+          "fr": "standard"
+        }
+      }
+    }
+  ]
+}
