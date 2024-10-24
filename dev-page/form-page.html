@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- YASGUI (YASQE/YASR) CSS -->
+    <link
+      href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <!-- FontAwesome CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <title>SPARQL Query Form</title>
+
+    <style>
+      .yasqe .CodeMirror {
+        font-size: 0.9em;
+        height: 380px;
+      }
+      .yasr_header {
+        display: none;
+      }
+      .form-container {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+      .result-container {
+        margin-top: 20px;
+      }
+    </style>
+    <!-- Webpack CSS -->
+    <%= css %>
+  </head>
+  <body>
+    <!-- The HTML needs to import one Sparnatural theme CSS of their choice - and this can be customized by the client -->
+    <link href="themes/sparnatural-theme-sea.css" rel="stylesheet" />
+    <header>
+      <nav class="navbar navbar-expand navbar-dark bg-dark">
+        <a class="navbar-brand display-1 mr-auto" href="#"
+          >SPARnatural - Form page</a
+        >
+        <span class="navbar-text" style="margin-right: 100px">
+          <a href="?lang=fr">fr</a>&nbsp;|&nbsp;<a href="?lang=en">en</a>
+        </span>
+      </nav>
+    </header>
+
+    <div class="container-fluid" style="margin-top: 1em">
+      <div class="row">
+        <!-- Formulaire à gauche -->
+        <a href="#" id="switch-language">switch to en</a>
+        <div class="col-md-4">
+          <h5>Formulaire</h5>
+          <!-- Sparnatural Form -->
+          <sparnatural-form
+            src="configs/dbpediafr-config.ttl"
+            lang="en"
+            defaultLang="fr"
+            limit="100"
+            endpoint="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=http%3A%2F%2Ffr.dbpedia.org%2Fsparql"
+            form="form.json"
+            prefix="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"
+            query="query.json"
+          ></sparnatural-form>
+        </div>
+
+        <!-- Éditeur SPARQL à droite -->
+        <div class="col-md-8">
+          <h5>Éditeur SPARQL</h5>
+          <div class="row" style="margin-bottom: 0.5em">
+            <div class="col-md-12">
+              <span style="font-size: 90%">
+                Les requêtes sont envoyées à
+                <a
+                  id="endpoint"
+                  href="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=http%3A%2F%2Ffr.dbpedia.org%2Fsparql"
+                  >https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=http%3A%2F%2Ffr.dbpedia.org%2Fsparql</a
+                >
+              </span>
+            </div>
+            <div id="yasqe"></div>
+          </div>
+
+          <div class="result-container">
+            <h5>Résultats</h5>
+            <div id="yasr"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--JQUERY DEPENDENCY-->
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- YASGUI stuff -->
+    <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+
+    <!-- Webpack JS -->
+    <%= js %>
+
+    <script src="sparnatural-yasgui-plugins.js"></script>
+    <script src="scripts/initPage.js"></script>
+  </body>
+</html>

@@ -9,7 +9,7 @@ interface ISettings {
   language: string;
   defaultLanguage: string;
   addDistinct?: boolean;
-  limit?:number;
+  limit?: number;
   typePredicate: string;
   maxDepth: number;
   maxOr: number;
@@ -19,14 +19,14 @@ interface ISettings {
   localCacheDataTtl?: number;
   debug: boolean;
   submitButton?: boolean;
-  customization? : {
-    headers?: Map<string,string>;
-    autocomplete?: Partial<AutocompleteConfiguration>,
-    list?: Partial<ListConfiguration>,   
-    tree?: Partial<TreeConfiguration>,
-    number?: Partial<NumberConfiguration>,
-    map?: Partial<MapConfiguration>
-  }
+  customization?: {
+    headers?: Map<string, string>;
+    autocomplete?: Partial<AutocompleteConfiguration>;
+    list?: Partial<ListConfiguration>;
+    tree?: Partial<TreeConfiguration>;
+    number?: Partial<NumberConfiguration>;
+    map?: Partial<MapConfiguration>;
+  };
 }
 
 export default ISettings;

@@ -7,14 +7,17 @@ class PlayBtn extends HTMLComponent {
 
   constructor(ParentComponent: HTMLComponent, callback: () => void) {
     //TODO generateQuery enable disable as binary state
-    let widgetHtml = $(`<span title="${I18n.labels["Submit.tooltip"]}">${UiuxConfig.ICON_PLAY}</span>`);
+    let widgetHtml = $(
+      `<span title="${I18n.labels["Submit.tooltip"]}">${UiuxConfig.ICON_PLAY}</span>`
+    );
     super("playBtn", ParentComponent, widgetHtml);
     this.callback = callback;
     // add clicklistener
     let that = this;
     this.widgetHtml.on("click", function (e: JQuery.ClickEvent) {
       // don't call the callback when the button is disabled
-      if(!that.isDisabled()) {
+      console.log("PlayBtn: Play button clicked");
+      if (!that.isDisabled()) {
         callback();
       }
     });
@@ -28,28 +31,27 @@ class PlayBtn extends HTMLComponent {
   /**
    * @returns true when the button is disabled
    */
-  isDisabled():boolean {
-    return this.html.hasClass('submitDisable');
+  isDisabled(): boolean {
+    return this.html.hasClass("submitDisable");
   }
 
   disable() {
     // set a disabled CSS class, trigger the loader
-    this.html.addClass('submitDisable loadingEnabled');
+    this.html.addClass("submitDisable loadingEnabled");
   }
 
   /**
    * Triggered when query has finished executing. Just removes the loading but keep the button disabled
    */
   removeLoading() {
-    this.html.removeClass('loadingEnabled');
+    this.html.removeClass("loadingEnabled");
   }
 
   /**
    * Re-enables the grey button
    */
   enable() {
-    this.html.removeClass('submitDisable');
+    this.html.removeClass("submitDisable");
   }
-
 }
 export default PlayBtn;

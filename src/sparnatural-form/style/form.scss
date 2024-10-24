@@ -1,0 +1,73 @@
+/* Display container for selected values */
+.value-display-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* Each selected value container */
+.selected-value-container {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #e0f7fa;
+  border: 1px solid #4db6ac;
+  border-radius: 5px;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+/* Align selected values horizontally with wrapping */
+.selected-value-container {
+  flex-direction: row;
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+/* Styling the selected value label */
+.selected-value-label {
+  margin-right: 10px;
+  font-weight: normal;
+  color: #00796b;
+}
+
+/* Container for the search button to control its position */
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* Align the button to the right */
+  margin-top: 20px; /* Add some space above the button */
+}
+
+/* Styling for the button */
+button {
+  background-color: #a5d6a7;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+button:hover {
+  background-color: #81c784;
+}
+
+.hr {
+  color: inherit;
+  border: 0;
+  border-top-width: 0px;
+  border-top-style: none;
+  border-top-color: currentcolor;
+  border-top: 1px solid;
+  opacity: 0.25;
+}
+sparnatural-form {
+  display: block;
+  padding: 20px;
+  background-color: #f0f8f8;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}

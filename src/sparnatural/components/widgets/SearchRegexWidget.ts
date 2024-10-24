@@ -1,4 +1,4 @@
-import { DataFactory } from 'rdf-data-factory';
+import { DataFactory } from "rdf-data-factory";
 import { BgpPattern, Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
@@ -6,9 +6,9 @@ import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import InfoBtn from "../buttons/InfoBtn";
-import { I18n } from '../../settings/I18n';
-import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
-import HTMLComponent from '../HtmlComponent';
+import { I18n } from "../../settings/I18n";
+import { TOOLTIP_CONFIG } from "../../settings/defaultSettings";
+import HTMLComponent from "../HtmlComponent";
 
 const factory = new DataFactory();
 
@@ -18,21 +18,20 @@ export class SearchRegexWidgetValue implements WidgetValue {
     regex: string;
   };
 
-  key():string {
+  key(): string {
     return this.value.regex;
   }
 
-  constructor(v:SearchRegexWidgetValue["value"]) {
+  constructor(v: SearchRegexWidgetValue["value"]) {
     this.value = v;
   }
 }
 
 export interface SearchConfiguration {
-  widgetType:string;
+  widgetType: string;
 }
 
 export class SearchRegexWidget extends AbstractWidget {
-
   protected widgetValues: SearchRegexWidgetValue[];
 
   configuration: SearchConfiguration;
@@ -65,10 +64,7 @@ export class SearchRegexWidget extends AbstractWidget {
     this.searchInput = $(`<input />`);
     this.html.append(this.searchInput);
     // Build datatippy info
-    if (
-      this.configuration.widgetType ==
-      Config.VIRTUOSO_SEARCH_PROPERTY
-    ) {
+    if (this.configuration.widgetType == Config.VIRTUOSO_SEARCH_PROPERTY) {
       let datatippy = I18n.labels.VirtuosoSearchHelp;
       // set a tooltip on the info circle
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
@@ -88,17 +84,16 @@ export class SearchRegexWidget extends AbstractWidget {
   #addValueBtnClicked = () => {
     this.searchInput.trigger("change");
     let searchWidgetValue = {
-        label: this.searchInput.val().toString(),
-        regex: this.searchInput.val().toString(),
+      label: this.searchInput.val().toString(),
+      regex: this.searchInput.val().toString(),
     };
     this.renderWidgetVal(this.parseInput(searchWidgetValue));
   };
 
-  parseInput(input:SearchRegexWidgetValue["value"]): SearchRegexWidgetValue {
+  parseInput(input: SearchRegexWidgetValue["value"]): SearchRegexWidgetValue {
     if (input.regex.toString() == "") {
-      throw Error('Empty String in SearchRegex Widget')
+      throw Error("Empty String in SearchRegex Widget");
     }
     return new SearchRegexWidgetValue(input);
   }
-
 }

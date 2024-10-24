@@ -10,7 +10,10 @@ import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup, OptionTypes } from "./optionsgroup/OptionsGroup";
 import HTMLComponent from "../../../HtmlComponent";
 import { SelectedVal } from "../../../SelectedVal";
-import { EndClassWidgetGroup, EndClassWidgetValue } from "./startendclassgroup/EndClassWidgetGroup";
+import {
+  EndClassWidgetGroup,
+  EndClassWidgetValue,
+} from "./startendclassgroup/EndClassWidgetGroup";
 import ActionsGroup from "../../../buttons/actions/ActionsGroup";
 import { triggerOption } from "../groupwrapperevents/events/TriggerOption";
 import { I18n } from "../../../../settings/I18n";
@@ -25,13 +28,12 @@ class CriteriaGroup extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
   ParentGroupWrapper: GroupWrapper;
   unselectBtn: UnselectBtn;
-  
 
   constructor(
     ParentComponent: GroupWrapper,
     specProvider: any,
     startClassVal?: SelectedVal,
-    startClassEyeBtn?:boolean
+    startClassEyeBtn?: boolean
   ) {
     super("CriteriaGroup", ParentComponent, null);
     this.specProvider = specProvider;
@@ -101,18 +103,21 @@ class CriteriaGroup extends HTMLComponent {
       "onObjectPropertyGroupSelected",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        
+
         if (!this.#isSelectedVal(e.detail))
           throw Error(
             "onObjectPropertyGroupSelected expects object of type SelectedVal"
           );
-        
-          // if there is already a where connection or widget values selected, don't change anything
-        if (!(this.ParentGroupWrapper.whereChild) && this.endClassWidgetGroup?.widgetValues?.length === 0){
+
+        // if there is already a where connection or widget values selected, don't change anything
+        if (
+          !this.ParentGroupWrapper.whereChild &&
+          this.endClassWidgetGroup?.widgetValues?.length === 0
+        ) {
           this.EndClassGroup.onObjectPropertyGroupSelected(e.detail);
           this.endClassWidgetGroup.render();
         }
-        
+
         this.OptionsGroup.onObjectPropertyGroupSelected(
           this.ParentGroupWrapper.optionState
         );
@@ -122,10 +127,13 @@ class CriteriaGroup extends HTMLComponent {
           this.ActionsGroup.onObjectPropertyGroupSelected();
 
         // if property has a sparqlService, switch the state
-        if(this.specProvider.getProperty(e.detail.type).getServiceEndpoint()) {
+        if (this.specProvider.getProperty(e.detail.type).getServiceEndpoint()) {
           triggerOption(this.ParentGroupWrapper, OptionTypes.SERVICE);
         } else {
-          triggerOption(this.ParentGroupWrapper, this.ParentGroupWrapper.optionState);
+          triggerOption(
+            this.ParentGroupWrapper,
+            this.ParentGroupWrapper.optionState
+          );
         }
       }
     );
@@ -137,13 +145,12 @@ class CriteriaGroup extends HTMLComponent {
         throw Error(
           'No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"'
         );
-      if(Array.isArray(e.detail)){
+      if (Array.isArray(e.detail)) {
         // if there is an array with values provided, render all of them
-        e.detail.forEach(v=>this.endClassWidgetGroup.renderWidgetVal(v))
-      } else{
+        e.detail.forEach((v) => this.endClassWidgetGroup.renderWidgetVal(v));
+      } else {
         this.endClassWidgetGroup.renderWidgetVal(e.detail);
-      } 
-
+      }
     });
 
     // when inputgot selected then we remove the where btn and EditComponents
@@ -169,36 +176,34 @@ class CriteriaGroup extends HTMLComponent {
       );
     });
 
-  // gets called when the user adds widgetvalues or removes widgetvalues
-  this.html[0].addEventListener("renderWidgetWrapper", (e: CustomEvent) => {
-    if (!("selectedValues" in e.detail) && e.detail.selectedValues.isArray)
-      throw Error("renderWidgetWrapper expects list of selected values.");
-    e.stopImmediatePropagation();
-    // removeEditComponents: if add btn got clicked mutiple times or the old widgetwrapper is still rendered while the last selectedvalue got deleted
-    this.html[0].dispatchEvent(new CustomEvent("removeEditComponents"));
-    if (
-      e.detail.selectedValues.length === 0
-      &&
-      // if we are not in the case that we edit the last value in the list
-      // note : editedValue contains the value being edited - it could be passed again to the widget, maybe, instead
-      // of keeping the state in the widget
-      !e.detail.editedValue
-    ) {
-      // Render WidgetsWrapper and ActionWhere
-      this.EndClassGroup.editComponents.render();
-      this.html[0].dispatchEvent(
-        new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
-      );
-    } else {
-      //we only need widgetswrapper
-      this.EndClassGroup.editComponents.renderWidgetsWrapper();
-    }
-  });
+    // gets called when the user adds widgetvalues or removes widgetvalues
+    this.html[0].addEventListener("renderWidgetWrapper", (e: CustomEvent) => {
+      if (!("selectedValues" in e.detail) && e.detail.selectedValues.isArray)
+        throw Error("renderWidgetWrapper expects list of selected values.");
+      e.stopImmediatePropagation();
+      // removeEditComponents: if add btn got clicked mutiple times or the old widgetwrapper is still rendered while the last selectedvalue got deleted
+      this.html[0].dispatchEvent(new CustomEvent("removeEditComponents"));
+      if (
+        e.detail.selectedValues.length === 0 &&
+        // if we are not in the case that we edit the last value in the list
+        // note : editedValue contains the value being edited - it could be passed again to the widget, maybe, instead
+        // of keeping the state in the widget
+        !e.detail.editedValue
+      ) {
+        // Render WidgetsWrapper and ActionWhere
+        this.EndClassGroup.editComponents.render();
+        this.html[0].dispatchEvent(
+          new CustomEvent("onGrpInputNotCompleted", { bubbles: true })
+        );
+      } else {
+        //we only need widgetswrapper
+        this.EndClassGroup.editComponents.renderWidgetsWrapper();
+      }
+    });
   };
 
   #isSelectedVal(payload: any): payload is SelectedVal {
     return "type" in payload && "variable" in payload;
   }
-
 }
 export default CriteriaGroup;

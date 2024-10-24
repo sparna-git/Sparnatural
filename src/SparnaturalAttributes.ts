@@ -14,17 +14,21 @@ export class SparnaturalAttributes {
   submitButton?: boolean;
   catalog: string;
 
-  constructor(element:HTMLElement) {
+  constructor(element: HTMLElement) {
     // not the differences in attribute names
-    this.src = this.#read(element,"src",this.#isJSON(element.getAttribute('src')));    
-    if(!this.src) {
-      throw Error('No src provided!');
+    this.src = this.#read(
+      element,
+      "src",
+      this.#isJSON(element.getAttribute("src"))
+    );
+    if (!this.src) {
+      throw Error("No src provided!");
     }
     let endpointParam = this.#read(element, "endpoint");
     this.endpoints = endpointParam.split(" ");
-    
-    if(!this.endpoints) {
-      throw Error('No endpoint provided!');
+
+    if (!this.endpoints) {
+      throw Error("No endpoint provided!");
     }
     this.catalog = this.#read(element, "catalog");
     this.language = this.#read(element, "lang");
@@ -40,52 +44,56 @@ export class SparnaturalAttributes {
     this.localCacheDataTtl = this.#read(element, "localCacheDataTtl", true);
     this.debug = this.#read(element, "debug", true);
     this.submitButton = this.#read(element, "submitButton", true);
-    
   }
 
-  #read(element:HTMLElement, attribute:string, asJson:boolean = false) {
-    return element.getAttribute(attribute)?(asJson)?JSON.parse(element.getAttribute(attribute)):element.getAttribute(attribute):undefined
+  #read(element: HTMLElement, attribute: string, asJson: boolean = false) {
+    return element.getAttribute(attribute)
+      ? asJson
+        ? JSON.parse(element.getAttribute(attribute))
+        : element.getAttribute(attribute)
+      : undefined;
   }
 
-  #parsePrefixes(element:HTMLElement) {
-    if(!element.getAttribute("prefix")) {
+  #parsePrefixes(element: HTMLElement) {
+    if (!element.getAttribute("prefix")) {
       return;
     }
 
     let sparqlPrefixes = {};
     // use the singular to match RDFa attribute name
-    let prefixArray = element.getAttribute("prefix").trim().split(/:\s+|\s+/);
+    let prefixArray = element
+      .getAttribute("prefix")
+      .trim()
+      .split(/:\s+|\s+/);
     for (let i = 0; i < prefixArray.length; i++) {
-      try{
+      try {
         const prefixPair = {
-          prefix: prefixArray[i].split(':')[0],
-          iri: prefixArray[i].split(':').slice(1).join(':')
-        }
+          prefix: prefixArray[i].split(":")[0],
+          iri: prefixArray[i].split(":").slice(1).join(":"),
+        };
         Object.defineProperty(sparqlPrefixes, prefixPair.prefix, {
           value: prefixPair.iri,
           writable: true,
-          enumerable:true
-        })
-      } catch(e){
-        console.error('Parsing of attribute prefix failed!')
-        console.error(`Can not parse ${prefixArray[i]}`)
+          enumerable: true,
+        });
+      } catch (e) {
+        console.error("Parsing of attribute prefix failed!");
+        console.error(`Can not parse ${prefixArray[i]}`);
       }
-
     }
-
+    console.log("Prefixes at Attributes", sparqlPrefixes);
     return sparqlPrefixes;
   }
-  #isJSON =(json:string)=> {
 
+  #isJSON = (json: string) => {
     let is_json = true; //true at first
 
     // Check if config is given as JSON string or as URL
     try {
       JSON.parse(json);
     } catch (error) {
-        is_json = false;
+      is_json = false;
     }
-    return is_json
-  }
-
+    return is_json;
+  };
 }
