@@ -209,6 +209,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                   valueLabel.classList.add("selected-value-label");
                   valueContainer.appendChild(valueLabel);
 
+                  // Add a remove button for each value (to remove the value from the set and the form)
                   const removeBtn = new UnselectBtn(this, () => {
                     selectedValues.delete(val);
                     theWidget.onRemoveValue(

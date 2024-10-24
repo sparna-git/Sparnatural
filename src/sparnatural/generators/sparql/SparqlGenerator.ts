@@ -28,14 +28,17 @@ export default class SparqlGenerator {
   prefixes: { [key: string]: string } = {};
   sparnatural: SparnaturalComponent | SparnaturalFormComponent;
   defaultLabelVars: Variable[] = []; // see: #checkForDefaultLabel()
+  settings: any;
   constructor(
     sparnatural: SparnaturalComponent | SparnaturalFormComponent,
     specProvider: ISparnaturalSpecification,
-    prefixes: { [key: string]: string } = {}
+    prefixes: { [key: string]: string } = {},
+    settings: any
   ) {
     this.sparnatural = sparnatural;
     this.specProvider = specProvider;
     this.prefixes = prefixes;
+    this.settings = settings;
   }
 
   generateQuery(
@@ -126,7 +129,8 @@ export default class SparqlGenerator {
         this.specProvider,
         this.typePredicate,
         false,
-        false
+        false,
+        this.settings
       );
       builder.build();
       this.defaultLabelVars = builder.getDefaultVars();

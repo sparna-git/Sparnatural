@@ -33,11 +33,11 @@ export class QueryGenerator {
     var jsonQuery = qryGen.generateQuery(
       this.actionStore.sparnatural.variableSection.listVariables(),
       this.actionStore.sparnatural.variableSection.getOrder(),
-      getSettings().addDistinct
+      settings.addDistinct
     );
 
     if (jsonQuery != null) {
-      if (getSettings().debug) {
+      if (settings.debug) {
         console.log("*** Sparnatural JSON Query ***");
         console.dir(jsonQuery);
       }
@@ -45,17 +45,18 @@ export class QueryGenerator {
       var writer = new SparqlGenerator(
         this.actionStore.sparnatural,
         this.actionStore.specProvider,
-        settings.sparqlPrefixes
+        settings.sparqlPrefixes,
+        settings
       );
       let selectQuery = writer.generateQuery(
         this.actionStore.sparnatural.variableSection.listVariables(),
         this.actionStore.sparnatural.variableSection.getOrder(),
-        getSettings().addDistinct,
-        getSettings().limit
+        settings.addDistinct,
+        settings.limit
       );
 
       // debug rdfJsQuery
-      if (getSettings().debug) {
+      if (settings.debug) {
         // prints the SPARQL generated from the writing of the JSON data structure
         console.log("*** Sparnatural SPARQL Query OLD ***");
         console.log(selectQuery);
@@ -71,7 +72,7 @@ export class QueryGenerator {
       let selectQueryFromJson =
         sparqlFromJsonGenerator.generateQuery(jsonQuery);
 
-      if (getSettings().debug) {
+      if (settings.debug) {
         // prints the SPARQL generated from the writing of the JSON data structure
         console.log("*** Sparnatural SPARQL Query NEW ***");
         console.log(selectQueryFromJson);
@@ -79,7 +80,7 @@ export class QueryGenerator {
 
       var queryStringFromJson = generator.stringify(selectQueryFromJson);
 
-      if (getSettings().debug) {
+      if (settings.debug) {
         console.log("*** Sparnatural SPARQL Query from JSON ***");
         console.dir(queryStringFromJson);
       }

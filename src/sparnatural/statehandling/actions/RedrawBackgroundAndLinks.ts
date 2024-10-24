@@ -1,4 +1,3 @@
-import { getSettings } from "../../settings/defaultSettings";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import SparnaturalComponent from "../../components/SparnaturalComponent";

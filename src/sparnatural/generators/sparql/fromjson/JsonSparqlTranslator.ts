@@ -23,14 +23,15 @@ export default class JsonSparqlTranslator {
   specProvider: ISparnaturalSpecification;
   prefixes: { [key: string]: string } = {};
   jsonQuery: ISparJson;
-  limit: number;
   settings: any;
+  limit: number;
+
   defaultLabelVars: Variable[] = [];
 
   constructor(
     // the Sparnatural configuration
     specProvider: ISparnaturalSpecification,
-    // the prefixes to include in the query
+    // settings
     settings: any
   ) {
     this.specProvider = specProvider;
@@ -124,7 +125,8 @@ export default class JsonSparqlTranslator {
   #createWhereClause(): Pattern[] {
     let whereBuilder = new QueryWhereTranslator(
       this.jsonQuery,
-      this.specProvider
+      this.specProvider,
+      this.settings
     );
     whereBuilder.build();
     this.defaultLabelVars = whereBuilder.getDefaultVars();
