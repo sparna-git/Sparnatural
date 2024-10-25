@@ -35,24 +35,6 @@ export class SparnaturalFormAttributes {
       "sparnatural-form"
     ) as SparnaturalFormElement;
 
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === "lang") {
-          const newLang = element.getAttribute("lang");
-          this.language = newLang; // Met à jour la langue dans les paramètres
-          console.log("Language changed dynamically to:", newLang);
-
-          // Relancer l'affichage pour mettre à jour l'interface
-          this.updateLanguage(newLang);
-        }
-      });
-    });
-
-    observer.observe(element, {
-      attributes: true, // Observez les changements d'attribut
-      attributeFilter: ["lang"], // Spécifier l'attribut à observer
-    });
-
     let endpointParam = this.#read(element, "endpoint");
     this.endpoints = endpointParam.split(" ");
 
