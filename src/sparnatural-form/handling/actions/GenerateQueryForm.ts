@@ -12,53 +12,54 @@ export class QueryGeneratorForm {
   }
 
   generateQuery(): QueryUpdatedPayload {
-    // if we are quiet, don't do anything
+    // Si on est en mode "quiet", ne rien faire
     if (this.actionStoreForm.quiet) {
       return;
     }
-    // if the query editor is empty, don't do anything
+
+    // Si le formulaire est vide, ne rien faire
     if (this.actionStoreForm.sparnaturalForm.isEmpty()) {
       return;
     }
 
-    // Utiliser JsonSparqlTranslator pour convertir la requête JSON nettoyée en SPARQL
+    // Récupérer la clean query si elle est disponible, sinon utiliser la jsonQuery
+    const sparnaturalForm = this.actionStoreForm.sparnaturalForm;
+    let queryToUse: ISparJson;
+    // Nettoyer la requête pour obtenir une version à jour
+    sparnaturalForm.cleanQuery();
+    // Utiliser la cleanQuery si elle existe, sinon jsonQuery
+    queryToUse = this.actionStoreForm.sparnaturalForm.cleanQueryResult;
+
     const jsonQuery = this.actionStoreForm.sparnaturalForm.jsonQuery;
 
-    console.log("Query generated here", jsonQuery);
-    let settings = getSettings();
-    console.log("settingsFORM", settings);
+    console.log("Query utilisée pour la génération :", queryToUse);
+
+    // Utiliser JsonSparqlTranslator pour convertir la requête en SPARQL
+    const settings = getSettings();
     const sparqlTranslator = new JsonSparqlTranslator(
       this.actionStoreForm.specProvider,
       settings
     );
-    console.log("sparqlTranslator", sparqlTranslator);
-    console.log("actionStoreForm", this.actionStoreForm);
-    console.log("sparqlPrefixesForm", settings.sparqlPrefixes);
 
-    // Générer la requête SPARQL depuis JSON
-    console.log("json", jsonQuery);
-
-    const sparqlJsQuery = sparqlTranslator.generateQuery(jsonQuery);
-    console.log("Query generated 0", sparqlJsQuery);
-
+    const sparqlJsQuery = sparqlTranslator.generateQuery(queryToUse);
     const generator = new Generator();
     const queryStringFromJson = generator.stringify(sparqlJsQuery);
-
-    console.log("Query generated 0.5", queryStringFromJson);
 
     // Créer un payload avec la requête générée
     const queryPayload: QueryUpdatedPayload = {
       queryString: queryStringFromJson,
-      queryJson: jsonQuery,
+      queryJson: queryToUse,
       querySparqlJs: sparqlJsQuery,
       queryStringFromJson: queryStringFromJson,
     };
-    console.log("Query generated 1", queryStringFromJson);
 
     // Déclencher l'événement pour notifier que la requête a été mise à jour
     this.fireQueryUpdatedEvent(queryPayload);
-    console.log("Query generated 2", queryPayload);
-    return queryPayload;
+
+    // re-enable submit button if it was disabled
+    this.actionStoreForm.sparnaturalForm.SubmitSection.enableSubmit();
+
+    //return queryPayload;
   }
 
   fireQueryUpdatedEvent(payload: QueryUpdatedPayload) {
@@ -69,7 +70,6 @@ export class QueryGeneratorForm {
         detail: payload,
       })
     );
-    console.log("Query updated event fired", payload);
   }
 }
 

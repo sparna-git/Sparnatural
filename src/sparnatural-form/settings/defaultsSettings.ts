@@ -16,6 +16,7 @@ const defaultSettings: ISettings = {
   debug: false,
   typePredicate: "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>", // Type prédicat par défaut
   endpoints: [], // Aucun endpoint par défaut
+  submitButton: true,
   sparqlPrefixes: {
     rdf: "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
     rdfs: "http://www.w3.org/2000/01/rdf-schema#",

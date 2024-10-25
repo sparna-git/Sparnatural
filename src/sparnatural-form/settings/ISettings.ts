@@ -16,6 +16,7 @@ interface ISettings {
   endpoints?: string[];
   debug: boolean;
   typePredicate: string;
+  submitButton?: boolean;
   sparqlPrefixes?: { [key: string]: string };
   customization?: {
     headers?: Map<string, string>;

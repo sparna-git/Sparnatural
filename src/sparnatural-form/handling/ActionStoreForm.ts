@@ -1,7 +1,6 @@
 import SparnaturalFormComponent from "../components/SparnaturalFormComponent";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
 import { QueryGeneratorForm } from "./actions/GenerateQueryForm";
-import SparnaturalComponent from "../../sparnatural/components/SparnaturalComponent";
 
 class ActionStoreForm {
   sparnaturalForm: SparnaturalFormComponent;
@@ -36,15 +35,6 @@ class ActionStoreForm {
       "valueRemoved",
       (event: CustomEvent) => {
         console.log("Valeur supprimée d'un widget !");
-        new QueryGeneratorForm(this).generateQuery();
-      }
-    );
-
-    // Soumettre la requête quand le formulaire est soumis
-    this.sparnaturalForm.html[0].addEventListener(
-      "submitFormQuery",
-      (event: CustomEvent) => {
-        console.log("Le formulaire a été soumis !");
         new QueryGeneratorForm(this).generateQuery();
       }
     );

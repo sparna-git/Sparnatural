@@ -39,6 +39,7 @@ class SparnaturalComponent extends HTMLComponent {
       if (getSettings().submitButton) {
         this.SubmitSection = new SubmitSection(this).render();
       }
+      console.log("submit section", this.SubmitSection);
       this.variableSection = new VariableSection(
         this,
         this.specProvider

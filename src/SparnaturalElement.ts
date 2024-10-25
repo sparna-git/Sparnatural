@@ -70,6 +70,18 @@ export class SparnaturalElement extends HTMLElement {
     this.sparnatural.render();
   }
 
+  /**
+   * Expands the SPARQL query according to the configuration.
+   * Can be called from the outside
+   * @returns
+   */
+  expandSparql(query: string) {
+    return this.sparnatural.specProvider.expandSparql(
+      query,
+      getSettings().sparqlPrefixes
+    );
+  }
+
   /* NOTE : defaultlang is all lowercase, see https://stackoverflow.com/questions/60566257/web-components-attributechangedcallback-not-firing */
   static get observedAttributes() {
     return ["src", "lang", "defaultlang", "endpoint"];
@@ -142,18 +154,6 @@ export class SparnaturalElement extends HTMLElement {
   loadQuery(query: ISparJson) {
     QueryLoader.setSparnatural(this.sparnatural);
     QueryLoader.loadQuery(query);
-  }
-
-  /**
-   * Expands the SPARQL query according to the configuration.
-   * Can be called from the outside
-   * @returns
-   */
-  expandSparql(query: string) {
-    return this.sparnatural.specProvider.expandSparql(
-      query,
-      getSettings().sparqlPrefixes
-    );
   }
 
   /**

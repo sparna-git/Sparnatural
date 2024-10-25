@@ -56,7 +56,6 @@ class ActionStore {
         new QueryGenerator(this).generateQuery();
       }
     );
-
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
     // called by click on "Eye" btn
     this.sparnatural.html[0].addEventListener(

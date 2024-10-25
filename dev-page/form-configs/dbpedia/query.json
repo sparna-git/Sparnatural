@@ -35,9 +35,11 @@
             "oType": "https://data.mydomain.com/ontologies/sparnatural-config/Country",
             "values": []
           },
-          "children": []
+          "children": [],
+          "optional": true
         }
-      ]
+      ],
+      "optional": true
     },
     {
       "line": {

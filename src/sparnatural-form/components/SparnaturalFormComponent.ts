@@ -10,21 +10,21 @@ import ISettings from "../settings/ISettings";
 import { SparnaturalFormI18n } from "../settings/SparnaturalFormI18n";
 import UnselectBtn from "../../sparnatural/components/buttons/UnselectBtn";
 import "../style/form.scss";
-import {
-  QueryGenerator,
-  QueryUpdatedPayload,
-} from "../../sparnatural/statehandling/actions/GenerateQuery";
 import ActionStoreForm from "../handling/ActionStoreForm"; // Importer le store
 import { Catalog } from "../../sparnatural/settings/Catalog";
 import { getSettings } from "../settings/defaultsSettings";
+import SubmitSection from "./buttons/SubmitBtn";
 
 class SparnaturalFormComponent extends HTMLComponent {
   // the content of all HTML element attributes
   formSettings: ISettings;
   // Sparnatural configuration
+  SubmitSection: SubmitSection;
   specProvider: ISparnaturalSpecification;
   // The JSON query from the "query" attribute
   jsonQuery: ISparJson;
+
+  cleanQueryResult: ISparJson | null; // Ajout pour stocker la clean query
 
   actionStoreForm: ActionStoreForm; // Ajouter une référence à l'ActionStoreForm
   catalog: Catalog;
@@ -35,54 +35,151 @@ class SparnaturalFormComponent extends HTMLComponent {
 
     this.formSettings = attributes;
     this.formSettings.customization = {};
+    this.cleanQueryResult = null; // Initialise cleanQueryResult
   }
-
-  //method to clean the query
+  /*
   public cleanQuery(): ISparJson | null {
-    // Same cleaning logic as before
     if (!this.jsonQuery || !this.jsonQuery.branches) {
       console.error(
         "jsonQuery is not initialized or does not contain branches."
       );
-      return;
+      return null;
     }
 
     const copiedQuery = JSON.parse(JSON.stringify(this.jsonQuery));
-
     let formUrl = this.formSettings.form;
-    $.getJSON(formUrl, (formConfig) => {
-      const formVariables = formConfig.bindings.map(
-        (binding: any) => binding.variable
-      );
-      const queryVariables = this.jsonQuery.variables.map((v: any) => v.value);
 
-      const cleanBranches = (branches: any[]) => {
-        return branches.filter((branch: any) => {
-          const formVariable = branch.line.o;
-          const existsInForm = formVariables.includes(formVariable);
-          const existsInQuery = queryVariables.includes(formVariable);
-          const hasValues = branch.line.values && branch.line.values.length > 0;
+    let formConfig: any = null;
 
-          if (existsInForm && !hasValues && !existsInQuery) {
-            return false;
-          }
-
-          if (branch.children && branch.children.length > 0) {
-            branch.children = cleanBranches(branch.children);
-          }
-
-          return true;
-        });
-      };
-
-      copiedQuery.branches = cleanBranches(copiedQuery.branches);
-      console.log("Cleaned query:", JSON.stringify(copiedQuery, null, 2));
-      return copiedQuery; // Retourne la requête nettoyée
-    }).fail((error) => {
-      console.error("Error loading form configuration:", error);
-      return null; // Ajoute une valeur de retour temporaire
+    // Chargement synchrone du fichier JSON via $.ajax (en mode synchrone)
+    $.ajax({
+      url: formUrl,
+      dataType: "json",
+      async: false, // Mode synchrone
+      success: (data) => {
+        formConfig = data;
+      },
+      error: (error) => {
+        console.error("Error loading form configuration:", error);
+        return null;
+      },
     });
-    return null; // Ajoute une valeur de retour temporaire
+
+    if (!formConfig) {
+      return null; // Si la configuration du formulaire n'a pas été chargée
+    }
+
+    const formVariables = formConfig.bindings.map(
+      (binding: any) => binding.variable
+    );
+    const queryVariables = this.jsonQuery.variables.map((v: any) => v.value);
+
+    const cleanBranches = (branches: any[]) => {
+      return branches.filter((branch: any) => {
+        const formVariable = branch.line.o;
+        const existsInForm = formVariables.includes(formVariable);
+        const existsInQuery = queryVariables.includes(formVariable);
+        const hasValues = branch.line.values && branch.line.values.length > 0;
+
+        if (existsInForm && !hasValues && !existsInQuery) {
+          return false;
+        }
+
+        if (branch.children && branch.children.length > 0) {
+          branch.children = cleanBranches(branch.children);
+        }
+
+        return true;
+      });
+    };
+
+    copiedQuery.branches = cleanBranches(copiedQuery.branches);
+    console.log("Cleaned query:", JSON.stringify(copiedQuery, null, 2));
+
+    this.cleanQueryResult = copiedQuery; // Mise à jour de l'attribut global cleanQuery
+
+    return copiedQuery;
+  }
+*/
+  public cleanQuery(): ISparJson | null {
+    if (!this.jsonQuery || !this.jsonQuery.branches) {
+      console.error(
+        "jsonQuery is not initialized or does not contain branches."
+      );
+      return null;
+    }
+
+    const copiedQuery = JSON.parse(JSON.stringify(this.jsonQuery));
+    let formUrl = this.formSettings.form;
+
+    let formConfig: any = null;
+
+    // Chargement synchrone du fichier JSON via $.ajax (en mode synchrone)
+    $.ajax({
+      url: formUrl,
+      dataType: "json",
+      async: false,
+      success: (data) => {
+        formConfig = data;
+      },
+      error: (error) => {
+        console.error("Error loading form configuration:", error);
+        return null;
+      },
+    });
+
+    if (!formConfig) {
+      return null; // Si la configuration du formulaire n'a pas été chargée
+    }
+
+    const formVariables = formConfig.bindings.map(
+      (binding: any) => binding.variable
+    );
+    const queryVariables = this.jsonQuery.variables.map((v: any) => v.value);
+
+    const cleanBranches = (
+      branches: any[],
+      parentOptional: boolean = false
+    ) => {
+      return branches.filter((branch: any) => {
+        const formVariable = branch.line.o;
+        const existsInForm = formVariables.includes(formVariable);
+        const existsInQuery = queryVariables.includes(formVariable);
+        const hasValues = branch.line.values && branch.line.values.length > 0;
+
+        // Suppression de la propriété `optional` si la branche ou un de ses enfants a des valeurs
+        if (
+          hasValues ||
+          branch.children.some(
+            (child: any) => child.line.values && child.line.values.length > 0
+          )
+        ) {
+          branch.optional = false;
+          parentOptional = false;
+        }
+
+        if (existsInForm && !hasValues && !existsInQuery) {
+          return false;
+        }
+
+        // Traitement récursif pour les enfants avec parentOptional mis à jour
+        if (branch.children && branch.children.length > 0) {
+          branch.children = cleanBranches(
+            branch.children,
+            branch.optional || parentOptional
+          );
+        }
+
+        return true;
+      });
+    };
+
+    copiedQuery.branches = cleanBranches(copiedQuery.branches);
+    console.log("Cleaned query:", JSON.stringify(copiedQuery, null, 2));
+
+    this.cleanQueryResult = copiedQuery; // Mise à jour de l'attribut global cleanQuery
+
+    return copiedQuery;
   }
 
   //cela va sortir en class submitQuery
@@ -314,17 +411,10 @@ class SparnaturalFormComponent extends HTMLComponent {
               );
             }
           });
-
-          //create the submit button to execute the query
-          const buttonContainer = document.createElement("div");
-          buttonContainer.classList.add("button-container");
-
-          const submitButton = document.createElement("button");
-          submitButton.innerText = "Submit";
-          submitButton.addEventListener("click", () => this.submitQuery()); // Only submits the query
-          buttonContainer.appendChild(submitButton);
-
-          this.html[0].appendChild(buttonContainer);
+          if (getSettings().submitButton) {
+            this.SubmitSection = new SubmitSection(this).render();
+          }
+          console.log("SubmitBtn", this.SubmitSection);
         }).fail((error) => {
           console.error("Error loading form configuration:", error);
         });
@@ -394,8 +484,12 @@ class SparnaturalFormComponent extends HTMLComponent {
   }
   // method is exposed from the HTMLElement
   enablePlayBtn = () => {
-    //this.SubmitSection.playBtn.removeLoading();
-    // buttonsubmit
+    this.SubmitSection.playBtn.removeLoading();
+  };
+
+  // method is exposed from the HTMLElement
+  disablePlayBtn = () => {
+    this.SubmitSection.playBtn.disable();
   };
   /**
    * Initialize the static labels used to render the widgets from Sparnatural

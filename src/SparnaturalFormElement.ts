@@ -18,7 +18,7 @@ import {
 */
 export class SparnaturalFormElement extends HTMLElement {
   static HTML_ELEMENT_NAME = "sparnatural-form";
-
+  static EVENT_INIT = "init";
   static EVENT_SUBMIT = "submit";
   static EVENT_QUERY_UPDATED = "queryUpdated";
 
@@ -36,6 +36,14 @@ export class SparnaturalFormElement extends HTMLElement {
    */
   connectedCallback() {
     this.display();
+  }
+
+  set customization(customization: any) {
+    getSettings().customization = customization;
+  }
+
+  get customization() {
+    return getSettings().customization;
   }
 
   display() {
@@ -65,29 +73,7 @@ export class SparnaturalFormElement extends HTMLElement {
       getSettings().sparqlPrefixes
     );
   }
-  /**
-   * Executes the provided SPARQL query, using the configured headers, and sending it to multiple
-   * endpoints, if configured through the catalog attribute (results are then merged in a single result set)
-   * @param query The SPARQL query to execute
-   * @param callback The callback to execute with the final query string
-   * @param errorCallback The callback to execute in case of an error during the query execution
-   */
-  executeSparql(
-    query: string,
-    callback: (data: any) => void,
-    errorCallback?: (error: any) => void
-  ) {
-    let sparqlFetcherFactory: SparqlFetcherFactory = new SparqlFetcherFactory(
-      this.sparnaturalForm.catalog,
-      getSettings().language,
-      getSettings().localCacheDataTtl,
-      getSettings().customization.headers
-    );
 
-    let sparqlFetcher: SparqlFetcherIfc =
-      sparqlFetcherFactory.buildSparqlFetcher(getSettings().endpoints);
-    sparqlFetcher.executeSparql(query, callback, errorCallback);
-  }
   static get observedAttributes() {
     return ["src", "lang", "defaultlang", "endpoint"];
   }
@@ -134,8 +120,39 @@ export class SparnaturalFormElement extends HTMLElement {
       this.display();
     }
   }
+
   enablePlayBtn() {
     this.sparnaturalForm.enablePlayBtn();
+  }
+  /**
+   * Disable the play button when query is triggered
+   * Can be called from the outside
+   */
+  disablePlayBtn() {
+    this.sparnaturalForm.disablePlayBtn();
+  }
+  /**
+   * Executes the provided SPARQL query, using the configured headers, and sending it to multiple
+   * endpoints, if configured through the catalog attribute (results are then merged in a single result set)
+   * @param query The SPARQL query to execute
+   * @param callback The callback to execute with the final query string
+   * @param errorCallback The callback to execute in case of an error during the query execution
+   */
+  executeSparql(
+    query: string,
+    callback: (data: any) => void,
+    errorCallback?: (error: any) => void
+  ) {
+    let sparqlFetcherFactory: SparqlFetcherFactory = new SparqlFetcherFactory(
+      this.sparnaturalForm.catalog,
+      getSettings().language,
+      getSettings().localCacheDataTtl,
+      getSettings().customization.headers
+    );
+
+    let sparqlFetcher: SparqlFetcherIfc =
+      sparqlFetcherFactory.buildSparqlFetcher(getSettings().endpoints);
+    sparqlFetcher.executeSparql(query, callback, errorCallback);
   }
 }
 
