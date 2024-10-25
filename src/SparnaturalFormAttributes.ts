@@ -1,3 +1,4 @@
+import { getSettings } from "./sparnatural-form/settings/defaultsSettings";
 import { SparnaturalFormElement } from "./SparnaturalFormElement";
 
 /**
@@ -30,6 +31,27 @@ export class SparnaturalFormAttributes {
     if (!this.src) {
       throw Error("No src provided!");
     }
+    this.sparnatural = document.querySelector(
+      "sparnatural-form"
+    ) as SparnaturalFormElement;
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === "lang") {
+          const newLang = element.getAttribute("lang");
+          this.language = newLang; // Met à jour la langue dans les paramètres
+          console.log("Language changed dynamically to:", newLang);
+
+          // Relancer l'affichage pour mettre à jour l'interface
+          this.updateLanguage(newLang);
+        }
+      });
+    });
+
+    observer.observe(element, {
+      attributes: true, // Observez les changements d'attribut
+      attributeFilter: ["lang"], // Spécifier l'attribut à observer
+    });
 
     let endpointParam = this.#read(element, "endpoint");
     this.endpoints = endpointParam.split(" ");
@@ -55,6 +77,13 @@ export class SparnaturalFormAttributes {
     }
 
     this.debug = this.#read(element, "debug", true);
+  }
+  updateLanguage(newLang: string) {
+    const settings = getSettings();
+    settings.language = newLang; // Met à jour la langue courante
+
+    // Relancer l'affichage de l'interface (réinitialisation des labels)
+    this.sparnatural.display(); // Ou la méthode qui réinitialise l'affichage
   }
 
   #read(element: HTMLElement, attribute: string, asJson: boolean = false) {

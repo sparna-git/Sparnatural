@@ -100,21 +100,26 @@ class SparnaturalFormComponent extends HTMLComponent {
 
     return copiedQuery;
   }
-*/
+  */
+  //methode to clean the query each time a value is added or removed
   public cleanQuery(): ISparJson | null {
+    //verify if the query is initialized
     if (!this.jsonQuery || !this.jsonQuery.branches) {
       console.error(
         "jsonQuery is not initialized or does not contain branches."
       );
       return null;
     }
-
+    //copy the query to avoid modifying the original query
     const copiedQuery = JSON.parse(JSON.stringify(this.jsonQuery));
+    //get the form configuration url
+    console.log("formSettings", this.formSettings);
     let formUrl = this.formSettings.form;
 
+    //initialize the form configuration
     let formConfig: any = null;
 
-    // Chargement synchrone du fichier JSON via $.ajax (en mode synchrone)
+    // Charge the JSON file synchronously via $.ajax (in synchronous mode)
     $.ajax({
       url: formUrl,
       dataType: "json",
@@ -128,15 +133,18 @@ class SparnaturalFormComponent extends HTMLComponent {
       },
     });
 
+    // If the form configuration is not loaded
     if (!formConfig) {
-      return null; // Si la configuration du formulaire n'a pas été chargée
+      return null;
     }
-
+    // Get the form variables and query variables
     const formVariables = formConfig.bindings.map(
       (binding: any) => binding.variable
     );
+
     const queryVariables = this.jsonQuery.variables.map((v: any) => v.value);
 
+    // Method to clean the branches
     const cleanBranches = (
       branches: any[],
       parentOptional: boolean = false
@@ -147,7 +155,7 @@ class SparnaturalFormComponent extends HTMLComponent {
         const existsInQuery = queryVariables.includes(formVariable);
         const hasValues = branch.line.values && branch.line.values.length > 0;
 
-        // Suppression de la propriété `optional` si la branche ou un de ses enfants a des valeurs
+        // Remove the optional flag if the branch has values
         if (
           hasValues ||
           branch.children.some(
@@ -162,7 +170,7 @@ class SparnaturalFormComponent extends HTMLComponent {
           return false;
         }
 
-        // Traitement récursif pour les enfants avec parentOptional mis à jour
+        // treat the optional branches recursively
         if (branch.children && branch.children.length > 0) {
           branch.children = cleanBranches(
             branch.children,
@@ -174,32 +182,25 @@ class SparnaturalFormComponent extends HTMLComponent {
       });
     };
 
+    //clean the branches
     copiedQuery.branches = cleanBranches(copiedQuery.branches);
+
     console.log("Cleaned query:", JSON.stringify(copiedQuery, null, 2));
 
-    this.cleanQueryResult = copiedQuery; // Mise à jour de l'attribut global cleanQuery
-
+    this.cleanQueryResult = copiedQuery; // update the global cleanQuery attribute
+    //return the cleaned query
     return copiedQuery;
-  }
-
-  //cela va sortir en class submitQuery
-  //methode to execute the query from the button
-  submitQuery(): void {
-    // ici executer la requete
-    console.log("action executer la requete");
-    this.handlePostExecutionTask(); // Exécution de la nouvelle tâche
-  }
-  // Nouvelle méthode pour gérer le bouton
-  handlePostExecutionTask(): void {}
+  } /**/
 
   //render the form
   render(): this {
     //init the language for the static labels
-    this.#initSparnaturalFormStaticLabels();
+    //this.#initSparnaturalFormStaticLabels();
     //init the catalog
     this.#initCatalog();
     //init the static labels for the widgets
     this.#initSparnaturalStaticLabels();
+    let formUrl = this.formSettings.form;
 
     //get les settings
     this.initSpecificationProvider((sp: ISparnaturalSpecification) => {
@@ -221,10 +222,23 @@ class SparnaturalFormComponent extends HTMLComponent {
         //get the form configuration
         let formUrl = this.formSettings.form;
         $.getJSON(formUrl, (formConfig) => {
+          // Vérifier si formConfig est défini et contient la propriété bindings
+          if (!formConfig || !formConfig.bindings) {
+            console.error("formConfig or formConfig.bindings is undefined");
+            return;
+          }
+          // Initialiser les labels après avoir chargé formConfig
+          this.#initSparnaturalFormStaticLabels(formConfig);
           //get the variables from the form configuration
           formConfig.bindings.forEach((binding: any) => {
             const variable = binding.variable;
-
+            // Créer et configurer le label en fonction de la langue
+            const label = document.createElement("label");
+            label.setAttribute("for", variable);
+            label.innerText = SparnaturalFormI18n.getLabel(variable) + " :";
+            label.style.fontSize = "18px";
+            this.html[0].appendChild(label);
+            /*
             //create the label for each variable
             const label = document.createElement("label");
             label.setAttribute("for", variable);
@@ -234,7 +248,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                 binding.node.name["en"]) + " :";
             //style the label
             label.style.fontSize = "18px";
-            this.html[0].appendChild(label);
+            this.html[0].appendChild(label);*/
             //create a line between the label and the widget
             const hr = document.createElement("hr");
             hr.classList.add("hr");
@@ -255,6 +269,8 @@ class SparnaturalFormComponent extends HTMLComponent {
 
             //find the line in the query that corresponds to the variable in the form configuration
             const queryLine = findInBranches(query.branches);
+            //How to build the widget
+            //response here :
             //if the line is found
             if (queryLine) {
               const subject = queryLine.sType;
@@ -291,7 +307,8 @@ class SparnaturalFormComponent extends HTMLComponent {
               this.html[0].appendChild(valueDisplay);
 
               //this part is for the selected values display for each widget
-              //exemple for widget country when we select a country it will be displayed in the form
+              //exemple for widget country when we select a country it will be displayed in the form as a selected value
+              //and we can remove it by clicking on the remove button
               const selectedValues = new Set<any>();
 
               //method to update the selected values display every time a value is added or removed
@@ -334,35 +351,38 @@ class SparnaturalFormComponent extends HTMLComponent {
                 });
               };
 
-              //
+              //this part it's after the widget is rendered and we can add the values to the widget
+              //these values will be injected to the query
+              //listen to the event when a value is added to the widget and update the selected values display
               theWidget.html[0].addEventListener(
                 "renderWidgetVal",
                 (e: CustomEvent) => {
                   e.stopImmediatePropagation();
-
+                  // Check if the event contains the widgetValue
                   if (!e.detail || !e.detail.value) {
                     throw Error(
                       'No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"'
                     );
                   }
 
-                  // Access 'value' directly
+                  // Access 'value' directly and convert it into an array if it's not already one
                   const valueToInject = Array.isArray(e.detail.value)
                     ? e.detail.value
                     : [e.detail.value]; // If value is not an array, convert it into one
 
                   console.log("Values to inject:", valueToInject);
 
+                  // Inject the values into the selected values set
                   valueToInject.forEach((val: any) => {
                     if (typeof val !== "object" || !val.label) {
                       console.warn("Invalid value structure received:", val);
                       return; // Skip if the value is not properly structured
                     }
-
+                    // Check if the value already exists in the set
                     const existingValue = Array.from(selectedValues).find(
                       (existingVal: any) => existingVal.label === val.label
                     );
-
+                    // Add the value if it’s not already in the set
                     if (!existingValue) {
                       // Add the value if it’s not already in the set
                       selectedValues.add(val); // Add the full object dynamically
@@ -383,7 +403,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                       // Update the selected values display
                       updateValueDisplay();
 
-                      // Update the JSON query
+                      // Update the JSON query with the new value set (as an array) for the current line
                       queryLine.values = Array.from(selectedValues);
                       this.cleanQuery(); // Automatically clean the query after adding a value
 
@@ -475,13 +495,20 @@ class SparnaturalFormComponent extends HTMLComponent {
   /**
    * Initialize the static labels used to render sparnatural-form
    */
+
+  #initSparnaturalFormStaticLabels(formConfig: any) {
+    const lang = getSettings().language === "fr" ? "fr" : "en";
+    SparnaturalFormI18n.init(lang, formConfig);
+  }
+
+  /*
   #initSparnaturalFormStaticLabels() {
     if (getSettings().language === "fr") {
       SparnaturalFormI18n.init("fr");
     } else {
       SparnaturalFormI18n.init("en");
     }
-  }
+  }*/
   // method is exposed from the HTMLElement
   enablePlayBtn = () => {
     this.SubmitSection.playBtn.removeLoading();

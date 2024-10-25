@@ -71,6 +71,13 @@ yasqe.on("queryResponse", function (_yasqe, response, duration) {
 });
 
 document.getElementById("switch-language").onclick = function () {
-  document.querySelector("sparnatural-form").setAttribute("lang", "en");
+  const sparnaturalForm = document.querySelector("sparnatural-form");
+
+  // Change la langue dynamiquement
+  const currentLang = sparnaturalForm.getAttribute("lang");
+  const newLang = currentLang === "fr" ? "en" : "fr";
+  sparnaturalForm.setAttribute("lang", newLang);
+
+  // Forcer le re-rendu du formulaire avec la nouvelle langue
   sparnaturalForm.display();
 };
