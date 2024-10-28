@@ -39,7 +39,8 @@ class SparnaturalJsonGenerator {
     }
     
     this.json.branches = this.#getBranch(
-      this.sparnatural.BgWrapper.componentsList.rootGroupWrapper
+      this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,
+      false
     );
     return this.json;
   }
@@ -72,7 +73,7 @@ class SparnaturalJsonGenerator {
   }
 
   // goes recursivly through the grpWrappers and collects all the data
-  #getBranch(grpWrapper: GroupWrapper): Array<any> {
+  #getBranch(grpWrapper: GroupWrapper, isInOption:boolean): Array<any> {
     let branches = [];
     let CrtGrp = grpWrapper.CriteriaGroup;
     let branch: Branch = {
@@ -86,21 +87,23 @@ class SparnaturalJsonGenerator {
         values: CrtGrp.endClassWidgetGroup.getWidgetValues().filter(v => !(v instanceof SelectAllValue)).map(v => {return v.value;}),
       },
       children: grpWrapper.whereChild
-        ? this.#getBranch(grpWrapper.whereChild)
+        // either we are already in an option, or one was set at this level
+        ? this.#getBranch(grpWrapper.whereChild, isInOption || (grpWrapper.optionState != OptionTypes.NONE))
         : []
     };
 
     // don't set the flags if they are not true
-    if(grpWrapper.optionState == OptionTypes.OPTIONAL) {
+    if(!isInOption && (grpWrapper.optionState == OptionTypes.OPTIONAL)) {
       branch.optional = true;
     }
-    if(grpWrapper.optionState == OptionTypes.NOTEXISTS) {
+    if(!isInOption && (grpWrapper.optionState == OptionTypes.NOTEXISTS)) {
       branch.notExists = true;
     }
 
     branches.push(branch);
     if (grpWrapper.andSibling)
-      branches.push(...this.#getBranch(grpWrapper.andSibling)); // spread operatore since getBranch() returns an array
+      // pass the "isInOption" flag down
+      branches.push(...this.#getBranch(grpWrapper.andSibling, isInOption)); // spread operatore since getBranch() returns an array
     return branches;
   }
 }
