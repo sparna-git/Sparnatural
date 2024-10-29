@@ -229,9 +229,6 @@ export interface DagNodeIfc<Payload> {
 
     traverseBreadthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
     traverseDepthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
-
-    // TODO ajouter un fonction qui ramène le/les chemins depuis le haut de l'arbre pour arriver jusqu'à un certain noeud
-    // findPaths(id:string):Array<Array<string>>
 }
 
 /**
