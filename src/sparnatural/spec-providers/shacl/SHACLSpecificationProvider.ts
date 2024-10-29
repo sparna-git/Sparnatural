@@ -205,15 +205,25 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     let entities:SHACLSpecificationEntity[] = this.getInitialEntityList();
 
     // 2. add the children of these entities - recursively
+    // while the children of every entity is not found in our flat list of entity, continue adding children
     while(!entities.every(entity => {
         return entity.getChildren().every(child => {
-            return (entities.find(anotherEntity => anotherEntity.getId() === child) != undefined);
+          // avoid testing deactivated shapes
+          return (this.isDeactivated(factory.namedNode(child))) || (entities.find(anotherEntity => anotherEntity.getId() === child) != undefined);
         });
     })) {
         let childrenToAdd:SHACLSpecificationEntity[] = [];
+        // for each entity in the initial list...
         entities.forEach(entity => {
+            // foreach child of this entity...
             entity.getChildren().forEach(child => {
-                if(!entities.find(anotherEntity => anotherEntity.getId() === child)) {
+                // if this child is not in the list, add it
+                if(
+                  // don't put deactivated shapes in the list
+                  ! this.isDeactivated(factory.namedNode(child))
+                  &&
+                  !entities.find(anotherEntity => anotherEntity.getId() === child)
+                ) {
                     childrenToAdd.push(this.getEntity(child) as SHACLSpecificationEntity);
                 }
             })
@@ -388,7 +398,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     // remove from the initial list the NodeShapes that are marked with sh:deactivated
     let that = this;
     dedupNodeShapes = dedupNodeShapes.filter(node => {
-      return !that.graph.hasTriple(node, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
+      return !that.isDeactivated(node);
     });
 
     // remove from the initial list the NodeShapes that are connected to only properties that Sparnatural will not use
@@ -406,6 +416,14 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
     console.log("Initial entity list " + items.map(i => i.getId()));
     return items;
+  }
+
+  /**
+   * @param node a NodeShape
+   * @returns true if the NodeShape is the subject of sh:deactivated true
+   */
+  isDeactivated(node:Term):boolean {
+    return this.graph.hasTriple(node as Quad_Subject, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN));
   }
 
   getNodeShapesLocallyReferencedWithShNode():string[] {

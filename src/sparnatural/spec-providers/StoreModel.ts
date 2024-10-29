@@ -33,7 +33,6 @@ export class StoreModel {
      **/
     readSingleProperty(subject: Term, property: Term): Term | undefined {
         var values = this.readProperty(subject, property);
-
         if (values.length > 0) {
             return values[0];
         }

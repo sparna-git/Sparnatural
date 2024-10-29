@@ -12,6 +12,7 @@ import { RdfStore } from "rdf-stores";
 import { Quad, Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { StoreModel } from "../StoreModel";
 import { OWL } from "../owl/OWLSpecificationProvider";
+import { StatisticsReader } from "../StatisticsReader";
 
 const factory = new DataFactory();
 
@@ -29,12 +30,20 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
    */
   static isSparnaturalSHACLSpecificationProperty(propertyShapeUri:string, n3store: RdfStore):boolean {
     let graph = new StoreModel(n3store);
+    let statReader:StatisticsReader = new StatisticsReader(graph);
+    let shapeIri = factory.namedNode(propertyShapeUri);
     return (
-      !graph.hasTriple(factory.namedNode(propertyShapeUri), SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
+      !graph.hasTriple(shapeIri, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
       &&
-      !graph.hasTriple(factory.namedNode(propertyShapeUri), SH.PATH, RDF.TYPE)
+      !graph.hasTriple(shapeIri, SH.PATH, RDF.TYPE)
       &&
-      !graph.hasTriple(factory.namedNode(propertyShapeUri), SH.HAS_VALUE, null)
+      !graph.hasTriple(shapeIri, SH.HAS_VALUE, null)
+      &&
+      (
+        (!statReader.hasStatistics(shapeIri))
+        ||
+        statReader.getTriplesCountForShape(shapeIri) > 0
+      )
     );
   }
 

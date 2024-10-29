@@ -235,6 +235,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             propShapes.push(...parentEntity.getProperties());
         });
 
+        // filter properties not to be shown
         propShapes
         .forEach(ps => {
             if(SHACLSpecificationProperty.isSparnaturalSHACLSpecificationProperty(ps, this.store)) {
