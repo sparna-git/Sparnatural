@@ -19,7 +19,7 @@ LIMIT 500
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_literal_list_count",
   `
-SELECT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) (STR(?theLabel) as ?itemLabel)
 WHERE {
   {
   SELECT DISTINCT ?count ?theLabel
@@ -45,7 +45,7 @@ ORDER BY DESC(?count) UCASE(?label)
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_literal_list_alpha_with_count",
   `
-SELECT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) (STR(?theLabel) as ?itemLabel)
 WHERE {
   {
   SELECT DISTINCT ?count ?theLabel
@@ -85,7 +85,7 @@ LIMIT 500
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_count",
   `
-SELECT ?uri ?count (CONCAT(STR(?uri), ' (', STR(?count), ')') AS ?label)
+SELECT ?uri ?count (CONCAT(STR(?uri), ' (', STR(?count), ')') AS ?label) (STR(?uri) as ?itemLabel)
 WHERE {
 {
   SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
@@ -146,7 +146,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha_with_count",
   `
-  SELECT DISTINCT ?value ?count (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value)), ' (', STR(?count), ')') AS ?label)
+  SELECT DISTINCT ?value ?count (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value)), ' (', STR(?count), ')') AS ?label) (STR(?value) as ?itemLabel)
   WHERE {
   {
     SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
@@ -192,7 +192,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_count",
   `
-  SELECT ?value ?count (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value)), ' (', STR(?count), ')') AS ?label)
+  SELECT ?value ?count (CONCAT(IF(isLiteral(?value) && LANG(?value) != '' && LANG(?value) != $lang,CONCAT(STR(?value), " <sup>(",LANG(?value),")</sup>"),STR(?value)), ' (', STR(?count), ')') AS ?label) (STR(?value) as ?itemLabel)
   WHERE {
   {
     SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
@@ -254,7 +254,7 @@ LIMIT 500
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_count",
   `
-SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) (STR(?theLabel) AS ?itemLabel)
 WHERE {
   {
   SELECT ?uri ?count ?theLabel
@@ -282,7 +282,7 @@ ORDER BY DESC(?count) UCASE(?label)
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_alpha_with_count",
   `
-SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)  (STR(?theLabel) AS ?itemLabel)
 WHERE {
   {
   SELECT ?uri ?count ?theLabel
@@ -327,7 +327,7 @@ LIMIT 500
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_with_range_count",
   `
-SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)  (STR(?theLabel) AS ?itemLabel)
 WHERE {
   {
   SELECT ?uri ?count ?theLabel
@@ -357,7 +357,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES +
     "query_list_label_with_range_alpha_with_count",
   `
-SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)  (STR(?theLabel) AS ?itemLabel)
 WHERE {
   {
   SELECT ?uri ?count ?theLabel
@@ -513,7 +513,7 @@ ORDER BY UCASE(?label)
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_tree_children_with_count",
   `
-SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren ?count
+SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren ?count  (STR(?theLabel) AS ?itemLabel)
 WHERE {
   {
   SELECT DISTINCT ?uri ?theLabel ?hasChildren (COUNT(?x) AS ?count)
@@ -570,7 +570,7 @@ ORDER BY UCASE(?label)
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_tree_root_noparent_with_count",
   `
-SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren ?count
+SELECT ?uri (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) ?hasChildren ?count  (STR(?theLabel) AS ?itemLabel)
 WHERE {
   {
   SELECT ?uri ?theLabel ?hasChildren (COUNT(?x) AS ?count)

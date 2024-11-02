@@ -9,7 +9,7 @@ import EndClassGroup from "../../builder-section/groupwrapper/criteriagroup/star
 import SparqlFactory from "../../../generators/sparql/SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
-import { NoOpTreeDataProvider, TreeDataProviderIfc } from "../data/DataProviders";
+import { NoOpTreeDataProvider, RdfTermTreeDatasourceItem, TreeDataProviderIfc } from "../data/DataProviders";
 import HTMLComponent from "../../HtmlComponent";
 
 const factory = new DataFactory();
@@ -118,15 +118,8 @@ export class TreeWidget extends AbstractWidget {
           }
         ) {
 
-          interface TreeItem {
-            term:RDFTerm;
-            label:string;
-            hasChildren:boolean;
-            disabled:boolean
-          }
-
-          let nodeCallback:(items:TreeItem[]) => void = function(
-            items:TreeItem[]
+          let nodeCallback:(items:RdfTermTreeDatasourceItem[]) => void = function(
+            items:RdfTermTreeDatasourceItem[]
           ) {
             var result = [];
 
@@ -332,6 +325,7 @@ export class TreeWidget extends AbstractWidget {
     var values = [];
     for (var node in checked) {
       const val = new RdfTermValue({
+        // TODO : find a wat to retrieve the itemLabel
         label: checked[node].original.text,
         rdfTerm: {
            type: "uri",

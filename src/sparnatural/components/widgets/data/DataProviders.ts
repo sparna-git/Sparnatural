@@ -2,6 +2,23 @@ import { RDFTerm } from "../AbstractWidget";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
 import { SparqlFetcherFactory, SparqlFetcherIfc } from "./UrlFetcher";
 
+/**
+ * An item returned by a list widget datasource
+ */
+export interface RdfTermDatasourceItem {
+    term:RDFTerm;
+    label:string;
+    group?:string;
+    itemLabel?:string;
+}
+
+/**
+ * Datasource item for a tree. The "group" variable is not used in that case.
+ */
+export interface RdfTermTreeDatasourceItem extends RdfTermDatasourceItem {
+    hasChildren:boolean;
+    disabled:boolean;
+}
 
 /**
  * Interface for objects that can provide data to a ListWidget :
@@ -19,7 +36,7 @@ export interface ListDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        callback:(items:RdfTermDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void
 }
@@ -41,7 +58,7 @@ export class NoOpListDataProvider implements ListDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        callback:(items:RdfTermDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         // does nothing !
@@ -83,7 +100,7 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
         domainType: string,
         predicate: string,
         rangeType: string,
-        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        callback:(items:RdfTermDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         // 1. create the SPARQL
@@ -99,22 +116,22 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
         // 2. execute it
         this.sparqlFetcher.executeSparql(sparql,(data:{results:{bindings:any}}) => {
             // 3. parse the results
-            let result = new Array<{term:RDFTerm, label:string, group?:string}>;
+            let result = new Array<RdfTermDatasourceItem>;
             for (let index = 0; index < data.results.bindings.length; index++) {
                 const solution = data.results.bindings[index];
                 if(solution.uri) {
                     // if we find a "uri" column...
                     // read uri key & label key
-                    result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value};
+                    result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
                 } else if(solution.value) {
                     // if we find a "value" column...
                     // read value key & label key
-                    result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value};
+                    result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
                 } else {
                     // try to determine the payload column by taking the column other than label
                     let columnName = this.getRdfTermColumn(solution);
                     if(columnName) {
-                        result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value};
+                        result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
                     } else {
                         throw Error("Could not determine which column to read from the result set")
                     }
@@ -174,14 +191,14 @@ export class SortListDataProvider implements ListDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        callback:(items:RdfTermDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         this.delegate.getListContent(
             domain,
             predicate,
             range,
-            (items:{term:RDFTerm;label:string;group?:string}[]) => {
+            (items:RdfTermDatasourceItem[]) => {
                 // sort according to lang
                 var collator = new Intl.Collator(this.lang);
 
@@ -220,7 +237,7 @@ export interface AutocompleteDataProviderIfc {
         predicate:string,
         range:string,
         key:string,
-        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        callback:(items:RdfTermDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void
 }
@@ -243,7 +260,7 @@ export class NoOpAutocompleteProvider implements AutocompleteDataProviderIfc {
         predicate:string,
         range:string,
         key:string,
-        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        callback:(items:RdfTermDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         // does nothing !
@@ -287,7 +304,7 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         predicate: string,
         range: string,
         key: string,
-        callback:(items:{term:RDFTerm;label:string;group?:string}[]) => void,
+        callback:(items:RdfTermDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ): void {
 
@@ -305,7 +322,7 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         // 2. execute it
         this.sparqlFetcher.executeSparql(sparql,(data:{results:{bindings:any}}) => {
             // 3. parse the results
-            let result = new Array<{term:RDFTerm, label:string;group?:string}>;
+            let result = new Array<RdfTermDatasourceItem>;
             for (let index = 0; index < data.results.bindings.length; index++) {
                 const solution = data.results.bindings[index];
                 if(solution.uri) {
@@ -364,7 +381,7 @@ export interface TreeDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        callback:(items:RdfTermTreeDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void
 
@@ -373,7 +390,7 @@ export interface TreeDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        callback:(items:RdfTermTreeDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void
 
@@ -394,7 +411,7 @@ export class NoOpTreeDataProvider implements TreeDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        callback:(items:RdfTermTreeDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         // does nothing !
@@ -406,7 +423,7 @@ export class NoOpTreeDataProvider implements TreeDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        callback:(items:RdfTermTreeDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         // does nothing !
@@ -446,7 +463,7 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
         domainType: string,
         predicate: string,
         rangeType: string,
-        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        callback:(items:RdfTermTreeDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         
@@ -474,7 +491,7 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
         domainType: string,
         predicate: string,
         rangeType: string,
-        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        callback:(items:RdfTermTreeDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         
@@ -499,17 +516,18 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
     }
 
     #getParser(
-        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void
+        callback:(items:RdfTermTreeDatasourceItem[]) => void
     ):(data: any) => void {
         return (data) => {
             // 3. parse the results
-            let result = new Array<{term:RDFTerm, label:string,hasChildren:boolean,disabled:boolean}>;
+            let result = new Array<RdfTermTreeDatasourceItem>;
             for (let index = 0; index < data.results.bindings.length; index++) {
                 const solution = data.results.bindings[index];
 
                 result[result.length] = {
                     term:solution.uri,
                     label:solution.label.value,
+                    itemLabel:solution.itemLabel?.value,
                     // make sure to parse the value as a boolean so that it is not a string
                     // we also test on "1" because Virtuoso returns this as a result instead of a true boolean
                     hasChildren:solution.hasChildren?((solution.hasChildren.value === "true" || solution.hasChildren.value == 1)?true:false):true,
@@ -551,14 +569,14 @@ export class SortTreeDataProvider implements TreeDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        callback:(items:RdfTermTreeDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         this.delegate.getRoots(
             domain,
             predicate,
             range,
-            (items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => {
+            (items:RdfTermTreeDatasourceItem[]) => {
                 var collator = new Intl.Collator(this.lang);					
                 items.sort(function(a:{label:string}, b:{label:string}) {
                     return collator.compare(a.label,b.label);
@@ -575,7 +593,7 @@ export class SortTreeDataProvider implements TreeDataProviderIfc {
         domain:string,
         predicate:string,
         range:string,
-        callback:(items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => void,
+        callback:(items:RdfTermTreeDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
         this.delegate.getChildren(
@@ -583,7 +601,7 @@ export class SortTreeDataProvider implements TreeDataProviderIfc {
             domain,
             predicate,
             range,
-            (items:{term:RDFTerm;label:string;hasChildren:boolean;disabled:boolean}[]) => {
+            (items:RdfTermTreeDatasourceItem[]) => {
                 callback(items);
             },
             errorCallback
