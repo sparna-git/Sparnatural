@@ -5,6 +5,8 @@ import StartClassGroup from "../../components/builder-section/groupwrapper/crite
 import { getSettings } from "../../settings/defaultSettings";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "./SparqlFactory";
+import { RDFS } from '../../spec-providers/BaseRDFReader';
+import { OWL } from '../../spec-providers/owl/OWLSpecificationProvider';
 
 const factory = new DataFactory();
 
@@ -64,7 +66,7 @@ export default class  ClassBuilder {
     }
 
     #buildClsTriple(){
-        // don't build the class triple if the entity does not hove type
+        // don't build the class triple if the entity does not have type
         if(this.specProvider.getEntity(this.classGroup.getTypeSelected()).hasTypeCriteria()) {
             var typePredicate;
             if(getSettings().typePredicate){
@@ -73,11 +75,19 @@ export default class  ClassBuilder {
                 typePredicate = factory.namedNode("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
             }
 
-            this.classTriple = SparqlFactory.buildTypeTriple(
-                factory.variable(this.classGroup.getVarName()?.replace('?','')) ,
-                typePredicate,
-                factory.namedNode(this.classGroup.getTypeSelected())
-            )
+            // don't add the type if the range is rdfs:Resource or owl:Thing
+            if(
+                (this.classGroup.getTypeSelected() != RDFS.RESOURCE.value)
+                &&
+                (this.classGroup.getTypeSelected() != OWL.THING.value)
+            ) {
+                this.classTriple = SparqlFactory.buildTypeTriple(
+                    factory.variable(this.classGroup.getVarName()?.replace('?','')) ,
+                    typePredicate,
+                    factory.namedNode(this.classGroup.getTypeSelected())
+                )
+            }
+            
         }
     }
 

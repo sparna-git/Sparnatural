@@ -11,7 +11,6 @@ import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
 import { Quad, Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { StoreModel } from "../StoreModel";
-import { OWL } from "../owl/OWLSpecificationProvider";
 import { StatisticsReader } from "../StatisticsReader";
 
 const factory = new DataFactory();
