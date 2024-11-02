@@ -85,14 +85,20 @@ export class AutoCompleteWidget extends AbstractWidget {
         });
       });
 
+      // toggle spinner
+      if(list.length == 0) {
+        this.toggleSpinner(I18n.labels.AutocompleteSpinner_NoResults);
+      } else {
+        this.toggleSpinner('')
+      }
+
       // build final list
       awesomplete.list = list;
       awesomplete.evaluate();
     }
 
-    // TODO : this is not working for now
     let errorCallback = (payload:any) => {
-      this.html.append(errorHtml);
+      this.toggleSpinner(I18n.labels.AutocompleteSpinner_NoResults);
     }
 
     // when user selects a value from the autocompletion list...
@@ -132,7 +138,8 @@ export class AutoCompleteWidget extends AbstractWidget {
             phrase,
             callback,
             errorCallback
-          )
+          );
+          this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching)
           }, 
           350
         );
