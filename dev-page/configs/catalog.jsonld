@@ -1,4 +1,6 @@
-[
+{
+  "type": "Catalog",
+  "service": [
     {
       "id": "https://sparna-git.github.io/europeana-linkeddata-taskforce-poc/dataset/rijksmuseum",
       "type": "DataService",
@@ -9,7 +11,8 @@
       "endpointURL" : "https://sage-ails.ails.ece.ntua.gr/api/content/rijksmuseum-poc/sparql",
       "description": {
         "en" : "Lorem ipsum..."
-      }
+      },
+      "extent": "configs/statistics.ttl"
     },
     {
       "id": "https://sparna-git.github.io/europeana-linkeddata-taskforce-poc/dataset/gooi-en-vecht",
@@ -21,7 +24,8 @@
       "endpointURL" : "https://sage-ails.ails.ece.ntua.gr/api/content/gooi-en-vecht-poc/sparql",
       "description": {
         "en" : "Lorem ipsum..."
-      }
+      },
+      "extent": "configs/statistics.ttl"
     },
     {
       "id": "https://sparna-git.github.io/europeana-linkeddata-taskforce-poc/dataset/gelderland",
@@ -33,6 +37,8 @@
       "endpointURL" : "https://sage-ails.ails.ece.ntua.gr/api/content/gelderland-poc/sparql",
       "description": {
         "en" : "Lorem ipsum..."
-      }
+      },
+      "extent": "configs/statistics.ttl"
     }
-]
+  ]
+}
