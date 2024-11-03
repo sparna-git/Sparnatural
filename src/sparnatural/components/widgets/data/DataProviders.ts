@@ -308,6 +308,22 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         errorCallback?:(payload:any) => void
     ): void {
 
+        
+
+        if(key.startsWith("http") && SparqlAutocompleDataProvider.isValidUrl(key, ["http", "https"])) {
+            // valid URI given, return it directly
+            let result = new Array<RdfTermDatasourceItem>;
+            result.push({
+                term:{
+                    type: "uri",
+                    value: key
+                },
+                label:key
+            });
+            callback(result);  
+            return;
+        } 
+
         // 1. create the SPARQL
         let sparql = this.queryBuilder.buildSparqlQuery(
             domain,
@@ -317,7 +333,7 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
             this.lang,
             this.defaultLang,
             this.typePredicate
-        );
+        );        
 
         // 2. execute it
         this.sparqlFetcher.executeSparql(sparql,(data:{results:{bindings:any}}) => {
@@ -363,6 +379,19 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
         }
         return foundKey;
     }  
+
+    static isValidUrl(s:string, protocols:string[]) {
+        try {
+            let url = new URL(s);
+            return protocols
+                ? url.protocol
+                    ? protocols.map(x => `${x.toLowerCase()}:`).includes(url.protocol)
+                    : false
+                : true;
+        } catch (err) {
+            return false;
+        }
+    };
 
 }
 

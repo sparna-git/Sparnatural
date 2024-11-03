@@ -131,6 +131,7 @@ export class AutoCompleteWidget extends AbstractWidget {
         }
 
         autocompleteTimer = window.setTimeout(() => {
+          this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching)
           this.configuration.dataProvider.getAutocompleteSuggestions(
             this.startClassVal.type,
             this.objectPropVal.type,
@@ -138,8 +139,7 @@ export class AutoCompleteWidget extends AbstractWidget {
             phrase,
             callback,
             errorCallback
-          );
-          this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching)
+          );          
           }, 
           350
         );
