@@ -42,7 +42,12 @@ class SparnaturalSpecificationFactory {
       if(catalog) {
         // also add all statistics files of selected endpoints
         // note that endpoint filtering happened before
-        catalog.getServices().forEach(s => {if(s.getExtent()){ configs.push(s.getExtent())}})
+        catalog.getServices().forEach(s => {
+          if(s.getExtent()){
+            configs.push(s.getExtent());
+            console.log("Adding a statistics file to store : "+s.getExtent());
+          }
+        });
       }
 
       BaseRDFReader.buildStore(configs, (theStore:RdfStore) => {

@@ -11,6 +11,7 @@ export class DataService {
         this.id = obj.id;
         this.endpointURL = obj.endpointURL;
         this.title = obj.title;
+        this.extent = obj.extent;
     }
 
     public getEndpointURL():string {
