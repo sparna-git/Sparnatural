@@ -379,7 +379,8 @@ sparnatural.addEventListener("init", (event) => {
         errorCallback?:(error: any) => void
       ):void {
           console.log("Received SPARQL "+sparql);
-          // fire callback
+          // ... execute SPARQL ...
+          // fire callback with SPARQL results
           callback({});
       }
     }
