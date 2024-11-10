@@ -1,6 +1,6 @@
 import { RDFTerm } from "../AbstractWidget";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
-import { SparqlFetcherFactory, SparqlFetcherIfc } from "./UrlFetcher";
+import { SparqlHandlerFactory, SparqlHandlerIfc } from "./UrlFetcher";
 
 /**
  * An item returned by a list widget datasource
@@ -73,13 +73,13 @@ export class NoOpListDataProvider implements ListDataProviderIfc {
 export class SparqlListDataProvider implements ListDataProviderIfc {
     
     queryBuilder:ListSparqlQueryBuilderIfc;
-    sparqlFetcher:SparqlFetcherIfc;
+    sparqlFetcher:SparqlHandlerIfc;
     lang: string;
     defaultLang: string;
     typePredicate: string;
 
     constructor(
-        sparqlFetcher:SparqlFetcherIfc,
+        sparqlFetcher:SparqlHandlerIfc,
         queryBuilder: ListSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
@@ -279,10 +279,10 @@ export class SparqlAutocompleDataProvider implements AutocompleteDataProviderIfc
     typePredicate: string;
 
     queryBuilder:AutocompleteSparqlQueryBuilderIfc;
-    sparqlFetcher:SparqlFetcherIfc;
+    sparqlFetcher:SparqlHandlerIfc;
 
     constructor(
-        sparqlFetcher: SparqlFetcherIfc,
+        sparqlFetcher: SparqlHandlerIfc,
         queryBuilder: AutocompleteSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;
@@ -467,11 +467,11 @@ export class SparqlTreeDataProvider implements TreeDataProviderIfc {
     typePredicate: string;
 
     queryBuilder:TreeSparqlQueryBuilderIfc;
-    sparqlFetcher:SparqlFetcherIfc;
+    sparqlFetcher:SparqlHandlerIfc;
 
 
     constructor(
-        sparqlFetcher:SparqlFetcherIfc,
+        sparqlFetcher:SparqlHandlerIfc,
         queryBuilder: TreeSparqlQueryBuilderIfc
     ) {
         this.queryBuilder = queryBuilder;

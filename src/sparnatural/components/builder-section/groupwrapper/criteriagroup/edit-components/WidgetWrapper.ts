@@ -17,7 +17,7 @@ import { getSettings } from "../../../../../settings/defaultSettings";
 import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
 import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, NoOpTreeDataProvider, SortListDataProvider, SortTreeDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
-import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
+import { SparqlHandlerFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
 import { I18n } from "../../../../../settings/I18n";
 import { NumberConfiguration, NumberWidget } from "../../../../widgets/NumberWidget";

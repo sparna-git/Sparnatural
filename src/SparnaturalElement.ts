@@ -7,7 +7,7 @@ import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent"
 import { ISparJson } from "./sparnatural/generators/json/ISparJson";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
-import { SparqlFetcher, SparqlFetcherFactory, SparqlFetcherIfc } from "./sparnatural/components/widgets/data/UrlFetcher";
+import { EndpointSparqlHandler, SparqlHandlerFactory, SparqlHandlerIfc } from "./sparnatural/components/widgets/data/UrlFetcher";
 
 /*
   This is the sparnatural HTMLElement. 
@@ -153,14 +153,14 @@ export class SparnaturalElement extends HTMLElement {
     callback: (data: any) => void,
     errorCallback?:(error: any) => void
   ) {
-    let sparqlFetcherFactory:SparqlFetcherFactory = new SparqlFetcherFactory(
+    let sparqlFetcherFactory:SparqlHandlerFactory = new SparqlHandlerFactory(
       this.sparnatural.catalog,
       getSettings().language,
       getSettings().localCacheDataTtl,
       getSettings().customization.headers
     );
 
-    let sparqlFetcher:SparqlFetcherIfc = sparqlFetcherFactory.buildSparqlFetcher(getSettings().endpoints);
+    let sparqlFetcher:SparqlHandlerIfc = sparqlFetcherFactory.buildSparqlHandler(getSettings().endpoints);
     sparqlFetcher.executeSparql(query, callback, errorCallback);
   }
 

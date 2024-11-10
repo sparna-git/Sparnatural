@@ -64,7 +64,7 @@ export class UrlFetcher {
 
 }
 
-export interface SparqlFetcherIfc {
+export interface SparqlHandlerIfc {
     executeSparql(
         sparql:string,
         callback: (data: any) => void,
@@ -72,7 +72,7 @@ export interface SparqlFetcherIfc {
     ):void;
 }
 
-export class SparqlFetcherFactory {
+export class SparqlHandlerFactory {
 
     protected catalog:Catalog;
     protected lang:string;
@@ -91,7 +91,7 @@ export class SparqlFetcherFactory {
         this.extraHeaders = extraHeaders;
     }
 
-    buildSparqlFetcher(endpoints:string[]):SparqlFetcherIfc {   
+    buildSparqlHandler(endpoints:string[]):SparqlHandlerIfc {   
         // if more than one endpoint
         if(endpoints.length > 1) {
             // extract selected endpoints from full catalog
@@ -104,16 +104,16 @@ export class SparqlFetcherFactory {
         } else {
             // only one single endpoint
             let endpoint:string = endpoints[0]
-            return new SparqlFetcher(new UrlFetcher(this.localCacheDataTtl, this.extraHeaders), endpoint);
+            return new EndpointSparqlHandler(new UrlFetcher(this.localCacheDataTtl, this.extraHeaders), endpoint);
         }
     }
 
 }
 
 /**
- * Executes a SPARQL query against the triplestore
+ * Executes a SPARQL query against a remote endpoint at a known URL
  */
-export class SparqlFetcher implements SparqlFetcherIfc {
+export class EndpointSparqlHandler implements SparqlHandlerIfc {
 
     urlFetcher:UrlFetcher;
     sparqlEndpointUrl: any;
@@ -155,7 +155,7 @@ export class SparqlFetcher implements SparqlFetcherIfc {
 }
 
 
-export class MultipleEndpointSparqlFetcher implements SparqlFetcherIfc {
+export class MultipleEndpointSparqlFetcher implements SparqlHandlerIfc {
 
     urlFetcher:UrlFetcher;
     catalog: Catalog;
@@ -184,7 +184,7 @@ export class MultipleEndpointSparqlFetcher implements SparqlFetcherIfc {
         const promises:Promise<{}>[] = [];
         for(const i in this.catalog.getServices()) {
             console.log("Calling "+this.catalog.getServices()[i].getEndpointURL())
-            let fetcher = new SparqlFetcher(this.urlFetcher, this.catalog.getServices()[i].getEndpointURL());
+            let fetcher = new EndpointSparqlHandler(this.urlFetcher, this.catalog.getServices()[i].getEndpointURL());
 
             promises[promises.length] = new Promise((resolve, reject) => {
                 fetcher.executeSparql(
