@@ -1,4 +1,5 @@
 import { AutocompleteConfiguration } from "../components/widgets/AutoCompleteWidget";
+import { SparqlHandlerIfc } from "../components/widgets/data/SparqlHandler";
 import { ListConfiguration } from "../components/widgets/ListWidget";
 import { MapConfiguration } from "../components/widgets/MapWidget";
 import { NumberConfiguration } from "../components/widgets/NumberWidget";
@@ -20,12 +21,13 @@ interface ISettings {
   debug: boolean;
   submitButton?: boolean;
   customization? : {
-    headers?: Map<string,string>;
     autocomplete?: Partial<AutocompleteConfiguration>,
     list?: Partial<ListConfiguration>,   
     tree?: Partial<TreeConfiguration>,
     number?: Partial<NumberConfiguration>,
-    map?: Partial<MapConfiguration>
+    map?: Partial<MapConfiguration>,
+    headers?: Map<string,string>,
+    sparqlHandler?: SparqlHandlerIfc
   }
 }
 

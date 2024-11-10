@@ -157,7 +157,8 @@ export class SparnaturalElement extends HTMLElement {
       this.sparnatural.catalog,
       getSettings().language,
       getSettings().localCacheDataTtl,
-      getSettings().customization.headers
+      getSettings().customization.headers,
+      getSettings().customization.sparqlHandler
     );
 
     let sparqlFetcher:SparqlHandlerIfc = sparqlFetcherFactory.buildSparqlHandler(getSettings().endpoints);

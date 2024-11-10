@@ -18,20 +18,28 @@ export class SparqlHandlerFactory {
     protected lang:string;
     protected localCacheDataTtl:any;
     protected extraHeaders:Map<string,string>;
+    protected customizedSparqlHandler:SparqlHandlerIfc;
 
     constructor(
         catalog:Catalog,
         lang:string,
         localCacheDataTtl:any,
-        extraHeaders:Map<string,string>
+        extraHeaders:Map<string,string>,
+        customizedSparqlHandler?:SparqlHandlerIfc
     ) {
         this.catalog = catalog;
         this.lang = lang;
         this.localCacheDataTtl = localCacheDataTtl;
         this.extraHeaders = extraHeaders;
+        this.customizedSparqlHandler = customizedSparqlHandler;
     }
 
-    buildSparqlHandler(endpoints:string[]):SparqlHandlerIfc {   
+    buildSparqlHandler(endpoints:string[]):SparqlHandlerIfc {
+        // if customized handler, use it
+        if(this.customizedSparqlHandler) {
+            return this.customizedSparqlHandler;
+        }
+
         // if more than one endpoint
         if(endpoints.length > 1) {
             // extract selected endpoints from full catalog

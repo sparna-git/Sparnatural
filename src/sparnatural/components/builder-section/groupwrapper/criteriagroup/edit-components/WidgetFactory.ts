@@ -8,7 +8,7 @@ import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widge
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { ListDataProviderIfc, NoOpListDataProvider, SparqlListDataProvider, SortListDataProvider, AutocompleteDataProviderIfc, NoOpAutocompleteProvider, SparqlAutocompleDataProvider, TreeDataProviderIfc, NoOpTreeDataProvider, SparqlTreeDataProvider, SortTreeDataProvider } from "../../../../widgets/data/DataProviders";
 import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { SparqlHandlerFactory } from "../../../../widgets/data/SparqlHandler";
+import { SparqlHandlerFactory, SparqlHandlerIfc } from "../../../../widgets/data/SparqlHandler";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
@@ -34,12 +34,13 @@ export class WidgetFactorySettings {
     localCacheDataTtl?: number;
     
     customization? : {
-      headers?: Map<string,string>;
       autocomplete?: Partial<AutocompleteConfiguration>,
       list?: Partial<ListConfiguration>,   
       tree?: Partial<TreeConfiguration>,
       number?: Partial<NumberConfiguration>,
-      map?: Partial<MapConfiguration>
+      map?: Partial<MapConfiguration>,
+      headers?: Map<string,string>,
+      sparqlHandler?: SparqlHandlerIfc
     }
 }
 
@@ -71,7 +72,8 @@ export class WidgetFactory {
             this.catalog,
             this.settings.language,
             this.settings.localCacheDataTtl,
-            this.settings.customization.headers
+            this.settings.customization.headers,
+            this.settings.customization.sparqlHandler
         );
 
         // how to post-process the generated SPARQL after it is constructed and before it is send
