@@ -1,6 +1,6 @@
 import { RDFTerm } from "../AbstractWidget";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
-import { SparqlHandlerFactory, SparqlHandlerIfc } from "./UrlFetcher";
+import { SparqlHandlerIfc } from "./SparqlHandler";
 
 /**
  * An item returned by a list widget datasource

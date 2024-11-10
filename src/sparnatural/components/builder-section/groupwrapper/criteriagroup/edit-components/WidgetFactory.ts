@@ -8,7 +8,7 @@ import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widge
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { ListDataProviderIfc, NoOpListDataProvider, SparqlListDataProvider, SortListDataProvider, AutocompleteDataProviderIfc, NoOpAutocompleteProvider, SparqlAutocompleDataProvider, TreeDataProviderIfc, NoOpTreeDataProvider, SparqlTreeDataProvider, SortTreeDataProvider } from "../../../../widgets/data/DataProviders";
 import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { SparqlHandlerFactory } from "../../../../widgets/data/UrlFetcher";
+import { SparqlHandlerFactory } from "../../../../widgets/data/SparqlHandler";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";

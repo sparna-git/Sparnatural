@@ -1,26 +1,13 @@
 import ISettings from "../../../../../../sparnatural/settings/ISettings";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
-import Datasources from "../../../../../ontologies/SparnaturalConfigDatasources";
+import { getSettings } from "../../../../../settings/defaultSettings";
+import { I18n } from "../../../../../settings/I18n";
 import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../SelectedVal";
-import EditComponents from "./EditComponents";
-import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
-import { AbstractWidget } from "../../../../widgets/AbstractWidget";
-import { BooleanWidget } from "../../../../widgets/BooleanWidget";
-import { SearchConfiguration, SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
-import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
-import { NoWidget } from "../../../../widgets/NoWidget";
-import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
-import { AutoCompleteWidget, AutocompleteConfiguration } from "../../../../widgets/AutoCompleteWidget";
-import { getSettings } from "../../../../../settings/defaultSettings";
-import { AutocompleteSparqlTemplateQueryBuilder, ListSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { AutocompleteDataProviderIfc, ListDataProviderIfc, NoOpAutocompleteProvider, NoOpListDataProvider, NoOpTreeDataProvider, SortListDataProvider, SortTreeDataProvider, SparqlAutocompleDataProvider, SparqlListDataProvider, SparqlTreeDataProvider, TreeDataProviderIfc } from "../../../../widgets/data/DataProviders";
-import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
-import { SparqlHandlerFactory } from "../../../../widgets/data/UrlFetcher";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
-import { I18n } from "../../../../../settings/I18n";
-import { NumberConfiguration, NumberWidget } from "../../../../widgets/NumberWidget";
+import { AbstractWidget } from "../../../../widgets/AbstractWidget";
+import EditComponents from "./EditComponents";
 import { WidgetFactory } from "./WidgetFactory";
 
 

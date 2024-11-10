@@ -7,7 +7,7 @@ import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent"
 import { ISparJson } from "./sparnatural/generators/json/ISparJson";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
-import { EndpointSparqlHandler, SparqlHandlerFactory, SparqlHandlerIfc } from "./sparnatural/components/widgets/data/UrlFetcher";
+import { SparqlHandlerFactory, SparqlHandlerIfc } from "./sparnatural/components/widgets/data/SparqlHandler";
 
 /*
   This is the sparnatural HTMLElement. 
