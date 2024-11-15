@@ -70,7 +70,7 @@
         <a href="#" id="switch-language">switch to en</a>
         <div class="col-md-4">
           <!-- Sparnatural Form -->
-          <sparnatural-form
+          <!--   <sparnatural-form
             src="form-configs/dbpedia/dbpediafr-config.ttl"
             lang="en"
             defaultLang="fr"
@@ -79,8 +79,8 @@
             form="form-configs/dbpedia/form.json"
             prefix="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"
             query="form-configs/dbpedia/query.json"
-          ></sparnatural-form>
-          <!-- 
+          ></sparnatural-form>-->
+
           <sparnatural-form
             src="https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1WrC2r7yDQCP5AKhu6SAK8Ba_QshzFKmm%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true form-configs/sapa/collections-shacl.ttl form-configs/sapa/instantiation_statistics_sparnatural.ttl"
             lang="en"
@@ -90,8 +90,9 @@
             form="form-configs/sapa/form.json"
             prefix="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"
             query="form-configs/sapa/query.json"
-          ></sparnatural-form>-->
+          ></sparnatural-form>
         </div>
+
         <!-- Éditeur SPARQL à droite -->
         <div class="col-md-8">
           <div class="row" style="margin-bottom: 0.5em">
@@ -100,8 +101,8 @@
                 Les requêtes sont envoyées à
                 <a
                   id="endpoint"
-                  href="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=http%3A%2F%2Ffr.dbpedia.org%2Fsparql"
-                  >https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=http%3A%2F%2Ffr.dbpedia.org%2Fsparql</a
+                  href="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=https%3A%2F%2Fwww.performing-arts.ch%2Fsparql"
+                  >https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=https%3A%2F%2Fwww.performing-arts.ch%2Fsparql</a
                 >
               </span>
             </div>

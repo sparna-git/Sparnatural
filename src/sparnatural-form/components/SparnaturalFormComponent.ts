@@ -14,12 +14,16 @@ import ActionStoreForm from "../handling/ActionStoreForm"; // Importer le store
 import { Catalog } from "../../sparnatural/settings/Catalog";
 import { getSettings } from "../settings/defaultsSettings";
 import SubmitSection from "./buttons/SubmitBtn";
+import { value } from "../../../../Sparnatural-yasgui-plugins/src/sparnatural-yasr-plugin-grid/old-backup/Models/value";
+import { ValueBuilderFactory } from "../../sparnatural/generators/sparql/ValueBuilder";
+import { SparnaturalFormElement } from "../../SparnaturalFormElement";
 
 class SparnaturalFormComponent extends HTMLComponent {
   // the content of all HTML element attributes
   formSettings: ISettings;
   // Sparnatural configuration
   SubmitSection: SubmitSection;
+
   specProvider: ISparnaturalSpecification;
   // The JSON query from the "query" attribute
   jsonQuery: ISparJson;
@@ -32,75 +36,11 @@ class SparnaturalFormComponent extends HTMLComponent {
   constructor(attributes: SparnaturalFormAttributes) {
     // this is a root component : Does not have a ParentComponent!
     super("SparnaturalForm", null, null);
-
     this.formSettings = attributes;
     this.formSettings.customization = {};
     this.cleanQueryResult = null; // Initialise cleanQueryResult
   }
-  /*
-  public cleanQuery(): ISparJson | null {
-    if (!this.jsonQuery || !this.jsonQuery.branches) {
-      console.error(
-        "jsonQuery is not initialized or does not contain branches."
-      );
-      return null;
-    }
 
-    const copiedQuery = JSON.parse(JSON.stringify(this.jsonQuery));
-    let formUrl = this.formSettings.form;
-
-    let formConfig: any = null;
-
-    // Chargement synchrone du fichier JSON via $.ajax (en mode synchrone)
-    $.ajax({
-      url: formUrl,
-      dataType: "json",
-      async: false, // Mode synchrone
-      success: (data) => {
-        formConfig = data;
-      },
-      error: (error) => {
-        console.error("Error loading form configuration:", error);
-        return null;
-      },
-    });
-
-    if (!formConfig) {
-      return null; // Si la configuration du formulaire n'a pas été chargée
-    }
-
-    const formVariables = formConfig.bindings.map(
-      (binding: any) => binding.variable
-    );
-    const queryVariables = this.jsonQuery.variables.map((v: any) => v.value);
-
-    const cleanBranches = (branches: any[]) => {
-      return branches.filter((branch: any) => {
-        const formVariable = branch.line.o;
-        const existsInForm = formVariables.includes(formVariable);
-        const existsInQuery = queryVariables.includes(formVariable);
-        const hasValues = branch.line.values && branch.line.values.length > 0;
-
-        if (existsInForm && !hasValues && !existsInQuery) {
-          return false;
-        }
-
-        if (branch.children && branch.children.length > 0) {
-          branch.children = cleanBranches(branch.children);
-        }
-
-        return true;
-      });
-    };
-
-    copiedQuery.branches = cleanBranches(copiedQuery.branches);
-    console.log("Cleaned query:", JSON.stringify(copiedQuery, null, 2));
-
-    this.cleanQueryResult = copiedQuery; // Mise à jour de l'attribut global cleanQuery
-
-    return copiedQuery;
-  }
-  */
   //methode to clean the query each time a value is added or removed
   public cleanQuery(): ISparJson | null {
     //verify if the query is initialized
@@ -110,6 +50,7 @@ class SparnaturalFormComponent extends HTMLComponent {
       );
       return null;
     }
+
     //copy the query to avoid modifying the original query
     const copiedQuery = JSON.parse(JSON.stringify(this.jsonQuery));
     //get the form configuration url
@@ -119,7 +60,7 @@ class SparnaturalFormComponent extends HTMLComponent {
     //initialize the form configuration
     let formConfig: any = null;
 
-    // Charge the JSON file synchronously via $.ajax (in synchronous mode)
+    // Charge the JSON form configuration synchronously via $.ajax (en synchronous mode)
     $.ajax({
       url: formUrl,
       dataType: "json",
@@ -132,7 +73,6 @@ class SparnaturalFormComponent extends HTMLComponent {
         return null;
       },
     });
-
     // If the form configuration is not loaded
     if (!formConfig) {
       return null;
@@ -141,189 +81,194 @@ class SparnaturalFormComponent extends HTMLComponent {
     const formVariables = formConfig.bindings.map(
       (binding: any) => binding.variable
     );
-
+    console.log("formVariables", formVariables);
     const queryVariables = this.jsonQuery.variables.map((v: any) => v.value);
+    console.log("queryVariables", queryVariables);
 
-    // Method to clean the branches
-    const cleanBranches = (
-      branches: any[],
-      parentOptional: boolean = false
-    ) => {
-      return branches.filter((branch: any) => {
-        const formVariable = branch.line.o;
-        const existsInForm = formVariables.includes(formVariable);
-        const existsInQuery = queryVariables.includes(formVariable);
-        const hasValues = branch.line.values && branch.line.values.length > 0;
+    // Adjust optional flags for all branches without removing them
+    this.adjustOptionalFlags(copiedQuery.branches);
 
-        // Remove the optional flag if the branch has values
-        if (
-          hasValues ||
-          branch.children.some(
-            (child: any) => child.line.values && child.line.values.length > 0
-          )
-        ) {
-          branch.optional = false;
-          parentOptional = false;
-        }
-
-        if (existsInForm && !hasValues && !existsInQuery) {
-          return false;
-        }
-
-        // treat the optional branches recursively
-        if (branch.children && branch.children.length > 0) {
-          branch.children = cleanBranches(
-            branch.children,
-            branch.optional || parentOptional
-          );
-        }
-
-        return true;
-      });
-    };
-
-    //clean the branches
-    copiedQuery.branches = cleanBranches(copiedQuery.branches);
-
-    console.log("Cleaned query:", JSON.stringify(copiedQuery, null, 2));
-
+    console.log(
+      "Adjusted query without branch removal:",
+      JSON.stringify(copiedQuery, null, 2)
+    );
     this.cleanQueryResult = copiedQuery; // update the global cleanQuery attribute
-    //return the cleaned query
-    return copiedQuery;
-  } /**/
+    return copiedQuery; // return the adjusted query
+  }
+
+  //methode qui ajuste les branches optionnelles
+  private adjustOptionalFlags(
+    branches: any[],
+    parentOptional: boolean = false
+  ) {
+    branches.forEach((branch: any) => {
+      const formVariable = branch.line.o;
+      const hasValues = branch.line.values && branch.line.values.length > 0;
+      // Remove the optional flag if the branch has values
+      if (
+        hasValues ||
+        branch.children.some(
+          (child: any) => child.line.values && child.line.values.length > 0
+        )
+      ) {
+        branch.optional = false;
+      } else {
+        // If no values and not in form/query, propagate the optional flag from the parent
+        branch.optional = branch.optional || parentOptional;
+      }
+
+      // Recursively adjust the optional flags for child branches
+      if (branch.children && branch.children.length > 0) {
+        this.adjustOptionalFlags(branch.children, branch.optional);
+      }
+    });
+  }
 
   //render the form
   render(): this {
-    //init the language for the static labels
-    //this.#initSparnaturalFormStaticLabels();
+    //add resume section to the form that will contain the selected values for each variable
+    //like country: |France (x)|
+    /*
+    let resumeSection = document.createElement("div");
+    resumeSection.setAttribute("id", "resume");
+    let resumeTitle = document.createElement("h3");
+    resumeTitle.innerText = "Resume";
+    resumeSection.appendChild(resumeTitle);
+    resumeSection.style.marginBottom = "20px";
+    this.html[0].appendChild(resumeSection);
+*/
+    //clean the query
+    this.cleanQuery();
+    //init the static labels
+    this.#initSparnaturalStaticLabels();
     //init the catalog
     this.#initCatalog();
-    //init the static labels for the widgets
-    this.#initSparnaturalStaticLabels();
-    let formUrl = this.formSettings.form;
 
     //get les settings
     this.initSpecificationProvider((sp: ISparnaturalSpecification) => {
       //get the specification provider
       this.specProvider = sp;
-      console.log("sp", sp);
 
       //init the query
       this.initJsonQuery((query: ISparJson) => {
         //get the query
         this.jsonQuery = query;
 
-        //formSettings
-        console.log("settings", this.formSettings);
-
         // ActonStoreForm for listening to form actions
-        this.actionStoreForm = new ActionStoreForm(this, sp);
+        this.actionStoreForm = new ActionStoreForm(this, this.specProvider);
 
-        //get the form configuration
+        //get the url of the form configuration file
         let formUrl = this.formSettings.form;
+
+        // Load the form configuration file asynchronously via $.getJSON
         $.getJSON(formUrl, (formConfig) => {
-          // Vérifier si formConfig est défini et contient la propriété bindings
           if (!formConfig || !formConfig.bindings) {
             console.error("formConfig or formConfig.bindings is undefined");
             return;
           }
-          // Initialiser les labels après avoir chargé formConfig
+
+          // Initialize labels after loading formConfig
           this.#initSparnaturalFormStaticLabels(formConfig);
-          //get the variables from the form configuration
+
+          // Build the widget for each variable in the form configuration
           formConfig.bindings.forEach((binding: any) => {
             const variable = binding.variable;
-            // Créer et configurer le label en fonction de la langue
+
+            // Create a label for the widget and append it to the form
             const label = document.createElement("label");
+
             label.setAttribute("for", variable);
-            label.innerText = SparnaturalFormI18n.getLabel(variable) + " :";
+            label.innerHTML = `<strong>${SparnaturalFormI18n.getLabel(
+              variable
+            )} :</strong>`;
+
             label.style.fontSize = "18px";
             this.html[0].appendChild(label);
-            /*
-            //create the label for each variable
-            const label = document.createElement("label");
-            label.setAttribute("for", variable);
-            //set the label text from the form configuration
-            label.innerText =
-              (binding.node.name[this.formSettings.language] ||
-                binding.node.name["en"]) + " :";
-            //style the label
-            label.style.fontSize = "18px";
-            this.html[0].appendChild(label);*/
-            //create a line between the label and the widget
-            const hr = document.createElement("hr");
-            hr.classList.add("hr");
-            this.html[0].appendChild(hr);
 
-            //method that will find the line in the query that corresponds to the variable in the form configuration
+            const label1 = label.cloneNode(true);
+            // resumeSection.appendChild(label1);
+
+            // Find the line in the query that corresponds to the variable
             const findInBranches = (branches: any[]): any => {
               for (const branch of branches) {
-                if (branch.line.o === variable) {
-                  return branch.line;
-                } else if (branch.children && branch.children.length > 0) {
+                if (branch.line.o === variable) return branch.line;
+                if (branch.children && branch.children.length > 0) {
                   const result = findInBranches(branch.children);
                   if (result) return result;
                 }
               }
               return null;
             };
-
-            //find the line in the query that corresponds to the variable in the form configuration
             const queryLine = findInBranches(query.branches);
-            //How to build the widget
-            //response here :
-            //if the line is found
+
+            const findtheBranch = (branches: any[]): any => {
+              for (const branch of branches) {
+                if (branch.line.o === variable) return branch;
+                if (branch.children && branch.children.length > 0) {
+                  const result = findtheBranch(branch.children);
+                  if (result) return result;
+                }
+              }
+              return null;
+            };
+            const branch = findtheBranch(query.branches);
+
+            const findthebranchparentofchildren = (branches: any[]): any => {
+              for (const branch of branches) {
+                if (branch.children && branch.children.length > 0) {
+                  const result = findtheBranch(branch.children);
+                  if (result) return branch;
+                }
+              }
+              return false;
+            };
+            const branchparent = findthebranchparentofchildren(query.branches);
+            console.log("branchparent", branchparent);
+
             if (queryLine) {
               const subject = queryLine.sType;
               const predicate = queryLine.p;
               const object = queryLine.oType;
-
-              let specEntity: ISpecificationEntity =
-                this.specProvider.getEntity(subject);
-              let connectingProperty = this.specProvider.getProperty(predicate);
+              const specEntity = this.specProvider.getEntity(subject);
+              const connectingProperty =
+                this.specProvider.getProperty(predicate);
               const propertyType = connectingProperty.getPropertyType(object);
 
-              let wf: WidgetFactory = new WidgetFactory(
+              const wf = new WidgetFactory(
                 this,
                 this.specProvider,
                 this.formSettings,
                 null
               );
-              //build the widget for the variable
-              let theWidget = wf.buildWidget(
+
+              const theWidget = wf.buildWidget(
                 propertyType,
                 { variable: queryLine.s, type: specEntity.getId() },
                 { variable: "predicate", type: connectingProperty.getId() },
                 { variable: queryLine.o, type: object }
               );
-              //render the widget
               theWidget.render();
               this.html[0].appendChild(theWidget.html[0]);
+              /**/
+              const selectedValues = new Set<any>();
 
-              //append the selected values to the form
               const valueDisplay = document.createElement("div");
+
               valueDisplay.setAttribute("id", `selected-value-${variable}`);
               valueDisplay.classList.add("value-display-container");
               valueDisplay.style.marginTop = "5px";
               this.html[0].appendChild(valueDisplay);
 
-              //this part is for the selected values display for each widget
-              //exemple for widget country when we select a country it will be displayed in the form as a selected value
-              //and we can remove it by clicking on the remove button
-              const selectedValues = new Set<any>();
-
-              //method to update the selected values display every time a value is added or removed
               const updateValueDisplay = () => {
                 valueDisplay.innerHTML = "";
                 selectedValues.forEach((val) => {
                   const valueContainer = document.createElement("div");
                   valueContainer.classList.add("selected-value-container");
-
                   const valueLabel = document.createElement("span");
                   valueLabel.innerText = `${val.label}`;
                   valueLabel.classList.add("selected-value-label");
                   valueContainer.appendChild(valueLabel);
 
-                  // Add a remove button for each value (to remove the value from the set and the form)
                   const removeBtn = new UnselectBtn(this, () => {
                     selectedValues.delete(val);
                     theWidget.onRemoveValue(
@@ -334,61 +279,35 @@ class SparnaturalFormComponent extends HTMLComponent {
                     updateValueDisplay();
                     queryLine.values = Array.from(selectedValues);
 
-                    // Ajouter l'événement 'valueRemoved' ici
                     this.html[0].dispatchEvent(
-                      // using acrtionStoreForm to dispatch the event and put the new generated query on the SPARQL Editor
                       new CustomEvent("valueRemoved", {
                         bubbles: true,
-                        detail: { value: val, variable: variable }, // Tu peux ajouter plus de détails si nécessaire
+                        detail: { value: val, variable: variable },
                       })
                     );
-
-                    this.cleanQuery(); // Automatically clean the query after removing a value
+                    this.cleanQuery();
+                    updateOptionVisibility();
                   }).render();
-
                   valueContainer.appendChild(removeBtn.html[0]);
                   valueDisplay.appendChild(valueContainer);
                 });
               };
 
-              //this part it's after the widget is rendered and we can add the values to the widget
-              //these values will be injected to the query
-              //listen to the event when a value is added to the widget and update the selected values display
               theWidget.html[0].addEventListener(
                 "renderWidgetVal",
                 (e: CustomEvent) => {
                   e.stopImmediatePropagation();
-                  // Check if the event contains the widgetValue
-                  if (!e.detail || !e.detail.value) {
-                    throw Error(
-                      'No widgetValue received. Widget Value needs to be provided for "renderWidgetVal"'
-                    );
-                  }
-
-                  // Access 'value' directly and convert it into an array if it's not already one
                   const valueToInject = Array.isArray(e.detail.value)
                     ? e.detail.value
-                    : [e.detail.value]; // If value is not an array, convert it into one
+                    : [e.detail.value];
 
-                  console.log("Values to inject:", valueToInject);
-
-                  // Inject the values into the selected values set
                   valueToInject.forEach((val: any) => {
-                    if (typeof val !== "object" || !val.label) {
-                      console.warn("Invalid value structure received:", val);
-                      return; // Skip if the value is not properly structured
-                    }
-                    // Check if the value already exists in the set
                     const existingValue = Array.from(selectedValues).find(
                       (existingVal: any) => existingVal.label === val.label
                     );
-                    // Add the value if it’s not already in the set
-                    if (!existingValue) {
-                      // Add the value if it’s not already in the set
-                      selectedValues.add(val); // Add the full object dynamically
-                      console.log("Added value:", val);
 
-                      // Add to widgetValues only if it doesn't already exist
+                    if (!existingValue) {
+                      selectedValues.add(val);
                       if (
                         !theWidget
                           .getWidgetValues()
@@ -399,49 +318,208 @@ class SparnaturalFormComponent extends HTMLComponent {
                       ) {
                         theWidget.addWidgetValue(val);
                       }
-
-                      // Update the selected values display
                       updateValueDisplay();
 
-                      // Update the JSON query with the new value set (as an array) for the current line
                       queryLine.values = Array.from(selectedValues);
-                      this.cleanQuery(); // Automatically clean the query after adding a value
+                      this.cleanQuery();
+                      updateOptionVisibility(); // Update options visibility
 
-                      // Ajouter l'événement 'valueAdded' ici
+                      // Dispatch valueAdded event
                       this.html[0].dispatchEvent(
-                        // using acrtionStoreForm to dispatch the event and put the new generated query on the SPARQL Editor
                         new CustomEvent("valueAdded", {
                           bubbles: true,
                           detail: { value: val, variable: variable },
                         })
                       );
-
-                      console.log(
-                        "Updated query after addition:",
-                        JSON.stringify(query, null, 2)
-                      );
-                    } else {
-                      console.warn(
-                        "Value already exists in the set:",
-                        val.label
-                      );
                     }
                   });
                 }
               );
+              //resumeSection.appendChild(valueDisplay);
+
+              // Sauvegarde de l'état initial
+              this.saveInitialOptionalState(this.jsonQuery.branches);
+
+              // Création du conteneur d'options
+              const optionContainer = document.createElement("div");
+              optionContainer.classList.add("option-container");
+              const anydiv = document.createElement("div");
+              const anyValueToggle = document.createElement("input");
+              // Si la variable est optionnelle, on ajoute l'option "Any value"
+              console.log("variable", variable);
+              console.log("branch", branch);
+              console.log("branchparent", branchparent);
+              if (branch.optional || branchparent.optional) {
+                // Création de l'élément "Any value"
+
+                //anydiv.classList.add("any-value-container");
+
+                const anyValueLabel = document.createElement("label");
+                anyValueToggle.type = "checkbox";
+                anyValueToggle.id = `any-value-${variable}`;
+                anyValueToggle.classList.add("any-value-toggle");
+                anyValueLabel.htmlFor = `any-value-${variable}`;
+                anyValueLabel.innerText = "Any value";
+                anydiv.appendChild(anyValueToggle);
+                anydiv.appendChild(anyValueLabel);
+
+                // Ajoute "Any value" au conteneur d'options
+                optionContainer.appendChild(anydiv);
+
+                anyValueToggle.addEventListener("change", () => {
+                  if (anyValueToggle.checked) {
+                    this.setAnyValueForWidget(variable);
+                    notExistDiv.style.display = "none"; // Masquer "Not Exist"
+                    notExistValue.checked = false;
+                    notExistValue.disabled = true;
+
+                    theWidget.disableWidget();
+
+                    // Transformer "Any Value" en encadré
+                    anyValueToggle.parentElement.classList.add(
+                      "selected-value-container"
+                    );
+
+                    this.html[0].dispatchEvent(
+                      new CustomEvent("anyValueSelected", {
+                        bubbles: true,
+                        detail: { variable: variable },
+                      })
+                    );
+                    this.cleanQuery();
+                  } else {
+                    this.resetToDefaultValueForWidget(variable);
+                    notExistValue.disabled = false;
+                    notExistDiv.style.display = "block"; // Afficher "Not Exist"
+                    theWidget.enableWidget();
+
+                    // Retirer le style encadré
+                    anyValueToggle.parentElement.classList.remove(
+                      "selected-value-container"
+                    );
+
+                    this.html[0].dispatchEvent(
+                      new CustomEvent("removeAnyValueOption", {
+                        bubbles: true,
+                        detail: { variable: variable },
+                      })
+                    );
+                    this.cleanQuery();
+                  }
+                });
+              }
+
+              // Création de l'élément "Not Exist"
+              const notExistDiv = document.createElement("div");
+              notExistDiv.classList.add("not-exist-container");
+              const notExistValue = document.createElement("input");
+              const notExistLabel = document.createElement("label");
+              notExistValue.type = "checkbox";
+              notExistValue.id = `not-value-${variable}`;
+              notExistValue.classList.add("any-value-toggle");
+              notExistLabel.htmlFor = `not-value-${variable}`;
+              notExistLabel.innerText = "Not Exist";
+              notExistDiv.appendChild(notExistValue);
+              notExistDiv.appendChild(notExistLabel);
+
+              // Ajout de l'option "Not Exist" au conteneur d'options
+              optionContainer.appendChild(notExistDiv);
+              this.html[0].appendChild(optionContainer);
+
+              // Mise à jour de la visibilité des options
+              const updateOptionVisibility = () => {
+                const hasValues =
+                  queryLine.values && queryLine.values.length > 0;
+
+                if (hasValues) {
+                  if (anyValueToggle) anyValueToggle.checked = false;
+                  notExistValue.checked = false;
+                  if (anyValueToggle) anyValueToggle.disabled = true;
+                  notExistValue.disabled = true;
+                  anydiv.style.display = "none";
+                  notExistDiv.style.display = "none";
+                } else {
+                  if (anyValueToggle) anyValueToggle.disabled = false;
+                  notExistValue.disabled = false;
+                  anydiv.style.display = "block";
+                  notExistDiv.style.display = "block";
+                }
+              };
+
+              updateOptionVisibility();
+
+              // Gestion des événements pour le bouton "Not Exist"
+              notExistValue.addEventListener("change", () => {
+                if (notExistValue.checked) {
+                  this.setNotExistsForWidget(variable);
+                  if (anyValueToggle) anyValueToggle.checked = false;
+                  if (anyValueToggle) anyValueToggle.disabled = true;
+                  anydiv.style.display = "none"; // Masquer "Any value"
+                  theWidget.disableWidget();
+
+                  this.html[0].dispatchEvent(
+                    new CustomEvent("notExist", {
+                      bubbles: true,
+                      detail: { variable: variable },
+                    })
+                  );
+                } else {
+                  this.removeNotExistsForWidget(variable);
+                  if (anyValueToggle) anyValueToggle.disabled = false;
+                  anydiv.style.display = "block"; // Afficher "Any value"
+                  theWidget.enableWidget();
+
+                  this.html[0].dispatchEvent(
+                    new CustomEvent("removeNotExistOption", {
+                      bubbles: true,
+                      detail: { variable: variable },
+                    })
+                  );
+                }
+              });
             }
           });
+
           if (getSettings().submitButton) {
-            this.SubmitSection = new SubmitSection(this).render();
+            const submitBtn = document.createElement("div");
+            submitBtn.setAttribute("id", "submit");
+            this.html[0].appendChild(submitBtn);
+            this.SubmitSection = new SubmitSection(this, "submit").render();
           }
-          console.log("SubmitBtn", this.SubmitSection);
         }).fail((error) => {
           console.error("Error loading form configuration:", error);
         });
       });
+
+      this.html[0].dispatchEvent(
+        new CustomEvent(SparnaturalFormElement.EVENT_INIT, {
+          bubbles: true,
+          detail: {
+            sparnaturalForm: this,
+          },
+        })
+      );
     });
 
     return this;
+  }
+
+  resetForm() {
+    console.log("Resetting the entire form...");
+
+    // Effacer tous les éléments enfants du formulaire pour le vider
+    while (this.html[0].firstChild) {
+      this.html[0].removeChild(this.html[0].firstChild);
+    }
+
+    // Réinitialiser la requête JSON pour supprimer toutes les valeurs sélectionnées
+    this.jsonQuery.branches.forEach((branch: any) => {
+      branch.line.values = []; // Vider toutes les valeurs
+    });
+
+    // Recréer le formulaire en appelant la méthode `render`
+    this.render();
+    console.log("Form reset and re-rendered successfully.");
   }
 
   /**
@@ -501,22 +579,14 @@ class SparnaturalFormComponent extends HTMLComponent {
     SparnaturalFormI18n.init(lang, formConfig);
   }
 
-  /*
-  #initSparnaturalFormStaticLabels() {
-    if (getSettings().language === "fr") {
-      SparnaturalFormI18n.init("fr");
-    } else {
-      SparnaturalFormI18n.init("en");
-    }
-  }*/
   // method is exposed from the HTMLElement
   enablePlayBtn = () => {
-    this.SubmitSection.playBtn.removeLoading();
+    this.SubmitSection.searchBtn.removeLoading();
   };
 
   // method is exposed from the HTMLElement
   disablePlayBtn = () => {
-    this.SubmitSection.playBtn.disable();
+    this.SubmitSection.searchBtn.disable();
   };
   /**
    * Initialize the static labels used to render the widgets from Sparnatural
@@ -532,6 +602,337 @@ class SparnaturalFormComponent extends HTMLComponent {
   isEmpty(): any {
     return null;
   }
-}
 
+  private initialOptionalStates: { [variable: string]: any } = {};
+
+  private saveInitialOptionalState(
+    queryBranches: any[],
+    parentOptionalChain: boolean[] = []
+  ) {
+    const saveState = (branches: any[], currentParentChain: boolean[]) => {
+      branches.forEach((branch: any) => {
+        const branchVariable = branch.line?.o;
+        const currentChain = [...currentParentChain, branch.optional || false]; // Ajout du statut actuel à la chaîne
+
+        const branchState: any = {
+          optional: branch.optional,
+          notExists: branch.notExists || false,
+          parentOptionalChain: currentChain, // Stocke la chaîne d'optionalité pour cette branche
+          children: branch.children
+            ? saveState(branch.children, currentChain)
+            : [],
+        };
+
+        // Sauvegarde de l'état initial si la branche a une variable
+        if (branchVariable) {
+          this.initialOptionalStates[branchVariable] = branchState;
+        }
+      });
+    };
+
+    saveState(queryBranches, parentOptionalChain);
+  }
+
+  //cette methode sert a
+  public setAnyValueForWidget(variable: string) {
+    console.log(`Setting "Any value" for variable: ${variable}`);
+    const adjustOptionalFlags = (branches: any[], targetVariable: string) => {
+      branches.forEach((branch: any) => {
+        const formVariable = branch.line.o;
+        if (formVariable === targetVariable && branch.optional === true) {
+          console.log(
+            `Removing "optional: true" for variable: ${targetVariable}`
+          );
+          delete branch.optional;
+        }
+        if (branch.children && branch.children.length > 0) {
+          const childHasTargetVariable = branch.children.some(
+            (child: any) => child.line.o === targetVariable
+          );
+          if (childHasTargetVariable && branch.optional === true) {
+            console.log(
+              `Removing "optional: true" for parent of variable: ${targetVariable}`
+            );
+            delete branch.optional;
+          }
+          adjustOptionalFlags(branch.children, targetVariable);
+        }
+      });
+    };
+    adjustOptionalFlags(this.jsonQuery.branches, variable);
+  }
+  public resetToDefaultValueForWidget(variable: string) {
+    console.log(`Resetting to default state for variable: ${variable}`);
+
+    const restoreInitialState = (branches: any[], targetVariable: string) => {
+      branches.forEach((branch: any) => {
+        if (branch.line && branch.line.o === targetVariable) {
+          const initialState = this.initialOptionalStates[targetVariable];
+          if (initialState) {
+            // Restaure l'état initial de la branche
+            branch.optional = initialState.optional;
+            branch.notExists = initialState.notExists;
+            // Restaure la chaîne d'optionalité parentale si elle existe
+            this.restoreParentOptionalChain(
+              branch,
+              initialState.parentOptionalChain
+            );
+          }
+        }
+        if (branch.children && branch.children.length > 0) {
+          restoreInitialState(branch.children, targetVariable);
+        }
+      });
+    };
+
+    restoreInitialState(this.jsonQuery.branches, variable);
+    this.cleanQuery();
+  }
+
+  /**
+   * Restaure l'état d'optionalité des parents en utilisant la chaîne d'optionalité enregistrée
+   */
+  private restoreParentOptionalChain(
+    branch: any,
+    parentOptionalChain: boolean[]
+  ) {
+    // Remonte la chaîne d'optionalité en restaurant chaque état parent
+    let currentBranch = branch;
+    for (let i = parentOptionalChain.length - 1; i >= 0; i--) {
+      const parentOptional = parentOptionalChain[i];
+      if (currentBranch) {
+        currentBranch.optional = parentOptional;
+        currentBranch = this.findParentBranch(
+          this.jsonQuery.branches,
+          currentBranch.line.o
+        );
+      }
+    }
+  }
+
+  /**
+   * Recherche le parent d'une branche donnée en utilisant sa variable
+   */
+  private findParentBranch(branches: any[], childVariable: string): any | null {
+    for (const branch of branches) {
+      if (
+        branch.children &&
+        branch.children.some((child: any) => child.line.o === childVariable)
+      ) {
+        return branch;
+      }
+      if (branch.children && branch.children.length > 0) {
+        const foundParent = this.findParentBranch(
+          branch.children,
+          childVariable
+        );
+        if (foundParent) {
+          return foundParent;
+        }
+      }
+    }
+    return null;
+  }
+
+  public setNotExistsForWidget(variable: string) {
+    console.log(`Setting "notExists" for variable: ${variable}`);
+
+    const addNotExistsFlag = (branches: any[], targetVariable: string) => {
+      branches.forEach((branch: any) => {
+        // Vérifie si la variable correspond
+        if (branch.line && branch.line.o === targetVariable) {
+          console.log(
+            `Adding "notExists: true" for variable: ${targetVariable}`
+          );
+          branch.notExists = true; // Applique `notExists: true`
+
+          // Supprime `optional: true` si présent
+          if (branch.optional === true) {
+            console.log(
+              `Removing "optional: true" for variable: ${targetVariable}`
+            );
+            delete branch.optional;
+          }
+        }
+        // Parcours récursif des enfants pour ajouter `notExists` et supprimer `optional`
+        if (branch.children && branch.children.length > 0) {
+          addNotExistsFlag(branch.children, targetVariable);
+        }
+      });
+    };
+
+    const adjustParentOptionalFlags = (
+      branches: any[],
+      targetVariable: string
+    ) => {
+      branches.forEach((branch: any) => {
+        const childHasTargetVariable = branch.children.some(
+          (child: any) => child.line.o === targetVariable
+        );
+
+        // Si un enfant correspond à la variable cible, on supprime le `optional: true` du parent
+        if (childHasTargetVariable && branch.optional === true) {
+          console.log(
+            `Removing "optional: true" for parent of variable: ${targetVariable}`
+          );
+          delete branch.optional;
+        }
+
+        // Appel récursif pour ajuster les parents potentiels
+        if (branch.children && branch.children.length > 0) {
+          adjustParentOptionalFlags(branch.children, targetVariable);
+        }
+      });
+    };
+
+    // Applique les flags `notExists` et ajuste `optional`
+    addNotExistsFlag(this.jsonQuery.branches, variable);
+    adjustParentOptionalFlags(this.jsonQuery.branches, variable);
+
+    // Nettoyage de la requête
+    this.cleanQuery();
+  }
+  public removeNotExistsForWidget(variable: string) {
+    console.log(`Removing "notExists" for variable: ${variable}`);
+
+    const removeNotExistsFlag = (branches: any[], targetVariable: string) => {
+      branches.forEach((branch: any) => {
+        if (branch.line && branch.line.o === targetVariable) {
+          // Supprime le flag notExists
+          delete branch.notExists;
+
+          // Restaure l’état initial d'optionalité pour cette variable et ses parents
+          const initialState = this.initialOptionalStates[targetVariable];
+          if (initialState) {
+            branch.optional = initialState.optional;
+            // Restaure la chaîne d'optionalité parentale
+            this.restoreParentOptionalChain(
+              branch,
+              initialState.parentOptionalChain
+            );
+          }
+        }
+        if (branch.children && branch.children.length > 0) {
+          removeNotExistsFlag(branch.children, targetVariable);
+        }
+      });
+    };
+
+    // Supprime le flag `notExists` pour la variable et restaure l’état d'optionalité
+    removeNotExistsFlag(this.jsonQuery.branches, variable);
+    this.cleanQuery();
+  }
+}
 export default SparnaturalFormComponent;
+
+/*
+
+  public cleanQuery1(): ISparJson | null {
+    // Vérifie si la query est initialisée
+    if (!this.jsonQuery || !this.jsonQuery.branches) {
+      console.error(
+        "jsonQuery is not initialized or does not contain branches."
+      );
+      return null;
+    }
+
+    // Copie la query pour éviter de modifier l'original
+    const copiedQuery = JSON.parse(JSON.stringify(this.jsonQuery));
+    const originalQuery = JSON.parse(JSON.stringify(this.jsonQuery)); // Sauvegarde l'original pour la restauration
+
+    // Récupère l'URL de la configuration de la forme
+    let formUrl = this.formSettings.form;
+    let formConfig: any = null;
+
+    // Charge le fichier JSON de configuration de manière synchrone
+    $.ajax({
+      url: formUrl,
+      dataType: "json",
+      async: false,
+      success: (data) => {
+        formConfig = data;
+      },
+      error: (error) => {
+        console.error("Error loading form configuration:", error);
+        return null;
+      },
+    });
+
+    if (!formConfig) {
+      return null;
+    }
+
+    // Liste des variables de form pour lesquelles nous devons appliquer le nettoyage
+    const formVariables = formConfig.bindings.map(
+      (binding: any) => binding.variable
+    );
+    const queryVariables = this.jsonQuery.variables.map((v: any) => v.value);
+
+    // Fonction pour nettoyer et ajuster les branches optionnelles
+    const cleanAndAdjustBranches = (
+      branches: any[],
+      parentOptional: boolean = false
+    ): any[] => {
+      return branches.filter((branch: any) => {
+        const formVariable = branch.line.o;
+        const hasValues = branch.line.values && branch.line.values.length > 0;
+        const isTargetVariable = formVariables.includes(formVariable);
+        const existsInQuery = queryVariables.includes(formVariable);
+
+        // Condition pour supprimer la branche
+        if (isTargetVariable && !hasValues && !existsInQuery) {
+          return false; // Supprime si c'est une variable cible sans valeurs et non dans les variables de query
+        }
+
+        // Ajuste le drapeau optional
+        if (
+          hasValues ||
+          branch.children.some(
+            (child: any) => child.line.values && child.line.values.length > 0
+          )
+        ) {
+          branch.optional = false;
+        } else {
+          branch.optional = branch.optional || parentOptional;
+        }
+
+        // Traite récursivement les branches enfants
+        if (branch.children && branch.children.length > 0) {
+          branch.children = cleanAndAdjustBranches(
+            branch.children,
+            branch.optional
+          );
+        }
+
+        return true;
+      });
+    };
+
+    // Applique le nettoyage et l'ajustement des drapeaux
+    copiedQuery.branches = cleanAndAdjustBranches(copiedQuery.branches);
+
+    // Fonction pour restaurer les branches supprimées si elles reçoivent des valeurs
+    const restoreBranches = (branches: any[], originalBranches: any[]) => {
+      originalBranches.forEach((originalBranch: any) => {
+        const formVariable = originalBranch.line.o;
+        const existingBranch = branches.find(
+          (b: any) => b.line.o === formVariable
+        );
+
+        if (!existingBranch && originalBranch.line.values?.length > 0) {
+          // Si la branche originale a des valeurs et n'existe pas dans la copie nettoyée
+          branches.push(JSON.parse(JSON.stringify(originalBranch)));
+        } else if (existingBranch && originalBranch.children?.length > 0) {
+          // Appel récursif pour les enfants
+          restoreBranches(existingBranch.children, originalBranch.children);
+        }
+      });
+    };
+
+    // Restaure les branches si des valeurs sont ajoutées
+    restoreBranches(copiedQuery.branches, originalQuery.branches);
+
+    this.cleanQueryResult = copiedQuery; // Met à jour l'attribut cleanQuery global
+    return copiedQuery;
+  }
+*/

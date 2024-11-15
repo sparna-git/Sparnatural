@@ -21,6 +21,9 @@
 /* Align selected values horizontally with wrapping */
 .selected-value-container {
   flex-direction: row;
+  border: 1px solid #ccc;
+  padding: 5px;
+  display: inline-block;
   margin-right: 10px;
   margin-bottom: 10px;
 }
@@ -35,24 +38,8 @@
 /* Container for the search button to control its position */
 .button-container {
   display: flex;
-  justify-content: flex-end; /* Align the button to the right */
-  margin-top: 20px; /* Add some space above the button */
-}
-
-/* Styling for the button */
-button {
-  background-color: #a5d6a7;
-  color: #000;
-  border: none;
-  padding: 10px 20px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 5px;
-  font-weight: bold;
-}
-
-button:hover {
-  background-color: #81c784;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
 
 .hr {
@@ -70,4 +57,51 @@ sparnatural-form {
   background-color: #f0f8f8;
   border-radius: 5px;
   margin-bottom: 20px;
+}
+#submit {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+#submit button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#submit button[id="Search"] {
+  background-color: #a5d6a7;
+  color: #000;
+}
+
+#submit button[id="Search"]:hover {
+  background-color: #81c784;
+  color: #fff;
+}
+
+#submit button[id="Reset"] {
+  background-color: #973d46a2;
+  color: #000;
+}
+
+#submit button[id="Reset"]:hover {
+  background-color: #973d46;
+  color: #fff;
+}
+
+.option-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.any-value-container,
+.not-exist-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: px;
 }

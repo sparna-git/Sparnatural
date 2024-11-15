@@ -4,7 +4,7 @@
   "Select": "Sélectionner",
   "And": "et",
   "That": "qui",
-  "Search": "Rechercher",
+  "Search": "Chercher",
   "Submit.tooltip": "Lancer la recherche",
   "Reset.tooltip": "Réinitialiser la recherche",
   "PlaceHolderDatePeriod": "nom de la période",
@@ -58,5 +58,6 @@
   "AggrLabelSum": "somme",
   "AggrLabelAvg": "moyenne",
   "AggrLabelSeeMore": "Voir +",
-  "AggrLabelSeeLess": "Voir -"
+  "AggrLabelSeeLess": "Voir -",
+  "Reset": "Réinitialiser"
 }

@@ -30,6 +30,8 @@ export class QueryGeneratorForm {
     // Utiliser la cleanQuery si elle existe, sinon jsonQuery
     queryToUse = this.actionStoreForm.sparnaturalForm.cleanQueryResult;
 
+    let queryJson = this.actionStoreForm.sparnaturalForm.jsonQuery;
+
     const jsonQuery = this.actionStoreForm.sparnaturalForm.jsonQuery;
 
     console.log("Query utilisée pour la génération :", queryToUse);

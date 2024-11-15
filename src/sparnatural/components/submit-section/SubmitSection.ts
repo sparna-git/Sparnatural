@@ -27,6 +27,8 @@ class SubmitSection extends HTMLComponent {
         detail: this.ParentSparnatural,
       });
       this.html[0].dispatchEvent(e);
+      console.log("Submit event dispatched.");
+      console.log(e);
     }
   };
 

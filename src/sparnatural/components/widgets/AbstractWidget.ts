@@ -145,8 +145,36 @@ export abstract class AbstractWidget extends HTMLComponent {
         detail: widgetValues,
       })
     );
+    console.log("problem here !");
   }
 
+  // Method to disable the widget
+  disableWidget() {
+    // Add a 'disabled-widget' class to visually indicate it's disabled
+    this.html[0].classList.add("disabled-widget");
+
+    // Disable all input elements within the widget's HTML container
+    const inputs = this.html[0].querySelectorAll(
+      "input, button, select, textarea"
+    );
+    inputs.forEach((element) => {
+      element.setAttribute("disabled", "true");
+    });
+  }
+
+  // Method to enable the widget
+  enableWidget() {
+    // Remove the 'disabled-widget' class to restore normal appearance
+    this.html[0].classList.remove("disabled-widget");
+
+    // Enable all input elements within the widget's HTML container
+    const inputs = this.html[0].querySelectorAll(
+      "input, button, select, textarea"
+    );
+    inputs.forEach((element) => {
+      element.removeAttribute("disabled");
+    });
+  }
   // toggle spinner component when loading a datasource
   toggleSpinner(message?: string) {
     const elements = this.spinner.html[0].getElementsByClassName("load");

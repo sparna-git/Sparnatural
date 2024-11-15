@@ -26,6 +26,7 @@ export class SparnaturalFormElement extends HTMLElement {
 
   // just to avoid name clash with "attributes"
   _attributes: SparnaturalFormAttributes;
+  static EVENT_RESET: "reset";
 
   constructor() {
     super();
