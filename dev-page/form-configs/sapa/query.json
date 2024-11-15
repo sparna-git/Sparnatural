@@ -1,166 +1,47 @@
 {
-  "distinct": true,
-  "variables": [
-    {
-      "termType": "Variable",
-      "value": "File"
-    },
-    {
-      "termType": "Variable",
-      "value": "OriginalName"
-    },
-    {
-      "termType": "Variable",
-      "value": "VideoFormat"
-    },
-    {
-      "termType": "Variable",
-      "value": "AudioFormat"
-    },
-    {
-      "termType": "Variable",
-      "value": "ContainerFormat"
-    },
-    {
-      "termType": "Variable",
-      "value": "Size"
-    },
-    {
-      "termType": "Variable",
-      "value": "LastControlExprDate"
-    },
-    {
-      "termType": "Variable",
-      "value": "LastControlNormDate"
-    },
-    {
-      "termType": "Variable",
-      "value": "Standard"
-    },
-    {
-      "termType": "Variable",
-      "value": "History"
-    },
-    {
-      "termType": "Variable",
-      "value": "Integrity"
-    }
-  ],
-  "order": null,
-  "branches": [
-    {
-      "line": {
-        "s": "File",
-        "p": "http://shapes.performing-arts.ch/instantiations/File_originalName",
-        "o": "OriginalName",
-        "sType": "http://shapes.performing-arts.ch/instantiations/File",
-        "oType": "http://special/Z_Text",
-        "values": []
-      },
-      "children": [],
-      "optional": true
-    },
-    {
-      "line": {
-        "s": "File",
-        "p": "http://shapes.performing-arts.ch/instantiations/File_hasFormat",
-        "o": "VideoFormat",
-        "sType": "http://shapes.performing-arts.ch/instantiations/File",
-        "oType": "http://shapes.performing-arts.ch/instantiations/VideoFormat",
-        "values": []
-      },
-      "children": [],
-      "optional": true
-    },
-    {
-      "line": {
-        "s": "File",
-        "p": "http://shapes.performing-arts.ch/instantiations/File_hasFormat",
-        "o": "AudioFormat",
-        "sType": "http://shapes.performing-arts.ch/instantiations/File",
-        "oType": "http://shapes.performing-arts.ch/instantiations/AudioFormat",
-        "values": []
-      },
-      "children": [],
-      "optional": true
-    },
-    {
-      "line": {
-        "s": "File",
-        "p": "http://shapes.performing-arts.ch/instantiations/File_hasFormat",
-        "o": "ContainerFormat",
-        "sType": "http://shapes.performing-arts.ch/instantiations/File",
-        "oType": "http://shapes.performing-arts.ch/instantiations/ContainerFormat",
-        "values": []
-      },
-      "children": [],
-      "optional": true
-    },
-    {
-      "line": {
-        "s": "File",
-        "p": "http://shapes.performing-arts.ch/instantiations/File_size",
-        "o": "Size",
-        "sType": "http://shapes.performing-arts.ch/instantiations/File",
-        "oType": "http://special/Z_Text",
-        "values": []
-      },
-      "children": [],
-      "optional": true
-    },
-    {
-      "line": {
-        "s": "File",
-        "p": "http://shapes.performing-arts.ch/instantiations/File_isIncludedIn",
-        "o": "Representation_12",
-        "sType": "http://shapes.performing-arts.ch/instantiations/File",
-        "oType": "http://shapes.performing-arts.ch/instantiations/Representation",
-        "values": []
-      },
-      "children": [
+      "distinct": true,
+      "variables": [
         {
-          "line": {
-            "s": "Representation_12",
-            "p": "http://shapes.performing-arts.ch/instantiations/Instantiation_lastControl",
-            "o": "SingleDate_14",
-            "sType": "http://shapes.performing-arts.ch/instantiations/Representation",
-            "oType": "http://shapes.performing-arts.ch/collections/SingleDate",
-            "values": []
-          },
-          "children": [
-            {
-              "line": {
-                "s": "SingleDate_14",
-                "p": "http://shapes.performing-arts.ch/collections/SingleDate_expressedDate",
-                "o": "LastControlExprDate",
-                "sType": "http://shapes.performing-arts.ch/collections/SingleDate",
-                "oType": "http://special/Z_Text",
-                "values": []
-              },
-              "children": [],
-              "optional": true
-            },
-            {
-              "line": {
-                "s": "SingleDate_14",
-                "p": "http://shapes.performing-arts.ch/collections/SingleDate_normalizedDateValue",
-                "o": "LastControlNormDate",
-                "sType": "http://shapes.performing-arts.ch/collections/SingleDate",
-                "oType": "http://special/Z_Text",
-                "values": []
-              },
-              "children": [],
-              "optional": true
-            }
-          ],
-          "optional": true
+          "termType": "Variable",
+          "value": "File"
         },
         {
+          "termType": "Variable",
+          "value": "OriginalName"
+        },
+        {
+          "termType": "Variable",
+          "value": "Instantiation"
+        },
+        {
+          "termType": "Variable",
+          "value": "ContainerFormat"
+        },
+        {
+          "termType": "Variable",
+          "value": "VideoFormat"
+        },
+        {
+          "termType": "Variable",
+          "value": "AudioFormat"
+        },
+        {
+          "termType": "Variable",
+          "value": "Standard"
+        },
+        {
+          "termType": "Variable",
+          "value": "Size"
+        }
+      ],
+      "order": null,
+      "branches": [
+        {
           "line": {
-            "s": "Representation_12",
-            "p": "http://shapes.performing-arts.ch/instantiations/Instantiation_history",
-            "o": "History",
-            "sType": "http://shapes.performing-arts.ch/instantiations/Representation",
+            "s": "File",
+            "p": "http://shapes.performing-arts.ch/instantiations/File_originalName",
+            "o": "OriginalName",
+            "sType": "http://shapes.performing-arts.ch/instantiations/File",
             "oType": "http://special/Z_Text",
             "values": []
           },
@@ -169,10 +50,69 @@
         },
         {
           "line": {
-            "s": "Representation_12",
-            "p": "http://shapes.performing-arts.ch/instantiations/Instantiation_integrity",
-            "o": "Integrity",
-            "sType": "http://shapes.performing-arts.ch/instantiations/Representation",
+            "s": "File",
+            "p": "http://shapes.performing-arts.ch/instantiations/File_hasFormat",
+            "o": "VideoFormat",
+            "sType": "http://shapes.performing-arts.ch/instantiations/File",
+            "oType": "http://shapes.performing-arts.ch/instantiations/VideoFormat",
+            "values": []
+          },
+          "children": [],
+          "optional": true
+        },
+        {
+          "line": {
+            "s": "File",
+            "p": "http://shapes.performing-arts.ch/instantiations/File_hasFormat",
+            "o": "AudioFormat",
+            "sType": "http://shapes.performing-arts.ch/instantiations/File",
+            "oType": "http://shapes.performing-arts.ch/instantiations/AudioFormat",
+            "values": []
+          },
+          "children": [],
+          "optional": true
+        },
+        {
+          "line": {
+            "s": "File",
+            "p": "http://shapes.performing-arts.ch/instantiations/File_hasFormat",
+            "o": "ContainerFormat",
+            "sType": "http://shapes.performing-arts.ch/instantiations/File",
+            "oType": "http://shapes.performing-arts.ch/instantiations/ContainerFormat",
+            "values": []
+          },
+          "children": [],
+          "optional": true
+        },
+        {
+          "line": {
+            "s": "File",
+            "p": "http://shapes.performing-arts.ch/instantiations/File_isIncludedIn",
+            "o": "Instantiation",
+            "sType": "http://shapes.performing-arts.ch/instantiations/File",
+            "oType": "http://shapes.performing-arts.ch/instantiations/Representation",
+            "values": []
+          },
+          "children": []
+        },
+        {
+          "line": {
+            "s": "File",
+            "p": "http://shapes.performing-arts.ch/instantiations/File_hasStandard",
+            "o": "Standard",
+            "sType": "http://shapes.performing-arts.ch/instantiations/File",
+            "oType": "http://shapes.performing-arts.ch/instantiations/Standard",
+            "values": []
+          },
+          "children": [],
+          "optional": true
+        },
+        {
+          "line": {
+            "s": "File",
+            "p": "http://shapes.performing-arts.ch/instantiations/File_size",
+            "o": "Size",
+            "sType": "http://shapes.performing-arts.ch/instantiations/File",
             "oType": "http://special/Z_Text",
             "values": []
           },
@@ -180,18 +120,4 @@
           "optional": true
         }
       ]
-    },
-    {
-      "line": {
-        "s": "File",
-        "p": "http://shapes.performing-arts.ch/instantiations/File_hasStandard",
-        "o": "Standard",
-        "sType": "http://shapes.performing-arts.ch/instantiations/File",
-        "oType": "http://shapes.performing-arts.ch/instantiations/Standard",
-        "values": []
-      },
-      "children": [],
-      "optional": true
     }
-  ]
-}
