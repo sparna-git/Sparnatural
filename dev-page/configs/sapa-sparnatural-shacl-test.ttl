@@ -1,0 +1,55 @@
+@prefix premis: <http://www.loc.gov/premis/rdf/v1#> .
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix rico: <https://www.ica.org/standards/RiC/ontology#> .
+@prefix vocab: <http://vocab.performing-arts.ch/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix rda-u: <http://rdaregistry.info/Elements/u/> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix spao-sparnatural: <http://shapes.performing-arts.ch/sparnatural/> .
+@prefix crypto: <http://id.loc.gov/vocabulary/preservation/cryptographicHashFunctions/> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix spao-i: <http://shapes.performing-arts.ch/instantiations/> .
+@prefix olo: <http://purl.org/ontology/olo/core#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ebucore: <https://www.ebu.ch/metadata/ontologies/ebucore#> .
+@prefix spao-co: <http://shapes.performing-arts.ch/collections/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix spao: <http://ontology.performing-arts.ch/> .
+@prefix frbroo: <http://iflastandards.info/ns/fr/frbr/frbroo/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://shapes.performing-arts.ch/sparnatural> a owl:Ontology.
+
+spao-sparnatural:FondsTheatre a sh:NodeShape;
+  rdfs:label "Fonds Théatre"@fr;
+  sh:node spao-sparnatural:Fonds;
+  skos:definition "Un fonds sur le théatre"@fr .
+
+spao-sparnatural:FondsTheatreDeRue a sh:NodeShape;
+  rdfs:label "Fonds Théatre De Rue"@fr;
+  sh:node spao-sparnatural:FondsTheatre;
+  skos:definition "Un fonds sur le théatre de rue"@fr .
+
+spao-sparnatural:FondsTheatreDeRueMime a sh:NodeShape;
+  rdfs:label "Fonds Théatre De Rue Mimé"@fr;
+  sh:node spao-sparnatural:FondsTheatreDeRue;
+  skos:definition "Un fonds sur le théatre de rue mimé"@fr .

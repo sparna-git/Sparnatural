@@ -531,6 +531,8 @@ class SparnaturalFormComponent extends HTMLComponent {
     specProviderFactory.build(
       this.formSettings.src,
       this.formSettings.language,
+      // here : catalog parameter that we could add to the form
+      undefined,
       (sp: any) => {
         // call the call back when done
         callback(sp);

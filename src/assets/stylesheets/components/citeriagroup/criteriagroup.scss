@@ -80,6 +80,109 @@
 		border-radius: 11px;
 		z-index: 2;
 	}
+
+	.currentWrapper {
+        height: 48px;
+        background: rgba(0, 0, 0, 0);
+        border-color: rgba(0, 0, 0, 0);
+        padding-left: 8px;
+        padding-right: 12px;
+        border-width: 0;
+        border-top-width: 3px;
+        border-bottom-width: 3px;
+        border-top: 3px solid #fff;
+        border-bottom: 3px solid #fff;
+
+		span.current {
+			display: inline-block;
+			height: 42px;
+			line-height: 42px;
+			vertical-align: bottom;
+			white-space: nowrap;
+			opacity: 0.6;
+			background-color: var(--primary-color-light) ;
+			padding: 0 14px;
+			&:not(:has(span.label)) {
+
+				max-width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			span {
+				display: inline-block;
+				vertical-align: middle;
+				min-width: 20px;
+			}
+			
+			&>span.label {
+				max-width: 200px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			&.selected {
+				background-color: #fff; 
+				opacity: 1;
+				padding: 0 0;
+				color: var(--default-text-color);
+				span i {
+					font-size: 22px;
+				}
+			}
+		}
+    }
+	
+    .focus {
+		.currentWrapper {
+			span.current {
+				min-width: 345px;
+			}
+		}
+        &.selectorIsFlat { // -30px
+            .currentWrapper span.current {
+                min-width: 315px;
+            }
+        }
+        &:not(.selectorHasIcon) { // -48px
+            .currentWrapper span.current {
+                min-width: 297px;
+            }
+        }
+        &.selectorIsFlat:not(.selectorHasIcon) {// -48px -30px
+            .currentWrapper span.current {
+                min-width: 267px;
+            }
+        }
+    }
+    .VariableSelected .currentWrapper {
+        color: var(--default-text-color);
+        border-color: rgba(0, 0, 0, 0);
+        border-radius: 0;
+    }
+
+	
+	.ClassTypeId.Highlited .currentWrapper {
+		border-radius: unset;
+		background-color: var(--primary-color-main);
+		border-color: #fff;
+		.current {
+			color: #fff;
+			background-color: var(--primary-color-main);
+		}
+	}
+
+	.StartClassGroup .ClassTypeId.Highlited .currentWrapper {
+		border-top-left-radius: 6px;
+		border-bottom-left-radius: 6px;
+	}
+
+	.ClassTypeId.Highlited.VariableSelected .currentWrapper {
+		border-color: var(--secondary-color-important);
+	}
+	.StartClassGroup .ClassTypeId .currentWrapper {
+		border-left: 3px solid #fff;
+	}
+
+    
 }
 
 /* When a value is selected or Where is enabled */

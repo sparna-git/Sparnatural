@@ -18,7 +18,8 @@ import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad, Quad_Object, Quad_Subject } from '@rdfjs/types/data-model';
 import { Term } from "@rdfjs/types";
 import { StoreModel } from '../StoreModel';
-import { Dag, DagIfc } from '../../dag/Dag';
+import { DagIfc, Dag, DagNodeIfc } from '../../dag/Dag';
+import { StatisticsReader } from '../StatisticsReader';
 
 const factory = new DataFactory();
 
@@ -29,6 +30,7 @@ export const SH = {
   DATATYPE: factory.namedNode(SH_NAMESPACE + "datatype") as NamedNode,
   DEACTIVATED: factory.namedNode(SH_NAMESPACE + "deactivated") as NamedNode,
   DESCRIPTION: factory.namedNode(SH_NAMESPACE + "description") as NamedNode,
+  HAS_VALUE: factory.namedNode(SH_NAMESPACE + "hasValue") as NamedNode,
   IN: factory.namedNode(SH_NAMESPACE + "in") as NamedNode, 
   INVERSE_PATH: factory.namedNode(SH_NAMESPACE + "inversePath") as NamedNode, 
   IRI: factory.namedNode(SH_NAMESPACE + "IRI") as NamedNode, 
@@ -49,6 +51,7 @@ export const SH = {
   UNIQUE_LANG: factory.namedNode(SH_NAMESPACE + "uniqueLang") as NamedNode, 
   ZERO_OR_MORE_PATH: factory.namedNode(SH_NAMESPACE + "zeroOrMorePath") as NamedNode, 
   ZERO_OR_ONE_PATH: factory.namedNode(SH_NAMESPACE + "zeroOrOnePath") as NamedNode, 
+  PARENT: factory.namedNode(SH_NAMESPACE + "parent") as NamedNode, 
 };
 
 const DASH_NAMESPACE = "http://datashapes.org/dash#";
@@ -193,13 +196,43 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
   getEntitiesInDomainOfAnyProperty(): string[] {
     // map to extract just the uri
+    console.log(this.getEntitiesTreeInDomainOfAnyProperty().toDebugString());
     return this.getInitialEntityList().map(e => e.getId());
   }
 
   getEntitiesTreeInDomainOfAnyProperty(): DagIfc<ISpecificationEntity> {
     // 1. get the entities that are in a domain of a property
     let entities:SHACLSpecificationEntity[] = this.getInitialEntityList();
-    // 2. complement the initial list with their parents
+
+    // 2. add the children of these entities - recursively
+    // while the children of every entity is not found in our flat list of entity, continue adding children
+    while(!entities.every(entity => {
+        return entity.getChildren().every(child => {
+          // avoid testing deactivated shapes
+          return (this.isDeactivated(factory.namedNode(child))) || (entities.find(anotherEntity => anotherEntity.getId() === child) != undefined);
+        });
+    })) {
+        let childrenToAdd:SHACLSpecificationEntity[] = [];
+        // for each entity in the initial list...
+        entities.forEach(entity => {
+            // foreach child of this entity...
+            entity.getChildren().forEach(child => {
+                // if this child is not in the list, add it
+                if(
+                  // don't put deactivated shapes in the list
+                  ! this.isDeactivated(factory.namedNode(child))
+                  &&
+                  !entities.find(anotherEntity => anotherEntity.getId() === child)
+                ) {
+                    childrenToAdd.push(this.getEntity(child) as SHACLSpecificationEntity);
+                }
+            })
+        });
+        childrenToAdd.forEach(p => entities.push(p));
+    }
+
+    // 3. complement the initial list with their parents
+    let disabledList:string[] = new Array<string>();
     while(!entities.every(entity => {
       return entity.getParents().every(parent => {
         return (entities.find(anotherEntity => anotherEntity.getId() === parent) != undefined);
@@ -214,12 +247,27 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
         })
       });
       parentsToAdd.forEach(p => entities.push(p));
+      // also keep that as a disabled node
+      parentsToAdd.forEach(p => disabledList.push(p.getId()));
     }
 
     let dag:Dag<SHACLSpecificationEntity> = new Dag<SHACLSpecificationEntity>();
-    // for the moment : no disabled entries
-    dag.initFromParentableAndIdAbleEntity(entities, []);
-    console.log(dag.toDebugString())
+    dag.initFromParentableAndIdAbleEntity(entities, disabledList);
+
+    let statisticsReader:StatisticsReader = new StatisticsReader(new StoreModel(this.store));
+
+    // add count
+    dag.traverseBreadthFirst((node:DagNodeIfc<ISpecificationEntity>) => {
+      if(node.parents.length == 0) {
+        // if this is a root
+        // add a count to it
+        node.count = statisticsReader.getEntitiesCountForShape(factory.namedNode(node.payload.getId()))
+      } else {
+        // otherwise make absolutely sure the count is undefined
+        node.count = undefined
+      }
+    })
+
     return dag;
   }
 
@@ -270,7 +318,8 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
           // replace the $this with the name of the original variable in the query
           
           // \S matches any non-whitespace charracter
-          var re = new RegExp("(\\S*) (rdf:type|a|<http://www\\.w3\\.org/1999/02/22-rdf-syntax-ns#type>) <" + nodeShapeUri + ">", "g");      
+          // note how we match optionnally the final dot of the triple
+          var re = new RegExp("(\\S*) (rdf:type|a|<http://www\\.w3\\.org/1999/02/22-rdf-syntax-ns#type>) <" + nodeShapeUri + ">( \\.)?", "g");      
 
           let replacer = function(
             match:string,
@@ -340,6 +389,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     );
   }
 
+
   getInitialEntityList():SHACLSpecificationEntity[] {
     const duplicatedNodeShapes = this.store.getQuads(
       null,
@@ -353,7 +403,13 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
     // remove from the initial list the NodeShapes that are marked with sh:deactivated
     let that = this;
     dedupNodeShapes = dedupNodeShapes.filter(node => {
-      return !that.graph.hasTriple(node, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
+      return !that.isDeactivated(node);
+    });
+
+    // remove from the initial list the NodeShapes that are connected to only properties that Sparnatural will not use
+    // by checking the lenght of the list of properties we can make sure of that
+    dedupNodeShapes = dedupNodeShapes.filter(node => {
+      return (this.getEntity(node.value) as SHACLSpecificationEntity).getProperties().length > 0;
     });
 
     var items: SHACLSpecificationEntity[] = [];
@@ -365,6 +421,14 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
     console.log("Initial entity list " + items.map(i => i.getId()));
     return items;
+  }
+
+  /**
+   * @param node a NodeShape
+   * @returns true if the NodeShape is the subject of sh:deactivated true
+   */
+  isDeactivated(node:Term):boolean {
+    return this.graph.hasTriple(node as Quad_Subject, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN));
   }
 
   getNodeShapesLocallyReferencedWithShNode():string[] {

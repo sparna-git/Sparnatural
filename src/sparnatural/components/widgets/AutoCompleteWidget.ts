@@ -85,14 +85,20 @@ export class AutoCompleteWidget extends AbstractWidget {
         });
       });
 
+      // toggle spinner
+      if(list.length == 0) {
+        this.toggleSpinner(I18n.labels.AutocompleteSpinner_NoResults);
+      } else {
+        this.toggleSpinner('')
+      }
+
       // build final list
       awesomplete.list = list;
       awesomplete.evaluate();
     }
 
-    // TODO : this is not working for now
     let errorCallback = (payload:any) => {
-      this.html.append(errorHtml);
+      this.toggleSpinner(I18n.labels.AutocompleteSpinner_NoResults);
     }
 
     // when user selects a value from the autocompletion list...
@@ -112,18 +118,30 @@ export class AutoCompleteWidget extends AbstractWidget {
     });
 
     // add the behavior on the input HTML element to fetch the autocompletion value
+    var autocompleteTimer = 0;
     queryInput.addEventListener("input", (event:Event) => {
       const phrase = (event.target as HTMLInputElement)?.value;
       // Process inputText as you want, e.g. make an API request.
 
       if(phrase.length >= 3) {
-        this.configuration.dataProvider.getAutocompleteSuggestions(
-          this.startClassVal.type,
-          this.objectPropVal.type,
-          this.endClassVal.type,
-          phrase,
-          callback,
-          errorCallback
+
+        // cancel the previously-set timer
+        if (autocompleteTimer) {
+          window.clearTimeout(autocompleteTimer);
+        }
+
+        autocompleteTimer = window.setTimeout(() => {
+          this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching)
+          this.configuration.dataProvider.getAutocompleteSuggestions(
+            this.startClassVal.type,
+            this.objectPropVal.type,
+            this.endClassVal.type,
+            phrase,
+            callback,
+            errorCallback
+          );          
+          }, 
+          350
         );
       }
     });

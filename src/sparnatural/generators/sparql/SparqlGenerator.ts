@@ -13,6 +13,8 @@ import WhereBuilder from "./WhereBuilder";
 import SparqlFactory from "./SparqlFactory";
 import { DataFactory } from "rdf-data-factory";
 import { DraggableComponentState } from "../../components/variables-section/variableorder/DraggableComponent";
+import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
+import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
 import SparnaturalFormComponent from "../../../sparnatural-form/components/SparnaturalFormComponent";
 
 const factory = new DataFactory();
@@ -26,11 +28,11 @@ export default class SparqlGenerator {
   typePredicate: string;
   specProvider: ISparnaturalSpecification;
   prefixes: { [key: string]: string } = {};
-  sparnatural: SparnaturalComponent | SparnaturalFormComponent;
+  sparnatural: SparnaturalComponent;
   defaultLabelVars: Variable[] = []; // see: #checkForDefaultLabel()
   settings: any;
   constructor(
-    sparnatural: SparnaturalComponent | SparnaturalFormComponent,
+    sparnatural: SparnaturalComponent,
     specProvider: ISparnaturalSpecification,
     prefixes: { [key: string]: string } = {},
     settings: any
@@ -148,17 +150,54 @@ export default class SparqlGenerator {
   }
 
   #varsToRDFJS(variables: Array<DraggableComponentState>): Variable[] {
-    return variables.map((v) => {
-      if (v.aggregateFunction) {
-        return SparqlFactory.buildAggregateFunctionExpression(
+    let variablesArray:Variable[][] = variables.map((v) => {
+      if(v.aggregateFunction) {
+        return [SparqlFactory.buildAggregateFunctionExpression(
           v.aggregateFunction,
           factory.variable(v.originalVariable.variable),
           factory.variable(v.selectedVariable.variable)
-        );
+        )];
       } else {
-        return factory.variable(v.selectedVariable.variable);
-      }
+        // find where the variable comes from
+        let specProperty:ISpecificationProperty = undefined;
+        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
+          (grpWrapper: GroupWrapper) => {
+            if(grpWrapper.CriteriaGroup.EndClassGroup.endClassVal.variable == v.selectedVariable.variable) {
+              // check if the spec tells us that begin date / end date / exact date propeties are used
+              let propertyType = grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected();
+              specProperty = this.specProvider.getProperty(propertyType);
+            }
+          }
+        ); // end traverse
+
+        // not found as an object, we cannot read the specification property, so return as normal
+        if(!specProperty) {
+          return [ factory.variable(v.selectedVariable.variable) ];
+        }
+
+        if(specProperty.getBeginDateProperty() && specProperty.getEndDateProperty()) {
+          let result:Variable[] = []
+          if(specProperty.getBeginDateProperty()) {
+            result.push(factory.variable(v.selectedVariable.variable+"_begin"));
+          }
+          if(specProperty.getEndDateProperty()) {
+            result.push(factory.variable(v.selectedVariable.variable+"_end"));
+          }
+          if(specProperty.getExactDateProperty()) {
+            result.push(factory.variable(v.selectedVariable.variable+"_exact"));
+          }
+          return result;
+        } else {
+          // no begin or date, return as normal
+          return [ factory.variable(v.selectedVariable.variable) ];
+        }
+      }      
     });
+
+    let finalResult:Variable[] = [];
+    variablesArray.forEach((varArray:Variable[]) => {finalResult.push(...varArray)});
+    return finalResult;
+    
   }
 
   // It will be ordered by the Provided variable

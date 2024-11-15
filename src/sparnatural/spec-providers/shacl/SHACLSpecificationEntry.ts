@@ -38,25 +38,13 @@ export abstract class SHACLSpecificationEntry extends BaseRDFReader implements I
       );
       
       if (faIcon.length > 0) {
-        return SHACLSpecificationEntry.buildIconHtml(faIcon[0].value);
+        return faIcon[0].value;
       } else {
         var icons = this.graph.readProperty(factory.namedNode(this.uri), VOLIPI.ICON);
         if (icons.length > 0) {
           return icons[0].value;
-        } else {
-          // this is ugly, just so it aligns with other entries having an icon
-          return "<span style='font-size: 175%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
-        }
+        } 
       }
-    }
-
-    static buildIconHtml(iconCode:string) {
-      // use of fa-fw for fixed-width icons
-      return (
-        "<span style='font-size: 170%;' >&nbsp;<i class='" +
-        iconCode +
-        " fa-fw'></i></span>"
-      );
     }
 
     /**

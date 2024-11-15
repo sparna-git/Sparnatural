@@ -286,6 +286,13 @@ The customization object structure is outlined below. All items are optionnal.
   },
   headers: {
     "header name": "value"
+  },
+  sparqlHandler: {
+    executeSparql(
+        sparql:string,
+        callback: (data: any) => void,
+        errorCallback?:(error: any) => void
+    ):void;
   }
 }
 ```
@@ -301,7 +308,7 @@ export class RDFTerm {
 }
 ```
 
-### example of specifying a custom data provider function
+### Example of custom data provider function
 
 ```javascript
 sparnatural.addEventListener("init", (event) => {  
@@ -355,6 +362,27 @@ sparnatural.addEventListener("init", (event) => {
   sparnatural.customization = {
     headers: { 
       "User-Agent" : "This is Sparnatural calling"
+    }
+  }
+});
+```
+
+### Example of custom SPARQL handler
+
+```javascript
+sparnatural.addEventListener("init", (event) => {
+  sparnatural.customization = {
+    sparqlHandler: { 
+      executeSparql(
+        sparql:string,
+        callback: (data: {}) => void,
+        errorCallback?:(error: any) => void
+      ):void {
+          console.log("Received SPARQL "+sparql);
+          // ... execute SPARQL ...
+          // fire callback with SPARQL results
+          callback({});
+      }
     }
   }
 });

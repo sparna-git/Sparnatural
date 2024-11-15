@@ -3,13 +3,15 @@ export class DataService {
     protected title:{
         [lang:string]:string
     }
-
     protected endpointURL:string;
+    // pointer to statistics file
+    protected extent?:string;
     
     constructor(obj: any) {
         this.id = obj.id;
         this.endpointURL = obj.endpointURL;
         this.title = obj.title;
+        this.extent = obj.extent;
     }
 
     public getEndpointURL():string {
@@ -26,5 +28,9 @@ export class DataService {
 
     public getId():string {
         return this.id;
+    }
+
+    public getExtent():string {
+        return this.extent;
     }
 }

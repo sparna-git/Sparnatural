@@ -10,6 +10,8 @@
 //StartEndClassGroup
 @use './citeriagroup/startendclassgroup/startendclassgroup.scss';
 @use './citeriagroup/startendclassgroup/classtypeid.scss';
+//---Millers columns class selector
+@use './citeriagroup/startendclassgroup/hierarchicalclassselectbuilder.scss';
 //Actions
 @use './citeriagroup/actions/actionand.scss';
 @use './citeriagroup/actions/actionwhere.scss';
@@ -37,4 +39,4 @@
 @use './link-and-component.scss';
 @use './link-where-child.scss';
 // jquery nice-select
-@use './citeriagroup/nice-select/nice-select.scss';
+@use './citeriagroup/nice-select/nice-select.scss'

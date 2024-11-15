@@ -6,7 +6,7 @@ import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { ListDataProviderIfc, NoOpListDataProvider } from "./data/DataProviders";
+import { ListDataProviderIfc, RdfTermDatasourceItem, NoOpListDataProvider } from "./data/DataProviders";
 import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";
 import HTMLComponent from "../HtmlComponent";
@@ -69,7 +69,7 @@ export class ListWidget extends AbstractWidget {
       ${I18n.labels.ListWidgetNoItem}
     </div>`);
 
-    let callback = (items:{term:RDFTerm;label:string;group?:string}[]) => {
+    let callback = (items:RdfTermDatasourceItem[]) => {
 
       if (items.length > 0) {
   
@@ -79,8 +79,10 @@ export class ListWidget extends AbstractWidget {
         if(groups.length == 1 && groups[0] == undefined) {
           // no groups were defined at all
           items.forEach(item => {
+            // select item label : either displayed label, or itemLabel if provided
+            let itemLabel = item.itemLabel?item.itemLabel:item.label;
             this.selectHtml.append(
-              $("<option value='" + JSON.stringify(item.term) + "'>" + item.label + "</option>")
+              $("<option value='" + JSON.stringify(item.term) + "' data-itemLabel='"+itemLabel+"'>" + item.label + "</option>")
             );
           });
         } else {
@@ -88,7 +90,10 @@ export class ListWidget extends AbstractWidget {
           groups.forEach(group => {
             let html = "<optgroup label=\""+group+"\">";
             items.filter(item => (item.group == group)).forEach(item => {
-              html += "<option value='" + JSON.stringify(item.term) + "'>" + item.label + "</option>";
+              // select item label : either displayed label, or itemLabel if provided
+              let itemLabel = item.itemLabel?item.itemLabel:item.label;
+              
+              html += "<option value='" + JSON.stringify(item.term) + "' data-itemLabel='"+itemLabel+"'>" + item.label + "</option>";
             });
             html += "</optgroup>"
             this.selectHtml.append($(html));
@@ -111,7 +116,8 @@ export class ListWidget extends AbstractWidget {
           if (option.length > 1)
             throw Error("List widget should allow only for one el to be selected!");
 
-            let listWidgetValue: WidgetValue = this.buildValue(option[0].value, option[0].label);
+            let itemLabel = option[0].getAttribute("data-itemLabel");
+            let listWidgetValue: WidgetValue = this.buildValue(option[0].value, itemLabel);
             this.renderWidgetVal(listWidgetValue);
         });
 

@@ -25,9 +25,9 @@ import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecific
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { SearchRegexWidgetValue } from "../../components/widgets/SearchRegexWidget";
 import { DateTimePickerValue } from "../../components/widgets/timedatepickerwidget/TimeDatePickerWidget";
-import { buildDateRangeOrExactDatePattern } from "../../components/widgets/timedatepickerwidget/TimeDatePattern";
 import { MapValue } from "../../components/widgets/MapWidget";
 import { LatLng } from "leaflet";
+import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
 
 const factory = new DataFactory();
 
@@ -403,65 +403,58 @@ export class SearchRegexValueBuilder
   }
 }
 
-export class DateTimePickerValueBuilder
-  extends BaseValueBuilder
-  implements ValueBuilderIfc
-{
+export class DateTimePickerValueBuilder extends BaseValueBuilder implements ValueBuilderIfc {
+
   build(): Pattern[] {
-    let widgetValues = this.values as DateTimePickerValue["value"][];
+      
+      let widgetValues = this.values as DateTimePickerValue["value"][];
+      
+      let specProperty:ISpecificationProperty = this.specProvider.getProperty(this.propertyVal.type);
+      let beginDateProp = specProperty.getBeginDateProperty();
+      let endDateProp = specProperty.getEndDateProperty();
+  
+      if(beginDateProp && endDateProp) {
+        // special config with a begin and end date
+        let exactDateProp = specProperty.getExactDateProperty();
 
-    let beginDateProp = this.specProvider
-      .getProperty(this.propertyVal.type)
-      .getBeginDateProperty();
-    let endDateProp = this.specProvider
-      .getProperty(this.propertyVal.type)
-      .getEndDateProperty();
+        // we have some values, generate the filters 
+        return [
+          
+          SparqlFactory.buildDateRangeOrExactDatePattern(
+            widgetValues[0].start?factory.literal(
+              this.#formatSparqlDate(widgetValues[0].start),
+              factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+            ):null,
+            widgetValues[0].stop?factory.literal(
+              this.#formatSparqlDate(widgetValues[0].stop),
+              factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+            ):null,
+            factory.variable(this.startClassVal.variable),
+            factory.namedNode(beginDateProp),
+            factory.namedNode(endDateProp),
+            exactDateProp != null?factory.namedNode(exactDateProp):null,
+            factory.variable(this.endClassVal.variable)
+          )
+        ];
+        
 
-    if (beginDateProp != null && endDateProp != null) {
-      let exactDateProp = this.specProvider
-        .getProperty(this.propertyVal.type)
-        .getExactDateProperty();
-
-      return [
-        buildDateRangeOrExactDatePattern(
-          widgetValues[0].start
-            ? factory.literal(
-                this.#formatSparqlDate(widgetValues[0].start),
-                factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-              )
-            : null,
-          widgetValues[0].stop
-            ? factory.literal(
-                this.#formatSparqlDate(widgetValues[0].stop),
-                factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-              )
-            : null,
-          factory.variable(this.startClassVal.variable),
-          factory.namedNode(beginDateProp),
-          factory.namedNode(endDateProp),
-          exactDateProp != null ? factory.namedNode(exactDateProp) : null,
-          factory.variable(this.startClassVal.variable)
-        ),
-      ];
-    } else {
-      return [
-        SparqlFactory.buildFilterRangeDateOrNumber(
-          widgetValues[0].start
-            ? factory.literal(
-                this.#formatSparqlDate(widgetValues[0].start),
-                factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-              )
-            : null,
-          widgetValues[0].stop
-            ? factory.literal(
-                this.#formatSparqlDate(widgetValues[0].stop),
-                factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
-              )
-            : null,
-          factory.variable(this.endClassVal.variable)
-        ),
-      ];
-    }
+      } else {
+        // normal case, standard config
+        return [
+          SparqlFactory.buildFilterRangeDateOrNumber(
+            widgetValues[0].start?factory.literal(
+              this.#formatSparqlDate(widgetValues[0].start),
+              factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+            ):null,
+            widgetValues[0].stop?factory.literal(
+              this.#formatSparqlDate(widgetValues[0].stop),
+              factory.namedNode("http://www.w3.org/2001/XMLSchema#dateTime")
+            ):null,
+            factory.variable(this.endClassVal.variable)
+          )
+        ];
+      } 
+ 
   }
 
   /**
@@ -470,57 +463,52 @@ export class DateTimePickerValueBuilder
    * @returns true if the property has been configured with a begin and an end date property
    */
   isBlockingObjectProp() {
-    let beginDateProp = this.specProvider
-      .getProperty(this.propertyVal.type)
-      .getBeginDateProperty();
-    let endDateProp = this.specProvider
-      .getProperty(this.propertyVal.type)
-      .getEndDateProperty();
+      let beginDateProp = this.specProvider.getProperty(this.propertyVal.type).getBeginDateProperty();
+      let endDateProp = this.specProvider.getProperty(this.propertyVal.type).getEndDateProperty();
 
-    return beginDateProp != null && endDateProp != null;
+      return (
+        this.values?.length == 1
+        &&
+        !(this.values[0] instanceof SelectAllValue)
+        &&
+        beginDateProp != null
+        &&
+        endDateProp != null
+      );
   }
 
   /**
-   *
+   * 
    * @param date Formats the date to insert in the SPARQL query. We cannot rely on toISOString() method
    * since it does not properly handle negative year and generates "-000600-12-31" while we want "-0600-12-31"
-   * @returns
+   * @returns 
    */
-  #formatSparqlDate(date: Date) {
-    if (date == null) return null;
+  #formatSparqlDate(date:Date) {
+      if(date == null) return null;
 
-    return (
-      this.#padYear(date.getUTCFullYear()) +
-      "-" +
-      this.#pad(date.getUTCMonth() + 1) +
-      "-" +
-      this.#pad(date.getUTCDate()) +
-      "T" +
-      this.#pad(date.getUTCHours()) +
-      ":" +
-      this.#pad(date.getUTCMinutes()) +
-      ":" +
-      this.#pad(date.getUTCSeconds()) +
-      "Z"
-    );
+      return this.#padYear(date.getUTCFullYear()) +
+      '-' + this.#pad(date.getUTCMonth() + 1) +
+      '-' + this.#pad(date.getUTCDate()) +
+      'T' + this.#pad(date.getUTCHours()) +
+      ':' + this.#pad(date.getUTCMinutes()) +
+      ':' + this.#pad(date.getUTCSeconds()) +
+      'Z';
   }
 
-  #pad(number: number) {
-    if (number < 10) {
-      return "0" + number;
-    }
-    return number;
+  #pad(number:number) {
+      if (number < 10) {
+      return '0' + number;
+      }
+      return number;
   }
 
-  #padYear(number: number) {
-    let absoluteValue = number < 0 ? -number : number;
-    let absoluteString =
-      absoluteValue < 1000
-        ? absoluteValue.toString().padStart(4, "0")
-        : absoluteValue.toString();
-    let finalString = number < 0 ? "-" + absoluteString : absoluteString;
-    return finalString;
+  #padYear(number:number) {
+      let absoluteValue = (number < 0)?-number:number;
+      let absoluteString = (absoluteValue < 1000)?absoluteValue.toString().padStart(4,'0'):absoluteValue.toString();
+      let finalString = (number < 0)?"-"+absoluteString:absoluteString;
+      return finalString;
   }
+
 }
 
 const GEOFUNCTIONS_NAMESPACE = "http://www.opengis.net/def/function/geosparql/";

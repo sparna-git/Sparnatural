@@ -1,0 +1,17 @@
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT ?class ?labelFR ?labelEN ?tooltipFR ?tooltipEN ?theOrder ?icon ?sparqlString
+WHERE {
+    { 
+        {?class rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> .}
+        UNION
+        {?class rdfs:subClassOf rdfs:Literal .}
+    }
+    OPTIONAL { ?class rdfs:label ?labelFr . FILTER(lang(?labelFr) = "fr") BIND(STR(?labelFr) AS ?labelFR)}
+    OPTIONAL { ?class rdfs:label ?labelEn . FILTER(lang(?labelEn) = "en") BIND(STR(?labelEn) AS ?labelEN)}
+    OPTIONAL { ?class <http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip> ?tooltipFr . FILTER(lang(?tooltipFr) = "fr") BIND(STR(?tooltipFr) AS ?tooltipFR)}
+    OPTIONAL { ?class <http://data.sparna.fr/ontologies/sparnatural-config-core#tooltip> ?tooltipEn . FILTER(lang(?tooltipEn) = "en") BIND(STR(?tooltipEn) AS ?tooltipEN)}
+    OPTIONAL { ?class <http://data.sparna.fr/ontologies/sparnatural-config-core#order> ?order . BIND(STR(?order) AS ?theOrder)}
+    OPTIONAL { ?class <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> ?icon . }
+    OPTIONAL { ?class <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> ?sparqlString . }
+}
+ORDER BY ?order

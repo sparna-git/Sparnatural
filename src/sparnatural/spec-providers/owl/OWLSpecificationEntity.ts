@@ -7,6 +7,7 @@ import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';
 import { DagIfc, Dag } from "../../dag/Dag";
+import ISpecificationProperty from "../ISpecificationProperty";
 
 const factory = new DataFactory();
 
@@ -48,7 +49,14 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     }
 
     getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
-      return new Dag<ISpecificationEntity>();
+      // 1. get the entities that are in a domain of a property
+    let entities:OWLSpecificationEntity[] = this.getConnectedEntities().map(s => this.provider.getEntity(s) as OWLSpecificationEntity) as OWLSpecificationEntity[];
+
+    // build dag from flat list
+    let dag:Dag<OWLSpecificationEntity> = new Dag<OWLSpecificationEntity>();
+    dag.initFlatTreeFromFlatList(entities);
+
+    return dag;
     }
 
 
@@ -82,6 +90,22 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         items = this.provider._sort(items);
     
         return items;
+    }
+
+    
+    /**
+     * Return the tree of properties connecting this entity to the specified range entity
+     * @param range The URI of the selected target entity
+     * @returns 
+     */
+    getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
+      // 1. get list of properties
+      let entities:ISpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as ISpecificationProperty[];
+
+      // 2. turn it into a flat tree
+      let dag:Dag<ISpecificationProperty> = new Dag<ISpecificationProperty>();
+      dag.initFlatTreeFromFlatList(entities);
+      return dag;
     }
 
     isLiteralEntity(): boolean {

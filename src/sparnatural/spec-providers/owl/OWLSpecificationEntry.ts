@@ -52,26 +52,25 @@ export class OWLSpecificationEntry extends BaseRDFReader implements ISpecificati
     }
 
     getIcon(): string {
-        var faIcon = this.graph.readProperty(
-            factory.namedNode(this.uri),
-            factory.namedNode(Config.FA_ICON)
-        );
-        if (faIcon.length > 0) {
-          // use of fa-fw for fixed-width icons
-          return (
-            "<span style='font-size: 170%;' >&nbsp;<i class='" +
-            faIcon[0].value +
-            " fa-fw'></i></span>"
-          );
+      var faIcon = this.graph.readProperty(
+        factory.namedNode(this.uri),
+        VOLIPI.ICON_NAME
+      );
+      
+      if (faIcon.length > 0) {
+        return faIcon[0].value;
+      } else {
+        var icons = this.graph.readProperty(factory.namedNode(this.uri), VOLIPI.ICON);
+        if (icons.length > 0) {
+          return icons[0].value;
         } else {
-          var icons = this.graph.readProperty(factory.namedNode(this.uri), factory.namedNode(Config.ICON));
+          // backward compatibility : read config-core:faIcon from OWL config
+          var icons = this.graph.readProperty(factory.namedNode(this.uri), factory.namedNode(Config.FA_ICON));
           if (icons.length > 0) {
             return icons[0].value;
-          } else {
-            // this is ugly, just so it aligns with other entries having an icon
-            return "<span style='font-size: 175%;' >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>";
           }
         }
+      }
     }
 
     getHighlightedIcon(): string|undefined {

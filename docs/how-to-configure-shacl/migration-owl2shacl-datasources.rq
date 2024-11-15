@@ -1,0 +1,17 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX core: <http://data.sparna.fr/ontologies/sparnatural-config-core#>
+PREFIX datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?datasource ?queryTemplate ?labelProperty ?labelPath ?childrenPath
+WHERE {
+    ?datasource a ?datasourceType . 
+    VALUES ?datasourceType { datasources:SparqlDatasource datasources:SparqlTreeChildrenDatasource datasources:SparqlTreeRootDatasource } .
+    OPTIONAL { ?datasource datasources:queryTemplate ?queryTemplate . }
+    OPTIONAL { ?datasource datasources:labelProperty ?labelProperty }
+    OPTIONAL { ?datasource datasources:labelPath ?labelPath }
+    OPTIONAL { ?datasource datasources:childrenPath ?childrenPath }
+    OPTIONAL { ?datasource datasources:queryString ?labelProperty }
+    
+}

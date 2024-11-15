@@ -1,0 +1,172 @@
+{
+  "name" : "Query",
+  "schema" : {
+    "$defs" : {
+      "Branch" : {
+        "type" : "object",
+        "properties" : {
+          "line" : {
+            "type" : "object",
+            "properties" : {
+              "s" : {
+                "type" : "string",
+                "description" : "The subject variable name, such as '?Person_1'"
+              },
+              "p" : {
+                "type" : "string",
+                "description" : "The full URI of the predicate",
+                "enum" : [ 
+"https://data.mydomain.com/ontologies/sparnatural-config/Artwork_label",
+"https://data.mydomain.com/ontologies/sparnatural-config/Artwork_author",
+"https://data.mydomain.com/ontologies/sparnatural-config/Artwork_creationYear",
+"https://data.mydomain.com/ontologies/sparnatural-config/Artwork_displayedAt",
+"https://data.mydomain.com/ontologies/sparnatural-config/Artwork_thumbnail",
+"https://data.mydomain.com/ontologies/sparnatural-config/Artwork_description",
+"https://data.mydomain.com/ontologies/sparnatural-config/Museum_country",
+"https://data.mydomain.com/ontologies/sparnatural-config/Museum_label",
+"https://data.mydomain.com/ontologies/sparnatural-config/Museum_numberOfVisitors",
+"https://data.mydomain.com/ontologies/sparnatural-config/Museum_displays",
+"https://data.mydomain.com/ontologies/sparnatural-config/Museum_inWikidata",
+"https://data.mydomain.com/ontologies/sparnatural-config/Museum_thumbnail",
+"https://data.mydomain.com/ontologies/sparnatural-config/Museum_description",
+"https://data.mydomain.com/ontologies/sparnatural-config/Country_countryOf",
+"https://data.mydomain.com/ontologies/sparnatural-config/Country_label",
+"https://data.mydomain.com/ontologies/sparnatural-config/Country_deathPlace",
+"https://data.mydomain.com/ontologies/sparnatural-config/Country_birthPlace",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_bornIn",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_diedIn",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_label",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_birthDate",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_classifiedIn",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_created",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_deathYear",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_movement",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_thumbnail",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person_description",
+"https://data.mydomain.com/ontologies/sparnatural-config/Movement_movementIncludes",
+"https://data.mydomain.com/ontologies/sparnatural-config/Movement_description",
+"https://data.mydomain.com/ontologies/sparnatural-config/Movement_label",
+"https://data.mydomain.com/ontologies/sparnatural-config/MuseumWikidata_situe_a"
+                 ]
+              },
+              "o" : {
+                "type" : "string",
+                "description" : "The object variable name, such as '?Country_2'"
+              },
+              "sType" : {
+                "type" : "string",
+                "description" : "The full URI of the type of the subject",
+                "enum" : [
+"https://data.mydomain.com/ontologies/sparnatural-config/Artwork",
+"https://data.mydomain.com/ontologies/sparnatural-config/Museum",
+"https://data.mydomain.com/ontologies/sparnatural-config/Country",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person",
+"https://data.mydomain.com/ontologies/sparnatural-config/Movement",
+"https://data.mydomain.com/ontologies/sparnatural-config/Category",
+"https://data.mydomain.com/ontologies/sparnatural-config/MuseumWikidata",
+"https://data.mydomain.com/ontologies/sparnatural-config/Image",
+"https://data.mydomain.com/ontologies/sparnatural-config/Date",
+"https://data.mydomain.com/ontologies/sparnatural-config/Position",
+"https://data.mydomain.com/ontologies/sparnatural-config/Text",
+"https://data.mydomain.com/ontologies/sparnatural-config/Number"
+                ]
+              },
+              "oType" : {
+                "type" : "string",
+                "description" : "The full URI of the type of the object",
+                "enum" : [
+"https://data.mydomain.com/ontologies/sparnatural-config/Artwork",
+"https://data.mydomain.com/ontologies/sparnatural-config/Museum",
+"https://data.mydomain.com/ontologies/sparnatural-config/Country",
+"https://data.mydomain.com/ontologies/sparnatural-config/Person",
+"https://data.mydomain.com/ontologies/sparnatural-config/Movement",
+"https://data.mydomain.com/ontologies/sparnatural-config/Category",
+"https://data.mydomain.com/ontologies/sparnatural-config/MuseumWikidata",
+"https://data.mydomain.com/ontologies/sparnatural-config/Image",
+"https://data.mydomain.com/ontologies/sparnatural-config/Date",
+"https://data.mydomain.com/ontologies/sparnatural-config/Position",
+"https://data.mydomain.com/ontologies/sparnatural-config/Text",
+"https://data.mydomain.com/ontologies/sparnatural-config/Number"
+                ]
+              },
+              "values" : {
+                "description" : "The values used as search criteria in this line, when the values are URIs from a list, autocomplete or tree widget",
+                "type" : "array",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "type" : {
+                      "type" : "string",
+                      "enum" : [ "LITERAL", "BNODE", "URI" ],
+                      "description" : "The type of the RDF node, either literal, blank node or URI"
+                    },
+                    "value" : {
+                      "type" : "string",
+                      "description" : "The value, either the URI itself, the lexical form of the literal, or the blank node identifier"
+                    },
+                    "xml:lang" : {
+                      "type" : "string",
+                      "description" : "The language code of the value, if the term is a literal with a language."
+                    },
+                    "datatype" : {
+                      "type" : "string",
+                      "description" : "The full URI of the datatype of the Literal, it it has one."
+                    }
+                  },
+                  "required" : [ "type", "value", "xml:lang", "datatype" ],
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "required" : [ "s", "p", "o", "sType", "oType", "values" ],
+            "additionalProperties" : false,
+            "description" : "One line of criteria in Sparnatural, corresponding to a subject, a predicate, an object, and also the type (rdf:type) of the subject and the object"
+          },
+          "children" : {
+            "description" : "The children branches. This is a recusrsive reference. The array may be empty if there are no children.",
+            "type" : "array",
+            "items" : {
+              "$ref" : "#/$defs/Branch"
+            }
+          },
+          "optional" : {
+            "type" : "boolean",
+            "description" : "Whether the OPTIONAL SPARQL keyword is applied at this level, on this branch and all children branches"
+          },
+          "notExists" : {
+            "type" : "boolean",
+            "description" : "Whether the FILTER NOT EXISTS SPARQL keyword is applied at this level, on this branch and all children branches"
+          }
+        },
+        "required" : [ "line", "children", "optional", "notExists" ],
+        "additionalProperties" : false
+      }
+    },
+    "type" : "object",
+    "properties" : {
+      "branches" : {
+        "description" : "The query criterias, forming the 'WHERE' clause of the query",
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/$defs/Branch"
+        }
+      },
+      "distinct" : {
+        "type" : "boolean",
+        "description" : "Whether the SELECT clause will use a DISTINCT keyword."
+      },
+      "order" : {
+        "type" : "string",
+        "enum" : [ "ASC", "DESC", "NOORD" ],
+        "description" : "The order criteria to be applied to the first column of the query, either ascending, descending, or no order"
+      },
+      "variables" : {
+        "description" : "The variables in the SELECT clause of the query, either simple variables, or aggregated variables",
+        "type" : "array",
+        "items" : { }
+      }
+    },
+    "required" : [ "branches", "distinct", "order", "variables" ],
+    "additionalProperties" : false
+  }
+}

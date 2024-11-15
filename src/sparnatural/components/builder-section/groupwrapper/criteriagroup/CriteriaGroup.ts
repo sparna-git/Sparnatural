@@ -41,6 +41,7 @@ class CriteriaGroup extends HTMLComponent {
     this.StartClassGroup = new StartClassGroup(
       this,
       this.specProvider,
+      I18n.labels.StartClassTemporaryLabel,
       startClassVal,
       // Decides if the selectviewvarBtn is rendered on the startClass. That is the case only for the first one
       startClassEyeBtn

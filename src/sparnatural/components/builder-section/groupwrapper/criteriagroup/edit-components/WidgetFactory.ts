@@ -8,7 +8,7 @@ import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widge
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { ListDataProviderIfc, NoOpListDataProvider, SparqlListDataProvider, SortListDataProvider, AutocompleteDataProviderIfc, NoOpAutocompleteProvider, SparqlAutocompleDataProvider, TreeDataProviderIfc, NoOpTreeDataProvider, SparqlTreeDataProvider, SortTreeDataProvider } from "../../../../widgets/data/DataProviders";
 import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { SparqlFetcherFactory } from "../../../../widgets/data/UrlFetcher";
+import { SparqlHandlerFactory, SparqlHandlerIfc } from "../../../../widgets/data/SparqlHandler";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
@@ -34,12 +34,13 @@ export class WidgetFactorySettings {
     localCacheDataTtl?: number;
     
     customization? : {
-      headers?: Map<string,string>;
       autocomplete?: Partial<AutocompleteConfiguration>,
       list?: Partial<ListConfiguration>,   
       tree?: Partial<TreeConfiguration>,
       number?: Partial<NumberConfiguration>,
-      map?: Partial<MapConfiguration>
+      map?: Partial<MapConfiguration>,
+      headers?: Map<string,string>,
+      sparqlHandler?: SparqlHandlerIfc
     }
 }
 
@@ -52,7 +53,7 @@ export class WidgetFactory {
     settings: WidgetFactorySettings;
     catalog:Catalog;
 
-    private sparqlFetcherFactory:SparqlFetcherFactory;
+    private sparqlFetcherFactory:SparqlHandlerFactory;
     private sparqlPostProcessor:{ semanticPostProcess: (sparql:string)=>string };
 
     constructor(
@@ -67,11 +68,12 @@ export class WidgetFactory {
         this.catalog = catalog;
 
         // how to fetch a SPARQL query
-        this.sparqlFetcherFactory = new SparqlFetcherFactory(
+        this.sparqlFetcherFactory = new SparqlHandlerFactory(
             this.catalog,
             this.settings.language,
             this.settings.localCacheDataTtl,
-            this.settings.customization.headers
+            this.settings.customization.headers,
+            this.settings.customization.sparqlHandler
         );
 
         // how to post-process the generated SPARQL after it is constructed and before it is send
@@ -149,7 +151,7 @@ export class WidgetFactory {
               listDataProvider = new SparqlListDataProvider(
     
                 // endpoint URL
-                this.sparqlFetcherFactory.buildSparqlFetcher(
+                this.sparqlFetcherFactory.buildSparqlHandler(
                     datasource.sparqlEndpointUrl != null
                     ? [datasource.sparqlEndpointUrl]
                     : this.settings.endpoints
@@ -238,7 +240,7 @@ export class WidgetFactory {
               autocompleteDataProvider = new SparqlAutocompleDataProvider(
     
                 // endpoint URL
-                this.sparqlFetcherFactory.buildSparqlFetcher(
+                this.sparqlFetcherFactory.buildSparqlHandler(
                     datasource.sparqlEndpointUrl != null
                     ? [datasource.sparqlEndpointUrl]
                     : this.settings.endpoints
@@ -370,7 +372,7 @@ export class WidgetFactory {
     
                 // endpoint URL
                 // we read it on the roots datasource
-                this.sparqlFetcherFactory.buildSparqlFetcher(
+                this.sparqlFetcherFactory.buildSparqlHandler(
                     treeRootsDatasource.sparqlEndpointUrl != null
                     ? [treeRootsDatasource.sparqlEndpointUrl]
                     : this.settings.endpoints

@@ -8,8 +8,9 @@ import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { RdfStore } from "rdf-stores";
 import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../StoreModel";
-import { Dag, DagIfc } from "../../dag/Dag";
+import { DagIfc, Dag } from "../../dag/Dag";
 import ISpecificationEntity from "../ISpecificationEntity";
+import ISpecificationProperty from "../ISpecificationProperty";
 
 const factory = new DataFactory();
 
@@ -80,23 +81,24 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     }
 
 
-    getConnectingProperties(range: string): string[] {
+    getConnectingProperties(range: string): string[] {        
+        // read all sh:property and find the ones that can target the selected class
         var items: string[] = [];
-
-        // read all sh:property
-        //let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
         let propShapes = this.getProperties();
-        
         propShapes
         .forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
-            if(!prop.isDeactivated()) {
-                let pRange = prop.getRange();
-                if(pRange.indexOf(range) > -1) {
-                    items.push(ps);
-                }
+            let pRange = prop.getRange();
+            if(pRange.indexOf(range) > -1) {
+                items.push(ps);
             }
         });
+
+        // add properties available from parents - recursively
+        let parents = this.provider.getEntity(range).getParents();
+        parents.forEach(aParent => {
+            items = [...items, ...this.getConnectingProperties(aParent)];
+        })
 
         // dedup, although probably dedup is not necessary here
         var dedupItems = [...new Set(items)];
@@ -105,23 +107,53 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         // return dedup array of strings
         return sortedDedups.map(e => e.getId());
     }
+
+    /**
+     * Return the tree of properties connecting this entity to the specified range entity
+     * @param range The URI of the selected target entity
+     * @returns 
+     */
+    getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
+        // 1. get list of properties
+        let properties:ISpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as ISpecificationProperty[];
+
+        // retrive the potential parents
+        while(!properties.every(property => {
+            return property.getParents().every(parent => {
+                return (properties.find(anotherProperty => anotherProperty.getId() === parent) != undefined);
+            });      
+        })) {
+            let parentsToAdd:ISpecificationProperty[] = [];
+            properties.forEach(property => {
+                property.getParents().forEach(parent => {
+                    if(!properties.find(anotherProperty => anotherProperty.getId() === parent)) {
+                        parentsToAdd.push(this.provider.getProperty(parent) as ISpecificationProperty);
+                    }
+                })
+            });
+            parentsToAdd.forEach(p => properties.push(p));
+        }
+
+        // 2. turn it into a flat tree
+        let dag:Dag<ISpecificationProperty> = new Dag<ISpecificationProperty>();
+        // dag.initFlatTreeFromFlatList(properties);
+        dag.initFromParentableAndIdAbleEntity(properties, []);
+        return dag;
+    }
     
 
     getConnectedEntities(): string[] {
         var items: string[] = [];
 
-        // read all sh:property
-        // let propShapes = this._readAsResource(factory.namedNode(this.uri), SH.PROPERTY);
+        // read all properties that make sense for Sparnatural
         let propShapes = this.getProperties();
 
         propShapes
         .forEach(ps => {            
             // read the property
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
-            if(!prop.isDeactivated()) {
-                // and then read their ranges
-                items.push(...prop.getRange());
-            }
+            // and then read their ranges
+            items.push(...prop.getRange());
         });
 
         // dedup
@@ -186,7 +218,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     }
     
     /**
-     * @returns all properties available on this node shape, including inherited properties from superclasses
+     * @returns all (non-deactivated) properties available on this node shape, including inherited properties from superclasses
      */
     getProperties(): string[] {
         var items: string[] = [];
@@ -196,30 +228,17 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             this.graph.readProperty(factory.namedNode(this.uri), SH.PROPERTY)
             .map(node => node.value);
                 
-        // add all properties from node shapes of superclasses
-        /*
-        let superClasses:Term[] = this.getSuperClasses();
-        superClasses.forEach(sc => {
-            let ns = this.provider.getNodeShapeTargetingClass(sc as Quad_Subject);
-            if(ns) {
-                let superClassEntity = new SHACLSpecificationEntity(ns.value,this.provider, this.store, this.lang);
-                propShapes.push(...superClassEntity.getProperties());
-            } else {
-                console.warn("Warning, cannot find a node shape targeting class "+sc.value);
-            }
-        });
-        */
-
+        // add all properties from parents (either through sh:node or sh:targetClass/rdfs:subClassOf/^sh:targetClass)
         let parents:string[] = this.getParents();
         parents.forEach(p => {
             let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);
             propShapes.push(...parentEntity.getProperties());
         });
 
+        // filter properties not to be shown
         propShapes
         .forEach(ps => {
-            let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
-            if(!prop.isDeactivated()) {
+            if(SHACLSpecificationProperty.isSparnaturalSHACLSpecificationProperty(ps, this.store)) {
                 items.push(ps);
             }
         });
@@ -246,12 +265,13 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     }
 
     /**
-     * @returns true if this shape has a target, either a targetClass or sh:target
+     * @returns true if this shape has a target, either a targetClass or sh:target, or is itself a Class
      */
     hasTypeCriteria(): boolean {
         var hasTargetClass = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null);
         var hasTarget = this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null);
-        return (hasTargetClass || hasTarget);
+        var isItselfClass = this.graph.hasTriple(factory.namedNode(this.uri), RDF.TYPE, RDFS.CLASS);
+        return (hasTargetClass || hasTarget || isItselfClass);
     }
 
     /**
@@ -336,7 +356,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             .filter(term => (term != undefined));
 
         // get the children from sh:node
-        let childrenFromShNode = this.#getInverseOfShNode();
+        let childrenFromShNode = this.#getInverseOfShNodeForExplicitNodeShapes();
         
         // concat parents from superclasses and from node - deduplicated
         let children = [...new Set([...cildrenFromSuperClasses, ...childrenFromShNode])];
@@ -396,10 +416,18 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     }
 
     /**
-     * @returns the NodeShape IRI that reference this one with sh:node
+     * @returns the NodeShapes IRI that reference this one with sh:node
      */
-    #getInverseOfShNode(): Term[] {
-        return this.graph.findSubjectsOf(SH.NODE, factory.namedNode(this.uri));
+    #getInverseOfShNodeForExplicitNodeShapes(): Term[] {
+        let subjects:Quad_Subject[] = this.graph.findSubjectsOf(SH.NODE, factory.namedNode(this.uri));
+        // keep only the sh:node references from NodeShapes, not property shapes or sh:or on property shapes
+        // there could be more precise ways of doing this
+        return subjects.filter(term => 
+            term.termType == "NamedNode"
+            &&
+            this.graph.hasTriple(term, RDF.TYPE, SH.NODE_SHAPE)
+        )
+
     }
 
     isRangeOf(n3store:RdfStore, shapeUri:any) {
@@ -468,6 +496,10 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
         return new Array<string>();
     }
 
+    getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
+        return new Dag<ISpecificationProperty>();
+    }
+
     isLiteralEntity(): boolean {
         return true;
     }
@@ -514,7 +546,7 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
     }
 
     getIcon(): string {
-        return SHACLSpecificationEntry.buildIconHtml(this.icon);
+        return this.icon;
     }
 
     getHighlightedIcon(): string {
@@ -526,6 +558,9 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
     }
 
     getParents(): string[] {
+        return [];
+    }
+    getChildren(): string[] {
         return [];
     }
 }

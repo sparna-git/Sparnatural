@@ -1,0 +1,2212 @@
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct:  <http://purl.org/dc/terms/> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix void: <http://rdfs.org/ns/void#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P73>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P73> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P14>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P14> ;
+        void:distinctObjects  "9936"^^xsd:int , "1"^^xsd:int ;
+        void:property         dct:identifier ;
+        void:triples          "9936"^^xsd:int , "1"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P43>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P43> ;
+        void:distinctObjects  "110227"^^xsd:int ;
+        void:property         <http://www.w3.org/ns/org#hasMembership> ;
+        void:triples          "110227"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P113>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P113> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#decisionAboutId> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P86>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P86> ;
+        void:distinctObjects  "854"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_participant_person> ;
+        void:triples          "130801"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P13>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P13> ;
+        void:distinctObjects  "29762"^^xsd:int , "27"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#altLabel> ;
+        void:triples          "83367"^^xsd:int , "264"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P209>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P209> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23Resource>
+        dct:conformsTo  <http://www.w3.org/2000/01/rdf-schema#Resource> ;
+        void:class      <http://www.w3.org/2000/01/rdf-schema#Resource> ;
+        void:entities   "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P56>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P56> ;
+        void:distinctObjects  "246"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#refers_to> ;
+        void:triples          "526"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2004%2F02%2Fskos%2Fcore%23Concept>
+        dct:conformsTo          <http://www.w3.org/2004/02/skos/core#Concept> ;
+        void:class              <http://www.w3.org/2004/02/skos/core#Concept> ;
+        void:entities           "487"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P82> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P178> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P179> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P85>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P85> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P26>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P26> ;
+        void:distinctObjects  "469"^^xsd:int , "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#numbering> ;
+        void:triples          "964"^^xsd:int , "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P210>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P210> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.opengis.net/ont/geosparql#sfWithin> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P55>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P55> ;
+        void:distinctObjects  "11"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#membershipClassification> ;
+        void:triples          "99123"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "15023"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/DELEGATION_PARLIAMENTARY>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "2251"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/WORKING_GROUP>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "2273"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/COMMITTEE_PARLIAMENTARY_SUB>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "35905"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/COMMITTEE_PARLIAMENTARY_STANDING>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "10649"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/EU_INSTITUTION>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "2122"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/COMMITTEE_PARLIAMENTARY_TEMPORARY>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "401"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/COMMITTEE_PARLIAMENTARY_SPECIAL>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "3511"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/DELEGATION_JOINT_COMMITTEE>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "13402"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/EU_POLITICAL_GROUP>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "3732"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/DELEGATION_PARLIAMENTARY_ASSEMBLY>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "9854"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/NATIONAL_CHAMBER>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P125>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P125> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#number_of_votes_against> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P98>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P98> ;
+        void:distinctObjects  "14"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#hasRoom> ;
+        void:triples          "901"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P25>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P25> ;
+        void:distinctObjects  "2826"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/givenName> ;
+        void:triples          "5243"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P68>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P68> ;
+        void:distinctObjects  "0"^^xsd:int , "61"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_order> ;
+        void:triples          "0"^^xsd:int , "6893"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P197>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P197> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Process>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#Process> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#Process> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P171> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P167> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P169> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P165> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P168> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P162> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P172> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P163> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P166> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P170> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P164> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P97>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P97> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P167>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P167> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#created_a_realization_of> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P38>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P38> ;
+        void:distinctObjects  "794"^^xsd:int ;
+        void:property         dct:creator ;
+        void:triples          "30695"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P67>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P67> ;
+        void:distinctObjects  "1635"^^xsd:int ;
+        void:property         <http://www.w3.org/2006/vcard/ns#hasValue> ;
+        void:triples          "1635"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P222>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P222> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "22"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P102>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P102> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P137>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P137> ;
+        void:distinctObjects  "61051"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#title> ;
+        void:triples          "66287"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P37>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P37> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://www.w3.org/2006/vcard/ns#hasHonorificPrefix> ;
+        void:triples          "5245"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1377"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/honorific/MS>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "3868"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/honorific/MR>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P107>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P107> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_label> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P179>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P179> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "487"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P234>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P234> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P79>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P79> ;
+        void:distinctObjects  "10"^^xsd:int ;
+        void:property         dct:type ;
+        void:triples          "1095"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "58"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/YTB>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "60"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/FBP>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "72"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/LNK>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "279"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/FBW>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "9"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/BLG>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "6"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/TLG>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "284"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/IST>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/TKT>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "324"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/TWT>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "2"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/address-type/MST>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23Manifestation>
+        dct:conformsTo          <http://data.europa.eu/eli/ontology#Manifestation> ;
+        void:class              <http://data.europa.eu/eli/ontology#Manifestation> ;
+        void:entities           "184478"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P145> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P146> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P147> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P148> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P144> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P81>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P81> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#was_motivated_by> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P204>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P204> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P49>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P49> ;
+        void:distinctObjects  "14709"^^xsd:int ;
+        void:property         <http://www.w3.org/ns/org#memberDuring> ;
+        void:triples          "110228"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P119>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P119> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2000/01/rdf-schema#comment> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P51>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P51> ;
+        void:distinctObjects  "288"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#numbering> ;
+        void:triples          "473"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P19>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P19> ;
+        void:distinctObjects  "820"^^xsd:int , "11"^^xsd:int ;
+        void:property         dct:temporal ;
+        void:triples          "3617"^^xsd:int , "11"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P21>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P21> ;
+        void:distinctObjects  "61051"^^xsd:int , "24"^^xsd:int ;
+        void:property         dct:title ;
+        void:triples          "66377"^^xsd:int , "24"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P50>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P50> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#memberDuringParliamentaryTerm> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P120>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P120> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#decided_on_a_realization_of> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P93>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P93> ;
+        void:distinctObjects  "150"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "150"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P63>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P63> ;
+        void:distinctObjects  "776"^^xsd:int , "7528"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_id> ;
+        void:triples          "776"^^xsd:int , "7528"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2Fns%2Forg%23Role>
+        dct:conformsTo          <http://www.w3.org/ns/org#Role> ;
+        void:class              <http://www.w3.org/ns/org#Role> ;
+        void:entities           "29"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P94> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P93> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.mydomain.com%2Fontologies%2Fsparnatural-config%2FConcept_prefLabel> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P162>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P162> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#process_id> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P33>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P33> ;
+        void:distinctObjects  "228"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#foresees_change_of> ;
+        void:triples          "850"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P62>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P62> ;
+        void:distinctObjects  "1466"^^xsd:int ;
+        void:property         <http://publications.europa.eu/ontology/euvoc#officeAddress> ;
+        void:triples          "3880"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P132>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P132> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_voter_intended_against> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Fepvoc%23Room>
+        dct:conformsTo          <https://data.europarl.europa.eu/def/epvoc#Room> ;
+        void:class              <https://data.europarl.europa.eu/def/epvoc#Room> ;
+        void:entities           "14"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P157> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P158> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P159> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Participation>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#Participation> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#Participation> ;
+        void:entities           "26310"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P151> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P152> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P153> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P154> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P228>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P228> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P32>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P32> ;
+        void:distinctObjects  "309"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#upperOfficialFamilyName> ;
+        void:triples          "317"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P75>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P75> ;
+        void:distinctObjects  "358"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#documented_by_a_realization_of> ;
+        void:triples          "358"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P45>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P45> ;
+        void:distinctObjects  "151"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#isAboutDirectoryCode> ;
+        void:triples          "531"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P144>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P144> ;
+        void:distinctObjects  "184454"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#is_exemplified_by> ;
+        void:triples          "184478"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23WorkType>
+        dct:conformsTo          <http://data.europa.eu/eli/ontology#WorkType> ;
+        void:class              <http://data.europa.eu/eli/ontology#WorkType> ;
+        void:entities           "31"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.mydomain.com%2Fontologies%2Fsparnatural-config%2FConcept_prefLabel> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P186> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P187> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P15>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P15> ;
+        void:distinctObjects  "18"^^xsd:int , "1"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#work_type> ;
+        void:triples          "9936"^^xsd:int , "1"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P44>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P44> ;
+        void:distinctObjects  "5247"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#sortLabel> ;
+        void:triples          "5247"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P114>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P114> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_order> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23Country>
+        dct:conformsTo          <http://publications.europa.eu/ontology/euvoc#Country> ;
+        void:class              <http://publications.europa.eu/ontology/euvoc#Country> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P205> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P85> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P204> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P86> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P87>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P87> ;
+        void:distinctObjects  "229"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_excused_person> ;
+        void:triples          "1889"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P14>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P14> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         dct:source ;
+        void:triples          "3707"^^xsd:int , "11"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23DecisionMethod>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#DecisionMethod> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#DecisionMethod> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P232> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P231> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P186>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P186> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "31"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P57>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P57> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P86>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P86> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P27>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P27> ;
+        void:distinctObjects  "240"^^xsd:int , "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#itemNumberBegin> ;
+        void:triples          "850"^^xsd:int , "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P126>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P126> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#number_of_votes_abstention> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P99>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P99> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#referenceText> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P26>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P26> ;
+        void:distinctObjects  "4928"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/familyName> ;
+        void:triples          "5248"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P69>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P69> ;
+        void:distinctObjects  "3744"^^xsd:int , "97735"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_label> ;
+        void:triples          "22632"^^xsd:int , "167519"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Decision>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#Decision> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#Decision> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P120> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P111> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P107> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P113> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P116> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P119> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P110> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P109> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P106> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P115> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P105> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P118> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P112> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P108> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P114> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P121> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P117> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P104> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P98>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P98> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P168>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P168> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#consists_of> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P39>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P39> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#versiontype> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P138>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P138> ;
+        void:distinctObjects  "50818"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#title_alternative> ;
+        void:triples          "51409"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P70>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P70> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#parliamentary_term> ;
+        void:triples          "744"^^xsd:int , "358"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "38"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/org/ep-8>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "706"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/org/ep-9>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "31"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/org/ep-8>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "327"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/org/ep-9>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P38>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P38> ;
+        void:distinctObjects  "28"^^xsd:int ;
+        void:property         <http://www.w3.org/ns/person#citizenship> ;
+        void:triples          "5246"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P108>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P108> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P40>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P40> ;
+        void:distinctObjects  "22"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#originalLanguage> ;
+        void:triples          "5805"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ParliamentaryTerm>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#ParliamentaryTerm> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#ParliamentaryTerm> ;
+        void:entities           "11"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P12> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P9> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P13> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P175> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P10> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P11> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P19> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P17> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P14> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P10>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P10> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         dcat:hasCurrentVersion ;
+        void:triples          "1"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P235>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P235> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ParticipationRole>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#ParticipationRole> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#ParticipationRole> ;
+        void:entities           "5"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P182> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P183> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.mydomain.com%2Fontologies%2Fsparnatural-config%2FConcept_prefLabel> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Activity>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#Activity> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#Activity> ;
+        void:entities           "7528"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P88> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P85> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P82> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P72> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P90> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P75> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P66> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P80> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P69> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P78> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P64> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P86> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P83> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P76> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P91> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P67> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P73> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P70> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P89> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P79> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P87> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P84> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P81> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P68> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P71> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P65> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P77> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P63> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P82>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P82> ;
+        void:distinctObjects  "744"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#scheduledIn> ;
+        void:triples          "744"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P205>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P205> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P52>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P52> ;
+        void:distinctObjects  "285"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#number> ;
+        void:triples          "473"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23AddressType>
+        dct:conformsTo          <http://publications.europa.eu/ontology/euvoc#AddressType> ;
+        void:class              <http://publications.europa.eu/ontology/euvoc#AddressType> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P105> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P106> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P151>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P151> ;
+        void:distinctObjects  "30"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_participant_organization> ;
+        void:triples          "13314"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P22>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P22> ;
+        void:distinctObjects  "752"^^xsd:int , "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "773"^^xsd:int , "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P51>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P51> ;
+        void:distinctObjects  "27"^^xsd:int ;
+        void:property         <http://www.w3.org/ns/org#role> ;
+        void:triples          "110211"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P121>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P121> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#decided_on_a_part_of_a_realization_of> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P94>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P94> ;
+        void:distinctObjects  "150"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "150"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P193>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P193> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P64>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P64> ;
+        void:distinctObjects  "7"^^xsd:int , "2"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_activity_type> ;
+        void:triples          "7528"^^xsd:int , "776"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1686"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-activities/PLENARY_DEBATE>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "3864"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-activities/PLENARY_ACTIVITY>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "180"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-activities/PLENARY_VOTE_RESULTS>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "274"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-activities/PLENARY_SITTING>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1343"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-activities/PLENARY_VOTE>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "97"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-activities/PLENARY_VOTE_EXPLANATIONS>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "84"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-activities/PLENARY_PART_SESSION>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P93>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P93> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "29"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P163>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P163> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#identifierYear> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P34>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P34> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#consolidated_by> ;
+        void:triples          "1"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P63>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P63> ;
+        void:distinctObjects  "9"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#hasSite> ;
+        void:triples          "3880"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "405"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/site/SDM>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "274"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/site/WIB>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "23"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/site/ATR>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "21"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/site/HAV>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "179"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/site/WIE>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "370"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/site/WIC>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "10"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/site/PHS>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1144"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/site/LOW>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1454"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/site/ASP>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P133>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P133> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_voter_intended_abstention> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P229>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P229> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P33>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P33> ;
+        void:distinctObjects  "4776"^^xsd:int ;
+        void:property         <http://www.w3.org/2006/vcard/ns#bday> ;
+        void:triples          "5233"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P109>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P109> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P76>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P76> ;
+        void:distinctObjects  "7294"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#recorded_in_a_realization_of> ;
+        void:triples          "7294"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P175>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P175> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "22"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P46>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P46> ;
+        void:distinctObjects  "879"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#adopts> ;
+        void:triples          "883"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P110>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P110> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P145>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P145> ;
+        void:distinctObjects  "6"^^xsd:int ;
+        void:property         dct:format ;
+        void:triples          "184478"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "66867"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/file-type/PDF>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/file-type/DOC>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "11064"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/file-type/XML>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "66697"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/file-type/DOCX>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "39843"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/file-type/XHTML>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "6"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/file-type/XLSX>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P16>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P16> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#parliamentary_term> ;
+        void:triples          "9934"^^xsd:int , "1"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P200>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P200> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P115>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P115> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#headingLabel> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P88>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P88> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2000/01/rdf-schema#comment> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P15>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P15> ;
+        void:distinctObjects  "109"^^xsd:int ;
+        void:property         <http://www.w3.org/ns/org#linkedTo> ;
+        void:triples          "450"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P187>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P187> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "62"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P58>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P58> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#originalLanguage> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2Fns%2Forg%23Membership>
+        dct:conformsTo          <http://www.w3.org/ns/org#Membership> ;
+        void:class              <http://www.w3.org/ns/org#Membership> ;
+        void:entities           "110227"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P53> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P50> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P48> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P47> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P55> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P51> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P52> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P49> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P54> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P157>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P157> ;
+        void:distinctObjects  "14"^^xsd:int ;
+        void:property         <http://publications.europa.eu/ontology/euvoc#officeAddress> ;
+        void:triples          "14"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P28>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P28> ;
+        void:distinctObjects  "255"^^xsd:int , "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#itemNumberEnd> ;
+        void:triples          "850"^^xsd:int , "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P127>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P127> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#number_of_attendees> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ActivityType>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#ActivityType> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#ActivityType> ;
+        void:entities           "22"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.mydomain.com%2Fontologies%2Fsparnatural-config%2FConcept_prefLabel> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P222> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P221> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P27>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P27> ;
+        void:distinctObjects  "2841"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#upperGivenName> ;
+        void:triples          "5243"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ProcessType>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#ProcessType> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#ProcessType> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P229> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P228> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.mydomain.com%2Fontologies%2Fsparnatural-config%2FConcept_prefLabel> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P169>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P169> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#current_stage> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P139>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P139> ;
+        void:distinctObjects  "48"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#language> ;
+        void:triples          "66874"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P71>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P71> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://www.w3.org/2006/vcard/ns#hasLocality> ;
+        void:triples          "763"^^xsd:int , "274"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "499"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/place/FRA_SXB>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "264"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/place/BEL_BRU>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "175"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/place/FRA_SXB>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "99"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/place/BEL_BRU>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P39>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P39> ;
+        void:distinctObjects  "3060"^^xsd:int ;
+        void:property         <http://www.w3.org/ns/person#placeOfBirth> ;
+        void:triples          "5152"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2006%2Fvcard%2Fns%23Fax>
+        dct:conformsTo          <http://www.w3.org/2006/vcard/ns#Fax> ;
+        void:class              <http://www.w3.org/2006/vcard/ns#Fax> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P70> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P109>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P109> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#decision_method> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FMediaType>
+        dct:conformsTo          dct:MediaType ;
+        void:class              dct:MediaType ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P196> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P197> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P170>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P170> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#scheduledIn> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P41>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P41> ;
+        void:distinctObjects  "23"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#corrects> ;
+        void:triples          "24"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P70>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P70> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2006/vcard/ns#hasValue> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P140>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P140> ;
+        void:distinctObjects  "184478"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#is_embodied_by> ;
+        void:triples          "184478"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P9>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P9> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#has_member> ;
+        void:triples          "4"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P40>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P40> ;
+        void:distinctObjects  "793"^^xsd:int ;
+        void:property         <http://www.w3.org/2006/vcard/ns#hasEmail> ;
+        void:triples          "794"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P110>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P110> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_decision_outcome> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FLinguisticSystem>
+        dct:conformsTo          dct:LinguisticSystem ;
+        void:class              dct:LinguisticSystem ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P201> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.mydomain.com%2Fontologies%2Fsparnatural-config%2FConcept_prefLabel> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P200> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P83>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P83> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#hasRoom> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P10>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P10> ;
+        void:distinctObjects  "3617"^^xsd:int , "11"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "3617"^^xsd:int , "11"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P182>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P182> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "5"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P53>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P53> ;
+        void:distinctObjects  "8"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#is_part_of> ;
+        void:triples          "473"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P82>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P82> ;
+        void:distinctObjects  "10016"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#prefLabel> ;
+        void:triples          "10121"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23HonorificTitle>
+        dct:conformsTo          <http://publications.europa.eu/ontology/euvoc#HonorificTitle> ;
+        void:class              <http://publications.europa.eu/ontology/euvoc#HonorificTitle> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P110> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P109> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P152>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P152> ;
+        void:distinctObjects  "717"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_participant_person> ;
+        void:triples          "17813"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P23>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P23> ;
+        void:distinctObjects  "315"^^xsd:int , "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#is_derivative_of> ;
+        void:triples          "317"^^xsd:int , "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P52>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P52> ;
+        void:distinctObjects  "2994"^^xsd:int ;
+        void:property         <http://www.w3.org/ns/org#organization> ;
+        void:triples          "109501"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P95>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P95> ;
+        void:distinctObjects  "150"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "150"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P218>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P218> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "3718"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "11"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://data.europa.eu/eli/eli-draft-legislation-ontology#ParliamentaryTerm>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "3707"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://www.w3.org/ns/org#Organization>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P22>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P22> ;
+        void:distinctObjects  "5247"^^xsd:int ;
+        void:property         dct:identifier ;
+        void:triples          "5247"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P194>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P194> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P65>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P65> ;
+        void:distinctObjects  "666"^^xsd:int , "302"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_date> ;
+        void:triples          "776"^^xsd:int , "7528"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23WorkSubdivision>
+        dct:conformsTo          <http://data.europa.eu/eli/ontology#WorkSubdivision> ;
+        void:class              <http://data.europa.eu/eli/ontology#WorkSubdivision> ;
+        void:entities           "473"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P55> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P52> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P57> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P59> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P54> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P51> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P56> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P58> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P53> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P50> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P94>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P94> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "58"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P164>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P164> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2000/01/rdf-schema#label> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P35>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P35> ;
+        void:distinctObjects  "3509"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#answers_to> ;
+        void:triples          "3509"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P64>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P64> ;
+        void:distinctObjects  "1635"^^xsd:int ;
+        void:property         <http://www.w3.org/2006/vcard/ns#hasTelephone> ;
+        void:triples          "3792"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P134>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P134> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#recorded_in_a_realization_of> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Fepvoc%23ContactPoint>
+        dct:conformsTo          <https://data.europarl.europa.eu/def/epvoc#ContactPoint> ;
+        void:class              <https://data.europarl.europa.eu/def/epvoc#ContactPoint> ;
+        void:entities           "3880"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P63> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P62> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P64> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P34>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P34> ;
+        void:distinctObjects  "608"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#deathDate> ;
+        void:triples          "633"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P104>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P104> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_id> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P77>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P77> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#based_on_a_realization_of> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P47>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P47> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#expressionContent> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P231>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P231> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P76>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P76> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P146>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P146> ;
+        void:distinctObjects  "10"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#media_type> ;
+        void:triples          "184478"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "6"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/application/vnd.openxmlformats-officedocument.spreadsheetml.sheet>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "49985"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/application/vnd.openxmlformats-officedocument.wordprocessingml.document>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "16448"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/vnd.openxmlformats-officedocument.wordprocessingml.document>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "8471"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/xml>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/msword>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "39843"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/application/xhtml+xml>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "16450"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/pdf>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "50417"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/application/pdf>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "264"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/docx>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "2593"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://www.iana.org/assignments/media-types/application/xml>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P17>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P17> ;
+        void:distinctObjects  "396"^^xsd:int , "1"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#date_document> ;
+        void:triples          "9936"^^xsd:int , "1"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P201>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P201> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P116>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P116> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#referenceText> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P89>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P89> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_responsible_organization> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P16>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P16> ;
+        void:distinctObjects  "22"^^xsd:int ;
+        void:property         <http://www.w3.org/ns/org#hasSubOrganization> ;
+        void:triples          "35"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P59>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P59> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#is_realized_by> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FPeriodOfTime>
+        dct:conformsTo          dct:PeriodOfTime ;
+        void:class              dct:PeriodOfTime ;
+        void:entities           "15022"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P59> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P58> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P158>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P158> ;
+        void:distinctObjects  "14"^^xsd:int ;
+        void:property         dct:identifier ;
+        void:triples          "14"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P29>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P29> ;
+        void:distinctObjects  "25736"^^xsd:int , "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#workHadParticipation> ;
+        void:triples          "25736"^^xsd:int , "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Vote>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#Vote> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#Vote> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P105> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P134> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P120> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P106> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P109> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P116> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P107> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P126> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P133> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P124> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P127> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P114> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P132> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P128> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P115> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P112> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P118> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P130> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P125> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P119> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P123> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P129> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P110> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P113> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P104> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P131> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P111> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P117> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P121> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P108> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P90>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P90> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#responsible_organization_label> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P213>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P213> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P58>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P58> ;
+        void:distinctObjects  "4577"^^xsd:int ;
+        void:property         dcat:startDate ;
+        void:triples          "15022"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P128>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P128> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_voter_favor> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P28>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P28> ;
+        void:distinctObjects  "4911"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#upperFamilyName> ;
+        void:triples          "5247"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P225>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P225> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P105>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P105> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23SubdivisionType>
+        dct:conformsTo          <http://data.europa.eu/eli/ontology#SubdivisionType> ;
+        void:class              <http://data.europa.eu/eli/ontology#SubdivisionType> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P226> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P225> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P72>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P72> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#occured_at_stage> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ProcessStage>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#ProcessStage> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#ProcessStage> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P238> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P237> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P171>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P171> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#based_on> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P42>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P42> ;
+        void:distinctObjects  "66874"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#is_realized_by> ;
+        void:triples          "66874"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P141>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P141> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#expressionContent> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P237>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P237> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P41>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P41> ;
+        void:distinctObjects  "202"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/homepage> ;
+        void:triples          "203"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P111>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P111> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#was_motivated_by> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P84>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P84> ;
+        void:distinctObjects  "107"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "180"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P11>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P11> ;
+        void:distinctObjects  "1109"^^xsd:int , "11"^^xsd:int ;
+        void:property         <http://www.w3.org/2000/01/rdf-schema#label> ;
+        void:triples          "3247"^^xsd:int , "11"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2006%2Fvcard%2Fns%23Voice>
+        dct:conformsTo          <http://www.w3.org/2006/vcard/ns#Voice> ;
+        void:class              <http://www.w3.org/2006/vcard/ns#Voice> ;
+        void:entities           "1635"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P67> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P183>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P183> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "10"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P54>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P54> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#type_subdivision> ;
+        void:triples          "473"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "371"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/subdivision/ITM>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "102"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/subdivision-type/ITM>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P153>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P153> ;
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#participation_role> ;
+        void:triples          "25938"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "196"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-roles/RAPPORTEUR>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "14"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/role/ADDRESSEE>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1685"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/role/AUT>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "3622"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-roles/ADDRESSEE>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "20421"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-roles/AUTHOR>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P24>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P24> ;
+        void:distinctObjects  "56"^^xsd:int , "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#is_annex_of> ;
+        void:triples          "97"^^xsd:int , "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P53>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P53> ;
+        void:distinctObjects  "28"^^xsd:int ;
+        void:property         <http://publications.europa.eu/ontology/euvoc#represents> ;
+        void:triples          "9901"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P123>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P123> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_start_date> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P96>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P96> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#headingLabel> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P23>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P23> ;
+        void:distinctObjects  "5247"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "5247"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23CorporateBodyClassification>
+        dct:conformsTo          <http://publications.europa.eu/ontology/euvoc#CorporateBodyClassification> ;
+        void:class              <http://publications.europa.eu/ontology/euvoc#CorporateBodyClassification> ;
+        void:entities           "12"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P90> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P89> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.mydomain.com%2Fontologies%2Fsparnatural-config%2FConcept_prefLabel> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P66>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P66> ;
+        void:distinctObjects  "744"^^xsd:int , "274"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_start_date> ;
+        void:triples          "744"^^xsd:int , "358"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23Work>
+        dct:conformsTo          <http://data.europa.eu/eli/ontology#Work> ;
+        void:class              <http://data.europa.eu/eli/ontology#Work> ;
+        void:entities           "9936"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P23> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P26> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P39> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P44> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P36> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P25> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P17> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P38> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P22> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P43> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P16> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P35> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P21> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P34> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P37> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P29> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P42> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P15> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P20> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P41> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P14> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P33> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P47> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P28> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P32> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P27> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P46> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P19> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P40> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P24> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P45> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P18> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P165>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P165> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#process_type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P36>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P36> ;
+        void:distinctObjects  "21"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#based_on> ;
+        void:triples          "580"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P35>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P35> ;
+        void:distinctObjects  "4"^^xsd:int ;
+        void:property         <http://www.w3.org/2006/vcard/ns#hasGender> ;
+        void:triples          "5247"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/human-sex/NAP>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/human-sex/NKN>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1377"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/human-sex/FEMALE>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "3868"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/human-sex/MALE>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P105>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P105> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_activity_type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P78>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P78> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#created_a_realization_of> ;
+        void:triples          "2"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P232>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P232> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P9>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P9> ;
+        void:distinctObjects  "3707"^^xsd:int , "11"^^xsd:int ;
+        void:property         dct:identifier ;
+        void:triples          "3707"^^xsd:int , "11"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FDocument>
+        dct:conformsTo          <http://xmlns.com/foaf/0.1/Document> ;
+        void:class              <http://xmlns.com/foaf/0.1/Document> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P76> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P147>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P147> ;
+        void:distinctObjects  "82530"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#byteSize> ;
+        void:triples          "184478"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P18>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P18> ;
+        void:distinctObjects  "5136"^^xsd:int , "1"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#epNumber> ;
+        void:triples          "6161"^^xsd:int , "1"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P47>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P47> ;
+        void:distinctObjects  "110227"^^xsd:int ;
+        void:property         dct:identifier ;
+        void:triples          "110227"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P117>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P117> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#responsible_organization_label> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P17>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P17> ;
+        void:distinctObjects  "12"^^xsd:int , "1"^^xsd:int ;
+        void:property         <http://www.w3.org/ns/org#classification> ;
+        void:triples          "3643"^^xsd:int , "11"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "39"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/COMMITTEE_PARLIAMENTARY_SUB>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "98"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/EU_POLITICAL_GROUP>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "2083"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/NATIONAL_CHAMBER>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "125"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/DELEGATION_JOINT_COMMITTEE>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "41"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/DELEGATION_PARLIAMENTARY_ASSEMBLY>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "268"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/COMMITTEE_PARLIAMENTARY_JOINT>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "397"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/COMMITTEE_PARLIAMENTARY_STANDING>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "29"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/WORKING_GROUP>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "4"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/COMMITTEE_PARLIAMENTARY_SPECIAL>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "12"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/EU_INSTITUTION>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "521"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/DELEGATION_PARLIAMENTARY>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "26"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/COMMITTEE_PARLIAMENTARY_TEMPORARY>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "11"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/def/ep-entities/EU_INSTITUTION>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P89>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P89> ;
+        void:distinctObjects  "1"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "12"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P159>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P159> ;
+        void:distinctObjects  "3"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#hasSite> ;
+        void:triples          "14"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P91>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P91> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#hadResponsibleOrganization> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P214>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P214> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P59>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P59> ;
+        void:distinctObjects  "4206"^^xsd:int ;
+        void:property         dcat:endDate ;
+        void:triples          "15014"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P129>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P129> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_voter_against> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P190>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P190> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P29>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P29> ;
+        void:distinctObjects  "200"^^xsd:int ;
+        void:property         <http://publications.europa.eu/ontology/euvoc#officialGivenName> ;
+        void:triples          "317"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2Fns%2Forg%23Organization>
+        dct:conformsTo          <http://www.w3.org/ns/org#Organization> ;
+        void:class              <http://www.w3.org/ns/org#Organization> ;
+        void:entities           "3707"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P14> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P16> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P13> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P12> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P11> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P218> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P10> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P19> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P18> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P9> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P15> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P17> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P90>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P90> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "24"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FLocation>
+        dct:conformsTo          dct:Location ;
+        void:class              dct:Location ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P209> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P208> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P210> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P130>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P130> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_voter_abstention> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23FileStatus>
+        dct:conformsTo          <http://publications.europa.eu/ontology/euvoc#FileStatus> ;
+        void:class              <http://publications.europa.eu/ontology/euvoc#FileStatus> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P190> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P191> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P226>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P226> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P30>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P30> ;
+        void:distinctObjects  "306"^^xsd:int ;
+        void:property         <http://publications.europa.eu/ontology/euvoc#officialFamilyName> ;
+        void:triples          "317"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P106>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P106> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P100>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P100> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#forms_part_of> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P73>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P73> ;
+        void:distinctObjects  "768"^^xsd:int , "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#structuredLabel> ;
+        void:triples          "768"^^xsd:int , "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P172>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P172> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#involved_work> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P43>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P43> ;
+        void:distinctObjects  "1546"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/ontology#is_about> ;
+        void:triples          "8577"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2Fns%2Forg%23Site>
+        dct:conformsTo          <http://www.w3.org/ns/org#Site> ;
+        void:class              <http://www.w3.org/ns/org#Site> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P214> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P98> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P97> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P213> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P42>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P42> ;
+        void:distinctObjects  "1095"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/account> ;
+        void:triples          "1095"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P238>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P238> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P112>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P112> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#decisionAboutId> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P85>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P85> ;
+        void:distinctObjects  "169"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#number_of_attendees> ;
+        void:triples          "247"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P208>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P208> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P12>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P12> ;
+        void:distinctObjects  "33350"^^xsd:int , "30"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#prefLabel> ;
+        void:triples          "83367"^^xsd:int , "264"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P55>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P55> ;
+        void:distinctObjects  "11196"^^xsd:int ;
+        void:property         dct:title ;
+        void:triples          "11292"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P154>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P154> ;
+        void:distinctObjects  "60"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#participation_in_name_of> ;
+        void:triples          "8862"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P25>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P25> ;
+        void:distinctObjects  "2"^^xsd:int , "1"^^xsd:int ;
+        void:property         dct:publisher ;
+        void:triples          "834"^^xsd:int , "1"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "365"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <https://data.europarl.europa.eu/org/EU_PARLIAMENT>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "469"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/corporate-body/EP>
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          <http://publications.europa.eu/resource/authority/corporate-body/EP>
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.mydomain.com%2Fontologies%2Fsparnatural-config%2FConcept_prefLabel>
+        dct:conformsTo        <https://data.mydomain.com/ontologies/sparnatural-config/Concept_prefLabel> ;
+        void:distinctObjects  "37"^^xsd:int , "528"^^xsd:int , "624"^^xsd:int , "0"^^xsd:int , "693"^^xsd:int , "118"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#prefLabel> ;
+        void:triples          "37"^^xsd:int , "0"^^xsd:int , "696"^^xsd:int , "695"^^xsd:int , "120"^^xsd:int , "528"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P54>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P54> ;
+        void:distinctObjects  "3880"^^xsd:int ;
+        void:property         dcat:contactPoint ;
+        void:triples          "3880"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FImage>
+        dct:conformsTo          <http://xmlns.com/foaf/0.1/Image> ;
+        void:class              <http://xmlns.com/foaf/0.1/Image> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P73> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P124>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P124> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#number_of_votes_favor> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard>
+        a                        void:Dataset ;
+        void:classPartition      <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2006%2Fvcard%2Fns%23Fax> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23WorkSubdivision> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Participation> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FImage> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Decision> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23CorporateBodyClassification> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2006%2Fvcard%2Fns%23Gender> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ActivityType> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23HonorificTitle> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ForeseenActivity> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FDocument> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2Fns%2Forg%23Role> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Fepvoc%23Room> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23SubdivisionType> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2Fns%2Forg%23Membership> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23FileStatus> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23LegalResource> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ProcessStage> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23AddressType> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23DecisionOutcome> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FPeriodOfTime> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ProcessType> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ParticipationRole> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FLinguisticSystem> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FMediaType> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Activity> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23Expression> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2004%2F02%2Fskos%2Fcore%23Concept> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Vote> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23Manifestation> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2006%2Fvcard%2Fns%23Voice> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2Fns%2Forg%23Site> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23DecisionMethod> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23ComplexWork> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23WorkType> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2Fns%2Forg%23Organization> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpublications.europa.eu%2Fontology%2Feuvoc%23Country> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23Work> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Fepvoc%23ContactPoint> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23Resource> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FPerson> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FOnlineAccount> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ParliamentaryTerm> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FMediaTypeOrExtent> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23Process> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FLocation> ;
+        void:triples             "3668058"^^xsd:int ;
+        sh:suggestedShapesGraph  <https://data.europarl.europa.eu/def/org-ep#> , <https://data.mydomain.com/ontologies/sparnatural-config> , <https://data.europarl.europa.eu/def/eli-ep#> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P97>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P97> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#agendaLabel> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P24>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P24> ;
+        void:distinctObjects  "5244"^^xsd:int ;
+        void:property         <http://www.w3.org/2000/01/rdf-schema#label> ;
+        void:triples          "5247"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P196>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P196> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P67>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P67> ;
+        void:distinctObjects  "771"^^xsd:int , "274"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_end_date> ;
+        void:triples          "777"^^xsd:int , "358"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P166>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P166> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#process_title> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P37>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P37> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         dct:contributor ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23Expression>
+        dct:conformsTo          <http://data.europa.eu/eli/ontology#Expression> ;
+        void:class              <http://data.europa.eu/eli/ontology#Expression> ;
+        void:entities           "66874"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P140> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P138> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P139> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P137> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P141> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P221>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P221> ;
+        void:distinctObjects  "2"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "44"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P101>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P101> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#inScheme> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P36>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P36> ;
+        void:distinctObjects  "5247"^^xsd:int ;
+        void:property         <http://xmlns.com/foaf/0.1/img> ;
+        void:triples          "5247"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P106>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P106> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#activity_date> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P79>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P79> ;
+        void:distinctObjects  "60"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#executed> ;
+        void:triples          "93"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fpurl.org%2Fdc%2Fterms%2FMediaTypeOrExtent>
+        dct:conformsTo          dct:MediaTypeOrExtent ;
+        void:class              dct:MediaTypeOrExtent ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P193> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P194> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P178>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P178> ;
+        void:distinctObjects  "7"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "595"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23LegalResource>
+        dct:conformsTo  <http://data.europa.eu/eli/ontology#LegalResource> ;
+        void:class      <http://data.europa.eu/eli/ontology#LegalResource> ;
+        void:entities   "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fwww.w3.org%2F2006%2Fvcard%2Fns%23Gender>
+        dct:conformsTo          <http://www.w3.org/2006/vcard/ns#Gender> ;
+        void:class              <http://www.w3.org/2006/vcard/ns#Gender> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P101> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P102> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.mydomain.com%2Fontologies%2Fsparnatural-config%2FConcept_prefLabel> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P148>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P148> ;
+        void:distinctObjects  "73502"^^xsd:int ;
+        void:property         dct:issued ;
+        void:triples          "184478"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P19>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P19> ;
+        void:distinctObjects  "1299"^^xsd:int , "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2000/01/rdf-schema#label> ;
+        void:triples          "1320"^^xsd:int , "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P80>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P80> ;
+        void:distinctObjects  "20992"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#consists_of> ;
+        void:triples          "20992"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P48>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P48> ;
+        void:distinctObjects  "110227"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#notation> ;
+        void:triples          "110227"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P118>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P118> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/2004/02/skos/core#note> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P50>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P50> ;
+        void:distinctObjects  "473"^^xsd:int ;
+        void:property         dct:identifier ;
+        void:triples          "473"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Fontology%23ComplexWork>
+        dct:conformsTo          <http://data.europa.eu/eli/ontology#ComplexWork> ;
+        void:class              <http://data.europa.eu/eli/ontology#ComplexWork> ;
+        void:entities           "1"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P28> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P9> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P22> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P19> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P16> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P10> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P26> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P29> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P14> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P20> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P23> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P17> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P15> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P27> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P21> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P18> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P24> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P25> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P18>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P18> ;
+        void:distinctObjects  "193"^^xsd:int ;
+        void:property         <http://publications.europa.eu/ontology/euvoc#represents> ;
+        void:triples          "1526"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P20>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P20> ;
+        void:distinctObjects  "2"^^xsd:int , "1"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#identifierYear> ;
+        void:triples          "9846"^^xsd:int , "1"^^xsd:int ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          "2021"
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "9845"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          "2022"
+                ] ;
+        <https://shacl-play.sparna.fr/ontology#valuePartition>
+                [ void:distinctSubjects  "1"^^xsd:int ;
+                  <https://shacl-play.sparna.fr/ontology#value>
+                          "2022"
+                ] .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23DecisionOutcome>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#DecisionOutcome> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#DecisionOutcome> ;
+        void:entities           "0"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P234> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P235> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P191>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P191> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P32>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P32> ;
+        void:distinctObjects  "5"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#epNumberVersion> ;
+        void:triples          "301"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FOnlineAccount>
+        dct:conformsTo          <http://xmlns.com/foaf/0.1/OnlineAccount> ;
+        void:class              <http://xmlns.com/foaf/0.1/OnlineAccount> ;
+        void:entities           "1095"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P79> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P131>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P131> ;
+        void:distinctObjects  "0"^^xsd:int ;
+        void:property         <http://data.europa.eu/eli/eli-draft-legislation-ontology#had_voter_intended_favor> ;
+        void:triples          "0"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P31>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/org-ep#P31> ;
+        void:distinctObjects  "197"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#upperOfficialGivenName> ;
+        void:triples          "317"^^xsd:int .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fdata.europa.eu%2Feli%2Feli-draft-legislation-ontology%23ForeseenActivity>
+        dct:conformsTo          <http://data.europa.eu/eli/eli-draft-legislation-ontology#ForeseenActivity> ;
+        void:class              <http://data.europa.eu/eli/eli-draft-legislation-ontology#ForeseenActivity> ;
+        void:entities           "776"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P66> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P98> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P70> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P71> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P99> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P69> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P67> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P94> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P68> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P95> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P100> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P93> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P96> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P63> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P97> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P72> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P64> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P65> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P73> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_http%3A%2F%2Fxmlns.com%2Ffoaf%2F0.1%2FPerson>
+        dct:conformsTo          <http://xmlns.com/foaf/0.1/Person> ;
+        void:class              <http://xmlns.com/foaf/0.1/Person> ;
+        void:entities           "5247"^^xsd:int ;
+        void:propertyPartition  <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P34> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P22> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P31> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P36> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P24> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P23> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P33> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P42> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P41> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P26> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P44> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P28> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P35> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P25> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P27> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P43> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P40> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P37> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P39> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P29> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P30> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P32> , <http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Forg-ep%23P38> .
+
+<http://graphdb.sparna.fr/repositories/ep_dashboard/partition_https%3A%2F%2Fdata.europarl.europa.eu%2Fdef%2Feli-ep%23P44>
+        dct:conformsTo        <https://data.europarl.europa.eu/def/eli-ep#P44> ;
+        void:distinctObjects  "102"^^xsd:int ;
+        void:property         <https://data.europarl.europa.eu/def/epvoc#isAboutSubjectMatter> ;
+        void:triples          "687"^^xsd:int .

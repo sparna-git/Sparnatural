@@ -2451,3 +2451,144 @@ _:b15 rdf:first shape:Collection_isReferencedBy_datatype_0 ; rdf:rest ( shape:Co
 _:b16 rdf:first shape:ProvidedCHO_mediator_datatype_0 ; rdf:rest ( shape:ProvidedCHO_mediator_datatype_1 ) .
 
 _:b17 rdf:first "fr" ; rdf:rest () .
+
+
+shape:SubAgent1_1  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubAgent1_1"@en ;
+        sh:property     shape:Agent_altLabel , shape:Agent_prefLabel ;
+        sh:parent     shape:SubAgent1 ;
+        sh:targetClass  skos:Agent .
+
+shape:SubAgent1_2  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubAgent1_2"@en ;
+        sh:property     shape:Agent_altLabel , shape:Agent_prefLabel ;
+        sh:parent     shape:SubAgent1 ;
+        sh:targetClass  skos:Agent .
+
+shape:SubAgent3_1  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubAgent3_1"@en ;
+        sh:property     shape:Agent_altLabel , shape:Agent_prefLabel ;
+        sh:parent     shape:SubAgent3 ;
+        sh:targetClass  skos:Agent .
+
+shape:SubAgent3_2  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubAgent3_2"@en ;
+        sh:property     shape:Agent_altLabel , shape:Agent_prefLabel ;
+        sh:parent     shape:SubAgent3 ;
+        sh:targetClass  skos:Agent .
+
+shape:SubConcept1  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept1"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:Concept ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept2  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept2"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:Concept ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept3  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept3"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:Concept ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept4  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept4"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:Concept ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept3_1  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept3_1"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:SubConcept3 ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept3_2  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept3_2"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:SubConcept3 ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept3_3  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept3_3"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:SubConcept3 ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept3_4  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept3_4"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:SubConcept3 ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept1_1  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept1_1"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:SubConcept1 ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept1_2  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept1_2"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:SubConcept1 ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept1_3  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept1_3"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:SubConcept1 ;
+        sh:targetClass  skos:Concept .
+
+shape:SubConcept1_4  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubConcept1_4"@en ;
+        sh:property     shape:Concept_altLabel , shape:Concept_prefLabel ;
+        sh:parent     shape:SubConcept1 ;
+        sh:targetClass  skos:Concept .
+
+shape:SubAgent1  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubAgent1"@en ;
+        sh:property     shape:Agent_altLabel , shape:Agent_prefLabel ;
+        sh:parent     shape:Agent ;
+        sh:targetClass  skos:Agent .
+
+shape:SubAgent2  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubAgent2"@en ;
+        sh:property     shape:Agent_altLabel , shape:Agent_prefLabel ;
+        sh:parent     shape:Agent ;
+        sh:targetClass  skos:Agent .
+
+shape:SubAgent3  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubAgent3"@en ;
+        sh:property     shape:Agent_altLabel , shape:Agent_prefLabel ;
+        sh:parent     shape:Agent ;
+        sh:targetClass  skos:Agent .
+
+shape:SubAgent4  rdf:type  sh:NodeShape ;
+        rdfs:comment    "533 instances" ;
+        rdfs:label      "SubAgent4"@en ;
+        sh:property     shape:Agent_altLabel , shape:Agent_prefLabel ;
+        sh:parent     shape:Agent ;
+        sh:targetClass  skos:Agent .

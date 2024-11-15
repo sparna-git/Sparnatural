@@ -24,6 +24,7 @@
   "DisplayValueDateTo": "Until",
   "ButtonAdd": "Add",
   "ListWidgetNoItem": "... Oups, no value found !",
+  "StartClassTemporaryLabel": "Search for resources",
   "ObjectPropertyTemporaryLabel": "related to",
   "labelOptionOptional": "Optional",
   "labelOptionNotExists": "Not exists",

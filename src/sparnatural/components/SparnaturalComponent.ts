@@ -14,7 +14,7 @@ class SparnaturalComponent extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
   actionStore: ActionStore;
   BgWrapper: BgWrapper;
-  SubmitSection: SubmitSection;
+  submitSection: SubmitSection;
   variableSection: VariableSection;
   catalog: Catalog;
   // filter that is applied to optional/not exists green arrows, based on its ID
@@ -28,18 +28,17 @@ class SparnaturalComponent extends HTMLComponent {
   }
 
   render(): this {
-    this.#initLang();
-    this.#initCatalog();
-    this.initSpecificationProvider((sp: ISparnaturalSpecification) => {
+    this.#initLang()
+
+    let afterSpecificationLoaded = (sp: ISparnaturalSpecification) => {
       this.specProvider = sp;
-      //Think this will be launched before load query ???
       this.actionStore = new ActionStore(this, this.specProvider);
       this.BgWrapper = new BgWrapper(this, this.specProvider).render();
       // display the submit button only if a callback was provided
-      if (getSettings().submitButton) {
-        this.SubmitSection = new SubmitSection(this).render();
+      if(getSettings().submitButton) {
+        this.submitSection = new SubmitSection(this).render();
       }
-      console.log("submit section", this.SubmitSection);
+      console.log("submit section", this.submitSection);
       this.variableSection = new VariableSection(
         this,
         this.specProvider
@@ -48,56 +47,65 @@ class SparnaturalComponent extends HTMLComponent {
       this.html[0].dispatchEvent(
         new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
       );
-      this.html.append(this.filter);
-      console.log(
-        "Found languages in configuration : " + this.specProvider.getLanguages()
-      );
+      this.html.append(this.filter);  
+      console.log("Found languages in configuration : "+this.specProvider.getLanguages());
+      
+      this.html[0].dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_INIT, {
+        bubbles: true,
+        detail: {
+          sparnatural: this
+        }
+      }));
+    };
 
-      this.html[0].dispatchEvent(
-        new CustomEvent(SparnaturalElement.EVENT_INIT, {
-          bubbles: true,
-          detail: {
-            sparnatural: this,
-          },
-        })
-      );
-    });
+    // chain catalog loading and spec loading
+    let afterCatalogLoaded = (catalog: Catalog|undefined) => {
+      this.catalog = catalog;
+      this.initSpecificationProvider(afterSpecificationLoaded);
+    }
 
+    this.#initCatalog(afterCatalogLoaded);
+    
     return this;
   }
 
-  #initCatalog() {
+  #initCatalog(callback:((catalog:Catalog|undefined)=>void)) {
     let settings = getSettings();
     let me = this;
     if (settings.catalog) {
       $.getJSON(settings.catalog, function (data) {
-        me.catalog = new Catalog(data);
+        callback(new Catalog(data));
       }).fail(function (response) {
         console.error(
           "Sparnatural - unable to load catalog file : " + settings.catalog
         );
-      });
+        callback(undefined);
+      })
+    } else {
+      // no catalog provided
+      callback(undefined);
     }
   }
 
-  initSpecificationProvider(callback: any) {
+  initSpecificationProvider(callback:((sp:ISparnaturalSpecification)=>void)) {
     let settings = getSettings();
     let specProviderFactory = new SparnaturalSpecificationFactory();
-    specProviderFactory.build(settings.src, settings.language, (sp: any) => {
+    // load only the statistics of the selected endpoints
+    specProviderFactory.build(settings.src, settings.language, this.catalog.extractSubCatalog(settings.endpoints), (sp: any) => {
       // call the call back when done
       callback(sp);
     });
   }
 
   // method is exposed from the HTMLElement
-  enablePlayBtn = () => {
-    this.SubmitSection.playBtn.removeLoading();
-  };
-
+  enablePlayBtn = () =>{
+    this.submitSection.playBtn.removeLoading();
+  }
+  
   // method is exposed from the HTMLElement
   disablePlayBtn = () => {
-    this.SubmitSection.playBtn.disable();
-  };
+    this.submitSection.playBtn.disable();
+  }
 
   setQuiet(quiet: boolean) {
     this.actionStore.quiet = quiet;

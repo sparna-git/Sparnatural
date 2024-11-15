@@ -1,0 +1,53 @@
+PREFIX owl: <http://www.w3.org/2002/07/owl#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX core: <http://data.sparna.fr/ontologies/sparnatural-config-core#>
+PREFIX datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+SELECT ?property ?labelEN ?labelFR ?theDomain ?theRange (CONCAT("core:",STRAFTER(STR(?sparnaturalProperty), "#")) AS ?widget) ?enableOptional ?enableNegation ?sparqlString ?datasource ?beginDateProperty ?endDateProperty ?exactDateProperty ?treeChildrenDatasource ?treeRootsDatasource
+WHERE {
+    ?property rdfs:subPropertyOf ?sparnaturalProperty .
+    VALUES ?sparnaturalProperty {
+        core:NonSelectableProperty
+        core:SearchProperty
+        core:StringEqualsProperty
+        core:SelectRdfTermProperty
+        core:AutocompleteProperty
+        core:ListProperty
+        core:TreeProperty
+        core:TimeProperty
+        core:TimeProperty-Date
+        core:TimeProperty-Year
+        core:TimeProperty-Period
+        core:BooleanProperty
+        core:MapProperty
+        core:NumberProperty
+    }
+    OPTIONAL { ?property rdfs:label ?labelFr . FILTER(lang(?labelFr) = "fr") BIND(STR(?labelFr) AS ?labelFR)}
+    OPTIONAL { ?property rdfs:label ?labelEn . FILTER(lang(?labelEn) = "en") BIND(STR(?labelEn) AS ?labelEN)}
+    OPTIONAL { ?property <http://data.sparna.fr/ontologies/sparnatural-config-core#enableNegation> ?enableNegationDatatype . BIND(STR(?enableNegationDatatype) AS ?enableNegation) }
+    OPTIONAL { ?property <http://data.sparna.fr/ontologies/sparnatural-config-core#enableOptional> ?enableOptionalDatatype . BIND(STR(?enableOptionalDatatype) AS ?enableOptional) }
+    OPTIONAL { ?property <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> ?sparqlStringDatatype . BIND(STR(?sparqlStringDatatype) AS ?sparqlString) }
+    OPTIONAL { ?property datasources:datasource ?datasource .  }
+    OPTIONAL { ?property core:beginDateProperty ?beginDateProperty .  }
+    OPTIONAL { ?property core:endDateProperty ?endDateProperty .  }
+    OPTIONAL { ?property core:exactDateProperty ?exactDateProperty .  }
+    OPTIONAL { ?property datasources:treeChildrenDatasource ?treeChildrenDatasource .  }
+    OPTIONAL { ?property datasources:treeRootsDatasource ?treeRootsDatasource .  }
+    
+    {
+        SELECT ?property (GROUP_CONCAT(CONCAT("this:",STRAFTER(STR(?aDomain), '#')); separator=", ") AS ?theDomain) 
+        WHERE {
+            ?property rdfs:domain/(owl:unionOf/rdf:rest*/rdf:first)? ?aDomain . 
+        }
+        GROUP BY ?property
+    }
+    
+    {
+        SELECT ?property (GROUP_CONCAT(CONCAT("this:",STRAFTER(STR(?aRange), '#')); separator=", ") AS ?theRange) 
+        WHERE {
+            ?property rdfs:range/(owl:unionOf/rdf:rest*/rdf:first)? ?aRange . 
+        }
+        GROUP BY ?property
+    }
+}
+ORDER BY ?theDomain

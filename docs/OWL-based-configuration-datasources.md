@@ -1,10 +1,10 @@
-_[Home](index.html) > OWL-based configuration Datasources_
+_[Home](index.html) > Datasources_
 
 # Datasources
 
 ## Datasources basics
 
-As indicated in the [[OWL-based configuration]] reference, lists and autocomplete properties in Sparnatural require a [`ds:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) annotation to populate respectively the list of values or the values proposed by autocompletion. In its simplest and most common form a datasource is basically a SPARQL query that returns the expected columns to be used to populate the list/autocomplete values.
+Lists and autocomplete properties in Sparnatural can be associated to a [`ds:datasource`](http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource) annotation to populate respectively the list of values or the values proposed by autocompletion. In its simplest and most common form a datasource is a SPARQL query that returns the expected columns to be used to populate the list/autocomplete values.
 
 The datasource annotation configuration can be either:
 
@@ -120,7 +120,9 @@ To use the range as a criteria in the query and filter the list based on the typ
 
 You can provide your own SPARQL queries to populate lists or autocomplete suggestions. To do so, attach a `queryString` data property assertion on your datasource object, holding the SPARQL query that should be used to populate the list/autocomplete.
 
-**The SPARQL query MUST return 2 variables : `?uri` and `?label`, populated anyway you like.** Additionnally, since version 8.6.0, the query can return, optionnally, an extra `?group` variable, which will be used to generate `optgroup` sections in lists widgets, and will be used as hover tooltips in autocompletion lists. This is used to indicate the source endpoint of the result in cases of multiple endpoints.
+**The SPARQL query MUST return 2 variables : `?uri` and `?label`, populated anyway you like.** Additionnally, the query can return, optionnally:
+- an extra `?group` variable, which will be used to generate `optgroup` sections in lists widgets, and will be used as hover tooltips in autocompletion lists. This is used to indicate the source endpoint of the result in cases of multiple endpoints.
+- an extra `?itemLabel` variable, which will be used, if present, as the label of the selected value; for exemple, `?label` can hold a count, like _"Italy (307)"_, while `?itemLabel` can be just _"Italy"_.
 
 In this SPARQL query, the following replacements will happen:
 - **`$domain`**, if present, will be replaced by the URI of the domain class;
@@ -136,7 +138,7 @@ Take a look at the preconfigured SPARQL queries in the [Sparnatural datasources 
 Here is an example of such a query: (note the use of the placeholder variables that will be replaced with the corresponding values):
 
 ```sparql
-SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) (STR(?theLabel) AS ?itemLabel)
 WHERE { 
   { 
     SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) 

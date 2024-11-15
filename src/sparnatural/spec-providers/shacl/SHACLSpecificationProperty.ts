@@ -9,8 +9,9 @@ import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntit
 import Datasources from "../../ontologies/SparnaturalConfigDatasources";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
-import { Quad, Term } from "@rdfjs/types/data-model";
+import { Quad, Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { StoreModel } from "../StoreModel";
+import { StatisticsReader } from "../StatisticsReader";
 
 const factory = new DataFactory();
 
@@ -18,6 +19,31 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
   constructor(uri:string, provider: SHACLSpecificationProvider, n3store: RdfStore, lang: string) {
     super(uri, provider, n3store, lang);
+  }
+
+  /**
+   * Tests whether the provided property shape URI will be turned into a Sparnatural property
+   * @param propertyShapeUri 
+   * @param n3store 
+   * @returns false if the property is deactivated, or it is on rdf:type, or it has an sh:hasValue
+   */
+  static isSparnaturalSHACLSpecificationProperty(propertyShapeUri:string, n3store: RdfStore):boolean {
+    let graph = new StoreModel(n3store);
+    let statReader:StatisticsReader = new StatisticsReader(graph);
+    let shapeIri = factory.namedNode(propertyShapeUri);
+    return (
+      !graph.hasTriple(shapeIri, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
+      &&
+      !graph.hasTriple(shapeIri, SH.PATH, RDF.TYPE)
+      &&
+      !graph.hasTriple(shapeIri, SH.HAS_VALUE, null)
+      &&
+      (
+        (!statReader.hasStatistics(shapeIri))
+        ||
+        statReader.getTriplesCountForShape(shapeIri) > 0
+      )
+    );
   }
 
     getLabel(): string {
@@ -130,12 +156,16 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         }
     }
 
+    /**
+     * @param shapeUri the shape URI (this property shape or an or member of the range of this shape) from which to compute the default property type (e.g. by reading the associated count)
+     * @returns the default widget for this property, based on datatype and count
+     */
     getDefaultPropertyType(shapeUri:string): string {
       let highest:SparnaturalSearchWidget = new ListWidget();
       let highestScore:number = 0;
       for (let index = 0; index < SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().length; index++) {
         const currentWidget = SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets()[index];
-        let currentScore = currentWidget.score(shapeUri, this.store)
+        let currentScore = currentWidget.score(shapeUri, new StoreModel(this.store))
         if(currentScore > highestScore) {
           highestScore = currentScore;
           highest = currentWidget;
@@ -167,7 +197,48 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
 
     getParents(): string[] {
-      return [];
+      let parentsFromSuperProperties:Term[] = this.getSuperPropertiesOfPath()
+      // note : we exclude blank nodes
+      .filter(term => term.termType == "NamedNode")
+      // we find the property shape having this property as a path
+      .map(term => {
+          let propertyShapesWithSuperProperty:Quad_Subject[] = this.graph.findSubjectsOf(SH.PATH, term);
+          let result = undefined;
+          propertyShapesWithSuperProperty.forEach(ps => {
+            if(this.graph.hasTriple(
+              this.graph.findSingleSubjectOf(SH.PROPERTY, factory.namedNode(this.uri)),
+              SH.PROPERTY,
+              ps
+            )) {
+              result = ps;
+            }
+          })
+          return result;
+      })
+      // remove those for which the shape was not found
+      .filter(term => (term != undefined));
+      
+      // concat parents from superclasses and from node - deduplicated
+      let parents = [...new Set([...parentsFromSuperProperties])];
+      return parents
+      // and simply return the string value
+      .map(term => term.value);
+    }
+
+    /**
+     * @returns the property shapes that target a superproperty of the property being the path of this shape.
+     * In other words follow sh:path/owl:subPropertyOf/^sh:path on the same entity
+     */
+    getSuperPropertiesOfPath(): Term[] {
+      // retrieve property
+      let property:Term = this.graph.readSingleProperty(factory.namedNode(this.uri),SH.PATH) as Term;
+      if(property.termType == "NamedNode") {
+        // then retrieve super properties of this one
+        let superProperties:Term[] = this.graph.readProperty(property, RDFS.SUBPROPERTY_OF);
+        return superProperties;
+      } else {
+        return [];
+      }
     }
 
     /**
@@ -303,7 +374,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
                 null
             ).forEach((q:Quad) => {
                   n3store.getQuads(
-                    quad.object,
+                    q.subject,
                     RDF.TYPE,
                     SH.NODE_SHAPE,
                     null

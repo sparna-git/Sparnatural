@@ -24,9 +24,8 @@ export const RDFS = {
   COMMENT: factory.namedNode(RDFS_NAMESPACE + "comment") as NamedNode,
   DOMAIN: factory.namedNode(RDFS_NAMESPACE + "domain") as NamedNode,
   RANGE: factory.namedNode(RDFS_NAMESPACE + "range") as NamedNode,
-  SUBPROPERTY_OF: factory.namedNode(
-    RDFS_NAMESPACE + "subPropertyOf"
-  ) as NamedNode,
+  RESOURCE: factory.namedNode(RDFS_NAMESPACE + "Resource") as NamedNode,
+  SUBPROPERTY_OF: factory.namedNode(RDFS_NAMESPACE + "subPropertyOf") as NamedNode,
   SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf") as NamedNode,
 };
 

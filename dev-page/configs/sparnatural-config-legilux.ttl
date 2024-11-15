@@ -1,0 +1,240 @@
+@prefix : <http://ontologies.sparna.fr/sparnatural-legilux#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://data.sparna.fr/ontologies/sparnatural-legilux> .
+
+<http://data.sparna.fr/ontologies/sparnatural-legilux> rdf:type owl:Ontology ;
+                                                        owl:imports <http://data.sparna.fr/ontologies/sparnatural-config-core> ,
+                                                                    <http://data.sparna.fr/ontologies/sparnatural-config-datasources> .
+
+#################################################################
+#    Object Properties
+#################################################################
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#basedOn
+<http://data.legilux.public.lu/resource/ontology/jolux#basedOn> rdf:type owl:ObjectProperty ;
+                                                                rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> ;
+                                                                rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                rdfs:range <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :search_joluxrealizedBy_title_contains ;
+                                                                rdfs:label "based on"@en ,
+                                                                           "basé sur"@fr .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#basisFor
+<http://data.legilux.public.lu/resource/ontology/jolux#basisFor> rdf:type owl:ObjectProperty ;
+                                                                 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> ;
+                                                                 rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                 rdfs:range <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                 <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "^<http://data.legilux.public.lu/resource/ontology/jolux#basedOn>" ;
+                                                                 <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :search_joluxrealizedBy_title_contains ;
+                                                                 rdfs:label "base de"@fr ,
+                                                                            "basis for"@en .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#citedBy
+<http://data.legilux.public.lu/resource/ontology/jolux#citedBy> rdf:type owl:ObjectProperty ;
+                                                                rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> ;
+                                                                rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                rdfs:range <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "^<http://data.legilux.public.lu/resource/ontology/jolux#cites>" ;
+                                                                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :search_joluxrealizedBy_title_contains ;
+                                                                rdfs:label "cited by"@en ,
+                                                                           "cité par"@fr .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#cites
+<http://data.legilux.public.lu/resource/ontology/jolux#cites> rdf:type owl:ObjectProperty ;
+                                                              rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> ;
+                                                              rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                              rdfs:range <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :search_joluxrealizedBy_title_contains ;
+                                                              rdfs:label "cite"@fr ,
+                                                                         "cites"@en .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#dateDocument
+<http://data.legilux.public.lu/resource/ontology/jolux#dateDocument> rdf:type owl:ObjectProperty ;
+                                                                     rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year> ;
+                                                                     rdfs:domain [ rdf:type owl:Class ;
+                                                                                   owl:unionOf ( <http://data.legilux.public.lu/resource/ontology/jolux#EULegalResource>
+                                                                                                 <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource>
+                                                                                               )
+                                                                                 ] ;
+                                                                     rdfs:range :Date ;
+                                                                     rdfs:label "date"@en ,
+                                                                                "date"@fr .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#modifiedBy
+<http://data.legilux.public.lu/resource/ontology/jolux#modifiedBy> rdf:type owl:ObjectProperty ;
+                                                                   rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> ;
+                                                                   rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                   rdfs:range <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                   <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "^<http://data.legilux.public.lu/resource/ontology/jolux#modifies>" ;
+                                                                   <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :search_joluxrealizedBy_title_contains ;
+                                                                   rdfs:label "modified by"@en ,
+                                                                              "modifié par"@fr .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#modifies
+<http://data.legilux.public.lu/resource/ontology/jolux#modifies> rdf:type owl:ObjectProperty ;
+                                                                 rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> ;
+                                                                 rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                 rdfs:range <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                 <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :search_joluxrealizedBy_title_contains ;
+                                                                 rdfs:label "modifie"@fr ,
+                                                                            "modifies"@en .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#responsibilityOf
+<http://data.legilux.public.lu/resource/ontology/jolux#responsibilityOf> rdf:type owl:ObjectProperty ;
+                                                                         rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                         rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                         rdfs:range :CorporateBody ;
+                                                                         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> <http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_alpha> ;
+                                                                         rdfs:label "auteur"@fr ,
+                                                                                    "author"@en .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#transposes
+<http://data.legilux.public.lu/resource/ontology/jolux#transposes> rdf:type owl:ObjectProperty ;
+                                                                   rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> ;
+                                                                   rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                   rdfs:range <http://data.legilux.public.lu/resource/ontology/jolux#EULegalResource> ;
+                                                                   <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :search_joluxtitle_contains ,
+                                                                                                                                                :search_realizedBy_title_contains ;
+                                                                   rdfs:label "transpose"@fr ,
+                                                                              "transposes"@en .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#typeDocument
+<http://data.legilux.public.lu/resource/ontology/jolux#typeDocument> rdf:type owl:ObjectProperty ;
+                                                                     rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty> ;
+                                                                     rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+                                                                     rdfs:range :ResourceType ;
+                                                                     <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> <http://data.sparna.fr/ontologies/sparnatural-config-datasources#list_skospreflabel_count> ;
+                                                                     rdfs:label "type"@en ,
+                                                                                "type"@fr .
+
+
+###  http://ontologies.sparna.fr/sparnatural-legilux#subject
+:subject rdf:type owl:ObjectProperty ;
+         rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> ;
+         rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+         rdfs:range :Concept ;
+         <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://data.legilux.public.lu/resource/ontology/jolux#subjectLevel1>|<http://data.legilux.public.lu/resource/ontology/jolux#subjectLevel2>" ;
+         <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> <http://data.sparna.fr/ontologies/sparnatural-config-datasources#search_skospreflabel_contains> ;
+         rdfs:label "subject"@en ,
+                    "sujet"@fr .
+
+
+###  http://ontologies.sparna.fr/sparnatural-legilux#transposedBy
+:transposedBy rdf:type owl:ObjectProperty ;
+              rdfs:subPropertyOf <http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty> ;
+              rdfs:domain <http://data.legilux.public.lu/resource/ontology/jolux#EULegalResource> ;
+              rdfs:range <http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> ;
+              <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "^<http://data.legilux.public.lu/resource/ontology/jolux#transposes>" ;
+              <http://data.sparna.fr/ontologies/sparnatural-config-datasources#datasource> :search_joluxrealizedBy_title_contains ;
+              rdfs:label "transposed by"@en ,
+                         "transposé par"@fr .
+
+
+#################################################################
+#    Classes
+#################################################################
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#EULegalResource
+<http://data.legilux.public.lu/resource/ontology/jolux#EULegalResource> rdf:type owl:Class ;
+                                                                        rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                        <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fal fa-scroll" ;
+                                                                        rdfs:label "Directive européenne"@fr ,
+                                                                                   "EU legislation"@en .
+
+
+###  http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource
+<http://data.legilux.public.lu/resource/ontology/jolux#NationalLegalResource> rdf:type owl:Class ;
+                                                                              rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+                                                                              <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fad fa-scroll" ;
+                                                                              rdfs:label "Act"@en ,
+                                                                                         "Acte"@fr .
+
+
+###  http://ontologies.sparna.fr/sparnatural-legilux#Concept
+:Concept rdf:type owl:Class ;
+         rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+         <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fad fa-circle-notch" ;
+         <http://data.sparna.fr/ontologies/sparnatural-config-core#sparqlString> "<http://www.w3.org/2004/02/skos/core#Concept>" ;
+         rdfs:label "Subject"@en ,
+                    "Sujet"@fr .
+
+
+###  http://ontologies.sparna.fr/sparnatural-legilux#CorporateBody
+:CorporateBody rdf:type owl:Class ;
+               rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+               <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fad fa-building" ;
+               rdfs:label "Ministry"@en ,
+                          "Ministère"@fr .
+
+
+###  http://ontologies.sparna.fr/sparnatural-legilux#Date
+:Date rdf:type owl:Class ;
+      rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+      <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fad fa-calendar" ;
+      rdfs:label "Date"@en ,
+                 "Date"@fr .
+
+
+###  http://ontologies.sparna.fr/sparnatural-legilux#ResourceType
+:ResourceType rdf:type owl:Class ;
+              rdfs:subClassOf <http://data.sparna.fr/ontologies/sparnatural-config-core#SparnaturalClass> ;
+              <http://data.sparna.fr/ontologies/sparnatural-config-core#faIcon> "fad fa-shapes" ;
+              rdfs:label "Type d'acte"@fr ,
+                         "Type of act"@en .
+
+
+#################################################################
+#    Individuals
+#################################################################
+
+###  http://ontologies.sparna.fr/sparnatural-legilux#search_joluxrealizedBy_title_contains
+:search_joluxrealizedBy_title_contains rdf:type owl:NamedIndividual ,
+                                                <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+                                       <http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryTemplate> <http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains> ;
+                                       <http://data.sparna.fr/ontologies/sparnatural-config-datasources#labelPath> "^<http://data.legilux.public.lu/resource/ontology/jolux#realizes>/(<http://data.legilux.public.lu/resource/ontology/jolux#title> | <http://data.legilux.public.lu/resource/ontology/jolux#titleAlternative>)" .
+
+
+###  http://ontologies.sparna.fr/sparnatural-legilux#search_joluxtitle_contains
+:search_joluxtitle_contains rdf:type owl:NamedIndividual ,
+                                     <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryTemplate> <http://data.sparna.fr/ontologies/sparnatural-config-datasources#query_search_label_contains> ;
+                            <http://data.sparna.fr/ontologies/sparnatural-config-datasources#labelPath> "(<http://data.legilux.public.lu/resource/ontology/jolux#title> | <http://data.legilux.public.lu/resource/ontology/jolux#titleAlternative>)" .
+
+
+###  http://ontologies.sparna.fr/sparnatural-legilux#semapps_list_dbpedia
+:semapps_list_dbpedia rdf:type owl:NamedIndividual ,
+                               <http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource> ;
+                      <http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString> """SELECT DISTINCT ?uri (STR(?theLabel) AS ?label)
+WHERE {
+
+  {
+  SELECT DISTINCT ?uri
+  WHERE {
+    ?domain a $domain .
+    ?domain $property ?uri .
+    # Note how the range criteria is not used in this query
+  }
+  }
+
+  SERVICE <http://dbpedia.org/sparql> {
+    ?uri <http://www.w3.org/2000/01/rdf-schema#label> ?theLabel .
+    FILTER(lang(?theLabel) = 'fr')
+  }
+}
+ORDER BY ?label""" .
+
+
+###  Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi

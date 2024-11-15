@@ -1,12 +1,13 @@
 import ISettings from "../../../../../../sparnatural/settings/ISettings";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
+import { getSettings } from "../../../../../settings/defaultSettings";
+import { I18n } from "../../../../../settings/I18n";
 import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../SelectedVal";
-import { AbstractWidget } from "../../../../widgets/AbstractWidget";
-import { getSettings } from "../../../../../settings/defaultSettings";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
-import { I18n } from "../../../../../settings/I18n";
+import { AbstractWidget } from "../../../../widgets/AbstractWidget";
+import EditComponents from "./EditComponents";
 import { WidgetFactory } from "./WidgetFactory";
 
 
