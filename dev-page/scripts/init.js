@@ -8,25 +8,36 @@ const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 console.log("urlParams", urlParams);
 const lang = urlParams.get("lang");
+console.log("Configuration ", sparnatural.configuration);
 
-console.log("init sparnatural...");
 sparnatural.addEventListener("init", (event) => {
+  console.log("init sparnatural...");
   sparnatural.configuration = {
     headers: { "User-Agent": "This is Sparnatural calling" },
     autocomplete: {
       maxItems: 40,
     },
   };
+  console.log("Configuration ", sparnatural.configuration);
+  // Notify all plugins of configuration updates if they support it
+  for (const plugin in yasr.plugins) {
+    if (yasr.plugins[plugin].notifyConfiguration) {
+      console.log("notifying configuration for plugin " + plugin);
+      yasr.plugins[plugin].notifyConfiguration(
+        sparnatural.sparnatural.specProvider
+      );
+      console.log("sparnatural", sparnatural.sparnatural.specProvider);
+    }
+  }
 });
 
 sparnatural.addEventListener("queryUpdated", (event) => {
-  var queryString = sparnatural.expandSparql(event.detail.queryString);
-
   var queryStringFromJson = sparnatural.expandSparql(
     event.detail.queryStringFromJson
   );
 
   yasqe.setValue(queryStringFromJson);
+
   // store JSON in hidden field
   document.getElementById("query-json").value = JSON.stringify(
     event.detail.queryStringFromJson
@@ -63,10 +74,13 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   row.appendChild(statusCell);
   tableBody.appendChild(row);
   // Mettre à jour le champ caché
+
   document.getElementById("query-json").value = JSON.stringify(
     event.detail.queryJson
   );
+
   // Notifier les plugins Yasr
+  // notify the query to yasr plugins
   for (const plugin in yasr.plugins) {
     if (yasr.plugins[plugin].notifyQuery) {
       yasr.plugins[plugin].notifyQuery(event.detail.queryJson);
@@ -88,13 +102,20 @@ const yasqe = new Yasqe(document.getElementById("yasqe"), {
 
 Yasr.registerPlugin("TableX", SparnaturalYasguiPlugins.TableX);
 Yasr.registerPlugin("Map", SparnaturalYasguiPlugins.MapPlugin);
+Yasr.registerPlugin("GridPlugin", SparnaturalYasguiPlugins.GridPlugin);
+
+// exemple pour passer un paramètre de config à un plugin
+Yasr.plugins.TableX.defaults.openIriInNewWindow = true;
+
 delete Yasr.plugins["table"];
 const yasr = new Yasr(document.getElementById("yasr"), {
-  pluginOrder: ["TableX", "Response", "Map"],
+  pluginOrder: ["TableX", "Response", "Map", "GridPlugin", "StatsPlugin"],
   defaultPlugin: "TableX",
+  //this way, the URLs in the results are prettified using the defined prefixes in the query
   getUsedPrefixes: yasqe.getPrefixesFromQuery,
   drawOutputSelector: false,
   drawDownloadIcon: false,
+  // avoid persistency side-effects
   persistency: { prefix: false, results: { key: false } },
 });
 

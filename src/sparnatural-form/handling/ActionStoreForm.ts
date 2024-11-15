@@ -21,11 +21,11 @@ class ActionStoreForm {
   // Ajouter les écouteurs d'événements sur les actions du formulaire
   #addFormEventListeners() {
     // Quand une valeur est ajoutée à un widget
+
     this.sparnaturalForm.html[0].addEventListener(
       "valueAdded",
       (event: CustomEvent) => {
         console.log("Valeur ajoutée dans un widget !");
-        console.log("SparnaturalForm", this.sparnaturalForm);
         new QueryGeneratorForm(this).generateQuery();
       }
     );
@@ -36,6 +36,37 @@ class ActionStoreForm {
       (event: CustomEvent) => {
         console.log("Valeur supprimée d'un widget !");
         new QueryGeneratorForm(this).generateQuery();
+      }
+    );
+    // Ajouter un écouteur pour l'événement "anyValueSelected" dans ActionStoreForm
+    this.sparnaturalForm.html[0].addEventListener(
+      "anyValueSelected",
+      (event: CustomEvent) => {
+        new QueryGeneratorForm(this).generateQuery(); // Générer la requête mise à jour
+      }
+    );
+
+    // Ajouter un écouteur pour l'événement "defaultValueSelected" dans ActionStoreForm
+    this.sparnaturalForm.html[0].addEventListener(
+      "removeAnyValueOption",
+      (event: CustomEvent) => {
+        new QueryGeneratorForm(this).generateQuery(); // Générer la requête mise à jour
+      }
+    );
+
+    // Ajouter un écouteur pour l'événement "notExist" dans ActionStoreForm
+    this.sparnaturalForm.html[0].addEventListener(
+      "notExist",
+      (event: CustomEvent) => {
+        new QueryGeneratorForm(this).generateQuery(); // Générer la requête mise à jour
+      }
+    );
+
+    // Ajouter un écouteur pour l'événement "removeNotExistOption" dans ActionStoreForm
+    this.sparnaturalForm.html[0].addEventListener(
+      "removeNotExistOption",
+      (event: CustomEvent) => {
+        new QueryGeneratorForm(this).generateQuery(); // Générer la requête mise à jour
       }
     );
   }
