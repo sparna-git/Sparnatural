@@ -7,10 +7,6 @@
         },
         {
           "termType": "Variable",
-          "value": "OriginalName"
-        },
-        {
-          "termType": "Variable",
           "value": "Instantiation"
         },
         {
