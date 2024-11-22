@@ -1,0 +1,20 @@
+//Buttons
+@use './buttons/unselectbtn.scss';
+@use './buttons/optionalarrow.scss';
+@use './buttons/resetbtn.scss';
+@use './buttons/selectviewvariablebtn.scss';
+@use './buttons/AddUserInputBtn.scss';
+@use './buttons/InfoBtn.scss';
+@use './buttons/AddMoreValuesBtn.scss';
+@use './buttons/editBtn.scss';
+//Widget
+@use './widget/EndClassWidgetGroup.scss';
+@use './widget/EndClassWidgetValue.scss';
+@use './widget/WidgetWrapper.scss';
+@use './widget/AutocompleteWidget.scss';
+@use './widget/ListWidget.scss';
+@use './widget/MapWidget.scss';
+@use './widget/TreeWidget.scss';
+@use './widget/Widgets.scss';
+// LoadingSpinner
+@use './widget/LoadingSpinner.scss';

@@ -1,4 +1,6 @@
 @use './base';
+// Importing all the components
+@use './components/all-components-sparnatural-form.scss';
 // we are importing one default theme,
 // so that all the variables have a default value.
 // they can be overriden by importing another theme CSS in the HTML page
