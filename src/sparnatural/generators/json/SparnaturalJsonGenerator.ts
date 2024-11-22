@@ -1,10 +1,17 @@
 import SparnaturalComponent from "../../components/SparnaturalComponent";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
-import { Branch, ISparJson, Order, VariableExpression, VariableTerm } from "./ISparJson";
+import {
+  Branch,
+  ISparJson,
+  Order,
+  VariableExpression,
+  VariableTerm,
+} from "./ISparJson";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import { DraggableComponentState } from "../../components/variables-section/variableorder/DraggableComponent";
 import { DataFactory } from "rdf-data-factory";
+import SparnaturalFormComponent from "../../../sparnatural-form/components/SparnaturalFormComponent";
 
 const factory = new DataFactory();
 
@@ -20,19 +27,22 @@ class SparnaturalJsonGenerator {
     order: null,
     branches: null,
   };
+
   constructor(sparnatural: SparnaturalComponent) {
     this.sparnatural = sparnatural;
   }
 
   generateQuery(
-    variables: Array<DraggableComponentState>,
+    variables: Array<DraggableComponentState> | string[],
     order: Order,
-    distinct: boolean,
+    distinct: boolean
   ) {
     this.json.distinct = distinct;
-    this.json.variables = this.#toVariables(variables);
+    this.json.variables = this.#toVariables(
+      variables as Array<DraggableComponentState>
+    );
     // don't output "noord", just set it to null
-    if(order != Order.NOORDER) {
+    if (order != Order.NOORDER) {
       this.json.order = order;
     } else {
       this.json.order = null;
@@ -45,9 +55,11 @@ class SparnaturalJsonGenerator {
     return this.json;
   }
 
-  #toVariables(variables: Array<DraggableComponentState>):Array<VariableTerm | VariableExpression> {
+  #toVariables(
+    variables: Array<DraggableComponentState>
+  ): Array<VariableTerm | VariableExpression> {
     return variables.map((v) => {
-      if(v.aggregateFunction) {
+      if (v.aggregateFunction) {
         return {
           expression: {
             type: "aggregate",
@@ -55,20 +67,20 @@ class SparnaturalJsonGenerator {
             distinct: false,
             expression: {
               termType: "Variable",
-            value: v.originalVariable.variable
+              value: v.originalVariable.variable,
             },
           },
-          variable : {
+          variable: {
             termType: "Variable",
-            value: v.selectedVariable.variable
-          }
+            value: v.selectedVariable.variable,
+          },
         };
       } else {
         return {
           termType: "Variable",
-          value: v.selectedVariable.variable
+          value: v.selectedVariable.variable,
         };
-      }      
+      }
     });
   }
 
@@ -84,7 +96,12 @@ class SparnaturalJsonGenerator {
         sType: CrtGrp.StartClassGroup.getTypeSelected(),
         oType: CrtGrp.EndClassGroup.getTypeSelected(),
         // extract only the value part, not the key
-        values: CrtGrp.endClassWidgetGroup.getWidgetValues().filter(v => !(v instanceof SelectAllValue)).map(v => {return v.value;}),
+        values: CrtGrp.endClassWidgetGroup
+          .getWidgetValues()
+          .filter((v) => !(v instanceof SelectAllValue))
+          .map((v) => {
+            return v.value;
+          }),
       },
       children: grpWrapper.whereChild
         // either we are already in an option, or one was set at this level

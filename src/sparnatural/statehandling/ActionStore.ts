@@ -14,7 +14,7 @@ import { QueryGenerator } from "./actions/GenerateQuery";
 export enum MaxVarAction {
   INCREASE,
   DECREASE,
-  RESET
+  RESET,
 }
 
 /*
@@ -29,13 +29,16 @@ class ActionStore {
   // variables: Array<string> = []; // example ?museum
   language = "en"; //default
   sparqlVarID = 0; // sparqlVarId shows the index for the sparql variables. e.g Country_1 where '1' is the id
-  showVariableNames = true //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
-  
+  showVariableNames = true; //variable decides whether the variableNames (?Musee_1) or the label name (museum) is shown
+
   // when quiet, don't emit onQueryUpdated events
   // this is set when a query is loaded
   quiet = false;
-  
-  constructor(sparnatural: SparnaturalComponent, specProvider: ISparnaturalSpecification) {
+
+  constructor(
+    sparnatural: SparnaturalComponent,
+    specProvider: ISparnaturalSpecification
+  ) {
     this.specProvider = specProvider;
     this.sparnatural = sparnatural;
     this.#addCustomEventListners();
@@ -49,10 +52,10 @@ class ActionStore {
         event.stopImmediatePropagation();
         event.preventDefault();
         // trigger query generation + re-enable submit button
+        console.log("sparnatural", this.sparnatural);
         new QueryGenerator(this).generateQuery();
       }
     );
-
     // executed by VariableSelection, Start-EndclassGroup & VariableSelector
     // called by click on "Eye" btn
     this.sparnatural.html[0].addEventListener(
@@ -64,7 +67,7 @@ class ActionStore {
             "onSelectViewVar expects object of type {val:SelectedVal,selected:boolean}"
           );
         // add variable to selected variables
-        selectViewVar(this, e.detail,e.target);
+        selectViewVar(this, e.detail, e.target);
         // trigger query generation + re-enable submit button
         new QueryGenerator(this).generateQuery();
       }
@@ -73,24 +76,29 @@ class ActionStore {
     // Switch which toggles if the Start and Endvalues are shown as their Var name. e.g Country_1
     this.sparnatural.html[0].addEventListener("toggleVarNames", (e) => {
       e.stopImmediatePropagation();
-      toggleVarNames(this.sparnatural,this.showVariableNames);
-      this.showVariableNames? this.showVariableNames = false : this.showVariableNames = true
+      toggleVarNames(this.sparnatural, this.showVariableNames);
+      this.showVariableNames
+        ? (this.showVariableNames = false)
+        : (this.showVariableNames = true);
     });
 
-    this.sparnatural.html[0].addEventListener("getSelectedVariables",(e:CustomEvent)=>{
-
-    })
+    this.sparnatural.html[0].addEventListener(
+      "getSelectedVariables",
+      (e: CustomEvent) => {}
+    );
 
     this.sparnatural.html[0].addEventListener(
       "getMaxVarIndex",
       (e: CustomEvent) => {
         e.stopImmediatePropagation();
         var maxDepth = 1;
-        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePostOrder((grpWrapper: GroupWrapper) => {
-          if(grpWrapper.depth > maxDepth) {
-            maxDepth = grpWrapper.depth;
+        this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePostOrder(
+          (grpWrapper: GroupWrapper) => {
+            if (grpWrapper.depth > maxDepth) {
+              maxDepth = grpWrapper.depth;
+            }
           }
-        });
+        );
 
         // return the index in callback
         e.detail(maxDepth);
@@ -114,10 +122,11 @@ class ActionStore {
 
     this.sparnatural.html[0].addEventListener(
       "getSelectedVarLength",
-      (e:CustomEvent)=>{
+      (e: CustomEvent) => {
         e.stopImmediatePropagation();
-        e.detail(this.sparnatural.variableSection.listVariables().length)
-    })
+        e.detail(this.sparnatural.variableSection.listVariables().length);
+      }
+    );
 
     this.sparnatural.html[0].addEventListener("resetVars", (e: CustomEvent) => {
       e.stopImmediatePropagation();
@@ -158,9 +167,9 @@ class ActionStore {
           throw Error(
             "updateVarName event requires an object of { state: { } }"
           );
-        
+
         updateVarName(this, payload.state, payload.previousVarName);
-        
+
         // trigger query generation + re-enable submit button
         new QueryGenerator(this).generateQuery();
       }
@@ -168,16 +177,19 @@ class ActionStore {
 
     this.sparnatural.html[0].addEventListener(
       "updateAggr",
-      (e: CustomEvent) => {   
+      (e: CustomEvent) => {
         // trigger query generation + re-enable submit button
         new QueryGenerator(this).generateQuery();
       }
     );
 
-    this.sparnatural.html[0].addEventListener("redrawBackgroundAndLinks", (e) => {
-      e.stopImmediatePropagation();
-      redrawBackgroundAndLinks(this.sparnatural);
-    });
+    this.sparnatural.html[0].addEventListener(
+      "redrawBackgroundAndLinks",
+      (e) => {
+        e.stopImmediatePropagation();
+        redrawBackgroundAndLinks(this.sparnatural);
+      }
+    );
 
     this.sparnatural.html[0].addEventListener(
       "deleteGrpWrapper",

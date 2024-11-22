@@ -1,8 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
 import { Pattern } from "sparqljs";
 import ObjectPropertyGroup from "../../components/builder-section/groupwrapper/criteriagroup/objectpropertygroup/ObjectPropertyGroup";
-import { AbstractWidget } from "../../components/widgets/AbstractWidget";
-import { getSettings } from "../../settings/defaultSettings";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "./SparqlFactory";
 import ValueBuilderIfc from './ValueBuilder';
@@ -17,19 +15,22 @@ export default class IntersectionBuilder{
     #objectPropCls:ObjectPropertyGroup
     resultPtrn:Pattern[] = []
     specProvider:ISparnaturalSpecification
+    settings: any;
     
     constructor(
         startClassVar:string|undefined,
         endClassVar:string|undefined,
         valueBuilder:ValueBuilderIfc,
         objectPropCls:ObjectPropertyGroup,
-        specProvider:ISparnaturalSpecification
+        specProvider:ISparnaturalSpecification,
+        settings: any
     ){
         this.#startClassVar = startClassVar
         this.#endClassVar = endClassVar
         this.#valueBuilder = valueBuilder
         this.#objectPropCls = objectPropCls 
         this.specProvider = specProvider
+        this.settings = settings;
     }
 
     build(){
@@ -89,7 +90,7 @@ export default class IntersectionBuilder{
             if(this.specProvider.getProperty(this.#objectPropCls.getTypeSelected()).isMultilingual()) {
                 this.resultPtrn.push(SparqlFactory.buildFilterLangEquals(
                     factory.variable(this.#endClassVar),
-                    factory.literal(getSettings().language)
+                    factory.literal(this.settings.language)
                 ));
             }
         }

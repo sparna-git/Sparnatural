@@ -59,5 +59,6 @@
   "AggrLabelSum": "sum",
   "AggrLabelAvg": "average",
   "AggrLabelSeeMore": "View more",
-  "AggrLabelSeeLess": "View less"
+  "AggrLabelSeeLess": "View less",
+  "Reset": "Reset"
 }

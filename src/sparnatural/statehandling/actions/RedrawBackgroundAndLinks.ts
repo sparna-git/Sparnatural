@@ -1,11 +1,12 @@
-import { getSettings } from "../../settings/defaultSettings";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import SparnaturalComponent from "../../components/SparnaturalComponent";
 /*
   Triggered either on an addSiblingComponen/addWhereChild OR a onRemoveGrpWrapper
 */
-export default function redrawBackgroundAndLinks(sparnatural: SparnaturalComponent) {
+export default function redrawBackgroundAndLinks(
+  sparnatural: SparnaturalComponent
+) {
   let cssdef = ``;
   //index used in callback
   let index = 0;
@@ -27,23 +28,21 @@ export default function redrawBackgroundAndLinks(sparnatural: SparnaturalCompone
       previousHeight = previousHeight + currentHeight + 1;
       index++;
 
-      if(grpWrapper.whereChild != null) {
+      if (grpWrapper.whereChild != null) {
         // compute total height of children
         let childrenHeight = 0;
-        grpWrapper.whereChild.traversePreOrder(
-          (g: GroupWrapper) => {
-            childrenHeight = g.CriteriaGroup.html.outerHeight(true)
+        grpWrapper.whereChild.traversePreOrder((g: GroupWrapper) => {
+          childrenHeight = g.CriteriaGroup.html.outerHeight(true);
 
-            cssdef += drawBackgroundOfGroupWrapper(
-              index,
-              previousHeight,
-              childrenHeight
-            );
-            //Calculate start distance for next line.
-            previousHeight = previousHeight + childrenHeight + 1;
-            index++;
-          }
-        );
+          cssdef += drawBackgroundOfGroupWrapper(
+            index,
+            previousHeight,
+            childrenHeight
+          );
+          //Calculate start distance for next line.
+          previousHeight = previousHeight + childrenHeight + 1;
+          index++;
+        });
       }
     }
   );
@@ -87,7 +86,7 @@ function drawBackgroundOfGroupWrapper(
   let rgba = `rgba(var(--bg-red),var(--bg-green),var(--bg-blue),${a})`;
   if (index !== 0) {
     // comma in the string beginning
-    return ` ,${rgba} ${prevHeight}px, ${rgba} ${prevHeight+currHeight}px`;
+    return ` ,${rgba} ${prevHeight}px, ${rgba} ${prevHeight + currHeight}px`;
   }
   return `${rgba} ${prevHeight}px, ${rgba} ${currHeight}px`;
 }

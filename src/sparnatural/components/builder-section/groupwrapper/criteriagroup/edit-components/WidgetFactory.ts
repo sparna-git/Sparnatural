@@ -26,7 +26,7 @@ export class WidgetFactorySettings {
     language: string;
     defaultLanguage: string;
     typePredicate: string;
-    maxOr: number;
+    maxOr?: number;
     
     sparqlPrefixes?: { [key: string]: string };
     endpoints?: string[];
@@ -95,6 +95,15 @@ export class WidgetFactory {
     }
 
 
+    /**
+     * Create a widget.
+     * 
+     * @param widgetType the widget type(list, autocomplete, etc.) that is returned from the method "getPropertyType" of the configuration
+     * @param startClassVal the type + variable name of the subject
+     * @param objectPropVal the type + variable name of the property
+     * @param endClassVal the type + variable name of the object
+     * @returns the widget component to be displayed
+     */
     buildWidget(
         widgetType: string,
         startClassVal: SelectedVal,

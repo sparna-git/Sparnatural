@@ -19,8 +19,11 @@ class HTMLComponent implements IRenderable {
     widgetHtml: JQuery<HTMLElement>
   ) {
     this.baseCssClass = baseCssClass;
-    this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass);
     this.ParentComponent = ParentComponent;
+
+    // create the HTML element
+    this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass);
+    
     this.widgetHtml = widgetHtml;
   }
 
@@ -58,6 +61,9 @@ class HTMLComponent implements IRenderable {
     return this;
   }
 
+  /**
+   * @returns moves up the component hierarchy and returns the one that does not have a parent component
+   */
   getRootComponent():HTMLComponent {
     if(this.ParentComponent == null) {
       return this;

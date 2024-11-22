@@ -25,7 +25,7 @@ class WidgetWrapper extends HTMLComponent {
   add_or: boolean = true;
 
   constructor(
-    ParentComponent: EditComponents,
+    ParentComponent: HTMLComponent,
     specProvider: ISparnaturalSpecification,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
@@ -177,10 +177,6 @@ class WidgetWrapper extends HTMLComponent {
       this.objectPropVal,
       this.endClassVal
     );
-  }
-
-  #createSparqlGenerator() {
-    
   }
 
   getWidgetType() {

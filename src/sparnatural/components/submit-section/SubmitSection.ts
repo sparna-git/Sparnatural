@@ -21,11 +21,14 @@ class SubmitSection extends HTMLComponent {
   // see: https://stackoverflow.com/questions/55088050/ts-class-method-is-undefined-in-callback
   submitAction = () => {
     if (getSettings().submitButton) {
-      let e = new CustomEvent(SparnaturalElement.EVENT_SUBMIT, { 
+      console.log("SubmitSection: Submit button clicked");
+      let e = new CustomEvent(SparnaturalElement.EVENT_SUBMIT, {
         bubbles: true,
-        detail : this.ParentSparnatural
+        detail: this.ParentSparnatural,
       });
       this.html[0].dispatchEvent(e);
+      console.log("Submit event dispatched.");
+      console.log(e);
     }
   };
 

@@ -8,6 +8,12 @@ const factory = new DataFactory();
 export default class SparqlFactory {
   static sparqlParser =  new SparqlParser({ pathOnly: true } as any);
 
+  /**
+   * @param aggregation The aggregation function to apply
+   * @param aggregatedVar The original variable being aggregated
+   * @param asVar The final variable holding the result of the aggregation function
+   * @returns An aggregation expression, always using a DISTINCT
+   */
   static buildAggregateFunctionExpression(
     aggregation:string,
     aggregatedVar:Variable,
@@ -28,6 +34,9 @@ export default class SparqlFactory {
 
 
   static buildBgpPattern(triples: Triple[]): BgpPattern {
+      if(triples.findIndex(t => (t == null)) > -1) {
+        throw new Error("Trying to build a bgp pattern with null triple !");
+      }
       return {
           type: "bgp",
           triples: triples,
@@ -129,6 +138,12 @@ export default class SparqlFactory {
     };
   }
 
+  /**
+   * @param firstVariable First variable in the COALESCE
+   * @param secondvariable Second variable in the COALESCE
+   * @param finalVariable Finale variable of the BIND clause
+   * @returns BIND(COALESCE(?var1, ?var2) AS ?finalVar)
+   */
   static buildBindCoalescePattern(firstVariable:Variable, secondvariable:Variable, finalVariable:Variable): BindPattern {				
     return {
         type: "bind",
@@ -266,7 +281,7 @@ export default class SparqlFactory {
   static buildPropertyPathTriple(
     subject: IriTerm | BlankTerm | VariableTerm | QuadTerm,
     predicate: IriTerm | PropertyPath,
-    object: Term
+    object: Term 
   ):Triple {
     return {
       subject: subject,

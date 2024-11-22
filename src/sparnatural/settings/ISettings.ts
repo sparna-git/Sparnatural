@@ -10,7 +10,7 @@ interface ISettings {
   language: string;
   defaultLanguage: string;
   addDistinct?: boolean;
-  limit?:number;
+  limit?: number;
   typePredicate: string;
   maxDepth: number;
   maxOr: number;

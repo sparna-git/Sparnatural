@@ -1,0 +1,54 @@
+{
+  "bindings": [
+    {
+      "variable": "OriginalName",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "original name",
+          "fr": "nom d'origine"
+        }
+      }
+    },
+    {
+      "variable": "ContainerFormat",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "container format",
+          "fr": "format container"
+        }
+      }
+    },
+    {
+      "variable": "VideoFormat",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "video format",
+          "fr": "format vidéo"
+        }
+      }
+    },
+    {
+      "variable": "AudioFormat",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "audio format",
+          "fr": "format audio"
+        }
+      }
+    },
+    {
+      "variable": "Standard",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "standard",
+          "fr": "standard"
+        }
+      }
+    }
+  ]
+}

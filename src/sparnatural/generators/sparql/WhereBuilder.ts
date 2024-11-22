@@ -18,8 +18,8 @@ export default class WhereBuilder{
     #typePredicate: string
     #isChild:boolean
     #isInOption:boolean
-    
-    #widgetComponent:AbstractWidget | null | undefined = null
+    settings: any
+
     #valueBuilder:ValueBuilderIfc;
     
     // patterns built in the build process
@@ -35,14 +35,22 @@ export default class WhereBuilder{
     // default vars gathered from children
     #defaultVars: Variable[] =[]
 
-    constructor(grpWrapper:GroupWrapper,specProvider:ISparnaturalSpecification,typePredicate:string,isChild:boolean,isInOption:boolean){
+    constructor(
+      grpWrapper:GroupWrapper,
+      specProvider:ISparnaturalSpecification,
+      typePredicate:string,
+      isChild:boolean,
+      isInOption:boolean,
+      settings: any
+    ){
         this.#grpWrapper = grpWrapper
         this.#specProvider = specProvider
         this.#typePredicate = typePredicate
         this.#isChild = isChild
         this.#isInOption = isInOption
+        this.settings = settings;
         // this.#widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
-
+        
         
         // create the object to convert widget values to SPARQL
         let endClassValue = this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal.type;
@@ -58,7 +66,7 @@ export default class WhereBuilder{
                 this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal,
                 this.#grpWrapper.CriteriaGroup.EndClassGroup.isVarSelected(),
-                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent?.getWidgetValues()
+                this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent?.getWidgetValues().map((v) => v.value)
             );
         }
     }
@@ -86,7 +94,8 @@ export default class WhereBuilder{
             this.#specProvider,
             this.#typePredicate,
             true,
-            this.#grpWrapper.optionState !== OptionTypes.NONE
+            this.#grpWrapper.optionState !== OptionTypes.NONE,
+            this.settings
         )
         builder.build()
         this.#whereChildPtrns = builder.getResultPtrns()
@@ -102,7 +111,8 @@ export default class WhereBuilder{
             this.#specProvider,
             this.#typePredicate,
             true,
-            this.#isInOption
+            this.#isInOption,
+            this.settings
         )
         builder.build()
         this.#andChildPtrns = builder.getResultPtrns()
@@ -160,7 +170,8 @@ export default class WhereBuilder{
             this.#grpWrapper.CriteriaGroup.EndClassGroup.getVarName(),
             this.#valueBuilder,
             objectPropCls,
-            this.#specProvider
+            this.#specProvider,
+            this.settings
         );
         intersectionBuilder.build()
         this.#intersectionPtrn = intersectionBuilder.getPattern()
