@@ -71,7 +71,7 @@ this:Person a sh:NodeShape;
   sh:description "A person, here usually a painter or sculptor"@en, "Une personne, ici souvent un peintre ou un scupteur"@fr;
   sh:property this:Person_bornIn, this:Person_diedIn, this:Person_label, this:Person_birthDate,
     this:Person_classifiedIn, this:Person_created, this:Person_deathYear, this:Person_movement,
-    this:Person_thumbnail, this:Person_description .
+    this:Person_thumbnail, this:Person_description, this:Person_date .
 
 this:Movement a sh:NodeShape;
   sh:order "5"^^xsd:integer;
@@ -380,6 +380,16 @@ this:Person_birthDate sh:path dbpedia:birthDate;
   dash:searchWidget core:TimeProperty-Date;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
+
+this:Person_date sh:path this:date;
+  sh:order "1";
+  sh:name "vivant en"@en, "living in"@fr;
+  sh:nodeKind sh:Literal;
+  sh:node this:Date;
+  dash:searchWidget core:TimeProperty-Date;
+  core:beginDateProperty this:Person_birthDate;
+  core:endDateProperty this:Person_deathYear;
+.
 
 this:Person_classifiedIn sh:path dcterms:subject;
   sh:name "category"@en, "catégorie"@fr;
