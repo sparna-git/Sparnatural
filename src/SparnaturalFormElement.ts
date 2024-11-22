@@ -1,8 +1,7 @@
 import $ from "jquery";
-import "./assets/stylesheets/SparnaturalForm.scss";
+import "./assets/stylesheets/sparnatural-form.scss";
 import SparnaturalFormComponent from "./sparnatural-form/components/SparnaturalFormComponent";
 import { SparnaturalFormAttributes } from "./SparnaturalFormAttributes";
-import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
 import {
   getSettings,
   mergeSettings,

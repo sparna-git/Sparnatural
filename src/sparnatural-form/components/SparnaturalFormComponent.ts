@@ -3,19 +3,15 @@ import HTMLComponent from "../../sparnatural/components/HtmlComponent";
 import { ISparJson } from "../../sparnatural/generators/json/ISparJson";
 import { I18n } from "../../sparnatural/settings/I18n";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
-import ISpecificationEntity from "../../sparnatural/spec-providers/ISpecificationEntity";
 import SparnaturalSpecificationFactory from "../../sparnatural/spec-providers/SparnaturalSpecificationFactory";
 import { SparnaturalFormAttributes } from "../../SparnaturalFormAttributes";
 import ISettings from "../settings/ISettings";
 import { SparnaturalFormI18n } from "../settings/SparnaturalFormI18n";
 import UnselectBtn from "../../sparnatural/components/buttons/UnselectBtn";
-import "../style/form.scss";
 import ActionStoreForm from "../handling/ActionStoreForm"; // Importer le store
 import { Catalog } from "../../sparnatural/settings/Catalog";
 import { getSettings } from "../settings/defaultsSettings";
 import SubmitSection from "./buttons/SubmitBtn";
-import { value } from "../../../../Sparnatural-yasgui-plugins/src/sparnatural-yasr-plugin-grid/old-backup/Models/value";
-import { ValueBuilderFactory } from "../../sparnatural/generators/sparql/ValueBuilder";
 import { SparnaturalFormElement } from "../../SparnaturalFormElement";
 
 class SparnaturalFormComponent extends HTMLComponent {
