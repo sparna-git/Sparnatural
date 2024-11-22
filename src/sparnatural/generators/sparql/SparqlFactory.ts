@@ -377,7 +377,7 @@ export default class SparqlFactory {
         SparqlFactory.buildTriple(
           startClassVar,
           beginDatePred,
-          endDateVarName
+          beginDateVarName
         )
       );
       secondAlternative.patterns.push(secondBgp);
