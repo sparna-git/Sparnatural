@@ -164,12 +164,13 @@ export class SparnaturalElement extends HTMLElement {
     callback: (data: any) => void,
     errorCallback?: (error: any) => void
   ) {
-    let sparqlFetcherFactory:SparqlHandlerFactory = new SparqlHandlerFactory(
-      this.sparnatural.catalog,
+    let sparqlFetcherFactory:SparqlHandlerFactory = new SparqlHandlerFactory(      
       getSettings().language,
       getSettings().localCacheDataTtl,
       getSettings().customization.headers,
-      getSettings().customization.sparqlHandler
+      getSettings().customization.sparqlHandler,
+      // can be undefined
+      this.sparnatural.catalog,
     );
 
     let sparqlFetcher:SparqlHandlerIfc = sparqlFetcherFactory.buildSparqlHandler(getSettings().endpoints);

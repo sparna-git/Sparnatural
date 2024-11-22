@@ -14,24 +14,25 @@ export interface SparqlHandlerIfc {
 
 export class SparqlHandlerFactory {
 
-    protected catalog:Catalog;
     protected lang:string;
     protected localCacheDataTtl:any;
     protected extraHeaders:Map<string,string>;
     protected customizedSparqlHandler:SparqlHandlerIfc;
+    protected catalog?:Catalog;
 
     constructor(
-        catalog:Catalog,
         lang:string,
         localCacheDataTtl:any,
         extraHeaders:Map<string,string>,
-        customizedSparqlHandler?:SparqlHandlerIfc
+        customizedSparqlHandler?:SparqlHandlerIfc,
+        catalog?:Catalog
     ) {
-        this.catalog = catalog;
+        
         this.lang = lang;
         this.localCacheDataTtl = localCacheDataTtl;
         this.extraHeaders = extraHeaders;
         this.customizedSparqlHandler = customizedSparqlHandler;
+        this.catalog = catalog;
     }
 
     buildSparqlHandler(endpoints:string[]):SparqlHandlerIfc {
