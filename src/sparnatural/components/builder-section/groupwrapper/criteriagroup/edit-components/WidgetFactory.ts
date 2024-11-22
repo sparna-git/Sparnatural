@@ -51,7 +51,7 @@ export class WidgetFactory {
     parentComponent:HTMLComponent;
     specProvider: any;
     settings: WidgetFactorySettings;
-    catalog:Catalog;
+    catalog?:Catalog;
 
     private sparqlFetcherFactory:SparqlHandlerFactory;
     private sparqlPostProcessor:{ semanticPostProcess: (sparql:string)=>string };
@@ -68,12 +68,12 @@ export class WidgetFactory {
         this.catalog = catalog;
 
         // how to fetch a SPARQL query
-        this.sparqlFetcherFactory = new SparqlHandlerFactory(
-            this.catalog,
+        this.sparqlFetcherFactory = new SparqlHandlerFactory(            
             this.settings.language,
             this.settings.localCacheDataTtl,
             this.settings.customization.headers,
-            this.settings.customization.sparqlHandler
+            this.settings.customization.sparqlHandler,
+            this.catalog
         );
 
         // how to post-process the generated SPARQL after it is constructed and before it is send

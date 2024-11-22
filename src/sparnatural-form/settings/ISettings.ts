@@ -1,4 +1,5 @@
 import { AutocompleteConfiguration } from "../../sparnatural/components/widgets/AutoCompleteWidget";
+import { SparqlHandlerIfc } from "../../sparnatural/components/widgets/data/SparqlHandler";
 import { ListConfiguration } from "../../sparnatural/components/widgets/ListWidget";
 import { MapConfiguration } from "../../sparnatural/components/widgets/MapWidget";
 import { NumberConfiguration } from "../../sparnatural/components/widgets/NumberWidget";
@@ -25,6 +26,7 @@ interface ISettings {
     tree?: Partial<TreeConfiguration>;
     number?: Partial<NumberConfiguration>;
     map?: Partial<MapConfiguration>;
+    sparqlHandler?: SparqlHandlerIfc;
   };
 }
 
