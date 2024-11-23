@@ -52,7 +52,7 @@
       "line": {
         "s": "File",
         "p": "http://shapes.performing-arts.ch/instantiations/File_originalName",
-        "o": "Z_Text_2",
+        "o": "OriginalName",
         "sType": "http://shapes.performing-arts.ch/instantiations/File",
         "oType": "http://special/Z_Text",
         "values": []
