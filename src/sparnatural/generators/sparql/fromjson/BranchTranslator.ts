@@ -136,46 +136,43 @@ export default class BranchTranslator {
    * Generates the triple of the type of subject ("s" and "sType" in the branch JSON structure)
    */
   #buildSubjectClassPtrn() {
-    if (!this.#valueBuilder?.isBlockingStart()) {
-      let typeTranslator: TypedVariableTranslator = new TypedVariableTranslator(
-        this.#branch.line.s,
-        this.#branch.line.sType,
-        // Note : on subject position, the only variable that can be selected is the very first one
-        // Otherwise it can be selected in the object position, but not inside a WHERE clause
-        // Anyway if it not the very first, all the startClassPtrn is ignored when building the final query
-        BranchTranslator.isVarSelected(this.#fullQuery, this.#branch.line.s) &&
-          this.#isVeryFirst,
-        this.#specProvider,
-        this.settings
+    let typeTranslator: TypedVariableTranslator = new TypedVariableTranslator(
+      this.#branch.line.s,
+      this.#branch.line.sType,
+      // Note : on subject position, the only variable that can be selected is the very first one
+      // Otherwise it can be selected in the object position, but not inside a WHERE clause
+      // Anyway if it not the very first, all the startClassPtrn is ignored when building the final query
+      BranchTranslator.isVarSelected(this.#fullQuery, this.#branch.line.s) && this.#isVeryFirst,
+      this.#valueBuilder?.isBlockingStart(),
+      this.#specProvider,
+      this.settings
+    );
+    typeTranslator.build();
+    this.#startClassPtrn = typeTranslator.resultPtrns;
+    // if there was any default label patterns generated, gather the variable names of the default label
+    if (typeTranslator.defaultLblPatterns.length > 0) {
+      this.#defaultVars.push(
+        factory.variable(typeTranslator.defaultLabelVarName)
       );
-      typeTranslator.build();
-      this.#startClassPtrn = typeTranslator.resultPtrns;
-      // if there was any default label patterns generated, gather the variable names of the default label
-      if (typeTranslator.defaultLblPatterns.length > 0) {
-        this.#defaultVars.push(
-          factory.variable(typeTranslator.defaultLabelVarName)
-        );
-      }
     }
   }
 
   #buildObjectClassPtrn() {
-    if (!this.#valueBuilder?.isBlockingEnd()) {
-      let typeTranslator: TypedVariableTranslator = new TypedVariableTranslator(
-        this.#branch.line.o,
-        this.#branch.line.oType,
-        BranchTranslator.isVarSelected(this.#fullQuery, this.#branch.line.o),
-        this.#specProvider,
-        this.settings
-      );
-      typeTranslator.build();
+    let typeTranslator: TypedVariableTranslator = new TypedVariableTranslator(
+      this.#branch.line.o,
+      this.#branch.line.oType,
+      BranchTranslator.isVarSelected(this.#fullQuery, this.#branch.line.o),
+      this.#valueBuilder?.isBlockingEnd(),
+      this.#specProvider,
+      this.settings
+    );
+    typeTranslator.build();
 
-      this.#endClassPtrn = typeTranslator.resultPtrns;
-      if (typeTranslator.defaultLblPatterns.length > 0) {
-        this.#defaultVars.push(
-          factory.variable(typeTranslator.defaultLabelVarName)
-        );
-      }
+    this.#endClassPtrn = typeTranslator.resultPtrns;
+    if (typeTranslator.defaultLblPatterns.length > 0) {
+      this.#defaultVars.push(
+        factory.variable(typeTranslator.defaultLabelVarName)
+      );
     }
   }
 
