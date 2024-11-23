@@ -8,7 +8,7 @@ import { SparnaturalFormAttributes } from "../../SparnaturalFormAttributes";
 import ISettings from "../settings/ISettings";
 import { SparnaturalFormI18n } from "../settings/SparnaturalFormI18n";
 import UnselectBtn from "../../sparnatural/components/buttons/UnselectBtn";
-import ActionStoreForm from "../handling/ActionStoreForm"; // Importer le store
+import ActionStoreForm from "../handling/ActionStore"; // Importer le store
 import { Catalog } from "../../sparnatural/settings/Catalog";
 import { getSettings } from "../settings/defaultsSettings";
 import SubmitSection from "./buttons/SubmitBtn";
@@ -355,7 +355,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                 anyValueToggle.id = `any-value-${variable}`;
                 anyValueToggle.classList.add("any-value-toggle");
                 anyValueLabel.htmlFor = `any-value-${variable}`;
-                anyValueLabel.innerText = "Any value";
+                anyValueLabel.innerText = "&nbsp;Any value";
                 anydiv.appendChild(anyValueToggle);
                 anydiv.appendChild(anyValueLabel);
 
@@ -414,7 +414,7 @@ class SparnaturalFormComponent extends HTMLComponent {
               notExistValue.id = `not-value-${variable}`;
               notExistValue.classList.add("any-value-toggle");
               notExistLabel.htmlFor = `not-value-${variable}`;
-              notExistLabel.innerText = "Not Exist";
+              notExistLabel.innerText = "&nbsp;Not Exist";
               notExistDiv.appendChild(notExistValue);
               notExistDiv.appendChild(notExistLabel);
 

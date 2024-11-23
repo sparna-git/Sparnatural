@@ -1,13 +1,11 @@
 import SparnaturalFormComponent from "../components/SparnaturalFormComponent";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
-import { QueryGeneratorForm } from "./actions/GenerateQueryForm";
+import { QueryGeneratorForm } from "./actions/GenerateQuery";
 
 class ActionStoreForm {
   sparnaturalForm: SparnaturalFormComponent;
   specProvider: any;
   quiet = false; // Pour éviter d'exécuter des actions quand c'est nécessaire de "garder le silence"
-  language = "en"; //default
-  sparqlVarID = 0;
 
   constructor(
     sparnaturalForm: SparnaturalFormComponent,

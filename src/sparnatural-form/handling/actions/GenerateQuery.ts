@@ -1,5 +1,5 @@
 import { getSettings } from "../../settings/defaultsSettings";
-import ActionStoreForm from "../ActionStoreForm";
+import ActionStoreForm from "../ActionStore";
 import { Generator } from "sparqljs";
 import { ISparJson } from "../../../sparnatural/generators/json/ISparJson";
 import JsonSparqlTranslator from "../../../sparnatural/generators/sparql/fromjson/JsonSparqlTranslator";
