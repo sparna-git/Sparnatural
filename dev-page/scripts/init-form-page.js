@@ -42,7 +42,19 @@ sparnaturalForm.addEventListener("queryUpdated", (event) => {
 // Listen for form submission and trigger YASQE query
 sparnaturalForm.addEventListener("submit", () => {
   sparnaturalForm.disablePlayBtn();
-  yasqe.query();
+  let finalResult = sparnaturalForm.executeSparql(
+    yasqe.getValue(),
+    (finalResult) => {
+      // send final result to YasR
+      yasr.setResponse(finalResult);
+      // re-enable submit button
+      sparnaturalForm.enablePlayBtn();
+    },
+    (error) => {
+      console.error("Got an error when executing SPARQL in Sparnatural");
+      console.dir(error);
+    }
+  );
 });
 
 console.log("init yasr & yasqe...");
