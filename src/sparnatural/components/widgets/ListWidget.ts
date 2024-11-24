@@ -73,6 +73,10 @@ export class ListWidget extends AbstractWidget {
 
       if (items.length > 0) {
   
+        this.selectHtml.append(
+          $("<option value=''>" + I18n.labels.ListWidgetSelectValue + "</option>")
+        );
+
         // find distinct values of the 'group' binding
         const groups = [...new Set(items.map(item => item.group))];
 
@@ -116,9 +120,13 @@ export class ListWidget extends AbstractWidget {
           if (option.length > 1)
             throw Error("List widget should allow only for one el to be selected!");
 
-            let itemLabel = option[0].getAttribute("data-itemLabel");
-            let listWidgetValue: WidgetValue = this.buildValue(option[0].value, itemLabel);
-            this.renderWidgetVal(listWidgetValue);
+          // this is the placeholder
+          if(option[0].value == "")
+            return;
+
+          let itemLabel = option[0].getAttribute("data-itemLabel");
+          let listWidgetValue: WidgetValue = this.buildValue(option[0].value, itemLabel);
+          this.renderWidgetVal(listWidgetValue);
         });
 
       } else {
