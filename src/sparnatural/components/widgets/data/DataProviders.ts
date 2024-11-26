@@ -116,21 +116,25 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
             let result = new Array<RdfTermDatasourceItem>;
             for (let index = 0; index < data.results.bindings.length; index++) {
                 const solution = data.results.bindings[index];
-                if(solution.uri) {
-                    // if we find a "uri" column...
-                    // read uri key & label key
-                    result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
-                } else if(solution.value) {
-                    // if we find a "value" column...
-                    // read value key & label key
-                    result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
-                } else {
-                    // try to determine the payload column by taking the column other than label
-                    let columnName = this.getRdfTermColumn(solution);
-                    if(columnName) {
-                        result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                // this is to avoid corner-cases with GraphDB queries returning only count=0 in aggregation queries.
+                // we need at least 2 bindings anyway
+                if(solution.length > 1) {
+                    if(solution.uri) {
+                        // if we find a "uri" column...
+                        // read uri key & label key
+                        result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                    } else if(solution.value) {
+                        // if we find a "value" column...
+                        // read value key & label key
+                        result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
                     } else {
-                        throw Error("Could not determine which column to read from the result set")
+                        // try to determine the payload column by taking the column other than label
+                        let columnName = this.getRdfTermColumn(solution);
+                        if(columnName) {
+                            result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                        } else {
+                            throw Error("Could not determine which column to read from the result set")
+                        }
                     }
                 }
             }
@@ -145,15 +149,14 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
   getRdfTermColumn(aBindingSet: any): string | undefined {
     let foundKey: string | undefined = undefined;
     for (const key of Object.keys(aBindingSet)) {
-      if (key != "label") {
-        if (!foundKey) {
-          foundKey = key;
-        } else {
-          // it means there are more than one column, don't know which one to take, break
-          return undefined;
+        if (key != "label") {
+            if (!foundKey) {
+            foundKey = key;
+            } else {
+            // it means there are more than one column, don't know which one to take, break
+            return undefined;
+            }
         }
-      }
-      // console.log(`${key}: ${(aBindingSet as {[key: string]: string})[key]}`);
     }
     return foundKey;
   }
