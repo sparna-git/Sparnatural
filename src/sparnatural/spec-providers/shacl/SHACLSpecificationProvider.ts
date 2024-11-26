@@ -350,7 +350,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       });
 
     // reparse the query, apply prefixes, and reserialize the query
-    console.log(sparql)
+    // console.log(sparql)
     var query = this.#parser.parse(sparql);
     for (var key in prefixes) {
       query.prefixes[key] = prefixes[key];
