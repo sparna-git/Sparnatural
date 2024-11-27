@@ -4,7 +4,7 @@ import { SelectedVal } from "../SelectedVal";
 import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { AutocompleteDataProviderIfc, NoOpAutocompleteProvider } from "./data/DataProviders";
+import { AutocompleteDataProviderIfc, NoOpAutocompleteProvider, RdfTermDatasourceItem } from "./data/DataProviders";
 import Awesomplete from 'awesomplete';
 import { I18n } from '../../settings/I18n';
 import HTMLComponent from '../HtmlComponent';
@@ -74,7 +74,7 @@ export class AutoCompleteWidget extends AbstractWidget {
 
 
     // the callback called when proposals have been fetched, to populate the suggestion list
-    let callback = (items:{term:RDFTerm;label:string;group?:string}[]) => {
+    let callback = (items:RdfTermDatasourceItem[]) => {
       
       let list = new Array<{label:String, value:String}>();
       $.each(items, (key, item) => {
