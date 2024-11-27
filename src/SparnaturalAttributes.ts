@@ -31,7 +31,7 @@ export class SparnaturalAttributes {
       throw Error("No endpoint provided!");
     }
     this.catalog = this.#read(element, "catalog");
-    //this.language = this.#read(element, "lang");
+    this.language = this.#read(element, "lang");
     this.defaultLanguage = this.#read(element, "defaultLang");
 
     // use the singular to match RDFa attribute name
