@@ -12,6 +12,7 @@ import WhereBuilder from "../WhereBuilder";
 import SparqlFactory from "../SparqlFactory";
 import { DataFactory } from "rdf-data-factory";
 import QueryWhereTranslator from "./QueryWhereTranslator";
+import ISpecificationProperty from "../../../spec-providers/ISpecificationProperty";
 
 const factory = new DataFactory();
 
@@ -154,12 +155,14 @@ export default class JsonSparqlTranslator {
       */
   }
 
+  //---------------------------------------------------------------------
+  // old version of the method, to be removed after testing the new one
   /**
    * Translates the variables from the JSON structure to variables in the SparqlJs structure
    * @param variables The variables in the original JSON query structure
    * @returns An array of Variable structure in the SparqlJs structure
    */
-  #varsToRDFJS(
+  #varsToRDFJS1(
     variables: Array<VariableTerm | VariableExpression>
   ): Variable[] {
     return variables.map((v) => {
@@ -175,6 +178,75 @@ export default class JsonSparqlTranslator {
         return factory.variable((v as VariableTerm).value);
       }
     });
+  }
+
+  //--------------------------------------------------------------------
+
+  /**
+   * Translates the variables from the JSON structure to variables in the SparqlJs structure
+   * @param variables The variables in the original JSON query structure
+   * @returns An array of Variable structure in the SparqlJs structure
+   */
+
+  #varsToRDFJS(
+    variables: Array<VariableTerm | VariableExpression>
+  ): Variable[] {
+    let variablesArray: Variable[][] = variables.map((v) => {
+      if ((v as VariableExpression).expression) {
+        let vExpression: VariableExpression = v as VariableExpression;
+        return [
+          SparqlFactory.buildAggregateFunctionExpression(
+            vExpression.expression.aggregation,
+            factory.variable(vExpression.expression.expression.value),
+            factory.variable(vExpression.variable.value)
+          ),
+        ];
+      } else {
+        let specProperty: ISpecificationProperty | undefined = undefined;
+
+        // Parcourir les branches pour trouver la correspondance uniquement avec l'objet (o)
+        (this.jsonQuery.branches as any[]).forEach((branch) => {
+          if (branch.line.o === (v as VariableTerm).value) {
+            console.log("Matching branch found for object:", branch);
+            specProperty = this.specProvider.getProperty(branch.line.p);
+          }
+        });
+
+        console.log("specProperty", specProperty);
+
+        if (!specProperty) {
+          // Si aucune propriété n'est trouvée, retourne une variable simple
+          console.log("Variable", (v as VariableTerm).value);
+          return [factory.variable((v as VariableTerm).value)];
+        }
+
+        if (
+          specProperty.getBeginDateProperty() &&
+          specProperty.getEndDateProperty()
+        ) {
+          let result: Variable[] = [];
+          if (specProperty.getBeginDateProperty()) {
+            result.push(factory.variable((v as VariableTerm).value + "_begin"));
+          }
+          if (specProperty.getEndDateProperty()) {
+            result.push(factory.variable((v as VariableTerm).value + "_end"));
+          }
+          if (specProperty.getExactDateProperty()) {
+            result.push(factory.variable((v as VariableTerm).value + "_exact"));
+          }
+          return result;
+        } else {
+          return [factory.variable((v as VariableTerm).value)];
+        }
+      }
+    });
+
+    // Aplatissement du tableau de tableaux en un tableau simple
+    let finalResult: Variable[] = [];
+    variablesArray.forEach((varArray: Variable[]) => {
+      finalResult.push(...varArray);
+    });
+    return finalResult;
   }
 
   /**

@@ -3,7 +3,8 @@ import { Pattern, Triple } from "sparqljs";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../SparqlFactory";
 import ISpecificationProperty from "../../../spec-providers/ISpecificationProperty";
-
+import { RDFS } from "../../../spec-providers/BaseRDFReader";
+import { OWL } from "../../../spec-providers/owl/OWLSpecificationProvider";
 const factory = new DataFactory();
 
 /**
@@ -66,28 +67,45 @@ export default class TypedVariableTranslator {
     this.#createResultPtrns();
   }
 
+  //-------------------------------------------------------------
+  // old version
   /**
    * Generates the triple of the type
    */
-  #buildTypeTriple() {
-    if(!this.#propertyIsBlocking) {
-      // don't build the class triple if the entity does not have a type criteria
-      if (this.#specProvider.getEntity(this.#variableType).hasTypeCriteria()) {
-        var typePredicate;
-        if (this.settings.typePredicate) {
-          typePredicate = SparqlFactory.parsePropertyPath(
-            this.settings.typePredicate
-          );
-        } else {
-          typePredicate = factory.namedNode(
-            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-          );
-        }
 
+  /**
+   * Test
+   */
+  #buildTypeTriple() {
+    // Ne construisez pas le triple si l'entité n'a pas de critère de type
+    if (this.#specProvider.getEntity(this.#variableType).hasTypeCriteria()) {
+      let typePredicate;
+      if (this.settings.typePredicate) {
+        typePredicate = SparqlFactory.parsePropertyPath(
+          this.settings.typePredicate
+        );
+      } else {
+        typePredicate = factory.namedNode(
+          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+        );
+      }
+
+      // Ne pas ajouter le type si la portée est RDFS.Resource ou OWL.Thing
+      if (
+        this.#variableType !== RDFS.RESOURCE.value &&
+        this.#variableType !== OWL.THING.value
+      ) {
         this.#typeTriple = SparqlFactory.buildTypeTriple(
           factory.variable(this.#variableName),
           typePredicate,
           factory.namedNode(this.#variableType)
+        );
+        console.log(`Added type triple for ${this.#variableName}`);
+      } else {
+        console.warn(
+          `Skipped adding type triple for ${
+            this.#variableName
+          } as it is RDFS.Resource or OWL.Thing`
         );
       }
     }
