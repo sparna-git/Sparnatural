@@ -1,0 +1,41 @@
+{
+  "type": "Catalog",
+  "service": [
+    {
+      "id": "http://aerba.huma-num.fr/",
+      "type": "DataService",
+      "title": {
+        "fr" : "Archeoviz"
+      },
+      "endpointURL" : "http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo?default-graph-uri=https%3A%2F%2Fpactols.frantiq.fr%2Fopentheso%2F&default-graph-uri=https%3A%2F%2Fanalytics.huma-num.fr%2Farcheoviz%2F",
+      "description": {
+        "en" : "Lorem ipsum..."
+      },
+      "extent": "statistics/archeoviz-statistics.ttl"
+    },
+    {
+      "id": "http://arsol.huma-num.fr/",
+      "type": "DataService",
+      "title": {
+        "fr" : "AERBA"
+      },
+      "endpointURL" : "http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo?default-graph-uri=https%3A%2F%2Fpactols.frantiq.fr%2Fopentheso%2F&default-graph-uri=http%3A%2F%2Faerba.huma-num.fr",
+      "description": {
+        "en" : "Lorem ipsum..."
+      },
+      "extent": "statistics/aerba-statistics.ttl"
+    },
+    {
+      "id": "http://archeoviz.huma-num.fr/",
+      "type": "DataService",
+      "title": {
+        "fr" : "ARSOL"
+      },
+      "endpointURL" : "http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo?default-graph-uri=https%3A%2F%2Fpactols.frantiq.fr%2Fopentheso%2F&default-graph-uri=http%3A%2F%2Farsol.univ-tours.fr",
+      "description": {
+        "en" : "Lorem ipsum..."
+      },
+      "extent": "statistics/arsol-statistics.ttl"
+    }
+  ]
+}
