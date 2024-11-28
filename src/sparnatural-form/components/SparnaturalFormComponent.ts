@@ -3,19 +3,15 @@ import HTMLComponent from "../../sparnatural/components/HtmlComponent";
 import { ISparJson } from "../../sparnatural/generators/json/ISparJson";
 import { I18n } from "../../sparnatural/settings/I18n";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
-import ISpecificationEntity from "../../sparnatural/spec-providers/ISpecificationEntity";
 import SparnaturalSpecificationFactory from "../../sparnatural/spec-providers/SparnaturalSpecificationFactory";
 import { SparnaturalFormAttributes } from "../../SparnaturalFormAttributes";
 import ISettings from "../settings/ISettings";
 import { SparnaturalFormI18n } from "../settings/SparnaturalFormI18n";
 import UnselectBtn from "../../sparnatural/components/buttons/UnselectBtn";
-import "../style/form.scss";
-import ActionStoreForm from "../handling/ActionStoreForm"; // Importer le store
+import ActionStoreForm from "../handling/ActionStore"; // Importer le store
 import { Catalog } from "../../sparnatural/settings/Catalog";
 import { getSettings } from "../settings/defaultsSettings";
 import SubmitSection from "./buttons/SubmitBtn";
-import { value } from "../../../../Sparnatural-yasgui-plugins/src/sparnatural-yasr-plugin-grid/old-backup/Models/value";
-import { ValueBuilderFactory } from "../../sparnatural/generators/sparql/ValueBuilder";
 import { SparnaturalFormElement } from "../../SparnaturalFormElement";
 
 class SparnaturalFormComponent extends HTMLComponent {
@@ -174,16 +170,21 @@ class SparnaturalFormComponent extends HTMLComponent {
           formConfig.bindings.forEach((binding: any) => {
             const variable = binding.variable;
 
+            // create a div that contains this form field
+            const formFieldDiv = document.createElement("div");
+            formFieldDiv.classList.add("formField");
+            this.html[0].appendChild(formFieldDiv);
+
             // Create a label for the widget and append it to the form
             const label = document.createElement("label");
 
             label.setAttribute("for", variable);
             label.innerHTML = `<strong>${SparnaturalFormI18n.getLabel(
               variable
-            )} :</strong>`;
+            )}</strong>`;
 
             label.style.fontSize = "18px";
-            this.html[0].appendChild(label);
+            formFieldDiv.appendChild(label);
 
             const label1 = label.cloneNode(true);
             // resumeSection.appendChild(label1);
@@ -248,7 +249,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                 { variable: queryLine.o, type: object }
               );
               theWidget.render();
-              this.html[0].appendChild(theWidget.html[0]);
+              formFieldDiv.appendChild(theWidget.html[0]);
               /**/
               const selectedValues = new Set<any>();
 
@@ -257,7 +258,7 @@ class SparnaturalFormComponent extends HTMLComponent {
               valueDisplay.setAttribute("id", `selected-value-${variable}`);
               valueDisplay.classList.add("value-display-container");
               valueDisplay.style.marginTop = "5px";
-              this.html[0].appendChild(valueDisplay);
+              formFieldDiv.appendChild(valueDisplay);
 
               const updateValueDisplay = () => {
                 valueDisplay.innerHTML = "";
@@ -279,7 +280,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                     updateValueDisplay();
                     queryLine.values = Array.from(selectedValues);
 
-                    this.html[0].dispatchEvent(
+                    formFieldDiv.dispatchEvent(
                       new CustomEvent("valueRemoved", {
                         bubbles: true,
                         detail: { value: val, variable: variable },
@@ -325,7 +326,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                       updateOptionVisibility(); // Update options visibility
 
                       // Dispatch valueAdded event
-                      this.html[0].dispatchEvent(
+                      formFieldDiv.dispatchEvent(
                         new CustomEvent("valueAdded", {
                           bubbles: true,
                           detail: { value: val, variable: variable },
@@ -345,10 +346,35 @@ class SparnaturalFormComponent extends HTMLComponent {
               optionContainer.classList.add("option-container");
               const anydiv = document.createElement("div");
               const anyValueToggle = document.createElement("input");
+              const notExistDiv = document.createElement("div");
+              notExistDiv.classList.add("not-exist-container");
+              const notExistToggle = document.createElement("input");
+
               // Si la variable est optionnelle, on ajoute l'option "Any value"
               console.log("variable", variable);
               console.log("branch", branch);
               console.log("branchparent", branchparent);
+
+              // Fonction de mise à jour de la visibilité des options
+              const updateOptionVisibility = () => {
+                const hasValues =
+                  queryLine.values && queryLine.values.length > 0;
+
+                if (hasValues) {
+                  if (anyValueToggle) anyValueToggle.checked = false;
+                  if (notExistToggle) notExistToggle.checked = false;
+                  if (anyValueToggle) anyValueToggle.disabled = true;
+                  if (notExistToggle) notExistToggle.disabled = true;
+                  anydiv.style.display = "none";
+                  notExistDiv.style.display = "none";
+                } else {
+                  if (anyValueToggle) anyValueToggle.disabled = false;
+                  if (notExistToggle) notExistToggle.disabled = false;
+                  anydiv.style.display = "block";
+                  notExistDiv.style.display = "block";
+                }
+              };
+
               if (branch.optional || branchparent.optional) {
                 // Création de l'élément "Any value"
 
@@ -359,7 +385,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                 anyValueToggle.id = `any-value-${variable}`;
                 anyValueToggle.classList.add("any-value-toggle");
                 anyValueLabel.htmlFor = `any-value-${variable}`;
-                anyValueLabel.innerText = "Any value";
+                anyValueLabel.innerHTML = "&nbsp;Any value";
                 anydiv.appendChild(anyValueToggle);
                 anydiv.appendChild(anyValueLabel);
 
@@ -370,8 +396,8 @@ class SparnaturalFormComponent extends HTMLComponent {
                   if (anyValueToggle.checked) {
                     this.setAnyValueForWidget(variable);
                     notExistDiv.style.display = "none"; // Masquer "Not Exist"
-                    notExistValue.checked = false;
-                    notExistValue.disabled = true;
+                    notExistToggle.checked = false;
+                    notExistToggle.disabled = true;
 
                     theWidget.disableWidget();
 
@@ -380,7 +406,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                       "selected-value-container"
                     );
 
-                    this.html[0].dispatchEvent(
+                    formFieldDiv.dispatchEvent(
                       new CustomEvent("anyValueSelected", {
                         bubbles: true,
                         detail: { variable: variable },
@@ -389,7 +415,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                     this.cleanQuery();
                   } else {
                     this.resetToDefaultValueForWidget(variable);
-                    notExistValue.disabled = false;
+                    notExistToggle.disabled = false;
                     notExistDiv.style.display = "block"; // Afficher "Not Exist"
                     theWidget.enableWidget();
 
@@ -398,7 +424,7 @@ class SparnaturalFormComponent extends HTMLComponent {
                       "selected-value-container"
                     );
 
-                    this.html[0].dispatchEvent(
+                    formFieldDiv.dispatchEvent(
                       new CustomEvent("removeAnyValueOption", {
                         bubbles: true,
                         detail: { variable: variable },
@@ -407,76 +433,54 @@ class SparnaturalFormComponent extends HTMLComponent {
                     this.cleanQuery();
                   }
                 });
+
+                // Création de l'élément "Not Exist"
+                const notExistLabel = document.createElement("label");
+                notExistToggle.type = "checkbox";
+                notExistToggle.id = `not-value-${variable}`;
+                notExistToggle.classList.add("any-value-toggle");
+                notExistLabel.htmlFor = `not-value-${variable}`;
+                notExistLabel.innerHTML = "&nbsp;Not Exist";
+                notExistDiv.appendChild(notExistToggle);
+                notExistDiv.appendChild(notExistLabel);
+
+                // Ajout de l'option "Not Exist" au conteneur d'options
+                optionContainer.appendChild(notExistDiv);
+                formFieldDiv.appendChild(optionContainer);
+
+                updateOptionVisibility();
+
+                // Gestion des événements pour le bouton "Not Exist"
+                notExistToggle.addEventListener("change", () => {
+                  if (notExistToggle.checked) {
+                    this.setNotExistsForWidget(variable);
+                    if (anyValueToggle) anyValueToggle.checked = false;
+                    if (anyValueToggle) anyValueToggle.disabled = true;
+                    anydiv.style.display = "none"; // Masquer "Any value"
+                    theWidget.disableWidget();
+
+                    formFieldDiv.dispatchEvent(
+                      new CustomEvent("notExist", {
+                        bubbles: true,
+                        detail: { variable: variable },
+                      })
+                    );
+                  } else {
+                    this.removeNotExistsForWidget(variable);
+                    if (anyValueToggle) anyValueToggle.disabled = false;
+                    anydiv.style.display = "block"; // Afficher "Any value"
+                    theWidget.enableWidget();
+
+                    formFieldDiv.dispatchEvent(
+                      new CustomEvent("removeNotExistOption", {
+                        bubbles: true,
+                        detail: { variable: variable },
+                      })
+                    );
+                  }
+                });
+
               }
-
-              // Création de l'élément "Not Exist"
-              const notExistDiv = document.createElement("div");
-              notExistDiv.classList.add("not-exist-container");
-              const notExistValue = document.createElement("input");
-              const notExistLabel = document.createElement("label");
-              notExistValue.type = "checkbox";
-              notExistValue.id = `not-value-${variable}`;
-              notExistValue.classList.add("any-value-toggle");
-              notExistLabel.htmlFor = `not-value-${variable}`;
-              notExistLabel.innerText = "Not Exist";
-              notExistDiv.appendChild(notExistValue);
-              notExistDiv.appendChild(notExistLabel);
-
-              // Ajout de l'option "Not Exist" au conteneur d'options
-              optionContainer.appendChild(notExistDiv);
-              this.html[0].appendChild(optionContainer);
-
-              // Mise à jour de la visibilité des options
-              const updateOptionVisibility = () => {
-                const hasValues =
-                  queryLine.values && queryLine.values.length > 0;
-
-                if (hasValues) {
-                  if (anyValueToggle) anyValueToggle.checked = false;
-                  notExistValue.checked = false;
-                  if (anyValueToggle) anyValueToggle.disabled = true;
-                  notExistValue.disabled = true;
-                  anydiv.style.display = "none";
-                  notExistDiv.style.display = "none";
-                } else {
-                  if (anyValueToggle) anyValueToggle.disabled = false;
-                  notExistValue.disabled = false;
-                  anydiv.style.display = "block";
-                  notExistDiv.style.display = "block";
-                }
-              };
-
-              updateOptionVisibility();
-
-              // Gestion des événements pour le bouton "Not Exist"
-              notExistValue.addEventListener("change", () => {
-                if (notExistValue.checked) {
-                  this.setNotExistsForWidget(variable);
-                  if (anyValueToggle) anyValueToggle.checked = false;
-                  if (anyValueToggle) anyValueToggle.disabled = true;
-                  anydiv.style.display = "none"; // Masquer "Any value"
-                  theWidget.disableWidget();
-
-                  this.html[0].dispatchEvent(
-                    new CustomEvent("notExist", {
-                      bubbles: true,
-                      detail: { variable: variable },
-                    })
-                  );
-                } else {
-                  this.removeNotExistsForWidget(variable);
-                  if (anyValueToggle) anyValueToggle.disabled = false;
-                  anydiv.style.display = "block"; // Afficher "Any value"
-                  theWidget.enableWidget();
-
-                  this.html[0].dispatchEvent(
-                    new CustomEvent("removeNotExistOption", {
-                      bubbles: true,
-                      detail: { variable: variable },
-                    })
-                  );
-                }
-              });
             }
           });
 

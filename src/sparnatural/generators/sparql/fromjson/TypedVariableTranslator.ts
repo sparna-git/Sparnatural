@@ -33,6 +33,8 @@ export default class TypedVariableTranslator {
   public defaultLblPatterns: Pattern[] = [];
   // the rdf:type triple
   #typeTriple: Triple;
+  // whether the property is blocking the generation of the type triple (but not the default label triples)
+  #propertyIsBlocking: boolean;
 
   public executedAfterPtrns: Pattern[] = [];
 
@@ -40,11 +42,13 @@ export default class TypedVariableTranslator {
     variableName: string,
     variableType: string,
     variableIsSelected: boolean,
+    propertyIsBlocking: boolean,
     specProvider: ISparnaturalSpecification,
     settings: any
   ) {
     this.#variableName = variableName;
     this.#variableType = variableType;
+    this.#propertyIsBlocking = propertyIsBlocking;
     this.#specProvider = specProvider;
     this.#variableIsSelected = variableIsSelected;
 
@@ -68,28 +72,6 @@ export default class TypedVariableTranslator {
   /**
    * Generates the triple of the type
    */
-  #buildTypeTriple1() {
-    // don't build the class triple if the entity does not have a type criteria
-    if (this.#specProvider.getEntity(this.#variableType).hasTypeCriteria()) {
-      var typePredicate;
-      if (this.settings.typePredicate) {
-        typePredicate = SparqlFactory.parsePropertyPath(
-          this.settings.typePredicate
-        );
-      } else {
-        typePredicate = factory.namedNode(
-          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-        );
-      }
-
-      this.#typeTriple = SparqlFactory.buildTypeTriple(
-        factory.variable(this.#variableName),
-        typePredicate,
-        factory.namedNode(this.#variableType)
-      );
-    }
-  }
-  //-------------------------------------------------------------
 
   /**
    * Test

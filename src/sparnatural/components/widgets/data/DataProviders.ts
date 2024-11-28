@@ -116,21 +116,25 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
             let result = new Array<RdfTermDatasourceItem>;
             for (let index = 0; index < data.results.bindings.length; index++) {
                 const solution = data.results.bindings[index];
-                if(solution.uri) {
-                    // if we find a "uri" column...
-                    // read uri key & label key
-                    result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
-                } else if(solution.value) {
-                    // if we find a "value" column...
-                    // read value key & label key
-                    result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
-                } else {
-                    // try to determine the payload column by taking the column other than label
-                    let columnName = this.getRdfTermColumn(solution);
-                    if(columnName) {
-                        result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                // this is to avoid corner-cases with GraphDB queries returning only count=0 in aggregation queries.
+                // we need at least 2 bindings anyway
+                if(Object.keys(solution).length > 1) {
+                    if(solution.uri) {
+                        // if we find a "uri" column...
+                        // read uri key & label key
+                        result[result.length] = {term:solution.uri, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                    } else if(solution.value) {
+                        // if we find a "value" column...
+                        // read value key & label key
+                        result[result.length] = {term:solution.value, label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
                     } else {
-                        throw Error("Could not determine which column to read from the result set")
+                        // try to determine the payload column by taking the column other than label
+                        let columnName = this.getRdfTermColumn(solution);
+                        if(columnName) {
+                            result[result.length] ={term:solution[columnName], label:solution.label.value, group:solution.group?.value, itemLabel:solution.itemLabel?.value};
+                        } else {
+                            throw Error("Could not determine which column to read from the result set")
+                        }
                     }
                 }
             }
@@ -145,15 +149,14 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
   getRdfTermColumn(aBindingSet: any): string | undefined {
     let foundKey: string | undefined = undefined;
     for (const key of Object.keys(aBindingSet)) {
-      if (key != "label") {
-        if (!foundKey) {
-          foundKey = key;
-        } else {
-          // it means there are more than one column, don't know which one to take, break
-          return undefined;
+        if (key != "label") {
+            if (!foundKey) {
+            foundKey = key;
+            } else {
+            // it means there are more than one column, don't know which one to take, break
+            return undefined;
+            }
         }
-      }
-      // console.log(`${key}: ${(aBindingSet as {[key: string]: string})[key]}`);
     }
     return foundKey;
   }
@@ -622,4 +625,55 @@ export class SortTreeDataProvider implements TreeDataProviderIfc {
       );
   }
 
+}
+
+/**
+ * @param items Merges the datasource items based on their equality, in the case that multiple groups
+ * (= multiple datasets) return the same RDF term (= the same URI or literal value). In that case a single result is kept,
+ * with a group that is the concatenation of the groups of the merged items.
+ * @returns a new list of datasource items in which the items have been merge based on their rdfTerm equality.
+ */
+export function mergeDatasourceResults(items:RdfTermDatasourceItem[]):RdfTermDatasourceItem[] {
+    let result:RdfTermDatasourceItem[] = new Array<RdfTermDatasourceItem>();
+
+    // iterate on each item
+    items.forEach(item => {
+        // if it wasn't already added...
+        if(!result.some(itemInResult => sameTerm(itemInResult.term, item.term))) {
+            // find all items with the same URI
+            let sameTerms = items.filter(i => sameTerm(item.term, i.term));
+            // add the first identical item of this in our result table, with a merged group
+            let newTerm:RdfTermDatasourceItem = {
+                term: sameTerms[0].term,
+                label : sameTerms[0].label,
+                itemLabel: sameTerms[0].itemLabel,
+                group: sameTerms.map(i => i.group).join(" + ")
+            }
+            result.push(newTerm);
+        }
+
+    });
+
+    return result;
+}
+
+/**
+ * @param t1 
+ * @param t2 
+ * @returns true if both RDF term are equal (same type, same value, same datatype, same language)
+ */
+export function sameTerm(t1:RDFTerm, t2:RDFTerm):boolean {
+    return(
+        t1 != null
+        &&
+        t2 != null
+        &&
+        t1.type == t2.type
+        &&
+        t1.value == t2.value
+        &&
+        t1.datatype == t2.datatype
+        &&
+        t1["xml:lang"] == t2["xml:lang"]
+    );
 }

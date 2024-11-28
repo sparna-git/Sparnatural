@@ -6,7 +6,7 @@ import "select2";
 import "select2/dist/css/select2.css";
 import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { ListDataProviderIfc, RdfTermDatasourceItem, NoOpListDataProvider } from "./data/DataProviders";
+import { ListDataProviderIfc, RdfTermDatasourceItem, NoOpListDataProvider, mergeDatasourceResults } from "./data/DataProviders";
 import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";
 import HTMLComponent from "../HtmlComponent";
@@ -72,7 +72,11 @@ export class ListWidget extends AbstractWidget {
     let callback = (items:RdfTermDatasourceItem[]) => {
 
       if (items.length > 0) {
-  
+
+        this.selectHtml.append(
+          $("<option value=''>" + I18n.labels.ListWidgetSelectValue + "</option>")
+        );
+
         // find distinct values of the 'group' binding
         const groups = [...new Set(items.map(item => item.group))];
 
@@ -86,10 +90,14 @@ export class ListWidget extends AbstractWidget {
             );
           });
         } else {
-          // we found some group, organise the list content with optgroup
-          groups.forEach(group => {
+          // we found some groups, organise the list content with optgroup
+
+          let mergedResult = mergeDatasourceResults(items);
+          const groupsAfterMerge = [...new Set(mergedResult.map(item => item.group))];
+
+          groupsAfterMerge.forEach(group => {
             let html = "<optgroup label=\""+group+"\">";
-            items.filter(item => (item.group == group)).forEach(item => {
+            mergedResult.filter(item => (item.group == group)).forEach(item => {
               // select item label : either displayed label, or itemLabel if provided
               let itemLabel = item.itemLabel?item.itemLabel:item.label;
               
@@ -116,9 +124,13 @@ export class ListWidget extends AbstractWidget {
           if (option.length > 1)
             throw Error("List widget should allow only for one el to be selected!");
 
-            let itemLabel = option[0].getAttribute("data-itemLabel");
-            let listWidgetValue: WidgetValue = this.buildValue(option[0].value, itemLabel);
-            this.renderWidgetVal(listWidgetValue);
+          // this is the placeholder
+          if(option[0].value == "")
+            return;
+
+          let itemLabel = option[0].getAttribute("data-itemLabel");
+          let listWidgetValue: WidgetValue = this.buildValue(option[0].value, itemLabel);
+          this.renderWidgetVal(listWidgetValue);
         });
 
       } else {

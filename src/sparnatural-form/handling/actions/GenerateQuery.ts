@@ -1,5 +1,5 @@
 import { getSettings } from "../../settings/defaultsSettings";
-import ActionStoreForm from "../ActionStoreForm";
+import ActionStoreForm from "../ActionStore";
 import { Generator } from "sparqljs";
 import { ISparJson } from "../../../sparnatural/generators/json/ISparJson";
 import JsonSparqlTranslator from "../../../sparnatural/generators/sparql/fromjson/JsonSparqlTranslator";
@@ -30,10 +30,6 @@ export class QueryGeneratorForm {
     // Utiliser la cleanQuery si elle existe, sinon jsonQuery
     queryToUse = this.actionStoreForm.sparnaturalForm.cleanQueryResult;
 
-    let queryJson = this.actionStoreForm.sparnaturalForm.jsonQuery;
-
-    const jsonQuery = this.actionStoreForm.sparnaturalForm.jsonQuery;
-
     console.log("Query utilisée pour la génération :", queryToUse);
 
     // Utiliser JsonSparqlTranslator pour convertir la requête en SPARQL
@@ -50,9 +46,7 @@ export class QueryGeneratorForm {
     // Créer un payload avec la requête générée
     const queryPayload: QueryUpdatedPayload = {
       queryString: queryStringFromJson,
-      queryJson: queryToUse,
-      querySparqlJs: sparqlJsQuery,
-      queryStringFromJson: queryStringFromJson,
+      queryJson: queryToUse
     };
 
     // Déclencher l'événement pour notifier que la requête a été mise à jour
@@ -60,8 +54,6 @@ export class QueryGeneratorForm {
 
     // re-enable submit button if it was disabled
     this.actionStoreForm.sparnaturalForm.SubmitSection.enableSubmit();
-
-    //return queryPayload;
   }
 
   fireQueryUpdatedEvent(payload: QueryUpdatedPayload) {
@@ -78,6 +70,4 @@ export class QueryGeneratorForm {
 export class QueryUpdatedPayload {
   queryString: string;
   queryJson: ISparJson;
-  querySparqlJs: Object;
-  queryStringFromJson: string;
 }

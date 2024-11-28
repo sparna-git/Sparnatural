@@ -31,7 +31,7 @@ export class SparnaturalAttributes {
       throw Error("No endpoint provided!");
     }
     this.catalog = this.#read(element, "catalog");
-    //this.language = this.#read(element, "lang");
+    this.language = this.#read(element, "lang");
     this.defaultLanguage = this.#read(element, "defaultLang");
 
     // use the singular to match RDFa attribute name
@@ -55,14 +55,14 @@ export class SparnaturalAttributes {
   }
 
   #parsePrefixes(element: HTMLElement) {
-    if (!element.getAttribute("prefix")) {
+    if (!element.getAttribute("prefixes")) {
       return;
     }
 
     let sparqlPrefixes = {};
     // use the singular to match RDFa attribute name
     let prefixArray = element
-      .getAttribute("prefix")
+      .getAttribute("prefixes")
       .trim()
       .split(/:\s+|\s+/);
     for (let i = 0; i < prefixArray.length; i++) {
@@ -77,11 +77,10 @@ export class SparnaturalAttributes {
           enumerable: true,
         });
       } catch (e) {
-        console.error("Parsing of attribute prefix failed!");
+        console.error("Parsing of attribute prefixes failed!");
         console.error(`Can not parse ${prefixArray[i]}`);
       }
     }
-    console.log("Prefixes at Attributes", sparqlPrefixes);
     return sparqlPrefixes;
   }
 

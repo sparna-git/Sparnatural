@@ -318,8 +318,9 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
           // replace the $this with the name of the original variable in the query
           
           // \S matches any non-whitespace charracter
-          // note how we match optionnally the final dot of the triple
-          var re = new RegExp("(\\S*) (rdf:type|a|<http://www\\.w3\\.org/1999/02/22-rdf-syntax-ns#type>) <" + nodeShapeUri + ">( \\.)?", "g");      
+          // note how we match optionnally the final dot of the triple, and an optional space after the type (not always here)
+          // flag "g" is for global search
+          var re = new RegExp("(\\S*) (rdf:type|a|<http://www\\.w3\\.org/1999/02/22-rdf-syntax-ns#type>) <" + nodeShapeUri + ">( ?\\.)?", "g");      
 
           let replacer = function(
             match:string,
@@ -336,6 +337,11 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
             // replacing "$this" with the original variable name
             var reThis = new RegExp("\\$this", "g");
             let whereClauseReplacedThis = whereClauseReplacedVariables.replace(reThis, p1);
+
+            // then we make sure the where clause properly ends with a dot
+            if(!whereClauseReplacedThis.trim().endsWith(".")) {
+              whereClauseReplacedThis += ".";
+            }
             return whereClauseReplacedThis;
           }
 
@@ -344,7 +350,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       });
 
     // reparse the query, apply prefixes, and reserialize the query
-    console.log(sparql)
+    // console.log(sparql)
     var query = this.#parser.parse(sparql);
     for (var key in prefixes) {
       query.prefixes[key] = prefixes[key];

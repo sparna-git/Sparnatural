@@ -8,13 +8,7 @@ console.log("urlParams", urlParams);
 const lang = urlParams.get("lang");
 
 sparnaturalForm.addEventListener("init", (event) => {
-  console.log("init sparnatural...");
-  sparnaturalForm.configuration = {
-    headers: { "User-Agent": "This is Sparnatural calling" },
-    autocomplete: {
-      maxItems: 40,
-    },
-  };
+  console.log("init sparnatural-form...");
   console.log("Configuration ", sparnaturalForm.configuration);
   // Notify all plugins of configuration updates if they support it
   for (const plugin in yasr.plugins) {
@@ -23,27 +17,24 @@ sparnaturalForm.addEventListener("init", (event) => {
       yasr.plugins[plugin].notifyConfiguration(
         sparnaturalForm.sparnaturalForm.specProvider
       );
-      console.log("sparnatural", sparnaturalForm.sparnaturalForm.specProvider);
     }
   }
 });
 
 // Listen for updates to the query and pass to YASQE
 sparnaturalForm.addEventListener("queryUpdated", (event) => {
-  const queryStringFromJson = sparnaturalForm.expandSparql(
-    event.detail.queryStringFromJson
+  const queryString = sparnaturalForm.expandSparql(
+    event.detail.queryString
   );
-  console.log("queryStringFromJson", event.detail);
+  console.log("queryString", event.detail);
 
   // Update YASQE with the new SPARQL query
-  yasqe.setValue(queryStringFromJson);
-  console.log("yasr plugins", yasr.plugins);
+  yasqe.setValue(queryString);
 
   for (const plugin in yasr.plugins) {
     if (yasr.plugins[plugin].notifyQuery) {
       yasr.plugins[plugin].notifyQuery(event.detail.queryJson);
       console.log("notifying query for plugin " + plugin);
-      console.log(true);
     }
   }
 });
@@ -51,7 +42,19 @@ sparnaturalForm.addEventListener("queryUpdated", (event) => {
 // Listen for form submission and trigger YASQE query
 sparnaturalForm.addEventListener("submit", () => {
   sparnaturalForm.disablePlayBtn();
-  yasqe.query();
+  let finalResult = sparnaturalForm.executeSparql(
+    yasqe.getValue(),
+    (finalResult) => {
+      // send final result to YasR
+      yasr.setResponse(finalResult);
+      // re-enable submit button
+      sparnaturalForm.enablePlayBtn();
+    },
+    (error) => {
+      console.error("Got an error when executing SPARQL in Sparnatural");
+      console.dir(error);
+    }
+  );
 });
 
 console.log("init yasr & yasqe...");

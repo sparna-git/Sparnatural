@@ -23,6 +23,7 @@
   "DisplayValueDateFrom": "A partir de",
   "DisplayValueDateTo": "Jusqu'à",
   "ButtonAdd": "Ajouter",
+  "ListWidgetSelectValue": "Selectionnez une valeur...",
   "ListWidgetNoItem": "... Oups, aucune valeur trouvée !",
   "StartClassTemporaryLabel": "Chercher des ressources",
   "ObjectPropertyTemporaryLabel": "relié(e) à",
