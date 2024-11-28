@@ -118,7 +118,7 @@ export default class BranchTranslator {
         this.settings
       );
       builder.build();
-      this.#whereChildPtrns = builder.getResultPtrns();
+      this.#whereChildPtrns.push(...builder.getResultPtrns());
       // gather default vars from children
       this.#defaultVars.push(...builder.getDefaultVars());
       // gather patterns to be executed after
