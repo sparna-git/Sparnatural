@@ -4,7 +4,7 @@ import { SelectedVal } from "../SelectedVal";
 import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
-import { AutocompleteDataProviderIfc, NoOpAutocompleteProvider, RdfTermDatasourceItem } from "./data/DataProviders";
+import { AutocompleteDataProviderIfc, mergeDatasourceResults, NoOpAutocompleteProvider, RdfTermDatasourceItem } from "./data/DataProviders";
 import Awesomplete from 'awesomplete';
 import { I18n } from '../../settings/I18n';
 import HTMLComponent from '../HtmlComponent';
@@ -76,14 +76,31 @@ export class AutoCompleteWidget extends AbstractWidget {
     // the callback called when proposals have been fetched, to populate the suggestion list
     let callback = (items:RdfTermDatasourceItem[]) => {
       
+      // find distinct values of the 'group' binding
+      const groups = [...new Set(items.map(item => item.group))];
+
       let list = new Array<{label:String, value:String}>();
-      $.each(items, (key, item) => {
-        // Awesomplete list will contain the label as 'label', and the RDFTerm JSON serialization as 'value'
-        list.push({
-          label: (item.group)?"<span title='"+item.group+"'>"+item.label+"</span>":item.label,
-          value: JSON.stringify(item.term)
+      if(groups.length == 1 && groups[0] == undefined) {
+        // no groups defined at all
+
+        items.forEach(item => {
+          // Awesomplete list will contain the label as 'label', and the RDFTerm JSON serialization as 'value'
+          list.push({
+            label: item.label,
+            value: JSON.stringify(item.term)
+          });
         });
-      });
+      } else {
+        // we have some groups, merge
+        let mergedResult = mergeDatasourceResults(items);
+        
+        mergedResult.forEach(item => {
+          list.push({
+            label: (item.group)?"<span title='"+item.group+"'>"+item.label+"</span>":item.label,
+            value: JSON.stringify(item.term)
+          });
+        });
+      }
 
       // toggle spinner
       if(list.length == 0) {
@@ -152,3 +169,4 @@ export class AutoCompleteWidget extends AbstractWidget {
   parseInput(input: RdfTermValue["value"]): RdfTermValue {return new RdfTermValue(input)}
 
 }
+
