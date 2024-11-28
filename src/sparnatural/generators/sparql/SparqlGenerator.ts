@@ -150,54 +150,70 @@ export default class SparqlGenerator {
   }
 
   #varsToRDFJS(variables: Array<DraggableComponentState>): Variable[] {
-    let variablesArray:Variable[][] = variables.map((v) => {
-      if(v.aggregateFunction) {
-        return [SparqlFactory.buildAggregateFunctionExpression(
-          v.aggregateFunction,
-          factory.variable(v.originalVariable.variable),
-          factory.variable(v.selectedVariable.variable)
-        )];
+    let variablesArray: Variable[][] = variables.map((v) => {
+      if (v.aggregateFunction) {
+        return [
+          SparqlFactory.buildAggregateFunctionExpression(
+            v.aggregateFunction,
+            factory.variable(v.originalVariable.variable),
+            factory.variable(v.selectedVariable.variable)
+          ),
+        ];
       } else {
         // find where the variable comes from
-        let specProperty:ISpecificationProperty = undefined;
+        let specProperty: ISpecificationProperty = undefined;
         this.sparnatural.BgWrapper.componentsList.rootGroupWrapper.traversePreOrder(
           (grpWrapper: GroupWrapper) => {
-            if(grpWrapper.CriteriaGroup.EndClassGroup.endClassVal.variable == v.selectedVariable.variable) {
+            if (
+              grpWrapper.CriteriaGroup.EndClassGroup.endClassVal.variable ==
+              v.selectedVariable.variable
+            ) {
               // check if the spec tells us that begin date / end date / exact date propeties are used
-              let propertyType = grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected();
+              let propertyType =
+                grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected();
+              console.log("propertyType: ", propertyType);
               specProperty = this.specProvider.getProperty(propertyType);
+              console.log("specProperty: ", specProperty);
             }
           }
         ); // end traverse
 
         // not found as an object, we cannot read the specification property, so return as normal
-        if(!specProperty) {
-          return [ factory.variable(v.selectedVariable.variable) ];
+        if (!specProperty) {
+          return [factory.variable(v.selectedVariable.variable)];
         }
 
-        if(specProperty.getBeginDateProperty() && specProperty.getEndDateProperty()) {
-          let result:Variable[] = []
-          if(specProperty.getBeginDateProperty()) {
-            result.push(factory.variable(v.selectedVariable.variable+"_begin"));
+        if (
+          specProperty.getBeginDateProperty() &&
+          specProperty.getEndDateProperty()
+        ) {
+          let result: Variable[] = [];
+          if (specProperty.getBeginDateProperty()) {
+            result.push(
+              factory.variable(v.selectedVariable.variable + "_begin")
+            );
           }
-          if(specProperty.getEndDateProperty()) {
-            result.push(factory.variable(v.selectedVariable.variable+"_end"));
+          if (specProperty.getEndDateProperty()) {
+            result.push(factory.variable(v.selectedVariable.variable + "_end"));
           }
-          if(specProperty.getExactDateProperty()) {
-            result.push(factory.variable(v.selectedVariable.variable+"_exact"));
+          if (specProperty.getExactDateProperty()) {
+            result.push(
+              factory.variable(v.selectedVariable.variable + "_exact")
+            );
           }
           return result;
         } else {
           // no begin or date, return as normal
-          return [ factory.variable(v.selectedVariable.variable) ];
+          return [factory.variable(v.selectedVariable.variable)];
         }
-      }      
+      }
     });
 
-    let finalResult:Variable[] = [];
-    variablesArray.forEach((varArray:Variable[]) => {finalResult.push(...varArray)});
+    let finalResult: Variable[] = [];
+    variablesArray.forEach((varArray: Variable[]) => {
+      finalResult.push(...varArray);
+    });
     return finalResult;
-    
   }
 
   // It will be ordered by the Provided variable

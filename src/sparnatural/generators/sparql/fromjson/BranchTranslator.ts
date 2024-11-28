@@ -178,8 +178,89 @@ export default class BranchTranslator {
       }
     }
   }
-
   #buildIntersectionPtrn() {
+    // Vérification des conditions de génération de l'intersection triple
+    if (
+      this.#branch.line.s &&
+      this.#branch.line.o &&
+      !this.#valueBuilder?.isBlockingObjectProp()
+    ) {
+      const specProperty = this.#specProvider.getProperty(this.#branch.line.p);
+
+      if (
+        specProperty.getBeginDateProperty() &&
+        specProperty.getEndDateProperty()
+      ) {
+        // Génération des triples pour les dates de début, de fin et exactes, si disponibles
+        if (specProperty.getBeginDateProperty()) {
+          this.#intersectionPtrn.push(
+            SparqlFactory.buildOptionalPattern([
+              SparqlFactory.buildBgpPattern([
+                SparqlFactory.buildIntersectionTriple(
+                  factory.variable(this.#branch.line.s),
+                  specProperty.getBeginDateProperty(),
+                  factory.variable(`${this.#branch.line.o}_begin`)
+                ),
+              ]),
+            ])
+          );
+        }
+
+        if (specProperty.getEndDateProperty()) {
+          this.#intersectionPtrn.push(
+            SparqlFactory.buildOptionalPattern([
+              SparqlFactory.buildBgpPattern([
+                SparqlFactory.buildIntersectionTriple(
+                  factory.variable(this.#branch.line.s),
+                  specProperty.getEndDateProperty(),
+                  factory.variable(`${this.#branch.line.o}_end`)
+                ),
+              ]),
+            ])
+          );
+        }
+
+        if (specProperty.getExactDateProperty()) {
+          this.#intersectionPtrn.push(
+            SparqlFactory.buildOptionalPattern([
+              SparqlFactory.buildBgpPattern([
+                SparqlFactory.buildIntersectionTriple(
+                  factory.variable(this.#branch.line.s),
+                  specProperty.getExactDateProperty(),
+                  factory.variable(`${this.#branch.line.o}_exact`)
+                ),
+              ]),
+            ])
+          );
+        }
+      } else {
+        // Génération du triple d'intersection normal si aucune propriété de date n'est spécifiée
+        this.#intersectionPtrn.push(
+          SparqlFactory.buildBgpPattern([
+            SparqlFactory.buildIntersectionTriple(
+              factory.variable(this.#branch.line.s),
+              this.#branch.line.p,
+              factory.variable(this.#branch.line.o)
+            ),
+          ])
+        );
+      }
+
+      // Ajout du filtre de langue si la propriété est multilingue
+      if (specProperty.isMultilingual()) {
+        this.#intersectionPtrn.push(
+          SparqlFactory.buildFilterLangEquals(
+            factory.variable(this.#branch.line.o),
+            factory.literal(this.settings.language)
+          )
+        );
+      }
+    }
+  }
+
+  //-----------------------------------------------------------
+  //old version
+  #buildIntersectionPtrn1() {
     // the intersection triple can very well be generated even if no rdf:type triple is generated for the end class.
     if (
       this.#branch.line.s &&
@@ -209,6 +290,8 @@ export default class BranchTranslator {
       }
     }
   }
+
+  //-----------------------------------------------------------
 
   /**
    * Translates the line to SPARQL

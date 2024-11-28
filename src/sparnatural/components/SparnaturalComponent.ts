@@ -28,14 +28,14 @@ class SparnaturalComponent extends HTMLComponent {
   }
 
   render(): this {
-    this.#initLang()
+    this.#initLang();
 
     let afterSpecificationLoaded = (sp: ISparnaturalSpecification) => {
       this.specProvider = sp;
       this.actionStore = new ActionStore(this, this.specProvider);
       this.BgWrapper = new BgWrapper(this, this.specProvider).render();
       // display the submit button only if a callback was provided
-      if(getSettings().submitButton) {
+      if (getSettings().submitButton) {
         this.submitSection = new SubmitSection(this).render();
       }
       console.log("submit section", this.submitSection);
@@ -47,29 +47,33 @@ class SparnaturalComponent extends HTMLComponent {
       this.html[0].dispatchEvent(
         new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
       );
-      this.html.append(this.filter);  
-      console.log("Found languages in configuration : "+this.specProvider.getLanguages());
-      
-      this.html[0].dispatchEvent(new CustomEvent(SparnaturalElement.EVENT_INIT, {
-        bubbles: true,
-        detail: {
-          sparnatural: this
-        }
-      }));
+      this.html.append(this.filter);
+      console.log(
+        "Found languages in configuration : " + this.specProvider.getLanguages()
+      );
+
+      this.html[0].dispatchEvent(
+        new CustomEvent(SparnaturalElement.EVENT_INIT, {
+          bubbles: true,
+          detail: {
+            sparnatural: this,
+          },
+        })
+      );
     };
 
     // chain catalog loading and spec loading
-    let afterCatalogLoaded = (catalog: Catalog|undefined) => {
+    let afterCatalogLoaded = (catalog: Catalog | undefined) => {
       this.catalog = catalog;
       this.initSpecificationProvider(afterSpecificationLoaded);
-    }
+    };
 
     this.#initCatalog(afterCatalogLoaded);
-    
+
     return this;
   }
 
-  #initCatalog(callback:((catalog:Catalog|undefined)=>void)) {
+  #initCatalog(callback: (catalog: Catalog | undefined) => void) {
     let settings = getSettings();
     let me = this;
     if (settings.catalog) {
@@ -80,36 +84,39 @@ class SparnaturalComponent extends HTMLComponent {
           "Sparnatural - unable to load catalog file : " + settings.catalog
         );
         callback(undefined);
-      })
+      });
     } else {
       // no catalog provided
       callback(undefined);
     }
   }
 
-  initSpecificationProvider(callback:((sp:ISparnaturalSpecification)=>void)) {
+  initSpecificationProvider(callback: (sp: ISparnaturalSpecification) => void) {
     let settings = getSettings();
     let specProviderFactory = new SparnaturalSpecificationFactory();
     // load only the statistics of the selected endpoints
     specProviderFactory.build(
       settings.src,
       settings.language,
-      (this.catalog)?this.catalog.extractSubCatalog(settings.endpoints):undefined,
-       (sp: any) => {
+      this.catalog
+        ? this.catalog.extractSubCatalog(settings.endpoints)
+        : undefined,
+      (sp: any) => {
         // call the call back when done
         callback(sp);
-    });
+      }
+    );
   }
 
   // method is exposed from the HTMLElement
-  enablePlayBtn = () =>{
+  enablePlayBtn = () => {
     this.submitSection.playBtn.removeLoading();
-  }
-  
+  };
+
   // method is exposed from the HTMLElement
   disablePlayBtn = () => {
     this.submitSection.playBtn.disable();
-  }
+  };
 
   setQuiet(quiet: boolean) {
     this.actionStore.quiet = quiet;
