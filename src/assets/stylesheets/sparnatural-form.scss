@@ -1,121 +1,142 @@
-@use './base';
+@use "./base";
 // Importing all the components
-@use './components/all-components-sparnatural-form.scss';
+@use "./components/all-components-sparnatural-form.scss";
 // we are importing one default theme,
 // so that all the variables have a default value.
 // they can be overriden by importing another theme CSS in the HTML page
 @import "themes/sparnatural-theme-grass.css";
 
 sparnatural-form {
-    display: block;
-    padding: 20px;
-    /* This is the same color as background of Sparnatural with default theme "grass" */
-    background-color: #e8fcf5;
+  display: block;
+  padding: 20px;
+  // This is the same color as background of Sparnatural with default theme "grass"
+  background-color: #e8fcf5;
+  border-radius: 5px;
+  margin-bottom: 20px;
+
+  .formField {
+    margin-bottom: 10px;
+  }
+
+  // Display container for selected values
+  .value-display-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+  }
+
+  // Each selected value container
+  .selected-value-container {
+    display: flex;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: var(--primary-color-medium);
+    // border: 1px solid #4db6ac;
     border-radius: 5px;
-    margin-bottom: 20px;
+    font-size: 13px;
+    margin-bottom: 5px;
+  }
 
-    .formField {
-        margin-bottom: 10px;
+  // Align selected values horizontally with wrapping
+  .selected-value-container {
+    flex-direction: row;
+    // border: 1px solid #ccc;
+    padding: 5px;
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+
+  // Styling the selected value label
+  .selected-value-label {
+    margin-right: 10px;
+    font-weight: normal;
+    color: var(--default-text-color);
+  }
+
+  // Container for the search button to control its position
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+
+  #submit {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
     }
 
-    /* Display container for selected values */
-    .value-display-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin-top: 10px;
-    }
-    
-    /* Each selected value container */
-    .selected-value-container {
-        display: flex;
-        align-items: center;
-        padding: 5px 10px;
-        background-color: var(--primary-color-medium);
-        /* border: 1px solid #4db6ac; */
-        border-radius: 5px;
-        font-size: 13px;
-        margin-bottom: 5px;
+    button[id="Search"] {
+      background-color: var(--secondary-color-important);
+      color: #000;
+      border: 1px solid #ddd;
+      box-shadow: 0px 2px 3px 0px #cfcfcf;
     }
 
-    /* Align selected values horizontally with wrapping */
-    .selected-value-container {
-        flex-direction: row;
-        /* border: 1px solid #ccc; */
-        padding: 5px;
-        display: inline-block;
-        margin-right: 10px;
-        margin-bottom: 10px;
+    button[id="Reset"] {
+      background-color: #fff;
+      color: #000;
+      border: 1px solid #ddd;
+      box-shadow: 0px 2px 3px 0px #cfcfcf;
     }
+  }
 
-    /* Styling the selected value label */
-    .selected-value-label {
-        margin-right: 10px;
-        font-weight: normal;
-        color: var(--default-text-color);
-    }
+  .option-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 10px;
+  }
 
-    /* Container for the search button to control its position */
-    .button-container {
-        display: flex;
-        justify-content: flex-end;
-        margin-top: 20px;
-    }
+  .any-value-container,
+  .not-exist-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: px;
+  }
 
-    .hr {
-        color: inherit;
-        border: 0;
-        border-top-width: 0px;
-        border-top-style: none;
-        border-top-color: currentcolor;
-        border-top: 1px solid;
-        opacity: 0.25;
-    }
+  //style for the option pill for any value and not exist
+  .option-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 3px;
+    background-color: var(--primary-color-light, #ffcc99); /* Couleur ajustée */
+    border-radius: 5px;
+    font-size: 13px;
+    color: var(--default-text-color, #333);
+    border: 1px solid var(--primary-color-medium, #aaa);
+    font-weight: normal;
+  }
 
-    #submit {
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
+  .option-pill.any-value {
+    background-color: #ffd699;
+  }
 
-        button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-        }
+  .option-pill.not-exist {
+    background-color: #ffd699;
+  }
 
-        button[id="Search"] {
-            background-color: var(--secondary-color-important);
-            color: #000;
-            border: 1px solid #ddd;
-            box-shadow: 0px 2px 3px 0px #cfcfcf;
-        }
-
-        button[id="Reset"] {
-            background-color: #fff;
-            color: #000;
-            border: 1px solid #ddd;
-            box-shadow: 0px 2px 3px 0px #cfcfcf;
-        }
-
-    }
-
-    .option-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 10px;
-    }
-
-    .any-value-container,
-    .not-exist-container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: px;
-    }
+  .option-pill .unselect {
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    /*
+    &:hover {
+      background-color: var(--error-color, #d9534f);
+    }*/
+  }
 }
-
-
-
-  

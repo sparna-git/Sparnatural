@@ -25,8 +25,10 @@ export class QueryGeneratorForm {
     // Récupérer la clean query si elle est disponible, sinon utiliser la jsonQuery
     const sparnaturalForm = this.actionStoreForm.sparnaturalForm;
     let queryToUse: ISparJson;
+
     // Nettoyer la requête pour obtenir une version à jour
     sparnaturalForm.cleanQuery();
+
     // Utiliser la cleanQuery si elle existe, sinon jsonQuery
     queryToUse = this.actionStoreForm.sparnaturalForm.cleanQueryResult;
 
@@ -46,7 +48,7 @@ export class QueryGeneratorForm {
     // Créer un payload avec la requête générée
     const queryPayload: QueryUpdatedPayload = {
       queryString: queryStringFromJson,
-      queryJson: queryToUse
+      queryJson: queryToUse,
     };
 
     // Déclencher l'événement pour notifier que la requête a été mise à jour
