@@ -4,7 +4,7 @@ import { QueryGeneratorForm } from "./actions/GenerateQuery";
 
 class ActionStoreForm {
   sparnaturalForm: SparnaturalFormComponent;
-  specProvider: any;
+  specProvider: ISparnaturalSpecification;
   quiet = false; // Pour éviter d'exécuter des actions quand c'est nécessaire de "garder le silence"
 
   constructor(

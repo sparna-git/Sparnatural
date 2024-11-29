@@ -1,12 +1,18 @@
 import { WidgetFactory } from "../../sparnatural/components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetFactory";
 import { SparnaturalFormI18n } from "../settings/SparnaturalFormI18n";
 import UnselectBtn from "../../sparnatural/components/buttons/UnselectBtn";
-import { ISparJson } from "../../sparnatural/generators/json/ISparJson";
+import {
+  Branch,
+  CriteriaLine,
+  ISparJson,
+} from "../../sparnatural/generators/json/ISparJson";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
 import OptionalCriteriaManager from "./optionalCriteria/OptionalCriteriaManager";
+import { AbstractWidget } from "../../sparnatural/components/widgets/AbstractWidget";
+import { Binding } from "../FormStructure";
 
-class FormFieldGenerator {
-  private binding: any;
+class FormField {
+  private binding: Binding;
   private formContainer: HTMLElement;
   private specProvider: ISparnaturalSpecification;
   private query: ISparJson;
@@ -14,7 +20,7 @@ class FormFieldGenerator {
   private optionalCriteriaManager!: OptionalCriteriaManager; // Optional Criteria Manager instance
 
   constructor(
-    binding: any,
+    binding: Binding,
     formContainer: HTMLElement,
     specProvider: ISparnaturalSpecification,
     query: ISparJson,
@@ -55,7 +61,7 @@ class FormFieldGenerator {
         formFieldDiv
       );
 
-      // Add options like "Any value" and "Not Exist"
+      // Add options like "An'y value" and "Not Exist"
       this.addValuesAndOptions(formFieldDiv, queryLine, widget, variable);
     }
   }
@@ -72,7 +78,10 @@ class FormFieldGenerator {
   }
 
   //method to find the line in the query corresponding to the variable
-  private findInBranches(branches: any[], variable: string): any {
+  private findInBranches(
+    branches: Branch[],
+    variable: string
+  ): CriteriaLine | null {
     for (const branch of branches) {
       if (branch.line.o === variable) return branch.line;
       if (branch.children && branch.children.length > 0) {
@@ -84,7 +93,7 @@ class FormFieldGenerator {
   }
 
   //method to create a widget in the form
-  private createWidget(queryLine: any): any {
+  private createWidget(queryLine: CriteriaLine): AbstractWidget {
     const subject = queryLine.sType;
     const predicate = queryLine.p;
     const object = queryLine.oType;
@@ -107,8 +116,8 @@ class FormFieldGenerator {
   //methode to add values and options to the widget in the form
   private addValuesAndOptions(
     formFieldDiv: HTMLElement,
-    queryLine: any,
-    widget: any,
+    queryLine: CriteriaLine,
+    widget: AbstractWidget,
     variable: string
   ): void {
     const valueDisplay = document.createElement("div");
@@ -118,6 +127,7 @@ class FormFieldGenerator {
     formFieldDiv.appendChild(valueDisplay);
 
     // Add a set to store selected values and a method to update the display
+
     const selectedValues = new Set<any>();
     const updateValueDisplay = () => {
       valueDisplay.innerHTML = "";
@@ -138,9 +148,12 @@ class FormFieldGenerator {
                 (w: { value: { label: string } }) => w.value.label === val.label
               )
           );
+          console.log("widget.getWidgetValues()", widget.getWidgetValues());
+          console.log(selectedValues);
           updateValueDisplay();
           queryLine.values = Array.from(selectedValues);
-
+          console.log(true);
+          console.log("QUERYLINE ", queryLine);
           formFieldDiv.dispatchEvent(
             new CustomEvent("valueRemoved", {
               bubbles: true,
@@ -158,6 +171,8 @@ class FormFieldGenerator {
       });
     };
 
+    // Add existing values to the widget
+
     // Add an event listener to add values to the widget
     widget.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
       const valueToInject = Array.isArray(e.detail.value)
@@ -171,16 +186,7 @@ class FormFieldGenerator {
 
         if (!existingValue) {
           selectedValues.add(val);
-          if (
-            !widget
-              .getWidgetValues()
-              .some(
-                (widgetValue: { value: { label: string } }) =>
-                  widgetValue.value.label === val.label
-              )
-          ) {
-            widget.addWidgetValue(val);
-          }
+
           updateValueDisplay();
           queryLine.values = Array.from(selectedValues);
 
@@ -199,7 +205,9 @@ class FormFieldGenerator {
       });
     });
 
-    // Add AnyValue and NotExist options
+    console.log("widget", widget);
+
+    // Add An'yValue and NotExist options
     this.optionalCriteriaManager = new OptionalCriteriaManager(
       this.query,
       variable,
@@ -210,4 +218,19 @@ class FormFieldGenerator {
   }
 }
 
-export default FormFieldGenerator;
+export default FormField;
+
+/*
+
+          if (
+            !widget
+              .getWidgetValues()
+              .some(
+                (widgetValue: { value: { label: string } }) =>
+                  widgetValue.value.label === val.label
+              )
+          ) {
+            //widget.addWidgetValue(val);
+          }
+
+*/

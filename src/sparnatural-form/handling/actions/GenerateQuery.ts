@@ -27,7 +27,7 @@ export class QueryGeneratorForm {
     let queryToUse: ISparJson;
 
     // Nettoyer la requête pour obtenir une version à jour
-    sparnaturalForm.cleanQuery();
+    sparnaturalForm.HandleOptional();
 
     // Utiliser la cleanQuery si elle existe, sinon jsonQuery
     queryToUse = this.actionStoreForm.sparnaturalForm.cleanQueryResult;

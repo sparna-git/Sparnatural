@@ -1,6 +1,13 @@
+import { AbstractWidget } from "../../../sparnatural/components/widgets/AbstractWidget";
+import {
+  Branch,
+  CriteriaLine,
+  ISparJson,
+} from "../../../sparnatural/generators/json/ISparJson";
+
 class OptionalCriteriaManager {
   private initialOptionalStates: { [variable: string]: any } = {};
-  private queryLine: any;
+  private queryLine: CriteriaLine;
 
   // Store references to elements for reuse
   private anyValueToggle!: HTMLInputElement;
@@ -9,10 +16,10 @@ class OptionalCriteriaManager {
   private notExistDiv!: HTMLDivElement;
 
   constructor(
-    private query: any, // The entire query structure
+    private query: ISparJson, // The entire query structure
     private variable: string, // The variable associated with this field
-    queryline: any, // The specific query line for this field
-    private widget: any, // The widget associated with this field
+    queryline: CriteriaLine, // The specific query line for this field
+    private widget: AbstractWidget, // The widget associated with this field
     private formFieldDiv: HTMLElement // The container for the form field
   ) {
     this.queryLine = queryline;
@@ -24,11 +31,11 @@ class OptionalCriteriaManager {
    * Saves the initial state of optional and notExist flags for each branch.
    */
   private saveInitialOptionalState(
-    queryBranches: any[],
+    queryBranches: Branch[],
     parentOptionalChain: boolean[] = []
   ) {
-    const saveState = (branches: any[], currentParentChain: boolean[]) => {
-      branches.forEach((branch: any) => {
+    const saveState = (branches: Branch[], currentParentChain: boolean[]) => {
+      branches.forEach((branch: Branch) => {
         const branchVariable = branch.line?.o;
         const currentChain = [...currentParentChain, branch.optional || false];
 
@@ -478,7 +485,7 @@ class OptionalCriteriaManager {
     );
   }
 
-  private findBranch(branches: any[]): any {
+  private findBranch(branches: Branch[]): Branch | null {
     for (const branch of branches) {
       if (branch.line.o === this.variable) return branch;
       if (branch.children && branch.children.length > 0) {
@@ -489,7 +496,7 @@ class OptionalCriteriaManager {
     return null;
   }
 
-  private findBranchParent(branches: any[]): any {
+  private findBranchParent(branches: Branch[]): Branch | any {
     for (const branch of branches) {
       if (branch.children && branch.children.length > 0) {
         const result = this.findBranch(branch.children);
@@ -501,8 +508,11 @@ class OptionalCriteriaManager {
 
   public setAnyValueForWidget(variable: string) {
     console.log(`Setting "Any value" for variable: ${variable}`);
-    const adjustOptionalFlags = (branches: any[], targetVariable: string) => {
-      branches.forEach((branch: any) => {
+    const adjustOptionalFlags = (
+      branches: Branch[],
+      targetVariable: string
+    ) => {
+      branches.forEach((branch: Branch) => {
         const formVariable = branch.line.o;
         if (formVariable === targetVariable && branch.optional === true) {
           console.log(
@@ -512,7 +522,7 @@ class OptionalCriteriaManager {
         }
         if (branch.children && branch.children.length > 0) {
           const childHasTargetVariable = branch.children.some(
-            (child: any) => child.line.o === targetVariable
+            (child: Branch) => child.line.o === targetVariable
           );
           if (childHasTargetVariable && branch.optional === true) {
             console.log(
@@ -530,8 +540,11 @@ class OptionalCriteriaManager {
   public resetToDefaultValueForWidget(variable: string) {
     console.log(`Resetting to default state for variable: ${variable}`);
 
-    const restoreInitialState = (branches: any[], targetVariable: string) => {
-      branches.forEach((branch: any) => {
+    const restoreInitialState = (
+      branches: Branch[],
+      targetVariable: string
+    ) => {
+      branches.forEach((branch: Branch) => {
         if (branch.line && branch.line.o === targetVariable) {
           const initialState = this.initialOptionalStates[targetVariable];
           if (initialState) {
@@ -553,7 +566,7 @@ class OptionalCriteriaManager {
   }
 
   private restoreParentOptionalChain(
-    branch: any,
+    branch: Branch,
     parentOptionalChain: boolean[]
   ) {
     let currentBranch = branch;
@@ -569,11 +582,14 @@ class OptionalCriteriaManager {
     }
   }
 
-  private findParentBranch(branches: any[], childVariable: string): any | null {
+  private findParentBranch(
+    branches: Branch[],
+    childVariable: string
+  ): Branch | null {
     for (const branch of branches) {
       if (
         branch.children &&
-        branch.children.some((child: any) => child.line.o === childVariable)
+        branch.children.some((child: Branch) => child.line.o === childVariable)
       ) {
         return branch;
       }
@@ -593,8 +609,8 @@ class OptionalCriteriaManager {
   public setNotExistsForWidget(variable: string) {
     console.log(`Setting "notExists" for variable: ${variable}`);
 
-    const addNotExistsFlag = (branches: any[], targetVariable: string) => {
-      branches.forEach((branch: any) => {
+    const addNotExistsFlag = (branches: Branch[], targetVariable: string) => {
+      branches.forEach((branch: Branch) => {
         if (branch.line && branch.line.o === targetVariable) {
           console.log(
             `Adding "notExists: true" for variable: ${targetVariable}`
@@ -614,12 +630,12 @@ class OptionalCriteriaManager {
     };
 
     const adjustParentOptionalFlags = (
-      branches: any[],
+      branches: Branch[],
       targetVariable: string
     ) => {
-      branches.forEach((branch: any) => {
+      branches.forEach((branch: Branch) => {
         const childHasTargetVariable = branch.children.some(
-          (child: any) => child.line.o === targetVariable
+          (child: Branch) => child.line.o === targetVariable
         );
         if (childHasTargetVariable && branch.optional === true) {
           console.log(
@@ -640,8 +656,11 @@ class OptionalCriteriaManager {
   public removeNotExistsForWidget(variable: string) {
     console.log(`Removing "notExists" for variable: ${variable}`);
 
-    const removeNotExistsFlag = (branches: any[], targetVariable: string) => {
-      branches.forEach((branch: any) => {
+    const removeNotExistsFlag = (
+      branches: Branch[],
+      targetVariable: string
+    ) => {
+      branches.forEach((branch: Branch) => {
         if (branch.line && branch.line.o === targetVariable) {
           delete branch.notExists;
           const initialState = this.initialOptionalStates[targetVariable];
