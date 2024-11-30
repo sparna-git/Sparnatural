@@ -1,6 +1,6 @@
 import { WidgetFactory } from "../../sparnatural/components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetFactory";
 import HTMLComponent from "../../sparnatural/components/HtmlComponent";
-import { ISparJson } from "../../sparnatural/generators/json/ISparJson";
+import { Branch, ISparJson } from "../../sparnatural/generators/json/ISparJson";
 import { I18n } from "../../sparnatural/settings/I18n";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
 import SparnaturalSpecificationFactory from "../../sparnatural/spec-providers/SparnaturalSpecificationFactory";
@@ -13,7 +13,8 @@ import { Catalog } from "../../sparnatural/settings/Catalog";
 import { getSettings } from "../settings/defaultsSettings";
 import SubmitSection from "./buttons/SubmitBtn";
 import { SparnaturalFormElement } from "../../SparnaturalFormElement";
-import FormFieldGenerator from "./FormFieldGenerator";
+import FormField from "./FormFieldGenerator";
+import { Binding, Form } from "../FormStructure";
 
 class SparnaturalFormComponent extends HTMLComponent {
   // the content of all HTML element attributes
@@ -39,8 +40,8 @@ class SparnaturalFormComponent extends HTMLComponent {
     this.cleanQueryResult = null; // Initialise cleanQueryResult
   }
 
-  //methode to clean the query each time a value is added or removed
-  public cleanQuery(): ISparJson | null {
+  //methode to handle the optional branches of the query and return the adjusted query
+  public HandleOptional(): ISparJson | null {
     //verify if the query is initialized
     if (!this.jsonQuery || !this.jsonQuery.branches) {
       console.error(
@@ -56,7 +57,7 @@ class SparnaturalFormComponent extends HTMLComponent {
     let formUrl = this.formSettings.form;
 
     //initialize the form configuration
-    let formConfig: any = null;
+    let formConfig: Form = null;
 
     // Charge the JSON form configuration synchronously via $.ajax (en synchronous mode)
     $.ajax({
@@ -77,36 +78,37 @@ class SparnaturalFormComponent extends HTMLComponent {
     }
     // Get the form variables and query variables
     const formVariables = formConfig.bindings.map(
-      (binding: any) => binding.variable
+      (binding: Binding) => binding.variable
     );
     console.log("formVariables", formVariables);
     const queryVariables = this.jsonQuery.variables.map((v: any) => v.value);
+    console.log("queryVariables", queryVariables);
     console.log("queryVariables", queryVariables);
 
     // Adjust optional flags for all branches without removing them
     this.adjustOptionalFlags(copiedQuery.branches);
 
-    console.log(
+    /*console.log(
       "Adjusted query without branch removal:",
       JSON.stringify(copiedQuery, null, 2)
-    );
+    );*/
     this.cleanQueryResult = copiedQuery; // update the global cleanQuery attribute
     return copiedQuery; // return the adjusted query
   }
 
   //methode qui ajuste les branches optionnelles
   private adjustOptionalFlags(
-    branches: any[],
+    branches: Branch[],
     parentOptional: boolean = false
   ) {
-    branches.forEach((branch: any) => {
+    branches.forEach((branch: Branch) => {
       const formVariable = branch.line.o;
       const hasValues = branch.line.values && branch.line.values.length > 0;
       // Remove the optional flag if the branch has values
       if (
         hasValues ||
         branch.children.some(
-          (child: any) => child.line.values && child.line.values.length > 0
+          (child: Branch) => child.line.values && child.line.values.length > 0
         )
       ) {
         branch.optional = false;
@@ -155,8 +157,8 @@ class SparnaturalFormComponent extends HTMLComponent {
           // Initialize labels after loading formConfig
           this.#initSparnaturalFormStaticLabels(formConfig);
 
-          formConfig.bindings.forEach((binding: any) => {
-            const fieldGenerator = new FormFieldGenerator(
+          formConfig.bindings.forEach((binding: Binding) => {
+            const fieldGenerator = new FormField(
               binding,
               this.html[0], // form container
               this.specProvider,
@@ -208,7 +210,7 @@ class SparnaturalFormComponent extends HTMLComponent {
     }
 
     // Réinitialiser la requête JSON pour supprimer toutes les valeurs sélectionnées
-    this.jsonQuery.branches.forEach((branch: any) => {
+    this.jsonQuery.branches.forEach((branch: Branch) => {
       branch.line.values = []; // Vider toutes les valeurs
     });
 
@@ -221,15 +223,16 @@ class SparnaturalFormComponent extends HTMLComponent {
    * Reads and parse the configuration provided in the "src" attribute, and fires a callback when ready
    * @param callback the function that is called with the ISpecificationProvider instance created after reading the config
    */
-  initSpecificationProvider(callback: any) {
+  initSpecificationProvider(callback: (sp: ISparnaturalSpecification) => void) {
     let specProviderFactory = new SparnaturalSpecificationFactory();
     specProviderFactory.build(
       this.formSettings.src,
       this.formSettings.language,
       // here : catalog parameter that we could add to the form
       undefined,
-      (sp: any) => {
+      (sp: ISparnaturalSpecification) => {
         // call the call back when done
+        console.log("sp", sp);
         callback(sp);
       }
     );
@@ -271,7 +274,7 @@ class SparnaturalFormComponent extends HTMLComponent {
    * Initialize the static labels used to render sparnatural-form
    */
 
-  #initSparnaturalFormStaticLabels(formConfig: any) {
+  #initSparnaturalFormStaticLabels(formConfig: Form) {
     const lang = getSettings().language === "fr" ? "fr" : "en";
     SparnaturalFormI18n.init(lang, formConfig);
   }
@@ -296,7 +299,7 @@ class SparnaturalFormComponent extends HTMLComponent {
     }
   }
   //methode to check if the form is empty
-  isEmpty(): any {
+  isEmpty(): boolean {
     return null;
   }
 }
