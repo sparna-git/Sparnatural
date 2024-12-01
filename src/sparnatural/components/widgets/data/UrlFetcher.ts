@@ -24,6 +24,7 @@ export class UrlFetcher {
     ): void {
         return this.fetchUrlWithParameters(
             url,
+            // call with no provided parameters
             {},
             callback,
             errorCallback

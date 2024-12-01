@@ -95,7 +95,7 @@ export class EndpointSparqlHandler implements SparqlHandlerIfc {
         callback: (data: {}) => void,
         errorCallback?:(error: any) => void
     ):void {
-        let url = this.buildUrl(sparql);
+        let url = this.sparqlEndpointUrl;
 
         const headers = new Headers();
         headers.append("Content-Type", "application/x-www-form-urlencoded");
