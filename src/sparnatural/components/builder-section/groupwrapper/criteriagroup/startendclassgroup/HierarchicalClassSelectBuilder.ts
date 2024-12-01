@@ -437,7 +437,8 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       let icon = `` ;
       let iconValue = ``;
       if (element.icon != '') {
-        icon = `<span><i class="fa ${element.icon} fa-fw"></i></span>` ;
+        // TODO : handle iconHover
+        icon = (element.icon.startsWith("fa"))?`<span><i class="fa ${element.icon} fa-fw"></i></span>`:`<span><img src="${element.icon}" /></span>` ;
         iconValue = `data-icon="${element.icon}"` ;
         this.hasIcon = true;
       }
