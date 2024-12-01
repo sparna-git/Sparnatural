@@ -7,6 +7,7 @@ import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../SelectedVal";
 import SparnaturalComponent from "../../../../SparnaturalComponent";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
+import CriteriaGroup from "../CriteriaGroup";
 import EditComponents from "./EditComponents";
 import { WidgetFactory } from "./WidgetFactory";
 
@@ -25,13 +26,13 @@ class WidgetWrapper extends HTMLComponent {
   add_or: boolean = true;
 
   constructor(
-    ParentComponent: HTMLComponent,
+    parentComponent: HTMLComponent,
     specProvider: ISparnaturalSpecification,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
   ) {
-    super("WidgetWrapper", ParentComponent, null);
+    super("WidgetWrapper", parentComponent, null);
     this.specProvider = specProvider;
     this.startClassVal = startClassVal;
     this.objectPropVal = objectPropVal;
@@ -121,8 +122,10 @@ class WidgetWrapper extends HTMLComponent {
     let htmlString = '';
     widgetType == Config.NON_SELECTABLE_PROPERTY
     ? (htmlString = lineSpan + selectAnySpan)
+
     // if there is a value, do not propose the "Any" selection option
-    : (this.widgetComponent.getWidgetValues().length > 0)
+    // : (this.widgetComponent.getWidgetValues().length > 0)
+    : ((this.parentComponent.parentComponent.parentComponent as CriteriaGroup).endClassWidgetGroup.getWidgetValues().length > 0)
       ?(htmlString = lineSpan + endLabelSpan) 
       :(htmlString = lineSpan + selectAnySpan + orSpan + endLabelSpan);
 

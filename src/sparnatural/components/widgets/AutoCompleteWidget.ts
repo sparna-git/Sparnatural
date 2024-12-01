@@ -25,7 +25,6 @@ export class AutoCompleteWidget extends AbstractWidget {
     maxItems:15
   }
   
-  protected widgetValues: RdfTermValue[];
   protected configuration: AutocompleteConfiguration;
 
   constructor(
@@ -131,7 +130,7 @@ export class AutoCompleteWidget extends AbstractWidget {
 
       // set the value on the criteria
       inputHtml.val(autocompleteValue.value.label);
-      this.renderWidgetVal(autocompleteValue);
+      this.triggerRenderWidgetVal(autocompleteValue);
     });
 
     // add the behavior on the input HTML element to fetch the autocompletion value

@@ -46,7 +46,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
  
   protected widgetValues: DateTimePickerValue[];
   datesHandler: any;
-  ParentComponent: any;
+  parentComponent: any;
   dateFormat: any;
   inputStart: JQuery<HTMLElement>;
   inputEnd: JQuery<HTMLElement>;
@@ -176,7 +176,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
       stringDateTimeVal
     );
     if (!widgetVal) return;
-    this.renderWidgetVal(widgetVal);
+    this.triggerRenderWidgetVal(widgetVal);
   };
 
   parseInput(input: StringDateTimeValue["value"]): DateTimePickerValue {

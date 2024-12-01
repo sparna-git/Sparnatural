@@ -38,7 +38,7 @@ class VariableOptionsSelectBtn extends HTMLComponent {
   }
 
   render(): this {
-    this.htmlParent = this.ParentComponent.htmlParent;
+    this.htmlParent = this.parentComponent.htmlParent;
     super.render();
     return this;
   }

@@ -5,6 +5,7 @@ export interface ISparJson {
   variables: Array<VariableTerm | VariableExpression>;
   order?: Order;
   branches: Array<Branch>;
+  limit?: number;
 }
 
 export interface Branch {

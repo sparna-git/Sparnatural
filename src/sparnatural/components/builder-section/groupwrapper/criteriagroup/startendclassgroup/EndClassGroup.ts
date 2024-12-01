@@ -33,7 +33,7 @@ class EndClassGroup extends HTMLComponent {
   constructor(ParentCriteriaGroup: CriteriaGroup, specProvider: ISparnaturalSpecification) {
     super("EndClassGroup", ParentCriteriaGroup, null);
     this.specProvider = specProvider;
-    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
+    this.ParentCriteriaGroup = this.parentComponent as CriteriaGroup;
     // this.endClassWidgetGroup = new EndClassWidgetGroup(this, this.specProvider);
   }
 

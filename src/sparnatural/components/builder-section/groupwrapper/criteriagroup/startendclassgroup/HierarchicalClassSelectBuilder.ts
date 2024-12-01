@@ -469,10 +469,10 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
 
     displayClassSelector() {
       this.htmlSelectUiUx.addClass('open') ;
-      this.ParentComponent.html[0].classList.add('focus') ;
+      this.parentComponent.html[0].classList.add('focus') ;
     }
     hideClassSelector() {
-      this.ParentComponent.html[0].classList.remove('focus') ;
+      this.parentComponent.html[0].classList.remove('focus') ;
       this.htmlSelectUiUx.removeClass('open') ;
     }
     setValue(selectedValue:string) {
@@ -537,11 +537,11 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
 
       if (this.isFlatHierarchy()) {
         this.htmlSelectUiUx[0].classList.add('isFlat') ;
-        this.ParentComponent.html[0].classList.add('selectorIsFlat') ;
+        this.parentComponent.html[0].classList.add('selectorIsFlat') ;
       }
       if (this.hasIcon) {
         this.htmlSelectUiUx[0].classList.add('hasIcon') ;
-        this.ParentComponent.html[0].classList.add('selectorHasIcon') ;
+        this.parentComponent.html[0].classList.add('selectorHasIcon') ;
       }
 
 

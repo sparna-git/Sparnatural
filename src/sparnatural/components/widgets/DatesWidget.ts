@@ -153,7 +153,7 @@ export class DatesWidget extends AbstractWidget {
       stop: this.inputEnd.val().toString(),
       label: "",
     };
-    this.renderWidgetVal(this.parseInput(val));
+    this.triggerRenderWidgetVal(this.parseInput(val));
   };
 
   parseInput(dateValue:DateValue["value"]): DateValue {

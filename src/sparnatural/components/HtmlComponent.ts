@@ -7,7 +7,7 @@ class HTMLComponent implements IRenderable {
   baseCssClass: string;
   static BaseClassFactory = new BaseClassFactory();
 
-  ParentComponent: HTMLComponent;
+  parentComponent: HTMLComponent;
   widgetHtml: JQuery<HTMLElement>;
   html: JQuery<HTMLElement>;
   // TODO this is only temporarly. Some components (ActionWhere) don't need to be attached on there parentcomponent but somewhere else
@@ -19,7 +19,7 @@ class HTMLComponent implements IRenderable {
     widgetHtml: JQuery<HTMLElement>
   ) {
     this.baseCssClass = baseCssClass;
-    this.ParentComponent = ParentComponent;
+    this.parentComponent = ParentComponent;
 
     // create the HTML element
     this.html = HTMLComponent.BaseClassFactory.getBaseClass(this.baseCssClass);
@@ -32,7 +32,7 @@ class HTMLComponent implements IRenderable {
     if (this.htmlParent) {
       this.htmlParent.append(this.html);
     } else {
-      $(this.html).appendTo(this.ParentComponent.html);
+      $(this.html).appendTo(this.parentComponent.html);
     }
   }
 
@@ -65,10 +65,10 @@ class HTMLComponent implements IRenderable {
    * @returns moves up the component hierarchy and returns the one that does not have a parent component
    */
   getRootComponent():HTMLComponent {
-    if(this.ParentComponent == null) {
+    if(this.parentComponent == null) {
       return this;
     } else {
-      return this.ParentComponent.getRootComponent();
+      return this.parentComponent.getRootComponent();
     }
 
   }

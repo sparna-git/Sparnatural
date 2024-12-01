@@ -16,6 +16,7 @@ import { SelectedVal } from "../SelectedVal";
 import { NamedNode } from '@rdfjs/types/data-model';
 import { I18n } from '../../settings/I18n';
 import HTMLComponent from '../HtmlComponent';
+import CriteriaGroup from '../builder-section/groupwrapper/criteriagroup/CriteriaGroup';
 
 
 const factory = new DataFactory();
@@ -93,7 +94,6 @@ export default class MapWidget extends AbstractWidget {
   }
   
   protected configuration: MapConfiguration;
-  protected parentComponent: any;
   protected endClassWidgetGroup: any;
   protected widgetValues: MapValue[];
   //protected widgetValue: MapWidgetValue[];
@@ -120,7 +120,7 @@ export default class MapWidget extends AbstractWidget {
 
     this.configuration = configuration;
     this.parentComponent = parentComponent;
-    this.endClassWidgetGroup = this.parentComponent.ParentComponent.ParentComponent.ParentComponent.endClassWidgetGroup ;
+    this.endClassWidgetGroup = (this.parentComponent.parentComponent.parentComponent.parentComponent as CriteriaGroup).endClassWidgetGroup ;
   }
 
   render(): this {
@@ -247,7 +247,7 @@ export default class MapWidget extends AbstractWidget {
       onClick: () => {
         //this.widgetValue = [this.widgetValue]
         this.#setWidgetValue(this.drawingLayer) ;
-        this.renderWidgetValues(this.widgetValues);
+        this.triggerRenderWidgetVal(this.widgetValues);
         $(this.parentComponent).trigger("change");
         console.log(this) ;
         console.log(this.endClassWidgetGroup) ;
@@ -337,9 +337,6 @@ export default class MapWidget extends AbstractWidget {
   }
 
   #setWidgetValue = (layer:any) => {
-    if(this.widgetValues?.length > 0) {
-      this.onRemoveValue(this.widgetValues[0]) ;
-    }
     this.widgetValues = [] ;
 
     switch ((layer as any).pm._shape) {
@@ -364,7 +361,7 @@ export default class MapWidget extends AbstractWidget {
 
   #closeMap = () => {
     if(this.widgetValues?.length > 0 ) {
-      this.renderWidgetValues(this.widgetValues);
+      this.triggerRenderWidgetVal(this.widgetValues);
       $(this.parentComponent).trigger("change");
     }
   };

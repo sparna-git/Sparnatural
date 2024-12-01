@@ -42,7 +42,7 @@ class ComponentsList extends HTMLComponent {
   attachNewRoot(grpWrapper: GroupWrapper) {
     this.rootGroupWrapper = grpWrapper;
     // this should already be the case, but we are just making sure it is
-    this.rootGroupWrapper.ParentComponent = this;
+    this.rootGroupWrapper.parentComponent = this;
 
     // display its eye and selects it
     // TODO : this should be done only if previous StartClassGroup was itself selected

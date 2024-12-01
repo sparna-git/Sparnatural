@@ -34,7 +34,7 @@ class StartClassGroup extends HTMLComponent {
     
     this.temporaryLabel = temporaryLabel;
     this.inputSelector = new ClassTypeId(this, this.specProvider, this.temporaryLabel, startClassVal);
-    this.ParentCriteriaGroup = this.ParentComponent as CriteriaGroup;
+    this.ParentCriteriaGroup = this.parentComponent as CriteriaGroup;
     this.startClassVal = startClassVal
       ? startClassVal
       : {

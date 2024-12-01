@@ -25,7 +25,7 @@ export class BooleanWidgetValue implements WidgetValue {
 }
 
 export class BooleanWidget extends AbstractWidget {
-  protected widgetValues: BooleanWidgetValue[];
+
   constructor(
     parentComponent: HTMLComponent,
     startClassVal: SelectedVal,
@@ -60,7 +60,7 @@ export class BooleanWidget extends AbstractWidget {
         boolean: true,
       });
 
-      this.renderWidgetVal(widgetValue);
+      this.triggerRenderWidgetVal(widgetValue);
     });
 
     falseSpan[0].addEventListener("click", (e) => {
@@ -69,7 +69,7 @@ export class BooleanWidget extends AbstractWidget {
         boolean: false,
       });
 
-      this.renderWidgetVal(widgetValue);
+      this.triggerRenderWidgetVal(widgetValue);
     });
     return this;
   }
