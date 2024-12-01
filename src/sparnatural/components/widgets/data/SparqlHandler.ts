@@ -81,14 +81,39 @@ export class EndpointSparqlHandler implements SparqlHandlerIfc {
         var url =
             this.sparqlEndpointUrl +
             separator +
-            "query=" +
-            encodeURIComponent(sparql) +
-            "&format=json";
+            this.buildParameters(sparql)
 
         return url;
     }
 
-    executeSparql(
+    buildParameters(sparql:string):string {
+        return "query=" + encodeURIComponent(sparql) + "&format=json";
+    }
+
+    executeSparqlPost(
+        sparql:string,
+        callback: (data: {}) => void,
+        errorCallback?:(error: any) => void
+    ):void {
+        let url = this.buildUrl(sparql);
+
+        const headers = new Headers();
+        headers.append("Content-Type", "application/x-www-form-urlencoded");
+        headers.append("Accept", "application/sparql-results+json,*/*;q=0.9");
+
+        return this.urlFetcher.fetchUrlWithParameters(
+            url,
+            {
+                method:"POST",
+                body:this.buildParameters(sparql),
+                headers: headers
+            },
+            callback,
+            errorCallback
+        );
+    }
+
+    executeSparqlGet(
         sparql:string,
         callback: (data: {}) => void,
         errorCallback?:(error: any) => void
@@ -100,6 +125,17 @@ export class EndpointSparqlHandler implements SparqlHandlerIfc {
             callback,
             errorCallback
         );
+    }
+
+    executeSparql(
+        sparql:string,
+        callback: (data: {}) => void,
+        errorCallback?:(error: any) => void
+    ):void {
+        if(sparql.length > 1024)
+            this.executeSparqlGet(sparql,callback,errorCallback);
+        else
+            this.executeSparqlPost(sparql,callback,errorCallback);
     }
 }
 

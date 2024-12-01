@@ -22,6 +22,20 @@ export class UrlFetcher {
         callback: (data: {}) => void,
         errorCallback?:(error: any) => void
     ): void {
+        return this.fetchUrlWithParameters(
+            url,
+            {},
+            callback,
+            errorCallback
+        );
+    }
+
+    fetchUrlWithParameters(
+        url:string,
+        providedParameters:{},
+        callback: (data: {}) => void,
+        errorCallback?:(error: any) => void
+    ): void {
     
         var headers = new Headers();
         if(this.extraHeaders) {
@@ -34,16 +48,23 @@ export class UrlFetcher {
             "Accept",
             "application/sparql-results+json, application/json, */*;q=0.01"
         );
-        let init = {
+
+        
+        let defaultParameters = {
             method: "GET",
             headers: headers,
             mode: "cors",
             cache: "default"
         };
+
+        let parameters = {
+            ...defaultParameters,
+            ...providedParameters
+        }
         
         let temp = new LocalCacheData();
         try {
-            let fetchpromise:Promise<Response> = temp.fetch(url, init, this.localCacheDataTtl);        
+            let fetchpromise:Promise<Response> = temp.fetch(url, parameters, this.localCacheDataTtl);        
             fetchpromise
             .then((response: Response) => {
                 if (!response.ok) {
