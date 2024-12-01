@@ -25,7 +25,6 @@ export default class JsonSparqlTranslator {
   prefixes: { [key: string]: string } = {};
   jsonQuery: ISparJson;
   settings: any;
-  limit: number;
 
   defaultLabelVars: Variable[] = [];
 
@@ -55,7 +54,7 @@ export default class JsonSparqlTranslator {
       prefixes: this.prefixes,
       order: this.#orderToRDFJS(this.jsonQuery.order, jsonQuery.variables[0]),
       // sets a limit if provided, otherwise leave to undefined
-      limit: this.limit && this.limit > 0 ? this.limit : undefined,
+      limit: jsonQuery.limit && jsonQuery.limit > 0 ? jsonQuery.limit : undefined,
     };
 
     // if the RdfJsQuery contains empty 'where' array, then the generator crashes.

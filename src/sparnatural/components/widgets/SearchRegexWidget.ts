@@ -32,7 +32,6 @@ export interface SearchConfiguration {
 }
 
 export class SearchRegexWidget extends AbstractWidget {
-  protected widgetValues: SearchRegexWidgetValue[];
 
   configuration: SearchConfiguration;
   addValueBtn: AddUserInputBtn;
@@ -87,7 +86,7 @@ export class SearchRegexWidget extends AbstractWidget {
       label: this.searchInput.val().toString(),
       regex: this.searchInput.val().toString(),
     };
-    this.renderWidgetVal(this.parseInput(searchWidgetValue));
+    this.triggerRenderWidgetVal(this.parseInput(searchWidgetValue));
   };
 
   parseInput(input: SearchRegexWidgetValue["value"]): SearchRegexWidgetValue {

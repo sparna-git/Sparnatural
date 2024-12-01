@@ -42,6 +42,7 @@ class EditComponents extends HTMLComponent {
   widgetWrapper: WidgetWrapper;
   specProvider: ISparnaturalSpecification;
   RENDER_WHERE = RENDER_WHERE_ENUM;
+ 
   constructor(
     parentComponent: EndClassGroup,
     startCassVal: SelectedVal,

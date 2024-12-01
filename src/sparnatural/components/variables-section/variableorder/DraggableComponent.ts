@@ -17,7 +17,7 @@ export class DraggableComponent extends HTMLComponent {
   aggrComponentInput: JQuery<HTMLElement>;
   aggrComponentBadgeValue: JQuery<HTMLElement>;
   aggrComponentOptionsExtend: JQuery<HTMLElement>;
-  ParentComponent: VariableOrderMenu;
+  parentComponent: VariableOrderMenu;
   
   state: DraggableComponentState;
   
@@ -146,7 +146,7 @@ export class DraggableComponent extends HTMLComponent {
   }
 
   render(): this {
-    this.htmlParent = $(this.ParentComponent.html).find(
+    this.htmlParent = $(this.parentComponent.html).find(
       ".variablesOtherSelect"
     );
     super.render();
@@ -240,7 +240,7 @@ export class DraggableComponent extends HTMLComponent {
     if(this.aggrComponentOptions[0].style.display == 'block') {
       return this.closeAggrOptions() ;
     }
-    if(this.ParentComponent.aggrOptionsExtend) {
+    if(this.parentComponent.aggrOptionsExtend) {
       this.aggrComponentOptions[0].classList.remove('reducted');
       this.aggrComponentOptions[0].classList.add('extended');
     } else {
@@ -253,11 +253,11 @@ export class DraggableComponent extends HTMLComponent {
     if(this.aggrComponentOptions[0].classList.contains('reducted')) {
       this.aggrComponentOptions[0].classList.remove('reducted');
       this.aggrComponentOptions[0].classList.add('extended');
-      this.ParentComponent.aggrOptionsExtend = true;
+      this.parentComponent.aggrOptionsExtend = true;
     } else {
       this.aggrComponentOptions[0].classList.add('reducted');
       this.aggrComponentOptions[0].classList.remove('extended');
-      this.ParentComponent.aggrOptionsExtend = false;
+      this.parentComponent.aggrOptionsExtend = false;
     }
   }
   onpenAggrOptions() {

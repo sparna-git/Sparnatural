@@ -33,7 +33,8 @@ export class QueryGenerator {
     var jsonQuery = qryGen.generateQuery(
       this.actionStore.sparnatural.variableSection.listVariables(),
       this.actionStore.sparnatural.variableSection.getOrder(),
-      settings.addDistinct
+      settings.addDistinct,
+      settings.limit
     );
 
     if (jsonQuery != null) {

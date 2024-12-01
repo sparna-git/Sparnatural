@@ -50,9 +50,9 @@ class GroupWrapper extends HTMLComponent {
 
   isRootGrpWrapper(): boolean{
     return (
-      (this.ParentComponent instanceof ComponentsList)
+      (this.parentComponent instanceof ComponentsList)
       &&
-      ((this.ParentComponent as ComponentsList).rootGroupWrapper == this)
+      ((this.parentComponent as ComponentsList).rootGroupWrapper == this)
     );
   }
 

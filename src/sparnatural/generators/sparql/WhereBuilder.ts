@@ -8,6 +8,7 @@ import ClassBuilder from "./ClassBuilder";
 import IntersectionBuilder from "./IntersectionBuilder";
 import SparqlFactory from "./SparqlFactory";
 import ValueBuilderIfc, { ValueBuilderFactory } from "./ValueBuilder";
+import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 
 const factory = new DataFactory();
 
@@ -49,7 +50,6 @@ export default class WhereBuilder {
     this.#isChild = isChild;
     this.#isInOption = isInOption;
     this.settings = settings;
-    // this.#widgetComponent = this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
 
     // create the object to convert widget values to SPARQL
     let endClassValue =
@@ -70,9 +70,12 @@ export default class WhereBuilder {
         this.#grpWrapper.CriteriaGroup.ObjectPropertyGroup.objectPropVal,
         this.#grpWrapper.CriteriaGroup.EndClassGroup.endClassVal,
         this.#grpWrapper.CriteriaGroup.EndClassGroup.isVarSelected(),
-        this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents?.widgetWrapper?.widgetComponent
-          ?.getWidgetValues()
-          .map((v) => v.value)
+        this.#grpWrapper.CriteriaGroup.endClassWidgetGroup
+          .getWidgetValues()
+          .filter((v) => !(v instanceof SelectAllValue))
+          .map((v) => {
+            return v.value;
+          })
       );
     }
   }
@@ -126,15 +129,14 @@ export default class WhereBuilder {
   }
 
   #buildRdfPtrn() {
-    let widgetComponent =
-      this.#grpWrapper.CriteriaGroup.EndClassGroup?.editComponents
-        ?.widgetWrapper?.widgetComponent;
-    if (widgetComponent?.getWidgetValues()?.length > 0) {
+    // exclude the "Any" value
+    if (
+        (this.#grpWrapper.CriteriaGroup.endClassWidgetGroup?.getWidgetValues()?.length > 0) 
+        &&
+        !(this.#grpWrapper.CriteriaGroup.endClassWidgetGroup?.hasAnyValue()) 
+    ) {
       this.#rdfPtrns = this.#valueBuilder.build();
     }
-
-    //get the information from the widget if there are widgetvalues selected
-    // if (this.#widgetComponent?.getwidgetValues()?.length > 0 ) this.#rdfPtrns = this.#widgetComponent.getRdfJsPattern();
   }
 
   #buildEndClassPtrn() {

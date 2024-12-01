@@ -35,7 +35,8 @@ class SparnaturalJsonGenerator {
   generateQuery(
     variables: Array<DraggableComponentState> | string[],
     order: Order,
-    distinct: boolean
+    distinct: boolean,
+    limit:number
   ) {
     this.json.distinct = distinct;
     this.json.variables = this.#toVariables(
@@ -52,6 +53,9 @@ class SparnaturalJsonGenerator {
       this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,
       false
     );
+
+    this.json.limit = limit;
+    
     return this.json;
   }
 

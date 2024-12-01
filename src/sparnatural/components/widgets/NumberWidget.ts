@@ -40,8 +40,6 @@ export class NumberWidget extends AbstractWidget {
   static defaultConfiguration: NumberConfiguration = {
     
   }
-
-  protected widgetValues: NumberWidgetValue[];
   
   configuration: NumberConfiguration;
   form: JQuery<HTMLElement>;
@@ -125,7 +123,7 @@ export class NumberWidget extends AbstractWidget {
     };
 
     numberWidgetValue = this.#checkInput(numberWidgetValue);  
-    this.renderWidgetVal(this.parseInput(numberWidgetValue));
+    this.triggerRenderWidgetVal(this.parseInput(numberWidgetValue));
 
     // prevent actual form submission
     event.preventDefault();

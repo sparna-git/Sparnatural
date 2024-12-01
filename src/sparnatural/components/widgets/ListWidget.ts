@@ -28,7 +28,6 @@ export class ListWidget extends AbstractWidget {
 
   configuration: ListConfiguration;
 
-  protected widgetValues: WidgetValue[];
   selectHtml: JQuery<HTMLElement>;
 
   constructor(
@@ -130,7 +129,7 @@ export class ListWidget extends AbstractWidget {
 
           let itemLabel = option[0].getAttribute("data-itemLabel");
           let listWidgetValue: WidgetValue = this.buildValue(option[0].value, itemLabel);
-          this.renderWidgetVal(listWidgetValue);
+          this.triggerRenderWidgetVal(listWidgetValue);
         });
 
       } else {

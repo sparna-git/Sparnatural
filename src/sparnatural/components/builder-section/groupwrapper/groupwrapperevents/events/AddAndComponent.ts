@@ -8,7 +8,7 @@ export function addAndComponent(
   startClassVal: SelectedVal
 ) {
   grpWrapper.andSibling = new GroupWrapper(
-    grpWrapper.ParentComponent,
+    grpWrapper.parentComponent,
     grpWrapper.specProvider,
     // same depth
     grpWrapper.depth,

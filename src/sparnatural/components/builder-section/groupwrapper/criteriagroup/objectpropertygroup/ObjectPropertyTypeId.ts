@@ -33,7 +33,7 @@ class ObjectPropertyTypeId extends HTMLComponent {
   ) {
     super("ObjectPropertyTypeId", ParentComponent, null);
     this.temporaryLabel = temporaryLabel;
-    this.GrandParent = ParentComponent.ParentComponent as CriteriaGroup;
+    this.GrandParent = ParentComponent.parentComponent as CriteriaGroup;
     this.specProvider = specProvider;
     this.startClassVal = startClassVal;
   }
@@ -232,7 +232,7 @@ class PropertySelectBuilder extends HTMLComponent {
 
   initDagWidget(items:DagIfc<ISpecificationProperty>, default_value: DagWidgetDefaultValue) {
     let jsonDag = this.convertToJsonDag(items.roots) ;
-    this.selectWidget = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, default_value );
+    this.selectWidget = new HierarchicalClassSelectBuilder(this.parentComponent, this.specProvider, jsonDag, default_value );
     return this.selectWidget.buildClassSelectFromJson() ; ;
   }
 

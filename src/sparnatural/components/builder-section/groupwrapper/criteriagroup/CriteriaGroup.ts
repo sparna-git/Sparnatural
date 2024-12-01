@@ -30,14 +30,14 @@ class CriteriaGroup extends HTMLComponent {
   unselectBtn: UnselectBtn;
 
   constructor(
-    ParentComponent: GroupWrapper,
+    parentComponent: GroupWrapper,
     specProvider: any,
     startClassVal?: SelectedVal,
     startClassEyeBtn?: boolean
   ) {
-    super("CriteriaGroup", ParentComponent, null);
+    super("CriteriaGroup", parentComponent, null);
     this.specProvider = specProvider;
-    this.ParentGroupWrapper = ParentComponent;
+    this.ParentGroupWrapper = parentComponent;
     this.StartClassGroup = new StartClassGroup(
       this,
       this.specProvider,
@@ -168,10 +168,7 @@ class CriteriaGroup extends HTMLComponent {
           "updateWidgetList expects an object of type EndClassWidgetValue"
         );
       e.stopImmediatePropagation();
-      let removed = e.detail.unselectedVal as EndClassWidgetValue;
-      this.EndClassGroup.editComponents.widgetWrapper.widgetComponent?.onRemoveValue(
-        removed.widgetVal
-      );
+      
       this.html[0].dispatchEvent(
         new CustomEvent("generateQuery", { bubbles: true })
       );

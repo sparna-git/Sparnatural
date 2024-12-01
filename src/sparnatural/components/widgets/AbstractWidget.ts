@@ -70,7 +70,6 @@ export class RdfTermValue implements WidgetValue {
 
 export abstract class AbstractWidget extends HTMLComponent {
   public valueRepetition: ValueRepetition;
-  protected widgetValues: Array<WidgetValue> = [];
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
@@ -104,48 +103,16 @@ export abstract class AbstractWidget extends HTMLComponent {
   // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
   abstract parseInput(value: WidgetValue["value"]): WidgetValue;
 
-  addWidgetValue(widgetValue: WidgetValue) {
-    this.widgetValues.push(widgetValue);
-  }
-
-  // returns null if valueObject has not been set before
-  getWidgetValues(): WidgetValue[] {
-    return this.widgetValues;
-  }
-
-  // This method gets called when an selected value gets deleted again.
-  // For example: Germany and France are chosen from the list widget and now get deleted
-  onRemoveValue(val: WidgetValue) {
-    this.widgetValues = this.widgetValues.filter((v) => {
-      if (v === val) return false;
-      return true;
-    });
-  }
 
   // fires the event to render the label of the WidgetValue on the UI
-  renderWidgetVal(widgetValue: WidgetValue) {
-    if (!this.widgetValues.find((v) => v.key() == widgetValue.key())) {
-      // don't add double values
-      // store value
-      this.widgetValues.push(widgetValue);
-      this.html[0].dispatchEvent(
-        new CustomEvent("renderWidgetVal", {
-          bubbles: true,
-          detail: widgetValue,
-        })
-      );
-    }
-  }
-
-  renderWidgetValues(widgetValues: WidgetValue[]) {
-    widgetValues.forEach((v) => this.widgetValues.push(v));
+  // can take either a single value or an array of values
+  triggerRenderWidgetVal(widgetValue: WidgetValue | WidgetValue[]) {
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetVal", {
         bubbles: true,
-        detail: widgetValues,
+        detail: widgetValue,
       })
     );
-    console.log("problem here !");
   }
 
   // Method to disable the widget
@@ -175,6 +142,7 @@ export abstract class AbstractWidget extends HTMLComponent {
       element.removeAttribute("disabled");
     });
   }
+  
   // toggle spinner component when loading a datasource
   toggleSpinner(message?: string) {
     const elements = this.spinner.html[0].getElementsByClassName("load");

@@ -30,7 +30,6 @@ export class TreeWidget extends AbstractWidget {
     maxSelectedItems: 3
   }
 
-  protected widgetValues: RdfTermValue[];
   configuration:TreeConfiguration;
   IdCriteriaGroupe: any;
   jsTree: any;

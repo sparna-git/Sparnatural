@@ -85,8 +85,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         // read all sh:property and find the ones that can target the selected class
         var items: string[] = [];
         let propShapes = this.getProperties();
-        propShapes
-        .forEach(ps => {
+        propShapes.forEach(ps => {
             let prop = new SHACLSpecificationProperty(ps, this.provider, this.store, this.lang);
             let pRange = prop.getRange();
             if(pRange.indexOf(range) > -1) {

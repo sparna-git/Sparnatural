@@ -141,14 +141,6 @@ class FormField {
 
         const removeBtn = new UnselectBtn(widget, () => {
           selectedValues.delete(val);
-          widget.onRemoveValue(
-            widget
-              .getWidgetValues()
-              .find(
-                (w: { value: { label: string } }) => w.value.label === val.label
-              )
-          );
-          console.log("widget.getWidgetValues()", widget.getWidgetValues());
           console.log(selectedValues);
           updateValueDisplay();
           queryLine.values = Array.from(selectedValues);

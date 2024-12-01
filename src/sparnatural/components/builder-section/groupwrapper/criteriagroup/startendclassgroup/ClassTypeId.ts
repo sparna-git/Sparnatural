@@ -16,7 +16,7 @@ import ISpecificationEntry from "../../../../../spec-providers/ISpecificationEnt
  * The DOMAIN selection happens only for the very first line/criteria.
  **/
 class ClassTypeId extends HTMLComponent {
-  ParentComponent: EndClassGroup | StartClassGroup;
+  parentComponent: EndClassGroup | StartClassGroup;
   id: string;
   frontArrow: ArrowComponent = new ArrowComponent(
     this,
@@ -65,7 +65,7 @@ class ClassTypeId extends HTMLComponent {
 
 
     // no back arrow on start class
-    if (!isStartClassGroup(this.ParentComponent)) {
+    if (!isStartClassGroup(this.parentComponent)) {
       this.backArrow.render();
     }
 
@@ -74,7 +74,7 @@ class ClassTypeId extends HTMLComponent {
     currentWrapper.append(this.htmlCurentValue) ;
     this.html.append(currentWrapper);
     
-    if (isStartClassGroup(this.ParentComponent)) {
+    if (isStartClassGroup(this.parentComponent)) {
       if(!this.startClassVal?.type) {
         // If this Component is a child of the StartClassGroup component in the first row with no value selected
         this.widgetHtml = this.selectBuilder.buildSelect_FirstStartClassGroup();
@@ -171,12 +171,12 @@ class ClassTypeId extends HTMLComponent {
         ? this.html.addClass("VariableSelected")
         : this.html.removeClass("VariableSelected");
         
-    if (isEndClassGroup(this.ParentComponent)) 
-      this.#onSelectViewVar(this.ParentComponent.endClassVal,selected)
+    if (isEndClassGroup(this.parentComponent)) 
+      this.#onSelectViewVar(this.parentComponent.endClassVal,selected)
 
      // The first StartClass gets an eye Btn to de/select
-    if(isStartClassGroup(this.ParentComponent) && this.ParentComponent.renderEyeBtn) 
-      this.#onSelectViewVar(this.ParentComponent.startClassVal,selected)
+    if(isStartClassGroup(this.parentComponent) && this.parentComponent.renderEyeBtn) 
+      this.#onSelectViewVar(this.parentComponent.startClassVal,selected)
     
   };
 
@@ -202,14 +202,14 @@ class ClassTypeId extends HTMLComponent {
   showTypeName(){
     const currentSpan = this.htmlCurentValue.first()[0].getElementsByClassName('label').item(0)
      //display label
-     currentSpan.textContent = this.specProvider.getEntity(this.ParentComponent.getTypeSelected()).getLabel();
+     currentSpan.textContent = this.specProvider.getEntity(this.parentComponent.getTypeSelected()).getLabel();
   }
 
   // renders the variable name
   showVarName(){
     const currentSpan = this.htmlCurentValue.first()[0].getElementsByClassName('label').item(0)
     // display variable
-    currentSpan.textContent = this.ParentComponent.getVarName();
+    currentSpan.textContent = this.parentComponent.getVarName();
   }
 
 }
@@ -332,7 +332,7 @@ class ClassSelectBuilder extends HTMLComponent {
 
   initDagWidget(items:DagIfc<ISpecificationEntity>, default_value: DagWidgetDefaultValue) {
     let jsonDag = this.convertToJsonDag(items.roots) ;
-    this.selectWidget = new HierarchicalClassSelectBuilder(this.ParentComponent, this.specProvider, jsonDag, default_value );
+    this.selectWidget = new HierarchicalClassSelectBuilder(this.parentComponent, this.specProvider, jsonDag, default_value );
     return this.selectWidget.buildClassSelectFromJson() ; ;
   }
 

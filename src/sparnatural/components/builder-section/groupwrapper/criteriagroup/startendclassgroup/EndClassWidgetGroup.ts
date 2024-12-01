@@ -137,7 +137,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     )
       return;
     
-      // if not, then create the EndclassWidgetValue and add it to the list
+    // if not, then create the EndclassWidgetValue and add it to the list
     this.#renderEndClassWidgetVal(selectedVal);
   }
 
@@ -149,7 +149,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
     // undefined for NON_SELECTABLE_PROPERTY
-    const widgetComp:AbstractWidget | undefined = (this.ParentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent()
+    const widgetComp:AbstractWidget | undefined = (this.parentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent()
     if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE && !(widgetVal instanceof SelectAllValue) ) {
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
@@ -202,6 +202,13 @@ export class EndClassWidgetGroup extends HTMLComponent {
       return val.widgetVal;
     });
     return vals;
+  }
+
+  /**
+   * @returns true if the widget value is the "Any" value
+   */
+  hasAnyValue():boolean {
+    return this.getWidgetValues().some((v) => (v instanceof SelectAllValue))
   }
 }
 

@@ -35,7 +35,7 @@ export default function deleteGrpWrapper(
         if(elToDel.whereChild) deleteWhereChilds(elToDel)
         if(elToDel.andSibling) {
           // We are making the andSibling the root grpWrapper
-          (grpWrapper.ParentComponent as ComponentsList).attachNewRoot(elToDel.andSibling);
+          (grpWrapper.parentComponent as ComponentsList).attachNewRoot(elToDel.andSibling);
           deleteIt(elToDel)
         } else {
           sparnatural.BgWrapper.resetCallback();
