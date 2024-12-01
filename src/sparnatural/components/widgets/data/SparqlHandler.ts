@@ -132,7 +132,7 @@ export class EndpointSparqlHandler implements SparqlHandlerIfc {
         callback: (data: {}) => void,
         errorCallback?:(error: any) => void
     ):void {
-        if(sparql.length > 1024)
+        if(sparql.length < 1024)
             this.executeSparqlGet(sparql,callback,errorCallback);
         else
             this.executeSparqlPost(sparql,callback,errorCallback);
