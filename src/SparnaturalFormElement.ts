@@ -3,10 +3,11 @@ import "./assets/stylesheets/sparnatural-form.scss";
 import SparnaturalFormComponent from "./sparnatural-form/components/SparnaturalFormComponent";
 import { SparnaturalFormAttributes } from "./SparnaturalFormAttributes";
 import {
-  getSettings,
-  mergeSettings,
-} from "./sparnatural-form/settings/defaultsSettings";
+  defaultSettings,
+  extend
+} from "./sparnatural-form/settings/Settings";
 import { SparqlHandlerFactory, SparqlHandlerIfc } from "./sparnatural/components/widgets/data/SparqlHandler";
+import ISettings from "./sparnatural-form/settings/ISettings";
 
 /*
   This is the sparnatural-form HTMLElement. 
@@ -17,12 +18,16 @@ export class SparnaturalFormElement extends HTMLElement {
   static EVENT_INIT = "init";
   static EVENT_SUBMIT = "submit";
   static EVENT_QUERY_UPDATED = "queryUpdated";
+  static EVENT_RESET: "reset";
 
   sparnaturalForm: SparnaturalFormComponent;
 
   // just to avoid name clash with "attributes"
   _attributes: SparnaturalFormAttributes;
-  static EVENT_RESET: "reset";
+
+  settings: ISettings;
+
+
 
   constructor() {
     super();
@@ -36,25 +41,27 @@ export class SparnaturalFormElement extends HTMLElement {
   }
 
   set customization(customization: any) {
-    getSettings().customization = customization;
+    this.settings.customization = customization;
   }
 
   get customization() {
-    return getSettings().customization;
+    return this.settings.customization;
   }
 
   display() {
     // read the HTML attributes in sparnatural-form
     this._attributes = new SparnaturalFormAttributes(this);
 
+    this.settings = extend(true, this.settings, defaultSettings, this._attributes) as ISettings
+
     // create the sparnatural-form instance
-    this.sparnaturalForm = new SparnaturalFormComponent(this._attributes);
+    this.sparnaturalForm = new SparnaturalFormComponent(this.settings);
 
     // empty the HTML content in case we re-display after an attribute change
     $(this).empty();
     // attach the component to this WebComponent
     $(this).append(this.sparnaturalForm.html);
-    mergeSettings(this._attributes);
+
     // render the form
     this.sparnaturalForm.render();
   }
@@ -67,7 +74,7 @@ export class SparnaturalFormElement extends HTMLElement {
   expandSparql(query: string) {
     return this.sparnaturalForm.specProvider.expandSparql(
       query,
-      getSettings().sparqlPrefixes
+      this.settings.sparqlPrefixes
     );
   }
 
@@ -86,26 +93,26 @@ export class SparnaturalFormElement extends HTMLElement {
 
     // prevents callback to be called on initial creation
     if (oldValue != null) {
-      if (getSettings().debug) {
+      if (this.settings.debug) {
         console.log(
           `${name}'s value has been changed from ${oldValue} to ${newValue}`
         );
       }
       switch (name) {
         case "src": {
-          getSettings().src = newValue;
+          this.settings.src = newValue;
           break;
         }
         case "lang": {
-          getSettings().language = newValue;
+          this.settings.language = newValue;
           break;
         }
         case "defaultlang": {
-          getSettings().defaultLanguage = newValue;
+          this.settings.defaultLanguage = newValue;
           break;
         }
         case "endpoint": {
-          getSettings().endpoints = newValue.split(" ");
+          this.settings.endpoints = newValue.split(" ");
           break;
         }
         default: {
@@ -141,15 +148,15 @@ export class SparnaturalFormElement extends HTMLElement {
     errorCallback?: (error: any) => void
   ) {
     let sparqlFetcherFactory: SparqlHandlerFactory = new SparqlHandlerFactory(      
-      getSettings().language,
-      getSettings().localCacheDataTtl,
-      getSettings().customization.headers,
-      getSettings().customization.sparqlHandler,
+      this.settings.language,
+      this.settings.localCacheDataTtl,
+      this.settings.customization.headers,
+      this.settings.customization.sparqlHandler,
       this.sparnaturalForm.catalog
     );
 
     let sparqlFetcher: SparqlHandlerIfc =
-      sparqlFetcherFactory.buildSparqlHandler(getSettings().endpoints);
+      sparqlFetcherFactory.buildSparqlHandler(this.settings.endpoints);
     sparqlFetcher.executeSparql(query, callback, errorCallback);
   }
 }

@@ -4,25 +4,26 @@ import { Branch, ISparJson } from "../../sparnatural/generators/json/ISparJson";
 import { I18n } from "../../sparnatural/settings/I18n";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
 import SparnaturalSpecificationFactory from "../../sparnatural/spec-providers/SparnaturalSpecificationFactory";
-import { SparnaturalFormAttributes } from "../../SparnaturalFormAttributes";
 import ISettings from "../settings/ISettings";
 import { SparnaturalFormI18n } from "../settings/SparnaturalFormI18n";
-import UnselectBtn from "../../sparnatural/components/buttons/UnselectBtn";
 import ActionStoreForm from "../handling/ActionStore"; // Importer le store
 import { Catalog } from "../../sparnatural/settings/Catalog";
-import { getSettings } from "../settings/defaultsSettings";
 import SubmitSection from "./buttons/SubmitBtn";
 import { SparnaturalFormElement } from "../../SparnaturalFormElement";
 import FormField from "./FormFieldGenerator";
 import { Binding, Form } from "../FormStructure";
 
+/**
+ * the content of all HTML element attributes
+ */
 class SparnaturalFormComponent extends HTMLComponent {
-  // the content of all HTML element attributes
-  formSettings: ISettings;
   // Sparnatural configuration
+  settings: ISettings;
+  
   SubmitSection: SubmitSection;
 
   specProvider: ISparnaturalSpecification;
+
   // The JSON query from the "query" attribute
   jsonQuery: ISparJson;
 
@@ -32,11 +33,10 @@ class SparnaturalFormComponent extends HTMLComponent {
 
   catalog: Catalog;
 
-  constructor(attributes: SparnaturalFormAttributes) {
+  constructor(settings: ISettings) {
     // this is a root component : Does not have a ParentComponent!
     super("SparnaturalForm", null, null);
-    this.formSettings = attributes;
-    this.formSettings.customization = {};
+    this.settings = settings;
     this.cleanQueryResult = null; // Initialise cleanQueryResult
   }
 
@@ -53,8 +53,8 @@ class SparnaturalFormComponent extends HTMLComponent {
     //copy the query to avoid modifying the original query
     const copiedQuery = JSON.parse(JSON.stringify(this.jsonQuery));
     //get the form configuration url
-    console.log("formSettings", this.formSettings);
-    let formUrl = this.formSettings.form;
+    console.log("formSettings", this.settings);
+    let formUrl = this.settings.form;
 
     //initialize the form configuration
     let formConfig: Form = null;
@@ -145,7 +145,7 @@ class SparnaturalFormComponent extends HTMLComponent {
         this.actionStoreForm = new ActionStoreForm(this, this.specProvider);
 
         //get the url of the form configuration file
-        let formUrl = this.formSettings.form;
+        let formUrl = this.settings.form;
 
         // Load the form configuration file asynchronously via $.getJSON
         $.getJSON(formUrl, (formConfig) => {
@@ -166,7 +166,7 @@ class SparnaturalFormComponent extends HTMLComponent {
               new WidgetFactory(
                 this,
                 this.specProvider,
-                this.formSettings,
+                this.settings,
                 null
               )
             );
@@ -174,11 +174,15 @@ class SparnaturalFormComponent extends HTMLComponent {
           });
 
           // Add the submit button if it is set in the settings
-          if (getSettings().submitButton) {
+          if (this.settings.submitButton) {
+            let id:string = "submit-"+Math.random().toString(36).substring(2, 8);
             const submitBtn = document.createElement("div");
-            submitBtn.setAttribute("id", "submit");
+            submitBtn.setAttribute("id", id);
+            submitBtn.setAttribute("class", "submitSection");
             this.html[0].appendChild(submitBtn);
-            this.SubmitSection = new SubmitSection(this, "submit").render();
+            // we give a unique ID to the section to avoid ID clashes if there are more than one form used in the page
+            this.SubmitSection = new SubmitSection(this, id);
+            this.SubmitSection.render();
           }
         }).fail((error) => {
           console.error("Error loading form configuration:", error);
@@ -226,8 +230,8 @@ class SparnaturalFormComponent extends HTMLComponent {
   initSpecificationProvider(callback: (sp: ISparnaturalSpecification) => void) {
     let specProviderFactory = new SparnaturalSpecificationFactory();
     specProviderFactory.build(
-      this.formSettings.src,
-      this.formSettings.language,
+      this.settings.src,
+      this.settings.language,
       // here : catalog parameter that we could add to the form
       undefined,
       (sp: ISparnaturalSpecification) => {
@@ -239,7 +243,7 @@ class SparnaturalFormComponent extends HTMLComponent {
   }
 
   #initCatalog() {
-    let settings = getSettings();
+    let settings = this.settings;
     let me = this;
     if (settings.catalog) {
       $.getJSON(settings.catalog, function (data) {
@@ -257,7 +261,7 @@ class SparnaturalFormComponent extends HTMLComponent {
    * @param callback
    */
   initJsonQuery(callback: (query: ISparJson) => void) {
-    let queryUrl = this.formSettings.query;
+    let queryUrl = this.settings.query;
 
     $.when(
       $.getJSON(queryUrl, function (data) {
@@ -275,7 +279,7 @@ class SparnaturalFormComponent extends HTMLComponent {
    */
 
   #initSparnaturalFormStaticLabels(formConfig: Form) {
-    const lang = getSettings().language === "fr" ? "fr" : "en";
+    const lang = this.settings.language === "fr" ? "fr" : "en";
     SparnaturalFormI18n.init(lang, formConfig);
   }
 
@@ -292,7 +296,7 @@ class SparnaturalFormComponent extends HTMLComponent {
    * Initialize the static labels used to render the widgets from Sparnatural
    */
   #initSparnaturalStaticLabels() {
-    if (getSettings().language === "fr") {
+    if (this.settings.language === "fr") {
       I18n.init("fr");
     } else {
       I18n.init("en");

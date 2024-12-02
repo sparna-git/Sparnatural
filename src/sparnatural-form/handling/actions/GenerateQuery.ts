@@ -1,4 +1,3 @@
-import { getSettings } from "../../settings/defaultsSettings";
 import ActionStoreForm from "../ActionStore";
 import { Generator } from "sparqljs";
 import { ISparJson } from "../../../sparnatural/generators/json/ISparJson";
@@ -35,7 +34,7 @@ export class QueryGeneratorForm {
     console.log("Query utilisée pour la génération :", queryToUse);
 
     // Utiliser JsonSparqlTranslator pour convertir la requête en SPARQL
-    const settings = getSettings();
+    const settings = this.actionStoreForm.sparnaturalForm.settings;
     const sparqlTranslator = new JsonSparqlTranslator(
       this.actionStoreForm.specProvider,
       settings

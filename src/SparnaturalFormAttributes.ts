@@ -1,4 +1,3 @@
-import { getSettings } from "./sparnatural-form/settings/defaultsSettings";
 import { SparnaturalFormElement } from "./SparnaturalFormElement";
 
 /**
@@ -60,13 +59,6 @@ export class SparnaturalFormAttributes {
 
     this.debug = this.#read(element, "debug", true);
   }
-  updateLanguage(newLang: string) {
-    const settings = getSettings();
-    settings.language = newLang; // Met à jour la langue courante
-
-    // Relancer l'affichage de l'interface (réinitialisation des labels)
-    this.sparnatural.display(); // Ou la méthode qui réinitialise l'affichage
-  }
 
   #read(element: HTMLElement, attribute: string, asJson: boolean = false) {
     return element.getAttribute(attribute)
@@ -77,15 +69,14 @@ export class SparnaturalFormAttributes {
   }
 
   #parsePrefixes(element: HTMLElement) {
-    if (!element.getAttribute("prefix")) {
-      console.error("No prefixes provided!");
+    if (!element.getAttribute("prefixes")) {
       return;
     }
 
     let sparqlPrefixes = {};
     // use the singular to match RDFa attribute name
     let prefixArray = element
-      .getAttribute("prefix")
+      .getAttribute("prefixes")
       .trim()
       .split(/:\s+|\s+/);
     for (let i = 0; i < prefixArray.length; i++) {
@@ -100,7 +91,7 @@ export class SparnaturalFormAttributes {
           enumerable: true,
         });
       } catch (e) {
-        console.error("Parsing of attribute prefix failed!");
+        console.error("Parsing of attribute prefixes failed!");
         console.error(`Can not parse ${prefixArray[i]}`);
       }
     }

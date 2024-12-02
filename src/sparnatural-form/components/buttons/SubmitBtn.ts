@@ -1,4 +1,3 @@
-import { getSettings } from "../../../sparnatural-form/settings/defaultsSettings";
 import SearchBtn from "./SearchBtn";
 import SparnaturalFormComponent from "../../../sparnatural-form/components/SparnaturalFormComponent";
 import { SparnaturalFormElement } from "../../../SparnaturalFormElement";
@@ -19,10 +18,8 @@ class SubmitSection {
     this.resetBtn = new ResetBtn(this.resetForm.bind(this));
     // Create the Search button
     this.searchBtn = new SearchBtn(this.submitAction.bind(this));
-
-    // Render the button inside the container
-    this.render();
   }
+  
   render(): this {
     // Vérifie si les boutons existent déjà dans le conteneur
     if (
@@ -42,16 +39,13 @@ class SubmitSection {
 
   // Define submit action
   submitAction = () => {
-    if (getSettings().submitButton) {
-      console.log("SubmitSection: Submit button clicked");
-      let e = new CustomEvent(SparnaturalFormElement.EVENT_SUBMIT, {
-        bubbles: true,
-        detail: this.ParentSparnatural,
-      });
-      this.container[0].dispatchEvent(e);
-      console.log(e);
-      console.log("Submit event dispatched.");
-    }
+    let e = new CustomEvent(SparnaturalFormElement.EVENT_SUBMIT, {
+      bubbles: true,
+      detail: this.ParentSparnatural,
+    });
+    this.container[0].dispatchEvent(e);
+    console.log(e);
+    console.log("Submit event dispatched.");
   };
 
   // Reset form action
