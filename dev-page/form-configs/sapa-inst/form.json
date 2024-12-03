@@ -1,0 +1,274 @@
+{
+  "bindings": [
+    {
+      "variable": "Fonds",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "fonds",
+          "fr": "fonds"
+        }
+      }
+    },
+    {
+      "variable": "RR",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "record resource",
+          "fr": "record resource"
+        }
+      }
+    },
+    {
+      "variable": "InstCote2",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "signaturID quick access",
+          "fr": "signaturID accès rapide"
+        }
+      }
+    },
+    {
+      "variable": "InstCote2Value",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "signaturID search",
+          "fr": "signaturID recherche"
+        }
+      }
+    },
+    {
+      "variable": "InstCote1",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "identifier (deprecated)",
+          "fr": "identifiant (déprécié)"
+        }
+      }
+    },
+    {
+      "variable": "RepresentationType",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "representation type",
+          "fr": "type de représentation"
+        }
+      }
+    },
+    {
+      "variable": "CarrierTypeCriteria",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "carrier type",
+          "fr": "type de support"
+        }
+      }
+    },
+    {
+      "variable": "RecordingSystem",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "recording system",
+          "fr": "système d'enregistrement"
+        }
+      }
+    },
+    {
+      "variable": "ArchivalStatusCriteria",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "archival status",
+          "fr": "statut de préservation"
+        }
+      }
+    },
+    {
+      "variable": "DerivedInstantiation",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "derived instantiation",
+          "fr": "instantiation dérivée"
+        }
+      }
+    },
+    {
+      "variable": "DerivedFromInstantiation",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "derived from instantiation",
+          "fr": "dérive de l'instantiation"
+        }
+      }
+    },
+    {
+      "variable": "CopyPath",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "copy path",
+          "fr": "copy path"
+        }
+      }
+    },
+    {
+      "variable": "History",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "history",
+          "fr": "historique"
+        }
+      }
+    },
+    {
+      "variable": "ModeOfAcq",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "mode of acquisition",
+          "fr": "mode d'acquisition"
+        }
+      }
+    },
+    {
+      "variable": "ContentDesc",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "content description",
+          "fr": "description du contenu"
+        }
+      }
+    },
+    {
+      "variable": "Condition",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "condition",
+          "fr": "condition"
+        }
+      }
+    },
+    {
+      "variable": "LocationCriteria",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "location",
+          "fr": "localisation"
+        }
+      }
+    },
+    {
+      "variable": "Color",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "color",
+          "fr": "couleur"
+        }
+      }
+    },
+    {
+      "variable": "Standard",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "standard",
+          "fr": "standard"
+        }
+      }
+    },
+    {
+      "variable": "DisplayMode",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "display mode",
+          "fr": "mode d'affichage"
+        }
+      }
+    },
+    {
+      "variable": "ScanningFormat",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "scanning format",
+          "fr": "scanning format"
+        }
+      }
+    },
+    {
+      "variable": "ScanningOrder",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "scanning order",
+          "fr": "scanning order"
+        }
+      }
+    },
+    {
+      "variable": "VideoDamage",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "video damage",
+          "fr": "dommages vidéo"
+        }
+      }
+    },
+    {
+      "variable": "Integrity",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "integrity",
+          "fr": "intégrité"
+        }
+      }
+    },
+    {
+      "variable": "PhysUsability",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "physical usability",
+          "fr": "utilisabilité physique"
+        }
+      }
+    },
+    {
+      "variable": "InternalNote",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "internal note",
+          "fr": "note interne"
+        }
+      }
+    },
+    {
+      "variable": "Note",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "en": "note / anmerkung",
+          "fr": "note / anmerkung"
+        }
+      }
+    }
+  ]
+}

@@ -294,27 +294,27 @@ export class TreeWidget extends AbstractWidget {
   };
 
   onClickDisplay = function (e: any) {
-    let this_ = e.data.arg1;
+    let this_:TreeWidget = e.data.arg1;
     this_.displayLayer.show();
   };
 
   onClickCancel = function (e: any) {
-    let this_ = e.data.arg1;
+    let this_:TreeWidget = e.data.arg1;
     this_.displayLayer.hide();
   };
 
   onClickSelect = function (e: any) {
-    let this_ = e.data.arg1;
+    let this_:TreeWidget = e.data.arg1;
     const values = this_.getValue()
     this_.displayLayer?.hide();
-    this_.renderWidgetValues(values)
+    this_.triggerRenderWidgetVal(values)
     
   };
 
   onClickClose = function (e: any) {
-    let this_ = e.data.arg1;
+    let this_:TreeWidget = e.data.arg1;
     this_.displayLayer?.hide();
-    $(this_.ParentComponent).trigger("change");
+    $(this_.parentComponent).trigger("change");
   };
 
   getValue = function ():Array<RdfTermValue> {
