@@ -462,6 +462,14 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return this.graph.readProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
     }
 
+    /**
+     * @returns true if this shape as an sh:target predicate (indicating it is associated to a SPARQL query target)
+     */
+    hasShTarget():boolean {
+        console.log("hasShTarget "+this.uri+" "+this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null))
+        return this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null);
+    }
+
 }
 
 

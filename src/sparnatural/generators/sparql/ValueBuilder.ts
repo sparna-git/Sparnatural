@@ -28,6 +28,7 @@ import { DateTimePickerValue } from "../../components/widgets/timedatepickerwidg
 import { MapValue } from "../../components/widgets/MapWidget";
 import { LatLng } from "leaflet";
 import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
+import { SHACLSpecificationEntity } from "../../spec-providers/shacl/SHACLSpecificationEntity";
 
 const factory = new DataFactory();
 
@@ -226,10 +227,21 @@ export class RdfTermValueBuilder
 
   /**
    * @returns true if there is a single value and the end class is not selected (in which case we need the variable
-   * to put it in the SELECT clause)
+   * to put it in the SELECT clause), and the target entity is not associated to a SPARQL query, in which case the variable
+   * must not disappear from the query
    */
   isBlockingObjectProp(): boolean {
-    return this.values?.length == 1 && !this.endClassVarSelected;
+    return (
+      this.values?.length == 1 
+      && 
+      !this.endClassVarSelected
+      &&
+      !(
+        this.specProvider.getEntity(this.endClassVal.type) instanceof SHACLSpecificationEntity
+        &&
+        (this.specProvider.getEntity(this.endClassVal.type) as SHACLSpecificationEntity).hasShTarget()
+      )
+    );
   }
 }
 

@@ -34,8 +34,6 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     return (
       !graph.hasTriple(shapeIri, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
       &&
-      !graph.hasTriple(shapeIri, SH.PATH, RDF.TYPE)
-      &&
       !graph.hasTriple(shapeIri, SH.HAS_VALUE, null)
       &&
       (
