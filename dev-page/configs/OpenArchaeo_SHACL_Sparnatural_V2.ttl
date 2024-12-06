@@ -36,7 +36,7 @@
 <http://openarchaeo.huma-num.fr/federation/shapes/openarchaeo-shapes/> a owl:Ontology .
 
 oash:Site a sh:NodeShape;
-  volipi:icon "/openarchaeo_v2/assets/icons/noir/site.png";
+  volipi:icon "http://openarchaeo.huma-num.fr/openarchaeo_v2/assets/icons/noir/site.png";
   rdfs:label "Archeological site"@en, "Site archéologique"@fr;
   sh:description "An archeological site on which a discovery or an excavation was made which found multiple entities"@en,
     "Un site archéologique sur lequel une découverte ou une fouille a eu lieu et où diverses entités ont été trouvées"@fr;
@@ -90,7 +90,7 @@ oash:HumanMadeFeature a sh:NodeShape;
   sh:targetClass crm:E25_Human-Made_Feature .
 
 oash:HumanMadeObject a sh:NodeShape;
-  volipi:icon "/openarchaeo_v2/assets/icons/noir/mobilier.png";
+  volipi:icon "http://openarchaeo.huma-num.fr/openarchaeo_v2/assets/icons/noir/mobilier.png";
   rdfs:label "Artefact"@en, "Mobilier"@fr;
   sh:description "An artefact found on a site or keyworded as a metadata on the site"@en,
     "Un mobilier trouvé sur un site archéologique ou désigné comme métadonnée d'un site ou d'une fouille."@fr;
@@ -98,7 +98,7 @@ oash:HumanMadeObject a sh:NodeShape;
   sh:targetClass crm:E22_Human-Made_Object .
 
 oash:StratigraphicVolumeUnit a sh:NodeShape;
-  volipi:icon "/openarchaeo_v2/assets/icons/noir/unite_str.png";
+  volipi:icon "http://openarchaeo.huma-num.fr/openarchaeo_v2/assets/icons/noir/unite_str.png";
   rdfs:label "Stratigraphic Unit"@en, "Unité stratigraphique"@fr;
   sh:description "A Stratigraphic Unit"@en;
   sh:order 7;
@@ -173,7 +173,7 @@ oash:Position a sh:NodeShape;
   sh:order 11 .
 
 oash:Wall a sh:NodeShape;
-  volipi:icon "/openarchaeo_v2/assets/icons/noir/construction.png";
+  volipi:icon "http://openarchaeo.huma-num.fr/openarchaeo_v2/assets/icons/noir/construction.png";
   rdfs:label "Mur"@fr, "Wall"@en;
   sh:description "A Wall found on a site or during an excavation, or keyworded as metadata of either"@en,
     "Un mur trouvé sur un site ou durant une découverte, ou désigné comme métadonnée d'un site ou d'une fouille"@fr;
@@ -184,7 +184,7 @@ oash:Wall-target sh:select """SELECT $this
 WHERE { $this rdf:type <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/pcrtIxHmbVwDYW> }""" .
 
 oash:Burial a sh:NodeShape;
-  volipi:icon "/openarchaeo_v2/assets/icons/noir/sepulture.png";
+  volipi:icon "http://openarchaeo.huma-num.fr/openarchaeo_v2/assets/icons/noir/sepulture.png";
   rdfs:label "Burial"@en, "Sépulture"@fr;
   sh:description "A Burial found on a site or during an excavation, or keyworded as metadata of either"@en,
     "Une sépulture trouvée sur un site ou durant une découverte, ou désignée comme métadonnée d'un site ou d'une fouille"@fr;
@@ -195,7 +195,7 @@ oash:Burial-target sh:select """SELECT $this
 WHERE { $this rdf:type <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/pcrt795b632nWw> }""" .
 
 oash:Feature a sh:NodeShape;
-  volipi:icon "/openarchaeo_v2/assets/icons/noir/fait.png";
+  volipi:icon "http://openarchaeo.huma-num.fr/openarchaeo_v2/assets/icons/noir/fait.png";
   rdfs:label "Archaeological feature"@en, "Fait archéologique"@fr;
   sh:description "An Archeological feature found on a site or during an excavation, or keyworded as metadata of either"@en,
     "Un fait archéologique trouvé sur un site ou durant une découverte, ou désigné comme métadonnée d'un site ou d'une fouille"@fr;

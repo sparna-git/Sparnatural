@@ -142,13 +142,14 @@ export class ListWidget extends AbstractWidget {
 
     // TODO : this is not working for now
     let errorCallback = (payload:any) => {
+      console.log(payload);
       this.html.append(errorHtml);
     }
 
     // toggle spinner before loading
     this.toggleSpinner(I18n.labels.AutocompleteSpinner_Searching);
 
-    // if there are some provided values...
+    // if there are some provided values like in sh:in...
     if(this.configuration.values?.length > 0) {
       // convert the provided list of terms to RDFTerm[]
       let items: {term:RDFTerm;label:string;group?:string}[] = [];

@@ -161,7 +161,7 @@ export class TreeWidget extends AbstractWidget {
 
           // TODO : this is not working for now
           let errorCallback = (payload:any) => {
-            this.html.append(payload);
+            console.error(payload)
           }
 
           if(node.id === "#") {
