@@ -93,6 +93,26 @@ class FormField {
   }
 
   //method to create a widget in the form
+  private createWidget1(queryLine: CriteriaLine): AbstractWidget {
+    const subject = queryLine.sType;
+    const predicate = queryLine.p;
+    const object = queryLine.oType;
+
+    const specEntity = this.specProvider.getEntity(subject);
+    const connectingProperty = this.specProvider.getProperty(predicate);
+    const propertyType = connectingProperty.getPropertyType(object);
+
+    const widget = this.widgetFactory.buildWidget(
+      propertyType,
+      { variable: queryLine.s, type: specEntity.getId() },
+      { variable: "predicate", type: connectingProperty.getId() },
+      { variable: queryLine.o, type: object }
+    );
+    widget.render();
+    console.log("widget", widget);
+    return widget;
+  }
+
   private createWidget(queryLine: CriteriaLine): AbstractWidget {
     const subject = queryLine.sType;
     const predicate = queryLine.p;
@@ -109,6 +129,37 @@ class FormField {
       { variable: queryLine.o, type: object }
     );
     widget.render();
+    const loadspinenr = widget.html[0].querySelector(".loadingspinner");
+    if (loadspinenr) {
+      loadspinenr.classList.remove("loadingspinner");
+      loadspinenr.classList.add("loadingspinner-new");
+    }
+
+    // Appliquez la nouvelle classe CSS dynamiquement si le widget est "tree-widget"
+    if (widget.baseCssClass === "tree-widget") {
+      widget.html[0].classList.remove("tree-widget");
+      widget.html[0].classList.add("tree-widget-new");
+
+      // Modifiez les sous-éléments si nécessaire
+      const btnDisplay = widget.html[0].querySelector(".treeBtnDisplay");
+      if (btnDisplay) {
+        btnDisplay.classList.remove("treeBtnDisplay");
+        btnDisplay.classList.add("treeBtnDisplay-new");
+      }
+
+      const treeLayer = widget.html[0].querySelector(".treeLayer");
+      if (treeLayer) {
+        treeLayer.classList.remove("treeLayer");
+        treeLayer.classList.add("treeLayer-new");
+      }
+
+      const treeDisplay = widget.html[0].querySelector(".treeDisplay");
+      if (treeDisplay) {
+        treeDisplay.classList.remove("treeDisplay");
+        treeDisplay.classList.add("treeDisplay-new");
+      }
+    }
+
     console.log("widget", widget);
     return widget;
   }
@@ -167,9 +218,26 @@ class FormField {
 
     // Add an event listener to add values to the widget
     widget.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
-      const valueToInject = Array.isArray(e.detail.value)
-        ? e.detail.value
-        : [e.detail.value];
+      console.log("widget", widget);
+      console.log("e.detail", e.detail);
+
+      let valueToInject: any[];
+
+      // Handle different cases for e.detail
+      if (Array.isArray(e.detail)) {
+        // Case: e.detail is an array
+        valueToInject = e.detail.map((item: any) => item.value);
+      } else if (e.detail.value) {
+        // Case: e.detail contains a single value or a wrapped object
+        valueToInject = Array.isArray(e.detail.value)
+          ? e.detail.value
+          : [e.detail.value];
+      } else {
+        console.warn("Unexpected e.detail format:", e.detail);
+        return; // Exit early if the format is not recognized
+      }
+
+      console.log("valueToInject", valueToInject);
 
       valueToInject.forEach((val: any) => {
         const existingValue = Array.from(selectedValues).find(
@@ -196,7 +264,43 @@ class FormField {
         }
       });
     });
+    /*
 
+    // Add an event listener to add values to the widget
+    widget.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
+      console.log("widget", widget);
+      console.log("e.detail", e.detail);
+      const valueToInject = Array.isArray(e.detail.value)
+        ? e.detail.value
+        : [e.detail.value];
+      console.log("valueToInject", valueToInject);
+
+      valueToInject.forEach((val: any) => {
+        const existingValue = Array.from(selectedValues).find(
+          (existingVal: any) => existingVal.label === val.label
+        );
+
+        if (!existingValue) {
+          selectedValues.add(val);
+
+          updateValueDisplay();
+          queryLine.values = Array.from(selectedValues);
+
+          formFieldDiv.dispatchEvent(
+            new CustomEvent("valueAdded", {
+              bubbles: true,
+              detail: { value: val, variable: variable },
+            })
+          );
+
+          // Update options visibility
+          if (this.optionalCriteriaManager) {
+            this.optionalCriteriaManager.updateOptionVisibility();
+          }
+        }
+      });
+    });
+*/
     console.log("widget", widget);
 
     // Add An'yValue and NotExist options

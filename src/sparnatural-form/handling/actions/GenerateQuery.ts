@@ -2,6 +2,8 @@ import ActionStoreForm from "../ActionStore";
 import { Generator } from "sparqljs";
 import { ISparJson } from "../../../sparnatural/generators/json/ISparJson";
 import JsonSparqlTranslator from "../../../sparnatural/generators/sparql/fromjson/JsonSparqlTranslator";
+import CleanQuery from "../../components/CleanQuery";
+import { SparnaturalFormAttributes } from "../../../SparnaturalFormAttributes";
 
 export class QueryGeneratorForm {
   actionStoreForm: ActionStoreForm;
@@ -11,60 +13,67 @@ export class QueryGeneratorForm {
   }
 
   generateQuery(): QueryUpdatedPayload {
-    // Si on est en mode "quiet", ne rien faire
+    // If in quiet mode, do nothing
     if (this.actionStoreForm.quiet) {
       return;
     }
 
-    // Si le formulaire est vide, ne rien faire
+    // If the form is empty, do nothing
     if (this.actionStoreForm.sparnaturalForm.isEmpty()) {
       return;
     }
 
-    // Récupérer la clean query si elle est disponible, sinon utiliser la jsonQuery
+    // Step 1: Handle optional branches to get the clean query result
     const sparnaturalForm = this.actionStoreForm.sparnaturalForm;
-    let queryToUse: ISparJson;
-
-    // Nettoyer la requête pour obtenir une version à jour
     sparnaturalForm.HandleOptional();
 
-    // Utiliser la cleanQuery si elle existe, sinon jsonQuery
-    queryToUse = this.actionStoreForm.sparnaturalForm.cleanQueryResult;
+    // Step 2: Retrieve the last cleaned query
+    let queryToUse: ISparJson = sparnaturalForm.cleanQueryResult;
 
-    console.log("Query utilisée pour la génération :", queryToUse);
+    // Step 3: Further clean the query using CleanQuery for final processing
+    const cleanQueryProcessor = new CleanQuery(
+      queryToUse,
+      sparnaturalForm.settings as SparnaturalFormAttributes
+    );
+    const finalCleanQuery = cleanQueryProcessor.cleanQueryToUse();
 
-    // Utiliser JsonSparqlTranslator pour convertir la requête en SPARQL
-    const settings = this.actionStoreForm.sparnaturalForm.settings;
+    console.log("Final Clean Query for SPARQL generation:", finalCleanQuery);
+
+    // Step 4: Translate the final clean query into SPARQL
+    const settings = sparnaturalForm.settings;
     const sparqlTranslator = new JsonSparqlTranslator(
       this.actionStoreForm.specProvider,
       settings
     );
 
-    const sparqlJsQuery = sparqlTranslator.generateQuery(queryToUse);
+    const sparqlJsQuery = sparqlTranslator.generateQuery(finalCleanQuery);
     const generator = new Generator();
     const queryStringFromJson = generator.stringify(sparqlJsQuery);
 
-    // Créer un payload avec la requête générée
+    // Step 5: Create a payload with the generated SPARQL query
     const queryPayload: QueryUpdatedPayload = {
       queryString: queryStringFromJson,
-      queryJson: queryToUse,
+      queryJson: finalCleanQuery,
     };
 
-    // Déclencher l'événement pour notifier que la requête a été mise à jour
+    // Step 6: Dispatch the event to update the editor and notify components
     this.fireQueryUpdatedEvent(queryPayload);
 
-    // re-enable submit button if it was disabled
-    this.actionStoreForm.sparnaturalForm.SubmitSection.enableSubmit();
+    // Re-enable the submit button if it was disabled
+    sparnaturalForm.SubmitSection.enableSubmit();
+
+    return queryPayload; // Optionally return the payload for further use
   }
 
   fireQueryUpdatedEvent(payload: QueryUpdatedPayload) {
-    // Déclencher l'événement pour notifier les autres composants
+    // Dispatch an event to notify other components
     this.actionStoreForm.sparnaturalForm.html[0].dispatchEvent(
       new CustomEvent("queryUpdated", {
         bubbles: true,
         detail: payload,
       })
     );
+    console.log("Query Updated Event Dispatched with Payload:", payload);
   }
 }
 

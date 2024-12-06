@@ -456,6 +456,65 @@ class OptionalCriteriaManager {
       "renderWidgetVal",
       (e: CustomEvent) => {
         console.log("Widget value change detected.");
+        console.log("Event detail:", e.detail);
+
+        // Vérifie si e.detail.value est défini avant de continuer
+        if (!e.detail || !e.detail.value) {
+          console.error("e.detail.value is undefined or invalid:", e.detail);
+          return;
+        }
+
+        // Normalise les nouvelles valeurs en tableau
+        const newValues = Array.isArray(e.detail.value)
+          ? e.detail.value
+          : [e.detail.value];
+
+        console.log("New values to inject:", newValues);
+
+        // Vérifie si newValues contient des objets valides
+        const validNewValues = newValues.filter(
+          (val: any) => val && val.label !== undefined
+        );
+
+        if (validNewValues.length === 0) {
+          console.warn("No valid new values found:", newValues);
+          return;
+        }
+
+        // Récupère les valeurs existantes (ou initialise un tableau vide)
+        const existingValues = this.queryLine.values || [];
+        console.log("Existing values:", existingValues);
+
+        // Fusionne les valeurs en évitant les doublons
+        const mergedValues = [
+          ...existingValues.filter(
+            (existing: { label: any }) =>
+              !validNewValues.some(
+                (newVal: { label: any }) => newVal.label === existing.label
+              )
+          ),
+          ...validNewValues,
+        ];
+
+        // Met à jour les valeurs dans `this.queryLine.values`
+        this.queryLine.values = mergedValues;
+
+        // Affiche les valeurs fusionnées pour débogage
+        console.log("Updated queryLine.values:", this.queryLine.values);
+
+        // Mets à jour la visibilité des options si nécessaire
+        if (this.anydiv && this.notExistDiv) {
+          this.updateOptionVisibility();
+        }
+      }
+    );
+  }
+
+  private attachValueChangeListener4() {
+    this.widget.html[0].addEventListener(
+      "renderWidgetVal",
+      (e: CustomEvent) => {
+        console.log("Widget value change detected.");
 
         // Assure-toi que la valeur de l'événement est toujours un tableau
         const newValues = Array.isArray(e.detail.value)

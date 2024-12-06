@@ -8,7 +8,7 @@ class SearchBtn {
     this.callback = callback;
     // Créer le bouton avec jQuery et ajouter le texte "Search"
     this.buttonElement = $(
-      `<button id="Search" title="${I18n.labels["Search"]}">${I18n.labels["Search"]}</button>`
+      `<button id="Search" >${I18n.labels["Search"]}</button>`
     );
 
     // Ajouter un écouteur d'événement "click" pour appeler le callback si le bouton n'est pas désactivé

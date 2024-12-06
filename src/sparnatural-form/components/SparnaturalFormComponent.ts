@@ -19,7 +19,7 @@ import { Binding, Form } from "../FormStructure";
 class SparnaturalFormComponent extends HTMLComponent {
   // Sparnatural configuration
   settings: ISettings;
-  
+
   SubmitSection: SubmitSection;
 
   specProvider: ISparnaturalSpecification;
@@ -123,7 +123,7 @@ class SparnaturalFormComponent extends HTMLComponent {
       }
     });
   }
-
+  /*
   //render the form
   render(): this {
     //init the static labels
@@ -163,25 +163,21 @@ class SparnaturalFormComponent extends HTMLComponent {
               this.html[0], // form container
               this.specProvider,
               this.jsonQuery,
-              new WidgetFactory(
-                this,
-                this.specProvider,
-                this.settings,
-                null
-              )
+              new WidgetFactory(this, this.specProvider, this.settings, null)
             );
             fieldGenerator.generateField();
           });
 
           // Add the submit button if it is set in the settings
           if (this.settings.submitButton) {
-            let id:string = "submit-"+Math.random().toString(36).substring(2, 8);
+            let id: string =
+              "submit-" + Math.random().toString(36).substring(2, 8);
             const submitBtn = document.createElement("div");
             submitBtn.setAttribute("id", id);
             submitBtn.setAttribute("class", "submitSection");
             this.html[0].appendChild(submitBtn);
             // we give a unique ID to the section to avoid ID clashes if there are more than one form used in the page
-            this.SubmitSection = new SubmitSection(this, id);
+            this.SubmitSection = new SubmitSection(this, id, this.settings);
             this.SubmitSection.render();
           }
         }).fail((error) => {
@@ -201,6 +197,89 @@ class SparnaturalFormComponent extends HTMLComponent {
     });
 
     return this;
+  }
+*/
+  render(): this {
+    // Initialisation des labels et du catalogue
+    this.#initSparnaturalStaticLabels();
+    this.#initCatalog();
+
+    // Chargement des paramètres et génération du formulaire
+    this.initSpecificationProvider((sp: ISparnaturalSpecification) => {
+      this.specProvider = sp;
+
+      this.initJsonQuery((query: ISparJson) => {
+        this.jsonQuery = query;
+        this.actionStoreForm = new ActionStoreForm(this, this.specProvider);
+
+        // Charger le fichier de configuration du formulaire
+        const formUrl = this.settings.form;
+        $.getJSON(formUrl, (formConfig) => {
+          if (!formConfig || !formConfig.bindings) {
+            console.error("formConfig or formConfig.bindings is undefined");
+            return;
+          }
+
+          // Initialisation des labels
+          this.#initSparnaturalFormStaticLabels(formConfig);
+
+          // Génération des champs du formulaire
+          formConfig.bindings.forEach((binding: Binding) => {
+            const fieldGenerator = new FormField(
+              binding,
+              this.html[0],
+              this.specProvider,
+              this.jsonQuery,
+              new WidgetFactory(this, this.specProvider, this.settings, null)
+            );
+            fieldGenerator.generateField();
+          });
+
+          // Détection du nombre de champs pour rendre la section sticky
+          if (formConfig.bindings.length > 10) {
+            this.makeFormScrollable();
+          }
+
+          // Ajouter les boutons Reset/Search
+          if (this.settings.submitButton) {
+            let id = "submit-" + Math.random().toString(36).substring(2, 8);
+            const submitBtn = document.createElement("div");
+            submitBtn.setAttribute("id", id);
+            submitBtn.setAttribute("class", "submitSection");
+            this.html[0].appendChild(submitBtn);
+            this.SubmitSection = new SubmitSection(this, id, this.settings);
+            this.SubmitSection.render();
+          }
+        }).fail((error) => {
+          console.error("Error loading form configuration:", error);
+        });
+      });
+
+      this.html[0].dispatchEvent(
+        new CustomEvent(SparnaturalFormElement.EVENT_INIT, {
+          bubbles: true,
+          detail: {
+            sparnaturalForm: this,
+          },
+        })
+      );
+    });
+
+    return this;
+  }
+  // Méthode pour rendre le formulaire scrollable et ajouter un espace pour la SubmitSection
+  makeFormScrollable(): void {
+    const formContainer = this.html[0];
+    const containerDiv = document.createElement("div");
+    containerDiv.classList.add("sparnatural-form-container");
+
+    // Déplacer le contenu du formulaire dans le conteneur scrollable
+    while (formContainer.firstChild) {
+      containerDiv.appendChild(formContainer.firstChild);
+    }
+
+    // Ajouter le conteneur au formulaire principal
+    formContainer.appendChild(containerDiv);
   }
 
   //methode to reset the form
