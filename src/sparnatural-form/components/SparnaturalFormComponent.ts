@@ -242,7 +242,7 @@ class SparnaturalFormComponent extends HTMLComponent {
 
           // Ajouter les boutons Reset/Search
           if (this.settings.submitButton) {
-            let id = "submit-" + Math.random().toString(36).substring(2, 8);
+            let id = "submit";
             const submitBtn = document.createElement("div");
             submitBtn.setAttribute("id", id);
             submitBtn.setAttribute("class", "submitSection");
@@ -267,6 +267,7 @@ class SparnaturalFormComponent extends HTMLComponent {
 
     return this;
   }
+
   // Méthode pour rendre le formulaire scrollable et ajouter un espace pour la SubmitSection
   makeFormScrollable(): void {
     const formContainer = this.html[0];
@@ -284,6 +285,25 @@ class SparnaturalFormComponent extends HTMLComponent {
 
   //methode to reset the form
   //a faire add a methode when we reset we push the initial query to the sparql editor
+  /*
+  resetForm1() {
+    console.log("Resetting the entire form...");
+
+    // Effacer tous les éléments enfants du formulaire pour le vider
+    while (this.html[0].firstChild) {
+      this.html[0].removeChild(this.html[0].firstChild);
+    }
+
+    // Réinitialiser la requête JSON pour supprimer toutes les valeurs sélectionnées
+    this.jsonQuery.branches.forEach((branch: Branch) => {
+      branch.line.values = []; // Vider toutes les valeurs
+    });
+
+    // Recréer le formulaire en appelant la méthode `render`
+    this.render();
+    console.log("Form reset and re-rendered successfully.");
+  }*/
+  /**/
   resetForm() {
     console.log("Resetting the entire form...");
 
@@ -296,6 +316,13 @@ class SparnaturalFormComponent extends HTMLComponent {
     this.jsonQuery.branches.forEach((branch: Branch) => {
       branch.line.values = []; // Vider toutes les valeurs
     });
+
+    // Ajouter un événement pour vider l'éditeur SPARQL
+    const resetEditorEvent = new CustomEvent("resetEditor", {
+      bubbles: true,
+      detail: { queryString: "", queryJson: this.jsonQuery },
+    });
+    this.html[0].dispatchEvent(resetEditorEvent);
 
     // Recréer le formulaire en appelant la méthode `render`
     this.render();

@@ -129,37 +129,6 @@ class FormField {
       { variable: queryLine.o, type: object }
     );
     widget.render();
-    const loadspinenr = widget.html[0].querySelector(".loadingspinner");
-    if (loadspinenr) {
-      loadspinenr.classList.remove("loadingspinner");
-      loadspinenr.classList.add("loadingspinner-new");
-    }
-
-    // Appliquez la nouvelle classe CSS dynamiquement si le widget est "tree-widget"
-    if (widget.baseCssClass === "tree-widget") {
-      widget.html[0].classList.remove("tree-widget");
-      widget.html[0].classList.add("tree-widget-new");
-
-      // Modifiez les sous-éléments si nécessaire
-      const btnDisplay = widget.html[0].querySelector(".treeBtnDisplay");
-      if (btnDisplay) {
-        btnDisplay.classList.remove("treeBtnDisplay");
-        btnDisplay.classList.add("treeBtnDisplay-new");
-      }
-
-      const treeLayer = widget.html[0].querySelector(".treeLayer");
-      if (treeLayer) {
-        treeLayer.classList.remove("treeLayer");
-        treeLayer.classList.add("treeLayer-new");
-      }
-
-      const treeDisplay = widget.html[0].querySelector(".treeDisplay");
-      if (treeDisplay) {
-        treeDisplay.classList.remove("treeDisplay");
-        treeDisplay.classList.add("treeDisplay-new");
-      }
-    }
-
     console.log("widget", widget);
     return widget;
   }

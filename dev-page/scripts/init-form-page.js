@@ -43,31 +43,11 @@ sparnaturalForm.addEventListener("submit", () => {
 
   // Désactiver le bouton et afficher un spinner sur le bouton
   sparnaturalForm.disablePlayBtn();
-  const searchBtn = document.querySelector("#Search");
-  const spinner = document.createElement("div");
-  spinner.className = "spinner";
-  searchBtn.innerHTML = ""; // Efface le texte du bouton
-  searchBtn.appendChild(spinner); // Ajoute le spinner
 
   // Afficher un message ou un spinner temporaire dans YASR
   yasr.setResponse({
     contentType: "text/html",
     data: `chargement en cours ...`,
-    /*data: `{
-  "head": {
-    "vars": ["message"]
-  },
-  "results": {
-    "bindings": [
-      {
-        "message": {
-          "type": "literal",
-          "value": "Chargement en cours..."
-        }
-      }
-    ]
-  }
-}`,*/
     status: 200,
   });
 
@@ -83,7 +63,6 @@ sparnaturalForm.addEventListener("submit", () => {
 
       // Réactiver le bouton et restaurer le texte
       sparnaturalForm.enablePlayBtn();
-      searchBtn.innerHTML = "Search"; // Réinitialise le texte du bouton
     },
     (error) => {
       console.error("Erreur lors de l'exécution de la requête SPARQL :", error);
@@ -91,48 +70,15 @@ sparnaturalForm.addEventListener("submit", () => {
       // Afficher un message d'erreur directement dans YASR
       yasr.setResponse({
         contentType: "text/html",
-        data: `<p style="text-align: center; color: red;">Erreur : Impossible de charger les résultats.</p>`,
+        data: `Impossible de charger les résultats. Veuillez réessayer.`,
         status: 500,
       });
 
       // Réactiver le bouton même en cas d'erreur
       sparnaturalForm.enablePlayBtn();
-      searchBtn.innerHTML = "Search"; // Réinitialise le texte du bouton
     }
   );
 });
-
-/*
-sparnaturalForm.addEventListener("submit", () => {
-  // Désactiver le bouton et afficher le spinner
-  sparnaturalForm.disablePlayBtn();
-  const searchBtn = document.querySelector("#Search");
-  const spinner = document.createElement("div");
-  spinner.className = "spinner";
-  searchBtn.innerHTML = ""; // Efface le texte du bouton
-  searchBtn.appendChild(spinner); // Ajoute le spinner
-
-  let finalResult = sparnaturalForm.executeSparql(
-    yasqe.getValue(),
-    (finalResult) => {
-      // Envoyer les résultats à YASR
-      yasr.setResponse(finalResult);
-
-      // Réactiver le bouton et restaurer le texte
-      sparnaturalForm.enablePlayBtn();
-      searchBtn.innerHTML = "Search"; // Réinitialise le texte du bouton
-    },
-    (error) => {
-      console.error("Got an error when executing SPARQL in Sparnatural");
-      console.dir(error);
-
-      // Réactiver le bouton même en cas d'erreur
-      sparnaturalForm.enablePlayBtn();
-      searchBtn.innerHTML = "Search"; // Réinitialise le texte du bouton
-    }
-  );
-});
-*/
 
 console.log("init yasr & yasqe...");
 
@@ -180,3 +126,10 @@ document.getElementById("switch-language").onclick = function () {
   // Force form to re-render with new language
   sparnaturalForm.display();
 };
+
+// Écouter l'événement "resetEditor" pour vider l'éditeur SPARQL
+sparnaturalForm.addEventListener("resetEditor", (event) => {
+  console.log("Resetting SPARQL editor...");
+  yasqe.setValue(""); // Vider l'éditeur SPARQL
+  console.log("SPARQL editor has been reset.");
+});

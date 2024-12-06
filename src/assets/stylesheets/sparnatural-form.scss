@@ -221,135 +221,57 @@ sparnatural-form {
   }
 
   //ceci est pour le tree widget dans le formulaire
-  .tree-widget-new {
-    height: 100%;
+  .tree-widget {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     position: relative;
     gap: 10px;
 
-    .treeBtnDisplay-new {
+    .treeBtnDisplay {
       position: relative;
       left: 0;
       top: auto;
       transform: none;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background: #fff;
-      box-shadow: 0px 2px 3px 0px #cfcfcf;
-      padding: 5px;
-      line-height: 1;
-      z-index: 1;
-      cursor: pointer;
-      img {
-        height: 26px;
-      }
     }
 
-    .treeLayer-new {
-      display: none;
-      position: absolute;
-      top: 0;
+    .treeLayer {
+      top: 20px;
       //margin-top: -19px;
       left: 0;
       transform: none;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      background: #fff;
-      box-shadow: 0px 2px 3px 0px #cfcfcf;
-      z-index: 2;
 
-      .treeClose {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        width: 22px;
-        height: 22px;
-        vertical-align: top;
-        line-height: 22px;
-        cursor: pointer;
-        i {
-          text-align: center;
-          color: var(--primary-color-important);
-          background: #fff !important;
-          font-size: 18px;
-        }
-      }
-
-      .treeNotice {
-        padding: 5px;
-        display: none;
-        line-height: 20px;
-      }
-
-      .treeDisplay-new {
-        overflow: auto;
+      .treeDisplay {
         max-height: 200px;
-        max-width: 400px;
+        min-width: none;
+        max-width: 340px;
         padding: 25px 10px 5px;
-
-        &.jstree-default .jstree-disabled {
-          opacity: 0.5;
-        }
-        &.jstree-default .jstree-checkbox-disabled {
-          opacity: 0.5;
-        }
-      }
-      .treeActions {
-        border-top: 2px solid #ddd;
-        padding: 5px 10px;
-        text-align: right;
-        a {
-          border-radius: 5px;
-          color: #fff;
-          display: inline-block;
-          margin-left: 10px;
-          padding: 15px 5px;
-          line-height: 1;
-          cursor: pointer;
-        }
-        a.treeCancel {
-          background: #ee8d67;
-        }
-        a.treeSubmit {
-          background: #84c99e;
-        }
       }
     }
   }
 
   //cette partie pour le loading spinner dans le formulaire
-  .loadingspinner-new {
-    position: absolute;
-
-    z-index: 1;
-    top: 0.6em;
+  .loadingspinner {
+    display: none;
     left: 0;
-    line-height: 32px;
-    /* background: #fff; */
-    border-radius: 0 0 4px 4px;
-    padding: 0 5px;
-    margin-left: 7px;
-    font-style: italic;
-    font-size: 0.9em;
+  }
 
-    &.show {
-      display: block;
+  .spinner {
+    border: 3px solid #f3f3f3; /* Couleur de fond */
+    border-top: 3px solid #4caf50; /* Vert */
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
     }
-    .load {
-      display: none;
-      width: 32px;
-      height: 32px;
-      svg {
-        vertical-align: top;
-        path {
-          fill: var(--primary-color-main);
-        }
-      }
-      &.show {
-        display: inline-block;
-      }
+    100% {
+      transform: rotate(360deg);
     }
   }
 }
