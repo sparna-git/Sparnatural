@@ -1,0 +1,897 @@
+You convert user input into a structured Sparnatural query, similar to SPARQL.
+
+In your output, you must use the node shapes full URI from the following SHACL specification for the "sType" and "oType" keys, and the property shapes URI for the "p" key. 
+
+Do not use prefixed URI, always use full URIs by expending their prefix. Do not start variable names with question mark or dollar sign. Do not retrieve any additionnal attribute like the label unless explicitely requested. Do not specify an "order" clause in the query if not explicitely requested.
+
+When you need to populate the "values" part of the query, pretend you know the URI of the entity and use the named entity label to populate the "label" key, with the fake uri "https://sparnatural.eu/fake/uri" in field "value".
+
+
+```turtle
+@prefix schema: <http://schema.org/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix vann: <http://purl.org/vocab/vann/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix adms: <https://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix eli-dl: <http://data.europa.eu/eli/eli-draft-legislation-ontology#> .
+@prefix ept: <https://data.europarl.europa.eu/def/> .
+@prefix org-ep: <https://data.europarl.europa.eu/def/org-ep#> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix person: <http://www.w3.org/ns/person#> .
+@prefix epvoc: <https://data.europarl.europa.eu/def/epvoc#> .
+@prefix op-aut: <http://publications.europa.eu/resource/authority/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<https://data.europarl.europa.eu/def/org-ep#> a owl:Ontology, adms:Asset;
+  dcterms:type <https://publications.europa.eu/resource/authority/dataset-type/APROF>;
+  dcterms:title "ORG-EP Application Profile"@en;
+  dcterms:description "ORG-EP is an application profile of the W3C Organization Ontology, specifically designed to describe the organisational components of the European Parliament (MEPs, Parliamentary Groups, Committees, etc.)."@en;
+  owl:versionInfo "2.1.0";
+  adms:versionNotes """2.1.0 - 2024-03-06
+- (rfc) org:classification values based on EP taxonomy ep-entities and not EU AT op-aut:corporate-body-classification
+2.1.0 - 2024-02-28
+- (rfc) change range from xsd:dateTime to xsd:date for vcard:bday, epvoc:deathDate, dcat:startDate, dcat:endDate
+2.1.0 - 2024-01-31
+- (rfc) org:role values based on EP taxonomy ep-roles and not EU AT op-aut:role
+2.1.0 - 2023-12-20
+- creation of org:Organization with new properties (dcterms:isVersionOf, 
+dcat:hasCurrentVersion). This body could be considered equivalent to \"skos:Concept\", e.g. AFET committee, which will be used in linking eli-ep data
+1.2 - 2023-09-26
+- new property epvoc:sortLabel
+1.1
+- minor fixes
+1.0 - 2022-11-18
+- creation"""@en;
+  adms:status <https://publications.europa.eu/resource/authority/dataset-status/COMPLETED>;
+  owl:versionIRI <https://data.europarl.europa.eu/def/org-ep#>;
+  dcterms:conformsTo <https://www.w3.org/TR/shacl>;
+  dcterms:created "2021-11-18"^^xsd:date;
+  dcterms:modified "2024-03-06T00:00:00.000Z"^^xsd:dateTime;
+  dcterms:dateCopyrighted "2022"^^xsd:gYear;
+  dcterms:license <https://www.europarl.europa.eu/legal-notice/>;
+  dcterms:creator <https://publications.europa.eu/resource/authority/corporate-body/EP>;
+  dcterms:publisher <https://publications.europa.eu/resource/authority/corporate-body/EP>;
+  dcterms:rigthsHolder <https://publications.europa.eu/resource/authority/corporate-body/EURUN>;
+  dcat:distribution _:a4aeb3f30c2042e3b539bc99a24f35721745 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721745 dcterms:format <https://www.iana.org/assignments/media-types/text/turtle>;
+  dcat:downloadURL <https://europarl.github.io/org-ep/2.1.0/org-ep.shacl.ttl> .
+
+org:Organization a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/org/1234>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/org/.*$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721746;
+  rdfs:label "Organization"@en;
+  rdfs:comment "Represents a collection of people organized together into a community or other social, commercial or political structure. The group has some common purpose or reason for existence which goes beyond the set of people belonging to it and can act as an Agent. Organizations are often decomposable into hierarchical structures."@en;
+  sh:order "1"^^xsd:integer;
+  owl:versionInfo "2.1.0";
+  sh:property org-ep:P9, org-ep:P10, org-ep:P11, org-ep:P12, org-ep:P13, org-ep:P14,
+    org-ep:P15, org-ep:P16, org-ep:P17, org-ep:P18, org-ep:P19, org-ep:P20, org-ep:P21 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721746 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+foaf:Person a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/person/124936>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/person/[0-9]*?$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721747;
+  rdfs:label "Person"@en;
+  rdfs:comment "The foaf:Person class represents people."@en;
+  sh:order "2"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P24, org-ep:P25, org-ep:P26, org-ep:P27, org-ep:P28, org-ep:P29,
+    org-ep:P30, org-ep:P31, org-ep:P32, org-ep:P33, org-ep:P34, org-ep:P35, org-ep:P36,
+    org-ep:P37, org-ep:P38, org-ep:P39, org-ep:P40, org-ep:P41, org-ep:P42, org-ep:P43,
+    org-ep:P44, org-ep:P45, org-ep:P46 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721747 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+org:Membership a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/membership/12345-m-999900001>, <https://data.europarl.europa.eu/membership/12345-f-999900001>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/membership/.*$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721748;
+  rdfs:label "Membership"@en;
+  rdfs:comment "Indicates the nature of an Agent's membership of an organization."@en;
+  sh:order "3"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P49, org-ep:P50, org-ep:P51, org-ep:P52, org-ep:P53, org-ep:P54,
+    org-ep:P55, org-ep:P56, org-ep:P57 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721748 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+vcard:Voice a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/tel/33388175139>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/tel/[0-9]*$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721749;
+  rdfs:label "Voice"@en;
+  sh:order "4"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P69 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721749 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+vcard:Fax a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/tel/33388175139>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/tel/[0-9]*$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721750;
+  rdfs:label "Fax"@en;
+  sh:order "5"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P72 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721750 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+dcterms:PeriodOfTime a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/time-period/pt_9>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/time-period/.*$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721751;
+  rdfs:label "Period of time"@en;
+  rdfs:comment "An interval of time that is named or defined by its start and end dates."@en;
+  sh:order "6"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P60, org-ep:P61 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721751 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+epvoc:ContactPoint a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/contact-point/58766-m-16341-M05047>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/contact-point/.*$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721752;
+  rdfs:label "Contact point"@en;
+  rdfs:comment "A contact point for a person, an organisation"@en;
+  sh:order "7"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P64, org-ep:P65, org-ep:P66 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721752 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+eli-dl:ParliamentaryTerm a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/org/ep-9>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "^https://data.europarl.europa.eu/org/ep-[0-9].*$";
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721753;
+  rdfs:label "Parliamentary term"@en;
+  sh:order "8"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P9, org-ep:P10, org-ep:P11, org-ep:P12, org-ep:P13, org-ep:P14,
+    org-ep:P17, org-ep:P19 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721753 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+foaf:OnlineAccount a sh:NodeShape, rdfs:Class;
+  skos:example <https://twitter.com/mariearenaps>;
+  sh:nodeKind sh:IRI;
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721754;
+  rdfs:label "Online account"@en;
+  sh:order "9"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P81 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721754 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+skos:Concept a sh:NodeShape, rdfs:Class;
+  sh:nodeKind sh:IRI;
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721755;
+  rdfs:label "Concept"@en;
+  sh:order "10"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P84 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721755 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+rdfs:Resource a sh:NodeShape, rdfs:Class;
+  sh:nodeKind sh:IRI;
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721756;
+  rdfs:label "Resource"@en;
+  sh:order "11"^^xsd:integer;
+  owl:versionInfo "1.0" .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721756 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+foaf:Document a sh:NodeShape, rdfs:Class;
+  sh:nodeKind sh:IRI;
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721757;
+  rdfs:label "Document"@en;
+  sh:order "12"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P78 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721757 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+foaf:Image a sh:NodeShape, rdfs:Class;
+  skos:example <https://www.europarl.europa.eu/mepphoto/124936.jpg>;
+  sh:nodeKind sh:IRI;
+  sh:closed "true"^^xsd:boolean;
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721758;
+  rdfs:label "Image"@en;
+  sh:order "13"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P75 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721758 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+org:Site a sh:NodeShape, rdfs:Class;
+  skos:example <http://publications.europa.eu/resource/authority/site/ASP>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/site/.*$";
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721759;
+  rdfs:label "Site"@en;
+  rdfs:comment "An office or other premise at which the organization is located. Many organizations are spread across multiple sites and many sites will host multiple locations. In most cases a Site will be a physical location. However, we don't exclude the possibility of non-physical sites such as a virtual office with an associated post box and phone reception service. Extensions may provide subclasses to denote particular types of site."@en;
+  sh:order "14"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P99, org-ep:P100 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721759 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+org:Role a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/def/ep-roles/PRESIDENT_PARLIAMENT>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "https://data.europarl.europa.eu/def/ep-roles/.*$";
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721760;
+  rdfs:label "Role"@en;
+  rdfs:comment "Denotes a role that a Person or other Agent can take in an organization. Instances of this class describe the abstract role; to denote a specific instance of a person playing that role in a specific organization use an instance of `org:Membership`. It is common for roles to be arranged in some taxonomic structure and we use SKOS to represent that. The normal SKOS lexical properties should be used when labelling the Role."@en;
+  sh:order "15"^^xsd:integer;
+  owl:versionInfo "2.1.0";
+  sh:property org-ep:P95, org-ep:P96 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721760 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+euvoc:HonorificTitle a sh:NodeShape, rdfs:Class;
+  skos:example <http://publications.europa.eu/resource/authority/honorific/MR>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/honorific/.*$";
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721761;
+  rdfs:label "Honorific title"@en;
+  sh:order "16"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P111, org-ep:P112 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721761 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+euvoc:Country a sh:NodeShape, rdfs:Class;
+  skos:example <http://publications.europa.eu/resource/authority/country/BEL>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/country/.*$";
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721762;
+  rdfs:label "Country"@en;
+  sh:order "17"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P87, org-ep:P88 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721762 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+vcard:Gender a sh:NodeShape, rdfs:Class;
+  skos:example <http://publications.europa.eu/resource/authority/human-sex/FEMALE>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/human-sex/.*$";
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721763;
+  rdfs:label "Gender"@en;
+  rdfs:comment "To specify the sex or gender identity of the object. URIs are recommended to enable interoperable sex and gender codes to be used"@en;
+  sh:order "18"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P103, org-ep:P104 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721763 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+euvoc:CorporateBodyClassification a sh:NodeShape, rdfs:Class;
+  skos:example <https://data.europarl.europa.eu/def/ep-entities/EU_POLITICAL_GROUP>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "https://data.europarl.europa.eu/def/ep-entities/.*$";
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721764;
+  rdfs:label "Corporate body classification"@en;
+  sh:order "19"^^xsd:integer;
+  owl:versionInfo "2.1.0";
+  sh:property org-ep:P91, org-ep:P92 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721764 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+euvoc:AddressType a sh:NodeShape, rdfs:Class;
+  skos:example <http://publications.europa.eu/resource/authority/address-type/TWT>;
+  sh:nodeKind sh:IRI;
+  sh:pattern "http://publications.europa.eu/resource/authority/address-type/.*$";
+  sh:ignoredProperties _:a4aeb3f30c2042e3b539bc99a24f35721765;
+  rdfs:label "Address type"@en;
+  sh:order "20"^^xsd:integer;
+  owl:versionInfo "1.0";
+  sh:property org-ep:P107, org-ep:P108 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721765 rdf:first rdf:type;
+  rdf:rest rdf:nil .
+
+org-ep:P9 owl:versionInfo "1.0";
+  sh:path dcterms:identifier;
+  sh:name "Identifier"@en;
+  sh:description "An unambiguous reference to the resource within a given context."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P10 owl:versionInfo "1.0";
+  sh:path skos:notation;
+  sh:name "Notation"@en;
+  sh:description "A notation is a string of characters such as \"T58.5\" or \"303.4833\" used to uniquely identify a concept within the scope of a given concept scheme."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype epvoc:codictBodyId .
+
+org-ep:P11 owl:versionInfo "1.0";
+  sh:path rdfs:label;
+  sh:name "Label"@en;
+  sh:description "The property may be used to provide a human-readable version of a resource's name."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P12 owl:versionInfo "1.0";
+  sh:path skos:prefLabel;
+  sh:name "Preferred label"@en;
+  sh:description "A preferred lexical label for a given resource."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+org-ep:P13 owl:versionInfo "1.0";
+  sh:path skos:altLabel;
+  sh:name "Alternative label"@en;
+  sh:description "An alternative lexical label for a given resource."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+org-ep:P14 owl:versionInfo "1.0";
+  sh:path dcterms:source;
+  sh:name "Source"@en;
+  sh:description "A related source from which the described resource is derived."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P15 owl:versionInfo "1.0";
+  sh:path org:linkedTo;
+  sh:name "Linked to"@en;
+  sh:description "Indicates an arbitrary relationship between two organizations."@en;
+  sh:nodeKind sh:IRI;
+  sh:class org:Organization .
+
+org-ep:P16 owl:versionInfo "1.0";
+  sh:path org:hasSubOrganization;
+  sh:name "Has suborganization"@en;
+  sh:description "Represents hierarchical containment of Organizations or Organizational Units; indicates an organization which is a sub-part or child of this organization. Inverse of `org:subOrganizationOf`."@en;
+  sh:nodeKind sh:IRI;
+  sh:class org:Organization .
+
+org-ep:P17 owl:versionInfo "1.0";
+  sh:path org:classification;
+  sh:name "Classification"@en;
+  sh:description "Indicates a classification for this Organization within some classification scheme. Extension vocabularies may wish to specialize this property to have a range corresponding to a specific `skos:ConceptScheme`. This property is under discussion and may be revised or removed - in many cases organizations are best categorized by defining a sub-class hierarchy in an extension vocabulary."@en;
+  sh:nodeKind sh:IRI;
+  sh:class euvoc:CorporateBodyClassification .
+
+org-ep:P18 owl:versionInfo "1.0";
+  sh:path euvoc:represents;
+  sh:name "Represents"@en;
+  sh:description "This property idicates an entoty representig another. Usually refers to Countries and/or Organizations."@en;
+  sh:nodeKind sh:IRI;
+  sh:class euvoc:Country .
+
+org-ep:P19 owl:versionInfo "1.0";
+  sh:path dcterms:temporal;
+  sh:name "Temporal"@en;
+  sh:description "Temporal characteristics of the resource."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dcterms:PeriodOfTime .
+
+org-ep:P20 owl:versionInfo "2.1.0";
+  sh:path dcterms:isVersionOf;
+  sh:name "is version of"@en;
+  sh:nodeKind sh:IRI;
+  sh:class org:Organization .
+
+org-ep:P21 owl:versionInfo "2.1.0";
+  sh:path dcat:hasCurrentVersion;
+  sh:name "has current version"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class org:Organization .
+
+org-ep:P24 owl:versionInfo "1.0";
+  sh:path dcterms:identifier;
+  sh:name "Identifier"@en;
+  sh:description "An unambiguous reference to the resource within a given context."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P25 owl:versionInfo "1.0";
+  sh:path skos:notation;
+  sh:name "Notation"@en;
+  sh:description "A notation is a string of characters such as \"T58.5\" or \"303.4833\" used to uniquely identify a concept within the scope of a given concept scheme."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype epvoc:codictPersonId .
+
+org-ep:P26 owl:versionInfo "1.0";
+  sh:path rdfs:label;
+  sh:name "Label"@en;
+  sh:description "The property may be used to provide a human-readable version of a resource's name."@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P27 owl:versionInfo "1.0";
+  sh:path foaf:givenName;
+  sh:name "Given name"@en;
+  sh:description "The given name of some person."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P28 owl:versionInfo "1.0";
+  sh:path foaf:familyName;
+  sh:name "Family name"@en;
+  sh:description "The family name of some person."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P29 owl:versionInfo "1.0";
+  sh:path epvoc:upperGivenName;
+  sh:name "Upper given name"@en;
+  sh:description "Given name in uppercase"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P30 owl:versionInfo "1.0";
+  sh:path epvoc:upperFamilyName;
+  sh:name "Upper family name"@en;
+  sh:description "Family name in uppercase"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P31 owl:versionInfo "1.0";
+  sh:path euvoc:officialGivenName;
+  sh:name "Official given name"@en;
+  sh:description "Official given name"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P32 owl:versionInfo "1.0";
+  sh:path euvoc:officialFamilyName;
+  sh:name "Official family name"@en;
+  sh:description "Official family name"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P33 owl:versionInfo "1.0";
+  sh:path epvoc:upperOfficialGivenName;
+  sh:name "Uppercase official given name"@en;
+  sh:description "Official given name in uppercase"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P34 owl:versionInfo "1.0";
+  sh:path epvoc:upperOfficialFamilyName;
+  sh:name "Uppercase official family name"@en;
+  sh:description "Official family name in uppercase"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P35 owl:versionInfo "2.1.0";
+  sh:path vcard:bday;
+  sh:name "Birthday"@en;
+  sh:description "To specify the birth date of the object"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date .
+
+org-ep:P36 owl:versionInfo "2.1.0";
+  sh:path epvoc:deathDate;
+  sh:name "Death date"@en;
+  sh:description "Date of death."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date .
+
+org-ep:P37 owl:versionInfo "1.0";
+  sh:path vcard:hasGender;
+  sh:name "Has gender"@en;
+  sh:description "The gender of this Agent (typically but not necessarily 'male' or 'female')."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class vcard:Gender .
+
+org-ep:P38 owl:versionInfo "1.0";
+  sh:path foaf:img;
+  sh:name "Image"@en;
+  sh:description "An image that can be used to represent some thing (ie. those depictions which are particularly representative of something, eg. one's photo on a homepage)."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class foaf:Image .
+
+org-ep:P39 owl:versionInfo "1.0";
+  sh:path vcard:hasHonorificPrefix;
+  sh:name "Has honorific prefix"@en;
+  sh:description "Used to support property parameters for the honorific prefix data property"@en;
+  sh:nodeKind sh:IRI;
+  sh:class euvoc:HonorificTitle .
+
+org-ep:P40 owl:versionInfo "1.0";
+  sh:path person:citizenship;
+  sh:name "Citizenship"@en;
+  sh:description "The citizenship relationship links a Person to a Jurisdiction that has conferred citizenship rights on the individual such as the right to vote, to receive certain protection from the community or the issuance of a passport. Multiple citizenships are recorded as multiple instances of the citizenship relationship."@en;
+  sh:nodeKind sh:IRI;
+  sh:class euvoc:Country .
+
+org-ep:P41 owl:versionInfo "1.0";
+  sh:path person:placeOfBirth;
+  sh:name "Place of birth"@en;
+  sh:description "A person's place of birth."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P42 owl:versionInfo "1.0";
+  sh:path vcard:hasEmail;
+  sh:name "Has email"@en;
+  sh:description "To specify the electronic mail address for communication with the object"@en;
+  sh:nodeKind sh:IRI .
+
+org-ep:P43 owl:versionInfo "1.0";
+  sh:path foaf:homepage;
+  sh:name "Homepage"@en;
+  sh:description "A homepage for some thing."@en;
+  sh:nodeKind sh:IRI;
+  sh:class foaf:Document .
+
+org-ep:P44 owl:versionInfo "1.0";
+  sh:path foaf:account;
+  sh:name "Account"@en;
+  sh:description "Indicates an account held by this agent."@en;
+  sh:nodeKind sh:IRI;
+  sh:class foaf:OnlineAccount .
+
+org-ep:P45 owl:versionInfo "1.0";
+  sh:path org:hasMembership;
+  sh:name "Has membership"@en;
+  sh:description "Indicates a membership relationship that the Agent plays. Inverse of `org:member`"@en;
+  sh:nodeKind sh:IRI;
+  sh:class org:Membership .
+
+org-ep:P46 owl:versionInfo "1.2";
+  sh:path epvoc:sortLabel;
+  sh:name "Sort label"@en;
+  sh:description "This property identifies the part of the family name of the Person used in sorting."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P49 owl:versionInfo "1.0";
+  sh:path dcterms:identifier;
+  sh:name "Membership id"@en;
+  sh:description "An unambiguous reference to the resource within a given context."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P50 owl:versionInfo "1.0";
+  sh:path skos:notation;
+  sh:name "Notation"@en;
+  sh:description "A notation is a string of characters such as \"T58.5\" or \"303.4833\" used to uniquely identify a concept within the scope of a given concept scheme."@en;
+  sh:nodeKind sh:Literal;
+  sh:or _:a4aeb3f30c2042e3b539bc99a24f35721766 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721766 rdf:first _:a4aeb3f30c2042e3b539bc99a24f35721767;
+  rdf:rest _:a4aeb3f30c2042e3b539bc99a24f35721768 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721767 sh:datatype epvoc:codictFunctionId .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721768 rdf:first _:a4aeb3f30c2042e3b539bc99a24f35721769;
+  rdf:rest rdf:nil .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721769 sh:datatype epvoc:codictMandateId .
+
+org-ep:P51 owl:versionInfo "1.0";
+  sh:path org:memberDuring;
+  sh:name "Member during"@en;
+  sh:description "property to indicate the interval for which the membership is/was valid."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class dcterms:PeriodOfTime .
+
+org-ep:P52 owl:versionInfo "1.0";
+  sh:path epvoc:memberDuringParliamentaryTerm;
+  sh:name "Member during parliamentary term"@en;
+  sh:description "This property identifies the parliamentary term during which a person was a Member of the European Parliament."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class org:Organization .
+
+org-ep:P53 owl:versionInfo "1.0";
+  sh:path org:role;
+  sh:name "Role"@en;
+  sh:description "Indicates the Role that the Agent plays in a Membership relationship with an Organization. Can also be used on a org:Post to indicate the role that any holder of the Post plays."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class org:Role .
+
+org-ep:P54 owl:versionInfo "1.0";
+  sh:path org:organization;
+  sh:name "Organization"@en;
+  sh:description "Indicates the organization in which the Agent is a member."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class org:Organization .
+
+org-ep:P55 owl:versionInfo "1.0";
+  sh:path euvoc:represents;
+  sh:name "Represents"@en;
+  sh:description "This property idicates an entoty representig another. Usually refers to Countries and/or Organizations."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class euvoc:Country .
+
+org-ep:P56 owl:versionInfo "1.0";
+  sh:path dcat:contactPoint;
+  sh:name "Contact point"@en;
+  sh:description "A contact point for a person, an organisation"@en;
+  sh:nodeKind sh:IRI;
+  sh:class epvoc:ContactPoint .
+
+org-ep:P57 owl:versionInfo "1.0";
+  sh:path epvoc:membershipClassification;
+  sh:name "Membership classification"@en;
+  sh:description "Indicates a classification for memberships within some classification scheme, depending on implied org:Organization classification."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class euvoc:CorporateBodyClassification .
+
+org-ep:P60 owl:versionInfo "2.1.0";
+  sh:path dcat:startDate;
+  sh:name "Start date"@en;
+  sh:description "The start of the period."@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date .
+
+org-ep:P61 owl:versionInfo "2.1.0";
+  sh:path dcat:endDate;
+  sh:name "End date"@en;
+  sh:description "The end of the period."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:date .
+
+org-ep:P64 owl:versionInfo "1.0";
+  sh:path euvoc:officeAddress;
+  sh:name "Office address"@en;
+  sh:description "Used to indicate the address or identifier of an office or a room."@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:string .
+
+org-ep:P65 owl:versionInfo "1.0";
+  sh:path epvoc:hasSite;
+  sh:name "Has site"@en;
+  sh:description "Indicates the site where a resource is located"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class org:Site .
+
+org-ep:P66 owl:versionInfo "1.0";
+  sh:path vcard:hasTelephone;
+  sh:name "Has telephone"@en;
+  sh:description "To specify the telephone number for telephony communication with the object"@en;
+  sh:nodeKind sh:IRI;
+  sh:or _:a4aeb3f30c2042e3b539bc99a24f35721770 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721770 rdf:first _:a4aeb3f30c2042e3b539bc99a24f35721771;
+  rdf:rest _:a4aeb3f30c2042e3b539bc99a24f35721772 .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721771 sh:node vcard:Voice .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721772 rdf:first _:a4aeb3f30c2042e3b539bc99a24f35721773;
+  rdf:rest rdf:nil .
+
+_:a4aeb3f30c2042e3b539bc99a24f35721773 sh:node vcard:Fax .
+
+org-ep:P69 owl:versionInfo "1.0";
+  sh:path vcard:hasValue;
+  sh:name "Has value"@en;
+  sh:description "Used to indicate the resource value of an object property that requires property parameters"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI .
+
+org-ep:P72 owl:versionInfo "1.0";
+  sh:path vcard:hasValue;
+  sh:name "Has value"@en;
+  sh:description "Used to indicate the resource value of an object property that requires property parameters"@en;
+  sh:minCount "1"^^xsd:integer;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI .
+
+org-ep:P75 owl:versionInfo "1.0";
+  sh:path rdf:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI .
+
+org-ep:P78 owl:versionInfo "1.0";
+  sh:path rdf:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI .
+
+org-ep:P81 owl:versionInfo "1.0";
+  sh:path dcterms:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:maxCount "1"^^xsd:integer;
+  sh:nodeKind sh:IRI;
+  sh:class euvoc:AddressType .
+
+org-ep:P84 owl:versionInfo "1.0";
+  sh:path skos:prefLabel;
+  sh:name "Preferred label"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:Literal;
+  sh:datatype rdf:langString .
+
+org-ep:P87 owl:versionInfo "1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:country .
+
+org-ep:P88 owl:versionInfo "1.0";
+  sh:path rdf:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+org-ep:P91 owl:versionInfo "2.1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue ept:ep-entities .
+
+org-ep:P92 owl:versionInfo "1.0";
+  sh:path rdf:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:hasValue skos:Concept .
+
+org-ep:P95 owl:versionInfo "2.1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue ept:ep-roles .
+
+org-ep:P96 owl:versionInfo "1.0";
+  sh:path rdf:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+org-ep:P99 owl:versionInfo "1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:site .
+
+org-ep:P100 owl:versionInfo "1.0";
+  sh:path rdf:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+org-ep:P103 owl:versionInfo "1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:human-sex .
+
+org-ep:P104 owl:versionInfo "1.0";
+  sh:path rdf:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+org-ep:P107 owl:versionInfo "1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:address-type .
+
+org-ep:P108 owl:versionInfo "1.0";
+  sh:path rdf:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+org-ep:P111 owl:versionInfo "1.0";
+  sh:path skos:inScheme;
+  sh:name "Is in scheme"@en;
+  sh:description "Property stating the concept scheme that a given resource is part of"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue op-aut:honorific .
+
+org-ep:P112 owl:versionInfo "1.0";
+  sh:path rdf:type;
+  sh:name "Type"@en;
+  sh:description "Property that is used to state that a resource is an instance of a class"@en;
+  sh:nodeKind sh:IRI;
+  sh:hasValue skos:Concept .
+
+```

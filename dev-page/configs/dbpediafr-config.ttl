@@ -161,7 +161,24 @@ this:Artwork_creationYear sh:path dbpedia:creationYear;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
 
-this:Artwork_displayedAt sh:path _:a3498c4a778c4f829e250049f6184b3d5345;
+this:Artwork_displayedAt sh:path (
+  [
+    sh:zeroOrMorePath [
+      sh:alternativePath (
+        dbpedia:museum
+        [ sh:inversePath dbpedia:displays ]
+      )
+    ]
+  ]
+  [
+    sh:zeroOrMorePath [
+      sh:alternativePath (
+        dbpedia:museum
+        [ sh:inversePath dbpedia:displays ]
+      )
+    ]
+  ]
+);
   sh:name "displayed at"@en, "exposée à"@fr;
   sh:nodeKind sh:IRI;
   sh:class dbpedia:Museum;
@@ -169,16 +186,6 @@ this:Artwork_displayedAt sh:path _:a3498c4a778c4f829e250049f6184b3d5345;
   datasources:datasource datasources:search_rdfslabel_bifcontains;
   core:enableOptional "true"^^xsd:boolean;
   core:enableNegation "true"^^xsd:boolean .
-
-_:a3498c4a778c4f829e250049f6184b3d5345 sh:alternativePath _:a3498c4a778c4f829e250049f6184b3d5346 .
-
-_:a3498c4a778c4f829e250049f6184b3d5346 rdf:first dbpedia:museum;
-  rdf:rest _:a3498c4a778c4f829e250049f6184b3d5347 .
-
-_:a3498c4a778c4f829e250049f6184b3d5347 rdf:first _:a3498c4a778c4f829e250049f6184b3d5348;
-  rdf:rest rdf:nil .
-
-_:a3498c4a778c4f829e250049f6184b3d5348 sh:inversePath dbpedia:displays .
 
 this:Artwork_thumbnail sh:path dbpedia:thumbnail;
   sh:name "thumbnail"@en, "vignette"@fr;

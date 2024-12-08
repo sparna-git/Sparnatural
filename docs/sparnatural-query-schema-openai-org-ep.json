@@ -1,0 +1,408 @@
+{
+  "title": "Sparnatural query schema",
+  "version": "10.0.0",
+  "description": "A JSON schema describing the structure of queries as read or written by the Sparnatural query builder UI",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sparnatural.eu/def/schemas/sparnatural-query-schema.json",
+  "$defs": {
+
+    "VariableTerm": {
+      "description": "A SPARQL variable with its name, such as 'x'",
+      "type":"object",
+      "properties": {
+        "termType": {
+          "type" : "string",
+          "const": "Variable"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required":["termType", "value"],
+      "additionalProperties":false
+    },
+
+    "VariableExpression": {
+      "description": "A SPARQL aggregation expression, with the aggregation function on the original variable and the resulting variable, such as '(COUNT(?x) AS ?count)' ",
+      "type":"object",
+      "properties": {
+        "variable" : {
+          "$ref": "#/$defs/VariableTerm"
+        },
+        "expression": {
+          "description": "An aggregation expression, with an aggregation function and the variable being aggregated, such as 'COUNT(?x)'",
+          "type":"object",
+          "properties": {
+            "type": {
+              "type":"string",
+              "const":"aggregate"
+            },
+            "aggregation": {
+              "description": "The aggregation function name, as one of the allowed SPARQL aggregation functions",
+              "type":"string",
+              "enum": ["count","max","min","sample","sum","avg","group_concat"]
+            },
+            "distinct": {
+              "description": "Whether the aggregation function should use the DISTINCT keywork",
+              "type":["boolean","null"]
+            },
+            "expression": {
+              "$ref": "#/$defs/VariableTerm"
+            }
+          },
+          "required":["type","aggregation","expression","distinct"],
+          "additionalProperties":false
+        }
+      },
+      "required":["variable","expression"],
+      "additionalProperties":false
+    },
+
+    "Branch": {
+      "description": "A Sparnatural query branch, consisting of a criteria line (subject, predicate, object), and optional children branches",
+      "type" : "object",
+      "properties": {
+        "line" : {
+          "description": "One line of criteria in Sparnatural, corresponding to a subject, a predicate, an object, and also the type (rdf:type) of the subject and the object",
+          "type":"object",
+          "properties": {
+            "s" : {
+              "description": "The subject variable name, such as 'Person_1'",
+              "type": "string"
+            },
+            "p" : {
+              "description": "The full URI of the predicate",
+              "type": "string",
+              "enum" : [ 
+"https://data.europarl.europa.eu/def/org-ep#P84",
+"https://data.europarl.europa.eu/def/org-ep#P9",
+"https://data.europarl.europa.eu/def/org-ep#P10",
+"https://data.europarl.europa.eu/def/org-ep#P11",
+"https://data.europarl.europa.eu/def/org-ep#P12",
+"https://data.europarl.europa.eu/def/org-ep#P13",
+"https://data.europarl.europa.eu/def/org-ep#P14",
+"https://data.europarl.europa.eu/def/org-ep#P15",
+"https://data.europarl.europa.eu/def/org-ep#P16",
+"https://data.europarl.europa.eu/def/org-ep#P17",
+"https://data.europarl.europa.eu/def/org-ep#P18",
+"https://data.europarl.europa.eu/def/org-ep#P19",
+"https://data.europarl.europa.eu/def/org-ep#P20",
+"https://data.europarl.europa.eu/def/org-ep#P21",
+"https://data.europarl.europa.eu/def/org-ep#P24",
+"https://data.europarl.europa.eu/def/org-ep#P25",
+"https://data.europarl.europa.eu/def/org-ep#P26",
+"https://data.europarl.europa.eu/def/org-ep#P27",
+"https://data.europarl.europa.eu/def/org-ep#P28",
+"https://data.europarl.europa.eu/def/org-ep#P29",
+"https://data.europarl.europa.eu/def/org-ep#P30",
+"https://data.europarl.europa.eu/def/org-ep#P31",
+"https://data.europarl.europa.eu/def/org-ep#P32",
+"https://data.europarl.europa.eu/def/org-ep#P33",
+"https://data.europarl.europa.eu/def/org-ep#P34",
+"https://data.europarl.europa.eu/def/org-ep#P35",
+"https://data.europarl.europa.eu/def/org-ep#P36",
+"https://data.europarl.europa.eu/def/org-ep#P37",
+"https://data.europarl.europa.eu/def/org-ep#P38",
+"https://data.europarl.europa.eu/def/org-ep#P39",
+"https://data.europarl.europa.eu/def/org-ep#P40",
+"https://data.europarl.europa.eu/def/org-ep#P41",
+"https://data.europarl.europa.eu/def/org-ep#P42",
+"https://data.europarl.europa.eu/def/org-ep#P43",
+"https://data.europarl.europa.eu/def/org-ep#P44",
+"https://data.europarl.europa.eu/def/org-ep#P45",
+"https://data.europarl.europa.eu/def/org-ep#P46",
+"https://data.europarl.europa.eu/def/org-ep#P49",
+"https://data.europarl.europa.eu/def/org-ep#P50",
+"https://data.europarl.europa.eu/def/org-ep#P51",
+"https://data.europarl.europa.eu/def/org-ep#P52",
+"https://data.europarl.europa.eu/def/org-ep#P53",
+"https://data.europarl.europa.eu/def/org-ep#P54",
+"https://data.europarl.europa.eu/def/org-ep#P55",
+"https://data.europarl.europa.eu/def/org-ep#P56",
+"https://data.europarl.europa.eu/def/org-ep#P57",
+"https://data.europarl.europa.eu/def/org-ep#P69",
+"https://data.europarl.europa.eu/def/org-ep#P72",
+"https://data.europarl.europa.eu/def/org-ep#P60",
+"https://data.europarl.europa.eu/def/org-ep#P61",
+"https://data.europarl.europa.eu/def/org-ep#P64",
+"https://data.europarl.europa.eu/def/org-ep#P65",
+"https://data.europarl.europa.eu/def/org-ep#P66",
+"https://data.europarl.europa.eu/def/org-ep#P81",
+"https://data.europarl.europa.eu/def/org-ep#P78",
+"https://data.europarl.europa.eu/def/org-ep#P75",
+"https://data.europarl.europa.eu/def/org-ep#P99",
+"https://data.europarl.europa.eu/def/org-ep#P100",
+"https://data.europarl.europa.eu/def/org-ep#P95",
+"https://data.europarl.europa.eu/def/org-ep#P96",
+"https://data.europarl.europa.eu/def/org-ep#P111",
+"https://data.europarl.europa.eu/def/org-ep#P112",
+"https://data.europarl.europa.eu/def/org-ep#P87",
+"https://data.europarl.europa.eu/def/org-ep#P88",
+"https://data.europarl.europa.eu/def/org-ep#P103",
+"https://data.europarl.europa.eu/def/org-ep#P104",
+"https://data.europarl.europa.eu/def/org-ep#P91",
+"https://data.europarl.europa.eu/def/org-ep#P92",
+"https://data.europarl.europa.eu/def/org-ep#P107",
+"https://data.europarl.europa.eu/def/org-ep#P108"
+                 ]
+            },
+            "o" : {
+              "description": "The object variable name, such as 'Country_2'",
+              "type": "string"
+            },
+            "sType" : {
+              "description": "The full URI of the type of the subject",
+              "type": "string",
+              "enum" : [
+"http://www.w3.org/2000/01/rdf-schema#Resource",
+"http://www.w3.org/2004/02/skos/core#Concept",
+"http://www.w3.org/ns/org#Organization",
+"http://xmlns.com/foaf/0.1/Person",
+"http://www.w3.org/ns/org#Membership",
+"http://www.w3.org/2006/vcard/ns#Voice",
+"http://www.w3.org/2006/vcard/ns#Fax",
+"http://purl.org/dc/terms/PeriodOfTime",
+"https://data.europarl.europa.eu/def/epvoc#ContactPoint",
+"http://data.europa.eu/eli/eli-draft-legislation-ontology#ParliamentaryTerm",
+"http://xmlns.com/foaf/0.1/OnlineAccount",
+"http://xmlns.com/foaf/0.1/Document",
+"http://xmlns.com/foaf/0.1/Image",
+"http://www.w3.org/ns/org#Site",
+"http://www.w3.org/ns/org#Role",
+"http://publications.europa.eu/ontology/euvoc#HonorificTitle",
+"http://publications.europa.eu/ontology/euvoc#Country",
+"http://www.w3.org/2006/vcard/ns#Gender",
+"http://publications.europa.eu/ontology/euvoc#CorporateBodyClassification",
+"http://publications.europa.eu/ontology/euvoc#AddressType"
+                ]
+            },
+            "oType" : {
+              "description": "The full URI of the type of the object",
+              "type": "string",
+              "enum" : [
+"http://www.w3.org/2000/01/rdf-schema#Resource",
+"http://www.w3.org/2004/02/skos/core#Concept",
+"http://www.w3.org/ns/org#Organization",
+"http://xmlns.com/foaf/0.1/Person",
+"http://www.w3.org/ns/org#Membership",
+"http://www.w3.org/2006/vcard/ns#Voice",
+"http://www.w3.org/2006/vcard/ns#Fax",
+"http://purl.org/dc/terms/PeriodOfTime",
+"https://data.europarl.europa.eu/def/epvoc#ContactPoint",
+"http://data.europa.eu/eli/eli-draft-legislation-ontology#ParliamentaryTerm",
+"http://xmlns.com/foaf/0.1/OnlineAccount",
+"http://xmlns.com/foaf/0.1/Document",
+"http://xmlns.com/foaf/0.1/Image",
+"http://www.w3.org/ns/org#Site",
+"http://www.w3.org/ns/org#Role",
+"http://publications.europa.eu/ontology/euvoc#HonorificTitle",
+"http://publications.europa.eu/ontology/euvoc#Country",
+"http://www.w3.org/2006/vcard/ns#Gender",
+"http://publications.europa.eu/ontology/euvoc#CorporateBodyClassification",
+"http://publications.europa.eu/ontology/euvoc#AddressType"
+                ]
+            },
+            "values": {
+              "description": "The values selected as search criteria in this line. This is optional, no values may be selected.",
+              "type": ["array", "null"],
+              "items": {
+                 "anyOf" : [
+                    {
+                      "description": "An RDF term value, either an IRI or a Literal",
+                      "type":"object",
+                      "extends" : [{"$ref": "#/$defs/WidgetValue"}],
+                      "properties": {
+                        "type" : {
+                          "description": "The type of the RDF node, either literal, blank node or URI",
+                          "type" : "string",
+                          "enum" : ["literal","bnode","uri"]
+                        },
+                        "value" : {
+                          "description": "The value, either the URI itself, the lexical form of the literal, or the blank node identifier",
+                          "type" : "string"
+                        },
+                        "xml:lang" : {
+                          "description": "The language code of the value, if the term is a literal with a language.",
+                          "type" : ["string","null"]
+                        },
+                        "datatype" : {
+                          "description": "The full URI of the datatype of the Literal, it it has one.",
+                          "type" : ["string","null"]
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria, typically the name of the named entity recognized in the text.",
+                          "type" : ["string","null"]
+                        }
+                      },
+                      "required" : ["type", "value", "xml:lang", "datatype", "label"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "description": "A boolean value criteria",
+                      "type":"object",
+                      "properties": {
+                        "boolean": {
+                          "description": "The boolean value, either tru or false",
+                          "type":"boolean"
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria, typically 'true' or 'false'",
+                          "type" : ["string","null"]
+                        }
+                      },
+                      "required" : ["boolean","label"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "description": "A date range criteria, with a start date and an end date. At least a start date or an end date must be provided.",
+                      "type":"object",
+                      "properties": {
+                        "start": {
+                          "description": "The start date of the range, either in a date format, a year format, or a date-time format",
+                          "type":["string","null"]
+                        },
+                        "stop": {
+                          "description": "The end date of the range, either in a date format, a year format, or a date-time format",
+                          "type":["string","null"]
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria, typically indicating 'from start date to end date'",
+                          "type" : ["string","null"]
+                        }
+                      },
+                      "required":["start", "stop", "label"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "description": "A GeoSPARQL query criteria. This is a list of shapes, either polygons or rectangles, each polygons containing a list of latitude and longitude pairs",
+                      "type":"object",
+                      "properties": {
+                        "type": {
+                          "description": "The type of the searched shape, either 'Rectangle' or 'Polygon'.",
+                          "type": "string",
+                          "enum": ["Rectangle","Polygon"]
+                        },
+                        "coordinates": {
+                          "description": "The coordinates of the shapes, a list of latitude/longitude pairs",
+                          "type" : "array",
+                          "items" : {
+                            "type" : "array",
+                            "items" : {
+                              "type": "object",
+                              "properties": {
+                                "lat": {
+                                  "description": "A latitude",
+                                  "type":"number"
+                                },
+                                "long": {
+                                  "description": "A longitude",
+                                  "type":"number"
+                                }
+                              },
+                              "required":["lat","long"],
+                              "additionalProperties": false
+                            }            
+                          }
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria, which can be for example the number of square kilometer of the area selected",
+                          "type" : ["string","null"]
+                        }
+                      },
+                      "required":["type","coordinates","label"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "description": "A number search range, with a minimum and maximum value. At least the minimum or maximum should be provided.",
+                      "type":"object",
+                      "properties": {
+                        "min" : {
+                          "type":["number","null"]
+                        },
+                        "max" : {
+                          "type":["number","null"]
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria, mentioning the min and max values",
+                          "type" : ["string","null"]
+                        }
+                      },
+                      "required":["min","max","label"],
+                      "additionalProperties": false
+                    },
+                    {
+                      "description": "A string search criteria that will typically be translated to a FILTER(REGEX(...)) SPARQL function",
+                      "type":"object",
+                      "properties": {
+                        "regex": {
+                          "description": "The string to search on, that can be a regular expression",
+                          "type":"string"
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria",
+                          "type" : ["string","null"]
+                        }
+                      },
+                      "required":["regex","label"],
+                      "additionalProperties": false
+                    }
+                  ]
+              }
+            }
+          },
+          "required": ["s","p","o","sType","oType", "values"],
+          "additionalProperties": false
+        },
+        "children": {
+          "description": "The children branches. This is a recusrsive reference. The array may be empty if there are no children.",
+          "type":"array",
+          "items": {
+            "$ref": "#/$defs/Branch"
+          }
+        },
+        "optional": {
+          "description": "Whether the OPTIONAL SPARQL keyword is applied at this level, on this branch and all children branches",
+          "type":["boolean","null"]
+        },
+        "notExists": {
+          "description": "Whether the FILTER NOT EXISTS SPARQL keyword is applied at this level, on this branch and all children branches",
+          "type":["boolean","null"]
+        }
+      },
+      "required":["line","children","optional","notExists"],
+      "additionalProperties":false
+    }
+  },
+  "type": "object",
+  "description": "A full Sparnatural query, with selected variables, query criterias, order clause",
+  "properties": {
+    "distinct": {
+      "description": "Whether the SELECT clause will use a DISTINCT keyword.",
+      "type":["boolean","null"]
+    },
+    "variables": {
+      "description": "The variables in the SELECT clause of the query, either simple variables, or aggregated variables",
+      "type":"array",
+      "items": {
+        "anyOf": [
+          {"$ref": "#/$defs/VariableTerm"},
+          {"$ref": "#/$defs/VariableExpression"}
+        ]
+      }
+    },
+    "order": {
+      "description": "The order criteria to be applied to the first column of the query, either ascending, descending, or no order",
+      "type":["string", "null"],
+      "enum": ["asc","desc","noord"]
+    },
+    "branches": {
+      "description": "The query criterias, forming the 'WHERE' clause of the query",
+      "type":"array",
+      "items": {
+        "$ref": "#/$defs/Branch"
+      }
+    }
+  },
+  "required":["distinct","branches","order","variables"],
+  "additionalProperties":false
+}

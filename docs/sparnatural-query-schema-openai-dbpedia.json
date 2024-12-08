@@ -7,7 +7,7 @@
   "$defs": {
 
     "VariableTerm": {
-      "description": "A SPARQL variable with its name, such as '?x'",
+      "description": "A SPARQL variable with its name, such as 'x'",
       "type":"object",
       "properties": {
         "termType": {
@@ -67,7 +67,7 @@
           "type":"object",
           "properties": {
             "s" : {
-              "description": "The subject variable name, such as '?Person_1'",
+              "description": "The subject variable name, such as 'Person_1'",
               "type": "string"
             },
             "p" : {
@@ -108,7 +108,7 @@
                  ]
             },
             "o" : {
-              "description": "The object variable name, such as '?Country_2'",
+              "description": "The object variable name, such as 'Country_2'",
               "type": "string"
             },
             "sType" : {
@@ -175,7 +175,7 @@
                           "type" : ["string","null"]
                         },
                         "label" : {
-                          "description": "The label of the named entity found, with a fake URI",
+                          "description": "The display label of this search criteria, typically the name of the named entity recognized in the text.",
                           "type" : ["string","null"]
                         }
                       },
@@ -185,20 +185,22 @@
                     {
                       "description": "A boolean value criteria",
                       "type":"object",
-                      "extends" : [{"$ref": "#/$defs/WidgetValue"}],
                       "properties": {
                         "boolean": {
                           "description": "The boolean value, either tru or false",
                           "type":"boolean"
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria, typically 'true' or 'false'",
+                          "type" : ["string","null"]
                         }
                       },
-                      "required" : ["boolean"],
+                      "required" : ["boolean","label"],
                       "additionalProperties": false
                     },
                     {
                       "description": "A date range criteria, with a start date and an end date. At least a start date or an end date must be provided.",
                       "type":"object",
-                      "extends" : [{"$ref": "#/$defs/WidgetValue"}],
                       "properties": {
                         "start": {
                           "description": "The start date of the range, either in a date format, a year format, or a date-time format",
@@ -207,15 +209,18 @@
                         "stop": {
                           "description": "The end date of the range, either in a date format, a year format, or a date-time format",
                           "type":["string","null"]
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria, typically indicating 'from start date to end date'",
+                          "type" : ["string","null"]
                         }
                       },
-                      "required":["start", "stop"],
+                      "required":["start", "stop", "label"],
                       "additionalProperties": false
                     },
                     {
                       "description": "A GeoSPARQL query criteria. This is a list of shapes, either polygons or rectangles, each polygons containing a list of latitude and longitude pairs",
                       "type":"object",
-                      "extends" : [{"$ref": "#/$defs/WidgetValue"}],
                       "properties": {
                         "type": {
                           "description": "The type of the searched shape, either 'Rectangle' or 'Polygon'.",
@@ -243,37 +248,47 @@
                               "additionalProperties": false
                             }            
                           }
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria, which can be for example the number of square kilometer of the area selected",
+                          "type" : ["string","null"]
                         }
                       },
-                      "required":["type","coordinates"],
+                      "required":["type","coordinates","label"],
                       "additionalProperties": false
                     },
                     {
                       "description": "A number search range, with a minimum and maximum value. At least the minimum or maximum should be provided.",
                       "type":"object",
-                      "extends" : [{"$ref": "#/$defs/WidgetValue"}],
                       "properties": {
                         "min" : {
                           "type":["number","null"]
                         },
                         "max" : {
                           "type":["number","null"]
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria, mentioning the min and max values",
+                          "type" : ["string","null"]
                         }
                       },
-                      "required":["min","max"],
+                      "required":["min","max","label"],
                       "additionalProperties": false
                     },
                     {
                       "description": "A string search criteria that will typically be translated to a FILTER(REGEX(...)) SPARQL function",
                       "type":"object",
-                      "extends" : [{"$ref": "#/$defs/WidgetValue"}],
                       "properties": {
                         "regex": {
                           "description": "The string to search on, that can be a regular expression",
                           "type":"string"
+                        },
+                        "label" : {
+                          "description": "The display label of this search criteria",
+                          "type" : ["string","null"]
                         }
                       },
-                      "required":["regex"],
+                      "required":["regex","label"],
                       "additionalProperties": false
                     }
                   ]
@@ -301,19 +316,6 @@
       },
       "required":["line","children","optional","notExists"],
       "additionalProperties":false
-    },
-
-    "WidgetValue": {
-      "description": "An abstract selected value. Every value has a human-readable display label.",
-      "type":"object",
-      "properties": {
-        "label" : {
-          "description": "The human-readable display label of the value",
-          "type": "string"
-        }
-      },
-      "required" : ["label"],
-      "additionalProperties": false
     }
   },
   "type": "object",
