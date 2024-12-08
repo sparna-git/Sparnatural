@@ -11,13 +11,15 @@ import { Binding, Form } from "../FormStructure";
 
 class CleanQuery {
   private query: ISparJson;
-  private cleanQueryResult: ISparJson;
-  private formConfig: Form;
+  private formConfig:Form;
+  private variablesUsedInFormConfig: string[];
 
   constructor(query: ISparJson, formAttributes: SparnaturalFormAttributes) {
     this.query = query;
-    this.cleanQueryResult = JSON.parse(JSON.stringify(query)); // Copie profonde de la requête
+    // init the form variables
+    // TODO : should not be here
     this.formConfig = this.loadFormConfig(formAttributes.form); // Charger la configuration depuis les attributs
+    this.variablesUsedInFormConfig = this.getFormVariables(this.formConfig);    
   }
 
   private loadFormConfig(formUrl: string): Form {
@@ -37,28 +39,32 @@ class CleanQuery {
   }
 
   // Obtenir les form variables à partir de formConfig
-  getFormVariables(): string[] {
-    if (!this.formConfig || !this.formConfig.bindings) {
-      console.error("formConfig ou ses bindings sont introuvables.");
-      return [];
-    }
-    return this.formConfig.bindings.map((binding: Binding) => binding.variable);
+  getFormVariables(form:Form): string[] {
+    return form.bindings.map((binding: Binding) => binding.variable);
   }
 
   //metthods to clean the querytouse
   cleanQueryToUse(): ISparJson {
-    const formVariables = this.getFormVariables();
 
-    // Vérifier et extraire les variables de la requête
-    const queryVariables = Array.isArray(this.query.variables)
-      ? this.query.variables.map((v) => ("value" in v ? v.value : null))
-      : [];
+    // deep copy of the initial query
+    let cleanQueryResult:ISparJson = JSON.parse(JSON.stringify(this.query));
 
-    console.log("Form variables:", formVariables);
-    console.log("Query variables:", queryVariables);
+    // remove selected variables if onscreen display
+    cleanQueryResult = this.removeUnusedVariablesFromSelect(cleanQueryResult, "onscreen");
 
-    const cleanBranches = (branches: Branch[]): Branch[] => {
-      return branches
+    // re-list the variables used in result set
+    let variablesUsedInResultSet:string[] = this.getVariablesUsedInResultSet(cleanQueryResult);
+
+    cleanQueryResult.branches = this.cleanBranches(
+      cleanQueryResult.branches,
+      variablesUsedInResultSet
+    );
+    console.log("CleanQuery: Query cleaned:", cleanQueryResult);
+    return cleanQueryResult;
+  }
+
+  private cleanBranches(branches: Branch[], variablesUsedInResultSet:string[]) : Branch[] {
+    return branches
         .filter((branch) => {
           const variable = branch.line?.o;
           const hasValues = branch.line?.values?.length > 0;
@@ -66,12 +72,12 @@ class CleanQuery {
           const parentOptional = this.isParentOptional(branch.line?.o);
 
           // Vérifier si la variable existe dans `queryVariables`
-          const existsInQueryVariables = queryVariables.includes(variable);
+          const existsInQueryVariables = variablesUsedInResultSet.includes(variable);
 
           //remove the branches with o that exist on the form varibales which haven't any values not exist in query.variables and it's optional or his father is optional focus on formVariables and don't touch the other branches
           // Supprimer les branches selon les conditions
           const shouldRemove =
-            formVariables.includes(variable) && // La variable est dans les form variables
+            // this.variablesUsedInFormConfig.includes(variable) && // La variable est dans les form variables
             !existsInQueryVariables && // La variable n'existe pas dans les variables de la requête
             !hasValues && // Aucune valeur pour cette branche
             (isOptional || parentOptional); // La branche ou son parent est optionnel
@@ -80,15 +86,18 @@ class CleanQuery {
         })
         .map((branch) => ({
           ...branch,
-          children: cleanBranches(branch.children || []), // Nettoyer récursivement les enfants
+          children: this.cleanBranches(branch.children || [], variablesUsedInResultSet), // Nettoyer récursivement les enfants
         }));
-    };
+  }
 
-    this.cleanQueryResult.branches = cleanBranches(
-      this.cleanQueryResult.branches
-    );
-    console.log("CleanQuery: Query cleaned:", this.cleanQueryResult);
-    return this.cleanQueryResult;
+  /**
+   * @return the array of all queries that are used in the query result, either directly or as aggregated variables
+   */
+  private getVariablesUsedInResultSet(theQuery:ISparJson):string[] {
+    return Array.isArray(theQuery.variables)
+      // either this is a simple variable, or this is an aggregated variable
+      ? theQuery.variables.map((v) => ("value" in v ? v.value : v.expression.expression.value))
+      : [];
   }
 
   // Vérifier si le parent d'une branche est optionnel
@@ -111,5 +120,17 @@ class CleanQuery {
     const parent = findParent(this.query.branches, childVariable);
     return parent?.optional || false;
   }
+
+  private removeUnusedVariablesFromSelect(query: ISparJson, resultType:"onscreen"|"export"):ISparJson {
+    if(resultType == "onscreen") {
+      query.variables = query.variables.filter(v => {
+        let varName = ("value" in v ? v.value : v.expression.expression.value);
+        return !this.formConfig.variables?.onscreen || this.formConfig.variables?.onscreen?.includes(varName)
+      });
+
+      return query;
+    }
+  }
+
 }
 export default CleanQuery;

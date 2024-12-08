@@ -1,5 +1,8 @@
 export interface Form {
   bindings: Binding[];
+  variables?: {
+    onscreen?: string[]
+  }
 }
 
 export interface Binding {
