@@ -50,11 +50,15 @@ class CleanQuery {
     let cleanQueryResult:ISparJson = JSON.parse(JSON.stringify(this.query));
 
     // remove selected variables if onscreen display
+    // we remove variables from the SELECT clause
+    // further cleaning steps will remove the corresponding criteria from the WHERE clause if they are optional,
+    // and they have no value, and they are no more in the SELECT clause
     cleanQueryResult = this.removeUnusedVariablesFromSelect(cleanQueryResult, "onscreen");
 
-    // re-list the variables used in result set
+    // re-list the variables used in the result set, after the previous filtering step
     let variablesUsedInResultSet:string[] = this.getVariablesUsedInResultSet(cleanQueryResult);
 
+    // clean the branches (= the WHERE clause)
     cleanQueryResult.branches = this.cleanBranches(
       cleanQueryResult.branches,
       variablesUsedInResultSet
