@@ -121,9 +121,17 @@ class CleanQuery {
     return parent?.optional || false;
   }
 
+  /**
+   * 
+   * @param query The query from which to remove the selected variables
+   * @param resultType The type of expected result. Depending on the type of result, only some columns are kept in the result set
+   * @returns 
+   */
   private removeUnusedVariablesFromSelect(query: ISparJson, resultType:"onscreen"|"export"):ISparJson {
     if(resultType == "onscreen") {
       query.variables = query.variables.filter(v => {
+        // retain only the columns that are useful for an onscreen display
+        // the list of columns for onscreen display is a section in the form config
         let varName = ("value" in v ? v.value : v.expression.expression.value);
         return !this.formConfig.variables?.onscreen || this.formConfig.variables?.onscreen?.includes(varName)
       });
