@@ -2,11 +2,11 @@ import $ from "jquery";
 import "./assets/stylesheets/sparnatural-form.scss";
 import SparnaturalFormComponent from "./sparnatural-form/components/SparnaturalFormComponent";
 import { SparnaturalFormAttributes } from "./SparnaturalFormAttributes";
+import { defaultSettings, extend } from "./sparnatural-form/settings/Settings";
 import {
-  defaultSettings,
-  extend
-} from "./sparnatural-form/settings/Settings";
-import { SparqlHandlerFactory, SparqlHandlerIfc } from "./sparnatural/components/widgets/data/SparqlHandler";
+  SparqlHandlerFactory,
+  SparqlHandlerIfc,
+} from "./sparnatural/components/widgets/data/SparqlHandler";
 import ISettings from "./sparnatural-form/settings/ISettings";
 
 /*
@@ -17,6 +17,7 @@ export class SparnaturalFormElement extends HTMLElement {
   static HTML_ELEMENT_NAME = "sparnatural-form";
   static EVENT_INIT = "init";
   static EVENT_SUBMIT = "submit";
+  static EVENT_EXPORT = "export";
   static EVENT_QUERY_UPDATED = "queryUpdated";
   static EVENT_RESET: "reset";
 
@@ -26,8 +27,6 @@ export class SparnaturalFormElement extends HTMLElement {
   _attributes: SparnaturalFormAttributes;
 
   settings: ISettings;
-
-
 
   constructor() {
     super();
@@ -52,7 +51,12 @@ export class SparnaturalFormElement extends HTMLElement {
     // read the HTML attributes in sparnatural-form
     this._attributes = new SparnaturalFormAttributes(this);
 
-    this.settings = extend(true, this.settings, defaultSettings, this._attributes) as ISettings
+    this.settings = extend(
+      true,
+      this.settings,
+      defaultSettings,
+      this._attributes
+    ) as ISettings;
 
     // create the sparnatural-form instance
     this.sparnaturalForm = new SparnaturalFormComponent(this.settings);
@@ -147,7 +151,7 @@ export class SparnaturalFormElement extends HTMLElement {
     callback: (data: any) => void,
     errorCallback?: (error: any) => void
   ) {
-    let sparqlFetcherFactory: SparqlHandlerFactory = new SparqlHandlerFactory(      
+    let sparqlFetcherFactory: SparqlHandlerFactory = new SparqlHandlerFactory(
       this.settings.language,
       this.settings.localCacheDataTtl,
       this.settings.customization.headers,

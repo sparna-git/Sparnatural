@@ -1,12 +1,12 @@
 import SparnaturalFormComponent from "../components/SparnaturalFormComponent";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
-import { QueryGeneratorForm } from "./actions/GenerateQuery";
+import { QueryGeneratorForm } from "./actions/GenerateQueryForm";
 
 class ActionStoreForm {
   sparnaturalForm: SparnaturalFormComponent;
   specProvider: ISparnaturalSpecification;
   quiet = false; // Pour éviter d'exécuter des actions quand c'est nécessaire de "garder le silence"
-
+  resultType: string;
   constructor(
     sparnaturalForm: SparnaturalFormComponent,
     specProvider: ISparnaturalSpecification
@@ -65,6 +65,26 @@ class ActionStoreForm {
       "removeNotExistOption",
       (event: CustomEvent) => {
         new QueryGeneratorForm(this).generateQuery(); // Générer la requête mise à jour
+      }
+    );
+
+    this.sparnaturalForm.html[0].addEventListener(
+      "submit",
+      (event: CustomEvent) => {
+        console.log("Submit event received", event.detail);
+        this.resultType = event.detail.type;
+        console.log("ActionStoreForm: Submit event received", this.resultType);
+        new QueryGeneratorForm(this).generateQuery();
+      }
+    );
+
+    this.sparnaturalForm.html[0].addEventListener(
+      "export",
+      (event: CustomEvent) => {
+        console.log("export event received", event.detail);
+        this.resultType = event.detail.type;
+        console.log("ActionStoreForm: Export event received", this.resultType);
+        new QueryGeneratorForm(this).generateQuery();
       }
     );
   }

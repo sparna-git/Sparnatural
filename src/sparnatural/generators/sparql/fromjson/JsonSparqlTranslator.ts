@@ -54,7 +54,8 @@ export default class JsonSparqlTranslator {
       prefixes: this.prefixes,
       order: this.#orderToRDFJS(this.jsonQuery.order, jsonQuery.variables[0]),
       // sets a limit if provided, otherwise leave to undefined
-      limit: jsonQuery.limit && jsonQuery.limit > 0 ? jsonQuery.limit : undefined,
+      limit:
+        jsonQuery.limit && jsonQuery.limit > 0 ? jsonQuery.limit : undefined,
     };
 
     // if the RdfJsQuery contains empty 'where' array, then the generator crashes.
@@ -206,12 +207,12 @@ export default class JsonSparqlTranslator {
         // Parcourir les branches pour trouver la correspondance uniquement avec l'objet (o)
         (this.jsonQuery.branches as any[]).forEach((branch) => {
           if (branch.line.o === (v as VariableTerm).value) {
-            console.log("Matching branch found for object:", branch);
+            //console.log("Matching branch found for object:", branch);
             specProperty = this.specProvider.getProperty(branch.line.p);
           }
         });
 
-        console.log("specProperty", specProperty);
+        //console.log("specProperty", specProperty);
 
         if (!specProperty) {
           // Si aucune propriété n'est trouvée, retourne une variable simple
@@ -286,7 +287,7 @@ export default class JsonSparqlTranslator {
       0,
       (defaultLabelVar as VariableTerm).value.length - "_label".length
     );
-    console.log("SpraqlQuery variables", sparqlQuery.variables);
+    //console.log("SpraqlQuery variables", sparqlQuery.variables);
     for (var i = 0; i < sparqlQuery.variables.length; i++) {
       // find variable with the original name
       if ((sparqlQuery.variables[i] as VariableTerm).value == originalVar) {

@@ -6,6 +6,12 @@
 // they can be overriden by importing another theme CSS in the HTML page
 @import "themes/sparnatural-theme-grass.css";
 
+@media (prefers-color-scheme: light) {
+  :root {
+    --light: true;
+  }
+}
+
 sparnatural-form {
   display: block;
   //padding: 20px;
@@ -20,6 +26,23 @@ sparnatural-form {
     max-height: 70vh; /* Limite en hauteur */
     overflow-y: auto; /* Permet de scroller */
     position: relative;
+  }
+
+  .sparnatural-form-container.scrollable + .submitSection::after {
+    content: "";
+    position: absolute;
+    top: -20px; // Place l'ombre juste au-dessus de la section
+    left: 0;
+    right: 0;
+    height: 20px; // Hauteur de l'ombre
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+    pointer-events: none; // Empêche toute interaction
+    z-index: -1; // Place l'ombre sous la section
+  }
+
+  /* Désactiver le gradient par défaut */
+  .sparnatural-form-container + .submitSection::after {
+    content: none;
   }
 
   .formField {
@@ -72,24 +95,161 @@ sparnatural-form {
   }
 
   .submitSection {
-    /*
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-*/
-
     position: sticky; // Toujours visible
     bottom: 0; // Collée en bas
     z-index: 1000; // Toujours au-dessus
-
     justify-content: flex-end;
     display: flex;
     padding: 4px;
-    background: none;
+    background-color: #e8fcf5;
     height: max-content;
-
     gap: 10px;
-    button {
+    border-radius: 10%;
+
+    .gui-split-button {
+      display: inline-flex;
+      border-radius: 6px;
+      background: var(--secondary-color-important);
+      color: #fff;
+      fill: #fff;
+      touch-action: manipulation;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .gui-split-button button {
+      cursor: pointer;
+      appearance: none;
+      background: none;
+      border: none;
+
+      display: inline-flex;
+      align-items: center;
+      gap: 1ch;
+      white-space: nowrap;
+
+      font-family: inherit;
+      font-size: inherit;
+      font-weight: 500;
+
+      padding-block: 1.25ch;
+      padding-inline: 2.5ch;
+
+      color: #fff;
+      outline-color: #fff;
+      outline-offset: -5px;
+
+      border-right: 1px solid hsl(220, 50%, 85%); // Couleur claire pour contraster
+
+      &:is(:hover, :focus-visible) {
+        background: rgb(1, 109, 69);
+        color: hsl(220 90% 98%);
+
+        & > svg {
+          stroke: currentColor;
+          fill: none;
+        }
+      }
+
+      &:active {
+        background: rgb(1, 109, 69);
+      }
+    }
+
+    .gui-split-button > button {
+      border-end-start-radius: 6px;
+      border-start-start-radius: 6px;
+
+      & > svg {
+        fill: none;
+        stroke: #fff;
+      }
+    }
+
+    .gui-popup-button {
+      inline-size: 4ch;
+      cursor: pointer;
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-inline-start: 6px;
+      border-start-end-radius: 6px;
+      border-end-end-radius: 6px;
+
+      &:is(:hover, :focus-within) {
+        background: rgb(1, 109, 69);
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:active {
+        background: rgb(1, 109, 69);
+      }
+
+      &:focus-within {
+        & > svg {
+          transition-duration: 0.2s;
+          transform: rotateZ(0.5turn);
+        }
+        & > .gui-popup {
+          transition-duration: 0.2s;
+          opacity: 1;
+          transform: translateY(0);
+          pointer-events: auto;
+        }
+      }
+    }
+
+    .gui-popup {
+      opacity: 0;
+      pointer-events: none; // Désactive l'interaction par défaut
+      position: absolute;
+      top: 100%; // Place le menu juste en dessous du bouton
+      left: -80px;
+      background-color: white;
+      border: 1px solid #ddd;
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+      border-radius: 5px;
+      padding: 5px 0;
+      z-index: 1000;
+
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      transform: translateY(-10px); // Légèrement au-dessus initialement
+    }
+
+    .gui-popup:not(.hidden) {
+      opacity: 1; // Rendre visible
+      pointer-events: auto; // Activer l'interaction
+      transform: translateY(0); // Réinitialiser la position
+    }
+
+    .gui-popup li button {
+      width: 100%;
+      padding: 10px 20px;
+      border: none;
+      background: none;
+      text-align: left;
+      cursor: pointer;
+      color: #000;
+    }
+
+    .gui-popup li button:hover {
+      background-color: rgb(1, 109, 69);
+      color: #fff;
+    }
+
+    .gui-split-button svg {
+      inline-size: 2ch;
+      box-sizing: content-box;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 2px;
+    }
+
+    button[id="Reset"] {
       padding: 10px 20px;
       border: none;
       border-radius: 5px;
@@ -102,7 +262,7 @@ sparnatural-form {
       position: relative; /* Nécessaire pour le spinner */
     }
 
-    button[id="Search"] {
+    /*button[id="Search"] {
       background-color: var(--secondary-color-important);
       color: #000000;
       font-size: 15px;
@@ -114,9 +274,10 @@ sparnatural-form {
       color: #fff;
       background-color: rgb(1, 109, 69);
     }
-
+    
+*/
     button[id="Search"]:disabled {
-      background-color: #ccc; /* Bouton gris lorsqu'il est désactivé */
+      background-color: #ccc; // Bouton gris lorsqu'il est désactivé
       color: #666;
       cursor: not-allowed;
     }
@@ -133,21 +294,18 @@ sparnatural-form {
       background-color: #cacaca;
     }
   }
-  .submitSection::after {
+
+  /*.submitSection::after {
     content: "";
     position: absolute;
-    top: -20px; /* Place l'ombre juste au-dessus de la section */
+    top: -20px; // Place l'ombre juste au-dessus de la section
     left: 0;
     right: 0;
-    height: 20px; /* Hauteur de l'ombre */
-    background: linear-gradient(
-      to top,
-      rgba(0, 0, 0, 0.2),
-      rgba(0, 0, 0, 0)
-    ); /* Dégradé simulant une ombre */
-    pointer-events: none; /* Empêche toute interaction */
-    z-index: -1; /* Place l'ombre sous la section */
-  }
+    height: 20px; // Hauteur de l'ombre
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
+    pointer-events: none; // Empêche toute interaction
+    z-index: -1; // Place l'ombre sous la section
+  }*/
 
   .option-container {
     display: flex;
@@ -237,14 +395,13 @@ sparnatural-form {
 
     .treeLayer {
       top: 20px;
-      //margin-top: -19px;
       left: 0;
       transform: none;
 
       .treeDisplay {
         max-height: 200px;
         min-width: none;
-        max-width: 340px;
+        max-width: 300px;
         padding: 25px 10px 5px;
       }
     }

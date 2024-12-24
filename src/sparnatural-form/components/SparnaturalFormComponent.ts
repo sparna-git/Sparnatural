@@ -10,7 +10,7 @@ import ActionStoreForm from "../handling/ActionStore"; // Importer le store
 import { Catalog } from "../../sparnatural/settings/Catalog";
 import SubmitSection from "./buttons/SubmitBtn";
 import { SparnaturalFormElement } from "../../SparnaturalFormElement";
-import FormField from "./FormFieldGenerator";
+import FormField from "./FormField";
 import { Binding, Form } from "../FormStructure";
 
 /**
@@ -33,6 +33,10 @@ class SparnaturalFormComponent extends HTMLComponent {
 
   catalog: Catalog;
 
+  formConfig: Form; // Stocker la configuration du formulaire ici
+
+  resultType: "onscreen" | "export";
+
   constructor(settings: ISettings) {
     // this is a root component : Does not have a ParentComponent!
     super("SparnaturalForm", null, null);
@@ -52,32 +56,13 @@ class SparnaturalFormComponent extends HTMLComponent {
 
     //copy the query to avoid modifying the original query
     const copiedQuery = JSON.parse(JSON.stringify(this.jsonQuery));
-    //get the form configuration url
-    console.log("formSettings", this.settings);
-    let formUrl = this.settings.form;
 
-    //initialize the form configuration
-    let formConfig: Form = null;
-
-    // Charge the JSON form configuration synchronously via $.ajax (en synchronous mode)
-    $.ajax({
-      url: formUrl,
-      dataType: "json",
-      async: false,
-      success: (data) => {
-        formConfig = data;
-      },
-      error: (error) => {
-        console.error("Error loading form configuration:", error);
-        return null;
-      },
-    });
-    // If the form configuration is not loaded
-    if (!formConfig) {
+    if (!this.formConfig) {
       return null;
     }
+    this.formConfig = this.formConfig; // Store the form configuration here
     // Get the form variables and query variables
-    const formVariables = formConfig.bindings.map(
+    const formVariables = this.formConfig.bindings.map(
       (binding: Binding) => binding.variable
     );
     console.log("formVariables", formVariables);
@@ -123,83 +108,23 @@ class SparnaturalFormComponent extends HTMLComponent {
       }
     });
   }
-  /*
-  //render the form
   render(): this {
-    //init the static labels
-    this.#initSparnaturalStaticLabels();
-    //init the catalog
-    this.#initCatalog();
-
-    //get les settings
-    this.initSpecificationProvider((sp: ISparnaturalSpecification) => {
-      //get the specification provider
-      this.specProvider = sp;
-
-      //init the query
-      this.initJsonQuery((query: ISparJson) => {
-        //get the query
-        this.jsonQuery = query;
-
-        // ActonStoreForm for listening to form actions
-        this.actionStoreForm = new ActionStoreForm(this, this.specProvider);
-
-        //get the url of the form configuration file
-        let formUrl = this.settings.form;
-
-        // Load the form configuration file asynchronously via $.getJSON
-        $.getJSON(formUrl, (formConfig) => {
-          if (!formConfig || !formConfig.bindings) {
-            console.error("formConfig or formConfig.bindings is undefined");
-            return;
-          }
-
-          // Initialize labels after loading formConfig
-          this.#initSparnaturalFormStaticLabels(formConfig);
-
-          formConfig.bindings.forEach((binding: Binding) => {
-            const fieldGenerator = new FormField(
-              binding,
-              this.html[0], // form container
-              this.specProvider,
-              this.jsonQuery,
-              new WidgetFactory(this, this.specProvider, this.settings, null)
-            );
-            fieldGenerator.generateField();
-          });
-
-          // Add the submit button if it is set in the settings
-          if (this.settings.submitButton) {
-            let id: string =
-              "submit-" + Math.random().toString(36).substring(2, 8);
-            const submitBtn = document.createElement("div");
-            submitBtn.setAttribute("id", id);
-            submitBtn.setAttribute("class", "submitSection");
-            this.html[0].appendChild(submitBtn);
-            // we give a unique ID to the section to avoid ID clashes if there are more than one form used in the page
-            this.SubmitSection = new SubmitSection(this, id, this.settings);
-            this.SubmitSection.render();
-          }
-        }).fail((error) => {
-          console.error("Error loading form configuration:", error);
-        });
-      });
-
-      // Dispatch an event to notify that the form has been initialized
-      this.html[0].dispatchEvent(
-        new CustomEvent(SparnaturalFormElement.EVENT_INIT, {
-          bubbles: true,
-          detail: {
-            sparnaturalForm: this,
-          },
-        })
+    //ajouter un ecouteur d'evenement pour le formulaire
+    this.html[0].addEventListener("submit", (event: CustomEvent) => {
+      event.preventDefault();
+      this.resultType = event.detail.type;
+      console.log("ActionStoreForm: Submit event received", this.resultType);
+    });
+    //ajouter un ecouteur d'evenement pour le formulaire
+    this.html[0].addEventListener("export", (event: CustomEvent) => {
+      event.preventDefault();
+      this.resultType = event.detail.type;
+      console.log(
+        "ActionStoreForm: Export event received FORM FORM",
+        this.resultType
       );
     });
 
-    return this;
-  }
-*/
-  render(): this {
     // Initialisation des labels et du catalogue
     this.#initSparnaturalStaticLabels();
     this.#initCatalog();
@@ -219,6 +144,8 @@ class SparnaturalFormComponent extends HTMLComponent {
             console.error("formConfig or formConfig.bindings is undefined");
             return;
           }
+
+          this.formConfig = formConfig; // Stocker la configuration du formulaire ici
 
           // Initialisation des labels
           this.#initSparnaturalFormStaticLabels(formConfig);
@@ -269,7 +196,7 @@ class SparnaturalFormComponent extends HTMLComponent {
   }
 
   // Méthode pour rendre le formulaire scrollable et ajouter un espace pour la SubmitSection
-  makeFormScrollable(): void {
+  makeFormScrollable1(): void {
     const formContainer = this.html[0];
     const containerDiv = document.createElement("div");
     containerDiv.classList.add("sparnatural-form-container");
@@ -283,27 +210,32 @@ class SparnaturalFormComponent extends HTMLComponent {
     formContainer.appendChild(containerDiv);
   }
 
-  //methode to reset the form
-  //a faire add a methode when we reset we push the initial query to the sparql editor
-  /*
-  resetForm1() {
-    console.log("Resetting the entire form...");
+  makeFormScrollable(): void {
+    const formContainer = this.html[0];
+    const containerDiv = document.createElement("div");
+    containerDiv.classList.add("sparnatural-form-container");
 
-    // Effacer tous les éléments enfants du formulaire pour le vider
-    while (this.html[0].firstChild) {
-      this.html[0].removeChild(this.html[0].firstChild);
+    // Déplacer le contenu du formulaire dans le conteneur scrollable
+    while (formContainer.firstChild) {
+      containerDiv.appendChild(formContainer.firstChild);
     }
 
-    // Réinitialiser la requête JSON pour supprimer toutes les valeurs sélectionnées
-    this.jsonQuery.branches.forEach((branch: Branch) => {
-      branch.line.values = []; // Vider toutes les valeurs
-    });
+    // Ajouter le conteneur au formulaire principal
+    formContainer.appendChild(containerDiv);
 
-    // Recréer le formulaire en appelant la méthode `render`
-    this.render();
-    console.log("Form reset and re-rendered successfully.");
-  }*/
-  /**/
+    // Vérifiez si le contenu dépasse la hauteur visible
+    const isScrollable = containerDiv.scrollHeight > containerDiv.clientHeight;
+
+    // Ajouter ou retirer la classe `scrollable` en fonction de la scrollabilité
+    if (isScrollable) {
+      containerDiv.classList.add("scrollable");
+    } else {
+      containerDiv.classList.remove("scrollable");
+    }
+  }
+
+  //methode to reset the form
+
   resetForm() {
     console.log("Resetting the entire form...");
 
@@ -342,7 +274,6 @@ class SparnaturalFormComponent extends HTMLComponent {
       undefined,
       (sp: ISparnaturalSpecification) => {
         // call the call back when done
-        console.log("sp", sp);
         callback(sp);
       }
     );

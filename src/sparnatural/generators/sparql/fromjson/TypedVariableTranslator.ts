@@ -100,7 +100,7 @@ export default class TypedVariableTranslator {
           typePredicate,
           factory.namedNode(this.#variableType)
         );
-        console.log(`Added type triple for ${this.#variableName}`);
+        //console.log(`Added type triple for ${this.#variableName}`);
       } else {
         console.warn(
           `Skipped adding type triple for ${

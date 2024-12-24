@@ -1,3 +1,4 @@
+import { Form } from "./sparnatural-form/FormStructure";
 import { SparnaturalFormElement } from "./SparnaturalFormElement";
 
 /**
@@ -15,6 +16,7 @@ export class SparnaturalFormAttributes {
   debug: boolean;
   catalog: string;
   sparqlPrefixes?: { [key: string]: string };
+  formConfig: Form;
 
   sparnatural: SparnaturalFormElement;
 
