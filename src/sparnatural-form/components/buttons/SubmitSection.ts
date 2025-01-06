@@ -51,8 +51,7 @@ class SubmitSection {
     const exportEvent = new CustomEvent(SparnaturalFormElement.EVENT_SUBMIT, {
       bubbles: true,
       detail: {
-        type: "export",
-        parent: this.ParentSparnatural,
+        type: "export"
       },
     });
     console.log("Export Event:", exportEvent);
@@ -67,8 +66,7 @@ class SubmitSection {
       const submitEvent = new CustomEvent(SparnaturalFormElement.EVENT_SUBMIT, {
         bubbles: true,
         detail: {
-          type: "onscreen",
-          parent: this.ParentSparnatural,
+          type: "onscreen"
         },
       });
       this.container[0].dispatchEvent(submitEvent);
