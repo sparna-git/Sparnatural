@@ -43,6 +43,45 @@ In a nutshell, Sparnatural Form requires 4 things to be configured:
 
 ## Sparnatural Form events
 
-TODO
+### "queryUpdated" event
+
+The `queryUpdated` event is triggered everytime the query is modified. The event detail contains :
+
+- The SPARQL string in `queryString`
+- The JSON Sparnatural structure in queryJson
+
+```javascript
+sparnaturalForm.addEventListener("queryUpdated", (event) => {
+  console.log(event.detail.queryString);
+  console.log(event.detail.queryJson);
+});
+```
+
+
+### "submit" event
+
+The `submit` event is triggered when the search/export button is clicked.
+
+In typical integrations, the state of the submit button can be updated upon submit. The submit button can be “not loading and active”, “loading” or “disabled”. The functions to update the state of the button are:
+
+- `sparnaturalForm.disablePlayBtn()`
+- `sparnaturalForm.enablePlayBtn()`
+
+`disablePlayBtn()` should be called on submit event and `enablePlayBtn()` when the query has returned.
+
+### "init" event
+
+The `init` event is triggered when Sparnatural form has finished initializing itself.
+
+See the [corresponding event in Sparnatural](../Javascript-integration.html#init-event).
+
+### "reset" event
+
+The `submit` event is triggered when the reset button is clicked. It can be used to empty or reset other part of the page, typically YasQE.
+
+See the [corresponding event in Sparnatural](../Javascript-integration.html#reset-event).
 
 ## Sparnatural Form element API
+
+TODO
+
