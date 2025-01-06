@@ -18,8 +18,6 @@ export class SparnaturalFormAttributes {
   sparqlPrefixes?: { [key: string]: string };
   formConfig: Form;
 
-  sparnatural: SparnaturalFormElement;
-
   typePredicate = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
 
   constructor(element: HTMLElement) {
@@ -32,22 +30,12 @@ export class SparnaturalFormAttributes {
     if (!this.src) {
       throw Error("No src provided!");
     }
-    this.sparnatural = document.querySelector(
-      "sparnatural-form"
-    ) as SparnaturalFormElement;
 
     let endpointParam = this.#read(element, "endpoint");
     this.endpoints = endpointParam.split(" ");
-
     if (!this.endpoints) {
       throw Error("No endpoint provided!");
     }
-    this.sparqlPrefixes = this.#parsePrefixes(element);
-    this.catalog = this.#read(element, "catalog");
-    this.limit = this.#read(element, "limit", true);
-    this.language = this.#read(element, "lang");
-    this.debug = this.#read(element, "debug", true);
-    this.defaultLanguage = this.#read(element, "defaultLang");
 
     this.query = this.#read(element, "query");
     if (!this.query) {
@@ -59,7 +47,12 @@ export class SparnaturalFormAttributes {
       throw Error("No form config provided!");
     }
 
+    this.sparqlPrefixes = this.#parsePrefixes(element);
+    this.catalog = this.#read(element, "catalog");
+    this.limit = this.#read(element, "limit", true);
+    this.language = this.#read(element, "lang");
     this.debug = this.#read(element, "debug", true);
+    this.defaultLanguage = this.#read(element, "defaultLang");
   }
 
   #read(element: HTMLElement, attribute: string, asJson: boolean = false) {
@@ -99,13 +92,6 @@ export class SparnaturalFormAttributes {
     }
 
     return sparqlPrefixes;
-  }
-  /**
-   * Enable the play button when a query has finished executing
-   * Can be called from the outside. Removes the loading spinner on the btn
-   */
-  enablePlayBtn() {
-    this.sparnatural.enablePlayBtn();
   }
 
   #isJSON = (json: string) => {
