@@ -18,7 +18,7 @@ This is a reference documentation for Sparnatural widgets.
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Showing literal values only (EDM Type is a literal value) |
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-mix-literal-URIs.png" width="75%" /> | Showing a mix of literal values and URIs |
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Listing URI values with a label listed alphabetically |
-| TODO | Listing values using optgroup |
+| <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-optgroup.png" width="75%" /> | Listing values using optgroup |
 
 
 ### Description
@@ -34,7 +34,11 @@ List widgets supports `optgroup` to group values into sections. The grouping is 
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty)
+In your SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:ListProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#ListProperty).
+
+### Default configuration
+
+By default, list widgets are used if the statistics are available to the configuration and if the number of distinct objects for the property is less than 500.
 
 ### Datasources
 
@@ -92,7 +96,11 @@ Autocomplete widget is implemented based on [awesomeplete library](https://proje
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:AutocompleteProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty)
+In your SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:AutocompleteProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#AutocompleteProperty).
+
+### Default configuration
+
+By default, autocomplete widgets are used if none of the other widget matched.
 
 ### Datasources
 
@@ -120,7 +128,11 @@ Tree widget is implemented using the [JS tree library](https://www.jstree.com/).
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty)
+In SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:TreeProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#TreeProperty).
+
+### Default configuration
+
+The tree widget does not have a default behavior, it needs to be declared explicitely in the configuration.
 
 ### Datasources
 
@@ -147,7 +159,11 @@ The search widget simply allows to enter some characters that will be searched f
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:SearchProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty), **or one of its sub-properties**, which will influence the SPARQL generation logic (see below).
+In SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:SearchProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#SearchProperty) **or one of its sub-properties**, which will influence the SPARQL generation logic (see below).
+
+### Default configuration
+
+String search widget is used by default if the sh:nodeKind is `sh:Literal` and if there is either no statistics available or a number of distinct values greater than 500.
 
 ### Datasources
 
@@ -198,8 +214,13 @@ Date range widget is implemented using [@chenfengyuan/datepicker](https://fengyu
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:TimeProperty-Date`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date).
-In addition, if the entities in the knowledge graph are associated to a date range and possibly an exact date, and you want to test if the searche ddate range overlaps with the entities date range, you could use the [`config-core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty), [`config-core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) and optionnaly [`config-core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) to indicate respectively the URIs used to express the begin date, end date and exact date on the entities. More details can be found in the [detailled documentation of the date-range query feature](http://docs.sparnatural.eu/Querying-date-ranges.html).
+In your SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:TimeProperty-Date`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Date).
+
+In addition, if the entities in the knowledge graph are associated to a date range and possibly an exact date, and you want to test if the searche date range overlaps with the entities date range, you can use the annotations [`config-core:beginDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#beginDateProperty), [`config-core:endDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#endDateProperty) and optionnaly [`config-core:exactDateProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#exactDateProperty) to indicate respectively the URIs used to express the begin date, end date and exact date on the entities. More details can be found in the [detailled documentation of the date-range query feature](http://docs.sparnatural.eu/Querying-date-ranges.html).
+
+### Default configuration
+
+Date range widget is used by default if the sh:datatype is `xsd:date` or `xsd:dateTime`.
 
 ### Datasources
 
@@ -221,7 +242,7 @@ For advanced date-range querying, see the [detailled documentation](http://docs.
 
 ### Appearance
 
-
+<img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/time-widget-year.png" />
 
 ### Description
 
@@ -230,11 +251,16 @@ Year range widget is implemented using [@chenfengyuan/datepicker](https://fengyu
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:TimeProperty-Year`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year).
+In your SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:TimeProperty-Year`](http://data.sparna.fr/ontologies/sparnatural-config-core#TimeProperty-Year).
+
+### Default configuration
+
+Year range widget is used by default if the sh:datatype is `xsd:gYear`.
 
 ### Datasources
 
 No datasource required.
+
 
 ### SPARQL clause
 
@@ -261,11 +287,15 @@ Can limit the range of input fields based on the datatype indicated in the SHACL
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:NumberProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NumberProperty).
+In your SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:NumberProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NumberProperty).
 
 ### Datasources
 
 No datasource required.
+
+### Default configuration
+
+Numeric range widget is used by default if the sh:datatype is this list : `xsd:byte`,`xsd:decimal`,`xsd:double`,`xsd:float`,`xsd:int`,`xsd:integer`,`xsd:long`,`xsd:nonNegativeInteger`,`xsd:short`,`xsd:unsignedByte`,`xsd:unsignedInt`,`xsd:unsignedLong`,`xsd:unsignedShort`.
 
 ### SPARQL clause
 
@@ -303,7 +333,11 @@ Allows to select either a boolean value "true" or "false".
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:BooleanProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#BooleanProperty).
+In your SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:NumberProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#BooleanProperty).
+
+### Default configuration
+
+Boolean widget is used by default if the sh:datatype is `xsd:boolean`.
 
 ### Datasources
 
@@ -311,7 +345,9 @@ No datasource required.
 
 ### SPARQL clause
 
-`TODO`
+```sparql
+   ?Person_1 ex:isAlive true .
+```
 
 
 -----
@@ -351,7 +387,11 @@ For more information on WKT literals, see the [Wikipedia page](https://fr.wikipe
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:MapProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#MapProperty).
+In your SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:MapProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#MapProperty).
+
+### Default configuration
+
+Boolean widget is used by default if the sh:datatype is `geo:wktLiteral`.
 
 ### Datasources
 
@@ -380,11 +420,15 @@ Completely disables the possibility for the user to select a value. Only the "wh
 
 ### Configuration
 
-In OWL configuration, declare a sub-property of [`config-core:NonSelectableProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty).
+In your SHACL configuration, add a `dash:searchWidget` annotation with the value [`config-core:NonSelectableProperty`](http://data.sparna.fr/ontologies/sparnatural-config-core#NonSelectableProperty).
 
 ### Datasources
 
 No datasource required.
+
+### Default configuration
+
+There is no default behavior for this widhet, it needs to be configured explicitely.
 
 ### SPARQL clause
 
