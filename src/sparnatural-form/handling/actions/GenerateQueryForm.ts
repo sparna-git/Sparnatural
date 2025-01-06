@@ -3,7 +3,6 @@ import { Generator } from "sparqljs";
 import { ISparJson } from "../../../sparnatural/generators/json/ISparJson";
 import JsonSparqlTranslator from "../../../sparnatural/generators/sparql/fromjson/JsonSparqlTranslator";
 import CleanQuery from "../../components/CleanQuery";
-import { SparnaturalFormAttributes } from "../../../SparnaturalFormAttributes";
 
 export class QueryGeneratorForm {
   actionStoreForm: ActionStoreForm;
@@ -31,13 +30,18 @@ export class QueryGeneratorForm {
     let queryToUse: ISparJson = sparnaturalForm.cleanQueryResult;
 
     // Step 3: Further clean the query using CleanQuery for final processing
+    const resultType = this.actionStoreForm.resultType || "onscreen";
+
     const cleanQueryProcessor = new CleanQuery(
       queryToUse,
-      sparnaturalForm.settings as SparnaturalFormAttributes
+      sparnaturalForm.formConfig
     );
-    const finalCleanQuery = cleanQueryProcessor.cleanQueryToUse();
 
-    console.log("Final Clean Query for SPARQL generation:", finalCleanQuery);
+    const finalCleanQuery = cleanQueryProcessor.cleanQueryToUse(
+      resultType as "onscreen" | "export"
+    );
+
+    //console.log("Final Clean Query for SPARQL generation:", finalCleanQuery);
 
     // Step 4: Translate the final clean query into SPARQL
     const settings = sparnaturalForm.settings;
@@ -58,7 +62,7 @@ export class QueryGeneratorForm {
 
     // Step 6: Dispatch the event to update the editor and notify components
     this.fireQueryUpdatedEvent(queryPayload);
-
+    console.log("result Type :", resultType);
     // Re-enable the submit button if it was disabled
     sparnaturalForm.SubmitSection.enableSubmit();
 
@@ -73,7 +77,6 @@ export class QueryGeneratorForm {
         detail: payload,
       })
     );
-    console.log("Query Updated Event Dispatched with Payload:", payload);
   }
 }
 

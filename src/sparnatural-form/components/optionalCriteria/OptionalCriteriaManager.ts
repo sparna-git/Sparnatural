@@ -60,33 +60,6 @@ class OptionalCriteriaManager {
   /**
    * Updates the visibility and enabled state of "Any value" and "Not Exist" options.
    */
-  public updateOptionVisibility1() {
-    const hasValues = this.queryLine.values && this.queryLine.values.length > 0;
-
-    if (hasValues) {
-      // Hide and disable options if the widget has values
-      if (this.anyValueToggle) {
-        this.anyValueToggle.checked = false;
-        this.anyValueToggle.disabled = true;
-      }
-      if (this.notExistToggle) {
-        this.notExistToggle.checked = false;
-        this.notExistToggle.disabled = true;
-      }
-      this.anydiv.style.display = "none";
-      this.notExistDiv.style.display = "none";
-    } else {
-      // Show and enable options if the widget has no values
-      if (this.anyValueToggle) {
-        this.anyValueToggle.disabled = false;
-      }
-      if (this.notExistToggle) {
-        this.notExistToggle.disabled = false;
-      }
-      this.anydiv.style.display = "block";
-      this.notExistDiv.style.display = "block";
-    }
-  }
 
   public updateOptionVisibility() {
     const hasValues = this.queryLine.values && this.queryLine.values.length > 0;
@@ -500,40 +473,6 @@ class OptionalCriteriaManager {
         this.queryLine.values = mergedValues;
 
         // Affiche les valeurs fusionnées pour débogage
-        console.log("Updated queryLine.values:", this.queryLine.values);
-
-        // Mets à jour la visibilité des options si nécessaire
-        if (this.anydiv && this.notExistDiv) {
-          this.updateOptionVisibility();
-        }
-      }
-    );
-  }
-
-  private attachValueChangeListener4() {
-    this.widget.html[0].addEventListener(
-      "renderWidgetVal",
-      (e: CustomEvent) => {
-        console.log("Widget value change detected.");
-
-        // Assure-toi que la valeur de l'événement est toujours un tableau
-        const newValues = Array.isArray(e.detail.value)
-          ? e.detail.value
-          : [e.detail.value];
-
-        // Fusionne les nouvelles valeurs avec les valeurs existantes
-        const existingValues = this.queryLine.values || []; // Prend les valeurs existantes ou un tableau vide
-        const mergedValues = [
-          ...existingValues.filter(
-            (existing: { label: any }) =>
-              !newValues.some(
-                (newVal: { label: any }) => newVal.label === existing.label
-              )
-          ), // Garde les anciennes valeurs qui ne sont pas déjà dans les nouvelles
-          ...newValues, // Ajoute les nouvelles valeurs
-        ];
-
-        this.queryLine.values = mergedValues; // Met à jour avec toutes les valeurs
         console.log("Updated queryLine.values:", this.queryLine.values);
 
         // Mets à jour la visibilité des options si nécessaire

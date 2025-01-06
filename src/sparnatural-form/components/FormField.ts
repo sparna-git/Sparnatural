@@ -109,7 +109,7 @@ class FormField {
       { variable: queryLine.o, type: object }
     );
     widget.render();
-    console.log("widget", widget);
+    //console.log("widget", widget);
     return widget;
   }
 
@@ -129,7 +129,7 @@ class FormField {
       { variable: queryLine.o, type: object }
     );
     widget.render();
-    console.log("widget", widget);
+    // console.log("widget", widget);
     return widget;
   }
 
@@ -187,7 +187,7 @@ class FormField {
 
     // Add an event listener to add values to the widget
     widget.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
-      console.log("widget", widget);
+      //console.log("widget", widget);
       console.log("e.detail", e.detail);
 
       let valueToInject: any[];
@@ -233,7 +233,20 @@ class FormField {
         }
       });
     });
-    /*
+
+    // Add An'yValue and NotExist options
+    this.optionalCriteriaManager = new OptionalCriteriaManager(
+      this.query,
+      variable,
+      queryLine,
+      widget,
+      formFieldDiv
+    );
+  }
+}
+export default FormField;
+
+/*
 
     // Add an event listener to add values to the widget
     widget.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
@@ -269,33 +282,4 @@ class FormField {
         }
       });
     });
-*/
-    console.log("widget", widget);
-
-    // Add An'yValue and NotExist options
-    this.optionalCriteriaManager = new OptionalCriteriaManager(
-      this.query,
-      variable,
-      queryLine,
-      widget,
-      formFieldDiv
-    );
-  }
-}
-
-export default FormField;
-
-/*
-
-          if (
-            !widget
-              .getWidgetValues()
-              .some(
-                (widgetValue: { value: { label: string } }) =>
-                  widgetValue.value.label === val.label
-              )
-          ) {
-            //widget.addWidgetValue(val);
-          }
-
 */

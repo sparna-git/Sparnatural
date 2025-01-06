@@ -103,7 +103,6 @@ export abstract class AbstractWidget extends HTMLComponent {
   // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
   abstract parseInput(value: WidgetValue["value"]): WidgetValue;
 
-
   // fires the event to render the label of the WidgetValue on the UI
   // can take either a single value or an array of values
   triggerRenderWidgetVal(widgetValue: WidgetValue | WidgetValue[]) {
@@ -118,7 +117,7 @@ export abstract class AbstractWidget extends HTMLComponent {
   // Method to disable the widget
   disableWidget() {
     // Add a 'disabled-widget' class to visually indicate it's disabled
-    this.html[0].classList.add("disabled-widget");
+    //this.html[0].classList.add("disabled-widget");
 
     // Disable all input elements within the widget's HTML container
     const inputs = this.html[0].querySelectorAll(
@@ -132,7 +131,7 @@ export abstract class AbstractWidget extends HTMLComponent {
   // Method to enable the widget
   enableWidget() {
     // Remove the 'disabled-widget' class to restore normal appearance
-    this.html[0].classList.remove("disabled-widget");
+    //this.html[0].classList.remove("disabled-widget");
 
     // Enable all input elements within the widget's HTML container
     const inputs = this.html[0].querySelectorAll(
@@ -142,7 +141,7 @@ export abstract class AbstractWidget extends HTMLComponent {
       element.removeAttribute("disabled");
     });
   }
-  
+
   // toggle spinner component when loading a datasource
   toggleSpinner(message?: string) {
     const elements = this.spinner.html[0].getElementsByClassName("load");
