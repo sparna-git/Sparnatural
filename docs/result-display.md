@@ -32,7 +32,7 @@ The default labels are configured with the `core:defaultLabelProperty` annotatio
 
 ### Javascript integration
 
-
+See the [corresponding section in the plugin integration page](https://docs.sparnatural.eu/YasGUI-plugins-integration.html#tablex-plugin).
 
 ## "Grid" Plugin : nice merged cards, with images
 
@@ -69,6 +69,7 @@ _No specific configuration needed in Sparnatural_
 
 ### Integration
 
+See the [corresponding section in the plugin integration page](https://docs.sparnatural.eu/YasGUI-plugins-integration.html#grid-plugin).
 
 ## Stats Plugin
 
@@ -91,7 +92,9 @@ The Stats plugin can:
 
 No specific configuration needed in Sparnatural, you simply need to issue a "count" query, typically with other columns as "group by" columns.
 
-### Javascript integration
+### Integration
+
+See the [corresponding section in the plugin integration page](https://docs.sparnatural.eu/YasGUI-plugins-integration.html#stats-plugin).
 
 
 ## Map Plugin : Points and Polygons
@@ -118,4 +121,6 @@ No specific configuration needed in Sparnatural, you simply need to issue a quer
 - returns a `geo:wktLiteral` in a column
 - or returns 2 columns from 2 properties that contain respectively `lat` and `long` in their URI.
 
-### Javascript integration
+### Integration
+
+See the [corresponding section in the plugin integration page](https://docs.sparnatural.eu/YasGUI-plugins-integration.html#map-plugin).

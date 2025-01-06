@@ -43,7 +43,7 @@ Historically, Sparnatural also supported configuration specified in OWL :
 ## 4. Integrating Sparnatural in HTML / React
 
 - [**HTML page and Javascript integration**](Javascript-integration.md) - The reference page to understand how the `<spar-natural` web component can be integrated in your webpage
-- [YasGUI plugins integratuin](YasGUI-plugins-integration.md) - Read to understand how to integrate the [Sparnatural specific plugins](result-display.md) in your HTML/javascript code
+- [YasGUI plugins integration](YasGUI-plugins-integration.md) - Read to understand how to integrate the [Sparnatural specific plugins](result-display.md) in your HTML/javascript code
 - [Customize colors](Customize-colors.md) - How to customize colors of Sparnatural
 
 **Advanced integration**
@@ -78,3 +78,9 @@ Historically, Sparnatural also supported configuration specified in OWL :
 **deprecated v7 Javascript integration page**
 
 - [Javascript integration v7 (old)](Javascript-integration-v7.md) - Reference page for Javascript integration and parameters for the old version 7
+
+
+# Sparnatural-form documentation
+
+- [HTML page and Javascript integration](sparnatural-form/Javascript-integration.md) - The reference page to understand how the `<sparnatural-form` web component can be integrated in your webpage
+- [Form configuration JSON reference page](sparnatural-form/form-json-configuration.md) - The documentation of the form configuration structure
