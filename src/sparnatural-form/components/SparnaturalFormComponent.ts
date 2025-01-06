@@ -35,8 +35,6 @@ class SparnaturalFormComponent extends HTMLComponent {
 
   formConfig: Form; // Stocker la configuration du formulaire ici
 
-  resultType: "onscreen" | "export";
-
   constructor(settings: ISettings) {
     // this is a root component : Does not have a ParentComponent!
     super("SparnaturalForm", null, null);
@@ -110,22 +108,6 @@ class SparnaturalFormComponent extends HTMLComponent {
   }
 
   render(): this {
-    //ajouter un ecouteur d'evenement pour le formulaire
-    this.html[0].addEventListener("submit", (event: CustomEvent) => {
-      event.preventDefault();
-      this.resultType = event.detail.type;
-      console.log("ActionStoreForm: Submit event received", this.resultType);
-    });
-
-    //ajouter un ecouteur d'evenement pour le formulaire
-    this.html[0].addEventListener("export", (event: CustomEvent) => {
-      event.preventDefault();
-      this.resultType = event.detail.type;
-      console.log(
-        "ActionStoreForm: Export event received FORM FORM",
-        this.resultType
-      );
-    });
 
     // Initialisation des labels et du catalogue
     this.#initSparnaturalStaticLabels();
@@ -179,19 +161,20 @@ class SparnaturalFormComponent extends HTMLComponent {
             this.SubmitSection = new SubmitSection(this, id, this.settings);
             this.SubmitSection.render();
           }
+
+          // fire init event at the end
+          this.html[0].dispatchEvent(
+            new CustomEvent(SparnaturalFormElement.EVENT_INIT, {
+              bubbles: true,
+              detail: {
+                sparnaturalForm: this,
+              },
+            })
+          );
         }).fail((error) => {
           console.error("Error loading form configuration:", error);
         });
       });
-
-      this.html[0].dispatchEvent(
-        new CustomEvent(SparnaturalFormElement.EVENT_INIT, {
-          bubbles: true,
-          detail: {
-            sparnaturalForm: this,
-          },
-        })
-      );
     });
 
     return this;
