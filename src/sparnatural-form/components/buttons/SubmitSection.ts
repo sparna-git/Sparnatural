@@ -1,11 +1,8 @@
-import { SparnaturalFormAttributes } from "../../../SparnaturalFormAttributes";
 import SearchBtn from "./SearchBtn";
-import SparnaturalFormComponent from "../../../sparnatural-form/components/SparnaturalFormComponent";
+import SparnaturalFormComponent from "../SparnaturalFormComponent";
 import { SparnaturalFormElement } from "../../../SparnaturalFormElement";
 import ResetBtn from "./ResetBtn";
-import CleanQuery from "../CleanQuery"; // Import de CleanQuery
 import ISettings from "../../settings/ISettings";
-import HTMLComponent from "../../../sparnatural/components/HtmlComponent";
 import { Form } from "../../FormStructure";
 
 class SubmitSection {
@@ -51,7 +48,7 @@ class SubmitSection {
   //Export action
   exportAction = () => {
     console.log("SubmitSection: Export button clicked");
-    const exportEvent = new CustomEvent(SparnaturalFormElement.EVENT_EXPORT, {
+    const exportEvent = new CustomEvent(SparnaturalFormElement.EVENT_SUBMIT, {
       bubbles: true,
       detail: {
         type: "export",

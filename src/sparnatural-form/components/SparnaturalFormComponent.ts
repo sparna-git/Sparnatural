@@ -8,7 +8,7 @@ import ISettings from "../settings/ISettings";
 import { SparnaturalFormI18n } from "../settings/SparnaturalFormI18n";
 import ActionStoreForm from "../handling/ActionStore"; // Importer le store
 import { Catalog } from "../../sparnatural/settings/Catalog";
-import SubmitSection from "./buttons/SubmitBtn";
+import SubmitSection from "./buttons/SubmitSection";
 import { SparnaturalFormElement } from "../../SparnaturalFormElement";
 import FormField from "./FormField";
 import { Binding, Form } from "../FormStructure";
@@ -108,6 +108,7 @@ class SparnaturalFormComponent extends HTMLComponent {
       }
     });
   }
+
   render(): this {
     //ajouter un ecouteur d'evenement pour le formulaire
     this.html[0].addEventListener("submit", (event: CustomEvent) => {
@@ -115,6 +116,7 @@ class SparnaturalFormComponent extends HTMLComponent {
       this.resultType = event.detail.type;
       console.log("ActionStoreForm: Submit event received", this.resultType);
     });
+
     //ajouter un ecouteur d'evenement pour le formulaire
     this.html[0].addEventListener("export", (event: CustomEvent) => {
       event.preventDefault();

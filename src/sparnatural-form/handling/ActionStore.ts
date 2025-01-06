@@ -6,7 +6,6 @@ class ActionStoreForm {
   sparnaturalForm: SparnaturalFormComponent;
   specProvider: ISparnaturalSpecification;
   quiet = false; // Pour éviter d'exécuter des actions quand c'est nécessaire de "garder le silence"
-  resultType: string;
   constructor(
     sparnaturalForm: SparnaturalFormComponent,
     specProvider: ISparnaturalSpecification
@@ -24,7 +23,7 @@ class ActionStoreForm {
       "valueAdded",
       (event: CustomEvent) => {
         console.log("Valeur ajoutée dans un widget !");
-        new QueryGeneratorForm(this).generateQuery();
+        new QueryGeneratorForm(this).generateQuery("onscreen");
       }
     );
 
@@ -33,14 +32,14 @@ class ActionStoreForm {
       "valueRemoved",
       (event: CustomEvent) => {
         console.log("Valeur supprimée d'un widget !");
-        new QueryGeneratorForm(this).generateQuery();
+        new QueryGeneratorForm(this).generateQuery("onscreen");
       }
     );
     // Ajouter un écouteur pour l'événement "anyValueSelected" dans ActionStoreForm
     this.sparnaturalForm.html[0].addEventListener(
       "anyValueSelected",
       (event: CustomEvent) => {
-        new QueryGeneratorForm(this).generateQuery(); // Générer la requête mise à jour
+        new QueryGeneratorForm(this).generateQuery("onscreen"); // Générer la requête mise à jour
       }
     );
 
@@ -48,7 +47,7 @@ class ActionStoreForm {
     this.sparnaturalForm.html[0].addEventListener(
       "removeAnyValueOption",
       (event: CustomEvent) => {
-        new QueryGeneratorForm(this).generateQuery(); // Générer la requête mise à jour
+        new QueryGeneratorForm(this).generateQuery("onscreen"); // Générer la requête mise à jour
       }
     );
 
@@ -56,7 +55,7 @@ class ActionStoreForm {
     this.sparnaturalForm.html[0].addEventListener(
       "notExist",
       (event: CustomEvent) => {
-        new QueryGeneratorForm(this).generateQuery(); // Générer la requête mise à jour
+        new QueryGeneratorForm(this).generateQuery("onscreen"); // Générer la requête mise à jour
       }
     );
 
@@ -64,7 +63,7 @@ class ActionStoreForm {
     this.sparnaturalForm.html[0].addEventListener(
       "removeNotExistOption",
       (event: CustomEvent) => {
-        new QueryGeneratorForm(this).generateQuery(); // Générer la requête mise à jour
+        new QueryGeneratorForm(this).generateQuery("onscreen"); // Générer la requête mise à jour
       }
     );
 
@@ -72,19 +71,8 @@ class ActionStoreForm {
       "submit",
       (event: CustomEvent) => {
         console.log("Submit event received", event.detail);
-        this.resultType = event.detail.type;
-        console.log("ActionStoreForm: Submit event received", this.resultType);
-        new QueryGeneratorForm(this).generateQuery();
-      }
-    );
-
-    this.sparnaturalForm.html[0].addEventListener(
-      "export",
-      (event: CustomEvent) => {
-        console.log("export event received", event.detail);
-        this.resultType = event.detail.type;
-        console.log("ActionStoreForm: Export event received", this.resultType);
-        new QueryGeneratorForm(this).generateQuery();
+        console.log("ActionStoreForm: Submit event received", event.detail.type);
+        new QueryGeneratorForm(this).generateQuery(event.detail.type);
       }
     );
   }

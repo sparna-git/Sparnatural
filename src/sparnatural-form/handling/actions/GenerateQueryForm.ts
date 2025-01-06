@@ -11,7 +11,7 @@ export class QueryGeneratorForm {
     this.actionStoreForm = actionStoreForm;
   }
 
-  generateQuery(): QueryUpdatedPayload {
+  generateQuery(resultType: "onscreen" | "export"): QueryUpdatedPayload {
     // If in quiet mode, do nothing
     if (this.actionStoreForm.quiet) {
       return;
@@ -30,15 +30,12 @@ export class QueryGeneratorForm {
     let queryToUse: ISparJson = sparnaturalForm.cleanQueryResult;
 
     // Step 3: Further clean the query using CleanQuery for final processing
-    const resultType = this.actionStoreForm.resultType || "onscreen";
-
     const cleanQueryProcessor = new CleanQuery(
       queryToUse,
       sparnaturalForm.formConfig
     );
-
     const finalCleanQuery = cleanQueryProcessor.cleanQueryToUse(
-      resultType as "onscreen" | "export"
+      resultType
     );
 
     //console.log("Final Clean Query for SPARQL generation:", finalCleanQuery);

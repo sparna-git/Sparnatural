@@ -17,7 +17,6 @@ export class SparnaturalFormElement extends HTMLElement {
   static HTML_ELEMENT_NAME = "sparnatural-form";
   static EVENT_INIT = "init";
   static EVENT_SUBMIT = "submit";
-  static EVENT_EXPORT = "export";
   static EVENT_QUERY_UPDATED = "queryUpdated";
   static EVENT_RESET: "reset";
 
