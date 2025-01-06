@@ -7,7 +7,7 @@ _For examples of how Sparnatural works and can be configured, have a look at the
 ## 1. Features
 
 - [Reference documentation of Sparnatural widgets](widgets.md) : all the possible ways to select a criteria value in Sparnatural. Read this to learn some of the features of Sparnatural.
-
+- [Reference documentation of result display plugins](result-display.md) : the specific ways to display search results after a query has been written, beyond classical table display.
 
 ## 2. Getting started
 
@@ -43,7 +43,7 @@ Historically, Sparnatural also supported configuration specified in OWL :
 ## 4. Integrating Sparnatural in HTML / React
 
 - [**HTML page and Javascript integration**](Javascript-integration.md) - The reference page to understand how the `<spar-natural` web component can be integrated in your webpage
-- [YasGUI specific plugins](YasGUI-plugins.md) - Read if you are using YasGUI in combination with Sparnatural, to understand the Sparnatural specific plugins
+- [YasGUI plugins integratuin](YasGUI-plugins-integration.md) - Read to understand how to integrate the [Sparnatural specific plugins](result-display.md) in your HTML/javascript code
 - [Customize colors](Customize-colors.md) - How to customize colors of Sparnatural
 
 **Advanced integration**
