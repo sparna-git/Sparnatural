@@ -270,5 +270,12 @@
         }
       }
     }
-  ]
+  ],
+  "variables": {
+    "onscreen": [
+      "Fonds",
+      "RR",
+      "InstCote2"
+    ]
+  }
 }

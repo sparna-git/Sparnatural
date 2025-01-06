@@ -104,7 +104,7 @@ The JSON data structure encodes the list of fields in the form, and for each fie
   - its display labels
   - the variable to which the field is associated in the underlying Sparnatural query passed in the `query` attribute of the form
 
-The data structure can also lists the variables from the original query that should be retained when the query results are displayed onscreen (versus when a full export is done).
+The data structure can also optionnaly list the variables from the original query that should be retained when the query results are displayed onscreen (versus when a full export is done).
 
 ### Form specification structure
 
@@ -180,6 +180,8 @@ Then you may configure a form field this way:
 
 ### Variables structure
 
+This part is optionnal.
+
 ```json
 "variables": {
   	"onscreen" : [
@@ -191,4 +193,6 @@ Then you may configure a form field this way:
 ```
 
 - `variables` : the `variables` section of the form specification can contain only the single key `onscreen`.
-- `onscreen` : the `onscreen` key is an array that contains a list of string value corresponding to the variables that should be retained when displaying the query result on screen, as opposed to making an export of the query result. Any variables in the SELECT clause of the query that is not in this list will be filtered out, along with the corresponding search criteria in the WHERE clause, if this criteria was not filled in by the user
+- `onscreen` : the `onscreen` key is an array that contains a list of string value corresponding to the variables that should be retained when displaying the query result on screen, as opposed to making an export of the query result. Any variables in the SELECT clause of the query that is not in this list will be filtered out, along with the corresponding search criteria in the WHERE clause, if this criteria was not filled in by the user.
+
+If left unspecified, all variables selected in the query will be returned as normal, and the "export" option will not be available.
