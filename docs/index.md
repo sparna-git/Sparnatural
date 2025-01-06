@@ -83,4 +83,4 @@ Historically, Sparnatural also supported configuration specified in OWL :
 # Sparnatural-form documentation
 
 - [HTML page and Javascript integration](sparnatural-form/Javascript-integration.md) - The reference page to understand how the `<sparnatural-form` web component can be integrated in your webpage
-- [Form configuration JSON reference page](sparnatural-form/form-json-configuration.md) - The documentation of the form configuration structure
+- [Form configuration JSON reference page](sparnatural-form/form-configuration.md) - The documentation of the JSON form configuration data
