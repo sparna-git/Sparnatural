@@ -272,10 +272,6 @@
     }
   ],
   "variables": {
-    "onscreen": [
-      "Fonds",
-      "RR",
-      "InstCote2"
-    ]
+    "onscreen": ["Fonds", "RR", "InstCote2"]
   }
 }

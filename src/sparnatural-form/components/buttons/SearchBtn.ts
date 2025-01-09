@@ -10,8 +10,17 @@ class SearchBtn {
     this.callbackSearch = callbackSearch;
     this.callbackExport = callbackExport;
     // Créer le bouton avec jQuery et ajouter le texte "Search"
-    this.buttonGroupElement = $(
-      `<div class="gui-split-button">
+    if (!callbackExport) {
+      this.buttonGroupElement = $(
+        `<div class="gui-split-button">
+         <button id="Search" >${I18n.labels["Search"] || "Search"}
+         <span class="spinner" style="display: none;"></span>
+         </button>
+         </div>`
+      );
+    } else {
+      this.buttonGroupElement = $(
+        `<div class="gui-split-button">
        <button id="Search" >${I18n.labels["Search"] || "Search"}
        <span class="spinner" style="display: none;"></span>
        </button>
@@ -22,12 +31,15 @@ class SearchBtn {
        
        <ul class="gui-popup">
          <li>
-           <button id="Export">${I18n.labels["Export"] || "Export"}</button>
+           <button id="Export">${
+             I18n.labels["Export"] || "Export"
+           }<span class="spinner" style="display: none;"></span></button>
          </li>
        </ul>
        </span>
        </div>`
-    );
+      );
+    }
     // Créer l'élément du spinner (mais ne pas l'ajouter immédiatement)
     this.spinner = document.createElement("div");
     this.spinner.className = "spinner";
@@ -39,16 +51,20 @@ class SearchBtn {
   }
 
   private setupEventListeners() {
-    // Bouton "Search"
+    // Search button click
     this.buttonGroupElement.find("#Search").on("click", () => {
       if (!this.isDisabled()) {
         this.callbackSearch();
+        this.disable(); // Disable both buttons when Search is clicked
       }
     });
 
-    // Bouton "Export"
+    // Export button click
     this.buttonGroupElement.find("#Export").on("click", () => {
-      this.callbackExport();
+      if (!this.isDisabled()) {
+        this.callbackExport();
+        this.disable(); // Disable both buttons when Export is clicked
+      }
     });
 
     // Gestion de l'ouverture et fermeture du menu déroulant
@@ -56,7 +72,9 @@ class SearchBtn {
       .find(".gui-popup-button")
       .on("click", (e: JQuery.ClickEvent) => {
         e.stopPropagation(); // Empêcher la propagation du clic
-        this.togglePopup();
+        if (!this.isDisabled()) {
+          this.togglePopup();
+        }
       });
 
     // Fermer le menu si clic en dehors
@@ -77,22 +95,22 @@ class SearchBtn {
     this.buttonGroupElement.find(".gui-popup").addClass("hidden");
   }
 
-  // Méthode pour désactiver le bouton et ajouter le spinner
   disable() {
+    // Disable both Search and Export buttons
     this.buttonGroupElement.find("#Search").prop("disabled", true);
-    // Ajouter le spinner si ce n'est pas déjà fait
-    if (!this.buttonGroupElement[0].contains(this.spinner)) {
-      this.buttonGroupElement.find(".spinner").css("display", "inline-block");
-    }
+    this.buttonGroupElement.find(".gui-popup-button").addClass("disabled");
+
+    // Show the spinner
+    this.buttonGroupElement.find(".spinner").css("display", "inline-block");
   }
 
-  // Méthode pour activer le bouton et retirer le spinner
   enable() {
+    // Re-enable both Search and Export buttons
     this.buttonGroupElement.find("#Search").prop("disabled", false);
-    // Supprimer le spinner si présent
-    if (this.buttonGroupElement[0].contains(this.spinner)) {
-      this.buttonGroupElement[0].removeChild(this.spinner);
-    }
+    this.buttonGroupElement.find(".gui-popup-button").removeClass("disabled");
+
+    // Hide the spinner
+    this.buttonGroupElement.find(".spinner").css("display", "none");
   }
 
   // Méthode pour supprimer l'état de chargement sans activer le bouton

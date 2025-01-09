@@ -108,7 +108,6 @@ class SparnaturalFormComponent extends HTMLComponent {
   }
 
   render(): this {
-
     // Initialisation des labels et du catalogue
     this.#initSparnaturalStaticLabels();
     this.#initCatalog();

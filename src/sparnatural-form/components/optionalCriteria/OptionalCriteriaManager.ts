@@ -675,7 +675,6 @@ class OptionalCriteriaManager {
         }
       });
     };
-
     removeNotExistsFlag(this.query.branches, variable);
   }
 }

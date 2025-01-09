@@ -21,10 +21,15 @@ class SubmitSection {
     this.ParentSparnatural = ParentSparnatural;
     this.container = $(`#${containerId}`); // Using jQuery to select the container by ID
     this.resetBtn = new ResetBtn(this.resetForm.bind(this));
-    this.searchBtn = new SearchBtn(
-      this.submitAction.bind(this),
-      this.exportAction.bind(this)
-    );
+    if (this.ParentSparnatural.formConfig.variables) {
+      this.searchBtn = new SearchBtn(
+        this.submitAction.bind(this),
+        this.exportAction.bind(this)
+      );
+    } else {
+      this.searchBtn = new SearchBtn(this.submitAction.bind(this), undefined);
+    }
+
     this.settings = settings;
     this.render();
   }
@@ -46,12 +51,18 @@ class SubmitSection {
   }
 
   //Export action
-  exportAction = () => {
+  exportAction = (): void => {
     console.log("SubmitSection: Export button clicked");
+    //verifier si la formConfig contient les variables
+    console.log("FormConfig:", this.ParentSparnatural.formConfig.variables);
+    if (!this.ParentSparnatural.formConfig.variables) {
+      console.error("SubmitSection: FormConfig not found");
+      return undefined;
+    }
     const exportEvent = new CustomEvent(SparnaturalFormElement.EVENT_SUBMIT, {
       bubbles: true,
       detail: {
-        type: "export"
+        type: "export",
       },
     });
     console.log("Export Event:", exportEvent);
@@ -66,7 +77,7 @@ class SubmitSection {
       const submitEvent = new CustomEvent(SparnaturalFormElement.EVENT_SUBMIT, {
         bubbles: true,
         detail: {
-          type: "onscreen"
+          type: "onscreen",
         },
       });
       this.container[0].dispatchEvent(submitEvent);
