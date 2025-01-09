@@ -29,6 +29,23 @@ export class StoreModel {
     }
 
     /**
+     * Reads the given property on an entity recursively, and return values as an array
+     **/
+    readPropertyRec(subject: Term, property: Term): Quad_Object[] {
+        let values:Quad_Object[] = this.store
+            .getQuads(subject, property, null, null)
+            .map(quad => quad.object);
+        
+        let recValues:Quad_Object[] = [];
+        values.forEach(v => {
+            recValues.push(...this.readPropertyRec(v, property));
+        });
+        values.push(...recValues);
+
+        return values;
+    }
+
+    /**
      * Reads the given property on an entity, and returns the first value found, or undefined if not found
      **/
     readSingleProperty(subject: Term, property: Term): Term | undefined {

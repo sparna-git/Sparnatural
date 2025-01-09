@@ -1,11 +1,8 @@
-import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { DataFactory } from 'rdf-data-factory';
 import "select2";
 import "select2/dist/css/select2.css";
-import SparqlFactory from "../../generators/sparql/SparqlFactory";
-import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { ListDataProviderIfc, RdfTermDatasourceItem, NoOpListDataProvider, mergeDatasourceResults } from "./data/DataProviders";
 import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";

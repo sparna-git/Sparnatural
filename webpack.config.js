@@ -136,6 +136,8 @@ module.exports = {
 
     new DashboardPlugin(),
     // so that JQuery is automatically inserted
+    // see https://stackoverflow.com/a/28989476
+    // this will automatically add a "require("jquery")" everytime the jQuery or & symbol are encountered
     new webpack.ProvidePlugin({
       $: "jquery",
       jQuery: "jquery",
