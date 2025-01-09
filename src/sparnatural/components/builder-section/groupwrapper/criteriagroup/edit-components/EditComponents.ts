@@ -25,23 +25,25 @@ export class SelectAllValue implements WidgetValue {
   }
 }
 
-enum RENDER_WHERE_ENUM {
-  LIST_PROPERTY = Config.LIST_PROPERTY,
-  LITERAL_LIST_PROPERTY = Config.LITERAL_LIST_PROPERTY,
-  RDFS_LITERAL = Config.RDFS_LITERAL,
-  AUTOCOMPLETE_PROPERTY = Config.AUTOCOMPLETE_PROPERTY,
-  TREE_PROPERTY = Config.TREE_PROPERTY,
-  NON_SELECTABLE_PROPERTY = Config.NON_SELECTABLE_PROPERTY,
-}
 
 class EditComponents extends HTMLComponent {
+  // the list of widget types for which the "WHERE" option should be available
+  // this is an array of string to facilitate test with the widgetType value below
+  static RENDER_WHERE_WIDGET_TYPES : Array<string> = [
+    Config.LIST_PROPERTY,
+    Config.LITERAL_LIST_PROPERTY,
+    Config.RDFS_LITERAL,
+    Config.AUTOCOMPLETE_PROPERTY,
+    Config.TREE_PROPERTY,
+    Config.NON_SELECTABLE_PROPERTY,
+  ];
+
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
   actionWhere: ActionWhere;
   widgetWrapper: WidgetWrapper;
   specProvider: ISparnaturalSpecification;
-  RENDER_WHERE = RENDER_WHERE_ENUM;
  
   constructor(
     parentComponent: EndClassGroup,
@@ -68,7 +70,7 @@ class EditComponents extends HTMLComponent {
 
     let widgetType = this.widgetWrapper.getWidgetType();
     if (
-      Object.values(this.RENDER_WHERE).includes(widgetType)
+      EditComponents.RENDER_WHERE_WIDGET_TYPES.indexOf(widgetType) > -1
       &&
       // Do not allow WHERE if wehave reached max depth
       !this.maxDepthIsReached()

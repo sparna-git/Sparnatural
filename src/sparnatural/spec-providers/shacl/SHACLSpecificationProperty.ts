@@ -201,7 +201,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       // we find the property shape having this property as a path
       .map(term => {
           let propertyShapesWithSuperProperty:Quad_Subject[] = this.graph.findSubjectsOf(SH.PATH, term);
-          let result = undefined;
+          let result:Quad_Subject = undefined;
           propertyShapesWithSuperProperty.forEach(ps => {
             if(this.graph.hasTriple(
               this.graph.findSingleSubjectOf(SH.PROPERTY, factory.namedNode(this.uri)),
