@@ -99,24 +99,3 @@ class SubmitSection {
 }
 
 export default SubmitSection;
-
-/*
-      // Step 1: Trigger HandleOptional
-      this.ParentSparnatural.HandleOptional();
-
-      // Step 2: Get the final cleaned query
-      const lastQuery = this.ParentSparnatural.cleanQueryResult;
-
-      this.formConfig = this.ParentSparnatural.formConfig;
-
-      const cleanQueryProcessor = new CleanQuery(lastQuery, this.formConfig);
-      const finalCleanQuery = cleanQueryProcessor.cleanQueryToUse();
-
-      console.log("Final Clean Query Ready for Submission:", finalCleanQuery);
-
-      // Step 3: Dispatch the submit event with the cleaned query
-      const queryPayload = {
-        queryJson: finalCleanQuery,
-        queryString: JSON.stringify(finalCleanQuery, null, 2), // Example
-      };
-*/

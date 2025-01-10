@@ -179,21 +179,6 @@ class SparnaturalFormComponent extends HTMLComponent {
     return this;
   }
 
-  // Méthode pour rendre le formulaire scrollable et ajouter un espace pour la SubmitSection
-  makeFormScrollable1(): void {
-    const formContainer = this.html[0];
-    const containerDiv = document.createElement("div");
-    containerDiv.classList.add("sparnatural-form-container");
-
-    // Déplacer le contenu du formulaire dans le conteneur scrollable
-    while (formContainer.firstChild) {
-      containerDiv.appendChild(formContainer.firstChild);
-    }
-
-    // Ajouter le conteneur au formulaire principal
-    formContainer.appendChild(containerDiv);
-  }
-
   makeFormScrollable(): void {
     const formContainer = this.html[0];
     const containerDiv = document.createElement("div");
