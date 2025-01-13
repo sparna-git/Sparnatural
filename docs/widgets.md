@@ -18,7 +18,7 @@ This is a reference documentation for Sparnatural widgets.
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Showing literal values only (EDM Type is a literal value) |
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-mix-literal-URIs.png" width="75%" /> | Showing a mix of literal values and URIs |
 | <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-literals.png" width="75%" /> | Listing URI values with a label listed alphabetically |
-| <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-optgroup.png" width="75%" /> | Listing values using optgroup |
+| <img src="https://raw.githubusercontent.com/sparna-git/Sparnatural/master/docs/assets/images/widgets/list-widget-optgroups.png" width="75%" /> | Listing values using optgroup |
 
 
 ### Description
