@@ -425,6 +425,10 @@ sparnatural-form {
       }
     }
   }
+  .tree-close svg {
+    z-index: 2000;
+    position: relative;
+  }
 
   //cette partie pour le loading spinner dans le formulaire
   .loadingspinner {
