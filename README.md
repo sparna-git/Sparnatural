@@ -95,7 +95,7 @@ Sparnatural offers currently 9 ways of selecting a value for a criteria :
 
 ![](docs/assets/images/readme/17-tree.png)
 
-![](docs/assets/screencasts/autocomplete-widget.gif)
+![](docs/assets/screencasts/tree-widget.gif)
 
 
 ### [Map selection widget](https://docs.sparnatural.eu/widgets.html#map-widget)
