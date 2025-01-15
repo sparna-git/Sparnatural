@@ -67,53 +67,61 @@ Select multiple values for a criteria :
 ## Values selection
 
 Sparnatural offers currently 9 ways of selecting a value for a criteria :
-- dropdown list widget
-- autocomplete search field
-- tree browsing widget
-- map selection widget
-- string search widget, searched as regex or as exact string
-- date range widget (year or date precision)
-- numeric values widget
-- boolean widget
-- no value selection (useful for 'intermediate' entities)
+- [dropdown list widget](https://docs.sparnatural.eu/widgets.html#list-widget)
+- [autocomplete search field](https://docs.sparnatural.eu/widgets.html#autocomplete-widget)
+- [tree browsing widget](https://docs.sparnatural.eu/widgets.html#tree-widget)
+- [map selection widget](https://docs.sparnatural.eu/widgets.html#map-widget)
+- [string search widget, searched as regex or as exact string](https://docs.sparnatural.eu/widgets.html#string-search-widget)
+- [date range widget (year or date precision)](https://docs.sparnatural.eu/widgets.html#date-range-widget)
+- [numeric values widget](https://docs.sparnatural.eu/widgets.html#number-widget)
+- [boolean widget](https://docs.sparnatural.eu/widgets.html#boolean-widget)
+- [no value selection (useful for 'intermediate' entities)](https://docs.sparnatural.eu/widgets.html#no-selection-widget)
 
-### Dropdown list widget
+### [Dropdown list widget](https://docs.sparnatural.eu/widgets.html#list-widget)
 
 ![](docs/assets/images/readme/10-list.png)
+![](docs/assets/screencasts/list-widget.gif)
 
-### Autocomplete search widget
+### [Autocomplete search widget](https://docs.sparnatural.eu/widgets.html#autocomplete-widget)
 
 ![](docs/assets/images/readme/9-autocomplete.png)
+![](docs/assets/screencasts/list-widget.gif)
 
-### Tree browsing widget
+### [Tree browsing widget](https://docs.sparnatural.eu/widgets.html#tree-widget)
 
 ![](docs/assets/images/readme/17-tree.png)
+![](docs/assets/screencasts/autocomplete-widget.gif)
 
-### Map selection widget
+### [Map selection widget](https://docs.sparnatural.eu/widgets.html#map-widget)
 
 ![](docs/assets/images/readme/18-map.png)
+![](docs/assets/screencasts/map-widget.gif)
 
-### String search widget (text search)
+### [String search widget (text search)](https://docs.sparnatural.eu/widgets.html#string-search-widget)
 
 ![](docs/assets/images/readme/11-search.png)
+![](docs/assets/screencasts/string-search-widget.gif)
 
-### Date range widget (year or date precision)
+### [Date range widget (year or date precision)](https://docs.sparnatural.eu/widgets.html#date-range-widget)
 
 ![](docs/assets/images/readme/12-time-date.png)
+![](docs/assets/screencasts/date-range-widget.gif)
 
-### Numeric values widget
+### [Numeric values widget](https://docs.sparnatural.eu/widgets.html#number-widget)
 
 ![](docs/assets/images/readme/19-number.png)
+![](docs/assets/screencasts/number-widget.gif)
 
-### Boolean widget
+### [Boolean widget](https://docs.sparnatural.eu/widgets.html#boolean-widget)
 
 ![](docs/assets/images/readme/15-boolean.png)
 
-### No value selection
+### [No value selection](https://docs.sparnatural.eu/widgets.html#no-selection-widget)
 
 This is useful when a type a of entity is used only to navigate the graph, but without the ability to select an instance of these entities.
 
 ![](docs/assets/images/readme/13-no-value.png)
+![](docs/assets/screencasts/no-selection-widget.gif)
 
 ## Multilingual
 
