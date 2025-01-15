@@ -79,55 +79,70 @@ Sparnatural offers currently 9 ways of selecting a value for a criteria :
 
 ### [Dropdown list widget](https://docs.sparnatural.eu/widgets.html#list-widget)
 
+screenshot :
 ![](docs/assets/images/readme/10-list.png)
 
+screencast :
 ![](docs/assets/screencasts/list-widget.gif)
 
 
 ### [Autocomplete search widget](https://docs.sparnatural.eu/widgets.html#autocomplete-widget)
 
+screenshot :
 ![](docs/assets/images/readme/9-autocomplete.png)
 
+screencast :
 ![](docs/assets/screencasts/autocomplete-widget.gif)
 
 
 ### [Tree browsing widget](https://docs.sparnatural.eu/widgets.html#tree-widget)
 
+screenshot :
 ![](docs/assets/images/readme/17-tree.png)
 
+screencast :
 ![](docs/assets/screencasts/tree-widget.gif)
 
 
 ### [Map selection widget](https://docs.sparnatural.eu/widgets.html#map-widget)
 
+screenshot :
 ![](docs/assets/images/readme/18-map.png)
 
+screencast :
 ![](docs/assets/screencasts/map-widget.gif)
 
 
 ### [String search widget (text search)](https://docs.sparnatural.eu/widgets.html#string-search-widget)
 
+screenshot :
 ![](docs/assets/images/readme/11-search.png)
 
+screencast :
 ![](docs/assets/screencasts/string-search-widget.gif)
 
 
 ### [Date range widget (year or date precision)](https://docs.sparnatural.eu/widgets.html#date-range-widget)
 
+screenshot :
 ![](docs/assets/images/readme/12-time-date.png)
 
+screencast :
 ![](docs/assets/screencasts/date-range-widget.gif)
 
 
 ### [Numeric values widget](https://docs.sparnatural.eu/widgets.html#number-widget)
 
+screenshot :
 ![](docs/assets/images/readme/19-number.png)
 
+screencast :
 ![](docs/assets/screencasts/number-widget.gif)
 
 
 ### [Boolean widget](https://docs.sparnatural.eu/widgets.html#boolean-widget)
 
+screenshot :
 ![](docs/assets/images/readme/15-boolean.png)
 
 
@@ -135,8 +150,10 @@ Sparnatural offers currently 9 ways of selecting a value for a criteria :
 
 This is useful when a type a of entity is used only to navigate the graph, but without the ability to select an instance of these entities.
 
+screenshot :
 ![](docs/assets/images/readme/13-no-value.png)
 
+screencast :
 ![](docs/assets/screencasts/no-selection-widget.gif)
 
 
