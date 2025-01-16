@@ -327,6 +327,7 @@ class OptionalCriteriaManager {
         const validNewValues = newValues.filter(
           (val: any) => val && val.label !== undefined
         );
+        console.log("Valid new values:", validNewValues);
 
         if (validNewValues.length === 0) {
           console.warn("No valid new values found:", newValues);
@@ -340,9 +341,9 @@ class OptionalCriteriaManager {
         // Fusionne les valeurs en évitant les doublons
         const mergedValues = [
           ...existingValues.filter(
-            (existing: { label: any }) =>
+            (existing: { label: string }) =>
               !validNewValues.some(
-                (newVal: { label: any }) => newVal.label === existing.label
+                (newVal: { label: string }) => newVal.label === existing.label
               )
           ),
           ...validNewValues,

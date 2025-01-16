@@ -63,10 +63,6 @@ class SparnaturalFormComponent extends HTMLComponent {
     const formVariables = this.formConfig.bindings.map(
       (binding: Binding) => binding.variable
     );
-    console.log("formVariables", formVariables);
-    const queryVariables = this.jsonQuery.variables.map((v: any) => v.value);
-    console.log("queryVariables", queryVariables);
-    console.log("queryVariables", queryVariables);
 
     // Adjust optional flags for all branches without removing them
     this.adjustOptionalFlags(copiedQuery.branches);

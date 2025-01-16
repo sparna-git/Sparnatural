@@ -1,3 +1,5 @@
+import { Binding, Form } from "../FormStructure";
+
 /*export class SparnaturalFormI18n {
   static i18nLabelsResources: any = {
     // "en":
@@ -19,7 +21,7 @@ export class SparnaturalFormI18n {
   private constructor() {}
 
   // Méthode init qui prend la langue et formConfig
-  static init(lang: string, formConfig: any) {
+  static init(lang: string, formConfig: Form) {
     formConfig.bindings.forEach((binding: any) => {
       const variable = binding.variable;
       console.log(lang);

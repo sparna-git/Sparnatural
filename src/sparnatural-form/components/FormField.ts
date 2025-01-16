@@ -196,6 +196,8 @@ class FormField {
       if (Array.isArray(e.detail)) {
         // Case: e.detail is an array
         valueToInject = e.detail.map((item: any) => item.value);
+        console.log("here");
+        typeof valueToInject[0] === "string";
       } else if (e.detail.value) {
         // Case: e.detail contains a single value or a wrapped object
         valueToInject = Array.isArray(e.detail.value)
@@ -245,41 +247,3 @@ class FormField {
   }
 }
 export default FormField;
-
-/*
-
-    // Add an event listener to add values to the widget
-    widget.html[0].addEventListener("renderWidgetVal", (e: CustomEvent) => {
-      console.log("widget", widget);
-      console.log("e.detail", e.detail);
-      const valueToInject = Array.isArray(e.detail.value)
-        ? e.detail.value
-        : [e.detail.value];
-      console.log("valueToInject", valueToInject);
-
-      valueToInject.forEach((val: any) => {
-        const existingValue = Array.from(selectedValues).find(
-          (existingVal: any) => existingVal.label === val.label
-        );
-
-        if (!existingValue) {
-          selectedValues.add(val);
-
-          updateValueDisplay();
-          queryLine.values = Array.from(selectedValues);
-
-          formFieldDiv.dispatchEvent(
-            new CustomEvent("valueAdded", {
-              bubbles: true,
-              detail: { value: val, variable: variable },
-            })
-          );
-
-          // Update options visibility
-          if (this.optionalCriteriaManager) {
-            this.optionalCriteriaManager.updateOptionVisibility();
-          }
-        }
-      });
-    });
-*/
