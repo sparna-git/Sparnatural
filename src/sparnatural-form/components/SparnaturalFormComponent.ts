@@ -146,14 +146,17 @@ class SparnaturalFormComponent extends HTMLComponent {
             this.makeFormScrollable();
           }
 
-          // Ajouter les boutons Reset/Search
+          // Ajouter les boutons Reset/Search sans ID
           if (this.settings.submitButton) {
-            let id = "submit";
             const submitBtn = document.createElement("div");
-            submitBtn.setAttribute("id", id);
             submitBtn.setAttribute("class", "submitSection");
             this.html[0].appendChild(submitBtn);
-            this.SubmitSection = new SubmitSection(this, id, this.settings);
+            this.SubmitSection = new SubmitSection(
+              this,
+              $(submitBtn),
+              this.settings
+            );
+
             this.SubmitSection.render();
           }
 

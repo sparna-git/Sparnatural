@@ -15,12 +15,13 @@ class SubmitSection {
 
   constructor(
     ParentSparnatural: SparnaturalFormComponent,
-    containerId: string,
+    container: JQuery<HTMLElement>, // On passe un élément directement
     settings: ISettings
   ) {
     this.ParentSparnatural = ParentSparnatural;
-    this.container = $(`#${containerId}`); // Using jQuery to select the container by ID
+    this.container = container;
     this.resetBtn = new ResetBtn(this.resetForm.bind(this));
+
     if (this.ParentSparnatural.formConfig.variables) {
       this.searchBtn = new SearchBtn(
         this.submitAction.bind(this),
@@ -36,17 +37,17 @@ class SubmitSection {
 
   render(): this {
     // Vérifie si les boutons existent déjà dans le conteneur
-    if (
+    /* if (
       this.container.find("#Reset").length === 0 &&
       this.container.find("#Search").length === 0
-    ) {
-      console.log("Rendering buttons...");
-      this.resetBtn.render(this.container);
-      this.searchBtn.render(this.container);
-      console.log("Buttons rendered:", this.resetBtn, this.searchBtn);
-    } else {
+    ) {*/
+    console.log("Rendering buttons...");
+    this.resetBtn.render(this.container);
+    this.searchBtn.render(this.container);
+    console.log("Buttons rendered:", this.resetBtn, this.searchBtn);
+    /*} else {
       console.log("Buttons already exist, skipping rendering.");
-    }
+    }*/
     return this;
   }
 
