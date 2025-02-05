@@ -48,6 +48,9 @@ class SearchBtn {
 
     // Ajouter les gestionnaires d'événements
     this.setupEventListeners();
+
+    // close Export when page is loaded
+    this.closePopup();
   }
 
   private setupEventListeners() {
@@ -113,10 +116,14 @@ class SearchBtn {
     this.buttonGroupElement.find(".spinner").css("display", "none");
   }
 
-  // Méthode pour supprimer l'état de chargement sans activer le bouton
+  // Méthode pour supprimer l'état de chargement et réactiver le bouton
   removeLoading() {
     // Supprimer le spinner si présent
     this.buttonGroupElement.find(".spinner").css("display", "none");
+
+    this.enable();
+    // Thomas : ici je ne comprends pas pourquoi le bouton ne se referme pas
+    this.closePopup();
   }
 
   // Méthode pour vérifier si le bouton est désactivé

@@ -10,6 +10,7 @@ import { Binding, Form } from "../FormStructure";
 
 class CleanQuery {
   private query: ISparJson;
+  // Thomas : this is not used anymore (05/02/2025)
   private variablesUsedInFormConfig: string[];
   private formConfig: Form;
 
@@ -71,17 +72,25 @@ class CleanQuery {
         const parentOptional = this.isParentOptional(branch.line?.o);
 
         // Vérifier si la variable existe dans `queryVariables`
-        const existsInQueryVariables =
-          variablesUsedInResultSet.includes(variable);
+        // const existsInQueryVariables = variablesUsedInResultSet.includes(variable);
+        const existsInQueryVariables = variablesUsedInResultSet.find(v => v === variable) !== undefined;
 
-        //remove the branches with o that exist on the form varibales which haven't any values not exist in query.variables and it's optional or his father is optional focus on formVariables and don't touch the other branches
-        // Supprimer les branches selon les conditions
+        // remove the branches with o :
+        //   - which haven't any values 
+        //   - don't exist in query.variables 
+        //   - is optional or his father is optional
+        //
+        // note : we don't check that the variable is in the form variables, because what could happen is:
+        //   - the variable is optional
+        //   - it is not in the form variables (only here to be selected as a result variable)
+        //   - it is selected in the query
+        //   - but then it is removed for onscreen display
+        //   - so we should remove it anyway
         const shouldRemove =
-          this.variablesUsedInFormConfig.includes(variable) && // La variable est dans les form variables
-          !existsInQueryVariables && // La variable n'existe pas dans les variables de la requête
+          // this.variablesUsedInFormConfig.includes(variable) && // La variable est dans les form variables
+          !existsInQueryVariables && // La variable n'existe pas dans les variables du SELECT la requête
           !hasValues && // Aucune valeur pour cette branche
           (isOptional || parentOptional); // La branche ou son parent est optionnel
-        console.log("shouldRemove", variable, shouldRemove);
         return !shouldRemove;
       })
       .map((branch) => ({
