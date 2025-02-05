@@ -67,46 +67,42 @@ export default class TypedVariableTranslator {
     this.#createResultPtrns();
   }
 
-  //-------------------------------------------------------------
-  // old version
   /**
    * Generates the triple of the type
    */
-
-  /**
-   * Test
-   */
   #buildTypeTriple() {
-    // Ne construisez pas le triple si l'entité n'a pas de critère de type
-    if (this.#specProvider.getEntity(this.#variableType).hasTypeCriteria()) {
-      let typePredicate;
-      if (this.settings.typePredicate) {
-        typePredicate = SparqlFactory.parsePropertyPath(
-          this.settings.typePredicate
-        );
-      } else {
-        typePredicate = factory.namedNode(
-          "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-        );
-      }
+    if(!this.#propertyIsBlocking) {
+      // Ne construisez pas le triple si l'entité n'a pas de critère de type
+      if (this.#specProvider.getEntity(this.#variableType).hasTypeCriteria()) {
+        let typePredicate;
+        if (this.settings.typePredicate) {
+          typePredicate = SparqlFactory.parsePropertyPath(
+            this.settings.typePredicate
+          );
+        } else {
+          typePredicate = factory.namedNode(
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+          );
+        }
 
-      // Ne pas ajouter le type si la portée est RDFS.Resource ou OWL.Thing
-      if (
-        this.#variableType !== RDFS.RESOURCE.value &&
-        this.#variableType !== OWL.THING.value
-      ) {
-        this.#typeTriple = SparqlFactory.buildTypeTriple(
-          factory.variable(this.#variableName),
-          typePredicate,
-          factory.namedNode(this.#variableType)
-        );
-        //console.log(`Added type triple for ${this.#variableName}`);
-      } else {
-        console.warn(
-          `Skipped adding type triple for ${
-            this.#variableName
-          } as it is RDFS.Resource or OWL.Thing`
-        );
+        // Ne pas ajouter le type si la portée est RDFS.Resource ou OWL.Thing
+        if (
+          this.#variableType !== RDFS.RESOURCE.value &&
+          this.#variableType !== OWL.THING.value
+        ) {
+          this.#typeTriple = SparqlFactory.buildTypeTriple(
+            factory.variable(this.#variableName),
+            typePredicate,
+            factory.namedNode(this.#variableType)
+          );
+          //console.log(`Added type triple for ${this.#variableName}`);
+        } else {
+          console.warn(
+            `Skipped adding type triple for ${
+              this.#variableName
+            } as it is RDFS.Resource or OWL.Thing`
+          );
+        }
       }
     }
   }
