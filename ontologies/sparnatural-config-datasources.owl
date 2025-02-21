@@ -141,19 +141,6 @@ The placeholder $labelPath will be replaced by the value indicated in the Sparql
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
-
-
-    <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#forceSort -->
-
-    <owl:DatatypeProperty rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources#forceSort">
-        <rdfs:domain rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SparqlDatasource"/>
-        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
-        <rdfs:comment xml:lang="en">Set to true to force a sort on a datasource</rdfs:comment>
-        <rdfs:label xml:lang="en">force sort</rdfs:label>
-    </owl:DatatypeProperty>
-    
-
 
     <!-- http://data.sparna.fr/ontologies/sparnatural-config-datasources#queryString -->
 
