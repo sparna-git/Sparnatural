@@ -268,6 +268,9 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       }
     })
 
+    // sort tree
+    dag.sort(SHACLSpecificationEntity.compare);
+
     return dag;
   }
 

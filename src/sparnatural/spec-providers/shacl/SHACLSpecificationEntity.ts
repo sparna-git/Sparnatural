@@ -137,6 +137,10 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         let dag:Dag<ISpecificationProperty> = new Dag<ISpecificationProperty>();
         // dag.initFlatTreeFromFlatList(properties);
         dag.initFromParentableAndIdAbleEntity(properties, []);
+
+        // sort the tree with compare function
+        dag.sort(SHACLSpecificationProperty.compare);
+
         return dag;
     }
     
@@ -208,7 +212,10 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
         let dag:Dag<ISpecificationEntity> = new Dag<ISpecificationEntity>();
         dag.initFromParentableAndIdAbleEntity(entities, disabledList);
-        console.log(dag.toDebugString())
+
+        // sort the tree with compare function
+        dag.sort(SHACLSpecificationEntity.compare);
+
         return dag;
     }
 
@@ -522,6 +529,10 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     hasShTarget():boolean {
         console.log("hasShTarget "+this.uri+" "+this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null))
         return this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null);
+    }
+
+    static compare(item1: SHACLSpecificationEntity, item2: SHACLSpecificationEntity) {
+        return SHACLSpecificationEntry.compare(item1, item2);
     }
 
 }

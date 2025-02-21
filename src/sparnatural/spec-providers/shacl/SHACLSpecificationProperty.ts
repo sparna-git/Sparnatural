@@ -459,6 +459,10 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     isLogicallyExecutedAfter(): boolean {
       return this.graph.hasTriple(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"), null);
     }
+
+    static compare(item1: SHACLSpecificationProperty, item2: SHACLSpecificationProperty) {
+      return SHACLSpecificationEntry.compare(item1, item2);
+    }
 }
 
 

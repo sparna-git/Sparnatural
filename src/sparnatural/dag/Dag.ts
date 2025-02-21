@@ -123,6 +123,15 @@ export class Dag<Payload> implements DagIfc<Payload> {
             root.traverseBreadthFirst(processor);
         })
     }
+
+    public sort(compareFn: (a:Payload, b:Payload) => number) {
+        // when sorting the children array, sort their payload
+        this.roots.sort((a:DagNodeIfc<Payload>, b:DagNodeIfc<Payload>) => {
+            return compareFn(a.payload, b.payload);
+        });
+        // then sort recursively
+        this.roots.forEach(c => c.sort(compareFn));
+    }
     
 }
 
@@ -238,6 +247,8 @@ export interface DagIfc<Payload> {
     roots:DagNodeIfc<Payload>[];
 
     toDebugString():string;
+
+    sort: (compareFn:(a:Payload, b:Payload)=> number) => void;
 
     traverseBreadthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
     traverseDepthFirst: (processor:(node:DagNodeIfc<Payload>) => void) => void;
