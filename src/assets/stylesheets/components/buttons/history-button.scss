@@ -1,0 +1,463 @@
+.historySection {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+
+  .history-btn {
+    position: absolute;
+    display: flex;
+    top: 10px;
+    right: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    z-index: 2;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  }
+}
+.history-btn:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.container {
+  position: relative; // Permet de positionner les éléments enfants par rapport à ce conteneur
+  display: inline-block; // Assure que le conteneur s'adapte à la taille de son contenu
+}
+
+.load-query-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.icon-btn {
+  position: absolute; // Positionne l'élément par rapport au conteneur parent
+  top: 50%; // Centre verticalement
+  left: 50%; // Centre horizontalement
+  transform: translate(-50%, -50%); // Ajuste pour centrer parfaitement
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px; // Ajustez selon la taille de l'icône
+}
+
+#queryHistoryTable_wrapper {
+  flex-grow: 1; // Permet au tableau de prendre l’espace disponible sans dépasser
+  overflow-y: auto;
+}
+
+.history-footer {
+  display: flex;
+  justify-content: space-between; // Utilisez flex-end si vous voulez tout aligner à droite
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box; // Assure que le padding est inclus dans la largeur totale
+}
+
+// Pagination et contrôles en bas
+.dataTables_wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+  .dataTables_length,
+  .dataTables_filter {
+    margin-bottom: 10px;
+  }
+
+  .dataTables_paginate {
+    display: flex;
+    justify-content: center;
+    margin-top: auto;
+    padding: 10px 0;
+  }
+}
+
+.dt-layout-row {
+  display: flex;
+  justify-content: space-between; // Répartit les éléments avec espace entre eux
+  align-items: center; // Alignement vertical centré
+  flex-wrap: nowrap; // Empêche le passage à la ligne
+  padding: 10px 15px;
+  width: 100%; // Assure la prise de toute la largeur
+  box-sizing: border-box; // Inclut padding et border dans la largeur totale
+}
+
+/* Barre de recherche en haut à gauche */
+.dt-layout-cell.dt-layout-start .dt-search {
+  flex: 1;
+  text-align: left;
+}
+
+.dt-layout-cell {
+  flex: 1; // Permet aux cellules de s'étendre pour occuper l'espace disponible
+  text-align: left; // Alignement du texte à gauche
+}
+
+/* Nombre d'entrées par page (au centre) */
+.dt-layout-cell.dt-layout-middle {
+  //flex: 1;
+  //text-align: center;
+  flex: 0 0 auto; // Empêche cette cellule de s'étendre, garde sa taille naturelle
+  margin: 0 auto; // Centre l'élément horizontalement
+  text-align: center; // Alignement du texte au centre
+}
+
+/* Pagination à droite */
+.dt-layout-cell.dt-layout-end {
+  flex: 0 0 auto; // Empêche cette cellule de s'étendre, garde sa taille naturelle
+  text-align: right; // Alignement du texte à droite
+}
+
+.history-actions {
+  display: flex;
+  justify-content: flex-end; // Aligne les boutons à droite
+  gap: 8px; // Ajoute un petit espace entre les boutons si nécessaire
+  padding: 0;
+  border-top: 1px solid #ddd; // Séparation avec le tableau
+}
+
+.history-actions button {
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+
+  &.btn-orange {
+    background: orange;
+    color: white;
+    &:hover {
+      background: darkorange;
+    }
+  }
+
+  &.btn-red {
+    background: #dc3545;
+    color: white;
+    &:hover {
+      background: #a71d2a;
+    }
+  }
+
+  &.btn-yellow {
+    background: #ffcc00;
+    color: black;
+    &:hover {
+      background: #e6b800;
+    }
+  }
+}
+
+#closeHistory,
+#resetHistory {
+  background-color: #dc3545;
+  color: white;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+  align-self: flex-end;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #a71d2a;
+  }
+}
+
+#resetHistory {
+  background-color: #007bff;
+  &:hover {
+    background-color: #0056b3;
+  }
+}
+
+.history-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.history-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 85%;
+  max-width: 1200px;
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1000;
+  box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+// Bloquer le scroll du body quand la modale est ouverte
+body.history-modal-open {
+  overflow: hidden;
+}
+
+.history-container {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+  }
+
+  tbody tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  // 🔹 Ajuster la largeur de la colonne JSON
+  th:nth-child(3),
+  td:nth-child(3) {
+    width: 60%;
+    word-break: break-word;
+    white-space: normal;
+    max-width: 0;
+    overflow-wrap: break-word;
+    max-height: 150px;
+    overflow-y: auto;
+    display: block;
+  }
+}
+
+.history-total-results {
+  font-size: 14px;
+  color: #333;
+}
+
+.history-page-size {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  select {
+    padding: 6px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+}
+
+.history-pagination {
+  display: flex;
+  gap: 5px;
+
+  button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #0056b3;
+    }
+
+    &.active {
+      background: #0056b3;
+      font-weight: bold;
+    }
+  }
+}
+
+// 🔹 Style des Boutons 🔹
+button {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &.btn-load {
+    background: #007bff;
+    color: white;
+    &:hover {
+      background: #0056b3;
+      transform: scale(1.05);
+    }
+  }
+
+  &.btn-delete {
+    background: #dc3545;
+    color: white;
+    &:hover {
+      background: #a71d2a;
+      transform: scale(1.05);
+    }
+  }
+
+  &.btn-close {
+    background: #dc3545;
+    color: white;
+    font-weight: bold;
+    padding: 10px 16px;
+    &:hover {
+      background: #b02a37;
+      transform: scale(1.05);
+    }
+  }
+
+  &.btn-clear {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 10px 16px;
+    &:hover {
+      background: #0056b3;
+      transform: scale(1.05);
+    }
+  }
+}
+
+.favorite-query {
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+  background: none;
+  border: none;
+
+  i {
+    color: #b5b5b5; // ⭐ Étoile grise par défaut (non favori)
+    transition: color 0.3s ease;
+  }
+
+  &:hover i {
+    color: #ffcc00; // 🟡 Devient jaune au survol
+    transform: scale(1.2);
+  }
+
+  &.active i {
+    color: #ffcc00; // 🟡 Jaune si favori activé
+  }
+}
+
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1001; /* Above other content */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* Center the modal */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 400px; /* Maximum width for the modal */
+  text-align: center;
+  border-radius: 8px; /* Rounded corners */
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px; /* Rounded corners for buttons */
+  font-size: 16px;
+}
+
+#confirmYes {
+  background-color: #007bff;
+  color: white;
+}
+
+#confirmNo {
+  background-color: #dc3545;
+  color: white;
+}
+
+#confirmYes:hover,
+#confirmNo:hover {
+  opacity: 0.8; /* Slight hover effect */
+}
+
+.dt-paging {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Espace entre les éléments de pagination */
+  margin-top: 20px;
+}
+
+.dt-paging a,
+.dt-paging button {
+  background-color: #f1f1f1; /* Couleur de fond des boutons */
+  border: 1px solid #ddd; /* Bordure des boutons */
+  color: #333; /* Couleur du texte */
+  padding: 8px 12px; /* Espacement intérieur */
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+  border-radius: 4px; /* Coins arrondis */
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s; /* Effet de transition */
+}
+
+.dt-paging a:hover,
+.dt-paging button:hover {
+  background-color: #ddd; /* Couleur de fond au survol */
+  color: #007bff; /* Couleur du texte au survol */
+}
+
+.dt-paging .current {
+  background-color: #0056b3;
+  color: white;
+  border-color: #0056b3;
+  cursor: default;
+}
+
+.dt-paging .disabled {
+  background-color: #ddd;
+  color: #999;
+  cursor: not-allowed;
+}

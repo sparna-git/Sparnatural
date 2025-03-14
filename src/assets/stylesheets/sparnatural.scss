@@ -1,9 +1,10 @@
-@use 'sass:math';
-@use './mixins';
-@use './base';
-@use './layout/all-layout.scss';
+@use "sass:math";
+@use "./mixins";
+@use "./base";
+@use "./layout/all-layout.scss";
 // Importing all the components
-@use './components/all-components.scss';
+@use "./components/all-components.scss";
+@use "./components/buttons/history-button.scss";
 @import "nice-select.css";
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
 // we are importing one default theme,
@@ -12,57 +13,58 @@
 @import "themes/sparnatural-theme-grass.css";
 
 spar-natural {
-	section {
-		padding-top: 30px;
-	}	
+  section {
+    padding-top: 30px;
+  }
 
-	.Sparnatural {
-		width:100%;
-		.easy-autocomplete {
-			input {
-				height: base.$height-components-hover;
-				box-sizing: border-box;
-			}
-		}
-		.easy-autocomplete-container {
-			z-index: 999;
-			ul {
-				line-height: 20px;
-				background: #fff;
-				li {
-					padding: 5px;
-					&.selected {
-						
-						background: var(--primary-color-main) ;
-					}
-				}
-			}
-		}
-		
-		// in order to work properly even if no bootstrap included
-		*, ::after, ::before {
-			box-sizing: border-box;
-		}		
-	}
+  .Sparnatural {
+    width: 100%;
+    .easy-autocomplete {
+      input {
+        height: base.$height-components-hover;
+        box-sizing: border-box;
+      }
+    }
+    .easy-autocomplete-container {
+      z-index: 999;
+      ul {
+        line-height: 20px;
+        background: #fff;
+        li {
+          padding: 5px;
+          &.selected {
+            background: var(--primary-color-main);
+          }
+        }
+      }
+    }
+
+    // in order to work properly even if no bootstrap included
+    *,
+    ::after,
+    ::before {
+      box-sizing: border-box;
+    }
+  }
 }
 
 //Select2 overides
 body .select2-container--default {
-	font-size: 14px;
-	line-height: 1.2;
-	.select2-results__option--highlighted.select2-results__option--highlighted {
-		background-color: var(--primary-color-main);
-	}
+  font-size: 14px;
+  line-height: 1.2;
+  .select2-results__option--highlighted.select2-results__option--highlighted {
+    background-color: var(--primary-color-main);
+  }
 }
 
 // tippy overides
-.tippy-box[data-theme~='sparnatural'] {
-    background-color: var(--primary-color-light);
-	// background-color: rgb(255, 231, 203);	
-    color: #000;
-	border-radius: 5px;
-	border: 1px dashed var(--primary-color-main);
-	// border: 1px dashed rgb(250,136,3);
-	padding: 2px;
-	font-size:0.75em;
+.tippy-box[data-theme~="sparnatural"] {
+  background-color: var(--primary-color-light);
+  // background-color: rgb(255, 231, 203);
+  color: #000;
+  border-radius: 5px;
+  border: 1px dashed var(--primary-color-main);
+  // border: 1px dashed rgb(250,136,3);
+  padding: 2px;
+  font-size: 0.75em;
 }

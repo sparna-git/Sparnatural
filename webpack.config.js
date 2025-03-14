@@ -11,6 +11,7 @@ module.exports = {
   entry: {
     sparnatural: "./src/SparnaturalElement.ts",
     "sparnatural-form": "./src/SparnaturalFormElement.ts",
+    "sparnatural-history": "./src/sparnaturalHistoryElement.ts",
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
