@@ -16,7 +16,7 @@
 
     <!-- YASGUI stuff -->
     <link
-      href="https://unpkg.com/@triply/yasgui/build/yasgui.min.css"
+      href="https://cdn.jsdelivr.net/npm/@triply/yasgui/build/yasgui.min.css"
       rel="stylesheet"
       type="text/css"
     />
@@ -98,10 +98,10 @@
               https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1LBumEdCIl8CUlkB0PGqPK6T_9-4nnpix%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true https://raw.githubusercontent.com/ICA-EGAD/RiC-O/refs/heads/master/ontology/previous-versions/RiC-O_v0-2_release/RiC-O_v0-2.rdf
             -->
             <spar-natural
-              src="https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1WrC2r7yDQCP5AKhu6SAK8Ba_QshzFKmm%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true configs/collections-shacl.ttl"
+              src="https://dataria.org/static/sparnatural/config.ttl"
               lang="en"
-              defaultLang="fr"
-              endpoint="http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo?default-graph-uri=https%3A%2F%2Fpactols.frantiq.fr%2Fopentheso%2F&default-graph-uri=http%3A%2F%2Farsol.univ-tours.fr http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo?default-graph-uri=https%3A%2F%2Fpactols.frantiq.fr%2Fopentheso%2F&default-graph-uri=http%3A%2F%2Faerba.huma-num.fr http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo?default-graph-uri=https%3A%2F%2Fpactols.frantiq.fr%2Fopentheso%2F&default-graph-uri=https%3A%2F%2Fanalytics.huma-num.fr%2Farcheoviz%2F"
+              defaultLang="en"
+              endpoint="https://graph.dhi-roma.it/query"
               distinct="true"
               limit="100"
               prefixes="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology# crm:http://www.cidoc-crm.org/cidoc-crm/ grace:http://www.graceful17.org/ontology/"
@@ -320,7 +320,7 @@
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- YASGUI stuff -->
-    <script src="https://unpkg.com/@triply/yasgui/build/yasgui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@triply/yasgui/build/yasgui.min.js"></script>
 
     <!-- Webpack JS -->
     <%= js %>
