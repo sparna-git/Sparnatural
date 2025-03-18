@@ -1,6 +1,6 @@
 {
   "name": "sparnatural",
-  "version": "10.1.2",
+  "version": "10.2.0",
   "description": "Visual client-side SPARQL query builder and knowledge graph exploration tool",
   "main": "dist/sparnatural.js",
   "module": "dist/sparnatural.js",
