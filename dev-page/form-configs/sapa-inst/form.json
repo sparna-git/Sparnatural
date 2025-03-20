@@ -7,6 +7,10 @@
         "name": {
           "en": "fonds",
           "fr": "fonds"
+        },
+        "help": {
+          "en": "Help message containing <strong>HTML</strong>",
+          "fr": "Message d'aide contenant du <strong>HTML</strong>"
         }
       }
     },
@@ -17,6 +21,10 @@
         "name": {
           "en": "record resource",
           "fr": "record resource"
+        },
+        "help": {
+          "en": "Help message containing <strong>HTML</strong>",
+          "fr": "Message d'aide contenant du <strong>HTML</strong>"
         }
       }
     },

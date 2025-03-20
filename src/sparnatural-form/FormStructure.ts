@@ -3,8 +3,8 @@ export interface Form {
   // the variables config of the form, more specifically the list of variables
   // that we want to keep for an on-screen display
   variables?: {
-    onscreen?: string[]
-  }
+    onscreen?: string[];
+  };
 }
 
 /**
@@ -18,6 +18,7 @@ export interface Binding {
 export interface Node {
   type: string;
   name: Name;
+  help?: Name;
 }
 
 export interface Name {

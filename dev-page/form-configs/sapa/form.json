@@ -7,6 +7,10 @@
         "name": {
           "en": "original name",
           "fr": "nom d'origine"
+        },
+        "help": {
+          "en": "Help message containing <strong>HTML</strong>",
+          "fr": "Message d'aide contenant du <strong>HTML</strong>"
         }
       }
     },

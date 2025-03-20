@@ -10,6 +10,7 @@ import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnat
 import OptionalCriteriaManager from "./optionalCriteria/OptionalCriteriaManager";
 import { AbstractWidget } from "../../sparnatural/components/widgets/AbstractWidget";
 import { Binding } from "../FormStructure";
+import tippy from "tippy.js";
 
 class FormField {
   private binding: Binding;
@@ -45,6 +46,19 @@ class FormField {
     const label = this.createLabel(variable);
     formFieldDiv.appendChild(label);
 
+    // Initialize Tippy.js on the help icon
+    setTimeout(() => {
+      tippy(".help-icon", {
+        allowHTML: true,
+        theme: "sparnatural",
+        arrow: false,
+        placement: "right",
+        animation: "scale-extreme",
+        delay: [200, 200],
+        duration: [200, 200],
+      });
+    }, 500);
+
     // Find the line in the query corresponding to the variable
     const queryLine = this.findInBranches(this.query.branches, variable);
 
@@ -66,14 +80,32 @@ class FormField {
     }
   }
 
-  //method to create a label for the widget in the form
+  // Method to create a label with an SVG tooltip icon
   private createLabel(variable: string): HTMLLabelElement {
     const label = document.createElement("label");
     label.setAttribute("for", variable);
-    label.innerHTML = `<strong>${SparnaturalFormI18n.getLabel(
-      variable
-    )}</strong>`;
-    label.style.fontSize = "18px";
+    label.classList.add("form-label");
+
+    // Get the field label
+    const labelText = SparnaturalFormI18n.getLabel(variable);
+    label.innerHTML = `<strong>${labelText}</strong>`;
+
+    // Create an SVG help icon
+    const helpIcon = document.createElement("span");
+    helpIcon.classList.add("help-icon");
+    helpIcon.setAttribute("tabindex", "0");
+
+    helpIcon.innerHTML = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 512 512" fill="currentColor">
+          <path d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zM262.655 90c-54.497 0-89.255 22.957-116.549 63.758-3.536 5.286-2.353 12.415 2.715 16.258l34.699 26.31c5.205 3.947 12.621 3.008 16.665-2.122 17.864-22.658 30.113-35.797 57.303-35.797 20.429 0 45.698 13.148 45.698 32.958 0 14.976-12.363 22.667-32.534 33.976C247.128 238.528 216 254.941 216 296v4c0 6.627 5.373 12 12 12h56c6.627 0 12-5.373 12-12v-1.333c0-28.462 83.186-29.647 83.186-106.667 0-58.002-60.165-102-116.531-102zM256 338c-25.365 0-46 20.635-46 46 0 25.364 20.635 46 46 46s46-20.636 46-46c0-25.365-20.635-46-46-46z"/>
+      </svg>`;
+
+    // Get the help text if it exists on form config
+    const helpText = SparnaturalFormI18n.getHelp(variable);
+    if (helpText) {
+      helpIcon.setAttribute("data-tippy-content", helpText);
+      label.appendChild(helpIcon);
+    }
     return label;
   }
 
@@ -90,27 +122,6 @@ class FormField {
       }
     }
     return null;
-  }
-
-  //method to create a widget in the form
-  private createWidget1(queryLine: CriteriaLine): AbstractWidget {
-    const subject = queryLine.sType;
-    const predicate = queryLine.p;
-    const object = queryLine.oType;
-
-    const specEntity = this.specProvider.getEntity(subject);
-    const connectingProperty = this.specProvider.getProperty(predicate);
-    const propertyType = connectingProperty.getPropertyType(object);
-
-    const widget = this.widgetFactory.buildWidget(
-      propertyType,
-      { variable: queryLine.s, type: specEntity.getId() },
-      { variable: "predicate", type: connectingProperty.getId() },
-      { variable: queryLine.o, type: object }
-    );
-    widget.render();
-    //console.log("widget", widget);
-    return widget;
   }
 
   private createWidget(queryLine: CriteriaLine): AbstractWidget {
