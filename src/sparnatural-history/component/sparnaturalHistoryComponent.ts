@@ -3,6 +3,8 @@ import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnat
 import HistorySection from "./HistorySection";
 import "datatables.net";
 import { SparnaturalHistoryElement } from "../../sparnaturalHistoryElement";
+import { SparnaturalHistoryI18n } from "../settings/SparnaturalHistoryI18n";
+import { getSettings } from "../settings/defaultSettings";
 
 class SparnaturalHistoryComponent extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
@@ -14,6 +16,7 @@ class SparnaturalHistoryComponent extends HTMLComponent {
   }
 
   render(): this {
+    this.#initLang();
     console.log("🔍 Rendering SparnaturalHistoryComponent...");
 
     document.addEventListener("specProviderReady", (event) => {
@@ -47,9 +50,6 @@ class SparnaturalHistoryComponent extends HTMLComponent {
       }, 0);
 
       this.html[0].dispatchEvent(
-        new CustomEvent("redrawBackgroundAndLinks", { bubbles: true })
-      );
-      this.html[0].dispatchEvent(
         new CustomEvent(SparnaturalHistoryElement.EVENT_INIT, {
           bubbles: true,
           detail: { sparnaturalHistory: this },
@@ -58,6 +58,13 @@ class SparnaturalHistoryComponent extends HTMLComponent {
     });
 
     return this;
+  }
+  #initLang() {
+    if (getSettings().language === "fr") {
+      SparnaturalHistoryI18n.init("fr");
+    } else {
+      SparnaturalHistoryI18n.init("en");
+    }
   }
 }
 export default SparnaturalHistoryComponent;

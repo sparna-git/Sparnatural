@@ -461,3 +461,41 @@ button {
   color: #999;
   cursor: not-allowed;
 }
+
+.query-summary {
+  max-height: 80px; /* Hauteur fixe */
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: block;
+  white-space: normal;
+  position: relative;
+  padding-right: 5px;
+}
+
+/* ✅ Ombre correctement orientée vers le bas */
+.query-summary.has-scroll::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 15px;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.2),
+    rgba(255, 255, 255, 0)
+  );
+  pointer-events: none;
+  transition: opacity 0.1s ease-out;
+  opacity: 1;
+}
+
+/* ❌ Cacher l'ombre quand l'utilisateur scrolle */
+.query-summary.scrolled::after {
+  opacity: 0;
+}
+
+.dt-scroll {
+  max-height: 400px; /* Ajuste la hauteur max du tableau */
+  overflow-y: auto; /* Active le scroll vertical */
+}

@@ -1,3 +1,5 @@
+import { SparnaturalHistoryI18n } from "../settings/SparnaturalHistoryI18n";
+
 class ConfirmationModal {
   private modalElement: JQuery<HTMLElement>;
   private resolveAction: (confirmed: boolean) => void;
@@ -6,10 +8,10 @@ class ConfirmationModal {
     this.modalElement = $(`
         <div id="confirmationModal" class="modal">
           <div class="modal-content">
-            <p id="modalMessage">Êtes-vous sûr de vouloir effectuer cette action ?</p>
+            <p id="modalMessage">${SparnaturalHistoryI18n.labels.confirmMessage}</p>
             <div class="modal-buttons">
-              <button id="confirmYes">Oui</button>
-              <button id="confirmNo">Non</button>
+              <button id="confirmYes">${SparnaturalHistoryI18n.labels.yes}</button>
+              <button id="confirmNo">${SparnaturalHistoryI18n.labels.no}</button>
             </div>
           </div>
         </div>
@@ -25,10 +27,12 @@ class ConfirmationModal {
     $("#confirmNo").on("click", () => this.handleConfirmation(false));
   }
 
-  public show(message: string): Promise<boolean> {
+  public show(message?: string): Promise<boolean> {
     return new Promise((resolve) => {
       this.resolveAction = resolve;
-      $("#modalMessage").text(message);
+      $("#modalMessage").text(
+        message || SparnaturalHistoryI18n.labels.confirmMessage
+      );
       this.modalElement.show(); // Affiche la modal
     });
   }

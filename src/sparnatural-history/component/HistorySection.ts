@@ -1,17 +1,14 @@
 import "datatables.net";
-import $, { get } from "jquery";
+import $ from "jquery";
 import LocalDataStorage from "../storage/LocalDataStorage";
 import HTMLComponent from "../../sparnatural/components/HtmlComponent";
 import { Branch, ISparJson } from "../../sparnatural/generators/json/ISparJson";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
-import { SparnaturalElement } from "../../SparnaturalElement";
-import QueryLoader from "../../sparnatural/querypreloading/QueryLoader";
 import ConfirmationModal from "./ConfirmationModal";
-import { Query } from "sparqljs";
+import { VariableExpression, VariableTerm } from "sparqljs";
 import { QueryHistory } from "./QueryHistory";
 import { SparnaturalHistoryElement } from "../../sparnaturalHistoryElement";
-
-//sparnatural-history
+import { SparnaturalHistoryI18n } from "../settings/SparnaturalHistoryI18n"; //
 
 class HistorySection extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
@@ -36,7 +33,9 @@ class HistorySection extends HTMLComponent {
 
   render(): this {
     super.render();
-    let historyBtn = $('<button class="history-btn">📜 Historique</button>');
+    let historyBtn = $(
+      `<button class="history-btn">📜 ${SparnaturalHistoryI18n.labels["historyButton"]}</button>`
+    );
     historyBtn.on("click", () => this.showHistory());
     this.html.append(historyBtn);
     return this;
@@ -54,30 +53,20 @@ class HistorySection extends HTMLComponent {
     const storage = LocalDataStorage.getInstance();
     const history = storage.getHistory();
 
-    const options = {
-      year: "numeric" as "numeric",
-      month: "short" as "short",
-      day: "numeric" as "numeric",
-      hour: "2-digit" as "2-digit",
-      minute: "2-digit" as "2-digit",
-      second: "2-digit" as "2-digit",
-      hour12: false,
-    };
-
     if (!Array.isArray(history)) {
       console.error("❌ Erreur: L'historique n'est pas un tableau !");
       return;
     }
 
-    // ✅ Supprimer proprement la modale et DataTables AVANT de recréer
+    // Supprimer proprement la modale et DataTables AVANT de recréer
     $(".history-overlay, #historyModal").remove();
     $("#queryHistoryTable_wrapper").remove();
 
-    // ✅ Ajout de l'overlay
+    // Ajout de l'overlay
     $("body").append('<div class="history-overlay"></div>');
     $("body").addClass("history-modal-open");
 
-    // ✅ Création propre de la table
+    // Création propre de la table
     let modalHtml = `
       <div id="historyModal" class="history-modal">
         <div class="table-container">
@@ -87,30 +76,43 @@ class HistorySection extends HTMLComponent {
           </table>
         </div>
         <div class="history-actions">
-          <button id="resetHistory" title="Vider l'historique"><i class="fas fa-eraser"></i></button>
+          <button id="resetHistory">
+            <strong>${SparnaturalHistoryI18n.labels["clearHistory"]}</strong>
+            <i class="fas fa-eraser"></i>
+          </button>
         </div>
       </div>`;
-
     $("body").append(modalHtml);
 
-    // ✅ Détruire DataTables s'il était déjà activé
+    // Vérifie si DataTable existe déjà, et le détruit proprement
     if ($.fn.DataTable.isDataTable("#queryHistoryTable")) {
-      $("#queryHistoryTable").DataTable().destroy();
+      $("#queryHistoryTable").DataTable().clear().destroy();
     }
 
-    // ✅ Vider le tbody avant d'ajouter des lignes
+    // Vider le tbody avant d'ajouter des lignes
     $("#queryHistoryTable tbody").empty();
 
-    // ✅ Initialisation propre de DataTables avec les nouvelles colonnes
+    // Initialisation propre de DataTables avec les nouvelles colonnes
     $("#queryHistoryTable").DataTable({
       pageLength: 4,
       lengthMenu: [
         [4, 10, 25, 50, -1],
         [4, 10, 25, 50, "All"],
       ],
+      //scrollY: "400px", // ✅ Active le scroll vertical
       scrollCollapse: true,
       destroy: true,
       autoWidth: false,
+      language: {
+        search: SparnaturalHistoryI18n.labels.search,
+        lengthMenu: SparnaturalHistoryI18n.labels.entriesPerPage,
+        info: SparnaturalHistoryI18n.labels.showingEntries,
+        infoEmpty: SparnaturalHistoryI18n.labels.infoEmpty,
+        infoFiltered: SparnaturalHistoryI18n.labels.infoFiltered,
+        zeroRecords: SparnaturalHistoryI18n.labels.zeroRecords,
+        emptyTable: SparnaturalHistoryI18n.labels.noData,
+      },
+      //make only résumé searchable
       data: history
         .map((entry) => {
           let parsedQuery;
@@ -127,9 +129,8 @@ class HistorySection extends HTMLComponent {
             return null;
           }
 
-          const entityStype =
-            parsedQuery?.branches?.[0]?.line?.sType || "Inconnu";
           // 🔹 Extraire l'entité principale (sujet de la requête)
+          const entityStype = this.getEntityType(parsedQuery);
           const entity = this.getEntityLabel(entityStype);
 
           return [
@@ -140,27 +141,40 @@ class HistorySection extends HTMLComponent {
             </button>`,
             entity, // 🔹 Ajout de l'entité principale
             this.formatQuerySummary(parsedQuery, this.specProvider),
-            `<button class="load-query btn-orange" data-id="${entry.id}">Load query</button>
-             <button class="delete-query btn-red" data-id="${entry.id}"><i class="fas fa-trash"></i></button>`,
-            new Date(entry.date).toLocaleString("en-US", options),
+            // Change date format according to the language selected fr or en
+
+            new Date(entry.date).toLocaleString("en-US"),
+
+            `<button class="load-query btn-orange" data-id="${entry.id}">
+              ${SparnaturalHistoryI18n.labels["loadQuery"]}
+            </button>
+            <button class="delete-query btn-red" data-id="${entry.id}">
+              <i class="fas fa-trash"></i>
+            </button>`,
           ];
         })
         .filter((row) => row !== null),
       columns: [
-        { title: "Favori" },
-        { title: "Entité" }, // ✅ Ajout de la colonne Entité (sujet de la requête)
-        { title: "Résumé" },
-        { title: "Actions", orderable: false },
-        { title: "Date" },
+        { title: SparnaturalHistoryI18n.labels["favorite"], searchable: false },
+        { title: SparnaturalHistoryI18n.labels["entity"], searchable: false },
+        { title: SparnaturalHistoryI18n.labels["summary"] },
+        { title: SparnaturalHistoryI18n.labels["date"], searchable: false },
+        {
+          title: SparnaturalHistoryI18n.labels["actions"],
+          searchable: false,
+          orderable: false,
+        },
       ],
+      // fixedHeader: true, // ✅ Fixe l'entête pour éviter le doublon**
 
       drawCallback: () => {
+        this.enableQuerySummaryScrollEffect();
         $(".delete-query")
           .off("click")
           .on("click", async (event) => {
             const id = $(event.currentTarget).data("id");
             const confirmed = await this.confirmAction(
-              "Voulez-vous vraiment supprimer cette requête ?"
+              SparnaturalHistoryI18n.labels["confirmDelRequest"]
             );
             if (confirmed) {
               storage.deleteQuery(id);
@@ -182,7 +196,7 @@ class HistorySection extends HTMLComponent {
 
     $("#resetHistory").on("click", async () => {
       const confirmed = await this.confirmAction(
-        "Voulez-vous vraiment vider l'historique ?"
+        SparnaturalHistoryI18n.labels["confirmClearHistory"]
       );
       if (confirmed) {
         this.clearHistory();
@@ -198,7 +212,7 @@ class HistorySection extends HTMLComponent {
   }
 
   private loadQuery(event: JQuery.ClickEvent) {
-    const id = $(event.currentTarget).data("id"); // Retrieve the query ID
+    const id = $(event.currentTarget).data("id"); // Récupérer l'ID de la requête
     const storage = LocalDataStorage.getInstance();
     const history = storage.getHistory();
 
@@ -220,27 +234,18 @@ class HistorySection extends HTMLComponent {
     }
 
     console.log("🔄 Loading query:", parsedQuery);
-    QueryLoader.loadQuery(parsedQuery);
 
-    // ✅ Forcer le repositionnement après chargement
-    setTimeout(() => {
-      const historySection = document.querySelector(".historySection");
-      const variablesSelection = document.querySelector(".variablesSelection");
+    // ✅ Récupérer `sparnatural-history` et charger la requête
+    const historyElement = document.querySelector(
+      "sparnatural-history"
+    ) as SparnaturalHistoryElement;
 
-      if (historySection && variablesSelection) {
-        variablesSelection.parentNode.insertBefore(
-          historySection,
-          variablesSelection.nextSibling
-        );
-        console.log(
-          "✅ .historySection déplacé après .variablesSelection après chargement !"
-        );
-      } else {
-        console.log(
-          "⚠️ Impossible de déplacer .historySection après chargement"
-        );
-      }
-    }, 0); // Attendre la fin du cycle de rendu
+    if (historyElement) {
+      console.log("SparnaturalHistoryElement trouvé, chargement...");
+      historyElement.loadQuery(parsedQuery);
+    } else {
+      console.error("❌ SparnaturalHistoryElement non trouvé !");
+    }
   }
 
   private makeFavorite(event: JQuery.ClickEvent) {
@@ -255,8 +260,10 @@ class HistorySection extends HTMLComponent {
 
     storage.set("queryHistory", history);
 
-    // ✅ Met à jour l'icône immédiatement
+    // Met à jour l'icône immédiatement
     this.initializeFavorites();
+
+    this.enableQuerySummaryScrollEffect();
   }
 
   private initializeFavorites() {
@@ -281,11 +288,42 @@ class HistorySection extends HTMLComponent {
       }
     });
   }
+
+  private enableQuerySummaryScrollEffect() {
+    document.querySelectorAll(".query-summary").forEach((element) => {
+      const div = element as HTMLElement;
+
+      // Vérifie si le contenu dépasse la hauteur définie
+      if (div.scrollHeight > div.clientHeight) {
+        div.classList.add("has-scroll"); // Ajoute l’ombre si scroll nécessaire
+      } else {
+        div.classList.remove("has-scroll"); // Supprime si pas besoin de scroll
+      }
+
+      div.addEventListener("scroll", function () {
+        if (this.scrollTop > 0) {
+          this.classList.add("scrolled"); // Cache l’ombre quand l'utilisateur scrolle
+        } else {
+          this.classList.remove("scrolled"); // Remet l’ombre si retour en haut
+        }
+      });
+    });
+  }
+
   private formatQuerySummary(
     queryJson: ISparJson,
     specProvider: ISparnaturalSpecification
   ): string {
     let summary = `<div class="query-summary">`;
+
+    setTimeout(() => {
+      document.querySelectorAll(".query-summary").forEach((element) => {
+        const div = element as HTMLDivElement;
+        if (div.scrollHeight > div.clientHeight) {
+          div.classList.add("scrollable"); // Ajoute la classe uniquement si le contenu dépasse
+        }
+      });
+    }, 100);
 
     const processBranch = (branch: Branch, depth = 0): string => {
       let result = "";
@@ -354,9 +392,8 @@ class HistorySection extends HTMLComponent {
       return predicateURI;
     }
   }
-  private clearHistory() {
-    console.log("🗑️ Vider l'historique...");
 
+  private clearHistory() {
     // Récupération de l'instance du stockage local
     const storage = LocalDataStorage.getInstance();
 
@@ -368,6 +405,65 @@ class HistorySection extends HTMLComponent {
 
     console.log("✅ Historique vidé !");
   }
+
+  private getFirstVariableValue(
+    variable: VariableTerm | VariableExpression
+  ): string | null {
+    if ("value" in variable) {
+      return variable.value; // Cas d'un VariableTerm
+    } else if ("expression" in variable && "value" in variable.expression) {
+      return variable.expression.value; // Cas d'un VariableExpression
+    }
+    return null;
+  }
+
+  private getEntityType(queryJson: ISparJson): string {
+    if (
+      !queryJson ||
+      !Array.isArray(queryJson.variables) ||
+      queryJson.variables.length === 0
+    ) {
+      return "Inconnu"; // Cas où il n'y a ni variables ni branches
+    }
+
+    // 🔍 Étape 1: Récupérer la première variable sélectionnée
+    const firstVariable = this.getFirstVariableValue(
+      queryJson.variables[0] as VariableTerm | VariableExpression
+    );
+
+    if (!firstVariable) {
+      return "Inconnu"; // Si aucune variable valide n'est trouvée
+    }
+
+    // 🔍 Étape 2: Rechercher dans les branches la première correspondance entre `s` et `firstVariable`
+    const matchingBranch = queryJson.branches.find(
+      (branch) => branch.line.s === firstVariable
+    );
+
+    // 🔍 Étape 3: Vérifier aussi dans les enfants des branches si la correspondance est plus profonde
+    const deepMatchingBranch = queryJson.branches
+      .flatMap((branch) => branch.children) // Récupérer tous les enfants de niveau 1
+      .find((child) => child.line.s === firstVariable); // Vérifier si `s` correspond à la première variable
+
+    // 🔍 Étape 4: Prioriser le `sType` correspondant à la variable sélectionnée
+    if (matchingBranch?.line.sType) return matchingBranch.line.sType;
+    if (deepMatchingBranch?.line.sType) return deepMatchingBranch.line.sType;
+
+    // 🔍 Étape 5: Si aucune correspondance, prendre la première branche existante comme dernier recours
+    return queryJson.branches[0]?.line.sType || "Inconnu";
+  }
 }
 
 export default HistorySection;
+
+/*
+    const options = {
+      year: "numeric" as "numeric",
+      month: "short" as "short",
+      day: "numeric" as "numeric",
+      hour: "2-digit" as "2-digit",
+      minute: "2-digit" as "2-digit",
+      second: "2-digit" as "2-digit",
+      hour12: false,
+    };
+*/
