@@ -14,4 +14,5 @@ export class SparnaturalHistoryI18n {
     SparnaturalHistoryI18n.labels =
       SparnaturalHistoryI18n.i18nLabelsResources[lang];
   }
+  // make a methode that change the type of date on history section according to the language
 }

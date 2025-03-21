@@ -1,5 +1,5 @@
 import "datatables.net";
-import $ from "jquery";
+import $, { get } from "jquery";
 import LocalDataStorage from "../storage/LocalDataStorage";
 import HTMLComponent from "../../sparnatural/components/HtmlComponent";
 import { Branch, ISparJson } from "../../sparnatural/generators/json/ISparJson";
@@ -9,6 +9,7 @@ import { VariableExpression, VariableTerm } from "sparqljs";
 import { QueryHistory } from "./QueryHistory";
 import { SparnaturalHistoryElement } from "../../sparnaturalHistoryElement";
 import { SparnaturalHistoryI18n } from "../settings/SparnaturalHistoryI18n"; //
+import { getSettings } from "../settings/defaultSettings";
 
 class HistorySection extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
@@ -62,6 +63,11 @@ class HistorySection extends HTMLComponent {
     $(".history-overlay, #historyModal").remove();
     $("#queryHistoryTable_wrapper").remove();
 
+    // ✅ **2. Ajouter un type de tri personnalisé pour les favoris**
+    $.fn.dataTable.ext.type.order["custom-fav-pre"] = function (data: any) {
+      return $(data).find("i").hasClass("fas") ? 1 : 0;
+    };
+
     // Ajout de l'overlay
     $("body").append('<div class="history-overlay"></div>');
     $("body").addClass("history-modal-open");
@@ -99,10 +105,16 @@ class HistorySection extends HTMLComponent {
         [4, 10, 25, 50, -1],
         [4, 10, 25, 50, "All"],
       ],
-      //scrollY: "400px", // ✅ Active le scroll vertical
+
+      scrollY: "400px", // ✅ Active le scroll vertical
       scrollCollapse: true,
       destroy: true,
       autoWidth: false,
+      paging: true,
+      ordering: true,
+      order: [],
+      info: true,
+
       language: {
         search: SparnaturalHistoryI18n.labels.search,
         lengthMenu: SparnaturalHistoryI18n.labels.entriesPerPage,
@@ -112,6 +124,15 @@ class HistorySection extends HTMLComponent {
         zeroRecords: SparnaturalHistoryI18n.labels.zeroRecords,
         emptyTable: SparnaturalHistoryI18n.labels.noData,
       },
+      columnDefs: [
+        {
+          targets: 0, // ✅ Appliquer le tri personnalisé à la colonne "Favori"
+          orderable: true,
+          type: "custom-fav",
+        },
+        { orderable: false, targets: [2, 4] }, // ❌ Désactiver le tri sur "Actions"
+      ],
+
       //make only résumé searchable
       data: history
         .map((entry) => {
@@ -133,6 +154,14 @@ class HistorySection extends HTMLComponent {
           const entityStype = this.getEntityType(parsedQuery);
           const entity = this.getEntityLabel(entityStype);
 
+          let dateHist;
+          // Change date format according to the language selected fr or en in the component
+          if (getSettings().language === "fr") {
+            dateHist = new Date(entry.date).toLocaleString("fr-FR");
+          } else {
+            dateHist = new Date(entry.date).toLocaleString("en-US");
+          }
+          console.log("📅 Date:", dateHist);
           return [
             `<button class="favorite-query" data-id="${entry.id}">
               <i class="favorite-icon ${
@@ -141,9 +170,8 @@ class HistorySection extends HTMLComponent {
             </button>`,
             entity, // 🔹 Ajout de l'entité principale
             this.formatQuerySummary(parsedQuery, this.specProvider),
-            // Change date format according to the language selected fr or en
 
-            new Date(entry.date).toLocaleString("en-US"),
+            dateHist,
 
             `<button class="load-query btn-orange" data-id="${entry.id}">
               ${SparnaturalHistoryI18n.labels["loadQuery"]}
