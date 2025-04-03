@@ -60,6 +60,14 @@ class SparnaturalComponent extends HTMLComponent {
           },
         })
       );
+      // ✅ Notifie maintenant aussi l’historique !
+      document.dispatchEvent(
+        new CustomEvent("specProviderReady", {
+          detail: {
+            specProvider: this.specProvider,
+          },
+        })
+      );
     };
 
     // chain catalog loading and spec loading

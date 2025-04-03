@@ -30,14 +30,16 @@ class HistorySection extends HTMLComponent {
 
     historyElement.listenQueryUpdated();
     historyElement.listenSubmit();
+    console.log("🔍 HistorySection constructed........");
   }
 
   render(): this {
     super.render();
     let historyBtn = $(
-      `<button class="history-btn">📜 ${SparnaturalHistoryI18n.labels["historyButton"]}</button>`
+      `<button class="history-btn"><i class="fas fa-history"></i>${SparnaturalHistoryI18n.labels["historyButton"]}</button>`
     );
     historyBtn.on("click", () => this.showHistory());
+    console.log("🔍 HistorySection render........");
     this.html.append(historyBtn);
     return this;
   }
