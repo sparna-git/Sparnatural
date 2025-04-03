@@ -29,26 +29,6 @@ class SparnaturalHistoryComponent extends HTMLComponent {
         this.specProvider
       ).render();
 
-      // 📌 Déplacer .historySection après .variablesSelection une fois le rendu terminé
-      setTimeout(() => {
-        const historySection = document.querySelector(".historySection");
-        const variablesSelection = document.querySelector(
-          ".variablesSelection"
-        );
-
-        if (historySection && variablesSelection) {
-          variablesSelection.parentNode.insertBefore(
-            historySection,
-            variablesSelection.nextSibling
-          );
-          console.log("✅ .historySection déplacé après .variablesSelection");
-        } else {
-          console.log(
-            "⚠️ Impossible de déplacer .historySection : élément manquant"
-          );
-        }
-      }, 0);
-
       this.html[0].dispatchEvent(
         new CustomEvent(SparnaturalHistoryElement.EVENT_INIT, {
           bubbles: true,

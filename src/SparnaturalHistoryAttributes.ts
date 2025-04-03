@@ -4,7 +4,6 @@ export class SparnaturalHistoryAttributes {
 
   constructor(element: HTMLElement) {
     this.language = this.#read(element, "lang");
-    this.defaultLanguage = this.#read(element, "defaultLang");
   }
 
   #read(element: HTMLElement, attribute: string, asJson: boolean = false) {

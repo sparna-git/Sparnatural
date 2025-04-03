@@ -3,13 +3,11 @@ import ISettings from "./ISettings";
 
 const defaultSettings: ISettings = {
   language: "fr",
-  defaultLanguage: "fr",
 };
 
 // the actual settings, result of merge between defaultSettings and settings passed as parameters
 let settings: ISettings = {
   language: "",
-  defaultLanguage: "",
 };
 export function getSettings() {
   return settings;
@@ -54,17 +52,3 @@ const extend = (
 
   return target;
 };
-
-/*
-// tooltip configs are constant
-export const TOOLTIP_CONFIG: Partial<Props> = {
-  allowHTML: true,
-  plugins: [] as any[],
-  placement: "right-start",
-  offset: [5, 5],
-  theme: "sparnatural",
-  arrow: false,
-  delay: [800, 100], //Delay in ms once a trigger event is fired before a tippy shows or hides.
-  duration: [200, 200], //Duration in ms of the transition animation.
-};
-*/

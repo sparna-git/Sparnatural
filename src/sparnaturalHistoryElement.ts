@@ -5,10 +5,7 @@ import { ISparJson } from "./sparnatural/generators/json/ISparJson";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
 import { SparnaturalHistoryAttributes } from "./SparnaturalHistoryAttributes";
-import {
-  getSettings,
-  mergeSettings,
-} from "./sparnatural-history/settings/defaultSettings";
+import { mergeSettings } from "./sparnatural-history/settings/defaultSettings";
 
 export class SparnaturalHistoryElement extends HTMLElement {
   static HTML_ELEMENT_NAME = "sparnatural-history";

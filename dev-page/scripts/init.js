@@ -32,9 +32,7 @@ sparnatural.addEventListener("init", (event) => {
 });
 
 sparnatural.addEventListener("queryUpdated", (event) => {
-  var queryStringFromJson = sparnatural.expandSparql(
-    event.detail.queryString
-  );
+  var queryStringFromJson = sparnatural.expandSparql(event.detail.queryString);
 
   yasqe.setValue(queryStringFromJson);
 

@@ -20,5 +20,8 @@
   "zeroRecords": "No results found",
   "yes": "Yes",
   "no": "No",
-  "noData": "No data available in table"
+  "noData": "No data available in table",
+  "close": "Close",
+  "MessageExport": "Query copied to clipboard!",
+  "copyQuery": "Copy query"
 }

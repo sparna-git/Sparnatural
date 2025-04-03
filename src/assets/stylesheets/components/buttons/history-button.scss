@@ -3,33 +3,34 @@
   width: 100%;
   margin: 0 auto;
   padding: 0;
-
-  .history-btn {
-    position: absolute;
-    display: flex;
-    top: 10px;
-    right: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    z-index: 2;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
-  }
 }
+
+.history-btn {
+  position: absolute;
+  display: flex;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 2;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
 .history-btn:hover {
   background-color: #0056b3;
   transform: scale(1.05);
 }
 
 .container {
-  position: relative; // Permet de positionner les éléments enfants par rapport à ce conteneur
-  display: inline-block; // Assure que le conteneur s'adapte à la taille de son contenu
+  position: relative;
+  display: inline-block;
 }
 
 .load-query-btn {
@@ -44,92 +45,81 @@
 }
 
 .icon-btn {
-  position: absolute; // Positionne l'élément par rapport au conteneur parent
-  top: 50%; // Centre verticalement
-  left: 50%; // Centre horizontalement
-  transform: translate(-50%, -50%); // Ajuste pour centrer parfaitement
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 20px; // Ajustez selon la taille de l'icône
-}
-
-#queryHistoryTable_wrapper {
-  flex-grow: 1; // Permet au tableau de prendre l’espace disponible sans dépasser
-  overflow-y: auto;
+  font-size: 20px;
 }
 
 .history-footer {
   display: flex;
-  justify-content: space-between; // Utilisez flex-end si vous voulez tout aligner à droite
+  justify-content: space-between;
   align-items: center;
   width: 100%;
   padding: 10px;
-  box-sizing: border-box; // Assure que le padding est inclus dans la largeur totale
+  box-sizing: border-box;
 }
 
-// Pagination et contrôles en bas
 .dataTables_wrapper {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+}
 
-  .dataTables_length,
-  .dataTables_filter {
-    margin-bottom: 10px;
-  }
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+  margin-bottom: 10px;
+}
 
-  .dataTables_paginate {
-    display: flex;
-    justify-content: center;
-    margin-top: auto;
-    padding: 10px 0;
-  }
+.dataTables_wrapper .dataTables_paginate {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  padding: 10px 0;
 }
 
 .dt-layout-row {
   display: flex;
-  justify-content: space-between; // Répartit les éléments avec espace entre eux
-  align-items: center; // Alignement vertical centré
-  flex-wrap: nowrap; // Empêche le passage à la ligne
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
   padding: 10px 15px;
-  width: 100%; // Assure la prise de toute la largeur
-  box-sizing: border-box; // Inclut padding et border dans la largeur totale
+  width: 100%;
+  box-sizing: border-box;
 }
 
-/* Barre de recherche en haut à gauche */
 .dt-layout-cell.dt-layout-start .dt-search {
   flex: 1;
   text-align: left;
 }
 
 .dt-layout-cell {
-  flex: 1; // Permet aux cellules de s'étendre pour occuper l'espace disponible
-  text-align: left; // Alignement du texte à gauche
+  flex: 1;
+  text-align: left;
 }
 
-/* Nombre d'entrées par page (au centre) */
 .dt-layout-cell.dt-layout-middle {
-  //flex: 1;
-  //text-align: center;
-  flex: 0 0 auto; // Empêche cette cellule de s'étendre, garde sa taille naturelle
-  margin: 0 auto; // Centre l'élément horizontalement
-  text-align: center; // Alignement du texte au centre
+  flex: 0 0 auto;
+  margin: 0 auto;
+  text-align: center;
 }
 
-/* Pagination à droite */
 .dt-layout-cell.dt-layout-end {
-  flex: 0 0 auto; // Empêche cette cellule de s'étendre, garde sa taille naturelle
-  text-align: right; // Alignement du texte à droite
+  flex: 0 0 auto;
+  text-align: right;
 }
 
 .history-actions {
   display: flex;
-  justify-content: flex-end; // Aligne les boutons à droite
-  gap: 8px; // Ajoute un petit espace entre les boutons si nécessaire
+  justify-content: flex-end;
+  gap: 8px;
   padding: 0;
-  border-top: 1px solid #ddd; // Séparation avec le tableau
+  border-top: 1px solid #ddd;
 }
 
 .history-actions button {
@@ -139,35 +129,40 @@
   cursor: pointer;
   border: none;
   transition: background-color 0.3s ease;
+}
 
-  &.btn-orange {
-    background: orange;
-    color: white;
-    &:hover {
-      background: darkorange;
-    }
-  }
+.actions-btn button.btn-orange {
+  background: rgb(218, 141, 0);
+  color: white;
+}
 
-  &.btn-red {
-    background: #dc3545;
-    color: white;
-    &:hover {
-      background: #a71d2a;
-    }
-  }
+.actions-btn button.btn-orange:hover {
+  background: rgb(255, 140, 0);
+}
 
-  &.btn-yellow {
-    background: #ffcc00;
-    color: black;
-    &:hover {
-      background: #e6b800;
-    }
-  }
+.actions-btn button.btn-red,
+button.btn-green {
+  background: #dddddd;
+  color: black;
+}
+
+.actions-btn button.btn-red:hover,
+button.btn-green:hover {
+  background: #666666;
+  color: white;
+}
+
+.history-actions button.btn-yellow {
+  background: #ffcc00;
+  color: black;
+}
+
+.history-actions button.btn-yellow:hover {
+  background: #e6b800;
 }
 
 #closeHistory,
 #resetHistory {
-  background-color: #dc3545;
   color: white;
   padding: 10px 14px;
   border-radius: 6px;
@@ -175,17 +170,56 @@
   margin-top: 10px;
   align-self: flex-end;
   transition: background-color 0.3s ease;
+}
 
-  &:hover {
-    background-color: #a71d2a;
-  }
+#resetHistory strong {
+  transition: opacity 0.3s ease;
+}
+
+#resetHistory i {
+  transition: transform 0.3s ease;
+}
+
+/* Hover effect */
+#resetHistory:hover strong {
+  opacity: 0;
+}
+/* Hover effect */
+#resetHistory:hover strong {
+  opacity: 0;
+}
+
+#resetHistory:hover i {
+  transform: translateX(
+    -45px
+  ); /* Adjust as needed to center the icon visually */
+}
+
+/* Hover effect */
+#closeHistory:hover strong {
+  opacity: 0;
+}
+
+#closeHistory:hover i {
+  transform: translateX(
+    -19px
+  ); /* Adjust as needed to center the icon visually */
+}
+
+#closeHistory {
+  background-color: #b5b5b5;
+}
+
+#closeHistory:hover {
+  background-color: #a71d2a;
 }
 
 #resetHistory {
-  background-color: #007bff;
-  &:hover {
-    background-color: #0056b3;
-  }
+  background-color: #b5b5b5;
+}
+
+#resetHistory:hover {
+  background-color: rgb(218, 141, 0);
 }
 
 .history-overlay {
@@ -214,7 +248,6 @@
   flex-direction: column;
 }
 
-// Bloquer le scroll du body quand la modale est ouverte
 body.history-modal-open {
   overflow: hidden;
 }
@@ -228,35 +261,38 @@ body.history-modal-open {
 .history-table {
   width: 100%;
   border-collapse: collapse;
+}
 
-  th,
-  td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
+.history-table th,
+.history-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
 
-  th {
-    background-color: #f8f9fa;
-    font-weight: bold;
-  }
+.history-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
 
-  tbody tr:hover {
-    background-color: #f1f1f1;
-  }
+th {
+  cursor: pointer;
+}
 
-  // 🔹 Ajuster la largeur de la colonne JSON
-  th:nth-child(3),
-  td:nth-child(3) {
-    width: 60%;
-    word-break: break-word;
-    white-space: normal;
-    max-width: 0;
-    overflow-wrap: break-word;
-    max-height: 150px;
-    overflow-y: auto;
-    display: block;
-  }
+.history-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.history-table th:nth-child(3),
+.history-table td:nth-child(3) {
+  width: 60%;
+  word-break: break-word;
+  white-space: normal;
+  max-width: 0;
+  overflow-wrap: break-word;
+  max-height: 150px;
+  overflow-y: auto;
+  display: block;
 }
 
 .history-total-results {
@@ -264,45 +300,6 @@ body.history-modal-open {
   color: #333;
 }
 
-.history-page-size {
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-
-  select {
-    padding: 6px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-}
-
-.history-pagination {
-  display: flex;
-  gap: 5px;
-
-  button {
-    background: #007bff;
-    color: white;
-    border: none;
-    padding: 6px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-
-    &:hover {
-      background-color: #0056b3;
-    }
-
-    &.active {
-      background: #0056b3;
-      font-weight: bold;
-    }
-  }
-}
-
-// 🔹 Style des Boutons 🔹
 button {
   border: none;
   padding: 8px 14px;
@@ -310,46 +307,50 @@ button {
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
+}
 
-  &.btn-load {
-    background: #007bff;
-    color: white;
-    &:hover {
-      background: #0056b3;
-      transform: scale(1.05);
-    }
-  }
+button.btn-load {
+  background: #007bff;
+  color: white;
+}
 
-  &.btn-delete {
-    background: #dc3545;
-    color: white;
-    &:hover {
-      background: #a71d2a;
-      transform: scale(1.05);
-    }
-  }
+button.btn-load:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
 
-  &.btn-close {
-    background: #dc3545;
-    color: white;
-    font-weight: bold;
-    padding: 10px 16px;
-    &:hover {
-      background: #b02a37;
-      transform: scale(1.05);
-    }
-  }
+button.btn-delete {
+  background: #dc3545;
+  color: white;
+}
 
-  &.btn-clear {
-    background: #007bff;
-    color: white;
-    font-weight: bold;
-    padding: 10px 16px;
-    &:hover {
-      background: #0056b3;
-      transform: scale(1.05);
-    }
-  }
+button.btn-delete:hover {
+  background: #a71d2a;
+  transform: scale(1.05);
+}
+
+button.btn-close {
+  background: #dc3545;
+  color: white;
+  font-weight: bold;
+  padding: 10px 16px;
+}
+
+button.btn-close:hover {
+  background: #b02a37;
+  transform: scale(1.05);
+}
+
+button.btn-clear {
+  background: #007bff;
+  color: white;
+  font-weight: bold;
+  padding: 10px 16px;
+}
+
+button.btn-clear:hover {
+  background: #0056b3;
+  transform: scale(1.05);
 }
 
 .favorite-query {
@@ -358,43 +359,43 @@ button {
   transition: color 0.3s ease, transform 0.2s ease;
   background: none;
   border: none;
+}
 
-  i {
-    color: #b5b5b5; // ⭐ Étoile grise par défaut (non favori)
-    transition: color 0.3s ease;
-  }
+.favorite-query i {
+  color: #b5b5b5;
+  transition: color 0.3s ease;
+}
 
-  &:hover i {
-    color: #ffcc00; // 🟡 Devient jaune au survol
-    transform: scale(1.2);
-  }
+.favorite-query:hover i {
+  color: #ffcc00;
+  transform: scale(1.2);
+}
 
-  &.active i {
-    color: #ffcc00; // 🟡 Jaune si favori activé
-  }
+.favorite-query.active i {
+  color: #ffcc00;
 }
 
 .modal {
-  display: none; /* Hidden by default */
+  display: none;
   position: fixed;
-  z-index: 1001; /* Above other content */
+  z-index: 1001;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* Center the modal */
+  margin: 15% auto;
   padding: 20px;
   border: 1px solid #888;
   width: 80%;
-  max-width: 400px; /* Maximum width for the modal */
+  max-width: 400px;
   text-align: center;
-  border-radius: 8px; /* Rounded corners */
+  border-radius: 8px;
 }
 
 .modal-buttons button {
@@ -402,7 +403,7 @@ button {
   margin: 5px;
   border: none;
   cursor: pointer;
-  border-radius: 4px; /* Rounded corners for buttons */
+  border-radius: 4px;
   font-size: 16px;
 }
 
@@ -418,42 +419,56 @@ button {
 
 #confirmYes:hover,
 #confirmNo:hover {
-  opacity: 0.8; /* Slight hover effect */
+  opacity: 0.8;
 }
 
 .dt-paging {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px; /* Espace entre les éléments de pagination */
-  margin-top: 20px;
+  gap: 2px; /* Petit espace entre les éléments */
 }
 
 .dt-paging a,
 .dt-paging button {
-  background-color: #f1f1f1; /* Couleur de fond des boutons */
-  border: 1px solid #ddd; /* Bordure des boutons */
-  color: #333; /* Couleur du texte */
-  padding: 8px 12px; /* Espacement intérieur */
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  color: #333;
+  padding: 8px 14px; /* Agrandit les éléments */
   text-align: center;
   text-decoration: none;
-  font-size: 14px;
-  border-radius: 4px; /* Coins arrondis */
+  font-size: 14px; /* Agrandit la taille du texte */
+  border-radius: 0; /* Pas de bordure arrondie par défaut */
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s; /* Effet de transition */
+  transition: background-color 0.3s, color 0.3s;
+  //shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Ajoute une ombre légère */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Ajoute une ombre légère */
+}
+
+/* Ajouter un border-radius uniquement aux premiers et derniers éléments */
+.dt-paging a:first-child,
+.dt-paging button:first-child {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.dt-paging a:last-child,
+.dt-paging button:last-child {
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 .dt-paging a:hover,
 .dt-paging button:hover {
-  background-color: #ddd; /* Couleur de fond au survol */
-  color: #007bff; /* Couleur du texte au survol */
+  background-color: #ddd;
+  color: rgb(218, 141, 0);
 }
 
 .dt-paging .current {
-  background-color: #0056b3;
+  background-color: rgb(218, 141, 0);
   color: white;
-  border-color: #0056b3;
   cursor: default;
+  border-color: rgb(218, 141, 0);
 }
 
 .dt-paging .disabled {
@@ -462,8 +477,27 @@ button {
   cursor: not-allowed;
 }
 
+/* Ajouter un espace gris entre les éléments */
+.dt-paging a + a,
+.dt-paging button + button {
+  margin-left: -1px; /* Ajuste pour que les bords se touchent */
+  position: relative;
+}
+
+.dt-paging a + a::before,
+.dt-paging button + button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px; /* Largeur de l'espace gris */
+  height: 100%;
+  background-color: #ddd; /* Couleur grise */
+  z-index: -1; /* Assure que l'espace est derrière les éléments */
+}
+
 .query-summary {
-  max-height: 80px; /* Hauteur fixe */
+  max-height: 80px;
   overflow-y: auto;
   overflow-x: hidden;
   display: block;
@@ -472,30 +506,98 @@ button {
   padding-right: 5px;
 }
 
-/* ✅ Ombre correctement orientée vers le bas */
 .query-summary.has-scroll::after {
   content: "";
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 15px;
+  height: 10px;
   background: linear-gradient(
     to top,
     rgba(0, 0, 0, 0.2),
     rgba(255, 255, 255, 0)
   );
   pointer-events: none;
-  transition: opacity 0.1s ease-out;
+  //transition: opacity 0.1s ease-out;
   opacity: 1;
 }
 
-/* ❌ Cacher l'ombre quand l'utilisateur scrolle */
 .query-summary.scrolled::after {
   opacity: 0;
 }
 
 .dt-scroll {
-  max-height: 400px; /* Ajuste la hauteur max du tableau */
-  overflow-y: auto; /* Active le scroll vertical */
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.dt-scroll-sizing {
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+.dataTables_scrollHeadInner table thead {
+  visibility: hidden;
+}
+.dt-search {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espace entre les éléments */
+}
+
+.dt-input {
+  padding: 8px 12px;
+  font-size: 14px;
+  color: #333;
+  background-color: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-size: 16px; /* Agrandit la taille du texte */
+}
+
+.dt-input:focus {
+  border-color: rgb(218, 141, 0);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  outline: none;
+}
+
+.dt-input::placeholder {
+  color: #999;
+}
+
+#queryHistoryTable thead {
+  display: none;
+}
+
+.custom-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #2b2b2b;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  font-family: sans-serif;
+  font-size: 14px;
+  z-index: 9999;
+  display: none;
+}
+
+.toast-icon {
+  margin-right: 8px;
+}
+
+.date-filter-container {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: sans-serif;
+  font-size: 14px;
 }

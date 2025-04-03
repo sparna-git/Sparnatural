@@ -20,5 +20,8 @@
   "zeroRecords": "Aucun résultat trouvé",
   "yes": "Oui",
   "no": "Non",
-  "noData": "Aucune donnée disponible dans le tableau"
+  "noData": "Aucune donnée disponible dans le tableau",
+  "close": "Fermer",
+  "MessageExport": "Requête copiée dans le presse-papiers !",
+  "copyQuery": "Copier la requête"
 }
