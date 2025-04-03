@@ -9,12 +9,12 @@
   /**
  * Color of the criteria arrows (orange)
  **/
-  --primary-color-main: rgb(250, 136, 3);
+  --primary-color-main: rgba(252, 61, 14);
 
   /**
   * Color of the "unselect" buttons in criterias (dark orange)
   **/
-  --primary-color-important: rgb(182, 97, 0);
+  --primary-color-important: rgb(139, 40, 9);
 
   /**
   * Color of the bottom : folded variable selector, and of a selected value in a criteria (light orange)
@@ -29,27 +29,34 @@
   /** 
   * Color of the options arrow (optional / negation) (strong green)
   **/
-  --secondary-color-main: rgb(107, 215, 171);
+  --secondary-color-main: rgb(29, 120, 224);
 
   /** 
   * Color of the highlight of arrows
   **/
-  --secondary-color-important: rgb(2, 184, 117);
+  --secondary-color-important: rgb(21, 87, 161);
+
+  /**
+  * new
+  **/
+  --secondary-color-important-dark: rgb(15, 65, 120);
 
   /**
   * Color of the options arrow when not selected (light green)
   **/
-  --secondary-color-light: rgb(151, 227, 196);
+  --secondary-color-light: rgb(112, 177, 252);
 
   /**
   * Color of the service option enabled
   **/
-  --ternary-color-main: rgb(3, 201, 250);
+  --ternary-color-main: rgb(250, 117, 255);
 
   /**
   * Color of the hover of autocomplete selection
   **/
   --ternary-color-light: rgb(184, 211, 224);
+
+  --ternary-color-light-plus: rgb(245, 248, 254);
 
   /**
   * Color of variable d&d grip, disabled query button, disabled options
@@ -57,7 +64,7 @@
   --silver-color-main: rgb(167, 167, 167);
 
   /**
-  *
+  * 
   **/
   --silver-color-light: rgb(230, 230, 230);
 
@@ -67,10 +74,15 @@
   --default-text-color: #666;
 
   /**
+    * (white)
+    **/
+  --default-text-color-light: #fff;
+
+  /**
  * Red, Green and Blue components for the background color.
  * An alpha is added to this color at each line (0.1, 0.2, 0.3, etc.)
  **/
   --bg-red: 29;
-  --bg-green: 224;
-  --bg-blue: 153;
+  --bg-green: 120;
+  --bg-blue: 224;
 }

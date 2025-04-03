@@ -5,27 +5,18 @@
 // so that all the variables have a default value.
 // they can be overriden by importing another theme CSS in the HTML page
 @import "themes/sparnatural-theme-grass.css";
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --light: true;
-  }
-}
+@import "themes/sparnatural-theme-sea.css";
 
 sparnatural-form {
-  display: block;
-  //padding: 20px;
-  //padding: 2px;
-  // This is the same color as background of Sparnatural with default theme "grass"
-  background-color: #e8fcf5;
-  border-radius: 5px;
-  margin-bottom: 20px;
-  padding-top: 15px;
+  //display: block;
 
   .sparnatural-form-container {
+    border-radius: 5px;
+    padding-top: 15px;
     max-height: 70vh; /* Limite en hauteur */
     overflow-y: auto; /* Permet de scroller */
     position: relative;
+    background-color: rgba(var(--bg-red), var(--bg-green), var(--bg-blue), 0.1);
   }
 
   .sparnatural-form-container.scrollable + .submitSection::after {
@@ -55,7 +46,7 @@ sparnatural-form {
   .value-display-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 1px;
     margin-top: 10px;
   }
 
@@ -101,17 +92,17 @@ sparnatural-form {
     justify-content: flex-end;
     display: flex;
     padding: 4px;
-    background-color: #e8fcf5;
+    background-color: var(--primary-color-medium);
     height: max-content;
     gap: 10px;
-    border-radius: 10%;
+    border-radius: 0 0 5px 5px;
 
     .gui-split-button {
       display: inline-flex;
       border-radius: 6px;
       background: var(--secondary-color-important);
-      color: #fff;
-      fill: #fff;
+      //color: var(--default-text-color-light);
+      fill: var(--default-text-color-light);
       touch-action: manipulation;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
@@ -122,7 +113,6 @@ sparnatural-form {
       appearance: none;
       background: none;
       border: none;
-
       display: inline-flex;
       align-items: center;
       gap: 1ch;
@@ -130,21 +120,20 @@ sparnatural-form {
 
       font-family: inherit;
       font-size: inherit;
-      font-weight: 500;
+      font-weight: 550;
 
       padding-block: 1.25ch;
       padding-inline: 2.5ch;
 
-      color: #fff;
-      outline-color: #fff;
+      color: var(--default-text-color-light);
+      outline-color: var(--default-text-color-light);
       outline-offset: -5px;
 
       border-right: 1px solid hsl(220, 50%, 85%); // Couleur claire pour contraster
 
       &:is(:hover, :focus-visible) {
-        background: rgb(1, 109, 69);
-        color: hsl(220 90% 98%);
-
+        background: var(--secondary-color-important);
+        filter: brightness(80%);
         & > svg {
           stroke: currentColor;
           fill: none;
@@ -152,7 +141,7 @@ sparnatural-form {
       }
 
       &:active {
-        background: rgb(1, 109, 69);
+        background: var(--secondary-color-important);
       }
     }
 
@@ -162,7 +151,7 @@ sparnatural-form {
 
       & > svg {
         fill: none;
-        stroke: #fff;
+        stroke: var(--default-text-color-light);
       }
     }
 
@@ -178,7 +167,8 @@ sparnatural-form {
       border-end-end-radius: 6px;
 
       &:is(:hover, :focus-within) {
-        background: rgb(1, 109, 69);
+        background: var(--secondary-color-important);
+        filter: brightness(80%);
       }
 
       &:focus {
@@ -186,7 +176,7 @@ sparnatural-form {
       }
 
       &:active {
-        background: rgb(1, 109, 69);
+        background: var(--secondary-color-important);
       }
 
       &:focus-within {
@@ -250,8 +240,8 @@ sparnatural-form {
     }
 
     .gui-popup li button:hover {
-      background-color: rgb(1, 109, 69);
-      color: #fff;
+      background-color: var(--secondary-color-important);
+      color: var(--default-text-color-light);
     }
 
     .gui-split-button svg {
@@ -267,7 +257,8 @@ sparnatural-form {
       border: none;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 14px;
+      //font-size: ;
+      font-weight: 550;
       display: flex;
       align-items: center; /* Centrer verticalement le contenu */
       justify-content: center; /* Centrer horizontalement le contenu */
@@ -275,56 +266,33 @@ sparnatural-form {
       position: relative; /* Nécessaire pour le spinner */
     }
 
-    /*button[id="Search"] {
-      background-color: var(--secondary-color-important);
-      color: #000000;
-      font-size: 15px;
-      //border: 1px solid ;
-      //box-shadow: 0px 2px 3px 0px #cfcfcf;
-      transition: background-color 0.2s ease;
-    }
-    button[id="Search"]:hover {
-      color: #fff;
-      background-color: rgb(1, 109, 69);
-    }
-    
-*/
     button[id="Search"]:disabled {
       background-color: #ccc; // Bouton gris lorsqu'il est désactivé
-      color: #666;
+      color: var(--default-text-color-light);
       cursor: not-allowed;
     }
 
     button[id="Export"]:disabled {
       background-color: #ccc; // Bouton gris lorsqu'il est désactivé
-      color: #666;
+      color: var(--default-text-color);
       cursor: not-allowed;
     }
 
     button[id="Reset"] {
-      font-size: 15px;
-      background-color: #fff;
-      color: #000;
+      //font-size: 15px;--primary-color-important--default-text-color-light
+      background-color: var(--primary-color-important);
+      color: var(--default-text-color-light);
       //border: 1px solid #ddd;
       //box-shadow: 0px 2px 3px 0px #cfcfcf;
       transition: background-color 0.2s ease;
     }
     button[id="Reset"]:hover {
-      background-color: #cacaca;
+      //--silver-color-main
+      background-color: var(--primary-color-main);
+      filter: brightness(90%);
+      color: var(--silver-color-light);
     }
   }
-
-  /*.submitSection::after {
-    content: "";
-    position: absolute;
-    top: -20px; // Place l'ombre juste au-dessus de la section
-    left: 0;
-    right: 0;
-    height: 20px; // Hauteur de l'ombre
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
-    pointer-events: none; // Empêche toute interaction
-    z-index: -1; // Place l'ombre sous la section
-  }*/
 
   .option-container {
     display: flex;
@@ -345,20 +313,20 @@ sparnatural-form {
     display: inline-flex;
     align-items: center;
     padding: 5px 3px;
-    background-color: var(--primary-color-light, #ffcc99); /* Couleur ajustée */
+    background-color: var(--primary-color-light); /* Couleur ajustée */
     border-radius: 5px;
     font-size: 13px;
-    color: var(--default-text-color, #333);
-    border: 1px solid var(--primary-color-medium, #aaa);
+    color: var(--default-text-color);
+    border: 1px solid var(--primary-color-medium);
     font-weight: normal;
   }
 
   .option-pill.any-value {
-    background-color: #ffd699;
+    background-color: var(--primary-color-medium);
   }
 
   .option-pill.not-exist {
-    background-color: #ffd699;
+    background-color: var(--primary-color-medium);
   }
 
   .option-pill .unselect {
@@ -370,16 +338,12 @@ sparnatural-form {
     justify-content: center;
     width: 20px;
     height: 20px;
-    /*
-    &:hover {
-      background-color: var(--error-color, #d9534f);
-    }*/
   }
   /* Spinner */
   .spinner {
     border: 4px solid #f3f3f3; /* Couleur de fond */
     border-radius: 50%;
-    border-top: 4px solid #4caf50; /* Vert */
+    border-top: 4px solid var(--secondary-color-important); /* Couleur de la bordure supérieure */
     width: 20px;
     height: 20px;
     animation: spin 1s linear infinite;
@@ -437,8 +401,8 @@ sparnatural-form {
   }
 
   .spinner {
-    border: 3px solid #f3f3f3; /* Couleur de fond */
-    border-top: 3px solid #4caf50; /* Vert */
+    border: 3px solid var(--silver-color-light); /* Couleur de fond */
+    border-top: 3px solid var(--secondary-color-important); /* Vert */
     border-radius: 50%;
     width: 16px;
     height: 16px;

@@ -1,4 +1,3 @@
-
 /**
  Note how the theme applies to Sparnatural as well as other technical classes with absolute positioning that
  also needs to benefits from the variables.
@@ -7,72 +6,77 @@
 .SparnaturalForm,
 .select2-container--default,
 .tippy-box {
-/**
+  /**
  * Color of the criteria arrows (orange)
  **/
- --primary-color-main: rgba(252, 61, 14);
+  --primary-color-main: rgba(252, 61, 14);
 
- /**
+  /**
   * Color of the "unselect" buttons in criterias (dark orange)
   **/
---primary-color-important: rgb(139, 40, 9) ;
- 
- /**
+  --primary-color-important: rgb(139, 40, 9);
+
+  /**
   * Color of the bottom : folded variable selector, and of a selected value in a criteria (light orange)
   **/
---primary-color-medium: rgb(255, 210, 157) ;
- 
- /**
+  --primary-color-medium: rgb(255, 210, 157);
+
+  /**
   * variable selector background & tooltip background (even lighter orange)
   **/
---primary-color-light: rgb(255, 231, 203) ;
- 
- /** 
+  --primary-color-light: rgb(255, 231, 203);
+
+  /** 
   * Color of the options arrow (optional / negation) (strong green)
   **/
---secondary-color-main: rgb(29,120,224) ;
- 
- /** 
+  --secondary-color-main: rgb(29, 120, 224);
+
+  /** 
   * Color of the highlight of arrows
   **/
---secondary-color-important: rgb(21, 87, 161) ;
- 
- /**
+  --secondary-color-important: rgb(21, 87, 161);
+
+  /**
   * Color of the options arrow when not selected (light green)
   **/
---secondary-color-light: rgb(112, 177, 252) ;
- 
- /**
+  --secondary-color-light: rgb(112, 177, 252);
+
+  /**
   * Color of the service option enabled
   **/
---ternary-color-main: rgb(250, 117, 255) ;
+  --ternary-color-main: rgb(250, 117, 255);
 
-/**
+  /**
   * Color of the hover of autocomplete selection
   **/
   --ternary-color-light: rgb(184, 211, 224);
- 
- /**
+
+  /**
   * Color of variable d&d grip, disabled query button, disabled options
   **/
---silver-color-main: rgb(167,167,167) ;
- 
- /**
-  *
+  --silver-color-main: rgb(167, 167, 167);
+
+  /**
+  * 
   **/
---silver-color-light: rgb(230,230,230) ;
- 
- /**
+  --silver-color-light: rgb(230, 230, 230);
+
+  /**
   * Default text color
   **/
---default-text-color: #666 ;
+  --default-text-color: #666;
 
-/**
+  /**
+  * new
+  * (white)
+  **/
+  --default-text-color-light: #fff;
+
+  /**
  * Red, Green and Blue components for the background color.
  * An alpha is added to this color at each line (0.1, 0.2, 0.3, etc.)
  **/
---bg-red: 29 ;
---bg-green: 120 ;
---bg-blue: 224 ;
-
+  --bg-red: 29;
+  --bg-green: 120;
+  --bg-blue: 224;
 }
