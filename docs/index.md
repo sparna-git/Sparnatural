@@ -44,6 +44,7 @@ Historically, Sparnatural also supported configuration specified in OWL :
 
 - [**HTML page and Javascript integration**](Javascript-integration.md) - The reference page to understand how the `<spar-natural` web component can be integrated in your webpage
 - [YasGUI plugins integration](YasGUI-plugins-integration.md) - Read to understand how to integrate the [Sparnatural specific plugins](result-display.md) in your HTML/javascript code
+- [Sparnatural history integration](sparnatural-history.md) - how to integrate the sparnatural history component in your HTML/javascript code
 - [Customize colors](Customize-colors.md) - How to customize colors of Sparnatural
 
 **Advanced integration**
