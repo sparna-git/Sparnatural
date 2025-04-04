@@ -35,14 +35,14 @@ class DateFilterModal {
       $("body").append(this.modalElement);
     }
 
-    // ✅ Bouton "Clear"
+    // Bouton "Clear"
     $("#applyDateFilter").on("click", () => {
       $("#minDate").val("");
       $("#maxDate").val("");
       $("#queryHistoryTable").DataTable().draw();
     });
 
-    // ✅ Bouton "Annuler"
+    // Bouton "Annuler"
     $("#cancelDateFilter").on("click", () => {
       this.modalElement.hide();
     });

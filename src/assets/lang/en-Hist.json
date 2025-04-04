@@ -23,7 +23,7 @@
   "noData": "No data available in table",
   "close": "Close",
   "MessageExport": "Query copied to clipboard!",
-  "copyQuery": "Copy query",
+  "copyQuery": "Copy query (JSON).",
   "apply": "Apply",
   "cancel": "Cancel",
   "from": "From",

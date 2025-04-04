@@ -34,7 +34,7 @@ class HistorySection extends HTMLComponent {
 
     historyElement.listenQueryUpdated();
     historyElement.listenSubmit();
-    console.log("🔍 HistorySection constructed........");
+    console.log("HistorySection constructed...");
   }
 
   render(): this {
@@ -43,7 +43,7 @@ class HistorySection extends HTMLComponent {
       `<button class="history-btn"><i class="fas fa-history"></i>${SparnaturalHistoryI18n.labels["historyButton"]}</button>`
     );
     historyBtn.on("click", () => this.showHistory());
-    console.log("🔍 HistorySection render........");
+    console.log("HistorySection render...");
     this.html.append(historyBtn);
     return this;
   }
@@ -51,7 +51,7 @@ class HistorySection extends HTMLComponent {
   private async confirmAction(message: string): Promise<boolean> {
     const confirmed = await this.confirmationModal.show(message);
     if (!confirmed) {
-      console.log("❌ Action annulée par l'utilisateur.");
+      console.log("Action annulée par l'utilisateur.");
     }
     return confirmed; // Return the confirmation status
   }
@@ -61,14 +61,14 @@ class HistorySection extends HTMLComponent {
     const history = storage.getHistory();
 
     if (!Array.isArray(history)) {
-      console.error("❌ Erreur: L'historique n'est pas un tableau !");
+      console.error("Erreur: L'historique n'est pas un tableau !");
       return;
     }
 
-    // ✅ Supprimer uniquement les éléments m odaux précédents
+    // Supprimer uniquement les éléments m odaux précédents
     $(".history-overlay, #historyModal, #queryHistoryTable_wrapper").remove();
 
-    // ✅ Ajout de l'overlay et conteneur modal
+    // Ajout de l'overlay et conteneur modal
     $("body").append('<div class="history-overlay"></div>');
     $("body").addClass("history-modal-open");
 
@@ -93,7 +93,7 @@ class HistorySection extends HTMLComponent {
       </div>`;
     $("body").append(modalHtml);
 
-    // ✅ Tri personnalisé pour les favoris
+    // Tri personnalisé pour les favoris
     $.fn.dataTable.ext.type.order["custom-fav-pre"] = function (data: any) {
       return $(data).find("i").hasClass("fas") ? 1 : 0;
     };
@@ -255,7 +255,7 @@ class HistorySection extends HTMLComponent {
               })
               .catch((err) => {
                 console.error("Erreur lors de la copie :", err);
-                this.showToast("❌ Échec de la copie", 4000);
+                this.showToast("Échec de la copie", 4000);
               });
           });
 
@@ -298,7 +298,7 @@ class HistorySection extends HTMLComponent {
 
     this.initializeFavorites();
 
-    // ✅ Supprime le thead dupliqué dans la table interne scrollable (zone .dt-scroll-body)
+    // Supprime le thead dupliqué dans la table interne scrollable (zone .dt-scroll-body)
     $("#queryHistoryTable").find(".dt-scroll-body thead").remove();
   }
 
@@ -327,7 +327,7 @@ class HistorySection extends HTMLComponent {
 
     const selectedEntry = history.find((q: QueryHistory) => q.id === id);
     if (!selectedEntry) {
-      console.error("❌ Query not found in history.");
+      console.error("Query not found in history.");
       return;
     }
 
@@ -338,22 +338,25 @@ class HistorySection extends HTMLComponent {
           ? JSON.parse(selectedEntry.queryJson)
           : selectedEntry.queryJson;
     } catch (error) {
-      console.error("❌ Failed to parse query JSON:", error);
+      console.error("Failed to parse query JSON:", error);
       return;
     }
 
-    console.log("🔄 Loading query:", parsedQuery);
+    console.log("Loading query:", parsedQuery);
 
-    // ✅ Récupérer `sparnatural-history` et charger la requête
+    // Récupérer `sparnatural-history` et charger la requête
     const historyElement = document.querySelector(
       "sparnatural-history"
     ) as SparnaturalHistoryElement;
 
     if (historyElement) {
-      console.log("SparnaturalHistoryElement trouvé, chargement...");
       historyElement.loadQuery(parsedQuery);
+
+      // Fermer la fenêtre de l'historique après chargement
+      $("#historyModal, .history-overlay").remove();
+      $("body").removeClass("history-modal-open");
     } else {
-      console.error("❌ SparnaturalHistoryElement non trouvé !");
+      console.error("SparnaturalHistoryElement non trouvé !");
     }
   }
 
@@ -500,7 +503,7 @@ class HistorySection extends HTMLComponent {
     // Rafraîchir l'affichage de l'historique
     this.showHistory();
 
-    console.log("✅ Historique vidé !");
+    console.log("Historique vidé !");
   }
 
   private getFirstVariableValue(

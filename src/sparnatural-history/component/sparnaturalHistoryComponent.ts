@@ -17,7 +17,7 @@ class SparnaturalHistoryComponent extends HTMLComponent {
 
   render(): this {
     this.#initLang();
-    console.log("🔍 Rendering SparnaturalHistoryComponent...");
+    console.log("Rendering SparnaturalHistoryComponent...");
 
     document.addEventListener("specProviderReady", (event) => {
       console.log("specProviderReady event received");
