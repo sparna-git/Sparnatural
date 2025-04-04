@@ -141,10 +141,7 @@ class SparnaturalFormComponent extends HTMLComponent {
             fieldGenerator.generateField();
           });
 
-          // Détection du nombre de champs pour rendre la section sticky
-          if (formConfig.bindings.length > 10) {
-            this.makeFormScrollable();
-          }
+          this.makeFormScrollable();
 
           // Ajouter les boutons Reset/Search sans ID
           if (this.settings.submitButton) {
