@@ -23,5 +23,10 @@
   "noData": "Aucune donnée disponible dans le tableau",
   "close": "Fermer",
   "MessageExport": "Requête copiée dans le presse-papiers !",
-  "copyQuery": "Copier la requête"
+  "copyQuery": "Copier la requête",
+  "apply": "Appliquer",
+  "cancel": "Annuler",
+  "from": "De",
+  "to": "À",
+  "dateFilterTitle": "Filtre de date"
 }

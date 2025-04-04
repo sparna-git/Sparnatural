@@ -33,28 +33,6 @@
   display: inline-block;
 }
 
-.load-query-btn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.icon-btn {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-}
-
 .history-footer {
   display: flex;
   justify-content: space-between;
@@ -64,25 +42,7 @@
   box-sizing: border-box;
 }
 
-.dataTables_wrapper {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-}
-
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter {
-  margin-bottom: 10px;
-}
-
-.dataTables_wrapper .dataTables_paginate {
-  display: flex;
-  justify-content: center;
-  margin-top: auto;
-  padding: 10px 0;
-}
-
+// mise en page des elements de l'historique
 .dt-layout-row {
   display: flex;
   justify-content: space-between;
@@ -113,6 +73,8 @@
   flex: 0 0 auto;
   text-align: right;
 }
+
+//----------------------------------------------------
 
 .history-actions {
   display: flex;
@@ -300,57 +262,13 @@ th {
   color: #333;
 }
 
-button {
+.actions-btn button {
   border: none;
   padding: 8px 14px;
   border-radius: 6px;
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-}
-
-button.btn-load {
-  background: #007bff;
-  color: white;
-}
-
-button.btn-load:hover {
-  background: #0056b3;
-  transform: scale(1.05);
-}
-
-button.btn-delete {
-  background: #dc3545;
-  color: white;
-}
-
-button.btn-delete:hover {
-  background: #a71d2a;
-  transform: scale(1.05);
-}
-
-button.btn-close {
-  background: #dc3545;
-  color: white;
-  font-weight: bold;
-  padding: 10px 16px;
-}
-
-button.btn-close:hover {
-  background: #b02a37;
-  transform: scale(1.05);
-}
-
-button.btn-clear {
-  background: #007bff;
-  color: white;
-  font-weight: bold;
-  padding: 10px 16px;
-}
-
-button.btn-clear:hover {
-  background: #0056b3;
-  transform: scale(1.05);
 }
 
 .favorite-query {
@@ -408,12 +326,11 @@ button.btn-clear:hover {
 }
 
 #confirmYes {
-  background-color: #007bff;
-  color: white;
+  color: black;
 }
 
 #confirmNo {
-  background-color: #dc3545;
+  background-color: #a71d2a;
   color: white;
 }
 
@@ -540,6 +457,7 @@ button.btn-clear:hover {
 .dataTables_scrollHeadInner table thead {
   visibility: hidden;
 }
+
 .dt-search {
   display: flex;
   align-items: center;
@@ -547,7 +465,7 @@ button.btn-clear:hover {
 }
 
 .dt-input {
-  padding: 8px 12px;
+  padding: 4px 6px;
   font-size: 14px;
   color: #333;
   background-color: #f1f1f1;
@@ -593,11 +511,49 @@ button.btn-clear:hover {
   margin-right: 8px;
 }
 
-.date-filter-container {
-  margin-bottom: 10px;
+.dt-layout-cell.dt-layout-start {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-family: sans-serif;
-  font-size: 14px;
+  gap: 30px;
+}
+
+.dt-length {
+  order: 0;
+}
+
+.date-filter-container {
+  order: 1;
+}
+
+#openDateFilter {
+  background-color: #b5b5b5;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  transition: all 0.3s ease;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+input[type="date"] {
+  background-color: #da8d00;
+  font-family: "Roboto Mono", monospace;
+  padding: 5px;
+  color: #ffffff;
+  font-size: 15px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+}
+::-webkit-calendar-picker-indicator {
+  background-color: #ffffff;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 3px;
 }

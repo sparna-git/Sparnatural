@@ -10,18 +10,22 @@ import { QueryHistory } from "./QueryHistory";
 import { SparnaturalHistoryElement } from "../../sparnaturalHistoryElement";
 import { SparnaturalHistoryI18n } from "../settings/SparnaturalHistoryI18n"; //
 import { getSettings } from "../settings/defaultSettings";
+import DateFilterModal from "./DateFilter";
 
 class HistorySection extends HTMLComponent {
   specProvider: ISparnaturalSpecification;
   private confirmationModal: ConfirmationModal;
+  private dateFilterModal: DateFilterModal;
 
   constructor(
     ParentComponent: HTMLComponent,
-    specProvider: ISparnaturalSpecification
+    specProvider: ISparnaturalSpecification,
+    dateFilterModal?: DateFilterModal
   ) {
     super("historySection", ParentComponent, null);
     this.specProvider = specProvider;
     this.confirmationModal = new ConfirmationModal();
+    this.dateFilterModal = dateFilterModal || new DateFilterModal();
 
     const historyElement = document.querySelector(
       "sparnatural-history"
@@ -71,12 +75,7 @@ class HistorySection extends HTMLComponent {
     let modalHtml = `
       <div id="historyModal" class="history-modal">
         <div class="table-container">
-            <div class="date-filter-container">
-              <label for="minDate">Du : </label>
-              <input type="date" id="minDate">
-              <label for="maxDate">au :</label>
-              <input type="date" id="maxDate">
-        </div>
+            
           <table id="queryHistoryTable" class="display">
             <tbody></tbody>
           </table>
@@ -263,6 +262,20 @@ class HistorySection extends HTMLComponent {
         this.initializeFavorites();
       },
     });
+    const layoutRow = $("#queryHistoryTable_wrapper .dt-layout-row").first(); // première ligne
+
+    const dateIconCell = $(`
+  <div class="dt-layout-cell" style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;">
+    <div style="width: 10px;"></div> <!-- petit espace -->
+    <button id="openDateFilter" class="btn-yellow">
+      <i class="fas fa-calendar-alt"></i>
+    </button>
+  </div>
+`);
+
+    layoutRow.append(dateIconCell);
+
+    $("#openDateFilter").on("click", () => this.dateFilterModal.open());
 
     $("#resetHistory").on("click", async () => {
       const confirmed = await this.confirmAction(
@@ -537,186 +550,4 @@ class HistorySection extends HTMLComponent {
     return queryJson.branches[0]?.line.sType || "Inconnu";
   }
 }
-
 export default HistorySection;
-
-/*
-    const options = {
-      year: "numeric" as "numeric",
-      month: "short" as "short",
-      day: "numeric" as "numeric",
-      hour: "2-digit" as "2-digit",
-      minute: "2-digit" as "2-digit",
-      second: "2-digit" as "2-digit",
-      hour12: false,
-    };
-
-
-
-    showHistory1() {
-    const storage = LocalDataStorage.getInstance();
-    const history = storage.getHistory();
-
-    if (!Array.isArray(history)) {
-      console.error("❌ Erreur: L'historique n'est pas un tableau !");
-      return;
-    }
-
-    // Supprimer proprement la modale et DataTables AVANT de recréer
-    $(".history-overlay, #historyModal").remove();
-    $("#queryHistoryTable_wrapper").remove();
-
-    // ✅ **1. Vérifier et détruire proprement l'ancienne instance DataTable**
-    if ($.fn.DataTable.isDataTable("#queryHistoryTable")) {
-      $("#queryHistoryTable").DataTable().clear().destroy();
-    }
-    $("#queryHistoryTable").empty(); // Supprime l'ancien contenu
-    //$("#queryHistoryTable thead").remove(); // Supprime le header dupliqué
-
-    // ✅ **2. Ajouter un type de tri personnalisé pour les favoris**
-    $.fn.dataTable.ext.type.order["custom-fav-pre"] = function (data: any) {
-      return $(data).find("i").hasClass("fas") ? 1 : 0;
-    };
-
-    // Ajout de l'overlay
-    $("body").append('<div class="history-overlay"></div>');
-    $("body").addClass("history-modal-open");
-
-    // Création propre de la table
-    let modalHtml = `
-      <div id="historyModal" class="history-modal">
-        <div class="table-container">
-          <table id="queryHistoryTable" class="display">
-            <tbody></tbody>
-          </table>
-        </div>
-        <div class="history-actions">
-          <button id="resetHistory">
-            <strong>${SparnaturalHistoryI18n.labels["clearHistory"]}</strong>
-            <i class="fas fa-eraser"></i>
-          </button>
-        </div>
-      </div>`;
-    $("body").append(modalHtml);
-
-    $("#queryHistoryTable").DataTable({
-      destroy: true,
-      pageLength: 4,
-      lengthMenu: [
-        [4, 10, 25, 50, -1],
-        [4, 10, 25, 50, "All"],
-      ],
-      scrollY: "400px",
-      scrollCollapse: true,
-      autoWidth: false,
-      ordering: true,
-      order: [],
-      info: true,
-      language: {
-        search: SparnaturalHistoryI18n.labels.search,
-        lengthMenu: SparnaturalHistoryI18n.labels.entriesPerPage,
-        info: SparnaturalHistoryI18n.labels.showingEntries,
-        infoEmpty: SparnaturalHistoryI18n.labels.infoEmpty,
-        infoFiltered: SparnaturalHistoryI18n.labels.infoFiltered,
-        zeroRecords: SparnaturalHistoryI18n.labels.zeroRecords,
-        emptyTable: SparnaturalHistoryI18n.labels.noData,
-      },
-
-      columnDefs: [
-        { targets: 0, orderable: true, type: "custom-fav" },
-        { orderable: false, targets: [2, 4] },
-      ],
-
-      data: history
-        .map((entry) => {
-          let parsedQuery;
-          try {
-            parsedQuery =
-              typeof entry.queryJson === "string"
-                ? JSON.parse(entry.queryJson)
-                : entry.queryJson;
-          } catch (error) {
-            return null;
-          }
-
-          const entityStype = this.getEntityType(parsedQuery);
-          const entity = this.getEntityLabel(entityStype);
-
-          let dateHist = new Date(entry.date).toLocaleString(
-            getSettings().language === "fr" ? "fr-FR" : "en-US"
-          );
-
-          return [
-            `<button class="favorite-query" data-id="${entry.id}">
-              <i class="favorite-icon ${
-                entry.isFavorite ? "fas" : "far"
-              } fa-star"></i>
-            </button>`,
-            entity,
-            this.formatQuerySummary(parsedQuery, this.specProvider),
-            dateHist,
-            `<button class="load-query btn-orange" data-id="${entry.id}">
-              ${SparnaturalHistoryI18n.labels["loadQuery"]}
-            </button>
-            <button class="delete-query btn-red" data-id="${entry.id}">
-              <i class="fas fa-trash"></i>
-            </button>`,
-          ];
-        })
-        .filter((row) => row !== null),
-
-      columns: [
-        { title: SparnaturalHistoryI18n.labels["favorite"], searchable: false },
-        { title: SparnaturalHistoryI18n.labels["entity"], searchable: false },
-        { title: SparnaturalHistoryI18n.labels["summary"] },
-        { title: SparnaturalHistoryI18n.labels["date"], searchable: false },
-        {
-          title: SparnaturalHistoryI18n.labels["actions"],
-          searchable: false,
-          orderable: false,
-        },
-      ],
-
-      drawCallback: () => {
-        this.enableQuerySummaryScrollEffect();
-        $(".delete-query")
-          .off("click")
-          .on("click", async (event) => {
-            const id = $(event.currentTarget).data("id");
-            const confirmed = await this.confirmAction(
-              SparnaturalHistoryI18n.labels["confirmDelRequest"]
-            );
-            if (confirmed) {
-              storage.deleteQuery(id);
-              this.showHistory();
-            }
-          });
-
-        $(".load-query")
-          .off("click")
-          .on("click", (event) => this.loadQuery(event));
-        $(".favorite-query")
-          .off("click")
-          .on("click", (event) => this.makeFavorite(event));
-        this.initializeFavorites();
-      },
-    });
-
-    $("#resetHistory").on("click", async () => {
-      const confirmed = await this.confirmAction(
-        SparnaturalHistoryI18n.labels["confirmClearHistory"]
-      );
-      if (confirmed) {
-        this.clearHistory();
-      }
-    });
-
-    $("#closeHistory, .history-overlay").on("click", () => {
-      $("#historyModal, .history-overlay").remove();
-      $("body").removeClass("history-modal-open");
-    });
-    document.querySelectorAll("#queryHistoryTable thead").length;
-
-    this.initializeFavorites();
-  }
-*/
