@@ -24,7 +24,7 @@ class CleanQuery {
     return form.bindings.map((binding: Binding) => binding.variable);
   }
 
-  //metthods to clean the querytouse
+  //methods to clean the querytouse
   cleanQueryToUse(resultType: "onscreen" | "export"): ISparJson {
     // deep copy of the initial query
     let cleanQueryResult: ISparJson = JSON.parse(JSON.stringify(this.query));

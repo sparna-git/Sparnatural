@@ -1,4 +1,4 @@
-import { BgpPattern, BindPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableExpression, VariableTerm, Wildcard } from "sparqljs";
+import { AggregateExpression, BgpPattern, BindPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableExpression, VariableTerm, Wildcard } from "sparqljs";
 import { Literal, Variable, NamedNode } from "@rdfjs/types";
 import {  Parser as SparqlParser } from "sparqljs";
 import { DataFactory } from 'rdf-data-factory';
@@ -19,15 +19,22 @@ export default class SparqlFactory {
     aggregatedVar:Variable,
     asVar:Variable
   ):VariableExpression {
-    return {
-      expression: {
+    var aggregateExpression:AggregateExpression = {
         type: "aggregate",
         aggregation: aggregation,
         // always use a DISTINCT, so that we don't count duplicated results
         // e.g. same result in different named graphs
         distinct: true,
         expression: aggregatedVar
-      },
+    }
+
+    // group_concat will always use ";" as separator
+    if(aggregation === "group_concat") {
+      aggregateExpression.separator = ";";
+    }  
+
+    return {
+      expression: aggregateExpression,
       variable : asVar
     }
   }
