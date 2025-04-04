@@ -11,7 +11,7 @@ WHERE {
     ?domain $type $domain .
     ?domain $property ?value .
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500
 `
 );
@@ -38,7 +38,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY DESC(?count) UCASE(?label)
+ORDER BY DESC(?count) UCASE(STR(?label))
 `
 );
 
@@ -64,7 +64,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 `
 );
 
@@ -77,7 +77,7 @@ WHERE {
     ?domain $property ?uri .
     FILTER(isIRI(?uri))
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500
 `
 );
@@ -138,7 +138,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
       }
       # Note how the range criteria is not used in this query
   }
-  ORDER BY UCASE(?label)
+  ORDER BY UCASE(STR(?label))
   LIMIT 500
 `
 );
@@ -184,7 +184,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
     GROUP BY ?value
   }
   }
-  ORDER BY UCASE(?label)
+  ORDER BY UCASE(STR(?label))
   LIMIT 500
 `
 );
@@ -230,7 +230,7 @@ QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
     GROUP BY ?value
   }
   }
-  ORDER BY DESC(?count) UCASE(?label)
+  ORDER BY DESC(?count) UCASE(STR(?label))
   LIMIT 500
 `
 );
@@ -246,7 +246,7 @@ WHERE {
     FILTER(lang(?label) = "" || lang(?label) = $lang)
     FILTER(isIRI(?uri))
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500
 `
 );
@@ -275,7 +275,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY DESC(?count) UCASE(?label)
+ORDER BY DESC(?count) UCASE(STR(?label))
 `
 );
 
@@ -303,7 +303,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 `
 );
 
@@ -319,7 +319,7 @@ WHERE {
     FILTER(isIRI(?uri))
     FILTER(lang(?label) = "" || lang(?label) = $lang)
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500
 `
 );
@@ -349,7 +349,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY DESC(?count) UCASE(?label)
+ORDER BY DESC(?count) UCASE(STR(?label))
 `
 );
 
@@ -380,7 +380,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 `
 );
 
@@ -397,7 +397,7 @@ WHERE {
   FILTER(lang(?label) = '' || lang(?label) = $lang)
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE("$key"))) 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15
 `
 );
@@ -414,8 +414,9 @@ WHERE {
   FILTER(isIRI(?uri))
   FILTER(lang(?label) = '' || lang(?label) = $lang)
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE("$key"))) 
+  BIND( IF( STRSTARTS(LCASE(STR(?label)), LCASE("$key")),0,9 ) AS ?starts )
 } 
-ORDER BY UCASE(?label)
+ORDER BY ?starts UCASE(STR(?label))
 LIMIT 15
 `
 );
@@ -434,7 +435,7 @@ SELECT DISTINCT ?uri ?label
   FILTER(lang(?label) = '' || lang(?label) = $lang )
   ?label bif:contains "'$key'" . 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15
 `
 );
@@ -451,7 +452,7 @@ WHERE {
   BIND(STR(?uri) AS ?label)
   FILTER(CONTAINS(LCASE(?label), LCASE("$key"))) 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15
 `
 );
@@ -467,7 +468,7 @@ WHERE {
   BIND(STR(?value) AS ?label)
   FILTER(CONTAINS(LCASE(STR(?value)), LCASE("$key"))) 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15
 `
 );
@@ -483,7 +484,7 @@ WHERE {
   BIND(STR(?value) AS ?label)
   FILTER(STRSTARTS(LCASE(STR(?value)), LCASE("$key"))) 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15
 `
 );
@@ -504,7 +505,7 @@ WHERE {
   }
   BIND(IF(bound(?children),true,false) AS ?hasChildren)
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 `
 );
 
@@ -542,7 +543,7 @@ WHERE {
   GROUP BY ?uri ?theLabel ?hasChildren
   }
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 `
 );
 
@@ -563,7 +564,7 @@ WHERE {
   }
   BIND(IF(bound(?children),true,false) AS ?hasChildren)
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 `
 );
 
@@ -600,7 +601,7 @@ WHERE {
   GROUP BY ?uri ?theLabel ?hasChildren
   }
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 `
 );
 
@@ -1033,7 +1034,7 @@ WHERE {
   }
   BIND(IF(bound(?children),true,false) AS ?hasChildren)
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 `,
   }
 );
@@ -1071,7 +1072,7 @@ WHERE {
     }
     GROUP BY ?uri ?theLabel ?hasChildren
   }
-} ORDER BY UCASE(?label)
+} ORDER BY UCASE(STR(?label))
 `,
   }
 );

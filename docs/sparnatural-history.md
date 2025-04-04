@@ -22,7 +22,7 @@ Sparnatural history is inserted ...
 | `endpoint` | The URL of a SPARQL endpoint that will be used as the default service for the datasource queries provided in the configuration. If not specified, each datasource should indicate explicitely a SPARQL endpoint. Note that this URL can use the `default-graph-uri` parameter to restrict the query to a specified named graph, as per [SPARQL protocol specification](https://www.w3.org/TR/2013/REC-sparql11-protocol-20130321/#dataset), e.g. `http://ex.com/sparql?default-graph-uri=http%3A%2F%2Fencoded-named-graph-uri`. This can also contain **multiple** endpoint URLs in combination with the `catalog` attribute (see "[querying multiple endpoints](Querying-multiple-endpoints.md)") | `undefined` | Mandatory except for advanced use-cases. |
 
 
-## Sparnatural history events events
+## Sparnatural history events
 
 ...
 

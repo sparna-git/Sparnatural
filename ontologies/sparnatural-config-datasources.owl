@@ -548,7 +548,7 @@ WHERE {
     FILTER(isIRI(?uri))
     # Note how the range criteria is not used in this query
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -571,7 +571,7 @@ WHERE {
   GROUP BY ?uri
 }
 }
-ORDER BY DESC(?count) UCASE(?label)
+ORDER BY DESC(?count) UCASE(STR(?label))
 LIMIT 500</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -614,7 +614,7 @@ WHERE {
     }
     # Note how the range criteria is not used in this query
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -662,7 +662,7 @@ WHERE {
   GROUP BY ?value
 }
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -710,7 +710,7 @@ WHERE {
   GROUP BY ?value
 }
 }
-ORDER BY DESC(?count) UCASE(?label)
+ORDER BY DESC(?count) UCASE(STR(?label))
 LIMIT 500</sparnatural-config-datasources:queryString>
         <sparnatural-config-datasources:noSort rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</sparnatural-config-datasources:noSort>
     </owl:NamedIndividual>
@@ -730,7 +730,7 @@ WHERE {
     FILTER(isIRI(?uri))
     FILTER(lang(?label) = &quot;&quot; || lang(?label) = $lang)
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -761,7 +761,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -791,7 +791,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY DESC(?count) UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY DESC(?count) UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -810,7 +810,7 @@ WHERE {
     FILTER(isIRI(?uri))
     FILTER(lang(?label) = &quot;&quot; || lang(?label) = $lang)
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -843,7 +843,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -874,7 +874,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY DESC(?count) UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY DESC(?count) UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -888,7 +888,7 @@ WHERE {
     ?domain $type $domain .
     ?domain $property ?value .
 }
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 500</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -917,7 +917,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -945,7 +945,7 @@ WHERE {
   LIMIT 500
   }
 }
-ORDER BY DESC(?count) UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY DESC(?count) UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -963,7 +963,7 @@ WHERE {
   BIND(STR(?uri) AS ?label)
   FILTER(CONTAINS(LCASE(?label), LCASE(&quot;$key&quot;))) 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -985,7 +985,7 @@ SELECT DISTINCT ?uri ?label
   # Note the single quote to handle space character
   ?label bif:contains &quot;&apos;$key&apos;&quot; . 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -1004,8 +1004,9 @@ WHERE {
   FILTER(isIRI(?uri))
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
   FILTER(CONTAINS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
+  BIND( IF( STRSTARTS(LCASE(STR(?label)), LCASE(&quot;$key&quot;)),0,9 ) AS ?starts )
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -1025,7 +1026,7 @@ WHERE {
   FILTER(lang(?label) = &apos;&apos; || lang(?label) = $lang)
   FILTER(STRSTARTS(LCASE(STR(?label)), LCASE(&quot;$key&quot;))) 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -1043,7 +1044,7 @@ WHERE {
   BIND(STR(?value) AS ?label)
   FILTER(CONTAINS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -1061,7 +1062,7 @@ WHERE {
   BIND(STR(?value) AS ?label)
   FILTER(STRSTARTS(LCASE(STR(?value)), LCASE(&quot;$key&quot;))) 
 } 
-ORDER BY UCASE(?label)
+ORDER BY UCASE(STR(?label))
 LIMIT 15</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
@@ -1083,7 +1084,7 @@ WHERE {
   }
   BIND(IF(bound(?children),true,false) AS ?hasChildren)
 }
-ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1121,7 +1122,7 @@ WHERE {
   GROUP BY ?uri ?theLabel ?hasChildren
   }
 }
-ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1144,7 +1145,7 @@ WHERE {
   }
   BIND(IF(bound(?children),true,false) AS ?hasChildren)
 }
-ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1183,7 +1184,7 @@ WHERE {
   GROUP BY ?uri ?theLabel ?hasChildren
   }
 } 
-ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1419,7 +1420,7 @@ WHERE {
   }
   BIND(IF(bound(?children),true,false) AS ?hasChildren)
 }
-ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+ORDER BY UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
@@ -1457,7 +1458,7 @@ WHERE {
     }
     GROUP BY ?uri ?theLabel ?hasChildren
   }
-} ORDER BY UCASE(?label)</sparnatural-config-datasources:queryString>
+} ORDER BY UCASE(STR(?label))</sparnatural-config-datasources:queryString>
     </owl:NamedIndividual>
     
 
