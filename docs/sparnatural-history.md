@@ -48,14 +48,6 @@ document.dispatchEvent(new CustomEvent("submit"));
 | ---------------------- | ----------------------------------------------------------------------- | ------------------------------ |
 | `loadQuery(queryJson)` | Loads a query from the history into the main `<spar-natural>` component | `queryJson` (ISparJson object) |
 
-## Sparnatural history element API
-
-The table below summarizes the various functions that can be called on the Sparnatural history element.
-
-| Function                      | Description                                                                   | Parameters |
-| ----------------------------- | ----------------------------------------------------------------------------- | ---------- |
-| `sparnatural.enablePlayBtn()` | Removes the loading from the play button once a query has finished executing. | none       |
-
 ## Internal Components
 
 ### `SparnaturalHistoryComponent`
