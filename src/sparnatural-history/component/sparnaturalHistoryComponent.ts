@@ -31,7 +31,7 @@ class SparnaturalHistoryComponent extends HTMLComponent {
 
     // Avoid initializing twice
     if (!this.historySection) {
-      this.historySection = new HistorySection(this, sp).render();
+      this.historySection = new HistorySection(this, sp || null).render();
 
       // Dispatch INIT event to signal other components
       this.html[0].dispatchEvent(

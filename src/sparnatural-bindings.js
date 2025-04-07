@@ -35,24 +35,24 @@ bindSparnaturalWithYasrPlugins = function (sparnatural, yasr) {
  * - On sparnatural `submit` event : dispatches custom submit event to trigger query saving
  */
 bindSparnaturalWithHistory = function (sparnatural) {
-  sparnatural.addEventListener("init", (event) => {
-    const specProvider = sparnatural.sparnatural.specProvider;
+  sparnatural.addEventListener("init", () => {
+    const specProvider = sparnatural?.sparnatural?.specProvider;
+    const historyElement = document.querySelector("sparnatural-history");
 
-    const sparnaturalHistoryElement = document.querySelector(
-      "sparnatural-history"
-    );
     if (
-      sparnaturalHistoryElement &&
-      sparnaturalHistoryElement.sparnaturalHistory &&
-      typeof sparnaturalHistoryElement.sparnaturalHistory.setSpecProvider ===
-        "function"
+      historyElement?.sparnaturalHistory &&
+      typeof historyElement.sparnaturalHistory.setSpecProvider === "function"
     ) {
-      sparnaturalHistoryElement.sparnaturalHistory.setSpecProvider(
-        specProvider
-      );
-      console.log("SpecProvider injected into sparnatural-history");
+      if (specProvider) {
+        historyElement.sparnaturalHistory.setSpecProvider(specProvider);
+        console.log("SpecProvider injected into sparnatural-history");
+      } else {
+        console.log(
+          "SpecProvider not available, history will use fallback labels"
+        );
+      }
     } else {
-      console.warn("sparnatural-history not ready or setSpecProvider missing");
+      console.warn("sparnatural-history not ready or missing setSpecProvider");
     }
   });
 

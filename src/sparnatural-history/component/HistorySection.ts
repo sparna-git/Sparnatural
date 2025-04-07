@@ -19,11 +19,11 @@ class HistorySection extends HTMLComponent {
 
   constructor(
     ParentComponent: HTMLComponent,
-    specProvider: ISparnaturalSpecification,
+    specProvider?: ISparnaturalSpecification,
     dateFilterModal?: DateFilterModal
   ) {
     super("historySection", ParentComponent, null);
-    this.specProvider = specProvider;
+    this.specProvider = specProvider || null;
     this.confirmationModal = new ConfirmationModal();
     this.dateFilterModal = dateFilterModal || new DateFilterModal();
 
@@ -424,7 +424,7 @@ class HistorySection extends HTMLComponent {
 
   private formatQuerySummary(
     queryJson: ISparJson,
-    specProvider: ISparnaturalSpecification
+    specProvider?: ISparnaturalSpecification
   ): string {
     let summary = `<div class="query-summary">`;
 
@@ -446,17 +446,17 @@ class HistorySection extends HTMLComponent {
 
       const startLabel =
         branch.line.sType &&
-        (specProvider.getEntity(branch.line.sType)?.getLabel() ||
+        (specProvider?.getEntity(branch.line.sType)?.getLabel() ||
           extractLastSegment(branch.line.p));
       console.log(extractLastSegment(branch.line.p));
       const propLabel =
         branch.line.p &&
-        (specProvider.getProperty(branch.line.p)?.getLabel() ||
+        (specProvider?.getProperty(branch.line.p)?.getLabel() ||
           extractLastSegment(branch.line.p));
 
       const endLabel =
         branch.line.oType &&
-        (specProvider.getEntity(branch.line.oType)?.getLabel() ||
+        (specProvider?.getEntity(branch.line.oType)?.getLabel() ||
           extractLastSegment(branch.line.oType));
 
       let line = `${indentation}<strong>${startLabel}</strong> → ${propLabel} → <strong>${endLabel}</strong>`;
