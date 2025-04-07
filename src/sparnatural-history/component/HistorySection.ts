@@ -40,7 +40,7 @@ class HistorySection extends HTMLComponent {
   render(): this {
     super.render();
     let historyBtn = $(
-      `<button class="history-btn"><i class="fas fa-history"></i> <span> ${SparnaturalHistoryI18n.labels["historyButton"]}</span></button>`
+      `<button class="history-btn"><span>${SparnaturalHistoryI18n.labels["historyButton"]} </span><i class="fas fa-history"></i></button>`
     );
     historyBtn.on("click", () => this.showHistory());
     console.log("HistorySection render...");

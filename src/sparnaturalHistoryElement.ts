@@ -28,6 +28,10 @@ export class SparnaturalHistoryElement extends HTMLElement {
   connectedCallback() {
     console.log("SparnaturalHistoryElement connected to the DOM");
     this.display();
+
+    // Ajouter l’écoute automatique des événements
+    this.listenQueryUpdated();
+    this.listenSubmit();
   }
 
   display() {

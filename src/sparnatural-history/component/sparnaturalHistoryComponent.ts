@@ -18,33 +18,39 @@ class SparnaturalHistoryComponent extends HTMLComponent {
   render(): this {
     this.#initLang();
     console.log("Rendering SparnaturalHistoryComponent...");
+    return this;
+  }
 
-    document.addEventListener("specProviderReady", (event) => {
-      console.log("specProviderReady event received");
-      const customEvent = event as CustomEvent;
-      this.specProvider = customEvent.detail.specProvider;
-      console.log("specProvider set:", this.specProvider);
-      this.historySection = new HistorySection(
-        this,
-        this.specProvider
-      ).render();
+  /**
+   * Sets the specification provider and initializes the history section.
+   * Should be called externally (e.g., in plugin binding code).
+   */
+  public setSpecProvider(sp: ISparnaturalSpecification): void {
+    this.specProvider = sp;
+    console.log("SparnaturalHistoryComponent: specProvider", sp);
 
+    // Avoid initializing twice
+    if (!this.historySection) {
+      this.historySection = new HistorySection(this, sp).render();
+
+      // Dispatch INIT event to signal other components
       this.html[0].dispatchEvent(
         new CustomEvent(SparnaturalHistoryElement.EVENT_INIT, {
           bubbles: true,
           detail: { sparnaturalHistory: this },
         })
       );
-    });
-
-    return this;
+    }
   }
+
   #initLang() {
-    if (getSettings().language === "fr") {
+    const lang = getSettings().language;
+    if (lang === "fr") {
       SparnaturalHistoryI18n.init("fr");
     } else {
       SparnaturalHistoryI18n.init("en");
     }
   }
 }
+
 export default SparnaturalHistoryComponent;
