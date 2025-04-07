@@ -432,33 +432,37 @@ class HistorySection extends HTMLComponent {
       document.querySelectorAll(".query-summary").forEach((element) => {
         const div = element as HTMLDivElement;
         if (div.scrollHeight > div.clientHeight) {
-          div.classList.add("scrollable"); // Ajoute la classe uniquement si le contenu dépasse
+          div.classList.add("scrollable");
         }
       });
     }, 100);
 
+    const extractLastSegment = (uri: string): string =>
+      uri ? uri.substring(uri.lastIndexOf("/") + 1) : "Inconnu";
+
     const processBranch = (branch: Branch, depth = 0): string => {
       let result = "";
-      let indentation = "&nbsp;".repeat(depth * 4);
+      const indentation = "&nbsp;".repeat(depth * 4);
 
-      const startLabel = branch.line.sType
-        ? specProvider.getEntity(branch.line.sType)?.getLabel() ||
-          branch.line.sType
-        : "Unknown Subject";
+      const startLabel =
+        branch.line.sType &&
+        (specProvider.getEntity(branch.line.sType)?.getLabel() ||
+          extractLastSegment(branch.line.p));
+      console.log(extractLastSegment(branch.line.p));
+      const propLabel =
+        branch.line.p &&
+        (specProvider.getProperty(branch.line.p)?.getLabel() ||
+          extractLastSegment(branch.line.p));
 
-      const propLabel = branch.line.p
-        ? specProvider.getProperty(branch.line.p)?.getLabel() || branch.line.p
-        : "Unknown Predicate";
-
-      const endLabel = branch.line.oType
-        ? specProvider.getEntity(branch.line.oType)?.getLabel() ||
-          branch.line.oType
-        : "Unknown Object";
+      const endLabel =
+        branch.line.oType &&
+        (specProvider.getEntity(branch.line.oType)?.getLabel() ||
+          extractLastSegment(branch.line.oType));
 
       let line = `${indentation}<strong>${startLabel}</strong> → ${propLabel} → <strong>${endLabel}</strong>`;
 
       if (branch.line.values.length > 0) {
-        line += ` = ${branch.line.values.join(", ")}`; // Simplifié, à ajuster selon les widgets
+        line += ` = ${branch.line.values.join(", ")}`;
       }
 
       result += line;
