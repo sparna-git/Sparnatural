@@ -2,7 +2,7 @@ import { Props } from "tippy.js";
 import ISettings from "./ISettings";
 
 const defaultSettings: ISettings = {
-  language: "fr",
+  language: "en",
 };
 
 // the actual settings, result of merge between defaultSettings and settings passed as parameters

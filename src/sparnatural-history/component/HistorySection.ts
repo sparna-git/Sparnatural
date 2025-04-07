@@ -17,6 +17,8 @@ class HistorySection extends HTMLComponent {
   private confirmationModal: ConfirmationModal;
   private dateFilterModal: DateFilterModal;
 
+  // Constructor for the HistorySection class
+  // It initializes the section with a parent component and optional specProvider and dateFilterModal
   constructor(
     ParentComponent: HTMLComponent,
     specProvider?: ISparnaturalSpecification,
@@ -37,6 +39,8 @@ class HistorySection extends HTMLComponent {
     console.log("HistorySection constructed...");
   }
 
+  // Override the render method to add the history button
+  // and the history modal
   render(): this {
     super.render();
     let historyBtn = $(
@@ -44,6 +48,7 @@ class HistorySection extends HTMLComponent {
     );
     historyBtn.on("click", () => this.showHistory());
     console.log("HistorySection render...");
+    // append the history button to the parent component
     this.html.append(historyBtn);
     return this;
   }
@@ -56,6 +61,8 @@ class HistorySection extends HTMLComponent {
     return confirmed; // Return the confirmation status
   }
 
+  // show the history modal
+  // and populate it with the history data
   showHistory() {
     const storage = LocalDataStorage.getInstance();
     const history = storage.getHistory();
@@ -72,6 +79,8 @@ class HistorySection extends HTMLComponent {
     $("body").append('<div class="history-overlay"></div>');
     $("body").addClass("history-modal-open");
 
+    // Créer le modal HTML
+    // et le conteneur de la table
     let modalHtml = `
       <div id="historyModal" class="history-modal">
         <div class="table-container">
@@ -121,6 +130,7 @@ class HistorySection extends HTMLComponent {
     $("#queryHistoryTable").DataTable({
       // add a function to destroy the thead element created at dt-scroll-body exactly in the table with id "queryHistoryTable"
 
+      // parameters for the DataTable
       destroy: true,
       pageLength: 4,
       lengthMenu: [
@@ -174,7 +184,7 @@ class HistorySection extends HTMLComponent {
             getSettings().language === "fr" ? "fr-FR" : "en-US"
           );
           const dateISO = dateHist.toISOString();
-
+          // returner une ligne de tableau avec les données formatées
           return [
             `<button class="favorite-query" data-id="${entry.id}">
               <i class="favorite-icon ${
@@ -200,6 +210,7 @@ class HistorySection extends HTMLComponent {
         })
         .filter((row) => row !== null),
 
+      // columns definition for the DataTable
       columns: [
         { title: SparnaturalHistoryI18n.labels["favorite"], searchable: false },
         { title: SparnaturalHistoryI18n.labels["entity"], searchable: false },
@@ -214,7 +225,6 @@ class HistorySection extends HTMLComponent {
       ],
 
       // add a function to destroy the thead element created at dt-scroll-body exactly in the table with id "queryHistoryTable"
-
       drawCallback: () => {
         this.enableQuerySummaryScrollEffect();
 
@@ -237,7 +247,7 @@ class HistorySection extends HTMLComponent {
         $(".favorite-query")
           .off("click")
           .on("click", (event) => this.makeFavorite(event));
-        // copy the query to the clipboard
+
         // copy the query to the clipboard
         $(".save-query")
           .off("click")

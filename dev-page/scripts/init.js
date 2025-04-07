@@ -20,17 +20,20 @@ sparnatural.addEventListener("init", (event) => {
   };
   console.log("Configuration ", sparnatural.configuration);
   // Inject history (specProvider is optional)
-  const historyElement = document.querySelector("sparnatural-history");
-  const spec = sparnatural?.sparnatural?.specProvider;
 
-  if (spec && historyElement?.sparnaturalHistory?.setSpecProvider) {
-    historyElement.sparnaturalHistory.setSpecProvider(spec);
-    console.log("✅ specProvider injected into sparnatural-history");
-  } else {
-    console.warn(
-      "ℹ️ specProvider not provided — sparnatural-history will use default rendering."
-    );
-  }
+  setTimeout(() => {
+    const historyElement = document.querySelector("sparnatural-history");
+    const spec = sparnatural?.sparnatural?.specProvider;
+
+    if (spec && historyElement?.sparnaturalHistory?.setSpecProvider) {
+      historyElement.sparnaturalHistory.setSpecProvider(spec);
+      console.log("specProvider injected into sparnatural-history");
+    } else {
+      console.warn(
+        "specProvider not provided — sparnatural-history will use default rendering."
+      );
+    }
+  }, 30);
 
   // Notify all plugins of configuration updates if they support it
   for (const plugin in yasr.plugins) {
