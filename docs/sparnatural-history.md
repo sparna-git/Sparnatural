@@ -54,6 +54,8 @@ document.dispatchEvent(new CustomEvent("submit"));
 
 Main component rendered inside `<sparnatural-history>`. Responsible for rendering the history UI, initializing language, and dispatching the `initHist` event.
 
+If a `specProvider` is injected via `setSpecProvider()`, it improves label rendering for entities and properties, but it is **optional**. The history view still works without it.
+
 ### `HistorySection`
 
 Contains all UI logic and rendering for the history modal, including:
@@ -63,6 +65,7 @@ Contains all UI logic and rendering for the history modal, including:
 - Copying
 - Deleting
 - Applying a date range filter via `DateFilterModal`
+- Graceful fallback if no `specProvider` is provided (basic labels are still shown)
 
 ### `DateFilterModal`
 
@@ -95,8 +98,8 @@ bindSparnaturalWithHistory(sparnatural);
 
 This binds:
 
-- The `specProvider` to Sparnatural History after initialization
 - The `queryUpdated` and `submit` events to record queries
+- The optional `specProvider` to improve label rendering (not required)
 
 ## Example Setup
 
@@ -112,3 +115,4 @@ This binds:
 - **Date range filter** via calendar modal
 - **Internationalization** (English/French)
 - **Copy/Load/Delete** actions per query
+- **Optional specProvider support** for enhanced label rendering
