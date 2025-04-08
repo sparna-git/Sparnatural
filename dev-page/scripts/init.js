@@ -4,6 +4,8 @@
 
 const sparnatural = document.querySelector("spar-natural");
 
+let lastquery = null;
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 console.log("urlParams", urlParams);
@@ -49,6 +51,9 @@ sparnatural.addEventListener("init", (event) => {
 
 sparnatural.addEventListener("queryUpdated", (event) => {
   var queryStringFromJson = sparnatural.expandSparql(event.detail.queryString);
+
+  lastquery = event.detail.queryJson;
+  console.log("lastquery", lastquery);
 
   yasqe.setValue(queryStringFromJson);
 
@@ -104,8 +109,19 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 
 sparnatural.addEventListener("submit", (event) => {
   sparnatural.disablePlayBtn();
+  //save the lastquery in localstorage
+  if (lastquery) {
+    LocalDataStorage.getInstance().saveQuery(lastquery);
+  }
   // trigger the query from YasQE
   yasqe.query();
+});
+
+const historyElement = document.querySelector("sparnatural-history");
+
+historyElement.addEventListener("loadQuery", (event) => {
+  const query = event.detail.query;
+  sparnatural.loadQuery(query);
 });
 
 console.log("init yasr & yasqe...");

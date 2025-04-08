@@ -35,6 +35,8 @@ bindSparnaturalWithYasrPlugins = function (sparnatural, yasr) {
  * - On sparnatural `submit` event : dispatches custom submit event to trigger query saving
  */
 bindSparnaturalWithHistory = function (sparnatural) {
+  let lastquery = null;
+
   sparnatural.addEventListener("init", () => {
     const specProvider = sparnatural?.sparnatural?.specProvider;
     const historyElement = document.querySelector("sparnatural-history");
@@ -54,18 +56,22 @@ bindSparnaturalWithHistory = function (sparnatural) {
     } else {
       console.warn("sparnatural-history not ready or missing setSpecProvider");
     }
+
+    // 🔁 Écouteur pour charger une requête depuis l'historique
+    historyElement?.addEventListener("loadQuery", (event) => {
+      const query = event.detail.query;
+      sparnatural.loadQuery(query);
+    });
   });
 
   sparnatural.addEventListener("queryUpdated", (event) => {
-    document.dispatchEvent(
-      new CustomEvent("queryUpdated", {
-        detail: { queryJson: event.detail.queryJson },
-      })
-    );
+    lastquery = event.detail.queryJson;
   });
 
   sparnatural.addEventListener("submit", () => {
-    document.dispatchEvent(new CustomEvent("submit"));
+    if (lastquery) {
+      LocalDataStorage.getInstance().saveQuery(lastquery);
+    }
   });
 };
 

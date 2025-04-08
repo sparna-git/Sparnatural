@@ -190,7 +190,10 @@ class HistorySection extends HTMLComponent {
               } fa-star"></i>
             </button>`,
             entity,
-            this.formatQuerySummary(parsedQuery, this.specProvider),
+            this.formatQuerySummary(
+              parsedQuery,
+              this.specProvider || undefined
+            ),
             dateDisplay, // visible column
             dateISO, // hidden column for filtering
             `<div class="actions-btn">
@@ -436,6 +439,8 @@ class HistorySection extends HTMLComponent {
       });
     });
   }
+  private extractLastSegment = (uri: string): string =>
+    uri ? uri.substring(uri.lastIndexOf("/") + 1) : "Inconnu";
 
   private formatQuerySummary(
     queryJson: ISparJson,
@@ -462,7 +467,7 @@ class HistorySection extends HTMLComponent {
       const startLabel =
         branch.line.sType &&
         (specProvider?.getEntity(branch.line.sType)?.getLabel() ||
-          extractLastSegment(branch.line.p));
+          extractLastSegment(branch.line.sType));
       const propLabel =
         branch.line.p &&
         (specProvider?.getProperty(branch.line.p)?.getLabel() ||
@@ -504,6 +509,11 @@ class HistorySection extends HTMLComponent {
   // get l entity du predicat en utilisant getLabel dans ISpecificationEntry
   private getEntityLabel(entityURI: string): string {
     // Récupérer le type de l'objet avec la méthode getProperty
+    //verifier si la specProvider est définie
+    if (!this.specProvider) {
+      console.error("specProvider is not defined.");
+      return this?.extractLastSegment(entityURI); // Retourne le dernier segment de l'URI
+    }
     const object = this.specProvider.getEntity(entityURI);
     if (object) {
       return object.getLabel() || entityURI;

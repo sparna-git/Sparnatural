@@ -7,7 +7,6 @@ import { SparnaturalHistoryAttributes } from "./SparnaturalHistoryAttributes";
 import { mergeSettings } from "./sparnatural-history/settings/defaultSettings";
 
 export class SparnaturalHistoryElement extends HTMLElement {
-  
   static HTML_ELEMENT_NAME = "sparnatural-history";
   static EVENT_INIT = "init";
   static EVENT_LOAD_QUERY = "loadQuery";
@@ -41,7 +40,6 @@ export class SparnaturalHistoryElement extends HTMLElement {
   }
 
   triggerLoadQueryEvent(query: ISparJson) {
-
     // Dispatch LOAD_QUERY event
     this.dispatchEvent(
       new CustomEvent(SparnaturalHistoryElement.EVENT_LOAD_QUERY, {
@@ -49,9 +47,16 @@ export class SparnaturalHistoryElement extends HTMLElement {
         detail: { query: query },
       })
     );
+  }
+}
 
+customElements.get(SparnaturalHistoryElement.HTML_ELEMENT_NAME) ||
+  window.customElements.define(
+    SparnaturalHistoryElement.HTML_ELEMENT_NAME,
+    SparnaturalHistoryElement
+  );
 
-    /*
+/*
     if (!this.sparnatural) {
       console.error(
         "Erreur: SparnaturalComponent n'est pas encore initialisé !"
@@ -68,11 +73,3 @@ export class SparnaturalHistoryElement extends HTMLElement {
     QueryLoader.setSparnatural(this.sparnatural);
     QueryLoader.loadQuery(query);
     */
-  }
-}
-
-customElements.get(SparnaturalHistoryElement.HTML_ELEMENT_NAME) ||
-  window.customElements.define(
-    SparnaturalHistoryElement.HTML_ELEMENT_NAME,
-    SparnaturalHistoryElement
-  );

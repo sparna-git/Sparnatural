@@ -89,3 +89,5 @@ class LocalDataStorage {
 }
 
 export default LocalDataStorage;
+// à la fin de LocalDataStorage.ts
+(window as any).LocalDataStorage = LocalDataStorage;
