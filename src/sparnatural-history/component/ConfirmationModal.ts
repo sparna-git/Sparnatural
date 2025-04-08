@@ -4,41 +4,44 @@ class ConfirmationModal {
   private modalElement: JQuery<HTMLElement>;
   private resolveAction: (confirmed: boolean) => void;
 
-  constructor() {
+  constructor(private container: JQuery<HTMLElement>) {
     this.modalElement = $(`
-        <div id="confirmationModal" class="modal">
-          <div class="modal-content">
-            <p id="modalMessage">${SparnaturalHistoryI18n.labels.confirmMessage}</p>
-            <div class="modal-buttons">
-              <button id="confirmYes">${SparnaturalHistoryI18n.labels.yes}</button>
-              <button id="confirmNo">${SparnaturalHistoryI18n.labels.no}</button>
-            </div>
+      <div class="modal confirmation-modal">
+        <div class="modal-content">
+          <p class="modal-message">${SparnaturalHistoryI18n.labels.confirmMessage}</p>
+          <div class="modal-buttons">
+            <button class="confirm-yes">${SparnaturalHistoryI18n.labels.yes}</button>
+            <button class="confirm-no">${SparnaturalHistoryI18n.labels.no}</button>
           </div>
         </div>
-      `);
+      </div>
+    `);
 
-    // Ajoutez la modal au body uniquement si elle n'existe pas déjà
-    if ($("#confirmationModal").length === 0) {
-      $("body").append(this.modalElement);
+    // Ajoute dans le conteneur uniquement si pas déjà présent
+    if (this.container.find(".confirmation-modal").length === 0) {
+      this.container.append(this.modalElement);
     }
 
-    // Ajoutez les gestionnaires d'événements pour les boutons
-    $("#confirmYes").on("click", () => this.handleConfirmation(true));
-    $("#confirmNo").on("click", () => this.handleConfirmation(false));
+    this.modalElement
+      .find(".confirm-yes")
+      .on("click", () => this.handleConfirmation(true));
+    this.modalElement
+      .find(".confirm-no")
+      .on("click", () => this.handleConfirmation(false));
   }
 
   public show(message?: string): Promise<boolean> {
     return new Promise((resolve) => {
       this.resolveAction = resolve;
-      $("#modalMessage").text(
-        message || SparnaturalHistoryI18n.labels.confirmMessage
-      );
-      this.modalElement.show(); // Affiche la modal
+      this.modalElement
+        .find(".modal-message")
+        .text(message || SparnaturalHistoryI18n.labels.confirmMessage);
+      this.modalElement.show();
     });
   }
 
   private handleConfirmation(confirmed: boolean) {
-    this.modalElement.hide(); // Cache la modal après la réponse
+    this.modalElement.hide();
     if (this.resolveAction) {
       this.resolveAction(confirmed);
     }

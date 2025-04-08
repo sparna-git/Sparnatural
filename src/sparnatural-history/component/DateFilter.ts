@@ -3,7 +3,7 @@ import { SparnaturalHistoryI18n } from "../settings/SparnaturalHistoryI18n";
 class DateFilterModal {
   private modalElement: JQuery<HTMLElement>;
 
-  constructor() {
+  constructor(private container: JQuery<HTMLElement>) {
     this.modalElement = $(`
       <div id="dateFilterModal" class="modal">
         <div class="modal-content">
@@ -31,8 +31,8 @@ class DateFilterModal {
       </div>
     `);
 
-    if ($("#dateFilterModal").length === 0) {
-      $("body").append(this.modalElement);
+    if (this.container.find("#dateFilterModal").length === 0) {
+      this.container.append(this.modalElement);
     }
 
     // Bouton "Clear"

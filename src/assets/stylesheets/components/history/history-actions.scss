@@ -1,0 +1,90 @@
+// ----------- modal buttons ---------------------
+.history-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0;
+  border-top: 1px solid #ddd;
+
+  button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease;
+
+    &.btn-yellow {
+      background: #ffcc00;
+      color: black;
+
+      &:hover {
+        background: #e6b800;
+      }
+    }
+  }
+
+  // Bouton reset
+  #resetHistory {
+    background-color: #b5b5b5;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    align-self: flex-end;
+    transition: background-color 0.3s ease;
+
+    strong {
+      transition: opacity 0.3s ease;
+    }
+
+    i {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      background-color: rgb(218, 141, 0);
+
+      strong {
+        opacity: 0;
+      }
+
+      i {
+        transform: translateX(-45px);
+      }
+    }
+  }
+
+  // Bouton close
+  #closeHistory {
+    background-color: #b5b5b5;
+    color: white;
+    padding: 10px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+    align-self: flex-end;
+    transition: background-color 0.3s ease;
+
+    strong {
+      transition: opacity 0.3s ease;
+    }
+
+    i {
+      transition: transform 0.3s ease;
+    }
+
+    &:hover {
+      background-color: #a71d2a;
+
+      strong {
+        opacity: 0;
+      }
+
+      i {
+        transform: translateX(-19px);
+      }
+    }
+  }
+}

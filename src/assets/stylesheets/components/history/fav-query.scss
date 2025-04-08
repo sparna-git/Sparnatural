@@ -1,0 +1,21 @@
+.favorite-query {
+  font-size: 22px;
+  cursor: pointer;
+  transition: color 0.3s ease, transform 0.2s ease;
+  background: none;
+  border: none;
+
+  i {
+    color: #b5b5b5;
+    transition: color 0.3s ease;
+  }
+
+  &:hover i {
+    color: #ffcc00;
+    transform: scale(1.2);
+  }
+
+  &.active i {
+    color: #ffcc00;
+  }
+}

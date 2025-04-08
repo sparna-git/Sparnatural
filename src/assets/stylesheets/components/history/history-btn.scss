@@ -1,0 +1,32 @@
+// ----- history button ------------------
+.history-btn {
+  position: absolute;
+  display: flex;
+  top: 10px;
+  right: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  z-index: 2;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+  gap: 6px;
+
+  i {
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+  }
+
+  &:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+}
+
+// -----------------------------------------------------

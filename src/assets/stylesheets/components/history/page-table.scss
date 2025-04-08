@@ -1,0 +1,75 @@
+// Mise en page des éléments de l'historique
+.dt-layout-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+  padding: 10px 15px;
+  width: 100%;
+  box-sizing: border-box;
+
+  .dt-layout-cell {
+    flex: 1;
+    text-align: left;
+
+    &.dt-layout-start {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+
+      .dt-search {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        .dt-input {
+          padding: 4px 6px;
+          font-size: 16px;
+          color: #333;
+          background-color: #f1f1f1;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+          transition: border-color 0.3s, box-shadow 0.3s;
+
+          &::placeholder {
+            color: #999;
+          }
+
+          &:focus {
+            border-color: rgb(218, 141, 0);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            outline: none;
+          }
+        }
+      }
+    }
+
+    &.dt-layout-middle {
+      flex: 0 0 auto;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    &.dt-layout-end {
+      flex: 0 0 auto;
+      text-align: right;
+    }
+  }
+}
+
+// Scroll containers pour DataTables
+.dt-scroll {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.dt-scroll-sizing {
+  height: 0 !important;
+  overflow: hidden !important;
+}
+
+// Ordre spécifique pour la longueur
+.dt-length {
+  order: 0;
+}

@@ -19,7 +19,7 @@ class SparnaturalHistoryComponent extends HTMLComponent {
     this.#initLang();
     console.log("Rendering SparnaturalHistoryComponent...");
 
-    this.historySection = new HistorySection(this, null).render();
+    this.historySection = new HistorySection(this).render();
 
     return this;
   }

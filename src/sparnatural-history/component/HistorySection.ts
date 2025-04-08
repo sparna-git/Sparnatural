@@ -19,19 +19,12 @@ class HistorySection extends HTMLComponent {
 
   // Constructor for the HistorySection class
   // It initializes the section with a parent component and optional specProvider and dateFilterModal
-  constructor(
-    ParentComponent: HTMLComponent,
-    dateFilterModal?: DateFilterModal
-  ) {
+  constructor(ParentComponent: HTMLComponent) {
     super("historySection", ParentComponent, null);
-    this.confirmationModal = new ConfirmationModal();
-    this.dateFilterModal = dateFilterModal || new DateFilterModal();
-
     const historyElement = document.querySelector(
       "sparnatural-history"
     ) as SparnaturalHistoryElement;
     if (!historyElement) return;
-
     console.log("HistorySection constructed...");
   }
 
@@ -50,6 +43,9 @@ class HistorySection extends HTMLComponent {
     console.log("HistorySection render...");
     // append the history button to the parent component
     this.html.append(historyBtn);
+    // Crée les modales ici, une fois que this.html est bien dans le DOM
+    this.confirmationModal = new ConfirmationModal(this.html);
+    this.dateFilterModal = new DateFilterModal(this.html);
     return this;
   }
 
@@ -73,7 +69,9 @@ class HistorySection extends HTMLComponent {
     }
 
     // Supprimer uniquement les éléments modaux précédents
-    $(".history-overlay, #historyModal, #queryHistoryTable_wrapper").remove();
+    this.html
+      .find(".history-overlay, #historyModal, #queryHistoryTable_wrapper")
+      .remove();
 
     // Ajout de l'overlay et conteneur modal
     this.html.append('<div class="history-overlay"></div>');
@@ -100,7 +98,7 @@ class HistorySection extends HTMLComponent {
           </button>
         </div>
       </div>`;
-      this.html.append(modalHtml);
+    this.html.append(modalHtml);
 
     // Tri personnalisé pour les favoris
     $.fn.dataTable.ext.type.order["custom-fav-pre"] = function (data: any) {
@@ -228,7 +226,8 @@ class HistorySection extends HTMLComponent {
       drawCallback: () => {
         this.enableQuerySummaryScrollEffect();
 
-        $(".delete-query")
+        this.html
+          .find(".delete-query")
           .off("click")
           .on("click", async (event) => {
             const id = $(event.currentTarget).data("id");
@@ -241,15 +240,18 @@ class HistorySection extends HTMLComponent {
             }
           });
 
-        $(".load-query")
+        this.html
+          .find(".load-query")
           .off("click")
           .on("click", (event) => this.loadQuery(event));
-        $(".favorite-query")
+
+        this.html
+          .find(".favorite-query")
           .off("click")
           .on("click", (event) => this.makeFavorite(event));
 
-        // copy the query to the clipboard
-        $(".save-query")
+        this.html
+          .find(".save-query")
           .off("click")
           .on("click", (event) => {
             const id = $(event.currentTarget).data("id");
@@ -268,11 +270,13 @@ class HistorySection extends HTMLComponent {
                 this.showToast("Échec de la copie", 4000);
               });
           });
-
+        console.log("HTML :", this.html);
         this.initializeFavorites();
       },
     });
-    const layoutRow = $("#queryHistoryTable_wrapper .dt-layout-row").first(); // première ligne
+    const layoutRow = this.html
+      .find("#queryHistoryTable_wrapper .dt-layout-row")
+      .first(); // ✅ scope local
 
     const dateIconCell = $(`
   <div class="dt-layout-cell" style="flex: 0 0 auto; display: flex; align-items: center; gap: 10px;">
@@ -285,9 +289,12 @@ class HistorySection extends HTMLComponent {
 
     layoutRow.append(dateIconCell);
 
-    $("#openDateFilter").on("click", () => this.dateFilterModal.open());
+    // Scoper les sélecteurs à this.html
+    this.html
+      .find("#openDateFilter")
+      .on("click", () => this.dateFilterModal.open());
 
-    $("#resetHistory").on("click", async () => {
+    this.html.find("#resetHistory").on("click", async () => {
       const confirmed = await this.confirmAction(
         SparnaturalHistoryI18n.labels["confirmClearHistory"]
       );
@@ -296,20 +303,18 @@ class HistorySection extends HTMLComponent {
       }
     });
 
-    $("#closeHistory, .history-overlay").on("click", () => {
-      $("#historyModal, .history-overlay").remove();
-      $("body").removeClass("history-modal-open");
+    this.html.find("#closeHistory, .history-overlay").on("click", () => {
+      this.html.find("#historyModal, .history-overlay").remove();
+      this.html.removeClass("history-modal-open");
     });
 
-    // Rafraîchir le filtre quand on change les dates
-    $("#minDate, #maxDate").on("change", () => {
-      $("#queryHistoryTable").DataTable().draw();
+    this.html.find("#minDate, #maxDate").on("change", () => {
+      this.html.find("#queryHistoryTable").DataTable().draw();
     });
 
     this.initializeFavorites();
 
-    // Supprime le thead dupliqué dans la table interne scrollable (zone .dt-scroll-body)
-    $("#queryHistoryTable").find(".dt-scroll-body thead").remove();
+    this.html.find("#queryHistoryTable .dt-scroll-body thead").remove();
   }
 
   private showToast(message: string, duration = 3000) {
@@ -318,8 +323,8 @@ class HistorySection extends HTMLComponent {
         <span class="toast-message">${message}</span>
       </div>
     `);
-
-    $("body").append(toast);
+    console.log("HTML:", this.html);
+    this.html.append(toast);
 
     // Animate appearance
     toast.fadeIn(200);
@@ -458,7 +463,6 @@ class HistorySection extends HTMLComponent {
         branch.line.sType &&
         (specProvider?.getEntity(branch.line.sType)?.getLabel() ||
           extractLastSegment(branch.line.p));
-      console.log(extractLastSegment(branch.line.p));
       const propLabel =
         branch.line.p &&
         (specProvider?.getProperty(branch.line.p)?.getLabel() ||

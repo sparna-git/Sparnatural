@@ -1,0 +1,20 @@
+.custom-toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #2b2b2b;
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  font-family: sans-serif;
+  font-size: 14px;
+  z-index: 9999;
+  display: none;
+}
+
+.toast-icon {
+  margin-right: 8px;
+}

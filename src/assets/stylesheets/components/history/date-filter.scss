@@ -1,0 +1,31 @@
+.date-filter-container {
+  order: 1;
+}
+
+#openDateFilter {
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  border: none;
+  padding: 8px 14px;
+  transition: all 0.3s ease;
+}
+
+// Style input date
+input[type="date"] {
+  background-color: #da8d00;
+  font-family: "Roboto Mono", monospace;
+  padding: 5px;
+  color: #ffffff;
+  font-size: 15px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+
+  &::-webkit-calendar-picker-indicator {
+    background-color: #ffffff;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+}
