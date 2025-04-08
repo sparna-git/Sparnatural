@@ -1,5 +1,5 @@
 import "datatables.net";
-import $, { get } from "jquery";
+import $ from "jquery";
 import LocalDataStorage from "../storage/LocalDataStorage";
 import HTMLComponent from "../../sparnatural/components/HtmlComponent";
 import { Branch, ISparJson } from "../../sparnatural/generators/json/ISparJson";
@@ -7,7 +7,7 @@ import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnat
 import ConfirmationModal from "./ConfirmationModal";
 import { VariableExpression, VariableTerm } from "sparqljs";
 import { QueryHistory } from "./QueryHistory";
-import { SparnaturalHistoryElement } from "../../sparnaturalHistoryElement";
+import { SparnaturalHistoryElement } from "../../SparnaturalHistoryElement";
 import { SparnaturalHistoryI18n } from "../settings/SparnaturalHistoryI18n"; //
 import { getSettings } from "../settings/defaultSettings";
 import DateFilterModal from "./DateFilter";
@@ -21,11 +21,9 @@ class HistorySection extends HTMLComponent {
   // It initializes the section with a parent component and optional specProvider and dateFilterModal
   constructor(
     ParentComponent: HTMLComponent,
-    specProvider?: ISparnaturalSpecification,
     dateFilterModal?: DateFilterModal
   ) {
     super("historySection", ParentComponent, null);
-    this.specProvider = specProvider || null;
     this.confirmationModal = new ConfirmationModal();
     this.dateFilterModal = dateFilterModal || new DateFilterModal();
 
@@ -34,9 +32,11 @@ class HistorySection extends HTMLComponent {
     ) as SparnaturalHistoryElement;
     if (!historyElement) return;
 
-    historyElement.listenQueryUpdated();
-    historyElement.listenSubmit();
     console.log("HistorySection constructed...");
+  }
+
+  public setSpecProvider(specProvider: ISparnaturalSpecification) {
+    this.specProvider = specProvider;
   }
 
   // Override the render method to add the history button
@@ -72,12 +72,12 @@ class HistorySection extends HTMLComponent {
       return;
     }
 
-    // Supprimer uniquement les éléments m odaux précédents
+    // Supprimer uniquement les éléments modaux précédents
     $(".history-overlay, #historyModal, #queryHistoryTable_wrapper").remove();
 
     // Ajout de l'overlay et conteneur modal
-    $("body").append('<div class="history-overlay"></div>');
-    $("body").addClass("history-modal-open");
+    this.html.append('<div class="history-overlay"></div>');
+    this.html.addClass("history-modal-open");
 
     // Créer le modal HTML
     // et le conteneur de la table
@@ -100,7 +100,7 @@ class HistorySection extends HTMLComponent {
           </button>
         </div>
       </div>`;
-    $("body").append(modalHtml);
+      this.html.append(modalHtml);
 
     // Tri personnalisé pour les favoris
     $.fn.dataTable.ext.type.order["custom-fav-pre"] = function (data: any) {
@@ -360,7 +360,7 @@ class HistorySection extends HTMLComponent {
     ) as SparnaturalHistoryElement;
 
     if (historyElement) {
-      historyElement.loadQuery(parsedQuery);
+      historyElement.triggerLoadQueryEvent(parsedQuery);
 
       // Fermer la fenêtre de l'historique après chargement
       $("#historyModal, .history-overlay").remove();

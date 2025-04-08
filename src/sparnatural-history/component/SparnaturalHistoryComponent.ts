@@ -2,7 +2,7 @@ import HTMLComponent from "../../sparnatural/components/HtmlComponent";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
 import HistorySection from "./HistorySection";
 import "datatables.net";
-import { SparnaturalHistoryElement } from "../../sparnaturalHistoryElement";
+import { SparnaturalHistoryElement } from "../../SparnaturalHistoryElement";
 import { SparnaturalHistoryI18n } from "../settings/SparnaturalHistoryI18n";
 import { getSettings } from "../settings/defaultSettings";
 
@@ -18,6 +18,9 @@ class SparnaturalHistoryComponent extends HTMLComponent {
   render(): this {
     this.#initLang();
     console.log("Rendering SparnaturalHistoryComponent...");
+
+    this.historySection = new HistorySection(this, null).render();
+
     return this;
   }
 
@@ -29,18 +32,15 @@ class SparnaturalHistoryComponent extends HTMLComponent {
     this.specProvider = sp;
     console.log("SparnaturalHistoryComponent: specProvider", sp);
 
-    // Avoid initializing twice
-    if (!this.historySection) {
-      this.historySection = new HistorySection(this, sp || null).render();
+    this.historySection.setSpecProvider(sp);
 
-      // Dispatch INIT event to signal other components
-      this.html[0].dispatchEvent(
-        new CustomEvent(SparnaturalHistoryElement.EVENT_INIT, {
-          bubbles: true,
-          detail: { sparnaturalHistory: this },
-        })
-      );
-    }
+    // Dispatch INIT event to signal other components
+    this.html[0].dispatchEvent(
+      new CustomEvent(SparnaturalHistoryElement.EVENT_INIT, {
+        bubbles: true,
+        detail: { sparnaturalHistory: this },
+      })
+    );
   }
 
   #initLang() {

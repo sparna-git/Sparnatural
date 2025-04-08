@@ -1,4 +1,3 @@
-import { Props } from "tippy.js";
 import ISettings from "./ISettings";
 
 const defaultSettings: ISettings = {
