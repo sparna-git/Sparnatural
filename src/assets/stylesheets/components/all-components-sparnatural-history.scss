@@ -1,12 +1,32 @@
-@use "./history/history-btn.scss";
-@use "./history/page-table.scss";
-@use "./history/history-actions.scss";
-@use "./history/actions-btn.scss";
-@use "./history/history-table.scss";
-@use "./history/fav-query.scss";
-@use "./history/modal-confirm.scss";
-@use "./history/dt-paging.scss";
-@use "./history/query-summary.scss";
-@use "./history/date-filter.scss";
-@use "./history/toast-copy-query.scss";
-@use "./history/sparnatural-history.scss";
+// Bouton principal pour ouvrir l'historique dans l'interface Sparnatural
+@use "./history/history-toggle-button.scss";
+
+// Mise en forme générale de la table (entrées, recherche, pagination, etc.)
+@use "./history/history-table-layout.scss";
+
+// Boutons secondaires (Clear/effacer, Close/fermer) dans le pied de l'historique
+@use "./history/history-footer-actions.scss";
+
+// Boutons d'action associés à chaque requête (Charger, Copier, Supprimer)
+@use "./history/query-action-buttons.scss";
+
+// Style de l’icône étoile pour les favoris
+@use "./history/favorite-icon.scss";
+
+// Modale de confirmation pour supprimer une requête ou vider l'historique
+@use "./history/delete-confirm-modal.scss";
+
+// Style spécifique de la pagination de l’historique (DataTables pagination)
+@use "./history/history-pagination.scss";
+
+// Affichage compact de la requête (shadow, scroll, etc.)
+@use "./history/query-summary-box.scss";
+
+// Filtres de date dans l’historique
+@use "./history/history-date-filter.scss";
+
+// Notification visuelle (toast) pour copie de requête
+@use "./history/copy-toast.scss";
+
+// Style général de la modale de l'historique
+@use "./history/history-modal.scss";

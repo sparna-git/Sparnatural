@@ -53,7 +53,6 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   var queryStringFromJson = sparnatural.expandSparql(event.detail.queryString);
 
   lastquery = event.detail.queryJson;
-  console.log("lastquery", lastquery);
 
   yasqe.setValue(queryStringFromJson);
 
@@ -107,17 +106,20 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   }
 });
 
+const historyElement = document.querySelector("sparnatural-history");
+
 sparnatural.addEventListener("submit", (event) => {
   sparnatural.disablePlayBtn();
-  //save the lastquery in localstorage
-  if (lastquery) {
-    LocalDataStorage.getInstance().saveQuery(lastquery);
+
+  if (historyElement && typeof historyElement.saveQuery === "function") {
+    historyElement.saveQuery(lastquery);
+  } else {
+    console.warn("Impossible d'appeler saveQuery sur sparnatural-history.");
   }
-  // trigger the query from YasQE
+
+  // Exécuter la requête via YASQE
   yasqe.query();
 });
-
-const historyElement = document.querySelector("sparnatural-history");
 
 historyElement.addEventListener("loadQuery", (event) => {
   const query = event.detail.query;

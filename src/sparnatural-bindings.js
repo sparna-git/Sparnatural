@@ -69,8 +69,11 @@ bindSparnaturalWithHistory = function (sparnatural) {
   });
 
   sparnatural.addEventListener("submit", () => {
-    if (lastquery) {
-      LocalDataStorage.getInstance().saveQuery(lastquery);
+    // use saveQuery method from history component
+    if (historyElement && typeof historyElement.saveQuery === "function") {
+      historyElement.saveQuery(lastquery);
+    } else {
+      console.warn("Impossible d'appeler saveQuery sur sparnatural-history.");
     }
   });
 };

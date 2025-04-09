@@ -5,6 +5,7 @@ import { ISparJson } from "./sparnatural/generators/json/ISparJson";
 // import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
 import { SparnaturalHistoryAttributes } from "./SparnaturalHistoryAttributes";
 import { mergeSettings } from "./sparnatural-history/settings/defaultSettings";
+import LocalDataStorage from "./sparnatural-history/storage/LocalDataStorage";
 
 export class SparnaturalHistoryElement extends HTMLElement {
   static HTML_ELEMENT_NAME = "sparnatural-history";
@@ -48,8 +49,29 @@ export class SparnaturalHistoryElement extends HTMLElement {
       })
     );
   }
-}
 
+  // Méthode pour sauvegarder la requête dans le local storage
+  saveQuery(queryJson: ISparJson): void {
+    if (!queryJson) {
+      console.error("Impossible de sauvegarder une requête vide !");
+      return;
+    }
+
+    const storage = LocalDataStorage.getInstance();
+
+    // Vérifier si la requête existe déjà dans l'historique
+    const alreadyExists = storage
+      .getHistory()
+      .some((q: ISparJson) => JSON.stringify(q) === JSON.stringify(queryJson));
+
+    if (!alreadyExists) {
+      storage.saveQuery(queryJson);
+      console.info("Requête sauvegardée avec succès.");
+    } else {
+      console.info("Requête déjà présente dans l'historique.");
+    }
+  }
+}
 customElements.get(SparnaturalHistoryElement.HTML_ELEMENT_NAME) ||
   window.customElements.define(
     SparnaturalHistoryElement.HTML_ELEMENT_NAME,

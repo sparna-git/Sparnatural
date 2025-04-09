@@ -13,6 +13,10 @@
     cursor: pointer;
     border: none;
     transition: background-color 0.3s ease;
+    position: relative; // Ajouté pour permettre le positionnement absolu des icônes
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &.btn-yellow {
       background: #ffcc00;
@@ -40,7 +44,11 @@
     }
 
     i {
-      transition: transform 0.3s ease;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      position: absolute; // Position absolue pour l'icône
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0; // Caché par défaut
     }
 
     &:hover {
@@ -51,7 +59,8 @@
       }
 
       i {
-        transform: translateX(-45px);
+        opacity: 1; // Visible au survol
+        transform: translateX(-50%);
       }
     }
   }
@@ -72,7 +81,11 @@
     }
 
     i {
-      transition: transform 0.3s ease;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      position: absolute; // Position absolue pour l'icône
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0; // Caché par défaut
     }
 
     &:hover {
@@ -83,7 +96,8 @@
       }
 
       i {
-        transform: translateX(-19px);
+        opacity: 1; // Visible au survol
+        transform: translateX(-50%);
       }
     }
   }
