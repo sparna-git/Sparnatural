@@ -30,6 +30,8 @@ You can use any HTML element (a `html <button>, <div>, <icon>`, etc.) to trigger
 <sparnatural-history lang="en"></sparnatural-history>
 ```
 
+JavaScript to link the trigger
+
 ```javascript
 const historyComponent = document.querySelector("sparnatural-history");
 
@@ -134,13 +136,6 @@ This binds:
 
 - The `queryUpdated` and `submit` events to record queries
 - The optional `specProvider` to improve label rendering (not required)
-
-## Example Setup
-
-```html
-<spar-natural id="sparnatural" src="sparnatural-config.ttl" lang="en" />
-<sparnatural-history lang="en"></sparnatural-history>
-```
 
 ## Features Summary
 
