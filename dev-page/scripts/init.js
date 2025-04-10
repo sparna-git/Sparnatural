@@ -49,6 +49,12 @@ sparnatural.addEventListener("init", (event) => {
   }
 });
 
+const historyComponent = document.querySelector("sparnatural-history");
+
+document.getElementById("myCustomButton").addEventListener("click", () => {
+  historyComponent.openHistoryModal();
+});
+
 sparnatural.addEventListener("queryUpdated", (event) => {
   var queryStringFromJson = sparnatural.expandSparql(event.detail.queryString);
 

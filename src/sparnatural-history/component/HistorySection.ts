@@ -36,14 +36,6 @@ class HistorySection extends HTMLComponent {
   // and the history modal
   render(): this {
     super.render();
-    let historyBtn = $(
-      `<button class="history-btn"><span>${SparnaturalHistoryI18n.labels["historyButton"]} </span><i class="fas fa-history"></i></button>`
-    );
-    historyBtn.on("click", () => this.showHistory());
-    console.log("HistorySection render...");
-    // append the history button to the parent component
-    this.html.append(historyBtn);
-    // Crée les modales ici, une fois que this.html est bien dans le DOM
     this.confirmationModal = new ConfirmationModal(this.html);
     this.dateFilterModal = new DateFilterModal(this.html);
     return this;
@@ -142,7 +134,6 @@ class HistorySection extends HTMLComponent {
       order: [],
       info: true,
       pagingType: "simple_numbers",
-
       language: {
         search: SparnaturalHistoryI18n.labels.search,
         lengthMenu: SparnaturalHistoryI18n.labels.entriesPerPage,
@@ -158,8 +149,11 @@ class HistorySection extends HTMLComponent {
       },
 
       columnDefs: [
-        { targets: 0, orderable: true, type: "custom-fav" },
-        { orderable: false, targets: [2, 4] },
+        { targets: 0, orderable: true, type: "custom-fav", width: "3%" },
+        { targets: 1, width: "8%" },
+        { targets: 2, orderable: false, width: "40%" },
+        { targets: 3, width: "17%" },
+        { targets: 4, orderable: false, width: "32%" },
       ],
 
       data: history
@@ -439,6 +433,7 @@ class HistorySection extends HTMLComponent {
       });
     });
   }
+
   private extractLastSegment = (uri: string): string =>
     uri ? uri.substring(uri.lastIndexOf("/") + 1) : "Inconnu";
 
@@ -554,7 +549,7 @@ class HistorySection extends HTMLComponent {
       return "Inconnu"; // Cas où il n'y a ni variables ni branches
     }
 
-    // 🔍 Étape 1: Récupérer la première variable sélectionnée
+    // Étape 1: Récupérer la première variable sélectionnée
     const firstVariable = this.getFirstVariableValue(
       queryJson.variables[0] as VariableTerm | VariableExpression
     );
@@ -563,21 +558,21 @@ class HistorySection extends HTMLComponent {
       return "Inconnu"; // Si aucune variable valide n'est trouvée
     }
 
-    // 🔍 Étape 2: Rechercher dans les branches la première correspondance entre `s` et `firstVariable`
+    // Étape 2: Rechercher dans les branches la première correspondance entre `s` et `firstVariable`
     const matchingBranch = queryJson.branches.find(
       (branch) => branch.line.s === firstVariable
     );
 
-    // 🔍 Étape 3: Vérifier aussi dans les enfants des branches si la correspondance est plus profonde
+    // Étape 3: Vérifier aussi dans les enfants des branches si la correspondance est plus profonde
     const deepMatchingBranch = queryJson.branches
       .flatMap((branch) => branch.children) // Récupérer tous les enfants de niveau 1
       .find((child) => child.line.s === firstVariable); // Vérifier si `s` correspond à la première variable
 
-    // 🔍 Étape 4: Prioriser le `sType` correspondant à la variable sélectionnée
+    // Étape 4: Prioriser le `sType` correspondant à la variable sélectionnée
     if (matchingBranch?.line.sType) return matchingBranch.line.sType;
     if (deepMatchingBranch?.line.sType) return deepMatchingBranch.line.sType;
 
-    // 🔍 Étape 5: Si aucune correspondance, prendre la première branche existante comme dernier recours
+    // Étape 5: Si aucune correspondance, prendre la première branche existante comme dernier recours
     return queryJson.branches[0]?.line.sType || "Inconnu";
   }
 }

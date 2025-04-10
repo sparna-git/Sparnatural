@@ -11,6 +11,7 @@
   .dt-layout-cell {
     flex: 1;
     text-align: left;
+    box-sizing: border-box;
 
     &.dt-layout-start {
       display: flex;
@@ -55,15 +56,29 @@
       flex: 0 0 auto;
       text-align: right;
     }
+
+    &.dt-layout-full {
+      max-width: 100%;
+      overflow-x: auto;
+      box-sizing: border-box;
+
+      .dt-scroll {
+        max-height: 400px;
+        overflow-y: auto;
+        overflow-x: auto;
+        max-width: 100%;
+        box-sizing: border-box;
+
+        table {
+          width: 100% !important;
+          table-layout: auto !important;
+        }
+      }
+    }
   }
 }
 
-// Scroll containers pour DataTables
-.dt-scroll {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
+// Scroll sizing hack pour DataTables
 .dt-scroll-sizing {
   height: 0 !important;
   overflow: hidden !important;

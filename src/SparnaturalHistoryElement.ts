@@ -71,6 +71,15 @@ export class SparnaturalHistoryElement extends HTMLElement {
       console.info("Requête déjà présente dans l'historique.");
     }
   }
+
+  // Méthode publique pour ouvrir le modal d’historique depuis l’extérieur
+  public openHistoryModal(): void {
+    if (this.sparnaturalHistory?.historySection) {
+      this.sparnaturalHistory.historySection.showHistory();
+    } else {
+      console.error("HistorySection is not initialized yet.");
+    }
+  }
 }
 customElements.get(SparnaturalHistoryElement.HTML_ELEMENT_NAME) ||
   window.customElements.define(
