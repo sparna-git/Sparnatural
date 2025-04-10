@@ -12,7 +12,7 @@ Sparnatural History is inserted as a custom HTML element named `<sparnatural-his
 
 This component does not provide a default button to open the history modal. This gives you full control over how and where to trigger it.
 
-You can use any HTML element (a <button>, <div>, <icon>, etc.) to trigger the modal manually:
+You can use any HTML element (a `html <button>, <div>, <icon>`, etc.) to trigger the modal manually:
 
 ```html
 <!-- Custom trigger button -->
