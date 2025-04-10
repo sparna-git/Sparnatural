@@ -10,7 +10,11 @@ Sparnatural History is inserted as a custom HTML element named `<sparnatural-his
 <sparnatural-history lang="en"></sparnatural-history>
 ```
 
-This component displays a button for accessing the query history and opens a modal with a DataTable listing the previously submitted queries.
+This component does not display a button by default. Instead, you must trigger the display of the history modal manually via JavaScript:
+
+```javascript
+document.querySelector("sparnatural-history")?.openHistoryModal();
+```
 
 ## HTML Attributes Reference
 
@@ -44,36 +48,43 @@ document.dispatchEvent(new CustomEvent("submit"));
 
 ## API Methods
 
-| Method                 | Description                                                             | Parameters                     |
-| ---------------------- | ----------------------------------------------------------------------- | ------------------------------ |
-| `loadQuery(queryJson)` | Loads a query from the history into the main `<spar-natural>` component | `queryJson` (ISparJson object) |
+| Method                 | Description                                                                  | Parameters                     |
+| ---------------------- | ---------------------------------------------------------------------------- | ------------------------------ |
+| openHistoryModal()     | Opens the history modal manually (since there's no internal button anymore)  | none                           |
+| ---------------------- | ---------------------------------------------------------------------------- | ------------------------------ |
+| saveQuery(query)       | Public method to save a query manually to local storage                      | queryJson (ISparJson object)   |
+
+Queries from history are loaded by clicking the "load" button in the modal, which dispatches a loadQuery event with the corresponding queryJson.
 
 ## Internal Components
 
 ### `SparnaturalHistoryComponent`
 
-Main component rendered inside `<sparnatural-history>`. Responsible for rendering the history UI, initializing language, and dispatching the `initHist` event.
+The main component rendered inside <sparnatural-history>. Responsible for:
 
-If a `specProvider` is injected via `setSpecProvider()`, it improves label rendering for entities and properties, but it is **optional**. The history view still works without it.
+- Rendering the full history interface
+- Initializing the selected language
+- Handling the injection of the optional `specProvider` via `setSpecProvider()`, which enhances the rendering of labels for entities and properties
 
 ### `HistorySection`
 
-Contains all UI logic and rendering for the history modal, including:
+Handles all the UI logic for the modal, including:
 
-- Loading saved queries
-- Favoriting
-- Copying
-- Deleting
-- Applying a date range filter via `DateFilterModal`
-- Graceful fallback if no `specProvider` is provided (basic labels are still shown)
+- Loading and displaying saved queries
+- Applying a custom scrollable summary renderer
+- Favoriting (star icons)
+- Copying to clipboard
+- Deleting entries
+- Filtering by date range with a modal
+- Graceful fallback for missing `specProvider`
 
 ### `DateFilterModal`
 
-A simple modal that lets users choose a `minDate` and `maxDate` to filter the history.
+A modal window triggered by a calendar icon, allowing users to apply a date range filter (`minDate` / `maxDate`) on saved queries.
 
 ### `ConfirmationModal`
 
-Displays a confirmation dialog before deleting history items or clearing the full history.
+A confirmation dialog shown before critical actions, such as deleting a query or clearing all non-favorited history entries.
 
 ### `SparnaturalHistoryI18n`
 
@@ -110,9 +121,11 @@ This binds:
 
 ## Features Summary
 
-- **Automatic storage** of query history in `localStorage`
-- **Support for favorites** (★ icons)
+- **No default button** – total control over your UI design
+- **Local storage** of submitted queries
+- **Favorites support** (star toggle)
 - **Date range filter** via calendar modal
+- **Copy, Load, Delete** actions for each saved query
 - **Internationalization** (English/French)
-- **Copy/Load/Delete** actions per query
-- **Optional specProvider support** for enhanced label rendering
+- **Optional label enhancement** via `specProvider` injection
+- **Customizable modal trigger**
