@@ -10,11 +10,35 @@ Sparnatural History is inserted as a custom HTML element named `<sparnatural-his
 <sparnatural-history lang="en"></sparnatural-history>
 ```
 
-This component does not display a button by default. Instead, you must trigger the display of the history modal manually via JavaScript:
+This component does not provide a default button to open the history modal. This gives you full control over how and where to trigger it.
+
+You can use any HTML element (a <button>, <div>, <icon>, etc.) to trigger the modal manually:
+
+```html
+<!-- Custom trigger button -->
+<button id="myCustomButton" class="history-btn">
+  History <i class="fas fa-history"></i>
+</button>
+
+<!-- Sparnatural and History -->
+<spar-natural
+  id="sparnatural"
+  src="./configs/my-config.ttl"
+  lang="en"
+  endpoint="https://example.org/sparql"
+/>
+<sparnatural-history lang="en"></sparnatural-history>
+```
 
 ```javascript
-document.querySelector("sparnatural-history")?.openHistoryModal();
+const historyComponent = document.querySelector("sparnatural-history");
+
+document.getElementById("myCustomButton").addEventListener("click", () => {
+  historyComponent.openHistoryModal();
+});
 ```
+
+This gives you complete flexibility to place the history trigger wherever and however you want in your UI.
 
 ## HTML Attributes Reference
 
@@ -48,11 +72,10 @@ document.dispatchEvent(new CustomEvent("submit"));
 
 ## API Methods
 
-| Method                 | Description                                                                  | Parameters                     |
-| ---------------------- | ---------------------------------------------------------------------------- | ------------------------------ |
-| openHistoryModal()     | Opens the history modal manually (since there's no internal button anymore)  | none                           |
-| ---------------------- | ---------------------------------------------------------------------------- | ------------------------------ |
-| saveQuery(query)       | Public method to save a query manually to local storage                      | queryJson (ISparJson object)   |
+| Method             | Description                                                                 | Parameters                   |
+| ------------------ | --------------------------------------------------------------------------- | ---------------------------- |
+| openHistoryModal() | Opens the history modal manually (since there's no internal button anymore) | none                         |
+| saveQuery(query)   | Public method to save a query manually to local storage                     | queryJson (ISparJson object) |
 
 Queries from history are loaded by clicking the "load" button in the modal, which dispatches a loadQuery event with the corresponding queryJson.
 
