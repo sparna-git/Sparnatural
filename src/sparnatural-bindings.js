@@ -70,6 +70,40 @@ bindSparnaturalWithYasqe = function(sparnatural, yasqe, yasr) {
 
 
 /**
+ * Binds Sparnatural with the SparnaturalHistoryComponent.
+ *
+ * - On sparnatural `init` event : injects the config into sparnatural-history
+ * - On sparnatural `queryUpdated` event : stores the latest query in a global var
+ * - On sparnatural `submit` event : saves the latest query in the history
+ * - On sparnatural-history `loadQuery` event : loads the query from the history in Sparnatural
+ */
+bindSparnaturalWithHistory = function (sparnatural, sparnaturalHistory) {
+  let lastquery = null;
+
+  sparnatural.addEventListener("init", (event) => {
+    const config = event.detail.config;
+    sparnaturalHistory.notifyConfiguration(config);
+  });
+
+  // stores the latest query
+  sparnatural.addEventListener("queryUpdated", (event) => {
+    lastquery = event.detail.queryJson;
+  });
+
+  sparnatural.addEventListener("submit", () => {
+    // use saveQuery method from history component
+    sparnaturalHistory.saveQuery(lastquery);
+  });
+
+  // 🔁 Écouteur pour charger une requête depuis l'historique
+  sparnaturalHistory.addEventListener("loadQuery", (event) => {
+    const query = event.detail.query;
+    sparnatural.loadQuery(query);
+  });
+};
+
+
+/**
  * Binds Sparnatural with a query executed by Sparnatural itself, using yasqe as a read-only query editor.
  * 
  * 

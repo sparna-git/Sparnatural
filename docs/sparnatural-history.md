@@ -10,9 +10,9 @@ Sparnatural History is inserted as a custom HTML element named `<sparnatural-his
 <sparnatural-history lang="en"></sparnatural-history>
 ```
 
-This component does not provide a default button to open the history modal. This gives you full control over how and where to trigger it.
+This element represents the modal dialog that manages the history. It is invisble by default. You need to open the modal dialog from a button or a link in the main page.
 
-You can use any HTML element (a `html <button>, <div>, <icon>`, etc.) to trigger the modal manually:
+You can use any HTML element (a `<button>`, `<div>v, `<icon>`, etc.) to trigger the history modal manually:
 
 ```html
 <!-- Custom trigger button -->
@@ -20,17 +20,11 @@ You can use any HTML element (a `html <button>, <div>, <icon>`, etc.) to trigger
   History <i class="fas fa-history"></i>
 </button>
 
-<!-- Sparnatural and History -->
-<spar-natural
-  id="sparnatural"
-  src="./configs/my-config.ttl"
-  lang="en"
-  endpoint="https://example.org/sparql"
-/>
+<!-- History modal dialog -->
 <sparnatural-history lang="en"></sparnatural-history>
 ```
 
-JavaScript to link the trigger
+To open the history modal, call the function `.openHistoryModal()` on the `sparnatural-history` element:
 
 ```javascript
 const historyComponent = document.querySelector("sparnatural-history");
@@ -50,100 +44,79 @@ This gives you complete flexibility to place the history trigger wherever and ho
 
 ## Sparnatural history events
 
-Sparnatural History listens to the following **global events** triggered from the Sparnatural instance:
+Sparnatural History sends the following events
 
-### `queryUpdated`
+### `init`
 
-Triggered when the query is modified. Sparnatural History listens to it and stores the latest `queryJson` to prepare for submission.
+Triggered when the component has finished its initialization.
 
-```javascript
-document.dispatchEvent(
-  new CustomEvent("queryUpdated", {
-    detail: { queryJson: queryJsonObject },
-  })
-);
-```
+### `loadQuery`
 
-### `submit`
-
-Triggered when the user clicks the "submit" button. Sparnatural History saves the last recorded `queryJson` in the local storage.
+Triggered when the user clicks the "load query" button in the history modal dialog. This is the event to listen to to load the query in Sparnatural. The query is accessible in the `event.detail.query` attribute.
 
 ```javascript
-document.dispatchEvent(new CustomEvent("submit"));
+const sparnatural = document.querySelector("sparnatural");
+const sparnaturalHistory = document.querySelector("sparnatural-history");
+sparnaturalHistory.addEventListener("loadQuery", (event) => {
+  const query = event.detail.query;
+  sparnatural.loadQuery(query);
+});
 ```
 
 ## API Methods
 
 | Method             | Description                                                                 | Parameters                   |
 | ------------------ | --------------------------------------------------------------------------- | ---------------------------- |
-| openHistoryModal() | Opens the history modal manually (since there's no internal button anymore) | none                         |
-| saveQuery(query)   | Public method to save a query manually to local storage                     | queryJson (ISparJson object) |
+| `openHistoryModal()` | Opens the history modal dialog | none                         |
+| `saveQuery(query)`   | Save a query in the history | queryJson (ISparJson object) |
+| `notifyConfiguration(config)`   | Notifies the Sparnatural configuration to the history component | Sparnatural configuration |
 
-Queries from history are loaded by clicking the "load" button in the modal, which dispatches a loadQuery event with the corresponding queryJson.
+## Typical manual integration
 
-## Internal Components
-
-### `SparnaturalHistoryComponent`
-
-The main component rendered inside <sparnatural-history>. Responsible for:
-
-- Rendering the full history interface
-- Initializing the selected language
-- Handling the injection of the optional `specProvider` via `setSpecProvider()`, which enhances the rendering of labels for entities and properties
-
-### `HistorySection`
-
-Handles all the UI logic for the modal, including:
-
-- Loading and displaying saved queries
-- Applying a custom scrollable summary renderer
-- Favoriting (star icons)
-- Copying to clipboard
-- Deleting entries
-- Filtering by date range with a modal
-- Graceful fallback for missing `specProvider`
-
-### `DateFilterModal`
-
-A modal window triggered by a calendar icon, allowing users to apply a date range filter (`minDate` / `maxDate`) on saved queries.
-
-### `ConfirmationModal`
-
-A confirmation dialog shown before critical actions, such as deleting a query or clearing all non-favorited history entries.
-
-### `SparnaturalHistoryI18n`
-
-Loads translation labels from language files in `/assets/lang/en-Hist.json` or `/fr-Hist.json`.
-
-### `LocalDataStorage`
-
-Singleton for handling browser `localStorage`:
-
-- `getHistory()` — retrieves saved history
-- `saveQuery(queryJson)` — saves a query with date
-- `deleteQuery(id)` — deletes a query
-- `clearHistory()` — clears all
-
-## Typical Integration
-
-Integration typically involves two components: `<spar-natural>` and `<sparnatural-history>`. They are linked via the binding method `bindSparnaturalWithHistory()`:
+Typically, the integration involves:
+  1. (optional) Passing the configuration from Sparnatural to the sparnatural-history element
+  2. saving the Sparnatural JSON query to the history whenever the query is submitted from Sparnatural
+  3. loading the query in Sparnatural whenever the user loads it from the history
 
 ```javascript
-bindSparnaturalWithHistory(sparnatural);
+const sparnatural = document.querySelector("sparnatural");
+const sparnaturalHistory = document.querySelector("sparnatural-history");
+
+sparnatural.addEventListener("init", () => {
+  // ... other actions here ...
+  // notify the history component of the configuration
+  sparnaturalHistory.notifyConfiguration(event.detail.config);
+});
+
+sparnatural.addEventListener("queryUpdated", (event) => {
+  // ... other actions here ...
+  // Whenever the query changes, save it the JSON in a hidden field
+  document.getElementById("query-json").value = JSON.stringify(
+    event.detail.queryJson
+  );
+});
+
+sparnatural.addEventListener("submit", () => {
+  // ... other actions here ...
+  // Whenever the query is submitted, send it to the history component
+  // use saveQuery method from history component
+  sparnaturalHistory.saveQuery(document.getElementById("query-json").value);
+});
+
+// Whenever a query is loaded from the history, load it in Sparnatural
+sparnaturalHistory.addEventListener("loadQuery", (event) => {
+  const query = event.detail.query;
+  sparnatural.loadQuery(query);
+});
 ```
 
-This binds:
+## Typical integration via sparnatural-bindings.js
 
-- The `queryUpdated` and `submit` events to record queries
-- The optional `specProvider` to improve label rendering (not required)
+The manual integration described above can be directly 
 
-## Features Summary
+```javascript
+const sparnatural = document.querySelector("sparnatural");
+const sparnaturalHistory = document.querySelector("sparnatural-history");
+bindSparnaturalWithHistory(sparnatural, sparnaturalHistory);
+```
 
-- **No default button** – total control over your UI design
-- **Local storage** of submitted queries
-- **Favorites support** (star toggle)
-- **Date range filter** via calendar modal
-- **Copy, Load, Delete** actions for each saved query
-- **Internationalization** (English/French)
-- **Optional label enhancement** via `specProvider` injection
-- **Customizable modal trigger**
