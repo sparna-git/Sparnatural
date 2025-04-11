@@ -38,7 +38,6 @@ class SparnaturalComponent extends HTMLComponent {
       if (getSettings().submitButton) {
         this.submitSection = new SubmitSection(this).render();
       }
-      console.log("submit section", this.submitSection);
       this.variableSection = new VariableSection(
         this,
         this.specProvider
@@ -57,6 +56,7 @@ class SparnaturalComponent extends HTMLComponent {
           bubbles: true,
           detail: {
             sparnatural: this,
+            config: this.specProvider
           },
         })
       );
