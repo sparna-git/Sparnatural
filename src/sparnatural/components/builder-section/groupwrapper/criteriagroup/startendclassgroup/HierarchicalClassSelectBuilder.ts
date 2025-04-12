@@ -450,9 +450,9 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
         let sep = tooltip != '' ? ` - ` : "" ;
         tooltip = `${element.label}${sep}${tooltip}` ;
       }
-      // set typpy attribute if tooltip content
+      // set tippy attribute if tooltip content
       if (tooltip != '') {
-        tooltip = `data-tippy-content="${tooltip}"` ;
+        tooltip = `data-tippy-content="${tooltip.replace(/"/g, '&quot;')}"` ;
       }
       // set count attribute
       let count = element.count ;
