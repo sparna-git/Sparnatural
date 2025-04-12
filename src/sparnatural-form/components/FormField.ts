@@ -103,7 +103,7 @@ class FormField {
     // Get the help text if it exists on form config
     const helpText = SparnaturalFormI18n.getHelp(variable);
     if (helpText) {
-      helpIcon.setAttribute("data-tippy-content", helpText);
+      helpIcon.setAttribute("data-tippy-content", helpText.replace(/"/g, '&quot;'));
       label.appendChild(helpIcon);
     }
     return label;

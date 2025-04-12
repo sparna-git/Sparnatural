@@ -145,7 +145,7 @@ class EndClassGroup extends HTMLComponent {
 
     var desc = this.specProvider.getEntity(this.endClassVal.type).getTooltip();
     if (desc) {
-      $(this.html).find(".ClassTypeId").attr("data-tippy-content", desc);
+      $(this.html).find(".ClassTypeId").attr("data-tippy-content", desc.replace(/"/g, '&quot;'));
       var tippySettings = Object.assign({}, TOOLTIP_CONFIG);
       tippySettings.placement = "top-start";
       tippy(".EndClassGroup .ClassTypeId[data-tippy-content]", tippySettings);
