@@ -1,4 +1,4 @@
-import { AggregateExpression, BgpPattern, BindPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableExpression, VariableTerm, Wildcard } from "sparqljs";
+import { AggregateExpression, BgpPattern, BindPattern, BlankTerm, FilterPattern, GroupPattern, IriTerm, OperationExpression, OptionalPattern, Pattern, PropertyPath, QuadTerm, ServicePattern, Term, Triple, UnionPattern, VariableExpression, VariableTerm, Wildcard } from "sparqljs";
 import { Literal, Variable, NamedNode } from "@rdfjs/types";
 import {  Parser as SparqlParser } from "sparqljs";
 import { DataFactory } from 'rdf-data-factory';
@@ -108,22 +108,19 @@ export default class SparqlFactory {
       };
   }
 
-  static buildFilterRegex(texte: Literal, variable: Variable): FilterPattern {			
+  static buildRegexOperation(texte: Literal, variable: Variable): OperationExpression {			
     return {
-      type: "filter",
-      expression: {
-        type: "operation",
-        operator: "regex",
-        args: [
-          {
-            type: "operation",
-            operator: "str",
-            args: [ variable ]
-          },
-          texte,
-          factory.literal(`i`)
-        ],
-      },
+      type: "operation",
+      operator: "regex",
+      args: [
+        {
+          type: "operation",
+          operator: "str",
+          args: [ variable ]
+        },
+        texte,
+        factory.literal(`i`)
+      ]
     };
   }
 
@@ -203,10 +200,52 @@ export default class SparqlFactory {
 
   }
 
-  static buildFilterStringEquals(texte: Literal, variable: Variable): FilterPattern {			
+  /**
+   * Wraps the given operations in a filter with an OR operator
+   * @param operations a flat array or operations
+   * @returns 
+   */
+  static buildFilterOr(operations: OperationExpression[]): FilterPattern {			
     return {
       type: "filter",
-      expression: {
+      expression: SparqlFactory.combineWithOr(operations)
+    } ;      
+  }
+
+  /**
+   * Combines multiple operations with an || operator, recursively
+   * @param operations a flet array or operations
+   * @returns a hierarchy of || operations, each having 2 args
+   */
+  static combineWithOr(operations: OperationExpression[]): OperationExpression {			
+    if(operations.length == 1) {
+      return operations[0];     
+    } else if(operations.length == 2) {
+      return {
+        type: "operation",
+        operator: "||",
+        args: operations
+      };
+    } else {
+      return {
+        type: "operation",
+        operator: "||",
+        args: [
+          operations[0],
+          SparqlFactory.combineWithOr(operations.slice(1))
+        ]
+      };
+    }
+  }
+
+  /**
+   * Builds an operation expression that compares the lowercase of a variable with the lowercase of a literal
+   * @param texte 
+   * @param variable 
+   * @returns 
+   */
+  static buildOperationLcaseEquals(texte: Literal, variable: Variable): OperationExpression {			
+    return {
         type: "operation",
         operator: "=",
         args: [					
@@ -221,9 +260,10 @@ export default class SparqlFactory {
             args : [texte]
           }
         ]
-      }
-    } ;
+    };
   }
+
+
 
   static buildFilterRangeDateOrNumber(
       rangeBegin: Literal|null,

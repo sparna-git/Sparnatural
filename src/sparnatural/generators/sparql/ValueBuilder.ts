@@ -348,21 +348,25 @@ export class SearchRegexValueBuilder
     switch (widgetType) {
       case Config.STRING_EQUALS_PROPERTY: {
         // builds a FILTER(lcase(...) = lcase(...))
-        return [
-          SparqlFactory.buildFilterStringEquals(
-            factory.literal(`${widgetValues[0].regex}`),
-            factory.variable(this.endClassVal.variable)
-          ),
-        ];
+        return [ SparqlFactory.buildFilterOr(
+          widgetValues.map((v) => {
+            return SparqlFactory.buildOperationLcaseEquals(
+              factory.literal(`${v.regex}`),
+              factory.variable(this.endClassVal.variable)
+            );
+          })
+        ) ];
       }
       case Config.SEARCH_PROPERTY: {
         // builds a FILTER(regex(...,...,"i"))
-        return [
-          SparqlFactory.buildFilterRegex(
-            factory.literal(`${widgetValues[0].regex}`),
+       return [ SparqlFactory.buildFilterOr(
+        widgetValues.map((v) => {
+          return SparqlFactory.buildRegexOperation(
+            factory.literal(`${v.regex}`),
             factory.variable(this.endClassVal.variable)
-          ),
-        ];
+          );
+        })
+       ) ];
       }
       case Config.GRAPHDB_SEARCH_PROPERTY: {
         // builds a GraphDB-specific search pattern
@@ -393,7 +397,7 @@ export class SearchRegexValueBuilder
           .split(" ")
           .map((e) => `'${e}'`)
           .join(" and ");
-        console.log(bif_query);
+
         let ptrn: BgpPattern = {
           type: "bgp",
           triples: [

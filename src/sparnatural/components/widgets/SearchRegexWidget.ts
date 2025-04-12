@@ -52,7 +52,10 @@ export class SearchRegexWidget extends AbstractWidget {
       startClassVal,
       objectPropVal,
       endClassVal,
-      ValueRepetition.SINGLE
+      // simple search or regexes can be multivalued, but proprietary seaerch patterns are not
+      (configuration.widgetType == Config.STRING_EQUALS_PROPERTY || configuration.widgetType == Config.SEARCH_PROPERTY)
+        ?ValueRepetition.MULTIPLE
+        :ValueRepetition.SINGLE
     );
 
     this.configuration = configuration;

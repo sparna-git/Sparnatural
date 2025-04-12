@@ -354,6 +354,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
     // reparse the query, apply prefixes, and reserialize the query
     // console.log(sparql)
+    // console.log(this.#parser.parse("SELECT ?this WHERE { ?this a <http://www.sparna.fr/foo> . FILTER(?this = \"foo\" || ?this = \"bar\" || ?this = \"baz\") }"));
     var query = this.#parser.parse(sparql);
     for (var key in prefixes) {
       query.prefixes[key] = prefixes[key];
