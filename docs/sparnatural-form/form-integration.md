@@ -36,10 +36,12 @@ In a nutshell, Sparnatural Form requires 4 things to be configured:
 | `form` | URL of a JSON file giving the specification of the form fields, following the [form specification structure](form-configuration.md) | `undefined` | Mandatory
 | `query` | URL of a JSON file giving the structure of the final query that the form will execute, with variables bounded to the values provided in the form. This file must follow the [Sparnatural form query structure](../Query-JSON-format.md) | `undefined` | Mandatory
 | `catalog` | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) | none | Optional|
-| `limit` | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) | `-1` | Optional|
-| `lang` | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) `en` | Recommended |
 | `defaultLang` | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) `en` | Recommended |
-| `prefixes` | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) | `none` | Optional
+| `lang` | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) `en` | Recommended |
+| `limit` | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) | `-1` | Optional|
+| `prefixes` | identical to the equivalent [Sparnatural attribute](../javascript-integration.md) | `none` | Optional |
+| `typePredicate` | The type predicate to use to generate the type criteria. Defaults to rdf:type, but could be changed to e.g. `<http://www.wikidata.org/prop/direct/P31>+` for Wikidata integration, or `<http://www.w3.org/2000/01/rdf-schema#subClassOf>+` to query OWL-style models.|`rdf:type` | Optional |
+
 
 ## Sparnatural Form events
 

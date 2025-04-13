@@ -18,7 +18,7 @@ export class SparnaturalFormAttributes {
   sparqlPrefixes?: { [key: string]: string };
   formConfig: Form;
 
-  typePredicate = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
+  typePredicate: string = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
 
   constructor(element: HTMLElement) {
     // not the differences in attribute names
@@ -53,6 +53,7 @@ export class SparnaturalFormAttributes {
     this.language = this.#read(element, "lang");
     this.debug = this.#read(element, "debug", true);
     this.defaultLanguage = this.#read(element, "defaultLang");
+    this.typePredicate = this.#read(element, "typePredicate");
   }
 
   #read(element: HTMLElement, attribute: string, asJson: boolean = false) {
