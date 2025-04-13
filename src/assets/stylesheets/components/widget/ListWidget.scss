@@ -1,4 +1,11 @@
 .list-widget{
     width:100%;
     min-width:275px;
+
+    /* we have also the loadingspinner here */
+
+    select {
+        max-width:450px;
+    }
+    
 }
