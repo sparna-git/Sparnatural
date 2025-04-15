@@ -36,7 +36,7 @@ class SparnaturalSpecificationFactory {
       });
     } else {
       // split on whitespace and load all files
-      let configs = (cfg as string).split(" ");
+      let configs = (cfg as string).split(/\s+/).filter((e:string) => e.length > 0);
       console.log("Configuring from " + configs.length + " configs");
 
       if(catalog) {
