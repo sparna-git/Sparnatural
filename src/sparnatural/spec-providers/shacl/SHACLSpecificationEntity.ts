@@ -11,6 +11,7 @@ import { StoreModel } from "../StoreModel";
 import { DagIfc, Dag } from "../../dag/Dag";
 import ISpecificationEntity from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
+import ISparnaturalSpecification from "../ISparnaturalSpecification";
 
 const factory = new DataFactory();
 
@@ -531,6 +532,56 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         return this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null);
     }
 
+    couldBeSkosConcept():boolean {
+        return SHACLSpecificationEntity.couldBeSkosConcept(this.uri, this.provider);
+    }
+
+    static couldBeSkosConcept(nodeShapeUri:string, config:ISparnaturalSpecification):boolean {
+        let specEntity:SHACLSpecificationEntity = config.getEntity(nodeShapeUri) as SHACLSpecificationEntity;
+        if(specEntity) {
+            let isItselfSkosConcept:boolean = (nodeShapeUri == SKOS.CONCEPT.value);
+            let targetsSkosConcept:boolean = (specEntity.getShTargetClass().findIndex(t => t.value == SKOS.CONCEPT.value) > -1);
+
+            // read all sh:property, including sh:deactivated, ones with sh:hasValue, etc.
+            let propShapes = specEntity.graph.readProperty(factory.namedNode(nodeShapeUri), SH.PROPERTY).map(node => node.value);
+
+            let hasPropertyRdfTypeSkosConcept:boolean = propShapes.findIndex(p => {
+                let propertyShape:SHACLSpecificationProperty = config.getProperty(p) as SHACLSpecificationProperty;
+                let path = propertyShape.getShPath();
+                if(
+                    path
+                    &&
+                    (path.value === RDF.TYPE.value)
+                    &&
+                    specEntity.graph.hasTriple(factory.namedNode(p), SH.HAS_VALUE, SKOS.CONCEPT)
+                ) {
+                    return true;
+                }
+
+                return false;
+            }) > -1;
+
+            let hasConstraintOnSkosInScheme = propShapes.findIndex(p => {
+                let propertyShape:SHACLSpecificationProperty = config.getProperty(p) as SHACLSpecificationProperty;
+                let path = propertyShape.getShPath();
+                if(
+                    path
+                    &&
+                    (path.value === SKOS.IN_SCHEME.value)
+                    &&
+                    specEntity.graph.hasTriple(factory.namedNode(p), SH.HAS_VALUE, null)
+                ) {
+                    return true;
+                }
+
+                return false;
+            }) > -1;
+
+            return isItselfSkosConcept || targetsSkosConcept || hasPropertyRdfTypeSkosConcept || hasConstraintOnSkosInScheme;
+        }
+    }
+
+
     static compare(item1: SHACLSpecificationEntity, item2: SHACLSpecificationEntity) {
         return SHACLSpecificationEntry.compare(item1, item2);
     }
@@ -552,38 +603,6 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
         this.isRangeOfFunction = isRangeOfFunction;
     }
 
-    getConnectedEntities(): string[] {
-        return new Array<string>();
-    }
-
-    getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
-        return new Dag<ISpecificationEntity>();
-    }
-
-    hasConnectedEntities(): boolean {
-        return false;
-    }
-
-    getConnectingProperties(range: string): string[] {
-        return new Array<string>();
-    }
-
-    getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
-        return new Dag<ISpecificationProperty>();
-    }
-
-    isLiteralEntity(): boolean {
-        return true;
-    }
-
-    hasTypeCriteria(): boolean {
-        return false;
-    }
-
-    getDefaultLabelProperty(): string | undefined {
-        return undefined;
-    }
-
     getId(): string {
         return this.id;
     }
@@ -592,49 +611,38 @@ export class SpecialSHACLSpecificationEntity implements ISHACLSpecificationEntit
         return this.label;
     }
 
-    getOrder(): string|undefined {
-        return undefined;
-    }
-
-    getTooltip(): string | undefined {
-        return undefined;
-    }
-
     getColor(): string | undefined {
         // return "slategray";
         return undefined;
-    }
-
-    getDatasource(): any {
-        return null;
-    }
-
-    getTreeChildrenDatasource(): any {
-        return null;
-    }
-
-    getTreeRootsDatasource(): any {
-        return null;
     }
 
     getIcon(): string {
         return this.icon;
     }
 
-    getHighlightedIcon(): string {
-        return "";
-    }
-
     isRangeOf(n3store:RdfStore, shapeUri:any):boolean {
         return this.isRangeOfFunction(n3store, shapeUri);
     }
 
-    getParents(): string[] {
-        return [];
-    }
-    getChildren(): string[] {
-        return [];
-    }
+    // default implementation of all other functions
+
+    getConnectedEntities(): string[] { return new Array<string>(); }
+    getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> { return new Dag<ISpecificationEntity>(); }
+    hasConnectedEntities(): boolean { return false; }
+    getConnectingProperties(range: string): string[] { return new Array<string>(); }
+    getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> { return new Dag<ISpecificationProperty>(); }
+    isLiteralEntity(): boolean { return true; }
+    hasTypeCriteria(): boolean { return false; }
+    getDefaultLabelProperty(): string | undefined { return undefined; }
+    getOrder(): string|undefined { return undefined; }
+    getTooltip(): string | undefined { return undefined; }
+    getDatasource(): any { return null; }
+    getTreeChildrenDatasource(): any { return null; }
+    getTreeRootsDatasource(): any { return null; }
+    getHighlightedIcon(): string { return ""; }
+    getParents(): string[] { return []; }
+    getChildren(): string[] { return []; }
+    couldBeSkosConcept(): boolean {  return false; }
 }
 
 export class SpecialSHACLSpecificationEntityRegistry {

@@ -23,5 +23,7 @@ interface ISpecificationEntity extends ISpecificationEntry {
 
   getDefaultLabelProperty():string|undefined;
 
+  couldBeSkosConcept():boolean;
+
 }
 export default ISpecificationEntity;

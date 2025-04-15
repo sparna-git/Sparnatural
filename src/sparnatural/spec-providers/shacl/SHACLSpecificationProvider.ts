@@ -107,7 +107,10 @@ export const VOID = {
 
 const SKOS_NAMESPACE = "http://www.w3.org/2004/02/skos/core#";
 export const SKOS = {
-  DEFINITION: factory.namedNode(SKOS_NAMESPACE + "definition") as NamedNode
+  CONCEPT: factory.namedNode(SKOS_NAMESPACE + "Concept") as NamedNode,
+  DEFINITION: factory.namedNode(SKOS_NAMESPACE + "definition") as NamedNode,
+  IN_SCHEME: factory.namedNode(SKOS_NAMESPACE + "inScheme") as NamedNode,
+  PREF_LABEL: factory.namedNode(SKOS_NAMESPACE + "prefLabel") as NamedNode
 };
 
 export class SHACLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {

@@ -1,17 +1,18 @@
 import { Config } from "../../ontologies/SparnaturalConfig";
-import { DataFactory } from 'rdf-data-factory';
-import { SH, XSD } from "./SHACLSpecificationProvider";
+import { BlankNode, DataFactory, NamedNode } from 'rdf-data-factory';
+import { SH, SKOS, XSD } from "./SHACLSpecificationProvider";
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { StoreModel } from "../StoreModel";
 import { StatisticsReader } from "../StatisticsReader";
 import { RDF } from "../BaseRDFReader";
+import ISparnaturalSpecification from "../ISparnaturalSpecification";
 
 const factory = new DataFactory();
 
 
 export interface SparnaturalSearchWidget {
     getUri():string;
-    score(propertyShape:string, store: StoreModel):number;
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number;
 }
 
 export class SparnaturalSearchWidgetsRegistry {
@@ -40,7 +41,7 @@ export class AutocompleteWidget implements SparnaturalSearchWidget {
         return Config.AUTOCOMPLETE_PROPERTY;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         return 10;
     }
 
@@ -53,7 +54,7 @@ export class ListWidget implements SparnaturalSearchWidget {
         return Config.LIST_PROPERTY;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         // if there is a provided list of values, score higher
         if(store.hasTriple(factory.namedNode(propertyShape), SH.IN, null) ) {
             return 100;
@@ -63,9 +64,18 @@ export class ListWidget implements SparnaturalSearchWidget {
         let count = new StatisticsReader(store).getDistinctObjectsCountForShape(factory.namedNode(propertyShape));
         if(count && (count < 500)) {
             return 20;
-        } else {
-            return -1;
         }
+        
+        // if the shape points to skos:Concept in sh:class, score higher
+        if(store.hasTriple(factory.namedNode(propertyShape), SH.CLASS, SKOS.CONCEPT)) {
+            return 20;
+        }
+
+        if(config.getEntity(range).couldBeSkosConcept()){
+            return 20;                    
+        }
+
+        return -1;
     }
 
 }
@@ -77,7 +87,7 @@ export class TreeWidget implements SparnaturalSearchWidget {
         return Config.TREE_PROPERTY;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         return -1;
     }
 
@@ -90,7 +100,7 @@ export class DatePickerWidget implements SparnaturalSearchWidget {
         return Config.TIME_PROPERTY_DATE;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
 
         let hasDateOrDateTimePredicate = function(rdfNode: any) {
             if(
@@ -124,7 +134,7 @@ export class YearPickerWidget implements SparnaturalSearchWidget {
         return Config.TIME_PROPERTY_YEAR;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         // if the datatype is xsd:gYear
         if(
             store.hasTriple(factory.namedNode(propertyShape), SH.DATATYPE, XSD.GYEAR) 
@@ -145,7 +155,7 @@ export class MapWidget implements SparnaturalSearchWidget {
         return Config.MAP_PROPERTY;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         // if the datatype is geo:wktLiteral
         if(
             store.hasTriple(factory.namedNode(propertyShape), SH.DATATYPE, GEOSPARQL.WKT_LITERAL) 
@@ -166,7 +176,7 @@ export class BooleanWidget implements SparnaturalSearchWidget {
         return Config.BOOLEAN_PROPERTY;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         // if the datatype is xsd:boolean
         if(
             store.hasTriple(factory.namedNode(propertyShape), SH.DATATYPE, XSD.BOOLEAN) 
@@ -188,7 +198,7 @@ export class NumberWidget implements SparnaturalSearchWidget {
         return Config.NUMBER_PROPERTY;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         // if the datatype is xsd:boolean
         if(
             store.hasTriple(factory.namedNode(propertyShape), SH.DATATYPE, XSD.BYTE)
@@ -234,7 +244,7 @@ export class NoWidget implements SparnaturalSearchWidget {
         return Config.NON_SELECTABLE_PROPERTY;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         return -1;
     }
 
@@ -248,7 +258,7 @@ export class SearchRegexWidget implements SparnaturalSearchWidget {
         return Config.SEARCH_PROPERTY;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         let count = new StatisticsReader(store).getDistinctObjectsCountForShape(factory.namedNode(propertyShape));
         // if the datatype is xsd:string or rdf:langString, and there is a large number, otherwise we stick with list widget
         if(
@@ -277,7 +287,7 @@ export class SearchEqualWidget implements SparnaturalSearchWidget {
         return Config.STRING_EQUALS_PROPERTY;
     }
 
-    score(propertyShape:string, store: StoreModel):number {
+    score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number {
         return -1;
     }
 

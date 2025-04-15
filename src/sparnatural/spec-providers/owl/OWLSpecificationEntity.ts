@@ -134,6 +134,11 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         return this.graph.readSingleProperty(factory.namedNode(this.uri), factory.namedNode(Config.DEFAULT_LABEL_PROPERTY))?.value;
     }
 
+    // unsupported in OWL config
+    couldBeSkosConcept(): boolean {
+        return false;
+    }
+
     #_isSparnaturalClass(classUri: string) {
         return (
           this.store.getQuads(

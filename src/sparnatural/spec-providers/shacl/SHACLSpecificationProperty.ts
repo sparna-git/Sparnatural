@@ -150,7 +150,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
         if(result.length) {
           return result[0];
         } else {
-          return this.getDefaultPropertyType(shapeUri);
+          return this.getDefaultPropertyType(shapeUri, range);
         }
     }
 
@@ -158,12 +158,12 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
      * @param shapeUri the shape URI (this property shape or an or member of the range of this shape) from which to compute the default property type (e.g. by reading the associated count)
      * @returns the default widget for this property, based on datatype and count
      */
-    getDefaultPropertyType(shapeUri:string): string {
+    getDefaultPropertyType(shapeUri:string, range:string): string {
       let highest:SparnaturalSearchWidget = new ListWidget();
       let highestScore:number = 0;
       for (let index = 0; index < SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().length; index++) {
         const currentWidget = SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets()[index];
-        let currentScore = currentWidget.score(shapeUri, new StoreModel(this.store))
+        let currentScore = currentWidget.score(shapeUri, range, new StoreModel(this.store), this.provider);
         if(currentScore > highestScore) {
           highestScore = currentScore;
           highest = currentWidget;
@@ -192,6 +192,10 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
     isDeactivated(): boolean {
       return this.graph.hasTriple(factory.namedNode(this.uri), SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN));
+    }
+
+    getShPath(): Term {
+      return this.graph.readSingleProperty(factory.namedNode(this.uri), SH.PATH);
     }
 
     getParents(): string[] {
