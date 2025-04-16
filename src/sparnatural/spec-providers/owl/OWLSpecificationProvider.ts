@@ -118,7 +118,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
         // keep only Sparnatural classes in the list
         if (typeClass == "BlankNode" || this.isSparnaturalClass(classId)) {
           // always exclude "remote classes" that should not have a type that from first list
-          if (!this.getEntity(classId).hasTypeCriteria()) {
+          if (this.getEntity(classId).hasTypeCriteria()) {
             if (!this._isUnionClass(classAsRDFTerm)) {
               this._pushIfNotExist(classId, items);
             } else {
