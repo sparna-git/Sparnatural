@@ -205,15 +205,21 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       // we find the property shape having this property as a path
       .map(term => {
           let propertyShapesWithSuperProperty:Quad_Subject[] = this.graph.findSubjectsOf(SH.PATH, term);
-          let result:Quad_Subject = undefined;
+          let result:Quad_Subject = undefined;          
+
+          // we can find multiple property shapes with this super property
+          // we need to filter them to find the one that is referenced from the same node shape as the one the current property is attached
           propertyShapesWithSuperProperty.forEach(ps => {
-            if(this.graph.hasTriple(
-              this.graph.findSingleSubjectOf(SH.PROPERTY, factory.namedNode(this.uri)),
-              SH.PROPERTY,
-              ps
-            )) {
-              result = ps;
-            }
+            // a potential issue is that this same property shape may be attached to multiple node shapes, so we need to check on each of them
+            this.graph.findSubjectsOf(SH.PROPERTY, factory.namedNode(this.uri)).forEach(nodeShape => {
+              if(this.graph.hasTriple(
+                nodeShape,
+                SH.PROPERTY,
+                ps
+              )) {
+                result = ps;
+              }
+            });
           })
           return result;
       })

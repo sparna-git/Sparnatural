@@ -116,8 +116,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     getConnectingPropertiesTree(range: string): DagIfc<ISpecificationProperty> {
         // 1. get list of properties
         let properties:ISpecificationProperty[] = this.getConnectingProperties(range).map(s => this.provider.getProperty(s)) as ISpecificationProperty[];
-
-        // retrive the potential parents
+        // retrieve the potential parents
         while(!properties.every(property => {
             return property.getParents().every(parent => {
                 return (properties.find(anotherProperty => anotherProperty.getId() === parent) != undefined);
@@ -126,7 +125,9 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             let parentsToAdd:ISpecificationProperty[] = [];
             properties.forEach(property => {
                 property.getParents().forEach(parent => {
+                    // if the parent is not already there, add it to the list of parents to add
                     if(!properties.find(anotherProperty => anotherProperty.getId() === parent)) {
+                        
                         parentsToAdd.push(this.provider.getProperty(parent) as ISpecificationProperty);
                     }
                 })
@@ -134,9 +135,8 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
             parentsToAdd.forEach(p => properties.push(p));
         }
 
-        // 2. turn it into a flat tree
+        // 2. turn it into a tree
         let dag:Dag<ISpecificationProperty> = new Dag<ISpecificationProperty>();
-        // dag.initFlatTreeFromFlatList(properties);
         dag.initFromParentableAndIdAbleEntity(properties, []);
 
         // sort the tree with compare function
