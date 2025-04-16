@@ -1,6 +1,7 @@
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import Datasources from "../../../../../ontologies/SparnaturalConfigDatasources";
 import { Catalog } from "../../../../../settings/Catalog";
+import { SKOS } from "../../../../../spec-providers/shacl/SHACLSpecificationProvider";
 import HTMLComponent from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../SelectedVal";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
@@ -131,6 +132,13 @@ export class WidgetFactory {
                       Datasources.QUERY_LIST_LABEL_ALPHA
                     ),
                     labelProperty: this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty(),
+                  }
+                } else if(this.specProvider.getEntity(endClassVal.type).couldBeSkosConcept()) {
+                  datasource = {
+                    queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+                      Datasources.QUERY_LIST_LABEL_ALPHA
+                    ),
+                    labelProperty: SKOS.PREF_LABEL.value,
                   }
                 } else {
                   // that datasource can work indifferently with URIs or Literals
