@@ -524,7 +524,6 @@ export class HierarchicalClassSelectBuilder extends HTMLComponent {
       
       this.initBreadCrum() ;
       this.htmlSelectUiUxLists.append(this.htmlSelectUiUxBreadCrum) ;
-      console.log(this.hierarchyData) ;
       this.buildClassSelectList(this.hierarchyData, 'root active-pane', '', initBreadcrumData) ;
 
       this.html = $('<div></div>');

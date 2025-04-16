@@ -216,7 +216,6 @@ export default class JsonSparqlTranslator {
 
         if (!specProperty) {
           // Si aucune propriété n'est trouvée, retourne une variable simple
-          console.log("Variable", (v as VariableTerm).value);
           return [factory.variable((v as VariableTerm).value)];
         }
 

@@ -135,7 +135,6 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
 
     items = this._sort(items);
 
-    console.log("Classes in domain of any property " + items);
     return items;
   }
 
@@ -281,7 +280,6 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
     }
     
     let finalString = this.#generator.stringify(query);
-    console.log(finalString);
     return finalString
   }
 

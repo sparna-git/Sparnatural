@@ -139,7 +139,6 @@ class ClassTypeId extends HTMLComponent {
       "change",
       (e: CustomEvent) => {
         let selectedValue = e.detail.value ;
-        console.log(e.detail) ;
         this.setCurrentContent(selectedValue) ;
         //disable further choice on nice-select
         this.widgetHtml[0].classList.add("disabled");
@@ -290,8 +289,6 @@ class ClassSelectBuilder extends HTMLComponent {
 
 
   convertToJsonDag(rootNodes:DagNodeIfc<ISpecificationEntry>[]) {
-    console.log('rootNodes') ;
-    console.log(rootNodes) ;
     let arrayToJson: Array<JsonDagRow> = [];
     arrayToJson = this.getRecursiveDagElements(rootNodes, '') ;
     return JSON.parse(JSON.stringify(arrayToJson));

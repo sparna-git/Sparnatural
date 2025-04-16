@@ -16,7 +16,6 @@ class PlayBtn extends HTMLComponent {
     let that = this;
     this.widgetHtml.on("click", function (e: JQuery.ClickEvent) {
       // don't call the callback when the button is disabled
-      console.log("PlayBtn: Play button clicked");
       if (!that.isDisabled()) {
         callback();
       }

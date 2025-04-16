@@ -181,8 +181,6 @@ export default class WhereBuilder {
     );
     intersectionBuilder.build();
     this.#intersectionPtrn = intersectionBuilder.getPattern();
-    console.log(this.#intersectionPtrn);
-    console.log(objectPropCls);
   }
 
   #buildGrpWrapperPtrn() {

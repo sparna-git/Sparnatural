@@ -125,7 +125,6 @@ class ObjectPropertyTypeId extends HTMLComponent {
       "change",
       (e: CustomEvent) => {
         let selectedValue = e.detail.value ;
-        console.log(e.detail) ; 
         this.setCurrentContent(selectedValue) ;
         //disable further choice on nice-select
         this.widgetHtml[0].classList.add("disabled");
@@ -186,8 +185,6 @@ class PropertySelectBuilder extends HTMLComponent {
   }
 
   convertToJsonDag(rootNodes:DagNodeIfc<ISpecificationEntry>[]) {
-    console.log('rootNodes') ;
-    console.log(rootNodes) ;
     let arrayToJson: Array<JsonDagRow> = [];
     this.selectableItems = [] ;
     arrayToJson = this.getRecursiveDagElements(rootNodes, '') ;

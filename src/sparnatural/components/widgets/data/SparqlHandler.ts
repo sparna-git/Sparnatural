@@ -168,7 +168,6 @@ export class MultipleEndpointSparqlHandler implements SparqlHandlerIfc {
 
         const promises:Promise<{}>[] = [];
         for(const i in this.catalog.getServices()) {
-            console.log("Calling "+this.catalog.getServices()[i].getEndpointURL())
             let fetcher = new EndpointSparqlHandler(this.urlFetcher, this.catalog.getServices()[i].getEndpointURL());
 
             promises[promises.length] = new Promise((resolve, reject) => {

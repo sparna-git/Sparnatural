@@ -78,7 +78,6 @@ export class BaseRDFReader {
             console.error(
               "Sparnatural - unable to load RDF config file : " + config
             );
-            console.log(response);
             reject();
           })
         ); // end Promise

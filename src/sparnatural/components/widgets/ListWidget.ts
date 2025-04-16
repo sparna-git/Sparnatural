@@ -139,7 +139,6 @@ export class ListWidget extends AbstractWidget {
 
     // TODO : this is not working for now
     let errorCallback = (payload:any) => {
-      console.log(payload);
       this.html.append(errorHtml);
     }
 

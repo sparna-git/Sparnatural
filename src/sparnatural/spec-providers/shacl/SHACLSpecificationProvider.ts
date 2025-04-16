@@ -147,7 +147,6 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
           
           // 2. build a property shape URI from it
           let propertyShapeUri = uri+"_"+i;
-          console.log("replace with new URI "+propertyShapeUri)
           // 3. replace all triples where the blank node is subject
           this.store.getQuads(
             propertyShapeNode,
@@ -199,7 +198,6 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
   getEntitiesInDomainOfAnyProperty(): string[] {
     // map to extract just the uri
-    console.log(this.getEntitiesTreeInDomainOfAnyProperty().toDebugString());
     return this.getInitialEntityList().map(e => e.getId());
   }
 
@@ -432,7 +430,6 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
 
     items = (SHACLSpecificationEntry.sort(items) as SHACLSpecificationEntity[]);
 
-    console.log("Initial entity list " + items.map(i => i.getId()));
     return items;
   }
 

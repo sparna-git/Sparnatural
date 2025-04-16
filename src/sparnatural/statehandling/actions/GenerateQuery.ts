@@ -27,7 +27,6 @@ export class QueryGenerator {
 
     // triggered when Sparnatural is submitted : generates output SPARQL query
     let settings = getSettings();
-    console.log("settings", settings);
     let qryGen = new SparnaturalJsonGenerator(this.actionStore.sparnatural);
 
     var jsonQuery = qryGen.generateQuery(

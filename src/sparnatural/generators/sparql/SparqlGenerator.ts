@@ -171,9 +171,7 @@ export default class SparqlGenerator {
               // check if the spec tells us that begin date / end date / exact date propeties are used
               let propertyType =
                 grpWrapper.CriteriaGroup.ObjectPropertyGroup.getTypeSelected();
-              console.log("propertyType: ", propertyType);
               specProperty = this.specProvider.getProperty(propertyType);
-              console.log("specProperty: ", specProperty);
             }
           }
         ); // end traverse

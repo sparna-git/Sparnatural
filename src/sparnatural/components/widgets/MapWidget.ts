@@ -124,8 +124,6 @@ export default class MapWidget extends AbstractWidget {
   }
 
   render(): this {
-    console.log("rendering map widget...")
-    console.log(this) ;
     super.render();
     this.renderMapValueBtn = new AddUserInputBtn(
       this,
@@ -157,12 +155,10 @@ export default class MapWidget extends AbstractWidget {
 
       switch ((this.widgetValues[0].value.type as string)) {
         case 'Rectangle':
-            console.log(this.widgetValues[0].value.coordinates) ;
             let bounds = L.latLngBounds(this.widgetValues[0].value.coordinates[0][0],this.widgetValues[0].value.coordinates[0][2]) ;
             L.rectangle(bounds, (options as PolylineOptions)).addTo(this.map);
           break;    
         default: 
-          console.log(this.widgetValues[0].value.coordinates) ;
           let coordinates = this.widgetValues[0].value.coordinates[0][0] ;
           L.polygon(this.widgetValues[0].value.coordinates[0], (options as PolylineOptions)).addTo(this.map);
         break;
@@ -221,17 +217,11 @@ export default class MapWidget extends AbstractWidget {
       });
       this.drawingLayer.on("pm:edit", (e) => {
         
-      console.log('fireing pm:create')
-        console.log(e);
-        
         //let widgetValue = this.#setWidgetValue(e.layer) ;
         this.drawingLayer = e.layer;
 
       });
       this.drawingLayer.on("pm:update", (e) => {
-        
-      console.log('fireing pm:update')
-        console.log(e);
         
         //let widgetValue = this.#setWidgetValue(e.layer) ;
         this.drawingLayer = e.layer;
@@ -249,8 +239,6 @@ export default class MapWidget extends AbstractWidget {
         this.#setWidgetValue(this.drawingLayer) ;
         this.triggerRenderWidgetVal(this.widgetValues);
         $(this.parentComponent).trigger("change");
-        console.log(this) ;
-        console.log(this.endClassWidgetGroup) ;
         //this.html.hide() ;
         //this.endClassWidgetGroup
       },
@@ -259,7 +247,6 @@ export default class MapWidget extends AbstractWidget {
 
     this.map.on("pm:create", (e:any) => {
 
-      console.log('fireing pm:create')
       //If there is already a drawing, then delete it
       // allows only for one drawing at a time
       if (this.drawingLayer) this.map.removeLayer(this.drawingLayer);
@@ -270,15 +257,13 @@ export default class MapWidget extends AbstractWidget {
 
       //let widgetValue = this.#setWidgetValue(e.layer) ;
 
-      console.log(this.endClassWidgetGroup) ;
 
       //this.endClassWidgetGroup.html[0].addEventListener("click", (evt:MouseEvent) => this.showWidgetMap(evt)) ;
 
       //this.renderWidgetVal(widgetValue);
       //add listener when the shape gets changed
         this.drawingLayer.on("pm:edit", (e) => {
-          
-        console.log('fireing pm:create pm:edit');
+
         this.drawingLayer = e.layer;
           //let widgetValue = this.#setWidgetValue(e.layer) ;
           //this.#setWidgetValue(e.layer) ;
@@ -405,7 +390,6 @@ export default class MapWidget extends AbstractWidget {
     let lat = 0;
     let lon = 0;
     coordinates[0].forEach((point:any) => {
-      console.log(point) ;
       lat = point.lat - startBottom ;
       lon = point.lng - startLeft ;
       if(!(svgCoordinates == '')) {

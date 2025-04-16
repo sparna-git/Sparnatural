@@ -52,7 +52,6 @@ class ActionStore {
         event.stopImmediatePropagation();
         event.preventDefault();
         // trigger query generation + re-enable submit button
-        console.log("sparnatural", this.sparnatural);
         new QueryGenerator(this).generateQuery();
       }
     );
