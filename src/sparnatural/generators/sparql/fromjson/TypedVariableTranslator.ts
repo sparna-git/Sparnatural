@@ -71,6 +71,8 @@ export default class TypedVariableTranslator {
    * Generates the triple of the type
    */
   #buildTypeTriple() {
+    console.log("buildTypeTriple on "+this.#variableName);
+    console.log("propertyIsBlocking "+this.#propertyIsBlocking);
     if(!this.#propertyIsBlocking) {
       // Ne construisez pas le triple si l'entité n'a pas de critère de type
       if (this.#specProvider.getEntity(this.#variableType).hasTypeCriteria()) {
