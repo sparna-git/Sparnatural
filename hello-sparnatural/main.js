@@ -22,12 +22,12 @@ const yasqe = new Yasqe(document.getElementById("yasqe"), {
 
 // init yasR result display
 // register a specific plugin that is capable of displaying clikable label + URI
-Yasr.registerPlugin("LabelledUriTable",SparnaturalYasguiPlugins.TableX);
+Yasr.registerPlugin("TableX",SparnaturalYasguiPlugins.TableX);
 delete Yasr.plugins['table'];
 
 const yasr = new Yasr(document.getElementById("yasr"), {
-	pluginOrder: ["LabelledUriTable", "response"],
-	defaultPlugin: "LabelledUriTable"
+	pluginOrder: ["TableX", "response"],
+	defaultPlugin: "TableX"
 });
 
 // link yasqe and yasr
