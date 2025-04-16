@@ -23,10 +23,11 @@ const yasqe = new Yasqe(document.getElementById("yasqe"), {
 // init yasR result display
 // register a specific plugin that is capable of displaying clikable label + URI
 Yasr.registerPlugin("TableX",SparnaturalYasguiPlugins.TableX);
+Yasr.registerPlugin("Grid",SparnaturalYasguiPlugins.GridPlugin);
 delete Yasr.plugins['table'];
 
 const yasr = new Yasr(document.getElementById("yasr"), {
-	pluginOrder: ["TableX", "response"],
+	pluginOrder: ["TableX", "Grid", "response"],
 	defaultPlugin: "TableX"
 });
 
@@ -35,6 +36,18 @@ yasqe.on("queryResponse", function(_yasqe, response, duration) {
 	yasr.setResponse(response, duration);
 	// when response is received, enable the button
 	sparnatural.enablePlayBtn();
+});
+
+
+sparnatural.addEventListener("init", (event) => {
+	// notify the specification to yasr plugins
+	for (const plugin in yasr.plugins) {
+	  if (yasr.plugins[plugin].notifyConfiguration) {
+	    yasr.plugins[plugin].notifyConfiguration(
+	      event.detail.config
+	    );
+	  }
+	}
 });
 
 // listener when sparnatural updates the query
@@ -46,6 +59,13 @@ sparnatural.addEventListener("queryUpdated", (event) => {
 	// display the JSON query on the console
 	console.log("Sparnatural JSON query structure:");
 	console.dir(event.detail.queryJson);
+
+	// notify the query to yasr plugins
+	for (const plugin in yasr.plugins) {
+	  if (yasr.plugins[plugin].notifyQuery) {
+	    yasr.plugins[plugin].notifyQuery(event.detail.queryJson);
+	  }
+	}
 });
 
 // listener when the sparnatural submit button is clicked

@@ -13,7 +13,7 @@ bindSparnaturalWithYasrPlugins = function(sparnatural, yasr) {
       for (const plugin in yasr.plugins) {
         if (yasr.plugins[plugin].notifyConfiguration) {
           yasr.plugins[plugin].notifyConfiguration(
-            sparnatural.sparnatural.specProvider
+            event.detail.config
           );
         }
       }
