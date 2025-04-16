@@ -126,7 +126,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
               RDFS.SUBCLASS_OF,
               factory.namedNode(Config.NOT_INSTANTIATED_CLASS),
               null
-            ).length > 0
+            ).length == 0
           );
     }
 
