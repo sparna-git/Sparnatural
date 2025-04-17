@@ -147,3 +147,67 @@ SELECT DISTINCT ?ProvidedCHO_1 ?ProvidedCHO_1_label WHERE {
 }
 LIMIT 1000
 ```
+
+
+## Joining on literal values
+
+Sometimes the key to join between the local and the remote triplestore is a literal value. See the original discussion at [#605](https://github.com/sparna-git/Sparnatural/issues/605). In that case, the way to configure this in SHACL is the following:
+
+1. Declare the property that contains in the local triplestore the key to join with the remote SPARQL service. Like _"lcsh id"_. 
+
+```turtle
+this:Museum a sh:NodeShape;
+  sh:targetClass dbpedia:Museum;
+  sh:nodeKind sh:IRI;
+  rdfs:label "Museum"@en, "Musée"@fr;
+  sh:property
+    # the property expressing the literal value
+   this:Museum_LCSH_id .
+
+# The library of congress ID, A Literal
+this:Museum_LCSH_id 
+  sh:path dbpedia:fake_lcsh_id;
+  sh:name "LCSH ID"@en, "LCSH ID"@fr;  
+  sh:node this:LCSHIdentifier;
+  dash:searchWidget core:NonSelectableProperty .
+```
+
+2. Declare a `sh:node` constraint on this property pointing to the entity in the config that "represents" these literal values, like _"LCSH Identifier"_
+
+
+```turtle
+
+# The library of congress ID, A Literal
+this:Museum_LCSH_id 
+  # points to a Literal NodeShape
+  sh:node this:LCSHIdentifier .
+
+# A Literal NodeShape
+this:LCSHIdentifier a sh:NodeShape;
+  # This represents literals
+  sh:nodeKind sh:Literal;
+  rdfs:label "Library of Congress Subject Headings ID"@en, "Library of Congress Subject Headings ID"@fr;
+  # ...
+.
+```
+
+3. Then attach a property on this literal entity, which represent how this same literal is expressed in the remote SPARQL service. This is counter intuitive, because literals normally cannot have properties, but this property will be an _inverse property_ **_from_** the remote entity **_to_** the literal. It is this property that will be annotated with the `core:sparqlService`. The property also uses an `sh:node` to declare its "range" entity, as usual.
+
+Like this:
+
+```turtle
+# A Literal NodeShape
+this:LCSHIdentifier a sh:NodeShape;
+  # property attached to this literal
+  sh:property this:Wikidata_hasLCSHIdentifier ;
+.
+
+# The property being an inverse and linking to the Wikidata item
+# Note the use of inversePath
+this:Wikidata_hasLCAuthorityIdentifier sh:path [ sh:inversePath wdt:P244 ] ;
+  sh:name "is LC Authority ID of"@en, "is LC Authority ID of"@fr;
+  sh:nodeKind sh:IRI;
+  sh:node this:MuseumWikidata;
+  # This is using a SPARQL SERVICE keyword
+  core:sparqlService <https://www.wikidata.org> .
+```
