@@ -96,6 +96,7 @@ export const XSD = {
 const DCT_NAMESPACE = "http://purl.org/dc/terms/";
 export const DCT = {
   CONFORMS_TO: factory.namedNode(DCT_NAMESPACE + "conformsTo") as NamedNode,
+  TITLE: factory.namedNode(DCT_NAMESPACE + "title") as NamedNode
 };
 
 const VOID_NAMESPACE = "http://rdfs.org/ns/void#";
@@ -111,6 +112,21 @@ export const SKOS = {
   DEFINITION: factory.namedNode(SKOS_NAMESPACE + "definition") as NamedNode,
   IN_SCHEME: factory.namedNode(SKOS_NAMESPACE + "inScheme") as NamedNode,
   PREF_LABEL: factory.namedNode(SKOS_NAMESPACE + "prefLabel") as NamedNode
+};
+
+const FOAF_NAMESPACE = "http://xmlns.com/foaf/0.1/";
+export const FOAF = {
+  NAME: factory.namedNode(FOAF_NAMESPACE + "name") as NamedNode
+};
+
+const RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
+export const RDFS = {
+  LABEL: factory.namedNode(RDFS_NAMESPACE + "label") as NamedNode
+};
+
+const SCHEMA_NAMESPACE = "https://schema.org/";
+export const SCHEMA = {
+  NAME: factory.namedNode(SCHEMA_NAMESPACE + "name") as NamedNode
 };
 
 export class SHACLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {

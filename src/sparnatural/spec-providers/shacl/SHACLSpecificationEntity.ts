@@ -1,6 +1,6 @@
 import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
 import { DataFactory, NamedNode } from 'rdf-data-factory';
-import { DASH, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
+import { DASH, DCT, FOAF, SCHEMA, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
@@ -310,13 +310,44 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
                 if(!parentDefaultLabelProp) {
                     let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);   
                     parentDefaultLabelProp = parentEntity.getDefaultLabelProperty();
+                    // could be undefined or a string
+                    if(parentDefaultLabelProp) {
+                        return parentDefaultLabelProp;
+                    };
                 }
             });
-            // could be undefined or a string
-            return parentDefaultLabelProp;
-        } else {
+        } 
+        
+        if(items.length == 0) {
+            // nothing found, check for SKOS.PREF_LABEL, FOAF.NAME, SCHEMA.NAME, DCTERMS.TITLE, RDFS.LABEL
+            const PROPERTIES_TO_CHECK = [ SKOS.PREF_LABEL, FOAF.NAME, SCHEMA.NAME, DCT.TITLE, RDFS.LABEL ];
+                
+            for(let i=0; i<PROPERTIES_TO_CHECK.length; i++) {
+                let prop = PROPERTIES_TO_CHECK[i];
+                
+                propShapes.forEach(ps => {
+                    if (this.store.getQuads(
+                        ps,
+                        SH.PATH,
+                        prop,
+                        null
+                    ).length > 0) {
+                        items.push(ps);
+                    }
+                });
+
+                if(items.length > 0) {
+                    // break as soon as we find something
+                    break;
+                }
+            }
+        }
+        
+        if(items.length > 0) {
             // return the first one found
             return items[0].value
+        } else {
+            return undefined;
         }
         
     }
