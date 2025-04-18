@@ -314,3 +314,13 @@ this:Artwork_thumbnail sh:path dbpedia:thumbnail;
   core:enableNegation "true"^^xsd:boolean .
 ```
 
+# Companion components
+
+Sparnatural works in combination with other components:
+
+| Component | Description | Documentation |
+|-----------|-------------|---------------|
+|[Query results display plugins](https://github.com/sparna-git/sparnatural-yasgui-plugins)|Display the SPARQL query results in table, charts, cards, timeline, maps|[documentation](https://docs.sparnatural.eu/#sparnatural-results-display-plugins)|
+|[Query history](https://github.com/sparna-git/Sparnatural-history)|Tracks the history of queries so that they can be reloaded easily|[documentation](https://docs.sparnatural.eu/#sparnatural-history)|
+|[Query form](https://github.com/sparna-git/Sparnatural-form)|A simple facet-like search component based on a Sparnatural configuration and a predefined query|[documentation](https://docs.sparnatural.eu/#sparnatural-form)|
+
