@@ -216,14 +216,17 @@ To send SPARQL queries to a service that is not hosted on the same domain name a
 
 # Configuration
 
-## Specification of classes and properties
+## Specification of entities and properties
 
 Sparnatural is configured with a **SHACL specification**. Look at the [supported SHACL features in the documentation](http://docs.sparnatural.eu/SHACL-based-configuration.html). If you already have a SHACL spec, you can try passing it directly to Sparnatural and see the result ofr yourself - it should work :-). It is possible to pass multiple configuration files, so another config file can contain sparnatural annotations over an standard SHACL spec.
 
+## Configuration documentation
 
-### SHACL-based config
+The documentation portal includes an [extensive How-to documentation on how to configure Sparnatural in SHACL](https://docs.sparnatural.eu/how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html) using an Excel file.
 
-To give you an idea, here is an annotated SHACL-based configuration snippet below. The [SHACL configuration guide](https://docs.sparnatural.eu/how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html) explains how this file can be generated from an [Excel template](https://docs.google.com/spreadsheets/d/1lduSARo-zyL8qxObwPVD4Z2m8iKQpye-) - no need to write that file by hands:
+## SHACL config example 
+
+To give you an idea, here is an annotated SHACL-based configuration snippet below. You don't need to write that file manually, but instead you will use the [Excel template](https://docs.google.com/spreadsheets/d/1lduSARo-zyL8qxObwPVD4Z2m8iKQpye-) and follow The [SHACL configuration guide](https://docs.sparnatural.eu/how-to-configure-shacl/How-to-configure-Sparnatural-shacl.html).
 
 ```turtle
 <https://data.mydomain.com/ontologies/sparnatural-config> a owl:Ontology .
