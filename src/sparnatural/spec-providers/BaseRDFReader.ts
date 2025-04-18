@@ -1,10 +1,10 @@
 import { DataFactory } from 'rdf-data-factory';
-import rdfParser from "rdf-parse";
 var Readable = require('stream').Readable
 import Datasources from "../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from 'rdf-stores';
 import { NamedNode, Quad, Stream, Term } from "@rdfjs/types";
 import { StoreModel } from './StoreModel';
+import N3 from 'n3';
 
 const factory = new DataFactory();
 
@@ -43,11 +43,17 @@ export class BaseRDFReader {
     static buildStoreFromString(configData:string, filePath:string, callback: any) {
       const store:RdfStore = RdfStore.createDefault();
       console.log("Building store from string...");
-      let quadStream: Stream<Quad> = BaseRDFReader.#toQuadStream(configData,filePath);
 
-      store.import(quadStream)
-        .on('error', () => console.log("Problem parsing inline config"))
-        .once('end', () => callback(store));
+      const parser = new N3.Parser();
+      parser.parse(configData, (error, quad, prefixes) => {
+        if (error) {
+          console.error('Error parsing RDF:', error);
+        } else if (quad) {
+          store.addQuad(quad);
+        } else {
+          console.log('Parsing complete. Prefixes:', prefixes);
+        }
+      });
 
     }
 
@@ -57,6 +63,7 @@ export class BaseRDFReader {
       // see https://www.npmjs.com/package/rdf-stores
       const store:RdfStore = RdfStore.createDefault();
 
+      const parser = new N3.Parser();
       let promises = new Array<Promise<RdfStore>>();
       for(let config of files) {
         console.log("Importing in store '" + config + "'");
@@ -68,11 +75,18 @@ export class BaseRDFReader {
             dataType: "text",
           }).done(function (configData) {
 
-            let quadStream: Stream<Quad> = BaseRDFReader.#toQuadStream(configData,config);
+            // Parse the RDF data and add quads to the store
+            parser.parse(configData, (error, quad, prefixes) => {
+              if (error) {
+                console.error('Error parsing RDF:', error);
+              } else if (quad) {
+                store.addQuad(quad);
+              } else {
+                console.log('Parsing complete. Prefixes:', prefixes);
+              }
+            });
 
-            store.import(quadStream)
-              .on('error', reject)
-              .once('end', () => resolve(store));
+            resolve(store);
 
           }).fail(function (response) {
             console.error(
@@ -101,35 +115,6 @@ export class BaseRDFReader {
       })
   }
 
-      static #toQuadStream(string:any, filePath:any) {
-        // turn input string into a stream
-        var textStream = new Readable();
-        textStream.push(string)    // the string you want
-        textStream.push(null)     // indicates end-of-file basically - the end of the stream
-    
-        var quadStream;
-        try {
-          // attempt to parse based on path
-          console.log("Attempt to parse determining format from path " + filePath+"...");
-          quadStream = rdfParser.parse(textStream, { path: filePath });
-        } catch (exception) {
-          try {
-            console.log("Attempt to parse in Turtle...");
-            // attempt to parse in turtle
-            quadStream = rdfParser.parse(textStream, {
-              contentType: "text/turtle",
-            });
-          } catch (exception) {
-            console.log("Attempt to parse in RDF/XML...");
-            // attempt to parse in RDF/XML
-            quadStream = rdfParser.parse(textStream, {
-              contentType: "application/rdf+xml",
-            });
-          }
-        }
-
-        return quadStream;
-      }
 
       _readDatasourceAnnotationProperty(
         propertyOrClassId: any,

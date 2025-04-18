@@ -6,11 +6,11 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const DashboardPlugin = require("webpack-dashboard/plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 const FileManagerPlugin = require("filemanager-webpack-plugin");
+const StatoscopeWebpackPlugin = require('@statoscope/webpack-plugin').default;
 
 module.exports = {
   entry: {
-    sparnatural: "./src/SparnaturalElement.ts",
-    "sparnatural-form": "./src/SparnaturalFormElement.ts",
+    sparnatural: "./src/SparnaturalElement.ts"
   },
   output: {
     path: path.resolve(__dirname, "./dist"),
@@ -135,6 +135,9 @@ module.exports = {
     }),
 
     new DashboardPlugin(),
+
+    new StatoscopeWebpackPlugin(),
+
     // so that JQuery is automatically inserted
     // see https://stackoverflow.com/a/28989476
     // this will automatically add a "require("jquery")" everytime the jQuery or & symbol are encountered
