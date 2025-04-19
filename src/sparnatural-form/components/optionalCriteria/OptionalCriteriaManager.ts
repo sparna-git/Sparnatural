@@ -2,8 +2,8 @@ import { AbstractWidget } from "../../../sparnatural/components/widgets/Abstract
 import {
   Branch,
   CriteriaLine,
-  ISparJson,
-} from "../../../sparnatural/ISparJson";
+  SparnaturalQueryIfc,
+} from "../../../sparnatural/SparnaturalQuery";
 
 class OptionalCriteriaManager {
   private initialOptionalStates: { [variable: string]: any } = {};
@@ -16,7 +16,7 @@ class OptionalCriteriaManager {
   private notExistDiv!: HTMLDivElement;
 
   constructor(
-    private query: ISparJson, // The entire query structure
+    private query: SparnaturalQueryIfc, // The entire query structure
     private variable: string, // The variable associated with this field
     queryline: CriteriaLine, // The specific query line for this field
     private widget: AbstractWidget, // The widget associated with this field

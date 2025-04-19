@@ -5,10 +5,10 @@ import SparqlFactory from "../SparqlFactory";
 import ValueBuilderIfc, { ValueBuilderFactory } from "../ValueBuilder";
 import {
   Branch,
-  ISparJson,
+  SparnaturalQueryIfc,
   VariableExpression,
   VariableTerm,
-} from "../../../ISparJson";
+} from "../../../SparnaturalQuery";
 import TypedVariableTranslator from "./TypedVariableTranslator";
 
 const factory = new DataFactory();
@@ -20,7 +20,7 @@ export default class BranchTranslator {
   // The JSON branch to convert to SPARQL
   #branch: Branch;
   // The full query from which the branch is extracted
-  #fullQuery: ISparJson;
+  #fullQuery: SparnaturalQueryIfc;
   #specProvider: ISparnaturalSpecification;
   // whether this branch is a children of another branch
   #isVeryFirst: boolean;
@@ -48,7 +48,7 @@ export default class BranchTranslator {
     // the branch to convert
     branch: Branch,
     // the full query (we need it to test if variables are selected)
-    fullQuery: ISparJson,
+    fullQuery: SparnaturalQueryIfc,
     // the sparnatural spec
     specProvider: ISparnaturalSpecification,
     // true if this branch is the very first of the query (not a child of another, not a sibling of the first one)
@@ -380,7 +380,7 @@ export default class BranchTranslator {
    * @param varName The variable to test the selection for
    * @returns true if the varName is selected in the query
    */
-  static isVarSelected(query: ISparJson, varName: string): boolean {
+  static isVarSelected(query: SparnaturalQueryIfc, varName: string): boolean {
     return (
       query.variables.filter((v) => {
         // if it is an aggregated variable...

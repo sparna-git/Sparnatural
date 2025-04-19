@@ -9,14 +9,14 @@ import NoOrderBtn from "../components/buttons/NoOrderBtn";
 import { SelectedVal } from "../components/SelectedVal";
 import SparnaturalComponent from "../components/SparnaturalComponent";
 import { WidgetValue } from "../components/widgets/AbstractWidget";
-import { Branch, ISparJson, Order, VariableTerm } from "../ISparJson";
+import { Branch, SparnaturalQueryIfc, Order, VariableTerm } from "../SparnaturalQuery";
 
 
 export default class QueryLoader{
     static sparnatural: SparnaturalComponent;
-    static query: ISparJson
+    static query: SparnaturalQueryIfc
     
-    static loadQuery(query:ISparJson){
+    static loadQuery(query:SparnaturalQueryIfc){
         this.query = query
         // set Sparnatural quiet so it does not emit the update callbacks
         this.sparnatural.setQuiet(true);
@@ -24,7 +24,7 @@ export default class QueryLoader{
         this.sparnatural.BgWrapper.resetCallback();
         // build Sparnatural query
         // use a deep copy of the query to avoid modifying the original copy
-        let clone = JSON.parse(JSON.stringify(query)) as ISparJson;
+        let clone = JSON.parse(JSON.stringify(query)) as SparnaturalQueryIfc;
         let varMapping = this.#buildSparnatural(this.sparnatural, clone.branches);
         // set the correct variable names
         this.#updateNamingOfVariables(varMapping)
@@ -237,7 +237,7 @@ export default class QueryLoader{
     })
   }
 
-  static #hasSelectedVar(vars:ISparJson["variables"], varName:string):boolean {
+  static #hasSelectedVar(vars:SparnaturalQueryIfc["variables"], varName:string):boolean {
 
     var result:boolean = false;
     vars.forEach(v => {

@@ -4,8 +4,8 @@ import UnselectBtn from "../../sparnatural/components/buttons/UnselectBtn";
 import {
   Branch,
   CriteriaLine,
-  ISparJson,
-} from "../../sparnatural/ISparJson";
+  SparnaturalQueryIfc,
+} from "../../sparnatural/SparnaturalQuery";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
 import OptionalCriteriaManager from "./optionalCriteria/OptionalCriteriaManager";
 import { AbstractWidget } from "../../sparnatural/components/widgets/AbstractWidget";
@@ -16,7 +16,7 @@ class FormField {
   private binding: Binding;
   private formContainer: HTMLElement;
   private specProvider: ISparnaturalSpecification;
-  private query: ISparJson;
+  private query: SparnaturalQueryIfc;
   private widgetFactory: WidgetFactory;
   private optionalCriteriaManager!: OptionalCriteriaManager; // Optional Criteria Manager instance
 
@@ -24,7 +24,7 @@ class FormField {
     binding: Binding,
     formContainer: HTMLElement,
     specProvider: ISparnaturalSpecification,
-    query: ISparJson,
+    query: SparnaturalQueryIfc,
     widgetFactory: WidgetFactory
   ) {
     this.binding = binding;

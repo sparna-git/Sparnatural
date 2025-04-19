@@ -1,6 +1,6 @@
 
 
-export interface ISparJson {
+export interface SparnaturalQueryIfc {
   distinct?: boolean;
   variables: Array<VariableTerm | VariableExpression>;
   order?: Order;

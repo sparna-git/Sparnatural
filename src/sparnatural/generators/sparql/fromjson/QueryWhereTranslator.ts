@@ -1,14 +1,14 @@
 import { DataFactory } from "rdf-data-factory";
 import { Pattern, Variable } from "sparqljs";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
-import { ISparJson } from "../../../ISparJson";
+import { SparnaturalQueryIfc } from "../../../SparnaturalQuery";
 import BranchTranslator from "./BranchTranslator";
 
 const factory = new DataFactory();
 
 export default class QueryWhereTranslator {
   // variables set in construtor
-  #jsonQuery: ISparJson;
+  #jsonQuery: SparnaturalQueryIfc;
   #specProvider: ISparnaturalSpecification;
 
   // patterns built in the build process
@@ -20,7 +20,7 @@ export default class QueryWhereTranslator {
   settings: any;
 
   constructor(
-    jsonQuery: ISparJson,
+    jsonQuery: SparnaturalQueryIfc,
     specProvider: ISparnaturalSpecification,
     settings: any
   ) {

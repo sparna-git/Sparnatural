@@ -4,7 +4,7 @@ import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpeci
 import HTMLComponent from "../../HtmlComponent";
 import VariableOrderMenu from "./VariableOrderMenu";
 import { I18n } from "../../../settings/I18n";
-import { AggregateFunction, VariableExpression, VariableTerm } from "../../../ISparJson";
+import { AggregateFunction, VariableExpression, VariableTerm } from "../../../SparnaturalQuery";
 
 /*
     Single Draggable Component

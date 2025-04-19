@@ -1,9 +1,9 @@
 import {
-  ISparJson,
+  SparnaturalQueryIfc,
   Order,
   VariableExpression,
   VariableTerm,
-} from "../../../ISparJson";
+} from "../../../SparnaturalQuery";
 import { Pattern, VariableTerm as SparqlVariableTerm } from "sparqljs";
 import { VariableExpression as SparqlVariableExpression } from "sparqljs";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
@@ -23,7 +23,7 @@ export default class JsonSparqlTranslator {
   typePredicate: string;
   specProvider: ISparnaturalSpecification;
   prefixes: { [key: string]: string } = {};
-  jsonQuery: ISparJson;
+  jsonQuery: SparnaturalQueryIfc;
   settings: any;
 
   defaultLabelVars: Variable[] = [];
@@ -42,7 +42,7 @@ export default class JsonSparqlTranslator {
    * @param jsonQuery the Sparnatural JSON query
    * @returns a SPARQL query translated from the Sparnatural JSON query structure
    */
-  generateQuery(jsonQuery: ISparJson): SelectQuery {
+  generateQuery(jsonQuery: SparnaturalQueryIfc): SelectQuery {
     this.jsonQuery = jsonQuery;
 
     const sparqlJsQuery: SelectQuery = {

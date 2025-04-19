@@ -5,7 +5,7 @@ import SparnaturalJsonGenerator from "../../generators/json/SparnaturalJsonGener
 import SparqlGenerator from "../../generators/sparql/SparqlGenerator";
 import { Generator } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
-import { ISparJson } from "../../ISparJson";
+import { SparnaturalQueryIfc } from "../../SparnaturalQuery";
 import JsonSparqlTranslator from "../../generators/sparql/fromjson/JsonSparqlTranslator";
 
 export class QueryGenerator {
@@ -114,7 +114,7 @@ export class QueryGenerator {
 
 export class QueryUpdatedPayload {
   queryString: string;
-  queryJson: ISparJson;
+  queryJson: SparnaturalQueryIfc;
   querySparqlJs: Object;
   queryStringFromJson: string;
 }

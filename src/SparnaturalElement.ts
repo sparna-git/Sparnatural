@@ -7,7 +7,7 @@ import {
   mergeSettings,
 } from "./sparnatural/settings/defaultSettings";
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
-import { ISparJson } from "./sparnatural/ISparJson";
+import { SparnaturalQueryIfc } from "./sparnatural/SparnaturalQuery";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
 import { SparqlHandlerFactory, SparqlHandlerIfc } from "./sparnatural/components/widgets/data/SparqlHandler";
@@ -147,7 +147,7 @@ export class SparnaturalElement extends HTMLElement {
    * Can be called from the outside
    * @param query
    */
-  loadQuery(query: ISparJson) {
+  loadQuery(query: SparnaturalQueryIfc) {
     QueryLoader.setSparnatural(this.sparnatural);
     QueryLoader.loadQuery(query);
   }

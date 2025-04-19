@@ -2,11 +2,11 @@ import SparnaturalComponent from "../../components/SparnaturalComponent";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import {
   Branch,
-  ISparJson,
+  SparnaturalQueryIfc,
   Order,
   VariableExpression,
   VariableTerm,
-} from "../../ISparJson";
+} from "../../SparnaturalQuery";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import { DraggableComponentState } from "../../components/variables-section/variableorder/DraggableComponent";
@@ -21,7 +21,7 @@ const factory = new DataFactory();
 */
 class SparnaturalJsonGenerator {
   sparnatural: SparnaturalComponent;
-  json: ISparJson = {
+  json: SparnaturalQueryIfc = {
     distinct: null,
     variables: null,
     order: null,
