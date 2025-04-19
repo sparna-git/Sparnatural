@@ -297,24 +297,21 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
                 DASH.LABEL_ROLE,
                 null
             ).length > 0) {
-                items.push(ps);
+                items.push(ps.value);
             }
         });
 
         // nothing found, see if we can inherit it
         if(items.length == 0) {
             let parents = this.getParents();
-            let parentDefaultLabelProp:string|undefined;
             parents.forEach(p => {
                 // if not found already, set it to the parent default label prop - otherwise keep the value we found
-                if(!parentDefaultLabelProp) {
-                    let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);   
-                    parentDefaultLabelProp = parentEntity.getDefaultLabelProperty();
-                    // could be undefined or a string
-                    if(parentDefaultLabelProp) {
-                        return parentDefaultLabelProp;
-                    };
-                }
+                let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);   
+                let parentDefaultLabelProp = parentEntity.getDefaultLabelProperty();
+                // could be undefined or a string
+                if(parentDefaultLabelProp) {
+                    items.push(parentDefaultLabelProp);
+                };
             });
         } 
         
@@ -332,7 +329,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
                         prop,
                         null
                     ).length > 0) {
-                        items.push(ps);
+                        items.push(ps.value);
                     }
                 });
 
@@ -345,7 +342,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
         
         if(items.length > 0) {
             // return the first one found
-            return items[0].value
+            return items[0]
         } else {
             return undefined;
         }
