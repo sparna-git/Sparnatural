@@ -3,7 +3,7 @@ import {
   Order,
   VariableExpression,
   VariableTerm,
-} from "../../json/ISparJson";
+} from "../../../ISparJson";
 import { Pattern, VariableTerm as SparqlVariableTerm } from "sparqljs";
 import { VariableExpression as SparqlVariableExpression } from "sparqljs";
 import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";

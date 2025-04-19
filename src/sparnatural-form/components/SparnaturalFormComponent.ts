@@ -1,6 +1,6 @@
 import { WidgetFactory } from "../../sparnatural/components/builder-section/groupwrapper/criteriagroup/edit-components/WidgetFactory";
 import HTMLComponent from "../../sparnatural/components/HtmlComponent";
-import { Branch, ISparJson } from "../../sparnatural/generators/json/ISparJson";
+import { Branch, ISparJson } from "../../sparnatural/ISparJson";
 import { I18n } from "../../sparnatural/settings/I18n";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
 import SparnaturalSpecificationFactory from "../../sparnatural/spec-providers/SparnaturalSpecificationFactory";

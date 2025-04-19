@@ -1,6 +1,6 @@
 import ActionStoreForm from "../ActionStore";
 import { Generator } from "sparqljs";
-import { ISparJson } from "../../../sparnatural/generators/json/ISparJson";
+import { ISparJson } from "../../../sparnatural/ISparJson";
 import JsonSparqlTranslator from "../../../sparnatural/generators/sparql/fromjson/JsonSparqlTranslator";
 import CleanQuery from "../../components/CleanQuery";
 

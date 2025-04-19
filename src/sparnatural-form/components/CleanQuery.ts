@@ -1,4 +1,4 @@
-import { Branch, ISparJson } from "../../sparnatural/generators/json/ISparJson";
+import { Branch, ISparJson } from "../../sparnatural/ISparJson";
 import { Binding, Form } from "../FormStructure";
 
 /**

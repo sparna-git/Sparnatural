@@ -3,12 +3,6 @@ import { DataFactory } from 'rdf-data-factory';
 import L, { LatLng, Rectangle, PolylineOptions, Polygon, PM, TileLayer } from "leaflet";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import {
-  FilterPattern,
-  FunctionCallExpression,
-  LiteralTerm,
-  Pattern,
-} from "sparqljs";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";

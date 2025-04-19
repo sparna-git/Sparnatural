@@ -8,7 +8,7 @@ import {
   ISparJson,
   VariableExpression,
   VariableTerm,
-} from "../../json/ISparJson";
+} from "../../../ISparJson";
 import TypedVariableTranslator from "./TypedVariableTranslator";
 
 const factory = new DataFactory();

@@ -1,4 +1,4 @@
-import { Order } from "../json/ISparJson";
+import { Order } from "../../ISparJson";
 import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
 import {
   Grouping,

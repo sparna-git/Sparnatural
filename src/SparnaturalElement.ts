@@ -7,7 +7,7 @@ import {
   mergeSettings,
 } from "./sparnatural/settings/defaultSettings";
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
-import { ISparJson } from "./sparnatural/generators/json/ISparJson";
+import { ISparJson } from "./sparnatural/ISparJson";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
 import { SparqlHandlerFactory, SparqlHandlerIfc } from "./sparnatural/components/widgets/data/SparqlHandler";

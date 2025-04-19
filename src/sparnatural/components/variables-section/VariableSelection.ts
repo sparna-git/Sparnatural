@@ -4,7 +4,7 @@ import HTMLComponent from "../HtmlComponent";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";
 import VariableSortOption from "./variablesort/VariableSortOptions";
 import { DraggableComponent, DraggableComponentState } from "./variableorder/DraggableComponent";
-import { Order } from "../../generators/json/ISparJson";
+import { Order } from "../../ISparJson";
 
 class VariableSection extends HTMLComponent {
   displayBtn: DisplayBtn;

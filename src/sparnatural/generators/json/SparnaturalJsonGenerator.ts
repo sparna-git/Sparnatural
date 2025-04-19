@@ -6,7 +6,7 @@ import {
   Order,
   VariableExpression,
   VariableTerm,
-} from "./ISparJson";
+} from "../../ISparJson";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import { DraggableComponentState } from "../../components/variables-section/variableorder/DraggableComponent";

@@ -5,7 +5,7 @@ import SparnaturalJsonGenerator from "../../generators/json/SparnaturalJsonGener
 import SparqlGenerator from "../../generators/sparql/SparqlGenerator";
 import { Generator } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
-import { ISparJson } from "../../generators/json/ISparJson";
+import { ISparJson } from "../../ISparJson";
 import JsonSparqlTranslator from "../../generators/sparql/fromjson/JsonSparqlTranslator";
 
 export class QueryGenerator {

@@ -3,7 +3,7 @@ import {
   Branch,
   CriteriaLine,
   ISparJson,
-} from "../../../sparnatural/generators/json/ISparJson";
+} from "../../../sparnatural/ISparJson";
 
 class OptionalCriteriaManager {
   private initialOptionalStates: { [variable: string]: any } = {};

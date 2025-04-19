@@ -5,7 +5,7 @@ import {
   Branch,
   CriteriaLine,
   ISparJson,
-} from "../../sparnatural/generators/json/ISparJson";
+} from "../../sparnatural/ISparJson";
 import ISparnaturalSpecification from "../../sparnatural/spec-providers/ISparnaturalSpecification";
 import OptionalCriteriaManager from "./optionalCriteria/OptionalCriteriaManager";
 import { AbstractWidget } from "../../sparnatural/components/widgets/AbstractWidget";

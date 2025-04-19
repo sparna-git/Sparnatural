@@ -1,6 +1,6 @@
 import UiuxConfig from "../IconsConstants";
 import HTMLComponent from "../HtmlComponent";
-import { Order } from "../../generators/json/ISparJson";
+import { Order } from "../../ISparJson";
 
 class AscendBtn extends HTMLComponent {
   selected = false;
