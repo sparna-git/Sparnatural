@@ -3,6 +3,8 @@
   "version": "10.3.0",
   "description": "Visual client-side SPARQL query builder and knowledge graph exploration tool",
   "main": "dist/sparnatural.js",
+  "types": "dist/types/index.d.ts",
+  "files": ["dist"],
   "module": "dist/sparnatural.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

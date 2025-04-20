@@ -1,0 +1,13 @@
+{
+  "bindings": [
+    {
+      "variable": "Substance",
+      "node": {
+        "type": "UserPrompt",
+        "name": {
+          "fr": "Substance"
+        }
+      }
+    }   
+  ]
+}
