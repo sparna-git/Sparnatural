@@ -1,9 +1,10 @@
 import BaseClassFactory from "./baseClassFactory/BaseClassFactory";
 
-interface IRenderable {
+export interface IRenderable {
   render: () => this;
 }
-class HTMLComponent implements IRenderable {
+
+export class HTMLComponent implements IRenderable {
   baseCssClass: string;
   static BaseClassFactory = new BaseClassFactory();
 
@@ -73,4 +74,3 @@ class HTMLComponent implements IRenderable {
 
   }
 }
-export default HTMLComponent;

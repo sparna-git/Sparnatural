@@ -1,5 +1,5 @@
 import tippy from "tippy.js";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 import "tippy.js/dist/tippy.css";
 
 class TippyInfo {

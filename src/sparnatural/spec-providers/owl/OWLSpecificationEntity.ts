@@ -1,5 +1,5 @@
 import { RDF, RDFS } from "../BaseRDFReader";
-import ISpecificationEntity from "../ISpecificationEntity";
+import { ISpecificationEntity } from "../ISpecificationEntity";
 import { OWLSpecificationEntry } from "./OWLSpecificationEntry";
 import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { Config } from "../../ontologies/SparnaturalConfig";

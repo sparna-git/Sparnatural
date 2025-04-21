@@ -1,7 +1,7 @@
 import { deprecate } from "util";
-import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparnaturalSpecification";
 import OptionalArrow from "../../../../buttons/OptionalArrow";
-import HTMLComponent from "../../../../HtmlComponent";
+import { HTMLComponent } from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
 import NotExistsComponent from "./optioncomponents/NotExistsComponent";
 import OptionalComponent from "./optioncomponents/OptionalComponent";

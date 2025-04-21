@@ -5,9 +5,9 @@ import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget"
 import "@chenfengyuan/datepicker";
 import { DataFactory } from 'rdf-data-factory';
 import { SelectedVal } from "../../SelectedVal";
-import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
 import { I18n } from "../../../settings/I18n";
-import HTMLComponent from "../../HtmlComponent";
+import { HTMLComponent } from "../../HtmlComponent";
 import { TOOLTIP_CONFIG } from "../../../settings/defaultSettings";
 
 const factory = new DataFactory();

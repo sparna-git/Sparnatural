@@ -1,14 +1,14 @@
 /**
  * A single line/criteria
  **/
-import ISparnaturalSpecification from "../../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../../spec-providers/ISparnaturalSpecification";
 import UnselectBtn from "../../../buttons/UnselectBtn";
 import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
 import StartClassGroup from "./startendclassgroup/StartClassGroup";
 import GroupWrapper from "../GroupWrapper";
 import { OptionsGroup, OptionTypes } from "./optionsgroup/OptionsGroup";
-import HTMLComponent from "../../../HtmlComponent";
+import { HTMLComponent } from "../../../HtmlComponent";
 import { SelectedVal } from "../../../SelectedVal";
 import {
   EndClassWidgetGroup,

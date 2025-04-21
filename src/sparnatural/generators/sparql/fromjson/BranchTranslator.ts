@@ -1,6 +1,6 @@
 import { DataFactory } from "rdf-data-factory";
 import { Pattern, Variable } from "sparqljs";
-import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../SparqlFactory";
 import ValueBuilderIfc, { ValueBuilderFactory } from "../ValueBuilder";
 import {
@@ -8,7 +8,7 @@ import {
   SparnaturalQueryIfc,
   VariableExpression,
   VariableTerm,
-} from "../../../SparnaturalQuery";
+} from "../../../SparnaturalQueryIfc";
 import TypedVariableTranslator from "./TypedVariableTranslator";
 
 const factory = new DataFactory();

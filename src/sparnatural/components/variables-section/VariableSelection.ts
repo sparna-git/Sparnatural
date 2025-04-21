@@ -1,10 +1,10 @@
-import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
 import DisplayBtn from "../buttons/DisplayBtn";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";
 import VariableSortOption from "./variablesort/VariableSortOptions";
 import { DraggableComponent, DraggableComponentState } from "./variableorder/DraggableComponent";
-import { Order } from "../../SparnaturalQuery";
+import { Order } from "../../SparnaturalQueryIfc";
 
 class VariableSection extends HTMLComponent {
   displayBtn: DisplayBtn;

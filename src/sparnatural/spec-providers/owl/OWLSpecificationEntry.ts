@@ -1,5 +1,5 @@
 import { BaseRDFReader, RDFS } from "../BaseRDFReader";
-import ISpecificationEntry from "../ISpecificationEntry";
+import { ISpecificationEntry } from "../ISpecificationEntry";
 import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { DataFactory } from 'rdf-data-factory';

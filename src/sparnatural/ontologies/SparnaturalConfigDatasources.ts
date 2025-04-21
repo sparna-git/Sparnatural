@@ -1127,7 +1127,7 @@ DATASOURCES_CONFIG.set(
   }
 );
 
-const Datasources = Object.freeze({
+export const Datasources = Object.freeze({
   SPARNATURAL_CONFIG_DATASOURCES: SPARNATURAL_CONFIG_DATASOURCES,
 
   // annotation and data properties
@@ -1270,4 +1270,3 @@ const Datasources = Object.freeze({
   DATASOURCES_CONFIG: DATASOURCES_CONFIG,
 });
 
-export default Datasources;

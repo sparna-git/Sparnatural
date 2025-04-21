@@ -1,7 +1,7 @@
 import { DataFactory } from 'rdf-data-factory';
 import { Pattern } from "sparqljs";
 import ObjectPropertyGroup from "../../components/builder-section/groupwrapper/criteriagroup/objectpropertygroup/ObjectPropertyGroup";
-import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "./SparqlFactory";
 import ValueBuilderIfc from './ValueBuilder';
 import ISpecificationProperty from '../../spec-providers/ISpecificationProperty';

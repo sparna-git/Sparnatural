@@ -1,6 +1,6 @@
 import { DataFactory } from "rdf-data-factory";
 import { Pattern, Triple } from "sparqljs";
-import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../SparqlFactory";
 import ISpecificationProperty from "../../../spec-providers/ISpecificationProperty";
 import { RDFS } from "../../../spec-providers/BaseRDFReader";

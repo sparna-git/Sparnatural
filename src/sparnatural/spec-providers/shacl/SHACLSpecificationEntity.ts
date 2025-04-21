@@ -9,9 +9,9 @@ import { RdfStore } from "rdf-stores";
 import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../StoreModel";
 import { DagIfc, Dag } from "../../dag/Dag";
-import ISpecificationEntity from "../ISpecificationEntity";
+import { ISpecificationEntity } from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
-import ISparnaturalSpecification from "../ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../ISparnaturalSpecification";
 
 const factory = new DataFactory();
 

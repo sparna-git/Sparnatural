@@ -1,8 +1,8 @@
-import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
 import LinkAndBottom from "./LinkAndBottom";
 import LinkWhereBottom from "./LinkWhereBottom";
 import CriteriaGroup from "./criteriagroup/CriteriaGroup";
-import HTMLComponent from "../../HtmlComponent";
+import { HTMLComponent } from "../../HtmlComponent";
 import { OptionTypes } from "./criteriagroup/optionsgroup/OptionsGroup";
 import GroupWrapperEventStore from "./groupwrapperevents/GroupWrapperEventStore";
 import ComponentsList from "../ComponentsList";

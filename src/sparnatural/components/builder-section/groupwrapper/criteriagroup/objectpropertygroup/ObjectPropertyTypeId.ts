@@ -1,13 +1,13 @@
 import UiuxConfig from "../../../../IconsConstants";
 import { SelectedVal } from "../../../..//SelectedVal";
-import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparnaturalSpecification";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
-import HTMLComponent from "../../../../HtmlComponent";
+import { HTMLComponent } from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
 import {HierarchicalClassSelectBuilder, JsonDagRow, DagWidgetDefaultValue} from "../startendclassgroup/HierarchicalClassSelectBuilder";
 import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
 import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
-import ISpecificationEntry from "../../../../../spec-providers/ISpecificationEntry";
+import { ISpecificationEntry } from "../../../../../spec-providers/ISpecificationEntry";
 
 /**
  * The property selector

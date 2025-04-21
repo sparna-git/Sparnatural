@@ -1,6 +1,6 @@
 import {  Pattern } from "sparqljs";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 
 export class NoWidget extends AbstractWidget {
   parseInput(): WidgetValue {

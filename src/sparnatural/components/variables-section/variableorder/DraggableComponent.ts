@@ -1,10 +1,10 @@
 import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../../components/SelectedVal";
-import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
-import HTMLComponent from "../../HtmlComponent";
+import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
+import { HTMLComponent } from "../../HtmlComponent";
 import VariableOrderMenu from "./VariableOrderMenu";
 import { I18n } from "../../../settings/I18n";
-import { AggregateFunction, VariableExpression, VariableTerm } from "../../../SparnaturalQuery";
+import { AggregateFunction, VariableExpression, VariableTerm } from "../../../SparnaturalQueryIfc";
 
 /*
     Single Draggable Component

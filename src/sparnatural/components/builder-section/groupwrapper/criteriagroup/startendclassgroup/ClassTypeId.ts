@@ -1,4 +1,4 @@
-import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparnaturalSpecification";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
 import {HierarchicalClassSelectBuilder, JsonDagRow, DagWidgetDefaultValue} from "./HierarchicalClassSelectBuilder";
@@ -7,10 +7,10 @@ import UiuxConfig from "../../../../IconsConstants";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
 import { SelectedVal } from "../../../..//SelectedVal";
 import SelectViewVariableBtn from "../../../../buttons/SelectViewVariableBtn";
-import HTMLComponent from "../../../../HtmlComponent";
+import { HTMLComponent } from "../../../../HtmlComponent";
 import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
-import ISpecificationEntity from "../../../../../spec-providers/ISpecificationEntity";
-import ISpecificationEntry from "../../../../../spec-providers/ISpecificationEntry";
+import { ISpecificationEntity } from "../../../../../spec-providers/ISpecificationEntity";
+import { ISpecificationEntry } from "../../../../../spec-providers/ISpecificationEntry";
 /**
  * Handles the selection of a Class, either in the DOMAIN selection or the RANGE selection.
  * The DOMAIN selection happens only for the very first line/criteria.

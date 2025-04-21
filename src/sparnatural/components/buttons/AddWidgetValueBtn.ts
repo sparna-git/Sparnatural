@@ -1,6 +1,6 @@
 import UiuxConfig from "../IconsConstants";
 import ArrowComponent from "./ArrowComponent";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 
 class AddWidgetValueBtn extends HTMLComponent {
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);

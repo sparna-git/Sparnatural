@@ -3,10 +3,10 @@ import {
   Order,
   VariableExpression,
   VariableTerm,
-} from "../../../SparnaturalQuery";
+} from "../../../SparnaturalQueryIfc";
 import { Pattern, VariableTerm as SparqlVariableTerm } from "sparqljs";
 import { VariableExpression as SparqlVariableExpression } from "sparqljs";
-import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
 import { Grouping, Ordering, SelectQuery, Variable } from "sparqljs";
 import WhereBuilder from "../WhereBuilder";
 import SparqlFactory from "../SparqlFactory";
@@ -19,7 +19,7 @@ const factory = new DataFactory();
 /**
  * Generates a Sparql query in the SparqlJs structure from the JSON query format of Sparnatural
  */
-export default class JsonSparqlTranslator {
+export class JsonSparqlTranslator {
   typePredicate: string;
   specProvider: ISparnaturalSpecification;
   prefixes: { [key: string]: string } = {};

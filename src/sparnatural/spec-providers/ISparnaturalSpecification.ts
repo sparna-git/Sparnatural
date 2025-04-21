@@ -1,12 +1,12 @@
 import { DagIfc } from "../dag/Dag";
 import { Config } from "../ontologies/SparnaturalConfig";
-import ISpecificationEntity from "./ISpecificationEntity";
+import { ISpecificationEntity } from "./ISpecificationEntity";
 import ISpecificationProperty from "./ISpecificationProperty";
 
 /*
     All Sparnatural specifications provided by the SparnaturalSpecificationFactory MUST implement this interface
 */
-interface ISparnaturalSpecification {
+export interface ISparnaturalSpecification {
 
   /**
    * Lists all the entity ids - currently only used for filtering purposes, but could probably be deleted
@@ -42,4 +42,3 @@ interface ISparnaturalSpecification {
   getLanguages():Array<string>;
 
 }
-export default ISparnaturalSpecification;

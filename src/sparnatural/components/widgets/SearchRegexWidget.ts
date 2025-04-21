@@ -8,7 +8,7 @@ import { Config } from "../../ontologies/SparnaturalConfig";
 import InfoBtn from "../buttons/InfoBtn";
 import { I18n } from "../../settings/I18n";
 import { TOOLTIP_CONFIG } from "../../settings/defaultSettings";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 
 const factory = new DataFactory();
 

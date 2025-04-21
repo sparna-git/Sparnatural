@@ -1,6 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
-import ISparnaturalSpecification from "../ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../ISparnaturalSpecification";
 import {
   Parser,
   Generator,
@@ -8,7 +8,7 @@ import {
   SparqlGenerator
 } from "sparqljs";
 import { BaseRDFReader, RDFS } from "../BaseRDFReader";
-import ISpecificationEntity from "../ISpecificationEntity";
+import { ISpecificationEntity } from "../ISpecificationEntity";
 import { OWLSpecificationEntity } from "./OWLSpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { OWLSpecificationProperty } from "./OWLSpecificationProperty";

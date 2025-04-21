@@ -9,8 +9,7 @@ const FileManagerPlugin = require("filemanager-webpack-plugin");
 
 module.exports = {
   entry: {
-    sparnatural: "./src/SparnaturalElement.ts",
-    "sparnatural-form": "./src/SparnaturalFormElement.ts",
+    sparnatural: "./src/SparnaturalElement.ts"
   },
   output: {
     path: path.resolve(__dirname, "./dist"),

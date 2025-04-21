@@ -1,7 +1,7 @@
 // Spinner component used by the data source handler
 // bridges the time between loading the datasource for list or search widget
 
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 import UiuxConfig from "../IconsConstants";
 import { AbstractWidget } from "./AbstractWidget";
 

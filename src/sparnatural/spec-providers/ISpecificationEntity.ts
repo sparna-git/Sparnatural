@@ -1,10 +1,9 @@
 import { DagIfc } from "../dag/Dag";
-import { Config } from "../ontologies/SparnaturalConfig";
-import ISpecificationEntry from "./ISpecificationEntry";
+import { ISpecificationEntry } from "./ISpecificationEntry";
 import ISpecificationProperty from "./ISpecificationProperty";
 
 
-interface ISpecificationEntity extends ISpecificationEntry {
+export interface ISpecificationEntity extends ISpecificationEntry {
 
 
   getConnectedEntities():Array<string>;
@@ -26,4 +25,3 @@ interface ISpecificationEntity extends ISpecificationEntry {
   couldBeSkosConcept():boolean;
 
 }
-export default ISpecificationEntity;

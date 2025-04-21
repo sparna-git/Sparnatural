@@ -1,7 +1,7 @@
 import { BlankNode, DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
-import ISparnaturalSpecification from "../ISparnaturalSpecification";
-import Datasources from "../../ontologies/SparnaturalConfigDatasources";
+import { ISparnaturalSpecification } from "../ISparnaturalSpecification";
+import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import {
   Parser,
   Generator,
@@ -9,7 +9,7 @@ import {
   SparqlGenerator
 } from "sparqljs";
 import { BaseRDFReader, RDF } from "../BaseRDFReader";
-import ISpecificationEntity from "../ISpecificationEntity";
+import { ISpecificationEntity } from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationEntity, SpecialSHACLSpecificationEntityRegistry } from "./SHACLSpecificationEntity";

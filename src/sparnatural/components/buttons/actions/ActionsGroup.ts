@@ -1,6 +1,6 @@
-import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
 import CriteriaGroup from "../../builder-section/groupwrapper/criteriagroup/CriteriaGroup";
-import HTMLComponent from "../../HtmlComponent";
+import { HTMLComponent } from "../../HtmlComponent";
 import ActionAnd from "./actioncomponents/ActionAnd";
 
 /**

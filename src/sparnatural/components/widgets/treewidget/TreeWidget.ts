@@ -10,7 +10,7 @@ import SparqlFactory from "../../../generators/sparql/SparqlFactory";
 import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
 import { NoOpTreeDataProvider, RdfTermTreeDatasourceItem, TreeDataProviderIfc } from "../data/DataProviders";
-import HTMLComponent from "../../HtmlComponent";
+import { HTMLComponent } from "../../HtmlComponent";
 
 const factory = new DataFactory();
 

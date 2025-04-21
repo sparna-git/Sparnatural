@@ -21,11 +21,11 @@ import { DataFactory, NamedNode } from "rdf-data-factory";
 import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import { BooleanWidgetValue } from "../../components/widgets/BooleanWidget";
 import { NumberWidgetValue } from "../../components/widgets/NumberWidget";
-import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { SearchRegexWidgetValue } from "../../components/widgets/SearchRegexWidget";
 import { DateTimePickerValue } from "../../components/widgets/timedatepickerwidget/TimeDatePickerWidget";
-import { MapValue } from "../../components/widgets/MapWidget";
+import { GEOFUNCTIONS, GEOSPARQL, MapValue } from "../../components/widgets/MapWidget";
 import { LatLng } from "leaflet";
 import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
 import { SHACLSpecificationEntity } from "../../spec-providers/shacl/SHACLSpecificationEntity";
@@ -527,17 +527,6 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
 
 }
 
-const GEOFUNCTIONS_NAMESPACE = "http://www.opengis.net/def/function/geosparql/";
-export const GEOFUNCTIONS = {
-  WITHIN: factory.namedNode(GEOFUNCTIONS_NAMESPACE + "sfWithin") as NamedNode,
-};
-
-const GEOSPARQL_NAMESPACE = "http://www.opengis.net/ont/geosparql#";
-export const GEOSPARQL = {
-  WKT_LITERAL: factory.namedNode(
-    GEOSPARQL_NAMESPACE + "wktLiteral"
-  ) as NamedNode,
-};
 
 export class MapValueBuilder
   extends BaseValueBuilder

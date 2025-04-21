@@ -3,7 +3,7 @@ import { OptionalPattern, Pattern, Triple, Variable } from "sparqljs";
 import EndClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import StartClassGroup from "../../components/builder-section/groupwrapper/criteriagroup/startendclassgroup/StartClassGroup";
 import { getSettings } from "../../settings/defaultSettings";
-import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "./SparqlFactory";
 import { RDFS } from '../../spec-providers/BaseRDFReader';
 import { OWL } from '../../spec-providers/owl/OWLSpecificationProvider';

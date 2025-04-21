@@ -1,5 +1,5 @@
 import { BaseRDFReader } from "../BaseRDFReader";
-import ISpecificationEntry from "../ISpecificationEntry";
+import { ISpecificationEntry } from "../ISpecificationEntry";
 import { SH, SHACLSpecificationProvider, VOLIPI } from "./SHACLSpecificationProvider";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';

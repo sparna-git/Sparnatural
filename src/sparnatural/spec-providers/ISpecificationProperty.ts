@@ -1,5 +1,5 @@
 import { Term } from "@rdfjs/types";
-import ISpecificationEntry from "./ISpecificationEntry";
+import { ISpecificationEntry } from "./ISpecificationEntry";
 
 interface ISpecificationProperty extends ISpecificationEntry {
   /**

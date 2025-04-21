@@ -1,9 +1,9 @@
 import UiuxConfig from "../../../../IconsConstants";
-import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparnaturalSpecification";
 import { getSettings } from "../../../../../../sparnatural/settings/defaultSettings";
 import ArrowComponent from "../../../../buttons/ArrowComponent";
 import UnselectBtn from "../../../../buttons/UnselectBtn";
-import HTMLComponent from "../../../../HtmlComponent";
+import { HTMLComponent } from "../../../../HtmlComponent";
 import AddWidgetValueBtn from "../../../../buttons/AddWidgetValueBtn";
 import {
   AbstractWidget,

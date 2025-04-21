@@ -1,5 +1,5 @@
 import { getSettings } from "../../../sparnatural/settings/defaultSettings";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 
 class AddUserInputBtn extends HTMLComponent {
   callBack: () => void;

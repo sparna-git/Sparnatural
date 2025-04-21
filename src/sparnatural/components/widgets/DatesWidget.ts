@@ -3,7 +3,7 @@ import { SelectedVal } from "../SelectedVal";
 import AddUserInputBtn from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { I18n } from "../../settings/I18n";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 
 export class DateValue implements WidgetValue {
   value: {

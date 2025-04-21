@@ -4,7 +4,7 @@ import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
-import Datasources from "../../ontologies/SparnaturalConfigDatasources";
+import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from "rdf-stores";
 import { Term } from "@rdfjs/types";
 

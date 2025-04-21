@@ -1,5 +1,5 @@
-import { Order } from "../../SparnaturalQuery";
-import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
+import { Order } from "../../SparnaturalQueryIfc";
+import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
 import {
   Grouping,
   Ordering,
@@ -15,7 +15,6 @@ import { DataFactory } from "rdf-data-factory";
 import { DraggableComponentState } from "../../components/variables-section/variableorder/DraggableComponent";
 import GroupWrapper from "../../components/builder-section/groupwrapper/GroupWrapper";
 import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
-import SparnaturalFormComponent from "../../../sparnatural-form/components/SparnaturalFormComponent";
 
 const factory = new DataFactory();
 

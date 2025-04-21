@@ -1,5 +1,5 @@
-import ISparnaturalSpecification from "../../spec-providers/ISparnaturalSpecification";
-import HTMLComponent from "../HtmlComponent";
+import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
+import { HTMLComponent } from "../HtmlComponent";
 import GroupWrapper from "./groupwrapper/GroupWrapper";
 
 /*

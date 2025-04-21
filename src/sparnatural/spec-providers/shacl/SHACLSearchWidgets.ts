@@ -5,37 +5,37 @@ import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { StoreModel } from "../StoreModel";
 import { StatisticsReader } from "../StatisticsReader";
 import { RDF } from "../BaseRDFReader";
-import ISparnaturalSpecification from "../ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../ISparnaturalSpecification";
 
 const factory = new DataFactory();
 
 
-export interface SparnaturalSearchWidget {
+export interface SparnaturalSearchWidgetScorer {
     getUri():string;
     score(propertyShape:string, range:string, store: StoreModel, config: ISparnaturalSpecification):number;
 }
 
-export class SparnaturalSearchWidgetsRegistry {
-    static instance = new SparnaturalSearchWidgetsRegistry();
+export class SparnaturalSearchWidgetsScorerRegistry {
+    static instance = new SparnaturalSearchWidgetsScorerRegistry();
 
-    searchWidgets:SparnaturalSearchWidget[] = new Array<SparnaturalSearchWidget>();
+    searchWidgets:SparnaturalSearchWidgetScorer[] = new Array<SparnaturalSearchWidgetScorer>();
 
     private constructor() { }
 
-    public static getInstance(): SparnaturalSearchWidgetsRegistry {
-        if (!SparnaturalSearchWidgetsRegistry.instance) {
-            SparnaturalSearchWidgetsRegistry.instance = new SparnaturalSearchWidgetsRegistry();
+    public static getInstance(): SparnaturalSearchWidgetsScorerRegistry {
+        if (!SparnaturalSearchWidgetsScorerRegistry.instance) {
+            SparnaturalSearchWidgetsScorerRegistry.instance = new SparnaturalSearchWidgetsScorerRegistry();
         }
 
-        return SparnaturalSearchWidgetsRegistry.instance;
+        return SparnaturalSearchWidgetsScorerRegistry.instance;
     }
 
-    getSearchWidgets(): SparnaturalSearchWidget[]{
+    getSearchWidgets(): SparnaturalSearchWidgetScorer[]{
         return this.searchWidgets;
     }
 }
 
-export class AutocompleteWidget implements SparnaturalSearchWidget {
+export class AutocompleteWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.AUTOCOMPLETE_PROPERTY;
@@ -46,9 +46,9 @@ export class AutocompleteWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new AutocompleteWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new AutocompleteWidgetScorer());
 
-export class ListWidget implements SparnaturalSearchWidget {
+export class ListWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.LIST_PROPERTY;
@@ -79,9 +79,9 @@ export class ListWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new ListWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new ListWidgetScorer());
 
-export class TreeWidget implements SparnaturalSearchWidget {
+export class TreeWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.TREE_PROPERTY;
@@ -92,9 +92,9 @@ export class TreeWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new TreeWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new TreeWidgetScorer());
 
-export class DatePickerWidget implements SparnaturalSearchWidget {
+export class DatePickerWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.TIME_PROPERTY_DATE;
@@ -126,9 +126,9 @@ export class DatePickerWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new DatePickerWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new DatePickerWidgetScorer());
 
-export class YearPickerWidget implements SparnaturalSearchWidget {
+export class YearPickerWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.TIME_PROPERTY_YEAR;
@@ -147,9 +147,9 @@ export class YearPickerWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new YearPickerWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new YearPickerWidgetScorer());
 
-export class MapWidget implements SparnaturalSearchWidget {
+export class MapWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.MAP_PROPERTY;
@@ -168,9 +168,9 @@ export class MapWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new MapWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new MapWidgetScorer());
 
-export class BooleanWidget implements SparnaturalSearchWidget {
+export class BooleanWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.BOOLEAN_PROPERTY;
@@ -189,10 +189,10 @@ export class BooleanWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new BooleanWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new BooleanWidgetScorer());
 
 
-export class NumberWidget implements SparnaturalSearchWidget {
+export class NumberWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.NUMBER_PROPERTY;
@@ -235,10 +235,10 @@ export class NumberWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new NumberWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new NumberWidgetScorer());
 
 
-export class NoWidget implements SparnaturalSearchWidget {
+export class NoWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.NON_SELECTABLE_PROPERTY;
@@ -249,10 +249,10 @@ export class NoWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new NoWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new NoWidgetScorer());
 
 
-export class SearchRegexWidget implements SparnaturalSearchWidget {
+export class SearchRegexWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.SEARCH_PROPERTY;
@@ -279,9 +279,9 @@ export class SearchRegexWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new SearchRegexWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new SearchRegexWidgetScorer());
 
-export class SearchEqualWidget implements SparnaturalSearchWidget {
+export class SearchEqualWidgetScorer implements SparnaturalSearchWidgetScorer {
 
     getUri():string {
         return Config.STRING_EQUALS_PROPERTY;
@@ -292,5 +292,5 @@ export class SearchEqualWidget implements SparnaturalSearchWidget {
     }
 
 }
-SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().push(new SearchEqualWidget());
+SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().push(new SearchEqualWidgetScorer());
 

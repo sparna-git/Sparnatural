@@ -1,7 +1,7 @@
 import { DataFactory } from 'rdf-data-factory';
 import rdfParser from "rdf-parse";
 var Readable = require('stream').Readable
-import Datasources from "../ontologies/SparnaturalConfigDatasources";
+import { Datasources } from "../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from 'rdf-stores';
 import { NamedNode, Quad, Stream, Term } from "@rdfjs/types";
 import { StoreModel } from './StoreModel';

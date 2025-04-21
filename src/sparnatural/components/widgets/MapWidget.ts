@@ -9,7 +9,7 @@ import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../SelectedVal";
 import { NamedNode } from '@rdfjs/types/data-model';
 import { I18n } from '../../settings/I18n';
-import HTMLComponent from '../HtmlComponent';
+import { HTMLComponent } from '../HtmlComponent';
 import CriteriaGroup from '../builder-section/groupwrapper/criteriagroup/CriteriaGroup';
 
 

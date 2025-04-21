@@ -1,8 +1,8 @@
 import ClassTypeId from "./ClassTypeId";
-import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparnaturalSpecification";
 import { SelectedVal } from "../../../..//SelectedVal";
 import CriteriaGroup from "../CriteriaGroup";
-import HTMLComponent from "../../../../HtmlComponent";
+import { HTMLComponent } from "../../../../HtmlComponent";
 import TippyInfo from "../../../../buttons/TippyInfo";
 import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
 

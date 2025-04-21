@@ -4,7 +4,7 @@
 
 import UiuxConfig from "../IconsConstants";
 import { OptionsGroup } from "../builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 
 class OptionalArrow extends HTMLComponent {
   selected = false;

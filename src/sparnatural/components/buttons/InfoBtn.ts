@@ -1,5 +1,5 @@
 import UiuxConfig from "../IconsConstants";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 import TippyInfo from "./TippyInfo";
 
 class InfoBtn extends HTMLComponent {

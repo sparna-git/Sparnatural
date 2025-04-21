@@ -5,7 +5,7 @@ import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { SelectAllValue } from "../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { I18n } from '../../settings/I18n';
-import HTMLComponent from '../HtmlComponent';
+import { HTMLComponent } from '../HtmlComponent';
 
 const factory = new DataFactory();
 

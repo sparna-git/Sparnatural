@@ -6,12 +6,11 @@ import {
   Order,
   VariableExpression,
   VariableTerm,
-} from "../../SparnaturalQuery";
+} from "../../SparnaturalQueryIfc";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import { DraggableComponentState } from "../../components/variables-section/variableorder/DraggableComponent";
 import { DataFactory } from "rdf-data-factory";
-import SparnaturalFormComponent from "../../../sparnatural-form/components/SparnaturalFormComponent";
 
 const factory = new DataFactory();
 
@@ -19,7 +18,7 @@ const factory = new DataFactory();
   Reads out the UI and creates the internal JSON structure described here:
   https://docs.sparnatural.eu/Query-JSON-format
 */
-class SparnaturalJsonGenerator {
+export class SparnaturalJsonGenerator {
   sparnatural: SparnaturalComponent;
   json: SparnaturalQueryIfc = {
     distinct: null,
@@ -129,4 +128,3 @@ class SparnaturalJsonGenerator {
   }
 }
 
-export default SparnaturalJsonGenerator;

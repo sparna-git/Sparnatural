@@ -1,4 +1,4 @@
-import ISpecificationEntity from "../ISpecificationEntity";
+import { ISpecificationEntity } from "../ISpecificationEntity";
 import { RdfStore } from "rdf-stores";
 
 

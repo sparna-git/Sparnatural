@@ -7,7 +7,7 @@ import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/starten
 import { AutocompleteDataProviderIfc, mergeDatasourceResults, NoOpAutocompleteProvider, RdfTermDatasourceItem } from "./data/DataProviders";
 import Awesomplete from 'awesomplete';
 import { I18n } from '../../settings/I18n';
-import HTMLComponent from '../HtmlComponent';
+import { HTMLComponent } from '../HtmlComponent';
 
 const factory = new DataFactory();
 

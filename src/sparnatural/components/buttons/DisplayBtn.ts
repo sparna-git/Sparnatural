@@ -1,5 +1,5 @@
 import UiuxConfig from "../IconsConstants";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 
 class DisplayBtn extends HTMLComponent {
   selected = false;

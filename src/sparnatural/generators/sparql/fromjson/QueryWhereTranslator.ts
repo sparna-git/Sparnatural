@@ -1,7 +1,7 @@
 import { DataFactory } from "rdf-data-factory";
 import { Pattern, Variable } from "sparqljs";
-import ISparnaturalSpecification from "../../../spec-providers/ISparnaturalSpecification";
-import { SparnaturalQueryIfc } from "../../../SparnaturalQuery";
+import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
+import { SparnaturalQueryIfc } from "../../../SparnaturalQueryIfc";
 import BranchTranslator from "./BranchTranslator";
 
 const factory = new DataFactory();

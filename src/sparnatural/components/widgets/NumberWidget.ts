@@ -7,7 +7,7 @@ import AddUserInputBtn from '../buttons/AddUserInputBtn';
 import SparqlFactory from '../../generators/sparql/SparqlFactory';
 import InfoBtn from '../buttons/InfoBtn';
 import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
-import HTMLComponent from '../HtmlComponent';
+import { HTMLComponent } from '../HtmlComponent';
 
 
 const factory = new DataFactory();

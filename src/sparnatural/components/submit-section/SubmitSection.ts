@@ -1,6 +1,6 @@
 import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import PlayBtn from "../buttons/PlayBtn";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 import SparnaturalComponent from "../SparnaturalComponent";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 

@@ -1,5 +1,5 @@
 import UiuxConfig from "../IconsConstants";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 import { I18n } from "../../settings/I18n";
 
 class ResetBtn extends HTMLComponent {

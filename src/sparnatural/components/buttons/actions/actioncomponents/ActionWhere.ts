@@ -1,7 +1,7 @@
 import { I18n } from "../../../../settings/I18n";
-import ISparnaturalSpecification from "../../../../spec-providers/ISparnaturalSpecification";
+import { ISparnaturalSpecification } from "../../../../spec-providers/ISparnaturalSpecification";
 import EditComponents from "../../../builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
-import HTMLComponent from "../../../HtmlComponent";
+import { HTMLComponent } from "../../../HtmlComponent";
 import UiuxConfig from "../../../IconsConstants";
 
 /*

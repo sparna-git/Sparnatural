@@ -1,5 +1,5 @@
 import { I18n } from "../../settings/I18n";
-import HTMLComponent from "../HtmlComponent";
+import { HTMLComponent } from "../HtmlComponent";
 
 class VariableOptionsSelectBtn extends HTMLComponent {
   selected = false;

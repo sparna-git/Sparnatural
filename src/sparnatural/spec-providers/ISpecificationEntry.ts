@@ -1,7 +1,6 @@
-import { Config } from "../ontologies/SparnaturalConfig";
 
 
-export default interface ISpecificationEntry {
+export interface ISpecificationEntry {
 
     /**
      * @returns The id (if JSON-LD) or URI of the entry

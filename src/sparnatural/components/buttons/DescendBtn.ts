@@ -1,6 +1,6 @@
 import UiuxConfig from "../IconsConstants";
-import HTMLComponent from "../HtmlComponent";
-import { Order } from "../../SparnaturalQuery";
+import { HTMLComponent } from "../HtmlComponent";
+import { Order } from "../../SparnaturalQueryIfc";
 
 class DescendBtn extends HTMLComponent {
   selected: boolean = false;

@@ -1,14 +1,14 @@
 import { getSettings } from "../../../../../settings/defaultSettings";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import { SelectedVal } from "../../../../SelectedVal";
-import HTMLComponent from "../../../../HtmlComponent";
-import ISparnaturalSpecification from "../../../../../spec-providers/ISparnaturalSpecification";
+import { HTMLComponent } from "../../../../HtmlComponent";
+import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparnaturalSpecification";
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
 import { WidgetValue } from "../../../../widgets/AbstractWidget";
 import { I18n } from "../../../../../settings/I18n";
 import { DagIfc, DagNodeIfc} from "../../../../../dag/Dag";
-import ISpecificationEntity from "../../../../../spec-providers/ISpecificationEntity";
+import { ISpecificationEntity } from "../../../../../spec-providers/ISpecificationEntity";
 import UiuxConfig from "../../../../IconsConstants";
 import tippy from "tippy.js";
 import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";

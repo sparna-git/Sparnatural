@@ -4,9 +4,9 @@ import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { DASH, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
-import { ListWidget, SparnaturalSearchWidget, SparnaturalSearchWidgetsRegistry } from "./SHACLSearchWidgets";
+import { ListWidgetScorer, SparnaturalSearchWidgetScorer, SparnaturalSearchWidgetsScorerRegistry } from "./SHACLSearchWidgets";
 import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntity, SHACLSpecificationEntity } from "./SHACLSpecificationEntity";
-import Datasources from "../../ontologies/SparnaturalConfigDatasources";
+import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
 import { Quad, Quad_Subject, Term } from "@rdfjs/types/data-model";
@@ -159,10 +159,10 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
      * @returns the default widget for this property, based on datatype and count
      */
     getDefaultPropertyType(shapeUri:string, range:string): string {
-      let highest:SparnaturalSearchWidget = new ListWidget();
+      let highest:SparnaturalSearchWidgetScorer = new ListWidgetScorer();
       let highestScore:number = 0;
-      for (let index = 0; index < SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets().length; index++) {
-        const currentWidget = SparnaturalSearchWidgetsRegistry.getInstance().getSearchWidgets()[index];
+      for (let index = 0; index < SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets().length; index++) {
+        const currentWidget = SparnaturalSearchWidgetsScorerRegistry.getInstance().getSearchWidgets()[index];
         let currentScore = currentWidget.score(shapeUri, range, new StoreModel(this.store), this.provider);
         if(currentScore > highestScore) {
           highestScore = currentScore;
