@@ -2,7 +2,7 @@ import { getSettings } from "../../sparnatural/settings/defaultSettings";
 import { ISparnaturalSpecification } from "../spec-providers/ISparnaturalSpecification";
 import BgWrapper from "./builder-section/BgWrapper";
 import SubmitSection from "./submit-section/SubmitSection";
-import SparnaturalSpecificationFactory from "../spec-providers/SparnaturalSpecificationFactory";
+import { SparnaturalSpecificationFactory } from "../spec-providers/SparnaturalSpecificationFactory";
 import ActionStore from "../statehandling/ActionStore";
 import VariableSection from "./variables-section/VariableSelection";
 import { HTMLComponent } from "./HtmlComponent";

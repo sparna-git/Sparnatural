@@ -7,7 +7,7 @@ import { Catalog } from '../settings/Catalog';
 
 let DF = new DataFactory();
 
-class SparnaturalSpecificationFactory {
+export class SparnaturalSpecificationFactory {
 
   build(cfg:any, language:string, catalog:Catalog|undefined, callback:any) {
     if (cfg.includes("@prefix") || cfg.includes("<http")) {
@@ -75,4 +75,3 @@ class SparnaturalSpecificationFactory {
     }
   }
 }
-export default SparnaturalSpecificationFactory;
