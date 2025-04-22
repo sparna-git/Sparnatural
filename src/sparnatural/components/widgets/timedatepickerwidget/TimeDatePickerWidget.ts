@@ -1,6 +1,5 @@
-import { Pattern } from "sparqljs";
-import AddUserInputBtn from "../../buttons/AddUserInputBtn";
-import InfoBtn from "../../buttons/InfoBtn";
+import { AddUserInputBtn } from "../../buttons/AddUserInputBtn";
+import { InfoBtn } from "../../buttons/InfoBtn";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
 import { DataFactory } from 'rdf-data-factory';

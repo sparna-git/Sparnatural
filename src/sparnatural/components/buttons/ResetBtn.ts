@@ -2,7 +2,7 @@ import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
 import { I18n } from "../../settings/I18n";
 
-class ResetBtn extends HTMLComponent {
+export class ResetBtn extends HTMLComponent {
   tippySettings: any;
 
   constructor(ParentComponent: HTMLComponent, callBack: () => void) {
@@ -29,4 +29,3 @@ class ResetBtn extends HTMLComponent {
     return this;
   }
 }
-export default ResetBtn;

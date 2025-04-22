@@ -1,7 +1,7 @@
 import { HTMLComponent } from "../HtmlComponent";
 import UiuxConfig from "../IconsConstants";
 
-class EditBtn extends HTMLComponent {
+export class EditBtn extends HTMLComponent {
   constructor(ParentComponent: HTMLComponent, callBack: () => void) {
     let widgetHtml = $(`<span>${UiuxConfig.ICON_PEN}</span>`);
     super("edit", ParentComponent, widgetHtml);
@@ -16,4 +16,3 @@ class EditBtn extends HTMLComponent {
     return this;
   }
 }
-export default EditBtn;

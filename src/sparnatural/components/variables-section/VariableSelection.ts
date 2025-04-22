@@ -1,5 +1,5 @@
 import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
-import DisplayBtn from "../buttons/DisplayBtn";
+import { DisplayBtn } from "../buttons/DisplayBtn";
 import { HTMLComponent } from "../HtmlComponent";
 import VariableOrderMenu from "./variableorder/VariableOrderMenu";
 import VariableSortOption from "./variablesort/VariableSortOptions";

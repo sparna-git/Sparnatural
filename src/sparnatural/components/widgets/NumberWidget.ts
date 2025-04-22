@@ -1,11 +1,9 @@
 import { DataFactory } from 'rdf-data-factory';
-import { Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { I18n } from '../../settings/I18n';
-import AddUserInputBtn from '../buttons/AddUserInputBtn';
-import SparqlFactory from '../../generators/sparql/SparqlFactory';
-import InfoBtn from '../buttons/InfoBtn';
+import { AddUserInputBtn } from '../buttons/AddUserInputBtn';
+import { InfoBtn } from '../buttons/InfoBtn';
 import { TOOLTIP_CONFIG } from '../../settings/defaultSettings';
 import { HTMLComponent } from '../HtmlComponent';
 

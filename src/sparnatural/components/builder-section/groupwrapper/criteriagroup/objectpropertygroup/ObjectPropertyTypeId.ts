@@ -1,7 +1,7 @@
 import UiuxConfig from "../../../../IconsConstants";
 import { SelectedVal } from "../../../..//SelectedVal";
 import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparnaturalSpecification";
-import ArrowComponent from "../../../../buttons/ArrowComponent";
+import { ArrowComponent } from "../../../../buttons/ArrowComponent";
 import { HTMLComponent } from "../../../../HtmlComponent";
 import CriteriaGroup from "../CriteriaGroup";
 import {HierarchicalClassSelectBuilder, JsonDagRow, DagWidgetDefaultValue} from "../startendclassgroup/HierarchicalClassSelectBuilder";

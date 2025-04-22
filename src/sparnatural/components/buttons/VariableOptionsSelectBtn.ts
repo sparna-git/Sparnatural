@@ -1,7 +1,7 @@
 import { I18n } from "../../settings/I18n";
 import { HTMLComponent } from "../HtmlComponent";
 
-class VariableOptionsSelectBtn extends HTMLComponent {
+export class VariableOptionsSelectBtn extends HTMLComponent {
   selected = false;
   constructor(
     ParentComponent: HTMLComponent,
@@ -43,4 +43,3 @@ class VariableOptionsSelectBtn extends HTMLComponent {
     return this;
   }
 }
-export default VariableOptionsSelectBtn;

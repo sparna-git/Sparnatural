@@ -1,7 +1,7 @@
 import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
 
-class ArrowComponent extends HTMLComponent {
+export class ArrowComponent extends HTMLComponent {
   arrowStyle: UiuxConfig;
   constructor(ParenComponent: HTMLComponent, arrowStyle: UiuxConfig) {
     let baseCssClass: string = "componentFrontArrow"; //default
@@ -18,4 +18,3 @@ class ArrowComponent extends HTMLComponent {
     return this;
   }
 }
-export default ArrowComponent;

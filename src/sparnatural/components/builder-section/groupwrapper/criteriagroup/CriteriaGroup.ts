@@ -2,7 +2,7 @@
  * A single line/criteria
  **/
 import { ISparnaturalSpecification } from "../../../../spec-providers/ISparnaturalSpecification";
-import UnselectBtn from "../../../buttons/UnselectBtn";
+import { UnselectBtn } from "../../../buttons/UnselectBtn";
 import ObjectPropertyGroup from "./objectpropertygroup/ObjectPropertyGroup";
 import EndClassGroup from "./startendclassgroup/EndClassGroup";
 import StartClassGroup from "./startendclassgroup/StartClassGroup";

@@ -6,7 +6,7 @@ import { HTMLComponent } from "../HtmlComponent";
     Switch Component having a binary state:
     selected: Switching between the states with onClick
 */
-class SelectViewVariableBtn extends HTMLComponent {
+export class SelectViewVariableBtn extends HTMLComponent {
   selected = false;
   callBack;
   constructor(
@@ -64,4 +64,3 @@ class SelectViewVariableBtn extends HTMLComponent {
   }
 
 }
-export default SelectViewVariableBtn;

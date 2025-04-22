@@ -6,7 +6,7 @@ import UiuxConfig from "../IconsConstants";
 import { OptionsGroup } from "../builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
 import { HTMLComponent } from "../HtmlComponent";
 
-class OptionalArrow extends HTMLComponent {
+export class OptionalArrow extends HTMLComponent {
   selected = false;
   callBack: (selected: boolean) => void;
   constructor(
@@ -27,4 +27,3 @@ class OptionalArrow extends HTMLComponent {
     return this;
   }
 }
-export default OptionalArrow;

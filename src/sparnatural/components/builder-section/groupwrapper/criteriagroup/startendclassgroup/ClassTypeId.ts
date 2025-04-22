@@ -2,11 +2,11 @@ import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparna
 import StartClassGroup from "./StartClassGroup";
 import EndClassGroup from "./EndClassGroup";
 import {HierarchicalClassSelectBuilder, JsonDagRow, DagWidgetDefaultValue} from "./HierarchicalClassSelectBuilder";
-import ArrowComponent from "../../../../buttons/ArrowComponent";
+import { ArrowComponent } from "../../../../buttons/ArrowComponent";
 import UiuxConfig from "../../../../IconsConstants";
-import UnselectBtn from "../../../../buttons/UnselectBtn";
+import { UnselectBtn } from "../../../../buttons/UnselectBtn";
 import { SelectedVal } from "../../../..//SelectedVal";
-import SelectViewVariableBtn from "../../../../buttons/SelectViewVariableBtn";
+import { SelectViewVariableBtn } from "../../../../buttons/SelectViewVariableBtn";
 import { HTMLComponent } from "../../../../HtmlComponent";
 import { DagIfc, DagNodeIfc, DagNode} from "../../../../../dag/Dag";
 import { ISpecificationEntity } from "../../../../../spec-providers/ISpecificationEntity";

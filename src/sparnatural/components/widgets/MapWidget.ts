@@ -1,7 +1,7 @@
 import { DataFactory } from 'rdf-data-factory';
 // L needs to be imported *before* leaflet-geoman-free
 import L, { LatLng, Rectangle, PolylineOptions, Polygon, PM, TileLayer } from "leaflet";
-import AddUserInputBtn from "../buttons/AddUserInputBtn";
+import { AddUserInputBtn } from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";

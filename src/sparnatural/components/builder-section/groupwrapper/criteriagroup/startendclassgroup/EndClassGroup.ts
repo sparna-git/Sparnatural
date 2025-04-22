@@ -1,7 +1,7 @@
 import ClassTypeId from "./ClassTypeId";
 import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparnaturalSpecification";
 import tippy from "tippy.js";
-import { getSettings, TOOLTIP_CONFIG } from "../../../../../../sparnatural/settings/defaultSettings";
+import { TOOLTIP_CONFIG } from "../../../../../../sparnatural/settings/defaultSettings";
 import { SelectedVal } from "../../../..//SelectedVal";
 import CriteriaGroup from "../CriteriaGroup";
 import { HTMLComponent } from "../../../../HtmlComponent";

@@ -3,7 +3,7 @@ import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparna
 import { SelectedVal } from "../../../..//SelectedVal";
 import CriteriaGroup from "../CriteriaGroup";
 import { HTMLComponent } from "../../../../HtmlComponent";
-import TippyInfo from "../../../../buttons/TippyInfo";
+import { TippyInfo } from "../../../../buttons/TippyInfo";
 import { TOOLTIP_CONFIG } from "../../../../../settings/defaultSettings";
 
 /**

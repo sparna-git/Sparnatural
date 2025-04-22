@@ -1,7 +1,6 @@
-import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 import { HTMLComponent } from "../HtmlComponent";
 
-class AddUserInputBtn extends HTMLComponent {
+export class AddUserInputBtn extends HTMLComponent {
   callBack: () => void;
   constructor(
     parentComponent: HTMLComponent,
@@ -23,5 +22,3 @@ class AddUserInputBtn extends HTMLComponent {
     return this;
   }
 }
-
-export default AddUserInputBtn;

@@ -1,8 +1,8 @@
 import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
-import TippyInfo from "./TippyInfo";
+import { TippyInfo } from "./TippyInfo";
 
-class InfoBtn extends HTMLComponent {
+export class InfoBtn extends HTMLComponent {
   infoMessage: string;
   tippySettings: any;
   constructor(
@@ -21,4 +21,3 @@ class InfoBtn extends HTMLComponent {
     return this;
   }
 }
-export default InfoBtn;

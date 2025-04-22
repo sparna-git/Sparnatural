@@ -1,7 +1,7 @@
 import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
 
-class DisplayBtn extends HTMLComponent {
+export class DisplayBtn extends HTMLComponent {
   selected = false;
   callBack: (displayed: boolean) => void;
   constructor(
@@ -39,4 +39,3 @@ class DisplayBtn extends HTMLComponent {
     });
   }
 }
-export default DisplayBtn;

@@ -2,7 +2,7 @@ import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
 import { Order } from "../../SparnaturalQueryIfc";
 
-class DescendBtn extends HTMLComponent {
+export class DescendBtn extends HTMLComponent {
   selected: boolean = false;
   constructor(ParentComponent: HTMLComponent, callBack: (order:Order) => void) {
     let widgetHtml = $(UiuxConfig.ICON_ZA);
@@ -27,4 +27,3 @@ class DescendBtn extends HTMLComponent {
     return this;
   }
 }
-export default DescendBtn;

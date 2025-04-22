@@ -1,9 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
-import { BgpPattern, Pattern, Triple, ValuePatternRow, ValuesPattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
-import SparqlFactory from "../../generators/sparql/SparqlFactory";
 import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import EndClassGroup from "../builder-section/groupwrapper/criteriagroup/startendclassgroup/EndClassGroup";
 import { AutocompleteDataProviderIfc, mergeDatasourceResults, NoOpAutocompleteProvider, RdfTermDatasourceItem } from "./data/DataProviders";
 import Awesomplete from 'awesomplete';
 import { I18n } from '../../settings/I18n';

@@ -1,4 +1,3 @@
-import {  Pattern } from "sparqljs";
 import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
 import { HTMLComponent } from "../HtmlComponent";
 

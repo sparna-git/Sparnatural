@@ -2,13 +2,21 @@
   "name": "sparnatural",
   "version": "11.0.0",
   "description": "Visual client-side SPARQL query builder and knowledge graph exploration tool",
-  "main": "dist/sparnatural.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/types/index.d.ts",
-  "files": ["dist"],
-  "module": "dist/sparnatural.js",
+  "browser": "dist/browser/sparnatural.js",
+  "files": [
+    "dist",
+    "stylesheets"
+  ],  
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config webpack.config.js --mode production",
+    "clean": "rm -rf dist",
+    "build:types": "tsc --emitDeclarationOnly",
+    "build:lib": "tsc",
+    "build:bundle": "webpack --config webpack.config.js --mode production",
+    "build": "npm run clean && npm run build:lib && npm run build:bundle",
+    "test": "echo \"Error: no test specified\" && exit 1",    
     "build-dev": "rm -rf dist && webpack --mode development",
     "start": "webpack serve --hot --config webpack.config.js --mode development",
     "pretty": "prettier --write \"./src/**/*.{ts,js,json}\""

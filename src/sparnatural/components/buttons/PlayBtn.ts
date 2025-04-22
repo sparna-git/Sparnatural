@@ -2,7 +2,7 @@ import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
 import { I18n } from "../../settings/I18n";
 
-class PlayBtn extends HTMLComponent {
+export class PlayBtn extends HTMLComponent {
   callback: () => void;
 
   constructor(ParentComponent: HTMLComponent, callback: () => void) {
@@ -53,4 +53,3 @@ class PlayBtn extends HTMLComponent {
     this.html.removeClass("submitDisable");
   }
 }
-export default PlayBtn;

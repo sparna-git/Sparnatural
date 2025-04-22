@@ -1,4 +1,4 @@
-import ResetBtn from "../buttons/ResetBtn";
+import { ResetBtn } from "../buttons/ResetBtn";
 import ComponentsList from "./ComponentsList";
 import SparnaturalComponent from "../SparnaturalComponent";
 import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";

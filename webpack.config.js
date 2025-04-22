@@ -12,9 +12,8 @@ module.exports = {
     sparnatural: "./src/SparnaturalElement.ts"
   },
   output: {
-    path: path.resolve(__dirname, "./dist"),
-    filename: "[name].js",
-    clean: true,
+    path: path.resolve(__dirname, "./dist/browser"),
+    filename: "[name].js"
   },
   module: {
     rules: [
@@ -125,11 +124,10 @@ module.exports = {
             ignore: ["**/index.html", "**/form-page.html"], // Assure-toi de ne pas copier ces fichiers déjà générés
           },
         },
-        // Copy the themes CSS directly as static files in a themes subfolder
         {
-          from: __dirname + "/src/assets/stylesheets/themes",
-          to: "themes",
-        },
+          from: __dirname + "/src/assets/stylesheets",
+          to: __dirname + "/dist/stylesheets"
+        }
       ],
     }),
 
@@ -149,11 +147,21 @@ module.exports = {
     new FileManagerPlugin({
       events: {
         onEnd: [
+          // Copy the themes CSS directly as static files in a themes subfolder
+          {
+            copy: [
+              {
+                source: "./src/assets/stylesheets/themes/*",
+                destination: "./release/themes",
+                options: { overwrite: true },
+              },
+            ],
+          },
           {
             copy: [
               {
                 source: "./hello-sparnatural/**",
-                destination: "./dist/hello-sparnatural",
+                destination: "./release/hello-sparnatural",
                 options: { overwrite: true },
               },
             ],
@@ -161,8 +169,8 @@ module.exports = {
           {
             copy: [
               {
-                source: "./dist/sparnatural.js",
-                destination: "./dist/hello-sparnatural/",
+                source: "./dist/browser/sparnatural.js",
+                destination: "./release/hello-sparnatural/",
                 options: { overwrite: true },
               },
             ],
@@ -170,8 +178,8 @@ module.exports = {
           {
             copy: [
               {
-                source: "./dist/sparnatural.css",
-                destination: "./dist/hello-sparnatural/",
+                source: "./dist/browser/sparnatural.css",
+                destination: "./release/hello-sparnatural/",
                 options: { overwrite: true },
               },
             ],
@@ -179,8 +187,8 @@ module.exports = {
           {
             copy: [
               {
-                source: "./dist/sparnatural.js.map",
-                destination: "./dist/hello-sparnatural/",
+                source: "./dist/browser/sparnatural.js.map",
+                destination: "./release/hello-sparnatural/",
                 options: { overwrite: true },
               },
             ],
@@ -188,8 +196,8 @@ module.exports = {
           {
             copy: [
               {
-                source: "./dist/sparnatural.css.map",
-                destination: "./dist/hello-sparnatural/",
+                source: "./dist/browser/sparnatural.css.map",
+                destination: "./release/hello-sparnatural/",
                 options: { overwrite: true },
               },
             ],
@@ -197,8 +205,8 @@ module.exports = {
           {
             archive: [
               {
-                source: "./dist/hello-sparnatural",
-                destination: "./dist/hello-sparnatural.zip",
+                source: "./release/hello-sparnatural",
+                destination: "./release/hello-sparnatural.zip",
               },
             ],
           },
@@ -206,7 +214,7 @@ module.exports = {
             copy: [
               {
                 source: "./src/sparnatural-bindings.js",
-                destination: "./dist/",
+                destination: "./release/",
                 options: { overwrite: true },
               },
             ],

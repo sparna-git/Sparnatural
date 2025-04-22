@@ -1,5 +1,5 @@
 import UiuxConfig from "../../../../../IconsConstants";
-import ArrowComponent from "../../../../../buttons/ArrowComponent";
+import { ArrowComponent } from "../../../../../buttons/ArrowComponent";
 import { HTMLComponent } from "../../../../../HtmlComponent";
 import GroupWrapper from "../../../GroupWrapper";
 import { OptionsGroup, OptionTypes } from "../OptionsGroup";

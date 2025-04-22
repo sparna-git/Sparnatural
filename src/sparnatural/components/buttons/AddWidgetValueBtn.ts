@@ -1,8 +1,8 @@
 import UiuxConfig from "../IconsConstants";
-import ArrowComponent from "./ArrowComponent";
+import { ArrowComponent } from "./ArrowComponent";
 import { HTMLComponent } from "../HtmlComponent";
 
-class AddWidgetValueBtn extends HTMLComponent {
+export class AddWidgetValueBtn extends HTMLComponent {
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   backArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_BACK);
   callBack: () => void;
@@ -28,4 +28,3 @@ class AddWidgetValueBtn extends HTMLComponent {
     });
   }
 }
-export default AddWidgetValueBtn;

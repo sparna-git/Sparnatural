@@ -2,7 +2,7 @@ import UiuxConfig from "../IconsConstants";
 import { HTMLComponent } from "../HtmlComponent";
 import { Order } from "../../SparnaturalQueryIfc";
 
-class NoOrderBtn extends HTMLComponent {
+export class NoOrderBtn extends HTMLComponent {
   selected: boolean = false;
   
   constructor(ParentComponent: HTMLComponent, callBack: (order:Order) => void) {
@@ -30,4 +30,3 @@ class NoOrderBtn extends HTMLComponent {
     return this;
   }
 }
-export default NoOrderBtn;
