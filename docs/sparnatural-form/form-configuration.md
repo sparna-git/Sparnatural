@@ -103,6 +103,7 @@ Is modelled in the following JSON data structure :
 The JSON data structure encodes the list of fields in the form, and for each field, gives:
   - its display labels
   - the variable to which the field is associated in the underlying Sparnatural query passed in the `query` attribute of the form
+  - optionaly, some user tooltips
 
 The data structure can also optionnaly list the variables from the original query that should be retained when the query results are displayed onscreen (versus when a full export is done).
 
@@ -139,12 +140,18 @@ Inside `bindings`, a single binding is an association between an underlying vari
     "name": {
       "en": "...",
       "fr": "..."
+    },
+    "help": {
+      "en": "...",
+      "fr": "..."
     }
   }
 }
 ```
 
 - `variable` : the name of the variable in the underlying Sparnatural query in which the selected value will be injected. See the [Sparnatural query structure documentation](https://docs.sparnatural.eu/Query-JSON-format.html). This is typically the name of a variable in the `o` position of the query, at any level in the query structure.
+- `name` : a map of language codes to labels. This is the title that will be used for this field
+- `help` (optional) : a map of language codes to tooltips. If provided, an "i" icon will be displayed with this tooltip, next to the field title.
 
 For example if your query contains this, with the `ContainerFormat` variable in `o` position:
 
