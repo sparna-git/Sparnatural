@@ -6,10 +6,9 @@ import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
 import { NoOpTreeDataProvider, RdfTermTreeDatasourceItem, TreeDataProviderIfc } from "../data/DataProviders";
 import { HTMLComponent } from "../../HtmlComponent";
+import "jstree/dist/themes/default/style.min.css";
 
 const factory = new DataFactory();
-
-require("jstree/dist/themes/default/style.min.css");
 
 
 export interface TreeConfiguration {

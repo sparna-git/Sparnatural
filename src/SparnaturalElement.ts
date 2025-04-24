@@ -1,4 +1,4 @@
-require("./assets/js/jquery-nice-select/jquery.nice-select.js");
+import "./assets/js/jquery-nice-select/jquery.nice-select.js";
 import "./assets/stylesheets/sparnatural.scss";
 import $ from "jquery";
 /*SPARNATURAL*/
