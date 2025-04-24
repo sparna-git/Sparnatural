@@ -3,7 +3,7 @@
 @use './base';
 @use './layout/all-layout.scss';
 // Importing all the components
-@use './components/all-components.scss';
+@use './components/_all-components';
 @import "nice-select.css";
 @import "~@chenfengyuan/datepicker/dist/datepicker.min.css";
 // we are importing one default theme,
