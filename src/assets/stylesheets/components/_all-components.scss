@@ -1,42 +1,42 @@
-@use './componentslist.scss'; 
-@use './groupwrapper.scss';
+@use './componentslist'; 
+@use './groupwrapper';
 //CriteriaGroup
-@use './citeriagroup/criteriagroup.scss';
+@use './citeriagroup/criteriagroup';
 //OptionsGroup
-@use './citeriagroup/optionsgroup/optionsgroup.scss';
+@use './citeriagroup/optionsgroup/optionsgroup';
 //ObjectPropertyGroup
-@use './citeriagroup/objectpropertygroup/objectpropertygroup.scss';
-@use './citeriagroup/objectpropertygroup/objectpropertytypeid.scss';
+@use './citeriagroup/objectpropertygroup/objectpropertygroup';
+@use './citeriagroup/objectpropertygroup/objectpropertytypeid';
 //StartEndClassGroup
-@use './citeriagroup/startendclassgroup/startendclassgroup.scss';
-@use './citeriagroup/startendclassgroup/classtypeid.scss';
+@use './citeriagroup/startendclassgroup/startendclassgroup';
+@use './citeriagroup/startendclassgroup/classtypeid';
 //---Millers columns class selector
-@use './citeriagroup/startendclassgroup/hierarchicalclassselectbuilder.scss';
+@use './citeriagroup/startendclassgroup/hierarchicalclassselectbuilder';
 //Actions
-@use './citeriagroup/actions/actionand.scss';
-@use './citeriagroup/actions/actionwhere.scss';
+@use './citeriagroup/actions/actionand';
+@use './citeriagroup/actions/actionwhere';
 //Buttons
-@use './buttons/unselectbtn.scss';
-@use './buttons/optionalarrow.scss';
-@use './buttons/resetbtn.scss';
-@use './buttons/selectviewvariablebtn.scss';
-@use './buttons/AddUserInputBtn.scss';
-@use './buttons/InfoBtn.scss';
-@use './buttons/AddMoreValuesBtn.scss';
-@use './buttons/editBtn.scss';
+@use './buttons/unselectbtn';
+@use './buttons/optionalarrow';
+@use './buttons/resetbtn';
+@use './buttons/selectviewvariablebtn';
+@use './buttons/AddUserInputBtn';
+@use './buttons/InfoBtn';
+@use './buttons/AddMoreValuesBtn';
+@use './buttons/editBtn';
 //Widget
-@use './widget/EndClassWidgetGroup.scss';
-@use './widget/EndClassWidgetValue.scss';
-@use './widget/WidgetWrapper.scss';
-@use './widget/AutocompleteWidget.scss';
-@use './widget/ListWidget.scss';
-@use './widget/MapWidget.scss';
-@use './widget/TreeWidget.scss';
-@use './widget/Widgets.scss';
+@use './widget/EndClassWidgetGroup';
+@use './widget/EndClassWidgetValue';
+@use './widget/WidgetWrapper';
+@use './widget/AutocompleteWidget';
+@use './widget/ListWidget';
+@use './widget/MapWidget';
+@use './widget/TreeWidget';
+@use './widget/Widgets';
 // LoadingSpinner
-@use './widget/LoadingSpinner.scss';
+@use './widget/LoadingSpinner';
 // link components
-@use './link-and-component.scss';
-@use './link-where-child.scss';
+@use './link-and-component';
+@use './link-where-child';
 // jquery nice-select
-@use './citeriagroup/nice-select/nice-select.scss'
+@use './citeriagroup/nice-select/nice-select'
