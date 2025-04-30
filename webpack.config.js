@@ -126,7 +126,7 @@ module.exports = {
         },
         {
           from: __dirname + "/src/assets/stylesheets",
-          to: __dirname + "/dist/stylesheets"
+          to: __dirname + "/dist/scss"
         }
       ],
     }),

@@ -20,6 +20,10 @@ export class DateValue implements WidgetValue {
   }
 }
 
+/**
+ * Old time period widget
+ * @deprecated
+ */
 export class DatesWidget extends AbstractWidget {
 
   datesHandler: any;

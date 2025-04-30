@@ -6,9 +6,10 @@
   "module": "dist/index.js",
   "types": "dist/types/index.d.ts",
   "browser": "dist/browser/sparnatural.js",
+  "style": "dist/browser/sparnatural.css",
+  "sass": "dist/scss/sparnatural.scss",
   "files": [
-    "dist",
-    "stylesheets"
+    "dist"
   ],  
   "scripts": {
     "clean": "rm -rf dist",
