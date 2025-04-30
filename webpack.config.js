@@ -123,10 +123,6 @@ module.exports = {
           globOptions: {
             ignore: ["**/index.html", "**/form-page.html"], // Assure-toi de ne pas copier ces fichiers déjà générés
           },
-        },
-        {
-          from: __dirname + "/src/assets/stylesheets",
-          to: __dirname + "/dist/scss"
         }
       ],
     }),
@@ -151,8 +147,8 @@ module.exports = {
           {
             copy: [
               {
-                source: "./src/assets/stylesheets/themes/*",
-                destination: "./release/themes",
+                source: "./scss/themes/*",
+                destination: "./dist/themes",
                 options: { overwrite: true },
               },
             ],
@@ -161,7 +157,7 @@ module.exports = {
             copy: [
               {
                 source: "./hello-sparnatural/**",
-                destination: "./release/hello-sparnatural",
+                destination: "./dist/hello-sparnatural",
                 options: { overwrite: true },
               },
             ],
@@ -170,7 +166,7 @@ module.exports = {
             copy: [
               {
                 source: "./dist/browser/sparnatural.js",
-                destination: "./release/hello-sparnatural/",
+                destination: "./dist/hello-sparnatural/",
                 options: { overwrite: true },
               },
             ],
@@ -179,7 +175,7 @@ module.exports = {
             copy: [
               {
                 source: "./dist/browser/sparnatural.css",
-                destination: "./release/hello-sparnatural/",
+                destination: "./dist/hello-sparnatural/",
                 options: { overwrite: true },
               },
             ],
@@ -188,7 +184,7 @@ module.exports = {
             copy: [
               {
                 source: "./dist/browser/sparnatural.js.map",
-                destination: "./release/hello-sparnatural/",
+                destination: "./dist/hello-sparnatural/",
                 options: { overwrite: true },
               },
             ],
@@ -197,7 +193,7 @@ module.exports = {
             copy: [
               {
                 source: "./dist/browser/sparnatural.css.map",
-                destination: "./release/hello-sparnatural/",
+                destination: "./dist/hello-sparnatural/",
                 options: { overwrite: true },
               },
             ],
@@ -205,16 +201,19 @@ module.exports = {
           {
             archive: [
               {
-                source: "./release/hello-sparnatural",
-                destination: "./release/hello-sparnatural.zip",
+                source: "./dist/hello-sparnatural",
+                destination: "./dist/hello-sparnatural.zip",
               },
             ],
+          },
+          {
+            delete: ["./dist/hello-sparnatural"]
           },
           {
             copy: [
               {
                 source: "./src/sparnatural-bindings.js",
-                destination: "./release/",
+                destination: "./dist/",
                 options: { overwrite: true },
               },
             ],

@@ -27,7 +27,6 @@ export function removeEndClass(grpWrapper: GroupWrapper) {
   // set StartClassVal back to its original value
   grpWrapper.CriteriaGroup.StartClassGroup.startClassVal = startVal;
   let inputSelector = grpWrapper.CriteriaGroup.StartClassGroup.inputSelector;
-  //inputSelector.oldWidget.val(startVal.type).niceSelect("update");
   inputSelector.submitSelected() ;
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   //inputSelector.html[0].children[1].classList.add("disabled");

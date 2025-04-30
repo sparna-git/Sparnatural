@@ -28,7 +28,6 @@ export function addWhereComponent(
   let inputSelector =
     grpWrapper.whereChild.CriteriaGroup.StartClassGroup.inputSelector;
   
-    //inputSelector.oldWidget.val(endClassVal.type).niceSelect("update");
     inputSelector.submitSelected() ;
   // nice-select is 2nd place in childrenslist. move away from nice-select...
   //inputSelector.html[0].children[1].classList.add("disabled");

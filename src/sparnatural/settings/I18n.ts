@@ -1,5 +1,5 @@
-import enLabels from "../../assets/lang/en.json";
-import frLabels from "../../assets/lang/fr.json";
+import enLabels from "../lang/en.json";
+import frLabels from "../lang/fr.json";
 
 export class I18n {
   static i18nLabelsResources: any = {

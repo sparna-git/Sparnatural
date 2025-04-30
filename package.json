@@ -2,14 +2,15 @@
   "name": "sparnatural",
   "version": "11.0.0",
   "description": "Visual client-side SPARQL query builder and knowledge graph exploration tool",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/js/index.js",
+  "module": "dist/js/index.js",
   "types": "dist/types/index.d.ts",
   "browser": "dist/browser/sparnatural.js",
   "style": "dist/browser/sparnatural.css",
-  "sass": "dist/scss/sparnatural.scss",
+  "sass": "scss/sparnatural.scss",
   "files": [
-    "dist"
+    "dist",
+    "scss"
   ],  
   "scripts": {
     "clean": "rm -rf dist",

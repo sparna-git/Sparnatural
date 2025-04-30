@@ -9,7 +9,7 @@ import EditComponents from "../edit-components/EditComponents";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 
 /**
- * The "range" select, encapsulating a ClassTypeId, with a niceselect
+ * The "range" select, encapsulating a ClassTypeId
  **/
 class EndClassGroup extends HTMLComponent {
   variableSelector: any;

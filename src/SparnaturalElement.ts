@@ -1,5 +1,4 @@
-import "./assets/js/jquery-nice-select/jquery.nice-select.js";
-import "./assets/stylesheets/sparnatural.scss";
+import "../scss/sparnatural.scss";
 import $ from "jquery";
 /*SPARNATURAL*/
 import {
