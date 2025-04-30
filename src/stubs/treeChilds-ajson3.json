@@ -1,8 +1,0 @@
-[
-    { "id" : "http://fr.dbpedia.org/resource/Réalisme_(peinture)", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Réalisme (peinture)" },
-    { "id" : "http://fr.dbpedia.org/resource/Néoclassicisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Néoclassicisme" },
-    { "id" : "http://fr.dbpedia.org/resource/Expressionnisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Expressionnisme" },
-    { "id" : "http://fr.dbpedia.org/resource/Classicisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Classicisme" },
-    { "id" : "http://fr.dbpedia.org/resource/Orientalisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Orientalisme" },
-    { "id" : "http://fr.dbpedia.org/resource/Cubisme", "parent" : "http://fr.dbpedia.org/resource/Surréalisme", "text" : "Cubisme" }
-]
