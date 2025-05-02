@@ -1,4 +1,3 @@
-import "../scss/sparnatural.scss";
 import $ from "jquery";
 /*SPARNATURAL*/
 import {

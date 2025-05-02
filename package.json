@@ -5,9 +5,18 @@
   "main": "dist/js/index.js",
   "module": "dist/js/index.js",
   "types": "dist/types/index.d.ts",
-  "browser": "dist/browser/sparnatural.js",
+  "exports": {
+    ".": {
+      "import": "./dist/js/index.js",
+      "require": "./dist/js/index.js",
+      "types": "./dist/types/index.d.ts",
+      "style": "./dist/browser/sparnatural.css",  
+      "sass": "./scss/sparnatural.scss"
+    },
+    "./dist/browser": "./dist/browser/sparnatural.js",
+    "./scss/*": "./scss/*"
+  },
   "style": "dist/browser/sparnatural.css",
-  "sass": "scss/sparnatural.scss",
   "files": [
     "dist",
     "scss"
