@@ -20,7 +20,8 @@
   "files": [
     "dist",
     "scss"
-  ],  
+  ],
+  "sideEffects": ["**/*.css"],
   "scripts": {
     "clean": "rm -rf dist",
     "build:types": "tsc --emitDeclarationOnly",

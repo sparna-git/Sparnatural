@@ -25,7 +25,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
    * Tests whether the provided property shape URI will be turned into a Sparnatural property
    * @param propertyShapeUri 
    * @param n3store 
-   * @returns false if the property is deactivated, or it is on rdf:type, or it has an sh:hasValue
+   * @returns false if the property is deactivated, or it has an sh:hasValue
    */
   static isSparnaturalSHACLSpecificationProperty(propertyShapeUri:string, n3store: RdfStore):boolean {
     let graph = new StoreModel(n3store);
