@@ -119,7 +119,7 @@ module.exports = {
       patterns: [
         {
           from: __dirname + "/dev-page",
-          to: "dev-page",
+          to: __dirname + "/dist" + "/dev-page",
           globOptions: {
             ignore: ["**/index.html", "**/form-page.html"], // Assure-toi de ne pas copier ces fichiers déjà générés
           },

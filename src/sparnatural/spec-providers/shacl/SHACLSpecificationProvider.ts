@@ -366,6 +366,17 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
           }
 
           sparql = sparql.replace(re,replacer);
+
+          // add the prefixes from the target query to our query
+          var parsedTargetQuery = this.#parser.parse(sparqlTarget);
+          for (var key in parsedTargetQuery.prefixes) {
+            let prefixUri = parsedTargetQuery.prefixes[key];
+            // prepend the SPARQL prefix declaration to our SPARQL query if it does not already contain it
+            if(!sparql.includes("PREFIX "+key+": <"+prefixUri+">")) {
+              sparql = "PREFIX "+key+": <"+prefixUri+">\n" + sparql;
+            }
+          }
+
         })
       });
 
