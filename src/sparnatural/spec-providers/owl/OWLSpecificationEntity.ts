@@ -20,7 +20,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
 
 
     getConnectedEntities(): string[] {
-        var items: any[] = [];
+        var items:Set<string> = new Set<string>();
 
         const properties = this.#_readPropertiesWithDomain(this.uri);
 
@@ -35,18 +35,18 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
               var subClasses = this.#_readImmediateSubClasses(aClass);
               for (const aSubClass of subClasses) {
                   if (this.#_isSparnaturalClass(aSubClass)) {
-                  this._pushIfNotExist(aSubClass, items);
+                    items.add(aSubClass);
                   }
               }
               } else {
-              this._pushIfNotExist(aClass, items);
+                items.add(aClass);
               }
           }
         }
 
-        items = this.provider._sort(items);
-
-        return items;
+        // recreate an array from the set
+        // and sort it
+        return this.provider._sort(Array.from(items));
     }
 
     getConnectedEntitiesTree(): DagIfc<ISpecificationEntity> {
@@ -66,7 +66,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     }
 
     getConnectingProperties(range: string): string[] {
-        var items: any[] = [];
+        const items: Set<string> = new Set<string>();
 
         const properties = this.#_readPropertiesWithDomain(this.uri);
     
@@ -75,22 +75,22 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
           var classesInRange = prop.getRange();
     
           if (classesInRange.indexOf(range) > -1) {
-            this._pushIfNotExist(aProperty, items);
+            items.add(aProperty);
           } else {
             // potentially the select rangeClassId is a subClass, let's look up
             for (const aClass of classesInRange) {
               // TODO : recursivity
               var subClasses = this.#_readImmediateSubClasses(aClass);
               if (subClasses.indexOf(range) > -1) {
-                this._pushIfNotExist(aProperty, items);
+                items.add(aProperty);
               }
             }
           }
         }
     
-        items = this.provider._sort(items);
-    
-        return items;
+        // recreate an array from the set
+        // and sort it
+        return this.provider._sort(Array.from(items));
     }
 
     
@@ -163,8 +163,8 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         );
       }
 
-    #_readPropertiesWithDomain(classId: string) {
-    var properties: any[] = [];
+  #_readPropertiesWithDomain(classId: string) {
+    const properties: Set<string> = new Set<string>();
 
     const propertyQuads = this.store.getQuads(
       null,
@@ -176,7 +176,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     for (const aQuad of propertyQuads) {
       // only select properties with proper Sparnatural configuration
       if (new OWLSpecificationProperty(aQuad.subject.value, this.provider, this.store, this.lang).getPropertyType("")) {
-        this._pushIfNotExist(aQuad.subject.value, properties);
+        properties.add(aQuad.subject.value);
       }
     }
 
@@ -195,7 +195,7 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
       for (const aQuad of propertyQuadsHavingUnionAsDomain) {
         // only select properties with proper Sparnatural configuration
         if (new OWLSpecificationProperty(aQuad.subject.value, this.provider, this.store, this.lang).getPropertyType("")) {
-          this._pushIfNotExist(aQuad.subject.value, properties);
+          properties.add(aQuad.subject.value);
         }
       }
     }
@@ -208,15 +208,15 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
         anImmediateSuperClass
       );
       for (const aProperty of propertiesFromSuperClass) {
-        this._pushIfNotExist(aProperty, properties);
+        properties.add(aProperty);
       }
     }
 
-    return properties;
+    return Array.from(properties);
   }
 
   #_readImmediateSuperClasses(classId: any) {
-    var classes: any[] = [];
+    const classes: Set<any> = new Set<any>();
 
     const subClassQuads = this.store.getQuads(
       factory.namedNode(classId),
@@ -226,14 +226,14 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     );
 
     for (const aQuad of subClassQuads) {
-      this._pushIfNotExist(aQuad.object.value, classes);
+      classes.add(aQuad.object.value);
     }
 
-    return classes;
+    return Array.from(classes);
   }
 
   #_readImmediateSubClasses(classId: any) {
-    var classes: any[] = [];
+    const classes: Set<any> = new Set<any>();
 
     const subClassQuads = this.store.getQuads(
       null,
@@ -243,10 +243,10 @@ export class OWLSpecificationEntity extends OWLSpecificationEntry implements ISp
     );
 
     for (const aQuad of subClassQuads) {
-      this._pushIfNotExist(aQuad.subject.value, classes);
+      classes.add(aQuad.subject.value);
     }
 
-    return classes;
+    return Array.from(classes);
   }
 
     /*** Handling of UNION classes ***/

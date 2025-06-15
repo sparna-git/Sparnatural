@@ -18,7 +18,7 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
 
 
   getRange(): string[] {
-    var classes: any[] = [];
+    const classes = new Set<string>();
 
     const propertyQuads = this.store.getQuads(
       factory.namedNode(this.uri),
@@ -29,19 +29,19 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
 
     for (const aQuad of propertyQuads) {
       if (!this._isUnionClass(aQuad.object)) {
-        this._pushIfNotExist(aQuad.object.value, classes);
+        classes.add(aQuad.object.value);
       } else {
         // read union content - /!\ this is returning RDFTerms, so we map to extract the URI only
         var classesInUnion = this.graph.readAsList(aQuad.object, OWL.UNION_OF).map(o => o.value)
         if(classesInUnion) {
             for (const aUnionClass of classesInUnion) {
-              this._pushIfNotExist(aUnionClass, classes);
+              classes.add(aUnionClass);
             }
         }
       }
     }
 
-    return classes;
+    return Array.from(classes);
   }
 
 

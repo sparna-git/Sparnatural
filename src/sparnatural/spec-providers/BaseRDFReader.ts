@@ -270,14 +270,6 @@ export class BaseRDFReader {
         return this.graph.readProperty(uri, RDF.TYPE);
     }
 
-    _pushIfNotExist(item: any, items: any[]) {
-      if (items.indexOf(item) < 0) {
-        items.push(item);
-      }
-  
-      return items;
-    }
-
 }
 
 export { RDF };

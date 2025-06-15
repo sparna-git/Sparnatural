@@ -96,13 +96,13 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       null
     );
 
-    var items: SHACLSpecificationEntry[] = [];
+    const itemsSet = new Set<SHACLSpecificationEntry>();
     for (const quad of quadsArray) {
       var nodeShapeId = quad.subject.value;
-      this._pushIfNotExist(this.getEntity(nodeShapeId), items);
+      itemsSet.add(this.getEntity(nodeShapeId) as unknown as SHACLSpecificationEntry);
     }
 
-    items = SHACLSpecificationEntry.sort(items);
+    let items:SHACLSpecificationEntry[] = SHACLSpecificationEntry.sort(Array.from(itemsSet));
 
     return items.map(e => e.getId());
   }

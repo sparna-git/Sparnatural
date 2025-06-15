@@ -85,16 +85,19 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
 
   getAllSparnaturalEntities() {
     var classes = this.getEntitiesInDomainOfAnyProperty();
+
     // copy initial array
-    var result = classes.slice();
+    // create a set to avoid duplicates
+    var result = new Set<string>(classes.slice());
+
     // now look for all classes we can reach from this class list
     for (const aClass of classes) {
       var connectedClasses = this.getEntity(aClass).getConnectedEntities();
       for (const aConnectedClass of connectedClasses) {
-        this._pushIfNotExist(aConnectedClass, result);
+        result.add(aConnectedClass);
       }
     }
-    return result;
+    return Array.from(result);
   }
 
   getEntitiesInDomainOfAnyProperty() : string[] {
@@ -105,7 +108,8 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
       null
     );
 
-    var items: string | any[] = [];
+    const items = new Set<string>();
+
     for (const quad of quadsArray) {
       // we are not looking at domains of _any_ property
       // the property we are looking at must be a Sparnatural property, with a known type
@@ -121,12 +125,12 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
           // always exclude "remote classes" that should not have a type that from first list
           if (this.getEntity(classId).hasTypeCriteria()) {
             if (!this._isUnionClass(classAsRDFTerm)) {
-              this._pushIfNotExist(classId, items);
+              items.add(classId);
             } else {
               // read union content - /!\ this returns RDFTerm
               var classesInUnion = this.graph.readAsList(classAsRDFTerm, OWL.UNION_OF);
               for (const aUnionClass of classesInUnion) {
-                this._pushIfNotExist(aUnionClass.value, items);
+                items.add(aUnionClass.value);
               }
             }
           }
@@ -134,9 +138,7 @@ export class OWLSpecificationProvider extends BaseRDFReader implements ISparnatu
       }
     }
 
-    items = this._sort(items);
-
-    return items;
+    return this._sort(Array.from(items));
   }
 
 
