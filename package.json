@@ -10,7 +10,7 @@
       "import": "./dist/js/index.js",
       "require": "./dist/js/index.js",
       "types": "./dist/types/index.d.ts",
-      "style": "./dist/browser/sparnatural.css",  
+      "style": "./dist/browser/sparnatural.css",
       "sass": "./scss/sparnatural.scss"
     },
     "./dist/browser": "./dist/browser/sparnatural.js",
@@ -21,14 +21,16 @@
     "dist",
     "scss"
   ],
-  "sideEffects": ["**/*.css"],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "clean": "rm -rf dist",
     "build:types": "tsc --emitDeclarationOnly",
     "build:lib": "tsc",
     "build:bundle": "webpack --config webpack.config.js --mode production",
     "build": "npm run clean && npm run build:lib && npm run build:bundle",
-    "test": "echo \"Error: no test specified\" && exit 1",    
+    "test": "echo \"Error: no test specified\" && exit 1",
     "build-dev": "rm -rf dist && webpack --mode development",
     "start": "webpack serve --hot --config webpack.config.js --mode development",
     "pretty": "prettier --write \"./src/**/*.{ts,js,json}\""
@@ -97,7 +99,7 @@
     "sass-loader": "^16.0.1",
     "stream-browserify": "^3.0.0",
     "ts-loader": "^9.3.0",
-    "typescript": "^4.6.3",
+    "typescript": "^4.9.5",
     "url": "^0.11.0",
     "url-loader": "^4.1.1",
     "util": "^0.12.4",
