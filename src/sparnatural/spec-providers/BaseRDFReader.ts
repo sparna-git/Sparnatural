@@ -5,29 +5,10 @@ import { Datasources } from "../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from 'rdf-stores';
 import { NamedNode, Quad, Stream, Term } from "@rdfjs/types";
 import { StoreModel } from './StoreModel';
+import { RDF } from '../../rdf/vocabularies/RDF';
+import { RDFS } from '../../rdf/vocabularies/RDFS';
 
 const factory = new DataFactory();
-
-const RDF_NAMESPACE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-export const RDF = {
-  LANG_STRING: factory.namedNode(RDF_NAMESPACE + "langString") as NamedNode,
-  TYPE: factory.namedNode(RDF_NAMESPACE + "type") as NamedNode,
-  FIRST: factory.namedNode(RDF_NAMESPACE + "first") as NamedNode,
-  REST: factory.namedNode(RDF_NAMESPACE + "rest") as NamedNode,
-  NIL: factory.namedNode(RDF_NAMESPACE + "nil") as NamedNode,
-};
-
-const RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
-export const RDFS = {
-  CLASS: factory.namedNode(RDFS_NAMESPACE + "Class") as NamedNode,
-  LABEL: factory.namedNode(RDFS_NAMESPACE + "label") as NamedNode,
-  COMMENT: factory.namedNode(RDFS_NAMESPACE + "comment") as NamedNode,
-  DOMAIN: factory.namedNode(RDFS_NAMESPACE + "domain") as NamedNode,
-  RANGE: factory.namedNode(RDFS_NAMESPACE + "range") as NamedNode,
-  RESOURCE: factory.namedNode(RDFS_NAMESPACE + "Resource") as NamedNode,
-  SUBPROPERTY_OF: factory.namedNode(RDFS_NAMESPACE + "subPropertyOf") as NamedNode,
-  SUBCLASS_OF: factory.namedNode(RDFS_NAMESPACE + "subClassOf") as NamedNode,
-};
 
 export class BaseRDFReader {
     protected lang: string;
@@ -298,3 +279,5 @@ export class BaseRDFReader {
     }
 
 }
+
+export { RDF };

@@ -1,8 +1,7 @@
-import { RDF, RDFS } from "../BaseRDFReader";
+
 import { DataFactory } from 'rdf-data-factory';
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../ISpecificationProperty";
-import { DASH, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { ListWidgetScorer, SparnaturalSearchWidgetScorer, SparnaturalSearchWidgetsScorerRegistry } from "./SHACLSearchWidgets";
 import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntity, SHACLSpecificationEntity } from "./SHACLSpecificationEntity";
@@ -12,6 +11,14 @@ import { RdfStore } from "rdf-stores";
 import { Quad, Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { StoreModel } from "../StoreModel";
 import { StatisticsReader } from "../StatisticsReader";
+import { SHACLSpecificationProvider } from './SHACLSpecificationProvider';
+import { XSD } from '../../../rdf/vocabularies/XSD';
+import { SH } from '../../../rdf/vocabularies/SH';
+import { VOLIPI } from '../../../rdf/vocabularies/VOLIPI';
+import { SKOS } from '../../../rdf/vocabularies/SKOS';
+import { DASH } from '../../../rdf/vocabularies/DASH';
+import { RDF } from '../BaseRDFReader';
+import { RDFS } from '../../../rdf/vocabularies/RDFS';
 
 const factory = new DataFactory();
 

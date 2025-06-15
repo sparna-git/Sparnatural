@@ -7,7 +7,6 @@ import {
   SparqlParser,
   SparqlGenerator
 } from "sparqljs";
-import { BaseRDFReader, RDFS } from "../BaseRDFReader";
 import { ISpecificationEntity } from "../ISpecificationEntity";
 import { OWLSpecificationEntity } from "./OWLSpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
@@ -15,6 +14,8 @@ import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad_Subject, Term } from '@rdfjs/types/data-model';
 import { Dag, DagIfc } from '../../dag/Dag';
+import { BaseRDFReader } from '../BaseRDFReader';
+import { RDFS } from '../../../rdf/vocabularies/RDFS';
 
 const factory = new DataFactory();
 

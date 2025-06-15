@@ -2,8 +2,9 @@ import { DataFactory } from 'rdf-data-factory';
 import { RdfStore } from "rdf-stores";
 import { BaseRDFReader, RDF } from "./BaseRDFReader";
 import { OWLSpecificationProvider } from "./owl//OWLSpecificationProvider";
-import { SH, SHACLSpecificationProvider } from "./shacl/SHACLSpecificationProvider";
 import { Catalog } from '../settings/Catalog';
+import { SH } from '../../rdf/vocabularies/SH';
+import { SHACLSpecificationProvider } from './shacl/SHACLSpecificationProvider';
 
 let DF = new DataFactory();
 

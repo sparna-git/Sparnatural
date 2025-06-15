@@ -1,4 +1,3 @@
-import { RDFS } from "../BaseRDFReader";
 import { OWLSpecificationEntry } from "./OWLSpecificationEntry";
 import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { DataFactory } from 'rdf-data-factory';
@@ -7,6 +6,7 @@ import ISpecificationProperty from "../ISpecificationProperty";
 import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from "rdf-stores";
 import { Term } from "@rdfjs/types";
+import { RDFS } from "../../../rdf/vocabularies/RDFS";
 
 const factory = new DataFactory();
 

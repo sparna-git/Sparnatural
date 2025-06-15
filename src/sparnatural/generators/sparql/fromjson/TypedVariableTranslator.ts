@@ -3,8 +3,8 @@ import { Pattern, Triple } from "sparqljs";
 import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
 import SparqlFactory from "../SparqlFactory";
 import ISpecificationProperty from "../../../spec-providers/ISpecificationProperty";
-import { RDFS } from "../../../spec-providers/BaseRDFReader";
-import { OWL } from "../../../spec-providers/owl/OWLSpecificationProvider";
+import { RDFS } from "../../../../rdf/vocabularies/RDFS";
+import { OWL } from "../../../../rdf/vocabularies/OWL";
 const factory = new DataFactory();
 
 /**

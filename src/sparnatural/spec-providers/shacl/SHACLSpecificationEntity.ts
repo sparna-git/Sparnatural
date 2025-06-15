@@ -1,10 +1,18 @@
-import { BaseRDFReader, RDF, RDFS } from "../BaseRDFReader";
-import { DataFactory, NamedNode } from 'rdf-data-factory';
-import { DASH, DCT, FOAF, SCHEMA, SH, SHACLSpecificationProvider, SKOS, VOLIPI, XSD } from "./SHACLSpecificationProvider";
+import { DataFactory } from 'rdf-data-factory';
+import { RDF } from "../../../rdf/vocabularies/RDF";
+import { RDFS } from "../../../rdf/vocabularies/RDFS";
+import { DASH } from "../../../rdf/vocabularies/DASH";
+import { DCT } from "../../../rdf/vocabularies/DCT";
+import { FOAF } from "../../../rdf/vocabularies/FOAF";
+import { SCHEMA } from "../../../rdf/vocabularies/SCHEMA";
+import { SH } from "../../../rdf/vocabularies/SH";
+import { SKOS } from "../../../rdf/vocabularies/SKOS";
+import { VOLIPI } from "../../../rdf/vocabularies/VOLIPI";
+import { XSD } from "../../../rdf/vocabularies/XSD";
+import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
-import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { RdfStore } from "rdf-stores";
 import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../StoreModel";
@@ -12,6 +20,7 @@ import { DagIfc, Dag } from "../../dag/Dag";
 import { ISpecificationEntity } from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { ISparnaturalSpecification } from "../ISparnaturalSpecification";
+import { GEOSPARQL } from '../../components/widgets/MapWidget';
 
 const factory = new DataFactory();
 

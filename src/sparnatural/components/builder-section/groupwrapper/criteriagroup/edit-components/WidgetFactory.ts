@@ -1,7 +1,7 @@
+import { SKOS } from "../../../../../../rdf/vocabularies/SKOS";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import { Datasources } from "../../../../../ontologies/SparnaturalConfigDatasources";
 import { Catalog } from "../../../../../settings/Catalog";
-import { SKOS } from "../../../../../spec-providers/shacl/SHACLSpecificationProvider";
 import { HTMLComponent } from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../SelectedVal";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";

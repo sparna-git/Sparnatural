@@ -1,7 +1,5 @@
 import { BlankNode, DataFactory } from 'rdf-data-factory';
-import { Config } from "../../ontologies/SparnaturalConfig";
 import { ISparnaturalSpecification } from "../ISparnaturalSpecification";
-import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import {
   Parser,
   Generator,
@@ -20,114 +18,11 @@ import { Term } from "@rdfjs/types";
 import { StoreModel } from '../StoreModel';
 import { DagIfc, Dag, DagNodeIfc } from '../../dag/Dag';
 import { StatisticsReader } from '../StatisticsReader';
+import { SH } from '../../../rdf/vocabularies/SH';
+import { XSD } from '../../../rdf/vocabularies/XSD';
+
 
 const factory = new DataFactory();
-
-const SH_NAMESPACE = "http://www.w3.org/ns/shacl#";
-export const SH = {
-  ALTERNATIVE_PATH: factory.namedNode(SH_NAMESPACE + "alternativePath") as NamedNode,
-  CLASS: factory.namedNode(SH_NAMESPACE + "class") as NamedNode,
-  DATATYPE: factory.namedNode(SH_NAMESPACE + "datatype") as NamedNode,
-  DEACTIVATED: factory.namedNode(SH_NAMESPACE + "deactivated") as NamedNode,
-  DESCRIPTION: factory.namedNode(SH_NAMESPACE + "description") as NamedNode,
-  HAS_VALUE: factory.namedNode(SH_NAMESPACE + "hasValue") as NamedNode,
-  IN: factory.namedNode(SH_NAMESPACE + "in") as NamedNode, 
-  INVERSE_PATH: factory.namedNode(SH_NAMESPACE + "inversePath") as NamedNode, 
-  IRI: factory.namedNode(SH_NAMESPACE + "IRI") as NamedNode, 
-  LANGUAGE_IN: factory.namedNode(SH_NAMESPACE + "languageIn") as NamedNode, 
-  LITERAL: factory.namedNode(SH_NAMESPACE + "Literal") as NamedNode, 
-  NAME: factory.namedNode(SH_NAMESPACE + "name") as NamedNode,
-  NODE: factory.namedNode(SH_NAMESPACE + "node") as NamedNode,  
-  NODE_KIND: factory.namedNode(SH_NAMESPACE + "nodeKind") as NamedNode, 
-  NODE_SHAPE: factory.namedNode(SH_NAMESPACE + "NodeShape") as NamedNode,  
-  ONE_OR_MORE_PATH: factory.namedNode(SH_NAMESPACE + "oneOrMorePath") as NamedNode, 
-  OR: factory.namedNode(SH_NAMESPACE + "or") as NamedNode,
-  ORDER: factory.namedNode(SH_NAMESPACE + "order") as NamedNode,
-  PATH: factory.namedNode(SH_NAMESPACE + "path") as NamedNode,
-  PROPERTY: factory.namedNode(SH_NAMESPACE + "property") as NamedNode,
-  SELECT: factory.namedNode(SH_NAMESPACE + "select") as NamedNode,
-  TARGET: factory.namedNode(SH_NAMESPACE + "target") as NamedNode,
-  TARGET_CLASS: factory.namedNode(SH_NAMESPACE + "targetClass") as NamedNode,
-  UNIQUE_LANG: factory.namedNode(SH_NAMESPACE + "uniqueLang") as NamedNode, 
-  ZERO_OR_MORE_PATH: factory.namedNode(SH_NAMESPACE + "zeroOrMorePath") as NamedNode, 
-  ZERO_OR_ONE_PATH: factory.namedNode(SH_NAMESPACE + "zeroOrOnePath") as NamedNode, 
-  PARENT: factory.namedNode(SH_NAMESPACE + "parent") as NamedNode, 
-};
-
-const DASH_NAMESPACE = "http://datashapes.org/dash#";
-export const DASH = {
-  // note : this is not (yet) an official part of the DASH namespace, but was discussed with Holger
-  SEARCH_WIDGET: factory.namedNode(DASH_NAMESPACE + "searchWidget") as NamedNode,
-  SEARCH_WIDGET_CLASS: factory.namedNode(DASH_NAMESPACE + "SearchWidget") as NamedNode,
-  PROPERTY_ROLE: factory.namedNode(DASH_NAMESPACE + "propertyRole") as NamedNode,
-  LABEL_ROLE: factory.namedNode(DASH_NAMESPACE + "LabelRole") as NamedNode,
-};
-
-const VOLIPI_NAMESPACE = "http://data.sparna.fr/ontologies/volipi#";
-export const VOLIPI = {
-  COLOR: factory.namedNode(VOLIPI_NAMESPACE + "color") as NamedNode,
-  MESSAGE: factory.namedNode(VOLIPI_NAMESPACE + "message") as NamedNode,
-  ICON_NAME: factory.namedNode(VOLIPI_NAMESPACE + "iconName") as NamedNode, 
-  ICON: factory.namedNode(VOLIPI_NAMESPACE + "icon") as NamedNode, 
-};
-
-const XSD_NAMESPACE = "http://www.w3.org/2001/XMLSchema#";
-export const XSD = {
-  BOOLEAN: factory.namedNode(XSD_NAMESPACE + "boolean") as NamedNode,
-  BYTE: factory.namedNode(XSD_NAMESPACE + "byte") as NamedNode,
-  DATE: factory.namedNode(XSD_NAMESPACE + "date") as NamedNode,
-  DATE_TIME: factory.namedNode(XSD_NAMESPACE + "dateTime") as NamedNode,
-  DECIMAL: factory.namedNode(XSD_NAMESPACE + "decimal") as NamedNode,
-  DOUBLE: factory.namedNode(XSD_NAMESPACE + "double") as NamedNode,
-  FLOAT: factory.namedNode(XSD_NAMESPACE + "float") as NamedNode,  
-  GYEAR: factory.namedNode(XSD_NAMESPACE + "gYear") as NamedNode,
-  INT: factory.namedNode(XSD_NAMESPACE + "int") as NamedNode,
-  INTEGER: factory.namedNode(XSD_NAMESPACE + "integer") as NamedNode,
-  NONNEGATIVE_INTEGER: factory.namedNode(XSD_NAMESPACE + "nonNegativeInteger") as NamedNode,
-  LONG: factory.namedNode(XSD_NAMESPACE + "long") as NamedNode,
-  SHORT: factory.namedNode(XSD_NAMESPACE + "short") as NamedNode,
-  STRING: factory.namedNode(XSD_NAMESPACE + "string") as NamedNode,
-  UNSIGNED_BYTE: factory.namedNode(XSD_NAMESPACE + "unsignedByte") as NamedNode,
-  UNSIGNED_INT: factory.namedNode(XSD_NAMESPACE + "unsignedInt") as NamedNode,
-  UNSIGNED_LONG: factory.namedNode(XSD_NAMESPACE + "unsignedLong") as NamedNode,
-  UNSIGNED_SHORT: factory.namedNode(XSD_NAMESPACE + "unsignedShort") as NamedNode,
-};
-
-const DCT_NAMESPACE = "http://purl.org/dc/terms/";
-export const DCT = {
-  CONFORMS_TO: factory.namedNode(DCT_NAMESPACE + "conformsTo") as NamedNode,
-  TITLE: factory.namedNode(DCT_NAMESPACE + "title") as NamedNode
-};
-
-const VOID_NAMESPACE = "http://rdfs.org/ns/void#";
-export const VOID = {
-  ENTITIES: factory.namedNode(VOID_NAMESPACE + "entities") as NamedNode,
-  TRIPLES: factory.namedNode(VOID_NAMESPACE + "triples") as NamedNode,
-  DISTINCT_OBJECTS: factory.namedNode(VOID_NAMESPACE + "distinctObjects") as NamedNode,
-};
-
-const SKOS_NAMESPACE = "http://www.w3.org/2004/02/skos/core#";
-export const SKOS = {
-  CONCEPT: factory.namedNode(SKOS_NAMESPACE + "Concept") as NamedNode,
-  DEFINITION: factory.namedNode(SKOS_NAMESPACE + "definition") as NamedNode,
-  IN_SCHEME: factory.namedNode(SKOS_NAMESPACE + "inScheme") as NamedNode,
-  PREF_LABEL: factory.namedNode(SKOS_NAMESPACE + "prefLabel") as NamedNode
-};
-
-const FOAF_NAMESPACE = "http://xmlns.com/foaf/0.1/";
-export const FOAF = {
-  NAME: factory.namedNode(FOAF_NAMESPACE + "name") as NamedNode
-};
-
-const RDFS_NAMESPACE = "http://www.w3.org/2000/01/rdf-schema#";
-export const RDFS = {
-  LABEL: factory.namedNode(RDFS_NAMESPACE + "label") as NamedNode
-};
-
-const SCHEMA_NAMESPACE = "https://schema.org/";
-export const SCHEMA = {
-  NAME: factory.namedNode(SCHEMA_NAMESPACE + "name") as NamedNode
-};
 
 export class SHACLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {
 

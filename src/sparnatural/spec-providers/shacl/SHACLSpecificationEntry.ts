@@ -1,9 +1,10 @@
 import { BaseRDFReader } from "../BaseRDFReader";
 import { ISpecificationEntry } from "../ISpecificationEntry";
-import { SH, SHACLSpecificationProvider, VOLIPI } from "./SHACLSpecificationProvider";
+import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';
-import { SHACLSpecificationEntity } from "./SHACLSpecificationEntity";
+import { VOLIPI } from "../../../rdf/vocabularies/VOLIPI";
+import { SH } from "../../../rdf/vocabularies/SH";
 
 const factory = new DataFactory();
 

@@ -1,8 +1,8 @@
 import { Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { DataFactory } from "rdf-data-factory";
 import { StoreModel } from "./StoreModel";
-import { DCT, VOID } from "./shacl/SHACLSpecificationProvider";
-import { Quad_Object } from "n3";
+import { DCT } from "../../rdf/vocabularies/DCT";
+import { VOID } from "../../rdf/vocabularies/VOID";
 
 let factory = new DataFactory();
 

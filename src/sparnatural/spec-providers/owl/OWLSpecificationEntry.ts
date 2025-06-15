@@ -1,11 +1,12 @@
-import { BaseRDFReader, RDFS } from "../BaseRDFReader";
 import { ISpecificationEntry } from "../ISpecificationEntry";
 import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { DataFactory } from 'rdf-data-factory';
-import { VOLIPI } from "../shacl/SHACLSpecificationProvider";
 import { RdfStore } from "rdf-stores";
 import { StoreModel } from "../StoreModel";
+import { BaseRDFReader } from "../BaseRDFReader";
+import { RDFS } from "../../../rdf/vocabularies/RDFS";
+import { VOLIPI } from "../../../rdf/vocabularies/VOLIPI";
 
 const factory = new DataFactory();
 

@@ -1,4 +1,3 @@
-import { RDF, RDFS } from "../BaseRDFReader";
 import { ISpecificationEntity } from "../ISpecificationEntity";
 import { OWLSpecificationEntry } from "./OWLSpecificationEntry";
 import { OWL, OWLSpecificationProvider } from "./OWLSpecificationProvider";
@@ -8,6 +7,8 @@ import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';
 import { DagIfc, Dag } from "../../dag/Dag";
 import ISpecificationProperty from "../ISpecificationProperty";
+import { RDFS } from "../../../rdf/vocabularies/RDFS";
+import { RDF } from "../BaseRDFReader";
 
 const factory = new DataFactory();
 

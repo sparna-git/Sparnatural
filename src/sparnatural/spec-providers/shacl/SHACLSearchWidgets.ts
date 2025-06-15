@@ -1,6 +1,8 @@
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { BlankNode, DataFactory, NamedNode } from 'rdf-data-factory';
-import { SH, SKOS, XSD } from "./SHACLSpecificationProvider";
+import { SH } from '../../../rdf/vocabularies/SH';
+import { SKOS } from '../../../rdf/vocabularies/SKOS';
+import { XSD } from '../../../rdf/vocabularies/XSD';
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { StoreModel } from "../StoreModel";
 import { StatisticsReader } from "../StatisticsReader";
