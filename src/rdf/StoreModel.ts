@@ -1,6 +1,6 @@
 import { Quad, Quad_Object, Quad_Predicate, Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { RdfStore } from "rdf-stores";
-import { RDF } from "./BaseRDFReader";
+import { RDF } from "../sparnatural/spec-providers/BaseRDFReader";
 import { DataFactory } from "rdf-data-factory";
 import { QuadPredicate } from "n3";
 

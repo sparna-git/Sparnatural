@@ -9,7 +9,7 @@ import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
 import { Quad, Quad_Subject, Term } from "@rdfjs/types/data-model";
-import { StoreModel } from "../StoreModel";
+import { StoreModel } from "../../../rdf/StoreModel";
 import { StatisticsReader } from "../StatisticsReader";
 import { SHACLSpecificationProvider } from './SHACLSpecificationProvider';
 import { XSD } from '../../../rdf/vocabularies/XSD';

@@ -4,7 +4,7 @@ var Readable = require('stream').Readable
 import { Datasources } from "../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from 'rdf-stores';
 import { NamedNode, Quad, Stream, Term } from "@rdfjs/types";
-import { StoreModel } from './StoreModel';
+import { StoreModel } from '../../rdf/StoreModel';
 import { RDF } from '../../rdf/vocabularies/RDF';
 import { RDFS } from '../../rdf/vocabularies/RDFS';
 
@@ -262,13 +262,6 @@ export class BaseRDFReader {
 
     return datasource;
   }
-
-   /**
-   * Reads rdf:type(s) of an entity, and return them as an array
-   **/
-    _readRdfTypes(uri: Term):Term[] {
-        return this.graph.readProperty(uri, RDF.TYPE);
-    }
 
 }
 

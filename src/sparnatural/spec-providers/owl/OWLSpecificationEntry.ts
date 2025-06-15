@@ -3,7 +3,7 @@ import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { DataFactory } from 'rdf-data-factory';
 import { RdfStore } from "rdf-stores";
-import { StoreModel } from "../StoreModel";
+import { StoreModel } from "../../../rdf/StoreModel";
 import { BaseRDFReader } from "../BaseRDFReader";
 import { RDFS } from "../../../rdf/vocabularies/RDFS";
 import { VOLIPI } from "../../../rdf/vocabularies/VOLIPI";

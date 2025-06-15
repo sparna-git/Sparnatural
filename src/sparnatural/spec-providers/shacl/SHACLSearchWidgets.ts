@@ -4,7 +4,7 @@ import { SH } from '../../../rdf/vocabularies/SH';
 import { SKOS } from '../../../rdf/vocabularies/SKOS';
 import { XSD } from '../../../rdf/vocabularies/XSD';
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
-import { StoreModel } from "../StoreModel";
+import { StoreModel } from "../../../rdf/StoreModel";
 import { StatisticsReader } from "../StatisticsReader";
 import { RDF } from "../BaseRDFReader";
 import { ISparnaturalSpecification } from "../ISparnaturalSpecification";

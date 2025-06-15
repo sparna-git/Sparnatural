@@ -15,7 +15,7 @@ import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad, Quad_Object, Quad_Subject } from '@rdfjs/types/data-model';
 import { Term } from "@rdfjs/types";
-import { StoreModel } from '../StoreModel';
+import { StoreModel } from '../../../rdf/StoreModel';
 import { DagIfc, Dag, DagNodeIfc } from '../../dag/Dag';
 import { StatisticsReader } from '../StatisticsReader';
 import { SH } from '../../../rdf/vocabularies/SH';

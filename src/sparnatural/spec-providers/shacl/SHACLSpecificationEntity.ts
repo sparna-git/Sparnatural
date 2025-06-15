@@ -15,7 +15,7 @@ import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
 import { Quad_Subject, Term } from "@rdfjs/types";
-import { StoreModel } from "../StoreModel";
+import { StoreModel } from "../../../rdf/StoreModel";
 import { DagIfc, Dag } from "../../dag/Dag";
 import { ISpecificationEntity } from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";

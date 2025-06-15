@@ -1,6 +1,6 @@
 import { Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { DataFactory } from "rdf-data-factory";
-import { StoreModel } from "./StoreModel";
+import { StoreModel } from "../../rdf/StoreModel";
 import { DCT } from "../../rdf/vocabularies/DCT";
 import { VOID } from "../../rdf/vocabularies/VOID";
 
