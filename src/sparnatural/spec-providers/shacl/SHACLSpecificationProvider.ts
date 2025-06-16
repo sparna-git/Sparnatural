@@ -207,7 +207,7 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
         try {
           // find it with the full URI
           var re = new RegExp("<" + quad.subject.value + ">", "g");
-          let sparqlReplacementString = SHACLSpecificationProvider.pathToSparql(quad.object, this.store);
+          let sparqlReplacementString = new StoreModel(this.store).pathToSparql(quad.object);
           sparql = sparql.replace(re, sparqlReplacementString);
         } catch (error) {
           console.error("Unsupported sh:path for "+quad.subject.value+" - review your configuration");
@@ -393,45 +393,6 @@ export class SHACLSpecificationProvider extends BaseRDFReader implements ISparna
       }
       return null;
     }
-  }
-
-
-  public static pathToSparql(path:Term, store:RdfStore, asDisplayLabel:boolean = false):string {
-    if(path.termType == "NamedNode") {
-      if(asDisplayLabel) {
-        return StoreModel.getLocalName((path as NamedNode).value);
-      } else {
-        return "<" + (path as NamedNode).value + ">";
-      }
-    } else if(path.termType == "BlankNode") {
-      if(store.getQuads(path, RDF.FIRST, null, null).length > 0) {
-        // this is an RDF list, indicating a sequence path
-        let graph = new StoreModel(store);
-        let sequence:Term[] = graph.readListContent(path);
-        return sequence.map(t => SHACLSpecificationProvider.pathToSparql(t, store, asDisplayLabel)).join("/");
-      } else {
-        if(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null).length > 0) {
-          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"+";
-        }
-        if(store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
-          return "^"+SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.INVERSE_PATH, null, null)[0].object, store, asDisplayLabel);
-        }
-        if(store.getQuads(path, SH.ALTERNATIVE_PATH, null, null).length > 0) {
-          let list = store.getQuads(path, SH.ALTERNATIVE_PATH, null, null)[0].object;
-          let graph = new StoreModel(store);
-          let sequence:Term[] = graph.readListContent(list);
-          return "("+sequence.map(t => SHACLSpecificationProvider.pathToSparql(t, store, asDisplayLabel)).join("|")+")";
-        }
-        if(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
-          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null)[0].object, store, asDisplayLabel)+"*";
-        }
-        if(store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
-          return SHACLSpecificationProvider.pathToSparql(store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null)[0].object, store, asDisplayLabel)+"?";
-        }
-      }
-      
-    }
-    throw new Error("Unsupported SHACL property path")
   }
 
 }

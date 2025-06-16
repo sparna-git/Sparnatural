@@ -68,7 +68,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
       // no sh:name present, no property label, display the sh:path without prefixes
       if(!label) {
-        label = SHACLSpecificationProvider.pathToSparql(this.store.getQuads(factory.namedNode(this.uri),SH.PATH, null, null)[0].object, this.store, true);
+        label = new StoreModel(this.store).pathToSparql(this.store.getQuads(factory.namedNode(this.uri),SH.PATH, null, null)[0].object, true);
       }      
       // or try to read the local part of the URI, but should not happen
       if(!label) {
