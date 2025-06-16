@@ -2,7 +2,8 @@ import { Quad, Quad_Object, Quad_Predicate, Quad_Subject, Term } from "@rdfjs/ty
 import { RdfStore } from "rdf-stores";
 import { RDF } from "../sparnatural/spec-providers/BaseRDFReader";
 import { DataFactory } from "rdf-data-factory";
-import { QuadPredicate } from "n3";
+import { SH } from "./vocabularies/SH";
+import { XSD } from "./vocabularies/XSD";
 
 let DF = new DataFactory();
 
@@ -211,6 +212,158 @@ export class StoreModel {
         } else {
             return null;
         }
+    }
+
+    /******* END LIST HANDLING *********/
+
+    /**
+     * Finds the most suitable value of a given property for a list of languages.
+     * Falls back to literals with no language if no better literal is found.
+     * @param subject The subject resource.
+     * @param langs The allowed languages.
+     * @param properties The properties to check.
+     * @return The best suitable value or null.
+     */
+    getBestStringLiteral(subject: Term, langs: string[], properties: Term[]): Term | null {
+        let bestLiteral: Term | null = null;
+        let bestLangIndex = -1;
+
+        for (const property of properties) {
+            const quads = this.store.getQuads(subject, property, null, null);
+            for (const quad of quads) {
+                const object = quad.object;
+                if (object.termType === "Literal") {
+                    const lang = object.language || "";
+                    if (lang === "" && bestLiteral === null) {
+                        bestLiteral = object;
+                    } else {
+                        let startLangIndex = bestLangIndex < 0 ? langs.length - 1 : bestLangIndex;
+                        for (let i = startLangIndex; i >= 0; i--) {
+                            const langPreference = langs[i];
+                            if (langPreference.toLowerCase() === lang.toLowerCase()) {
+                                bestLiteral = object;
+                                bestLangIndex = i;
+                            } else if (lang.includes("-") && lang.startsWith(langPreference) && bestLiteral === null) {
+                                bestLiteral = object;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return bestLiteral;
+    }
+
+        /**
+     * Render a list of RDFNode as a string, in plain text.
+     * @param list The list of RDFNode to be displayed.
+     * @return A comma-separated string.
+     */
+    public static render(list: Term[]): string {
+        return this.renderWithPlainString(list, true);
+    }
+
+    /**
+     * Render an RDFNode as a string, in plain text.
+     * @param node The node to be rendered.
+     * @return The rendered string.
+     */
+    public static renderNode(node: Term): string {
+        return this.renderWithPlainString([node], true);
+    }
+
+    /**
+     * Render a list of RDFNode as a comma-separated string. If plainString is true, make it a plain string,
+     * otherwise uses HTML markup to display e.g. datatypes and languages in "sup" tags.
+     * @param list The list of RDFNode to be displayed.
+     * @param plainString True to retrieve a plain string, false to retrieve a piece of HTML.
+     * @return The rendered string.
+     */
+    public static renderWithPlainString(list: Term[], plainString: boolean): string {
+        if (!list || list.length === 0) {
+            return "";
+        }
+
+        return list.map(item => this.renderSingleNode(item, plainString)).join(", ");
+    }
+
+    /**
+     * Render an RDFNode as a string. If plainString is true, make it a plain string,
+     * otherwise uses HTML markup to display e.g. datatypes and languages in "sup" tags.
+     * @param node The node to be rendered.
+     * @param plainString True to retrieve a plain string, false to retrieve a piece of HTML.
+     * @return The rendered string.
+     */
+    public static renderSingleNode(node: Term, plainString: boolean): string {
+        if (!node) {
+            return "";
+        }
+
+        if (node.termType === "NamedNode") {
+            return node.value; // Assuming short form is handled elsewhere.
+        } else if (node.termType === "BlankNode") {
+            return node.value;
+        } else if (node.termType === "Literal") {
+            if (plainString) {
+                return node.value;
+            }
+
+            if (node.datatype && node.datatype.value !== RDF.LANG_STRING.value) {
+                if (node.datatype.value !== XSD.STRING.value) {
+                    return `"${node.value}"<sup>^^${node.datatype.value}</sup>`;
+                } else {
+                    return `"${node.value}"`;
+                }
+            } else if (node.language) {
+                return `"${node.value}"<sup>@${node.language}</sup>`;
+            } else {
+                return node.value;
+            }
+        } else {
+            return node.value;
+        }
+    }
+
+    /**
+     * Renders the provided SHACL property path as a SPARQL property path syntax, using prefixed URIs.
+     * @param path The SHACL property path to render in SPARQL.
+     * @param usePrefixes True to use prefixes, false to use full URIs.
+     * @return The rendered SPARQL property path.
+     */
+    pathToSparql(path: Term, usePrefixes: boolean = false): string {
+        if (path.termType === "NamedNode") {
+            if (usePrefixes) {
+                return StoreModel.getLocalName(path.value);
+            } else {
+                return `<${path.value}>`;
+            }
+        } else if (path.termType === "BlankNode") {
+            if (this.store.getQuads(path, RDF.FIRST, null, null).length > 0) {
+                // This is an RDF list, indicating a sequence path
+                const sequence: Term[] = this.readListContent(path);
+                return sequence.map(t => this.pathToSparql(t, usePrefixes)).join("/");
+            } else {
+                if (this.store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null).length > 0) {
+                    return this.pathToSparql(this.store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, usePrefixes) + "+";
+                }
+                if (this.store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
+                    return "^" + this.pathToSparql(this.store.getQuads(path, SH.INVERSE_PATH, null, null)[0].object, usePrefixes);
+                }
+                if (this.store.getQuads(path, SH.ALTERNATIVE_PATH, null, null).length > 0) {
+                    const list = this.store.getQuads(path, SH.ALTERNATIVE_PATH, null, null)[0].object;
+                    const sequence: Term[] = this.readListContent(list);
+                    return `(${sequence.map(t => this.pathToSparql(t, usePrefixes)).join("|")})`;
+                }
+                if (this.store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
+                    return this.pathToSparql(this.store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null)[0].object, usePrefixes) + "*";
+                }
+                if (this.store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
+                    return this.pathToSparql(this.store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null)[0].object, usePrefixes) + "?";
+                }
+            }
+        }
+        throw new Error("Unsupported SHACL property path");
     }
 
 }
