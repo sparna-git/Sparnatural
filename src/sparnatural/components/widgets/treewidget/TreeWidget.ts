@@ -4,9 +4,10 @@ import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } f
 import "jstree"
 import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
-import { NoOpTreeDataProvider, RdfTermTreeDatasourceItem, TreeDataProviderIfc } from "../data/DataProviders";
 import { HTMLComponent } from "../../HtmlComponent";
 import "jstree/dist/themes/default/style.min.css";
+import { TreeDataProviderIfc, RdfTermTreeDatasourceItem } from "../../datasources/DataProviders";
+import { NoOpTreeDataProvider } from "../../datasources/NoOpDataProviders";
 
 const factory = new DataFactory();
 

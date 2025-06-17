@@ -1,10 +1,13 @@
 import { DataFactory } from 'rdf-data-factory';
 import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "./AbstractWidget";
-import { AutocompleteDataProviderIfc, mergeDatasourceResults, NoOpAutocompleteProvider, RdfTermDatasourceItem } from "./data/DataProviders";
+
 import Awesomplete from 'awesomplete';
 import { I18n } from '../../settings/I18n';
 import { HTMLComponent } from '../HtmlComponent';
+import { AutocompleteDataProviderIfc, RdfTermDatasourceItem } from '../datasources/DataProviders';
+import { NoOpAutocompleteProvider } from '../datasources/NoOpDataProviders';
+import { mergeDatasourceResults } from '../datasources/SparqlDataProviders';
 
 const factory = new DataFactory();
 

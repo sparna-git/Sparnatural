@@ -21,7 +21,7 @@ export * from "./sparnatural/components/widgets/timedatepickerwidget/TimeDatePic
 // export * from "./sparnatural/components/widgets/LoadingSpinner";
 // export * from "./sparnatural/components/widgets/data/DataProviders";
 // export * from "./sparnatural/components/widgets/data/SparqlBuilders";
-export * from "./sparnatural/components/widgets/data/SparqlHandler";
+export * from "./sparnatural/components/datasources/SparqlHandler";
 // export * from "./sparnatural/components/widgets/data/UrlFetcher";
 export * from "./sparnatural/dag/Dag";
 // export * from "./sparnatural/datastorage/LocalCacheData";

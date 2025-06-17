@@ -1,5 +1,5 @@
-import LocalCacheData from "../../../datastorage/LocalCacheData";
-import { Catalog } from "../../../settings/Catalog";
+import LocalCacheData from "../../datastorage/LocalCacheData";
+import { Catalog } from "../../settings/Catalog";
 import { UrlFetcher } from "./UrlFetcher";
 
 
@@ -11,6 +11,8 @@ export interface SparqlHandlerIfc {
         errorCallback?:(error: any) => void
     ):void;
 }
+
+
 
 export class SparqlHandlerFactory {
 
@@ -139,7 +141,11 @@ export class EndpointSparqlHandler implements SparqlHandlerIfc {
     }
 }
 
-
+/**
+ * Executes a SPARQL query against multiple endpoints
+ * and returns the results merged in a single result set
+ * with an extra column to express the source
+ */
 export class MultipleEndpointSparqlHandler implements SparqlHandlerIfc {
 
     urlFetcher:UrlFetcher;

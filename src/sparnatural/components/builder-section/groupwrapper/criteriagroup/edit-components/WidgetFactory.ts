@@ -7,9 +7,8 @@ import { SelectedVal } from "../../../../SelectedVal";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
-import { ListDataProviderIfc, NoOpListDataProvider, SparqlListDataProvider, SortListDataProvider, AutocompleteDataProviderIfc, NoOpAutocompleteProvider, SparqlAutocompleDataProvider, TreeDataProviderIfc, NoOpTreeDataProvider, SparqlTreeDataProvider, SortTreeDataProvider } from "../../../../widgets/data/DataProviders";
-import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../widgets/data/SparqlBuilders";
-import { SparqlHandlerFactory, SparqlHandlerIfc } from "../../../../widgets/data/SparqlHandler";
+import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../datasources/SparqlBuilders";
+import { SparqlHandlerFactory, SparqlHandlerIfc } from "../../../../datasources/SparqlHandler";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
 import { NoWidget } from "../../../../widgets/NoWidget";
@@ -17,6 +16,9 @@ import { NumberConfiguration, NumberWidget } from "../../../../widgets/NumberWid
 import { SearchConfiguration, SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
+import { ListDataProviderIfc, SortListDataProvider, AutocompleteDataProviderIfc, TreeDataProviderIfc, SortTreeDataProvider } from "../../../../datasources/DataProviders";
+import { NoOpListDataProvider, NoOpAutocompleteProvider, NoOpTreeDataProvider } from "../../../../datasources/NoOpDataProviders";
+import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider } from "../../../../datasources/SparqlDataProviders";
 
 /**
  * Inversion of coupling : we don't want to depend on ISettings as this class is meant to be reused
@@ -54,7 +56,7 @@ export class WidgetFactory {
     settings: WidgetFactorySettings;
     catalog?:Catalog;
 
-    private sparqlFetcherFactory:SparqlHandlerFactory;
+    private sparqlHandlerFactory:SparqlHandlerFactory;
     private sparqlPostProcessor:{ semanticPostProcess: (sparql:string)=>string };
 
     constructor(
@@ -68,8 +70,8 @@ export class WidgetFactory {
         this.settings = settings;
         this.catalog = catalog;
 
-        // how to fetch a SPARQL query
-        this.sparqlFetcherFactory = new SparqlHandlerFactory(            
+        // how to handle / execute a SPARQL query
+        this.sparqlHandlerFactory = new SparqlHandlerFactory(            
             this.settings.language,
             this.settings.localCacheDataTtl,
             this.settings.customization.headers,
@@ -114,8 +116,6 @@ export class WidgetFactory {
         switch (widgetType) {
           case Config.LITERAL_LIST_PROPERTY:
           case Config.LIST_PROPERTY:
-            // to be passed in anonymous functions
-            var theSpecProvider = this.specProvider;
     
             // determine custom datasource
             var datasource = this.specProvider.getProperty(objectPropVal.type).getDatasource();
@@ -159,7 +159,7 @@ export class WidgetFactory {
               listDataProvider = new SparqlListDataProvider(
     
                 // endpoint URL
-                this.sparqlFetcherFactory.buildSparqlHandler(
+                this.sparqlHandlerFactory.buildSparqlHandler(
                     datasource.sparqlEndpointUrl != null
                     ? [datasource.sparqlEndpointUrl]
                     : this.settings.endpoints
@@ -248,7 +248,7 @@ export class WidgetFactory {
               autocompleteDataProvider = new SparqlAutocompleDataProvider(
     
                 // endpoint URL
-                this.sparqlFetcherFactory.buildSparqlHandler(
+                this.sparqlHandlerFactory.buildSparqlHandler(
                     datasource.sparqlEndpointUrl != null
                     ? [datasource.sparqlEndpointUrl]
                     : this.settings.endpoints
@@ -380,7 +380,7 @@ export class WidgetFactory {
     
                 // endpoint URL
                 // we read it on the roots datasource
-                this.sparqlFetcherFactory.buildSparqlHandler(
+                this.sparqlHandlerFactory.buildSparqlHandler(
                     treeRootsDatasource.sparqlEndpointUrl != null
                     ? [treeRootsDatasource.sparqlEndpointUrl]
                     : this.settings.endpoints
