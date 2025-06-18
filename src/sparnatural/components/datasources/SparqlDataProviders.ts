@@ -1,26 +1,20 @@
+import { Term } from "@rdfjs/types/data-model";
 import { RDFTerm } from "../widgets/AbstractWidget";
-import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem } from "./DataProviders";
-import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
+import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem, ValuesListDataProviderIfc } from "./DataProviders";
+import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc } from "./SparqlBuilders";
 import { SparqlHandlerIfc } from "./SparqlHandler";
 
 
-/**
- * Implementation of ListDataProviderIfc that executes a SPARQL query against an endpoint,
- * and read the 'uri' and 'label' columns.
- */
-export class SparqlListDataProvider implements ListDataProviderIfc {
+export abstract class BaseSparqlListDataProvider {
     
-    queryBuilder:ListSparqlQueryBuilderIfc;
     sparqlHandler:SparqlHandlerIfc;
     lang: string;
     defaultLang: string;
     typePredicate: string;
 
     constructor(
-        sparqlHandler:SparqlHandlerIfc,
-        queryBuilder: ListSparqlQueryBuilderIfc
+        sparqlHandler:SparqlHandlerIfc
     ) {
-        this.queryBuilder = queryBuilder;
         this.sparqlHandler = sparqlHandler;        
     }
 
@@ -30,25 +24,14 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
         this.typePredicate = typePredicate;
     }
 
-    getListContent(
-        domainType: string,
-        predicate: string,
-        rangeType: string,
+    doExecuteWithCallback(
+        sparqlQuery: string,
         callback:(items:RdfTermDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
-        // 1. create the SPARQL
-        let sparql = this.queryBuilder.buildSparqlQuery(
-            domainType,
-            predicate,
-            rangeType,
-            this.lang,
-            this.defaultLang,
-            this.typePredicate
-        );
 
         // 2. execute it
-        this.sparqlHandler.executeSparql(sparql,(data:{results:{bindings:any}}) => {
+        this.sparqlHandler.executeSparql(sparqlQuery,(data:{results:{bindings:any}}) => {
             // 3. parse the results
             let result = new Array<RdfTermDatasourceItem>;
             for (let index = 0; index < data.results.bindings.length; index++) {
@@ -80,7 +63,7 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
             callback(result);
         },
         errorCallback
-      );
+    );
   }
 
   getRdfTermColumn(aBindingSet: any): string | undefined {
@@ -97,6 +80,89 @@ export class SparqlListDataProvider implements ListDataProviderIfc {
     }
     return foundKey;
   }
+
+}
+
+
+/**
+ * Implementation of ListDataProviderIfc that executes a SPARQL query against an endpoint,
+ * and read the 'uri' and 'label' columns.
+ */
+export class SparqlListDataProvider extends BaseSparqlListDataProvider implements ListDataProviderIfc {
+    
+    queryBuilder:ListSparqlQueryBuilderIfc;
+
+    constructor(
+        sparqlHandler:SparqlHandlerIfc,
+        queryBuilder: ListSparqlQueryBuilderIfc
+    ) {
+        super(sparqlHandler); 
+        this.queryBuilder = queryBuilder;
+               
+    }
+
+    getListContent(
+        domainType: string,
+        predicate: string,
+        rangeType: string,
+        callback:(items:RdfTermDatasourceItem[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        // 1. create the SPARQL
+        let sparql = this.queryBuilder.buildSparqlQuery(
+            domainType,
+            predicate,
+            rangeType,
+            this.lang,
+            this.defaultLang,
+            this.typePredicate
+        );
+
+        // 2. execute it
+        super.doExecuteWithCallback(
+            sparql,
+            callback,
+            errorCallback
+        );
+  }
+
+}
+
+
+export class SparqlValuesListDataProvider extends BaseSparqlListDataProvider implements ValuesListDataProviderIfc {
+    
+    queryBuilder:ValuesListSparqlQueryBuilderIfc;
+
+    constructor(
+        sparqlHandler:SparqlHandlerIfc,
+        queryBuilder: ValuesListSparqlQueryBuilderIfc
+    ) {
+        super(sparqlHandler);  
+        this.queryBuilder = queryBuilder;      
+    }
+
+
+    getListContent(
+        values:Term[],
+        callback:(items:RdfTermDatasourceItem[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        // 1. create the SPARQL
+        let sparql = this.queryBuilder.buildSparqlQuery(
+            values,
+            this.lang,
+            this.defaultLang,
+            this.typePredicate
+        );
+
+        // 2. execute it
+        super.doExecuteWithCallback(
+            sparql,
+            callback,
+            errorCallback
+        );
+  }
+
 }
 
 

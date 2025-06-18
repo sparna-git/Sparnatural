@@ -1,3 +1,4 @@
+import { Term } from "@rdfjs/types/data-model";
 import { RDFTerm } from "../widgets/AbstractWidget";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
 import { SparqlHandlerIfc } from "./SparqlHandler";
@@ -25,7 +26,6 @@ export interface RdfTermTreeDatasourceItem extends RdfTermDatasourceItem {
  * either through a SPARQL query, or through custom mean (calling an API)
  */
 export interface ListDataProviderIfc {
-  init(lang: string, defaultLang: string, typePredicate: string): void;
 
     init(
         lang:string,
@@ -58,28 +58,82 @@ export class SortListDataProvider implements ListDataProviderIfc {
     this.delegate.init(lang, defaultLang, typePredicate);
   }
 
+  getListContent(
+      domain:string,
+      predicate:string,
+      range:string,
+      callback:(items:RdfTermDatasourceItem[]) => void,
+      errorCallback?:(payload:any) => void
+  ):void {
+    this.delegate.getListContent(
+      domain,
+      predicate,
+      range,
+      (items:RdfTermDatasourceItem[]) => {
+          // sort according to lang
+          var collator = new Intl.Collator(this.lang);
+          items.sort((a: any, b: any) => {
+            return collator.compare(a.label, b.label);
+          });
+          callback(items);
+      },
+      errorCallback
+    );
+  }
+
+}
+
+/**
+ * Interface for objects that can provide data to a ListWidget :
+ * either through a SPARQL query, or through custom mean (calling an API)
+ */
+export interface ValuesListDataProviderIfc {
+
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void;
+
     getListContent(
-        domain:string,
-        predicate:string,
-        range:string,
+        values:Term[],
+        callback:(items:RdfTermDatasourceItem[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void
+}
+
+/**
+ * An implementation of ValuesListDataProviderIfc that sorts items of another data provider
+ */
+export class SortValuesListDataProvider implements ValuesListDataProviderIfc {
+  delegate: ValuesListDataProviderIfc;
+  lang: string;
+
+  constructor(delegate: ValuesListDataProviderIfc) {
+    this.delegate = delegate;
+  }
+
+  init(lang: string, defaultLang: string, typePredicate: string): void {
+    this.lang = lang;
+    this.delegate.init(lang, defaultLang, typePredicate);
+  }
+
+  getListContent(
+        values:Term[],
         callback:(items:RdfTermDatasourceItem[]) => void,
         errorCallback?:(payload:any) => void
     ):void {
-        this.delegate.getListContent(
-            domain,
-            predicate,
-            range,
-            (items:RdfTermDatasourceItem[]) => {
-                // sort according to lang
-                var collator = new Intl.Collator(this.lang);
-
-        items.sort((a: any, b: any) => {
-          return collator.compare(a.label, b.label);
-        });
-
-        callback(items);
-      },
-      errorCallback
+    this.delegate.getListContent(
+        values,
+        (items:RdfTermDatasourceItem[]) => {
+            // sort according to lang
+            var collator = new Intl.Collator(this.lang);
+            items.sort((a: any, b: any) => {
+                return collator.compare(a.label, b.label);
+            });
+            callback(items);
+        },
+        errorCallback
     );
   }
 }
@@ -89,7 +143,6 @@ export class SortListDataProvider implements ListDataProviderIfc {
  * either through a SPARQL query, or through custom mean (calling an API)
  */
 export interface AutocompleteDataProviderIfc {
-  init(lang: string, defaultLang: string, typePredicate: string): void;
 
     init(
         lang:string,
@@ -114,7 +167,11 @@ export interface AutocompleteDataProviderIfc {
  * Interface for objects that can provide data to a TreeWidget
  */
 export interface TreeDataProviderIfc {
-  init(lang: string, defaultLang: string, typePredicate: string): void;
+  init(
+      lang:string,
+      defaultLang:string,
+      typePredicate:string,
+  ):void;
 
   getRoots(
     domain: string,

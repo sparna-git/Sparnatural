@@ -1,5 +1,6 @@
+import { Term } from "@rdfjs/types/data-model";
 import { RDFTerm } from "../widgets/AbstractWidget";
-import { AutocompleteDataProviderIfc, ListDataProviderIfc, RdfTermDatasourceItem, RdfTermTreeDatasourceItem, TreeDataProviderIfc } from "./DataProviders";
+import { AutocompleteDataProviderIfc, ListDataProviderIfc, RdfTermDatasourceItem, RdfTermTreeDatasourceItem, TreeDataProviderIfc, ValuesListDataProviderIfc } from "./DataProviders";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
 import { SparqlHandlerIfc } from "./SparqlHandler";
 
@@ -26,6 +27,29 @@ export class NoOpListDataProvider implements ListDataProviderIfc {
     ):void {
         // does nothing !
         console.warn("Warning, a NoOpListDataProvider is being called for predicate "+predicate)
+    }
+}
+
+/**
+ * An implementation of ListDataProviderIfc that does nothing !
+ */
+export class NoOpValuesListDataProvider implements ValuesListDataProviderIfc {
+
+    init(
+        lang:string,
+        defaultLang:string,
+        typePredicate:string,
+    ):void {
+        // nothing
+    }
+
+    getListContent(
+        values:Term[],
+        callback:(items:RdfTermDatasourceItem[]) => void,
+        errorCallback?:(payload:any) => void
+    ):void {
+        // does nothing !
+        console.warn("Warning, a NoOpValuesListDataProvider is being called")
     }
 }
 

@@ -7,7 +7,7 @@ import { SelectedVal } from "../../../../SelectedVal";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
 import { BooleanWidget } from "../../../../widgets/BooleanWidget";
-import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder } from "../../../../datasources/SparqlBuilders";
+import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder, ValuesListSparqlTemplateQueryBuilder } from "../../../../datasources/SparqlBuilders";
 import { SparqlHandlerFactory, SparqlHandlerIfc } from "../../../../datasources/SparqlHandler";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
 import MapWidget, { MapConfiguration } from "../../../../widgets/MapWidget";
@@ -16,9 +16,12 @@ import { NumberConfiguration, NumberWidget } from "../../../../widgets/NumberWid
 import { SearchConfiguration, SearchRegexWidget } from "../../../../widgets/SearchRegexWidget";
 import { TimeDatePickerWidget } from "../../../../widgets/timedatepickerwidget/TimeDatePickerWidget";
 import { TreeConfiguration, TreeWidget } from "../../../../widgets/treewidget/TreeWidget";
-import { ListDataProviderIfc, SortListDataProvider, AutocompleteDataProviderIfc, TreeDataProviderIfc, SortTreeDataProvider } from "../../../../datasources/DataProviders";
+import { ListDataProviderIfc, SortListDataProvider, AutocompleteDataProviderIfc, TreeDataProviderIfc, SortTreeDataProvider, ValuesListDataProviderIfc, SortValuesListDataProvider } from "../../../../datasources/DataProviders";
 import { NoOpListDataProvider, NoOpAutocompleteProvider, NoOpTreeDataProvider } from "../../../../datasources/NoOpDataProviders";
-import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider } from "../../../../datasources/SparqlDataProviders";
+import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider } from "../../../../datasources/SparqlDataProviders";
+import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
+import { IDatasource } from "../../../../../spec-providers/IDatasource";
+import { RDFS } from "../../../../../../rdf/vocabularies/RDFS";
 
 /**
  * Inversion of coupling : we don't want to depend on ISettings as this class is meant to be reused
@@ -99,26 +102,29 @@ export class WidgetFactory {
 
 
     /**
-     * Create a widget.
+     * Creates a widget for the specified criteria subject / predicate / object
      * 
-     * @param widgetType the widget type(list, autocomplete, etc.) that is returned from the method "getPropertyType" of the configuration
      * @param startClassVal the type + variable name of the subject
      * @param objectPropVal the type + variable name of the property
      * @param endClassVal the type + variable name of the object
      * @returns the widget component to be displayed
      */
     buildWidget(
-        widgetType: string,
         startClassVal: SelectedVal,
         objectPropVal: SelectedVal,
         endClassVal: SelectedVal,
     ): AbstractWidget {
+        let property:ISpecificationProperty = this.specProvider.getProperty(objectPropVal.type);
+
+        // read the widgetType from the config
+        const widgetType = property.getPropertyType(endClassVal.variable);
+
         switch (widgetType) {
           case Config.LITERAL_LIST_PROPERTY:
           case Config.LIST_PROPERTY:
     
             // determine custom datasource
-            var datasource = this.specProvider.getProperty(objectPropVal.type).getDatasource();
+            var datasource:IDatasource = property.getDatasource();
     
             if (datasource == null) {
               // datasource still null
@@ -133,12 +139,22 @@ export class WidgetFactory {
                     ),
                     labelProperty: this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty(),
                   }
+                // if there is no datasource, but we can guess the end class could be skos:Concept,
+                // use a skos:prefLabel datasource  
                 } else if(this.specProvider.getEntity(endClassVal.type).couldBeSkosConcept()) {
                   datasource = {
                     queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
                       Datasources.QUERY_LIST_LABEL_ALPHA
                     ),
                     labelProperty: SKOS.PREF_LABEL.value,
+                  }
+                // if there are some values specified in the config with sh:in, use a values datasource
+                } else if(property.getValues()) {
+                  datasource = {
+                    queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+                      Datasources.QUERY_LIST_LABEL_VALUES_ALPHA
+                    ),
+                    labelPath: "<"+RDFS.LABEL.value+">|<"+SKOS.PREF_LABEL.value+">"
                   }
                 } else {
                   // that datasource can work indifferently with URIs or Literals
@@ -152,33 +168,63 @@ export class WidgetFactory {
               }
             }
     
-            let listDataProvider:ListDataProviderIfc = new NoOpListDataProvider();
+            let listDataProvider:ListDataProviderIfc | ValuesListDataProviderIfc = new NoOpListDataProvider();
             if (datasource != null) {
-              // if we have a datasource, possibly the default one, provide a config based
-              // on a SparqlTemplate, otherwise use the handler provided
-              listDataProvider = new SparqlListDataProvider(
-    
-                // endpoint URL
-                this.sparqlHandlerFactory.buildSparqlHandler(
-                    datasource.sparqlEndpointUrl != null
-                    ? [datasource.sparqlEndpointUrl]
-                    : this.settings.endpoints
-                ), 
-    
-                new ListSparqlTemplateQueryBuilder(
-                  // sparql query (with labelPath interpreted)
-                  this.#getFinalQueryString(datasource),
-    
-                  // sparqlPostProcessor
-                  this.sparqlPostProcessor
-                )
-              );
+              if(property.getValues()) {
+                // if there was some fixed values specified in the config, use a ValuesListDataProvider
+                listDataProvider = new SparqlValuesListDataProvider(
+      
+                  // endpoint URL
+                  this.sparqlHandlerFactory.buildSparqlHandler(
+                      datasource.sparqlEndpointUrl != null
+                      ? [datasource.sparqlEndpointUrl]
+                      : this.settings.endpoints
+                  ), 
+      
+                  new ValuesListSparqlTemplateQueryBuilder(
+                    // sparql query (with labelPath interpreted)
+                    this.#getFinalQueryString(datasource),
+      
+                    // sparqlPostProcessor
+                    this.sparqlPostProcessor
+                  )
+                );
+
+                // if we need to sort things, add an explicit wrapper around the data provider
+                if(!(datasource.noSort == true)) {
+                  listDataProvider = new SortValuesListDataProvider(listDataProvider);
+                }
+                
+              } else {
+                // if we have a datasource, possibly the default one, provide a config based
+                // on a SparqlTemplate, otherwise use the handler provided
+                listDataProvider = new SparqlListDataProvider(
+      
+                  // endpoint URL
+                  this.sparqlHandlerFactory.buildSparqlHandler(
+                      datasource.sparqlEndpointUrl != null
+                      ? [datasource.sparqlEndpointUrl]
+                      : this.settings.endpoints
+                  ), 
+      
+                  new ListSparqlTemplateQueryBuilder(
+                    // sparql query (with labelPath interpreted)
+                    this.#getFinalQueryString(datasource),
+      
+                    // sparqlPostProcessor
+                    this.sparqlPostProcessor
+                  )
+                );
+
+                // if we need to sort things, add an explicit wrapper around the data provider
+                if(!(datasource.noSort == true)) {
+                  listDataProvider = new SortListDataProvider(listDataProvider);
+                }
+              }
+
             }
     
-            // if we need to sort things, add an explicit wrapper around the data provider
-            if(!(datasource.noSort == true)) {
-              listDataProvider = new SortListDataProvider(listDataProvider);
-            }
+
     
             // create the configuration object : use the default configuration, then the generated data provider, then overwrite with 
             // what is set in the provided configuration object for the corresponding section
@@ -212,7 +258,7 @@ export class WidgetFactory {
             var theSpecProvider = this.specProvider;
     
             // determine custom datasource
-            var datasource = this.specProvider.getProperty(objectPropVal.type).getDatasource();
+            var datasource:IDatasource = this.specProvider.getProperty(objectPropVal.type).getDatasource();
     
             if (datasource == null) {
               // datasource still null

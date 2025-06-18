@@ -174,7 +174,6 @@ class WidgetWrapper extends HTMLComponent {
     );
 
     return factory.buildWidget(
-      widgetType,
       this.startClassVal,
       this.objectPropVal,
       this.endClassVal

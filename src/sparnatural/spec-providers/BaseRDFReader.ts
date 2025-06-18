@@ -7,6 +7,7 @@ import { NamedNode, Quad, Stream, Term } from "@rdfjs/types";
 import { StoreModel } from '../../rdf/StoreModel';
 import { RDF } from '../../rdf/vocabularies/RDF';
 import { RDFS } from '../../rdf/vocabularies/RDFS';
+import { IDatasource } from './IDatasource';
 
 const factory = new DataFactory();
 
@@ -115,7 +116,7 @@ export class BaseRDFReader {
       _readDatasourceAnnotationProperty(
         propertyOrClassId: any,
         datasourceAnnotationProperty: any
-      ) {
+      ):IDatasource {
         // read predicate datasource
         const datasourceQuads = this.store.getQuads(
           factory.namedNode(propertyOrClassId),
@@ -154,17 +155,8 @@ export class BaseRDFReader {
    * }
    **/
 
-  #_buildDatasource(datasourceUri: string) {
-    var datasource: {
-      queryString?: string;
-      queryTemplate?: any;
-      labelPath?: any;
-      labelProperty?: any;
-      childrenPath?: any;
-      childrenProperty?: any;
-      sparqlEndpointUrl?: any;
-      noSort?: any;
-    } = {};
+  #_buildDatasource(datasourceUri: string):IDatasource {
+    var datasource: IDatasource = {};
     // read datasource characteristics
 
     // Alternative 1 : read optional queryString

@@ -1,10 +1,34 @@
+import { Term } from "@rdfjs/types/data-model";
 
+/**
+ * This file contains interfaces and classes for building SPARQL queries
+ * for various operations such as listing, autocompleting, and tree structures.
+ * It includes template-based query builders that can be customized with specific parameters.
+ */
+
+/**
+ * Interface for building SPARQL queries to list items based on a domain, predicate, and range (coming from the query), and other attributes from Sparnatural itself
+ */
 export interface ListSparqlQueryBuilderIfc  {
 
     buildSparqlQuery(
         domain:string,
         predicate:string,
         range:string,
+        language: any,
+        defaultLanguage: any,
+        typePath: string
+    ):string;
+
+}
+
+/**
+ * Same for lists, but using a fixed list of values (used when sh:in is present in the SHACL)
+ */
+export interface ValuesListSparqlQueryBuilderIfc  {
+
+    buildSparqlQuery(
+        values:Term[],
         language: any,
         defaultLanguage: any,
         typePath: string
@@ -55,6 +79,68 @@ export class ListSparqlTemplateQueryBuilder implements ListSparqlQueryBuilderIfc
     }
 
 }
+
+
+
+export class ValuesListSparqlTemplateQueryBuilder implements ValuesListSparqlQueryBuilderIfc {
+    
+    queryString: string;
+    sparqlPostProcessor: any;
+
+    constructor(
+        queryString: string,
+        sparqlPostProcessor: any,
+
+    ) {
+        this.queryString = queryString;
+        this.sparqlPostProcessor = sparqlPostProcessor;
+    }
+
+    buildSparqlQuery(
+        values:Term[],        
+        language: any,
+        defaultLanguage: any,
+        typePath: string
+    ): string {
+        var reValues = new RegExp("\\$values", "g");
+        var reLang = new RegExp("\\$lang", "g");
+        var reDefaultLang = new RegExp("\\$defaultLang", "g");
+        var reType = new RegExp("\\$type", "g");
+
+        // turn the values into their corresponding string representation in SPARQL
+        var stringValues = values.map((value: Term) => {
+            if (value.termType === 'NamedNode') {
+                return "<"+value.value+">"; // NamedNode is a URI
+            } else if (value.termType === 'Literal') {
+                // For literals, we need to include the language tag or datatype
+                if (value.language) {
+                    return `"${value.value}"@${value.language}`; // Literal with language tag
+                } else if (value.datatype) {
+                    return `"${value.value}"^^<${value.datatype.value}>`; // Literal with datatype
+                } else {
+                    return `"${value.value}"`; // Plain literal
+                }
+            } else {
+                throw new Error(`Unsupported term type: ${value.termType}`);
+            }
+        }).join(" ");
+    
+        var sparql = this.queryString
+          .replace(reValues, stringValues)
+          .replace(reLang, "'" + language + "'")
+          .replace(reDefaultLang, "'" + defaultLanguage + "'")
+          .replace(reType, typePath);
+
+          console.log("SPARQL Query: ", sparql);
+          
+        sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
+
+        return sparql;
+    }
+
+}
+
+
 
 export interface AutocompleteSparqlQueryBuilderIfc  {
 

@@ -6,14 +6,14 @@ import "select2/dist/css/select2.css";
 import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";
 import { HTMLComponent } from "../HtmlComponent";
-import { ListDataProviderIfc, RdfTermDatasourceItem } from "../datasources/DataProviders";
-import { NoOpListDataProvider } from "../datasources/NoOpDataProviders";
+import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc } from "../datasources/DataProviders";
+import { NoOpListDataProvider, NoOpValuesListDataProvider } from "../datasources/NoOpDataProviders";
 import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
 
 const factory = new DataFactory();
 
 export interface ListConfiguration {
-  dataProvider: ListDataProviderIfc,
+  dataProvider: ListDataProviderIfc | ValuesListDataProviderIfc,
   values?: Term[]
 }
 
@@ -149,18 +149,13 @@ export class ListWidget extends AbstractWidget {
 
     // if there are some provided values like in sh:in...
     if(this.configuration.values?.length > 0) {
-      // convert the provided list of terms to RDFTerm[]
-      let items: {term:RDFTerm;label:string;group?:string}[] = [];
-      this.configuration.values.forEach(v => {
-        items.push({
-          term: new RDFTerm(v),
-          label:v.value
-        });
-      });
-      // then call the callback with it
-      callback(items);
+      (this.configuration.dataProvider as ValuesListDataProviderIfc).getListContent(
+        this.configuration.values,
+        callback,
+        errorCallback
+      );
     } else {
-      this.configuration.dataProvider.getListContent(
+      (this.configuration.dataProvider as ListDataProviderIfc).getListContent(
         this.startClassVal.type,
         this.objectPropVal.type,
         this.endClassVal.type,

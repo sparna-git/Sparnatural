@@ -384,6 +384,23 @@ ORDER BY UCASE(STR(?label))
 `
 );
 
+// 4 backslashes here mean 2 backslashes in reality
+QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
+  SPARNATURAL_CONFIG_DATASOURCES +
+    "query_list_label_values_alpha",
+  `
+SELECT DISTINCT ?uri ?label
+WHERE {
+    VALUES ?uri { $values}
+    OPTIONAL { ?uri $labelPath ?knownLabel . FILTER(lang(?knownLabel) = "" || lang(?knownLabel) = $lang) }
+    BIND(COALESCE(?knownLabel, REPLACE(STR(?uri), "^.*?([_\\\\p{L}][-_\\\\p{L}\\\\p{N}]*)$", "$1")) AS ?label) 
+}
+ORDER BY UCASE(STR(?label))
+LIMIT 500
+`
+);
+
+
 QUERY_STRINGS_BY_QUERY_TEMPLATE.set(
   SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_strstarts",
   `
@@ -1163,6 +1180,8 @@ export const Datasources = Object.freeze({
     SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_count",
   QUERY_LIST_URI_OR_LITERAL_ALPHA_WITH_COUNT:
     SPARNATURAL_CONFIG_DATASOURCES + "query_list_URI_or_literal_alpha_with_count",
+  QUERY_LIST_LABEL_VALUES_ALPHA:
+    SPARNATURAL_CONFIG_DATASOURCES + "query_list_label_values_alpha",
   QUERY_SEARCH_LABEL_STRSTARTS:
     SPARNATURAL_CONFIG_DATASOURCES + "query_search_label_strstarts",
   QUERY_SEARCH_LABEL_CONTAINS:

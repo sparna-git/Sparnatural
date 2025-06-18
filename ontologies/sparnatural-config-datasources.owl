@@ -1507,6 +1507,22 @@ WHERE {
         <sparnatural-config-datasources:childrenPath>^&lt;http://www.w3.org/2000/01/rdf-schema#subClassOf&gt;</sparnatural-config-datasources:childrenPath>
         <sparnatural-config-datasources:labelPath>&lt;http://www.w3.org/2000/01/rdf-schema#label&gt;</sparnatural-config-datasources:labelPath>
     </owl:NamedIndividual>
+
+
+
+    <owl:NamedIndividual rdf:about="http://data.sparna.fr/ontologies/sparnatural-config-datasources/query_list_label_values_alpha">
+        <rdf:type rdf:resource="http://data.sparna.fr/ontologies/sparnatural-config-datasources#SPARQLQuery"/>
+        <sparnatural-config-datasources:queryString>SELECT DISTINCT ?uri ?label
+WHERE {
+    VALUES ?uri { $values}
+    OPTIONAL { ?uri $labelPath ?knownLabel . FILTER(lang(?knownLabel) = "" || lang(?knownLabel) = $lang) }
+    BIND(COALESCE(?knownLabel, REPLACE(STR(?uri), "^.*?([_\\p{L}][-_\\p{L}\\p{N}]*)$", "$1")) AS ?label) 
+}
+ORDER BY UCASE(STR(?label))
+LIMIT 500
+}</sparnatural-config-datasources:queryString>
+        <rdfs:comment xml:lang="en">Used when the known list of values is provided through sh:in.</rdfs:comment>
+    </owl:NamedIndividual>
 </rdf:RDF>
 
 
