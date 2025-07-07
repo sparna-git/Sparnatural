@@ -130,8 +130,6 @@ export class ValuesListSparqlTemplateQueryBuilder implements ValuesListSparqlQue
           .replace(reLang, "'" + language + "'")
           .replace(reDefaultLang, "'" + defaultLanguage + "'")
           .replace(reType, typePath);
-
-          console.log("SPARQL Query: ", sparql);
           
         sparql = this.sparqlPostProcessor.semanticPostProcess(sparql);
 

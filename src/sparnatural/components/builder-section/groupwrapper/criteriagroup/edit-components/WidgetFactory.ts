@@ -130,9 +130,18 @@ export class WidgetFactory {
               // datasource still null
               // if a default endpoint was provided, provide default datasource
               if (this.settings.endpoints || this.settings.catalog) {
-    
+                // if there are some values specified in the config with sh:in, use a values datasource
+                if(property.getValues()) {
+                  datasource = {
+                    queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
+                      Datasources.QUERY_LIST_LABEL_VALUES_ALPHA
+                    ),
+                    labelPath: "<"+RDFS.LABEL.value+">|<"+SKOS.PREF_LABEL.value+">"
+                  }
+                }
+
                 // if there is a default label property on the end class, use it to populate the dropdown
-                if(this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty()) {
+                else if(this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty()) {
                   datasource = {
                     queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
                       Datasources.QUERY_LIST_LABEL_ALPHA
@@ -147,14 +156,6 @@ export class WidgetFactory {
                       Datasources.QUERY_LIST_LABEL_ALPHA
                     ),
                     labelProperty: SKOS.PREF_LABEL.value,
-                  }
-                // if there are some values specified in the config with sh:in, use a values datasource
-                } else if(property.getValues()) {
-                  datasource = {
-                    queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
-                      Datasources.QUERY_LIST_LABEL_VALUES_ALPHA
-                    ),
-                    labelPath: "<"+RDFS.LABEL.value+">|<"+SKOS.PREF_LABEL.value+">"
                   }
                 } else {
                   // that datasource can work indifferently with URIs or Literals

@@ -439,7 +439,8 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
 
     getValues():Term[] | undefined {
-      return this.graph.readAsList(factory.namedNode(this.uri), SH.IN);
+      let values:Term[] = this.graph.readAsList(factory.namedNode(this.uri), SH.IN);
+      return (values.length > 0) ? values : undefined;
     }
 
     getBeginDateProperty(): string | undefined {
