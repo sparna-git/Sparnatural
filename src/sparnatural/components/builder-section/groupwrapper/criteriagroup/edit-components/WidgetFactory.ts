@@ -117,7 +117,7 @@ export class WidgetFactory {
         let property:ISpecificationProperty = this.specProvider.getProperty(objectPropVal.type);
 
         // read the widgetType from the config
-        const widgetType = property.getPropertyType(endClassVal.variable);
+        const widgetType = property.getPropertyType(endClassVal.type);
 
         switch (widgetType) {
           case Config.LITERAL_LIST_PROPERTY:
