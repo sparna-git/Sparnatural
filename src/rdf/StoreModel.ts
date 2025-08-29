@@ -1,9 +1,9 @@
 import { Quad, Quad_Object, Quad_Predicate, Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { RdfStore } from "rdf-stores";
-import { RDF } from "../sparnatural/spec-providers/BaseRDFReader";
 import { DataFactory } from "rdf-data-factory";
 import { SH } from "./vocabularies/SH";
 import { XSD } from "./vocabularies/XSD";
+import { RDF } from "./vocabularies/RDF";
 
 let DF = new DataFactory();
 

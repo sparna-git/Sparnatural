@@ -17,8 +17,9 @@ import { SH } from '../../../rdf/vocabularies/SH';
 import { VOLIPI } from '../../../rdf/vocabularies/VOLIPI';
 import { SKOS } from '../../../rdf/vocabularies/SKOS';
 import { DASH } from '../../../rdf/vocabularies/DASH';
-import { RDF } from '../BaseRDFReader';
 import { RDFS } from '../../../rdf/vocabularies/RDFS';
+import { DatasourceReading } from '../DatasourceReading';
+import { RDF } from '../../../rdf/vocabularies/RDF';
 
 const factory = new DataFactory();
 
@@ -404,23 +405,26 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
     }
 
     getDatasource() {
-      return this._readDatasourceAnnotationProperty(
+      return DatasourceReading.readDatasourceAnnotationProperty(
           this.uri,
-          Datasources.DATASOURCE
+          Datasources.DATASOURCE,
+          this.graph
       );
     }
 
     getTreeChildrenDatasource() {
-      return this._readDatasourceAnnotationProperty(
+      return DatasourceReading.readDatasourceAnnotationProperty(
           this.uri,
-          Datasources.TREE_CHILDREN_DATASOURCE
+          Datasources.TREE_CHILDREN_DATASOURCE,
+          this.graph
         );
     }
 
     getTreeRootsDatasource() {
-      return this._readDatasourceAnnotationProperty(
+      return DatasourceReading.readDatasourceAnnotationProperty(
           this.uri,
-          Datasources.TREE_ROOTS_DATASOURCE
+          Datasources.TREE_ROOTS_DATASOURCE,
+          this.graph
       );
     }
 

@@ -8,7 +8,7 @@ import { DataFactory } from 'rdf-data-factory';
 import { DagIfc, Dag } from "../../dag/Dag";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { RDFS } from "../../../rdf/vocabularies/RDFS";
-import { RDF } from "../BaseRDFReader";
+import { RDF } from "../../../rdf/vocabularies/RDF";
 
 const factory = new DataFactory();
 

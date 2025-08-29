@@ -7,6 +7,7 @@ import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from "rdf-stores";
 import { Term } from "@rdfjs/types";
 import { RDFS } from "../../../rdf/vocabularies/RDFS";
+import { DatasourceReading } from "../DatasourceReading";
 
 const factory = new DataFactory();
 
@@ -79,26 +80,29 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     return undefined;
   }
 
-  getDatasource() {
-    return this._readDatasourceAnnotationProperty(
-        this.uri,
-        Datasources.DATASOURCE
-    );
-  }
-
-  getTreeChildrenDatasource() {
-      return this._readDatasourceAnnotationProperty(
+    getDatasource() {
+      return DatasourceReading.readDatasourceAnnotationProperty(
           this.uri,
-          Datasources.TREE_CHILDREN_DATASOURCE
-        );
-  }
-
-  getTreeRootsDatasource() {
-      return this._readDatasourceAnnotationProperty(
-          this.uri,
-          Datasources.TREE_ROOTS_DATASOURCE
+          Datasources.DATASOURCE,
+          this.graph
       );
-  }
+    }
+
+    getTreeChildrenDatasource() {
+      return DatasourceReading.readDatasourceAnnotationProperty(
+          this.uri,
+          Datasources.TREE_CHILDREN_DATASOURCE,
+          this.graph
+        );
+    }
+
+    getTreeRootsDatasource() {
+      return DatasourceReading.readDatasourceAnnotationProperty(
+          this.uri,
+          Datasources.TREE_ROOTS_DATASOURCE,
+          this.graph
+      );
+    }
 
   getMinValue():string|undefined {
     return undefined;

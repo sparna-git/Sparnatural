@@ -1,13 +1,13 @@
 import { Config } from "../../ontologies/SparnaturalConfig";
-import { BlankNode, DataFactory, NamedNode } from 'rdf-data-factory';
+import { DataFactory } from 'rdf-data-factory';
 import { SH } from '../../../rdf/vocabularies/SH';
 import { SKOS } from '../../../rdf/vocabularies/SKOS';
 import { XSD } from '../../../rdf/vocabularies/XSD';
 import { GEOSPARQL } from "../../components/widgets/MapWidget";
 import { StoreModel } from "../../../rdf/StoreModel";
 import { StatisticsReader } from "../StatisticsReader";
-import { RDF } from "../BaseRDFReader";
 import { ISparnaturalSpecification } from "../ISparnaturalSpecification";
+import { RDF } from "../../../rdf/vocabularies/RDF";
 
 const factory = new DataFactory();
 
