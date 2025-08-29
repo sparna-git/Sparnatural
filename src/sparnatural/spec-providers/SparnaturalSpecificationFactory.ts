@@ -5,7 +5,7 @@ import { Catalog } from '../settings/Catalog';
 import { SH } from '../../rdf/vocabularies/SH';
 import { SHACLSpecificationProvider } from './shacl/SHACLSpecificationProvider';
 import { RDF } from '../../rdf/vocabularies/RDF';
-import { RdfStoreReader } from './RdfStoreReader';
+import { RdfStoreReader } from '../../rdf/RdfStoreReader';
 
 let DF = new DataFactory();
 

@@ -20,7 +20,7 @@ import { StatisticsReader } from '../StatisticsReader';
 import { SH } from '../../../rdf/vocabularies/SH';
 import { XSD } from '../../../rdf/vocabularies/XSD';
 import { RDF } from '../../../rdf/vocabularies/RDF';
-import { BaseRdfStoreWrapper } from '../BaseRdfStoreWrapper';
+import { BaseRdfStoreWrapper } from '../../../rdf/BaseRdfStoreWrapper';
 
 
 const factory = new DataFactory();

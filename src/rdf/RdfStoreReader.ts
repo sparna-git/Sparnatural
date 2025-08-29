@@ -3,7 +3,7 @@ import rdfParser from "rdf-parse";
 var Readable = require('stream').Readable
 import { RdfStore } from 'rdf-stores';
 import { Quad, Stream } from "@rdfjs/types";
-import { StoreModel } from '../../rdf/StoreModel';
+import { StoreModel } from './StoreModel';
 
 const factory = new DataFactory();
 

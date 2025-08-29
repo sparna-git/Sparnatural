@@ -1,4 +1,4 @@
-import { BaseRdfStoreWrapper } from "../BaseRdfStoreWrapper";
+import { BaseRdfStoreWrapper } from "../../../rdf/BaseRdfStoreWrapper";
 import { ISpecificationEntry } from "../ISpecificationEntry";
 import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { RdfStore } from "rdf-stores";

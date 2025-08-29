@@ -1,6 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
 import { RdfStore } from 'rdf-stores';
-import { StoreModel } from '../../rdf/StoreModel';
+import { StoreModel } from './StoreModel';
 
 const factory = new DataFactory();
 
