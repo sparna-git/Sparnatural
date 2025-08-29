@@ -1,11 +1,11 @@
 import { DataFactory } from 'rdf-data-factory';
 import { RdfStore } from "rdf-stores";
-import { BaseRDFReader } from "./BaseRDFReader";
 import { OWLSpecificationProvider } from "./owl//OWLSpecificationProvider";
 import { Catalog } from '../settings/Catalog';
 import { SH } from '../../rdf/vocabularies/SH';
 import { SHACLSpecificationProvider } from './shacl/SHACLSpecificationProvider';
 import { RDF } from '../../rdf/vocabularies/RDF';
+import { RdfStoreReader } from './RdfStoreReader';
 
 let DF = new DataFactory();
 
@@ -14,7 +14,7 @@ export class SparnaturalSpecificationFactory {
   build(cfg:any, language:string, catalog:Catalog|undefined, callback:any) {
     if (cfg.includes("@prefix") || cfg.includes("<http")) {
       // inline Turtle
-      BaseRDFReader.buildStoreFromString(cfg, "https://sparnatural.eu", (theStore:RdfStore) => {
+      RdfStoreReader.buildStoreFromString(cfg, "https://sparnatural.eu", (theStore:RdfStore) => {
         if(theStore.asDataset().has(
           DF.quad(
             null,
@@ -52,7 +52,7 @@ export class SparnaturalSpecificationFactory {
         });
       }
 
-      BaseRDFReader.buildStore(configs, (theStore:RdfStore) => {
+      RdfStoreReader.buildStore(configs, (theStore:RdfStore) => {
         if(theStore.asDataset().has(
           DF.quad(
             null,

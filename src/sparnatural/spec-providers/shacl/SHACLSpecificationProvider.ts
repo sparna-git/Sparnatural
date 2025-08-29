@@ -6,7 +6,6 @@ import {
   SparqlParser,
   SparqlGenerator
 } from "sparqljs";
-import { BaseRDFReader } from "../BaseRDFReader";
 import { ISpecificationEntity } from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
@@ -21,11 +20,12 @@ import { StatisticsReader } from '../StatisticsReader';
 import { SH } from '../../../rdf/vocabularies/SH';
 import { XSD } from '../../../rdf/vocabularies/XSD';
 import { RDF } from '../../../rdf/vocabularies/RDF';
+import { BaseRdfStoreWrapper } from '../BaseRdfStoreWrapper';
 
 
 const factory = new DataFactory();
 
-export class SHACLSpecificationProvider extends BaseRDFReader implements ISparnaturalSpecification {
+export class SHACLSpecificationProvider extends BaseRdfStoreWrapper implements ISparnaturalSpecification {
 
   #parser: SparqlParser;
   #generator: SparqlGenerator;

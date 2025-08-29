@@ -1,4 +1,4 @@
-import { BaseRDFReader } from "../BaseRDFReader";
+import { BaseRdfStoreWrapper } from "../BaseRdfStoreWrapper";
 import { ISpecificationEntry } from "../ISpecificationEntry";
 import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { RdfStore } from "rdf-stores";
@@ -8,7 +8,7 @@ import { SH } from "../../../rdf/vocabularies/SH";
 
 const factory = new DataFactory();
 
-export abstract class SHACLSpecificationEntry extends BaseRDFReader implements ISpecificationEntry {
+export abstract class SHACLSpecificationEntry extends BaseRdfStoreWrapper implements ISpecificationEntry {
     uri:string;
     provider:SHACLSpecificationProvider;
 

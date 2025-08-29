@@ -27,6 +27,7 @@ export class ShaclGraph {
   constructor(n3store: RdfStore) {
     this.store = n3store;
     this.graph = new StoreModel(n3store);
+    
     // init SPARQL parser and generator once
     this.#parser = new Parser();
     this.#generator = new Generator();

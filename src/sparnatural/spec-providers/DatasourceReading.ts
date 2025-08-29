@@ -1,7 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
 import { Datasources } from "../ontologies/SparnaturalConfigDatasources";
 import { StoreModel } from '../../rdf/StoreModel';
-import { RDF } from '../../rdf/vocabularies/RDF';
 import { IDatasource } from './IDatasource';
 
 const factory = new DataFactory();
