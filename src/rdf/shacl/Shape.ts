@@ -10,7 +10,7 @@ import { DatatypeIfc, DatatypeRegistry } from "../Datatypes";
 import { DASH } from "../vocabularies/DASH";
 import { ListWidget, SearchWidgetIfc, SearchWidgetRegistry } from "./SearchWidgets";
 import { XSD } from "../vocabularies/XSD";
-import { DataFactory } from "rdf-data-factory";
+import { DataFactory, Literal } from "rdf-data-factory";
 // Note : pour éviter les dépendances cycliques, il ne faut pas importer NodeShape ici
 
 const factory = new DataFactory();
@@ -94,6 +94,13 @@ export class Shape {
      */
     getShOr():Resource[] {
       return this.graph.readAsList(this.resource, SH.OR).map(r => ResourceFactory.fromTerm(r));
+    }
+
+    /**
+     * @returns the pattern defined with sh:pattern, if any
+     */
+    getShPattern(): Literal | undefined{
+        return this.graph.readSingleProperty(this.resource, SH.PATTERN) as Literal;
     }
 
     /**
@@ -217,9 +224,15 @@ export class Shape {
       return ranges;
     }
 
+    static sort(items: Shape[], lang:string) {  
+      let comparator:ShapeOrderOrLabelComparator = new ShapeOrderOrLabelComparator(lang);
+      // sort according to order or label
+      items.sort(comparator.compare);
+      return items;
+    }
 }
 
-export class ShapeOrderOrLabelComparator {
+class ShapeOrderOrLabelComparator {
   lang:string;
 
   constructor(lang:string) {

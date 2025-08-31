@@ -25,6 +25,7 @@ export const SH = {
   OR: factory.namedNode(SH_NAMESPACE + "or") as NamedNode,
   ORDER: factory.namedNode(SH_NAMESPACE + "order") as NamedNode,
   PATH: factory.namedNode(SH_NAMESPACE + "path") as NamedNode,
+  PATTERN: factory.namedNode(SH_NAMESPACE + "pattern") as NamedNode,
   PROPERTY: factory.namedNode(SH_NAMESPACE + "property") as NamedNode,
   SELECT: factory.namedNode(SH_NAMESPACE + "select") as NamedNode,
   TARGET: factory.namedNode(SH_NAMESPACE + "target") as NamedNode,
