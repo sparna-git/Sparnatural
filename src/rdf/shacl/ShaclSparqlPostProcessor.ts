@@ -5,131 +5,33 @@ import {
   SparqlParser,
   SparqlGenerator
 } from "sparqljs";
-import { RdfStore } from "rdf-stores";
-import { Quad, Quad_Subject } from '@rdfjs/types/data-model';
-import { Term } from "@rdfjs/types";
-import { StoreModel } from '../../../rdf/StoreModel';
-import { SH } from '../../../rdf/vocabularies/SH';
-import { XSD } from '../../../rdf/vocabularies/XSD';
-import { RDF } from '../../../rdf/vocabularies/RDF';
+import { Quad } from '@rdfjs/types/data-model';
+import { SH } from '../vocabularies/SH';
+import { ShaclStoreModel } from './ShaclStoreModel';
+import { StoreModel } from '../StoreModel';
 
 
 const factory = new DataFactory();
 
-export class ShaclGraph {
+export class ShaclSparqlPostProcessor {
 
-  graph: StoreModel;
-  store: RdfStore;
-
+  shaclGraph: StoreModel;
   #parser: SparqlParser;
   #generator: SparqlGenerator;
 
-  constructor(n3store: RdfStore) {
-    this.store = n3store;
-    this.graph = new StoreModel(n3store);
-    
+  constructor(shaclStoreModel: StoreModel) {    
+    this.shaclGraph = shaclStoreModel;
+
     // init SPARQL parser and generator once
     this.#parser = new Parser();
     this.#generator = new Generator();
-    this.#skolemizeAnonymousPropertyShapes();
-  }
-
-  #skolemizeAnonymousPropertyShapes() {
-    // any subject of an sh:path...
-    const quadsArray = this.store.getQuads(
-      null,
-      SH.PROPERTY,
-      null,
-      null
-    );
-
-    let i=0;
-    for (const quad of quadsArray) {
-      var propertyShapeNode = quad.object;
-      if(propertyShapeNode.termType == "BlankNode") {
-        // 1. get the base URI pointing to this property shape
-        var nodeShape = quad.subject;
-        if(nodeShape.termType == "NamedNode") {
-          let uri = quad.subject.value;
-          
-          // 2. build a property shape URI from it
-          let propertyShapeUri = uri+"_"+i;
-          // 3. replace all triples where the blank node is subject
-          this.store.getQuads(
-            propertyShapeNode,
-            null,
-            null,
-            null
-          ).forEach(
-            q => {
-              this.store.removeQuad(q);
-              this.store.addQuad(factory.quad(factory.namedNode(propertyShapeUri), q.predicate, q.object, q.graph));
-            }
-          );
-          // 4. replace all triples where the blank node is object
-          this.store.getQuads(
-            null,
-            null,
-            propertyShapeNode,
-            null
-          ).forEach(
-            q => {
-              this.store.removeQuad(q);
-              this.store.addQuad(factory.quad(q.subject, q.predicate, factory.namedNode(propertyShapeUri), q.graph));
-            }
-          );
-        }
-      }
-      i++;
-    }
-  }
-
-  /**
-   * 
-   * @returns All the subjects of type sh:NodeShape
-   */
-  getAllNodeShapes(): string[] {
-    const quadsArray = this.store.getQuads(
-      null,
-      RDF.TYPE,
-      SH.NODE_SHAPE,
-      null
-    );
-
-    const itemsSet = new Set<string>();
-    for (const quad of quadsArray) {
-      var nodeShapeId = quad.subject.value;
-      itemsSet.add(nodeShapeId);
-    }
-
-    return Array.from(itemsSet);
-  }
-
-  /**
-   * 
-   * @returns All the languages used in sh:name properties
-   */
-  getLanguages(): string[] {
-    let languages = this.store
-      .getQuads(null, SH.NAME, null, null)
-      .map((quad: { object: any }) => quad.object.language);
-    // deduplicate the list of languages
-    return [...new Set(languages)];
-  }
-
-  /**
-   * @param node a NodeShape
-   * @returns true if the NodeShape is the subject of sh:deactivated true
-   */
-  isDeactivated(node:Term):boolean {
-    return this.graph.hasTriple(node as Quad_Subject, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN));
   }
 
 
   expandSparql(sparql: string, prefixes: { [key: string]: string; }): string {
     
     // for each sh:targetClass
-    this.store
+    this.shaclGraph.store
       .getQuads(null, SH.TARGET_CLASS, null, null)
       .forEach((quad: Quad) => {
         // find it with the full URI
@@ -141,13 +43,13 @@ export class ShaclGraph {
     // do nothing :-) their URI is already correct
 
     // for each sh:path
-    this.store
+    this.shaclGraph.store
       .getQuads(null, SH.PATH, null, null)
       .forEach((quad: Quad) => {
         try {
           // find it with the full URI
           var re = new RegExp("<" + quad.subject.value + ">", "g");
-          let sparqlReplacementString = new StoreModel(this.store).pathToSparql(quad.object);
+          let sparqlReplacementString = this.shaclGraph.pathToSparql(quad.object);
           sparql = sparql.replace(re, sparqlReplacementString);
         } catch (error) {
           console.error("Unsupported sh:path for "+quad.subject.value+" - review your configuration");
@@ -155,14 +57,14 @@ export class ShaclGraph {
       });
 
     // for each sh:target/sh:select ...
-    this.store
+    this.shaclGraph.store
       .getQuads(null, SH.TARGET, null, null)
       .forEach((q1: Quad) => {
 
         // get the subject URI that will be replaced
         let nodeShapeUri = q1.subject.value;
 
-        this.store
+        this.shaclGraph.store
         .getQuads(q1.object, SH.SELECT, null, null)
         .forEach((quad: Quad) => {          
           let sparqlTarget = quad.object.value;
@@ -223,39 +125,6 @@ export class ShaclGraph {
       query.prefixes[key] = prefixes[key];
     }
     return this.#generator.stringify(query);
-  }
-
-  /**
-   * @returns the NodeShape targeting the provided class, either implicitly or explicitly through sh:targetClass 
-   * @param c 
-   */
-  getNodeShapeTargetingClass(c:Quad_Subject):Term|null {
-    if(this.graph.hasTriple(c, RDF.TYPE, SH.NODE_SHAPE)) {
-      // class if also a NodeShape, return it directly
-      return c;
-    } else {
-      let shapes:Term[] = this.graph.findSubjectsWithPredicate(SH.TARGET_CLASS,c);
-      if(shapes.length > 0) {
-        if(shapes.length > 1) {
-          console.warn("Warning, found more than one NodeShape targeting class "+c.value);
-        }
-        return shapes[0];
-      }
-      return null;
-    }
-  }
-
-
-  getNodeShapesLocallyReferencedWithShNode():string[] {
-    const duplicatedNodeShapes = this.store.getQuads(
-      null,
-      SH.NODE,
-      null,
-      null
-    ).map(triple => triple.object.value);
-
-    let dedupNodeShapes = [...new Set(duplicatedNodeShapes)];
-    return dedupNodeShapes;
   }
 
 }

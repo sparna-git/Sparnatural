@@ -15,6 +15,8 @@ export const SH = {
   IRI: factory.namedNode(SH_NAMESPACE + "IRI") as NamedNode,
   LANGUAGE_IN: factory.namedNode(SH_NAMESPACE + "languageIn") as NamedNode,
   LITERAL: factory.namedNode(SH_NAMESPACE + "Literal") as NamedNode,
+  MAX_COUNT: factory.namedNode(SH_NAMESPACE + "maxCount") as NamedNode,
+  MIN_COUNT: factory.namedNode(SH_NAMESPACE + "minCount") as NamedNode,
   NAME: factory.namedNode(SH_NAMESPACE + "name") as NamedNode,
   NODE: factory.namedNode(SH_NAMESPACE + "node") as NamedNode,
   NODE_KIND: factory.namedNode(SH_NAMESPACE + "nodeKind") as NamedNode,

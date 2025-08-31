@@ -1,26 +1,23 @@
-import { DataFactory } from 'rdf-data-factory';
+import { DataFactory, NamedNode } from 'rdf-data-factory';
 import { RDF } from "../../../rdf/vocabularies/RDF";
 import { RDFS } from "../../../rdf/vocabularies/RDFS";
-import { DASH } from "../../../rdf/vocabularies/DASH";
-import { DCT } from "../../../rdf/vocabularies/DCT";
-import { FOAF } from "../../../rdf/vocabularies/FOAF";
-import { SCHEMA } from "../../../rdf/vocabularies/SCHEMA";
 import { SH } from "../../../rdf/vocabularies/SH";
-import { SKOS } from "../../../rdf/vocabularies/SKOS";
-import { VOLIPI } from "../../../rdf/vocabularies/VOLIPI";
 import { XSD } from "../../../rdf/vocabularies/XSD";
 import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
-import { Quad_Subject, Term } from "@rdfjs/types";
 import { StoreModel } from "../../../rdf/StoreModel";
 import { DagIfc, Dag } from "../../dag/Dag";
 import { ISpecificationEntity } from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
-import { ISparnaturalSpecification } from "../ISparnaturalSpecification";
-import { GEOSPARQL } from '../../components/widgets/MapWidget';
+import { NodeShape } from '../../../rdf/shacl/NodeShape';
+import { PropertyShape } from '../../../rdf/shacl/PropertyShape';
+import { GEOSPARQL } from '../../../rdf/vocabularies/GEOSPARQL';
+import { Term } from '@rdfjs/types';
+import { DatatypeRegistry } from '../../../rdf/Datatypes';
+import { Resource } from '../../../rdf/Resource';
 
 const factory = new DataFactory();
 
@@ -32,62 +29,11 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
 
 
     getLabel(): string {
-        // first try to read an rdfs:label
-        let label = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), RDFS.LABEL, this.lang)?.value;
-        
-        if(!label) {
-            // attempt to read it on the targetClass, if we have it
-            if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
-                let targetClass = this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
-                label = this.graph.readSinglePropertyInLang(targetClass as Term, RDFS.LABEL, this.lang)?.value;
-            }
-        }
-
-        if(!label) {
-            // attempt to read the local part of the targetClass URI
-            if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
-                let targetClass = this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
-                label = StoreModel.getLocalName(targetClass.value) as string;
-            }
-        }
-
-        if(!label) {
-            // default : read the local part of the URI
-            label = StoreModel.getLocalName(this.uri) as string;
-        }
-
-        return label;
+        return this.shape.getLabel(this.lang);
     }
 
     getTooltip(): string | undefined {
-        let tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), VOLIPI.MESSAGE, this.lang)?.value;
-        
-        if(!tooltip) {
-            // try with sh:description
-            tooltip = this.graph.readSinglePropertyInLang(factory.namedNode(this.uri), SH.DESCRIPTION, this.lang)?.value;
-        }
-
-        if(this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET_CLASS, null)) {
-            if(!tooltip) {
-                // try to read an rdfs:comment on the class itself
-                // note that we try to read the value even in case the target is a blank node, e.g. SPARQL target
-                tooltip = this.graph.readSinglePropertyInLang(
-                    this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS) as Term,  
-                    SKOS.DEFINITION, 
-                    this.lang)?.value;
-            }
-
-            if(!tooltip) {
-                // try to read an rdfs:comment on the class itself
-                // note that we try to read the value even in case the target is a blank node, e.g. SPARQL target
-                tooltip = this.graph.readSinglePropertyInLang(
-                    this.graph.readSingleProperty(factory.namedNode(this.uri), SH.TARGET_CLASS) as Term,  
-                    RDFS.COMMENT, 
-                    this.lang)?.value;
-            }
-        }
-
-        return tooltip;
+        return (this.shape as NodeShape).getTooltip(this.lang);
     }
 
 
@@ -239,23 +185,13 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
     getProperties(): string[] {
         var items: string[] = [];
 
-        // read all sh:property
-        let propShapes = 
-            this.graph.readProperty(factory.namedNode(this.uri), SH.PROPERTY)
-            .map(node => node.value);
-                
-        // add all properties from parents (either through sh:node or sh:targetClass/rdfs:subClassOf/^sh:targetClass)
-        let parents:string[] = this.getParents();
-        parents.forEach(p => {
-            let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);
-            propShapes.push(...parentEntity.getProperties());
-        });
+        let propertyShapes:PropertyShape[] = (this.shape as NodeShape).getProperties();
 
         // filter properties not to be shown
-        propShapes
+        propertyShapes
         .forEach(ps => {
-            if(SHACLSpecificationProperty.isSparnaturalSHACLSpecificationProperty(ps, this.store)) {
-                items.push(ps);
+            if(SHACLSpecificationProperty.isSparnaturalSHACLSpecificationProperty(ps.resource.value, this.store)) {
+                items.push(ps.resource.value);
             }
         });
 
@@ -272,12 +208,7 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
      * @returns true if sh:nodeKind = sh:Literal, or if sh:datatype is present, or if sh:languageIn is present
      */
     isLiteralEntity(): boolean {
-        var hasNodeKindLiteral = this.graph.hasTriple(factory.namedNode(this.uri), SH.NODE_KIND, SH.LITERAL);
-        var hasDatatype = this.graph.hasTriple(factory.namedNode(this.uri), SH.DATATYPE, null);
-        var hasLanguageIn = this.graph.hasTriple(factory.namedNode(this.uri), SH.LANGUAGE_IN, null);
-        var hasUniqueLang = this.graph.hasTriple(factory.namedNode(this.uri), SH.UNIQUE_LANG, null);
-
-        return hasNodeKindLiteral || hasDatatype || hasLanguageIn || hasUniqueLang;
+        return this.shape.isLiteral();
     }
 
     /**
@@ -294,329 +225,34 @@ export class SHACLSpecificationEntity extends SHACLSpecificationEntry implements
      * @returns a property labelled with dash:propertyRole = dash:LabelRole
      */
     getDefaultLabelProperty(): string | undefined {
-        var items: any[] = [];
-
-        // read all properties
-        let propShapes = this.graph.readProperty(factory.namedNode(this.uri), SH.PROPERTY);
-
-        propShapes.forEach(ps => {
-            if (this.store.getQuads(
-                ps,
-                DASH.PROPERTY_ROLE,
-                DASH.LABEL_ROLE,
-                null
-            ).length > 0) {
-                items.push(ps.value);
-            }
-        });
-
-        // nothing found, see if we can inherit it
-        if(items.length == 0) {
-            let parents = this.getParents();
-            parents.forEach(p => {
-                // if not found already, set it to the parent default label prop - otherwise keep the value we found
-                let parentEntity = new SHACLSpecificationEntity(p,this.provider, this.store, this.lang);   
-                let parentDefaultLabelProp = parentEntity.getDefaultLabelProperty();
-                // could be undefined or a string
-                if(parentDefaultLabelProp) {
-                    items.push(parentDefaultLabelProp);
-                };
-            });
-        } 
-        
-        if(items.length == 0) {
-            // nothing found, check for SKOS.PREF_LABEL, FOAF.NAME, SCHEMA.NAME, DCTERMS.TITLE, RDFS.LABEL
-            const PROPERTIES_TO_CHECK = [ SKOS.PREF_LABEL, FOAF.NAME, SCHEMA.NAME, DCT.TITLE, RDFS.LABEL ];
-                
-            for(let i=0; i<PROPERTIES_TO_CHECK.length; i++) {
-                let prop = PROPERTIES_TO_CHECK[i];
-                
-                propShapes.forEach(ps => {
-                    if (this.store.getQuads(
-                        ps,
-                        SH.PATH,
-                        prop,
-                        null
-                    ).length > 0) {
-                        items.push(ps.value);
-                    }
-                });
-
-                if(items.length > 0) {
-                    // break as soon as we find something
-                    break;
-                }
-            }
-        }
-        
-        if(items.length > 0) {
-            // return the first one found
-            return items[0]
-        } else {
-            return undefined;
-        }
-        
+        return (this.shape as NodeShape).getDefaultLabelProperty()?.resource.value;
     }
 
     getParents(): string[] {
-        
-        let parentsFromSuperClasses = this.#findShapesTargetingClassIn(this.getImmediateSuperClassesOfTargetClass());
-
-        if(parentsFromSuperClasses.length == 0) {
-            parentsFromSuperClasses = this.#findShapesTargetingClassIn(this.getSuperClassesOfTargetClass(2));
-        }
-        if(parentsFromSuperClasses.length == 0) {
-            parentsFromSuperClasses = this.#findShapesTargetingClassIn(this.getSuperClassesOfTargetClass(3));
-        }
-        if(parentsFromSuperClasses.length == 0) {
-            parentsFromSuperClasses = this.#findShapesTargetingClassIn(this.getSuperClassesOfTargetClass(4));
-        }
-        if(parentsFromSuperClasses.length == 0) {
-            parentsFromSuperClasses = this.#findShapesTargetingClassIn(this.getSuperClassesOfTargetClass(5));
-        }
-
-        // get the parents from sh:node
-        let parentsFromShNode = this.#getShNode();
-        
-        // concat parents from superclasses and from node - deduplicated
-        let parents = [...new Set([...parentsFromSuperClasses, ...parentsFromShNode])];
-        return parents
-            // and simply return the string value
-            .map(term => term.value);
-    }
-
-    #findShapesTargetingClassIn(classes: Term[]) {
-        // note : we exclude blank nodes
-        return classes.filter(term => term.termType == "NamedNode")
-        // we find the shape targeting this class - it can be the class itself
-        .map(term => {
-            if(this.graph.hasTriple(term as Quad_Subject, RDF.TYPE, RDFS.CLASS)) {
-                return term;
-            } else {
-                return this.graph.findSingleSubjectOf(SH.TARGET_CLASS, term);
-            }                
-        })
-        // remove those for which the shape was not found
-        .filter(term => (term != undefined));
+        return (this.shape as NodeShape).getParents().map(r => r.value);
     }
 
     getChildren(): string[] {
-        let cildrenFromSuperClasses = this.getSubClassesOfTargetClass()
-            // note : we exclude blank nodes
-            .filter(term => term.termType == "NamedNode")
-            // we find the shape targeting this class - it can be the class itself
-            .map(term => {
-                if(this.graph.hasTriple(term as Quad_Subject, RDF.TYPE, RDFS.CLASS)) {
-                    return term;
-                } else {
-                    return this.graph.findSingleSubjectOf(SH.TARGET_CLASS, term);
-                }                
-            })
-            // remove those for which the shape was not found
-            .filter(term => (term != undefined));
-
-        // get the children from sh:node
-        let childrenFromShNode = this.#getInverseOfShNodeForExplicitNodeShapes();
-        
-        // concat parents from superclasses and from node - deduplicated
-        let children = [...new Set([...cildrenFromSuperClasses, ...childrenFromShNode])];
-        return children
-            // and simply return the string value
-            .map(term => term.value);
-    }
-
-    /**
-     * @returns the recursive superclasses of the target class of this Shape (can be the shape itself)
-     */
-    getAllSuperClassesOfTargetClass(): Term[] {
-        // retrieve target classes
-        let targetClasses:Term[] = this.#getTargetClasses();
-        // then retrieve super classes of those classes
-        let superClasses:Term[] = [];
-        targetClasses.forEach(tc => {
-            let allSuperClasses = this.graph.readPropertyRec(tc, RDFS.SUBCLASS_OF);
-            superClasses.push(...allSuperClasses);
-        });
-        return superClasses;
-    }
-
-    /**
-     * @returns the immediate superclasses of the target class of this Shape (can be the shape itself)
-     */
-    getImmediateSuperClassesOfTargetClass(): Term[] {
-        return this.getSuperClassesOfTargetClass(1);
-    }
-
-    getSuperClassesOfTargetClass(level: number): Term[] {
-        // retrieve target classes
-        let targetClasses:Term[] = this.#getTargetClasses();
-        // then retrieve super classes of those classes
-        let superClasses:Term[] = [];
-        targetClasses.forEach(tc => {
-            let currentSuperClasses = this.#getSuperClassesAtLevel(tc, level);
-            superClasses.push(...currentSuperClasses);
-        });
-        return superClasses;
-    }
-
-    /**
-     * @returns the immediate subclasses of the target class of this Shape (can be the shape itself)
-     */
-    getSubClassesOfTargetClass(): Term[] {
-        // retrieve target classes
-        let targetClasses:Term[] = this.#getTargetClasses();
-        // then retrieve sub classes of those classes
-        let subClasses:Term[] = [];
-        targetClasses.forEach(tc => {
-            let currentSubClasses = this.graph.findSubjectsOf(RDFS.SUBCLASS_OF, tc)
-            subClasses.push(...currentSubClasses);
-        });
-        return subClasses;
-    }
-
-    /**
-     * @returns all super classes, recursively, of the provided classes. This is currently not used.
-     */
-    #getSuperClassesRec(classNode:Term): Term[] {
-        var items: Term[] = [];
-        let superClasses = this.graph.readProperty(classNode, RDFS.SUBCLASS_OF);
-        items.push(...superClasses);
-        superClasses.forEach(sc => {
-            items.push(...this.#getSuperClassesRec(sc));
-        });
-        return items;
-    }
-
-    /**
-     * @returns the superClasses of the provided class, at a certain level
-     */
-    #getSuperClassesAtLevel(classNode:Term, level:number): Term[] {
-        if(level < 1) {
-            return null;
-        }
-        var items: Term[] = [];
-        let superClasses = this.graph.readProperty(classNode, RDFS.SUBCLASS_OF);
-        items.push(...superClasses);
-        if(level == 1) {
-            return items;
-        } else {
-            var result: Term[] = [];
-            items.forEach(i => result.push(...this.#getSuperClassesAtLevel(i, (level-1))));
-            return result;
-        }
-    }
-
-    /**
-     * @returns the NodeShape IRI that are referenced from this one with sh:node - this is like subClassOf
-     */
-    #getShNode(): Term[] {
-        return this.graph.readProperty(factory.namedNode(this.uri), SH.NODE);
-    }
-
-    /**
-     * @returns the NodeShapes IRI that reference this one with sh:node
-     */
-    #getInverseOfShNodeForExplicitNodeShapes(): Term[] {
-        let subjects:Quad_Subject[] = this.graph.findSubjectsOf(SH.NODE, factory.namedNode(this.uri));
-        // keep only the sh:node references from NodeShapes, not property shapes or sh:or on property shapes
-        // there could be more precise ways of doing this
-        return subjects.filter(term => 
-            term.termType == "NamedNode"
-            &&
-            this.graph.hasTriple(term, RDF.TYPE, SH.NODE_SHAPE)
-        )
-
-    }
-
-    isRangeOf(n3store:RdfStore, shapeUri:any) {
-       return (SHACLSpecificationProperty.readShClassAndShNodeOn(n3store, shapeUri).indexOf(this.uri) > -1);
-    }
-
-    /**
-     * @returns all targeted classes, either implicitly or explicitly through sh:targetClass
-     */
-    #getTargetClasses():Term[] {
-        if(this.#isNodeShapeAndClass()) {
-            return [factory.namedNode(this.uri)];
-        } else {
-            return this.getShTargetClass();
-        }
-    }
-
-    /**
-     * @returns true if this entity is both a NodeShape and a Class
-     */
-    #isNodeShapeAndClass():boolean {
-        return (
-            this.graph.hasTriple(factory.namedNode(this.uri), RDF.TYPE, RDFS.CLASS)
-            &&
-            this.graph.hasTriple(factory.namedNode(this.uri), RDF.TYPE, SH.NODE_SHAPE)
-        );
+        return (this.shape as NodeShape).getChildren().map(r => r.value);
     }
 
     /**
      * @returns all values of sh:targetClass on this entity, as RDF Terms
      */
     getShTargetClass():Term[] {
-        return this.graph.readProperty(factory.namedNode(this.uri), SH.TARGET_CLASS);
+        return (this.shape as NodeShape).getShTargetClass();
     }
 
     /**
      * @returns true if this shape as an sh:target predicate (indicating it is associated to a SPARQL query target)
      */
     hasShTarget():boolean {
-        return this.graph.hasTriple(factory.namedNode(this.uri), SH.TARGET, null);
+        return (this.shape as NodeShape).getShTarget()?.length > 0;
     }
 
     couldBeSkosConcept():boolean {
-        return SHACLSpecificationEntity.couldBeSkosConcept(this.uri, this.provider);
+        return (this.shape as NodeShape).couldBeSkosConcept();
     }
-
-    static couldBeSkosConcept(nodeShapeUri:string, config:ISparnaturalSpecification):boolean {
-        let specEntity:SHACLSpecificationEntity = config.getEntity(nodeShapeUri) as SHACLSpecificationEntity;
-        if(specEntity) {
-            let isItselfSkosConcept:boolean = (nodeShapeUri == SKOS.CONCEPT.value);
-            let targetsSkosConcept:boolean = (specEntity.getShTargetClass().findIndex(t => t.value == SKOS.CONCEPT.value) > -1);
-
-            // read all sh:property, including sh:deactivated, ones with sh:hasValue, etc.
-            let propShapes = specEntity.graph.readProperty(factory.namedNode(nodeShapeUri), SH.PROPERTY).map(node => node.value);
-
-            let hasPropertyRdfTypeSkosConcept:boolean = propShapes.findIndex(p => {
-                let propertyShape:SHACLSpecificationProperty = config.getProperty(p) as SHACLSpecificationProperty;
-                let path = propertyShape.getShPath();
-                if(
-                    path
-                    &&
-                    (path.value === RDF.TYPE.value)
-                    &&
-                    specEntity.graph.hasTriple(factory.namedNode(p), SH.HAS_VALUE, SKOS.CONCEPT)
-                ) {
-                    return true;
-                }
-
-                return false;
-            }) > -1;
-
-            let hasConstraintOnSkosInScheme = propShapes.findIndex(p => {
-                let propertyShape:SHACLSpecificationProperty = config.getProperty(p) as SHACLSpecificationProperty;
-                let path = propertyShape.getShPath();
-                if(
-                    path
-                    &&
-                    (path.value === SKOS.IN_SCHEME.value)
-                    &&
-                    specEntity.graph.hasTriple(factory.namedNode(p), SH.HAS_VALUE, null)
-                ) {
-                    return true;
-                }
-
-                return false;
-            }) > -1;
-
-            return isItselfSkosConcept || targetsSkosConcept || hasPropertyRdfTypeSkosConcept || hasConstraintOnSkosInScheme;
-        }
-    }
-
 
     static compare(item1: SHACLSpecificationEntity, item2: SHACLSpecificationEntity) {
         return SHACLSpecificationEntry.compare(item1, item2);
@@ -741,13 +377,8 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "Date",
                 function(n3store:RdfStore, shapeUri:any):boolean {
                     let graph:StoreModel = new StoreModel(n3store);
-                    return (
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE) 
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DATE_TIME) 
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.GYEAR)
-                    );
+                    let dt = graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE) as NamedNode;
+                    return dt && DatatypeRegistry.asDatatype(dt).isDateDatatype();
                 }
             )
         )
@@ -805,33 +436,8 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "Number",
                 function(n3store:RdfStore, shapeUri:any):boolean {
                     let graph:StoreModel = new StoreModel(n3store);
-                    return (
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.BYTE)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DECIMAL)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.DOUBLE) 
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.FLOAT) 
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INT)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.INTEGER)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.LONG)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.NONNEGATIVE_INTEGER)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.SHORT)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.UNSIGNED_BYTE)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.UNSIGNED_INT)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.UNSIGNED_LONG)
-                        ||
-                        graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.UNSIGNED_SHORT)  
-                    );
+                    let dt = graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE) as NamedNode;
+                    return dt && DatatypeRegistry.asDatatype(dt).isNumberDatatype();
                 }
             )
         )

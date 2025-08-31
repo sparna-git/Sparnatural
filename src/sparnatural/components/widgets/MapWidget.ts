@@ -7,23 +7,12 @@ import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { SelectedVal } from "../SelectedVal";
-import { NamedNode } from '@rdfjs/types/data-model';
 import { I18n } from '../../settings/I18n';
 import { HTMLComponent } from '../HtmlComponent';
 import CriteriaGroup from '../builder-section/groupwrapper/criteriagroup/CriteriaGroup';
 
 
 const factory = new DataFactory();
-
-const GEOFUNCTIONS_NAMESPACE = 'http://www.opengis.net/def/function/geosparql/'
-export const GEOFUNCTIONS = {
-  WITHIN: factory.namedNode(GEOFUNCTIONS_NAMESPACE + 'sfWithin') as NamedNode
-}
-
-const GEOSPARQL_NAMESPACE = "http://www.opengis.net/ont/geosparql#"
-export const GEOSPARQL = {
-  WKT_LITERAL: factory.namedNode(GEOSPARQL_NAMESPACE + 'wktLiteral') as NamedNode
-}
 
 export class MapValue implements WidgetValue {
   value: {

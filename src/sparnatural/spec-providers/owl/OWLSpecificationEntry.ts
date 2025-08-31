@@ -4,13 +4,13 @@ import { Config } from "../../ontologies/SparnaturalConfig";
 import { DataFactory } from 'rdf-data-factory';
 import { RdfStore } from "rdf-stores";
 import { StoreModel } from "../../../rdf/StoreModel";
-import { BaseRdfStoreWrapper } from "../../../rdf/BaseRdfStoreWrapper";
+import { BaseRdfStore } from "../../../rdf/BaseRdfStore";
 import { RDFS } from "../../../rdf/vocabularies/RDFS";
 import { VOLIPI } from "../../../rdf/vocabularies/VOLIPI";
 
 const factory = new DataFactory();
 
-export class OWLSpecificationEntry extends BaseRdfStoreWrapper implements ISpecificationEntry {
+export class OWLSpecificationEntry extends BaseRdfStore implements ISpecificationEntry {
     uri:string;
     provider:OWLSpecificationProvider;
 

@@ -1,21 +1,23 @@
-import { BaseRdfStoreWrapper } from "../../../rdf/BaseRdfStoreWrapper";
+import { BaseRdfStore } from "../../../rdf/BaseRdfStore";
 import { ISpecificationEntry } from "../ISpecificationEntry";
 import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';
-import { VOLIPI } from "../../../rdf/vocabularies/VOLIPI";
-import { SH } from "../../../rdf/vocabularies/SH";
+import { Shape } from "../../../rdf/shacl/Shape";
+import { ShaclStoreModel, ShapeFactory } from "../../../rdf/shacl/ShaclStoreModel";
 
 const factory = new DataFactory();
 
-export abstract class SHACLSpecificationEntry extends BaseRdfStoreWrapper implements ISpecificationEntry {
+export abstract class SHACLSpecificationEntry extends BaseRdfStore implements ISpecificationEntry {
     uri:string;
     provider:SHACLSpecificationProvider;
+    shape:Shape;
 
     constructor(uri:string, provider: SHACLSpecificationProvider, n3store: RdfStore, lang: string) {
         super(n3store, lang);
         this.uri=uri;
         this.provider=provider;
+        this.shape = ShapeFactory.buildShape(factory.namedNode(uri), new ShaclStoreModel(this.store));
     }
 
     abstract getLabel():string;
@@ -29,24 +31,12 @@ export abstract class SHACLSpecificationEntry extends BaseRdfStoreWrapper implem
     }
 
     getColor(): string | undefined {
-      return this.graph.readSingleProperty(factory.namedNode(this.uri), VOLIPI.COLOR)?.value;
+      return this.shape.getColor();
     }
 
 
     getIcon(): string {
-      var faIcon = this.graph.readProperty(
-        factory.namedNode(this.uri),
-        VOLIPI.ICON_NAME
-      );
-      
-      if (faIcon.length > 0) {
-        return faIcon[0].value;
-      } else {
-        var icons = this.graph.readProperty(factory.namedNode(this.uri), VOLIPI.ICON);
-        if (icons.length > 0) {
-          return icons[0].value;
-        } 
-      }
+      return this.shape.getIcon();
     }
 
     /**
@@ -57,8 +47,7 @@ export abstract class SHACLSpecificationEntry extends BaseRdfStoreWrapper implem
     }
 
     getOrder(): string | undefined {
-        let order = this.graph.readSingleProperty(factory.namedNode(this.uri), SH.ORDER)?.value;
-        return order
+        return (this.shape.getOrder()? this.shape.getOrder().value : undefined);
     }
 
     static sort(items: SHACLSpecificationEntry[]) {  

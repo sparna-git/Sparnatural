@@ -25,10 +25,11 @@ import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpec
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { SearchRegexWidgetValue } from "../../components/widgets/SearchRegexWidget";
 import { DateTimePickerValue } from "../../components/widgets/timedatepickerwidget/TimeDatePickerWidget";
-import { GEOFUNCTIONS, GEOSPARQL, MapValue } from "../../components/widgets/MapWidget";
+import { MapValue } from "../../components/widgets/MapWidget";
 import { LatLng } from "leaflet";
 import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
 import { SHACLSpecificationEntity } from "../../spec-providers/shacl/SHACLSpecificationEntity";
+import { GEOFUNCTIONS, GEOSPARQL } from "../../../rdf/vocabularies/GEOSPARQL";
 
 const factory = new DataFactory();
 

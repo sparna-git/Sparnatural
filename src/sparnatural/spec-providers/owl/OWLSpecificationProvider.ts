@@ -14,7 +14,7 @@ import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad_Subject, Term } from '@rdfjs/types/data-model';
 import { Dag, DagIfc } from '../../dag/Dag';
-import { BaseRdfStoreWrapper } from '../../../rdf/BaseRdfStoreWrapper';
+import { BaseRdfStore } from '../../../rdf/BaseRdfStore';
 import { RDFS } from '../../../rdf/vocabularies/RDFS';
 
 const factory = new DataFactory();
@@ -27,7 +27,7 @@ export const OWL = {
   UNION_OF: factory.namedNode(OWL_NAMESPACE + "unionOf") as NamedNode
 };
 
-export class OWLSpecificationProvider extends BaseRdfStoreWrapper implements ISparnaturalSpecification {
+export class OWLSpecificationProvider extends BaseRdfStore implements ISparnaturalSpecification {
   #parser: SparqlParser;
   #generator: SparqlGenerator;
 

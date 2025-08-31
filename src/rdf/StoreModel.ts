@@ -5,11 +5,10 @@ import { SH } from "./vocabularies/SH";
 import { XSD } from "./vocabularies/XSD";
 import { RDF } from "./vocabularies/RDF";
 
-let DF = new DataFactory();
-
 export class StoreModel {
 
-    protected store: RdfStore;
+    public store: RdfStore;
+    protected factory = new DataFactory();
 
     constructor(n3store: RdfStore) {
         this.store = n3store;
@@ -17,7 +16,8 @@ export class StoreModel {
 
     public static getLocalName(uri:string):string{
         if(uri.includes('#')) return uri.split('#').pop() as string
-        return uri.split('/').pop() as string
+        if(uri.includes('/')) return uri.split('/').pop() as string
+        return uri;
     }
 
     /**
@@ -49,7 +49,7 @@ export class StoreModel {
     /**
      * Reads the given property on an entity, and returns the first value found, or undefined if not found
      **/
-    readSingleProperty(subject: Term, property: Term): Term | undefined {
+    readSingleProperty(subject: Term, property: Term): Quad_Object | undefined {
         var values = this.readProperty(subject, property);
         if (values.length > 0) {
             return values[0];
@@ -255,7 +255,7 @@ export class StoreModel {
         return bestLiteral;
     }
 
-        /**
+    /**
      * Render a list of RDFNode as a string, in plain text.
      * @param list The list of RDFNode to be displayed.
      * @return A comma-separated string.
@@ -323,47 +323,6 @@ export class StoreModel {
         } else {
             return node.value;
         }
-    }
-
-    /**
-     * Renders the provided SHACL property path as a SPARQL property path syntax, using prefixed URIs.
-     * @param path The SHACL property path to render in SPARQL.
-     * @param usePrefixes True to use prefixes, false to use full URIs.
-     * @return The rendered SPARQL property path.
-     */
-    pathToSparql(path: Term, usePrefixes: boolean = false): string {
-        if (path.termType === "NamedNode") {
-            if (usePrefixes) {
-                return StoreModel.getLocalName(path.value);
-            } else {
-                return `<${path.value}>`;
-            }
-        } else if (path.termType === "BlankNode") {
-            if (this.store.getQuads(path, RDF.FIRST, null, null).length > 0) {
-                // This is an RDF list, indicating a sequence path
-                const sequence: Term[] = this.readListContent(path);
-                return sequence.map(t => this.pathToSparql(t, usePrefixes)).join("/");
-            } else {
-                if (this.store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null).length > 0) {
-                    return this.pathToSparql(this.store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, usePrefixes) + "+";
-                }
-                if (this.store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
-                    return "^" + this.pathToSparql(this.store.getQuads(path, SH.INVERSE_PATH, null, null)[0].object, usePrefixes);
-                }
-                if (this.store.getQuads(path, SH.ALTERNATIVE_PATH, null, null).length > 0) {
-                    const list = this.store.getQuads(path, SH.ALTERNATIVE_PATH, null, null)[0].object;
-                    const sequence: Term[] = this.readListContent(list);
-                    return `(${sequence.map(t => this.pathToSparql(t, usePrefixes)).join("|")})`;
-                }
-                if (this.store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
-                    return this.pathToSparql(this.store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null)[0].object, usePrefixes) + "*";
-                }
-                if (this.store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
-                    return this.pathToSparql(this.store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null)[0].object, usePrefixes) + "?";
-                }
-            }
-        }
-        throw new Error("Unsupported SHACL property path");
     }
 
 }

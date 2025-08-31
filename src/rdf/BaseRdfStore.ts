@@ -4,7 +4,7 @@ import { StoreModel } from './StoreModel';
 
 const factory = new DataFactory();
 
-export class BaseRdfStoreWrapper {
+export class BaseRdfStore {
     protected lang: string;
     protected store: RdfStore;
     protected graph: StoreModel;

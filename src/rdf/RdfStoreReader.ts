@@ -3,24 +3,35 @@ import rdfParser from "rdf-parse";
 var Readable = require('stream').Readable
 import { RdfStore } from 'rdf-stores';
 import { Quad, Stream } from "@rdfjs/types";
-import { StoreModel } from './StoreModel';
 
 const factory = new DataFactory();
 
+/**
+ * Utility class to build an RDF store from files or strings
+ */
 export class RdfStoreReader {
  
 
+  /**
+   * @param configData the RDF content as a string
+   * @param filePath the file path to determine the format from
+   * @param callback 
+   * @returns a store built from the string
+   */
   static buildStoreFromString(configData:string, filePath:string, callback: any) {
     const store:RdfStore = RdfStore.createDefault();
-    console.log("Building store from string...");
     let quadStream: Stream<Quad> = RdfStoreReader.#toQuadStream(configData,filePath);
 
     store.import(quadStream)
-      .on('error', () => console.log("Problem parsing inline config"))
+      .on('error', () => console.error("Problem parsing inline config"))
       .once('end', () => callback(store));
   }
 
-
+  /**
+   * @param files array of file paths to load into the store
+   * @param callback 
+   * @returns a store built from the files
+   */
   static buildStore(files: Array<string>, callback: any) {
     // Create a new store with default settings
     // see https://www.npmjs.com/package/rdf-stores
@@ -28,7 +39,7 @@ export class RdfStoreReader {
 
     let promises = new Array<Promise<RdfStore>>();
     for(let config of files) {
-      console.log("Importing in store '" + config + "'");
+      console.log("Importing file in store : '" + config + "'");
 
       let p:Promise<RdfStore> = new Promise((resolve, reject) =>
         $.ajax({
@@ -45,7 +56,7 @@ export class RdfStoreReader {
 
         }).fail(function (response) {
           console.error(
-            "Sparnatural - unable to load RDF config file : " + config
+            "Unable to load file in store : " + config
           );
           reject();
         })
@@ -57,7 +68,7 @@ export class RdfStoreReader {
     // when all done, call callback
     Promise.all(promises).then((values) => {
       console.log(
-        "Specification store populated with " +
+        "Store populated with " +
           store.countQuads(
             null,
             null,
