@@ -15,11 +15,11 @@ const factory = new DataFactory();
 
 export class ShaclSparqlPostProcessor {
 
-  shaclGraph: StoreModel;
+  shaclGraph: ShaclStoreModel;
   #parser: SparqlParser;
   #generator: SparqlGenerator;
 
-  constructor(shaclStoreModel: StoreModel) {    
+  constructor(shaclStoreModel: ShaclStoreModel) {    
     this.shaclGraph = shaclStoreModel;
 
     // init SPARQL parser and generator once

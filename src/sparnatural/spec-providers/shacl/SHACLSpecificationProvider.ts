@@ -129,7 +129,7 @@ export class SHACLSpecificationProvider extends BaseRdfStore implements ISparnat
   }
 
   expandSparql(sparql: string, prefixes: { [key: string]: string; }): string {
-    let postProc:ShaclSparqlPostProcessor = new ShaclSparqlPostProcessor(new StoreModel(this.store));
+    let postProc:ShaclSparqlPostProcessor = new ShaclSparqlPostProcessor(new ShaclStoreModel(this.store));
     return postProc.expandSparql(sparql, prefixes);
   }
 

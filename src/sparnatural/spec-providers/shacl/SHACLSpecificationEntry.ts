@@ -31,12 +31,12 @@ export abstract class SHACLSpecificationEntry extends BaseRdfStore implements IS
     }
 
     getColor(): string | undefined {
-      return this.shape.getColor();
+      return this.shape.getVolipiColor();
     }
 
 
     getIcon(): string {
-      return this.shape.getIcon();
+      return this.shape.getVolipiIconName();
     }
 
     /**
@@ -47,7 +47,7 @@ export abstract class SHACLSpecificationEntry extends BaseRdfStore implements IS
     }
 
     getOrder(): string | undefined {
-        return (this.shape.getOrder()? this.shape.getOrder().value : undefined);
+        return (this.shape.getShOrder()? this.shape.getShOrder().value : undefined);
     }
 
     static sort(items: SHACLSpecificationEntry[]) {  

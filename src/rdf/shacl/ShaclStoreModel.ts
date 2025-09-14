@@ -292,7 +292,7 @@ export class ShaclStoreModel extends StoreModel {
         }
     }
 
-        /**
+    /**
      * Renders the provided SHACL property path as a SPARQL property path syntax, using prefixed URIs.
      * @param path The SHACL property path to render in SPARQL.
      * @param usePrefixes True to use prefixes, false to use full URIs.
