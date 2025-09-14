@@ -1,0 +1,3381 @@
+@prefix schema: <http://schema.org/> .
+@prefix volipi: <http://data.sparna.fr/ontologies/volipi#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix crmarch: <http://www.ics.forth.gr/isl/CRMarchaeo/> .
+@prefix frantiq: <https://ark.frantiq.fr/ark:/26678/> .
+@prefix example: <https://data.sparna.fr/shapes-example/> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix crmsci: <http://www.ics.forth.gr/isl/CRMsci/> .
+@prefix oash: <http://openarchaeo.huma-num.fr/federation/shapes/openarchaeo-shapes/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix crm: <http://www.cidoc-crm.org/cidoc-crm/> .
+@prefix wgs84: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix xls2rdf: <https://xls2rdf.sparna.fr/vocabulary#> .
+@prefix this: <https://data.example.com/ontologies/sparnatural-config/> .
+@prefix dbpedia: <http://dbpedia.org/ontology/> .
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix shacl-play: <https://shacl-play.sparna.fr/ontology#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix crmba: <http://www.ics.forth.gr/isl/CRMba/> .
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+
+<http://openarchaeo.huma-num.fr/federation/shapes/openarchaeo-shapes/> a owl:Ontology .
+
+oash:Site a sh:NodeShape;
+  sh:order 2;
+  volipi:icon "/openarchaeo_sparnatural/assets/icons/noir/site.png";
+  volipi:iconName "fa-solid fa-magnifying-glass-location";
+  sh:targetClass crm:E27_Site;
+  rdfs:label "Archeological site"@en, "Site archéologique"@fr;
+  sh:description "An archeological site on which a discovery or an excavation was made which found multiple entities"@en,
+    "Un site archéologique sur lequel une découverte ou une fouille a eu lieu et où diverses entités ont été trouvées"@fr;
+  sh:property oash:P9, oash:P10, oash:P11, oash:P12, oash:P13, oash:P14 .
+
+oash:EncounterEvent a sh:NodeShape;
+  sh:order 3;
+  volipi:iconName "fa-solid fa-flashlight";
+  sh:targetClass crmsci:S19_Encounter_Event;
+  rdfs:label "Excavation/Discovery"@en, "Fouille/Découverte"@fr;
+  sh:description "A documented excavation which took place on a specific place at a specific time, or a generic discovery of some entities"@en,
+    "Une fouille documenté ayant eu lieu à un certain endroit à un certain moment, ou une découverte générique d'entités"@fr;
+  sh:property oash:P16, oash:P17, oash:P18, oash:P19, oash:P20, oash:P21, oash:P22,
+    oash:P23, oash:P24 .
+
+oash:Person a sh:NodeShape;
+  sh:order 13;
+  volipi:iconName "fa-solid fa-head-side";
+  sh:targetClass crm:E21_Person;
+  rdfs:label "Person"@en, "Personne"@fr;
+  sh:description "A person whom carried out an excavation or the creation of a document"@en,
+    "Une personne qui a mené une fouille ou créé un document"@fr;
+  sh:property oash:P26, oash:P27, oash:P28 .
+
+oash:Group a sh:NodeShape;
+  sh:order 14;
+  volipi:iconName "fa-solid fa-user-group";
+  sh:targetClass crm:E74_Group;
+  rdfs:label "Group"@en, "Groupe"@fr;
+  sh:description "An organization/instition which have organized an excavation which a member carried out, or which has published a document"@en,
+    "Une institution/organisation ayant organisé une fouille dans laquelle le responsable de fouille était membre, ou ayant publié un document"@fr;
+  sh:property oash:P30, oash:P31, oash:P32, oash:P33 .
+
+oash:BuiltWork a sh:NodeShape;
+  sh:order 8;
+  volipi:iconName "fa-solid fa-home";
+  sh:targetClass crmba:B1_Built_Work;
+  rdfs:label "Archeological entities"@en, "Entité archéologique"@fr;
+  sh:description "An archaelogical entity found on a site during an excavation"@en,
+    "Une entité archéologique (bâti, structure) trouvé sur un site fouillé"@fr;
+  sh:property oash:P35, oash:P36, oash:P37, oash:P38, oash:P39, oash:P40, oash:P41,
+    oash:P42 .
+
+oash:HumanMadeFeature a sh:NodeShape;
+  sh:order 4;
+  volipi:iconName "fa-solid fa-person-digging";
+  sh:targetClass crm:E25_Human-Made_Feature;
+  rdfs:label "Feature"@en, "Fait"@fr;
+  sh:description "A feature which can be a wall, a burial or an archeological feature"@en,
+    "Un fait qui peut être un mur, une sépulture ou un fait archéologique"@fr;
+  sh:property oash:P44, oash:P45, oash:P46, oash:P47, oash:P48, oash:P49, oash:P50,
+    oash:P51, oash:P52, oash:P53 .
+
+oash:HumanMadeObject a sh:NodeShape;
+  sh:order 1;
+  volipi:icon "/openarchaeo_sparnaturaassets/icons/noir/mobilier.png";
+  volipi:iconName "fa-solid fa-mortar-pestle";
+  sh:targetClass crm:E22_Human-Made_Object;
+  rdfs:label "Artefact"@en, "Mobilier"@fr;
+  sh:description "An artefact found on a site or keyworded as a metadata on the site"@en,
+    "Un mobilier trouvé sur un site archéologique ou désigné comme métadonnée d'un site ou d'une fouille."@fr;
+  sh:property oash:P55, oash:P56, oash:P57, oash:P58, oash:P59, oash:P60, oash:P61,
+    oash:P62, oash:P63, oash:P64 .
+
+oash:StratigraphicVolumeUnit a sh:NodeShape;
+  sh:order 7;
+  volipi:iconName "fa-solid fa-layer-group";
+  sh:targetClass crmarch:A2_Stratigraphic_Volume_Unit;
+  rdfs:label "Stratigraphic Unit"@en, "Unité stratigraphique"@fr;
+  sh:description "A Stratigraphic Unit"@en;
+  sh:property oash:P66, oash:P67, oash:P68, oash:P69, oash:P70, oash:P71, oash:P72,
+    oash:P73, oash:P74 .
+
+oash:Document a sh:NodeShape;
+  sh:order 15;
+  volipi:iconName "fa-solid fa-file";
+  sh:targetClass crm:E31_Document;
+  rdfs:label "Document"@en, "Document"@fr;
+  sh:description "A document providing information on a site, on a excavation, on an artefact, a feature, etc…"@en,
+    "Un document renseignant un site, une fouille un mobilier, un fait archéologique ou une entité archéologique"@fr;
+  sh:property oash:P82, oash:P83, oash:P84, oash:P85 .
+
+oash:Wall a sh:NodeShape;
+  sh:order 4;
+  volipi:icon "/openarchaeo_sparnatural/assets/icons/noir/construction.png";
+  volipi:iconName "fa-solid fa-dungeon";
+  rdfs:label "Wall"@en, "Mur"@fr;
+  sh:description "A Wall found on a site or during an excavation, or keyworded as metadata of either"@en,
+    "Un mur trouvé sur un site ou durant une découverte, ou désigné comme métadonnée d'un site ou d'une fouille"@fr;
+  sh:node oash:HumanMadeFeature;
+  sh:target oash:Wall-target .
+
+oash:Wall-target sh:select """SELECT $this 
+WHERE { $this a <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/pcrtIxHmbVwDYW> }""" .
+
+oash:Burial a sh:NodeShape;
+  sh:order 5;
+  volipi:icon "/openarchaeo_sparnatural/assets/icons/noir/sepulture.png";
+  volipi:iconName "fa-solid fa-skull-crossbones";
+  rdfs:label "Burial"@en, "Sépulture"@fr;
+  sh:description "A Burial found on a site or during an excavation, or keyworded as metadata of either"@en,
+    "Une sépulture trouvée sur un site ou durant une découverte, ou désignée comme métadonnée d'un site ou d'une fouille"@fr;
+  sh:node oash:HumanMadeFeature;
+  sh:target oash:Burial-target .
+
+oash:Burial-target sh:select """SELECT $this 
+WHERE { $this a <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/pcrt795b632nWw> }""" .
+
+oash:Feature a sh:NodeShape;
+  sh:order 6;
+  volipi:icon "/openarchaeo_sparnatural/assets/icons/noir/fait.png";
+  volipi:iconName "fa-solid fa-person-digging";
+  rdfs:label "Archaeological feature"@en, "Fait archéologique"@fr;
+  sh:description "An Archeological feature found on a site or during an excavation, or keyworded as metadata of either"@en,
+    "Un fait archéologique trouvé sur un site ou durant une découverte, ou désigné comme métadonnée d'un site ou d'une fouille"@fr;
+  sh:node oash:HumanMadeFeature;
+  sh:target oash:Feature-target .
+
+oash:Feature-target sh:select """SELECT $this 
+WHERE { $this a <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/crtyuEo4S4GyD> }""" .
+
+oash:Natural a sh:NodeShape;
+  sh:order 6;
+  volipi:iconName "fa-solid fa-leaf";
+  sh:targetClass crm:E20_Biological_Object;
+  rdfs:label "Biological object"@en, "Objet naturel"@fr;
+  sh:description "An object found on a site or during an excavation, which was not human-made, but might have been used or brought by human"@en,
+    "Un objet, trouvé sur un site ou durant une fouille, qui n'a pas été influencé par l'homme et qui est naturel."@fr .
+
+oash:P24 sh:path skos:prefLabel;
+  sh:description "The skos:prefLabel on an Excavation/a Discovery MUST ALWAYS exists and be unique ."@en,
+    "Le skos:prefLabel d'une Fouille/Découverte DOIT TOUJOURS exister et être unique ."@fr;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal .
+
+
+
+
+oash:Place sh:property oash:P93, oash:P94, oash:P95 .
+
+
+
+oash:Type sh:property oash:P97, oash:P99, oash:P100 .
+
+
+oash:Material sh:property oash:P98, oash:P101 .
+
+
+oash:Label sh:property oash:P103, oash:P104 .
+
+oash:P104 sh:path dcterms:source;
+  sh:description "A Label MUST ALWAYS have the source (the dataset) of the literal form."@en,
+    "Un Label DOIT TOUJOURS avoir la source (l'ensemble de données) de la forme littérale."@fr;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal .
+
+oash:P106 sh:path wgs84:lat;
+  sh:description "A Position CAN have a latitude, or MUST have a latitude if no geographic polygon exists for the Position."@en,
+    "Une Position PEUT avoir une latitude ou DOIT avoir une latitude si aucun polygone géographique n'existe pour la Position"@fr;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:decimal .
+
+oash:Space sh:property oash:P106, oash:P107, oash:P108, oash:P109 .
+
+
+oash:Natural sh:property oash:P111, oash:P112, oash:P113, oash:P114, oash:P115, oash:P116,
+    oash:P117, oash:P118, oash:P119, oash:P120 .
+
+
+
+oash:P122 sh:path crm:P101_had_as_general_use;
+  sh:name "had as general use"@en, "avait comme utilité"@fr;
+  sh:description "Precise the kind of wall researched"@en, "Précise le type de mur recherché"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:Wall sh:property oash:P122 .
+
+oash:P124 sh:path crm:P101_had_as_general_use;
+  sh:name "had as general use"@en, "avait comme utilité"@fr;
+  sh:description "Precise the kind of burial researched"@en, "Précise le type de sépulture recherché"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:Burial sh:property oash:P124 .
+
+oash:P126 sh:path crm:P101_had_as_general_use;
+  sh:name "had as general use"@en, "avait comme utilité"@fr;
+  sh:description "Precise the kind of archeological feature researched"@en, "Précise le type de fait archéologique recherché"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:Feature sh:property oash:P126 .
+
+oash:P128 sh:path crm:P2_has_type;
+  sh:name "has type"@en, "a pour type"@fr;
+  sh:description "The type of archeological site discovered or excavated"@en, "Le type de site archéologique découvert ou fouillé"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:Site sh:property oash:P128, oash:P129, oash:P130, oash:P131, oash:P132, oash:P133,
+    oash:P134, oash:P135, oash:P136, oash:P137, oash:P138, oash:P139, oash:P140, oash:P141,
+    oash:P142, oash:P143, oash:P144, oash:P145, oash:P146, oash:P147 .
+
+oash:P129 sh:path _:18c9bd0805834f90a6ab5c43db908150277;
+  sh:name "is documented in"@en, "est documenté par"@fr;
+  sh:description "A document in which the archeological site is described, analysed or contextualised"@en,
+    "Un document dans lequel le site archéologique est décrit, analysé et contextualisé."@fr;
+  sh:node oash:Document;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150277 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150278 .
+
+_:18c9bd0805834f90a6ab5c43db908150278 rdf:first crm:P70i_is_documented_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150279 .
+
+_:18c9bd0805834f90a6ab5c43db908150279 rdf:first _:18c9bd0805834f90a6ab5c43db908150280;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150280 sh:inversePath crm:P70_documents .
+
+oash:P130 sh:path _:18c9bd0805834f90a6ab5c43db908150281;
+  sh:name "has been discovered/excavated during"@en, "a été fouillé ou découvert durant"@fr;
+  sh:description "The excavations or discoveries made on the archeological site."@en,
+    "Les fouilles ou les découvertes ayant été réalisé sur le site archéologique."@fr;
+  sh:node oash:EncounterEvent;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150281 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150282 .
+
+_:18c9bd0805834f90a6ab5c43db908150282 rdf:first crm:P8_took_place_on_or_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150283 .
+
+_:18c9bd0805834f90a6ab5c43db908150283 rdf:first _:18c9bd0805834f90a6ab5c43db908150284;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150284 sh:inversePath crm:P8i_witnessed .
+
+oash:P131 sh:path _:18c9bd0805834f90a6ab5c43db908150285;
+  sh:name "has been discovered excavated by"@en, "a été fouillé ou découvert par"@fr;
+  sh:description "A person who excavated or discovered the archeological site"@en, "Une personne qui ont fouillé ou découvert un site archéologique"@fr;
+  sh:node oash:Person;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150285 rdf:first _:18c9bd0805834f90a6ab5c43db908150286;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150290 .
+
+_:18c9bd0805834f90a6ab5c43db908150286 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150287 .
+
+_:18c9bd0805834f90a6ab5c43db908150287 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150288 .
+
+_:18c9bd0805834f90a6ab5c43db908150288 rdf:first _:18c9bd0805834f90a6ab5c43db908150289;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150289 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150290 rdf:first _:18c9bd0805834f90a6ab5c43db908150291;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150291 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150292 .
+
+_:18c9bd0805834f90a6ab5c43db908150292 rdf:first crm:P14_carried_out_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150293 .
+
+_:18c9bd0805834f90a6ab5c43db908150293 rdf:first _:18c9bd0805834f90a6ab5c43db908150294;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150294 sh:inversePath crm:P14i_performed .
+
+oash:P132 sh:path _:18c9bd0805834f90a6ab5c43db908150295;
+  sh:name "has been discovered excavated by"@en, "a été fouillé ou découvert par"@fr;
+  sh:description "A group who excavated or discovered the archeological site"@en, "Un groupe qui ont fouillé ou découvert un site archéologique"@fr;
+  sh:node oash:Group;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150295 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150296 .
+
+_:18c9bd0805834f90a6ab5c43db908150296 rdf:first _:18c9bd0805834f90a6ab5c43db908150297;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150307 .
+
+_:18c9bd0805834f90a6ab5c43db908150297 rdf:first _:18c9bd0805834f90a6ab5c43db908150298;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150302 .
+
+_:18c9bd0805834f90a6ab5c43db908150298 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150299 .
+
+_:18c9bd0805834f90a6ab5c43db908150299 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150300 .
+
+_:18c9bd0805834f90a6ab5c43db908150300 rdf:first _:18c9bd0805834f90a6ab5c43db908150301;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150301 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150302 rdf:first _:18c9bd0805834f90a6ab5c43db908150303;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150303 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150304 .
+
+_:18c9bd0805834f90a6ab5c43db908150304 rdf:first crm:P14_carried_out_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150305 .
+
+_:18c9bd0805834f90a6ab5c43db908150305 rdf:first _:18c9bd0805834f90a6ab5c43db908150306;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150306 sh:inversePath crm:P14i_performed .
+
+_:18c9bd0805834f90a6ab5c43db908150307 rdf:first _:18c9bd0805834f90a6ab5c43db908150308;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150308 rdf:first _:18c9bd0805834f90a6ab5c43db908150309;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150313 .
+
+_:18c9bd0805834f90a6ab5c43db908150309 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150310 .
+
+_:18c9bd0805834f90a6ab5c43db908150310 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150311 .
+
+_:18c9bd0805834f90a6ab5c43db908150311 rdf:first _:18c9bd0805834f90a6ab5c43db908150312;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150312 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150313 rdf:first _:18c9bd0805834f90a6ab5c43db908150314;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150318 .
+
+_:18c9bd0805834f90a6ab5c43db908150314 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150315 .
+
+_:18c9bd0805834f90a6ab5c43db908150315 rdf:first crm:P14_carried_out_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150316 .
+
+_:18c9bd0805834f90a6ab5c43db908150316 rdf:first _:18c9bd0805834f90a6ab5c43db908150317;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150317 sh:inversePath crm:P14i_performed .
+
+_:18c9bd0805834f90a6ab5c43db908150318 rdf:first _:18c9bd0805834f90a6ab5c43db908150319;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150319 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150320 .
+
+_:18c9bd0805834f90a6ab5c43db908150320 rdf:first crm:P107i_is_current_or_former_member_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150321 .
+
+_:18c9bd0805834f90a6ab5c43db908150321 rdf:first _:18c9bd0805834f90a6ab5c43db908150322;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150322 sh:inversePath crm:P107_has_former_or_current_member .
+
+oash:P133 sh:path crm:P3_has_note;
+  sh:name "note"@en, "note"@fr;
+  sh:description "The comments made on the archeological site"@en, "Les commentaires faits sur le site archéologique"@fr;
+  sh:nodeKind sh:Literal .
+
+oash:P134 sh:path skos:prefLabel;
+  sh:name "has as name"@en, "a pour nom"@fr;
+  sh:description "The label given to the archeological site"@en, "Le label donné par le site archéologique"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:P135 sh:path crm:P48_has_preferred_identifier;
+  sh:name "has as identifier"@en, "a pour identifiant"@fr;
+  sh:description "The identifier given to the archeological site"@en, "L'identifiant donné à un site archéologique"@fr;
+  sh:node oash:PreferredIdentifier;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P136 sh:path _:18c9bd0805834f90a6ab5c43db908150323;
+  sh:name "is located at"@en, "est localisé à"@fr;
+  sh:node oash:Place;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:place_autocomplete;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150323 rdf:first _:18c9bd0805834f90a6ab5c43db908150324;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150328 .
+
+_:18c9bd0805834f90a6ab5c43db908150324 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150325 .
+
+_:18c9bd0805834f90a6ab5c43db908150325 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150326 .
+
+_:18c9bd0805834f90a6ab5c43db908150326 rdf:first _:18c9bd0805834f90a6ab5c43db908150327;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150327 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150328 rdf:first crm:P7_took_place_at;
+  rdf:rest rdf:nil .
+
+oash:P137 sh:path _:18c9bd0805834f90a6ab5c43db908150329;
+  sh:name "is positionned at"@en, "est positionné dans"@fr;
+  sh:node oash:Position;
+  dash:searchWidget core:MapProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150329 rdf:first _:18c9bd0805834f90a6ab5c43db908150330;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150334 .
+
+_:18c9bd0805834f90a6ab5c43db908150330 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150331 .
+
+_:18c9bd0805834f90a6ab5c43db908150331 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150332 .
+
+_:18c9bd0805834f90a6ab5c43db908150332 rdf:first _:18c9bd0805834f90a6ab5c43db908150333;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150333 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150334 rdf:first crm:P7_took_place_at;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150335 .
+
+_:18c9bd0805834f90a6ab5c43db908150335 rdf:first crm:P171_at_some_place_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150336 .
+
+_:18c9bd0805834f90a6ab5c43db908150336 rdf:first geo:asWKT;
+  rdf:rest rdf:nil .
+
+oash:P138 sh:path _:18c9bd0805834f90a6ab5c43db908150337;
+  sh:name "has contained"@en, "a contenu"@fr;
+  sh:description "Various entities were present on the archaelogical site when he was discovered or excavated."@en,
+    "Une variété d'entité était présent sur le site archéologique lorsqu'il a été découvert ou fouillé."@fr;
+  sh:node oash:StratigraphicVolumeUnit;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150337 rdf:first _:18c9bd0805834f90a6ab5c43db908150338;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150342 .
+
+_:18c9bd0805834f90a6ab5c43db908150338 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150339 .
+
+_:18c9bd0805834f90a6ab5c43db908150339 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150340 .
+
+_:18c9bd0805834f90a6ab5c43db908150340 rdf:first _:18c9bd0805834f90a6ab5c43db908150341;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150341 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150342 rdf:first _:18c9bd0805834f90a6ab5c43db908150343;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150343 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150344 .
+
+_:18c9bd0805834f90a6ab5c43db908150344 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150345 .
+
+_:18c9bd0805834f90a6ab5c43db908150345 rdf:first _:18c9bd0805834f90a6ab5c43db908150346;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150346 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P139 sh:path _:18c9bd0805834f90a6ab5c43db908150347;
+  sh:name "has contained"@en, "a contenu"@fr;
+  sh:description "Various entities were present on the archaelogical site when he was discovered or excavated."@en,
+    "Une variété d'entité était présent sur le site archéologique lorsqu'il a été découvert ou fouillé."@fr;
+  sh:node oash:HumanMadeObject;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150347 rdf:first _:18c9bd0805834f90a6ab5c43db908150348;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150352 .
+
+_:18c9bd0805834f90a6ab5c43db908150348 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150349 .
+
+_:18c9bd0805834f90a6ab5c43db908150349 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150350 .
+
+_:18c9bd0805834f90a6ab5c43db908150350 rdf:first _:18c9bd0805834f90a6ab5c43db908150351;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150351 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150352 rdf:first _:18c9bd0805834f90a6ab5c43db908150353;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150353 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150354 .
+
+_:18c9bd0805834f90a6ab5c43db908150354 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150355 .
+
+_:18c9bd0805834f90a6ab5c43db908150355 rdf:first _:18c9bd0805834f90a6ab5c43db908150356;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150356 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P140 sh:path _:18c9bd0805834f90a6ab5c43db908150357;
+  sh:name "has contained"@en, "a contenu"@fr;
+  sh:description "Various entities were present on the archaelogical site when he was discovered or excavated."@en,
+    "Une variété d'entité était présent sur le site archéologique lorsqu'il a été découvert ou fouillé."@fr;
+  sh:node oash:BuiltWork;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150357 rdf:first _:18c9bd0805834f90a6ab5c43db908150358;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150362 .
+
+_:18c9bd0805834f90a6ab5c43db908150358 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150359 .
+
+_:18c9bd0805834f90a6ab5c43db908150359 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150360 .
+
+_:18c9bd0805834f90a6ab5c43db908150360 rdf:first _:18c9bd0805834f90a6ab5c43db908150361;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150361 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150362 rdf:first _:18c9bd0805834f90a6ab5c43db908150363;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150363 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150364 .
+
+_:18c9bd0805834f90a6ab5c43db908150364 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150365 .
+
+_:18c9bd0805834f90a6ab5c43db908150365 rdf:first _:18c9bd0805834f90a6ab5c43db908150366;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150366 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P141 sh:path _:18c9bd0805834f90a6ab5c43db908150367;
+  sh:name "has contained"@en, "a contenu"@fr;
+  sh:description "Various entities were present on the archaelogical site when he was discovered or excavated."@en,
+    "Une variété d'entité était présent sur le site archéologique lorsqu'il a été découvert ou fouillé."@fr;
+  sh:node oash:Burial;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Burial_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150367 rdf:first _:18c9bd0805834f90a6ab5c43db908150368;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150372 .
+
+_:18c9bd0805834f90a6ab5c43db908150368 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150369 .
+
+_:18c9bd0805834f90a6ab5c43db908150369 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150370 .
+
+_:18c9bd0805834f90a6ab5c43db908150370 rdf:first _:18c9bd0805834f90a6ab5c43db908150371;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150371 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150372 rdf:first _:18c9bd0805834f90a6ab5c43db908150373;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150373 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150374 .
+
+_:18c9bd0805834f90a6ab5c43db908150374 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150375 .
+
+_:18c9bd0805834f90a6ab5c43db908150375 rdf:first _:18c9bd0805834f90a6ab5c43db908150376;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150376 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P142 sh:path _:18c9bd0805834f90a6ab5c43db908150377;
+  sh:name "has contained"@en, "a contenu"@fr;
+  sh:description "Various entities were present on the archaelogical site when he was discovered or excavated."@en,
+    "Une variété d'entité était présent sur le site archéologique lorsqu'il a été découvert ou fouillé."@fr;
+  sh:node oash:Wall;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Wall_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150377 rdf:first _:18c9bd0805834f90a6ab5c43db908150378;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150382 .
+
+_:18c9bd0805834f90a6ab5c43db908150378 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150379 .
+
+_:18c9bd0805834f90a6ab5c43db908150379 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150380 .
+
+_:18c9bd0805834f90a6ab5c43db908150380 rdf:first _:18c9bd0805834f90a6ab5c43db908150381;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150381 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150382 rdf:first _:18c9bd0805834f90a6ab5c43db908150383;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150383 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150384 .
+
+_:18c9bd0805834f90a6ab5c43db908150384 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150385 .
+
+_:18c9bd0805834f90a6ab5c43db908150385 rdf:first _:18c9bd0805834f90a6ab5c43db908150386;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150386 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P143 sh:path _:18c9bd0805834f90a6ab5c43db908150387;
+  sh:name "has contained"@en, "a contenu"@fr;
+  sh:description "Various entities were present on the archaelogical site when he was discovered or excavated."@en,
+    "Une variété d'entité était présent sur le site archéologique lorsqu'il a été découvert ou fouillé."@fr;
+  sh:node oash:Feature;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Feature_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150387 rdf:first _:18c9bd0805834f90a6ab5c43db908150388;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150392 .
+
+_:18c9bd0805834f90a6ab5c43db908150388 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150389 .
+
+_:18c9bd0805834f90a6ab5c43db908150389 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150390 .
+
+_:18c9bd0805834f90a6ab5c43db908150390 rdf:first _:18c9bd0805834f90a6ab5c43db908150391;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150391 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150392 rdf:first _:18c9bd0805834f90a6ab5c43db908150393;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150393 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150394 .
+
+_:18c9bd0805834f90a6ab5c43db908150394 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150395 .
+
+_:18c9bd0805834f90a6ab5c43db908150395 rdf:first _:18c9bd0805834f90a6ab5c43db908150396;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150396 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P144 sh:path _:18c9bd0805834f90a6ab5c43db908150397;
+  sh:name "has contained"@en, "a contenu"@fr;
+  sh:description "Various entities were present on the archaelogical site when he was discovered or excavated."@en,
+    "Une variété d'entité était présent sur le site archéologique lorsqu'il a été découvert ou fouillé."@fr;
+  sh:node oash:Natural;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Feature_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150397 rdf:first _:18c9bd0805834f90a6ab5c43db908150398;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150402 .
+
+_:18c9bd0805834f90a6ab5c43db908150398 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150399 .
+
+_:18c9bd0805834f90a6ab5c43db908150399 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150400 .
+
+_:18c9bd0805834f90a6ab5c43db908150400 rdf:first _:18c9bd0805834f90a6ab5c43db908150401;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150401 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150402 rdf:first _:18c9bd0805834f90a6ab5c43db908150403;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150403 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150404 .
+
+_:18c9bd0805834f90a6ab5c43db908150404 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150405 .
+
+_:18c9bd0805834f90a6ab5c43db908150405 rdf:first _:18c9bd0805834f90a6ab5c43db908150406;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150406 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P145 sh:path _:18c9bd0805834f90a6ab5c43db908150407;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150407 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150408 .
+
+_:18c9bd0805834f90a6ab5c43db908150408 rdf:first _:18c9bd0805834f90a6ab5c43db908150409;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150412 .
+
+_:18c9bd0805834f90a6ab5c43db908150409 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150410 .
+
+_:18c9bd0805834f90a6ab5c43db908150410 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150411 .
+
+_:18c9bd0805834f90a6ab5c43db908150411 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150412 rdf:first _:18c9bd0805834f90a6ab5c43db908150413;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150413 rdf:first _:18c9bd0805834f90a6ab5c43db908150414;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150415 .
+
+_:18c9bd0805834f90a6ab5c43db908150414 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150415 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150416 .
+
+_:18c9bd0805834f90a6ab5c43db908150416 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+oash:P146 sh:path _:18c9bd0805834f90a6ab5c43db908150417;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150417 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150418 .
+
+_:18c9bd0805834f90a6ab5c43db908150418 rdf:first _:18c9bd0805834f90a6ab5c43db908150419;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150422 .
+
+_:18c9bd0805834f90a6ab5c43db908150419 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150420 .
+
+_:18c9bd0805834f90a6ab5c43db908150420 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150421 .
+
+_:18c9bd0805834f90a6ab5c43db908150421 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150422 rdf:first _:18c9bd0805834f90a6ab5c43db908150423;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150423 rdf:first _:18c9bd0805834f90a6ab5c43db908150424;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150425 .
+
+_:18c9bd0805834f90a6ab5c43db908150424 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150425 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150426 .
+
+_:18c9bd0805834f90a6ab5c43db908150426 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+oash:P147 sh:path _:18c9bd0805834f90a6ab5c43db908150427;
+  sh:name "is dated"@en, "est daté"@fr;
+  sh:description "The datation of an archeological site"@en, "La datation d'un site archéologique"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime;
+  dash:searchWidget core:TimeProperty-Year;
+  core:beginDateProperty oash:P145;
+  core:endDateProperty oash:P146 .
+
+_:18c9bd0805834f90a6ab5c43db908150427 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150428 .
+
+_:18c9bd0805834f90a6ab5c43db908150428 rdf:first _:18c9bd0805834f90a6ab5c43db908150429;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150431 .
+
+_:18c9bd0805834f90a6ab5c43db908150429 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150430 .
+
+_:18c9bd0805834f90a6ab5c43db908150430 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150431 rdf:first _:18c9bd0805834f90a6ab5c43db908150432;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150432 rdf:first _:18c9bd0805834f90a6ab5c43db908150433;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150434 .
+
+_:18c9bd0805834f90a6ab5c43db908150433 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150434 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+oash:P149 sh:path _:18c9bd0805834f90a6ab5c43db908150435;
+  sh:name "has found"@en, "a trouvé"@fr;
+  sh:description "Entities found during an excavation or during a discovery."@en, "Entité(s) trouvée(s) lors d'une fouille ou une découverte."@fr;
+  sh:node oash:HumanMadeObject;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150435 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150436 .
+
+_:18c9bd0805834f90a6ab5c43db908150436 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150437 .
+
+_:18c9bd0805834f90a6ab5c43db908150437 rdf:first _:18c9bd0805834f90a6ab5c43db908150438;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150438 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:EncounterEvent sh:property oash:P149, oash:P150, oash:P151, oash:P152, oash:P153,
+    oash:P154, oash:P155, oash:P156, oash:P157, oash:P158, oash:P159, oash:P160, oash:P161,
+    oash:P162, oash:P163, oash:P164, oash:P165 .
+
+oash:P150 sh:path _:18c9bd0805834f90a6ab5c43db908150439;
+  sh:name "has found"@en, "a trouvé"@fr;
+  sh:description "Entities found during an excavation or during a discovery."@en, "Entité(s) trouvée(s) lors d'une fouille ou une découverte."@fr;
+  sh:node oash:Natural;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150439 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150440 .
+
+_:18c9bd0805834f90a6ab5c43db908150440 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150441 .
+
+_:18c9bd0805834f90a6ab5c43db908150441 rdf:first _:18c9bd0805834f90a6ab5c43db908150442;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150442 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P151 sh:path _:18c9bd0805834f90a6ab5c43db908150443;
+  sh:name "has found"@en, "a trouvé"@fr;
+  sh:description "Entities found during an excavation or during a discovery."@en, "Entité(s) trouvée(s) lors d'une fouille ou une découverte."@fr;
+  sh:node oash:HumanMadeObject;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150443 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150444 .
+
+_:18c9bd0805834f90a6ab5c43db908150444 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150445 .
+
+_:18c9bd0805834f90a6ab5c43db908150445 rdf:first _:18c9bd0805834f90a6ab5c43db908150446;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150446 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P152 sh:path _:18c9bd0805834f90a6ab5c43db908150447;
+  sh:name "has found"@en, "a trouvé"@fr;
+  sh:description "Entities found during an excavation or during a discovery."@en, "Entité(s) trouvée(s) lors d'une fouille ou une découverte."@fr;
+  sh:node oash:BuiltWork;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150447 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150448 .
+
+_:18c9bd0805834f90a6ab5c43db908150448 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150449 .
+
+_:18c9bd0805834f90a6ab5c43db908150449 rdf:first _:18c9bd0805834f90a6ab5c43db908150450;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150450 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P153 sh:path _:18c9bd0805834f90a6ab5c43db908150451;
+  sh:name "has found"@en, "a trouvé"@fr;
+  sh:description "Entities found during an excavation or during a discovery."@en, "Entité(s) trouvée(s) lors d'une fouille ou une découverte."@fr;
+  sh:node oash:Burial;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150451 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150452 .
+
+_:18c9bd0805834f90a6ab5c43db908150452 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150453 .
+
+_:18c9bd0805834f90a6ab5c43db908150453 rdf:first _:18c9bd0805834f90a6ab5c43db908150454;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150454 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P154 sh:path _:18c9bd0805834f90a6ab5c43db908150455;
+  sh:name "has found"@en, "a trouvé"@fr;
+  sh:description "Entities found during an excavation or during a discovery."@en, "Entité(s) trouvée(s) lors d'une fouille ou une découverte."@fr;
+  sh:node oash:Wall;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150455 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150456 .
+
+_:18c9bd0805834f90a6ab5c43db908150456 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150457 .
+
+_:18c9bd0805834f90a6ab5c43db908150457 rdf:first _:18c9bd0805834f90a6ab5c43db908150458;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150458 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P155 sh:path _:18c9bd0805834f90a6ab5c43db908150459;
+  sh:name "has found"@en, "a trouvé"@fr;
+  sh:description "Entities found during an excavation or during a discovery."@en, "Entité(s) trouvée(s) lors d'une fouille ou une découverte."@fr;
+  sh:node oash:Feature;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150459 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150460 .
+
+_:18c9bd0805834f90a6ab5c43db908150460 rdf:first crmsci:O19_has_found_object;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150461 .
+
+_:18c9bd0805834f90a6ab5c43db908150461 rdf:first _:18c9bd0805834f90a6ab5c43db908150462;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150462 sh:inversePath crmsci:O19i_was_object_found_by .
+
+oash:P156 sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:description "Name given to a dicovery or an excavation"@en, "Nom donné à une découverte ou une fouille"@fr;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:P157 sh:path crm:P2_has_type;
+  sh:name "is defined as"@en, "est défini comme"@fr;
+  sh:description "Type or method which defined the discovery or the excavation"@en,
+    "Type ou méthode associé à des découvertes ou des fouilles"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P158 sh:path _:18c9bd0805834f90a6ab5c43db908150463;
+  sh:name "lead by"@en, "menée par"@fr;
+  sh:description "Actor who leads the discovery or the excavation"@en, "Acteur qui a mené une fouille ou une découverte"@fr;
+  sh:node oash:Person;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150463 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150464 .
+
+_:18c9bd0805834f90a6ab5c43db908150464 rdf:first crm:P14_carried_out_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150465 .
+
+_:18c9bd0805834f90a6ab5c43db908150465 rdf:first _:18c9bd0805834f90a6ab5c43db908150466;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150466 sh:inversePath crm:P14i_performed .
+
+oash:P159 sh:path _:18c9bd0805834f90a6ab5c43db908150467;
+  sh:name "lead by"@en, "menée par"@fr;
+  sh:description "Actor who leads the discovery or the excavation"@en, "Acteur qui a mené une fouille ou une découverte"@fr;
+  sh:node oash:Person;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150467 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150468 .
+
+_:18c9bd0805834f90a6ab5c43db908150468 rdf:first _:18c9bd0805834f90a6ab5c43db908150469;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150473 .
+
+_:18c9bd0805834f90a6ab5c43db908150469 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150470 .
+
+_:18c9bd0805834f90a6ab5c43db908150470 rdf:first crm:P14_carried_out_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150471 .
+
+_:18c9bd0805834f90a6ab5c43db908150471 rdf:first _:18c9bd0805834f90a6ab5c43db908150472;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150472 sh:inversePath crm:P14i_performed .
+
+_:18c9bd0805834f90a6ab5c43db908150473 rdf:first _:18c9bd0805834f90a6ab5c43db908150474;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150474 rdf:first _:18c9bd0805834f90a6ab5c43db908150475;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150479 .
+
+_:18c9bd0805834f90a6ab5c43db908150475 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150476 .
+
+_:18c9bd0805834f90a6ab5c43db908150476 rdf:first crm:P14_carried_out_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150477 .
+
+_:18c9bd0805834f90a6ab5c43db908150477 rdf:first _:18c9bd0805834f90a6ab5c43db908150478;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150478 sh:inversePath crm:P14i_performed .
+
+_:18c9bd0805834f90a6ab5c43db908150479 rdf:first _:18c9bd0805834f90a6ab5c43db908150480;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150480 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150481 .
+
+_:18c9bd0805834f90a6ab5c43db908150481 rdf:first _:18c9bd0805834f90a6ab5c43db908150482;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150483 .
+
+_:18c9bd0805834f90a6ab5c43db908150482 sh:inversePath crm:P107_has_former_or_current_member .
+
+_:18c9bd0805834f90a6ab5c43db908150483 rdf:first crm:P107i_is_current_or_former_member_of;
+  rdf:rest rdf:nil .
+
+oash:P160 sh:path crm:P7_took_place_at;
+  sh:name "took place at"@en, "a eu lieu à"@fr;
+  sh:description "Place where the discovery or the excavation took place"@en, "Lieu sur lequel la découverte ou la fouille a eu lieue"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:node oash:Place;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:place_autocomplete;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P161 sh:path _:18c9bd0805834f90a6ab5c43db908150484;
+  sh:name "has excavated/discovered"@en, "a fouillé/découvert"@fr;
+  sh:description "Site which has been discovered or excavated"@en, "Le site qui a été découvert ou fouillé"@fr;
+  sh:node oash:Site;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150484 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150485 .
+
+_:18c9bd0805834f90a6ab5c43db908150485 rdf:first crm:P8_took_place_on_or_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150486 .
+
+_:18c9bd0805834f90a6ab5c43db908150486 rdf:first _:18c9bd0805834f90a6ab5c43db908150487;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150487 sh:inversePath crm:P8i_witnessed .
+
+oash:P162 sh:path _:18c9bd0805834f90a6ab5c43db908150488;
+  sh:name "is documented in"@en, "est documenté dans"@fr;
+  sh:description "Documentat describing the discovery or the excavation"@en, "Documentation décrivant des fouilles ou découvertes"@fr;
+  sh:node oash:Document;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150488 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150489 .
+
+_:18c9bd0805834f90a6ab5c43db908150489 rdf:first crm:P70i_is_documented_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150490 .
+
+_:18c9bd0805834f90a6ab5c43db908150490 rdf:first _:18c9bd0805834f90a6ab5c43db908150491;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150491 sh:inversePath crm:P70_documents .
+
+oash:P163 sh:path _:18c9bd0805834f90a6ab5c43db908150492;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150492 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150493 .
+
+_:18c9bd0805834f90a6ab5c43db908150493 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+oash:P164 sh:path _:18c9bd0805834f90a6ab5c43db908150494;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150494 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150495 .
+
+_:18c9bd0805834f90a6ab5c43db908150495 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+oash:P165 sh:path crm:P4_has_time-span;
+  sh:name "is dated"@en, "est daté"@fr;
+  sh:description "The datation of an excavation/a discovery"@en, "La datation d'une fouille/une découverte"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime;
+  dash:searchWidget core:TimeProperty-Year;
+  core:beginDateProperty oash:P163;
+  core:endDateProperty oash:P164 .
+
+oash:P167 sh:path skos:prefLabel;
+  sh:name "name"@en, "nom"@fr;
+  sh:description "The name of a person"@en, "Le nom d'une personne"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:Person sh:property oash:P167 .
+
+oash:P168 sh:path _:18c9bd0805834f90a6ab5c43db908150496 .
+
+_:18c9bd0805834f90a6ab5c43db908150496 rdf:first _:18c9bd0805834f90a6ab5c43db908150497 .
+
+_:18c9bd0805834f90a6ab5c43db908150497 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150498 .
+
+_:18c9bd0805834f90a6ab5c43db908150498 rdf:first crm:P14i_performed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150499 .
+
+_:18c9bd0805834f90a6ab5c43db908150499 rdf:first _:18c9bd0805834f90a6ab5c43db908150500;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150500 sh:inversePath crm:P14_carried_out_by .
+
+_:18c9bd0805834f90a6ab5c43db908150496 rdf:rest _:18c9bd0805834f90a6ab5c43db908150501 .
+
+_:18c9bd0805834f90a6ab5c43db908150501 rdf:first _:18c9bd0805834f90a6ab5c43db908150502;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150502 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150503 .
+
+_:18c9bd0805834f90a6ab5c43db908150503 rdf:first crm:P94_has_created;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150504 .
+
+_:18c9bd0805834f90a6ab5c43db908150504 rdf:first _:18c9bd0805834f90a6ab5c43db908150505;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150505 sh:inversePath crm:P94i_was_created_by .
+
+oash:Person sh:property oash:P168, oash:P169, oash:P170, oash:P171 .
+
+oash:P168 sh:name "has created"@en, "a créé"@fr;
+  sh:description "A document created by a person"@en, "Un document créé par une personne"@fr;
+  sh:node oash:Document;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P169 sh:path _:18c9bd0805834f90a6ab5c43db908150506;
+  sh:name "has carried excavation on"@en, "a mené une fouille sur"@fr;
+  sh:description "A site on which the person has carried an excavation on"@en, "Un site sur lequel la personne a méné une fouille"@fr;
+  sh:node oash:Site;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150506 rdf:first _:18c9bd0805834f90a6ab5c43db908150507;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150511 .
+
+_:18c9bd0805834f90a6ab5c43db908150507 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150508 .
+
+_:18c9bd0805834f90a6ab5c43db908150508 rdf:first crm:P14i_performed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150509 .
+
+_:18c9bd0805834f90a6ab5c43db908150509 rdf:first _:18c9bd0805834f90a6ab5c43db908150510;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150510 sh:inversePath crm:P14_carried_out_by .
+
+_:18c9bd0805834f90a6ab5c43db908150511 rdf:first _:18c9bd0805834f90a6ab5c43db908150512;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150512 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150513 .
+
+_:18c9bd0805834f90a6ab5c43db908150513 rdf:first crm:P8_took_place_on_or_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150514 .
+
+_:18c9bd0805834f90a6ab5c43db908150514 rdf:first _:18c9bd0805834f90a6ab5c43db908150515;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150515 sh:inversePath crm:P8i_witnessed .
+
+oash:P170 sh:path _:18c9bd0805834f90a6ab5c43db908150516;
+  sh:name "has carried"@en, "a mené"@fr;
+  sh:description "The excavation/discovery carried out by a person."@en, "La fouille/découverte mené par une personne"@fr;
+  sh:node oash:EncounterEvent;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150516 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150517 .
+
+_:18c9bd0805834f90a6ab5c43db908150517 rdf:first crm:P14i_performed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150518 .
+
+_:18c9bd0805834f90a6ab5c43db908150518 rdf:first _:18c9bd0805834f90a6ab5c43db908150519;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150519 sh:inversePath crm:P14_carried_out_by .
+
+oash:P171 sh:path _:18c9bd0805834f90a6ab5c43db908150520;
+  sh:name "was member of"@en, "est membre de"@fr;
+  sh:description "A group of which a person is member of"@en, "Le groupe dans lequel une personne est membre"@fr;
+  sh:node oash:Group;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150520 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150521 .
+
+_:18c9bd0805834f90a6ab5c43db908150521 rdf:first crm:P107i_is_current_or_former_member_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150522 .
+
+_:18c9bd0805834f90a6ab5c43db908150522 rdf:first _:18c9bd0805834f90a6ab5c43db908150523;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150523 sh:inversePath crm:P107_has_former_or_current_member .
+
+oash:P173 sh:path _:18c9bd0805834f90a6ab5c43db908150524;
+  sh:name "has carried"@en, "a mené"@fr;
+  sh:description "The excavation/discovery carried out by a person."@en, "La fouille/découverte mené par une personne"@fr;
+  sh:node oash:EncounterEvent;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150524 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150525 .
+
+_:18c9bd0805834f90a6ab5c43db908150525 rdf:first _:18c9bd0805834f90a6ab5c43db908150526;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150530 .
+
+_:18c9bd0805834f90a6ab5c43db908150526 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150527 .
+
+_:18c9bd0805834f90a6ab5c43db908150527 rdf:first crm:P14i_performed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150528 .
+
+_:18c9bd0805834f90a6ab5c43db908150528 rdf:first _:18c9bd0805834f90a6ab5c43db908150529;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150529 sh:inversePath crm:P14_carried_out_by .
+
+_:18c9bd0805834f90a6ab5c43db908150530 rdf:first _:18c9bd0805834f90a6ab5c43db908150531;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150531 rdf:first _:18c9bd0805834f90a6ab5c43db908150532;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150536 .
+
+_:18c9bd0805834f90a6ab5c43db908150532 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150533 .
+
+_:18c9bd0805834f90a6ab5c43db908150533 rdf:first crm:P107_has_former_or_current_member;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150534 .
+
+_:18c9bd0805834f90a6ab5c43db908150534 rdf:first _:18c9bd0805834f90a6ab5c43db908150535;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150535 sh:inversePath crm:P107i_is_current_or_former_member_of .
+
+_:18c9bd0805834f90a6ab5c43db908150536 rdf:first _:18c9bd0805834f90a6ab5c43db908150537;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150537 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150538 .
+
+_:18c9bd0805834f90a6ab5c43db908150538 rdf:first crm:P14i_performed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150539 .
+
+_:18c9bd0805834f90a6ab5c43db908150539 rdf:first _:18c9bd0805834f90a6ab5c43db908150540;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150540 sh:inversePath crm:P14_carried_out_by .
+
+oash:Group sh:property oash:P173, oash:P174, oash:P175, oash:P176, oash:P177 .
+
+oash:P174 sh:path _:18c9bd0805834f90a6ab5c43db908150541;
+  sh:name "has created"@en, "a créé"@fr;
+  sh:description "A document created by a group"@en, "Un document créé par un groupe"@fr;
+  sh:node oash:Document;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150541 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150542 .
+
+_:18c9bd0805834f90a6ab5c43db908150542 rdf:first _:18c9bd0805834f90a6ab5c43db908150543;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150553 .
+
+_:18c9bd0805834f90a6ab5c43db908150543 rdf:first _:18c9bd0805834f90a6ab5c43db908150544;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150548 .
+
+_:18c9bd0805834f90a6ab5c43db908150544 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150545 .
+
+_:18c9bd0805834f90a6ab5c43db908150545 rdf:first crm:P14i_performed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150546 .
+
+_:18c9bd0805834f90a6ab5c43db908150546 rdf:first _:18c9bd0805834f90a6ab5c43db908150547;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150547 sh:inversePath crm:P14_carried_out_by .
+
+_:18c9bd0805834f90a6ab5c43db908150548 rdf:first _:18c9bd0805834f90a6ab5c43db908150549;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150549 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150550 .
+
+_:18c9bd0805834f90a6ab5c43db908150550 rdf:first crm:P94_has_created;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150551 .
+
+_:18c9bd0805834f90a6ab5c43db908150551 rdf:first _:18c9bd0805834f90a6ab5c43db908150552;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150552 sh:inversePath crm:P94i_was_created_by .
+
+_:18c9bd0805834f90a6ab5c43db908150553 rdf:first _:18c9bd0805834f90a6ab5c43db908150554;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150554 rdf:first _:18c9bd0805834f90a6ab5c43db908150555;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150559 .
+
+_:18c9bd0805834f90a6ab5c43db908150555 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150556 .
+
+_:18c9bd0805834f90a6ab5c43db908150556 rdf:first crm:P107_has_former_or_current_member;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150557 .
+
+_:18c9bd0805834f90a6ab5c43db908150557 rdf:first _:18c9bd0805834f90a6ab5c43db908150558;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150558 sh:inversePath crm:P107i_is_current_or_former_member_of .
+
+_:18c9bd0805834f90a6ab5c43db908150559 rdf:first _:18c9bd0805834f90a6ab5c43db908150560;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150564 .
+
+_:18c9bd0805834f90a6ab5c43db908150560 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150561 .
+
+_:18c9bd0805834f90a6ab5c43db908150561 rdf:first crm:P14i_performed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150562 .
+
+_:18c9bd0805834f90a6ab5c43db908150562 rdf:first _:18c9bd0805834f90a6ab5c43db908150563;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150563 sh:inversePath crm:P14_carried_out_by .
+
+_:18c9bd0805834f90a6ab5c43db908150564 rdf:first _:18c9bd0805834f90a6ab5c43db908150565;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150565 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150566 .
+
+_:18c9bd0805834f90a6ab5c43db908150566 rdf:first crm:P94_has_created;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150567 .
+
+_:18c9bd0805834f90a6ab5c43db908150567 rdf:first _:18c9bd0805834f90a6ab5c43db908150568;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150568 sh:inversePath crm:P94i_was_created_by .
+
+oash:P175 sh:path skos:prefLabel;
+  sh:name "name"@en, "nom"@fr;
+  sh:description "The name of a group"@en, "Le nom d'une groupe"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:P176 sh:path _:18c9bd0805834f90a6ab5c43db908150569;
+  sh:name "has carried excavation on"@en, "a mené une fouille sur"@fr;
+  sh:description "A site on which an institution/a group has carried an excavation on"@en,
+    "Un site sur lequel l'institutation/le groupe a méné une fouille"@fr;
+  sh:node oash:Site;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150569 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150570 .
+
+_:18c9bd0805834f90a6ab5c43db908150570 rdf:first _:18c9bd0805834f90a6ab5c43db908150571;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150581 .
+
+_:18c9bd0805834f90a6ab5c43db908150571 rdf:first _:18c9bd0805834f90a6ab5c43db908150572;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150576 .
+
+_:18c9bd0805834f90a6ab5c43db908150572 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150573 .
+
+_:18c9bd0805834f90a6ab5c43db908150573 rdf:first crm:P14i_performed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150574 .
+
+_:18c9bd0805834f90a6ab5c43db908150574 rdf:first _:18c9bd0805834f90a6ab5c43db908150575;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150575 sh:inversePath crm:P14_carried_out_by .
+
+_:18c9bd0805834f90a6ab5c43db908150576 rdf:first _:18c9bd0805834f90a6ab5c43db908150577;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150577 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150578 .
+
+_:18c9bd0805834f90a6ab5c43db908150578 rdf:first crm:P8_took_place_on_or_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150579 .
+
+_:18c9bd0805834f90a6ab5c43db908150579 rdf:first _:18c9bd0805834f90a6ab5c43db908150580;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150580 sh:inversePath crm:P8i_witnessed .
+
+_:18c9bd0805834f90a6ab5c43db908150581 rdf:first _:18c9bd0805834f90a6ab5c43db908150582;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150582 rdf:first _:18c9bd0805834f90a6ab5c43db908150583;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150587 .
+
+_:18c9bd0805834f90a6ab5c43db908150583 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150584 .
+
+_:18c9bd0805834f90a6ab5c43db908150584 rdf:first crm:P107_has_former_or_current_member;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150585 .
+
+_:18c9bd0805834f90a6ab5c43db908150585 rdf:first _:18c9bd0805834f90a6ab5c43db908150586;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150586 sh:inversePath crm:P107i_is_current_or_former_member_of .
+
+_:18c9bd0805834f90a6ab5c43db908150587 rdf:first _:18c9bd0805834f90a6ab5c43db908150588;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150592 .
+
+_:18c9bd0805834f90a6ab5c43db908150588 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150589 .
+
+_:18c9bd0805834f90a6ab5c43db908150589 rdf:first crm:P14i_performed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150590 .
+
+_:18c9bd0805834f90a6ab5c43db908150590 rdf:first _:18c9bd0805834f90a6ab5c43db908150591;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150591 sh:inversePath crm:P14_carried_out_by .
+
+_:18c9bd0805834f90a6ab5c43db908150592 rdf:first _:18c9bd0805834f90a6ab5c43db908150593;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150593 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150594 .
+
+_:18c9bd0805834f90a6ab5c43db908150594 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150595 .
+
+_:18c9bd0805834f90a6ab5c43db908150595 rdf:first _:18c9bd0805834f90a6ab5c43db908150596;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150596 sh:inversePath crm:P8_took_place_on_or_within .
+
+oash:P177 sh:path _:18c9bd0805834f90a6ab5c43db908150597;
+  sh:name "was member of"@en, "est membre de"@fr;
+  sh:description "A group of which a person is member of"@en, "Le groupe dans lequel une personne est membre"@fr;
+  sh:node oash:Person;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150597 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150598 .
+
+_:18c9bd0805834f90a6ab5c43db908150598 rdf:first crm:P107_has_current_or_former_member_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150599 .
+
+_:18c9bd0805834f90a6ab5c43db908150599 rdf:first _:18c9bd0805834f90a6ab5c43db908150600;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150600 sh:inversePath crm:P107i_is_current_or_former_member_of .
+
+oash:P179 sh:path _:18c9bd0805834f90a6ab5c43db908150601;
+  sh:name "was found on"@en, "a été trouvé sur"@fr;
+  sh:description "The excavation/discovery on which the Built Work was excavated or found."@en,
+    "La fouille ou la découverte où des entités archéologiques ont éte découvertes ou trouvées"@fr;
+  sh:node oash:EncounterEvent;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150601 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150602 .
+
+_:18c9bd0805834f90a6ab5c43db908150602 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150603 .
+
+_:18c9bd0805834f90a6ab5c43db908150603 rdf:first _:18c9bd0805834f90a6ab5c43db908150604;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150604 sh:inversePath crmsci:O19_has_found_object .
+
+oash:BuiltWork sh:property oash:P179, oash:P180, oash:P181, oash:P182, oash:P183,
+    oash:P184, oash:P185, oash:P186, oash:P187, oash:P188, oash:P189, oash:P190, oash:P191 .
+
+oash:P180 sh:path _:18c9bd0805834f90a6ab5c43db908150605;
+  sh:name "is composed of"@en, "est composé de"@fr;
+  sh:description "An archeological feature which is part of an artefact."@en, "Un fait archéologique qui fait partie d'une entité archéologique"@fr;
+  sh:node oash:Wall;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Wall_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150605 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150606 .
+
+_:18c9bd0805834f90a6ab5c43db908150606 rdf:first crm:P46_is_composed_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150607 .
+
+_:18c9bd0805834f90a6ab5c43db908150607 rdf:first _:18c9bd0805834f90a6ab5c43db908150608;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150608 sh:inversePath crm:P46i_forms_part_of .
+
+oash:P181 sh:path _:18c9bd0805834f90a6ab5c43db908150609;
+  sh:name "is composed of"@en, "est composé de"@fr;
+  sh:description "An archeological feature which is part of an artefact."@en, "Un fait archéologique qui fait partie d'une entité archéologique"@fr;
+  sh:node oash:Burial;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Burial_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150609 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150610 .
+
+_:18c9bd0805834f90a6ab5c43db908150610 rdf:first crm:P46_is_composed_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150611 .
+
+_:18c9bd0805834f90a6ab5c43db908150611 rdf:first _:18c9bd0805834f90a6ab5c43db908150612;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150612 sh:inversePath crm:P46i_forms_part_of .
+
+oash:P182 sh:path _:18c9bd0805834f90a6ab5c43db908150613;
+  sh:name "is composed of"@en, "est composé de"@fr;
+  sh:description "An archeological feature which is part of an artefact."@en, "Un fait archéologique qui fait partie d'une entité archéologique"@fr;
+  sh:node oash:Feature;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Feature_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150613 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150614 .
+
+_:18c9bd0805834f90a6ab5c43db908150614 rdf:first crm:P46_is_composed_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150615 .
+
+_:18c9bd0805834f90a6ab5c43db908150615 rdf:first _:18c9bd0805834f90a6ab5c43db908150616;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150616 sh:inversePath crm:P46i_forms_part_of .
+
+oash:P183 sh:path _:18c9bd0805834f90a6ab5c43db908150617;
+  sh:name "is documented in"@en, "est documenté dans"@fr;
+  sh:description "A document in which the artefact is described, analysed or contextualised"@en,
+    "Un document dans lequel l'entité archéologique est décrit, analysé et contextualisé."@fr;
+  sh:node oash:Document;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150617 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150618 .
+
+_:18c9bd0805834f90a6ab5c43db908150618 rdf:first crm:P70i_is_documented_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150619 .
+
+_:18c9bd0805834f90a6ab5c43db908150619 rdf:first _:18c9bd0805834f90a6ab5c43db908150620;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150620 sh:inversePath crm:P70_documents .
+
+oash:P184 sh:path crm:P101_had_as_general_use;
+  sh:name "had as general use"@en, "avait comme utilité"@fr;
+  sh:description "Precise the kind of archeological entities researched"@en, "Précise le type d'entité archéologique recherché"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P185 sh:path crm:P48_has_preferred_identifier;
+  sh:name "has as identifier"@en, "a comme identifiant"@fr;
+  sh:description "Precise the identifier of the archeological entities researched"@en,
+    "Précise l'identifiant de l'entité archéologique recherchée"@fr;
+  sh:node oash:PreferredIdentifier;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P186 sh:path _:18c9bd0805834f90a6ab5c43db908150621;
+  sh:name "was present on"@en, "était présent sur"@fr;
+  sh:description "The excavation/discovery on which the Built Work was excavated or found."@en,
+    "La fouille ou la découverte où des entités archéologiques ont éte découvertes ou trouvées"@fr;
+  sh:node oash:Site;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150621 rdf:first _:18c9bd0805834f90a6ab5c43db908150622;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150626 .
+
+_:18c9bd0805834f90a6ab5c43db908150622 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150623 .
+
+_:18c9bd0805834f90a6ab5c43db908150623 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150624 .
+
+_:18c9bd0805834f90a6ab5c43db908150624 rdf:first _:18c9bd0805834f90a6ab5c43db908150625;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150625 sh:inversePath crmsci:O19_has_found_object .
+
+_:18c9bd0805834f90a6ab5c43db908150626 rdf:first _:18c9bd0805834f90a6ab5c43db908150627;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150627 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150628 .
+
+_:18c9bd0805834f90a6ab5c43db908150628 rdf:first crm:P8_took_place_on_or_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150629 .
+
+_:18c9bd0805834f90a6ab5c43db908150629 rdf:first _:18c9bd0805834f90a6ab5c43db908150630;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150630 sh:inversePath crm:P8i_witnessed .
+
+oash:P187 sh:path crm:P3_has_note;
+  sh:name "note"@en, "note"@fr;
+  sh:description "Comments on the artefact"@en, "Commentaires sur l'entité archéologique"@fr;
+  sh:nodeKind sh:Literal;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P188 sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:description "The label of the artefact"@en, "Le label de l'entité archéologique"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:P189 sh:path _:18c9bd0805834f90a6ab5c43db908150631;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150631 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150632 .
+
+_:18c9bd0805834f90a6ab5c43db908150632 rdf:first _:18c9bd0805834f90a6ab5c43db908150633;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150636 .
+
+_:18c9bd0805834f90a6ab5c43db908150633 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150634 .
+
+_:18c9bd0805834f90a6ab5c43db908150634 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150635 .
+
+_:18c9bd0805834f90a6ab5c43db908150635 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150636 rdf:first _:18c9bd0805834f90a6ab5c43db908150637;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150637 rdf:first _:18c9bd0805834f90a6ab5c43db908150638;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150639 .
+
+_:18c9bd0805834f90a6ab5c43db908150638 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150639 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150640 .
+
+_:18c9bd0805834f90a6ab5c43db908150640 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+oash:P190 sh:path _:18c9bd0805834f90a6ab5c43db908150641;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150641 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150642 .
+
+_:18c9bd0805834f90a6ab5c43db908150642 rdf:first _:18c9bd0805834f90a6ab5c43db908150643;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150646 .
+
+_:18c9bd0805834f90a6ab5c43db908150643 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150644 .
+
+_:18c9bd0805834f90a6ab5c43db908150644 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150645 .
+
+_:18c9bd0805834f90a6ab5c43db908150645 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150646 rdf:first _:18c9bd0805834f90a6ab5c43db908150647;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150647 rdf:first _:18c9bd0805834f90a6ab5c43db908150648;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150649 .
+
+_:18c9bd0805834f90a6ab5c43db908150648 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150649 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150650 .
+
+_:18c9bd0805834f90a6ab5c43db908150650 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+oash:P191 sh:path _:18c9bd0805834f90a6ab5c43db908150651;
+  sh:name "is dated"@en, "est daté"@fr;
+  sh:description "The datation of an archeological entity"@en, "La datation d'une entité archéologique"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime;
+  dash:searchWidget core:TimeProperty-Year;
+  core:beginDateProperty oash:P189;
+  core:endDateProperty oash:P190 .
+
+_:18c9bd0805834f90a6ab5c43db908150651 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150652 .
+
+_:18c9bd0805834f90a6ab5c43db908150652 rdf:first _:18c9bd0805834f90a6ab5c43db908150653;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150655 .
+
+_:18c9bd0805834f90a6ab5c43db908150653 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150654 .
+
+_:18c9bd0805834f90a6ab5c43db908150654 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150655 rdf:first _:18c9bd0805834f90a6ab5c43db908150656;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150656 rdf:first _:18c9bd0805834f90a6ab5c43db908150657;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150658 .
+
+_:18c9bd0805834f90a6ab5c43db908150657 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150658 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+oash:P193 sh:path _:18c9bd0805834f90a6ab5c43db908150659;
+  sh:name "was found on"@en, "a été trouvé sur"@fr;
+  sh:description "The excavation/discovery on which the artefact was excavated or found."@en,
+    "La fouille ou la découverte où des mobiliers ont éte découverts ou trouvés"@fr;
+  sh:node oash:EncounterEvent;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150659 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150660 .
+
+_:18c9bd0805834f90a6ab5c43db908150660 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150661 .
+
+_:18c9bd0805834f90a6ab5c43db908150661 rdf:first _:18c9bd0805834f90a6ab5c43db908150662;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150662 sh:inversePath crmsci:O19_has_found_object .
+
+oash:HumanMadeObject sh:property oash:P193, oash:P194, oash:P195, oash:P196, oash:P197,
+    oash:P198, oash:P199, oash:P200, oash:P201, oash:P202, oash:P203, oash:P204, oash:P205,
+    oash:P206, oash:P207 .
+
+oash:P194 sh:path _:18c9bd0805834f90a6ab5c43db908150663;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "An artefact which was containes in an archeological feature."@en,
+    "Un mobilier qui était contenu dans un fait archéologique."@fr;
+  sh:node oash:Wall;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Wall_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150663 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150664 .
+
+_:18c9bd0805834f90a6ab5c43db908150664 rdf:first crm:P46i_forms_part_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150665 .
+
+_:18c9bd0805834f90a6ab5c43db908150665 rdf:first crm:P46_is_composed_of;
+  rdf:rest rdf:nil .
+
+oash:P195 sh:path _:18c9bd0805834f90a6ab5c43db908150666;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "An artefact which was containes in an archeological feature."@en,
+    "Un mobilier qui était contenu dans un fait archéologique."@fr;
+  sh:node oash:Burial;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Burial_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150666 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150667 .
+
+_:18c9bd0805834f90a6ab5c43db908150667 rdf:first crm:P46i_forms_part_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150668 .
+
+_:18c9bd0805834f90a6ab5c43db908150668 rdf:first crm:P46_is_composed_of;
+  rdf:rest rdf:nil .
+
+oash:P196 sh:path _:18c9bd0805834f90a6ab5c43db908150669;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "An artefact which was containes in an archeological feature."@en,
+    "Un mobilier qui était contenu dans un fait archéologique."@fr;
+  sh:node oash:Feature;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Feature_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150669 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150670 .
+
+_:18c9bd0805834f90a6ab5c43db908150670 rdf:first crmarch:AP21i_is_contained_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150671 .
+
+_:18c9bd0805834f90a6ab5c43db908150671 rdf:first _:18c9bd0805834f90a6ab5c43db908150672;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150672 sh:inversePath crmarch:AP21_contains .
+
+oash:P197 sh:path _:18c9bd0805834f90a6ab5c43db908150673;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "An artefact which is contained in a stratigraphic unit."@en, "Un mobilier qui est contenu dans une unité stratigraphique"@fr;
+  sh:node oash:StratigraphicVolumeUnit;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150673 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150674 .
+
+_:18c9bd0805834f90a6ab5c43db908150674 rdf:first crmarch:AP21i_is_contained_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150675 .
+
+_:18c9bd0805834f90a6ab5c43db908150675 rdf:first _:18c9bd0805834f90a6ab5c43db908150676;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150676 sh:inversePath crmarch:AP21_contains .
+
+oash:P198 sh:path _:18c9bd0805834f90a6ab5c43db908150677;
+  sh:name "is documented in"@en, "est documenté dans"@fr;
+  sh:description "A document in which the artefact is described, analysed or contextualised"@en,
+    "Un document dans lequel un mobilier est décrit, analysé et contextualisé."@fr;
+  sh:node oash:Document;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150677 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150678 .
+
+_:18c9bd0805834f90a6ab5c43db908150678 rdf:first crm:P70i_is_documented_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150679 .
+
+_:18c9bd0805834f90a6ab5c43db908150679 rdf:first _:18c9bd0805834f90a6ab5c43db908150680;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150680 sh:inversePath crm:P70_documents .
+
+oash:P199 sh:path crm:P101_had_as_general_use;
+  sh:name "had as general use"@en, "avait comme utilité"@fr;
+  sh:description "Precise the kind of artefact researched"@en, "Précise le type de mobilier recherché"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P200 sh:path crm:P45_consists_of;
+  sh:name "has as material"@en, "a pour matériau"@fr;
+  sh:description "Precise the kind of material use on the artefact"@en, "Précise le type de matériau utilisé sur un mobilier"@fr;
+  sh:node oash:Material;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P201 sh:path crm:P48_has_preferred_identifier;
+  sh:name "has as identifier"@en, "a comme identifiant"@fr;
+  sh:description "Precise the identifier of the artefact researched"@en, "Précise l'identifiant du mobilier recherchée"@fr;
+  sh:node oash:PreferredIdentifier;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P202 sh:path _:18c9bd0805834f90a6ab5c43db908150681;
+  sh:name "was present on"@en, "était présent sur"@fr;
+  sh:description "The archaeological site on which the artefact was present."@en, "Le site archéologique sur lequel du mobilier était présent"@fr;
+  sh:node oash:Site;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150681 rdf:first _:18c9bd0805834f90a6ab5c43db908150682;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150686 .
+
+_:18c9bd0805834f90a6ab5c43db908150682 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150683 .
+
+_:18c9bd0805834f90a6ab5c43db908150683 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150684 .
+
+_:18c9bd0805834f90a6ab5c43db908150684 rdf:first _:18c9bd0805834f90a6ab5c43db908150685;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150685 sh:inversePath crmsci:O19_has_found_object .
+
+_:18c9bd0805834f90a6ab5c43db908150686 rdf:first _:18c9bd0805834f90a6ab5c43db908150687;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150687 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150688 .
+
+_:18c9bd0805834f90a6ab5c43db908150688 rdf:first crm:P8_took_place_on_or_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150689 .
+
+_:18c9bd0805834f90a6ab5c43db908150689 rdf:first _:18c9bd0805834f90a6ab5c43db908150690;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150690 sh:inversePath crm:P8i_witnessed .
+
+oash:P203 sh:path crm:P3_has_note;
+  sh:name "note"@en, "note"@fr;
+  sh:description "Comments on the artefact"@en, "Commentaires sur le mobilier"@fr;
+  sh:nodeKind sh:Literal .
+
+oash:P204 sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:description "The label of the artefact"@en, "Le label du mobilier"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:P205 sh:path _:18c9bd0805834f90a6ab5c43db908150691;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150691 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150692 .
+
+_:18c9bd0805834f90a6ab5c43db908150692 rdf:first _:18c9bd0805834f90a6ab5c43db908150693;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150696 .
+
+_:18c9bd0805834f90a6ab5c43db908150693 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150694 .
+
+_:18c9bd0805834f90a6ab5c43db908150694 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150695 .
+
+_:18c9bd0805834f90a6ab5c43db908150695 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150696 rdf:first _:18c9bd0805834f90a6ab5c43db908150697;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150697 rdf:first _:18c9bd0805834f90a6ab5c43db908150698;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150699 .
+
+_:18c9bd0805834f90a6ab5c43db908150698 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150699 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150700 .
+
+_:18c9bd0805834f90a6ab5c43db908150700 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+oash:P206 sh:path _:18c9bd0805834f90a6ab5c43db908150701;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150701 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150702 .
+
+_:18c9bd0805834f90a6ab5c43db908150702 rdf:first _:18c9bd0805834f90a6ab5c43db908150703;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150706 .
+
+_:18c9bd0805834f90a6ab5c43db908150703 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150704 .
+
+_:18c9bd0805834f90a6ab5c43db908150704 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150705 .
+
+_:18c9bd0805834f90a6ab5c43db908150705 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150706 rdf:first _:18c9bd0805834f90a6ab5c43db908150707;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150707 rdf:first _:18c9bd0805834f90a6ab5c43db908150708;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150709 .
+
+_:18c9bd0805834f90a6ab5c43db908150708 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150709 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150710 .
+
+_:18c9bd0805834f90a6ab5c43db908150710 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+oash:P207 sh:path _:18c9bd0805834f90a6ab5c43db908150711;
+  sh:name "is dated"@en, "est daté"@fr;
+  sh:description "The datation of an artefact"@en, "La datation d'un mobilier"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime;
+  dash:searchWidget core:TimeProperty-Year;
+  core:beginDateProperty oash:P205;
+  core:endDateProperty oash:P206 .
+
+_:18c9bd0805834f90a6ab5c43db908150711 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150712 .
+
+_:18c9bd0805834f90a6ab5c43db908150712 rdf:first _:18c9bd0805834f90a6ab5c43db908150713;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150715 .
+
+_:18c9bd0805834f90a6ab5c43db908150713 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150714 .
+
+_:18c9bd0805834f90a6ab5c43db908150714 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150715 rdf:first _:18c9bd0805834f90a6ab5c43db908150716;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150716 rdf:first _:18c9bd0805834f90a6ab5c43db908150717;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150718 .
+
+_:18c9bd0805834f90a6ab5c43db908150717 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150718 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+oash:P209 sh:path _:18c9bd0805834f90a6ab5c43db908150719;
+  sh:name "was found on"@en, "a été trouvé sur"@fr;
+  sh:description "The excavation/discovery on which the artefact was excavated or found."@en,
+    "La fouille ou la découverte où des mobiliers ont éte découverts ou trouvés"@fr;
+  sh:node oash:EncounterEvent;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150719 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150720 .
+
+_:18c9bd0805834f90a6ab5c43db908150720 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150721 .
+
+_:18c9bd0805834f90a6ab5c43db908150721 rdf:first _:18c9bd0805834f90a6ab5c43db908150722;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150722 sh:inversePath crmsci:O19_has_found_object .
+
+oash:StratigraphicVolumeUnit sh:property oash:P209, oash:P210, oash:P211, oash:P212,
+    oash:P213, oash:P214, oash:P215, oash:P216, oash:P217, oash:P218, oash:P219, oash:P220,
+    oash:P221, oash:P222 .
+
+oash:P210 sh:path _:18c9bd0805834f90a6ab5c43db908150723;
+  sh:name "contained"@en, "contenait"@fr;
+  sh:description "A stratigraphic unit which contained natural object."@en, "Une unité stratigraphique qui contenait des objets naturels"@fr;
+  sh:node oash:Natural;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150723 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150724 .
+
+_:18c9bd0805834f90a6ab5c43db908150724 rdf:first crmarch:AP21_contains;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150725 .
+
+_:18c9bd0805834f90a6ab5c43db908150725 rdf:first _:18c9bd0805834f90a6ab5c43db908150726;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150726 sh:inversePath crmarch:AP21i_is_contained_in .
+
+oash:P211 sh:path _:18c9bd0805834f90a6ab5c43db908150727;
+  sh:name "contained"@en, "contenait"@fr;
+  sh:description "A stratigraphic unit which contained artefacts."@en, "Une unité stratigraphique qui contenait des artefactfs"@fr;
+  sh:node oash:HumanMadeObject;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150727 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150728 .
+
+_:18c9bd0805834f90a6ab5c43db908150728 rdf:first crmarch:AP21_contains;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150729 .
+
+_:18c9bd0805834f90a6ab5c43db908150729 rdf:first _:18c9bd0805834f90a6ab5c43db908150730;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150730 sh:inversePath crmarch:AP21i_is_contained_in .
+
+oash:P212 sh:path _:18c9bd0805834f90a6ab5c43db908150731;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "A stratigraphic unit which was containes in an archeological feature."@en,
+    "Une unité stratigraphique qui était contenu dans un fait archéologique."@fr;
+  sh:node oash:Wall;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Wall_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150731 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150732 .
+
+_:18c9bd0805834f90a6ab5c43db908150732 rdf:first crm:P46i_forms_part_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150733 .
+
+_:18c9bd0805834f90a6ab5c43db908150733 rdf:first _:18c9bd0805834f90a6ab5c43db908150734;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150734 sh:inversePath crm:P46_is_composed_of .
+
+oash:P213 sh:path _:18c9bd0805834f90a6ab5c43db908150735;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "A stratigraphic unit which was containes in an archeological feature."@en,
+    "Une unité stratigraphique qui était contenu dans un fait archéologique."@fr;
+  sh:node oash:Burial;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Burial_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150735 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150736 .
+
+_:18c9bd0805834f90a6ab5c43db908150736 rdf:first crm:P46i_forms_part_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150737 .
+
+_:18c9bd0805834f90a6ab5c43db908150737 rdf:first _:18c9bd0805834f90a6ab5c43db908150738;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150738 sh:inversePath crm:P46_is_composed_of .
+
+oash:P214 sh:path _:18c9bd0805834f90a6ab5c43db908150739;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "A stratigraphic unit which was containes in an archeological feature."@en,
+    "Une unité stratigraphique qui était contenu dans un fait archéologique."@fr;
+  sh:node oash:Feature;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Feature_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150739 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150740 .
+
+_:18c9bd0805834f90a6ab5c43db908150740 rdf:first crm:P46i_forms_part_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150741 .
+
+_:18c9bd0805834f90a6ab5c43db908150741 rdf:first _:18c9bd0805834f90a6ab5c43db908150742;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150742 sh:inversePath crm:P46_is_composed_of .
+
+oash:P215 sh:path _:18c9bd0805834f90a6ab5c43db908150743;
+  sh:name "is documented in"@en, "est documenté dans"@fr;
+  sh:description "A document in which the stratigraphic unit is described, analysed or contextualised"@en,
+    "Un document dans lequel une unité stratigraphique est décrit, analysé et contextualisé."@fr;
+  sh:node oash:Document;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150743 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150744 .
+
+_:18c9bd0805834f90a6ab5c43db908150744 rdf:first crm:P70i_is_documented_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150745 .
+
+_:18c9bd0805834f90a6ab5c43db908150745 rdf:first _:18c9bd0805834f90a6ab5c43db908150746;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150746 sh:inversePath crm:P70_documents .
+
+oash:P216 sh:path crm:P48_has_preferred_identifier;
+  sh:name "has as identifier"@en, "a comme identifiant"@fr;
+  sh:description "Precise the identifier of the stratigraphic unit researched"@en, "Précise l'identifiant d'une unité stratigraphique recherchée"@fr;
+  sh:node oash:PreferredIdentifier;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P217 sh:path _:18c9bd0805834f90a6ab5c43db908150747;
+  sh:name "was present on"@en, "était présent sur"@fr;
+  sh:description "The archaeological site on which the stratigraphic unit was present."@en,
+    "Le site archéologique sur lequel d'une unité stratigraphique était présent"@fr;
+  sh:node oash:Site;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150747 rdf:first _:18c9bd0805834f90a6ab5c43db908150748;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150752 .
+
+_:18c9bd0805834f90a6ab5c43db908150748 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150749 .
+
+_:18c9bd0805834f90a6ab5c43db908150749 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150750 .
+
+_:18c9bd0805834f90a6ab5c43db908150750 rdf:first _:18c9bd0805834f90a6ab5c43db908150751;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150751 sh:inversePath crmsci:O19_has_found_object .
+
+_:18c9bd0805834f90a6ab5c43db908150752 rdf:first _:18c9bd0805834f90a6ab5c43db908150753;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150753 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150754 .
+
+_:18c9bd0805834f90a6ab5c43db908150754 rdf:first crm:P8_took_place_on_or_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150755 .
+
+_:18c9bd0805834f90a6ab5c43db908150755 rdf:first _:18c9bd0805834f90a6ab5c43db908150756;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150756 sh:inversePath crm:P8i_witnessed .
+
+oash:P218 sh:path crm:P3_has_note;
+  sh:name "note"@en, "note"@fr;
+  sh:description "Comments on the stratigraphic unit"@en, "Commentaires sur l'unité stratigraphique"@fr;
+  sh:nodeKind sh:Literal .
+
+oash:P219 sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:description "The label of the stratigraphic unit"@en, "Le label du l'unité stratigraphique"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:P220 sh:path _:18c9bd0805834f90a6ab5c43db908150757;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150757 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150758 .
+
+_:18c9bd0805834f90a6ab5c43db908150758 rdf:first _:18c9bd0805834f90a6ab5c43db908150759;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150762 .
+
+_:18c9bd0805834f90a6ab5c43db908150759 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150760 .
+
+_:18c9bd0805834f90a6ab5c43db908150760 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150761 .
+
+_:18c9bd0805834f90a6ab5c43db908150761 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150762 rdf:first _:18c9bd0805834f90a6ab5c43db908150763;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150763 rdf:first _:18c9bd0805834f90a6ab5c43db908150764;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150765 .
+
+_:18c9bd0805834f90a6ab5c43db908150764 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150765 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150766 .
+
+_:18c9bd0805834f90a6ab5c43db908150766 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+oash:P221 sh:path _:18c9bd0805834f90a6ab5c43db908150767;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150767 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150768 .
+
+_:18c9bd0805834f90a6ab5c43db908150768 rdf:first _:18c9bd0805834f90a6ab5c43db908150769;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150772 .
+
+_:18c9bd0805834f90a6ab5c43db908150769 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150770 .
+
+_:18c9bd0805834f90a6ab5c43db908150770 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150771 .
+
+_:18c9bd0805834f90a6ab5c43db908150771 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150772 rdf:first _:18c9bd0805834f90a6ab5c43db908150773;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150773 rdf:first _:18c9bd0805834f90a6ab5c43db908150774;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150775 .
+
+_:18c9bd0805834f90a6ab5c43db908150774 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150775 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150776 .
+
+_:18c9bd0805834f90a6ab5c43db908150776 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+oash:P222 sh:path _:18c9bd0805834f90a6ab5c43db908150777;
+  sh:name "is dated"@en, "est daté"@fr;
+  sh:description "The datation of a stratigraphic unit"@en, "La datation d'une unité stratigraphique"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime;
+  dash:searchWidget core:TimeProperty-Year;
+  core:beginDateProperty oash:P220;
+  core:endDateProperty oash:P221 .
+
+_:18c9bd0805834f90a6ab5c43db908150777 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150778 .
+
+_:18c9bd0805834f90a6ab5c43db908150778 rdf:first _:18c9bd0805834f90a6ab5c43db908150779;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150781 .
+
+_:18c9bd0805834f90a6ab5c43db908150779 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150780 .
+
+_:18c9bd0805834f90a6ab5c43db908150780 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150781 rdf:first _:18c9bd0805834f90a6ab5c43db908150782;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150782 rdf:first _:18c9bd0805834f90a6ab5c43db908150783;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150784 .
+
+_:18c9bd0805834f90a6ab5c43db908150783 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150784 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+oash:P224 sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:description "The label of a time-span"@en, "Le label d'un intervalle de temps"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:TimeSpanEvent sh:property oash:P224, oash:P225 .
+
+oash:P225 sh:path _:18c9bd0805834f90a6ab5c43db908150785;
+  sh:name "time boundary"@en, "borne temporelle"@fr;
+  sh:description "The time boundary researched in the time-spans"@en, "Les bornes temporelles recherchées dans les intervalles de temps"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150785 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150786 .
+
+_:18c9bd0805834f90a6ab5c43db908150786 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150787 .
+
+_:18c9bd0805834f90a6ab5c43db908150787 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+oash:P227 sh:path crm:P2_has_type;
+  sh:name "has type"@en, "a pour type"@fr;
+  sh:description "Type affiliated to the researched document"@en, "Le type affilié au document recherché"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:Document sh:property oash:P227, oash:P228 .
+
+oash:P228 sh:path _:18c9bd0805834f90a6ab5c43db908150788;
+  sh:name "was made by"@en, "a été créé par"@fr;
+  sh:description "The creator of the document"@en, "Le créateur du document"@fr;
+  sh:node oash:Person;
+  dash:searchWidget core:ListProperty .
+
+_:18c9bd0805834f90a6ab5c43db908150788 rdf:first _:18c9bd0805834f90a6ab5c43db908150789;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150793 .
+
+_:18c9bd0805834f90a6ab5c43db908150789 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150790 .
+
+_:18c9bd0805834f90a6ab5c43db908150790 rdf:first crm:P94i_was_created_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150791 .
+
+_:18c9bd0805834f90a6ab5c43db908150791 rdf:first _:18c9bd0805834f90a6ab5c43db908150792;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150792 sh:inversePath crm:P94_has_created .
+
+_:18c9bd0805834f90a6ab5c43db908150793 rdf:first _:18c9bd0805834f90a6ab5c43db908150794;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150794 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150795 .
+
+_:18c9bd0805834f90a6ab5c43db908150795 rdf:first crm:P14_carried_out_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150796 .
+
+_:18c9bd0805834f90a6ab5c43db908150796 rdf:first _:18c9bd0805834f90a6ab5c43db908150797;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150797 sh:inversePath crm:P14i_performed .
+
+oash:P228 a skos:Concept;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P229 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150798;
+  sh:name "documents"@en, "documente"@fr;
+  sh:description "An stratigraphic unit which is documented"@en, "Une US qui est documentée"@fr;
+  sh:node oash:StratigraphicVolumeUnit;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150798 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150799 .
+
+_:18c9bd0805834f90a6ab5c43db908150799 rdf:first crm:P70_documents;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150800 .
+
+_:18c9bd0805834f90a6ab5c43db908150800 rdf:first _:18c9bd0805834f90a6ab5c43db908150801;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150801 sh:inversePath crm:P70i_is_documented_in .
+
+oash:Document sh:property oash:P229, oash:P230, oash:P231, oash:P232, oash:P233, oash:P234,
+    oash:P235, oash:P236, oash:P237, oash:P238, oash:P239, oash:P240 .
+
+oash:P230 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150802;
+  sh:name "documents"@en, "documente"@fr;
+  sh:description "A site which is documented"@en, "Un site qui est documenté"@fr;
+  sh:node oash:Site;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150802 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150803 .
+
+_:18c9bd0805834f90a6ab5c43db908150803 rdf:first crm:P70_documents;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150804 .
+
+_:18c9bd0805834f90a6ab5c43db908150804 rdf:first _:18c9bd0805834f90a6ab5c43db908150805;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150805 sh:inversePath crm:P70i_is_documented_in .
+
+oash:P231 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150806;
+  sh:name "documents"@en, "documente"@fr;
+  sh:description "A natural object which is documented"@en, "Un objet naturel qui est documenté"@fr;
+  sh:node oash:Natural;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150806 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150807 .
+
+_:18c9bd0805834f90a6ab5c43db908150807 rdf:first crm:P70_documents;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150808 .
+
+_:18c9bd0805834f90a6ab5c43db908150808 rdf:first _:18c9bd0805834f90a6ab5c43db908150809;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150809 sh:inversePath crm:P70i_is_documented_in .
+
+oash:P232 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150810;
+  sh:name "documents"@en, "documente"@fr;
+  sh:description "An artifact which is documented"@en, "Un mobilier qui est documenté"@fr;
+  sh:node oash:HumanMadeObject;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150810 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150811 .
+
+_:18c9bd0805834f90a6ab5c43db908150811 rdf:first crm:P70_documents;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150812 .
+
+_:18c9bd0805834f90a6ab5c43db908150812 rdf:first _:18c9bd0805834f90a6ab5c43db908150813;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150813 sh:inversePath crm:P70i_is_documented_in .
+
+oash:P233 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150814;
+  sh:name "documents"@en, "documente"@fr;
+  sh:description "An archeological entity which is documented"@en, "Une entité archéologique qui est documentée"@fr;
+  sh:node oash:BuiltWork;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150814 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150815 .
+
+_:18c9bd0805834f90a6ab5c43db908150815 rdf:first crm:P70_documents;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150816 .
+
+_:18c9bd0805834f90a6ab5c43db908150816 rdf:first _:18c9bd0805834f90a6ab5c43db908150817;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150817 sh:inversePath crm:P70i_is_documented_in .
+
+oash:P234 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150818;
+  sh:name "documents"@en, "documente"@fr;
+  sh:description "A feature which is documented"@en, "Un fait qui est documenté"@fr;
+  sh:node oash:Feature;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Feature_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150818 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150819 .
+
+_:18c9bd0805834f90a6ab5c43db908150819 rdf:first crm:P70_documents;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150820 .
+
+_:18c9bd0805834f90a6ab5c43db908150820 rdf:first _:18c9bd0805834f90a6ab5c43db908150821;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150821 sh:inversePath crm:P70i_is_documented_in .
+
+oash:P235 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150822;
+  sh:name "documents"@en, "documente"@fr;
+  sh:description "A wall which is documented"@en, "Un mur qui est documenté"@fr;
+  sh:node oash:Wall;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Wall_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150822 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150823 .
+
+_:18c9bd0805834f90a6ab5c43db908150823 rdf:first crm:P70_documents;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150824 .
+
+_:18c9bd0805834f90a6ab5c43db908150824 rdf:first _:18c9bd0805834f90a6ab5c43db908150825;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150825 sh:inversePath crm:P70i_is_documented_in .
+
+oash:P236 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150826;
+  sh:name "documents"@en, "documente"@fr;
+  sh:description "A burial which is documented"@en, "Une sépulture qui est documentée"@fr;
+  sh:node oash:Burial;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Burial_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150826 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150827 .
+
+_:18c9bd0805834f90a6ab5c43db908150827 rdf:first crm:P70_documents;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150828 .
+
+_:18c9bd0805834f90a6ab5c43db908150828 rdf:first _:18c9bd0805834f90a6ab5c43db908150829;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150829 sh:inversePath crm:P70i_is_documented_in .
+
+oash:P237 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150830;
+  sh:name "documents"@en, "documente"@fr;
+  sh:description "A discovery/an excavation which is documented"@en, "Une découverte ou une fouille qui est documentée"@fr;
+  sh:node oash:EncounterEvent;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150830 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150831 .
+
+_:18c9bd0805834f90a6ab5c43db908150831 rdf:first crm:P70_documents;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150832 .
+
+_:18c9bd0805834f90a6ab5c43db908150832 rdf:first _:18c9bd0805834f90a6ab5c43db908150833;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150833 sh:inversePath crm:P70i_is_documented_in .
+
+oash:P238 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150834;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150834 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150835 .
+
+_:18c9bd0805834f90a6ab5c43db908150835 rdf:first _:18c9bd0805834f90a6ab5c43db908150836;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150839 .
+
+_:18c9bd0805834f90a6ab5c43db908150836 rdf:first crm:P94i_was_created_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150837 .
+
+_:18c9bd0805834f90a6ab5c43db908150837 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150838 .
+
+_:18c9bd0805834f90a6ab5c43db908150838 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150839 rdf:first _:18c9bd0805834f90a6ab5c43db908150840;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150840 rdf:first _:18c9bd0805834f90a6ab5c43db908150841;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150842 .
+
+_:18c9bd0805834f90a6ab5c43db908150841 sh:inversePath crm:P94_has_created .
+
+_:18c9bd0805834f90a6ab5c43db908150842 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150843 .
+
+_:18c9bd0805834f90a6ab5c43db908150843 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+oash:P239 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150844;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150844 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150845 .
+
+_:18c9bd0805834f90a6ab5c43db908150845 rdf:first _:18c9bd0805834f90a6ab5c43db908150846;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150849 .
+
+_:18c9bd0805834f90a6ab5c43db908150846 rdf:first crm:P94i_was_created_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150847 .
+
+_:18c9bd0805834f90a6ab5c43db908150847 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150848 .
+
+_:18c9bd0805834f90a6ab5c43db908150848 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150849 rdf:first _:18c9bd0805834f90a6ab5c43db908150850;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150850 rdf:first _:18c9bd0805834f90a6ab5c43db908150851;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150852 .
+
+_:18c9bd0805834f90a6ab5c43db908150851 sh:inversePath crm:P94_has_created .
+
+_:18c9bd0805834f90a6ab5c43db908150852 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150853 .
+
+_:18c9bd0805834f90a6ab5c43db908150853 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+oash:P240 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150854;
+  sh:name "is dated"@en, "est daté"@fr;
+  sh:description "The datation of a document"@en, "La datation d'un document"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime;
+  dash:searchWidget core:TimeProperty-Year;
+  core:beginDateProperty oash:P238;
+  core:endDateProperty oash:P239 .
+
+_:18c9bd0805834f90a6ab5c43db908150854 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150855 .
+
+_:18c9bd0805834f90a6ab5c43db908150855 rdf:first _:18c9bd0805834f90a6ab5c43db908150856;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150858 .
+
+_:18c9bd0805834f90a6ab5c43db908150856 rdf:first crm:P94i_was_created_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150857 .
+
+_:18c9bd0805834f90a6ab5c43db908150857 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150858 rdf:first _:18c9bd0805834f90a6ab5c43db908150859;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150859 rdf:first _:18c9bd0805834f90a6ab5c43db908150860;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150861 .
+
+_:18c9bd0805834f90a6ab5c43db908150860 sh:inversePath crm:P94_has_created .
+
+_:18c9bd0805834f90a6ab5c43db908150861 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+oash:P242 a skos:Concept;
+  sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:nodeKind sh:Literal;
+  dash:searchWidget core:AutocompleteProperty;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:Type sh:property oash:P242, oash:P244 .
+
+oash:P243 a skos:Concept;
+  sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:nodeKind sh:Literal;
+  dash:searchWidget core:AutocompleteProperty;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:Material sh:property oash:P243, oash:P245 .
+
+oash:P244 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150862;
+  sh:name "altLabel"@en, "altLabel"@fr;
+  sh:description "Label given to the concept. It can be the original label of the concept or the scientific expression aligned to the concept in the data."@en,
+    "Label donné au concept. Cela peut être le label d'origine du concept ou l'expression scientifique donnée au concept dans les données."@fr;
+  sh:nodeKind sh:Literal;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150862 rdf:first skosxl:altLabel;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150863 .
+
+_:18c9bd0805834f90a6ab5c43db908150863 rdf:first skosxl:literalForm;
+  rdf:rest rdf:nil .
+
+oash:P245 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150864;
+  sh:name "altLabel"@en, "altLabel"@fr;
+  sh:description "Label given to the Material. It can be the original label of the concept or the scientific expression aligned to the material in the data."@en,
+    "Label donné au matériau. Cela peut être le label d'origine du matériau ou l'expression scientifique donnée au matériau dans les données."@fr;
+  sh:nodeKind sh:Literal;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150864 rdf:first skosxl:altLabel;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150865 .
+
+_:18c9bd0805834f90a6ab5c43db908150865 rdf:first skosxl:literalForm;
+  rdf:rest rdf:nil .
+
+oash:P247 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150866;
+  sh:name "was found on"@en, "a été trouvé sur"@fr;
+  sh:description "The excavation/discovery on which the archeological feature was excavated or found."@en,
+    "La fouille ou la découverte où des fait archéologiques ont éte découverts ou trouvés"@fr;
+  sh:node oash:EncounterEvent;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150866 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150867 .
+
+_:18c9bd0805834f90a6ab5c43db908150867 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150868 .
+
+_:18c9bd0805834f90a6ab5c43db908150868 rdf:first _:18c9bd0805834f90a6ab5c43db908150869;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150869 sh:inversePath crmsci:O19_has_found_object .
+
+oash:HumanMadeFeature sh:property oash:P247, oash:P248, oash:P249, oash:P250, oash:P251,
+    oash:P252, oash:P253, oash:P254, oash:P255, oash:P256, oash:P257, oash:P258, oash:P259,
+    oash:P260 .
+
+oash:P248 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150870;
+  sh:name "contained"@en, "contenait"@fr;
+  sh:description "An archeological feature which contained natural object."@en, "Un fait archéologique qui contenait des objets naturels"@fr;
+  sh:node oash:Natural;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150870 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150871 .
+
+_:18c9bd0805834f90a6ab5c43db908150871 rdf:first crmarch:AP21_contains;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150872 .
+
+_:18c9bd0805834f90a6ab5c43db908150872 rdf:first _:18c9bd0805834f90a6ab5c43db908150873;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150873 sh:inversePath crmarch:AP21i_is_contained_in .
+
+oash:P249 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150874;
+  sh:name "contained"@en, "contenait"@fr;
+  sh:description "An archeological feature which contained artefacts."@en, "Un fait archéologique qui contenait des artefactfs"@fr;
+  sh:node oash:HumanMadeObject;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150874 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150875 .
+
+_:18c9bd0805834f90a6ab5c43db908150875 rdf:first crmarch:AP21_contains;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150876 .
+
+_:18c9bd0805834f90a6ab5c43db908150876 rdf:first _:18c9bd0805834f90a6ab5c43db908150877;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150877 sh:inversePath crmarch:AP21i_is_contained_in .
+
+oash:P250 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150878;
+  sh:name "is part of"@en, "fait partie de"@fr;
+  sh:description "An archeologicall feature which is part of an archeologic entities."@en,
+    "Un fait archéologique qui fait partie d'une entité archéologique"@fr;
+  sh:node oash:BuiltWork;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150878 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150879 .
+
+_:18c9bd0805834f90a6ab5c43db908150879 rdf:first crm:P46i_forms_part_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150880 .
+
+_:18c9bd0805834f90a6ab5c43db908150880 rdf:first _:18c9bd0805834f90a6ab5c43db908150881;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150881 sh:inversePath crm:P46_is_composed_of .
+
+oash:P251 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150882;
+  sh:name "contained"@en, "contenait"@fr;
+  sh:description "An archeological feature which contained stratigraphic units."@en,
+    "Un fait archéologique qui est contenu dans une unité stratigraphique"@fr;
+  sh:node oash:StratigraphicVolumeUnit;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150882 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150883 .
+
+_:18c9bd0805834f90a6ab5c43db908150883 rdf:first crm:P46_is_composed_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150884 .
+
+_:18c9bd0805834f90a6ab5c43db908150884 rdf:first _:18c9bd0805834f90a6ab5c43db908150885;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150885 sh:inversePath crm:P46i_forms_part_of .
+
+oash:P252 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150886;
+  sh:name "is documented in"@en, "est documenté dans"@fr;
+  sh:description "A document in which the archeological feature is described, analysed or contextualised"@en,
+    "Un document dans lequel un fait archéologique est décrit, analysé et contextualisé."@fr;
+  sh:node oash:Document;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150886 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150887 .
+
+_:18c9bd0805834f90a6ab5c43db908150887 rdf:first crm:P70i_is_documented_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150888 .
+
+_:18c9bd0805834f90a6ab5c43db908150888 rdf:first _:18c9bd0805834f90a6ab5c43db908150889;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150889 sh:inversePath crm:P70_documents .
+
+oash:P253 a skos:Concept;
+  sh:path crm:P48_has_preferred_identifier;
+  sh:name "has as identifier"@en, "a comme identifiant"@fr;
+  sh:description "Precise the identifier of the archeological feature researched"@en,
+    "Précise l'identifiant du fait archéologique recherchée"@fr;
+  sh:node oash:PreferredIdentifier;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P254 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150890;
+  sh:name "was present on"@en, "était présent sur"@fr;
+  sh:description "The archaeological site on which the archeological feature was present."@en,
+    "Le site archéologique sur lequel du fait archéologique était présent"@fr;
+  sh:node oash:Site;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150890 rdf:first _:18c9bd0805834f90a6ab5c43db908150891;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150895 .
+
+_:18c9bd0805834f90a6ab5c43db908150891 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150892 .
+
+_:18c9bd0805834f90a6ab5c43db908150892 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150893 .
+
+_:18c9bd0805834f90a6ab5c43db908150893 rdf:first _:18c9bd0805834f90a6ab5c43db908150894;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150894 sh:inversePath crmsci:O19_has_found_object .
+
+_:18c9bd0805834f90a6ab5c43db908150895 rdf:first _:18c9bd0805834f90a6ab5c43db908150896;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150896 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150897 .
+
+_:18c9bd0805834f90a6ab5c43db908150897 rdf:first crm:P8_took_place_on_or_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150898 .
+
+_:18c9bd0805834f90a6ab5c43db908150898 rdf:first _:18c9bd0805834f90a6ab5c43db908150899;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150899 sh:inversePath crm:P8i_witnessed .
+
+oash:P255 a skos:Concept;
+  sh:path crm:P101_had_as_general_use;
+  sh:name "had as general use (generic)"@en, "avait comme utilité (générique)"@fr;
+  sh:description "Precise the kind of feature researched (DO NOT USE ON BURIAL, ARCHEOLOGICAL FEATURE OR WALL)"@en,
+    "Précise le type de fait recherché (À NE PAS UTILISER SUR FAIT ARCHÉOLOGIQUE, SÉPULTURE OU MUR)"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P256 a skos:Concept;
+  sh:path crm:P3_has_note;
+  sh:name "note"@en, "note"@fr;
+  sh:description "Comments on the archeological feature"@en, "Commentaires sur le fait archéologique"@fr;
+  sh:nodeKind sh:Literal .
+
+oash:P257 a skos:Concept;
+  sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:description "The label of the archeological feature"@en, "Le label du fait archéologique"@fr;
+  sh:minCount 1;
+  sh:maxCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole;
+  core:enableNegation true .
+
+oash:P258 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150900;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150900 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150901 .
+
+_:18c9bd0805834f90a6ab5c43db908150901 rdf:first _:18c9bd0805834f90a6ab5c43db908150902;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150905 .
+
+_:18c9bd0805834f90a6ab5c43db908150902 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150903 .
+
+_:18c9bd0805834f90a6ab5c43db908150903 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150904 .
+
+_:18c9bd0805834f90a6ab5c43db908150904 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150905 rdf:first _:18c9bd0805834f90a6ab5c43db908150906;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150906 rdf:first _:18c9bd0805834f90a6ab5c43db908150907;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150908 .
+
+_:18c9bd0805834f90a6ab5c43db908150907 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150908 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150909 .
+
+_:18c9bd0805834f90a6ab5c43db908150909 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+oash:P259 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150910;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150910 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150911 .
+
+_:18c9bd0805834f90a6ab5c43db908150911 rdf:first _:18c9bd0805834f90a6ab5c43db908150912;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150915 .
+
+_:18c9bd0805834f90a6ab5c43db908150912 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150913 .
+
+_:18c9bd0805834f90a6ab5c43db908150913 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150914 .
+
+_:18c9bd0805834f90a6ab5c43db908150914 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150915 rdf:first _:18c9bd0805834f90a6ab5c43db908150916;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150916 rdf:first _:18c9bd0805834f90a6ab5c43db908150917;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150918 .
+
+_:18c9bd0805834f90a6ab5c43db908150917 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150918 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150919 .
+
+_:18c9bd0805834f90a6ab5c43db908150919 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+oash:P260 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150920;
+  sh:name "is dated"@en, "est daté"@fr;
+  sh:description "The datation of a feature"@en, "La datation d'un fait archéologique"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime;
+  dash:searchWidget core:TimeProperty-Year;
+  core:beginDateProperty oash:P258;
+  core:endDateProperty oash:P259 .
+
+_:18c9bd0805834f90a6ab5c43db908150920 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150921 .
+
+_:18c9bd0805834f90a6ab5c43db908150921 rdf:first _:18c9bd0805834f90a6ab5c43db908150922;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150924 .
+
+_:18c9bd0805834f90a6ab5c43db908150922 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150923 .
+
+_:18c9bd0805834f90a6ab5c43db908150923 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150924 rdf:first _:18c9bd0805834f90a6ab5c43db908150925;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150925 rdf:first _:18c9bd0805834f90a6ab5c43db908150926;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150927 .
+
+_:18c9bd0805834f90a6ab5c43db908150926 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150927 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+oash:P262 a skos:Concept;
+  sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:description "The label of a place"@en, "Le label d'un lieu"@fr;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole .
+
+oash:Place sh:property oash:P262 .
+
+oash:P264 a skos:Concept;
+  sh:path skos:prefLabel;
+  sh:name "label"@en, "label"@fr;
+  sh:description "The label of a natural object"@en, "Le label d'un objet naturel"@fr;
+  sh:minCount 1;
+  sh:nodeKind sh:Literal;
+  dash:propertyRole dash:LabelRole .
+
+oash:Natural sh:property oash:P264, oash:P265, oash:P266, oash:P267, oash:P268, oash:P269,
+    oash:P270, oash:P271, oash:P272, oash:P273, oash:P274, oash:P275, oash:P276, oash:P277,
+    oash:P278 .
+
+oash:P265 a skos:Concept;
+  sh:path crm:P48_has_preferred_identifier;
+  sh:name "has as identifier"@en, "a comme identifiant"@fr;
+  sh:description "Precise the identifier of the natural object researched"@en, "Précise l'identifiant du l'objet naturel recherché"@fr;
+  sh:node oash:PreferredIdentifier;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P266 a skos:Concept;
+  sh:path crm:P2_has_type;
+  sh:name "has type"@en, "a pour type"@fr;
+  sh:description "Precise the type of natural object researched"@en, "Précise le type de l'object naturel recherché"@fr;
+  sh:node oash:Type;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P267 a skos:Concept;
+  sh:path crm:P45_consists_of;
+  sh:name "has as material"@en, "a pour matériau"@fr;
+  sh:description "Precise the kind of material of the natural object"@en, "Précise le type de matériau de l'objet naturel"@fr;
+  sh:node oash:Material;
+  dash:searchWidget core:ListProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+oash:P268 a skos:Concept;
+  sh:path crm:P3_has_note;
+  sh:name "note"@en, "note"@fr;
+  sh:description "Comments on the natural object"@en, "Commentaires sur l'objet naturel"@fr;
+  sh:nodeKind sh:Literal .
+
+oash:P269 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150928;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150928 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150929 .
+
+_:18c9bd0805834f90a6ab5c43db908150929 rdf:first _:18c9bd0805834f90a6ab5c43db908150930;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150933 .
+
+_:18c9bd0805834f90a6ab5c43db908150930 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150931 .
+
+_:18c9bd0805834f90a6ab5c43db908150931 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150932 .
+
+_:18c9bd0805834f90a6ab5c43db908150932 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150933 rdf:first _:18c9bd0805834f90a6ab5c43db908150934;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150934 rdf:first _:18c9bd0805834f90a6ab5c43db908150935;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150936 .
+
+_:18c9bd0805834f90a6ab5c43db908150935 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150936 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150937 .
+
+_:18c9bd0805834f90a6ab5c43db908150937 rdf:first crm:P82a_begin_of_the_begin;
+  rdf:rest rdf:nil .
+
+oash:P270 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150938;
+  sh:deactivated true .
+
+_:18c9bd0805834f90a6ab5c43db908150938 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150939 .
+
+_:18c9bd0805834f90a6ab5c43db908150939 rdf:first _:18c9bd0805834f90a6ab5c43db908150940;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150943 .
+
+_:18c9bd0805834f90a6ab5c43db908150940 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150941 .
+
+_:18c9bd0805834f90a6ab5c43db908150941 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150942 .
+
+_:18c9bd0805834f90a6ab5c43db908150942 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150943 rdf:first _:18c9bd0805834f90a6ab5c43db908150944;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150944 rdf:first _:18c9bd0805834f90a6ab5c43db908150945;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150946 .
+
+_:18c9bd0805834f90a6ab5c43db908150945 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150946 rdf:first crm:P4_has_time-span;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150947 .
+
+_:18c9bd0805834f90a6ab5c43db908150947 rdf:first crm:P82b_end_of_the_end;
+  rdf:rest rdf:nil .
+
+oash:P271 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150948;
+  sh:name "is dated"@en, "est daté"@fr;
+  sh:description "The datation of a natural object"@en, "La datation d'un objet naturel"@fr;
+  sh:nodeKind sh:Literal;
+  sh:datatype xsd:dateTime;
+  dash:searchWidget core:TimeProperty-Year;
+  core:beginDateProperty oash:P269;
+  core:endDateProperty oash:P270 .
+
+_:18c9bd0805834f90a6ab5c43db908150948 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150949 .
+
+_:18c9bd0805834f90a6ab5c43db908150949 rdf:first _:18c9bd0805834f90a6ab5c43db908150950;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150952 .
+
+_:18c9bd0805834f90a6ab5c43db908150950 rdf:first crm:P8i_witnessed;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150951 .
+
+_:18c9bd0805834f90a6ab5c43db908150951 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150952 rdf:first _:18c9bd0805834f90a6ab5c43db908150953;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150953 rdf:first _:18c9bd0805834f90a6ab5c43db908150954;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150955 .
+
+_:18c9bd0805834f90a6ab5c43db908150954 sh:inversePath crm:P8_took_place_on_or_within .
+
+_:18c9bd0805834f90a6ab5c43db908150955 rdf:first crm:P4_has_time-span;
+  rdf:rest rdf:nil .
+
+oash:P272 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150956;
+  sh:name "was present on"@en, "était présent sur"@fr;
+  sh:description "The archaeological site on which the natural object was present."@en,
+    "Le site archéologique sur lequel des objets naturels était présent"@fr;
+  sh:node oash:Site;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150956 rdf:first _:18c9bd0805834f90a6ab5c43db908150957;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150961 .
+
+_:18c9bd0805834f90a6ab5c43db908150957 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150958 .
+
+_:18c9bd0805834f90a6ab5c43db908150958 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150959 .
+
+_:18c9bd0805834f90a6ab5c43db908150959 rdf:first _:18c9bd0805834f90a6ab5c43db908150960;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150960 sh:inversePath crmsci:O19_has_found_object .
+
+_:18c9bd0805834f90a6ab5c43db908150961 rdf:first _:18c9bd0805834f90a6ab5c43db908150962;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150962 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150963 .
+
+_:18c9bd0805834f90a6ab5c43db908150963 rdf:first crm:P8_took_place_on_or_within;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150964 .
+
+_:18c9bd0805834f90a6ab5c43db908150964 rdf:first _:18c9bd0805834f90a6ab5c43db908150965;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150965 sh:inversePath crm:P8i_witnessed .
+
+oash:P273 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150966;
+  sh:name "was found on"@en, "a été trouvé sur"@fr;
+  sh:description "The excavation/discovery on which the natural object was excavated or found."@en,
+    "La fouille ou la découverte où des objets naturels ont éte découverts ou trouvés"@fr;
+  sh:node oash:EncounterEvent;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150966 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150967 .
+
+_:18c9bd0805834f90a6ab5c43db908150967 rdf:first crmsci:O19i_was_object_found_by;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150968 .
+
+_:18c9bd0805834f90a6ab5c43db908150968 rdf:first _:18c9bd0805834f90a6ab5c43db908150969;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150969 sh:inversePath crmsci:O19_has_found_object .
+
+oash:P274 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150970;
+  sh:name "is documented in"@en, "est documenté dans"@fr;
+  sh:description "A document in which the natural object is described, analysed or contextualised"@en,
+    "Un document dans lequel un objet naturel est décrit, analysé et contextualisé."@fr;
+  sh:node oash:Document;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150970 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150971 .
+
+_:18c9bd0805834f90a6ab5c43db908150971 rdf:first crm:P70i_is_documented_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150972 .
+
+_:18c9bd0805834f90a6ab5c43db908150972 rdf:first _:18c9bd0805834f90a6ab5c43db908150973;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150973 sh:inversePath crm:P70_documents .
+
+oash:P275 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150974;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "A biological object which is contained in a stratigraphic unit."@en,
+    "Un objet naturel qui est contenu dans une unité stratigraphique"@fr;
+  sh:node oash:StratigraphicVolumeUnit;
+  dash:searchWidget core:AutocompleteProperty;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150974 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150975 .
+
+_:18c9bd0805834f90a6ab5c43db908150975 rdf:first crmarch:AP21i_is_contained_in;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150976 .
+
+_:18c9bd0805834f90a6ab5c43db908150976 rdf:first _:18c9bd0805834f90a6ab5c43db908150977;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150977 sh:inversePath crmarch:AP21_contains .
+
+oash:P276 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150978;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "A biological object which is contained in an archeological feature"@en,
+    "Un objet naturel qui est contenu dans un fait archéologique"@fr;
+  sh:node oash:Feature;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Feature_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150978 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150979 .
+
+_:18c9bd0805834f90a6ab5c43db908150979 rdf:first crm:P46i_forms_part_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150980 .
+
+_:18c9bd0805834f90a6ab5c43db908150980 rdf:first _:18c9bd0805834f90a6ab5c43db908150981;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150981 sh:inversePath crm:P46_is_composed_of .
+
+oash:P277 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150982;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "A biological object which is contained in an archeological feature"@en,
+    "Un objet naturel qui est contenu dans un fait archéologique"@fr;
+  sh:node oash:Wall;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Wall_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150982 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150983 .
+
+_:18c9bd0805834f90a6ab5c43db908150983 rdf:first crm:P46i_forms_part_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150984 .
+
+_:18c9bd0805834f90a6ab5c43db908150984 rdf:first _:18c9bd0805834f90a6ab5c43db908150985;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150985 sh:inversePath crm:P46_is_composed_of .
+
+oash:P278 a skos:Concept;
+  sh:path _:18c9bd0805834f90a6ab5c43db908150986;
+  sh:name "was contained in"@en, "était contenu dans"@fr;
+  sh:description "A biological object which is contained in an archeological feature"@en,
+    "Un objet naturel qui est contenu dans un fait archéologique"@fr;
+  sh:node oash:Burial;
+  dash:searchWidget core:AutocompleteProperty;
+  datasources:datasource oash:Burial_prefLabel;
+  core:enableOptional true;
+  core:enableNegation true .
+
+_:18c9bd0805834f90a6ab5c43db908150986 sh:alternativePath _:18c9bd0805834f90a6ab5c43db908150987 .
+
+_:18c9bd0805834f90a6ab5c43db908150987 rdf:first crm:P46i_forms_part_of;
+  rdf:rest _:18c9bd0805834f90a6ab5c43db908150988 .
+
+_:18c9bd0805834f90a6ab5c43db908150988 rdf:first _:18c9bd0805834f90a6ab5c43db908150989;
+  rdf:rest rdf:nil .
+
+_:18c9bd0805834f90a6ab5c43db908150989 sh:inversePath crm:P46_is_composed_of .
+
+oash:List_skosxl-altlabel_count a datasources:SparqlDatasource;
+  datasources:queryTemplate datasources:query_list_label_with_range_count;
+  datasources:labelPath "<http://www.w3.org/2008/05/skos-xl#altLabel>/<http://www.w3.org/2008/05/skos-xl#literalForm>" .
+
+oash:Wall_prefLabel a datasources:SparqlDatasource;
+  datasources:queryTemplate oash:Wall_label;
+  datasources:labelProperty skos:prefLabel .
+
+oash:Feature_prefLabel a datasources:SparqlDatasource;
+  datasources:queryTemplate oash:Feature_label;
+  datasources:labelProperty skos:prefLabel .
+
+oash:Burial_prefLabel a datasources:SparqlDatasource;
+  datasources:queryTemplate oash:Burial_label;
+  datasources:labelProperty skos:prefLabel .
+
+oash:list_skos-preflabel_range-count a datasources:SparqlDatasource;
+  datasources:queryTemplate oash:query_list;
+  datasources:labelProperty skos:prefLabel .
+
+oash:place_autocomplete a datasources:SparqlDatasource;
+  datasources:queryTemplate oash:Place_Query_without_filter_lang;
+  datasources:labelProperty skos:prefLabel .
+
+oash:Wall_List_prefLabel a datasources:SparqlDatasource;
+  datasources:queryTemplate oash:Wall_list;
+  datasources:labelProperty skos:prefLabel .
+
+oash:Feature_List_prefLabel a datasources:SparqlDatasource;
+  datasources:queryTemplate oash:Feature_list;
+  datasources:labelProperty skos:prefLabel .
+
+oash:Burial_List_prefLabel a datasources:SparqlDatasource;
+  datasources:queryTemplate oash:Burial_list;
+  datasources:labelProperty skos:prefLabel .
+
+this:query_search_label_contains_langfr a datasources:SPARQLQuery;
+  datasources:queryString """SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ ?uri a $range .
+ ?uri $labelPath ?label .
+ FILTER(isIRI(?uri))
+ FILTER(CONTAINS(LCASE(STR(?label)), LCASE(\"$key\"))) 
+ FILTER(lang(?label) = '' || lang(?label) = \"fr\")
+} 
+ORDER BY UCASE(?label)
+LIMIT 50""";
+  rdfs:comment "A query that will search in labels using contains function, first in the user language but will default to French."@en .
+
+oash:Wall_label a datasources:SPARQLQuery;
+  datasources:queryString "SELECT DISTINCT ?uri ?label WHERE { ?domain $type $domain . ?domain $property ?uri . ?uri a <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/pcrtIxHmbVwDYW> ; $labelPath ?label . FILTER(isIRI(?uri)) FILTER(lang(?label) = \"\" || lang(?label) = $lang) }";
+  rdfs:comment "A query that will search the label for an oash:Wall entity"@en .
+
+oash:Feature_label a datasources:SPARQLQuery;
+  datasources:queryString "SELECT DISTINCT ?uri ?label WHERE { ?domain $type $domain . ?domain $property ?uri . ?uri a <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/crtyuEo4S4GyD> ; $labelPath ?label . FILTER(isIRI(?uri)) FILTER(lang(?label) = \"\" || lang(?label) = $lang) }";
+  rdfs:comment "A query that will search the label for an oash:Feature entity"@en .
+
+oash:Burial_label a datasources:SPARQLQuery;
+  datasources:queryString "SELECT DISTINCT ?uri ?label WHERE { ?domain $type $domain . ?domain $property ?uri . ?uri a <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/pcrt795b632nWw> ; $labelPath ?label . FILTER(isIRI(?uri)) FILTER(lang(?label) = \"\" || lang(?label) = $lang) }";
+  rdfs:comment "A query that will search the label for an oash:Burial entity."@en .
+
+oash:Place_Query_without_filter_lang a datasources:SPARQLQuery;
+  datasources:queryString "SELECT DISTINCT ?uri ?label WHERE { ?domain $type $domain . ?domain $property ?uri . ?uri $type $range . ?uri $labelPath ?label . FILTER(isIRI(?uri)) FILTER(CONTAINS(LCASE(STR(?label)), LCASE(\"$key\"))) } ORDER BY UCASE(?label) LIMIT 10";
+  rdfs:comment "A query that will search for geonames without taking into account the lang of the label."@en .
+
+oash:Wall_list a datasources:SPARQLQuery;
+  datasources:queryString "SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) WHERE { { SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) WHERE { ?domain a <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/pcrtIxHmbVwDYW> . ?domain $property ?uri . FILTER(isIRI(?uri)) } GROUP BY ?uri } ?uri $labelPath ?theLabel . FILTER(lang(?theLabel) = \"\" || lang(?theLabel) = $lang) } ORDER BY DESC(?count) UCASE(?label) LIMIT 500" .
+
+oash:Feature_list a datasources:SPARQLQuery;
+  datasources:queryString "SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) WHERE { { SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) WHERE { ?domain a <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/crtyuEo4S4GyD> . ?domain $property ?uri . FILTER(isIRI(?uri)) } GROUP BY ?uri } ?uri $labelPath ?theLabel . FILTER(lang(?theLabel) = \"\" || lang(?theLabel) = $lang) } ORDER BY DESC(?count) UCASE(?label) LIMIT 500" .
+
+oash:Burial_list a datasources:SPARQLQuery;
+  datasources:queryString "SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) WHERE { { SELECT DISTINCT ?uri (COUNT(?domain) AS ?count) WHERE { ?domain a <http://www.cidoc-crm.org/cidoc-crm/E25_Human-Made_Feature> ; <http://www.cidoc-crm.org/cidoc-crm/P2_has_type> <https://ark.frantiq.fr/ark:/26678/pcrt795b632nWw> . ?domain $property ?uri . FILTER(isIRI(?uri)) } GROUP BY ?uri } ?uri $labelPath ?theLabel . FILTER(lang(?theLabel) = \"\" || lang(?theLabel) = $lang) } ORDER BY DESC(?count) UCASE(?label) LIMIT 500" .
+
+oash:query_list a datasources:SPARQLQuery;
+  datasources:queryString "SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label) WHERE { SELECT DISTINCT ?uri ?theLabel (COUNT(?domain) AS ?count) WHERE { ?domain $type $domain . ?domain $property ?uri . ?uri $type $range . ?uri $labelPath ?theLabel . FILTER(lang(?theLabel) = \"\" || lang(?theLabel) = 'fr') FILTER(isIRI(?uri)) } GROUP BY ?uri ?theLabel } ORDER BY DESC(?count) LIMIT 500" .
