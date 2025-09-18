@@ -6,8 +6,7 @@ import StartClassGroup from "../components/builder-section/groupwrapper/criteria
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { SelectedVal } from "../components/SelectedVal";
 import SparnaturalComponent from "../components/SparnaturalComponent";
-import { WidgetValue } from "../components/widgets/AbstractWidget";
-import { Branch, SparnaturalQueryIfc, Order, VariableTerm } from "../SparnaturalQueryIfc";
+import { Branch, SparnaturalQueryIfc, Order, VariableTerm, CriteriaValue } from "../SparnaturalQueryIfc";
 
 
 export default class QueryLoader{
@@ -100,7 +99,7 @@ export default class QueryLoader{
     
       // set WidgetValues
       branch.line.values.forEach((v) => {
-        const parsedVal: WidgetValue = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
+        const parsedVal: CriteriaValue = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
         // if there are multiple values rendered, click first the 'plus' btn, to add more values
         if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
         grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(parsedVal)

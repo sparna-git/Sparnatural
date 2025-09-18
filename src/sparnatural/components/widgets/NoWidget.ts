@@ -1,8 +1,9 @@
-import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { HTMLComponent } from "../HtmlComponent";
+import { CriteriaValue } from "../../SparnaturalQueryIfc";
 
 export class NoWidget extends AbstractWidget {
-  parseInput(): WidgetValue {
+  parseInput(): CriteriaValue {
     throw new Error("Method not implemented.");
   }
   value: any = null;

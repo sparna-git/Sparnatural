@@ -1,6 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
 import { SelectedVal } from "../SelectedVal";
-import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 
 import Awesomplete from 'awesomplete';
 import { I18n } from '../../settings/I18n';
@@ -8,6 +8,7 @@ import { HTMLComponent } from '../HtmlComponent';
 import { AutocompleteDataProviderIfc, RdfTermDatasourceItem } from '../datasources/DataProviders';
 import { NoOpAutocompleteProvider } from '../datasources/NoOpDataProviders';
 import { mergeDatasourceResults } from '../datasources/SparqlDataProviders';
+import { CriteriaValue, RDFTerm, RdfTermValue } from '../../SparnaturalQueryIfc';
 
 const factory = new DataFactory();
 
@@ -122,14 +123,16 @@ export class AutoCompleteWidget extends AbstractWidget {
       // fetch the autocomplete event payload, which is the JSON serialization of the RDFTerm
       let awesompleteEvent:{label:string, value:string} = (event as unknown as {text:{label:string, value:string}}).text;
 
-      let autocompleteValue= new RdfTermValue({
+      let autocompleteValue: CriteriaValue = {
           label: awesompleteEvent.label,
-          // parse back the RDFTerm as an object
-          rdfTerm: (JSON.parse(awesompleteEvent.value) as RDFTerm),
-      });
+          value: {
+            // parse back the RDFTerm as an object
+            rdfTerm: (JSON.parse(awesompleteEvent.value) as RDFTerm),
+          }          
+      };
 
       // set the value on the criteria
-      inputHtml.val(autocompleteValue.value.label);
+      inputHtml.val(autocompleteValue.label);
       this.triggerRenderWidgetVal(autocompleteValue);
     });
 
@@ -165,7 +168,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     return this;
   }
 
-  parseInput(input: RdfTermValue["value"]): RdfTermValue {return new RdfTermValue(input)}
+  parseInput(input: CriteriaValue): CriteriaValue {return input;}
 
 }
 

@@ -1,25 +1,11 @@
 import { DataFactory } from 'rdf-data-factory';
 import { SelectedVal } from "../SelectedVal";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { I18n } from '../../settings/I18n';
 import { HTMLComponent } from '../HtmlComponent';
+import { CriteriaValue } from '../../SparnaturalQueryIfc';
 
 const factory = new DataFactory();
-
-export class BooleanWidgetValue implements WidgetValue {
-  value: {
-    label: string;
-    boolean: boolean;
-  }
-
-  key():string {
-    return this.value.boolean.toString();
-  }
-
-  constructor(v:BooleanWidgetValue["value"]) {
-    this.value = v;
-  }
-}
 
 export class BooleanWidget extends AbstractWidget {
 
@@ -52,27 +38,32 @@ export class BooleanWidget extends AbstractWidget {
     this.html.append(trueSpan).append(orSpan).append(falseSpan);
 
     trueSpan[0].addEventListener("click", (e) => {
-      let widgetValue: BooleanWidgetValue = new BooleanWidgetValue({
+      let widgetValue:CriteriaValue = {
         label: I18n.labels.true,
-        boolean: true,
-      });
+        value: {
+          boolean: true
+        }
+        
+      };
 
       this.triggerRenderWidgetVal(widgetValue);
     });
 
     falseSpan[0].addEventListener("click", (e) => {
-      let widgetValue: BooleanWidgetValue = new BooleanWidgetValue({
+      let widgetValue: CriteriaValue = {
         label: I18n.labels.false,
-        boolean: false,
-      });
+        value: {
+          boolean: false
+        }
+      };
 
       this.triggerRenderWidgetVal(widgetValue);
     });
     return this;
   }
 
-  parseInput(input: BooleanWidgetValue["value"]): BooleanWidgetValue {
-    return new BooleanWidgetValue(input);
+  parseInput(input: CriteriaValue): CriteriaValue {
+    return input;
    }
 
 }

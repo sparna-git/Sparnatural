@@ -1,29 +1,15 @@
 import { DataFactory } from "rdf-data-factory";
 import { SelectedVal } from "../SelectedVal";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { I18n } from "../../settings/I18n";
 import { AddUserInputBtn } from "../buttons/AddUserInputBtn";
 import { InfoBtn } from "../buttons/InfoBtn";
 import { TOOLTIP_CONFIG } from "../../settings/defaultSettings";
 import { HTMLComponent } from "../HtmlComponent";
+import { CriteriaValue, NumberValue } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
-export class NumberWidgetValue implements WidgetValue {
-  value: {
-    label: string;
-    min: number | undefined;
-    max: number | undefined;
-  };
-
-  key(): string {
-    return "" + this.value.min + "-" + this.value.max;
-  }
-
-  constructor(v: NumberWidgetValue["value"]) {
-    this.value = v;
-  }
-}
 
 export interface NumberConfiguration {
   min?: string;
@@ -115,11 +101,7 @@ export class NumberWidget extends AbstractWidget {
   }
 
   #onFormSubmit = (event: SubmitEvent) => {
-    let numberWidgetValue = {
-      label: this.#getValueLabel(
-        this.minInput.val().toString(),
-        this.maxInput.val().toString()
-      ),
+    let value:NumberValue = {
       min:
         this.minInput.val() != ""
           ? Number(this.minInput.val().toString())
@@ -127,11 +109,20 @@ export class NumberWidget extends AbstractWidget {
       max:
         this.maxInput.val() != ""
           ? Number(this.maxInput.val().toString())
-          : undefined,
-    };
+          : undefined
+    }
 
-    numberWidgetValue = this.#checkInput(numberWidgetValue);
-    this.triggerRenderWidgetVal(this.parseInput(numberWidgetValue));
+    this.#checkInput(value);
+
+    let numberWidgetValue:CriteriaValue = {
+      label: this.#getValueLabel(
+        this.minInput.val().toString(),
+        this.maxInput.val().toString()
+      ),
+      value: value
+    };
+    
+    this.triggerRenderWidgetVal(numberWidgetValue);
 
     // prevent actual form submission
     event.preventDefault();
@@ -143,10 +134,9 @@ export class NumberWidget extends AbstractWidget {
     (this.form[0] as HTMLFormElement).requestSubmit();
   };
 
-  #checkInput(input: NumberWidgetValue["value"]): NumberWidgetValue["value"] {
+  #checkInput(input: NumberValue) {
     if (input.min && input.max && input.min > input.max)
       throw Error("lower bound is bigger than upper bound!");
-    return input;
   }
 
   #getValueLabel = function (
@@ -172,7 +162,7 @@ export class NumberWidget extends AbstractWidget {
     return valueLabel;
   };
 
-  parseInput(input: NumberWidgetValue["value"]): NumberWidgetValue {
-    return new NumberWidgetValue(input);
+  parseInput(input: CriteriaValue): CriteriaValue {
+    return input;
   }
 }

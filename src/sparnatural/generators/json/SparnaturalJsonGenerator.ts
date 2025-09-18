@@ -8,7 +8,6 @@ import {
   VariableTerm,
 } from "../../SparnaturalQueryIfc";
 import { OptionTypes } from "../../components/builder-section/groupwrapper/criteriagroup/optionsgroup/OptionsGroup";
-import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 import { DraggableComponentState } from "../../components/variables-section/variableorder/DraggableComponent";
 import { DataFactory } from "rdf-data-factory";
 
@@ -100,11 +99,7 @@ export class SparnaturalJsonGenerator {
         oType: CrtGrp.EndClassGroup.getTypeSelected(),
         // extract only the value part, not the key
         values: CrtGrp.endClassWidgetGroup
-          .getWidgetValues()
-          .filter((v) => !(v instanceof SelectAllValue))
-          .map((v) => {
-            return v.value;
-          }),
+          .getWidgetValues(),
       },
       children: grpWrapper.whereChild
         // either we are already in an option, or one was set at this level

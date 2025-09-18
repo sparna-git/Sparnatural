@@ -8,7 +8,6 @@ import ClassBuilder from "./ClassBuilder";
 import IntersectionBuilder from "./IntersectionBuilder";
 import SparqlFactory from "./SparqlFactory";
 import ValueBuilderIfc, { ValueBuilderFactory } from "./ValueBuilder";
-import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
 
 const factory = new DataFactory();
 
@@ -72,7 +71,6 @@ export default class WhereBuilder {
         this.#grpWrapper.CriteriaGroup.EndClassGroup.isVarSelected(),
         this.#grpWrapper.CriteriaGroup.endClassWidgetGroup
           .getWidgetValues()
-          .filter((v) => !(v instanceof SelectAllValue))
           .map((v) => {
             return v.value;
           })

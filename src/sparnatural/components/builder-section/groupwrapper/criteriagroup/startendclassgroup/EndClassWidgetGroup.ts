@@ -7,13 +7,12 @@ import { HTMLComponent } from "../../../../HtmlComponent";
 import { AddWidgetValueBtn } from "../../../../buttons/AddWidgetValueBtn";
 import {
   AbstractWidget,
-  ValueRepetition,
-  WidgetValue,
+  ValueRepetition
 } from "../../../../widgets/AbstractWidget";
 import CriteriaGroup from "../CriteriaGroup";
-import { SelectAllValue } from "../edit-components/EditComponents";
 import { EditBtn } from "../../../../buttons/EditBtn";
-import { MapValue } from "../../../../widgets/MapWidget";
+import { CriteriaValue, equalsWidgetValue, getWidgetValueType, MapValue, WidgetValueType } from "../../../../../SparnaturalQueryIfc";
+import { I18n } from "../../../../../settings/I18n";
 
 
 /*
@@ -21,9 +20,11 @@ import { MapValue } from "../../../../widgets/MapWidget";
   This values are added in a 'list' after the EndClassGroup
 */
 export class EndClassWidgetGroup extends HTMLComponent {
-  widgetValues: Array<EndClassWidgetValue> = [];
+  widgetValues?: Array<EndClassWidgetValue> = [];
   specProvider: ISparnaturalSpecification;
   addWidgetValueBtn: AddWidgetValueBtn;
+  isSelectAll:boolean = false;
+
   constructor(parentComponent: HTMLComponent, specProvider: ISparnaturalSpecification) {
     super("EndClassWidgetGroup", parentComponent, null);
     this.specProvider = specProvider;
@@ -59,7 +60,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
         let unselectedValue: EndClassWidgetValue;
         this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
-          if (val.widgetVal.key() === valueToDel.widgetVal.key()) {
+          if (equalsWidgetValue(val.widgetVal.value, valueToDel.widgetVal.value)) {
             unselectedValue = val;
             return false;
           }
@@ -87,16 +88,24 @@ export class EndClassWidgetGroup extends HTMLComponent {
   #onRemoveValue(e: CustomEvent) {
     let valueToDel: EndClassWidgetValue = e.detail;
 
+    // special case: if the value to delete is the selectAll value
     let unselectedValue: EndClassWidgetValue;
-    this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
-      if (val.widgetVal.key() === valueToDel.widgetVal.key()) {
-        unselectedValue = val;
-        return false;
-      }
-      return true;
-    });
-    if (unselectedValue === undefined)
-      throw Error("Unselected val not found in the widgetValues list!");
+    if(valueToDel.selectAll) {
+      this.isSelectAll = false;
+      unselectedValue = valueToDel;
+    } else {
+      this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
+        if (equalsWidgetValue(val.widgetVal.value, valueToDel.widgetVal.value)) {
+          unselectedValue = val;
+          return false;
+        }
+        return true;
+      });
+      if (unselectedValue === undefined)
+        throw Error("Unselected val not found in the widgetValues list!");   
+      
+    }
+
     unselectedValue.html.remove();
 
     if (this.widgetValues.length < 1) {
@@ -130,10 +139,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
   }
 
   // user selects a value for example a country from the listwidget
-  renderWidgetVal(selectedVal: WidgetValue) {
+  renderWidgetVal(selectedVal: CriteriaValue) {
+    this.isSelectAll = false
     // check if value already got selected before
     if (
-      this.widgetValues.some((val) => val.widgetVal.key() === selectedVal.key())
+      this.widgetValues.some((val) => equalsWidgetValue(val.widgetVal.value, selectedVal.value))
     )
       return;
     
@@ -141,7 +151,22 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.#renderEndClassWidgetVal(selectedVal);
   }
 
-  #renderEndClassWidgetVal(widgetVal: WidgetValue) {
+  setSelectAll() {
+    this.isSelectAll = true;
+    let endClassWidgetVal = new EndClassWidgetValue(this, null, true);
+    this.#renderNewSelectedValue(endClassWidgetVal);
+
+    // asks to remove the value selection part, with 1 and 2
+    this.html[0].dispatchEvent(
+      new CustomEvent("removeEditComponents", { bubbles: true })
+    );
+
+    this.html[0].dispatchEvent(
+      new CustomEvent("onGrpInputCompleted", { bubbles: true })
+    );
+  }
+
+  #renderEndClassWidgetVal(widgetVal: CriteriaValue) {
     let endClassWidgetVal = new EndClassWidgetValue(this, widgetVal);
     this.widgetValues.push(endClassWidgetVal);
 
@@ -150,7 +175,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     // if the widget allows multiple values to be selected then AddWidgetValueBtn
     // undefined for NON_SELECTABLE_PROPERTY
     const widgetComp:AbstractWidget | undefined = (this.parentComponent as CriteriaGroup).EndClassGroup.getWidgetComponent()
-    if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE && !(widgetVal instanceof SelectAllValue) ) {
+    if(widgetComp && widgetComp.valueRepetition == ValueRepetition.MULTIPLE) {
       // now (re)render the addMoreValuesButton
       this.addWidgetValueBtn?.html
         ? this.addWidgetValueBtn.render()
@@ -197,7 +222,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     //this.#addEventListener();
   };
 
-  getWidgetValues(): WidgetValue[] {
+  getWidgetValues(): CriteriaValue[] {
     let vals = this.widgetValues.map((val) => {
       return val.widgetVal;
     });
@@ -208,7 +233,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
    * @returns true if the widget value is the "Any" value
    */
   hasAnyValue():boolean {
-    return this.getWidgetValues().some((v) => (v instanceof SelectAllValue))
+    return this.isSelectAll;
   }
 }
 
@@ -217,21 +242,26 @@ export class EndClassWidgetValue extends HTMLComponent {
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   unselectBtn: UnselectBtn;
   editBtn:EditBtn;
-  value_lbl: string;
-  widgetVal: WidgetValue;
-  constructor(ParentComponent: EndClassWidgetGroup, selectedVal: WidgetValue) {
+  widgetVal: CriteriaValue;
+
+  selectAll: boolean = false;
+
+  constructor(ParentComponent: EndClassWidgetGroup, selectedVal: CriteriaValue, selectAll: boolean = false) {
     super("EndClassWidgetValue", ParentComponent, null);
     // set a tooltip if the label is a bit long
     this.widgetVal = selectedVal;
-    this.value_lbl = selectedVal.value.label;
+    this.selectAll = selectAll;
   }
 
   render(): this {
     super.render();
     this.backArrow.render();
+
+    let theLabel = this.selectAll?I18n.labels.SelectAllValues:this.widgetVal.label;
+
     // set a tooltip if the label is a bit long
-    var tooltip = (this.value_lbl.length > 25)?'title="'+this.#stripLabelHtml(this.value_lbl)+'"':"";
-    let valuelbl = `<p ${tooltip}><span> ${this.value_lbl} </span></p>`;
+    var tooltip = (theLabel.length > 25)?'title="'+this.#stripLabelHtml(theLabel)+'"':"";
+    let valuelbl = `<p ${tooltip}><span> ${theLabel} </span></p>`;
     this.html.append($(valuelbl));
     this.frontArrow.render();
     this.unselectBtn = new UnselectBtn(this, () => {
@@ -243,7 +273,7 @@ export class EndClassWidgetValue extends HTMLComponent {
       );
     }).render();
 
-    if(this.widgetVal instanceof MapValue) {
+    if(this.widgetVal && getWidgetValueType(this.widgetVal.value) == WidgetValueType.MapValue) {
       this.editBtn = new EditBtn(this, () => {
         this.html[0].dispatchEvent(
           new CustomEvent("onEditEndClassWidgetValue", {

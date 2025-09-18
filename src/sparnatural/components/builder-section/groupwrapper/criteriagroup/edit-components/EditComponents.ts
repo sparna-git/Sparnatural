@@ -4,26 +4,10 @@ import { SelectedVal } from "../../../../SelectedVal";
 import { ISparnaturalSpecification } from "../../../../../spec-providers/ISparnaturalSpecification";
 import { HTMLComponent } from "../../../../HtmlComponent";
 import EndClassGroup from "../startendclassgroup/EndClassGroup";
-import { WidgetValue } from "../../../../widgets/AbstractWidget";
 import WidgetWrapper from "./WidgetWrapper";
 import ActionWhere from "../../../../buttons/actions/actioncomponents/ActionWhere";
 import { I18n } from "../../../../../settings/I18n";
-
-export class SelectAllValue implements WidgetValue {
-  static key = "SelectAllValue";
-
-  value: {
-    label: string;
-  };
-
-  key():string {
-    return SelectAllValue.key;
-  }
-
-  constructor(v:SelectAllValue["value"]){
-    this.value = v;
-  }
-}
+import { CriteriaValue } from "../../../../../SparnaturalQueryIfc";
 
 
 class EditComponents extends HTMLComponent {
@@ -109,15 +93,9 @@ class EditComponents extends HTMLComponent {
    * Can be called from the outside when loading queries
    */
   onSelectAll() {
-    let selectAllVal = new SelectAllValue(
-      {
-        label: I18n.labels.SelectAllValues,
-      }
-    );
     this.html[0].dispatchEvent(
-      new CustomEvent("renderWidgetVal", {
-        bubbles: true,
-        detail: selectAllVal,
+      new CustomEvent("selectAll", {
+        bubbles: true
       })
     );
   }

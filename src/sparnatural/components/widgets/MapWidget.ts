@@ -2,7 +2,7 @@ import { DataFactory } from 'rdf-data-factory';
 // L needs to be imported *before* leaflet-geoman-free
 import L, { LatLng, Rectangle, PolylineOptions, Polygon, PM, TileLayer } from "leaflet";
 import { AddUserInputBtn } from "../buttons/AddUserInputBtn";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import "leaflet/dist/leaflet.css";
 import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
@@ -10,30 +10,10 @@ import { SelectedVal } from "../SelectedVal";
 import { I18n } from '../../settings/I18n';
 import { HTMLComponent } from '../HtmlComponent';
 import CriteriaGroup from '../builder-section/groupwrapper/criteriagroup/CriteriaGroup';
+import { CriteriaValue, MapValue } from '../../SparnaturalQueryIfc';
 
 
 const factory = new DataFactory();
-
-export class MapValue implements WidgetValue {
-  value: {
-    label: string;
-    type: string;
-    coordinates: LatLng[][];
-  };
-
-  key():string {
-    return this.value.coordinates.toString();
-  }
-
-  constructor(v:MapValue["value"]) {
-    this.value = v;
-  }
-
-  exportToGeoJson():object {
-    // TODO : recreate a GeoJSON value from the MapWidgetValue
-    return {};
-  }
-}
 
 // converts props of type Date to type string
 type ObjectifyLatLng<T> = T extends LatLng[][]
@@ -78,7 +58,7 @@ export default class MapWidget extends AbstractWidget {
   
   protected configuration: MapConfiguration;
   protected endClassWidgetGroup: any;
-  protected widgetValues: MapValue[];
+  protected widgetValues: CriteriaValue[];
   //protected widgetValue: MapWidgetValue[];
   // protected blockObjectPropTriple: boolean = true
   renderMapValueBtn: AddUserInputBtn;
@@ -136,14 +116,17 @@ export default class MapWidget extends AbstractWidget {
         fillRule: "evenodd"
       }
 
-      switch ((this.widgetValues[0].value.type as string)) {
+      switch (((this.widgetValues[0].value as MapValue).valueType as string)) {
         case 'Rectangle':
-            let bounds = L.latLngBounds(this.widgetValues[0].value.coordinates[0][0],this.widgetValues[0].value.coordinates[0][2]) ;
+            let bounds = L.latLngBounds(
+              (this.widgetValues[0].value as MapValue).coordinates[0][0],
+              (this.widgetValues[0].value as MapValue).coordinates[0][2]
+            ) ;
             L.rectangle(bounds, (options as PolylineOptions)).addTo(this.map);
           break;    
         default: 
-          let coordinates = this.widgetValues[0].value.coordinates[0][0] ;
-          L.polygon(this.widgetValues[0].value.coordinates[0], (options as PolylineOptions)).addTo(this.map);
+          let coordinates = (this.widgetValues[0].value as MapValue).coordinates[0][0] ;
+          L.polygon((this.widgetValues[0].value as MapValue).coordinates[0], (options as PolylineOptions)).addTo(this.map);
         break;
       }
     }
@@ -309,18 +292,22 @@ export default class MapWidget extends AbstractWidget {
 
     switch ((layer as any).pm._shape) {
       case 'Rectangle':
-        this.widgetValues.push(new MapValue({
+        this.widgetValues.push({
           label: this.#getValueLabel(layer as Rectangle),
-          type: 'Rectangle',
-          coordinates: (layer as Rectangle).getLatLngs() as LatLng[][],
-        }))
+          value: {
+            valueType: 'Rectangle',
+            coordinates: (layer as Rectangle).getLatLngs() as LatLng[][]
+          }
+        })
         break;    
       default: 
-        this.widgetValues.push(new MapValue({
+        this.widgetValues.push({
           label: this.#getValueLabel(layer as Polygon),
-          type: 'Polygon',
-          coordinates: (layer as Polygon).getLatLngs() as LatLng[][],
-        }));
+          value: {
+            valueType: 'Polygon',
+            coordinates: (layer as Polygon).getLatLngs() as LatLng[][]
+          }          
+        });
       break;
     }
 
@@ -334,21 +321,24 @@ export default class MapWidget extends AbstractWidget {
     }
   };
 
-  parseInput(input:ObjectMapWidgetValue["value"]): MapValue {
+  parseInput(input:CriteriaValue): CriteriaValue {
+    let theValue = input.value as MapValue;
 
-    const parsedCoords = input.coordinates.map((c)=>{
+    const parsedCoords = theValue.coordinates.map((c)=>{
       return c.map((latlng)=>{
         if(!("lat" in latlng) || !('lng' in LatLng) || isNaN(latlng.lat) || isNaN(latlng.lng))
         return new LatLng(latlng.lat,latlng.lng)
       })
     })
-    if(parsedCoords.length === 0) throw Error(`Parsing of ${input.coordinates} failed`)
-    return new MapValue({
-        label: input.label,
+    if(parsedCoords.length === 0) throw Error(`Parsing of ${theValue.coordinates} failed`)
+    return {
+      label: input.label,
+      value: {
         coordinates: parsedCoords,
-        type: input.type
+        valueType: theValue.valueType
       }
-    );
+      
+    };
   }
 
   #changeButton() {

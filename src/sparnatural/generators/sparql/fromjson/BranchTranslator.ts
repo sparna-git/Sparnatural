@@ -80,7 +80,7 @@ export default class BranchTranslator {
         { variable: null, type: this.#branch.line.p },
         { variable: this.#branch.line.o, type: this.#branch.line.oType },
         BranchTranslator.isVarSelected(fullQuery, this.#branch.line.o),
-        this.#branch.line.values
+        this.#branch.line.values.map((v) => v.value)
       );
     }
   }
