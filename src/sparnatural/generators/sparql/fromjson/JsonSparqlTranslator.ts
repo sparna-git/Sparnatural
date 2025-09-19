@@ -8,7 +8,6 @@ import { Pattern, VariableTerm as SparqlVariableTerm } from "sparqljs";
 import { VariableExpression as SparqlVariableExpression } from "sparqljs";
 import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalSpecification";
 import { Grouping, Ordering, SelectQuery, Variable } from "sparqljs";
-import WhereBuilder from "../WhereBuilder";
 import SparqlFactory from "../SparqlFactory";
 import { DataFactory } from "rdf-data-factory";
 import QueryWhereTranslator from "./QueryWhereTranslator";
@@ -132,55 +131,7 @@ export class JsonSparqlTranslator {
     whereBuilder.build();
     this.defaultLabelVars = whereBuilder.getDefaultVars();
     return whereBuilder.getResultPtrns();
-    /*
-    const builder = new WhereBuilder(
-      this.sparnatural.BgWrapper.componentsList.rootGroupWrapper,
-      this.specProvider,
-      this.typePredicate,
-      false,
-      false
-    )
-    builder.build()
-    this.defaultLabelVars = builder.getDefaultVars()
-    
-    if(builder.getExecutedAfterPtrns().length > 0) {
-      // put all normal patterns in a subquery to garantee they are logically executed before
-      // and their variables are bound in the rest of the query outside the subquery
-      let subquery = SparqlFactory.buildSubQuery(builder.getResultPtrns());
-      // and the patterns to be executed after in the normal where clause
-      return [subquery, ...builder.getExecutedAfterPtrns()];
-    } else {
-      return builder.getResultPtrns()
-    }
-      */
   }
-
-  //---------------------------------------------------------------------
-  // old version of the method, to be removed after testing the new one
-  /**
-   * Translates the variables from the JSON structure to variables in the SparqlJs structure
-   * @param variables The variables in the original JSON query structure
-   * @returns An array of Variable structure in the SparqlJs structure
-   */
-  #varsToRDFJS1(
-    variables: Array<VariableTerm | VariableExpression>
-  ): Variable[] {
-    return variables.map((v) => {
-      // if it is an aggregated variable...
-      if ((v as VariableExpression).expression) {
-        let vExpression: VariableExpression = v as VariableExpression;
-        return SparqlFactory.buildAggregateFunctionExpression(
-          vExpression.expression.aggregation,
-          factory.variable(vExpression.expression.expression.value),
-          factory.variable(vExpression.variable.value)
-        );
-      } else {
-        return factory.variable((v as VariableTerm).value);
-      }
-    });
-  }
-
-  //--------------------------------------------------------------------
 
   /**
    * Translates the variables from the JSON structure to variables in the SparqlJs structure
