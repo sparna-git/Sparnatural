@@ -119,7 +119,7 @@ export class NumberWidget extends AbstractWidget {
         this.minInput.val().toString(),
         this.maxInput.val().toString()
       ),
-      value: value
+      criteria: value
     };
     
     this.triggerRenderWidgetVal(numberWidgetValue);

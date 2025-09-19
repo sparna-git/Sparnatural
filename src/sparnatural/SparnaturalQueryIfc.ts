@@ -29,7 +29,7 @@ export interface SparnaturalQueryIfc {
 
 export interface Branch {
   line: CriteriaLine;
-  children?: Array<Branch> | [];
+  children?: Array<Branch> | undefined;
   optional?: boolean;
   notExists?: boolean;
 }
@@ -55,14 +55,14 @@ export interface CriteriaLine {
   o: string;
   sType: string;
   oType: string;
-  values?: LabelledCriteria<Criteria>[];
+  criterias?: LabelledCriteria<Criteria>[];
 }
 
 // TODO : parameterize ?
 export interface LabelledCriteria<T extends Criteria> {
   // human readable string representation shown as a WidgetValue to the user
   label: string; 
-  value: T;
+  criteria: T;
 }
 
 export type Criteria = 

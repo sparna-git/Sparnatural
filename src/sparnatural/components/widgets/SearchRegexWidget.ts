@@ -71,7 +71,7 @@ export class SearchRegexWidget extends AbstractWidget {
     this.searchInput.trigger("change");
     let searchWidgetValue:LabelledCriteria<SearchCriteria> = {
       label: this.searchInput.val().toString(),
-      value: {
+      criteria: {
         search: this.searchInput.val().toString()
       }      
     };

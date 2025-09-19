@@ -139,7 +139,7 @@ export class DatesWidget extends AbstractWidget {
   #addValueBtnClicked = () => {
     let val:LabelledCriteria<DateCriteria> = {
       label: "",
-      value: {
+      criteria: {
         start: this.inputStart.val().toString(),
         stop: this.inputEnd.val().toString()
       }      
@@ -148,7 +148,7 @@ export class DatesWidget extends AbstractWidget {
   };
 
   parseInput(dateValue:LabelledCriteria<DateCriteria>): LabelledCriteria<DateCriteria> {
-    let theValue = dateValue.value as DateCriteria;
+    let theValue = dateValue.criteria as DateCriteria;
     if (theValue.start == "" || theValue.stop == "") {
       dateValue = null;
     } else {
@@ -183,7 +183,7 @@ export class DatesWidget extends AbstractWidget {
         theValue.start,
         theValue.stop
       ),
-      value: theValue
+      criteria: theValue
     }
   }
 

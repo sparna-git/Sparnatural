@@ -322,7 +322,7 @@ export class TreeWidget extends AbstractWidget {
       const val:LabelledCriteria<RdfTermCriteria> = {
         // TODO : find a way to retrieve the itemLabel
         label: checked[node].original.text,
-        value: {
+        criteria: {
           rdfTerm: {
             type: "uri",
             value: checked[node].id

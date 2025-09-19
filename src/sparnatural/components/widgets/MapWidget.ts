@@ -116,17 +116,17 @@ export default class MapWidget extends AbstractWidget {
         fillRule: "evenodd"
       }
 
-      switch (((this.widgetValues[0].value as MapCriteria).coordType as string)) {
+      switch (((this.widgetValues[0].criteria as MapCriteria).coordType as string)) {
         case 'Rectangle':
             let bounds = L.latLngBounds(
-              (this.widgetValues[0].value as MapCriteria).coordinates[0][0],
-              (this.widgetValues[0].value as MapCriteria).coordinates[0][2]
+              (this.widgetValues[0].criteria as MapCriteria).coordinates[0][0],
+              (this.widgetValues[0].criteria as MapCriteria).coordinates[0][2]
             ) ;
             L.rectangle(bounds, (options as PolylineOptions)).addTo(this.map);
           break;    
         default: 
-          let coordinates = (this.widgetValues[0].value as MapCriteria).coordinates[0][0] ;
-          L.polygon((this.widgetValues[0].value as MapCriteria).coordinates[0], (options as PolylineOptions)).addTo(this.map);
+          let coordinates = (this.widgetValues[0].criteria as MapCriteria).coordinates[0][0] ;
+          L.polygon((this.widgetValues[0].criteria as MapCriteria).coordinates[0], (options as PolylineOptions)).addTo(this.map);
         break;
       }
     }
@@ -294,7 +294,7 @@ export default class MapWidget extends AbstractWidget {
       case 'Rectangle':
         this.widgetValues.push({
           label: this.#getValueLabel(layer as Rectangle),
-          value: {
+          criteria: {
             coordType: 'Rectangle',
             coordinates: (layer as Rectangle).getLatLngs() as LatLng[][]
           }
@@ -303,7 +303,7 @@ export default class MapWidget extends AbstractWidget {
       default: 
         this.widgetValues.push({
           label: this.#getValueLabel(layer as Polygon),
-          value: {
+          criteria: {
             coordType: 'Polygon',
             coordinates: (layer as Polygon).getLatLngs() as LatLng[][]
           }          
@@ -322,7 +322,7 @@ export default class MapWidget extends AbstractWidget {
   };
 
   parseInput(input:LabelledCriteria<MapCriteria>): LabelledCriteria<MapCriteria> {
-    let theValue = input.value as MapCriteria;
+    let theValue = input.criteria as MapCriteria;
 
     const parsedCoords = theValue.coordinates.map((c)=>{
       return c.map((latlng)=>{
@@ -333,7 +333,7 @@ export default class MapWidget extends AbstractWidget {
     if(parsedCoords.length === 0) throw Error(`Parsing of ${theValue.coordinates} failed`)
     return {
       label: input.label,
-      value: {
+      criteria: {
         coordinates: parsedCoords,
         coordType: theValue.coordType
       }

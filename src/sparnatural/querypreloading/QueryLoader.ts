@@ -98,7 +98,7 @@ export default class QueryLoader{
       );
     
       // set WidgetValues
-      branch.line.values.forEach((v) => {
+      branch.line.criterias.forEach((v) => {
         const parsedVal: LabelledCriteria<Criteria> = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
         // if there are multiple values rendered, click first the 'plus' btn, to add more values
         if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
@@ -106,7 +106,7 @@ export default class QueryLoader{
       });
 
       // if there is no value, and no children, set an "Any" value
-      if(branch.line.values.length == 0 && branch.children.length == 0) {
+      if(branch.line.criterias.length == 0 && branch.children.length == 0) {
         grpWarpper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
       }
     

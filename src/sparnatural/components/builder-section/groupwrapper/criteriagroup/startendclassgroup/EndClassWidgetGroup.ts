@@ -60,7 +60,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
         let unselectedValue: EndClassWidgetValue;
         this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
-          if (equalsCriteria(val.widgetVal.value, valueToDel.widgetVal.value)) {
+          if (equalsCriteria(val.widgetVal.criteria, valueToDel.widgetVal.criteria)) {
             unselectedValue = val;
             return false;
           }
@@ -97,7 +97,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       unselectedValue = valueToDel;
 
       this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
-        if (equalsCriteria(val.widgetVal.value, valueToDel.widgetVal.value)) {
+        if (equalsCriteria(val.widgetVal.criteria, valueToDel.widgetVal.criteria)) {
           unselectedValue = val;
           return false;
         }
@@ -145,7 +145,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     this.isSelectAll = false
     // check if value already got selected before
     if (
-      this.widgetValues.some((val) => equalsCriteria(val.widgetVal.value, selectedVal.value))
+      this.widgetValues.some((val) => equalsCriteria(val.widgetVal.criteria, selectedVal.criteria))
     )
       return;
     
@@ -276,7 +276,7 @@ export class EndClassWidgetValue extends HTMLComponent {
       );
     }).render();
 
-    if(this.widgetVal && getCriteriaType(this.widgetVal.value) == CriteriaType.MapCriteria) {
+    if(this.widgetVal && getCriteriaType(this.widgetVal.criteria) == CriteriaType.MapCriteria) {
       this.editBtn = new EditBtn(this, () => {
         this.html[0].dispatchEvent(
           new CustomEvent("onEditEndClassWidgetValue", {

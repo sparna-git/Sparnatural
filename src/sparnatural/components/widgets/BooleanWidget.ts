@@ -40,7 +40,7 @@ export class BooleanWidget extends AbstractWidget {
     trueSpan[0].addEventListener("click", (e) => {
       let widgetValue:LabelledCriteria<BooleanCriteria> = {
         label: I18n.labels.true,
-        value: {
+        criteria: {
           boolean: true
         }
         
@@ -52,7 +52,7 @@ export class BooleanWidget extends AbstractWidget {
     falseSpan[0].addEventListener("click", (e) => {
       let widgetValue: LabelledCriteria<BooleanCriteria> = {
         label: I18n.labels.false,
-        value: {
+        criteria: {
           boolean: false
         }
       };

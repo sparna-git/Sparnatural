@@ -175,7 +175,7 @@ export class ListWidget extends AbstractWidget {
     let term = (JSON.parse(termString) as RDFTerm);
     return {
       label: label,
-      value: { rdfTerm: term }
+      criteria: { rdfTerm: term }
     };
   }
 

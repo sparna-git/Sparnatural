@@ -2,7 +2,6 @@ import { getSettings } from "../../../sparnatural/settings/defaultSettings";
 
 import ActionStore from "../ActionStore";
 import { SparnaturalJsonGenerator } from "../../generators/json/SparnaturalJsonGenerator";
-import SparqlGenerator from "../../generators/sparql/SparqlGenerator";
 import { Generator } from "sparqljs";
 import { SparnaturalElement } from "../../../SparnaturalElement";
 import { SparnaturalQueryIfc } from "../../SparnaturalQueryIfc";
@@ -36,69 +35,39 @@ export class QueryGenerator {
       settings.limit
     );
 
-    if (jsonQuery != null) {
-      if (settings.debug) {
-        console.log("*** Sparnatural JSON Query ***");
-        console.dir(jsonQuery);
-      }
+    if (settings.debug) {
+      console.log("*** Sparnatural JSON Query ***");
+      console.dir(jsonQuery);
+    }
 
-      var writer = new SparqlGenerator(
-        this.actionStore.sparnatural,
-        this.actionStore.specProvider,
-        settings.sparqlPrefixes,
-        settings
-      );
-      let selectQuery = writer.generateQuery(
-        this.actionStore.sparnatural.variableSection.listVariables(),
-        this.actionStore.sparnatural.variableSection.getOrder(),
-        settings.addDistinct,
-        settings.limit
-      );
+    var sparqlFromJsonGenerator = new JsonSparqlTranslator(
+      this.actionStore.specProvider,
+      settings
+    );
 
-      // debug rdfJsQuery
-      if (settings.debug) {
-        // prints the SPARQL generated from the writing of the JSON data structure
-        console.log("*** Sparnatural SPARQL Query OLD ***");
-        console.log(selectQuery);
-      }
-
-      var generator = new Generator();
-      var queryString = generator.stringify(selectQuery);
-
-      var sparqlFromJsonGenerator = new JsonSparqlTranslator(
-        this.actionStore.specProvider,
-        settings
-      );
-      let selectQueryFromJson =
+    let selectQueryFromJson =
         sparqlFromJsonGenerator.generateQuery(jsonQuery);
 
-      if (settings.debug) {
-        // prints the SPARQL generated from the writing of the JSON data structure
-        console.log("*** Sparnatural SPARQL Query NEW ***");
-        console.log(selectQueryFromJson);
-      }
+    var generator = new Generator();
+    var queryString = generator.stringify(selectQueryFromJson);
 
-      var queryStringFromJson = generator.stringify(selectQueryFromJson);
-
-      if (settings.debug) {
-        console.log("*** Sparnatural SPARQL Query from JSON ***");
-        console.dir(queryStringFromJson);
-      }
-
-      // fire the event
-      let payload: QueryUpdatedPayload = {
-        queryString: queryString,
-        queryJson: jsonQuery,
-        querySparqlJs: selectQuery,
-        queryStringFromJson: queryStringFromJson,
-      };
-      this.fireQueryUpdatedEvent(payload);
-
-      // re-enable submit button if it was disabled
-      // note that the submitSection may not be present in case submitButton = false in the attributes
-      this.actionStore.sparnatural.submitSection?.enableSubmit();
-
+    if (settings.debug) {
+      console.log("*** Sparnatural SPARQL Query from JSON ***");
+      console.dir(queryString);
     }
+
+    // fire the event
+    let payload: QueryUpdatedPayload = {
+      queryString: queryString,
+      queryJson: jsonQuery,
+      querySparqlJs: selectQueryFromJson
+    };
+    this.fireQueryUpdatedEvent(payload);
+
+    // re-enable submit button if it was disabled
+    // note that the submitSection may not be present in case submitButton = false in the attributes
+    this.actionStore.sparnatural.submitSection?.enableSubmit();
+
   }
 
   fireQueryUpdatedEvent(payload: QueryUpdatedPayload) {
@@ -116,5 +85,4 @@ export class QueryUpdatedPayload {
   queryString: string;
   queryJson: SparnaturalQueryIfc;
   querySparqlJs: Object;
-  queryStringFromJson: string;
 }

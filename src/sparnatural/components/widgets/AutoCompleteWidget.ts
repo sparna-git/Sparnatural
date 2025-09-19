@@ -125,7 +125,7 @@ export class AutoCompleteWidget extends AbstractWidget {
 
       let autocompleteValue: LabelledCriteria<RdfTermCriteria> = {
           label: awesompleteEvent.label,
-          value: {
+          criteria: {
             // parse back the RDFTerm as an object
             rdfTerm: (JSON.parse(awesompleteEvent.value) as RDFTerm),
           }          

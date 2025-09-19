@@ -153,7 +153,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
 
     let stringDateTimeVal:LabelledCriteria<DateCriteria> = {
       label: null,
-      value: {
+      criteria: {
         start:(startDate)?startDate.toISOString():null,
         stop:(endDate)?endDate.toISOString():null
       }      
@@ -166,7 +166,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
   };
 
   parseInput(input: LabelledCriteria<DateCriteria>): LabelledCriteria<DateCriteria> {
-    let theValue:DateCriteria = input.value as DateCriteria;
+    let theValue:DateCriteria = input.criteria as DateCriteria;
 
     if(!this.#isValidDate(theValue.start) && !this.#isValidDate(theValue.stop)) throw Error('No valid Date received')
     let startValue = (this.#isValidDate(theValue.start))?new Date(theValue.start):null
@@ -193,7 +193,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
 
     let dateTimePickerVal:LabelledCriteria<DateCriteria> = {
       label: this.#getValueLabel(tmpValue.startLabel, tmpValue.endLabel),
-      value: {
+      criteria: {
         start: (tmpValue.start)?tmpValue.start.toISOString():null,
         stop: (tmpValue.stop)?tmpValue.stop.toISOString():null,
       }        

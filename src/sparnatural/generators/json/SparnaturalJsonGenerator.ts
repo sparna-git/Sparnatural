@@ -98,13 +98,12 @@ export class SparnaturalJsonGenerator {
         sType: CrtGrp.StartClassGroup.getTypeSelected(),
         oType: CrtGrp.EndClassGroup.getTypeSelected(),
         // extract only the value part, not the key
-        values: CrtGrp.endClassWidgetGroup
-          .getWidgetValues(),
+        criterias: CrtGrp.endClassWidgetGroup.getWidgetValues(),
       },
       children: grpWrapper.whereChild
         // either we are already in an option, or one was set at this level
         ? this.#getBranch(grpWrapper.whereChild, isInOption || (grpWrapper.optionState != OptionTypes.NONE))
-        : []
+        : undefined
     };
 
     // don't set the flags if they are not true
