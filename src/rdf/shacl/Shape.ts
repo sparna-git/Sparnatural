@@ -1,7 +1,7 @@
-import { ShaclStoreModel } from "./ShaclStoreModel";
+import { ShaclModel } from "./ShaclModel";
 import { Resource, ResourceFactory } from "../Resource";
 import { RDFS } from "../vocabularies/RDFS";
-import { StoreModel } from "../StoreModel";
+import { Model } from "../Model";
 import { VOLIPI } from '../vocabularies/VOLIPI';
 import { SH } from '../vocabularies/SH';
 import { NamedNode, Quad_Object, Quad_Subject, Term } from '@rdfjs/types';
@@ -20,9 +20,9 @@ const factory = new DataFactory();
  */
 export class Shape {
     resource: Resource;
-    graph:ShaclStoreModel;
+    graph:ShaclModel;
 
-    constructor(resource:Resource, graph:ShaclStoreModel) {
+    constructor(resource:Resource, graph:ShaclModel) {
       this.resource = resource;
       this.graph = graph;
     }
@@ -117,7 +117,7 @@ export class Shape {
 
       // or try to read the local part of the URI, but should not happen
       if(!label) {
-        label = StoreModel.getLocalName(this.resource.value) as string;
+        label = Model.getLocalName(this.resource.value) as string;
       }
 
       return label;

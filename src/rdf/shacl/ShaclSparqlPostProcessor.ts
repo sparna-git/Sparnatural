@@ -7,20 +7,20 @@ import {
 } from "sparqljs";
 import { Quad } from '@rdfjs/types/data-model';
 import { SH } from '../vocabularies/SH';
-import { ShaclStoreModel } from './ShaclStoreModel';
-import { StoreModel } from '../StoreModel';
+import { ShaclModel } from './ShaclModel';
+import { Model } from '../Model';
 
 
 const factory = new DataFactory();
 
 export class ShaclSparqlPostProcessor {
 
-  shaclGraph: ShaclStoreModel;
+  shaclModel: ShaclModel;
   #parser: SparqlParser;
   #generator: SparqlGenerator;
 
-  constructor(shaclStoreModel: ShaclStoreModel) {    
-    this.shaclGraph = shaclStoreModel;
+  constructor(shaclModel: ShaclModel) {    
+    this.shaclModel = shaclModel;
 
     // init SPARQL parser and generator once
     this.#parser = new Parser();
@@ -31,7 +31,7 @@ export class ShaclSparqlPostProcessor {
   expandSparql(sparql: string, prefixes: { [key: string]: string; }): string {
     
     // for each sh:targetClass
-    this.shaclGraph.store
+    this.shaclModel.store
       .getQuads(null, SH.TARGET_CLASS, null, null)
       .forEach((quad: Quad) => {
         // find it with the full URI
@@ -43,13 +43,13 @@ export class ShaclSparqlPostProcessor {
     // do nothing :-) their URI is already correct
 
     // for each sh:path
-    this.shaclGraph.store
+    this.shaclModel.store
       .getQuads(null, SH.PATH, null, null)
       .forEach((quad: Quad) => {
         try {
           // find it with the full URI
           var re = new RegExp("<" + quad.subject.value + ">", "g");
-          let sparqlReplacementString = this.shaclGraph.pathToSparql(quad.object);
+          let sparqlReplacementString = this.shaclModel.pathToSparql(quad.object);
           sparql = sparql.replace(re, sparqlReplacementString);
         } catch (error) {
           console.error("Unsupported sh:path for "+quad.subject.value+" - review your configuration");
@@ -57,14 +57,14 @@ export class ShaclSparqlPostProcessor {
       });
 
     // for each sh:target/sh:select ...
-    this.shaclGraph.store
+    this.shaclModel.store
       .getQuads(null, SH.TARGET, null, null)
       .forEach((q1: Quad) => {
 
         // get the subject URI that will be replaced
         let nodeShapeUri = q1.subject.value;
 
-        this.shaclGraph.store
+        this.shaclModel.store
         .getQuads(q1.object, SH.SELECT, null, null)
         .forEach((quad: Quad) => {          
           let sparqlTarget = quad.object.value;

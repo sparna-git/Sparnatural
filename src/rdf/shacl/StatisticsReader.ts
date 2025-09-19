@@ -1,6 +1,6 @@
 import { Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { DataFactory } from "rdf-data-factory";
-import { StoreModel } from "../StoreModel";
+import { Model } from "../Model";
 import { DCT } from "../vocabularies/DCT";
 import { VOID } from "../vocabularies/VOID";
 
@@ -8,9 +8,9 @@ let factory = new DataFactory();
 
 export class StatisticsReader {
 
-    protected store: StoreModel;
+    protected store: Model;
 
-    constructor(store: StoreModel) {
+    constructor(store: Model) {
         this.store = store;
     }
 

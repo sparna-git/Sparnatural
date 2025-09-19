@@ -3,10 +3,10 @@ import { Quad_Subject, Term } from "@rdfjs/types";
 
 import { Shape } from './Shape';
 import { Resource } from '../Resource';
-import { ShaclStoreModel, ShapeFactory } from './ShaclStoreModel';
+import { ShaclModel, ShapeFactory } from './ShaclModel';
 import { RDFS } from '../vocabularies/RDFS';
 import { SH } from '../vocabularies/SH';
-import { StoreModel } from '../StoreModel';
+import { Model } from '../Model';
 import { VOLIPI } from '../vocabularies/VOLIPI';
 import { SKOS } from '../vocabularies/SKOS';
 import { RDF } from '../vocabularies/RDF';
@@ -20,7 +20,7 @@ const factory = new DataFactory();
 
 export class NodeShape extends Shape {
 
-    constructor(resource:Resource, graph:ShaclStoreModel) {
+    constructor(resource:Resource, graph:ShaclModel) {
         super(resource, graph);
     }
 
@@ -76,13 +76,13 @@ export class NodeShape extends Shape {
             // attempt to read the local part of the targetClass URI
             if(this.graph.hasTriple(this.resource, SH.TARGET_CLASS, null)) {
                 let targetClass = this.graph.readSingleProperty(this.resource, SH.TARGET_CLASS);
-                label = StoreModel.getLocalName(targetClass.value) as string;
+                label = Model.getLocalName(targetClass.value) as string;
             }
         }
 
         if(!label) {
             // default : read the local part of the URI
-            label = StoreModel.getLocalName(this.resource.value) as string;
+            label = Model.getLocalName(this.resource.value) as string;
         }
 
         return label;
@@ -371,6 +371,6 @@ export class NodeShape extends Shape {
     }
 
     couldBeSkosConcept():boolean {
-        return ShaclStoreModel.couldBeSkosConcept(this.resource, this.graph);
+        return ShaclModel.couldBeSkosConcept(this.resource, this.graph);
     }
 }

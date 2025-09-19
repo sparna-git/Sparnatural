@@ -8,15 +8,15 @@ import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { Quad_Subject } from '@rdfjs/types/data-model';
 import { Term } from "@rdfjs/types";
-import { StoreModel } from '../../../rdf/StoreModel';
+import { Model } from '../../../rdf/Model';
 import { DagIfc, Dag, DagNodeIfc } from '../../dag/Dag';
 import { StatisticsReader } from '../../../rdf/shacl/StatisticsReader';
 import { SH } from '../../../rdf/vocabularies/SH';
 import { XSD } from '../../../rdf/vocabularies/XSD';
 import { RDF } from '../../../rdf/vocabularies/RDF';
-import { BaseRdfStore } from '../../../rdf/BaseRdfStore';
+import { BaseRdfStore } from '../BaseRdfStore';
 import { ShaclSparqlPostProcessor } from '../../../rdf/shacl/ShaclSparqlPostProcessor';
-import { ShaclStoreModel } from '../../../rdf/shacl/ShaclStoreModel';
+import { ShaclModel } from '../../../rdf/shacl/ShaclModel';
 
 
 const factory = new DataFactory();
@@ -27,7 +27,7 @@ export class SHACLSpecificationProvider extends BaseRdfStore implements ISparnat
     super(n3store, lang);
 
     // skolemize blank nodes
-    ShaclStoreModel.skolemizeAnonymousPropertyShapes(this.store);
+    ShaclModel.skolemizeAnonymousPropertyShapes(this.store);
   }
 
   getAllSparnaturalEntities(): string[] {
@@ -108,7 +108,7 @@ export class SHACLSpecificationProvider extends BaseRdfStore implements ISparnat
     let dag:Dag<SHACLSpecificationEntity> = new Dag<SHACLSpecificationEntity>();
     dag.initFromParentableAndIdAbleEntity(entities, disabledList);
 
-    let statisticsReader:StatisticsReader = new StatisticsReader(new StoreModel(this.store));
+    let statisticsReader:StatisticsReader = new StatisticsReader(new Model(this.store));
 
     // add count
     dag.traverseBreadthFirst((node:DagNodeIfc<ISpecificationEntity>) => {
@@ -129,12 +129,12 @@ export class SHACLSpecificationProvider extends BaseRdfStore implements ISparnat
   }
 
   expandSparql(sparql: string, prefixes: { [key: string]: string; }): string {
-    let postProc:ShaclSparqlPostProcessor = new ShaclSparqlPostProcessor(new ShaclStoreModel(this.store));
+    let postProc:ShaclSparqlPostProcessor = new ShaclSparqlPostProcessor(new ShaclModel(this.store));
     return postProc.expandSparql(sparql, prefixes);
   }
 
   getLanguages(): string[] {
-    let shaclStoreModel:ShaclStoreModel = new ShaclStoreModel(this.store);
+    let shaclStoreModel:ShaclModel = new ShaclModel(this.store);
     return shaclStoreModel.readAllLanguages();
   }
 

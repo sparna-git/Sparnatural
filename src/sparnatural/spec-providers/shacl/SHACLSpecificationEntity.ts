@@ -8,7 +8,7 @@ import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
-import { StoreModel } from "../../../rdf/StoreModel";
+import { Model } from "../../../rdf/Model";
 import { DagIfc, Dag } from "../../dag/Dag";
 import { ISpecificationEntity } from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
@@ -347,7 +347,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "Other",
                 function(n3store:RdfStore, shapeUri:any):boolean {
                     // this is in range if nothing else is in range
-                    let graph:StoreModel = new StoreModel(n3store);
+                    let graph:Model = new Model(n3store);
                     return (
                         !graph.hasTriple(factory.namedNode(shapeUri), SH.NODE, null) 
                         &&
@@ -376,7 +376,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "fa-solid fa-calendar",
                 "Date",
                 function(n3store:RdfStore, shapeUri:any):boolean {
-                    let graph:StoreModel = new StoreModel(n3store);
+                    let graph:Model = new Model(n3store);
                     let dt = graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE) as NamedNode;
                     return dt && DatatypeRegistry.asDatatype(dt).isDateDatatype();
                 }
@@ -390,7 +390,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "fa-solid fa-map-location-dot",
                 "Location",
                 function(n3store:RdfStore, shapeUri:any):boolean {
-                    let graph:StoreModel = new StoreModel(n3store);
+                    let graph:Model = new Model(n3store);
                     return graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, GEOSPARQL.WKT_LITERAL)
                 }
             )
@@ -403,7 +403,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "fa-solid fa-font",
                 "Text",
                 function(n3store:RdfStore, shapeUri:any):boolean {
-                    let graph:StoreModel = new StoreModel(n3store);
+                    let graph:Model = new Model(n3store);
                     return (
                         graph.hasTriple(factory.namedNode(shapeUri), SH.DATATYPE, XSD.STRING) 
                         ||
@@ -435,7 +435,7 @@ export class SpecialSHACLSpecificationEntityRegistry {
                 "fa-solid fa-1",
                 "Number",
                 function(n3store:RdfStore, shapeUri:any):boolean {
-                    let graph:StoreModel = new StoreModel(n3store);
+                    let graph:Model = new Model(n3store);
                     let dt = graph.readSingleProperty(factory.namedNode(shapeUri), SH.DATATYPE) as NamedNode;
                     return dt && DatatypeRegistry.asDatatype(dt).isNumberDatatype();
                 }

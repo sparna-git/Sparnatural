@@ -3,8 +3,8 @@ import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { DataFactory } from 'rdf-data-factory';
 import { RdfStore } from "rdf-stores";
-import { StoreModel } from "../../../rdf/StoreModel";
-import { BaseRdfStore } from "../../../rdf/BaseRdfStore";
+import { Model } from "../../../rdf/Model";
+import { BaseRdfStore } from "../BaseRdfStore";
 import { RDFS } from "../../../rdf/vocabularies/RDFS";
 import { VOLIPI } from "../../../rdf/vocabularies/VOLIPI";
 
@@ -33,7 +33,7 @@ export class OWLSpecificationEntry extends BaseRdfStore implements ISpecificatio
           return labels[0].value;
       } else {
           // no rdfs:label present, read the local part of the URI
-          return StoreModel.getLocalName(this.uri) as string;
+          return Model.getLocalName(this.uri) as string;
       }
     }
 

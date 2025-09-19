@@ -4,7 +4,7 @@ import { SKOS } from '../vocabularies/SKOS';
 import { XSD } from '../vocabularies/XSD';
 import { RDF } from "../vocabularies/RDF";
 import { Resource } from "../Resource";
-import { ShaclStoreModel } from "./ShaclStoreModel";
+import { ShaclModel } from "./ShaclModel";
 import { GEOSPARQL } from '../vocabularies/GEOSPARQL';
 import { StatisticsReader } from './StatisticsReader';
 import { SPARNATURAL } from '../vocabularies/SPARNATURAL';
@@ -15,7 +15,7 @@ const factory = new DataFactory();
 
 export interface SearchWidgetIfc {
     getResource():Resource;
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number;
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number;
 }
 
 export class SearchWidgetRegistry {
@@ -66,7 +66,7 @@ export class BaseWidget implements SearchWidgetIfc {
         return this.resource;
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         return -1;
     }
 
@@ -78,7 +78,7 @@ export class AutocompleteWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.AUTOCOMPLETE_PROPERTY);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         return 10;
     }
 
@@ -91,7 +91,7 @@ export class ListWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.LIST_PROPERTY);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         // if there is a provided list of values, score higher
         if(store.hasTriple(propertyShape, SH.IN, null) ) {
             return 100;
@@ -108,7 +108,7 @@ export class ListWidget extends BaseWidget implements SearchWidgetIfc {
             return 20;
         }
 
-        if(range && ShaclStoreModel.couldBeSkosConcept(range, store)){
+        if(range && ShaclModel.couldBeSkosConcept(range, store)){
             return 20;                    
         }
 
@@ -124,7 +124,7 @@ export class TreeWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.TREE_PROPERTY);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         return -1;
     }
 
@@ -137,7 +137,7 @@ export class DatePickerWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.TIME_PROPERTY_DATE);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
 
         let hasDateOrDateTimePredicate = function(rdfNode: any) {
             if(
@@ -171,7 +171,7 @@ export class YearPickerWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.TIME_PROPERTY_YEAR);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         // if the datatype is xsd:gYear
         if(
             store.hasTriple(propertyShape, SH.DATATYPE, XSD.GYEAR) 
@@ -192,7 +192,7 @@ export class MapWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.MAP_PROPERTY);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         // if the datatype is geo:wktLiteral
         if(
             store.hasTriple(propertyShape, SH.DATATYPE, GEOSPARQL.WKT_LITERAL) 
@@ -213,7 +213,7 @@ export class BooleanWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.BOOLEAN_PROPERTY);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         // if the datatype is xsd:boolean
         if(
             store.hasTriple(propertyShape, SH.DATATYPE, XSD.BOOLEAN) 
@@ -235,7 +235,7 @@ export class NumberWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.NUMBER_PROPERTY);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         // if the datatype is xsd:boolean
         if(
             store.hasTriple(propertyShape, SH.DATATYPE, XSD.BYTE)
@@ -281,7 +281,7 @@ export class NoWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.NON_SELECTABLE_PROPERTY);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         return -1;
     }
 
@@ -295,7 +295,7 @@ export class SearchRegexWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.SEARCH_PROPERTY);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         let count = new StatisticsReader(store).getDistinctObjectsCountForShape(propertyShape);
         // if the datatype is xsd:string or rdf:langString, and there is a large number, otherwise we stick with list widget
         if(
@@ -324,7 +324,7 @@ export class SearchEqualWidget extends BaseWidget implements SearchWidgetIfc {
         super(SPARNATURAL.STRING_EQUALS_PROPERTY);
     }
 
-    score(propertyShape:Resource, range:Resource, store: ShaclStoreModel):number {
+    score(propertyShape:Resource, range:Resource, store: ShaclModel):number {
         return -1;
     }
 

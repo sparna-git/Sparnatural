@@ -14,7 +14,7 @@ import { OWLSpecificationProperty } from "./OWLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad_Subject, Term } from '@rdfjs/types/data-model';
 import { Dag, DagIfc } from '../../dag/Dag';
-import { BaseRdfStore } from '../../../rdf/BaseRdfStore';
+import { BaseRdfStore } from '../BaseRdfStore';
 import { RDFS } from '../../../rdf/vocabularies/RDFS';
 
 const factory = new DataFactory();

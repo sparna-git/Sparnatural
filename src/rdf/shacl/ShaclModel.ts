@@ -1,7 +1,7 @@
 import { Term } from "@rdfjs/types/data-model";
 import { RdfStore } from "rdf-stores";
 import { SH } from "../vocabularies/SH";
-import { StoreModel } from "../StoreModel";
+import { Model } from "../Model";
 import { DataFactory } from "rdf-data-factory";
 import { RDF } from "../vocabularies/RDF";
 import { PropertyShape } from "./PropertyShape";
@@ -14,7 +14,7 @@ const factory = new DataFactory();
 
 export class ShapeFactory {
 
-    static buildShape(resource: Term, graph: ShaclStoreModel): Shape {
+    static buildShape(resource: Term, graph: ShaclModel): Shape {
         // the resource must be a named node or blank node
         if (resource.termType != "NamedNode" && resource.termType != "BlankNode") {
             throw new Error("The shape resource must be a named node or a blank node");
@@ -31,63 +31,11 @@ export class ShapeFactory {
 
 }
 
-export class ShaclStoreModel extends StoreModel {
+export class ShaclModel extends Model {
 
     constructor(n3store: RdfStore) {
         super(n3store);
     }
-
-    public static skolemizeAnonymousPropertyShapes(n3store: RdfStore) {
-
-        // any subject of an sh:path...
-        const quadsArray = n3store.getQuads(
-            null,
-            SH.PROPERTY,
-            null,
-            null
-        );
-
-        let i=0;
-        for (const quad of quadsArray) {
-            var propertyShapeNode = quad.object;
-            if(propertyShapeNode.termType == "BlankNode") {
-            // 1. get the base URI pointing to this property shape
-            var nodeShape = quad.subject;
-            if(nodeShape.termType == "NamedNode") {
-                let uri = quad.subject.value;
-                
-                // 2. build a property shape URI from it
-                let propertyShapeUri = uri+"_"+i;
-                // 3. replace all triples where the blank node is subject
-                n3store.getQuads(
-                    propertyShapeNode,
-                    null,
-                    null,
-                    null
-                ).forEach(
-                q => {
-                    n3store.removeQuad(q);
-                    n3store.addQuad(factory.quad(factory.namedNode(propertyShapeUri), q.predicate, q.object, q.graph));
-                }
-                );
-                // 4. replace all triples where the blank node is object
-                n3store.getQuads(
-                    null,
-                    null,
-                    propertyShapeNode,
-                    null
-                ).forEach(
-                q => {
-                    n3store.removeQuad(q);
-                    n3store.addQuad(factory.quad(q.subject, q.predicate, factory.namedNode(propertyShapeUri), q.graph));
-                }
-                );
-            }
-            }
-            i++;
-        }
-    }
-
 
     /**
      * 
@@ -241,13 +189,112 @@ export class ShaclStoreModel extends StoreModel {
     }
 
     /**
+     * Renders the provided SHACL property path as a SPARQL property path syntax, using prefixed URIs.
+     * @param path The SHACL property path to render in SPARQL.
+     * @param usePrefixes True to use prefixes, false to use full URIs.
+     * @return The rendered SPARQL property path.
+     */
+    pathToSparql(path: Term, usePrefixes: boolean = false): string {
+        if (path.termType === "NamedNode") {
+            if (usePrefixes) {
+                return Model.getLocalName(path.value);
+            } else {
+                return `<${path.value}>`;
+            }
+        } else if (path.termType === "BlankNode") {
+            if (this.store.getQuads(path, RDF.FIRST, null, null).length > 0) {
+                // This is an RDF list, indicating a sequence path
+                const sequence: Term[] = this.readListContent(path);
+                return sequence.map(t => this.pathToSparql(t, usePrefixes)).join("/");
+            } else {
+                if (this.store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null).length > 0) {
+                    return this.pathToSparql(this.store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, usePrefixes) + "+";
+                }
+                if (this.store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
+                    return "^" + this.pathToSparql(this.store.getQuads(path, SH.INVERSE_PATH, null, null)[0].object, usePrefixes);
+                }
+                if (this.store.getQuads(path, SH.ALTERNATIVE_PATH, null, null).length > 0) {
+                    const list = this.store.getQuads(path, SH.ALTERNATIVE_PATH, null, null)[0].object;
+                    const sequence: Term[] = this.readListContent(list);
+                    return `(${sequence.map(t => this.pathToSparql(t, usePrefixes)).join("|")})`;
+                }
+                if (this.store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
+                    return this.pathToSparql(this.store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null)[0].object, usePrefixes) + "*";
+                }
+                if (this.store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
+                    return this.pathToSparql(this.store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null)[0].object, usePrefixes) + "?";
+                }
+            }
+        }
+        throw new Error("Unsupported SHACL property path");
+    }
+
+
+    /**
+     * @param n3store A RDF store
+     * 
+     * Replace all blank nodes used as subjects of sh:property with skolem URIs,
+     * based on the URI of the node shape they belong to.
+     */
+    public static skolemizeAnonymousPropertyShapes(n3store: RdfStore) {
+
+        // any subject of an sh:path...
+        const quadsArray = n3store.getQuads(
+            null,
+            SH.PROPERTY,
+            null,
+            null
+        );
+
+        let i=0;
+        for (const quad of quadsArray) {
+            var propertyShapeNode = quad.object;
+            if(propertyShapeNode.termType == "BlankNode") {
+            // 1. get the base URI pointing to this property shape
+            var nodeShape = quad.subject;
+            if(nodeShape.termType == "NamedNode") {
+                let uri = quad.subject.value;
+                
+                // 2. build a property shape URI from it
+                let propertyShapeUri = uri+"_"+i;
+                // 3. replace all triples where the blank node is subject
+                n3store.getQuads(
+                    propertyShapeNode,
+                    null,
+                    null,
+                    null
+                ).forEach(
+                q => {
+                    n3store.removeQuad(q);
+                    n3store.addQuad(factory.quad(factory.namedNode(propertyShapeUri), q.predicate, q.object, q.graph));
+                }
+                );
+                // 4. replace all triples where the blank node is object
+                n3store.getQuads(
+                    null,
+                    null,
+                    propertyShapeNode,
+                    null
+                ).forEach(
+                q => {
+                    n3store.removeQuad(q);
+                    n3store.addQuad(factory.quad(q.subject, q.predicate, factory.namedNode(propertyShapeUri), q.graph));
+                }
+                );
+            }
+            }
+            i++;
+        }
+    }
+
+    /**
      * 
      * @param nodeShape A NodeShape to test
      * @param graph the SHACL graph
      * @returns true if the node shape could be a SKOS Concept, by looking at its target class, its rdf:type constraint,
      * and its skos:inScheme property shape
      */
-    static couldBeSkosConcept(nodeShape:Resource, graph:ShaclStoreModel):boolean {
+    static couldBeSkosConcept(nodeShape:Resource, graph:ShaclModel):boolean {
         let specEntity:NodeShape = new NodeShape(nodeShape, graph);
         if(specEntity) {
             let isItselfSkosConcept:boolean = (nodeShape.value == SKOS.CONCEPT.value);
@@ -292,44 +339,4 @@ export class ShaclStoreModel extends StoreModel {
         }
     }
 
-    /**
-     * Renders the provided SHACL property path as a SPARQL property path syntax, using prefixed URIs.
-     * @param path The SHACL property path to render in SPARQL.
-     * @param usePrefixes True to use prefixes, false to use full URIs.
-     * @return The rendered SPARQL property path.
-     */
-    pathToSparql(path: Term, usePrefixes: boolean = false): string {
-        if (path.termType === "NamedNode") {
-            if (usePrefixes) {
-                return StoreModel.getLocalName(path.value);
-            } else {
-                return `<${path.value}>`;
-            }
-        } else if (path.termType === "BlankNode") {
-            if (this.store.getQuads(path, RDF.FIRST, null, null).length > 0) {
-                // This is an RDF list, indicating a sequence path
-                const sequence: Term[] = this.readListContent(path);
-                return sequence.map(t => this.pathToSparql(t, usePrefixes)).join("/");
-            } else {
-                if (this.store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null).length > 0) {
-                    return this.pathToSparql(this.store.getQuads(path, SH.ONE_OR_MORE_PATH, null, null)[0].object, usePrefixes) + "+";
-                }
-                if (this.store.getQuads(path, SH.INVERSE_PATH, null, null).length > 0) {
-                    return "^" + this.pathToSparql(this.store.getQuads(path, SH.INVERSE_PATH, null, null)[0].object, usePrefixes);
-                }
-                if (this.store.getQuads(path, SH.ALTERNATIVE_PATH, null, null).length > 0) {
-                    const list = this.store.getQuads(path, SH.ALTERNATIVE_PATH, null, null)[0].object;
-                    const sequence: Term[] = this.readListContent(list);
-                    return `(${sequence.map(t => this.pathToSparql(t, usePrefixes)).join("|")})`;
-                }
-                if (this.store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null).length > 0) {
-                    return this.pathToSparql(this.store.getQuads(path, SH.ZERO_OR_MORE_PATH, null, null)[0].object, usePrefixes) + "*";
-                }
-                if (this.store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null).length > 0) {
-                    return this.pathToSparql(this.store.getQuads(path, SH.ZERO_OR_ONE_PATH, null, null)[0].object, usePrefixes) + "?";
-                }
-            }
-        }
-        throw new Error("Unsupported SHACL property path");
-    }
 }

@@ -1,10 +1,10 @@
-import { BaseRdfStore } from "../../../rdf/BaseRdfStore";
+import { BaseRdfStore } from "../BaseRdfStore";
 import { ISpecificationEntry } from "../ISpecificationEntry";
 import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';
 import { Shape } from "../../../rdf/shacl/Shape";
-import { ShaclStoreModel, ShapeFactory } from "../../../rdf/shacl/ShaclStoreModel";
+import { ShaclModel, ShapeFactory } from "../../../rdf/shacl/ShaclModel";
 
 const factory = new DataFactory();
 
@@ -17,7 +17,7 @@ export abstract class SHACLSpecificationEntry extends BaseRdfStore implements IS
         super(n3store, lang);
         this.uri=uri;
         this.provider=provider;
-        this.shape = ShapeFactory.buildShape(factory.namedNode(uri), new ShaclStoreModel(this.store));
+        this.shape = ShapeFactory.buildShape(factory.namedNode(uri), new ShaclModel(this.store));
     }
 
     abstract getLabel():string;

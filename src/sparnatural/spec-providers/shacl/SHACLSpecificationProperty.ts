@@ -7,7 +7,7 @@ import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntit
 import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from "rdf-stores";
 import { Term } from "@rdfjs/types/data-model";
-import { StoreModel } from "../../../rdf/StoreModel";
+import { Model } from "../../../rdf/Model";
 import { StatisticsReader } from "../../../rdf/shacl/StatisticsReader";
 import { SHACLSpecificationProvider } from './SHACLSpecificationProvider';
 import { XSD } from '../../../rdf/vocabularies/XSD';
@@ -17,7 +17,7 @@ import { RDF } from '../../../rdf/vocabularies/RDF';
 import { PropertyShape } from '../../../rdf/shacl/PropertyShape';
 import { Shape } from '../../../rdf/shacl/Shape';
 import { DatatypeIfc } from '../../../rdf/Datatypes';
-import { ShaclStoreModel, ShapeFactory } from '../../../rdf/shacl/ShaclStoreModel';
+import { ShaclModel, ShapeFactory } from '../../../rdf/shacl/ShaclModel';
 
 const factory = new DataFactory();
 
@@ -34,7 +34,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
    * @returns false if the property is deactivated, or it has an sh:hasValue
    */
   static isSparnaturalSHACLSpecificationProperty(propertyShapeUri:string, n3store: RdfStore):boolean {
-    let graph = new StoreModel(n3store);
+    let graph = new Model(n3store);
     let statReader:StatisticsReader = new StatisticsReader(graph);
     let shapeIri = factory.namedNode(propertyShapeUri);
     return (
@@ -112,7 +112,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
       // still nothing, look on the sh:or members
       if(classes.length == 0) {
-        var orMembers:Shape[] = this.shape.getShOr().map(m => ShapeFactory.buildShape(m, new ShaclStoreModel(this.store)));
+        var orMembers:Shape[] = this.shape.getShOr().map(m => ShapeFactory.buildShape(m, new ShaclModel(this.store)));
         
         orMembers?.forEach(m => {
           // read sh:class / sh:node
@@ -131,7 +131,7 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
           // still nothing, recurse one level more
           if(orClasses.length == 0) {
-            var orOrMembers:Shape[] = m.getShOr().map(m => ShapeFactory.buildShape(m, new ShaclStoreModel(this.store)));
+            var orOrMembers:Shape[] = m.getShOr().map(m => ShapeFactory.buildShape(m, new ShaclModel(this.store)));
 
             orOrMembers?.forEach(orOrMember => {
               // read sh:class / sh:node

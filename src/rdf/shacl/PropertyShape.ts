@@ -4,10 +4,10 @@ import { Quad_Subject, Term } from "@rdfjs/types/data-model";
 
 import { Shape } from './Shape';
 import { Resource, ResourceFactory } from '../Resource';
-import { ShaclStoreModel, ShapeFactory } from './ShaclStoreModel';
+import { ShaclModel, ShapeFactory } from './ShaclModel';
 import { RDFS } from '../vocabularies/RDFS';
 import { SH } from '../vocabularies/SH';
-import { StoreModel } from '../StoreModel';
+import { Model } from '../Model';
 import { VOLIPI } from '../vocabularies/VOLIPI';
 import { SKOS } from '../vocabularies/SKOS';
 import { SearchWidgetIfc, SearchWidgetRegistry } from './SearchWidgets';
@@ -16,7 +16,7 @@ const factory = new DataFactory();
 
 export class PropertyShape extends Shape {
 
-    constructor(resource:Resource, graph:ShaclStoreModel) {
+    constructor(resource:Resource, graph:ShaclModel) {
         super(resource, graph);
     }
 
@@ -80,7 +80,7 @@ export class PropertyShape extends Shape {
       }      
       // or try to read the local part of the URI, but should not happen
       if(!label) {
-        label = StoreModel.getLocalName(this.resource.value) as string;
+        label = Model.getLocalName(this.resource.value) as string;
       }
 
       return label;

@@ -1,6 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
 import { Datasources } from "../ontologies/SparnaturalConfigDatasources";
-import { StoreModel } from '../../rdf/StoreModel';
+import { Model } from '../../rdf/Model';
 import { IDatasource } from './IDatasource';
 
 const factory = new DataFactory();
@@ -10,7 +10,7 @@ export class DatasourceReading {
     public static readDatasourceAnnotationProperty(
       propertyOrClassId: string,
       datasourceAnnotationProperty: string,
-      graph: StoreModel
+      graph: Model
     ):IDatasource {
       // read predicate datasource
       const datasourceQuads = graph.readProperty(
@@ -48,7 +48,7 @@ export class DatasourceReading {
    * }
    **/
 
-  static _buildDatasource(datasourceUri: string, graph: StoreModel):IDatasource {
+  static _buildDatasource(datasourceUri: string, graph: Model):IDatasource {
     var datasource: IDatasource = {};
     // read datasource characteristics
 

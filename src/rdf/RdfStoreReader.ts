@@ -18,7 +18,7 @@ export class RdfStoreReader {
    * @param callback 
    * @returns a store built from the string
    */
-  static buildStoreFromString(configData:string, filePath:string, callback: any) {
+  static buildStoreFromString(configData:string, filePath:string, callback: (store:RdfStore) => void) {
     const store:RdfStore = RdfStore.createDefault();
     let quadStream: Stream<Quad> = RdfStoreReader.#toQuadStream(configData,filePath);
 
@@ -32,7 +32,7 @@ export class RdfStoreReader {
    * @param callback 
    * @returns a store built from the files
    */
-  static buildStore(files: Array<string>, callback: any) {
+  static buildStore(files: Array<string>, callback: (store:RdfStore) => void) {
     // Create a new store with default settings
     // see https://www.npmjs.com/package/rdf-stores
     const store:RdfStore = RdfStore.createDefault();

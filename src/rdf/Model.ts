@@ -1,23 +1,20 @@
 import { Quad, Quad_Object, Quad_Predicate, Quad_Subject, Term } from "@rdfjs/types/data-model";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from "rdf-data-factory";
-import { SH } from "./vocabularies/SH";
 import { XSD } from "./vocabularies/XSD";
 import { RDF } from "./vocabularies/RDF";
 
-export class StoreModel {
+/**
+ * A simple RDF model, wrapping an RDFJS store, with utility methods to read properties and lists.
+ * Similar to Jena's Model class.
+ */
+export class Model {
 
     public store: RdfStore;
     protected factory = new DataFactory();
 
     constructor(n3store: RdfStore) {
         this.store = n3store;
-    }
-
-    public static getLocalName(uri:string):string{
-        if(uri.includes('#')) return uri.split('#').pop() as string
-        if(uri.includes('/')) return uri.split('/').pop() as string
-        return uri;
     }
 
     /**
@@ -127,12 +124,22 @@ export class StoreModel {
         return this.store.size
     }
 
+    /**
+     * @param subject 
+     * @param property 
+     * @returns same as hasTriple(subject, property, null)
+     */
     hasProperty(subject: Quad_Subject, property: Quad_Predicate) {
         return this.hasTriple(subject, property, null);
     }
 
-    hasTriple(rdfNode: Quad_Subject, property: Quad_Predicate, value: Quad_Object | null): boolean {
-        
+    /**
+     * @param rdfNode 
+     * @param property 
+     * @param value may be null in which case we check only for the presence of the subject and the property
+     * @returns true if the requested triple exists in the store, false otherwise
+     */
+    hasTriple(rdfNode: Quad_Subject, property: Quad_Predicate, value: Quad_Object | null): boolean {        
         return (
             this.store.getQuads(
                 rdfNode,
@@ -254,6 +261,14 @@ export class StoreModel {
 
         return bestLiteral;
     }
+
+    public static getLocalName(uri:string):string{
+        if(uri.includes('#')) return uri.split('#').pop() as string
+        if(uri.includes('/')) return uri.split('/').pop() as string
+        return uri;
+    }
+
+    /******* RENDERING UTILITIES *********/
 
     /**
      * Render a list of RDFNode as a string, in plain text.
