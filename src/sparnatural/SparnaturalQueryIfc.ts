@@ -185,12 +185,10 @@ export enum CriteriaType {
 export function getCriteriaType(value: Criteria): CriteriaType | undefined {
   if (typeof value === "object" && value !== null) {
     if ("rdfTerm" in value) return CriteriaType.RdfTermCriteria;
-    if ("valueType" in value && "coordinates" in value) return CriteriaType.MapCriteria;
-    if ("start" in value && "stop" in value) {
-      return CriteriaType.DateCriteria;
-    }
+    if ("coordinates" in value) return CriteriaType.MapCriteria;
+    if ("start" in value || "stop" in value) return CriteriaType.DateCriteria;
     if ("boolean" in value) return CriteriaType.BooleanCriteria;
-    if ("min" in value && "max" in value) return CriteriaType.NumberCriteria;
+    if ("min" in value || "max" in value) return CriteriaType.NumberCriteria;
     if ("search" in value) return CriteriaType.SearchCriteria;
   }
   return undefined;
