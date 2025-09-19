@@ -8,7 +8,7 @@ import { HTMLComponent } from '../HtmlComponent';
 import { AutocompleteDataProviderIfc, RdfTermDatasourceItem } from '../datasources/DataProviders';
 import { NoOpAutocompleteProvider } from '../datasources/NoOpDataProviders';
 import { mergeDatasourceResults } from '../datasources/SparqlDataProviders';
-import { CriteriaValue, RDFTerm, RdfTermValue } from '../../SparnaturalQueryIfc';
+import { LabelledCriteria, RDFTerm, RdfTermCriteria } from '../../SparnaturalQueryIfc';
 
 const factory = new DataFactory();
 
@@ -123,7 +123,7 @@ export class AutoCompleteWidget extends AbstractWidget {
       // fetch the autocomplete event payload, which is the JSON serialization of the RDFTerm
       let awesompleteEvent:{label:string, value:string} = (event as unknown as {text:{label:string, value:string}}).text;
 
-      let autocompleteValue: CriteriaValue = {
+      let autocompleteValue: LabelledCriteria<RdfTermCriteria> = {
           label: awesompleteEvent.label,
           value: {
             // parse back the RDFTerm as an object
@@ -168,7 +168,7 @@ export class AutoCompleteWidget extends AbstractWidget {
     return this;
   }
 
-  parseInput(input: CriteriaValue): CriteriaValue {return input;}
+  parseInput(input: LabelledCriteria<RdfTermCriteria>): LabelledCriteria<RdfTermCriteria> {return input;}
 
 }
 

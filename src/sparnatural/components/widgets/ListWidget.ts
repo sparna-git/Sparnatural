@@ -9,7 +9,7 @@ import { HTMLComponent } from "../HtmlComponent";
 import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc } from "../datasources/DataProviders";
 import { NoOpListDataProvider } from "../datasources/NoOpDataProviders";
 import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
-import { RDFTerm, RdfTermValue, CriteriaValue } from "../../SparnaturalQueryIfc";
+import { RDFTerm, RdfTermCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -128,7 +128,7 @@ export class ListWidget extends AbstractWidget {
             return;
 
           let itemLabel = option[0].getAttribute("data-itemLabel");
-          let listWidgetValue: CriteriaValue = this.buildValue(option[0].value, itemLabel);
+          let listWidgetValue: LabelledCriteria<RdfTermCriteria> = this.buildValue(option[0].value, itemLabel);
           this.triggerRenderWidgetVal(listWidgetValue);
         });
 
@@ -171,7 +171,7 @@ export class ListWidget extends AbstractWidget {
 
   // separate the creation of the value from the widget code itself
   // so that it can be overriden by LiteralListWidget
-  buildValue(termString:string,label:string): CriteriaValue {
+  buildValue(termString:string,label:string): LabelledCriteria<RdfTermCriteria> {
     let term = (JSON.parse(termString) as RDFTerm);
     return {
       label: label,
@@ -179,7 +179,7 @@ export class ListWidget extends AbstractWidget {
     };
   }
 
-  parseInput(input:CriteriaValue): CriteriaValue { return input }
+  parseInput(input:LabelledCriteria<RdfTermCriteria>): LabelledCriteria<RdfTermCriteria> { return input }
 
 
 }

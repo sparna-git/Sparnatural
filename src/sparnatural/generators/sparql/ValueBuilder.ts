@@ -18,7 +18,7 @@ import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
 import { SHACLSpecificationEntity } from "../../spec-providers/shacl/SHACLSpecificationEntity";
 import { GEOFUNCTIONS, GEOSPARQL } from "../../../rdf/vocabularies/GEOSPARQL";
-import { DateValue, RDFTerm, RdfTermValue, CriteriaValue, WidgetValue, BooleanValue, NumberValue, SearchValue, MapValue } from "../../SparnaturalQueryIfc";
+import { DateCriteria, RDFTerm, RdfTermCriteria, LabelledCriteria, Criteria, BooleanCriteria, NumberCriteria, SearchCriteria, MapCriteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -77,7 +77,7 @@ export default interface ValueBuilderIfc {
     propertyVal: SelectedVal,
     endClassVal: SelectedVal,
     endClassVarSelected: boolean,
-    values: Array<WidgetValue>
+    values: Array<Criteria>
   ): void;
 
   /**
@@ -106,7 +106,7 @@ export abstract class BaseValueBuilder implements ValueBuilderIfc {
   protected startClassVal: SelectedVal;
   protected propertyVal: SelectedVal;
   protected endClassVal: SelectedVal;
-  protected values: Array<WidgetValue>;
+  protected values: Array<Criteria>;
   protected endClassVarSelected: boolean;
 
   init(
@@ -115,7 +115,7 @@ export abstract class BaseValueBuilder implements ValueBuilderIfc {
     propertyVal: SelectedVal,
     endClassVal: SelectedVal,
     endClassVarSelected: boolean,
-    values: Array<WidgetValue>
+    values: Array<Criteria>
   ): void {
     this.specProvider = specProvider;
     this.startClassVal = startClassVal;
@@ -149,7 +149,7 @@ export class RdfTermValueBuilder
   implements ValueBuilderIfc
 {
   build(): Pattern[] {
-    let widgetValues = this.values as RdfTermValue[];
+    let widgetValues = this.values as RdfTermCriteria[];
 
     if (this.isBlockingObjectProp()) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
@@ -240,7 +240,7 @@ export class BooleanValueBuilder
   implements ValueBuilderIfc
 {
   build(): Pattern[] {
-    let widgetValues = this.values as BooleanValue[];
+    let widgetValues = this.values as BooleanCriteria[];
 
     // if we are blocking the object prop, we create it directly here with the value as the object
     if (this.isBlockingObjectProp()) {
@@ -260,7 +260,7 @@ export class BooleanValueBuilder
       return [ptrn];
     } else {
       // otherwise the object prop is created and we create a VALUES clause with the actual boolean
-      let vals = (this.values as BooleanValue[]).map((v) => {
+      let vals = (this.values as BooleanCriteria[]).map((v) => {
         let vl: ValuePatternRow = {};
         vl["?" + this.endClassVal.variable] = factory.literal(
           widgetValues[0].boolean.toString(),
@@ -293,7 +293,7 @@ export class NumberValueBuilder
   implements ValueBuilderIfc
 {
   build(): Pattern[] {
-    let widgetValues = this.values as NumberValue[];
+    let widgetValues = this.values as NumberCriteria[];
 
     return [
       SparqlFactory.buildFilterRangeDateOrNumber(
@@ -333,7 +333,7 @@ export class SearchRegexValueBuilder
       .getProperty(this.propertyVal.type)
       .getPropertyType(this.endClassVal.type);
     
-     let widgetValues = this.values as SearchValue[];
+     let widgetValues = this.values as SearchCriteria[];
 
     switch (widgetType) {
       case Config.STRING_EQUALS_PROPERTY: {
@@ -413,7 +413,7 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
 
   build(): Pattern[] {
       
-      let widgetValues = this.values as DateValue[];
+      let widgetValues = this.values as DateCriteria[];
       
       let specProperty:ISpecificationProperty = this.specProvider.getProperty(this.propertyVal.type);
       let beginDateProp = specProperty.getBeginDateProperty();
@@ -524,7 +524,7 @@ export class MapValueBuilder
 {
   // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
   build(): Pattern[] {
-    let widgetValues = this.values as MapValue[];
+    let widgetValues = this.values as MapCriteria[];
 
     // the property between the subject and its position expressed as wkt value, e.g. http://www.w3.org/2003/01/geo/wgs84_pos#geometry
 

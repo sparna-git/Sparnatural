@@ -29,7 +29,7 @@ export interface SparnaturalQueryIfc {
 
 export interface Branch {
   line: CriteriaLine;
-  children: Array<Branch> | [];
+  children?: Array<Branch> | [];
   optional?: boolean;
   notExists?: boolean;
 }
@@ -55,29 +55,29 @@ export interface CriteriaLine {
   o: string;
   sType: string;
   oType: string;
-  values?: CriteriaValue[];
+  values?: LabelledCriteria<Criteria>[];
 }
 
 // TODO : parameterize ?
-export interface CriteriaValue {
+export interface LabelledCriteria<T extends Criteria> {
   // human readable string representation shown as a WidgetValue to the user
   label: string; 
-  value: WidgetValue;
+  value: T;
 }
 
-export type WidgetValue = 
-  RdfTermValue |
-  DateValue | 
-  BooleanValue | 
-  MapValue | 
-  NumberValue | 
-  SearchValue;
+export type Criteria = 
+  RdfTermCriteria |
+  DateCriteria | 
+  BooleanCriteria | 
+  MapCriteria | 
+  NumberCriteria | 
+  SearchCriteria;
 
-export interface RdfTermValue {
+export interface RdfTermCriteria {
   rdfTerm: RDFTerm;
 };
 
-export interface DateValue {
+export interface DateCriteria {
   // a date string in ISO format
   // e.g. "2023-10-05T14:48:00.000Z"
   // or for just a year "2023" or "-0450" (for 450 BC)
@@ -86,21 +86,24 @@ export interface DateValue {
   stop: string | null;
 };
 
-export interface BooleanValue {
+export interface BooleanCriteria {
    boolean: boolean;
 }
 
-export interface MapValue {
-  valueType: 'Polygon' | 'Rectangle';
+export interface MapCriteria {
+  coordType: 'Polygon' | 'Rectangle';
   coordinates: LatLng[][];
 }
 
-export interface NumberValue {
+export interface NumberCriteria {
+  // either min or max need to be defined
   min: number | undefined;
   max: number | undefined;
 }
 
-export interface SearchValue {
+export interface SearchCriteria {
+  // this is interpreted as a regexp when using plain SPARQL queries
+  // or as a fulltext search string when using a triplestore with fulltext search capabilities
   search: string;
 }
 
@@ -115,10 +118,16 @@ export interface LatLng {
  */
 export interface RDFTerm {
   type: 'literal' | 'uri' | 'bnode';
+  // value is either the IRI string, the literal value, or the bnode identifier
   value: string;
   "xml:lang"?: string;
   datatype?: string;
 }
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 /**
  * @param t1 
@@ -159,13 +168,13 @@ export enum AggregateFunction {
 
 
 
-export enum WidgetValueType {
-  RdfTermValue = "RdfTermValue",
-  DateValue = "DateTimePickerValue",
-  BooleanValue = "BooleanValue",
-  MapValue = "MapValue",
-  NumberValue = "NumberValue",
-  SearchValue = "SearchValue"
+export enum CriteriaType {
+  RdfTermCriteria = "RdfTermCriteria",
+  DateCriteria = "DateCriteria",
+  BooleanCriteria = "BooleanCriteria",
+  MapCriteria = "t",
+  NumberCriteria = "NumberCriteria",
+  SearchCriteria = "SearchCriteria"
 }
 
 /**
@@ -173,16 +182,16 @@ export enum WidgetValueType {
  * @param value The WidgetValue to check.
  * @returns The type name as a string ("MapValue", "RdfTermValue", etc.), or undefined if unknown.
  */
-export function getWidgetValueType(value: WidgetValue): WidgetValueType | undefined {
+export function getCriteriaType(value: Criteria): CriteriaType | undefined {
   if (typeof value === "object" && value !== null) {
-    if ("rdfTerm" in value) return WidgetValueType.RdfTermValue;
-    if ("valueType" in value && "coordinates" in value) return WidgetValueType.MapValue;
+    if ("rdfTerm" in value) return CriteriaType.RdfTermCriteria;
+    if ("valueType" in value && "coordinates" in value) return CriteriaType.MapCriteria;
     if ("start" in value && "stop" in value) {
-      return WidgetValueType.DateValue;
+      return CriteriaType.DateCriteria;
     }
-    if ("boolean" in value) return WidgetValueType.BooleanValue;
-    if ("min" in value && "max" in value) return WidgetValueType.NumberValue;
-    if ("search" in value) return WidgetValueType.SearchValue;
+    if ("boolean" in value) return CriteriaType.BooleanCriteria;
+    if ("min" in value && "max" in value) return CriteriaType.NumberCriteria;
+    if ("search" in value) return CriteriaType.SearchCriteria;
   }
   return undefined;
 }
@@ -193,25 +202,25 @@ export function getWidgetValueType(value: WidgetValue): WidgetValueType | undefi
  * @param v2 The second WidgetValue.
  * @returns True if both values are equal, false otherwise.
  */
-export function equalsWidgetValue(v1: WidgetValue, v2: WidgetValue): boolean {
-  const type1 = getWidgetValueType(v1);
-  const type2 = getWidgetValueType(v2);
+export function equalsCriteria(v1: Criteria, v2: Criteria): boolean {
+  const type1 = getCriteriaType(v1);
+  const type2 = getCriteriaType(v2);
   if (type1 !== type2) return false;
 
   switch (type1) {
-    case WidgetValueType.RdfTermValue:
-      return sameTerm((v1 as RdfTermValue).rdfTerm, (v2 as RdfTermValue).rdfTerm);
-    case WidgetValueType.DateValue: {
-      const d1 = v1 as DateValue;
-      const d2 = v2 as DateValue;
+    case CriteriaType.RdfTermCriteria:
+      return sameTerm((v1 as RdfTermCriteria).rdfTerm, (v2 as RdfTermCriteria).rdfTerm);
+    case CriteriaType.DateCriteria: {
+      const d1 = v1 as DateCriteria;
+      const d2 = v2 as DateCriteria;
       return d1.start === d2.start && d1.stop === d2.stop;
     }
-    case WidgetValueType.BooleanValue:
-      return (v1 as BooleanValue).boolean === (v2 as BooleanValue).boolean;
-    case WidgetValueType.MapValue: {
-      const m1 = v1 as MapValue;
-      const m2 = v2 as MapValue;
-      if (m1.valueType !== m2.valueType) return false;
+    case CriteriaType.BooleanCriteria:
+      return (v1 as BooleanCriteria).boolean === (v2 as BooleanCriteria).boolean;
+    case CriteriaType.MapCriteria: {
+      const m1 = v1 as MapCriteria;
+      const m2 = v2 as MapCriteria;
+      if (m1.coordType !== m2.coordType) return false;
       if (m1.coordinates.length !== m2.coordinates.length) return false;
       for (let i = 0; i < m1.coordinates.length; i++) {
         const arr1 = m1.coordinates[i];
@@ -231,13 +240,13 @@ export function equalsWidgetValue(v1: WidgetValue, v2: WidgetValue): boolean {
       }
       return true;
     }
-    case WidgetValueType.NumberValue: {
-      const n1 = v1 as NumberValue;
-      const n2 = v2 as NumberValue;
+    case CriteriaType.NumberCriteria: {
+      const n1 = v1 as NumberCriteria;
+      const n2 = v2 as NumberCriteria;
       return n1.min === n2.min && n1.max === n2.max;
     }
-    case WidgetValueType.SearchValue:
-      return (v1 as SearchValue).search === (v2 as SearchValue).search;
+    case CriteriaType.SearchCriteria:
+      return (v1 as SearchCriteria).search === (v2 as SearchCriteria).search;
     default:
       return false;
   }

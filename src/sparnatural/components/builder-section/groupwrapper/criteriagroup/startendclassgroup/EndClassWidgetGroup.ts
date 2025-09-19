@@ -11,7 +11,7 @@ import {
 } from "../../../../widgets/AbstractWidget";
 import CriteriaGroup from "../CriteriaGroup";
 import { EditBtn } from "../../../../buttons/EditBtn";
-import { CriteriaValue, equalsWidgetValue, getWidgetValueType, MapValue, WidgetValueType } from "../../../../../SparnaturalQueryIfc";
+import { LabelledCriteria, equalsCriteria, getCriteriaType, MapCriteria, CriteriaType, Criteria } from "../../../../../SparnaturalQueryIfc";
 import { I18n } from "../../../../../settings/I18n";
 
 
@@ -60,7 +60,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
 
         let unselectedValue: EndClassWidgetValue;
         this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
-          if (equalsWidgetValue(val.widgetVal.value, valueToDel.widgetVal.value)) {
+          if (equalsCriteria(val.widgetVal.value, valueToDel.widgetVal.value)) {
             unselectedValue = val;
             return false;
           }
@@ -95,7 +95,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
       unselectedValue = valueToDel;
     } else {
       this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
-        if (equalsWidgetValue(val.widgetVal.value, valueToDel.widgetVal.value)) {
+        if (equalsCriteria(val.widgetVal.value, valueToDel.widgetVal.value)) {
           unselectedValue = val;
           return false;
         }
@@ -139,11 +139,11 @@ export class EndClassWidgetGroup extends HTMLComponent {
   }
 
   // user selects a value for example a country from the listwidget
-  renderWidgetVal(selectedVal: CriteriaValue) {
+  renderWidgetVal(selectedVal: LabelledCriteria<Criteria>) {
     this.isSelectAll = false
     // check if value already got selected before
     if (
-      this.widgetValues.some((val) => equalsWidgetValue(val.widgetVal.value, selectedVal.value))
+      this.widgetValues.some((val) => equalsCriteria(val.widgetVal.value, selectedVal.value))
     )
       return;
     
@@ -166,7 +166,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     );
   }
 
-  #renderEndClassWidgetVal(widgetVal: CriteriaValue) {
+  #renderEndClassWidgetVal(widgetVal: LabelledCriteria<Criteria>) {
     let endClassWidgetVal = new EndClassWidgetValue(this, widgetVal);
     this.widgetValues.push(endClassWidgetVal);
 
@@ -222,7 +222,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     //this.#addEventListener();
   };
 
-  getWidgetValues(): CriteriaValue[] {
+  getWidgetValues(): LabelledCriteria<Criteria>[] {
     let vals = this.widgetValues.map((val) => {
       return val.widgetVal;
     });
@@ -242,11 +242,11 @@ export class EndClassWidgetValue extends HTMLComponent {
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   unselectBtn: UnselectBtn;
   editBtn:EditBtn;
-  widgetVal: CriteriaValue;
+  widgetVal: LabelledCriteria<Criteria>;
 
   selectAll: boolean = false;
 
-  constructor(ParentComponent: EndClassWidgetGroup, selectedVal: CriteriaValue, selectAll: boolean = false) {
+  constructor(ParentComponent: EndClassWidgetGroup, selectedVal: LabelledCriteria<Criteria>, selectAll: boolean = false) {
     super("EndClassWidgetValue", ParentComponent, null);
     // set a tooltip if the label is a bit long
     this.widgetVal = selectedVal;
@@ -273,7 +273,7 @@ export class EndClassWidgetValue extends HTMLComponent {
       );
     }).render();
 
-    if(this.widgetVal && getWidgetValueType(this.widgetVal.value) == WidgetValueType.MapValue) {
+    if(this.widgetVal && getCriteriaType(this.widgetVal.value) == CriteriaType.MapCriteria) {
       this.editBtn = new EditBtn(this, () => {
         this.html[0].dispatchEvent(
           new CustomEvent("onEditEndClassWidgetValue", {

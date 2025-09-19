@@ -7,7 +7,7 @@ import { InfoBtn } from "../buttons/InfoBtn";
 import { I18n } from "../../settings/I18n";
 import { TOOLTIP_CONFIG } from "../../settings/defaultSettings";
 import { HTMLComponent } from "../HtmlComponent";
-import { CriteriaValue } from "../../SparnaturalQueryIfc";
+import { LabelledCriteria, SearchCriteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -69,7 +69,7 @@ export class SearchRegexWidget extends AbstractWidget {
   }
   #addValueBtnClicked = () => {
     this.searchInput.trigger("change");
-    let searchWidgetValue:CriteriaValue = {
+    let searchWidgetValue:LabelledCriteria<SearchCriteria> = {
       label: this.searchInput.val().toString(),
       value: {
         search: this.searchInput.val().toString()
@@ -78,7 +78,7 @@ export class SearchRegexWidget extends AbstractWidget {
     this.triggerRenderWidgetVal(searchWidgetValue);
   };
 
-  parseInput(input: CriteriaValue): CriteriaValue {
+  parseInput(input: LabelledCriteria<SearchCriteria>): LabelledCriteria<SearchCriteria> {
     return input
   }
 }

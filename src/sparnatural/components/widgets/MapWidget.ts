@@ -10,7 +10,7 @@ import { SelectedVal } from "../SelectedVal";
 import { I18n } from '../../settings/I18n';
 import { HTMLComponent } from '../HtmlComponent';
 import CriteriaGroup from '../builder-section/groupwrapper/criteriagroup/CriteriaGroup';
-import { CriteriaValue, MapValue } from '../../SparnaturalQueryIfc';
+import { LabelledCriteria, MapCriteria } from '../../SparnaturalQueryIfc';
 
 
 const factory = new DataFactory();
@@ -26,7 +26,7 @@ type ObjectifyLatLng<T> = T extends LatLng[][]
 
 // stringified type of MapWidgetValue
 // see: https://effectivetypescript.com/2020/04/09/jsonify/
-type ObjectMapWidgetValue = ObjectifyLatLng<MapValue>
+type ObjectMapWidgetValue = ObjectifyLatLng<MapCriteria>
 
 
 export interface MapConfiguration {
@@ -58,7 +58,7 @@ export default class MapWidget extends AbstractWidget {
   
   protected configuration: MapConfiguration;
   protected endClassWidgetGroup: any;
-  protected widgetValues: CriteriaValue[];
+  protected widgetValues: LabelledCriteria<MapCriteria>[];
   //protected widgetValue: MapWidgetValue[];
   // protected blockObjectPropTriple: boolean = true
   renderMapValueBtn: AddUserInputBtn;
@@ -116,17 +116,17 @@ export default class MapWidget extends AbstractWidget {
         fillRule: "evenodd"
       }
 
-      switch (((this.widgetValues[0].value as MapValue).valueType as string)) {
+      switch (((this.widgetValues[0].value as MapCriteria).coordType as string)) {
         case 'Rectangle':
             let bounds = L.latLngBounds(
-              (this.widgetValues[0].value as MapValue).coordinates[0][0],
-              (this.widgetValues[0].value as MapValue).coordinates[0][2]
+              (this.widgetValues[0].value as MapCriteria).coordinates[0][0],
+              (this.widgetValues[0].value as MapCriteria).coordinates[0][2]
             ) ;
             L.rectangle(bounds, (options as PolylineOptions)).addTo(this.map);
           break;    
         default: 
-          let coordinates = (this.widgetValues[0].value as MapValue).coordinates[0][0] ;
-          L.polygon((this.widgetValues[0].value as MapValue).coordinates[0], (options as PolylineOptions)).addTo(this.map);
+          let coordinates = (this.widgetValues[0].value as MapCriteria).coordinates[0][0] ;
+          L.polygon((this.widgetValues[0].value as MapCriteria).coordinates[0], (options as PolylineOptions)).addTo(this.map);
         break;
       }
     }
@@ -295,7 +295,7 @@ export default class MapWidget extends AbstractWidget {
         this.widgetValues.push({
           label: this.#getValueLabel(layer as Rectangle),
           value: {
-            valueType: 'Rectangle',
+            coordType: 'Rectangle',
             coordinates: (layer as Rectangle).getLatLngs() as LatLng[][]
           }
         })
@@ -304,7 +304,7 @@ export default class MapWidget extends AbstractWidget {
         this.widgetValues.push({
           label: this.#getValueLabel(layer as Polygon),
           value: {
-            valueType: 'Polygon',
+            coordType: 'Polygon',
             coordinates: (layer as Polygon).getLatLngs() as LatLng[][]
           }          
         });
@@ -321,8 +321,8 @@ export default class MapWidget extends AbstractWidget {
     }
   };
 
-  parseInput(input:CriteriaValue): CriteriaValue {
-    let theValue = input.value as MapValue;
+  parseInput(input:LabelledCriteria<MapCriteria>): LabelledCriteria<MapCriteria> {
+    let theValue = input.value as MapCriteria;
 
     const parsedCoords = theValue.coordinates.map((c)=>{
       return c.map((latlng)=>{
@@ -335,7 +335,7 @@ export default class MapWidget extends AbstractWidget {
       label: input.label,
       value: {
         coordinates: parsedCoords,
-        valueType: theValue.valueType
+        coordType: theValue.coordType
       }
       
     };

@@ -8,7 +8,7 @@ import { HTMLComponent } from "../../HtmlComponent";
 import "jstree/dist/themes/default/style.min.css";
 import { TreeDataProviderIfc, RdfTermTreeDatasourceItem } from "../../datasources/DataProviders";
 import { NoOpTreeDataProvider } from "../../datasources/NoOpDataProviders";
-import { CriteriaValue, RdfTermValue } from "../../../SparnaturalQueryIfc";
+import { LabelledCriteria, RdfTermCriteria } from "../../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -29,7 +29,7 @@ export class TreeWidget extends AbstractWidget {
   configuration:TreeConfiguration;
   IdCriteriaGroupe: any;
   jsTree: any;
-  value: RdfTermValue;
+  value: RdfTermCriteria;
   // html content
   button: any;
   hiddenInput: any;
@@ -313,13 +313,13 @@ export class TreeWidget extends AbstractWidget {
     $(this_.parentComponent).trigger("change");
   };
 
-  getValue = function ():Array<CriteriaValue> {
+  getValue = function ():Array<LabelledCriteria<RdfTermCriteria>> {
     var checked = this.jsTree.jstree().get_top_checked(true);
 
     // rebuild a clean data structure
     var values = [];
     for (var node in checked) {
-      const val:CriteriaValue = {
+      const val:LabelledCriteria<RdfTermCriteria> = {
         // TODO : find a way to retrieve the itemLabel
         label: checked[node].original.text,
         value: {
@@ -336,7 +336,7 @@ export class TreeWidget extends AbstractWidget {
     return values;
   };
 
-  parseInput(input: CriteriaValue): CriteriaValue {
+  parseInput(input: LabelledCriteria<RdfTermCriteria>): LabelledCriteria<RdfTermCriteria> {
     return input;
   }
 

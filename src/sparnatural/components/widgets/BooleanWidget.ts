@@ -3,7 +3,7 @@ import { SelectedVal } from "../SelectedVal";
 import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { I18n } from '../../settings/I18n';
 import { HTMLComponent } from '../HtmlComponent';
-import { CriteriaValue } from '../../SparnaturalQueryIfc';
+import { BooleanCriteria, LabelledCriteria } from '../../SparnaturalQueryIfc';
 
 const factory = new DataFactory();
 
@@ -38,7 +38,7 @@ export class BooleanWidget extends AbstractWidget {
     this.html.append(trueSpan).append(orSpan).append(falseSpan);
 
     trueSpan[0].addEventListener("click", (e) => {
-      let widgetValue:CriteriaValue = {
+      let widgetValue:LabelledCriteria<BooleanCriteria> = {
         label: I18n.labels.true,
         value: {
           boolean: true
@@ -50,7 +50,7 @@ export class BooleanWidget extends AbstractWidget {
     });
 
     falseSpan[0].addEventListener("click", (e) => {
-      let widgetValue: CriteriaValue = {
+      let widgetValue: LabelledCriteria<BooleanCriteria> = {
         label: I18n.labels.false,
         value: {
           boolean: false
@@ -62,7 +62,7 @@ export class BooleanWidget extends AbstractWidget {
     return this;
   }
 
-  parseInput(input: CriteriaValue): CriteriaValue {
+  parseInput(input: LabelledCriteria<BooleanCriteria>): LabelledCriteria<BooleanCriteria> {
     return input;
    }
 

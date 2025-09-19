@@ -3,7 +3,7 @@ import { HTMLComponent } from "../HtmlComponent";
 import LoadingSpinner from "./LoadingSpinner";
 import { DataFactory, Literal } from "rdf-data-factory";
 import { Term } from "@rdfjs/types/data-model";
-import { RDFTerm, CriteriaValue } from "../../SparnaturalQueryIfc";
+import { RDFTerm, LabelledCriteria, Criteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -57,11 +57,11 @@ export abstract class AbstractWidget extends HTMLComponent {
   }
 
   // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
-  abstract parseInput(value: CriteriaValue): CriteriaValue;
+  abstract parseInput(value: LabelledCriteria<Criteria>): LabelledCriteria<Criteria>;
 
   // fires the event to render the label of the WidgetValue on the UI
   // can take either a single value or an array of values
-  triggerRenderWidgetVal(widgetValue: CriteriaValue | CriteriaValue[]) {
+  triggerRenderWidgetVal(widgetValue: LabelledCriteria<Criteria> | LabelledCriteria<Criteria>[]) {
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetVal", {
         bubbles: true,

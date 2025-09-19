@@ -7,7 +7,7 @@ import EndClassGroup from "../startendclassgroup/EndClassGroup";
 import WidgetWrapper from "./WidgetWrapper";
 import ActionWhere from "../../../../buttons/actions/actioncomponents/ActionWhere";
 import { I18n } from "../../../../../settings/I18n";
-import { CriteriaValue } from "../../../../../SparnaturalQueryIfc";
+import { LabelledCriteria } from "../../../../../SparnaturalQueryIfc";
 
 
 class EditComponents extends HTMLComponent {

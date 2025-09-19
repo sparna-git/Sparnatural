@@ -6,7 +6,7 @@ import { AddUserInputBtn } from "../buttons/AddUserInputBtn";
 import { InfoBtn } from "../buttons/InfoBtn";
 import { TOOLTIP_CONFIG } from "../../settings/defaultSettings";
 import { HTMLComponent } from "../HtmlComponent";
-import { CriteriaValue, NumberValue } from "../../SparnaturalQueryIfc";
+import { LabelledCriteria, NumberCriteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -101,7 +101,7 @@ export class NumberWidget extends AbstractWidget {
   }
 
   #onFormSubmit = (event: SubmitEvent) => {
-    let value:NumberValue = {
+    let value:NumberCriteria = {
       min:
         this.minInput.val() != ""
           ? Number(this.minInput.val().toString())
@@ -114,7 +114,7 @@ export class NumberWidget extends AbstractWidget {
 
     this.#checkInput(value);
 
-    let numberWidgetValue:CriteriaValue = {
+    let numberWidgetValue:LabelledCriteria<NumberCriteria> = {
       label: this.#getValueLabel(
         this.minInput.val().toString(),
         this.maxInput.val().toString()
@@ -134,7 +134,7 @@ export class NumberWidget extends AbstractWidget {
     (this.form[0] as HTMLFormElement).requestSubmit();
   };
 
-  #checkInput(input: NumberValue) {
+  #checkInput(input: NumberCriteria) {
     if (input.min && input.max && input.min > input.max)
       throw Error("lower bound is bigger than upper bound!");
   }
@@ -162,7 +162,7 @@ export class NumberWidget extends AbstractWidget {
     return valueLabel;
   };
 
-  parseInput(input: CriteriaValue): CriteriaValue {
+  parseInput(input: LabelledCriteria<NumberCriteria>): LabelledCriteria<NumberCriteria> {
     return input;
   }
 }

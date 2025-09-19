@@ -3,7 +3,7 @@ import { AddUserInputBtn } from "../buttons/AddUserInputBtn";
 import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { I18n } from "../../settings/I18n";
 import { HTMLComponent } from "../HtmlComponent";
-import { CriteriaValue, DateValue } from "../../SparnaturalQueryIfc";
+import { LabelledCriteria, DateCriteria } from "../../SparnaturalQueryIfc";
 
 
 /**
@@ -137,7 +137,7 @@ export class DatesWidget extends AbstractWidget {
   }
 
   #addValueBtnClicked = () => {
-    let val:CriteriaValue = {
+    let val:LabelledCriteria<DateCriteria> = {
       label: "",
       value: {
         start: this.inputStart.val().toString(),
@@ -147,8 +147,8 @@ export class DatesWidget extends AbstractWidget {
     this.triggerRenderWidgetVal(this.parseInput(val));
   };
 
-  parseInput(dateValue:CriteriaValue): CriteriaValue {
-    let theValue = dateValue.value as DateValue;
+  parseInput(dateValue:LabelledCriteria<DateCriteria>): LabelledCriteria<DateCriteria> {
+    let theValue = dateValue.value as DateCriteria;
     if (theValue.start == "" || theValue.stop == "") {
       dateValue = null;
     } else {
