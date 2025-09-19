@@ -81,9 +81,9 @@ export interface DateCriteria {
   // a date string in ISO format
   // e.g. "2023-10-05T14:48:00.000Z"
   // or for just a year "2023" or "-0450" (for 450 BC)
-  // null if not set
-  start: string | null;
-  stop: string | null;
+  // undefined if not set
+  start?: string | undefined;
+  stop?: string | undefined;
 };
 
 export interface BooleanCriteria {
@@ -97,8 +97,8 @@ export interface MapCriteria {
 
 export interface NumberCriteria {
   // either min or max need to be defined
-  min: number | undefined;
-  max: number | undefined;
+  min?: number | undefined;
+  max?: number | undefined;
 }
 
 export interface SearchCriteria {
@@ -172,7 +172,7 @@ export enum CriteriaType {
   RdfTermCriteria = "RdfTermCriteria",
   DateCriteria = "DateCriteria",
   BooleanCriteria = "BooleanCriteria",
-  MapCriteria = "t",
+  MapCriteria = "mapCriteria",
   NumberCriteria = "NumberCriteria",
   SearchCriteria = "SearchCriteria"
 }

@@ -84,7 +84,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
     );
   }
 
-  // input : the 'key' of the value to be deleted
+  // input : the widget value to remove
   #onRemoveValue(e: CustomEvent) {
     let valueToDel: EndClassWidgetValue = e.detail;
 
@@ -94,6 +94,8 @@ export class EndClassWidgetGroup extends HTMLComponent {
       this.isSelectAll = false;
       unselectedValue = valueToDel;
     } else {
+      unselectedValue = valueToDel;
+
       this.widgetValues = this.widgetValues.filter((val: EndClassWidgetValue) => {
         if (equalsCriteria(val.widgetVal.value, valueToDel.widgetVal.value)) {
           unselectedValue = val;
@@ -102,7 +104,7 @@ export class EndClassWidgetGroup extends HTMLComponent {
         return true;
       });
       if (unselectedValue === undefined)
-        throw Error("Unselected val not found in the widgetValues list!");   
+        throw Error("Unselected val not found in the widgetValues list!"); 
       
     }
 
@@ -242,8 +244,9 @@ export class EndClassWidgetValue extends HTMLComponent {
   frontArrow = new ArrowComponent(this, UiuxConfig.COMPONENT_ARROW_FRONT);
   unselectBtn: UnselectBtn;
   editBtn:EditBtn;
-  widgetVal: LabelledCriteria<Criteria>;
-
+  // may be undefined in case of "select all"
+  widgetVal?: LabelledCriteria<Criteria>;
+  // in case this value is the special "select all" value
   selectAll: boolean = false;
 
   constructor(ParentComponent: EndClassWidgetGroup, selectedVal: LabelledCriteria<Criteria>, selectAll: boolean = false) {
