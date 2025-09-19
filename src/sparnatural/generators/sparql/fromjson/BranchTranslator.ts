@@ -80,7 +80,7 @@ export default class BranchTranslator {
         { variable: null, type: this.#branch.line.p },
         { variable: this.#branch.line.o, type: this.#branch.line.oType },
         BranchTranslator.isVarSelected(fullQuery, this.#branch.line.o),
-        this.#branch.line.values
+        this.#branch.line.criterias.map((v) => v.criteria)
       );
     }
   }
@@ -95,18 +95,11 @@ export default class BranchTranslator {
     this.#buildFinalResultPtrn();
   }
 
-  //!
-  //!
-  //!
-  //!
-  //!
-  //!
-  //verifier cette partie la pour la generation des childrens
   /**
    * Converts all children branches, and gather their patterns at this level
    */
   #buildChildrenPatterns() {
-    this.#branch.children.forEach((branch) => {
+    this.#branch.children?.forEach((branch) => {
       const builder = new BranchTranslator(
         branch,
         this.#fullQuery,
@@ -127,7 +120,7 @@ export default class BranchTranslator {
   }
 
   #buildValuePtrn() {
-    if (this.#branch.line.values?.length > 0) {
+    if (this.#branch.line.criterias?.length > 0) {
       this.#valuePtrns = this.#valueBuilder.build();
     }
   }

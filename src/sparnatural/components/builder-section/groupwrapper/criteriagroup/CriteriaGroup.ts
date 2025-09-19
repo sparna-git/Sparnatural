@@ -154,14 +154,19 @@ class CriteriaGroup extends HTMLComponent {
       }
     });
 
+    // gets called by the widget.
+    this.html[0].addEventListener("selectAll", (e: CustomEvent) => {
+      e.stopImmediatePropagation();
+      this.endClassWidgetGroup.setSelectAll();
+    });
+
     // when inputgot selected then we remove the where btn and EditComponents
     this.html[0].addEventListener("removeEditComponents", (e: CustomEvent) => {
       e.stopImmediatePropagation();
       this.EndClassGroup.editComponents?.html?.empty()?.remove();
     });
 
-    //gets called when a user removes a previously selected widgetValue
-    //removes the widgetValue from the widgetvalues list in the widget
+    // gets called when a user removes a previously selected widgetValue
     this.html[0].addEventListener("updateWidgetList", (e: CustomEvent) => {
       if (!("unselectedVal" in e.detail))
         throw Error(

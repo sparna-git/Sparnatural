@@ -10,6 +10,7 @@ export type Resource = import('@rdfjs/types').NamedNode | import('@rdfjs/types')
  */
 export class ResourceFactory {
     static fromTerm(t:Term): Resource {
+        if(!t) return null;
         if(t.termType == "NamedNode" || t.termType == "BlankNode") {
             return t;
         } else {

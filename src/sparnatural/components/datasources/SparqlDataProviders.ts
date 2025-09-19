@@ -1,8 +1,8 @@
 import { Term } from "@rdfjs/types/data-model";
-import { RDFTerm } from "../widgets/AbstractWidget";
 import { ListDataProviderIfc, RdfTermDatasourceItem, AutocompleteDataProviderIfc, TreeDataProviderIfc, RdfTermTreeDatasourceItem, ValuesListDataProviderIfc } from "./DataProviders";
 import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc, ValuesListSparqlQueryBuilderIfc } from "./SparqlBuilders";
 import { SparqlHandlerIfc } from "./SparqlHandler";
+import { sameTerm } from "../../SparnaturalQueryIfc";
 
 
 export abstract class BaseSparqlListDataProvider {
@@ -427,25 +427,4 @@ export function mergeDatasourceResults(items:RdfTermDatasourceItem[]):RdfTermDat
     });
 
     return result;
-}
-
-/**
- * @param t1 
- * @param t2 
- * @returns true if both RDF term are equal (same type, same value, same datatype, same language)
- */
-export function sameTerm(t1:RDFTerm, t2:RDFTerm):boolean {
-    return(
-        t1 != null
-        &&
-        t2 != null
-        &&
-        t1.type == t2.type
-        &&
-        t1.value == t2.value
-        &&
-        t1.datatype == t2.datatype
-        &&
-        t1["xml:lang"] == t2["xml:lang"]
-    );
 }

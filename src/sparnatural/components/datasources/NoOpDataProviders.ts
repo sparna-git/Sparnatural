@@ -1,9 +1,5 @@
 import { Term } from "@rdfjs/types/data-model";
-import { RDFTerm } from "../widgets/AbstractWidget";
 import { AutocompleteDataProviderIfc, ListDataProviderIfc, RdfTermDatasourceItem, RdfTermTreeDatasourceItem, TreeDataProviderIfc, ValuesListDataProviderIfc } from "./DataProviders";
-import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
-import { SparqlHandlerIfc } from "./SparqlHandler";
-
 
 /**
  * An implementation of ListDataProviderIfc that does nothing !

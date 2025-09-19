@@ -1,9 +1,9 @@
-import { BlankTerm, IriTerm, LiteralTerm, Pattern } from "sparqljs";
 import { SelectedVal } from "../SelectedVal";
 import { HTMLComponent } from "../HtmlComponent";
 import LoadingSpinner from "./LoadingSpinner";
 import { DataFactory, Literal } from "rdf-data-factory";
 import { Term } from "@rdfjs/types/data-model";
+import { RDFTerm, LabelledCriteria, Criteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -15,56 +15,12 @@ export enum ValueRepetition {
   MULTIPLE, // multiple values can be selected like a list of values
 }
 
-export interface WidgetValue {
-  value: {
-    label: string; // that's the human readable string representation shown as a WidgetValue to the user
-  };
-  key: () => string; // a function that returns the value key as a string.
-}
-
-/**
- * Generic RDFTerm value structure, either an IRI or a Literal with lang or datatype
- */
-export class RDFTerm {
-  type: string;
-  value: string;
-  "xml:lang"?: string;
-  datatype?: string;
-
-  constructor(term: Term) {
-    switch (term.termType) {
-      case "Literal":
-        this.type = "literal";
-        break;
-      case "BlankNode":
-        this.type = "bnode";
-        break;
-      case "NamedNode":
-        this.type = "uri";
-        break;
-      default:
-        throw new Error("Unsupported termType here " + term.termType);
-    }
-    this.value = term.value;
-    this["xml:lang"] =
-      term instanceof Literal ? (term as Literal).language : undefined;
-    this.datatype =
-      term instanceof Literal ? (term as Literal).datatype.value : undefined;
-  }
-}
-
-export class RdfTermValue implements WidgetValue {
-  value: {
-    label: string;
-    rdfTerm: RDFTerm;
-  };
-
-  key(): string {
-    return this.value.rdfTerm.value;
-  }
-
-  constructor(v: RdfTermValue["value"]) {
-    this.value = v;
+let RDFTermFactory = (term: Term): RDFTerm => {
+  return {
+    type: term.termType === "Literal" ? "literal" : term.termType === "BlankNode" ? "bnode" : "uri",
+    value: term.value,
+    "xml:lang": term instanceof Literal ? (term as Literal).language : undefined,
+    datatype: term instanceof Literal ? (term as Literal).datatype.value : undefined, 
   }
 }
 
@@ -101,11 +57,11 @@ export abstract class AbstractWidget extends HTMLComponent {
   }
 
   // Is used to parse the inputs from the ISparnaturalJson e.g "preloaded" queries
-  abstract parseInput(value: WidgetValue["value"]): WidgetValue;
+  abstract parseInput(value: LabelledCriteria<Criteria>): LabelledCriteria<Criteria>;
 
   // fires the event to render the label of the WidgetValue on the UI
   // can take either a single value or an array of values
-  triggerRenderWidgetVal(widgetValue: WidgetValue | WidgetValue[]) {
+  triggerRenderWidgetVal(widgetValue: LabelledCriteria<Criteria> | LabelledCriteria<Criteria>[]) {
     this.html[0].dispatchEvent(
       new CustomEvent("renderWidgetVal", {
         bubbles: true,
@@ -149,3 +105,5 @@ export abstract class AbstractWidget extends HTMLComponent {
     if (message != null) this.spinner.renderMessage(message);
   }
 }
+export { RDFTerm };
+

@@ -6,8 +6,7 @@ import StartClassGroup from "../components/builder-section/groupwrapper/criteria
 import GroupWrapper from "../components/builder-section/groupwrapper/GroupWrapper";
 import { SelectedVal } from "../components/SelectedVal";
 import SparnaturalComponent from "../components/SparnaturalComponent";
-import { WidgetValue } from "../components/widgets/AbstractWidget";
-import { Branch, SparnaturalQueryIfc, Order, VariableTerm } from "../SparnaturalQueryIfc";
+import { Branch, SparnaturalQueryIfc, Order, VariableTerm, LabelledCriteria, Criteria } from "../SparnaturalQueryIfc";
 
 
 export default class QueryLoader{
@@ -99,15 +98,15 @@ export default class QueryLoader{
       );
     
       // set WidgetValues
-      branch.line.values.forEach((v) => {
-        const parsedVal: WidgetValue = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
+      branch.line.criterias.forEach((v) => {
+        const parsedVal: LabelledCriteria<Criteria> = grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.parseInput(v)
         // if there are multiple values rendered, click first the 'plus' btn, to add more values
         if(grpWarpper.CriteriaGroup.endClassWidgetGroup.widgetValues.length > 0) this.#clickOn(grpWarpper.CriteriaGroup.endClassWidgetGroup.addWidgetValueBtn.html)
         grpWarpper.CriteriaGroup.EndClassGroup.editComponents.widgetWrapper.widgetComponent.triggerRenderWidgetVal(parsedVal)
       });
 
       // if there is no value, and no children, set an "Any" value
-      if(branch.line.values.length == 0 && branch.children.length == 0) {
+      if(branch.line.criterias.length == 0 && branch.children.length == 0) {
         grpWarpper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
       }
     

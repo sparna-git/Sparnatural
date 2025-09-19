@@ -1,6 +1,6 @@
 import { AddUserInputBtn } from "../../buttons/AddUserInputBtn";
 import { InfoBtn } from "../../buttons/InfoBtn";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "../AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "../AbstractWidget";
 import "@chenfengyuan/datepicker";
 import { DataFactory } from 'rdf-data-factory';
 import { SelectedVal } from "../../SelectedVal";
@@ -8,25 +8,10 @@ import { ISparnaturalSpecification } from "../../../spec-providers/ISparnaturalS
 import { I18n } from "../../../settings/I18n";
 import { HTMLComponent } from "../../HtmlComponent";
 import { TOOLTIP_CONFIG } from "../../../settings/defaultSettings";
+import { LabelledCriteria, DateCriteria } from "../../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
-export class DateTimePickerValue implements WidgetValue {
-  value: {
-    label: string;
-    start: Date;
-    stop: Date;
-  };
-
-  key():string {
-    return JSON.stringify(this.value.start).replace(/["]+/g,'')+" - "+JSON.stringify(this.value.stop).replace(/["]+/g,'');
-  }
-
-  constructor(v:DateTimePickerValue["value"]) {
-    this.value = v;
-  }
-
-}
 
 // converts props of type Date to type string
 type StringifyDate<T> = T extends Date
@@ -39,11 +24,11 @@ type StringifyDate<T> = T extends Date
 
 // stringified type of DateTimePickerValue
 // see: https://effectivetypescript.com/2020/04/09/jsonify/
-type StringDateTimeValue = StringifyDate<DateTimePickerValue>
+type StringDateTimeValue = StringifyDate<DateCriteria>
 
 export class TimeDatePickerWidget extends AbstractWidget {
  
-  protected widgetValues: DateTimePickerValue[];
+  protected widgetValues: DateCriteria[];
   datesHandler: any;
   parentComponent: any;
   dateFormat: any;
@@ -52,7 +37,7 @@ export class TimeDatePickerWidget extends AbstractWidget {
   inputValue: JQuery<HTMLElement>;
   infoBtn: InfoBtn;
   addValueBtn: AddUserInputBtn;
-  value: DateTimePickerValue;
+  value: DateCriteria;
   startClassVal: SelectedVal;
   objectPropVal: SelectedVal;
   endClassVal: SelectedVal;
@@ -166,22 +151,26 @@ export class TimeDatePickerWidget extends AbstractWidget {
       }
     }
 
-    let stringDateTimeVal:StringDateTimeValue["value"] ={
+    let stringDateTimeVal:LabelledCriteria<DateCriteria> = {
       label: null,
-      start:(startDate)?startDate.toISOString():null,
-      stop:(endDate)?endDate.toISOString():null,
+      criteria: {
+        start:(startDate)?startDate.toISOString():null,
+        stop:(endDate)?endDate.toISOString():null
+      }      
     } 
-    let widgetVal: DateTimePickerValue = this.parseInput(
+    let widgetVal: LabelledCriteria<DateCriteria> = this.parseInput(
       stringDateTimeVal
     );
     if (!widgetVal) return;
     this.triggerRenderWidgetVal(widgetVal);
   };
 
-  parseInput(input: StringDateTimeValue["value"]): DateTimePickerValue {
-    if(!this.#isValidDate(input.start) && !this.#isValidDate(input.stop)) throw Error('No valid Date received')
-    let startValue = (this.#isValidDate(input.start))?new Date(input.start):null
-    let endValue = (this.#isValidDate(input.stop))?new Date(input.stop):null
+  parseInput(input: LabelledCriteria<DateCriteria>): LabelledCriteria<DateCriteria> {
+    let theValue:DateCriteria = input.criteria as DateCriteria;
+
+    if(!this.#isValidDate(theValue.start) && !this.#isValidDate(theValue.stop)) throw Error('No valid Date received')
+    let startValue = (this.#isValidDate(theValue.start))?new Date(theValue.start):null
+    let endValue = (this.#isValidDate(theValue.stop))?new Date(theValue.stop):null
     if (startValue && endValue && (startValue > endValue)) throw Error('StartDate is bigger than Enddate!')
 
     let tmpValue: { start: Date; stop: Date; startLabel: string; endLabel: string };
@@ -201,18 +190,23 @@ export class TimeDatePickerWidget extends AbstractWidget {
         endLabel: endValue?endValue.getFullYear().toString():""
       };
     }
-    let dateTimePickerVal = new DateTimePickerValue({
-        label: this.#getValueLabel(tmpValue.startLabel, tmpValue.endLabel),
-        start: tmpValue.start,
-        stop: tmpValue.stop,
-      });
+
+    let dateTimePickerVal:LabelledCriteria<DateCriteria> = {
+      label: this.#getValueLabel(tmpValue.startLabel, tmpValue.endLabel),
+      criteria: {
+        start: (tmpValue.start)?tmpValue.start.toISOString():null,
+        stop: (tmpValue.stop)?tmpValue.stop.toISOString():null,
+      }        
+    };
     return dateTimePickerVal;
   }
+
   #getFirstDayYear(startValue:Date) {
     return startValue ?
     new Date(startValue.getFullYear(),0,1,0,0,1,0) 
     :null
   }
+
   #getLastDayOfYear(endValue:Date) {
     return endValue ? 
     new Date(endValue.getFullYear(),11,31,23,59,59) 
@@ -236,3 +230,5 @@ export class TimeDatePickerWidget extends AbstractWidget {
     return (new Date(dateString).toString() !== "Invalid Date") && !isNaN(Date.parse(dateString));
   }
 }
+export { DateCriteria as DateTimePickerValue };
+

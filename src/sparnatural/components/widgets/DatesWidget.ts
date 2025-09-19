@@ -1,24 +1,10 @@
 import { SelectedVal } from "../SelectedVal";
 import { AddUserInputBtn } from "../buttons/AddUserInputBtn";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { I18n } from "../../settings/I18n";
 import { HTMLComponent } from "../HtmlComponent";
+import { LabelledCriteria, DateCriteria } from "../../SparnaturalQueryIfc";
 
-export class DateValue implements WidgetValue {
-  value: {
-    label: string;
-    start: string;
-    stop: string;
-  };
-
-  key():string {
-    return this.value.start+" - "+this.value.stop;
-  }
-
-  constructor(v:DateValue["value"]) {
-    this.value = v;
-  }
-}
 
 /**
  * Old time period widget
@@ -151,45 +137,54 @@ export class DatesWidget extends AbstractWidget {
   }
 
   #addValueBtnClicked = () => {
-    let val = {
-      start: this.inputStart.val().toString(),
-      stop: this.inputEnd.val().toString(),
+    let val:LabelledCriteria<DateCriteria> = {
       label: "",
+      criteria: {
+        start: this.inputStart.val().toString(),
+        stop: this.inputEnd.val().toString()
+      }      
     };
     this.triggerRenderWidgetVal(this.parseInput(val));
   };
 
-  parseInput(dateValue:DateValue["value"]): DateValue {
-    if (dateValue.start == "" || dateValue.stop == "") {
+  parseInput(dateValue:LabelledCriteria<DateCriteria>): LabelledCriteria<DateCriteria> {
+    let theValue = dateValue.criteria as DateCriteria;
+    if (theValue.start == "" || theValue.stop == "") {
       dateValue = null;
     } else {
-      if (parseInt(dateValue.start) > parseInt(dateValue.stop)) {
+      if (parseInt(theValue.start) > parseInt(theValue.stop)) {
         dateValue = null;
       } else {
-        var absoluteStartYear = dateValue.start.startsWith("-")
-          ? dateValue.start.substring(1)
-          : dateValue.start;
+        var absoluteStartYear = theValue.start.startsWith("-")
+          ? theValue.start.substring(1)
+          : theValue.start;
         var paddedAbsoluteStartYear = absoluteStartYear.padStart(4, "0");
-        var paddedStartYear = dateValue.start.startsWith("-")
+        var paddedStartYear = theValue.start.startsWith("-")
           ? "-" + paddedAbsoluteStartYear
           : paddedAbsoluteStartYear;
-        dateValue.start = paddedStartYear + "-01-01T00:00:00";
+        theValue.start = paddedStartYear + "-01-01T00:00:00";
 
-        var absoluteStopYear = dateValue.stop.startsWith("-")
-          ? dateValue.stop.substring(1)
-          : dateValue.stop;
+        var absoluteStopYear = theValue.stop.startsWith("-")
+          ? theValue.stop.substring(1)
+          : theValue.stop;
         var paddedAbsoluteStopYear = absoluteStopYear.padStart(4, "0");
-        var paddedStopYear = dateValue.stop.startsWith("-")
+        var paddedStopYear = theValue.stop.startsWith("-")
           ? "-" + paddedAbsoluteStopYear
           : paddedAbsoluteStopYear;
-        dateValue.stop = paddedStopYear + "-12-31T23:59:59";
+        theValue.stop = paddedStopYear + "-12-31T23:59:59";
       }
     }
     dateValue.label = this.#getValueLabel(
-      dateValue.start,
-      dateValue.stop
+      theValue.start,
+      theValue.stop
     );
-    return new DateValue(dateValue);
+    return {
+      label: this.#getValueLabel(
+        theValue.start,
+        theValue.stop
+      ),
+      criteria: theValue
+    }
   }
 
   #getValueLabel = function (start: any, stop: any) {

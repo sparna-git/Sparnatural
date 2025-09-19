@@ -1,7 +1,5 @@
 import { Term } from "@rdfjs/types/data-model";
-import { RDFTerm } from "../widgets/AbstractWidget";
-import { AutocompleteSparqlQueryBuilderIfc, ListSparqlQueryBuilderIfc, TreeSparqlQueryBuilderIfc } from "./SparqlBuilders";
-import { SparqlHandlerIfc } from "./SparqlHandler";
+import { RDFTerm } from "../../SparnaturalQueryIfc";
 
 /**
  * An item returned by a list widget datasource

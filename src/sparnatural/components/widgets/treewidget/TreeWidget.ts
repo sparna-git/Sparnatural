@@ -1,6 +1,6 @@
 import UiuxConfig from "../../IconsConstants";
 import { SelectedVal } from "../../SelectedVal";
-import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "../AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "../AbstractWidget";
 import "jstree"
 import { DataFactory } from 'rdf-data-factory';
 import { I18n } from "../../../settings/I18n";
@@ -8,6 +8,7 @@ import { HTMLComponent } from "../../HtmlComponent";
 import "jstree/dist/themes/default/style.min.css";
 import { TreeDataProviderIfc, RdfTermTreeDatasourceItem } from "../../datasources/DataProviders";
 import { NoOpTreeDataProvider } from "../../datasources/NoOpDataProviders";
+import { LabelledCriteria, RdfTermCriteria } from "../../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -28,7 +29,7 @@ export class TreeWidget extends AbstractWidget {
   configuration:TreeConfiguration;
   IdCriteriaGroupe: any;
   jsTree: any;
-  value: RdfTermValue;
+  value: RdfTermCriteria;
   // html content
   button: any;
   hiddenInput: any;
@@ -312,20 +313,22 @@ export class TreeWidget extends AbstractWidget {
     $(this_.parentComponent).trigger("change");
   };
 
-  getValue = function ():Array<RdfTermValue> {
+  getValue = function ():Array<LabelledCriteria<RdfTermCriteria>> {
     var checked = this.jsTree.jstree().get_top_checked(true);
 
     // rebuild a clean data structure
     var values = [];
     for (var node in checked) {
-      const val = new RdfTermValue({
-        // TODO : find a wat to retrieve the itemLabel
+      const val:LabelledCriteria<RdfTermCriteria> = {
+        // TODO : find a way to retrieve the itemLabel
         label: checked[node].original.text,
-        rdfTerm: {
-           type: "uri",
-           value: checked[node].id
+        criteria: {
+          rdfTerm: {
+            type: "uri",
+            value: checked[node].id
+          }
         }
-      });
+      };
       
       values.push(val);
     }
@@ -333,8 +336,8 @@ export class TreeWidget extends AbstractWidget {
     return values;
   };
 
-  parseInput(input: RdfTermValue["value"]): RdfTermValue {
-    return new RdfTermValue(input);
+  parseInput(input: LabelledCriteria<RdfTermCriteria>): LabelledCriteria<RdfTermCriteria> {
+    return input;
   }
 
 }

@@ -11,25 +11,14 @@ import {
   ValuesPattern,
 } from "sparqljs";
 import { SelectedVal } from "../../components/SelectedVal";
-import {
-  RDFTerm,
-  RdfTermValue,
-  WidgetValue,
-} from "../../components/widgets/AbstractWidget";
 import SparqlFactory from "./SparqlFactory";
-import { DataFactory, NamedNode } from "rdf-data-factory";
-import { SelectAllValue } from "../../components/builder-section/groupwrapper/criteriagroup/edit-components/EditComponents";
-import { BooleanWidgetValue } from "../../components/widgets/BooleanWidget";
-import { NumberWidgetValue } from "../../components/widgets/NumberWidget";
+import { DataFactory } from "rdf-data-factory";
 import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpecification";
 import { Config } from "../../ontologies/SparnaturalConfig";
-import { SearchRegexWidgetValue } from "../../components/widgets/SearchRegexWidget";
-import { DateTimePickerValue } from "../../components/widgets/timedatepickerwidget/TimeDatePickerWidget";
-import { MapValue } from "../../components/widgets/MapWidget";
-import { LatLng } from "leaflet";
 import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
 import { SHACLSpecificationEntity } from "../../spec-providers/shacl/SHACLSpecificationEntity";
 import { GEOFUNCTIONS, GEOSPARQL } from "../../../rdf/vocabularies/GEOSPARQL";
+import { DateCriteria, RDFTerm, RdfTermCriteria, LabelledCriteria, Criteria, BooleanCriteria, NumberCriteria, SearchCriteria, MapCriteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -88,7 +77,7 @@ export default interface ValueBuilderIfc {
     propertyVal: SelectedVal,
     endClassVal: SelectedVal,
     endClassVarSelected: boolean,
-    values: Array<WidgetValue["value"]>
+    values: Array<Criteria>
   ): void;
 
   /**
@@ -117,7 +106,7 @@ export abstract class BaseValueBuilder implements ValueBuilderIfc {
   protected startClassVal: SelectedVal;
   protected propertyVal: SelectedVal;
   protected endClassVal: SelectedVal;
-  protected values: Array<WidgetValue["value"]>;
+  protected values: Array<Criteria>;
   protected endClassVarSelected: boolean;
 
   init(
@@ -126,7 +115,7 @@ export abstract class BaseValueBuilder implements ValueBuilderIfc {
     propertyVal: SelectedVal,
     endClassVal: SelectedVal,
     endClassVarSelected: boolean,
-    values: Array<WidgetValue["value"]>
+    values: Array<Criteria>
   ): void {
     this.specProvider = specProvider;
     this.startClassVal = startClassVal;
@@ -160,7 +149,7 @@ export class RdfTermValueBuilder
   implements ValueBuilderIfc
 {
   build(): Pattern[] {
-    let widgetValues = this.values as RdfTermValue["value"][];
+    let widgetValues = this.values as RdfTermCriteria[];
 
     if (this.isBlockingObjectProp()) {
       let singleTriple: Triple = SparqlFactory.buildTriple(
@@ -251,7 +240,7 @@ export class BooleanValueBuilder
   implements ValueBuilderIfc
 {
   build(): Pattern[] {
-    let widgetValues = this.values as BooleanWidgetValue["value"][];
+    let widgetValues = this.values as BooleanCriteria[];
 
     // if we are blocking the object prop, we create it directly here with the value as the object
     if (this.isBlockingObjectProp()) {
@@ -271,7 +260,7 @@ export class BooleanValueBuilder
       return [ptrn];
     } else {
       // otherwise the object prop is created and we create a VALUES clause with the actual boolean
-      let vals = (this.values as BooleanWidgetValue["value"][]).map((v) => {
+      let vals = (this.values as BooleanCriteria[]).map((v) => {
         let vl: ValuePatternRow = {};
         vl["?" + this.endClassVal.variable] = factory.literal(
           widgetValues[0].boolean.toString(),
@@ -294,7 +283,6 @@ export class BooleanValueBuilder
   isBlockingObjectProp() {
     return (
       this.values?.length == 1 &&
-      !(this.values[0] instanceof SelectAllValue) &&
       !this.endClassVarSelected
     );
   }
@@ -305,7 +293,7 @@ export class NumberValueBuilder
   implements ValueBuilderIfc
 {
   build(): Pattern[] {
-    let widgetValues = this.values as NumberWidgetValue["value"][];
+    let widgetValues = this.values as NumberCriteria[];
 
     return [
       SparqlFactory.buildFilterRangeDateOrNumber(
@@ -344,7 +332,8 @@ export class SearchRegexValueBuilder
     let widgetType = this.specProvider
       .getProperty(this.propertyVal.type)
       .getPropertyType(this.endClassVal.type);
-    let widgetValues = this.values as SearchRegexWidgetValue["value"][];
+    
+     let widgetValues = this.values as SearchCriteria[];
 
     switch (widgetType) {
       case Config.STRING_EQUALS_PROPERTY: {
@@ -352,7 +341,7 @@ export class SearchRegexValueBuilder
         return [ SparqlFactory.buildFilterOr(
           widgetValues.map((v) => {
             return SparqlFactory.buildOperationLcaseEquals(
-              factory.literal(`${v.regex}`),
+              factory.literal(`${v.search}`),
               factory.variable(this.endClassVal.variable)
             );
           })
@@ -363,7 +352,7 @@ export class SearchRegexValueBuilder
        return [ SparqlFactory.buildFilterOr(
         widgetValues.map((v) => {
           return SparqlFactory.buildRegexOperation(
-            factory.literal(`${v.regex}`),
+            factory.literal(`${v.search}`),
             factory.variable(this.endClassVal.variable)
           );
         })
@@ -379,7 +368,7 @@ export class SearchRegexValueBuilder
               predicate: factory.namedNode(
                 "http://www.ontotext.com/connectors/lucene#query"
               ),
-              object: factory.literal(`text:${widgetValues[0].regex}`),
+              object: factory.literal(`text:${widgetValues[0].search}`),
             },
             {
               subject: factory.variable(this.startClassVal.variable),
@@ -393,7 +382,7 @@ export class SearchRegexValueBuilder
         return [ptrn];
       }
       case Config.VIRTUOSO_SEARCH_PROPERTY: {
-        let bif_query = widgetValues[0].label
+        let bif_query = widgetValues[0].search
           .replace(/[\"']/g, " ")
           .split(" ")
           .map((e) => `'${e}'`)
@@ -424,7 +413,7 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
 
   build(): Pattern[] {
       
-      let widgetValues = this.values as DateTimePickerValue["value"][];
+      let widgetValues = this.values as DateCriteria[];
       
       let specProperty:ISpecificationProperty = this.specProvider.getProperty(this.propertyVal.type);
       let beginDateProp = specProperty.getBeginDateProperty();
@@ -486,8 +475,6 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
       return (
         this.values?.length == 1
         &&
-        !(this.values[0] instanceof SelectAllValue)
-        &&
         beginDateProp != null
         &&
         endDateProp != null
@@ -500,8 +487,10 @@ export class DateTimePickerValueBuilder extends BaseValueBuilder implements Valu
    * since it does not properly handle negative year and generates "-000600-12-31" while we want "-0600-12-31"
    * @returns 
    */
-  #formatSparqlDate(date:Date) {
-      if(date == null) return null;
+  #formatSparqlDate(dateString:string|null):string|null {
+      if(dateString == null) return null;
+
+      let date = new Date(dateString);
 
       return this.#padYear(date.getUTCFullYear()) +
       '-' + this.#pad(date.getUTCMonth() + 1) +
@@ -535,7 +524,7 @@ export class MapValueBuilder
 {
   // reference: https://graphdb.ontotext.com/documentation/standard/geosparql-support.html
   build(): Pattern[] {
-    let widgetValues = this.values as MapValue["value"][];
+    let widgetValues = this.values as MapCriteria[];
 
     // the property between the subject and its position expressed as wkt value, e.g. http://www.w3.org/2003/01/geo/wgs84_pos#geometry
 
@@ -554,7 +543,7 @@ export class MapValueBuilder
     return [filterPtrn];
   }
 
-  #buildPolygon(coordinates: LatLng[]) {
+  #buildPolygon(coordinates: {lat: number; lng: number;}[]) {
     let polygon = "";
     coordinates.forEach((coordinat) => {
       polygon = `${polygon}${coordinat.lng} ${coordinat.lat}, `;

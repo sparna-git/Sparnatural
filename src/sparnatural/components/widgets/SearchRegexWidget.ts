@@ -1,29 +1,15 @@
 import { DataFactory } from "rdf-data-factory";
 import { SelectedVal } from "../SelectedVal";
 import { AddUserInputBtn } from "../buttons/AddUserInputBtn";
-import { AbstractWidget, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { InfoBtn } from "../buttons/InfoBtn";
 import { I18n } from "../../settings/I18n";
 import { TOOLTIP_CONFIG } from "../../settings/defaultSettings";
 import { HTMLComponent } from "../HtmlComponent";
+import { LabelledCriteria, SearchCriteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
-
-export class SearchRegexWidgetValue implements WidgetValue {
-  value: {
-    label: string;
-    regex: string;
-  };
-
-  key(): string {
-    return this.value.regex;
-  }
-
-  constructor(v: SearchRegexWidgetValue["value"]) {
-    this.value = v;
-  }
-}
 
 export interface SearchConfiguration {
   widgetType: string;
@@ -83,17 +69,16 @@ export class SearchRegexWidget extends AbstractWidget {
   }
   #addValueBtnClicked = () => {
     this.searchInput.trigger("change");
-    let searchWidgetValue = {
+    let searchWidgetValue:LabelledCriteria<SearchCriteria> = {
       label: this.searchInput.val().toString(),
-      regex: this.searchInput.val().toString(),
+      criteria: {
+        search: this.searchInput.val().toString()
+      }      
     };
-    this.triggerRenderWidgetVal(this.parseInput(searchWidgetValue));
+    this.triggerRenderWidgetVal(searchWidgetValue);
   };
 
-  parseInput(input: SearchRegexWidgetValue["value"]): SearchRegexWidgetValue {
-    if (input.regex.toString() == "") {
-      throw Error("Empty String in SearchRegex Widget");
-    }
-    return new SearchRegexWidgetValue(input);
+  parseInput(input: LabelledCriteria<SearchCriteria>): LabelledCriteria<SearchCriteria> {
+    return input
   }
 }

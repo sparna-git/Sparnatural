@@ -1,5 +1,5 @@
 import { SelectedVal } from "../SelectedVal";
-import { AbstractWidget, RDFTerm, RdfTermValue, ValueRepetition, WidgetValue } from "./AbstractWidget";
+import { AbstractWidget, ValueRepetition } from "./AbstractWidget";
 import { DataFactory } from 'rdf-data-factory';
 import "select2";
 import "select2/dist/css/select2.css";
@@ -7,8 +7,9 @@ import { I18n } from "../../settings/I18n";
 import { Term } from "@rdfjs/types/data-model";
 import { HTMLComponent } from "../HtmlComponent";
 import { ListDataProviderIfc, RdfTermDatasourceItem, ValuesListDataProviderIfc } from "../datasources/DataProviders";
-import { NoOpListDataProvider, NoOpValuesListDataProvider } from "../datasources/NoOpDataProviders";
+import { NoOpListDataProvider } from "../datasources/NoOpDataProviders";
 import { mergeDatasourceResults } from "../datasources/SparqlDataProviders";
+import { RDFTerm, RdfTermCriteria, LabelledCriteria } from "../../SparnaturalQueryIfc";
 
 const factory = new DataFactory();
 
@@ -127,7 +128,7 @@ export class ListWidget extends AbstractWidget {
             return;
 
           let itemLabel = option[0].getAttribute("data-itemLabel");
-          let listWidgetValue: WidgetValue = this.buildValue(option[0].value, itemLabel);
+          let listWidgetValue: LabelledCriteria<RdfTermCriteria> = this.buildValue(option[0].value, itemLabel);
           this.triggerRenderWidgetVal(listWidgetValue);
         });
 
@@ -170,15 +171,15 @@ export class ListWidget extends AbstractWidget {
 
   // separate the creation of the value from the widget code itself
   // so that it can be overriden by LiteralListWidget
-  buildValue(termString:string,label:string): WidgetValue {
+  buildValue(termString:string,label:string): LabelledCriteria<RdfTermCriteria> {
     let term = (JSON.parse(termString) as RDFTerm);
-    return new RdfTermValue({
+    return {
       label: label,
-      rdfTerm: term
-    });
+      criteria: { rdfTerm: term }
+    };
   }
 
-  parseInput(input:RdfTermValue["value"]): WidgetValue { return new RdfTermValue(input) }
+  parseInput(input:LabelledCriteria<RdfTermCriteria>): LabelledCriteria<RdfTermCriteria> { return input }
 
 
 }
