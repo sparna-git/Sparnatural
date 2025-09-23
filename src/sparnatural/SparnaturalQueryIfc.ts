@@ -124,6 +124,22 @@ export interface RDFTerm {
   datatype?: string;
 }
 
+export enum Order {
+  ASC = "asc",
+  DESC = "desc",
+  NOORDER = "noord",
+}
+
+export enum AggregateFunction {
+  COUNT = "count",
+  MAX = "max",
+  MIN = "min",
+  SUM = "sum",
+  GROUP_CONCAT = "group_concat",
+  SAMPLE = "sample",
+  AVG = "avg"
+}
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -149,23 +165,6 @@ export function sameTerm(t1:RDFTerm, t2:RDFTerm):boolean {
         t1["xml:lang"] == t2["xml:lang"]
     );
 }
-
-export enum Order {
-  ASC = "asc",
-  DESC = "desc",
-  NOORDER = "noord",
-}
-
-export enum AggregateFunction {
-  COUNT = "count",
-  MAX = "max",
-  MIN = "min",
-  SUM = "sum",
-  GROUP_CONCAT = "group_concat",
-  SAMPLE = "sample",
-  AVG = "avg"
-}
-
 
 
 export enum CriteriaType {

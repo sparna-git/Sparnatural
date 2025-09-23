@@ -106,14 +106,14 @@ export default class QueryLoader{
       });
 
       // if there is no value, and no children, set an "Any" value
-      if(branch.line.criterias.length == 0 && branch.children.length == 0) {
+      if(branch.line.criterias.length == 0 && (!branch.children || branch.children.length == 0)) {
         grpWarpper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
       }
     
       // trigger option state
       this.#triggerOptions(grpWarpper, branch);
     
-      if (branch.children.length > 0) {
+      if (branch.children && branch.children.length > 0) {
         this.#clickOn(
           grpWarpper.CriteriaGroup.EndClassGroup.editComponents.actionWhere.btn
         );
