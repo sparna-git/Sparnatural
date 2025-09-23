@@ -32,29 +32,29 @@ sparnatural.addEventListener("init", (event) => {
 });
 
 sparnatural.addEventListener("queryUpdated", (event) => {
-  var queryStringFromJson = sparnatural.expandSparql(
+  var queryString = sparnatural.expandSparql(
     event.detail.queryString
   );
 
-  yasqe.setValue(queryStringFromJson);
+  yasqe.setValue(queryString);
 
   // store JSON in hidden field
   document.getElementById("query-json").value = JSON.stringify(
-    event.detail.queryStringFromJson
+    event.detail.queryString
   );
 
   // notify the query to yasr plugins
   for (const plugin in yasr.plugins) {
     if (yasr.plugins[plugin].notifyQuery) {
-      yasr.plugins[plugin].notifyQuery(event.detail.queryStringFromJson);
+      yasr.plugins[plugin].notifyQuery(event.detail.queryString);
     }
   }
 });
 
 sparnatural.addEventListener("queryUpdated", (event) => {
   var queryString = sparnatural.expandSparql(event.detail.queryString);
-  var queryStringFromJson = sparnatural.expandSparql(
-    event.detail.queryStringFromJson
+  var queryString = sparnatural.expandSparql(
+    event.detail.queryString
   );
   // Ajouter une ligne au tableau
   const tableBody = document.getElementById("sparql-comparison-table");
@@ -63,13 +63,13 @@ sparnatural.addEventListener("queryUpdated", (event) => {
   oldCell.textContent = queryString;
   row.appendChild(oldCell);
   const newCell = document.createElement("td");
-  newCell.textContent = queryStringFromJson;
+  newCell.textContent = queryString;
   row.appendChild(newCell);
   const statusCell = document.createElement("td");
   statusCell.textContent =
-    queryString === queryStringFromJson ? "OK" : "Pas OK";
+    queryString === queryString ? "OK" : "Pas OK";
   statusCell.classList.add(
-    queryString === queryStringFromJson ? "table-success" : "table-danger"
+    queryString === queryString ? "table-success" : "table-danger"
   );
   row.appendChild(statusCell);
   tableBody.appendChild(row);

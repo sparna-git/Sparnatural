@@ -7,17 +7,10 @@ import { SpecialSHACLSpecificationEntityRegistry, SpecialSHACLSpecificationEntit
 import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from "rdf-stores";
 import { Term } from "@rdfjs/types/data-model";
-import { Model } from "../../../rdf/Model";
-import { StatisticsReader } from "../../../rdf/shacl/StatisticsReader";
 import { SHACLSpecificationProvider } from './SHACLSpecificationProvider';
-import { XSD } from '../../../rdf/vocabularies/XSD';
-import { SH } from '../../../rdf/vocabularies/SH';
 import { DatasourceReading } from '../DatasourceReading';
-import { RDF } from '../../../rdf/vocabularies/RDF';
-import { PropertyShape } from '../../../rdf/shacl/PropertyShape';
-import { Shape } from '../../../rdf/shacl/Shape';
-import { DatatypeIfc } from '../../../rdf/Datatypes';
-import { ShaclModel, ShapeFactory } from '../../../rdf/shacl/ShaclModel';
+import { DatatypeIfc, Model, PropertyShape, RDF, SH, ShaclModel, Shape, ShapeFactory, StatisticsReader, XSD } from 'rdf-shacl-commons';
+
 
 const factory = new DataFactory();
 

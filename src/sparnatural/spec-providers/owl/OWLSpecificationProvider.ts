@@ -15,7 +15,7 @@ import { RdfStore } from "rdf-stores";
 import { NamedNode, Quad_Subject, Term } from '@rdfjs/types/data-model';
 import { Dag, DagIfc } from '../../dag/Dag';
 import { BaseRdfStore } from '../BaseRdfStore';
-import { RDFS } from '../../../rdf/vocabularies/RDFS';
+import { RDFS } from 'rdf-shacl-commons';
 
 const factory = new DataFactory();
 

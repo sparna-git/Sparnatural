@@ -8,15 +8,9 @@ import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import { RdfStore } from "rdf-stores";
 import { Quad_Subject } from '@rdfjs/types/data-model';
 import { Term } from "@rdfjs/types";
-import { Model } from '../../../rdf/Model';
-import { DagIfc, Dag, DagNodeIfc } from '../../dag/Dag';
-import { StatisticsReader } from '../../../rdf/shacl/StatisticsReader';
-import { SH } from '../../../rdf/vocabularies/SH';
-import { XSD } from '../../../rdf/vocabularies/XSD';
-import { RDF } from '../../../rdf/vocabularies/RDF';
+import { Model, RDF, SH, ShaclModel, ShaclSparqlPostProcessor, StatisticsReader, XSD } from 'rdf-shacl-commons';
 import { BaseRdfStore } from '../BaseRdfStore';
-import { ShaclSparqlPostProcessor } from '../../../rdf/shacl/ShaclSparqlPostProcessor';
-import { ShaclModel } from '../../../rdf/shacl/ShaclModel';
+import { Dag, DagIfc, DagNodeIfc } from '../../dag/Dag';
 
 
 const factory = new DataFactory();

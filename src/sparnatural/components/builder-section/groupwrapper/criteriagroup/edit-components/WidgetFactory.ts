@@ -1,4 +1,3 @@
-import { SKOS } from "../../../../../../rdf/vocabularies/SKOS";
 import { Config } from "../../../../../ontologies/SparnaturalConfig";
 import { Datasources } from "../../../../../ontologies/SparnaturalConfigDatasources";
 import { Catalog } from "../../../../../settings/Catalog";
@@ -21,7 +20,7 @@ import { NoOpListDataProvider, NoOpAutocompleteProvider, NoOpTreeDataProvider } 
 import { SparqlListDataProvider, SparqlAutocompleDataProvider, SparqlTreeDataProvider, SparqlValuesListDataProvider } from "../../../../datasources/SparqlDataProviders";
 import ISpecificationProperty from "../../../../../spec-providers/ISpecificationProperty";
 import { IDatasource } from "../../../../../spec-providers/IDatasource";
-import { RDFS } from "../../../../../../rdf/vocabularies/RDFS";
+import { RDFS, SKOS } from "rdf-shacl-commons";
 
 /**
  * Inversion of coupling : we don't want to depend on ISettings as this class is meant to be reused

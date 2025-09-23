@@ -6,8 +6,8 @@ import ISpecificationProperty from "../ISpecificationProperty";
 import { Datasources } from "../../ontologies/SparnaturalConfigDatasources";
 import { RdfStore } from "rdf-stores";
 import { Term } from "@rdfjs/types";
-import { RDFS } from "../../../rdf/vocabularies/RDFS";
 import { DatasourceReading } from "../DatasourceReading";
+import { RDFS } from "rdf-shacl-commons";
 
 const factory = new DataFactory();
 

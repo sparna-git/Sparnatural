@@ -1,7 +1,7 @@
 import { DataFactory } from 'rdf-data-factory';
 import { Datasources } from "../ontologies/SparnaturalConfigDatasources";
-import { Model } from '../../rdf/Model';
 import { IDatasource } from './IDatasource';
+import { Model } from 'rdf-shacl-commons';
 
 const factory = new DataFactory();
 

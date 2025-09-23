@@ -1,23 +1,14 @@
 import { DataFactory, NamedNode } from 'rdf-data-factory';
-import { RDF } from "../../../rdf/vocabularies/RDF";
-import { RDFS } from "../../../rdf/vocabularies/RDFS";
-import { SH } from "../../../rdf/vocabularies/SH";
-import { XSD } from "../../../rdf/vocabularies/XSD";
 import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { SHACLSpecificationEntry } from "./SHACLSpecificationEntry";
 import { SHACLSpecificationProperty } from "./SHACLSpecificationProperty";
 import ISHACLSpecificationEntity from "./ISHACLSpecificationEntity";
 import { RdfStore } from "rdf-stores";
-import { Model } from "../../../rdf/Model";
 import { DagIfc, Dag } from "../../dag/Dag";
 import { ISpecificationEntity } from "../ISpecificationEntity";
 import ISpecificationProperty from "../ISpecificationProperty";
-import { NodeShape } from '../../../rdf/shacl/NodeShape';
-import { PropertyShape } from '../../../rdf/shacl/PropertyShape';
-import { GEOSPARQL } from '../../../rdf/vocabularies/GEOSPARQL';
 import { Term } from '@rdfjs/types';
-import { DatatypeRegistry } from '../../../rdf/Datatypes';
-import { Resource } from '../../../rdf/Resource';
+import { GEOSPARQL, Model, NodeShape, PropertyShape, RDF, RDFS, SH, XSD, DatatypeRegistry } from 'rdf-shacl-commons';
 
 const factory = new DataFactory();
 

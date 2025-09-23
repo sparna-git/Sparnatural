@@ -17,8 +17,8 @@ import { ISparnaturalSpecification } from "../../spec-providers/ISparnaturalSpec
 import { Config } from "../../ontologies/SparnaturalConfig";
 import ISpecificationProperty from "../../spec-providers/ISpecificationProperty";
 import { SHACLSpecificationEntity } from "../../spec-providers/shacl/SHACLSpecificationEntity";
-import { GEOFUNCTIONS, GEOSPARQL } from "../../../rdf/vocabularies/GEOSPARQL";
 import { DateCriteria, RDFTerm, RdfTermCriteria, LabelledCriteria, Criteria, BooleanCriteria, NumberCriteria, SearchCriteria, MapCriteria } from "../../SparnaturalQueryIfc";
+import { GEOFUNCTIONS, GEOSPARQL } from "rdf-shacl-commons";
 
 const factory = new DataFactory();
 

@@ -3,8 +3,7 @@ import { ISpecificationEntry } from "../ISpecificationEntry";
 import { SHACLSpecificationProvider } from "./SHACLSpecificationProvider";
 import { RdfStore } from "rdf-stores";
 import { DataFactory } from 'rdf-data-factory';
-import { Shape } from "../../../rdf/shacl/Shape";
-import { ShaclModel, ShapeFactory } from "../../../rdf/shacl/ShaclModel";
+import { ShaclModel, Shape, ShapeFactory } from "rdf-shacl-commons";
 
 const factory = new DataFactory();
 

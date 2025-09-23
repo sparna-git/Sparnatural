@@ -1,6 +1,6 @@
 import { DataFactory } from 'rdf-data-factory';
+import { Model } from 'rdf-shacl-commons';
 import { RdfStore } from 'rdf-stores';
-import { Model } from '../../rdf/Model';
 
 const factory = new DataFactory();
 

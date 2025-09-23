@@ -3,10 +3,8 @@ import { OWLSpecificationProvider } from "./OWLSpecificationProvider";
 import { Config } from "../../ontologies/SparnaturalConfig";
 import { DataFactory } from 'rdf-data-factory';
 import { RdfStore } from "rdf-stores";
-import { Model } from "../../../rdf/Model";
 import { BaseRdfStore } from "../BaseRdfStore";
-import { RDFS } from "../../../rdf/vocabularies/RDFS";
-import { VOLIPI } from "../../../rdf/vocabularies/VOLIPI";
+import { Model, RDFS, VOLIPI } from "rdf-shacl-commons";
 
 const factory = new DataFactory();
 
