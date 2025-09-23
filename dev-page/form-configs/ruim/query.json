@@ -1,0 +1,37 @@
+{
+  "distinct": true,
+  "variables": [
+    {
+      "termType": "Variable",
+      "value": "SpecialitePharmaceutique"
+    },
+    {
+      "termType": "Variable",
+      "value": "CIS"
+    }
+  ],
+  "branches": [
+    {
+      "line": {
+        "s": "SpecialitePharmaceutique",
+        "p": "http://data.esante.gouv.fr/ansm/medicament/CIS",
+        "o": "CIS",
+        "sType": "http://data.esante.gouv.fr/ansm/medicament/SpecialitePharmaceutique",
+        "oType": "http://data.esante.gouv.fr/ansm/medicament/sparnatural-config/CIS",
+        "values": []
+      },
+      "children": []
+    },
+    {
+      "line": {
+        "s": "SpecialitePharmaceutique",
+        "p": "http://data.esante.gouv.fr/ansm/medicament/substanceActive",
+        "o": "Substance",
+        "sType": "http://data.esante.gouv.fr/ansm/medicament/SpecialitePharmaceutique",
+        "oType": "http://data.esante.gouv.fr/ansm/medicament/Substance",
+        "values": []
+      },
+      "children": []
+    }
+  ]
+}

@@ -97,16 +97,19 @@
 
               https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1LBumEdCIl8CUlkB0PGqPK6T_9-4nnpix%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true https://raw.githubusercontent.com/ICA-EGAD/RiC-O/refs/heads/master/ontology/previous-versions/RiC-O_v0-2_release/RiC-O_v0-2.rdf
             -->
-            <spar-natural
-              src="https://dataria.org/static/sparnatural/config.ttl"
-              lang="en"
-              defaultLang="en"
-              endpoint="https://graph.dhi-roma.it/query"
-              distinct="true"
-              limit="100"
-              prefixes="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology# crm:http://www.cidoc-crm.org/cidoc-crm/ grace:http://www.graceful17.org/ontology/"
-              debug="true"
-            />
+                    <spar-natural
+            id="sparnatural"
+            src="configs/OpenArchaeo_SHACL_Sparnatural_V2_cleaned.ttl"
+            endpoint="http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo"
+            lang="fr"
+            defaultLang="fr"
+            distinct="true"
+            limit="10000"
+            maxOr="10"
+            maxDepth="10"
+            debug="false"
+            prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
+        ></spar-natural>
           </div>
           <input type="hidden" id="query-json" />
           <div><a id="export" href="#">Export query in JSON</a></div>
@@ -120,8 +123,8 @@
                 Les requêtes sont envoyées à
                 <a
                   id="endpoint"
-                  href="http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo?default-graph-uri=https%3A%2F%2Fpactols.frantiq.fr%2Fopentheso%2F&default-graph-uri=https%3A%2F%2Fanalytics.huma-num.fr%2Farcheoviz%2F"
-                  >http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo?default-graph-uri=https%3A%2F%2Fpactols.frantiq.fr%2Fopentheso%2F&default-graph-uri=https%3A%2F%2Fanalytics.huma-num.fr%2Farcheoviz%2F</a
+                  href="http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo "
+                  >http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo</a
                 >
               </span>
             </div>

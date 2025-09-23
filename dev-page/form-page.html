@@ -83,14 +83,15 @@
           ></sparnatural-form>-->
 
           <sparnatural-form
-            src="https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1WrC2r7yDQCP5AKhu6SAK8Ba_QshzFKmm%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1UWfCJmgvgwJ0yOs6Ox_qzn47heaiQ0cx%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true form-configs/sapa/collections-shacl.ttl form-configs/sapa/instantiation_statistics_sparnatural.ttl"
-            lang="en"
-            defaultLang="en"
+            src="form-configs/ruim/sparnatural-config.ttl"
+            lang="fr"
+            defaultLang="fr"
             limit="100"
-            endpoint="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=https%3A%2F%2Fwww.dev.performing-arts.ch%2Fsparql"
-            form="form-configs/sapa-inst/form.json"
+            endpoint="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=https%3A%2F%2Fsmt.esante.gouv.fr%2Fapi%2Fsparql"
+            form="form-configs/ruim/form.json"
             prefix="skos:http://www.w3.org/2004/02/skos/core# rico:https://www.ica.org/standards/RiC/ontology#"
-            query="form-configs/sapa-inst/query.json"
+            query="form-configs/ruim/query.json"
+            typePredicate="<http://www.w3.org/2000/01/rdf-schema#subClassOf>"
           ></sparnatural-form>
         </div>
 

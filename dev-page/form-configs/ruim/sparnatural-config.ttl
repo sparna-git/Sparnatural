@@ -1,0 +1,683 @@
+@prefix adms: <http://www.w3.org/ns/adms#> .
+@prefix core: <http://data.sparna.fr/ontologies/sparnatural-config-core#> .
+@prefix datasources: <http://data.sparna.fr/ontologies/sparnatural-config-datasources#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix euvoc: <http://publications.europa.eu/ontology/euvoc#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix med: <http://data.esante.gouv.fr/ansm/medicament/> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix qb: <http://purl.org/linked-data/cube#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix skosthes: <http://purl.org/iso25964/skos-thes#> .
+@prefix skosxl: <http://www.w3.org/2008/05/skos-xl#> .
+@prefix this: <http://data.esante.gouv.fr/ansm/medicament/sparnatural-config/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+med:sparnatural-config a owl:Ontology;
+  dct:format <https://docs.google.com/spreadsheets/d/1ZkgVyfG1rnl3yZALOdxovj7ommoKDn7ieudi7jCwoYw/export?format=xlsx>,
+    <https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1ZkgVyfG1rnl3yZALOdxovj7ommoKDn7ieudi7jCwoYw%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true>;
+  dct:source <https://docs.google.com/spreadsheets/d/1ZkgVyfG1rnl3yZALOdxovj7ommoKDn7ieudi7jCwoYw>;
+  owl:imports <http://data.sparna.fr/ontologies/sparnatural-config-core>, <http://data.sparna.fr/ontologies/sparnatural-config-datasources> .
+
+med:Presentation a owl:Class;
+  core:defaultLabelProperty rdfs:label;
+  core:faIcon "fa-thin fa-box";
+  core:order 3;
+  rdfs:label "Présentation"@fr;
+  rdfs:subClassOf core:SparnaturalClass .
+
+med:UniteCommuneDeDispensation a owl:Class;
+  core:defaultLabelProperty rdfs:label;
+  core:faIcon "fa-thin fa-capsules";
+  core:order 2;
+  rdfs:label "Unité de Dispensation"@fr;
+  rdfs:subClassOf core:SparnaturalClass .
+
+med:SpecialitePharmaceutique a owl:Class;
+  core:defaultLabelProperty rdfs:label;
+  core:faIcon "fa-thin fa-mortar-pestle";
+  core:order 1;
+  rdfs:label "Spécialité pharmaceutique"@fr;
+  rdfs:subClassOf core:SparnaturalClass .
+
+this:ATC a owl:Class;
+  core:defaultLabelProperty rdfs:label;
+  core:faIcon "fa-thin fa-folder-tree";
+  core:sparqlString "<http://data.esante.gouv.fr/whocc/atc/ATC>";
+  rdfs:label "Classification ATC"@fr;
+  rdfs:subClassOf core:SparnaturalClass .
+
+med:Evenement a owl:Class;
+  core:defaultLabelProperty rdfs:label;
+  core:faIcon "fa-thin fa-calendar-exclamation";
+  core:order 5;
+  core:sparqlString "?classeEvenement . VALUES ?classeEvenement {<http://data.esante.gouv.fr/ansm/medicament/Evenement> <http://data.esante.gouv.fr/ansm/medicament/Autorisation> }";
+  core:tooltip "Un évènement réglementaire : Autorisation (AMM, enregistrement, AAC, AAP, ADP, AI), affectation des indications pour les accès dérogatoires, changement de statut"@fr;
+  rdfs:label "Événement"@fr;
+  rdfs:subClassOf core:SparnaturalClass .
+
+med:Substance a owl:Class;
+  core:defaultLabelProperty rdfs:label;
+  core:faIcon "fa-thin fa-atom-simple";
+  core:order 4;
+  rdfs:label "Substance"@fr;
+  rdfs:subClassOf core:SparnaturalClass .
+
+med:TypeEvenement a owl:Class;
+  core:defaultLabelProperty rdfs:label;
+  core:faIcon "fa-thin fa-window-restore";
+  rdfs:label "Type d'événement"@fr;
+  rdfs:subClassOf core:SparnaturalClass .
+
+med:TypeProcedure a owl:Class;
+  core:defaultLabelProperty rdfs:label;
+  core:faIcon "fa-thin fa-list";
+  rdfs:label "Type de procédure"@fr;
+  rdfs:subClassOf core:SparnaturalClass .
+
+this:Text a owl:Class;
+  core:faIcon "fa-thin fa-message-dots";
+  rdfs:label "Libellé"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:Date a owl:Class;
+  core:faIcon "fa-thin fa-calendar-day";
+  rdfs:label "Date"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:CIP a owl:Class;
+  core:faIcon "fa-thin fa-input-numeric";
+  rdfs:label "Code CIP"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:UCD a owl:Class;
+  core:faIcon "fa-thin fa-input-numeric";
+  rdfs:label "Code UCD"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:DateAMM a owl:Class;
+  core:faIcon "fa-thin fa-calendar-day";
+  rdfs:label "Date de 1re AMM"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:DateFin a owl:Class;
+  core:faIcon "fa-thin fa-calendar-day";
+  rdfs:label "Date de fin"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:DateEffet a owl:Class;
+  core:faIcon "fa-thin fa-calendar-day";
+  rdfs:label "Date d'effet"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:DateNotification a owl:Class;
+  core:faIcon "fa-thin fa-calendar-day";
+  rdfs:label "Date de notification"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:Label a owl:Class;
+  core:faIcon "fa-thin fa-message-dots";
+  rdfs:label "Libellé préférentiel"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:AltLabel a owl:Class;
+  core:faIcon "fa-thin fa-message-dots";
+  rdfs:label "Libellé alternatif"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:CodeUCD13 a owl:Class;
+  core:faIcon "fa-thin fa-input-numeric";
+  rdfs:label "Code UCD13"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:CodeUCD7 a owl:Class;
+  core:faIcon "fa-thin fa-input-numeric";
+  rdfs:label "Code UCD7"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:CIP13 a owl:Class;
+  core:faIcon "fa-thin fa-input-numeric";
+  rdfs:label "Code CIP13"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:CIP7 a owl:Class;
+  core:faIcon "fa-thin fa-input-numeric";
+  rdfs:label "Code CIP7"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:NombreUnites a owl:Class;
+  core:faIcon "fa-thin fa-ball-pile";
+  rdfs:label "Nombre d'unités de dispensation"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:TypeDispositif a owl:Class;
+  core:faIcon "fa-thin fa-syringe";
+  rdfs:label "Dispositif d'administration"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:CIS a owl:Class;
+  core:faIcon "fa-thin fa-barcode";
+  rdfs:label "Code ID de Spécialité"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:Actif a owl:Class;
+  core:faIcon "fa-thin fa-circle-check";
+  rdfs:label "Active"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:CodeATC a owl:Class;
+  core:faIcon "fa-thin fa-input-numeric";
+  rdfs:label "Code ATC"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+med:StatutSpecialite a owl:Class;
+  core:faIcon "fa-thin fa-circle-info";
+  rdfs:label "Statut courant"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+med:Element a owl:Class;
+  core:faIcon "fa-thin fa-pills";
+  rdfs:label "Élément"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:IDSubstance a owl:Class;
+  core:faIcon "fa-thin fa-barcode";
+  rdfs:label "ID Substance"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+this:CodeSMS a owl:Class;
+  core:faIcon "fa-thin fa-input-numeric";
+  rdfs:label "Code Substances SMS"@fr;
+  rdfs:subClassOf rdfs:Literal .
+
+rdfs:label a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:Presentation, med:SpecialitePharmaceutique, med:Substance, med:UniteCommuneDeDispensation;
+  rdfs:label "a pour désignation"@fr;
+  rdfs:range this:Text;
+  rdfs:subPropertyOf core:SearchProperty .
+
+skos:altLabel a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf, this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:Presentation, med:Substance;
+  rdfs:label "autre dénomination"@fr;
+  rdfs:range this:Text;
+  rdfs:subPropertyOf core:AutocompleteProperty, core:SearchProperty .
+
+med:CIP13 a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:Presentation;
+  rdfs:label "a pour CIP13"@fr;
+  rdfs:range this:CIP;
+  rdfs:subPropertyOf core:SearchProperty .
+
+med:CIP7 a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:Presentation;
+  rdfs:label "a pour CIP7"@fr;
+  rdfs:range this:CIP;
+  rdfs:subPropertyOf core:SearchProperty .
+
+med:nombreUniteDeDispensation a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:Presentation;
+  rdfs:label "contient"@fr;
+  rdfs:range this:NombreUnites;
+  rdfs:subPropertyOf core:SearchProperty .
+
+med:typeDispositif a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:Presentation;
+  rdfs:label "comprend"@fr;
+  rdfs:range this:TypeDispositif;
+  rdfs:subPropertyOf core:LiteralListProperty .
+
+med:presente a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:Presentation;
+  rdfs:label "associée à"@fr;
+  rdfs:range med:SpecialitePharmaceutique;
+  rdfs:subPropertyOf core:AutocompleteProperty .
+
+med:contientUniteDeDispensation a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:search_rdfslabel_cis_cip_ucd_contains_rdfssubClassOf;
+  rdfs:domain med:Presentation;
+  rdfs:label "associée à"@fr;
+  rdfs:range med:UniteCommuneDeDispensation;
+  rdfs:subPropertyOf core:AutocompleteProperty .
+
+med:concernePar a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_rdfslabel_alpha_rdfssubClassOf_with_count;
+  rdfs:domain med:Presentation, med:SpecialitePharmaceutique;
+  rdfs:label "est concernée par"@fr;
+  rdfs:range med:Evenement;
+  rdfs:subPropertyOf core:NonSelectableProperty .
+
+med:codeUCD13 a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:UniteCommuneDeDispensation;
+  rdfs:label "a pour UCD 13"@fr;
+  rdfs:range this:UCD;
+  rdfs:subPropertyOf core:SearchProperty .
+
+med:codeUCD7 a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:UniteCommuneDeDispensation;
+  rdfs:label "a pour UCD 7"@fr;
+  rdfs:range this:UCD;
+  rdfs:subPropertyOf core:SearchProperty .
+
+med:uniteDeDispensationDe a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:UniteCommuneDeDispensation;
+  rdfs:label "est UCD de"@fr;
+  rdfs:range med:SpecialitePharmaceutique;
+  rdfs:subPropertyOf core:AutocompleteProperty .
+
+rdfs:subClassOf a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  rdfs:domain med:UniteCommuneDeDispensation;
+  rdfs:label "classement"@fr;
+  rdfs:subPropertyOf core:ListProperty .
+
+med:presenteDans a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:UniteCommuneDeDispensation;
+  rdfs:label "est présentée dans"@fr;
+  rdfs:range med:Presentation;
+  rdfs:subPropertyOf core:AutocompleteProperty .
+
+med:CIS a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "a pour CIS"@fr;
+  rdfs:range this:CIS;
+  rdfs:subPropertyOf core:SearchProperty .
+
+med:actif a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "actif Vrai/Faux"@fr;
+  rdfs:range med:StatutSpecialite;
+  rdfs:subPropertyOf core:BooleanProperty .
+
+med:dateDebut a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "mise sur le marché"@fr;
+  rdfs:range this:Date;
+  rdfs:subPropertyOf core:TimeProperty-Date .
+
+med:dateFin a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "plus active depuis"@fr;
+  rdfs:range this:Date;
+  rdfs:subPropertyOf core:TimeProperty-Date .
+
+med:classificationATC a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  core:sparqlString "<http://data.esante.gouv.fr/ansm/medicament/classificationATC>/<http://www.w3.org/2000/01/rdf-schema#subClassOf>*";
+  datasources:treeChildrenDatasource this:tree_atc_child;
+  datasources:treeRootsDatasource this:tree_atc_root;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "est classée sous"@fr;
+  rdfs:range this:ATC;
+  rdfs:subPropertyOf core:TreeProperty .
+
+med:codeATC a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "a pour ATC"@fr;
+  rdfs:range this:CodeATC;
+  rdfs:subPropertyOf core:SearchProperty .
+
+this:labelATC a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  core:sparqlString "<http://data.esante.gouv.fr/ansm/medicament/classificationATC>/<http://www.w3.org/2000/01/rdf-schema#label>";
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "libellé ATC"@fr;
+  rdfs:range this:CodeATC;
+  rdfs:subPropertyOf core:SearchProperty .
+
+med:typeProcedureCourante a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_rdfslabel_alpha_rdfssubClassOf_with_count;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "type de procédure courante"@fr;
+  rdfs:range med:TypeProcedure;
+  rdfs:subPropertyOf core:ListProperty .
+
+med:statutCourant a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_rdfslabel_alpha_rdfssubClassOf_with_count;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "a pour statut"@fr;
+  rdfs:range med:StatutSpecialite;
+  rdfs:subPropertyOf core:ListProperty .
+
+med:substanceActive a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "contient"@fr;
+  rdfs:range med:Substance;
+  rdfs:subPropertyOf core:AutocompleteProperty .
+
+med:aPourUniteDeDispensation a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "a pour UCD"@fr;
+  rdfs:range med:UniteCommuneDeDispensation;
+  rdfs:subPropertyOf core:AutocompleteProperty .
+
+med:aPourPresentation a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:SpecialitePharmaceutique;
+  rdfs:label "est conditionnée sous"@fr;
+  rdfs:range med:Presentation;
+  rdfs:subPropertyOf core:AutocompleteProperty .
+
+med:concerne a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:Evenement;
+  rdfs:label "concerne"@fr;
+  rdfs:range med:Presentation, med:SpecialitePharmaceutique;
+  rdfs:subPropertyOf core:AutocompleteProperty .
+
+med:typeEvenement a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_rdfslabel_alpha_rdfssubClassOf_with_count;
+  rdfs:domain med:Evenement;
+  rdfs:label "est de type"@fr;
+  rdfs:range med:TypeEvenement;
+  rdfs:subPropertyOf core:ListProperty .
+
+med:dateEffet a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  rdfs:domain med:Evenement;
+  rdfs:label "applicable depuis"@fr;
+  rdfs:range this:Date;
+  rdfs:subPropertyOf core:TimeProperty-Date .
+
+dct:identifier a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:Substance;
+  rdfs:label "a pour identifiant"@fr;
+  rdfs:range this:IDSubstance;
+  rdfs:subPropertyOf core:SearchProperty .
+
+med:codeSMS a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  datasources:datasource this:list_literal_alpha_rdfssubClassOf;
+  rdfs:domain med:Substance;
+  rdfs:label "a pour SMS"@fr;
+  rdfs:range this:CodeSMS;
+  rdfs:subPropertyOf core:SearchProperty .
+
+this:estSubstanceActiveDans a owl:ObjectProperty;
+  core:enableNegation true;
+  core:enableOptional true;
+  core:sparqlString "^<http://data.esante.gouv.fr/ansm/medicament/substanceActive>";
+  datasources:datasource this:search_rdfslabel_contains_rdfssubClassOf;
+  rdfs:domain med:Substance;
+  rdfs:label "active dans"@fr;
+  rdfs:range med:SpecialitePharmaceutique;
+  rdfs:subPropertyOf core:AutocompleteProperty .
+
+this:list_rdfslabel_alpha_rdfssubClassOf_with_count a datasources:SparqlDatasource;
+  datasources:labelProperty rdfs:label;
+  datasources:queryTemplate this:query_list_label_subClassOfOf_alpha_with_count .
+
+this:search_rdfslabel_contains_rdfssubClassOf a datasources:SparqlDatasource;
+  datasources:labelProperty rdfs:label;
+  datasources:queryTemplate this:query_search_med_subClassOf_contains .
+
+this:search_rdfslabel_cis_cip_ucd_contains_rdfssubClassOf a datasources:SparqlDatasource;
+  datasources:labelPath "<http://www.w3.org/2000/01/rdf-schema#label>|<http://data.esante.gouv.fr/ansm/medicament/CIS>|<http://data.esante.gouv.fr/ansm/medicament/CIP13>|<http://data.esante.gouv.fr/ansm/medicament/codeUCD13>|<http://www.w3.org/2004/02/skos/core#altLabel>";
+  datasources:queryTemplate this:query_search_med_subClassOf_contains .
+
+this:list_literal_alpha_rdfssubClassOf a datasources:SparqlDatasource;
+  datasources:labelProperty med:unite;
+  datasources:queryTemplate this:query_list_med_subClassOf_alpha .
+
+this:tree_atc_root a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?uri (CONCAT(?code, \" - \", STR(?rdfs_label)) AS ?label) (COUNT(?x) AS ?count)
+WHERE {
+ ?uri rdfs:subClassOf <http://data.esante.gouv.fr/whocc/atc/ATC> .
+ ?uri rdfs:label ?rdfs_label .
+ ?uri skos:notation ?code .
+ FILTER(lang(?rdfs_label) = $lang)
+
+ # Counts how many time the URI is used as value in the criteria build in Sparnatural
+ OPTIONAL {
+ ?x $property ?uri .
+ }
+}
+GROUP BY ?uri ?code ?rdfs_label""" .
+
+this:tree_atc_child a datasources:SparqlDatasource;
+  datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?uri (CONCAT(?code, \" - \", STR(?rdfs_label)) AS ?label) ?hasChildren (COUNT(?x) AS ?count)
+WHERE {
+ ?uri rdfs:subClassOf $node .
+ ?uri rdfs:label ?rdfs_label .
+ ?uri skos:notation ?code .
+ FILTER(lang(?rdfs_label) = $lang)
+
+ OPTIONAL { ?something rdfs:subClassOf ?uri }
+ BIND(bound(?something) AS ?hasChildren)
+
+ # Counts how many time the URI is used as value in the criteria build in Sparnatural
+ OPTIONAL {
+ ?x $property ?uri .
+ }
+
+}
+GROUP BY ?uri ?code ?rdfs_label ?hasChildren""" .
+
+this:query_list_label_subClassOfOf_alpha_with_count a "config-datatsources:SPARQLQuery";
+  datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX med:<http://data.esante.gouv.fr/ansm/medicament/>
+SELECT DISTINCT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+ SELECT DISTINCT ?uri (COUNT(DISTINCT ?domain) AS ?count)
+ WHERE {
+ ?domain rdfs:subClassOf $domain .
+ ?domain $property ?uri .
+ FILTER(isIRI(?uri))
+ # Note how the range criteria is not used in this query
+ }
+ GROUP BY ?uri
+}
+OPTIONAL { ?uri $labelPath ?theLabelLang . FILTER(lang(?theLabelLang) = $lang) }
+OPTIONAL { ?uri $labelPath ?theLabelNone . FILTER(lang(?theLabelNone) = \"\") }
+BIND(COALESCE(?theLabelLang, ?theLabelNone, STR(?uri)) AS ?theLabel)
+}
+ORDER BY UCASE(?label)
+LIMIT 500""" .
+
+this:query_list_label_alpha_with_count_langfr a "config-datatsources:SPARQLQuery";
+  datasources:queryString """SELECT DISTINCT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+ SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+ WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ FILTER(isIRI(?uri))
+ # Note how the range criteria is not used in this query
+ }
+ GROUP BY ?uri
+}
+OPTIONAL { ?uri $labelPath ?theLabelLang . FILTER(lang(?theLabelLang) = $lang) }
+OPTIONAL { ?uri $labelPath ?theLabelNone . FILTER(lang(?theLabelNone) = \"\") }
+OPTIONAL { ?uri $labelPath ?theLabelFr . FILTER(lang(?theLabelFr) = \"fr\") }
+BIND(COALESCE(?theLabelLang, ?theLabelNone, ?theLabelFr, STR(?uri)) AS ?theLabel)
+}
+ORDER BY UCASE(?label)
+LIMIT 500""" .
+
+this:query_list_label_count_langfr a "config-datatsources:SPARQLQuery";
+  datasources:queryString """SELECT ?uri ?count (CONCAT(STR(?theLabel), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+ SELECT DISTINCT ?uri (COUNT(?domain) AS ?count)
+ WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ FILTER(isIRI(?uri))
+ # Note how the range criteria is not used in this query
+ }
+ GROUP BY ?uri
+}
+OPTIONAL { ?uri $labelPath ?theLabelLang . FILTER(lang(?theLabelLang) = $lang) }
+OPTIONAL { ?uri $labelPath ?theLabelNone . FILTER(lang(?theLabelNone) = \"\") }
+OPTIONAL { ?uri $labelPath ?theLabelFr . FILTER(lang(?theLabelFr) = \"fr\") }
+BIND(COALESCE(?theLabelLang, ?theLabelNone, ?theLabelFr) AS ?theLabel)
+}
+ORDER BY DESC(?count) UCASE(?label)
+LIMIT 500""" .
+
+this:query_list_label_alpha_langfr a "config-datatsources:SPARQLQuery";
+  datasources:queryString """SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ # Note how the range criteria is not used in this query
+ FILTER(isIRI(?uri))
+
+ OPTIONAL { ?uri $labelPath ?theLabelLang . FILTER(lang(?theLabelLang) = $lang) }
+ OPTIONAL { ?uri $labelPath ?theLabelNone . FILTER(lang(?theLabelNone) = \"\") }
+ OPTIONAL { ?uri $labelPath ?theLabelFr . FILTER(lang(?theLabelFr) = \"fr\") }
+ BIND(COALESCE(?theLabelLang, ?theLabelNone, ?theLabelFr) AS ?label)
+}
+ORDER BY UCASE(?label)
+LIMIT 500""" .
+
+this:query_search_label_contains_langfr a "config-datatsources:SPARQLQuery";
+  datasources:queryString """SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain a $domain .
+ ?domain $property ?uri .
+ ?uri a $range .
+ ?uri $labelPath ?label .
+ FILTER(isIRI(?uri))
+ FILTER(CONTAINS(LCASE(STR(?label)), LCASE(\"$key\"))) 
+ FILTER(lang(?label) = '' || lang(?label) = \"fr\")
+} 
+ORDER BY UCASE(?label)
+LIMIT 50""" .
+
+this:query_list_med_subClassOf_alpha_with_count a "config-datatsources:SPARQLQuery";
+  datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX med:<http://data.esante.gouv.fr/ansm/medicament/>
+SELECT DISTINCT ?value ?count (CONCAT(STR(?value), ' (', STR(?count), ')') AS ?label)
+WHERE {
+{
+ SELECT DISTINCT ?value (COUNT(DISTINCT ?domain) AS ?count)
+ WHERE {
+ ?domain rdfs:subClassOf $domain .
+ ?domain $property ?value .
+ # Note how the range criteria is not used in this query
+ }
+ GROUP BY ?value
+}
+OPTIONAL { ?uri $labelPath ?theLabelLang.}
+}
+ORDER BY UCASE(?label)
+LIMIT 500""" .
+
+this:query_list_med_subClassOf_alpha a "config-datatsources:SPARQLQuery";
+  datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX med:<http://data.esante.gouv.fr/ansm/medicament/>
+SELECT DISTINCT ?value (STR(?value) AS ?label)
+WHERE {
+ ?domain rdfs:subClassOf $domain .
+ ?domain $property ?value .
+}
+ORDER BY UCASE(?label)
+LIMIT 500""" .
+
+this:query_search_med_subClassOf_contains a "config-datatsources:SPARQLQuery";
+  datasources:queryString """PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX med:<http://data.esante.gouv.fr/ansm/medicament/>
+SELECT DISTINCT ?uri ?label
+WHERE {
+ ?domain rdfs:subClassOf $domain .
+ ?domain $property ?uri .
+ ?uri rdfs:subClassOf $range .
+ ?uri $labelPath ?label .
+ FILTER(isIRI(?uri))
+ FILTER(lang(?label) = '' || lang(?label) = $lang)
+ FILTER(CONTAINS(LCASE(STR(?label)), LCASE(\"$key\"))) 
+} 
+ORDER BY UCASE(?label)
+LIMIT 50""" .
