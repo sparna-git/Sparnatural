@@ -171,7 +171,7 @@ export enum CriteriaType {
   RdfTermCriteria = "RdfTermCriteria",
   DateCriteria = "DateCriteria",
   BooleanCriteria = "BooleanCriteria",
-  MapCriteria = "mapCriteria",
+  MapCriteria = "MapCriteria",
   NumberCriteria = "NumberCriteria",
   SearchCriteria = "SearchCriteria"
 }

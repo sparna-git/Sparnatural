@@ -132,6 +132,10 @@ export class TimeDatePickerWidget extends AbstractWidget {
   }
 
   #addValueBtnClicked = () => {
+    // ensure calendar is hidden to avoid error
+    // // (otherwise the calendar tries to remove itself but its parent node is gone)
+    this.inputStart.datepicker("hide");
+    this.inputEnd.datepicker("hide");
 
     // fix for negative years
     // set a minus in front of the date if there was one in the value

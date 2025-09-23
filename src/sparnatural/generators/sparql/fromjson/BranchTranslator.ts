@@ -248,40 +248,6 @@ export default class BranchTranslator {
     }
   }
 
-  //-----------------------------------------------------------
-  //old version
-  #buildIntersectionPtrn1() {
-    // the intersection triple can very well be generated even if no rdf:type triple is generated for the end class.
-    if (
-      this.#branch.line.s &&
-      this.#branch.line.o &&
-      !this.#valueBuilder?.isBlockingObjectProp()
-    ) {
-      this.#intersectionPtrn.push(
-        SparqlFactory.buildBgpPattern([
-          SparqlFactory.buildIntersectionTriple(
-            factory.variable(this.#branch.line.s),
-            this.#branch.line.p,
-            factory.variable(this.#branch.line.o)
-          ),
-        ])
-      );
-
-      // add language filter if property is set to be multilingual
-      if (
-        this.#specProvider.getProperty(this.#branch.line.p).isMultilingual()
-      ) {
-        this.#intersectionPtrn.push(
-          SparqlFactory.buildFilterLangEquals(
-            factory.variable(this.#branch.line.o),
-            factory.literal(this.settings.language)
-          )
-        );
-      }
-    }
-  }
-
-  //-----------------------------------------------------------
 
   /**
    * Translates the line to SPARQL
