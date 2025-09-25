@@ -53,13 +53,17 @@ document.getElementById('select-examples').onchange = function() {
 
 ```
 
+## Typescript definition
+
+The definition of the query structure is defined in [SparnaturalQueryIfc](https://github.com/sparna-git/Sparnatural/blob/master/src/sparnatural/SparnaturalQueryIfc.ts).
+
 ## JSON query example
 
 The following query in Sparnatural (_All Artworks displayed in French or Italian museums, and created in the 19th century, with their creation date_) :
 
 ![Sparnatural query example](/assets/images/screenshot-JSON-data-structure.png)
 
-Is modelled in the following JSON data structure :
+Is encoded in the following JSON data structure :
 
 ```json
 {
@@ -79,57 +83,61 @@ Is modelled in the following JSON data structure :
     {
       "line": {
         "s": "Artwork_1",
-        "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#displayedAt",
+        "p": "https://data.mydomain.com/ontologies/sparnatural-config/Artwork_displayedAt",
         "o": "Museum_2",
-        "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
-        "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
-        "values": []
+        "sType": "https://data.mydomain.com/ontologies/sparnatural-config/Artwork",
+        "oType": "https://data.mydomain.com/ontologies/sparnatural-config/Museum",
+        "criterias": []
       },
       "children": [
         {
           "line": {
             "s": "Museum_2",
-            "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#country",
+            "p": "https://data.mydomain.com/ontologies/sparnatural-config/Museum_country",
             "o": "Country_4",
-            "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
-            "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
-            "values": [
+            "sType": "https://data.mydomain.com/ontologies/sparnatural-config/Museum",
+            "oType": "https://data.mydomain.com/ontologies/sparnatural-config/Country",
+            "criterias": [
               {
-                "label": "France (3987)",
-                "rdfTerm": {
-                  "type": "uri",
-                  "value": "http://fr.dbpedia.org/resource/France"
+                "label": "Italy",
+                "criteria": {
+                  "rdfTerm": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/resource/Italy"
+                  }
                 }
               },
               {
-                "label": "Italy (1091)",
-                "rdfTerm": {
-                  "type": "uri",
-                  "value": "http://fr.dbpedia.org/resource/Italie"
+                "label": "France",
+                "criteria": {
+                  "rdfTerm": {
+                    "type": "uri",
+                    "value": "http://dbpedia.org/resource/France"
+                  }
                 }
               }
             ]
-          },
-          "children": []
+          }
         }
       ]
     },
     {
       "line": {
         "s": "Artwork_1",
-        "p": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#creationYear",
+        "p": "https://data.mydomain.com/ontologies/sparnatural-config/Artwork_creationYear",
         "o": "Date_6",
-        "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Artwork",
-        "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Date",
-        "values": [
+        "sType": "https://data.mydomain.com/ontologies/sparnatural-config/Artwork",
+        "oType": "https://data.mydomain.com/ontologies/sparnatural-config/Date",
+        "criterias": [
           {
-            "label": "from 1800 to 1901",
-            "start": "1799-12-31T23:50:40.000Z",
-            "stop": "1901-12-31T23:50:38.000Z"
+            "label": "between 1801 and 1900",
+            "criteria": {
+              "min": 1801,
+              "max": 1900
+            }
           }
         ]
-      },
-      "children": []
+      }
     }
   ]
 }
@@ -138,11 +146,11 @@ Is modelled in the following JSON data structure :
 ## JSON data structure reference
 
 Basically, the JSON data structure encodes a bit more information than the generated SPARQL query, to make our life easier when parsing the data structure to initialize Sparnatural with it. It adds:
-  - The labels of the values
-  - The types of all subjects and objects
-  - The tree-like structure that Sparnatural uses, which would be hard to guess by looking at the SPARQL string
+  - The *labels* of the values
+  - The *types* of all subjects and objects
+  - The *tree-like structure* that Sparnatural uses, which would be hard to guess by looking at the SPARQL string
 
-The data structure is composed of a top "Query" structure, that contains "branches". Each "branch" contains on "query line", corresponding to one line of the Sparnatural interface, and the "children" of this line, that are the lines under it in the Sparnatural interface.
+The data structure is composed of a top "Query" structure, that contains "branches". Each "branch" contains a "query line", corresponding to one line of the Sparnatural interface, and the "children" of this line, that are the lines under it in the Sparnatural interface.
 
 ### Query structure
 
@@ -187,7 +195,7 @@ The data structure is composed of a top "Query" structure, that contains "branch
 ```
 
 - `line` : one single query line / criteria
-- `children` : the children of that line / criteria, the ones that are below it in the Sparnatural query builder
+- `children` : the children of that line / criteria, the ones that are below it in the Sparnatural query builder. This may not be present at all, or can be an empty array.
 - `optional` : whether the line and all its children are optional (use a SPARQL "OPTIONAL")
 - `notExists` : whether the line and all its children are negative (use a SPARQL "FILTER NOT EXISTS")
 
@@ -201,21 +209,8 @@ The data structure is composed of a top "Query" structure, that contains "branch
     "o": "Country_4",
     "sType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Museum",
     "oType": "http://ontologies.sparna.fr/sparnatural-demo-dbpedia#Country",
-    "values": [
-      {
-        "label": "France (3987)",
-        "rdfTerm": {
-          "type": "uri",
-          "value": "http://fr.dbpedia.org/resource/France"
-        }
-      },
-      {
-        "label": "Italy (1091)",
-        "rdfTerm": {
-          "type": "uri",
-          "value": "http://fr.dbpedia.org/resource/Italie"
-        }
-      }
+    "criterias": [
+        ...
     ]
   },
   "children": []
@@ -227,11 +222,41 @@ The data structure is composed of a top "Query" structure, that contains "branch
 - `o` : variable of the object
 - `sType` : URI of the selected type of the subject
 - `oType` : URI of the selected type of the object
-- `values` : arrays of values selected for the object, if any
+- `criterias` : arrays of criterias selected for the object, if any (typically URI of selected values from a dropdown list)
 
-### Values
+### Labelled Criterias
 
-The structure of the values depend on the structure of the criteria/line. This can be :
+```json
+{
+  "line": {
+    ...
+    "criterias": [
+        {
+          "label": "Italy",
+          "criteria": {
+            ...
+          }
+        },
+        {
+          "label": "France",
+          "criteria": {
+            ...
+          }
+        }
+    ]
+  }
+}
+```
+
+A criteria is composed of 2 parts:
+
+- `label` : The display label of the criteria
+- `criteria` : The actual criteria to use, depending on the value selection widget (e.g. either a URI, a date range, etc.)
+
+
+### Criteria values
+
+The structure of the criterias depends on the value selection widget. This can be :
 
 - A URI selection widget (dropdown list, autocomplete, tree widget):
 
@@ -239,11 +264,12 @@ If the value is a URI:
 
 ```json
   {
-        "label": "Italy (1091)",
+      "criteria": {
         "rdfTerm": {
           "type": "uri",
           "value": "http://fr.dbpedia.org/resource/Italie"
         }
+      }
   }
 ```
 
@@ -252,12 +278,13 @@ If the value is a Literal (with a language):
 
 ```json
   {
-        "label": "foo",
+      "criteria": {
         "rdfTerm": {
           "type": "literal",
           "value": "foo",
           "xml:lang": "en"
         }
+      }
   }
 ```
 
@@ -265,12 +292,14 @@ If the value is a Literal (with a datatype):
 
 ```json
   {
-        "label": "1",
+      "label": "xxx",
+      "criteria": {
         "rdfTerm": {
           "type": "literal",
           "value": "1",
           "datatype": "http://www.w3.org/2001/XMLSchema#integer"
         }
+      }
   }
 ```
 
@@ -278,9 +307,11 @@ If the value is a Literal (with a datatype):
 
 ```json
   {
-    "label": "From 1800 to 1901",
-    "start": "1800-01-01T00:00:00",
-    "stop": "1901-12-31T23:59:59"
+    "label": "xxx",
+    "criteria": {
+      "start": "1800-01-01T00:00:00",
+      "stop": "1901-12-31T23:59:59"
+    }
   }
 ```
 
@@ -288,8 +319,10 @@ If the value is a Literal (with a datatype):
 
 ```json
   {
-    "label": "Vrai",
-    "boolean": true
+    "label": "xxx",
+    "criteria": {
+      "boolean": true
+    }
   }
 ```
 
@@ -297,8 +330,10 @@ If the value is a Literal (with a datatype):
 
 ```json
   {
-    "label": "...",
-    "search": "..."
+    "label": "xxx",
+    "criteria": {
+      "search": "..."
+    }
   }
 ```
 
@@ -306,9 +341,28 @@ If the value is a Literal (with a datatype):
 
 ```json
   {
-    "label": "between 10000 and 100000",
-    "min": 10000,
-    "max": 100000
+    "label": "xxx",
+    "criteria": {
+      "min": 10000,
+      "max": 100000
+    }
+  }
+```
+
+- A map widget:
+
+```json
+  {
+    "label": "xxx",
+    "criteria": {
+      "coordType": "Rectangle",
+      "coordinates": [
+        { "lat": "1", "long":"1" }
+        { "lat": "2", "long":"2" }
+        { "lat": "3", "long":"3" }
+        { "lat": "4", "long":"4" }
+      ]
+    }
   }
 ```
 
