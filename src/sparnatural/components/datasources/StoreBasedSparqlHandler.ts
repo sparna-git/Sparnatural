@@ -2,6 +2,10 @@ import { Store } from 'n3';
 import { QueryEngine } from '@comunica/query-sparql-rdfjs-lite';
 import { SparqlHandlerIfc } from './SparqlHandler';
 
+/**
+ * A SPARQL handler that executes queries against an in-memory RDF store,
+ * and returns results in SPARQL JSON format.
+ */
 export class StoreBasedSparqlHandler implements SparqlHandlerIfc {
     private store: Store;
     private engine: QueryEngine;

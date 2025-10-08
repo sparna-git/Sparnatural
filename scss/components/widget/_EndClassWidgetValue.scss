@@ -45,6 +45,17 @@
             white-space: nowrap;
             color:var(--default-text-color);
             width: 100%;
+
+            &.notFound {
+                color: red;
+                &::before {
+                    content: "⛔";
+                    margin-right: 4px;
+                    font-size: 1em;
+                    vertical-align: middle;
+                }
+            }
         }
+        
     }
 }

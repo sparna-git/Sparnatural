@@ -11,7 +11,7 @@ import {
 } from "../../../../widgets/AbstractWidget";
 import CriteriaGroup from "../CriteriaGroup";
 import { EditBtn } from "../../../../buttons/EditBtn";
-import { LabelledCriteria, equalsCriteria, getCriteriaType, MapCriteria, CriteriaType, Criteria } from "../../../../../SparnaturalQueryIfc";
+import { LabelledCriteria, equalsCriteria, getCriteriaType, MapCriteria, CriteriaType, Criteria, RdfTermCriteria } from "../../../../../SparnaturalQueryIfc";
 import { I18n } from "../../../../../settings/I18n";
 
 
@@ -263,8 +263,15 @@ export class EndClassWidgetValue extends HTMLComponent {
     let theLabel = this.selectAll?I18n.labels.SelectAllValues:this.widgetVal.label;
 
     // set a tooltip if the label is a bit long
+    var extraClass = "";
+    if(
+      this.widgetVal && this.widgetVal.criteria && (getCriteriaType(this.widgetVal.criteria) == CriteriaType.RdfTermCriteria)
+      && (this.widgetVal.criteria as RdfTermCriteria).rdfTerm.value == "https://services.sparnatural.eu/api/v1/URI_NOT_FOUND"
+    ) {
+      extraClass = 'class="notFound"'
+    }
     var tooltip = (theLabel.length > 25)?'title="'+this.#stripLabelHtml(theLabel)+'"':"";
-    let valuelbl = `<p ${tooltip}><span> ${theLabel} </span></p>`;
+    let valuelbl = `<p ${tooltip}><span ${extraClass}> ${theLabel} </span></p>`;
     this.html.append($(valuelbl));
     this.frontArrow.render();
     this.unselectBtn = new UnselectBtn(this, () => {

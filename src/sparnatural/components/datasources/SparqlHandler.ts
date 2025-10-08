@@ -1,4 +1,3 @@
-import LocalCacheData from "../../datastorage/LocalCacheData";
 import { Catalog } from "../../settings/Catalog";
 import { UrlFetcher } from "./UrlFetcher";
 
