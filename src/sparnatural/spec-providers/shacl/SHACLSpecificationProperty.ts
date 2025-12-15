@@ -10,6 +10,7 @@ import { Term } from "@rdfjs/types/data-model";
 import { SHACLSpecificationProvider } from './SHACLSpecificationProvider';
 import { DatasourceReading } from '../DatasourceReading';
 import { DatatypeIfc, Model, PropertyShape, RDF, SH, ShaclModel, Shape, ShapeFactory, StatisticsReader, XSD } from 'rdf-shacl-commons';
+import { Quad_Subject } from 'n3';
 
 
 const factory = new DataFactory();
@@ -34,6 +35,13 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       !graph.hasTriple(shapeIri, SH.DEACTIVATED, factory.literal("true", XSD.BOOLEAN))
       &&
       !graph.hasTriple(shapeIri, SH.HAS_VALUE, null)
+      &&
+      // if there is a qualified value shape with a sh:hasValue, exclude too as this represents a fixed value that we don't want to query
+      !(
+        graph.hasTriple(shapeIri, SH.QUALIFIED_VALUE_SHAPE, null)
+        &&
+        graph.hasTriple((graph.readSingleProperty(shapeIri, SH.QUALIFIED_VALUE_SHAPE) as Quad_Subject), SH.HAS_VALUE, null)
+      )
       &&
       (
         (!statReader.hasStatistics(shapeIri))
@@ -152,7 +160,36 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
 
           // add sh:or range to final list of ranges
           classes.push(...orClasses);
-        });
+        }); // end iterate sh:or members
+      }
+
+      // still nothing, look for sh:class or sh:node on an sh:qualifiedValueShape
+      if(classes.length == 0) {
+        var qvs:Shape|undefined = (this.shape as PropertyShape).getShQualifiedValueShape();
+        if(qvs) {
+          var qvsClasses: string[] = qvs.resolveShNodeOrShClass().map(r => r.value) ;
+
+          // nothing, see if default applies on this sh:qualifiedValueShape
+          if(qvsClasses.length == 0) {
+            SpecialSHACLSpecificationEntityRegistry.getInstance().getRegistry().forEach((value: SpecialSHACLSpecificationEntity, key: string) => {
+              if(key != SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) {
+                if(value.isRangeOf(this.store, qvs!.resource.value)) {
+                  qvsClasses.push(key);
+                }
+              }
+            });
+          }
+
+          // still nothing, add default, only if not added previously
+          if(qvsClasses.length == 0) {
+            if(qvsClasses.indexOf(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER) == -1) {
+              qvsClasses.push(SpecialSHACLSpecificationEntityRegistry.SPECIAL_SHACL_ENTITY_OTHER);
+            }
+          }
+
+          // add sh:qualifiedValueShape range to final list of ranges
+          classes.push(...qvsClasses);
+        }
       }
 
       // still nothing, add the default
