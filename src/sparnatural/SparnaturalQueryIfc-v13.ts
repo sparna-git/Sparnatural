@@ -1,3 +1,5 @@
+// See the original Traqula SPARQL rules at https://github.com/comunica/traqula/blob/ac278a201bf487889b063168c056b5495b9ed6b5/packages/rules-sparql-1-1/lib/Sparql11types.ts
+
 
 /***** Main Sparnatural Query Structure *****/
 
@@ -18,7 +20,9 @@ export type PatternBase = { type: 'pattern'; subType: string };
 
 export type PatternBind = PatternBase & {
   subType: 'bind';
-  expression: Expression;
+  // expression: Expression;
+  // right now we limit to aggregate expressions only
+  expression: ExpressionAggregate;
   variable: TermVariable;
 };
 
@@ -191,6 +195,30 @@ export type PatternValues = PatternBase & {
 
 export type ExpressionBase = Node & { type: 'expression'; subType: string };
 
+
+type ExpressionAggregateBase = ExpressionBase & {
+  subType: 'aggregate';
+  distinct: boolean;
+  expression: [TermVariable];
+};
+export type ExpressionAggregateDefault = ExpressionAggregateBase & {
+  expression: [TermVariable];
+  aggregation: string;
+};
+export type ExpressionAggregateSeparator = ExpressionAggregateBase & {
+  expression: [TermVariable];
+  aggregation: string;
+  separator: string;
+};
+export type ExpressionAggregate =
+  | ExpressionAggregateDefault
+  | ExpressionAggregateSeparator;
+
+
+/*
+
+This is the full original Expression structure
+
 type ExpressionAggregateBase = ExpressionBase & {
   subType: 'aggregate';
   distinct: boolean;
@@ -229,6 +257,7 @@ export type Expression =
   | TermIri
   | TermVariable
   | TermLiteral;
+*/
 
 /***** End Generic Expression structure *****/
 
@@ -265,14 +294,10 @@ export type TermIri = TermIriFull;
 **/
 
 // Extension : Specific labelled IRI
-export type TermLabelledIri = TermIriFull & { subType: 'labelledIri';label: string; };
+export type TermLabelledIri = TermIriFull & { label: string; };
 
 // Extension Specific typed variables
-export type TermTypedVariable = TermBase & {
-  subType: 'typedVariable';
-  value: string;
-  class: TermIri;
-};
+export type TermTypedVariable = TermVariable & { rdfType: string; }
 
 export type GraphTerm = TermIri | TermLiteral | TermLabelledIri;
 export type Term = GraphTerm | TermVariable | TermTypedVariable;
