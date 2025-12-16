@@ -8,3 +8,28 @@
 6. Check at https://www.npmjs.com/package/sparnatural
 7. Create release on Github project
 8. Write release note by checking the issues that were closed since last release (https://github.com/sparna-git/Sparnatural/issues?q=is%3Aclosed+sort%3Aupdated-desc)
+
+Use template:
+
+```
+
+## Major New Features
+
+_none_
+
+## Other Enhancements
+
+_none_
+
+## Bug fixes
+
+_none_
+
+## Refactoring
+
+_ none_
+
+## Documentation
+
+_none_	
+```

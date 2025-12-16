@@ -43,5 +43,10 @@ interface ISpecificationProperty extends ISpecificationEntry {
    * @returns true if the query should omit the class criteria of its range all the time
    */
   omitClassCriteria(): boolean;
+
+  /**
+   * @returns true if the property has its range defined as a qualified value shape
+   */
+  hasQualifiedValueShapeRange(): boolean;
 }
 export default ISpecificationProperty;

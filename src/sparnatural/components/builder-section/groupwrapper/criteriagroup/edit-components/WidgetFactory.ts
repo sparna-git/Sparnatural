@@ -141,18 +141,20 @@ export class WidgetFactory {
 
                 // if there is a default label property on the end class, use it to populate the dropdown
                 else if(this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty()) {
+                  let defautlDatasource = property.hasQualifiedValueShapeRange()?Datasources.QUERY_LIST_LABEL_WITH_RANGE_ALPHA:Datasources.QUERY_LIST_LABEL_ALPHA
                   datasource = {
                     queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
-                      Datasources.QUERY_LIST_LABEL_ALPHA
+                      defautlDatasource
                     ),
                     labelProperty: this.specProvider.getEntity(endClassVal.type).getDefaultLabelProperty(),
                   }
-                // if there is no datasource, but we can guess the end class could be skos:Concept,
+                // if there is no datasource and no default label on the end class, but we can guess the end class could be skos:Concept,
                 // use a skos:prefLabel datasource  
                 } else if(this.specProvider.getEntity(endClassVal.type).couldBeSkosConcept()) {
+                  let defautlDatasource = property.hasQualifiedValueShapeRange()?Datasources.QUERY_LIST_LABEL_WITH_RANGE_ALPHA:Datasources.QUERY_LIST_LABEL_ALPHA
                   datasource = {
                     queryTemplate: Datasources.QUERY_STRINGS_BY_QUERY_TEMPLATE.get(
-                      Datasources.QUERY_LIST_LABEL_ALPHA
+                      defautlDatasource
                     ),
                     labelProperty: SKOS.PREF_LABEL.value,
                   }

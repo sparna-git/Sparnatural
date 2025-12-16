@@ -279,6 +279,17 @@ export class SHACLSpecificationProperty extends SHACLSpecificationEntry implemen
       return this.graph.hasTriple(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"), null);
     }
 
+    hasQualifiedValueShapeRange(): boolean {
+      var qvs:Shape|undefined = (this.shape as PropertyShape).getShQualifiedValueShape();
+      if(qvs) {
+          var qvsClasses: string[] = qvs.resolveShNodeOrShClass().map(r => r.value) ;
+          if(qvsClasses.length > 0) {
+              return true;
+          }
+      }
+      return false;
+    }
+
     static compare(item1: SHACLSpecificationProperty, item2: SHACLSpecificationProperty) {
       return SHACLSpecificationEntry.compare(item1, item2);
     }

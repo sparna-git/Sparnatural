@@ -161,6 +161,10 @@ export class OWLSpecificationProperty extends OWLSpecificationEntry implements I
     return this.graph.hasTriple(factory.namedNode(this.uri), factory.namedNode(Config.SPARNATURAL_CONFIG_CORE+"executedAfter"), null);
   }
 
+  hasQualifiedValueShapeRange(): boolean {
+    return false;
+  }
+
   _isUnionClass(classNode: any) {
     return this.graph.hasProperty(classNode, OWL.UNION_OF);
   }
