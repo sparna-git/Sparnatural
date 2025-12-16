@@ -36,6 +36,8 @@
   "SwitchVariablesNames": "Montrer le nom des colonnes",
   "true": "Vrai",
   "false": "Faux",
+  "exists": "Existe",
+  "notExists": "N'existe pas",
   "TreeWidgetNoData": "Aucune information trouvée...",
   "TreeWidgetDelete": "Effacer la sélection",
   "TreeWidgetSelect": "Sélectionner",

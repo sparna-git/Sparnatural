@@ -5,7 +5,7 @@ import { HTMLComponent } from "../../../../HtmlComponent";
 import { SelectedVal } from "../../../../SelectedVal";
 import { AbstractWidget } from "../../../../widgets/AbstractWidget";
 import { AutocompleteConfiguration, AutoCompleteWidget } from "../../../../widgets/AutoCompleteWidget";
-import { BooleanWidget } from "../../../../widgets/BooleanWidget";
+import { BooleanConfiguration, BooleanWidget } from "../../../../widgets/BooleanWidget";
 import { ListSparqlTemplateQueryBuilder, AutocompleteSparqlTemplateQueryBuilder, TreeSparqlTemplateQueryBuilder, ValuesListSparqlTemplateQueryBuilder } from "../../../../datasources/SparqlBuilders";
 import { SparqlHandlerFactory, SparqlHandlerIfc } from "../../../../datasources/SparqlHandler";
 import { ListConfiguration, ListWidget } from "../../../../widgets/ListWidget";
@@ -380,8 +380,14 @@ export class WidgetFactory {
             return new NoWidget(this.parentComponent);
             break;
           case Config.BOOLEAN_PROPERTY:
+            
+          let booleanConfig:BooleanConfiguration = {
+              existNotExist: !this.specProvider.getEntity(endClassVal.type).isLiteralEntity()
+            }
+
             return new BooleanWidget(
               this.parentComponent,
+              booleanConfig,
               startClassVal,
               objectPropVal,
               endClassVal
@@ -493,7 +499,6 @@ export class WidgetFactory {
           
           case Config.NUMBER_PROPERTY:
     
-            // TODO : determine min and max based on datatypes
             let thisNumberConfig:NumberConfiguration = {
               min: this.specProvider.getProperty(objectPropVal.type).getMinValue(),
               max: this.specProvider.getProperty(objectPropVal.type).getMaxValue(),

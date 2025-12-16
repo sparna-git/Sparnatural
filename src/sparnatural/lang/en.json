@@ -36,6 +36,8 @@
   "SwitchVariablesNames": "Show column names",
   "true": "True",
   "false": "False",
+  "exists": "Exists",
+  "notExists": "Does not exist",
   "TreeWidgetNoData": "No data could be found...",
   "TreeWidgetDelete": "Clear selection",
   "TreeWidgetSelect": "Select",

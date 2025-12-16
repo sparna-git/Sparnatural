@@ -7,10 +7,17 @@ import { BooleanCriteria, LabelledCriteria } from '../../SparnaturalQueryIfc';
 
 const factory = new DataFactory();
 
+export interface BooleanConfiguration {
+  existNotExist?: boolean;
+}
+
 export class BooleanWidget extends AbstractWidget {
+
+  configuration: BooleanConfiguration;
 
   constructor(
     parentComponent: HTMLComponent,
+    configuration: BooleanConfiguration,
     startClassVal: SelectedVal,
     objectPropVal: SelectedVal,
     endClassVal: SelectedVal
@@ -24,22 +31,24 @@ export class BooleanWidget extends AbstractWidget {
       endClassVal,
       ValueRepetition.SINGLE
     );
+
+    this.configuration = configuration;
   }
 
   render() {
     super.render();
     let trueSpan = $(
-      `<span class="boolean-value">${I18n.labels.true}</span>'`
+      `<span class="boolean-value">${this.configuration.existNotExist ? I18n.labels.exists : I18n.labels.true}</span>'`
     );
     let orSpan = $(`<span class="or">&nbsp;${I18n.labels.Or}&nbsp;</span>`);
     let falseSpan = $(
-      `<span class="boolean-value"">${I18n.labels.false}</span>`
+      `<span class="boolean-value"">${this.configuration.existNotExist ? I18n.labels.notExists : I18n.labels.true}</span>`
     );
     this.html.append(trueSpan).append(orSpan).append(falseSpan);
 
     trueSpan[0].addEventListener("click", (e) => {
       let widgetValue:LabelledCriteria<BooleanCriteria> = {
-        label: I18n.labels.true,
+        label: this.configuration.existNotExist ? I18n.labels.exists : I18n.labels.true,
         criteria: {
           boolean: true
         }
@@ -51,7 +60,7 @@ export class BooleanWidget extends AbstractWidget {
 
     falseSpan[0].addEventListener("click", (e) => {
       let widgetValue: LabelledCriteria<BooleanCriteria> = {
-        label: I18n.labels.false,
+        label: this.configuration.existNotExist ? I18n.labels.notExists : I18n.labels.true,
         criteria: {
           boolean: false
         }
