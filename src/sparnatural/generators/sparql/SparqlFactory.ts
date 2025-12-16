@@ -88,6 +88,19 @@ export default class SparqlFactory {
     };
 }
 
+  static buildExistsPattern(groupPattern: GroupPattern): FilterPattern {
+      return {
+        type: "filter",
+        expression: {
+          type: "operation",
+          operator: "exists",
+          args: [
+              groupPattern
+          ],
+        },
+      };
+  }
+
   static buildNotExistsPattern(groupPattern: GroupPattern): FilterPattern {
       return {
         type: "filter",

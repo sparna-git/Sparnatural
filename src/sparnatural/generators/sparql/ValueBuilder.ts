@@ -19,6 +19,7 @@ import ISpecificationProperty from "../../spec-providers/ISpecificationProperty"
 import { SHACLSpecificationEntity } from "../../spec-providers/shacl/SHACLSpecificationEntity";
 import { DateCriteria, RDFTerm, RdfTermCriteria, LabelledCriteria, Criteria, BooleanCriteria, NumberCriteria, SearchCriteria, MapCriteria } from "../../SparnaturalQueryIfc";
 import { GEOFUNCTIONS, GEOSPARQL } from "rdf-shacl-commons";
+import { SHACLSpecificationProperty } from "../../spec-providers/shacl/SHACLSpecificationProperty";
 
 const factory = new DataFactory();
 
@@ -242,49 +243,84 @@ export class BooleanValueBuilder
   build(): Pattern[] {
     let widgetValues = this.values as BooleanCriteria[];
 
-    // if we are blocking the object prop, we create it directly here with the value as the object
-    if (this.isBlockingObjectProp()) {
+    let isLiteral = 
+      this.specProvider.getEntity(this.endClassVal.type).isLiteralEntity();
+
+    if(!isLiteral) {
+      // not a literal, we turn the criteria into FILTER EXISTS or FILTER NOT EXISTS
       let ptrn: BgpPattern = {
         type: "bgp",
         triples: [
           {
             subject: factory.variable(this.startClassVal.variable),
             predicate: factory.namedNode(this.propertyVal.type),
-            object: factory.literal(
-              widgetValues[0].boolean.toString(),
-              factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
-            ),
+            object: factory.variable(this.endClassVal.variable),
           },
         ],
       };
-      return [ptrn];
+
+      let groupPattern = SparqlFactory.buildGroupPattern([ptrn]);
+      let filterPtrn: FilterPattern = widgetValues[0].boolean 
+          ? SparqlFactory.buildExistsPattern(groupPattern)
+          : SparqlFactory.buildNotExistsPattern(groupPattern)
+      ;
+
+      return [filterPtrn];
+
     } else {
-      // otherwise the object prop is created and we create a VALUES clause with the actual boolean
-      let vals = (this.values as BooleanCriteria[]).map((v) => {
-        let vl: ValuePatternRow = {};
-        vl["?" + this.endClassVal.variable] = factory.literal(
-          widgetValues[0].boolean.toString(),
-          factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
-        );
-        return vl;
-      });
-      let valuePattern: ValuesPattern = {
-        type: "values",
-        values: vals,
-      };
-      return [valuePattern];
+      // if we are blocking the object prop, we create it directly here with the value as the object
+      if (this.isBlockingObjectProp()) {
+        let ptrn: BgpPattern = {
+          type: "bgp",
+          triples: [
+            {
+              subject: factory.variable(this.startClassVal.variable),
+              predicate: factory.namedNode(this.propertyVal.type),
+              object: factory.literal(
+                widgetValues[0].boolean.toString(),
+                factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
+              ),
+            },
+          ],
+        };
+        return [ptrn];
+      } else {
+        // otherwise the object prop is created and we create a VALUES clause with the actual boolean
+        let vals = (this.values as BooleanCriteria[]).map((v) => {
+          let vl: ValuePatternRow = {};
+          vl["?" + this.endClassVal.variable] = factory.literal(
+            widgetValues[0].boolean.toString(),
+            factory.namedNode("http://www.w3.org/2001/XMLSchema#boolean")
+          );
+          return vl;
+        });
+        let valuePattern: ValuesPattern = {
+          type: "values",
+          values: vals,
+        };
+        return [valuePattern];
+      }
     }
+
   }
 
   /**
-   * Blocks if a value is selected and this is not the "all" special value
-   * @returns true
+   * @returns true if a value is selected but the variable is not selected
    */
   isBlockingObjectProp() {
     return (
-      this.values?.length == 1 &&
+      this.values?.length == 1 
+      &&
       !this.endClassVarSelected
     );
+  }
+
+  /**
+   * @returns true if the range is not a literal, indicating we will generate a FILTER NOT EXISTS
+   */
+  isBlockingEnd(): boolean {
+      let isLiteral = this.specProvider.getEntity(this.endClassVal.type).isLiteralEntity();
+      return !isLiteral;
   }
 }
 
