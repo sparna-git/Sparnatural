@@ -43,6 +43,8 @@ export type PatternBgpSameSubject = PatternBase & {
 // Extension : predicate-object pair in a BGP with same subject
 export type PredicateObjectPair = {
   type: 'predicateObjectPair';
+  // mark a line as optional or notExists
+  subType?: 'optional' | 'notExists';
   predicate: TermIri;
   object: ObjectCriteria;
 };
