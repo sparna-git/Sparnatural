@@ -6,9 +6,14 @@ import {
 } from "./sparnatural/settings/defaultSettings";
 import SparnaturalComponent from "./sparnatural/components/SparnaturalComponent";
 import { SparnaturalQueryIfc } from "./sparnatural/SparnaturalQueryIfc";
+import { SparnaturalQuery } from "./sparnatural/SparnaturalQueryIfc-v13";
 import QueryLoader from "./sparnatural/querypreloading/QueryLoader";
+import QueryLoaderv13 from "./sparnatural/querypreloading/QueryLoader-v13";
 import { SparnaturalAttributes } from "./SparnaturalAttributes";
-import { SparqlHandlerFactory, SparqlHandlerIfc } from "./sparnatural/components/datasources/SparqlHandler";
+import {
+  SparqlHandlerFactory,
+  SparqlHandlerIfc,
+} from "./sparnatural/components/datasources/SparqlHandler";
 
 /*
   This is the sparnatural HTMLElement. 
@@ -141,13 +146,30 @@ export class SparnaturalElement extends HTMLElement {
   }
 
   /**
+   * Type guard to check if the provided query is a v13 SparnaturalQuery
+   * @param query The query to check
+   * @returns True if the query is a SparnaturalQuery (v13), false if it's a SparnaturalQueryIfc (v1)
+   */
+  private isV13Query(
+    query: SparnaturalQuery | SparnaturalQueryIfc
+  ): query is SparnaturalQuery {
+    return (query as SparnaturalQuery).where !== undefined;
+  }
+
+  /**
    * Load a saved/predefined query in the visual query builder
    * Can be called from the outside
    * @param query
    */
-  loadQuery(query: SparnaturalQueryIfc) {
-    QueryLoader.setSparnatural(this.sparnatural);
-    QueryLoader.loadQuery(query);
+
+  loadQuery(query: SparnaturalQuery | SparnaturalQueryIfc) {
+    if (this.isV13Query(query)) {
+      QueryLoaderv13.setSparnatural(this.sparnatural);
+      QueryLoaderv13.loadQuery(query);
+    } else {
+      QueryLoader.setSparnatural(this.sparnatural);
+      QueryLoader.loadQuery(query);
+    }
   }
 
   /**
@@ -162,16 +184,17 @@ export class SparnaturalElement extends HTMLElement {
     callback: (data: any) => void,
     errorCallback?: (error: any) => void
   ) {
-    let sparqlFetcherFactory:SparqlHandlerFactory = new SparqlHandlerFactory(      
+    let sparqlFetcherFactory: SparqlHandlerFactory = new SparqlHandlerFactory(
       getSettings().language,
       getSettings().localCacheDataTtl,
       getSettings().customization.headers,
       getSettings().customization.sparqlHandler,
       // can be undefined
-      this.sparnatural.catalog,
+      this.sparnatural.catalog
     );
 
-    let sparqlFetcher:SparqlHandlerIfc = sparqlFetcherFactory.buildSparqlHandler(getSettings().endpoints);
+    let sparqlFetcher: SparqlHandlerIfc =
+      sparqlFetcherFactory.buildSparqlHandler(getSettings().endpoints);
     sparqlFetcher.executeSparql(query, callback, errorCallback);
   }
 

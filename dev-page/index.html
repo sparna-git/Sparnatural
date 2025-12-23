@@ -97,7 +97,22 @@
 
               https://xls2rdf.sparna.fr/rest/convert?url=https%3A%2F%2Fdocs.google.com%2Fspreadsheets%2Fd%2F1LBumEdCIl8CUlkB0PGqPK6T_9-4nnpix%2Fexport%3Fformat%3Dxlsx&noPostProcessings=true https://raw.githubusercontent.com/ICA-EGAD/RiC-O/refs/heads/master/ontology/previous-versions/RiC-O_v0-2_release/RiC-O_v0-2.rdf
             -->
-                    <spar-natural
+            <spar-natural
+              id="sparnatural"
+              src="configs/dbpediafr-config.ttl"
+              lang="en"
+              endpoint="https://proxy.sparnatural.eu/sparql-proxy/sparql?endpoint=http%3A%2F%2Ffr.dbpedia.org%2Fsparql"
+              defaultLang="fr"
+              distinct="true"
+              limit="1000"
+              maxOr="10"
+              maxDepth="10"
+              debug="false"
+              prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
+            />
+
+            <!--       
+        <spar-natural
             id="sparnatural"
             src="configs/OpenArchaeo_SHACL_Sparnatural_V2_cleaned.ttl"
             endpoint="http://openarchaeo-graphdb.huma-num.fr/repositories/openarchaeo"
@@ -110,6 +125,7 @@
             debug="false"
             prefixes="rdfs:http://www.w3.org/2000/01/rdf-schema#"
         ></spar-natural>
+        -->
           </div>
           <input type="hidden" id="query-json" />
           <div><a id="export" href="#">Export query in JSON</a></div>
