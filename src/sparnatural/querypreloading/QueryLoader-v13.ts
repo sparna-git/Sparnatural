@@ -203,8 +203,8 @@ export default class QueryLoader {
       grpWrapper.CriteriaGroup.EndClassGroup.editComponents.onSelectAll();
     }
 
-    // options absent in v13
-    this.#triggerOptions(grpWrapper, { optional: false, notExists: false });
+    // options v13
+    this.#triggerOptions(grpWrapper, this.#mapPairSubTypeToOptions(pair));
 
     // children recursion (WHERE)
     if (obj.predicateObjectPairs?.length) {
@@ -269,6 +269,20 @@ export default class QueryLoader {
       this.#clickOn(
         grpWrapper.CriteriaGroup.OptionsGroup.OptionalComponent.html
       );
+    }
+  }
+
+  static #mapPairSubTypeToOptions(pair: PredicateObjectPair): {
+    optional?: boolean;
+    notExists?: boolean;
+  } {
+    switch (pair.subType) {
+      case "optional":
+        return { optional: true };
+      case "notExists":
+        return { notExists: true };
+      default:
+        return { optional: false, notExists: false };
     }
   }
 
